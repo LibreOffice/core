@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_OOX_PPT_SOUNDACTIONCONTEXT_HXX
-#define INCLUDED_OOX_PPT_SOUNDACTIONCONTEXT_HXX
+#pragma once
 
 #include <oox/core/contexthandler.hxx>
 #include <oox/core/fragmenthandler2.hxx>
@@ -53,6 +52,5 @@ private:
 } }
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TOOLS_DATETIMEUTILS_HXX
-#define INCLUDED_TOOLS_DATETIMEUTILS_HXX
+#pragma once
 
 #include <tools/datetime.hxx>
 
@@ -21,6 +20,5 @@ TOOLS_DLLPUBLIC OString DateToOString( const Date& rDate );
 // This function converts a 'Date' object to an 'OString' object in DD/MM/YYYY format
 TOOLS_DLLPUBLIC OString DateToDDMMYYYYOString( const Date& rDate );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

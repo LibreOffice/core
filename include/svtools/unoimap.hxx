@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_UNOIMAP_HXX
-#define INCLUDED_SVTOOLS_UNOIMAP_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
@@ -36,6 +35,5 @@ SVT_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvUnoImageMap_createIn
 SVT_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvUnoImageMap_createInstance( const ImageMap& rMap, const SvEventDescription* pSupportedMacroItems );
 SVT_DLLPUBLIC bool SvUnoImageMap_fillImageMap( const css::uno::Reference< css::uno::XInterface >& xImageMap, ImageMap& rMap );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

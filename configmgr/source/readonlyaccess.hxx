@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_READONLYACCESS_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_READONLYACCESS_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -35,6 +34,5 @@ getSupportedServiceNames();
 
 } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

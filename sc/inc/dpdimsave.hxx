@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DPDIMSAVE_HXX
-#define INCLUDED_SC_INC_DPDIMSAVE_HXX
+#pragma once
 
 #include <vector>
 #include <map>
@@ -206,6 +205,5 @@ private:
     ScDPSaveNumGroupDimMap maNumGroupDims;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

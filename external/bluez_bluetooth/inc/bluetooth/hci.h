@@ -9,8 +9,7 @@
  ***
  ****************************************************************************
  ****************************************************************************/
-#ifndef __HCI_H
-#define __HCI_H
+#pragma once
 
 #ifdef __cplusplus
 #endif
@@ -715,4 +714,3 @@ struct hci_conn_list_req
   uint16_t conn_num;
   struct hci_conn_info conn_info[0];
 };
-#endif

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_TPRIVILEGESRESULTSET_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_TPRIVILEGESRESULTSET_HXX
+#pragma once
 
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -43,6 +42,5 @@ namespace connectivity
         virtual sal_Bool SAL_CALL next(  ) override;
     };
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_TPRIVILEGESRESULTSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

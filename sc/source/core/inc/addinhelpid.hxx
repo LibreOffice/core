@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_CORE_INC_ADDINHELPID_HXX
-#define INCLUDED_SC_SOURCE_CORE_INC_ADDINHELPID_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
@@ -43,6 +42,5 @@ public:
     OString                GetHelpId( const OUString& rFuncName ) const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

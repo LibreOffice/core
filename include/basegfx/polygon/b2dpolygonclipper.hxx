@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_POLYGON_B2DPOLYGONCLIPPER_HXX
-#define INCLUDED_BASEGFX_POLYGON_B2DPOLYGONCLIPPER_HXX
+#pragma once
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -64,6 +63,5 @@ namespace basegfx
     } // end of namespace utils
 } // end of namespace basegfx
 
-#endif // INCLUDED_BASEGFX_POLYGON_B2DPOLYGONCLIPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6,8 +6,7 @@
 
 /* Template-based metaprogramming and type-testing facilities. */
 
-#ifndef mozilla_TypeTraits_h
-#define mozilla_TypeTraits_h
+#pragma once
 
 #include "Types.h"
 
@@ -1113,4 +1112,3 @@ struct Conditional<false, A, B>
 
 } /* namespace mozilla */
 
-#endif /* mozilla_TypeTraits_h */

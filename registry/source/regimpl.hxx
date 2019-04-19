@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_SOURCE_REGIMPL_HXX
-#define INCLUDED_REGISTRY_SOURCE_REGIMPL_HXX
+#pragma once
 
 #include <unordered_map>
 
@@ -148,6 +147,5 @@ private:
     static constexpr OUStringLiteral ROOT { "/" };
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

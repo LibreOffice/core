@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_IFINISHEDTHREADLISTENER_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_IFINISHEDTHREADLISTENER_HXX
+#pragma once
 
 #include <osl/interlck.h>
 
@@ -41,6 +40,5 @@ protected:
         {
         };
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

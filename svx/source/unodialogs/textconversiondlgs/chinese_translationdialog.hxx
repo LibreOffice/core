@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_UNODIALOGS_TEXTCONVERSIONDLGS_CHINESE_TRANSLATIONDIALOG_HXX
-#define INCLUDED_SVX_SOURCE_UNODIALOGS_TEXTCONVERSIONDLGS_CHINESE_TRANSLATIONDIALOG_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -51,6 +50,5 @@ private:
 
 } //end namespace
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

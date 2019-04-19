@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_CORE_FILEACCESS_HXX
-#define INCLUDED_UCB_SOURCE_CORE_FILEACCESS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -39,6 +38,5 @@ css::uno::Reference<css::lang::XMultiServiceFactory> const & xSMgr);
 
 css::uno::Sequence<OUString> FileAccess_getSupportedServiceNames();
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

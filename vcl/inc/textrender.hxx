@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_CAIROFONTIMPL_HXX
-#define INCLUDED_VCL_INC_UNX_CAIROFONTIMPL_HXX
+#pragma once
 
 #include "salgdi.hxx"
 
@@ -67,6 +66,5 @@ public:
 #endif // ENABLE_CAIRO_CANVAS
 };
 
-#endif
 
 /* vim:set tabstop=4 shiftwidth=4 softtabstop=4 expandtab: */

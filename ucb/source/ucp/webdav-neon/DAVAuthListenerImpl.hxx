@@ -26,8 +26,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVAUTHLISTENERIMPL_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVAUTHLISTENERIMPL_HXX
+#pragma once
 
 #include <config_lgpl.h>
 #include "DAVAuthListener.hxx"
@@ -67,6 +66,5 @@ namespace webdav_ucp
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVTOOLS_BREADCRUMB_HXX
-#define INCLUDED_SVTOOLS_BREADCRUMB_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 
@@ -62,6 +61,5 @@ class SVT_DLLPUBLIC Breadcrumb : public VclHBox
         void SetMode( SvtBreadcrumbMode eMode );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

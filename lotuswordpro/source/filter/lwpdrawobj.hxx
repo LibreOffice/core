@@ -59,8 +59,7 @@
  *  and so on.
  */
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDRAWOBJ_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDRAWOBJ_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -368,6 +367,5 @@ protected:
     virtual XFFrame* CreateDrawObj(const OUString& rStyleName) override;
     virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) override;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

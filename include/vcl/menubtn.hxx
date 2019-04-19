@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_MENUBTN_HXX
-#define INCLUDED_VCL_MENUBTN_HXX
+#pragma once
 
 #include <vcl/button.hxx>
 #include <vcl/dllapi.h>
@@ -95,6 +94,5 @@ public:
     void            SetActive( bool bSel );
 };
 
-#endif // INCLUDED_VCL_MENUBTN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

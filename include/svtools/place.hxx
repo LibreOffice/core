@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVTOOLS_PLACE_HXX
-#define INCLUDED_SVTOOLS_PLACE_HXX
+#pragma once
 
 #include <tools/urlobj.hxx>
 
@@ -37,6 +36,5 @@ public:
     bool  IsEditable( ) { return mbEditable; }
 };
 
-#endif // INCLUDED_SVTOOLS_PLACE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

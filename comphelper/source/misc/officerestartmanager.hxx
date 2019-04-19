@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_SOURCE_MISC_OFFICERESTARTMANAGER_HXX
-#define INCLUDED_COMPHELPER_SOURCE_MISC_OFFICERESTARTMANAGER_HXX
+#pragma once
 
 #include <com/sun/star/task/XRestartManager.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -64,6 +63,5 @@ public:
 
 } // namespace comphelper
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DUMP_DUMPERBASE_HXX
-#define INCLUDED_OOX_DUMP_DUMPERBASE_HXX
+#pragma once
 
 #include <cmath>
 #include <cstddef>
@@ -1738,6 +1737,5 @@ do {                                                \
 #define OOX_DUMP_FILE( DumperClassName ) (void)0
 
 #endif  // OOX_INCLUDE_DUMPER
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

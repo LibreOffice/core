@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_WIN_SALSYS_H
-#define INCLUDED_VCL_INC_WIN_SALSYS_H
+#pragma once
 
 #include <salsys.hxx>
 
@@ -65,6 +64,5 @@ public:
                                 sal_IntPtr /*LPRECT*/ );
 };
 
-#endif // INCLUDED_VCL_INC_WIN_SALSYS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_REFDATA_HXX
-#define INCLUDED_SC_INC_REFDATA_HXX
+#pragma once
 
 #include "address.hxx"
 #include "scdllapi.h"
@@ -196,6 +195,5 @@ struct ScComplexRefData
 #endif
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

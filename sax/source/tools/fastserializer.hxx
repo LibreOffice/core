@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAX_SOURCE_TOOLS_FASTSERIALIZER_HXX
-#define INCLUDED_SAX_SOURCE_TOOLS_FASTSERIALIZER_HXX
+#pragma once
 
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -246,6 +245,5 @@ private:
 
 } // namespace sax_fastparser
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

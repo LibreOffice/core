@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_UNOPRNMS_HXX
-#define INCLUDED_EDITENG_UNOPRNMS_HXX
+#pragma once
 
 
 #define UNO_NAME_CHAR_COLOR                     "CharColor"
@@ -343,7 +342,6 @@
 #define UNO_NAME_GRAPHIC_COLOR_MODE             "GraphicColorMode"
 #define UNO_NAME_GRAPHIC_GRAPHICCROP            "GraphicCrop"
 
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

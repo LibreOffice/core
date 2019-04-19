@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_GENERIC_PRINT_GLYPHSET_HXX
-#define INCLUDED_VCL_GENERIC_PRINT_GLYPHSET_HXX
+#pragma once
 
 #include <unx/fontmanager.hxx>
 
@@ -80,6 +79,5 @@ public:
 
 } /* namespace psp */
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

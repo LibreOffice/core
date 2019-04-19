@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLS_SVBORDER_HXX
-#define INCLUDED_TOOLS_SVBORDER_HXX
+#pragma once
 
 #include <tools/toolsdllapi.h>
 
@@ -67,6 +66,5 @@ public:
 
 TOOLS_DLLPUBLIC tools::Rectangle & operator += ( tools::Rectangle & rRect, const SvBorder & rBorder );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

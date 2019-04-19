@@ -57,8 +57,7 @@
  * @file
  * doc field.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDOCFIELD_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDOCFIELD_HXX
+#pragma once
 
 #include <xfilter/xfcontent.hxx>
 #include <xfilter/xfpagecount.hxx>
@@ -193,6 +192,5 @@ public:
     virtual void    ToXml(IXFStream *pStrm) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

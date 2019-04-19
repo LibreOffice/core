@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_SOURCE_EDITENG_EDITUNDO_HXX
-#define INCLUDED_EDITENG_SOURCE_EDITENG_EDITUNDO_HXX
+#pragma once
 
 #include <editdoc.hxx>
 #include <editeng/editund2.hxx>
@@ -285,6 +284,5 @@ public:
 };
 
 
-#endif // INCLUDED_EDITENG_SOURCE_EDITENG_EDITUNDO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_CURVE_B2DCUBICBEZIER_HXX
-#define INCLUDED_BASEGFX_CURVE_B2DCUBICBEZIER_HXX
+#pragma once
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -197,6 +196,5 @@ namespace basegfx
     };
 } // end of namespace basegfx
 
-#endif // INCLUDED_BASEGFX_CURVE_B2DCUBICBEZIER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

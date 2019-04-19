@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_OBJ3D_HXX
-#define INCLUDED_SVX_OBJ3D_HXX
+#pragma once
 
 #include <svx/svdoattr.hxx>
 #include <svx/svdobj.hxx>
@@ -198,6 +197,5 @@ public:
     E3dCompoundObject& operator=(const E3dCompoundObject& rObj);
 };
 
-#endif // INCLUDED_SVX_OBJ3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_HELPER_OOXMLSECPARSER_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_HELPER_OOXMLSECPARSER_HXX
+#pragma once
 
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -83,6 +82,5 @@ public:
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

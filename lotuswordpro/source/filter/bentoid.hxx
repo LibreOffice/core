@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_BENTOID_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_BENTOID_HXX
+#pragma once
 
 namespace OpenStormBento
 {
@@ -91,6 +90,5 @@ namespace OpenStormBento
 #define BEN_NOOP 0xFF
 
 }// end OpenStormBento namespace
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

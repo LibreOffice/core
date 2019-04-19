@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDRPAGEWINDOW_HXX
-#define INCLUDED_SVX_SDRPAGEWINDOW_HXX
+#pragma once
 
 #include <basegfx/range/b2irectangle.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -94,6 +93,5 @@ public:
     void    SetDesignMode( bool _bDesignMode ) const;
 };
 
-#endif // INCLUDED_SVX_SDRPAGEWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

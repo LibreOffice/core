@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_SCANNER_TWAIN32SHIM_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_SCANNER_TWAIN32SHIM_HXX
+#pragma once
 
 #include <prewin.h>
 #include <postwin.h>
@@ -65,6 +64,5 @@ void ThrowWin32Error(const char* sFunc, DWORD nWin32Error)
 
 void ThrowLastError(const char* sFunc) { ThrowWin32Error(sFunc, GetLastError()); }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

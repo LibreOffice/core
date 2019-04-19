@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_DOCNODE_NDSECT_HXX
-#define INCLUDED_SW_SOURCE_CORE_DOCNODE_NDSECT_HXX
+#pragma once
 
 #include <tools/solar.h>
 
@@ -27,6 +26,5 @@ class SwSectionNode;
 void sw_DeleteFootnote( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd );
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

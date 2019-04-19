@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_INC_SORGITM_HXX
-#define INCLUDED_SFX2_INC_SORGITM_HXX
+#pragma once
 
 #include <svl/stritem.hxx>
 
@@ -39,6 +38,5 @@ public:
     const OUString&       getLanguage() const { return aLanguage; };
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

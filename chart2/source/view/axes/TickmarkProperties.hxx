@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_VIEW_AXES_TICKMARKPROPERTIES_HXX
-#define INCLUDED_CHART2_SOURCE_VIEW_AXES_TICKMARKPROPERTIES_HXX
+#pragma once
 
 #include <VLineProperties.hxx>
 
@@ -34,6 +33,5 @@ struct TickmarkProperties
 };
 
 } //namespace chart
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

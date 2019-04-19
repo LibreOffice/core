@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_CONSTITEMCONTAINER_HXX
-#define INCLUDED_FRAMEWORK_INC_UIELEMENT_CONSTITEMCONTAINER_HXX
+#pragma once
 
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -99,6 +98,5 @@ class FWI_DLLPUBLIC ConstItemContainer : public ::cppu::WeakImplHelper<
 
 }
 
-#endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_CONSTITEMCONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

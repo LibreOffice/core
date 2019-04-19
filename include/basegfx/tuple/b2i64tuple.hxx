@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_TUPLE_B2I64TUPLE_HXX
-#define INCLUDED_BASEGFX_TUPLE_B2I64TUPLE_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <basegfx/basegfxdllapi.h>
@@ -174,6 +173,5 @@ namespace basegfx
 
 } // end of namespace basegfx
 
-#endif // INCLUDED_BASEGFX_TUPLE_B2I64TUPLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

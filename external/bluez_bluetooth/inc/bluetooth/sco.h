@@ -9,8 +9,7 @@
  ***
  ****************************************************************************
  ****************************************************************************/
-#ifndef __SCO_H
-#define __SCO_H
+#pragma once
 
 #ifdef __cplusplus
 #endif
@@ -29,4 +28,3 @@ struct sockaddr_sco
   bdaddr_t sco_bdaddr;
   uint16_t sco_pkt_type;
 };
-#endif

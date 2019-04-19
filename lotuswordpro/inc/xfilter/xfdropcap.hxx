@@ -57,8 +57,7 @@
  * @file
  * Drop cap of a paragraph.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDROPCAP_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDROPCAP_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 
@@ -145,5 +144,4 @@ inline bool operator!=(XFDropcap const & dc1, XFDropcap const & dc2)
     return !(dc1==dc2);
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

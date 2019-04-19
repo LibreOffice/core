@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLTBLI_HXX
-#define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLTBLI_HXX
+#pragma once
 
 #include <librevenge/librevenge.h>
 
@@ -42,6 +41,5 @@ private:
 } // namespace exp
 } // namespace writerperfect
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

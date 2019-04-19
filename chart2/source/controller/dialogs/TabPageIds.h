@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TABPAGEIDS_H
-#define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TABPAGEIDS_H
+#pragma once
 
 //TabPage Ids:
 #define TP_LEGEND_POS   900
@@ -39,6 +38,5 @@
 #define TP_YERRORBAR    919
 #define TP_XERRORBAR    923
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

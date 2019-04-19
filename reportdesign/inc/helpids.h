@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef RTPUI_REPORTDESIGN_HELPIDS_H
-#define RTPUI_REPORTDESIGN_HELPIDS_H
+#pragma once
 
 #define UID_RPT_PROP_FORMULA                    "REPORTDESIGN_UID_RPT_PROP_FORMULA"
 #define UID_RPT_RPT_PROP_DLG_FONT_TYPE          "REPORTDESIGN_UID_RPT_RPT_PROP_DLG_FONT_TYPE"
@@ -87,6 +86,5 @@
 #define HID_RPT_PROP_BACKTRANSPARENT                  "REPORTDESIGN_HID_RPT_PROP_BACKTRANSPARENT"
 #define HID_RPT_PROP_CONTROLBACKGROUNDTRANSPARENT     "REPORTDESIGN_HID_RPT_PROP_CONTROLBACKGROUNDTRANSPARENT"
 
-#endif //RTPUI_REPORTDESIGN_HELPID_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

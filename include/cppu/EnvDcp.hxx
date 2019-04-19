@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPU_ENVDCP_HXX
-#define INCLUDED_CPPU_ENVDCP_HXX
+#pragma once
 
 #include "rtl/ustring.hxx"
 #include "uno/EnvDcp.h"
@@ -64,6 +63,5 @@ inline rtl::OUString getPurpose(rtl::OUString const & rEnvDcp)
 }
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

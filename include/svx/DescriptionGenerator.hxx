@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_SVX_DESCRIPTIONGENERATOR_HXX
-#define INCLUDED_SVX_DESCRIPTIONGENERATOR_HXX
+#pragma once
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -195,6 +194,5 @@ private:
 } // end of namespace accessibility
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

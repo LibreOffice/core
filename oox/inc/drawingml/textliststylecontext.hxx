@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_TEXTLISTSTYLECONTEXT_HXX
-#define INCLUDED_OOX_DRAWINGML_TEXTLISTSTYLECONTEXT_HXX
+#pragma once
 
 #include <drawingml/textliststyle.hxx>
 #include <oox/core/contexthandler2.hxx>
@@ -39,6 +38,5 @@ private:
 
 } }
 
-#endif // INCLUDED_OOX_DRAWINGML_TEXTLISTSTYLECONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

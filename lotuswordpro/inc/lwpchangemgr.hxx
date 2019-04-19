@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPCHANGEMGR_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPCHANGEMGR_HXX
+#pragma once
 
 #include <map>
 #include <vector>
@@ -89,5 +88,4 @@ private:
     sal_uInt32 m_nCounter;
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

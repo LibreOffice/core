@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_COM_SUN_STAR_UNO_SEQUENCE_HXX
-#define INCLUDED_COM_SUN_STAR_UNO_SEQUENCE_HXX
+#pragma once
 
 #include "sal/config.h"
 
@@ -356,6 +355,5 @@ SAL_CALL getCharSequenceCppuType()
         & s_pType_com_sun_star_uno_Sequence_Char );
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

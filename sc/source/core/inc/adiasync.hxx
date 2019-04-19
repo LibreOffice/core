@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_CORE_INC_ADIASYNC_HXX
-#define INCLUDED_SC_SOURCE_CORE_INC_ADIASYNC_HXX
+#pragma once
 
 #include <svl/broadcast.hxx>
 #include <set>
@@ -75,6 +74,5 @@ using ScAddInAsyncs = std::set<std::unique_ptr<ScAddInAsync>, CompareScAddInAsyn
 
 extern ScAddInAsyncs theAddInAsyncTbl;  // in adiasync.cxx
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

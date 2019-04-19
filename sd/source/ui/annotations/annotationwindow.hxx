@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONWINDOW_HXX
-#define INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONWINDOW_HXX
+#pragma once
 
 #include <vcl/ctrl.hxx>
 #include <vcl/floatwin.hxx>
@@ -140,6 +139,5 @@ TextApiObject* getTextApiObject( const css::uno::Reference< css::office::XAnnota
 
 } // namespace sd
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

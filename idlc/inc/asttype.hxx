@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_IDLC_INC_ASTTYPE_HXX
-#define INCLUDED_IDLC_INC_ASTTYPE_HXX
+#pragma once
 
 #include "astdeclaration.hxx"
 
@@ -31,6 +30,5 @@ public:
     virtual bool isUnsigned() const { return false; }
 };
 
-#endif // INCLUDED_IDLC_INC_ASTTYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

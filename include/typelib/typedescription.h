@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TYPELIB_TYPEDESCRIPTION_H
-#define INCLUDED_TYPELIB_TYPEDESCRIPTION_H
+#pragma once
 
 #include "cppu/cppudllapi.h"
 #include "typelib/uik.h"
@@ -1032,6 +1031,5 @@ inline void TYPELIB_DANGER_RELEASE( typelib_TypeDescription* pDescription )
 }
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

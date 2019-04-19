@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSPRM_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSPRM_HXX
+#pragma once
 
 #include <string>
 #include <utility>
@@ -101,6 +100,5 @@ private:
 } // namespace rtftok
 } // namespace writerfilter
 
-#endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSPRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

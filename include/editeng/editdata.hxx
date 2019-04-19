@@ -18,8 +18,7 @@
  */
 
 // MyEDITDATA, wegen exportiertem EditData
-#ifndef INCLUDED_EDITENG_EDITDATA_HXX
-#define INCLUDED_EDITENG_EDITDATA_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <editeng/editengdllapi.h>
@@ -343,6 +342,5 @@ struct EENotify
         { eNotificationType = eType; nParagraph = EE_PARA_NOT_FOUND; nParam1 = 0; nParam2 = 0; }
 };
 
-#endif // INCLUDED_EDITENG_EDITDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

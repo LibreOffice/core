@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBACKGROUNDOVERRIDE_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBACKGROUNDOVERRIDE_HXX
+#pragma once
 
 #include <lwpoverride.hxx>
 #include "lwpbackgroundstuff.hxx"
@@ -94,5 +93,4 @@ private:
     LwpBackgroundStuff  m_aStuff;
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

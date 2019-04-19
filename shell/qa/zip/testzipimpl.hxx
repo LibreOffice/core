@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_QA_ZIP_TESTZIPIMPL_HXX
-#define INCLUDED_SHELL_QA_ZIP_TESTZIPIMPL_HXX
+#pragma once
 
 #include <zipfile.hxx>
 #include <string>
@@ -41,6 +40,5 @@ class TestZipImpl
     bool test_getContent();
 };
 
-#endif // INCLUDED_SHELL_QA_ZIP_TESTZIPIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

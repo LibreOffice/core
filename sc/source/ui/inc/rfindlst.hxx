@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_RFINDLST_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_RFINDLST_HXX
+#pragma once
 
 #include <tools/color.hxx>
 #include <address.hxx>
@@ -62,6 +61,5 @@ public:
     Color            FindColor(const ScRange& rRef, const size_t nIndex);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_MSFILTER_MSDFFIMP_HXX
-#define INCLUDED_FILTER_MSFILTER_MSDFFIMP_HXX
+#pragma once
 
 #include <cstring>
 #include <map>
@@ -807,6 +806,5 @@ struct CompareSvxMSDffShapeTxBxSort
 class MSFILTER_DLLPUBLIC SvxMSDffShapeTxBxSort : public std::set<SvxMSDffShapeOrder*,CompareSvxMSDffShapeTxBxSort> {};
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

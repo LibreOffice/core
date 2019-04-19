@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_CREATEPARSER_HXX
-#define INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_CREATEPARSER_HXX
+#pragma once
 
 #include <vector>
 #include "columndef.hxx"
@@ -66,6 +65,5 @@ public:
 };
 }
 
-#endif // INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_CREATEPARSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

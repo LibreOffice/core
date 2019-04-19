@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPFILEHDR_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPFILEHDR_HXX
+#pragma once
 
 #include "lwpobjid.hxx"
 /**
@@ -86,6 +85,5 @@ inline LwpObjectID& LwpFileHeader::GetDocID()
     return m_cDocumentID;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

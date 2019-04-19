@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_PRNTOPTS_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_PRNTOPTS_HXX
+#pragma once
 
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>
@@ -69,6 +68,5 @@ public:
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
 };
 
-#endif // INCLUDED_SD_SOURCE_UI_INC_PRNTOPTS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_DBEXCEPTION_HXX
-#define INCLUDED_CONNECTIVITY_DBEXCEPTION_HXX
+#pragma once
 
 #include <connectivity/standardsqlstate.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
@@ -326,7 +325,6 @@ OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
 }   // namespace dbtools
 
 
-#endif // INCLUDED_CONNECTIVITY_DBEXCEPTION_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

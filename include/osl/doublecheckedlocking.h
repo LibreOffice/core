@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OSL_DOUBLECHECKEDLOCKING_H
-#define INCLUDED_OSL_DOUBLECHECKEDLOCKING_H
+#pragma once
 
 #if defined __cplusplus
 extern "C" {
@@ -72,6 +71,5 @@ extern "C" {
 }
 #endif /* __cplusplus */
 
-#endif /* INCLUDED_OSL_DOUBLECHECKEDLOCKING_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

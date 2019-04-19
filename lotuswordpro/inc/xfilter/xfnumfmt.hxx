@@ -57,8 +57,7 @@
  * @file
  * Number format. a),A),i),1),(1)
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFNUMFMT_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFNUMFMT_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 
@@ -145,5 +144,4 @@ private:
     sal_Int16   m_nStartValue;
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

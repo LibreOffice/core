@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_MACRODLG_HXX
-#define INCLUDED_BASCTL_SOURCE_BASICIDE_MACRODLG_HXX
+#pragma once
 
 #include <bastype2.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -104,6 +103,5 @@ public:
 
 } // namespace basctl
 
-#endif // INCLUDED_BASCTL_SOURCE_BASICIDE_MACRODLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

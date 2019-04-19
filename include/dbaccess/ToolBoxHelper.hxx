@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_TOOLBOXHELPER_HXX
-#define INCLUDED_DBACCESS_TOOLBOXHELPER_HXX
+#pragma once
 
 #include <dbaccess/dbaccessdllapi.h>
 #include <sal/types.h>
@@ -71,6 +70,5 @@ namespace dbaui
         DECL_LINK(SettingsChanged, VclSimpleEvent&, void );
     };
 }
-#endif // INCLUDED_DBACCESS_TOOLBOXHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

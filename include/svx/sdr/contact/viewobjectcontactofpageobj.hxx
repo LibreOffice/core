@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFPAGEOBJ_HXX
-#define INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFPAGEOBJ_HXX
+#pragma once
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #include <memory>
@@ -49,6 +48,5 @@ public:
 }}
 
 
-#endif // INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFPAGEOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

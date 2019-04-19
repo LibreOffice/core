@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_SCREENSHOT_TEST_HXX
-#define INCLUDED_TEST_SCREENSHOT_TEST_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
@@ -85,6 +84,5 @@ public:
     const mapType& getKnownDialogs() const { return maKnownDialogs; }
 };
 
-#endif // INCLUDED_TEST_SCREENSHOT_TEST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,8 +58,7 @@
  *  kinds of holder classes header file
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPHOLDER_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPHOLDER_HXX
+#pragma once
 
 #include <lwpobj.hxx>
 #include "lwpdlvlist.hxx"
@@ -126,6 +125,5 @@ private:
     LwpDLVListHeadTail m_HeadTail;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

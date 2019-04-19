@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDGMOITM_HXX
-#define INCLUDED_SVX_SDGMOITM_HXX
+#pragma once
 
 #include <vcl/GraphicObject.hxx>
 #include <svl/eitem.hxx>
@@ -47,6 +46,5 @@ public:
                                   OUString& rText, const IntlWrapper& ) const override;
 };
 
-#endif // INCLUDED_SVX_SDGMOITM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

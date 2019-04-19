@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_SOURCE_INC_TREEOPT_HXX
-#define INCLUDED_CUI_SOURCE_INC_TREEOPT_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -230,6 +229,5 @@ public:
     void            SavePage();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

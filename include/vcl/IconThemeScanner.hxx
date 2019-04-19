@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_ICONTHEMESCANNER_HXX
-#define INCLUDED_VCL_ICONTHEMESCANNER_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -87,6 +86,5 @@ private:
 
 } // end namespace vcl
 
-#endif // INCLUDED_VCL_ICONTHEMESCANNER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

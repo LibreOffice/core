@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBATOGGLEBUTTON_HXX
-#define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBATOGGLEBUTTON_HXX
+#pragma once
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/msforms/XToggleButton.hpp>
 
@@ -55,6 +54,5 @@ public:
     // XDefaultProperty
     OUString SAL_CALL getDefaultPropertyName(  ) override { return OUString("Value"); }
 };
-#endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBATOGGLEBUTTON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

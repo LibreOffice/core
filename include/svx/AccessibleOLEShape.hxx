@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_ACCESSIBLEOLESHAPE_HXX
-#define INCLUDED_SVX_ACCESSIBLEOLESHAPE_HXX
+#pragma once
 
 #include <exception>
 
@@ -115,6 +114,5 @@ private:
 
 } // end of namespace accessibility
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_NUMBERS_HXX
-#define INCLUDED_COMPHELPER_NUMBERS_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -51,6 +50,5 @@ namespace comphelper
 }   // namespace comphelper
 
 
-#endif // INCLUDED_COMPHELPER_NUMBERS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

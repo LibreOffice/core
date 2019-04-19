@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_OPENGL_OPENGLHELPER_HXX
-#define INCLUDED_VCL_OPENGL_OPENGLHELPER_HXX
+#pragma once
 
 #include <epoxy/gl.h>
 #include <sal/detail/log.h>
@@ -113,6 +112,5 @@ public:
 #define CHECK_GL_ERROR() do { } while (false)
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

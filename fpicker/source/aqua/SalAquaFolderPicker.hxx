@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FPICKER_SOURCE_AQUA_SALAQUAFOLDERPICKER_HXX
-#define INCLUDED_FPICKER_SOURCE_AQUA_SALAQUAFOLDERPICKER_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/util/XCancellable.hpp>
@@ -98,6 +97,5 @@ private:
 
 };
 
-#endif // INCLUDED_FPICKER_SOURCE_AQUA_SALAQUAFOLDERPICKER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

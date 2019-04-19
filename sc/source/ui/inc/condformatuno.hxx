@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CONDFORMATUNO_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CONDFORMATUNO_HXX
+#pragma once
 
 #include <types.hxx>
 
@@ -372,6 +371,5 @@ private:
     const ScCondDateFormatEntry* mpFormat;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

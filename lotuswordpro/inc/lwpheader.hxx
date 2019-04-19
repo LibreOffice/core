@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  */
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPHEADER_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPHEADER_HXX
+#pragma once
 
 #include <config_lgpl.h>
 #include <math.h>
@@ -75,6 +74,5 @@
 #include <rtl/ustring.hxx>
 #include <memory.h>
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

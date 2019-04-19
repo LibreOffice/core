@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UNO_ENVIRONMENT_H
-#define INCLUDED_UNO_ENVIRONMENT_H
+#pragma once
 
 #include "cppu/cppudllapi.h"
 #include "rtl/ustring.h"
@@ -380,6 +379,5 @@ CPPU_DLLPUBLIC int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_
 }
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

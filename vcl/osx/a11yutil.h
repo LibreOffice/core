@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OSX_A11YUTIL_H
-#define INCLUDED_VCL_OSX_A11YUTIL_H
+#pragma once
 
 #include <com/sun/star/awt/Point.hpp>
 
@@ -28,5 +27,4 @@
 +(css::awt::Point)nsPointToVclPoint:(NSValue *)nsPoint;
 @end
 
-#endif // INCLUDED_VCL_OSX_A11YUTIL_H
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

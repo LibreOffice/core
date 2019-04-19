@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_EXPORT_CHARTEXPORT_HXX
-#define INCLUDED_OOX_EXPORT_CHARTEXPORT_HXX
+#pragma once
 
 #include <set>
 #include <vector>
@@ -226,6 +225,5 @@ public:
 
 }}
 
-#endif // INCLUDED_OOX_EXPORT_CHARTEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPAGEHINT_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPAGEHINT_HXX
+#pragma once
 
 #include <lwpobj.hxx>
 #include <lwpobjid.hxx>
@@ -122,5 +121,4 @@ private:
     sal_uInt16 m_nLayoutPageNumber;
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

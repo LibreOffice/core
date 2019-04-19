@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_HELPIDS_H
-#define INCLUDED_SW_INC_HELPIDS_H
+#pragma once
 
 #define HID_EDIT_WIN                                            "SW_HID_EDIT_WIN"
 
@@ -154,6 +153,5 @@
 #define HID_TBX_FORMULA_CANCEL                                  "SW_HID_TBX_FORMULA_CANCEL"
 #define HID_TBX_FORMULA_APPLY                                   "SW_HID_TBX_FORMULA_APPLY"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

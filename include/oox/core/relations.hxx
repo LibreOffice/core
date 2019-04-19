@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_CORE_RELATIONS_HXX
-#define INCLUDED_OOX_CORE_RELATIONS_HXX
+#pragma once
 
 #include <cstddef>
 #include <map>
@@ -116,6 +115,5 @@ private:
 } // namespace core
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_FNTCACHE_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_FNTCACHE_HXX
+#pragma once
 
 #include <map>
 
@@ -157,6 +156,5 @@ public:
     SwFntObj* Get() { return static_cast<SwFntObj*>( SwCacheAccess::Get() ); }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

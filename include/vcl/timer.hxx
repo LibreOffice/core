@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_TIMER_HXX
-#define INCLUDED_VCL_TIMER_HXX
+#pragma once
 
 #include <tools/link.hxx>
 #include <vcl/task.hxx>
@@ -76,6 +75,5 @@ public:
     AutoTimer( const sal_Char *pDebugName = nullptr );
 };
 
-#endif // INCLUDED_VCL_TIMER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

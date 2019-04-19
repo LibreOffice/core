@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVGIO_INC_SVGTOOLS_HXX
-#define INCLUDED_SVGIO_INC_SVGTOOLS_HXX
+#pragma once
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
@@ -222,6 +221,5 @@ namespace svgio
     } // end of namespace svgreader
 } // end of namespace svgio
 
-#endif // INCLUDED_SVGIO_INC_SVGTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

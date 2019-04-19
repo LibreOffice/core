@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_SWCACHE_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_SWCACHE_HXX
+#pragma once
 
 /**
  * Here, we manage pointers in a simple PtrArray to objects.
@@ -250,6 +249,5 @@ inline SwCacheObj *SwCacheAccess::Get()
     return m_pObj;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

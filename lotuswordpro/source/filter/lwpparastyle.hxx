@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARASTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARASTYLE_HXX
+#pragma once
 
 #include "lwpcharacterstyle.hxx"
 #include "lwppiece.hxx"
@@ -117,6 +116,5 @@ private:
     LwpBulletOverride       m_BulletOverride;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

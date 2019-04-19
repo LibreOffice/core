@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_IMAPDLG_HXX
-#define INCLUDED_SVX_IMAPDLG_HXX
+#pragma once
 
 #include <svtools/inettbc.hxx>
 #include <sfx2/childwin.hxx>
@@ -155,6 +154,5 @@ public:
 
 SVX_DLLPUBLIC SvxIMapDlg* GetIMapDlg();
 
-#endif // INCLUDED_SVX_IMAPDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

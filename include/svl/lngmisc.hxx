@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_LNGMISC_HXX
-#define INCLUDED_SVL_LNGMISC_HXX
+#pragma once
 
 #include <svl/svldllapi.h>
 
@@ -51,6 +50,5 @@ namespace linguistic
     SVL_DLLPUBLIC OUString GetThesaurusReplaceText(const OUString &rText);
 } // namespace linguistic
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

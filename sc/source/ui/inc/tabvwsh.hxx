@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_TABVWSH_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_TABVWSH_HXX
+#pragma once
 
 #include <formula/errorcodes.hxx>
 #include <svx/fmshell.hxx>
@@ -396,6 +395,5 @@ public:
     static  css::uno::Reference<css::datatransfer::XTransferable2> GetClipData(vcl::Window* pWin);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

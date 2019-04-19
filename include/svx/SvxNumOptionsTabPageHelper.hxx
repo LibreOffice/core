@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVXNUMOPTIONSTABPAGEHELPER_HXX
-#define INCLUDED_SVX_SVXNUMOPTIONSTABPAGEHELPER_HXX
+#pragma once
 
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
@@ -49,5 +48,4 @@ public:
     static void GetI18nNumbering(weld::ComboBox& rFmtLB, sal_uInt16 nDoNotRemove);
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

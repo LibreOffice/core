@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXAMPLES_COMPLEXTOOLBARCONTROLS_MYPROTOCOLHANDLER_H
-#define INCLUDED_EXAMPLES_COMPLEXTOOLBARCONTROLS_MYPROTOCOLHANDLER_H
+#pragma once
 
 #include <com/sun/star/awt/XToolkit2.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -156,6 +155,5 @@ public:
     {}
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

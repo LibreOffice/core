@@ -23,8 +23,7 @@
 
  *************************************************************************/
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPURL_HXX
-#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPURL_HXX
+#pragma once
 
 #include "curl.hxx"
 #include <curl/easy.h>
@@ -162,6 +161,5 @@ namespace ftp {
 }
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

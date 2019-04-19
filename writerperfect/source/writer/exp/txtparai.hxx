@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_TXTPARAI_HXX
-#define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_TXTPARAI_HXX
+#pragma once
 
 #include <map>
 
@@ -57,6 +56,5 @@ void FillStyles(const OUString& rName,
 } // namespace exp
 } // namespace writerperfect
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

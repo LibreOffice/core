@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OSL_DETAIL_FILE_H
-#define INCLUDED_OSL_DETAIL_FILE_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -27,6 +26,5 @@
 
 /** @endcond */
 
-#endif /* INCLUDED_OSL_DETAIL_FILE_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

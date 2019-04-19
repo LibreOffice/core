@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_EDITENG_CUSTOMPROPERTYFIELD_HXX
-#define INCLUDED_EDITENG_CUSTOMPROPERTYFIELD_HXX
+#pragma once
 
 #include <editeng/editengdllapi.h>
 
@@ -56,6 +55,5 @@ public:
 
 } // end editeng namespace
 
-#endif // INCLUDED_EDITENG_CUSTOMPROPERTYFIELD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

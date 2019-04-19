@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_OBJFAC3D_HXX
-#define INCLUDED_SVX_OBJFAC3D_HXX
+#pragma once
 
 #include <svx/svxdllapi.h>
 #include <tools/link.hxx>
@@ -44,6 +43,5 @@ public:
 };
 
 
-#endif // INCLUDED_SVX_OBJFAC3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

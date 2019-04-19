@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_BITMAPDISABLEDIMAGEFILTER_HXX
-#define INCLUDED_VCL_INC_BITMAPDISABLEDIMAGEFILTER_HXX
+#pragma once
 
 #include <vcl/BitmapFilter.hxx>
 
@@ -21,6 +20,5 @@ public:
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

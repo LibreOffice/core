@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPCANVAS_BITMAPCANVAS_HXX
-#define INCLUDED_CPPCANVAS_BITMAPCANVAS_HXX
+#pragma once
 
 #include <basegfx/vector/b2isize.hxx>
 #include <cppcanvas/canvas.hxx>
@@ -44,6 +43,5 @@ namespace cppcanvas
 
 }
 
-#endif // INCLUDED_CPPCANVAS_BITMAPCANVAS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

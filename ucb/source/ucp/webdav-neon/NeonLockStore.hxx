@@ -25,8 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONLOCKSTORE_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONLOCKSTORE_HXX
+#pragma once
 
 #include <config_lgpl.h>
 #include <map>
@@ -92,6 +91,5 @@ private:
 
 } // namespace webdav_ucp
 
-#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONLOCKSTORE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

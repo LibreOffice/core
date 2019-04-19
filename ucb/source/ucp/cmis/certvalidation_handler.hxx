@@ -9,8 +9,7 @@
  * This file incorporates work covered by the following license notice:
  *
  */
-#ifndef INCLUDED_UCB_SOURCE_UCP_CMIS_CERTVALIDATION_HANDLER_HXX
-#define INCLUDED_UCB_SOURCE_UCP_CMIS_CERTVALIDATION_HANDLER_HXX
+#pragma once
 
 #if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic push
@@ -43,6 +42,5 @@ namespace cmis
     };
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

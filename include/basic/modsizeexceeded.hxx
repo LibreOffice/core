@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_MODSIZEEXCEEDED_HXX
-#define INCLUDED_BASIC_MODSIZEEXCEEDED_HXX
+#pragma once
 
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -52,6 +51,5 @@ private:
     css::uno::Reference< css::task::XInteractionContinuation> m_xApprove;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

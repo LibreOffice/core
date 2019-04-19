@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_TEST_OLE_OLECLIENT_AXHOST_HXX
-#define INCLUDED_EXTENSIONS_TEST_OLE_OLECLIENT_AXHOST_HXX
+#pragma once
 
 #include <atlbase.h>
 extern CComModule _Module;
@@ -47,7 +46,6 @@ public:
 
     LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 };
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

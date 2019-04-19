@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CUI_SOURCE_INC_HELPID_HRC
-#define INCLUDED_CUI_SOURCE_INC_HELPID_HRC
+#pragma once
 
 #include <svx/svxcommands.h>
 
@@ -42,6 +41,5 @@
 #define HID_SVX_DESCFIELD "CUI_HID_SVX_DESCFIELD"
 #define HID_MACRO_HEADERTABLISTBOX "CUI_HID_MACRO_HEADERTABLISTBOX"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

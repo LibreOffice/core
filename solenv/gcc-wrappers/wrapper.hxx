@@ -7,8 +7,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#ifndef INCLUDED_SOLENV_GCC_WRAPPERS_WRAPPER_HXX
-#define INCLUDED_SOLENV_GCC_WRAPPERS_WRAPPER_HXX
+#pragma once
 
 #include <string>
 #include <iostream>
@@ -24,6 +23,5 @@ string processccargs(vector<string> rawargs);
 
 int startprocess(string command, string args);
 
-#endif // INCLUDED_SOLENV_GCC_WRAPPERS_WRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

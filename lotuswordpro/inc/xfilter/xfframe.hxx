@@ -58,8 +58,7 @@
  * Frame object for OOo.This is the basic object for all Shape Layer.
  * You can reference to the XFFrame object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFRAME_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFRAME_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xfcontent.hxx>
@@ -247,6 +246,5 @@ inline void XFFrame::SetAnchorPage(sal_Int32 page)
     m_nAnchorPage = page;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

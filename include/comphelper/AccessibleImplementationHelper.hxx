@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_ACESSIBLEIMPLEMENTATIONHELPER_HXX
-#define INCLUDED_COMPHELPER_ACESSIBLEIMPLEMENTATIONHELPER_HXX
+#pragma once
 
 #include <com/sun/star/awt/KeyStroke.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -37,6 +36,5 @@ COMPHELPER_DLLPUBLIC OUString
 GetkeyBindingStrByXkeyBinding(const css::uno::Sequence<css::awt::KeyStroke>& keySet);
 }
 
-#endif // INCLUDED_COMPHELPER_ACESSIBLEIMPLEMENTATIONHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

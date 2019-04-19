@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_INC_INTERNAL_XML_PARSER_HXX
-#define INCLUDED_SHELL_INC_INTERNAL_XML_PARSER_HXX
+#pragma once
 
 #include <expat.h>
 #include <stdexcept>
@@ -104,6 +103,5 @@ private:
     xml_parser& operator=(const xml_parser&) = delete;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

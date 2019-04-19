@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_EDITENG_RSIDITEM_HXX
-#define INCLUDED_EDITENG_RSIDITEM_HXX
+#pragma once
 
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>
@@ -34,4 +33,3 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
-#endif // INCLUDED_EDITENG_RSIDITEM_HXX

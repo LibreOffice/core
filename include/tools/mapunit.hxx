@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLS_MAPUNIT_HXX
-#define INCLUDED_TOOLS_MAPUNIT_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -44,6 +43,5 @@ constexpr sal_Int64 convertMm100ToTwip(sal_Int64 n)
     return (n >= 0)? (n*72+63)/127: (n*72-63)/127;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

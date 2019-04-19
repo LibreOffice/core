@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_SOURCE_KEYIMPL_HXX
-#define INCLUDED_REGISTRY_SOURCE_KEYIMPL_HXX
+#pragma once
 
 #include "regimpl.hxx"
 #include <rtl/ustring.hxx>
@@ -130,7 +129,6 @@ private:
     ORegistry*              m_pRegistry;
 };
 
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFOOTNOTE_HXX
-#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFOOTNOTE_HXX
+#pragma once
 
 #include <sal/types.h>
 #include "acccontext.hxx"
@@ -63,6 +62,5 @@ public:
     static bool IsEndnote( const SwFootnoteFrame *pFrame );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

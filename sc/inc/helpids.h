@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_HELPIDS_H
-#define INCLUDED_SC_INC_HELPIDS_H
+#pragma once
 
 #define HID_INSWIN_POS                                          "SC_HID_INSWIN_POS"
 #define HID_INSWIN_CALC                                         "SC_HID_INSWIN_CALC"
@@ -580,6 +579,5 @@
 #define HID_FUNC_REGEX                                          "SC_HID_FUNC_REGEX"
 #define HID_FUNC_FOURIER                                        "SC_HID_FUNC_FOURIER"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

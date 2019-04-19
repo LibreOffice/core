@@ -16,14 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VCL_INC_UNX_SVSYS_H
-#define INCLUDED_VCL_INC_UNX_SVSYS_H
+#pragma once
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/extensions/Xrender.h>
 #include <X11/XKBlib.h>
 
-#endif // INCLUDED_VCL_INC_UNX_SVSYS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

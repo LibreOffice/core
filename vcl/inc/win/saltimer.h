@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_WIN_SALTIMER_H
-#define INCLUDED_VCL_INC_WIN_SALTIMER_H
+#pragma once
 
 #include <saltimer.hxx>
 
@@ -81,6 +80,5 @@ inline bool WinSalTimer::GetForceRealTimer() const
     return m_bForceRealTimer;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

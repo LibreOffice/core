@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_OLE_OLEHELPER_HXX
-#define INCLUDED_OOX_OLE_OLEHELPER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <filter/msfilter/msocximex.hxx>
@@ -198,6 +197,5 @@ public:
 } // namespace ole
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

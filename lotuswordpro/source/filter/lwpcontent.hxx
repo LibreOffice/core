@@ -58,8 +58,7 @@
  *  LwpContent, LwpHeadContent: base class for Word Pro content object
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCONTENT_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCONTENT_HXX
+#pragma once
 
 #include <lwpheader.hxx>
 #include <lwpobj.hxx>
@@ -150,6 +149,5 @@ protected:
     void Read() override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

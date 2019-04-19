@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_EDITOBJ_HXX
-#define INCLUDED_EDITENG_EDITOBJ_HXX
+#pragma once
 
 #include <svl/style.hxx>
 #include <svl/itempool.hxx>
@@ -144,6 +143,5 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
-#endif // INCLUDED_EDITENG_EDITOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

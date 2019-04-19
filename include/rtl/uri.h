@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_RTL_URI_H
-#define INCLUDED_RTL_URI_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -335,6 +334,5 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_uriConvertRelToAbs(
 }
 #endif /* __cplusplus */
 
-#endif // INCLUDED_RTL_URI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STARMATH_INC_NODE_HXX
-#define INCLUDED_STARMATH_INC_NODE_HXX
+#pragma once
 
 #include "types.hxx"
 #include "token.hxx"
@@ -1265,7 +1264,6 @@ inline const SmNode* SmVerticalBraceNode::Script() const
     return const_cast< SmVerticalBraceNode* >( this )->Script();
 }
 
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_TEXTFIELD_HXX
-#define INCLUDED_OOX_DRAWINGML_TEXTFIELD_HXX
+#pragma once
 
 #include <drawingml/textrun.hxx>
 #include <drawingml/textparagraphproperties.hxx>
@@ -57,6 +56,5 @@ private:
 
 } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

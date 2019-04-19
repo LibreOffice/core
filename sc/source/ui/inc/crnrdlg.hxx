@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CRNRDLG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CRNRDLG_HXX
+#pragma once
 
 #include "anyrefdg.hxx"
 #include <rangelst.hxx>
@@ -94,6 +93,5 @@ private:
     DECL_LINK( LoseButtonFocusHdl, formula::WeldRefButton&, void );
 };
 
-#endif // INCLUDED_SC_SOURCE_UI_INC_CRNRDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

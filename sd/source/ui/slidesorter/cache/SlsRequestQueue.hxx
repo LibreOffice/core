@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_CACHE_SLSREQUESTQUEUE_HXX
-#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_CACHE_SLSREQUESTQUEUE_HXX
+#pragma once
 
 #include "SlsRequestPriorityClass.hxx"
 #include <cache/SlsCacheContext.hxx>
@@ -124,6 +123,5 @@ private:
 
 } } } // end of namespace ::sd::slidesorter::cache
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

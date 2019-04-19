@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCBHELPER_SIMPLECERTIFICATEVALIDATIONREQUEST_HXX
-#define INCLUDED_UCBHELPER_SIMPLECERTIFICATEVALIDATIONREQUEST_HXX
+#pragma once
 
 #include <ucbhelper/interactionrequest.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
@@ -59,6 +58,5 @@ public:
 
 } // namespace ucbhelper
 
-#endif /* ! INCLUDED_UCBHELPER_SIMPLECERTIFICATEVALIDATIONREQUEST_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

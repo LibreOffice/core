@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_DOCSORT_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_DOCSORT_HXX
+#pragma once
 
 #include <ndindex.hxx>
 
@@ -157,6 +156,5 @@ private:
 
 inline bool FlatFndBox::HasItemSets() const { return !ppItemSets.empty(); }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_SALFRAMEVIEW_H
-#define INCLUDED_VCL_INC_OSX_SALFRAMEVIEW_H
+#pragma once
 
 #include <osx/a11ywrapper.h>
 
@@ -208,6 +207,5 @@ enum class SalEvent;
 
 @end
 
-#endif // INCLUDED_VCL_INC_OSX_SALFRAMEVIEW_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

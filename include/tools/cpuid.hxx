@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_TOOLS_CPUID_HXX
-#define INCLUDED_TOOLS_CPUID_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <tools/toolsdllapi.h>
@@ -29,6 +28,5 @@ namespace cpuid
 }
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

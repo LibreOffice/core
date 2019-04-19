@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SALHELPER_SALHELPERDLLAPI_H
-#define INCLUDED_SALHELPER_SALHELPERDLLAPI_H
+#pragma once
 
 #include "sal/types.h"
 
@@ -29,6 +28,5 @@
 #endif
 #define SALHELPER_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif // INCLUDED_SALHELPER_SALHELPERDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

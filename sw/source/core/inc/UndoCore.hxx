@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDOCORE_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_UNDOCORE_HXX
+#pragma once
 
 #include <undobj.hxx>
 #include <calbck.hxx>
@@ -270,6 +269,5 @@ ShortenString(const OUString & rStr, sal_Int32 nLength, const OUString & rFillSt
 */
 OUString DenoteSpecialCharacters(const OUString & rStr);
 
-#endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOCORE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

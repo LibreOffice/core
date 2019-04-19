@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_INC_COMMONEMBOBJ_HXX
-#define INCLUDED_EMBEDDEDOBJ_SOURCE_INC_COMMONEMBOBJ_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -400,6 +399,5 @@ public:
     virtual void SAL_CALL setDefaultSize( const css::awt::Size& rSize_100TH_MM ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

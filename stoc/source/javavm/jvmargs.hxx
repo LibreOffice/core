@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_STOC_SOURCE_JAVAVM_JVMARGS_HXX
-#define INCLUDED_STOC_SOURCE_JAVAVM_JVMARGS_HXX
+#pragma once
 
 
 #include <vector>
@@ -47,6 +46,5 @@ namespace stoc_javavm {
     };
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

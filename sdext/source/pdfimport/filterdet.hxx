@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_FILTERDET_HXX
-#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_FILTERDET_HXX
+#pragma once
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -101,6 +100,5 @@ bool checkDocChecksum( const OUString& rInPDFFileURL,
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_NODE_HXX
-#define INCLUDED_SW_INC_NODE_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -743,6 +742,5 @@ inline SwNodePtr SwNodes::operator[]( sal_uLong n ) const
     return static_cast<SwNodePtr>(BigPtrArray::operator[] ( n ));
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

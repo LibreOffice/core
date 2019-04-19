@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_MYSQLC_SOURCE_MYSQLC_DATABASEMETADATA_HXX
-#define INCLUDED_MYSQLC_SOURCE_MYSQLC_DATABASEMETADATA_HXX
+#pragma once
 
 #include "mysqlc_connection.hxx"
 
@@ -234,6 +233,5 @@ public:
 }
 }
 
-#endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_DATABASEMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

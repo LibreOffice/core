@@ -3,8 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef INCLUDED_COMPHELPER_WINSTART_HXX
-#define INCLUDED_COMPHELPER_WINSTART_HXX
+#pragma once
 
 #ifdef _WIN32
 #if !defined WIN32_LEAN_AND_MEAN
@@ -24,4 +23,3 @@ WinLaunchChild(const wchar_t *exePath, int argc,
 
 wchar_t* MakeCommandLine(int argc, wchar_t **argv);
 
-#endif

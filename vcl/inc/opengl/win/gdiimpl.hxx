@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_OPENGL_WIN_GDIIMPL_HXX
-#define INCLUDED_VCL_INC_OPENGL_WIN_GDIIMPL_HXX
+#pragma once
 
 #include <memory>
 #include <vcl/dllapi.h>
@@ -62,6 +61,5 @@ public:
     static ControlCacheType & get();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

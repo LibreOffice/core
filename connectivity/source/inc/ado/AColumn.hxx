@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACOLUMN_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACOLUMN_HXX
+#pragma once
 
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <ado/Awrapadox.hxx>
@@ -55,6 +54,5 @@ namespace connectivity
         };
     }
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACOLUMN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

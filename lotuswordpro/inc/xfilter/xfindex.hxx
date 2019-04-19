@@ -57,8 +57,7 @@
  * @file
  * Represents index source, index body and index entry.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFINDEX_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFINDEX_HXX
+#pragma once
 #include <map>
 #include <vector>
 
@@ -225,6 +224,5 @@ inline void XFIndex::SetIndexType(enumXFIndex type)
     m_eType = type;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

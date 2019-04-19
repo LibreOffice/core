@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_LINGUPROPS_HXX
-#define INCLUDED_UNOTOOLS_LINGUPROPS_HXX
+#pragma once
 
 // UNO property names for general options
 #define UPN_IS_GERMAN_PRE_REFORM            "IsGermanPreReform"     /*! deprecated #i91949 !*/
@@ -100,6 +99,5 @@
 #define UPH_IS_REVERSE_MAPPING              33
 #define UPH_IS_GRAMMAR_AUTO                 34
 #define UPH_IS_GRAMMAR_INTERACTIVE          35
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

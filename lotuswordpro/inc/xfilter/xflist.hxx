@@ -57,8 +57,7 @@
  * @file
  * Base list object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLIST_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLIST_HXX
+#pragma once
 
 #include "xflistitem.hxx"
 #include <xfilter/xfcontentcontainer.hxx>
@@ -107,6 +106,5 @@ inline void XFList::SetContinueNumber(bool bContinueNumber)
     m_bContinueNumber = bContinueNumber;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_BUFFERNODE_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_BUFFERNODE_HXX
+#pragma once
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
@@ -110,6 +109,5 @@ public:
     void elementCollectorNotify();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

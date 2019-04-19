@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SBDEF_HXX
-#define INCLUDED_BASIC_SBDEF_HXX
+#pragma once
 
 #include <basic/sbxdef.hxx>
 #include <rtl/ustring.hxx>
@@ -73,6 +72,5 @@ BASIC_DLLPUBLIC extern std::pair<const char*, ErrCode> const RID_BASIC_START[];
 BASIC_DLLPUBLIC std::locale BasResLocale();
 BASIC_DLLPUBLIC OUString BasResId(const char* pId);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

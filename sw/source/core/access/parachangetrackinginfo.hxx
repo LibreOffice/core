@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_PARACHANGETRACKINGINFO_HXX
-#define INCLUDED_SW_SOURCE_CORE_ACCESS_PARACHANGETRACKINGINFO_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <memory>
@@ -46,6 +45,5 @@ class SwParaChangeTrackingInfo
         std::unique_ptr<SwWrongList> mpChangeTrackDeletionTextMarkupList;
         std::unique_ptr<SwWrongList> mpChangeTrackFormatChangeTextMarkupList;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

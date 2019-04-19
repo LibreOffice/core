@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_MACROS_REGISTRATION_HXX
-#define INCLUDED_FRAMEWORK_INC_MACROS_REGISTRATION_HXX
+#pragma once
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -86,6 +85,5 @@ ________________________________________________________________________________
 
 //}     //  namespace framework
 
-#endif // INCLUDED_FRAMEWORK_INC_MACROS_REGISTRATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

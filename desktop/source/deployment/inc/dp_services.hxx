@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_SERVICES_HXX
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_SERVICES_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -60,6 +59,5 @@ extern comphelper::service_decl::ServiceDecl const serviceDecl;
 
 } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

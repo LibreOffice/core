@@ -57,8 +57,7 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSHADOW_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSHADOW_HXX
+#pragma once
 
 #include <lwpcolor.hxx>
 #include <lwptools.hxx>
@@ -104,6 +103,5 @@ inline const LwpColor& LwpShadow::GetColor()
     return m_aColor;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

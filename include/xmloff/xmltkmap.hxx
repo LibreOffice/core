@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_XMLTKMAP_HXX
-#define INCLUDED_XMLOFF_XMLTKMAP_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
@@ -65,6 +64,5 @@ public:
     sal_uInt16 Get( sal_Int32 nFastTok ) const;
 };
 
-#endif // INCLUDED_XMLOFF_XMLTKMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

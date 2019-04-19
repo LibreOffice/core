@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_GENERIC_GENPRN_H
-#define INCLUDED_VCL_INC_GENERIC_GENPRN_H
+#pragma once
 
 #include <vcl/jobdata.hxx>
 #include <unx/printergfx.hxx>
@@ -90,6 +89,5 @@ public:
     virtual void                    EndPage() override;
 };
 
-#endif // INCLUDED_VCL_INC_GENERIC_GENPRN_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

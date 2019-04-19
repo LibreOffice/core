@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_SALUNX_H
-#define INCLUDED_VCL_INC_UNX_SALUNX_H
+#pragma once
 
 #include <unx/salunxtime.h>
 
 inline long Divide( long nDividend, long nDivisor )
 { return (nDividend + nDivisor/2) / nDivisor; }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

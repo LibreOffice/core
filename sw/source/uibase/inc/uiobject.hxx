@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SW_SOURCE_UIBASE_INC_UIOBJECT_HXX
-#define SW_SOURCE_UIBASE_INC_UIOBJECT_HXX
+#pragma once
 
 #include <memory>
 #include <vcl/uitest/uiobject.hxx>
@@ -61,6 +60,5 @@ protected:
 };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_SOURCE_INC_POOLIO_HXX
-#define INCLUDED_SVL_SOURCE_INC_POOLIO_HXX
+#pragma once
 
 #include <svl/itempool.hxx>
 #include <svl/SfxBroadcaster.hxx>
@@ -125,6 +124,5 @@ struct SfxItemPool_Impl
 #define SFX_ITEMPOOL_REC_ITEMS          sal_uInt16(0x0040)
 #define SFX_ITEMPOOL_REC_DEFAULTS       sal_uInt16(0x0050)
 
-#endif // INCLUDED_SVL_SOURCE_INC_POOLIO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

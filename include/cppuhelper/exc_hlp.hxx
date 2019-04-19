@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPUHELPER_EXC_HLP_HXX
-#define INCLUDED_CPPUHELPER_EXC_HLP_HXX
+#pragma once
 
 #include "com/sun/star/uno/Any.hxx"
 #include "cppuhelper/cppuhelperdllapi.h"
@@ -88,6 +87,5 @@ CPPUHELPER_DLLPUBLIC css::uno::Any SAL_CALL getCaughtException();
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

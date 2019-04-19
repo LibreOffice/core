@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VCL_Reference_HXX
-#define INCLUDED_VCL_Reference_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <osl/interlck.h>
@@ -65,4 +64,3 @@ public:
     bool                        isDisposed() const { return mbDisposed; }
 
 };
-#endif

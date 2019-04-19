@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_RASTER_BZPIXELRASTER_HXX
-#define INCLUDED_BASEGFX_RASTER_BZPIXELRASTER_HXX
+#pragma once
 
 #include <basegfx/pixel/bpixel.hxx>
 #include <sal/types.h>
@@ -88,6 +87,5 @@ namespace basegfx
     };
 } // end of namespace basegfx
 
-#endif // INCLUDED_BASEGFX_RASTER_BZPIXELRASTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_AFFINEMATRIXITEM_HXX
-#define INCLUDED_SVX_AFFINEMATRIXITEM_HXX
+#pragma once
 
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -45,6 +44,5 @@ public:
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
-#endif // INCLUDED_SVX_AFFINEMATRIXITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

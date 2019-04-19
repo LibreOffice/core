@@ -61,8 +61,7 @@
  * LwpFontManager
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPFONT_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPFONT_HXX
+#pragma once
 
 #include "lwpheader.hxx"
 #include "lwpobjstrm.hxx"
@@ -286,6 +285,5 @@ sal_uInt16 LwpFontManager::GetFontAttrIndex(sal_uInt32 fontID)
     return static_cast<sal_uInt16>(fontID);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

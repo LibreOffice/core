@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_FILTER_SOURCE_SVG_SPIRIT_SUPPLEMENTS_HXX
-#define INCLUDED_FILTER_SOURCE_SVG_SPIRIT_SUPPLEMENTS_HXX
+#pragma once
 
 # ifndef USE_MODERN_SPIRIT
 # include <boost/spirit.hpp>
@@ -105,6 +104,5 @@ namespace boost { namespace spirit
 } }
 
 # endif
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

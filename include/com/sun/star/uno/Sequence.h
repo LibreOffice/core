@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_COM_SUN_STAR_UNO_SEQUENCE_H
-#define INCLUDED_COM_SUN_STAR_UNO_SEQUENCE_H
+#pragma once
 
 #include "typelib/typedescription.h"
 #include "uno/sequence2.h"
@@ -320,6 +319,5 @@ SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type &
 SAL_CALL getCharSequenceCppuType();
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMULA_FUNCUTL_HXX
-#define INCLUDED_FORMULA_FUNCUTL_HXX
+#pragma once
 
 #include <formula/formuladllapi.h>
 #include <rtl/ustring.hxx>
@@ -244,6 +243,5 @@ public:
 
 } // formula
 
-#endif // INCLUDED_FORMULA_FUNCUTL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

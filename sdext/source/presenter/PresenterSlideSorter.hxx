@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERSLIDESORTER_HXX
-#define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERSLIDESORTER_HXX
+#pragma once
 
 #include <memory>
 #include "PresenterController.hxx"
@@ -186,6 +185,5 @@ private:
 
 } } // end of namespace ::sdext::presenter
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

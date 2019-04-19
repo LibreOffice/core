@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_FETCLIST_HXX
-#define INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_FETCLIST_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
@@ -137,6 +136,5 @@ private:
     CFormatRegistrar& operator=( const CFormatRegistrar& );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

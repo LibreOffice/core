@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTDATAPILOT_HXX
-#define INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTDATAPILOT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <global.hxx>
@@ -71,6 +70,5 @@ public:
     void WriteDataPilots();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

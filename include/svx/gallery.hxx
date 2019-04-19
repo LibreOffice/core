@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_GALLERY_HXX
-#define INCLUDED_SVX_GALLERY_HXX
+#pragma once
 
 #include <svx/svxdllapi.h>
 #include <tools/urlobj.hxx>
@@ -137,6 +136,5 @@ public:
     static bool                 EndLocking( sal_uInt32 nThemeId );
 };
 
-#endif // INCLUDED_SVX_GALLERY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

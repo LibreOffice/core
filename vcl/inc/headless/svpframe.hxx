@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_HEADLESS_SVPFRAME_HXX
-#define INCLUDED_VCL_INC_HEADLESS_SVPFRAME_HXX
+#pragma once
 
 #include <vcl/sysdata.hxx>
 #include <basegfx/range/b2ibox.hxx>
@@ -120,6 +119,5 @@ public:
 
 };
 
-#endif // INCLUDED_VCL_INC_HEADLESS_SVPFRAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

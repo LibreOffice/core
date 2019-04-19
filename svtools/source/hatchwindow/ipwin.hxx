@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_SOURCE_HATCHWINDOW_IPWIN_HXX
-#define INCLUDED_SVTOOLS_SOURCE_HATCHWINDOW_IPWIN_HXX
+#pragma once
 
 #include <tools/gen.hxx>
 #include <vcl/window.hxx>
@@ -88,6 +87,5 @@ public:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 };
 
-#endif // INCLUDED_SVTOOLS_SOURCE_HATCHWINDOW_IPWIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

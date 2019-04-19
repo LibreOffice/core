@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPUHELPER_FINDSOFFICEPATH_H
-#define INCLUDED_CPPUHELPER_FINDSOFFICEPATH_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -40,6 +39,5 @@ cppuhelper_detail_findSofficePath(void);
 }
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

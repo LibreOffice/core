@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLS_COLOR_HXX
-#define INCLUDED_TOOLS_COLOR_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <tools/toolsdllapi.h>
@@ -285,6 +284,5 @@ constexpr ::Color COL_AUTHOR9_DARK            ( 209,  118,   0 );
 constexpr ::Color COL_AUTHOR9_NORMAL          ( 255,  226, 185 );
 constexpr ::Color COL_AUTHOR9_LIGHT           ( 255,  231, 199 );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

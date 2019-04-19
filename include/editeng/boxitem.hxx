@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_BOXITEM_HXX
-#define INCLUDED_EDITENG_BOXITEM_HXX
+#pragma once
 
 #include <svl/poolitem.hxx>
 #include <editeng/borderline.hxx>
@@ -265,6 +264,5 @@ void EDITENG_DLLPUBLIC BorderDistancesToWord(const SvxBoxItem& rBox, const WordP
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

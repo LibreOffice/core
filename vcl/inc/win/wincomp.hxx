@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_WIN_WINCOMP_HXX
-#define INCLUDED_VCL_INC_WIN_WINCOMP_HXX
+#pragma once
 
 #include <string.h>
 
@@ -229,6 +228,5 @@ inline HINSTANCE GetWindowInstance( HWND hWnd )
 #define UNICODE_NOCHAR          0xFFFF
 #endif
 
-#endif // INCLUDED_VCL_INC_WIN_WINCOMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

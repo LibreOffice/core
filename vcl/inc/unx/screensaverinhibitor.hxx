@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_SCREENSAVERINHIBITOR_HXX
-#define INCLUDED_VCL_INC_UNX_SCREENSAVERINHIBITOR_HXX
+#pragma once
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -69,6 +68,5 @@ private:
     void inhibitDPMS( bool bInhibit, Display* pDisplay );
 };
 
-#endif // INCLUDED_VCL_INC_UNX_SCREENSAVERINHIBITOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

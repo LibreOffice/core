@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_OSL_SOCKET_HXX
-#define INCLUDED_OSL_SOCKET_HXX
+#pragma once
 
 #include "osl/socket_decl.hxx"
 
@@ -560,6 +559,5 @@ namespace osl
         return osl_sendToSocket( m_handle, ReceiverAddr.getHandle(), pBuffer, BufferSize, Flag );
     }
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

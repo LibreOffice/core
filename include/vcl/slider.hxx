@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SLIDER_HXX
-#define INCLUDED_VCL_SLIDER_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
@@ -111,6 +110,5 @@ public:
     void            SetEndSlideHdl( const Link<Slider*,void>& rLink ) { maEndSlideHdl = rLink; }
 };
 
-#endif // INCLUDED_VCL_SLIDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

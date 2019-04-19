@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_INC_HELPIDS_H
-#define INCLUDED_DBACCESS_INC_HELPIDS_H
+#pragma once
 
 
 #define HID_DATABROWSE_HEADER                             "DBACCESS_HID_DATABROWSE_HEADER"
@@ -112,6 +111,5 @@
 #define HID_DBWIZ_CANCEL                                  "DBACCESS_HID_DBWIZ_CANCEL"
 #define HID_DBWIZ_FINISH                                  "DBACCESS_HID_DBWIZ_FINISH"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

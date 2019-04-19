@@ -9,8 +9,7 @@
  *
  */
 
-#ifndef CASCADINGCONDOP_H
-#define CASCADINGCONDOP_H
+#pragma once
 
 #include "plugin.hxx"
 
@@ -33,6 +32,5 @@ class CascadingCondOp
 
 } // namespace loplugin
 
-#endif // CASCADINGCONDOP_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

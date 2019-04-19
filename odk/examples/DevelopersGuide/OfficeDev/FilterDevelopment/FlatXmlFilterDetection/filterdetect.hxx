@@ -33,8 +33,7 @@
  *
  *************************************************************************/
 
-#ifndef INCLUDED_EXAMPLES_OFFICEDEV_FILTERDEVELOPMENT_FLATXMLFILTERDETECTION_FILTERDETECT_HXX
-#define INCLUDED_EXAMPLES_OFFICEDEV_FILTERDEVELOPMENT_FLATXMLFILTERDETECTION_FILTERDETECT_HXX
+#pragma once
 
 
 #include <com/sun/star/document/XFilter.hpp>
@@ -117,6 +116,5 @@ sal_Bool SAL_CALL FilterDetect_supportsService( const ::rtl::OUString& ServiceNa
 SAL_CALL FilterDetect_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rContext)
     throw ( ::com::sun::star::uno::Exception );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

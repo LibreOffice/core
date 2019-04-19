@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_FILTER_PNGIMAGEREADER_HXX
-#define INCLUDED_VCL_FILTER_PNGIMAGEREADER_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -38,6 +37,5 @@ public:
 
 } // namespace vcl
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

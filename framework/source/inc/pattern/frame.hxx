@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_SOURCE_INC_PATTERN_FRAME_HXX
-#define INCLUDED_FRAMEWORK_SOURCE_INC_PATTERN_FRAME_HXX
+#pragma once
 
 #include <general.h>
 
@@ -83,6 +82,5 @@ inline bool closeIt(const css::uno::Reference< css::uno::XInterface >& xResource
     } // namespace pattern
 } // namespace framework
 
-#endif // INCLUDED_FRAMEWORK_SOURCE_INC_PATTERN_FRAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -9,8 +9,7 @@
  ***
  ****************************************************************************
  ****************************************************************************/
-#ifndef __L2CAP_H
-#define __L2CAP_H
+#pragma once
 
 #ifdef __cplusplus
 #endif
@@ -84,4 +83,3 @@ struct sockaddr_l2
   unsigned short l2_psm;
   bdaddr_t l2_bdaddr;
 };
-#endif

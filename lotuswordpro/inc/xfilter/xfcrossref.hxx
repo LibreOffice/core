@@ -57,8 +57,7 @@
  * @file
  * cross reference object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCROSSREF_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCROSSREF_HXX
+#pragma once
 
 #include <xfilter/xfcontent.hxx>
 
@@ -103,5 +102,4 @@ public:
     void ToXml(IXFStream *pStrm) override;
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

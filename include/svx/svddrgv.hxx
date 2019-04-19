@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDDRGV_HXX
-#define INCLUDED_SVX_SVDDRGV_HXX
+#pragma once
 
 #include <svx/svxdllapi.h>
 #include <svx/svdxcgv.hxx>
@@ -228,6 +227,5 @@ public:
     virtual bool TakeDragLimit(SdrDragMode eMode, tools::Rectangle& rRect) const;
 };
 
-#endif // INCLUDED_SVX_SVDDRGV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_SVL_GRABBAGITEM_HXX
-#define INCLUDED_SVL_GRABBAGITEM_HXX
+#pragma once
 
 #include <map>
 
@@ -41,6 +40,5 @@ public:
     bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
     bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

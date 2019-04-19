@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_IMAPOBJ_HXX
-#define INCLUDED_VCL_IMAPOBJ_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <svl/macitem.hxx>
@@ -119,6 +118,5 @@ public:
     void SetMacroTable( const SvxMacroTableDtor& rTbl ) { aEventList = rTbl; }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

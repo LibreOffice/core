@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXAMPLES_COMPLEXTOOLBARCONTROLS_LISTENERHELPER_H
-#define INCLUDED_EXAMPLES_COMPLEXTOOLBARCONTROLS_LISTENERHELPER_H
+#pragma once
 
 #include <map>
 #include <vector>
@@ -80,6 +79,5 @@ public:
     virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

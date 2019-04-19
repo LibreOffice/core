@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_GENERIC_GENDATA_HXX
-#define INCLUDED_VCL_INC_GENERIC_GENDATA_HXX
+#pragma once
 
 #include <osl/socket.hxx>
 
@@ -97,6 +96,5 @@ inline GenericUnixSalData* GetGenericUnixSalData()
     return static_cast<GenericUnixSalData*>(ImplGetSVData()->mpSalData);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

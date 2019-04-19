@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_NOTEBOOKBAR_OPTIONALBOX_HXX
-#define INCLUDED_SFX2_NOTEBOOKBAR_OPTIONALBOX_HXX
+#pragma once
 
 #include <vcl/builderfactory.hxx>
 #include <vcl/IPrioritable.hxx>
@@ -43,6 +42,5 @@ public:
     bool IsHidden() override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

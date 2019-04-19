@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_SWUIIDXMRK_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_SWUIIDXMRK_HXX
+#pragma once
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
@@ -231,6 +230,5 @@ public:
     virtual short int run() override;
 };
 
-#endif // INCLUDED_SW_SOURCE_UIBASE_INC_SWUIIDXMRK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

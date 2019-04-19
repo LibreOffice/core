@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVL_CONVERTER_HXX
-#define INCLUDED_SVL_CONVERTER_HXX
+#pragma once
 
 #include <svl/svldllapi.h>
 
@@ -28,7 +27,6 @@ public:
     SVL_DLLPUBLIC static sal_Int32 ConvertPrecisionToOdbc(sal_Int32 _nLen, sal_Int32 _nScale);
 };
 
-#endif //_CONVERTER_HXX_
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

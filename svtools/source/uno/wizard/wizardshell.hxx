@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVT_UNO_WIZARD_SHELL
-#define SVT_UNO_WIZARD_SHELL
+#pragma once
 
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
 #include <com/sun/star/ui/dialogs/XWizard.hpp>
@@ -126,6 +125,5 @@ namespace svt { namespace uno
 } } // namespace svt::uno
 
 
-#endif // SVT_UNO_WIZARD_SHELL
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

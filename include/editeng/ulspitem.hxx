@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_ULSPITEM_HXX
-#define INCLUDED_EDITENG_ULSPITEM_HXX
+#pragma once
 
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
@@ -99,6 +98,5 @@ inline void SvxULSpaceItem::SetLower( const sal_uInt16 nL, const sal_uInt16 nPro
     nLower = sal_uInt16((sal_uInt32(nL) * nProp ) / 100); nPropLower = nProp;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

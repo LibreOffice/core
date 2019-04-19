@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_MID_H
-#define SC_MID_H
+#pragma once
 
 #define MID_1   1
 #define MID_2   2
 #define MID_3   3
 #define MID_4   4
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

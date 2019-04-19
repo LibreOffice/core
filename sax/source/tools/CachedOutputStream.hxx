@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAX_SOURCE_TOOLS_CACHEDOUTPUTSTREAM_HXX
-#define INCLUDED_SAX_SOURCE_TOOLS_CACHEDOUTPUTSTREAM_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -114,6 +113,5 @@ public:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

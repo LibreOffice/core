@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_FILTER_HTML_BUTTONSET_HXX
-#define INCLUDED_SD_SOURCE_FILTER_HTML_BUTTONSET_HXX
+#pragma once
 
 #include <sddllapi.h>
 
@@ -44,6 +43,5 @@ private:
     std::unique_ptr<ButtonSetImpl> mpImpl;
 };
 
-#endif // INCLUDED_SD_SOURCE_FILTER_HTML_BUTTONSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

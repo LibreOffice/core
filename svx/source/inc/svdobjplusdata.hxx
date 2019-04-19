@@ -7,8 +7,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#ifndef INCLUDED_SVX_SVDOBJPLUSDATA_HXX
-#define INCLUDED_SVX_SVDOBJPLUSDATA_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <memory>
@@ -41,6 +40,5 @@ public:
     void SetGluePoints(const SdrGluePointList& rPts);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_REGISTRY_HXX
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_REGISTRY_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -38,6 +37,5 @@ css::uno::Reference<css::deployment::XPackageRegistry> create(
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

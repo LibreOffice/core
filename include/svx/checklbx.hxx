@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_CHECKLBX_HXX
-#define INCLUDED_SVX_CHECKLBX_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -67,6 +66,5 @@ public:
     virtual void    KeyInput            ( const KeyEvent& rKEvt ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

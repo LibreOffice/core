@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_WINREG_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_WINREG_HXX
+#pragma once
 
 namespace configmgr {
 
@@ -19,6 +18,5 @@ bool dumpWindowsRegistry(OUString* pFileURL, WinRegType eType);
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

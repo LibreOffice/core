@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_A11YLISTENER_HXX
-#define INCLUDED_VCL_INC_OSX_A11YLISTENER_HXX
+#pragma once
 
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -49,5 +48,4 @@ private:
     css::awt::Rectangle m_oldBounds;
 };
 
-#endif // INCLUDED_VCL_INC_OSX_A11YLISTENER_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

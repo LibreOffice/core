@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART_SHAPECONTROLLER_H
-#define CHART_SHAPECONTROLLER_H
+#pragma once
 
 //Command Ids:
 #define COMMAND_ID_FORMAT_LINE                  1
@@ -33,6 +32,5 @@
 #define COMMAND_ID_FONT_DIALOG                 15
 #define COMMAND_ID_PARAGRAPH_DIALOG            16
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

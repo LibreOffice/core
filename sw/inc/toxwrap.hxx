@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_TOXWRAP_HXX
-#define INCLUDED_SW_INC_TOXWRAP_HXX
+#pragma once
 
 #include <com/sun/star/lang/Locale.hpp>
 #include "swdllapi.h"
@@ -57,6 +56,5 @@ public:
                                  const css::lang::Locale& rLcl2 ) const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

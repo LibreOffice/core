@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_XMLPRMAP_HXX
-#define INCLUDED_XMLOFF_XMLPRMAP_HXX
+#pragma once
 
 #include <xmloff/dllapi.h>
 #include <unotools/saveopt.hxx>
@@ -114,6 +113,5 @@ public:
     void RemoveEntry( sal_Int32 nIndex );
 };
 
-#endif // INCLUDED_XMLOFF_XMLPRMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

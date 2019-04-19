@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef GTV_COMMENTS_SIDEBAR_H
-#define GTV_COMMENTS_SIDEBAR_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -43,6 +42,5 @@ void gtv_comments_sidebar_view_annotations(GtvCommentsSidebar* sidebar);
 
 G_END_DECLS
 
-#endif /* GTV_COMMENTS_SIDEBAR_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

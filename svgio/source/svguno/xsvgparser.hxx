@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVGIO_SOURCE_SVGUNO_XSVGPARSER_HXX
-#define INCLUDED_SVGIO_SOURCE_SVGUNO_XSVGPARSER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -45,6 +44,5 @@ XSvgParser_getSupportedServiceNames();
 
 } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

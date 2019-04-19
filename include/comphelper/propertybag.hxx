@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_PROPERTYBAG_HXX
-#define INCLUDED_COMPHELPER_PROPERTYBAG_HXX
+#pragma once
 
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/propertycontainerhelper.hxx>
@@ -222,6 +221,5 @@ namespace comphelper
 } // namespace comphelper
 
 
-#endif // INCLUDED_COMPHELPER_PROPERTYBAG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

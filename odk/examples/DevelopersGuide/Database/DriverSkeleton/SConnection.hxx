@@ -33,8 +33,7 @@
  *
  *************************************************************************/
 
-#ifndef INCLUDED_EXAMPLES_DATABASE_DRIVERSKELETON_SCONNECTION_HXX
-#define INCLUDED_EXAMPLES_DATABASE_DRIVERSKELETON_SCONNECTION_HXX
+#pragma once
 
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -153,6 +152,5 @@ namespace connectivity
     }
 }
 
-#endif // INCLUDED_EXAMPLES_DATABASE_DRIVERSKELETON_SCONNECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

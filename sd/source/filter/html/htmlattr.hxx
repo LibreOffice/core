@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_FILTER_HTML_HTMLATTR_HXX
-#define INCLUDED_SD_SOURCE_FILTER_HTML_HTMLATTR_HXX
+#pragma once
 
 #include <vcl/ctrl.hxx>
 #include <tools/color.hxx>
@@ -38,6 +37,5 @@ public:
                        Color const & aVLink, Color const & aALink );
 };
 
-#endif // INCLUDED_SD_SOURCE_FILTER_HTML_HTMLATTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_O3TL_ENUMRANGE_HXX
-#define INCLUDED_O3TL_ENUMRANGE_HXX
+#pragma once
 
 namespace o3tl {
 
@@ -82,6 +81,5 @@ typename enumrange<T>::Iterator end( enumrange<T> )
 
 }; // namespace o3tl
 
-#endif /* INCLUDED_O3TL_ENUMRANGE_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

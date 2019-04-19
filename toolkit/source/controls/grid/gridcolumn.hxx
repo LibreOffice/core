@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_SOURCE_CONTROLS_GRID_GRIDCOLUMN_HXX
-#define INCLUDED_TOOLKIT_SOURCE_CONTROLS_GRID_GRIDCOLUMN_HXX
+#pragma once
 
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -128,6 +127,5 @@ private:
 
 }
 
-#endif // INCLUDED_TOOLKIT_SOURCE_CONTROLS_GRID_GRIDCOLUMN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

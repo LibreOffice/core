@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_GTK_GTKBACKEND_HXX
-#define INCLUDED_VCL_INC_UNX_GTK_GTKBACKEND_HXX
+#pragma once
 
 #include <gtk/gtk.h>
 #if defined(GDK_WINDOWING_X11)
@@ -20,6 +19,5 @@ bool DLSYM_GDK_IS_X11_DISPLAY(GdkDisplay* pDisplay);
 bool DLSYM_GDK_IS_WAYLAND_DISPLAY(GdkDisplay* pDisplay);
 #endif
 
-#endif // INCLUDED_VCL_INC_UNX_GTK_GTKBACKEND_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_SYMBOLLOADER_HXX
-#define INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_SYMBOLLOADER_HXX
+#pragma once
 #if defined(_WIN32)
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
@@ -124,6 +123,5 @@ struct ApiMap
 }
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

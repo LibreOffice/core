@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_GTK_HUDAWARENESS_H
-#define INCLUDED_VCL_INC_UNX_GTK_HUDAWARENESS_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -29,4 +28,3 @@ void                    hud_awareness_unregister                        (GDBusCo
 
 G_END_DECLS
 
-#endif // INCLUDED_VCL_INC_UNX_GTK_HUDAWARENESS_H

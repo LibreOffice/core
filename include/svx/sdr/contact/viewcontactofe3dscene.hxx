@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFE3DSCENE_HXX
-#define INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFE3DSCENE_HXX
+#pragma once
 
 #include <svx/scene3d.hxx>
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
@@ -98,6 +97,5 @@ private:
 
 }}
 
-#endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFE3DSCENE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

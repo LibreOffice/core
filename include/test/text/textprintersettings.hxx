@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_TEXT_TEXTPRINTERSETTINGS_HXX
-#define INCLUDED_TEST_TEXT_TEXTPRINTERSETTINGS_HXX
+#pragma once
 
 #include <test/unoapi_property_testers.hxx>
 #include <test/testdllapi.hxx>
@@ -26,6 +25,5 @@ public:
 };
 } // end namespace apitest
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

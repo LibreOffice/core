@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_FACREG_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_FACREG_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sfx2/sfxmodelfactory.hxx>
@@ -39,6 +38,5 @@ OUString SdPresentationDocument_getImplementationName();
 /// @throws css::uno::RuntimeException
 css::uno::Sequence< OUString > SdPresentationDocument_getSupportedServiceNames();
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,8 +19,7 @@
 
 // ZipException.h: interface for the ZipException class.
 
-#ifndef INCLUDED_SHELL_SOURCE_WIN32_ZIPFILE_ZIPEXCPTN_HXX
-#define INCLUDED_SHELL_SOURCE_WIN32_ZIPFILE_ZIPEXCPTN_HXX
+#pragma once
 
 #include <stdexcept>
 
@@ -80,6 +79,5 @@ public:
     explicit IOException(int Error);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

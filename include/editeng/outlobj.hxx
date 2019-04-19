@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_OUTLOBJ_HXX
-#define INCLUDED_EDITENG_OUTLOBJ_HXX
+#pragma once
 
 #include <editeng/paragraphdata.hxx>
 #include <editeng/editengdllapi.h>
@@ -108,6 +107,5 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

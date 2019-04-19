@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_PDF_PDFDIALOG_HXX
-#define INCLUDED_FILTER_SOURCE_PDF_PDFDIALOG_HXX
+#pragma once
 
 #include "pdffilter.hxx"
 #include <svtools/genericunodialog.hxx>
@@ -72,6 +71,5 @@ Sequence< OUString > PDFDialog_getSupportedServiceNames();
 /// @throws Exception
 Reference< XInterface > PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr);
 
-#endif // INCLUDED_FILTER_SOURCE_PDF_PDFDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

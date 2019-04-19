@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_ITEMHOLDER2_HXX_
-#define INCLUDED_SVTOOLS_ITEMHOLDER2_HXX_
+#pragma once
 
 #include <unotools/itemholderbase.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -61,6 +60,5 @@ class ItemHolder2 : private ItemHolderMutexBase
 
 } // namespace svtools
 
-#endif // INCLUDED_SVTOOLS_ITEMHOLDER2_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

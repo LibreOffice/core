@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_MEMBERIDS_H
-#define INCLUDED_EDITENG_MEMBERIDS_H
+#pragma once
 
 #include <svl/memberid.h>
 
@@ -177,6 +176,5 @@
 // SvxShadowItem
 #define MID_SHADOW_TRANSPARENCE 1
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

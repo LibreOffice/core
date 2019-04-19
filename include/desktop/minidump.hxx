@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DESKTOP_MINIDUMP_MINIDUMP_HXX
-#define INCLUDED_DESKTOP_MINIDUMP_MINIDUMP_HXX
+#pragma once
 
 #include <string>
 
@@ -20,6 +19,5 @@ CRASHREPORT_DLLPUBLIC bool readConfig(const std::string& iniPath, std::string& r
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

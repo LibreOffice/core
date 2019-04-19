@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_MSGBOX_HXX
-#define INCLUDED_VCL_MSGBOX_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -34,6 +33,5 @@ VCL_DLLPUBLIC OUString GetStandardErrorBoxText();
 VCL_DLLPUBLIC Image const & GetStandardQueryBoxImage();
 VCL_DLLPUBLIC OUString GetStandardQueryBoxText();
 
-#endif // INCLUDED_VCL_MSGBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

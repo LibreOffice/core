@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_CERTIFICATEVIEWER_HXX
-#define INCLUDED_XMLSECURITY_INC_CERTIFICATEVIEWER_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -157,6 +156,5 @@ public:
 };
 
 
-#endif // INCLUDED_XMLSECURITY_INC_CERTIFICATEVIEWER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_MODULDLG_HXX
-#define INCLUDED_BASCTL_SOURCE_BASICIDE_MODULDLG_HXX
+#pragma once
 
 #include <bastype2.hxx>
 #include <vcl/svtabbx.hxx>
@@ -256,6 +255,5 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
 
 } // namespace basctl
 
-#endif // INCLUDED_BASCTL_SOURCE_BASICIDE_MODULDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

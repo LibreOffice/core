@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_DRAWITEM_HXX
-#define INCLUDED_SVX_DRAWITEM_HXX
+#pragma once
 
 #include <svl/poolitem.hxx>
 #include <svx/xtable.hxx>
@@ -197,6 +196,5 @@ public:
     const XLineEndListRef&  GetLineEndList() const { return pLineEndList; }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_IMAGE_HXX
-#define INCLUDED_BASIC_SOURCE_INC_IMAGE_HXX
+#pragma once
 
 #include "sbintern.hxx"
 #include <rtl/ustring.hxx>
@@ -99,6 +98,5 @@ public:
     bool        ExceedsLegacyLimits();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

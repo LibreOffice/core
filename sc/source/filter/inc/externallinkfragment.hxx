@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXTERNALLINKFRAGMENT_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_EXTERNALLINKFRAGMENT_HXX
+#pragma once
 
 #include "excelhandlers.hxx"
 #include "externallinkbuffer.hxx"
@@ -99,6 +98,5 @@ private:
 } // namespace xls
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

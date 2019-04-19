@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLCONTAINERMODEL_HXX
-#define INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLCONTAINERMODEL_HXX
+#pragma once
 
 
 #include <toolkit/controls/unocontrolmodel.hxx>
@@ -51,6 +50,5 @@ public:
 };
 
 
-#endif // INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLCONTAINERMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

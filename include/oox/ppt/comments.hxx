@@ -8,8 +8,7 @@
  */
 
 
-#ifndef INCLUDED_OOX_PPT_COMMENTS_HXX
-#define INCLUDED_OOX_PPT_COMMENTS_HXX
+#pragma once
 
 #include <vector>
 
@@ -112,6 +111,5 @@ class CommentList
 
 } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

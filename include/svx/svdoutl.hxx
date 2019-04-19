@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDOUTL_HXX
-#define INCLUDED_SVX_SVDOUTL_HXX
+#pragma once
 
 #include <editeng/outliner.hxx>
 #include <svx/svxdllapi.h>
@@ -48,6 +47,5 @@ public:
     bool hasEditViewCallbacks() const;
 };
 
-#endif // INCLUDED_SVX_SVDOUTL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_AVMEDIA_SOURCE_MACAVF_PLAYER_HXX
-#define INCLUDED_AVMEDIA_SOURCE_MACAVF_PLAYER_HXX
+#pragma once
 
 #include <osl/conditn.h>
 #include "macavfcommon.hxx"
@@ -83,6 +82,5 @@ private:
 } // namespace macavf
 } // namespace avmedia
 
-#endif // INCLUDED_AVMEDIA_SOURCE_MACAVF_PLAYER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_HELPCOMPILER_SOURCE_LUCENEHELPER_HXX
-#define INCLUDED_HELPCOMPILER_SOURCE_LUCENEHELPER_HXX
+#pragma once
 
 #if defined(__GNUC__)
 #  pragma GCC visibility push (default)
@@ -27,6 +26,5 @@
 std::vector<TCHAR> OUStringToTCHARVec(OUString const &rStr);
 OUString TCHARArrayToOUString(TCHAR const *str);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

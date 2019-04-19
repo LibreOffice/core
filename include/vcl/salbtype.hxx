@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SALBTYPE_HXX
-#define INCLUDED_VCL_SALBTYPE_HXX
+#pragma once
 
 #include <vcl/checksum.hxx>
 #include <tools/color.hxx>
@@ -569,6 +568,5 @@ inline void ColorMask::SetColorFor32Bit( const BitmapColor& rColor, sal_uInt8* p
     pPixel[ 3 ] = static_cast<sal_uInt8>( nVal >> 24 );
 }
 
-#endif // INCLUDED_VCL_SALBTYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

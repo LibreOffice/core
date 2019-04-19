@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLNOPTS_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLNOPTS_HXX
+#pragma once
 
 #include <lwpobjstrm.hxx>
 #include <lwptools.hxx>
@@ -92,6 +91,5 @@ public:
     void Read(LwpObjectStream *pStrm);
     void RegisterStyle();
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

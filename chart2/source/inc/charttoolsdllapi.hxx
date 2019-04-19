@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_INC_CHARTTOOLSDLLAPI_HXX
-#define INCLUDED_CHART2_SOURCE_INC_CHARTTOOLSDLLAPI_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -30,6 +29,5 @@
 #define OOO_DLLPUBLIC_CHARTTOOLS SAL_DLLPUBLIC_IMPORT
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

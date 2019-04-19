@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_H
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_H
+#pragma once
 
 #include "dp_gui_updatedata.hxx"
 #include <dp_misc.h>
@@ -64,6 +63,5 @@ enum PackageState { REGISTERED, NOT_REGISTERED, AMBIGUOUS, NOT_AVAILABLE };
 
 } // namespace dp_gui
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
