@@ -19,9 +19,11 @@
 
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/util/thePathSettings.hpp>
 
 #include "vbaapplication.hxx"
 #include "vbadocument.hxx"
+#include "vbafilterpropsfromformat.hxx"
 #include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <vbahelper/vbahelper.hxx>
@@ -45,6 +47,7 @@
 #include <swdll.hxx>
 #include <swmodule.hxx>
 #include "vbalistgalleries.hxx"
+#include <tools/urlobj.hxx>
 
 using namespace ::ooo;
 using namespace ::ooo::vba;
@@ -77,6 +80,17 @@ public:
 
     virtual void SAL_CALL FileOpen( const OUString& Name, const uno::Any& ConfirmConversions, const uno::Any& ReadOnly, const uno::Any& AddToMru, const uno::Any& PasswordDoc, const uno::Any& PasswordDot, const uno::Any& Revert, const uno::Any& WritePasswordDoc, const uno::Any& WritePasswordDot ) override;
     virtual void SAL_CALL FileSave() override;
+    virtual void SAL_CALL FileSaveAs( const css::uno::Any& Name,
+                                      const css::uno::Any& Format,
+                                      const css::uno::Any& LockAnnot,
+                                      const css::uno::Any& Password,
+                                      const css::uno::Any& AddToMru,
+                                      const css::uno::Any& WritePassword,
+                                      const css::uno::Any& RecommendReadOnly,
+                                      const css::uno::Any& EmbedFonts,
+                                      const css::uno::Any& NativePictureFormat,
+                                      const css::uno::Any& FormsData,
+                                      const css::uno::Any& SaveAsAOCELetter ) override;
     virtual void SAL_CALL FileClose( const css::uno::Any& Save ) override;
     virtual void SAL_CALL ToolsOptionsView( const css::uno::Any& DraftFont,
                                             const css::uno::Any& WrapToWindow,
@@ -550,6 +564,77 @@ SwWordBasic::FileSave()
 {
     uno::Reference< frame::XModel > xModel( mpApp->getCurrentDocument(), uno::UNO_SET_THROW );
     dispatchRequests(xModel,".uno:Save");
+}
+
+void SAL_CALL
+SwWordBasic::FileSaveAs( const css::uno::Any& Name,
+                         const css::uno::Any& Format,
+                         const css::uno::Any& /*LockAnnot*/,
+                         const css::uno::Any& /*Password*/,
+                         const css::uno::Any& /*AddToMru*/,
+                         const css::uno::Any& /*WritePassword*/,
+                         const css::uno::Any& /*RecommendReadOnly*/,
+                         const css::uno::Any& /*EmbedFonts*/,
+                         const css::uno::Any& /*NativePictureFormat*/,
+                         const css::uno::Any& /*FormsData*/,
+                         const css::uno::Any& /*SaveAsAOCELetter*/ )
+{
+    uno::Reference< frame::XModel > xModel( mpApp->getCurrentDocument(), uno::UNO_SET_THROW );
+
+    // Based on SwVbaDocument::SaveAs2000.
+
+    OUString sFileName;
+    Name >>= sFileName;
+
+    OUString sURL;
+    osl::FileBase::getFileURLFromSystemPath( sFileName, sURL );
+
+    // Detect if there is no path then we need to use the current folder.
+    INetURLObject aURL( sURL );
+    sURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
+    if( sURL.isEmpty() )
+    {
+        // Need to add cur dir ( of this document ) or else the 'Work' dir
+        sURL = xModel->getURL();
+
+        if ( sURL.isEmpty() )
+        {
+            // Not path available from 'this' document. Need to add the 'document'/work directory then.
+            // Based on SwVbaOptions::getValueEvent()
+            uno::Reference< util::XPathSettings > xPathSettings = util::thePathSettings::get( comphelper::getProcessComponentContext() );
+            OUString sPathUrl;
+            xPathSettings->getPropertyValue( "Work" ) >>= sPathUrl;
+            // Path could be a multipath, Microsoft doesn't support this feature in Word currently.
+            // Only the last path is from interest.
+            // No idea if this crack is relevant for WordBasic or not.
+            sal_Int32 nIndex = sPathUrl.lastIndexOf( ';' );
+            if( nIndex != -1 )
+            {
+                sPathUrl = sPathUrl.copy( nIndex + 1 );
+            }
+
+            aURL.SetURL( sPathUrl );
+        }
+        else
+        {
+            aURL.SetURL( sURL );
+            aURL.Append( sFileName );
+        }
+        sURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
+
+    }
+    sal_Int32 nFileFormat = word::WdSaveFormat::wdFormatDocument;
+    Format >>= nFileFormat;
+
+    uno::Sequence<  beans::PropertyValue > aProps(2);
+    aProps[0].Name = "FilterName";
+
+    setFilterPropsFromFormat( nFileFormat, aProps );
+
+    aProps[1].Name = "FileName";
+    aProps[1].Value <<= sURL;
+
+    dispatchRequests(xModel,".uno:SaveAs",aProps);
 }
 
 void SAL_CALL
