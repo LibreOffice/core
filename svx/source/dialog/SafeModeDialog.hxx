@@ -15,7 +15,6 @@
 #include <vcl/layout.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/vclmedit.hxx>
 #include <vcl/fixedhyper.hxx>
 #include <comphelper/backupfilehelper.hxx>
 

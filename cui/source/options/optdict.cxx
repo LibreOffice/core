@@ -27,10 +27,10 @@
 #include <tools/debug.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/intlwrapper.hxx>
+#include <unotools/syslocale.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/event.hxx>
 #include <svx/dialogs.hrc>
 

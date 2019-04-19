@@ -18,7 +18,6 @@
  */
 
 #include <svx/frmsel.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/event.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>

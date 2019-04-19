@@ -35,7 +35,6 @@
 
 #include <svtools/ivctrl.hxx>
 #include "imivctl.hxx"
-#include <svtools/svmedit.hxx>
 
 #include <algorithm>
 #include <memory>

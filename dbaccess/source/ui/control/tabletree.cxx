@@ -23,7 +23,6 @@
 #include <strings.hrc>
 #include <vcl/layout.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/builderfactory.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
 #include <stringconstants.hxx>

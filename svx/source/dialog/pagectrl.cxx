@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <vcl/bitmap.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 #include <tools/fract.hxx>
 #include <editeng/frmdiritem.hxx>

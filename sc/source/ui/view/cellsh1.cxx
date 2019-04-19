@@ -46,7 +46,6 @@
 #include <basic/sbxcore.hxx>
 #include <unotools/useroptions.hxx>
 #include <vcl/waitobj.hxx>
-#include <vcl/builderfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <editeng/editview.hxx>
 #include <svtools/cliplistener.hxx>

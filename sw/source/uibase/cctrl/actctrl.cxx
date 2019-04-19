@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/builderfactory.hxx>
 #include <actctrl.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>

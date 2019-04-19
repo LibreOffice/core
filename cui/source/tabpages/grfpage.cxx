@@ -33,7 +33,6 @@
 #include <tools/fract.hxx>
 #include <svx/dialogs.hrc>
 #include <strings.hrc>
-#include <vcl/builderfactory.hxx>
 #include <vcl/field.hxx>
 #include <vcl/settings.hxx>
 

@@ -19,7 +19,6 @@
 
 #include <charsetlistbox.hxx>
 
-#include <vcl/builderfactory.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <osl/diagnose.h>
