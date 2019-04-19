@@ -1542,6 +1542,13 @@ public:
         return m_xToggleButton->IsChecked();
     }
 
+    virtual void WoW_focus() override
+    {
+        disable_notify_events();
+        return m_xToggleButton->GetFocus();
+        enable_notify_events();
+    }
+
     virtual void set_inconsistent(bool inconsistent) override
     {
         disable_notify_events();
