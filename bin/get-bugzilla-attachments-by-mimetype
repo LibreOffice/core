@@ -71,6 +71,11 @@ def get_from_bug_url_via_xml(url, mimetype, prefix, suffix):
         print(" mimetype is", end=' ')
         for node in attachment.childNodes:
             if node.nodeName == 'type':
+                # check if attachment is deleted
+                if not node.firstChild:
+                    print('deleted attachment, skipping')
+                    continue
+
                 print(node.firstChild.nodeValue, end=' ')
                 if node.firstChild.nodeValue.lower() != mimetype.lower():
                     print('skipping')
