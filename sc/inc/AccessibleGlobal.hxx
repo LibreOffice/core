@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_ACCESSIBLEGLOBAL_HXX
-#define INCLUDED_SC_INC_ACCESSIBLEGLOBAL_HXX
+#pragma once
 
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -51,7 +50,5 @@ public:
 private:
     ::std::set<sal_Int16> maStates;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRAME_HXX
-#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRAME_HXX
+#pragma once
 
 #include <swrect.hxx>
 
@@ -160,7 +159,5 @@ inline const SwFrame *SwAccessibleFrame::GetParent() const
     sw::access::SwAccessibleChild aFrameOrObj( GetFrame() );
     return GetParent( aFrameOrObj, IsInPagePreview()  );
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

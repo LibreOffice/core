@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OSX_DROPTARGET_HXX
-#define INCLUDED_VCL_OSX_DROPTARGET_HXX
+#pragma once
 
 #include "DataFlavorMapping.hxx"
 #include <cppuhelper/compbase.hxx>
@@ -151,7 +150,5 @@ private:
   sal_Int8 mSelectedDropAction;
   sal_Int8 mDefaultActions;
 };
-
-#endif // INCLUDED_VCL_OSX_DROPTARGET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

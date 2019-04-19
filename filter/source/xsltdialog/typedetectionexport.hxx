@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_XSLTDIALOG_TYPEDETECTIONEXPORT_HXX
-#define INCLUDED_FILTER_SOURCE_XSLTDIALOG_TYPEDETECTIONEXPORT_HXX
+#pragma once
 
 #include <com/sun/star/xml/sax/XWriter.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -38,7 +37,5 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > mxContext;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

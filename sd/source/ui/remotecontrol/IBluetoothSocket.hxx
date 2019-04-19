@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_IBLUETOOTHSOCKET_HXX
-#define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_IBLUETOOTHSOCKET_HXX
+#pragma once
 
 #include <rtl/string.hxx>
 
@@ -39,7 +38,5 @@ namespace sd
         virtual void close() {};
     };
 }
-
-#endif // INCLUDED_SD_SOURCE_UI_REMOTECONTROL_IBLUETOOTHSOCKET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

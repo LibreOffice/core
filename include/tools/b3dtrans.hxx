@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLS_B3DTRANS_HXX
-#define INCLUDED_TOOLS_B3DTRANS_HXX
+#pragma once
 
 #define ZBUFFER_DEPTH_RANGE         (double(256L * 256L * 256L))
 
@@ -211,7 +210,5 @@ private:
     double                  fBankAngle;
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

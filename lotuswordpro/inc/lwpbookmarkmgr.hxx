@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPBOOKMARKMGR_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPBOOKMARKMGR_HXX
+#pragma once
 
 #include "lwpfilehdr.hxx"
 #include <map>
@@ -78,6 +77,4 @@ private:
     std::map<OUString, rtl::Reference<XFBookmarkStart>> m_MapStart;
     std::map<OUString, rtl::Reference<XFBookmarkEnd>> m_MapEnd;
 };
-
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

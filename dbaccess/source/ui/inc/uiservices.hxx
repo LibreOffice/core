@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_UISERVICES_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_UISERVICES_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -52,7 +51,5 @@ void createRegistryInfo_OViewControl();
 void createRegistryInfo_SbaXGridControl();
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

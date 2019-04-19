@@ -57,8 +57,7 @@
  * @file
  * Page number field.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPAGECOUNT_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPAGECOUNT_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xfcontent.hxx>
@@ -82,6 +81,4 @@ inline void XFPageCount::ToXml(IXFStream *pStrm)
     pStrm->StartElement( "text:page-count" );
     pStrm->EndElement( "text:page-count" );
 }
-
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

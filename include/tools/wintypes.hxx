@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLS_WINTYPES_HXX
-#define INCLUDED_TOOLS_WINTYPES_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -262,7 +261,5 @@ enum class StandardButtonType
 // prominent place for ListBox window types
 
 enum class ProminentEntry { TOP, MIDDLE };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

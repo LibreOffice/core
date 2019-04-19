@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_IMAGESTYLE_HXX
-#define INCLUDED_XMLOFF_IMAGESTYLE_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
@@ -39,7 +38,5 @@ XMLOFF_DLLPUBLIC bool importXML(css::uno::Reference<css::xml::sax::XAttributeLis
                                 css::uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport);
 
 }
-
-#endif // INCLUDED_XMLOFF_IMAGESTYLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

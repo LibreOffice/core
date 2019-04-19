@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_EDITUND2_HXX
-#define INCLUDED_EDITENG_EDITUND2_HXX
+#pragma once
 
 #include <editeng/editengdllapi.h>
 #include <svl/undo.hxx>
@@ -65,8 +64,6 @@ public:
     ViewShellId GetViewShellId() const override;
     sal_uInt16  GetId() const;
 };
-
-#endif // INCLUDED_EDITENG_EDITUND2_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_SOURCE_INC_DISPATCH_LOADDISPATCHER_HXX
-#define INCLUDED_FRAMEWORK_SOURCE_INC_DISPATCH_LOADDISPATCHER_HXX
+#pragma once
 
 #include <loadenv/loadenv.hxx>
 
@@ -117,7 +116,5 @@ class LoadDispatcher : public  ::cppu::WeakImplHelper< css::frame::XNotifyingDis
 }; // class LoadDispatcher
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_SOURCE_INC_DISPATCH_LOADDISPATCHER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

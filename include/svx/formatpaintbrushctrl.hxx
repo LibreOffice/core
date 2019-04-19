@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_FORMATPAINTBRUSHCTRL_HXX
-#define INCLUDED_SVX_FORMATPAINTBRUSHCTRL_HXX
+#pragma once
 
 #include <sfx2/tbxctrl.hxx>
 #include <vcl/timer.hxx>
@@ -53,7 +52,5 @@ private:
 
 
 } //namespace svx
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

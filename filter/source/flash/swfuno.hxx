@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_FLASH_SWFUNO_HXX
-#define INCLUDED_FILTER_SOURCE_FLASH_SWFUNO_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -60,7 +59,5 @@ css::uno::Sequence<OUString> SWFDialog_getSupportedServiceNames();
 /// @throws css::uno::Exception
 css::uno::Reference<css::uno::XInterface> SWFDialog_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPILERPLUGINS_CLANG_TEST_REDUNDANTINLINE_HXX
-#define INCLUDED_COMPILERPLUGINS_CLANG_TEST_REDUNDANTINLINE_HXX
+#pragma once
 
 struct S1 {
     inline S1();
@@ -76,6 +75,5 @@ constexpr inline int f6() { return 0; } // expected-error {{function definition 
 
 static inline int f7() { return 0; }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

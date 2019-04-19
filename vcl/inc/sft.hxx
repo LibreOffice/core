@@ -37,8 +37,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_SFT_HXX
-#define INCLUDED_VCL_INC_SFT_HXX
+#pragma once
 
 #ifdef UNX
 #include <sys/types.h>
@@ -485,7 +484,5 @@ namespace vcl
 #define NUM_TAGS 18
 
 } // namespace vcl
-
-#endif // INCLUDED_VCL_INC_SFT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

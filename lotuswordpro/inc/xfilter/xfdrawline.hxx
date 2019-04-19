@@ -57,8 +57,7 @@
  * @file
  * Line object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWLINE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWLINE_HXX
+#pragma once
 
 #include <xfilter/xfdrawobj.hxx>
 #include <xfilter/xfpoint.hxx>
@@ -104,7 +103,5 @@ inline void XFDrawLine::SetEndPoint(double x, double y)
     m_aPoint2.SetX(x);
     m_aPoint2.SetY(y);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

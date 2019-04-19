@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SYSCHILD_HXX
-#define INCLUDED_VCL_SYSCHILD_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
@@ -58,7 +57,5 @@ public:
     // return the platform specific handle/id of this window;
     sal_IntPtr              GetParentWindowHandle();
 };
-
-#endif // INCLUDED_VCL_SYSCHILD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

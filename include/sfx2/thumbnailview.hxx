@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_THUMBNAILVIEW_HXX
-#define INCLUDED_SFX2_THUMBNAILVIEW_HXX
+#pragma once
 
 #include <sfx2/dllapi.h>
 
@@ -472,7 +471,5 @@ protected:
     std::function<bool (const ThumbnailViewItem*)> maFilterFunc;
 };
 
-
-#endif // INCLUDED_SFX2_THUMBNAILVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

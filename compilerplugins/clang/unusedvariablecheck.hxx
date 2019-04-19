@@ -9,8 +9,7 @@
  *
  */
 
-#ifndef UNUSEDVARIABLECHECK_H
-#define UNUSEDVARIABLECHECK_H
+#pragma once
 
 #include "plugin.hxx"
 
@@ -27,7 +26,5 @@ class UnusedVariableCheck
     };
 
 } // namespace
-
-#endif // UNUSEDVARIABLECHECK_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

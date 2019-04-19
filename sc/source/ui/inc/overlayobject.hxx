@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_OVERLAYOBJECT_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_OVERLAYOBJECT_HXX
+#pragma once
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <vcl/font.hxx>
@@ -62,7 +61,5 @@ private:
     sal_Int32 m_nLeft;
     sal_Int32 m_nTop;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

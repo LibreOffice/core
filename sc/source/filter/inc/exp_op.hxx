@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXP_OP_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_EXP_OP_HXX
+#pragma once
 
 #include <memory>
 #include "xeroot.hxx"
@@ -58,7 +57,5 @@ public:
                         ExportBiff8( XclExpRootData& rExpData, SvStream& rStrm );
     virtual             ~ExportBiff8() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

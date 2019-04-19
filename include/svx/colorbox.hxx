@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVX_COLORBOX_HXX
-#define INCLUDED_SVX_COLORBOX_HXX
+#pragma once
 
 #include <memory>
 #include <vcl/menubtn.hxx>
@@ -142,7 +141,5 @@ public:
     void set_help_id(const OString& rHelpId) { m_xButton->set_help_id(rHelpId); }
     weld::MenuButton& get_widget() { return *m_xButton; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

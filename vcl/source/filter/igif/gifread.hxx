@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_FILTER_IGIF_GIFREAD_HXX
-#define INCLUDED_VCL_SOURCE_FILTER_IGIF_GIFREAD_HXX
+#pragma once
 
 #include <vcl/graph.hxx>
 #include <vcl/bitmapaccess.hxx>
 
 VCL_DLLPUBLIC bool ImportGIF( SvStream& rStream, Graphic& rGraphic );
 VCL_DLLPUBLIC bool IsGIFAnimated(SvStream& rStream);
-
-#endif // INCLUDED_VCL_SOURCE_FILTER_IGIF_GIFREAD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

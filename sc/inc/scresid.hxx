@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_SCRESID_HXX
-#define INCLUDED_SC_INC_SCRESID_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include "scdllapi.h"
 
 OUString SC_DLLPUBLIC ScResId(const char* pId);
 OUString SC_DLLPUBLIC ScResId(const char* pId, int nCardinality);
-
-#endif // SC_SCRESMGR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

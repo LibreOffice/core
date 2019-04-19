@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASCTL_SOURCE_INC_BASIDECTRLR_HXX
-#define INCLUDED_BASCTL_SOURCE_INC_BASIDECTRLR_HXX
+#pragma once
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertycontainer.hxx>
@@ -65,7 +64,5 @@ protected:
 };
 
 } // namespace basctl
-
-#endif // INCLUDED_BASCTL_SOURCE_INC_BASIDECTRLR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_STRINGLISTITEM_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_STRINGLISTITEM_HXX
+#pragma once
 
 #include <svl/poolitem.hxx>
 
@@ -46,7 +45,5 @@ public:
 };
 
 }   // namespace dbaui
-
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_STRINGLISTITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

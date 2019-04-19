@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CUI_SOURCE_INC_POSTDLG_HXX
-#define INCLUDED_CUI_SOURCE_INC_POSTDLG_HXX
+#pragma once
 
 #include <sfx2/basedlgs.hxx>
 
@@ -97,7 +96,5 @@ private:
     DECL_LINK(PrevHdl, weld::Button&, void);
     DECL_LINK(NextHdl, weld::Button&, void);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

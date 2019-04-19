@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEPOSITIONHANDLER_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEPOSITIONHANDLER_HXX
+#pragma once
 
 #include "LoggedResources.hxx"
 #include <memory>
@@ -110,7 +109,5 @@ public:
 using TablePositionHandlerPtr = tools::SvRef<TablePositionHandler>;
 } // namespace dmapper
 } // namespace writerfilter
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

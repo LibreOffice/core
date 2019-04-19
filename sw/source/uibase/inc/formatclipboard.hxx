@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_FORMATCLIPBOARD_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_FORMATCLIPBOARD_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -89,7 +88,5 @@ private:
     /** specify if the Paste function have to clear the current object */
     bool   m_bPersistentCopy;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

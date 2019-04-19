@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_FORMS_ELEMENTEXPORT_HXX
-#define INCLUDED_XMLOFF_SOURCE_FORMS_ELEMENTEXPORT_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -308,7 +307,5 @@ namespace xmloff
         virtual void exportAttributes() override;
     };
 }   // namespace xmloff
-
-#endif // INCLUDED_XMLOFF_SOURCE_FORMS_ELEMENTEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

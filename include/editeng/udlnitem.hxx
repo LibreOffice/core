@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_UDLNITEM_HXX
-#define INCLUDED_EDITENG_UDLNITEM_HXX
+#pragma once
 
 #include <svl/eitem.hxx>
 #include <tools/color.hxx>
@@ -108,7 +107,5 @@ public:
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
     virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const override;
 };
-
-#endif // INCLUDED_EDITENG_UDLNITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

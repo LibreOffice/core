@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_WALL_HXX
-#define INCLUDED_VCL_WALL_HXX
+#pragma once
 
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
@@ -107,7 +106,5 @@ public:
     friend VCL_DLLPUBLIC SvStream& ReadWallpaper( SvStream& rIStm, Wallpaper& rWallpaper );
     friend VCL_DLLPUBLIC SvStream& WriteWallpaper( SvStream& rOStm, const Wallpaper& rWallpaper );
 };
-
-#endif // INCLUDED_VCL_WALL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

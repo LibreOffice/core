@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SBX_HXX
-#define INCLUDED_BASIC_SBX_HXX
+#pragma once
 
 #include <tools/ref.hxx>
 #include <svl/hint.hxx>
@@ -223,7 +222,5 @@ public:
 typedef tools::SvRef<SbxArray> SbxArrayRef;
 typedef tools::SvRef<SbxInfo> SbxInfoRef;
 typedef tools::SvRef<SbxDimArray> SbxDimArrayRef;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

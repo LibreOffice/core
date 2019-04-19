@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_OPENGL_OGL_CANVASFONT_HXX
-#define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_CANVASFONT_HXX
+#pragma once
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -58,7 +57,5 @@ namespace oglcanvas
         css::geometry::Matrix2D        maFontMatrix;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

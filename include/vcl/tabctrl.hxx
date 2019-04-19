@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_TABCTRL_HXX
-#define INCLUDED_VCL_TABCTRL_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
@@ -223,7 +222,5 @@ private:
     VclPtr<PushButton> m_pOpenMenu;
     DECL_LINK(OpenMenu, Button*, void);
 };
-
-#endif // INCLUDED_VCL_TABCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

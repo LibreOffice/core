@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUISTIC_SOURCE_LNGOPT_HXX
-#define INCLUDED_LINGUISTIC_SOURCE_LNGOPT_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -210,7 +209,5 @@ inline OUString LinguProps::getImplementationName_Static() throw()
     return OUString( "com.sun.star.lingu2.LinguProps" );
 }
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

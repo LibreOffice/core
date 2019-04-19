@@ -7,14 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLSEC_INIT_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLSEC_INIT_HXX
+#pragma once
 
 #include <xsecxmlsecdllapi.h>
 
 XSECXMLSEC_DLLPUBLIC void initXmlSec();
 XSECXMLSEC_DLLPUBLIC void deInitXmlSec();
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

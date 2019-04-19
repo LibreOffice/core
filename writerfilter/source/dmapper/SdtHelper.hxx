@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_SDTHELPER_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_SDTHELPER_HXX
+#pragma once
 
 #include <vector>
 
@@ -125,7 +124,5 @@ public:
 
 } // namespace dmapper
 } // namespace writerfilter
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

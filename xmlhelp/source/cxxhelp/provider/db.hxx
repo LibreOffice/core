@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_DB_HXX
-#define INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_DB_HXX
+#pragma once
 
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <comphelper/fileurl.hxx>
@@ -94,7 +93,5 @@ namespace helpdatafileproxy {
     };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

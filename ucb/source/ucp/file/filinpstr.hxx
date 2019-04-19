@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UCB_SOURCE_UCP_FILE_FILINPSTR_HXX
-#define INCLUDED_UCB_SOURCE_UCP_FILE_FILINPSTR_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
@@ -108,7 +107,5 @@ namespace fileaccess {
         sal_Int32                                          m_nMinorErrorCode;
     };
 } // end namespace XInputStream_impl
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

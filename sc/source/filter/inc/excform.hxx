@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXCFORM_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_EXCFORM_HXX
+#pragma once
 
 #include "xlformula.hxx"
 #include "xiroot.hxx"
@@ -138,7 +137,5 @@ inline bool ExcelToSc8::IsComplRowRange( const sal_uInt16 nRow1, const sal_uInt1
 {
     return ( nRow1 == 0x0000 ) && ( nRow2 == 0xFFFF );
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

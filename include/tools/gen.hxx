@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLS_GEN_HXX
-#define INCLUDED_TOOLS_GEN_HXX
+#pragma once
 
 #include <tools/toolsdllapi.h>
 
@@ -753,7 +752,5 @@ inline SvStream& ReadPair( SvStream& rIStream, Point& v ) { return ReadPair(rISt
 inline SvStream& WritePair( SvStream& rOStream, const Point& v ) { return WritePair(rOStream, v.toPair()); }
 inline SvStream& ReadPair( SvStream& rIStream, Size& v ) { return ReadPair(rIStream, v.toPair()); }
 inline SvStream& WritePair( SvStream& rOStream, const Size& v ) { return WritePair(rOStream, v.toPair()); }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

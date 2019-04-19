@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACONTROL_HXX
-#define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACONTROL_HXX
+#pragma once
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -137,7 +136,5 @@ namespace ScVbaControlFactory
         const css::uno::Reference< css::frame::XModel >& xModel,
         double fOffsetX, double fOffsetY );
 }
-
-#endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

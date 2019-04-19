@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_XMLSEC_SAXHELPER_HXX
-#define INCLUDED_XMLSECURITY_INC_XMLSEC_SAXHELPER_HXX
+#pragma once
 
 #include <libxml/tree.h>
 
@@ -79,7 +78,5 @@ class SAXHelper final
             const OUString& aData ) ;
 
 } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

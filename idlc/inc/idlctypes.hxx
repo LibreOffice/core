@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_IDLC_INC_IDLCTYPES_HXX
-#define INCLUDED_IDLC_INC_IDLCTYPES_HXX
+#pragma once
 
 #include <stdio.h>
 
@@ -186,7 +185,5 @@ enum ParseState
     PS_DeclsCommaSeen,      // Seen ',' in declarators list
     PS_DeclsDeclSeen        // Seen complete decl in decls list
 };
-
-#endif // INCLUDED_IDLC_INC_IDLCTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMFIO_INC_MTFTOOLS_HXX
-#define INCLUDED_EMFIO_INC_MTFTOOLS_HXX
+#pragma once
 
 #include <basegfx/utils/b2dclipstate.hxx>
 #include <tools/poly.hxx>
@@ -653,7 +652,5 @@ namespace emfio
         ~MtfTools() COVERITY_NOEXCEPT_FALSE;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_WIN_GDI_GDIIMPL_HXX
-#define INCLUDED_VCL_WIN_GDI_GDIIMPL_HXX
+#pragma once
 
 #include <salgdiimpl.hxx>
 #include <win/salgdi.h>
@@ -243,7 +242,5 @@ public:
     virtual bool RenderAndCacheNativeControl(OpenGLCompatibleDC& rWhite, OpenGLCompatibleDC& rBlack,
                                              int nX, int nY , ControlCacheKey& aControlCacheKey);
 };
-
-#endif // INCLUDED_VCL_WIN_GDI_GDIIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_FONTLB_HXX
-#define INCLUDED_SVX_FONTLB_HXX
+#pragma once
 
 #include <vcl/svtabbx.hxx>
 #include <vcl/svlbitm.hxx>
@@ -42,7 +41,5 @@ public:
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

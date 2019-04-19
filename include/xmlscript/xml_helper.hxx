@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XMLSCRIPT_XML_HELPER_HXX
-#define INCLUDED_XMLSCRIPT_XML_HELPER_HXX
+#pragma once
 
 #include <vector>
 #include <cppuhelper/implbase.hxx>
@@ -118,7 +117,5 @@ createOutputStream(
     std::vector<sal_Int8> * pOutData );
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

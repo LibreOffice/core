@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_AVMEDIA_SOURCE_WIN_INTERFACE_HXX
-#define INCLUDED_AVMEDIA_SOURCE_WIN_INTERFACE_HXX
+#pragma once
 
 extern "C" const CLSID CLSID_MediaDet;
 extern "C" const IID IID_IMediaDet;
@@ -117,7 +116,5 @@ public:
 protected:
     ~ISampleGrabber() {}
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

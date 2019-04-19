@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPHYPERLINKMGR_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPHYPERLINKMGR_HXX
+#pragma once
 
 #include <lwpfilehdr.hxx>
 
@@ -76,7 +75,5 @@ private:
     OUString m_Hyperlink;
     bool m_bIsHyperlink;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

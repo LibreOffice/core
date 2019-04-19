@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_PDFIADAPTOR_HXX
-#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_PDFIADAPTOR_HXX
+#pragma once
 
 #include <xmlemitter.hxx>
 #include <treevisitorfactory.hxx>
@@ -137,7 +136,5 @@ namespace pdfi
         css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

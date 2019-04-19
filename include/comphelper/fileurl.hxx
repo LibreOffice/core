@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_FILEURL_HXX
-#define INCLUDED_COMPHELPER_FILEURL_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -31,7 +30,5 @@ namespace comphelper {
 COMPHELPER_DLLPUBLIC bool isFileUrl(OUString const & url);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

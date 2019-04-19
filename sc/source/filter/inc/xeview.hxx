@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XEVIEW_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XEVIEW_HXX
+#pragma once
 
 #include "xerecord.hxx"
 #include "xlview.hxx"
@@ -160,7 +159,5 @@ private:
     XclTabViewData      maData;             /// All view settings for a sheet.
     sal_uInt32          mnGridColorId;      /// Color identifier for grid color.
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

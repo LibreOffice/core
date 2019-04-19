@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLKIT_CONTROLS_ROADMAPENTRY_HXX
-#define INCLUDED_TOOLKIT_CONTROLS_ROADMAPENTRY_HXX
+#pragma once
 
 #include <comphelper/uno3.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -66,7 +65,5 @@ private:
     bool            m_bEnabled;
     bool            m_bInteractive;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

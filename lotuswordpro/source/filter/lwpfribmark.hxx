@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBMARK_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBMARK_HXX
+#pragma once
 
 #include <lwpfrib.hxx>
 #include "lwpstory.hxx"
@@ -151,7 +150,5 @@ private:
     sal_uInt8 m_nType;
     LwpObjectID m_objMarker;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

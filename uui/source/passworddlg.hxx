@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UUI_SOURCE_PASSWORDDLG_HXX
-#define INCLUDED_UUI_SOURCE_PASSWORDDLG_HXX
+#pragma once
 
 #include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <vcl/weld.hxx>
@@ -46,7 +45,5 @@ public:
 private:
     const std::locale&                 rResLocale;
 };
-
-#endif // INCLUDED_UUI_SOURCE_PASSWORDDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

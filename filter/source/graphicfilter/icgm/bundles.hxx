@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_BUNDLES_HXX
-#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_BUNDLES_HXX
+#pragma once
 
 #include <sal/types.h>
 #include "cgmtypes.hxx"
@@ -172,7 +171,5 @@ public:
     void            InsertCharSet( CharSetType, sal_uInt8 const * pSource, sal_uInt32 nSize );
     CGMFList&       operator=( const CGMFList& rFontList );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

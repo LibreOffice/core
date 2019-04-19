@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_REGISTERINTERFACES_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_REGISTERINTERFACES_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -27,7 +26,5 @@ namespace sd { namespace ui { namespace table {
 void RegisterInterfaces( SfxModule* pMod );
 
 } } }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

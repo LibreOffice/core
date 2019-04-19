@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_FLDDAT_HXX
-#define INCLUDED_SW_INC_FLDDAT_HXX
+#pragma once
 
 #include "fldbas.hxx"
 
@@ -71,7 +70,5 @@ public:
         virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt16 nMId ) const override;
         virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt16 nMId ) override;
 };
-
-#endif // INCLUDED_SW_INC_FLDDAT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

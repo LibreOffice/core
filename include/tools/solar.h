@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLS_SOLAR_H
-#define INCLUDED_TOOLS_SOLAR_H
+#pragma once
 
 #include <sal/types.h>
 #include <osl/endian.h>
@@ -114,8 +113,6 @@ inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = reinterpret_cast<s
                                                        p[6] = reinterpret_cast<sal_uInt8*>(&n)[1];
                                                        p[7] = reinterpret_cast<sal_uInt8*>(&n)[0]; }
 #endif
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

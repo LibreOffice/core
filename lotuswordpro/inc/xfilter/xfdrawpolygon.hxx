@@ -57,8 +57,7 @@
  * @file
  * Polygon object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWPOLYGON_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWPOLYGON_HXX
+#pragma once
 
 #include <xfilter/xfdrawpolyline.hxx>
 #include <vector>
@@ -75,6 +74,4 @@ public:
 public:
     virtual void    ToXml(IXFStream *pStrm) override;
 };
-
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

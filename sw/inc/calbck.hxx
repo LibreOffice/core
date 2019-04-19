@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_CALBCK_HXX
-#define INCLUDED_SW_INC_CALBCK_HXX
+#pragma once
 
 #include <cassert>
 
@@ -447,7 +446,5 @@ SwClient::SwClient( SwModify* pToRegisterIn )
     if(pToRegisterIn)
         pToRegisterIn->Add(this);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

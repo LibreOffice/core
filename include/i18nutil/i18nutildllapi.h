@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NUTIL_I18NUTILDLLAPI_H
-#define INCLUDED_I18NUTIL_I18NUTILDLLAPI_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -28,7 +27,5 @@
 #define I18NUTIL_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
 #endif
 #define I18NUTIL_DLLPRIVATE SAL_DLLPRIVATE
-
-#endif // INCLUDED_I18NUTIL_I18NUTILDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

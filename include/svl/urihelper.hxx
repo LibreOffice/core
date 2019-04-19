@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_URIHELPER_HXX
-#define INCLUDED_SVL_URIHELPER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/textenc.h>
@@ -167,7 +166,5 @@ SVL_DLLPUBLIC OUString removePassword(OUString const & rURI,
 SVL_DLLPUBLIC OUString resolveIdnaHost(OUString const & url);
 
 }
-
-#endif // INCLUDED_SVL_URIHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

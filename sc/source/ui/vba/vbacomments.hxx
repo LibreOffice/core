@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBACOMMENTS_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_VBACOMMENTS_HXX
+#pragma once
 
 #include <ooo/vba/excel/XComments.hpp>
 
@@ -46,7 +45,5 @@ public:
 private:
     css::uno::Reference< css::frame::XModel > mxModel;
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_VBA_VBACOMMENTS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

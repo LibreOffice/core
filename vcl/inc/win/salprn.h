@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_WIN_SALPRN_H
-#define INCLUDED_VCL_INC_WIN_SALPRN_H
+#pragma once
 
 #include <salprn.hxx>
 
@@ -107,7 +106,5 @@ public:
     void markInvalid();
     bool isValid() const { return mbValid; }
 };
-
-#endif // INCLUDED_VCL_INC_WIN_SALPRN_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,8 +57,7 @@
  * @file
  * Rect object
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFRECT_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFRECT_HXX
+#pragma once
 
 #include <xfilter/xfpoint.hxx>
 
@@ -133,6 +132,4 @@ private:
     double  m_fWidth;
     double  m_fHeight;
 };
-
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

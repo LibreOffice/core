@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVXDLLAPI_H
-#define INCLUDED_SVX_SVXDLLAPI_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -28,7 +27,5 @@
 #define SVX_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
 #endif
 #define SVX_DLLPRIVATE SAL_DLLPRIVATE
-
-#endif // INCLUDED_SVX_SVXDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

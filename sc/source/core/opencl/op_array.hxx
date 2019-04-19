@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_CORE_OPENCL_OP_ARRAY_HXX
-#define INCLUDED_SC_SOURCE_CORE_OPENCL_OP_ARRAY_HXX
+#pragma once
 
 #include "opbase.hxx"
 
@@ -38,7 +37,5 @@ public:
     virtual std::string BinFuncName() const override { return "SumXMY2"; }
 };
 }}
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

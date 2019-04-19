@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CODEMAKER_COMMONCPP_HXX
-#define INCLUDED_CODEMAKER_COMMONCPP_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -56,7 +55,5 @@ rtl::OString translateUnoToCppIdentifier(
     rtl::OString const * forbidden = nullptr);
 
 } }
-
-#endif // INCLUDED_CODEMAKER_COMMONCPP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

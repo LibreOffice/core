@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_SALDISP_HXX
-#define INCLUDED_VCL_INC_UNX_SALDISP_HXX
+#pragma once
 
 class   SalDisplay;
 class   SalColormap;
@@ -429,7 +428,5 @@ namespace vcl_sal {
         return static_cast<SalDisplay *>(data->GetDisplay());
     }
 }
-
-#endif // INCLUDED_VCL_INC_UNX_SALDISP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

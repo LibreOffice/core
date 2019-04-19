@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_FRAMELISTANALYZER_HXX
-#define INCLUDED_FRAMEWORK_FRAMELISTANALYZER_HXX
+#pragma once
 
 #include <framework/fwedllapi.h>
 #include <o3tl/typed_flags_set.hxx>
@@ -197,7 +196,5 @@ class FWE_DLLPUBLIC FrameListAnalyzer final
 }; // class FrameListAnalyzer
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_FRAMELISTANALYZER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

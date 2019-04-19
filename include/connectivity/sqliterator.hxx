@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_SQLITERATOR_HXX
-#define INCLUDED_CONNECTIVITY_SQLITERATOR_HXX
+#pragma once
 
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/IParseContext.hxx>
@@ -330,7 +329,5 @@ namespace connectivity
         void impl_fillJoinConditions(const OSQLParseNode* i_pJoinCondition);
     };
 }
-
-#endif // INCLUDED_CONNECTIVITY_SQLITERATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

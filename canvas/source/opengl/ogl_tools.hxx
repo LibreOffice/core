@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_OPENGL_OGL_TOOLS_HXX
-#define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_TOOLS_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <epoxy/gl.h>
@@ -24,7 +23,5 @@ namespace oglcanvas
         { glPopMatrix(); }
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

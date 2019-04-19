@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_SOURCE_CMDMAIL_CMDMAILMSG_HXX
-#define INCLUDED_SHELL_SOURCE_CMDMAIL_CMDMAILMSG_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -101,7 +100,5 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) override;
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

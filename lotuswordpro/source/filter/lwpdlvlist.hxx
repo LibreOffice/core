@@ -58,8 +58,7 @@
  *  list related class
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDLVLIST_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDLVLIST_HXX
+#pragma once
 
 #include <lwpatomholder.hxx>
 #include <lwpobj.hxx>
@@ -153,7 +152,5 @@ public:
 private:
     LwpObjectID m_objHead;//LwpDLVList
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

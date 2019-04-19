@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_BITMAP_HXX
-#define INCLUDED_VCL_BITMAP_HXX
+#pragma once
 
 #include <tools/solar.h>
 #include <vcl/checksum.hxx>
@@ -584,7 +583,5 @@ inline sal_uLong Bitmap::GetSizeBytes() const
     const Size aSizePix( GetSizePixel() );
     return( ( static_cast<sal_uLong>(aSizePix.Width()) * aSizePix.Height() * GetBitCount() ) >> 3 );
 }
-
-#endif // INCLUDED_VCL_BITMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

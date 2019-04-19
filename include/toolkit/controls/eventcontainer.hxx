@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_CONTROLS_EVENTCONTAINER_HXX
-#define INCLUDED_TOOLKIT_CONTROLS_EVENTCONTAINER_HXX
+#pragma once
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -66,7 +65,5 @@ public:
 };
 
 }   // namespace toolkit_namecontainer
-
-#endif // INCLUDED_TOOLKIT_CONTROLS_EVENTCONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

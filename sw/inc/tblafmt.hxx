@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_TBLAFMT_HXX
-#define INCLUDED_SW_INC_TBLAFMT_HXX
+#pragma once
 /*
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  *
@@ -407,7 +406,5 @@ public:
     /// If found returns a ptr to a BoxFormat. If not found returns nullptr
     SwBoxAutoFormat* GetBoxFormat(const OUString& sName) const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

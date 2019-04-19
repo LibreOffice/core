@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_SDR_PRIMITIVE3D_SDRATTRIBUTECREATOR3D_HXX
-#define INCLUDED_SVX_INC_SDR_PRIMITIVE3D_SDRATTRIBUTECREATOR3D_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -47,7 +46,5 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-
-#endif // INCLUDED_SVX_INC_SDR_PRIMITIVE3D_SDRATTRIBUTECREATOR3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

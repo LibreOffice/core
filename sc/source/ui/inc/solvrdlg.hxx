@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_SOLVRDLG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_SOLVRDLG_HXX
+#pragma once
 
 #include <address.hxx>
 #include "anyrefdg.hxx"
@@ -87,7 +86,5 @@ private:
 
     DECL_LINK( GetFocusHdl, weld::Widget&, void );
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_SOLVRDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

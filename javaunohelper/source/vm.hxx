@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_JAVAUNOHELPER_SOURCE_VM_HXX
-#define INCLUDED_JAVAUNOHELPER_SOURCE_VM_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -43,7 +42,5 @@ install_vm_singleton(
     ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > const & vm_access );
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

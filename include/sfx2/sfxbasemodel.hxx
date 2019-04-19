@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SFXBASEMODEL_HXX
-#define INCLUDED_SFX2_SFXBASEMODEL_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
@@ -735,7 +734,5 @@ private:
     const bool                          m_bSupportDocRecovery;
 
 } ; // class SfxBaseModel
-
-#endif // INCLUDED_SFX2_SFXBASEMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

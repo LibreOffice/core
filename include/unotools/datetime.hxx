@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_UNOTOOLS_DATETIME_HXX
-#define INCLUDED_UNOTOOLS_DATETIME_HXX
+#pragma once
 
 //= conversions UNO3.TimeClass <-> Tools.TimeClass (Date/Time/DateTime)
 #include <unotools/unotoolsdllapi.h>
@@ -55,7 +54,5 @@ namespace utl
     UNOTOOLS_DLLPUBLIC bool            ISO8601parseTime(const OUString &i_rIn, css::util::Time& o_Time);
 
 }   // namespace utl
-
-#endif // INCLUDED_UNOTOOLS_DATETIME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

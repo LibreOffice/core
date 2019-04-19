@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDMODEL_HXX
-#define INCLUDED_SVX_SVDMODEL_HXX
+#pragma once
 
 #include <functional>
 #include <memory>
@@ -610,7 +609,6 @@ public:
 };
 
 
-#endif // INCLUDED_SVX_SVDMODEL_HXX
 
 /*
             +-----------+
@@ -631,5 +629,4 @@ public:
 This class: SdrModel is the head of the data models for the StarView Drawing Engine.
 
 ///////////////////////////////////////////////////////////////////////////////////////////////// */
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

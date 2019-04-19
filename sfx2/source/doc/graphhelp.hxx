@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SOURCE_DOC_GRAPHHELP_HXX
-#define INCLUDED_SFX2_SOURCE_DOC_GRAPHHELP_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/XStream.hpp>
@@ -59,7 +58,5 @@ public:
             const css::uno::Reference< css::io::XStream >& xStream );
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

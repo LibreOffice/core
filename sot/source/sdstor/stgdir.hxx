@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SOT_SOURCE_SDSTOR_STGDIR_HXX
-#define INCLUDED_SOT_SOURCE_SDSTOR_STGDIR_HXX
+#pragma once
 
 #include "stgavl.hxx"
 #include "stgelem.hxx"
@@ -107,7 +106,5 @@ public:
     StgDirEntry* First() { return static_cast<StgDirEntry*>( StgAvlIterator::First() ); }
     StgDirEntry* Next()  { return static_cast<StgDirEntry*>( StgAvlIterator::Next() );  }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

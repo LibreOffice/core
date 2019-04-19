@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLINDEXALPHABETICALSOURCECONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLINDEXALPHABETICALSOURCECONTEXT_HXX
+#pragma once
 
 #include "XMLIndexSourceBaseContext.hxx"
 #include <xmloff/languagetagodf.hxx>
@@ -76,7 +75,5 @@ protected:
         const OUString& rLocalName,
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLSTRING_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XLSTRING_HXX
+#pragma once
 
 #include <vector>
 #include <o3tl/typed_flags_set.hxx>
@@ -83,7 +82,5 @@ inline bool operator<( const XclFormatRun& rLeft, const XclFormatRun& rRight )
 
 /** A vector with all formatting runs for a rich-string. */
 typedef ::std::vector< XclFormatRun > XclFormatRunVec;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

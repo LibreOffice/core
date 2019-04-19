@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_IVCTRL_HXX
-#define INCLUDED_SVTOOLS_IVCTRL_HXX
+#pragma once
 
 #include <memory>
 #include <svtools/svtdllapi.h>
@@ -275,7 +274,5 @@ public:
     /** Creates and returns the accessible object of the Box. */
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 };
-
-#endif // INCLUDED_SVTOOLS_IVCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

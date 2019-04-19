@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_PIXMAP_HXX
-#define INCLUDED_VCL_INC_UNX_PIXMAP_HXX
+#pragma once
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -39,7 +38,5 @@ private:
     int             mnWidth;
     int             mnHeight;
 };
-
-#endif // INCLUDED_VCL_INC_UNX_PIXMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

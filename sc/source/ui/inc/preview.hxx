@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_INC_PREVIEW_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_PREVIEW_HXX
+#pragma once
 
 #include <vcl/window.hxx>
 #include "printfun.hxx"
@@ -160,7 +159,5 @@ public:
     SC_DLLPUBLIC void SetSelectedTabs(const ScMarkData& rMark);
     const ScMarkData::MarkedTabsType& GetSelectedTabs() const { return maSelectedTabs; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

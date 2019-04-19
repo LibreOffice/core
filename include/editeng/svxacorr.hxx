@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_SVXACORR_HXX
-#define INCLUDED_EDITENG_SVXACORR_HXX
+#pragma once
 
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -416,7 +415,5 @@ public:
         return *pCharClass;
     }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

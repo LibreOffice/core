@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OSX_DRAGSOURCECONTEXT_HXX
-#define INCLUDED_VCL_OSX_DRAGSOURCECONTEXT_HXX
+#pragma once
 
 #include <com/sun/star/datatransfer/dnd/XDragSourceContext.hpp>
 #include <cppuhelper/compbase.hxx>
@@ -47,7 +46,5 @@ public:
 
   virtual void SAL_CALL transferablesFlavorsChanged(  ) override;
 };
-
-#endif // INCLUDED_VCL_OSX_DRAGSOURCECONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_MEASUREHANDLER_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_MEASUREHANDLER_HXX
+#pragma once
 
 #include "LoggedResources.hxx"
 #include <memory>
@@ -60,7 +59,5 @@ public:
 typedef tools::SvRef
     < MeasureHandler >  MeasureHandlerPtr;
 }}
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

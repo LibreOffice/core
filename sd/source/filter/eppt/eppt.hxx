@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_FILTER_EPPT_EPPT_HXX
-#define INCLUDED_SD_SOURCE_FILTER_EPPT_EPPT_HXX
+#pragma once
 #include <memory>
 #include <vector>
 #include "escherex.hxx"
@@ -228,7 +227,5 @@ class PPTWriter final : public PPTWriterBase, public PPTExBulletProvider
         virtual void        exportPPTPre( const std::vector< css::beans::PropertyValue >& ) override;
         virtual void        exportPPTPost( ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

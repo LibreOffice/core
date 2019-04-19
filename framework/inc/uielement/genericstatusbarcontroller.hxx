@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_GENERICSTATUSBARCONTROLLER_HXX
-#define INCLUDED_FRAMEWORK_INC_UIELEMENT_GENERICSTATUSBARCONTROLLER_HXX
+#pragma once
 
 #include <svtools/statusbarcontroller.hxx>
 
@@ -54,7 +53,5 @@ class GenericStatusbarController final : public svt::StatusbarController
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

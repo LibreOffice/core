@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XEHELPER_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XEHELPER_HXX
+#pragma once
 
 #include <memory>
 #include <rangelst.hxx>
@@ -432,7 +431,5 @@ public:
 private:
     const ScMatrix& mrMatrix;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

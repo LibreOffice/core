@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_STLSHEET_HXX
-#define INCLUDED_SD_INC_STLSHEET_HXX
+#pragma once
 
 #include <rtl/ref.hxx>
 
@@ -165,7 +164,5 @@ struct StyleSheetCopyResult
 };
 
 typedef std::vector<StyleSheetCopyResult> StyleSheetCopyResultVector;
-
-#endif // INCLUDED_SD_INC_STLSHEET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

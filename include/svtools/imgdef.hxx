@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_IMGDEF_HXX
-#define INCLUDED_SVTOOLS_IMGDEF_HXX
+#pragma once
 
 enum SfxSymbolsSize
 {
@@ -27,7 +26,5 @@ enum SfxSymbolsSize
     SFX_SYMBOLS_SIZE_32      = 3, // keep the numbers as they are written into the profile
     SFX_SYMBOLS_SIZE_AUTO    = 2,
 };
-
-#endif // INCLUDED_SVTOOLS_IMGDEF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

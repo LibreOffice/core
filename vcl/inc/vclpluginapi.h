@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_VCLPLUGINAPI_H
-#define INCLUDED_VCL_INC_VCLPLUGINAPI_H
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -69,8 +68,6 @@
 #define DESKTOP_DETECTOR_PUBLIC SAL_DLLPUBLIC_EXPORT
 #else
 #define DESKTOP_DETECTOR_PUBLIC SAL_DLLPUBLIC_IMPORT
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
