@@ -9,8 +9,7 @@
  ***
  ****************************************************************************
  ****************************************************************************/
-#ifndef __BLUETOOTH_H
-#define __BLUETOOTH_H
+#pragma once
 
 #ifdef __cplusplus
 #endif
@@ -67,4 +66,3 @@ bacpy (bdaddr_t * dst, const bdaddr_t * src)
 {
   memcpy (dst, src, sizeof (bdaddr_t));
 }
-#endif

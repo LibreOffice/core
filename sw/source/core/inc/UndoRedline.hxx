@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDOREDLINE_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_UNDOREDLINE_HXX
+#pragma once
 
 #include <memory>
 #include <undobj.hxx>
@@ -131,7 +130,5 @@ public:
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
-
-#endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOREDLINE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,15 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_OPENGL_X11_GLXTEST_HXX
-#define INCLUDED_VCL_INC_OPENGL_X11_GLXTEST_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
 VCL_DLLPUBLIC int* getGlxPipe();
 
 VCL_DLLPUBLIC pid_t* getGlxPid();
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

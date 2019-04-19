@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_GRADIENT_HXX
-#define INCLUDED_VCL_GRADIENT_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <vcl/dllapi.h>
@@ -107,7 +106,5 @@ public:
     friend VCL_DLLPUBLIC SvStream& ReadGradient( SvStream& rIStm, Gradient& rGradient );
     friend VCL_DLLPUBLIC SvStream& WriteGradient( SvStream& rOStm, const Gradient& rGradient );
 };
-
-#endif // INCLUDED_VCL_GRADIENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

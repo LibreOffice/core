@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_STARMATH_SOURCE_OOXMLIMPORT_HXX
-#define INCLUDED_STARMATH_SOURCE_OOXMLIMPORT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -48,7 +47,5 @@ private:
 
     oox::formulaimport::XmlStream& m_rStream;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

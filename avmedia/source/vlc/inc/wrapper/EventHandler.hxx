@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_INC_WRAPPER_EVENTHANDLER_HXX
-#define INCLUDED_AVMEDIA_SOURCE_VLC_INC_WRAPPER_EVENTHANDLER_HXX
+#pragma once
 
 #include <functional>
 #include <salhelper/thread.hxx>
@@ -39,7 +38,5 @@ namespace wrapper
 }
 }
 }
-
-#endif // INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_EVENTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

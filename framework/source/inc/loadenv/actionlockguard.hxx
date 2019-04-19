@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_ACTIONLOCKGUARD_HXX
-#define INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_ACTIONLOCKGUARD_HXX
+#pragma once
 
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <osl/mutex.hxx>
@@ -138,7 +137,5 @@ class ActionLockGuard final
 };
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_ACTIONLOCKGUARD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

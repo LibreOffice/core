@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_ACCESSIBLEFILTERTOPWINDOW_HXX
-#define INCLUDED_SC_INC_ACCESSIBLEFILTERTOPWINDOW_HXX
+#pragma once
 
 #include "AccessibleFilterMenu.hxx"
 
@@ -75,7 +74,5 @@ private:
     css::uno::Reference< css::accessibility::XAccessible >
         mxAccCancelBtn;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

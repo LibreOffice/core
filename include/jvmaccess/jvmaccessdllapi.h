@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_JVMACCESS_JVMACCESSDLLAPI_H
-#define INCLUDED_JVMACCESS_JVMACCESSDLLAPI_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -18,7 +17,5 @@
 #   define JVMACCESS_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 #define JVMACCESS_DLLPRIVATE SAL_DLLPRIVATE
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

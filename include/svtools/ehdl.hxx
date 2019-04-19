@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_EHDL_HXX
-#define INCLUDED_SVTOOLS_EHDL_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
@@ -67,7 +66,5 @@ private:
     SVT_DLLPRIVATE static void GetClassString(ErrCodeClass lErrId, OUString &);
     virtual bool          CreateString(const ErrorInfo *, OUString &) const override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

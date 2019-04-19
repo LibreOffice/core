@@ -19,8 +19,7 @@
 
 // AccActionBase.h: interface for the CAccActionBase class.
 
-#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCACTIONBASE_H
-#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCACTIONBASE_H
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
@@ -73,7 +72,5 @@ private:
         return pRXAct.get();
     }
 };
-
-#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCACTIONBASE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

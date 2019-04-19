@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDRPAINTWINDOW_HXX
-#define INCLUDED_SVX_SDRPAINTWINDOW_HXX
+#pragma once
 
 #include <rtl/ref.hxx>
 #include <vcl/virdev.hxx>
@@ -137,7 +136,5 @@ public:
     // #i72889# get target output device, take into account output buffering
     OutputDevice& GetTargetOutputDevice() { if(mpPreRenderDevice) return mpPreRenderDevice->GetPreRenderDevice(); else return *mpOutputDevice; }
 };
-
-#endif // INCLUDED_SVX_SDRPAINTWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

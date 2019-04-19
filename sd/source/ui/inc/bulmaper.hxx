@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_BULMAPER_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_BULMAPER_HXX
+#pragma once
 
 #include <sddllapi.h>
 
@@ -35,7 +34,5 @@ public:
     static void MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& rSet );
 
 };
-
-#endif // INCLUDED_SD_SOURCE_UI_INC_BULMAPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

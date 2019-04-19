@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_LAYOUTATOMVISITORS_HXX
-#define INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_LAYOUTATOMVISITORS_HXX
+#pragma once
 
 #include <memory>
 
@@ -119,7 +118,5 @@ public:
 };
 
 } }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

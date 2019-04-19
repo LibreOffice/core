@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VCL_ENUMCONTEXT_HXX
-#define INCLUDED_VCL_ENUMCONTEXT_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -162,7 +161,5 @@ private:
         | static_cast<sal_uInt16>(::vcl::EnumContext::e))
 
 } // end of namespace vcl
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SVX_CLASSIFICATIONEDITVIEW_HXX
-#define INCLUDED_SVX_CLASSIFICATIONEDITVIEW_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <svx/svxdllapi.h>
@@ -88,7 +87,5 @@ protected:
 };
 
 } // end svx namespace
-
-#endif // INCLUDED_SVX_CLASSIFICATIONEDITVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

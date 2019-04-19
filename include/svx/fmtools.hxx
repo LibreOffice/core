@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_FMTOOLS_HXX
-#define INCLUDED_SVX_FMTOOLS_HXX
+#pragma once
 
 #include <svx/svxdllapi.h>
 
@@ -192,7 +191,5 @@ bool isRowSetAlive(const css::uno::Reference< css::uno::XInterface>& _rxRowSet);
 typedef ::std::set  < css::uno::Reference< css::uno::XInterface >
                     , ::comphelper::OInterfaceCompare< css::uno::XInterface >
                     > InterfaceBag;
-
-#endif // INCLUDED_SVX_FMTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

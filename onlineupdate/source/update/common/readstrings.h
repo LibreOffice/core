@@ -4,8 +4,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef READSTRINGS_H__
-#define READSTRINGS_H__
+#pragma once
 
 #define MAX_TEXT_LEN 600
 
@@ -35,4 +34,3 @@ int ReadStrings(const NS_tchar *path,
                 char results[][MAX_TEXT_LEN],
                 const char *section = nullptr);
 
-#endif  // READSTRINGS_H__

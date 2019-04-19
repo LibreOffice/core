@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_T602_T602FILTER_HXX
-#define INCLUDED_FILTER_SOURCE_T602_T602FILTER_HXX
+#pragma once
 
 #include <memory>
 #include <com/sun/star/document/XFilter.hpp>
@@ -272,7 +271,5 @@ css::uno::Reference< css::uno::XInterface >
 T602ImportFilterDialog_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

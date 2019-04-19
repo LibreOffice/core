@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_VIEWPT3D_HXX
-#define INCLUDED_SVX_VIEWPT3D_HXX
+#pragma once
 
 #include <svx/svxdllapi.h>
 #include <basegfx/matrix/b3dhommatrix.hxx>
@@ -89,7 +88,5 @@ class SVX_DLLPUBLIC Viewport3D
     // returns observers position in world coordinates
     const basegfx::B3DPoint&    GetViewPoint();
 };
-
-#endif // INCLUDED_SVX_VIEWPT3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

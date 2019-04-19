@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTTREELISTLABEL_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTTREELISTLABEL_HXX
+#pragma once
 
 #include "PivotLayoutTreeListBase.hxx"
 #include <vector>
@@ -32,7 +31,5 @@ protected:
     virtual void InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget) override;
     virtual void KeyInput(const KeyEvent& rKeyEvent) override;
 };
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
-#endif

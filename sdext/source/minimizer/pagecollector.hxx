@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_PAGECOLLECTOR_HXX
-#define INCLUDED_SDEXT_SOURCE_MINIMIZER_PAGECOLLECTOR_HXX
+#pragma once
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -37,7 +36,5 @@ class PageCollector
     static void CollectNonCustomShowPages( const css::uno::Reference< css::frame::XModel >&, const OUString& rCustomShow, std::vector< css::uno::Reference< css::drawing::XDrawPage > >& );
     static void CollectMasterPages( const css::uno::Reference< css::frame::XModel >&, std::vector< MasterPageEntity >& );
 };
-
-#endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_PAGECOLLECTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

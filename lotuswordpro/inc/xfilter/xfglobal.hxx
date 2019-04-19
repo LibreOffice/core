@@ -58,8 +58,7 @@
  * Global functions or include files that are needed.
  * It's all for the full filter.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFGLOBAL_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFGLOBAL_HXX
+#pragma once
 
 #include <cassert>
 
@@ -140,6 +139,4 @@ public:
     static int  s_nAreaID;
     static int s_nImageID;
 };
-
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

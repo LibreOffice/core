@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VBAHELPER_VBAEVENTSHELPERBASE_HXX
-#define INCLUDED_VBAHELPER_VBAEVENTSHELPERBASE_HXX
+#pragma once
 
 #include <deque>
 #include <exception>
@@ -225,7 +224,5 @@ private:
     bool mbDisposed;
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_INC_HELPER_UNOPROPERTYARRAYHELPER_HXX
-#define INCLUDED_TOOLKIT_INC_HELPER_UNOPROPERTYARRAYHELPER_HXX
+#pragma once
 
 #include <toolkit/dllapi.h>
 #include <cppuhelper/propshlp.hxx>
@@ -48,7 +47,5 @@ public:
     sal_Int32 SAL_CALL fillHandles( sal_Int32* pHandles, const css::uno::Sequence< OUString > & rPropNames ) override;
 };
 
-
-#endif // INCLUDED_TOOLKIT_INC_HELPER_UNOPROPERTYARRAYHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

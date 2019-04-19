@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUISTIC_SOURCE_CONVDICXML_HXX
-#define INCLUDED_LINGUISTIC_SOURCE_CONVDICXML_HXX
+#pragma once
 
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
@@ -99,7 +98,5 @@ public:
     void         SetConversionType( sal_Int16 nType )    { nConversionType = nType; }
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

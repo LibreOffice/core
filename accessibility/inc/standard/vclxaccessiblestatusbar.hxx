@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLESTATUSBAR_HXX
-#define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLESTATUSBAR_HXX
+#pragma once
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <vcl/vclptr.hxx>
@@ -66,7 +65,5 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
 };
 
-
-#endif // INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLESTATUSBAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

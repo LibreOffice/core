@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_GETALLCHARPROPIDS_HXX
-#define INCLUDED_SVX_INC_GETALLCHARPROPIDS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -29,7 +28,5 @@
 class SfxItemSet;
 
 std::vector<sal_uInt16> GetAllCharPropIds(const SfxItemSet& rSet);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,11 +18,8 @@
  */
 
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_DECL_H
-#define INCLUDED_SC_SOURCE_FILTER_INC_DECL_H
+#pragma once
 
 enum WKTYP { eWK_UNKNOWN = -2, eWK_1 = 0, eWK_2, eWK3, eWK4, eWK_Error, eWK123 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

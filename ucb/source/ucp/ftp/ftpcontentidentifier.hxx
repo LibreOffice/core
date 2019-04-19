@@ -22,8 +22,7 @@
  **************************************************************************
 
  *************************************************************************/
-#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTENTIDENTIFIER_HXX
-#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTENTIDENTIFIER_HXX
+#pragma once
 
 #include <vector>
 #include "curl.hxx"
@@ -85,7 +84,5 @@ namespace ftp {
 
 }
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

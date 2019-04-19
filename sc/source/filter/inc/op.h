@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_OP_H
-#define INCLUDED_SC_SOURCE_FILTER_INC_OP_H
+#pragma once
 
 #include <sal/types.h>
 class SfxItemSet;
@@ -55,7 +54,5 @@ void OP_SheetName123(LotusContext &rContext, SvStream &rStream, sal_uInt16 nLeng
 void OP_HorAlign123(LotusContext &rContext,sal_uInt8 nAlignPattern, SfxItemSet& rPattern /*  const ScPatternAttr& rPattern*/  );
 void OP_VerAlign123(LotusContext &rContext,sal_uInt8 nAlignPattern, SfxItemSet& rPattern /*  const ScPatternAttr& rPattern*/  );
 void OP_ApplyPatternArea123(LotusContext &rContext,SvStream& r);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

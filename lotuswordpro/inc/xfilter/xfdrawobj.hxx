@@ -57,8 +57,7 @@
  * @file
  * Interface for all Drawing object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWOBJ_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWOBJ_HXX
+#pragma once
 
 #include <xfilter/xfframe.hxx>
 #include <xfilter/xfrect.hxx>
@@ -102,6 +101,4 @@ protected:
     XFPoint         m_aRotatePoint;
     unsigned int    m_nDrawFlag;
 };
-
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#ifndef INCLUDED_SHELL_INC_SPSUPP_COMOPENDOCUMENTS_HPP
-#define INCLUDED_SHELL_INC_SPSUPP_COMOPENDOCUMENTS_HPP
+#pragma once
 
 #if defined __clang__
 #pragma clang diagnostic push
@@ -215,7 +214,5 @@ private:
     static ITypeInfo* m_pTypeInfo;
     COMObjectSafety m_aObjectSafety;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

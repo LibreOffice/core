@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_MAPTYPE_HXX
-#define INCLUDED_XMLOFF_MAPTYPE_HXX
+#pragma once
 
 #include <com/sun/star/uno/Any.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -111,7 +110,5 @@ struct XMLPropertyState
     XMLPropertyState( sal_Int32 nIndex, const css::uno::Any& rValue )
         : mnIndex( nIndex ), maValue( rValue ) {}
 };
-
-#endif // INCLUDED_XMLOFF_MAPTYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

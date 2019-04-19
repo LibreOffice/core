@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_LOKHELPER_HXX
-#define INCLUDED_SFX2_LOKHELPER_HXX
+#pragma once
 
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/event.hxx>
@@ -85,7 +84,5 @@ void SfxLokHelper::forEachOtherView(ViewShellType* pThisViewShell, FunctionType 
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

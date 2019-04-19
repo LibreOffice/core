@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSCRIPT_SOURCE_INC_UNOSERVICES_HXX
-#define INCLUDED_XMLSCRIPT_SOURCE_INC_UNOSERVICES_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -43,7 +42,5 @@ css::uno::Reference<css::uno::XInterface> create_DocumentHandlerImpl(
     css::uno::Reference<css::uno::XComponentContext> const & xContext);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

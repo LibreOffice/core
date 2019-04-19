@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLSTREAMIO_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLSTREAMIO_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/crypto/XUriBinding.hpp>
@@ -31,7 +30,5 @@ XSECXMLSEC_DLLPUBLIC int xmlRegisterStreamInputCallbacks(
     css::uno::Reference< css::xml::crypto::XUriBinding > const & aUriBinding
 );
 XSECXMLSEC_DLLPUBLIC int xmlUnregisterStreamInputCallbacks() ;
-
-#endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLSTREAMIO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYMAPHELPER_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYMAPHELPER_HXX
+#pragma once
 
 #include "PropertyMap.hxx"
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -36,7 +35,5 @@ void lcl_DumpPropertyValueSeq(css::uno::Sequence<css::beans::PropertyValues> con
 #endif // DBG_UTIL
 }
 }
-
-#endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYMAPHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

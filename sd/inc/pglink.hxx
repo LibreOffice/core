@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_PGLINK_HXX
-#define INCLUDED_SD_INC_PGLINK_HXX
+#pragma once
 
 #include <sfx2/lnkbase.hxx>
 
@@ -37,7 +36,5 @@ public:
         const OUString& rMimeType, const css::uno::Any & rValue ) override;
     void         Connect() { SvBaseLink::GetRealObject(); }
 };
-
-#endif // INCLUDED_SD_INC_PGLINK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

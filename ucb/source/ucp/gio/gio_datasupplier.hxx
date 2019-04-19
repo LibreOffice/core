@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_GIO_GIO_DATASUPPLIER_HXX
-#define INCLUDED_UCB_SOURCE_UCP_GIO_GIO_DATASUPPLIER_HXX
+#pragma once
 
 #include <ucbhelper/resultset.hxx>
 #include "gio_content.hxx"
@@ -85,7 +84,5 @@ public:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

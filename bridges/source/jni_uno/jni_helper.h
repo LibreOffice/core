@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_HELPER_H
-#define INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_HELPER_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -147,7 +146,5 @@ inline jobject compute_oid( JNI_context const & jni, jobject jo )
 }
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

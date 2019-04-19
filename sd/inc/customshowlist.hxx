@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_CUSTOMSHOWLIST_HXX
-#define INCLUDED_SD_INC_CUSTOMSHOWLIST_HXX
+#pragma once
 
 #include "sddllapi.h"
 #include "cusshow.hxx"
@@ -86,7 +85,5 @@ public:
             mShows.erase(it);
     }
 };
-
-#endif // INCLUDED_SD_INC_CUSTOMSHOWLIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

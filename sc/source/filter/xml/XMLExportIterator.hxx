@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTITERATOR_HXX
-#define INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTITERATOR_HXX
+#pragma once
 
 #include <vector>
 #include <list>
@@ -371,7 +370,5 @@ public:
 
     bool                        GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

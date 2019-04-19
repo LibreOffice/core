@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef GTV_APPLICATION_WINDOW_H
-#define GTV_APPLICATION_WINDOW_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -108,7 +107,5 @@ GtkWindow* gtv_application_window_get_child_window_by_id(GtvApplicationWindow* w
 GtkWidget* gtv_application_window_get_parent(GtvApplicationWindow* window, guint nWinId);
 
 G_END_DECLS
-
-#endif /* GTV_APPLICATION_WINDOW_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,8 +32,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MORKPARSER_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MORKPARSER_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -147,7 +146,5 @@ private: // Data
     MorkParser &operator=(const MorkParser &) = delete;
 
 };
-
-#endif // __MorkParser_h__
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

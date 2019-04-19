@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPIECE_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPIECE_HXX
+#pragma once
 
 #include <lwpobj.hxx>
 #include <lwpoverride.hxx>
@@ -220,6 +219,4 @@ public:
 private:
     virtual ~LwpCharacterBorderPiece() override {}
 };
-
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SFXBASECONTROLLER_HXX
-#define INCLUDED_SFX2_SFXBASECONTROLLER_HXX
+#pragma once
 
 #include <memory>
 #include <sal/config.h>
@@ -199,7 +198,5 @@ private:
     std::unique_ptr<IMPL_SfxBaseController_DataContainer>   m_pData ;
 
 } ; // class SfxBaseController
-
-#endif  // _SFX_SFXBASECONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

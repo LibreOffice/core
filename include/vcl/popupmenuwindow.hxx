@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_POPUPMENUWINDOW_HXX
-#define INCLUDED_VCL_POPUPMENUWINDOW_HXX
+#pragma once
 
 #include <vcl/floatwin.hxx>
 #include <memory>
@@ -40,7 +39,5 @@ public:
     //determine if a given window is an activated PopupMenuFloatingWindow
     static bool isPopupMenu(const vcl::Window *pWindow);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

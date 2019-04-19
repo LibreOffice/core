@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UNOTOOLS_LOCALFILEHELPER_HXX
-#define INCLUDED_UNOTOOLS_LOCALFILEHELPER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <unotools/unotoolsdllapi.h>
@@ -36,7 +35,5 @@ namespace utl
     /// recursively remove directory and all contents
     UNOTOOLS_DLLPUBLIC void removeTree(OUString const & url);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

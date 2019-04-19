@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_UTIL_PROPERTY_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_UTIL_PROPERTY_HXX
+#pragma once
 
 #include <java/lang/Object.hxx>
 
@@ -35,7 +34,5 @@ namespace connectivity
         void setProperty(const OUString& key, const OUString& value);
     };
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_UTIL_PROPERTY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

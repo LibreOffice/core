@@ -8,8 +8,7 @@
  * Implements various macros meant to ease the use of variadic macros.
  */
 
-#ifndef mozilla_MacroArgs_h
-#define mozilla_MacroArgs_h
+#pragma once
 
 /*
  * MOZ_PASTE_PREFIX_AND_ARG_COUNT(aPrefix, ...) counts the number of variadic
@@ -102,4 +101,3 @@
 #define MOZ_ARG_1(a1, ...) a1
 #define MOZ_ARG_2(a1, a2, ...) a2
 
-#endif /* mozilla_MacroArgs_h */

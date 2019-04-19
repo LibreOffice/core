@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SFXUNO_HXX
-#define INCLUDED_SFX2_SFXUNO_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
@@ -44,7 +43,5 @@ SFX2_DLLPUBLIC void TransformItems(         sal_uInt16                          
 bool GetEncryptionData_Impl( const SfxItemSet* pSet, css::uno::Sequence< css::beans::NamedValue >& aEncryptionData );
 
 typedef sal_Int32 FrameSearchFlags;
-
-#endif // INCLUDED_SFX2_SFXUNO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

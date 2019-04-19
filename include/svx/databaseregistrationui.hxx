@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_DATABASEREGISTRATIONUI_HXX
-#define INCLUDED_SVX_DATABASEREGISTRATIONUI_HXX
+#pragma once
 
 #include <svx/svxdllapi.h>
 
@@ -35,7 +34,5 @@ namespace svx
     sal_uInt16  SVX_DLLPUBLIC  administrateDatabaseRegistration( weld::Window* _parentWindow );
 
 }
-
-#endif // INCLUDED_SVX_DATABASEREGISTRATIONUI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

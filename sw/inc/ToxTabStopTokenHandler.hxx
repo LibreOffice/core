@@ -8,8 +8,7 @@
  */
 
 
-#ifndef TOXTABSTOPTOKENHANDLER_HXX_
-#define TOXTABSTOPTOKENHANDLER_HXX_
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -107,7 +106,5 @@ private:
 };
 
 }
-
-#endif /* TOXTABSTOPTOKENHANDLER_HXX_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

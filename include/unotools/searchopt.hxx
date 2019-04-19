@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_SEARCHOPT_HXX
-#define INCLUDED_UNOTOOLS_SEARCHOPT_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 #include <memory>
@@ -108,7 +107,5 @@ public:
     void    SetIgnoreDiacritics_CTL( bool bVal );
     void    SetIgnoreKashida_CTL( bool bVal );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

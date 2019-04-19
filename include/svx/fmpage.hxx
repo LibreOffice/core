@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_FMPAGE_HXX
-#define INCLUDED_SVX_FMPAGE_HXX
+#pragma once
 
 #include <memory>
 #include <svx/svdpage.hxx>
@@ -75,7 +74,5 @@ protected:
     // lateInit -> copyValuesToClonedInstance (?)
     void lateInit(const FmFormPage& rPage);
 };
-
-#endif // INCLUDED_SVX_FMPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

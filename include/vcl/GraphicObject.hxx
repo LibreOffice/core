@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_GRAPHICOBJECT_HXX
-#define INCLUDED_VCL_GRAPHICOBJECT_HXX
+#pragma once
 
 #include <memory>
 #include <vcl/graph.hxx>
@@ -395,7 +394,5 @@ VCL_DLLPUBLIC void SearchForGraphics(css::uno::Reference<css::uno::XInterface> c
 
 }
 } // end namespace vcl::graphic
-
-#endif // INCLUDED_VCL_GRAPHICOBJECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

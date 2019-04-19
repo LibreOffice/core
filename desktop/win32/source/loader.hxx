@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_WIN32_SOURCE_LOADER_HXX
-#define INCLUDED_DESKTOP_WIN32_SOURCE_LOADER_HXX
+#pragma once
 
 #include <cstddef>
 #define WIN32_LEAN_AND_MEAN
@@ -83,7 +82,5 @@ void extendLoaderEnvironment(WCHAR * binPath, WCHAR * iniDirectory);
 int officeloader_impl(bool bAllowConsole);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

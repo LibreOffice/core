@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SOURCE_BASTYP_FLTLST_HXX
-#define INCLUDED_SFX2_SOURCE_BASTYP_FLTLST_HXX
+#pragma once
 
 #include <sfx2/fcontnr.hxx>
 #include <rtl/ustring.hxx>
@@ -48,7 +47,5 @@ class SfxFilterListener final
         void disposing( const css::lang::EventObject& aSource );
 
 };
-
-#endif // INCLUDED_SFX2_SOURCE_BASTYP_FLTLST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

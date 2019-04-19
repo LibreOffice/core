@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STARMATH_INC_DOCUMENT_HXX
-#define INCLUDED_STARMATH_INC_DOCUMENT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
@@ -216,7 +215,5 @@ public:
     void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding);
     void readFormulaOoxml( oox::formulaimport::XmlStream& stream );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

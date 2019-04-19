@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_TASKCREATORDEFS_HXX
-#define INCLUDED_FRAMEWORK_INC_TASKCREATORDEFS_HXX
+#pragma once
 
 /// [XFrame] if it's set, it will be used as parent frame for the new created frame.
 const char ARGUMENT_PARENTFRAME[] = "ParentFrame"; // XFrame
@@ -52,7 +51,5 @@ const char ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE[] = "SupportPersistentWindowSta
                Default = ON !
  */
 const char ARGUMENT_ENABLE_TITLEBARUPDATE[] = "EnableTitleBarUpdate"; // sal_Bool
-
-#endif // INCLUDED_FRAMEWORK_INC_TASKCREATORDEFS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

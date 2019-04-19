@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_INC_PAGEMASTERIMPORTCONTEXT_HXX
-#define INCLUDED_XMLOFF_INC_PAGEMASTERIMPORTCONTEXT_HXX
+#pragma once
 
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -56,7 +55,5 @@ public:
     //text grid enhancement
     virtual void SetDefaults() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

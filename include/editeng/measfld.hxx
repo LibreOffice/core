@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_MEASFLD_HXX
-#define INCLUDED_EDITENG_MEASFLD_HXX
+#pragma once
 
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
@@ -45,7 +44,5 @@ public:
     SdrMeasureField & operator =(SdrMeasureField &&) = default;
 };
 
-
-#endif // INCLUDED_EDITENG_MEASFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

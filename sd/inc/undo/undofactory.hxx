@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_UNDO_UNDOFACTORY_HXX
-#define INCLUDED_SD_INC_UNDO_UNDOFACTORY_HXX
+#pragma once
 
 #include <svx/svdundo.hxx>
 
@@ -37,7 +36,5 @@ public:
 };
 
 }
-
-#endif // INCLUDED_SD_INC_UNDO_UNDOFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

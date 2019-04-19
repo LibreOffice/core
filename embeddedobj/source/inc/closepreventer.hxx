@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_INC_CLOSEPREVENTER_HXX
-#define INCLUDED_EMBEDDEDOBJ_SOURCE_INC_CLOSEPREVENTER_HXX
+#pragma once
 
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -30,7 +29,5 @@ class OClosePreventer : public ::cppu::WeakImplHelper < css::util::XCloseListene
 
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

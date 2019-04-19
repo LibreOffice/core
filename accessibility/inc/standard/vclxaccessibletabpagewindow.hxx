@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLETABPAGEWINDOW_HXX
-#define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLETABPAGEWINDOW_HXX
+#pragma once
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <vcl/vclptr.hxx>
@@ -53,7 +52,5 @@ public:
     virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) override;
 };
 
-
-#endif // INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLETABPAGEWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

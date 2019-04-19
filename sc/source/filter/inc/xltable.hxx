@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLTABLE_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XLTABLE_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -164,7 +163,5 @@ const sal_uInt16 EXC_ID_RK                  = 0x027E;
 
 // (0x04BC) SHRFMLA -----------------------------------------------------------
 const sal_uInt16 EXC_ID_SHRFMLA             = 0x04BC;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

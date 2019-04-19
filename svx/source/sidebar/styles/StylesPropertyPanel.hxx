@@ -1,5 +1,4 @@
-#ifndef INCLUDED_SVX_SOURCE_SIDEBAR_STYLES_STYLESPROPERTYPANEL_HXX
-#define INCLUDED_SVX_SOURCE_SIDEBAR_STYLES_STYLESPROPERTYPANEL_HXX
+#pragma once
 
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
@@ -33,4 +32,3 @@ public:
 
 } } //end of namespace svx::sidebar
 
-#endif

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_SPLASH_SPLASH_HXX
-#define INCLUDED_DESKTOP_SOURCE_SPLASH_SPLASH_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -44,7 +43,5 @@ css::uno::Sequence< OUString >
 getSupportedServiceNames();
 
 } }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

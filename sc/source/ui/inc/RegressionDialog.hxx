@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_REGRESSIONDIALOG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_REGRESSIONDIALOG_HXX
+#pragma once
 
 #include "StatisticsTwoVariableDialog.hxx"
 
@@ -78,7 +77,5 @@ private:
     DECL_LINK( NumericFieldHdl, weld::SpinButton&, void );
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

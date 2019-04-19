@@ -9,8 +9,7 @@
  *
  */
 
-#ifndef PLUGINHANDLER_H
-#define PLUGINHANDLER_H
+#pragma once
 
 #include <cstddef>
 #include <functional>
@@ -93,7 +92,5 @@ private:
 };
 
 }
-
-#endif // COMPILEPLUGIN_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_METAACT_HXX
-#define INCLUDED_VCL_METAACT_HXX
+#pragma once
 
 #include <memory>
 #include <vcl/dllapi.h>
@@ -1706,7 +1705,5 @@ public:
 
     LanguageType        GetTextLanguage() const { return meTextLanguage; }
 };
-
-#endif // INCLUDED_VCL_METAACT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

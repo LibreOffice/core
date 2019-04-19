@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_CONTDLG_HXX
-#define INCLUDED_SVX_CONTDLG_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -82,7 +81,5 @@ public:
     static tools::PolyPolygon  CreateAutoContour(  const Graphic& rGraphic,
                                             const tools::Rectangle* pRect = nullptr );
 };
-
-#endif // INCLUDED_SVX_CONTDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

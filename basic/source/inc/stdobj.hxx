@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_STDOBJ_HXX
-#define INCLUDED_BASIC_SOURCE_INC_STDOBJ_HXX
+#pragma once
 
 #include <basic/sbxobj.hxx>
 
@@ -38,7 +37,5 @@ public:
     virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
     virtual void SetModified( bool ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

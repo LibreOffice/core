@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SALDATABASIC_HXX
-#define INCLUDED_VCL_INC_SALDATABASIC_HXX
+#pragma once
 
 #include <osl/module.h>
 #include <vcl/dllapi.h>
@@ -62,7 +61,5 @@ inline SalData* GetSalData()
 {
     return ImplGetSVData()->mpSalData;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

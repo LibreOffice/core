@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_OWNVIEW_HXX
-#define INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_OWNVIEW_HXX
+#pragma once
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
@@ -77,7 +76,5 @@ public:
 
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

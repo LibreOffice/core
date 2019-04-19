@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_SCUITPHFEDIT_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_SCUITPHFEDIT_HXX
+#pragma once
 
 #include "tphfedit.hxx"
 #include <vcl/customweld.hxx>
@@ -152,7 +151,5 @@ public:
 private:
     ScLeftFooterEditPage( TabPageParent pParent, const SfxItemSet& rSet );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

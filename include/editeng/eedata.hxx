@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_EEDATA_HXX
-#define INCLUDED_EDITENG_EEDATA_HXX
+#pragma once
 
 
 // extended data definitions for EditEngine portion stripping (StripPortions()
@@ -42,7 +41,5 @@ namespace EEngineData
     typedef std::vector< WrongSpellClass > WrongSpellVector;
 
 } // end of namespace EditEngine
-
-#endif // INCLUDED_EDITENG_EEDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

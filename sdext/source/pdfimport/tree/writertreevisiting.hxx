@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_TREE_WRITERTREEVISITING_HXX
-#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_TREE_WRITERTREEVISITING_HXX
+#pragma once
 
 #include <treevisiting.hxx>
 
@@ -98,7 +97,5 @@ namespace pdfi
         virtual void visit( DocumentElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

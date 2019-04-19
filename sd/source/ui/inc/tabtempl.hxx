@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_TABTEMPL_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_TABTEMPL_HXX
+#pragma once
 
 #include <sfx2/styledlg.hxx>
 #include <svx/xtable.hxx>
@@ -54,7 +53,5 @@ public:
                      SdrModel const * pModel,
                      SdrView* pView);
 };
-
-#endif // INCLUDED_SD_SOURCE_UI_INC_TABTEMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

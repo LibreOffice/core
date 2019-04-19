@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_FRMPAGE_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_FRMPAGE_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/dialcontrol.hxx>
@@ -332,7 +331,5 @@ public:
     void            SetShell(SwWrtShell* pSh) { m_pWrtSh  = pSh; }
 
 };
-
-#endif // INCLUDED_SW_SOURCE_UIBASE_INC_FRMPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOXML_SOURCE_RDF_CNODES_HXX
-#define INCLUDED_UNOXML_SOURCE_RDF_CNODES_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <cppuhelper/factory.hxx>
@@ -55,7 +54,5 @@ css::uno::Sequence< OUString > _getSupportedServiceNames();
 css::uno::Reference< css::uno::XInterface > _create( css::uno::Reference< css::uno::XComponentContext > const & context );
 
 } // closing component helper namespace
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
