@@ -21,10 +21,8 @@
 
 #include <editeng/editengdllapi.h>
 #include <rtl/ustring.hxx>
+#include <tools/fontenum.hxx>
 #include <svl/poolitem.hxx>
-#include <vcl/font.hxx>
-
-class SvXMLUnitConverter;
 
 /** This item describes a Font.
 */

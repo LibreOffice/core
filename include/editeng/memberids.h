@@ -20,8 +20,6 @@
 #ifndef INCLUDED_EDITENG_MEMBERIDS_H
 #define INCLUDED_EDITENG_MEMBERIDS_H
 
-#include <svl/memberid.h>
-
 #define MID_LOCATION            0x3c
 #define MID_TRANSPARENT         0x4b
 #define MID_BG_COLOR            0x22

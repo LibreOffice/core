@@ -18,6 +18,8 @@
  */
 
 
+#include <com/sun/star/linguistic2/XThesaurus.hpp>
+
 #include <comphelper/string.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <sfx2/bindings.hxx>

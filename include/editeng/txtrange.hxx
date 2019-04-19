@@ -26,7 +26,6 @@
 #include <memory>
 
 namespace tools { class PolyPolygon; }
-namespace tools { class Rectangle; }
 
 namespace basegfx {
     class B2DPolyPolygon;

@@ -19,14 +19,15 @@
 #ifndef INCLUDED_EDITENG_HANGULHANJA_HXX
 #define INCLUDED_EDITENG_HANGULHANJA_HXX
 
-#include <vcl/window.hxx>
 #include <memory>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <editeng/editengdllapi.h>
 #include <i18nlangtag/mslangid.hxx>
+
+namespace com::sun::star::lang { struct Locale; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace vcl { class Font; }
+namespace weld { class Window; }
 
 
 namespace editeng

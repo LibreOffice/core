@@ -20,6 +20,7 @@
 
 #include <editeng/eeitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/awt/FontDescriptor.hpp>
 
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>

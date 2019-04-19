@@ -23,6 +23,7 @@
 #include <sfx2/msg.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
+#include <svl/memberid.h>
 #include <editeng/wghtitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>

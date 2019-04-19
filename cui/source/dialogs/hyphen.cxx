@@ -19,6 +19,8 @@
 
 #include <hyphen.hxx>
 
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
+
 #include <editeng/splwrap.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/unolingu.hxx>

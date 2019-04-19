@@ -23,6 +23,8 @@
 #include <sfx2/sfxuno.hxx>
 #include <svl/eitem.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/linguistic2/XDictionary.hpp>
+#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <comphelper/string.hxx>
 #include <tools/debug.hxx>
 #include <unotools/collatorwrapper.hxx>

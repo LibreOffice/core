@@ -22,6 +22,7 @@
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/view/PaperOrientation.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/profilezone.hxx>
 #include <comphelper/servicehelper.hxx>

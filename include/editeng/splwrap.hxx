@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
 }}}}
 
 namespace vcl { class Window; }
-class SdrObject;
+
 // misc functions ---------------------------------------------------------------
 
 void EDITENG_DLLPUBLIC SvxPrepareAutoCorrect( OUString &rOldText, const OUString &rNewText );

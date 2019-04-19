@@ -28,6 +28,7 @@
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
+#include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <svl/aeitem.hxx>
 #include <SwStyleNameMapper.hxx>

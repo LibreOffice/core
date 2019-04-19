@@ -10,7 +10,6 @@
 #ifndef INCLUDED_EDITENG_TRIE_HXX
 #define INCLUDED_EDITENG_TRIE_HXX
 
-#include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <editeng/editengdllapi.h>
 #include <memory>

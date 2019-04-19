@@ -84,6 +84,7 @@
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/office/Quickstart.hpp>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

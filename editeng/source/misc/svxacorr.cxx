@@ -21,6 +21,8 @@
 #include <string_view>
 #include <sal/config.h>
 
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/Locale.hpp>

@@ -18,6 +18,8 @@
  */
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 
 #include <textapi.hxx>
 #include <drawdoc.hxx>
@@ -32,7 +34,6 @@
 #include <svx/svdundo.hxx>
 
 namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }
-namespace com { namespace sun { namespace star { namespace text { class XTextField; } } } }
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;

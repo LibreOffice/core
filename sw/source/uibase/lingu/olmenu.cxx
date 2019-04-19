@@ -87,6 +87,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
 using namespace ::com::sun::star;
 

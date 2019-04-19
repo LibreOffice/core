@@ -20,7 +20,6 @@
 #ifndef INCLUDED_EDITENG_FORBIDDENCHARACTERSTABLE_HXX
 #define INCLUDED_EDITENG_FORBIDDENCHARACTERSTABLE_HXX
 
-#include <salhelper/simplereferenceobject.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <editeng/editengdllapi.h>

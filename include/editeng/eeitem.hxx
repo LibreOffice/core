@@ -56,6 +56,8 @@ class SvxULSpaceItem;
 class SvxUnderlineItem;
 class SvxWeightItem;
 class SvxWordLineModeItem;
+class SvxBulletItem;
+class SvxNumBulletItem;
 
 /*
  * NOTE: Changes in this file will probably require

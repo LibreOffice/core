@@ -20,11 +20,8 @@
 #ifndef INCLUDED_EDITENG_SVXACORR_HXX
 #define INCLUDED_EDITENG_SVXACORR_HXX
 
-#include <com/sun/star/embed/XStorage.hpp>
-
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <tools/ref.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/time.hxx>
 #include <tools/date.hxx>
@@ -40,6 +37,8 @@ class SotStorage;
 class SvxAutoCorrect;
 class SfxObjectShell;
 namespace vcl { class Window; }
+namespace com::sun::star::embed { class XStorage; }
+namespace tools { template <typename T> class SvRef; }
 
 struct CompareSvStringsISortDtor
 {

@@ -21,7 +21,6 @@
 
 #include <editeng/editdata.hxx>
 #include <editeng/editstat.hxx>
-#include <editeng/numitem.hxx>
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
 #include <svl/SfxBroadcaster.hxx>
@@ -29,21 +28,13 @@
 #include <svl/undo.hxx>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
-#include <tools/contnr.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/errcode.hxx>
 #include <tools/link.hxx>
-#include <svl/style.hxx>
 #include <editeng/editengdllapi.h>
-#include <com/sun/star/lang/Locale.hpp>
 
 #include <vcl/GraphicObject.hxx>
 
-#include <LibreOfficeKit/LibreOfficeKitTypes.h>
-#include <com/sun/star/uno/Reference.h>
-
-#include <rtl/ref.hxx>
 #include <editeng/svxfont.hxx>
 #include <editeng/eedata.hxx>
 #include <editeng/paragraphdata.hxx>
@@ -61,8 +52,6 @@ class EditUndo;
 class ParagraphList;
 class OutlinerParaObject;
 class SvStream;
-class SvxBulletItem;
-class SvxFont;
 class SvxSearchItem;
 class SvxFieldItem;
 namespace vcl { class Window; }
@@ -70,15 +59,11 @@ class KeyEvent;
 class MouseEvent;
 class CommandEvent;
 class MapMode;
-class OutputDevice;
-namespace tools { class PolyPolygon; }
 class SfxStyleSheetPool;
 class SfxStyleSheet;
 class SfxItemPool;
 class SfxItemSet;
-class SvxNumBulletItem;
 class SvxNumberFormat;
-class SvxLRSpaceItem;
 class EditEngine;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
@@ -88,8 +73,8 @@ class OutlinerViewShell;
 enum class CharCompressType;
 enum class TransliterationFlags;
 class SvxFieldData;
-class SfxUndoManager;
 enum class PointerStyle;
+class SvxNumRule;
 
 namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XSpellChecker1;
@@ -100,6 +85,7 @@ namespace svx{
     typedef std::vector<SpellPortion> SpellPortions;
 }
 namespace basegfx { class B2DPolyPolygon; }
+namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
 
 
 

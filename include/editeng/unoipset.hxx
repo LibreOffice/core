@@ -20,16 +20,14 @@
 #ifndef INCLUDED_EDITENG_UNOIPSET_HXX
 #define INCLUDED_EDITENG_UNOIPSET_HXX
 
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <editeng/editengdllapi.h>
 #include <svl/itemprop.hxx>
 #include <memory>
 #include <vector>
 
-class SdrItemPool;
+namespace com::sun::star::beans { class XPropertySetInfo; }
+
 class SfxItemSet;
-class SvxShape;
 struct SvxIDPropertyCombine;
 
 class EDITENG_DLLPUBLIC SvxItemPropertySet

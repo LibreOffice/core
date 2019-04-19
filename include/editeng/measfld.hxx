@@ -20,12 +20,9 @@
 #ifndef INCLUDED_EDITENG_MEASFLD_HXX
 #define INCLUDED_EDITENG_MEASFLD_HXX
 
-#include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/editengdllapi.h>
 #include <com/sun/star/text/textfield/Type.hpp>
-
-class SdrMeasureObj;
 
 enum class SdrMeasureFieldKind { Value, Unit, Rotate90Blanks };
 

@@ -888,3 +888,23 @@ blacklist:
     - class SvxUnderlineItem
     - class SvxWeightItem
     - class SvxWordLineModeItem
+    - class SvxBulletItem
+    - class SvxNumBulletItem
+    include/editeng/UnoForbiddenCharsTable.hxx:
+    # base class has to be a complete type
+    - com/sun/star/i18n/XForbiddenCharacters.hpp
+    - com/sun/star/linguistic2/XSupportedLocales.hpp
+    include/editeng/unonrule.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XIndexReplace.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/ucb/XAnyCompare.hpp
+    - com/sun/star/util/XCloneable.hpp
+    include/editeng/unotext.hxx:
+    # Needed for macro defines
+    - com/sun/star/container/XIndexReplace.hpp
+    - com/sun/star/awt/FontSlant.hpp
+    - com/sun/star/awt/FontDescriptor.hpp
+    - com/sun/star/style/LineSpacing.hpp
+    - com/sun/star/style/TabStop.hpp

@@ -31,6 +31,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <sot/storage.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/jobset.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/docfile.hxx>

@@ -28,6 +28,11 @@
 #include <editeng/unolingu.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#include <com/sun/star/linguistic2/XHyphenator.hpp>
+#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
+#include <com/sun/star/linguistic2/XDictionary.hpp>
 
 #include <editeng/svxenum.hxx>
 #include <editeng/splwrap.hxx>

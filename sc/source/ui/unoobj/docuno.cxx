@@ -55,6 +55,7 @@
 
 #include <float.h>
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>

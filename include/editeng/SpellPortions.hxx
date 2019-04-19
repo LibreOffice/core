@@ -24,12 +24,13 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/SingleProofreadingError.hpp>
-#include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <vector>
 
 namespace com{ namespace sun{ namespace star{ namespace linguistic2{
     class XSpellAlternatives;
 }}}}
+
+namespace com::sun::star::linguistic2 { class XProofreader; }
 
 namespace svx{
 /** contains a portion of text that has the same language attributes applied

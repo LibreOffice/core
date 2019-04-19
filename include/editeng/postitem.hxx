@@ -19,11 +19,9 @@
 #ifndef INCLUDED_EDITENG_POSTITEM_HXX
 #define INCLUDED_EDITENG_POSTITEM_HXX
 
-#include <vcl/vclenum.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/editengdllapi.h>
-
-class SvXMLUnitConverter;
+#include <tools/fontenum.hxx>
 
 // class SvxPostureItem --------------------------------------------------
 

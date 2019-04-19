@@ -20,12 +20,9 @@
 #define INCLUDED_EDITENG_UDLNITEM_HXX
 
 #include <svl/eitem.hxx>
-#include <vcl/vclenum.hxx>
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
 #include <editeng/editengdllapi.h>
-
-class SvXMLUnitConverter;
 
 // class SvxTextLineItem ------------------------------------------------
 

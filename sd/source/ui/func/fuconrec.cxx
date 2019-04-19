@@ -42,6 +42,7 @@
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xfillit.hxx>

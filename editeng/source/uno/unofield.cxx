@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
+#include <svl/itemprop.hxx>
 
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>

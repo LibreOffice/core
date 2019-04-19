@@ -20,16 +20,12 @@
 #define INCLUDED_EDITENG_NUMITEM_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/link.hxx>
 #include <tools/solar.h>
 #include <svl/poolitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <tools/gen.hxx>
 #include <editeng/numdef.hxx>
 #include <tools/color.hxx>
-#include <cppuhelper/weakref.hxx>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <unotools/fontcvt.hxx>
 #include <editeng/editengdllapi.h>
@@ -46,6 +42,8 @@ namespace com{namespace sun{ namespace star{
         class XNumberingFormatter;
     }
 }}}
+
+namespace com::sun::star::lang { struct Locale; }
 
 
 #define SVX_NO_NUM              200 // Marker for no numbering

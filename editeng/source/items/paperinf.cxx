@@ -18,6 +18,7 @@
  */
 
 #include <limits.h>
+#include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/paperinf.hxx>
 

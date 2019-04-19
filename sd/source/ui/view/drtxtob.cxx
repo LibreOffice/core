@@ -22,6 +22,8 @@
 
 #include <svx/svxids.hrc>
 
+#include <com/sun/star/linguistic2/XThesaurus.hpp>
+
 #include <i18nlangtag/mslangid.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/ulspitem.hxx>

@@ -44,6 +44,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/frame/Frame.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdb/XResultSetAccess.hpp>

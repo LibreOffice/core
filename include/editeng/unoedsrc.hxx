@@ -20,8 +20,6 @@
 #ifndef INCLUDED_EDITENG_UNOEDSRC_HXX
 #define INCLUDED_EDITENG_UNOEDSRC_HXX
 
-#include <com/sun/star/accessibility/TextSegment.hpp>
-
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
