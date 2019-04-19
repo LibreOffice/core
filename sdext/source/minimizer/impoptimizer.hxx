@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_IMPOPTIMIZER_HXX
-#define INCLUDED_SDEXT_SOURCE_MINIMIZER_IMPOPTIMIZER_HXX
+#pragma once
 
 #include "pppoptimizertoken.hxx"
 #include "optimizationstats.hxx"
@@ -67,7 +66,5 @@ public:
         void     Optimize( const css::uno::Sequence< css::beans::PropertyValue >& rArguments );
         void     DispatchStatus();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

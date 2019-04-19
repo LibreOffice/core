@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_PRIMITIVE2D_SDRDECOMPOSITIONTOOLS_HXX
-#define INCLUDED_SVX_SDR_PRIMITIVE2D_SDRDECOMPOSITIONTOOLS_HXX
+#pragma once
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
@@ -76,7 +75,5 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-
-#endif // INCLUDED_SVX_SDR_PRIMITIVE2D_SDRDECOMPOSITIONTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATION_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATION_HXX
+#pragma once
 
 #include "animatableshape.hxx"
 #include "shapeattributelayer.hxx"
@@ -82,7 +81,5 @@ namespace slideshow
 
     }
 }
-
-#endif // INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

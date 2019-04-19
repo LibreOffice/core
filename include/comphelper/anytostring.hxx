@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_ANYTOSTRING_HXX
-#define INCLUDED_COMPHELPER_ANYTOSTRING_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <comphelper/comphelperdllapi.h>
@@ -38,7 +37,5 @@ namespace comphelper
 COMPHELPER_DLLPUBLIC OUString anyToString( css::uno::Any const & value );
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

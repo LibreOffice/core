@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_UNX_FILE_PATH_HELPER_HXX
-#define INCLUDED_SAL_OSL_UNX_FILE_PATH_HELPER_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <rtl/ustring.h>
@@ -312,7 +311,5 @@ namespace osl
  }
 
  } // namespace osl
-
- #endif /* #ifndef _OSL_PATH_HELPER_HXX_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

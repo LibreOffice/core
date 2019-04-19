@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_MACOSX_SPOTLIGHT_GETMETADATAFORFILE_H
-#define INCLUDED_EXTENSIONS_SOURCE_MACOSX_SPOTLIGHT_GETMETADATAFORFILE_H
+#pragma once
 
 Boolean GetMetadataForFile(
     void * thisInterface, CFMutableDictionaryRef attributes,
     CFStringRef contentTypeUTI, CFStringRef pathToFile);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

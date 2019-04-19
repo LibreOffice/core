@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_GENERICELEMENTS_HXX
-#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_GENERICELEMENTS_HXX
+#pragma once
 
 #include "pdfihelper.hxx"
 #include "treevisiting.hxx"
@@ -312,7 +311,5 @@ namespace pdfi
         { return new DocumentElement(); }
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

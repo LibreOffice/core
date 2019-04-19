@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDLAYER_HXX
-#define INCLUDED_SVX_SVDLAYER_HXX
+#pragma once
 
 #include <svx/svdsob.hxx>
 #include <svx/svdtypes.hxx>
@@ -161,7 +160,5 @@ public:
     // Output is a uno sequence of BYTE (which is 'short' in API).
     void               QueryValue(const SdrLayerIDSet& rViewLayerSet, css::uno::Any& rAny);
 };
-
-#endif // INCLUDED_SVX_SVDLAYER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

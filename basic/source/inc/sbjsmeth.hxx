@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_SBJSMETH_HXX
-#define INCLUDED_BASIC_SOURCE_INC_SBJSMETH_HXX
+#pragma once
 
 #include <basic/sbmeth.hxx>
 
@@ -36,7 +35,5 @@ public:
     SBX_DECL_PERSIST_NODATA(SBXID_JSCRIPTMETH,2);
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_TEXTRUN_HXX
-#define INCLUDED_OOX_DRAWINGML_TEXTRUN_HXX
+#pragma once
 
 #include <memory>
 
@@ -59,7 +58,5 @@ private:
 typedef std::shared_ptr< TextRun > TextRunPtr;
 
 } }
-
-#endif // INCLUDED_OOX_DRAWINGML_TEXTRUN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

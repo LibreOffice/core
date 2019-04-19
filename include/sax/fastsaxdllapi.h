@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAX_FASTSAXDLLAPI_H
-#define INCLUDED_SAX_FASTSAXDLLAPI_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -26,8 +25,6 @@
 #define FASTSAX_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
 #else
 #define FASTSAX_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

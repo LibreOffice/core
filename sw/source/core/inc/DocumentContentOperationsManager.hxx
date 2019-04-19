@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTCONTENTOPERATIONSMANAGER_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTCONTENTOPERATIONSMANAGER_HXX
+#pragma once
 
 #include <IDocumentContentOperations.hxx>
 #include <ndarr.hxx> //Only for lcl_RstTxtAttr
@@ -174,7 +173,5 @@ private:
 };
 
 }
-
-#endif // INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTCONTENTOPERATIONSMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_MAPMOD_HXX
-#define INCLUDED_VCL_MAPMOD_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <tools/mapunit.hxx>
@@ -83,7 +82,5 @@ inline std::basic_ostream<charT, traits> & operator <<(
     rStream << "MapMode(" << static_cast<unsigned>(rMode.GetMapUnit()) << ",(" << rMode.GetScaleX() << "," << rMode.GetScaleY() << ")@(" << rMode.GetOrigin() << "))";
     return rStream;
 }
-
-#endif // INCLUDED_VCL_MAPMOD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

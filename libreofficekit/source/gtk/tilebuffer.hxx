@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TILEBUFFER_HXX
-#define INCLUDED_TILEBUFFER_HXX
+#pragma once
 
 #include <gdk/gdkkeysyms.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
@@ -264,7 +263,5 @@ struct LOEvent
     /// Wrapper around delete to help GLib.
     static void destroy(void* pMemory);
 };
-
-#endif // INCLUDED_TILEBUFFER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

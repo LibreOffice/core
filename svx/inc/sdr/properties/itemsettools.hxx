@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_SDR_PROPERTIES_ITEMSETTOOLS_HXX
-#define INCLUDED_SVX_INC_SDR_PROPERTIES_ITEMSETTOOLS_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <tools/gen.hxx>
@@ -59,7 +58,5 @@ namespace sdr
         void ScaleItemSet(SfxItemSet& rSet, const Fraction& rScale);
     } // end of namespace properties
 } // end of namespace sdr
-
-#endif // INCLUDED_SVX_INC_SDR_PROPERTIES_ITEMSETTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6,8 +6,7 @@
 
 /* mfbt foundational types and macros. */
 
-#ifndef mozilla_Types_h
-#define mozilla_Types_h
+#pragma once
 
 /*
  * This header must be valid C and C++, includable by code embedding either
@@ -131,4 +130,3 @@
 #  define decltype __typeof__
 #endif
 
-#endif /* mozilla_Types_h */

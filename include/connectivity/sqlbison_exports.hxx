@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SQLBISON_EXPORTS_HXX
-#define INCLUDED_CONNECTIVITY_SQLBISON_EXPORTS_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -18,7 +17,5 @@ namespace connectivity { class OSQLParser; }
 OUString ConvertLikeToken(const ::connectivity::OSQLParseNode* pTokenNode, const ::connectivity::OSQLParseNode* pEscapeNode, bool bInternational);
 int SQLyyparse();
 void setParser( ::connectivity::OSQLParser* );
-
-#endif // INCLUDED_CONNECTIVITY_SQLBISON_EXPORTS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

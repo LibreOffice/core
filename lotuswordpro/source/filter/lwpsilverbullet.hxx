@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSILVERBULLET_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSILVERBULLET_HXX
+#pragma once
 
 #include <memory>
 #include <lwpheader.hxx>
@@ -157,7 +156,5 @@ inline bool LwpSilverBullet::IsLesserLevel(sal_uInt16 nPos)
         return ((m_pResetPositionFlags[nPos] & LESSERLEVEL) != 0);
     return false;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

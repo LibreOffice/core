@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_FUHHCONV_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_FUHHCONV_HXX
+#pragma once
 
 #include "fupoor.hxx"
 
@@ -55,7 +54,5 @@ private:
 };
 
 } // end of namespace sd
-
-#endif // INCLUDED_SD_SOURCE_UI_INC_FUHHCONV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

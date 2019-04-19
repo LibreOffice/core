@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVL_INETHIST_HXX
-#define INCLUDED_SVL_INETHIST_HXX
+#pragma once
 
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
@@ -107,7 +106,5 @@ public:
     explicit INetURLHistoryHint( const INetURLObject* Object ) : pObj(Object) {}
     const INetURLObject* GetObject() const { return pObj; }
 };
-
-#endif // INCLUDED_SVL_INETHIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,8 +57,7 @@
  * @file
  * Image object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFIMAGE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFIMAGE_HXX
+#pragma once
 
 #include <xfilter/xfframe.hxx>
 
@@ -93,6 +92,4 @@ private:
     OUString m_strData;
     bool    m_bUseLink;
 };
-
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

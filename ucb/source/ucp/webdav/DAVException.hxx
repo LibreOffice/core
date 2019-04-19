@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVEXCEPTION_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVEXCEPTION_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -162,7 +161,5 @@ class DAVException : public std::exception
 };
 
 } // namespace http_dav_ucp
-
-#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVEXCEPTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

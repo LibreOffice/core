@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_XML_XMLITMAP_HXX
-#define INCLUDED_SW_SOURCE_FILTER_XML_XMLITMAP_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <tools/ref.hxx>
@@ -83,7 +82,5 @@ extern SvXMLItemMapEntry const aXMLTableItemMap[];
 extern SvXMLItemMapEntry const aXMLTableColItemMap[];
 extern SvXMLItemMapEntry const aXMLTableRowItemMap[];
 extern SvXMLItemMapEntry const aXMLTableCellItemMap[];
-
-#endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLITMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

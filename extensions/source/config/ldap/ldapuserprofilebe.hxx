@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_CONFIG_LDAP_LDAPUSERPROFILEBE_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_CONFIG_LDAP_LDAPUSERPROFILEBE_HXX
+#pragma once
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -124,7 +123,5 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
 } ;
 
 }}}
-
-#endif // EXTENSIONS_CONFIG_LDAP_LDAPUSERPROFILE_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

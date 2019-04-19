@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_GIO_GIO_RESULTSET_HXX
-#define INCLUDED_UCB_SOURCE_UCP_GIO_GIO_RESULTSET_HXX
+#pragma once
 
 #include <ucbhelper/resultsethelper.hxx>
 #include "gio_content.hxx"
@@ -43,7 +42,5 @@ namespace gio
             const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv );
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_DIRECTX_DX_IBITMAP_HXX
-#define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_IBITMAP_HXX
+#pragma once
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
@@ -58,7 +57,5 @@ namespace dxcanvas
 
     typedef std::shared_ptr<IBitmap> IBitmapSharedPtr;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

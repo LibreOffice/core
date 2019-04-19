@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_SOURCE_INC_DBREGISTER_HXX
-#define INCLUDED_CUI_SOURCE_INC_DBREGISTER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -114,8 +113,6 @@ namespace svx
         virtual short   run() override;
     };
 }
-
-#endif // INCLUDED_CUI_SOURCE_INC_DBREGISTER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

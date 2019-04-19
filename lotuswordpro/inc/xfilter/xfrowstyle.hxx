@@ -57,8 +57,7 @@
  * @file
  * Table row style, ie. table row height.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFROWSTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFROWSTYLE_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xfstyle.hxx>
@@ -109,6 +108,4 @@ inline double XFRowStyle::GetRowHeight()
         return m_fHeight;
     }
     return 0;
-}
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

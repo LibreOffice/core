@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_UICONFIGURATION_WINDOWSTATEPROPERTIES_HXX
-#define INCLUDED_FRAMEWORK_INC_UICONFIGURATION_WINDOWSTATEPROPERTIES_HXX
+#pragma once
 
 #define WINDOWSTATE_PROPERTY_LOCKED         "Locked"
 #define WINDOWSTATE_PROPERTY_DOCKED         "Docked"
@@ -36,7 +35,5 @@
 #define WINDOWSTATE_PROPERTY_NOCLOSE        "NoClose"
 #define WINDOWSTATE_PROPERTY_SOFTCLOSE      "SoftClose"
 #define WINDOWSTATE_PROPERTY_CONTEXTACTIVE  "ContextActive"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

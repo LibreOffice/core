@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFTBLRD_HXX
-#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFTBLRD_HXX
+#pragma once
 
 #include "dxfgrprd.hxx"
 #include "dxfvec.hxx"
@@ -164,8 +163,6 @@ public:
     DXFVPort * SearchVPort(OString const& rName) const;
 
 };
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

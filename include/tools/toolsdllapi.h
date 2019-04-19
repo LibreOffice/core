@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLS_TOOLSDLLAPI_H
-#define INCLUDED_TOOLS_TOOLSDLLAPI_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -28,7 +27,5 @@
 #define TOOLS_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
 #endif
 #define TOOLS_DLLPRIVATE SAL_DLLPRIVATE
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

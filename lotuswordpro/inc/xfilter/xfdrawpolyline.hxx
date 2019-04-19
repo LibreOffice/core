@@ -57,8 +57,7 @@
  * @file
  * Polyline.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWPOLYLINE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWPOLYLINE_HXX
+#pragma once
 
 #include <xfilter/xfdrawobj.hxx>
 #include <vector>
@@ -82,6 +81,4 @@ public:
 protected:
     std::vector<XFPoint>    m_aPoints;
 };
-
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

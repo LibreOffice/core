@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_XMLIMP_HXX
-#define INCLUDED_XMLOFF_XMLIMP_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -635,7 +634,5 @@ inline SvXMLNumFmtHelper* SvXMLImport::GetDataStylesImport()
     return mpNumImport.get();
 }
 
-
-#endif // INCLUDED_XMLOFF_XMLIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

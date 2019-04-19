@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XISTREAM_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XISTREAM_HXX
+#pragma once
 
 #include <comphelper/docpasswordhelper.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -546,7 +545,5 @@ private:
     bool                mbValidRec;     /// false = No more records to read.
     bool                mbValid;        /// false = Record overread.
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

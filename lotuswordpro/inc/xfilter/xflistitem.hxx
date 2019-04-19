@@ -57,8 +57,7 @@
  * @file
  * List item.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLISTITEM_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLISTITEM_HXX
+#pragma once
 
 #include <xfilter/xfcontent.hxx>
 #include <xfilter/xfcontentcontainer.hxx>
@@ -109,6 +108,4 @@ inline void XFListItem::ToXml(IXFStream *pStrm)
         pStrm->EndElement( "text:list-header" );
     }
 }
-
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

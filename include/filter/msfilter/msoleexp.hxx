@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FILTER_MSFILTER_MSOLEEXP_HXX
-#define INCLUDED_FILTER_MSFILTER_MSOLEEXP_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
@@ -50,7 +49,5 @@ public:
     void ExportOLEObject( const css::uno::Reference < css::embed::XEmbeddedObject>& rObj, SotStorage& rDestStg );
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

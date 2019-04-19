@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCBHELPER_GETCOMPONENTCONTEXT_HXX
-#define INCLUDED_UCBHELPER_GETCOMPONENTCONTEXT_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -41,7 +40,5 @@ getComponentContext(
         const & factory);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

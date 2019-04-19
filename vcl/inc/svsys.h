@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SVSYS_H
-#define INCLUDED_VCL_INC_SVSYS_H
+#pragma once
 
 #ifdef _WIN32
 #include "win/svsys.h"
@@ -32,8 +31,6 @@
 #elif defined LIBO_HEADLESS
 #else
 #include "unx/svsys.h"
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

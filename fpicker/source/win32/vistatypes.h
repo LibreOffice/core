@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTATYPES_H
-#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTATYPES_H
+#pragma once
 
 #include "comptr.hxx"
 #include <shobjidl.h>
@@ -41,7 +40,5 @@ typedef TFileOpenDialog TFolderPickerDialog;
 } // namespace vista
 } // namespace win32
 } // namespace fpicker
-
-#endif // INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTATYPES_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

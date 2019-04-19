@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUISTIC_SOURCE_HHCONVDIC_HXX
-#define INCLUDED_LINGUISTIC_SOURCE_HHCONVDIC_HXX
+#pragma once
 
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -48,7 +47,5 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

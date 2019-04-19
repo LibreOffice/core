@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_UNX_BACKTRACE_H
-#define INCLUDED_SAL_OSL_UNX_BACKTRACE_H
+#pragma once
 
 #if defined (LINUX)
 
@@ -49,8 +48,6 @@ struct frame {
 
 #ifdef __cplusplus
 } /* extern "C" */
-#endif
-
 #endif
 
 #endif

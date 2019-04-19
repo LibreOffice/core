@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VBAHELPER_VBACOLLECTIONIMPL_HXX
-#define INCLUDED_VBAHELPER_VBACOLLECTIONIMPL_HXX
+#pragma once
 
 #include <exception>
 #include <vector>
@@ -349,7 +348,5 @@ public:
     CollTestImplHelper( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, bool bIgnoreCase = false ) : ImplBase( xParent, xContext, xIndexAccess, bIgnoreCase ) {}
 };
 
-
-#endif //SC_VBA_COLLECTION_IMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

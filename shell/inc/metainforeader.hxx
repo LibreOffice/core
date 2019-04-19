@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_INC_INTERNAL_METAINFOREADER_HXX
-#define INCLUDED_SHELL_INC_INTERNAL_METAINFOREADER_HXX
+#pragma once
 
 #include "basereader.hxx"
 #include "types.hxx"
@@ -138,7 +137,5 @@ private:
     CDummyTag*   m_pDummy_Builder;
     CSimpleTag* m_pSimple_Builder;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

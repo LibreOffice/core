@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_SWXMLTEXTBLOCKS_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_SWXMLTEXTBLOCKS_HXX
+#pragma once
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
@@ -94,7 +93,5 @@ public:
     ErrCode PutBlockText( const OUString& rShort, const OUString& rText, const OUString& rPackageName );
     void MakeBlockText( const OUString& rText );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_HELPER_FORM_HXX
-#define INCLUDED_TEST_HELPER_FORM_HXX
+#pragma once
 
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -56,7 +55,5 @@ css::uno::Reference<css::drawing::XControlShape> OOO_DLLPUBLIC_TEST createContro
 } // namespace form
 } // namespace helper
 } // namespace apitest
-
-#endif // INCLUDED_TEST_HELPER_FORM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_XMLTOKEN_HXX
-#define INCLUDED_XMLOFF_XMLTOKEN_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
@@ -3367,7 +3366,5 @@ namespace xmloff { namespace token {
         const sax_fastparser::FastAttributeList::FastAttributeIter& aIter,
         enum XMLTokenEnum eToken );
 } }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

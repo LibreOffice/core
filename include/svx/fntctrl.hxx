@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_FNTCTRL_HXX
-#define INCLUDED_SVX_FNTCTRL_HXX
+#pragma once
 
 #include <memory>
 #include <vcl/customweld.hxx>
@@ -122,7 +121,5 @@ public:
     void                SetFromItemSet( const SfxItemSet &rSet,
                                         bool bPreviewBackgroundToCharacter );
 };
-
-#endif // INCLUDED_SVX_FNTCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_SOURCE_DIALOGS_THESDLG_IMPL_HXX
-#define INCLUDED_CUI_SOURCE_DIALOGS_THESDLG_IMPL_HXX
+#pragma once
 
 #include <thesdlg.hxx>
 
@@ -51,7 +50,5 @@ public:
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

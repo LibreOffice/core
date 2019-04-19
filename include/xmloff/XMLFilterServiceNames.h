@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_XMLFILTERSERVICENAMES_H
-#define INCLUDED_XMLOFF_XMLFILTERSERVICENAMES_H
+#pragma once
 
 
 #define XML_IMPORT_FILTER_WRITER    "com.sun.star.comp.Writer.XMLOasisImporter"
@@ -34,7 +33,5 @@
 #define XML_EXPORT_FILTER_IMPRESS   "com.sun.star.comp.Impress.XMLOasisExporter"
 #define XML_EXPORT_FILTER_MATH      "com.sun.star.comp.Math.XMLExporter"
 #define XML_EXPORT_FILTER_CHART     "com.sun.star.comp.Chart.XMLOasisExporter"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

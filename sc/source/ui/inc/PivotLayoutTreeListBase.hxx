@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTTREELISTBASE_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTTREELISTBASE_HXX
+#pragma once
 
 #include <vcl/treelistbox.hxx>
 
@@ -63,7 +62,5 @@ public:
 protected:
     virtual void InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget);
 };
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
-#endif

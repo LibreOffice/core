@@ -17,12 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_HELPIDS_H
-#define INCLUDED_DESKTOP_HELPIDS_H
+#pragma once
 
 #define HID_EXTENSION_MANAGER_LISTBOX_ENABLE               "DESKTOP_HID_EXTENSION_MANAGER_LISTBOX_ENABLE"
 #define HID_EXTENSION_MANAGER_LISTBOX_DISABLE              "DESKTOP_HID_EXTENSION_MANAGER_LISTBOX_DISABLE"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

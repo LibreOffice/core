@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_XMLNUMFE_HXX
-#define INCLUDED_XMLOFF_XMLNUMFE_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
@@ -125,7 +124,5 @@ public:
     /// obtain number format with system languange for a given key
     sal_uInt32 ForceSystemLanguage( sal_uInt32 nKey );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

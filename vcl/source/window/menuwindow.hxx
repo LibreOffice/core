@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_WINDOW_MENUWINDOW_HXX
-#define INCLUDED_VCL_SOURCE_WINDOW_MENUWINDOW_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <tools/link.hxx>
@@ -55,6 +54,4 @@ protected:
     static bool ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu const * pMenu, sal_uInt16 nHighlightedItem,
             const HelpEvent& rHEvt, const tools::Rectangle &rHighlightRect);
 };
-
-#endif // INCLUDED_VCL_SOURCE_WINDOW_MENUWINDOW_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

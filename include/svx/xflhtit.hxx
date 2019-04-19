@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XFLHTIT_HXX
-#define INCLUDED_SVX_XFLHTIT_HXX
+#pragma once
 
 #include <svx/xit.hxx>
 #include <svx/xhatch.hxx>
@@ -57,7 +56,5 @@ public:
     static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     std::unique_ptr<XFillHatchItem> checkForUniqueItem( SdrModel* pModel ) const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

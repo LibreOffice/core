@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XMLOFF_INC_XMLSDTYPES_HXX
-#define INCLUDED_XMLOFF_INC_XMLSDTYPES_HXX
+#pragma once
 
 //#include <xmloff/xmlnume.hxx>
 //#include <xmloff/maptype.hxx>
@@ -201,7 +200,5 @@
 #define CTF_SD_OLE_VIS_AREA_EXPORT_HEIGHT   1063
 
 //////////////////////////////////////////////////////////////////////////////
-
-#endif  // _XMLSDTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

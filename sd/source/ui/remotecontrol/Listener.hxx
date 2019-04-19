@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_LISTENER_HXX
-#define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_LISTENER_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
@@ -61,6 +60,4 @@ private:
     sd::Transmitter *pTransmitter;
     css::uno::Reference< css::presentation::XSlideShowController > mController;
 };
-}
-#endif // INCLUDED_SD_SOURCE_UI_REMOTECONTROL_LISTENER_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

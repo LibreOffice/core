@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_UNOWIDS_HXX
-#define INCLUDED_SC_INC_UNOWIDS_HXX
+#pragma once
 
 #include "scitems.hxx"
 
@@ -86,7 +85,5 @@ inline bool IsScItemWid( sal_uInt16 nWid )
 {
     return nWid >= ATTR_STARTINDEX && nWid <= ATTR_ENDINDEX;    // incl. page
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_FORMLAYERIMPORT_HXX
-#define INCLUDED_XMLOFF_FORMLAYERIMPORT_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
@@ -129,7 +128,5 @@ namespace xmloff
 
 }   // namespace xmloff
 
-
-#endif // INCLUDED_XMLOFF_FORMLAYERIMPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

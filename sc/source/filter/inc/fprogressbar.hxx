@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_FPROGRESSBAR_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_FPROGRESSBAR_HXX
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -219,7 +218,5 @@ private:
     ScfSimpleProgressBarPtr mxProgress; /// The used progress bar.
     SvStream&           mrStrm;         /// The used stream.
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_UNONRULE_HXX
-#define INCLUDED_EDITENG_UNONRULE_HXX
+#pragma once
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/ucb/XAnyCompare.hpp>
@@ -82,8 +81,6 @@ public:
     const SvxNumRule& getNumRule() const { return maRule; }
 };
 
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

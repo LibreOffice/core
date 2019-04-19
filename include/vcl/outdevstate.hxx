@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OUTDEVSTATE_HXX
-#define INCLUDED_VCL_OUTDEVSTATE_HXX
+#pragma once
 
 #include <vcl/mapmod.hxx>
 #include <vcl/vclenum.hxx>
@@ -98,7 +97,5 @@ public:
     LanguageType    meTextLanguage;
     PushFlags       mnFlags;
 };
-
-#endif // INCLUDED_VCL_OUTDEVSTATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

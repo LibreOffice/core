@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPOBJFACTORY_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPOBJFACTORY_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -114,7 +113,5 @@ public:
     LwpIndexManager& GetIndexManager(){return m_IndexMgr;}
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

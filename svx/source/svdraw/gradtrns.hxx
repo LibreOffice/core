@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_SVDRAW_GRADTRNS_HXX
-#define INCLUDED_SVX_SOURCE_SVDRAW_GRADTRNS_HXX
+#pragma once
 
 #include <svx/xgrad.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -50,7 +49,5 @@ public:
     static void VecToGrad(GradTransVector const & rV, GradTransGradient& rG,
         GradTransGradient const & rGOld, const SdrObject* pObj, bool bMoveSingle, bool bMoveFirst);
 };
-
-#endif // INCLUDED_SVX_SOURCE_SVDRAW_GRADTRNS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

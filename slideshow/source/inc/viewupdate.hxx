@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_VIEWUPDATE_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_INC_VIEWUPDATE_HXX
+#pragma once
 
 #include "disposable.hxx"
 #include "view.hxx"
@@ -57,7 +56,5 @@ namespace slideshow
         typedef ::std::shared_ptr< ViewUpdate > ViewUpdateSharedPtr;
     }
 }
-
-#endif // INCLUDED_SLIDESHOW_SOURCE_INC_VIEWUPDATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

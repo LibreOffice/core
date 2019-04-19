@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDDRGMT_HXX
-#define INCLUDED_SVX_SVDDRGMT_HXX
+#pragma once
 
 #include <svx/svddrgv.hxx>
 #include <svx/svxdllapi.h>
@@ -299,7 +298,5 @@ public:
     virtual bool EndSdrDrag(bool bCopy) override;
     virtual PointerStyle GetSdrDragPointer() const override;
 };
-
-#endif // INCLUDED_SVX_SVDDRGMT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_MEDIASHAPE_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_MEDIASHAPE_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
@@ -43,7 +42,5 @@ namespace slideshow
             const SlideShowContext&                    rContext);
     }
 }
-
-#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_MEDIASHAPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

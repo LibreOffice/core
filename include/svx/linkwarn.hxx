@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_LINKWARN_HXX
-#define INCLUDED_SVX_LINKWARN_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
@@ -32,7 +31,5 @@ public:
     SvxLinkWarningDialog(weld::Widget* pParent, const OUString& _rFileName);
     virtual ~SvxLinkWarningDialog() override;
 };
-
-#endif // INCLUDED_SVX_LINKWARN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

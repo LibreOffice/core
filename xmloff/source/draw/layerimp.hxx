@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_LAYERIMP_HXX
-#define INCLUDED_XMLOFF_SOURCE_DRAW_LAYERIMP_HXX
+#pragma once
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -41,7 +40,5 @@ public:
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 };
-
-#endif // INCLUDED_XMLOFF_SOURCE_DRAW_LAYERIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

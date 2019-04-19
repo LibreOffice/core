@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DTRANS_TEST_WIN32_DND_SOURCELISTENER_HXX
-#define INCLUDED_DTRANS_TEST_WIN32_DND_SOURCELISTENER_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
@@ -53,7 +52,5 @@ public:
         throw(RuntimeException);
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

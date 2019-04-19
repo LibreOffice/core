@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_SIDEBAR_PANELS_HXX
-#define INCLUDED_SFX2_SIDEBAR_PANELS_HXX
+#pragma once
 
 
 #include <com/sun/star/ui/XPanels.hpp>
@@ -55,7 +54,5 @@ private:
     const OUString& mDeckId;
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

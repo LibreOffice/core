@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FRAMEWORK_SOURCE_UICONFIGURATION_IMAGE_H
-#define FRAMEWORK_SOURCE_UICONFIGURATION_IMAGE_H
+#pragma once
 
 #include <vcl/bitmapex.hxx>
 
@@ -61,7 +60,5 @@ struct ImplImageList
                    sal_uInt16 nId, const BitmapEx &aBitmapEx );
     void RemoveImage( sal_uInt16 nPos );
 };
-
-#endif // INCLUDED_VCL_INC_IMAGE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

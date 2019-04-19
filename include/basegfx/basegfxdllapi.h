@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_BASEGFXDLLAPI_H
-#define INCLUDED_BASEGFX_BASEGFXDLLAPI_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -37,8 +36,6 @@
 #define BASEGFX_DLLPRIVATE SAL_DLLPRIVATE
 
 #endif /*BASEGFX_STATICLIBRARY*/
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

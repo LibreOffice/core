@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_HATCH_HXX
-#define INCLUDED_VCL_HATCH_HXX
+#pragma once
 
 #include <tools/color.hxx>
 #include <vcl/dllapi.h>
@@ -71,7 +70,5 @@ public:
 private:
     o3tl::cow_wrapper< ImplHatch >          mpImplHatch;
 };
-
-#endif // INCLUDED_VCL_HATCH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

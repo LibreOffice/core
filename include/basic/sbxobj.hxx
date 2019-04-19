@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SBXOBJ_HXX
-#define INCLUDED_BASIC_SBXOBJ_HXX
+#pragma once
 
 #include <svl/lstner.hxx>
 #include <basic/sbxvar.hxx>
@@ -79,7 +78,5 @@ public:
     // Debugging
     void Dump( SvStream&, bool bDumpAll );
 };
-
-#endif // INCLUDED_BASIC_SBXOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

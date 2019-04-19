@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SIDEBAR_CONTEXTCHANGEEVENTMULTIPLEXER_HXX
-#define INCLUDED_SVX_SIDEBAR_CONTEXTCHANGEEVENTMULTIPLEXER_HXX
+#pragma once
 
 #include <svx/svxdllapi.h>
 #include <vcl/EnumContext.hxx>
@@ -59,7 +58,5 @@ private:
     static OUString GetModuleName (
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

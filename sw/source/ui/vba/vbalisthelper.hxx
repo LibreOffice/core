@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_SW_SOURCE_UI_VBA_VBALISTHELPER_HXX
-#define INCLUDED_SW_SOURCE_UI_VBA_VBALISTHELPER_HXX
+#pragma once
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -65,7 +64,5 @@ public:
     void setPropertyValueWithNameAndLevel( sal_Int32 nLevel, const OUString& sName, const css::uno::Any& aValue );
 
 };
-
-#endif // INCLUDED_SW_SOURCE_UI_VBA_VBALISTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

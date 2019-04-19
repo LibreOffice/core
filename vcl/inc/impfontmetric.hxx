@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_IMPFONTMETRIC_HXX
-#define INCLUDED_VCL_INC_IMPFONTMETRIC_HXX
+#pragma once
 
 class ImplFontCharMap;
 typedef tools::SvRef<ImplFontCharMap> ImplFontCharMapRef;
@@ -64,7 +63,5 @@ private:
     bool                mbFullstopCentered;
 
 };
-
-#endif // INCLUDED_VCL_INC_IMPFONTMETRIC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

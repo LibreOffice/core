@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_AWT_VCLXMENU_HXX
-#define INCLUDED_TOOLKIT_AWT_VCLXMENU_HXX
+#pragma once
 
 #include <toolkit/dllapi.h>
 #include <toolkit/helper/listenermultiplexer.hxx>
@@ -157,7 +156,5 @@ public:
     VCLXPopupMenu();
     VCLXPopupMenu( PopupMenu* pPopMenu );
 };
-
-#endif // INCLUDED_TOOLKIT_AWT_VCLXMENU_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

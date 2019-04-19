@@ -57,8 +57,7 @@
  * @file
  * Rect object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWRECT_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWRECT_HXX
+#pragma once
 
 #include <xfilter/xfdrawobj.hxx>
 
@@ -82,7 +81,5 @@ inline void XFDrawRect::SetSize(double width, double height)
 {
     m_aRect.SetSize(width,height);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

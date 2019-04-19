@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SPINFLD_HXX
-#define INCLUDED_VCL_SPINFLD_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/edit.hxx>
@@ -91,7 +90,5 @@ private:
                     mbLowerIn:1,
                     mbInDropDown:1;
 };
-
-#endif // INCLUDED_VCL_SPINFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

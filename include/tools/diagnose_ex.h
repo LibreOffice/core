@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLS_DIAGNOSE_EX_H
-#define INCLUDED_TOOLS_DIAGNOSE_EX_H
+#pragma once
 
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
@@ -132,7 +131,5 @@ inline css::uno::Any DbgGetCaughtException()
 /** Convert a caught exception to a string suitable for logging.
 */
 TOOLS_DLLPUBLIC OString exceptionToString(css::uno::Any const & caughtEx);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

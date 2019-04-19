@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERCONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERCONTEXT_HXX
+#pragma once
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <salhelper/simplereferenceobject.hxx>
@@ -96,7 +95,5 @@ public:
     virtual void ExportContent();
 };
 
-
-#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

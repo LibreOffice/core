@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_XML_H
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_XML_H
+#pragma once
 
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -42,7 +41,5 @@ void xml_parse(
     css::uno::Reference< css::uno::XComponentContext > const & xContext );
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

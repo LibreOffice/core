@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_CHART_AXISMODEL_HXX
-#define INCLUDED_OOX_DRAWINGML_CHART_AXISMODEL_HXX
+#pragma once
 
 #include <oox/drawingml/shape.hxx>
 #include <oox/token/tokens.hxx>
@@ -94,7 +93,5 @@ struct AxisModel
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_XMLMETAI_HXX
-#define INCLUDED_XMLOFF_XMLMETAI_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
@@ -59,7 +58,5 @@ public:
     static void setBuildId(const OUString & rGenerator,
         const css::uno::Reference< css::beans::XPropertySet>& xImportInfo );
 };
-
-#endif // _ INCLUDED_XMLOFF_XMLMETAI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

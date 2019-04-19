@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_UNOVIEW_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_INC_UNOVIEW_HXX
+#pragma once
 
 #include "view.hxx"
 #include <com/sun/star/uno/Reference.hxx>
@@ -73,7 +72,5 @@ namespace slideshow
         typedef std::vector< UnoViewSharedPtr >   UnoViewVector;
     }
 }
-
-#endif // INCLUDED_SLIDESHOW_SOURCE_INC_UNOVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

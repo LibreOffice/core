@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_FLASH_SWFDIALOG_HXX
-#define INCLUDED_FILTER_SOURCE_FLASH_SWFDIALOG_HXX
+#pragma once
 
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/document/XExporter.hpp>
@@ -72,7 +71,5 @@ public:
     virtual     ~SWFDialog() override;
 };
 
-
-#endif // INCLUDED_FILTER_SOURCE_FLASH_SWFDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_AUTOFMT_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_AUTOFMT_HXX
+#pragma once
 
 #include <svx/framelinkarray.hxx>
 #include <scdllapi.h>
@@ -88,7 +87,5 @@ private:
     SAL_DLLPRIVATE void MakeFonts(vcl::RenderContext const& rRenderContext, sal_uInt16 nIndex,
                                   vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont);
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_AUTOFMT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

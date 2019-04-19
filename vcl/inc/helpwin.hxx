@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_HELPWIN_HXX
-#define INCLUDED_VCL_INC_HELPWIN_HXX
+#pragma once
 
 #include <vcl/floatwin.hxx>
 #include <vcl/timer.hxx>
@@ -75,7 +74,5 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
 VCL_DLLPUBLIC void ImplDestroyHelpWindow( bool bUpdateHideTime );
 void ImplSetHelpWindowPos( vcl::Window* pHelpWindow, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
                             const Point& rPos, const tools::Rectangle& rHelpArea );
-
-#endif // INCLUDED_VCL_INC_HELPWIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

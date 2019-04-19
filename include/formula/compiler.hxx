@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_COMPILER_HXX
-#define FORMULA_COMPILER_HXX
+#pragma once
 
 /* Central definition of OpCodes for spreadsheet functions */
 
@@ -522,7 +521,5 @@
 #define SC_OPCODE_DATA_TOKEN_1    10001
 
 #define SC_OPCODE_NONE           0xFFFF
-
-#endif /* FORMULA_COMPILER_HRC */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

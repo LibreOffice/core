@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_SFXHELPERFUNCTIONS_HXX
-#define INCLUDED_FRAMEWORK_SFXHELPERFUNCTIONS_HXX
+#pragma once
 
 #include <framework/fwedllapi.h>
 #include <rtl/ustring.hxx>
@@ -85,7 +84,5 @@ FWE_DLLPUBLIC bool IsDockingWindowVisible(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     const OUString& rResourceURL );
 }
-
-#endif // INCLUDED_FRAMEWORK_SFXHELPERFUNCTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

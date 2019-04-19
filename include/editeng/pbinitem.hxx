@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_PBINITEM_HXX
-#define INCLUDED_EDITENG_PBINITEM_HXX
+#pragma once
 
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>
@@ -52,7 +51,5 @@ public:
 inline SvxPaperBinItem::SvxPaperBinItem( const sal_uInt16 nId, const sal_uInt8 nT )
     : SfxByteItem( nId, nT )
 {}
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

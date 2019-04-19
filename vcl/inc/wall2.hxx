@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_WALL2_HXX
-#define INCLUDED_VCL_INC_WALL2_HXX
+#pragma once
 
 #include <boost/optional.hpp>
 
@@ -44,7 +43,5 @@ public:
     friend SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper );
     friend SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpaper );
 };
-
-#endif // INCLUDED_VCL_INC_WALL2_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

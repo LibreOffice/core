@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TAGLOGGER_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TAGLOGGER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -64,7 +63,5 @@ namespace writerfilter
 #endif
     };
 }
-
-#endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TAGLOGGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

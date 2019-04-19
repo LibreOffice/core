@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_DLLAPI_H
-#define INCLUDED_VCL_DLLAPI_H
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -40,8 +39,6 @@
 #define VCL_PLUGIN_PUBLIC VCL_DLLPUBLIC
 #else
 #define VCL_PLUGIN_PUBLIC SAL_DLLPRIVATE
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
