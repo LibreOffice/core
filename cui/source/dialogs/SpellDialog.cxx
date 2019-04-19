@@ -45,7 +45,6 @@
 #include <sfx2/app.hxx>
 #include <vcl/help.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/builderfactory.hxx>
 #include <osl/file.hxx>
 #include <editeng/optitems.hxx>
 #include <editeng/svxenum.hxx>

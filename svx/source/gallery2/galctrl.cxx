@@ -39,7 +39,6 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/builderfactory.hxx>
 #include <bitmaps.hlst>
 
 #define GALLERY_BRWBOX_TITLE    1

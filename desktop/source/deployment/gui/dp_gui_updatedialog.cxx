@@ -94,7 +94,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/vclmedit.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>

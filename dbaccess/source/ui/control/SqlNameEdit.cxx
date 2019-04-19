@@ -18,7 +18,6 @@
  */
 
 #include <SqlNameEdit.hxx>
-#include <vcl/builderfactory.hxx>
 
 namespace dbaui
 {

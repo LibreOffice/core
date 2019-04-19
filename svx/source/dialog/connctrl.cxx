@@ -31,7 +31,6 @@
 #include <svx/sxelditm.hxx>
 #include <sxmkitm.hxx>
 
-#include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 #include <memory>
 

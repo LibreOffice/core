@@ -24,7 +24,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/vclmedit.hxx>
 
 #include "anyrefdg.hxx"
 #include <sc.hrc>

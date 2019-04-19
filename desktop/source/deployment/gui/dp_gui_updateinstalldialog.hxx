@@ -25,7 +25,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/prgsbar.hxx>
-#include <vcl/vclmedit.hxx>
 #include <vcl/weld.hxx>
 #include <rtl/ref.hxx>
 #include <vector>

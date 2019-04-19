@@ -19,7 +19,6 @@
 
 #include <sfx2/dialoghelper.hxx>
 #include <svx/paraprev.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 
 SvxParaPrevWindow::SvxParaPrevWindow() :

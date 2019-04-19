@@ -91,7 +91,6 @@
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/layout.hxx>

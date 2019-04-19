@@ -19,7 +19,6 @@
 
 #include <unotools/pathoptions.hxx>
 #include "optchart.hxx"
-#include <vcl/builderfactory.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

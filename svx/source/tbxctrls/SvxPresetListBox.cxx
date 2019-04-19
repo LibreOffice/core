@@ -19,7 +19,6 @@
 
 #include <svx/SvxPresetListBox.hxx>
 #include <svx/xtable.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

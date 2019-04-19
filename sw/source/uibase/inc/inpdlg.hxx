@@ -20,10 +20,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_INPDLG_HXX
 
 #include <svx/stddlg.hxx>
-
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/vclmedit.hxx>
 #include <vcl/weld.hxx>
 
 class SwInputField;
