@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_SVDIBROW_HXX
-#define INCLUDED_SVX_INC_SVDIBROW_HXX
+#pragma once
 
 #include <svtools/brwbox.hxx>
 #include <vcl/edit.hxx>
@@ -112,8 +111,6 @@ public:
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet) { aBrowse->SetAttributes(pAttr,p2ndSet); }
     SdrItemBrowserControl *GetBrowserControl() { return aBrowse.get(); }
 };
-
-#endif // INCLUDED_SVX_INC_SVDIBROW_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

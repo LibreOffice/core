@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TEXTCONNECTIONSETTINGS_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_TEXTCONNECTIONSETTINGS_HXX
+#pragma once
 
 #include "propertystorage.hxx"
 #include <vcl/weld.hxx>
@@ -56,7 +55,5 @@ namespace dbaui
     };
 
 } // namespace dbaui
-
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TEXTCONNECTIONSETTINGS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

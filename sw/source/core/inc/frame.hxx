@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_FRAME_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_FRAME_HXX
+#pragma once
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <editeng/borderline.hxx>
@@ -1404,7 +1403,5 @@ private:
     bool m_bVertL2RB2T;
     SwRectFn m_fnRect;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

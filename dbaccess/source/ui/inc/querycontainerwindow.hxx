@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYCONTAINERWINDOW_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYCONTAINERWINDOW_HXX
+#pragma once
 
 #include <vcl/window.hxx>
 #include <vcl/split.hxx>
@@ -101,7 +100,5 @@ namespace dbaui
     // end of temp classes
 
 }   // namespace dbaui
-
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYCONTAINERWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

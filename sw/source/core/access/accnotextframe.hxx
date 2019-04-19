@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCNOTEXTFRAME_HXX
-#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCNOTEXTFRAME_HXX
+#pragma once
 
 #include "accframebase.hxx"
 #include <com/sun/star/accessibility/XAccessibleImage.hpp>
@@ -124,7 +123,5 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

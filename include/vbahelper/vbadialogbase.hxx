@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VBAHELPER_VBADIALOGBASE_HXX
-#define INCLUDED_VBAHELPER_VBADIALOGBASE_HXX
+#pragma once
 
 #include <exception>
 
@@ -54,7 +53,5 @@ public:
     virtual void SAL_CALL Show() override;
     virtual OUString mapIndexToName( sal_Int32 nIndex ) = 0;
 };
-
-#endif // INCLUDED_VBAHELPER_VBADIALOGBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

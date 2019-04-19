@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_DBNAMDLG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_DBNAMDLG_HXX
+#pragma once
 
 #include <vector>
 
@@ -102,7 +101,5 @@ private:
     DECL_LINK( NameModifyHdl, weld::ComboBox&, void );
     DECL_LINK( AssModifyHdl, formula::WeldRefEdit&, void );
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_DBNAMDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

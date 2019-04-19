@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_TEXTAPI_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_TEXTAPI_HXX
+#pragma once
 
 #include <editeng/unoedsrc.hxx>
 #include <editeng/unotext.hxx>
@@ -63,7 +62,5 @@ public:
     void                SetText( OutlinerParaObject const & rText ) { pSource->SetText( rText ); }
     OUString            GetText() { return pSource->GetText(); }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

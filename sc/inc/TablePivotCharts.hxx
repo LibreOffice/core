@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_TABLEPIVOTCHARTS_HXX
-#define INCLUDED_SC_INC_TABLEPIVOTCHARTS_HXX
+#pragma once
 
 #include <com/sun/star/table/XTablePivotCharts.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -67,7 +66,5 @@ public:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

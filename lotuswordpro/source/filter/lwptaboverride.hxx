@@ -57,8 +57,7 @@
  * @file
  * Tab override for VO_PARASTYLE.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABOVERRIDE_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABOVERRIDE_HXX
+#pragma once
 
 #include <lwpoverride.hxx>
 #include <lwpobjid.hxx>
@@ -110,7 +109,5 @@ inline void LwpTabOverride::Override(LwpTabOverride* pOther)
             pOther->m_aTabRackID = GetTabRackID();
     }
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

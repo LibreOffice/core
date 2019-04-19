@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_MEMBERID_H
-#define INCLUDED_SVL_MEMBERID_H
+#pragma once
 
 #define MID_X       1
 #define MID_Y       2
@@ -79,7 +78,5 @@
 #define MID_TYPE                             0x38
 #define MID_VALUE                            0x39
 #define MID_VALUESET                         0x40
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

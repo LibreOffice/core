@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_A11YFOCUSTRACKER_HXX
-#define INCLUDED_VCL_INC_OSX_A11YFOCUSTRACKER_HXX
+#pragma once
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
@@ -97,7 +96,5 @@ private:
 struct TheAquaA11yFocusTracker:
     rtl::Static<AquaA11yFocusTracker, TheAquaA11yFocusTracker>
 {};
-
-#endif // INCLUDED_VCL_INC_OSX_A11YFOCUSTRACKER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_CALENDAR_HXX
-#define INCLUDED_VCL_CALENDAR_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <unotools/calendarwrapper.hxx>
@@ -232,7 +231,5 @@ public:
     void            SetSelectHdl( const Link<Calendar*,void>& rLink ) { maSelectHdl = rLink; }
     void            SetActivateHdl( const Link<Calendar*,void>& rLink ) { maActivateHdl = rLink; }
 };
-
-#endif // INCLUDED_VCL_CALENDAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

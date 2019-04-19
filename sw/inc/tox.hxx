@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_TOX_HXX
-#define INCLUDED_SW_INC_TOX_HXX
+#pragma once
 
 #include <cppuhelper/weakref.hxx>
 #include <sal/log.hxx>
@@ -718,7 +717,5 @@ inline void SwTOXBase::SetOptions(SwTOIOptions nOpt)
     SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
     m_aData.nOptions = nOpt;
 }
-
-#endif // INCLUDED_SW_INC_TOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

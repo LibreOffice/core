@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XMLSCRIPT_XMLLIB_IMEXP_HXX
-#define INCLUDED_XMLSCRIPT_XMLLIB_IMEXP_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -79,7 +78,5 @@ XMLSCRIPT_DLLPUBLIC css::uno::Reference<
 importLibrary( LibDescriptor& rLib );
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

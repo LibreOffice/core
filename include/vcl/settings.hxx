@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SETTINGS_HXX
-#define INCLUDED_VCL_SETTINGS_HXX
+#pragma once
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -708,7 +707,5 @@ public:
     static void                             LocaleSettingsChanged( ConfigurationHints nHint );
     SvtSysLocale&                           GetSysLocale();
 };
-
-#endif // INCLUDED_VCL_SETTINGS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

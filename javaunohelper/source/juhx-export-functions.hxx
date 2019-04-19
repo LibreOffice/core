@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_JAVAUNOHELPER_SOURCE_JUHX_EXPORT_FUNCTIONS_HXX
-#define INCLUDED_JAVAUNOHELPER_SOURCE_JUHX_EXPORT_FUNCTIONS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -38,7 +37,5 @@ SAL_JNI_EXPORT javaunohelper::detail::Func_writeInfo
 Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo;
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

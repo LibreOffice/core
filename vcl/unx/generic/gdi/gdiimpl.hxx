@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_GENERIC_GDI_GDIIMPL_HXX
-#define INCLUDED_VCL_GENERIC_GDI_GDIIMPL_HXX
+#pragma once
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -297,7 +296,5 @@ public:
     virtual bool RenderAndCacheNativeControl(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY,
                                              ControlCacheKey& aControlCacheKey) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

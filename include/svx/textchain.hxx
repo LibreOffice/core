@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_TEXTCHAIN_HXX
-#define INCLUDED_SVX_TEXTCHAIN_HXX
+#pragma once
 
 #include <editeng/editdata.hxx>
 #include <map>
@@ -150,7 +149,5 @@ private:
     //SdrTextObj *impGetNextLink(const SdrTextObj *) const;
     //SdrTextObj *impGetPrevLink(const SdrTextObj *) const;
 };
-
-#endif // INCLUDED_SVX_TEXTCHAIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

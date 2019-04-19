@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WINACCESSIBILITY_INC_UACCCOMDLLAPI_H
-#define INCLUDED_WINACCESSIBILITY_INC_UACCCOMDLLAPI_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -16,8 +15,6 @@
 #define UACCCOM_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
 #else
 #define UACCCOM_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

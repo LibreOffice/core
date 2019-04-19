@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVTOOLS_INC_STRINGS_HXX
-#define INCLUDED_SVTOOLS_INC_STRINGS_HXX
+#pragma once
 
 // no need to translate this
 // the items in this string have to be in the same order as the STR_FIELD_* strings are added to the
@@ -22,6 +21,5 @@
 #define STR_DESCRIPTION_SIMPRESS_DOC    "StarImpress 4.0 / 5.0"
 #define STR_DESCRIPTION_SWRITER_DOC     "StarWriter 3.0 - 5.0"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

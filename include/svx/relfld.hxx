@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_RELFLD_HXX
-#define INCLUDED_SVX_RELFLD_HXX
+#pragma once
 
 #include <tools/fldunit.hxx>
 #include <svtools/unitconv.hxx>
@@ -70,7 +69,5 @@ public:
     void SetFieldUnit(FieldUnit eUnit, bool bAll = false) { ::SetFieldUnit(*m_xSpinButton, eUnit, bAll); }
     void SetMetricValue(int lCoreValue, MapUnit eUnit) { ::SetMetricValue(*m_xSpinButton, lCoreValue, eUnit); }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

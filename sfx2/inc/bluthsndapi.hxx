@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_INC_BLUTHSNDAPI_HXX
-#define INCLUDED_SFX2_INC_BLUTHSNDAPI_HXX
+#pragma once
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <rtl/ustring.hxx>
@@ -25,7 +24,5 @@ public:
     SendMailResult      SaveAndSend( const css::uno::Reference< css::frame::XFrame >& xFrame );
     SendMailResult      Send();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

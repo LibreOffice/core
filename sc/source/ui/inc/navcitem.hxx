@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_NAVCITEM_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_NAVCITEM_HXX
+#pragma once
 
 #include <sfx2/ctrlitem.hxx>
 
@@ -37,7 +36,5 @@ protected:
 private:
     ScNavigatorDlg& rNavigatorDlg;
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_NAVCITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

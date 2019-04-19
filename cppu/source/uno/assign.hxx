@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CPPU_SOURCE_UNO_ASSIGN_HXX
-#define INCLUDED_CPPU_SOURCE_UNO_ASSIGN_HXX
+#pragma once
 
 #include "prim.hxx"
 #include "destr.hxx"
@@ -449,7 +448,5 @@ inline bool _assignData(
 }
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

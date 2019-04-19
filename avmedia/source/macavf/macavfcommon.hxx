@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_AVMEDIA_SOURCE_MACAVF_MACAVFCOMMON_HXX
-#define INCLUDED_AVMEDIA_SOURCE_MACAVF_MACAVFCOMMON_HXX
+#pragma once
 
 #include <premac.h>
 #import <Cocoa/Cocoa.h>
@@ -88,7 +87,5 @@ public:
 };
 
 }}
-
-#endif // INCLUDED_AVMEDIA_SOURCE_MACAVF_MACAVFCOMMON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

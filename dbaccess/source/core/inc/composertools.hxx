@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_COMPOSERTOOLS_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_INC_COMPOSERTOOLS_HXX
+#pragma once
 
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
@@ -118,7 +117,5 @@ namespace dbaccess
     };
 
 } // namespace dbaccess
-
-#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_COMPOSERTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

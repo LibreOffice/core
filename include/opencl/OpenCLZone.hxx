@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OPENCL_INC_OPENCL_ZONE_HXX
-#define INCLUDED_OPENCL_INC_OPENCL_ZONE_HXX
+#pragma once
 
 #include <opencl/opencldllapi.h>
 
@@ -47,7 +46,5 @@ public:
     static void hardDisable();
     static void enterInitialTest();
 };
-
-#endif // INCLUDED_OPENCL_INC_OPENCL_ZONE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

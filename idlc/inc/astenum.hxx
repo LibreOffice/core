@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_IDLC_INC_ASTENUM_HXX
-#define INCLUDED_IDLC_INC_ASTENUM_HXX
+#pragma once
 
 #include "asttype.hxx"
 #include "astscope.hxx"
@@ -41,7 +40,5 @@ public:
 private:
     sal_Int32   m_enumValueCount;
 };
-
-#endif // INCLUDED_IDLC_INC_ASTENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

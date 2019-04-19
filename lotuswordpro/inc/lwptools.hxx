@@ -58,8 +58,7 @@
  *  to provide basic utilities for word pro filter
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPTOOLS_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPTOOLS_HXX
+#pragma once
 
 #include "lwpheader.hxx"
 #include "lwpobjstrm.hxx"
@@ -144,7 +143,5 @@ class BadDecompress : public std::runtime_error
 public:
     BadDecompress() : std::runtime_error("Lotus Word Pro Bad Decompress") { }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

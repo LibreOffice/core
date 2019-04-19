@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_FILTER_EPPT_EPPTDEF_HXX
-#define INCLUDED_SD_SOURCE_FILTER_EPPT_EPPTDEF_HXX
+#pragma once
 
 #define EPP_Document                    1000
 #define EPP_DocumentAtom                1001
@@ -142,7 +141,5 @@
 #define EPP_SLIDESIZE_TYPE35MM              3
 #define EPP_SLIDESIZE_TYPEBANNER            5
 #define EPP_SLIDESIZE_TYPECUSTOM            6
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

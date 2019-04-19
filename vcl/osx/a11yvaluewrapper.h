@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OSX_A11YVALUEWRAPPER_H
-#define INCLUDED_VCL_OSX_A11YVALUEWRAPPER_H
+#pragma once
 
 #include <osx/salinst.h>
 #include <osx/osxvcltypes.h>
@@ -34,7 +33,5 @@
 +(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper;
 +(void)setValueAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value;
 @end
-
-#endif // INCLUDED_VCL_OSX_A11YVALUEWRAPPER_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

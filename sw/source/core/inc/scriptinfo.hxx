@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_SCRIPTINFO_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_SCRIPTINFO_HXX
+#pragma once
 
 #include <vector>
 #include <deque>
@@ -377,7 +376,5 @@ public:
     SwFontScript WhichFont(TextFrameIndex nIdx) const;
     static SwFontScript WhichFont(sal_Int32 nIdx, OUString const & rText);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

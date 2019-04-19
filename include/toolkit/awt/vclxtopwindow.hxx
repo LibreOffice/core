@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_AWT_VCLXTOPWINDOW_HXX
-#define INCLUDED_TOOLKIT_AWT_VCLXTOPWINDOW_HXX
+#pragma once
 
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 #include <com/sun/star/awt/XTopWindow2.hpp>
@@ -99,7 +98,5 @@ public:
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
-
-#endif // INCLUDED_TOOLKIT_AWT_VCLXTOPWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

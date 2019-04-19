@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_RUNTIME_DDECTRL_HXX
-#define INCLUDED_BASIC_SOURCE_RUNTIME_DDECTRL_HXX
+#pragma once
 
 #include <tools/link.hxx>
 #include <basic/sberrors.hxx>
@@ -48,7 +47,5 @@ public:
     ErrCode Execute( size_t nChannel, const OUString& rCommand );
     ErrCode Poke( size_t nChannel, const OUString& rItem, const OUString& rData );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

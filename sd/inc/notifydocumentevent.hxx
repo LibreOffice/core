@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_NOTIFYDOCUMENTEVENT_HXX
-#define INCLUDED_SD_INC_NOTIFYDOCUMENTEVENT_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -27,7 +26,5 @@ class SdDrawDocument;
 void NotifyDocumentEvent( SdDrawDocument const & rDocument, const OUString& rEventName );
 
 void NotifyDocumentEvent( SdDrawDocument const & rDocument, const OUString& rEventName, const css::uno::Reference< css::uno::XInterface >& xSource );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

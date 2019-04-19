@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFCALLBACKS_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFCALLBACKS_HXX
+#pragma once
 
 #include <serf.h>
 
@@ -63,7 +62,5 @@ extern "C" apr_status_t Serf_HandleResponse( serf_request_t *request,
                                              serf_bucket_t *response,
                                              void *handler_baton,
                                              apr_pool_t *pool );
-
-#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFCALLBACKS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

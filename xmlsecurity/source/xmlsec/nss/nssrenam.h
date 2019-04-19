@@ -32,13 +32,10 @@
  * GPL.
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_NSSRENAM_H
-#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_NSSRENAM_H
+#pragma once
 
 #define CERT_NewTempCertificate __CERT_NewTempCertificate
 #define PK11_GetKeyData __PK11_GetKeyData
 #define CERT_DecodeDERCertificate __CERT_DecodeDERCertificate
-
-#endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_NSSRENAM_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

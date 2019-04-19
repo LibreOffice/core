@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLCONNECTIONDATA_HXX
-#define INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLCONNECTIONDATA_HXX
+#pragma once
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -42,7 +41,5 @@ namespace dbaxml
                     const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
     };
 } // namespace dbaxml
-
-#endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLCONNECTIONDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

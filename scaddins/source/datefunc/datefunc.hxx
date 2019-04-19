@@ -19,8 +19,7 @@
 
 // date functions add in
 
-#ifndef INCLUDED_SCADDINS_SOURCE_DATEFUNC_DATEFUNC_HXX
-#define INCLUDED_SCADDINS_SOURCE_DATEFUNC_DATEFUNC_HXX
+#pragma once
 
 #include <string.h>
 #include <vector>
@@ -193,7 +192,5 @@ public:
     virtual OUString SAL_CALL getRot13(
                                     const OUString& aSrcText ) override;
 };
-
-#endif // INCLUDED_SCADDINS_SOURCE_DATEFUNC_DATEFUNC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

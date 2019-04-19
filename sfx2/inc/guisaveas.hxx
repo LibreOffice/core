@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_INC_GUISAVEAS_HXX
-#define INCLUDED_SFX2_INC_GUISAVEAS_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -82,7 +81,5 @@ public:
     static vcl::Window* GetModelWindow( const css::uno::Reference< css::frame::XModel >& xModel );
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

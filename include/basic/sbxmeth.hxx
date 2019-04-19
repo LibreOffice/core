@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SBXMETH_HXX
-#define INCLUDED_BASIC_SBXMETH_HXX
+#pragma once
 
 #include <basic/sbxvar.hxx>
 #include <basic/basicdllapi.h>
@@ -37,7 +36,5 @@ public:
     bool IsRuntimeFunction() const { return mbIsRuntimeFunction; }
     SbxDataType GetRuntimeFunctionReturnType() const{ return mbRuntimeFunctionReturnType; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

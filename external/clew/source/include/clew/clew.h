@@ -1,5 +1,4 @@
-#ifndef CLEW_CLEW_H_INCLUDED
-#define CLEW_CLEW_H_INCLUDED
+#pragma once
 
 //////////////////////////////////////////////////////////////////////////
 //  Copyright (c) 2009-2011 Organic Vectory B.V.
@@ -1184,4 +1183,3 @@ CLEW_FUN_EXPORT const char* clewErrorString (cl_int error);
 }
 #endif
 
-#endif  //  CLEW_CLEW_H_INCLUDED

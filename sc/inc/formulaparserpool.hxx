@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_FORMULAPARSERPOOL_HXX
-#define INCLUDED_SC_INC_FORMULAPARSERPOOL_HXX
+#pragma once
 
 #include <unordered_map>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
@@ -48,7 +47,5 @@ private:
     const ScDocument&   mrDoc;
     ParserMap           maParsers;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

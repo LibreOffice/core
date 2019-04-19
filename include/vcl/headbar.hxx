@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_HEADBAR_HXX
-#define INCLUDED_VCL_HEADBAR_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <tools/link.hxx>
@@ -322,7 +321,5 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible >  CreateAccessible() override;
     void SetAccessible( const css::uno::Reference< css::accessibility::XAccessible >& );
 };
-
-#endif // INCLUDED_VCL_HEADBAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

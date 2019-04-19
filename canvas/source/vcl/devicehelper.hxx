@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_VCL_DEVICEHELPER_HXX
-#define INCLUDED_CANVAS_SOURCE_VCL_DEVICEHELPER_HXX
+#pragma once
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
@@ -89,7 +88,5 @@ namespace vclcanvas
         OutDevProviderSharedPtr mpOutDev;
     };
 }
-
-#endif // INCLUDED_CANVAS_SOURCE_VCL_DEVICEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

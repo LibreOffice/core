@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_DBINSDLG_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_DBINSDLG_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -155,7 +154,5 @@ public:
         css::uno::Reference< css::sdbc::XResultSet > const & xResultSet);
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

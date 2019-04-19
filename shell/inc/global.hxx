@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_INC_INTERNAL_GLOBAL_HXX
-#define INCLUDED_SHELL_INC_INTERNAL_GLOBAL_HXX
+#pragma once
 
 #if !defined WIN32_LEAN_AND_MEAN
 #  define WIN32_LEAN_AND_MEAN
@@ -26,7 +25,5 @@
 #include <windows.h>
 
 extern long g_DllRefCnt;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

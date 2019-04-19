@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_SHAPE_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_INC_SHAPE_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -256,7 +255,5 @@ namespace slideshow
         typedef ::std::set< ShapeSharedPtr, Shape::lessThanShape >  ShapeSet;
     }
 }
-
-#endif // INCLUDED_SLIDESHOW_SOURCE_INC_SHAPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

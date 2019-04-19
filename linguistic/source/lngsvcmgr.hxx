@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUISTIC_SOURCE_LNGSVCMGR_HXX
-#define INCLUDED_LINGUISTIC_SOURCE_LNGSVCMGR_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
@@ -173,7 +172,5 @@ inline OUString LngSvcMgr::getImplementationName_Static()
     return OUString( "com.sun.star.lingu2.LngSvcMgr" );
 }
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

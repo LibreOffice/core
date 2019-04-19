@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_WINREG_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_WINREG_HXX
+#pragma once
 
 namespace configmgr {
 
@@ -18,7 +17,5 @@ enum WinRegType { LOCAL_MACHINE, CURRENT_USER };
 bool dumpWindowsRegistry(OUString* pFileURL, WinRegType eType);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

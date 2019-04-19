@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CODEMAKER_COMMONJAVA_HXX
-#define INCLUDED_CODEMAKER_COMMONJAVA_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -36,7 +35,5 @@ rtl::OString translateUnoToJavaIdentifier(
     rtl::OString const & identifier, rtl::OString const & prefix);
 
 } }
-
-#endif // INCLUDED_CODEMAKER_COMMONJAVA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

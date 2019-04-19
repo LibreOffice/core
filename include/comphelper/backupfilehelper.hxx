@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_BACKUPFILEHELPER_HXX
-#define INCLUDED_COMPHELPER_BACKUPFILEHELPER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -209,7 +208,5 @@ namespace comphelper
         void fillDirFileInfo();
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_SHELL_SOURCE_WIN32_OOOFILEREADER_KEYWORDSTAG_HXX
-#define INCLUDED_SHELL_SOURCE_WIN32_OOOFILEREADER_KEYWORDSTAG_HXX
+#pragma once
 
 #include "itag.hxx"
 
@@ -42,7 +41,5 @@ class CKeywordsTag : public ITag
         std::vector<std::wstring> m_slKeywords;
         std::wstring m_sCurrentKeyword;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

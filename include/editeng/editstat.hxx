@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_EDITSTAT_HXX
-#define INCLUDED_EDITENG_EDITSTAT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
@@ -139,7 +138,5 @@ struct SpellCallbackInfo
         nCommand = nCMD;
     }
 };
-
-#endif // INCLUDED_EDITENG_EDITSTAT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFILTER_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFILTER_HXX
+#pragma once
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
@@ -62,7 +61,5 @@ class SvStream;
 
 //test code
 int ReadWordproFile(SvStream &rStream, css::uno::Reference<css::xml::sax::XDocumentHandler> const & XDoc);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

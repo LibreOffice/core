@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_TXENCBOX_HXX
-#define INCLUDED_SVX_TXENCBOX_HXX
+#pragma once
 
 #include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
@@ -199,7 +198,5 @@ public:
         m_xControl->set_size_request(nWidth, nHeight);
     }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_CMDID_H
-#define INCLUDED_SW_INC_CMDID_H
+#pragma once
 
 #include <sfx2/sfxsids.hrc>
 #include <svl/solar.hrc>
@@ -864,7 +863,5 @@
 #define         MID_11          0xf8
 #define         MID_12          0xf9
 #define         MID_13          0xfa
-
-#endif // INCLUDED_SW_INC_CMDID_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

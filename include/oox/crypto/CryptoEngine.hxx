@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_OOX_CRYPTO_CRYPTOENGINE_HXX
-#define INCLUDED_OOX_CRYPTO_CRYPTOENGINE_HXX
+#pragma once
 
 #include <vector>
 
@@ -62,7 +61,5 @@ public:
 
 } // namespace core
 } // namespace oox
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

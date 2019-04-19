@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_FILEOPENDIALOG_HXX
-#define INCLUDED_SDEXT_SOURCE_MINIMIZER_FILEOPENDIALOG_HXX
+#pragma once
 
 #include <vector>
 #include <com/sun/star/beans/StringPair.hpp>
@@ -55,7 +54,5 @@ public:
         OUString getURL() const;
         OUString getFilterName() const;
 };
-
-#endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_FILEOPENDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

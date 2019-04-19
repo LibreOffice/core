@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XFTSTIT_HXX
-#define INCLUDED_SVX_XFTSTIT_HXX
+#pragma once
 
 #include <svl/metitem.hxx>
 #include <svx/svxdllapi.h>
@@ -37,7 +36,5 @@ public:
                             XFormTextStartItem(long nStart = 0);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

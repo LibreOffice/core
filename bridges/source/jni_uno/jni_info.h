@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_INFO_H
-#define INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_INFO_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -363,7 +362,5 @@ inline void JNI_info::append_sig(
 }
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

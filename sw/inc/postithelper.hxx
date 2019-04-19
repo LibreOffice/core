@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_POSTITHELPER_HXX
-#define INCLUDED_SW_INC_POSTITHELPER_HXX
+#pragma once
 
 #include "swrect.hxx"
 #include "fmtfld.hxx"
@@ -151,7 +150,5 @@ public:
 private:
     SwFormatField& mrFormatField;
 };
-
-#endif // INCLUDED_SW_INC_POSTITHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_FILE_PROV_HXX
-#define INCLUDED_UCB_SOURCE_UCP_FILE_PROV_HXX
+#pragma once
 
 #include <cppuhelper/weak.hxx>
 
@@ -169,7 +168,5 @@ namespace fileaccess {
     };
 
 }       // end namespace fileaccess
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

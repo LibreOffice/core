@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XSFLCLIT_HXX
-#define INCLUDED_SVX_XSFLCLIT_HXX
+#pragma once
 
 #include <svx/xcolit.hxx>
 
@@ -40,7 +39,5 @@ public:
     SVX_DLLPRIVATE virtual sal_uInt16 GetVersion( sal_uInt16 nFileFormatVersion ) const override;
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

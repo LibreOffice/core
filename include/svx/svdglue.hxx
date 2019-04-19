@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDGLUE_HXX
-#define INCLUDED_SVX_SVDGLUE_HXX
+#pragma once
 
 #include <tools/gen.hxx>
 #include <svx/svxdllapi.h>
@@ -144,7 +143,5 @@ public:
     void                Shear (const Point& rRef, double tn, bool bVShear, const SdrObject* pObj);
 };
 
-
-#endif // INCLUDED_SVX_SVDGLUE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

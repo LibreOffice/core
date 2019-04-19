@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDPNTV_HXX
-#define INCLUDED_SVX_SVDPNTV_HXX
+#pragma once
 
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/lstner.hxx>
@@ -525,7 +524,5 @@ public:
     // Access to Drawinglayer configuration options
     const SvtOptionsDrawinglayer& getOptionsDrawinglayer() const { return maDrawinglayerOpt; }
 };
-
-#endif // INCLUDED_SVX_SVDPNTV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

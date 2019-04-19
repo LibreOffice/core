@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_ENHANCEDCUSTOMSHAPETYPENAMES_HXX
-#define INCLUDED_SVX_ENHANCEDCUSTOMSHAPETYPENAMES_HXX
+#pragma once
 #include <svx/msdffdef.hxx>
 #include <rtl/ustring.hxx>
 
@@ -28,7 +27,5 @@ namespace EnhancedCustomShapeTypeNames
     SVX_DLLPUBLIC OUString Get( const MSO_SPT );
     SVX_DLLPUBLIC OUString GetAccName( const OUString& );
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

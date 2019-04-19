@@ -16,15 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_INC_EDITENG_HXX
-#define INCLUDED_EDITENG_INC_EDITENG_HXX
+#pragma once
 
 #define MN_WORDLANGUAGE  998
 #define MN_PARALANGUAGE  999
 #define MN_ALTSTART     1000
 #define MN_AUTOSTART    2000
 #define MN_DICTSTART    3000
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

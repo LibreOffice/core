@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAFORMATCONDITIONS_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_VBAFORMATCONDITIONS_HXX
+#pragma once
 
 #include <ooo/vba/excel/XFormatConditions.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
@@ -63,7 +62,5 @@ public:
 
     ScVbaFormatConditions() = delete;
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_VBA_VBAFORMATCONDITIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

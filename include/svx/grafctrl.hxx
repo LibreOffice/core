@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_GRAFCTRL_HXX
-#define INCLUDED_SVX_GRAFCTRL_HXX
+#pragma once
 
 #include <svl/lstner.hxx>
 #include <svl/intitem.hxx>
@@ -116,7 +115,5 @@ public:
     static void     ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView );
     static void     GetGrafAttrState( SfxItemSet& rSet, SdrView const & rView );
 };
-
-#endif // INCLUDED_SVX_GRAFCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

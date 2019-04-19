@@ -57,8 +57,7 @@
  * @file
  * Header style,exist in page-master object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFHEADERSTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFHEADERSTYLE_HXX
+#pragma once
 
 #include <xfilter/xfstyle.hxx>
 #include <xfilter/xfmargins.hxx>
@@ -131,7 +130,5 @@ protected:
     std::unique_ptr<XFBGImage> m_pBGImage;
     XFColor     m_aBackColor;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

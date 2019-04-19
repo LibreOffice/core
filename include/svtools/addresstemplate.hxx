@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_ADDRESSTEMPLATE_HXX
-#define INCLUDED_SVTOOLS_ADDRESSTEMPLATE_HXX
+#pragma once
 
 #include <memory>
 #include <svtools/svtdllapi.h>
@@ -124,7 +123,5 @@ namespace svt
         std::unique_ptr<AddressBookSourceDialogData> m_pImpl;
     };
 }   // namespace svt
-
-#endif // INCLUDED_SVTOOLS_ADDRESSTEMPLATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

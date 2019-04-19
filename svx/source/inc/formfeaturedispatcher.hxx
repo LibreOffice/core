@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_INC_FORMFEATUREDISPATCHER_HXX
-#define INCLUDED_SVX_SOURCE_INC_FORMFEATUREDISPATCHER_HXX
+#pragma once
 
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -106,7 +105,5 @@ namespace svx
 
 }
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

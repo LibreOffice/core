@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 // MyEDITENG, due to exported EditEng
-#ifndef INCLUDED_EDITENG_EDITENG_HXX
-#define INCLUDED_EDITENG_EDITENG_HXX
+#pragma once
 
 #include <rtl/ref.hxx>
 #include <memory>
@@ -623,7 +622,5 @@ public:
     void ClearOverflowingParaNum();
     bool IsPageOverflow();
 };
-
-#endif // INCLUDED_EDITENG_EDITENG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

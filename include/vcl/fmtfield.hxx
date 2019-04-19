@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_FMTFIELD_HXX
-#define INCLUDED_VCL_FMTFIELD_HXX
+#pragma once
 
 #include <vcl/spinfld.hxx>
 #include <memory>
@@ -299,7 +298,5 @@ private:
     bool       m_bPrependCurrSym;
     bool       m_bChangingFormat;
 };
-
-#endif // INCLUDED_VCL_FMTFIELD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

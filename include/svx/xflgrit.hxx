@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XFLGRIT_HXX
-#define INCLUDED_SVX_XFLGRIT_HXX
+#pragma once
 
 #include <svx/xit.hxx>
 #include <svx/xgrad.hxx>
@@ -57,7 +56,5 @@ public:
     static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     std::unique_ptr<XFillGradientItem> checkForUniqueItem( SdrModel* pModel ) const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

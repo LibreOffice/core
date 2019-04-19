@@ -6,8 +6,7 @@
 
 /* Implementations of various class and method modifier attributes. */
 
-#ifndef mozilla_Attributes_h
-#define mozilla_Attributes_h
+#pragma once
 
 #include "Compiler.h"
 
@@ -478,4 +477,3 @@
 
 #endif /* __cplusplus */
 
-#endif /* mozilla_Attributes_h */

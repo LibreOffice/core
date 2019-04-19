@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUISTIC_SOURCE_SPELLDSP_HXX
-#define INCLUDED_LINGUISTIC_SOURCE_SPELLDSP_HXX
+#pragma once
 
 #include "lngopt.hxx"
 #include <linguistic/misc.hxx>
@@ -138,7 +137,5 @@ inline css::uno::Reference< css::linguistic2::XSearchableDictionaryList >
         m_xDicList : m_xDicList = linguistic::GetDictionaryList();
 }
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

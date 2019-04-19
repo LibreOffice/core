@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_VCLSTATUSLISTENER_HXX
-#define INCLUDED_VCL_VCLSTATUSLISTENER_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
@@ -102,7 +101,5 @@ void VclStatusListener<T>::dispose()
     mWidget.clear();
 }
 
-
-#endif // INCLUDED_VCL_VCLSTATUSLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

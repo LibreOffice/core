@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_SALTIMER_H
-#define INCLUDED_VCL_INC_OSX_SALTIMER_H
+#pragma once
 
 #include <premac.h>
 #include <Cocoa/Cocoa.h>
@@ -69,7 +68,5 @@ inline bool AquaSalTimer::IsDirectTimeout() const
 {
     return m_bDirectTimeout;
 }
-
-#endif // INCLUDED_VCL_INC_OSX_SALTIMER_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

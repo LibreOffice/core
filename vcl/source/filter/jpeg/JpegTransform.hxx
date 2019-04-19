@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGTRANSFORM_HXX
-#define INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGTRANSFORM_HXX
+#pragma once
 
 #include <vcl/graph.hxx>
 
@@ -36,7 +35,5 @@ public:
     void setRotate(sal_uInt16 aRotate);
     void perform();
 };
-
-#endif // INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGTRANSFORM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_ENUMHELPER_HXX
-#define INCLUDED_COMPHELPER_ENUMHELPER_HXX
+#pragma once
 
 #include <vector>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -115,7 +114,5 @@ public:
 };
 
 }
-
-#endif // INCLUDED_COMPHELPER_ENUMHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

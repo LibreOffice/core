@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OUTDEV_HXX
-#define INCLUDED_VCL_OUTDEV_HXX
+#pragma once
 
 #include <tools/gen.hxx>
 #include <tools/ref.hxx>
@@ -1982,7 +1981,5 @@ public:
                                     const GfxLink& rGfxLink, GDIMetaFile* pSubst = nullptr );
     ///@}
 };
-
-#endif // INCLUDED_VCL_OUTDEV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

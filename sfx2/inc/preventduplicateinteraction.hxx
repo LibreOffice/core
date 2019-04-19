@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_PREVENTDUPLICATEINTERACTION_HXX
-#define INCLUDED_FRAMEWORK_PREVENTDUPLICATEINTERACTION_HXX
+#pragma once
 
 #include <vector>
 
@@ -334,7 +333,5 @@ class PreventDuplicateInteraction : private ThreadHelpBase2
 };
 
 } // namespace sfx2
-
-#endif // INCLUDED_FRAMEWORK_PREVENTDUPLICATEINTERACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

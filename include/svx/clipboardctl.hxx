@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_CLIPBOARDCTL_HXX
-#define INCLUDED_SVX_CLIPBOARDCTL_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <sfx2/tbxctrl.hxx>
@@ -51,7 +50,5 @@ public:
                                               SfxItemState eState,
                                               const SfxPoolItem* pState ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

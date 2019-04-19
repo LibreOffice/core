@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_UNX_GTK3_GDI_GTK3CAIROTEXTRENDER_HXX
-#define INCLUDED_VCL_UNX_GTK3_GDI_GTK3CAIROTEXTRENDER_HXX
+#pragma once
 
 #include <unx/cairotextrender.hxx>
 
@@ -27,7 +26,5 @@ public:
     virtual void clipRegion(cairo_t* cr) override;
     virtual void releaseCairoContext(cairo_t* cr) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

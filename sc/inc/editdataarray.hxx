@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_EDITDATAARRAY_HXX
-#define INCLUDED_SC_INC_EDITDATAARRAY_HXX
+#pragma once
 
 #include <editeng/editobj.hxx>
 #include "types.hxx"
@@ -69,7 +68,5 @@ private:
     ::std::vector<Item>::const_iterator maIter;
     ::std::vector<Item> maArray;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

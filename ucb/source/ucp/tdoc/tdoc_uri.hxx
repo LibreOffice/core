@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_URI_HXX
-#define INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_URI_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -104,7 +103,5 @@ inline bool Uri::isDocument() const
 }
 
 } // namespace tdoc_ucp
-
-#endif // INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_URI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

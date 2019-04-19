@@ -23,8 +23,7 @@
 
 
 
-#ifndef RASQAL_H
-#define RASQAL_H
+#pragma once
 
 
 #ifdef __cplusplus
@@ -2256,4 +2255,3 @@ int rasqal_set_triples_source_factory(rasqal_world* world, rasqal_triples_source
 }
 #endif
 
-#endif

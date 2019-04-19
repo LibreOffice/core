@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_MSGPOOL_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_MSGPOOL_HXX
+#pragma once
 
 #include <svl/srchitem.hxx>
 
@@ -54,7 +53,5 @@ public:
 
     virtual MapUnit GetMetric( sal_uInt16 nWhich ) const override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

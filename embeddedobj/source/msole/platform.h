@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_PLATFORM_H
-#define INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_PLATFORM_H
+#pragma once
 
 #define STRICT
 #define _ATL_APARTMENT_THREADED
@@ -28,7 +27,5 @@
 #endif
 #include <windows.h>
 #include <ole2.h>
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

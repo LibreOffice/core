@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_SCMEM_H
-#define INCLUDED_SC_SOURCE_FILTER_INC_SCMEM_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -26,7 +25,5 @@ struct LotusContext;
 
 bool MemNew(LotusContext& rContext);
 void MemDelete(LotusContext& rContext);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_INC_SCFUNCS_HXX
-#define INCLUDED_SC_INC_SCFUNCS_HXX
+#pragma once
 
 #define ID_FUNCTION_GRP_DATABASE    1
 #define ID_FUNCTION_GRP_DATETIME    2
@@ -30,7 +29,5 @@
 #define ID_FUNCTION_GRP_TABLE       9
 #define ID_FUNCTION_GRP_TEXT        10
 #define ID_FUNCTION_GRP_ADDINS      11
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
