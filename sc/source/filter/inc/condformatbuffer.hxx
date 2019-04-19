@@ -161,6 +161,9 @@ public:
     /** Imports rule settings from a CFRULE record. */
     void                importCfRule( SequenceInputStream& rStrm );
 
+    /** Directly set a ScFormatEntry with a priority ready for finalizeImport(). */
+    void                setFormatEntry(sal_Int32 nPriority, ScFormatEntry* pEntry);
+
     /** Creates a conditional formatting rule in the Calc document. */
     void                finalizeImport();
 
@@ -175,6 +178,7 @@ private:
     const CondFormat&   mrCondFormat;
     CondFormatRuleModel maModel;
     ScConditionalFormat* mpFormat;
+    ScFormatEntry*       mpFormatEntry;
     std::unique_ptr<ColorScaleRule> mpColor;
     std::unique_ptr<DataBarRule> mpDataBar;
     std::unique_ptr<IconSetRule> mpIconSet;
@@ -191,9 +195,12 @@ struct CondFormatModel
     explicit            CondFormatModel();
 };
 
+class CondFormatBuffer;
+
 /** Represents a conditional formatting object with a list of affected cell ranges. */
 class CondFormat : public WorksheetHelper
 {
+friend class CondFormatBuffer;
 public:
     explicit            CondFormat( const WorksheetHelper& rHelper );
 
@@ -269,14 +276,17 @@ public:
 class ExtCfCondFormat
 {
 public:
-    ExtCfCondFormat(const ScRangeList& aRange, std::vector< std::unique_ptr<ScFormatEntry> >& rEntries);
+    ExtCfCondFormat(const ScRangeList& aRange, std::vector< std::unique_ptr<ScFormatEntry> >& rEntries,
+                    std::vector<sal_Int32>* pPriorities = nullptr);
     ~ExtCfCondFormat();
 
     const ScRangeList& getRange();
     const std::vector< std::unique_ptr<ScFormatEntry> >& getEntries();
+    const std::vector<sal_Int32>& getPriorities() const { return maPriorities; }
 
 private:
     std::vector< std::unique_ptr<ScFormatEntry> > maEntries;
+    std::vector<sal_Int32> maPriorities;
     ScRangeList maRange;
 };
 
@@ -308,6 +318,7 @@ private:
     CondFormatVec       maCondFormats;      /// All conditional formatting in a sheet.
     ExtCfDataBarRuleVec        maCfRules;          /// All external conditional formatting rules in a sheet.
     std::vector< std::unique_ptr<ExtCfCondFormat> > maExtCondFormats;
+    sal_Int32 mnNonPrioritizedRuleNextPriority = 1048576;
 };
 
 } // namespace xls
