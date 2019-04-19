@@ -1482,7 +1482,7 @@
           <value xml:lang="en-US">Delete Rows</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Rows</value>
+          <value xml:lang="en-US">Delete ~Rows</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1493,7 +1493,7 @@
           <value xml:lang="en-US">Delete Columns</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Columns</value>
+          <value xml:lang="en-US">Delete ~Columns</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1504,7 +1504,7 @@
           <value xml:lang="en-US">Delete Table</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Table</value>
+          <value xml:lang="en-US">Delete ~Table</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1589,7 +1589,7 @@
           <value xml:lang="en-US">Select Cell</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">C~ell</value>
+          <value xml:lang="en-US">Select C~ell</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1624,7 +1624,7 @@
           <value xml:lang="en-US">Select Table</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Table</value>
+          <value xml:lang="en-US">Select ~Table</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
