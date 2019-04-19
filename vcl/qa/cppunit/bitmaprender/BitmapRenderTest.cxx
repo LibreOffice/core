@@ -194,7 +194,7 @@ void BitmapRenderTest::testAlphaVirtualDevice()
     // Oh no.. what we input is not the same as what we get out!
     CPPUNIT_ASSERT_EQUAL(Color(0x002Cff44), aColor);
 #elif defined _WIN32
-    CPPUNIT_ASSERT_LESS(3, deltaColor(Color(0x0022ff55), aColor));
+    CPPUNIT_ASSERT_LESS(6, deltaColor(Color(0x0022ff55), aColor));
 #else
     CPPUNIT_ASSERT_EQUAL(Color(0x0022ff55), aColor);
 #endif
@@ -209,7 +209,7 @@ void BitmapRenderTest::testAlphaVirtualDevice()
     // Oh no.. what we input is not the same as what we get out!
     CPPUNIT_ASSERT_EQUAL(Color(0x002Cff44), aColor);
 #elif defined _WIN32
-    CPPUNIT_ASSERT_LESS(3, deltaColor(Color(0x0022ff55), aColor));
+    CPPUNIT_ASSERT_LESS(6, deltaColor(Color(0x0022ff55), aColor));
 #else
     CPPUNIT_ASSERT_EQUAL(Color(0x0022ff55), aColor);
 #endif
@@ -223,7 +223,7 @@ void BitmapRenderTest::testAlphaVirtualDevice()
     // Oh no.. what we input is not the same as what we get out!
     CPPUNIT_ASSERT_EQUAL(Color(0x342CFF44), aColor);
 #elif defined _WIN32
-    CPPUNIT_ASSERT_LESS(3, deltaColor(Color(0x4422FF55), aColor));
+    CPPUNIT_ASSERT_LESS(6, deltaColor(Color(0x4422FF55), aColor));
 #else
     CPPUNIT_ASSERT_EQUAL(Color(0x4422FF55), aColor);
 #endif
@@ -238,7 +238,7 @@ void BitmapRenderTest::testAlphaVirtualDevice()
     // Oh no.. what we input is not the same as what we get out!
     CPPUNIT_ASSERT_EQUAL(Color(0x342CFF44), aColor);
 #elif defined _WIN32
-    CPPUNIT_ASSERT_LESS(3, deltaColor(Color(0x4422FF55), aColor));
+    CPPUNIT_ASSERT_LESS(6, deltaColor(Color(0x4422FF55), aColor));
 #else
     CPPUNIT_ASSERT_EQUAL(Color(0x4422FF55), aColor);
 #endif
