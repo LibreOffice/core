@@ -1226,6 +1226,7 @@ void XclExpCrn::SaveXml( XclExpXmlStream& rStrm )
     ScAddress aAdr( mnScCol, mnScRow, 0);   // Tab number doesn't matter
     for( const auto& rValue : maValues )
     {
+        bool bCloseCell = true;
         if( rValue.has< double >() )
         {
             double fVal = rValue.get< double >();
@@ -1270,9 +1271,13 @@ void XclExpCrn::SaveXml( XclExpXmlStream& rStrm )
         else
         {
             // Empty/blank cell not stored, only aAdr is incremented.
+            bCloseCell = false;
         }
-        pFS->endElement( XML_v );
-        pFS->endElement( XML_cell);
+        if (bCloseCell)
+        {
+            pFS->endElement(XML_v);
+            pFS->endElement(XML_cell);
+        }
         aAdr.IncCol();
     }
 
