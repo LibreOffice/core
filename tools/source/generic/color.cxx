@@ -35,7 +35,7 @@ sal_uInt8 Color::GetColorError( const Color& rCompareColor ) const
                          labs(long(rCompareColor.G) - G) +
                          labs(long(rCompareColor.B) - B);
 
-    return static_cast<sal_uInt8>(FRound( nErrAbs * 0.3333333333 ));
+    return sal_uInt8(FRound(double(nErrAbs) / 3.0));
 }
 
 void Color::IncreaseLuminance(sal_uInt8 cLumInc)
@@ -52,11 +52,11 @@ void Color::DecreaseLuminance(sal_uInt8 cLumDec)
     B = sal_uInt8(std::clamp(long(B) - cLumDec, 0L, 255L));
 }
 
-void Color::DecreaseContrast( sal_uInt8 cContDec )
+void Color::DecreaseContrast(sal_uInt8 nContDec)
 {
-    if( cContDec )
+    if (nContDec)
     {
-        const double fM = ( 128.0 - 0.4985 * cContDec ) / 128.0;
+        const double fM = (128.0 - 0.4985 * nContDec) / 128.0;
         const double fOff = 128.0 - fM * 128.0;
 
         R = sal_uInt8(std::clamp(FRound(R * fM + fOff), 0L, 255L));
