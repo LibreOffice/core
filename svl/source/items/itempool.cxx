@@ -578,7 +578,7 @@ void SfxItemPool::ResetPoolDefaultItem( sal_uInt16 nWhichId )
 }
 
 
-const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
+const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nWhich, bool bPassingOwnership )
 {
     if ( 0 == nWhich )
         nWhich = rItem.Which();
@@ -588,7 +588,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     if ( !bSID && !IsInRange(nWhich) )
     {
         if ( pImpl->mpSecondary )
-            return pImpl->mpSecondary->Put( rItem, nWhich );
+            return pImpl->mpSecondary->PutImpl( rItem, nWhich, bPassingOwnership );
         OSL_FAIL( "unknown WhichId - cannot put item" );
     }
 
@@ -601,6 +601,8 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
         SfxPoolItem *pPoolItem = rItem.Clone(pImpl->mpMaster);
         pPoolItem->SetWhich(nWhich);
         AddRef( *pPoolItem );
+        if (bPassingOwnership)
+            delete &rItem;
         return *pPoolItem;
     }
 
@@ -623,6 +625,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
             if (it != rItemArr.end())
             {
                 AddRef(rItem);
+                assert(!bPassingOwnership && "cant be passing ownership and have the item already in the pool");
                 return rItem;
             }
         }
@@ -635,6 +638,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
             {
                 assert(*pFoundItem == rItem);
                 AddRef(*pFoundItem);
+                assert(!bPassingOwnership && "cant be passing ownership and have the item already in the pool");
                 return *pFoundItem;
             }
         }
@@ -645,6 +649,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
                 if (**itr == rItem)
                 {
                     AddRef(**itr);
+                    assert(!bPassingOwnership && "cant be passing ownership and have the item already in the pool");
                     return **itr;
                 }
             }
@@ -652,7 +657,14 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     }
 
     // 3. not found, so clone to insert into the pointer array.
-    SfxPoolItem* pNewItem = rItem.Clone(pImpl->mpMaster);
+    SfxPoolItem* pNewItem;
+    if (bPassingOwnership)
+    {
+        assert(!dynamic_cast<const SfxItemSet*>(&rItem) && "cant pass ownership of SfxItem, they need to be cloned to the master pool");
+        pNewItem = const_cast<SfxPoolItem*>(&rItem);
+    }
+    else
+        pNewItem = rItem.Clone(pImpl->mpMaster);
     pNewItem->SetWhich(nWhich);
     assert(typeid(rItem) == typeid(*pNewItem) && "SfxItemPool::Put(): unequal types, no Clone() override?");
     if (dynamic_cast<const SfxSetItem*>(&rItem) == nullptr)

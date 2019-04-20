@@ -146,7 +146,10 @@ public:
     virtual SfxItemPool*            Clone() const;
     const OUString&                 GetName() const;
 
-    virtual const SfxPoolItem&      Put( const SfxPoolItem&, sal_uInt16 nWhich = 0 );
+    const SfxPoolItem&              Put( std::unique_ptr<SfxPoolItem> xItem, sal_uInt16 nWhich = 0 )
+    { return PutImpl( *xItem.release(), nWhich, /*bPassingOwnership*/true); }
+    const SfxPoolItem&              Put( const SfxPoolItem& rItem, sal_uInt16 nWhich = 0 )
+    { return PutImpl( rItem, nWhich, /*bPassingOwnership*/false); }
     void                            Remove( const SfxPoolItem& );
 
     const SfxPoolItem&              GetDefaultItem( sal_uInt16 nWhich ) const;
@@ -195,6 +198,8 @@ public:
 
     void                            dumpAsXml(xmlTextWriterPtr pWriter) const;
 
+protected:
+    virtual const SfxPoolItem&      PutImpl( const SfxPoolItem&, sal_uInt16 nWhich = 0, bool bPassingOwnership = false );
 private:
     const SfxItemPool&              operator=(const SfxItemPool &) = delete;
 

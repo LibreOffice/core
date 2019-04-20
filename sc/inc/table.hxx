@@ -707,11 +707,9 @@ public:
                                   const ScPatternAttr& rAttr, ScEditDataArray* pDataArray = nullptr,
                                   bool* const pIsChanged = nullptr );
 
-    void        SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr )
-                    {
-                        if (ValidColRow(rPos.Col(),rPos.Row()))
-                            aCol[rPos.Col()].SetPattern( rPos.Row(), rAttr );
-                    }
+    void        SetPattern( const ScAddress& rPos, std::unique_ptr<ScPatternAttr> );
+    void        SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr );
+    void        SetPattern( SCCOL nCol, SCROW nRow, std::unique_ptr<ScPatternAttr> );
     void        SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr );
     void        ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
                             const ScPatternAttr& rPattern, SvNumFormatType nNewType );
