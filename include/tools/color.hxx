@@ -26,7 +26,15 @@
 
 class SvStream;
 
-constexpr sal_uInt32 COLORDATA_RGB( sal_uInt32 n )          { return static_cast<sal_uInt32>(n & 0x00FFFFFF); }
+namespace color
+{
+
+constexpr sal_uInt32 extractRGB(sal_uInt32 nColorNumber)
+{
+    return nColorNumber & 0x00FFFFFF;
+}
+
+}
 
 // Color
 
@@ -126,7 +134,7 @@ public:
 
     Color GetRGBColor() const
     {
-        return COLORDATA_RGB(mnColor);
+        return color::extractRGB(mnColor);
     }
 
     sal_uInt8 GetColorError(const Color& rCompareColor) const;
@@ -213,7 +221,7 @@ inline void Color::SetTransparency( sal_uInt8 nTransparency )
 
 inline bool Color::IsRGBEqual( const Color& rColor ) const
 {
-    return COLORDATA_RGB( mnColor ) == COLORDATA_RGB(rColor.mnColor);
+    return color::extractRGB(mnColor) == color::extractRGB(rColor.mnColor);
 }
 
 inline sal_uInt8 Color::GetLuminance() const
@@ -223,8 +231,8 @@ inline sal_uInt8 Color::GetLuminance() const
 
 constexpr sal_uInt8 ColorChannelMerge(sal_uInt8 nDst, sal_uInt8 nSrc, sal_uInt8 nSrcTrans)
 {
-    return static_cast<sal_uInt8>(((static_cast<sal_Int32>(nDst)-nSrc)*nSrcTrans+((nSrc<<8)|nDst))>>8);
-};
+    return sal_uInt8(((sal_Int32(nDst) - nSrc) * nSrcTrans + ((nSrc << 8) | nDst)) >> 8);
+}
 
 inline void Color::Merge( const Color& rMergeColor, sal_uInt8 cTransparency )
 {
