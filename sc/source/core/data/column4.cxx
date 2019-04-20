@@ -1009,7 +1009,7 @@ private:
         {
             maPos.SetRow(nRow);
             const ScCondFormatItem& rItem = pPat->GetItem(ATTR_CONDITIONAL);
-            const std::vector<sal_uInt32>& rData = rItem.GetCondFormatData();
+            const ScCondFormatIndexes& rData = rItem.GetCondFormatData();
             pCondSet = mrCol.GetDoc()->GetCondResult(rCell, maPos, *mpCFList, rData);
         }
 
