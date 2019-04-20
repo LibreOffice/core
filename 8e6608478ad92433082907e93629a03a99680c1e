@@ -34,6 +34,24 @@
       "revId": "8e6608478ad92433082907e93629a03a99680c1e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_3c2c7146",
+        "filename": "cui/source/inc/cuitabarea.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-20T07:36:44Z",
+      "side": 1,
+      "message": "Try setting a breakpoint to Window::ImplGrabFocus, which would not break the execution, but only print call stack to output; and check what happens when you open the dialog for a case when the object has some fill.",
+      "parentUuid": "3fa0c359_bc8de17c",
+      "revId": "8e6608478ad92433082907e93629a03a99680c1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
