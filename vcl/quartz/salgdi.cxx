@@ -460,6 +460,15 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     SAL_INFO("vcl.cg", "CGContextSetFillColor(" << mrContext << "," << maTextColor << ")");
     CGContextSetFillColor(mrContext, maTextColor.AsArray());
 
+    if (rStyle.mbFauxBold)
+    {
+
+        float fSize = rFontSelect.mnHeight / 23.0f;
+        CGContextSetStrokeColor(mrContext, maTextColor.AsArray());
+        CGContextSetLineWidth(mrContext, fSize);
+        CGContextSetTextDrawingMode(mrContext, kCGTextFillStroke);
+    }
+
     auto aIt = aGlyphOrientation.cbegin();
     while (aIt != aGlyphOrientation.cend())
     {
