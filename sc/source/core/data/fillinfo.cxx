@@ -272,7 +272,7 @@ void initColWidths(RowInfo* pRowInfo, const ScDocument* pDoc, double fColScale, 
     }
 }
 
-bool handleConditionalFormat(ScConditionalFormatList& rCondFormList, const std::vector<sal_uInt32>& rCondFormats,
+bool handleConditionalFormat(ScConditionalFormatList& rCondFormList, const ScCondFormatIndexes& rCondFormats,
         CellInfo* pInfo, ScStyleSheetPool* pStlPool,
         const ScAddress& rAddr, bool& bHidden, bool& bHideFormula, bool bTabProtect)
 {
@@ -522,7 +522,7 @@ void ScDocument::FillInfo(
                         else
                             bHidden = bHideFormula = false;
 
-                        const std::vector<sal_uInt32>& rCondFormats = pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
+                        const ScCondFormatIndexes& rCondFormats = pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
                         bool bContainsCondFormat = !rCondFormats.empty();
 
                         do

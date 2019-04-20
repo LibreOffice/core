@@ -36,6 +36,7 @@
 #include "calcmacros.hxx"
 #include "calcconfig.hxx"
 #include <o3tl/deleter.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <svl/hint.hxx>
 #include <svl/typedwhich.hxx>
 #include <svl/zforlist.hxx>
@@ -195,6 +196,7 @@ enum class ScSheetEventId;
 class BitmapEx;
 class ScColumnsRange;
 struct ScFilterEntries;
+typedef o3tl::sorted_vector<sal_uInt32> ScCondFormatIndexes;
 
 namespace sc {
 
@@ -1693,7 +1695,7 @@ public:
     SC_DLLPUBLIC const SfxItemSet*          GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     const SfxItemSet*                       GetCondResult( ScRefCellValue& rCell, const ScAddress& rPos,
                                                            const ScConditionalFormatList& rList,
-                                                           const std::vector<sal_uInt32>& rIndex ) const;
+                                                           const ScCondFormatIndexes& rIndex ) const;
     const SfxPoolItem*                      GetEffItem( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const;
     template<class T> const T*              GetEffItem( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedWhichId<T> nWhich ) const
     {
