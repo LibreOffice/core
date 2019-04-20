@@ -26,29 +26,46 @@
 
 class SvStream;
 
-constexpr sal_uInt8  COLORDATA_RED( sal_uInt32 n )          { return static_cast<sal_uInt8>(n>>16); }
-constexpr sal_uInt8  COLORDATA_GREEN( sal_uInt32 n )        { return static_cast<sal_uInt8>(static_cast<sal_uInt16>(n) >> 8); }
-constexpr sal_uInt8  COLORDATA_BLUE( sal_uInt32 n )         { return static_cast<sal_uInt8>(n); }
-constexpr sal_uInt8  COLORDATA_TRANSPARENCY( sal_uInt32 n ) { return static_cast<sal_uInt8>(n>>24); }
 constexpr sal_uInt32 COLORDATA_RGB( sal_uInt32 n )          { return static_cast<sal_uInt32>(n & 0x00FFFFFF); }
 
 // Color
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Color final
 {
-    sal_uInt32 mnColor;
+    struct ColorComponents
+    {
+#ifdef OSL_BIGENDIAN
+            sal_uInt8 A;
+            sal_uInt8 R;
+            sal_uInt8 G;
+            sal_uInt8 B;
+#else
+            sal_uInt8 B;
+            sal_uInt8 G;
+            sal_uInt8 R;
+            sal_uInt8 A;
+#endif
+    };
 
 public:
+    union
+    {
+        sal_uInt32 mValue;
+        ColorComponents mComp;
+    };
+
     constexpr Color()
-        : mnColor(0) // black
+        : mValue(0) // black
     {}
+
     constexpr Color(sal_uInt32 nColor)
-        : mnColor(nColor)
+        : mValue(nColor)
     {}
+
     constexpr Color(sal_uInt8 nTransparency, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
-        : mnColor( sal_uInt32(nBlue) | (sal_uInt32(nGreen) << 8) | (sal_uInt32(nRed) << 16)
-                   | (sal_uInt32(nTransparency) << 24) )
+        : mValue(sal_uInt32(nBlue) | (sal_uInt32(nGreen) << 8) | (sal_uInt32(nRed) << 16) | (sal_uInt32(nTransparency) << 24))
     {}
+
     constexpr Color(sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
         : Color(0, nRed, nGreen, nBlue)
     {}
@@ -56,51 +73,51 @@ public:
     // constructor to create a tools-Color from ::basegfx::BColor
     explicit Color(const basegfx::BColor& rBColor)
         : Color(0,
-                sal_uInt8((rBColor.getRed() * 255.0) + 0.5),
-                sal_uInt8((rBColor.getGreen() * 255.0) + 0.5),
-                sal_uInt8((rBColor.getBlue() * 255.0) + 0.5))
+                sal_uInt8(std::round(rBColor.getRed() * 255.0)),
+                sal_uInt8(std::round(rBColor.getGreen() * 255.0)),
+                sal_uInt8(std::round(rBColor.getBlue() * 255.0)))
     {}
 
     /** Primarily used when passing Color objects to UNO API */
     constexpr explicit operator sal_uInt32() const
     {
-        return mnColor;
+        return mValue;
     }
 
     constexpr explicit operator sal_Int32() const
     {
-        return sal_Int32(mnColor);
+        return sal_Int32(mValue);
     }
 
-    bool operator<(const Color& b) const
+    bool operator<(const Color& aCompareColor) const
     {
-        return mnColor < b.mnColor;
+        return mValue < aCompareColor.mValue;
     }
 
     void SetRed(sal_uInt8 nRed);
     sal_uInt8 GetRed() const
     {
-        return COLORDATA_RED(mnColor);
+        return mComp.R;
     }
     void SetGreen(sal_uInt8 nGreen);
     sal_uInt8 GetGreen() const
     {
-        return COLORDATA_GREEN(mnColor);
+        return mComp.G;
     }
     void SetBlue(sal_uInt8 nBlue);
     sal_uInt8 GetBlue() const
     {
-        return COLORDATA_BLUE(mnColor);
+        return mComp.B;
     }
     void SetTransparency(sal_uInt8 nTransparency);
     sal_uInt8 GetTransparency() const
     {
-        return COLORDATA_TRANSPARENCY(mnColor);
+        return mComp.A;
     }
 
     Color GetRGBColor() const
     {
-        return COLORDATA_RGB(mnColor);
+        return COLORDATA_RGB(mValue);
     }
 
     sal_uInt8 GetColorError(const Color& rCompareColor) const;
@@ -141,7 +158,7 @@ public:
 
     bool operator==(const Color& rColor) const
     {
-        return mnColor == rColor.mnColor;
+        return mValue == rColor.mValue;
     }
     bool operator!=(const Color& rColor) const
     {
@@ -167,38 +184,32 @@ public:
 
 inline void Color::SetRed( sal_uInt8 nRed )
 {
-    mnColor &= 0xFF00FFFF;
-    mnColor |= static_cast<sal_uInt32>(nRed)<<16;
+    mComp.R = nRed;
 }
 
 inline void Color::SetGreen( sal_uInt8 nGreen )
 {
-    mnColor &= 0xFFFF00FF;
-    mnColor |= static_cast<sal_uInt16>(nGreen)<<8;
+    mComp.G = nGreen;
 }
 
 inline void Color::SetBlue( sal_uInt8 nBlue )
 {
-    mnColor &= 0xFFFFFF00;
-    mnColor |= nBlue;
+    mComp.B = nBlue;
 }
 
 inline void Color::SetTransparency( sal_uInt8 nTransparency )
 {
-    mnColor &= 0x00FFFFFF;
-    mnColor |= static_cast<sal_uInt32>(nTransparency)<<24;
+    mComp.A = nTransparency;
 }
 
 inline bool Color::IsRGBEqual( const Color& rColor ) const
 {
-    return COLORDATA_RGB( mnColor ) == COLORDATA_RGB(rColor.mnColor);
+    return COLORDATA_RGB(mValue) == COLORDATA_RGB(rColor.mValue);
 }
 
 inline sal_uInt8 Color::GetLuminance() const
 {
-    return static_cast<sal_uInt8>((COLORDATA_BLUE(mnColor) * 29UL +
-                                   COLORDATA_GREEN(mnColor) * 151UL +
-                                   COLORDATA_RED(mnColor) * 76UL) >> 8);
+    return sal_uInt8((mComp.B * 29UL + mComp.G * 151UL + mComp.R * 76UL) >> 8);
 }
 
 constexpr sal_uInt8 ColorChannelMerge(sal_uInt8 nDst, sal_uInt8 nSrc, sal_uInt8 nSrcTrans)
@@ -208,9 +219,9 @@ constexpr sal_uInt8 ColorChannelMerge(sal_uInt8 nDst, sal_uInt8 nSrc, sal_uInt8 
 
 inline void Color::Merge( const Color& rMergeColor, sal_uInt8 cTransparency )
 {
-    SetRed(ColorChannelMerge(COLORDATA_RED(mnColor), COLORDATA_RED(rMergeColor.mnColor), cTransparency));
-    SetGreen(ColorChannelMerge(COLORDATA_GREEN(mnColor), COLORDATA_GREEN(rMergeColor.mnColor), cTransparency));
-    SetBlue(ColorChannelMerge(COLORDATA_BLUE(mnColor), COLORDATA_BLUE(rMergeColor.mnColor), cTransparency));
+    mComp.R = ColorChannelMerge(mComp.R, rMergeColor.mComp.R, cTransparency);
+    mComp.G = ColorChannelMerge(mComp.G, rMergeColor.mComp.G, cTransparency);
+    mComp.B = ColorChannelMerge(mComp.B, rMergeColor.mComp.B, cTransparency);
 }
 
 // to reduce the noise when moving these into and out of Any
