@@ -111,7 +111,30 @@ SfxPoolItem* ScPatternAttr::Clone( SfxItemPool *pPool ) const
 
 static bool StrCmp( const OUString* pStr1, const OUString* pStr2 )
 {
-    return ( pStr1 ? ( pStr2 && ( *pStr1 == *pStr2 ) ) : ( pStr2 == nullptr ) );
+    if (pStr1 == pStr2)
+        return true;
+    if (pStr1 && !pStr2)
+        return false;
+    if (!pStr1 && pStr2)
+        return false;
+    // we don't care about a proper lexicographic ordering, we just care about a stable order, and
+    // this is faster
+    return strcmp(reinterpret_cast<const char*>(pStr1->getStr()),
+                  reinterpret_cast<const char*>(pStr2->getStr())) == 0;
+}
+
+static bool StrLess( const OUString* pStr1, const OUString* pStr2 )
+{
+    if (pStr1 == pStr2)
+        return false;
+    if (pStr1 && !pStr2)
+        return false;
+    if (!pStr1 && pStr2)
+        return true;
+    // we don't care about a proper lexicographic ordering, we just care about a stable order, and
+    // this is faster
+    return strcmp(reinterpret_cast<const char*>(pStr1->getStr()),
+                  reinterpret_cast<const char*>(pStr2->getStr())) < 0;
 }
 
 static bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
@@ -129,12 +152,41 @@ static bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
     return ( 0 == memcmp( pItems1, pItems2, (ATTR_PATTERN_END - ATTR_PATTERN_START + 1) * sizeof(pItems1[0]) ) );
 }
 
+static int CmpPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
+{
+    // #i62090# The SfxItemSet in the SfxSetItem base class always has the same ranges
+    // (single range from ATTR_PATTERN_START to ATTR_PATTERN_END), and the items are pooled,
+    // so it's enough to compare just the pointers (Count just because it's even faster).
+
+    if ( rSet1.Count() < rSet2.Count() )
+        return -1;
+    if ( rSet1.Count() > rSet2.Count() )
+        return 1;
+
+    SfxPoolItem const ** pItems1 = rSet1.GetItems_Impl();   // inline method of SfxItemSet
+    SfxPoolItem const ** pItems2 = rSet2.GetItems_Impl();
+
+    return memcmp( pItems1, pItems2, (ATTR_PATTERN_END - ATTR_PATTERN_START + 1) * sizeof(pItems1[0]) );
+}
+
 bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
 {
     // #i62090# Use quick comparison between ScPatternAttr's ItemSets
 
     return ( EqualPatternSets( GetItemSet(), static_cast<const ScPatternAttr&>(rCmp).GetItemSet() ) &&
              StrCmp( GetStyleName(), static_cast<const ScPatternAttr&>(rCmp).GetStyleName() ) );
+}
+
+bool ScPatternAttr::operator<( const SfxPoolItem& rCmp ) const
+{
+    // #i62090# Use quick comparison between ScPatternAttr's ItemSets
+    auto const & rOtherAttr = static_cast<const ScPatternAttr&>(rCmp);
+    int cmp = CmpPatternSets( GetItemSet(), rOtherAttr.GetItemSet() );
+    if (cmp < 0)
+        return true;
+    if (cmp > 0)
+        return false;
+    return StrLess(GetStyleName(), rOtherAttr.GetStyleName());
 }
 
 SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet& rItemSet, const SfxItemSet* pCondSet )

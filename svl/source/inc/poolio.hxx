@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVL_SOURCE_INC_POOLIO_HXX
 #define INCLUDED_SVL_SOURCE_INC_POOLIO_HXX
 
+#include <sal/log.hxx>
 #include <svl/itempool.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <tools/debug.hxx>
@@ -32,6 +33,13 @@ class SfxItemPoolUser;
 
 static const sal_uInt32 SFX_ITEMS_DEFAULT = 0xfffffffe;
 
+struct CompareSortablePoolItems
+{
+    bool operator()(SfxPoolItem const* lhs, SfxPoolItem const* rhs) const
+    {
+        return (*lhs) < (*rhs);
+    }
+};
 /**
  * This array contains a set of SfxPoolItems, if those items are
  * poolable then each item has a unique set of properties, and we
@@ -42,6 +50,7 @@ struct SfxPoolItemArray_Impl
 {
 private:
     o3tl::sorted_vector<SfxPoolItem*> maPoolItemSet;
+    o3tl::sorted_vector<const SfxPoolItem*, CompareSortablePoolItems> maSortablePoolItems;
 public:
     o3tl::sorted_vector<SfxPoolItem*>::const_iterator begin() const { return maPoolItemSet.begin(); }
     o3tl::sorted_vector<SfxPoolItem*>::const_iterator end() const { return maPoolItemSet.end(); }
@@ -50,9 +59,26 @@ public:
     void clear();
     size_t size() const {return maPoolItemSet.size();}
     bool empty() const {return maPoolItemSet.empty();}
-    void insert(SfxPoolItem* pItem) { maPoolItemSet.insert(pItem); }
+    void insert(SfxPoolItem* pItem)
+    {
+        maPoolItemSet.insert(pItem);
+        if (pItem->IsSortable())
+            maSortablePoolItems.insert(pItem);
+        else
+            SAL_WARN_IF(maPoolItemSet.size() > 1024, "svl.items", "make this item sortable to speed up managing this set");
+    }
     o3tl::sorted_vector<SfxPoolItem*>::const_iterator find(SfxPoolItem* pItem) const { return maPoolItemSet.find(pItem); }
-    void erase(o3tl::sorted_vector<SfxPoolItem*>::const_iterator it) { return maPoolItemSet.erase(it); }
+    const SfxPoolItem* findByLessThan(const SfxPoolItem* pItem) const
+    {
+        auto it = maSortablePoolItems.find(pItem);
+        return it == maSortablePoolItems.end() ? nullptr : *it;
+    }
+    void erase(o3tl::sorted_vector<SfxPoolItem*>::const_iterator it)
+    {
+        if ((*it)->IsSortable())
+            maSortablePoolItems.erase(*it);
+        return maPoolItemSet.erase(it);
+    }
 };
 
 struct SfxItemPool_Impl
