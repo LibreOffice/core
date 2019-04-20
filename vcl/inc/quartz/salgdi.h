@@ -102,6 +102,8 @@ public:
     /// text rotation in radian
     float               mfFontRotation;
     FontSelectPattern   maFontSelData;
+    /// faux bold - true, if font doesn't have proper bold variants
+    float mbFauxBold;
 
 private:
     /// CoreText text style object

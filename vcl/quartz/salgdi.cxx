@@ -467,6 +467,15 @@ void AquaSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
     CGContextSetShouldAntialias(mrContext, !mbNonAntialiasedText);
     CGContextSetFillColor(mrContext, maTextColor.AsArray());
 
+    if (rStyle.mbFauxBold)
+    {
+
+        float fSize = rFontSelect.mnHeight / 23.0f;
+        CGContextSetStrokeColor(mrContext, maTextColor.AsArray());
+        CGContextSetLineWidth(mrContext, fSize);
+        CGContextSetTextDrawingMode(mrContext, kCGTextFillStroke);
+    }
+
     auto aIt = aGlyphOrientation.cbegin();
     while (aIt != aGlyphOrientation.cend())
     {

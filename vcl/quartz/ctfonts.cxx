@@ -49,6 +49,7 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
     , mfFontStretch( 1.0 )
     , mfFontRotation( 0.0 )
     , maFontSelData( rFSD )
+    , mbFauxBold(false)
     , mpStyleDict( nullptr )
     , mpHbFont( nullptr )
 {
@@ -83,9 +84,7 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
          ((mpFontData->GetWeight() < WEIGHT_SEMIBOLD) &&
           (mpFontData->GetWeight() != WEIGHT_DONTKNOW)) )
     {
-        int nStroke = -lrint((3.5F * pReqFont->GetWeight()) / mpFontData->GetWeight());
-        CFNumberRef rStroke = CFNumberCreate(nullptr, kCFNumberSInt32Type, &nStroke);
-        CFDictionarySetValue(mpStyleDict, kCTStrokeWidthAttributeName, rStroke);
+        mbFauxBold = true;
     }
 
     // fake italic
