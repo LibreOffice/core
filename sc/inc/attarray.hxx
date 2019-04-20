@@ -137,9 +137,16 @@ public:
     void    ApplyBlockFrame(const SvxBoxItem& rLineOuter, const SvxBoxInfoItem* pLineInner,
                             SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight);
 
-    void    SetPattern( SCROW nRow, const ScPatternAttr* pPattern, bool bPutToPool = false );
+    void    SetPattern( SCROW nRow, const ScPatternAttr* pPattern, bool bPutToPool = false )
+    { SetPatternAreaImpl(nRow, nRow, pPattern, bPutToPool, nullptr, /*bPassingOwnership*/false); }
+    void    SetPattern( SCROW nRow, std::unique_ptr<ScPatternAttr> pPattern, bool bPutToPool = false )
+    { SetPatternAreaImpl(nRow, nRow, pPattern.release(), bPutToPool, nullptr, /*bPassingOwnership*/true); }
+    void    SetPatternArea( SCROW nStartRow, SCROW nEndRow, std::unique_ptr<ScPatternAttr> pPattern,
+                            bool bPutToPool = false, ScEditDataArray* pDataArray = nullptr)
+    { SetPatternAreaImpl(nStartRow, nEndRow, pPattern.release(), bPutToPool, pDataArray, /*bPassingOwnership*/true); }
     void    SetPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr* pPattern,
-                            bool bPutToPool = false, ScEditDataArray* pDataArray = nullptr );
+                            bool bPutToPool = false, ScEditDataArray* pDataArray = nullptr)
+    { SetPatternAreaImpl(nStartRow, nEndRow, pPattern, bPutToPool, pDataArray, /*bPassingOwnership*/false); }
     void    ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle );
     void    ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache,
                             ScEditDataArray* pDataArray = nullptr, bool* const pIsChanged = nullptr );
@@ -210,6 +217,11 @@ public:
     bool    Reserve( SCSIZE nReserve );
     SCSIZE  Count() const { return mvData.size(); }
     SCSIZE  Count( SCROW nRow1, SCROW nRow2 ) const;
+
+private:
+    void    SetPatternAreaImpl( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr* pPattern,
+                            bool bPutToPool = false, ScEditDataArray* pDataArray = nullptr,
+                            bool bPassingPatternOwnership = false );
 };
 
 //                              Iterator for attributes

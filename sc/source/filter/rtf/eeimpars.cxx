@@ -213,9 +213,9 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             }
 
             // Set attributes
-            ScPatternAttr aAttr( pDocPool );
-            aAttr.GetFromEditItemSet( &aSet );
-            SfxItemSet& rSet = aAttr.GetItemSet();
+            auto pAttr = std::make_unique<ScPatternAttr>( pDocPool );
+            pAttr->GetFromEditItemSet( &aSet );
+            SfxItemSet& rSet = pAttr->GetItemSet();
             if (!aNumStr.isEmpty())
             {
                 rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumForm ) );
@@ -323,8 +323,8 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             }
             const ScStyleSheet* pStyleSheet =
                 mpDoc->GetPattern( nCol, nRow, nTab )->GetStyleSheet();
-            aAttr.SetStyleSheet( const_cast<ScStyleSheet*>(pStyleSheet) );
-            mpDoc->SetPattern( nCol, nRow, nTab, aAttr );
+            pAttr->SetStyleSheet( const_cast<ScStyleSheet*>(pStyleSheet) );
+            mpDoc->SetPattern( nCol, nRow, nTab, std::move(pAttr) );
 
             // Add data
             if (bSimple)

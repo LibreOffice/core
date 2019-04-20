@@ -327,17 +327,17 @@ ScDocumentPool::~ScDocumentPool()
     }
 }
 
-const SfxPoolItem& ScDocumentPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
+const SfxPoolItem& ScDocumentPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nWhich, bool bPassingOwnership )
 {
     if ( rItem.Which() != ATTR_PATTERN ) // Only Pattern is special
-        return SfxItemPool::Put( rItem, nWhich );
+        return SfxItemPool::PutImpl( rItem, nWhich, bPassingOwnership );
 
     // Don't copy the default pattern of this Pool
     if (&rItem == mvPoolDefaults[ ATTR_PATTERN - ATTR_STARTINDEX ])
         return rItem;
 
     // Else Put must always happen, because it could be another Pool
-    const SfxPoolItem& rNew = SfxItemPool::Put( rItem, nWhich );
+    const SfxPoolItem& rNew = SfxItemPool::PutImpl( rItem, nWhich, bPassingOwnership );
     sal_uInt32 nRef = rNew.GetRefCount();
     if (nRef == 1)
     {
