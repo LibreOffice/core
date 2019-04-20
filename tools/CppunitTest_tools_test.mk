@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tools_test, \
 $(eval $(call gb_CppunitTest_use_sdk_api,tools_test))
 
 $(eval $(call gb_CppunitTest_use_libraries,tools_test, \
+    basegfx \
     sal \
     tl \
     test \
