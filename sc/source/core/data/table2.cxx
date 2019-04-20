@@ -2799,6 +2799,25 @@ bool ScTable::RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
     return bChanged;
 }
 
+void ScTable::SetPattern( const ScAddress& rPos, std::unique_ptr<ScPatternAttr> pAttr )
+{
+    if (ValidColRow(rPos.Col(),rPos.Row()))
+        aCol[rPos.Col()].SetPattern( rPos.Row(), std::move(pAttr) );
+}
+
+void ScTable::SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr )
+{
+    if (ValidColRow(rPos.Col(),rPos.Row()))
+        aCol[rPos.Col()].SetPattern( rPos.Row(), rAttr );
+}
+
+const ScPatternAttr* ScTable::SetPattern( SCCOL nCol, SCROW nRow, std::unique_ptr<ScPatternAttr> pAttr )
+{
+    if (ValidColRow(nCol,nRow))
+        return aCol[nCol].SetPattern( nRow, std::move(pAttr) );
+    return nullptr;
+}
+
 void ScTable::SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr )
 {
     if (ValidColRow(nCol,nRow))

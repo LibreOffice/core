@@ -321,7 +321,7 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
             nTempEndRow = nEndRow;
         }
 
-        SetPatternArea( nTempStartRow, nTempEndRow, pNewPattern.get(), true );
+        SetPatternArea( nTempStartRow, nTempEndRow, std::move(pNewPattern), true );
         nTempStartRow = nTempEndRow + 1;
     }
     while(nTempEndRow < nEndRow);
@@ -345,7 +345,6 @@ void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 n
 
         if(pPattern)
         {
-            ScPatternAttr aPattern( *pPattern );
             SCROW nPatternStartRow;
             SCROW nPatternEndRow;
             GetPatternRange( nPatternStartRow, nPatternEndRow, nTempStartRow );
@@ -355,6 +354,7 @@ void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 n
             pPattern->GetItemSet().GetItemState( ATTR_CONDITIONAL, true, &pItem );
             if(pItem)
             {
+                auto pPatternAttr = std::make_unique<ScPatternAttr>( *pPattern );
                 std::vector< sal_uInt32 > aCondFormatData = static_cast<const ScCondFormatItem*>(pItem)->GetCondFormatData();
                 std::vector<sal_uInt32>::iterator itr = std::find(aCondFormatData.begin(), aCondFormatData.end(), nIndex);
                 if(itr != aCondFormatData.end() || nIndex == 0)
@@ -365,8 +365,8 @@ void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 n
                     else
                         aCondFormatData.erase(itr);
                     aItem.SetCondFormatData( aCondFormatData );
-                    aPattern.GetItemSet().Put( aItem );
-                    SetPatternArea( nTempStartRow, nTempEndRow, &aPattern, true );
+                    pPatternAttr->GetItemSet().Put( aItem );
+                    SetPatternArea( nTempStartRow, nTempEndRow, std::move(pPatternAttr), true );
                 }
             }
         }
@@ -379,11 +379,6 @@ void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 n
     }
     while(nTempEndRow < nEndRow);
 
-}
-
-void ScAttrArray::SetPattern( SCROW nRow, const ScPatternAttr* pPattern, bool bPutToPool )
-{
-    SetPatternArea( nRow, nRow, pPattern, bPutToPool );
 }
 
 void ScAttrArray::RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
@@ -440,14 +435,18 @@ bool ScAttrArray::Reserve( SCSIZE nReserve )
         return false;
 }
 
-void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPatternAttr *pPattern,
-                                 bool bPutToPool, ScEditDataArray* pDataArray )
+const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEndRow, const ScPatternAttr* pPattern,
+                                 bool bPutToPool, ScEditDataArray* pDataArray, bool bPassingOwnership )
 {
     if (ValidRow(nStartRow) && ValidRow(nEndRow))
     {
         if (bPutToPool)
-            pPattern = static_cast<const ScPatternAttr*>(&pDocument->GetPool()->Put(*pPattern));
-
+        {
+            if (bPassingOwnership)
+                pPattern = static_cast<const ScPatternAttr*>(&pDocument->GetPool()->Put(std::unique_ptr<ScPatternAttr>(const_cast<ScPatternAttr*>(pPattern))));
+            else
+                pPattern = static_cast<const ScPatternAttr*>(&pDocument->GetPool()->Put(*pPattern));
+        }
         if ((nStartRow == 0) && (nEndRow == MAXROW))
             Reset(pPattern);
         else
@@ -611,6 +610,7 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
 #if DEBUG_SC_TESTATTRARRAY
     TestData();
 #endif
+    return pPattern;
 }
 
 void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle )
@@ -648,7 +648,7 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleS
             {
                 if (nY1 < nStartRow) nY1=nStartRow;
                 if (nY2 > nEndRow) nY2=nEndRow;
-                SetPatternArea( nY1, nY2, pNewPattern.get(), true );
+                SetPatternArea( nY1, nY2, std::move(pNewPattern), true );
                 Search( nStart, nPos );
             }
             else
@@ -805,7 +805,7 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                 {
                     if (nY1 < nStartRow) nY1=nStartRow;
                     if (nY2 > nEndRow) nY2=nEndRow;
-                    SetPatternArea( nY1, nY2, pNewPattern.get(), true );
+                    SetPatternArea( nY1, nY2, std::move(pNewPattern), true );
                     Search( nStart, nPos );
                 }
                 else
@@ -813,7 +813,7 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                     // remove from pool ?
                     pDocument->GetPool()->Remove(*mvData[nPos].pPattern);
                     mvData[nPos].pPattern = static_cast<const ScPatternAttr*>(
-                                &pDocument->GetPool()->Put(*pNewPattern) );
+                                &pDocument->GetPool()->Put(std::move(pNewPattern)) );
 
                     if (Concat(nPos))
                         Search(nStart, nPos);
@@ -1569,9 +1569,8 @@ void ScAttrArray::SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
                 //  Instead, the document's GetDefPattern is copied. Since it is passed as
                 //  pWantedPattern, no special treatment of default is needed here anymore.
                 std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr( *pWantedPattern ));
-                SfxItemSet*     pSet = &pNewPattern->GetItemSet();
-                pSet->Put( *pItem );
-                SetPatternArea( nThisRow, nAttrRow, pNewPattern.get(), true );
+                pNewPattern->GetItemSet().Put( *pItem );
+                SetPatternArea( nThisRow, nAttrRow, std::move(pNewPattern), true );
             }
             else
             {
@@ -1617,9 +1616,9 @@ bool ScAttrArray::ApplyFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags )
         {
             nRow = mvData[nIndex].nEndRow;
             SCROW nAttrRow = std::min( nRow, nEndRow );
-            ScPatternAttr aNewPattern(*pOldPattern);
-            aNewPattern.GetItemSet().Put( ScMergeFlagAttr( nOldValue | nFlags ) );
-            SetPatternArea( nThisRow, nAttrRow, &aNewPattern, true );
+            auto pNewPattern = std::make_unique<ScPatternAttr>(*pOldPattern);
+            pNewPattern->GetItemSet().Put( ScMergeFlagAttr( nOldValue | nFlags ) );
+            SetPatternArea( nThisRow, nAttrRow, std::move(pNewPattern), true );
             Search( nThisRow, nIndex );  // data changed
             bChanged = true;
         }
@@ -1654,9 +1653,9 @@ bool ScAttrArray::RemoveFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags )
         {
             nRow = mvData[nIndex].nEndRow;
             SCROW nAttrRow = std::min( nRow, nEndRow );
-            ScPatternAttr aNewPattern(*pOldPattern);
-            aNewPattern.GetItemSet().Put( ScMergeFlagAttr( nOldValue & ~nFlags ) );
-            SetPatternArea( nThisRow, nAttrRow, &aNewPattern, true );
+            auto pNewPattern = std::make_unique<ScPatternAttr>(*pOldPattern);
+            pNewPattern->GetItemSet().Put( ScMergeFlagAttr( nOldValue & ~nFlags ) );
+            SetPatternArea( nThisRow, nAttrRow, std::move(pNewPattern), true );
             Search( nThisRow, nIndex );  // data changed
             bChanged = true;
         }
@@ -1684,12 +1683,12 @@ void ScAttrArray::ClearItems( SCROW nStartRow, SCROW nEndRow, const sal_uInt16* 
         const ScPatternAttr* pOldPattern = mvData[nIndex].pPattern;
         if ( pOldPattern->HasItemsSet( pWhich ) )
         {
-            ScPatternAttr aNewPattern(*pOldPattern);
-            aNewPattern.ClearItems( pWhich );
+            auto pNewPattern = std::make_unique<ScPatternAttr>(*pOldPattern);
+            pNewPattern->ClearItems( pWhich );
 
             nRow = mvData[nIndex].nEndRow;
             SCROW nAttrRow = std::min( nRow, nEndRow );
-            SetPatternArea( nThisRow, nAttrRow, &aNewPattern, true );
+            SetPatternArea( nThisRow, nAttrRow, std::move(pNewPattern), true );
             Search( nThisRow, nIndex );  // data changed
         }
 
@@ -1742,12 +1741,12 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
         {
             SCROW nThisEnd = mvData[nIndex].nEndRow;
             SCROW nAttrRow = std::min( nThisEnd, nEndRow );
-            ScPatternAttr aNewPattern(*pOldPattern);
-            aNewPattern.GetItemSet().Put( SfxUInt16Item( ATTR_INDENT, nNewValue ) );
+            auto pNewPattern = std::make_unique<ScPatternAttr>(*pOldPattern);
+            pNewPattern->GetItemSet().Put( SfxUInt16Item( ATTR_INDENT, nNewValue ) );
             if ( bNeedJust )
-                aNewPattern.GetItemSet().Put(
+                pNewPattern->GetItemSet().Put(
                                 SvxHorJustifyItem( SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY ) );
-            SetPatternArea( nThisStart, nAttrRow, &aNewPattern, true );
+            SetPatternArea( nThisStart, nAttrRow, std::move(pNewPattern), true );
 
             nThisStart = nThisEnd + 1;
             Search( nThisStart, nIndex ); // data changed
@@ -2339,16 +2338,16 @@ void ScAttrArray::DeleteHardAttr(SCROW nStartRow, SCROW nEndRow)
             nRow = mvData[nIndex].nEndRow;
             SCROW nAttrRow = std::min( nRow, nEndRow );
 
-            ScPatternAttr aNewPattern(*pOldPattern);
-            SfxItemSet& rSet = aNewPattern.GetItemSet();
+            auto pNewPattern = std::make_unique<ScPatternAttr>(*pOldPattern);
+            SfxItemSet& rSet = pNewPattern->GetItemSet();
             for (sal_uInt16 nId = ATTR_PATTERN_START; nId <= ATTR_PATTERN_END; nId++)
                 if (nId != ATTR_MERGE && nId != ATTR_MERGE_FLAG)
                     rSet.ClearItem(nId);
 
-            if ( aNewPattern == *pDefPattern )
+            if ( *pNewPattern == *pDefPattern )
                 SetPatternArea( nThisRow, nAttrRow, pDefPattern );
             else
-                SetPatternArea( nThisRow, nAttrRow, &aNewPattern, true );
+                SetPatternArea( nThisRow, nAttrRow, std::move(pNewPattern), true );
 
             Search( nThisRow, nIndex );  // data changed
         }

@@ -232,9 +232,9 @@ void ScUndoEnterData::Undo()
                             SfxUInt32Item(ATTR_VALUE_FORMAT, rVal.mnFormat));
         else
         {
-            ScPatternAttr aPattern(*rDoc.GetPattern(maPos.Col(), maPos.Row(), rVal.mnTab));
-            aPattern.GetItemSet().ClearItem( ATTR_VALUE_FORMAT );
-            rDoc.SetPattern(maPos.Col(), maPos.Row(), rVal.mnTab, aPattern);
+            auto pPattern = std::make_unique<ScPatternAttr>(*rDoc.GetPattern(maPos.Col(), maPos.Row(), rVal.mnTab));
+            pPattern->GetItemSet().ClearItem( ATTR_VALUE_FORMAT );
+            rDoc.SetPattern(maPos.Col(), maPos.Row(), rVal.mnTab, std::move(pPattern));
         }
         pDocShell->PostPaintCell(maPos.Col(), maPos.Row(), rVal.mnTab);
     }
