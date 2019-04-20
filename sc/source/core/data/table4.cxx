@@ -631,7 +631,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 }
 
                 const ScCondFormatItem& rCondFormatItem = pSrcPattern->GetItem(ATTR_CONDITIONAL);
-                const std::vector<sal_uInt32>& rCondFormatIndex = rCondFormatItem.GetCondFormatData();
+                const ScCondFormatIndexes& rCondFormatIndex = rCondFormatItem.GetCondFormatData();
 
                 if ( bVertical && nISrcStart == nISrcEnd && !bHasFiltered )
                 {
@@ -1648,7 +1648,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             const ScPatternAttr* pSrcPattern = aCol[nCol].GetPattern(static_cast<SCROW>(nRow));
 
             const ScCondFormatItem& rCondFormatItem = pSrcPattern->GetItem(ATTR_CONDITIONAL);
-            const std::vector<sal_uInt32>& rCondFormatIndex = rCondFormatItem.GetCondFormatData();
+            const ScCondFormatIndexes& rCondFormatIndex = rCondFormatItem.GetCondFormatData();
 
             if (bVertical)
             {
