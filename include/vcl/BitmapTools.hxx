@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_BITMAP_TOOLS_HXX
-#define INCLUDED_VCL_BITMAP_TOOLS_HXX
+#pragma once
 
 #include <config_cairo_canvas.h>
 #include <vcl/bitmapex.hxx>
@@ -131,6 +130,5 @@ VCL_DLLPUBLIC bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & 
 
 }} // end vcl::bitmap
 
-#endif // INCLUDED_VCL_BITMAP_TOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

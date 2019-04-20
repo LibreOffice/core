@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_XATTR_HXX
-#define INCLUDED_SVX_XATTR_HXX
+#pragma once
 
 #include <svx/xit.hxx>
 #include <svx/xcolit.hxx>
@@ -33,6 +32,5 @@
 #include <svx/xlinjoit.hxx>
 #include <svx/xlncapit.hxx>
 
-#endif // INCLUDED_SVX_XATTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

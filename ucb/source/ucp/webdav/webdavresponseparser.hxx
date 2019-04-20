@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVRESPONSEPARSER_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVRESPONSEPARSER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -35,6 +34,5 @@ namespace http_dav_ucp
 } // namespace http_dav_ucp
 
 
-#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVRESPONSEPARSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

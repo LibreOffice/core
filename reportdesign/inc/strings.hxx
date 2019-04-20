@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_REPORTDESIGN_INC_STRINGS_HXX
-#define INCLUDED_REPORTDESIGN_INC_STRINGS_HXX
+#pragma once
 
 // Dialog Controls
 
@@ -282,6 +281,5 @@
 #define PROPERTY_BORDERTOP "BorderTop"
 #define PROPERTY_BORDERBOTTOM "BorderBottom"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

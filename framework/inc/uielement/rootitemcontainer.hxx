@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_ROOTITEMCONTAINER_HXX
-#define INCLUDED_FRAMEWORK_INC_UIELEMENT_ROOTITEMCONTAINER_HXX
+#pragma once
 
 #include <helper/shareablemutex.hxx>
 
@@ -126,6 +125,5 @@ class RootItemContainer final : private cppu::BaseMutex,
 
 }
 
-#endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_ROOTITEMCONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

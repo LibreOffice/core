@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_FONT_FEATURECOLLECTOR_HXX
-#define INCLUDED_VCL_INC_FONT_FEATURECOLLECTOR_HXX
+#pragma once
 
 #include <vcl/font/Feature.hxx>
 #include <hb.h>
@@ -49,7 +48,5 @@ public:
 
 } // end namespace font
 } // end namespace vcl
-
-#endif // INCLUDED_VCL_INC_FONT_FEATURECOLLECTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

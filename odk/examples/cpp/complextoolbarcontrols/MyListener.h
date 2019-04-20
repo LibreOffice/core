@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXAMPLES_COMPLEXTOOLBARCONTROLS_MYLISTENER_H
-#define INCLUDED_EXAMPLES_COMPLEXTOOLBARCONTROLS_MYLISTENER_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -111,6 +110,5 @@ class WriterListener : public cppu::WeakImplHelper1< css::document::XEventListen
         throw (css::uno::RuntimeException);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

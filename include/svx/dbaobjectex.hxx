@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_DBAOBJECTEX_HXX
-#define INCLUDED_SVX_DBAOBJECTEX_HXX
+#pragma once
 
 #include <vcl/transfer.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -69,6 +68,5 @@ namespace svx
 }
 
 
-#endif // INCLUDED_SVX_DBAOBJECTEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

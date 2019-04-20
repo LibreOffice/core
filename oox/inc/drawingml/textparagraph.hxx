@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPH_HXX
-#define INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPH_HXX
+#pragma once
 
 #include <memory>
 #include <com/sun/star/text/XTextCursor.hpp>
@@ -88,6 +87,5 @@ private:
 
 } }
 
-#endif // INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

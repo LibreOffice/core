@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_SHELL_SOURCE_WIN32_OOOFILEREADER_ITAG_HXX
-#define INCLUDED_SHELL_SOURCE_WIN32_OOOFILEREADER_ITAG_HXX
+#pragma once
 
 #include <config.hxx>
 #include <types.hxx>
@@ -41,6 +40,5 @@ class ITag
         virtual ::std::wstring const getTagAttribute( ::std::wstring  const & attrname ) = 0;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

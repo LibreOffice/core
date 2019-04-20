@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_IMAGEPREPARER_HXX
-#define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_IMAGEPREPARER_HXX
+#pragma once
 
 #include <vcl/timer.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -43,5 +42,4 @@ private:
 
 }
 
-#endif // INCLUDED_SD_SOURCE_UI_REMOTECONTROL_IMAGEPREPARER_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

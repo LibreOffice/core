@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VCL_SVTABBX_HXX
-#define INCLUDED_VCL_SVTABBX_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/treelistbox.hxx>
@@ -242,7 +241,6 @@ public:
     virtual sal_Int32               GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
 };
 
-#endif // INCLUDED_VCL_SVTABBX_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_FLOWFRM_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_FLOWFRM_HXX
+#pragma once
 
 #include "frame.hxx"
 #include "layfrm.hxx"
@@ -274,6 +273,5 @@ public:
     }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

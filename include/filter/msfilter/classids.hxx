@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_FILTER_MSFILTER_CLASSIDS_HXX
-#define INCLUDED_FILTER_MSFILTER_CLASSIDS_HXX
+#pragma once
 
 #define MSO_EQUATION2_CLASSID \
     0x00021700L, 0x0000, 0x0000, \
@@ -42,6 +41,5 @@
     0x64818d11L, 0x4f9b, 0x11cf, \
     0x86, 0xea, 0x00, 0xaa, 0x00, 0xb9, 0x29, 0xe8
 
-#endif // INCLUDED_FILTER_MSFILTER_CLASSIDS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

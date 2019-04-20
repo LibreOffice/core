@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMULA_SOURCE_CORE_INC_CORE_RESOURCE_HXX
-#define INCLUDED_FORMULA_SOURCE_CORE_INC_CORE_RESOURCE_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <formula/formuladllapi.h>
 
 FORMULA_DLLPUBLIC OUString ForResId(const char *pId);
 
-#endif // INCLUDED_FORMULA_SOURCE_CORE_INC_CORE_RESOURCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

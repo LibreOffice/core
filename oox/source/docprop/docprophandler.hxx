@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_SOURCE_DOCPROP_DOCPROPHANDLER_HXX
-#define INCLUDED_OOX_SOURCE_DOCPROP_DOCPROPHANDLER_HXX
+#pragma once
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -86,6 +85,5 @@ public:
 } // namespace core
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

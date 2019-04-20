@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_MATHCONF_H
-#define INCLUDED_SAL_MATHCONF_H
+#pragma once
 
 #include "osl/endian.h"
 
@@ -149,6 +148,5 @@ union sal_math_Double
 }
 #endif /* __cplusplus */
 
-#endif /* INCLUDED_SAL_MATHCONF_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

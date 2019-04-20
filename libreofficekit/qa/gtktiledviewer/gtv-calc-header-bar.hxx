@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef GTV_CALC_HEADER_BAR_H
-#define GTV_CALC_HEADER_BAR_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -53,6 +52,5 @@ void gtv_calc_header_bar_set_type_and_width(GtvCalcHeaderBar* bar, CalcHeaderTyp
 
 G_END_DECLS
 
-#endif /* GTV_CALC_HEADER_BAR_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

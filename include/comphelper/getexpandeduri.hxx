@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_GETEXPANDEDURI_HXX
-#define INCLUDED_COMPHELPER_GETEXPANDEDURI_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -36,6 +35,5 @@ COMPHELPER_DLLPUBLIC OUString getExpandedUri(
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

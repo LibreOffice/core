@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_UCBHELPER_HXX
-#define INCLUDED_UNOTOOLS_UCBHELPER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -108,6 +107,5 @@ UNOTOOLS_DLLPUBLIC
 
 } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

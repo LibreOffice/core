@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_TITLEPAGE_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_TITLEPAGE_HXX
+#pragma once
 
 #include <sfx2/basedlgs.hxx>
 
@@ -55,6 +54,5 @@ public:
     virtual ~SwTitlePageDlg() override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

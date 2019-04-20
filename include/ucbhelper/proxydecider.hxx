@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCBHELPER_PROXYDECIDER_HXX
-#define INCLUDED_UCBHELPER_PROXYDECIDER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
@@ -130,6 +129,5 @@ private:
 
 } // namespace ucbhelper
 
-#endif /* ! INCLUDED_UCBHELPER_PROXYDECIDER_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_HTML_CSS1ATR_HXX
-#define INCLUDED_SW_SOURCE_FILTER_HTML_CSS1ATR_HXX
+#pragma once
 
 bool swhtml_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

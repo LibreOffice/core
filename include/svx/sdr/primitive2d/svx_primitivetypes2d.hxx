@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_PRIMITIVE2D_SVX_PRIMITIVETYPES2D_HXX
-#define INCLUDED_SVX_SDR_PRIMITIVE2D_SVX_PRIMITIVETYPES2D_HXX
+#pragma once
 
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
@@ -50,6 +49,5 @@
 #define PRIMITIVE2D_ID_SDRFRAMEBORDERTPRIMITIVE2D       (PRIMITIVE2D_ID_RANGE_SVX| 24)
 
 
-#endif // INCLUDED_SVX_SDR_PRIMITIVE2D_SVX_PRIMITIVETYPES2D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

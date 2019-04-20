@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_FORMEL_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_FORMEL_HXX
+#pragma once
 
 #include <tools/stream.hxx>
 
@@ -187,6 +186,5 @@ inline void LotusConverterBase::Read( sal_uInt32& nUINT32 )
         nBytesLeft = -1;    // bail out early
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

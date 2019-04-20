@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MTABLE_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MTABLE_HXX
+#pragma once
 
 #include <connectivity/TTableHelper.hxx>
 #include "MConnection.hxx"
@@ -56,6 +55,5 @@ namespace connectivity
         };
     }
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAAPPLICATION_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_VBAAPPLICATION_HXX
+#pragma once
 
 #include <vector>
 
@@ -161,6 +160,5 @@ public:
     // XSinkCaller
     virtual void SAL_CALL CallSinks( const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments ) override;
 };
-#endif // INCLUDED_SC_SOURCE_UI_VBA_VBAAPPLICATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XGRAD_HXX
-#define INCLUDED_SVX_XGRAD_HXX
+#pragma once
 
 #include <svx/xenum.hxx>
 #include <tools/color.hxx>
@@ -73,6 +72,5 @@ public:
     sal_uInt16         GetSteps() const                 { return nStepCount; }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

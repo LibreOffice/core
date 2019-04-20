@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SVXCOMMANDS_H
-#define INCLUDED_SVX_SVXCOMMANDS_H
+#pragma once
 
 #define CMD_SID_OBJECT_ALIGN_CENTER                 ".uno:AlignCenter"
 #define CMD_SID_OBJECT_ALIGN_DOWN                   ".uno:AlignDown"
@@ -133,6 +132,5 @@
 #define CMD_SID_INSERT_GRIDCONTROL                  ".uno:InsertGridControl"
 #define CMD_SID_INSERT_HYPERLINKCONTROL             ".uno:InsertHyperlinkControl"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

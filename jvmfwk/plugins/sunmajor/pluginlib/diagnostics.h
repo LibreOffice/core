@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_DIAGNOSTICS_H
-#define INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_DIAGNOSTICS_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -31,6 +30,5 @@
 
 #define JFW_TRACE2(m) SAL_INFO("jfw.level2", m)
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_COLEX_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_COLEX_HXX
+#pragma once
 
 #include <svx/pagectrl.hxx>
 #include <editeng/paperinf.hxx>
@@ -103,6 +102,5 @@ public:
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 };
 
-#endif // INCLUDED_SW_SOURCE_UIBASE_INC_COLEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

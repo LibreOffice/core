@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_COMPRESSEDARRAY_HXX
-#define INCLUDED_SC_INC_COMPRESSEDARRAY_HXX
+#pragma once
 
 #include <cstddef>
 #include <memory>
@@ -202,6 +201,5 @@ void ScBitMaskCompressedArray<A,D>::OrValue( A nPos, const D& rValueToOr )
         this->SetValue( nPos, rValue | rValueToOr);
 }
 
-#endif // INCLUDED_SC_INC_COMPRESSEDARRAY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_CPPUTYPE_HXX
-#define INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_CPPUTYPE_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -33,6 +32,5 @@ void produce(
     OUString const & name, rtl::Reference< TypeManager > const & manager,
     codemaker::GeneratedTypeSet & generated, CppuOptions const & options);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

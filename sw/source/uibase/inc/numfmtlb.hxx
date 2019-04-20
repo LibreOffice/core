@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_NUMFMTLB_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_NUMFMTLB_HXX
+#pragma once
 
 #include <vcl/lstbox.hxx>
 #include <svl/zforlist.hxx>
@@ -180,6 +179,5 @@ public:
     void            connect_changed(const Link<weld::TreeView&, void>& rLink) { mxControl->connect_changed(rLink); }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

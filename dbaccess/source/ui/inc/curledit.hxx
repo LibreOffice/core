@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_CURLEDIT_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_CURLEDIT_HXX
+#pragma once
 
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
@@ -102,6 +101,5 @@ public:
 
 }   // namespace dbaui
 
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_CURLEDIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

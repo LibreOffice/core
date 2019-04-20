@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CHART2_SOURCE_INC_SERVICENAMES_COOSYSTEMS_HXX
-#define INCLUDED_CHART2_SOURCE_INC_SERVICENAMES_COOSYSTEMS_HXX
+#pragma once
 
 namespace chart
 {
@@ -26,6 +25,5 @@ namespace chart
 #define CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME "com.sun.star.chart2.CoordinateSystems.PolarView"
 
 } //namespace chart
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

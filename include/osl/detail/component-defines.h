@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OSL_DETAIL_COMPONENT_DEFINES_H
-#define INCLUDED_OSL_DETAIL_COMPONENT_DEFINES_H
+#pragma once
 
 /* Experimental direct constructor calls, under construction */
 
@@ -42,6 +41,5 @@
 #define LO_URE_CTOR_ENV_com_dot_sun_dot_star_dot_drawing_dot_CustomShapeEngine 1
 #define LO_URE_CTOR_FUN_com_dot_sun_dot_star_dot_drawing_dot_CustomShapeEngine com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

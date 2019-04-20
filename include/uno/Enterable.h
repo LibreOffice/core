@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNO_ENTERABLE_H
-#define INCLUDED_UNO_ENTERABLE_H
+#pragma once
 
 #include "uno/environment.h"
 
@@ -101,6 +100,5 @@ uno_Enterable;
 }
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

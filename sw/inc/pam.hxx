@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_PAM_HXX
-#define INCLUDED_SW_INC_PAM_HXX
+#pragma once
 
 #include <sal/types.h>
 #include "ring.hxx"
@@ -279,6 +278,5 @@ SW_DLLPUBLIC std::ostream &operator <<(std::ostream& s, const SwPaM& pam);
 
 bool CheckNodesRange( const SwNodeIndex&, const SwNodeIndex&, bool bChkSection );
 
-#endif // INCLUDED_SW_INC_PAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

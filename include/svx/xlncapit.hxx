@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XLNCAPIT_HXX
-#define INCLUDED_SVX_XLNCAPIT_HXX
+#pragma once
 
 #include <svx/svxdllapi.h>
 #include <svl/eitem.hxx>
@@ -48,6 +47,5 @@ public:
     virtual sal_uInt16      GetValueCount() const override;
 };
 
-#endif // INCLUDED_SVX_XLNCAPIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

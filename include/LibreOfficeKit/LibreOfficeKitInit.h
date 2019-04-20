@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITINIT_H
-#define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITINIT_H
+#pragma once
 
 #include <LibreOfficeKit/LibreOfficeKit.h>
 
@@ -351,6 +350,5 @@ int lok_preinit( const char *install_path,  const char *user_profile_url )
 }
 #endif
 
-#endif // INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITINIT_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

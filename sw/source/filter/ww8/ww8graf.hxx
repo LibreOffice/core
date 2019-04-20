@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WW8GRAF_HXX
-#define INCLUDED_SW_SOURCE_FILTER_WW8_WW8GRAF_HXX
+#pragma once
 
 #include <vector>
 #include <stack>
@@ -87,6 +86,5 @@ public:
 };
 
 void WW8FSPAShadowToReal( WW8_FSPA_SHADOW const * pFSPAS, WW8_FSPA* pPic );
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

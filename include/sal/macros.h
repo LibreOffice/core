@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_MACROS_H
-#define INCLUDED_SAL_MACROS_H
+#pragma once
 
 #include <stddef.h>
 
@@ -53,6 +52,5 @@
 #   define SAL_STRINGIFY(x) SAL_STRINGIFY_ARG(x)
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

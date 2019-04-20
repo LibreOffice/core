@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_BASIC_SBXDEF_HXX
-#define INCLUDED_BASIC_SBXDEF_HXX
+#pragma once
 
 #include <o3tl/typed_flags_set.hxx>
 
@@ -209,6 +208,5 @@ namespace o3tl
 // The numeric values of sal_True and FALSE
 enum SbxBOOL { SbxFALSE = 0, SbxTRUE = -1 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_PAGEIDS_HXX
-#define INCLUDED_SFX2_PAGEIDS_HXX
+#pragma once
 
 #include <svl/solar.hrc>
 
@@ -65,6 +64,5 @@
 
 #define RID_SVXPAGE_OPENCL                                  (RID_SVX_START + 254)
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

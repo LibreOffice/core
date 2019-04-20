@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_FADEDEF_H
-#define INCLUDED_SD_INC_FADEDEF_H
+#pragma once
 
 // has to be adjusted!
 #define FADE_EFFECT_COUNT 57
@@ -26,6 +25,5 @@
 // has to be adjusted!
 #define FADE_SPEED_COUNT 3
 
-#endif // INCLUDED_SD_INC_FADEDEF_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_WINDOWSERRORSTRING_HXX
-#define INCLUDED_COMPHELPER_WINDOWSERRORSTRING_HXX
+#pragma once
 
 #include <prewin.h>
 #include <postwin.h>
@@ -63,6 +62,5 @@ inline OUString WindowsErrorStringFromHRESULT(HRESULT hr)
 
 } // anonymous namespace
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

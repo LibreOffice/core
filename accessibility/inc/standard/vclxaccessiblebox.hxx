@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEBOX_HXX
-#define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEBOX_HXX
+#pragma once
 
 #include <map>
 #include <standard/vclxaccessibleedit.hxx>
@@ -154,6 +153,5 @@ protected:
     sal_Int32 implGetAccessibleChildCount();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

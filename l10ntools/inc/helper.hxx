@@ -9,8 +9,7 @@
 
 // Helper string methods
 
-#ifndef INCLUDED_L10NTOOLS_INC_HELPER_HXX
-#define INCLUDED_L10NTOOLS_INC_HELPER_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -43,6 +42,5 @@ OString xmlStrToOString( const xmlChar* pString );
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

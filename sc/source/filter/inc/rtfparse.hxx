@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_RTFPARSE_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_RTFPARSE_HXX
+#pragma once
 
 #include "eeparser.hxx"
 
@@ -76,6 +75,5 @@ public:
     virtual ErrCode     Read( SvStream&, const OUString& rBaseURL ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

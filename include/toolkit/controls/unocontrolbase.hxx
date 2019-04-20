@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLBASE_HXX
-#define INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLBASE_HXX
+#pragma once
 
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -62,6 +61,5 @@ protected:
 };
 
 
-#endif // INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

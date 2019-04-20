@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_TPLPITEM_HXX
-#define INCLUDED_SFX2_TPLPITEM_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
@@ -45,6 +44,5 @@ public:
     void                    SetValue(SfxStyleSearchBits n) { SfxFlagItem::SetValue(static_cast<sal_uInt16>(n)); }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

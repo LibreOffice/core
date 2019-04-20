@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_FIXEDTEXTCOLOR_HXX
-#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_FIXEDTEXTCOLOR_HXX
+#pragma once
 
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -59,6 +58,5 @@ namespace rptui
 } // namespace rptui
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

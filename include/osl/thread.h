@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OSL_THREAD_H
-#define INCLUDED_OSL_THREAD_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -223,6 +222,5 @@ SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL osl_setThreadTextEncoding(rtl_TextEncodi
 }
 #endif
 
-#endif // INCLUDED_OSL_THREAD_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

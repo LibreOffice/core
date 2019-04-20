@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCBHELPER_MACROS_HXX
-#define INCLUDED_UCBHELPER_MACROS_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <cppuhelper/factory.hxx>
@@ -181,6 +180,5 @@ Class::createServiceFactory( const css::uno::Reference< css::lang::XMultiService
                 Class::getSupportedServiceNames_Static() );                 \
 }
 
-#endif /* ! INCLUDED_UCBHELPER_MACROS_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XFTSHCIT_HXX
-#define INCLUDED_SVX_XFTSHCIT_HXX
+#pragma once
 
 #include <svx/xcolit.hxx>
 #include <svx/svxdllapi.h>
@@ -39,6 +38,5 @@ public:
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

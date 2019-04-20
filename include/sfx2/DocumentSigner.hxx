@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SFX2_DOCUMENTSIGNER_HXX
-#define INCLUDED_SFX2_DOCUMENTSIGNER_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
@@ -41,7 +40,5 @@ public:
 };
 
 } // namespace sfx2
-
-#endif // INCLUDED_SFX2_DOCUMENTSIGNER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

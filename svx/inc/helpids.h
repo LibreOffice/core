@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_INC_HELPIDS_H
-#define INCLUDED_SVX_INC_HELPIDS_H
+#pragma once
 
 #include <svx/svxcommands.h>
 
@@ -57,6 +56,5 @@
 #define HID_GRID_TRAVEL_ABSOLUTE                              "SVX_HID_GRID_TRAVEL_ABSOLUTE"
 #define HID_GRID_NUMBEROFRECORDS                              "SVX_HID_GRID_NUMBEROFRECORDS"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

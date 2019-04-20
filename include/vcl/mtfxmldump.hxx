@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_MTFXMLDUMP_HXX
-#define INCLUDED_VCL_MTFXMLDUMP_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <vcl/dllapi.h>
@@ -39,6 +38,5 @@ public:
     void dump(const GDIMetaFile& rMetaFile, SvStream& rStream);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

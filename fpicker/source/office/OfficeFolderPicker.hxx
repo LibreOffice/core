@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FPICKER_SOURCE_OFFICE_OFFICEFOLDERPICKER_HXX
-#define INCLUDED_FPICKER_SOURCE_OFFICE_OFFICEFOLDERPICKER_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
@@ -99,6 +98,5 @@ protected:
     virtual sal_Int16       implExecutePicker( ) override;
 };
 
-#endif // INCLUDED_FPICKER_SOURCE_OFFICE_OFFICEFOLDERPICKER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

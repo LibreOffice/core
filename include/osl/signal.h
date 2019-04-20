@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OSL_SIGNAL_H
-#define INCLUDED_OSL_SIGNAL_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -103,7 +102,6 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setErrorReporting(
 }
 #endif
 
-#endif // INCLUDED_OSL_SIGNAL_H
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

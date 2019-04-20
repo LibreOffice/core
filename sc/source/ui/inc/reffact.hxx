@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_REFFACT_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_REFFACT_HXX
+#pragma once
 
 #include <sfx2/childwin.hxx>
 #include "ChildWindowWrapper.hxx"
@@ -210,6 +209,5 @@ public:
     void                Show( ShowFlags nFlags ) override { if( !m_bVisibleLock ) SfxChildWindow::Show( nFlags ); }
 };
 
-#endif // INCLUDED_SC_SOURCE_UI_INC_REFFACT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

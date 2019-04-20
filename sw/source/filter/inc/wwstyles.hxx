@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_INC_WWSTYLES_HXX
-#define INCLUDED_SW_SOURCE_FILTER_INC_WWSTYLES_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -171,6 +170,5 @@ namespace ww
     bool StandardStiIsCharStyle(sti eSti) throw();
 } // namespace ww
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

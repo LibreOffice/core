@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_IDLC_INC_ASTEXCEPTION_HXX
-#define INCLUDED_IDLC_INC_ASTEXCEPTION_HXX
+#pragma once
 
 #include "aststruct.hxx"
 
@@ -29,6 +28,5 @@ public:
         {}
 };
 
-#endif // INCLUDED_IDLC_INC_ASTEXCEPTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

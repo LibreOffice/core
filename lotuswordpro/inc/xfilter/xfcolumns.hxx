@@ -57,8 +57,7 @@
  * @file
  * Columns styles for section, or paragraph.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCOLUMNS_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCOLUMNS_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xfcolor.hxx>
@@ -151,5 +150,4 @@ private:
 
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

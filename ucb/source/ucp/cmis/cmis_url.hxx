@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_UCB_SOURCE_UCP_CMIS_CMIS_URL_HXX
-#define INCLUDED_UCB_SOURCE_UCP_CMIS_CMIS_URL_HXX
+#pragma once
 
 #include <map>
 #include <string>
@@ -44,6 +43,5 @@ namespace cmis
     };
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

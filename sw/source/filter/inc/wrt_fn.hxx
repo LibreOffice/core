@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_FILTER_INC_WRT_FN_HXX
-#define INCLUDED_SW_SOURCE_FILTER_INC_WRT_FN_HXX
+#pragma once
 #include <hintids.hxx>
 
 // some forward declarations
@@ -51,6 +50,5 @@ typedef FnNodeOut SwNodeFnTab[ RES_NODE_END - RES_NODE_BEGIN ];
 
 SW_DLLPUBLIC Writer& Out( const SwNodeFnTab, SwNode&, Writer & rWrt );
 
-#endif // INCLUDED_SW_SOURCE_FILTER_INC_WRT_FN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

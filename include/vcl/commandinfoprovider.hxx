@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VCL_COMMANDINFOPROVIDER_HXX
-#define INCLUDED_VCL_COMMANDINFOPROVIDER_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/image.hxx>
@@ -91,6 +90,5 @@ namespace vcl { namespace CommandInfoProvider {
     VCL_DLLPUBLIC OUString const GetModuleIdentifier(const css::uno::Reference<css::frame::XFrame>& rxFrame);
 } }
 
-#endif // INCLUDED_VCL_COMMANDINFOPROVIDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

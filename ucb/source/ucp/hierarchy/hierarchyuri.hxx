@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYURI_HXX
-#define INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYURI_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -69,6 +68,5 @@ inline bool HierarchyUri::isRootFolder() const
 }
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

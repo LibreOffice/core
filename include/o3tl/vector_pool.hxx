@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_O3TL_VECTOR_POOL_HXX
-#define INCLUDED_O3TL_VECTOR_POOL_HXX
+#pragma once
 
 #include <vector>
 
@@ -117,6 +116,5 @@ myPool.free(nIdx);
     {};
 }
 
-#endif /* INCLUDED_O3TL_VECTOR_POOL_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

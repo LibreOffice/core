@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CPPUHELPER_IMPLBASE_EX_POST_HXX
-#define INCLUDED_CPPUHELPER_IMPLBASE_EX_POST_HXX
+#pragma once
 
 /// @cond INTERNAL
 
@@ -163,6 +162,5 @@ __DEF_CLASS_DATA_INIT_EX( N, (AggImplInheritanceHelper##N< BaseClass, __IFC##N >
 
 /// @endcond
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_SVMEDIT2_HXX
-#define INCLUDED_SVTOOLS_SVMEDIT2_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <svtools/svmedit.hxx>
@@ -39,6 +38,5 @@ public:
     sal_uInt32      GetParagraphCount() const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

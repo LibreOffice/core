@@ -33,8 +33,7 @@
  *
  *************************************************************************/
 
-#ifndef INCLUDED_EXAMPLES_COMPONENTS_ADDONS_PROTOCOLHANDLERADDON_CPP_ADDON_HXX
-#define INCLUDED_EXAMPLES_COMPONENTS_ADDONS_PROTOCOLHANDLERADDON_CPP_ADDON_HXX
+#pragma once
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -127,6 +126,5 @@ sal_Bool SAL_CALL Addon_supportsService( const ::rtl::OUString& ServiceName )
 SAL_CALL Addon_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rContext)
     throw ( ::com::sun::star::uno::Exception );
 
-#endif // INCLUDED_EXAMPLES_COMPONENTS_ADDONS_PROTOCOLHANDLERADDON_CPP_ADDON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

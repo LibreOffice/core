@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDOVIRT_HXX
-#define INCLUDED_SVX_SVDOVIRT_HXX
+#pragma once
 
 #include <svx/svdobj.hxx>
 #include <svx/svxdllapi.h>
@@ -145,6 +144,5 @@ public:
     virtual const Point GetOffset() const;
 };
 
-#endif // INCLUDED_SVX_SVDOVIRT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

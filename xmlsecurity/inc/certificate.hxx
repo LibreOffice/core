@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_CERTIFICATE_H
-#define INCLUDED_XMLSECURITY_INC_CERTIFICATE_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -44,6 +43,5 @@ protected:
 
 }
 
-#endif // INCLUDED_XMLSECURITY_INC_CERTIFICATE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

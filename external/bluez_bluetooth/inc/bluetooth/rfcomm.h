@@ -9,8 +9,7 @@
  ***
  ****************************************************************************
  ****************************************************************************/
-#ifndef __RFCOMM_H
-#define __RFCOMM_H
+#pragma once
 
 #ifdef __cplusplus
 #endif
@@ -44,4 +43,3 @@ struct sockaddr_rc
   bdaddr_t rc_bdaddr;
   uint8_t rc_channel;
 };
-#endif

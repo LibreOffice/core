@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_MATRIXCOMPARISONGENERATOR_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_MATRIXCOMPARISONGENERATOR_HXX
+#pragma once
 
 #include <address.hxx>
 #include "viewdata.hxx"
@@ -34,6 +33,5 @@ protected:
     virtual const OUString getTemplate() = 0;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

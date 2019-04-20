@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_JAVAUNOHELPER_SOURCE_JUHX_EXPORT_TYPES_HXX
-#define INCLUDED_JAVAUNOHELPER_SOURCE_JUHX_EXPORT_TYPES_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -47,6 +46,5 @@ typedef jboolean JAVAUNOHELPER_DETAIL_CALLCONV Func_writeInfo(
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

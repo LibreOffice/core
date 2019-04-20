@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_INC_COMPONENTMODULE_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_INC_COMPONENTMODULE_HXX
+#pragma once
 
 /** you may find this file helpful if you implement a component (in its own library) which can't use
     the usual infrastructure.<br/>
@@ -147,6 +146,5 @@ typedef css::uno::Reference< css::lang::XSingleServiceFactory > (*FactoryInstant
 }   // namespace compmodule
 
 
-#endif // INCLUDED_EXTENSIONS_SOURCE_INC_COMPONENTMODULE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

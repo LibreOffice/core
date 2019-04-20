@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_DEBUGEVENT_HXX
-#define INCLUDED_VCL_DEBUGEVENT_HXX
+#pragma once
 
 #if OSL_DEBUG_LEVEL > 0
 
@@ -35,6 +34,5 @@ class VCL_DLLPUBLIC DebugEventInjector : private Timer {
 
 #endif // OSL_DEBUG_LEVEL > 0
 
-#endif // INCLUDED_VCL_DEBUGEVENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

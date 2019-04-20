@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_POLYGON_B2DPOLYPOLYGONTOOLS_HXX
-#define INCLUDED_BASEGFX_POLYGON_B2DPOLYPOLYGONTOOLS_HXX
+#pragma once
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
@@ -297,6 +296,5 @@ namespace basegfx
     } // end of namespace utils
 } // end of namespace basegfx
 
-#endif // INCLUDED_BASEGFX_POLYGON_B2DPOLYPOLYGONTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

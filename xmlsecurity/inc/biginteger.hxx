@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_BIGINTEGER_HXX
-#define INCLUDED_XMLSECURITY_INC_BIGINTEGER_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
@@ -33,6 +32,5 @@ XSECXMLSEC_DLLPUBLIC OUString bigIntegerToNumericString( const css::uno::Sequenc
 XSECXMLSEC_DLLPUBLIC css::uno::Sequence< sal_Int8 > numericStringToBigInteger ( const OUString& serialNumber );
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

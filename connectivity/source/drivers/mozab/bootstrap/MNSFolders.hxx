@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSFOLDERS_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSFOLDERS_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <osl/diagnose.h>
@@ -29,6 +28,5 @@
 
 OUString getRegistryDir(css::mozilla::MozillaProductType product);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_CALCMACROS_HXX
-#define INCLUDED_SC_INC_CALCMACROS_HXX
+#pragma once
 
 #define DEBUG_COLUMN_STORAGE 0
 #define DEBUG_PIVOT_TABLE 0
@@ -37,6 +36,5 @@ using std::cerr;
 using std::endl;
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

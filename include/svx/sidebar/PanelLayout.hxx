@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVX_SIDEBAR_PANELLAYOUT_HXX
-#define INCLUDED_SVX_SIDEBAR_PANELLAYOUT_HXX
+#pragma once
 
 #include <svx/svxdllapi.h>
 
@@ -43,6 +42,5 @@ public:
     virtual bool EventNotify(NotifyEvent& rNEvt) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

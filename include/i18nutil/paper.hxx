@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NUTIL_PAPER_HXX
-#define INCLUDED_I18NUTIL_PAPER_HXX
+#pragma once
 
 #include <i18nutil/i18nutildllapi.h>
 #include <rtl/string.hxx>
@@ -142,6 +141,5 @@ public:
     static long sloppyFitPageDimension(long nDimension);
 };
 
-#endif // INCLUDED_I18NUTIL_PAPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_W32_PROCIMPL_HXX
-#define INCLUDED_SAL_OSL_W32_PROCIMPL_HXX
+#pragma once
 
 #include <osl/process.h>
 
@@ -27,6 +26,5 @@ struct oslProcessImpl {
     DWORD  m_IdProcess;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

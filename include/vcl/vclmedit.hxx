@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_VCLMEDIT_HXX
-#define INCLUDED_VCL_VCLMEDIT_HXX
+#pragma once
 
 #include <tools/lineend.hxx>
 #include <tools/wintypes.hxx>
@@ -176,6 +175,5 @@ public:
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 };
 
-#endif // INCLUDED_VCL_VCLMEDIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

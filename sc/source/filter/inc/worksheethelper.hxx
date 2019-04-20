@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_WORKSHEETHELPER_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_WORKSHEETHELPER_HXX
+#pragma once
 
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/progressbar.hxx>
@@ -301,6 +300,5 @@ private:
 } // namespace xls
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

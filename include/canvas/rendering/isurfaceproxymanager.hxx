@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_RENDERING_ISURFACEPROXYMANAGER_HXX
-#define INCLUDED_CANVAS_RENDERING_ISURFACEPROXYMANAGER_HXX
+#pragma once
 
 #include <canvas/canvastoolsdllapi.h>
 #include <memory>
@@ -64,6 +63,5 @@ namespace canvas
     CANVASTOOLS_DLLPUBLIC std::shared_ptr<ISurfaceProxyManager> createSurfaceProxyManager( const std::shared_ptr<IRenderModule>& rRenderModule );
 }
 
-#endif // INCLUDED_CANVAS_RENDERING_ISURFACEPROXYMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

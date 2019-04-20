@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NUTIL_SOURCE_UTILITY_UNICODE_DATA_H
-#define INCLUDED_I18NUTIL_SOURCE_UTILITY_UNICODE_DATA_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -1638,6 +1637,5 @@ static const sal_Unicode UnicodeScriptType[][2] = {
     {0xff00, 0xffef}, // 85. Halfwidth and Fullwidth Forms
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

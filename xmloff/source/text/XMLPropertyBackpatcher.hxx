@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLPROPERTYBACKPATCHER_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLPROPERTYBACKPATCHER_HXX
+#pragma once
 
 #include <map>
 #include <memory>
@@ -93,6 +92,5 @@ public:
         const OUString& sName);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

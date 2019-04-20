@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZERTOKEN_HXX
-#define INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZERTOKEN_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -143,6 +142,5 @@ enum PPPOptimizerTokenEnum
 PPPOptimizerTokenEnum TKGet( const OUString& );
 OUString TKGet( const PPPOptimizerTokenEnum );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

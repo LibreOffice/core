@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_STATUSBARCONTROLLER_HXX
-#define INCLUDED_SVTOOLS_STATUSBARCONTROLLER_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <com/sun/star/frame/XStatusbarController.hpp>
@@ -130,6 +129,5 @@ class SVT_DLLPUBLIC StatusbarController :
 
 }
 
-#endif // INCLUDED_SVTOOLS_STATUSBARCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEGRIDCONTROLBASE_HXX
-#define INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEGRIDCONTROLBASE_HXX
+#pragma once
 
 #include <vcl/accessibletable.hxx>
 #include <rtl/ustring.hxx>
@@ -331,6 +330,5 @@ inline void AccessibleGridControlBase::implSetName(
 } // namespace accessibility
 
 
-#endif // ACCESSIBILITY_EXT_ACCESSIBILEGRIDCONTROLBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

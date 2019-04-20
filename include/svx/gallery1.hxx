@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_GALLERY1_HXX
-#define INCLUDED_SVX_GALLERY1_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <svl/SfxBroadcaster.hxx>
@@ -135,6 +134,5 @@ public:
     SAL_DLLPRIVATE const INetURLObject& GetRelativeURL() const { return aRelURL; }
 };
 
-#endif // INCLUDED_SVX_GALLERY1_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

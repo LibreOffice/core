@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SOURCE_INC_SFXURLRELOCATOR_HXX
-#define INCLUDED_SFX2_SOURCE_INC_SFXURLRELOCATOR_HXX
+#pragma once
 
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
@@ -46,6 +45,5 @@ private:
     void implExpandURL( OUString& io_url );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

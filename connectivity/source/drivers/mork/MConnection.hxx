@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MCONNECTION_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MCONNECTION_HXX
+#pragma once
 
 #include <TConnection.hxx>
 #include "MColumnAlias.hxx"
@@ -93,6 +92,5 @@ namespace connectivity
         };
     }
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MCONNECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

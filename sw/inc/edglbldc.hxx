@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_EDGLBLDC_HXX
-#define INCLUDED_SW_INC_EDGLBLDC_HXX
+#pragma once
 
 #include <o3tl/sorted_vector.hxx>
 
@@ -62,6 +61,5 @@ public:
 
 class SwGlblDocContents : public o3tl::sorted_vector<std::unique_ptr<SwGlblDocContent>, o3tl::less_uniqueptr_to<SwGlblDocContent> > {};
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

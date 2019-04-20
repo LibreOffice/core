@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_DRAWSHAPE_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_DRAWSHAPE_HXX
+#pragma once
 
 #include <osl/diagnose.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -355,6 +354,5 @@ namespace slideshow
     }
 }
 
-#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_DRAWSHAPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

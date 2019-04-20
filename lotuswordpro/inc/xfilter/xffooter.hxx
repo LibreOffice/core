@@ -57,8 +57,7 @@
  * @file
  * Footer object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFOOTER_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFOOTER_HXX
+#pragma once
 
 #include <xfilter/xfcontentcontainer.hxx>
 #include <vector>
@@ -82,6 +81,5 @@ public:
     }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDOOVERWRITE_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_UNDOOVERWRITE_HXX
+#pragma once
 
 #include <memory>
 #include <com/sun/star/uno/Sequence.h>
@@ -89,6 +88,5 @@ public:
     bool HasData() const { return aChanges.size() > 0; }
 };
 
-#endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOOVERWRITE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

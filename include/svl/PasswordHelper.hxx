@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_PASSWORDHELPER_HXX
-#define INCLUDED_SVL_PASSWORDHELPER_HXX
+#pragma once
 
 #include <svl/svldllapi.h>
 #include <sal/types.h>
@@ -46,6 +45,5 @@ public:
     SVL_DLLPUBLIC static bool     CompareHashPassword(const css::uno::Sequence<sal_Int8>& rOldPassHash, const OUString& sNewPass);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

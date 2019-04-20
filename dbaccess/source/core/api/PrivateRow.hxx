@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_PRIVATEROW_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_API_PRIVATEROW_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -55,6 +54,5 @@ namespace dbaccess
         virtual css::uno::Reference< css::sdbc::XArray > SAL_CALL getArray( ::sal_Int32 columnIndex ) override;
     };
 } // dbaccess
-#endif // INCLUDED_DBACCESS_SOURCE_CORE_API_PRIVATEROW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

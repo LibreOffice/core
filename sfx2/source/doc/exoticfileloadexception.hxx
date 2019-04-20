@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_EXOTICFILELOADEXCEPTION_HXX
-#define INCLUDED_SFX2_EXOTICFILELOADEXCEPTION_HXX
+#pragma once
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -36,7 +35,5 @@ private:
     css::uno::Reference<css::task::XInteractionContinuation> m_xAbort;
     css::uno::Reference<css::task::XInteractionContinuation> m_xApprove;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

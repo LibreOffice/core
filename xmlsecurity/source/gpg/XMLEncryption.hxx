@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_GPG_XMLENCRYPTION_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_GPG_XMLENCRYPTION_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
@@ -37,6 +36,5 @@ public:
         const css::uno::Reference< css::xml::crypto::XXMLSecurityContext >& aContext) override;
 };
 
-#endif // INCLUDED_XMLSECURITY_SOURCE_GPG_XMLENCRYPTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

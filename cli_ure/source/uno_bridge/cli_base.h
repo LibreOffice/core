@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CLI_URE_SOURCE_UNO_BRIDGE_CLI_BASE_H
-#define INCLUDED_CLI_URE_SOURCE_UNO_BRIDGE_CLI_BASE_H
+#pragma once
 
 #pragma unmanaged
 // Workaround: osl/mutex.h contains only a forward declaration of _oslMutexImpls.
@@ -166,6 +165,5 @@ inline TypeDescr::TypeDescr( typelib_TypeDescriptionReference * td_ref )
 
 
 } //end namespace cli_uno
- #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

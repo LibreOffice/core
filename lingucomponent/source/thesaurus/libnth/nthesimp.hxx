@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUCOMPONENT_SOURCE_THESAURUS_LIBNTH_NTHESIMP_HXX
-#define INCLUDED_LINGUCOMPONENT_SOURCE_THESAURUS_LIBNTH_NTHESIMP_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -135,6 +134,5 @@ inline OUString Thesaurus::getImplementationName_Static() throw()
     return OUString( "org.openoffice.lingu.new.Thesaurus" );
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

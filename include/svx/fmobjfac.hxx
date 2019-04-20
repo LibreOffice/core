@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_FMOBJFAC_HXX
-#define INCLUDED_SVX_FMOBJFAC_HXX
+#pragma once
 
 #include <tools/link.hxx>
 #include <svx/svxdllapi.h>
@@ -36,6 +35,5 @@ public:
     DECL_STATIC_LINK(FmFormObjFactory, MakeObject, SdrObjCreatorParams, SdrObject* );
 };
 
-#endif          // _FM_FMOBJFAC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

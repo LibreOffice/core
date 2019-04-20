@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
-#define INCLUDED_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 
@@ -58,6 +57,5 @@ namespace utl
 
 } // namespace utl
 
-#endif // INCLUDED_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

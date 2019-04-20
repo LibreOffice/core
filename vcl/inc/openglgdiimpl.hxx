@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OPENGLGDIIMPL_HXX
-#define INCLUDED_VCL_OPENGLGDIIMPL_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/opengl/OpenGLContext.hxx>
@@ -387,6 +386,5 @@ public:
     void doFlush();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

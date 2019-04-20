@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_TABLE_TABLEHANDLES_HXX
-#define INCLUDED_SVX_SOURCE_TABLE_TABLEHANDLES_HXX
+#pragma once
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 
@@ -89,6 +88,5 @@ private:
 } // end of namespace table
 } // end of namespace sdr
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

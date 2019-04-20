@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_CODECOMPLETECACHE_HXX
-#define INCLUDED_BASIC_CODECOMPLETECACHE_HXX
+#pragma once
 
 #include <basic/basicdllapi.h>
 #include <rtl/ustring.hxx>
@@ -89,6 +88,5 @@ public:
     void Clear();
 };
 
-#endif // INCLUDED_BASIC_CODECOMPLETECACHE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

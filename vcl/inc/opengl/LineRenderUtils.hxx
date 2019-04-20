@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_OPENGL_LINERENDERUTILS_H
-#define INCLUDED_VCL_INC_OPENGL_LINERENDERUTILS_H
+#pragma once
 
 #include <opengl/VertexUtils.hxx>
 #include <opengl/RenderList.hxx>
@@ -51,6 +50,5 @@ public:
 
 } // end vcl
 
-#endif // INCLUDED_VCL_INC_OPENGL_LINERENDERUTILS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

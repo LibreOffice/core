@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_CUI_SOURCE_INC_FONTFEATURESDIALOG_HXX
-#define INCLUDED_CUI_SOURCE_INC_FONTFEATURESDIALOG_HXX
+#pragma once
 
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -72,7 +71,5 @@ public:
 };
 
 } // end svx namespaces
-
-#endif // INCLUDED_CUI_SOURCE_INC_FONTFEATURESDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

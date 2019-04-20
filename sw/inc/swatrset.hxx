@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_SWATRSET_HXX
-#define INCLUDED_SW_INC_SWATRSET_HXX
+#pragma once
 
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
@@ -323,6 +322,5 @@ public:
 SW_DLLPUBLIC long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
                           const SwAttrSet &rSet,
                           const vcl::RenderContext &rOut, sal_Int16 nScript);
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

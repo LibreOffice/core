@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_FILTER_HTML_WRTHTML_HXX
-#define INCLUDED_SW_SOURCE_FILTER_HTML_WRTHTML_HXX
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -690,6 +689,5 @@ Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt );
 
 OString GetCSS1_Color(const Color& rColor);
 
-#endif // INCLUDED_SW_SOURCE_FILTER_HTML_WRTHTML_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVDATASUPPLIER_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVDATASUPPLIER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -72,6 +71,5 @@ public:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

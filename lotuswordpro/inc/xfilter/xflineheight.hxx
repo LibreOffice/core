@@ -57,8 +57,7 @@
  * @file
  * Line height for paragraph.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLINEHEIGHT_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLINEHEIGHT_HXX
+#pragma once
 
 #include <string.h>
 
@@ -165,5 +164,4 @@ inline bool operator!=(XFLineHeight const & lh1, XFLineHeight const & lh2)
     return !(lh1==lh2);
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

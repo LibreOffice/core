@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_IDLC_SOURCE_ATTRIBUTEEXCEPTIONS_HXX
-#define INCLUDED_IDLC_SOURCE_ATTRIBUTEEXCEPTIONS_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -31,6 +30,5 @@ struct AttributeExceptions {
     Part set;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

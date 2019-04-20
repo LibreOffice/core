@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_ICONVIEW_HXX
-#define INCLUDED_SVTOOLS_ICONVIEW_HXX
+#pragma once
 
 #include <vcl/treelistbox.hxx>
 
@@ -36,6 +35,5 @@ public:
     void PaintEntry( SvTreeListEntry&, long nX, long nY, vcl::RenderContext& rRenderContext);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

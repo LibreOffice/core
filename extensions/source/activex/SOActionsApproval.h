@@ -19,8 +19,7 @@
 
 // SOActionsApproval.h: Definition of the SOActionsApproval class
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_ACTIVEX_SOACTIONSAPPROVAL_H
-#define INCLUDED_EXTENSIONS_SOURCE_ACTIVEX_SOACTIONSAPPROVAL_H
+#pragma once
 
 #ifdef _MSC_VER
 #pragma once
@@ -103,6 +102,5 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SODOCUMENTEVENTLISTENER)
         }
 };
 
-#endif // INCLUDED_EXTENSIONS_SOURCE_ACTIVEX_SOACTIONSAPPROVAL_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

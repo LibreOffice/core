@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZCONNECTIONWRAPPER_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZCONNECTIONWRAPPER_HXX
+#pragma once
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -74,6 +73,5 @@ namespace connectivity
         virtual void SAL_CALL close(  ) override;
     };
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZCONNECTIONWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

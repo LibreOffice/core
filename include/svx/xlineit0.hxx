@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XLINEIT0_HXX
-#define INCLUDED_SVX_XLINEIT0_HXX
+#pragma once
 
 #include <svx/xenum.hxx>
 #include <svl/eitem.hxx>
@@ -45,6 +44,5 @@ public:
     virtual sal_uInt16          GetValueCount() const override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVL_INDEXEDSTYLESHEETS_HXX
-#define INCLUDED_SVL_INDEXEDSTYLESHEETS_HXX
+#pragma once
 
 #include <svl/style.hxx>
 #include <rtl/ustring.hxx>
@@ -184,6 +183,5 @@ private:
 
 } /* namespace svl */
 
-#endif // INCLUDED_SVL_INDEXEDSTYLESHEETS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

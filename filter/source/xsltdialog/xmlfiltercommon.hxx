@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERCOMMON_HXX
-#define INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERCOMMON_HXX
+#pragma once
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -83,6 +82,5 @@ extern OUString getApplicationUIName( const OUString& rServiceName );
 extern const application_info_impl* getApplicationInfo( const OUString& rServiceName );
 OUString XsltResId(const char* pId);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

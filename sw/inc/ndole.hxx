@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_NDOLE_HXX
-#define INCLUDED_SW_INC_NDOLE_HXX
+#pragma once
 
 #include "ndnotxt.hxx"
 #include <svtools/embedhlp.hxx>
@@ -164,6 +163,5 @@ inline const SwOLENode *SwNode::GetOLENode() const
      return SwNodeType::Ole == m_nNodeType ? static_cast<const SwOLENode*>(this) : nullptr;
 }
 
-#endif  // _ INCLUDED_SW_INC_NDOLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OSL_DETAIL_ANDROID_BOOTSTRAP_H
-#define INCLUDED_OSL_DETAIL_ANDROID_BOOTSTRAP_H
+#pragma once
 
 #if defined(ANDROID)
 
@@ -54,6 +53,5 @@ int setup_assets_tree(void);
 
 #endif // ANDROID
 
-#endif // ANDROID_BOOTSTRAP_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

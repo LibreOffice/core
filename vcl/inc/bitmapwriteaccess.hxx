@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_BITMAPWRITEACCESS_HXX
-#define INCLUDED_VCL_INC_BITMAPWRITEACCESS_HXX
+#pragma once
 
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
@@ -90,7 +89,5 @@ private:
     BitmapWriteAccess(const BitmapWriteAccess&) = delete;
     BitmapWriteAccess& operator=(const BitmapWriteAccess&) = delete;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

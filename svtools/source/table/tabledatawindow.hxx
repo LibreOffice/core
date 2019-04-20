@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_SOURCE_TABLE_TABLEDATAWINDOW_HXX
-#define INCLUDED_SVTOOLS_SOURCE_TABLE_TABLEDATAWINDOW_HXX
+#pragma once
 
 #include <vcl/window.hxx>
 #include <vcl/seleng.hxx>
@@ -64,6 +63,5 @@ namespace svt { namespace table
 } } // namespace svt::table
 
 
-#endif // INCLUDED_SVTOOLS_SOURCE_TABLE_TABLEDATAWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

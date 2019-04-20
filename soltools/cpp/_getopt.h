@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SOLTOOLS_CPP__GETOPT_H
-#define INCLUDED_SOLTOOLS_CPP__GETOPT_H
+#pragma once
 
 int stgetopt(int, char *const [], const char *);
 extern char *optarg;
 extern int optind;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

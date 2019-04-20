@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_QA_SORT_HELPER_QAHELPER_HXX
-#define INCLUDED_SC_QA_SORT_HELPER_QAHELPER_HXX
+#pragma once
 
 // Unfortunately requires linkage to sc/ internals so
 // can't live in qahelper itself.
@@ -51,6 +50,5 @@ public:
     SortRefUpdateSetter() : SortTypeSetter(true) {}
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

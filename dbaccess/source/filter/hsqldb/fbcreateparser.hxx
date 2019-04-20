@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_FBCREATEPARSER_HXX
-#define INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_FBCREATEPARSER_HXX
+#pragma once
 
 #include "createparser.hxx"
 
@@ -34,7 +33,5 @@ public:
 };
 
 } // dbahsql
-
-#endif // INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_FBCREATEPARSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

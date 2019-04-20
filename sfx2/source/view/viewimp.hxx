@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SOURCE_VIEW_VIEWIMP_HXX
-#define INCLUDED_SFX2_SOURCE_VIEW_VIEWIMP_HXX
+#pragma once
 
 #include <memory>
 #include <basic/sbxobj.hxx>
@@ -65,6 +64,5 @@ struct SfxViewShell_Impl
     std::vector< SfxInPlaceClient* >* GetIPClients_Impl(bool bCreate = true) const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCPORTIONS_HXX
-#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCPORTIONS_HXX
+#pragma once
 
 #include <SwPortionHandler.hxx>
 #include <sal/types.h>
@@ -166,6 +165,5 @@ private:
     std::vector< std::pair<sal_Int32,sal_Int32> > m_vecPairPos;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

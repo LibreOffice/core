@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_FORMULA_VECTORTOKEN_HXX
-#define INCLUDED_FORMULA_VECTORTOKEN_HXX
+#pragma once
 
 #include <cstddef>
 #include <vector>
@@ -105,6 +104,5 @@ public:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

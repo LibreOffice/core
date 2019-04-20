@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_ANCHORID_HXX
-#define INCLUDED_SVX_ANCHORID_HXX
+#pragma once
 
 #include <o3tl/typed_flags_set.hxx>
 
@@ -41,6 +40,5 @@ namespace o3tl
 }
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

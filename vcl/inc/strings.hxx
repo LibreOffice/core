@@ -7,11 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_STRINGS_HXX
-#define INCLUDED_VCL_INC_STRINGS_HXX
+#pragma once
 
 #define SV_APP_VCLBACKEND "VCL: "
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

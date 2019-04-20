@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERSPRITEPANE_HXX
-#define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERSPRITEPANE_HXX
+#pragma once
 
 #include "PresenterPaneBase.hxx"
 #include "PresenterSprite.hxx"
@@ -88,6 +87,5 @@ private:
 
 } } // end of namespace ::sd::presenter
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

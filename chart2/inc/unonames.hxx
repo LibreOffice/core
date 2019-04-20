@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CHART2_INC_UNONAMES_HXX
-#define INCLUDED_CHART2_INC_UNONAMES_HXX
+#pragma once
 
 #define CHART_UNONAME_SORT_BY_XVALUES       "SortByXValues"
 #define CHART_UNONAME_SPLINE_TYPE           "SplineType"
@@ -30,6 +29,5 @@
 #define CHART_UNONAME_LABEL_BORDER_TRANS    "LabelBorderTransparency"
 #define CHART_UNONAME_CUSTOM_LABEL_FIELDS   "CustomLabelFields"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

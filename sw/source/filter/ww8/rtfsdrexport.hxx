@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_RTFSDREXPORT_HXX
-#define INCLUDED_SW_SOURCE_FILTER_WW8_RTFSDREXPORT_HXX
+#pragma once
 
 #include <filter/msfilter/escherex.hxx>
 #include <editeng/outlobj.hxx>
@@ -104,7 +103,5 @@ private:
     /// Exports the pib property of the shape
     void impl_writeGraphic();
 };
-
-#endif // INCLUDED_SW_SOURCE_FILTER_WW8_RTFSDREXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

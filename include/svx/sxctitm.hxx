@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SXCTITM_HXX
-#define INCLUDED_SVX_SXCTITM_HXX
+#pragma once
 
 #include <svl/eitem.hxx>
 #include <svx/svddef.hxx>
@@ -37,6 +36,5 @@ public:
     virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric, MapUnit ePresMetric, OUString& rText, const IntlWrapper&) const override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

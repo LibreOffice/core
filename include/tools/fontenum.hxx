@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLS_FONTENUM_HXX
-#define INCLUDED_TOOLS_FONTENUM_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
@@ -79,6 +78,5 @@ enum FontEmbeddedBitmap { EMBEDDEDBITMAP_DONTKNOW, EMBEDDEDBITMAP_FALSE, EMBEDDE
 
 enum FontAntiAlias { ANTIALIAS_DONTKNOW, ANTIALIAS_FALSE, ANTIALIAS_TRUE };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

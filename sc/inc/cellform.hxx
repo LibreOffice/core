@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_CELLFORM_HXX
-#define INCLUDED_SC_INC_CELLFORM_HXX
+#pragma once
 
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
@@ -51,6 +50,5 @@ public:
         ScDocument& rDoc, const ScAddress& rPos, ScRefCellValue& rCell );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDODELETE_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_UNDODELETE_HXX
+#pragma once
 
 #include <undobj.hxx>
 #include <rtl/ustring.hxx>
@@ -100,6 +99,5 @@ public:
     bool IsDelFullPara() const { return m_bDelFullPara; }
 };
 
-#endif // INCLUDED_SW_SOURCE_CORE_INC_UNDODELETE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

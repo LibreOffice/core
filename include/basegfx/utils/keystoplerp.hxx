@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_UTILS_KEYSTOPLERP_HXX
-#define INCLUDED_BASEGFX_UTILS_KEYSTOPLERP_HXX
+#pragma once
 
 #include <vector>
 #include <basegfx/basegfxdllapi.h>
@@ -86,6 +85,5 @@ namespace basegfx
     }
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

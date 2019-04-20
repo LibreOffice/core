@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_PDFIO_PDFDOCUMENT_HXX
-#define INCLUDED_XMLSECURITY_INC_PDFIO_PDFDOCUMENT_HXX
+#pragma once
 
 #include <xmlsecuritydllapi.h>
 
@@ -38,7 +37,5 @@ XMLSECURITY_DLLPUBLIC bool ValidateSignature(SvStream& rStream,
 
 } // namespace pdfio
 } // namespace xmlsecurity
-
-#endif // INCLUDED_XMLSECURITY_INC_PDFIO_PDFDOCUMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

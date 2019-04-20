@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_SOURCE_BRWBOX_BRWIMPL_HXX
-#define INCLUDED_SVTOOLS_SOURCE_BRWBOX_BRWIMPL_HXX
+#pragma once
 
 #include <vcl/svtaccessiblefactory.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -74,6 +73,5 @@ namespace svt
     };
 }
 
-#endif // INCLUDED_SVTOOLS_SOURCE_BRWBOX_BRWIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

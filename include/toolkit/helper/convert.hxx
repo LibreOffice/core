@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_HELPER_CONVERT_HXX
-#define INCLUDED_TOOLKIT_HELPER_CONVERT_HXX
+#pragma once
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -56,6 +55,5 @@ inline ::tools::Rectangle VCLRectangle( const css::awt::Rectangle& rAWTRect )
     return ::tools::Rectangle( ::Point( rAWTRect.X, rAWTRect.Y ), ::Size( rAWTRect.Width, rAWTRect.Height ) );
 }
 
-#endif // INCLUDED_TOOLKIT_HELPER_CONVERT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

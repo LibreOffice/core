@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_TOCREAD_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_TOCREAD_HXX
+#pragma once
 namespace OpenStormBento
 {
 
@@ -89,6 +88,5 @@ private: // Data
     unsigned long cTOCSize;
 };
 }//end namespace OpenStormBento
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_UNOEDPRX_HXX
-#define INCLUDED_EDITENG_UNOEDPRX_HXX
+#pragma once
 
 #include <memory>
 #include <svl/SfxBroadcaster.hxx>
@@ -166,6 +165,5 @@ private:
     bool                                mbEditSourceValid;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLCHANGETRACKINGEXPORTHELPER_HXX
-#define INCLUDED_SC_SOURCE_FILTER_XML_XMLCHANGETRACKINGEXPORTHELPER_HXX
+#pragma once
 
 #include <xmloff/xmltoken.hxx>
 #include <map>
@@ -84,6 +83,5 @@ public:
     void CollectAndWriteChanges();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

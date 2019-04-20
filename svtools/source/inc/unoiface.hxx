@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_SOURCE_INC_UNOIFACE_HXX
-#define INCLUDED_SVTOOLS_SOURCE_INC_UNOIFACE_HXX
+#pragma once
 
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
@@ -413,6 +412,5 @@ public:
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
-#endif // INCLUDED_SVTOOLS_SOURCE_INC_UNOIFACE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

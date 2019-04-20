@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_RANDOM_HXX
-#define INCLUDED_COMPHELPER_RANDOM_HXX
+#pragma once
 
 #include <comphelper/comphelperdllapi.h>
 
@@ -40,6 +39,5 @@ COMPHELPER_DLLPUBLIC size_t uniform_size_distribution(size_t a, size_t b);
 
 } // namespace
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

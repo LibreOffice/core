@@ -9,8 +9,7 @@
 
 //as seen at http://www.microsoft.com/typography/otspec/name.htm
 
-#ifndef INCLUDED_I18NLANGTAG_APPLELANGID_H
-#define INCLUDED_I18NLANGTAG_APPLELANGID_H
+#pragma once
 
 #include <i18nlangtag/languagetag.hxx>
 
@@ -140,6 +139,5 @@ enum class AppleLanguageId : unsigned short
 I18NLANGTAG_DLLPUBLIC LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage);
 
 
-#endif /* INCLUDED_I18NLANGTAG_APPLELANGID_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

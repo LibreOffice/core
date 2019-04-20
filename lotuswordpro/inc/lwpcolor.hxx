@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPCOLOR_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPCOLOR_HXX
+#pragma once
 
 #include "lwpobjstrm.hxx"
 #include "lwpheader.hxx"
@@ -119,6 +118,5 @@ inline bool LwpColor::IsTransparent()
 {
     return (m_nExtra==AGLRGB_TRANSPARENT);
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

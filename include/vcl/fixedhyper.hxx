@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_FIXEDHYPER_HXX
-#define INCLUDED_VCL_FIXEDHYPER_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/fixed.hxx>
@@ -111,6 +110,5 @@ class VCL_DLLPUBLIC FixedHyperlink : public FixedText
         virtual void        SetText(const OUString& rNewDescription) override;
     };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

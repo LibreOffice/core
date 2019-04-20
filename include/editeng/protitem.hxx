@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_PROTITEM_HXX
-#define INCLUDED_EDITENG_PROTITEM_HXX
+#pragma once
 
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
@@ -83,6 +82,5 @@ inline SvxProtectItem &SvxProtectItem::operator=( const SvxProtectItem &rCpy )
 }
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

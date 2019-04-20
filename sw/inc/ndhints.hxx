@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_NDHINTS_HXX
-#define INCLUDED_SW_INC_NDHINTS_HXX
+#pragma once
 
 #include <o3tl/sorted_vector.hxx>
 
@@ -186,6 +185,5 @@ public:
     bool CalcHiddenParaField() const; // changes mutable state
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

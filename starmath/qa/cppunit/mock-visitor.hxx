@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_STARMATH_QA_CPPUNIT_MOCK_VISITOR_HXX
-#define INCLUDED_STARMATH_QA_CPPUNIT_MOCK_VISITOR_HXX
+#pragma once
 
 #include <cppunit/TestAssert.h>
 #include <visitors.hxx>
@@ -187,6 +186,5 @@ private:
     }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

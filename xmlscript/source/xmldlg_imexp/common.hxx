@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSCRIPT_SOURCE_XMLDLG_IMEXP_COMMON_HXX
-#define INCLUDED_XMLSCRIPT_SOURCE_XMLDLG_IMEXP_COMMON_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -40,6 +39,5 @@ extern StringTriple const * const g_pEventTranslations;
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

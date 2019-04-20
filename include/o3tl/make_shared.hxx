@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_O3TL_MAKE_SHARED_HXX
-#define INCLUDED_O3TL_MAKE_SHARED_HXX
+#pragma once
 
 #include <memory>
 #include <type_traits>
@@ -28,6 +27,5 @@ std::shared_ptr<T> make_shared_array(size_t const size)
 
 } // namespace o3tl
 
-#endif // INCLUDED_O3TL_MAKE_SHARED_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

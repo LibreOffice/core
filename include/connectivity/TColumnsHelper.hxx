@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_TCOLUMNSHELPER_HXX
-#define INCLUDED_CONNECTIVITY_TCOLUMNSHELPER_HXX
+#pragma once
 
 #include <memory>
 #include <connectivity/sdbcx/VCollection.hxx>
@@ -57,6 +56,5 @@ namespace connectivity
         void setParent(OTableHelper* _pTable) { m_pTable = _pTable;}
     };
 }
-#endif // INCLUDED_CONNECTIVITY_TCOLUMNSHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_SHEET_XSHEETCELLRANGECONTAINER_HXX
-#define INCLUDED_TEST_SHEET_XSHEETCELLRANGECONTAINER_HXX
+#pragma once
 
 #include <com/sun/star/table/CellRangeAddress.hpp>
 
@@ -33,7 +32,5 @@ protected:
     static css::uno::Sequence<com::sun::star::table::CellRangeAddress> createCellRangeAddresses();
 };
 }
-
-#endif // INCLUDED_TEST_SHEET_XSHEETCELLRANGECONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

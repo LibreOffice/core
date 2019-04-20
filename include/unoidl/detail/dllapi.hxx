@@ -8,8 +8,7 @@
  */
 
 
-#ifndef INCLUDED_UNOIDL_DETAIL_DLLAPI_HXX
-#define INCLUDED_UNOIDL_DETAIL_DLLAPI_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -21,6 +20,5 @@
 #define LO_DLLPUBLIC_UNOIDL SAL_DLLPUBLIC_IMPORT
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

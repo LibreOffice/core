@@ -57,8 +57,7 @@
  * @file
  * Column style object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCOLSTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCOLSTYLE_HXX
+#pragma once
 
 #include <xfilter/xfstyle.hxx>
 
@@ -105,5 +104,4 @@ inline double XFColStyle::GetWidth()
     return m_fWidth;
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

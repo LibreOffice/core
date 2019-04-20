@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CORRELATIONDIALOG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CORRELATIONDIALOG_HXX
+#pragma once
 
 #include "MatrixComparisonGenerator.hxx"
 
@@ -27,6 +26,5 @@ protected:
     virtual const OUString getTemplate() override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

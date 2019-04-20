@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEG_H
-#define INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEG_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -64,6 +63,5 @@ struct SourceManagerStruct {
     boolean     no_data_available;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

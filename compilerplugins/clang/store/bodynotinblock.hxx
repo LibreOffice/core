@@ -9,8 +9,7 @@
  *
  */
 
-#ifndef BODYNOTINBLOCK_H
-#define BODYNOTINBLOCK_H
+#pragma once
 
 #include "plugin.hxx"
 
@@ -33,6 +32,5 @@ class BodyNotInBlock
 
 } // namespace
 
-#endif // BODYNOTINBLOCK_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

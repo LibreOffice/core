@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_INC_CHARMAPPOPUP_HXX
-#define INCLUDED_SFX2_INC_CHARMAPPOPUP_HXX
+#pragma once
 
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/dllapi.h>
@@ -35,6 +34,5 @@ public:
     virtual void SAL_CALL execute( sal_Int16 /*KeyModifier*/ ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

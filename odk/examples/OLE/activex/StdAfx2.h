@@ -37,8 +37,7 @@
 //      or project specific include files that are used frequently,
 //      but are changed infrequently
 
-#ifndef INCLUDED_EXAMPLES_ACTIVEX_STDAFX2_H
-#define INCLUDED_EXAMPLES_ACTIVEX_STDAFX2_H
+#pragma once
 
 #define STRICT
 #ifndef _WIN32_WINNT
@@ -59,6 +58,5 @@ extern CComModule _Module;
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
-#endif // INCLUDED_EXAMPLES_ACTIVEX_STDAFX2_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

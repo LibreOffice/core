@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TABLEFIELDDESCWIN_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TABLEFIELDDESCWIN_HXX
+#pragma once
 
 #include <vcl/tabpage.hxx>
 #include "FieldDescGenWin.hxx"
@@ -90,6 +89,5 @@ namespace dbaui
 
     };
 }
-#endif // INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TABLEFIELDDESCWIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

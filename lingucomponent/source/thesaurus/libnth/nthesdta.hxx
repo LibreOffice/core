@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUCOMPONENT_SOURCE_THESAURUS_LIBNTH_NTHESDTA_HXX
-#define INCLUDED_LINGUCOMPONENT_SOURCE_THESAURUS_LIBNTH_NTHESDTA_HXX
+#pragma once
 
 #include <com/sun/star/linguistic2/XMeaning.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -55,6 +54,5 @@ public:
 
 }   // namespace linguistic
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

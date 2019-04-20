@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_UNDOSTYL_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_UNDOSTYL_HXX
+#pragma once
 
 #include <memory>
 #include <svl/style.hxx>
@@ -99,6 +98,5 @@ private:
     OUString const  maNewStyle;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

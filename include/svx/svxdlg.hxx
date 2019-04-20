@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SVXDLG_HXX
-#define INCLUDED_SVX_SVXDLG_HXX
+#pragma once
 
 #include <sfx2/sfxdlg.hxx>
 #include <svx/anchorid.hxx>
@@ -455,6 +454,5 @@ public:
     virtual VclPtr<SvxAbstractInsRowColDlg> CreateSvxInsRowColDlg(weld::Window* pParent, bool bCol, const OString& rHelpId) = 0;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

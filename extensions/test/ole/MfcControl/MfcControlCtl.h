@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#if !defined(AFX_MFCCONTROLCTL_H__AC221FC3_A0D8_11D4_833B_005004526AB4__INCLUDED_)
-#define AFX_MFCCONTROLCTL_H__AC221FC3_A0D8_11D4_833B_005004526AB4__INCLUDED_
+#pragma once
 
 #ifdef _MSC_VER
 #pragma once
@@ -110,7 +109,6 @@ public:
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
-#endif // !defined(AFX_MFCCONTROLCTL_H__AC221FC3_A0D8_11D4_833B_005004526AB4__INCLUDED)
 // BYTE
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

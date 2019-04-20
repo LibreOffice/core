@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OSL_CONDITN_H
-#define INCLUDED_OSL_CONDITN_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -92,6 +91,5 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition);
 }
 #endif
 
-#endif // INCLUDED_OSL_CONDITN_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

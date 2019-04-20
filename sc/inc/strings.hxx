@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_STRINGS_HXX
-#define INCLUDED_SC_INC_STRINGS_HXX
+#pragma once
 
 #define SCSTR_FIELDSEP              ",\t44\t;\t59\t:\t58\t{%TAB}\t9\t{%SPACE}\t32 "
 #define SCSTR_TEXTSEP               "\"\t34\t'\t39"
@@ -23,6 +22,5 @@
 #define STR_ACC_RIGHTAREA_DESCR     ""
 #define STR_ACC_HEADER_DESCR        ""
 #define STR_ACC_FOOTER_DESCR        ""
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

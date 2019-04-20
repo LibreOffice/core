@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVGIO_INC_SVGDOCUMENTHANDLER_HXX
-#define INCLUDED_SVGIO_INC_SVGDOCUMENTHANDLER_HXX
+#pragma once
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include "svgdocument.hxx"
@@ -63,6 +62,5 @@ namespace svgio
     } // end of namespace svgreader
 } // end of namespace svgio
 
-#endif // INCLUDED_SVGIO_INC_SVGDOCUMENTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

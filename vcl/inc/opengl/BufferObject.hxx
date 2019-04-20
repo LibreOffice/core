@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_OPENGL_BUFFEROBJECT_H
-#define INCLUDED_VCL_INC_OPENGL_BUFFEROBJECT_H
+#pragma once
 
 namespace vcl
 {
@@ -79,6 +78,5 @@ class IndexBufferObject : public BufferObject<GLuint, GL_ELEMENT_ARRAY_BUFFER>
 
 } // end vcl
 
-#endif // INCLUDED_VCL_INC_OPENGL_BUFFEROBJECT_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#ifndef INCLUDED_SHELL_INC_SPSUPP_REGISTRAR_H
-#define INCLUDED_SHELL_INC_SPSUPP_REGISTRAR_H
+#pragma once
 
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
@@ -33,6 +32,5 @@ private:
     HRESULT m_ConstructionResult;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

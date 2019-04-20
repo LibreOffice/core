@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_I18N_XKB_HXX
-#define INCLUDED_VCL_INC_UNX_I18N_XKB_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <vclpluginapi.h>
@@ -61,6 +60,5 @@ SalI18N_KeyboardExtension::GetEventBase() const
     return mnEventBase;
 }
 
-#endif // INCLUDED_VCL_INC_UNX_I18N_XKB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

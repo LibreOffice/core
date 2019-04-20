@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPUHELPER_PROPTYPEHLP_HXX
-#define INCLUDED_CPPUHELPER_PROPTYPEHLP_HXX
+#pragma once
 
 #include "cppuhelper/proptypehlp.h"
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
@@ -274,6 +273,5 @@ inline void SAL_CALL convertPropertyValue( double &d , const css::uno::Any &a )
 
 }     // end namespace cppu
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

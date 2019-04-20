@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_A11YWRAPPER_H
-#define INCLUDED_VCL_INC_OSX_A11YWRAPPER_H
+#pragma once
 
 #include "osxvcltypes.h"
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
@@ -105,6 +104,5 @@ struct ReferenceWrapper
 -(css::accessibility::XAccessibleTextMarkup *)accessibleTextMarkup;
 @end
 
-#endif // INCLUDED_VCL_INC_OSX_A11YWRAPPER_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_TABPROTECTION_HXX
-#define INCLUDED_SC_INC_TABPROTECTION_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -221,6 +220,5 @@ private:
     std::unique_ptr<ScTableProtectionImpl> mpImpl;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

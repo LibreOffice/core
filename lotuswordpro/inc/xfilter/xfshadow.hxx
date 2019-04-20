@@ -57,8 +57,7 @@
  * @file
  * Shadow object,now only used by paragraph object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSHADOW_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSHADOW_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xfcolor.hxx>
@@ -145,5 +144,4 @@ inline const XFColor& XFShadow::GetColor()
     return m_aColor;
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

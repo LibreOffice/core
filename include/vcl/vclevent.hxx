@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_VCLEVENT_HXX
-#define INCLUDED_VCL_VCLEVENT_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
@@ -230,6 +229,5 @@ private:
     css::uno::Reference< css::accessibility::XAccessible > mxAccessible;
 };
 
-#endif // INCLUDED_VCL_VCLEVENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

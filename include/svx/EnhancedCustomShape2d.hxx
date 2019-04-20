@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_ENHANCEDCUSTOMSHAPE2D_HXX
-#define INCLUDED_SVX_ENHANCEDCUSTOMSHAPE2D_HXX
+#pragma once
 
 #include <svx/msdffdef.hxx>
 #include <svx/sdasitm.hxx>
@@ -215,6 +214,5 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
                                         EnhancedCustomShape2d::Handle& rDestinationHandle );
         SAL_DLLPRIVATE static void SwapStartAndEndArrow( SdrObject* pObj );
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

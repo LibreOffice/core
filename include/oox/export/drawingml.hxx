@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_EXPORT_DRAWINGML_HXX
-#define INCLUDED_OOX_EXPORT_DRAWINGML_HXX
+#pragma once
 
 #include <map>
 #include <vector>
@@ -297,6 +296,5 @@ public:
 }
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

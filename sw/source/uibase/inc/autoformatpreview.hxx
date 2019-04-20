@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_AUTOFORMATPREVIEW_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_AUTOFORMATPREVIEW_HXX
+#pragma once
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <sal/types.h>
@@ -81,7 +80,5 @@ private:
     void MakeFonts(vcl::RenderContext const& rRenderContext, sal_uInt8 nIndex, vcl::Font& rFont,
                    vcl::Font& rCJKFont, vcl::Font& rCTLFont);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

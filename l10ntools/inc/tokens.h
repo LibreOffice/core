@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_L10NTOOLS_INC_TOKENS_H
-#define INCLUDED_L10NTOOLS_INC_TOKENS_H
+#pragma once
 
 /*------------------------------------------------------                    */
 /*------------------------------------------------------                    */
@@ -95,6 +94,5 @@
 #define DESC_EXTENSION_DESCRIPTION_END   705
 #define DESC_EXTENSION_DESCRIPTION_SRC   706
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_INC_INTERNAL_ISO8601_CONVERTER_HXX
-#define INCLUDED_SHELL_INC_INTERNAL_ISO8601_CONVERTER_HXX
+#pragma once
 
 #include <string>
 
@@ -37,6 +36,5 @@ std::wstring iso8601_date_to_local_date(const std::wstring& iso8601date);
 */
 std::wstring iso8601_duration_to_local_duration(const std::wstring& iso8601duration);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

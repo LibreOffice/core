@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDSERV_SOURCE_INPROCSERV_INPROCEMBOBJ_H
-#define INCLUDED_EMBEDSERV_SOURCE_INPROCSERV_INPROCEMBOBJ_H
+#pragma once
 
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
@@ -228,6 +227,5 @@ public:
 
 } // namespace inprocserv
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

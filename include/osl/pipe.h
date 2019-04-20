@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_OSL_PIPE_H
-#define INCLUDED_OSL_PIPE_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -119,6 +118,5 @@ SAL_DLLPUBLIC oslPipeError SAL_CALL osl_getLastPipeError(oslPipe Pipe);
 }
 #endif
 
-#endif // INCLUDED_OSL_PIPE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

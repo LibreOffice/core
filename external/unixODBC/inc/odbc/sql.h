@@ -4,8 +4,7 @@
  * These should be consistent with the MS version.
  *
  **************************************************/
-#ifndef __SQL_H
-#define __SQL_H
+#pragma once
 
 
 /****************************
@@ -820,5 +819,4 @@ extern "C" {
 
 #ifdef __cplusplus
 }
-#endif
 #endif

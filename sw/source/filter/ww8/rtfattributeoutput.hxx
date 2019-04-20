@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_RTFATTRIBUTEOUTPUT_HXX
-#define INCLUDED_SW_SOURCE_FILTER_WW8_RTFATTRIBUTEOUTPUT_HXX
+#pragma once
 
 #include <memory>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -654,7 +653,5 @@ public:
 
     const SwPageDesc* GetPrevPageDesc() const { return m_pPrevPageDesc; }
 };
-
-#endif // INCLUDED_SW_SOURCE_FILTER_WW8_RTFATTRIBUTEOUTPUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,8 +58,7 @@
  *  LwpPara: Word Pro object for paragraph
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARA_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARA_HXX
+#pragma once
 
 #include <memory>
 
@@ -359,6 +358,5 @@ inline void LwpPara::SetBelowSpacing(double value)
 {
     m_BelowSpacing = value;
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

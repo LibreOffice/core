@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_WIN_SCOPED_GDI_HXX
-#define INCLUDED_VCL_INC_WIN_SCOPED_GDI_HXX
+#pragma once
 
 #include <win/svsys.h>
 #include <win/wincomp.hxx>
@@ -69,7 +68,5 @@ public:
 private:
     HDC m_hDC;
 };
-
-#endif // INCLUDED_VCL_INC_WIN_SCOPED_GDI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

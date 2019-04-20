@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_SDPPTWRP_HXX
-#define INCLUDED_SD_INC_SDPPTWRP_HXX
+#pragma once
 
 #include "sdfilter.hxx"
 
@@ -42,6 +41,5 @@ private:
     SvMemoryStream*         pBas;
 };
 
-#endif // INCLUDED_SD_INC_SDPPTWRP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

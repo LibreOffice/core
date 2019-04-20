@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLSPRITECANVAS_HXX
-#define INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLSPRITECANVAS_HXX
+#pragma once
 
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <basegfx/vector/b2dsize.hxx>
@@ -81,6 +80,5 @@ namespace cppcanvas
     }
 }
 
-#endif // INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLSPRITECANVAS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

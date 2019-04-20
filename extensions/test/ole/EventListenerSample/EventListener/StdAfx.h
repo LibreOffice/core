@@ -20,8 +20,7 @@
 //      or project specific include files that are used frequently,
 //      but are changed infrequently
 
-#if !defined(AFX_STDAFX_H__E275407A_804A_477E_9A28_F5CA84E711C3__INCLUDED_)
-#define AFX_STDAFX_H__E275407A_804A_477E_9A28_F5CA84E711C3__INCLUDED_
+#pragma once
 
 #ifdef _MSC_VER
 #pragma once
@@ -39,6 +38,5 @@ extern CComModule _Module;
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
-#endif // !defined(AFX_STDAFX_H__E275407A_804A_477E_9A28_F5CA84E711C3__INCLUDED)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

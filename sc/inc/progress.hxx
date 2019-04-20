@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_PROGRESS_HXX
-#define INCLUDED_SC_INC_PROGRESS_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <sfx2/progress.hxx>
@@ -118,6 +117,5 @@ public:
             void                Enable() { bEnabled = true; }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

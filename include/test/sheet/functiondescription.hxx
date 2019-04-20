@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_SHEET_FUNCTIONDESCRIPTION_HXX
-#define INCLUDED_TEST_SHEET_FUNCTIONDESCRIPTION_HXX
+#pragma once
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -29,7 +28,5 @@ protected:
     ~FunctionDescription() {}
 };
 }
-
-#endif // INCLUDED_TEST_SHEET_FUNCTIONDESCRIPTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

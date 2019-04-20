@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_TEXTCHAINFLOW_HXX
-#define INCLUDED_SVX_TEXTCHAINFLOW_HXX
+#pragma once
 
 #include <svx/textchain.hxx>
 #include <memory>
@@ -102,6 +101,5 @@ private:
     void impBroadcastCursorInfo() const;
 };
 
-#endif // INCLUDED_SVX_TEXTCHAINFLOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

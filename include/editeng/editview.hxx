@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 // MyEDITVIEW, due to exported EditView
-#ifndef INCLUDED_EDITENG_EDITVIEW_HXX
-#define INCLUDED_EDITENG_EDITVIEW_HXX
+#pragma once
 
 #include <memory>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -304,6 +303,5 @@ public:
     void DrawSelectionXOR(OutlinerViewShell* pOtherShell);
 };
 
-#endif // INCLUDED_EDITENG_EDITVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_BROWSERVIEW_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_BROWSERVIEW_HXX
+#pragma once
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <vcl/window.hxx>
@@ -65,6 +64,5 @@ namespace pcr
 } // namespace pcr
 
 
-#endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_BROWSERVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

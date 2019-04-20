@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_FONTCVT_HXX
-#define INCLUDED_UNOTOOLS_FONTCVT_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
@@ -56,6 +55,5 @@ public:
 // which were inside and those outside the unicode private area.
 UNOTOOLS_DLLPUBLIC StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont();
 
-#endif // INCLUDED_UNOTOOLS_FONTCVT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

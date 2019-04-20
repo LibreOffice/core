@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_VBA_PROPVALULE_HXX
-#define SC_VBA_PROPVALULE_HXX
+#pragma once
 
 #include <exception>
 
@@ -54,6 +53,5 @@ public:
     OUString SAL_CALL getDefaultPropertyName() override { return OUString("Value"); }
 
 };
-#endif //SC_VBA_PROPVALULE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

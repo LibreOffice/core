@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_DETAIL_LOG_H
-#define INCLUDED_SAL_DETAIL_LOG_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -99,6 +98,5 @@ SAL_DLLPUBLIC void SAL_CALL sal_detail_logFormat(
 
 /** @endcond */
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,8 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef UPDATEDEFINES_H
-#define UPDATEDEFINES_H
+#pragma once
 
 #include "readstrings.h"
 
@@ -132,4 +131,3 @@ static inline int mywcsprintf(WCHAR* dest, size_t count, const WCHAR* fmt, ...)
 
 #define BACKUP_EXT NS_T(".moz-backup")
 
-#endif

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SELCTRL_HXX
-#define INCLUDED_SVX_SELCTRL_HXX
+#pragma once
 
 #include <vcl/image.hxx>
 #include <sfx2/stbitem.hxx>
@@ -41,6 +40,5 @@ private:
     Image const maImage;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

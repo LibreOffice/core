@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_USERDAT_HXX
-#define INCLUDED_SC_INC_USERDAT_HXX
+#pragma once
 
 #include <svx/svdobj.hxx>
 #include <vcl/imap.hxx>
@@ -106,6 +105,5 @@ private:
     OUString   maHlink;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

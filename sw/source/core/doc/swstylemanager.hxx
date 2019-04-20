@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_DOC_SWSTYLEMANAGER_HXX
-#define INCLUDED_SW_SOURCE_CORE_DOC_SWSTYLEMANAGER_HXX
+#pragma once
 
 #include <memory>
 
@@ -27,6 +26,5 @@ class SfxItemSet;
 
 std::unique_ptr<IStyleAccess> createStyleManager( SfxItemSet const * pIgnorableParagraphItems );
 
-#endif // INCLUDED_SW_SOURCE_CORE_DOC_SWSTYLEMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

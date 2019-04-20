@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_HYP_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_HYP_HXX
+#pragma once
 
 #include <tools/link.hxx>
 #include <editeng/splwrap.hxx>
@@ -50,6 +49,5 @@ public:
     virtual ~SwHyphWrapper() override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

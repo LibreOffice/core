@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBACHARTOBJECTS_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_VBACHARTOBJECTS_HXX
+#pragma once
 
 #include <ooo/vba/excel/XChartObjects.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
@@ -58,6 +57,5 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 };
 
-#endif // INCLUDED_SC_SOURCE_UI_VBA_VBACHARTOBJECTS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

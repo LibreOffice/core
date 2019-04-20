@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WW8PAR2_HXX
-#define INCLUDED_SW_SOURCE_FILTER_WW8_WW8PAR2_HXX
+#pragma once
 
 #include <swtypes.hxx>
 #include <fmtfsize.hxx>
@@ -296,6 +295,5 @@ public:
 enum WW8LvlType {WW8_None, WW8_Outline, WW8_Numbering, WW8_Sequence, WW8_Pause};
 
 WW8LvlType GetNumType(sal_uInt8 nWwLevelNo);
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

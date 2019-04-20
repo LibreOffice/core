@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_RANGE_B2DPOLYRANGE_HXX
-#define INCLUDED_BASEGFX_RANGE_B2DPOLYRANGE_HXX
+#pragma once
 
 #include <o3tl/cow_wrapper.hxx>
 #include <tuple>
@@ -91,6 +90,5 @@ namespace basegfx
     };
 }
 
-#endif // INCLUDED_BASEGFX_RANGE_B2DPOLYRANGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

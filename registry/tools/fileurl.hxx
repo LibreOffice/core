@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_TOOLS_FILEURL_HXX
-#define INCLUDED_REGISTRY_TOOLS_FILEURL_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -32,6 +31,5 @@ OUString convertToFileUrl(char const * filename, sal_Int32 length);
 } // namespace tools
 } // namespace registry
 
-#endif /* INCLUDED_REGISTRY_TOOLS_FILEURL_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

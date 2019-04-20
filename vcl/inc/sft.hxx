@@ -37,8 +37,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_SFT_HXX
-#define INCLUDED_VCL_INC_SFT_HXX
+#pragma once
 
 #ifdef UNX
 #include <sys/types.h>
@@ -486,6 +485,5 @@ namespace vcl
 
 } // namespace vcl
 
-#endif // INCLUDED_VCL_INC_SFT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

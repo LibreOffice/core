@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_SOURCE_CONTNR_IMIVCTL_HXX
-#define INCLUDED_SVTOOLS_SOURCE_CONTNR_IMIVCTL_HXX
+#pragma once
 
 #include <vcl/virdev.hxx>
 #include <vcl/scrbar.hxx>
@@ -512,6 +511,5 @@ public:
     void                OutputSizeChanged();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

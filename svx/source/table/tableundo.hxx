@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_TABLE_TABLEUNDO_HXX
-#define INCLUDED_SVX_SOURCE_TABLE_TABLEUNDO_HXX
+#pragma once
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/table/CellContentType.hpp>
@@ -255,6 +254,5 @@ private:
 
 } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

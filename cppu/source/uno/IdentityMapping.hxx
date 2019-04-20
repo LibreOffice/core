@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPU_SOURCE_UNO_IDENTITYMAPPING_HXX
-#define INCLUDED_CPPU_SOURCE_UNO_IDENTITYMAPPING_HXX
+#pragma once
 
 #include <uno/mapping.h>
 
@@ -28,6 +27,5 @@ class Environment;
 
 uno_Mapping * createIdentityMapping(const css::uno::Environment & rEnv);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

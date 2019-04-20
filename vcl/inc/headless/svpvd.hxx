@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_HEADLESS_SVPVD_HXX
-#define INCLUDED_VCL_INC_HEADLESS_SVPVD_HXX
+#pragma once
 
 #include <salvd.hxx>
 
@@ -55,6 +54,5 @@ public:
     virtual long GetHeight() const override;
 };
 
-#endif // INCLUDED_VCL_INC_HEADLESS_SVPVD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

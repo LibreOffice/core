@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_FIRST_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_FIRST_HXX
+#pragma once
 
 #include "bento.hxx"
 
@@ -74,6 +73,5 @@ CBenIDListElmt * FindID(CUtList * pList, BenObjectID ObjectID,
 // Private headers
 #include "bentoid.hxx"
 #include "tocread.hxx"
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

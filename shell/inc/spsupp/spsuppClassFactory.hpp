@@ -7,8 +7,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#ifndef INCLUDED_SHELL_INC_SPSUPP_SPSUPPCLASSFACTORY_HPP
-#define INCLUDED_SHELL_INC_SPSUPP_SPSUPPCLASSFACTORY_HPP
+#pragma once
 
 #include "COMRefCounted.hpp"
 
@@ -44,6 +43,5 @@ private:
     static long m_nLockCount;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

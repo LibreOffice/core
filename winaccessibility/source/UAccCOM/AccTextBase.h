@@ -19,8 +19,7 @@
 
 // AccTextBase.h: interface for the CAccTextBase class.
 
-#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCTEXTBASE_H
-#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCTEXTBASE_H
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
@@ -109,6 +108,5 @@ private:
     }
 };
 
-#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCTEXTBASE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

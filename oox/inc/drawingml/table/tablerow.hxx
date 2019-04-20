@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_TABLE_TABLEROW_HXX
-#define INCLUDED_OOX_DRAWINGML_TABLE_TABLEROW_HXX
+#pragma once
 
 #include <drawingml/table/tablecell.hxx>
 #include <vector>
@@ -44,6 +43,5 @@ private:
 
 } } }
 
-#endif // INCLUDED_OOX_DRAWINGML_TABLE_TABLEROW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

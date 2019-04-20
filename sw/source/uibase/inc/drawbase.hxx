@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_DRAWBASE_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_DRAWBASE_HXX
+#pragma once
 
 #include <tools/gen.hxx>
 
@@ -67,6 +66,5 @@ public:
     virtual bool doConstructOrthogonal() const;
 };
 
-#endif // INCLUDED_SW_SOURCE_UIBASE_INC_DRAWBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

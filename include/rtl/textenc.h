@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_RTL_TEXTENC_H
-#define INCLUDED_RTL_TEXTENC_H
+#pragma once
 
 #include "sal/types.h"
 
@@ -257,6 +256,5 @@ Japanese (JIS 0212)                             RTL_TEXTENCODING_JISX_0212
 # Currently not implemented
 */
 
-#endif // INCLUDED_RTL_TEXTENC_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

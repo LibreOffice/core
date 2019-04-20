@@ -60,8 +60,7 @@
  * CVersionedGointer, so use one class
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPVERDOCUMENT_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPVERDOCUMENT_HXX
+#pragma once
 
 #include <lwpobj.hxx>
 
@@ -78,6 +77,5 @@ private:
 
     sal_uInt32 m_nTabSpacing;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTDDELINKS_HXX
-#define INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTDDELINKS_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -40,6 +39,5 @@ public:
     void WriteDDELinks(const css::uno::Reference < css::sheet::XSpreadsheetDocument >& xSpreadDoc);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

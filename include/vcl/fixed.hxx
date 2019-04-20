@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_FIXED_HXX
-#define INCLUDED_VCL_FIXED_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/bitmapex.hxx>
@@ -177,6 +176,5 @@ public:
     static Image loadThemeImage(const OUString &rFileName);
 };
 
-#endif // INCLUDED_VCL_FIXED_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

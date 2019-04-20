@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSCRIPT_SOURCE_XMLLIB_IMEXP_IMP_SHARE_HXX
-#define INCLUDED_XMLSCRIPT_SOURCE_XMLLIB_IMEXP_IMP_SHARE_HXX
+#pragma once
 
 #include <xmlscript/xmllib_imexp.hxx>
 
@@ -222,6 +221,5 @@ public:
 
 }
 
-#endif // INCLUDED_XMLSCRIPT_SOURCE_XMLLIB_IMEXP_IMP_SHARE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

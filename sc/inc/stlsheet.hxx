@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_STLSHEET_HXX
-#define INCLUDED_SC_INC_STLSHEET_HXX
+#pragma once
 
 #include <svl/style.hxx>
 
@@ -68,6 +67,5 @@ private:
     mutable ScStyleSheet::Usage eUsage;
 };
 
-#endif // INCLUDED_SC_INC_STLSHEET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_CLASSES_FWKRESID_HXX
-#define INCLUDED_FRAMEWORK_INC_CLASSES_FWKRESID_HXX
+#pragma once
 
 #include <framework/fwedllapi.h>
 #include <rtl/ustring.hxx>
 
 FWE_DLLPUBLIC OUString FwkResId(const char* pId);
 
-#endif // __FRAMEWORK_CLASSES_FWKRESID
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
