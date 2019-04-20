@@ -90,9 +90,11 @@ public:
     CFMutableDictionaryRef  GetStyleDict( void ) const { return mpStyleDict; }
 
     /// <1.0: font is squeezed, >1.0 font is stretched, else 1.0
-    float               mfFontStretch;
+    float mfFontStretch;
     /// text rotation in radian
-    float               mfFontRotation;
+    float mfFontRotation;
+    /// faux bold - true, if font doesn't have proper bold variants
+    float mbFauxBold;
 
 private:
     explicit CoreTextStyle(const PhysicalFontFace&, const FontSelectPattern&);

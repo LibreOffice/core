@@ -50,6 +50,7 @@ CoreTextStyle::CoreTextStyle(const PhysicalFontFace& rPFF, const FontSelectPatte
     : LogicalFontInstance(rPFF, rFSP)
     , mfFontStretch( 1.0 )
     , mfFontRotation( 0.0 )
+    , mbFauxBold(false)
     , mpStyleDict( nullptr )
 {
     double fScaledFontHeight = rFSP.mfExactHeight;
@@ -81,9 +82,7 @@ CoreTextStyle::CoreTextStyle(const PhysicalFontFace& rPFF, const FontSelectPatte
          ((rPFF.GetWeight() < WEIGHT_SEMIBOLD) &&
           (rPFF.GetWeight() != WEIGHT_DONTKNOW)) )
     {
-        int nStroke = -lrint((3.5F * rFSP.GetWeight()) / rPFF.GetWeight());
-        CFNumberRef rStroke = CFNumberCreate(nullptr, kCFNumberSInt32Type, &nStroke);
-        CFDictionarySetValue(mpStyleDict, kCTStrokeWidthAttributeName, rStroke);
+        mbFauxBold = true;
     }
 
     // fake italic
