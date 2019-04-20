@@ -5033,6 +5033,14 @@ bool ScDocument::RemoveFlagsTab( SCCOL nStartCol, SCROW nStartRow,
     return false;
 }
 
+const ScPatternAttr* ScDocument::SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, std::unique_ptr<ScPatternAttr> pAttr )
+{
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
+        if (maTabs[nTab])
+            return maTabs[nTab]->SetPattern( nCol, nRow, std::move(pAttr) );
+    return nullptr;
+}
+
 void ScDocument::SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatternAttr& rAttr )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))

@@ -1789,7 +1789,9 @@ public:
                                          SCCOL nEndCol, SCROW nEndRow,
                                          SCTAB nTab, ScMF nFlags );
 
+    SC_DLLPUBLIC void    SetPattern( const ScAddress&, std::unique_ptr<ScPatternAttr> );
     SC_DLLPUBLIC void    SetPattern( const ScAddress&, const ScPatternAttr& rAttr );
+    SC_DLLPUBLIC const ScPatternAttr* SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, std::unique_ptr<ScPatternAttr> );
     SC_DLLPUBLIC void    SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatternAttr& rAttr );
 
     void                 AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
