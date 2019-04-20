@@ -25,7 +25,7 @@
 
 String AVMEDIA_STR_OPEN
 {
-    Text[en-US] = "Open";
+    Text [en-US] = "Open" ;
 };
 
 // ------------------------------------------------------------------------------
@@ -39,85 +39,84 @@ String AVMEDIA_STR_INSERT
 
 String AVMEDIA_STR_PLAY
 {
-    Text[en-US] = "Play";
+    Text [en-US] = "Play" ;
 };
 
 // ------------------------------------------------------------------------------
 
 String AVMEDIA_STR_PAUSE
 {
-    Text[en-US] = "Pause";
+    Text [en-US] = "Pause" ;
 };
 
 // ------------------------------------------------------------------------------
 
 String AVMEDIA_STR_STOP
 {
-    Text[en-US] = "Stop";
+    Text [en-US] = "Stop" ;
 };
 
 // ------------------------------------------------------------------------------
 
 String AVMEDIA_STR_ENDLESS
 {
-    Text[en-US] = "Repeat";
+    Text [en-US] = "Repeat" ;
 };
 
 // ------------------------------------------------------------------------------
 
 String AVMEDIA_STR_MUTE
 {
-    Text[en-US] = "Mute";
+    Text [en-US] = "Mute" ;
 };
 
 // ------------------------------------------------------------------------------
 
 String AVMEDIA_STR_ZOOM
 {
-    Text[en-US] = "View";
+    Text [en-US] = "View" ;
 };
 
 // ------------------------------------------------------------------------------
 
 String AVMEDIA_STR_ZOOM_50
 {
-    Text[en-US] = "50 %";
+    Text [en-US] = "50 %" ;
 };
 
 // ------------------------------------------------------------------------------
 
 String AVMEDIA_STR_ZOOM_100
 {
-    Text[en-US] = "100 %";
+    Text [en-US] = "100 %" ;
 };
 
 // ------------------------------------------------------------------------------
 
 String AVMEDIA_STR_ZOOM_200
 {
-    Text[en-US] = "200 %";
+    Text [en-US] = "200 %" ;
 };
 
 // ------------------------------------------------------------------------------
 
 String AVMEDIA_STR_ZOOM_FIT
 {
-    Text[en-US] = "Scaled";
+    Text [en-US] = "Scaled" ;
 };
 
 // ------------------------------------------------------------------------------
 
 String AVMEDIA_STR_MEDIAPLAYER
 {
-    Text[en-US] = "Media Player";
+    Text [en-US] = "Media Player" ;
 };
 
 // ------------------------------------------------------------------------------
 
 ImageList AVMEDIA_IMGLST
 {
-    Prefix = "av";
-    MaskColor = Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; };
+    Prefix = "av" ;
     IdList =
     {
         AVMEDIA_IMG_OPEN;
@@ -135,8 +134,7 @@ ImageList AVMEDIA_IMGLST
 
 ImageList AVMEDIA_IMGLST_L
 {
-    Prefix = "avl";
-    MaskColor = Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; };
+    Prefix = "avl" ;
     IdList =
     {
         AVMEDIA_IMG_OPEN;
@@ -154,8 +152,7 @@ ImageList AVMEDIA_IMGLST_L
 
 ImageList AVMEDIA_IMGLST_HC
 {
-    Prefix = "avh";
-    MaskColor = Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; };
+    Prefix = "avh" ;
     IdList =
     {
         AVMEDIA_IMG_OPEN;
@@ -173,8 +170,7 @@ ImageList AVMEDIA_IMGLST_HC
 
 ImageList AVMEDIA_IMGLST_L_HC
 {
-    Prefix = "avlh";
-    MaskColor = Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; };
+    Prefix = "avlh" ;
     IdList =
     {
         AVMEDIA_IMG_OPEN;
@@ -187,3 +183,5 @@ ImageList AVMEDIA_IMGLST_L_HC
     };
     IdCount = 7;
 };
+
+// ********************************************************************** EOF
