@@ -771,7 +771,7 @@ bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, sc::CellSt
     {
         const ScCondFormatItem& rItem =
             pPattern->GetItem(ATTR_CONDITIONAL);
-        const std::vector<sal_uInt32>& rData = rItem.GetCondFormatData();
+        const ScCondFormatIndexes& rData = rItem.GetCondFormatData();
         pCondSet = pDocument->GetCondResult(aCell, aPos, *pCFList, rData);
     }
 
