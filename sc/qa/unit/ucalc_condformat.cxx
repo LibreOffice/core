@@ -305,7 +305,7 @@ void Test::testCondCopyPaste()
 
     CPPUNIT_ASSERT(pCondFormatItem);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pCondFormatItem->GetCondFormatData().at(0));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pCondFormatItem->GetCondFormatData().front());
 
     m_pDoc->DeleteTab(0);
 }
@@ -344,7 +344,7 @@ void Test::testCondCopyPasteSingleCell()
 
     CPPUNIT_ASSERT(pCondFormatItem);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pCondFormatItem->GetCondFormatData().at(0) );
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pCondFormatItem->GetCondFormatData().front() );
 
     m_pDoc->DeleteTab(0);
 }
@@ -387,7 +387,7 @@ void Test::testCondCopyPasteSingleCellToRange()
 
             CPPUNIT_ASSERT(pCondFormatItem);
             CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-            CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pCondFormatItem->GetCondFormatData().at(0) );
+            CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pCondFormatItem->GetCondFormatData().front() );
         }
     }
 
@@ -426,7 +426,7 @@ void Test::testCondCopyPasteSingleCellIntoSameFormatRange()
 
     CPPUNIT_ASSERT(pCondFormatItem);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pCondFormatItem->GetCondFormatData().at(0));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pCondFormatItem->GetCondFormatData().front());
 
     m_pDoc->DeleteTab(0);
 }
@@ -542,7 +542,7 @@ void Test::testCondCopyPasteSheet()
 
     CPPUNIT_ASSERT(pCondFormatItem);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-    CPPUNIT_ASSERT_EQUAL( nKey, pCondFormatItem->GetCondFormatData().at(0) );
+    CPPUNIT_ASSERT_EQUAL( nKey, pCondFormatItem->GetCondFormatData().front() );
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);

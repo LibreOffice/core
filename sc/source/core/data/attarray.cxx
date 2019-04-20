@@ -299,24 +299,29 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
             nTempEndRow = std::min<SCROW>( nPatternEndRow, nEndRow );
             const SfxPoolItem* pItem = nullptr;
             pPattern->GetItemSet().GetItemState( ATTR_CONDITIONAL, true, &pItem );
-            std::vector< sal_uInt32 > aCondFormatData;
             if(pItem)
-                aCondFormatData = static_cast<const ScCondFormatItem*>(pItem)->GetCondFormatData();
-            if (std::find(aCondFormatData.begin(), aCondFormatData.end(), nIndex)
-                == aCondFormatData.end())
             {
-                aCondFormatData.push_back(nIndex);
-
-                ScCondFormatItem aItem;
-                aItem.SetCondFormatData( aCondFormatData );
+                ScCondFormatIndexes const & rCondFormatData = static_cast<const ScCondFormatItem*>(pItem)->GetCondFormatData();
+                if (rCondFormatData.find(nIndex) == rCondFormatData.end())
+                {
+                    ScCondFormatIndexes aNewCondFormatData;
+                    aNewCondFormatData.reserve(rCondFormatData.size()+1);
+                    aNewCondFormatData = rCondFormatData;
+                    aNewCondFormatData.insert(nIndex);
+                    ScCondFormatItem aItem( std::move(aNewCondFormatData) );
+                    pNewPattern->GetItemSet().Put( aItem );
+                }
+            }
+            else
+            {
+                ScCondFormatItem aItem(nIndex);
                 pNewPattern->GetItemSet().Put( aItem );
             }
         }
         else
         {
             pNewPattern.reset( new ScPatternAttr( pDocument->GetPool() ) );
-            ScCondFormatItem aItem;
-            aItem.AddCondFormatData(nIndex);
+            ScCondFormatItem aItem(nIndex);
             pNewPattern->GetItemSet().Put( aItem );
             nTempEndRow = nEndRow;
         }
@@ -355,18 +360,24 @@ void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 n
             if(pItem)
             {
                 auto pPatternAttr = std::make_unique<ScPatternAttr>( *pPattern );
-                std::vector< sal_uInt32 > aCondFormatData = static_cast<const ScCondFormatItem*>(pItem)->GetCondFormatData();
-                std::vector<sal_uInt32>::iterator itr = std::find(aCondFormatData.begin(), aCondFormatData.end(), nIndex);
-                if(itr != aCondFormatData.end() || nIndex == 0)
+                if (nIndex == 0)
                 {
                     ScCondFormatItem aItem;
-                    if (nIndex == 0)
-                        aCondFormatData.clear();
-                    else
-                        aCondFormatData.erase(itr);
-                    aItem.SetCondFormatData( aCondFormatData );
                     pPatternAttr->GetItemSet().Put( aItem );
                     SetPatternArea( nTempStartRow, nTempEndRow, std::move(pPatternAttr), true );
+                }
+                else
+                {
+                    ScCondFormatIndexes const & rCondFormatData = static_cast<const ScCondFormatItem*>(pItem)->GetCondFormatData();
+                    auto itr = rCondFormatData.find(nIndex);
+                    if(itr != rCondFormatData.end())
+                    {
+                        ScCondFormatIndexes aNewCondFormatData(rCondFormatData);
+                        aNewCondFormatData.erase(nIndex);
+                        ScCondFormatItem aItem( std::move(aNewCondFormatData) );
+                        pPatternAttr->GetItemSet().Put( aItem );
+                        SetPatternArea( nTempStartRow, nTempEndRow, std::move(pPatternAttr), true );
+                    }
                 }
             }
         }

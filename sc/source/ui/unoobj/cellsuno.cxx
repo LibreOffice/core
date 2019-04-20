@@ -2551,7 +2551,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                             formula::FormulaGrammar::Grammar eGrammar = (bXML ?
                                     rDoc.GetStorageGrammar() :
                                    formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
-                            const std::vector<sal_uInt32>& rIndex =
+                            const ScCondFormatIndexes& rIndex =
                                     pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
                             sal_uLong nIndex = 0;
                             if(!rIndex.empty())
