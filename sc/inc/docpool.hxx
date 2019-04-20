@@ -41,14 +41,14 @@ public:
     virtual SfxItemPool*        Clone() const override;
     virtual MapUnit             GetMetric( sal_uInt16 nWhich ) const override;
 
-    virtual const SfxPoolItem&  Put( const SfxPoolItem&, sal_uInt16 nWhich = 0 ) override;
-
     void StyleDeleted( const ScStyleSheet* pStyle );      // delete templates(?) in organizer
     void CellStyleCreated( const OUString& rName, const ScDocument* pDoc );
     virtual bool GetPresentation( const SfxPoolItem&  rItem,
                                   MapUnit          ePresentationMetric,
                                   OUString&           rText,
                                   const IntlWrapper& rIntl ) const override;
+protected:
+    virtual const SfxPoolItem&  PutImpl( const SfxPoolItem&, sal_uInt16 nWhich = 0, bool bPassingOwnership = false ) override;
 };
 
 #endif

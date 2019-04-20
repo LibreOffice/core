@@ -553,7 +553,7 @@ void ScColumn::ApplyStyle( SCROW nRow, const ScStyleSheet* rStyle )
     const ScPatternAttr* pPattern = pAttrArray->GetPattern(nRow);
     std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pPattern));
     pNewPattern->SetStyleSheet(const_cast<ScStyleSheet*>(rStyle));
-    pAttrArray->SetPattern(nRow, pNewPattern.get(), true);
+    pAttrArray->SetPattern(nRow, std::move(pNewPattern), true);
 }
 
 void ScColumn::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle )
@@ -683,9 +683,20 @@ void ScColumn::ClearItems( SCROW nStartRow, SCROW nEndRow, const sal_uInt16* pWh
     pAttrArray->ClearItems( nStartRow, nEndRow, pWhich );
 }
 
+void ScColumn::SetPattern( SCROW nRow, std::unique_ptr<ScPatternAttr> pPatAttr )
+{
+    pAttrArray->SetPattern( nRow, std::move(pPatAttr), true/*bPutToPool*/ );
+}
+
 void ScColumn::SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr )
 {
     pAttrArray->SetPattern( nRow, &rPatAttr, true/*bPutToPool*/ );
+}
+
+void ScColumn::SetPatternArea( SCROW nStartRow, SCROW nEndRow,
+                                std::unique_ptr<ScPatternAttr> pPatAttr )
+{
+    pAttrArray->SetPatternArea( nStartRow, nEndRow, std::move(pPatAttr), true/*bPutToPool*/ );
 }
 
 void ScColumn::SetPatternArea( SCROW nStartRow, SCROW nEndRow,
@@ -1692,7 +1703,7 @@ void ScColumn::CopyToColumn(
                 const ScPatternAttr* pPattern = pAttrArray->GetPattern( nRow );
                 std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr( *pPattern ));
                 pNewPattern->SetStyleSheet( const_cast<ScStyleSheet*>(pStyle) );
-                rColumn.pAttrArray->SetPattern( nRow, pNewPattern.get(), true );
+                rColumn.pAttrArray->SetPattern( nRow, std::move(pNewPattern), true );
             }
         }
         else

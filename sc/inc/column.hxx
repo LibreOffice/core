@@ -460,9 +460,10 @@ public:
     void        ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr,
                                   ScEditDataArray* pDataArray = nullptr,
                                   bool* const pIsChanged = nullptr);
-    void        SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr );
-    void        SetPatternArea( SCROW nStartRow, SCROW nEndRow,
-                                const ScPatternAttr& rPatAttr );
+    void        SetPattern( SCROW nRow, std::unique_ptr<ScPatternAttr> );
+    void        SetPattern( SCROW nRow, const ScPatternAttr& );
+    void        SetPatternArea( SCROW nStartRow, SCROW nEndRow, std::unique_ptr<ScPatternAttr> );
+    void        SetPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& );
     void        ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
                             const ScPatternAttr& rPattern, SvNumFormatType nNewType );
 
