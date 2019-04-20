@@ -1757,6 +1757,8 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
 
     m_xMoveUpButton->connect_clicked(LINK( this, SvxMainMenuOrganizerDialog, MoveHdl));
     m_xMoveDownButton->connect_clicked(LINK( this, SvxMainMenuOrganizerDialog, MoveHdl));
+
+    UpdateButtonStates();
 }
 
 SvxMainMenuOrganizerDialog::~SvxMainMenuOrganizerDialog()
@@ -1817,6 +1819,8 @@ IMPL_LINK( SvxMainMenuOrganizerDialog, MoveHdl, weld::Button&, rButton, void )
     m_xMenuListBox->remove(nSourceEntry);
     m_xMenuListBox->insert(nTargetEntry, sEntry, &sId, nullptr, nullptr);
     m_xMenuListBox->select(nTargetEntry);
+
+    std::swap(mpEntries->at(nSourceEntry), mpEntries->at(nTargetEntry));
 
     UpdateButtonStates();
 }
