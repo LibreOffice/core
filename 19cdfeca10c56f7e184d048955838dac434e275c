@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_3ce1d1ff",
+        "filename": "filter/source/xslt/import/spreadsheetml/spreadsheetml2ooo.xsl",
+        "patchSetId": 1
+      },
+      "lineNbr": 8866,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-04-20T08:25:33Z",
+      "side": 1,
+      "message": "\"lowest\" or \"min\"",
+      "range": {
+        "startLine": 8866,
+        "startChar": 21,
+        "endLine": 8866,
+        "endChar": 26
+      },
+      "revId": "19cdfeca10c56f7e184d048955838dac434e275c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_1cdc1545",
+        "filename": "filter/source/xslt/import/spreadsheetml/spreadsheetml2ooo.xsl",
+        "patchSetId": 1
+      },
+      "lineNbr": 8866,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-04-20T08:25:33Z",
+      "side": 1,
+      "message": "wrong!",
+      "range": {
+        "startLine": 8866,
+        "startChar": 9,
+        "endLine": 8866,
+        "endChar": 10
+      },
+      "revId": "19cdfeca10c56f7e184d048955838dac434e275c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_dce54d0c",
+        "filename": "filter/source/xslt/import/spreadsheetml/spreadsheetml2ooo.xsl",
+        "patchSetId": 1
+      },
+      "lineNbr": 8896,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-04-20T08:25:33Z",
+      "side": 1,
+      "message": "\"greatest\" or \"max\"",
+      "range": {
+        "startLine": 8896,
+        "startChar": 20,
+        "endLine": 8896,
+        "endChar": 27
+      },
+      "revId": "19cdfeca10c56f7e184d048955838dac434e275c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
