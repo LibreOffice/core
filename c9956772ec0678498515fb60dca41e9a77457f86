@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_dccf8d55",
+        "filename": "sc/source/ui/view/viewfun2.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2019-04-20T16:13:15Z",
+      "side": 0,
+      "message": "This causes some difference in results if the user selected say average instead of sum. The case I tested involves an active range selection and the selected range already has an autosum entry(average) and I selected average in the menu again for this selection.\n\nIn my opinion the generalized condition here should have \"eSum\" not matching any of the opcode-enum-entries.",
+      "range": {
+        "startLine": 345,
+        "startChar": 105,
+        "endLine": 345,
+        "endChar": 117
+      },
+      "revId": "c9956772ec0678498515fb60dca41e9a77457f86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_3ceb11b1",
+        "filename": "sc/source/ui/view/viewfun2.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2019-04-20T16:13:15Z",
+      "side": 0,
+      "message": "same here.",
+      "range": {
+        "startLine": 390,
+        "startChar": 106,
+        "endLine": 390,
+        "endChar": 118
+      },
+      "revId": "c9956772ec0678498515fb60dca41e9a77457f86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
