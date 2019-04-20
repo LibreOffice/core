@@ -23,6 +23,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,gpgmepp, \
     $(if $(filter MSC,$(COM)),external/gpgmepp/w32-fix-libtool.patch.1) \
     $(if $(filter MSC,$(COM)),external/gpgmepp/w32-add-initializer.patch.1) \
     external/gpgmepp/w32-build-fixes-2.patch \
+    external/gpgmepp/add-gpgme_set_global_flag-wrapper.patch \
     $(if $(filter LINUX,$(OS)),external/gpgmepp/asan.patch) \
     $(if $(filter LINUX,$(OS)),external/gpgmepp/rpath.patch) \
 ))
