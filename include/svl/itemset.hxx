@@ -104,8 +104,6 @@ protected:
     // Notification-Callback
     virtual void                Changed( const SfxPoolItem& rOld, const SfxPoolItem& rNew );
 
-    void                        PutDirect(const SfxPoolItem &rItem);
-
 public:
     struct Pair { sal_uInt16 wid1, wid2; };
 
@@ -198,6 +196,8 @@ public:
     void                        PutExtended( const SfxItemSet&,
                                              SfxItemState eDontCareAs,
                                              SfxItemState eDefaultAs );
+    /** put passing ownership */
+    void                        PutDirect(const SfxPoolItem &rItem);
 
     bool                        Set( const SfxItemSet&, bool bDeep = true );
 

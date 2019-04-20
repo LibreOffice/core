@@ -299,25 +299,30 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
             nTempEndRow = std::min<SCROW>( nPatternEndRow, nEndRow );
             const SfxPoolItem* pItem = nullptr;
             pPattern->GetItemSet().GetItemState( ATTR_CONDITIONAL, true, &pItem );
-            std::vector< sal_uInt32 > aCondFormatData;
             if(pItem)
-                aCondFormatData = static_cast<const ScCondFormatItem*>(pItem)->GetCondFormatData();
-            if (std::find(aCondFormatData.begin(), aCondFormatData.end(), nIndex)
-                == aCondFormatData.end())
             {
-                aCondFormatData.push_back(nIndex);
-
-                ScCondFormatItem aItem;
-                aItem.SetCondFormatData( aCondFormatData );
-                pNewPattern->GetItemSet().Put( aItem );
+                std::vector< sal_uInt32 > const & rCondFormatData = static_cast<const ScCondFormatItem*>(pItem)->GetCondFormatData();
+                if (std::find(rCondFormatData.begin(), rCondFormatData.end(), nIndex)
+                    == rCondFormatData.end())
+                {
+                    std::vector< sal_uInt32 > aNewCondFormatData(rCondFormatData.size()+1);
+                    aNewCondFormatData = rCondFormatData;
+                    aNewCondFormatData.push_back(nIndex);
+                    auto pItem = new ScCondFormatItem(std::move(aNewCondFormatData));
+                    pNewPattern->GetItemSet().PutDirect( *pItem );
+                }
+            }
+            else
+            {
+                auto pItem = new ScCondFormatItem(nIndex);
+                pNewPattern->GetItemSet().PutDirect( *pItem );
             }
         }
         else
         {
             pNewPattern.reset( new ScPatternAttr( pDocument->GetPool() ) );
-            ScCondFormatItem aItem;
-            aItem.AddCondFormatData(nIndex);
-            pNewPattern->GetItemSet().Put( aItem );
+            auto pItem = new ScCondFormatItem(nIndex);
+            pNewPattern->GetItemSet().PutDirect( *pItem );
             nTempEndRow = nEndRow;
         }
 

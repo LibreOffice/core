@@ -265,6 +265,8 @@ class ScCondFormatItem : public SfxPoolItem
 public:
     explicit ScCondFormatItem();
     explicit ScCondFormatItem(const std::vector<sal_uInt32>& nIndex);
+    explicit ScCondFormatItem(std::vector<sal_uInt32>&& nIndex);
+    explicit ScCondFormatItem(sal_uInt32 nIndex);
 
     virtual ~ScCondFormatItem() override;
 
