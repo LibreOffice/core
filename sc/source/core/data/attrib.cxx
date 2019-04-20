@@ -682,7 +682,21 @@ ScCondFormatItem::~ScCondFormatItem()
 
 bool ScCondFormatItem::operator==( const SfxPoolItem& rCmp ) const
 {
-    return maIndex == static_cast<const ScCondFormatItem&>(rCmp).maIndex;
+    auto const & other = static_cast<const ScCondFormatItem&>(rCmp);
+    // memcmp is faster than operator< on std::vector
+    return maIndex.size() == other.maIndex.size()
+        && memcmp(maIndex.data(), other.maIndex.data(), maIndex.size() * sizeof(sal_uInt32)) == 0;
+}
+
+bool ScCondFormatItem::operator<( const SfxPoolItem& rCmp ) const
+{
+    auto const & other = static_cast<const ScCondFormatItem&>(rCmp);
+    if ( maIndex.size() < other.maIndex.size() )
+        return true;
+    if ( maIndex.size() > other.maIndex.size() )
+        return false;
+    // memcmp is faster than operator< on std::vector
+    return memcmp(maIndex.data(), other.maIndex.data(), maIndex.size() * sizeof(sal_uInt32)) < 0;
 }
 
 ScCondFormatItem* ScCondFormatItem::Clone(SfxItemPool*) const

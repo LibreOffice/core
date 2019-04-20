@@ -628,12 +628,25 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
         }
 
         // 2. search for an item with matching attributes.
-        for (auto itr = rItemArr.begin(); itr != rItemArr.end(); ++itr)
+        if (rItem.IsSortable())
         {
-            if (**itr == rItem)
+            auto pFoundItem = rItemArr.findByLessThan(&rItem);
+            if (pFoundItem)
             {
-                AddRef(**itr);
-                return **itr;
+                assert(*pFoundItem == rItem);
+                AddRef(*pFoundItem);
+                return *pFoundItem;
+            }
+        }
+        else
+        {
+            for (auto itr = rItemArr.begin(); itr != rItemArr.end(); ++itr)
+            {
+                if (**itr == rItem)
+                {
+                    AddRef(**itr);
+                    return **itr;
+                }
             }
         }
     }
@@ -710,8 +723,8 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
         // See other MI-REF
         if ( 0 == rItem.GetRefCount() && nWhich < 4000 )
         {
-            delete &rItem;
             rItemArr.erase(it);
+            delete &rItem;
         }
 
         return;

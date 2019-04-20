@@ -33,6 +33,7 @@
 void SfxPoolItemArray_Impl::clear()
 {
     maPoolItemSet.clear();
+    maSortablePoolItems.clear();
 }
 
 sal_uInt16 SfxItemPool::GetFirstWhich() const

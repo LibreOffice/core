@@ -152,6 +152,11 @@ public:
     bool                     operator!=( const SfxPoolItem& rItem ) const
                              { return !(*this == rItem); }
 
+    // Sorting is only used for faster searching in a pool which contains large quantities
+    // of a single kind of pool item.
+    virtual bool             operator<( const SfxPoolItem& ) const { assert(false); return false; }
+    virtual bool             IsSortable() const { return false; }
+
     /**  @return true if it has a valid string representation */
     virtual bool             GetPresentation( SfxItemPresentation ePresentation,
                                     MapUnit eCoreMetric,
