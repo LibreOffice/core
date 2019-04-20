@@ -21,16 +21,91 @@ namespace
 class Test: public CppUnit::TestFixture
 {
 public:
+    void testConstruction();
+    void testVariables();
     void test_asRGBColor();
     void test_readAndWriteStream();
     void test_ApplyTintOrShade();
+    void testGetColorError();
+    void testInvert();
+    void testBColor();
 
     CPPUNIT_TEST_SUITE(Test);
+    CPPUNIT_TEST(testConstruction);
+    CPPUNIT_TEST(testVariables);
     CPPUNIT_TEST(test_asRGBColor);
     CPPUNIT_TEST(test_readAndWriteStream);
     CPPUNIT_TEST(test_ApplyTintOrShade);
+    CPPUNIT_TEST(testGetColorError);
+    CPPUNIT_TEST(testInvert);
+    CPPUNIT_TEST(testBColor);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void Test::testConstruction()
+{
+    // Compile time construction of the Color and representation as a sal_uInt32
+
+    Color aColor = Color(0xFF, 0xFF, 0x00);
+
+    switch (sal_uInt32(aColor))
+    {
+        case sal_uInt32(Color(0xFF, 0xFF, 0x00)):
+            break;
+        case sal_uInt32(Color(0x00, 0x00, 0xFF, 0xFF)):
+            break;
+        //case sal_uInt32(Color::RGB(0xAA, 0xBB, 0xCC)):
+        //    break;
+        //case sal_uInt32(Color::RGBA(0xAA, 0xBB, 0xCC, 0xDD)):
+//            break;
+        default:
+            CPPUNIT_ASSERT(false);
+            break;
+    }
+}
+
+void Test::testVariables()
+{
+    Color aColor(0x44, 0x88, 0xAA);
+    CPPUNIT_ASSERT_EQUAL(int(0x00), int(aColor.mComp.A));
+    CPPUNIT_ASSERT_EQUAL(int(0x44), int(aColor.mComp.R));
+    CPPUNIT_ASSERT_EQUAL(int(0x88), int(aColor.mComp.G));
+    CPPUNIT_ASSERT_EQUAL(int(0xAA), int(aColor.mComp.B));
+    CPPUNIT_ASSERT_EQUAL(int(0x004488AA), int(aColor.mValue));
+
+    aColor.mValue = 0xAABBCCDD;
+    CPPUNIT_ASSERT_EQUAL(int(0xAA), int(aColor.mComp.A));
+    CPPUNIT_ASSERT_EQUAL(int(0xBB), int(aColor.mComp.R));
+    CPPUNIT_ASSERT_EQUAL(int(0xCC), int(aColor.mComp.G));
+    CPPUNIT_ASSERT_EQUAL(int(0xDD), int(aColor.mComp.B));
+
+    aColor.mComp.A = 0x11;
+    CPPUNIT_ASSERT_EQUAL(int(0x11BBCCDD), int(aColor.mValue));
+
+    aColor.mComp.R = 0x22;
+    CPPUNIT_ASSERT_EQUAL(int(0x1122CCDD), int(aColor.mValue));
+
+    aColor.mComp.G = 0x33;
+    CPPUNIT_ASSERT_EQUAL(int(0x112233DD), int(aColor.mValue));
+
+    aColor.mComp.B = 0x44;
+    CPPUNIT_ASSERT_EQUAL(int(0x11223344), int(aColor.mValue));
+
+    aColor.SetTransparency(0x77);
+    CPPUNIT_ASSERT_EQUAL(int(0x77223344), int(aColor.mValue));
+
+    aColor.SetRed(0x88);
+    CPPUNIT_ASSERT_EQUAL(int(0x77883344), int(aColor.mValue));
+
+    aColor.SetGreen(0x99);
+    CPPUNIT_ASSERT_EQUAL(int(0x77889944), int(aColor.mValue));
+
+    aColor.SetBlue(0xAA);
+    CPPUNIT_ASSERT_EQUAL(int(0x778899AA), int(aColor.mValue));
+
+    //aColor = Color::RGBA(0x11, 0x22, 0x33, 0x44);
+    //CPPUNIT_ASSERT_EQUAL(int(0x44112233), int(aColor.mValue));
+}
 
 void Test::test_asRGBColor()
 {
@@ -131,6 +206,62 @@ void Test::test_ApplyTintOrShade()
     CPPUNIT_ASSERT_EQUAL(OUString("404040"), createTintShade(0x80, 0x80, 0x80, "808080",  -5000));
     // 100% shade
     CPPUNIT_ASSERT_EQUAL(OUString("000000"), createTintShade(0x80, 0x80, 0x80, "808080", -10000));
+}
+
+void Test::testGetColorError()
+{
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), Color(0xAA, 0xBB, 0xCC).GetColorError(Color(0xAA, 0xBB, 0xCC)));
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), Color(0xA0, 0xB0, 0xC0).GetColorError(Color(0xA1, 0xB0, 0xC0)));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), Color(0xA0, 0xB0, 0xC0).GetColorError(Color(0xA0, 0xB1, 0xC0)));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), Color(0xA0, 0xB0, 0xC0).GetColorError(Color(0xA0, 0xB0, 0xC1)));
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(1), Color(0xA0, 0xB0, 0xC0).GetColorError(Color(0xA1, 0xB1, 0xC0)));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(1), Color(0xA0, 0xB0, 0xC0).GetColorError(Color(0xA0, 0xB1, 0xC1)));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(1), Color(0xA0, 0xB0, 0xC0).GetColorError(Color(0xA1, 0xB0, 0xC1)));
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(1), Color(0xA0, 0xB0, 0xC0).GetColorError(Color(0xA1, 0xB1, 0xC1)));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(1), Color(0xA0, 0xB0, 0xC0).GetColorError(Color(0xA1, 0xB1, 0xC1)));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(1), Color(0xA0, 0xB0, 0xC0).GetColorError(Color(0xA1, 0xB1, 0xC1)));
+}
+
+void Test::testInvert()
+{
+    Color aColor = Color(0xFF, 0x00, 0x88);
+    aColor.Invert();
+    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0xFF, 0x77).AsRGBHexString(), aColor.AsRGBHexString());
+
+    // Alpha should be unaffected
+    aColor = Color(0xFF, 0x00, 0x88, 0x22);
+    aColor.Invert();
+    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0xFF, 0x77, 0x22).AsRGBHexString(), aColor.AsRGBHexString());
+}
+
+void Test::testBColor()
+{
+    Color aColor;
+
+    aColor = Color(basegfx::BColor(0.0, 0.0, 0.0));
+
+    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x00, 0x00).AsRGBHexString(), aColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(0.0, aColor.getBColor().getRed());
+    CPPUNIT_ASSERT_EQUAL(0.0, aColor.getBColor().getGreen());
+    CPPUNIT_ASSERT_EQUAL(0.0, aColor.getBColor().getBlue());
+
+    aColor = Color(basegfx::BColor(1.0, 1.0, 1.0));
+
+    CPPUNIT_ASSERT_EQUAL(Color(0xFF, 0xFF, 0xFF).AsRGBHexString(), aColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(1.0, aColor.getBColor().getRed());
+    CPPUNIT_ASSERT_EQUAL(1.0, aColor.getBColor().getGreen());
+    CPPUNIT_ASSERT_EQUAL(1.0, aColor.getBColor().getBlue());
+
+    aColor = Color(basegfx::BColor(0.5, 0.25, 0.125));
+
+    CPPUNIT_ASSERT_EQUAL(Color(0x80, 0x40, 0x20).AsRGBHexString(), aColor.AsRGBHexString());
+    // FP error is rather big, but that's normal
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.500, aColor.getBColor().getRed(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.250, aColor.getBColor().getGreen(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.125, aColor.getBColor().getBlue(), 1E-2);
 
 }
 
