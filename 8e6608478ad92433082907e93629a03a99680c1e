@@ -16,6 +16,24 @@
       "revId": "8e6608478ad92433082907e93629a03a99680c1e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_bc8de17c",
+        "filename": "cui/source/inc/cuitabarea.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-04-20T05:20:39Z",
+      "side": 1,
+      "message": "I tried mnButtonList[mnCurrentButton]-\u003egrab_focus(). I build fine, but without doing the aimed work. Why?",
+      "parentUuid": "7f96bb07_d9e314a4",
+      "revId": "8e6608478ad92433082907e93629a03a99680c1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
