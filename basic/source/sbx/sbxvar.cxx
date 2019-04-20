@@ -220,7 +220,7 @@ void SbxVariable::SetName( const OUString& rName )
 
 const OUString& SbxVariable::GetName( SbxNameType t ) const
 {
-    static const char cSuffixes[] = "  %&!#@ $";
+    static const OUString cSuffixes { "  %&!#@ $" };
     if( t == SbxNameType::NONE )
     {
         return maName;
@@ -403,10 +403,10 @@ void SbxVariable::SetParent( SbxObject* p )
                 bFound = ( this == pChildren->Get(nIdx) );
             }
         }
-        SAL_INFO_IF(
+/*        SAL_INFO_IF(
             !bFound, "basic.sbx",
             "dangling: [" << GetName() << "].SetParent([" << p->GetName()
-                << "])");
+                << "])"); */
     }
 #endif
 
