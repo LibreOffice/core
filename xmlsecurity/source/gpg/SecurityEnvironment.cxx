@@ -16,6 +16,13 @@
 #include <comphelper/servicehelper.hxx>
 #include <list>
 
+#ifdef _WIN32
+#include <o3tl/char16_t2wchar_t.hxx>
+#include <osl/file.hxx>
+#include <osl/process.h>
+#include <tools/urlobj.hxx>
+#endif
+
 #include <key.h>
 #include <keylistresult.h>
 #include <xmlsec-wrapper.h>
@@ -27,6 +34,40 @@ using namespace css::lang;
 
 SecurityEnvironmentGpg::SecurityEnvironmentGpg()
 {
+#ifdef _WIN32
+    // On Windows, gpgme expects gpgme-w32spawn.exe to be in the same directory as the current
+    // process executable. This assumption might be wrong, e.g., for bundled python, which is
+    // in instdir/program/python-core-x.y.z/bin, while gpgme-w32spawn.exe is in instdir/program.
+    // If we can't find gpgme-w32spawn.exe in the current executable location, then try to find
+    // the spawn executable, and inform gpgme about actual location using gpgme_set_global_flag.
+    static bool bSpawnPathInitialized = [] {
+        auto accessUrl = [](const INetURLObject& url) {
+            osl::File file(url.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            return file.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None;
+        };
+        OUString spawn_exe("gpgme-w32spawn.exe");
+        OUString sexec_path;
+        osl_getExecutableFile(&sexec_path.pData);
+        INetURLObject path_url(sexec_path);
+        path_url.setName(spawn_exe);
+        if (!accessUrl(path_url))
+        {
+            /* get the installation path from the UNO_PATH environment variable */
+            wchar_t* env = _wgetenv(L"UNO_PATH");
+            if (env && env[0])
+            {
+                OUString soffice_path = o3tl::toU(env);
+                path_url.setFSysPath(soffice_path, FSysStyle::Detect);
+                path_url.Append(spawn_exe);
+                if (accessUrl(path_url))
+                {
+                    GpgME::setGlobalFlag("w32-inst-dir", soffice_path.toUtf8().getStr());
+                }
+            }
+        }
+        return true;
+    }();
+#endif
     GpgME::Error err = GpgME::checkEngine(GpgME::OpenPGP);
     if (err)
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
