@@ -670,9 +670,21 @@ ScCondFormatItem::ScCondFormatItem():
 {
 }
 
-ScCondFormatItem::ScCondFormatItem( const std::vector<sal_uInt32>& rIndex ):
+ScCondFormatItem::ScCondFormatItem( sal_uInt32 nIndex ):
+    SfxPoolItem( ATTR_CONDITIONAL )
+{
+    maIndex.insert(nIndex);
+}
+
+ScCondFormatItem::ScCondFormatItem( const ScCondFormatIndexes& rIndex ):
     SfxPoolItem( ATTR_CONDITIONAL ),
     maIndex( rIndex )
+{
+}
+
+ScCondFormatItem::ScCondFormatItem( ScCondFormatIndexes&& aIndex ):
+    SfxPoolItem( ATTR_CONDITIONAL ),
+    maIndex( std::move(aIndex) )
 {
 }
 
@@ -685,7 +697,7 @@ bool ScCondFormatItem::operator==( const SfxPoolItem& rCmp ) const
     auto const & other = static_cast<const ScCondFormatItem&>(rCmp);
     // memcmp is faster than operator< on std::vector
     return maIndex.size() == other.maIndex.size()
-        && memcmp(maIndex.data(), other.maIndex.data(), maIndex.size() * sizeof(sal_uInt32)) == 0;
+        && memcmp(&maIndex.front(), &other.maIndex.front(), maIndex.size() * sizeof(sal_uInt32)) == 0;
 }
 
 bool ScCondFormatItem::operator<( const SfxPoolItem& rCmp ) const
@@ -696,22 +708,12 @@ bool ScCondFormatItem::operator<( const SfxPoolItem& rCmp ) const
     if ( maIndex.size() > other.maIndex.size() )
         return false;
     // memcmp is faster than operator< on std::vector
-    return memcmp(maIndex.data(), other.maIndex.data(), maIndex.size() * sizeof(sal_uInt32)) < 0;
+    return memcmp(&maIndex.front(), &other.maIndex.front(), maIndex.size() * sizeof(sal_uInt32)) < 0;
 }
 
 ScCondFormatItem* ScCondFormatItem::Clone(SfxItemPool*) const
 {
     return new ScCondFormatItem(maIndex);
-}
-
-void ScCondFormatItem::AddCondFormatData( sal_uInt32 nIndex )
-{
-    maIndex.push_back(nIndex);
-}
-
-void ScCondFormatItem::SetCondFormatData( const std::vector<sal_uInt32>& rIndex )
-{
-    maIndex = rIndex;
 }
 
 void ScCondFormatItem::dumpAsXml(xmlTextWriterPtr pWriter) const
