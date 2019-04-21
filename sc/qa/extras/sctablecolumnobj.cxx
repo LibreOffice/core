@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xnamed.hxx>
 #include <test/table/xcellrange.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -25,7 +26,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScTableColumnObj : public CalcUnoApiTest, public apitest::XCellRange
+class ScTableColumnObj : public CalcUnoApiTest, public apitest::XCellRange, public apitest::XNamed
 {
 public:
     ScTableColumnObj();
@@ -41,6 +42,11 @@ public:
     CPPUNIT_TEST(testGetCellRangeByName);
     CPPUNIT_TEST(testGetCellRangeByPosition);
 
+    // XNamed
+    CPPUNIT_TEST(testGetName);
+    // because TableColumnNames are fixed, test for an exception
+    CPPUNIT_TEST(testSetNameThrowsException);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -50,6 +56,7 @@ private:
 ScTableColumnObj::ScTableColumnObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XCellRange("K1:K1")
+    , XNamed("K")
 {
 }
 
