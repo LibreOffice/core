@@ -1122,7 +1122,8 @@ bool ScQueryCellIterator::GetThis()
         {
             do
             {
-                if ( ++nCol > mpParam->nCol2 )
+                ++nCol;
+                if (nCol > mpParam->nCol2 || nCol >= pDoc->maTabs[nTab]->GetAllocatedColumnsCount())
                     return false; // Over and out
                 if ( bAdvanceQuery )
                 {
