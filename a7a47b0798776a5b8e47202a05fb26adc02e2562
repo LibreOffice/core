@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_ff46fb21",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1924,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2019-04-21T13:42:11Z",
+      "side": 1,
+      "message": "Not sure what this change has to do with the bug. If unrelated please put this in a separate patch with a suitable commit message like \"simplify conditional fmt dialog item search\" or something.",
+      "range": {
+        "startLine": 1924,
+        "startChar": 16,
+        "endLine": 1924,
+        "endChar": 103
+      },
+      "revId": "a7a47b0798776a5b8e47202a05fb26adc02e2562",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_9f5337e3",
+        "filename": "sc/source/ui/view/tabvwshc.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2019-04-21T13:42:11Z",
+      "side": 1,
+      "message": "same here.",
+      "range": {
+        "startLine": 190,
+        "startChar": 12,
+        "endLine": 191,
+        "endChar": 55
+      },
+      "revId": "a7a47b0798776a5b8e47202a05fb26adc02e2562",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
