@@ -649,10 +649,6 @@ cmd/sc_gridvisible.png cmd/sc_grid.png
 cmd/sc_insertgridcontrol.png cmd/sc_grid.png
 cmd/lc_insertgridcontrol.png cmd/lc_grid.png
 
-# Crop
-cmd/lc_grafattrcrop.png cmd/lc_crop.png
-cmd/sc_grafattrcrop.png cmd/sc_crop.png
-
 # Extrusion Rotate
 cmd/lc_rulerrowsvertical.png cmd/lc_extrusiontiltright.png
 cmd/lc_rulerrows.png cmd/lc_extrusiontiltleft.png

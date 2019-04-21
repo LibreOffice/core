@@ -767,9 +767,7 @@ cmd/sc_insertgridcontrol.png cmd/sc_grid.png
 cmd/lc_insertgridcontrol.png cmd/lc_grid.png
 
 # Crop
-cmd/lc_grafattrcrop.png cmd/lc_crop.png
 cmd/sc_transformdialog.png cmd/sc_crop.png
-cmd/sc_grafattrcrop.png cmd/sc_crop.png
 
 # Group
 cmd/sc_formatgroup.png cmd/sc_group.png
