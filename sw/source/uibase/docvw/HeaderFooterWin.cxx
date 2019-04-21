@@ -486,6 +486,36 @@ void SwHeaderFooterWin::Select()
     ExecuteCommand(GetCurItemIdent());
 }
 
+void SwHeaderFooterWin::KeyInput(const KeyEvent& rKEvt)
+{
+    if (IsEmptyHeaderFooter())
+    {
+        vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
+        sal_uInt16 nCode = aKeyCode.GetCode();
+
+        SwView& rView = GetEditWin()->GetView();
+        SwWrtShell& rSh = rView.GetWrtShell();
+
+        if ( aKeyCode == KEY_ESCAPE )
+        {
+            rSh.ToggleHeaderFooterEdit();
+            if(m_bIsHeader)
+                rSh.SetShowHeaderFooterSeparator( Header, false );
+            else
+                rSh.SetShowHeaderFooterSeparator( Footer, false );
+            GrabFocusToDocument();
+        }
+        else if ( (nCode == KEY_RETURN) || (nCode == KEY_SPACE) )
+        {
+            const OUString& rStyleName = GetPageFrame()->GetPageDesc()->GetName();
+            rSh.ChangeHeaderOrFooter(rStyleName, m_bIsHeader, true, false);
+            GrabFocusToDocument();
+        }
+    }
+    else
+        MenuButton::KeyInput( rKEvt );
+}
+
 IMPL_LINK_NOARG(SwHeaderFooterWin, FadeHandler, Timer *, void)
 {
     if (m_bIsAppearing && m_nFadeRate > 0)
