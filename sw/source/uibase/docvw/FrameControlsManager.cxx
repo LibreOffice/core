@@ -108,6 +108,9 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrame* pPageFra
 
     if (!pWin->IsVisible())
         pControl->ShowAll( true );
+
+    if( pWin->IsEmptyHeaderFooter() )
+        pWin->GrabFocus();
 }
 
 void SwFrameControlsManager::SetPageBreakControl( const SwPageFrame* pPageFrame )

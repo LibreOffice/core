@@ -64,6 +64,8 @@ public:
 
     void SetReadonly( bool bReadonly ) override;
 
+    void KeyInput( const KeyEvent& rKEvt ) override;
+
 private:
     DECL_LINK( FadeHandler, Timer *, void );
 };
