@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_9fbed7fd",
+        "filename": "tools/qa/cppunit/test_color.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-21T13:01:30Z",
+      "side": 1,
+      "message": "Why is this? It doesn\u0027t seem right - even for little-endian vs big-endian: a sal_uInt32(Color(0xFF, 0xFF, 0x00)) is compared to another sal_uInt32(Color(0xFF, 0xFF, 0x00)), so the second case should be unreachable?",
+      "range": {
+        "startLine": 55,
+        "startChar": 8,
+        "endLine": 56,
+        "endChar": 18
+      },
+      "revId": "d487d6e082bc7ce652217578ffd37397a59cc3ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
