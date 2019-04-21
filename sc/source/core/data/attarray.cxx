@@ -27,6 +27,7 @@
 #include <editeng/justifyitem.hxx>
 #include <osl/diagnose.h>
 #include <svl/poolcach.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <global.hxx>
 #include <document.hxx>
@@ -494,9 +495,10 @@ const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEnd
 
             // ensure that attributing changes text width of cell
             // otherwise, conditional formats need to be reset or deleted
+            bool bIsLoading = !pDocument->GetDocumentShell() || pDocument->GetDocumentShell()->IsLoading();
             while ( ns <= nEndRow )
             {
-                if ( nCol != -1 )
+                if ( nCol != -1 && !bIsLoading )
                 {
                     const SfxItemSet& rNewSet = pPattern->GetItemSet();
                     const SfxItemSet& rOldSet = mvData[nx].pPattern->GetItemSet();
