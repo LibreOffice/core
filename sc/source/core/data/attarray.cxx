@@ -494,9 +494,10 @@ const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEnd
 
             // ensure that attributing changes text width of cell
             // otherwise, conditional formats need to be reset or deleted
+            bool bIsImportingXML = pDocument->IsImportingXML();
             while ( ns <= nEndRow )
             {
-                if ( nCol != -1 )
+                if ( nCol != -1 && !bIsImportingXML )
                 {
                     const SfxItemSet& rNewSet = pPattern->GetItemSet();
                     const SfxItemSet& rOldSet = mvData[nx].pPattern->GetItemSet();
