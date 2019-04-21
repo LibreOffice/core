@@ -25,42 +25,42 @@
 
 String AVMEDIA_STR_INSERTMEDIA_DLG
 {
-    Text[en-US] = "Insert Movie and Sound";
+    Text [ en-US ] = "Insert Movie and Sound" ;
 };
 
 // ------------------------------------------------------------------------------
 
 STRING AVMEDIA_STR_OPENMEDIA_DLG
 {
-    Text[en-US] = "Open Movie and Sound";
+    Text [ en-US ] = "Open Movie and Sound" ;
 };
 
 // ------------------------------------------------------------------------------
 
 String AVMEDIA_STR_ALL_MEDIAFILES
 {
-    Text[en-US] = "All movie and sound files";
+    Text [ en-US ] = "All movie and sound files" ;
 };
 
 // ------------------------------------------------------------------------------
 
 String AVMEDIA_STR_ALL_FILES
 {
-    Text[en-US] = "All files (*.*)";
+    Text [ en-US ] = "All files (*.*)" ;
 };
 
 // ------------------------------------------------------------------------------
 
 Bitmap AVMEDIA_BMP_AUDIOLOGO
 {
-    file = "avaudiologo.png";
+    file = "avaudiologo.png" ;
 };
 
 // ------------------------------------------------------------------------------
 
 Bitmap AVMEDIA_BMP_EMPTYLOGO
 {
-    file = "avemptylogo.png";
+    file = "avemptylogo.png" ;
 };
 
 // ------------------------------------------------------------------------------
@@ -69,5 +69,7 @@ ErrorBox AVMEDIA_ERR_URL
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message[en-US] = "The format of the selected file is not supported.";
+    Message [ en-US ] = "The format of the selected file is not supported." ;
 };
+
+// ********************************************************************** EOF
