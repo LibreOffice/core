@@ -5366,7 +5366,7 @@ public:
 
     virtual void set_date(const Date& rDate) override
     {
-        gtk_calendar_select_month(m_pCalendar, rDate.GetMonth(), rDate.GetYear());
+        gtk_calendar_select_month(m_pCalendar, rDate.GetMonth() - 1, rDate.GetYear());
         gtk_calendar_select_day(m_pCalendar, rDate.GetDay());
     }
 
@@ -5374,7 +5374,7 @@ public:
     {
         guint year, month, day;
         gtk_calendar_get_date(m_pCalendar, &year, &month, &day);
-        return Date(day, month, year);
+        return Date(day, month + 1, year);
     }
 
     virtual void disable_notify_events() override
