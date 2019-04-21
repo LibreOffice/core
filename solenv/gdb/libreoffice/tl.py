@@ -44,11 +44,10 @@ class ColorPrinter(object):
         self.val = val
 
     def to_string(self):
-        color = self.val['mnColor']
-        b = color & 0xff
-        g = (color >> 8) & 0xff
-        r = (color >> 16) & 0xff
-        a = (color >> 24) & 0xff
+        r = self.val['R']
+        g = self.val['G']
+        b = self.val['B']
+        a = self.val['A']
         if a:
             return "rgba(%d, %d, %d, %d)" % (r, g, b, a)
         else:
