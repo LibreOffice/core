@@ -172,7 +172,7 @@ sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleRowSelected( sal_Int32
         if(nRow == selectedRows[i])
         {
             bSelected = true;
-            continue;
+            break;
         }
     }
     return bSelected;
