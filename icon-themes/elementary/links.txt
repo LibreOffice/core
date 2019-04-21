@@ -1102,9 +1102,9 @@ cmd/sc_diagramaxisall.png cmd/sc_diagramaxisxyz.png
 cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
 
 # Crop
-cmd/32/grafattrcrop.png cmd/32/crop.png
-cmd/lc_grafattrcrop.png cmd/lc_crop.png
-cmd/sc_grafattrcrop.png cmd/sc_crop.png
+cmd/32/grafattrcrop.png cmd/32/transformdialog.png
+cmd/lc_grafattrcrop.png cmd/lc_transformdialog.png
+cmd/sc_grafattrcrop.png cmd/sc_transformdialog.png
 
 # Group
 cmd/32/groupmenu.png cmd/32/formatgroup.png
@@ -1973,7 +1973,7 @@ cmd/32/addtextbox.png cmd/32/insertfixedtext.png
 cmd/lc_addtextbox.png cmd/lc_insertfixedtext.png
 cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
 
-# Edit menu 
+# Edit menu
 # ===============================================
 cmd/32/authoritiesentrydialog.png cmd/32/dbviewaliases.png
 cmd/32/changesmenu.png cmd/32/accepttrackedchange.png

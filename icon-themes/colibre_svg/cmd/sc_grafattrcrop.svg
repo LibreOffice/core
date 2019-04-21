@@ -1,0 +1,114 @@
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+<g
+   fill="#808080"
+   id="g8">
+  <rect
+     height="1"
+     ry=".5"
+     width="3"
+     y="12"
+     id="rect2" />
+  <rect
+     height="1"
+     ry=".5"
+     width="3"
+     id="rect4" />
+  <rect
+     height="1"
+     ry=".5"
+     width="3"
+     x="10"
+     y="13"
+     id="rect6" />
+</g>
+<g
+   fill="#4d82b8"
+   id="g18">
+  <rect
+     height="2"
+     ry="1"
+     width="10"
+     x="4"
+     y="12"
+     id="rect10" />
+  <rect
+     height="2"
+     ry="1"
+     transform="rotate(90)"
+     width="10"
+     x="4"
+     y="-14"
+     id="rect12" />
+  <rect
+     height="2"
+     rx="0"
+     ry=".874159"
+     width="10"
+     x="6"
+     y="6"
+     id="rect14" />
+  <rect
+     height="1.999999"
+     ry=".982023"
+     transform="rotate(90)"
+     width="10"
+     x="6"
+     y="-7.999999"
+     id="rect16" />
+</g>
+<rect
+   style="fill:#808080"
+   y="0"
+   id="rect20"
+   x="12"
+   width="1"
+   ry="0.5"
+   height="3" />
+<path
+   style="fill:#808080"
+   d="M 6 0 L 6 1 L 6.5 1 C 6.777 1 7 0.777 7 0.5 C 7 0.223 6.777 0 6.5 0 L 6 0 z "
+   id="rect22" />
+<rect
+   style="fill:#808080"
+   y="0"
+   id="rect24"
+   x="8"
+   width="3"
+   ry="0.5"
+   height="1" />
+<path
+   style="fill:#808080"
+   d="M 0 6 L 0 6.5 C 0 6.777 0.223 7 0.5 7 C 0.777 7 1 6.777 1 6.5 L 1 6 L 0 6 z "
+   id="rect28" />
+<rect
+   style="fill:#808080"
+   x="0"
+   id="rect30"
+   y="8"
+   width="1"
+   ry="0.5"
+   height="3" />
+<g
+   style="fill:#eac282"
+   id="g10">
+  <rect
+     y="0"
+     x="0"
+     height="1"
+     ry="0.5"
+     width="3"
+     id="rect4-3" />
+  <rect
+     y="0"
+     x="0"
+     height="3"
+     rx="0.5"
+     width="1"
+     id="rect6-6" />
+  <path
+     style="fill-rule:evenodd;stroke:#eac282;stroke-linecap:round;stroke-linejoin:round"
+     inkscape:connector-curvature="0"
+     d="m 0.4999293,4.5 4,-4 v 4 z"
+     id="path8" />
+</g>
+</svg>
