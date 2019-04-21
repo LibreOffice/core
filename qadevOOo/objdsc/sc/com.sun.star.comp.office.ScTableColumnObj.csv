@@ -1,5 +1,3 @@
-"ScTableColumnObj";"com::sun::star::container::XNamed";"getName()"
-"ScTableColumnObj";"com::sun::star::container::XNamed";"setName()"
 "ScTableColumnObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "ScTableColumnObj";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "ScTableColumnObj";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
