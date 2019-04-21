@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/beans/xpropertyset.hxx>
 #include <test/container/xnamed.hxx>
 #include <test/table/xcellrange.hxx>
 
@@ -26,7 +27,10 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScTableColumnObj : public CalcUnoApiTest, public apitest::XCellRange, public apitest::XNamed
+class ScTableColumnObj : public CalcUnoApiTest,
+                         public apitest::XCellRange,
+                         public apitest::XNamed,
+                         public apitest::XPropertySet
 {
 public:
     ScTableColumnObj();
@@ -47,6 +51,13 @@ public:
     // because TableColumnNames are fixed, test for an exception
     CPPUNIT_TEST(testSetNameThrowsException);
 
+    // XPropertySet
+    CPPUNIT_TEST(testGetPropertySetInfo);
+    CPPUNIT_TEST(testGetPropertyValue);
+    CPPUNIT_TEST(testSetPropertyValue);
+    CPPUNIT_TEST(testPropertyChangeListener);
+    CPPUNIT_TEST(testVetoableChangeListener);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -57,6 +68,41 @@ ScTableColumnObj::ScTableColumnObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XCellRange("K1:K1")
     , XNamed("K")
+    , XPropertySet({
+          "BottomBorder",
+          "BottomBorder2",
+          "CellProtection",
+          "CharLocale",
+          "CharLocaleAsian",
+          "CharLocaleComplex",
+          "CharPosture",
+          "CharPostureAsian",
+          "CharPostureComplex",
+          "ConditionalFormat",
+          "ConditionalFormatLocal",
+          "ConditionalFormatXML",
+          "DiagonalBLTR",
+          "DiagonalBLTR2",
+          "DiagonalTLBR",
+          "DiagonalTLBR2",
+          "HoriJustify",
+          "LeftBorder",
+          "LeftBorder2",
+          "NumberingRules",
+          "Orientation",
+          "RightBorder",
+          "RightBorder2",
+          "ShadowFormat",
+          "TableBorder",
+          "TableBorder2",
+          "TopBorder",
+          "TopBorder2",
+          "UserDefinedAttributes",
+          "Validation",
+          "ValidationLocal",
+          "ValidationXML",
+          "WritingMode",
+      })
 {
 }
 
