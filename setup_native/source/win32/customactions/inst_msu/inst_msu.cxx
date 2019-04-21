@@ -199,6 +199,46 @@ bool IsWow64Process()
 #endif
 }
 
+// This class uses MsiProcessMessage to check for user input: it returns IDCANCEL when user cancels
+// installation. It throws a special exception, to be intercepted in main action function to return
+// corresponding exit code.
+class UserInputChecker
+{
+public:
+    class eUserCancelled
+    {
+    };
+
+    UserInputChecker(MSIHANDLE hInstall)
+        : m_hInstall(hInstall)
+        , m_hProgressRec(MsiCreateRecord(3))
+    {
+        // Use explicit progress messages
+        MsiRecordSetInteger(m_hProgressRec, 1, 1);
+        MsiRecordSetInteger(m_hProgressRec, 2, 1);
+        MsiRecordSetInteger(m_hProgressRec, 3, 0);
+        int nResult = MsiProcessMessage(m_hInstall, INSTALLMESSAGE_PROGRESS, m_hProgressRec);
+        if (nResult == IDCANCEL)
+            throw eUserCancelled();
+        // Prepare the record to following progress update calls
+        MsiRecordSetInteger(m_hProgressRec, 1, 2);
+        MsiRecordSetInteger(m_hProgressRec, 2, 0); // step by 0 - don't move progress
+        MsiRecordSetInteger(m_hProgressRec, 3, 0);
+    }
+
+    void ThrowIfUserCancelled()
+    {
+        // Check if user has cancelled
+        int nResult = MsiProcessMessage(m_hInstall, INSTALLMESSAGE_PROGRESS, m_hProgressRec);
+        if (nResult == IDCANCEL)
+            throw eUserCancelled();
+    }
+
+private:
+    MSIHANDLE m_hInstall;
+    PMSIHANDLE m_hProgressRec;
+};
+
 // Checks if Windows Update service is disabled, and if it is, enables it temporarily.
 // Also stops the service if it's currently running, because it seems that wusa.exe
 // does not freeze when it starts the service itself.
@@ -218,7 +258,7 @@ public:
             if (mhService)
             {
                 EnsureServiceEnabled(mhInstall, mhService.get(), false);
-                StopService(mhInstall, mhService.get());
+                StopService(mhInstall, mhService.get(), false);
             }
         }
         catch (std::exception& e)
@@ -246,8 +286,9 @@ private:
         // Stop currently running service to prevent wusa.exe from hanging trying to detect if the
         // update is applicable (sometimes this freezes it ~indefinitely; it seems that it doesn't
         // happen if wusa.exe starts the service itself: https://superuser.com/questions/1044528/).
+        // tdf#124794: Wait for service to stop.
         if (nCurrentStatus == SERVICE_RUNNING)
-            StopService(hInstall, hService.get());
+            StopService(hInstall, hService.get(), true);
 
         if (nCurrentStatus == SERVICE_RUNNING
             || !EnsureServiceEnabled(hInstall, hService.get(), true))
@@ -344,7 +385,7 @@ private:
         return aServiceStatus.dwCurrentState;
     }
 
-    static void StopService(MSIHANDLE hInstall, SC_HANDLE hService)
+    static void StopService(MSIHANDLE hInstall, SC_HANDLE hService, bool bWait)
     {
         try
         {
@@ -352,12 +393,36 @@ private:
             {
                 SERVICE_STATUS aServiceStatus{};
                 if (!ControlService(hService, SERVICE_CONTROL_STOP, &aServiceStatus))
-                    WriteLog(hInstall, Win32ErrorMessage("ControlService", GetLastError()));
-                else
-                    WriteLog(
-                        hInstall,
-                        "Successfully sent SERVICE_CONTROL_STOP code to Windows Update service");
-                // No need to wait for the service stopped
+                    ThrowLastError("ControlService");
+                WriteLog(hInstall,
+                         "Successfully sent SERVICE_CONTROL_STOP code to Windows Update service");
+                if (aServiceStatus.dwCurrentState != SERVICE_STOPPED && bWait)
+                {
+                    // Let user cancel too long wait
+                    UserInputChecker aInputChecker(hInstall);
+                    int nLoop = 0;
+                    do
+                    {
+                        int nWait = 0;
+                        do
+                        {
+                            Sleep(500);
+                            aInputChecker.ThrowIfUserCancelled();
+                        } while ((nWait += 500) < aServiceStatus.dwWaitHint);
+
+                        if (!QueryServiceStatus(hService, &aServiceStatus))
+                        {
+                            ThrowLastError("QueryServiceStatus");
+                        }
+
+                        if (aServiceStatus.dwCurrentState == SERVICE_STOPPED)
+                            break;
+                    } while (nLoop++ < 10); // arbitrary limit of wait hint periods elapsed
+                }
+                if (aServiceStatus.dwCurrentState == SERVICE_STOPPED)
+                    WriteLog(hInstall, "Successfully stopped Windows Update service");
+                else if (bWait)
+                    WriteLog(hInstall, "Wait for Windows Update stop timed out - proceeding");
             }
             else
                 WriteLog(hInstall, "Windows Update service is not running");
@@ -519,33 +584,16 @@ extern "C" __declspec(dllexport) UINT __stdcall InstallMSU(MSIHANDLE hInstall)
 
         {
             // This block waits when the started wusa.exe process finishes. Since it's possible
-            // for wusa.exe in some circumstances to wait really long (indefinitely?), we use
-            // MsiProcessMessage to check for user input: it returns IDCANCEL when user cancels
-            // installation.
-            PMSIHANDLE hProgressRec = MsiCreateRecord(3);
-            // Use explicit progress messages
-            MsiRecordSetInteger(hProgressRec, 1, 1);
-            MsiRecordSetInteger(hProgressRec, 2, 1);
-            MsiRecordSetInteger(hProgressRec, 3, 0);
-            int nResult = MsiProcessMessage(hInstall, INSTALLMESSAGE_PROGRESS, hProgressRec);
-            if (nResult == IDCANCEL)
-                return ERROR_INSTALL_USEREXIT;
-            // Prepare the record to following progress update calls
-            MsiRecordSetInteger(hProgressRec, 1, 2);
-            MsiRecordSetInteger(hProgressRec, 2, 0); // step by 0 - don't move progress
-            MsiRecordSetInteger(hProgressRec, 3, 0);
+            // for wusa.exe in some circumstances to wait really long (indefinitely?), we check
+            // for user input here.
+            UserInputChecker aInputChecker(hInstall);
             for (;;)
             {
                 DWORD nWaitResult = WaitForSingleObject(pi.hProcess, 500);
                 if (nWaitResult == WAIT_OBJECT_0)
                     break; // wusa.exe finished
                 else if (nWaitResult == WAIT_TIMEOUT)
-                {
-                    // Check if user has cancelled
-                    nResult = MsiProcessMessage(hInstall, INSTALLMESSAGE_PROGRESS, hProgressRec);
-                    if (nResult == IDCANCEL)
-                        return ERROR_INSTALL_USEREXIT;
-                }
+                    aInputChecker.ThrowIfUserCancelled();
                 else
                     ThrowWin32Error("WaitForSingleObject", nWaitResult);
             }
@@ -569,6 +617,10 @@ extern "C" __declspec(dllexport) UINT __stdcall InstallMSU(MSIHANDLE hInstall)
             default:
                 ThrowHResult("Execution of wusa.exe", hr);
         }
+    }
+    catch (const UserInputChecker::eUserCancelled&)
+    {
+        return ERROR_INSTALL_USEREXIT;
     }
     catch (std::exception& e)
     {
