@@ -54,6 +54,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <memory>
+#include <FrameControlsManager.hxx>
+#include <vcl/menubtn.hxx>
 
 #define TEXT_PADDING 5
 #define BOX_DISTANCE 10
@@ -484,6 +486,29 @@ void SwHeaderFooterWin::MouseButtonDown( const MouseEvent& rMEvt )
 void SwHeaderFooterWin::Select()
 {
     ExecuteCommand(GetCurItemIdent());
+}
+
+void SwHeaderFooterWin::KeyInput(const KeyEvent& rKEvt)
+{
+    if (IsEmptyHeaderFooter())
+    {
+        const vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
+        sal_uInt16 nCode = aKeyCode.GetCode();
+        SwView& rView = GetEditWin()->GetView();
+        SwWrtShell& rSh = rView.GetWrtShell();
+        if (aKeyCode == KEY_ESCAPE)
+        {
+            rSh.ToggleHeaderFooterEdit();
+            GrabFocusToDocument(); // should hide the header/footer separator line and then grab focus to the main document
+        }
+        else if ((nCode == KEY_RETURN) || (nCode == KEY_SPACE))
+        {
+            const OUString& rStyleName = GetPageFrame()->GetPageDesc()->GetName();
+            rSh.ChangeHeaderOrFooter(rStyleName, m_bIsHeader, true, false);
+        }
+    }
+    else
+        MenuButton::KeyInput( rKEvt );
 }
 
 IMPL_LINK_NOARG(SwHeaderFooterWin, FadeHandler, Timer *, void)
