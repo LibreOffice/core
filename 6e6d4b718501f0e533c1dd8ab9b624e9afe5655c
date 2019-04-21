@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_5fb7efd9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-04-21T20:55:58Z",
+      "side": 1,
+      "message": "When header/foot is empty there is no drop down menu.",
+      "range": {
+        "startLine": 20,
+        "startChar": 5,
+        "endLine": 20,
+        "endChar": 67
+      },
+      "revId": "6e6d4b718501f0e533c1dd8ab9b624e9afe5655c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_9f76d73e",
+        "filename": "sw/source/uibase/docvw/HeaderFooterWin.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-04-21T20:55:58Z",
+      "side": 1,
+      "message": "This if else is perfectly acceptable. There is a one line replacement that involves using the ?: conditional operator that you might want to play around with here for fun :-)",
+      "range": {
+        "startLine": 502,
+        "startChar": 0,
+        "endLine": 505,
+        "endChar": 66
+      },
+      "revId": "6e6d4b718501f0e533c1dd8ab9b624e9afe5655c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_dfa1bf97",
+        "filename": "sw/source/uibase/docvw/HeaderFooterWin.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-04-21T20:55:58Z",
+      "side": 1,
+      "message": "Think about how to do this and take care of the focus issue after empty header/footer button mouse click without duplicating code.\n\nGetEditWin()-\u003eGrabFocus() or GrabFocusToDocument() which gets to the function that does the focus grab in less steps?",
+      "range": {
+        "startLine": 510,
+        "startChar": 12,
+        "endLine": 512,
+        "endChar": 34
+      },
+      "revId": "6e6d4b718501f0e533c1dd8ab9b624e9afe5655c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
