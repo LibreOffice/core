@@ -22,6 +22,30 @@
       "revId": "d487d6e082bc7ce652217578ffd37397a59cc3ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_1f408707",
+        "filename": "tools/qa/cppunit/test_color.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-04-21T13:31:59Z",
+      "side": 1,
+      "message": "Just to test this resolves both constructors at compile time and that it converts to uInt32. If it doesn\u0027t then the compiler would complain as in the case statement you can only have constants.\n\nWe have such situation somewhere else in the code and during code changing that failed, but as changing the color headers triggers a whole code recompile I have wrote this test, so I can make sure this will work.\n\nBut now writing this I\u0027m thinking if I should just make a static_assert instead.",
+      "parentUuid": "3fa0c359_9fbed7fd",
+      "range": {
+        "startLine": 55,
+        "startChar": 8,
+        "endLine": 56,
+        "endChar": 18
+      },
+      "revId": "d487d6e082bc7ce652217578ffd37397a59cc3ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
