@@ -6489,9 +6489,9 @@ function init()
     }
 }
 
-function presentationEngineStop()
+function presentationEngineStop(message)
 {
-    alert( 'We are sorry! An unexpected error occurred.\nThe presentation engine will be stopped' );
+    alert( message + '\nThe presentation engine will be stopped' );
     document.onkeydown = null;
     document.onkeypress = null;
     document.onclick = null;
@@ -6502,7 +6502,7 @@ function assert( condition, message )
 {
     if (!condition)
     {
-        presentationEngineStop();
+        presentationEngineStop( message );
         if (typeof console == 'object')
             // eslint-disable-next-line no-console
             console.trace();
