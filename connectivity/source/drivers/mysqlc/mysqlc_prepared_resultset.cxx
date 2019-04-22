@@ -38,6 +38,7 @@ using namespace rtl;
 #include <cstdlib>
 
 using namespace connectivity::mysqlc;
+using namespace connectivity;
 using namespace cppu;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
@@ -51,6 +52,52 @@ using namespace ::comphelper;
 using ::osl::MutexGuard;
 
 #include <stdio.h>
+#include <typeinfo>
+#include <typeindex>
+
+namespace
+{
+const std::type_index getTypeFromMysqlType(enum_field_types type)
+{
+    switch (type)
+    {
+        case MYSQL_TYPE_TINY:
+            return std::type_index(typeid(sal_Int8));
+        case MYSQL_TYPE_SHORT:
+            return std::type_index(typeid(sal_Int16));
+        case MYSQL_TYPE_LONG:
+            return std::type_index(typeid(sal_Int32));
+        case MYSQL_TYPE_LONGLONG:
+            return std::type_index(typeid(sal_Int64));
+        case MYSQL_TYPE_FLOAT:
+            return std::type_index(typeid(float));
+        case MYSQL_TYPE_DOUBLE:
+            return std::type_index(typeid(double));
+        case MYSQL_TYPE_TIMESTAMP:
+        case MYSQL_TYPE_DATETIME:
+            return std::type_index(typeid(DateTime));
+        case MYSQL_TYPE_DATE:
+            return std::type_index(typeid(Date));
+        case MYSQL_TYPE_TIME:
+            return std::type_index(typeid(Time));
+        case MYSQL_TYPE_STRING:
+        case MYSQL_TYPE_VAR_STRING:
+        case MYSQL_TYPE_DECIMAL:
+        case MYSQL_TYPE_NEWDECIMAL:
+            return std::type_index(typeid(OUString));
+        case MYSQL_TYPE_BLOB:
+        case MYSQL_TYPE_YEAR:
+        case MYSQL_TYPE_BIT:
+        case MYSQL_TYPE_INT24:
+        case MYSQL_TYPE_SET:
+        case MYSQL_TYPE_ENUM:
+        case MYSQL_TYPE_GEOMETRY:
+        case MYSQL_TYPE_NULL:
+        default:
+            return std::type_index(typeid(nullptr));
+    }
+}
+}
 
 OUString SAL_CALL OPreparedResultSet::getImplementationName()
 {
@@ -128,90 +175,41 @@ sal_Int32 SAL_CALL OPreparedResultSet::findColumn(const OUString& columnName)
                        Any());
 }
 
-uno::Reference<XInputStream> SAL_CALL OPreparedResultSet::getBinaryStream(sal_Int32 column)
+template <typename T> T OPreparedResultSet::safelyRetrieveValue(sal_Int32 nColumnIndex)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-
-    mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedResultSet::getBinaryStream",
-                                                            *this);
-    return nullptr;
-}
-
-uno::Reference<XInputStream> SAL_CALL OPreparedResultSet::getCharacterStream(sal_Int32 column)
-{
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-
-    mysqlc_sdbc_driver::throwFeatureNotImplementedException(
-        "OPreparedResultSet::getCharacterStream", *this);
-    return nullptr;
-}
-
-sal_Bool SAL_CALL OPreparedResultSet::getBoolean(sal_Int32 column)
-{
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-
-    if (*m_aData[column - 1].is_null)
+    checkColumnIndex(nColumnIndex);
+    if (*m_aData[nColumnIndex - 1].is_null)
     {
         m_bWasNull = true;
-        return false;
-    }
-    m_bWasNull = false;
-    return *static_cast<bool*>(m_aData[column - 1].buffer);
-}
-
-sal_Int8 SAL_CALL OPreparedResultSet::getByte(sal_Int32 column)
-{
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-
-    if (*m_aData[column - 1].is_null)
-    {
-        m_bWasNull = true;
-        return 0;
-    }
-    m_bWasNull = false;
-    return *static_cast<sal_Int8*>(m_aData[column - 1].buffer);
-}
-
-uno::Sequence<sal_Int8> SAL_CALL OPreparedResultSet::getBytes(sal_Int32 column)
-{
-    checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
-    MutexGuard aGuard(m_aMutex);
-
-    if (*m_aData[column - 1].is_null)
-    {
-        m_bWasNull = true;
-        return uno::Sequence<sal_Int8>();
+        return T();
     }
     m_bWasNull = false;
 
+    return retrieveValue<T>(nColumnIndex);
+}
+
+template <typename T> T OPreparedResultSet::retrieveValue(sal_Int32 nColumnIndex)
+{
+    if (getTypeFromMysqlType(m_aFields[nColumnIndex - 1].type) == std::type_index(typeid(T)))
+        return *static_cast<T*>(m_aData[nColumnIndex - 1].buffer);
+    else
+        return getRowSetValue(nColumnIndex);
+}
+
+template <> uno::Sequence<sal_Int8> OPreparedResultSet::retrieveValue(sal_Int32 column)
+{
+    // TODO make conversion possible
     return uno::Sequence<sal_Int8>(static_cast<sal_Int8 const*>(m_aData[column - 1].buffer),
                                    *m_aData[column - 1].length);
 }
 
-Date SAL_CALL OPreparedResultSet::getDate(sal_Int32 column)
+template <> Date OPreparedResultSet::retrieveValue(sal_Int32 column)
 {
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-
-    if (*m_aData[column - 1].is_null)
-    {
-        m_bWasNull = true;
-        return Date{}; // TODO init
-    }
-    m_bWasNull = false;
-
+    if (getTypeFromMysqlType(m_aFields[column - 1].type) != std::type_index(typeid(Date)))
+        return getRowSetValue(column);
     const MYSQL_TIME* pTime = static_cast<MYSQL_TIME*>(m_aData[column - 1].buffer);
-
-    assert(pTime != nullptr);
 
     Date d;
     d.Year = pTime->year;
@@ -220,54 +218,126 @@ Date SAL_CALL OPreparedResultSet::getDate(sal_Int32 column)
     return d;
 }
 
+template <> Time OPreparedResultSet::retrieveValue(sal_Int32 column)
+{
+    if (getTypeFromMysqlType(m_aFields[column - 1].type) != std::type_index(typeid(Time)))
+        return getRowSetValue(column);
+    const MYSQL_TIME* pTime = static_cast<MYSQL_TIME*>(m_aData[column - 1].buffer);
+
+    Time t;
+    t.Hours = pTime->hour;
+    t.Minutes = pTime->minute;
+    t.Seconds = pTime->second;
+    return t;
+}
+
+template <> DateTime OPreparedResultSet::retrieveValue(sal_Int32 column)
+{
+    if (getTypeFromMysqlType(m_aFields[column - 1].type) != std::type_index(typeid(DateTime)))
+        return getRowSetValue(column);
+    const MYSQL_TIME* pTime = static_cast<MYSQL_TIME*>(m_aData[column - 1].buffer);
+
+    DateTime t;
+    t.Year = pTime->year;
+    t.Month = pTime->month;
+    t.Day = pTime->day;
+    t.Hours = pTime->hour;
+    t.Minutes = pTime->minute;
+    t.Seconds = pTime->second;
+    return t;
+}
+
+template <> OUString OPreparedResultSet::retrieveValue(sal_Int32 column)
+{
+    if (getTypeFromMysqlType(m_aFields[column - 1].type) != std::type_index(typeid(OUString)))
+        return getRowSetValue(column);
+    const char* sStr = static_cast<const char*>(m_aData[column - 1].buffer);
+
+    OUString sReturn = OUString(sStr, *m_aData[column - 1].length, m_encoding);
+    return sReturn;
+}
+
+ORowSetValue OPreparedResultSet::getRowSetValue(sal_Int32 nColumnIndex)
+{
+    switch (m_aFields[nColumnIndex - 1].type)
+    {
+        case MYSQL_TYPE_TINY:
+            return getByte(nColumnIndex);
+        case MYSQL_TYPE_SHORT:
+            return getShort(nColumnIndex);
+        case MYSQL_TYPE_LONG:
+            return getInt(nColumnIndex);
+        case MYSQL_TYPE_LONGLONG:
+            return getLong(nColumnIndex);
+        case MYSQL_TYPE_FLOAT:
+        case MYSQL_TYPE_DOUBLE:
+            return getDouble(nColumnIndex);
+        case MYSQL_TYPE_TIMESTAMP:
+        case MYSQL_TYPE_DATETIME:
+            return getTimestamp(nColumnIndex);
+        case MYSQL_TYPE_DATE:
+            return getDate(nColumnIndex);
+        case MYSQL_TYPE_TIME:
+            return getTime(nColumnIndex);
+        case MYSQL_TYPE_STRING:
+        case MYSQL_TYPE_VAR_STRING:
+        case MYSQL_TYPE_DECIMAL:
+        case MYSQL_TYPE_NEWDECIMAL:
+            return getString(nColumnIndex);
+        default:
+            mysqlc_sdbc_driver::throwFeatureNotImplementedException(
+                "OPreparedResultSet::getRowSetValue", *this);
+            return ORowSetValue();
+    }
+}
+
+uno::Reference<XInputStream> SAL_CALL OPreparedResultSet::getBinaryStream(sal_Int32 /*column*/)
+{
+    mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedResultSet::getBinaryStream",
+                                                            *this);
+    return nullptr;
+}
+
+uno::Reference<XInputStream> SAL_CALL OPreparedResultSet::getCharacterStream(sal_Int32 /*column*/)
+{
+    mysqlc_sdbc_driver::throwFeatureNotImplementedException(
+        "OPreparedResultSet::getCharacterStream", *this);
+    return nullptr;
+}
+
+sal_Bool SAL_CALL OPreparedResultSet::getBoolean(sal_Int32 column)
+{
+    return safelyRetrieveValue<bool>(column);
+}
+
+sal_Int8 SAL_CALL OPreparedResultSet::getByte(sal_Int32 column)
+{
+    return safelyRetrieveValue<sal_Int8>(column);
+}
+
+uno::Sequence<sal_Int8> SAL_CALL OPreparedResultSet::getBytes(sal_Int32 column)
+{
+    return safelyRetrieveValue<uno::Sequence<sal_Int8>>(column);
+}
+
+Date SAL_CALL OPreparedResultSet::getDate(sal_Int32 column)
+{
+    return safelyRetrieveValue<Date>(column);
+}
+
 double SAL_CALL OPreparedResultSet::getDouble(sal_Int32 column)
 {
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-
-    if (*m_aData[column - 1].is_null)
-    {
-        m_bWasNull = true;
-        return 0;
-    }
-    m_bWasNull = false;
-
-    if (m_aFields[column - 1].type == MYSQL_TYPE_FLOAT)
-        return *static_cast<float*>(m_aData[column - 1].buffer);
-
-    return *static_cast<double*>(m_aData[column - 1].buffer);
+    return safelyRetrieveValue<double>(column);
 }
 
 float SAL_CALL OPreparedResultSet::getFloat(sal_Int32 column)
 {
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-
-    if (*m_aData[column - 1].is_null)
-    {
-        m_bWasNull = true;
-        return 0;
-    }
-    m_bWasNull = false;
-
-    return *static_cast<float*>(m_aData[column - 1].buffer);
+    return safelyRetrieveValue<float>(column);
 }
 
 sal_Int32 SAL_CALL OPreparedResultSet::getInt(sal_Int32 column)
 {
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-    if (*m_aData[column - 1].is_null)
-    {
-        m_bWasNull = true;
-        return 0;
-    }
-    m_bWasNull = false;
-
-    return *static_cast<sal_Int32*>(m_aData[column - 1].buffer);
+    return safelyRetrieveValue<sal_Int32>(column);
 }
 
 sal_Int32 SAL_CALL OPreparedResultSet::getRow()
@@ -280,14 +350,7 @@ sal_Int32 SAL_CALL OPreparedResultSet::getRow()
 
 sal_Int64 SAL_CALL OPreparedResultSet::getLong(sal_Int32 column)
 {
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-
-    if (*m_aData[column - 1].is_null)
-        return 0;
-
-    return *static_cast<sal_Int64*>(m_aData[column - 1].buffer);
+    return safelyRetrieveValue<sal_Int64>(column);
 }
 
 uno::Reference<XResultSetMetaData> SAL_CALL OPreparedResultSet::getMetaData()
@@ -356,94 +419,22 @@ Any SAL_CALL OPreparedResultSet::getObject(sal_Int32 column,
 
 sal_Int16 SAL_CALL OPreparedResultSet::getShort(sal_Int32 column)
 {
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-
-    if (*m_aData[column - 1].is_null)
-    {
-        m_bWasNull = true;
-        return 0;
-    }
-    m_bWasNull = false;
-
-    return *static_cast<sal_Int16*>(m_aData[column - 1].buffer);
+    return safelyRetrieveValue<sal_Int16>(column);
 }
 
 OUString SAL_CALL OPreparedResultSet::getString(sal_Int32 column)
 {
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-    if (*m_aData[column - 1].is_null)
-    {
-        m_bWasNull = true;
-        return OUString{};
-    }
-    m_bWasNull = false;
-
-    if (m_aFields[column - 1].type == MYSQL_TYPE_BIT)
-    {
-        if (*static_cast<sal_Int8*>(m_aData[column - 1].buffer) != 0)
-            return OUString{ "YES" };
-        return OUString{ "NO" };
-    }
-
-    const char* sStr = static_cast<const char*>(m_aData[column - 1].buffer);
-
-    OUString sReturn = OUString(sStr, *m_aData[column - 1].length, m_encoding);
-    return sReturn;
+    return safelyRetrieveValue<OUString>(column);
 }
 
 Time SAL_CALL OPreparedResultSet::getTime(sal_Int32 column)
 {
-    checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
-    MutexGuard aGuard(m_aMutex);
-    checkColumnIndex(column);
-
-    if (*m_aData[column - 1].is_null)
-    {
-        m_bWasNull = true;
-        return Time{}; // TODO init
-    }
-    m_bWasNull = false;
-
-    const MYSQL_TIME* pTime = static_cast<MYSQL_TIME*>(m_aData[column - 1].buffer);
-
-    assert(pTime != nullptr);
-
-    Time t;
-    t.Hours = pTime->hour;
-    t.Minutes = pTime->minute;
-    t.Seconds = pTime->second;
-    return t;
+    return safelyRetrieveValue<Time>(column);
 }
 
 DateTime SAL_CALL OPreparedResultSet::getTimestamp(sal_Int32 column)
 {
-    checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
-    MutexGuard aGuard(m_aMutex);
-    checkColumnIndex(column);
-
-    if (*m_aData[column - 1].is_null)
-    {
-        m_bWasNull = true;
-        return DateTime{};
-    }
-    m_bWasNull = false;
-
-    const MYSQL_TIME* pTime = static_cast<MYSQL_TIME*>(m_aData[column - 1].buffer);
-
-    assert(pTime != nullptr);
-
-    DateTime t;
-    t.Year = pTime->year;
-    t.Month = pTime->month;
-    t.Day = pTime->day;
-    t.Hours = pTime->hour;
-    t.Minutes = pTime->minute;
-    t.Seconds = pTime->second;
-    return t;
+    return safelyRetrieveValue<DateTime>(column);
 }
 
 sal_Bool SAL_CALL OPreparedResultSet::isBeforeFirst()
