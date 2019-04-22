@@ -31,6 +31,7 @@ $(eval $(call gb_Library_use_sdk_api,mysqlc))
 
 $(eval $(call gb_Library_use_libraries,mysqlc,\
 	cppu \
+    dbtools \
 	sal \
 	salhelper \
 	comphelper \
