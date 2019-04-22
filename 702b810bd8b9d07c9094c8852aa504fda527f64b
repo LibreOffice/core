@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_02382ed1",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 6494,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-22T11:50:54Z",
+      "side": 1,
+      "message": "The \"We are sorry!\" part looks also silly (as tml told; and I agree with him).\n\nMy thought is also that this specific function is only called from assert() below; and that assert() has a message - so wouldn\u0027t it be good to also include the message to the alert (visible message box), in addition to the exception thrown in the assert() - which, to be honest, I don\u0027t know how and where is handled.",
+      "range": {
+        "startLine": 6494,
+        "startChar": 11,
+        "endLine": 6494,
+        "endChar": 26
+      },
+      "revId": "702b810bd8b9d07c9094c8852aa504fda527f64b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
