@@ -23,6 +23,7 @@
 #include <sot/exchange.hxx>
 #include <sfx2/progress.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -1286,6 +1287,36 @@ SwFlyFrameFormat* SwDoc::InsertDrawLabel(
     return pNewFormat;
 }
 
+static void lcl_SetNumUsedBit(std::vector<sal_uInt8>& rSetFlags, size_t nFormatSize, sal_Int32 nNmLen, const OUString& rName, const OUString& rCmpName)
+{
+    if (rName.startsWith(rCmpName))
+    {
+        // Only get and set the Flag
+        const sal_Int32 nNum = rName.copy(nNmLen).toInt32()-1;
+        if (nNum >= 0 && static_cast<SwFrameFormats::size_type>(nNum) < nFormatSize)
+            rSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
+    }
+}
+
+static void lcl_SetNumUsedBit(std::vector<sal_uInt8>& rSetFlags, size_t nFormatSize, sal_Int32 nNmLen, const SdrObject& rObj, const OUString& rCmpName)
+{
+    OUString sName = rObj.GetName();
+    lcl_SetNumUsedBit(rSetFlags, nFormatSize, nNmLen, sName, rCmpName);
+    // tdf#122487 take groups into account, interate and recurse through their
+    // contents for name collision check
+    if (rObj.IsGroupObject())
+    {
+        const SdrObjGroup &rGroupObj = static_cast<const SdrObjGroup&>(rObj);
+        for (size_t i = 0, nCount = rGroupObj.GetObjCount(); i < nCount; ++i)
+        {
+            SdrObject* pObj = rGroupObj.GetObj(i);
+            if (!pObj)
+                continue;
+            lcl_SetNumUsedBit(rSetFlags, nFormatSize, nNmLen, *pObj, rCmpName);
+        }
+    }
+}
+
 static OUString lcl_GetUniqueFlyName(const SwDoc* pDoc, const char* pDefStrId, sal_uInt16 eType)
 {
     assert(eType >= RES_FMT_BEGIN && eType < RES_FMT_END);
@@ -1309,23 +1340,16 @@ static OUString lcl_GetUniqueFlyName(const SwDoc* pDoc, const char* pDefStrId, s
         const SwFrameFormat* pFlyFormat = rFormats[ n ];
         if (eType != pFlyFormat->Which())
             continue;
-        OUString sName;
         if (eType == RES_DRAWFRMFMT)
         {
             const SdrObject *pObj = pFlyFormat->FindSdrObject();
             if (pObj)
-                sName = pObj->GetName();
+                lcl_SetNumUsedBit(aSetFlags, rFormats.size(), nNmLen, *pObj, aName);
         }
         else
         {
-            sName = pFlyFormat->GetName();
-        }
-        if (sName.startsWith(aName))
-        {
-            // Only get and set the Flag
-            const sal_Int32 nNum = sName.copy(nNmLen).toInt32()-1;
-            if( nNum >= 0 && static_cast<SwFrameFormats::size_type>(nNum) < rFormats.size() )
-                aSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
+            OUString sName = pFlyFormat->GetName();
+            lcl_SetNumUsedBit(aSetFlags, rFormats.size(), nNmLen, sName, aName);
         }
     }
 
