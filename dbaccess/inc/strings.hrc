@@ -338,7 +338,7 @@
 
 #define STR_RSC_CHARSETS                            NC_("STR_RSC_CHARSETS", "System")
 #define STR_ERROR_DURING_CREATION                   NC_("STR_ERROR_DURING_CREATION", "Error during creation")
-#define STR_UNEXPECTED_ERROR                        NC_("STR_UNEXPECTED_ERROR", "An unexpected error occurred. The operation could not be performed.")
+#define STR_UNEXPECTED_ERROR                        NC_("STR_UNEXPECTED_ERROR", "An error occurred. The operation could not be performed.")
 #define STR_COULDNOTOPEN_LINKEDDOC                  NC_("STR_COULDNOTOPEN_LINKEDDOC", "The document \"$file$\" could not be opened.")
 #define STR_MISSING_TABLES_XDROP                    NC_("STR_MISSING_TABLES_XDROP", "The table cannot be deleted because the database connection does not support this.")
 #define STR_BUTTON_TEXT_ALL                         NC_("STR_BUTTON_TEXT_ALL", "~All")

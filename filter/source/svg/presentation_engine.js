@@ -6491,7 +6491,7 @@ function init()
 
 function presentationEngineStop()
 {
-    alert( 'We are sorry! An unexpected error occurred.\nThe presentation engine will be stopped' );
+    alert( 'We are sorry! An error occurred.\nThe presentation engine will be stopped' );
     document.onkeydown = null;
     document.onkeypress = null;
     document.onclick = null;
