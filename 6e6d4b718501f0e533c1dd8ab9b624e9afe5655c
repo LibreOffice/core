@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_3fbc6368",
+        "filename": "sw/source/uibase/docvw/HeaderFooterWin.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-04-22T04:06:00Z",
+      "side": 1,
+      "message": "Very cool! In fact, in future I encourage you to suggest me tips and tricks to write a cleaner code ;-)",
+      "parentUuid": "3fa0c359_9f76d73e",
+      "range": {
+        "startLine": 502,
+        "startChar": 0,
+        "endLine": 505,
+        "endChar": 66
+      },
+      "revId": "6e6d4b718501f0e533c1dd8ab9b624e9afe5655c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_dfa1bf97",
         "filename": "sw/source/uibase/docvw/HeaderFooterWin.cxx",
         "patchSetId": 5
@@ -59,6 +83,30 @@
       "writtenOn": "2019-04-21T20:55:58Z",
       "side": 1,
       "message": "Think about how to do this and take care of the focus issue after empty header/footer button mouse click without duplicating code.\n\nGetEditWin()-\u003eGrabFocus() or GrabFocusToDocument() which gets to the function that does the focus grab in less steps?",
+      "range": {
+        "startLine": 510,
+        "startChar": 12,
+        "endLine": 512,
+        "endChar": 34
+      },
+      "revId": "6e6d4b718501f0e533c1dd8ab9b624e9afe5655c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_1fb72789",
+        "filename": "sw/source/uibase/docvw/HeaderFooterWin.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-04-22T04:06:00Z",
+      "side": 1,
+      "message": "\"const OUString\u0026 rStyleName \u003d GetPageFrame()-\u003eGetPageDesc()-\u003eGetName();\nrSh.ChangeHeaderOrFooter(rStyleName, m_bIsHeader, true, false);\"\nThe first two lines in the block are to activate the header/footer (change the \"+\" to triangle in the frame menu button). \nI got lost at part \"which gets to the function that does the focus grab in less steps\".. \nIIUC, GrabFocusToDocument() grabs the focus in 1 step only, while GetEditWin()-\u003eGrabFocus() takes two steps..? which wouldn\u0027t make sense as to why you\u0027d recommend the latter... so I\u0027m a little confused here.",
+      "parentUuid": "3fa0c359_dfa1bf97",
       "range": {
         "startLine": 510,
         "startChar": 12,
