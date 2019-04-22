@@ -73,7 +73,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="docrecoverysavedialog|label1">Due to an unexpected error, %PRODUCTNAME crashed. All the files you were working on will now be saved. The next time %PRODUCTNAME is launched, your files will be recovered automatically.</property>
+                    <property name="label" translatable="yes" context="docrecoverysavedialog|label1">Due to an error, %PRODUCTNAME crashed. All the files you were working on will now be saved. The next time %PRODUCTNAME is launched, your files will be recovered automatically.</property>
                     <property name="wrap">True</property>
                     <property name="width_chars">70</property>
                     <property name="max_width_chars">70</property>
