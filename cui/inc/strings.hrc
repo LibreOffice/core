@@ -258,6 +258,7 @@
 #define RID_SVXSTR_CHG_SMARTART                     NC_("RID_SVXSTR_CHG_SMARTART", "SmartArt to %PRODUCTNAME shapes or reverse")
 
 #define RID_SVXSTR_OPT_DOUBLE_DICTS                 NC_("RID_SVXSTR_OPT_DOUBLE_DICTS", "The specified name already exists.\nPlease enter a new name.")
+#define RID_SVXSTR_OPT_INVALID_DICT_NAME            NC_("RID_SVXSTR_OPT_INVALID_DICT_NAME", "The specified name is invalid.\nPlease enter a new name.")
 /* To translators:
    Please, try to find a similar *short* translation to avoid
    to get narrow "New" field in the "Edit custom dictionary" window,

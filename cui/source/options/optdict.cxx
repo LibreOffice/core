@@ -132,6 +132,17 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, weld::Button&, void)
         if ( sDict.equalsIgnoreAsciiCase( pDic[i]->getName()) )
             bFound = true;
 
+    if ( sDict.indexOf("/") != -1 || sDict.indexOf("\\") != -1 )
+    {
+        // Detected an invalid character.
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      CuiResId(RID_SVXSTR_OPT_INVALID_DICT_NAME)));
+        xInfoBox->run();
+        m_xNameEdit->grab_focus();
+        return;
+    }
+
     if ( bFound )
     {
         // duplicate names?
