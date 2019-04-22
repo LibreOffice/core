@@ -209,6 +209,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	$(if $(filter WNT,$(OS)), \
 		senddoc \
 	) \
+	$(if $(filter OPENCL,$(BUILD_TYPE)),opencltest) \
 ))
 
 ifeq ($(OS),WNT)
