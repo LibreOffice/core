@@ -52,6 +52,7 @@ public:
     void testMultipleResultsets();
     void testDBMetaData();
     void testTimestampField();
+    void testNumericConversionPrepared();
 
     CPPUNIT_TEST_SUITE(MysqlTestDriver);
     CPPUNIT_TEST(testDBConnection);
@@ -60,6 +61,7 @@ public:
     CPPUNIT_TEST(testMultipleResultsets);
     CPPUNIT_TEST(testDBMetaData);
     CPPUNIT_TEST(testTimestampField);
+    CPPUNIT_TEST(testNumericConversionPrepared);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -354,6 +356,36 @@ void MysqlTestDriver::testTimestampField()
     CPPUNIT_ASSERT_EQUAL(static_cast<unsigned short>(20), dt.Hours);
     CPPUNIT_ASSERT_EQUAL(static_cast<unsigned short>(15), dt.Minutes);
     CPPUNIT_ASSERT_EQUAL(static_cast<unsigned short>(3), dt.Seconds);
+
+    xStatement->executeUpdate("DROP TABLE myTestTable");
+}
+
+/**
+ * Test getting value from a decimal type column from a result set of a
+ * prepared statement, getting as a tinyint, string, short, int, long.
+ */
+void MysqlTestDriver::testNumericConversionPrepared()
+{
+    Reference<XConnection> xConnection = m_xDriver->connect(m_sUrl, m_infos);
+    if (!xConnection.is())
+        CPPUNIT_ASSERT_MESSAGE("cannot connect to data source!", xConnection.is());
+    uno::Reference<XStatement> xStatement = xConnection->createStatement();
+    CPPUNIT_ASSERT(xStatement.is());
+    xStatement->executeUpdate("DROP TABLE IF EXISTS myTestTable");
+
+    xStatement->executeUpdate("CREATE TABLE myTestTable (myDecimal DECIMAL(4,2))");
+    xStatement->executeUpdate("INSERT INTO myTestTable VALUES (11.22)");
+    Reference<XPreparedStatement> xPrepared
+        = xConnection->prepareStatement("SELECT * from myTestTable");
+    Reference<XResultSet> xResultSet = xPrepared->executeQuery();
+    xResultSet->next(); // use it
+    Reference<XRow> xRow(xResultSet, UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("11.22"), xRow->getString(1));
+    // converting to integer types results in rounding down the number
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int8>(11), xRow->getByte(1));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(11), xRow->getShort(1));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11), xRow->getInt(1));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(11), xRow->getLong(1));
 
     xStatement->executeUpdate("DROP TABLE myTestTable");
 }
