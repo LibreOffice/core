@@ -1078,13 +1078,16 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             long nDimIdx = rDataField.mnPos;
             assert(aCachedDims[nDimIdx]); // the loop above should have screened for NULL's.
             const ScDPSaveDimension& rDim = *rDataField.mpDim;
-            const boost::optional<OUString> & pName = rDim.GetLayoutName();
+            boost::optional<OUString> pName = rDim.GetLayoutName();
             // tdf#124651: despite being optional in CT_DataField according to ECMA-376 Part 1,
             // Excel (at least 2016) seems to insist on the presence of "name" attribute in
-            // dataField element, even if empty
-            const OString sName = pName ? pName->toUtf8() : "";
+            // dataField element.
+            // tdf#124881: try to create a meaningful name; don't use empty string.
+            if (!pName)
+                pName = ScDPUtil::getDisplayedMeasureName(
+                    rDim.GetName(), ScDPUtil::toSubTotalFunc(rDim.GetFunction()));
             auto pItemAttList = sax_fastparser::FastSerializerHelper::createAttrList();
-            pItemAttList->add(XML_name, sName);
+            pItemAttList->add(XML_name, pName->toUtf8());
             pItemAttList->add(XML_fld, OString::number(nDimIdx));
             const char* pSubtotal = toOOXMLSubtotalType(rDim.GetFunction());
             if (pSubtotal)
