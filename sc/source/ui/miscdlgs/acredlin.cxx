@@ -1437,7 +1437,7 @@ void ScAcceptChgDlg::AppendChanges(const ScChangeTrack* pChanges,sal_uLong nStar
     }
 }
 
-void ScAcceptChgDlg::RemoveEntrys(sal_uLong nStartAction,sal_uLong nEndAction)
+void ScAcceptChgDlg::RemoveEntries(sal_uLong nStartAction,sal_uLong nEndAction)
 {
 
     pTheView->SetUpdateMode(false);
@@ -1481,7 +1481,7 @@ void ScAcceptChgDlg::RemoveEntrys(sal_uLong nStartAction,sal_uLong nEndAction)
 
 }
 
-void ScAcceptChgDlg::UpdateEntrys(const ScChangeTrack* pChgTrack, sal_uLong nStartAction,sal_uLong nEndAction)
+void ScAcceptChgDlg::UpdateEntries(const ScChangeTrack* pChgTrack, sal_uLong nStartAction,sal_uLong nEndAction)
 {
     pTheView->SetUpdateMode(false);
 
@@ -1556,11 +1556,11 @@ IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack&, rChgTrack, void)
                                     AppendChanges(&rChgTrack,nStartAction,nEndAction);
                                     break;
                 case ScChangeTrackMsgType::Remove:
-                                    RemoveEntrys(nStartAction,nEndAction);
+                                    RemoveEntries(nStartAction,nEndAction);
                                     break;
                 case ScChangeTrackMsgType::Parent:
                 case ScChangeTrackMsgType::Change: //bNeedsUpdate=true;
-                                    UpdateEntrys(&rChgTrack,nStartAction,nEndAction);
+                                    UpdateEntries(&rChgTrack,nStartAction,nEndAction);
                                     break;
                 default: assert(false); break;
             }

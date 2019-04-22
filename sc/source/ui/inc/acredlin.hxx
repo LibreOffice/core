@@ -135,8 +135,8 @@ class ScAcceptChgDlg final : public SfxModelessDialog
 
     void            AppendChanges(const ScChangeTrack* pChanges,sal_uLong nStartAction, sal_uLong nEndAction);
 
-    void            RemoveEntrys(sal_uLong nStartAction,sal_uLong nEndAction);
-    void            UpdateEntrys(const ScChangeTrack* pChgTrack, sal_uLong nStartAction,sal_uLong nEndAction);
+    void            RemoveEntries(sal_uLong nStartAction,sal_uLong nEndAction);
+    void            UpdateEntries(const ScChangeTrack* pChgTrack, sal_uLong nStartAction,sal_uLong nEndAction);
 
     void            UpdateView();
     void            ClearView();

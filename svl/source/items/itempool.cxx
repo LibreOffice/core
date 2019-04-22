@@ -626,7 +626,7 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
             if (it != rItemArr.end())
             {
                 AddRef(rItem);
-                assert(!bPassingOwnership && "cant be passing ownership and have the item already in the pool");
+                assert(!bPassingOwnership && "can't be passing ownership and have the item already in the pool");
                 return rItem;
             }
         }
@@ -651,7 +651,7 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
                 if (**itr == rItem)
                 {
                     AddRef(**itr);
-                    assert(!bPassingOwnership && "cant be passing ownership and have the item already in the pool");
+                    assert(!bPassingOwnership && "can't be passing ownership and have the item already in the pool");
                     return **itr;
                 }
             }
@@ -662,7 +662,7 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
     SfxPoolItem* pNewItem;
     if (bPassingOwnership)
     {
-        assert(!dynamic_cast<const SfxItemSet*>(&rItem) && "cant pass ownership of SfxItem, they need to be cloned to the master pool");
+        assert(!dynamic_cast<const SfxItemSet*>(&rItem) && "can't pass ownership of SfxItem, they need to be cloned to the master pool");
         pNewItem = const_cast<SfxPoolItem*>(&rItem);
     }
     else

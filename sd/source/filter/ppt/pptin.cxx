@@ -1167,7 +1167,7 @@ bool ImplSdPPTImport::Import()
                     break;
 
                     case PptSlideLayout::BOTTOMROW2COLUMNS :
-                    case PptSlideLayout::BLANCSLIDE :
+                    case PptSlideLayout::BLANKSLIDE :
                     case PptSlideLayout::MASTERSLIDE :           // layout of the standard and title master page
                     case PptSlideLayout::TITLEMASTERSLIDE :
                     case PptSlideLayout::MASTERNOTES :           // layout of the note master page
