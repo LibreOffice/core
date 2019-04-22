@@ -856,6 +856,30 @@ void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId)
     findDeviceInfoFromDeviceId(id, rDeviceId, rPlatformId);
 }
 
+void getOpenCLDeviceName(OUString& rDeviceName, OUString& rPlatformName)
+{
+    if (!canUseOpenCL())
+        return;
+
+    int status = clewInit(OPENCL_DLL_NAME);
+    if (status < 0)
+        return;
+
+    cl_device_id deviceId = gpuEnv.mpDevID;
+    cl_platform_id platformId;
+    if( clGetDeviceInfo(deviceId, CL_DEVICE_PLATFORM, sizeof(platformId), &platformId, nullptr) != CL_SUCCESS )
+        return;
+
+    char deviceName[DEVICE_NAME_LENGTH] = {0};
+    if( clGetDeviceInfo(deviceId, CL_DEVICE_NAME, sizeof(deviceName), deviceName, nullptr) != CL_SUCCESS )
+        return;
+    char platformName[64];
+    if( clGetPlatformInfo(platformId, CL_PLATFORM_NAME, 64, platformName, nullptr) != CL_SUCCESS )
+        return;
+    rDeviceName = OUString::createFromAscii(deviceName);
+    rPlatformName = OUString::createFromAscii(platformName);
+}
+
 void setOpenCLCmdQueuePosition( int nPos )
 {
     if (nPos < 0 || nPos >= OPENCL_CMDQUEUE_SIZE)

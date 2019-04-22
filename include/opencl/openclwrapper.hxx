@@ -77,6 +77,8 @@ OPENCL_DLLPUBLIC bool switchOpenCLDevice(const OUString* pDeviceId, bool bAutoSe
 
 OPENCL_DLLPUBLIC void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId);
 
+OPENCL_DLLPUBLIC void getOpenCLDeviceName(OUString& rDeviceName, OUString& rPlatformName);
+
 /**
  * Set the current command queue position in case of multiple command queues
  * for a given device.
