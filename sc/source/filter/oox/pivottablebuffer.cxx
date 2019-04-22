@@ -572,6 +572,9 @@ void PivotTableField::convertDataField( const PTDataFieldModel& rDataField )
         // field orientation
         aPropSet.setProperty( PROP_Orientation, DataPilotFieldOrientation_DATA );
 
+        if (!rDataField.maName.isEmpty())
+            aPropSet.setProperty(PROP_Name, rDataField.maName);
+
         /*  Field aggregation function. Documentation is a little bit confused
             about which names to use for the count functions. The name 'count'
             means 'count all', and 'countNum' means 'count numbers'. On the
