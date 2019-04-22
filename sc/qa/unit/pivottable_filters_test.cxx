@@ -93,6 +93,7 @@ public:
     void testTdf124736();
     void tesTtdf124772NumFmt();
     void testTdf124810();
+    void testTdf124883();
 
     CPPUNIT_TEST_SUITE(ScPivotTableFiltersTest);
 
@@ -140,6 +141,7 @@ public:
     CPPUNIT_TEST(testTdf124736);
     CPPUNIT_TEST(tesTtdf124772NumFmt);
     CPPUNIT_TEST(testTdf124810);
+    CPPUNIT_TEST(testTdf124883);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2612,6 +2614,26 @@ void ScPivotTableFiltersTest::testTdf124810()
         assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showColStripes", "0");
         assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showLastColumn", "1");
     }
+}
+
+void ScPivotTableFiltersTest::testTdf124883()
+{
+    ScDocShellRef xDocSh = loadDoc("pivot-table/two-data-fields.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(xDocSh.get(), FORMAT_XLSX);
+    xDocSh->DoClose();
+
+    xmlDocPtr pTable
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
+    CPPUNIT_ASSERT(pTable);
+
+    // The field names must be kept just as they appear in original XLSX
+    assertXPath(pTable, "/x:pivotTableDefinition/x:dataFields/x:dataField[1]", "name",
+                "Sum of Value");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:dataFields/x:dataField[2]", "name",
+                "Count of Value2");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPivotTableFiltersTest);
