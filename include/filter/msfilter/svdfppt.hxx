@@ -1443,7 +1443,7 @@ enum class PptSlideLayout
     TOPROW2COLUMN          =  13,  // Body contains 2 rows, top row has 2 columns
     FOUROBJECTS            =  14,  // 4 objects
     BIGOBJECT              =  15,  // Big object
-    BLANCSLIDE             =  16,  // Blank slide
+    BLANKSLIDE             =  16,  // Blank slide
     TITLERIGHTBODYLEFT     =  17,  // Vertical title on the right, body on the left
     TITLERIGHT2BODIESLEFT  =  18   // Vertical title on the right, body on the left split into 2 rows
 };
