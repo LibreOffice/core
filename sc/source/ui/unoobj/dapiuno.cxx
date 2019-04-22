@@ -1910,6 +1910,12 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
     {
         setRepeatItemLabels(cppu::any2bool(aValue));
     }
+    else if (aPropertyName == SC_UNONAME_NAME)
+    {
+        OUString sName;
+        if (aValue >>= sName)
+            setName(sName);
+    }
 }
 
 Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyName )
@@ -1999,6 +2005,8 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
         aRet <<= getShowEmpty();
     else if ( aPropertyName == SC_UNONAME_REPEATITEMLABELS )
         aRet <<= getRepeatItemLabels();
+    else if (aPropertyName == SC_UNONAME_NAME)
+        aRet <<= getName();
 
     return aRet;
 }
