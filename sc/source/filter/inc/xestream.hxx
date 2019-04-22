@@ -290,9 +290,9 @@ public:
     void WriteAttributes(sal_Int32 nAttribute, const Str& value, Args... rest)
     {
         WriteAttribute(nAttribute, value);
-        WriteAttributes(rest...);
+        if constexpr(sizeof...(rest) > 0)
+            WriteAttributes(rest...);
     }
-    static void WriteAttributes() {}
 
     sax_fastparser::FSHelperPtr     CreateOutputStream (
                                         const OUString& sFullStream,
