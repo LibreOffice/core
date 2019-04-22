@@ -47,9 +47,9 @@ public:
         double fValue, const ScDPNumGroupInfo* pInfo, sal_Int32 nDatePart,
         const SvNumberFormatter* pFormatter);
 
-    static OUString getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc eFunc);
+    SC_DLLPUBLIC static OUString getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc eFunc);
 
-    static ScSubTotalFunc toSubTotalFunc(ScGeneralFunction eGenFunc);
+    SC_DLLPUBLIC static ScSubTotalFunc toSubTotalFunc(ScGeneralFunction eGenFunc);
 };
 
 #endif
