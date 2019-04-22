@@ -243,6 +243,11 @@ namespace com { namespace sun { namespace star { namespace uno {
     }
 } } } }
 
+// Test compile time conversion of Color to sal_uInt32
+
+static_assert (sal_uInt32(Color(0x00, 0x12, 0x34, 0x56)) == 0x00123456);
+static_assert (sal_uInt32(Color(0x12, 0x34, 0x56)) == 0x00123456);
+
 // Color types
 
 constexpr ::Color COL_BLACK                   ( 0x00, 0x00, 0x00 );

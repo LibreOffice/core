@@ -31,7 +31,6 @@ public:
     void testBColor();
 
     CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testConstruction);
     CPPUNIT_TEST(testVariables);
     CPPUNIT_TEST(test_asRGBColor);
     CPPUNIT_TEST(test_readAndWriteStream);
@@ -41,24 +40,6 @@ public:
     CPPUNIT_TEST(testBColor);
     CPPUNIT_TEST_SUITE_END();
 };
-
-void Test::testConstruction()
-{
-    // Compile time construction of the Color and representation as a sal_uInt32
-
-    Color aColor = Color(0xFF, 0xFF, 0x00);
-
-    switch (sal_uInt32(aColor))
-    {
-        case sal_uInt32(Color(0xFF, 0xFF, 0x00)):
-            break;
-        case sal_uInt32(Color(0x00, 0x00, 0xFF, 0xFF)):
-            break;
-        default:
-            CPPUNIT_ASSERT(false);
-            break;
-    }
-}
 
 void Test::testVariables()
 {
