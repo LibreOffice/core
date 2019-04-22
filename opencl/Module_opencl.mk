@@ -10,6 +10,7 @@
 $(eval $(call gb_Module_Module,opencl))
 
 $(eval $(call gb_Module_add_targets,opencl,\
+    Executable_opencltest \
     Library_opencl \
 ))
 
