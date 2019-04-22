@@ -80,12 +80,6 @@ std::wstring GetKnownFolder(const KNOWNFOLDERID& rfid)
     return sResult;
 }
 
-void WriteLogElem(MSIHANDLE hInst, MSIHANDLE hRecord, std::ostringstream& sTmpl, UINT)
-{
-    MsiRecordSetStringA(hRecord, 0, sTmpl.str().c_str());
-    MsiProcessMessage(hInst, INSTALLMESSAGE_INFO, hRecord);
-}
-
 void RecSetString(MSIHANDLE hRec, UINT nField, LPCSTR sVal)
 {
     MsiRecordSetStringA(hRec, nField, sVal);
@@ -96,20 +90,25 @@ void RecSetString(MSIHANDLE hRec, UINT nField, LPCWSTR sVal)
     MsiRecordSetStringW(hRec, nField, sVal);
 }
 
-template <class Ch, class... SOther>
+template <class S>
+void RecSetString(MSIHANDLE hRec, UINT nField, const S& sVal)
+{
+    RecSetString(hRec, nField, sVal.c_str());
+}
+
+template <class S, class... SOther>
 void WriteLogElem(MSIHANDLE hInst, MSIHANDLE hRec, std::ostringstream& sTmpl, UINT nField,
-                  const Ch* elem, const SOther&... others)
+                  const S& elem, const SOther&... others)
 {
     sTmpl << " [" << nField << "]";
     RecSetString(hRec, nField, elem);
-    WriteLogElem(hInst, hRec, sTmpl, nField + 1, others...);
-}
-
-template <class S1, class... SOther>
-void WriteLogElem(MSIHANDLE hInst, MSIHANDLE hRec, std::ostringstream& sTmpl, UINT nField,
-                  const S1& elem, const SOther&... others)
-{
-    WriteLogElem(hInst, hRec, sTmpl, nField, elem.c_str(), others...);
+    if constexpr(sizeof...(others) > 0)
+        WriteLogElem(hInst, hRec, sTmpl, nField + 1, others...);
+    else
+    {
+        MsiRecordSetStringA(hRec, 0, sTmpl.str().c_str());
+        MsiProcessMessage(hInst, INSTALLMESSAGE_INFO, hRec);
+    }
 }
 
 static std::string sLogPrefix;
