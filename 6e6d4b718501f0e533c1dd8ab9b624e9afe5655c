@@ -116,6 +116,30 @@
       "revId": "6e6d4b718501f0e533c1dd8ab9b624e9afe5655c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_9faa5717",
+        "filename": "sw/source/uibase/docvw/HeaderFooterWin.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-04-22T04:27:46Z",
+      "side": 1,
+      "message": "GetFocusToDocument() calls Window::GrabFocusToDocument() which further calls Window::ImplGrabFocusToDocument() which is at core/vcl/source/window/mouse.cxx.\n\nIn the function, there is \n\"pWin-\u003eImplGetFrameWindow()-\u003eGetWindow( GetWindowType::Client )-\u003eImplGrabFocus(nFlags);\"\nI see 4 steps now, inside a while loop.",
+      "parentUuid": "3fa0c359_1fb72789",
+      "range": {
+        "startLine": 510,
+        "startChar": 12,
+        "endLine": 512,
+        "endChar": 34
+      },
+      "revId": "6e6d4b718501f0e533c1dd8ab9b624e9afe5655c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
