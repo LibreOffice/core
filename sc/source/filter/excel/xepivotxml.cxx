@@ -1136,8 +1136,12 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             const OUString* pName = rDim.GetLayoutName();
             // tdf#124651: despite being optional in CT_DataField according to ECMA-376 Part 1,
             // Excel (at least 2016) seems to insist on the presence of "name" attribute in
-            // dataField element, even if empty
-            const OString sName = pName ? XclXmlUtils::ToOString(*pName) : "";
+            // dataField element.
+            // tdf#124881: try to create a meaningful name; don't use empty string.
+            const OString sName = XclXmlUtils::ToOString(
+                pName ? *pName
+                      : ScDPUtil::getDisplayedMeasureName(
+                            rDim.GetName(), ScDPUtil::toSubTotalFunc(rDim.GetFunction())));
             auto pItemAttList = sax_fastparser::FastSerializerHelper::createAttrList();
             pItemAttList->add(XML_name, sName);
             pItemAttList->add(XML_fld, OString::number(nDimIdx));

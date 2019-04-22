@@ -2480,7 +2480,8 @@ void ScPivotTableFiltersTest::testTdf124651()
     CPPUNIT_ASSERT(pDoc);
     // We have to export name attribute, even though it's optional according to ECMA-376 standard,
     // because Excel (at least 2016) seems to require it.
-    assertXPath(pDoc, "/x:pivotTableDefinition/x:dataFields/x:dataField", "name", "");
+    // tdf#124881: this shouldn't be an empty string
+    assertXPath(pDoc, "/x:pivotTableDefinition/x:dataFields/x:dataField", "name", "Sum - num");
 }
 
 void ScPivotTableFiltersTest::testTdf124736()
