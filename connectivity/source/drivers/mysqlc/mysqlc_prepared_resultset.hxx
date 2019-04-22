@@ -36,6 +36,7 @@
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
+#include <connectivity/FValue.hxx>
 
 #include <cppuhelper/compbase12.hxx>
 
@@ -90,6 +91,10 @@ class OPreparedResultSet final : public OBase_Mutex,
     void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) override;
 
     void SAL_CALL getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const override;
+
+    template <typename T> T safelyRetrieveValue(const sal_Int32 nColumnIndex);
+    template <typename T> T retrieveValue(const sal_Int32 nColumnIndex);
+    connectivity::ORowSetValue getRowSetValue(sal_Int32 nColumnIndex);
 
     // you can't delete objects of this type
     virtual ~OPreparedResultSet() override = default;
