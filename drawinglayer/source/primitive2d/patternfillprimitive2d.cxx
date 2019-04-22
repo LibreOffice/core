@@ -99,7 +99,7 @@ namespace drawinglayer
         {
             Primitive2DContainer aContent;
 
-            // see if buffering is wanted. it is wanted, create buffered content in given resolution
+            // see if buffering is wanted. If so, create buffered content in given resolution
             if(0 != mnDiscreteWidth && 0 != mnDiscreteHeight)
             {
                 const geometry::ViewInformation2D aViewInformation2D;
