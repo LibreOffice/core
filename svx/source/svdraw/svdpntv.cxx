@@ -226,10 +226,9 @@ void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         return;
     }
 
-    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-    if (!pSdrHint)
+    if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
         return;
-
+    const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
     SdrHintKind eKind = pSdrHint->GetKind();
     if (eKind==SdrHintKind::ObjectChange || eKind==SdrHintKind::ObjectInserted || eKind==SdrHintKind::ObjectRemoved)
     {

@@ -763,9 +763,9 @@ SdTransferable* SdTransferable::getImplementation( const Reference< XInterface >
 
 void SdTransferable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >( &rHint );
-    if( pSdrHint )
+    if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
     {
+        const SdrHint* pSdrHint = static_cast< const SdrHint* >( &rHint );
         if( SdrHintKind::ModelCleared == pSdrHint->GetKind() )
         {
             EndListening(*mpSourceDoc);
