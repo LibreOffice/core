@@ -349,8 +349,15 @@ GError *MountOperation::Mount(GFile *pFile)
         // GdkThreadsLeave unlock the SolarMutex down to zero at the end of
         // g_main_loop_run, so we need ~SolarMutexReleaser to raise it back to
         // the original value again:
-        SolarMutexReleaser rel;
-        g_main_loop_run(mpLoop);
+        if (comphelper::SolarMutex::get()->IsCurrentThread())
+        {
+            SolarMutexReleaser rel;
+            g_main_loop_run(mpLoop);
+        }
+        else
+        {
+            g_main_loop_run(mpLoop);
+        }
     }
     return mpError;
 }
