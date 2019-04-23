@@ -396,45 +396,45 @@ void ScChildrenShapes::SetDrawBroadcaster()
 
 void ScChildrenShapes::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-    if (pSdrHint)
+    if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
+        return;
+    const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
+
+    SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject());
+    if (pObj && /*(pObj->GetLayer() != SC_LAYER_INTERN) && */(pObj->getSdrPageFromSdrObject() == GetDrawPage()) &&
+        (pObj->getSdrPageFromSdrObject() == pObj->getParentSdrObjListFromSdrObject()) ) //only do something if the object lies direct on the page
     {
-        SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject());
-        if (pObj && /*(pObj->GetLayer() != SC_LAYER_INTERN) && */(pObj->getSdrPageFromSdrObject() == GetDrawPage()) &&
-            (pObj->getSdrPageFromSdrObject() == pObj->getParentSdrObjListFromSdrObject()) ) //only do something if the object lies direct on the page
+        switch (pSdrHint->GetKind())
         {
-            switch (pSdrHint->GetKind())
+            case SdrHintKind::ObjectChange :         // object changed
             {
-                case SdrHintKind::ObjectChange :         // object changed
+                uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
+                if (xShape.is())
                 {
-                    uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
-                    if (xShape.is())
-                    {
-                        std::sort(maZOrderedShapes.begin(), maZOrderedShapes.end(), ScShapeDataLess()); // sort, because the z index or layer could be changed
-                        CheckWhetherAnchorChanged(xShape);
-                    }
+                    std::sort(maZOrderedShapes.begin(), maZOrderedShapes.end(), ScShapeDataLess()); // sort, because the z index or layer could be changed
+                    CheckWhetherAnchorChanged(xShape);
                 }
-                break;
-                case SdrHintKind::ObjectInserted :    // new drawing object inserted
-                {
-                    uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
-                    if (xShape.is())
-                        AddShape(xShape, true);
-                }
-                break;
-                case SdrHintKind::ObjectRemoved :     // Removed drawing object from list
-                {
-                    uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
-                    if (xShape.is())
-                        RemoveShape(xShape);
-                }
-                break;
-                default :
-                {
-                    // other events are not interesting
-                }
-                break;
             }
+            break;
+            case SdrHintKind::ObjectInserted :    // new drawing object inserted
+            {
+                uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
+                if (xShape.is())
+                    AddShape(xShape, true);
+            }
+            break;
+            case SdrHintKind::ObjectRemoved :     // Removed drawing object from list
+            {
+                uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
+                if (xShape.is())
+                    RemoveShape(xShape);
+            }
+            break;
+            default :
+            {
+                // other events are not interesting
+            }
+            break;
         }
     }
 }

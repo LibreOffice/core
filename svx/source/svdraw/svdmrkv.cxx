@@ -169,11 +169,10 @@ SdrMarkView::~SdrMarkView()
 
 void SdrMarkView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-    if (pSdrHint)
+    if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
     {
+        const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
         SdrHintKind eKind=pSdrHint->GetKind();
-
         if (eKind==SdrHintKind::ObjectChange || eKind==SdrHintKind::ObjectInserted || eKind==SdrHintKind::ObjectRemoved)
         {
             mbMarkedObjRectDirty=true;
