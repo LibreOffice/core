@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_c28ec6cf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-04-23T08:32:52Z",
+      "side": 1,
+      "message": "rhbz#112252 (https://bugzilla.redhat.com/show_bug.cgi?id\u003d112252) is something else. I imagine you want\ntdf#112252 (https://bugs.documentfoundation.org/show_bug.cgi?id\u003d112252) or rhbz#1432468 (https://bugzilla.redhat.com/show_bug.cgi?id\u003d1432468)",
+      "revId": "f96e230d22e683d03e912a0a2d507c9c6951b2e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
