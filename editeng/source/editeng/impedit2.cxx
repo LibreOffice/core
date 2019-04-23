@@ -364,7 +364,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
         if( mpIMEInfos )
         {
             // #102812# convert quotes in IME text
-            // works on the last input character, this is escpecially in Korean text often done
+            // works on the last input character, this is especially in Korean text often done
             // quotes that are inside of the string are not replaced!
             // Borrowed from sw: edtwin.cxx
             if ( mpIMEInfos->nLen )
@@ -373,7 +373,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 aSel.Min().SetIndex( aSel.Min().GetIndex() + mpIMEInfos->nLen-1 );
                 aSel.Max().SetIndex( aSel.Max().GetIndex() + mpIMEInfos->nLen );
                 // #102812# convert quotes in IME text
-                // works on the last input character, this is escpecially in Korean text often done
+                // works on the last input character, this is especially in Korean text often done
                 // quotes that are inside of the string are not replaced!
                 const sal_Unicode nCharCode = aSel.Min().GetNode()->GetChar( aSel.Min().GetIndex() );
                 if ( ( GetStatus().DoAutoCorrect() ) && ( ( nCharCode == '\"' ) || ( nCharCode == '\'' ) ) )

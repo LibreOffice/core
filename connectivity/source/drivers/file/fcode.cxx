@@ -85,7 +85,7 @@ OOperandParam::OOperandParam(OSQLParseNode const * pNode, sal_Int32 _nPos)
 
     // set up Parameter-Column with default type, can be specified more precisely later using Describe-Parameter
 
-    // save Identity (not escpecially necessary here, just for the sake of symmetry)
+    // save Identity (not especially necessary here, just for the sake of symmetry)
 
     // todo
     //  OColumn* pColumn = new OFILEColumn(aParameterName,eDBType,255,0,SQL_FLAGS_NULLALLOWED);
