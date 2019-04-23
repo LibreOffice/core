@@ -106,13 +106,27 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
                 oox::drawingml::FillPropertiesPtr pBackgroundPropertiesPtr = mpSlidePersistPtr->getBackgroundProperties();
                 if (!pBackgroundPropertiesPtr)
                 {
-                    // The shape wants a background, but the slide doesn't have
-                    // one: default to white.
-                    pBackgroundPropertiesPtr.reset(new oox::drawingml::FillProperties);
-                    pBackgroundPropertiesPtr->moFillType = XML_solidFill;
-                    pBackgroundPropertiesPtr->maFillColor.setSrgbClr(0xFFFFFF);
+                    // The shape wants a background, but the slide doesn't have one.
+                    SlidePersistPtr pMaster = mpSlidePersistPtr->getMasterPersist();
+                    if (pMaster)
+                    {
+                        oox::drawingml::FillPropertiesPtr pMasterBackground
+                            = pMaster->getBackgroundProperties();
+                        if (pMasterBackground)
+                        {
+                            if (pMasterBackground->moFillType.has()
+                                && pMasterBackground->moFillType.get() == XML_solidFill)
+                            {
+                                // Master has a solid background, use that.
+                                pBackgroundPropertiesPtr = pMasterBackground;
+                            }
+                        }
+                    }
                 }
-                pShape->getFillProperties().assignUsed( *pBackgroundPropertiesPtr );
+                if (pBackgroundPropertiesPtr)
+                {
+                    pShape->getFillProperties().assignUsed(*pBackgroundPropertiesPtr);
+                }
             }
             pShape->setModelId(rAttribs.getString( XML_modelId ).get());
             return new PPTShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr, pShape );
