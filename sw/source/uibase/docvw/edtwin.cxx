@@ -5318,7 +5318,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 if ( !sRecord.isEmpty() )
                 {
                     // convert quotes in IME text
-                    // works on the last input character, this is escpecially in Korean text often done
+                    // works on the last input character, this is especially in Korean text often done
                     // quotes that are inside of the string are not replaced!
                     const sal_Unicode aCh = sRecord[sRecord.getLength() - 1];
                     SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
