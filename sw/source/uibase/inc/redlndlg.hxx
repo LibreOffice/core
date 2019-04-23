@@ -128,7 +128,7 @@ public:
     void            Init(SwRedlineTable::size_type nStart = 0);
     void            CallAcceptReject( bool bSelect, bool bAccept );
 
-    void            Initialize(const OUString &rExtraData);
+    void            Initialize(OUString &rExtraData);
     void            FillInfo(OUString &rExtraData) const;
 
     void            Activate();
@@ -146,16 +146,16 @@ public:
 
     virtual void    Activate() override;
     virtual void    FillInfo(SfxChildWinInfo&) const override;
-    void            Initialize (SfxChildWinInfo const * pInfo);
+    void            Initialize(SfxChildWinInfo * pInfo);
 };
 
 class SwRedlineAcceptChild : public SwChildWinWrapper
 {
 public:
-    SwRedlineAcceptChild(   vcl::Window* ,
-                            sal_uInt16 nId,
-                            SfxBindings*,
-                            SfxChildWinInfo const *  );
+    SwRedlineAcceptChild(vcl::Window* ,
+                         sal_uInt16 nId,
+                         SfxBindings*,
+                         SfxChildWinInfo*);
 
     SFX_DECL_CHILDWINDOW_WITHID( SwRedlineAcceptChild );
 

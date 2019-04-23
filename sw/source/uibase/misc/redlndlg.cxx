@@ -60,11 +60,11 @@ SFX_IMPL_MODELESSDIALOG_WITHID( SwRedlineAcceptChild, FN_REDLINE_ACCEPT )
 static sal_uInt16 nSortMode = 0xffff;
 static bool       bSortDir = true;
 
-SwRedlineAcceptChild::SwRedlineAcceptChild( vcl::Window* _pParent,
-                                            sal_uInt16 nId,
-                                            SfxBindings* pBindings,
-                                            SfxChildWinInfo const * pInfo ) :
-    SwChildWinWrapper( _pParent, nId )
+SwRedlineAcceptChild::SwRedlineAcceptChild(vcl::Window* _pParent,
+                                           sal_uInt16 nId,
+                                           SfxBindings* pBindings,
+                                           SfxChildWinInfo* pInfo)
+    : SwChildWinWrapper(_pParent, nId)
 {
     SetWindow( VclPtr<SwModelessRedlineAcceptDlg>::Create( pBindings, this, _pParent) );
 
@@ -122,7 +122,7 @@ void SwModelessRedlineAcceptDlg::Activate()
     pImplDlg->Activate();
 }
 
-void SwModelessRedlineAcceptDlg::Initialize(SfxChildWinInfo const *pInfo)
+void SwModelessRedlineAcceptDlg::Initialize(SfxChildWinInfo* pInfo)
 {
     if (pInfo != nullptr)
         pImplDlg->Initialize(pInfo->aExtraString);
@@ -1160,38 +1160,49 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
     }
 }
 
-void SwRedlineAcceptDlg::Initialize(const OUString& rExtraData)
+namespace
 {
-    if (!rExtraData.isEmpty())
+    OUString lcl_StripAcceptChgDat(OUString &rExtraString)
     {
-        sal_Int32 nPos = rExtraData.indexOf("AcceptChgDat:");
-
-        // try to read the alignment string "ALIGN:(...)"; if none existing,
-        // it's an old version
-        if (nPos != -1)
+        OUString aStr;
+        while(true)
         {
-            sal_Int32 n1 = rExtraData.indexOf('(', nPos);
+            sal_Int32 nPos = rExtraString.indexOf("AcceptChgDat:");
+            if (nPos == -1)
+                break;
+            // try to read the alignment string "ALIGN:(...)"; if none existing,
+            // it's an old version
+            sal_Int32 n1 = rExtraString.indexOf('(', nPos);
             if (n1 != -1)
             {
-                sal_Int32 n2 = rExtraData.indexOf(')', n1);
+                sal_Int32 n2 = rExtraString.indexOf(')', n1);
                 if (n2 != -1)
                 {
                     // cut out the alignment string
-                    OUString aStr = rExtraData.copy(nPos, n2 - nPos + 1);
+                    aStr = rExtraString.copy(nPos, n2 - nPos + 1);
+                    rExtraString = rExtraString.replaceAt(nPos, n2 - nPos + 1, "");
                     aStr = aStr.copy(n1 - nPos + 1);
-
-                    if (!aStr.isEmpty())
-                    {
-                        sal_uInt16 nCount = static_cast< sal_uInt16 >(aStr.toInt32());
-
-                        for (sal_uInt16 i = 0; i < nCount; i++)
-                        {
-                            sal_Int32 n3 = aStr.indexOf(';');
-                            aStr = aStr.copy(n3 + 1);
-                            m_pTable->SetTab(i, aStr.toInt32(), MapUnit::MapPixel);
-                        }
-                    }
                 }
+            }
+        }
+        return aStr;
+    }
+}
+
+void SwRedlineAcceptDlg::Initialize(OUString& rExtraString)
+{
+    if (!rExtraString.isEmpty())
+    {
+        OUString aStr = lcl_StripAcceptChgDat(rExtraString);
+        if (!aStr.isEmpty())
+        {
+            sal_uInt16 nCount = static_cast<sal_uInt16>(aStr.toInt32());
+
+            for (sal_uInt16 i = 0; i < nCount; ++i)
+            {
+                sal_Int32 n1 = aStr.indexOf(';');
+                aStr = aStr.copy(n1 + 1);
+                m_pTable->SetTab(i, aStr.toInt32(), MapUnit::MapPixel);
             }
         }
     }
@@ -1199,6 +1210,8 @@ void SwRedlineAcceptDlg::Initialize(const OUString& rExtraData)
 
 void SwRedlineAcceptDlg::FillInfo(OUString &rExtraData) const
 {
+    //remove any old one before adding a new one
+    lcl_StripAcceptChgDat(rExtraData);
     rExtraData += "AcceptChgDat:(";
 
     sal_uInt16  nCount = m_pTable->TabCount();
