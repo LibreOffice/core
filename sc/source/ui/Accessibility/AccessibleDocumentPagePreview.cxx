@@ -589,16 +589,11 @@ struct ScShapeRange
 
 typedef std::vector<ScShapeRange> ScShapeRangeVec;
 
-class ScShapeChildren : public SfxListener,
-        public ::accessibility::IAccessibleParent
+class ScShapeChildren : public ::accessibility::IAccessibleParent
 {
 public:
     ScShapeChildren(ScPreviewShell* pViewShell, ScAccessibleDocumentPagePreview* pAccDoc);
     virtual ~ScShapeChildren() override;
-
-    ///=====  SfxListener  =====================================================
-
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     ///=====  IAccessibleParent  ==============================================
 
@@ -625,7 +620,6 @@ public:
     void DataChanged();
     void VisAreaChanged() const;
 
-    void SetDrawBroadcaster();
 private:
     ScAccessibleDocumentPagePreview* const mpAccDoc;
     ScPreviewShell* mpViewShell;
@@ -648,56 +642,10 @@ ScShapeChildren::ScShapeChildren(ScPreviewShell* pViewShell, ScAccessibleDocumen
     mpViewShell(pViewShell),
     maShapeRanges(SC_PREVIEW_MAXRANGES)
 {
-    if (pViewShell)
-    {
-        SfxBroadcaster* pDrawBC = pViewShell->GetDocument().GetDrawBroadcaster();
-        if (pDrawBC)
-            StartListening(*pDrawBC);
-    }
 }
 
 ScShapeChildren::~ScShapeChildren()
 {
-    if (mpViewShell)
-    {
-        SfxBroadcaster* pDrawBC = mpViewShell->GetDocument().GetDrawBroadcaster();
-        if (pDrawBC)
-            EndListening(*pDrawBC);
-    }
-}
-
-void ScShapeChildren::SetDrawBroadcaster()
-{
-    if (mpViewShell)
-    {
-        SfxBroadcaster* pDrawBC = mpViewShell->GetDocument().GetDrawBroadcaster();
-        if (pDrawBC)
-            StartListening(*pDrawBC, DuplicateHandling::Prevent);
-    }
-}
-
-void ScShapeChildren::Notify(SfxBroadcaster&, const SfxHint& rHint)
-{
-    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint );
-    if (pSdrHint)
-    {
-        SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject());
-        if (pObj && (pObj->getSdrPageFromSdrObject() == GetDrawPage()))
-        {
-            switch (pSdrHint->GetKind())
-            {
-                case SdrHintKind::ObjectChange :
-                {
-                }
-                break;
-                default :
-                {
-                    // other events are not interesting
-                }
-                break;
-            }
-        }
-    }
 }
 
 void ScShapeChildren::FindChanged(ScShapeChildVec& rOld, ScShapeChildVec& rNew) const

@@ -52,9 +52,9 @@ void SAL_CALL ScDrawModelBroadcaster::removeEventListener( const uno::Reference<
 void ScDrawModelBroadcaster::Notify( SfxBroadcaster&,
         const SfxHint& rHint )
 {
-    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-    if( !pSdrHint )
+    if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
         return;
+    const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
 
     document::EventObject aEvent;
     if( !SvxUnoDrawMSFactory::createEvent( mpDrawModel, pSdrHint, aEvent ) )

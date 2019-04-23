@@ -288,8 +288,9 @@ void FmXUndoEnvironment::ModeChanged()
 
 void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if (const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint))
+    if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
     {
+        const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
         switch (pSdrHint->GetKind())
         {
             case SdrHintKind::ObjectInserted:

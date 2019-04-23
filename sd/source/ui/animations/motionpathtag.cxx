@@ -387,7 +387,7 @@ void MotionPathTag::updatePathAttributes()
 
 void MotionPathTag::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if( !(mpPathObj && !mbInUpdatePath && dynamic_cast< const SdrHint* >( &rHint ) && (mpEffect.get() != nullptr)) )
+    if( !(mpPathObj && !mbInUpdatePath && rHint.GetId() == SfxHintId::ThisIsAnSdrHint && (mpEffect.get() != nullptr)) )
         return;
 
     if( mxPolyPoly != mpPathObj->GetPathPoly() )

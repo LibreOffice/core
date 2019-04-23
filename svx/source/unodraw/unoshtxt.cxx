@@ -269,8 +269,9 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     {
         Broadcast( *pViewHint );
     }
-    else if (const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
     {
+        const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
         switch( pSdrHint->GetKind() )
         {
             case SdrHintKind::ObjectChange:

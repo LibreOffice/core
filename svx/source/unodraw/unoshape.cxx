@@ -1018,17 +1018,18 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
         return;
 
     // #i55919# SdrHintKind::ObjectChange is only interesting if it's for this object
-
-    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-    if (!pSdrHint ||
-        ((pSdrHint->GetKind() != SdrHintKind::ModelCleared) &&
-         (pSdrHint->GetKind() != SdrHintKind::ObjectChange || pSdrHint->GetObject() != GetSdrObject() )))
+    if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
+        return;
+    SdrObject* pSdrObject(GetSdrObject());
+    const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
+    if ((pSdrHint->GetKind() != SdrHintKind::ModelCleared) &&
+         (pSdrHint->GetKind() != SdrHintKind::ObjectChange || pSdrHint->GetObject() != pSdrObject ))
         return;
 
-    uno::Reference< uno::XInterface > xSelf( GetSdrObject()->getWeakUnoShape() );
+    uno::Reference< uno::XInterface > xSelf( pSdrObject->getWeakUnoShape() );
     if( !xSelf.is() )
     {
-        EndListening(GetSdrObject()->getSdrModelFromSdrObject());
+        EndListening(pSdrObject->getSdrModelFromSdrObject());
         mpSdrObjectWeakReference.reset(nullptr);
         return;
     }
@@ -1053,8 +1054,6 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 
     if( bClearMe )
     {
-        SdrObject* pSdrObject(GetSdrObject());
-
         if(!HasSdrObjectOwnership())
         {
             if(nullptr != pSdrObject)
