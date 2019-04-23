@@ -1582,7 +1582,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             m_aStates.top().aPicture.eStyle = RTFBmpStyle::DIBITMAP;
             break;
         case RTF_TRWWIDTHA:
-            m_aStates.top().nTableRowWidthAfter = nParam;
+            // m_aStates.top().nTableRowWidthAfter = nParam;
             break;
         case RTF_ANIMTEXT:
         {

@@ -3354,11 +3354,11 @@ RTFError RTFDocumentImpl::popState()
             replayBuffer(m_aSuperBuffer, nullptr, nullptr);
     }
 
-    if (!m_aStates.empty() && m_aStates.top().nTableRowWidthAfter > 0
-        && aState.nTableRowWidthAfter == 0)
-        // An RTF_ROW in the inner group already parsed nTableRowWidthAfter,
-        // don't do it again in the outer state later.
-        m_aStates.top().nTableRowWidthAfter = 0;
+    // if (!m_aStates.empty() && m_aStates.top().nTableRowWidthAfter > 0
+    //     && aState.nTableRowWidthAfter == 0)
+    //     // An RTF_ROW in the inner group already parsed nTableRowWidthAfter,
+    //     // don't do it again in the outer state later.
+    //     m_aStates.top().nTableRowWidthAfter = 0;
 
     if (m_nResetBreakOnSectBreak != RTF_invalid && !m_aStates.empty())
     {
