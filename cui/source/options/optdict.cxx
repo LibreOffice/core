@@ -98,6 +98,9 @@ SvxNewDictionaryDialog::SvxNewDictionaryDialog(weld::Window* pParent)
     , m_xExceptBtn(m_xBuilder->weld_check_button("except"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
 {
+    // Prevent creation of dictionary without a name.
+    m_xOKBtn->set_sensitive(false);
+
     // install handler
     m_xNameEdit->connect_changed(LINK(this, SvxNewDictionaryDialog, ModifyHdl_Impl));
     m_xOKBtn->connect_clicked(LINK(this, SvxNewDictionaryDialog, OKHdl_Impl));
