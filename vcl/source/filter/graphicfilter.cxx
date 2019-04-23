@@ -1428,7 +1428,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
     }
 }
 
-Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream)
+Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 sizeLimit)
 {
     Graphic aGraphic;
     sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
@@ -1443,7 +1443,7 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream)
     ErrCode nStatus = ImpTestOrFindFormat("", rIStream, nFormat);
 
     rIStream.Seek(nStreamBegin);
-    const sal_uInt32 nStreamLength(rIStream.remainingSize());
+    const sal_uInt32 nStreamLength( sizeLimit ? sizeLimit : rIStream.remainingSize());
 
     OUString aFilterName = pConfig->GetImportFilterName(nFormat);
     OUString aExternalFilterName = pConfig->GetExternalFilterName(nFormat, false);
