@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_a5b7043b",
+        "filename": "svx/source/stbctrls/selctrl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-23T10:46:59Z",
+      "side": 1,
+      "message": "Sorry, no, but no. Including a header file of another module and even a module that is above is a no-go.\n\nPlease revert this change and find another solution.",
+      "revId": "220ce1a5b1db6e456afe04b7e9002c524dcf1044",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
