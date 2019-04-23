@@ -107,13 +107,13 @@ SvxAreaTabPage::SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs
     maBox.AddButton(m_xBtnHatch.get());
     maBox.AddButton(m_xBtnBitmap.get());
     maBox.AddButton(m_xBtnPattern.get());
-    Link<weld::ToggleButton&, void> aLink = LINK(this, SvxAreaTabPage, SelectFillTypeHdl_Impl);
-    m_xBtnNone->connect_toggled(aLink);
-    m_xBtnColor->connect_toggled(aLink);
-    m_xBtnGradient->connect_toggled(aLink);
-    m_xBtnHatch->connect_toggled(aLink);
-    m_xBtnBitmap->connect_toggled(aLink);
-    m_xBtnPattern->connect_toggled(aLink);
+    Link<weld::Button&, void> aLink = LINK(this, SvxAreaTabPage, SelectFillTypeHdl_Impl);
+    m_xBtnNone->connect_clicked(aLink);
+    m_xBtnColor->connect_clicked(aLink);
+    m_xBtnGradient->connect_clicked(aLink);
+    m_xBtnHatch->connect_clicked(aLink);
+    m_xBtnBitmap->connect_clicked(aLink);
+    m_xBtnPattern->connect_clicked(aLink);
 
     SetExchangeSupport();
 }
@@ -373,9 +373,18 @@ VclPtr<SfxTabPage> lcl_CreateFillStyleTabPage(sal_uInt16 nId, TabPageParent pPar
 
 }
 
-IMPL_LINK(SvxAreaTabPage, SelectFillTypeHdl_Impl, weld::ToggleButton&, rButton, void)
+IMPL_LINK(SvxAreaTabPage, SelectFillTypeHdl_Impl, weld::Button&, rButton, void)
 {
-    SelectFillType(rButton);
+    m_xBtnNone->set_active(&rButton == m_xBtnNone.get());
+    m_xBtnColor->set_active(&rButton == m_xBtnColor.get());
+    m_xBtnGradient->set_active(&rButton == m_xBtnGradient.get());
+    m_xBtnHatch->set_active(&rButton == m_xBtnHatch.get());
+    m_xBtnBitmap->set_active(&rButton == m_xBtnBitmap.get());
+    m_xBtnPattern->set_active(&rButton == m_xBtnPattern.get());
+
+    // downcast - explicit type case required
+    weld::ToggleButton& rBtn  = dynamic_cast<weld::ToggleButton&>(rButton);
+    SelectFillType(rBtn);
     m_bBtnClicked = true;
 }
 

@@ -257,7 +257,7 @@ protected:
     bool IsBtnClicked() { return m_bBtnClicked; }
 
 private:
-    DECL_LINK(SelectFillTypeHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(SelectFillTypeHdl_Impl, weld::Button&, void);
 
     template< typename TabPage >
     bool FillItemSet_Impl( SfxItemSet* );
