@@ -19,19 +19,15 @@
 
 #include <fucopy.hxx>
 #include <sfx2/progress.hxx>
-#include <svx/svxids.hrc>
 
+#include <sdattr.hrc>
 #include <sdresid.hxx>
-#include <sdattr.hxx>
 #include <strings.hrc>
 #include <ViewShell.hxx>
 #include <View.hxx>
-#include <Window.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
-#include <vcl/wrkwin.hxx>
 #include <svx/svdobj.hxx>
-#include <sfx2/app.hxx>
 #include <svx/xcolit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xdef.hxx>

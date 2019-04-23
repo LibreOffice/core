@@ -23,18 +23,13 @@
 
 #include <futempl.hxx>
 
-#include <editeng/editdata.hxx>
-#include <editeng/bulletitem.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/bindings.hxx>
-#include <svl/aeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <editeng/eeitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/editeng.hxx>
-#include <editeng/lrspitem.hxx>
 #include <svx/svdopage.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
@@ -45,14 +40,16 @@
 #include <svx/xlndsit.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnedit.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xflftrit.hxx>
+#include <svx/xflhtit.hxx>
 #include <app.hrc>
 #include <stlsheet.hxx>
 #include <sdpage.hxx>
 #include <stlpool.hxx>
 #include <sdmod.hxx>
 #include <View.hxx>
-#include <Window.hxx>
-#include <drawview.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
@@ -60,11 +57,8 @@
 
 #include <strings.hrc>
 #include <prlayout.hxx>
-#include <svx/xfillit.hxx>
 #include <sdresid.hxx>
 #include <OutlineView.hxx>
-#include <OutlineViewShell.hxx>
-#include <helpids.h>
 #include <sdabstdlg.hxx>
 #include <memory>
 

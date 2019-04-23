@@ -20,11 +20,9 @@
 #include <fuconnct.hxx>
 #include <sfx2/request.hxx>
 #include <View.hxx>
-#include <ViewShell.hxx>
 #include <drawdoc.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <memory>
 
 namespace sd {
 

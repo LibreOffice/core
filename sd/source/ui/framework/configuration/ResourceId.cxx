@@ -18,16 +18,14 @@
  */
 
 #include <framework/ResourceId.hxx>
-#include <framework/FrameworkHelper.hxx>
 #include <tools/SdGlobalResourceContainer.hxx>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <rtl/ref.hxx>
 
-#include <facreg.hxx>
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

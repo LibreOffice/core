@@ -19,18 +19,18 @@
 
 #include <fusldlg.hxx>
 #include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <sdresid.hxx>
 #include <strings.hrc>
-#include <sdattr.hxx>
+#include <sdattr.hrc>
 #include <sdmod.hxx>
-#include <ViewShell.hxx>
 #include <Window.hxx>
 #include <optsitem.hxx>
 #include <sdabstdlg.hxx>
-#include <memory>
 
 namespace sd {
 

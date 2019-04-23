@@ -28,14 +28,11 @@
 #include <editeng/lrspitem.hxx>
 #include <svx/svdoutl.hxx>
 
-#include <app.hrc>
 #include <View.hxx>
 #include <ViewShell.hxx>
-#include <Window.hxx>
 #include <drawdoc.hxx>
 #include <sdabstdlg.hxx>
 #include <sdattr.hrc>
-#include <memory>
 
 namespace sd {
 

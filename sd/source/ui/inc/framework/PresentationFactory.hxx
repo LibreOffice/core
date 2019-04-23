@@ -26,7 +26,6 @@
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <cppuhelper/compbase.hxx>
 
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationController; } } } } }
 namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
 
 namespace sd { namespace framework {

@@ -21,16 +21,10 @@
 
 #include <sfx2/viewfrm.hxx>
 
-#include <svx/svxids.hrc>
-#include <svl/srchitem.hxx>
-#include <svx/srchdlg.hxx>
 #include <sfx2/bindings.hxx>
 #include <fupoor.hxx>
-#include <Window.hxx>
 #include <drawdoc.hxx>
 #include <app.hrc>
-#include <sdmod.hxx>
-#include <View.hxx>
 #include <Outliner.hxx>
 #include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>

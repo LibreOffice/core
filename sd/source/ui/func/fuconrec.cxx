@@ -25,7 +25,6 @@
 #include <svx/dialmgr.hxx>
 
 #include <app.hrc>
-#include <svl/aeitem.hxx>
 #include <svl/itemset.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedwit.hxx>
@@ -45,7 +44,7 @@
 #include <editeng/eeitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xfltrit.hxx>
-#include <svx/xfillit.hxx>
+#include <svx/xflclit.hxx>
 
 #include <svx/svdocapt.hxx>
 
@@ -61,7 +60,6 @@
 #include <View.hxx>
 #include <sdpage.hxx>
 #include <Window.hxx>
-#include <stlpool.hxx>
 #include <drawdoc.hxx>
 #include <unokywds.hxx>
 

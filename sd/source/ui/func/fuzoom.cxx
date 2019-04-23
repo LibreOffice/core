@@ -26,11 +26,9 @@
 #include <svx/svdpagv.hxx>
 #include <vcl/ptrstyle.hxx>
 
-#include <FrameView.hxx>
 #include <ViewShell.hxx>
 #include <View.hxx>
 #include <Window.hxx>
-#include <drawdoc.hxx>
 #include <zoomlist.hxx>
 
 namespace sd {

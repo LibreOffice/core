@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <editeng/eeitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -41,8 +40,6 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <anminfo.hxx>
-#include <imapinfo.hxx>
-#include <app.hrc>
 #include <strings.hrc>
 
 
@@ -55,11 +52,9 @@
 #include <Window.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
-#include <Client.hxx>
 #include <sdresid.hxx>
 #include <drawview.hxx>
 #include <fusel.hxx>
-#include <svl/aeitem.hxx>
 #include <vcl/weld.hxx>
 #include <slideshow.hxx>
 #include <svx/sdrhittesthelper.hxx>

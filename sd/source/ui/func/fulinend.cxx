@@ -20,14 +20,12 @@
 #include <fulinend.hxx>
 #include <svx/xtable.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svdobj.hxx>
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
 #include <strings.hrc>
-#include <ViewShell.hxx>
 #include <helpids.h>
 #include <sdresid.hxx>
 #include <drawdoc.hxx>

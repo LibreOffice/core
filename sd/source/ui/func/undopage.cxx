@@ -18,16 +18,7 @@
  */
 
 #include <undopage.hxx>
-
-#include <svx/svxids.hrc>
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/viewfrm.hxx>
-
 #include <sdpage.hxx>
-#include <DrawViewShell.hxx>
-#include <drawview.hxx>
-#include <svx/svdpagv.hxx>
 
 
 SdPageFormatUndoAction::~SdPageFormatUndoAction()

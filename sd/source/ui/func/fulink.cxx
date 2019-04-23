@@ -19,17 +19,14 @@
 
 #include <fulink.hxx>
 
-#include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <svx/svxdlg.hxx>
 
-#include <Window.hxx>
 #include <drawdoc.hxx>
 #include <ViewShell.hxx>
 #include <app.hrc>
-#include <memory>
 
 class SfxRequest;
 
