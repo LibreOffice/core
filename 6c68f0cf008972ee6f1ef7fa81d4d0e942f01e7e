@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_c5b49038",
+        "filename": "svl/Library_svl.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-04-23T10:44:18Z",
+      "side": 1,
+      "message": "why use filter here?",
+      "revId": "6c68f0cf008972ee6f1ef7fa81d4d0e942f01e7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
