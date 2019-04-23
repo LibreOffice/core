@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_c58d707c",
+        "filename": "UnoControls/inc/basecontainercontrol.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-23T10:53:27Z",
+      "side": 1,
+      "message": "it would be nice if this didn\u0027t leave behind excess empty lines",
+      "revId": "37903d8679a11b7535b591fa08382066f13b8117",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
