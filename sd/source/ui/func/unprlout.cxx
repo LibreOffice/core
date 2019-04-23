@@ -23,7 +23,6 @@
 
 #include <strings.hrc>
 #include <sdpage.hxx>
-#include <drawdoc.hxx>
 #include <sdresid.hxx>
 
 

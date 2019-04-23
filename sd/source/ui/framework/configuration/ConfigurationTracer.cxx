@@ -19,7 +19,6 @@
 
 #include "ConfigurationTracer.hxx"
 
-#include <cstdio>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star::uno;

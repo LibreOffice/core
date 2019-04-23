@@ -21,11 +21,11 @@
 #define INCLUDED_SD_SOURCE_UI_INC_FUMORPH_HXX
 
 #include "fupoor.hxx"
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <vector>
 
 namespace basegfx {
-    class B2DPolyPolygon;
     class B2DPolygon;
     class B2DPoint;
 }

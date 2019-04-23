@@ -21,11 +21,8 @@
 #include <sfx2/request.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 #include <View.hxx>
-#include <ViewShell.hxx>
 #include <drawdoc.hxx>
-#include <memory>
 
 namespace sd {
 

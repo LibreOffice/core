@@ -22,8 +22,8 @@
 
 #include "FrameWindowPane.hxx"
 #include <tools/link.hxx>
+#include <vcl/wrkwin.hxx>
 
-class WorkWindow;
 class VclWindowEvent;
 
 namespace vcl { class Window; }

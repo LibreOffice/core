@@ -22,26 +22,17 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include <svl/itemiter.hxx>
-
-#include <svx/globl3d.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdotable.hxx>
 #include <svx/svdundo.hxx>
 #include <editeng/outliner.hxx>
-#include <editeng/eeitem.hxx>
-#include <editeng/editeng.hxx>
 #include <vcl/ptrstyle.hxx>
-
-#include <sdmod.hxx>
 
 #include <fuformatpaintbrush.hxx>
 #include <drawview.hxx>
-#include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
 #include <FrameView.hxx>
 #include <drawdoc.hxx>
-#include <Outliner.hxx>
 #include <ViewShellBase.hxx>
 
 #include <Window.hxx>

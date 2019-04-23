@@ -21,8 +21,6 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <app.hrc>
-#include <DrawViewShell.hxx>
-#include <drawview.hxx>
 #include <undoheaderfooter.hxx>
 
 

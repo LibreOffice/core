@@ -20,18 +20,14 @@
 #include <futhes.hxx>
 
 #include <editeng/outliner.hxx>
-#include <vcl/layout.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/eeitem.hxx>
 
-#include <svx/dialogs.hrc>
 #include <svx/svxerr.hxx>
 #include <svx/dialmgr.hxx>
 #include <editeng/unolingu.hxx>
-#include <app.hrc>
 #include <drawdoc.hxx>
-#include <sdmod.hxx>
 #include <View.hxx>
 #include <Outliner.hxx>
 #include <DrawViewShell.hxx>

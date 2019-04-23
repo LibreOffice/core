@@ -20,14 +20,13 @@
 #include <framework/PresentationFactory.hxx>
 
 #include <DrawController.hxx>
-#include <ViewShellBase.hxx>
-#include <facreg.hxx>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <tools/diagnose_ex.h>
 #include <slideshow.hxx>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

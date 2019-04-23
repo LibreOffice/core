@@ -25,7 +25,6 @@
 #include <com/sun/star/drawing/framework/XConfigurationControllerBroadcaster.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <facreg.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;

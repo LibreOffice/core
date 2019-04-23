@@ -26,10 +26,8 @@
 #include <editeng/numitem.hxx>
 #include <strings.hxx>
 
-#include <editeng/editdata.hxx>
 #include <svx/svxids.hrc>
 #include <OutlineView.hxx>
-#include <OutlineViewShell.hxx>
 #include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
 #include <Window.hxx>

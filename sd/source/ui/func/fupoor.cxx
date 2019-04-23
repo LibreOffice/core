@@ -20,31 +20,22 @@
 #include <fupoor.hxx>
 
 #include <svx/svxids.hrc>
-#include <svl/aeitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
 #include <vcl/seleng.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/XLayer.hpp>
-#include <com/sun/star/drawing/XLayerManager.hpp>
-#include <com/sun/star/container/XChild.hpp>
 
-#include <FrameView.hxx>
 #include <app.hrc>
 #include <fusel.hxx>
 #include <sdpage.hxx>
-#include <drawview.hxx>
 #include <DrawViewShell.hxx>
 #include <Window.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
 #include <zoomlist.hxx>
-#include <Client.hxx>
 #include <slideshow.hxx>
 #include <LayerTabBar.hxx>
 

@@ -20,7 +20,6 @@
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 
 #include <fuconbez.hxx>
-#include <svl/aeitem.hxx>
 #include <svx/svdopath.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>

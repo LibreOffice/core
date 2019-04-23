@@ -20,21 +20,13 @@
 #include <fuline.hxx>
 
 #include <svx/svxids.hrc>
-#include <svx/tabline.hxx>
-#include <svx/xenum.hxx>
-#include <svl/intitem.hxx>
-#include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
-#include <svx/xdef.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <ViewShell.hxx>
 #include <View.hxx>
-#include <Window.hxx>
 #include <drawdoc.hxx>
-#include <app.hrc>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 #include <memory>
 
 namespace sd {
