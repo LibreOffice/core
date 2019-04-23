@@ -1751,17 +1751,6 @@ void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes )
         }
     }
     maDefcolwidth.SetDefWidth( nMaxUsedWidth );
-
-    // remove all default COLINFO records
-    nPos = 0;
-    while( nPos < maColInfos.GetSize() )
-    {
-        XclExpColinfoRef xRec = maColInfos.GetRecord( nPos );
-        if( xRec->IsDefault( maDefcolwidth ) )
-            maColInfos.RemoveRecord( nPos );
-        else
-            ++nPos;
-    }
 }
 
 void XclExpColinfoBuffer::Save( XclExpStream& rStrm )
@@ -1769,7 +1758,16 @@ void XclExpColinfoBuffer::Save( XclExpStream& rStrm )
     // DEFCOLWIDTH
     maDefcolwidth.Save( rStrm );
     // COLINFO records
-    maColInfos.Save( rStrm );
+    // remove all default COLINFO records
+    XclExpColinfoList aFilteredColInfos;
+    size_t nPos = 0;
+    while (nPos < maColInfos.GetSize())
+    {
+        XclExpColinfoRef xRec = maColInfos.GetRecord(nPos);
+        if (!xRec->IsDefault(maDefcolwidth))
+            aFilteredColInfos.AppendRecord(xRec);
+    }
+    aFilteredColInfos.Save( rStrm );
 }
 
 void XclExpColinfoBuffer::SaveXml( XclExpXmlStream& rStrm )

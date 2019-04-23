@@ -215,6 +215,7 @@ public:
     void testTdf91634XLSX();
     void testTdf115159();
     void testTdf123645XLSX();
+    void testTdf124741();
 
     void testXltxExport();
 
@@ -337,6 +338,7 @@ public:
     CPPUNIT_TEST(testTdf91634XLSX);
     CPPUNIT_TEST(testTdf115159);
     CPPUNIT_TEST(testTdf123645XLSX);
+    CPPUNIT_TEST(testTdf124741);
 
     CPPUNIT_TEST(testXltxExport);
 
@@ -4247,6 +4249,29 @@ void ScExportTest::testTdf123645XLSX()
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "Target", "file:///C:/TEMP/test.xlsx");
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId3']", "Target", "#Sheet2!A1");
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId5']", "Target", "https://bugs.documentfoundation.org/show_bug.cgi?id=123645");
+}
+
+void ScExportTest::testTdf124741()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf124741.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+                                               "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Check that we export data for all the columns - there's no settable DEFCOLWIDTH in XLSX
+    // Previously, only one col element was present, with min="2" max="2".
+    assertXPath(pDoc, "/x:worksheet/x:cols/x:col", 3);
+    assertXPath(pDoc, "/x:worksheet/x:cols/x:col[1]", "min", "1");
+    assertXPath(pDoc, "/x:worksheet/x:cols/x:col[1]", "max", "1");
+    assertXPath(pDoc, "/x:worksheet/x:cols/x:col[1]", "width", "11.52");
+    assertXPath(pDoc, "/x:worksheet/x:cols/x:col[2]", "min", "2");
+    assertXPath(pDoc, "/x:worksheet/x:cols/x:col[2]", "max", "2");
+    assertXPath(pDoc, "/x:worksheet/x:cols/x:col[2]", "width", "14.08");
+    assertXPath(pDoc, "/x:worksheet/x:cols/x:col[3]", "min", "3");
+    assertXPath(pDoc, "/x:worksheet/x:cols/x:col[3]", "max", "1025"); // to the end
+    assertXPath(pDoc, "/x:worksheet/x:cols/x:col[3]", "width", "11.52");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
