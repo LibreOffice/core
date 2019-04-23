@@ -163,12 +163,14 @@ namespace accessibility
         }
         else
         {
-            const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >( &rHint );
-
-            if( pSdrHint && ( pSdrHint->GetKind() == SdrHintKind::ModelCleared ) )
+            if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
             {
-                // model is dying under us, going defunc
-                bDispose = true;
+                const SdrHint* pSdrHint = static_cast< const SdrHint* >( &rHint );
+                if( pSdrHint->GetKind() == SdrHintKind::ModelCleared )
+                {
+                    // model is dying under us, going defunc
+                    bDispose = true;
+                }
             }
         }
 

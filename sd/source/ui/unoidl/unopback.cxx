@@ -75,19 +75,17 @@ SdUnoPageBackground::~SdUnoPageBackground() throw()
 
 void SdUnoPageBackground::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint );
+    if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
+        return;
+    const SdrHint* pSdrHint = static_cast<const SdrHint*>( &rHint );
 
-    if( pSdrHint )
+    // delete item set if document is dying because then the pool
+    // will also die
+    if( pSdrHint->GetKind() == SdrHintKind::ModelCleared )
     {
-        // delete item set if document is dying because then the pool
-        // will also die
-        if( pSdrHint->GetKind() == SdrHintKind::ModelCleared )
-        {
-            mpSet.reset();
-            mpDoc = nullptr;
-        }
+        mpSet.reset();
+        mpDoc = nullptr;
     }
-
 }
 
 void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) throw()

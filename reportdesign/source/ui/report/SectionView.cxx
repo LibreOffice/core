@@ -128,17 +128,16 @@ void OSectionView::MakeVisible( const tools::Rectangle& rRect, vcl::Window& rWin
 void OSectionView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     SdrView::Notify(rBC,rHint);
-    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-    if ( pSdrHint )
-    {
-        const SdrObject* pObj = pSdrHint->GetObject();
-        const SdrHintKind eKind = pSdrHint->GetKind();
-        // check for change of selected object
-        if(SdrHintKind::ObjectChange == eKind && pObj && IsObjMarked(pObj))
-            AdjustMarkHdl();
-        else if ( eKind == SdrHintKind::ObjectRemoved )
-            ObjectRemovedInAliveMode(pObj);
-    }
+    if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
+        return;
+    const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
+    const SdrObject* pObj = pSdrHint->GetObject();
+    const SdrHintKind eKind = pSdrHint->GetKind();
+    // check for change of selected object
+    if(SdrHintKind::ObjectChange == eKind && pObj && IsObjMarked(pObj))
+        AdjustMarkHdl();
+    else if ( eKind == SdrHintKind::ObjectRemoved )
+        ObjectRemovedInAliveMode(pObj);
 }
 
 

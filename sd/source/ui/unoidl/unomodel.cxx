@@ -174,14 +174,12 @@ SdUnoForbiddenCharsTable::~SdUnoForbiddenCharsTable()
 
 void SdUnoForbiddenCharsTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 {
-    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint );
-
-    if( pSdrHint )
+    if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
+        return;
+    const SdrHint* pSdrHint = static_cast<const SdrHint*>( &rHint );
+    if( SdrHintKind::ModelCleared == pSdrHint->GetKind() )
     {
-        if( SdrHintKind::ModelCleared == pSdrHint->GetKind() )
-        {
-            mpModel = nullptr;
-        }
+        mpModel = nullptr;
     }
 }
 
@@ -418,10 +416,9 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if( mpDoc )
     {
-        const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint );
-
-        if( pSdrHint )
+        if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
         {
+            const SdrHint* pSdrHint = static_cast<const SdrHint*>( &rHint );
             if( hasEventListeners() )
             {
                 document::EventObject aEvent;

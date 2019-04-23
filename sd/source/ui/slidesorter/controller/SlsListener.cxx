@@ -267,9 +267,9 @@ void Listener::Notify (
     SfxBroadcaster& rBroadcaster,
     const SfxHint& rHint)
 {
-    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-    if (pSdrHint)
+    if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
     {
+        const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
         switch (pSdrHint->GetKind())
         {
             case SdrHintKind::ModelCleared:
