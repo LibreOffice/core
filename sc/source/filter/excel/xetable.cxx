@@ -1552,38 +1552,48 @@ void XclExpDimensions::WriteBody( XclExpStream& rStrm )
 
 namespace {
 
-double lclGetCorrectedColWidth( const XclExpRoot& rRoot, sal_uInt16 nXclColWidth )
+double lclGetCChCorrection(const XclExpRoot& rRoot)
 {
+    // Convert the correction from 1/256ths of a character size to count of chars
+    // TODO: make to fit ECMA-376-1:2016 18.3.1.81 sheetFormatPr (Sheet Format Properties):
+    // 5 pixels are added to the base width: 2 for margin padding on each side, plus 1 for gridline
+    // So this should depend on rRoot.GetCharWidth(), not on font height
+
     long nFontHt = rRoot.GetFontBuffer().GetAppFontData().mnHeight;
-    return nXclColWidth - XclTools::GetXclDefColWidthCorrection( nFontHt );
+    return XclTools::GetXclDefColWidthCorrection(nFontHt) / 256.0;
 }
 
 } // namespace
 
 XclExpDefcolwidth::XclExpDefcolwidth( const XclExpRoot& rRoot ) :
-    XclExpUInt16Record( EXC_ID_DEFCOLWIDTH, EXC_DEFCOLWIDTH_DEF ),
+    XclExpDoubleRecord(EXC_ID_DEFCOLWIDTH, EXC_DEFCOLWIDTH_DEF + lclGetCChCorrection(rRoot)),
     XclExpRoot( rRoot )
 {
 }
 
 bool XclExpDefcolwidth::IsDefWidth( sal_uInt16 nXclColWidth ) const
 {
-    double fNewColWidth = lclGetCorrectedColWidth( GetRoot(), nXclColWidth );
     // This formula is taking number of characters with GetValue()
-    // and it is translating it into default column width. 0.5 means half character.
+    // and it is translating it into default column width.
     // https://msdn.microsoft.com/en-us/library/documentformat.openxml.spreadsheet.column.aspx
-    long defaultColumnWidth = static_cast< long >( 256.0 * ( GetValue() + 0.5 ) );
+    double defaultColumnWidth = 256.0 * GetValue();
 
     // exactly matched, if difference is less than 1/16 of a character to the left or to the right
-    return std::abs( defaultColumnWidth - fNewColWidth ) < 16;
+    return std::abs(defaultColumnWidth - nXclColWidth) < 256.0 * 1.0 / 16.0;
 }
 
 void XclExpDefcolwidth::SetDefWidth( sal_uInt16 nXclColWidth )
 {
-    double fNewColWidth = lclGetCorrectedColWidth( GetRoot(), nXclColWidth );
-    // This function is taking width and translate it into number of characters
-    // Next this number of characters are stored. 0.5 means half character.
-    SetValue( limit_cast< sal_uInt16 >( fNewColWidth / 256.0 - 0.5 ) );
+    SetValue(nXclColWidth / 256.0);
+}
+
+void XclExpDefcolwidth::Save(XclExpStream& rStrm)
+{
+    double fCorrectedCCh = GetValue() - lclGetCChCorrection(GetRoot());
+    // Convert double to sal_uInt16
+    XclExpUInt16Record aUInt16Rec(GetRecId(),
+                                  static_cast<sal_uInt16>(std::round(fCorrectedCCh)));
+    aUInt16Rec.Save(rStrm);
 }
 
 XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
@@ -1613,10 +1623,6 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
     // column flags
     ::set_flag( mnFlags, EXC_COLINFO_HIDDEN, rDoc.ColHidden(nScCol, nScTab) );
 
-    XclExpDefcolwidth defColWidth = XclExpDefcolwidth( rRoot );
-    mbCustomWidth = !defColWidth.IsDefWidth( mnWidth );
-    set_flag(mnFlags, EXC_COLINFO_CUSTOMWIDTH, mbCustomWidth);
-
     // outline data
     rOutlineBfr.Update( nScCol );
     ::set_flag( mnFlags, EXC_COLINFO_COLLAPSED, rOutlineBfr.IsCollapsed() );
@@ -1629,12 +1635,13 @@ void XclExpColinfo::ConvertXFIndexes()
     maXFId.ConvertXFIndex( GetRoot() );
 }
 
-bool XclExpColinfo::IsDefault( const XclExpDefcolwidth& rDefColWidth ) const
+bool XclExpColinfo::IsDefault( const XclExpDefcolwidth& rDefColWidth )
 {
+    mbCustomWidth = !rDefColWidth.IsDefWidth(mnWidth);
     return (maXFId.mnXFIndex == EXC_XF_DEFAULTCELL) &&
            (mnFlags == 0) &&
            (mnOutlineLevel == 0) &&
-           rDefColWidth.IsDefWidth( mnWidth );
+           !mbCustomWidth;
 }
 
 bool XclExpColinfo::TryMerge( const XclExpColinfo& rColInfo )
@@ -2701,7 +2708,7 @@ void XclExpCellTable::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_sheetFormatPr,
         // OOXTODO: XML_baseColWidth
-        // OOXTODO: XML_defaultColWidth
+        XML_defaultColWidth, OString::number(maColInfoBfr.GetDefColWidth()),
         // OOXTODO: XML_customHeight
         // OOXTODO: XML_thickTop
         // OOXTODO: XML_thickBottom

@@ -691,7 +691,7 @@ private:
     default width. If the passed width is rounded up or down to get the default
     width, the function returns false.
  */
-class XclExpDefcolwidth : public XclExpUInt16Record, protected XclExpRoot
+class XclExpDefcolwidth : public XclExpDoubleRecord, protected XclExpRoot
 {
 public:
     explicit            XclExpDefcolwidth( const XclExpRoot& rRoot );
@@ -701,6 +701,8 @@ public:
 
     /** Sets the passed column width (in 1/256 character width) as default width. */
     void                SetDefWidth( sal_uInt16 nXclColWidth );
+
+    virtual void        Save(XclExpStream& rStrm) override;
 };
 
 /** Contains the column settings for a range of columns.
@@ -732,8 +734,8 @@ public:
     /** Returns the number of columns represented by this record. */
     sal_uInt16   GetColCount() const { return mnLastXclCol - mnFirstXclCol + 1; }
 
-    /** Returns true, if the column has default format and width. */
-    bool                IsDefault( const XclExpDefcolwidth& rDefColWidth ) const;
+    /** Returns true, if the column has default format and width. Also sets mbCustomWidth */
+    bool                IsDefault( const XclExpDefcolwidth& rDefColWidth );
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
@@ -775,6 +777,7 @@ public:
     virtual void        Save( XclExpStream& rStrm ) override;
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
     sal_uInt8           GetHighestOutlineLevel() { return mnHighestOutlineLevel; }
+    double              GetDefColWidth() { return maDefcolwidth.GetValue(); }
 
 private:
     typedef XclExpRecordList< XclExpColinfo >   XclExpColinfoList;
