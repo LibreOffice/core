@@ -1046,6 +1046,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     if ( pIter.second )
                     {
                         aCmdInfo.nId = nId;
+                        pIter.first->second.nId = nId;
                     }
                     else
                     {
@@ -1199,7 +1200,7 @@ void ToolBarManager::FillOverflowToolbar( ToolBox const * pParent )
             if ( pIter.second )
             {
                 aCmdInfo.nId = nId;
-                const CommandToInfoMap::value_type aValue( aCommandURL, aCmdInfo );
+                pIter.first->second.nId = nId;
             }
             else
             {
