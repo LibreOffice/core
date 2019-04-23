@@ -191,8 +191,9 @@ void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         if ( nTab == static_cast<const ScTabSizeChangedHint&>(rHint).GetTab() )
             UpdateWorkArea();
     }
-    else if ( const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint ) )
+    else if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
     {
+        const SdrHint* pSdrHint = static_cast<const SdrHint*>( &rHint );
         adjustAnchoredPosition(*pSdrHint, *pDoc, nTab);
         FmFormView::Notify( rBC,rHint );
     }

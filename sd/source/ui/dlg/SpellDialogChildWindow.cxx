@@ -110,12 +110,12 @@ void SpellDialogChildWindow::EndSpellingAndClearOutliner()
 
 void SpellDialogChildWindow::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    if (const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint))
+    if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
+        return;
+    const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
+    if (SdrHintKind::ModelCleared == pSdrHint->GetKind())
     {
-        if (SdrHintKind::ModelCleared == pSdrHint->GetKind())
-        {
-            EndSpellingAndClearOutliner();
-        }
+        EndSpellingAndClearOutliner();
     }
 }
 

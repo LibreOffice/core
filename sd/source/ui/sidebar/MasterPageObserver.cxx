@@ -222,9 +222,9 @@ void MasterPageObserver::Implementation::Notify(
     SfxBroadcaster& rBroadcaster,
     const SfxHint& rHint)
 {
-    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-    if (!pSdrHint)
+    if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
         return;
+    const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
 
     switch (pSdrHint->GetKind())
     {
