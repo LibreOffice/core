@@ -2011,28 +2011,32 @@ const css::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImplementationId()
 
 
 SdrHint::SdrHint(SdrHintKind eNewHint)
-:   meHint(eNewHint),
+:   SfxHint(SfxHintId::ThisIsAnSdrHint),
+    meHint(eNewHint),
     mpObj(nullptr),
     mpPage(nullptr)
 {
 }
 
 SdrHint::SdrHint(SdrHintKind eNewHint, const SdrObject& rNewObj)
-:   meHint(eNewHint),
+:   SfxHint(SfxHintId::ThisIsAnSdrHint),
+    meHint(eNewHint),
     mpObj(&rNewObj),
     mpPage(rNewObj.getSdrPageFromSdrObject())
 {
 }
 
 SdrHint::SdrHint(SdrHintKind eNewHint, const SdrPage* pPage)
-:   meHint(eNewHint),
+:   SfxHint(SfxHintId::ThisIsAnSdrHint),
+    meHint(eNewHint),
     mpObj(nullptr),
     mpPage(pPage)
 {
 }
 
 SdrHint::SdrHint(SdrHintKind eNewHint, const SdrObject& rNewObj, const SdrPage* pPage)
-:   meHint(eNewHint),
+:   SfxHint(SfxHintId::ThisIsAnSdrHint),
+    meHint(eNewHint),
     mpObj(&rNewObj),
     mpPage(pPage)
 {

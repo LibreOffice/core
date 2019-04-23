@@ -65,9 +65,10 @@ void SvxUnoNameItemTable::dispose()
 
 void SvxUnoNameItemTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 {
-    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-
-    if( pSdrHint && SdrHintKind::ModelCleared == pSdrHint->GetKind() )
+    if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
+        return;
+    const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
+    if( SdrHintKind::ModelCleared == pSdrHint->GetKind() )
         dispose();
 }
 

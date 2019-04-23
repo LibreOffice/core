@@ -2610,9 +2610,9 @@ void ChartView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         }
     }
 
-    const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >(&rHint);
-    if( !pSdrHint )
+    if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
         return;
+    const SdrHint* pSdrHint = static_cast< const SdrHint* >(&rHint);
 
     bool bShapeChanged = false;
     switch( pSdrHint->GetKind() )

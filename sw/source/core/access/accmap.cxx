@@ -168,12 +168,13 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
 {
     // do not broadcast notifications for writer fly frames, because there
     // are no shapes that need to know about them.
-    const SdrHint *pSdrHint = dynamic_cast<const SdrHint*>( &rHint );
-    if ( !pSdrHint ||
-         ( pSdrHint->GetObject() &&
+    if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
+        return;
+    const SdrHint *pSdrHint = static_cast<const SdrHint*>( &rHint );
+    if (pSdrHint->GetObject() &&
            ( dynamic_cast< const SwFlyDrawObj* >(pSdrHint->GetObject()) !=  nullptr ||
               dynamic_cast< const SwVirtFlyDrawObj* >(pSdrHint->GetObject()) !=  nullptr ||
-             typeid(SdrObject) == typeid(pSdrHint->GetObject()) ) ) )
+             typeid(SdrObject) == typeid(pSdrHint->GetObject()) ) )
     {
         return;
     }

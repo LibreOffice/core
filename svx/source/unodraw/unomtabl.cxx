@@ -116,10 +116,12 @@ void SvxUnoMarkerTable::dispose()
 // SfxListener
 void SvxUnoMarkerTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 {
-    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-
-    if( pSdrHint && SdrHintKind::ModelCleared == pSdrHint->GetKind() )
-        dispose();
+    if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
+    {
+        const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
+        if( SdrHintKind::ModelCleared == pSdrHint->GetKind() )
+            dispose();
+    }
 }
 
 sal_Bool SAL_CALL SvxUnoMarkerTable::supportsService( const  OUString& ServiceName )
