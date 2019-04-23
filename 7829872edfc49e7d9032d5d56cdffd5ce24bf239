@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_a2aa9a16",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-23T08:48:14Z",
+      "side": 1,
+      "message": "Oh, btw: you need to assert after the dynamic cast, that you have a non-nullptr - otherwise, static analysers might rightfully warn about dereferencing potentially nullptr.\n\n(Which would be not required if you have separated logic for clicks and toggles)",
+      "range": {
+        "startLine": 386,
+        "startChar": 4,
+        "endLine": 386,
+        "endChar": 75
+      },
+      "revId": "7829872edfc49e7d9032d5d56cdffd5ce24bf239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_e2b0a28e",
         "filename": "cui/source/tabpages/tparea.cxx",
         "patchSetId": 1
