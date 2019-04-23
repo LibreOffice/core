@@ -21,16 +21,13 @@
 
 #include <svx/svxids.hrc>
 
-#include <app.hrc>
 #include <ViewShell.hxx>
 #include <Window.hxx>
 #include <drawdoc.hxx>
-#include <sdpage.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <sdabstdlg.hxx>
-#include <memory>
 
 namespace sd {
 

@@ -19,7 +19,6 @@
 
 #include <framework/Pane.hxx>
 
-#include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>

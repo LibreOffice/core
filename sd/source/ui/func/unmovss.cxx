@@ -18,7 +18,6 @@
  */
 
 #include <unmovss.hxx>
-#include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
 #include <stlsheet.hxx>
 #include <stlpool.hxx>

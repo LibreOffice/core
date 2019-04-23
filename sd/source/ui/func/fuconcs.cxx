@@ -19,47 +19,25 @@
 
 #include <fuconcs.hxx>
 #include <rtl/ustring.hxx>
-#include <svx/svdpagv.hxx>
 
 #include <svx/svxids.hrc>
-#include <svx/dialogs.hrc>
 
-#include <app.hrc>
-#include <svl/aeitem.hxx>
-#include <svx/xlnstwit.hxx>
-#include <svx/xlnedwit.hxx>
-#include <svx/xlnedit.hxx>
-#include <svx/xlnstit.hxx>
-#include <svx/xlnwtit.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/sdtmfitm.hxx>
-#include <svx/sxekitm.hxx>
-#include <svx/sderitm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/svdopath.hxx>
-#include <svx/svdocirc.hxx>
-#include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include <editeng/adjustitem.hxx>
-#include <svx/xtable.hxx>
-#include <svx/sdasitm.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/sdtagitm.hxx>
 
-#include <svx/svdocapt.hxx>
-
-#include <svx/svdomeas.hxx>
 #include <ViewShell.hxx>
 #include <ViewShellBase.hxx>
 #include <ToolBarManager.hxx>
-#include <editeng/writingmodeitem.hxx>
 #include <svx/gallery.hxx>
 #include <svl/itempool.hxx>
 
 #include <View.hxx>
-#include <sdpage.hxx>
 #include <Window.hxx>
-#include <stlpool.hxx>
 #include <drawdoc.hxx>
 
 namespace sd {

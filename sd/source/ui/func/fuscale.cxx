@@ -19,13 +19,12 @@
 
 #include <fuscale.hxx>
 
-#include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 
 #include <app.hrc>
 #include <View.hxx>
 #include <Window.hxx>
 #include <OutlineViewShell.hxx>
-#include <drawview.hxx>
 #include <drawdoc.hxx>
 #include <DrawViewShell.hxx>
 #include <ViewShell.hxx>
@@ -34,7 +33,6 @@
 #include <svx/svdpagv.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/zoom_def.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svxdlg.hxx>

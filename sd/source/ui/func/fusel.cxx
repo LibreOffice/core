@@ -29,19 +29,16 @@
 #include <drawview.hxx>
 #include <vcl/imapobj.hxx>
 #include <svl/urihelper.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/securityoptions.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xfillit0.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
-#include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 
 #include <svx/svdotable.hxx>
@@ -60,11 +57,9 @@
 #include <View.hxx>
 #include <Window.hxx>
 #include <drawdoc.hxx>
-#include <sdpage.hxx>
 #include <DrawViewShell.hxx>
 #include <ToolBarManager.hxx>
 #include <pgjump.hxx>
-#include <svx/globl3d.hxx>
 #include <Client.hxx>
 
 #include <slideshow.hxx>

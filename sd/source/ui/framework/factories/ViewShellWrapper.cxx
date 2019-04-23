@@ -18,18 +18,14 @@
  */
 
 #include <framework/ViewShellWrapper.hxx>
-#include <framework/Pane.hxx>
 #include <sdpage.hxx>
 #include <ViewShell.hxx>
-#include <Window.hxx>
 
 #include <SlideSorter.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <controller/SlsPageSelector.hxx>
-#include <controller/SlsCurrentSlideManager.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <model/SlsPageEnumerationProvider.hxx>
-#include <model/SlideSorterModel.hxx>
 #include <model/SlsPageDescriptor.hxx>
 
 #include <com/sun/star/drawing/framework/XPane.hpp>
@@ -37,10 +33,7 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;

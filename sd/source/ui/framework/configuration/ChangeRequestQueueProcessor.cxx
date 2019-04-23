@@ -21,14 +21,13 @@
 #include "ChangeRequestQueueProcessor.hxx"
 #include "ConfigurationTracer.hxx"
 
-#include <framework/ConfigurationController.hxx>
 #include "ConfigurationUpdater.hxx"
 
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/drawing/framework/XConfiguration.hpp>
-#include <com/sun/star/drawing/framework/ConfigurationChangeEvent.hpp>
+#include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

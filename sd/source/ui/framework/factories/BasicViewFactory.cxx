@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <framework/Pane.hxx>
 #include <DrawController.hxx>
-#include <DrawSubController.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
 #include <DrawDocShell.hxx>
@@ -35,7 +34,6 @@
 #include <PresentationViewShell.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <FrameView.hxx>
-#include <facreg.hxx>
 #include <Window.hxx>
 
 #include <sfx2/viewfrm.hxx>

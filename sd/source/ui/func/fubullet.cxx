@@ -38,11 +38,7 @@
 #include <svl/itempool.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
-#include <drawview.hxx>
-#include <memory>
-
-#include <app.hrc>
+#include <svx/svxids.hrc>
 
 namespace sd {
 

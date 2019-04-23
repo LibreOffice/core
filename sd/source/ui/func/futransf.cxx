@@ -19,14 +19,12 @@
 
 #include <futransf.hxx>
 
-#include <comphelper/scopeguard.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <sfx2/request.hxx>
 
 #include <strings.hrc>
 #include <ViewShell.hxx>
 #include <View.hxx>
-#include <Window.hxx>
 #include <sdresid.hxx>
 #include <drawdoc.hxx>
 #include <svx/svxdlg.hxx>

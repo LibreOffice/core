@@ -23,7 +23,6 @@
 #include <svx/svdotext.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/svdundo.hxx>
-#include <sfx2/printer.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/svdetc.hxx>
 #include <xmloff/autolayout.hxx>
@@ -35,12 +34,9 @@
 #include <View.hxx>
 #include <sdpage.hxx>
 #include <Outliner.hxx>
-#include <drawview.hxx>
 #include <drawdoc.hxx>
 #include <ViewShell.hxx>
-#include <DrawDocShell.hxx>
 #include <sdresid.hxx>
-#include <optsitem.hxx>
 #include <sdmod.hxx>
 #include <sfx2/dispatch.hxx>
 #include <editeng/eeitem.hxx>

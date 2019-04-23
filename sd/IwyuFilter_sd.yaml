@@ -121,6 +121,8 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/drawing/framework/XResourceFactory.hpp
     - com/sun/star/lang/XInitialization.hpp
+    # Don't stop on false positive while checking BasicViewFactory.cxx
+    - namespace vcl { class Window; }
     sd/source/ui/framework/factories/ChildWindowPane.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XEventListener.hpp
@@ -425,3 +427,28 @@ blacklist:
     sd/source/filter/xml/sdtransform.cxx:
     # Needed for implicit dtor
     - editeng/outlobj.hxx
+    sd/source/ui/framework/configuration/ChangeRequestQueueProcessor.cxx:
+    # Needed for DEBUG_SD_CONFIGURATION_TRACE
+    - ConfigurationTracer.hxx
+    - com/sun/star/container/XNamed.hpp
+    sd/source/ui/framework/configuration/ConfigurationTracer.cxx:
+    # Needed for DEBUG mode
+    - sal/log.hxx
+    sd/source/ui/framework/configuration/ConfigurationUpdater.cxx:
+    # Needed for DEBUG_SD_CONFIGURATION_TRACE
+    - ConfigurationTracer.hxx
+    sd/source/ui/framework/configuration/ResourceFactoryManager.cxx:
+    # Needed for VERBOSE mode
+    - sal/log.hxx
+    sd/source/ui/framework/module/ModuleController.cxx:
+    # Needed for direct member access
+    - com/sun/star/frame/XController.hpp
+    sd/source/ui/func/fuconbez.cxx:
+    # Needed for virtual method parameter
+    - Window.hxx
+    sd/source/ui/func/fuhhconv.cxx:
+    # Needed for direct member access
+    - com/sun/star/awt/XWindow.hpp
+    sd/source/ui/inc/fupoor.hxx:
+    # Don't stop on false positive while checking fupoor.cxx
+    - namespace sd { class Window; }

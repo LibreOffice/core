@@ -20,8 +20,6 @@
 #include <fuarea.hxx>
 
 #include <svx/svxids.hrc>
-#include <svl/intitem.hxx>
-#include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -29,11 +27,7 @@
 
 #include <drawdoc.hxx>
 #include <View.hxx>
-#include <Window.hxx>
-#include <app.hrc>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
-#include <memory>
 
 namespace sd {
 

@@ -19,15 +19,12 @@
 
 #include <fuediglu.hxx>
 #include <svl/eitem.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svdglue.hxx>
 #include <sfx2/request.hxx>
 
 #include <app.hrc>
 
 #include <Window.hxx>
-#include <drawdoc.hxx>
-#include <FrameView.hxx>
 #include <View.hxx>
 #include <ViewShell.hxx>
 #include <ViewShellBase.hxx>

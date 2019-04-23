@@ -18,11 +18,9 @@
  */
 
 #include <fuchar.hxx>
-#include <svx/dialogs.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxdlg.hxx>
 
-#include <editeng/editdata.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/eeitem.hxx>
 #include <editeng/colritem.hxx>
@@ -30,14 +28,10 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <View.hxx>
-#include <Window.hxx>
-#include <drawview.hxx>
 #include <drawdoc.hxx>
-#include <DrawViewShell.hxx>
 #include <ViewShell.hxx>
 #include <DrawDocShell.hxx>
 #include <sdabstdlg.hxx>
-#include <memory>
 
 namespace sd {
 

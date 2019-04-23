@@ -18,13 +18,9 @@
  */
 
 #include "FullScreenPane.hxx"
-#include <ViewShellBase.hxx>
-#include <cppcanvas/vclfactory.hxx>
-#include <sfx2/dispatch.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/URL.hpp>

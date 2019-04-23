@@ -27,8 +27,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <vcl/vclptr.hxx>
-
-namespace vcl { class Window; }
+#include <vcl/window.hxx>
 
 namespace sd { namespace framework {
 

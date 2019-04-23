@@ -19,7 +19,6 @@
 
 #include <fudspord.hxx>
 
-#include <svx/svxids.hrc>
 #include <vcl/ptrstyle.hxx>
 
 #include <app.hrc>
@@ -27,7 +26,6 @@
 #include <ViewShell.hxx>
 #include <View.hxx>
 #include <Window.hxx>
-#include <drawdoc.hxx>
 
 namespace sd {
 

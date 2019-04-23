@@ -21,7 +21,6 @@
 #include <editeng/eeitem.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdundo.hxx>
-#include <sfx2/printer.hxx>
 #include <editeng/outlobj.hxx>
 #include <xmloff/autolayout.hxx>
 
@@ -31,13 +30,10 @@
 #include <View.hxx>
 #include <sdpage.hxx>
 #include <Outliner.hxx>
-#include <drawview.hxx>
 #include <drawdoc.hxx>
 #include <ViewShell.hxx>
-#include <DrawDocShell.hxx>
 #include <sdmod.hxx>
 #include <sdresid.hxx>
-#include <optsitem.hxx>
 #include <DrawViewShell.hxx>
 
 using namespace com::sun::star;

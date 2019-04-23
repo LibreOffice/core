@@ -23,8 +23,8 @@
 #include <svx/svxids.hrc>
 
 #include <strings.hrc>
+#include <sdattr.hrc>
 
-#include <sdattr.hxx>
 #include <View.hxx>
 #include <ViewShell.hxx>
 #include <DrawViewShell.hxx>
@@ -32,9 +32,7 @@
 #include <sdenumdef.hxx>
 #include <sdresid.hxx>
 #include <sdabstdlg.hxx>
-#include <app.hrc>
 #include <svx/svdpagv.hxx>
-#include <memory>
 
 namespace sd {
 

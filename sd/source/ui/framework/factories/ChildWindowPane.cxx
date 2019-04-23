@@ -28,9 +28,7 @@
 #include <PaneDockingWindow.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
-#include <framework/FrameworkHelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/svapp.hxx>
 #include <sfx2/viewfrm.hxx>
 
 using namespace ::com::sun::star;

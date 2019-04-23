@@ -29,7 +29,6 @@
 #include <memory>
 
 namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationController; } } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
 namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace sd {

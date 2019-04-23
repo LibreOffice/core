@@ -18,17 +18,15 @@
  */
 
 #include <fumorph.hxx>
-#include <svx/xfillit.hxx>
-#include <svx/xlineit.hxx>
-#include <svx/svdpool.hxx>
-#include <tools/poly.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xflclit.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdogrp.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/outlobj.hxx>
 
 #include <View.hxx>
-#include <ViewShell.hxx>
 #include <Window.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -44,7 +42,6 @@
 
 #include <basegfx/color/bcolor.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <memory>
 
 using namespace com::sun::star;
 

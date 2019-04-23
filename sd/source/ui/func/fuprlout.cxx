@@ -18,35 +18,23 @@
  */
 
 #include <fuprlout.hxx>
-#include <vcl/wrkwin.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svl/itempool.hxx>
-#include <sot/storage.hxx>
-#include <svx/svdundo.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 
+#include <sdattr.hrc>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <pres.hxx>
 #include <DrawViewShell.hxx>
-#include <FrameView.hxx>
-#include <stlpool.hxx>
 #include <View.hxx>
 #include <glob.hxx>
-#include <strmname.h>
 #include <app.hrc>
 #include <DrawDocShell.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <Window.hxx>
-#include <unprlout.hxx>
-#include <unchss.hxx>
-#include <unmovss.hxx>
-#include <sdattr.hxx>
 #include <drawview.hxx>
-#include <editeng/outliner.hxx>
-#include <editeng/editdata.hxx>
 #include <sdabstdlg.hxx>
 #include <memory>
 

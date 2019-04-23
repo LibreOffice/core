@@ -19,25 +19,18 @@
 
 #include <fuconuno.hxx>
 #include <rtl/ustring.hxx>
-#include <svl/aeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
-
-#include <svx/fmglob.hxx>
-
-#include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <vcl/ptrstyle.hxx>
 
-#include <app.hrc>
-#include <strings.hrc>
 #include <ViewShell.hxx>
 #include <View.hxx>
 #include <Window.hxx>
 #include <ViewShellBase.hxx>
 #include <ToolBarManager.hxx>
-#include <drawdoc.hxx>
 #include <unokywds.hxx>
 
 

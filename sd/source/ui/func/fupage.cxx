@@ -19,38 +19,28 @@
 
 #include <fupage.hxx>
 
-#include <sfx2/viewfrm.hxx>
-
 // arrange Tab-Page
 
 #include <sfx2/sfxdlg.hxx>
 #include <svx/svxids.hrc>
-#include <svx/dialogs.hrc>
 #include <svl/itempool.hxx>
-#include <vcl/layout.hxx>
 #include <sfx2/request.hxx>
-#include <svl/stritem.hxx>
 #include <vcl/prntypes.hxx>
-#include <svl/style.hxx>
 #include <stlsheet.hxx>
-#include <svx/svdorect.hxx>
-#include <svx/svdundo.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/graphichelper.hxx>
 #include <svx/xbtmpit.hxx>
-#include <svx/xsetit.hxx>
+#include <svx/xflbstit.hxx>
+#include <svx/xflbmtit.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svx/sdr/properties/properties.hxx>
-#include <sfx2/bindings.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/pbinitem.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/opengrf.hxx>
-#include <rtl/ustring.hxx>
 
 #include <strings.hrc>
 #include <sdpage.hxx>
@@ -60,21 +50,16 @@
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
-#include <ViewShellBase.hxx>
 #include <DrawViewShell.hxx>
 #include <app.hrc>
 #include <unchss.hxx>
 #include <undoback.hxx>
 #include <sdabstdlg.hxx>
 #include <sdresid.hxx>
-#include <sdundogr.hxx>
-#include <helpids.h>
 
 #include <memory>
 
 using namespace com::sun::star;
-
-namespace vcl { class Window; }
 
 namespace sd {
 

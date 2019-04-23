@@ -19,19 +19,13 @@
 
 #include <futext.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/editerr.hxx>
-#include <svx/dlgutil.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
-#include <svx/svxerr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
-#include <editeng/editstat.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/svdogrp.hxx>
 #include <editeng/flditem.hxx>
 #include <svl/style.hxx>
 #include <svx/svdpagv.hxx>
@@ -41,11 +35,9 @@
 #include <sfx2/request.hxx>
 #include <editeng/editeng.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/svdotable.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/docfile.hxx>
 #include <editeng/outlobj.hxx>
-#include <svtools/langtab.hxx>
 
 #include <editeng/frmdiritem.hxx>
 
@@ -58,17 +50,14 @@
 #include <ViewShell.hxx>
 #include <ViewShellBase.hxx>
 #include <View.hxx>
-#include <Outliner.hxx>
 #include <Window.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
-#include <sdmod.hxx>
 #include <FrameView.hxx>
 #include <ToolBarManager.hxx>
 #include <DrawDocShell.hxx>
 #include <strings.hrc>
 #include <pres.hxx>
-#include <optsitem.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

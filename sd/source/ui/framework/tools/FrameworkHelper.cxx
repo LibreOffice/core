@@ -25,18 +25,14 @@
 #include <framework/ResourceId.hxx>
 #include <framework/ViewShellWrapper.hxx>
 #include <ViewShellBase.hxx>
-#include <FrameView.hxx>
 #include <DrawViewShell.hxx>
 #include <ViewShellHint.hxx>
-#include <DrawController.hxx>
 #include <app.hrc>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#include <com/sun/star/drawing/framework/XPane.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <svl/lstner.hxx>
 
 #include <sfx2/request.hxx>
-#include <sfx2/dispatch.hxx>
 
 #include <MutexOwner.hxx>
 #include <vcl/svapp.hxx>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svxids.hrc>
+#include <editeng/editids.hrc>
 
 //-> Fonts & Items
 #include <vcl/font.hxx>
@@ -31,13 +31,9 @@
 #include <editeng/shdditem.hxx>
 
 //<- Fonts & Items
-#include <editeng/bulletitem.hxx>
-#include <editeng/brushitem.hxx>
-#include <vcl/graph.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/eeitem.hxx>
 
 #include <bulmaper.hxx>
 
