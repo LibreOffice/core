@@ -2680,7 +2680,7 @@ void XclExpCellTable::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_sheetFormatPr,
         // OOXTODO: XML_baseColWidth
-        // OOXTODO: XML_defaultColWidth
+        XML_defaultColWidth, OString::number(maColInfoBfr.GetDefColWidth()),
         // OOXTODO: XML_customHeight
         // OOXTODO: XML_thickTop
         // OOXTODO: XML_thickBottom

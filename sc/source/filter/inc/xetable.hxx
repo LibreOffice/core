@@ -760,6 +760,7 @@ public:
     virtual void        Save( XclExpStream& rStrm ) override;
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
     sal_uInt8           GetHighestOutlineLevel() { return mnHighestOutlineLevel; }
+    sal_uInt16          GetDefColWidth() { return maDefcolwidth.GetValue(); }
 
 private:
     typedef XclExpRecordList< XclExpColinfo >   XclExpColinfoList;
