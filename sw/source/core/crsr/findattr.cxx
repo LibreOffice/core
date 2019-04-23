@@ -195,14 +195,14 @@ struct SwSrchChrAttr
 
 class SwAttrCheckArr
 {
-    SwSrchChrAttr *pFndArr, *pStackArr;
-    sal_Int32 nNdStt;
-    sal_Int32 nNdEnd;
-    sal_uInt16 nArrStart, nArrLen;
-    sal_uInt16 nFound, nStackCnt;
-    SfxItemSet aCmpSet;
-    bool const bNoColls;
-    bool const bForward;
+    SwSrchChrAttr *m_pFindArr, *m_pStackArr;
+    sal_Int32 m_nNodeStart;
+    sal_Int32 m_nNodeEnd;
+    sal_uInt16 m_nArrStart, m_nArrLen;
+    sal_uInt16 m_nFound, m_nStackCount;
+    SfxItemSet m_aComapeSet;
+    bool const m_bNoColls;
+    bool const m_bForward;
 
 public:
     SwAttrCheckArr( const SfxItemSet& rSet, bool bForward, bool bNoCollections );
@@ -211,15 +211,15 @@ public:
     void SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam );
 
     /// how many attributes are there in total?
-    sal_uInt16 Count() const    { return aCmpSet.Count(); }
-    bool Found() const       { return nFound == aCmpSet.Count(); }
+    sal_uInt16 Count() const    { return m_aComapeSet.Count(); }
+    bool Found() const       { return m_nFound == m_aComapeSet.Count(); }
     bool CheckStack();
 
     sal_Int32 Start() const;
     sal_Int32 End() const;
 
-    sal_Int32 GetNdStt() const { return nNdStt; }
-    sal_Int32 GetNdEnd() const { return nNdEnd; }
+    sal_Int32 GetNdStt() const { return m_nNodeStart; }
+    sal_Int32 GetNdEnd() const { return m_nNodeEnd; }
 
     bool SetAttrFwd( const SwTextAttr& rAttr );
     bool SetAttrBwd( const SwTextAttr& rAttr );
@@ -227,62 +227,62 @@ public:
 
 SwAttrCheckArr::SwAttrCheckArr( const SfxItemSet& rSet, bool bFwd,
                                 bool bNoCollections )
-    : nNdStt(0)
-    , nNdEnd(0)
-    , nFound(0)
-    , nStackCnt(0)
-    , aCmpSet( *rSet.GetPool(), svl::Items<RES_CHRATR_BEGIN, RES_TXTATR_END-1>{} )
-    , bNoColls(bNoCollections)
-    , bForward(bFwd)
+    : m_nNodeStart(0)
+    , m_nNodeEnd(0)
+    , m_nFound(0)
+    , m_nStackCount(0)
+    , m_aComapeSet( *rSet.GetPool(), svl::Items<RES_CHRATR_BEGIN, RES_TXTATR_END-1>{} )
+    , m_bNoColls(bNoCollections)
+    , m_bForward(bFwd)
 {
-    aCmpSet.Put( rSet, false );
+    m_aComapeSet.Put( rSet, false );
 
     // determine area of Fnd/Stack array (Min/Max)
-    SfxItemIter aIter( aCmpSet );
-    nArrStart = aCmpSet.GetWhichByPos( aIter.GetFirstPos() );
-    nArrLen = aCmpSet.GetWhichByPos( aIter.GetLastPos() ) - nArrStart+1;
+    SfxItemIter aIter( m_aComapeSet );
+    m_nArrStart = m_aComapeSet.GetWhichByPos( aIter.GetFirstPos() );
+    m_nArrLen = m_aComapeSet.GetWhichByPos( aIter.GetLastPos() ) - m_nArrStart+1;
 
-    char* pFndChar  = new char[ nArrLen * sizeof(SwSrchChrAttr) ];
-    char* pStackChar = new char[ nArrLen * sizeof(SwSrchChrAttr) ];
+    char* pFndChar  = new char[ m_nArrLen * sizeof(SwSrchChrAttr) ];
+    char* pStackChar = new char[ m_nArrLen * sizeof(SwSrchChrAttr) ];
 
-    pFndArr = reinterpret_cast<SwSrchChrAttr*>(pFndChar);
-    pStackArr = reinterpret_cast<SwSrchChrAttr*>(pStackChar);
+    m_pFindArr = reinterpret_cast<SwSrchChrAttr*>(pFndChar);
+    m_pStackArr = reinterpret_cast<SwSrchChrAttr*>(pStackChar);
 }
 
 SwAttrCheckArr::~SwAttrCheckArr()
 {
-    delete[] reinterpret_cast<char*>(pFndArr);
-    delete[] reinterpret_cast<char*>(pStackArr);
+    delete[] reinterpret_cast<char*>(m_pFindArr);
+    delete[] reinterpret_cast<char*>(m_pStackArr);
 }
 
 void SwAttrCheckArr::SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam )
 {
-    std::fill(pFndArr, pFndArr + nArrLen, SwSrchChrAttr());
-    std::fill(pStackArr, pStackArr + nArrLen, SwSrchChrAttr());
-    nFound = 0;
-    nStackCnt = 0;
+    std::fill(m_pFindArr, m_pFindArr + m_nArrLen, SwSrchChrAttr());
+    std::fill(m_pStackArr, m_pStackArr + m_nArrLen, SwSrchChrAttr());
+    m_nFound = 0;
+    m_nStackCount = 0;
 
-    if( bForward )
+    if( m_bForward )
     {
-        nNdStt = rPam.GetPoint()->nContent.GetIndex();
-        nNdEnd = rPam.GetPoint()->nNode == rPam.GetMark()->nNode
+        m_nNodeStart = rPam.GetPoint()->nContent.GetIndex();
+        m_nNodeEnd = rPam.GetPoint()->nNode == rPam.GetMark()->nNode
                 ? rPam.GetMark()->nContent.GetIndex()
                 : rTextNd.GetText().getLength();
     }
     else
     {
-        nNdEnd = rPam.GetPoint()->nContent.GetIndex();
-        nNdStt = rPam.GetPoint()->nNode == rPam.GetMark()->nNode
+        m_nNodeEnd = rPam.GetPoint()->nContent.GetIndex();
+        m_nNodeStart = rPam.GetPoint()->nNode == rPam.GetMark()->nNode
                 ? rPam.GetMark()->nContent.GetIndex()
                 : 0;
     }
 
-    if( bNoColls && !rTextNd.HasSwAttrSet() )
+    if( m_bNoColls && !rTextNd.HasSwAttrSet() )
         return ;
 
     const SfxItemSet& rSet = rTextNd.GetSwAttrSet();
 
-    SfxItemIter aIter( aCmpSet );
+    SfxItemIter aIter( m_aComapeSet );
     const SfxPoolItem* pItem = aIter.GetCurItem();
     const SfxPoolItem* pFndItem;
     sal_uInt16 nWhich;
@@ -291,16 +291,16 @@ void SwAttrCheckArr::SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam )
     {
         if( IsInvalidItem( pItem ) )
         {
-            nWhich = aCmpSet.GetWhichByPos( aIter.GetCurPos() );
+            nWhich = m_aComapeSet.GetWhichByPos( aIter.GetCurPos() );
             if( RES_TXTATR_END <= nWhich )
                 break; // end of text attributes
 
-            if( SfxItemState::SET == rSet.GetItemState( nWhich, !bNoColls, &pFndItem )
+            if( SfxItemState::SET == rSet.GetItemState( nWhich, !m_bNoColls, &pFndItem )
                 && !CmpAttr( *pFndItem, rSet.GetPool()->GetDefaultItem( nWhich ) ))
             {
-                pFndArr[ nWhich - nArrStart ] =
-                    SwSrchChrAttr( *pFndItem, nNdStt, nNdEnd );
-                nFound++;
+                m_pFindArr[ nWhich - m_nArrStart ] =
+                    SwSrchChrAttr( *pFndItem, m_nNodeStart, m_nNodeEnd );
+                m_nFound++;
             }
         }
         else
@@ -308,11 +308,11 @@ void SwAttrCheckArr::SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam )
             if( RES_TXTATR_END <= (nWhich = pItem->Which() ))
                 break; // end of text attributes
 
-            if( CmpAttr( rSet.Get( nWhich, !bNoColls ), *pItem ) )
+            if( CmpAttr( rSet.Get( nWhich, !m_bNoColls ), *pItem ) )
             {
-                pFndArr[ nWhich - nArrStart ] =
-                    SwSrchChrAttr( *pItem, nNdStt, nNdEnd );
-                nFound++;
+                m_pFindArr[ nWhich - m_nArrStart ] =
+                    SwSrchChrAttr( *pItem, m_nNodeStart, m_nNodeEnd );
+                m_nFound++;
             }
         }
 
@@ -342,7 +342,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
     SwSrchChrAttr aTmp( rAttr.GetAttr(), rAttr.GetStart(), *rAttr.GetAnyEnd() );
 
     // ignore all attributes not in search range
-    if (lcl_IsAttributeIgnorable(nNdStt, nNdEnd, aTmp))
+    if (lcl_IsAttributeIgnorable(m_nNodeStart, m_nNodeEnd, aTmp))
     {
         return Found();
     }
@@ -355,7 +355,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
     const SfxItemSet* pSet = nullptr;
     if( RES_TXTATR_CHARFMT == nWhch || RES_TXTATR_AUTOFMT == nWhch )
     {
-        if( bNoColls && RES_TXTATR_CHARFMT == nWhch )
+        if( m_bNoColls && RES_TXTATR_CHARFMT == nWhch )
             return Found();
         pTmpItem = nullptr;
         pSet = CharFormat::GetItemSet( rAttr.GetAttr() );
@@ -375,7 +375,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
 
     while( pTmpItem )
     {
-        SfxItemState eState = aCmpSet.GetItemState( nWhch, false, &pItem );
+        SfxItemState eState = m_aComapeSet.GetItemState( nWhch, false, &pItem );
         if( SfxItemState::DONTCARE == eState || SfxItemState::SET == eState )
         {
             sal_uInt16 n;
@@ -383,20 +383,20 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
 
             // first delete all up to start position that are already invalid
             SwSrchChrAttr* pArrPtr;
-            if( nFound )
-                for( pArrPtr = pFndArr, n = 0; n < nArrLen;
+            if( m_nFound )
+                for( pArrPtr = m_pFindArr, n = 0; n < m_nArrLen;
                     ++n, ++pArrPtr )
                     if( pArrPtr->nWhich && pArrPtr->nEnd <= aTmp.nStt )
                     {
                         pArrPtr->nWhich = 0; // deleted
-                        nFound--;
+                        m_nFound--;
                     }
 
             // delete all up to start position that are already invalid and
             // move all "open" ones (= stick out over start position) from stack
             // into FndSet
-            if( nStackCnt )
-                for( pArrPtr = pStackArr, n=0; n < nArrLen; ++n, ++pArrPtr )
+            if( m_nStackCount )
+                for( pArrPtr = m_pStackArr, n=0; n < m_nArrLen; ++n, ++pArrPtr )
                 {
                     if( !pArrPtr->nWhich )
                         continue;
@@ -404,12 +404,12 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
                     if( pArrPtr->nEnd <= aTmp.nStt )
                     {
                         pArrPtr->nWhich = 0; // deleted
-                        if( !--nStackCnt )
+                        if( !--m_nStackCount )
                             break;
                     }
                     else if( pArrPtr->nStt <= aTmp.nStt )
                     {
-                        if( ( pCmp = &pFndArr[ n ])->nWhich )
+                        if( ( pCmp = &m_pFindArr[ n ])->nWhich )
                         {
                             if( pCmp->nEnd < pArrPtr->nEnd ) // extend
                                 pCmp->nEnd = pArrPtr->nEnd;
@@ -417,10 +417,10 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
                         else
                         {
                             *pCmp = *pArrPtr;
-                            nFound++;
+                            m_nFound++;
                         }
                         pArrPtr->nWhich = 0;
-                        if( !--nStackCnt )
+                        if( !--m_nStackCount )
                             break;
                     }
                 }
@@ -430,14 +430,14 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
             if( SfxItemState::DONTCARE == eState  )
             {
                 // Will the attribute become valid?
-                if( !CmpAttr( aCmpSet.GetPool()->GetDefaultItem( nWhch ),
+                if( !CmpAttr( m_aComapeSet.GetPool()->GetDefaultItem( nWhch ),
                     *pTmpItem ))
                 {
                     // search attribute and extend if needed
-                    if( !( pCmp = &pFndArr[ nWhch - nArrStart ])->nWhich )
+                    if( !( pCmp = &m_pFindArr[ nWhch - m_nArrStart ])->nWhich )
                     {
                         *pCmp = aTmp; // not found, insert
-                        nFound++;
+                        m_nFound++;
                     }
                     else if( pCmp->nEnd < aTmp.nEnd ) // extend?
                         pCmp->nEnd = aTmp.nEnd;
@@ -448,18 +448,18 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
             // Will the attribute become valid?
             else if(  CmpAttr( *pItem, *pTmpItem ) )
             {
-                pFndArr[ nWhch - nArrStart ] = aTmp;
-                ++nFound;
+                m_pFindArr[ nWhch - m_nArrStart ] = aTmp;
+                ++m_nFound;
                 bContinue = true;
             }
 
             // then is has to go on the stack
-            if( !bContinue && ( pCmp = &pFndArr[ nWhch - nArrStart ])->nWhich )
+            if( !bContinue && ( pCmp = &m_pFindArr[ nWhch - m_nArrStart ])->nWhich )
             {
                 // exists on stack, only if it is even bigger
                 if( pCmp->nEnd > aTmp.nEnd )
                 {
-                    OSL_ENSURE( !pStackArr[ nWhch - nArrStart ].nWhich,
+                    OSL_ENSURE( !m_pStackArr[ nWhch - m_nArrStart ].nWhich,
                                     "slot on stack is still in use" );
 
                     if( aTmp.nStt <= pCmp->nStt )
@@ -467,11 +467,11 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
                     else
                         pCmp->nEnd = aTmp.nStt;
 
-                    pStackArr[ nWhch - nArrStart ] = *pCmp;
-                    nStackCnt++;
+                    m_pStackArr[ nWhch - m_nArrStart ] = *pCmp;
+                    m_nStackCount++;
                 }
                 pCmp->nWhich = 0;
-                nFound--;
+                m_nFound--;
             }
         }
         if( pIter )
@@ -496,7 +496,7 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
     SwSrchChrAttr aTmp( rAttr.GetAttr(), rAttr.GetStart(), *rAttr.GetAnyEnd() );
 
     // ignore all attributes not in search range
-    if (lcl_IsAttributeIgnorable(nNdStt, nNdEnd, aTmp))
+    if (lcl_IsAttributeIgnorable(m_nNodeStart, m_nNodeEnd, aTmp))
     {
         return Found();
     }
@@ -509,7 +509,7 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
     const SfxItemSet* pSet = nullptr;
     if( RES_TXTATR_CHARFMT == nWhch || RES_TXTATR_AUTOFMT == nWhch )
     {
-        if( bNoColls && RES_TXTATR_CHARFMT == nWhch )
+        if( m_bNoColls && RES_TXTATR_CHARFMT == nWhch )
             return Found();
 
         pSet = CharFormat::GetItemSet( rAttr.GetAttr() );
@@ -529,7 +529,7 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
 
     while( pTmpItem )
     {
-        SfxItemState eState = aCmpSet.GetItemState( nWhch, false, &pItem );
+        SfxItemState eState = m_aComapeSet.GetItemState( nWhch, false, &pItem );
         if( SfxItemState::DONTCARE == eState || SfxItemState::SET == eState )
         {
             sal_uInt16 n;
@@ -537,19 +537,19 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
 
             // first delete all up to start position that are already invalid
             SwSrchChrAttr* pArrPtr;
-            if( nFound )
-                for( pArrPtr = pFndArr, n = 0; n < nArrLen; ++n, ++pArrPtr )
+            if( m_nFound )
+                for( pArrPtr = m_pFindArr, n = 0; n < m_nArrLen; ++n, ++pArrPtr )
                     if( pArrPtr->nWhich && pArrPtr->nStt >= aTmp.nEnd )
                     {
                         pArrPtr->nWhich = 0; // deleted
-                        nFound--;
+                        m_nFound--;
                     }
 
             // delete all up to start position that are already invalid and
             // move all "open" ones (= stick out over start position) from stack
             // into FndSet
-            if( nStackCnt )
-                for( pArrPtr = pStackArr, n = 0; n < nArrLen; ++n, ++pArrPtr )
+            if( m_nStackCount )
+                for( pArrPtr = m_pStackArr, n = 0; n < m_nArrLen; ++n, ++pArrPtr )
                 {
                     if( !pArrPtr->nWhich )
                         continue;
@@ -557,12 +557,12 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
                     if( pArrPtr->nStt >= aTmp.nEnd )
                     {
                         pArrPtr->nWhich = 0; // deleted
-                        if( !--nStackCnt )
+                        if( !--m_nStackCount )
                             break;
                     }
                     else if( pArrPtr->nEnd >= aTmp.nEnd )
                     {
-                        if( ( pCmp = &pFndArr[ n ])->nWhich )
+                        if( ( pCmp = &m_pFindArr[ n ])->nWhich )
                         {
                             if( pCmp->nStt > pArrPtr->nStt ) // extend
                                 pCmp->nStt = pArrPtr->nStt;
@@ -570,10 +570,10 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
                         else
                         {
                             *pCmp = *pArrPtr;
-                            nFound++;
+                            m_nFound++;
                         }
                         pArrPtr->nWhich = 0;
-                        if( !--nStackCnt )
+                        if( !--m_nStackCount )
                             break;
                     }
                 }
@@ -582,14 +582,14 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
             if( SfxItemState::DONTCARE == eState  )
             {
                 // Will the attribute become valid?
-                if( !CmpAttr( aCmpSet.GetPool()->GetDefaultItem( nWhch ),
+                if( !CmpAttr( m_aComapeSet.GetPool()->GetDefaultItem( nWhch ),
                     *pTmpItem ) )
                 {
                     // search attribute and extend if needed
-                    if( !( pCmp = &pFndArr[ nWhch - nArrStart ])->nWhich )
+                    if( !( pCmp = &m_pFindArr[ nWhch - m_nArrStart ])->nWhich )
                     {
                         *pCmp = aTmp; // not found, insert
-                        nFound++;
+                        m_nFound++;
                     }
                     else if( pCmp->nStt > aTmp.nStt ) // extend?
                         pCmp->nStt = aTmp.nStt;
@@ -600,18 +600,18 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
             // Will the attribute become valid?
             else if( CmpAttr( *pItem, *pTmpItem ))
             {
-                pFndArr[ nWhch - nArrStart ] = aTmp;
-                ++nFound;
+                m_pFindArr[ nWhch - m_nArrStart ] = aTmp;
+                ++m_nFound;
                 bContinue = true;
             }
 
             // then is has to go on the stack
-            if( !bContinue && ( pCmp = &pFndArr[ nWhch - nArrStart ])->nWhich )
+            if( !bContinue && ( pCmp = &m_pFindArr[ nWhch - m_nArrStart ])->nWhich )
             {
                 // exists on stack, only if it is even bigger
                 if( pCmp->nStt < aTmp.nStt )
                 {
-                    OSL_ENSURE( !pStackArr[ nWhch - nArrStart ].nWhich,
+                    OSL_ENSURE( !m_pStackArr[ nWhch - m_nArrStart ].nWhich,
                             "slot on stack is still in use" );
 
                     if( aTmp.nEnd <= pCmp->nEnd )
@@ -619,11 +619,11 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
                     else
                         pCmp->nStt = aTmp.nEnd;
 
-                    pStackArr[ nWhch - nArrStart ] = *pCmp;
-                    nStackCnt++;
+                    m_pStackArr[ nWhch - m_nArrStart ] = *pCmp;
+                    m_nStackCount++;
                 }
                 pCmp->nWhich = 0;
-                nFound--;
+                m_nFound--;
             }
         }
         if( pIter )
@@ -645,9 +645,9 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
 
 sal_Int32 SwAttrCheckArr::Start() const
 {
-    sal_Int32 nStart = nNdStt;
-    SwSrchChrAttr* pArrPtr = pFndArr;
-    for( sal_uInt16 n = 0; n < nArrLen; ++n, ++pArrPtr )
+    sal_Int32 nStart = m_nNodeStart;
+    SwSrchChrAttr* pArrPtr = m_pFindArr;
+    for( sal_uInt16 n = 0; n < m_nArrLen; ++n, ++pArrPtr )
         if( pArrPtr->nWhich && pArrPtr->nStt > nStart )
             nStart = pArrPtr->nStt;
 
@@ -656,9 +656,9 @@ sal_Int32 SwAttrCheckArr::Start() const
 
 sal_Int32 SwAttrCheckArr::End() const
 {
-    SwSrchChrAttr* pArrPtr = pFndArr;
-    sal_Int32 nEnd = nNdEnd;
-    for( sal_uInt16 n = 0; n < nArrLen; ++n, ++pArrPtr )
+    SwSrchChrAttr* pArrPtr = m_pFindArr;
+    sal_Int32 nEnd = m_nNodeEnd;
+    for( sal_uInt16 n = 0; n < m_nArrLen; ++n, ++pArrPtr )
         if( pArrPtr->nWhich && pArrPtr->nEnd < nEnd )
             nEnd = pArrPtr->nEnd;
 
@@ -667,36 +667,36 @@ sal_Int32 SwAttrCheckArr::End() const
 
 bool SwAttrCheckArr::CheckStack()
 {
-    if( !nStackCnt )
+    if( !m_nStackCount )
         return false;
 
     sal_uInt16 n;
     const sal_Int32 nSttPos = Start();
     const sal_Int32 nEndPos = End();
     SwSrchChrAttr* pArrPtr;
-    for( pArrPtr = pStackArr, n = 0; n < nArrLen; ++n, ++pArrPtr )
+    for( pArrPtr = m_pStackArr, n = 0; n < m_nArrLen; ++n, ++pArrPtr )
     {
         if( !pArrPtr->nWhich )
             continue;
 
-        if( bForward ? pArrPtr->nEnd <= nSttPos : pArrPtr->nStt >= nEndPos )
+        if( m_bForward ? pArrPtr->nEnd <= nSttPos : pArrPtr->nStt >= nEndPos )
         {
             pArrPtr->nWhich = 0; // deleted
-            if( !--nStackCnt )
-                return nFound == aCmpSet.Count();
+            if( !--m_nStackCount )
+                return m_nFound == m_aComapeSet.Count();
         }
-        else if( bForward ? pArrPtr->nStt < nEndPos : pArrPtr->nEnd > nSttPos )
+        else if( m_bForward ? pArrPtr->nStt < nEndPos : pArrPtr->nEnd > nSttPos )
         {
             // move all "open" ones (= stick out over start position) into FndSet
-            OSL_ENSURE( !pFndArr[ n ].nWhich, "slot in array is already in use" );
-            pFndArr[ n ] = *pArrPtr;
+            OSL_ENSURE( !m_pFindArr[ n ].nWhich, "slot in array is already in use" );
+            m_pFindArr[ n ] = *pArrPtr;
             pArrPtr->nWhich = 0;
-            nFound++;
-            if( !--nStackCnt )
-                return nFound == aCmpSet.Count();
+            m_nFound++;
+            if( !--m_nStackCount )
+                return m_nFound == m_aComapeSet.Count();
         }
     }
-    return nFound == aCmpSet.Count();
+    return m_nFound == m_aComapeSet.Count();
 }
 
 static bool lcl_SearchForward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpArr,
