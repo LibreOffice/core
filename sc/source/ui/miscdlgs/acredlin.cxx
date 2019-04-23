@@ -1714,34 +1714,43 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
     }
 }
 
-void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
+namespace
 {
-    OUString aStr;
-    if(pInfo!=nullptr)
+    //at one point we were writing multiple AcceptChgDat strings,
+    //so strip all of them and keep the results of the last one
+    OUString lcl_StripAcceptChgDat(OUString &rExtraString)
     {
-        if ( !pInfo->aExtraString.isEmpty() )
+        OUString aStr;
+        while (true)
         {
-            sal_Int32 nPos = pInfo->aExtraString.indexOf("AcceptChgDat:");
-
+            sal_Int32 nPos = rExtraString.indexOf("AcceptChgDat:");
+            if (nPos == -1)
+                break;
             // Try to read the alignment string "ALIGN:(...)"; if it is missing
             // we have an old version
-            if ( nPos != -1 )
+            sal_Int32 n1 = rExtraString.indexOf('(', nPos);
+            if ( n1 != -1 )
             {
-                sal_Int32 n1 = pInfo->aExtraString.indexOf('(', nPos);
-                if ( n1 != -1 )
+                sal_Int32 n2 = rExtraString.indexOf(')', n1);
+                if ( n2 != -1 )
                 {
-                    sal_Int32 n2 = pInfo->aExtraString.indexOf(')', n1);
-                    if ( n2 != -1 )
-                    {
-                        // cut out alignment string
-                        aStr = pInfo->aExtraString.copy(nPos, n2 - nPos + 1);
-                        pInfo->aExtraString = pInfo->aExtraString.replaceAt(nPos, n2 - nPos + 1, "");
-                        aStr = aStr.copy( n1-nPos+1 );
-                    }
+                    // cut out alignment string
+                    aStr = rExtraString.copy(nPos, n2 - nPos + 1);
+                    rExtraString = rExtraString.replaceAt(nPos, n2 - nPos + 1, "");
+                    aStr = aStr.copy( n1-nPos+1 );
                 }
             }
         }
+        return aStr;
     }
+}
+
+void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
+{
+    OUString aStr;
+    if (pInfo && !pInfo->aExtraString.isEmpty())
+        aStr = lcl_StripAcceptChgDat(pInfo->aExtraString);
+
     SfxModelessDialog::Initialize(pInfo);
 
     if ( !aStr.isEmpty())
@@ -1760,6 +1769,8 @@ void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
 void ScAcceptChgDlg::FillInfo(SfxChildWinInfo& rInfo) const
 {
     SfxModelessDialog::FillInfo(rInfo);
+    //remove any old one before adding a new one
+    lcl_StripAcceptChgDat(rInfo.aExtraString);
     rInfo.aExtraString += "AcceptChgDat:(";
 
     sal_uInt16  nCount=pTheView->TabCount();
