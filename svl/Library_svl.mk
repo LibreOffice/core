@@ -111,6 +111,11 @@ $(eval $(call gb_Library_use_externals,svl,\
     nss3 \
     plc4 \
 ))
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_libs,svl, \
+    -lpthread \
+))
+endif
 endif # BUILD_TYPE=DESKTOP
 endif
 
