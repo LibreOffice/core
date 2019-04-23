@@ -166,6 +166,7 @@ public:
     void testTdf104445();
     void testTdf105150();
     void testTdf105150PPT();
+    void testTdf123684();
     void testTdf100926();
     void testTdf89064();
     void testTdf108925();
@@ -252,6 +253,7 @@ public:
     CPPUNIT_TEST(testTdf104445);
     CPPUNIT_TEST(testTdf105150);
     CPPUNIT_TEST(testTdf105150PPT);
+    CPPUNIT_TEST(testTdf123684);
     CPPUNIT_TEST(testTdf100926);
     CPPUNIT_TEST(testPatternImport);
     CPPUNIT_TEST(testTdf89064);
@@ -1765,6 +1767,20 @@ void SdImportTest::testTdf105150()
     // This was drawing::FillStyle_NONE, <p:sp useBgFill="1"> was ignored when
     // the slide didn't have an explicit background fill.
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rFillStyleItem.GetValue());
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf123684()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf123684.pptx"), PPTX);
+    const SdrPage* pPage = GetPage(1, xDocShRef);
+    const SdrObject* pObj = pPage->GetObj(0);
+    auto& rFillStyleItem
+        = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 0; Actual:
+    // 1', i.e. the shape's fill was FillStyle_SOLID, making the text of the shape unreadable.
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rFillStyleItem.GetValue());
     xDocShRef->DoClose();
 }
 
