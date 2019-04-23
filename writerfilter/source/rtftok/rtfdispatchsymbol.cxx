@@ -231,20 +231,20 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTF_ROW:
         {
             m_bAfterCellBeforeRow = false;
-            if (m_aStates.top().nTableRowWidthAfter > 0)
-            {
-                // Add fake cellx / cell, RTF equivalent of
-                // OOXMLFastContextHandlerTextTableRow::handleGridAfter().
-                auto pXValue = std::make_shared<RTFValue>(m_aStates.top().nTableRowWidthAfter);
-                m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
-                                                   RTFOverwrite::NO_APPEND);
-                dispatchSymbol(RTF_CELL);
-
-                // Adjust total width, which is done in the \cellx handler for normal cells.
-                m_nTopLevelCurrentCellX += m_aStates.top().nTableRowWidthAfter;
-
-                m_aStates.top().nTableRowWidthAfter = 0;
-            }
+            // if (m_aStates.top().nTableRowWidthAfter > 0)
+            // {
+            //     // Add fake cellx / cell, RTF equivalent of
+            //     // OOXMLFastContextHandlerTextTableRow::handleGridAfter().
+            //     auto pXValue = std::make_shared<RTFValue>(m_aStates.top().nTableRowWidthAfter);
+            //     m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
+            //                                        RTFOverwrite::NO_APPEND);
+            //     dispatchSymbol(RTF_CELL);
+            //
+            //     // Adjust total width, which is done in the \cellx handler for normal cells.
+            //     m_nTopLevelCurrentCellX += m_aStates.top().nTableRowWidthAfter;
+            //
+            //     m_aStates.top().nTableRowWidthAfter = 0;
+            // }
 
             bool bRestored = false;
             // Ending a row, but no cells defined?
