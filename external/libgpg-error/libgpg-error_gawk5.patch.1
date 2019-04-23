@@ -1,0 +1,72 @@
+diff -ur libgpg-error.org/lang/cl/mkerrcodes.awk libgpg-error/lang/cl/mkerrcodes.awk
+--- libgpg-error.org/lang/cl/mkerrcodes.awk	2019-04-23 20:31:37.884316597 +0200
++++ libgpg-error/lang/cl/mkerrcodes.awk	2019-04-23 20:35:10.840098336 +0200
+@@ -122,7 +122,7 @@
+ }
+ 
+ !header {
+-  sub (/\#.+/, "");
++  sub (/#.+/, "");
+   sub (/[ 	]+$/, ""); # Strip trailing space and tab characters.
+ 
+   if (/^$/)
+diff -ur libgpg-error.org/src/mkerrcodes1.awk libgpg-error/src/mkerrcodes1.awk
+--- libgpg-error.org/src/mkerrcodes1.awk	2019-04-23 20:31:37.888316595 +0200
++++ libgpg-error/src/mkerrcodes1.awk	2019-04-23 20:47:29.626294678 +0200
+@@ -81,7 +81,7 @@
+ }
+ 
+ !header {
+-  sub (/\#.+/, "");
++  sub (/#.+/, "");
+   sub (/[ 	]+$/, ""); # Strip trailing space and tab characters.
+ 
+   if (/^$/)
+diff -ur libgpg-error.org/src/mkerrcodes2.awk libgpg-error/src/mkerrcodes2.awk
+--- libgpg-error.org/src/mkerrcodes2.awk	2019-04-23 20:31:37.888316595 +0200
++++ libgpg-error/src/mkerrcodes2.awk	2019-04-23 20:47:42.382215444 +0200
+@@ -91,7 +91,7 @@
+ }
+ 
+ !header {
+-  sub (/\#.+/, "");
++  sub (/#.+/, "");
+   sub (/[ 	]+$/, ""); # Strip trailing space and tab characters.
+ 
+   if (/^$/)
+diff -ur libgpg-error.org/src/mkerrcodes.awk libgpg-error/src/mkerrcodes.awk
+--- libgpg-error.org/src/mkerrcodes.awk	2019-04-23 20:31:37.888316595 +0200
++++ libgpg-error/src/mkerrcodes.awk	2019-04-23 20:36:00.780042680 +0200
+@@ -85,7 +85,7 @@
+ }
+ 
+ !header {
+-  sub (/\#.+/, "");
++  sub (/#.+/, "");
+   sub (/[ 	]+$/, ""); # Strip trailing space and tab characters.
+ 
+   if (/^$/)
+diff -ur libgpg-error.org/src/mkerrnos.awk libgpg-error/src/mkerrnos.awk
+--- libgpg-error.org/src/mkerrnos.awk	2019-04-23 20:31:37.888316595 +0200
++++ libgpg-error/src/mkerrnos.awk	2019-04-23 20:47:54.850139158 +0200
+@@ -83,7 +83,7 @@
+ }
+ 
+ !header {
+-  sub (/\#.+/, "");
++  sub (/#.+/, "");
+   sub (/[ 	]+$/, ""); # Strip trailing space and tab characters.
+ 
+   if (/^$/)
+diff -ur libgpg-error.org/src/mkstrtable.awk libgpg-error/src/mkstrtable.awk
+--- libgpg-error.org/src/mkstrtable.awk	2019-04-23 20:31:37.884316597 +0200
++++ libgpg-error/src/mkstrtable.awk	2019-04-23 20:48:44.317847241 +0200
+@@ -110,7 +110,7 @@
+ }
+ 
+ !header {
+-  sub (/\#.+/, "");
++  sub (/#.+/, "");
+   sub (/[ 	]+$/, ""); # Strip trailing space and tab characters.
+ 
+   if (/^$/)
