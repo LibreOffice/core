@@ -117,10 +117,7 @@ static bool StrCmp( const OUString* pStr1, const OUString* pStr2 )
         return false;
     if (!pStr1 && pStr2)
         return false;
-    // we don't care about a proper lexicographic ordering, we just care about a stable order, and
-    // this is faster
-    return strcmp(reinterpret_cast<const char*>(pStr1->getStr()),
-                  reinterpret_cast<const char*>(pStr2->getStr())) == 0;
+    return *pStr1 == *pStr2;
 }
 
 static bool StrLess( const OUString* pStr1, const OUString* pStr2 )
@@ -131,10 +128,7 @@ static bool StrLess( const OUString* pStr1, const OUString* pStr2 )
         return false;
     if (!pStr1 && pStr2)
         return true;
-    // we don't care about a proper lexicographic ordering, we just care about a stable order, and
-    // this is faster
-    return strcmp(reinterpret_cast<const char*>(pStr1->getStr()),
-                  reinterpret_cast<const char*>(pStr2->getStr())) < 0;
+    return *pStr1 < *pStr2;
 }
 
 static bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
