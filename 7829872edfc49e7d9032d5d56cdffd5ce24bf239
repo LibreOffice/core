@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_42bcf668",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-23T08:45:49Z",
+      "side": 1,
+      "message": "Why do we need to do this for all buttons? I suppose we only care about the clicked button, so why comparing the pointers at all, instead of just using the passed reference?\n\nAlso, iirc, setting active internally goes through setting inactive first, then setting active (needs checking) - so in this case, better check the clicked button state and only activate in inactive to avoid extra round of status change.",
+      "range": {
+        "startLine": 378,
+        "startChar": 4,
+        "endLine": 383,
+        "endChar": 63
+      },
+      "revId": "7829872edfc49e7d9032d5d56cdffd5ce24bf239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_e2b0a28e",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-23T08:45:49Z",
+      "side": 1,
+      "message": "I don\u0027t think we need to move this logic here - why not have two handlers: one - old - for toggled set change; the other - new - for checking clicks to ensure they always result in active state.",
+      "range": {
+        "startLine": 385,
+        "startChar": 4,
+        "endLine": 387,
+        "endChar": 25
+      },
+      "revId": "7829872edfc49e7d9032d5d56cdffd5ce24bf239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
