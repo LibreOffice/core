@@ -114,6 +114,12 @@ $(eval $(call gb_Library_use_externals,svl,\
 endif # BUILD_TYPE=DESKTOP
 endif
 
+ifeq ($(OS), $(filter LINUX, $(OS)))
+$(eval $(call gb_Library_add_libs,svl,\
+    -lpthread \
+))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/config/asiancfg \
     svl/source/config/cjkoptions \
