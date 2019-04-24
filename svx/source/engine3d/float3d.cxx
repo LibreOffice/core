@@ -50,6 +50,7 @@
 #include <svx/e3ditem.hxx>
 #include <svx/gallery.hxx>
 #include <svl/whiter.hxx>
+#include <svtools/unitconv.hxx>
 
 #include <svx/float3d.hxx>
 #include <bitmaps.hlst>

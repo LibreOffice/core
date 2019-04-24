@@ -32,9 +32,11 @@
 #include <rtl/ustring.hxx>
 #include <tools/fract.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <strings.hrc>
 #include <vcl/field.hxx>
 #include <vcl/settings.hxx>
+#include <svtools/unitconv.hxx>
 
 #define CM_1_TO_TWIP        567
 #define TWIP_TO_INCH        1440

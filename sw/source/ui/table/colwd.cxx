@@ -19,6 +19,7 @@
 
 #include <sfx2/dispatch.hxx>
 #include <svx/dlgutil.hxx>
+#include <svtools/unitconv.hxx>
 #include <colwd.hxx>
 #include <tablemgr.hxx>
 #include <wrtsh.hxx>

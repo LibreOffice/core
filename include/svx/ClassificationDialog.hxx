@@ -12,12 +12,13 @@
 #define INCLUDED_SVX_CLASSIFICATIONDIALOG_HXX
 
 #include <sal/config.h>
-#include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/ClassificationEditView.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <svx/ClassificationField.hxx>
+
+namespace svx { class ClassificationEditView; }
+namespace weld { class CustomWeld; }
 
 namespace svx {
 

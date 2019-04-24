@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_DLGUTIL_HXX
 #define INCLUDED_SVX_DLGUTIL_HXX
 
-#include <svtools/unitconv.hxx>
+#include <tools/fldunit.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/outdev.hxx>
 

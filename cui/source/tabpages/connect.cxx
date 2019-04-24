@@ -25,6 +25,7 @@
 
 #include <svx/connctrl.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <svx/dlgutil.hxx>
 #include <svx/ofaitem.hxx>
 #include <svx/svdattr.hxx>
@@ -33,6 +34,7 @@
 #include <svx/sxekitm.hxx>
 #include <svx/sxelditm.hxx>
 #include <svx/sxenditm.hxx>
+#include <svtools/unitconv.hxx>
 
 #include <connect.hxx>
 

@@ -20,6 +20,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <svl/intitem.hxx>
+#include <svtools/unitconv.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/optgrid.hxx>

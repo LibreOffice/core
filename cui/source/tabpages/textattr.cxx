@@ -30,12 +30,14 @@
 #include <svx/svdview.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 
 #include <textattr.hxx>
 #include <svx/dlgutil.hxx>
 #include <sfx2/request.hxx>
 #include <svx/ofaitem.hxx>
 #include <editeng/writingmodeitem.hxx>
+#include <svtools/unitconv.hxx>
 
 using namespace ::com::sun::star;
 

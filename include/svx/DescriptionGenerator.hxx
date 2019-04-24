@@ -21,10 +21,12 @@
 #ifndef INCLUDED_SVX_DESCRIPTIONGENERATOR_HXX
 #define INCLUDED_SVX_DESCRIPTIONGENERATOR_HXX
 
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svx/svxdllapi.h>
+
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::drawing { class XShape; }
 
 
 namespace accessibility {

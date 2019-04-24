@@ -30,23 +30,16 @@
 #include <svx/svxdllapi.h>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
-#include <vcl/ctrl.hxx>
-#include <vcl/event.hxx>
-#include <vcl/fontcharmap.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/window.hxx>
-#include <vcl/textview.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace accessibility { class XAccessible; }
 } } }
 
-namespace vcl { class Font; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 

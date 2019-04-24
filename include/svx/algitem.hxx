@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVX_ALGITEM_HXX
 #define INCLUDED_SVX_ALGITEM_HXX
 
-#include <com/sun/star/uno/Any.hxx>
 #include <editeng/svxenum.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

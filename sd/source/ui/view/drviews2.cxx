@@ -63,6 +63,7 @@
 #include <svx/compressgraphicdialog.hxx>
 #include <svx/ClassificationDialog.hxx>
 #include <svx/ClassificationCommon.hxx>
+#include <svx/ClassificationEditView.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/bmpmask.hxx>
 #include <svx/colrctrl.hxx>
@@ -109,6 +110,7 @@
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/shdditem.hxx>
+#include <editeng/numitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/SvxColorChildWindow.hxx>

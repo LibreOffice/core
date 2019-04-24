@@ -26,6 +26,7 @@
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/mslangid.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <svtools/colorcfg.hxx>
 
 #include <numcategories.hrc>

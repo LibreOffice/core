@@ -22,7 +22,6 @@
 #include <climits>
 #include <memory>
 
-#include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <sot/formats.hxx>

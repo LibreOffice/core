@@ -41,6 +41,7 @@
 #include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <tools/gen.hxx>

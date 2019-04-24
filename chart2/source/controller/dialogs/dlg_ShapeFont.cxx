@@ -22,6 +22,7 @@
 
 #include <svl/intitem.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <svx/flagsdef.hxx>
 #include <editeng/flstitem.hxx>
 

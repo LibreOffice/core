@@ -43,7 +43,9 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
+#include <svx/svxids.hrc>
 #include <cuitabarea.hxx>
+#include <svtools/unitconv.hxx>
 
 #define XOUT_WIDTH    150
 

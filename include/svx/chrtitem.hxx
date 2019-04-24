@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVX_CHRTITEM_HXX
 #define INCLUDED_SVX_CHRTITEM_HXX
 
-#include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <svl/eitem.hxx>
@@ -28,7 +27,6 @@
 
 class IntlWrapper;
 class SfxItemPool;
-class SvStream;
 
 enum class SvxChartTextOrder
 {

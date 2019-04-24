@@ -26,6 +26,7 @@
 #include <sfx2/request.hxx>
 #include <sal/log.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <numfmt.hxx>
 #include <splitcelldlg.hxx>
 #include <dstribut.hxx>

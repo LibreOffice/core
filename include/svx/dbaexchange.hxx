@@ -24,12 +24,13 @@
 
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/transfer.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <svx/dataaccessdescriptor.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svx/svxdllapi.h>
 
+namespace com::sun::star::sdbc { class XConnection; }
+namespace com::sun::star::beans { class XPropertySet; }
 
 // column transfer formats
 enum class ColumnTransferFormatFlags

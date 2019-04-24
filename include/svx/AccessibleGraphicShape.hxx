@@ -20,11 +20,8 @@
 #ifndef INCLUDED_SVX_ACCESSIBLEGRAPHICSHAPE_HXX
 #define INCLUDED_SVX_ACCESSIBLEGRAPHICSHAPE_HXX
 
-#include <exception>
-
 #include <com/sun/star/accessibility/XAccessibleImage.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <rtl/ustring.hxx>

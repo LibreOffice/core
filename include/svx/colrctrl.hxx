@@ -23,18 +23,14 @@
 #include <sfx2/dockwin.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/transfer.hxx>
-#include <svtools/valueset.hxx>
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/xtable.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
-#include <tools/wintypes.hxx>
-#include <vcl/event.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace vcl { class Window; }
 
-class CommandEvent;
 class SfxBindings;
 class SfxBroadcaster;
 class SfxChildWindow;

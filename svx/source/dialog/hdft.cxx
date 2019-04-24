@@ -26,6 +26,7 @@
 #include <svx/svxids.hrc>
 
 #include <svl/intitem.hxx>
+#include <svtools/unitconv.hxx>
 
 #include <svx/hdft.hxx>
 #include <svx/pageitem.hxx>

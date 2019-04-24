@@ -20,10 +20,15 @@
 #ifndef INCLUDED_SVX_DATAACCESSDESCRIPTOR_HXX
 #define INCLUDED_SVX_DATAACCESSDESCRIPTOR_HXX
 
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
 #include <memory>
+
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 namespace svx
 {

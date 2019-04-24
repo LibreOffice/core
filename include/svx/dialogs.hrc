@@ -20,8 +20,7 @@
 #ifndef INCLUDED_SVX_DIALOGS_HRC
 #define INCLUDED_SVX_DIALOGS_HRC
 
-#include <svx/svxids.hrc>
-#include <sfx2/sfxsids.hrc>
+#include <svl/solar.hrc>
 
 // factory IDs of tabpages implemented in CUI
 #define RID_SVXPAGE_CHAR_TWOLINES           (RID_SVX_START + 242)

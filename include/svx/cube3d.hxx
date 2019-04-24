@@ -25,7 +25,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <svx/obj3d.hxx>
-#include <svx/svdobj.hxx>
 #include <svx/svxdllapi.h>
 
 namespace sdr { namespace contact { class ViewContact; } }

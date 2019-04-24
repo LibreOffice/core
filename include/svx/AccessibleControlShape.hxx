@@ -20,15 +20,10 @@
 #ifndef INCLUDED_SVX_ACCESSIBLECONTROLSHAPE_HXX
 #define INCLUDED_SVX_ACCESSIBLECONTROLSHAPE_HXX
 
-#include <exception>
-
-#include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/util/XModeChangeListener.hpp>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase4.hxx>
@@ -59,7 +54,6 @@ namespace comphelper
     class OWrappedAccessibleChildrenManager;
 }
 
-class SdrObject;
 namespace accessibility {
 
     class AccessibleShapeInfo;

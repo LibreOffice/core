@@ -34,6 +34,7 @@
 #include <svtools/toolbarmenu.hxx>
 #include <svx/tbcontrl.hxx>
 #include <sfx2/opengrf.hxx>
+#include <tools/urlobj.hxx>
 #include <bitmaps.hlst>
 
 using namespace css;

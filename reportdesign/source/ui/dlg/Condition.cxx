@@ -33,6 +33,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 
+#include <svx/PaletteManager.hxx>
 #include <svx/tbcontrl.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xtable.hxx>

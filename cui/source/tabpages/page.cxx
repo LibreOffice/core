@@ -25,6 +25,7 @@
 #include <sfx2/viewsh.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/languageoptions.hxx>
+#include <svtools/unitconv.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/configitem.hxx>

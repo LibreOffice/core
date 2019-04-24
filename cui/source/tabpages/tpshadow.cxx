@@ -21,6 +21,8 @@
 #include <sfx2/module.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
+#include <svtools/unitconv.hxx>
 
 #include <svx/xattr.hxx>
 #include <svx/xpool.hxx>

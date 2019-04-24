@@ -22,6 +22,7 @@
 #include <config_gpgme.h>
 
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 
 #include <strings.hrc>
 #include <treeopt.hrc>

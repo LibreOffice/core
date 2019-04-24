@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_DEF3D_HXX
 
 #include <o3tl/typed_flags_set.hxx>
-#include <math.h>
 
 const double fPiDiv180 = 0.01745329251994;
 const double EPSILON = 1e-06;

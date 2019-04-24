@@ -33,6 +33,8 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
+#include <svtools/unitconv.hxx>
 
 using namespace ::com::sun::star::text;
 

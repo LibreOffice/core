@@ -19,6 +19,7 @@
 
 #include <fmtextcontroldialogs.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 
 #include <editeng/eeitem.hxx>
 

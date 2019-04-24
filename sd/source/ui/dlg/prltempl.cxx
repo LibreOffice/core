@@ -19,6 +19,7 @@
 
 #include <sal/log.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
 #include <svl/style.hxx>

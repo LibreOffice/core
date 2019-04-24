@@ -26,6 +26,8 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+
 using namespace ::accessibility;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

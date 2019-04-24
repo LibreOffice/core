@@ -21,6 +21,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/module.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 
@@ -46,6 +47,7 @@
 #include <sal/macros.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/lok.hxx>
+#include <svtools/unitconv.hxx>
 
 using namespace ::editeng;
 using ::com::sun::star::uno::Reference;

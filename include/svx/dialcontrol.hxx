@@ -23,11 +23,10 @@
 #include <memory>
 #include <vcl/ctrl.hxx>
 #include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/field.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svxdllapi.h>
 
-class NumericField;
 class Edit;
 
 namespace svx {

@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <vcl/event.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/menu.hxx>

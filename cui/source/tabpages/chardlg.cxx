@@ -28,6 +28,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <svtools/unitconv.hxx>
 #include <svl/languageoptions.hxx>
 #include <svx/xtable.hxx>
@@ -72,6 +73,7 @@
 #include <svx/flagsdef.hxx>
 #include <FontFeaturesDialog.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 

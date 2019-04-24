@@ -29,7 +29,6 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
 
-class Rectangle;
 class SfxBindings;
 class SfxModule;
 

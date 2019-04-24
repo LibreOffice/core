@@ -13,11 +13,21 @@
 
 #include <sal/config.h>
 #include <svx/svxdllapi.h>
-#include <svx/ClassificationField.hxx>
 #include <vector>
 #include <sfx2/classificationhelper.hxx>
-#include <com/sun/star/beans/XPropertyContainer.hpp>
-#include <com/sun/star/beans/Property.hpp>
+
+namespace com::sun::star::beans
+{
+class XPropertyContainer;
+}
+namespace com::sun::star::beans
+{
+struct Property;
+}
+namespace svx
+{
+class ClassificationResult;
+}
 
 namespace svx
 {
