@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_2b7d056e",
+        "filename": "sw/qa/extras/odfexport/odfexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2166,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-04-24T11:58:28Z",
+      "side": 1,
+      "message": "It\u0027s fine if you just test the shape property here (\"IsLayoutInCell\"), the layout behavior is already covered by existing tests.",
+      "revId": "7c7324a19f95ce9abdf94b106c491e810fc461fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
