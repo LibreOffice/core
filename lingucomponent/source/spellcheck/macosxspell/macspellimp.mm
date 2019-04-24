@@ -139,6 +139,20 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
                     postspdict.push_back( pLangStr );
                 }
             }
+#ifdef IOS
+            // iOS says it has specifically de_DE, but let's assume it is good enough for the other
+            // variants, too, for now.
+            else if ([pLangStr isEqualToString:@"de_DE"])
+            {
+                const std::vector<NSString*> aDE
+                    { @"AT", @"BE", @"CH", @"DE", @"LI", @"LU" };
+                for (auto c: aDE)
+                {
+                    pLangStr = [@"de_" stringByAppendingString: c];
+                    postspdict.push_back( pLangStr );
+                }
+            }
+#endif
             else if ([pLangStr isEqualToString:@"en"])
             {
                 // System has en_AU, en_CA, en_GB, and en_IN. Add the rest.
