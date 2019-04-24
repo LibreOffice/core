@@ -151,6 +151,7 @@ public:
     ~WinFontInstance() override;
 
     bool hasHScale() const;
+    float getHScale() const;
 
     void SetGraphics(WinSalGraphics*);
     WinSalGraphics* GetGraphics() const { return m_pGraphics; }
