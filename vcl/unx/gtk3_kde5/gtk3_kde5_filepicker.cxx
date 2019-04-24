@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <QUrl>
+#include <KFileWidget>
+
 #include "gtk3_kde5_filepicker.hxx"
 
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -71,6 +74,11 @@ Gtk3KDE5FilePicker::Gtk3KDE5FilePicker(const uno::Reference<uno::XComponentConte
     : Gtk3KDE5FilePicker_Base(_helperMutex)
 {
     setMultiSelectionMode(false);
+
+    // tdf#124598 dummy KWidget use to make gtk3_kde5 VCL plugin link against KIO libraries
+    QString sDummyStr;
+    QUrl aUrl = KFileWidget::getStartUrl(QUrl(), sDummyStr);
+    aUrl.setPath("/dev/null");
 }
 
 Gtk3KDE5FilePicker::~Gtk3KDE5FilePicker() = default;
