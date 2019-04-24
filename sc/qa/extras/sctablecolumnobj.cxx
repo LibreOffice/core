@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
 #include <test/container/xnamed.hxx>
+#include <test/table/tablecolumn.hxx>
 #include <test/table/xcellrange.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -28,6 +29,7 @@ using namespace css;
 namespace sc_apitest
 {
 class ScTableColumnObj : public CalcUnoApiTest,
+                         public apitest::TableColumn,
                          public apitest::XCellRange,
                          public apitest::XNamed,
                          public apitest::XPropertySet
@@ -40,6 +42,9 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScTableColumnObj);
+
+    // TableColumn
+    CPPUNIT_TEST(testTableColumnProperties);
 
     // XCellRange
     CPPUNIT_TEST(testGetCellByPosition);
@@ -113,6 +118,7 @@ uno::Reference<uno::XInterface> ScTableColumnObj::init()
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
 
     uno::Reference<sheet::XSpreadsheet> xSheet0(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
+    setSpreadsheet(xSheet0);
     uno::Reference<table::XColumnRowRange> xCRR(xSheet0, uno::UNO_QUERY_THROW);
     uno::Reference<table::XTableColumns> xTC(xCRR->getColumns(), uno::UNO_QUERY_THROW);
 
