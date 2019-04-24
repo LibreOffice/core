@@ -2124,13 +2124,17 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
     SvStream *pDataStream)
 {
     sal_uInt8 nField;
-    // nHeaderBype == version
-    sal_uInt32 nHeaderByte = 0;
 
     // The following is a FFData structure as described in
     // Microsoft's DOC specification (chapter 2.9.78)
-
-    pDataStream->ReadUInt32( nHeaderByte );
+    sal_uInt32 nVersion = 0;
+    pDataStream->ReadUInt32(nVersion);
+    // An unsigned integer that MUST be 0xFFFFFFFF
+    if (nVersion != 0xFFFFFFFF)
+    {
+        SAL_WARN("sw.ww8", "Parsing error: invalid header for FFData");
+        return; // bail out
+    }
 
     // might be better to read the bits as a 16 bit word
     // ( like it is in the spec. )
