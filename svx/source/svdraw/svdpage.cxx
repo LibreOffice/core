@@ -1113,8 +1113,8 @@ void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
 
 
 SdrPage::SdrPage(SdrModel& rModel, bool bMasterPage)
-:   tools::WeakBase(),
-    SdrObjList(),
+:   SdrObjList(),
+    tools::WeakBase(),
     maPageUsers(),
     mrSdrModelFromSdrPage(rModel),
     mnWidth(10),
