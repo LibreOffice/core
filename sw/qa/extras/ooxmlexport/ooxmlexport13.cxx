@@ -97,7 +97,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak2, "tdf123636_newlinePage
 {
     //WITHOUT SplitPgBreakAndParaMark: a following anchored shape should force a page break
     //CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Paragraphs", 2, getParagraphs() );
-    //CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 2, getPages() );
+    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getParagraph(2, ""), "NumberingStyleName"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 2, getPages() );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak3, "tdf123636_newlinePageBreak3.docx")
