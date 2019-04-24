@@ -116,7 +116,8 @@
   <implementation name="XMLImpressMetaExportOOO">
     <service name="com.sun.star.comp.Impress.XMLMetaExporter"/>
   </implementation>
-  <implementation name="XMLImpressMetaExportOasis">
+  <implementation name="XMLImpressMetaExportOasis"
+    constructor="com_sun_star_comp_Impress_XMLOasisMetaExporter_get_implementation">
     <service name="com.sun.star.comp.Impress.XMLOasisMetaExporter"/>
   </implementation>
   <implementation name="XMLImpressMetaImportOasis">
