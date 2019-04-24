@@ -4130,7 +4130,7 @@ void SbiRuntime::StepCALLC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 
 void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
-    // If the Expr-Stack at the beginning of a statement constains a variable,
+    // If the Expr-Stack at the beginning of a statement contains a variable,
     // some fool has called X as a function, although it's a variable!
     bool bFatalExpr = false;
     OUString sUnknownMethodName;
