@@ -360,6 +360,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     pImpl->SetModel( pModel.get() );
 
     SetSublistOpenWithLeftRight();
+    isTopHalf = false;
 }
 
 VCL_BUILDER_FACTORY_CONSTRUCTOR(SvTreeListBox, WB_TABSTOP)
@@ -1592,6 +1593,8 @@ SvTreeListEntry* SvTreeListBox::InsertEntry(
     InitEntry( pEntry, rText, rDefColBmp, rDefExpBmp, eButtonKind );
     pEntry->EnableChildrenOnDemand( bChildrenOnDemand );
 
+    if( !pTargetEntry && GetIsTopHalf() )
+        nPos = 0;
     if( !pParent )
         Insert( pEntry, nPos );
     else
@@ -2525,7 +2528,15 @@ SvTreeListEntry* SvTreeListBox::GetDropTarget( const Point& rPos )
         }
     }
 
-    SvTreeListEntry* pTarget = pImpl->GetEntry( rPos );
+    bool b;
+    SvTreeListEntry* pTarget = pImpl->GetEntry( rPos, b );
+    SetIsTopHalf(b);
+    if( pTarget == First() && GetIsTopHalf() )
+    {
+        ImplShowTargetEmphasis(nullptr, false);
+        return nullptr;
+    }
+
     // when dropping in a vacant space, use the last entry
     if( !pTarget )
         return LastVisible();

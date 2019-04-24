@@ -253,6 +253,8 @@ protected:
     SvTreeListBoxFlags      nImpFlags;
     // Move/CopySelection: Position of the current Entry in SelectionList
     sal_uInt16              nCurEntrySelPos;
+    //Upper half entry selected
+    bool                    isTopHalf;
 
 private:
     DECL_DLLPRIVATE_LINK( CheckButtonClick, SvLBoxButtonData *, void );
@@ -511,6 +513,9 @@ public:
     void set_min_width_in_chars(sal_Int32 nChars);
 
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+
+    void SetIsTopHalf(bool bTopHalf){isTopHalf = bTopHalf;}
+    bool GetIsTopHalf(){return isTopHalf;}
 
 protected:
 

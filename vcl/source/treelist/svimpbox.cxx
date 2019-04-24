@@ -811,6 +811,27 @@ SvTreeListEntry* SvImpLBox::GetEntry( const Point& rPoint ) const
     return pEntry;
 }
 
+SvTreeListEntry* SvImpLBox::GetEntry( const Point& rPoint, bool& o_rIsTopHalf ) const
+{
+    if( (pView->GetEntryCount() == 0) || !pStartEntry ||
+        (rPoint.Y() > aOutputSize.Height())
+        || !pView->GetEntryHeight())
+        return nullptr;
+
+    if( (static_cast<float>(rPoint.Y()) / pView->GetEntryHeight() ) -
+        (rPoint.Y() / pView->GetEntryHeight() ) <= 0.5)
+        o_rIsTopHalf = true;
+    else
+        o_rIsTopHalf = false;
+
+    sal_uInt16 nClickedEntry = static_cast<sal_uInt16>(rPoint.Y() / pView->GetEntryHeight() );
+    sal_uInt16 nTemp = nClickedEntry;
+    SvTreeListEntry* pEntry = pView->NextVisible(pStartEntry, nTemp);
+    if( nTemp != nClickedEntry )
+        pEntry = nullptr;
+    return pEntry;
+}
+
 
 SvTreeListEntry* SvImpLBox::MakePointVisible(const Point& rPoint)
 {
