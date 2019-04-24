@@ -267,8 +267,12 @@ void Listener::Notify (
     SfxBroadcaster& rBroadcaster,
     const SfxHint& rHint)
 {
-    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-    if (pSdrHint)
+    if (rHint.GetId() == SfxHintId::DocChanged)
+    {
+        mrController.CheckForMasterPageAssignment();
+        mrController.CheckForSlideTransitionAssignment();
+    }
+    else if (const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint))
     {
         switch (pSdrHint->GetKind())
         {
@@ -321,11 +325,6 @@ void Listener::Notify (
                 mpModelChangeLock.reset();
                 break;
         }
-    }
-    else if (rHint.GetId() == SfxHintId::DocChanged)
-    {
-        mrController.CheckForMasterPageAssignment();
-        mrController.CheckForSlideTransitionAssignment();
     }
 }
 
