@@ -2424,8 +2424,10 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
     }
 
     bool bStartedAction = false;
-    for (auto const pCurrentEntry : selected)
+    SvTreeListEntry* pCurrentEntry;
+    for (sal_uInt16 i = 0; i < selected.size(); i++)
     {
+        pCurrentEntry = selected[i];
         assert(pCurrentEntry && lcl_IsContent(pCurrentEntry));
         if (pCurrentEntry && lcl_IsContent(pCurrentEntry))
         {
@@ -2441,7 +2443,18 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
         {
             continue;
         }
-
+        SwOutlineNodes::size_type nSelectToPos = nActPos;
+        if (bUpDown)
+        {
+            SvTreeListEntry* pSibling;
+            SvTreeListEntry* pSelectToEntry = pCurrentEntry;
+            while ((pSibling = bUp ? pSelectToEntry->NextSibling() : pSelectToEntry->PrevSibling()) && IsSelected(pSibling))
+            {
+                pSelectToEntry = pSibling;
+                i++;
+            }
+            nSelectToPos = static_cast<SwOutlineContent*>(pSelectToEntry->GetUserData())->GetOutlinePos();
+        }
         if (!bStartedAction)
         {
             pShell->StartAllAction();
@@ -2450,7 +2463,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
         }
         pShell->GotoOutline( nActPos); // If text selection != box selection
         pShell->Push();
-        pShell->MakeOutlineSel(nActPos, nActPos, bOutlineWithChildren);
+        pShell->MakeOutlineSel(nActPos, nSelectToPos, bOutlineWithChildren);
         if (bUpDown)
         {
             sal_uLong const nEntryAbsPos(GetModel()->GetAbsPos(pCurrentEntry));
