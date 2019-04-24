@@ -244,8 +244,12 @@ bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
         }
         else
         {
-            std::cout << type.getTypeName() << std::endl;
-            std::cout << rName << std::endl;
+            std::cout << "Unknown type:\n"
+                         "Type: "
+                      << type.getTypeName()
+                      << "\n"
+                         "Name: "
+                      << rName << "\n";
             CPPUNIT_ASSERT_MESSAGE(
                 "XPropertySet::isPropertyValueChangeable: unknown type in Any tested.", false);
         }
@@ -255,6 +259,7 @@ bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
     }
     catch (const uno::Exception&)
     {
+        std::cout << "Exception thrown while retrieving with property: " << rName << "\n";
         CPPUNIT_ASSERT_MESSAGE("XPropertySet::isPropertyValueChangeable: exception thrown while "
                                "retrieving the property value.",
                                false);
