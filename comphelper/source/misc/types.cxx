@@ -25,6 +25,7 @@
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <typelib/typedescription.hxx>
+#include <sal/log.hxx>
 
 
 namespace comphelper
@@ -38,7 +39,7 @@ using namespace ::com::sun::star::lang;
 sal_Int64 getINT64(const Any& _rAny)
 {
     sal_Int64 nReturn = 0;
-    OSL_VERIFY( _rAny >>= nReturn );
+    SAL_WARN_IF((_rAny >>= nReturn) == false, "comphelper", "conversion from Any to sal_Int64 failed");
     return nReturn;
 }
 
@@ -46,7 +47,7 @@ sal_Int64 getINT64(const Any& _rAny)
 sal_Int32 getINT32(const Any& _rAny)
 {
     sal_Int32 nReturn = 0;
-    OSL_VERIFY( _rAny >>= nReturn );
+    SAL_WARN_IF((_rAny >>= nReturn) == false, "comphelper", "conversion from Any to sal_Int32 failed");
     return nReturn;
 }
 
@@ -54,7 +55,7 @@ sal_Int32 getINT32(const Any& _rAny)
 sal_Int16 getINT16(const Any& _rAny)
 {
     sal_Int16 nReturn = 0;
-    OSL_VERIFY( _rAny >>= nReturn );
+    SAL_WARN_IF((_rAny >>= nReturn) == false, "comphelper", "conversion from Any to sal_Int16 failed");
     return nReturn;
 }
 
@@ -62,7 +63,7 @@ sal_Int16 getINT16(const Any& _rAny)
 double getDouble(const Any& _rAny)
 {
     double nReturn = 0.0;
-    OSL_VERIFY( _rAny >>= nReturn );
+    SAL_WARN_IF((_rAny >>= nReturn) == false, "comphelper", "conversion from Any to double failed");
     return nReturn;
 }
 
@@ -70,7 +71,7 @@ double getDouble(const Any& _rAny)
 float getFloat(const Any& _rAny)
 {
     float nReturn = 0.0;
-    OSL_VERIFY( _rAny >>= nReturn );
+    SAL_WARN_IF((_rAny >>= nReturn) == false, "comphelper", "conversion from Any to float failed");
     return nReturn;
 }
 
@@ -78,7 +79,7 @@ float getFloat(const Any& _rAny)
 OUString getString(const Any& _rAny)
 {
     OUString nReturn;
-    OSL_VERIFY( _rAny >>= nReturn );
+    SAL_WARN_IF((_rAny >>= nReturn) == false, "comphelper", "conversion from Any to OUString failed");
     return nReturn;
 }
 
