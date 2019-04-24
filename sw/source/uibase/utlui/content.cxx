@@ -2423,6 +2423,8 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
         std::reverse(selected.begin(), selected.end());
     }
 
+    bool bFirst = true;
+    int nLastDir = 0;
     bool bStartedAction = false;
     for (auto const pCurrentEntry : selected)
     {
@@ -2478,66 +2480,73 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                     nActEndPos = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos();
                     pEntry = Next(pEntry);
                 }
-                if (nDir == 1)
+                if (bFirst)
                 {
-                    // If the last entry is to be moved we're done
-                    if (pEntry && lcl_IsContent(pEntry))
+                    if (nDir == 1)
                     {
-                        // pEntry now points to the entry following the last
-                        // selected entry.
-                        SwOutlineNodes::size_type nDest = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos();
-                        // here needs to found the next entry after next.
-                        // The selection must be inserted in front of that.
-                        while (pEntry)
-                        {
-                            pEntry = Next(pEntry);
-                            assert(pEntry == nullptr || !lcl_IsContent(pEntry) || dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
-                            // nDest++ may only executed if pEntry != 0
-                            if (pEntry)
-                            {
-                                if (!lcl_IsContent(pEntry) ||
-                                    nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel())
-                                {
-                                    break;
-                                }
-                                else
-                                {
-                                    nDest = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos();
-                                }
-                            }
-                        }
-                        nDir = nDest - nActEndPos;
-                        // If no entry was found that allows insertion before
-                        // it, we just move it to the end.
-                    }
-                    else
-                        nDir = 0;
-                }
-                else
-                {
-                    SwOutlineNodes::size_type nDest = nActPos;
-                    pEntry = pCurrentEntry;
-                    while (pEntry && nDest)
-                    {
-                        pEntry = Prev(pEntry);
-                        assert(pEntry == nullptr || !lcl_IsContent(pEntry) || dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
+                        // If the last entry is to be moved we're done
                         if (pEntry && lcl_IsContent(pEntry))
                         {
-                            nDest = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos();
+                            // pEntry now points to the entry following the last
+                            // selected entry.
+                            SwOutlineNodes::size_type nDest = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos();
+                            // here needs to found the next entry after next.
+                            // The selection must be inserted in front of that.
+                            while (pEntry)
+                            {
+                                pEntry = Next(pEntry);
+                                assert(pEntry == nullptr || !lcl_IsContent(pEntry) || dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
+                                // nDest++ may only executed if pEntry != 0
+                                if (pEntry)
+                                {
+                                    if (!lcl_IsContent(pEntry) ||
+                                        nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel())
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        nDest = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos();
+                                    }
+                                }
+                            }
+                            nDir = nDest - nActEndPos;
+                            // If no entry was found that allows insertion before
+                            // it, we just move it to the end.
                         }
                         else
-                        {
-                            nDest = 0; // presumably?
-                        }
-                        if (pEntry &&
-                            (!lcl_IsContent(pEntry)
-                             || nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel()))
-                        {
-                            break;
-                        }
+                            nDir = 0;
                     }
-                    nDir = nDest - nActPos;
+                    else
+                    {
+                        SwOutlineNodes::size_type nDest = nActPos;
+                        pEntry = pCurrentEntry;
+                        while (pEntry && nDest)
+                        {
+                            pEntry = Prev(pEntry);
+                            assert(pEntry == nullptr || !lcl_IsContent(pEntry) || dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
+                            if (pEntry && lcl_IsContent(pEntry))
+                            {
+                                nDest = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos();
+                            }
+                            else
+                            {
+                                nDest = 0; // presumably?
+                            }
+                            if (pEntry &&
+                                    (!lcl_IsContent(pEntry)
+                                    || nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel()))
+                            {
+                                break;
+                            }
+                        }
+                        nDir = nDest - nActPos;
+                    }
+                    nLastDir = nDir;
+                    bFirst = false;
                 }
+                else
+                    nDir = nLastDir;
                 if (nDir)
                 {
                     pShell->MoveOutlinePara( nDir );
