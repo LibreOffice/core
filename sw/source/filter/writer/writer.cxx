@@ -420,10 +420,10 @@ void Writer::AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont )
     {
         SvxFontItem aFont( rFont );
         aFont.SetWhich( RES_CHRATR_FONT );
-        pItem = static_cast<const SvxFontItem*>(&rPool.Put( aFont ));
+        pItem = &rPool.Put( aFont );
     }
     else
-        pItem = static_cast<const SvxFontItem*>(&rPool.Put( rFont ));
+        pItem = &rPool.Put( rFont );
 
     if( 1 < pItem->GetRefCount() )
         rPool.Remove( *pItem );

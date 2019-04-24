@@ -146,10 +146,10 @@ public:
     virtual SfxItemPool*            Clone() const;
     const OUString&                 GetName() const;
 
-    const SfxPoolItem&              Put( std::unique_ptr<SfxPoolItem> xItem, sal_uInt16 nWhich = 0 )
-    { return PutImpl( *xItem.release(), nWhich, /*bPassingOwnership*/true); }
-    const SfxPoolItem&              Put( const SfxPoolItem& rItem, sal_uInt16 nWhich = 0 )
-    { return PutImpl( rItem, nWhich, /*bPassingOwnership*/false); }
+    template<class T> const T&      Put( std::unique_ptr<T> xItem, sal_uInt16 nWhich = 0 )
+    { return static_cast<const T&>(PutImpl( *xItem.release(), nWhich, /*bPassingOwnership*/true)); }
+    template<class T> const T&      Put( const T& rItem, sal_uInt16 nWhich = 0 )
+    { return static_cast<const T&>(PutImpl( rItem, nWhich, /*bPassingOwnership*/false)); }
     void                            Remove( const SfxPoolItem& );
 
     const SfxPoolItem&              GetDefaultItem( sal_uInt16 nWhich ) const;

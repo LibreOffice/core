@@ -715,7 +715,7 @@ void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
     const ScPatternAttr* pOldPattern = pAttrArray->GetPattern( nRow );
     std::unique_ptr<ScPatternAttr> pTemp(new ScPatternAttr(*pOldPattern));
     pTemp->GetItemSet().Put(rAttr);
-    const ScPatternAttr* pNewPattern = static_cast<const ScPatternAttr*>( &pDocPool->Put( *pTemp ) );
+    const ScPatternAttr* pNewPattern = &pDocPool->Put( *pTemp );
 
     if ( pNewPattern != pOldPattern )
         pAttrArray->SetPattern( nRow, pNewPattern );

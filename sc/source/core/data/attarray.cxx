@@ -60,7 +60,7 @@ ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, ScAttr
         {
             mvData[nIdx].nEndRow = pDefaultColAttrArray->mvData[nIdx].nEndRow;
             ScPatternAttr aNewPattern( *(pDefaultColAttrArray->mvData[nIdx].pPattern) );
-            mvData[nIdx].pPattern = static_cast<const ScPatternAttr*>( &pDocument->GetPool()->Put( aNewPattern ) );
+            mvData[nIdx].pPattern = &pDocument->GetPool()->Put( aNewPattern );
             bool bNumFormatChanged = false;
             if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
                  mvData[nIdx].pPattern->GetItemSet(), pDocument->GetDefPattern()->GetItemSet() ) )
@@ -145,7 +145,7 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern )
     pDocument->SetStreamValid(nTab, false);
 
     mvData.resize(1);
-    const ScPatternAttr* pNewPattern = static_cast<const ScPatternAttr*>( &pDocPool->Put(*pPattern) );
+    const ScPatternAttr* pNewPattern = &pDocPool->Put(*pPattern);
     mvData[0].nEndRow = MAXROW;
     mvData[0].pPattern = pNewPattern;
 }
@@ -455,9 +455,9 @@ const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEnd
         if (bPutToPool)
         {
             if (bPassingOwnership)
-                pPattern = static_cast<const ScPatternAttr*>(&pDocument->GetPool()->Put(std::unique_ptr<ScPatternAttr>(const_cast<ScPatternAttr*>(pPattern))));
+                pPattern = &pDocument->GetPool()->Put(std::unique_ptr<ScPatternAttr>(const_cast<ScPatternAttr*>(pPattern)));
             else
-                pPattern = static_cast<const ScPatternAttr*>(&pDocument->GetPool()->Put(*pPattern));
+                pPattern = &pDocument->GetPool()->Put(*pPattern);
         }
         if ((nStartRow == 0) && (nEndRow == MAXROW))
             Reset(pPattern);
@@ -684,8 +684,7 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleS
                 }
 
                 pDocument->GetPool()->Remove(*mvData[nPos].pPattern);
-                mvData[nPos].pPattern = static_cast<const ScPatternAttr*>(
-                                            &pDocument->GetPool()->Put(*pNewPattern));
+                mvData[nPos].pPattern = &pDocument->GetPool()->Put(*pNewPattern);
                 if (Concat(nPos))
                     Search(nStart, nPos);
                 else
@@ -825,8 +824,8 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                 {
                     // remove from pool ?
                     pDocument->GetPool()->Remove(*mvData[nPos].pPattern);
-                    mvData[nPos].pPattern = static_cast<const ScPatternAttr*>(
-                                &pDocument->GetPool()->Put(std::move(pNewPattern)) );
+                    mvData[nPos].pPattern =
+                                &pDocument->GetPool()->Put(std::move(pNewPattern));
 
                     if (Concat(nPos))
                         Search(nStart, nPos);
@@ -1830,8 +1829,7 @@ void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBo
                         Find( ScResId(STR_STYLENAME_STANDARD),
                               SfxStyleFamily::Para,
                               SfxStyleSearchBits::Auto | SfxStyleSearchBits::ScStandard ) ) );
-                mvData[nPos].pPattern = static_cast<const ScPatternAttr*>(
-                                            &pDocument->GetPool()->Put(*pNewPattern));
+                mvData[nPos].pPattern = &pDocument->GetPool()->Put(*pNewPattern);
                 pNewPattern.reset();
 
                 if (Concat(nPos))
@@ -2439,14 +2437,14 @@ void ScAttrArray::CopyArea(
                     pTmpPattern->GetItemSet().ClearItem( ATTR_MERGE_FLAG );
 
                 if (bSamePool)
-                    pNewPattern = static_cast<const ScPatternAttr*>( &pDestDocPool->Put(*pTmpPattern) );
+                    pNewPattern = &pDestDocPool->Put(*pTmpPattern);
                 else
                     pNewPattern = pTmpPattern->PutInPool( rAttrArray.pDocument, pDocument );
             }
             else
             {
                 if (bSamePool)
-                    pNewPattern = static_cast<const ScPatternAttr*>( &pDestDocPool->Put(*pOldPattern) );
+                    pNewPattern = &pDestDocPool->Put(*pOldPattern);
                 else
                     pNewPattern = pOldPattern->PutInPool( rAttrArray.pDocument, pDocument );
             }
@@ -2487,8 +2485,7 @@ void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttr
     {
         const ScPatternAttr* pNewPattern;
         if (bSamePool)
-            pNewPattern = static_cast<const ScPatternAttr*>(
-                             &pDestDocPool->Put(*pDocument->GetDefPattern()));
+            pNewPattern = &pDestDocPool->Put(*pDocument->GetDefPattern());
         else
             pNewPattern = pDocument->GetDefPattern()->PutInPool( rAttrArray.pDocument, pDocument );
 
@@ -2505,7 +2502,7 @@ void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttr
             const ScPatternAttr* pNewPattern;
 
             if (bSamePool)
-                pNewPattern = static_cast<const ScPatternAttr*>( &pDestDocPool->Put(*pOldPattern) );
+                pNewPattern = &pDestDocPool->Put(*pOldPattern);
             else
                 pNewPattern = pOldPattern->PutInPool( rAttrArray.pDocument, pDocument );
 

@@ -2079,7 +2079,7 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
             // Fill this gap with the default pattern.
             ScAttrEntry aEntry;
             aEntry.nEndRow = nRow1 - 1;
-            aEntry.pPattern = static_cast<const ScPatternAttr*>(&rDoc.GetPool()->Put(*rAttrs.mpDefPattern));
+            aEntry.pPattern = &rDoc.GetPool()->Put(*rAttrs.mpDefPattern);
             rAttrs.maAttrs.push_back(aEntry);
 
             // Check if the default pattern is 'General'.
@@ -2089,7 +2089,7 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
 
         ScAttrEntry aEntry;
         aEntry.nEndRow = nRow2;
-        aEntry.pPattern = static_cast<const ScPatternAttr*>(&rDoc.GetPool()->Put(rPat));
+        aEntry.pPattern = &rDoc.GetPool()->Put(rPat);
         rAttrs.maAttrs.push_back(aEntry);
 
         if (!sc::NumFmtUtil::isLatinScript(*aEntry.pPattern, rDoc))
