@@ -96,8 +96,7 @@ class XParaPortionList
     typedef std::vector<std::unique_ptr<XParaPortion> > ListType;
     ListType maList;
 
-    VclPtr<OutputDevice> nRefDevPtr;
-    OutDevType  eRefDevType;
+    VclPtr<OutputDevice> pRefDevPtr;
     MapMode     aRefMapMode;
     sal_uInt16  nStretchX;
     sal_uInt16  nStretchY;
@@ -109,10 +108,9 @@ public:
     void push_back(XParaPortion* p);
     const XParaPortion& operator[](size_t i) const;
 
-    OutputDevice*       GetRefDevPtr() const        { return nRefDevPtr; }
+    OutputDevice*       GetRefDevPtr() const        { return pRefDevPtr; }
     sal_uLong           GetPaperWidth() const       { return nPaperWidth; }
-    bool RefDevIsVirtual() const
-        { return (eRefDevType == OUTDEV_VIRDEV) || (eRefDevType == OUTDEV_PDF); }
+    bool                RefDevIsVirtual() const {return pRefDevPtr->IsVirtual();}
     const MapMode&  GetRefMapMode() const       { return aRefMapMode; }
     sal_uInt16  GetStretchX() const         { return nStretchX; }
     sal_uInt16  GetStretchY() const         { return nStretchY; }

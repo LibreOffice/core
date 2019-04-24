@@ -520,10 +520,7 @@ public:
     }
 
     OutDevType                  GetOutDevType() const { return meOutDevType; }
-    bool IsVirtual() const
-    {
-        return (meOutDevType == OUTDEV_VIRDEV) || (meOutDevType == OUTDEV_PDF);
-    }
+    virtual bool IsVirtual() const;
 
     /** Query an OutputDevice to see whether it supports a specific operation
 

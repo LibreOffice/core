@@ -169,6 +169,7 @@ public:
     void                SetReferenceDevice( sal_Int32 i_nDPIX, sal_Int32 i_nDPIY );
 
     virtual sal_uInt16  GetBitCount() const override;
+    bool                IsVirtual() const override;
 
 private:
     SAL_DLLPRIVATE void ImplSetReferenceDevice( RefDevMode, sal_Int32 i_nDPIX, sal_Int32 i_nDPIY );
