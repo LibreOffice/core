@@ -42,6 +42,7 @@ public:
 
     void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 
+    using SvImpLBox::GetEntry;
     // returns 0 if position is just past the last entry
     SvTreeListEntry* GetEntry( const Point& rPoint ) const override;
 

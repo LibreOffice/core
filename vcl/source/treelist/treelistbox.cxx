@@ -2525,7 +2525,14 @@ SvTreeListEntry* SvTreeListBox::GetDropTarget( const Point& rPos )
         }
     }
 
-    SvTreeListEntry* pTarget = pImpl->GetEntry( rPos );
+    bool isTopHalf;
+    SvTreeListEntry* pTarget = pImpl->GetEntry( rPos, isTopHalf );
+    if( pTarget == First() && isTopHalf )
+    {
+        ImplShowTargetEmphasis(nullptr, true);
+        return nullptr;
+    }
+
     // when dropping in a vacant space, use the last entry
     if( !pTarget )
         return LastVisible();

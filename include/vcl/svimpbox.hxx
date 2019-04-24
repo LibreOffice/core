@@ -284,6 +284,7 @@ public:
     SvTreeListEntry*    GetCurrentEntry() const { return pCursor; }
     virtual bool        IsEntryInView( SvTreeListEntry* pEntry ) const;
     virtual SvTreeListEntry*    GetEntry( const Point& rPos ) const;
+    virtual SvTreeListEntry*    GetEntry( const Point& rPoint, bool& o_rIsTopHalf ) const;
     // returns last entry, if Pos below last entry
     virtual SvTreeListEntry*    GetClickedEntry( const Point& ) const;
     SvTreeListEntry*    GetCurEntry() const { return pCursor; }
