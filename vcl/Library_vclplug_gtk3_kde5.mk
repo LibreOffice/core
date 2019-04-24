@@ -39,6 +39,7 @@ $(eval $(call gb_Library_add_cxxflags,vclplug_gtk3_kde5,\
 
 $(eval $(call gb_Library_add_defs,vclplug_gtk3_kde5,\
     -DVCLPLUG_GTK_IMPLEMENTATION -DVCLPLUG_GTK3_KDE5_IMPLEMENTATION \
+    $(KF5_CFLAGS) \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,vclplug_gtk3_kde5,\
@@ -125,6 +126,7 @@ $(eval $(call gb_Library_add_libs,vclplug_gtk3_kde5,\
 	-lm \
 	-ldl \
 	-lpthread \
+	$(KF5_LIBS) \
 ))
 endif
 
