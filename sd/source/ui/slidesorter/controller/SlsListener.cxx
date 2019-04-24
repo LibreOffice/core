@@ -288,6 +288,11 @@ void Listener::Notify (
                 break;
         }
     }
+    else if (rHint.GetId() == SfxHintId::DocChanged)
+    {
+        mrController.CheckForMasterPageAssignment();
+        mrController.CheckForSlideTransitionAssignment();
+    }
     else if (dynamic_cast<const ViewShellHint*>(&rHint))
     {
         const ViewShellHint& rViewShellHint = static_cast<const ViewShellHint&>(rHint);
@@ -321,11 +326,6 @@ void Listener::Notify (
                 mpModelChangeLock.reset();
                 break;
         }
-    }
-    else if (rHint.GetId() == SfxHintId::DocChanged)
-    {
-        mrController.CheckForMasterPageAssignment();
-        mrController.CheckForSlideTransitionAssignment();
     }
 }
 
