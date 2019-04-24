@@ -42,7 +42,8 @@ sub _need_to_strip
 
     # Check using the "file" command
 
-    open (FILE, "file $filename |");
+    $filename =~ s/'/'\\''/g;
+    open (FILE, "file '$filename' |");
     my $fileoutput = <FILE>;
     close (FILE);
 
