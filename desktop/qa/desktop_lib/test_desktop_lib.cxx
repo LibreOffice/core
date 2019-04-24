@@ -1896,6 +1896,8 @@ void DesktopLOKTest::testPaintPartTile()
     //CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
 
     mxComponent.clear();
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testWriterCommentInsertCursor()
