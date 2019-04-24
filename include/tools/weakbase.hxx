@@ -61,9 +61,10 @@ template< class reference_type >
 inline reference_type * WeakReference< reference_type >::get() const
 {
     auto pWeakBase = mpWeakConnection->mpReference;
-    auto pRet = dynamic_cast<reference_type *>(pWeakBase);
-    assert((pWeakBase && pRet) || (!pWeakBase && !pRet));
-    return pRet;
+    if (!pWeakBase)
+        return nullptr;
+    assert(dynamic_cast<reference_type *>(pWeakBase));
+    return static_cast<reference_type *>(pWeakBase);
 }
 
 template< class reference_type >

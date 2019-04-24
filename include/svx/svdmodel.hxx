@@ -143,7 +143,7 @@ public:
 
 struct SdrModelImpl;
 
-class SVX_DLLPUBLIC SdrModel : public SfxBroadcaster, public virtual tools::WeakBase
+class SVX_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase
 {
 private:
 #ifdef DBG_UTIL

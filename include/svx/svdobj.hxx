@@ -304,7 +304,7 @@ public:
 //      SwFlyDrawObj
 
 /// Abstract DrawObject
-class SVX_DLLPUBLIC SdrObject : public SfxListener, public virtual tools::WeakBase
+class SVX_DLLPUBLIC SdrObject : public SfxListener, public tools::WeakBase
 {
 private:
     friend class                SdrObjListIter;

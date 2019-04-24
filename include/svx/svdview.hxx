@@ -146,7 +146,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SdrView : public SdrCreateView, public virtual tools::WeakBase
+class SVX_DLLPUBLIC SdrView : public SdrCreateView, public tools::WeakBase
 {
     friend class                SdrPageView;
 
