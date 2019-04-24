@@ -350,6 +350,10 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_RUBY_ADJUST: sName = "RubyAdjust"; break;
         case PROP_RUBY_POSITION: sName = "RubyPosition"; break;
         case PROP_LAYOUT_IN_CELL: sName = "IsLayoutInCell"; break;
+        case PROP_DATABASE_NAME: sName = "DataBaseName"; break;
+        case PROP_COMMAND_TYPE: sName = "DataCommandType"; break;
+        case PROP_DATATABLE_NAME: sName = "DataTableName"; break;
+        case PROP_DATACOLUMN_NAME: sName = "DataColumnName"; break;
     }
     assert(sName.getLength()>0);
     return sName;
