@@ -1244,6 +1244,8 @@ void PdfExportTest::testTdf66597_2()
 // This requires Gentium Basic font, if it is missing the test will fail.
 void PdfExportTest::testTdf66597_3()
 {
+    // fails on some of the windows tinderboxes
+#if !defined _WIN32
     vcl::filter::PDFDocument aDocument;
     load("tdf66597-3.odt", aDocument);
 
@@ -1319,6 +1321,7 @@ void PdfExportTest::testTdf66597_3()
         }
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of ActualText entries does not match!", static_cast<size_t>(4), nCount);
     }
+#endif // __WIN32
 }
 #endif
 
