@@ -92,7 +92,6 @@ void XEditAttribute::SetItem(const SfxPoolItem& rNew)
 XParaPortionList::XParaPortionList(
     OutputDevice* pRefDev, sal_uLong nPW, sal_uInt16 _nStretchX, sal_uInt16 _nStretchY)
     : nRefDevPtr(pRefDev)
-    , eRefDevType(pRefDev->GetOutDevType())
     , aRefMapMode(pRefDev->GetMapMode())
     , nStretchX(_nStretchX)
     , nStretchY(_nStretchY)

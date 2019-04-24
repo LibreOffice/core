@@ -97,7 +97,6 @@ class XParaPortionList
     ListType maList;
 
     VclPtr<OutputDevice> nRefDevPtr;
-    OutDevType  eRefDevType;
     MapMode     aRefMapMode;
     sal_uInt16  nStretchX;
     sal_uInt16  nStretchY;
@@ -111,8 +110,7 @@ public:
 
     OutputDevice*       GetRefDevPtr() const        { return nRefDevPtr; }
     sal_uLong           GetPaperWidth() const       { return nPaperWidth; }
-    bool RefDevIsVirtual() const
-        { return (eRefDevType == OUTDEV_VIRDEV) || (eRefDevType == OUTDEV_PDF); }
+    bool                RefDevIsVirtual() const {return nRefDevPtr->IsVirtual();}
     const MapMode&  GetRefMapMode() const       { return aRefMapMode; }
     sal_uInt16  GetStretchX() const         { return nStretchX; }
     sal_uInt16  GetStretchY() const         { return nStretchY; }
