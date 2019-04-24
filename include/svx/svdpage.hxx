@@ -364,7 +364,7 @@ public:
 //          SwDPage
 //      OReportPage
 
-class SVX_DLLPUBLIC SdrPage : public SdrObjList, public virtual tools::WeakBase
+class SVX_DLLPUBLIC SdrPage : public SdrObjList, public tools::WeakBase
 {
     // #i9076#
     friend class SdrModel;
