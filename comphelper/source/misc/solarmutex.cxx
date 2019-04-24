@@ -60,9 +60,9 @@ void SolarMutex::doAcquire( const sal_uInt32 nLockCount )
 
 sal_uInt32 SolarMutex::doRelease( bool bUnlockAll )
 {
-    if ( m_nCount == 0 )
+    if ( !IsCurrentThread() )
         std::abort();
-    if ( m_nThreadId != osl::Thread::getCurrentIdentifier() )
+    if ( m_nCount == 0 )
         std::abort();
 
     const sal_uInt32 nCount = bUnlockAll ? m_nCount : 1;
