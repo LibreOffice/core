@@ -57,8 +57,15 @@ java_lang_Class * java_lang_Class::forName( const OUString& _par0 )
 jobject java_lang_Class::newInstanceObject()
 {
     SDBThreadAttach t;
-    static jmethodID mID(nullptr);
-    return callObjectMethod(t.pEnv,"newInstance","()Ljava/lang/Object;", mID);
+    auto const id = t.pEnv->GetMethodID(static_cast<jclass>(object), "<init>", "()V");
+    if (id == nullptr) {
+        ThrowSQLException(t.pEnv, nullptr);
+    }
+    auto const obj = t.pEnv->NewObject(static_cast<jclass>(object), id);
+    if (obj == nullptr) {
+        ThrowSQLException(t.pEnv, nullptr);
+    }
+    return obj;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
