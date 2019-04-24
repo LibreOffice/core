@@ -2628,6 +2628,8 @@ void ScDocRowHeightUpdater::update()
             if (!aData.mbValue)
                 continue;
 
+            aCxt.getHeightArray().clear();
+
             mrDoc.maTabs[nTab]->SetOptimalHeight(
                 aCxt, aData.mnRow1, aData.mnRow2, &aProgress, nProgressStart);
 
