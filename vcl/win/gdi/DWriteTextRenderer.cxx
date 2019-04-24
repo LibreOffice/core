@@ -271,6 +271,10 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
     if (!GetDWriteFaceFromHDC(hDC, &mpFontFace, &mlfEmHeight))
         return false;
 
+    const WinFontInstance& rWinFont = static_cast<const WinFontInstance&>(rLayout.GetFont());
+    float fHScale = rWinFont.getHScale();
+    WinFontStretchGuard aStretchGuard(mpRT, fHScale);
+
     tools::Rectangle bounds;
     bool succeeded = rLayout.GetBoundRect(bounds);
     if (succeeded)
@@ -297,9 +301,10 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
         while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
         {
             UINT16 glyphIndices[] = { pGlyph->m_aGlyphId };
-            FLOAT glyphAdvances[] = { static_cast<FLOAT>(pGlyph->m_nNewWidth) };
+            FLOAT glyphAdvances[] = { static_cast<FLOAT>(pGlyph->m_nNewWidth) / fHScale };
             DWRITE_GLYPH_OFFSET glyphOffsets[] = { { 0.0f, 0.0f }, };
-            D2D1_POINT_2F baseline = { static_cast<FLOAT>(aPos.X() - bounds.Left()), static_cast<FLOAT>(aPos.Y() - bounds.Top()) };
+            D2D1_POINT_2F baseline = { static_cast<FLOAT>(aPos.X() - bounds.Left()) / fHScale,
+                                       static_cast<FLOAT>(aPos.Y() - bounds.Top()) };
             DWRITE_GLYPH_RUN glyphs = {
                 mpFontFace,
                 mlfEmHeight,
@@ -418,6 +423,18 @@ bool D2DWriteTextOutRenderer::GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** p
     return succeeded;
 }
 
+WinFontStretchGuard::WinFontStretchGuard(ID2D1RenderTarget* pRenderTarget, float fHScale)
+    : mpRenderTarget(pRenderTarget)
+{
+    pRenderTarget->GetTransform(&maTransform);
+    if (fHScale == 1.0f)
+        return;
 
+    D2D1::Matrix3x2F aTransform
+        = maTransform * D2D1::Matrix3x2F::Scale(D2D1::Size(fHScale, 1.0f), D2D1::Point2F(0, 0));
+    mpRenderTarget->SetTransform(aTransform);
+}
+
+WinFontStretchGuard::~WinFontStretchGuard() { mpRenderTarget->SetTransform(maTransform); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

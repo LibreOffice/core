@@ -117,10 +117,11 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
     std::vector<float> aGlyphAdv(1);   // offsets between glyphs
     std::vector<DWRITE_GLYPH_OFFSET> aGlyphOffset(1, DWRITE_GLYPH_OFFSET{0.0f, 0.0f});
     std::vector<int> aEnds(1); // end of each glyph box
+    float fHScale = getHScale();
     float totWidth = 0;
     {
         int overhang = aInkBoxes[0].Left();
-        int blackWidth = aInkBoxes[0].getWidth(); // width of non-AA pixels
+        int blackWidth = aInkBoxes[0].getWidth() * fHScale; // width of non-AA pixels
         aElement.maLeftOverhangs = overhang;
 
         aGlyphAdv[0] = blackWidth + aElement.getExtraSpace();
@@ -171,6 +172,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
         0
     };
 
+    WinFontStretchGuard aStretchGuard(pRT, fHScale);
     pRT->BeginDraw();
     pRT->DrawGlyphRun(baseline, &glyphs, pBrush);
     HRESULT hResult = pRT->EndDraw();
@@ -320,6 +322,16 @@ bool WinFontInstance::hasHScale() const
     return nWidth != nHeight;
 }
 
+float WinFontInstance::getHScale() const
+{
+    const FontSelectPattern& rPattern = GetFontSelectPattern();
+    int nHeight(rPattern.mnHeight);
+    if (!nHeight)
+        return 1.0;
+    float nWidth(rPattern.mnWidth ? rPattern.mnWidth * GetAverageWidthFactor() : nHeight);
+    return nWidth / nHeight;
+}
+
 static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
 {
     sal_uLong nLength = 0;
@@ -467,9 +479,8 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     const HFONT hLayoutFont = pWinFont->GetHFONT();
     bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter;
 
-    // Our DirectWrite renderer is incomplete, skip it for non-horizontal or
-    // stretched text.
-    bool bForceGDI = rLayout.GetOrientation() || (pWinFont->hasHScale() && !bUseOpenGL);
+    // Our DirectWrite renderer is incomplete, skip it for non-horizontal text.
+    bool bForceGDI = rLayout.GetOrientation();
 
     if (!bUseOpenGL)
     {
