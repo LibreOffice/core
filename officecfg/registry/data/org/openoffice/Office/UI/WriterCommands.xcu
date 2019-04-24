@@ -1535,6 +1535,9 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Rows</value>
         </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value>Delete Selected Rows</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -1546,6 +1549,9 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Columns</value>
         </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value>Delete Selected Columns</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -1556,6 +1562,9 @@
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Table</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value>Delete Table</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1645,6 +1654,9 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">C~ell</value>
         </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value>Select Cell</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -1679,6 +1691,9 @@
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Table</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value>Select Table</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
