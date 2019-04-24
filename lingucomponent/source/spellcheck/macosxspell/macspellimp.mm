@@ -227,6 +227,13 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
                 postspdict.push_back( @"sv_FI" );
                 postspdict.push_back( @"sv_SE" );
             }
+#ifdef IOS
+            else if ([pLangStr isEqualToString:@"sv_SE"])
+            {
+                postspdict.push_back( @"sv_FI" );
+                postspdict.push_back( @"sv_SE" );
+            }
+#endif
             else if ([pLangStr isEqualToString:@"tr"])
             {
                 postspdict.push_back( @"tr_TR" );
