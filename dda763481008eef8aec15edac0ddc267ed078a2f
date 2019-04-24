@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_70c69819",
+        "filename": "compilerplugins/clang/test/cppunitassertequals.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-24T07:46:39Z",
+      "side": 1,
+      "message": "...but could have removed this excess empty line",
+      "revId": "dda763481008eef8aec15edac0ddc267ed078a2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
