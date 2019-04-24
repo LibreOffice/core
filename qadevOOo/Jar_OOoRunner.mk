@@ -582,7 +582,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/system/_XSimpleMailClientSupplier \
     qadevOOo/tests/java/ifc/system/_XSystemShellExecute \
     qadevOOo/tests/java/ifc/table/_CellProperties \
-    qadevOOo/tests/java/ifc/table/_TableColumn \
     qadevOOo/tests/java/ifc/table/_XAutoFormattable \
     qadevOOo/tests/java/ifc/table/_XCellRange \
     qadevOOo/tests/java/ifc/table/_XTableChart \
@@ -967,7 +966,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScShapeObj \
     qadevOOo/tests/java/mod/_sc/ScSheetLinkObj \
     qadevOOo/tests/java/mod/_sc/ScStyleObj \
-    qadevOOo/tests/java/mod/_sc/ScTableColumnObj \
     qadevOOo/tests/java/mod/_sc/ScTableSheetObj \
     qadevOOo/tests/java/mod/_sc/ScTableSheetsObj \
     qadevOOo/tests/java/mod/_sc/ScTabViewObj \
