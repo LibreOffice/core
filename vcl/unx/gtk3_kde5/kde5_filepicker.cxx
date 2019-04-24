@@ -65,7 +65,16 @@ KDE5FilePicker::KDE5FilePicker(QObject* parent)
 void KDE5FilePicker::enableFolderMode()
 {
     _dialog->setOption(QFileDialog::ShowDirsOnly, true);
-    _dialog->setFileMode(QFileDialog::Directory);
+    // Workaround for https://bugs.kde.org/show_bug.cgi?id=406464 :
+    // Don't set file mode to QFileDialog::Directory when native KDE Plasma 5
+    // file dialog is used, since clicking on directory "bar" inside directory "foo"
+    // and then confirming would return "foo" rather than "foo/bar";
+    // on the other hand, non-native file dialog needs 'QFileDialog::Directory'
+    // and doesn't allow folder selection otherwise
+    if (Application::GetDesktopEnvironment() != "KDE5")
+    {
+        _dialog->setFileMode(QFileDialog::Directory);
+    }
 }
 
 KDE5FilePicker::~KDE5FilePicker()
