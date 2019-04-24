@@ -1277,6 +1277,12 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                 continue;
             }
 
+            if (!aDataNode2->second->mpShape)
+            {
+                //busted, skip it
+                continue;
+            }
+
             rShape->setDataNodeType(aDataNode2->second->mnType);
 
             if( rItem.mnDepth == 0 )
