@@ -23,6 +23,8 @@
 #include <sal/config.h>
 
 #include <assert.h>
+#include <atomic>
+
 #include <osl/thread.h>
 #include <osl/mutex.hxx>
 #include <comphelper/comphelperdllapi.h>
@@ -68,9 +70,10 @@ protected:
 
     osl::Mutex            m_aMutex;
     sal_uInt32            m_nCount;
-    oslThreadIdentifier   m_nThreadId;
 
 private:
+    std::atomic<oslThreadIdentifier> m_nThreadId;
+
     SolarMutex(const SolarMutex&) = delete;
     SolarMutex& operator=(const SolarMutex&) = delete;
 
