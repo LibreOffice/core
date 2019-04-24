@@ -22,6 +22,7 @@
 #include "docxattributeoutput.hxx"
 #include "docxsdrexport.hxx"
 #include "docxhelper.hxx"
+#include "swdbdata.hxx"
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -33,6 +34,7 @@
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
 
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
@@ -977,6 +979,24 @@ void DocxExport::WriteSettings()
         pFS->startElementNS(XML_w, XML_compat);
         pFS->singleElementNS(XML_w, XML_doNotExpandShiftReturn);
         pFS->endElementNS( XML_w, XML_compat );
+    }
+
+    // export current mail merge database and table names
+    SwDBData aData = m_pDoc->GetDBData();
+    if ( !aData.sDataSource.isEmpty() && aData.nCommandType == css::sdb::CommandType::TABLE )
+    {
+        OUStringBuffer aDataSource;
+        aDataSource.appendAscii("SELECT * FROM ");
+        aDataSource.append(aData.sDataSource); // current database
+        aDataSource.appendAscii(".dbo."); // default database owner
+        aDataSource.append(aData.sCommand); // sheet name
+        aDataSource.appendAscii("$"); // sheet identifier
+        const OUString sDataSource = aDataSource.makeStringAndClear();
+        pFS->startElementNS( XML_w, XML_mailMerge, FSEND );
+        pFS->singleElementNS( XML_w, XML_query,
+            FSNS( XML_w, XML_val ), OUStringToOString( sDataSource, RTL_TEXTENCODING_UTF8 ).getStr(),
+            FSEND );
+        pFS->endElementNS( XML_w, XML_mailMerge );
     }
 
     // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.
