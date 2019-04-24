@@ -10,6 +10,7 @@
 
 #include <svx/ClassificationDialog.hxx>
 #include <svx/ClassificationCommon.hxx>
+#include <svx/ClassificationEditView.hxx>
 
 #include <editeng/flditem.hxx>
 #include <editeng/eeitem.hxx>
@@ -23,6 +24,7 @@
 #include <config_folders.h>
 #include <tools/XmlWriter.hxx>
 #include <tools/XmlWalker.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/objsh.hxx>

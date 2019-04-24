@@ -21,6 +21,7 @@
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <comphelper/accessiblewrapper.hxx>
 #include <vcl/svapp.hxx>

@@ -19,12 +19,11 @@
 #ifndef INCLUDED_SVX_DLGCTRL_HXX
 #define INCLUDED_SVX_DLGCTRL_HXX
 
-#include <svtools/ctrlbox.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/rectenum.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/customweld.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/xtable.hxx>
@@ -32,9 +31,6 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
 #include <array>
-
-class XOBitmap;
-class XOutdevItemPool;
 
 namespace com { namespace sun { namespace star { namespace awt {
     struct Point;

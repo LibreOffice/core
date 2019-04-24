@@ -59,6 +59,7 @@
 #include <editeng/unoprnms.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <svx/ClassificationCommon.hxx>
+#include <svx/ClassificationField.hxx>
 #include <svl/cryptosign.hxx>
 #include <svl/sigstruct.hxx>
 #include <utility>

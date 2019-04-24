@@ -31,6 +31,8 @@
 #include <vcl/builderfactory.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 namespace chart
 {
 

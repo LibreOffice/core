@@ -21,7 +21,6 @@
 
 #include <svl/poolitem.hxx>
 #include <svx/xtable.hxx>
-#include <com/sun/star/drawing/LineDash.hpp>
 #include <svx/svxdllapi.h>
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxColorListItem: public SfxPoolItem

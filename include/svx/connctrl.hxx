@@ -21,14 +21,9 @@
 
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
-#include <tools/gen.hxx>
-#include <tools/wintypes.hxx>
 #include <vcl/customweld.hxx>
-#include <vcl/event.hxx>
 #include <vcl/outdev.hxx>
 #include <memory>
-
-namespace vcl { class Window; }
 
 class SfxItemSet;
 class SdrEdgeObj;

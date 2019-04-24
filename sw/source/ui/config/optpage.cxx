@@ -66,6 +66,7 @@
 #include <svl/eitem.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svtools/ctrltool.hxx>
+#include <svtools/unitconv.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svx/xtable.hxx>
 #include <svx/dlgutil.hxx>

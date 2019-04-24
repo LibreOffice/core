@@ -22,6 +22,7 @@
 #include <hintids.hxx>
 #include <svtools/unitconv.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
 #include <sal/macros.h>

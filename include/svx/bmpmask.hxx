@@ -25,7 +25,6 @@
 #include <sfx2/dockwin.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/xtable.hxx>
 #include <tools/color.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/bitmap.hxx>
@@ -38,7 +37,6 @@
 namespace vcl { class Window; }
 
 class CheckBox;
-class ColorLB;
 class MetricField;
 class PushButton;
 class SfxBindings;

@@ -31,6 +31,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <fmtanchr.hxx>
 
 using namespace ::com::sun::star::accessibility;

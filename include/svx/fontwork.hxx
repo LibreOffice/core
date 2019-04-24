@@ -21,6 +21,7 @@
 
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/field.hxx>
 #include <vcl/idle.hxx>
 #include <svtools/valueset.hxx>
 #include <sfx2/dockwin.hxx>

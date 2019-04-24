@@ -25,6 +25,7 @@
 #include <vcl/settings.hxx>
 
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <svx/dlgutil.hxx>
 #include <svx/measctrl.hxx>
 #include <svx/ofaitem.hxx>
@@ -42,6 +43,7 @@
 #include <svx/sxmtpitm.hxx>
 #include <svx/sxmtritm.hxx>
 #include <svx/sxmuitm.hxx>
+#include <svtools/unitconv.hxx>
 
 #include <measure.hxx>
 

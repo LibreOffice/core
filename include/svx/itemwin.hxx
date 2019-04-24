@@ -20,6 +20,7 @@
 #define INCLUDED_SVX_ITEMWIN_HXX
 
 #include <vcl/bitmap.hxx>
+#include <vcl/field.hxx>
 
 #include <svx/dlgctrl.hxx>
 #include <svx/svxdllapi.h>

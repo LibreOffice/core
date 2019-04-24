@@ -21,6 +21,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
+#include <com/sun/star/ucb/XContent.hpp>
 #include <fmprop.hxx>
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>
@@ -33,7 +34,6 @@ namespace svx
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::sdb;
-    using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::sdbcx;

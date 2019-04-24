@@ -28,6 +28,7 @@
 #include <vcl/outdev.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <svx/strings.hrc>
 #include <editeng/borderline.hxx>
 #include <editeng/langitem.hxx>

@@ -19,6 +19,7 @@
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <stdio.h>
 #include <svx/charmap.hxx>

@@ -13,11 +13,9 @@
 
 #include <sal/config.h>
 #include <svx/svxdllapi.h>
-#include <vcl/ctrl.hxx>
-#include <editeng/flditem.hxx>
-#include <editeng/numitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
+#include <editeng/svxenum.hxx>
 #include <vcl/customweld.hxx>
 
 namespace svx {

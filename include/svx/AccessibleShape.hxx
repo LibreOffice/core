@@ -21,8 +21,6 @@
 #ifndef INCLUDED_SVX_ACCESSIBLESHAPE_HXX
 #define INCLUDED_SVX_ACCESSIBLESHAPE_HXX
 
-#include <exception>
-
 #include <com/sun/star/accessibility/TextSegment.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
@@ -33,11 +31,8 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -70,7 +65,6 @@ class AccessibleShapeInfo;
 class AccessibleTextHelper;
 class ChildrenManager;
 class IAccessibleParent;
-class IAccessibleViewForwarder;
 
 /** This base class provides a base implementation for all shapes.  For more
     detailed documentation about the methods refer to the descriptions of

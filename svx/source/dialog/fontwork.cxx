@@ -36,6 +36,7 @@
 
 #include <svx/dlgutil.hxx>
 
+#include <svtools/unitconv.hxx>
 #include <svx/svxids.hrc>
 #include <bitmaps.hlst>
 #include <svx/fontwork.hxx>

@@ -19,6 +19,7 @@
 
 
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <svx/flagsdef.hxx>
 #include <svx/svxdlg.hxx>
 #include <editeng/svxenum.hxx>

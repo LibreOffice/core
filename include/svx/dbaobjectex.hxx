@@ -21,11 +21,10 @@
 #define INCLUDED_SVX_DBAOBJECTEX_HXX
 
 #include <vcl/transfer.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/ucb/XContent.hpp>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/svxdllapi.h>
+
+namespace com::sun::star::ucb { class XContent; }
 
 
 namespace svx

@@ -26,6 +26,7 @@
 #include <formula/tokenarray.hxx>
 #include <formula/FormulaCompiler.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <memory>
 

@@ -21,6 +21,7 @@
 
 #include <svl/itemset.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/sfxdlg.hxx>
 

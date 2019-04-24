@@ -47,6 +47,7 @@
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <memory>
 
 void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSet,

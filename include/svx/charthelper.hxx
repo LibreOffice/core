@@ -20,15 +20,14 @@
 #ifndef INCLUDED_SVX_CHARTHELPER_HXX
 #define INCLUDED_SVX_CHARTHELPER_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 
 namespace com { namespace sun { namespace star {
-    namespace chart2 { class XDiagram; }
     namespace embed { class XEmbeddedObject; }
     namespace frame { class XModel; }
+    namespace uno { template <typename > class Reference; }
 } } }
 
 namespace basegfx { class B2DRange; }

@@ -25,6 +25,7 @@
 #include <comphelper/processfactory.hxx>
 #include <svl/macitem.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <tools/debug.hxx>
 #include <vcl/idle.hxx>
 #include <cfgutil.hxx>

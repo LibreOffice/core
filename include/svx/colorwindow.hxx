@@ -20,18 +20,18 @@
 #ifndef INCLUDED_SVX_SOURCE_TBXCTRLS_COLORWINDOW_HXX
 #define INCLUDED_SVX_SOURCE_TBXCTRLS_COLORWINDOW_HXX
 
-#include <sfx2/tbxctrl.hxx>
 #include <svtools/toolbarmenu.hxx>
-#include <svtools/valueset.hxx>
-#include <svl/lstner.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <svx/SvxColorValueSet.hxx>
-#include <svx/PaletteManager.hxx>
+#include <svx/Palette.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 
 #include <functional>
+
+namespace com::sun::star::frame { class XFrame; }
+
+class PaletteManager;
 
 class SVX_DLLPUBLIC ColorStatus
 {

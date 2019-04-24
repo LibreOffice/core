@@ -35,6 +35,7 @@
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <tools/gen.hxx>

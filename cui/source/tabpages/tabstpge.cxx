@@ -19,7 +19,9 @@
 
 #include <sfx2/app.hxx>
 #include <svtools/ruler.hxx>
+#include <svtools/unitconv.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 

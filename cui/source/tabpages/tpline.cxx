@@ -52,9 +52,11 @@
 #include <sfx2/opengrf.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <svx/strings.hrc>
 #include <vcl/settings.hxx>
 #include <cuitabarea.hxx>
+#include <svtools/unitconv.hxx>
 
 #define MAX_BMP_WIDTH   16
 #define MAX_BMP_HEIGHT  16

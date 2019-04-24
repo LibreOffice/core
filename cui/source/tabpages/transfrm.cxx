@@ -31,8 +31,10 @@
 #include <svx/svdoashp.hxx>
 #include <svx/sderitm.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <svx/transfrmhelper.hxx>
 #include <editeng/sizeitem.hxx>
+#include <svtools/unitconv.hxx>
 
 #include <transfrm.hxx>
 #include <svx/dlgutil.hxx>

@@ -33,6 +33,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/docfilt.hxx>
+#include <svtools/unitconv.hxx>
 #include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>

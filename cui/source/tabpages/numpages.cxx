@@ -47,6 +47,7 @@
 #include <sfx2/htmlmode.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
+#include <svtools/unitconv.hxx>
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -58,6 +59,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 
 #include <algorithm>
 #include <memory>

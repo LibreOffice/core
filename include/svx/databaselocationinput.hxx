@@ -21,12 +21,14 @@
 #define INCLUDED_SVX_DATABASELOCATIONINPUT_HXX
 
 #include <svx/svxdllapi.h>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <rtl/ustring.hxx>
 
 #include <memory>
 
 class PushButton;
 namespace svt { class OFileURLControl; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 namespace svx
 {

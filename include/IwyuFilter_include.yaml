@@ -920,3 +920,11 @@ blacklist:
     - com/sun/star/awt/FontDescriptor.hpp
     - com/sun/star/style/LineSpacing.hpp
     - com/sun/star/style/TabStop.hpp
+    include/svx/AccessibleControlShape.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertyChangeListener.hpp
+    - com/sun/star/container/XContainerListener.hpp
+    - com/sun/star/util/XModeChangeListener.hpp
+    include/svx/dbaexchange.hxx:
+    # Needed for implicit dtor
+    - com/sun/star/beans/PropertyValue.hpp

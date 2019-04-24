@@ -11,8 +11,9 @@
 #define INCLUDED_SVX_COMMONSTYLEMANAGER_HXX
 
 #include <sfx2/StyleManager.hxx>
-#include <sfx2/StylePreviewRenderer.hxx>
 #include <svx/svxdllapi.h>
+
+namespace sfx2 { class StylePreviewRenderer; }
 
 class OutputDevice;
 class SfxObjectShell;

@@ -24,6 +24,7 @@
 
 #include <tools/debug.hxx>
 #include <svl/lngmisc.hxx>
+#include <vcl/event.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistbox.hxx>

@@ -24,6 +24,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 
 #include <svx/xtable.hxx>
 #include <svx/globl3d.hxx>

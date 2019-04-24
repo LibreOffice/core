@@ -21,6 +21,7 @@
 
 #include <editeng/svxenum.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <bitmaps.hlst>

@@ -21,6 +21,7 @@
 #include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/dlgutil.hxx>
+#include <svtools/unitconv.hxx>
 
 #include <fmtfsize.hxx>
 #include <swtypes.hxx>

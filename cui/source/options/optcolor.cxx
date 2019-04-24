@@ -21,6 +21,7 @@
 
 #include <bitset>
 
+#include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <editeng/editids.hrc>
 #include <svtools/colorcfg.hxx>

@@ -40,6 +40,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <tools/link.hxx>

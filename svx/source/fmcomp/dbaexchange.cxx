@@ -20,6 +20,7 @@
 #include <svx/dbaexchange.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #include <fmprop.hxx>

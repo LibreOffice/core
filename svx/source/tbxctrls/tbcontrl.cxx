@@ -62,6 +62,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <svx/strings.hrc>
 #include <svx/svxitems.hrc>
 #include <svx/svxids.hrc>

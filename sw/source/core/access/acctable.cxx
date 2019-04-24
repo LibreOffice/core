@@ -28,6 +28,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <frmfmt.hxx>

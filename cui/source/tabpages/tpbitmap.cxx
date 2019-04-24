@@ -23,6 +23,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <svx/xattr.hxx>
 #include <svx/xpool.hxx>
 #include <strings.hrc>
@@ -52,6 +53,7 @@
 #include <sfx2/dialoghelper.hxx>
 #include <sal/log.hxx>
 #include <comphelper/lok.hxx>
+#include <svtools/unitconv.hxx>
 
 using namespace com::sun::star;
 

@@ -12,6 +12,7 @@
 #include <ObjectIdentifier.hxx>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/frame/XController.hpp>
 
 #include <svx/tbcontrl.hxx>
 

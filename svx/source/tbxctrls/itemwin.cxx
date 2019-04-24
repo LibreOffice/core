@@ -46,6 +46,7 @@
 #include <svx/itemwin.hxx>
 #include <svx/linectrl.hxx>
 #include <svtools/colorcfg.hxx>
+#include <svtools/unitconv.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

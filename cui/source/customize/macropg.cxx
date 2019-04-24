@@ -35,6 +35,7 @@
 #include <headertablistbox.hxx>
 #include "macropg_impl.hxx"
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <strings.hrc>
 #include <comphelper/namedvaluecollection.hxx>
 

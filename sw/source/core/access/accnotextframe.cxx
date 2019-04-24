@@ -19,6 +19,7 @@
 
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <frmfmt.hxx>

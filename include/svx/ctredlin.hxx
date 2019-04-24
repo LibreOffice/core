@@ -39,7 +39,6 @@
 #include <tools/wintypes.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/image.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
@@ -52,14 +51,11 @@ namespace utl {
 
 namespace vcl { class Window; }
 
-class Button;
-class CheckBox;
 class DateField;
 class Edit;
 class FixedText;
 class ListBox;
 class Point;
-class PushButton;
 class SvViewDataEntry;
 class TimeField;
 struct SvSortData;
