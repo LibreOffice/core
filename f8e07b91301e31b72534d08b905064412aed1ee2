@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_d631a4ee",
+        "filename": "sw/source/uibase/docvw/HeaderFooterWin.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-04-24T21:00:18Z",
+      "side": 1,
+      "message": "This is also perfectly acceptable but there is another way that only requires one rSh.SetShowHeaderFooterSeparator.\n\nHint: The ?: operator can be used in function arguments.",
+      "range": {
+        "startLine": 502,
+        "startChar": 11,
+        "endLine": 502,
+        "endChar": 128
+      },
+      "revId": "f8e07b91301e31b72534d08b905064412aed1ee2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
