@@ -468,6 +468,33 @@ void SwTextFrame::RegisterToNode(SwTextNode & rNode, bool const isForceNodeAsFir
     }
 }
 
+//Flag pFrame for SwFrameDeleteGuard lifetime that we shouldn't delete
+//it in e.g. SwSectionFrame::MergeNext etc because we will need it
+//again after the SwFrameDeleteGuard dtor
+SwFrameDeleteGuard::SwFrameDeleteGuard(SwFrame* pFrame)
+    : m_pForbidFrame((pFrame && !pFrame->IsDeleteForbidden()) ? pFrame : nullptr)
+{
+    if (m_pForbidFrame)
+    {
+        m_pForbidFrame->ForbidDelete();
+    }
+}
+
+SwFrameDeleteGuard::~SwFrameDeleteGuard()
+{
+    if (m_pForbidFrame)
+    {
+        const bool bLogicErrorThrown = !m_pForbidFrame->IsDeleteForbidden();
+        if (bLogicErrorThrown)
+        {
+            // see testForcepoint80
+            SwFrame::DestroyFrame(m_pForbidFrame);
+            return;
+        }
+        m_pForbidFrame->AllowDelete();
+    }
+}
+
 void SwLayoutFrame::DestroyImpl()
 {
     while (!m_VertPosOrientFramesFor.empty())
@@ -527,7 +554,8 @@ void SwLayoutFrame::DestroyImpl()
                 pFrame->AllowDelete();
                 bFatalError = true;
             }
-            SwFrame::DestroyFrame(pFrame);
+            else
+                SwFrame::DestroyFrame(pFrame);
             pFrame = m_pLower;
         }
 
