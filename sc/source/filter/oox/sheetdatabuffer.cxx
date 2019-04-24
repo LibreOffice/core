@@ -672,6 +672,9 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel )
          * It is sufficient to check if the row range size is one
          */
         if (!rRangeList.empty() &&
+            *pLastRange == rModel.maCellAddr)
+            ; // do nothing - this probably bad data
+        else if (!rRangeList.empty() &&
             pLastRange->aStart.Tab() == rModel.maCellAddr.Tab() &&
             pLastRange->aStart.Row() == pLastRange->aEnd.Row() &&
             pLastRange->aStart.Row() == rModel.maCellAddr.Row() &&
