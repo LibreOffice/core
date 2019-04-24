@@ -988,6 +988,38 @@ DECLARE_OOXMLIMPORT_TEST(testTdf123054, "tdf123054.docx")
                          getProperty<OUString>(getParagraph(20), "ParaStyleName"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf67207_MERGEFIELD_DATABASE, "tdf67207.docx")
+{
+    // database fields use the database "database" and its table "Sheet1"
+    uno::Reference<beans::XPropertySet> xTextField = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(2), 2), "TextField");
+    CPPUNIT_ASSERT(xTextField.is());
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xTextField, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XDependentTextField> xDependent(xTextField, uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextField.Database"));
+    OUString sValue;
+    xTextField->getPropertyValue("Content") >>= sValue;
+    CPPUNIT_ASSERT_EQUAL(OUString::fromUtf8("<c1>"), sValue);
+
+    uno::Reference<beans::XPropertySet> xFiledMaster = xDependent->getTextFieldMaster();
+    uno::Reference<lang::XServiceInfo> xFiledMasterServiceInfo(xFiledMaster, uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT(xFiledMasterServiceInfo->supportsService("com.sun.star.text.fieldmaster.Database"));
+
+    // Defined properties: DataBaseName, Name, DataTableName, DataColumnName, DependentTextFields, DataCommandType, InstanceName, DataBaseURL
+    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue("DataBaseName") >>= sValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("database"), sValue);
+    sal_Int32 nCommandType;
+    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue("DataCommandType") >>= nCommandType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nCommandType); // css::sdb::CommandType::TABLE
+    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue("DataTableName") >>= sValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet1"), sValue);
+    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue("DataColumnName") >>= sValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("c1"), sValue);
+    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue("InstanceName") >>= sValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.text.fieldmaster.DataBase.database.Sheet1.c1"), sValue);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
