@@ -245,6 +245,7 @@ public:
     void testCharacterSetXLSXML();
     void testTdf62268();
     void testVBAMacroFunctionODS();
+    void testAutoheight2Rows();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -383,6 +384,7 @@ public:
     CPPUNIT_TEST(testCondFormatFormulaListenerXLSX);
     CPPUNIT_TEST(testTdf62268);
     CPPUNIT_TEST(testVBAMacroFunctionODS);
+    CPPUNIT_TEST(testAutoheight2Rows);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4245,6 +4247,22 @@ void ScFiltersTest::testVBAMacroFunctionODS()
     rDoc.GetFormula(2, 0, 0, aFunction);
     std::cout << aFunction << std::endl;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, rDoc.GetValue(2, 0, 0), 1e-6);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testAutoheight2Rows()
+{
+    ScDocShellRef xDocSh = loadDoc("autoheight2rows.", FORMAT_ODS);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    SCTAB nTab = 0;
+    int nHeight1 = rDoc.GetRowHeight(0, nTab, false);
+    int nHeight3 = rDoc.GetRowHeight(2, nTab, false);
+
+    // We will do relative comparison, because calculated autoheight
+    // can be different on different platforms
+    CPPUNIT_ASSERT_MESSAGE("Row #3 shoud be thinner than #1", nHeight3 < nHeight1);
 
     xDocSh->DoClose();
 }
