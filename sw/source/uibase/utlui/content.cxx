@@ -2424,8 +2424,10 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
     }
 
     bool bStartedAction = false;
-    for (auto const pCurrentEntry : selected)
+    SvTreeListEntry* pCurrentEntry;
+    for (sal_uLong i = 0; i < selected.size(); i++)
     {
+        pCurrentEntry = selected[i];
         assert(pCurrentEntry && lcl_IsContent(pCurrentEntry));
         if (pCurrentEntry && lcl_IsContent(pCurrentEntry))
         {
@@ -2441,7 +2443,18 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
         {
             continue;
         }
-
+        SwOutlineNodes::size_type nSelectToPos = nActPos;
+        if (bUpDown)
+        {
+            SvTreeListEntry* pSibling;
+            SvTreeListEntry* pSelectToEntry = pCurrentEntry;
+            while ((pSibling = bUp ? pSelectToEntry->NextSibling() : pSelectToEntry->PrevSibling()) && IsSelected(pSibling))
+            {
+                pSelectToEntry = pSibling;
+                i++;
+            }
+            nSelectToPos = static_cast<SwOutlineContent*>(pSelectToEntry->GetUserData())->GetOutlinePos();
+        }
         if (!bStartedAction)
         {
             pShell->StartAllAction();
@@ -2450,7 +2463,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
         }
         pShell->GotoOutline( nActPos); // If text selection != box selection
         pShell->Push();
-        pShell->MakeOutlineSel(nActPos, nActPos, bOutlineWithChildren);
+        pShell->MakeOutlineSel(nActPos, nSelectToPos, bOutlineWithChildren);
         if (bUpDown)
         {
             sal_uLong const nEntryAbsPos(GetModel()->GetAbsPos(pCurrentEntry));
@@ -2478,7 +2491,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                     nActEndPos = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos();
                     pEntry = Next(pEntry);
                 }
-                if (nDir == 1)
+                if (nDir == 1) // move down
                 {
                     // If the last entry is to be moved we're done
                     if (pEntry && lcl_IsContent(pEntry))
@@ -2495,9 +2508,20 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                             // nDest++ may only executed if pEntry != 0
                             if (pEntry)
                             {
-                                if (!lcl_IsContent(pEntry) ||
-                                    nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel())
+                                if (!lcl_IsContent(pEntry))
+                                    break;
+                                else if (nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel())
                                 {
+                                    // nDest needs adjusted if there are selected entries immediatly
+                                    // before the level change.
+                                    pEntry = Prev(pEntry);
+                                    while(pEntry && lcl_IsContent(pEntry) &&
+                                          nActLevel > static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel() &&
+                                          IsSelected(pEntry))
+                                    {
+                                        nDest = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos();
+                                        pEntry = Prev(pEntry);
+                                    }
                                     break;
                                 }
                                 else
@@ -2513,7 +2537,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                     else
                         nDir = 0;
                 }
-                else
+                else // move up
                 {
                     SwOutlineNodes::size_type nDest = nActPos;
                     pEntry = pCurrentEntry;
@@ -2529,11 +2553,24 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                         {
                             nDest = 0; // presumably?
                         }
-                        if (pEntry &&
-                            (!lcl_IsContent(pEntry)
-                             || nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel()))
+                        if (pEntry)
                         {
-                            break;
+                            if (!lcl_IsContent(pEntry))
+                                break;
+                            else if (nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel())
+                            {
+                                // nDest needs adjusted if there are selected entries immediatly
+                                // after the level change.
+                                pEntry = Next(pEntry);
+                                while(pEntry && lcl_IsContent(pEntry) &&
+                                      nActLevel < static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel() &&
+                                      IsSelected(pEntry))
+                                {
+                                    nDest = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos();
+                                    pEntry = Next(pEntry);
+                                }
+                                break;
+                            }
                         }
                     }
                     nDir = nDest - nActPos;
