@@ -1965,6 +1965,15 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
         if( pContext.get() )
         {
+            if (pContext->isSet(PROP_BREAK_TYPE))
+            {
+                // If there is a deferred page break, create a dummy paragraph,
+                // so that the anchored frame will be on the correct page.
+                m_pImpl->m_bIsSplitPara = true;
+                m_pImpl->finishParagraph(pContext);
+                lcl_startParagraphGroup();
+            }
+
             ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pContext.get() );
             if (pParaContext)
                 pParaContext->SetFrameMode();
