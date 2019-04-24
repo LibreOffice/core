@@ -95,6 +95,18 @@ private:
     D2DTextAntiAliasMode meTextAntiAliasMode;
 };
 
+/// Sets and unsets the needed DirectWrite transform to support the font's horizontal scaling.
+class WinFontStretchGuard
+{
+public:
+    WinFontStretchGuard(ID2D1RenderTarget* pRenderTarget, float fHScale);
+    ~WinFontStretchGuard();
+
+private:
+    ID2D1RenderTarget* mpRenderTarget;
+    D2D1::Matrix3x2F maTransform;
+};
+
 #endif // INCLUDED_VCL_INC_WIN_DWRITERENDERER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
