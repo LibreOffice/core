@@ -19,7 +19,7 @@ namespace loplugin
 
 // The class implementing the plugin action.
 class Tutorial1
-    // Inherits from the Clang class that will allow examing the Clang AST tree (i.e. syntax tree).
+    // Inherits from the Clang class that will allow examining the Clang AST tree (i.e. syntax tree).
     : public FilteringPlugin< Tutorial1 >
     {
     public:
