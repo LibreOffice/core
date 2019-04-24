@@ -221,6 +221,7 @@ public:
     void testBnc762542();
 
     void testTdf62268();
+    void testAutoheight2Rows();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -331,6 +332,7 @@ public:
     CPPUNIT_TEST(testHiddenSheetsXLSX);
 
     CPPUNIT_TEST(testTdf62268);
+    CPPUNIT_TEST(testAutoheight2Rows);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3515,6 +3517,23 @@ void ScFiltersTest::testTdf62268()
     CPPUNIT_ASSERT( 3 >= abs( 256 - nHeight ) );
     nHeight = rDoc.GetRowHeight(1, nTab, false);
     CPPUNIT_ASSERT( 19 >= abs( 1905 - nHeight ) );
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testAutoheight2Rows()
+{
+    ScDocShellRef xDocSh = loadDoc("autoheight2rows.", FORMAT_ODS);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    SCTAB nTab = 0;
+    int nHeight1 = rDoc.GetRowHeight(0, nTab, false);
+    int nHeight2 = rDoc.GetRowHeight(1, nTab, false);
+    int nHeight3 = rDoc.GetRowHeight(2, nTab, false);
+
+    // We will do relative comparison, because calculated autoheight
+    // can be different on different platforms
+    CPPUNIT_ASSERT_MESSAGE("Row #3 shoud be thinner than #1", nHeight3 < nHeight1);
 
     xDocSh->DoClose();
 }
