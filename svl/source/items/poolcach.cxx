@@ -88,7 +88,7 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem )
     }
     else
         pNewItem->GetItemSet().Put( *pSetToPut );
-    const SfxSetItem* pNewPoolItem = static_cast<const SfxSetItem*>(&pPool->Put( *pNewItem ));
+    const SfxSetItem* pNewPoolItem = &pPool->Put( *pNewItem );
     DBG_ASSERT( pNewPoolItem != pNewItem.get(), "Pool: same in and out?" );
     pNewItem.reset();
 

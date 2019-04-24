@@ -467,7 +467,7 @@ void SwHistorySetFootnote::SetInDoc( SwDoc* pDoc, bool )
         // set the footnote in the TextNode
         SwFormatFootnote aTemp( m_bEndNote );
         SwFormatFootnote& rNew = const_cast<SwFormatFootnote&>(
-                static_cast<const SwFormatFootnote&>(pDoc->GetAttrPool().Put(aTemp)) );
+                pDoc->GetAttrPool().Put(aTemp) );
         if ( !m_FootnoteNumber.isEmpty() )
         {
             rNew.SetNumStr( m_FootnoteNumber );

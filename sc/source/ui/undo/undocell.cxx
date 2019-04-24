@@ -75,9 +75,9 @@ ScUndoCursorAttr::ScUndoCursorAttr( ScDocShell* pNewDocShell,
     pNewEditData( static_cast<EditTextObject*>(nullptr) )
 {
     ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
-    pNewPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>( &pPool->Put( *pNewPat ) ));
-    pOldPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>( &pPool->Put( *pOldPat ) ));
-    pApplyPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>( &pPool->Put( *pApplyPat ) ));
+    pNewPattern = const_cast<ScPatternAttr*>( &pPool->Put( *pNewPat ) );
+    pOldPattern = const_cast<ScPatternAttr*>( &pPool->Put( *pOldPat ) );
+    pApplyPattern = const_cast<ScPatternAttr*>( &pPool->Put( *pApplyPat ) );
 }
 
 ScUndoCursorAttr::~ScUndoCursorAttr()

@@ -351,9 +351,9 @@ ScUndoSelectionAttr::ScUndoSelectionAttr( ScDocShell* pNewDocShell,
         bMulti      ( bNewMulti )
 {
     ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
-    pApplyPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>( &pPool->Put( *pNewApply ) ));
-    pLineOuter = pNewOuter ? const_cast<SvxBoxItem*>(static_cast<const SvxBoxItem*>( &pPool->Put( *pNewOuter ) )) : nullptr;
-    pLineInner = pNewInner ? const_cast<SvxBoxInfoItem*>(static_cast<const SvxBoxInfoItem*>( &pPool->Put( *pNewInner ) )) : nullptr;
+    pApplyPattern = const_cast<ScPatternAttr*>(&pPool->Put( *pNewApply ));
+    pLineOuter = pNewOuter ? const_cast<SvxBoxItem*>( &pPool->Put( *pNewOuter ) ) : nullptr;
+    pLineInner = pNewInner ? const_cast<SvxBoxInfoItem*>( &pPool->Put( *pNewInner ) ) : nullptr;
     aRangeCover = pRangeCover ? *pRangeCover : aRange;
 }
 

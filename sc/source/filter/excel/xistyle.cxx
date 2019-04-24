@@ -1394,7 +1394,7 @@ void XclImpXF::ApplyPatternToAttrVector(
 
         ScAttrEntry aEntry;
         aEntry.nEndRow = nRow2;
-        aEntry.pPattern = static_cast<const ScPatternAttr*>(&rDoc.GetPool()->Put(rPat));
+        aEntry.pPattern = &rDoc.GetPool()->Put(rPat);
         rAttrs.push_back(aEntry);
     }
 }
