@@ -41,80 +41,65 @@
 #include <utility>
 #include <vector>
 #include <vcl/idle.hxx>
+#include <bitmaps.hlst>
 
 namespace
 {
 
-#define TABBAR_DRAG_SCROLLOFF   5
-#define TABBAR_MINSIZE          5
+constexpr sal_uInt16 TABBAR_DRAG_SCROLLOFF = 5;
+constexpr sal_uInt16 TABBAR_MINSIZE = 5;
 
-const sal_uInt16 ADDNEWPAGE_AREAWIDTH = 10;
-const sal_uInt16 BUTTON_MARGIN = 6;
+constexpr sal_uInt16 ADDNEWPAGE_AREAWIDTH = 10;
+constexpr sal_uInt16 BUTTON_MARGIN = 6;
 
 class TabDrawer
 {
 private:
-    TabBar& mrParent;
     vcl::RenderContext& mrRenderContext;
     const StyleSettings& mrStyleSettings;
 
     tools::Rectangle maRect;
+    tools::Rectangle maLineRect;
 
     Color maSelectedColor;
     Color maCustomColor;
     Color maUnselectedColor;
 
+public:
     bool mbSelected:1;
     bool mbCustomColored:1;
     bool mbEnabled:1;
+    bool mbProtect:1;
 
-public:
-    explicit TabDrawer(TabBar& rParent, vcl::RenderContext& rRenderContext)
-        : mrParent(rParent)
-        , mrRenderContext(rRenderContext)
+    explicit TabDrawer(vcl::RenderContext& rRenderContext)
+        : mrRenderContext(rRenderContext)
         , mrStyleSettings(rRenderContext.GetSettings().GetStyleSettings())
         , mbSelected(false)
         , mbCustomColored(false)
         , mbEnabled(false)
+        , mbProtect(false)
     {
-    }
 
-    void drawOutputAreaBorder()
-    {
-        WinBits nWinStyle = mrParent.GetStyle();
-
-        // draw extra line if above and below border
-        if (nWinStyle & WB_BORDER)
-        {
-            Size aOutputSize(mrParent.GetOutputSizePixel());
-            tools::Rectangle aOutRect = mrParent.GetPageArea();
-
-            // draw border (line above and line below)
-            mrRenderContext.SetLineColor(mrStyleSettings.GetDarkShadowColor());
-            mrRenderContext.DrawLine(aOutRect.TopLeft(), Point(aOutputSize.Width() - 1, aOutRect.Top()));
-        }
     }
 
     void drawOuterFrame()
     {
-        mrRenderContext.SetLineColor(mrStyleSettings.GetDarkShadowColor());
-
         // set correct FillInBrush depending on status
         if (mbSelected)
         {
             // Currently selected Tab
             mrRenderContext.SetFillColor(maSelectedColor);
+            mrRenderContext.SetLineColor(maSelectedColor);
+            mrRenderContext.DrawRect(maRect);
+            mrRenderContext.SetLineColor(mrStyleSettings.GetDarkShadowColor());
         }
         else if (mbCustomColored)
         {
             mrRenderContext.SetFillColor(maCustomColor);
+            mrRenderContext.SetLineColor(maCustomColor);
+            mrRenderContext.DrawRect(maRect);
+            mrRenderContext.SetLineColor(mrStyleSettings.GetDarkShadowColor());
         }
-        else
-        {
-            mrRenderContext.SetFillColor(maUnselectedColor);
-        }
-
-        mrRenderContext.DrawRect(maRect);
     }
 
     void drawText(const OUString& aText)
@@ -143,27 +128,38 @@ public:
 
     void drawColorLine()
     {
-        mrRenderContext.SetFillColor(maCustomColor);
-        mrRenderContext.SetLineColor(maCustomColor);
-
-        tools::Rectangle aLineRect(maRect.BottomLeft(), maRect.BottomRight());
-        aLineRect.AdjustTop( -3 );
-
-        mrRenderContext.DrawRect(aLineRect);
+        if (mbCustomColored && mbSelected)
+        {
+            mrRenderContext.SetFillColor(maCustomColor);
+            mrRenderContext.SetLineColor(maCustomColor);
+            mrRenderContext.DrawRect(maLineRect);
+        }
+        else if (mbSelected)
+        {
+            mrRenderContext.SetFillColor(mrStyleSettings.GetDarkShadowColor());
+            mrRenderContext.SetLineColor(mrStyleSettings.GetDarkShadowColor());
+            mrRenderContext.DrawRect(maLineRect);
+        }
     }
 
     void drawTab()
     {
         drawOuterFrame();
-
-        if (mbCustomColored && mbSelected)
+        drawColorLine();
+        if (mbProtect)
         {
-            drawColorLine();
+            BitmapEx aBitmap(BMP_TAB_LOCK);
+            Point aPosition = maRect.TopLeft();
+            aPosition.AdjustX(2);
+            aPosition.AdjustY((maRect.getHeight() - aBitmap.GetSizePixel().Height()) / 2);
+            mrRenderContext.DrawBitmapEx(aPosition, aBitmap);
         }
     }
 
     void setRect(const tools::Rectangle& rRect)
     {
+        maLineRect = tools::Rectangle(rRect.BottomLeft(), rRect.BottomRight());
+        maLineRect.AdjustTop(-2);
         maRect = rRect;
     }
 
@@ -241,14 +237,7 @@ struct ImplTabBarItem
 
     OUString GetRenderText() const
     {
-        if (!mbProtect)
-            return maText;
-        else
-        {
-            constexpr sal_uInt32 cLockChar[] = { 0x1F512, 0x2002 };   // Lock + EN SPACE
-            const OUString aLockSymbol( cLockChar, SAL_N_ELEMENTS(cLockChar));
-            return aLockSymbol + maText;
-        }
+        return maText;
     }
 };
 
@@ -685,7 +674,7 @@ bool TabBar::ImplCalcWidth()
 
         // Padding is dependent on font height - bigger font = bigger padding
         long nFontWidth = aFont.GetFontHeight();
-        nNewWidth += nFontWidth * 2;
+        nNewWidth += nFontWidth * 5;
 
         if (pItem->mnWidth != nNewWidth)
         {
@@ -1151,12 +1140,10 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
     vcl::Font aLightFont = aFont;
     aLightFont.SetWeight(WEIGHT_NORMAL);
 
-    TabDrawer aDrawer(*this, rRenderContext);
+    TabDrawer aDrawer(rRenderContext);
 
     aDrawer.setSelectedFillColor(aSelectColor);
     aDrawer.setUnselectedFillColor(aFaceColor);
-
-    aDrawer.drawOutputAreaBorder();
 
     // Now, start drawing the tabs.
 
@@ -1191,13 +1178,11 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
             aDrawer.setCustomColored(bCustomBgColor);
             aDrawer.setEnabled(true);
             aDrawer.setCustomColor(pItem->maTabBgColor);
+            aDrawer.mbProtect = pItem->mbProtect;
             aDrawer.drawTab();
 
             // actual page is drawn using a bold font
-            if (bCurrent)
-                rRenderContext.SetFont(aFont);
-            else
-                rRenderContext.SetFont(aLightFont);
+            rRenderContext.SetFont(aLightFont);
 
             // Set the correct FillInBrush depending on status
 

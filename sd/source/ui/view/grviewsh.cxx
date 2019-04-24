@@ -27,6 +27,8 @@
 
 #include <tools/helpers.hxx>
 
+constexpr sal_Int32 TAB_HEIGHT_MARGIN = 10;
+
 namespace sd {
 
 GraphicViewShell::GraphicViewShell (
@@ -74,7 +76,7 @@ void GraphicViewShell::ArrangeGUIElements()
         Size aSize = mpLayerTabBar->GetSizePixel();
         const Size aFrameSize (GetViewFrame()->GetWindow().GetOutputSizePixel());
 
-        aSize.setHeight( GetParentWindow()->GetFont().GetFontHeight() + 4 );
+        aSize.setHeight(GetParentWindow()->GetFont().GetFontHeight() + TAB_HEIGHT_MARGIN);
         aSize.setWidth( aFrameSize.Width() );
 
         Point aPos (0, maViewSize.Height() - aSize.Height());

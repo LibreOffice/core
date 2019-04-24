@@ -114,6 +114,8 @@
 #define BMP_FILTER                  "svtools/res/ed08.png"
 #define BMP_HEADERFOOTER            "svtools/res/ed09.png"
 
+#define BMP_TAB_LOCK "cmd/sc_lock.png"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
