@@ -173,9 +173,7 @@ void SvpSalInstance::Wakeup(SvpRequest const request)
         g_CheckedMutex = true;
     }
 #endif
-#ifdef IOS
-    (void)request;
-#else
+
     ImplSVData* pSVData = ImplGetSVData();
 
     if (pSVData->mpWakeCallback)
@@ -187,7 +185,6 @@ void SvpSalInstance::Wakeup(SvpRequest const request)
         pMutex->m_Request = request;
     pMutex->m_wakeUpMain = true;
     pMutex->m_WakeUpMainCond.notify_one();
-#endif
 }
 
 bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
