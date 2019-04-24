@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_d6bbe40b",
+        "filename": "l10ntools/source/ulfconv/msi-encodinglist.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-24T23:53:45Z",
+      "side": 1,
+      "message": "0x085F is listed in [MS-LCID] as \"Tamazight (Latin) Algeria tzm-Latn-DZ\" since Vista.\n\nAnd for Kabyle, there are 2 entires (eith same LCID; both since Win10): \"Kabyle 0x1000 kab\" and \"Kabyle Algeria 0x1000 kab-DZ\"\n\nThe 0x1000 looks like assigned for everything now; MS is \"migrating\" to locale names - but that leaves a question how that would be reflected in e.g. this MSI summary info thing...\n\nSee e.g. https://docs.microsoft.com/en-us/windows/desktop/api/winnls/nf-winnls-getlocaleinfow\n\n\"... Microsoft is migrating toward the use of locale names instead of locale identifiers for new locales\"",
+      "range": {
+        "startLine": 83,
+        "startChar": 12,
+        "endLine": 83,
+        "endChar": 16
+      },
+      "revId": "d376e7e71a9f86ea417d784130134585edd72d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_763690b7",
+        "filename": "l10ntools/source/ulfconv/msi-encodinglist.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-24T23:53:45Z",
+      "side": 1,
+      "message": "0x0472 is Oromo Ethiopia om-ET; there\u0027s also Oromo 0x0072 om - both since Win8.1",
+      "range": {
+        "startLine": 119,
+        "startChar": 12,
+        "endLine": 119,
+        "endChar": 16
+      },
+      "revId": "d376e7e71a9f86ea417d784130134585edd72d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_963b1c9b",
+        "filename": "l10ntools/source/ulfconv/msi-encodinglist.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-24T23:53:45Z",
+      "side": 1,
+      "message": "Kinyarwanda\n\n    Kinyarwanda Rwanda 0x0487 rw-RW since Vista\n    Kinyarwanda        0x0087 rw    since Win7",
+      "range": {
+        "startLine": 133,
+        "startChar": 12,
+        "endLine": 133,
+        "endChar": 16
+      },
+      "revId": "d376e7e71a9f86ea417d784130134585edd72d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_56459416",
+        "filename": "l10ntools/source/ulfconv/msi-encodinglist.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-24T23:53:45Z",
+      "side": 1,
+      "message": "Sinhala\n\n    Sinhala           0x005B si    since WIn7\n    Sinhala Sri Lanka 0x045B si-LK since Vista",
+      "range": {
+        "startLine": 139,
+        "startChar": 12,
+        "endLine": 139,
+        "endChar": 16
+      },
+      "revId": "d376e7e71a9f86ea417d784130134585edd72d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
