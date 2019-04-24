@@ -88,6 +88,8 @@ class SettingsTable : public LoggedProperties, public LoggedTable
 
     sal_Int32 GetWordCompatibilityMode() const;
 
+    OUString GetCurrentDatabaseDataSource() const;
+
  private:
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) override;

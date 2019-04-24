@@ -256,6 +256,7 @@ struct SettingsTable_Impl
 
     std::vector<beans::PropertyValue> m_aCompatSettings;
     uno::Sequence<beans::PropertyValue> m_pCurrentCompatSetting;
+    OUString            m_sCurrentDatabaseDataSource;
 
     DocumentProtection_Impl m_DocumentProtection;
 
@@ -460,6 +461,29 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_mirrorMargins:
         m_pImpl->m_bMirrorMargin = nIntValue;
         break;
+    case NS_ooxml::LN_CT_Settings_mailMerge:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if (pProperties.get())
+            pProperties->resolve(*this);
+    }
+    break;
+    case NS_ooxml::LN_CT_MailMerge_query:
+    {
+        // try to get the "database.table" name from the query saved previously
+        OUString sVal = pValue->getString();
+        if ( sVal.endsWith("$") && sVal.indexOf(".dbo.") > 0 )
+        {
+            sal_Int32 nSpace = sVal.lastIndexOf(' ');
+            sal_Int32 nDbo = sVal.lastIndexOf(".dbo.");
+            if ( nSpace > 0 && nSpace < nDbo - 1 )
+            {
+                m_pImpl->m_sCurrentDatabaseDataSource = sVal.copy(nSpace + 1, nDbo - nSpace - 1) +
+                            sVal.copy(nDbo + 4, sVal.getLength() - nDbo - 5);
+            }
+        }
+    }
+    break;
     case NS_ooxml::LN_CT_Compat_compatSetting:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -593,6 +617,11 @@ uno::Sequence<beans::PropertyValue> SettingsTable::GetCompatSettings() const
 css::uno::Sequence<css::beans::PropertyValue> SettingsTable::GetDocumentProtectionSettings() const
 {
     return m_pImpl->m_DocumentProtection.toSequence();
+}
+
+OUString SettingsTable::GetCurrentDatabaseDataSource() const
+{
+    return m_pImpl->m_sCurrentDatabaseDataSource;
 }
 
 static bool lcl_isDefault(const uno::Reference<beans::XPropertyState>& xPropertyState, const OUString& rPropertyName)

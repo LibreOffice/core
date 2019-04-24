@@ -3081,8 +3081,15 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::FindOrCreateFieldMaster(c
     uno::Reference< beans::XPropertySet > xMaster;
     OUString sFieldMasterService( OUString::createFromAscii(pFieldMasterService) );
     OUStringBuffer aFieldMasterName;
+    OUString sDatabaseDataSourceName = GetSettingsTable()->GetCurrentDatabaseDataSource();
+    bool bIsMergeField = sFieldMasterService.endsWith("Database");
     aFieldMasterName.appendAscii( pFieldMasterService );
     aFieldMasterName.append('.');
+    if ( bIsMergeField && !sDatabaseDataSourceName.isEmpty() )
+    {
+        aFieldMasterName.append(sDatabaseDataSourceName);
+        aFieldMasterName.append('.');
+    }
     aFieldMasterName.append(rFieldMasterName);
     OUString sFieldMasterName = aFieldMasterName.makeStringAndClear();
     if(xFieldMasterAccess->hasByName(sFieldMasterName))
@@ -3094,10 +3101,27 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::FindOrCreateFieldMaster(c
     {
         //create the master
         xMaster.set( m_xTextFactory->createInstance(sFieldMasterService), uno::UNO_QUERY_THROW);
-        //set the master's name
-        xMaster->setPropertyValue(
+        if ( !bIsMergeField || sDatabaseDataSourceName.isEmpty() )
+        {
+            //set the master's name
+            xMaster->setPropertyValue(
                     getPropertyName(PROP_NAME),
                     uno::makeAny(rFieldMasterName));
+        } else {
+           // set database data, based on the "databasename.tablename" of sDatabaseDataSourceName
+           xMaster->setPropertyValue(
+                    getPropertyName(PROP_DATABASE_NAME),
+                    uno::makeAny(sDatabaseDataSourceName.copy(0, sDatabaseDataSourceName.indexOf('.'))));
+           xMaster->setPropertyValue(
+                    getPropertyName(PROP_COMMAND_TYPE),
+                    uno::makeAny(sal_Int32(0)));
+           xMaster->setPropertyValue(
+                    getPropertyName(PROP_DATATABLE_NAME),
+                    uno::makeAny(sDatabaseDataSourceName.copy(sDatabaseDataSourceName.indexOf('.') + 1)));
+           xMaster->setPropertyValue(
+                    getPropertyName(PROP_DATACOLUMN_NAME),
+                    uno::makeAny(rFieldMasterName));
+        }
     }
     return xMaster;
 }
