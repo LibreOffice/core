@@ -5350,6 +5350,15 @@ find_al()
 
     unset altest
 
+    # We need this check to detect 4.6.1 or above.
+    for ver in 4.8 4.7.2 4.7.1 4.7 4.6.2 4.6.1; do
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/WinSDK-NetFx40Tools/InstallationFolder"
+        if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
+            altest=$regvalue
+            return
+        fi
+    done
+
     for x in `ls /proc/registry32/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft\ SDKs/Windows`; do
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/$x/WinSDK-NetFx40Tools/InstallationFolder"
         if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
@@ -5358,32 +5367,14 @@ find_al()
         fi
     done
 
-    # We need this additional check to detect 4.6.1 or above.
-    for ver in 4.7.2 4.7.1 4.7 4.6.2 4.6.1; do
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/WinSDK-NetFx40Tools/InstallationFolder"
-        if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
-            altest=$regvalue
-            return
-        fi
 
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/WOW6432Node/Microsoft/Microsoft SDKs/NETFXSDK/$ver/WinSDK-NetFx40Tools"
-        if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
-            altest=$regvalue
-            return
-        fi
-    done
 }
 
 find_dotnetsdk46()
 {
     unset frametest
 
-    for ver in 4.7.2 4.7.1 4.7 4.6.2 4.6.1 4.6; do
-        reg_get_value_64 "HKEY_LOCAL_MACHINE/SOFTWARE/Wow6432Node/Microsoft/Microsoft SDKs/NETFXSDK/$ver/KitsInstallationFolder"
-        if test -n "$regvalue"; then
-            frametest=$regvalue
-            return
-        fi
+    for ver in 4.8 4.7.2 4.7.1 4.7 4.6.2 4.6.1 4.6; do
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/KitsInstallationFolder"
         if test -n "$regvalue"; then
             frametest=$regvalue
