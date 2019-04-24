@@ -4487,6 +4487,10 @@ static void lo_runLoop(LibreOfficeKit* /*pThis*/,
                        LibreOfficeKitWakeCallback pWakeCallback,
                        void* pData)
 {
+#ifdef IOS // Maybe ANDROID, too?
+    InitVCL();
+#endif
+
     SolarMutexGuard aGuard;
     vcl::lok::registerPollCallbacks(pPollCallback, pWakeCallback, pData);
     lo_startmain(nullptr);
