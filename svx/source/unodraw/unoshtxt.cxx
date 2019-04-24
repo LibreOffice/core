@@ -265,10 +265,6 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             mpViewForwarder.reset();
         }
     }
-    else if (const SvxViewChangedHint* pViewHint = dynamic_cast<const SvxViewChangedHint*>(&rHint))
-    {
-        Broadcast( *pViewHint );
-    }
     else if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
     {
         const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
@@ -376,6 +372,10 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             default:
                 break;
         }
+    }
+    else if (const SvxViewChangedHint* pViewHint = dynamic_cast<const SvxViewChangedHint*>(&rHint))
+    {
+        Broadcast( *pViewHint );
     }
 }
 
