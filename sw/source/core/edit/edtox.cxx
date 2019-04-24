@@ -137,7 +137,7 @@ void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
     // Insert listing
     const SwTOXBaseSection* pTOX = mxDoc->InsertTableOf(
                 *GetCursor()->GetPoint(), rTOX, pSet, true, GetLayout() );
-    OSL_ENSURE(pTOX, "No current TOx");
+    OSL_ENSURE(pTOX, "No current TOX");
 
     // start formatting
     CalcLayout();
