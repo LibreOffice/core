@@ -529,7 +529,8 @@ void ScDocument::SetChartRangeList( const OUString& rChartName,
 
 bool ScDocument::HasData( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab]
+            && nCol < maTabs[nTab]->GetAllocatedColumnsCount())
         return maTabs[nTab]->HasData( nCol, nRow );
     else
         return false;

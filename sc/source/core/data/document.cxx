@@ -3765,7 +3765,8 @@ void ScDocument::GetCellType( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
 bool ScDocument::HasStringData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab]
+            && nCol < maTabs[nTab]->GetAllocatedColumnsCount())
             return maTabs[nTab]->HasStringData( nCol, nRow );
     else
         return false;
@@ -3773,7 +3774,8 @@ bool ScDocument::HasStringData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 
 bool ScDocument::HasValueData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab]
+            && nCol < maTabs[nTab]->GetAllocatedColumnsCount())
             return maTabs[nTab]->HasValueData( nCol, nRow );
     else
         return false;
