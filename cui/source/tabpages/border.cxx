@@ -157,9 +157,18 @@ void ShadowControlsWrapper::SetControlValue(const SvxShadowItem& rItem)
             mrVsPos.SetNoSelection();
             break;
     }
+    mrVsPos.SaveValue();
     mrMfSize.set_value(mrMfSize.normalize(rItem.GetWidth()), FieldUnit::TWIP);
-    mrLbColor.SelectEntry(rItem.GetColor());
     mrMfSize.save_value();
+    mrLbColor.SelectEntry(rItem.GetColor());
+    mrLbColor.SaveValue();
+}
+
+bool ShadowControlsWrapper::get_value_changed_from_saved() const
+{
+    return mrVsPos.IsValueChangedFromSaved() ||
+           mrMfSize.get_value_changed_from_saved() ||
+           mrLbColor.IsValueChangedFromSaved();
 }
 
 void ShadowControlsWrapper::SetControlDontKnow()
@@ -833,16 +842,12 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
         bAttrsChanged = true;
     }
 
-    if (m_xShadowControls)
+    if (m_xShadowControls && m_xShadowControls->get_value_changed_from_saved())
     {
         sal_uInt16 nShadowId = pPool->GetWhich(mnShadowSlot);
         const SvxShadowItem& rOldShadowItem = *static_cast<const SvxShadowItem*>(rCoreAttrs->GetItem(nShadowId));
-        SvxShadowItem aNewShadowItem = m_xShadowControls->GetControlValue(rOldShadowItem);
-        if (aNewShadowItem != rOldShadowItem)
-        {
-            rCoreAttrs->Put(aNewShadowItem);
-            bAttrsChanged = true;
-        }
+        rCoreAttrs->Put(m_xShadowControls->GetControlValue(rOldShadowItem));
+        bAttrsChanged = true;
     }
 
     if (m_xMarginControls && m_xMarginControls->get_value_changed_from_saved())
