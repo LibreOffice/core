@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_e33181ee",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1999,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-04-25T14:57:08Z",
+      "side": 1,
+      "message": "It needs to limit the decode to the bookmark names.",
+      "range": {
+        "startLine": 1999,
+        "startChar": 20,
+        "endLine": 1999,
+        "endChar": 127
+      },
+      "revId": "702e8af2a73e099a3751e8142266c4640edbf69c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
