@@ -70,9 +70,7 @@ public:
     /** Stores the cell position of the note in the user data area of the caption. */
     static void         SetCaptionUserData( SdrCaptionObj& rCaption, const ScAddress& rPos );
     /** Sets all default formatting attributes to the caption object. */
-    static void         SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc );
-    /** Updates caption item set according to the passed item set while removing shadow items. */
-    static void         SetCaptionItems( SdrCaptionObj& rCaption, const SfxItemSet& rItemSet );
+    static void         SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc, SfxItemSet* pExtraItemSet );
 };
 
 void ScCaptionUtil::SetCaptionLayer( SdrCaptionObj& rCaption, bool bShown )
@@ -98,7 +96,7 @@ void ScCaptionUtil::SetCaptionUserData( SdrCaptionObj& rCaption, const ScAddress
     pObjData->meType = ScDrawObjData::CellNote;
 }
 
-void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
+void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc, SfxItemSet* pExtraItemSet )
 {
     SfxItemSet aItemSet = rCaption.GetMergedItemSet();
 
@@ -137,18 +135,21 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
     const ScPatternAttr& rDefPattern = rDoc.GetPool()->GetDefaultItem( ATTR_PATTERN );
     rDefPattern.FillEditItemSet( &aItemSet );
 
-    rCaption.SetMergedItemSet( aItemSet );
-}
+    if (pExtraItemSet)
+    {
+        /* Updates caption item set according to the passed item set while removing shadow items. */
 
-void ScCaptionUtil::SetCaptionItems( SdrCaptionObj& rCaption, const SfxItemSet& rItemSet )
-{
-    // copy all items
-    rCaption.SetMergedItemSet( rItemSet );
-    // reset shadow items
-    rCaption.SetMergedItem( makeSdrShadowItem( false ) );
-    rCaption.SetMergedItem( makeSdrShadowXDistItem( 100 ) );
-    rCaption.SetMergedItem( makeSdrShadowYDistItem( 100 ) );
-    rCaption.SetSpecialTextBoxShadow();
+        aItemSet.MergeValues(*pExtraItemSet);
+        // reset shadow items
+        aItemSet.Put( makeSdrShadowItem( false ) );
+        aItemSet.Put( makeSdrShadowXDistItem( 100 ) );
+        aItemSet.Put( makeSdrShadowYDistItem( 100 ) );
+    }
+
+    rCaption.SetMergedItemSet( aItemSet );
+
+    if (pExtraItemSet)
+        rCaption.SetSpecialTextBoxShadow();
 }
 
 /** Helper for creation and manipulation of caption drawing objects independent
@@ -1051,9 +1052,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
         maNoteData.mxCaption->SetText( xInitData->maSimpleText );
 
     // copy all items or set default items; reset shadow items
-    ScCaptionUtil::SetDefaultItems( *maNoteData.mxCaption, mrDoc );
-    if (xInitData->mxItemSet)
-        ScCaptionUtil::SetCaptionItems( *maNoteData.mxCaption, *xInitData->mxItemSet );
+    ScCaptionUtil::SetDefaultItems( *maNoteData.mxCaption, mrDoc, xInitData->mxItemSet.get() );
 
     // set position and size of the caption object
     if( xInitData->mbDefaultPosSize )
@@ -1117,7 +1116,7 @@ void ScPostIt::CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCapti
         else
         {
             // set default formatting and default position
-            ScCaptionUtil::SetDefaultItems( *maNoteData.mxCaption, mrDoc );
+            ScCaptionUtil::SetDefaultItems( *maNoteData.mxCaption, mrDoc, nullptr );
             aCreator.AutoPlaceCaption();
         }
 
@@ -1201,7 +1200,7 @@ ScCaptionPtr ScNoteUtil::CreateTempCaption(
     {
         // if pNoteCaption is null, then aBuffer contains some text
         pCaption->SetText( aBuffer.makeStringAndClear() );
-        ScCaptionUtil::SetDefaultItems( *pCaption, rDoc );
+        ScCaptionUtil::SetDefaultItems( *pCaption, rDoc, nullptr );
         // adjust caption size to text size
         long nMaxWidth = ::std::min< long >( aVisRect.GetWidth() * 2 / 3, SC_NOTECAPTION_MAXWIDTH_TEMP );
         pCaption->SetMergedItem( makeSdrTextAutoGrowWidthItem( true ) );
