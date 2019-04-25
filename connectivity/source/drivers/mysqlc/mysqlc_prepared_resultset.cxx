@@ -255,6 +255,7 @@ template <typename T> T OPreparedResultSet::retrieveValue(sal_Int32 nColumnIndex
         return getRowSetValue(nColumnIndex);
 }
 
+namespace connectivity { namespace mysqlc {
 template <> uno::Sequence<sal_Int8> OPreparedResultSet::retrieveValue(sal_Int32 column)
 {
     // TODO make conversion possible
@@ -315,6 +316,7 @@ template <> OUString OPreparedResultSet::retrieveValue(sal_Int32 column)
 
     return OUString(sStr, *m_aData[column - 1].length, m_encoding);
 }
+}}
 
 ORowSetValue OPreparedResultSet::getRowSetValue(sal_Int32 nColumnIndex)
 {
