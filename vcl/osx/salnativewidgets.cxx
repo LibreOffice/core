@@ -253,6 +253,8 @@ bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
             break;
 
         case ControlType::Tooltip: // ** TO DO
+            if (nPart == ControlPart::Entire)
+                return true;
             break;
 
         case ControlType::MenuPopup:
@@ -412,6 +414,21 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
             aThemeBackgroundInfo.state = getState( nState );
             aThemeBackgroundInfo.kind = kThemeBrushDialogBackgroundActive;
             // FIXME: without this magical offset there is a 2 pixel black border on the right and bottom
+            rc.size.width += 2;
+            rc.size.height += 2;
+
+            HIThemeApplyBackground( &rc, &aThemeBackgroundInfo, mrContext, kHIThemeOrientationNormal);
+            CGContextFillRect( mrContext, rc );
+            bOK = true;
+        }
+        break;
+
+        case ControlType::Tooltip:
+        {
+            HIThemeBackgroundDrawInfo aThemeBackgroundInfo;
+            aThemeBackgroundInfo.version = 0;
+            aThemeBackgroundInfo.state = getState( nState );
+            aThemeBackgroundInfo.kind = kThemeBrushAlertBackgroundActive;
             rc.size.width += 2;
             rc.size.height += 2;
 
