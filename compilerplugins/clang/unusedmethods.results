@@ -688,8 +688,6 @@ include/vcl/svapp.hxx:169
      ApplicationEvent::ApplicationEvent(enum ApplicationEvent::Type,const class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &)
 include/vcl/svapp.hxx:798
     void Application::AppEvent(const class ApplicationEvent &)
-include/vcl/svmain.hxx:27
-    _Bool ImplSVMainHook(int *)
 include/vcl/syswin.hxx:172
     void SystemWindow::SetIdleDebugName(const char *)
 include/vcl/tabdlg.hxx:49
