@@ -248,6 +248,7 @@ public:
     void testTdf62268();
     void testVBAMacroFunctionODS();
     void testAutoheight2Rows();
+    void testXLSDefColWidth();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -387,6 +388,7 @@ public:
     CPPUNIT_TEST(testTdf62268);
     CPPUNIT_TEST(testVBAMacroFunctionODS);
     CPPUNIT_TEST(testAutoheight2Rows);
+    CPPUNIT_TEST(testXLSDefColWidth);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4265,6 +4267,19 @@ void ScFiltersTest::testAutoheight2Rows()
     // We will do relative comparison, because calculated autoheight
     // can be different on different platforms
     CPPUNIT_ASSERT_MESSAGE("Row #3 shoud be thinner than #1", nHeight3 < nHeight1);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testXLSDefColWidth()
+{
+    // XLS has only 256 columns; but on import, we need to set default width to all above that limit
+    ScDocShellRef xDocSh = loadDoc("chartx.", FORMAT_XLS); // just some XLS with narrow columns
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    int nWidth = rDoc.GetColWidth(MAXCOL, 0, false);
+    // This was 1280
+    CPPUNIT_ASSERT_EQUAL(1005, nWidth);
 
     xDocSh->DoClose();
 }
