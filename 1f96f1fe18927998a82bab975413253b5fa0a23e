@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_51459e16",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 2417,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-25T09:32:53Z",
+      "side": 1,
+      "message": "Yes, but GetSelectionFrame never needs to hold __another__ pointer to the underlying object - there is only ever one, which means this is better represented by std::unique_ptr.\n\n(and passed to GetSelectionFrame by std::unique_ptr\u003cXXX\u003e\u0026)",
+      "parentUuid": "3fa0c359_116636ef",
+      "revId": "1f96f1fe18927998a82bab975413253b5fa0a23e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_f65e2044",
         "filename": "sw/source/core/layout/paintfrm.cxx",
         "patchSetId": 13
