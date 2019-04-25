@@ -59,61 +59,39 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             {
                 uno::Reference<lang::XServiceInfo> xServiceInfo(mxShape, uno::UNO_QUERY);
                 uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
-                OptValue<OUString> oVert = rAttribs.getString(XML_vert);
-                if (oVert.has() && oVert.get() == "vert270")
+                sal_Int32 nVert = rAttribs.getToken(XML_vert, XML_horz);
+                if (nVert != XML_horz)
                 {
-                    if (xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
-                    {
-                        // No support for this in core, work around by char rotation, as we do so for table cells already.
-                        uno::Reference<text::XText> xText(mxShape, uno::UNO_QUERY);
-                        uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
-                        xTextCursor->gotoStart(false);
-                        xTextCursor->gotoEnd(true);
-                        uno::Reference<beans::XPropertyState> xPropertyState(xTextCursor,
-                                                                             uno::UNO_QUERY);
-                        beans::PropertyState aState
-                            = xPropertyState->getPropertyState("CharRotation");
-                        if (aState == beans::PropertyState_DEFAULT_VALUE)
-                        {
-                            uno::Reference<beans::XPropertySet> xTextCursorPropertySet(
-                                xTextCursor, uno::UNO_QUERY);
-                            xTextCursorPropertySet->setPropertyValue("CharRotation",
-                                                                     uno::makeAny(sal_Int16(900)));
-                        }
-                    }
-                    else
-                    {
-                        // Get the existing rotation of the shape.
-                        drawing::HomogenMatrix3 aMatrix;
-                        xPropertySet->getPropertyValue("Transformation") >>= aMatrix;
-                        basegfx::B2DHomMatrix aTransformation;
-                        aTransformation.set(0, 0, aMatrix.Line1.Column1);
-                        aTransformation.set(0, 1, aMatrix.Line1.Column2);
-                        aTransformation.set(0, 2, aMatrix.Line1.Column3);
-                        aTransformation.set(1, 0, aMatrix.Line1.Column1);
-                        aTransformation.set(1, 1, aMatrix.Line2.Column2);
-                        aTransformation.set(1, 2, aMatrix.Line3.Column3);
-                        aTransformation.set(2, 0, aMatrix.Line1.Column1);
-                        aTransformation.set(2, 1, aMatrix.Line2.Column2);
-                        aTransformation.set(2, 2, aMatrix.Line3.Column3);
-                        basegfx::B2DTuple aScale;
-                        basegfx::B2DTuple aTranslate;
-                        double fRotate = 0;
-                        double fShearX = 0;
-                        aTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
+                    // Get the existing rotation of the shape.
+                    drawing::HomogenMatrix3 aMatrix;
+                    xPropertySet->getPropertyValue("Transformation") >>= aMatrix;
+                    basegfx::B2DHomMatrix aTransformation;
+                    aTransformation.set(0, 0, aMatrix.Line1.Column1);
+                    aTransformation.set(0, 1, aMatrix.Line1.Column2);
+                    aTransformation.set(0, 2, aMatrix.Line1.Column3);
+                    aTransformation.set(1, 0, aMatrix.Line1.Column1);
+                    aTransformation.set(1, 1, aMatrix.Line2.Column2);
+                    aTransformation.set(1, 2, aMatrix.Line3.Column3);
+                    aTransformation.set(2, 0, aMatrix.Line1.Column1);
+                    aTransformation.set(2, 1, aMatrix.Line2.Column2);
+                    aTransformation.set(2, 2, aMatrix.Line3.Column3);
+                    basegfx::B2DTuple aScale;
+                    basegfx::B2DTuple aTranslate;
+                    double fRotate = 0;
+                    double fShearX = 0;
+                    aTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
 
-                        // If the text is not rotated the way the shape wants it already, set the angle.
-                        const sal_Int32 nRotation = -270;
-                        if (static_cast<long>(basegfx::rad2deg(fRotate))
-                            != NormAngle36000(static_cast<long>(nRotation) * 100) / 100)
-                        {
-                            comphelper::SequenceAsHashMap aCustomShapeGeometry(
-                                xPropertySet->getPropertyValue("CustomShapeGeometry"));
-                            aCustomShapeGeometry["TextPreRotateAngle"] <<= nRotation;
-                            xPropertySet->setPropertyValue(
-                                "CustomShapeGeometry",
-                                uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
-                        }
+                    // If the text is not rotated the way the shape wants it already, set the angle.
+                    const sal_Int32 nRotation = nVert == XML_vert270 ? -270 : -90;
+                    if (static_cast<long>(basegfx::rad2deg(fRotate))
+                        != NormAngle36000(static_cast<long>(nRotation) * 100) / 100)
+                    {
+                        comphelper::SequenceAsHashMap aCustomShapeGeometry(
+                            xPropertySet->getPropertyValue("CustomShapeGeometry"));
+                        aCustomShapeGeometry["TextPreRotateAngle"] <<= nRotation;
+                        xPropertySet->setPropertyValue(
+                            "CustomShapeGeometry",
+                            uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
                     }
                 }
 

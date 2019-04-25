@@ -65,6 +65,16 @@ DECLARE_OOXMLEXPORT_TEST(testendingSectionProps, "endingSectionProps.docx")
     //CPPUNIT_ASSERT_EQUAL_MESSAGE("Section Left Margin", sal_Int32(2540), getProperty<sal_Int32>(xSect, "SectionLeftMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTbrlTextbox, "tbrl-textbox.docx")
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
+    // Without the accompanying fix in place, this test would have failed with 'Expected: -90;
+    // Actual: 0', i.e. tbRl writing direction was imported as lrTb.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-90),
+                         aGeometry["TextPreRotateAngle"].get<sal_Int32>());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf124637_sectionMargin, "tdf124637_sectionMargin.docx")
 {
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
