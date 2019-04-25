@@ -559,7 +559,6 @@ ifneq (,$(filter LINUX ANDROID,$(OS)))
 $(eval $(call gb_Library_add_libs,pdfium,\
     -ldl \
     -lrt \
-    -lpthread \
 ))
 
 $(eval $(call gb_Library_use_external,pdfium,freetype))

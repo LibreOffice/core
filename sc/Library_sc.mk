@@ -710,12 +710,6 @@ $(eval $(call gb_Library_add_libs,sc,\
 ))
 endif
 
-ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
-$(eval $(call gb_Library_add_libs,sc,\
-    -lpthread \
-))
-endif
-
 $(eval $(call gb_SdiTarget_SdiTarget,sc/sdi/scslots,sc/sdi/scalc))
 
 $(eval $(call gb_SdiTarget_set_include,sc/sdi/scslots,\
