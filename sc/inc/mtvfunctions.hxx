@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_MTVFUNCTIONS_HXX
-#define INCLUDED_SC_INC_MTVFUNCTIONS_HXX
+#pragma once
 
 #include <cstdlib>
 #include <mdds/multi_type_vector_types.hpp>
@@ -483,6 +482,5 @@ FindElement2(
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

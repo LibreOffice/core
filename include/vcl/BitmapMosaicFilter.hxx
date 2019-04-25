@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPMOSAICFILTER_HXX
-#define INCLUDED_VCL_BITMAPMOSAICFILTER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -34,7 +33,5 @@ private:
     sal_uLong const mnTileWidth;
     sal_uLong const mnTileHeight;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

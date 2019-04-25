@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_S390X_SHARE_HXX
-#define INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_S390X_SHARE_HXX
+#pragma once
 
 #include "uno/mapping.h"
 
@@ -85,5 +84,4 @@ namespace s390x
     enum s390xlimits { MAX_GPR_REGS = 5, MAX_SSE_REGS = 4 };
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

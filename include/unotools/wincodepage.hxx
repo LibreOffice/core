@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_UNOTOOLS_WINCODEPAGE_HXX
-#define INCLUDED_UNOTOOLS_WINCODEPAGE_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/textenc.h>
@@ -30,6 +29,5 @@ RTL_TEXTENCODING_MS_1252 otherwise.
 UNOTOOLS_DLLPUBLIC rtl_TextEncoding utl_getWinTextEncodingFromLangStr(
     const char* pLanguage, bool bOEM = false);
 
-#endif  // INCLUDED_UNOTOOLS_WINCODEPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

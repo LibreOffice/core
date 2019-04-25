@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMER_HXX
-#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMER_HXX
+#pragma once
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -34,6 +33,5 @@ class XMLTransformer : public ::cppu::WeakImplHelper<
 {
 };
 
-#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX
-#define INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX
+#pragma once
 
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
@@ -198,6 +197,5 @@ inline void SvpSalInstance::deregisterFrame( SalFrame* pFrame )
 
 VCL_DLLPUBLIC cairo_surface_t* get_underlying_cairo_surface(const VirtualDevice& rDevice);
 
-#endif // INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

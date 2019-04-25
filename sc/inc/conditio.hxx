@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_CONDITIO_HXX
-#define INCLUDED_SC_INC_CONDITIO_HXX
+#pragma once
 
 #include "global.hxx"
 #include <tools/solar.h>
@@ -682,6 +681,5 @@ public:
     void CalcAll();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

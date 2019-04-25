@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_SCROLLHELPER_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_SCROLLHELPER_HXX
+#pragma once
 
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
@@ -63,6 +62,5 @@ namespace dbaui
         void scroll(const Point& _rPoint, const Size& _rOutputSize);
     };
 }
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_SCROLLHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

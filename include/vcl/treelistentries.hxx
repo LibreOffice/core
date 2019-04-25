@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_TREELISTENTRIES_HXX
-#define INCLUDED_VCL_TREELISTENTRIES_HXX
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -16,6 +15,5 @@
 class SvTreeListEntry;
 typedef std::vector<std::unique_ptr<SvTreeListEntry>> SvTreeListEntries;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

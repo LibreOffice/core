@@ -57,8 +57,7 @@
  * @file
  * Background image.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFBGIMAGE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFBGIMAGE_HXX
+#pragma once
 
 #include <xfilter/xfstyle.hxx>
 
@@ -148,6 +147,5 @@ inline void XFBGImage::SetStretch()
     m_bPosition = false;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

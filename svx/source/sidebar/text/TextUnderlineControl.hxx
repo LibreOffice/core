@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTUNDERLINECONTROL_HXX
-#define INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTUNDERLINECONTROL_HXX
+#pragma once
 
 #include <sfx2/bindings.hxx>
 #include <vcl/button.hxx>
@@ -56,6 +55,5 @@ private:
 }
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

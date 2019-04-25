@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_EXPLODE_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_EXPLODE_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <memory>
@@ -118,6 +117,5 @@ public:
     void fillArray();
     static void ToString(sal_uInt32 nBits, sal_Char *pChar, sal_uInt32 nLen);
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

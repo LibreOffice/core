@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_VIEWOPT_HXX
-#define INCLUDED_SW_INC_VIEWOPT_HXX
+#pragma once
 
 #include <config_features.h>
 
@@ -648,6 +647,5 @@ inline void SwViewOption::SetUIOptions( const SwViewOption& rVOpt )
 // Helper function for checking HTML-capabilities.
 SW_DLLPUBLIC sal_uInt16     GetHtmlMode(const SwDocShell*);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

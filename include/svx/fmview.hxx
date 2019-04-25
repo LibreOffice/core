@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_FMVIEW_HXX
-#define INCLUDED_SVX_FMVIEW_HXX
+#pragma once
 
 #include <svx/view3d.hxx>
 #include <svx/svxdllapi.h>
@@ -152,6 +151,5 @@ private:
     using E3dView::SetMoveOutside;
 };
 
-#endif          // _FML_FMVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

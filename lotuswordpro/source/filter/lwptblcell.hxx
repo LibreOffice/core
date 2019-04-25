@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype - table object
  */
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTBLCELL_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTBLCELL_HXX
+#pragma once
 
 #include <lwpobj.hxx>
 #include <lwpatomholder.hxx>
@@ -337,6 +336,5 @@ LwpColumnSpecifier::ColumnID(sal_uInt8 FormulaColumn)
     return FormulaColumn - cColumn;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

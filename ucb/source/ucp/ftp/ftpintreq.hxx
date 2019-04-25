@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPINTREQ_HXX
-#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPINTREQ_HXX
+#pragma once
 
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
@@ -88,6 +87,5 @@ namespace ftp {
 }
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFFLY_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFFLY_HXX
+#pragma once
 
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -137,7 +136,5 @@ private:
 };
 } // namespace rtftok
 } // namespace writerfilter
-
-#endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFFLY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_HTMLTESTTOOLS_HXX
-#define INCLUDED_TEST_HTMLTESTTOOLS_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <test/testdllapi.hxx>
@@ -25,5 +24,4 @@ protected:
     static htmlDocPtr parseHtmlStream(SvStream* pStream);
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

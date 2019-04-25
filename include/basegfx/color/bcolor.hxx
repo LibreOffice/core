@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_COLOR_BCOLOR_HXX
-#define INCLUDED_BASEGFX_COLOR_BCOLOR_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -184,6 +183,5 @@ namespace basegfx
     }
 } // end of namespace basegfx
 
-#endif // INCLUDED_BASEGFX_COLOR_BCOLOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

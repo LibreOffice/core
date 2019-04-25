@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_SOURCE_WIN32_SYSSHEXEC_HXX
-#define INCLUDED_SHELL_SOURCE_WIN32_SYSSHEXEC_HXX
+#pragma once
 
 #include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
@@ -65,6 +64,5 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

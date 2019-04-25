@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_QA_UNIT_WPFTQAHELPERDLLAPI_H
-#define INCLUDED_WRITERPERFECT_QA_UNIT_WPFTQAHELPERDLLAPI_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -18,7 +17,5 @@
 #define WPFTQAHELPER_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 #define WPFTQAHELPER_DLLPRIVATE SAL_DLLPRIVATE
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

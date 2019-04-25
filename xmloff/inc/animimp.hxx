@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_INC_ANIMIMP_HXX
-#define INCLUDED_XMLOFF_INC_ANIMIMP_HXX
+#pragma once
 
 #include <memory>
 
@@ -44,6 +43,5 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 };
 
-#endif // INCLUDED_XMLOFF_INC_ANIMIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

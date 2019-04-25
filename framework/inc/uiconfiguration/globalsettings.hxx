@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_UICONFIGURATION_GLOBALSETTINGS_HXX
-#define INCLUDED_FRAMEWORK_INC_UICONFIGURATION_GLOBALSETTINGS_HXX
+#pragma once
 
 #include <stdtypes.h>
 
@@ -61,6 +60,5 @@ class GlobalSettings
 
 } // namespace framework
 
-#endif // __FRAMEWORK_UIELEMENT_WINDOWSTATECONFIGURATION_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

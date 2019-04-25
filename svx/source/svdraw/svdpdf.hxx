@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_SVDRAW_SVDPDF_HXX
-#define INCLUDED_SVX_SOURCE_SVDRAW_SVDPDF_HXX
+#pragma once
 
 #include <config_features.h>
 
@@ -242,7 +241,5 @@ public:
 };
 
 #endif // HAVE_FEATURE_PDFIUM
-
-#endif // INCLUDED_SVX_SOURCE_SVDRAW_SVDFMTF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

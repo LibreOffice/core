@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CLI_URE_SOURCE_UNO_BRIDGE_CLI_PROXY_H
-#define INCLUDED_CLI_URE_SOURCE_UNO_BRIDGE_CLI_PROXY_H
+#pragma once
 
 #include "uno/environment.hxx"
 #include "uno/mapping.hxx"
@@ -289,6 +288,5 @@ struct CliProxy: public uno_Interface
     inline void release() const;
 };
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_TEXTENC_CONVERTSIMPLE_HXX
-#define INCLUDED_SAL_TEXTENC_CONVERTSIMPLE_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -31,4 +30,3 @@ sal_Size SAL_DLLPUBLIC convertUnicodeToChar(
 
 } } }
 
-#endif

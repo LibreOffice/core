@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_GFXLINK_HXX
-#define INCLUDED_VCL_GFXLINK_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
@@ -116,6 +115,5 @@ public:
     friend VCL_DLLPUBLIC SvStream&  ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

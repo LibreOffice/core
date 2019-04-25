@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_UNOSHPRP_HXX
-#define INCLUDED_SVX_UNOSHPRP_HXX
+#pragma once
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
@@ -545,6 +544,5 @@
 #define SPECIAL_3DBACKSCALE_PROPERTIES \
     { OUString(UNO_NAME_3D_BACKSCALE)        ,SDRATTR_3DOBJ_BACKSCALE           , ::cppu::UnoType<sal_Int16>::get(), 0, 0}, \
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

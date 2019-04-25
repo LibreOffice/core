@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_DOCINFOHELPER_HXX
-#define INCLUDED_UNOTOOLS_DOCINFOHELPER_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
@@ -34,6 +33,5 @@ public:
 
 }   // namespace utl
 
-#endif // INCLUDED_UNOTOOLS_DOCINFOHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

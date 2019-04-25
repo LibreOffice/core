@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVL_MACITEM_HXX
-#define INCLUDED_SVL_MACITEM_HXX
+#pragma once
 
 // class SvxMacroItem ----------------------------------------------------
 
@@ -153,6 +152,5 @@ inline const SvxMacro& SvxMacroItem::GetMacro( SvMacroItemId nEvent ) const
     return *(aMacroTable.Get(nEvent));
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

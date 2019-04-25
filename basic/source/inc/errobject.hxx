@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_ERROBJECT_HXX
-#define INCLUDED_BASIC_SOURCE_INC_ERROBJECT_HXX
+#pragma once
 #include "sbunoobj.hxx"
 #include <ooo/vba/XErrObject.hpp>
 
@@ -38,6 +37,5 @@ public:
     /// @throws css::uno::RuntimeException
     void setNumberAndDescription( ::sal_Int32 _number, const OUString& _description );
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

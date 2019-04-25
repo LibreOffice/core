@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SBXFAC_HXX
-#define INCLUDED_BASIC_SBXFAC_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <basic/basicdllapi.h>
@@ -35,6 +34,5 @@ public:
     virtual SbxObject* CreateObject( const OUString& );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

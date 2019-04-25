@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_GENERAL_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_GENERAL_HXX
+#pragma once
 
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
@@ -186,7 +185,6 @@ inline BibDataManager* BibGeneralPage::GetDataManager()
     return pDatMan;
 }
 
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

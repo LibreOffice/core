@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_XPDFWRAPPER_PDFIOUTDEV_GPL_HXX
-#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_XPDFWRAPPER_PDFIOUTDEV_GPL_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <config_poppler.h>
@@ -286,6 +285,5 @@ typedef std::vector< Output_t > OutputBuffer;
 static_assert(std::is_same_v<Guchar, unsigned char>, "unexpected typedef");
 #endif
 
-#endif // INCLUDED_SDEXT_SOURCE_PDFIMPORT_XPDFWRAPPER_PDFIOUTDEV_GPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_AVMEDIA_MEDIAITEM_HXX
-#define INCLUDED_AVMEDIA_MEDIAITEM_HXX
+#pragma once
 
 #include <svl/poolitem.hxx>
 #include <com/sun/star/media/ZoomLevel.hpp>
@@ -153,6 +152,5 @@ struct AVMEDIA_DLLPUBLIC MediaTempFile
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

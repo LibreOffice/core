@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEGRIDCONTROLTABLEBASE_HXX
-#define INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEGRIDCONTROLTABLEBASE_HXX
+#pragma once
 
 #include <extended/AccessibleGridControlBase.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -172,6 +171,5 @@ protected:
 } // namespace accessibility
 
 
-#endif // ACCESSIBILITY_EXT_ACCESSIBILEGRIDCONTROLTABLEBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

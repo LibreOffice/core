@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_OLEPERSIST_HXX
-#define INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_OLEPERSIST_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -42,6 +41,5 @@ OUString GetNewFilledTempFile_Impl(
 
 bool KillFile_Impl( const OUString& aURL, const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

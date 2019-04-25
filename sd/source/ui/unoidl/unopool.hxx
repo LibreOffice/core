@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_UNOIDL_UNOPOOL_HXX
-#define INCLUDED_SD_SOURCE_UI_UNOIDL_UNOPOOL_HXX
+#pragma once
 
 #include <sal/config.h>
 
 css::uno::Reference<css::uno::XInterface> SdUnoCreatePool(
     SdDrawDocument * pDrawModel);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

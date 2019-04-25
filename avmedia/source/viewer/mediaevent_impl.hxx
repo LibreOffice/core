@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_AVMEDIA_SOURCE_VIEWER_MEDIAEVENT_IMPL_HXX
-#define INCLUDED_AVMEDIA_SOURCE_VIEWER_MEDIAEVENT_IMPL_HXX
+#pragma once
 
 #include <avmedia/mediawindow.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -76,6 +75,5 @@ namespace avmedia
     }
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_REFRESHLISTENER_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_INC_REFRESHLISTENER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.h>
 
@@ -43,6 +42,5 @@ namespace dbaccess
 
 }   // namespace dbaccess
 
-#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_REFRESHLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

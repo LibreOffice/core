@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_STOC_SOURCE_SECURITY_LRU_CACHE_H
-#define INCLUDED_STOC_SOURCE_SECURITY_LRU_CACHE_H
+#pragma once
 
 #include <memory>
 #include <unordered_map>
@@ -205,6 +204,5 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

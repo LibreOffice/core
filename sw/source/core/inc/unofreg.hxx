@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNOFREG_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_UNOFREG_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sfx2/sfxmodelfactory.hxx>
@@ -36,6 +35,5 @@ OUString SwTextDocument_getImplementationName() throw();
 /// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface > SwTextDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > &rSMgr, SfxModelFlags _nCreationFlags );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

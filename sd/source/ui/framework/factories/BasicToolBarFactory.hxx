@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_FACTORIES_BASICTOOLBARFACTORY_HXX
-#define INCLUDED_SD_SOURCE_UI_FRAMEWORK_FACTORIES_BASICTOOLBARFACTORY_HXX
+#pragma once
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
@@ -84,6 +83,5 @@ private:
 
 } } // end of namespace sd::framework
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

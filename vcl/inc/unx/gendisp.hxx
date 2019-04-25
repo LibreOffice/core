@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_GENERIC_GENDISP_HXX
-#define INCLUDED_VCL_INC_GENERIC_GENDISP_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <osl/mutex.h>
@@ -55,6 +54,5 @@ public:
                         { return m_pCapture; }
 };
 
-#endif // INCLUDED_VCL_INC_GENERIC_GENDISP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_NUM_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_NUM_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 #include "numprevw.hxx"
@@ -137,6 +136,5 @@ public:
                     SwWrtShell &);
     virtual ~SwSvxNumBulletTabDialog() override;
 };
-#endif // INCLUDED_SW_SOURCE_UIBASE_INC_NUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

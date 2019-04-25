@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_EXPORT_UTILS_HXX
-#define INCLUDED_OOX_EXPORT_UTILS_HXX
+#pragma once
 
 #include <rtl/string.hxx>
 #include <rtl/textenc.h>
@@ -71,6 +70,5 @@ namespace oox { namespace drawingml {
     enum DocumentType { DOCUMENT_DOCX, DOCUMENT_PPTX, DOCUMENT_XLSX };
 } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

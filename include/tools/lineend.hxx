@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TOOLS_LINEEND_HXX
-#define INCLUDED_TOOLS_LINEEND_HXX
+#pragma once
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
@@ -28,6 +27,5 @@ inline LineEnd GetSystemLineEnd()
 TOOLS_DLLPUBLIC OString convertLineEnd(const OString &rIn, LineEnd eLineEnd);
 TOOLS_DLLPUBLIC OUString convertLineEnd(const OUString &rIn, LineEnd eLineEnd);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

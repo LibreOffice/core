@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_IMPFONTCACHE_HXX
-#define INCLUDED_VCL_INC_IMPFONTCACHE_HXX
+#pragma once
 
 #include <unordered_map>
 #include <boost/functional/hash.hpp>
@@ -94,6 +93,5 @@ public:
     void                Invalidate();
 };
 
-#endif // INCLUDED_VCL_INC_IMPFONTCACHE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

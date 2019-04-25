@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_XMLSTYLE_HXX
-#define INCLUDED_XMLOFF_XMLSTYLE_HXX
+#pragma once
 
 #include <rtl/ref.hxx>
 #include <sal/config.h>
@@ -234,6 +233,5 @@ public:
     bool IsAutomaticStyle() const;
 };
 
-#endif // INCLUDED_XMLOFF_XMLSTYLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_PAGESIZEHELPER_HXX
-#define INCLUDED_SVX_PAGESIZEHELPER_HXX
+#pragma once
 
 #include <i18nutil/paper.hxx>
 #include <svx/svxdllapi.h>
@@ -62,5 +61,4 @@ public:
     weld::ComboBox& get_widget() const { return *m_xControl; }
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,8 +57,7 @@
  * @file
  * Paragraph object of OOo, it will output <text:p >...</text:p> element.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPARAGRAPH_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPARAGRAPH_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xfcontentcontainer.hxx>
@@ -87,6 +86,5 @@ public:
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_RECENTDOCSVIEW_HXX
-#define INCLUDED_SFX2_RECENTDOCSVIEW_HXX
+#pragma once
 
 #include <sfx2/thumbnailview.hxx>
 #include <vcl/image.hxx>
@@ -97,6 +96,5 @@ private:
 
 } // namespace sfx2
 
-#endif // INCLUDED_SFX2_RECENTDOCSVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

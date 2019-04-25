@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_TEXTSH_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_TEXTSH_HXX
+#pragma once
 
 #include "basesh.hxx"
 #include <unotools/caserotate.hxx>
@@ -85,6 +84,5 @@ public:
 
 void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

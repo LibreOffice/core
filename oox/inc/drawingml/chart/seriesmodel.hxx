@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_CHART_SERIESMODEL_HXX
-#define INCLUDED_OOX_DRAWINGML_CHART_SERIESMODEL_HXX
+#pragma once
 
 #include <oox/drawingml/chart/datasourcemodel.hxx>
 #include <drawingml/chart/titlemodel.hxx>
@@ -212,6 +211,5 @@ struct SeriesModel
 } // namespace drawingml
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_NAVMGR_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_NAVMGR_HXX
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -57,6 +56,5 @@ public:
     /* to get notified if our cursors self-destruct */
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

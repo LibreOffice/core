@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDSERV_SOURCE_INPROCSERV_SMARTPOINTER_HXX
-#define INCLUDED_EMBEDSERV_SOURCE_INPROCSERV_SMARTPOINTER_HXX
+#pragma once
 
 namespace inprocserv{
 
@@ -174,6 +173,5 @@ public:
 
 } // namespace inprocserv
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_XMLCNIMP_HXX
-#define INCLUDED_XMLOFF_XMLCNIMP_HXX
+#pragma once
 
 #include <memory>
 
@@ -70,6 +69,5 @@ public:
     void Remove( size_t i );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef GTV_HELPERS_H
-#define GTV_HELPERS_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -63,6 +62,5 @@ namespace GtvHelpers
     }
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

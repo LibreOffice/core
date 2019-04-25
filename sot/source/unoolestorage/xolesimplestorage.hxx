@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SOT_SOURCE_UNOOLESTORAGE_XOLESIMPLESTORAGE_HXX
-#define INCLUDED_SOT_SOURCE_UNOOLESTORAGE_XOLESIMPLESTORAGE_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -121,6 +120,5 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

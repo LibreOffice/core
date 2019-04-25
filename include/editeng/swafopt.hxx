@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_SWAFOPT_HXX
-#define INCLUDED_EDITENG_SWAFOPT_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -135,6 +134,5 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFormatFlags
     SvxSwAutoFormatFlags();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

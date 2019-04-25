@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMS_SOURCE_XFORMS_NAMEDCOLLECTION_HXX
-#define INCLUDED_FORMS_SOURCE_XFORMS_NAMEDCOLLECTION_HXX
+#pragma once
 
 #include "collection.hxx"
 #include <cppuhelper/implbase.hxx>
@@ -108,6 +107,5 @@ public:
     }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

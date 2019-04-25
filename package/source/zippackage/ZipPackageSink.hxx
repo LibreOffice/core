@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_PACKAGE_SOURCE_ZIPPACKAGE_ZIPPACKAGESINK_HXX
-#define INCLUDED_PACKAGE_SOURCE_ZIPPACKAGE_ZIPPACKAGESINK_HXX
+#pragma once
 
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -31,6 +30,5 @@ public:
     virtual void SAL_CALL setInputStream( const css::uno::Reference< css::io::XInputStream >& aStream ) override;
     virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream(  ) override;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

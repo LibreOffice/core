@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_MENU_HXX
-#define INCLUDED_VCL_MENU_HXX
+#pragma once
 
 #include <memory>
 #include <vcl/vclenum.hxx>
@@ -538,6 +537,5 @@ inline PopupMenu& PopupMenu::operator=( const PopupMenu& rMenu )
     return *this;
 }
 
-#endif // INCLUDED_VCL_MENU_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

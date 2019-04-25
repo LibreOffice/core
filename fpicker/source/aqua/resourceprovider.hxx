@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_FPICKER_SOURCE_AQUA_RESOURCEPROVIDER_HXX
-#define INCLUDED_FPICKER_SOURCE_AQUA_RESOURCEPROVIDER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -44,6 +43,5 @@ NSString* getResString( sal_Int32 aId );
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

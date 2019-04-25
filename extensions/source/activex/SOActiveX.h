@@ -19,8 +19,7 @@
 
 // SOActiveX.h : Declaration of the CSOActiveX
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_ACTIVEX_SOACTIVEX_H
-#define INCLUDED_EXTENSIONS_SOURCE_ACTIVEX_SOACTIVEX_H
+#pragma once
 
 #include "resource.h"
 
@@ -210,6 +209,5 @@ public:
     SOVersion GetVersionConnected();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

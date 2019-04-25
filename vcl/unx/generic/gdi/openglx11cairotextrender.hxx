@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_UNX_GENERIC_GDI_OPENGLX11CAIROTEXTRENDER_HXX
-#define INCLUDED_VCL_UNX_GENERIC_GDI_OPENGLX11CAIROTEXTRENDER_HXX
+#pragma once
 
 #include "x11cairotextrender.hxx"
 
@@ -22,6 +21,5 @@ public:
     virtual void releaseCairoContext(cairo_t* cr) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

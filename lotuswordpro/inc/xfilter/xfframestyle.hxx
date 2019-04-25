@@ -58,8 +58,7 @@
  * Frame object style for OOo.
  * You can reference to the XFFrame object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFRAMESTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFRAMESTYLE_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xfstyle.hxx>
@@ -232,6 +231,5 @@ inline void XFFrameStyle::SetTransparency(sal_Int16 nTransparency)
     m_nTransparency = nTransparency;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

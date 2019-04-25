@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_FMMODEL_HXX
-#define INCLUDED_SVX_FMMODEL_HXX
+#pragma once
 
 #include <svx/svdmodel.hxx>
 #include <svx/svxdllapi.h>
@@ -83,6 +82,5 @@ private:
     void        implSetOpenInDesignMode( bool _bOpenDesignMode );
 };
 
-#endif          // _FM_FMMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

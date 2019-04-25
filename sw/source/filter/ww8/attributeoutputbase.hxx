@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_ATTRIBUTEOUTPUTBASE_HXX
-#define INCLUDED_SW_SOURCE_FILTER_WW8_ATTRIBUTEOUTPUTBASE_HXX
+#pragma once
 
 #include "fields.hxx"
 #include "WW8TableInfo.hxx"
@@ -684,6 +683,5 @@ public:
     sal_uInt32   GetBaseHeight() { return m_nBaseHeight; }
     OUString const & GetFontFamily() { return m_sFontFamily; }
 };
-#endif // INCLUDED_SW_SOURCE_FILTER_WW8_ATTRIBUTEOUTPUTBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

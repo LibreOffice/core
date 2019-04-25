@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_WIDGETDEFINITION_HXX
-#define INCLUDED_VCL_INC_WIDGETDEFINITION_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <memory>
@@ -262,7 +261,5 @@ public:
 };
 
 } // end vcl namespace
-
-#endif // INCLUDED_VCL_INC_WIDGETDEFINITION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,8 +57,7 @@
  * @file
  * Header object. Sub object of master page.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFHEADER_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFHEADER_HXX
+#pragma once
 
 #include <xfilter/xfcontentcontainer.hxx>
 #include <xfilter/xfparagraph.hxx>
@@ -82,5 +81,4 @@ public:
     }
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

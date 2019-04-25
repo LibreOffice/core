@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_SOURCE_CONTROLS_GRID_GRIDCONTROL_HXX
-#define INCLUDED_TOOLKIT_SOURCE_CONTROLS_GRID_GRIDCONTROL_HXX
+#pragma once
 
 #include <com/sun/star/awt/grid/XGridControl.hpp>
 #include <com/sun/star/awt/grid/XGridRowSelection.hpp>
@@ -138,6 +137,5 @@ private:
 
 } // toolkit
 
-#endif // _TOOLKIT_TREE_CONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

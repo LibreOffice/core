@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERSLIDESHOWVIEW_HXX
-#define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERSLIDESHOWVIEW_HXX
+#pragma once
 
 #include "PresenterViewFactory.hxx"
 #include <com/sun/star/presentation/XSlideShowView.hpp>
@@ -238,6 +237,5 @@ private:
 
 } } // end of namespace ::sd::presenter
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

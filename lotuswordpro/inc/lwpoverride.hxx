@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPOVERRIDE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPOVERRIDE_HXX
+#pragma once
 
 #include "lwpobjid.hxx"
 #include "lwptools.hxx"
@@ -478,6 +477,5 @@ private:
     sal_uInt16      m_nType;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

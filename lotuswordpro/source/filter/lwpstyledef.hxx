@@ -54,8 +54,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSTYLEDEF_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSTYLEDEF_HXX
+#pragma once
 
 #define INVALID_ATTR_ID 0
 #define EXTERNAL_ID         0x8000
@@ -253,6 +252,5 @@
 #define BACK_GRADIENT7          70
 #define BACK_GRADIENT8          71
 
-#endif //STYLEDEF_H_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

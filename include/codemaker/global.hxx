@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CODEMAKER_GLOBAL_HXX
-#define INCLUDED_CODEMAKER_GLOBAL_HXX
+#pragma once
 
 #include <list>
 #include <vector>
@@ -95,6 +94,5 @@ private:
     OUString message_;
 };
 
-#endif // INCLUDED_CODEMAKER_GLOBAL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CPPCANVAS_SOURCE_UNO_UNO_MTFRENDERER_HXX
-#define INCLUDED_CPPCANVAS_SOURCE_UNO_UNO_MTFRENDERER_HXX
+#pragma once
 #include <com/sun/star/rendering/MtfRenderer.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -39,6 +38,5 @@ private:
     css::uno::Reference<css::rendering::XBitmapCanvas> mxCanvas;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

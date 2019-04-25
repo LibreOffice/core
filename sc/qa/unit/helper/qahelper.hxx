@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_QA_UNIT_HELPER_QAHELPER_HXX
-#define INCLUDED_SC_QA_UNIT_HELPER_QAHELPER_HXX
+#pragma once
 
 #include <docsh.hxx>
 #include <address.hxx>
@@ -219,6 +218,5 @@ SCQAHELPER_DLLPUBLIC void checkFormula(ScDocument& rDoc, const ScAddress& rPos,
 
 SCQAHELPER_DLLPUBLIC void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

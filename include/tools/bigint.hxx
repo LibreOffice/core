@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLS_BIGINT_HXX
-#define INCLUDED_TOOLS_BIGINT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <tools/toolsdllapi.h>
@@ -249,6 +248,5 @@ inline bool operator>=( const BigInt& rVal1, const BigInt& rVal2 )
     return !(rVal1 < rVal2);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

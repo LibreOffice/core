@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEBROWSEBOX_HXX
-#define INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEBROWSEBOX_HXX
+#pragma once
 
 #include <extended/AccessibleBrowseBoxBase.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -281,6 +280,5 @@ private:
 } // namespace accessibility
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

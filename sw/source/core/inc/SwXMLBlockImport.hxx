@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_SWXMLBLOCKIMPORT_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_SWXMLBLOCKIMPORT_HXX
+#pragma once
 
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -128,6 +127,5 @@ public:
     virtual sal_Int32 getTokenDirect( const char *pTag, sal_Int32 nLength ) const override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

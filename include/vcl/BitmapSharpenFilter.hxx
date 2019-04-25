@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPSHARPENFILTER_HXX
-#define INCLUDED_VCL_BITMAPSHARPENFILTER_HXX
+#pragma once
 
 #include <vcl/BitmapConvolutionMatrixFilter.hxx>
 
@@ -18,7 +17,5 @@ class VCL_DLLPUBLIC BitmapSharpenFilter : public BitmapConvolutionMatrixFilter
 public:
     BitmapSharpenFilter();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

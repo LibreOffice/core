@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_WNAMEMATCH_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_WNAMEMATCH_HXX
+#pragma once
 
 #include "WTabPage.hxx"
 #include "marktree.hxx"
@@ -80,6 +79,5 @@ namespace dbaui
         virtual void dispose() override;
     };
 }
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WNAMEMATCH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

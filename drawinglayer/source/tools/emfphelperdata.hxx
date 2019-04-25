@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPHELPERDATA_HXX
-#define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPHELPERDATA_HXX
+#pragma once
 
 #include <emfplushelper.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -212,6 +211,5 @@ namespace emfplushelper
     };
 }
 
-#endif // INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPHELPERDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

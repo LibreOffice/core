@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_TEMPLATECONTAINERITEM_HXX
-#define INCLUDED_SFX2_TEMPLATECONTAINERITEM_HXX
+#pragma once
 
 #include <sfx2/templateproperties.hxx>
 
@@ -25,6 +24,5 @@ public:
     ~TemplateContainerItem ();
 };
 
-#endif // INCLUDED_SFX2_TEMPLATECONTAINERITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

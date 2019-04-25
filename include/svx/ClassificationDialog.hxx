@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SVX_CLASSIFICATIONDIALOG_HXX
-#define INCLUDED_SVX_CLASSIFICATIONDIALOG_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <vcl/customweld.hxx>
@@ -84,6 +83,5 @@ public:
 
 } // end svx namespace
 
-#endif // INCLUDED_SVX_CLASSIFICATIONDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CSVRULER_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CSVRULER_HXX
+#pragma once
 
 #include "csvcontrol.hxx"
 #include "csvsplits.hxx"
@@ -178,6 +177,5 @@ protected:
     virtual rtl::Reference<ScAccessibleCsvControl> ImplCreateAccessible() override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

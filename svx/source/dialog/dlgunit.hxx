@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_DIALOG_DLGUNIT_HXX
-#define INCLUDED_SVX_SOURCE_DIALOG_DLGUNIT_HXX
+#pragma once
 
 #include <svx/svdtrans.hxx>
 
@@ -37,6 +36,5 @@ inline OUString GetUnitString( long nVal_100, FieldUnit eFieldUnit, sal_Unicode 
     return aVal.makeStringAndClear();
 }
 
-#endif // INCLUDED_SVX_SOURCE_DIALOG_DLGUNIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

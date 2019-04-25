@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_SOURCE_WIN32_SIMPLEMAIL_SMPLMAILMSG_HXX
-#define INCLUDED_SHELL_SOURCE_WIN32_SIMPLEMAIL_SMPLMAILMSG_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -78,6 +77,5 @@ private:
     css::uno::Sequence< OUString >  m_Attachements;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

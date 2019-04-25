@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_STRMNAME_H
-#define INCLUDED_SD_INC_STRMNAME_H
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -31,6 +30,5 @@ static const OUString pFilterPowerPoint97AutoPlay( "MS PowerPoint 97 AutoPlay" )
 static const OUString pStarDrawXMLContent( "content.xml" );
 static const OUString pStarDrawOldXMLContent( "Content.xml" );
 
-#endif // INCLUDED_SD_INC_STRMNAME_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_IMAP_HXX
-#define INCLUDED_VCL_IMAP_HXX
+#pragma once
 
 #include <vcl/imapobj.hxx>
 #include <vcl/dllapi.h>
@@ -133,6 +132,5 @@ public:
                     ~IMapCompat();
 };
 
-#endif // INCLUDED_VCL_IMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

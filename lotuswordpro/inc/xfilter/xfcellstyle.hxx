@@ -57,8 +57,7 @@
  * @file
  * Table cell style. Number format, string value, and so on...
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCELLSTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCELLSTYLE_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -157,6 +156,5 @@ inline void XFCellStyle::SetDataStyle(const OUString& style)
     m_strDataStyle = style;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

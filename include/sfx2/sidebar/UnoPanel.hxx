@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SFX2_SIDEBAR_UNOPANEL_HXX
-#define INCLUDED_SFX2_SIDEBAR_UNOPANEL_HXX
+#pragma once
 
 #include <com/sun/star/ui/XPanel.hpp>
 
@@ -67,6 +66,5 @@ private:
     sal_Int32 GetMinOrderIndex(sfx2::sidebar::ResourceManager::PanelContextDescriptorContainer aPanels);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

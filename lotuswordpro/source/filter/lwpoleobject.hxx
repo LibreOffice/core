@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype - OLE object
  */
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOLEOBJECT_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOLEOBJECT_HXX
+#pragma once
 
 #include <lwpobj.hxx>
 #include <lwpobjhdr.hxx>
@@ -127,6 +126,5 @@ private:
     tools::Rectangle m_SizeRect;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

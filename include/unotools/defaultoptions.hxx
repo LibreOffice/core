@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UNOTOOLS_DEFAULTOPTIONS_HXX
-#define INCLUDED_UNOTOOLS_DEFAULTOPTIONS_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
@@ -39,6 +38,5 @@ public:
     OUString  GetDefaultPath( sal_uInt16 nId ) const;
 };
 
-#endif // INCLUDED_UNOTOOLS_DEFAULTOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

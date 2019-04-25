@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_SPLARGS_HXX
-#define INCLUDED_SW_INC_SPLARGS_HXX
+#pragma once
 
 #include <i18nlangtag/lang.h>
 #include <tools/gen.hxx>
@@ -152,6 +151,5 @@ SwHyphIterCacheLastTextFrame(SwTextNode const *, const Creator& rCreator);
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

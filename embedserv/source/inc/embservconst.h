@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDSERV_SOURCE_INC_EMBSERVCONST_H
-#define INCLUDED_EMBEDSERV_SOURCE_INC_EMBSERVCONST_H
+#pragma once
 
 #include <guiddef.h>
 
@@ -41,6 +40,5 @@ extern "C" const GUID DECLSPEC_SELECTANY OID_PresentationOASISServer = { SO3_SIM
 extern "C" const GUID DECLSPEC_SELECTANY OID_MathServer = { SO3_SM_OLE_EMBED_CLASSID_60 };
 extern "C" const GUID DECLSPEC_SELECTANY OID_MathOASISServer = { SO3_SM_OLE_EMBED_CLASSID_8 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

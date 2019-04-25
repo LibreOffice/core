@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_SOURCE_INC_HLMARKWN_HXX
-#define INCLUDED_CUI_SOURCE_INC_HLMARKWN_HXX
+#pragma once
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <vcl/button.hxx>
@@ -103,6 +102,5 @@ public:
 };
 
 
-#endif // INCLUDED_CUI_SOURCE_INC_HLMARKWN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

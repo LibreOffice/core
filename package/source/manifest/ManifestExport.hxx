@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_PACKAGE_SOURCE_MANIFEST_MANIFESTEXPORT_HXX
-#define INCLUDED_PACKAGE_SOURCE_MANIFEST_MANIFESTEXPORT_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
@@ -34,6 +33,5 @@ public:
     ManifestExport(css::uno::Reference < css::xml::sax::XDocumentHandler > const & xHandler, const css::uno::Sequence < css::uno::Sequence < css::beans::PropertyValue > > &rManList );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

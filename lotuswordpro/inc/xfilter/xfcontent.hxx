@@ -57,8 +57,7 @@
  * @file
  * Base class for the all content object,ie. text,paragraph,picture,and so on.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCONTENT_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCONTENT_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -120,6 +119,5 @@ public:
     bool m_bInserted;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

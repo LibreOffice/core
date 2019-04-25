@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DBU_DLG_HRC
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_DBU_DLG_HRC
+#pragma once
 
 #define PAGE_X              281
 #define PAGE_Y              215
@@ -27,6 +26,5 @@
 //constants for the wizards
 #define INDENT_BELOW_RADIO   10
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

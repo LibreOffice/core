@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_COMPHELPER_COMPHELPERDLLAPI_H
-#define INCLUDED_COMPHELPER_COMPHELPERDLLAPI_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -28,6 +27,5 @@
 #endif
 #define COMPHELPER_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif // INCLUDED_COMPHELPER_COMPHELPERDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

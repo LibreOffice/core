@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDSERV_SOURCE_INC_IIPAOBJ_HXX
-#define INCLUDED_EMBEDSERV_SOURCE_INC_IIPAOBJ_HXX
+#pragma once
 
 #include "stdafx.h"
 #include <oleidl.h>
@@ -60,5 +59,4 @@ private:
 };
 
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

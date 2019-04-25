@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_GETMETRICVAL_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_GETMETRICVAL_HXX
+#pragma once
 
 #include <tools/solar.h>
 
@@ -37,6 +36,5 @@ inline sal_uInt16 GetMetricVal( int n )
     return nVal;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

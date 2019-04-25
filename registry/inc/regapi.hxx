@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_INC_REGAPI_HXX
-#define INCLUDED_REGISTRY_INC_REGAPI_HXX
+#pragma once
 
 #include <rtl/ustring.h>
 #include <registry/regtype.h>
@@ -85,6 +84,5 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_closeRegistry(RegHandle hRegistry);
 */
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_dumpRegistry(RegKeyHandle hKey);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

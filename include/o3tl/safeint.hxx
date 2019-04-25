@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_O3TL_SAFEINT_HXX
-#define INCLUDED_O3TL_SAFEINT_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -228,6 +227,5 @@ template<typename T> inline typename std::enable_if<std::is_unsigned<T>::value, 
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

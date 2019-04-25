@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_UNOFILL_HXX
-#define INCLUDED_SVX_UNOFILL_HXX
+#pragma once
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <svx/svxdllapi.h>
@@ -32,6 +31,5 @@ SVX_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvxUnoTransGradientTab
 SVX_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvxUnoMarkerTable_createInstance( SdrModel* pModel );
 SVX_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvxUnoDashTable_createInstance( SdrModel* pModel );
 
-#endif // INCLUDED_SVX_UNOFILL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

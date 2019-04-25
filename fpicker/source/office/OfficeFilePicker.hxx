@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FPICKER_SOURCE_OFFICE_OFFICEFILEPICKER_HXX
-#define INCLUDED_FPICKER_SOURCE_OFFICE_OFFICEFILEPICKER_HXX
+#pragma once
 
 #include <cppuhelper/implbase5.hxx>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
@@ -258,6 +257,5 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 };
 
-#endif // INCLUDED_FPICKER_SOURCE_OFFICE_OFFICEFILEPICKER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

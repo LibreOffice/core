@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_WINDOW_DLGCTRL_HXX
-#define INCLUDED_VCL_SOURCE_WINDOW_DLGCTRL_HXX
+#pragma once
 
 #include <window.h>
 
@@ -32,6 +31,5 @@ vcl::Window* ImplFindAccelWindow( vcl::Window* pParent, sal_uInt16& rIndex, sal_
 
 sal_Unicode getAccel( const OUString& rStr );
 
-#endif // INCLUDED_VCL_SOURCE_WINDOW_DLGCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

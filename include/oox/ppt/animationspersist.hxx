@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_OOX_PPT_ANIMATIONSPERSIST_HXX
-#define INCLUDED_OOX_PPT_ANIMATIONSPERSIST_HXX
+#pragma once
 
 #include <array>
 #include <vector>
@@ -118,6 +117,5 @@ namespace oox { namespace ppt {
 } }
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

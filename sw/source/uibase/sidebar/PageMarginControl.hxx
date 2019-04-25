@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGEMARGINCONTROL_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGEMARGINCONTROL_HXX
+#pragma once
 
 #include <tools/fldunit.hxx>
 #include <svl/poolitem.hxx>
@@ -111,6 +110,5 @@ private:
 
 } } // end of namespace sw::sidebar
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

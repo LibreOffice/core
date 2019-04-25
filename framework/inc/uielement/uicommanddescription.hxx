@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_UICOMMANDDESCRIPTION_HXX
-#define INCLUDED_FRAMEWORK_INC_UIELEMENT_UICOMMANDDESCRIPTION_HXX
+#pragma once
 
 #include <unordered_map>
 #include <stdtypes.h>
@@ -93,6 +92,5 @@ public:
 
 } // namespace framework
 
-#endif // __FRAMEWORK_SERVICES_UICOMMANDDESCRPTION_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

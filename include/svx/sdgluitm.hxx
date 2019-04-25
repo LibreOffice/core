@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDGLUITM_HXX
-#define INCLUDED_SVX_SDGLUITM_HXX
+#pragma once
 
 #include <svx/sdprcitm.hxx>
 #include <svx/svddef.hxx>
@@ -53,6 +52,5 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
 };
 
-#endif // INCLUDED_SVX_SDGLUITM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

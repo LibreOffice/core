@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_BRDWIN_HXX
-#define INCLUDED_VCL_INC_BRDWIN_HXX
+#pragma once
 
 #include <vcl/notebookbar.hxx>
 #include <vcl/window.hxx>
@@ -286,6 +285,5 @@ public:
     virtual void            DrawWindow(vcl::RenderContext& rRenderContext, const Point* pOffset = nullptr) override;
 };
 
-#endif // INCLUDED_VCL_INC_BRDWIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

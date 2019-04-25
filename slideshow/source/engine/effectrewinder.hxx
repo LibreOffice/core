@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_EFFECTREWINDER_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_EFFECTREWINDER_HXX
+#pragma once
 
 #include <animationnode.hxx>
 #include <eventhandler.hxx>
@@ -164,6 +163,5 @@ private:
 
 } } // end of namespace ::slideshow::internal
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

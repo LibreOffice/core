@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_UNO_COLUMNCONTROL_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_UNO_COLUMNCONTROL_HXX
+#pragma once
 
 #include <toolkit/controls/unocontrol.hxx>
 #include <apitools.hxx>
@@ -52,6 +51,5 @@ namespace dbaui
     };
 }   // namespace dbaui
 
-#endif // INCLUDED_DBACCESS_SOURCE_UI_UNO_COLUMNCONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_PROPSHEETS_DOCUMENT_STATISTIC_HXX
-#define INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_PROPSHEETS_DOCUMENT_STATISTIC_HXX
+#pragma once
 
 #include <utility>
 #include <string>
@@ -117,6 +116,5 @@ protected:
         const std::wstring& document_name, CMetaInfoReader* meta_info_accessor);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

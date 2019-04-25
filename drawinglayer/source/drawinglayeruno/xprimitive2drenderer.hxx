@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_SOURCE_DRAWINGLAYERUNO_XPRIMITIVE2DRENDERER_HXX
-#define INCLUDED_DRAWINGLAYER_SOURCE_DRAWINGLAYERUNO_XPRIMITIVE2DRENDERER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -45,6 +44,5 @@ XPrimitive2DRenderer_createInstance(
 
 } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

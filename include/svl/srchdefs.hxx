@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_SRCHDEFS_HXX
-#define INCLUDED_SVL_SRCHDEFS_HXX
+#pragma once
 
 #include <o3tl/typed_flags_set.hxx>
 
@@ -45,6 +44,5 @@ namespace o3tl
     template<> struct typed_flags<SearchOptionFlags> : is_typed_flags<SearchOptionFlags, 0x1fff> {};
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

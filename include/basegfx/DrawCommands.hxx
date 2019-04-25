@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_BASEGFX_DRAWCOMMANDS_H
-#define INCLUDED_BASEGFX_DRAWCOMMANDS_H
+#pragma once
 
 #include <memory>
 
@@ -97,7 +96,5 @@ public:
 };
 
 } // end namespace gfx
-
-#endif // INCLUDED_BASEGFX_DRAWCOMMANDS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

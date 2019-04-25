@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_ACCESSIBILITY_INC_STANDARD_ACCESSIBLEMENUBASECOMPONENT_HXX
-#define INCLUDED_ACCESSIBILITY_INC_STANDARD_ACCESSIBLEMENUBASECOMPONENT_HXX
+#pragma once
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -135,6 +134,5 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) override;
 };
 
-#endif // INCLUDED_ACCESSIBILITY_INC_STANDARD_ACCESSIBLEMENUBASECOMPONENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

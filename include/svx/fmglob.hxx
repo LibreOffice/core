@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_FMGLOB_HXX
-#define INCLUDED_SVX_FMGLOB_HXX
+#pragma once
 
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <svx/svdobj.hxx>
@@ -48,6 +47,5 @@ const sal_uInt16 OBJ_FM_SCROLLBAR       =   css::form::FormComponentType::PATTER
 const sal_uInt16 OBJ_FM_SPINBUTTON      =   css::form::FormComponentType::PATTERNFIELD + 3;
 const sal_uInt16 OBJ_FM_NAVIGATIONBAR   =   css::form::FormComponentType::PATTERNFIELD + 4;
 
-#endif      // _FM_FMGLOB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

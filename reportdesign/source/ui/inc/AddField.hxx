@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_ADDFIELD_HXX
-#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_ADDFIELD_HXX
+#pragma once
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -129,6 +128,5 @@ private:
 
 } // rptui
 
-#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_ADDFIELD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

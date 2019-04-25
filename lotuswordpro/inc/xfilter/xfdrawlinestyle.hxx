@@ -57,8 +57,7 @@
  * @file
  * Line style of Drawing object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWLINESTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWLINESTYLE_HXX
+#pragma once
 
 #include <xfilter/xfstyle.hxx>
 #include <xfilter/xfcolor.hxx>
@@ -210,6 +209,5 @@ inline sal_Int32 XFDrawLineStyle::GetTransparency()
     return m_nTransparency;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_STARMATH_SOURCE_UIOBJECT_HXX
-#define INCLUDED_STARMATH_SOURCE_UIOBJECT_HXX
+#pragma once
 
 #include <memory>
 #include <vcl/uitest/uiobject.hxx>
@@ -57,6 +56,5 @@ protected:
     virtual OUString get_name() const override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

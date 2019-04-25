@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_MATRIX_B3DHOMMATRIXTOOLS_HXX
-#define INCLUDED_BASEGFX_MATRIX_B3DHOMMATRIXTOOLS_HXX
+#pragma once
 
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/matrix/b3dhommatrix.hxx>
@@ -53,7 +52,5 @@ B3DHomMatrixToUnoHomogenMatrix(const B3DHomMatrix& rMatrixIn,
 
 } // end of namespace tools
 } // end of namespace basegfx
-
-#endif // INCLUDED_BASEGFX_MATRIX_B3DHOMMATRIXTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
