@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_43b5d5ed",
+        "filename": "l10ntools/source/ulfconv/msi-encodinglist.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-25T18:40:31Z",
+      "side": 1,
+      "message": "For this we maybe should continue to use 1625 (0x0659) LANGUAGE_OBSOLETE_USER_KABYLE (whether that is really obsolete then replaced by LANGUAGE_TAMAZIGHT_LATIN_ALGERIA 0x085F is a different question and follow-up work).\nDoes the 1625 here work to install Kabyle?\n\nSee comments in i18nlangtag/source/isolang/isolang.cxx for the three LANGUAGE_TAMAZIGHT_LATIN_ALGERIA entries. MS tags this as tzm-Latn-DZ but \"In practice Kabyle is the language\" so that\u0027s what our translators use, hence we have kab-DZ as locale. I slightly remember some discussion around that years ago, but no details.\n\nI have no clue about how MSI does or should feed things to Windows, is a language tag even involved somewhere? So far I thought only the LCID matters (and I think it did in the past). If we can\u0027t use 0x085F for kab (or kab-DZ) then I wonder how Windows figures out that the language (tag) to be installed is something else than tzm-Latn-DZ.\n\nIf Windows is migrating to language tags (assuming that\u0027s meant with \"locale names\"?) instead of LCIDs, will MSI need to handle things completely different in future?",
+      "parentUuid": "3fa0c359_d6c5245d",
+      "range": {
+        "startLine": 83,
+        "startChar": 12,
+        "endLine": 83,
+        "endChar": 16
+      },
+      "revId": "d376e7e71a9f86ea417d784130134585edd72d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_763690b7",
         "filename": "l10ntools/source/ulfconv/msi-encodinglist.txt",
         "patchSetId": 1
@@ -107,6 +131,78 @@
       "writtenOn": "2019-04-25T05:26:30Z",
       "side": 1,
       "message": "Setting om to 114 does not make difference: Oromo (Ethiopia) still works; Oromo (Kenya) does not.\n\nActually, manually adding 4096 to the list of languages in MSI and choosing either Oromo (Kenya), or Kabyle as user locale in intl.cpl, makes installer generate error like:\n\nMSI (c) (8C:B8) [08:23:04:215]: Looking for storage transform: 4096\nMSI (c) (8C:B8) [08:23:04:215]: Note: 1: 2203 2: 4096 3: -2147287038 \nDEBUG: Error 2203:  Database: 4096. Cannot open database file. System error -2147287038\n1: 2203 2: 4096 3: -2147287038 \nОшибка применения преобразований. Проверьте правильности путей указанных преобразований.\n4096\nMSI (c) (8C:B8) [08:23:04:215]: Note: 1: 1708 \nMSI (c) (8C:B8) [08:23:04:215]: Product: LibreOfficeDev 6.3.0.0.alpha0 -- Installation failed.\n\nSo - I still wonder how do they expect all these 0x1000 locale ids to work. How would they share the common transform?",
+      "parentUuid": "3fa0c359_76a0d0a6",
+      "range": {
+        "startLine": 119,
+        "startChar": 12,
+        "endLine": 119,
+        "endChar": 16
+      },
+      "revId": "d376e7e71a9f86ea417d784130134585edd72d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_63afb194",
+        "filename": "l10ntools/source/ulfconv/msi-encodinglist.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-25T18:40:31Z",
+      "side": 1,
+      "message": "I have no idea.. it might well be that Windows allows *one* additional user defined language that way, which doesn\u0027t help at all when it comes to locales (not UI language).",
+      "parentUuid": "3fa0c359_b676583e",
+      "range": {
+        "startLine": 119,
+        "startChar": 12,
+        "endLine": 119,
+        "endChar": 16
+      },
+      "revId": "d376e7e71a9f86ea417d784130134585edd72d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_e3c5015d",
+        "filename": "l10ntools/source/ulfconv/msi-encodinglist.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-25T18:40:31Z",
+      "side": 1,
+      "message": "0x0072 is only the language, 0x0472 the locale.",
+      "parentUuid": "3fa0c359_763690b7",
+      "range": {
+        "startLine": 119,
+        "startChar": 12,
+        "endLine": 119,
+        "endChar": 16
+      },
+      "revId": "d376e7e71a9f86ea417d784130134585edd72d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_83a0bda7",
+        "filename": "l10ntools/source/ulfconv/msi-encodinglist.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-25T18:40:31Z",
+      "side": 1,
+      "message": "We don\u0027t know any \"Oromo (Kenya)\", where does that come from, Windows? Which LCID? Seems I might need to update from a current [MS-LCID] doc again..",
       "parentUuid": "3fa0c359_76a0d0a6",
       "range": {
         "startLine": 119,
