@@ -61,6 +61,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121867, "tdf121867.odt")
     CPPUNIT_ASSERT_EQUAL(SvxZoomType::PAGEWIDTH, pEditShell->GetViewOptions()->GetZoomType());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTbrlTextbox, "tbrl-textbox.docx")
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
+    // Without the accompanying fix in place, this test would have failed with 'Expected: -90;
+    // Actual: 0', i.e. tbRl writing direction was imported as lrTb.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-90),
+                         aGeometry["TextPreRotateAngle"].get<sal_Int32>());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFrameSizeExport, "floating-tables-anchor.docx")
 {
     // Make sure the table width is 4000
