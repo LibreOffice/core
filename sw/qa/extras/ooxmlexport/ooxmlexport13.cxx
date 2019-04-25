@@ -90,6 +90,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak2, "tdf123636_newlinePage
     //CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 2, getPages() );
 }
 
+#if 0
 DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak3, "tdf123636_newlinePageBreak3.docx")
 {
     //MS Compatibility flag: SplitPgBreakAndParaMark
@@ -100,6 +101,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak3, "tdf123636_newlinePage
     xmlDocPtr pDump = parseLayoutDump();
     assertXPath(pDump, "/root/page[1]/body/txt[3]", "Last line on page 1");
 }
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak4, "tdf123636_newlinePageBreak4.docx")
 {
