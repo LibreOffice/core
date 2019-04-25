@@ -2081,7 +2081,6 @@ void SdTiledRenderingTest::testTdf115783()
 
 void SdTiledRenderingTest::testPasteTextOnSlide()
 {
-#if 0
     // Load the document.
     comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("paste_text_onslide.odp");
@@ -2143,7 +2142,6 @@ void SdTiledRenderingTest::testPasteTextOnSlide()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(7393), aPos.getY(), 100);
 
     comphelper::LibreOfficeKit::setActive(false);
-#endif
 }
 
 void SdTiledRenderingTest::testTdf115873()
