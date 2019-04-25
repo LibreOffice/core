@@ -1132,17 +1132,49 @@ namespace accessibility
             {
                 const SfxHint& rHint = *pHint;
 
-                // determine hint type
-                const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint );
-                const TextHint* pTextHint = dynamic_cast<const TextHint*>( &rHint );
-                const SvxViewChangedHint* pViewHint = dynamic_cast<const SvxViewChangedHint*>( &rHint );
-                const SvxEditSourceHint* pEditSourceHint = dynamic_cast<const SvxEditSourceHint*>( &rHint );
 
                 try
                 {
-                    const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
 
-                    if( pEditSourceHint )
+                    if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
+                    {
+                        const SdrHint* pSdrHint = static_cast< const SdrHint* >( &rHint );
+
+                        switch( pSdrHint->GetKind() )
+                        {
+                            case SdrHintKind::BeginEdit:
+                            {
+                                if(!IsActive())
+                                {
+                                    break;
+                                }
+                                // change children state
+                                maParaManager.SetActive();
+
+                                // per definition, edit mode text has the focus
+                                SetFocus( true );
+                                break;
+                            }
+
+                            case SdrHintKind::EndEdit:
+                            {
+                                // focused child now loses focus
+                                ESelection aSelection;
+                                if( GetEditViewForwarder().GetSelection( aSelection ) )
+                                    SetChildFocus( aSelection.nEndPara, false );
+
+                                // change children state
+                                maParaManager.SetActive( false );
+
+                                maLastSelection = ESelection( EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND,
+                                                              EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
+                                break;
+                            }
+                            default:
+                                break;
+                        }
+                    }
+                    else if( const SvxEditSourceHint* pEditSourceHint = dynamic_cast<const SvxEditSourceHint*>( &rHint ) )
                     {
                         switch( pEditSourceHint->GetId() )
                         {
@@ -1176,8 +1208,10 @@ namespace accessibility
                             default: break;
                         }
                     }
-                    else if( pTextHint )
+                    else if( const TextHint* pTextHint = dynamic_cast<const TextHint*>( &rHint ) )
                     {
+                        const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
+
                         switch( pTextHint->GetId() )
                         {
                             case SfxHintId::TextModified:
@@ -1226,47 +1260,11 @@ namespace accessibility
                         UpdateVisibleChildren();
                         UpdateBoundRect();
                     }
-                    else if( pViewHint )
+                    else if ( dynamic_cast<const SvxViewChangedHint*>( &rHint ) )
                     {
                         // just check visibility
                         UpdateVisibleChildren();
                         UpdateBoundRect();
-                    }
-                    else if( pSdrHint )
-                    {
-                        switch( pSdrHint->GetKind() )
-                        {
-                            case SdrHintKind::BeginEdit:
-                            {
-                                if(!IsActive())
-                                {
-                                    break;
-                                }
-                                // change children state
-                                maParaManager.SetActive();
-
-                                // per definition, edit mode text has the focus
-                                SetFocus( true );
-                                break;
-                            }
-
-                            case SdrHintKind::EndEdit:
-                            {
-                                // focused child now loses focus
-                                ESelection aSelection;
-                                if( GetEditViewForwarder().GetSelection( aSelection ) )
-                                    SetChildFocus( aSelection.nEndPara, false );
-
-                                // change children state
-                                maParaManager.SetActive( false );
-
-                                maLastSelection = ESelection( EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND,
-                                                              EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
-                                break;
-                            }
-                            default:
-                                break;
-                        }
                     }
                     // it's VITAL to keep the SfxSimpleHint last! It's the base of some classes above!
                     else if( rHint.GetId() == SfxHintId::Dying)
@@ -1314,8 +1312,9 @@ namespace accessibility
                 // notification sequence.
                 maEventQueue.Append( *pViewHint );
             }
-            else if( const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint ) )
+            else if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
             {
+                const SdrHint* pSdrHint = static_cast< const SdrHint* >( &rHint );
                 // process drawing layer events right away, if not
                 // within an open EE notification frame. Otherwise,
                 // event processing would be delayed until next EE

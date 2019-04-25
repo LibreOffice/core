@@ -1609,7 +1609,10 @@ void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     SdrTextObj::Notify(rBC,rHint);
     if (nNotifyingCount==0) { // a locking flag
         nNotifyingCount++;
-        const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
+        if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
+            return;
+
+        const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
         if (bDataChg) { // StyleSheet changed
             ImpSetAttrToEdgeInfo(); // when changing templates, copy values from Pool to aEdgeInfo
         }

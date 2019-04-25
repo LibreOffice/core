@@ -323,7 +323,9 @@ void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     if( pSdrModel && pSdrModel->isLocked() )
         return;
 
-    const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >( &rHint );
+    if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
+         return;
+    const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
 
     //#i76053# do nothing when only changes on the hidden draw page were made ( e.g. when the symbols for the dialogs are created )
     SdrPageView* pSdrPageView = GetPageView();
