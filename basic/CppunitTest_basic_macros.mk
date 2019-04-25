@@ -15,6 +15,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,basic_macros, \
 	basic/qa/cppunit/basictest \
 	basic/qa/cppunit/basic_coverage \
 	basic/qa/cppunit/test_append \
+	basic/qa/cppunit/test_language_conditionals \
 	basic/qa/cppunit/test_nested_struct \
 	basic/qa/cppunit/test_vba \
 ))
