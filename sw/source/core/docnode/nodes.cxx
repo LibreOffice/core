@@ -62,7 +62,7 @@ SwNodes::SwNodes( SwDoc* pDocument )
 {
     m_bInNodesDel = m_bInDelUpdOutline = false;
 
-    OSL_ENSURE( m_pMyDoc, "in which Doc am I?" );
+    assert(m_pMyDoc);
 
     sal_uLong nPos = 0;
     SwStartNode* pSttNd = new SwStartNode( *this, nPos++ );
@@ -832,13 +832,13 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                 }
             }
             else {
-                OSL_FAIL( "How can this node be in the node array?" );
+                assert(!"How can this node be in the node array?");
             }
             --aRg.aEnd;
             break;
 
         default:
-            OSL_FAIL( "Unknown node type" );
+            assert(!"Unknown node type");
             break;
         }
     }
@@ -1866,12 +1866,12 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
                     ++aInsPos;  // skip
             }
             else {
-                OSL_FAIL( "How can this node be in the node array?" );
+                assert(!"How can this node be in the node array?");
             }
             break;
 
         default:
-            OSL_FAIL( "Unknown node type" );
+            assert(false);
         }
         ++aRg.aStart;
     }
