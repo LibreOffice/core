@@ -49,6 +49,8 @@ public:
     void SetControlValue(const SvxShadowItem& rItem);
     void SetControlDontKnow();
 
+    bool get_value_changed_from_saved() const;
+
 private:
     SvtValueSet&                        mrVsPos;
     weld::MetricSpinButton&             mrMfSize;
