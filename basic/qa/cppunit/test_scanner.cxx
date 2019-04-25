@@ -178,6 +178,7 @@ namespace
     const OUString sourceEE("==");
     const OUString sourceNE("<>");
     const OUString sourceA(":=");
+    const OUString sourceNot("Not");
 
     std::vector<Symbol> symbols;
 
@@ -235,6 +236,13 @@ namespace
     symbols = getSymbols(sourceA);
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(sourceA, symbols[0].text);
+    CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
+    CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
+    CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);
+
+    symbols = getSymbols(sourceNot);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
+    CPPUNIT_ASSERT_EQUAL(sourceNot, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);

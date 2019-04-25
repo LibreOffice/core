@@ -499,14 +499,19 @@ std::unique_ptr<SbiExprNode> SbiExpression::Operand( bool bUsedForTypeOf )
         }
         break;
     case DOT:   // .with
-        pRes = Term(); break;
+        pRes = Term();
+        break;
+    case NOT:
+        pRes = VBA_Not();
+        break;
     case NUMBER:
         pParser->Next();
         pRes = std::make_unique<SbiExprNode>( pParser->GetDbl(), pParser->GetType() );
         break;
     case FIXSTRING:
         pParser->Next();
-        pRes = std::make_unique<SbiExprNode>( pParser->GetSym() ); break;
+        pRes = std::make_unique<SbiExprNode>( pParser->GetSym() );
+        break;
     case LPAREN:
         pParser->Next();
         if( nParenLevel == 0 && m_eMode == EXPRMODE_LPAREN_PENDING && pParser->Peek() == RPAREN )
