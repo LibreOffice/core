@@ -199,7 +199,7 @@
         <child>
           <object class="cuilo-CommandCategoryListBox" id="commandcategorylist">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can_focus">False</property>
             <property name="margin_bottom">4</property>
             <property name="hexpand">True</property>
           </object>
@@ -243,7 +243,7 @@
             <child>
               <object class="GtkComboBoxText" id="savein">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="margin_right">5</property>
                 <property name="hexpand">True</property>
               </object>
@@ -280,7 +280,7 @@
             <child>
               <object class="GtkComboBoxText" id="toplevellist">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
               </object>
               <packing>
