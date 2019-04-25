@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_FONT_OPENTYPEFEATUREDEFINITONLIST_HXX
-#define INCLUDED_VCL_INC_FONT_OPENTYPEFEATUREDEFINITONLIST_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/font/Feature.hxx>
@@ -47,6 +46,5 @@ class VCL_DLLPUBLIC OpenTypeFeatureDefinitonList
 } // end font namespace
 } // end vcl namespace
 
-#endif // INCLUDED_VCL_INC_FONT_OPENTYPEFEATUREDEFINITONLIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

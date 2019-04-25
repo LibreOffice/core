@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DATAUNO_HXX
-#define INCLUDED_SC_INC_DATAUNO_HXX
+#pragma once
 
 #include "global.hxx"
 #include "queryparam.hxx"
@@ -547,6 +546,5 @@ public:
     virtual sal_Bool SAL_CALL hasByTable( sal_Int32 nTab ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

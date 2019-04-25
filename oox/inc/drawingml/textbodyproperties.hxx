@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_TEXTBODYPROPERTIES_HXX
-#define INCLUDED_OOX_DRAWINGML_TEXTBODYPROPERTIES_HXX
+#pragma once
 
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <oox/helper/helper.hxx>
@@ -57,6 +56,5 @@ struct TextBodyProperties
 } // namespace drawingml
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

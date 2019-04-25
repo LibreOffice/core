@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TEXTEFFECTSHANDLER_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TEXTEFFECTSHANDLER_HXX
+#pragma once
 
 #include "LoggedResources.hxx"
 
@@ -70,6 +69,5 @@ public:
 
 }}
 
-#endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TEXTEFFECTSHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

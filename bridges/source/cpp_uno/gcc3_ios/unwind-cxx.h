@@ -30,8 +30,7 @@
 // This is derived from the C++ ABI for IA-64.  Where we diverge
 // for cross-architecture compatibility are noted with "@@@".
 
-#ifndef _UNWIND_CXX_H
-#define _UNWIND_CXX_H 1
+#pragma once
 
 // Level 2: C++ ABI
 
@@ -264,5 +263,3 @@ __gxx_caught_object(_Unwind_Exception* eo)
 } /* namespace __cxxabiv1 */
 
 #pragma GCC visibility pop
-
-#endif // _UNWIND_CXX_H

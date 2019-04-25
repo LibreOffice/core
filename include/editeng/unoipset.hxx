@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_UNOIPSET_HXX
-#define INCLUDED_EDITENG_UNOIPSET_HXX
+#pragma once
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -70,6 +69,5 @@ EDITENG_DLLPUBLIC void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, css::uno
 /** converts the given any with a metric from 100th/mm to the given metric if needed */
 EDITENG_DLLPUBLIC void SvxUnoConvertFromMM( const MapUnit eDestinationMapUnit, css::uno::Any & rMetric ) throw();
 
-#endif // INCLUDED_EDITENG_UNOIPSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

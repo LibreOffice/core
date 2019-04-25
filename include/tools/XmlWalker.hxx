@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TOOLS_XMLWALKER_HXX
-#define INCLUDED_TOOLS_XMLWALKER_HXX
+#pragma once
 
 #include <tools/toolsdllapi.h>
 #include <rtl/string.hxx>
@@ -52,6 +51,5 @@ public:
 
 } // end tools namespace
 
-#endif // INCLUDED_TOOLS_XMLWRITER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CODEMAKER_UNOTYPE_HXX
-#define INCLUDED_CODEMAKER_UNOTYPE_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -86,6 +85,5 @@ namespace UnoType {
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

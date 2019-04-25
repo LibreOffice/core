@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_STDTEXT_HXX
-#define INCLUDED_VCL_STDTEXT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
@@ -27,6 +26,5 @@ namespace weld { class Widget; }
 
 void VCL_DLLPUBLIC ShowServiceNotAvailableError(weld::Widget* pParent, const OUString& rServiceName, bool bError);
 
-#endif // INCLUDED_VCL_STDTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

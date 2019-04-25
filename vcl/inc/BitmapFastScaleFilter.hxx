@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef VCL_INC_BITMAPFASTSCALEFILTER_HXX
-#define VCL_INC_BITMAPFASTSCALEFILTER_HXX
+#pragma once
 
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapFilter.hxx>
@@ -31,6 +30,5 @@ private:
     Size const maSize;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

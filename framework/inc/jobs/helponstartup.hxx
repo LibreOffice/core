@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_JOBS_HELPONSTARTUP_HXX
-#define INCLUDED_FRAMEWORK_INC_JOBS_HELPONSTARTUP_HXX
+#pragma once
 
 #include <macros/xserviceinfo.hxx>
 
@@ -184,6 +183,5 @@ class HelpOnStartup : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css
 
 } // namespace framework
 
-#endif // INCLUDED_FRAMEWORK_INC_JOBS_HELPONSTARTUP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

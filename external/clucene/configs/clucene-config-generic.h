@@ -1,5 +1,4 @@
-#ifndef _SRC_CLUCENE_CLUCENE_CONFIG_H
-#define _SRC_CLUCENE_CLUCENE_CONFIG_H 1
+#pragma once
 
 /* src/shared/CLucene/clucene-config.h.
 *  Normally generated automatically at end of cmake,
@@ -144,7 +143,4 @@ typedef  wchar_t TCHAR;
     //todo: bcc incorrectly detects this... fix this in cmake
     #undef LUCENE_STATIC_CONSTANT
     #define LUCENE_STATIC_CONSTANT(type, assignment) enum { assignment }
-#endif
-
-
 #endif

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_GRAPHIC_MANAGER_HXX
-#define INCLUDED_VCL_INC_GRAPHIC_MANAGER_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -73,6 +72,5 @@ public:
 }
 } // end namespace vcl::graphic
 
-#endif // INCLUDED_VCL_INC_GRAPHIC_MANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

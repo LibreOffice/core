@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_GENERAL_H
-#define INCLUDED_FRAMEWORK_INC_GENERAL_H
+#pragma once
 
 /* Normally XInterface isn't used here ...
    But we need it to be able to define namespace alias css to anything related to ::com::sun::star
@@ -27,6 +26,5 @@
 
 #include <rtl/ustring.hxx>
 
-#endif // INCLUDED_FRAMEWORK_INC_GENERAL_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

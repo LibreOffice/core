@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_SIDEBAR_SIDEBARTOOLBOX_HXX
-#define INCLUDED_SFX2_SIDEBAR_SIDEBARTOOLBOX_HXX
+#pragma once
 
 #include <sfx2/dllapi.h>
 #include <vcl/toolbox.hxx>
@@ -81,6 +80,5 @@ protected:
 
 } } // end of namespace sfx2::sidebar
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

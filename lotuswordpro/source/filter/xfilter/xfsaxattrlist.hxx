@@ -57,8 +57,7 @@
  * @file
  * Wrapper the attribute list of a xml element.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSAXATTRLIST_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSAXATTRLIST_HXX
+#pragma once
 
 #include <xfilter/ixfattrlist.hxx>
 #include <rtl/ref.hxx>
@@ -86,6 +85,5 @@ private:
 
 };
 
-#endif //XFSAXATTRLIST_INC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

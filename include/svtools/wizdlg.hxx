@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_WIZDLG_HXX
-#define INCLUDED_SVTOOLS_WIZDLG_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 
@@ -256,6 +255,5 @@ public:
     void                SetActivatePageHdl( const Link<WizardDialog*,void>& rLink ) { maActivateHdl = rLink; }
 };
 
-#endif // INCLUDED_SVTOOLS_WIZDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

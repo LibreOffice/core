@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_LISTCTRL_HXX
-#define INCLUDED_SVX_LISTCTRL_HXX
+#pragma once
 
 #include <vcl/ctrl.hxx>
 #include <vcl/scrbar.hxx>
@@ -56,6 +55,5 @@ public:
     DECL_LINK( ScrollHdl, ScrollBar*, void );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

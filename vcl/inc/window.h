@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_WINDOW_H
-#define INCLUDED_VCL_INC_WINDOW_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -423,6 +422,5 @@ void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight );
 VCL_DLLPUBLIC void ImplWindowStateFromStr(WindowStateData& rData, const OString& rStr);
 VCL_DLLPUBLIC OString ImplWindowStateToStr(const WindowStateData& rData);
 
-#endif // INCLUDED_VCL_INC_WINDOW_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

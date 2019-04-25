@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_INC_DWFUNCTR_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_DWFUNCTR_HXX
+#pragma once
 
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
@@ -58,6 +57,5 @@ public:
     void            InitLRUList();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

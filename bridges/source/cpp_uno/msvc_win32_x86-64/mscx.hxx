@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_MSVC_WIN32_X86_64_MSCX_HXX
-#define INCLUDED_BRIDGES_SOURCE_CPP_UNO_MSVC_WIN32_X86_64_MSCX_HXX
+#pragma once
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -47,5 +46,4 @@ void mscx_raiseException(
 
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

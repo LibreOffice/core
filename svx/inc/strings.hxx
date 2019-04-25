@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVX_INC_STRINGS_HXX
-#define INCLUDED_SVX_INC_STRINGS_HXX
+#pragma once
 
 #define RID_GALLERYSTR_THEME_HTMLBUTTONS            "private://gallery/hidden/HtmlExportButtons"
 #define RID_GALLERYSTR_THEME_POWERPOINT             "private://gallery/hidden/imgppt"
@@ -323,6 +322,5 @@
 #define RID_SVXSTR_COLOR_TANGO_SCARLET_RED_DEF      "Tango: Scarlet Red"
 #define RID_SVXSTR_COLOR_TANGO_ALUMINIUM_DEF        "Tango: Aluminium"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

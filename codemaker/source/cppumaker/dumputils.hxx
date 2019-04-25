@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_DUMPUTILS_HXX
-#define INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_DUMPUTILS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -37,6 +36,5 @@ void dumpTypeIdentifier(FileStream & out, rtl::OUString const & entityName);
 
 } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

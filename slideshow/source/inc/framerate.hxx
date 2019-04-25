@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_FRAMERATE_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_INC_FRAMERATE_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -42,6 +41,5 @@ public:
 
 } } // end of namespace slideshow::internal
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

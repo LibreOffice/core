@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_CURSUNO_HXX
-#define INCLUDED_SC_INC_CURSUNO_HXX
+#pragma once
 
 #include "cellsuno.hxx"
 #include <com/sun/star/table/XCellCursor.hpp>
@@ -82,6 +81,5 @@ public:
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

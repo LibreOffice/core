@@ -58,8 +58,7 @@
  * Area style of Drawing object.
  * Only support fill color and fill pattern now.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWAREASTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWAREASTYLE_HXX
+#pragma once
 
 #include <xfilter/xfstyle.hxx>
 #include <xfilter/xfcolor.hxx>
@@ -139,5 +138,4 @@ inline const XFColor& XFDrawAreaStyle::GetBackColor()
     return m_aBackColor;
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

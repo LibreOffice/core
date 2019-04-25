@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XSETIT_HXX
-#define INCLUDED_SVX_XSETIT_HXX
+#pragma once
 
 #include <svx/xit.hxx>
 #include <svl/metitem.hxx>
@@ -40,6 +39,5 @@
 #include <svx/xflboxy.hxx>
 #include <svx/xflbckit.hxx>
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

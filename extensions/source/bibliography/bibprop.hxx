@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBPROP_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBPROP_HXX
+#pragma once
 
 extern const OUString FM_PROP_LABEL;
 extern const OUString FM_PROP_NAME;
@@ -30,6 +29,5 @@ extern const OUString FM_PROP_CURSORSOURCE;
 extern const OUString FM_PROP_CURSORSOURCETYPE;
 extern const OUString FM_PROP_TEXT;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

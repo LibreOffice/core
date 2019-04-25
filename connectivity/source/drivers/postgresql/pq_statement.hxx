@@ -34,8 +34,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_STATEMENT_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_STATEMENT_HXX
+#pragma once
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/component.hxx>
@@ -190,6 +189,5 @@ css::uno::Reference< css::sdbc::XResultSet > getGeneratedValuesFromLastInsert(
 
 
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

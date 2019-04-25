@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_UNOFORBIDDENCHARSTABLE_HXX
-#define INCLUDED_EDITENG_UNOFORBIDDENCHARSTABLE_HXX
+#pragma once
 
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>
@@ -53,6 +52,5 @@ public:
     virtual sal_Bool SAL_CALL hasLocale( const css::lang::Locale& aLocale ) override;
 };
 
-#endif // INCLUDED_EDITENG_UNOFORBIDDENCHARSTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

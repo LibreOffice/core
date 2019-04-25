@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_FONTCAPABILITIES_HXX
-#define INCLUDED_VCL_FONTCAPABILITIES_HXX
+#pragma once
 
 #include <boost/optional.hpp>
 #include <bitset>
@@ -198,6 +197,5 @@ namespace vcl
     };
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

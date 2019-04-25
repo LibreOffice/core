@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_NBDTMG_HXX
-#define INCLUDED_SVX_NBDTMG_HXX
+#pragma once
 #include <svx/svxdllapi.h>
 #include <memory>
 #include <vector>
@@ -205,6 +204,5 @@ class SVX_DLLPUBLIC OutlineTypeMgr: public NBOTypeMgrBase
         static OutlineTypeMgr& GetInstance();
 };
 }}
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

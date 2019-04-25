@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_PACKAGE_INC_ENCRYPTEDDATAHEADER_HXX
-#define INCLUDED_PACKAGE_INC_ENCRYPTEDDATAHEADER_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -44,6 +43,5 @@
 const sal_uInt32 n_ConstHeader = 0x05024d4dL; // "MM\002\005"
 const sal_Int32 n_ConstHeaderSize = 38; // + salt length + iv length + digest length + mediatype length
 const sal_Int16 n_ConstCurrentVersion = 1;
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

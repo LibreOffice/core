@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef CONFIG_MAP_HXX
-#define CONFIG_MAP_HXX
+#pragma once
 
 #include <map>
 #include <rtl/ustring.hxx>
@@ -30,6 +29,5 @@ struct LengthContentsCompare
 
 template< class T > struct config_map : public std::map< OUString, T, LengthContentsCompare > { };
 
-#endif // CONFIG_MAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

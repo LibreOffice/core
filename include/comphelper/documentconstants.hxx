@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_COMPHELPER_DOCUMENTCONSTANTS_HXX
-#define INCLUDED_COMPHELPER_DOCUMENTCONSTANTS_HXX
+#pragma once
 
 #include <o3tl/typed_flags_set.hxx>
 
@@ -124,5 +123,4 @@ namespace o3tl
 
 #define SFX_FILTER_NOTINSTALLED (SfxFilterFlags::MUSTINSTALL | SfxFilterFlags::CONSULTSERVICE)
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

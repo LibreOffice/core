@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_WFRMSH_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_WFRMSH_HXX
+#pragma once
 
 #include "frmsh.hxx"
 
@@ -36,6 +35,5 @@ public:
     virtual ~SwWebFrameShell() override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

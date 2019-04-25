@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_FWIDLLAPI_H
-#define INCLUDED_FRAMEWORK_INC_FWIDLLAPI_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -28,6 +27,5 @@
 #define FWI_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
 #endif
 
-#endif // INCLUDED_FRAMEWORK_INC_FWIDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

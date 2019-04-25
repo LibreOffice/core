@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_TEXTENC_CONVERTEUCTW_HXX
-#define INCLUDED_SAL_TEXTENC_CONVERTEUCTW_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -60,6 +59,5 @@ sal_Size ImplConvertUnicodeToEucTw(void const * pData,
                                    sal_uInt32 * pInfo,
                                    sal_Size * pSrcCvtChars);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

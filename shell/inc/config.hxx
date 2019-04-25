@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_INC_INTERNAL_CONFIG_HXX
-#define INCLUDED_SHELL_INC_INTERNAL_CONFIG_HXX
+#pragma once
 
 #ifdef _AMD64_
 #define MODULE_NAME L"shlxthdl_x64.dll"
@@ -81,6 +80,5 @@
 #define CONTENT_STYLE_PROPERTIES_LANGUAGEASIAN   L"language-asian"
 #define CONTENT_STYLE_PROPERTIES_COUNTRYASIAN    L"country-asian"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

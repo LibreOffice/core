@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPOBJID_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPOBJID_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -137,6 +136,5 @@ inline size_t LwpObjectID::HashCode() const
         (m_nIndex == 0 ? 23 * m_nLow : 27 * m_nIndex) + 29 * m_nHigh);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

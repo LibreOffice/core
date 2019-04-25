@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_UNOPRNMS_HXX
-#define INCLUDED_SW_INC_UNOPRNMS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -864,6 +863,5 @@
 #define UNO_NAME_TABLE_FIRST_ROW_START_COLUMN "FirstRowStartColumn"
 #define UNO_NAME_TABLE_LAST_ROW_END_COLUMN "LastRowEndColumn"
 #define UNO_NAME_TABLE_LAST_ROW_START_COLUMN "LastRowStartColumn"
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

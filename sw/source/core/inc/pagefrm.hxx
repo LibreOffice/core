@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_PAGEFRM_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_PAGEFRM_HXX
+#pragma once
 
 #include <viewsh.hxx>
 #include "ftnboss.hxx"
@@ -434,6 +433,5 @@ SwTextGridItem const* GetGridItem(SwPageFrame const*const);
 
 sal_uInt16 GetGridWidth(SwTextGridItem const&, SwDoc const&);
 
-#endif // INCLUDED_SW_SOURCE_CORE_INC_PAGEFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_LIST_HXX
-#define INCLUDED_SW_INC_LIST_HXX
+#pragma once
 
 #include <o3tl/deleter.hxx>
 #include <rtl/ustring.hxx>
@@ -62,6 +61,5 @@ class SwList
 
         std::unique_ptr<SwListImpl, o3tl::default_delete<SwListImpl>> mpListImpl;
 };
-#endif // INCLUDED_SW_INC_LIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

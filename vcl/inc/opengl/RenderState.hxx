@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_OPENGL_RENDER_STATE_H
-#define INCLUDED_VCL_INC_OPENGL_RENDER_STATE_H
+#pragma once
 
 #include <opengl/TextureState.hxx>
 
@@ -183,6 +182,5 @@ public:
     }
 };
 
-#endif // INCLUDED_VCL_INC_OPENGL_RENDER_STATE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

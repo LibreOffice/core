@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDSERV_SOURCE_INC_SERVPROV_HXX
-#define INCLUDED_EMBEDSERV_SOURCE_INC_SERVPROV_HXX
+#pragma once
 
 #include "common.h"
 #include <oleidl.h>
@@ -77,6 +76,5 @@ protected:
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

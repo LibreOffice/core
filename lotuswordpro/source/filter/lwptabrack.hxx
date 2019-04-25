@@ -57,8 +57,7 @@
  * @file
  * Tabrack for LwpTabPiece object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABRACK_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABRACK_HXX
+#pragma once
 
 #include <lwpobj.hxx>
 
@@ -148,6 +147,5 @@ private:
     LwpObjectID     m_NextID;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

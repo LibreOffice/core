@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBATEXTFRAME_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_VBATEXTFRAME_HXX
+#pragma once
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XTextFrame.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
@@ -39,6 +38,5 @@ public:
 
 };
 
-#endif // INCLUDED_SC_SOURCE_UI_VBA_VBATEXTFRAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

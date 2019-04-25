@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_APP_APPICONCONTROL_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_APP_APPICONCONTROL_HXX
+#pragma once
 
 #include <svtools/ivctrl.hxx>
 #include <vcl/transfer.hxx>
@@ -43,6 +42,5 @@ namespace dbaui
         virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt ) override;
     };
 }
-#endif // INCLUDED_DBACCESS_SOURCE_UI_APP_APPICONCONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XMLEOHLP_HXX
-#define INCLUDED_SVX_XMLEOHLP_HXX
+#pragma once
 
 #include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
@@ -121,6 +120,5 @@ public:
         OUString& rObjectStorageName);
 };
 
-#endif // INCLUDED_SVX_XMLEOHLP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

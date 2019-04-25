@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_MZSTRING_H
-#define INCLUDED_HWPFILTER_SOURCE_MZSTRING_H
+#pragma once
 
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
@@ -160,6 +159,5 @@ inline const char* MzString::c_str() const
 
 // Non friend, non member operators
 
-#endif // INCLUDED_HWPFILTER_SOURCE_MZSTRING_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

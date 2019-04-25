@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPEMBOSSGREYFILTER_HXX
-#define INCLUDED_VCL_BITMAPEMBOSSGREYFILTER_HXX
+#pragma once
 
 #include <vcl/BitmapFilter.hxx>
 
@@ -31,6 +30,5 @@ private:
     sal_uInt16 const mnElevationAngle100;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

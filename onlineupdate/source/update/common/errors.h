@@ -4,8 +4,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef Errors_h__
-#define Errors_h__
+#pragma once
 
 #define OK 0
 
@@ -92,5 +91,3 @@
 #define FALLBACKKEY_NOKEY_ERROR 102
 #define FALLBACKKEY_SERVICE_NO_STOP_ERROR 103
 #define FALLBACKKEY_LAUNCH_ERROR 104
-
-#endif  // Errors_h__

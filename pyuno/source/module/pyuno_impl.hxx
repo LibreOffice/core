@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_PYUNO_SOURCE_MODULE_PYUNO_IMPL_HXX
-#define INCLUDED_PYUNO_SOURCE_MODULE_PYUNO_IMPL_HXX
+#pragma once
 
 #if defined(_MSC_VER)
 // Workaround for some horrible hypot() mess
@@ -386,6 +385,5 @@ void decreaseRefCount( PyInterpreterState *interpreter, PyObject *object );
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_INTERACTION_HXX
-#define INCLUDED_COMPHELPER_INTERACTION_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/task/XInteractionApprove.hpp>
@@ -133,7 +132,6 @@ namespace comphelper
 }   // namespace comphelper
 
 
-#endif // INCLUDED_COMPHELPER_INTERACTION_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,8 +34,7 @@
  *   created by: Eric R. Mader
  */
 
-#ifndef INCLUDED_VCL_INC_SCRPTRUN_H
-#define INCLUDED_VCL_INC_SCRPTRUN_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -156,5 +155,3 @@ inline void ScriptRun::reset(const UChar chars[], int32_t start, int32_t length)
 }
 
 }
-
-#endif

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_UNOFORED_HXX
-#define INCLUDED_EDITENG_UNOFORED_HXX
+#pragma once
 
 #include <editeng/editeng.hxx>
 #include <editeng/unoedsrc.hxx>
@@ -88,6 +87,5 @@ public:
     virtual void        CopyText(const SvxTextForwarder& rSource) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

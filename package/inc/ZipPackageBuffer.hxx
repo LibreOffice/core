@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_PACKAGE_INC_ZIPPACKAGEBUFFER_HXX
-#define INCLUDED_PACKAGE_INC_ZIPPACKAGEBUFFER_HXX
+#pragma once
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -56,6 +55,5 @@ public:
     virtual sal_Int64 SAL_CALL getPosition(  ) override;
     virtual sal_Int64 SAL_CALL getLength(  ) override;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

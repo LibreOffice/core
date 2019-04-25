@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWP9READER_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWP9READER_HXX
+#pragma once
 
 #include <lwpheader.hxx>
 #include <lwpsvstream.hxx>
@@ -82,6 +81,5 @@ private:
 public:
     bool Read();
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

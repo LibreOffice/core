@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVX_COMMONSTYLEMANAGER_HXX
-#define INCLUDED_SVX_COMMONSTYLEMANAGER_HXX
+#pragma once
 
 #include <sfx2/StyleManager.hxx>
 #include <sfx2/StylePreviewRenderer.hxx>
@@ -35,6 +34,5 @@ public:
 
 } // end namespace svx
 
-#endif // INCLUDED_SVX_COMMONSTYLEMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

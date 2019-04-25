@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_TOXMGR_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_TOXMGR_HXX
+#pragma once
 
 #include <swdllapi.h>
 #include <tox.hxx>
@@ -266,6 +265,5 @@ inline sal_uInt16 SwTOXMgr::GetTOXMarkCount()
 inline SwTOXMark* SwTOXMgr::GetCurTOXMark()
     {   return pCurTOXMark; }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

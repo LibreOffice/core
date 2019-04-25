@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_SOURCE_FSSTOR_OINPUTSTREAMCONTAINER_HXX
-#define INCLUDED_SVL_SOURCE_FSSTOR_OINPUTSTREAMCONTAINER_HXX
+#pragma once
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/embed/XExtendedStorageStream.hpp>
@@ -79,6 +78,5 @@ public:
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

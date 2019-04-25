@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_WIDGETTHEME_HXX
-#define INCLUDED_VCL_INC_WIDGETTHEME_HXX
+#pragma once
 
 #include <cstdint>
 
@@ -141,6 +140,5 @@ extern "C" vcl::WidgetThemeLibrary* CreateWidgetThemeLibrary();
 
 } // end vcl namespace
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

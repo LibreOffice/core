@@ -54,8 +54,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTOC_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTOC_HXX
+#pragma once
 
 #include "lwptablelayout.hxx"
 
@@ -162,6 +161,5 @@ protected:
     void Read() override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

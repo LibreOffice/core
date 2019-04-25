@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVX_UIOBJECT_HXX
-#define INCLUDED_SVX_UIOBJECT_HXX
+#pragma once
 
 #include <svx/svxdllapi.h>
 
@@ -32,6 +31,5 @@ public:
     virtual SdrObject* get_object() = 0;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

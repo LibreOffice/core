@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DETDATA_HXX
-#define INCLUDED_SC_INC_DETDATA_HXX
+#pragma once
 
 #include "global.hxx"
 
@@ -83,6 +82,5 @@ public:
     size_t      Count() const { return aDetOpDataVector.size(); }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

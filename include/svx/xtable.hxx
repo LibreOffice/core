@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_XTABLE_HXX
-#define INCLUDED_SVX_XTABLE_HXX
+#pragma once
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
@@ -403,6 +402,5 @@ inline XGradientListRef XPropertyList::AsGradientList(
     rtl::Reference<XPropertyList> const & plist)
 { return XGradientListRef( static_cast<XGradientList *> (plist.get()) ); }
 
-#endif // INCLUDED_SVX_XTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

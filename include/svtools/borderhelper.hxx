@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_BORDERHELPER_HXX
-#define INCLUDED_SVTOOLS_BORDERHELPER_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 
@@ -45,6 +44,5 @@ SVT_DLLPUBLIC void DrawLine( OutputDevice& rDev, const Point& rBeg,
         const Point& rEnd, sal_uInt32 nWidth, SvxBorderLineStyle nDashing );
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

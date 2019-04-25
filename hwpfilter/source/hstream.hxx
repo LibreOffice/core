@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_HSTREAM_H
-#define INCLUDED_HWPFILTER_SOURCE_HSTREAM_H
+#pragma once
 
 #include <vector>
 
@@ -47,6 +46,5 @@ class HStream
         std::vector<byte> seq;
         size_t pos;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

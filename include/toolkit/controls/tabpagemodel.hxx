@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_CONTROLS_TABPAGEMODEL_HXX
-#define INCLUDED_TOOLKIT_CONTROLS_TABPAGEMODEL_HXX
+#pragma once
 
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
 #include <com/sun/star/awt/tab/XTabPage.hpp>
@@ -81,6 +80,5 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
-#endif // INCLUDED_TOOLKIT_CONTROLS_TABPAGEMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

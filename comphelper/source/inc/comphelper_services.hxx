@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_SOURCE_INC_COMPHELPER_SERVICES_HXX
-#define INCLUDED_COMPHELPER_SOURCE_INC_COMPHELPER_SERVICES_HXX
+#pragma once
 
 #include <sal/config.h>
 
 void createRegistryInfo_Map();
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

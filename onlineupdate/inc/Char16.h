@@ -6,8 +6,7 @@
 
 /* Implements a UTF-16 character type. */
 
-#ifndef mozilla_Char16_h
-#define mozilla_Char16_h
+#pragma once
 
 #ifdef __cplusplus
 
@@ -190,5 +189,3 @@ static_assert(sizeof(u'A') == 2, "Is unicode char literal 16 bits?");
 static_assert(sizeof(u""[0]) == 2, "Is unicode string char 16 bits?");
 
 #endif
-
-#endif /* mozilla_Char16_h */

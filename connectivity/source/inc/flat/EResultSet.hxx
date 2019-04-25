@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_ERESULTSET_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_ERESULTSET_HXX
+#pragma once
 
 #include <file/FResultSet.hxx>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
@@ -69,6 +68,5 @@ namespace connectivity
         };
     }
 }
-#endif //_CONNECTIVITY_FLAT_DRESULTSET_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_CONTROLDIMS_HRC
-#define INCLUDED_SVTOOLS_CONTROLDIMS_HRC
+#pragma once
 
 // From: Dialogue Specification and Guidelines - Visual Design V1.3
 // by Christian Jansen
@@ -45,6 +44,5 @@
 #define RSC_SP_DLG_INNERBORDER_TOP          6
 #define RSC_SP_DLG_INNERBORDER_RIGHT        6
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

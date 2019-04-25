@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_CONTROLCACHEKEY_HXX
-#define INCLUDED_VCL_INC_CONTROLCACHEKEY_HXX
+#pragma once
 
 #include <tools/gen.hxx>
 #include <vcl/salnativewidgets.hxx>
@@ -75,5 +74,3 @@ public:
         return true;
     }
 };
-
-#endif // INCLUDED_VCL_INC_CONTROLCACHEKEY_HXX

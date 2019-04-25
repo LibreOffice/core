@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SOURCE_INC_FMSHIMP_HXX
-#define INCLUDED_SVX_SOURCE_INC_FMSHIMP_HXX
+#pragma once
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -558,6 +557,5 @@ public:
     virtual void Invalidate() override { IndexAccessIterator::Invalidate(); m_sCurrentValue.clear(); }
 };
 
-#endif // INCLUDED_SVX_SOURCE_INC_FMSHIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

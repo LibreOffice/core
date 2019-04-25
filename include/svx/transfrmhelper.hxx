@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_TRANSFRMHELPER_HXX
-#define INCLUDED_SVX_TRANSFRMHELPER_HXX
+#pragma once
 
 #include <basegfx/range/b2drange.hxx>
 #include <tools/fldunit.hxx>
@@ -46,5 +45,4 @@ public:
     }
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_I18NLANGTAG_LANGUAGETAG_HXX
-#define INCLUDED_I18NLANGTAG_LANGUAGETAG_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <rtl/locale.h>
@@ -573,6 +572,5 @@ private:
 
 };
 
-#endif  // INCLUDED_I18NLANGTAG_LANGUAGETAG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

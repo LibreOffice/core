@@ -8,8 +8,7 @@
  */
 
 
-#ifndef TOXWHITESPACESTRIPPER_HXX_
-#define TOXWHITESPACESTRIPPER_HXX_
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <vector>
@@ -46,6 +45,3 @@ private:
 };
 
 } // end namespace sw
-
-
-#endif /* TOXWHITESPACESTRIPPER_HXX_ */

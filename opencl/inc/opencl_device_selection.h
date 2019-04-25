@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OPENCL_INC_OPENCL_DEVICE_SELECTION_H
-#define INCLUDED_OPENCL_INC_OPENCL_DEVICE_SELECTION_H
+#pragma once
 
 #ifdef _MSC_VER
 //#define _CRT_SECURE_NO_WARNINGS
@@ -403,6 +402,5 @@ inline ds_status readProfile(const OUString& rStreamName, std::unique_ptr<ds_pro
     return eStatus;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTCONTROLMODEL_HXX
-#define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTCONTROLMODEL_HXX
+#pragma once
 
 #include "ReportComponent.hxx"
 #include <com/sun/star/style/VerticalAlignment.hpp>
@@ -134,6 +133,5 @@ namespace reportdesign
         static bool isInterfaceForbidden(const css::uno::Type& _rType);
     };
 }
-#endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTCONTROLMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCBHELPER_CONTENTHELPER_HXX
-#define INCLUDED_UCBHELPER_CONTENTHELPER_HXX
+#pragma once
 
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertiesChangeNotifier.hpp>
@@ -444,6 +443,5 @@ public:
 
 } // namespace ucbhelper
 
-#endif /* ! INCLUDED_UCBHELPER_CONTENTHELPER_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

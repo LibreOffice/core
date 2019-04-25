@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_CNTFRM_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_CNTFRM_HXX
+#pragma once
 
 #include "frame.hxx"
 #include "flowfrm.hxx"
@@ -119,6 +118,5 @@ inline SwContentFrame *SwContentFrame::GetFollow()
     return static_cast<SwContentFrame*>(SwFlowFrame::GetFollow());
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

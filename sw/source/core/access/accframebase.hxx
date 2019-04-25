@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRAMEBASE_HXX
-#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRAMEBASE_HXX
+#pragma once
 
 #include "acccontext.hxx"
 #include <calbck.hxx>
@@ -61,6 +60,5 @@ public:
     virtual bool SetSelectedState( bool bSeleted ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

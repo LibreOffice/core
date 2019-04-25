@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_TABLE_XMLTABLEIMPORT_HXX
-#define INCLUDED_XMLOFF_TABLE_XMLTABLEIMPORT_HXX
+#pragma once
 
 #include <com/sun/star/table/XColumnRowRange.hpp>
 
@@ -70,6 +69,5 @@ private:
     XMLTableTemplateMap                         maTableTemplates;
 };
 
-#endif // INCLUDED_XMLOFF_TABLE_XMLTABLEIMPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_MARKMANAGER_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_MARKMANAGER_HXX
+#pragma once
 
 #include <IMark.hxx>
 #include <IDocumentMarkAccess.hxx>
@@ -139,6 +138,5 @@ namespace sw {
     } // namespace mark
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

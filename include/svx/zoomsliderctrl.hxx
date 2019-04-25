@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_ZOOMSLIDERCTRL_HXX
-#define INCLUDED_SVX_ZOOMSLIDERCTRL_HXX
+#pragma once
 
 #include <sfx2/stbitem.hxx>
 #include <svx/svxdllapi.h>
@@ -51,6 +50,5 @@ public:
     virtual bool  MouseMove( const MouseEvent & rEvt ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

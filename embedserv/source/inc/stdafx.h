@@ -1,6 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-#if !defined(AFX_STDAFX_H_)
-#define AFX_STDAFX_H_
+#pragma once
 
 #define STRICT
 #define _ATL_APARTMENT_THREADED
@@ -46,6 +45,5 @@ extern CComModule _Module;
 #endif
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

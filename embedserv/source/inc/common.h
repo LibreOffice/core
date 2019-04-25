@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDSERV_SOURCE_INC_COMMON_H
-#define INCLUDED_EMBEDSERV_SOURCE_INC_COMMON_H
+#pragma once
 
 #include "stdafx.h"
 #include <initguid.h>
@@ -45,6 +44,5 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

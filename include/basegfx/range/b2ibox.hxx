@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_RANGE_B2IBOX_HXX
-#define INCLUDED_BASEGFX_RANGE_B2IBOX_HXX
+#pragma once
 
 #include <ostream>
 
@@ -188,6 +187,5 @@ inline std::basic_ostream<charT, traits> & operator <<(
                       << "@(" << box.getMinX() << "," << box.getMinY() << ")";
 }
 
-#endif // INCLUDED_BASEGFX_RANGE_B2IBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

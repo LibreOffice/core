@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_UCBHELPER_AUTHENTICATIONFALLBACK_HXX
-#define INCLUDED_UCBHELPER_AUTHENTICATIONFALLBACK_HXX
+#pragma once
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/interactionrequest.hxx>
@@ -46,6 +45,5 @@ public:
 
 } // namespace ucbhelper
 
-#endif /* ! INCLUDED_UCBHELPER_AUTHENTICATIONFALLBACK_HXX*/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

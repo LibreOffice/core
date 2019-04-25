@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_DISPATCHCOMMAND_HXX
-#define INCLUDED_COMPHELPER_DISPATCHCOMMAND_HXX
+#pragma once
 
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
@@ -33,6 +32,5 @@ COMPHELPER_DLLPUBLIC bool dispatchCommand(const OUString& rCommand,
 
 }
 
-#endif // INCLUDED_COMPHELPER_DISPATCHCOMMAND_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

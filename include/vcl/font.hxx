@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_FONT_HXX
-#define INCLUDED_VCL_FONT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -180,6 +179,5 @@ inline bool Font::IsUnderlineAbove() const
 
 }
 
-#endif  // _VCL_FONT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

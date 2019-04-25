@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FORMS_SOURCE_XFORMS_PROPERTYSETBASE_HXX
-#define INCLUDED_FORMS_SOURCE_XFORMS_PROPERTYSETBASE_HXX
+#pragma once
 
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -348,6 +347,5 @@ public:
 #define PROPERTY( NAME, TYPE )      PROPERTY_FLAGS( NAME, TYPE, css::beans::PropertyAttribute::BOUND )
 #define PROPERTY_RO( NAME, TYPE )   PROPERTY_FLAGS( NAME, TYPE, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY )
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

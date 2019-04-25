@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_TABLE_TABLECOLUMN_HXX
-#define INCLUDED_SVX_SOURCE_TABLE_TABLECOLUMN_HXX
+#pragma once
 
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -78,6 +77,5 @@ private:
 
 } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

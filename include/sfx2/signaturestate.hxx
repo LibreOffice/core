@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SIGNATURESTATE_HXX
-#define INCLUDED_SFX2_SIGNATURESTATE_HXX
+#pragma once
 
 enum class SignatureState
 {
@@ -38,6 +37,5 @@ enum class SignatureState
     NOTVALIDATED_PARTIAL_OK = 6
 };
 
-#endif // INCLUDED_SFX2_SIGNATURESTATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

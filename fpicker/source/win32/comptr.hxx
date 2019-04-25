@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_COMPTR_HXX
-#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_COMPTR_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <osl/diagnose.h>
@@ -207,6 +206,5 @@ class ComPtr
         T_INTERFACE* m_pInterface;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

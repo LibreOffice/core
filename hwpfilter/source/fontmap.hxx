@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_FONTMAP_HXX
-#define INCLUDED_HWPFILTER_SOURCE_FONTMAP_HXX
+#pragma once
 
 #include <sal/config.h>
 
 int getRepFamilyName(char const *, char *, double &);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

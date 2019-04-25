@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SOT_STORINFO_HXX
-#define INCLUDED_SOT_STORINFO_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
@@ -57,6 +56,5 @@ typedef ::std::vector< SvStorageInfo > SvStorageInfoList;
 SOT_DLLPUBLIC SotClipboardFormatId ReadClipboardFormat( SvStream & rStm );
 SOT_DLLPUBLIC void WriteClipboardFormat( SvStream & rStm, SotClipboardFormatId nFormat );
 
-#endif // _STORINFO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

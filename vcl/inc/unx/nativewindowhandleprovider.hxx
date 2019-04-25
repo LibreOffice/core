@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_UNX_NATIVEWINDOWHANDLEPROVIDER
-#define INCLUDED_VCL_UNX_NATIVEWINDOWHANDLEPROVIDER
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -20,6 +19,5 @@ public:
     virtual sal_uIntPtr GetNativeWindowHandle() = 0;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

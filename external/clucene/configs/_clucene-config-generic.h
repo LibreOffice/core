@@ -1,5 +1,4 @@
-#ifndef _SRC_CLUCENE_INTERNAL_CLUCENE_CONFIG_H
-#define _SRC_CLUCENE_INTERNAL_CLUCENE_CONFIG_H 1
+#pragma once
 
 /* src/shared/CLucene/_clucene-config.h.
 *  Normally generated automatically at end of cmake,
@@ -109,6 +108,4 @@
 
 #ifdef __BORLANDC__ //borland compiler
     #define O_RANDOM 0
-#endif
-
 #endif

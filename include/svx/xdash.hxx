@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XDASH_HXX
-#define INCLUDED_SVX_XDASH_HXX
+#pragma once
 
 
 // class XDash
@@ -66,6 +65,5 @@ public:
     double CreateDotDashArray(::std::vector< double >& rDotDashArray, double fLineWidth) const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

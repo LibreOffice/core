@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_FILTER_MSFILTER_RTFUTIL_HXX
-#define INCLUDED_FILTER_MSFILTER_RTFUTIL_HXX
+#pragma once
 
 #include <filter/msfilter/msfilterdllapi.h>
 #include <rtl/string.hxx>
@@ -76,6 +75,5 @@ MSFILTER_DLLPUBLIC bool StripMetafileHeader(const sal_uInt8*& rpGraphicAry, sal_
 }
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

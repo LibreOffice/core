@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_FILTOPT_HXX
-#define INCLUDED_SC_INC_FILTOPT_HXX
+#pragma once
 
 #include <unotools/configitem.hxx>
 #include "scdllapi.h"
@@ -40,6 +39,5 @@ public:
     bool        GetWK3Flag() const          { return bWK3Flag; }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_OLE_AXCONTROL_HXX
-#define INCLUDED_OOX_OLE_AXCONTROL_HXX
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -990,6 +989,5 @@ private:
 } // namespace ole
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

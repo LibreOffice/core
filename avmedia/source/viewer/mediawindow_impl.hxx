@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_AVMEDIA_SOURCE_VIEWER_MEDIAWINDOW_IMPL_HXX
-#define INCLUDED_AVMEDIA_SOURCE_VIEWER_MEDIAWINDOW_IMPL_HXX
+#pragma once
 
 #include <vcl/transfer.hxx>
 #include <vcl/syschild.hxx>
@@ -155,6 +154,5 @@ private:
 
 }} // end namespace avmedia::priv
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

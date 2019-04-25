@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_NAVIGATOR_HXX
-#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_NAVIGATOR_HXX
+#pragma once
 
 #include <vcl/floatwin.hxx>
 #include <memory>
@@ -41,6 +40,5 @@ namespace rptui
 
 } // namespace rptui
 
-#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_NAVIGATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

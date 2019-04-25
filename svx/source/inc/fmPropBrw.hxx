@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SOURCE_INC_FMPROPBRW_HXX
-#define INCLUDED_SVX_SOURCE_INC_FMPROPBRW_HXX
+#pragma once
 
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
@@ -107,6 +106,5 @@ private:
     */
     void    impl_createPropertyBrowser_throw( FmFormShell* _pFormShell );
 };
-#endif // INCLUDED_SVX_SOURCE_INC_FMPROPBRW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

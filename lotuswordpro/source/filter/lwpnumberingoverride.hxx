@@ -57,8 +57,7 @@
 * @file
 * Numbering override of Wordpro.
 ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPNUMBERINGOVERRIDE_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPNUMBERINGOVERRIDE_HXX
+#pragma once
 
 #include <lwpoverride.hxx>
 
@@ -109,5 +108,4 @@ inline bool LwpNumberingOverride::IsHeading()
     return (m_nValues & HEADING) != 0;
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

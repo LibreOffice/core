@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_DOCFUNC_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_DOCFUNC_HXX
+#pragma once
 
 #include <tools/solar.h>
 #include <global.hxx>
@@ -237,6 +236,5 @@ public:
 
 void VBA_DeleteModule( ScDocShell& rDocSh, const OUString& sModuleName );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

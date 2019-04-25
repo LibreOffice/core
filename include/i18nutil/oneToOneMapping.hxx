@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_I18NUTIL_ONETOONEMAPPING_HXX
-#define INCLUDED_I18NUTIL_ONETOONEMAPPING_HXX
+#pragma once
 
 #include <i18nutil/i18nutildllapi.h>
 #include <memory>
@@ -84,6 +83,5 @@ private:
 
 }
 
-#endif // _I18N_TRANSLITERATION_ONETOONEMAPPING_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

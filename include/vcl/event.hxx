@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_EVENT_HXX
-#define INCLUDED_VCL_EVENT_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
@@ -370,6 +369,5 @@ inline const AllSettings* DataChangedEvent::GetOldSettings() const
         return nullptr;
 }
 
-#endif // INCLUDED_VCL_EVENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,8 +57,7 @@
  * @file
  * Container for content.It will destroy all children when destroy.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCONTENTCONTAINER_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCONTENTCONTAINER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -135,6 +134,5 @@ inline rtl::Reference<XFContent> XFContentContainer::GetContent(sal_uInt32 index
         return nullptr;
     return m_aContents[index];
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

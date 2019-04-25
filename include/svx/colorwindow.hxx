@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_TBXCTRLS_COLORWINDOW_HXX
-#define INCLUDED_SVX_SOURCE_TBXCTRLS_COLORWINDOW_HXX
+#pragma once
 
 #include <sfx2/tbxctrl.hxx>
 #include <svtools/toolbarmenu.hxx>
@@ -164,6 +163,5 @@ public:
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

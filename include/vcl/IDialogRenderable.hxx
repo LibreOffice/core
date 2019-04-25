@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_IDIALOGRENDERABLE_HXX
-#define INCLUDED_VCL_IDIALOGRENDERABLE_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -39,6 +38,5 @@ public:
 
 } // namespace vcl
 
-#endif // INCLUDED_VCL_IDIALOGRENDERABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
