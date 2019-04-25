@@ -979,7 +979,7 @@ bool AquaSalInstance::SVMainHook(int* pnInit)
     NSApplicationMain( 1, pArgv );
 #endif
 
-    return true; // indicate that ImplSVMainHook is implemented
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
