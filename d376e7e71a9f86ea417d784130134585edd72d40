@@ -216,6 +216,30 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_43b155e1",
+        "filename": "l10ntools/source/ulfconv/msi-encodinglist.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-25T19:24:57Z",
+      "side": 1,
+      "message": "Oh the \"Oromo (Kenya)\" is one of the new 0x1000 ...\nI\u0027ll need to update my script to at least list those. However we might treat them..",
+      "parentUuid": "3fa0c359_83a0bda7",
+      "range": {
+        "startLine": 119,
+        "startChar": 12,
+        "endLine": 119,
+        "endChar": 16
+      },
+      "revId": "d376e7e71a9f86ea417d784130134585edd72d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_963b1c9b",
         "filename": "l10ntools/source/ulfconv/msi-encodinglist.txt",
         "patchSetId": 1
