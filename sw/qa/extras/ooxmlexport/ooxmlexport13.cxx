@@ -98,7 +98,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak3, "tdf123636_newlinePage
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 2, getPages() );
 
     xmlDocPtr pDump = parseLayoutDump();
-    assertXPath(pDump, "/root/page[1]/body/txt[3]", "Last line on page 1");
+    assertXPath(pDump, "/root/page[1]/body/txt[3]/Text[1]", "Portion", "Last line on page 1");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak4, "tdf123636_newlinePageBreak4.docx")
@@ -109,7 +109,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak4, "tdf123636_newlinePage
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 2, getPages() );
 
     xmlDocPtr pDump = parseLayoutDump();
-    assertXPath(pDump, "/root/page[2]/body/txt[1]", "");
+    assertXPath(pDump, "/root/page[2]/body/txt[1]/Text", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(tdf123912_protectedForm, "tdf123912_protectedForm.odt")
