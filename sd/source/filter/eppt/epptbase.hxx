@@ -200,7 +200,7 @@ private:
     std::vector<FontCollectionEntry> maFonts;
 };
 
-#define PPTEX_STYLESHEETENTRYS  9
+#define PPTEX_STYLESHEETENTRIES  9
 
 enum PPTExTextAttr
 {
@@ -302,8 +302,8 @@ class PPTExStyleSheet
 
     public:
 
-                std::unique_ptr<PPTExCharSheet>  mpCharSheet[ PPTEX_STYLESHEETENTRYS ];
-                std::unique_ptr<PPTExParaSheet>  mpParaSheet[ PPTEX_STYLESHEETENTRYS ];
+                std::unique_ptr<PPTExCharSheet>  mpCharSheet[ PPTEX_STYLESHEETENTRIES ];
+                std::unique_ptr<PPTExParaSheet>  mpParaSheet[ PPTEX_STYLESHEETENTRIES ];
 
                 PPTExStyleSheet( sal_uInt16 nDefaultTab, PPTExBulletProvider* pBuProv );
                 ~PPTExStyleSheet();

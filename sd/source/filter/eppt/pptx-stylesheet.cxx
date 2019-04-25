@@ -411,7 +411,7 @@ void PPTExStyleSheet::SetStyleSheet( const css::uno::Reference< css::beans::XPro
 
 bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, PPTExTextAttr eAttr, sal_uInt32 nValue )
 {
-    assert(nInstance < PPTEX_STYLESHEETENTRYS && nLevel < 5);
+    assert(nInstance < PPTEX_STYLESHEETENTRIES && nLevel < 5);
 
     const PPTExParaLevel& rPara = mpParaSheet[ nInstance ]->maParaLevel[ nLevel ];
     const PPTExCharLevel& rChar = mpCharSheet[ nInstance ]->maCharLevel[ nLevel ];
