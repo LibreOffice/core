@@ -17,8 +17,9 @@ $(eval $(call gb_Package_add_files,infoplist,$(PRODUCTNAME_WITHOUT_SPACES).app/C
 	Info.plist \
 ))
 
-$(eval $(call gb_Package_add_files,infoplist,bin,\
-	$(foreach lang,en-US $(gb_WITH_LANG),InfoPlist_$(lang).zip) \
-))
+$(foreach lang,$(filter ca cs da de el en es fi fr hr hu id it ja ko ms nl no pl pt pt_PT ro ru sk sv th tr uk vi zh_CN zh_TW,$(gb_WITH_LANG)),\
+$(eval $(call gb_Package_add_files,infoplist,$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/Resources/$(lang).lproj,\
+	InfoPlist_$(lang)/InfoPlist.strings \
+)))
 
 # vim: set noet sw=4 ts=4:
