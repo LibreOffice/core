@@ -35,6 +35,7 @@
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/xflbckit.hxx>
 #include <cuitabarea.hxx>
 #include <defdlgname.hxx>
 #include <dlgname.hxx>

@@ -26,6 +26,7 @@
 #include <svx/xpool.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/xfltrit.hxx>
 #include <cuitabarea.hxx>
 #include <svx/dlgutil.hxx>
 #include <cuitabline.hxx>

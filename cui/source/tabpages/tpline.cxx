@@ -42,6 +42,8 @@
 #include <svx/svdview.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/numvset.hxx>
+#include <svx/xlntrit.hxx>
+#include <svx/xfltrit.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <sfx2/objsh.hxx>

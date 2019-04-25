@@ -7477,7 +7477,6 @@ include/svx/xmlsecctrl.hxx
 include/svx/xoutbmp.hxx
 include/svx/xpoly.hxx
 include/svx/xpool.hxx
-include/svx/xsetit.hxx
 include/svx/xsflclit.hxx
 include/svx/xtable.hxx
 include/svx/xtextit.hxx

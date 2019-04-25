@@ -52,6 +52,9 @@
 #include <svx/svdocirc.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdotable.hxx>
+#include <svx/xflbstit.hxx>
+#include <svx/xflbmtit.hxx>
+#include <svx/xfltrit.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/numdef.hxx>
 #include <svx/svdattr.hxx>

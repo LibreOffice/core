@@ -31,6 +31,7 @@
 #include <svx/xtable.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/xfltrit.hxx>
 #include <cuitabarea.hxx>
 #include <dlgname.hxx>
 #include <svx/dlgutil.hxx>

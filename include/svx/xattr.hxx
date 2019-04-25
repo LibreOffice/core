@@ -29,7 +29,6 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xtextit0.hxx>
-#include <svx/xsetit.hxx>
 #include <svx/xlinjoit.hxx>
 #include <svx/xlncapit.hxx>
 

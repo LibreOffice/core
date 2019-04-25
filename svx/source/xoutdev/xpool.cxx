@@ -19,7 +19,19 @@
 
 #include <sal/config.h>
 
+#include <svx/xflbckit.hxx>
+#include <svx/xftshtit.hxx>
+#include <svx/xflboxy.hxx>
+#include <svx/xflbstit.hxx>
 #include <svx/xtable.hxx>
+#include <svx/xlntrit.hxx>
+#include <svx/xfltrit.hxx>
+#include <svx/xgrscit.hxx>
+#include <svx/xflbmtit.hxx>
+#include <svx/xflbmpit.hxx>
+#include <svx/xflbmsxy.hxx>
+#include <svx/xflbmsli.hxx>
+#include <svx/xflbtoxy.hxx>
 #include <svx/xattr.hxx>
 #include <svx/xpool.hxx>
 #include <svx/svdattr.hxx>
