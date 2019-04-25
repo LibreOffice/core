@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_d68e84cf",
+        "filename": "sc/source/core/data/patattr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-25T07:57:51Z",
+      "side": 1,
+      "message": "and here, we could return early if lengths are different, so sizes are equal at memcmp",
+      "range": {
+        "startLine": 120,
+        "startChar": 4,
+        "endLine": 120,
+        "endChar": 28
+      },
+      "revId": "1e3d0a57689006cd7244481958025177c01e4d09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
