@@ -407,11 +407,14 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
 {
     DBG_ASSERT(pPara,"SetText:No Para");
 
+    sal_Int32 nPara = pParaList->GetAbsPos( pPara );
+
+    if (pEditEngine->GetText( nPara ) == rText)
+        return; // do nothing
+
     bool bUpdate = pEditEngine->GetUpdateMode();
     pEditEngine->SetUpdateMode( false );
     ImplBlockInsertionCallbacks( true );
-
-    sal_Int32 nPara = pParaList->GetAbsPos( pPara );
 
     if (rText.isEmpty())
     {
