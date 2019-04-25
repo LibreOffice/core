@@ -470,6 +470,10 @@ namespace o3tl
 #define LANGUAGE_Neither_defined_nor_reserved_0x1C0C LanguageType(0x1C0C)
 #define LANGUAGE_Neither_defined_nor_reserved_0x2008 LanguageType(0x2008)
 
+/* MS defines these as reserved, whatever that might imply.. */
+#define LANGUAGE_reserved_0xEEEE            LanguageType(0xEEEE)  /* primary 0x2ee, sub 0x3b */
+#define LANGUAGE_reserved_0xF2EE            LanguageType(0xF2EE)  /* primary 0x2ee, sub 0x3c */
+
 /*! use only for import/export of MS documents, number formatter maps it to
  *! LANGUAGE_SYSTEM and then to effective system language */
 #define LANGUAGE_SYSTEM_DEFAULT             LanguageType(0x0800)
