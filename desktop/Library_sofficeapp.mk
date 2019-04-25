@@ -19,7 +19,6 @@ $(eval $(call gb_Library_set_include,sofficeapp,\
 $(eval $(call gb_Library_add_libs,sofficeapp,\
     $(if $(filter LINUX %BSD SOLARIS, $(OS)), \
         $(DLOPEN_LIBS) \
-        -lpthread \
     ) \
 ))
 
@@ -135,7 +134,6 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 ifeq ($(DISABLE_GUI),TRUE)
 $(eval $(call gb_Library_add_libs,sofficeapp,\
 	-lm $(DLOPEN_LIBS) \
-	-lpthread \
 ))
 else
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
@@ -147,7 +145,6 @@ endif
 
 $(eval $(call gb_Library_add_libs,sofficeapp,\
 	-lm $(DLOPEN_LIBS) \
-	-lpthread \
     -lX11 \
 ))
 endif
