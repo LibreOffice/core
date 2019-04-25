@@ -441,6 +441,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     bool bConnectBars = false;
     bool bGroupBarsPerAxis = true;
     bool bIncludeHiddenCells = true;
+    bool bSecondaryYaxisVisible = true;
     sal_Int32 nStartingAngle = 90;
     sal_Int32 n3DRelativeHeight = 100;
     try
@@ -479,7 +480,19 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     {
         uno::Reference< XCoordinateSystem > xCooSys( aCooSysList[nCS] );
         VCoordinateSystem* pVCooSys = addCooSysToList(m_rVCooSysList,xCooSys,rChartModel);
-
+        // Let's check whether the secondray Y axis is visible
+        try
+        {
+            Reference< beans::XPropertySet > xAxisProp(xCooSys->getAxisByDimension(1, 1), uno::UNO_QUERY);
+            if (xAxisProp.is())
+            {
+                xAxisProp->getPropertyValue("Show") >>= bSecondaryYaxisVisible;
+            }
+        }
+        catch (const lang::IndexOutOfBoundsException& e)
+        {
+            SAL_WARN("chart2", "Exception caught. " << e);
+        }
         //iterate through all chart types in the current coordinate system
         uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
         OSL_ASSERT( xChartTypeContainer.is());
@@ -563,7 +576,8 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
 
                 //ignore secondary axis for charttypes that do not support them
                 if( pSeries->getAttachedAxisIndex() != MAIN_AXIS_INDEX &&
-                    !ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount ) )
+                  ( !ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount ) ||
+                    !bSecondaryYaxisVisible ) )
                 {
                     pSeries->setAttachedAxisIndex(MAIN_AXIS_INDEX);
                 }
