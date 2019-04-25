@@ -24,6 +24,9 @@ class tdf117039(UITestCase):
         document = self.ui_test.get_component()
         self.xUITest.executeCommand(".uno:PrintPreview")  #open print preview
         self.xUITest.executeCommand(".uno:ClosePreview")  # close print preview
+
+        self.xUITest.getTopFocusWindow() #Get focus after closing preview
+
         #verify
         self.assertEqual(document.Text.String[0:22], "Test digital signature")
         self.ui_test.close_doc()

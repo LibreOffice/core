@@ -28,6 +28,9 @@ class tdf121591(UITestCase):
         #open and close print preview
         self.xUITest.executeCommand(".uno:PrintPreview")  #open print preview
         self.xUITest.executeCommand(".uno:ClosePreview")  # close print preview
+
+        self.xUITest.getTopFocusWindow() #Get focus after closing preview
+
         #verify nr. of frames
         self.assertEqual(document.TextFrames.getCount(), 1)
 
