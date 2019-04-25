@@ -28,7 +28,6 @@ ifeq ($(OS),LINUX)
 $(eval $(call gb_CppunitTest_add_libs,libreofficekit_tiledrendering,\
     -lm \
     -ldl \
-    -lpthread \
 ))
 endif
 
