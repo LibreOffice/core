@@ -356,9 +356,6 @@ ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
 		mkdir "$$lproj"; \
 	done
 #
-# And remove the "bin" folder which should not be there
-	rm -rf $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/bin
-#
 # Remove unnecessary executables in the LibreOfficePython framework
 	rm -rf $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/Frameworks/LibreOfficePython.framework/Versions/[1-9]*/bin
 #
