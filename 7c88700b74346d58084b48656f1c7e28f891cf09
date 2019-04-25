@@ -45,6 +45,29 @@
       "revId": "7c88700b74346d58084b48656f1c7e28f891cf09",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_31b572ef",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 5350,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-25T10:21:46Z",
+      "side": 0,
+      "message": "Ok, let\u0027s try that; but these are not exactly the same, and the removed one looked in WinSDK-NetFx40Tools key, while the one that is kept looks under its InstallationFolder subkey.",
+      "range": {
+        "startLine": 5350,
+        "startChar": 112,
+        "endLine": 5350,
+        "endChar": 131
+      },
+      "revId": "7c88700b74346d58084b48656f1c7e28f891cf09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
