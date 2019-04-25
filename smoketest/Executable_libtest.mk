@@ -16,7 +16,6 @@ $(eval $(call gb_Executable_set_include,libtest,\
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Executable_add_libs,libtest,\
 	-ldl \
-	-pthread \
 ))
 endif
 

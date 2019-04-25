@@ -624,11 +624,6 @@ $(eval $(call gb_Library_use_externals,vcl,\
     freetype \
     fontconfig \
 ))
-ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
-$(eval $(call gb_Library_add_libs,vcl,\
-    -lpthread \
-))
-endif
 else
  $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/opengl/DeviceInfo \
@@ -649,7 +644,6 @@ else
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,vcl,\
     -lm $(DLOPEN_LIBS) \
-    -lpthread \
     -lX11 \
     -lXext \
 ))

@@ -114,12 +114,6 @@ $(eval $(call gb_CppunitTest_add_libs,sc_ucalc,\
 ))
 endif
 
-ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
-$(eval $(call gb_CppunitTest_add_libs,sc_ucalc,\
-    -lpthread \
-))
-endif
-
 $(eval $(call gb_CppunitTest_use_configuration,sc_ucalc))
 
 # vim: set noet sw=4 ts=4:
