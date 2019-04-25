@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_d1f9ae4d",
+        "filename": "chart2/source/view/main/ChartView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-04-25T13:16:50Z",
+      "side": 1,
+      "message": "it seems, this is unnecessary, because we use only nDimensionIndex\u003d1",
+      "range": {
+        "startLine": 486,
+        "startChar": 7,
+        "endLine": 490,
+        "endChar": 13
+      },
+      "revId": "d5bb6ded13122d49375b9b9b919591fd250f6968",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
