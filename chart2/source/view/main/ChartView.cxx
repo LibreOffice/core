@@ -441,6 +441,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     bool bConnectBars = false;
     bool bGroupBarsPerAxis = true;
     bool bIncludeHiddenCells = true;
+    bool bSecondaryYaxisVisible = true;
     sal_Int32 nStartingAngle = 90;
     sal_Int32 n3DRelativeHeight = 100;
     try
@@ -481,6 +482,24 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
         VCoordinateSystem* pVCooSys = addCooSysToList(m_rVCooSysList,xCooSys,rChartModel);
 
         //iterate through all chart types in the current coordinate system
+        sal_Int32 nDimensionCount = xCooSys->getDimension();
+        for (sal_Int32 nDimensionIndex = 0; nDimensionIndex < nDimensionCount; ++nDimensionIndex)
+        {
+            const sal_Int32 nMaximumAxisIndex = xCooSys->getMaximumAxisIndexByDimension(nDimensionIndex);
+            try
+            {
+                Reference< beans::XPropertySet > xAxisProp(xCooSys->getAxisByDimension(nDimensionIndex, 1), uno::UNO_QUERY);
+                if ( xAxisProp.is() && nDimensionIndex == 1 )
+                {
+                    // Let's check whether the secondray Y axis is visible
+                    xAxisProp->getPropertyValue("Show") >>= bSecondaryYaxisVisible;
+                }
+            }
+            catch (const lang::IndexOutOfBoundsException& e)
+            {
+                SAL_WARN("chart2", "Exception caught. " << e);
+            }
+        }
         uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
         OSL_ASSERT( xChartTypeContainer.is());
         if( !xChartTypeContainer.is() )
@@ -563,7 +582,8 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
 
                 //ignore secondary axis for charttypes that do not support them
                 if( pSeries->getAttachedAxisIndex() != MAIN_AXIS_INDEX &&
-                    !ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount ) )
+                  ( !ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount ) ||
+                    !bSecondaryYaxisVisible ) )
                 {
                     pSeries->setAttachedAxisIndex(MAIN_AXIS_INDEX);
                 }
