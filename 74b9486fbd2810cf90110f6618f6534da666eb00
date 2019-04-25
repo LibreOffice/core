@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_25244d0d",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3301,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-04-25T04:55:11Z",
+      "side": 1,
+      "message": "By definition, I think this is not possible for a newline. Is that correct?  So it really ought to be pulled out of this one and the following COLUMN_BREAK (although the performance penalty is almost nill).  Keeping it just matches the lower down non-newline code (from which this was copied).",
+      "range": {
+        "startLine": 3301,
+        "startChar": 67,
+        "endLine": 3301,
+        "endChar": 93
+      },
+      "revId": "74b9486fbd2810cf90110f6618f6534da666eb00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
