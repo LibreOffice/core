@@ -80,7 +80,7 @@ OUString GetInfoBarIconName(InfoBarType ibType)
        aRet = "vcl/res/infobox.svg";
        break;
     case InfoBarType::Success:
-        aRet = "cmd/lc_apply.svg";
+        aRet = "vcl/res/successbox.svg";
         break;
     case InfoBarType::Warning:
         aRet = "vcl/res/warningbox.svg";
