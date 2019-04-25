@@ -37,7 +37,6 @@ $(eval $(call gb_Executable_add_exception_objects,ui-previewer,\
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Executable_add_libs,ui-previewer,\
 	-lm $(DLOPEN_LIBS) \
-	-lpthread \
     -lX11 \
 ))
 

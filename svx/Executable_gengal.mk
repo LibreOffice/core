@@ -64,13 +64,11 @@ endif
 ifeq ($(DISABLE_GUI),TRUE)
 $(eval $(call gb_Executable_add_libs,gengal,\
 	$(DLOPEN_LIBS) \
-	-lpthread \
 ))
 else
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Executable_add_libs,gengal,\
 	$(DLOPEN_LIBS) \
-	-lpthread \
     -lX11 \
 ))
 

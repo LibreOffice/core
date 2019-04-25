@@ -70,7 +70,6 @@ $(eval $(call gb_Executable_add_libs,updater,\
 	-lXrender \
 	-lSM \
 	-lICE \
-	-lpthread \
 ))
 endif
 

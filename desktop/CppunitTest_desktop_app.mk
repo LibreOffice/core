@@ -66,7 +66,6 @@ endif
 
 $(eval $(call gb_CppunitTest_add_libs,desktop_app,\
 	-lm $(DLOPEN_LIBS) \
-	-lpthread \
     -lX11 \
 ))
 endif

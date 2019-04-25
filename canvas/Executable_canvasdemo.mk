@@ -45,7 +45,6 @@ $(eval $(call gb_Executable_use_static_libraries,canvasdemo,\
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Executable_add_libs,canvasdemo,\
     -lm $(DLOPEN_LIBS) \
-    -lpthread \
     -lX11 \
 ))
 

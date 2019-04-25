@@ -57,7 +57,6 @@ $(eval $(call gb_Executable_add_libs,test_updater_dialog,\
 	-lXrender \
 	-lSM \
 	-lICE \
-	-lpthread \
 ))
 endif
 
