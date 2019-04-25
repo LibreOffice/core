@@ -61,12 +61,14 @@ protected:
     int           getXPathPosition(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rChildName);
     /**
      * Assert that rXPath exists, and returns exactly one node.
-     * In case rAttribute is provided, the rXPath's attribute's value must
-     * equal to the rExpected value.
      */
-    void          assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath,
-                              const OString& rAttribute = OString(),
-                              const OUString& rExpectedValue = OUString());
+    void          assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath);
+    /**
+     * Assert that rXPath exists, returns exactly one node, and the rXPath's attribute's value
+     * equals to the rExpected value.
+     */
+    void          assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute,
+                              const OUString& rExpectedValue);
     void          assertXPathAttrs(xmlDocPtr pXmlDoc, const OString& rXPath,
                           const std::vector<std::pair<OString, OUString>>& aPairVector);
     /**
