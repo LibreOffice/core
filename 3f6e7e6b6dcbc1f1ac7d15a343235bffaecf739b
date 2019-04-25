@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_7605307a",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 1539,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-04-25T06:23:10Z",
+      "side": 1,
+      "message": "should this be plural? You can select multiple rows and delete them.",
+      "range": {
+        "startLine": 1539,
+        "startChar": 24,
+        "endLine": 1539,
+        "endChar": 27
+      },
+      "revId": "3f6e7e6b6dcbc1f1ac7d15a343235bffaecf739b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
