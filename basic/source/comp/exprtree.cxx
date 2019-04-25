@@ -500,6 +500,9 @@ std::unique_ptr<SbiExprNode> SbiExpression::Operand( bool bUsedForTypeOf )
         break;
     case DOT:   // .with
         pRes = Term(); break;
+    case NOT:
+        pRes = VBA_Not();
+        break;
     case NUMBER:
         pParser->Next();
         pRes = std::make_unique<SbiExprNode>( pParser->GetDbl(), pParser->GetType() );
