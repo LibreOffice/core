@@ -184,7 +184,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
     // column widths ----------------------------------------------------------
 
     maColWidths.build_tree();
-    for( SCCOL nCol : rDoc.GetColumnsRange(nScTab, 0, MAXCOL) )
+    for (SCCOL nCol = 0; nCol <= MAXCOL; ++nCol)
     {
         sal_uInt16 nWidth = mnDefWidth;
         if (GetColFlag(nCol, ExcColRowFlags::Used))
