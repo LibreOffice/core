@@ -298,7 +298,7 @@ namespace accessibility
 
     void AccessibleEmptyEditSource::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
-        const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint );
+        const SdrHint* pSdrHint = ( rHint.GetId() == SfxHintId::ThisIsAnSdrHint ? static_cast<const SdrHint*>(&rHint) : nullptr );
 
         if( pSdrHint && pSdrHint->GetKind() == SdrHintKind::BeginEdit &&
             &mrObj == pSdrHint->GetObject() && mpEditSource.get() )
