@@ -168,7 +168,7 @@ class XclExpCFImpl;
 class XclExpCF : public XclExpRecord, protected XclExpRoot
 {
 public:
-    explicit            XclExpCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority );
+    explicit            XclExpCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority, ScAddress aOrigin );
     virtual             ~XclExpCF() override;
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
