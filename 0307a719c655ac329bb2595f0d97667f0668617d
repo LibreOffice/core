@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_11ab96d6",
+        "filename": "svx/source/accessibility/AccessibleTextHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1315,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-25T09:27:00Z",
+      "side": 1,
+      "message": "this if block can get moved to the beginning",
+      "revId": "0307a719c655ac329bb2595f0d97667f0668617d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
