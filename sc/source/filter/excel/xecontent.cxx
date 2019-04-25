@@ -581,7 +581,7 @@ void XclExpLabelranges::Save( XclExpStream& rStrm )
 class XclExpCFImpl : protected XclExpRoot
 {
 public:
-    explicit            XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority );
+    explicit            XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority, ScAddress aOrigin );
 
     /** Writes the body of the CF record. */
     void                WriteBody( XclExpStream& rStrm );
@@ -589,6 +589,7 @@ public:
 
 private:
     const ScCondFormatEntry& mrFormatEntry; /// Calc conditional format entry.
+    ScAddress           maOrigin;           /// Top left cell of the combined range
     XclFontData         maFontData;         /// Font formatting attributes.
     XclExpCellBorder    maBorder;           /// Border formatting attributes.
     XclExpCellArea      maArea;             /// Pattern formatting attributes.
@@ -610,9 +611,10 @@ private:
     bool                mbFormula2;
 };
 
-XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority ) :
+XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority, ScAddress aOrigin ) :
     XclExpRoot( rRoot ),
     mrFormatEntry( rFormatEntry ),
+    maOrigin( aOrigin ),
     mnFontColorId( 0 ),
     mnType( EXC_CF_TYPE_CELL ),
     mnOperator( EXC_CF_CMP_NONE ),
@@ -628,6 +630,10 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
     mbPattUsed( false ),
     mbFormula2(false)
 {
+    // Set correct tab for maOrigin from GetValidSrcPos() of the format-entry.
+    ScAddress aValidSrcPos = mrFormatEntry.GetValidSrcPos();
+    maOrigin.SetTab(aValidSrcPos.Tab());
+
     /*  Get formatting attributes here, and not in WriteBody(). This is needed to
         correctly insert all colors into the palette. */
 
@@ -1053,7 +1059,7 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
     if (RequiresFixedFormula(eOperation))
     {
         rWorksheet->startElement( XML_formula, FSEND );
-        OString aFormula = GetFixedFormula(eOperation, mrFormatEntry.GetValidSrcPos(), aText);
+        OString aFormula = GetFixedFormula(eOperation, maOrigin, aText);
         rWorksheet->writeEscaped(aFormula.getStr());
         rWorksheet->endElement( XML_formula );
     }
@@ -1077,10 +1083,10 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_cfRule );
 }
 
-XclExpCF::XclExpCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority = 0 ) :
+XclExpCF::XclExpCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority, ScAddress aOrigin ) :
     XclExpRecord( EXC_ID_CF ),
     XclExpRoot( rRoot ),
-    mxImpl( new XclExpCFImpl( rRoot, rFormatEntry, nPriority ) )
+    mxImpl( new XclExpCFImpl( rRoot, rFormatEntry, nPriority, aOrigin ) )
 {
 }
 
@@ -1289,11 +1295,12 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
     if( !maXclRanges.empty() )
     {
         std::vector<XclExpExtCondFormatData> aExtEntries;
+        ScAddress aOrigin = aScRanges.Combine().aStart;
         for( size_t nIndex = 0, nCount = rCondFormat.size(); nIndex < nCount; ++nIndex )
             if( const ScFormatEntry* pFormatEntry = rCondFormat.GetEntry( nIndex ) )
             {
                 if(pFormatEntry->GetType() == ScFormatEntry::Type::Condition)
-                    maCFList.AppendNewRecord( new XclExpCF( GetRoot(), static_cast<const ScCondFormatEntry&>(*pFormatEntry), ++rIndex ) );
+                    maCFList.AppendNewRecord( new XclExpCF( GetRoot(), static_cast<const ScCondFormatEntry&>(*pFormatEntry), ++rIndex, aOrigin ) );
                 else if(pFormatEntry->GetType() == ScFormatEntry::Type::ExtCondition)
                 {
                     const ScCondFormatEntry& rFormat = static_cast<const ScCondFormatEntry&>(*pFormatEntry);
