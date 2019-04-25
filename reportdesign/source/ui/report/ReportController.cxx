@@ -85,7 +85,12 @@
 #include <svx/svxids.hrc>
 #include <svx/svdobj.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <svx/xfillit.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xflftrit.hxx>
+#include <svx/xsflclit.hxx>
 #include <svx/xflbckit.hxx>
 #include <svx/xflbmpit.hxx>
 #include <svx/xflbmsli.hxx>

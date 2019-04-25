@@ -32,7 +32,7 @@
 #include <editeng/brushitem.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/xfillit.hxx>
+#include <svx/xbtmpit.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/xoutbmp.hxx>

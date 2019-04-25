@@ -34,6 +34,7 @@
 
 #include <svx/svdview.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/xflclit.hxx>
 #include <editeng/colritem.hxx>
 #include <svx/xattr.hxx>
 #include <svx/xtable.hxx>
