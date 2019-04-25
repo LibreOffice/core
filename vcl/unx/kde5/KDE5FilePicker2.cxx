@@ -98,16 +98,6 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     // set layout so custom widgets show up in our native file dialog
     setCustomControlWidgetLayout(_layout);
 
-    m_pFileDialog->setSupportedSchemes({
-        QStringLiteral("file"),
-        QStringLiteral("ftp"),
-        QStringLiteral("http"),
-        QStringLiteral("https"),
-        QStringLiteral("webdav"),
-        QStringLiteral("webdavs"),
-        QStringLiteral("smb"),
-    });
-
     // used to set the custom controls
     qApp->installEventFilter(this);
 }
