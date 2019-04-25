@@ -47,7 +47,6 @@ write_ALL_LANG();
 write_OTHER_LANGS();
 write_DIR_ISOLANGUAGE_ALL_LANG_2();
 write_DIR_ISOLANGUAGE_ALL_LANG();
-write_DIR_ISOLANGUAGE_ALL_LANG_LPROJ();
 write_EXTRA_ALL_LANG();
 write_EXTRA_ALL_LANG_BUT_EN_US();
 write_MO_ALL_LANG_EXCEPT_EN_US_AND_QTZ();
@@ -128,18 +127,6 @@ sub write_DIR_ISOLANGUAGE_ALL_LANG
     print OUTFILE "\\\n\tDosName (en-US) = \"en\"; \\\n\t";
     print OUTFILE "OTHER_LANGS";
         print OUTFILE "\n\n";
-}
-
-sub write_DIR_ISOLANGUAGE_ALL_LANG_LPROJ
-{
-    print OUTFILE "#define DIR_ISOLANGUAGE_ALL_LANG_LPROJ ";
-    foreach $lang (@completelangiso) {
-        my $speciallang = $lang;
-        if ( $speciallang eq "en-US" ) { $speciallang = "en"; }
-        print OUTFILE "\\\n\tDosName ($lang) = \"$speciallang.lproj\"";
-        print OUTFILE "; " if ( $lang ne $completelangiso[$#completelangiso]);
-    }
-    print OUTFILE "\n\n";
 }
 
 sub write_EXTRA_ALL_LANG
