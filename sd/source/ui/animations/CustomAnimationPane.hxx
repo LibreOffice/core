@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
-#define INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
+#pragma once
 
 #include <vcl/layout.hxx>
 #include <vcl/field.hxx>
@@ -193,6 +192,5 @@ void fillRepeatComboBox(weld::ComboBox& rBox);
 
 }
 
-#endif // INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WW8GLSY_HXX
-#define INCLUDED_SW_SOURCE_FILTER_WW8_WW8GLSY_HXX
+#pragma once
 
 #include <memory>
 #include <sot/storage.hxx>
@@ -84,6 +83,5 @@ private:
     WW8Glossary(const WW8Glossary&) = delete;
     WW8Glossary& operator=(const WW8Glossary&) = delete;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_ACCESSIBLEFILTERMENU_HXX
-#define INCLUDED_SC_INC_ACCESSIBLEFILTERMENU_HXX
+#pragma once
 
 #include <AccessibleContextBase.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -134,6 +133,5 @@ private:
     VclPtr<ScMenuFloatingWindow> mpWindow;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SDTACITM_HXX
-#define INCLUDED_SVX_SDTACITM_HXX
+#pragma once
 
 #include <svl/intitem.hxx>
 #include <svx/svddef.hxx>
@@ -35,6 +34,5 @@ public:
     { return new SdrTextAniCountItem(*this); }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

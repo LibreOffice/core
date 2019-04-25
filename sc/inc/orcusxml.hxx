@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_ORCUSXML_HXX
-#define INCLUDED_SC_INC_ORCUSXML_HXX
+#pragma once
 
 #include "scdllapi.h"
 #include "address.hxx"
@@ -77,6 +76,5 @@ struct ScOrcusImportXMLParam
     RangeLinksType maRangeLinks;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

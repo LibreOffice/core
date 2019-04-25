@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SOURCE_APPL_IMESTATUSWINDOW_HXX
-#define INCLUDED_SFX2_SOURCE_APPL_IMESTATUSWINDOW_HXX
+#pragma once
 
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -114,6 +113,5 @@ private:
 
 } }
 
-#endif // INCLUDED_SFX2_SOURCE_APPL_IMESTATUSWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

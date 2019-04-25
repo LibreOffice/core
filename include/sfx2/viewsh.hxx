@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_VIEWSH_HXX
-#define INCLUDED_SFX2_VIEWSH_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <memory>
@@ -361,7 +360,6 @@ inline SfxViewFrame* SfxViewShell::GetViewFrame() const
     return pFrame;
 }
 
-#endif // INCLUDED_SFX2_VIEWSH_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_UICONFIGURATION_IMAGEMANAGER_HXX
-#define INCLUDED_FRAMEWORK_INC_UICONFIGURATION_IMAGEMANAGER_HXX
+#pragma once
 
 #include <memory>
 
@@ -107,6 +106,5 @@ namespace framework
    };
 }
 
-#endif // INCLUDED_FRAMEWORK_INC_UICONFIGURATION_IMAGEMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

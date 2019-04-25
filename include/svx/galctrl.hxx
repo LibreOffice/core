@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_GALCTRL_HXX
-#define INCLUDED_SVX_GALCTRL_HXX
+#pragma once
 
 #include <vcl/graph.hxx>
 #include <vcl/fixed.hxx>
@@ -175,6 +174,5 @@ public:
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
 };
 
-#endif // INCLUDED_SVX_GALCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

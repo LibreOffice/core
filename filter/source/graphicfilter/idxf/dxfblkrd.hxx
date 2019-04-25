@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFBLKRD_HXX
-#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFBLKRD_HXX
+#pragma once
 
 #include "dxfentrd.hxx"
 
@@ -73,7 +72,6 @@ public:
 
 };
 
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

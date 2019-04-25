@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WW8PAR_HXX
-#define INCLUDED_SW_SOURCE_FILTER_WW8_WW8PAR_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <filter/msfilter/msdffimp.hxx>
@@ -1929,6 +1928,5 @@ bool RTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
     SwTwips nPageRight, SwTwips nPageSize);
 void MatchEscherMirrorIntoFlySet(const SvxMSDffImportRec &rRecord,
     SfxItemSet &rFlySet);
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

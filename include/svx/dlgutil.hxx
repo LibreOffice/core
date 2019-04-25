@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_DLGUTIL_HXX
-#define INCLUDED_SVX_DLGUTIL_HXX
+#pragma once
 
 #include <svtools/unitconv.hxx>
 #include <svx/svxdllapi.h>
@@ -33,6 +32,5 @@ SVX_DLLPUBLIC bool GetApplyCharUnit( const SfxItemSet& );
 constexpr DrawModeFlags OUTPUT_DRAWMODE_COLOR = DrawModeFlags::Default;
 constexpr DrawModeFlags OUTPUT_DRAWMODE_CONTRAST = DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

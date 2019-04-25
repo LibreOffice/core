@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPRESOURCE_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPRESOURCE_HXX
+#pragma once
 
 #define     IMPLEMENTATION_NAME         "com.ibm.ILWPImportFilter"
 
@@ -63,6 +62,5 @@ const char  STR_IMPLEMENTATION_NAME[]   = IMPLEMENTATION_NAME;
 const char  STR_SERVICE_NAME[]          = "com.sun.star.document.ImportFilter";
 const char  STR_WRITER_IMPORTER_NAME[]  = "com.sun.star.comp.Writer.XMLImporter";
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

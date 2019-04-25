@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_DRAWINGLAYERDLLAPI_H
-#define INCLUDED_DRAWINGLAYER_DRAWINGLAYERDLLAPI_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -19,6 +18,5 @@
 #endif
 #define DRAWINGLAYER_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

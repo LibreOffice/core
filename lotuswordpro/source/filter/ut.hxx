@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_UT_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_UT_HXX
+#pragma once
 # include <sal/types.h>
 
 namespace OpenStormBento
@@ -70,6 +69,5 @@ inline sal_uInt8 UtGetIntelByte(sal_uInt8 const * pData)
 { return * pData; }
 
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

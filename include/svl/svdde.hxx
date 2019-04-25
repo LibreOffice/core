@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_SVDDE_HXX
-#define INCLUDED_SVL_SVDDE_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -321,6 +320,5 @@ inline long DdeTransaction::GetError()
 {
     return rDde.GetError();
 }
-#endif // INCLUDED_SVL_SVDDE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

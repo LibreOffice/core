@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_DASHEDLINE_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_DASHEDLINE_HXX
+#pragma once
 
 #include <basegfx/color/bcolor.hxx>
 #include <vcl/fixed.hxx>
@@ -25,6 +24,5 @@ public:
     virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

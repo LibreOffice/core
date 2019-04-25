@@ -22,8 +22,7 @@
 // (C) 1998 Mizi Research, All rights are reserved
 
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
-#define INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
+#pragma once
 
 #include <algorithm>
 #include <list>
@@ -328,6 +327,5 @@ public:
 
 HWPFile *GetCurrentDoc(void);
 HWPFile *SetCurrentDoc(HWPFile *hwpfp);
-#endif // INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

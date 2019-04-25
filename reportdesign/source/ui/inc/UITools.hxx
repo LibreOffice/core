@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_UITOOLS_HXX
-#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_UITOOLS_HXX
+#pragma once
 
 #include <com/sun/star/report/XGroup.hpp>
 #include <com/sun/star/report/XReportControlFormat.hpp>
@@ -177,6 +176,5 @@ namespace rptui
     */
     void setZoomFactor(const Fraction& _aZoom, vcl::Window& _rWindow);
 }
-#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_UITOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

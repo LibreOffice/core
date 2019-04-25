@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCHEADERFOOTER_HXX
-#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCHEADERFOOTER_HXX
+#pragma once
 
 #include "acccontext.hxx"
 
@@ -63,6 +62,5 @@ public:
     sal_Int32 SAL_CALL getBackground() override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

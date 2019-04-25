@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_DEVICE_COORDINATE_HXX
-#define INCLUDED_VCL_DEVICE_COORDINATE_HXX
+#pragma once
 
 #include <config_vcl.h>
 
@@ -23,6 +22,5 @@ typedef long DeviceCoordinate;
 
 #endif /* ! Carpet Cushion */
 
-#endif /* NDef INCLUDED_VCL_DEVICE_COORDINATE_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

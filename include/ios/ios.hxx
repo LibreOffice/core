@@ -7,13 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_IOS_IOS_HXX
-#define INCLUDED_IOS_IOS_HXX
+#pragma once
 
 #include "com/sun/star/uno/Any.hxx"
 
 extern void lo_ios_throwException(css::uno::Any const& aException);
-
-#endif // INCLUDED_IOS_IOS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

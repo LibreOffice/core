@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLS_WLDCRD_HXX
-#define INCLUDED_TOOLS_WLDCRD_HXX
+#pragma once
 
 #include <tools/toolsdllapi.h>
 #include <osl/thread.h>
@@ -57,6 +56,5 @@ public:
     bool Matches( const OUString& rStr ) const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

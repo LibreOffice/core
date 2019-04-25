@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_XMLOFF_AUTOSTYLEENTRY_HXX
-#define INCLUDED_XMLOFF_AUTOSTYLEENTRY_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
@@ -26,7 +25,5 @@ struct XMLOFF_DLLPUBLIC AutoStyleEntry
 };
 
 } // end xmloff
-
-#endif // INCLUDED_XMLOFF_AUTOSTYLEENTRY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_UNOAPI_HXX
-#define INCLUDED_SVX_UNOAPI_HXX
+#pragma once
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -91,6 +90,5 @@ SVX_DLLPUBLIC bool SvxFieldUnitToMeasureUnit( const FieldUnit nVcl, short& eApi 
 [[nodiscard]] SVX_DLLPUBLIC OUString
     SvxUnogetInternalNameForItem(const sal_uInt16 nWhich, const OUString& rApiName);
 
-#endif // INCLUDED_SVX_UNOAPI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

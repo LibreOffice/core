@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NLANGTAG_LANG_H
-#define INCLUDED_I18NLANGTAG_LANG_H
+#pragma once
 
 /**
    These are MS LANGIDs, the lower 10 bits (mask 0x03ff, values below 0x0400
@@ -768,6 +767,5 @@ namespace o3tl
 #define LANGUAGE_USER_SYSTEM_CONFIG         LanguageType(0xFFFE)  /* not a locale, to be used only in configuration context to obtain system default, primary 0x3fe, sub 0x3f */
 
 
-#endif /* INCLUDED_I18NLANGTAG_LANG_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

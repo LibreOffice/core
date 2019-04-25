@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_XML_ACCELERATORCONFIGURATIONREADER_HXX
-#define INCLUDED_FRAMEWORK_INC_XML_ACCELERATORCONFIGURATIONREADER_HXX
+#pragma once
 
 #include <accelerators/acceleratorcache.hxx>
 #include <general.h>
@@ -132,6 +131,5 @@ class AcceleratorConfigurationReader : public ::cppu::WeakImplHelper< css::xml::
 
 } // namespace framework
 
-#endif // INCLUDED_FRAMEWORK_INC_XML_ACCELERATORCONFIGURATIONREADER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

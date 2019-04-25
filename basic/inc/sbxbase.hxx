@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_INC_SBXBASE_HXX
-#define INCLUDED_BASIC_INC_SBXBASE_HXX
+#pragma once
 
 #include <i18nlangtag/lang.h>
 #include <basic/sbxdef.hxx>
@@ -53,6 +52,5 @@ struct SbxAppData
 
 BASIC_DLLPUBLIC SbxAppData& GetSbxData_Impl();
 
-#endif // INCLUDED_BASIC_INC_SBXBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

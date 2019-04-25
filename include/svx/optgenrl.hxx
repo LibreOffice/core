@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_OPTGENRL_HXX
-#define INCLUDED_SVX_OPTGENRL_HXX
+#pragma once
 
 // Defines for setting the focus of a Edit via a slot from external.
 enum class EditPosition
@@ -40,6 +39,5 @@ enum class EditPosition
     EMAIL      = 15,
 };
 
-#endif // INCLUDED_SVX_OPTGENRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

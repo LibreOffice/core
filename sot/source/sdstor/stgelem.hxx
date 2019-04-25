@@ -20,8 +20,7 @@
 // This file reflects the structure of MS file elements.
 // It is very sensitive to alignment!
 
-#ifndef INCLUDED_SOT_SOURCE_SDSTOR_STGELEM_HXX
-#define INCLUDED_SOT_SOURCE_SDSTOR_STGELEM_HXX
+#pragma once
 
 #include <sot/stg.hxx>
 
@@ -141,6 +140,5 @@ public:
 #define STG_FAT     -3L                 // page is FAT page
 #define STG_MASTER  -4L                 // page is master FAT page
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

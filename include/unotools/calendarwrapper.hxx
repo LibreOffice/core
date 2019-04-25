@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_CALENDARWRAPPER_HXX
-#define INCLUDED_UNOTOOLS_CALENDARWRAPPER_HXX
+#pragma once
 
 #include <tools/datetime.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -107,6 +106,5 @@ public:
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

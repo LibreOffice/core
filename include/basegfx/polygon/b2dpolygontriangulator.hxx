@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_POLYGON_B2DPOLYGONTRIANGULATOR_HXX
-#define INCLUDED_BASEGFX_POLYGON_B2DPOLYGONTRIANGULATOR_HXX
+#pragma once
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -72,6 +71,5 @@ namespace basegfx
     } // end of namespace triangulator
 } // end of namespace basegfx
 
-#endif // INCLUDED_BASEGFX_POLYGON_B2DPOLYGONTRIANGULATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

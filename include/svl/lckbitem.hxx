@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVL_LCKBITEM_HXX
-#define INCLUDED_SVL_LCKBITEM_HXX
+#pragma once
 
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
@@ -51,6 +50,5 @@ public:
                                         sal_uInt8 nMemberId = 0 ) const override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_LINGUCOMPONENT_SOURCE_LANGUAGEGUESSING_SIMPLEGUESSER_HXX
-#define INCLUDED_LINGUCOMPONENT_SOURCE_LANGUAGEGUESSING_SIMPLEGUESSER_HXX
+#pragma once
 
 #include <string.h>
 #include <string>
@@ -107,6 +106,5 @@ private:
     void XableLanguage(const string& lang, char mask);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

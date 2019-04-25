@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_FORMULA_FUNCVARARGS_H
-#define INCLUDED_FORMULA_FUNCVARARGS_H
+#pragma once
 
 /** Used to indicate a variable number of parameters for the Function Wizard.
 
@@ -44,6 +43,5 @@
  */
 #define PAIRED_VAR_ARGS     (VAR_ARGS + VAR_ARGS)
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

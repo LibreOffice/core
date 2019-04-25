@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPPATH_HXX
-#define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPPATH_HXX
+#pragma once
 
 #include "emfphelperdata.hxx"
 
@@ -41,6 +40,5 @@ namespace emfplushelper
     };
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

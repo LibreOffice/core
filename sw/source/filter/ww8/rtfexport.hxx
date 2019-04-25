@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_RTFEXPORT_HXX
-#define INCLUDED_SW_SOURCE_FILTER_WW8_RTFEXPORT_HXX
+#pragma once
 
 #include <memory>
 #include "wrtww8.hxx"
@@ -230,7 +229,5 @@ private:
     /// Item set of the first page during export of a follow page format.
     const SfxItemSet* m_pFirstPageItemSet = nullptr;
 };
-
-#endif // INCLUDED_SW_SOURCE_FILTER_WW8_RTFEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

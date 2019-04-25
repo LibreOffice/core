@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMULA_FORMULACOMPILER_HXX
-#define INCLUDED_FORMULA_FORMULACOMPILER_HXX
+#pragma once
 
 #include <memory>
 #include <unordered_map>
@@ -443,7 +442,6 @@ private:
 } // formula
 
 
-#endif // INCLUDED_FORMULA_FORMULACOMPILER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_BITMAPCOLORIZEFILTER_HXX
-#define INCLUDED_VCL_INC_BITMAPCOLORIZEFILTER_HXX
+#pragma once
 
 #include <tools/color.hxx>
 
@@ -28,7 +27,5 @@ public:
 private:
     Color const maColor;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

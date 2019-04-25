@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SDBCX_VKEY_HXX
-#define INCLUDED_CONNECTIVITY_SDBCX_VKEY_HXX
+#pragma once
 
 
 #include <comphelper/IdPropArrayHelper.hxx>
@@ -107,7 +106,6 @@ namespace connectivity
     }
 }
 
-#endif // INCLUDED_CONNECTIVITY_SDBCX_VKEY_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

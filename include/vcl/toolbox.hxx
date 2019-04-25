@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_TOOLBOX_HXX
-#define INCLUDED_VCL_TOOLBOX_HXX
+#pragma once
 
 #include <vcl/vclenum.hxx>
 #include <vcl/dllapi.h>
@@ -538,6 +537,5 @@ inline ToolBox::ImplToolItems::size_type ToolBox::GetFloatingLines() const
     return mnFloatLines;
 }
 
-#endif // INCLUDED_VCL_TOOLBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

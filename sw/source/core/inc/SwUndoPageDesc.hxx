@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_SWUNDOPAGEDESC_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_SWUNDOPAGEDESC_HXX
+#pragma once
 
 #include <undobj.hxx>
 #include <pagedesc.hxx>
@@ -82,6 +81,5 @@ public:
 
     virtual SwRewriter GetRewriter() const override;
 };
-#endif // _SW_UNDO_PAGE_DESC_CHANGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

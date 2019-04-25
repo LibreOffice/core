@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOCONTROLS_SOURCE_INC_STATUSINDICATOR_HXX
-#define INCLUDED_UNOCONTROLS_SOURCE_INC_STATUSINDICATOR_HXX
+#pragma once
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XFixedText.hpp>
@@ -181,6 +180,5 @@ private:
 
 }
 
-#endif // INCLUDED_UNOCONTROLS_SOURCE_INC_STATUSINDICATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

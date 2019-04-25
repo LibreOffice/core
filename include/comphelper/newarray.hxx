@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_NEWARRAY_HXX
-#define INCLUDED_COMPHELPER_NEWARRAY_HXX
+#pragma once
 
 #include <limits>
 #include <new>
@@ -37,6 +36,5 @@ newArray_null(size_t const n) throw()
 
 } // namespace comphelper
 
-#endif // INCLUDED_COMPHELPER_NEWARRAY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

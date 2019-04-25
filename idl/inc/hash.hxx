@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_IDL_INC_HASH_HXX
-#define INCLUDED_IDL_INC_HASH_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <tools/ref.hxx>
@@ -56,6 +55,5 @@ public:
     OString GetNearString( const OString& rName ) const;
 };
 
-#endif // INCLUDED_IDL_INC_HASH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

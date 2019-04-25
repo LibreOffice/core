@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_MSFILTER_SVDFPPT_HXX
-#define INCLUDED_FILTER_MSFILTER_SVDFPPT_HXX
+#pragma once
 
 #include <algorithm>
 #include <cstddef>
@@ -1479,6 +1478,5 @@ enum class PptPlaceholder : sal_uInt8
     MEDIACLIP              = 24  // 25 Media Clip
 };
 
-#endif // INCLUDED_FILTER_MSFILTER_SVDFPPT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

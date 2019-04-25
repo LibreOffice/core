@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_FLYENUM_HXX
-#define INCLUDED_SW_INC_FLYENUM_HXX
+#pragma once
 
 enum FlyCntType
 {
@@ -42,6 +41,5 @@ enum class SwChainRet
     SELF           = 6        ///< Self-chaining is not allowed.
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

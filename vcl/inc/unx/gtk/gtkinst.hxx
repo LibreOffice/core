@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_GTK_GTKINST_HXX
-#define INCLUDED_VCL_INC_UNX_GTK_GTKINST_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -387,6 +386,5 @@ public:
 
 GdkPixbuf* load_icon_by_name(const OUString& rIconName);
 
-#endif // INCLUDED_VCL_INC_UNX_GTK_GTKINST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

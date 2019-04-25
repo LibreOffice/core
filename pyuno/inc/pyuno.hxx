@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_PYUNO_INC_PYUNO_HXX
-#define INCLUDED_PYUNO_INC_PYUNO_HXX
+#pragma once
 
 #ifndef Py_PYTHON_H
 #include <Python.h>
@@ -320,6 +319,5 @@ public:
 };
 
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

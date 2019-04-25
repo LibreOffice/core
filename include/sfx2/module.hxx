@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_MODULE_HXX
-#define INCLUDED_SFX2_MODULE_HXX
+#pragma once
 
 #include <memory>
 #include <sal/config.h>
@@ -97,6 +96,5 @@ public:
     SAL_DLLPRIVATE SfxChildWinFactArr_Impl* GetChildWinFactories_Impl() const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

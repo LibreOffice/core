@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEHDL_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEHDL_HXX
+#pragma once
 
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Any.h>
@@ -199,6 +198,5 @@ public:
     virtual void SAL_CALL notifyTermination( const css::lang::EventObject& e ) override;
 };
 
-#endif // INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEHDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
-#define INCLUDED_SVTOOLS_MISCOPT_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
@@ -109,6 +108,5 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
 
 };      // class SvtMiscOptions
 
-#endif  // #ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

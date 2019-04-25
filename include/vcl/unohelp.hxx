@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNOHELP_HXX
-#define INCLUDED_VCL_UNOHELP_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -56,6 +55,5 @@ VCL_DLLPUBLIC css::awt::FontSlant ConvertFontSlant( FontItalic eWeight );
 VCL_DLLPUBLIC FontItalic          ConvertFontSlant( css::awt::FontSlant );
 }}  // namespace vcl::unohelper
 
-#endif // INCLUDED_VCL_UNOHELP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

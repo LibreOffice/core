@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_INC_XMLXTEXP_HXX
-#define INCLUDED_SVX_SOURCE_INC_XMLXTEXP_HXX
+#pragma once
 
 #include <xmloff/xmlexp.hxx>
 
@@ -59,6 +58,5 @@ private:
     const css::uno::Reference< css::container::XNameContainer > & mxTable;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

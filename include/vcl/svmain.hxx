@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SVMAIN_HXX
-#define INCLUDED_VCL_SVMAIN_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <vcl/dllapi.h>
@@ -29,6 +28,5 @@ VCL_DLLPUBLIC int ImplSVMain();
 
 VCL_DLLPUBLIC int SVMain();
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_BITMAPCOLOR_HXX
-#define INCLUDED_VCL_BITMAPCOLOR_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
@@ -221,6 +220,5 @@ inline sal_uInt16 BitmapColor::GetColorError( const BitmapColor& rBitmapColor ) 
         abs( static_cast<int>(mcRed) - static_cast<int>(rBitmapColor.mcRed) ) );
 }
 
-#endif // INCLUDED_VCL_BITMAPCOLOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

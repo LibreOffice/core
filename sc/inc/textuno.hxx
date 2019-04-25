@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_TEXTUNO_HXX
-#define INCLUDED_SC_INC_TEXTUNO_HXX
+#pragma once
 
 #include "address.hxx"
 #include <editeng/unotext.hxx>
@@ -373,6 +372,5 @@ public:
         virtual  ~ScCellTextObj() throw() override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

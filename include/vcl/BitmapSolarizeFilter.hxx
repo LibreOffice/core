@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPSOLARIZEFILTER_HXX
-#define INCLUDED_VCL_BITMAPSOLARIZEFILTER_HXX
+#pragma once
 
 #include <vcl/BitmapFilter.hxx>
 
@@ -28,7 +27,5 @@ public:
 private:
     sal_uInt8 const mcSolarGreyThreshold;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

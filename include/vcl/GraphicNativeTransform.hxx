@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_GRAPHICNATIVETRANSFORM_HXX
-#define INCLUDED_VCL_GRAPHICNATIVETRANSFORM_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -40,6 +39,5 @@ public:
     void rotate(sal_uInt16 aRotation);
 };
 
-#endif // INCLUDED_VCL_GRAPHICNATIVETRANSFORM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

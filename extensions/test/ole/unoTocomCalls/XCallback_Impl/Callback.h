@@ -18,8 +18,7 @@
  */
 // Callback.h : Declaration of the CCallback
 
-#ifndef INCLUDED_EXTENSIONS_TEST_OLE_UNOTOCOMCALLS_XCALLBACK_IMPL_CALLBACK_H
-#define INCLUDED_EXTENSIONS_TEST_OLE_UNOTOCOMCALLS_XCALLBACK_IMPL_CALLBACK_H
+#pragma once
 
 #include "resource.h"
 
@@ -123,7 +122,6 @@ public:
     STDMETHOD(func1)();
 };
 
-#endif // INCLUDED_EXTENSIONS_TEST_OLE_UNOTOCOMCALLS_XCALLBACK_IMPL_CALLBACK_H
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

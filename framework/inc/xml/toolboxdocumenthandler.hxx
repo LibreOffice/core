@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_XML_TOOLBOXDOCUMENTHANDLER_HXX
-#define INCLUDED_FRAMEWORK_INC_XML_TOOLBOXDOCUMENTHANDLER_HXX
+#pragma once
 
 #include <framework/toolboxconfiguration.hxx>
 
@@ -157,6 +156,5 @@ class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler final
 
 } // namespace framework
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

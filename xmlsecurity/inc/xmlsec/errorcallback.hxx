@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_ERRORCALLBACK_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_ERRORCALLBACK_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
@@ -32,6 +31,5 @@ XSECXMLSEC_DLLPUBLIC void setErrorRecorder();
 //void setErrorRecorder(const css::uno::Reference< css::xml::crypto::XXMLEncryptionTemplate >& xTemplate);
 XSECXMLSEC_DLLPUBLIC void clearErrorRecorder();
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

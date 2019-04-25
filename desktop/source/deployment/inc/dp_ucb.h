@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_UCB_H
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_UCB_H
+#pragma once
 
 #include <vector>
 #include <rtl/byteseq.hxx>
@@ -94,6 +93,5 @@ bool readProperties( std::vector< std::pair< OUString, OUString> > & out_result,
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

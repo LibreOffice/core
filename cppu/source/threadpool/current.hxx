@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPU_SOURCE_THREADPOOL_CURRENT_HXX
-#define INCLUDED_CPPU_SOURCE_THREADPOOL_CURRENT_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -42,6 +41,5 @@ struct IdContainer
 IdContainer * getIdContainer();
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

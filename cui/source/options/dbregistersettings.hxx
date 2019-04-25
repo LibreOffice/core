@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_SOURCE_OPTIONS_DBREGISTERSETTINGS_HXX
-#define INCLUDED_CUI_SOURCE_OPTIONS_DBREGISTERSETTINGS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -77,6 +76,5 @@ namespace svx
 
 }
 
-#endif // INCLUDED_CUI_SOURCE_OPTIONS_DBREGISTERSETTINGS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

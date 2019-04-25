@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_ACCELERATORCACHE_HXX
-#define INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_ACCELERATORCACHE_HXX
+#pragma once
 
 #include <general.h>
 #include <stdtypes.h>
@@ -143,6 +142,5 @@ class AcceleratorCache
 
 } // namespace framework
 
-#endif // INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_ACCELERATORCACHE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

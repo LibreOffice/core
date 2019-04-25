@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_GDI_IMPANMVW_HXX
-#define INCLUDED_VCL_SOURCE_GDI_IMPANMVW_HXX
+#pragma once
 
 #include <vcl/animate.hxx>
 #include <vcl/vclptr.hxx>
@@ -93,6 +92,5 @@ private:
     bool            isMarked() const { return mbMarked; }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GTK_A11Y_ATKWRAPPER_HXX
-#define INCLUDED_VCL_UNX_GTK_A11Y_ATKWRAPPER_HXX
+#pragma once
 
 #include <atk/atk.h>
 #include <gtk/gtk.h>
@@ -126,6 +125,5 @@ OUStringToGChar(const OUString& rString )
 
 #define OUStringToConstGChar( string ) OUStringToOString( string, RTL_TEXTENCODING_UTF8 ).getStr()
 
-#endif // INCLUDED_VCL_UNX_GTK_A11Y_ATKWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

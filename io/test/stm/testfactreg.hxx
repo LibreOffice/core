@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_IO_TEST_STM_TESTFACTREG_HXX
-#define INCLUDED_IO_TEST_STM_TESTFACTREG_HXX
+#pragma once
 
 #include <rtl/strbuf.hxx>
 
@@ -106,6 +105,5 @@ Sequence<sal_Int8> createIntSeq( sal_Int32 i );
         }\
         ((void)0)
 
-#endif // INCLUDED_IO_TEST_STM_TESTFACTREG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

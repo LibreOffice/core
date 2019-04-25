@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_NATIVENUMBERWRAPPER_HXX
-#define INCLUDED_UNOTOOLS_NATIVENUMBERWRAPPER_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
@@ -67,6 +66,5 @@ public:
 
 };
 
-#endif // INCLUDED_UNOTOOLS_NATIVENUMBERWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

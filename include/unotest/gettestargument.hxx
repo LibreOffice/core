@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTEST_GETTESTARGUMENT_HXX
-#define INCLUDED_UNOTEST_GETTESTARGUMENT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <unotest/detail/unotestdllapi.hxx>
@@ -33,6 +32,5 @@ OOO_DLLPUBLIC_UNOTEST bool getTestArgument(
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

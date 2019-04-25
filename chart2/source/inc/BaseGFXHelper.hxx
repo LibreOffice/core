@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CHART2_SOURCE_INC_BASEGFXHELPER_HXX
-#define INCLUDED_CHART2_SOURCE_INC_BASEGFXHELPER_HXX
+#pragma once
 
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/range/b2irectangle.hxx>
@@ -84,6 +83,5 @@ void ReduceToRotationMatrix( ::basegfx::B3DHomMatrix & rB3DMatrix );
 } //  namespace chart
 
 // INCLUDED_CHART2_SOURCE_INC_BASEGFXHELPER_HXX
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

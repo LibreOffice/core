@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONCOLORNODE_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONCOLORNODE_HXX
+#pragma once
 
 #include "animationbasenode.hxx"
 #include <com/sun/star/animations/XAnimateColor.hpp>
@@ -49,6 +48,5 @@ private:
 } // namespace internal
 } // namespace presentation
 
-#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONCOLORNODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

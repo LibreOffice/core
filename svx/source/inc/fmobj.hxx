@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SOURCE_INC_FMOBJ_HXX
-#define INCLUDED_SVX_SOURCE_INC_FMOBJ_HXX
+#pragma once
 
 #include <svx/svdouno.hxx>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -113,6 +112,5 @@ private:
 };
 
 
-#endif // _FM_FMOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

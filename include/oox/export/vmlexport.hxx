@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_EXPORT_VMLEXPORT_HXX
-#define INCLUDED_OOX_EXPORT_VMLEXPORT_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <editeng/outlobj.hxx>
@@ -198,6 +197,5 @@ private:
 
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_FILEFMT_HXX
-#define INCLUDED_BASIC_SOURCE_INC_FILEFMT_HXX
+#pragma once
 
 class SvStream;
 
@@ -185,6 +184,5 @@ enum class FileOffset {
 //            sal_Int32  lower bound
 //            sal_Int32  upper bound
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

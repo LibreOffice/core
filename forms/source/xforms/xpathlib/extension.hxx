@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMS_SOURCE_XFORMS_XPATHLIB_EXTENSION_HXX
-#define INCLUDED_FORMS_SOURCE_XFORMS_XPATHLIB_EXTENSION_HXX
+#pragma once
 
 #include <rtl/ustring.h>
 #include <com/sun/star/uno/Reference.hxx>
@@ -54,6 +53,5 @@ public:
 
 };
 
-#endif // INCLUDED_FORMS_SOURCE_XFORMS_XPATHLIB_EXTENSION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

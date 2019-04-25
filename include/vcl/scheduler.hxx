@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SCHEDULER_HXX
-#define INCLUDED_VCL_SCHEDULER_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -80,6 +79,5 @@ public:
     static bool       GetDeterministicMode();
 };
 
-#endif // INCLUDED_VCL_SCHEDULER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

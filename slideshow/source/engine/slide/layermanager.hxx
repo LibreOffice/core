@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_LAYERMANAGER_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_LAYERMANAGER_HXX
+#pragma once
 
 #include <cppcanvas/spritecanvas.hxx>
 
@@ -357,6 +356,5 @@ namespace slideshow
     }
 }
 
-#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_LAYERMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

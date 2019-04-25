@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TESTTOOLS_SOURCE_BRIDGETEST_MULTI_HXX
-#define INCLUDED_TESTTOOLS_SOURCE_BRIDGETEST_MULTI_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -99,6 +98,5 @@ OUString testMulti( css::uno::Reference< test::testtools::bridgetest::XMulti >  
 
 } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

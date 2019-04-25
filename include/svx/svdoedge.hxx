@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDOEDGE_HXX
-#define INCLUDED_SVX_SVDOEDGE_HXX
+#pragma once
 
 #include <memory>
 #include <svx/svdotext.hxx>
@@ -408,6 +407,5 @@ public:
  //                     entire object, then the connector tries to find the most
  //                     convenient of the 4 vertex glue points (and only of those).
 
-#endif // INCLUDED_SVX_SVDOEDGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

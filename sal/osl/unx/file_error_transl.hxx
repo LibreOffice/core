@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_UNX_FILE_ERROR_TRANSL_HXX
-#define INCLUDED_SAL_OSL_UNX_FILE_ERROR_TRANSL_HXX
+#pragma once
 
 #include <osl/file.h>
 #include <sal/types.h>
@@ -32,6 +31,5 @@
 */
 oslFileError oslTranslateFileError(int Errno);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SCANLINE_HXX
-#define INCLUDED_VCL_SCANLINE_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
@@ -63,6 +62,5 @@ inline ScanlineFormat RemoveScanline(ScanlineFormat nFormat)
     return nFormat & ~ScanlineFormat::TopDown;
 }
 
-#endif // INCLUDED_VCL_SCANLINE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

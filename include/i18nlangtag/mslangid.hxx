@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NLANGTAG_MSLANGID_HXX
-#define INCLUDED_I18NLANGTAG_MSLANGID_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -324,6 +323,5 @@ inline LanguageType MsLangId::getSystemUILanguage()
     return getPlatformSystemUILanguage();
 }
 
-#endif // INCLUDED_I18NLANGTAG_MSLANGID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

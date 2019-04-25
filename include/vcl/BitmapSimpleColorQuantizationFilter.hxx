@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_INCLUDE_VCL_BITMAPSIMPLECOLORQUANTIZATIONFILTER_HXX
-#define INCLUDED_INCLUDE_VCL_BITMAPSIMPLECOLORQUANTIZATIONFILTER_HXX
+#pragma once
 
 #include <vcl/BitmapFilter.hxx>
 
@@ -31,7 +30,5 @@ public:
 private:
     sal_uInt16 const mnNewColorCount;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

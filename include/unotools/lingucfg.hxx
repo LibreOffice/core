@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_LINGUCFG_HXX
-#define INCLUDED_UNOTOOLS_LINGUCFG_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -204,6 +203,5 @@ public:
     bool                HasGrammarChecker() const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

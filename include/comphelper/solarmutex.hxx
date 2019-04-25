@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_SOLARMUTEX_HXX
-#define INCLUDED_COMPHELPER_SOLARMUTEX_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -90,6 +89,5 @@ inline sal_uInt32 SolarMutex::release( bool bUnlockAll )
 
 }
 
-#endif // INCLUDED_COMPHELPER_SOLARMUTEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

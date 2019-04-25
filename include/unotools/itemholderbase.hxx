@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_ITEMHOLDERBASE_HXX
-#define INCLUDED_UNOTOOLS_ITEMHOLDERBASE_HXX
+#pragma once
 
 #include <memory>
 #include <osl/mutex.hxx>
@@ -93,6 +92,5 @@ struct TItemInfo
     EItem eItem;
 };
 
-#endif // INCLUDED_UNOTOOLS_ITEMHOLDERBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

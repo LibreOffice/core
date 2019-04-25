@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_NDTYP_HXX
-#define INCLUDED_SW_INC_NDTYP_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
@@ -63,6 +62,5 @@ enum SwStartNodeType
 const sal_uInt8 ND_HAS_PREV_LAYNODE = 0x01;
 const sal_uInt8 ND_HAS_NEXT_LAYNODE = 0x02;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

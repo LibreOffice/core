@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPFILTER_HXX
-#define INCLUDED_VCL_BITMAPFILTER_HXX
+#pragma once
 
 #include <vcl/bitmapex.hxx>
 class Animation;
@@ -25,7 +24,5 @@ public:
     static bool Filter(BitmapEx& rBmpEx, BitmapFilter const& rFilter);
     static bool Filter(Animation& rBmpEx, BitmapFilter const& rFilter);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

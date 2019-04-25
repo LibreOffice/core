@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLCHANGEELEMENTIMPORTCONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLCHANGEELEMENTIMPORTCONTEXT_HXX
+#pragma once
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -80,6 +79,5 @@ public:
     virtual void EndElement() override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

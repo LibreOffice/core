@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDMRKV_HXX
-#define INCLUDED_SVX_SVDMRKV_HXX
+#pragma once
 
 #include <svx/svdmark.hxx>
 #include <svx/svdhdl.hxx>
@@ -450,6 +449,5 @@ public:
 //     In opposite, a hit in the surrounding sensitive area enables Dragging.
 
 
-#endif // INCLUDED_SVX_SVDMRKV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

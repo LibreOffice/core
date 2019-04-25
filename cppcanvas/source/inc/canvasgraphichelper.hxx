@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPCANVAS_SOURCE_INC_CANVASGRAPHICHELPER_HXX
-#define INCLUDED_CPPCANVAS_SOURCE_INC_CANVASGRAPHICHELPER_HXX
+#pragma once
 
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -69,6 +68,5 @@ namespace cppcanvas
     }
 }
 
-#endif // INCLUDED_CPPCANVAS_SOURCE_INC_CANVASGRAPHICHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

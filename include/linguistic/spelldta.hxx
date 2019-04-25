@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUISTIC_SPELLDTA_HXX
-#define INCLUDED_LINGUISTIC_SPELLDTA_HXX
+#pragma once
 
 #include <vector>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
@@ -89,6 +88,5 @@ public:
 
 }   // namespace linguistic
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

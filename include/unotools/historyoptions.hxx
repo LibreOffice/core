@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_HISTORYOPTIONS_HXX
-#define INCLUDED_UNOTOOLS_HISTORYOPTIONS_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
@@ -95,6 +94,5 @@ private:
     std::shared_ptr<SvtHistoryOptions_Impl> m_pImpl;
 };
 
-#endif // INCLUDED_UNOTOOLS_HISTORYOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

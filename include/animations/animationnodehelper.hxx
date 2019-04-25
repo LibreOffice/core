@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_ANIMATIONS_ANIMATIONNODEHELPER_HXX
-#define INCLUDED_ANIMATIONS_ANIMATIONNODEHELPER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/animations/XAnimationNode.hpp>
@@ -74,6 +73,5 @@ namespace anim
     }
 }
 
-#endif /* INCLUDED_ANIMATIONS_ANIMATIONNODEHELPER_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

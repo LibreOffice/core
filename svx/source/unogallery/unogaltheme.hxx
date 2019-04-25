@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_UNOGALLERY_UNOGALTHEME_HXX
-#define INCLUDED_SVX_SOURCE_UNOGALLERY_UNOGALTHEME_HXX
+#pragma once
 
 #include <vector>
 
@@ -95,6 +94,5 @@ private:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

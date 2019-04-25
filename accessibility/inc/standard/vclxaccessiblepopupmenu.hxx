@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEPOPUPMENU_HXX
-#define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEPOPUPMENU_HXX
+#pragma once
 
 #include <standard/accessiblemenucomponent.hxx>
 
@@ -46,6 +45,5 @@ public:
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
 };
 
-#endif // INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEPOPUPMENU_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

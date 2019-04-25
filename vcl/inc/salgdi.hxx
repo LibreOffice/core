@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SALGDI_HXX
-#define INCLUDED_VCL_INC_SALGDI_HXX
+#pragma once
 
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
@@ -690,6 +689,5 @@ protected:
     std::unique_ptr<vcl::WidgetDrawInterface> m_pWidgetDraw;
 };
 
-#endif // INCLUDED_VCL_INC_SALGDI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

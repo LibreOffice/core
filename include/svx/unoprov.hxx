@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_UNOPROV_HXX
-#define INCLUDED_SVX_UNOPROV_HXX
+#pragma once
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -120,6 +119,5 @@ private:
     static rtl::Reference<comphelper::PropertySetInfo> mxInfos[SVXUNO_SERVICEID_LASTID+1];
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_DOCXHELPER_HXX
-#define INCLUDED_SW_SOURCE_FILTER_WW8_DOCXHELPER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -20,6 +19,5 @@ struct DocxStringTokenMap
 
 sal_Int32 DocxStringGetToken(DocxStringTokenMap const * pMap, const OUString& rName);
 
-#endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

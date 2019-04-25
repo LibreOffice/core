@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_BEANS_XPROPERTYSET_HXX
-#define INCLUDED_TEST_BEANS_XPROPERTYSET_HXX
+#pragma once
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -68,7 +67,5 @@ private:
 };
 
 } // namespace apitest
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

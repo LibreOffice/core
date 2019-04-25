@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_GALLERY2_GALBRWS1_HXX
-#define INCLUDED_SVX_SOURCE_GALLERY2_GALBRWS1_HXX
+#pragma once
 
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
@@ -128,6 +127,5 @@ public:
     bool                    KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow );
 };
 
-#endif // INCLUDED_SVX_SOURCE_GALLERY2_GALBRWS1_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

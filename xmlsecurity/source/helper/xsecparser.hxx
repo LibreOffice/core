@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_HELPER_XSECPARSER_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_HELPER_XSECPARSER_HXX
+#pragma once
 
 #include <xsecctl.hxx>
 
@@ -157,7 +156,6 @@ public:
         const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 };
 
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XISTYLE_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XISTYLE_HXX
+#pragma once
 
 #include <tools/solar.h>
 #include <vector>
@@ -669,6 +668,5 @@ private:
     ScRangeList         maMergeList;        /// List of merged cell ranges.
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

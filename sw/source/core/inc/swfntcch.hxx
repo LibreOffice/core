@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_SWFNTCCH_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_SWFNTCCH_HXX
+#pragma once
 
 #define NUM_DEFAULT_VALUES 39
 
@@ -71,6 +70,5 @@ public:
     SwFontObj *Get();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

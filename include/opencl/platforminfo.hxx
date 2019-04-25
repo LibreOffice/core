@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OPENCL_PLATFORMINFO_HXX
-#define INCLUDED_OPENCL_PLATFORMINFO_HXX
+#pragma once
 
 #include <ostream>
 #include <vector>
@@ -48,4 +47,3 @@ struct OPENCL_DLLPUBLIC OpenCLPlatformInfo
 OPENCL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const OpenCLPlatformInfo& rPlatform);
 OPENCL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const OpenCLDeviceInfo& rDevice);
 
-#endif

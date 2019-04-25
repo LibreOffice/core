@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVTOOLS_FOLDERTREE_HXX
-#define INCLUDED_SVTOOLS_FOLDERTREE_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -45,6 +44,5 @@ public:
     void SetBlackList( const css::uno::Sequence< OUString >& rBlackList );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

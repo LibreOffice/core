@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_SWRULER_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_SWRULER_HXX
+#pragma once
 
 #include <svx/ruler.hxx>
 #include <vcl/timer.hxx>
@@ -113,6 +112,5 @@ private:
     DECL_LINK(FadeHandler, Timer *, void);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

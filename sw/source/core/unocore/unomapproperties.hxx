@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_UNOMAPPROPERTIES_HXX
-#define INCLUDED_SW_INC_UNOMAPPROPERTIES_HXX
+#pragma once
 
 // These are the unomap common properties used by unomap?.cxx
 
@@ -517,6 +516,5 @@
     { OUString(UNO_NAME_SW_FILLTRANSPARENCEGRADIENTNAME),   XATTR_FILLFLOATTRANSPARENCE,    cppu::UnoType<OUString>::get(),  0,  MID_NAME }, \
     { OUString(UNO_NAME_SW_FILLCOLOR_2),                    XATTR_SECONDARYFILLCOLOR,       cppu::UnoType<sal_Int32>::get(), 0,  0}, \
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

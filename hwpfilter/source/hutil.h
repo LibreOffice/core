@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_HUTIL_H
-#define INCLUDED_HWPFILTER_SOURCE_HUTIL_H
+#pragma once
 
 #include "hbox.h"
 /**
@@ -30,6 +29,5 @@ void    num2roman(int num, char *buf);
  */
 void    str2hstr(const char *c, hchar *i);
 
-#endif                                            /* UTIL_H_*/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

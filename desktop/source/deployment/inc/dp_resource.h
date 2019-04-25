@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_RESOURCE_H
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_RESOURCE_H
+#pragma once
 
 #include <i18nlangtag/languagetag.hxx>
 #include <dp_misc.h>
@@ -30,6 +29,5 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC const LanguageTag & getOfficeLanguageTag();
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

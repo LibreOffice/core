@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef GTV_MAIN_TOOLBAR_H
-#define GTV_MAIN_TOOLBAR_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -55,6 +54,5 @@ void gtv_main_toolbar_add_recent_uno(GtvMainToolbar* toolbar, const std::string&
 
 const std::string gtv_main_toolbar_get_recent_uno_args(GtvMainToolbar* toolbar, const std::string& rUnoCmd);
 
-#endif /* GTV_MAIN_TOOLBAR_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

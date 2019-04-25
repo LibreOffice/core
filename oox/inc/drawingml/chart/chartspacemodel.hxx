@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_CHART_CHARTSPACEMODEL_HXX
-#define INCLUDED_OOX_DRAWINGML_CHART_CHARTSPACEMODEL_HXX
+#pragma once
 
 #include <oox/drawingml/shape.hxx>
 #include <drawingml/chart/plotareamodel.hxx>
@@ -66,6 +65,5 @@ struct ChartSpaceModel
 } // namespace drawingml
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

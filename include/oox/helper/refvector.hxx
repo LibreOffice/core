@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_HELPER_REFVECTOR_HXX
-#define INCLUDED_OOX_HELPER_REFVECTOR_HXX
+#pragma once
 
 #include <algorithm>
 #include <functional>
@@ -158,6 +157,5 @@ private:
 
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

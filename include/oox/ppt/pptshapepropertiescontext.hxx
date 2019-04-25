@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_PPT_PPTSHAPEPROPERTIESCONTEXT_HXX
-#define INCLUDED_OOX_PPT_PPTSHAPEPROPERTIESCONTEXT_HXX
+#pragma once
 
 #include <drawingml/shapepropertiescontext.hxx>
 #include <oox/core/contexthandler.hxx>
@@ -42,6 +41,5 @@ public:
 
 } }
 
-#endif // INCLUDED_OOX_PPT_PPTSHAPEPROPERTIESCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

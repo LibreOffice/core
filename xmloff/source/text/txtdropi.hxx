@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_TXTDROPI_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_TXTDROPI_HXX
+#pragma once
 
 #include <XMLElementPropertyContext.hxx>
 
@@ -50,6 +49,5 @@ public:
 };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_IDLC_INC_ASTPARAMETER_HXX
-#define INCLUDED_IDLC_INC_ASTPARAMETER_HXX
+#pragma once
 
 #include "astmember.hxx"
 
@@ -41,6 +40,5 @@ private:
     bool m_rest;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_OUTDEVTESTS_HXX
-#define INCLUDED_VCL_OUTDEVTESTS_HXX
+#pragma once
 
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapaccess.hxx>
@@ -185,6 +184,5 @@ public:
 
 }} // end namespace vcl::test
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

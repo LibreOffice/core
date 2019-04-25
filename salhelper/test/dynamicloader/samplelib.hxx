@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SALHELPER_TEST_DYNAMICLOADER_SAMPLELIB_HXX
-#define INCLUDED_SALHELPER_TEST_DYNAMICLOADER_SAMPLELIB_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -38,6 +37,5 @@ sal_Int32 SAL_CALL funcA( sal_Int32 a);
 double SAL_CALL funcB( double a);
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

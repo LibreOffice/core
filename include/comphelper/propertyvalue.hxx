@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_PROPERTYVALUE_HXX
-#define INCLUDED_COMPHELPER_PROPERTYVALUE_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -36,6 +35,5 @@ template<typename T> css::beans::PropertyValue makePropertyValue(const OUString&
 
 }
 
-#endif // INCLUDED_COMPHELPER_PROPERTYVALUE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

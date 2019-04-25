@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_UNOMID_H
-#define INCLUDED_SW_INC_UNOMID_H
+#pragma once
 
 #define MID_MIRROR_VERT                         0
 #define MID_MIRROR_HORZ_EVEN_PAGES              1
@@ -151,6 +150,5 @@
 #define MID_FOLLOW_TEXT_FLOW    0
 #define MID_FTF_LAYOUT_IN_CELL  1
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

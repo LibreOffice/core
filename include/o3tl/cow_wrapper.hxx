@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_O3TL_COW_WRAPPER_HXX
-#define INCLUDED_O3TL_COW_WRAPPER_HXX
+#pragma once
 
 #include <memory>
 #include <osl/interlck.h>
@@ -347,6 +346,5 @@ int cow_wrapper_client::queryUnmodified() const
 
 }
 
-#endif /* INCLUDED_O3TL_COW_WRAPPER_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
