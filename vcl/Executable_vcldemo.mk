@@ -53,7 +53,6 @@ $(eval $(call gb_Executable_use_static_libraries,vcldemo,\
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Executable_add_libs,vcldemo,\
 	-lm $(DLOPEN_LIBS) \
-	-lpthread \
     -lX11 \
 ))
 
