@@ -25,7 +25,14 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdocirc.hxx>
-#include <svx/xtextit.hxx>
+#include <svx/xftadit.hxx>
+#include <svx/xftdiit.hxx>
+#include <svx/xftstit.hxx>
+#include <svx/xftmrit.hxx>
+#include <svx/xftouit.hxx>
+#include <svx/xftshit.hxx>
+#include <svx/xftshcit.hxx>
+#include <svx/xftshxy.hxx>
 
 #include <svx/dlgutil.hxx>
 
