@@ -19,6 +19,12 @@
 
 #include <sal/config.h>
 
+#include <svx/xflclit.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xflftrit.hxx>
+#include <svx/xsflclit.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xattr.hxx>
 #include <svx/xpool.hxx>

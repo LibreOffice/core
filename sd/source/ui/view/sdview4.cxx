@@ -32,7 +32,7 @@
 #include <vcl/weld.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/xfillit.hxx>
+#include <svx/xbtmpit.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/xoutbmp.hxx>
 #include <svx/svdograf.hxx>

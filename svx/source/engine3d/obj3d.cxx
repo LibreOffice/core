@@ -40,7 +40,6 @@
 #include <vcl/settings.hxx>
 #include <svx/xlnclit.hxx>
 #include <svl/metitem.hxx>
-#include <svx/xfillit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/poly.hxx>

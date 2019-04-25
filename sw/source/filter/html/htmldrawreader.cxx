@@ -26,7 +26,7 @@
 #include <svx/svdotext.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/outliner.hxx>
-#include <svx/xfillit.hxx>
+#include <svx/xflclit.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>

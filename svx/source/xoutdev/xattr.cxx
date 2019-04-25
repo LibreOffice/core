@@ -48,6 +48,12 @@
 #include <svx/xattr.hxx>
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xflftrit.hxx>
+#include <svx/xsflclit.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xbtmpit.hxx>
 #include <editeng/itemtype.hxx>
 #include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>

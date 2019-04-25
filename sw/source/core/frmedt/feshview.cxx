@@ -29,7 +29,6 @@
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/sxciaitm.hxx>
-#include <svx/xfillit.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnstwit.hxx>

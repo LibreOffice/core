@@ -34,6 +34,7 @@
 #include <svx/unoapi.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xbitmap.hxx>
+#include <svx/xbtmpit.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapTools.hxx>

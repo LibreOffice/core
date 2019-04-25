@@ -21,7 +21,10 @@
 #include <uitool.hxx>
 #include <sfx2/app.hxx>
 #include <svx/rulritem.hxx>
-#include <svx/xfillit.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xbtmpit.hxx>
 #include <svx/xfillit0.hxx>
 #include <editeng/tstpitem.hxx>
 #include <sfx2/request.hxx>

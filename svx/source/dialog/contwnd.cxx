@@ -23,7 +23,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/xfltrit.hxx>
-#include <svx/xfillit.hxx>
+#include <svx/xflclit.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/sdrpaintwindow.hxx>

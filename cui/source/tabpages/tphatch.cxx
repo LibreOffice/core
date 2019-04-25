@@ -30,6 +30,8 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <strings.hrc>
+#include <svx/xflhtit.hxx>
+#include <svx/xflclit.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/xattr.hxx>
 #include <svx/xpool.hxx>

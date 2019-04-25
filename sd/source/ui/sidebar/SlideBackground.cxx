@@ -48,6 +48,7 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <app.hrc>
 #include <editeng/paperinf.hxx>
+#include <svx/xflgrit.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xflclit.hxx>

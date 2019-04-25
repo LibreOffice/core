@@ -39,6 +39,8 @@
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <unotools/streamwrap.hxx>
 #include <filter/msfilter/svdfppt.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xbtmpit.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdmodel.hxx>

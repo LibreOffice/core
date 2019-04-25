@@ -36,7 +36,7 @@
 #include <svx/xfltrit.hxx>
 #include <svx/svdpagv.hxx>
 #include <svl/urihelper.hxx>
-#include <svx/xfillit.hxx>
+#include <svx/xflclit.hxx>
 #include <svx/xlineit.hxx>
 #include <sfx2/evntconf.hxx>
 
