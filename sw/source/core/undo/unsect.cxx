@@ -29,6 +29,8 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
+#include <poolfmt.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
@@ -204,7 +206,8 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
             pLayout = pLayoutToReset;
         }
         pUpdateTOX = rDoc.InsertTableOf( *rPam.GetPoint(),
-            *m_pTOXBase->first, m_pAttrSet.get(), true, pLayout);
+            // don't expand: will be done by SwUndoUpdateIndex::RedoImpl()
+            *m_pTOXBase->first, m_pAttrSet.get(), false, pLayout);
     }
     else
     {
@@ -505,6 +508,90 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoUpdateSection::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     UndoImpl(rContext);
+}
+
+
+SwUndoUpdateIndex::SwUndoUpdateIndex(SwTOXBaseSection & rTOX)
+    : SwUndo(SwUndoId::INSSECTION, rTOX.GetFormat()->GetDoc())
+    , m_pSaveSectionOriginal(new SwUndoSaveSection)
+    , m_pSaveSectionUpdated(new SwUndoSaveSection)
+    , m_nStartIndex(rTOX.GetFormat()->GetSectionNode()->GetIndex() + 1)
+{
+    SwDoc & rDoc(*rTOX.GetFormat()->GetDoc());
+    assert(rDoc.GetNodes()[m_nStartIndex-1]->IsSectionNode());
+    assert(rDoc.GetNodes()[rDoc.GetNodes()[m_nStartIndex]->EndOfSectionIndex()-1]->IsTextNode()); // -1 for extra empty node
+    // note: title is optional
+    assert(rDoc.GetNodes()[m_nStartIndex]->IsTextNode()
+        || rDoc.GetNodes()[m_nStartIndex]->IsSectionNode());
+    SwNodeIndex const first(rDoc.GetNodes(), m_nStartIndex);
+    if (first.GetNode().IsSectionNode())
+    {
+        SwSectionFormat & rSectionFormat(*first.GetNode().GetSectionNode()->GetSection().GetFormat());
+        // note: DelSectionFormat will create & append SwUndoDelSection!
+        rDoc.DelSectionFormat(& rSectionFormat); // remove inner section nodes
+    }
+    assert(first.GetNode().IsTextNode()); // invariant: ToX section is *never* empty
+    SwNodeIndex const last(rDoc.GetNodes(), rDoc.GetNodes()[m_nStartIndex]->EndOfSectionIndex() - 2); // skip empty node
+    assert(last.GetNode().IsTextNode());
+    m_pSaveSectionOriginal->SaveSection(SwNodeRange(first, last), false);
+}
+
+SwUndoUpdateIndex::~SwUndoUpdateIndex() = default;
+
+void SwUndoUpdateIndex::TitleSectionInserted(SwSectionFormat & rFormat)
+{
+    SwNodeIndex const tmp(rFormat.GetDoc()->GetNodes(), m_nStartIndex); // title inserted before empty node
+    assert(tmp.GetNode().IsSectionNode());
+    assert(tmp.GetNode().GetSectionNode()->GetSection().GetFormat() == &rFormat);
+    m_pTitleSectionUpdated.reset(static_cast<SwUndoDelSection*>(MakeUndoDelSection(rFormat).release()));
+}
+
+void SwUndoUpdateIndex::UndoImpl(::sw::UndoRedoContext & rContext)
+{
+    SwDoc & rDoc(rContext.GetDoc());
+    if (m_pTitleSectionUpdated)
+    {
+        m_pTitleSectionUpdated->RedoImpl(rContext);
+    }
+    SwNodeIndex const first(rDoc.GetNodes(), m_nStartIndex);
+    assert(first.GetNode().IsTextNode()); // invariant: ToX section is *never* empty
+    SwNodeIndex const last(rDoc.GetNodes(), rDoc.GetNodes()[m_nStartIndex]->EndOfSectionIndex() - 1);
+    assert(last.GetNode().IsTextNode());
+    // dummy node so that SaveSection doesn't remove ToX section...
+    SwTextNode *const pDeletionPrevention = rDoc.GetNodes().MakeTextNode(
+        SwNodeIndex(*rDoc.GetNodes()[m_nStartIndex]->EndOfSectionNode()),
+        rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT));
+    m_pSaveSectionUpdated->SaveSection(SwNodeRange(first, last), false);
+    m_pSaveSectionOriginal->RestoreSection(&rDoc, first, true);
+    // delete before restoring nested undo, so its node indexes match
+    SwNodeIndex const del(*pDeletionPrevention);
+    SwDoc::CorrAbs(del, del, SwPosition(SwNodeIndex(*rDoc.GetNodes()[m_nStartIndex]->EndOfSectionNode())), true);
+    rDoc.GetNodes().Delete(del);
+    // original title section will be restored by next Undo, see ctor!
+}
+
+void SwUndoUpdateIndex::RedoImpl(::sw::UndoRedoContext & rContext)
+{
+    SwDoc & rDoc(rContext.GetDoc());
+    // original title section was deleted by previous Undo, see ctor!
+    SwNodeIndex const first(rDoc.GetNodes(), m_nStartIndex);
+    assert(first.GetNode().IsTextNode()); // invariant: ToX section is *never* empty
+    SwNodeIndex const last(rDoc.GetNodes(), rDoc.GetNodes()[m_nStartIndex]->EndOfSectionIndex() - 1);
+    assert(last.GetNode().IsTextNode());
+    // dummy node so that SaveSection doesn't remove ToX section...
+    SwTextNode *const pDeletionPrevention = rDoc.GetNodes().MakeTextNode(
+        SwNodeIndex(*rDoc.GetNodes()[m_nStartIndex]->EndOfSectionNode()),
+        rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT));
+    m_pSaveSectionOriginal->SaveSection(SwNodeRange(first, last), false);
+    m_pSaveSectionUpdated->RestoreSection(&rDoc, first, true);
+    // delete before restoring nested undo, so its node indexes match
+    SwNodeIndex const del(*pDeletionPrevention);
+    SwDoc::CorrAbs(del, del, SwPosition(SwNodeIndex(*rDoc.GetNodes()[m_nStartIndex]->EndOfSectionNode())), true);
+    rDoc.GetNodes().Delete(del);
+    if (m_pTitleSectionUpdated)
+    {
+        m_pTitleSectionUpdated->UndoImpl(rContext);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
