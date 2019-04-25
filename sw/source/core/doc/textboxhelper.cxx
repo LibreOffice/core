@@ -44,6 +44,7 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 
 using namespace com::sun::star;
 
@@ -349,29 +350,49 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, const OUString& rPrope
                 uno::makeAny(static_cast<sal_Int32>(convertTwipToMm100(aRectangle.Top()))));
         }
 
-        if (SwFrameFormat* pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT))
+        SwFrameFormat* pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT);
+        if (!pFormat)
+            return;
+
+        comphelper::SequenceAsHashMap aCustomShapeGeometry(rValue);
+        auto it = aCustomShapeGeometry.find("TextPreRotateAngle");
+        if (it != aCustomShapeGeometry.end())
         {
-            comphelper::SequenceAsHashMap aCustomShapeGeometry(rValue);
-            // That would be the btLr text direction which we don't support at a frame level, so do it at a character level.
-            if (aCustomShapeGeometry.find("TextPreRotateAngle") != aCustomShapeGeometry.end()
-                && aCustomShapeGeometry["TextPreRotateAngle"].get<sal_Int32>() == -270)
+            auto nTextPreRotateAngle = it->second.get<sal_Int32>();
+            if (nTextPreRotateAngle == -270)
             {
-                if (const SwNodeIndex* pNodeIndex = pFormat->GetContent().GetContentIdx())
+                // That would be the btLr text direction which we don't support at a frame level, so
+                // do it at a character level.
+                const SwNodeIndex* pNodeIndex = pFormat->GetContent().GetContentIdx();
+                if (!pNodeIndex)
+                    return;
+
+                SwPaM aPaM(*pFormat->GetDoc()->GetNodes()[pNodeIndex->GetIndex() + 1], 0);
+                aPaM.SetMark();
+                if (SwTextNode* pMark
+                    = pFormat->GetDoc()
+                          ->GetNodes()[pNodeIndex->GetNode().EndOfSectionIndex() - 1]
+                          ->GetTextNode())
                 {
-                    SwPaM aPaM(*pFormat->GetDoc()->GetNodes()[pNodeIndex->GetIndex() + 1], 0);
-                    aPaM.SetMark();
-                    if (SwTextNode* pMark
-                        = pFormat->GetDoc()
-                              ->GetNodes()[pNodeIndex->GetNode().EndOfSectionIndex() - 1]
-                              ->GetTextNode())
-                    {
-                        aPaM.GetMark()->nNode = *pMark;
-                        aPaM.GetMark()->nContent.Assign(pMark, pMark->GetText().getLength());
-                        SvxCharRotateItem aItem(900, false, RES_CHRATR_ROTATE);
-                        pFormat->GetDoc()->getIDocumentContentOperations().InsertPoolItem(aPaM,
-                                                                                          aItem);
-                    }
+                    aPaM.GetMark()->nNode = *pMark;
+                    aPaM.GetMark()->nContent.Assign(pMark, pMark->GetText().getLength());
+                    SvxCharRotateItem aItem(900, false, RES_CHRATR_ROTATE);
+                    pFormat->GetDoc()->getIDocumentContentOperations().InsertPoolItem(aPaM, aItem);
                 }
+                return;
+            }
+
+            sal_Int16 nDirection = 0;
+            switch (nTextPreRotateAngle)
+            {
+                case -90:
+                    nDirection = text::WritingMode2::TB_RL;
+                    break;
+            }
+
+            if (nDirection)
+            {
+                syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(nDirection));
             }
         }
     }
@@ -547,6 +568,9 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                 break;
             case RES_OPAQUE:
                 aPropertyName = UNO_NAME_OPAQUE;
+                break;
+            case RES_FRAMEDIR:
+                aPropertyName = UNO_NAME_WRITING_MODE;
                 break;
         }
 
