@@ -267,6 +267,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             {
                 std::unique_ptr<SwPaM> pPaM = std::move(iPair.second);
                 const SfxPoolItem* pItem = iPair.first;
+                aSetItem.GetItemSet().ClearItem();
                 rWrtSh.GetPaMAttr( pPaM.get(), aSetItem.GetItemSet() );
                 aAttrSet.SetRanges( aSetItem.GetItemSet().GetRanges() );
 
