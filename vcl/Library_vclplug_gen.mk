@@ -147,7 +147,6 @@ ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,vclplug_gen,\
 	-lm \
 	-ldl \
-	-lpthread \
 ))
 endif
 

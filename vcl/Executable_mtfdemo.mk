@@ -43,7 +43,6 @@ $(eval $(call gb_Executable_use_static_libraries,mtfdemo,\
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Executable_add_libs,mtfdemo,\
 	-lm $(DLOPEN_LIBS) \
-	-lpthread \
     -lX11 \
 ))
 

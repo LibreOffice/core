@@ -123,7 +123,6 @@ ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,vclplug_gtk3_kde5,\
 	-lm \
 	-ldl \
-	-lpthread \
 ))
 endif
 

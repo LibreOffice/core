@@ -92,7 +92,6 @@ ifeq ($(OS),LINUX)
 $(eval $(call gb_Executable_add_libs,lo_kde5filepicker,\
 	-lm \
 	-ldl \
-	-lpthread \
 ))
 endif
 

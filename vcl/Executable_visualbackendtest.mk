@@ -45,7 +45,6 @@ ifeq ($(OS),LINUX)
 $(eval $(call gb_Executable_add_libs,visualbackendtest,\
 	-lm \
 	-ldl \
-	-lpthread \
     -lX11 \
 ))
 
