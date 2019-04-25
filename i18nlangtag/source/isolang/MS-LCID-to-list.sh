@@ -95,7 +95,7 @@ gawk -e '
             }
             break;
     }
-    printf "#define %-35s %s\n", def, val;
+    printf "#define %-35s LanguageType(%s)\n", def, val;
     print mapping;
     print ""
 }
