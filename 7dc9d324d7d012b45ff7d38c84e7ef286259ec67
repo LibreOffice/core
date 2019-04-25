@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_83275db7",
+        "filename": "chart2/source/view/main/ChartView.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-04-25T14:47:56Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 483,
+        "startChar": 41,
+        "endLine": 483,
+        "endChar": 43
+      },
+      "revId": "7dc9d324d7d012b45ff7d38c84e7ef286259ec67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
