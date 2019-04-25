@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_SOURCE_REGKEY_HXX
-#define INCLUDED_REGISTRY_SOURCE_REGKEY_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <registry/regtype.h>
@@ -64,6 +63,5 @@ RegError REGISTRY_CALLTYPE freeKeyNames(rtl_uString**, sal_uInt32);
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

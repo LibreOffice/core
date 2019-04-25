@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_SOURCE_CONTROLS_GRID_GRIDEVENTFORWARDER_HXX
-#define INCLUDED_TOOLKIT_SOURCE_CONTROLS_GRID_GRIDEVENTFORWARDER_HXX
+#pragma once
 
 #include <com/sun/star/awt/grid/XGridDataListener.hpp>
 #include <com/sun/star/awt/grid/XGridColumnListener.hpp>
@@ -73,6 +72,5 @@ namespace toolkit
 } // namespace toolkit
 
 
-#endif // INCLUDED_TOOLKIT_SOURCE_CONTROLS_GRID_GRIDEVENTFORWARDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_SOURCE_INC_CUIGRFFLT_HXX
-#define INCLUDED_CUI_SOURCE_INC_CUIGRFFLT_HXX
+#pragma once
 
 #include <tools/helpers.hxx>
 #include <vcl/GraphicObject.hxx>
@@ -181,6 +180,5 @@ public:
     virtual Graphic GetFilteredGraphic(const Graphic& rGraphic, double fScaleX, double fScaleY) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

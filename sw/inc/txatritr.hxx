@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_TXATRITR_HXX
-#define INCLUDED_SW_INC_TXATRITR_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <editeng/langitem.hxx>
@@ -69,6 +68,5 @@ public:
         { return static_cast<const SvxLanguageItem&>(*pCurItem).GetValue(); }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_BASCTL_INC_STRINGS_HRC
-#define INCLUDED_BASCTL_INC_STRINGS_HRC
+#pragma once
 
 // Dialog Controls ---------------------------------------------------------------
 
@@ -38,6 +37,5 @@
 #define RID_STR_CLASS_SPINCONTROL       "SpinButton"
 #define RID_STR_CLASS_HYPERLINKCONTROL  "HyperlinkControl"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

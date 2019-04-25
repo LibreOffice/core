@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANEBORDERPAINTER_HXX
-#define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANEBORDERPAINTER_HXX
+#pragma once
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -136,6 +135,5 @@ private:
 
 } } // end of namespace ::sd::presenter
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

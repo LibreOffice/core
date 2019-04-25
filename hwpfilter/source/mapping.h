@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_MAPPING_H
-#define INCLUDED_HWPFILTER_SOURCE_MAPPING_H
+#pragma once
 
 #include <string.h>
 #include <stdio.h>
@@ -390,6 +389,5 @@ hchar_string getMathMLEntity(const char *tex)
 }
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_ITEMTYPE_HXX
-#define INCLUDED_EDITENG_ITEMTYPE_HXX
+#pragma once
 
 // forward ---------------------------------------------------------------
 #include <rtl/ustring.hxx>
@@ -45,6 +44,5 @@ inline long Scale( long nVal, long nMult, long nDiv )
     return aVal;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

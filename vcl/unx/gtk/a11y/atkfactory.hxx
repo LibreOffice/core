@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GTK_A11Y_ATKFACTORY_HXX
-#define INCLUDED_VCL_UNX_GTK_A11Y_ATKFACTORY_HXX
+#pragma once
 
 #include <atk/atk.h>
 
@@ -28,6 +27,5 @@ GType wrapper_factory_get_type();
 
 } // extern "C"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

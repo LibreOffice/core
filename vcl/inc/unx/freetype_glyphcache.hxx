@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_GENERIC_GLYPHS_GCACH_FTYP_HXX
-#define INCLUDED_VCL_GENERIC_GLYPHS_GCACH_FTYP_HXX
+#pragma once
 
 #include <unx/glyphcache.hxx>
 #include <PhysicalFontFace.hxx>
@@ -124,6 +123,5 @@ public:
     virtual bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
 };
 
-#endif // INCLUDED_VCL_GENERIC_GLYPHS_GCACH_FTYP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

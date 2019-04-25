@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OOX_OLE_AXBINARYWRITER_HXX
-#define INCLUDED_OOX_OLE_AXBINARYWRITER_HXX
+#pragma once
 
 #include <cstddef>
 #include <utility>
@@ -161,6 +160,5 @@ private:
 } // namespace ole
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

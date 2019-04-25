@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UUI_SOURCE_PASSWORDCONTAINER_HXX
-#define INCLUDED_UUI_SOURCE_PASSWORDCONTAINER_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 
@@ -165,6 +164,5 @@ private:
 
 } // namespace uui
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

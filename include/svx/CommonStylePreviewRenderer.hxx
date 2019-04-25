@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVX_COMMONSTYLEPREVIEWRENDERER_HXX
-#define INCLUDED_SVX_COMMONSTYLEPREVIEWRENDERER_HXX
+#pragma once
 
 #include <memory>
 
@@ -46,6 +45,5 @@ public:
 
 } // end namespace svx
 
-#endif // INCLUDED_SVX_COMMONSTYLEPREVIEWRENDERER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

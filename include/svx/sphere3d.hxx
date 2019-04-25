@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SPHERE3D_HXX
-#define INCLUDED_SVX_SPHERE3D_HXX
+#pragma once
 
 #include <svx/obj3d.hxx>
 #include <svx/svxdllapi.h>
@@ -81,6 +80,5 @@ public:
     virtual OUString TakeObjNamePlural() const override;
 };
 
-#endif // INCLUDED_SVX_SPHERE3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

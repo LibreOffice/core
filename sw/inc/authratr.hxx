@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_AUTHRATR_HXX
-#define INCLUDED_SW_INC_AUTHRATR_HXX
+#pragma once
 
 #include <tools/color.hxx>
 #include "swdllapi.h"
@@ -39,6 +38,5 @@ public:
     }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

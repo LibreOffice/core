@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_UNX_SYSTEM_HXX
-#define INCLUDED_SAL_OSL_UNX_SYSTEM_HXX
+#pragma once
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -379,6 +378,5 @@ struct tm *gmtime_r(const time_t *timep, struct tm *buffer);
 #endif /* !defined(FREEBSD) */
 #endif
 
-#endif // INCLUDED_SAL_OSL_UNX_SYSTEM_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

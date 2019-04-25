@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_XML_XMLITHLP_HXX
-#define INCLUDED_SW_SOURCE_FILTER_XML_XMLITHLP_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <xmloff/xmlement.hxx>
@@ -66,6 +65,5 @@ extern const struct SvXMLEnumMapEntry<sal_Int16> aXMLTableAlignMap[];
 extern const struct SvXMLEnumMapEntry<sal_Int16> aXMLTableVAlignMap[];
 extern const struct SvXMLEnumMapEntry<sal_uInt16> aXML_KeepTogetherType[];
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_XMLDIFF_HXX
-#define INCLUDED_TEST_XMLDIFF_HXX
+#pragma once
 
 #include <test/testdllapi.hxx>
 
@@ -16,6 +15,5 @@ bool OOO_DLLPUBLIC_TEST
 doXMLDiff(const char* pFileName, const char* pContent, int size,
           const char* pToleranceFileName);
 
-#endif // INCLUDED_TEST_XMLDIFF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

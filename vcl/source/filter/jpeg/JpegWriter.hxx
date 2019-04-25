@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGWRITER_HXX
-#define INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGWRITER_HXX
+#pragma once
 
 #include <vcl/graph.hxx>
 #include <vcl/fltcall.hxx>
@@ -50,6 +49,5 @@ public:
 
 };
 
-#endif // INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGWRITER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

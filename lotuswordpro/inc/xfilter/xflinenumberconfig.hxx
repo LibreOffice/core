@@ -57,8 +57,7 @@
  * @file
  * Line numbering config for the full document.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLINENUMBERCONFIG_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLINENUMBERCONFIG_HXX
+#pragma once
 
 #include <xfilter/xfstyle.hxx>
 
@@ -168,5 +167,4 @@ inline void XFLineNumberConfig::ToXml(IXFStream *pStrm)
     pStrm->EndElement( "text:linenumbering-configuration" );
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

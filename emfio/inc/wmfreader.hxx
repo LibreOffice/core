@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMFIO_INC_WMFREADER_HXX
-#define INCLUDED_EMFIO_INC_WMFREADER_HXX
+#pragma once
 
 #include "mtftools.hxx"
 #include <tools/stream.hxx>
@@ -71,6 +70,5 @@ namespace emfio
     };
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

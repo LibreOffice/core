@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_TEST_OUTPUTWRAP_HXX
-#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_TEST_OUTPUTWRAP_HXX
+#pragma once
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -87,7 +86,6 @@ typedef ::cppu::WeakComponentImplHelper<
         }
     };
 }
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

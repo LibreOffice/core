@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_WRITERPERFECTDLLAPI_H
-#define INCLUDED_WRITERPERFECT_WRITERPERFECTDLLAPI_H
+#pragma once
 
 #if defined WRITERPERFECT_DLLIMPLEMENTATION
 
@@ -18,6 +17,5 @@
 #endif
 #define WRITERPERFECT_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif /* INCLUDED_WRITERPERFECT_WRITERPERFECTDLLAPI_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

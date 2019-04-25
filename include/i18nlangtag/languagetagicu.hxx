@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_I18NLANGTAG_LANGUAGETAGICU_HXX
-#define INCLUDED_I18NLANGTAG_LANGUAGETAGICU_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <i18nlangtag/i18nlangtagdllapi.h>
@@ -49,6 +48,5 @@ public:
     static  icu::Locale     getIcuLocale( const LanguageTag & rLanguageTag, const OUString & rVariant, const OUString & rKeywords);
 };
 
-#endif  // INCLUDED_I18NLANGTAG_LANGUAGETAGICU_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

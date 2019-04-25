@@ -57,8 +57,7 @@
  * @file
  * Group of drawing objects.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWGROUP_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWGROUP_HXX
+#pragma once
 
 #include <xfilter/xfdrawobj.hxx>
 #include <xfilter/xfframe.hxx>
@@ -111,5 +110,4 @@ inline void XFDrawGroup::ToXml(IXFStream *pStrm)
 
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDCLIP_HXX
-#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDCLIP_HXX
+#pragma once
 
 #include <vcl/transfer.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -75,6 +74,5 @@ private:
     TSectionElements const m_aCopyElements;
 };
 }
-#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDCLIP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

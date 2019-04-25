@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_SECTION_HXX
-#define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_SECTION_HXX
+#pragma once
 
 #include <com/sun/star/report/XSection.hpp>
 #include <cppuhelper/compbase.hxx>
@@ -230,6 +229,5 @@ namespace reportdesign
         void notifyElementRemoved(const css::uno::Reference< css::drawing::XShape >& xShape);
     };
 }
-#endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_SECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

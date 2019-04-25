@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_COMPHELPER_CLASSIDS_HXX
-#define INCLUDED_COMPHELPER_CLASSIDS_HXX
+#pragma once
 
 /*
  * StarWriter
@@ -329,6 +328,5 @@
     0xd7896d52, 0xb7af, 0x4820, \
     0x9d, 0xfe, 0xd4, 0x04, 0xd0, 0x15, 0x96, 0x0f
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

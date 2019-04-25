@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_ROADMAPWIZARD_HXX
-#define INCLUDED_SVTOOLS_ROADMAPWIZARD_HXX
+#pragma once
 
 #include <memory>
 #include <svtools/svtdllapi.h>
@@ -218,6 +217,5 @@ namespace svt
 } // namespace svt
 
 
-#endif // OOO_ INCLUDED_SVTOOLS_ROADMAPWIZARD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_HELPIDS_H
-#define EXTENSIONS_HELPIDS_H
+#pragma once
 
 #define HID_ABSPILOT_PREVIOUS                           "EXTENSIONS_HID_ABSPILOT_PREVIOUS"
 #define HID_ABSPILOT_NEXT                               "EXTENSIONS_HID_ABSPILOT_NEXT"
@@ -332,6 +331,5 @@
 #define HID_CHECK_FOR_UPD_DESCRIPTION                   "EXTENSIONS_HID_CHECK_FOR_UPD_DESCRIPTION"
 #define HID_CHECK_FOR_UPD_CANCEL                        "EXTENSIONS_HID_CHECK_FOR_UPD_CANCEL"
 
-#endif // EXTENSIONS_ABPILOT_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_FMTFTNTX_HXX
-#define INCLUDED_SW_INC_FMTFTNTX_HXX
+#pragma once
 
 #include <svl/eitem.hxx>
 #include <editeng/numitem.hxx>
@@ -113,6 +112,5 @@ inline const SwFormatFootnoteAtTextEnd &SwFormat::GetFootnoteAtTextEnd(bool bInP
 inline const SwFormatEndAtTextEnd &SwFormat::GetEndAtTextEnd(bool bInP) const
     { return m_aSet.GetEndAtTextEnd(bInP); }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

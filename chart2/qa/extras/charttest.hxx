@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CHART2_QA_EXTRAS_CHARTTEST_HXX
-#define INCLUDED_CHART2_QA_EXTRAS_CHARTTEST_HXX
+#pragma once
 
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
@@ -609,6 +608,5 @@ awt::Size ChartTest::getSize(css::uno::Reference<chart2::XDiagram> xDiagram, con
     return aSize;
 }
 
-#endif // INCLUDED_CHART2_QA_EXTRAS_CHARTTEST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

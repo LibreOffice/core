@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_CGMTYPES_HXX
-#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_CGMTYPES_HXX
+#pragma once
 
 struct FloatPoint
 {
@@ -124,6 +123,5 @@ enum FillInteriorStyle  { FIS_HOLLOW = 0, FIS_SOLID = 1, FIS_PATTERN = 2, FIS_HA
                             FIS_INTERPOLATED = 6, FIS_GRADIENT = 7 };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

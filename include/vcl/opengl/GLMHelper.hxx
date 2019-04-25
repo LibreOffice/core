@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_GLM_GLMHELPER_HXX
-#define INCLUDED_VCL_GLM_GLMHELPER_HXX
+#pragma once
 
 #include <glm/glm.hpp>
 #include <vcl/dllapi.h>
@@ -19,6 +18,5 @@ VCL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const glm::mat4& rMa
 VCL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const glm::vec4& rPos);
 VCL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const glm::vec3& rPos);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTHELPERIMPL_HXX
-#define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTHELPERIMPL_HXX
+#pragma once
 // css::report::XReportComponent:
 #define REPORTCOMPONENT_IMPL3(clazz,arg) \
 OUString SAL_CALL clazz::getName() \
@@ -1279,6 +1278,5 @@ void SAL_CALL clazz::setCharPosture( awt::FontSlant /*_charposture*/ )\
         REPORTCONTROLFORMAT_IMPL2(clazz,varName)
 
 
-#endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTHELPERIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

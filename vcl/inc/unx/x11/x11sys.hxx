@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_X11_X11SYS_HXX
-#define INCLUDED_VCL_INC_UNX_X11_X11SYS_HXX
+#pragma once
 
 #include <unx/gensys.h>
 #include <osl/thread.hxx>
@@ -40,6 +39,5 @@ public:
                                   const std::vector< OUString >& rButtons ) override;
 };
 
-#endif // INCLUDED_VCL_INC_UNX_X11_X11SYS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

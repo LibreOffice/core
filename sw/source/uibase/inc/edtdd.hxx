@@ -7,13 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_EDTDD_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_EDTDD_HXX
+#pragma once
 
 #include <sal/config.h>
 
 extern bool g_bExecuteDrag;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

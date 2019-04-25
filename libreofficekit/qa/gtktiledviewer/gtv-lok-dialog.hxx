@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef GTV_LOK_DIALOG_H
-#define GTV_LOK_DIALOG_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -49,6 +48,5 @@ gboolean gtv_lok_dialog_is_parent_of(GtvLokDialog* dialog, guint childId);
 
 G_END_DECLS
 
-#endif /* GTV_LOK_DIALOG_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

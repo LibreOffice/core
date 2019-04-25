@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_MTVELEMENTS_HXX
-#define INCLUDED_SC_INC_MTVELEMENTS_HXX
+#pragma once
 
 #include "formulacell.hxx"
 #include <svl/broadcast.hxx>
@@ -173,6 +172,5 @@ ScRefCellValue toRefCell( const sc::CellStoreType::const_iterator& itPos, size_t
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

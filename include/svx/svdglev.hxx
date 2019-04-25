@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDGLEV_HXX
-#define INCLUDED_SVX_SVDGLEV_HXX
+#pragma once
 
 #include <svx/svxdllapi.h>
 #include <svx/svdpoev.hxx>
@@ -80,6 +79,5 @@ public:
     void RotateMarkedGluePoints(const Point& rRef, long nAngle, bool bCopy);
 };
 
-#endif // INCLUDED_SVX_SVDGLEV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

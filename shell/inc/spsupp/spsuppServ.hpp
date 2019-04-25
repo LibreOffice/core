@@ -7,14 +7,12 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#ifndef INCLUDED_SHELL_INC_SPSUPP_SPSUPPSERV_HPP
-#define INCLUDED_SHELL_INC_SPSUPP_SPSUPPSERV_HPP
+#pragma once
 
 #include <objbase.h>
 
 ITypeLib* GetTypeLib();
 const wchar_t* GetLOPath();
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

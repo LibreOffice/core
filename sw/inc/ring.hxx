@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_RING_HXX
-#define INCLUDED_SW_INC_RING_HXX
+#pragma once
 
 #include <utility>
 #include <sal/types.h>
@@ -260,6 +259,5 @@ namespace sw
     inline typename RingContainer<value_type>::const_iterator RingContainer<value_type>::end() const
         { return RingContainer<value_type>::const_iterator(const_cast< nonconst_value_type* >(m_pStart), false); };
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

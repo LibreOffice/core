@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVL_GRIDPRINTER_HXX
-#define INCLUDED_SVL_GRIDPRINTER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <svl/svldllapi.h>
@@ -34,6 +33,5 @@ public:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

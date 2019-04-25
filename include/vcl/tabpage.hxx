@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_TABPAGE_HXX
-#define INCLUDED_VCL_TABPAGE_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/builder.hxx>
@@ -83,6 +82,5 @@ public:
     virtual Size    GetOptimalSize() const override;
 };
 
-#endif // INCLUDED_VCL_TABPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

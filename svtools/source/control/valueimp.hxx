@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_SOURCE_CONTROL_VALUEIMP_HXX
-#define INCLUDED_SVTOOLS_SOURCE_CONTROL_VALUEIMP_HXX
+#pragma once
 
 #include <osl/mutex.hxx>
 #include <tools/color.hxx>
@@ -450,6 +449,5 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
 };
 
-#endif // INCLUDED_SVTOOLS_SOURCE_CONTROL_VALUEIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

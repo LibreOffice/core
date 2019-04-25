@@ -57,8 +57,7 @@
 * @file
 * Border override of Wordpro.
 ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARABORDEROVERRIDE_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARABORDEROVERRIDE_HXX
+#pragma once
 
 #include <lwpoverride.hxx>
 
@@ -278,6 +277,5 @@ inline void LwpParaBorderOverride::RevertBetweenMargin()
     LwpOverride::Override(PBO_BETWEENMARGIN, STATE_STYLE);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

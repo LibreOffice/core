@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_UNOMASTER_HXX
-#define INCLUDED_SVX_UNOMASTER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Any.h>
@@ -71,6 +70,5 @@ protected:
     ~SvxShapeMaster() {}
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SOT_SOURCE_SDSTOR_STGCACHE_HXX
-#define INCLUDED_SOT_SOURCE_SDSTOR_STGCACHE_HXX
+#pragma once
 
 #include <osl/endian.h>
 #include <rtl/ref.hxx>
@@ -128,6 +127,5 @@ inline sal_Int32 StgCache::GetFromPage ( const rtl::Reference< StgPage >& rPage,
 #endif
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

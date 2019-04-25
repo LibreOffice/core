@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TEST_TESTDLLAPI_HXX
-#define INCLUDED_TEST_TESTDLLAPI_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -34,6 +33,5 @@
 #define OOO_DLLPUBLIC_TEST_SETUPVCL SAL_DLLPUBLIC_IMPORT
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

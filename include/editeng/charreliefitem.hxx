@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_CHARRELIEFITEM_HXX
-#define INCLUDED_EDITENG_CHARRELIEFITEM_HXX
+#pragma once
 
 #include <svl/eitem.hxx>
 #include <vcl/fntstyle.hxx>
@@ -55,6 +54,5 @@ public:
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

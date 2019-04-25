@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DUMP_PPTXDUMPER_HXX
-#define INCLUDED_OOX_DUMP_PPTXDUMPER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/dump/dumperbase.hxx>
@@ -71,7 +70,6 @@ protected:
 } // namespace dump
 } // namespace oox
 
-#endif
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

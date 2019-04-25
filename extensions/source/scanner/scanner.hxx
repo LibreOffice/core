@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_SCANNER_SCANNER_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_SCANNER_SCANNER_HXX
+#pragma once
 
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
@@ -84,6 +83,5 @@ public:
 /// @throws Exception
 Reference< XInterface > ScannerManager_CreateInstance( const Reference< css::lang::XMultiServiceFactory >& rxFactory );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

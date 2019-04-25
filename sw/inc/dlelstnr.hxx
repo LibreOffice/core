@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_DLELSTNR_HXX
-#define INCLUDED_SW_INC_DLELSTNR_HXX
+#pragma once
 
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
@@ -68,6 +67,5 @@ public:
     virtual void SAL_CALL notifyTermination( const css::lang::EventObject& rEventObj ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

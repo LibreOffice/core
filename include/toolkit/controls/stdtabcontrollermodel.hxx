@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_CONTROLS_STDTABCONTROLLERMODEL_HXX
-#define INCLUDED_TOOLKIT_CONTROLS_STDTABCONTROLLERMODEL_HXX
+#pragma once
 
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -121,6 +120,5 @@ public:
 };
 
 
-#endif // _TOOLKIT_HELPER_STDTABCONTROLLERMODEL_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

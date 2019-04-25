@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_FACTORYIDS_HXX
-#define INCLUDED_SD_INC_FACTORYIDS_HXX
+#pragma once
 
 #include <sfx2/shell.hxx>
 
@@ -38,6 +37,5 @@ constexpr auto PRESENTATION_FACTORY_ID     = SfxInterfaceId(4);
 
 } // end of namespace sd
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

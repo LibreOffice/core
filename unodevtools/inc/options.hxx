@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNODEVTOOLS_INC_OPTIONS_HXX
-#define INCLUDED_UNODEVTOOLS_INC_OPTIONS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -37,6 +36,5 @@ bool readOption( const sal_Char * pOpt,
 
 } // end of namespace unodevtools
 
-#endif // INCLUDED_UNODEVTOOLS_INC_OPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

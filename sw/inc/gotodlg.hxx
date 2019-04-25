@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_GOTODLG_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_GOTODLG_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -48,6 +47,5 @@ private:
     DECL_LINK( PageModifiedHdl, weld::Entry&, void );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

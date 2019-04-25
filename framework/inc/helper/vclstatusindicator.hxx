@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_HELPER_VCLSTATUSINDICATOR_HXX
-#define INCLUDED_FRAMEWORK_INC_HELPER_VCLSTATUSINDICATOR_HXX
+#pragma once
 
 #include <general.h>
 
@@ -90,6 +89,5 @@ class VCLStatusIndicator : public  ::cppu::WeakImplHelper< css::task::XStatusInd
 
 } // namespace framework
 
-#endif // INCLUDED_FRAMEWORK_INC_HELPER_VCLSTATUSINDICATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

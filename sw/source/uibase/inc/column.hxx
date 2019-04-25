@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_COLUMN_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_COLUMN_HXX
+#pragma once
 
 #include <vcl/timer.hxx>
 #include <svtools/ctrlbox.hxx>
@@ -207,6 +206,5 @@ public:
     weld::ComboBox* GetApplyComboBox() { return m_xApplyToLB.get(); }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

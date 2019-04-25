@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_SVXRTF_HXX
-#define INCLUDED_EDITENG_SVXRTF_HXX
+#pragma once
 
 #include <svl/itemset.hxx>
 #include <svtools/parrtf.hxx>
@@ -366,6 +365,5 @@ inline SfxItemSet& SvxRTFParser::GetAttrSet()
 }
 
 
-#endif // INCLUDED_EDITENG_SVXRTF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

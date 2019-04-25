@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_UNOTEST_ASSERTION_TRAITS_HXX
-#define INCLUDED_UNOTEST_ASSERTION_TRAITS_HXX
+#pragma once
 
 // sal/types.h declares typedefs to signed char (sal_Int8) and unsigned char
 // (sal_uInt8, sal_Bool), so better specialize CppUnit::assertion_traits for
@@ -37,6 +36,5 @@ template<> struct assertion_traits<unsigned char> {
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

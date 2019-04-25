@@ -6,8 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERFILTER_INC_DMAPPER_DOMAINMAPPERFACTORY_HXX
-#define INCLUDED_WRITERFILTER_INC_DMAPPER_DOMAINMAPPERFACTORY_HXX
+#pragma once
 
 #include <vector>
 
@@ -51,6 +50,5 @@ SAL_DLLPUBLIC_EXPORT std::tuple<OUString, std::vector<OUString>, std::vector<OUS
 } // namespace dmapper
 } // namespace writerfilter
 
-#endif // INCLUDED_WRITERFILTER_INC_DMAPPER_DOMAINMAPPERFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

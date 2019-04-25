@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_BASE_CANVASCUSTOMSPRITEHELPER_HXX
-#define INCLUDED_CANVAS_BASE_CANVASCUSTOMSPRITEHELPER_HXX
+#pragma once
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -215,6 +214,5 @@ namespace canvas
     };
 }
 
-#endif // INCLUDED_CANVAS_BASE_CANVASCUSTOMSPRITEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

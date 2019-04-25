@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_SOURCE_AWT_VCLXWINDOWS_INTERNAL_HXX
-#define INCLUDED_TOOLKIT_SOURCE_AWT_VCLXWINDOWS_INTERNAL_HXX
+#pragma once
 
 namespace toolkit
 {
@@ -26,6 +25,5 @@ namespace toolkit
     css::uno::Any  getButtonLikeFaceColor( const vcl::Window* _pWindow );
 }
 
-#endif // INCLUDED_TOOLKIT_SOURCE_AWT_VCLXWINDOWS_INTERNAL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

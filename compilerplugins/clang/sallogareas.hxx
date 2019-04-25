@@ -9,8 +9,7 @@
  *
  */
 
-#ifndef SALLOGAREAS_H
-#define SALLOGAREAS_H
+#pragma once
 
 #include <set>
 
@@ -42,6 +41,5 @@ class SalLogAreas
 
 } // namespace
 
-#endif // SALLOGAREAS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

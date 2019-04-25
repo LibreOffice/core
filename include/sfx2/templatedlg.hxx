@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_INC_TEMPLATEDLG_HXX
-#define INCLUDED_SFX2_INC_TEMPLATEDLG_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
@@ -201,6 +200,5 @@ private:
     OUString msTemplatePath;
 };
 
-#endif // INCLUDED_SFX2_INC_TEMPLATEDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

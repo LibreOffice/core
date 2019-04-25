@@ -58,8 +58,7 @@
  *  the class for VO_FrameLayout
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRAMELAYOUT_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRAMELAYOUT_HXX
+#pragma once
 
 #include <memory>
 #include "lwplayout.hxx"
@@ -227,6 +226,5 @@ private:
     LwpObjectID m_objRubyMarker;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

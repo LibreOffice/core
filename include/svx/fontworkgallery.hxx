@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_SVX_FONTWORKGALLERY_HXX
-#define INCLUDED_SVX_FONTWORKGALLERY_HXX
+#pragma once
 
 #include <svx/svxdllapi.h>
 #include <svtools/valueset.hxx>
@@ -79,6 +78,5 @@ public:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

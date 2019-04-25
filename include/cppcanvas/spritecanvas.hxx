@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPCANVAS_SPRITECANVAS_HXX
-#define INCLUDED_CPPCANVAS_SPRITECANVAS_HXX
+#pragma once
 
 #include <basegfx/vector/b2dsize.hxx>
 #include <cppcanvas/canvas.hxx>
@@ -58,6 +57,5 @@ namespace cppcanvas
 
 }
 
-#endif // INCLUDED_CPPCANVAS_SPRITECANVAS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

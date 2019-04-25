@@ -57,8 +57,7 @@
  * @file
  * enum const defines.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDEFS_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDEFS_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -495,6 +494,5 @@ enum enumXFFWShadow
     enumXFFWShadowSlant
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

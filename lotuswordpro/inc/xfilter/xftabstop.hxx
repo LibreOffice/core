@@ -57,8 +57,7 @@
  * @file
  * Tab stop object,<text:tab-stop/>
  *************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTABSTOP_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTABSTOP_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xfcontent.hxx>
@@ -78,5 +77,4 @@ inline void XFTabStop::ToXml(IXFStream *pStrm)
     pStrm->EndElement( "text:tab-stop" );
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

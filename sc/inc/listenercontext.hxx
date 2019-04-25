@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_LISTENERCONTEXT_HXX
-#define INCLUDED_SC_INC_LISTENERCONTEXT_HXX
+#pragma once
 
 #include "address.hxx"
 #include "columnspanset.hxx"
@@ -82,6 +81,5 @@ public:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

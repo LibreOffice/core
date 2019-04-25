@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_XML_PIVOTSOURCE_HXX
-#define INCLUDED_SC_SOURCE_FILTER_XML_PIVOTSOURCE_HXX
+#pragma once
 
 #include <dpshttab.hxx>
 #include <dpsdbtab.hxx>
@@ -84,6 +83,5 @@ struct PivotTableSources
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

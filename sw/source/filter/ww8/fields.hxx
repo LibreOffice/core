@@ -18,8 +18,7 @@
  */
 
 /// @HTML
-#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_FIELDS_HXX
-#define INCLUDED_SW_SOURCE_FILTER_WW8_FIELDS_HXX
+#pragma once
 
 namespace ww
 {
@@ -145,6 +144,5 @@ namespace ww
     const char *GetEnglishFieldName(eField eIndex) throw();
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_SPLWRAP_HXX
-#define INCLUDED_EDITENG_SPLWRAP_HXX
+#pragma once
 
 #include <editeng/editengdllapi.h>
 #include <editeng/svxenum.hxx>
@@ -113,6 +112,5 @@ protected:
     virtual void InsertHyphen( const sal_Int32 nPos ); // Insert hyphen
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

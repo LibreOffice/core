@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_RELATIONDESIGN_RTABLEWINDOW_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_RELATIONDESIGN_RTABLEWINDOW_HXX
+#pragma once
 
 #include <TableWindow.hxx>
 
@@ -36,7 +35,6 @@ namespace dbaui
         virtual OUString GetName() const override { return GetComposedName(); }
     };
 }
-#endif // INCLUDED_DBACCESS_SOURCE_UI_RELATIONDESIGN_RTABLEWINDOW_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

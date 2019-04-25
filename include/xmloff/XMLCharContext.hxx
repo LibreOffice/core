@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XMLOFF_XMLCHARCONTEXT_HXX
-#define INCLUDED_XMLOFF_XMLCHARCONTEXT_HXX
+#pragma once
 
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlictxt.hxx>
@@ -60,6 +59,5 @@ public:
     virtual void InsertString(const OUString& _sString);
 };
 
-#endif // INCLUDED_XMLOFF_XMLCHARCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

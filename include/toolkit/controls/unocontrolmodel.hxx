@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLMODEL_HXX
-#define INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLMODEL_HXX
+#pragma once
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -179,6 +178,5 @@ public:
     void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< css::uno::Any >& Values ) override;
 };
 
-#endif // INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

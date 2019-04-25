@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_PMDLITEM_HXX
-#define INCLUDED_EDITENG_PMDLITEM_HXX
+#pragma once
 
 #include <svl/stritem.hxx>
 #include <editeng/editengdllapi.h>
@@ -65,6 +64,5 @@ inline SvxPageModelItem::SvxPageModelItem( const OUString& rModel, bool bA,
     bAuto( bA )
 {}
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

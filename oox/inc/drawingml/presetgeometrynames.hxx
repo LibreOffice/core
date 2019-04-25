@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_PRESETGEOMETRYNAMES_HXX
-#define INCLUDED_OOX_DRAWINGML_PRESETGEOMETRYNAMES_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <oox/dllapi.h>
@@ -18,6 +17,5 @@ namespace PresetGeometryTypeNames
 OOX_DLLPUBLIC OUString GetFontworkType(const OUString& rMsoType);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

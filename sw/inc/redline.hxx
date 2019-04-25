@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_REDLINE_HXX
-#define INCLUDED_SW_INC_REDLINE_HXX
+#pragma once
 
 #include <tools/datetime.hxx>
 #include <rtl/ustring.hxx>
@@ -347,6 +346,5 @@ std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p
 
 } // namespace sw
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

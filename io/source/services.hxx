@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_IO_SOURCE_SERVICES_HXX
-#define INCLUDED_IO_SOURCE_SERVICES_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -97,6 +96,5 @@ namespace io_stm {
     Sequence<OUString> OPumpImpl_getSupportedServiceNames();
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

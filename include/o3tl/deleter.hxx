@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_O3TL_DELETER_HXX
-#define INCLUDED_O3TL_DELETER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Exception.hpp>
 #include <sal/log.hxx>
@@ -56,6 +55,5 @@ template<typename uniqueptr> void reset_preserve_ptr_during(uniqueptr& ptr)
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

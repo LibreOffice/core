@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_SHARECONTROLFILE_HXX
-#define INCLUDED_SVL_SHARECONTROLFILE_HXX
+#pragma once
 
 #include <svl/svldllapi.h>
 
@@ -66,6 +65,5 @@ public:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

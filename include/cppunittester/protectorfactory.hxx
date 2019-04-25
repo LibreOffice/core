@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPUNITTESTER_PROTECTORFACTORY_HXX
-#define INCLUDED_CPPUNITTESTER_PROTECTORFACTORY_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <cppunit/Protector.h>
@@ -36,6 +35,5 @@ extern "C" CppUnit::Protector *unobootstrapprotector();
 extern "C" CppUnit::Protector *vclbootstrapprotector();
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

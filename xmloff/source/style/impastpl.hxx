@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_IMPASTPL_HXX
-#define INCLUDED_XMLOFF_SOURCE_STYLE_IMPASTPL_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -181,6 +180,5 @@ public:
     std::vector<xmloff::AutoStyleEntry> GetAutoStyleEntries() const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

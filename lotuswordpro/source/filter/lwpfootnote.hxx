@@ -58,8 +58,7 @@
  *  footnote
  */
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFOOTNOTE_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFOOTNOTE_HXX
+#pragma once
 
 #include <lwpfrib.hxx>
 #include <lwpobj.hxx>
@@ -274,6 +273,5 @@ public:
     void SetMasterPage(const OUString& strMasterPage){ m_strMasterPage = strMasterPage;}
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

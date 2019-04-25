@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_NUMFMTSH_HXX
-#define INCLUDED_SVX_NUMFMTSH_HXX
+#pragma once
 
 #include <i18nlangtag/lang.h>
 
@@ -221,6 +220,5 @@ private:
     SVX_DLLPRIVATE static void CategoryToPos_Impl(SvNumFormatType nCategory, sal_uInt16& rPos);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

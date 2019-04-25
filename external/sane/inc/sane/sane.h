@@ -13,8 +13,7 @@
 
    This file declares SANE application interface.  See the SANE
    standard for a detailed explanation of the interface.  */
-#ifndef sane_h
-#define sane_h
+#pragma once
 
 #define SANE_CURRENT_MAJOR  0
 
@@ -210,4 +209,3 @@ extern SANE_Status sane_get_select_fd (SANE_Handle handle,
                        SANE_Int * fd);
 extern SANE_String_Const sane_strstatus (SANE_Status status);
 
-#endif /* sane_h */

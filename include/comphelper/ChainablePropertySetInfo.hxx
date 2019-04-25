@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_CHAINABLEPROPERTYSETINFO_HXX
-#define INCLUDED_COMPHELPER_CHAINABLEPROPERTYSETINFO_HXX
+#pragma once
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <comphelper/PropertyInfoHash.hxx>
@@ -59,6 +58,5 @@ namespace comphelper
         friend class MasterPropertySet;
     };
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

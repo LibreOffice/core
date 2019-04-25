@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_SHEETDATA_HXX
-#define INCLUDED_SC_INC_SHEETDATA_HXX
+#pragma once
 
 #include <editeng/editdata.hxx>
 #include <unordered_set>
@@ -175,6 +174,5 @@ struct ScFormatSaveData
     std::map<sal_uInt64, OUString> maIDToName;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

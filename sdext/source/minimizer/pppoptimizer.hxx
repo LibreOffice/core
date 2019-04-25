@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZER_HXX
-#define INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZER_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -33,6 +32,5 @@ struct PPPOptimizer
     static sal_Int64 GetFileSize( const OUString& rURL );
 };
 
-#endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

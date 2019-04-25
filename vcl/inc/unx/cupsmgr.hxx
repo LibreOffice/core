@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_CUPSMGR_HXX
-#define INCLUDED_VCL_INC_UNX_CUPSMGR_HXX
+#pragma once
 
 #include <printerinfomanager.hxx>
 #include <osl/module.h>
@@ -86,6 +85,5 @@ public:
 
 } // namespace psp
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

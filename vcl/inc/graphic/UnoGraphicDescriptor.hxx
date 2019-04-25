@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_GRAPHIC_DESCRIPTOR_HXX
-#define INCLUDED_VCL_SOURCE_GRAPHIC_DESCRIPTOR_HXX
+#pragma once
 
 #include <comphelper/propertysethelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -116,6 +115,5 @@ private:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

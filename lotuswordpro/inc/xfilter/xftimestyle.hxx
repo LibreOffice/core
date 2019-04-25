@@ -57,8 +57,7 @@
  * @file
  * Time style. The TIme format for time field.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTIMESTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTIMESTYLE_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xfstyle.hxx>
@@ -191,6 +190,5 @@ inline  void    XFTimeStyle::SetTruncate(bool bTrunc)
     m_bTruncate = bTrunc;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

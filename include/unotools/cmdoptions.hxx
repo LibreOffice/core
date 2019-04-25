@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UNOTOOLS_CMDOPTIONS_HXX
-#define INCLUDED_UNOTOOLS_CMDOPTIONS_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
@@ -118,6 +117,5 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtCommandOptions : public utl::detail:
 
 };      // class SvtCmdOptions
 
-#endif // INCLUDED_UNOTOOLS_CMDOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

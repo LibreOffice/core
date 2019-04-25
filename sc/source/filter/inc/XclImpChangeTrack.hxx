@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XCLIMPCHANGETRACK_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XCLIMPCHANGETRACK_HXX
+#pragma once
 
 #include "xiroot.hxx"
 #include "xistream.hxx"
@@ -142,6 +141,5 @@ public:
     virtual                     ~XclImpChTrFmlConverter() override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

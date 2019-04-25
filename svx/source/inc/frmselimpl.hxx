@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_INC_FRMSELIMPL_HXX
-#define INCLUDED_SVX_SOURCE_INC_FRMSELIMPL_HXX
+#pragma once
 
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
@@ -279,6 +278,5 @@ typedef FrameBorderIterBase< FrameBorderPtrVec, FrameBorderPtrVec::iterator, Fra
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

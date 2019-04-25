@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_DOCKWIN_HXX
-#define INCLUDED_VCL_DOCKWIN_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <o3tl/deleter.hxx>
@@ -375,6 +374,5 @@ inline void DockingWindow::SetIdleDebugName( const sal_Char *pDebugName )
 }
 
 
-#endif // INCLUDED_VCL_DOCKWIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

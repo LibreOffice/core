@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_I18NPOOL_INC_WTT_H
-#define INCLUDED_I18NPOOL_INC_WTT_H
+#pragma once
 
 namespace i18npool {
 
@@ -63,6 +62,5 @@ static const sal_uInt16 thaiCT[128] = {     // Thai character type
 
 }
 
-#endif // INCLUDED_I18NPOOL_INC_WTT_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDPOEV_HXX
-#define INCLUDED_SVX_SVDPOEV_HXX
+#pragma once
 
 #include <svx/svxdllapi.h>
 #include <svx/svdedtv.hxx>
@@ -80,6 +79,5 @@ public:
     void CheckPolyPossibilitiesHelper( SdrMark* pM, bool& b1stSmooth, bool& b1stSegm, bool& bCurve, bool& bSmoothFuz, bool& bSegmFuz, basegfx::B2VectorContinuity& eSmooth );
 };
 
-#endif // INCLUDED_SVX_SVDPOEV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_VCL_SPRITECANVAS_HXX
-#define INCLUDED_CANVAS_SOURCE_VCL_SPRITECANVAS_HXX
+#pragma once
 
 #include <rtl/ref.hxx>
 
@@ -158,6 +157,5 @@ namespace vclcanvas
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

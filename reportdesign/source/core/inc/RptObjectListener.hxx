@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_RPTOBJECTLISTENER_HXX
-#define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_RPTOBJECTLISTENER_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -46,6 +45,5 @@ public:
     virtual void SAL_CALL propertyChange( const  css::beans::PropertyChangeEvent& evt ) override;
 };
 }
-#endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_RPTOBJECTLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

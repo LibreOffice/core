@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_ACCESSIBLERULER_HXX
-#define INCLUDED_SVTOOLS_ACCESSIBLERULER_HXX
+#pragma once
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
@@ -183,6 +182,5 @@ inline bool SvtRulerAccessible::IsAlive() const
     return !rBHelper.bDisposed && !rBHelper.bInDispose;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

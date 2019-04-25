@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_IDLC_INC_ASTCONSTANT_HXX
-#define INCLUDED_IDLC_INC_ASTCONSTANT_HXX
+#pragma once
 
 #include "astdeclaration.hxx"
 #include "astexpression.hxx"
@@ -45,6 +44,5 @@ private:
     const ExprType  m_constValueType;
 };
 
-#endif // INCLUDED_IDLC_INC_ASTCONSTANT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

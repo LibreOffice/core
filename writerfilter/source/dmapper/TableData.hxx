@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEDATA_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEDATA_HXX
+#pragma once
 
 #include <dmapper/resourcemodel.hxx>
 
@@ -344,6 +343,5 @@ public:
 }
 }
 
-#endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_RESOURCEMODEL_TABLEDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

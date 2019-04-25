@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_TEXT_TEXTSETTINGS_HXX
-#define INCLUDED_TEST_TEXT_TEXTSETTINGS_HXX
+#pragma once
 
 namespace apitest
 {
@@ -20,7 +19,5 @@ public:
     void testSettingsProperties();
 };
 } // end namespace apitest
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

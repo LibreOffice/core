@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_ATTRIBUTE_SDRSHADOWTEXTATTRIBUTE_HXX
-#define INCLUDED_SVX_SDR_ATTRIBUTE_SDRSHADOWTEXTATTRIBUTE_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
@@ -57,6 +56,5 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 
-#endif // INCLUDED_SVX_SDR_ATTRIBUTE_SDRSHADOWTEXTATTRIBUTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

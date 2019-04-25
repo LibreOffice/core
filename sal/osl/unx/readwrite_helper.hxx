@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_OSL_UNX_READWRITE_HELPER_HXX
-#define INCLUDED_SAL_OSL_UNX_READWRITE_HELPER_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -19,6 +18,5 @@ bool safeWrite( int fd, void* data, sal_uInt32 dataSize );
 // data. It will return sal_False for any partial transfer or error.
 bool safeRead( int fd, void* buffer, sal_uInt32 count );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

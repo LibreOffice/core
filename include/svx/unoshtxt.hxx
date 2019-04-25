@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_UNOSHTXT_HXX
-#define INCLUDED_SVX_UNOSHTXT_HXX
+#pragma once
 
 #include <memory>
 #include <editeng/unoedsrc.hxx>
@@ -84,6 +83,5 @@ private:
     rtl::Reference<SvxTextEditSourceImpl>  mpImpl;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

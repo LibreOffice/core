@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_WRAPPOLYGONHANDLER_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_WRAPPOLYGONHANDLER_HXX
+#pragma once
 
 #include <deque>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
@@ -76,6 +75,5 @@ private:
 
 }}
 
-#endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_WRAPPOLYGONHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

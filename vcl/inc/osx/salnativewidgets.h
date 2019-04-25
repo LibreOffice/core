@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_SALNATIVEWIDGETS_H
-#define INCLUDED_VCL_INC_OSX_SALNATIVEWIDGETS_H
+#pragma once
 
 // since 10.4 ... no metrics are returned, and we have to fix the values
 #define BUTTON_WIDTH 16
@@ -57,6 +56,5 @@
 
 #define CLIP_FUZZ 1
 
-#endif // INCLUDED_VCL_INC_OSX_SALNATIVEWIDGETS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

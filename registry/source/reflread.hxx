@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_SOURCE_REFLREAD_HXX
-#define INCLUDED_REGISTRY_SOURCE_REFLREAD_HXX
+#pragma once
 
 #include <registry/refltype.hxx>
 #include <rtl/ustring.hxx>
@@ -109,6 +108,5 @@ private:
     TypeReaderImpl                                              m_hImpl;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_ONLINEUPDATE_TYPES_HXX
-#define INCLUDED_ONLINEUPDATE_TYPES_HXX
+#pragma once
 
 #include <string>
 
@@ -20,6 +19,5 @@ typedef std::string tstring;
 typedef char NS_tchar;
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

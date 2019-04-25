@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EXTENSIONS_TEST_OLE_OLECONVERTERVAR1_SMARTARRAY_H
-#define INCLUDED_EXTENSIONS_TEST_OLE_OLECONVERTERVAR1_SMARTARRAY_H
+#pragma once
 
 
 template< class sourceType>
@@ -219,6 +218,5 @@ template <> SmartArray <IUnknown*>::SmartArray(sourceType * parParams, int count
     }
     SafeArrayUnaccessData( m_array);
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

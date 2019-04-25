@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_CONDFORMATBUFFER_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_CONDFORMATBUFFER_HXX
+#pragma once
 
 #include "worksheethelper.hxx"
 #include <tools/color.hxx>
@@ -312,6 +311,5 @@ private:
 } // namespace xls
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_QA_UNIT_WPFTLOADER_HXX
-#define INCLUDED_WRITERPERFECT_QA_UNIT_WPFTLOADER_HXX
+#pragma once
 
 #include "wpftqahelperdllapi.h"
 
@@ -97,7 +96,5 @@ private:
 };
 }
 }
-
-#endif // INCLUDED_WRITERPERFECT_QA_UNIT_WPFTLOADER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

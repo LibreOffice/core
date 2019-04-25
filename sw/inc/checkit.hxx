@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_CHECKIT_HXX
-#define INCLUDED_SW_INC_CHECKIT_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.h>
 
@@ -35,6 +34,5 @@ public:
 
 extern SwCheckIt* pCheckIt;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

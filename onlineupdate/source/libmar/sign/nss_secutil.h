@@ -5,8 +5,7 @@
 /* With the exception of GetPasswordString, this file was
    copied from NSS's cmd/lib/secutil.h hg revision 8f011395145e */
 
-#ifndef NSS_SECUTIL_H_
-#define NSS_SECUTIL_H_
+#pragma once
 
 #include "nss.h"
 #include "pk11pub.h"
@@ -40,4 +39,3 @@ static char * quiet_fgets (char *buf, int length, FILE *input);
 char *
 SECU_GetModulePassword(PK11SlotInfo *slot, PRBool retry, void *arg);
 
-#endif

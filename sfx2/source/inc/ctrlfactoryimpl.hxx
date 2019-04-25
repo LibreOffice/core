@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_CTRLFACTORYIMPL_HXX
-#define INCLUDED_SFX2_CTRLFACTORYIMPL_HXX
+#pragma once
 
 #include <sfx2/stbitem.hxx>
 #include <sfx2/tbxctrl.hxx>
@@ -53,6 +52,5 @@ public:
     size_t size() const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,8 +57,7 @@
  * @file
  * index entry object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFENTRY_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFENTRY_HXX
+#pragma once
 
 #include <xfilter/xfcontent.hxx>
 
@@ -124,5 +123,4 @@ inline void XFEntry::SetOutlineLevel(sal_Int32 level)
     m_nOutlineLevel = level;
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

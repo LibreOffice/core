@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_PROGRESSBARHELPER_HXX
-#define INCLUDED_XMLOFF_PROGRESSBARHELPER_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
@@ -64,6 +63,5 @@ public:
             bool GetRepeat() { return bRepeat; }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

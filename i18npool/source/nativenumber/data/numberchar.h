@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NPOOL_SOURCE_NATIVENUMBER_DATA_NUMBERCHAR_H
-#define INCLUDED_I18NPOOL_SOURCE_NATIVENUMBER_DATA_NUMBERCHAR_H
+#pragma once
 
 namespace i18npool {
 
@@ -266,6 +265,5 @@ static const sal_Unicode MultiplierChar_7_CJK[][ExponentCount_7_CJK] = {
 
 }
 
-#endif // INCLUDED_I18NPOOL_SOURCE_NATIVENUMBER_DATA_NUMBERCHAR_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

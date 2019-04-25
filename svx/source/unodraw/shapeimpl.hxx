@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SOURCE_UNODRAW_SHAPEIMPL_HXX
-#define INCLUDED_SVX_SOURCE_UNODRAW_SHAPEIMPL_HXX
+#pragma once
 
 #include <svx/unoshape.hxx>
 class SvxShapeCaption : public SvxShapeText
@@ -101,6 +100,5 @@ public:
 
 SvxUnoPropertyMapProvider& getSvxMapProvider();
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

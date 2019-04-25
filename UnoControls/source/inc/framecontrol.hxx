@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOCONTROLS_SOURCE_INC_FRAMECONTROL_HXX
-#define INCLUDED_UNOCONTROLS_SOURCE_INC_FRAMECONTROL_HXX
+#pragma once
 
 #include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -180,6 +179,5 @@ private:
 
 }
 
-#endif // INCLUDED_UNOCONTROLS_SOURCE_INC_FRAMECONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_GESTUREEVENT_HXX
-#define INCLUDED_VCL_GESTUREEVENT_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -36,7 +35,5 @@ public:
     sal_Int32 mnOffset;
     PanningOrientation meOrientation;
 };
-
-#endif // INCLUDED_VCL_GESTUREEVENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

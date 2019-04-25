@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DESKTOP_INC_LIB_INIT_HXX
-#define INCLUDED_DESKTOP_INC_LIB_INIT_HXX
+#pragma once
 
 #include <map>
 #include <unordered_map>
@@ -182,6 +181,5 @@ namespace desktop {
     DESKTOP_DLLPUBLIC std::vector<com::sun::star::beans::PropertyValue> jsonToPropertyValuesVector(const char* pJSON);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

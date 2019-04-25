@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_FOPTMGR_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_FOPTMGR_HXX
+#pragma once
 
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
@@ -84,6 +83,5 @@ private:
 };
 
 
-#endif // INCLUDED_SC_SOURCE_UI_INC_FOPTMGR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

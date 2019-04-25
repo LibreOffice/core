@@ -57,8 +57,7 @@
  * @file
  * Margins object, include left margin,right margin,top margin and bottom margin.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFMARGINS_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFMARGINS_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 
@@ -127,5 +126,4 @@ inline double   XFMargins::GetTop()
     return m_fTop;
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

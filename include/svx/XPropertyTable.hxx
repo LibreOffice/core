@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XPROPERTYTABLE_HXX
-#define INCLUDED_SVX_XPROPERTYTABLE_HXX
+#pragma once
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <svx/svxdllapi.h>
@@ -33,7 +32,6 @@ css::uno::Reference< css::uno::XInterface > SvxUnoXHatchTable_createInstance( XP
 css::uno::Reference< css::uno::XInterface > SvxUnoXGradientTable_createInstance( XPropertyList* pList ) throw();
 css::uno::Reference< css::uno::XInterface > SvxUnoXBitmapTable_createInstance( XPropertyList* pList ) throw();
 
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CONDFORMATHELPER_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CONDFORMATHELPER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <address.hxx>
@@ -34,6 +33,5 @@ public:
             const OUString& aStr1 = OUString(), const OUString& aStr2 = OUString() );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

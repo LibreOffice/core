@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype - table layouts
  */
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABLELAYOUT_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABLELAYOUT_HXX
+#pragma once
 
 #include "lwplayout.hxx"
 #include <xfilter/xftable.hxx>
@@ -263,6 +262,5 @@ protected:
 #include "lwpcelllayout.hxx"
 #include "lwprowlayout.hxx"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

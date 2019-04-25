@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_LABIMP_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_LABIMP_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 #include "label.hxx"
@@ -36,6 +35,5 @@ inline void setfldval(weld::MetricSpinButton& rField, int lValue)
     rField.set_value(rField.normalize(lValue), FieldUnit::TWIP);
 }
 
-#endif // INCLUDED_SW_SOURCE_UIBASE_INC_LABIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -12,8 +12,7 @@
  * complete information.
  */
 
-#ifndef INCLUDED_COMPHELPER_WINDOWSDEBUGOUTPUT_HXX
-#define INCLUDED_COMPHELPER_WINDOWSDEBUGOUTPUT_HXX
+#pragma once
 
 #include <codecvt>
 #include <iomanip>
@@ -519,7 +518,5 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
     }
     return stream;
 }
-
-#endif // INCLUDED_COMPHELPER_WINDOWSDEBUGOUTPUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

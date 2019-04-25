@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_OPENGL_OGL_TEXTURECACHE_HXX
-#define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_TEXTURECACHE_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <unordered_map>
@@ -59,6 +58,5 @@ namespace oglcanvas
     };
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

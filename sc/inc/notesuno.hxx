@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_NOTESUNO_HXX
-#define INCLUDED_SC_INC_NOTESUNO_HXX
+#pragma once
 
 #include <com/sun/star/sheet/XSheetAnnotation.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationShapeSupplier.hpp>
@@ -102,6 +101,5 @@ private:
     rtl::Reference<SvxUnoText> pUnoText;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

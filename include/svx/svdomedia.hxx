@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDOMEDIA_HXX
-#define INCLUDED_SVX_SVDOMEDIA_HXX
+#pragma once
 
 #include <memory>
 #include <svx/svdorect.hxx>
@@ -79,6 +78,5 @@ private:
         std::unique_ptr<Impl> m_xImpl;
 };
 
-#endif // INCLUDED_SVX_SVDOMEDIA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

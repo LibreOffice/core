@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDOUNO_HXX
-#define INCLUDED_SVX_SVDOUNO_HXX
+#pragma once
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
@@ -141,6 +140,5 @@ private:
     SVX_DLLPRIVATE  bool    impl_getViewContact( sdr::contact::ViewContactOfUnoControl*& _out_rpContact ) const;
 };
 
-#endif // INCLUDED_SVX_SVDOUNO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

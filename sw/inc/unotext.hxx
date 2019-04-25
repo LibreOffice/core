@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_UNOTEXT_HXX
-#define INCLUDED_SW_INC_UNOTEXT_HXX
+#pragma once
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -234,6 +233,5 @@ public:
             const css::uno::Reference< css::text::XTextContent>& xPredecessor) override;
 };
 
-#endif // INCLUDED_SW_INC_UNOTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

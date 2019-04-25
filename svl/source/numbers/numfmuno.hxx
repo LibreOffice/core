@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_SOURCE_NUMBERS_NUMFMUNO_HXX
-#define INCLUDED_SVL_SOURCE_NUMBERS_NUMFMUNO_HXX
+#pragma once
 
 #include <com/sun/star/util/XNumberFormatter2.hpp>
 #include <com/sun/star/util/XNumberFormatPreviewer.hpp>
@@ -218,6 +217,5 @@ public:
 };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

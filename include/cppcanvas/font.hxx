@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPCANVAS_FONT_HXX
-#define INCLUDED_CPPCANVAS_FONT_HXX
+#pragma once
 
 #include <memory>
 
@@ -36,6 +35,5 @@ namespace cppcanvas
     typedef std::shared_ptr< ::cppcanvas::Font > FontSharedPtr;
 }
 
-#endif // INCLUDED_CPPCANVAS_FONT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

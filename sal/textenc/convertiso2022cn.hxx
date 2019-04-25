@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_TEXTENC_CONVERTISO2022CN_HXX
-#define INCLUDED_SAL_TEXTENC_CONVERTISO2022CN_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -68,6 +67,5 @@ sal_Size ImplConvertUnicodeToIso2022Cn(void const * pData,
                                        sal_uInt32 * pInfo,
                                        sal_Size * pSrcCvtChars);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDVIEW_HXX
-#define INCLUDED_SVX_SVDVIEW_HXX
+#pragma once
 
 // HACK to avoid too deep includes and to have some
 // levels free in svdmark itself (MS compiler include depth limit)
@@ -277,6 +276,5 @@ public:
 //     Pointer GetPreferredPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nTol=0) const;
 //     OUString GetStatusText();
 
-#endif // INCLUDED_SVX_SVDVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

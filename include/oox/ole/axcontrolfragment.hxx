@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_OLE_AXCONTROLFRAGMENT_HXX
-#define INCLUDED_OOX_OLE_AXCONTROLFRAGMENT_HXX
+#pragma once
 
 #include <oox/core/contexthandler.hxx>
 #include <oox/core/contexthandler2.hxx>
@@ -73,6 +72,5 @@ private:
 } // namespace ole
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

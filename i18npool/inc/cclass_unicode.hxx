@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_I18NPOOL_INC_CCLASS_UNICODE_HXX
-#define INCLUDED_I18NPOOL_INC_CCLASS_UNICODE_HXX
+#pragma once
 
 #include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
@@ -183,6 +182,5 @@ private:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

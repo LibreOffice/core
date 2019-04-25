@@ -57,8 +57,7 @@
  * @file
  * Font object to serial to xml filter.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFONT_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFONT_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -412,6 +411,5 @@ inline const XFColor& XFFont::GetColor()
     return m_aColor;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

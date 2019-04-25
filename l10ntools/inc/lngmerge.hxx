@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_L10NTOOLS_INC_LNGMERGE_HXX
-#define INCLUDED_L10NTOOLS_INC_LNGMERGE_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -59,6 +58,5 @@ public:
          const OString &rLanguage );
 };
 
-#endif // INCLUDED_L10NTOOLS_INC_LNGMERGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

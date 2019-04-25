@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUISTIC_SOURCE_GCITERATOR_HXX
-#define INCLUDED_LINGUISTIC_SOURCE_GCITERATOR_HXX
+#pragma once
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -208,6 +207,5 @@ private:
 };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
