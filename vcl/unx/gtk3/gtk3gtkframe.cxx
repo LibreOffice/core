@@ -137,7 +137,7 @@ sal_uInt16 GtkSalFrame::GetKeyCode(guint keyval)
         switch( keyval )
         {
             // - - - - - Sun keyboard, see vcl/unx/source/app/saldisp.cxx
-            // althopugh GDK_KEY_F1 ... GDK_KEY_L10 are known to
+            // although GDK_KEY_F1 ... GDK_KEY_L10 are known to
             // gdk/gdkkeysyms.h, they are unlikely to be generated
             // except possibly by Solaris systems
             // this whole section needs review
