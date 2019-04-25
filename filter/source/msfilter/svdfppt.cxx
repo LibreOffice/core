@@ -1010,8 +1010,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                 {
                     if ( !rPersistEntry.pPresentationObjects )
                     {
-                        rPersistEntry.pPresentationObjects.reset( new sal_uInt32[ PPT_STYLESHEETENTRYS ] );
-                        memset( rPersistEntry.pPresentationObjects.get(), 0, PPT_STYLESHEETENTRYS * 4 );
+                        rPersistEntry.pPresentationObjects.reset( new sal_uInt32[ PPT_STYLESHEETENTRIES ] );
+                        memset( rPersistEntry.pPresentationObjects.get(), 0, PPT_STYLESHEETENTRIES * 4 );
                     }
                     if ( !rPersistEntry.pPresentationObjects[ static_cast<int>(nDestinationInstance) ] )
                         rPersistEntry.pPresentationObjects[ static_cast<int>(nDestinationInstance) ] = rObjData.rSpHd.GetRecBegFilePos();
@@ -3331,7 +3331,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
             {
                 case PPT_PST_ExtendedParagraphMasterAtom :
                 {
-                    if ( aHd.nRecInstance < PPT_STYLESHEETENTRYS )
+                    if ( aHd.nRecInstance < PPT_STYLESHEETENTRIES )
                     {
                         sal_uInt16 nDepth = 0, i = 0;
                         rSt.ReadUInt16(nDepth);

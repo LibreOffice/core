@@ -688,7 +688,7 @@ struct  PPTTextSpecInfoAtomInterpreter
 
 };
 
-#define PPT_STYLESHEETENTRYS    9
+#define PPT_STYLESHEETENTRIES    9
 
 struct PPTExtParaLevel
 {
