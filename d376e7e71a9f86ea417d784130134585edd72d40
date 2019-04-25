@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_d6c5245d",
+        "filename": "l10ntools/source/ulfconv/msi-encodinglist.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-25T04:31:38Z",
+      "side": 1,
+      "message": "Setting user locale to Kabyle (Algeria) does not make installer take that language. No idea which one would match - I don\u0027t find anything like \"Tamazight\" or \"Amazight\" or the like in the list...",
+      "parentUuid": "3fa0c359_d6bbe40b",
+      "range": {
+        "startLine": 83,
+        "startChar": 12,
+        "endLine": 83,
+        "endChar": 16
+      },
+      "revId": "d376e7e71a9f86ea417d784130134585edd72d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_763690b7",
         "filename": "l10ntools/source/ulfconv/msi-encodinglist.txt",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-04-24T23:53:45Z",
       "side": 1,
       "message": "0x0472 is Oromo Ethiopia om-ET; there\u0027s also Oromo 0x0072 om - both since Win8.1",
+      "range": {
+        "startLine": 119,
+        "startChar": 12,
+        "endLine": 119,
+        "endChar": 16
+      },
+      "revId": "d376e7e71a9f86ea417d784130134585edd72d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_76a0d0a6",
+        "filename": "l10ntools/source/ulfconv/msi-encodinglist.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-25T04:31:38Z",
+      "side": 1,
+      "message": "Setting user locale to Oromo (Ethiopia) works - takes strings from https://opengrok.libreoffice.org/xref/translations/source/om/instsetoo_native/inc_openoffice/windows/msi_languages.po\n\nSetting it to Oromo (Kenya) does not work.",
+      "parentUuid": "3fa0c359_763690b7",
       "range": {
         "startLine": 119,
         "startChar": 12,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_96a55cb8",
+        "filename": "l10ntools/source/ulfconv/msi-encodinglist.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-25T04:31:38Z",
+      "side": 1,
+      "message": "Setting user locale to Kinyarwanda (Rwanda) works (picks strings from https://opengrok.libreoffice.org/xref/translations/source/rw/instsetoo_native/inc_openoffice/windows/msi_languages.po)",
+      "parentUuid": "3fa0c359_963b1c9b",
+      "range": {
+        "startLine": 133,
+        "startChar": 12,
+        "endLine": 133,
+        "endChar": 16
+      },
+      "revId": "d376e7e71a9f86ea417d784130134585edd72d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_56459416",
         "filename": "l10ntools/source/ulfconv/msi-encodinglist.txt",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2019-04-24T23:53:45Z",
       "side": 1,
       "message": "Sinhala\n\n    Sinhala           0x005B si    since WIn7\n    Sinhala Sri Lanka 0x045B si-LK since Vista",
+      "range": {
+        "startLine": 139,
+        "startChar": 12,
+        "endLine": 139,
+        "endChar": 16
+      },
+      "revId": "d376e7e71a9f86ea417d784130134585edd72d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_36aa4885",
+        "filename": "l10ntools/source/ulfconv/msi-encodinglist.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-25T04:31:38Z",
+      "side": 1,
+      "message": "Setting user locale to Sinhala (Sri Lanka) works (seems to take strings from https://opengrok.libreoffice.org/xref/translations/source/si/instsetoo_native/inc_openoffice/windows/msi_languages.po - I can\u0027t be sure, but very likely).",
+      "parentUuid": "3fa0c359_56459416",
       "range": {
         "startLine": 139,
         "startChar": 12,
