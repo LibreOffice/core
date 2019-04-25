@@ -726,7 +726,7 @@ void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
     if( pCpyNd || pEndNdIdx )
     {
         SwNodeRange aRg( pStt->nNode, 0, pEnd->nNode, 1 );
-        rDoc.GetNodes().MoveNodes( aRg, rNds, aPos.nNode, false );
+        rDoc.GetNodes().MoveNodes( aRg, rNds, aPos.nNode, true );
         aPos.nContent = 0;
         --aPos.nNode;
     }
@@ -745,7 +745,7 @@ void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
 
 void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
                             SwPosition& rInsPos,
-                            const sal_uLong* pEndNdIdx )
+            const sal_uLong* pEndNdIdx, bool const bForceCreateFrames)
 {
     // here comes the recovery
     SwNodes & rNds = rDoc.GetUndoManager().GetUndoNodes();
@@ -793,7 +793,7 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
         SwNodeRange aRg( rNds, nNodeIdx, rNds, (pEndNdIdx
                         ? ((*pEndNdIdx) + 1)
                         : rNds.GetEndOfExtras().GetIndex() ) );
-        rNds.MoveNodes( aRg, rDoc.GetNodes(), rInsPos.nNode, nullptr == pEndNdIdx );
+        rNds.MoveNodes(aRg, rDoc.GetNodes(), rInsPos.nNode, nullptr == pEndNdIdx || bForceCreateFrames);
 
     }
     else {
@@ -1205,7 +1205,7 @@ void SwUndoSaveSection::SaveSection( const SwNodeIndex& rSttIdx )
 }
 
 void SwUndoSaveSection::SaveSection(
-    const SwNodeRange& rRange )
+    const SwNodeRange& rRange, bool const bExpandNodes)
 {
     SwPaM aPam( rRange.aStart, rRange.aEnd );
 
@@ -1231,8 +1231,11 @@ void SwUndoSaveSection::SaveSection(
 
     nStartPos = rRange.aStart.GetIndex();
 
-    --aPam.GetPoint()->nNode;
-    ++aPam.GetMark()->nNode;
+    if (bExpandNodes)
+    {
+        --aPam.GetPoint()->nNode;
+        ++aPam.GetMark()->nNode;
+    }
 
     SwContentNode* pCNd = aPam.GetContentNode( false );
     if( pCNd )
@@ -1266,13 +1269,14 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
     }
 }
 
-void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos )
+void SwUndoSaveSection::RestoreSection(
+        SwDoc *const pDoc, const SwNodeIndex& rInsPos, bool bForceCreateFrames)
 {
     if( ULONG_MAX != nStartPos )        // was there any content?
     {
         SwPosition aInsPos( rInsPos );
         sal_uLong nEnd = m_pMovedStart->GetIndex() + nMvLen - 1;
-        MoveFromUndoNds(*pDoc, m_pMovedStart->GetIndex(), aInsPos, &nEnd);
+        MoveFromUndoNds(*pDoc, m_pMovedStart->GetIndex(), aInsPos, &nEnd, bForceCreateFrames);
 
         // destroy indices again, content was deleted from UndoNodes array
         m_pMovedStart.reset();

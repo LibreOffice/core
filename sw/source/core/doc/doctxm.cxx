@@ -51,6 +51,7 @@
 #include <txtfrm.hxx>
 #include <rootfrm.hxx>
 #include <UndoAttribute.hxx>
+#include <UndoSection.hxx>
 #include <swundo.hxx>
 #include <mdiexp.hxx>
 #include <docary.hxx>
@@ -871,60 +872,6 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     SwNode2LayoutSaveUpperFrames aN2L(*pSectNd);
     const_cast<SwSectionNode*>(pSectNd)->DelFrames();
 
-    // remove old content an insert one empty textnode (to hold the layout!)
-    SwTextNode* pFirstEmptyNd;
-    {
-        pDoc->getIDocumentRedlineAccess().DeleteRedline( *pSectNd, true, USHRT_MAX );
-
-        SwNodeIndex aSttIdx( *pSectNd, +1 );
-        SwNodeIndex aEndIdx( *pSectNd->EndOfSectionNode() );
-        pFirstEmptyNd = pDoc->GetNodes().MakeTextNode( aEndIdx,
-                        pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ) );
-
-        {
-            // Task 70995 - save and restore PageDesc and Break Attributes
-            SwNodeIndex aNxtIdx( aSttIdx );
-            const SwContentNode* pCNd = aNxtIdx.GetNode().GetContentNode();
-            if( !pCNd )
-                pCNd = pDoc->GetNodes().GoNext( &aNxtIdx );
-            if( pCNd->HasSwAttrSet() )
-            {
-                SfxItemSet aBrkSet( pDoc->GetAttrPool(), aBreakSetRange );
-                aBrkSet.Put( *pCNd->GetpSwAttrSet() );
-                if( aBrkSet.Count() )
-                    pFirstEmptyNd->SetAttr( aBrkSet );
-            }
-        }
-        --aEndIdx;
-        SwPosition aPos( aEndIdx, SwIndex( pFirstEmptyNd, 0 ));
-        SwDoc::CorrAbs( aSttIdx, aEndIdx, aPos, true );
-
-        // delete flys in whole range including start node which requires
-        // giving the node before start node as Mark parameter, hence -1.
-        // (flys must be deleted because the anchor nodes are removed)
-        DelFlyInRange( SwNodeIndex(aSttIdx, -1), aEndIdx );
-
-        pDoc->GetNodes().Delete( aSttIdx, aEndIdx.GetIndex() - aSttIdx.GetIndex() );
-    }
-
-    // insert title of TOX
-    if ( !GetTitle().isEmpty() )
-    {
-        // then insert the headline section
-        SwNodeIndex aIdx( *pSectNd, +1 );
-
-        SwTextNode* pHeadNd = pDoc->GetNodes().MakeTextNode( aIdx,
-                                GetTextFormatColl( FORM_TITLE ) );
-        pHeadNd->InsertText( GetTitle(), SwIndex( pHeadNd ) );
-
-        SwSectionData headerData( TOX_HEADER_SECTION, GetTOXName()+"_Head" );
-
-        SwNodeIndex aStt( *pHeadNd ); --aIdx;
-        SwSectionFormat* pSectFormat = pDoc->MakeSectionFormat();
-        pDoc->GetNodes().InsertTextSection(
-                aStt, *pSectFormat, headerData, nullptr, &aIdx, true, false);
-    }
-
     // This would be a good time to update the Numbering
     pDoc->UpdateNumRule();
 
@@ -964,6 +911,81 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     if( TOX_INDEX == SwTOXBase::GetType() &&
         ( GetOptions() & SwTOIOptions::AlphaDelimiter ) )
         InsertAlphaDelimitter( aIntl );
+
+    // remove old content an insert one empty textnode (to hold the layout!)
+    SwTextNode* pFirstEmptyNd;
+
+    SwUndoUpdateIndex * pUndo(nullptr);
+    {
+        pDoc->getIDocumentRedlineAccess().DeleteRedline( *pSectNd, true, USHRT_MAX );
+
+        SwNodeIndex aSttIdx( *pSectNd, +1 );
+        SwNodeIndex aEndIdx( *pSectNd->EndOfSectionNode() );
+        pFirstEmptyNd = pDoc->GetNodes().MakeTextNode( aEndIdx,
+                        pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ) );
+
+        {
+            // Task 70995 - save and restore PageDesc and Break Attributes
+            SwNodeIndex aNxtIdx( aSttIdx );
+            const SwContentNode* pCNd = aNxtIdx.GetNode().GetContentNode();
+            if( !pCNd )
+                pCNd = pDoc->GetNodes().GoNext( &aNxtIdx );
+            assert(pCNd != pFirstEmptyNd);
+            assert(pCNd->GetIndex() < pFirstEmptyNd->GetIndex());
+            if( pCNd->HasSwAttrSet() )
+            {
+                SfxItemSet aBrkSet( pDoc->GetAttrPool(), aBreakSetRange );
+                aBrkSet.Put( *pCNd->GetpSwAttrSet() );
+                if( aBrkSet.Count() )
+                    pFirstEmptyNd->SetAttr( aBrkSet );
+            }
+        }
+
+        if (pDoc->GetIDocumentUndoRedo().DoesUndo())
+        {
+            // note: this will first append a SwUndoDelSection from the ctor...
+            pUndo = new SwUndoUpdateIndex(*this);
+            // tdf#123313 insert Undo *after* all CrossRefBookmark Undos have
+            // been inserted by the Update*() functions
+            pDoc->GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndoUpdateIndex>(pUndo));
+        }
+        else
+        {
+            --aEndIdx;
+            SwPosition aPos( aEndIdx, SwIndex( pFirstEmptyNd, 0 ));
+            SwDoc::CorrAbs( aSttIdx, aEndIdx, aPos, true );
+
+            // delete flys in whole range including start node which requires
+            // giving the node before start node as Mark parameter, hence -1.
+            // (flys must be deleted because the anchor nodes are removed)
+            DelFlyInRange( SwNodeIndex(aSttIdx, -1), aEndIdx );
+
+            pDoc->GetNodes().Delete( aSttIdx, aEndIdx.GetIndex() - aSttIdx.GetIndex() );
+        }
+    }
+
+    // insert title of TOX
+    if ( !GetTitle().isEmpty() )
+    {
+        // then insert the headline section
+        SwNodeIndex aIdx( *pSectNd, +1 );
+
+        SwTextNode* pHeadNd = pDoc->GetNodes().MakeTextNode( aIdx,
+                                GetTextFormatColl( FORM_TITLE ) );
+        pHeadNd->InsertText( GetTitle(), SwIndex( pHeadNd ) );
+
+        SwSectionData headerData( TOX_HEADER_SECTION, GetTOXName()+"_Head" );
+
+        SwNodeIndex aStt( *pHeadNd ); --aIdx;
+        SwSectionFormat* pSectFormat = pDoc->MakeSectionFormat();
+        pDoc->GetNodes().InsertTextSection(
+                aStt, *pSectFormat, headerData, nullptr, &aIdx, true, false);
+
+        if (pUndo)
+        {
+            pUndo->TitleSectionInserted(*pSectFormat);
+        }
+    }
 
     // Sort the List of all TOC Marks and TOC Sections
     std::vector<SwTextFormatColl*> aCollArr( GetTOXForm().GetFormMax(), nullptr );

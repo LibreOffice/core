@@ -163,7 +163,8 @@ protected:
                         sal_uLong* pEndNdIdx = nullptr );
     static void MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
                           SwPosition& rInsPos,
-                          const sal_uLong* pEndNdIdx = nullptr );
+                          const sal_uLong* pEndNdIdx = nullptr,
+                          bool bForceCreateFrames = false);
 
     // These two methods move the SPoint back/forth from PaM. With it
     // a range can be spanned for Undo/Redo. (In this case the SPoint
@@ -199,9 +200,9 @@ public:
     ~SwUndoSaveSection();
 
     void SaveSection( const SwNodeIndex& rSttIdx );
-    void SaveSection( const SwNodeRange& rRange );
+    void SaveSection(const SwNodeRange& rRange, bool bExpandNodes = true);
     void RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx, sal_uInt16 nSectType );
-    void RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos );
+    void RestoreSection(SwDoc* pDoc, const SwNodeIndex& rInsPos, bool bForceCreateFrames = false);
 
     const SwHistory* GetHistory() const { return pHistory.get(); }
           SwHistory* GetHistory()       { return pHistory.get(); }
