@@ -1600,7 +1600,9 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
 void DocxAttributeOutput::DoWriteBookmarkTagStart(const OUString & bookmarkName)
 {
     const OString rId   = OString::number(m_nNextBookmarkId);
-    const OString rName = OUStringToOString(BookmarkToWord(bookmarkName), RTL_TEXTENCODING_UTF8).getStr();
+    //const OString rName = OUStringToOString(BookmarkToWord(bookmarkName), RTL_TEXTENCODING_UTF8).getStr();
+    //tdf#113483: fix non-ascii characters in bookmark names
+    const OString rName = OUStringToOString(bookmarkName, RTL_TEXTENCODING_UTF8).getStr();
 
     m_pSerializer->singleElementNS(XML_w, XML_bookmarkStart,
         FSNS(XML_w, XML_id), rId.getStr(),
@@ -1993,6 +1995,8 @@ void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos
                sToken = sToken.replaceAll("NN", "ddd");
             }
 
+            //tdf#113483: fix non-ascii characters in instrText xml tags
+            OUString sToken = INetURLObject::decode(sToken, INetURLObject::DecodeMechanism::Unambiguous, RTL_TEXTENCODING_UTF8);
             // Write the Field command
             DoWriteCmd( sToken );
 
