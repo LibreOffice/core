@@ -1743,8 +1743,6 @@ void SwDoc::ChangeTOX(SwTOXBase & rTOX, const SwTOXBase & rNew,
 {
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().DelAllUndoObj();
-
         GetIDocumentUndoRedo().AppendUndo(
             std::make_unique<SwUndoTOXChange>(this, &rTOX, rNew));
     }

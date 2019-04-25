@@ -324,15 +324,6 @@ void SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
     if(CanInsert())
     {
         SwEditShell::UpdateTableOf(rTOX, pSet);
-
-        if (pSet == nullptr)
-        {
-            SwDoc *const pDoc_ = GetDoc();
-            if (pDoc_)
-            {
-                pDoc_->GetIDocumentUndoRedo().DelAllUndoObj();
-            }
-        }
     }
 }
 
