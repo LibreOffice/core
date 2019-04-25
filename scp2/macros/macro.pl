@@ -76,20 +76,6 @@ sub write_ITERATE_ALL_LANG
         print OUTFILE "\\\n";
     }
     print OUTFILE "\n\n";
-
-    print OUTFILE "#define ITERATE_ALL_LANG_DIR_LPROJ(gid,parent) ";
-    foreach $lang (@helplangs) {
-        my $shortlang = $lang;
-        $shortlang = "en" if $shortlang eq "en-US";
-        my $speciallang = $lang;
-        $speciallang =~ s/-/_/;
-        print OUTFILE "\\\nDirectory CONCAT3(gid_Dir_,gid,_$speciallang)";
-        print OUTFILE "\\\n\tParentID = CONCAT2(gid_Dir_,parent);";
-        print OUTFILE "\\\n\tDosName = \"$shortlang.lproj\"; ";
-        print OUTFILE "\\\nEnd ";
-        print OUTFILE "\\\n";
-    }
-    print OUTFILE "\n\n";
 }
 
 sub write_ALL_LANG
