@@ -24,6 +24,7 @@
 #include <svtools/PlaceEditDialog.hxx>
 #include <svtools/ServerDetailsControls.hxx>
 #include <vcl/lstbox.hxx>
+#include <sal/log.hxx>
 
 #include <config_oauth2.h>
 
@@ -445,12 +446,11 @@ IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl, weld::Button&, void  )
     catch( const Exception& )
     {}
 
-    // Get the Content
-    ::ucbhelper::Content aCnt( sUrl, m_xCmdEnv, comphelper::getProcessComponentContext() );
-    Sequence<OUString> aProps { "Title" };
-
     try
     {
+        // Get the Content
+        ::ucbhelper::Content aCnt( sUrl, m_xCmdEnv, comphelper::getProcessComponentContext() );
+        Sequence<OUString> aProps { "Title" };
         Reference< XResultSet > xResultSet( aCnt.createCursor( aProps ), UNO_QUERY_THROW );
         Reference< XContentAccess > xAccess( xResultSet, UNO_QUERY_THROW );
         while ( xResultSet->next() )
@@ -466,8 +466,9 @@ IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl, weld::Button&, void  )
             m_pDialog->m_xLBRepository->append_text(sName);
         }
     }
-    catch ( const Exception& )
+    catch ( const Exception& e)
     {
+        SAL_WARN( "svtools.dialogs", "RefreshReposHdl exception=" << e );
     }
 
     // Auto-select the first one
