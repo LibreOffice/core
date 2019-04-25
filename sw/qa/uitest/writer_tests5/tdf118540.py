@@ -29,6 +29,9 @@ class tdf118540(UITestCase):
         xOkBtn = xDialog.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())
         self.xUITest.executeCommand(".uno:ClosePreview")  # close print preview
+
+        self.xUITest.getTopFocusWindow() #Get focus after closing preview
+
         #verify
         self.assertEqual(document.Text.String[0:4], "Test")
         self.ui_test.close_doc()
