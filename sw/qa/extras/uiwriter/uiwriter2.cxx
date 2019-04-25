@@ -433,6 +433,7 @@ void SwUiWriterTest2::testMixedFormFieldInsertion()
 
 void SwUiWriterTest2::testTdf122942()
 {
+#ifndef MACOSX
     load(DATA_DIRECTORY, "tdf122942.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
@@ -471,6 +472,7 @@ void SwUiWriterTest2::testTdf122942()
     CPPUNIT_ASSERT(pObject2);
     const tools::Rectangle& rOutRect2 = pObject2->GetLastBoundRect();
     CPPUNIT_ASSERT(rOutRect2.Top() > rOutRect1.Top() && rOutRect2.Top() < rOutRect1.Bottom());
+#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
