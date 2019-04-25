@@ -113,6 +113,7 @@ public:
     void testConditionalFormatRangeListXLSX();
     void testConditionalFormatContainsTextXLSX();
     void testConditionalFormatPriorityCheckXLSX();
+    void testConditionalFormatOriginXLSX();
     void testMiscRowHeightExport();
     void testNamedRangeBugfdo62729();
     void testBuiltinRangesXLSX();
@@ -244,6 +245,7 @@ public:
     CPPUNIT_TEST(testConditionalFormatRangeListXLSX);
     CPPUNIT_TEST(testConditionalFormatContainsTextXLSX);
     CPPUNIT_TEST(testConditionalFormatPriorityCheckXLSX);
+    CPPUNIT_TEST(testConditionalFormatOriginXLSX);
     CPPUNIT_TEST(testMiscRowHeightExport);
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
     CPPUNIT_TEST(testBuiltinRangesXLSX);
@@ -4044,6 +4046,19 @@ void ScExportTest::testConditionalFormatPriorityCheckXLSX()
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong priorities for A1", bHighPriorityExtensionA1, nA1ExtPriority < nA1NormalPriority);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong priorities for A3", bHighPriorityExtensionA3, nA3ExtPriority < nA3NormalPriority);
+}
+
+void ScExportTest::testConditionalFormatOriginXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("conditional_fmt_origin.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    // tdf#124953 : The range-list is B3:C6 F1:G2, origin address in the formula should be B1, not B3.
+    OUString aFormula = getXPathContent(pDoc, "//x:conditionalFormatting/x:cfRule/x:formula");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong origin address in formula", OUString("NOT(ISERROR(SEARCH(\"BAC\",B1)))"), aFormula);
 }
 
 void ScExportTest::testEscapeCharInNumberFormatXLSX()
