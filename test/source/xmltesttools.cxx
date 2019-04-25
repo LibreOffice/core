@@ -135,6 +135,11 @@ OUString XmlTestTools::getXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath)
     CPPUNIT_FAIL("Invalid XPath type");
 }
 
+void XmlTestTools::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath)
+{
+    getXPath(pXmlDoc, rXPath, ""); // it asserts that rXPath exists, and returns exactly one node
+}
+
 void XmlTestTools::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute, const OUString& rExpectedValue)
 {
     OUString aValue = getXPath(pXmlDoc, rXPath, rAttribute);
