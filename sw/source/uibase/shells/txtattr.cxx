@@ -251,7 +251,9 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             const SvxFontHeightItem* pSize( static_cast<const SvxFontHeightItem*>(
                                         aSetItem.GetItemOfScript( nScriptTypes ) ) );
             std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> vItems;
-            if ( pSize ) // selected text has one size
+            // simple case where selected text has one size and
+            // (tdf#124919) selection is not multiple table cells
+            if (pSize && !rWrtSh.IsTableMode())
             {
                 // must create new one, otherwise document is without pam
                 SwPaM* pPaM = rWrtSh.GetCursor();
