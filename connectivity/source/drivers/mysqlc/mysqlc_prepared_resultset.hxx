@@ -92,8 +92,8 @@ class OPreparedResultSet final : public OBase_Mutex,
 
     void SAL_CALL getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const override;
 
-    template <typename T> T safelyRetrieveValue(const sal_Int32 nColumnIndex);
-    template <typename T> T retrieveValue(const sal_Int32 nColumnIndex);
+    template <typename T> T safelyRetrieveValue(sal_Int32 nColumnIndex);
+    template <typename T> T retrieveValue(sal_Int32 nColumnIndex);
     connectivity::ORowSetValue getRowSetValue(sal_Int32 nColumnIndex);
 
     // you can't delete objects of this type
