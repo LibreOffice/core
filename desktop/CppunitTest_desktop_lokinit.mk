@@ -40,7 +40,6 @@ ifeq ($(OS),LINUX)
 $(eval $(call gb_CppunitTest_add_libs,desktop_lok_init,\
     -lm \
     -ldl \
-    -lpthread \
 ))
 endif
 

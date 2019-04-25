@@ -43,7 +43,6 @@ $(eval $(call gb_Executable_use_libraries,gtktiledviewer,\
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Executable_add_libs,gtktiledviewer,\
     -lm $(DLOPEN_LIBS) \
-    -lpthread \
 ))
 endif
 
