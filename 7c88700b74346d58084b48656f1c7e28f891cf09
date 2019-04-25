@@ -68,6 +68,30 @@
       "revId": "7c88700b74346d58084b48656f1c7e28f891cf09",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_b1c8a274",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 5350,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2019-04-25T10:31:46Z",
+      "side": 0,
+      "message": "yes, honestly speaking, I don\u0027t know why the base revision did not have the InstallationFolder subkey.",
+      "parentUuid": "3fa0c359_31b572ef",
+      "range": {
+        "startLine": 5350,
+        "startChar": 112,
+        "endLine": 5350,
+        "endChar": 131
+      },
+      "revId": "7c88700b74346d58084b48656f1c7e28f891cf09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
