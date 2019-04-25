@@ -99,13 +99,10 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     setCustomControlWidgetLayout(_layout);
 
     m_pFileDialog->setSupportedSchemes({
-        QStringLiteral("file"),
-        QStringLiteral("ftp"),
-        QStringLiteral("http"),
-        QStringLiteral("https"),
-        QStringLiteral("webdav"),
-        QStringLiteral("webdavs"),
+        QStringLiteral("file"), QStringLiteral("ftp"), QStringLiteral("http"),
+        QStringLiteral("https"), QStringLiteral("webdav"), QStringLiteral("webdavs"),
         QStringLiteral("smb"),
+        QStringLiteral(""), // this makes removable devices shown
     });
 
     // used to set the custom controls
