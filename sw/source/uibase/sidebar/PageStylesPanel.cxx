@@ -26,6 +26,10 @@
 #include <svx/dlgutil.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xbtmpit.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
 #include "PageStylesPanel.hxx"
 #include <sfx2/sidebar/ControlFactory.hxx>

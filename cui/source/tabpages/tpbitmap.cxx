@@ -22,6 +22,7 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
+#include <svx/xbtmpit.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <svx/xattr.hxx>

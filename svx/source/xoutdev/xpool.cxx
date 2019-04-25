@@ -23,6 +23,12 @@
 #include <svx/xftshtit.hxx>
 #include <svx/xflboxy.hxx>
 #include <svx/xflbstit.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xflftrit.hxx>
+#include <svx/xsflclit.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>

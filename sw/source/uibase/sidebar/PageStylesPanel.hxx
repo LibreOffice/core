@@ -42,7 +42,6 @@
 #include <tools/fldunit.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/dlgctrl.hxx>
-#include <svx/xfillit.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/pagenumberlistbox.hxx>

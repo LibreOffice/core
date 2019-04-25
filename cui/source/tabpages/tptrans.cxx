@@ -25,6 +25,11 @@
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 
+#include <svx/xflclit.hxx>
+#include <svx/xflftrit.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xbtmpit.hxx>
 #include <svx/xattr.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xflbckit.hxx>

@@ -7426,7 +7426,6 @@ include/svx/xcolit.hxx
 include/svx/xdash.hxx
 include/svx/xdef.hxx
 include/svx/xenum.hxx
-include/svx/xfillit.hxx
 include/svx/xfillit0.hxx
 include/svx/xflasit.hxx
 include/svx/xflbckit.hxx

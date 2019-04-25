@@ -27,7 +27,8 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <svx/xlineit.hxx>
-#include <svx/xfillit.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xbtmpit.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/sxctitm.hxx>

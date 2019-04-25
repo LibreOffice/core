@@ -77,6 +77,10 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/module.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xsflclit.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xflftrit.hxx>
 #include <svx/sdgcpitm.hxx>
 #include <svx/sdgmoitm.hxx>
 #include <editeng/tstpitem.hxx>
