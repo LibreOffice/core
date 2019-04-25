@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_GTK_GTKSALMENU_HXX
-#define INCLUDED_VCL_INC_UNX_GTK_GTKSALMENU_HXX
+#pragma once
 
 #include <config_dbus.h>
 #include <config_gio.h>
@@ -163,6 +162,5 @@ public:
     GtkSalMenu*         mpSubMenu;          // Submenu of this item (if defined)
 };
 
-#endif // INCLUDED_VCL_INC_UNX_GTK_GTKSALMENU_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_ABIWORDIMPORTFILTER_HXX
-#define INCLUDED_WRITERPERFECT_SOURCE_WRITER_ABIWORDIMPORTFILTER_HXX
+#pragma once
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -39,6 +38,5 @@ private:
                                   OdtGenerator& rGenerator, utl::MediaDescriptor&) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

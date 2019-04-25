@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_FRAMEWORK_SIGNATUREVERIFIERIMPL_HXX
-#define INCLUDED_XMLSECURITY_INC_FRAMEWORK_SIGNATUREVERIFIERIMPL_HXX
+#pragma once
 
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultBroadcaster.hpp>
@@ -86,7 +85,6 @@ OUString SignatureVerifierImpl_getImplementationName();
 /// @throws css::uno::RuntimeException
 css::uno::Sequence< OUString > SignatureVerifierImpl_getSupportedServiceNames(  );
 
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

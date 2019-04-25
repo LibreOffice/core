@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCPARA_HXX
-#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCPARA_HXX
+#pragma once
 
 #include "acccontext.hxx"
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
@@ -395,6 +394,5 @@ inline SwAccessibleParagraph::operator css::accessibility::XAccessibleText *()
     return static_cast< css::accessibility::XAccessibleEditableText * >( this );
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

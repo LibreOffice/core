@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_CONFIGURATIONACCESS_HXX
-#define INCLUDED_SDEXT_SOURCE_MINIMIZER_CONFIGURATIONACCESS_HXX
+#pragma once
 
 #include <vector>
 #include "pppoptimizertoken.hxx"
@@ -114,6 +113,5 @@ class ConfigurationAccess
             const css::uno::Reference< css::uno::XInterface >& xRoot, const OUString& sPathToNode );
 };
 
-#endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_CONFIGURATIONACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

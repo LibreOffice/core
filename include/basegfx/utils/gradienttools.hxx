@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_UTILS_GRADIENTTOOLS_HXX
-#define INCLUDED_BASEGFX_UTILS_GRADIENTTOOLS_HXX
+#pragma once
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -398,6 +397,5 @@ namespace basegfx
     }
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

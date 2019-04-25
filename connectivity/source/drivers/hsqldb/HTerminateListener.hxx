@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_HSQLDB_HTERMINATELISTENER_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_HSQLDB_HTERMINATELISTENER_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XTerminateListener.hpp>
@@ -49,6 +48,5 @@ namespace connectivity
 
 }   // namespace connectivity
 
-#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_HSQLDB_HTERMINATELISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

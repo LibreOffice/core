@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_PACKAGE_INC_HASHMAPS_HXX
-#define INCLUDED_PACKAGE_INC_HASHMAPS_HXX
+#pragma once
 
 #include "ZipEntry.hxx"
 #include <rtl/ref.hxx>
@@ -37,6 +36,5 @@ typedef std::unordered_map < OUString,
 typedef std::unordered_map < OUString,
                         ZipEntry > EntryHash;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

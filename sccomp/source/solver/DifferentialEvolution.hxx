@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SCCOMP_SOURCE_DIFFERENTIALEVOLUTION_HXX
-#define INCLUDED_SCCOMP_SOURCE_DIFFERENTIALEVOLUTION_HXX
+#pragma once
 
 #include <vector>
 #include <random>
@@ -160,6 +159,5 @@ public:
     }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

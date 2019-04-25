@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_COLUMNS_HXX
-#define INCLUDED_FORMS_SOURCE_COMPONENT_COLUMNS_HXX
+#pragma once
 
 #include <cloneable.hxx>
 #include <frm_strings.hxx>
@@ -198,6 +197,5 @@ DECL_COLUMN(FormattedFieldColumn)
 
 }   // namespace frm
 
-#endif // INCLUDED_FORMS_SOURCE_COMPONENT_COLUMNS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

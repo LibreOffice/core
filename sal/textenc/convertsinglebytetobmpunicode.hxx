@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_TEXTENC_CONVERTSINGLEBYTETOBMPUNICODE_HXX
-#define INCLUDED_SAL_TEXTENC_CONVERTSINGLEBYTETOBMPUNICODE_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -116,6 +115,5 @@ sal_Size rtl_textenc_convertBmpUnicodeToSingleByte(
     sal_Size destBytes, sal_uInt32 flags, sal_uInt32 * info,
     sal_Size * srcCvtChars);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

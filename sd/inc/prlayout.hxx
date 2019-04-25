@@ -23,8 +23,7 @@
 |* checked in and does only contain the enumerator.
 \************************************************************************/
 
-#ifndef INCLUDED_SD_INC_PRLAYOUT_HXX
-#define INCLUDED_SD_INC_PRLAYOUT_HXX
+#pragma once
 
 enum PresentationObjects
 {
@@ -44,6 +43,5 @@ enum PresentationObjects
     PO_SUBTITLE
 };
 
-#endif // INCLUDED_SD_INC_PRLAYOUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

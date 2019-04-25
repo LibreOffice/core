@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ITIFF_CCIDECOM_HXX
-#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ITIFF_CCIDECOM_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <tools/solar.h>
@@ -125,6 +124,5 @@ private:
 };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

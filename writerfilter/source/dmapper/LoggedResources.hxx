@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_LOGGEDRESOURCES_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_LOGGEDRESOURCES_HXX
+#pragma once
 
 #include <dmapper/resourcemodel.hxx>
 #include "TagLogger.hxx"
@@ -134,6 +133,5 @@ protected:
 };
 
 }
-#endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_LOGGEDRESOURCES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

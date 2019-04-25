@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_INC_XMLMULTIIMAGEHELPER_HXX
-#define INCLUDED_XMLOFF_INC_XMLMULTIIMAGEHELPER_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <xmloff/xmlimp.hxx>
@@ -55,6 +54,5 @@ public:
 };
 
 
-#endif // INCLUDED_XMLOFF_INC_XMLMULTIIMAGEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_COMBOBOX_HXX
-#define INCLUDED_VCL_COMBOBOX_HXX
+#pragma once
 
 #include <memory>
 #include <vcl/dllapi.h>
@@ -185,6 +184,5 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 };
 
-#endif  // _COMBOBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

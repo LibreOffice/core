@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_SINGLESELECTQUERYCOMPOSER_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_INC_SINGLESELECTQUERYCOMPOSER_HXX
+#pragma once
 
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -257,6 +256,5 @@ namespace dbaccess
         virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getParameters(  ) override;
     };
 }
-#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_SINGLESELECTQUERYCOMPOSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

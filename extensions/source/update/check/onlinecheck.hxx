@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_ONLINECHECK_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_ONLINECHECK_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -28,6 +27,5 @@
 extern "C" bool WNT_hasInternetConnection();
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

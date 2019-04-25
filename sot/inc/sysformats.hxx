@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SOT_SYSFORMATS_HXX
-#define INCLUDED_SOT_SYSFORMATS_HXX
+#pragma once
 
 #ifdef _WIN32
 #include <shlobj.h>
@@ -46,6 +45,5 @@ namespace sot
 SOT_DLLPUBLIC const SotAction_Impl* GetExchangeDestinationWriterFreeAreaCopy();
 }
 
-#endif // INCLUDED_SOT_SYSFORMATS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

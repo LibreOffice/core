@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_UNX_SECIMPL_HXX
-#define INCLUDED_SAL_OSL_UNX_SECIMPL_HXX
+#pragma once
 
 #include <pwd.h>
 
@@ -29,6 +28,5 @@ struct oslSecurityImpl {
 
 bool osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

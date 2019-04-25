@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_INFORMATIONDIALOG_HXX
-#define INCLUDED_SDEXT_SOURCE_MINIMIZER_INFORMATIONDIALOG_HXX
+#pragma once
 
 #include "unodialog.hxx"
 #include "configurationaccess.hxx"
@@ -86,6 +85,5 @@ private:
     UnoDialog& mrDialog;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

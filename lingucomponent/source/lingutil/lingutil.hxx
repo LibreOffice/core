@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUCOMPONENT_SOURCE_LINGUTIL_LINGUTIL_HXX
-#define INCLUDED_LINGUCOMPONENT_SOURCE_LINGUTIL_LINGUTIL_HXX
+#pragma once
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/string.hxx>
@@ -52,6 +51,5 @@ void MergeNewStyleDicsAndOldStyleDics( std::vector< SvtLinguConfigDictionaryEntr
 //RTL_TEXTENCODING_ISO_8859_1
 rtl_TextEncoding getTextEncodingFromCharset(const sal_Char* pCharset);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

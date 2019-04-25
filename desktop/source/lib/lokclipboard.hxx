@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_LIB_LOKCLIPBOARD_HXX
-#define INCLUDED_DESKTOP_SOURCE_LIB_LOKCLIPBOARD_HXX
+#pragma once
 
 #include <vector>
 
@@ -48,6 +47,5 @@ public:
     sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_VCL_FILTERCONFIGITEM_HXX
-#define INCLUDED_VCL_FILTERCONFIGITEM_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -85,6 +84,5 @@ public:
     css::uno::Reference< css::task::XStatusIndicator > GetStatusIndicator() const;
 };
 
-#endif // INCLUDED_VCL_FILTERCONFIGITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

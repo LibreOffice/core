@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_TOXTEXTGENERATOR_HXX_
-#define SW_TOXTEXTGENERATOR_HXX_
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -165,6 +164,5 @@ private:
 
 }
 
-#endif /* SW_TOXTEXTGENERATOR_HXX_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

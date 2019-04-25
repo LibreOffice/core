@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_BROKENPACKAGEINT_HXX
-#define INCLUDED_SFX2_BROKENPACKAGEINT_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <rtl/ref.hxx>
@@ -53,6 +52,5 @@ public:
     css::uno::Reference < css::task::XInteractionRequest > GetRequest();
 };
 
-#endif // INCLUDED_SFX2_BROKENPACKAGEINT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

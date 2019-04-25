@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_EMBEDDEDFONTSHELPER_HXX
-#define INCLUDED_VCL_EMBEDDEDFONTSHELPER_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -86,6 +85,5 @@ public:
     static void clearTemporaryFontFiles();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

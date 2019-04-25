@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBARADIOBUTTON_HXX
-#define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBARADIOBUTTON_HXX
+#pragma once
 #include <ooo/vba/msforms/XRadioButton.hpp>
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
@@ -42,6 +41,5 @@ public:
     OUString SAL_CALL getDefaultPropertyName(  ) override { return OUString("Value"); }
 
 };
-#endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBARADIOBUTTON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

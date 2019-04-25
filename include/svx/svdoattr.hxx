@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDOATTR_HXX
-#define INCLUDED_SVX_SVDOATTR_HXX
+#pragma once
 
 #include <svx/xfillit0.hxx>
 #include <svx/xflasit.hxx>
@@ -72,6 +71,5 @@ public:
 };
 
 
-#endif // INCLUDED_SVX_SVDOATTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

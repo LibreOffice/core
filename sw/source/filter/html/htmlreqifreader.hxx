@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_SW_SOURCE_FILTER_HTML_HTMLREQIFREADER_HXX
-#define INCLUDED_SW_SOURCE_FILTER_HTML_HTMLREQIFREADER_HXX
+#pragma once
 
 class Graphic;
 class Size;
@@ -34,6 +33,5 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode);
 bool WrapGraphicInRtf(const Graphic& rGraphic, const Size& rLogicSize, SvStream& rRtf);
 }
 
-#endif // INCLUDED_SW_SOURCE_FILTER_HTML_HTMLREQIFREADER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

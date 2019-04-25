@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_BASIC_BASMGR_HXX
-#define INCLUDED_BASIC_BASMGR_HXX
+#pragma once
 
 #include <vcl/errcode.hxx>
 #include <svl/SfxBroadcaster.hxx>
@@ -212,6 +211,5 @@ private:
                                            const OUString& LinkTargetURL );
 };
 
-#endif // INCLUDED_BASIC_BASMGR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

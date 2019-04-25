@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLIMAGE_HXX
-#define INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLIMAGE_HXX
+#pragma once
 
 #include "xmlReportElementBase.hxx"
 #include <com/sun/star/report/XImageControl.hpp>
@@ -42,6 +41,5 @@ namespace rptxml
 } // namespace rptxml
 
 
-#endif // INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLIMAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

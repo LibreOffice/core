@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMS_SOURCE_XFORMS_XMLHELPER_HXX
-#define INCLUDED_FORMS_SOURCE_XFORMS_XMLHELPER_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -39,6 +38,5 @@ bool isValidPrefixName( const OUString& sName,
 css::uno::Reference<css::xml::dom::XDocumentBuilder> getDocumentBuilder();
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

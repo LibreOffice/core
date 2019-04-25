@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REPORTDESIGN_INC_RPTMODEL_HXX
-#define INCLUDED_REPORTDESIGN_INC_RPTMODEL_HXX
+#pragma once
 
 #include "dllapi.h"
 #include <svx/svdmodel.hxx>
@@ -87,6 +86,5 @@ public:
 };
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

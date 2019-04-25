@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_INC_EERDLL2_HXX
-#define INCLUDED_EDITENG_INC_EERDLL2_HXX
+#pragma once
 
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <editeng/forbiddencharacterstable.hxx>
@@ -66,6 +65,5 @@ public:
     css::uno::Reference< css::linguistic2::XLanguageGuessing > const & GetLanguageGuesser();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

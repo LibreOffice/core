@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDOATTRIBUTE_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_UNDOATTRIBUTE_HXX
+#pragma once
 
 #include <undobj.hxx>
 #include <memory>
@@ -252,6 +251,5 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
 
-#endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOATTRIBUTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

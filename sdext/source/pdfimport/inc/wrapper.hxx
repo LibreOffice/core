@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_WRAPPER_HXX
-#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_WRAPPER_HXX
+#pragma once
 
 #include "contentsink.hxx"
 #include <com/sun/star/uno/Reference.hxx>
@@ -53,6 +52,5 @@ namespace pdfi
                                 const OUString&        rFilterOptions );
 }
 
-#endif // INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_WRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

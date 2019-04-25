@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_BORDERLINE_HXX
-#define INCLUDED_EDITENG_BORDERLINE_HXX
+#pragma once
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
 
@@ -240,6 +239,3 @@ public:
 EDITENG_DLLPUBLIC bool operator!=( const SvxBorderLine& rLeft, const SvxBorderLine& rRight );
 
 } // namespace editeng
-
-#endif
-

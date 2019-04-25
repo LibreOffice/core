@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_PROPERTYINFOHASH_HXX
-#define INCLUDED_COMPHELPER_PROPERTYINFOHASH_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Type.h>
@@ -47,6 +46,5 @@ typedef std::unordered_map < OUString,
                         ::comphelper::PropertyInfo const * > PropertyInfoHash;
 typedef std::unordered_map < OUString,
                         ::comphelper::PropertyData* > PropertyDataHash;
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

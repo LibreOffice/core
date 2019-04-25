@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_XSHAPEDUMPER_HXX
-#define INCLUDED_DRAWINGLAYER_XSHAPEDUMPER_HXX
+#pragma once
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <rtl/ustring.hxx>
@@ -26,6 +25,5 @@ public:
     static OUString dump(const css::uno::Reference<css::drawing::XShape>& xPageShapes, bool bDumpInteropProperties=false);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

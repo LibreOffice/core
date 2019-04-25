@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAX_FASTPARSER_HXX
-#define INCLUDED_SAX_FASTPARSER_HXX
+#pragma once
 
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -75,6 +74,5 @@ public:
 
 }
 
-#endif // _SAX_FASTPARSER_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

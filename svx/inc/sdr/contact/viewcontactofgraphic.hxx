@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFGRAPHIC_HXX
-#define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFGRAPHIC_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
@@ -74,6 +73,5 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-#endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFGRAPHIC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

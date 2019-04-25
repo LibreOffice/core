@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HELPCOMPILER_DLLAPI_H
-#define INCLUDED_HELPCOMPILER_DLLAPI_H
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -29,6 +28,5 @@
 #define L10N_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

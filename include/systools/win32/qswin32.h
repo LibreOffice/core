@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SYSTOOLS_WIN32_QSWIN32_H
-#define INCLUDED_SYSTOOLS_WIN32_QSWIN32_H
+#pragma once
 
 #define QUICKSTART_CLASSNAME           L"LO Listener Class"
 #define QUICKSTART_WINDOWNAME          L"LO Listener Window"
 #define SHUTDOWN_QUICKSTART_MESSAGE    L"LO KillTray"
 
-#endif // INCLUDED_SYSTOOLS_WIN32_QSWIN32_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

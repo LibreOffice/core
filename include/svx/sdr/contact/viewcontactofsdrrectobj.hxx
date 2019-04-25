@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFSDRRECTOBJ_HXX
-#define INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFSDRRECTOBJ_HXX
+#pragma once
 
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
 #include <svx/svdorect.hxx>
@@ -47,6 +46,5 @@ protected:
 
 }}
 
-#endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFSDRRECTOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_INC_FORMCONTROLLING_HXX
-#define INCLUDED_SVX_SOURCE_INC_FORMCONTROLLING_HXX
+#pragma once
 
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/form/XForm.hpp>
@@ -211,6 +210,5 @@ namespace svx
 }
 
 
-#endif // INCLUDED_SVX_SOURCE_INC_FORMCONTROLLING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

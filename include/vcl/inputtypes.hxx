@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INPUTTYPES_HXX
-#define INCLUDED_VCL_INPUTTYPES_HXX
+#pragma once
 
 #include <o3tl/typed_flags_set.hxx>
 
@@ -38,6 +37,5 @@ namespace o3tl
 
 #define VCL_INPUT_ANY                 (VclInputFlags::MOUSE | VclInputFlags::KEYBOARD | VclInputFlags::PAINT | VclInputFlags::TIMER | VclInputFlags::OTHER | VclInputFlags::APPEVENT)
 
-#endif // INCLUDED_VCL_INPUTTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

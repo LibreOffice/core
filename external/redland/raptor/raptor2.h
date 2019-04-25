@@ -24,8 +24,7 @@
 
 
 
-#ifndef RAPTOR_H
-#define RAPTOR_H
+#pragma once
 
 
 #ifdef __cplusplus
@@ -2182,6 +2181,4 @@ void raptor_sort_r(void *base, size_t nel, size_t width, raptor_data_compare_arg
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

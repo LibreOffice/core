@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCBHELPER_CONTENTIDENTIFIER_HXX
-#define INCLUDED_UCBHELPER_CONTENTIDENTIFIER_HXX
+#pragma once
 
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -74,6 +73,5 @@ private:
 
 } /* namespace ucbhelper */
 
-#endif /* ! INCLUDED_UCBHELPER_CONTENTIDENTIFIER_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

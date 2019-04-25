@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_INC_EDTSPELL_HXX
-#define INCLUDED_EDITENG_INC_EDTSPELL_HXX
+#pragma once
 
 #include <editeng/editengdllapi.h>
 #include <editeng/splwrap.hxx>
@@ -147,6 +146,5 @@ public:
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

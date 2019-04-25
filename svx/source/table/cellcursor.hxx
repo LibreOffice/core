@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_TABLE_CELLCURSOR_HXX
-#define INCLUDED_SVX_SOURCE_TABLE_CELLCURSOR_HXX
+#pragma once
 
 #include <com/sun/star/table/XMergeableCellRange.hpp>
 #include <com/sun/star/table/XCellCursor.hpp>
@@ -66,6 +65,5 @@ private:
 
 } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

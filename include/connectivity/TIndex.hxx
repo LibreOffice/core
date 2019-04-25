@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_TINDEX_HXX
-#define INCLUDED_CONNECTIVITY_TINDEX_HXX
+#pragma once
 
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/VIndex.hxx>
@@ -43,6 +42,5 @@ namespace connectivity
         OTableHelper* getTable() const { return m_pTable; }
     };
 }
-#endif // INCLUDED_CONNECTIVITY_TINDEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

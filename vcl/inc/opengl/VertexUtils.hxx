@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_OPENGL_VERTEXUTILS_H
-#define INCLUDED_VCL_INC_OPENGL_VERTEXUTILS_H
+#pragma once
 
 #include <basegfx/numeric/ftools.hxx>
 #include <epoxy/gl.h>
@@ -115,6 +114,5 @@ inline float lineVectorAngle(const glm::vec2& previous, const glm::vec2& next)
 
 }} // end vcl::vertex
 
-#endif // INCLUDED_VCL_INC_OPENGL_VERTEXUTILS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

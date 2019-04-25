@@ -57,8 +57,7 @@
  * @file
  * Section object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSECTION_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSECTION_HXX
+#pragma once
 
 #include <xfilter/xfcontentcontainer.hxx>
 #include <xfilter/xfcontent.hxx>
@@ -86,6 +85,5 @@ private:
     OUString   m_strSourceLink;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

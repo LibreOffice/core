@@ -23,8 +23,7 @@
  */
 
 
-#ifndef LIBRDF_H
-#define LIBRDF_H
+#pragma once
 
 #ifndef LIBRDF_OBJC_FRAMEWORK
 /* raptor */
@@ -429,6 +428,4 @@ extern const char * const librdf_home_url_string;
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

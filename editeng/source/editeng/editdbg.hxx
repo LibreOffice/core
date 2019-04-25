@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_SOURCE_EDITENG_EDITDBG_HXX
-#define INCLUDED_EDITENG_SOURCE_EDITENG_EDITDBG_HXX
+#pragma once
 
 #include <svl/solar.hrc>
 #include <stdio.h>
@@ -37,6 +36,5 @@ public:
     static void         ShowEditEngineData( EditEngine* pEditEngine, bool bInfoBox = true );
 };
 
-#endif // INCLUDED_EDITENG_SOURCE_EDITENG_EDITDBG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

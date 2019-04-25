@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_GPG_CIPHERCONTEXT_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_GPG_CIPHERCONTEXT_HXX
+#pragma once
 
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -26,6 +25,5 @@ public:
     virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeCipherContextAndDispose() override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

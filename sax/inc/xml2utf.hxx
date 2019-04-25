@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAX_INC_XML2UTF_HXX
-#define INCLUDED_SAX_INC_XML2UTF_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -121,6 +120,5 @@ private:
 };
 }
 
-#endif // INCLUDED_SAX_INC_XML2UTF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_SOURCE_INC_STRINGIO_HXX
-#define INCLUDED_SVL_SOURCE_INC_STRINGIO_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -43,6 +42,5 @@ OUString readByteString(SvStream & rStream);
 void writeByteString(SvStream & rStream, const OUString& rString);
 
 
-#endif // INCLUDED_SVL_SOURCE_INC_STRINGIO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

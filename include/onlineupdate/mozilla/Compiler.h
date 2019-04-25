@@ -6,8 +6,7 @@
 
 /* Various compiler checks. */
 
-#ifndef mozilla_Compiler_h
-#define mozilla_Compiler_h
+#pragma once
 
 #define MOZ_IS_GCC 0
 #define MOS_IS_MSVC 0
@@ -106,5 +105,3 @@
 #    define MOZ_LIBSTDCXX_VERSION_AT_LEAST(major, minor, patch) 0
 #  endif
 #endif /* __cplusplus */
-
-#endif /* mozilla_Compiler_h */

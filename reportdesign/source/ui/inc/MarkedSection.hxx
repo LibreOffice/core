@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_MARKEDSECTION_HXX
-#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_MARKEDSECTION_HXX
+#pragma once
 
 namespace rptui
 {
@@ -50,6 +49,5 @@ namespace rptui
 
 } // rptui
 
-#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_MARKEDSECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

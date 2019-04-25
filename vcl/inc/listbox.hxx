@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_LISTBOX_HXX
-#define INCLUDED_VCL_INC_LISTBOX_HXX
+#pragma once
 
 #include <vcl/button.hxx>
 #include <vcl/floatwin.hxx>
@@ -610,6 +609,5 @@ public:
 
 void ImplInitDropDownButton( PushButton* pButton );
 
-#endif // INCLUDED_VCL_INC_LISTBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

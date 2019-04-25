@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_OOX_PPT_TIMENODE_HXX
-#define INCLUDED_OOX_PPT_TIMENODE_HXX
+#pragma once
 
 #include <vector>
 #include <map>
@@ -123,6 +122,5 @@ namespace oox { namespace ppt {
 } }
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

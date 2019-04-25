@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_SOURCE_APPL_HELPDISPATCH_HXX
-#define INCLUDED_SFX2_SOURCE_APPL_HELPDISPATCH_HXX
+#pragma once
 
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -42,6 +41,5 @@ public:
     virtual void SAL_CALL   removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
 };
 
-#endif // INCLUDED_SFX2_SOURCE_APPL_HELPDISPATCH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

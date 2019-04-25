@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_UNOPAGE_HXX
-#define INCLUDED_SVX_UNOPAGE_HXX
+#pragma once
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -140,6 +139,5 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper6< css::drawin
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

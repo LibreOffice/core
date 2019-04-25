@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUISTIC_LNGDLLAPI_H
-#define INCLUDED_LINGUISTIC_LNGDLLAPI_H
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -30,6 +29,5 @@
 #endif
 #define LNG_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

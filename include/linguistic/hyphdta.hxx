@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUISTIC_HYPHDTA_HXX
-#define INCLUDED_LINGUISTIC_HYPHDTA_HXX
+#pragma once
 
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <com/sun/star/linguistic2/XPossibleHyphens.hpp>
@@ -104,6 +103,5 @@ public:
 };
 } // namespace linguistic
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

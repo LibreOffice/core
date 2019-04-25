@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREHELPER_HXX
-#define INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREHELPER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -106,6 +105,5 @@ namespace DocumentSignatureHelper
         const bool bWriteSignatureLineData);
 };
 
-#endif // INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

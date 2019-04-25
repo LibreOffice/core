@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_APP_SWDLLIMPL_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_APP_SWDLLIMPL_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -38,6 +37,5 @@ private:
     SvxAutoCorrCfg *m_pAutoCorrCfg;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

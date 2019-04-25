@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_SCANNER_HXX
-#define INCLUDED_BASIC_SOURCE_INC_SCANNER_HXX
+#pragma once
 
 #include <basic/sbxdef.hxx>
 #include <vcl/errcode.hxx>
@@ -91,6 +90,5 @@ public:
     double    GetDbl()              { return nVal;  }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

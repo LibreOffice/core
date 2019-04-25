@@ -57,8 +57,7 @@
  * @file
  * Table object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTABLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTABLE_HXX
+#pragma once
 
 #include <xfilter/xfcontent.hxx>
 #include <xfilter/xfrow.hxx>
@@ -133,6 +132,5 @@ inline bool XFTable::IsSubTable()
     return m_bSubTable;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

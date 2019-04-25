@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_MEDIAFILEMANAGER_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_INC_MEDIAFILEMANAGER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
@@ -31,6 +30,5 @@ public:
 };
 }
 }
-#endif // INCLUDED_SLIDESHOW_SOURCE_INC_MEDIAFILEMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

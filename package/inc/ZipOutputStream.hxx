@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_PACKAGE_INC_ZIPOUTPUTSTREAM_HXX
-#define INCLUDED_PACKAGE_INC_ZIPOUTPUTSTREAM_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -89,6 +88,5 @@ public:
     const std::shared_ptr<comphelper::ThreadTaskTag>& getThreadTaskTag() { return mpThreadTaskTag; }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

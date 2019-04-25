@@ -16,8 +16,7 @@
  * !!!DO NOT CONTAMINATE THIS FILE WITH NON-Linux CODE!!!
  *
  *************************************************************/
-#ifndef __SQLTYPES_H
-#define __SQLTYPES_H
+#pragma once
 
 /****************************
  * default to the 3.51 definitions. should define ODBCVER before here if you want an older set of defines
@@ -464,8 +463,3 @@ typedef SQLCHAR         SQLTCHAR;
 #ifdef __cplusplus
 }
 #endif
-
-#endif
-
-
-

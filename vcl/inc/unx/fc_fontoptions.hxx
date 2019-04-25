@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_FC_FONTOPTIONS_HXX
-#define INCLUDED_VCL_INC_UNX_FC_FONTOPTIONS_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
@@ -42,6 +41,5 @@ private:
 };
 
 
-#endif // INCLUDED_VCL_INC_UNX_FC_FONTOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

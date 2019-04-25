@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_FILTER_PPT_PROPREAD_HXX
-#define INCLUDED_SD_SOURCE_FILTER_PPT_PROPREAD_HXX
+#pragma once
 
 #include <map>
 #include <vector>
@@ -149,6 +148,5 @@ class PropRead
         void                    Read();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

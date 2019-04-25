@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_AWT_VCLXWINDOWS_HXX
-#define INCLUDED_TOOLKIT_AWT_VCLXWINDOWS_HXX
+#pragma once
 
 #include <toolkit/dllapi.h>
 
@@ -1199,6 +1198,5 @@ public:
 
 };
 
-#endif // INCLUDED_TOOLKIT_AWT_VCLXWINDOWS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DESKTOP_CRASHREPORT_HXX
-#define INCLUDED_DESKTOP_CRASHREPORT_HXX
+#pragma once
 
 #include <desktop/dllapi.h>
 
@@ -75,6 +74,5 @@ inline void CrashReporter::AddKeyValue(SAL_UNUSED_PARAMETER const OUString& /*rK
 #endif
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

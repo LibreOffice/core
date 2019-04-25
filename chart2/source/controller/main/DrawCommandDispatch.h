@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART_DRAWCOMMANDDISPATCH_HRC
-#define CHART_DRAWCOMMANDDISPATCH_HRC
+#pragma once
 
 //Command Ids:
 #define COMMAND_ID_OBJECT_SELECT                1
@@ -37,6 +36,5 @@
 #define COMMAND_ID_DRAWTBX_CS_CALLOUT          15
 #define COMMAND_ID_DRAWTBX_CS_STAR             16
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

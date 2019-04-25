@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SBERRORS_HXX
-#define INCLUDED_BASIC_SBERRORS_HXX
+#pragma once
 
 #include <vcl/errcode.hxx>
 
@@ -171,6 +170,5 @@
 #define ERRCODE_BASIC_TOO_MANY_DLL          ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Compiler, 137 )  // Too many dll application clients
 #define ERRCODE_BASIC_LOOP_NOT_INIT         ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Compiler, 138 )  // For loop not initialized
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

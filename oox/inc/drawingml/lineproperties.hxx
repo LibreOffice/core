@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_INC_DRAWINGML_LINEPROPERTIES_HXX
-#define INCLUDED_OOX_INC_DRAWINGML_LINEPROPERTIES_HXX
+#pragma once
 
 #include <utility>
 #include <vector>
@@ -83,6 +82,5 @@ struct OOX_DLLPUBLIC LineProperties
 } // namespace drawingml
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

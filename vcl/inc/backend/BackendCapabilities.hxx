@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_BACKENDCAPABILITIES_HXX
-#define INCLUDED_VCL_INC_BACKENDCAPABILITIES_HXX
+#pragma once
 
 namespace vcl
 {
@@ -23,6 +22,5 @@ struct BackendCapabilities
 };
 }
 
-#endif // INCLUDED_VCL_INC_BACKENDCAPABILITIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

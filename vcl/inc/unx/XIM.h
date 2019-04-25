@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VCL_INC_UNX_XIM_H
-#define INCLUDED_VCL_INC_UNX_XIM_H
+#pragma once
 
 #include <X11/Xlib.h>
 #include <X11/Xresource.h>
@@ -107,6 +106,5 @@ typedef struct {
 
 #define XNUnicodeCharacterSubset "UnicodeChararcterSubset"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

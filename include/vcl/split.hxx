@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SPLIT_HXX
-#define INCLUDED_VCL_SPLIT_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/keycod.hxx>
@@ -100,6 +99,5 @@ public:
     void                SetEndSplitHdl( const Link<Splitter*,void>& rLink ) { maEndSplitHdl = rLink; }
 };
 
-#endif // INCLUDED_VCL_SPLIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

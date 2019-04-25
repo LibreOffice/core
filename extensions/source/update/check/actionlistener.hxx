@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_ACTIONLISTENER_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_ACTIONLISTENER_HXX
+#pragma once
 
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
@@ -38,6 +37,5 @@ protected:
     virtual ~IActionListener() override {}
 };
 
-#endif // INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_ACTIONLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

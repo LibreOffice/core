@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_BASICCHARCLASS_HXX
-#define INCLUDED_BASIC_SOURCE_INC_BASICCHARCLASS_HXX
+#pragma once
 
 #include <unotools/charclass.hxx>
 #include <rtl/instance.hxx>
@@ -34,6 +33,5 @@ namespace BasicCharClass
     bool isWhitespace( sal_Unicode c );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

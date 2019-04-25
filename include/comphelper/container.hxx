@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_CONTAINER_HXX
-#define INCLUDED_COMPHELPER_CONTAINER_HXX
+#pragma once
 
 #include <vector>
 #include <com/sun/star/uno/Reference.hxx>
@@ -70,7 +69,6 @@ protected:
 }   // namespace comphelper
 
 
-#endif // INCLUDED_COMPHELPER_CONTAINER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,8 +22,7 @@
  **************************************************************************
 
  *************************************************************************/
-#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPCFUNC_HXX
-#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPCFUNC_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -40,6 +39,5 @@ extern "C" {
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

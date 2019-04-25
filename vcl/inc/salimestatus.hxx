@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SALIMESTATUS_HXX
-#define INCLUDED_VCL_INC_SALIMESTATUS_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -34,6 +33,5 @@ public:
     virtual void toggle() {}
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

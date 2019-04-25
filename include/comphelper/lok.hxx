@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_LOK_HXX
-#define INCLUDED_COMPHELPER_LOK_HXX
+#pragma once
 
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
@@ -95,6 +94,5 @@ COMPHELPER_DLLPUBLIC void statusIndicatorFinish();
 }
 }
 
-#endif // INCLUDED_COMPHELPER_LOK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

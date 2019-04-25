@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STORE_SOURCE_OBJECT_HXX
-#define INCLUDED_STORE_SOURCE_OBJECT_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <salhelper/simplereferenceobject.hxx>
@@ -58,6 +57,5 @@ store_handle_type * SAL_CALL query (
 
 } // namespace store
 
-#endif // INCLUDED_STORE_SOURCE_OBJECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

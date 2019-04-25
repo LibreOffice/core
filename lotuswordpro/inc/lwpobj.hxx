@@ -58,8 +58,7 @@
  *  Base class of all Lwp VO objects
  */
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPOBJ_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPOBJ_HXX
+#pragma once
 
 #include <memory>
 #include <sal/config.h>
@@ -135,6 +134,5 @@ public:
     LwpObjectID& GetObjectID(){ return m_ObjHdr.GetID();}
     sal_uInt32 GetTag() { return m_ObjHdr.GetTag();}
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

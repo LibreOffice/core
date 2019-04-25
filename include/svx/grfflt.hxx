@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_GRFFLT_HXX
-#define INCLUDED_SVX_GRFFLT_HXX
+#pragma once
 
 #include <vcl/GraphicObject.hxx>
 #include <svx/svxdllapi.h>
@@ -38,6 +37,5 @@ public:
     static void     DisableGraphicFilterSlots( SfxItemSet& rSet );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

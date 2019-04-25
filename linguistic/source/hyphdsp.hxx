@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUISTIC_SOURCE_HYPHDSP_HXX
-#define INCLUDED_LINGUISTIC_SOURCE_HYPHDSP_HXX
+#pragma once
 
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -129,6 +128,5 @@ inline css::uno::Reference< css::linguistic2::XSearchableDictionaryList >
 }
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

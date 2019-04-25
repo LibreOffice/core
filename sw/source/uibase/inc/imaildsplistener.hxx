@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_IMAILDSPLISTENER_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_IMAILDSPLISTENER_HXX
+#pragma once
 
 #include <com/sun/star/mail/XMailMessage.hpp>
 #include <salhelper/simplereferenceobject.hxx>
@@ -65,6 +64,5 @@ public:
     virtual void mailDeliveryError(::rtl::Reference<MailDispatcher> xMailDispatcher, css::uno::Reference< css::mail::XMailMessage> xMailMessage, const OUString& sErrorMessage) = 0;
 };
 
-#endif // INCLUDED_IMAILDISPATCHERLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

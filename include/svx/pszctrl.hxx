@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_PSZCTRL_HXX
-#define INCLUDED_SVX_PSZCTRL_HXX
+#pragma once
 
 #include <memory>
 #include <sfx2/stbitem.hxx>
@@ -42,6 +41,5 @@ public:
     virtual void    Command( const CommandEvent& rCEvt ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

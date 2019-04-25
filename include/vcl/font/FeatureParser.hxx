@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_FONT_FEATUREPASER_HXX
-#define INCLUDED_VCL_FONT_FEATUREPASER_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -46,6 +45,5 @@ public:
 } // end font namespace
 } // end vcl namespace
 
-#endif // INCLUDED_VCL_FONT_FEATUREPASER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

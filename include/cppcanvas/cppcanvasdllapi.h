@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPCANVAS_CPPCANVASDLLAPI_H
-#define INCLUDED_CPPCANVAS_CPPCANVASDLLAPI_H
+#pragma once
 
 #if defined CPPCANVAS_DLLIMPLEMENTATION
 
@@ -27,5 +26,3 @@
 #define CPPCANVAS_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 #define CPPCANVAS_DLLPRIVATE SAL_DLLPRIVATE
-
-#endif

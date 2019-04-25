@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_AIX_POWERPC_SHARE_HXX
-#define INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_AIX_POWERPC_SHARE_HXX
+#pragma once
 
 #include "uno/mapping.h"
 
@@ -87,5 +86,4 @@ namespace ppc
     enum ppclimits { MAX_GPR_REGS = 8, MAX_SSE_REGS = 13 };
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

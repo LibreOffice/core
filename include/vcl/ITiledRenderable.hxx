@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_ITILEDRENDERABLE_HXX
-#define INCLUDED_VCL_ITILEDRENDERABLE_HXX
+#pragma once
 
 #include <tools/gen.hxx>
 #include <rtl/ustring.hxx>
@@ -277,6 +276,5 @@ public:
 };
 } // namespace vcl
 
-#endif // INCLUDED_VCL_ITILEDRENDERABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

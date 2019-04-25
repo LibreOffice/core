@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_UNMODPG_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_UNMODPG_HXX
+#pragma once
 
 #include <xmloff/autolayout.hxx>
 
@@ -72,6 +71,5 @@ private:
     const OUString maComment;
 };
 
-#endif // INCLUDED_SD_SOURCE_UI_INC_UNMODPG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

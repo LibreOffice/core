@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_UNOIDL_UNOWCNTR_HXX
-#define INCLUDED_SD_SOURCE_UI_UNOIDL_UNOWCNTR_HXX
+#pragma once
 
 #include <cppuhelper/weakref.hxx>
 #include <vector>
@@ -45,6 +44,5 @@ public:
     void dispose();
 };
 
-#endif // INCLUDED_SD_SOURCE_UI_UNOIDL_UNOWCNTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

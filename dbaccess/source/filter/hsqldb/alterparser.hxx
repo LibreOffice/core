@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_ALTERPARSER_HXX
-#define INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_ALTERPARSER_HXX
+#pragma once
 
 #include <rtl/ustrbuf.hxx>
 
@@ -50,6 +49,5 @@ public:
 };
 }
 
-#endif // INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_ALTERPARSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

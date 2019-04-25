@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SYSTOOLS_WIN32_UWINAPI_H
-#define INCLUDED_SYSTOOLS_WIN32_UWINAPI_H
+#pragma once
 
 #include "sal/macros.h"
 
@@ -38,6 +37,5 @@ inline bool IsValidHandle(HANDLE handle)
 
 #endif  /* __cplusplus */
 
-#endif // INCLUDED_SYSTOOLS_WIN32_UWINAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

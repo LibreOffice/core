@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_MARKMULTI_HXX
-#define INCLUDED_SC_INC_MARKMULTI_HXX
+#pragma once
 
 #include "segmenttree.hxx"
 #include "markarr.hxx"
@@ -84,6 +83,5 @@ public:
     bool GetRangeData( SCROW nRow, ScFlatBoolRowSegments::RangeData& rRowRange ) const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

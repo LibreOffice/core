@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_INC_EVENTHANDLER_HXX
-#define INCLUDED_SVX_SOURCE_INC_EVENTHANDLER_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -27,6 +26,5 @@
 #include <vcl/idle.hxx>
 
 
-#endif // INCLUDED_SVX_SOURCE_INC_EVENTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

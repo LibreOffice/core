@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_GENERICPROPERTYHANDLER_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_GENERICPROPERTYHANDLER_HXX
+#pragma once
 
 #include "propertyhandler.hxx"
 #include "pcrcommontypes.hxx"
@@ -141,6 +140,5 @@ namespace pcr
 } // namespace pcr
 
 
-#endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_GENERICPROPERTYHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

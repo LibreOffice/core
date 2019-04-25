@@ -9,8 +9,7 @@
 
 /* Typedefs and structures that represent the libvlc API / ABI */
 
-#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_TYPES_HXX
-#define INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_TYPES_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -56,6 +55,5 @@ struct libvlc_track_description_t
 
 }
 
-#endif // INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_TYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_DFLYOBJ_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_DFLYOBJ_HXX
+#pragma once
 
 #include <svx/svdovirt.hxx>
 #include <svx/svdobj.hxx>
@@ -139,6 +138,5 @@ public:
     virtual bool IsTextBox() const override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

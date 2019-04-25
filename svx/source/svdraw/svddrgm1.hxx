@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_SVDRAW_SVDDRGM1_HXX
-#define INCLUDED_SVX_SOURCE_SVDRAW_SVDDRGM1_HXX
+#pragma once
 
 #include <svx/xpoly.hxx>
 #include <svx/svdhdl.hxx>
@@ -227,6 +226,5 @@ public:
     virtual PointerStyle GetSdrDragPointer() const override;
 };
 
-#endif // INCLUDED_SVX_SOURCE_SVDRAW_SVDDRGM1_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

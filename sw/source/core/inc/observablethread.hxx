@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_OBSERVABLETHREAD_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_OBSERVABLETHREAD_HXX
+#pragma once
 
 #include <osl/thread.hxx>
 #include <rtl/ref.hxx>
@@ -82,6 +81,5 @@ class ObservableThread : public osl::Thread,
         std::weak_ptr< IFinishedThreadListener > mpThreadListener;
 
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

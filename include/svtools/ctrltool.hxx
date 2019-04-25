@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_CTRLTOOL_HXX
-#define INCLUDED_SVTOOLS_CTRLTOOL_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
@@ -213,6 +212,5 @@ public:
     sal_Int32               GetIndexSize( sal_Int32 nIndex ) const;
 };
 
-#endif // INCLUDED_SVTOOLS_CTRLTOOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

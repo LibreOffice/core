@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SOT_EXCHANGE_HXX
-#define INCLUDED_SOT_EXCHANGE_HXX
+#pragma once
 
 #include <vector>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
@@ -147,6 +146,5 @@ public:
     static sal_uInt16 IsMath( const SvGlobalName& rName );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

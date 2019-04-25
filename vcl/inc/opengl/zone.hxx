@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_OPENGL_ZONE_H
-#define INCLUDED_VCL_INC_OPENGL_ZONE_H
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -54,6 +53,5 @@ public:
     ~PreDefaultWinNoOpenGLZone();
 };
 
-#endif // INCLUDED_VCL_INC_OPENGL_ZONE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

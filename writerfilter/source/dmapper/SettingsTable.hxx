@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_SETTINGSTABLE_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_SETTINGSTABLE_HXX
+#pragma once
 
 #include "LoggedResources.hxx"
 #include <com/sun/star/lang/XComponent.hpp>
@@ -100,6 +99,5 @@ class SettingsTable : public LoggedProperties, public LoggedTable
 typedef tools::SvRef< SettingsTable >          SettingsTablePtr;
 }}
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

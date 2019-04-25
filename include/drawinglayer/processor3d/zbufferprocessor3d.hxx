@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_ZBUFFERPROCESSOR3D_HXX
-#define INCLUDED_DRAWINGLAYER_PROCESSOR3D_ZBUFFERPROCESSOR3D_HXX
+#pragma once
 
 #include <drawinglayer/processor3d/defaultprocessor3d.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
@@ -94,6 +93,5 @@ namespace drawinglayer
     }
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

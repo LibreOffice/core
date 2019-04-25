@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_SOURCE_ISHEADLESS_HXX
-#define INCLUDED_TEST_SOURCE_ISHEADLESS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -32,6 +31,5 @@ inline bool isHeadless() {
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

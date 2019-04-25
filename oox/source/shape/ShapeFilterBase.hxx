@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_SOURCE_SHAPE_SHAPEFILTERBASE_HXX
-#define INCLUDED_OOX_SOURCE_SHAPE_SHAPEFILTERBASE_HXX
+#pragma once
 
 #include <memory>
 #include <rtl/ref.hxx>
@@ -71,6 +70,5 @@ private:
 } // namespace shape
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

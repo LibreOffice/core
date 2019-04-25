@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCBHELPER_PROPERTYVALUESET_HXX
-#define INCLUDED_UCBHELPER_PROPERTYVALUESET_HXX
+#pragma once
 
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
@@ -204,6 +203,5 @@ public:
 
 }
 
-#endif /* ! INCLUDED_UCBHELPER_PROPERTYVALUESET_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

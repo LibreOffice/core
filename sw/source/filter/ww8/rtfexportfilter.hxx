@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_RTFEXPORTFILTER_HXX
-#define INCLUDED_SW_SOURCE_FILTER_WW8_RTFEXPORTFILTER_HXX
+#pragma once
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
@@ -70,6 +69,5 @@ public:
     Writer& GetWriter() { return m_aWriter; }
 };
 
-#endif // INCLUDED_SW_SOURCE_FILTER_WW8_RTFEXPORTFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

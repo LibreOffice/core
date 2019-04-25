@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef GTV_SIGNAL_HANDLERS_H
-#define GTV_SIGNAL_HANDLERS_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -67,6 +66,5 @@ gboolean signalAddressbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer /*pD
 /// Handles the key-press-event of the formula entry widget.
 gboolean signalFormulabar(GtkWidget* /*pWidget*/, GdkEventKey* /*pEvent*/, gpointer /*pData*/);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

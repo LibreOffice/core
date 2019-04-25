@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_LAYOUT_HXX
-#define INCLUDED_VCL_LAYOUT_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/button.hxx>
@@ -821,6 +820,5 @@ Size getLegacyBestSizeForChildren(const vcl::Window &rWindow);
 //Get first parent which is not a layout widget
 VCL_DLLPUBLIC vcl::Window* getNonLayoutParent(vcl::Window *pParent);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

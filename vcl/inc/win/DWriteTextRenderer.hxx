@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_WIN_DWRITERENDERER_HXX
-#define INCLUDED_VCL_INC_WIN_DWRITERENDERER_HXX
+#pragma once
 
 #include <usp10.h>
 #include <d2d1.h>
@@ -81,6 +80,5 @@ private:
     D2DTextAntiAliasMode meTextAntiAliasMode;
 };
 
-#endif // INCLUDED_VCL_INC_WIN_DWRITERENDERER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

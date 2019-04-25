@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_EMPHASISMARKITEM_HXX
-#define INCLUDED_EDITENG_EMPHASISMARKITEM_HXX
+#pragma once
 
 #include <tools/fontenum.hxx>
 #include <svl/intitem.hxx>
@@ -56,6 +55,5 @@ public:
                                 { return static_cast<FontEmphasisMark>(GetValue()); }
 };
 
-#endif // INCLUDED_EDITENG_EMPHASISMARKITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

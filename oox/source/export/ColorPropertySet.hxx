@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XMLOFF_COLORPROPERTYSET_HXX
-#define XMLOFF_COLORPROPERTYSET_HXX
+#pragma once
 
 // FIXME? this file is identical to xmloff/source/chart/ColorPropertySet.hxx
 
@@ -85,6 +84,5 @@ private:
 } //  namespace xmloff
 
 // XMLOFF_COLORPROPERTYSET_HXX
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

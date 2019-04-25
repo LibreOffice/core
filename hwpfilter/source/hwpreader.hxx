@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_HWPREADER_HXX
-#define INCLUDED_HWPFILTER_SOURCE_HWPREADER_HXX
+#pragma once
 
 #include <errno.h>
 #include <stdio.h>
@@ -321,6 +320,5 @@ extern "C"
     }
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
