@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_366c8807",
+        "filename": "editeng/source/rtf/rtfitem.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 1561,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-25T08:25:49Z",
+      "side": 1,
+      "message": "here and elsewhere\n   *aAttr.get() \ncan just be\n   *aAttr",
+      "revId": "1f96f1fe18927998a82bab975413253b5fa0a23e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_d67c44b7",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 2417,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-25T08:25:49Z",
+      "side": 1,
+      "message": "here and elsewhere, using shared_ptr, but the objects in question are never actually shared?",
+      "revId": "1f96f1fe18927998a82bab975413253b5fa0a23e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_f65e2044",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 3928,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-25T08:25:49Z",
+      "side": 1,
+      "message": "aBack can never be nullptr here?",
+      "revId": "1f96f1fe18927998a82bab975413253b5fa0a23e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_b6589856",
+        "filename": "sw/source/core/layout/tabfrm.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 3134,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-25T08:25:49Z",
+      "side": 1,
+      "message": "and here?",
+      "revId": "1f96f1fe18927998a82bab975413253b5fa0a23e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_d655241f",
+        "filename": "sw/source/core/layout/wsfrm.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 1681,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-25T08:25:49Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "1f96f1fe18927998a82bab975413253b5fa0a23e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_96355cfa",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-25T08:25:49Z",
+      "side": 1,
+      "message": "this is a very odd construction with the semicolon inside an if?",
+      "revId": "1f96f1fe18927998a82bab975413253b5fa0a23e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
