@@ -30,7 +30,14 @@ void ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     bool bDataChanged = false;
 
-    if (const ScPaintHint* pPaintHint = dynamic_cast<const ScPaintHint*>(&rHint))
+    if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
+    {
+        const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
+        // SdrHints are no longer used for invalidating, thus react on objectchange instead
+        if(SdrHintKind::ObjectChange == pSdrHint->GetKind())
+            bDataChanged = true;
+    }
+    else if (const ScPaintHint* pPaintHint = dynamic_cast<const ScPaintHint*>(&rHint))
     {
         if ( pPaintHint->GetPrintFlag() )
         {
@@ -38,13 +45,6 @@ void ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             if (nParts & ( PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size ))
                 bDataChanged = true;
         }
-    }
-    else if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
-    {
-        const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
-        // SdrHints are no longer used for invalidating, thus react on objectchange instead
-        if(SdrHintKind::ObjectChange == pSdrHint->GetKind())
-            bDataChanged = true;
     }
     else
     {
