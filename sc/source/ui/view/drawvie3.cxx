@@ -176,7 +176,13 @@ void adjustAnchoredPosition(const SdrHint& rHint, const ScDocument& rDoc, SCTAB 
 
 void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (dynamic_cast<const ScTabDeletedHint*>(&rHint))                        // Sheet has been deleted
+    if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
+    {
+        const SdrHint* pSdrHint = static_cast<const SdrHint*>( &rHint );
+        adjustAnchoredPosition(*pSdrHint, *pDoc, nTab);
+        FmFormView::Notify( rBC,rHint );
+    }
+    else if (dynamic_cast<const ScTabDeletedHint*>(&rHint))                        // Sheet has been deleted
     {
         SCTAB nDelTab = static_cast<const ScTabDeletedHint&>(rHint).GetTab();
         if (ValidTab(nDelTab))
@@ -190,12 +196,6 @@ void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         if ( nTab == static_cast<const ScTabSizeChangedHint&>(rHint).GetTab() )
             UpdateWorkArea();
-    }
-    else if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
-    {
-        const SdrHint* pSdrHint = static_cast<const SdrHint*>( &rHint );
-        adjustAnchoredPosition(*pSdrHint, *pDoc, nTab);
-        FmFormView::Notify( rBC,rHint );
     }
     else
         FmFormView::Notify( rBC,rHint );
