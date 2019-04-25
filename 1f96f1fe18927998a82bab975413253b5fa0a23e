@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_916486bb",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 2417,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2019-04-25T09:37:31Z",
+      "side": 1,
+      "message": "Can change this, but the idea is for branch \u0027origin/feature/item_refactor2\u0027 and for the future of Items to have all Item::ItemBase derived as std::shared_ptr and to hold them like this in the ItemSet (later Item::ItemSet) - so if this currently does no harm, I would like to keep as std::shared_ptr - as preparation",
+      "parentUuid": "3fa0c359_51459e16",
+      "revId": "1f96f1fe18927998a82bab975413253b5fa0a23e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_f65e2044",
         "filename": "sw/source/core/layout/paintfrm.cxx",
         "patchSetId": 13
