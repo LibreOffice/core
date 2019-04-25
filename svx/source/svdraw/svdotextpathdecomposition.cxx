@@ -27,7 +27,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <algorithm>
-#include <svx/xtextit.hxx>
 #include <svx/xftshtit.hxx>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

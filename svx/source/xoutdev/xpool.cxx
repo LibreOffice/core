@@ -37,6 +37,14 @@
 #include <svx/svdattr.hxx>
 #include <svx/svxids.hrc>
 #include <svl/itemset.hxx>
+#include <svx/xftadit.hxx>
+#include <svx/xftdiit.hxx>
+#include <svx/xftstit.hxx>
+#include <svx/xftmrit.hxx>
+#include <svx/xftouit.hxx>
+#include <svx/xftshit.hxx>
+#include <svx/xftshcit.hxx>
+#include <svx/xftshxy.hxx>
 
 XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
     : SfxItemPool("XOutdevItemPool", SDRATTR_START, SDRATTR_END, nullptr, nullptr)

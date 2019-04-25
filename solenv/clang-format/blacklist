@@ -7479,7 +7479,6 @@ include/svx/xpoly.hxx
 include/svx/xpool.hxx
 include/svx/xsflclit.hxx
 include/svx/xtable.hxx
-include/svx/xtextit.hxx
 include/svx/xtextit0.hxx
 include/svx/zoom_def.hxx
 include/svx/zoomctrl.hxx

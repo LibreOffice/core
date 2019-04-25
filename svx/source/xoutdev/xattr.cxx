@@ -54,6 +54,14 @@
 #include <svx/xdef.hxx>
 #include <svx/unomid.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/xftdiit.hxx>
+#include <svx/xftstit.hxx>
+#include <svx/xftmrit.hxx>
+#include <svx/xftouit.hxx>
+#include <svx/xftshit.hxx>
+#include <svx/xftshcit.hxx>
+#include <svx/xftshxy.hxx>
+#include <svx/xftadit.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>

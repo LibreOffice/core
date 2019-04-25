@@ -25,7 +25,6 @@
 #include <svx/xhatch.hxx>
 #include <svx/xlineit.hxx>
 #include <svx/xfillit.hxx>
-#include <svx/xtextit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xtextit0.hxx>
