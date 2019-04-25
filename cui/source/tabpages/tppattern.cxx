@@ -42,6 +42,7 @@
 #include <svx/xtable.hxx>
 #include <svx/xoutbmp.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/xflbmtit.hxx>
 #include <cuitabarea.hxx>
 #include <defdlgname.hxx>
 #include <dlgname.hxx>

@@ -31,6 +31,13 @@
 #include <svx/xtable.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/xflbmsxy.hxx>
+#include <svx/xflbmtit.hxx>
+#include <svx/xflbstit.hxx>
+#include <svx/xflbmsli.hxx>
+#include <svx/xflbmpit.hxx>
+#include <svx/xflboxy.hxx>
+#include <svx/xflbtoxy.hxx>
 #include <cuitabarea.hxx>
 #include <dlgname.hxx>
 #include <dialmgr.hxx>

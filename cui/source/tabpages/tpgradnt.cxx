@@ -34,6 +34,7 @@
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/xgrscit.hxx>
 #include <cuitabarea.hxx>
 #include <defdlgname.hxx>
 #include <dlgname.hxx>
