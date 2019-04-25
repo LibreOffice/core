@@ -17,8 +17,8 @@ $(eval $(call gb_CustomTarget_CustomTarget,sysui/infoplist))
 $(eval $(call gb_CustomTarget_register_targets,sysui/infoplist,\
 	PkgInfo \
 	Info.plist \
-	$(foreach lang,en-US $(gb_WITH_LANG),\
-	InfoPlist_$(lang).zip InfoPlist_$(lang)/InfoPlist.strings) \
+	$(foreach lang,$(filter ca cs da de el en es fi fr hr hu id it ja ko ms nl no pl pt pt_PT ro ru sk sv th tr uk vi zh_CN zh_TW,$(gb_WITH_LANG)),\
+	InfoPlist_$(lang)/InfoPlist.strings) \
 ))
 
 $(info_WORKDIR)/PkgInfo:
@@ -27,10 +27,6 @@ $(info_WORKDIR)/PkgInfo:
 
 $(info_WORKDIR)/Info.plist: $(info_BUILDDIR)/Info.plist
 	cp $< $@
-
-$(info_WORKDIR)/InfoPlist_%.zip: $(info_WORKDIR)/InfoPlist_%/InfoPlist.strings
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ZIP,1)
-	zip -j $@ $<
 
 $(info_WORKDIR)/InfoPlist_%/InfoPlist.strings: \
 		$(info_WORKDIR)/Info.plist $(info_WORKDIR)/documents.ulf
