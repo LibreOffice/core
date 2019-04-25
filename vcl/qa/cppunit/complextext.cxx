@@ -92,11 +92,11 @@ void VclComplexTextTest::testArabic()
     // this sporadically returns 75 or 74 on some of the windows tinderboxes eg. tb73
     CPPUNIT_ASSERT_EQUAL(72L, nTextWidth);
     CPPUNIT_ASSERT_EQUAL(nTextWidth, aCharWidths.back());
-#endif
 
     // text advance width and line height
     CPPUNIT_ASSERT_EQUAL(72L, pOutDev->GetTextWidth(aOneTwoThree));
     CPPUNIT_ASSERT_EQUAL(14L, pOutDev->GetTextHeight());
+#endif
 
     // exact bounding rectangle, not essentially the same as text width/height
 #if defined(MACOSX) || defined(_WIN32)
