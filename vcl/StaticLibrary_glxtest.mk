@@ -31,7 +31,6 @@ $(eval $(call gb_StaticLibrary_use_api,glxtest,\
 
 $(eval $(call gb_StaticLibrary_add_libs,glxtest,\
 	-lm $(DLOPEN_LIBS) \
-	-lpthread \
     -lX11 \
 ))
 
