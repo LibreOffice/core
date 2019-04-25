@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_b6f2d899",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 5356,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-25T06:38:04Z",
+      "side": 0,
+      "message": "Why is this test excluded? Please mention in the commit message.",
+      "range": {
+        "startLine": 5356,
+        "startChar": 8,
+        "endLine": 5356,
+        "endChar": 125
+      },
+      "revId": "7c88700b74346d58084b48656f1c7e28f891cf09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_d6ef64ae",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 5369,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-25T06:38:04Z",
+      "side": 0,
+      "message": "and this",
+      "range": {
+        "startLine": 5369,
+        "startChar": 8,
+        "endLine": 5369,
+        "endChar": 128
+      },
+      "revId": "7c88700b74346d58084b48656f1c7e28f891cf09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
