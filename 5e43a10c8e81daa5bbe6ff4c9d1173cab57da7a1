@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_113876d1",
+        "filename": "chart2/source/controller/drawinglayer/DrawViewWrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-25T08:57:12Z",
+      "side": 1,
+      "message": "cannot return early here, will skip the call to E3dView::Notify",
+      "revId": "5e43a10c8e81daa5bbe6ff4c9d1173cab57da7a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_b13422e0",
+        "filename": "svx/source/accessibility/AccessibleEmptyEditSource.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-25T08:57:12Z",
+      "side": 1,
+      "message": "cannot return early",
+      "revId": "5e43a10c8e81daa5bbe6ff4c9d1173cab57da7a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_d131aeee",
+        "filename": "svx/source/accessibility/AccessibleTextHelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1315,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-25T08:57:12Z",
+      "side": 1,
+      "message": "can move this one up, to potentially skip the dynamic_cast above",
+      "revId": "5e43a10c8e81daa5bbe6ff4c9d1173cab57da7a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_714c5a76",
+        "filename": "svx/source/svdraw/svdoedge.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1613,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-25T08:57:12Z",
+      "side": 1,
+      "message": "cannot return early here, skips a bunch of logic",
+      "revId": "5e43a10c8e81daa5bbe6ff4c9d1173cab57da7a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
