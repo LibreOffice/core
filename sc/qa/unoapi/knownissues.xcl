@@ -218,9 +218,6 @@ sc.ScCellObj::com::sun::star::beans::XPropertySet
 sc.ScCellRangesObj::com::sun::star::table::CellProperties
 sc.ScCellRangesObj::com::sun::star::beans::XPropertySet
 
-### fdo43309 ###
-sc.ScCellRangeObj::com::sun::star::chart::XChartData
-
 ### fdo44167 ###
 sc.ScDatabaseRangeObj::com::sun::star::sheet::XDatabaseRange
 sc.ScDatabaseRangeObj::com::sun::star::util::XRefreshable
