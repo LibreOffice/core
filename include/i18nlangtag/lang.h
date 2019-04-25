@@ -642,8 +642,7 @@ namespace o3tl
 #define LANGUAGE_USER_YIDDISH_US            LanguageType(0x803D)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_YIDDISH)) */
 #define LANGUAGE_USER_LIMBU                 LanguageType(0x0657)
 #define LANGUAGE_USER_LOJBAN                LanguageType(0x0658)  /* no locale */
-#define LANGUAGE_OBSOLETE_USER_KABYLE       LanguageType(0x0659)
-#define LANGUAGE_USER_KABYLE                LANGUAGE_TAMAZIGHT_LATIN_ALGERIA
+#define LANGUAGE_USER_KABYLE                LanguageType(0x0659)  /* replaces LANGUAGE_TAMAZIGHT_LATIN_ALGERIA */
 #define LANGUAGE_USER_HAITIAN               LanguageType(0x065A)
 #define LANGUAGE_USER_BEEMBE                LanguageType(0x065B)
 #define LANGUAGE_USER_BEKWEL                LanguageType(0x065C)
