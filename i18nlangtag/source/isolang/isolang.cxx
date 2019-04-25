@@ -489,9 +489,9 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_ENGLISH_KUWAIT,              "en", "KW", k0    },    // MS reserved
     { LANGUAGE_ENGLISH_TURKEY,              "en", "TR", k0    },    // MS reserved
     { LANGUAGE_ENGLISH_YEMEN,               "en", "YE", k0    },    // MS reserved
-    { LANGUAGE_TAMAZIGHT_LATIN_ALGERIA,    "kab", "DZ", k0    },    // In practice Kabyle is the language used for this
-    { LANGUAGE_OBSOLETE_USER_KABYLE,       "kab", "DZ", k0    },
-    { LANGUAGE_TAMAZIGHT_LATIN_ALGERIA,    "ber", "DZ", kSAME },    // In practice Algeria has standardized on Kabyle as the member of the "ber" collective which gets used there.
+    { LANGUAGE_USER_KABYLE,                "kab", "DZ", k0    },
+    { LANGUAGE_TAMAZIGHT_LATIN_ALGERIA,    "kab", "DZ", LANGUAGE_USER_KABYLE },  // In practice Kabyle is the language used for this
+    { LANGUAGE_TAMAZIGHT_LATIN_ALGERIA,    "ber", "DZ", LANGUAGE_USER_KABYLE },  // In practice Algeria has standardized on Kabyle as the member of the "ber" collective which gets used there.
     { LANGUAGE_TAMAZIGHT_TIFINAGH_MOROCCO, "tmz", "MA", kSAME },
     { LANGUAGE_TAMAZIGHT_MOROCCO,          "tmz", "MA", k0    },    // MS reserved
     { LANGUAGE_TAMAZIGHT_TIFINAGH_MOROCCO, "ber", "MA", kSAME },    // Morocco is officially using Tifinagh for its Berber languages, old kludge to distinguish from LANGUAGE_TAMAZIGHT_LATIN_ALGERIA
@@ -748,7 +748,7 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_PUNJABI_ARABIC_LSO,                 "pnb-Arab", ""  , k0    },
     { LANGUAGE_PUNJABI_PAKISTAN,                    "pa-Arab", "PK", k0    },   // MS, incorrect
     { LANGUAGE_PUNJABI_ARABIC_LSO,                  "pa-Arab", ""  , k0    },   // MS, incorrect
-    { LANGUAGE_TAMAZIGHT_LATIN_ALGERIA,            "tzm-Latn", "DZ", kSAME },   // MS
+    { LANGUAGE_TAMAZIGHT_LATIN_ALGERIA,            "tzm-Latn", "DZ", LANGUAGE_USER_KABYLE },  // MS
     { LANGUAGE_TAMAZIGHT_LATIN_LSO,                "tzm-Latn", ""  , k0    },   // MS
     { LANGUAGE_FULFULDE_SENEGAL,                    "ff-Latn", "SN", k0    },   // macrolanguage code, MS
     { LANGUAGE_FULFULDE_LATIN_LSO,                  "ff-Latn", ""  , k0    },   // macrolanguage code

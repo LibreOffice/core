@@ -505,8 +505,8 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang )
         nLang = LANGUAGE_KALAALLISUT_GREENLAND;
     else if (nLang == LANGUAGE_OBSOLETE_USER_LUXEMBOURGISH)
         nLang = LANGUAGE_LUXEMBOURGISH_LUXEMBOURG;
-    else if (nLang == LANGUAGE_OBSOLETE_USER_KABYLE)
-        nLang = LANGUAGE_TAMAZIGHT_LATIN_ALGERIA;
+    else if (nLang == LANGUAGE_TAMAZIGHT_LATIN_ALGERIA) // may be stored in MS formats, was vice versa
+        nLang = LANGUAGE_USER_KABYLE;
     else if (nLang == LANGUAGE_OBSOLETE_USER_CATALAN_VALENCIAN)
         nLang = LANGUAGE_CATALAN_VALENCIAN;
     else if (nLang == LANGUAGE_OBSOLETE_USER_MALAGASY_PLATEAU)
