@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_e303c10e",
+        "filename": "solenv/clang-format/blacklist",
+        "patchSetId": 15
+      },
+      "lineNbr": 4070,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-04-26T04:52:21Z",
+      "side": 1,
+      "message": "Is there a reason to add new files to the blacklist here?\nUsually we give new files consistent formatting with clang-format.",
+      "revId": "1e2682235cded9a7cd90e55f0bfc60a1285e9a46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
