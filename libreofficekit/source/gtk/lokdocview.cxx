@@ -1449,6 +1449,8 @@ callback (gpointer pData)
     case LOK_CALLBACK_INVALIDATE_HEADER:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[INVALIDATE_HEADER], 0, pCallback->m_aPayload.c_str());
         break;
+    case LOK_CALLBACK_CONTEXT_CHANGED:
+        break; // TODO
     default:
         g_assert(false);
         break;
