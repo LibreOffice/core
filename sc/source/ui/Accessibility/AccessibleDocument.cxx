@@ -81,7 +81,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using ::std::for_each;
 
     //=====  internal  ========================================================
 
@@ -185,45 +184,6 @@ struct ScShapeDataLess
         else
             bResult = false;
         return bResult;
-    }
-};
-
-struct DeselectShape
-{
-    void operator() (const ScAccessibleShapeData* pAccShapeData) const
-    {
-        if (pAccShapeData)
-        {
-            pAccShapeData->bSelected = false;
-            if (pAccShapeData->pAccShape.is())
-                pAccShapeData->pAccShape->ResetState(AccessibleStateType::SELECTED);
-        }
-    }
-};
-
-struct SelectShape
-{
-    uno::Reference < drawing::XShapes > xShapes;
-    explicit SelectShape(const uno::Reference<drawing::XShapes>& xTemp) : xShapes(xTemp) {}
-    void operator() (const ScAccessibleShapeData* pAccShapeData) const
-    {
-        if (pAccShapeData && pAccShapeData->bSelectable)
-        {
-            pAccShapeData->bSelected = true;
-            if (pAccShapeData->pAccShape.is())
-                pAccShapeData->pAccShape->SetState(AccessibleStateType::SELECTED);
-            if (xShapes.is())
-                xShapes->add(pAccShapeData->xShape);
-        }
-    }
-};
-
-struct Destroy
-{
-    void operator() (ScAccessibleShapeData* pData)
-    {
-        if (pData)
-            DELETEZ(pData);
     }
 };
 
@@ -364,7 +324,8 @@ ScChildrenShapes::ScChildrenShapes(ScAccessibleDocument* pAccessibleDocument, Sc
 
 ScChildrenShapes::~ScChildrenShapes()
 {
-    std::for_each(maZOrderedShapes.begin(), maZOrderedShapes.end(), Destroy());
+    for (ScAccessibleShapeData* pShapeData : maZOrderedShapes)
+        delete pShapeData;
     if (mpViewShell)
     {
         SfxBroadcaster* pDrawBC = mpViewShell->GetViewData().GetDocument()->GetDrawBroadcaster();
@@ -729,8 +690,15 @@ void ScChildrenShapes::DeselectAll()
     }
 
     if (bSomethingSelected)
-        std::for_each(maZOrderedShapes.begin(), maZOrderedShapes.end(), DeselectShape());
-}
+        for (const ScAccessibleShapeData* pAccShapeData : maZOrderedShapes)
+            if (pAccShapeData)
+            {
+                pAccShapeData->bSelected = false;
+                if (pAccShapeData->pAccShape.is())
+                    pAccShapeData->pAccShape->ResetState(AccessibleStateType::SELECTED);
+            }
+};
+
 
 void ScChildrenShapes::SelectAll()
 {
@@ -747,7 +715,17 @@ void ScChildrenShapes::SelectAll()
 
         try
         {
-            std::for_each(maZOrderedShapes.begin(), maZOrderedShapes.end(), SelectShape(xShapes));
+            for (const ScAccessibleShapeData* pAccShapeData : maZOrderedShapes)
+            {
+                if (pAccShapeData && pAccShapeData->bSelectable)
+                {
+                    pAccShapeData->bSelected = true;
+                    if (pAccShapeData->pAccShape.is())
+                        pAccShapeData->pAccShape->SetState(AccessibleStateType::SELECTED);
+                    if (xShapes.is())
+                        xShapes->add(pAccShapeData->xShape);
+                }
+            }
             xSelectionSupplier->select(uno::makeAny(xShapes));
         }
         catch (lang::IllegalArgumentException&)
@@ -870,42 +848,27 @@ SdrPage* ScChildrenShapes::GetDrawPage() const
     return pDrawPage;
 }
 
-struct SetRelation
+utl::AccessibleRelationSetHelper* ScChildrenShapes::GetRelationSet(const ScAddress* pAddress) const
 {
-    const ScChildrenShapes* mpChildrenShapes;
-    mutable utl::AccessibleRelationSetHelper* mpRelationSet;
-    const ScAddress* mpAddress;
-    SetRelation(const ScChildrenShapes* pChildrenShapes, const ScAddress* pAddress)
-        :
-        mpChildrenShapes(pChildrenShapes),
-        mpRelationSet(nullptr),
-        mpAddress(pAddress)
-    {
-    }
-    void operator() (const ScAccessibleShapeData* pAccShapeData) const
+    utl::AccessibleRelationSetHelper* pRelationSet = nullptr;
+    for (const ScAccessibleShapeData* pAccShapeData : maZOrderedShapes)
     {
         if (pAccShapeData &&
-            ((!pAccShapeData->xRelationCell && !mpAddress) ||
-            (pAccShapeData->xRelationCell && mpAddress && (*(pAccShapeData->xRelationCell) == *mpAddress))))
+            ((!pAccShapeData->xRelationCell && !pAddress) ||
+            (pAccShapeData->xRelationCell && pAddress && (*(pAccShapeData->xRelationCell) == *pAddress))))
         {
-            if (!mpRelationSet)
-                mpRelationSet = new utl::AccessibleRelationSetHelper();
+            if (!pRelationSet)
+                pRelationSet = new utl::AccessibleRelationSetHelper();
 
             AccessibleRelation aRelation;
             aRelation.TargetSet.realloc(1);
-            aRelation.TargetSet[0] = mpChildrenShapes->Get(pAccShapeData);
+            aRelation.TargetSet[0] = Get(pAccShapeData);
             aRelation.RelationType = AccessibleRelationType::CONTROLLER_FOR;
 
-            mpRelationSet->AddRelation(aRelation);
+            pRelationSet->AddRelation(aRelation);
         }
     }
-};
-
-utl::AccessibleRelationSetHelper* ScChildrenShapes::GetRelationSet(const ScAddress* pAddress) const
-{
-    SetRelation aSetRelation(this, pAddress);
-    ::std::for_each(maZOrderedShapes.begin(), maZOrderedShapes.end(), aSetRelation);
-    return aSetRelation.mpRelationSet;
+    return pRelationSet;
 }
 
 bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::XShapes>& xShapes) const
@@ -1111,8 +1074,11 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
         aEvent.NewValue <<= xChild;
         mpAccessibleDocument->CommitChange(aEvent);
     }
-    std::for_each(aShapesList.begin(), aShapesList.end(), Destroy());
-
+    for(ScAccessibleShapeData*& pShapeData : aShapesList)
+    {
+        delete pShapeData;
+        pShapeData = nullptr;
+    }
     return bResult;
 }
 
@@ -1309,25 +1275,11 @@ sal_Int8 ScChildrenShapes::Compare(const ScAccessibleShapeData* pData1,
     return nResult;
 }
 
-namespace
-{
-    struct ScVisAreaChanged
-    {
-        explicit ScVisAreaChanged() {}
-        void operator() (const ScAccessibleShapeData* pAccShapeData) const
-        {
-            if (pAccShapeData && pAccShapeData->pAccShape.is())
-            {
-                pAccShapeData->pAccShape->ViewForwarderChanged();
-            }
-        }
-    };
-}
-
 void ScChildrenShapes::VisAreaChanged() const
 {
-    ScVisAreaChanged aVisAreaChanged;
-    std::for_each(maZOrderedShapes.begin(), maZOrderedShapes.end(), aVisAreaChanged);
+    for (const ScAccessibleShapeData* pAccShapeData: maZOrderedShapes)
+        if (pAccShapeData && pAccShapeData->pAccShape.is())
+            pAccShapeData->pAccShape->ViewForwarderChanged();
 }
 
 ScAccessibleDocument::ScAccessibleDocument(
