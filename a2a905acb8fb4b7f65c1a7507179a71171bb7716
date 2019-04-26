@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_c6bed3fe",
+        "filename": "pyuno/IwyuFilter_pyuno.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-04-26T07:07:58Z",
+      "side": 1,
+      "message": "Maybe handle this in find-unused-includes directly?",
+      "revId": "a2a905acb8fb4b7f65c1a7507179a71171bb7716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_e6bbcf0b",
+        "filename": "pyuno/IwyuFilter_pyuno.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-04-26T07:07:58Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "a2a905acb8fb4b7f65c1a7507179a71171bb7716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_86368bb4",
+        "filename": "pyuno/inc/pyuno.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-04-26T07:07:58Z",
+      "side": 1,
+      "message": "Just remove?",
+      "revId": "a2a905acb8fb4b7f65c1a7507179a71171bb7716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
