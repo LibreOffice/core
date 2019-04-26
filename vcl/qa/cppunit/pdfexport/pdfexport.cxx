@@ -12,6 +12,8 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
+#include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
+#include <com/sun/star/util/XRefreshable.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -25,6 +27,7 @@
 #include <tools/zcodec.hxx>
 #if HAVE_FEATURE_PDFIUM
 #include <fpdf_edit.h>
+#include <fpdf_doc.h>
 #include <fpdfview.h>
 #endif
 
@@ -35,11 +38,35 @@ namespace
 
 const char* const DATA_DIRECTORY = "/vcl/qa/cppunit/pdfexport/data/";
 
+struct CloseDocument {
+    void operator ()(FPDF_DOCUMENT doc) {
+        if (doc != nullptr) {
+            FPDF_CloseDocument(doc);
+        }
+    }
+};
+
+using DocumentHolder =
+    std::unique_ptr<typename std::remove_pointer<FPDF_DOCUMENT>::type, CloseDocument>;
+
+struct ClosePage {
+    void operator ()(FPDF_PAGE page) {
+        if (page != nullptr) {
+            FPDF_ClosePage(page);
+        }
+    }
+};
+
+using PageHolder =
+    std::unique_ptr<typename std::remove_pointer<FPDF_PAGE>::type, ClosePage>;
+
 /// Tests the PDF export filter.
 class PdfExportTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
     uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
+    utl::TempFile maTempFile;
+    SvMemoryStream maMemory;
 #if HAVE_FEATURE_PDFIUM
     FPDF_PAGE mpPdfPage = nullptr;
     FPDF_DOCUMENT mpPdfDocument = nullptr;
@@ -69,6 +96,7 @@ public:
     void testTdf99680();
     void testTdf99680_2();
 #endif
+    void testTocLink();
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
 #if HAVE_FEATURE_PDFIUM
@@ -86,6 +114,7 @@ public:
     CPPUNIT_TEST(testTdf99680);
     CPPUNIT_TEST(testTdf99680_2);
 #endif
+    CPPUNIT_TEST(testTocLink);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -679,6 +708,48 @@ void PdfExportTest::testTdf99680_2()
         size_t nRestoreCount = std::count(pStart, pEnd, 'Q');
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Save/restore graphic state operators count mistmatch!", nSaveCount, nRestoreCount);
     }
+}
+
+void PdfExportTest::testTocLink()
+{
+    // Load the Writer document.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "toc-link.fodt";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    // Update the ToC.
+    uno::Reference<text::XDocumentIndexesSupplier> xDocumentIndexesSupplier(mxComponent,
+                                                                            uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDocumentIndexesSupplier.is());
+
+    uno::Reference<util::XRefreshable> xToc(
+        xDocumentIndexesSupplier->getDocumentIndexes()->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xToc.is());
+
+    xToc->refresh();
+
+    // Save as PDF.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    maMemory.WriteStream(aFile);
+    DocumentHolder pPdfDocument(
+        FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument.get());
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
+
+    // Ensure there is a link on the first page (in the ToC).
+    int nStartPos = 0;
+    FPDF_LINK pLinkAnnot = nullptr;
+    // Without the accompanying fix in place, this test would have failed, as FPDFLink_Enumerate()
+    // returned false, as the page contained no links.
+    CPPUNIT_ASSERT(FPDFLink_Enumerate(pPdfPage.get(), &nStartPos, &pLinkAnnot));
 }
 
 #endif

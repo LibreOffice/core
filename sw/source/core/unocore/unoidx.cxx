@@ -2911,6 +2911,15 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
                 throw lang::IllegalArgumentException();
             }
         }
+
+        if (rTOXBase.GetType() == TOX_CONTENT)
+        {
+            if (aToken.eTokenType == TOKEN_LINK_START && aToken.sCharStyleName.isEmpty())
+            {
+                aToken.sCharStyleName = SwResId(STR_POOLCHR_TOXJUMP);
+            }
+        }
+
         sPattern += aToken.GetString();
     }
     SwForm aForm(rTOXBase.GetTOXForm());
