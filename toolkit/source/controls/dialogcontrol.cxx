@@ -523,7 +523,7 @@ void SAL_CALL UnoDialogControl::windowMoved( const css::awt::WindowEvent& e )
     if ( !pOutDev || mbPosModified )
         return;
 
-    // Currentley we are simply using MapUnit::MapAppFont
+    // Currently we are simply using MapUnit::MapAppFont
     ::Size aTmp( e.X, e.Y );
     aTmp = ImplMapPixelToAppFont( pOutDev, aTmp );
 

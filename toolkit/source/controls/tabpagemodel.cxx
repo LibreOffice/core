@@ -238,7 +238,7 @@ void SAL_CALL UnoControlTabPage::windowResized( const css::awt::WindowEvent& e )
     if ( !pOutDev || mbSizeModified )
         return;
 
-    // Currentley we are simply using MapUnit::MapAppFont
+    // Currently we are simply using MapUnit::MapAppFont
     ::Size aAppFontSize( e.Width, e.Height );
 
     Reference< XControl > xDialogControl( *this, UNO_QUERY_THROW );
@@ -276,7 +276,7 @@ void SAL_CALL UnoControlTabPage::windowMoved( const css::awt::WindowEvent& e )
     if ( !pOutDev || mbPosModified )
         return;
 
-    // Currentley we are simply using MapUnit::MapAppFont
+    // Currently we are simply using MapUnit::MapAppFont
     ::Size aTmp( e.X, e.Y );
     aTmp = ImplMapPixelToAppFont( pOutDev, aTmp );
 
