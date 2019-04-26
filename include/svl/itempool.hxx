@@ -171,6 +171,8 @@ public:
 
     sal_uInt32                      GetItemCount2(sal_uInt16 nWhich) const;
     Item2Range                      GetItemSurrogates(sal_uInt16 nWhich) const;
+    /* This is only valid for SfxPoolItem that override IsSortable and operator< */
+    const SfxPoolItem *             FindItemSurrogate(sal_uInt16 nWhich, SfxPoolItem const & rSample) const;
 
     sal_uInt16                      GetFirstWhich() const;
     sal_uInt16                      GetLastWhich() const;
