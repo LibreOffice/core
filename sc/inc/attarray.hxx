@@ -22,6 +22,8 @@
 
 #include "global.hxx"
 #include "attrib.hxx"
+#include "patattr.hxx"
+
 #include <algorithm>
 #include <memory>
 
@@ -30,7 +32,6 @@
 class ScDocument;
 class ScEditDataArray;
 class ScMarkArray;
-class ScPatternAttr;
 class ScStyleSheet;
 class ScFlatBoolRowSegments;
 

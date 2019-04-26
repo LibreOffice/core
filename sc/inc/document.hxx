@@ -24,6 +24,7 @@
 #include <vcl/errcode.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <vcl/vclptr.hxx>
+#include "patattr.hxx"
 #include "scdllapi.h"
 #include "interpretercontext.hxx"
 #include "rangelst.hxx"
@@ -142,7 +143,6 @@ class ScExternalRefManager;
 class ScFormulaCell;
 class ScMacroManager;
 class ScOutlineTable;
-class ScPatternAttr;
 class ScPrintRangeSaver;
 class ScStyleSheet;
 class ScStyleSheetPool;
