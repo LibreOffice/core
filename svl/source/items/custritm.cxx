@@ -28,10 +28,17 @@
 // virtual
 bool CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
 {
-    DBG_ASSERT(dynamic_cast<const CntUnencodedStringItem*>( &rItem ) !=  nullptr,
-               "CntUnencodedStringItem::operator ==(): Bad type");
+    assert(dynamic_cast<const CntUnencodedStringItem*>( &rItem ));
     return m_aValue
             == static_cast< const CntUnencodedStringItem * >(&rItem)->
+                m_aValue;
+}
+
+bool CntUnencodedStringItem::operator<(const SfxPoolItem & rItem) const
+{
+    assert(dynamic_cast<const CntUnencodedStringItem*>( &rItem ));
+    return m_aValue
+            < static_cast< const CntUnencodedStringItem * >(&rItem)->
                 m_aValue;
 }
 
