@@ -49,6 +49,8 @@ public:
             NameOrIndex(const NameOrIndex& rNameOrIndex);
 
     virtual bool         operator==(const SfxPoolItem& rItem) const override;
+    virtual bool         operator<(const SfxPoolItem& rItem) const override;
+    virtual bool         IsSortable() const override { return true; }
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
             OUString const & GetName() const              { return GetValue();   }
