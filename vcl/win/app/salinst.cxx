@@ -213,8 +213,7 @@ void ImplSalYieldMutexRelease()
 bool SalYieldMutex::IsCurrentThread() const
 {
     if ( !GetSalData()->mpInstance->m_nNoYieldLock )
-        // For the Windows backend, the LO identifier is the system thread ID
-        return m_nThreadId == GetCurrentThreadId();
+        return SolarMutex::IsCurrentThread();
     else
         return GetSalData()->mpInstance->IsMainThread();
 }
