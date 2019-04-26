@@ -719,6 +719,10 @@ void Window::ImplInvalidateFrameRegion( const vcl::Region* pRegion, InvalidateFl
             pParent->ImplInvalidateFrameRegion( pChildRegion, nFlags );
         }
     }
+
+    if (comphelper::LibreOfficeKit::isActive())
+        return; // All painting happens in response to tile requests
+
     if ( !mpWindowImpl->mpFrameData->maPaintIdle.IsActive() )
         mpWindowImpl->mpFrameData->maPaintIdle.Start();
 }
@@ -1320,8 +1324,11 @@ void Window::Update()
              pUpdateOverlapWindow = pUpdateOverlapWindow->mpWindowImpl->mpNext;
         }
 
-        pUpdateWindow->ImplCallPaint(nullptr, pUpdateWindow->mpWindowImpl->mnPaintFlags);
-        pUpdateWindow->LogicInvalidate(nullptr);
+        if (!comphelper::LibreOfficeKit::isActive())
+        {
+            pUpdateWindow->ImplCallPaint(nullptr, pUpdateWindow->mpWindowImpl->mnPaintFlags);
+            pUpdateWindow->LogicInvalidate(nullptr);
+        }
 
         if (xWindow->IsDisposed())
            return;
