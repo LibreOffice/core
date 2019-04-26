@@ -148,7 +148,9 @@ Public Sub TraceError(ByVal psErrorLevel As String _
 						, ByVal Optional pvMsgBox As Variant _
 						, ByVal Optional pvArgs As Variant _
 						)
-&apos;	store error codes in trace buffer
+&apos;	Store error code and description in trace rolling buffer
+&apos;	Display error message if errorlevel &gt;= ERROR
+&apos;	Stop program execution if errorlevel = FATAL or ABORT
 
 	On Local Error Resume Next
 	If IsEmpty(_A2B_) Then Call Application._RootInit()	&apos;	First use of Access2Base in current LibO/AOO session
@@ -159,12 +161,16 @@ Dim sErrorText As String, sErrorDesc As String, oDb As Object
 							&amp; &quot; (&quot; &amp; sErrorDesc &amp; &quot;) &quot; &amp; _GetLabel(&quot;ERROCCUR&quot;) _
 							&amp; Iif(piErrorLine &gt; 0, &quot; &quot; &amp; _GetLabel(&quot;ERRLINE&quot;) &amp; &quot; &quot; &amp; CStr(piErrorLine), &quot;&quot;) _
 							&amp; Iif(psErrorProc &lt;&gt; &quot;&quot;, &quot; &quot; &amp; _GetLabel(&quot;ERRIN&quot;) &amp; &quot; &quot; &amp; psErrorProc, Iif(_A2B_.CalledSub = &quot;&quot;, &quot;&quot;, &quot; &quot; &amp; _Getlabel(&quot;ERRIN&quot;) &amp; &quot; &quot; &amp; _A2B_.CalledSub))
+	With _A2B_
+		.LastErrorCode = piErrorCode
+		.ErrorText = sErrorDesc
+		.ErrorLongText = sErrorText
+	End With
 	If IsMissing(pvMsgBox) Then pvMsgBox = ( psErrorLevel = TRACEERRORS Or psErrorLevel = TRACEFATAL Or psErrorLevel = TRACEABORT )
 	TraceLog(psErrorLevel, sErrorText, pvMsgBox)
 	
 	&apos;	Unexpected error detected in user program or in Access2Base
 	If psErrorLevel = TRACEFATAL Or psErrorLevel = TRACEABORT Then
-		_A2B_.CalledSub = &quot;&quot;
 		If psErrorLevel = TRACEFATAL Then
 			Set oDb = Application.CurrentDb()
 			If Not IsNull(oDb) Then oDb.CloseAllrecordsets()
@@ -172,7 +178,23 @@ Dim sErrorText As String, sErrorDesc As String, oDb As Object
 		Stop
 	End If
 
-End Sub		&apos;	TraceError	V0.9,5
+End Sub		&apos;	TraceError	V0.9.5
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function TraceErrorCode(ByVal Optional piMode As Integer) As Variant
+&apos;	Return the last encountered error code or description
+&apos;	UNPUBLISHED
+
+Const cstCode = 0, cstDesc = 1, cstLongDesc = 2
+
+	If IsMissing(piMode) Then piMode = cstCode
+	Select Case piMode
+		Case cstCode		:	TraceErrorCode = _A2B_.LastErrorCode
+		Case cstDesc		:	TraceErrorCode = _A2B_.ErrorText
+		Case cstLongDesc	:	TraceErrorCode = _A2B_.ErrorLongText
+	End Select
+
+End Function	&apos;	TraceErrorCode V6.3
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Sub TraceLevel(ByVal Optional psTraceLevel As String)

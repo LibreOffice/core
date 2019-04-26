@@ -1041,8 +1041,10 @@ Public Sub _ResetCalledSub(ByVal psSub As String)
 &apos;	Called in bottom of each public function. _A2B_.CalledSub variable is used for error handling
 &apos;	Used to trace routine in/outs and to clarify error messages
 		If IsEmpty(_A2B_) Then Call Application._RootInit()	&apos;	Only is Utils module recompiled
-		If _A2B_.CalledSub = psSub Then _A2B_.CalledSub = &quot;&quot;
-		If _A2B_.MinimalTraceLevel = 1 Then TraceLog(TRACEDEBUG, _GetLabel(&quot;Exiting&quot;) &amp; &quot; &quot; &amp; psSub &amp; &quot; ...&quot;, False)
+		With _A2B_
+			If .CalledSub = psSub Then .CalledSub = &quot;&quot;
+			If .MinimalTraceLevel = 1 Then TraceLog(TRACEDEBUG, _GetLabel(&quot;Exiting&quot;) &amp; &quot; &quot; &amp; psSub &amp; &quot; ...&quot;, False)
+		End With
 End Sub			&apos;	ResetCalledSub
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -1073,8 +1075,15 @@ Public Sub _SetCalledSub(ByVal psSub As String)
 &apos;	Called in top of each public function.
 &apos;	Used to trace routine in/outs and to clarify error messages
 		If IsEmpty(_A2B_) Then Call Application._RootInit()	&apos;	First use of Access2Base in current LibO/AOO session
-		If _A2B_.CalledSub = &quot;&quot; Then _A2B_.CalledSub = psSub
-		If _A2B_.MinimalTraceLevel = 1 Then TraceLog(TRACEDEBUG, _GetLabel(&quot;Entering&quot;) &amp; &quot; &quot; &amp; psSub &amp; &quot; ...&quot;, False)
+		With _A2B_
+			If .CalledSub = &quot;&quot; Then
+				.CalledSub = psSub
+				.LastErrorCode = 0
+				.ErrorText = &quot;&quot;
+				.ErrorLongText = &quot;&quot;
+			End If
+			If .MinimalTraceLevel = 1 Then TraceLog(TRACEDEBUG, _GetLabel(&quot;Entering&quot;) &amp; &quot; &quot; &amp; psSub &amp; &quot; ...&quot;, False)
+		End With
 End Sub			&apos;	SetCalledSub
 
 REM -----------------------------------------------------------------------------------------------------------------------

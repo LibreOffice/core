@@ -25,6 +25,9 @@ Private TraceLogs()			As Variant
 Private TraceLogCount		As Integer
 Private TraceLogLast		As Integer
 Private TraceLogMaxEntries	As Integer
+Private LastErrorCode		As Integer
+Private ErrorText			As String
+Private ErrorLongText		As String
 Private CalledSub			As String
 Private DebugPrintShort		As Boolean
 Private Introspection		As Object				&apos;	com.sun.star.beans.Introspection	
@@ -50,6 +53,9 @@ Private Sub Class_Initialize()
 	TraceLogCount = 0
 	TraceLogLast = 0
 	TraceLogMaxEntries = 0
+	LastErrorCode = 0
+	ErrorText = &quot;&quot;
+	ErrorLongText = &quot;&quot;
 	CalledSub = &quot;&quot;
 	DebugPrintShort = True
 	Locale = L10N._GetLocale()
