@@ -23,11 +23,7 @@
 #include <sot/filelist.hxx>
 #include <osl/thread.h>
 
-/******************************************************************************
-|*
-|*  Stream operators
-|*
-\******************************************************************************/
+/* Stream operators */
 
 /* #i28176#
    The Windows clipboard bridge now provides a double '\0'
@@ -63,12 +59,7 @@ SvStream& ReadFileList( SvStream& rIStm, FileList& rFileList )
     return rIStm;
 }
 
-/******************************************************************************
-|*
-|*  Fill in / check the list
-|*
-\******************************************************************************/
-
+/* Fill in / check the list */
 void FileList::AppendFile( const OUString& rStr )
 {
     aStrList.push_back( rStr );

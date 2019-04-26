@@ -34,6 +34,7 @@ namespace com { namespace sun { namespace star { namespace uno { template <typen
 enum class SotClipboardFormatId : sal_uInt32;
 
 class BaseStorageStream;
+
 class SOT_DLLPUBLIC SotStorageStream : virtual public SotObject, public SvStream
 {
 friend class SotStorage;
@@ -41,22 +42,23 @@ friend class SotStorage;
 protected:
     virtual std::size_t GetData(void* pData, std::size_t nSize) override;
     virtual std::size_t PutData(const void* pData, std::size_t nSize) override;
-    virtual sal_uInt64  SeekPos(sal_uInt64 nPos) override;
-    virtual void        FlushData() override;
-                        virtual ~SotStorageStream() override;
+    virtual sal_uInt64 SeekPos(sal_uInt64 nPos) override;
+    virtual void FlushData() override;
+
+    virtual ~SotStorageStream() override;
 public:
-                        SotStorageStream( const OUString &,
-                                          StreamMode = StreamMode::STD_READWRITE );
-                        SotStorageStream( BaseStorageStream *pStm );
+    SotStorageStream(OUString const & rString,
+                     StreamMode = StreamMode::STD_READWRITE);
+    SotStorageStream(BaseStorageStream *pBaseStream);
 
-    virtual void        ResetError() override;
+    virtual void ResetError() override;
 
-    virtual void        SetSize( sal_uInt64 nNewSize ) override;
-    sal_uInt32          GetSize() const;
-    void                CopyTo( SotStorageStream * pDestStm );
-    bool                Commit();
-    bool                SetProperty( const OUString& rName, const css::uno::Any& rValue );
-    virtual sal_uInt64  TellEnd() override;
+    virtual void SetSize(sal_uInt64 nNewSize) override;
+    sal_uInt32 GetSize() const;
+    void CopyTo(SotStorageStream * pDestStm);
+    bool Commit();
+    bool SetProperty(OUString const & rName, css::uno::Any const & rValue);
+    virtual sal_uInt64 TellEnd() override;
 };
 
 class  BaseStorage;
@@ -64,96 +66,100 @@ class SOT_DLLPUBLIC SotStorage : virtual public SotObject
 {
 friend class SotStorageStream;
 
-    BaseStorage *   m_pOwnStg;   // target storage
-    SvStream *      m_pStorStm;  // only for SDSTORAGES
-    ErrCode         m_nError;
-    OUString        m_aName;     // name of the storage
-    bool            m_bIsRoot;   // e.g.: File Storage
-    bool            m_bDelStm;
-    OString         m_aKey;      // aKey.Len != 0  -> encryption
-    sal_Int32       m_nVersion;
+    BaseStorage* m_pOwnStg; // target storage
+    SvStream* m_pStorStm; // only for SDSTORAGES
+    ErrCode m_nError;
+    OUString m_aName;// name of the storage
+    bool m_bIsRoot; // e.g.: File Storage
+    bool m_bDelStm;
+    OString m_aKey; // aKey.Len != 0  -> encryption
+    sal_Int32 m_nVersion;
 
 protected:
-                        virtual ~SotStorage() override;
-   void                 CreateStorage( bool bUCBStorage, StreamMode );
+    virtual ~SotStorage() override;
+    void CreateStorage(bool bUCBStorage, StreamMode);
 public:
-                        SotStorage( const OUString &,
-                                    StreamMode = StreamMode::STD_READWRITE );
-                        SotStorage( bool bUCBStorage, const OUString &,
-                                    StreamMode = StreamMode::STD_READWRITE );
-                        SotStorage( BaseStorage * );
-                        SotStorage( SvStream & rStm );
-                        SotStorage( bool bUCBStorage, SvStream & rStm );
-                        SotStorage( SvStream * pStm, bool bDelete );
+    SotStorage(OUString const & rString, StreamMode eMode = StreamMode::STD_READWRITE);
+    SotStorage(bool bUCBStorage, const OUString & rString,
+               StreamMode = StreamMode::STD_READWRITE);
+    SotStorage(BaseStorage * pStorage);
+    SotStorage(SvStream & rStream);
+    SotStorage(bool bUCBStorage, SvStream & rStream);
+    SotStorage(SvStream * rStream, bool bDelete);
 
     std::unique_ptr<SvMemoryStream> CreateMemoryStream();
 
-    static bool         IsStorageFile( const OUString & rFileName );
-    static bool         IsStorageFile( SvStream* pStream );
+    static bool IsStorageFile(OUString const & rFileName);
+    static bool IsStorageFile(SvStream* pStream);
 
-    const OUString&     GetName() const;
+    const OUString& GetName() const;
 
-    bool                Validate();
+    bool Validate();
 
-    const OString&      GetKey() const { return m_aKey;}
+    const OString& GetKey() const { return m_aKey;}
 
-    void                SetVersion( sal_Int32 nVers )
-                        {
-                            m_nVersion = nVers;
-                        }
-    sal_Int32           GetVersion() const
-                        {
-                            return m_nVersion;
-                        }
+    void SetVersion(sal_Int32 nVersion)
+    {
+        m_nVersion = nVersion;
+    }
+    sal_Int32 GetVersion() const
+    {
+        return m_nVersion;
+    }
 
-    ErrCode             GetError() const { return m_nError.IgnoreWarning(); }
-    void                SetError( ErrCode nErrorCode )
-                        {
-                            if( m_nError == ERRCODE_NONE )
-                                m_nError = nErrorCode;
-                        }
+    ErrCode GetError() const
+    {
+        return m_nError.IgnoreWarning();
+    }
+    void SetError(ErrCode nErrorCode)
+    {
+        if (m_nError == ERRCODE_NONE)
+            m_nError = nErrorCode;
+    }
 
-    void                SignAsRoot( bool b ) { m_bIsRoot = b; }
+    void SignAsRoot(bool bRoot) { m_bIsRoot = bRoot; }
 
                         // own data sector
-    void                SetClass( const SvGlobalName & rClass,
-                                  SotClipboardFormatId bOriginalClipFormat,
-                                  const OUString & rUserTypeName );
-    SvGlobalName        GetClassName(); // type of data in the storage
+    void SetClass(const SvGlobalName & rClass,
+                  SotClipboardFormatId bOriginalClipFormat,
+                  const OUString & rUserTypeName);
+
+    SvGlobalName GetClassName(); // type of data in the storage
     SotClipboardFormatId GetFormat();
-    OUString            GetUserName();
+    OUString GetUserName();
 
-                        // list of all elements
-    void                FillInfoList( SvStorageInfoList * ) const;
-    bool                CopyTo( SotStorage * pDestStg );
-    bool                Commit();
+    // list of all elements
+    void FillInfoList(SvStorageInfoList *) const;
+    bool CopyTo(SotStorage * pDestStg);
+    bool Commit();
 
-                        // create stream with connection to Storage,
-                        // more or less a Parent-Child relationship
-    SotStorageStream *  OpenSotStream( const OUString & rEleName,
-                                       StreamMode = StreamMode::STD_READWRITE );
-    SotStorage *        OpenSotStorage( const OUString & rEleName,
-                                        StreamMode = StreamMode::STD_READWRITE,
-                                        bool transacted = true );
-                        // query whether Storage or Stream
-    bool                IsStream( const OUString & rEleName ) const;
-    bool                IsStorage( const OUString & rEleName ) const;
-    bool                IsContained( const OUString & rEleName ) const;
-                        // remove element
-    bool                Remove( const OUString & rEleName );
-    bool                CopyTo( const OUString & rEleName, SotStorage * pDest,
-                                const OUString & rNewName );
+    // create stream with connection to Storage,
+    // more or less a Parent-Child relationship
+    SotStorageStream*  OpenSotStream(const OUString & rEleName,
+                                     StreamMode = StreamMode::STD_READWRITE);
+    SotStorage* OpenSotStorage(const OUString & rEleName,
+                               StreamMode = StreamMode::STD_READWRITE,
+                               bool transacted = true);
 
-    bool                IsOLEStorage() const;
-    static bool         IsOLEStorage( const OUString & rFileName );
-    static bool         IsOLEStorage( SvStream* pStream );
+    // query whether Storage or Stream
+    bool IsStream( const OUString & rEleName ) const;
+    bool IsStorage( const OUString & rEleName ) const;
+    bool IsContained( const OUString & rEleName ) const;
+    // remove element
+    bool Remove(const OUString & rEleName);
+    bool CopyTo(const OUString & rEleName, SotStorage* pDest,
+                const OUString & rNewName);
 
-    static SotStorage*  OpenOLEStorage( const css::uno::Reference < css::embed::XStorage >& xStorage,
-                                        const OUString& rEleName, StreamMode = StreamMode::STD_READWRITE );
-    static SotClipboardFormatId  GetFormatID( const css::uno::Reference < css::embed::XStorage >& xStorage );
-    static sal_Int32    GetVersion( const css::uno::Reference < css::embed::XStorage >& xStorage );
+    bool IsOLEStorage() const;
+    static bool IsOLEStorage(const OUString & rFileName);
+    static bool IsOLEStorage(SvStream* pStream);
+
+    static SotStorage* OpenOLEStorage(css::uno::Reference<css::embed::XStorage> const & xStorage,
+                                      OUString const & rEleName, StreamMode = StreamMode::STD_READWRITE);
+    static SotClipboardFormatId GetFormatID(css::uno::Reference<css::embed::XStorage> const & xStorage);
+    static sal_Int32 GetVersion(css::uno::Reference<css::embed::XStorage> const & xStorage);
 };
 
-#endif // _SVSTOR_HXX
+#endif // INCLUDED_SOT_STORAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
