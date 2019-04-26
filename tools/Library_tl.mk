@@ -73,6 +73,7 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/ref/ref \
     tools/source/stream/stream \
     tools/source/stream/vcompat \
+    tools/source/stream/GenericTypePersister \
     tools/source/string/tenccvt \
     tools/source/zcodec/zcodec \
     tools/source/xml/XmlWriter \

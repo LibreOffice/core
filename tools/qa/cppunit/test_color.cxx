@@ -23,7 +23,6 @@ class Test: public CppUnit::TestFixture
 public:
     void testVariables();
     void test_asRGBColor();
-    void test_readAndWriteStream();
     void test_ApplyTintOrShade();
     void testGetColorError();
     void testInvert();
@@ -32,7 +31,6 @@ public:
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testVariables);
     CPPUNIT_TEST(test_asRGBColor);
-    CPPUNIT_TEST(test_readAndWriteStream);
     CPPUNIT_TEST(test_ApplyTintOrShade);
     CPPUNIT_TEST(testGetColorError);
     CPPUNIT_TEST(testInvert);
@@ -105,22 +103,6 @@ void Test::test_asRGBColor()
 
     aColor = COL_AUTO;
     CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aColor.AsRGBHexString());
-}
-
-void Test::test_readAndWriteStream()
-{
-    SvMemoryStream aStream;
-    Color aReadColor;
-
-    WriteColor(aStream, Color(0x12, 0x34, 0x56));
-
-    aStream.Seek(STREAM_SEEK_TO_BEGIN);
-
-    ReadColor(aStream, aReadColor);
-
-    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x12), aReadColor.GetRed());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x34), aReadColor.GetGreen());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x56), aReadColor.GetBlue());
 }
 
 OUString createTintShade(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB, OUString const & sReference, sal_Int16 nTintShade)

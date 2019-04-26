@@ -24,6 +24,7 @@
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <tools/helpers.hxx>
+#include <tools/GenericTypePersister.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/graph.hxx>
@@ -33,7 +34,6 @@
 #include <osl/diagnose.h>
 
 #include <svmconverter.hxx>
-
 #include <memory>
 
 // Inlines
@@ -1134,7 +1134,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 bool    bSet;
                 sal_Int32 nFollowingActionCount(0);
 
-                ReadColor( rIStm, aColor );
+                tools::GenericTypePersister aPersister(rIStm);
+                aPersister.readColor(aColor);
                 rIStm.ReadCharAsBool( bSet ).ReadInt32( nFollowingActionCount );
                 ImplSkipActions( rIStm, nFollowingActionCount );
                 rMtf.AddAction( new MetaTextLineColorAction( aColor, bSet ) );
