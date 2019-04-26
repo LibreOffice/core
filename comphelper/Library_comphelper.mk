@@ -124,7 +124,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/profilezone \
     comphelper/source/misc/proxyaggregation \
     comphelper/source/misc/random \
-    comphelper/source/misc/scopeguard \
     comphelper/source/misc/SelectionMultiplex \
     comphelper/source/misc/sequenceashashmap \
     comphelper/source/misc/sequence \

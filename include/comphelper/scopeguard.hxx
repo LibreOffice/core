@@ -21,34 +21,47 @@
 #define INCLUDED_COMPHELPER_SCOPEGUARD_HXX
 
 #include <comphelper/comphelperdllapi.h>
-
-#include <functional>
+#include <sal/log.hxx>
+#include <com/sun/star/uno/Exception.hpp>
 
 namespace comphelper {
 
 /** ScopeGuard to ease writing exception-safe code.
  */
-class COMPHELPER_DLLPUBLIC ScopeGuard
+template <class Func> class ScopeGuard
 {
 public:
     /** @param func function object to be executed in dtor
     */
-    template <typename func_type>
-    explicit ScopeGuard( func_type const & func ) : m_func( func ) {}
+    explicit ScopeGuard( Func && func ) : m_func( std::move(func) ) {}
 
-    ~ScopeGuard();
+    ~ScopeGuard()
+    {
+        if (m_bDismissed)
+            return;
+        try {
+            m_func();
+        }
+        catch (css::uno::Exception & exc) {
+            SAL_WARN("comphelper", "UNO exception occurred: " << exc);
+        }
+        catch (...) {
+            SAL_WARN("comphelper", "unknown exception occurred!");
+        }
+    }
 
     /** Dismisses the scope guard, i.e. the function won't
         be executed.
     */
-    void dismiss();
+    void dismiss() { m_bDismissed = true; }
 
 private:
     // noncopyable until we have good reasons...
     ScopeGuard(const ScopeGuard&) = delete;
     ScopeGuard& operator=(const ScopeGuard&) = delete;
 
-    ::std::function<void ()> m_func;
+    Func m_func;
+    bool m_bDismissed = false;
 };
 
 } // namespace comphelper
