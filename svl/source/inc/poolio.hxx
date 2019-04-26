@@ -64,8 +64,6 @@ public:
         maPoolItemSet.insert(pItem);
         if (pItem->IsSortable())
             maSortablePoolItems.insert(pItem);
-        else
-            SAL_WARN_IF(maPoolItemSet.size() > 1024, "svl.items", "make this item sortable to speed up managing this set");
     }
     o3tl::sorted_vector<SfxPoolItem*>::const_iterator find(SfxPoolItem* pItem) const { return maPoolItemSet.find(pItem); }
     const SfxPoolItem* findByLessThan(const SfxPoolItem* pItem) const
