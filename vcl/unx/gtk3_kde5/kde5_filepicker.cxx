@@ -45,13 +45,10 @@ KDE5FilePicker::KDE5FilePicker(QObject* parent)
     , allowRemoteUrls(false)
 {
     _dialog->setSupportedSchemes({
-        QStringLiteral("file"),
-        QStringLiteral("ftp"),
-        QStringLiteral("http"),
-        QStringLiteral("https"),
-        QStringLiteral("webdav"),
-        QStringLiteral("webdavs"),
+        QStringLiteral("file"), QStringLiteral("ftp"), QStringLiteral("http"),
+        QStringLiteral("https"), QStringLiteral("webdav"), QStringLiteral("webdavs"),
         QStringLiteral("smb"),
+        QStringLiteral(""), // this makes removable devices shown
     });
 
     setMultiSelectionMode(false);
