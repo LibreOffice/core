@@ -62,9 +62,9 @@ class AquaClipboard;
 @end
 
 class AquaClipboard : public ::cppu::BaseMutex,
-                      public ::cppu::WeakComponentImplHelper< css::datatransfer::clipboard::XSystemClipboard,
-                                                               css::datatransfer::clipboard::XFlushableClipboard,
-                                                               css::lang::XServiceInfo >
+                      public ::cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
+                                                             css::datatransfer::clipboard::XFlushableClipboard,
+                                                             css::lang::XServiceInfo>
 {
 public:
   /* Create a clipboard instance.
@@ -87,10 +87,10 @@ public:
 
   // XClipboard
 
-  virtual css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL getContents() override;
+  virtual css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getContents() override;
 
-  virtual void SAL_CALL setContents( const css::uno::Reference< css::datatransfer::XTransferable >& xTransferable,
-                                     const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner ) override;
+  virtual void SAL_CALL setContents(css::uno::Reference<css::datatransfer::XTransferable> const & xTransferable,
+                                    css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> const & xClipboardOwner) override;
 
   virtual OUString SAL_CALL getName() override;
 
@@ -100,20 +100,17 @@ public:
 
   // XClipboardNotifier
 
-  virtual void SAL_CALL addClipboardListener( const css::uno::Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
-
-  virtual void SAL_CALL removeClipboardListener( const css::uno::Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
+  virtual void SAL_CALL addClipboardListener(css::uno::Reference<css::datatransfer::clipboard::XClipboardListener> const & listener) override;
+  virtual void SAL_CALL removeClipboardListener(css::uno::Reference<css::datatransfer::clipboard::XClipboardListener> const & listener) override;
 
   // XFlushableClipboard
 
-  virtual void SAL_CALL flushClipboard( ) override;
+  virtual void SAL_CALL flushClipboard() override;
 
   // XServiceInfo
 
   virtual OUString SAL_CALL getImplementationName() override;
-
   virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-
   virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
   /* Get a reference to the used pastboard.
@@ -122,8 +119,8 @@ public:
 
   /* Notify the current clipboard owner that he is no longer the clipboard owner.
    */
-  void fireLostClipboardOwnershipEvent(css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner> const & oldOwner,
-                                       css::uno::Reference< css::datatransfer::XTransferable > const & oldContent);
+  void fireLostClipboardOwnershipEvent(css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> const & oldOwner,
+                                       css::uno::Reference<css::datatransfer::XTransferable> const & oldContent);
 
   void pasteboardChangedOwner();
 
@@ -139,10 +136,10 @@ private:
   void fireClipboardChangedEvent();
 
 private:
-  css::uno::Reference< css::datatransfer::XMimeContentTypeFactory > mrXMimeCntFactory;
-  ::std::list< css::uno::Reference< css::datatransfer::clipboard::XClipboardListener > > mClipboardListeners;
-  css::uno::Reference< css::datatransfer::XTransferable > mXClipboardContent;
-  css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner > mXClipboardOwner;
+  css::uno::Reference<css::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
+  std::list<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> mClipboardListeners;
+  css::uno::Reference<css::datatransfer::XTransferable> mXClipboardContent;
+  css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> mXClipboardOwner;
   DataFlavorMapperPtr_t mpDataFlavorMapper;
   bool mIsSystemPasteboard;
   NSPasteboard* mPasteboard;
