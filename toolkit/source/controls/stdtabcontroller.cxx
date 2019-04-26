@@ -20,6 +20,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/XVclContainerPeer.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <toolkit/controls/stdtabcontroller.hxx>
 #include <toolkit/controls/stdtabcontrollermodel.hxx>
@@ -395,7 +396,9 @@ css::uno::Sequence<OUString> StdTabController::getSupportedServiceNames()
 Reference< XControl >  StdTabController::FindControl( Sequence< Reference< XControl > >& rCtrls,
  const Reference< XControlModel > & rxCtrlModel )
 {
-    DBG_ASSERT( rxCtrlModel.is(), "ImplFindControl - which one ?!" );
+    if (!rxCtrlModel.is())
+        throw lang::IllegalArgumentException("No valid XControlModel",
+                                             uno::Reference<uno::XInterface>(), 0);
 
     const Reference< XControl > * pCtrls = rCtrls.getConstArray();
     sal_Int32 nCtrls = rCtrls.getLength();
