@@ -18,6 +18,7 @@
  */
 
 #include <tools/solar.h>
+#include <config_features.h>
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -347,6 +348,9 @@ SotAction_Impl const aEXCHG_DEST_DOC_GRAPHOBJ_Def[] =
 {
     { SotClipboardFormatId::GDIMETAFILE, EXCHG_IN_ACTION_COPY },
     { SotClipboardFormatId::DRAWING, EXCHG_IN_ACTION_COPY },
+#if HAVE_FEATURE_PDFIUM
+    { SotClipboardFormatId::PDF, EXCHG_IN_ACTION_COPY },
+#endif
     { SotClipboardFormatId::PNG, EXCHG_IN_ACTION_COPY },
     { SotClipboardFormatId::JPEG, EXCHG_IN_ACTION_COPY },
     { SotClipboardFormatId::BITMAP, EXCHG_IN_ACTION_COPY },
@@ -367,6 +371,9 @@ SotAction_Impl const aEXCHG_DEST_DOC_GRAPHOBJ_Move[] =
     { SotClipboardFormatId::DRAWING, EXCHG_OUT_ACTION_REPLACE_DRAWOBJ, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::KeepPosSize | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::SVXB, EXCHG_OUT_ACTION_REPLACE_SVXB, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::KeepPosSize | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::GDIMETAFILE, EXCHG_OUT_ACTION_REPLACE_GDIMETAFILE, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::KeepPosSize | SotExchangeActionFlags::InsertTargetUrl, 0 },
+#if HAVE_FEATURE_PDFIUM
+    { SotClipboardFormatId::PDF, EXCHG_OUT_ACTION_INSERT_GRAPH, SotExchangeActionFlags::InsertImageMap  | SotExchangeActionFlags::InsertTargetUrl, 0 },
+#endif
     { SotClipboardFormatId::PNG, EXCHG_OUT_ACTION_REPLACE_BITMAP, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::KeepPosSize | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::JPEG, EXCHG_OUT_ACTION_REPLACE_BITMAP, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::KeepPosSize | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::BITMAP, EXCHG_OUT_ACTION_REPLACE_BITMAP, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::KeepPosSize | SotExchangeActionFlags::InsertTargetUrl, 0 },
@@ -382,6 +389,9 @@ SotAction_Impl const aEXCHG_DEST_DOC_GRAPHOBJ_Copy[] =
     { SotClipboardFormatId::DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::SVXB, EXCHG_OUT_ACTION_INSERT_SVXB, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
+#if HAVE_FEATURE_PDFIUM
+    { SotClipboardFormatId::PDF, EXCHG_OUT_ACTION_INSERT_GRAPH, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
+#endif
     { SotClipboardFormatId::PNG, EXCHG_OUT_ACTION_INSERT_BITMAP, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::JPEG, EXCHG_OUT_ACTION_INSERT_BITMAP, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
@@ -839,6 +849,9 @@ SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_Def[] =
     { SotClipboardFormatId::DRAWING, EXCHG_IN_ACTION_COPY },
     { SotClipboardFormatId::SVXB, EXCHG_IN_ACTION_COPY },
     { SotClipboardFormatId::GDIMETAFILE, EXCHG_IN_ACTION_COPY },
+#if HAVE_FEATURE_PDFIUM
+    { SotClipboardFormatId::PDF, EXCHG_IN_ACTION_COPY },
+#endif
     { SotClipboardFormatId::PNG, EXCHG_IN_ACTION_COPY },
     { SotClipboardFormatId::JPEG, EXCHG_IN_ACTION_COPY },
     { SotClipboardFormatId::BITMAP, EXCHG_IN_ACTION_COPY },
@@ -869,6 +882,9 @@ SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_Move[] =
     { SotClipboardFormatId::RICHTEXT, EXCHG_IN_ACTION_COPY, SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::STRING, EXCHG_OUT_ACTION_INSERT_STRING },
     { SotClipboardFormatId::GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
+#if HAVE_FEATURE_PDFIUM
+    { SotClipboardFormatId::PDF, EXCHG_OUT_ACTION_INSERT_GRAPH, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
+#endif
     { SotClipboardFormatId::PNG, EXCHG_OUT_ACTION_INSERT_BITMAP, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::JPEG, EXCHG_OUT_ACTION_INSERT_BITMAP, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
@@ -893,6 +909,9 @@ SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_Copy[] =
     { SotClipboardFormatId::SD_OLE, EXCHG_OUT_ACTION_INSERT_OLE, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::EMBED_SOURCE, EXCHG_OUT_ACTION_INSERT_OLE, SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::EMBEDDED_OBJ, EXCHG_OUT_ACTION_INSERT_OLE, SotExchangeActionFlags::InsertTargetUrl, 0 },
+#if HAVE_FEATURE_PDFIUM
+    { SotClipboardFormatId::PDF, EXCHG_OUT_ACTION_INSERT_GRAPH, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
+#endif
     { SotClipboardFormatId::PNG, EXCHG_OUT_ACTION_INSERT_BITMAP, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::JPEG, EXCHG_OUT_ACTION_INSERT_BITMAP, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },

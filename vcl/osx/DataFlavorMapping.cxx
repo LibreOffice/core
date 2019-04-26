@@ -114,6 +114,7 @@ namespace
       { NSRTFPboardType, "text/rtf", "Rich Text Format", false },
       { NSTIFFPboardType, "image/png", "Portable Network Graphics", false },
       { NSHTMLPboardType, "text/html", "Plain Html", false },
+      { NSPDFPboardType, "application/pdf", "PDF File", false },
       { NSFilenamesPboardType, "application/x-openoffice-filelist;windows_formatname=\"FileList\"", "FileList", false },
       { PBTYPE_SESX, FLAVOR_SESX, "Star Embed Source (XML)", false },
       { PBTYPE_SLSDX, FLAVOR_SLSDX, "Star Link Source Descriptor (XML)", false },
