@@ -50,7 +50,7 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, test_comphelperGuards)
         comphelper::FlagRestorationGuard aGuard(bFlag, false);
         CPPUNIT_ASSERT(!bFlag);
     }
-    // comphelper::FlagGuard must reset flag to initial state on destruction
+    // comphelper::FlagRestorationGuard must reset flag to initial state on destruction
     CPPUNIT_ASSERT(bFlag);
 }
 
