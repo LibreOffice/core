@@ -181,6 +181,27 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119201, "tdf119201.docx")
     CPPUNIT_ASSERT_MESSAGE("Third shape should be printable.", getProperty<bool>(xShape, "Printable"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf123460, "tdf123460.docx")
+{
+    // check paragraph mark deletion at terminating moveFrom
+    CPPUNIT_ASSERT_EQUAL(true,getParagraph( 2 )->getString().startsWith("Nunc"));
+    CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 2 ), 1 )->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 1), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Delete"),getProperty<OUString>(getRun(getParagraph(2), 1), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true, getRun( getParagraph( 2 ), 2 )->getString().endsWith("tellus."));
+    CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 2 ), 3 )->getString());
+    bool bCaught = false;
+    try
+    {
+        getRun( getParagraph( 2 ), 4 );
+    }
+    catch (container::NoSuchElementException&)
+    {
+        bCaught = true;
+    }
+    CPPUNIT_ASSERT_EQUAL(true, bCaught);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
