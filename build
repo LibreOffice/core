@@ -1,0 +1,1444 @@
+#!/bin/bash
+
+
+
+# - Die verschiedene Fehlercodes
+#   - 0 = okay wird bei Parameter mit --help, -h ausgegeben oder wenn Version nicht mit Distribution zusammen passt
+#   - 1 = Bei fehlendes Verzeichnis
+#   - 2 = Datei, Programm nicht gefunden  
+#   - 3 = Fehler vom build
+#   - 4 = Interner Fehler mit dem Backend
+#   - 5 = Falscher Parameter
+
+# - Unter Windows wird nun auch nach der Produkt+Version gesucht
+# - Backend default für Walhalla gtk3-kde5 + kde5
+# - Wenn kein Build aber bauen des LHM-Pakets dann wird die LO-Version
+#   gepatcht und ergänzt durch "OnlyLhmPak"
+
+# - Bei bestimmten Parametern werden folgende Suffixe angehängt:
+#   -b = NoBuild   
+#   -c = NoConf    
+#   -P = NoPack    
+#   -p = NoLhmPak  
+#   -l = NoClean"  
+#   -t = TDF"      
+#   -s = Symbols   
+#   -u = DebUti    
+#   -d = Debug     
+#   -o = NoUnit
+
+# -TestM = Manueller Test (gebaut über die console)
+
+
+#Von Jenkins Sufixes
+# -TestL = Lokaler Test
+# -TestR = Remote Test
+# -TestB = Benutzer Test (eigener Branch)
+# -TestS = Simple Test (es wurde über Jenkins nur diese eine Projekt gebaut)
+
+
+# ========================================================================================================================================
+# Hier das Handling fürs Bauen der Packete
+# ========================================================================================================================================
+
+
+# starten und stoppen des timers
+StartStop()
+{
+   if [ "$1" == "Start" ]
+   then
+      start_time=$(date "+%s")
+      echo "Startzeit: $(date)" | tee -a ${BUILDLOG}
+   else
+      end_time=$(date "+%s")
+
+      time_diff=$(($end_time - $start_time))
+      minutes=$(($time_diff / 60))
+      hours=$(($minutes / 60))
+      minutes=$(($minutes - $hours * 60))
+      seconds=$((time_diff - $minutes * 60 - $hours * 3600))
+
+      echo "Zeit fuer $1:" $(date --date="${hours}:${minutes}:${seconds}" +'%H:%M:%S')  | tee -a ${BUILDLOG}
+   fi
+}
+
+
+
+# Gibt eine Fehlermeldung aus und beendet das Script mit Fehlercodes
+# Fehlercodes 0-5
+# 0 = okay wird bei Parameter mit --help, -h ausgegeben oder wenn Version nicht mit Distribution zusammen passt
+# 1 = Bei fehlendes Verzeichnis
+# 2 = Datei, Programm nicht gefunden  
+# 3 = Fehler vom build
+# 4 = Interner Fehler mit dem Backend
+# 5 = Falscher Parameter
+error()
+{
+  [ "$1" != "$USAGE" ] && echo "$1" >> ${BUILDLOG}
+
+  echo "$1" 1>&2
+  exit $2
+}
+
+# Anzeige welches script läuft
+ShowBegin() 
+{
+    echo "**********************************************************************************************************************************************************"  | tee -a ${BUILDLOG}
+    echo 
+    echo "*"  | tee -a ${BUILDLOG}
+    echo 
+    echo "*  STARTING $1"  | tee -a ${BUILDLOG}
+    echo 
+    echo "*"  | tee -a ${BUILDLOG}
+    echo 
+    echo "**********************************************************************************************************************************************************"  | tee -a ${BUILDLOG}
+}
+
+
+
+# Setzen der Variablen  
+SetVars() 
+{
+    # Diese Variable wird verwendet wenn nicht sofort abgebrochen werden kann
+    # Wird  in den Funktionen "TestLoInstall, TestDistri, Generate, TestRet" verwendet
+    Error=0
+
+    # Setzen der Werte für die Distribution 
+    declare -arg DISTRI_ARRAY=("wal" "wan" "win" )
+    let DaLen=${#DISTRI_ARRAY[@]}
+    declare -arg DISTRI_DESCR=("Walhalla" "Wanderer" "Windows")
+    declare -irg InxWal=0
+    declare -irg InxWan=1
+    declare -irg InxWin=2
+    local   hlp
+
+    # Distribution-Parameter
+    DISTRI_PARAM=""
+
+    
+    #MASTER_BLD_NUM wird von Jenkins-BuildAll gesetzt, hier steht auch gleich drin ob es Test ist
+    if [ -n "${MASTER_BLD_NUM}" ]
+    then
+       BUILD_NUM_SHOW=${MASTER_BLD_NUM}
+       hlp=${MASTER_BLD_NUM#-*}
+       BUILD_NUM_DIR=${hlp%-*}
+    else
+       #BUILD_NUMBER wird von Jenkins gesetzt, wenn nicht ist Buildnummer 9999
+       if [ -n "${BUILD_NUMBER}" ]
+       then
+          BUILD_NUM_SHOW="${BUILD_NUMBER}-TestS"
+          BUILD_NUM_DIR="${BUILD_NUMBER}"
+       else
+          BUILD_NUM_SHOW="9999-TestM"
+          BUILD_NUM_DIR="9999"
+       fi
+    fi
+
+    
+    
+    # log file
+    BUILDLOG="build.log"
+    
+    [ -f /etc/debian_chroot ] &&  debian_chroot=$(cat /etc/debian_chroot)
+    
+    # Hilfe Zusatz Info
+    DisHlpInf="wenn kein Distribution-Parameter angegeben wurde, wird ${debian_chroot:-\$debian_chroot} verwendet, 
+     ansonst hat diese Angabe den Vorrang, Ausnahme bei ${DISTRI_DESCR[$InxWan]} 32bit und ${DISTRI_DESCR[$InxWin]}"
+}
+
+
+
+# Anzeige in Abhängigkeit, für Hilfe, Input nur Info-Ausgabe
+ShowDistri() 
+{
+  case $1 in
+    "Hlp")
+     echo "Distribution sind:"
+     echo "   Parameter   |  Beschreibung "
+     echo "  -----------------------------"
+      ;;
+    "Inp")
+     echo "Wähle für welche Distribution 1 - $(($DaLen-$InxWin+1))"
+      ;;
+    "Out")
+      ;;
+  esac
+  
+  local hlps=""
+  local h1=$2
+  
+  for ((i=0; i<${DaLen}; ++i ));
+  do 
+     case $1 in
+       "Hlp")
+          hlps=" "
+          [ $i -eq $InxWan ] && hlps="(32bit | 64bit)"
+          [ $i -eq $InxWin ] && hlps="(Wird automatisch erkannt)"
+          printf "      %-9s|   %-10s %s\n" "${DISTRI_ARRAY[$i]}" "${DISTRI_DESCR[$i]}" "$hlps"
+        ;;
+       "Inp")
+         if [ $i -ne $InxWin ]
+         then
+            echo "$(($i+1)) = ${DISTRI_DESCR[$i]}"
+         fi
+        ;;
+       "Out")
+          if [  "$DISTRI_PARAM" == "${DISTRI_ARRAY[$i]}" ] 
+          then 
+             echo "***** Distribution      : ${DISTRI_DESCR[$i]} ${OSARC:+${OSARC}bit} ($DISTRI_PARAM)"  | tee -a ${BUILDLOG}
+          fi
+        ;;
+     esac
+  done
+}
+
+
+# Test ist $1 Programm vorhanden
+IsInstall()
+{
+    local wo=$(which "$1")
+    if [ -z  $wo ] 
+    then 
+       error "Nicht in der Chroot, oder falsch konfiguriert (es fehlt ${1}), halt" 2
+    fi
+}
+
+
+
+# Führe Diverse Test durch
+DiversTests()
+{
+
+    local let ret=0
+
+    # Testen ob Windows, wenn in der Env-Variable "SYSTEMDRIVE" ein Doppelpunkt vorkommt muss es Windows sein
+    if [ "${SYSTEMDRIVE:1:1}_" == ":_" ] 
+    then 
+       # Windows erkannt setzen der Variablen
+       DISTRI_PARAM="${DISTRI_ARRAY[$InxWin]}"
+       OSARC=""
+       let ret=1
+    else
+       # testen der OS-Bit-Breite
+       OSARC=`getconf LONG_BIT`
+       if [ "$OSARC" == "32" ] 
+       then 
+          # wenn 32 Bit kann nur wanderer sein
+          DISTRI_PARAM="${DISTRI_ARRAY[$InxWan]}"
+          let ret=0
+       fi  
+    fi
+
+
+    return $ret
+}
+
+
+# Test ist das Install-Verzeichnis vorhanden 
+TestLoInstall()
+{
+    local okay=0
+    InstDir="workdir/installation"
+    Anzahl=8
+
+    # Test wurde es compiliert
+    if [ -d  $InstDir ]
+    then
+       echo
+    else
+       echo "Install-Verzeichnis fehlt?, halt"  | tee -a ${BUILDLOG}
+       Error=1
+       return
+    fi
+
+    # suche den Produkt-Name
+    for i in LibreOffice LibreOfficeDev
+    do
+        # Produkt-Name bei debug ist dieser mit ..Dev
+        PRNA="$i"
+        
+        # LO install Pfad
+        LOINS="${InstDir}/${PRNA}"
+        
+        if [ -d $LOINS ]
+        then
+           okay=1
+           break
+        else
+           ((++Anzahl)) # bei Debug wird ein msi mehr gefunden
+        fi
+    done
+
+    if [ okay == 0 ]
+    then
+       echo "Produkt-Verzeichnis nicht gefunden, halt"  | tee -a ${BUILDLOG}
+       Error=1
+    fi
+}
+
+
+
+# Test welche Distribution wurde ausgewählt, ist es die richtige Eingabe und setzen 
+Convert()
+{
+  local InpOk=0
+
+  for ((i=0; i<${DaLen}; ++i ))
+  do 
+    [[ "$(($i+1))" == "$1" && $i -ne $InxWin ]] && InpOk=1
+  done
+
+
+  if [ $InpOk == 1 ]
+  then
+     echo
+     DISTRI_PARAM="${DISTRI_ARRAY[(($1-1))]}"
+  else
+     echo " <- falsches zeichen"
+     OkKey=0
+  fi
+}
+
+
+# Abfrage welche Distribution, bei falscher eingabe wiederholen der eingabe
+getinp()
+{
+  while [ $OkKey -eq 0 ]
+  do
+    OkKey=1
+    read -n 1 key
+    Convert $key
+  done
+}
+
+# Start der Abfrage mit Anzeige
+ReqDistri()
+{
+  ShowDistri "Inp"
+  
+  OkKey=0
+  getinp
+
+}
+
+
+#Test Distribution richtig gesetzt, wenn falsch dann Abfrage
+TestDistri()
+{
+  local DistriOk=0
+ 
+  local let len=${#DISTRI_DESCR[@]}
+  
+  # Test sind die Arrays gleich
+  if [ $len -ne $DaLen ]
+  then
+     echo "Fataler Fehler Arrays sind nicht gleich, halt"  | tee -a ${BUILDLOG}
+     Error=1
+  else
+     # Prüfen ob Parameter für die Distribution erkannt wird 
+     for i in "${DISTRI_ARRAY[@]}"
+     do
+        [ "$i" == "$DISTRI_PARAM" ] && DistriOk=1
+     done
+
+     # wenn nicht dann Abfrage
+     if [ $DistriOk == 0 ]
+     then
+        if [ -n "$DISTRI_PARAM" ]
+        then 
+           echo "Distribution Parameter nicht erkannt, es erfolgt eine Abfrage"
+           ReqDistri
+        else
+           echo "Kein Distribution Parameter angegeben, es wird \"${debian_chroot:0:3}\" verwendet" | tee -a ${BUILDLOG}
+           DISTRI_PARAM=${debian_chroot:0:3}
+           DISTRI_PARAM=${DISTRI_PARAM,,}
+           # darf nicht leer sein
+           DISTRI_PARAM=${DISTRI_PARAM:-"---"}
+           # erneuter Test ansonsten abfrage
+           TestDistri
+        fi
+     else
+        if [[ "_${DISTRI_PARAM}_" != "_${debian_chroot:0:3}_" && -n $debian_chroot ]]
+        then 
+           echo "!!!!!!!! Vorsicht ${DISTRI_PARAM} != ${debian_chroot:0:3} !!!!!!!" | tee -a ${BUILDLOG}
+        fi
+     fi
+   fi 
+}
+
+# Ausgabe vom ende und evtl. Abbruch
+TestRet() 
+{
+  ret=$?
+
+  echo "*****  END $1  *****"  | tee -a ${BUILDLOG}
+  
+  if [ $ret -ne 0 ]
+  then
+     Error=$ret
+  fi
+}
+
+# Ermitteln welcher branch wurde gabaut, war es ein Testbranch
+IsTestDir()
+{
+    # so würde man den Branchname bekommen
+    #local bn=`git describe --all --abbrev=0 --exact-match 2>/dev/null`
+    local all52=`git rev-parse refs/remotes/origin/distro/lhm/libreoffice-5-2+all^{commit}`
+    local all61=`git rev-parse refs/remotes/origin/distro/lhm/libreoffice-6-1+all^{commit}`
+    local head=`git rev-parse HEAD^{commit}`
+
+    TESTDIR="/tests"
+
+    # bei den All Branches ist es dann kein Test
+    if [[ ( $all52 == $head || $all61 == $head ) && $BUILD_NUM_SHOW == $BUILD_NUM_DIR && $PRNA == LibreOffice ]]
+    then
+       TESTDIR=
+    fi
+}
+
+
+
+# Hier werden die Pakete gebaut
+Generate()
+{
+    # Zu bauende LO Version
+    # (weitere Ausgabe aus Make-Target, die neben der Ausgabe des eigentlichen Kommandos kommt, herausfiltern)
+    LONUM=$(${MAKE} cmd cmd='echo ${LIBO_VERSION_MAJOR}.${LIBO_VERSION_MINOR}' | grep -E '^[0-9]+.[0-9]+$')
+
+    if [ "$LONUM" != "$CfgVersion" ]
+    then
+       echo "Die Versionsnummern von make (${LONUM}) ist ungleich von configure.ac (${CfgVersion})" | tee -a ${BUILDLOG}
+    fi
+
+    # ermitteln wo wir sind, für das Buidverzeichnis
+    # wenn nicht von jenkins aufgerufen wird, setze Buildverzeichnis im darüber liegendem Verzeichnis 
+    if [ $JenkinsIdx == 0 ]
+    then
+        cd ..
+        PACKDIR=`pwd`/build
+        cd $StartDir
+    else
+        IsTestDir
+        PACKDIR="${StartDir:0:$(($JenkinsIdx+7))}lo-builds/${LONUM/./-}${TESTDIR}/${BUILD_NUM_DIR}"
+    fi
+
+    # Ausgabe der Verzeichnisse
+    echo "***** LO-Version        : $LONUM"          | tee -a ${BUILDLOG}
+    echo "***** Build Nummer      : $BUILD_NUM_SHOW" | tee -a ${BUILDLOG}
+    echo "***** Build Ziel        : $PACKDIR"        | tee -a ${BUILDLOG}
+    echo "***** Start Dir         : $StartDir"       | tee -a ${BUILDLOG}
+    ShowDistri "Out"
+
+    LOVER="${LONUM}.*.?"
+    
+    # Bauen der Windows MSI
+    if [ "$DISTRI_PARAM" == "${DISTRI_ARRAY[$InxWin]}" ]
+    then
+        # Windows stuff kopie and umbenennen der msi
+        mkdir -p "${PACKDIR}"
+
+        echo 
+
+        cnt=0
+
+        ret=$(/bin/find ${InstDir} -name "${PRNA}_${LOVER}*.msi")
+        while IFS= read -r FILE
+        do
+            if [ -z "$FILE" ]
+            then
+               break
+            fi
+ 
+            BASE="${FILE%.msi}"
+            BASE="${BASE##*/}"
+            FILE_RENAMED="${BASE}_lhm${BUILD_NUM_SHOW}.msi"
+            echo "Kopiere Datei: $FILE nach ${PACKDIR}/${FILE_RENAMED}"  | tee -a ${BUILDLOG}
+            cp "$FILE" "${PACKDIR}/${FILE_RENAMED}"
+            if [ $? -eq 0 ]
+            then
+              ((++cnt))
+            fi
+        done <<EOF
+${ret}
+EOF
+
+        # Test wurden alle Dateien kopiert
+        if [ $cnt -ne $Anzahl ]
+        then
+            echo "Fehler es wurden nur $cnt von $Anzahl Dateien kopiert, halt"  | tee -a ${BUILDLOG}
+            Error=1
+        else
+            echo "Es wurden alle Dateien kopiert"  | tee -a ${BUILDLOG}
+        fi
+
+        
+    else
+        # Linux stuff umbauen der Packete für LHM
+        LOPAK="deb"
+        PAKDI="DEBS"
+        
+        if [ "_${OSARC}_" == "_64_" ]
+        then
+            LOARC="x86-64"
+        else
+            LOARC="x86"
+        fi
+        
+        echo "***** Architektur       : $LOARC"  | tee -a ${BUILDLOG}
+        echo
+        
+        if [ "$DISTRI_PARAM" == "${DISTRI_ARRAY[$InxWan]}" ]
+        then
+            DISTRI="${DISTRI_DESCR[$InxWan],}"
+        elif [ "$DISTRI_PARAM" == "${DISTRI_ARRAY[$InxWal]}" ]
+        then
+            DISTRI="${DISTRI_DESCR[$InxWal],}"
+        fi
+    
+        OUTFOLDER="${DISTRI}${OSARC}"
+        LOPAAR=${LOARC}_${LOPAK}
+
+        VERSION=$(date +"%y%m%d")
+        cd ..
+
+        mkdir -p $OUTFOLDER || false
+        cd $OUTFOLDER
+        of=`pwd`
+        echo "Temp-Folder  : $of"  | tee -a ${BUILDLOG}
+        echo
+
+        # Test existiert Datei
+        if [ ! -s $StartDir/${LOINS}/${LOPAK}/install/${PRNA}_${LOVER}_Linux_${LOPAAR}_download/${PRNA}_${LOVER}_Linux_${LOPAAR}.tar.gz ]
+        then
+            echo "Datei : $StartDir/${LOINS}/${LOPAK}/install/${PRNA}_${LOVER}_Linux_${LOPAAR}_download/${PRNA}_${LOVER}_Linux_${LOPAAR}.tar.gz"  | tee -a ${BUILDLOG}
+            echo " nicht gefunden, halt"  | tee -a ${BUILDLOG}
+            Error=1
+        else
+        
+            # Start des umbaues
+            cp $StartDir/${LOINS}/${LOPAK}/install/${PRNA}_${LOVER}_Linux_${LOPAAR}_download/${PRNA}_${LOVER}_Linux_${LOPAAR}.tar.gz .
+
+            # Die Sprachpakete
+            cp $StartDir/${LOINS}_languagepack/${LOPAK}/install/${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_en-US_download/${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_en-US.tar.gz .
+            cp $StartDir/${LOINS}_languagepack/${LOPAK}/install/${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_de_download/${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_de.tar.gz .
+            cp $StartDir/${LOINS}_languagepack/${LOPAK}/install/${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_fr_download/${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_fr.tar.gz .
+            cp $StartDir/${LOINS}_languagepack/${LOPAK}/install/${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_es_download/${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_es.tar.gz .
+            cp $StartDir/${LOINS}_languagepack/${LOPAK}/install/${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_pt_download/${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_pt.tar.gz .
+            cp $StartDir/${LOINS}_languagepack/${LOPAK}/install/${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_it_download/${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_it.tar.gz .
+
+            # Die Hilfepakete
+            cp $StartDir/${LOINS}_helppack/${LOPAK}/install/${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_fr_download/${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_fr.tar.gz .
+            cp $StartDir/${LOINS}_helppack/${LOPAK}/install/${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_it_download/${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_it.tar.gz .
+            cp $StartDir/${LOINS}_helppack/${LOPAK}/install/${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_de_download/${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_de.tar.gz .
+            cp $StartDir/${LOINS}_helppack/${LOPAK}/install/${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_es_download/${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_es.tar.gz .
+            cp $StartDir/${LOINS}_helppack/${LOPAK}/install/${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_en-US_download/${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_en-US.tar.gz .
+            cp $StartDir/${LOINS}_helppack/${LOPAK}/install/${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_pt_download/${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_pt.tar.gz .
+
+            # Das SDK
+            cp $StartDir/${LOINS}_SDK/${LOPAK}/install/${PRNA}_${LOVER}_Linux_${LOPAAR}_sdk_download/${PRNA}_${LOVER}_Linux_${LOPAAR}_sdk.tar.gz .
+        
+            tar -xvzf ${PRNA}_${LOVER}_Linux_${LOPAAR}.tar.gz
+            tar -xvzf ${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_de.tar.gz
+            tar -xvzf ${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_en-US.tar.gz
+            tar -xvzf ${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_es.tar.gz
+            tar -xvzf ${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_fr.tar.gz
+            tar -xvzf ${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_it.tar.gz
+            tar -xvzf ${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_pt.tar.gz
+            tar -xvzf ${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_fr.tar.gz
+            tar -xvzf ${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_it.tar.gz
+            tar -xvzf ${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_de.tar.gz
+            tar -xvzf ${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_es.tar.gz
+            tar -xvzf ${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_en-US.tar.gz
+            tar -xvzf ${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_pt.tar.gz
+            tar -xvzf ${PRNA}_${LOVER}_Linux_${LOPAAR}_sdk.tar.gz
+            rm ${PRNA}*.tar.gz
+
+            rm -rf release
+            mkdir release
+            mkdir release/sdk
+            mkdir release/main
+
+            mv ${PRNA}_${LOVER}_Linux_${LOPAAR}/${PAKDI}/*.${LOPAK} release/main
+            mv ${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_de/${PAKDI}/*.${LOPAK} release/main
+            mv ${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_en-US/${PAKDI}/*.${LOPAK} release/main
+            mv ${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_es/${PAKDI}/*.${LOPAK} release/main
+            mv ${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_fr/${PAKDI}/*.${LOPAK} release/main
+            mv ${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_it/${PAKDI}/*.${LOPAK} release/main
+            mv ${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_pt/${PAKDI}/*.${LOPAK} release/main
+            mv ${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_fr/${PAKDI}/*.${LOPAK} release/main
+            mv ${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_it/${PAKDI}/*.${LOPAK} release/main
+            mv ${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_de/${PAKDI}/*.${LOPAK} release/main
+            mv ${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_es/${PAKDI}/*.${LOPAK} release/main
+            mv ${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_pt/${PAKDI}/*.${LOPAK} release/main
+            mv ${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_en-US/${PAKDI}/*.${LOPAK} release/main
+            mv ${PRNA}_${LOVER}_Linux_${LOPAAR}_sdk/${PAKDI}/*.${LOPAK} release/sdk
+
+            rm -rf ${PRNA}_${LOVER}_Linux_${LOPAAR}
+            rm -rf ${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_de
+            rm -rf ${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_en-US
+            rm -rf ${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_es
+            rm -rf ${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_fr
+            rm -rf ${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_it
+            rm -rf ${PRNA}_${LOVER}_Linux_${LOPAAR}_langpack_pt
+            rm -rf ${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_de
+            rm -rf ${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_fr
+            rm -rf ${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_es
+            rm -rf ${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_it
+            rm -rf ${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_pt
+            rm -rf ${PRNA}_${LOVER}_Linux_${LOPAAR}_helppack_en-US
+            rm -rf ${PRNA}_${LOVER}_Linux_${LOPAAR}_sdk
+
+            rm -rf patched upload
+
+            # Add suffix 
+            VERSION_SUFFIX=''
+        
+            if [ "$DISTRI_PARAM" == ${DISTRI_ARRAY[$InxWal]} ]  
+            then
+                VERSION_SUFFIX='wal1'
+            fi
+        
+
+            ShowBegin "$StartDir/patch-office-${LOPAK}s.sh"
+            bash $StartDir/patch-office-${LOPAK}s.sh release patched "+lhm${BUILD_NUM_SHOW}${VERSION_SUFFIX}" ${LONUM}
+
+            TestRet "$StartDir/patch-office-${LOPAK}s.sh"
+            if [ $Error -eq 0 ]
+            then
+                ShowBegin "$StartDir/genchanges-lo.sh"
+                bash $StartDir/genchanges-lo.sh patched ${DISTRI} ${LONUM}
+
+                TestRet "$StartDir/genchanges-lo.sh"
+                if [ $Error -eq 0 ]
+                then
+                    FILENAME_TAR="LibO+lhm${BUILD_NUM_SHOW}${VERSION_SUFFIX}_Linux_${NODE_LABELS%% *}_${LOARC}_install-${LOPAK}_LHM${VERSION}.tar.gz"
+                    tar -cvzf "${FILENAME_TAR}" patched
+
+                    echo "$(ls -1 patched/*/*.${LOPAK} | wc -l) Pakete"  | tee -a ${BUILDLOG}
+               
+                    BUILD_RESDIR="${PACKDIR}/$OUTFOLDER"
+                    echo "Kopiere Datei: ${FILENAME_TAR} nach ${BUILD_RESDIR}"  | tee -a ${BUILDLOG}
+                    mkdir -p "${BUILD_RESDIR}"
+                    mv "${FILENAME_TAR}" "${BUILD_RESDIR}/${FILENAME_TAR}" 
+                    cd ..
+                    rm -rf $OUTFOLDER
+                fi
+            fi
+        fi
+    fi
+}
+
+
+
+
+# ========================================================================================================================================
+# ========================================================================================================================================
+#
+#                   Hier startet das  Build-Script
+#
+# ========================================================================================================================================
+# ========================================================================================================================================
+
+
+# Entferne File(s) ohne abbruch des Scripts bei nicht vorhanden sein des Files, keine Ausgabe
+Remove()
+{
+  echo "Remove $1" | tee -a ${BUILDLOG}
+  set +e
+  rm -rf "$1" 2>/dev/null
+  set -e
+}
+
+
+# Wenn Variable gesetzt ist füge es der Liste hinzu
+AppendIfSet()
+{
+   if [ -n "${2}" ]
+   then
+      if [ $1 == "o" ]
+      then
+          OPTIONS+=("${2}")
+      else
+          OPTIONS_PLATFORM+=("${2}")
+      fi
+   fi
+}
+
+
+# setzen des Backend-Parameter
+SetBackState()
+{
+    # Varaible für die Anzeige
+    BACKEND="${BACKEND}$1 "
+    AppendIfSet p $1
+}
+
+# setzen der Backends in die OPTIONS_PLATFORM-Variable
+SetTestBackEnd()
+{
+    local bits=0
+
+    for ((cnt=0 ; $cnt < $CntBackEnds; ++cnt ))
+    do
+       bits=$(($backstate & 1 << $cnt))
+
+       [ $backstate == $DEF ] && let bits=-1 # default
+
+       if [ $1 == $InxWal ]
+       then
+           # setzen des Backend-Parameter
+          case $bits in
+               -1) SetBackState "--enable-kde5" # setze default für walhalla
+                   SetBackState "--enable-gtk3-kde5"
+                   break;;
+             $DEF) ;; # tue nichts
+            $KDE5) SetBackState "--enable-kde5";;
+            $GTKD) SetBackState "--enable-gtk3-kde5";;
+            $KDE4) SetBackState "--enable-kde4";;
+             $GTK) SetBackState "--enable-gtk";;
+            ? | *) error "Fataler Fehler in Backend-State, halt" 4;;
+          esac
+       else
+          case $bits in
+               -1) SetBackState "--enable-kde4" # setze default für wanderer
+                   break;;
+             $DEF) ;; # tue nichts
+            $KDE4) SetBackState "--enable-kde4";; # ist okay
+             $GTK) SetBackState "--enable-gtk";; # ist okay
+            ? | *) error "Fehler falsches Backend, halt" 4;
+            ;;
+          esac
+       fi
+    done
+}
+
+
+# Split String in Tokens 
+# in   String zum Splitten
+# in   String Trenner
+# out  String Tokens array
+GetTokens()
+{
+   declare -ag Tokens
+   local h1="${1} "
+   local rest
+   local l1
+   local l2
+   local cnt=0
+   while [ TRUE ]
+   do
+       # hole die gesamt länge vom token
+       l1="${#h1}"
+       # bekomme den rest des tokens 
+       rest="${h1#*$2}"
+       # hole die länge vom rest
+       l2="${#rest}"
+       # bekomme den tok ohne trenner
+       Tokens[$cnt]="${h1:0:((l1-l2-1))}"
+#       echo "Tokens[$cnt] = ${Tokens[$cnt]}"
+
+       # abrechen wenn
+       if [[ "$h1" == "$rest" || $l1 -eq 0 ]]
+       then
+          break
+       fi
+       # nachster Token
+       ((++cnt))
+       h1="$rest"
+   done
+
+#   echo "Länge der Tokens = ${#Tokens[@]}"
+}
+
+# Bekomme die Versionsnummer aus der configure.ac
+GetVersionConf()
+{
+   # Hole Version line
+   local line=`less configure.ac | grep -F "AC_INIT(["`
+   local ver
+   # Extrakt die Versionsnummern
+   GetTokens "$line" ","
+   # entferne [ ]
+   ver=${Tokens[1]#[}
+   ver=${ver%]}
+   # Extrakt die einzelnen Nummern
+   GetTokens "$ver" "."
+
+   CfgVersion=${Tokens[0]}.${Tokens[1]}
+}
+
+
+SetVarsTest()
+{
+    SetVars
+    # liefert '1', bei Ausfuehrung unter Windows...
+    DiversTests
+    # wenn Windows erkannt wurde, wird in diesem Fall diese Variable auf 1 gesetzt, null bei Linux 
+    windows=$?
+
+
+
+    # ================================
+    # Variablen zum Steuern des Builds
+    # =================================
+    # **************************************************************************************
+    # diese Variablen müssen gleich lauten wie die Sub-routinen
+    # 
+
+    # setze die Konfiguration (autogen.sh mit parameter)
+    configure=1
+
+    # führe ein clean aus (das install, workdir wird gelöscht)
+    clean=1
+
+    # soll ein build durch geführt werden
+    build=1
+
+    # soll die install-Packete gebaut werden
+    makePackage=1
+
+    #
+    # diese Variablen müssen gleich lauten wie die Sub-routinen
+    # **************************************************************************************
+
+
+    # const defines für das Backend
+    declare -irg DEF=0
+    declare -irg KDE5=1
+    declare -irg GTKD=2
+    declare -irg KDE4=4
+    declare -irg GTK=8
+    
+    declare -irg CntBackEnds=4
+
+    # define für das Backend
+    declare -ig backstate=$DEF
+
+
+    # durch diese Variable wird bestimmt was für ein Build (release, debug)
+    build_targ="--enable-release-build"
+    # durch diese Variable wird bestimmt ob mit symbols gebaut werden soll 
+    #  damit eine release mit symbolen gebaut wird muss oben das release 
+    #  auch gesetzt werden. Es kann auch sein das für Debug/DebugUtile
+    #  dieser mit gesetzt werden muss um zu debuggen, eigentlich sollte
+    #  das symbolen automatisch mit gesetzt werden
+    build_sym=""
+
+
+    # build wird genau mit den gleichen Parameter erzeugt wie in der Community
+    tdf=0
+
+    # Update der git-Submodule durchführen
+    GitUpd=1
+
+    # wird nur für windows benötigt ob 64 oder 32 bit
+    arch=1
+    # Variable für die Übergabe an das autogen.sh, nur für Windows nur für 64bit notwendig zu setzen
+    ENABLE64BIT=""
+
+    # Variable für die Übergabe an das autogen.sh, für das external-Tar-Verzeichnis
+    EXTERNAL_TAR="${HOME}/lo-external"
+
+    # Variable für die Übergabe an das autogen.sh, für das bauen der Install-Pakete
+    # welches Paket soll gebaut werden, vorbelegt für linux 
+    WITH_PACKAGE="--with-package-format=deb"
+
+    # Variable für die Ausgabe des Backends  
+    BACKEND=""
+
+    # Variable für make, unter Windows wird ein anderes make verwendet
+    export MAKE='make'
+    
+    # Schaltet die erweiterte UnitTest dazu
+    CheckUnit=""
+
+    # Variablen für die übergebene Parameter
+    #
+    # Damit wird festgelegt welche Parameter erlaubt sind
+    InpMask=""
+    
+    # Die übergebene Distribution
+    InpDistr=""
+
+    # Das übergebene Sart-Verzeichnis
+    InpDir=""
+
+    # Nummer der make Jobs, nur für windows
+    JOBS="12"
+    
+    # Hilfe in Abhängikeit der Plattform
+    if [ $windows == 1 ]
+    then
+        USAGE="USAGE for windows: $0 [OPTIONEN] [<srcpath>] 
+        -l Clean nicht durchführen
+        -a enable 32bit build (Standard 64bit)
+        -c Configure nicht aufrufen
+        -b Build nicht starten
+        -P Pakete nicht bauen, setze dann auch -p
+        -p LHM-Pakete nicht bauen
+        -s Release Build mit Symbolen (ohne -b)
+        -u Dgb-Util-Build (ohne -b)
+        -d debug-Build    (ohne -b)
+        -j <Nummer der make-Jobs> (Standard 12)
+        -m kein Update der git-Submodule durchführen
+        -n schaltet die erweiterte UnitTest dazu (check)
+        -o schaltet die UnitTest aus (build-nocheck)
+        
+        <srcpath> Pfad, in dem die Sourcen von LibreOffice liegen. Default ist das aktuelle Verzeichnis.
+        "
+        InpMask=":abcPpmnlsuj:dho"
+    else
+        hlpdis=$(ShowDistri "Hlp")
+    
+        USAGE="USAGE: $0 [OPTIONEN] [<srcpath>]
+        -l Clean nicht durchführen
+        -c Configure nicht aufrufen
+        -b Build nicht starten
+        -P Pakete nicht bauen, setze dann auch -p
+        -p LHM-Pakete nicht bauen
+        -i <Distribution>
+        -s Release Build mit Symbolen (ohne -b)
+        -u Dgb-Util-Build (ohne -b)
+        -d debug-Build    (ohne -b)
+        -5 Baue mit KDE5 (Nur für ${DISTRI_DESCR[$InxWal]} und Standard ist gtk3-kde5)
+        -3 Baue mit gtk3-kde5 (Nur für ${DISTRI_DESCR[$InxWal]})
+        -4 Baue mit KDE4 (Standard ist KDE4 bei ${DISTRI_DESCR[$InxWan]})
+        -g Baue mit GTK  (Standard bei ${DISTRI_DESCR[$InxWan]} und bei ${DISTRI_DESCR[$InxWal]} wie oben)
+        -m kein Update der git-Submodule durchführen
+        -n schaltet die erweiterte UnitTest dazu (check)
+        -t TDF-Build (modifizierte TDF-Parameter).
+        -o schaltet die UnitTest aus (build-nocheck)
+
+       ${hlpdis}
+        
+   ${DisHlpInf} 
+        
+        <srcpath> Pfad, in dem die Sourcen von LibreOffice liegen. Default ist das aktuelle Verzeichnis.
+        "
+        InpMask=":bcPpi:mn534gltsudho"
+    fi
+}
+
+# Wenn kein Build erfolgt aber nachträglich die LHM-Pakete gebaut werden,
+# dann werden an die Vorhandene Buildnummer noch "-TestVer" angehängt
+SetVersionMan()
+{
+    echo "Setze die Version nachträglich auf -TestVer"
+    if [ $windows == 1 ] 
+    then
+       FName="version.ini"
+    else
+       FName="versionrc"
+    fi
+
+    cnt=0
+    for dr in  workdir instdir
+    do
+        ret=$(find $dr/ -name "$FName")
+        while IFS= read -r FILE
+        do
+            if [ -z "$FILE" ]
+            then
+                break
+            fi
+            flna[$cnt]="$FILE"
+            #echo "-- $FILE --" 
+            ((++cnt))
+        done <<EOF
+${ret}
+EOF
+    done
+
+
+    let anz=${#flna[@]}
+
+    echo "$anz Dateien werden angepasst"
+
+    for ((i=0; i<${anz}; ++i ))
+    do
+#        echo ${i}. ${flna[$i]}
+
+        let j=0
+        declare -a lines
+        while IFS= read -r cmd 
+        do
+            lines+=("$cmd")
+        done < "${flna[$i]}"
+
+        let lanz=${#lines}
+#        echo "Lines = $lanz"
+        echo -n "" > ${flna[$i]}
+        for ((j=0; j<${lanz}; ++j ))
+        do
+            idx=`echo "${lines[$j]}" | awk -F- '{ print index($1, "BuildVersion=") }'`
+            if [ $idx -eq 0 ]
+            then
+#                echo "Line $j. ${lines[$j]}"
+                echo "${lines[$j]}" >> ${flna[$i]}
+            else
+#                echo "Line $j. ${lines[$j]}-Test "
+                echo "${lines[$j]}-OnlyLhmPak" >> ${flna[$i]}
+            fi
+        done
+
+        unset lines
+
+    done
+}
+
+
+SetInputs()
+{
+    if [ "$1" == "--help" ] 
+    then
+        error "$USAGE" 0
+    fi
+
+
+    # Auswertung der Options-Parameter
+    while getopts "$InpMask" opt
+        do case "$opt" in
+            a) arch=0;;
+            b) build=0
+               BUILD_NUM_SHOW="${BUILD_NUM_SHOW}-NoBuild"
+               ;;
+            c) configure=0
+               BUILD_NUM_SHOW="${BUILD_NUM_SHOW}-NoConf"
+               ;;
+            P) WITH_PACKAGE=""
+               BUILD_NUM_SHOW="${BUILD_NUM_SHOW}-NoPack"
+               makePackage=0
+               ;;
+            p) makePackage=0
+               BUILD_NUM_SHOW="${BUILD_NUM_SHOW}-NoLhmPak"
+               ;;
+            l) clean=0
+               BUILD_NUM_SHOW="${BUILD_NUM_SHOW}-NoClean"
+               ;;
+            i) InpDistr="${OPTARG}";;
+            m) GitUpd=0;;
+            n) CheckUnit="check";;
+            o) CheckUnit="build-nocheck"
+               BUILD_NUM_SHOW="${BUILD_NUM_SHOW}-NoUnit"
+               ;;
+            5) ((backstate|=$KDE5));;
+            3) ((backstate|=$GTKD));;
+            4) ((backstate|=$KDE4));;
+            g) ((backstate|=$GTK));;
+            j) JOBS="${OPTARG}";;
+            t) tdf=1
+               BUILD_NUM_SHOW="${BUILD_NUM_SHOW}-TDF"
+               ;;
+            s) build_sym="--enable-symbols"
+               BUILD_NUM_SHOW="${BUILD_NUM_SHOW}-Symbols"
+               ;;
+            u) build_targ="--enable-dbgutil"
+               BUILD_NUM_SHOW="${BUILD_NUM_SHOW}-DebUti"
+               ;;
+            d) build_targ="--enable-debug"
+               BUILD_NUM_SHOW="${BUILD_NUM_SHOW}-Debug"
+               ;;
+            h) error "$USAGE" 0;;
+            ?) echo "Falscher Parameter: $@"
+               error "$USAGE" 5
+               ;;
+        esac
+    done
+
+    # setze den Parameter-Pointer auf den nächsten Parameter nach den Optionen, das ist das Verzeichnis 
+    shift $((OPTIND-1))
+    InpDir="$1"
+    
+    if [[ $build == 0 && $makePackage == 1 ]]
+    then
+       SetVersionMan
+    fi
+}
+
+
+InitBuild()
+{
+    # ein anderes Zielverzeichnis (!!! ACHTUNG !!! wurde von mir nicht getestet)
+    # wenn nicht angegeben dann verwende Start-Verzeichnis
+    StartDir=${InpDir:-`pwd`}
+
+    # Test existiert Verzeichnis
+    cd $StartDir || error "Zielverzeichnis existiert nicht, halt" 1
+
+    # befinden wir uns im jenkins Verzeichnis
+    JenkinsIdx=`echo "${StartDir,,}" | awk -F- '{ print index($1, "jenkins") }'`
+    
+    # Test sind wir im richtigen Verzeichnis
+    if [[ -d .git && -f ./autogen.sh ]]
+    then
+       echo 
+    else
+       error "Falsches Verzeichnis?, halt" 1
+    fi
+
+
+    # Clean temp, as a lot of checks don't remove their temporary files
+    Remove "/tmp/*"
+    # Remove old Build Log File
+    Remove "${BUILDLOG}"
+
+    
+    # Hier werden Einstellungen gesetzt die für alle Linux-Platformen gleich sind, bei Windows wird der Distribution-Parameter nicht benötigt
+    if [ ${windows} == 0 ]
+    then
+        #Test sind wir in der chroot / module vorhanden
+        IsInstall "autoconf"
+        IsInstall "pkg-config"
+        IsInstall "aclocal"
+        # Test ist fakeroot vorhanden
+        IsInstall "fakeroot"
+        
+        # Variablen für die Übergabe an das autogen.sh für linux
+        OPTIONS_PLATFORM=(
+        --enable-epm
+        --enable-evolution2
+        --enable-odk
+        --enable-python=internal
+        --without-fonts
+        --with-epm=internal
+        )
+
+
+        # Testen des Distribution Parameter, könnte schon gesetzt sein von DiversTests (wan), wenn nicht, verwende den Übergebenen
+        # Der übergebene Parameter hat vorrang, es kann aber nicht bei Wanderer 32bit überschrieben werden, und auch nicht Windows
+        DISTRI_PARAM=${DISTRI_PARAM:-"$InpDistr"}
+        if [[ $InpDistr != "" && $InpDistr != $DISTRI_PARAM ]]
+        then
+           echo "Der angebene Distribution Parameter $InpDistr wird ignoriert" | tee -a ${BUILDLOG}
+        fi
+            
+        # wenn 32 bit erkannt wurde, kann es nur wanderer sein, dann ist kein Distribution-Parameter notwendig  
+        if [ "_${DISTRI_PARAM}_" != "_${DISTRI_ARRAY[$InxWan]}_" ] 
+        then
+            # Testen ob Distribution-Parameter korrekt, oder vorhanden, ansonsten wir $debian_chroot verwendet
+            TestDistri
+        fi 
+    fi
+
+
+    # setze Build log in Abhängikeit von der Distribution
+    #BUILDLOG="${BUILDLOG%}_${DISTRI_PARAM}.log"
+    # Remove old Build Log File
+    #Remove "${BUILDLOG}"
+
+    # Versionsnummer von LibreOffice holen
+    GetVersionConf
+
+
+    # Test stimmen Backend Parameter mit der Distribution zusammen
+    # Hier werden auch die "Defaults" für die verschiedenen Plattformen festgelegt
+    case "$DISTRI_PARAM" in
+    ${DISTRI_ARRAY[$InxWin]})  # setze windows
+        # es sollte windows sein
+        [ ${windows} == 0 ] && error "Hier ist keine Windows Umgebung, halt" 2
+        
+        # windows make setzen
+        export MAKE='/opt/lo/bin/make'
+        #  Paket ist msi für windows, nur setzen wenn nicht Parameter -P
+        WITH_PACKAGE=${WITH_PACKAGE:+"--with-package-format=msi"}
+
+        # in Abhängikeit von 32bit setzen von Java, Pfade und Bau unter Win7 setzen, bei 64bit Java, Pfade und Bau unter Win10 
+        if [ $arch = 1 ]
+        then
+            # hier 64 bit
+            JDK_HOME='/cygdrive/c/Program Files/Java/jdk1.8.0_171'
+            JENKINS_BASE='/srv/sources'
+            ANT_HOME="${JENKINS_BASE}/Java/apache-ant-1.9.5"
+            ENABLE64BIT="--enable-64-bit"
+            OSARC="64"
+        else
+            # hier 32 bit (Windows 7)
+            #JDK_HOME='/cygdrive/c/Program Files (x86)/Java/jdk1.7.0_67'
+            #JENKINS_BASE='/srv/Jenkins'
+            #ANT_HOME="${JENKINS_BASE}/Java/apache-ant-1.9.4"
+
+            # hier windows 10
+            JDK_HOME='/cygdrive/c/Program Files (x86)/Java/jdk1.8.0_171'
+            JENKINS_BASE='/srv/sources'
+            ANT_HOME="${JENKINS_BASE}/Java/apache-ant-1.9.5"
+            OSARC="32"
+        fi
+
+        # für beide gleich
+        echo "Baue Lo-${DISTRI_DESCR[$InxWin]}" | tee -a ${BUILDLOG}
+        JUNIT_HOME="${JENKINS_BASE}/Java/junit-4.10.jar"
+        # windows hat es wo anders
+        EXTERNAL_TAR="${JENKINS_BASE}/ExternalTar"
+
+        # Variablen für die Übergabe an das autogen.sh für windows
+        OPTIONS_PLATFORM=(
+            --disable-ccache
+            --disable-werror
+            --with-ant-home="${ANT_HOME}"
+            --with-junit="${JUNIT_HOME}"
+	    --with-parallelism="${JOBS}"
+        )
+
+        AppendIfSet "p" "${ENABLE64BIT}"
+        
+        # testen des Pfades Ant
+        if [ ! -d "${ANT_HOME}" ]
+        then
+            error "Kein ANT in ${ANT_HOME} gefunden, halt." 2
+        fi
+        
+        # testen des Pfades JUnit
+        if [ ! -f "${JUNIT_HOME}" ]
+        then
+            error "Kein JUNIT in ${JUNIT_HOME} gefunden, halt." 2
+        fi
+        
+        # Ignore Unix executable bit in Windows, as everything is executable
+        # Prevents all the changed file attributes which break submodule update
+        git config core.filemode false
+        git submodule foreach git config core.filemode false
+        echo
+    ;;
+
+    ${DISTRI_ARRAY[$InxWal]}) # setze walhalla
+        # alle Backend Parameter sind erlaubt
+        # setze default für walhalla
+        echo "Baue Lo-Linux" | tee -a ${BUILDLOG}
+
+        SetTestBackEnd $InxWal  # in dieser Funktion wird der Default gesetzt
+        
+        # old java path java 8
+        JDK_HOME='/usr/lib/jvm/java-8-openjdk-amd64'
+        
+        # setze Pfad für Java hier auf Java 11 (default)
+        # JDK_HOME='/usr/lib/jvm/java-11-openjdk-amd64'
+        
+    ;;
+
+    ${DISTRI_ARRAY[$InxWan]}) # setze wanderer
+        if [ ${CfgVersion%.*} -gt 5 ]
+        then
+            error "Diese Plattform passt nicht zu dieser LO$CfgVersion - Version, stop" 0
+        fi
+
+        echo "Baue Lo-Linux" | tee -a ${BUILDLOG}
+
+        SetTestBackEnd $InxWan # in dieser Funktion wird der Default gesetzt
+        
+        # setze Pfad für Java hier auf Default (kein Pfad)
+        JDK_HOME=''
+
+    ;;
+    esac
+
+
+    if [ $GitUpd == 1 ]
+    then 
+        git submodule update
+    else
+        echo "Kein git submodule update" | tee -a ${BUILDLOG}
+    fi
+
+    # Wird das Script auf dem Jenkins gebaut (von TestDistri) 
+    if [ $JenkinsIdx != 0 ]
+    then
+        # dann erfolgt Ausgabe der Parameter
+        if [ $windows == 1 ] 
+        then
+            echo "***** Buildparameter    : $WIN10BLDPAR -i $DISTRI_PARAM" | tee -a ${BUILDLOG}
+        else
+            if [ "$DISTRI_PARAM" == "${DISTRI_ARRAY[$InxWan]}" ]
+            then
+                para=$WANBLDPAR
+            else
+                para=$WALBLDPAR
+            fi
+
+            echo "***** Buildparameter    : $para -i $DISTRI_PARAM" | tee -a ${BUILDLOG}
+        fi
+    fi
+
+
+
+    echo "***** Build Ziel        : ${build_targ#--enable-}"      | tee -a ${BUILDLOG}
+    echo "***** Build Nummer      : ${BUILD_NUM_SHOW}"            | tee -a ${BUILDLOG}
+    # Ausgabe des Backend aber nicht bei windows
+    [ $windows = 0 ] && echo "***** Backend           : $BACKEND" | tee -a ${BUILDLOG}
+    # Ausgabe ob ein Clean ausgeführt wurde
+    [ "_$CheckUnit" != "_" ] && echo "***** Weitere Unitest   : $CheckUnit" | tee -a ${BUILDLOG}
+    VoBu="***** Voll Build        : "
+    if [ $clean == 1 ]
+    then
+        VoBu+="JA"
+    else
+        VoBu+="Nein"
+    fi
+    echo "${VoBu}" | tee -a ${BUILDLOG}
+
+    ShowDistri "Out"
+
+    # Testen ist der JAV-Pfad richtig wenn gesetzt, und Ausgabe
+    if [[ -n "${JDK_HOME}" && ! -d "${JDK_HOME}" ]]
+    then
+        error "Kein JDK in ${JDK_HOME} gefunden." 2
+    else
+        echo "***** JDK               : ${JDK_HOME:-"default"}"  | tee -a ${BUILDLOG}
+    fi
+
+    echo 
+
+    # setzen des autogen.sh-Parameter
+    JDK_HOME=${JDK_HOME:+"--with-jdk-home=${JDK_HOME}"}
+
+    # Testen ist das external-tar Verzeichnis vorhanden
+    if [ ! -d "${EXTERNAL_TAR}" ]
+    then
+        error "Das External Tar Verzeichnis ${EXTERNAL_TAR} nicht gefunden." 1
+    fi
+}
+
+
+
+DoMake()
+{
+    if [ "_$1" == "_" ]
+    then
+        "$MAKE"
+    else
+        "$MAKE" "$1"
+    fi
+}
+
+
+# **************************************************************************************
+# diese Sub-routinen müssen gleich lauten wie die Variablen mit dem prefix do_
+#
+
+# --enable-pch makes impress unit tests fail
+# Setzen der autogen.sh Parameters
+do_configure()
+{
+  # hier nur tdf
+  if [ $tdf == 1 ]
+  then
+    OPTIONS=(
+      "${build_targ}"
+      --with-distro=LibreOfficeLinux
+      --with-package-format=deb
+      --with-lang=ALL
+      --disable-dependency-tracking
+      --with-vendor='it@M'
+      --without-doxygen
+      --with-external-tar="${EXTERNAL_TAR}"
+    )
+  else
+    OPTIONS=(
+      "${build_targ}"
+      --disable-online-update
+      --disable-extension-update
+      --disable-firebird-sdbc
+      --enable-extension-integration
+      --enable-ext-nlpsolver
+      --without-doxygen
+      --with-build-version="${BUILD_NUM_SHOW}"
+      --with-help
+      --with-java
+      --with-external-tar="${EXTERNAL_TAR}"
+      --with-lang='de fr es it pt'
+      --with-myspell-dicts
+      --with-vendor="it@M"
+      "${OPTIONS_PLATFORM[@]}"
+    )
+    AppendIfSet "o" "${WITH_PACKAGE}"
+  fi
+  
+  AppendIfSet "o" "${build_sym}"
+  AppendIfSet "o" "${JDK_HOME}"
+  
+  ./autogen.sh "${OPTIONS[@]}" 
+} # end do_configure
+
+
+do_clean() 
+{
+  DoMake "clean" 
+}
+
+
+do_build() 
+{
+  DoMake "$CheckUnit"
+}
+
+# Baue die Installations-Packete
+do_makePackage()
+{
+    TestLoInstall
+    if [ $Error -eq 0 ]
+    then
+        TestDistri
+        if [ $Error -eq 0 ]
+        then
+            Generate
+        fi
+    fi
+}
+
+# diese Sub-routinen müssen gleich lauten wie die Variablen mit prefix do_
+# **************************************************************************************
+
+# Ausgabe, testen, ausführen was getan werden muss
+TestState()
+{
+  para="${1%" "}"
+  para1="${1:0: -1}"
+  if [ ${!para} == 1 ]
+  then
+    ShowBegin "${para1^}ing..."
+    StartStop "Start"
+    "do_${para}"
+    ret=${PIPESTATUS[0]}
+    [ $ret -eq 0 ] &&  ret=$Error
+    StartStop "${para1^}ing"
+    if [ $ret -ne 0 ]
+    then
+      error "${para} fehlgeschlagen." 3
+    fi
+  else
+    echo "Skip ${para1^}ing..."  | tee -a ${BUILDLOG}
+  fi
+}
+
+
+# ======================================================================================
+# **************************************************************************************
+#
+#                                     main
+#
+# **************************************************************************************
+# ======================================================================================
+
+
+# Setzen aller Variablen, erste Tests
+SetVarsTest
+
+# Werte die Input Parameter aus
+SetInputs $@
+
+# Init und Tests für den Build
+InitBuild
+
+# Soll konfiguriert werden
+TestState "configure"
+
+# Soll ein clean ausgeführt werden
+TestState "clean "
+
+# Soll der build ausgeführt werden
+TestState "build "
+
+# Sollen die Install-Pakete erzeugt werden
+TestState "makePackage"
+
+
