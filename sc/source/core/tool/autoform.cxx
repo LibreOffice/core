@@ -146,7 +146,7 @@ ScAutoFormatDataField::ScAutoFormatDataField()
     aNumFormat()
 {
     // need to set default instances for base class AutoFormatBase here
-    // due to ressource defines (e.g. ATTR_FONT) which are not available
+    // due to resource defines (e.g. ATTR_FONT) which are not available
     // in svx and different in the different usages of derivations
     m_aFont = std::make_shared<SvxFontItem>(ATTR_FONT);
     m_aHeight = std::make_shared<SvxFontHeightItem>(240, 100, ATTR_FONT_HEIGHT);
