@@ -1144,6 +1144,9 @@ bool SvpSalGraphics::drawPolyLine(
             fMiterMinimumAngle,
             bPixelSnapHairline));
 
+    // if transformation has been applied, transform also extents (ranges)
+    // of damage so they can be correctly redrawn
+    aExtents.transform(rObjectToDevice);
     releaseCairoContext(cr, false, aExtents);
 
     return bRetval;
@@ -1491,6 +1494,9 @@ bool SvpSalGraphics::drawPolyPolygon(
         cairo_stroke_preserve(cr);
     }
 
+    // if transformation has been applied, transform also extents (ranges)
+    // of damage so they can be correctly redrawn
+    extents.transform(rObjectToDevice);
     releaseCairoContext(cr, true, extents);
 
     return true;
