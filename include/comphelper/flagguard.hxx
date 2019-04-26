@@ -28,46 +28,36 @@ namespace comphelper
 
     //= FlagRestorationGuard
 
-    class COMPHELPER_DLLPUBLIC FlagRestorationGuard : public ScopeGuard
+    // Get functor for cleanup to use in FlagRestorationGuard
+    auto GetFlagRestorationGuard(bool& i_flagRef)
+    {
+        return [&i_flagRef, resetVal = i_flagRef] { i_flagRef = resetVal; };
+    }
+
+    class FlagRestorationGuard : public ScopeGuard<decltype(GetFlagRestorationGuard(*(new bool)))>
     {
     public:
         FlagRestorationGuard( bool& i_flagRef, bool i_temporaryValue )
-            : ScopeGuard(RestoreFlag(i_flagRef))
+            : ScopeGuard(GetFlagRestorationGuard(i_flagRef))
         {
             i_flagRef = i_temporaryValue;
         }
-
-        ~FlagRestorationGuard();
-
-    private:
-        // note: can't store the originalValue in a FlagRestorationGuard member,
-        // because it will be used from base class dtor
-        struct RestoreFlag
-        {
-            bool & rFlag;
-            bool const originalValue;
-            RestoreFlag(bool & i_flagRef)
-                : rFlag(i_flagRef), originalValue(i_flagRef) {}
-            void operator()()
-            {
-                rFlag = originalValue;
-            }
-        };
     };
 
 
     //= FlagGuard
 
-    class COMPHELPER_DLLPUBLIC FlagGuard : public ScopeGuard
+    // Guarantees that the flag is true within the scope of the guard, and is set to false after
+    // its destruction, regardless of initial flag value
+    class FlagGuard : public FlagRestorationGuard
     {
     public:
-        explicit FlagGuard( bool& i_flagRef )
-            : ScopeGuard( [&i_flagRef] () { i_flagRef = false; } )
+        // Set flag to false before passing its reference to base class ctor, so that it would be
+        // reset back to false in base class dtor
+        explicit FlagGuard(bool& i_flagRef)
+            : FlagRestorationGuard((i_flagRef = false), true)
         {
-            i_flagRef = true;
         }
-
-        ~FlagGuard();
     };
 
 
