@@ -1686,6 +1686,20 @@ bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rF
         if( bRet )
             rGraphic = aBmpEx;
     }
+    else if(SotExchange::GetFormatDataFlavor(SotClipboardFormatId::PDF, aFlavor) &&
+            TransferableDataHelper::IsEqual(aFlavor, rFlavor))
+    {
+        Graphic aGraphic;
+        tools::SvRef<SotStorageStream> xStm;
+        if (GetSotStorageStream(rFlavor, xStm))
+        {
+            if (GraphicConverter::Import(*xStm, aGraphic) == ERRCODE_NONE)
+            {
+                rGraphic = aGraphic;
+                bRet = true;
+            }
+        }
+    }
     else if (SotExchange::GetFormatDataFlavor(SotClipboardFormatId::JPEG, aFlavor) && TransferableDataHelper::IsEqual(aFlavor, rFlavor))
     {
         BitmapEx aBitmapEx;
