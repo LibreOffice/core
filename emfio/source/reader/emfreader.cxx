@@ -406,9 +406,9 @@ namespace emfio
 
         mbEMFPlus = true;
         sal_uInt64 const pos = mpInputStream->Tell();
-        void *buffer = malloc( length );
-        PassEMFPlus( buffer, mpInputStream->ReadBytes(buffer, length) );
-        free( buffer );
+        auto buffer = std::make_unique<char[]>( length );
+        PassEMFPlus( buffer.get(), mpInputStream->ReadBytes(buffer.get(), length) );
+        buffer.reset();
         mpInputStream->Seek( pos );
 
         bHaveDC = false;
