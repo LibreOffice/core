@@ -28,46 +28,44 @@ namespace comphelper
 
     //= FlagRestorationGuard
 
-    class COMPHELPER_DLLPUBLIC FlagRestorationGuard : public ScopeGuard
+    // note: can't store the originalValue in a FlagRestorationGuard member,
+    // because it will be used from base class dtor
+    struct FlagRestorationGuard_Impl
+    {
+        bool & rFlag;
+        bool const originalValue;
+        FlagRestorationGuard_Impl(bool & i_flagRef)
+            : rFlag(i_flagRef), originalValue(i_flagRef) {}
+        void operator()()
+        {
+            rFlag = originalValue;
+        }
+    };
+
+    class FlagRestorationGuard : public ScopeGuard<FlagRestorationGuard_Impl>
     {
     public:
         FlagRestorationGuard( bool& i_flagRef, bool i_temporaryValue )
-            : ScopeGuard(RestoreFlag(i_flagRef))
+            : ScopeGuard(FlagRestorationGuard_Impl(i_flagRef))
         {
             i_flagRef = i_temporaryValue;
         }
-
-        ~FlagRestorationGuard();
-
-    private:
-        // note: can't store the originalValue in a FlagRestorationGuard member,
-        // because it will be used from base class dtor
-        struct RestoreFlag
-        {
-            bool & rFlag;
-            bool const originalValue;
-            RestoreFlag(bool & i_flagRef)
-                : rFlag(i_flagRef), originalValue(i_flagRef) {}
-            void operator()()
-            {
-                rFlag = originalValue;
-            }
-        };
     };
 
 
     //= FlagGuard
 
-    class COMPHELPER_DLLPUBLIC FlagGuard : public ScopeGuard
+    // Guarantees that the flag is true within the scope of the guard, and is set to false after
+    // its destruction, regardless of initial flag value
+    class FlagGuard : public FlagRestorationGuard
     {
     public:
-        explicit FlagGuard( bool& i_flagRef )
-            : ScopeGuard( [&i_flagRef] () { i_flagRef = false; } )
+        // Set flag to false before passing its reference to base class ctor, so that it would be
+        // reset back to false in base class dtor
+        explicit FlagGuard(bool& i_flagRef)
+            : FlagRestorationGuard((i_flagRef = false), true)
         {
-            i_flagRef = true;
         }
-
-        ~FlagGuard();
     };
 
 
