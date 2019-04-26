@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/svapp.hxx>
+
 #include "kde5_filepicker.hxx"
 
 #include <KWindowSystem>
