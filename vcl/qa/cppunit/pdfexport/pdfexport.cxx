@@ -17,6 +17,8 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
+#include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
+#include <com/sun/star/util/XRefreshable.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -29,6 +31,7 @@
 #include <tools/zcodec.hxx>
 #include <fpdf_edit.h>
 #include <fpdf_text.h>
+#include <fpdf_doc.h>
 #include <fpdfview.h>
 #include <vcl/graphicfilter.hxx>
 
@@ -129,6 +132,7 @@ public:
     void testTdf115262();
     void testTdf121962();
     void testTdf121615();
+    void testTocLink();
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
     CPPUNIT_TEST(testTdf106059);
@@ -164,6 +168,7 @@ public:
     CPPUNIT_TEST(testTdf115262);
     CPPUNIT_TEST(testTdf121962);
     CPPUNIT_TEST(testTdf121615);
+    CPPUNIT_TEST(testTocLink);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1735,6 +1740,48 @@ void PdfExportTest::testTdf121615()
     CPPUNIT_ASSERT_EQUAL( COL_WHITE, aBitmap.GetPixelColor( 0, 299 ));
     CPPUNIT_ASSERT_EQUAL( COL_WHITE, aBitmap.GetPixelColor( 199, 0 ));
     CPPUNIT_ASSERT_EQUAL( COL_BLACK, aBitmap.GetPixelColor( 199, 299 ));
+}
+
+void PdfExportTest::testTocLink()
+{
+    // Load the Writer document.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "toc-link.fodt";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    // Update the ToC.
+    uno::Reference<text::XDocumentIndexesSupplier> xDocumentIndexesSupplier(mxComponent,
+                                                                            uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDocumentIndexesSupplier.is());
+
+    uno::Reference<util::XRefreshable> xToc(
+        xDocumentIndexesSupplier->getDocumentIndexes()->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xToc.is());
+
+    xToc->refresh();
+
+    // Save as PDF.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    maMemory.WriteStream(aFile);
+    DocumentHolder pPdfDocument(
+        FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument.get());
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
+
+    // Ensure there is a link on the first page (in the ToC).
+    int nStartPos = 0;
+    FPDF_LINK pLinkAnnot = nullptr;
+    // Without the accompanying fix in place, this test would have failed, as FPDFLink_Enumerate()
+    // returned false, as the page contained no links.
+    CPPUNIT_ASSERT(FPDFLink_Enumerate(pPdfPage.get(), &nStartPos, &pLinkAnnot));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
