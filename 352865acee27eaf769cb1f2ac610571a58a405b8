@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_46ff2367",
+        "filename": "include/formula/tokenarray.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-04-26T09:26:14Z",
+      "side": 1,
+      "message": "Does it help if you preserve the original declaration of the class as-is? I.e.\n\n class FORMULA_DLLPUBLIC SAL_NO_VTABLE ExternalReferenceHelper;",
+      "revId": "352865acee27eaf769cb1f2ac610571a58a405b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
