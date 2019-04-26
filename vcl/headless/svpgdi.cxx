@@ -1347,20 +1347,8 @@ bool SvpSalGraphics::drawPolyLine(
     }
 
     // extract extents
-    if(nullptr != pExtents)
-    {
-        // This uses cairo_stroke_extents and combines with cairo_clip_extents, so
-        // referring to Cairo-documentation:
-        // "Computes a bounding box in user coordinates covering the area that would
-        //  be affected, (the "inked" area), by a cairo_stroke() operation given the
-        //  current path and stroke parameters."
-        // It *should* use the current set cairo_matrix_t.
+    if (pExtents)
         *pExtents = getClippedStrokeDamage(cr);
-
-        // If not - the following code needs to be used to correct that:
-        // if(!pExtents->isEmpty() && !bObjectToDeviceIsIdentity)
-        //     pExtents->transform(rObjectToDevice);
-    }
 
     // draw and consume
     cairo_stroke(cr);
