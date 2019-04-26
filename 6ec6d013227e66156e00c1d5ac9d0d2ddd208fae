@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_b94728bd",
+        "filename": "comphelper/qa/unit/test_guards.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-26T18:56:19Z",
+      "side": 1,
+      "message": "Typo: should have been FlagRestorationGuard",
+      "range": {
+        "startLine": 53,
+        "startChar": 19,
+        "endLine": 53,
+        "endChar": 28
+      },
+      "revId": "6ec6d013227e66156e00c1d5ac9d0d2ddd208fae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
