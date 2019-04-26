@@ -16,6 +16,24 @@
       "revId": "e96637adce8c1ce9a2edd92833b34ba10e8481a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_46b163e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-26T09:11:48Z",
+      "side": 1,
+      "message": "I didn\u0027t quantify it. Actually, that\u0027s a result of IRC conversation:\n\n[noelgrandin] wow a std::function call generates 6 stack frames\n[tml_] noelgrandin: no idea what that is, but it might be less in an optimised build, perhaps?\n[noelgrandin] tml_, this is an optimised build :-)\n[tml_] ah ok;)\n[mikekaganski] when /me looked into std::function implementation (looking at our variable guard class), I was amazed how much overhead that seemed to have. But I thought that it would be optomized away...\n[mikekaganski] ... or that it\u0027s only MS implementation having that problem\n[noelgrandin] apparently not :-(\n[mikekaganski] noelgrandin: and how lambdas in general behave with regards to performance?\n[noelgrandin] mikekaganski, no idea\n[tml_] aren\u0027t lambdas just unnamed normal functions?\n[sberg] classes with operator(); and lambdas aren\u0027t the performance issue, std::function (abstracting over all kinds of callable entities) is\n[mikekaganski] then is it possible to e.g. convert comphelper::ScopeGuard from using std::function to something like template\u003cclass Func\u003e ScipeGuard { ...\n[sberg] mikekaganski, if it can be turned into a template, that should always be beneficial performance-wise, yes",
+      "parentUuid": "3fa0c359_46988369",
+      "revId": "e96637adce8c1ce9a2edd92833b34ba10e8481a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
