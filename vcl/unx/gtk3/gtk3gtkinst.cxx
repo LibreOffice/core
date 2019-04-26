@@ -7505,6 +7505,8 @@ public:
 
     virtual ~GtkInstanceEntryTreeView() override
     {
+        if (m_nAutoCompleteIdleId)
+            g_source_remove(m_nAutoCompleteIdleId);
         GtkWidget* pWidget = m_pEntry->getWidget();
         g_signal_handler_disconnect(pWidget, m_nKeyPressSignalId);
         g_signal_handler_disconnect(pWidget, m_nEntryInsertTextSignalId);
