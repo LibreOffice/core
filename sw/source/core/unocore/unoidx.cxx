@@ -62,6 +62,7 @@
 #include <chpfld.hxx>
 #include <editsh.hxx>
 #include <SwStyleNameMapper.hxx>
+#include <strings.hrc>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -2898,6 +2899,15 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
                 throw lang::IllegalArgumentException();
             }
         }
+
+        if (rTOXBase.GetType() == TOX_CONTENT)
+        {
+            if (aToken.eTokenType == TOKEN_LINK_START && aToken.sCharStyleName.isEmpty())
+            {
+                aToken.sCharStyleName = SwResId(STR_POOLCHR_TOXJUMP);
+            }
+        }
+
         sPattern.append(aToken.GetString());
     }
     SwForm aForm(rTOXBase.GetTOXForm());
