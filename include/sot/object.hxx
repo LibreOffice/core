@@ -27,25 +27,25 @@
 
 class SOT_DLLPUBLIC SotObject : virtual public SvRefBase
 {
-    sal_uInt16  nOwnerLockCount;
-    bool        bInClose;         // TRUE, in DoClose
+    sal_uInt16 nOwnerLockCount;
+    bool bInClose; // TRUE, in DoClose
 
 protected:
-    virtual             ~SotObject() override;
-    virtual bool        Close();
+    virtual ~SotObject() override;
+    virtual bool Close();
 
 public:
-                        SotObject();
+    SotObject();
 
-    sal_uInt16          GetOwnerLockCount() const { return nOwnerLockCount; }
+    sal_uInt16 GetOwnerLockCount() const { return nOwnerLockCount; }
 
-    void                OwnerLock( bool bLock );
-    bool                DoClose();
-    bool                IsInClose() const { return bInClose; }
+    void OwnerLock(bool bLock);
+    bool DoClose();
+    bool IsInClose() const { return bInClose; }
 
 private:
-    SotObject & operator = ( const SotObject & ) = delete;
-    SotObject( const SotObject & ) = delete;
+    SotObject & operator= (const SotObject &) = delete;
+    SotObject(const SotObject &) = delete;
 };
 
 #endif

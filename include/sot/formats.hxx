@@ -179,10 +179,10 @@ enum class SotClipboardFormatId : sal_uInt32
 };
 
 /** Make it easier to iterate over format IDs */
-inline SotClipboardFormatId& operator++(SotClipboardFormatId& v)
+inline SotClipboardFormatId& operator++(SotClipboardFormatId& eFormat)
 {
-    v = static_cast<SotClipboardFormatId>(static_cast<sal_uInt32>(v) + 1);
-    return v;
+    eFormat = static_cast<SotClipboardFormatId>(static_cast<sal_uInt32>(eFormat) + 1);
+    return eFormat;
 }
 
 #define SOT_FORMAT_SYSTEM_START   SotClipboardFormatId::NONE

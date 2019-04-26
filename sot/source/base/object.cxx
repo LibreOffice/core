@@ -20,46 +20,40 @@
 #include <sot/object.hxx>
 
 SotObject::SotObject()
-    : nOwnerLockCount( 0 )
-    , bInClose    ( false )
+    : nOwnerLockCount(0)
+    , bInClose(false)
 {
 }
 
-SotObject::~SotObject()
-{
-}
+SotObject::~SotObject() = default;
 
-void SotObject::OwnerLock
-(
-    bool bLock      /* true, lock. false, unlock. */
-)
-/*  [Description]
-
- *  When the OwnerLock is decremented to zero, the DoClose method is called.
+/** When the OwnerLock is decremented to zero, the DoClose method is called.
  *  This happens independently of the lock or RefCount. If the OwnerLock
  *  counter != zero, no DoClose is called by <SotObject::FuzzyLock>.
+ *
+ *  bLock - true, lock. false, unlock.
  */
+void SotObject::OwnerLock(bool bLock)
 {
-    if( bLock )
+    if (bLock)
     {
         nOwnerLockCount++;
         AddFirstRef();
     }
-    else if ( nOwnerLockCount )
+    else if (nOwnerLockCount)
     {
-        if( 0 == --nOwnerLockCount )
+        if (0 == --nOwnerLockCount)
             DoClose();
         ReleaseRef();
     }
 }
 
-
 bool SotObject::DoClose()
 {
     bool bRet = false;
-    if( !bInClose )
+    if (!bInClose)
     {
-        tools::SvRef<SotObject> xHoldAlive( this );
+        tools::SvRef<SotObject> xHoldAlive(this);
         bInClose = true;
         bRet = Close();
         bInClose = false;
@@ -67,11 +61,9 @@ bool SotObject::DoClose()
     return bRet;
 }
 
-
 bool SotObject::Close()
 {
     return true;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,27 +24,24 @@
 #include <rtl/ustring.hxx>
 
 #include <vector>
+
 class SvStream;
 
 class SOT_DLLPUBLIC FileList
 {
-    std::vector< OUString >  aStrList;
+    std::vector<OUString> aStrList;
 
 private:
-
-    // delete list
     void clear() { aStrList.clear(); }
 
 public:
-
-    // import/export
+    // import / export
     SOT_DLLPUBLIC friend SvStream&  ReadFileList( SvStream& rIStm, FileList& rFileList );
 
     // fill in / interrogate list
-    void AppendFile( const OUString& rStr );
-    OUString GetFile( size_t i ) const;
+    void AppendFile(const OUString& rStr);
+    OUString GetFile(size_t nIndex) const;
     size_t Count() const;
-
 };
 
 #endif // INCLUDED_SOT_FILELIST_HXX
