@@ -47,6 +47,8 @@ public:
             XColorItem(const XColorItem& rItem);
 
     virtual bool            operator==(const SfxPoolItem& rItem) const override;
+    // NameOrIndex is sortable, but we are not
+    virtual bool            IsSortable() const override { return false; }
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
 
     const Color&    GetColorValue() const;
