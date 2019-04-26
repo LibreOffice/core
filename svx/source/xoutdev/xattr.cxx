@@ -114,6 +114,16 @@ bool NameOrIndex::operator==(const SfxPoolItem& rItem) const
             static_cast<const NameOrIndex&>(rItem).nPalIndex == nPalIndex );
 }
 
+bool NameOrIndex::operator<(const SfxPoolItem& rItem) const
+{
+    if (SfxStringItem::operator<(rItem))
+        return true;
+    auto rOther = static_cast<const NameOrIndex&>(rItem);
+    if (rOther.SfxStringItem::operator<(*this))
+        return false;
+    return nPalIndex < rOther.nPalIndex;
+}
+
 SfxPoolItem* NameOrIndex::Clone(SfxItemPool* /*pPool*/) const
 {
 

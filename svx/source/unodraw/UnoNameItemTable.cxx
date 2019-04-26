@@ -159,16 +159,15 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
     bool bFound = false;
 
     if (mpModelPool)
-        for (const SfxPoolItem* pItem : mpModelPool->GetItemSurrogates(mnWhich))
+    {
+        NameOrIndex aSample(mnWhich, aName);
+        const SfxPoolItem* pNameOrIndex = mpModelPool->FindItemSurrogate(mnWhich, aSample);
+        if (pNameOrIndex)
         {
-            NameOrIndex *pNameOrIndex = const_cast<NameOrIndex*>(static_cast<const NameOrIndex*>(pItem));
-            if (pNameOrIndex && aName == pNameOrIndex->GetName())
-            {
-                pNameOrIndex->PutValue( aElement, mnMemberId );
-                bFound = true;
-                break;
-            }
+            const_cast<SfxPoolItem*>(pNameOrIndex)->PutValue( aElement, mnMemberId );
+            bFound = true;
         }
+    }
 
     if( !bFound )
         throw container::NoSuchElementException();
@@ -187,19 +186,15 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
 
     OUString aName = SvxUnogetInternalNameForItem(mnWhich, aApiName);
 
-    uno::Any aAny;
-
     if (mpModelPool && !aName.isEmpty())
     {
-        for (const SfxPoolItem* pItem : mpModelPool->GetItemSurrogates(mnWhich))
+        NameOrIndex aSample(mnWhich, aName);
+        const SfxPoolItem* pFindItem = mpModelPool->FindItemSurrogate(mnWhich, aSample);
+        if (pFindItem)
         {
-            const NameOrIndex *pNameOrIndex = static_cast<const NameOrIndex*>(pItem);
-
-            if (isValid(pNameOrIndex) && aName == pNameOrIndex->GetName())
-            {
-                pNameOrIndex->QueryValue( aAny, mnMemberId );
-                return aAny;
-            }
+            uno::Any aAny;
+            pFindItem->QueryValue( aAny, mnMemberId );
+            return aAny;
         }
     }
 
@@ -237,15 +232,12 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
     if (aName.isEmpty())
         return false;
 
-    if (mpModelPool)
-        for (const SfxPoolItem* pItem : mpModelPool->GetItemSurrogates(mnWhich))
-        {
-            const NameOrIndex *pNameOrIndex = static_cast<const NameOrIndex*>(pItem);
-            if (isValid(pNameOrIndex) && aName == pNameOrIndex->GetName())
-                return true;
-        }
+    if (!mpModelPool)
+        return false;
 
-    return false;
+    NameOrIndex aSample(mnWhich, aName);
+    const SfxPoolItem* pFindItem = mpModelPool->FindItemSurrogate(mnWhich, aSample);
+    return pFindItem != nullptr;
 }
 
 sal_Bool SAL_CALL SvxUnoNameItemTable::hasElements(  )

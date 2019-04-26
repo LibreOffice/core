@@ -842,6 +842,21 @@ SfxItemPool::Item2Range SfxItemPool::GetItemSurrogates(sal_uInt16 nWhich) const
     return { rItemArr.begin(), rItemArr.end() };
 }
 
+/* This is only valid for SfxPoolItem that override IsSortable and operator< */
+const SfxPoolItem * SfxItemPool::FindItemSurrogate(sal_uInt16 nWhich, SfxPoolItem const & rSample) const
+{
+    if ( !IsInRange(nWhich) )
+    {
+        if ( pImpl->mpSecondary )
+            return pImpl->mpSecondary->FindItemSurrogate( nWhich, rSample );
+        assert(false && "unknown WhichId - cannot resolve surrogate");
+        return nullptr;;
+    }
+
+    SfxPoolItemArray_Impl& rItemArr = pImpl->maPoolItemArrays[GetIndex_Impl(nWhich)];
+    return rItemArr.findByLessThan(&rSample);
+}
+
 sal_uInt32 SfxItemPool::GetItemCount2(sal_uInt16 nWhich) const
 {
     if ( !IsInRange(nWhich) )
