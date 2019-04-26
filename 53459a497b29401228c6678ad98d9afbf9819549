@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_86944bea",
+        "filename": "include/comphelper/flagguard.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-26T11:24:01Z",
+      "side": 1,
+      "message": "whithin -\u003e within\n\n(although it actually is pronounced as if it was spelled \"whithin\", English..... go figure :-)",
+      "revId": "53459a497b29401228c6678ad98d9afbf9819549",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
