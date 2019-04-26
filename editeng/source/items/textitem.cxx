@@ -39,6 +39,7 @@
 #include <vcl/vclenum.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/mapunit.hxx>
+#include <tools/GenericTypePersister.hxx>
 
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -1668,9 +1669,8 @@ SvxColorItem::SvxColorItem( const Color& rCol, const sal_uInt16 nId ) :
 SvxColorItem::SvxColorItem( SvStream &rStrm, const sal_uInt16 nId ) :
     SfxPoolItem( nId )
 {
-    Color aColor;
-    ReadColor( rStrm, aColor );
-    mColor = aColor;
+    tools::GenericTypePersister aPersister(rStrm);
+    aPersister.readColor(mColor);
 }
 
 SvxColorItem::~SvxColorItem()
@@ -1711,11 +1711,12 @@ SfxPoolItem* SvxColorItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxColorItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 {
+    tools::GenericTypePersister aPersister(rStrm);
     if( VERSION_USEAUTOCOLOR == nItemVersion &&
         COL_AUTO == mColor )
-        WriteColor( rStrm, COL_BLACK );
+        aPersister.writeColor(COL_BLACK);
     else
-        WriteColor( rStrm, mColor );
+        aPersister.writeColor(mColor);
     return rStrm;
 }
 

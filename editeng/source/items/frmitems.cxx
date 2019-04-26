@@ -60,6 +60,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/mapunit.hxx>
+#include <tools/GenericTypePersister.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -111,7 +112,9 @@ namespace
     /// Store a border line to a stream.
     SvStream& StoreBorderLine(SvStream &stream, const SvxBorderLine &l, sal_uInt16 version)
     {
-        WriteColor( stream, l.GetColor() );
+        tools::GenericTypePersister aPersister(stream);
+        aPersister.writeColor(l.GetColor());
+
         stream.WriteUInt16( l.GetOutWidth() )
               .WriteUInt16( l.GetInWidth() )
               .WriteUInt16( l.GetDistance() );
@@ -129,7 +132,13 @@ namespace
         sal_uInt16 nOutline, nInline, nDistance;
         sal_uInt16 nStyle = css::table::BorderLineStyle::NONE;
         Color aColor;
-        ReadColor( stream, aColor ).ReadUInt16( nOutline ).ReadUInt16( nInline ).ReadUInt16( nDistance );
+
+        tools::GenericTypePersister aPersister(stream);
+        aPersister.readColor(aColor);
+
+        stream.ReadUInt16(nOutline);
+        stream.ReadUInt16(nInline);
+        stream.ReadUInt16(nDistance);
 
         if (version >= BORDER_LINE_WITH_STYLE_VERSION)
             stream.ReadUInt16( nStyle );
@@ -1279,8 +1288,10 @@ SvStream& SvxShadowItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) 
     rStrm.WriteSChar( static_cast<sal_uInt8>(GetLocation()) )
          .WriteUInt16( GetWidth() )
          .WriteBool( aShadowColor.GetTransparency() > 0 );
-    WriteColor( rStrm, GetColor() );
-    WriteColor( rStrm, GetColor() );
+
+    tools::GenericTypePersister aPersister(rStrm);
+    aPersister.writeColor(GetColor());
+    aPersister.writeColor(GetColor());
     rStrm.WriteSChar( aShadowColor.GetTransparency() > 0 ? 0 : 1 ); //BRUSH_NULL : BRUSH_SOLID
     return rStrm;
 }
@@ -1308,8 +1319,12 @@ SfxPoolItem* SvxShadowItem::Create( SvStream& rStrm, sal_uInt16 ) const
     sal_Int8 nStyle;
     rStrm.ReadSChar( cLoc ).ReadUInt16( _nWidth )
          .ReadCharAsBool( bTrans );
-    ReadColor( rStrm, aColor );
-    ReadColor( rStrm, aFillColor ).ReadSChar( nStyle );
+
+    tools::GenericTypePersister aPersister(rStrm);
+    aPersister.readColor(aColor);
+    aPersister.readColor(aFillColor);
+
+    rStrm.ReadSChar(nStyle);
     aColor.SetTransparency(bTrans ? 0xff : 0);
     return new SvxShadowItem( Which(), &aColor, _nWidth, static_cast<SvxShadowLocation>(cLoc) );
 }
@@ -3003,16 +3018,18 @@ bool SvxLineItem::GetPresentation
 
 SvStream& SvxLineItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
+    tools::GenericTypePersister aPersister(rStrm);
+
     if( pLine )
     {
-        WriteColor( rStrm, pLine->GetColor() );
+        aPersister.writeColor(pLine->GetColor());
         rStrm.WriteInt16( pLine->GetOutWidth() )
              .WriteInt16( pLine->GetInWidth() )
              .WriteInt16( pLine->GetDistance() );
     }
     else
     {
-        WriteColor( rStrm, Color() );
+        aPersister.writeColor(Color());
         rStrm.WriteInt16( 0 ).WriteInt16( 0 ).WriteInt16( 0 );
     }
     return rStrm;
@@ -3037,7 +3054,12 @@ SfxPoolItem* SvxLineItem::Create( SvStream& rStrm, sal_uInt16 ) const
     short        nOutline, nInline, nDistance;
     Color        aColor;
 
-    ReadColor( rStrm, aColor ).ReadInt16( nOutline ).ReadInt16( nInline ).ReadInt16( nDistance );
+    tools::GenericTypePersister aPersister(rStrm);
+    aPersister.readColor(aColor);
+
+    rStrm.ReadInt16(nOutline);
+    rStrm.ReadInt16(nInline);
+    rStrm.ReadInt16(nDistance);
     if( nOutline )
     {
         SvxBorderLine aLine( &aColor );
@@ -3128,8 +3150,10 @@ SvxBrushItem::SvxBrushItem(SvStream& rStream, sal_uInt16 nVersion, sal_uInt16 _n
     sal_Int8 nStyle;
 
     rStream.ReadCharAsBool( bTrans );
-    ReadColor( rStream, aTempColor );
-    ReadColor( rStream, aTempFillColor );
+    tools::GenericTypePersister aPersister(rStream);
+    aPersister.readColor(aTempColor);
+    aPersister.readColor(aTempFillColor);
+
     rStream.ReadSChar( nStyle );
 
     switch ( nStyle )
@@ -3580,9 +3604,10 @@ SfxPoolItem* SvxBrushItem::Create( SvStream& rStream, sal_uInt16 nVersion ) cons
 
 SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ ) const
 {
+    tools::GenericTypePersister aPersister(rStream);
     rStream.WriteBool( false );
-    WriteColor( rStream, aColor );
-    WriteColor( rStream, aColor );
+    aPersister.writeColor(aColor);
+    aPersister.writeColor(aColor);
     rStream.WriteSChar( aColor.GetTransparency() > 0 ? 0 : 1 ); //BRUSH_NULL : BRUSH_SOLID
 
     sal_uInt16 nDoLoad = 0;
