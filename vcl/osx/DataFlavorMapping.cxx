@@ -113,6 +113,7 @@ namespace
     {
       { NSPasteboardTypeString, "text/plain;charset=utf-16", "Unicode Text (UTF-16)", true },
       { NSPasteboardTypeRTF, "text/rtf", "Rich Text Format", false },
+      { NSPasteboardTypePDF, "application/pdf", "PDF File", false },
       { NSPasteboardTypeTIFF, "image/png", "Portable Network Graphics", false },
       { NSPasteboardTypeHTML, "text/html", "Plain Html", false },
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
