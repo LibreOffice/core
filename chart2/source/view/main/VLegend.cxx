@@ -991,6 +991,11 @@ void VLegend::createShapes(
                     pButton->createShapes(xModelPage);
                 }
             }
+            else
+            {
+                // set dummy legend size for empty legends, 0 would create rectangles of size RECT_EMPTY, which causes problems during size conversions
+                aLegendSize = { 1, 1 };
+            }
 
             Reference< drawing::XShape > xBorder =
                 pShapeFactory->createRectangle( xLegendContainer,
