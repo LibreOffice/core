@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_39831807",
+        "filename": "sc/source/ui/app/rfindlst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-26T16:24:06Z",
+      "side": 1,
+      "message": "On the default white sheet background there is almost no visible difference between COL_FUCHSIA and COL_MAGENTA, and not much difference between COL_AUTHOR9_DARK and COL_AUTHOR1_DARK, or COL_AUTHOR8_DARK and COL_CYAN; having COL_GRAY is quite similar to the default grid line colour. Also, with COL_AUTHOR... if those were changed for some reason we\u0027d have no control here on the actual values. It might be better to state actual values here (and choose different ones) and comment each what the colour is.",
+      "revId": "e3ca224ea7400474312b59f13c1d21e8a68ec319",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
