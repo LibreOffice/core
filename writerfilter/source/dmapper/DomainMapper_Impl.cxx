@@ -1690,6 +1690,11 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                 }
             }
 
+            // reset moveFrom data of non-terminating runs of the paragraph
+            if ( m_pParaMarkerRedlineMoveFrom.get( ) )
+            {
+                m_pParaMarkerRedlineMoveFrom.clear();
+            }
             CheckRedline( xTextRange );
             m_bParaChanged = true;
 
@@ -2063,6 +2068,8 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
                 sType = getPropertyName( PROP_INSERT );
                 break;
             case XML_moveFrom:
+                m_pParaMarkerRedlineMoveFrom = pRedline.get();
+                [[fallthrough]];
             case XML_del:
                 sType = getPropertyName( PROP_DELETE );
                 break;
@@ -2100,6 +2107,16 @@ void DomainMapper_Impl::CheckParaMarkerRedline( uno::Reference< text::XTextRange
             m_pParaMarkerRedline.clear();
             m_currentRedline.clear();
         }
+    }
+    else if ( m_pParaMarkerRedlineMoveFrom.get( ) )
+    {
+        // terminating moveFrom redline removes also the paragraph mark
+        m_pParaMarkerRedlineMoveFrom->m_nToken = XML_del;
+        CreateRedline( xRange, m_pParaMarkerRedlineMoveFrom );
+    }
+    if ( m_pParaMarkerRedlineMoveFrom.get( ) )
+    {
+        m_pParaMarkerRedlineMoveFrom.clear();
     }
 }
 
