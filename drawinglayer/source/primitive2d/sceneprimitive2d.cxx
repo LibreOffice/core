@@ -263,20 +263,23 @@ namespace drawinglayer
                     // only needed for dragging), reduce resolution extra
                     // to speed up dragging interactions
                     const double fArea(fViewSizeX * fViewSizeY);
-                    double fReducedVisualisationFactor(1.0 / (sqrt(fArea) * (1.0 / 170.0)));
+                    if (fArea != 0.0)
+                    {
+                        double fReducedVisualisationFactor(1.0 / (sqrt(fArea) * (1.0 / 170.0)));
 
-                    if(fReducedVisualisationFactor > 1.0)
-                    {
-                        fReducedVisualisationFactor = 1.0;
-                    }
-                    else if(fReducedVisualisationFactor < 0.20)
-                    {
-                        fReducedVisualisationFactor = 0.20;
-                    }
+                        if(fReducedVisualisationFactor > 1.0)
+                        {
+                            fReducedVisualisationFactor = 1.0;
+                        }
+                        else if(fReducedVisualisationFactor < 0.20)
+                        {
+                            fReducedVisualisationFactor = 0.20;
+                        }
 
-                    if(fReducedVisualisationFactor != 1.0)
-                    {
-                        fReduceFactor *= fReducedVisualisationFactor;
+                        if(fReducedVisualisationFactor != 1.0)
+                        {
+                            fReduceFactor *= fReducedVisualisationFactor;
+                        }
                     }
                 }
 
@@ -292,7 +295,10 @@ namespace drawinglayer
 
                     // bring to unit coordinates by applying inverse DiscreteRange
                     aObjToUnit.translate(-aDiscreteRange.getMinX(), -aDiscreteRange.getMinY());
-                    aObjToUnit.scale(1.0 / aDiscreteRange.getWidth(), 1.0 / aDiscreteRange.getHeight());
+                    if (aDiscreteRange.getWidth() != 0.0 && aDiscreteRange.getHeight() != 0.0)
+                    {
+                        aObjToUnit.scale(1.0 / aDiscreteRange.getWidth(), 1.0 / aDiscreteRange.getHeight());
+                    }
 
                     // calculate transformed user coordinate system
                     const basegfx::B2DPoint aStandardNull(0.0, 0.0);
