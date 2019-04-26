@@ -473,7 +473,8 @@ void DeInitVCL()
 
     pSVData->mpSettingsConfigItem.reset();
 
-    // empty and deactivate the SystemDependentDataManager
+    // prevent unnessesary painting during Scheduler shutdown
+    // as this processes all pending events in debug builds.
     ImplGetSystemDependentDataManager().flushAll();
 
     Scheduler::ImplDeInitScheduler();
