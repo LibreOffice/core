@@ -1768,18 +1768,23 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
         ScDocument& rDoc = pDocShell->GetDocument();
         if ( eFamily == SfxStyleFamily::Para )
         {
-            // update line height
-            ScopedVclPtrInstance< VirtualDevice > pVDev;
-            Point aLogic = pVDev->LogicToPixel(Point(1000,1000), MapMode(MapUnit::MapTwip));
-            double nPPTX = aLogic.X() / 1000.0;
-            double nPPTY = aLogic.Y() / 1000.0;
-            Fraction aZoom(1,1);
-            rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, aZoom, aZoom );
-
-            if (!rDoc.IsImportingXML())
+            // If we are loading, we can delay line height calculcation, because we are going to re-calc all of those
+            // after load.
+            if (pDocShell && !pDocShell->IsLoading())
             {
-                pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
-                pDocShell->SetDocumentModified();
+                // update line height
+                ScopedVclPtrInstance< VirtualDevice > pVDev;
+                Point aLogic = pVDev->LogicToPixel(Point(1000,1000), MapMode(MapUnit::MapTwip));
+                double nPPTX = aLogic.X() / 1000.0;
+                double nPPTY = aLogic.Y() / 1000.0;
+                Fraction aZoom(1,1);
+                rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, aZoom, aZoom );
+
+                if (!rDoc.IsImportingXML())
+                {
+                    pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
+                    pDocShell->SetDocumentModified();
+                }
             }
         }
         else
