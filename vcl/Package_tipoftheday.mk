@@ -11,6 +11,10 @@ $(eval $(call gb_Package_Package,tipoftheday_images,$(SRCDIR)/extras/source/tipo
 
 $(eval $(call gb_Package_add_files_with_dir,tipoftheday_images,$(LIBO_SHARE_FOLDER)/tipoftheday,\
 	tipoftheday.png \
+	tipoftheday_w.png \
+	tipoftheday_c.png \
+	tipoftheday_i.png \
+	tipoftheday_d.png \
 	tipoftheday_1.png \
 	tipoftheday_2.png \
 ))
