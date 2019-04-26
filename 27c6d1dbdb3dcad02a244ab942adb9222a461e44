@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_06a27b9b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-26T09:09:15Z",
+      "side": 1,
+      "message": "This has now been published as \u003chttps://bugs.java.com/bugdatabase/view_bug.do?bug_id\u003dJDK-8223014\u003e \"Calling java.lang.Class.newInstance from JNI Invocation API causes NPE\".",
+      "revId": "27c6d1dbdb3dcad02a244ab942adb9222a461e44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
