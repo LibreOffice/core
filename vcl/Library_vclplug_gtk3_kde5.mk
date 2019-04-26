@@ -59,7 +59,6 @@ $(eval $(call gb_Library_add_libs,vclplug_gtk3_kde5,\
 
 $(eval $(call gb_Library_use_libraries,vclplug_gtk3_kde5,\
     svl \
-    vclplug_gen \
     vcl \
     tl \
     utl \
