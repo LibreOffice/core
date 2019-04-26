@@ -81,11 +81,9 @@ bool StdTabController::ImplCreateComponentSequence(
         aSeq.realloc(nRealControls);
         rControls = aSeq;
     }
-#ifdef DBG_UTIL
-    DBG_ASSERT( rControls.getLength() <= rModels.getLength(), "StdTabController:ImplCreateComponentSequence: inconsistence!" );
-        // there may be less controls than models, but never more controls than models
-#endif
 
+    // there may be less controls than models, but never more controls than models
+    assert(rControls.getLength() <= rModels.getLength());
 
     const Reference< XControl > * pControls = rControls.getConstArray();
     sal_uInt32 nCtrls = rControls.getLength();
