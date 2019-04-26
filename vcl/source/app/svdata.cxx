@@ -107,15 +107,15 @@ namespace
     class SystemDependentDataBuffer : public basegfx::SystemDependentDataManager, protected cppu::BaseMutex
     {
     private:
-        std::unique_ptr<Timer>  maTimer;
-        EntryMap                maEntries;
+        std::unique_ptr<AutoTimer> maTimer;
+        EntryMap maEntries;
 
         DECL_LINK(implTimeoutHdl, Timer *, void);
 
     public:
         SystemDependentDataBuffer(const sal_Char* pDebugName)
         :   basegfx::SystemDependentDataManager(),
-            maTimer(std::make_unique<Timer>(pDebugName)),
+            maTimer(std::make_unique<AutoTimer>(pDebugName)),
             maEntries()
         {
             maTimer->SetTimeout(1000);
@@ -134,7 +134,7 @@ namespace
 
             if(aFound == maEntries.end())
             {
-                if(maEntries.empty() && maTimer)
+                if(maTimer && !maTimer->IsActive())
                 {
                     maTimer->Start();
                 }
@@ -151,11 +151,6 @@ namespace
             if(aFound != maEntries.end())
             {
                 maEntries.erase(aFound);
-
-                if(maEntries.empty() && maTimer)
-                {
-                    maTimer->Stop();
-                }
             }
         }
 
@@ -207,18 +202,11 @@ namespace
                 EntryMap::iterator aDelete(aIter);
                 ++aIter;
                 maEntries.erase(aDelete);
-
-                if(maEntries.empty() && maTimer)
-                {
-                    maTimer->Stop();
-                }
             }
         }
 
-        if(!maEntries.empty() && maTimer)
-        {
-            maTimer->Start();
-        }
+        if (maEntries.empty())
+            maTimer->Stop();
     }
 }
 
