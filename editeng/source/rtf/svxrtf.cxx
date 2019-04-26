@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <queue>
 #include <tools/diagnose_ex.h>
 #include <rtl/tencinfo.h>
 #include <svl/itemiter.hxx>
@@ -857,6 +858,7 @@ void SvxRTFParser::SetAllAttrOfStk()        // end all Attr. and set it into doc
     {
         auto const& pStkSet = m_AttrSetList[--n];
         SetAttrSet( *pStkSet );
+        pStkSet->DropChildList();
         m_AttrSetList.pop_back();
     }
 }
@@ -958,6 +960,44 @@ SvxRTFItemStackType::SvxRTFItemStackType(
     aAttrSet.SetParent( &rCpy.aAttrSet );
     if( bCopyAttr )
         aAttrSet.Put( rCpy.aAttrSet );
+}
+
+/* ofz#13491 SvxRTFItemStackType dtor recursively
+   calls the dtor of its m_pChildList. The recurse
+   depth can grow sufficiently to trigger asan.
+
+   So breadth-first iterate through the nodes
+   and make a flat vector of them which can
+   be iterated through in order of most
+   distant from root first and release
+   their children linearly
+*/
+void SvxRTFItemStackType::DropChildList()
+{
+    if (!m_pChildList || m_pChildList->empty())
+        return;
+
+    std::vector<SvxRTFItemStackType*> bfs;
+    std::queue<SvxRTFItemStackType*> aQueue;
+    aQueue.push(this);
+
+    while (!aQueue.empty())
+    {
+        auto* front = aQueue.front();
+        aQueue.pop();
+        if (front->m_pChildList)
+        {
+            for (const auto& a : *front->m_pChildList)
+                aQueue.push(a.get());
+            bfs.push_back(front);
+        }
+    }
+
+    for (auto it = bfs.rbegin(); it != bfs.rend(); ++it)
+    {
+        SvxRTFItemStackType* pNode = *it;
+        pNode->m_pChildList.reset();
+    }
 }
 
 SvxRTFItemStackType::~SvxRTFItemStackType()

@@ -309,10 +309,11 @@ class EDITENG_DLLPUBLIC SvxRTFItemStackType
 
     void Add(std::unique_ptr<SvxRTFItemStackType>);
     void Compress( const SvxRTFParser& );
+    void DropChildList();
 
 public:
-    SvxRTFItemStackType( const SvxRTFItemStackType&, const EditPosition&,
-                        bool bCopyAttr );
+    SvxRTFItemStackType(const SvxRTFItemStackType&, const EditPosition&,
+                        bool bCopyAttr);
     ~SvxRTFItemStackType();
     //cmc, I'm very suspicious about SetStartPos, it doesn't change
     //its children's starting position, and the implementation looks
