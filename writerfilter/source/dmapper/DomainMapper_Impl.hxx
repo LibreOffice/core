@@ -505,6 +505,8 @@ private:
     RedlineParamsPtr                m_currentRedline;
     RedlineParamsPtr                m_pParaMarkerRedline;
     bool                            m_bIsParaMarkerChange;
+    // redline data of the terminating run, if it's a moveFrom deletion
+    RedlineParamsPtr                m_pParaMarkerRedlineMoveFrom;
 
     /// If the current paragraph has any runs.
     bool                            m_bParaChanged;
@@ -575,7 +577,7 @@ public:
     }
     void SetDocumentSettingsProperty( const OUString& rPropName, const css::uno::Any& rValue );
 
-    static void CreateRedline(css::uno::Reference<css::text::XTextRange> const& xRange, const RedlineParamsPtr& pRedline);
+    void CreateRedline(css::uno::Reference<css::text::XTextRange> const& xRange, const RedlineParamsPtr& pRedline);
 
     void CheckParaMarkerRedline(css::uno::Reference<css::text::XTextRange> const& xRange);
 

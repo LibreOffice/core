@@ -796,13 +796,13 @@ DECLARE_OOXMLIMPORT_TEST(testTdf104797, "tdf104797.docx")
     CPPUNIT_ASSERT_EQUAL(true,getProperty<bool>(getRun(getParagraph(1), 2), "IsStart"));
     CPPUNIT_ASSERT_EQUAL( OUString( "This is a filler sentence. Will this sentence be duplicated ADDED STUFF?" ),
             getParagraph( 2 )->getString());
-    CPPUNIT_ASSERT_EQUAL( OUString( "This is a filler sentence." ), getRun( getParagraph( 2 ), 1 )->getString());
-    CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 2 ), 2 )->getString());
-    CPPUNIT_ASSERT_EQUAL( OUString( " Will this sentence be duplicated ADDED STUFF?" ), getRun( getParagraph( 2 ), 3 )->getString());
-    CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 2 ), 4 )->getString());
-    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 5), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Insert"),getProperty<OUString>(getRun(getParagraph(2), 5), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL(false,getProperty<bool>(getRun(getParagraph(2), 5), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 2 ), 1 )->getString());
+    CPPUNIT_ASSERT_EQUAL( OUString( "This is a filler sentence." ), getRun( getParagraph( 2 ), 2 )->getString());
+    CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 2 ), 3 )->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 3), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"),getProperty<OUString>(getRun(getParagraph(2), 3), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true,getProperty<bool>(getRun(getParagraph(2), 3), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL( OUString( " Will this sentence be duplicated ADDED STUFF?" ), getRun( getParagraph( 2 ), 4 )->getString());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf113608_runAwayNumbering, "tdf113608_runAwayNumbering.docx")
