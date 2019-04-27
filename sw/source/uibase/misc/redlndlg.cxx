@@ -1174,7 +1174,7 @@ void SwRedlineAcceptDlg::Initialize(OUString& rExtraString)
                     aWidths.push_back(aEndPos[i] - aEndPos[i - 1]);
 
                 // turn column end points back to column widths, ignoring the small
-                // value used for the the expander column
+                // value used for the expander column
                 weld::TreeView& rTreeView = m_pTable->GetWidget();
                 rTreeView.set_column_fixed_widths(aWidths);
             }
