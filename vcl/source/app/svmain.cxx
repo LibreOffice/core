@@ -473,7 +473,7 @@ void DeInitVCL()
 
     pSVData->mpSettingsConfigItem.reset();
 
-    // prevent unnessesary painting during Scheduler shutdown
+    // prevent unnecessary painting during Scheduler shutdown
     // as this processes all pending events in debug builds.
     ImplGetSystemDependentDataManager().flushAll();
 
