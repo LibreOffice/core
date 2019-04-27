@@ -433,7 +433,7 @@ void ScDocument::FillInfo(
     {
         SCCOL nX = (nArrCol>0) ? nArrCol-1 : MAXCOL+1;                    // negative -> invalid
 
-        if ( ValidCol(nX) && nX < maTabs[nTab]->GetAllocatedColumnsCount() )
+        if (ValidCol(nX))
         {
             // #i58049#, #i57939# Hidden columns must be skipped here, or their attributes
             // will disturb the output
@@ -447,184 +447,190 @@ void ScDocument::FillInfo(
 
                 pRowInfo[0].pCellInfo[nArrCol].nWidth = nThisWidth;           //TODO: this should be enough
 
-                ScColumn* pThisCol = &maTabs[nTab]->aCol[nX];                   // Column data
-
-                nArrRow = 1;
-                // Iterate between rows nY1 and nY2 and pick up non-empty
-                // cells that are not hidden.
-                RowInfoFiller aFunc(*this, nTab, pRowInfo, nArrCol, nArrRow);
-                sc::ParseAllNonEmpty(
-                    pThisCol->maCells.begin(), pThisCol->maCells, nRow1, nRow2, aFunc);
-
-                if (nX+1 >= nCol1)                                // Attribute/Blockmark from nX1-1
+                if (nX < maTabs[nTab]->GetAllocatedColumnsCount())
                 {
-                    ScAttrArray* pThisAttrArr = pThisCol->pAttrArray.get();       // Attribute
-                    nArrRow = 0;
+                    ScColumn* pThisCol = &maTabs[nTab]->aCol[nX]; // Column data
 
-                    SCROW nCurRow=nRow1;                  // single rows
-                    if (nCurRow>0)
-                        --nCurRow;                      // 1 more on top
-                    else
-                        nArrRow = 1;
+                    nArrRow = 1;
+                    // Iterate between rows nY1 and nY2 and pick up non-empty
+                    // cells that are not hidden.
+                    RowInfoFiller aFunc(*this, nTab, pRowInfo, nArrCol, nArrRow);
+                    sc::ParseAllNonEmpty(pThisCol->maCells.begin(), pThisCol->maCells, nRow1, nRow2,
+                                         aFunc);
 
-                    SCROW nThisRow;
-                    SCSIZE nIndex;
-                    if ( pThisAttrArr->Count() )
-                        (void) pThisAttrArr->Search( nCurRow, nIndex );
-                    else
-                        nIndex = 0;
-
-                    do
+                    if (nX + 1 >= nCol1) // Attribute/Blockmark from nX1-1
                     {
-                        const ScPatternAttr* pPattern = nullptr;
-                        if ( pThisAttrArr->Count() )
-                        {
-                            nThisRow = pThisAttrArr->mvData[nIndex].nEndRow;              // End of range
-                            pPattern = pThisAttrArr->mvData[nIndex].pPattern;
-                        }
+                        ScAttrArray* pThisAttrArr = pThisCol->pAttrArray.get(); // Attribute
+                        nArrRow = 0;
+
+                        SCROW nCurRow = nRow1; // single rows
+                        if (nCurRow > 0)
+                            --nCurRow; // 1 more on top
                         else
-                        {
-                            nThisRow = MAXROW;
-                            pPattern = GetDefPattern();
-                        }
+                            nArrRow = 1;
 
-                        const SvxBrushItem* pBackground = &pPattern->GetItem(ATTR_BACKGROUND);
-                        const SvxBoxItem* pLinesAttr = &pPattern->GetItem(ATTR_BORDER);
-
-                        const SvxLineItem* pTLBRLine = &pPattern->GetItem( ATTR_BORDER_TLBR );
-                        const SvxLineItem* pBLTRLine = &pPattern->GetItem( ATTR_BORDER_BLTR );
-
-                        const SvxShadowItem* pShadowAttr = &pPattern->GetItem(ATTR_SHADOW);
-                        if (pShadowAttr != pDefShadow)
-                            bAnyShadow = true;
-
-                        const ScMergeAttr* pMergeAttr = &pPattern->GetItem(ATTR_MERGE);
-                        bool bMerged = ( pMergeAttr != pDefMerge && *pMergeAttr != *pDefMerge );
-                        ScMF nOverlap = pPattern->GetItemSet().
-                                                        Get(ATTR_MERGE_FLAG).GetValue();
-                        bool bHOverlapped(nOverlap & ScMF::Hor);
-                        bool bVOverlapped(nOverlap & ScMF::Ver);
-                        bool bAutoFilter(nOverlap & ScMF::Auto);
-                        bool bPivotButton(nOverlap & ScMF::Button);
-                        bool bScenario(nOverlap & ScMF::Scenario);
-                        bool bPivotPopupButton(nOverlap & ScMF::ButtonPopup);
-                        bool bFilterActive(nOverlap & ScMF::HiddenMember);
-                        if (bMerged||bHOverlapped||bVOverlapped)
-                            bAnyMerged = true;                              // internal
-
-                        bool bHidden, bHideFormula;
-                        if (bTabProtect)
-                        {
-                            const ScProtectionAttr& rProtAttr = pPattern->GetItem(ATTR_PROTECTION);
-                            bHidden = rProtAttr.GetHideCell();
-                            bHideFormula = rProtAttr.GetHideFormula();
-                        }
+                        SCROW nThisRow;
+                        SCSIZE nIndex;
+                        if (pThisAttrArr->Count())
+                            (void)pThisAttrArr->Search(nCurRow, nIndex);
                         else
-                            bHidden = bHideFormula = false;
-
-                        const ScCondFormatIndexes& rCondFormats = pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
-                        bool bContainsCondFormat = !rCondFormats.empty();
+                            nIndex = 0;
 
                         do
                         {
-                            SCROW nLastHiddenRow = -1;
-                            bool bRowHidden = RowHidden(nCurRow, nTab, nullptr, &nLastHiddenRow);
-                            if ( nArrRow==0 || !bRowHidden )
+                            const ScPatternAttr* pPattern = nullptr;
+                            if (pThisAttrArr->Count())
                             {
-                                if ( GetPreviewCellStyle( nX, nCurRow, nTab  ) != nullptr )
-                                    bAnyPreview = true;
-                                RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
-                                if (pBackground != pDefBackground)          // Column background == Default ?
-                                    pThisRowInfo->bEmptyBack = false;
-                                if (bContainsCondFormat)
-                                    pThisRowInfo->bEmptyBack = false;
-                                if (bAutoFilter)
-                                    pThisRowInfo->bAutoFilter = true;
-                                if (bPivotButton || bPivotPopupButton)
-                                    pThisRowInfo->bPivotButton = true;
-
-                                CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrCol];
-                                pInfo->pBackground  = pBackground;
-                                pInfo->pPatternAttr = pPattern;
-                                pInfo->bMerged      = bMerged;
-                                pInfo->bHOverlapped = bHOverlapped;
-                                pInfo->bVOverlapped = bVOverlapped;
-                                pInfo->bAutoFilter  = bAutoFilter;
-                                pInfo->bPivotButton  = bPivotButton;
-                                pInfo->bPivotPopupButton = bPivotPopupButton;
-                                pInfo->bFilterActive = bFilterActive;
-                                pInfo->pLinesAttr   = pLinesAttr;
-                                pInfo->mpTLBRLine   = pTLBRLine;
-                                pInfo->mpBLTRLine   = pBLTRLine;
-                                pInfo->pShadowAttr  = pShadowAttr;
-                                // nWidth is no longer set individually
-
-                                if (bScenario)
-                                {
-                                    pInfo->pBackground = ScGlobal::GetButtonBrushItem();
-                                    pThisRowInfo->bEmptyBack = false;
-                                }
-
-                                if (bContainsCondFormat && pCondFormList)
-                                {
-                                    bAnyCondition |= handleConditionalFormat(*pCondFormList, rCondFormats, pInfo, pStlPool, ScAddress(nX, nCurRow, nTab),
-                                            bHidden, bHideFormula, bTabProtect);
-                                }
-
-                                if (bHidden || (bFormulaMode && bHideFormula && pInfo->maCell.meType == CELLTYPE_FORMULA))
-                                    pInfo->bEmptyCellText = true;
-
-                                ++nArrRow;
+                                nThisRow = pThisAttrArr->mvData[nIndex].nEndRow; // End of range
+                                pPattern = pThisAttrArr->mvData[nIndex].pPattern;
                             }
-                            else if (nLastHiddenRow >= 0)
+                            else
                             {
-                                nCurRow = nLastHiddenRow;
-                                if (nCurRow > nThisRow)
-                                    nCurRow = nThisRow;
+                                nThisRow = MAXROW;
+                                pPattern = GetDefPattern();
                             }
-                            ++nCurRow;
-                        }
-                        while (nCurRow <= nThisRow && nCurRow <= nYExtra);
-                        ++nIndex;
-                    }
-                    while ( nIndex < pThisAttrArr->Count() && nThisRow < nYExtra );
 
-                    if (pMarkData && pMarkData->IsMultiMarked())
-                    {
-                        //  Block marks
-                        ScMarkArray aThisMarkArr(pMarkData->GetMarkArray( nX ));
-                        nArrRow = 1;
-                        nCurRow = nRow1;                                      // single rows
+                            const SvxBrushItem* pBackground = &pPattern->GetItem(ATTR_BACKGROUND);
+                            const SvxBoxItem* pLinesAttr = &pPattern->GetItem(ATTR_BORDER);
 
-                        if ( aThisMarkArr.Search( nRow1, nIndex ) )
-                        {
+                            const SvxLineItem* pTLBRLine = &pPattern->GetItem(ATTR_BORDER_TLBR);
+                            const SvxLineItem* pBLTRLine = &pPattern->GetItem(ATTR_BORDER_BLTR);
+
+                            const SvxShadowItem* pShadowAttr = &pPattern->GetItem(ATTR_SHADOW);
+                            if (pShadowAttr != pDefShadow)
+                                bAnyShadow = true;
+
+                            const ScMergeAttr* pMergeAttr = &pPattern->GetItem(ATTR_MERGE);
+                            bool bMerged = (pMergeAttr != pDefMerge && *pMergeAttr != *pDefMerge);
+                            ScMF nOverlap = pPattern->GetItemSet().Get(ATTR_MERGE_FLAG).GetValue();
+                            bool bHOverlapped(nOverlap & ScMF::Hor);
+                            bool bVOverlapped(nOverlap & ScMF::Ver);
+                            bool bAutoFilter(nOverlap & ScMF::Auto);
+                            bool bPivotButton(nOverlap & ScMF::Button);
+                            bool bScenario(nOverlap & ScMF::Scenario);
+                            bool bPivotPopupButton(nOverlap & ScMF::ButtonPopup);
+                            bool bFilterActive(nOverlap & ScMF::HiddenMember);
+                            if (bMerged || bHOverlapped || bVOverlapped)
+                                bAnyMerged = true; // internal
+
+                            bool bHidden, bHideFormula;
+                            if (bTabProtect)
+                            {
+                                const ScProtectionAttr& rProtAttr
+                                    = pPattern->GetItem(ATTR_PROTECTION);
+                                bHidden = rProtAttr.GetHideCell();
+                                bHideFormula = rProtAttr.GetHideFormula();
+                            }
+                            else
+                                bHidden = bHideFormula = false;
+
+                            const ScCondFormatIndexes& rCondFormats
+                                = pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
+                            bool bContainsCondFormat = !rCondFormats.empty();
+
                             do
                             {
-                                nThisRow=aThisMarkArr.pData[nIndex].nRow;      // End of range
+                                SCROW nLastHiddenRow = -1;
+                                bool bRowHidden
+                                    = RowHidden(nCurRow, nTab, nullptr, &nLastHiddenRow);
+                                if (nArrRow == 0 || !bRowHidden)
+                                {
+                                    if (GetPreviewCellStyle(nX, nCurRow, nTab) != nullptr)
+                                        bAnyPreview = true;
+                                    RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
+                                    if (pBackground
+                                        != pDefBackground) // Column background == Default ?
+                                        pThisRowInfo->bEmptyBack = false;
+                                    if (bContainsCondFormat)
+                                        pThisRowInfo->bEmptyBack = false;
+                                    if (bAutoFilter)
+                                        pThisRowInfo->bAutoFilter = true;
+                                    if (bPivotButton || bPivotPopupButton)
+                                        pThisRowInfo->bPivotButton = true;
 
+                                    CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrCol];
+                                    pInfo->pBackground = pBackground;
+                                    pInfo->pPatternAttr = pPattern;
+                                    pInfo->bMerged = bMerged;
+                                    pInfo->bHOverlapped = bHOverlapped;
+                                    pInfo->bVOverlapped = bVOverlapped;
+                                    pInfo->bAutoFilter = bAutoFilter;
+                                    pInfo->bPivotButton = bPivotButton;
+                                    pInfo->bPivotPopupButton = bPivotPopupButton;
+                                    pInfo->bFilterActive = bFilterActive;
+                                    pInfo->pLinesAttr = pLinesAttr;
+                                    pInfo->mpTLBRLine = pTLBRLine;
+                                    pInfo->mpBLTRLine = pBLTRLine;
+                                    pInfo->pShadowAttr = pShadowAttr;
+                                    // nWidth is no longer set individually
+
+                                    if (bScenario)
+                                    {
+                                        pInfo->pBackground = ScGlobal::GetButtonBrushItem();
+                                        pThisRowInfo->bEmptyBack = false;
+                                    }
+
+                                    if (bContainsCondFormat && pCondFormList)
+                                    {
+                                        bAnyCondition |= handleConditionalFormat(
+                                            *pCondFormList, rCondFormats, pInfo, pStlPool,
+                                            ScAddress(nX, nCurRow, nTab), bHidden, bHideFormula,
+                                            bTabProtect);
+                                    }
+
+                                    if (bHidden
+                                        || (bFormulaMode && bHideFormula
+                                            && pInfo->maCell.meType == CELLTYPE_FORMULA))
+                                        pInfo->bEmptyCellText = true;
+
+                                    ++nArrRow;
+                                }
+                                else if (nLastHiddenRow >= 0)
+                                {
+                                    nCurRow = nLastHiddenRow;
+                                    if (nCurRow > nThisRow)
+                                        nCurRow = nThisRow;
+                                }
+                                ++nCurRow;
+                            } while (nCurRow <= nThisRow && nCurRow <= nYExtra);
+                            ++nIndex;
+                        } while (nIndex < pThisAttrArr->Count() && nThisRow < nYExtra);
+
+                        if (pMarkData && pMarkData->IsMultiMarked())
+                        {
+                            //  Block marks
+                            ScMarkArray aThisMarkArr(pMarkData->GetMarkArray(nX));
+                            nArrRow = 1;
+                            nCurRow = nRow1; // single rows
+
+                            if (aThisMarkArr.Search(nRow1, nIndex))
+                            {
                                 do
                                 {
-                                    if ( !RowHidden( nCurRow,nTab ) )
+                                    nThisRow = aThisMarkArr.pData[nIndex].nRow; // End of range
+
+                                    do
                                     {
-                                        ++nArrRow;
-                                    }
-                                    ++nCurRow;
-                                }
-                                while (nCurRow <= nThisRow && nCurRow <= nRow2);
-                                ++nIndex;
+                                        if (!RowHidden(nCurRow, nTab))
+                                        {
+                                            ++nArrRow;
+                                        }
+                                        ++nCurRow;
+                                    } while (nCurRow <= nThisRow && nCurRow <= nRow2);
+                                    ++nIndex;
+                                } while (nIndex < aThisMarkArr.nCount && nThisRow < nRow2);
                             }
-                            while ( nIndex < aThisMarkArr.nCount && nThisRow < nRow2 );
                         }
                     }
-                }
-                else                                    // columns in front
-                {
-                    for (nArrRow=1; nArrRow+1<nArrCount; nArrRow++)
+                    else // columns in front
                     {
-                        RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
-                        CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrCol];
+                        for (nArrRow = 1; nArrRow + 1 < nArrCount; nArrRow++)
+                        {
+                            RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
+                            CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrCol];
 
-                        pInfo->nWidth       = nThisWidth;           //TODO: or check only 0 ??
+                            pInfo->nWidth = nThisWidth; //TODO: or check only 0 ??
+                        }
                     }
                 }
             }
