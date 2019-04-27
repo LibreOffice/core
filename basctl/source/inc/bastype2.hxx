@@ -300,7 +300,9 @@ public:
     static ItemType ConvertType (EntryType eType);
     bool            IsValidEntry(weld::TreeIter& rEntry);
     void AddEntry(const OUString& rText, const OUString& rImage,
-                  const weld::TreeIter* pIter, bool bChildrenOnDemand, std::unique_ptr<Entry>&& rUserData);
+                  const weld::TreeIter* pParent, bool bChildrenOnDemand,
+                  std::unique_ptr<Entry>&& rUserData,
+                  weld::TreeIter* pRet = nullptr);
 
     void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_changed(rLink); }
     std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pIter = nullptr) const { return m_xControl->make_iterator(pIter); }
