@@ -665,15 +665,10 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
 
     if (eEditMode == EditMode::MasterPage)
     {
+        // Disable some slots when in master page mode.
         rSet.DisableItem(SID_ASSIGN_LAYOUT);
         rSet.DisableItem(SID_INSERTPAGE);
-    }
 
-    // Disable some slots when in master page mode.
-    if (eEditMode == EditMode::MasterPage)
-    {
-        if (rSet.GetItemState(SID_INSERTPAGE) == SfxItemState::DEFAULT)
-            rSet.DisableItem(SID_INSERTPAGE);
         if (rSet.GetItemState(SID_DUPLICATE_PAGE) == SfxItemState::DEFAULT)
             rSet.DisableItem(SID_DUPLICATE_PAGE);
     }

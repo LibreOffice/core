@@ -1966,8 +1966,11 @@ void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
             }
         }
         EndUndo();
-        if (bMrkChg) AdjustMarkHdl();
-        if (bMrkChg) MarkListHasChanged();
+        if (bMrkChg)
+        {
+            AdjustMarkHdl();
+            MarkListHasChanged();
+        }
     }
 }
 
