@@ -1722,6 +1722,12 @@ void registerPollCallbacks(
     }
 }
 
+bool isUnipoll()
+{
+    ImplSVData * pSVData = ImplGetSVData();
+    return pSVData && pSVData->mpPollClosure != nullptr;
+}
+
 } } // namespace lok, namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
