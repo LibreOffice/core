@@ -154,11 +154,8 @@ void OReportSection::Paint( vcl::RenderContext& rRenderContext, const tools::Rec
             // draw background self using wallpaper
             OutputDevice& rTargetOutDev = pTargetPaintWindow->GetTargetOutputDevice();
             rTargetOutDev.DrawWallpaper(rRect, Wallpaper(pPgView->GetApplicationDocumentColor()));
-        }
 
-        // do paint (unbuffered) and mark repaint end
-        if(pPgView)
-        {
+            // do paint (unbuffered) and mark repaint end
             pPgView->DrawLayer(RPT_LAYER_FRONT, &rRenderContext);
             pPgView->GetView().EndDrawLayers(*pTargetPaintWindow, true);
         }
