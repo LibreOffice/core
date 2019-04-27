@@ -28,25 +28,18 @@ namespace comphelper
 
     //= FlagRestorationGuard
 
-    // note: can't store the originalValue in a FlagRestorationGuard member,
-    // because it will be used from base class dtor
-    struct FlagRestorationGuard_Impl
+    // Get functor for cleanup to use in FlagRestorationGuard
+    auto GetFlagRestorationFunc(bool& i_flagRef)
     {
-        bool & rFlag;
-        bool const originalValue;
-        FlagRestorationGuard_Impl(bool & i_flagRef)
-            : rFlag(i_flagRef), originalValue(i_flagRef) {}
-        void operator()()
-        {
-            rFlag = originalValue;
-        }
-    };
+        return [&i_flagRef, resetVal = i_flagRef] { i_flagRef = resetVal; };
+    }
 
-    class FlagRestorationGuard : public ScopeGuard<FlagRestorationGuard_Impl>
+    class FlagRestorationGuard
+        : public ScopeGuard<decltype(GetFlagRestorationFunc(std::declval<bool&>()))>
     {
     public:
         FlagRestorationGuard( bool& i_flagRef, bool i_temporaryValue )
-            : ScopeGuard(FlagRestorationGuard_Impl(i_flagRef))
+            : ScopeGuard(GetFlagRestorationFunc(i_flagRef))
         {
             i_flagRef = i_temporaryValue;
         }
