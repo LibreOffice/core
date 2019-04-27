@@ -24,7 +24,7 @@
 #include <rtl/crc.h>
 #include <sal/log.hxx>
 
-#include <vcl/animate.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/dibtools.hxx>

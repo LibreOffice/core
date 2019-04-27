@@ -13,7 +13,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/animate.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/timer.hxx>

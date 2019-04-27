@@ -22,7 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/animate.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/window.hxx>
 #include <vcl/graph.hxx>

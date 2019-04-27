@@ -121,7 +121,7 @@
 #include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
-#include <vcl/animate.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
