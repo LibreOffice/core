@@ -106,7 +106,7 @@
 #include <vcl/EnumContext.hxx>
 #include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/alpha.hxx>
-#include <vcl/animate.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmapex.hxx>

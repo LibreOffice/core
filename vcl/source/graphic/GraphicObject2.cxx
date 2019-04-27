@@ -28,7 +28,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/animate.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/GraphicObject.hxx>

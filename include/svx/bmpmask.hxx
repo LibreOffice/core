@@ -27,7 +27,7 @@
 #include <svx/svxdllapi.h>
 #include <svx/xtable.hxx>
 #include <tools/color.hxx>
-#include <vcl/animate.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/gdimtf.hxx>

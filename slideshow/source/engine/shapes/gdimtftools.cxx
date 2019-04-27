@@ -40,7 +40,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/animate.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/graph.hxx>
 
 #include <unotools/streamwrap.hxx>
