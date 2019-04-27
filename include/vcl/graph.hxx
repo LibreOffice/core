@@ -25,7 +25,7 @@
 #include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/animate.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/gfxlink.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <vcl/vectorgraphicdata.hxx>

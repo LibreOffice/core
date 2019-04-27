@@ -107,7 +107,7 @@
 #include <vcl/IContext.hxx>
 #include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/alpha.hxx>
-#include <vcl/animate.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
