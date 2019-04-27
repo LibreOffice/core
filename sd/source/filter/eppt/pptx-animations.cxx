@@ -59,6 +59,7 @@
 #include "pptexanimations.hxx"
 #include "pptx-animations.hxx"
 #include "../ppt/pptanimations.hxx"
+#include <comphelper/stl_types.hxx>
 
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::container;
@@ -569,6 +570,7 @@ struct Cond
     OString msDelay;
     const char* mpEvent;
     Reference<XShape> mxShape;
+    Reference<XAnimationNode> mxNode;
 
     Cond(const Any& rAny, bool bIsMainSeqChild);
 
@@ -596,7 +598,8 @@ Cond::Cond(const Any& rAny, bool bIsMainSeqChild)
         else
         {
             mpEvent = convertEventTrigger(aEvent.Trigger);
-            aEvent.Source >>= mxShape;
+            if (!(aEvent.Source >>= mxShape))
+                aEvent.Source >>= mxNode;
 
             if (aEvent.Offset >>= fDelay)
                 bHasFDelay = true;
@@ -631,6 +634,11 @@ class PPTXAnimationExport
     PowerPointExport& mrPowerPointExport;
     const FSHelperPtr& mpFS;
     const NodeContext* mpContext;
+
+    std::map<Reference<XAnimationNode>, sal_Int32, ::comphelper::OInterfaceCompare<XAnimationNode>>
+        maAnimationNodeIdMap;
+    sal_Int32 GetNextAnimationNodeId(const Reference<XAnimationNode>& rNode);
+    sal_Int32 GetAnimationNodeId(const Reference<XAnimationNode>& rNode);
 
 public:
     PPTXAnimationExport(PowerPointExport& rExport, const FSHelperPtr& pFS);
@@ -751,6 +759,7 @@ void PPTXAnimationExport::WriteAnimationCondList(const Any& rAny, sal_Int32 nTok
 
 void PPTXAnimationExport::WriteAnimationCond(const Cond& rCond)
 {
+    sal_Int32 nId = -1;
     if (rCond.mpEvent)
     {
         if (rCond.mxShape.is())
@@ -758,6 +767,13 @@ void PPTXAnimationExport::WriteAnimationCond(const Cond& rCond)
             mpFS->startElementNS(XML_p, XML_cond, XML_delay, rCond.getDelay(), XML_evt,
                                  rCond.mpEvent);
             WriteAnimationTarget(makeAny(rCond.mxShape));
+            mpFS->endElementNS(XML_p, XML_cond);
+        }
+        else if (rCond.mxNode.is() && (nId = GetAnimationNodeId(rCond.mxNode)) != -1)
+        {
+            mpFS->startElementNS(XML_p, XML_cond, XML_delay, rCond.getDelay(), XML_evt,
+                                 rCond.mpEvent);
+            mpFS->singleElementNS(XML_p, XML_tn, XML_val, OString::number(nId));
             mpFS->endElementNS(XML_p, XML_cond);
         }
         else
@@ -1041,8 +1057,7 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
     bool bAutoReverse = rXNode->getAutoReverse();
 
     mpFS->startElementNS(
-        XML_p, XML_cTn, XML_id, OString::number(mrPowerPointExport.GetNextAnimationNodeID()),
-        XML_dur,
+        XML_p, XML_cTn, XML_id, OString::number(GetNextAnimationNodeId(rXNode)), XML_dur,
         fDuration != 0 ? OString::number(static_cast<sal_Int32>(fDuration * 1000.0)).getStr()
                        : pDuration,
         XML_autoRev, bAutoReverse ? "1" : nullptr, XML_restart, pRestart, XML_nodeType, pNodeType,
@@ -1259,6 +1274,24 @@ void PPTXAnimationExport::WriteAnimations(const Reference<XDrawPage>& rXDrawPage
         mpFS->endElementNS(XML_p, XML_tnLst);
         mpFS->endElementNS(XML_p, XML_timing);
     }
+}
+
+sal_Int32 PPTXAnimationExport::GetNextAnimationNodeId(const Reference<XAnimationNode>& xNode)
+{
+    sal_Int32 nId = mrPowerPointExport.GetNextAnimationNodeID();
+    maAnimationNodeIdMap[xNode] = nId;
+    return nId;
+}
+
+sal_Int32 PPTXAnimationExport::GetAnimationNodeId(const Reference<XAnimationNode>& xNode)
+{
+    sal_Int32 nId = -1;
+    const auto& aIter = maAnimationNodeIdMap.find(xNode);
+    if (aIter != maAnimationNodeIdMap.end())
+    {
+        nId = aIter->second;
+    }
+    return nId;
 }
 
 NodeContext::NodeContext(const Reference<XAnimationNode>& xNode, bool bMainSeqChild,
