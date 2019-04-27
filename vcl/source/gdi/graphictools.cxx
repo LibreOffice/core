@@ -19,6 +19,7 @@
 
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
+#include <tools/GenericTypeSerializer.hxx>
 
 #include <vcl/graphictools.hxx>
 
@@ -236,7 +237,8 @@ SvStream& WriteSvtGraphicFill( SvStream& rOStm, const SvtGraphicFill& rClass )
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
 
     rClass.maPath.Write( rOStm );
-    WriteColor( rOStm, rClass.maFillColor );
+    tools::GenericTypeSerializer aSerializer(rOStm);
+    aSerializer.writeColor(rClass.maFillColor);
     rOStm.WriteDouble( rClass.mfTransparency );
     sal_uInt16 nTmp = sal::static_int_cast<sal_uInt16>( rClass.maFillRule );
     rOStm.WriteUInt16( nTmp );
@@ -249,11 +251,11 @@ SvStream& WriteSvtGraphicFill( SvStream& rOStm, const SvtGraphicFill& rClass )
     rOStm.WriteUInt16( nTmp );
     nTmp = sal::static_int_cast<sal_uInt16>( rClass.maHatchType );
     rOStm.WriteUInt16( nTmp );
-    WriteColor( rOStm, rClass.maHatchColor );
+    aSerializer.writeColor(rClass.maHatchColor);
     nTmp = sal::static_int_cast<sal_uInt16>( rClass.maGradientType );
     rOStm.WriteUInt16( nTmp );
-    WriteColor( rOStm, rClass.maGradient1stColor );
-    WriteColor( rOStm, rClass.maGradient2ndColor );
+    aSerializer.writeColor(rClass.maGradient1stColor);
+    aSerializer.writeColor(rClass.maGradient2ndColor);
     rOStm.WriteInt32( rClass.maGradientStepCount );
     WriteGraphic( rOStm, rClass.maFillGraphic );
 
@@ -265,7 +267,9 @@ SvStream& ReadSvtGraphicFill( SvStream& rIStm, SvtGraphicFill& rClass )
     VersionCompat aCompat( rIStm, StreamMode::READ );
 
     rClass.maPath.Read( rIStm );
-    ReadColor( rIStm, rClass.maFillColor );
+
+    tools::GenericTypeSerializer aSerializer(rIStm);
+    aSerializer.readColor(rClass.maFillColor);
     rIStm.ReadDouble( rClass.mfTransparency );
     sal_uInt16 nTmp;
     rIStm.ReadUInt16( nTmp );
@@ -278,11 +282,11 @@ SvStream& ReadSvtGraphicFill( SvStream& rIStm, SvtGraphicFill& rClass )
     rClass.mbTiling = nTmp;
     rIStm.ReadUInt16( nTmp );
     rClass.maHatchType = SvtGraphicFill::HatchType( nTmp );
-    ReadColor( rIStm, rClass.maHatchColor );
+    aSerializer.readColor(rClass.maHatchColor);
     rIStm.ReadUInt16( nTmp );
     rClass.maGradientType = SvtGraphicFill::GradientType( nTmp );
-    ReadColor( rIStm, rClass.maGradient1stColor );
-    ReadColor( rIStm, rClass.maGradient2ndColor );
+    aSerializer.readColor(rClass.maGradient1stColor);
+    aSerializer.readColor(rClass.maGradient2ndColor);
     rIStm.ReadInt32( rClass.maGradientStepCount );
     ReadGraphic( rIStm, rClass.maFillGraphic );
 

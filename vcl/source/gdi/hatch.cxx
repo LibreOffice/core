@@ -19,6 +19,7 @@
 
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
+#include <tools/GenericTypeSerializer.hxx>
 #include <vcl/hatch.hxx>
 
 ImplHatch::ImplHatch() :
@@ -77,13 +78,17 @@ void Hatch::SetAngle( sal_uInt16 nAngle10 )
 
 SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch )
 {
-    VersionCompat   aCompat( rIStm, StreamMode::READ );
-    sal_uInt16          nTmp16;
-    sal_Int32       nTmp32(0);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
+    sal_uInt16 nTmp16;
+    sal_Int32 nTmp32(0);
 
-    rIStm.ReadUInt16( nTmp16 ); rHatch.mpImplHatch->meStyle = static_cast<HatchStyle>(nTmp16);
-    ReadColor( rIStm, rHatch.mpImplHatch->maColor ).ReadInt32( nTmp32 ).ReadUInt16(
-      rHatch.mpImplHatch->mnAngle );
+    rIStm.ReadUInt16(nTmp16);
+    rHatch.mpImplHatch->meStyle = static_cast<HatchStyle>(nTmp16);
+
+    tools::GenericTypeSerializer aSerializer(rIStm);
+    aSerializer.readColor(rHatch.mpImplHatch->maColor);
+    rIStm.ReadInt32(nTmp32);
+    rIStm.ReadUInt16(rHatch.mpImplHatch->mnAngle);
     rHatch.mpImplHatch->mnDistance = nTmp32;
 
     return rIStm;
@@ -94,7 +99,9 @@ SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch )
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
 
     rOStm.WriteUInt16( static_cast<sal_uInt16>(rHatch.mpImplHatch->meStyle) );
-    WriteColor( rOStm, rHatch.mpImplHatch->maColor );
+
+    tools::GenericTypeSerializer aSerializer(rOStm);
+    aSerializer.writeColor(rHatch.mpImplHatch->maColor);
     rOStm.WriteInt32( rHatch.mpImplHatch->mnDistance ).WriteUInt16( rHatch.mpImplHatch->mnAngle );
 
     return rOStm;

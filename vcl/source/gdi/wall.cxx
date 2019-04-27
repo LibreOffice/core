@@ -19,6 +19,7 @@
 
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
+#include <tools/GenericTypeSerializer.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/wall.hxx>
@@ -61,7 +62,8 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
     rImplWallpaper.mpBitmap.reset();
 
     // version 1
-    ReadColor( rIStm, rImplWallpaper.maColor );
+    tools::GenericTypeSerializer aSerializer(rIStm);
+    aSerializer.readColor(rImplWallpaper.maColor);
     sal_uInt16 nTmp16(0);
     rIStm.ReadUInt16(nTmp16);
     rImplWallpaper.meStyle = static_cast<WallpaperStyle>(nTmp16);
@@ -94,7 +96,7 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
         // version 3 (new color format)
         if( aCompat.GetVersion() >= 3 )
         {
-            rImplWallpaper.maColor.Read( rIStm );
+            rIStm.ReadUInt32(rImplWallpaper.maColor.mValue);
         }
     }
 
@@ -110,7 +112,9 @@ SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpap
     bool            bDummy = false;
 
     // version 1
-    WriteColor( rOStm, rImplWallpaper.maColor );
+    tools::GenericTypeSerializer aSerializer(rOStm);
+    aSerializer.writeColor(rImplWallpaper.maColor);
+
     rOStm.WriteUInt16( static_cast<sal_uInt16>(rImplWallpaper.meStyle) );
 
     // version 2
@@ -126,7 +130,7 @@ SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpap
         WriteDIBBitmapEx(*rImplWallpaper.mpBitmap, rOStm);
 
     // version 3 (new color format)
-    rImplWallpaper.maColor.Write( rOStm );
+    rOStm.WriteUInt32(rImplWallpaper.maColor.mValue);
 
     return rOStm;
 }

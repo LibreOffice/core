@@ -171,12 +171,6 @@ public:
         return !(Color::operator==(rColor));
     }
 
-    SvStream& Read(SvStream& rIStream);
-    SvStream& Write(SvStream& rOStream) const;
-
-    TOOLS_DLLPUBLIC friend SvStream& ReadColor(SvStream& rIStream, Color& rColor);
-    TOOLS_DLLPUBLIC friend SvStream& WriteColor(SvStream& rOStream, const Color& rColor);
-
     // Return color as RGB hex string
     // for example "00ff00" for green color
     OUString AsRGBHexString() const;
