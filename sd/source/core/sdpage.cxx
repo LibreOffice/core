@@ -564,10 +564,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         if( bUndo )
         {
             pUndoManager->AddUndoAction(getSdrModelFromSdrPage().GetSdrUndoFactory().CreateUndoNewObject(*pSdrObj));
-        }
 
-        if( bUndo )
-        {
             pUndoManager->AddUndoAction( std::make_unique<UndoObjectPresentationKind>( *pSdrObj ) );
             pUndoManager->AddUndoAction( std::make_unique<UndoObjectUserCall>(*pSdrObj) );
         }
