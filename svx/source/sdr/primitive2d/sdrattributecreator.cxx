@@ -649,6 +649,7 @@ namespace drawinglayer
                 {
                     aGraphic.SetPrefSize(aGraphic.GetBitmapEx().GetSizePixel());
                     aGraphic.SetPrefMapMode(MapMode(MapUnit::MapPixel));
+                    aPrefSize = aGraphic.GetPrefSize();
                 }
             }
 
