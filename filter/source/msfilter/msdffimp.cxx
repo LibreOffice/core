@@ -97,7 +97,6 @@
 #include <svx/xlntrit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xfltrit.hxx>
-#include <svx/xflbmtit.hxx>
 #include <svx/xflbmsxy.hxx>
 #include <svx/xflbmsli.hxx>
 #include <editeng/frmdir.hxx>
