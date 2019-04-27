@@ -114,13 +114,13 @@ namespace drawinglayer
 
             sal_uInt32 generateStepTime(sal_uInt32 nIndex) const
             {
-                const AnimationBitmap& rAnimBitmap = maAnimation.Get(sal_uInt16(nIndex));
-                sal_uInt32 nWaitTime(rAnimBitmap.nWait * 10);
+                const AnimationBitmap& rAnimationBitmap = maAnimation.Get(sal_uInt16(nIndex));
+                sal_uInt32 nWaitTime(rAnimationBitmap.mnWait * 10);
 
                 // Take care of special value for MultiPage TIFFs. ATM these shall just
                 // show their first page. Later we will offer some switching when object
                 // is selected.
-                if (ANIMATION_TIMEOUT_ON_CLICK == rAnimBitmap.nWait)
+                if (ANIMATION_TIMEOUT_ON_CLICK == rAnimationBitmap.mnWait)
                 {
                     // ATM the huge value would block the timer, so
                     // use a long time to show first page (whole day)
@@ -233,14 +233,14 @@ namespace drawinglayer
                     while (mnNextFrameToPrepare <= nTarget)
                     {
                         // prepare step
-                        const AnimationBitmap& rAnimBitmap = maAnimation.Get(sal_uInt16(mnNextFrameToPrepare));
+                        const AnimationBitmap& rAnimationBitmap = maAnimation.Get(sal_uInt16(mnNextFrameToPrepare));
 
-                        switch (rAnimBitmap.eDisposal)
+                        switch (rAnimationBitmap.meDisposal)
                         {
                             case Disposal::Not:
                             {
-                                maVirtualDevice->DrawBitmapEx(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx);
-                                Bitmap aMask = rAnimBitmap.aBmpEx.GetMask();
+                                maVirtualDevice->DrawBitmapEx(rAnimationBitmap.maPositionPixel, rAnimationBitmap.maBitmapEx);
+                                Bitmap aMask = rAnimationBitmap.maBitmapEx.GetMask();
 
                                 if (aMask.IsEmpty())
                                 {
@@ -252,7 +252,7 @@ namespace drawinglayer
                                 else
                                 {
                                     BitmapEx aExpandVisibilityMask = BitmapEx(aMask, aMask);
-                                    maVirtualDeviceMask->DrawBitmapEx(rAnimBitmap.aPosPix, aExpandVisibilityMask);
+                                    maVirtualDeviceMask->DrawBitmapEx(rAnimationBitmap.maPositionPixel, aExpandVisibilityMask);
                                 }
 
                                 break;
@@ -260,15 +260,15 @@ namespace drawinglayer
                             case Disposal::Back:
                             {
                                 // #i70772# react on no mask, for primitives, too.
-                                const Bitmap aMask(rAnimBitmap.aBmpEx.GetMask());
-                                const Bitmap aContent(rAnimBitmap.aBmpEx.GetBitmap());
+                                const Bitmap aMask(rAnimationBitmap.maBitmapEx.GetMask());
+                                const Bitmap aContent(rAnimationBitmap.maBitmapEx.GetBitmap());
 
                                 maVirtualDeviceMask->Erase();
-                                maVirtualDevice->DrawBitmap(rAnimBitmap.aPosPix, aContent);
+                                maVirtualDevice->DrawBitmap(rAnimationBitmap.maPositionPixel, aContent);
 
                                 if (aMask.IsEmpty())
                                 {
-                                    const ::tools::Rectangle aRect(rAnimBitmap.aPosPix, aContent.GetSizePixel());
+                                    const ::tools::Rectangle aRect(rAnimationBitmap.maPositionPixel, aContent.GetSizePixel());
                                     maVirtualDeviceMask->SetFillColor(COL_BLACK);
                                     maVirtualDeviceMask->SetLineColor();
                                     maVirtualDeviceMask->DrawRect(aRect);
@@ -276,16 +276,16 @@ namespace drawinglayer
                                 else
                                 {
                                     BitmapEx aExpandVisibilityMask = BitmapEx(aMask, aMask);
-                                    maVirtualDeviceMask->DrawBitmapEx(rAnimBitmap.aPosPix, aExpandVisibilityMask);
+                                    maVirtualDeviceMask->DrawBitmapEx(rAnimationBitmap.maPositionPixel, aExpandVisibilityMask);
                                 }
 
                                 break;
                             }
                             case Disposal::Previous:
                             {
-                                maVirtualDevice->DrawBitmapEx(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx);
-                                BitmapEx aExpandVisibilityMask = BitmapEx(rAnimBitmap.aBmpEx.GetMask(), rAnimBitmap.aBmpEx.GetMask());
-                                maVirtualDeviceMask->DrawBitmapEx(rAnimBitmap.aPosPix, aExpandVisibilityMask);
+                                maVirtualDevice->DrawBitmapEx(rAnimationBitmap.maPositionPixel, rAnimationBitmap.maBitmapEx);
+                                BitmapEx aExpandVisibilityMask = BitmapEx(rAnimationBitmap.maBitmapEx.GetMask(), rAnimationBitmap.maBitmapEx.GetMask());
+                                maVirtualDeviceMask->DrawBitmapEx(rAnimationBitmap.maPositionPixel, aExpandVisibilityMask);
                                 break;
                             }
                         }

@@ -121,11 +121,11 @@ bool ImplAnimView::matches( OutputDevice* pOut, long nExtraData ) const
     return bRet;
 }
 
-void ImplAnimView::getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix )
+void ImplAnimView::getPosSize( const AnimationBitmap& rAnimationBitmap, Point& rPosPix, Size& rSizePix )
 {
     const Size& rAnmSize = mpParent->GetDisplaySizePixel();
-    Point       aPt2( rAnm.aPosPix.X() + rAnm.aSizePix.Width() - 1,
-                      rAnm.aPosPix.Y() + rAnm.aSizePix.Height() - 1 );
+    Point       aPt2( rAnimationBitmap.maPositionPixel.X() + rAnimationBitmap.maSizePixel.Width() - 1,
+                      rAnimationBitmap.maPositionPixel.Y() + rAnimationBitmap.maSizePixel.Height() - 1 );
     double      fFactX, fFactY;
 
     // calculate x scaling
@@ -140,8 +140,8 @@ void ImplAnimView::getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size
     else
         fFactY = 1.0;
 
-    rPosPix.setX( FRound( rAnm.aPosPix.X() * fFactX ) );
-    rPosPix.setY( FRound( rAnm.aPosPix.Y() * fFactY ) );
+    rPosPix.setX( FRound( rAnimationBitmap.maPositionPixel.X() * fFactX ) );
+    rPosPix.setY( FRound( rAnimationBitmap.maPositionPixel.Y() * fFactY ) );
 
     aPt2.setX( FRound( aPt2.X() * fFactX ) );
     aPt2.setY( FRound( aPt2.Y() * fFactY ) );
@@ -216,9 +216,9 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
         Size                    aBmpSizePix;
         const sal_uLong             nLastPos = mpParent->Count() - 1;
         mnActPos = std::min( nPos, nLastPos );
-        const AnimationBitmap&  rAnm = mpParent->Get( static_cast<sal_uInt16>( mnActPos ) );
+        const AnimationBitmap&  rAnimationBitmap = mpParent->Get( static_cast<sal_uInt16>( mnActPos ) );
 
-        getPosSize( rAnm, aPosPix, aSizePix );
+        getPosSize( rAnimationBitmap, aPosPix, aSizePix );
 
         // Mirrored horizontally?
         if( mbHMirr )
@@ -271,7 +271,7 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
                 pDev->DrawOutDev( maRestPt, maRestSz, Point(), maRestSz, *mpRestore );
         }
 
-        meLastDisposal = rAnm.eDisposal;
+        meLastDisposal = rAnimationBitmap.meDisposal;
         maRestPt = aPosPix;
         maRestSz = aSizePix;
 
@@ -286,7 +286,7 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
             mpRestore->DrawOutDev( Point(), maRestSz, aPosPix, aSizePix, *pDev );
         }
 
-        pDev->DrawBitmapEx( aBmpPosPix, aBmpSizePix, rAnm.aBmpEx );
+        pDev->DrawBitmapEx( aBmpPosPix, aBmpSizePix, rAnimationBitmap.maBitmapEx );
 
         if( !pVDev )
         {

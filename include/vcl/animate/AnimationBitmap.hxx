@@ -33,39 +33,44 @@ enum class Disposal
 
 struct VCL_DLLPUBLIC AnimationBitmap
 {
-    BitmapEx aBmpEx;
-    Point aPosPix;
-    Size aSizePix;
-    long nWait;
-    Disposal eDisposal;
-    bool bUserInput;
+    BitmapEx maBitmapEx;
+    Point maPositionPixel;
+    Size maSizePixel;
+    long mnWait;
+    Disposal meDisposal;
+    bool mbUserInput;
 
     AnimationBitmap()
-        : nWait(0)
-        , eDisposal(Disposal::Not)
-        , bUserInput(false)
+        : mnWait(0)
+        , meDisposal(Disposal::Not)
+        , mbUserInput(false)
     {
     }
 
-    AnimationBitmap(const BitmapEx& rBmpEx, const Point& rPosPix, const Size& rSizePix,
-                    long _nWait = 0, Disposal _eDisposal = Disposal::Not)
-        : aBmpEx(rBmpEx)
-        , aPosPix(rPosPix)
-        , aSizePix(rSizePix)
-        , nWait(_nWait)
-        , eDisposal(_eDisposal)
-        , bUserInput(false)
+    AnimationBitmap(const BitmapEx& rBitmapEx, const Point& rPositionPixel, const Size& rSizePixel,
+                    long nWait = 0, Disposal eDisposal = Disposal::Not)
+        : maBitmapEx(rBitmapEx)
+        , maPositionPixel(rPositionPixel)
+        , maSizePixel(rSizePixel)
+        , mnWait(nWait)
+        , meDisposal(eDisposal)
+        , mbUserInput(false)
     {
     }
 
-    bool operator==(const AnimationBitmap& rAnimBmp) const
+    bool operator==(const AnimationBitmap& rAnimationBitmap) const
     {
-        return (rAnimBmp.aBmpEx == aBmpEx && rAnimBmp.aPosPix == aPosPix
-                && rAnimBmp.aSizePix == aSizePix && rAnimBmp.nWait == nWait
-                && rAnimBmp.eDisposal == eDisposal && rAnimBmp.bUserInput == bUserInput);
+        return (rAnimationBitmap.maBitmapEx == maBitmapEx
+                && rAnimationBitmap.maPositionPixel == maPositionPixel
+                && rAnimationBitmap.maSizePixel == maSizePixel && rAnimationBitmap.mnWait == mnWait
+                && rAnimationBitmap.meDisposal == meDisposal
+                && rAnimationBitmap.mbUserInput == mbUserInput);
     }
 
-    bool operator!=(const AnimationBitmap& rAnimBmp) const { return !(*this == rAnimBmp); }
+    bool operator!=(const AnimationBitmap& rAnimationBitmap) const
+    {
+        return !(*this == rAnimationBitmap);
+    }
 
     BitmapChecksum GetChecksum() const;
 };
