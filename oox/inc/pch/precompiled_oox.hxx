@@ -79,7 +79,7 @@
 #include <sal/log.hxx>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
-#include <vcl/animate.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/dllapi.h>

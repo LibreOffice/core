@@ -103,7 +103,7 @@
 #include <salhelper/singletonref.hxx>
 #include <salhelper/thread.hxx>
 #include <vcl/alpha.hxx>
-#include <vcl/animate.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/checksum.hxx>
