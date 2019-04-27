@@ -112,7 +112,7 @@ class ScAcceptChgDlg final : public SfxModelessDialogController
     OUString* MakeTypeString(ScChangeActionType eType);
 
     std::unique_ptr<weld::TreeIter> AppendChangeAction(
-        const ScChangeAction* pScChangeAction, bool bCreateOnDamend,
+        const ScChangeAction* pScChangeAction, bool bCreateOnDemand,
         const weld::TreeIter* pParent = nullptr, bool bDelMaster = false,
         bool bDisabled = false);
 
