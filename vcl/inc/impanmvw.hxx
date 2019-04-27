@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_SOURCE_GDI_IMPANMVW_HXX
 #define INCLUDED_VCL_SOURCE_GDI_IMPANMVW_HXX
 
-#include <vcl/animate.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/vclptr.hxx>
 
 class Animation;

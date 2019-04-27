@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_ANIMATE_HXX
-#define INCLUDED_VCL_ANIMATE_HXX
+#ifndef INCLUDED_VCL_ANIMATE_ANIMATION_HXX
+#define INCLUDED_VCL_ANIMATE_ANIMATION_HXX
 
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
@@ -183,6 +183,6 @@ private:
 
 };
 
-#endif // INCLUDED_VCL_ANIMATE_HXX
+#endif // INCLUDED_VCL_ANIMATE_ANIMATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7811,7 +7811,7 @@ include/vcl/accessiblefactory.hxx
 include/vcl/accessibletable.hxx
 include/vcl/accessibletableprovider.hxx
 include/vcl/alpha.hxx
-include/vcl/animate.hxx
+include/vcl/animate/Animation.hxx
 include/vcl/bitmap.hxx
 include/vcl/bitmapaccess.hxx
 include/vcl/bitmapex.hxx
@@ -17758,6 +17758,7 @@ vcl/quartz/salgdicommon.cxx
 vcl/quartz/salgdiutils.cxx
 vcl/quartz/salvd.cxx
 vcl/quartz/utils.cxx
+vcl/source/animate/Animation.cxx
 vcl/source/app/ITiledRenderable.cxx
 vcl/source/app/IconThemeInfo.cxx
 vcl/source/app/IconThemeScanner.cxx
@@ -17894,7 +17895,6 @@ vcl/source/fontsubset/xlat.hxx
 vcl/source/gdi/CommonSalLayout.cxx
 vcl/source/gdi/VerticalOrientationData.cxx
 vcl/source/gdi/alpha.cxx
-vcl/source/gdi/animate.cxx
 vcl/source/gdi/bitmap3.cxx
 vcl/source/gdi/bitmapex.cxx
 vcl/source/gdi/bmpacc.cxx

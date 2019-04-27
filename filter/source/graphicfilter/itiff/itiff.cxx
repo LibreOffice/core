@@ -25,7 +25,7 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
-#include <vcl/animate.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include "lzwdecom.hxx"
