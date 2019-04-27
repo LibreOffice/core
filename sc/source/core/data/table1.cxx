@@ -278,6 +278,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     mbForceBreaks(false),
     aDefaultColAttrArray(static_cast<SCCOL>(-1), nNewTab, pDoc, nullptr)
 {
+    fprintf(stderr, "tab created\n");
 
     if (bColInfo)
     {
