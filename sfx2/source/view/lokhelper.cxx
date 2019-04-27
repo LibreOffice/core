@@ -12,6 +12,10 @@
 #include <com/sun/star/frame/Desktop.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <vcl/lok.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/commandevent.hxx>
+#include <sfx2/app.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -235,6 +239,138 @@ void SfxLokHelper::notifyContextChange(SfxViewShell const* pViewShell, const OUS
     aBuffer.append(' ');
     aBuffer.append(OUStringToOString(aContext.replace(' ', '_'), RTL_TEXTENCODING_UTF8));
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_CHANGED, aBuffer.makeStringAndClear().getStr());
+}
+
+namespace
+{
+    struct LOKAsyncEventData
+    {
+        int mnView; // Window is not enough.
+        VclPtr<vcl::Window> mpWindow;
+        VclEventId mnEvent;
+        MouseEvent maMouseEvent;
+        KeyEvent maKeyEvent;
+    };
+
+    void LOKPostAsyncEvent(void* pEv, void*)
+    {
+        LOKAsyncEventData* pLOKEv = static_cast<LOKAsyncEventData*>(pEv);
+        if (pLOKEv->mpWindow->IsDisposed())
+            return;
+
+        int nView = SfxLokHelper::getView(nullptr);
+        if (nView != pLOKEv->mnView)
+        {
+            SAL_INFO("sfx.view", "LOK - view mismatch " << nView << " vs. " << pLOKEv->mnView);
+            SfxLokHelper::setView(pLOKEv->mnView);
+        }
+
+        switch (pLOKEv->mnEvent)
+        {
+        case VclEventId::WindowKeyInput:
+            pLOKEv->mpWindow->KeyInput(pLOKEv->maKeyEvent);
+            break;
+        case VclEventId::WindowKeyUp:
+            pLOKEv->mpWindow->KeyUp(pLOKEv->maKeyEvent);
+            break;
+        case VclEventId::WindowMouseButtonDown:
+            pLOKEv->mpWindow->LogicMouseButtonDown(pLOKEv->maMouseEvent);
+            // Invoke the context menu
+            if (pLOKEv->maMouseEvent.GetButtons() & MOUSE_RIGHT)
+            {
+                const CommandEvent aCEvt(pLOKEv->maMouseEvent.GetPosPixel(), CommandEventId::ContextMenu, true, nullptr);
+                pLOKEv->mpWindow->Command(aCEvt);
+            }
+            break;
+        case VclEventId::WindowMouseButtonUp:
+            pLOKEv->mpWindow->LogicMouseButtonUp(pLOKEv->maMouseEvent);
+
+            // sometimes MouseButtonDown captures mouse and starts tracking, and VCL
+            // will not take care of releasing that with tiled rendering
+            if (pLOKEv->mpWindow->IsTracking())
+                pLOKEv->mpWindow->EndTracking();
+
+            break;
+        case VclEventId::WindowMouseMove:
+            pLOKEv->mpWindow->LogicMouseMove(pLOKEv->maMouseEvent);
+            break;
+        default:
+            assert(false);
+            break;
+        }
+
+        delete pLOKEv;
+    }
+
+    void postEventAsync(LOKAsyncEventData *pEvent)
+    {
+        if (!pEvent->mpWindow || pEvent->mpWindow->IsDisposed())
+        {
+            SAL_WARN("vcl", "Async event post - but no valid window as destination " << pEvent->mpWindow.get());
+            delete pEvent;
+            return;
+        }
+
+        pEvent->mnView = SfxLokHelper::getView(nullptr);
+        if (vcl::lok::isUnipoll())
+        {
+            if (!Application::IsMainThread())
+                SAL_WARN("lok", "Posting event directly but not called from main thread!");
+            LOKPostAsyncEvent(pEvent, nullptr);
+        }
+        else
+            Application::PostUserEvent(Link<void*, void>(pEvent, LOKPostAsyncEvent));
+    }
+}
+
+void SfxLokHelper::postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,
+                                     int nType, int nCharCode, int nKeyCode)
+{
+    LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
+    switch (nType)
+    {
+    case LOK_KEYEVENT_KEYINPUT:
+        pLOKEv->mnEvent = VclEventId::WindowKeyInput;
+        break;
+    case LOK_KEYEVENT_KEYUP:
+        pLOKEv->mnEvent = VclEventId::WindowKeyUp;
+        break;
+    default:
+        assert(false);
+    }
+    pLOKEv->maKeyEvent = KeyEvent(nCharCode, nKeyCode, 0);
+    pLOKEv->mpWindow = xWindow;
+    postEventAsync(pLOKEv);
+}
+
+void SfxLokHelper::postMouseEventAsync(const VclPtr<vcl::Window> &xWindow,
+                                       int nType, const Point &rPos,
+                                       int nCount, MouseEventModifiers aModifiers,
+                                       int nButtons, int nModifier)
+{
+    LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
+    switch (nType)
+    {
+    case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
+        pLOKEv->mnEvent = VclEventId::WindowMouseButtonDown;
+        break;
+    case LOK_MOUSEEVENT_MOUSEBUTTONUP:
+        pLOKEv->mnEvent = VclEventId::WindowMouseButtonUp;
+        break;
+    case LOK_MOUSEEVENT_MOUSEMOVE:
+        pLOKEv->mnEvent = VclEventId::WindowMouseMove;
+        break;
+    default:
+        assert(false);
+    }
+
+    // no reason - just always true so far.
+    assert (aModifiers == MouseEventModifiers::SIMPLECLICK);
+
+    pLOKEv->maMouseEvent = MouseEvent(rPos, nCount,
+                                      aModifiers, nButtons, nModifier);
+    pLOKEv->mpWindow = xWindow;
+    postEventAsync(pLOKEv);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

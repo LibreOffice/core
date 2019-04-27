@@ -2989,10 +2989,13 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
 
     std::vector<beans::PropertyValue> aPropertyValuesVector(jsonToPropertyValuesVector(pArguments));
 
-    beans::PropertyValue aSynchronMode;
-    aSynchronMode.Name = "SynchronMode";
-    aSynchronMode.Value <<= false;
-    aPropertyValuesVector.push_back(aSynchronMode);
+    if (!vcl::lok::isUnipoll())
+    {
+        beans::PropertyValue aSynchronMode;
+        aSynchronMode.Name = "SynchronMode";
+        aSynchronMode.Value <<= false;
+        aPropertyValuesVector.push_back(aSynchronMode);
+    }
 
     int nView = SfxLokHelper::getView();
     if (nView < 0)
