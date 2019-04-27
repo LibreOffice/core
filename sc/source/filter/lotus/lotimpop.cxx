@@ -34,6 +34,8 @@
 #include <lotattr.hxx>
 #include <stringutil.hxx>
 
+#include <unotools/configmgr.hxx>
+
 LOTUS_ROOT::LOTUS_ROOT( ScDocument* pDocP, rtl_TextEncoding eQ )
     :
         pDoc( pDocP),
@@ -325,6 +327,9 @@ void ImportLotus::NamedSheet()
     Read(aName);
 
     SCTAB nLTab(SanitizeTab(static_cast<SCTAB>(nTmpTab)));
+    //ofz#14167 arbitrary sheet limit to make fuzzing useful
+    if (nLTab > 5 && utl::ConfigManager::IsFuzzing())
+        nLTab = 5;
 
     if (pD->HasTable(nLTab))
         pD->RenameTab(nLTab, aName);

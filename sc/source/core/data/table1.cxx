@@ -278,7 +278,6 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     mbForceBreaks(false),
     aDefaultColAttrArray(static_cast<SCCOL>(-1), nNewTab, pDoc, nullptr)
 {
-
     if (bColInfo)
     {
         mpColWidth.reset( new ScCompressedArray<SCCOL, sal_uInt16>( MAXCOL+1, STD_COL_WIDTH ) );
