@@ -644,38 +644,38 @@ void GIFReader::FillImages( const sal_uInt8* pBytes, sal_uLong nCount )
 
 void GIFReader::CreateNewBitmaps()
 {
-    AnimationBitmap aAnimBmp;
+    AnimationBitmap aAnimationBitmap;
 
     pAcc8.reset();
 
     if( bGCTransparent )
     {
         pAcc1.reset();
-        aAnimBmp.aBmpEx = BitmapEx( aBmp8, aBmp1 );
+        aAnimationBitmap.maBitmapEx = BitmapEx( aBmp8, aBmp1 );
     }
     else
-        aAnimBmp.aBmpEx = BitmapEx( aBmp8 );
+        aAnimationBitmap.maBitmapEx = BitmapEx( aBmp8 );
 
-    aAnimBmp.aPosPix = Point( nImagePosX, nImagePosY );
-    aAnimBmp.aSizePix = Size( nImageWidth, nImageHeight );
-    aAnimBmp.nWait = ( nTimer != 65535 ) ? nTimer : ANIMATION_TIMEOUT_ON_CLICK;
-    aAnimBmp.bUserInput = false;
+    aAnimationBitmap.maPositionPixel = Point( nImagePosX, nImagePosY );
+    aAnimationBitmap.maSizePixel = Size( nImageWidth, nImageHeight );
+    aAnimationBitmap.mnWait = ( nTimer != 65535 ) ? nTimer : ANIMATION_TIMEOUT_ON_CLICK;
+    aAnimationBitmap.mbUserInput = false;
 
     // tdf#104121 . Internet Explorer, Firefox, Chrome and Safari all set a minimum default playback speed.
     // IE10 Consumer Preview sets default of 100ms for rates less that 20ms. We do the same
-    if (aAnimBmp.nWait < 2) // 20ms, specified in 100's of a second
-        aAnimBmp.nWait = 10;
+    if (aAnimationBitmap.mnWait < 2) // 20ms, specified in 100's of a second
+        aAnimationBitmap.mnWait = 10;
 
     if( nGCDisposalMethod == 2 )
-        aAnimBmp.eDisposal = Disposal::Back;
+        aAnimationBitmap.meDisposal = Disposal::Back;
     else if( nGCDisposalMethod == 3 )
-        aAnimBmp.eDisposal = Disposal::Previous;
+        aAnimationBitmap.meDisposal = Disposal::Previous;
     else
-        aAnimBmp.eDisposal = Disposal::Not;
+        aAnimationBitmap.meDisposal = Disposal::Not;
 
-    nAnimationByteSize += aAnimBmp.aBmpEx.GetSizeBytes();
+    nAnimationByteSize += aAnimationBitmap.maBitmapEx.GetSizeBytes();
     nAnimationMinFileData += static_cast<sal_uInt64>(nImageWidth) * nImageHeight / 2560;
-    aAnimation.Insert( aAnimBmp );
+    aAnimation.Insert(aAnimationBitmap);
 
     if( aAnimation.Count() == 1 )
     {
@@ -923,7 +923,7 @@ ReadState GIFReader::ReadGIF( Graphic& rGraphic )
 
     if( aAnimation.Count() == 1 )
     {
-        rGraphic = aAnimation.Get( 0 ).aBmpEx;
+        rGraphic = aAnimation.Get(0).maBitmapEx;
 
         if( nLogWidth100 && nLogHeight100 )
         {
