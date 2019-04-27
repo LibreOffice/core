@@ -126,9 +126,9 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
 
                     // Push Polygon output to the right place; this is the
                     // offset of the sub-image within the total animation
-                    aTransMap.SetOrigin( Point( rStepBmp.aPosPix.X(), rStepBmp.aPosPix.Y() ) );
+                    aTransMap.SetOrigin( Point( rStepBmp.maPositionPixel.X(), rStepBmp.maPositionPixel.Y() ) );
                     pVDev->SetMapMode( aTransMap );
-                    pVDev->DrawPolyPolygon( CreateAutoContour( rStepBmp.aBmpEx, pRect ) );
+                    pVDev->DrawPolyPolygon( CreateAutoContour( rStepBmp.maBitmapEx, pRect ) );
                 }
 
                 aTransMap.SetOrigin( Point() );
