@@ -24,29 +24,29 @@
 
 BitmapChecksum AnimationBitmap::GetChecksum() const
 {
-    BitmapChecksum  nCrc = aBmpEx.GetChecksum();
-    SVBT32      aBT32;
+    BitmapChecksum nCrc = aBmpEx.GetChecksum();
+    SVBT32 aBT32;
 
-    Int32ToSVBT32( aPosPix.X(), aBT32 );
-    nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
+    Int32ToSVBT32(aPosPix.X(), aBT32);
+    nCrc = vcl_get_checksum(nCrc, aBT32, 4);
 
-    Int32ToSVBT32( aPosPix.Y(), aBT32 );
-    nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
+    Int32ToSVBT32(aPosPix.Y(), aBT32);
+    nCrc = vcl_get_checksum(nCrc, aBT32, 4);
 
-    Int32ToSVBT32( aSizePix.Width(), aBT32 );
-    nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
+    Int32ToSVBT32(aSizePix.Width(), aBT32);
+    nCrc = vcl_get_checksum(nCrc, aBT32, 4);
 
-    Int32ToSVBT32( aSizePix.Height(), aBT32 );
-    nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
+    Int32ToSVBT32(aSizePix.Height(), aBT32);
+    nCrc = vcl_get_checksum(nCrc, aBT32, 4);
 
-    Int32ToSVBT32( nWait, aBT32 );
-    nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
+    Int32ToSVBT32(nWait, aBT32);
+    nCrc = vcl_get_checksum(nCrc, aBT32, 4);
 
-    UInt32ToSVBT32( o3tl::underlyingEnumValue(eDisposal), aBT32 );
-    nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
+    UInt32ToSVBT32(o3tl::underlyingEnumValue(eDisposal), aBT32);
+    nCrc = vcl_get_checksum(nCrc, aBT32, 4);
 
-    UInt32ToSVBT32( sal_uInt32(bUserInput), aBT32 );
-    nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
+    UInt32ToSVBT32(sal_uInt32(bUserInput), aBT32);
+    nCrc = vcl_get_checksum(nCrc, aBT32, 4);
 
     return nCrc;
 }
