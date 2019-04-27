@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <vector>
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
@@ -32,12 +33,17 @@
 namespace comphelper
 {
 
-struct AttributeList_Impl;
+struct TagAttribute
+{
+    OUString sName;
+    OUString sType;
+    OUString sValue;
+};
 
 class COMPHELPER_DLLPUBLIC AttributeList :
     public ::cppu::WeakImplHelper<css::xml::sax::XAttributeList, css::util::XCloneable>
 {
-    std::unique_ptr<AttributeList_Impl> m_pImpl;
+    std::vector<TagAttribute> mAttributes;
 public:
     AttributeList();
     AttributeList(const AttributeList &r);
@@ -45,15 +51,33 @@ public:
     virtual ~AttributeList() override;
 
     // methods that are not contained in any interface
-    void AddAttribute(const OUString &sName , const OUString &sType , const OUString &sValue);
-    void Clear();
+    void AddAttribute(const OUString &sName , const OUString &sType , const OUString &sValue)
+    {
+        mAttributes.push_back({sName, sType, sValue});
+    }
+    void Clear()
+    {
+        mAttributes.clear();
+    }
 
     // css::xml::sax::XAttributeList
-    virtual sal_Int16 SAL_CALL getLength() override;
-    virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) override;
-    virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) override;
+    virtual sal_Int16 SAL_CALL getLength() override
+    {
+        return static_cast<sal_Int16>(mAttributes.size());
+    }
+    virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) override
+    {
+        return mAttributes[i].sName;
+    }
+    virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) override
+    {
+        return mAttributes[i].sType;
+    }
     virtual OUString SAL_CALL getTypeByName(const OUString& aName) override;
-    virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) override;
+    virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) override
+    {
+        return mAttributes[i].sValue;
+    }
     virtual OUString SAL_CALL getValueByName(const OUString& aName) override;
 
     // css::util::XCloneable
