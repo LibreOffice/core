@@ -20,14 +20,13 @@
 #ifndef INCLUDED_XMLSECURITY_SOURCE_HELPER_XSECPARSER_HXX
 #define INCLUDED_XMLSECURITY_SOURCE_HELPER_XSECPARSER_HXX
 
-#include <xsecctl.hxx>
-
-#include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 #include <cppuhelper/implbase.hxx>
+
+class XMLSignatureHelper;
+class XSecController;
 
 class XSecParser: public cppu::WeakImplHelper
 <

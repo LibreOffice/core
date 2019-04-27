@@ -10,17 +10,15 @@
 #ifndef INCLUDED_XMLSECURITY_SOURCE_GPG_SEINITIALIZER_HXX
 #define INCLUDED_XMLSECURITY_SOURCE_GPG_SEINITIALIZER_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 
 #include <xsecxmlsecdllapi.h>
 #include <cppuhelper/implbase.hxx>
+
+namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
 
 class XSECXMLSEC_DLLPUBLIC SEInitializerGpg : public cppu::WeakImplHelper
 <

@@ -32,6 +32,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/ofopxmlhelper.hxx>

@@ -24,17 +24,17 @@
 #include <rtl/ustring.hxx>
 #include <xsecxmlsecdllapi.h>
 
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
-#include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
-#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
+
+namespace com::sun::star::xml::crypto { class XXMLSignatureTemplate; }
+namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
+
 
 class XSECXMLSEC_DLLPUBLIC XMLSignature_GpgImpl : public ::cppu::WeakImplHelper<
     css::xml::crypto::XXMLSignature ,

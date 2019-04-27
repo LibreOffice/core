@@ -24,7 +24,8 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
-#include <pk11pub.h>
+#include <seccomon.h>
+#include <secmodt.h>
 
 class OCipherContext : public cppu::WeakImplHelper< css::xml::crypto::XCipherContext >
 {

@@ -20,14 +20,13 @@
 #ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_SEINITIALIZER_NSSIMPL_HXX
 #define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_SEINITIALIZER_NSSIMPL_HXX
 
-#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
-#include <libxml/tree.h>
-
 #include "nssinitializer.hxx"
+
+namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
 
 class SEInitializer_NssImpl : public cppu::ImplInheritanceHelper
 <

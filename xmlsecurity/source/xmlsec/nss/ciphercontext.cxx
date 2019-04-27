@@ -25,6 +25,7 @@
 #include <rtl/ref.hxx>
 
 #include "ciphercontext.hxx"
+#include <pk11pub.h>
 
 using namespace ::com::sun::star;
 

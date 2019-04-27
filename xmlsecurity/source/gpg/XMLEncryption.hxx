@@ -11,15 +11,13 @@
 #define INCLUDED_XMLSECURITY_SOURCE_GPG_XMLENCRYPTION_HXX
 
 #include <sal/config.h>
-#include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/crypto/XXMLEncryption.hpp>
-#include <com/sun/star/xml/crypto/XXMLEncryptionTemplate.hpp>
-#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
-#include <com/sun/star/xml/crypto/XMLEncryptionException.hpp>
+
+namespace com::sun::star::xml::crypto { class XXMLEncryptionTemplate; }
+namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
 
 class XMLEncryptionGpg : public cppu::WeakImplHelper< css::xml::crypto::XXMLEncryption >
 {

@@ -29,13 +29,12 @@
 
 #include <xmlsec-wrapper.h>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;
-using ::com::sun::star::lang::XMultiServiceFactory ;
-using ::com::sun::star::lang::XSingleServiceFactory ;
 
 using ::com::sun::star::xml::wrapper::XXMLElementWrapper ;
 using ::com::sun::star::xml::wrapper::XXMLDocumentWrapper ;

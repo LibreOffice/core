@@ -27,6 +27,8 @@
 #include <rtl/uri.hxx>
 #include <comphelper/scopeguard.hxx>
 
+#include <com/sun/star/xml/crypto/XUriBinding.hpp>
+
 #include <libxml/uri.h>
 #include <xmlsec-wrapper.h>
 

@@ -20,11 +20,7 @@
 #ifndef INCLUDED_XMLSECURITY_INC_CERTIFICATECHOOSER_HXX
 #define INCLUDED_XMLSECURITY_INC_CERTIFICATECHOOSER_HXX
 
-#include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
-#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <svl/sigstruct.hxx>
 #include <vcl/weld.hxx>
 
 namespace com {
@@ -35,6 +31,8 @@ namespace security {
 namespace xml { namespace crypto {
     class XSecurityEnvironment; }}
 }}}
+
+namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
 
 struct UserData
 {

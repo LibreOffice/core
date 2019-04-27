@@ -45,6 +45,7 @@
 #include <xmlsignaturehelper.hxx>
 #include <documentsignaturemanager.hxx>
 #include <certificate.hxx>
+#include <xsecctl.hxx>
 
 using namespace com::sun::star;
 

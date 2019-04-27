@@ -12,6 +12,9 @@
 #include "SecurityEnvironment.hxx"
 #include "CertificateImpl.hxx"
 
+#include <com/sun/star/security/CertificateCharacters.hpp>
+#include <com/sun/star/security/CertificateValidity.hpp>
+
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <list>
@@ -27,6 +30,16 @@
 #include <key.h>
 #include <keylistresult.h>
 #include <xmlsec-wrapper.h>
+
+#if defined _MSC_VER && defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundef"
+#endif
+#include <gpgme.h>
+#if defined _MSC_VER && defined __clang__
+#pragma clang diagnostic pop
+#endif
+#include <context.h>
 
 using namespace css;
 using namespace css::security;

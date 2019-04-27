@@ -21,8 +21,10 @@
 #define INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_ELEMENTCOLLECTOR_HXX
 
 #include "elementmark.hxx"
-#include <com/sun/star/xml/crypto/sax/XReferenceResolvedListener.hpp>
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com::sun::star::xml::crypto::sax { class XReferenceResolvedListener; }
 
 class ElementCollector : public ElementMark
 /****** elementcollector.hxx/CLASS ElementCollector ***************************

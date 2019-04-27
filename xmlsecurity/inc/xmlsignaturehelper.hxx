@@ -20,24 +20,16 @@
 #ifndef INCLUDED_XMLSECURITY_INC_XMLSIGNATUREHELPER_HXX
 #define INCLUDED_XMLSECURITY_INC_XMLSIGNATUREHELPER_HXX
 
-#include <vector>
-
 #include <tools/link.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <svl/sigstruct.hxx>
-#include "xsecctl.hxx"
 #include "xmlsecuritydllapi.h"
 #include "xmlsignaturehelper.hxx"
 
-#include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/xml/sax/XWriter.hpp>
-#include <com/sun/star/xml/crypto/XSEInitializer.hpp>
-#include <com/sun/star/xml/crypto/sax/XSignatureCreationResultListener.hpp>
-#include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultListener.hpp>
-
 class DateTime;
+class UriBindingHelper;
+class XSecController;
 
 namespace com {
 namespace sun {
@@ -48,6 +40,12 @@ namespace io {
 namespace embed {
     class XStorage; }
 }}}
+
+namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace crypto { class XXMLSecurityContext; } } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XDocumentHandler; } } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XWriter; } } } } }
 
 /**********************************************************
  XMLSignatureHelper

@@ -22,31 +22,26 @@
 
 #include <svl/sigstruct.hxx>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/xml/crypto/XXMLSignature.hpp>
-#include <com/sun/star/xml/crypto/XSEInitializer.hpp>
-#include <com/sun/star/xml/crypto/sax/XSecuritySAXEventKeeper.hpp>
-#include <com/sun/star/xml/crypto/sax/XReferenceResolvedListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XSAXEventKeeperStatusChangeListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureCreationResultListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultListener.hpp>
-#include <com/sun/star/xml/wrapper/XXMLDocumentWrapper.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 
-#include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <vector>
 
 #include "xmlsignaturehelper2.hxx"
+
+namespace com::sun::star::embed { class XStorage; }
+namespace com::sun::star::graphic { class XGraphic; }
+namespace com::sun::star::io { class XInputStream; }
+namespace com::sun::star::lang { class XInitialization; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
+namespace com::sun::star::xml::crypto { class XXMLSignature; }
+namespace com::sun::star::xml::crypto:: sax { class XReferenceResolvedListener; }
+namespace com::sun::star::xml::sax { class XDocumentHandler; }
 
 #define NS_XMLDSIG "http://www.w3.org/2000/09/xmldsig#"
 #define NS_DC      "http://purl.org/dc/elements/1.1/"
@@ -66,7 +61,6 @@
 #define ALGO_XMLDSIGSHA512 "http://www.w3.org/2001/04/xmlenc#sha512"
 #define ALGO_RELATIONSHIP  "http://schemas.openxmlformats.org/package/2006/RelationshipTransform"
 
-class XSecParser;
 class XMLDocumentWrapper_XmlSecImpl;
 class SAXEventKeeperImpl;
 class XMLSignatureHelper;
