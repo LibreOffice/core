@@ -457,10 +457,9 @@ bool SdrEditView::IsDismantlePossible(bool bMakeLines) const
 void SdrEditView::CheckPossibilities()
 {
     if (mbSomeObjChgdFlag)
-        m_bPossibilitiesDirty=true;
-
-    if (mbSomeObjChgdFlag)
     {
+        m_bPossibilitiesDirty = true;
+
         // This call IS necessary to correct the MarkList, in which
         // no longer to the model belonging objects still can reside.
         // These ones need to be removed.

@@ -266,10 +266,7 @@ sal_uInt32 SvParser<T>::GetNextChar()
                 cUC = (sal_Unicode(c1) << 8) | c2;
             else
                 cUC = (sal_Unicode(c2) << 8) | c1;
-        }
 
-        if( !bErr )
-        {
             c = cUC;
         }
     }
