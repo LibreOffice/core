@@ -173,13 +173,13 @@ bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem const * pF
             aAnimation.Insert(AnimationBitmap(rGraphic.GetBitmapEx(), Point(), Size()));
 
         for (size_t i = 0; i < aAnimation.Count(); ++i)
-            mnSumOfAllPictHeight += aAnimation.Get(i).aBmpEx.GetSizePixel().Height();
+            mnSumOfAllPictHeight += aAnimation.Get(i).maBitmapEx.GetSizePixel().Height();
 
         for (size_t i = 0; mbStatus && i < aAnimation.Count(); ++i)
         {
             mnPalPos = 0;
             const AnimationBitmap& rAnimationBitmap = aAnimation.Get( i );
-            Bitmap aBmp = rAnimationBitmap.aBmpEx.GetBitmap();
+            Bitmap aBmp = rAnimationBitmap.maBitmapEx.GetBitmap();
             mpAcc = aBmp.AcquireReadAccess();
             if ( mpAcc )
             {
