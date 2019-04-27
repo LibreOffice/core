@@ -33,49 +33,41 @@ enum class Disposal
 
 struct VCL_DLLPUBLIC AnimationBitmap
 {
-    BitmapEx        aBmpEx;
-    Point           aPosPix;
-    Size            aSizePix;
-    long            nWait;
-    Disposal        eDisposal;
-    bool            bUserInput;
+    BitmapEx aBmpEx;
+    Point aPosPix;
+    Size aSizePix;
+    long nWait;
+    Disposal eDisposal;
+    bool bUserInput;
 
-                    AnimationBitmap()
-                        : nWait(0)
-                        , eDisposal(Disposal::Not)
-                        , bUserInput(false)
-                    {}
+    AnimationBitmap()
+        : nWait(0)
+        , eDisposal(Disposal::Not)
+        , bUserInput(false)
+    {
+    }
 
-                    AnimationBitmap(
-                        const BitmapEx& rBmpEx,
-                        const Point& rPosPix,
-                        const Size& rSizePix,
-                        long _nWait = 0,
-                        Disposal _eDisposal = Disposal::Not
-                    ) :
-                        aBmpEx      ( rBmpEx ),
-                        aPosPix     ( rPosPix ),
-                        aSizePix    ( rSizePix ),
-                        nWait       ( _nWait ),
-                        eDisposal   ( _eDisposal ),
-                        bUserInput  ( false )
-                    {}
+    AnimationBitmap(const BitmapEx& rBmpEx, const Point& rPosPix, const Size& rSizePix,
+                    long _nWait = 0, Disposal _eDisposal = Disposal::Not)
+        : aBmpEx(rBmpEx)
+        , aPosPix(rPosPix)
+        , aSizePix(rSizePix)
+        , nWait(_nWait)
+        , eDisposal(_eDisposal)
+        , bUserInput(false)
+    {
+    }
 
-    bool            operator==( const AnimationBitmap& rAnimBmp ) const
-                        {
-                            return( rAnimBmp.aBmpEx == aBmpEx &&
-                                    rAnimBmp.aPosPix == aPosPix &&
-                                    rAnimBmp.aSizePix == aSizePix &&
-                                    rAnimBmp.nWait == nWait &&
-                                    rAnimBmp.eDisposal == eDisposal &&
-                                    rAnimBmp.bUserInput == bUserInput );
-                        }
+    bool operator==(const AnimationBitmap& rAnimBmp) const
+    {
+        return (rAnimBmp.aBmpEx == aBmpEx && rAnimBmp.aPosPix == aPosPix
+                && rAnimBmp.aSizePix == aSizePix && rAnimBmp.nWait == nWait
+                && rAnimBmp.eDisposal == eDisposal && rAnimBmp.bUserInput == bUserInput);
+    }
 
-    bool            operator!=( const AnimationBitmap& rAnimBmp ) const
-                        { return !( *this == rAnimBmp ); }
+    bool operator!=(const AnimationBitmap& rAnimBmp) const { return !(*this == rAnimBmp); }
 
-
-    BitmapChecksum  GetChecksum() const;
+    BitmapChecksum GetChecksum() const;
 };
 
 #endif // INCLUDED_VCL_ANIMATE_ANIMATIONBITMAP_HXX
