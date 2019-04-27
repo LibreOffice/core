@@ -193,7 +193,7 @@ private:
     SvxItemPropertySet const  maPropSet;
 
     rtl::Reference< SlideshowImpl > mxController;
-    /** This flag is used together with mxController.is() to prevent
+    /** mbIsInStartup : This flag is used together with mxController.is() to prevent
         multiple instances of the slide show for one document.  The flag
         covers the time before mxController is set.
     */

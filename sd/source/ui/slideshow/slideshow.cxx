@@ -221,7 +221,7 @@ bool SlideShow::IsRunning( ViewShell& rViewShell )
 
 void SlideShow::CreateController(  ViewShell* pViewSh, ::sd::View* pView, vcl::Window* pParentWindow )
 {
-    DBG_ASSERT( !mxController.is(), "sd::SlideShow::CreateController(), clean up old controller first!" );
+    SAL_INFO_IF( !mxController.is(), "sd.slideshow", "sd::SlideShow::CreateController(), clean up old controller first!" );
 
     Reference< XPresentation2 > xThis( this );
 
@@ -647,8 +647,8 @@ void SAL_CALL SlideShow::end()
     // The mbIsInStartup flag should have been reset during the start of the
     // slide show.  Reset it here just in case that something has horribly
     // gone wrong.
-    OSL_ASSERT(!mbIsInStartup);
-    mbIsInStartup = false;
+    assert(!mbIsInStartup);
+    //mbIsInStartup = false;
 
     rtl::Reference< SlideshowImpl > xController( mxController );
     if( !xController.is() )
@@ -800,7 +800,7 @@ void SAL_CALL SlideShow::startWithArguments(const Sequence< PropertyValue >& rAr
     // Stop a running show before starting a new one.
     if( mxController.is() )
     {
-        OSL_ASSERT(!mbIsInStartup);
+        assert(!mbIsInStartup);
         end();
     }
     else if (mbIsInStartup)
