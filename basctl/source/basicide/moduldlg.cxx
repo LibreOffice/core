@@ -1128,8 +1128,10 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                     bool bEntry = rBasicBox.FindEntry(aModName, OBJ_TYPE_MODULE, *xEntry);
                     if (!bEntry)
                     {
-                        rBasicBox.AddEntry(aModName, RID_BMP_MODULE, xEntry.get(), false,
+                        rBasicBox.AddEntry(aModName, RID_BMP_MODULE, xSubRootEntry.get(), false,
                                            o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
+                        rBasicBox.copy_iterator(*xSubRootEntry, *xEntry);
+                        rBasicBox.FindEntry(aModName, OBJ_TYPE_MODULE, *xEntry);
                     }
                     rBasicBox.set_cursor(*xEntry);
                     rBasicBox.select(*xEntry);
