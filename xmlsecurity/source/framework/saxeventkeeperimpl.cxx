@@ -25,6 +25,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/crypto/sax/ConstOfSecurityId.hpp>
+#include <com/sun/star/xml/wrapper/XXMLDocumentWrapper.hpp>
+#include <com/sun/star/xml/csax/XCompressedDocumentHandler.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
