@@ -20,7 +20,6 @@
 #ifndef INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_ELEMENTMARK_HXX
 #define INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_ELEMENTMARK_HXX
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/crypto/sax/ElementMarkType.hpp>
 
 class BufferNode;

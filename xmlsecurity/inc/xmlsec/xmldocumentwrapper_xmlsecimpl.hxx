@@ -22,7 +22,6 @@
 
 #include <com/sun/star/xml/wrapper/XXMLDocumentWrapper.hpp>
 #include <com/sun/star/xml/csax/XCompressedDocumentHandler.hpp>
-#include <com/sun/star/xml/crypto/sax/XSAXEventKeeper.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 
@@ -34,10 +33,6 @@
 #define NODEPOSITION_ENDELEMENT    3
 
 #include <libxml/tree.h>
-
-namespace com { namespace sun { namespace star { namespace uno {
-    class XComponentContext;
-} } } }
 
 class XSECXMLSEC_DLLPUBLIC XMLDocumentWrapper_XmlSecImpl : public cppu::WeakImplHelper
 <

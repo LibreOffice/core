@@ -20,17 +20,16 @@
 #ifndef INCLUDED_XMLSECURITY_INC_FRAMEWORK_SIGNATUREVERIFIERIMPL_HXX
 #define INCLUDED_XMLSECURITY_INC_FRAMEWORK_SIGNATUREVERIFIERIMPL_HXX
 
-#include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultBroadcaster.hpp>
-#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
 #include <xmlsecuritydllapi.h>
 #include <framework/signatureengine.hxx>
+
+namespace com::sun::star::xml::crypto::sax { class XSignatureVerifyResultListener; }
+namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
 
 typedef cppu::ImplInheritanceHelper
 <

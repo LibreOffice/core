@@ -14,6 +14,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <comphelper/ofopxmlhelper.hxx>
 #include <o3tl/make_unique.hxx>

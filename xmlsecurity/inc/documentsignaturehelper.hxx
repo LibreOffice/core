@@ -21,10 +21,8 @@
 #define INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREHELPER_HXX
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <rtl/ustring.hxx>
 #include <svl/sigstruct.hxx>
-#include "xmlsecuritydllapi.h"
 
 #include <vector>
 
@@ -36,6 +34,8 @@ namespace io {
 namespace embed {
     class XStorage; }
 }}}
+
+namespace com::sun::star::xml::sax { class XDocumentHandler; }
 
 enum class DocumentSignatureMode
 {

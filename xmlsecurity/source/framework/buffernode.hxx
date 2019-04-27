@@ -20,11 +20,12 @@
 #ifndef INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_BUFFERNODE_HXX
 #define INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_BUFFERNODE_HXX
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <memory>
 #include <vector>
+
+namespace com::sun::star::xml::wrapper { class XXMLElementWrapper; }
 
 class ElementMark;
 class ElementCollector;

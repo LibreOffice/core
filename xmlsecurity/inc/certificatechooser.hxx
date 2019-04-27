@@ -29,7 +29,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svl/sigstruct.hxx>
-
+#include <com/sun/star/uno/Sequence.hxx>
+#include <vcl/weld.hxx>
 
 namespace com {
 namespace sun {
@@ -40,7 +41,7 @@ namespace xml { namespace crypto {
     class XSecurityEnvironment; }}
 }}}
 
-class HeaderBar;
+namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
 
 struct UserData
 {

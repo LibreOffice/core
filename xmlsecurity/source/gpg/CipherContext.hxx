@@ -11,8 +11,6 @@
 #define INCLUDED_XMLSECURITY_SOURCE_GPG_CIPHERCONTEXT_HXX
 
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 
 #include <cppuhelper/implbase.hxx>
 

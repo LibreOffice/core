@@ -20,10 +20,10 @@
 #ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLSTREAMIO_HXX
 #define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLSTREAMIO_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/xml/crypto/XUriBinding.hpp>
-
 #include <xsecxmlsecdllapi.h>
+
+namespace com::sun::star::xml::crypto { class XUriBinding; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 XSECXMLSEC_DLLPUBLIC int xmlEnableStreamInputCallbacks() ;
 XSECXMLSEC_DLLPUBLIC void xmlDisableStreamInputCallbacks() ;

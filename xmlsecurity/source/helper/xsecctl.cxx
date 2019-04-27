@@ -36,6 +36,8 @@
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/xml/sax/XParser.hpp>
 
 #include <xmloff/attrlist.hxx>
 #include <rtl/math.hxx>

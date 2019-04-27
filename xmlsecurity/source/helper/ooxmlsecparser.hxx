@@ -10,14 +10,13 @@
 #ifndef INCLUDED_XMLSECURITY_SOURCE_HELPER_OOXMLSECPARSER_HXX
 #define INCLUDED_XMLSECURITY_SOURCE_HELPER_OOXMLSECPARSER_HXX
 
-#include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
-#include <xsecctl.hxx>
+class XSecController;
+class XMLSignatureHelper;
 
 /// Parses an OOXML digital signature.
 class OOXMLSecParser: public cppu::WeakImplHelper

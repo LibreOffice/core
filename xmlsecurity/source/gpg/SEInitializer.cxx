@@ -9,6 +9,8 @@
 
 #include <config_gpgme.h>
 
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 #include <cppuhelper/supportsservice.hxx>
 #include <gpg/SEInitializer.hxx>
 #include "SecurityEnvironment.hxx"

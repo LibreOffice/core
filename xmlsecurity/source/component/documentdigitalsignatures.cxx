@@ -32,6 +32,8 @@
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -46,6 +48,7 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/xmlsechelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>

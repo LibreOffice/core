@@ -22,11 +22,10 @@
 
 #include <libxml/tree.h>
 
-#include <com/sun/star/xml/sax/SAXException.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/xml/sax/XLocator.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/xml/csax/XMLAttribute.hpp>
+#include <rtl/ustring.hxx>
+
+namespace com::sun::star::xml::csax { struct XMLAttribute; }
+namespace com::sun::star::uno { template <typename > class Sequence; }
 
 /** This class represents a SAX handler which simply forwards to
     the corresponding libxml API and translates parameter if necessary.

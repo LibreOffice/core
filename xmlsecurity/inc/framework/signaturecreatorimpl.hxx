@@ -21,15 +21,15 @@
 #define INCLUDED_XMLSECURITY_INC_FRAMEWORK_SIGNATURECREATORIMPL_HXX
 
 #include <com/sun/star/xml/crypto/sax/XBlockerMonitor.hpp>
-#include <com/sun/star/xml/crypto/sax/XSignatureCreationResultListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureCreationResultBroadcaster.hpp>
-#include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/implbase.hxx>
 
 #include <framework/signatureengine.hxx>
+
+namespace com::sun::star::xml::crypto { class XSecurityEnvironment; }
+namespace com::sun::star::xml::crypto::sax { class XSignatureCreationResultListener;}
 
 typedef cppu::ImplInheritanceHelper
 <

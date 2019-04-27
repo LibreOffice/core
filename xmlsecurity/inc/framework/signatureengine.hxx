@@ -21,25 +21,23 @@
 #define INCLUDED_XMLSECURITY_INC_FRAMEWORK_SIGNATUREENGINE_HXX
 
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedListener.hpp>
-#include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/XKeyCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/XMissionTaker.hpp>
-#include <com/sun/star/xml/crypto/sax/XSAXEventKeeper.hpp>
-#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
-#include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 #include <com/sun/star/xml/crypto/XUriBinding.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <rtl/ref.hxx>
 
 #include <xmlsecuritydllapi.h>
 #include <framework/securityengine.hxx>
-#include <framework/xmlsignaturetemplateimpl.hxx>
 
 #include <vector>
+
+namespace com::sun::star::io { class XInputStream; }
+namespace com::sun::star::xml::crypto { class XXMLSignature; }
+namespace rtl { template <class reference_type> class Reference; }
+
+class XMLSignatureTemplateImpl;
 
 class XMLSECURITY_DLLPUBLIC SignatureEngine : public cppu::ImplInheritanceHelper
 <

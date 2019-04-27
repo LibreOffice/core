@@ -29,8 +29,6 @@
 #include <svtools/simptabl.hxx>
 #include <unotools/securityoptions.hxx>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-
 namespace com {
 namespace sun {
 namespace star {
