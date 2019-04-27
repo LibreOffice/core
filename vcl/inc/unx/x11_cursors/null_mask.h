@@ -20,6 +20,9 @@
  *************************************************************/
 
 
-#define nullmask_width 4
-#define nullmask_height 4
-static const unsigned char nullmask_bits[] = { 0x00, 0x00 };
+#define null_mask_width 4
+#define null_mask_height 4
+#define null_mask_x_hot 2
+#define null_mask_y_hot 2
+
+static const unsigned char null_mask_bits[] = {0x00,0x00};
