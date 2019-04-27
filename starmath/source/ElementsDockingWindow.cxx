@@ -334,8 +334,6 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
         }
         else
         {
-            Size aSizePixel = LogicToPixel(Size(element->getNode()->GetWidth(),
-                                                element->getNode()->GetHeight()));
             if (mbVerticalMode)
             {
                 if (y + boxY > nControlHeight)
@@ -363,14 +361,17 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
                 pContext->Pop();
             }
 
-            Point location(x + ((boxX - aSizePixel.Width()) / 2),
-                           y + ((boxY - aSizePixel.Height()) / 2));
-
-            if (pContext)
-                SmDrawingVisitor(*pContext, PixelToLogic(location), element->getNode().get());
-
             element->mBoxLocation = Point(x,y);
             element->mBoxSize = Size(boxX, boxY);
+
+            if (pContext)
+            {
+                Size aSizePixel = LogicToPixel(Size(element->getNode()->GetWidth(),
+                                                    element->getNode()->GetHeight()));
+                Point location(x + ((boxX - aSizePixel.Width()) / 2),
+                               y + ((boxY - aSizePixel.Height()) / 2));
+                SmDrawingVisitor(*pContext, PixelToLogic(location), element->getNode().get());
+            }
 
             if (mbVerticalMode)
                 y += boxY;
