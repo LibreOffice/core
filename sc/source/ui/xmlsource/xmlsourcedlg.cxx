@@ -21,6 +21,7 @@
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/viewdataentry.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -183,7 +184,10 @@ bool ScXMLSourceDlg::Close()
 
 void ScXMLSourceDlg::SelectSourceFile()
 {
-    uno::Reference<ui::dialogs::XFilePicker3> xFilePicker = ui::dialogs::FilePicker::createWithMode( comphelper::getProcessComponentContext(), ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
+    sfx2::FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+                                      FileDialogFlags::NONE, GetFrameWeld());
+
+    uno::Reference<ui::dialogs::XFilePicker3> xFilePicker = aDlgHelper.GetFilePicker();
 
     if (maSrcPath.isEmpty())
         // Use default path.
