@@ -28,13 +28,13 @@
 #include <tools/stream.hxx>
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
+#include <tools/GenericTypeSerializer.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/outdev.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <memory>
-
 
 #define DIBCOREHEADERSIZE       ( 12UL )
 #define DIBINFOHEADERSIZE       ( sizeof(DIBInfoHeader) )
@@ -1800,14 +1800,16 @@ bool ReadDIBBitmapEx(
                     }
                 case TransparentType::Color:
                     {
-                        Color maTransparentColor;
+                        Color aTransparentColor;
 
-                        ReadColor( rIStm, maTransparentColor );
+                        tools::GenericTypeSerializer aSerializer(rIStm);
+                        aSerializer.readColor(aTransparentColor);
+
                         bRetval = !rIStm.GetError();
 
                         if(bRetval)
                         {
-                            rTarget = BitmapEx(aBmp, maTransparentColor);
+                            rTarget = BitmapEx(aBmp, aTransparentColor);
                         }
                         break;
                     }
@@ -1885,7 +1887,8 @@ bool WriteDIBBitmapEx(
         }
         else if(TransparentType::Color == rSource.meTransparent)
         {
-            WriteColor( rOStm, rSource.maTransparentColor );
+            tools::GenericTypeSerializer aSerializer(rOStm);
+            aSerializer.writeColor(rSource.maTransparentColor);
             return true;
         }
     }

@@ -25,7 +25,6 @@
 #include <stdlib.h>
 
 #include <tools/color.hxx>
-#include <tools/stream.hxx>
 #include <tools/helpers.hxx>
 #include <basegfx/color/bcolortools.hxx>
 
@@ -184,89 +183,11 @@ Color Color::HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri )
     return Color( cR, cG, cB );
 }
 
-SvStream& Color::Read( SvStream& rIStm )
-{
-    rIStm.ReadUInt32(mValue);
-    return rIStm;
-}
-
-SvStream& Color::Write( SvStream& rOStm ) const
-{
-    rOStm.WriteUInt32(mValue);
-    return rOStm;
-}
-
 OUString Color::AsRGBHexString() const
 {
     std::stringstream ss;
     ss << std::hex << std::setfill ('0') << std::setw(6) << sal_uInt32(GetRGBColor());
     return OUString::createFromAscii(ss.str().c_str());
-}
-
-#define COL_NAME_USER       (sal_uInt16(0x8000))
-
-SvStream& ReadColor( SvStream& rIStream, Color& rColor )
-{
-    sal_uInt16 nColorName(0);
-
-    rIStream.ReadUInt16( nColorName );
-
-    if ( nColorName & COL_NAME_USER )
-    {
-        sal_uInt16 nRed;
-        sal_uInt16 nGreen;
-        sal_uInt16 nBlue;
-
-        rIStream.ReadUInt16( nRed );
-        rIStream.ReadUInt16( nGreen );
-        rIStream.ReadUInt16( nBlue );
-
-        rColor = Color( nRed>>8, nGreen>>8, nBlue>>8 );
-    }
-    else
-    {
-        static const Color aColAry[] =
-        {
-            COL_BLACK,                          // COL_BLACK
-            COL_BLUE,                           // COL_BLUE
-            COL_GREEN,                          // COL_GREEN
-            COL_CYAN,                           // COL_CYAN
-            COL_RED,                            // COL_RED
-            COL_MAGENTA,                        // COL_MAGENTA
-            COL_BROWN,                          // COL_BROWN
-            COL_GRAY,                           // COL_GRAY
-            COL_LIGHTGRAY,                      // COL_LIGHTGRAY
-            COL_LIGHTBLUE,                      // COL_LIGHTBLUE
-            COL_LIGHTGREEN,                     // COL_LIGHTGREEN
-            COL_LIGHTCYAN,                      // COL_LIGHTCYAN
-            COL_LIGHTRED,                       // COL_LIGHTRED
-            COL_LIGHTMAGENTA,                   // COL_LIGHTMAGENTA
-            COL_YELLOW,                         // COL_YELLOW
-            COL_WHITE,                          // COL_WHITE
-            COL_WHITE,                          // COL_MENUBAR
-            COL_BLACK,                          // COL_MENUBARTEXT
-            COL_WHITE,                          // COL_POPUPMENU
-            COL_BLACK,                          // COL_POPUPMENUTEXT
-            COL_BLACK,                          // COL_WINDOWTEXT
-            COL_WHITE,                          // COL_WINDOWWORKSPACE
-            COL_BLACK,                          // COL_HIGHLIGHT
-            COL_WHITE,                          // COL_HIGHLIGHTTEXT
-            COL_BLACK,                          // COL_3DTEXT
-            COL_LIGHTGRAY,                      // COL_3DFACE
-            COL_WHITE,                          // COL_3DLIGHT
-            COL_GRAY,                           // COL_3DSHADOW
-            COL_LIGHTGRAY,                      // COL_SCROLLBAR
-            COL_WHITE,                          // COL_FIELD
-            COL_BLACK                           // COL_FIELDTEXT
-        };
-
-        if ( nColorName < SAL_N_ELEMENTS( aColAry ) )
-            rColor = aColAry[nColorName];
-        else
-            rColor = COL_BLACK;
-    }
-
-    return rIStream;
 }
 
 void Color::ApplyTintOrShade(sal_Int16 n100thPercent)
@@ -293,23 +214,6 @@ void Color::ApplyTintOrShade(sal_Int16 n100thPercent)
     R = sal_uInt8(std::lround(aBColor.getRed()   * 255.0));
     G = sal_uInt8(std::lround(aBColor.getGreen() * 255.0));
     B = sal_uInt8(std::lround(aBColor.getBlue()  * 255.0));
-}
-
-SvStream& WriteColor( SvStream& rOStream, const Color& rColor )
-{
-    sal_uInt16 nRed         = rColor.GetRed();
-    sal_uInt16 nGreen       = rColor.GetGreen();
-    sal_uInt16 nBlue        = rColor.GetBlue();
-    nRed    = (nRed<<8) + nRed;
-    nGreen  = (nGreen<<8) + nGreen;
-    nBlue   = (nBlue<<8) + nBlue;
-
-    rOStream.WriteUInt16( COL_NAME_USER );
-    rOStream.WriteUInt16( nRed );
-    rOStream.WriteUInt16( nGreen );
-    rOStream.WriteUInt16( nBlue );
-
-    return rOStream;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

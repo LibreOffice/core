@@ -48,6 +48,7 @@
 #include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
+#include <tools/GenericTypeSerializer.hxx>
 #include <unotools/configmgr.hxx>
 #include <libxml/xmlwriter.h>
 #include <editeng/unonrule.hxx>
@@ -234,7 +235,9 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     else pBulletFont = nullptr;
     ReadPair( rStream, aGraphicSize );
 
-    ReadColor( rStream, nBulletColor );
+    tools::GenericTypeSerializer aSerializer(rStream);
+    aSerializer.readColor(nBulletColor);
+
     rStream.ReadUInt16( nBulletRelSize );
     rStream.ReadUInt16( nTmp16 ); SetShowSymbol( nTmp16 != 0 );
 
@@ -309,7 +312,9 @@ void SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverte
     Color nTempColor = nBulletColor;
     if(COL_AUTO == nBulletColor)
         nTempColor = COL_BLACK;
-    WriteColor( rStream, nTempColor );
+
+    tools::GenericTypeSerializer aSerializer(rStream);
+    aSerializer.writeColor(nTempColor);
     rStream.WriteUInt16( nBulletRelSize );
     rStream.WriteUInt16( sal_uInt16(IsShowSymbol()) );
 

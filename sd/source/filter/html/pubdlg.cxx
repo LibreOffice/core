@@ -30,6 +30,7 @@
 #include <svtools/colrdlg.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/GenericTypeSerializer.hxx>
 #include <sdiocmpt.hxx>
 #include <sfx2/docfile.hxx>
 #include <pres.hxx>
@@ -233,6 +234,7 @@ SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
     SdIOCompat aIO(rIn, StreamMode::READ);
 
     sal_uInt16 nTemp16;
+    tools::GenericTypeSerializer aSerializer(rIn);
 
     rDesign.m_aDesignName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIn,
         RTL_TEXTENCODING_UTF8);
@@ -257,11 +259,11 @@ SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
     rIn.ReadCharAsBool( rDesign.m_bCreated );      // not used
     rIn.ReadInt16( rDesign.m_nButtonThema );
     rIn.ReadCharAsBool( rDesign.m_bUserAttr );
-    ReadColor( rIn, rDesign.m_aBackColor );
-    ReadColor( rIn, rDesign.m_aTextColor );
-    ReadColor( rIn, rDesign.m_aLinkColor );
-    ReadColor( rIn, rDesign.m_aVLinkColor );
-    ReadColor( rIn, rDesign.m_aALinkColor );
+    aSerializer.readColor(rDesign.m_aBackColor);
+    aSerializer.readColor(rDesign.m_aTextColor);
+    aSerializer.readColor(rDesign.m_aLinkColor);
+    aSerializer.readColor(rDesign.m_aVLinkColor);
+    aSerializer.readColor(rDesign.m_aALinkColor);
     rIn.ReadCharAsBool( rDesign.m_bUseAttribs );
     rIn.ReadCharAsBool( rDesign.m_bUseColor );
 
@@ -287,6 +289,8 @@ SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDes
     // The last parameter is the versionnumber of the code
     SdIOCompat aIO(rOut, StreamMode::WRITE, 0);
 
+    tools::GenericTypeSerializer aSerializer(rOut);
+
     // Name
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aDesignName,
         RTL_TEXTENCODING_UTF8);
@@ -310,11 +314,11 @@ SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDes
     rOut.WriteBool( rDesign.m_bCreated );     // not used
     rOut.WriteInt16( rDesign.m_nButtonThema );
     rOut.WriteBool( rDesign.m_bUserAttr );
-    WriteColor( rOut, rDesign.m_aBackColor );
-    WriteColor( rOut, rDesign.m_aTextColor );
-    WriteColor( rOut, rDesign.m_aLinkColor );
-    WriteColor( rOut, rDesign.m_aVLinkColor );
-    WriteColor( rOut, rDesign.m_aALinkColor );
+    aSerializer.writeColor(rDesign.m_aBackColor);
+    aSerializer.writeColor(rDesign.m_aTextColor);
+    aSerializer.writeColor(rDesign.m_aLinkColor);
+    aSerializer.writeColor(rDesign.m_aVLinkColor);
+    aSerializer.writeColor(rDesign.m_aALinkColor);
     rOut.WriteBool( rDesign.m_bUseAttribs );
     rOut.WriteBool( rDesign.m_bUseColor );
 

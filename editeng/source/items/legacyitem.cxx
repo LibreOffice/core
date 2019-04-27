@@ -44,6 +44,8 @@
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/shaditem.hxx>
+#include <tools/GenericTypeSerializer.hxx>
+
 
 void Create_legacy_direct_set(SvxFontHeightItem& rItem, sal_uInt32 nH, sal_uInt16 nP, MapUnit eP)
 {
@@ -273,16 +275,18 @@ namespace legacy
         void Create(SvxColorItem& rItem, SvStream& rStrm, sal_uInt16)
         {
             Color aColor(COL_AUTO);
-            ReadColor(rStrm, aColor);
+            tools::GenericTypeSerializer aSerializer(rStrm);
+            aSerializer.readColor(aColor);
             rItem.SetValue(aColor);
         }
 
         SvStream& Store(const SvxColorItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion)
         {
+            tools::GenericTypeSerializer aSerializer(rStrm);
             if( VERSION_USEAUTOCOLOR == nItemVersion && COL_AUTO == rItem.GetValue() )
-                WriteColor( rStrm, COL_BLACK );
+                aSerializer.writeColor(COL_BLACK);
             else
-                WriteColor( rStrm, rItem.GetValue() );
+                aSerializer.writeColor(rItem.GetValue());
             return rStrm;
         }
     }
@@ -310,7 +314,9 @@ namespace legacy
             sal_uInt16 nOutline, nInline, nDistance;
             sal_uInt16 nStyle = css::table::BorderLineStyle::NONE;
             Color aColor;
-            ReadColor( stream, aColor ).ReadUInt16( nOutline ).ReadUInt16( nInline ).ReadUInt16( nDistance );
+            tools::GenericTypeSerializer aSerializer(stream);
+            aSerializer.readColor(aColor);
+            stream.ReadUInt16( nOutline ).ReadUInt16( nInline ).ReadUInt16( nDistance );
 
             if (version >= BORDER_LINE_WITH_STYLE_VERSION)
                 stream.ReadUInt16( nStyle );
@@ -363,7 +369,9 @@ namespace legacy
         /// Store a border line to a stream.
         static SvStream& StoreBorderLine(SvStream &stream, const ::editeng::SvxBorderLine &l, sal_uInt16 version)
         {
-            WriteColor( stream, l.GetColor() );
+            tools::GenericTypeSerializer aSerializer(stream);
+            aSerializer.writeColor(l.GetColor());
+
             stream.WriteUInt16( l.GetOutWidth() )
                 .WriteUInt16( l.GetInWidth() )
                 .WriteUInt16( l.GetDistance() );
@@ -432,7 +440,9 @@ namespace legacy
             short        nOutline, nInline, nDistance;
             Color        aColor;
 
-            ReadColor( rStrm, aColor ).ReadInt16( nOutline ).ReadInt16( nInline ).ReadInt16( nDistance );
+            tools::GenericTypeSerializer aSerializer(rStrm);
+            aSerializer.readColor(aColor);
+            rStrm.ReadInt16( nOutline ).ReadInt16( nInline ).ReadInt16( nDistance );
             if( nOutline )
             {
                 ::editeng::SvxBorderLine aLine( &aColor );
@@ -447,14 +457,16 @@ namespace legacy
 
             if(nullptr != pLine)
             {
-                WriteColor( rStrm, pLine->GetColor() );
+                tools::GenericTypeSerializer aSerializer(rStrm);
+                aSerializer.writeColor(pLine->GetColor());
                 rStrm.WriteInt16( pLine->GetOutWidth() )
                     .WriteInt16( pLine->GetInWidth() )
                     .WriteInt16( pLine->GetDistance() );
             }
             else
             {
-                WriteColor( rStrm, Color() );
+                tools::GenericTypeSerializer aSerializer(rStrm);
+                aSerializer.writeColor(Color());
                 rStrm.WriteInt16( 0 ).WriteInt16( 0 ).WriteInt16( 0 );
             }
 
@@ -481,8 +493,9 @@ namespace legacy
             sal_Int8 nStyle;
 
             rStrm.ReadCharAsBool( bTrans );
-            ReadColor( rStrm, aTempColor );
-            ReadColor( rStrm, aTempFillColor );
+            tools::GenericTypeSerializer aSerializer(rStrm);
+            aSerializer.readColor(aTempColor);
+            aSerializer.readColor(aTempFillColor);
             rStrm.ReadSChar( nStyle );
 
             switch ( nStyle )
@@ -579,8 +592,9 @@ namespace legacy
         SvStream& Store(const SvxBrushItem& rItem, SvStream& rStrm, sal_uInt16)
         {
             rStrm.WriteBool( false );
-            WriteColor( rStrm, rItem.GetColor() );
-            WriteColor( rStrm, rItem.GetColor() );
+            tools::GenericTypeSerializer aSerializer(rStrm);
+            aSerializer.writeColor(rItem.GetColor());
+            aSerializer.writeColor(rItem.GetColor());
             rStrm.WriteSChar( rItem.GetColor().GetTransparency() > 0 ? 0 : 1 ); //BRUSH_NULL : BRUSH_SOLID
 
             sal_uInt16 nDoLoad = 0;
@@ -782,8 +796,10 @@ namespace legacy
             Color aFillColor;
             sal_Int8 nStyle;
             rStrm.ReadSChar( cLoc ).ReadUInt16( _nWidth ).ReadCharAsBool( bTrans );
-            ReadColor( rStrm, aColor );
-            ReadColor( rStrm, aFillColor ).ReadSChar( nStyle );
+            tools::GenericTypeSerializer aSerializer(rStrm);
+            aSerializer.readColor(aColor);
+            aSerializer.readColor(aFillColor);
+            rStrm.ReadSChar(nStyle);
             aColor.SetTransparency(bTrans ? 0xff : 0);
 
             rItem.SetLocation(static_cast<SvxShadowLocation>(cLoc));
@@ -796,8 +812,9 @@ namespace legacy
             rStrm.WriteSChar( static_cast<sal_uInt8>(rItem.GetLocation()) )
                 .WriteUInt16( rItem.GetWidth() )
                 .WriteBool( rItem.GetColor().GetTransparency() > 0 );
-            WriteColor( rStrm, rItem.GetColor() );
-            WriteColor( rStrm, rItem.GetColor() );
+            tools::GenericTypeSerializer aSerializer(rStrm);
+            aSerializer.writeColor(rItem.GetColor());
+            aSerializer.writeColor(rItem.GetColor());
             rStrm.WriteSChar( rItem.GetColor().GetTransparency() > 0 ? 0 : 1 ); //BRUSH_NULL : BRUSH_SOLID
             return rStrm;
         }
