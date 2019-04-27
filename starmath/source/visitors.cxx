@@ -993,8 +993,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
             //Set right on mpRightMost from pChild
             mpRightMost->SetRight( bodyLeft );
         }
-    }
-    if( pSubSup ) {
+
         pChild = pSubSup->GetSubSup( LSUB );
         if( pChild ) {
             //Create position in front of pChild
@@ -1005,8 +1004,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
             //Set right on mpRightMost from pChild
             mpRightMost->SetRight( bodyLeft );
         }
-    }
-    if( pSubSup ) {
+
         pChild = pSubSup->GetSubSup( CSUP );
         if ( pChild ) {//TO
             //Create position in front of pChild
@@ -1017,8 +1015,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
             //Set right on mpRightMost from pChild
             mpRightMost->SetRight( bodyLeft );
         }
-    }
-    if( pSubSup ) {
+
         pChild = pSubSup->GetSubSup( CSUB );
         if( pChild ) { //FROM
             //Create position in front of pChild
@@ -1029,8 +1026,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
             //Set right on mpRightMost from pChild
             mpRightMost->SetRight( bodyLeft );
         }
-    }
-    if( pSubSup ) {
+
         pChild = pSubSup->GetSubSup( RSUP );
         if ( pChild ) {
             //Create position in front of pChild
@@ -1041,8 +1037,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
             //Set right on mpRightMost from pChild
             mpRightMost->SetRight( bodyLeft );
         }
-    }
-    if( pSubSup ) {
+
         pChild = pSubSup->GetSubSup( RSUB );
         if ( pChild ) {
             //Create position in front of pChild

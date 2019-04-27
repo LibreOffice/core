@@ -859,19 +859,16 @@ bool Window::AcquireGraphics() const
         }
     }
 
-    // update global LRU list of wingraphics
     if ( mpGraphics )
     {
+        // update global LRU list of wingraphics
         mpNextGraphics = pSVData->maGDIData.mpFirstWinGraphics;
         pSVData->maGDIData.mpFirstWinGraphics = const_cast<vcl::Window*>(this);
         if ( mpNextGraphics )
             mpNextGraphics->mpPrevGraphics = const_cast<vcl::Window*>(this);
         if ( !pSVData->maGDIData.mpLastWinGraphics )
             pSVData->maGDIData.mpLastWinGraphics = const_cast<vcl::Window*>(this);
-    }
 
-    if ( mpGraphics )
-    {
         mpGraphics->SetXORMode( (RasterOp::Invert == meRasterOp) || (RasterOp::Xor == meRasterOp), RasterOp::Invert == meRasterOp );
         mpGraphics->setAntiAliasB2DDraw(bool(mnAntialiasing & AntialiasingFlags::EnableB2dDraw));
     }

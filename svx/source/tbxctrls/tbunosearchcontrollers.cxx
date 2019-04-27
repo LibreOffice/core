@@ -121,9 +121,8 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
     if (!aMatchCase)
         nFlags |= TransliterationFlags::IGNORE_CASE;
     if (aCTLOptions.IsCTLFontEnabled())
-        nFlags |= TransliterationFlags::IGNORE_DIACRITICS_CTL;
-    if (aCTLOptions.IsCTLFontEnabled())
-        nFlags |= TransliterationFlags::IGNORE_KASHIDA_CTL;
+        nFlags |= TransliterationFlags::IGNORE_DIACRITICS_CTL
+                  | TransliterationFlags::IGNORE_KASHIDA_CTL;
 
     auto aArgs( comphelper::InitPropertySequence( {
         { "SearchItem.SearchString", css::uno::makeAny( sFindText ) },

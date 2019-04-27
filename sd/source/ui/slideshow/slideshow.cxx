@@ -727,8 +727,7 @@ void SAL_CALL SlideShow::end()
 
     if( mpCurrentViewShellBase )
     {
-        ViewShell* pViewShell = mpCurrentViewShellBase->GetMainViewShell().get();
-        if( pViewShell )
+        if (ViewShell* const pViewShell = mpCurrentViewShellBase->GetMainViewShell().get())
         {
             // invalidate the view shell so the presentation slot will be re-enabled
             // and the rehearsing will be updated
@@ -773,11 +772,12 @@ void SAL_CALL SlideShow::end()
                     }
                 }
             }
-        }
-        //Fire the acc focus event when focus is switched back. The above method mpCurrentViewShellBase->GetWindow()->GrabFocus() will
-        //set focus to WorkWindow instead of the sd::window, so here call Shell's method to fire the focus event
-        if (pViewShell)
+
+            // Fire the acc focus event when focus is switched back. The above method
+            // mpCurrentViewShellBase->GetWindow()->GrabFocus() will set focus to WorkWindow
+            // instead of the sd::window, so here call Shell's method to fire the focus event
             pViewShell->SwitchActiveViewFireFocus();
+        }
     }
     mpCurrentViewShellBase = nullptr;
 }

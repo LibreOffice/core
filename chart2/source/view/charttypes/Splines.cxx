@@ -850,9 +850,8 @@ void SplineCalculater::CalculateBSplines(
                     --r;
                 }
             }
-        }   // aPointsIn contains the control points now.
-        if (bIsSuccessful)
-        {
+            // aPointsIn contains the control points now.
+
             // calculate the intermediate points according given resolution
             // using deBoor-Cox algorithm
             lcl_tSizeType nNewSize = nResolution * n + 1;
