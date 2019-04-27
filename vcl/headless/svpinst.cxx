@@ -367,9 +367,23 @@ sal_uInt32 SvpSalYieldMutex::doRelease(bool const bUnlockAll)
         // read m_nCount before doRelease
         bool const isReleased(bUnlockAll || m_nCount == 1);
         nCount = comphelper::GenericSolarMutex::doRelease( bUnlockAll );
-        if (isReleased && pInst)
-            pInst->Wakeup(SvpRequest::NONE);
+        if (isReleased)
+        {
+            ImplSVData* pSVData = ImplGetSVData();
+            if (pSVData->mpPollCallback) // is unipoll
+            {
+                if (pInst)
+                    pInst->Wakeup(SvpRequest::NONE);
+            }
+            else
+            {
+                std::unique_lock<std::mutex> g(m_WakeUpMainMutex);
+                m_wakeUpMain = true;
+                m_WakeUpMainCond.notify_one();
+            }
+        }
     }
+
     return nCount;
 }
 
