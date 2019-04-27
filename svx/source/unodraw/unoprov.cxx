@@ -1542,16 +1542,33 @@ static bool SvxUnoConvertResourceString(const char **pSourceResIds, const char**
 
     for (int i = 0; i < nCount; ++i)
     {
-        const OUString aCompare = bToApi ? SvxResId(pSourceResIds[i]) : OUString::createFromAscii(pSourceResIds[i]);
-        if( aShortString == aCompare )
+        if (bToApi)
         {
-            rString = rString.replaceAt( 0, aShortString.getLength(), bToApi ? OUString::createFromAscii(pDestResIds[i]) : SvxResId(pDestResIds[i]) );
-            return true;
+            const OUString & aCompare = SvxResId(pSourceResIds[i]);
+            if( aShortString == aCompare )
+            {
+                rString = rString.replaceAt( 0, aShortString.getLength(), OUString::createFromAscii(pDestResIds[i]) );
+                return true;
+            }
+            else if( rString == aCompare )
+            {
+                rString = OUString::createFromAscii(pDestResIds[i]);
+                return true;
+            }
         }
-        else if( rString == aCompare )
+        else
         {
-            rString = bToApi ? OUString::createFromAscii(pDestResIds[i]) : SvxResId(pDestResIds[i]);
-            return true;
+            auto pCompare = pSourceResIds[i];
+            if( aShortString.equalsAscii(pCompare) )
+            {
+                rString = rString.replaceAt( 0, aShortString.getLength(), SvxResId(pDestResIds[i]) );
+                return true;
+            }
+            else if( rString.equalsAscii(pCompare) )
+            {
+                rString = SvxResId(pDestResIds[i]);
+                return true;
+            }
         }
     }
 
