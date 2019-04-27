@@ -555,10 +555,10 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
                     aTimeIncrement.TimeResolution <<= aExplicitScale.TimeResolution;
                     aRet <<= aTimeIncrement;
                 }
+                else
+                    aRet <<= aScaleData.TimeIncrement;
             }
 
-            if( aScaleData.AxisType == AxisType::DATE || aScaleData.AutoDateAxis )
-                aRet <<= aScaleData.TimeIncrement;
             break;
         }
         case SCALE_PROP_LOGARITHMIC:
