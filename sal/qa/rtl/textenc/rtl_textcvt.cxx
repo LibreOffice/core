@@ -228,8 +228,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
                                                      RTL_TEXTENCODING_UTF8).getStr(),
                                    rTest.m_aUnicode[i], aUnicode[i]);
         }
-    }
-    if (rTest.m_bForward) {
+
         sal_Unicode aUnicode[TEST_STRING_SIZE];
         rtl_TextToUnicodeConverter aConverter
             = rtl_createTextToUnicodeConverter(rTest.m_nEncoding);

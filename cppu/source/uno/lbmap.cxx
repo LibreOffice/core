@@ -603,21 +603,18 @@ void SAL_CALL uno_getMapping(
 
         if (*ppMapping)
             return;
-    }
 
-    if (! aRet.is()) // try callback chain
-    {
-        MutexGuard aGuard( rData.aCallbacksMutex );
-        for ( const auto& rCallback : rData.aCallbacks )
+        // try callback chain
         {
-            (*rCallback)( ppMapping, pFrom, pTo, aAddPurpose.pData );
-            if (*ppMapping)
-                return;
+            MutexGuard aGuard(rData.aCallbacksMutex);
+            for (const auto& rCallback : rData.aCallbacks)
+            {
+                (*rCallback)(ppMapping, pFrom, pTo, aAddPurpose.pData);
+                if (*ppMapping)
+                    return;
+            }
         }
-    }
 
-    if (! aRet.is())
-    {
         aRet = loadExternalMapping( aFrom, aTo, aAddPurpose ); // direct try
         if (! aRet.is())
             aRet = getMediateMapping( aFrom, aTo, aAddPurpose ); // try via uno

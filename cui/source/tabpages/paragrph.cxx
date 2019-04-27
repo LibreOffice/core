@@ -954,27 +954,28 @@ void SvxStdParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
         nWidth = pPageWidthItem->GetValue();
 
     if (pFlagSetItem )
+    {
         if (( 0x0001 & pFlagSetItem->GetValue())== 0x0001 )
             EnableRelativeMode();
 
-    if (pFlagSetItem)
         if (( 0x0002 & pFlagSetItem->GetValue())== 0x0002 )
                 EnableRegisterMode();
 
-    if (pFlagSetItem)
         if ( ( 0x0004 & pFlagSetItem->GetValue())== 0x0004 )
             EnableAutoFirstLine();
+    }
 
     if(pLineDistItem)
         EnableAbsLineDist(pLineDistItem->GetValue());
 
     if (pFlagSetItem)
+    {
         if  (( 0x0008 & pFlagSetItem->GetValue()) == 0x0008 )
                 EnableNegativeMode();
 
-    if (pFlagSetItem)
         if  (( 0x0010 & pFlagSetItem->GetValue()) == 0x0010 )
                 EnableContextualMode();
+    }
 }
 
 #define LASTLINEPOS_DEFAULT     0

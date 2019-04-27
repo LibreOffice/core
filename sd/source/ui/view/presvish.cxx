@@ -127,10 +127,10 @@ void PresentationViewShell::Activate( bool bIsMDIActivate )
 
         if( HasCurrentFunction() )
             GetCurrentFunction()->Activate();
+
+        ReadFrameViewData(mpFrameView);
     }
 
-    if( bIsMDIActivate )
-        ReadFrameViewData( mpFrameView );
     GetDocSh()->Connect( this );
 }
 
