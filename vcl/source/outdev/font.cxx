@@ -1332,8 +1332,6 @@ std::unique_ptr<SalLayout> OutputDevice::getFallbackLayout(
         return nullptr;
     }
 
-    pFallback->AdjustLayout( rLayoutArgs );
-
     return pFallback;
 }
 
