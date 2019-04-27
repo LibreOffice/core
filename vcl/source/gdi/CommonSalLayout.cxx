@@ -208,12 +208,10 @@ void GenericSalLayout::AdjustLayout(ImplLayoutArgs& rArgs)
         ApplyDXArray(rArgs);
     else if (rArgs.mnLayoutWidth)
         Justify(rArgs.mnLayoutWidth);
-
     // apply asian kerning if the glyphs are not already formatted
-    if ((rArgs.mnFlags & SalLayoutFlags::KerningAsian)
-    && !(rArgs.mnFlags & SalLayoutFlags::Vertical))
-        if ((rArgs.mpDXArray != nullptr) || (rArgs.mnLayoutWidth != 0))
-            ApplyAsianKerning(rArgs.mrStr);
+    else if ((rArgs.mnFlags & SalLayoutFlags::KerningAsian)
+         && !(rArgs.mnFlags & SalLayoutFlags::Vertical))
+        ApplyAsianKerning(rArgs.mrStr);
 }
 
 void GenericSalLayout::DrawText(SalGraphics& rSalGraphics) const
