@@ -161,6 +161,7 @@ public:
     void testFormulaRefUpdateMoveUndo2();
     void testFormulaRefUpdateMoveUndo3NonShared();
     void testFormulaRefUpdateMoveUndo3Shared();
+    void testFormulaRefUpdateMoveUndoDependents();
     void testFormulaRefUpdateMoveToSheet();
     void testFormulaRefUpdateDeleteContent();
     void testFormulaRefUpdateDeleteAndShiftLeft();
@@ -599,6 +600,7 @@ public:
     CPPUNIT_TEST(testFormulaRefUpdateMoveUndo2);
     CPPUNIT_TEST(testFormulaRefUpdateMoveUndo3NonShared);
     CPPUNIT_TEST(testFormulaRefUpdateMoveUndo3Shared);
+    CPPUNIT_TEST(testFormulaRefUpdateMoveUndoDependents);
     CPPUNIT_TEST(testFormulaRefUpdateMoveToSheet);
     CPPUNIT_TEST(testFormulaRefUpdateDeleteContent);
     CPPUNIT_TEST(testFormulaRefUpdateDeleteAndShiftLeft);
