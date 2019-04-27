@@ -22,7 +22,10 @@
 #include <osl/thread.h>
 #include <rtl/character.hxx>
 #include <string.h>
-
+#if OSL_DEBUG_LEVEL >= 2
+#include <osl/diagnose.h>
+#include "diagnostics.h"
+#endif
 namespace jfw_plugin  { //stoc_javadetect
 
 
