@@ -12,6 +12,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <vcl/lok.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
 #include <sfx2/app.hxx>
@@ -313,7 +314,14 @@ namespace
         }
 
         pEvent->mnView = SfxLokHelper::getView(nullptr);
-        Application::PostUserEvent(Link<void*, void>(pEvent, LOKPostAsyncEvent));
+        if (vcl::lok::isUnipoll())
+        {
+            if (Application::GetMainThreadIdentifier() != ::osl::Thread::getCurrentIdentifier())
+                SAL_WARN("lok", "Posting event directly but not called from main thread!");
+            LOKPostAsyncEvent(pEvent, nullptr);
+        }
+        else
+            Application::PostUserEvent(Link<void*, void>(pEvent, LOKPostAsyncEvent));
     }
 }
 
