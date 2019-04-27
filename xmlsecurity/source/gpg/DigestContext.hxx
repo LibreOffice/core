@@ -11,8 +11,6 @@
 #define INCLUDED_XMLSECURITY_SOURCE_GPG_DIGESTCONTEXT_HXX
 
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <cppuhelper/implbase.hxx>
 

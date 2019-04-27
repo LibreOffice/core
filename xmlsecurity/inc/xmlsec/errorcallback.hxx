@@ -20,10 +20,6 @@
 #ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_ERRORCALLBACK_HXX
 #define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_ERRORCALLBACK_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
-#include <com/sun/star/xml/crypto/XXMLEncryptionTemplate.hpp>
-
 #include <xsecxmlsecdllapi.h>
 
 // Only used for logging

@@ -22,6 +22,7 @@
 #include <nss.h>
 #include <secder.h>
 
+#include <cert.h>
 #include <hasht.h>
 #include <secoid.h>
 #include <pk11func.h>

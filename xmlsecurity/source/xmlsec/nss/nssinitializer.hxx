@@ -22,9 +22,10 @@
 
 #include <com/sun/star/xml/crypto/XNSSInitializer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <cppuhelper/implbase.hxx>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 #define NSS_SERVICE_NAME "com.sun.star.xml.crypto.NSSInitializer"
 

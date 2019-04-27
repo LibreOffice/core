@@ -41,18 +41,22 @@
 #include <osl/thread.h>
 #include <comphelper/sequence.hxx>
 
+#include "x509certificate_nssimpl.hxx"
 #include "secerror.hxx"
 #include <prerror.h>
+#include <keyhi.h>
 
 // added for password exception
 #include <com/sun/star/security/NoPasswordException.hpp>
+#include <com/sun/star/security/CertificateCharacters.hpp>
+#include <com/sun/star/security/CertificateValidity.hpp>
+
 namespace csss = ::com::sun::star::security;
 using namespace ::com::sun::star::security;
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;
 using ::com::sun::star::lang::XMultiServiceFactory ;
-using ::com::sun::star::lang::XSingleServiceFactory ;
 
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::security::XCertificate ;

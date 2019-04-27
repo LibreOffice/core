@@ -23,13 +23,9 @@
 #include <com/sun/star/xml/crypto/sax/XSecuritySAXEventKeeper.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
 #include <com/sun/star/xml/crypto/sax/XSAXEventKeeperStatusChangeBroadcaster.hpp>
-#include <com/sun/star/xml/crypto/sax/XSAXEventKeeperStatusChangeListener.hpp>
-#include <com/sun/star/xml/csax/XCompressedDocumentHandler.hpp>
-#include <com/sun/star/xml/wrapper/XXMLDocumentWrapper.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <xmlsecuritydllapi.h>
 #include <cppuhelper/implbase.hxx>
 
@@ -39,6 +35,10 @@ class ElementCollector;
 
 #include <vector>
 #include <memory>
+
+namespace com::sun::star::xml::crypto::sax { class XSAXEventKeeperStatusChangeListener; }
+namespace com::sun::star::xml::csax { class XCompressedDocumentHandler; }
+namespace com::sun::star::xml::wrapper { class XXMLDocumentWrapper; }
 
 class XMLSECURITY_DLLPUBLIC SAXEventKeeperImpl : public cppu::WeakImplHelper
 <
