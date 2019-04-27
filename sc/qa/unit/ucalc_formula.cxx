@@ -2806,6 +2806,71 @@ void Test::testFormulaRefUpdateMoveUndo3Shared()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaRefUpdateMoveUndoDependents()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    std::vector<std::vector<const char*>> aData = {
+        { "1"           },
+        { "22"          },
+        { "3"           },
+        { "4"           },
+        { "5"           },
+        { "=SUM(C1:C5)" },
+        { "=C6"         },
+    };
+
+    ScRange aOutRange = insertRangeData(m_pDoc, ScAddress(2,0,0), aData);
+
+    std::vector<std::vector<const char*>> aCheckInitial = {
+        { "1"   },
+        { "22"  },
+        { "3"   },
+        { "4"   },
+        { "5"   },
+        { "35"  },
+        { "35"  },
+    };
+
+    bool bGood = checkOutput(m_pDoc, aOutRange, aCheckInitial, "initial data");
+    CPPUNIT_ASSERT(bGood);
+
+    // Drag C2 into D2.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    bool bMoved = rFunc.MoveBlock(ScRange(2, 1, 0, 2, 1, 0), ScAddress(3, 1, 0), true, true, false, true);
+    CPPUNIT_ASSERT(bMoved);
+
+    std::vector<std::vector<const char*>> aCheckAfter = {
+        { "1"     },
+        { nullptr },
+        { "3"     },
+        { "4"     },
+        { "5"     },
+        { "13"    },
+        { "13"    },
+    };
+
+    bGood = checkOutput(m_pDoc, aOutRange, aCheckAfter, "C2 moved to D2");
+    CPPUNIT_ASSERT(bGood);
+
+    // Undo the move.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+
+    bGood = checkOutput(m_pDoc, aOutRange, aCheckInitial, "after undo");
+    CPPUNIT_ASSERT(bGood);
+
+    // Redo and check.
+    pUndoMgr->Redo();
+
+    bGood = checkOutput(m_pDoc, aOutRange, aCheckAfter, "after redo");
+    CPPUNIT_ASSERT(bGood);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaRefUpdateMoveToSheet()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
