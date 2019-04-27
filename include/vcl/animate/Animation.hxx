@@ -22,63 +22,9 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/animate/AnimationBitmap.hxx>
 
 #define ANIMATION_TIMEOUT_ON_CLICK 2147483647L
-
-enum class Disposal
-{
-    Not,
-    Back,
-    Previous
-};
-
-struct VCL_DLLPUBLIC AnimationBitmap
-{
-    BitmapEx        aBmpEx;
-    Point           aPosPix;
-    Size            aSizePix;
-    long            nWait;
-    Disposal        eDisposal;
-    bool            bUserInput;
-
-                    AnimationBitmap()
-                        : nWait(0)
-                        , eDisposal(Disposal::Not)
-                        , bUserInput(false)
-                    {}
-
-                    AnimationBitmap(
-                        const BitmapEx& rBmpEx,
-                        const Point& rPosPix,
-                        const Size& rSizePix,
-                        long _nWait = 0,
-                        Disposal _eDisposal = Disposal::Not
-                    ) :
-                        aBmpEx      ( rBmpEx ),
-                        aPosPix     ( rPosPix ),
-                        aSizePix    ( rSizePix ),
-                        nWait       ( _nWait ),
-                        eDisposal   ( _eDisposal ),
-                        bUserInput  ( false )
-                    {}
-
-    bool            operator==( const AnimationBitmap& rAnimBmp ) const
-                        {
-                            return( rAnimBmp.aBmpEx == aBmpEx &&
-                                    rAnimBmp.aPosPix == aPosPix &&
-                                    rAnimBmp.aSizePix == aSizePix &&
-                                    rAnimBmp.nWait == nWait &&
-                                    rAnimBmp.eDisposal == eDisposal &&
-                                    rAnimBmp.bUserInput == bUserInput );
-                        }
-
-    bool            operator!=( const AnimationBitmap& rAnimBmp ) const
-                        { return !( *this == rAnimBmp ); }
-
-
-    BitmapChecksum  GetChecksum() const;
-};
 
 class ImplAnimView;
 
