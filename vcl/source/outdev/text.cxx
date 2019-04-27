@@ -1264,14 +1264,15 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
         pLayoutCache = nullptr; // don't use cache with modified string!
         pGlyphs = nullptr;
     }
+
     DeviceCoordinate nPixelWidth = static_cast<DeviceCoordinate>(nLogicalWidth);
-    std::unique_ptr<DeviceCoordinate[]> xDXPixelArray;
-    DeviceCoordinate* pDXPixelArray(nullptr);
     if( nLogicalWidth && mbMap )
     {
         nPixelWidth = LogicWidthToDeviceCoordinate( nLogicalWidth );
     }
 
+    std::unique_ptr<DeviceCoordinate[]> xDXPixelArray;
+    DeviceCoordinate* pDXPixelArray(nullptr);
     if( pDXArray)
     {
         if(mbMap)
