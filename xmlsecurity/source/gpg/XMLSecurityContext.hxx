@@ -12,19 +12,15 @@
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
-#include <com/sun/star/security/SecurityInfrastructureException.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 
 #include <vector>
+
+namespace com::sun::star::xml::crypto { class XSecurityEnvironment; }
 
 class XMLSecurityContextGpg : public cppu::WeakImplHelper< css::xml::crypto::XXMLSecurityContext,
                                                            css::lang::XServiceInfo>

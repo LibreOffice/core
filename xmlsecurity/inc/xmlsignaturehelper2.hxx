@@ -20,12 +20,11 @@
 #ifndef INCLUDED_XMLSECURITY_INC_XMLSIGNATUREHELPER2_HXX
 #define INCLUDED_XMLSECURITY_INC_XMLSIGNATUREHELPER2_HXX
 
-#include <tools/link.hxx>
 #include <rtl/ustring.hxx>
 
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/crypto/XUriBinding.hpp>
 
 namespace com {
 namespace sun {

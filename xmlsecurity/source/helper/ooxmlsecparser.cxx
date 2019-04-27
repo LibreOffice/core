@@ -10,6 +10,7 @@
 
 #include "ooxmlsecparser.hxx"
 #include <xmlsignaturehelper.hxx>
+#include <xsecctl.hxx>
 #include <sal/log.hxx>
 
 using namespace com::sun::star;

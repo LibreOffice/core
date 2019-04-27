@@ -22,31 +22,25 @@
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/xml/crypto/XCertificateCreator.hpp>
-#include <com/sun/star/security/XCertificate.hpp>
-#include <com/sun/star/security/CertificateCharacters.hpp>
-#include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-
-#include "x509certificate_nssimpl.hxx"
 
 #include <osl/mutex.hxx>
 
-#include <pk11func.h>
-#include <keyhi.h>
-#include <certdb.h>
+#include <keythi.h>
+#include <certt.h>
 #include <list>
 
 #include <xmlsec-wrapper.h>
+
+namespace com { namespace sun { namespace star { namespace security { class XCertificate; } } } }
+class X509Certificate_NssImpl;
 
 class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper<
     css::xml::crypto::XSecurityEnvironment,

@@ -21,6 +21,7 @@
 
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/xml/crypto/sax/XSAXEventKeeper.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <xmlsec/xmldocumentwrapper_xmlsecimpl.hxx>
 #include "xmlelementwrapper_xmlsecimpl.hxx"

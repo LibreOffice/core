@@ -23,11 +23,10 @@
 #include <cppuhelper/supportsservice.hxx>
 #include "securityenvironment_nssimpl.hxx"
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang ;
-using ::com::sun::star::lang::XMultiServiceFactory ;
-using ::com::sun::star::lang::XSingleServiceFactory ;
 
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;

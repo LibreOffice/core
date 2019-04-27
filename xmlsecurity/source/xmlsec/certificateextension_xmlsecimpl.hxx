@@ -21,11 +21,7 @@
 #define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_CERTIFICATEEXTENSION_XMLSECIMPL_HXX
 
 #include <sal/config.h>
-#include <rtl/ustring.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/uno/SecurityException.hpp>
 #include <com/sun/star/security/XCertificateExtension.hpp>
 #include "certificateextension_certextn.hxx"
 

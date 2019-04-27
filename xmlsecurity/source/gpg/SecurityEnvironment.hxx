@@ -12,27 +12,14 @@
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/SecurityException.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
-#include <com/sun/star/security/XCertificate.hpp>
-#include <com/sun/star/security/CertificateCharacters.hpp>
-#include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#if defined _MSC_VER && defined __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundef"
-#endif
-#include <gpgme.h>
-#if defined _MSC_VER && defined __clang__
-#pragma clang diagnostic pop
-#endif
-#include <context.h>
+namespace com::sun::star::security { class XCertificate; }
+namespace GpgME { class Context; }
 
 class SecurityEnvironmentGpg : public cppu::WeakImplHelper< css::xml::crypto::XSecurityEnvironment,
                                                             css::lang::XUnoTunnel >

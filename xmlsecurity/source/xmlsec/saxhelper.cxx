@@ -23,12 +23,14 @@
 #include <xmlsec/saxhelper.hxx>
 #include <libxml/parserInternals.h>
 
+#include <com/sun/star/xml/csax/XMLAttribute.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+
 #ifndef XMLSEC_NO_XSLT
 #include "libxslt/xslt.h"
 #endif
 
 namespace cssu = com::sun::star::uno;
-namespace cssxs = com::sun::star::xml::sax;
 namespace cssxcsax = com::sun::star::xml::csax;
 
 /**

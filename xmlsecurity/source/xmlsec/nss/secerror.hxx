@@ -23,7 +23,7 @@
 #include <sal/config.h>
 
 #include <certt.h>
-#include <nspr.h>
+#include <prerror.h>
 
 const char *
 getCertError(PRErrorCode errNum);

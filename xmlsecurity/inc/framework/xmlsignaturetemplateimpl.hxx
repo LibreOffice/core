@@ -22,18 +22,17 @@
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
-#include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 
 #include <vector>
+
+namespace com::sun::star::lang { class XMultiServiceFactory; }
+namespace com::sun::star::xml::wrapper { class XXMLElementWrapper; }
 
 class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper<
     css::xml::crypto::XXMLSignatureTemplate ,
