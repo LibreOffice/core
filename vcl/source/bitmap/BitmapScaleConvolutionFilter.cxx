@@ -39,8 +39,8 @@ void ImplCalculateContributions(
     const long aDestinationSize,
     long& aNumberOfContributions,
     std::vector<double>& rWeights,
-    std::vector<long>& rPixels,
-    std::vector<long>& rCounts,
+    std::vector<sal_Int32>& rPixels,
+    std::vector<sal_Int32>& rCounts,
     const Kernel& aKernel)
 {
     const double fSamplingRadius(aKernel.GetWidth());
@@ -103,8 +103,8 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
     if(pReadAcc)
     {
         std::vector<double> aWeights;
-        std::vector<long> aPixels;
-        std::vector<long> aCounts;
+        std::vector<sal_Int32> aPixels;
+        std::vector<sal_Int32> aCounts;
         long aNumberOfContributions(0);
 
         const long nHeight(rSource.GetSizePixel().Height());
@@ -191,8 +191,8 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
     if(pReadAcc)
     {
         std::vector<double> aWeights;
-        std::vector<long> aPixels;
-        std::vector<long> aCounts;
+        std::vector<sal_Int32> aPixels;
+        std::vector<sal_Int32> aCounts;
         long aNumberOfContributions(0);
 
         const long nWidth(rSource.GetSizePixel().Width());
@@ -203,8 +203,14 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
 
         if(pWriteAcc)
         {
+            std::vector<BitmapColor> aScanline(nHeight);
             for(long x(0); x < nWidth; x++)
             {
+                for(long y(0); y < nHeight; y++)
+                        if(pReadAcc->HasPalette())
+                            aScanline[y] = pReadAcc->GetPaletteColor(pReadAcc->GetPixelIndex(y, x));
+                        else
+                            aScanline[y] = pReadAcc->GetPixel(y, x);
                 for(long y(0); y < nNewHeight; y++)
                 {
                     const long aBaseIndex(y * aNumberOfContributions);
@@ -217,19 +223,8 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
                     {
                         const long aIndex(aBaseIndex + j);
                         const double aWeight(aWeights[aIndex]);
-                        BitmapColor aColor;
-
                         aSum += aWeight;
-
-                        if(pReadAcc->HasPalette())
-                        {
-                            aColor = pReadAcc->GetPaletteColor(pReadAcc->GetPixelIndex(aPixels[aIndex], x));
-                        }
-                        else
-                        {
-                            aColor = pReadAcc->GetPixel(aPixels[aIndex], x);
-                        }
-
+                        const BitmapColor & aColor = aScanline[aPixels[aIndex]];
                         aValueRed += aWeight * aColor.GetRed();
                         aValueGreen += aWeight * aColor.GetGreen();
                         aValueBlue += aWeight * aColor.GetBlue();
