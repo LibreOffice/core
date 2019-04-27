@@ -1454,7 +1454,9 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
     ErrCode nStatus = ImpTestOrFindFormat("", rIStream, nFormat);
 
     rIStream.Seek(nStreamBegin);
-    const sal_uInt32 nStreamLength( sizeLimit ? sizeLimit : rIStream.Seek(STREAM_SEEK_TO_END) - nStreamBegin);
+    sal_uInt32 nStreamLength(rIStream.remainingSize());
+    if (sizeLimit && sizeLimit < nStreamLength)
+        nStreamLength = sizeLimit;
 
     OUString aFilterName = pConfig->GetImportFilterName(nFormat);
     OUString aExternalFilterName = pConfig->GetExternalFilterName(nFormat, false);
