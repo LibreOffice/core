@@ -433,7 +433,7 @@ void ScDocument::FillInfo(
     {
         SCCOL nX = (nArrCol>0) ? nArrCol-1 : MAXCOL+1;                    // negative -> invalid
 
-        if ( ValidCol(nX) && nX < maTabs[nTab]->GetAllocatedColumnsCount() )
+        if (ValidCol(nX))
         {
             // #i58049#, #i57939# Hidden columns must be skipped here, or their attributes
             // will disturb the output
@@ -447,18 +447,25 @@ void ScDocument::FillInfo(
 
                 pRowInfo[0].pCellInfo[nArrCol].nWidth = nThisWidth;           //TODO: this should be enough
 
-                ScColumn* pThisCol = &maTabs[nTab]->aCol[nX];                   // Column data
+                ScAttrArray* pThisAttrArr; // Attribute
+                if (nX < maTabs[nTab]->GetAllocatedColumnsCount())
+                {
+                    ScColumn* pThisCol = &maTabs[nTab]->aCol[nX]; // Column data
 
-                nArrRow = 1;
-                // Iterate between rows nY1 and nY2 and pick up non-empty
-                // cells that are not hidden.
-                RowInfoFiller aFunc(*this, nTab, pRowInfo, nArrCol, nArrRow);
-                sc::ParseAllNonEmpty(
-                    pThisCol->maCells.begin(), pThisCol->maCells, nRow1, nRow2, aFunc);
+                    nArrRow = 1;
+                    // Iterate between rows nY1 and nY2 and pick up non-empty
+                    // cells that are not hidden.
+                    RowInfoFiller aFunc(*this, nTab, pRowInfo, nArrCol, nArrRow);
+                    sc::ParseAllNonEmpty(pThisCol->maCells.begin(), pThisCol->maCells, nRow1, nRow2,
+                                         aFunc);
+
+                    pThisAttrArr = pThisCol->pAttrArray.get();
+                }
+                else
+                    pThisAttrArr = &maTabs[nTab]->aDefaultColAttrArray;
 
                 if (nX+1 >= nCol1)                                // Attribute/Blockmark from nX1-1
                 {
-                    ScAttrArray* pThisAttrArr = pThisCol->pAttrArray.get();       // Attribute
                     nArrRow = 0;
 
                     SCROW nCurRow=nRow1;                  // single rows
