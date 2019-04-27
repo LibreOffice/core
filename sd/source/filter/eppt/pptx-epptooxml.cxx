@@ -1971,14 +1971,15 @@ void PowerPointExport::embedEffectAudio(const FSHelperPtr& pFS, const OUString& 
     int nLastSlash = sUrl.lastIndexOf('/');
     sName = sUrl.copy(nLastSlash >= 0 ? nLastSlash + 1 : 0);
 
-    OUString sPath = OUStringBuffer().append("/media/")
+    OUString sPath = OUStringBuffer().append("../media/")
                                      .append(sName)
                                      .makeStringAndClear();
 
     sRelId = addRelation(pFS->getOutputStream(),
                         oox::getRelationship(Relationship::AUDIO), sPath);
 
-    uno::Reference<io::XOutputStream> xOutputStream = openFragmentStream(sPath, "audio/x-wav");
+    uno::Reference<io::XOutputStream> xOutputStream = openFragmentStream(sPath.replaceAt(0, 2, "/ppt"),
+            "audio/x-wav");
 
     comphelper::OStorageHelper::CopyInputToOutput(xAudioStream, xOutputStream);
 }

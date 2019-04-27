@@ -2087,30 +2087,37 @@ void SdOOXMLExportTest2::testTdf44223()
         = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf44223.pptx"), PPTX);
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
 
-    std::shared_ptr<SvStream> const pStream1(parseExportStream(tempFile, "media/audio1.wav"));
+    std::shared_ptr<SvStream> const pStream1(parseExportStream(tempFile, "ppt/media/audio1.wav"));
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(11140), pStream1->remainingSize());
 
-    std::shared_ptr<SvStream> const pStream2(parseExportStream(tempFile, "media/audio2.wav"));
+    std::shared_ptr<SvStream> const pStream2(parseExportStream(tempFile, "ppt/media/audio2.wav"));
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(28074), pStream2->remainingSize());
 
     xmlDocPtr pXmlContentType = parseExport(tempFile, "[Content_Types].xml");
     assertXPath(pXmlContentType,
-                "/ContentType:Types/ContentType:Override[@PartName='/media/audio1.wav']",
+                "/ContentType:Types/ContentType:Override[@PartName='/ppt/media/audio1.wav']",
                 "ContentType",
                 "audio/x-wav");
 
     assertXPath(pXmlContentType,
-                "/ContentType:Types/ContentType:Override[@PartName='/media/audio2.wav']",
+                "/ContentType:Types/ContentType:Override[@PartName='/ppt/media/audio2.wav']",
                 "ContentType",
                 "audio/x-wav");
 
     xmlDocPtr pDoc1 = parseExport(tempFile, "ppt/slides/slide1.xml");
 
+    // Start condition: 0s after timenode id 5 begins.
     assertXPath(pDoc1 , "//p:audio/p:cMediaNode/p:cTn/p:stCondLst/p:cond", "evt", "begin");
     assertXPath(pDoc1 , "//p:audio/p:cMediaNode/p:cTn/p:stCondLst/p:cond", "delay", "0");
+    assertXPath(pDoc1 , "//p:audio/p:cMediaNode/p:cTn/p:stCondLst/p:cond/p:tn", "val", "5");
 
     xmlDocPtr pDoc2 = parseExport(tempFile, "ppt/slides/slide2.xml");
     assertXPath(pDoc2 , "//p:transition/p:sndAc/p:stSnd/p:snd[@r:embed]", 2);
+
+    xmlDocPtr pRels1 = parseExport(tempFile, "ppt/slides/_rels/slide1.xml.rels");
+    assertXPath(pRels1, "//rels:Relationship[@Id='rId1']", "Type",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/audio");
+    assertXPath(pRels1, "//rels:Relationship[@Id='rId1']", "Target", "../media/audio1.wav");
 
     xDocShRef->DoClose();
 }
