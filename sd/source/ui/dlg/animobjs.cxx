@@ -723,7 +723,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
                 for( sal_uInt16 i = 0; i < nCount; i++ )
                 {
-                    const AnimationBitmap& rAnimBmp = aAnimation.Get( i );
+                    const AnimationBitmap& rAnimationBitmap = aAnimation.Get( i );
 
                     // LoopCount
                     if( i == 0 )
@@ -736,12 +736,12 @@ void AnimationWindow::AddObj (::sd::View& rView )
                             m_pLbLoopCount->SelectEntry(OUString::number( nLoopCount ) );
                     }
 
-                    long nTime = rAnimBmp.nWait;
+                    long nTime = rAnimationBitmap.mnWait;
                     ::tools::Time aTime( 0, 0, nTime / 100, nTime % 100 );
                     size_t nIndex = m_nCurrentFrame + 1;
                     m_FrameList.insert(
                             m_FrameList.begin() + nIndex,
-                            ::std::make_pair(rAnimBmp.aBmpEx, aTime));
+                            ::std::make_pair(rAnimationBitmap.maBitmapEx, aTime));
 
                     // increment => next one inserted after this one
                     ++m_nCurrentFrame;
@@ -958,21 +958,21 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             }
 
             // find LoopCount (number of passes)
-            AnimationBitmap aAnimBmp;
+            AnimationBitmap aAnimationBitmap;
             sal_uInt32 nLoopCount = 0;
             sal_Int32 nPos = m_pLbLoopCount->GetSelectedEntryPos();
 
             if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != m_pLbLoopCount->GetEntryCount() - 1 ) // endless
                 nLoopCount = m_pLbLoopCount->GetSelectedEntry().toUInt32();
 
-            aAnimBmp.aBmpEx = rBitmapEx;
-            aAnimBmp.aPosPix = aPt;
-            aAnimBmp.aSizePix = aBitmapSize;
-            aAnimBmp.nWait = nTime;
-            aAnimBmp.eDisposal = Disposal::Back;
-            aAnimBmp.bUserInput = false;
+            aAnimationBitmap.maBitmapEx = rBitmapEx;
+            aAnimationBitmap.maPositionPixel = aPt;
+            aAnimationBitmap.maSizePixel = aBitmapSize;
+            aAnimationBitmap.mnWait = nTime;
+            aAnimationBitmap.meDisposal = Disposal::Back;
+            aAnimationBitmap.mbUserInput = false;
 
-            aAnimation.Insert( aAnimBmp );
+            aAnimation.Insert( aAnimationBitmap );
             aAnimation.SetDisplaySizePixel( aMaxSizePix );
             aAnimation.SetLoopCount( nLoopCount );
         }
