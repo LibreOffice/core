@@ -2975,32 +2975,12 @@ public:
         return GtkToVcl(ret);
     }
 
-    virtual void hide() override
-    {
-        if (!gtk_widget_get_visible(m_pWidget))
-            return;
-        gtk_widget_hide(m_pWidget);
-        // if we hide the dialog while its running, then decrement the parent LibreOffice window
-        // modal count, we expect the dialog to restored while its running and match up with
-        // the inc_modal_count of show()
-        //
-        // This hide while running case is for the calc/chart dialogs which put
-        // up an extra range chooser dialog, hides the original, the user can
-        // select a range of cells and on completion the original dialog is
-        // restored
-        if (m_aDialogRun.loop_is_running())
-            m_aDialogRun.dec_modal_count();
-    }
-
     virtual void show() override
     {
         if (gtk_widget_get_visible(m_pWidget))
             return;
         sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
         gtk_widget_show(m_pWidget);
-        // see hide comment
-        if (m_aDialogRun.loop_is_running())
-            m_aDialogRun.inc_modal_count();
     }
 
     virtual void set_modal(bool bModal) override
@@ -3008,8 +2988,17 @@ public:
         if (get_modal() == bModal)
             return;
         GtkInstanceWindow::set_modal(bModal);
-        // see hide comment, but the modality-change example
-        // is the validity dialog in calc
+        /* if change the dialog modality while its running, then also change the parent LibreOffice window
+           modal count, we typically expect the dialog modality to be restored to its original state
+
+           This change modality while running case is for...
+
+           a) the calc/chart dialogs which put up an extra range chooser
+           dialog, hides the original, the user can select a range of cells and
+           on completion the original dialog is restored
+
+           b) the validity dialog in calc
+        */
         if (m_aDialogRun.loop_is_running())
         {
             if (bModal)
