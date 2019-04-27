@@ -21,6 +21,7 @@
 
 #include <xmlsec-wrapper.h>
 
+#include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
 #ifdef _WIN32

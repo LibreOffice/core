@@ -4,3 +4,112 @@ blacklist:
     xmlsecurity/qa/unit/pdfsigning/pdfsigning.cxx:
     # complete type is needed
     - com/sun/star/security/DocumentSignatureInformation.hpp
+    xmlsecurity/inc/xmlsignaturehelper2.hxx:
+    # Base class needs complete type
+    - com/sun/star/xml/crypto/XUriBinding.hpp
+    xmlsecurity/inc/xsecctl.hxx:
+    # Base class needs complete type
+    - com/sun/star/xml/crypto/sax/XSAXEventKeeperStatusChangeListener.hpp
+    - com/sun/star/xml/crypto/sax/XSignatureCreationResultListener.hpp
+    - com/sun/star/xml/crypto/sax/XSignatureVerifyResultListener.hpp
+    # Needed on WIN32 for rtl::Reference<UriBindingHelper> to compile
+    - xmlsignaturehelper2.hxx
+    xmlsecurity/inc/framework/securityengine.hxx:
+    # Base class needs complete type
+    - com/sun/star/xml/crypto/XXMLSignature.hpp
+    - com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp
+    - com/sun/star/xml/crypto/sax/XSAXEventKeeper.hpp
+    xmlsecurity/inc/framework/signaturecreatorimpl.hxx:
+    # Base class needs complete type
+    - framework/signatureengine.hxx
+    - com/sun/star/xml/crypto/sax/XBlockerMonitor.hpp
+    - com/sun/star/xml/crypto/sax/XSignatureCreationResultBroadcaster.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    xmlsecurity/inc/framework/saxeventkeeperimpl.hxx:
+    # Base class needs complete type
+    - com/sun/star/xml/crypto/sax/XSecuritySAXEventKeeper.hpp
+    - com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp
+    - com/sun/star/xml/crypto/sax/XSAXEventKeeperStatusChangeBroadcaster.hpp
+    - com/sun/star/xml/sax/XDocumentHandler.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    xmlsecurity/inc/framework/signatureverifierimpl.hxx:
+    # Base class needs complete type
+    - framework/signatureengine.hxx
+    - com/sun/star/xml/crypto/sax/XSignatureVerifyResultBroadcaster.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    xmlsecurity/inc/framework/xmlsignaturetemplateimpl.hxx:
+    # Base class needs complete type
+    - com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    xmlsecurity/inc/gpg/SEInitializer.hxx:
+    # Base class needs complete type
+    - com/sun/star/xml/crypto/XSEInitializer.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    xmlsecurity/inc/gpg/xmlsignature_gpgimpl.hxx:
+    # Base class needs complete type
+    - com/sun/star/xml/crypto/XXMLSignature.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    xmlsecurity/inc/xmlsec/xmldocumentwrapper_xmlsecimpl.hxx:
+    # Base class needs complete type
+    - com/sun/star/xml/wrapper/XXMLDocumentWrapper.hpp
+    - com/sun/star/xml/csax/XCompressedDocumentHandler.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    xmlsecurity/source/gpg/CipherContext.hxx:
+    # Base class needs complete type
+    - com/sun/star/xml/crypto/XCipherContext.hpp
+    xmlsecurity/source/gpg/DigestContext.hxx:
+    # Base class needs complete type
+    - com/sun/star/xml/crypto/XDigestContext.hpp
+    xmlsecurity/source/gpg/CertificateImpl.hxx:
+    # Base class needs complete type
+    - com/sun/star/security/XCertificate.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    xmlsecurity/source/gpg/SecurityEnvironment.hxx:
+    # Base class needs complete type
+    - com/sun/star/xml/crypto/XSecurityEnvironment.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    xmlsecurity/source/gpg/XMLSecurityContext.hxx:
+    # Base class needs complete type
+    - com/sun/star/xml/crypto/XXMLSecurityContext.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    xmlsecurity/source/gpg/XMLEncryption.hxx:
+    # Base class needs complete type
+    - com/sun/star/xml/crypto/XXMLEncryption.hpp
+    xmlsecurity/source/helper/ooxmlsecparser.hxx:
+    # Base class needs complete type
+    - com/sun/star/xml/sax/XDocumentHandler.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    xmlsecurity/source/helper/xsecparser.hxx:
+    # Base class needs complete type
+    - com/sun/star/xml/sax/XDocumentHandler.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    xmlsecurity/source/xmlsec/certificateextension_xmlsecimpl.hxx:
+    # Base class needs complete type
+    - com/sun/star/security/XCertificateExtension.hpp
+    xmlsecurity/source/xmlsec/xmlelementwrapper_xmlsecimpl.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/xml/wrapper/XXMLElementWrapper.hpp
+    xmlsecurity/source/xmlsec/nss/sanextension_nssimpl.hxx:
+    # Base class needs complete type
+    - com/sun/star/security/XSanExtension.hpp
+    xmlsecurity/source/xmlsec/nss/x509certificate_nssimpl.hxx:
+    # Base class needs complete type
+    - com/sun/star/security/XCertificate.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    xmlsecurity/source/xmlsec/nss/seinitializer_nssimpl.hxx:
+    # Base class needs complete type
+    - nssinitializer.hxx
+    - com/sun/star/xml/crypto/XSEInitializer.hpp
+    xmlsecurity/source/xmlsec/nss/securityenvironment_nssimpl.hxx:
+    # Base class needs complete type
+    - com/sun/star/xml/crypto/XSecurityEnvironment.hpp
+    - com/sun/star/xml/crypto/XCertificateCreator.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp

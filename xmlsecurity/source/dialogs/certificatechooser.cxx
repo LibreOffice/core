@@ -22,6 +22,7 @@
 #include <certificateviewer.hxx>
 #include <biginteger.hxx>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
+#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/xmlsechelper.hxx>
 

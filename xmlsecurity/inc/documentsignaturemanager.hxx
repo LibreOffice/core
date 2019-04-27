@@ -28,6 +28,8 @@
 #include "xmlsignaturehelper.hxx"
 #include "documentsignaturehelper.hxx"
 
+#include <com/sun/star/xml/crypto/XSEInitializer.hpp>
+
 namespace com
 {
 namespace sun
