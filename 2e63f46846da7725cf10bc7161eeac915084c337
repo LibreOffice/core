@@ -52,6 +52,24 @@
       "revId": "2e63f46846da7725cf10bc7161eeac915084c337",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_f2d625f2",
+        "filename": "sal/osl/all/filepath.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-28T18:27:46Z",
+      "side": 1,
+      "message": "I consider the assert as kind of documentation of the invariant that the code depends on. The rtl_uString* functions *might* return nullptr in case of OOM - but in that case, I don\u0027t think the function is supposed to handle that and try to recover, just as in other places throughout the code.\n\nThanks for the review!",
+      "parentUuid": "3fa0c359_32c80d54",
+      "revId": "2e63f46846da7725cf10bc7161eeac915084c337",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
