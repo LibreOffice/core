@@ -9,7 +9,7 @@
 
 #include <orcusxml.hxx>
 
-#include <vcl/treelistentry.hxx>
+#include <vcl/weld.hxx>
 
 ScOrcusXMLTreeParam::EntryData::EntryData(EntryType eType)
     : mnNamespaceID(0)
@@ -19,9 +19,9 @@ ScOrcusXMLTreeParam::EntryData::EntryData(EntryType eType)
     , mbLeafNode(true)
 {}
 
-ScOrcusXMLTreeParam::EntryData* ScOrcusXMLTreeParam::getUserData(const SvTreeListEntry& rEntry)
+ScOrcusXMLTreeParam::EntryData* ScOrcusXMLTreeParam::getUserData(const weld::TreeView& rControl, const weld::TreeIter& rEntry)
 {
-    return static_cast<ScOrcusXMLTreeParam::EntryData*>(rEntry.GetUserData());
+    return reinterpret_cast<ScOrcusXMLTreeParam::EntryData*>(rControl.get_id(rEntry).toInt64());
 }
 
 ScOrcusImportXMLParam::CellLink::CellLink(const ScAddress& rPos, const OString& rPath) :

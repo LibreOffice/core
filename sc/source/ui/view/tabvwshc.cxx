@@ -167,12 +167,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
         }
         break;
 
-        case SID_MANAGE_XML_SOURCE:
-        {
-            pResult = VclPtr<ScXMLSourceDlg>::Create(pB, pCW, pParent, pDoc);
-        }
-        break;
-
         case WID_CONDFRMT_REF:
         {
             bool        bFound      = false;
@@ -476,6 +470,11 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         {
             // dialog checks, what is in the cell
             xResult.reset(new ScHighlightChgDlg(pB, pCW, pParent, &GetViewData()));
+            break;
+        }
+        case SID_MANAGE_XML_SOURCE:
+        {
+            xResult.reset(new ScXMLSourceDlg(pB, pCW, pParent, pDoc));
             break;
         }
     }

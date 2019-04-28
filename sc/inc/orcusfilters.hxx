@@ -13,11 +13,11 @@
 #include <rtl/ustring.hxx>
 
 class ScDocument;
-class SvTreeListBox;
 struct ScOrcusXMLTreeParam;
 struct ScOrcusImportXMLParam;
 class ScOrcusXMLContext;
 class SfxMedium;
+namespace weld { class TreeView; }
 
 /**
  * Collection of orcus filter wrappers.
@@ -60,7 +60,7 @@ class ScOrcusXMLContext
 public:
     virtual ~ScOrcusXMLContext() {}
 
-    virtual void loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam) = 0;
+    virtual void loadXMLStructure(weld::TreeView& rTreeCtrl, ScOrcusXMLTreeParam& rParam) = 0;
 
     virtual void importXML(const ScOrcusImportXMLParam& rParam) = 0;
 };
