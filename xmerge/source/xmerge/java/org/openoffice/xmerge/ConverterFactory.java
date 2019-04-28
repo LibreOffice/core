@@ -54,7 +54,7 @@ public class ConverterFactory {
 
         toOffice = ConverterInfo.isValidOfficeType(mimeTypeOut);
 
-        // findConverterInfo expects the second paramenter to be the
+        // findConverterInfo expects the second parameter to be the
         // destination MimeType
         if (toOffice)
             foundInfo = ConverterInfoMgr.findConverterInfo(mimeTypeIn, mimeTypeOut);
