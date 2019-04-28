@@ -34,6 +34,24 @@
       "revId": "2e63f46846da7725cf10bc7161eeac915084c337",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_32c80d54",
+        "filename": "sal/osl/all/filepath.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-28T17:43:26Z",
+      "side": 1,
+      "message": "never mind, ignore my comment, I didn\u0027t read enough of the code to see what was going on.\n\nthe assert should not be necessary, that this effectively already an invariant of the rtl_uString* methods?",
+      "parentUuid": "3fa0c359_52f27908",
+      "revId": "2e63f46846da7725cf10bc7161eeac915084c337",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
