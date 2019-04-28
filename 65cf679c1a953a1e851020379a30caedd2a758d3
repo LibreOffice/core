@@ -70,6 +70,30 @@
       "revId": "65cf679c1a953a1e851020379a30caedd2a758d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_32f56dcc",
+        "filename": "vcl/source/gdi/sallayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-28T14:42:03Z",
+      "side": 1,
+      "message": "in c++11 (iirc, starting there; *possibly* it was also that way before) inline only means that the code might be included into several translation units, breaking ODR. It has nothing to do with compiler decision if to inline the code in the place of invocation now. And it is thus definitely unneeded now in cxx files, only in hxx.",
+      "parentUuid": "3fa0c359_b2097dde",
+      "range": {
+        "startLine": 766,
+        "startChar": 7,
+        "endLine": 766,
+        "endChar": 13
+      },
+      "revId": "65cf679c1a953a1e851020379a30caedd2a758d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
