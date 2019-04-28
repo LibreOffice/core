@@ -156,7 +156,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkRasterOp(const GDIMetaFile& rMetaFile);
     void testRasterOp();
 
-    //void checkTransparent(const GDIMetaFile& rMetaFile);
+    void checkTransparent(const GDIMetaFile& rMetaFile);
     void testTransparent();
 
     //void checkFloatTransparent(const GDIMetaFile& rMetaFile);
@@ -1517,8 +1517,43 @@ void SvmTest::testRasterOp()
     checkRasterOp(writeAndRead(aGDIMetaFile, "rasterop.svm"));
 }
 
+void SvmTest::checkTransparent(const GDIMetaFile& rMetaFile)
+{
+    xmlDocPtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/transparent[1]", {
+        {"transparence", "50"},
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/transparent[1]/polygon/point[1]", {
+        {"x", "1"}, {"y", "8"},
+    });
+    assertXPathAttrs(pDoc, "/metafile/transparent[1]/polygon/point[2]", {
+        {"x", "2"}, {"y", "7"},
+    });
+    assertXPathAttrs(pDoc, "/metafile/transparent[1]/polygon/point[3]", {
+        {"x", "3"}, {"y", "6"},
+    });
+}
+
 void SvmTest::testTransparent()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    tools::Polygon aPolygon(3);
+    aPolygon.SetPoint(Point(1, 8), 0);
+    aPolygon.SetPoint(Point(2, 7), 1);
+    aPolygon.SetPoint(Point(3, 6), 2);
+
+    tools::PolyPolygon aPolyPolygon(1);
+    aPolyPolygon.Insert(aPolygon);
+
+    pVirtualDev->DrawTransparent(aPolygon, 50);
+
+    checkTransparent(writeAndRead(aGDIMetaFile, "transparent.svm"));
+}
 
 void SvmTest::testFloatTransparent()
 {}
