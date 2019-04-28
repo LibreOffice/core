@@ -111,7 +111,7 @@ void XMLGradientStyleImport::importXML(
     aGradient.Angle = 0;
     aGradient.Border = 0;
 
-    SvXMLTokenMap aTokenMap( aGradientAttrTokenMap );
+    static const SvXMLTokenMap aTokenMap( aGradientAttrTokenMap );
     SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;

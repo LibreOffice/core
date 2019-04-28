@@ -108,7 +108,7 @@ void XMLLineNumberingImportContext::StartElement(
         XML_TOKEN_MAP_END
     };
 
-    SvXMLTokenMap aTokenMap(aLineNumberingTokenMap);
+    static const SvXMLTokenMap aTokenMap(aLineNumberingTokenMap);
 
     // process attributes
     sal_Int16 nLength = xAttrList->getLength();

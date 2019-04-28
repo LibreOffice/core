@@ -54,22 +54,18 @@ enum SvXMLTokenMapAttrs
     XML_TOK_BGIMG_FILTER,
     XML_TOK_BGIMG_OPACITY
 };
-static const SvXMLTokenMapEntry* lcl_getBGImgAttributesAttrTokenMap()
+static const SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
 {
-    static const SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
-    {
-        { XML_NAMESPACE_XLINK, XML_HREF,        XML_TOK_BGIMG_HREF      },
-        { XML_NAMESPACE_XLINK, XML_TYPE,        XML_TOK_BGIMG_TYPE      },
-        { XML_NAMESPACE_XLINK, XML_ACTUATE,     XML_TOK_BGIMG_ACTUATE   },
-        { XML_NAMESPACE_XLINK, XML_SHOW,        XML_TOK_BGIMG_SHOW      },
-        { XML_NAMESPACE_STYLE, XML_POSITION,    XML_TOK_BGIMG_POSITION  },
-        { XML_NAMESPACE_STYLE, XML_REPEAT,      XML_TOK_BGIMG_REPEAT    },
-        { XML_NAMESPACE_STYLE, XML_FILTER_NAME, XML_TOK_BGIMG_FILTER    },
-        { XML_NAMESPACE_DRAW,  XML_OPACITY,     XML_TOK_BGIMG_OPACITY   },
-        XML_TOKEN_MAP_END
-    };
-    return aBGImgAttributesAttrTokenMap;
-}
+    { XML_NAMESPACE_XLINK, XML_HREF,        XML_TOK_BGIMG_HREF      },
+    { XML_NAMESPACE_XLINK, XML_TYPE,        XML_TOK_BGIMG_TYPE      },
+    { XML_NAMESPACE_XLINK, XML_ACTUATE,     XML_TOK_BGIMG_ACTUATE   },
+    { XML_NAMESPACE_XLINK, XML_SHOW,        XML_TOK_BGIMG_SHOW      },
+    { XML_NAMESPACE_STYLE, XML_POSITION,    XML_TOK_BGIMG_POSITION  },
+    { XML_NAMESPACE_STYLE, XML_REPEAT,      XML_TOK_BGIMG_REPEAT    },
+    { XML_NAMESPACE_STYLE, XML_FILTER_NAME, XML_TOK_BGIMG_FILTER    },
+    { XML_NAMESPACE_DRAW,  XML_OPACITY,     XML_TOK_BGIMG_OPACITY   },
+    XML_TOKEN_MAP_END
+};
 
 
 static const SvXMLEnumMapEntry<GraphicLocation> psXML_BrushHoriPos[] =
@@ -170,7 +166,7 @@ static void lcl_xmlbic_MergeVertPos( GraphicLocation& ePos,
 void XMLBackgroundImageContext::ProcessAttrs(
         const Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLTokenMap aTokenMap( lcl_getBGImgAttributesAttrTokenMap() );
+    static const SvXMLTokenMap aTokenMap( aBGImgAttributesAttrTokenMap );
 
     ePos = GraphicLocation_NONE;
 

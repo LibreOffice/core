@@ -61,7 +61,7 @@ XMLSymbolImageContext::~XMLSymbolImageContext()
 
 void XMLSymbolImageContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLTokenMap aTokenMap( aSymbolImageAttrTokenMap );
+    static const SvXMLTokenMap aTokenMap( aSymbolImageAttrTokenMap );
     OUString aLocalName;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;

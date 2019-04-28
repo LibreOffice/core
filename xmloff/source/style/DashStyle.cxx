@@ -104,7 +104,7 @@ void XMLDashStyleImport::importXML(
     SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
     SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
 
-    SvXMLTokenMap aTokenMap( aDashStyleAttrTokenMap );
+    static const SvXMLTokenMap aTokenMap( aDashStyleAttrTokenMap );
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )

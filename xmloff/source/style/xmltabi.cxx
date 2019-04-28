@@ -84,7 +84,7 @@ SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
     aTabStop.FillChar = ' ';
     sal_Unicode cTextFillChar = 0;
 
-    SvXMLTokenMap aTokenMap( aTabsAttributesAttrTokenMap );
+    static const SvXMLTokenMap aTokenMap( aTabsAttributesAttrTokenMap );
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )

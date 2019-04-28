@@ -95,8 +95,8 @@ void XMLHatchStyleImport::importXML(
     aHatch.Distance = 0;
     aHatch.Angle = 0;
 
-    SvXMLTokenMap aTokenMap( aHatchAttrTokenMap );
-    SvXMLNamespaceMap rNamespaceMap = rImport.GetNamespaceMap();
+    static const SvXMLTokenMap aTokenMap( aHatchAttrTokenMap );
+    const SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
     SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;

@@ -2694,8 +2694,7 @@ static const SvXMLTokenMapEntry aDdeDeclAttrTokenMap[] =
 
 XMLDdeFieldDeclsImportContext::XMLDdeFieldDeclsImportContext(
     SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& sLocalName) :
-        SvXMLImportContext(rImport, nPrfx, sLocalName),
-        aTokenMap(aDdeDeclAttrTokenMap)
+        SvXMLImportContext(rImport, nPrfx, sLocalName)
 {
 }
 
@@ -2707,6 +2706,7 @@ SvXMLImportContextRef XMLDdeFieldDeclsImportContext::CreateChildContext(
     if ( (XML_NAMESPACE_TEXT == nPrefix) &&
          (IsXMLToken(rLocalName, XML_DDE_CONNECTION_DECL)) )
     {
+        static const SvXMLTokenMap aTokenMap(aDdeDeclAttrTokenMap);
         return new XMLDdeFieldDeclImportContext(GetImport(), nPrefix,
                                                 rLocalName, aTokenMap);
     }
