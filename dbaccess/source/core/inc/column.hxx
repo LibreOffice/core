@@ -112,7 +112,7 @@ namespace dbaccess
     class SAL_NO_VTABLE IColumnFactory
     {
     public:
-        /** creates a OColumn object which should represent the column with a given name
+        /** creates an OColumn object which should represent the column with a given name
         */
         virtual OColumn*
             createColumn( const OUString& _rName ) const = 0;
