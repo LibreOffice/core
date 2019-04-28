@@ -182,7 +182,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                   GetViewData()->GetTabNo(),
                                                   aStr );
                     }
-                    else
+                    else if (pHdl)
                     {
                         SC_MOD()->SetInputMode(SC_INPUT_TABLE);
 
