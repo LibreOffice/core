@@ -123,10 +123,10 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     //void checkMoveClipRegion(const GDIMetaFile& rMetaFile);
     void testMoveClipRegion();
 
-    //void checkLineColor(const GDIMetaFile& rMetaFile);
+    void checkLineColor(const GDIMetaFile& rMetaFile);
     void testLineColor();
 
-    //void checkFillColor(const GDIMetaFile& rMetaFile);
+    void checkFillColor(const GDIMetaFile& rMetaFile);
     void testFillColor();
 
     void checkTextColor(const GDIMetaFile& rMetaFile);
@@ -138,7 +138,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkTextLineColor(const GDIMetaFile& rMetaFile);
     void testTextLineColor();
 
-    //void checkOverLineColor(const GDIMetaFile& rMetaFile);
+    void checkOverLineColor(const GDIMetaFile& rMetaFile);
     void testOverLineColor();
 
     //void checkTextAlign(const GDIMetaFile& rMetaFile);
@@ -1308,10 +1308,50 @@ void SvmTest::testIntersectRegionClipRegion()
 {}
 void SvmTest::testMoveClipRegion()
 {}
+
+void SvmTest::checkLineColor(const GDIMetaFile& rMetaFile)
+{
+    xmlDocPtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/push/linecolor[1]", {
+        {"color", "#654321"},
+    });
+}
+
 void SvmTest::testLineColor()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    pVirtualDev->Push();
+    pVirtualDev->SetLineColor(Color(0x654321));
+    pVirtualDev->Pop();
+
+    checkLineColor(writeAndRead(aGDIMetaFile, "linecolor.svm"));
+}
+
+void SvmTest::checkFillColor(const GDIMetaFile& rMetaFile)
+{
+    xmlDocPtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/push/fillcolor[1]", {
+        {"color", "#456789"},
+    });
+}
+
 void SvmTest::testFillColor()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    pVirtualDev->Push();
+    pVirtualDev->SetFillColor(Color(0x456789));
+    pVirtualDev->Pop();
+
+    checkFillColor(writeAndRead(aGDIMetaFile, "fillcolor.svm"));
+}
 
 void SvmTest::checkTextColor(const GDIMetaFile& rMetaFile)
 {
@@ -1373,8 +1413,27 @@ void SvmTest::testTextLineColor()
     checkTextLineColor(writeAndRead(aGDIMetaFile, "textlinecolor.svm"));
 }
 
+void SvmTest::checkOverLineColor(const GDIMetaFile& rMetaFile)
+{
+    xmlDocPtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/push/overlinecolor[1]", {
+        {"color", "#345678"},
+    });
+}
+
 void SvmTest::testOverLineColor()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    pVirtualDev->Push();
+    pVirtualDev->SetOverlineColor(Color(0x345678));
+    pVirtualDev->Pop();
+
+    checkOverLineColor(writeAndRead(aGDIMetaFile, "overlinecolor.svm"));
+}
 
 void SvmTest::testTextAlign()
 {}
