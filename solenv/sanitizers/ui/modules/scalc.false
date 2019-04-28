@@ -57,6 +57,7 @@ sc/uiconfig/scalc/ui/ttestdialog.ui://GtkButton[@id='variable2-range-button'] bu
 sc/uiconfig/scalc/ui/ttestdialog.ui://GtkButton[@id='output-range-button'] button-no-label
 sc/uiconfig/scalc/ui/validationcriteriapage.ui://GtkButton[@id='validref'] no-labelled-by
 sc/uiconfig/scalc/ui/validationcriteriapage.ui://GtkButton[@id='validref'] button-no-label
+sc/uiconfig/scalc/ui/xmlsourcedialog.ui://GtkButton[@id='ref'] button-no-label
 sc/uiconfig/scalc/ui/ztestdialog.ui://GtkButton[@id='variable1-range-button'] button-no-label
 sc/uiconfig/scalc/ui/ztestdialog.ui://GtkButton[@id='variable2-range-button'] button-no-label
 sc/uiconfig/scalc/ui/ztestdialog.ui://GtkButton[@id='output-range-button'] button-no-label

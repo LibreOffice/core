@@ -41,7 +41,7 @@ public:
     ScOrcusXMLContextImpl(ScDocument& rDoc, const OUString& rPath);
     virtual ~ScOrcusXMLContextImpl() override;
 
-    virtual void loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam) override;
+    virtual void loadXMLStructure(weld::TreeView& rTreeCtrl, ScOrcusXMLTreeParam& rParam) override;
 
     virtual void importXML(const ScOrcusImportXMLParam& rParam) override;
 };
