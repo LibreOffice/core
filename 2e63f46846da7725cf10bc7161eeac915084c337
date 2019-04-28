@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_52a4b908",
+        "filename": "sal/osl/all/filepath.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-28T12:44:32Z",
+      "side": 1,
+      "message": "remember that sal may be called by external code like extensions, so you could be converting a silent problem with an existing extension into a crash",
+      "revId": "2e63f46846da7725cf10bc7161eeac915084c337",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
