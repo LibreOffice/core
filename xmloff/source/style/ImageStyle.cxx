@@ -106,7 +106,7 @@ bool XMLImageStyle::importXML(uno::Reference<xml::sax::XAttributeList> const & x
     OUString aDisplayName;
     uno::Reference<graphic::XGraphic> xGraphic;
 
-    SvXMLTokenMap aTokenMap( aHatchAttrTokenMap );
+    static const SvXMLTokenMap aTokenMap( aHatchAttrTokenMap );
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )

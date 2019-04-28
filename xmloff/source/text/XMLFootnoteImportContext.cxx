@@ -175,7 +175,7 @@ SvXMLImportContextRef XMLFootnoteImportContext::CreateChildContext(
 {
     SvXMLImportContextRef xContext;
 
-    SvXMLTokenMap aTokenMap(aFootnoteChildTokenMap);
+    static const SvXMLTokenMap aTokenMap(aFootnoteChildTokenMap);
 
     switch(aTokenMap.Get(p_nPrefix, rLocalName))
     {

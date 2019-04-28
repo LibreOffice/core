@@ -945,8 +945,6 @@ protected:
 /** import dde field declaration container (<text:dde-connection-decls>) */
 class XMLDdeFieldDeclsImportContext : public SvXMLImportContext
 {
-    SvXMLTokenMap const aTokenMap;
-
 public:
 
     XMLDdeFieldDeclsImportContext(SvXMLImport& rImport,

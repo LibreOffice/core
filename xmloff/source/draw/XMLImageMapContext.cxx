@@ -173,7 +173,7 @@ XMLImageMapObjectContext::XMLImageMapObjectContext(
 void XMLImageMapObjectContext::StartElement(
     const Reference<XAttributeList >& xAttrList )
 {
-    SvXMLTokenMap aMap(aImageMapObjectTokenMap);
+    static const SvXMLTokenMap aMap(aImageMapObjectTokenMap);
 
     sal_Int16 nLength = xAttrList->getLength();
     for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)

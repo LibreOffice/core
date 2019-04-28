@@ -162,7 +162,7 @@ XMLIndexSourceBaseContext::~XMLIndexSourceBaseContext()
 void XMLIndexSourceBaseContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
-    SvXMLTokenMap aTokenMap(aIndexSourceTokenMap);
+    static const SvXMLTokenMap aTokenMap(aIndexSourceTokenMap);
 
     // process attributes
     sal_Int16 nLength = xAttrList->getLength();

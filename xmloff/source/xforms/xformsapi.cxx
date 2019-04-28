@@ -195,7 +195,7 @@ sal_uInt16 xforms_getTypeClass(
     // translate name into token for local name
     OUString sLocalName;
     sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName(rXMLName, &sLocalName);
-    SvXMLTokenMap aMap( aTypes );
+    static const SvXMLTokenMap aMap( aTypes );
     sal_uInt16 nToken = aMap.Get( nPrefix, sLocalName );
 
     sal_uInt16 nTypeClass = css::xsd::DataTypeClass::STRING;
@@ -265,7 +265,7 @@ OUString xforms_getTypeName(
 {
     OUString sLocalName;
     sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName(rXMLName, &sLocalName);
-    SvXMLTokenMap aMap( aTypes );
+    static const SvXMLTokenMap aMap( aTypes );
     sal_uInt16 nToken = aMap.Get( nPrefix, sLocalName );
     return ( nToken == XML_TOK_UNKNOWN )
         ? rXMLName

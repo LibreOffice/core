@@ -73,7 +73,7 @@ static const SvXMLTokenMapEntry aSectionSourceTokenMap[] =
 void XMLSectionSourceImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
-    SvXMLTokenMap aTokenMap(aSectionSourceTokenMap);
+    static const SvXMLTokenMap aTokenMap(aSectionSourceTokenMap);
     OUString sURL;
     OUString sFilterName;
     OUString sSectionName;
