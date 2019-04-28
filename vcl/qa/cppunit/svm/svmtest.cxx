@@ -111,7 +111,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkWallpaper(const GDIMetaFile& rMetaFile);
     void testWallpaper();
 
-    //void checkClipRegion(const GDIMetaFile& rMetaFile);
+    void checkClipRegion(const GDIMetaFile& rMetaFile);
     void testClipRegion();
 
     //void checkIntersectRectClipRegion(const GDIMetaFile& rMetaFile);
@@ -1273,8 +1273,35 @@ void SvmTest::testWallpaper()
     checkWallpaper(writeAndRead(aGDIMetaFile, "wallpaper.svm"));
 }
 
+void SvmTest::checkClipRegion(const GDIMetaFile& rMetaFile)
+{
+    xmlDocPtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/clipregion[1]", {
+        {"left", "2"},
+        {"top", "2"},
+        {"right", "5"},
+        {"bottom", "5"},
+    });
+}
+
 void SvmTest::testClipRegion()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    vcl::Region aRegion(tools::Rectangle(Point(2, 2), Size(4, 4)));
+
+    // TODO
+    // explicit Region(const tools::Polygon& rPolygon);
+    // explicit Region(const tools::PolyPolygon& rPolyPoly);
+    // explicit Region(const basegfx::B2DPolyPolygon&);
+    pVirtualDev->SetClipRegion(aRegion);
+
+    checkClipRegion(writeAndRead(aGDIMetaFile, "clipregion.svm"));
+}
+
 void SvmTest::testIntersectRectClipRegion()
 {}
 void SvmTest::testIntersectRegionClipRegion()
