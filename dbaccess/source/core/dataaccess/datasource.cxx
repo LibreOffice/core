@@ -1177,7 +1177,7 @@ Reference< XConnection > ODatabaseSource::connectWithCompletion( const Reference
         {
             m_pImpl->m_sFailedPassword = m_pImpl->m_aPassword;
             // assume that we had an authentication problem. Without this we may, after an unsuccessful connect, while
-            // the user gave us a password an the order to remember it, never allow an password input again (at least
+            // the user gave us a password and the order to remember it, never allow a password input again (at least
             // not without restarting the session)
             m_pImpl->m_aPassword.clear();
         }
