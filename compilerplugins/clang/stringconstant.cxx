@@ -23,9 +23,9 @@
 #include "plugin.hxx"
 
 // Define a "string constant" to be a constant expression either of type "array
-// of N char" where each array element is a non-NUL ASCII character---except
-// that the last array element may be NUL, or, in some situations, of type char
-// with a ASCII value (including NUL).  Note that the former includes
+// of N char" where each array element is a non-NULL ASCII character---except
+// that the last array element may be NULL, or, in some situations, of type char
+// with an ASCII value (including NULL).  Note that the former includes
 // expressions denoting narrow string literals like "foo", and, with toolchains
 // that support constexpr, constexpr variables declared like
 //
@@ -559,7 +559,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
             report(
                 DiagnosticsEngine::Warning,
                 ("call of '%0' with string constant argument containing"
-                 " embedded NULs"),
+                 " embedded NULLs"),
                 expr->getExprLoc())
                 << fdecl->getQualifiedNameAsString() << expr->getSourceRange();
         }
@@ -601,7 +601,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
                 report(
                     DiagnosticsEngine::Warning,
                     ("call of '%0' with string constant argument containing"
-                     " embedded NULs"),
+                     " embedded NULLs"),
                     expr->getExprLoc())
                     << fdecl->getQualifiedNameAsString()
                     << expr->getSourceRange();
@@ -646,7 +646,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
                 report(
                     DiagnosticsEngine::Warning,
                     ("call of '%0' with string constant argument containing"
-                     " embedded NULs"),
+                     " embedded NULLs"),
                     expr->getExprLoc())
                     << fdecl->getQualifiedNameAsString()
                     << expr->getSourceRange();
@@ -689,7 +689,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
             report(
                 DiagnosticsEngine::Warning,
                 ("call of '%0' with string constant argument containing"
-                 " embedded NULs"),
+                 " embedded NULLs"),
                 expr->getExprLoc())
                 << fdecl->getQualifiedNameAsString() << expr->getSourceRange();
         }
@@ -844,7 +844,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                         report(
                             DiagnosticsEngine::Warning,
                             ("construction of %0 with string constant argument"
-                             " containing embedded NULs"),
+                             " containing embedded NULLs"),
                             expr->getExprLoc())
                             << classdecl << expr->getSourceRange();
                     }
@@ -1434,7 +1434,7 @@ bool StringConstant::isStringConstant(
         }
     case APValue::Array:
         {
-            if (v.hasArrayFiller()) { //TODO: handle final NUL filler?
+            if (v.hasArrayFiller()) { //TODO: handle final NULL filler?
                 return false;
             }
             unsigned n = v.getArraySize();
@@ -1716,7 +1716,7 @@ void StringConstant::handleChar(
         report(
             DiagnosticsEngine::Warning,
             ("call of '%0' with string constant argument containing embedded"
-             " NULs"),
+             " NULLs"),
             getMemberLocation(expr))
             << callee->getQualifiedNameAsString() << expr->getSourceRange();
         return;
@@ -1725,7 +1725,7 @@ void StringConstant::handleChar(
         report(
             DiagnosticsEngine::Warning,
             ("call of '%0' with string constant argument lacking a terminating"
-             " NUL"),
+             " NULL"),
             getMemberLocation(expr))
             << callee->getQualifiedNameAsString() << expr->getSourceRange();
         return;
@@ -2002,7 +2002,7 @@ void StringConstant::handleFunArgOstring(
             report(
                 DiagnosticsEngine::Warning,
                 ("call of '%0' with string constant argument lacking a"
-                 " terminating NUL"),
+                 " terminating NULL"),
                 getMemberLocation(expr))
                 << callee->getQualifiedNameAsString() << expr->getSourceRange();
             return;
@@ -2056,7 +2056,7 @@ void StringConstant::handleFunArgOstring(
                             report(
                                 DiagnosticsEngine::Warning,
                                 ("call of %0 constructor with string constant"
-                                 " argument containing embedded NULs"),
+                                 " argument containing embedded NULLs"),
                                 cexpr->getLocation())
                                 << classdecl << cexpr->getSourceRange();
                             return;
@@ -2065,7 +2065,7 @@ void StringConstant::handleFunArgOstring(
                             report(
                                 DiagnosticsEngine::Warning,
                                 ("call of %0 constructor with string constant"
-                                 " argument lacking a terminating NUL"),
+                                 " argument lacking a terminating NULL"),
                                 cexpr->getLocation())
                                 << classdecl << cexpr->getSourceRange();
                             return;
