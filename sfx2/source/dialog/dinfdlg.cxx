@@ -887,8 +887,7 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
     bool bRet = false;
 
     if ( !bHandleDelete && bEnableUseUserData &&
-         m_xUseUserDataCB->get_state_changed_from_saved() &&
-         GetDialogExampleSet() )
+         m_xUseUserDataCB->get_state_changed_from_saved() )
     {
         const SfxItemSet* pExpSet = GetDialogExampleSet();
         const SfxPoolItem* pItem;
@@ -924,8 +923,7 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
         }
     }
 
-    if ( m_xUseThumbnailSaveCB->get_state_changed_from_saved() &&
-       GetDialogExampleSet() )
+    if ( m_xUseThumbnailSaveCB->get_state_changed_from_saved() )
     {
         const SfxItemSet* pExpSet = GetDialogExampleSet();
         const SfxPoolItem* pItem;
