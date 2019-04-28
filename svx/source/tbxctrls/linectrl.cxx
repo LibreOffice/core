@@ -33,6 +33,10 @@
 
 #include <svx/drawitem.hxx>
 #include <svx/xattr.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xlndsit.hxx>
+#include <svx/xlnstit.hxx>
+#include <svx/xlnedit.hxx>
 #include <svx/xtable.hxx>
 #include <svx/linectrl.hxx>
 #include <svx/itemwin.hxx>

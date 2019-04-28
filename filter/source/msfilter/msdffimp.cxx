@@ -122,6 +122,15 @@
 #include <svx/svditer.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xattr.hxx>
+#include <svx/xlndsit.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/xlnedwit.hxx>
+#include <svx/xlnstit.hxx>
+#include <svx/xlnedit.hxx>
+#include <svx/xlnstcit.hxx>
+#include <svx/xlnedcit.hxx>
 #include <filter/msfilter/classids.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <editeng/outliner.hxx>

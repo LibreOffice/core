@@ -54,6 +54,15 @@
 #include <svx/xsflclit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
+#include <svx/xlndsit.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xlnstit.hxx>
+#include <svx/xlnedit.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/xlnedwit.hxx>
+#include <svx/xlnstcit.hxx>
+#include <svx/xlnedcit.hxx>
 #include <editeng/itemtype.hxx>
 #include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>

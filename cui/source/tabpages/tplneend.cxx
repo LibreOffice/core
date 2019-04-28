@@ -33,6 +33,12 @@
 #include <svx/drawitem.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/xlnedwit.hxx>
+#include <svx/xlnstit.hxx>
+#include <svx/xlnedit.hxx>
 #include <cuitabline.hxx>
 #include <cuitabarea.hxx>
 #include <svx/svxdlg.hxx>

@@ -22,7 +22,6 @@
 #include <vcl/button.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/xlineit0.hxx>
-#include <svx/xlineit.hxx>
 #include <svx/dlgctrl.hxx>
 #include <vcl/menubtn.hxx>
 

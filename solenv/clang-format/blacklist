@@ -7454,7 +7454,6 @@ include/svx/xgrad.hxx
 include/svx/xgrscit.hxx
 include/svx/xhatch.hxx
 include/svx/xit.hxx
-include/svx/xlineit.hxx
 include/svx/xlineit0.hxx
 include/svx/xlinjoit.hxx
 include/svx/xlnasit.hxx
