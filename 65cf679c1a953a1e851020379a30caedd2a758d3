@@ -46,6 +46,30 @@
       "revId": "65cf679c1a953a1e851020379a30caedd2a758d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_7213f50e",
+        "filename": "vcl/source/gdi/sallayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-04-28T14:41:04Z",
+      "side": 1,
+      "message": "Thinking about it, it\u0027s the other way around, so actually static is redundant.",
+      "parentUuid": "3fa0c359_b2097dde",
+      "range": {
+        "startLine": 766,
+        "startChar": 7,
+        "endLine": 766,
+        "endChar": 13
+      },
+      "revId": "65cf679c1a953a1e851020379a30caedd2a758d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
