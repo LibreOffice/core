@@ -70,7 +70,7 @@ namespace dbaccess
         TOldRowSetRows                  m_aOldRows;
 
         std::unique_ptr<ORowSetMatrix>  m_pInsertMatrix;        // represent the rows which should be inserted normally this is only one
-        ORowSetMatrix::iterator         m_aInsertRow;           // represent a insert row
+        ORowSetMatrix::iterator         m_aInsertRow;           // represent an insert row
 
         connectivity::OSQLTable         m_aUpdateTable;         // used for updates/deletes and inserts
 
@@ -135,7 +135,7 @@ namespace dbaccess
         ~ORowSetCache();
 
 
-        // called from the rowset when a updateXXX was called for the first time
+        // called from the rowset when an updateXXX was called for the first time
         void setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRow);
         ORowSetCacheIterator createIterator(ORowSetBase* _pRowSet);
         void deleteIterator(const ORowSetBase* _pRowSet);
