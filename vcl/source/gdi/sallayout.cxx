@@ -763,7 +763,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
 // to enable automatic halfwidth substitution for fullwidth punctuation
 // return value is negative for l, positive for r, zero for neutral
 // TODO: handle vertical layout as proposed in commit 43bf2ad49c2b3989bbbe893e4fee2e032a3920f5?
-static int lcl_CalcAsianKerning(sal_UCS4 c, bool bLeft)
+static inline int lcl_CalcAsianKerning(sal_UCS4 c, bool bLeft)
 {
     // http://www.asahi-net.or.jp/~sd5a-ucd/freetexts/jis/x4051/1995/appendix.html
     static const signed char nTable[0x30] =
@@ -774,6 +774,10 @@ static int lcl_CalcAsianKerning(sal_UCS4 c, bool bLeft)
     };
 
     int nResult = 0;
+    // ignore code ranges that are not affected by asian punctuation compression
+    if ((0x3000 != (c & 0xFF00)) && (0xFF00 != (c & 0xFF00)) && (0x2010 != (c & 0xFFF0)))
+        return nResult;
+
     if( (c >= 0x3000) && (c < 0x3030) )
         nResult = nTable[ c - 0x3000 ];
     else switch( c )
@@ -809,21 +813,17 @@ void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
         const int n = pGlyphIter->m_nCharPos;
         if (n < nLength - 1)
         {
-            // ignore code ranges that are not affected by asian punctuation compression
-            const sal_Unicode cHere = rStr[n];
-            if( ((0x3000 != (cHere & 0xFF00)) && (0x2010 != (cHere & 0xFFF0))) || (0xFF00 != (cHere & 0xFF00)) )
-                continue;
-            const sal_Unicode cNext = rStr[n+1];
-            if( ((0x3000 != (cNext & 0xFF00)) && (0x2010 != (cNext & 0xFFF0))) || (0xFF00 != (cNext & 0xFF00)) )
-                continue;
-
             // calculate compression values
-            const int nKernFirst = +lcl_CalcAsianKerning(cHere, true);
-            const int nKernNext  = -lcl_CalcAsianKerning(cNext, false);
+            const int nKernFirst = +lcl_CalcAsianKerning(rStr[n], true);
+            if (nKernFirst == 0)
+                continue;
+            const int nKernNext = -lcl_CalcAsianKerning(rStr[n + 1], false);
+            if (nKernNext == 0)
+                continue;
 
             // apply punctuation compression to logical glyph widths
             int nDelta = (nKernFirst < nKernNext) ? nKernFirst : nKernNext;
-            if( nDelta<0 && nKernFirst!=0 && nKernNext!=0 )
+            if (nDelta < 0)
             {
                 nDelta = (nDelta * pGlyphIter->m_nOrigWidth + 2) / 4;
                 if( pGlyphIter+1 == pGlyphIterEnd )
