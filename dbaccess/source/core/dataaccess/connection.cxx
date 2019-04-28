@@ -806,7 +806,7 @@ Reference< XInterface > SAL_CALL OConnection::getTableEditor( const Reference< X
     // ask ourself
     // well, we don't have own functionality here ...
     // In the future, we might decide to delegate the complete handling to this interface.
-    // In this case, we would need to instantiate an css.sdb.TableDesign here.
+    // In this case, we would need to instantiate a css.sdb.TableDesign here.
 
     return xReturn;
 }
