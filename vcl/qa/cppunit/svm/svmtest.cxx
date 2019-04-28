@@ -105,7 +105,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     //void checkGradientEx(const GDIMetaFile& rMetaFile);
     void testGradientEx();
 
-    //void checkHatch(const GDIMetaFile& rMetaFile);
+    void checkHatch(const GDIMetaFile& rMetaFile);
     void testHatch();
 
     //void checkWallpaper(const GDIMetaFile& rMetaFile);
@@ -1195,8 +1195,50 @@ void SvmTest::testGradient()
 
 void SvmTest::testGradientEx()
 {}
+
+void SvmTest::checkHatch(const GDIMetaFile& rMetaFile)
+{
+    xmlDocPtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/hatch[1]/polygon/point[1]", {
+        {"x", "1"}, {"y", "8"},
+    });
+    assertXPathAttrs(pDoc, "/metafile/hatch[1]/polygon/point[2]", {
+        {"x", "2"}, {"y", "7"},
+    });
+    assertXPathAttrs(pDoc, "/metafile/hatch[1]/polygon/point[3]", {
+        {"x", "3"}, {"y", "6"},
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/hatch[1]/hatch", {
+        {"style", "Single"},
+        {"color", "#ffff00"},
+        {"distance", "15"},
+        {"angle", "900"},
+    });
+}
+
 void SvmTest::testHatch()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    tools::Polygon aPolygon(3);
+    aPolygon.SetPoint(Point(1, 8), 0);
+    aPolygon.SetPoint(Point(2, 7), 1);
+    aPolygon.SetPoint(Point(3, 6), 2);
+
+    tools::PolyPolygon aPolyPolygon(1);
+    aPolyPolygon.Insert(aPolygon);
+
+    Hatch aHatch(HatchStyle::Single, COL_YELLOW, 15, 900);
+
+    pVirtualDev->DrawHatch(aPolyPolygon, aHatch);
+
+    checkHatch(writeAndRead(aGDIMetaFile, "hatch.svm"));
+}
+
 void SvmTest::testWallpaper()
 {}
 void SvmTest::testClipRegion()
