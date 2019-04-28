@@ -337,7 +337,7 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
         else if ( rHEvt.GetMode() & HelpEventMode::QUICK )
         {
             OUString aHelpText;
-            Point aTopLeft;
+            tools::Rectangle aHelpRect;
             if ( StarBASIC::IsRunning() )
             {
                 Point aWindowPos = rHEvt.GetMousePosPixel();
@@ -371,15 +371,20 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                     }
                     if ( !aHelpText.isEmpty() )
                     {
-                        aTopLeft = GetEditView()->GetTextEngine()->PaMtoEditCursor( aStartOfWord ).BottomLeft();
-                        aTopLeft = GetEditView()->GetWindowPos( aTopLeft );
-                        aTopLeft.AdjustX(5 );
-                        aTopLeft.AdjustY(5 );
-                        aTopLeft = OutputToScreenPixel( aTopLeft );
+                        tools::Rectangle aStartWordRect(GetEditView()->GetTextEngine()->PaMtoEditCursor(aStartOfWord));
+                        TextPaM aEndOfWord(aStartOfWord.GetPara(), aStartOfWord.GetIndex() + aWord.getLength());
+                        tools::Rectangle aEndWordRect(GetEditView()->GetTextEngine()->PaMtoEditCursor(aEndOfWord));
+                        aHelpRect = aStartWordRect.GetUnion(aEndWordRect);
+
+                        Point aTopLeft = GetEditView()->GetWindowPos(aHelpRect.TopLeft());
+                        aTopLeft = GetEditView()->GetWindow()->OutputToScreenPixel(aTopLeft);
+
+                        aHelpRect.setX(aTopLeft.X());
+                        aHelpRect.setY(aTopLeft.Y());
                     }
                 }
             }
-            Help::ShowQuickHelp( this, tools::Rectangle( aTopLeft, Size( 1, 1 ) ), aHelpText, QuickHelpFlags::Top|QuickHelpFlags::Left);
+            Help::ShowQuickHelp( this, aHelpRect, aHelpText, QuickHelpFlags::NONE);
             bDone = true;
         }
     }
