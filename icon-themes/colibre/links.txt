@@ -100,6 +100,7 @@ cmd/sc_insertcurrencyfield.png cmd/sc_formattedfield.png
 cmd/sc_insertdatefield.png cmd/sc_datefield.png
 cmd/sc_insertauthorfield.png cmd/sc_dbviewaliases.png
 cmd/sc_insertedit.png cmd/sc_text.png
+cmd/sc_edit.png cmd/sc_text.png
 cmd/sc_insertfield.png cmd/sc_addfield.png
 cmd/sc_insertctrl.png cmd/sc_inserttable.png
 cmd/sc_insertfilecontrol.png cmd/sc_open.png
