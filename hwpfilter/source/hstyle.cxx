@@ -67,7 +67,7 @@ void HWPStyle::SetName(int n, char const *name)
     {
         if (name)
         {
-#if defined __GNUC__ && __GNUC__ == 8 && __GNUC_MINOR__ == 2 && !defined __clang__
+#if defined __GNUC__ && __GNUC__ == 8 && (__GNUC_MINOR__ == 2 || __GNUC_MINOR__ == 3) && !defined __clang__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-truncation"
 #endif
