@@ -1034,18 +1034,19 @@ void generateSkeleton(ProgramOptions const & options,
             *pofs << (nm > 0 ? "// closing namespace\n\n" : "\n");
         }
 
-        if ( !standardout && pofs && static_cast<std::ofstream*>(pofs)->is_open()) {
-            static_cast<std::ofstream*>(pofs)->close();
+        if (!standardout)
+        {
+            if (static_cast<std::ofstream*>(pofs)->is_open())
+                static_cast<std::ofstream*>(pofs)->close();
             delete pofs;
             OSL_VERIFY(makeValidTypeFile(compFileName, tmpFileName, false));
         }
     } catch (CannotDumpException & e) {
         std::cerr << "ERROR: " << e.getMessage() << "\n";
         if ( !standardout ) {
-            if (pofs && static_cast<std::ofstream*>(pofs)->is_open()) {
+            if (static_cast<std::ofstream*>(pofs)->is_open())
                 static_cast<std::ofstream*>(pofs)->close();
-                delete pofs;
-            }
+            delete pofs;
             // remove existing type file if something goes wrong to ensure
             // consistency
             if (fileExists(compFileName))
@@ -1193,18 +1194,19 @@ void generateCalcAddin(ProgramOptions const & options,
 
         generateCompFunctions(*pofs, nmspace);
 
-        if ( !standardout && pofs && static_cast<std::ofstream*>(pofs)->is_open()) {
-            static_cast<std::ofstream*>(pofs)->close();
+        if (!standardout)
+        {
+            if (static_cast<std::ofstream*>(pofs)->is_open())
+                static_cast<std::ofstream*>(pofs)->close();
             delete pofs;
             OSL_VERIFY(makeValidTypeFile(compFileName, tmpFileName, false));
         }
     } catch (CannotDumpException & e) {
         std::cerr << "ERROR: " << e.getMessage() << "\n";
         if ( !standardout ) {
-            if (pofs && static_cast<std::ofstream*>(pofs)->is_open()) {
+            if (static_cast<std::ofstream*>(pofs)->is_open())
                 static_cast<std::ofstream*>(pofs)->close();
-                delete pofs;
-            }
+            delete pofs;
             // remove existing type file if something goes wrong to ensure
             // consistency
             if (fileExists(compFileName))
