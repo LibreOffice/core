@@ -123,22 +123,22 @@ SvxTabulatorTabPage::SvxTabulatorTabPage(TabPageParent pParent, const SfxItemSet
     m_xDelBtn->connect_clicked(LINK(this,SvxTabulatorTabPage, DelHdl_Impl));
     m_xDelAllBtn->connect_clicked(LINK(this,SvxTabulatorTabPage, DelAllHdl_Impl));
 
-    Link<weld::Button&,void> aLink = LINK(this, SvxTabulatorTabPage, TabTypeCheckHdl_Impl);
-    m_xLeftTab->connect_clicked(aLink);
-    m_xRightTab->connect_clicked(aLink);
-    m_xDezTab->connect_clicked(aLink);
-    m_xCenterTab->connect_clicked(aLink);
+    Link<weld::ToggleButton&,void> aLink = LINK(this, SvxTabulatorTabPage, TabTypeCheckHdl_Impl);
+    m_xLeftTab->connect_toggled(aLink);
+    m_xRightTab->connect_toggled(aLink);
+    m_xDezTab->connect_toggled(aLink);
+    m_xCenterTab->connect_toggled(aLink);
 
     m_xDezChar->connect_focus_out(LINK(this,  SvxTabulatorTabPage, GetDezCharHdl_Impl));
     m_xDezChar->set_sensitive(false);
     m_xDezCharLabel->set_sensitive(false);
 
     aLink = LINK(this, SvxTabulatorTabPage, FillTypeCheckHdl_Impl);
-    m_xNoFillChar->connect_clicked(aLink);
-    m_xFillPoints->connect_clicked(aLink);
-    m_xFillDashLine->connect_clicked(aLink);
-    m_xFillSolidLine->connect_clicked(aLink);
-    m_xFillSpecial->connect_clicked(aLink);
+    m_xNoFillChar->connect_toggled(aLink);
+    m_xFillPoints->connect_toggled(aLink);
+    m_xFillDashLine->connect_toggled(aLink);
+    m_xFillSolidLine->connect_toggled(aLink);
+    m_xFillSpecial->connect_toggled(aLink);
     m_xFillChar->connect_focus_out(LINK(this,  SvxTabulatorTabPage, GetFillCharHdl_Impl));
     m_xFillChar->set_sensitive(false);
 
@@ -537,8 +537,11 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelAllHdl_Impl, weld::Button&, void)
     }
 }
 
-IMPL_LINK(SvxTabulatorTabPage, TabTypeCheckHdl_Impl, weld::Button&, rBox, void)
+IMPL_LINK(SvxTabulatorTabPage, TabTypeCheckHdl_Impl, weld::ToggleButton&, rBox, void)
 {
+    if (!rBox.get_active())
+        return;
+
     SvxTabAdjust eAdj;
     m_xDezChar->set_sensitive(false);
     m_xDezCharLabel->set_sensitive(false);
@@ -567,8 +570,11 @@ IMPL_LINK(SvxTabulatorTabPage, TabTypeCheckHdl_Impl, weld::Button&, rBox, void)
     }
 }
 
-IMPL_LINK(SvxTabulatorTabPage, FillTypeCheckHdl_Impl, weld::Button&, rBox, void)
+IMPL_LINK(SvxTabulatorTabPage, FillTypeCheckHdl_Impl, weld::ToggleButton&, rBox, void)
 {
+    if (!rBox.get_active())
+        return;
+
     sal_uInt8 cFill = ' ';
     m_xFillChar->set_text( "" );
     m_xFillChar->set_sensitive(false);
