@@ -568,7 +568,7 @@ ScVbaAxis::setScaleType( ::sal_Int32 _nScaleType )
                     mxPropertySet->setPropertyValue("Logarithmic", uno::makeAny( true ) );
                     break;
                 default:
-                    // According to MS the paramenter is ignored and no Error is thrown
+                    // According to MS the parameter is ignored and no Error is thrown
                     break;
             }
         }
