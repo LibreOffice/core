@@ -88,7 +88,7 @@ private:
 public:
     /**
      * @param ppConnection The piece of memory, pConnection points to, is accessible
-     *                     as long as a reference to paramenter con is held.
+     *                     as long as a reference to parameter con is held.
      */
     Statement( const rtl::Reference< comphelper::RefCountedMutex > & refMutex,
                const css::uno::Reference< css::sdbc::XConnection> & con,
