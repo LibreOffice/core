@@ -26,78 +26,89 @@ class ScDocument;
 class ScRange;
 class ScOrcusXMLContext;
 
-class ScXMLSourceDlg : public ScAnyRefDlg
+struct CustomCompare
 {
-    VclPtr<PushButton> mpBtnSelectSource;
-    VclPtr<FixedText> mpFtSourceFile;
+    weld::TreeView& mrLbTree;
+    CustomCompare(weld::TreeView& rLbTree)
+        : mrLbTree(rLbTree)
+    {
+    }
+    bool operator()(const std::unique_ptr<weld::TreeIter>& lhs, const std::unique_ptr<weld::TreeIter>& rhs) const
+    {
+        return mrLbTree.iter_compare(*lhs, *rhs) == -1;
+    }
+};
 
-    VclPtr<VclContainer> mpMapGrid;
 
-    VclPtr<SvTreeListBox> mpLbTree;
-    VclPtr<formula::RefEdit> mpRefEdit;
-    VclPtr<formula::RefButton> mpRefBtn;
-
-    VclPtr<PushButton> mpBtnOk;
-    VclPtr<CancelButton> mpBtnCancel;
-
+class ScXMLSourceDlg : public ScAnyRefDlgController
+{
     OUString maSrcPath;
 
     ScOrcusXMLTreeParam maXMLParam;
-    std::set<const SvTreeListEntry*> maCellLinks;
-    std::set<const SvTreeListEntry*> maRangeLinks;
-    std::vector<SvTreeListEntry*> maHighlightedEntries;
-    SvTreeListEntry* mpCurRefEntry;
+    std::unique_ptr<weld::TreeIter> mxCurRefEntry;
     std::unique_ptr<ScOrcusXMLContext> mpXMLContext;
 
     ScDocument* mpDoc;
-
-    VclPtr<formula::RefEdit> mpActiveEdit;
     bool mbDlgLostFocus;
 
+    formula::WeldRefEdit* mpActiveEdit;
+    std::unique_ptr<weld::Button> mxBtnSelectSource;
+    std::unique_ptr<weld::Label> mxFtSourceFile;
+
+    std::unique_ptr<weld::Container> mxMapGrid;
+
+    std::unique_ptr<weld::TreeView> mxLbTree;
+    std::unique_ptr<formula::WeldRefEdit> mxRefEdit;
+    std::unique_ptr<formula::WeldRefButton> mxRefBtn;
+
+    std::unique_ptr<weld::Button> mxBtnOk;
+    std::unique_ptr<weld::Button> mxBtnCancel;
+
+    CustomCompare maCustomCompare;
+
+    std::set<std::unique_ptr<weld::TreeIter>, CustomCompare> maCellLinks;
+    std::set<std::unique_ptr<weld::TreeIter>, CustomCompare> maRangeLinks;
+
 public:
-    ScXMLSourceDlg(
-        SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent, ScDocument* pDoc);
+    ScXMLSourceDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent, ScDocument* pDoc);
     virtual ~ScXMLSourceDlg() override;
-    virtual void dispose() override;
 
     virtual bool IsRefInputMode() const override;
     virtual void SetReference(const ScRange& rRange, ScDocument* pDoc) override;
     virtual void Deactivate() override;
     virtual void SetActive() override;
-    virtual bool Close() override;
+    virtual void Close() override;
 
 private:
 
     void SelectSourceFile();
     void LoadSourceFileStructure(const OUString& rPath);
-    void HandleGetFocus(const Control* pCtrl);
     void TreeItemSelected();
-    void DefaultElementSelected(SvTreeListEntry& rEntry);
-    void RepeatElementSelected(SvTreeListEntry& rEntry);
-    void AttributeSelected(SvTreeListEntry& rEntry);
+    void DefaultElementSelected(weld::TreeIter& rEntry);
+    void RepeatElementSelected(weld::TreeIter& rEntry);
+    void AttributeSelected(weld::TreeIter& rEntry);
 
     void SetNonLinkable();
     void SetSingleLinkable();
     void SetRangeLinkable();
-    void SelectAllChildEntries(SvTreeListEntry& rEntry);
+    void SelectAllChildEntries(weld::TreeIter& rEntry);
 
     /**
      * Check if any of its parents is linked or repeated.  The passed entry is
      * not checked; its parent is the first one to be checked, then all its
      * parents get checked all the way to the root.
      */
-    bool IsParentDirty(SvTreeListEntry* pEntry) const;
+    bool IsParentDirty(weld::TreeIter* pEntry) const;
 
-    bool IsChildrenDirty(SvTreeListEntry* pEntry) const;
+    bool IsChildrenDirty(weld::TreeIter* pEntry) const;
 
     void OkPressed();
     void CancelPressed();
     void RefEditModified();
 
-    DECL_LINK(GetFocusHdl, Control&, void);
-    DECL_LINK(BtnPressedHdl, Button*, void);
-    DECL_LINK(TreeItemSelectHdl, SvTreeListBox*, void);
-    DECL_LINK(RefModifiedHdl, Edit&, void);
+    DECL_LINK(BtnPressedHdl, weld::Button&, void);
+    DECL_LINK(TreeItemSelectHdl, weld::TreeView&, void);
+    DECL_LINK(RefModifiedHdl, formula::WeldRefEdit&, void);
 };
 
 #endif
