@@ -119,7 +119,7 @@ namespace dbaccess
             simply do a "getByName" (equivalent) when we want to retrieve the node for a given registration name.
             Instead, we must search all nodes.
 
-            If a node with the given name already exists, then a ElementExistException is thrown.
+            If a node with the given name already exists, then an ElementExistException is thrown.
 
             If no exception is thrown, then a valid node is returned: If the node did not yet exist a new node is created,
             in this case the root node is not yet committed.
