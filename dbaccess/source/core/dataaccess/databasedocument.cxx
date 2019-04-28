@@ -534,7 +534,7 @@ void SAL_CALL ODatabaseDocument::load( const Sequence< PropertyValue >& Argument
         // similar ... just in case there is legacy code which expects a FileName only
         aResource.put( "FileName", aResource.get( "URL" ) );
 
-    // now that somebody (perhaps) told us an macro execution mode, remember it as
+    // now that somebody (perhaps) told us a macro execution mode, remember it as
     // ImposedMacroExecMode
     m_pImpl->setImposedMacroExecMode(
         aResource.getOrDefault( "MacroExecutionMode", m_pImpl->getImposedMacroExecMode() ) );
