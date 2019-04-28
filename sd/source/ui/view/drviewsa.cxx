@@ -535,7 +535,8 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
        or page) with the help of the ZoomItems !!!   */
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_ATTR_ZOOM ) )
     {
-        if (GetDocSh()->IsUIActive() || (SlideShow::IsRunning(GetViewShellBase())) )
+        if (GetDocSh()->IsUIActive() || SlideShow::IsRunning(GetViewShellBase())
+            || !GetActiveWindow())
         {
             rSet.DisableItem( SID_ATTR_ZOOM );
         }
