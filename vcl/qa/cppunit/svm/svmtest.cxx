@@ -141,7 +141,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkOverLineColor(const GDIMetaFile& rMetaFile);
     void testOverLineColor();
 
-    //void checkTextAlign(const GDIMetaFile& rMetaFile);
+    void checkTextAlign(const GDIMetaFile& rMetaFile);
     void testTextAlign();
 
     //void checkMapMode(const GDIMetaFile& rMetaFile);
@@ -153,7 +153,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkPushPop(const GDIMetaFile& rMetaFile);
     void testPushPop();
 
-    //void checkRasterOp(const GDIMetaFile& rMetaFile);
+    void checkRasterOp(const GDIMetaFile& rMetaFile);
     void testRasterOp();
 
     //void checkTransparent(const GDIMetaFile& rMetaFile);
@@ -1435,8 +1435,25 @@ void SvmTest::testOverLineColor()
     checkOverLineColor(writeAndRead(aGDIMetaFile, "overlinecolor.svm"));
 }
 
+void SvmTest::checkTextAlign(const GDIMetaFile& rMetaFile)
+{
+    xmlDocPtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/textalign[1]", {
+        {"align", "bottom"},
+    });
+}
+
 void SvmTest::testTextAlign()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    pVirtualDev->SetTextAlign(TextAlign::ALIGN_BOTTOM);
+
+    checkTextAlign(writeAndRead(aGDIMetaFile, "textalign.svm"));
+}
 
 void SvmTest::testMapMode()
 {}
@@ -1480,8 +1497,25 @@ void SvmTest::testPushPop()
     checkPushPop(writeAndRead(aGDIMetaFile, "pushpop.svm"));
 }
 
+void SvmTest::checkRasterOp(const GDIMetaFile& rMetaFile)
+{
+    xmlDocPtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/rasterop[1]", {
+        {"operation", "xor"},
+    });
+}
+
 void SvmTest::testRasterOp()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    pVirtualDev->SetRasterOp(RasterOp::Xor);
+
+    checkRasterOp(writeAndRead(aGDIMetaFile, "rasterop.svm"));
+}
 
 void SvmTest::testTransparent()
 {}
