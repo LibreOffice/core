@@ -58,7 +58,7 @@ static const SvXMLTokenMapEntry aDropAttrTokenMap[] =
 void XMLTextDropCapImportContext::ProcessAttrs(
         const Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLTokenMap aTokenMap( aDropAttrTokenMap );
+    static const SvXMLTokenMap aTokenMap( aDropAttrTokenMap );
 
     DropCapFormat aFormat;
     bool bWholeWord = false;

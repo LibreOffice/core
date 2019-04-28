@@ -224,7 +224,7 @@ void XMLSectionImportContext::StartElement(
 void XMLSectionImportContext::ProcessAttributes(
     const Reference<XAttributeList> & xAttrList )
 {
-    SvXMLTokenMap aTokenMap(aSectionTokenMap);
+    static const SvXMLTokenMap aTokenMap(aSectionTokenMap);
 
     sal_Int16 nLength = xAttrList->getLength();
     for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
