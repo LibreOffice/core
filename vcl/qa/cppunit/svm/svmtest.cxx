@@ -99,8 +99,35 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkMasks(const GDIMetaFile& rMetaFile);
     void testMasks();
 
-    void checkPushPop(const GDIMetaFile& rMetaFile);
-    void testPushPop();
+    void checkGradient(const GDIMetaFile& rMetaFile);
+    void testGradient();
+
+    //void checkGradientEx(const GDIMetaFile& rMetaFile);
+    void testGradientEx();
+
+    //void checkHatch(const GDIMetaFile& rMetaFile);
+    void testHatch();
+
+    //void checkWallpaper(const GDIMetaFile& rMetaFile);
+    void testWallpaper();
+
+    //void checkClipRegion(const GDIMetaFile& rMetaFile);
+    void testClipRegion();
+
+    //void checkIntersectRectClipRegion(const GDIMetaFile& rMetaFile);
+    void testIntersectRectClipRegion();
+
+    //void checkIntersectRegionClipRegion(const GDIMetaFile& rMetaFile);
+    void testIntersectRegionClipRegion();
+
+    //void checkMoveClipRegion(const GDIMetaFile& rMetaFile);
+    void testMoveClipRegion();
+
+    //void checkLineColor(const GDIMetaFile& rMetaFile);
+    void testLineColor();
+
+    //void checkFillColor(const GDIMetaFile& rMetaFile);
+    void testFillColor();
 
     void checkTextColor(const GDIMetaFile& rMetaFile);
     void testTextColor();
@@ -111,8 +138,44 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkTextLineColor(const GDIMetaFile& rMetaFile);
     void testTextLineColor();
 
-    void checkGradient(const GDIMetaFile& rMetaFile);
-    void testGradient();
+    //void checkOverLineColor(const GDIMetaFile& rMetaFile);
+    void testOverLineColor();
+
+    //void checkTextAlign(const GDIMetaFile& rMetaFile);
+    void testTextAlign();
+
+    //void checkMapMode(const GDIMetaFile& rMetaFile);
+    void testMapMode();
+
+    //void checkFont(const GDIMetaFile& rMetaFile);
+    void testFont();
+
+    void checkPushPop(const GDIMetaFile& rMetaFile);
+    void testPushPop();
+
+    //void checkRasterOp(const GDIMetaFile& rMetaFile);
+    void testRasterOp();
+
+    //void checkTransparent(const GDIMetaFile& rMetaFile);
+    void testTransparent();
+
+    //void checkFloatTransparent(const GDIMetaFile& rMetaFile);
+    void testFloatTransparent();
+
+    //void checkEPS(const GDIMetaFile& rMetaFile);
+    void testEPS();
+
+    //void checkRefPoint(const GDIMetaFile& rMetaFile);
+    void testRefPoint();
+
+    //void checkComment(const GDIMetaFile& rMetaFile);
+    void testComment();
+
+    //void checkLayoutMode(const GDIMetaFile& rMetaFile);
+    void testLayoutMode();
+
+    //void checkTextLanguage(const GDIMetaFile& rMetaFile);
+    void testTextLanguage();
 
 public:
     SvmTest()
@@ -121,8 +184,8 @@ public:
     {}
 
     CPPUNIT_TEST_SUITE(SvmTest);
-    CPPUNIT_TEST(testPoint);
     CPPUNIT_TEST(testPixel);
+    CPPUNIT_TEST(testPoint);
     CPPUNIT_TEST(testLine);
     CPPUNIT_TEST(testRect);
     CPPUNIT_TEST(testRoundRect);
@@ -139,13 +202,35 @@ public:
     CPPUNIT_TEST(testTextRect);
     CPPUNIT_TEST(testTextLine);
     CPPUNIT_TEST(testBitmaps); // BMP, BMPSCALE, BMPSCALEPART
-    CPPUNIT_TEST(testBitmapExs);
-    CPPUNIT_TEST(testMasks);
-    CPPUNIT_TEST(testPushPop);
+    CPPUNIT_TEST(testBitmapExs); // BMPEX, BMPEXSCALE, BMPEXSCALEPART
+    CPPUNIT_TEST(testMasks); // MASK, MASKSCALE, MASKSCALEPART
+    CPPUNIT_TEST(testGradient);
+    CPPUNIT_TEST(testGradientEx);
+    CPPUNIT_TEST(testHatch);
+    CPPUNIT_TEST(testWallpaper);
+    CPPUNIT_TEST(testClipRegion);
+    CPPUNIT_TEST(testIntersectRectClipRegion);
+    CPPUNIT_TEST(testIntersectRegionClipRegion);
+    CPPUNIT_TEST(testMoveClipRegion);
+    CPPUNIT_TEST(testLineColor);
+    CPPUNIT_TEST(testFillColor);
     CPPUNIT_TEST(testTextColor);
     CPPUNIT_TEST(testTextFillColor);
     CPPUNIT_TEST(testTextLineColor);
-    CPPUNIT_TEST(testGradient);
+    CPPUNIT_TEST(testOverLineColor);
+    CPPUNIT_TEST(testTextAlign);
+    CPPUNIT_TEST(testMapMode);
+    CPPUNIT_TEST(testFont);
+    CPPUNIT_TEST(testPushPop);
+    CPPUNIT_TEST(testRasterOp);
+    CPPUNIT_TEST(testTransparent);
+    CPPUNIT_TEST(testFloatTransparent);
+    CPPUNIT_TEST(testEPS);
+    CPPUNIT_TEST(testRefPoint);
+    CPPUNIT_TEST(testComment);
+    CPPUNIT_TEST(testLayoutMode);
+    CPPUNIT_TEST(testTextLanguage);
+
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1070,42 +1155,62 @@ void SvmTest::testMasks()
     checkMasks(writeAndRead(aGDIMetaFile, "masks.svm"));
 }
 
-void SvmTest::checkPushPop(const GDIMetaFile& rMetaFile)
+void SvmTest::checkGradient(const GDIMetaFile& rMetaFile)
 {
     xmlDocPtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/push[1]", {{"flags", "PushAll"}});
-    assertXPathAttrs(pDoc, "/metafile/push[1]/linecolor[1]", {{"color", "#800000"}});
-    assertXPathAttrs(pDoc, "/metafile/push[1]/line[1]", {
-        {"startx", "4"}, {"starty", "4"},
-        {"endx", "6"},   {"endy", "6"},
+    assertXPathAttrs(pDoc, "/metafile/gradient[1]", {
+        {"style", "Linear"},
+        {"startcolor", "#ffffff"},
+        {"endcolor", "#000000"},
+        {"angle", "0"},
+        {"border", "0"},
+        {"offsetx", "50"},
+        {"offsety", "50"},
+        {"startintensity", "100"},
+        {"endintensity", "100"},
+        {"steps", "0"},
     });
-    assertXPathAttrs(pDoc, "/metafile/push[1]/push[1]", {{"flags", "PushLineColor, PushFillColor"}});
-    assertXPathAttrs(pDoc, "/metafile/push[1]/push[1]/line[1]", {
-        {"startx", "5"}, {"starty", "5"},
-        {"endx", "7"},   {"endy", "7"},
+    assertXPathAttrs(pDoc, "/metafile/gradient[1]/rectangle", {
+        {"left", "1"},
+        {"top", "2"},
+        {"right", "4"},
+        {"bottom", "6"},
     });
 }
 
-void SvmTest::testPushPop()
+void SvmTest::testGradient()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
 
-    pVirtualDev->SetLineColor(COL_YELLOW);
-    pVirtualDev->Push();
-    pVirtualDev->SetLineColor(COL_RED);
-    pVirtualDev->DrawLine(Point(4,4), Point(6,6));
-    pVirtualDev->Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
-    pVirtualDev->SetLineColor(COL_LIGHTRED);
-    pVirtualDev->DrawLine(Point(5,5), Point(7,7));
-    pVirtualDev->Pop();
-    pVirtualDev->Pop();
-    pVirtualDev->DrawLine(Point(1,1), Point(8,8));
+    tools::Rectangle aRectangle(Point(1, 2), Size(4,5));
 
-    checkPushPop(writeAndRead(aGDIMetaFile, "pushpop.svm"));
+    Gradient aGradient(GradientStyle::Linear, COL_WHITE, COL_BLACK);
+    pVirtualDev->DrawGradient(aRectangle, aGradient);
+
+    checkGradient(writeAndRead(aGDIMetaFile, "gradient.svm"));
 }
+
+void SvmTest::testGradientEx()
+{}
+void SvmTest::testHatch()
+{}
+void SvmTest::testWallpaper()
+{}
+void SvmTest::testClipRegion()
+{}
+void SvmTest::testIntersectRectClipRegion()
+{}
+void SvmTest::testIntersectRegionClipRegion()
+{}
+void SvmTest::testMoveClipRegion()
+{}
+void SvmTest::testLineColor()
+{}
+void SvmTest::testFillColor()
+{}
 
 void SvmTest::checkTextColor(const GDIMetaFile& rMetaFile)
 {
@@ -1167,43 +1272,77 @@ void SvmTest::testTextLineColor()
     checkTextLineColor(writeAndRead(aGDIMetaFile, "textlinecolor.svm"));
 }
 
-void SvmTest::checkGradient(const GDIMetaFile& rMetaFile)
+void SvmTest::testOverLineColor()
+{}
+
+void SvmTest::testTextAlign()
+{}
+
+void SvmTest::testMapMode()
+{}
+void SvmTest::testFont()
+{}
+
+void SvmTest::checkPushPop(const GDIMetaFile& rMetaFile)
 {
     xmlDocPtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/gradient[1]", {
-        {"style", "Linear"},
-        {"startcolor", "#ffffff"},
-        {"endcolor", "#000000"},
-        {"angle", "0"},
-        {"border", "0"},
-        {"offsetx", "50"},
-        {"offsety", "50"},
-        {"startintensity", "100"},
-        {"endintensity", "100"},
-        {"steps", "0"},
+    assertXPathAttrs(pDoc, "/metafile/push[1]", {{"flags", "PushAll"}});
+    assertXPathAttrs(pDoc, "/metafile/push[1]/linecolor[1]", {{"color", "#800000"}});
+    assertXPathAttrs(pDoc, "/metafile/push[1]/line[1]", {
+        {"startx", "4"}, {"starty", "4"},
+        {"endx", "6"},   {"endy", "6"},
     });
-    assertXPathAttrs(pDoc, "/metafile/gradient[1]/rectangle", {
-        {"left", "1"},
-        {"top", "2"},
-        {"right", "4"},
-        {"bottom", "6"},
+    assertXPathAttrs(pDoc, "/metafile/push[1]/push[1]", {{"flags", "PushLineColor, PushFillColor"}});
+    assertXPathAttrs(pDoc, "/metafile/push[1]/push[1]/line[1]", {
+        {"startx", "5"}, {"starty", "5"},
+        {"endx", "7"},   {"endy", "7"},
     });
 }
 
-void SvmTest::testGradient()
+void SvmTest::testPushPop()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
-    tools::Rectangle aRectangle(Point(1, 2), Size(4,5));
+    pVirtualDev->SetLineColor(COL_YELLOW);
+    pVirtualDev->Push();
+    pVirtualDev->SetLineColor(COL_RED);
+    pVirtualDev->DrawLine(Point(4,4), Point(6,6));
+    pVirtualDev->Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+    pVirtualDev->SetLineColor(COL_LIGHTRED);
+    pVirtualDev->DrawLine(Point(5,5), Point(7,7));
+    pVirtualDev->Pop();
+    pVirtualDev->Pop();
+    pVirtualDev->DrawLine(Point(1,1), Point(8,8));
 
-    Gradient aGradient(GradientStyle::Linear, COL_WHITE, COL_BLACK);
-    pVirtualDev->DrawGradient(aRectangle, aGradient);
-
-    checkGradient(writeAndRead(aGDIMetaFile, "gradient.svm"));
+    checkPushPop(writeAndRead(aGDIMetaFile, "pushpop.svm"));
 }
+
+void SvmTest::testRasterOp()
+{}
+
+void SvmTest::testTransparent()
+{}
+
+void SvmTest::testFloatTransparent()
+{}
+
+void SvmTest::testEPS()
+{}
+
+void SvmTest::testRefPoint()
+{}
+
+void SvmTest::testComment()
+{}
+
+void SvmTest::testLayoutMode()
+{}
+
+void SvmTest::testTextLanguage()
+{}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SvmTest);
 
