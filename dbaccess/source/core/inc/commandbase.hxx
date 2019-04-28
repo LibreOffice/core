@@ -35,7 +35,7 @@ public: // need public access
     css::uno::Sequence< css::beans::PropertyValue>
                                          m_aLayoutInformation;
     OUString                             m_sCommand;
-    bool                                 m_bEscapeProcessing;        // no BitField ! so it can be used with a OPropertyStateContainer
+    bool                                 m_bEscapeProcessing;        // no BitField! So it can be used with an OPropertyStateContainer
     OUString                             m_sUpdateTableName;
     OUString                             m_sUpdateSchemaName;
     OUString                             m_sUpdateCatalogName;
