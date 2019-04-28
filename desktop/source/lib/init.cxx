@@ -150,6 +150,12 @@ static LibLibreOffice_Impl *gImpl = nullptr;
 static std::weak_ptr< LibreOfficeKitClass > gOfficeClass;
 static std::weak_ptr< LibreOfficeKitDocumentClass > gDocumentClass;
 
+static void SetLastExceptionMsg(const OUString& s = OUString())
+{
+    if (gImpl)
+        gImpl->maLastExceptionMsg = s;
+}
+
 typedef struct
 {
     const char *extn;
@@ -1643,8 +1649,7 @@ static void lo_registerCallback (LibreOfficeKit* pThis,
 static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
@@ -1652,7 +1657,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
     OUString aURL(getAbsoluteURL(sUrl));
     if (aURL.isEmpty())
     {
-        gImpl->maLastExceptionMsg = "Filename to save to was not provided.";
+        SetLastExceptionMsg("Filename to save to was not provided.");
         SAL_INFO("lok", "URL for save is empty");
         return false;
     }
@@ -1691,7 +1696,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
             }
             else
             {
-                gImpl->maLastExceptionMsg = "input filename without a suffix";
+                SetLastExceptionMsg("input filename without a suffix");
                 return false;
             }
         }
@@ -1707,7 +1712,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         }
         if (aFilterName.isEmpty())
         {
-            gImpl->maLastExceptionMsg = "no output filter found for provided suffix";
+            SetLastExceptionMsg("no output filter found for provided suffix");
             return false;
         }
 
@@ -1761,7 +1766,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
     }
     catch (const uno::Exception& exception)
     {
-        gImpl->maLastExceptionMsg = "exception: " + exception.Message;
+        SetLastExceptionMsg("exception: " + exception.Message);
     }
     return false;
 }
@@ -1769,8 +1774,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 static void doc_iniUnoCommands ()
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     OUString sUnoCommands[] =
     {
@@ -1912,8 +1916,7 @@ static void doc_iniUnoCommands ()
 static int doc_getDocumentType (LibreOfficeKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
@@ -1939,12 +1942,12 @@ static int doc_getDocumentType (LibreOfficeKitDocument* pThis)
         }
         else
         {
-            gImpl->maLastExceptionMsg = "unknown document type";
+            SetLastExceptionMsg("unknown document type");
         }
     }
     catch (const uno::Exception& exception)
     {
-        gImpl->maLastExceptionMsg = "exception: " + exception.Message;
+        SetLastExceptionMsg("exception: " + exception.Message);
     }
     return LOK_DOCTYPE_OTHER;
 }
@@ -1956,7 +1959,7 @@ static int doc_getParts (LibreOfficeKitDocument* pThis)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return 0;
     }
 
@@ -1966,13 +1969,12 @@ static int doc_getParts (LibreOfficeKitDocument* pThis)
 static int doc_getPart (LibreOfficeKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return 0;
     }
 
@@ -1982,13 +1984,12 @@ static int doc_getPart (LibreOfficeKitDocument* pThis)
 static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return;
     }
 
@@ -2001,7 +2002,7 @@ static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return nullptr;
     }
 
@@ -2016,13 +2017,12 @@ static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart)
 static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return nullptr;
     }
 
@@ -2037,13 +2037,12 @@ static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
 static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return nullptr;
     }
 
@@ -2058,13 +2057,12 @@ static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
 static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return nullptr;
     }
 
@@ -2080,13 +2078,12 @@ static void doc_setPartMode(LibreOfficeKitDocument* pThis,
                             int nPartMode)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return;
     }
 
@@ -2121,8 +2118,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
                           const int nTileWidth, const int nTileHeight)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     SAL_INFO( "lok.tiledrendering", "paintTile: painting [" << nTileWidth << "x" << nTileHeight <<
               "]@(" << nTilePosX << ", " << nTilePosY << ") to [" <<
@@ -2131,7 +2127,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return;
     }
 
@@ -2207,8 +2203,7 @@ static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
                                      const int nTileWidth, const int nTileHeight)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     SAL_INFO( "lok.tiledrendering", "paintTileToCGContext: painting [" << nTileWidth << "x" << nTileHeight <<
               "]@(" << nTilePosX << ", " << nTilePosY << ") to [" <<
@@ -2217,7 +2212,7 @@ static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return;
     }
 
@@ -2245,8 +2240,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               const int nTileWidth, const int nTileHeight)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     SAL_INFO( "lok.tiledrendering", "paintPartTile: painting @ " << nPart << " ["
                << nTileWidth << "x" << nTileHeight << "]@("
@@ -2330,8 +2324,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
 
 static int doc_getTileMode(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 {
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
     return LOK_TILEMODE_BGRA;
 }
 
@@ -2340,8 +2333,7 @@ static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
                                 long* pHeight)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (pDoc)
@@ -2352,7 +2344,7 @@ static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
     }
     else
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
     }
 }
 
@@ -2360,8 +2352,7 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
                                        const char* pArguments)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (pDoc)
@@ -2377,8 +2368,7 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
                                  void* pData)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
@@ -2432,12 +2422,11 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
 /// Returns the JSON representation of all the comments in the document
 static char* getPostIts(LibreOfficeKitDocument* pThis)
 {
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return nullptr;
     }
     OUString aComments = pDoc->getPostIts();
@@ -2447,12 +2436,11 @@ static char* getPostIts(LibreOfficeKitDocument* pThis)
 /// Returns the JSON representation of the positions of all the comments in the document
 static char* getPostItsPos(LibreOfficeKitDocument* pThis)
 {
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return nullptr;
     }
     OUString aComments = pDoc->getPostItsPos();
@@ -2461,12 +2449,11 @@ static char* getPostItsPos(LibreOfficeKitDocument* pThis)
 
 static char* getRulerState(LibreOfficeKitDocument* pThis)
 {
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return nullptr;
     }
     OUString state = pDoc->getRulerState();
@@ -2476,13 +2463,12 @@ static char* getRulerState(LibreOfficeKitDocument* pThis)
 static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return;
     }
 
@@ -2498,7 +2484,7 @@ static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsig
         ITiledRenderable* pDoc = getTiledRenderable(pThis);
         if (!pDoc)
         {
-            gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+            SetLastExceptionMsg("Document doesn't support tiled rendering");
             return;
         }
         pWindow = pDoc->getDocWindow();
@@ -2510,7 +2496,7 @@ static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsig
 
     if (!pWindow)
     {
-        gImpl->maLastExceptionMsg = "No window found for window id: " + OUString::number(nWindowId);
+        SetLastExceptionMsg("No window found for window id: " + OUString::number(nWindowId));
         return;
     }
 
@@ -2531,13 +2517,12 @@ static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsig
 static void doc_postWindowKeyEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
+        SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
         return;
     }
 
@@ -2602,8 +2587,7 @@ public:
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     OUString aCommand(pCommand, strlen(pCommand), RTL_TEXTENCODING_UTF8);
@@ -2674,20 +2658,19 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
 
     if (!bResult)
     {
-        gImpl->maLastExceptionMsg = "Failed to dispatch the .uno: command";
+        SetLastExceptionMsg("Failed to dispatch the .uno: command");
     }
 }
 
 static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return;
     }
 
@@ -2697,13 +2680,12 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
 static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
+        SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
         return;
     }
 
@@ -2735,13 +2717,12 @@ static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned
 static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int nX, int nY)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return;
     }
 
@@ -2751,13 +2732,12 @@ static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int n
 static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMimeType, char** pUsedMimeType)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return nullptr;
     }
 
@@ -2781,13 +2761,12 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
 static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, const char* pData, size_t nSize)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return false;
     }
 
@@ -2797,8 +2776,7 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
     pDoc->setClipboard(xClipboard);
     if (!pDoc->isMimeTypeSupported())
     {
-        if (gImpl)
-            gImpl->maLastExceptionMsg = "Document doesn't support this mime type";
+        SetLastExceptionMsg("Document doesn't support this mime type");
         return false;
     }
 
@@ -2809,7 +2787,7 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
     }));
     if (!comphelper::dispatchCommand(".uno:Paste", aPropertyValues))
     {
-        gImpl->maLastExceptionMsg = "Failed to dispatch the .uno: command";
+        SetLastExceptionMsg("Failed to dispatch the .uno: command");
         return false;
     }
 
@@ -2819,13 +2797,12 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
 static void doc_setGraphicSelection(LibreOfficeKitDocument* pThis, int nType, int nX, int nY)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return;
     }
 
@@ -2835,13 +2812,12 @@ static void doc_setGraphicSelection(LibreOfficeKitDocument* pThis, int nType, in
 static void doc_resetSelection(LibreOfficeKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return;
     }
 
@@ -3187,7 +3163,7 @@ static char* getTrackedChanges(LibreOfficeKitDocument* pThis)
         ITiledRenderable* pDoc = getTiledRenderable(pThis);
         if (!pDoc)
         {
-            gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+            SetLastExceptionMsg("Document doesn't support tiled rendering");
             return nullptr;
         }
         OUString aTrackedChanges = pDoc->getTrackedChanges();
@@ -3205,7 +3181,7 @@ static char* getTrackedChangeAuthors(LibreOfficeKitDocument* pThis)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return nullptr;
     }
     OUString aAuthors = pDoc->getTrackedChangeAuthors();
@@ -3215,8 +3191,7 @@ static char* getTrackedChangeAuthors(LibreOfficeKitDocument* pThis)
 static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCommand)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     OString aCommand(pCommand);
     static const OString aViewRowColumnHeaders(".uno:ViewRowColumnHeaders");
@@ -3268,7 +3243,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         ITiledRenderable* pDoc = getTiledRenderable(pThis);
         if (!pDoc)
         {
-            gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+            SetLastExceptionMsg("Document doesn't support tiled rendering");
             return nullptr;
         }
 
@@ -3323,7 +3298,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         ITiledRenderable* pDoc = getTiledRenderable(pThis);
         if (!pDoc)
         {
-            gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+            SetLastExceptionMsg("Document doesn't support tiled rendering");
             return nullptr;
         }
 
@@ -3375,7 +3350,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     }
     else
     {
-        gImpl->maLastExceptionMsg = "Unknown command, no values returned";
+        SetLastExceptionMsg("Unknown command, no values returned");
         return nullptr;
     }
 }
@@ -3384,13 +3359,12 @@ static void doc_setClientZoom(LibreOfficeKitDocument* pThis, int nTilePixelWidth
         int nTileTwipWidth, int nTileTwipHeight)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return;
     }
 
@@ -3400,13 +3374,12 @@ static void doc_setClientZoom(LibreOfficeKitDocument* pThis, int nTilePixelWidth
 static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int nY, int nWidth, int nHeight)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return;
     }
 
@@ -3417,13 +3390,12 @@ static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int 
 static void doc_setOutlineState(LibreOfficeKitDocument* pThis, bool bColumn, int nLevel, int nIndex, bool bHidden)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
         return;
     }
 
@@ -3433,8 +3405,7 @@ static void doc_setOutlineState(LibreOfficeKitDocument* pThis, bool bColumn, int
 static int doc_createView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     return SfxLokHelper::createView();
 }
@@ -3442,8 +3413,7 @@ static int doc_createView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/
 static void doc_destroyView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     SfxLokHelper::destroyView(nId);
 }
@@ -3451,8 +3421,7 @@ static void doc_destroyView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis
 static void doc_setView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     SfxLokHelper::setView(nId);
 }
@@ -3460,8 +3429,7 @@ static void doc_setView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, 
 static int doc_getView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     return SfxLokHelper::getView();
 }
@@ -3469,8 +3437,7 @@ static int doc_getView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 static int doc_getViewsCount(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     return SfxLokHelper::getViewsCount();
 }
@@ -3478,8 +3445,7 @@ static int doc_getViewsCount(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThi
 static bool doc_getViewIds(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int* pArray, size_t nSize)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     return SfxLokHelper::getViewIds(pArray, nSize);
 }
@@ -3487,8 +3453,7 @@ static bool doc_getViewIds(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*
 static void doc_setViewLanguage(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId, const char* language)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     SfxLokHelper::setViewLanguage(nId, OStringToOUString(language, RTL_TEXTENCODING_UTF8));
 }
@@ -3500,8 +3465,7 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
                     int* pFontHeight)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     OString aSearchedFontName(pFontName);
     OUString aText(OStringToOUString(pChar, RTL_TEXTENCODING_UTF8));
@@ -3613,13 +3577,12 @@ static void doc_paintWindowDPI(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKW
                                const double fDPIScale)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
+        SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
         return;
     }
 
@@ -3674,13 +3637,12 @@ static void doc_paintWindowDPI(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKW
 static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nAction)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
+        SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
         return;
     }
 
@@ -3829,8 +3791,7 @@ static void lo_freeError(char* pFree)
 static char* lo_getFilterTypes(LibreOfficeKit* pThis)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     LibLibreOffice_Impl* pImpl = static_cast<LibLibreOffice_Impl*>(pThis);
 
@@ -3869,8 +3830,7 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
 static void lo_setOptionalFeatures(LibreOfficeKit* pThis, unsigned long long const features)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     LibLibreOffice_Impl *const pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     pLib->mOptionalFeatures = features;
@@ -3888,8 +3848,7 @@ static void lo_setDocumentPassword(LibreOfficeKit* pThis,
         const char* pURL, const char* pPassword)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     assert(pThis);
     assert(pURL);
@@ -3900,8 +3859,7 @@ static void lo_setDocumentPassword(LibreOfficeKit* pThis,
 
 static char* lo_getVersionInfo(SAL_UNUSED_PARAMETER LibreOfficeKit* /*pThis*/)
 {
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
     const OUString sVersionStrTemplate(
         "{ "
         "\"ProductName\": \"%PRODUCTNAME\", "
@@ -3952,7 +3910,7 @@ static bool initialize_uno(const OUString& aAppProgramURL)
 
     if (!xContext.is())
     {
-        gImpl->maLastExceptionMsg = "XComponentContext could not be created";
+        SetLastExceptionMsg("XComponentContext could not be created");
         SAL_INFO("lok", "XComponentContext could not be created");
         return false;
     }
@@ -3960,7 +3918,7 @@ static bool initialize_uno(const OUString& aAppProgramURL)
     xFactory = xContext->getServiceManager();
     if (!xFactory.is())
     {
-        gImpl->maLastExceptionMsg = "XMultiComponentFactory could not be created";
+        SetLastExceptionMsg("XMultiComponentFactory could not be created");
         SAL_INFO("lok", "XMultiComponentFactory could not be created");
         return false;
     }
