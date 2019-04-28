@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_323d6dbb",
+        "filename": "vcl/source/gdi/sallayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-04-28T12:52:40Z",
+      "side": 1,
+      "message": "Long gone since commit 2f382d6c2579a25c68dbd121af7f1f5dc7ec9852, which has 102 files changed, 7107 insertions(+), 7384 deletions(-). At least at a quick glance I couldn\u0027t find what happened to it. I assume it was merged and now \"lives happy ever after\".",
+      "range": {
+        "startLine": 598,
+        "startChar": 8,
+        "endLine": 598,
+        "endChar": 23
+      },
+      "revId": "d2e3f206259bef19ecf86d391109391586eb2eb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_d249a960",
+        "filename": "vcl/source/gdi/sallayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-04-28T12:52:40Z",
+      "side": 1,
+      "message": "Comment referencing Japanese old standard (JIS X 4051-1995 ; last update 2001) on some private page.\n\nBut the code was extended in commit 43bf2ad49c2b3989bbbe893e4fee2e032a3920f5 for other CJK punctations and general half + full handling in 0xFF00.",
+      "revId": "d2e3f206259bef19ecf86d391109391586eb2eb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_f2462550",
+        "filename": "vcl/source/gdi/sallayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-04-28T12:52:40Z",
+      "side": 1,
+      "message": "This looks wrong, especially if you read lcl_CalcAsinKerning.\nProbably should be: \u0026\u0026 (0xFF00 !\u003d (cHere \u0026 0xFF00)))\n\nI can\u0027t get my head around it… is this the same then:\n\n* (1 !\u003d c \u0026\u0026 2 !\u003d c) || (3 !\u003d c)\n* !(1 \u003d\u003d c || 2 \u003d\u003d c) || !(3 \u003d\u003d c)\n* !((1 \u003d\u003d c || 2 \u003d\u003d c) \u0026\u0026 (3 \u003d\u003d c))\n\nThis would never be false, or am I wrong?",
+      "range": {
+        "startLine": 815,
+        "startChar": 78,
+        "endLine": 815,
+        "endChar": 111
+      },
+      "revId": "d2e3f206259bef19ecf86d391109391586eb2eb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
