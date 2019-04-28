@@ -108,7 +108,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkHatch(const GDIMetaFile& rMetaFile);
     void testHatch();
 
-    //void checkWallpaper(const GDIMetaFile& rMetaFile);
+    void checkWallpaper(const GDIMetaFile& rMetaFile);
     void testWallpaper();
 
     //void checkClipRegion(const GDIMetaFile& rMetaFile);
@@ -1239,8 +1239,40 @@ void SvmTest::testHatch()
     checkHatch(writeAndRead(aGDIMetaFile, "hatch.svm"));
 }
 
+void SvmTest::checkWallpaper(const GDIMetaFile& rMetaFile)
+{
+    xmlDocPtr pDoc = dumpMeta(rMetaFile);
+
+    // Fuuny enough - we don't serialize the rectangle of the wallpaper so it's always EMPTY
+    assertXPathAttrs(pDoc, "/metafile/wallpaper[1]",
+    {
+        {"left", "0"},
+        {"top", "0"},
+        {"right", "-32767"},
+        {"bottom", "-32767"},
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/wallpaper[1]/wallpaper",
+    {
+        {"color", "#00ff00"},
+        {"style", "Tile"},
+        {"fixed", "true"},
+        {"scrollable", "true"},
+    });
+}
+
 void SvmTest::testWallpaper()
-{}
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    Wallpaper aWallpaper(COL_LIGHTGREEN);
+    pVirtualDev->DrawWallpaper(tools::Rectangle(Point(1, 1), Size(3, 3)), aWallpaper);
+
+    checkWallpaper(writeAndRead(aGDIMetaFile, "wallpaper.svm"));
+}
+
 void SvmTest::testClipRegion()
 {}
 void SvmTest::testIntersectRectClipRegion()
