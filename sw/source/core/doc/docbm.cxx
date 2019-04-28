@@ -1458,7 +1458,7 @@ void DelBookmarks(
 {
     // illegal range ??
     if(rStt.GetIndex() > rEnd.GetIndex()
-        || (rStt == rEnd && (!pSttIdx || pSttIdx->GetIndex() >= pEndIdx->GetIndex())))
+        || (rStt == rEnd && (!pSttIdx || !pEndIdx || pSttIdx->GetIndex() >= pEndIdx->GetIndex())))
         return;
     SwDoc* const pDoc = rStt.GetNode().GetDoc();
 
