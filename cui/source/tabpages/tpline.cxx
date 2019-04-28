@@ -27,6 +27,17 @@
 #include <strings.hrc>
 #include <svx/colorbox.hxx>
 #include <svx/xattr.hxx>
+#include <svx/xlndsit.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/xlnedwit.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xlnstit.hxx>
+#include <svx/xlnedit.hxx>
+#include <svx/xlnstcit.hxx>
+#include <svx/xlnedcit.hxx>
+
+
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>

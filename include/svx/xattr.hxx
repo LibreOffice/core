@@ -23,7 +23,6 @@
 #include <svx/xcolit.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xhatch.hxx>
-#include <svx/xlineit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xtextit0.hxx>

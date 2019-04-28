@@ -30,6 +30,9 @@
 #include <strings.hrc>
 
 #include <svx/xattr.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xlndsit.hxx>
+#include <svx/xlnclit.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
 

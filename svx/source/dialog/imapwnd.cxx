@@ -37,7 +37,8 @@
 #include <svx/svdpagv.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/xlineit.hxx>
+#include <svx/xlnclit.hxx>
+
 #include <sfx2/evntconf.hxx>
 
 #include <sot/formats.hxx>
