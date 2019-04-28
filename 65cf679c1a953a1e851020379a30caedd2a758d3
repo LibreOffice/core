@@ -22,6 +22,30 @@
       "revId": "65cf679c1a953a1e851020379a30caedd2a758d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_b2097dde",
+        "filename": "vcl/source/gdi/sallayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-04-28T14:38:11Z",
+      "side": 1,
+      "message": "Really? static implies inline?",
+      "parentUuid": "3fa0c359_32700d73",
+      "range": {
+        "startLine": 766,
+        "startChar": 7,
+        "endLine": 766,
+        "endChar": 13
+      },
+      "revId": "65cf679c1a953a1e851020379a30caedd2a758d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
