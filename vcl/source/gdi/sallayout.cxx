@@ -774,10 +774,6 @@ static int lcl_CalcAsianKerning(sal_UCS4 c, bool bLeft)
     };
 
     int nResult = 0;
-    // ignore code ranges that are not affected by asian punctuation compression
-    if ((0x3000 != (c & 0xFF00)) && (0xFF00 != (c & 0xFF00)) && (0x2010 != (c & 0xFFF0)))
-        return nResult;
-
     if( (c >= 0x3000) && (c < 0x3030) )
         nResult = nTable[ c - 0x3000 ];
     else switch( c )
@@ -801,6 +797,12 @@ static int lcl_CalcAsianKerning(sal_UCS4 c, bool bLeft)
     return nResult;
 }
 
+static bool lcl_CanApplyAsianKerning(sal_Unicode cp)
+{
+    // ignore code ranges that are not affected by asian punctuation compression
+    return (0x3000 == (cp & 0xFF00)) || (0xFF00 == (cp & 0xFF00)) || (0x2010 == (cp & 0xFFF0));
+}
+
 void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
 {
     const int nLength = rStr.getLength();
@@ -813,11 +815,18 @@ void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
         const int n = pGlyphIter->m_nCharPos;
         if (n < nLength - 1)
         {
-            // calculate compression values
-            const int nKernFirst = +lcl_CalcAsianKerning(rStr[n], true);
+            const sal_Unicode cHere = rStr[n];
+            if (!lcl_CanApplyAsianKerning(cHere))
+                continue;
+            const sal_Unicode cNext = rStr[n + 1];
+            if (!lcl_CanApplyAsianKerning(cNext))
+                continue;
+
+            // calculate compression values, if both values are correct
+            const int nKernFirst = +lcl_CalcAsianKerning(cHere, true);
             if (nKernFirst == 0)
                 continue;
-            const int nKernNext = -lcl_CalcAsianKerning(rStr[n + 1], false);
+            const int nKernNext = -lcl_CalcAsianKerning(cNext, false);
             if (nKernNext == 0)
                 continue;
 
