@@ -33,6 +33,7 @@
 
 #include <sal/macros.h>
 #include <vcl/edit.hxx>
+#include <vcl/event.hxx>
 
 #include <strings.hrc>
 #include <sfx2/strings.hrc>
@@ -777,6 +778,47 @@ static const sal_uInt16 KEYCODE_ARRAY[] =
 
 static const sal_uInt16 KEYCODE_ARRAY_SIZE = SAL_N_ELEMENTS(KEYCODE_ARRAY);
 
+/** select the entry, which match the current key input ... excepting
+    keys, which are used for the dialog itself.
+  */
+IMPL_LINK(SfxAcceleratorConfigPage, KeyInputHdl, const KeyEvent&, rKey, bool)
+{
+    vcl::KeyCode aCode1 = rKey.GetKeyCode();
+    sal_uInt16 nCode1 = aCode1.GetCode();
+    sal_uInt16 nMod1 = aCode1.GetModifier();
+
+    // is it related to our list box ?
+    if (
+        (nCode1 != KEY_DOWN    ) &&
+        (nCode1 != KEY_UP      ) &&
+        (nCode1 != KEY_LEFT    ) &&
+        (nCode1 != KEY_RIGHT   ) &&
+        (nCode1 != KEY_PAGEUP  ) &&
+        (nCode1 != KEY_PAGEDOWN)
+       )
+    {
+        for (int i = 0, nCount = m_xEntriesBox->n_children(); i < nCount; ++i)
+        {
+            TAccInfo* pUserData = reinterpret_cast<TAccInfo*>(m_xEntriesBox->get_id(i).toInt64());
+            if (pUserData)
+            {
+                sal_uInt16 nCode2 = pUserData->m_aKey.GetCode();
+                sal_uInt16 nMod2  = pUserData->m_aKey.GetModifier();
+
+                if (nCode1 == nCode2 && nMod1  == nMod2)
+                {
+                    m_xEntriesBox->select(i);
+                    m_xEntriesBox->scroll_to_row(i);
+                    return true;
+                }
+            }
+        }
+    }
+
+    // no - handle it as normal dialog input
+    return false;
+}
+
 SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(TabPageParent pParent, const SfxItemSet& aSet )
     : SfxTabPage(pParent, "cui/ui/accelconfigpage.ui", "AccelConfigPage", &aSet)
     , m_pMacroInfoItem()
@@ -816,6 +858,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(TabPageParent pParent, const 
     m_xChangeButton->connect_clicked( LINK( this, SfxAcceleratorConfigPage, ChangeHdl ));
     m_xRemoveButton->connect_clicked( LINK( this, SfxAcceleratorConfigPage, RemoveHdl ));
     m_xEntriesBox->connect_changed ( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
+    m_xEntriesBox->connect_key_press( LINK( this, SfxAcceleratorConfigPage, KeyInputHdl ));
     m_xGroupLBox->connect_changed  ( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
     m_xFunctionBox->connect_changed( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
     m_xKeyBox->connect_changed     ( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));

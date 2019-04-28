@@ -130,6 +130,9 @@ private:
     DECL_LINK(FocusOut_Impl,       weld::Widget&,   void);
     DECL_LINK(TimeOut_Impl,        Timer*,          void);
 
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+
+
     DECL_LINK(LoadHdl, sfx2::FileDialogHelper *, void);
     DECL_LINK(SaveHdl, sfx2::FileDialogHelper *, void);
 
