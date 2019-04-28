@@ -426,6 +426,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         !m_xDoc->getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT_SAVE_LINKS))
         RemoveOLEObjects();
 
+    if (GetMedium())
     {
         // Task 75666 - is the Document imported by our Microsoft-Filters?
         std::shared_ptr<const SfxFilter> pOldFilter = GetMedium()->GetFilter();
@@ -448,8 +449,8 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
     CalcLayoutForOLEObjects();  // format for OLE objects
 
-    const bool bURLChanged = !GetMedium() || GetMedium()->GetURLObject() != rMedium.GetURLObject();
-    auto pMgr = m_xDoc->GetDBManager();
+    const bool bURLChanged = GetMedium() && GetMedium()->GetURLObject() != rMedium.GetURLObject();
+    const SwDBManager* const pMgr = m_xDoc->GetDBManager();
     const bool bHasEmbedded = pMgr && !pMgr->getEmbeddedName().isEmpty();
     bool bSaveDS = bHasEmbedded && bURLChanged;
     if (bSaveDS)
@@ -474,7 +475,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         xUri = css::uri::VndSunStarPkgUrlReferenceFactory::create(xContext)->createVndSunStarPkgUrlReference(xUri);
         assert(xUri.is());
         OUString const aURL = xUri->getUriReference() + "/"
-            + INetURLObject::encode(m_xDoc->GetDBManager()->getEmbeddedName(),
+            + INetURLObject::encode(pMgr->getEmbeddedName(),
                 INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All);
 
         bool bCopyTo = GetCreateMode() == SfxObjectCreateMode::EMBEDDED;
@@ -488,7 +489,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         uno::Reference<sdb::XDocumentDataSource> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
         uno::Reference<frame::XStorable> xStorable(xDataSource->getDatabaseDocument(), uno::UNO_QUERY);
         SwDBManager::StoreEmbeddedDataSource(xStorable, rMedium.GetOutputStorage(),
-                                             m_xDoc->GetDBManager()->getEmbeddedName(),
+                                             pMgr->getEmbeddedName(),
                                              rMedium.GetName(), bCopyTo);
     }
 
