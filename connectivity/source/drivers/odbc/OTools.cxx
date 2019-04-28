@@ -317,7 +317,7 @@ void OTools::ThrowException(const OConnection* _pConnection,
                         return;
         case SQL_NO_DATA_FOUND:
                                 if(_bNoFound)
-                                    return; // no need to throw a exception
+                                    return; // no need to throw an exception
                                 break;
         case SQL_ERROR:             break;
 
