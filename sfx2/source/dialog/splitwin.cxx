@@ -576,7 +576,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
     pDock->bNewLine = bNewLine;
     pDock->pWin = pDockWin;
 
-    DBG_ASSERT( nPos==0 || !bNewLine, "Wrong Paramenter!");
+    DBG_ASSERT( nPos==0 || !bNewLine, "Wrong Parameter!");
     if ( bNewLine )
         nPos = 0;
 
