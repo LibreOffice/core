@@ -15,6 +15,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <unotools/syslocaleoptions.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/scheduler.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
@@ -2536,10 +2537,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testUserFieldTypeLanguage)
 {
     // Set the system locale to German, the document will be English.
     SvtSysLocaleOptions aOptions;
+    OUString sLocaleConfigString = aOptions.GetLanguageTag().getBcp47();
     aOptions.SetLocaleConfigString("de-DE");
     aOptions.Commit();
-    comphelper::ScopeGuard g([&aOptions] {
-        aOptions.SetLocaleConfigString(OUString());
+    comphelper::ScopeGuard g([&aOptions, &sLocaleConfigString] {
+        aOptions.SetLocaleConfigString(sLocaleConfigString);
         aOptions.Commit();
     });
 
