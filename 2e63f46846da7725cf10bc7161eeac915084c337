@@ -16,6 +16,24 @@
       "revId": "2e63f46846da7725cf10bc7161eeac915084c337",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_52f27908",
+        "filename": "sal/osl/all/filepath.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-28T13:59:54Z",
+      "side": 1,
+      "message": "Well... this implementation first dereferences ustrPath, then ustrFile, if sum of their lengths is too much (so if ustrFile is too long, ustrPath will be deref\u0027d regardless if it\u0027s nullptr); then rtl_uString_newConcat internally requires that at least one of its arguments is non-nullptr. And only then the checks are made if the strings should be released.\n\nAnd - I don\u0027t see how that could be an extension problem. The string passed by user (ustrSystemPath) is dereferenced early; and then it\u0027s only internally allocated ustrFile and ustrPath, that must be created anyway?",
+      "parentUuid": "3fa0c359_52a4b908",
+      "revId": "2e63f46846da7725cf10bc7161eeac915084c337",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
