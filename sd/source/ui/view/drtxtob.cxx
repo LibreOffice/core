@@ -190,6 +190,8 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
                     SdrOutliner *pOutliner = mpView->GetTextEditOutliner();
 
+                    assert(mpViewShell);
+
                     if( dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
                     {
                         pOLV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
@@ -201,7 +203,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
                     if(pOLV && !pOLV->GetSelection().HasRange())
                     {
-                        if( mpViewShell && mpViewShell->GetViewShell() && mpViewShell->GetViewShell()->GetWindow() )
+                        if (mpViewShell->GetViewShell() && mpViewShell->GetViewShell()->GetWindow())
                         {
                             LanguageType nInputLang = mpViewShell->GetViewShell()->GetWindow()->GetInputLanguage();
                             if(nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
