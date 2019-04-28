@@ -62,6 +62,30 @@
       "revId": "d2e3f206259bef19ecf86d391109391586eb2eb9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_124ab126",
+        "filename": "vcl/source/gdi/sallayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-28T14:14:15Z",
+      "side": 1,
+      "message": "So yes, this makes line 817 unreachable.",
+      "parentUuid": "3fa0c359_f2462550",
+      "range": {
+        "startLine": 815,
+        "startChar": 78,
+        "endLine": 815,
+        "endChar": 111
+      },
+      "revId": "d2e3f206259bef19ecf86d391109391586eb2eb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
