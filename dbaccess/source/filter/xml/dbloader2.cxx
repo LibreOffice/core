@@ -360,7 +360,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         const Sequence< PropertyValue >& rArgs,
         const Reference< XLoadEventListener > & rListener)
 {
-    // first check if preview is true, if so return with out creating a controller. Preview is not supported
+    // first check if preview is true, if so return without creating a controller. Preview is not supported
     ::comphelper::NamedValueCollection aMediaDesc( rArgs );
     bool bPreview = aMediaDesc.getOrDefault( "Preview", false );
     if ( bPreview )
