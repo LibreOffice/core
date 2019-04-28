@@ -1063,6 +1063,9 @@ namespace
 void GtkSalMenu::NativeSetItemIcon( unsigned nSection, unsigned nItemPos, const Image& rImage )
 {
 #if GLIB_CHECK_VERSION(2,38,0)
+    if (!!rImage && mbHasNullItemIcon)
+        return;
+
     SolarMutexGuard aGuard;
 
     if (!!rImage)
@@ -1081,9 +1084,13 @@ void GtkSalMenu::NativeSetItemIcon( unsigned nSection, unsigned nItemPos, const 
         g_lo_menu_set_icon_to_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos, pIcon );
         g_object_unref(pIcon);
         g_bytes_unref(pBytes);
+        mbHasNullItemIcon = false;
     }
     else
+    {
         g_lo_menu_set_icon_to_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos, nullptr );
+        mbHasNullItemIcon = true;
+    }
 #else
     (void)nSection;
     (void)nItemPos;
@@ -1222,12 +1229,18 @@ void GtkSalMenu::ActivateAllSubmenus(Menu* pMenuBar)
     {
         if ( pSalItem->mpSubMenu != nullptr )
         {
-            pSalItem->mpSubMenu->mbInActivateCallback = true;
-            pMenuBar->HandleMenuActivateEvent(pSalItem->mpSubMenu->GetMenu());
-            pSalItem->mpSubMenu->mbInActivateCallback = false;
-            pSalItem->mpSubMenu->ActivateAllSubmenus(pMenuBar);
-            pSalItem->mpSubMenu->Update();
-            pMenuBar->HandleMenuDeActivateEvent(pSalItem->mpSubMenu->GetMenu());
+            // We can re-enter this method via the new event loop that gets created
+            // in GtkClipboardTransferable::getTransferDataFlavorsAsVector, so use the InActivateCallback
+            // flag to detect that and skip some startup work.
+            if (!pSalItem->mpSubMenu->mbInActivateCallback)
+            {
+                pSalItem->mpSubMenu->mbInActivateCallback = true;
+                pMenuBar->HandleMenuActivateEvent(pSalItem->mpSubMenu->GetMenu());
+                pSalItem->mpSubMenu->mbInActivateCallback = false;
+                pSalItem->mpSubMenu->ActivateAllSubmenus(pMenuBar);
+                pSalItem->mpSubMenu->Update();
+                pMenuBar->HandleMenuDeActivateEvent(pSalItem->mpSubMenu->GetMenu());
+            }
         }
     }
 }
