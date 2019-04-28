@@ -117,8 +117,8 @@ protected:
     // we can't just hold a vector of XContentRefs, as after initialization they're all empty
     // cause we load them only on access
     std::vector<Documents::iterator>
-                            m_aDocuments;               // for a efficient index access
-    Documents               m_aDocumentMap;             // for a efficient name access
+                            m_aDocuments;               // for an efficient index access
+    Documents               m_aDocumentMap;             // for an efficient name access
 
     ::comphelper::OInterfaceContainerHelper2
                             m_aApproveListeners;
@@ -214,7 +214,7 @@ protected:
     // helper
     virtual void SAL_CALL disposing() override;
 
-    /** create a object from its persistent data within the configuration. To be overwritten by derived classes.
+    /** create an object from its persistent data within the configuration. To be overwritten by derived classes.
         @param      _rName          the name the object has within the container
         @return                     the newly created object or an empty reference if something went wrong
     */
@@ -265,7 +265,7 @@ protected:
     */
     void implRemove(const OUString& _rName);
 
-    /** remove a object in the container. No plausibility checks are done, e.g. whether
+    /** remove an object in the container. No plausibility checks are done, e.g. whether
         or not there exists an object with the given name or the object is non-NULL. This is the responsibility of the caller.<BR>
         Additionally all object-related information within the registry will be deleted. The new object config node,
         where the caller may want to store the new objects information, is returned.<BR>
