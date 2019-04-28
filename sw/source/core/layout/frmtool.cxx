@@ -1640,8 +1640,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
 
             //Close the section, where appropriate activate the surrounding
             //section again.
-            SwActualSection *pActualSectionUpper1 = pActualSection ? pActualSection->GetUpper() : nullptr;
-            pActualSection.reset(pActualSectionUpper1);
+            pActualSection.reset(pActualSection->GetUpper());
             pLay = pLay->FindSctFrame();
             if ( pActualSection )
             {
