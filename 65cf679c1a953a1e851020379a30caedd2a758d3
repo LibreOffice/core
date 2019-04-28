@@ -118,6 +118,30 @@
       "revId": "65cf679c1a953a1e851020379a30caedd2a758d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_1221514e",
+        "filename": "vcl/source/gdi/sallayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-04-28T14:47:16Z",
+      "side": 1,
+      "message": "Well logically inline implies static. I know that inline is just a suggestion nowadays. You can\u0027t have an external symbol, which is inline - that contradicts.\n\nAnyway - clang also directly complained, so I fixed that ;-)",
+      "parentUuid": "3fa0c359_922d6148",
+      "range": {
+        "startLine": 766,
+        "startChar": 7,
+        "endLine": 766,
+        "endChar": 13
+      },
+      "revId": "65cf679c1a953a1e851020379a30caedd2a758d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
