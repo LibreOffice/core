@@ -799,10 +799,9 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                     SvxMSDffShapeInfo& rInfo = **it;
                     pImpRec->bReplaceByFly   = rInfo.bReplaceByFly;
                 }
-            }
 
-            if( bIsSimpleDrawingTextBox )
-                ApplyAttributes( rSt, aSet, rObjData );
+                ApplyAttributes(rSt, aSet, rObjData);
+            }
 
             if (GetPropertyValue(DFF_Prop_FitTextToShape, 0) & 2)
             {

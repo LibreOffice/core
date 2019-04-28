@@ -491,9 +491,7 @@ void SwWrongList::JoinList( SwWrongList* pNext, sal_Int32 nInsertPos )
     if (pNext)
     {
         OSL_ENSURE( GetWrongListType() == pNext->GetWrongListType(), "type mismatch with next list" );
-    }
-    if( pNext )
-    {
+
         sal_uInt16 nCnt = Count();
         pNext->Move( 0, nInsertPos );
         Insert(nCnt, pNext->maList.begin(), pNext->maList.end());
