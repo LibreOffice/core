@@ -30,7 +30,7 @@ namespace connectivity { namespace jdbc
 
         Note that this class never actually calls NewLocalRef. It is assumed that all objects
         passed are already acquired with a local ref (as it usually is the case if you obtain
-        the object from an JNI method).
+        the object from a JNI method).
     */
     template< typename T >
     class LocalRef final
