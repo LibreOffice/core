@@ -92,6 +92,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
     std::unique_ptr<OutlineViewModelChangeGuard, o3tl::default_delete<OutlineViewModelChangeGuard>> aGuard;
 
+    assert(mpViewShell);
+
     if( dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
     {
         pOLV = static_cast<OutlineView*>(mpView)
@@ -124,7 +126,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             }
             else
             {
-                if( mpViewShell && mpViewShell->GetViewFrame() )
+                if (mpViewShell->GetViewFrame())
                     mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_STYLE_DESIGNER, SfxCallMode::ASYNCHRON );
             }
 
