@@ -59,6 +59,8 @@ private:
     bool                            mbNeedsUpdate;
     bool                            mbReturnFocusToDocument;
     bool                            mbAddedGrab;
+    /// Even setting  null icon on a menuitem can be expensive, so cache state to avoid that call
+    bool                            mbHasNullItemIcon = true;
     GtkWidget*                      mpMenuBarContainerWidget;
     std::unique_ptr<utl::TempFile>  mxPersonaImage;
     BitmapEx                        maPersonaBitmap;
