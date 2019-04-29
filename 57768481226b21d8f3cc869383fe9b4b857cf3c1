@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_889a14c3",
+        "filename": "include/com/sun/star/uno/Reference.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-29T14:59:30Z",
+      "side": 1,
+      "message": "move the doxygen comment inside the #if (so it definitely doesn\u0027t get generated for the published interface documentation), to a place where doxygen will associate it with the entity being commented",
+      "revId": "57768481226b21d8f3cc869383fe9b4b857cf3c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_08ae04e7",
+        "filename": "include/com/sun/star/uno/Reference.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-29T14:59:30Z",
+      "side": 1,
+      "message": "call hash(s.get()) instead of doing the cast manually here?",
+      "revId": "57768481226b21d8f3cc869383fe9b4b857cf3c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_28abc0d6",
+        "filename": "include/rtl/ref.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-29T14:59:30Z",
+      "side": 1,
+      "message": "why move this around?",
+      "revId": "57768481226b21d8f3cc869383fe9b4b857cf3c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_e8b4f837",
+        "filename": "include/rtl/ref.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-29T14:59:30Z",
+      "side": 1,
+      "message": "std::size_t needs #include \u003ccstddef\u003e",
+      "revId": "57768481226b21d8f3cc869383fe9b4b857cf3c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_c8b7bc3a",
+        "filename": "include/rtl/ref.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-29T14:59:30Z",
+      "side": 1,
+      "message": "comments to Reference.hxx apply here, too",
+      "revId": "57768481226b21d8f3cc869383fe9b4b857cf3c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
