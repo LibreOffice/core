@@ -616,6 +616,8 @@ typedef enum
      * - "cursor_visible" - cursor visible status is changed. Status is available
      *    in "visible" field
      * - "close" - window is closed
+     * - "show" - show the window
+     * - "hide" - hide the window
      */
     LOK_CALLBACK_WINDOW = 36,
 
