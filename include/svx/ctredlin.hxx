@@ -38,7 +38,6 @@
 #include <tools/time.hxx>
 #include <tools/wintypes.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/image.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
@@ -124,9 +123,6 @@ private:
     DateTime        aDaTiFilterFirst;
     DateTime        aDaTiFilterLast;
     OUString        aAuthor;
-    Color           maEntryColor;
-    Image           maEntryImage;
-    OUString        maEntryString;
     std::unique_ptr<utl::TextSearch> pCommentSearcher;
 
     int ColCompare(const weld::TreeIter& rLeft, const weld::TreeIter& rRight);
