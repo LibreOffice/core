@@ -4631,3 +4631,20 @@ SfxVoidItem MovePageLast SID_MOVE_PAGE_LAST
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Modify;
 ]
+
+SfxVoidItem RegenerateDiagram SID_REGENERATE_DIAGRAM
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Modify;
+]
