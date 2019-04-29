@@ -7002,6 +7002,11 @@
           <value xml:lang="en-US">More Fields</value>
         </prop>
       </node>
+      <node oor:name=".uno:RegenerateDiagram" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Regenerate Diagram</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>
