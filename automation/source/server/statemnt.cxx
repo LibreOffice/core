@@ -4700,8 +4700,7 @@ sal_Bool StatementControl::Execute()
 
 /*  leads to problems because settext sets the text whereas typekeys adds to the text.
         if ( bDoTypeKeysDelay && nMethodId == M_SetText && ( nParams & PARAM_STR_1 ) )
-        {   // Hier wird das Statement auf ein TypeKeys umgebogen
-            nMethodId = M_TypeKeys;
+        {   // Here the statement is bent to a TypeKeys
             nParams = PARAM_BOOL_1 | PARAM_STR_1;
             bBool1 = sal_True;
             pControl->GrabFocus();
@@ -4745,7 +4744,7 @@ sal_Bool StatementControl::Execute()
                             pRet->GenReturn ( RET_Value, aUId, Id2Str( ((TabControl*)pControl)->GetTabPage(((TabControl*)pControl)->GetCurPageId())->GetUniqueOrHelpId() ) );
                             break;
                         case M_SetPage :
-                            {       // Wegen lokaler Variablen
+                            {       // Due to local variables
                                 TabControl *pTControl = ((TabControl*)pControl);
                                 sal_uInt16 nActive = pTControl->GetCurPageId();
                                 sal_uInt16 i,anz;
@@ -4776,7 +4775,7 @@ sal_Bool StatementControl::Execute()
                                     i++;
                                     if ( i >= pTControl->GetPageCount() )
                                         i = 0;
-                                    if ( !MaybeDoTypeKeysDelay( pTControl ) || !MaybeDoTypeKeysDelay( pTControl ) || !MaybeDoTypeKeysDelay( pTControl ) )   // 3 Mal aufrufen
+                                    if ( !MaybeDoTypeKeysDelay( pTControl ) || !MaybeDoTypeKeysDelay( pTControl ) || !MaybeDoTypeKeysDelay( pTControl ) )   // Call up 3 times
                                         break;
                                 }
                                 if ( !aID.equals( aWantedID ) )
@@ -4975,7 +4974,7 @@ sal_Bool StatementControl::Execute()
                                             if ( bUnselectBeforeSelect )
                                                 pLB->SetNoSelection();
                                             pLB->SelectEntryPos( nPos, bBool1 );
-                                            if ( pLB->IsEntryPosSelected( nPos ) ? !bBool1 : bBool1 )   // XOR rein mit BOOL
+                                            if ( pLB->IsEntryPosSelected( nPos ) ? !bBool1 : bBool1 )   // XOR into with BOOL
                                                 ReportError( aUId, GEN_RES_STR2( S_METHOD_FAILED, MethodString( nMethodId ), aString1 ) );
                                         }
                                     }
@@ -4988,7 +4987,7 @@ sal_Bool StatementControl::Execute()
                                             if ( bUnselectBeforeSelect )
                                                 pLB->SetNoSelection();
                                             pLB->SelectEntryPos( nNr1-1, bBool1 );
-                                            if ( pLB->IsEntryPosSelected( nNr1-1 ) ? !bBool1 : bBool1 ) // XOR rein mit BOOL
+                                            if ( pLB->IsEntryPosSelected( nNr1-1 ) ? !bBool1 : bBool1 ) // XOR into with BOOL
                                                 ReportError( aUId, GEN_RES_STR2( S_METHOD_FAILED, MethodString( nMethodId ), UniString::CreateFromInt32( nNr1 ) ) );
                                         }
                                     }
@@ -5232,7 +5231,7 @@ sal_Bool StatementControl::Execute()
                         if ( !aUId.equals( pTB->GetUniqueOrHelpId() ) ) // So we found a Button on the ToolBox
                         {
                             if ( (nParams == PARAM_NONE) || (nParams == PARAM_USHORT_1) )
-                            {           // Wir fälschen einen Parameter
+                            {           // We fake a parameter
                                 nParams |= PARAM_STR_1;
                                 aString1 = Id2Str( aUId );
                             }
@@ -5303,7 +5302,7 @@ sal_Bool StatementControl::Execute()
                             case M_Click :
                                 {
                                     FIND_ITEM;
-                                    if ( bItemFound )   // FIND_ITEM Erfolgreich
+                                    if ( bItemFound )   // FIND_ITEM successfull
                                     {
                                         Rectangle aRect = pTB->GetItemRect(pTB->GetItemId(nItemPos));
                                         if ( aRect.IsEmpty() )
@@ -5334,7 +5333,7 @@ sal_Bool StatementControl::Execute()
                             case M_TearOff :
                                 {
                                     FIND_ITEM;
-                                    if ( bItemFound )   // FIND_ITEM Erfolgreich
+                                    if ( bItemFound )   // FIND_ITEM successful
                                     {
                                         Rectangle aRect = pTB->GetItemPosDropDownRect( nItemPos );
                                         AnimateMouse( pControl, aRect.Center() );
@@ -5343,13 +5342,13 @@ sal_Bool StatementControl::Execute()
 
                                         Window *pWin = NULL;
                                         // Wait for the window to open.
-                                        StatementList::bExecuting = sal_True;       // Bah ist das ein ekliger Hack
-                                        {                                           // Das verhindert, daß schon der nächste Befehl ausgeführt wird.
+                                        StatementList::bExecuting = sal_True;       // Bah, that's a nasty hack.
+                                        {                                           // This prevents the next command from being executed.
                                             Time aDelay;
                                             while ( !pWin && ( (pWin = GetPopupFloatingWin()) == NULL ) && ( Time() - aDelay ).GetSec() < 15 )
                                                 SafeReschedule();
                                         }
-                                        StatementList::bExecuting = sal_False;  // Bah ist das ein ekliger Hack
+                                        StatementList::bExecuting = sal_False;  // Bah, that's a nasty hack.
 
                                         if ( pWin && pWin->GetType() == WINDOW_FLOATINGWINDOW )
                                         {
@@ -5377,7 +5376,7 @@ sal_Bool StatementControl::Execute()
                                         ImplMouseButtonDown( pTB, aMEvnt);
                                         ImplMouseButtonUp( pTB, aMEvnt);
 
-                                        // Das Fenster ist offen.
+                                        // T.
                                         aSubMenuId1 = 0;
                                         aSubMenuId2 = 0;
                                         aSubMenuId3 = 0;
@@ -5388,7 +5387,7 @@ sal_Bool StatementControl::Execute()
                             case _M_IsEnabled:
                                 {
                                     FIND_ITEM;
-                                    if ( bItemFound )   // FIND_ITEM Erfolgreich
+                                    if ( bItemFound )   // FIND_ITEM successful
                                     {
                                         pRet->GenReturn ( RET_Value, aUId, pTB->IsItemEnabled( pTB->GetItemId(nItemPos) ) );
                                     }
@@ -5397,7 +5396,7 @@ sal_Bool StatementControl::Execute()
                             case M_GetState :
                                 {
                                     FIND_ITEM;
-                                    if ( bItemFound )   // FIND_ITEM Erfolgreich
+                                    if ( bItemFound )   // FIND_ITEM successful
                                     {
                                         if ( ValueOK( aUId, CUniString("GetState"), nNr1, 4 ) )
                                             switch (nNr1)
@@ -5480,7 +5479,7 @@ sal_Bool StatementControl::Execute()
                             case M_IsMax:
                             case M_Minimize:
                             case M_Maximize:
-                            case M_Help:        // Alles was unten weiterbehandelt werden soll
+                            case M_Help:        // Everything to be treated below
                                 goto DockingWin;
                             default:
                                 ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "ToolBox" ) );
@@ -6385,7 +6384,7 @@ protected:
                             else
                                 ReportError( aUId, GEN_RES_STR1( S_ALLOWED_ONLY_IN_DOCKING_MODE, MethodString( nMethodId ) ) );
                             break;
-                        case M_Help:        // Alles was unten weiterbehandelt werden soll
+                        case M_Help:        // Everything to be treated below
                             goto MoreDialog;
 
                         default:
@@ -6433,7 +6432,7 @@ protected:
                             SET_WINP_CLOSING(pControl);
                             ((FloatingWindow*)pControl)->Close();
                             break;
-                        case M_Help:        // Alles was unten weiterbehandelt werden soll
+                        case M_Help:        // Everything to be treated below
                         case M_Move:
                             goto MoreDialog;
                         default:
@@ -6537,7 +6536,7 @@ protected:
                             ((WorkWindow*)pControl)->Maximize( sal_False );
                             ((WorkWindow*)pControl)->Restore();
                             break;
-                        case M_Help:        // Alles was unten weiterbehandelt werden soll
+                        case M_Help:        // Everything to be treated below
                             goto MoreDialog;
                         default:
                             ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "WorkWindow" ) );
