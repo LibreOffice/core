@@ -98,8 +98,8 @@
       <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
       <menu:menuitem menu:id=".uno:SearchDialog" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ToggleObjectBezierMode" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:GlueEditMode" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ToggleObjectBezierMode"/>
+      <menu:menuitem menu:id=".uno:GlueEditMode"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EditHyperlink" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ModifyField" menu:style="text"/>
@@ -518,7 +518,7 @@
   <menu:menu menu:id=".uno:SlideMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:InsertSlide"/>
-      <menu:menuitem menu:id=".uno:DuplicateSlide" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:DuplicateSlide"/>
       <menu:menuitem menu:id=".uno:ImportSlideFromFile" menu:style="text"/>
       <menu:menu menu:id=".uno:SlideLayoutMenu">
         <menu:menupopup>

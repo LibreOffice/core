@@ -1065,12 +1065,14 @@ cmd/sc_insertslidenumber.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertslidefield.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertslidesfield.png cmd/sc_insertpagecountfield.png
 cmd/sc_insertslidetitlefield.png cmd/sc_inserttitlefield.png
+cmd/sc_insertpagetitlefield.png cmd/sc_inserttitlefield.png
 cmd/sc_insertfilefield.png cmd/sc_open.png
 cmd/sc_insertdatefieldfix.png cmd/sc_datefield.png
 cmd/sc_insertdatefieldvar.png cmd/sc_datefield.png
 cmd/sc_inserttimefieldfix.png cmd/sc_timefield.png
 cmd/sc_inserttimefieldvar.png cmd/sc_timefield.png
 cmd/sc_insertpagefield.png cmd/sc_insertpagenumberfield.png
+cmd/sc_insertpagesfield.png cmd/sc_insertpagenumberfield.png
 
 # dbaccess
 # ==============================================
@@ -1832,10 +1834,11 @@ cmd/lc_notecellstyles.png cmd/lc_showannotations.png
 cmd/sc_notecellstyles.png cmd/sc_showannotations.png
 
 # menubar icons
-cmd/sc_focustofindbar.png cmd/lc_recsearch.png
+cmd/sc_focustofindbar.png cmd/sc_recsearch.png
 cmd/sc_macroorganizer%3ftabid%3ashort=1.png cmd/sc_open.png
 cmd/sc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/sc_insertplugin.png
-cmd/sc_formatobjectmenu.png cmd/sc_fontworkgalleryfloater.png
+cmd/sc_formatobjectmenu.png cmd/sc_text.png
+cmd/sc_textattributes.png cmd/sc_text.png
 
 # calc styles
 cmd/sc_badcellstyles.png cmd/sc_badcellstyle.png
