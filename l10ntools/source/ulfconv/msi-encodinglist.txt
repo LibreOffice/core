@@ -80,7 +80,7 @@ it       0  1040
 ja       0  1041
 jbo      0  1624
 ka       0  1079   # Georgian
-kab      0  1625
+kab      0  1625   # Kabyle
 kk       0  1087
 km       0  1107   # Khmer
 kmr-Latn 0  1574
@@ -116,7 +116,7 @@ nr       0  1580   # Ndebele South
 nso      0  1132
 ny       0  1598
 oc       0  1154   # Occitan-lengadocian
-om       0  2162
+om       0  1138   # Oromo
 or       0  1096   # Odia
 or-IN    0  1096
 pa-IN    0  1094   # Punjabi
@@ -130,13 +130,13 @@ qtz      0  1638   # key id pseudo language
 rm       0  1047   # Raeto-Romance
 ro       0  1048   # Romanian
 ru       0  1049
-rw       0  1569   # Kinyarwanda
+rw       0  1159   # Kinyarwanda
 sa-IN    0  1103   # Sanskrit
 sat      0  1606   # Santali
 sb       0  1070   # Sorbian
 sc       0  3047
 sd       0  1113   # Sindhi
-si       0  2133
+si       0  1115   # Sinhala
 sid      0  1669   # Sidama, fake LCID
 sk       0  1051   # Slovak
 sl       0  1060   # Slovenian
