@@ -69,6 +69,30 @@
       "revId": "ae56599a589cc0248a703c95bfcdd7c23f50b1ac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_cdc4ae43",
+        "filename": "sd/source/ui/slideshow/slideshow.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-04-29T09:36:03Z",
+      "side": 1,
+      "message": "yeah. so let\u0027s kill the mbIsInStartup \u003d false line \u0026 see what\u0027s the fallout.",
+      "parentUuid": "3fa0c359_6de1dafe",
+      "range": {
+        "startLine": 650,
+        "startChar": 4,
+        "endLine": 650,
+        "endChar": 10
+      },
+      "revId": "ae56599a589cc0248a703c95bfcdd7c23f50b1ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
