@@ -33,12 +33,12 @@ public:
     ~ScItemValue();
 };
 
-class ScPivotLayoutDialog : public ScAnyRefDlg
+class ScPivotLayoutDialog : public ScAnyRefDlgController
 {
 public:
     ScDPObject maPivotTableObject;
 
-    VclPtr<ScPivotLayoutTreeListBase> mpPreviouslyFocusedListBox;
+    ScPivotLayoutTreeListBase* mpPreviouslyFocusedListBox;
 
 private:
     ScViewData* mpViewData;
@@ -46,52 +46,62 @@ private:
 
     bool const mbNewPivotTable;
 
-    VclPtr<ScPivotLayoutTreeListLabel> mpListBoxField;
-    VclPtr<ScPivotLayoutTreeList>      mpListBoxPage;
-    VclPtr<ScPivotLayoutTreeList>      mpListBoxColumn;
-    VclPtr<ScPivotLayoutTreeList>      mpListBoxRow;
-    VclPtr<ScPivotLayoutTreeListData>  mpListBoxData;
-
-    VclPtr<CheckBox> mpCheckIgnoreEmptyRows;
-    VclPtr<CheckBox> mpCheckTotalColumns;
-    VclPtr<CheckBox> mpCheckAddFilter;
-    VclPtr<CheckBox> mpCheckIdentifyCategories;
-    VclPtr<CheckBox> mpCheckTotalRows;
-    VclPtr<CheckBox> mpCheckDrillToDetail;
-
-    VclPtr<RadioButton> mpSourceRadioNamedRange;
-    VclPtr<RadioButton> mpSourceRadioSelection;
-
-    VclPtr<ListBox>            mpSourceListBox;
-    VclPtr<formula::RefEdit>   mpSourceEdit;
-    VclPtr<formula::RefButton> mpSourceButton;
-
-    VclPtr<RadioButton>        mpDestinationRadioNewSheet;
-    VclPtr<RadioButton>        mpDestinationRadioNamedRange;
-    VclPtr<RadioButton>        mpDestinationRadioSelection;
-
-    VclPtr<ListBox>            mpDestinationListBox;
-    VclPtr<formula::RefEdit>   mpDestinationEdit;
-    VclPtr<formula::RefButton> mpDestinationButton;
-
-    VclPtr<PushButton>       mpBtnOK;
-    VclPtr<CancelButton>     mpBtnCancel;
-
-    VclPtr<formula::RefEdit>   mpActiveEdit;
     ScAddress::Details const  maAddressDetails;
     bool                mbDialogLostFocus;
 
-    DECL_LINK(CancelClicked,       Button*, void);
-    DECL_LINK(OKClicked,           Button*, void);
-    DECL_LINK(GetFocusHandler,     Control&, void);
-    DECL_LINK(LoseFocusHandler,    Control&, void);
-    DECL_LINK(ToggleSource,        RadioButton&, void);
-    DECL_LINK(ToggleDestination,   RadioButton&, void);
-    DECL_LINK(SourceListSelected,  ListBox&, void);
-    DECL_LINK(SourceEditModified,  Edit&, void);
+    formula::WeldRefEdit* mpActiveEdit;
+    std::unique_ptr<ScPivotLayoutTreeListLabel> mxListBoxField;
+    std::unique_ptr<ScPivotLayoutTreeList> mxListBoxPage;
+    std::unique_ptr<ScPivotLayoutTreeList> mxListBoxColumn;
+    std::unique_ptr<ScPivotLayoutTreeList> mxListBoxRow;
+    std::unique_ptr<ScPivotLayoutTreeListData>  mxListBoxData;
+
+    std::unique_ptr<weld::CheckButton> mxCheckIgnoreEmptyRows;
+    std::unique_ptr<weld::CheckButton> mxCheckTotalColumns;
+    std::unique_ptr<weld::CheckButton> mxCheckAddFilter;
+    std::unique_ptr<weld::CheckButton> mxCheckIdentifyCategories;
+    std::unique_ptr<weld::CheckButton> mxCheckTotalRows;
+    std::unique_ptr<weld::CheckButton> mxCheckDrillToDetail;
+
+    std::unique_ptr<weld::RadioButton> mxSourceRadioNamedRange;
+    std::unique_ptr<weld::RadioButton> mxSourceRadioSelection;
+
+    std::unique_ptr<weld::ComboBox> mxSourceListBox;
+    std::unique_ptr<formula::WeldRefEdit> mxSourceEdit;
+    std::unique_ptr<formula::WeldRefButton> mxSourceButton;
+
+    std::unique_ptr<weld::RadioButton> mxDestinationRadioNewSheet;
+    std::unique_ptr<weld::RadioButton> mxDestinationRadioNamedRange;
+    std::unique_ptr<weld::RadioButton> mxDestinationRadioSelection;
+
+    std::unique_ptr<weld::ComboBox> mxDestinationListBox;
+    std::unique_ptr<formula::WeldRefEdit> mxDestinationEdit;
+    std::unique_ptr<formula::WeldRefButton> mxDestinationButton;
+
+    std::unique_ptr<weld::Button> mxBtnOK;
+    std::unique_ptr<weld::Button> mxBtnCancel;
+
+    std::unique_ptr<weld::Frame> mxSourceFrame;
+    std::unique_ptr<weld::Label> mxSourceLabel;
+    std::unique_ptr<weld::Frame> mxDestFrame;
+    std::unique_ptr<weld::Label> mxDestLabel;
+
+    std::unique_ptr<weld::Expander> mxOptions;
+    std::unique_ptr<weld::Expander> mxMore;
+
+    DECL_LINK(CancelClicked, weld::Button&, void);
+    DECL_LINK(OKClicked, weld::Button&, void);
+    DECL_LINK(GetEditFocusHandler, formula::WeldRefEdit&, void);
+    DECL_LINK(GetButtonFocusHandler, formula::WeldRefButton&, void);
+    DECL_LINK(LoseEditFocusHandler, formula::WeldRefEdit&, void);
+    DECL_LINK(LoseButtonFocusHandler, formula::WeldRefButton&, void);
+    DECL_LINK(ToggleSource, weld::ToggleButton&, void);
+    DECL_LINK(ToggleDestination, weld::ToggleButton&, void);
+    DECL_LINK(SourceListSelected, weld::ComboBox&, void);
+    DECL_LINK(SourceEditModified, formula::WeldRefEdit&, void);
     void ToggleSource();
     void ToggleDestination();
-    virtual bool Close() override;
+    virtual void Close() override;
 
     ScPivotParam maPivotParameters;
 
@@ -104,10 +114,9 @@ private:
     bool GetDestination(ScRange& aDestinationRange, bool& bToNewSheet);
 
 public:
-    ScPivotLayoutDialog(SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow, vcl::Window* pParent,
+    ScPivotLayoutDialog(SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow, weld::Window* pParent,
                              ScViewData* pViewData, const ScDPObject* pPivotTableObject, bool bCreateNewPivotTable);
     virtual ~ScPivotLayoutDialog() override;
-    virtual void dispose() override;
 
     virtual void SetReference(const ScRange& rReferenceRange, ScDocument* pDocument) override;
     virtual void SetActive() override;
@@ -127,8 +136,6 @@ public:
     ScDPLabelData& GetLabelData(SCCOL nColumn);
     ScDPLabelDataVector& GetLabelDataVector() { return maPivotParameters.maLabelArray;}
     void PushDataFieldNames(std::vector<ScDPName>& rDataFieldNames);
-
-    ScPivotLayoutTreeListBase* FindListBoxFor(const SvTreeListEntry *pEntry);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

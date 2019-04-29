@@ -506,10 +506,21 @@ vcl::Window* ImplFindAccelWindow( vcl::Window* pParent, sal_uInt16& rIndex, sal_
 
 namespace vcl {
 
+void Window::SetMnemonicActivateHdl(const Link<vcl::Window&, bool>& rLink)
+{
+    if (mpWindowImpl) // may be called after dispose
+    {
+        mpWindowImpl->maMnemonicActivateHdl = rLink;
+    }
+}
+
 void Window::ImplControlFocus( GetFocusFlags nFlags )
 {
     if ( nFlags & GetFocusFlags::Mnemonic )
     {
+        if (mpWindowImpl->maMnemonicActivateHdl.Call(*this))
+            return;
+
         if ( GetType() == WindowType::RADIOBUTTON )
         {
             if ( !static_cast<RadioButton*>(this)->IsChecked() )

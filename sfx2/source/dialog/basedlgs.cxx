@@ -475,6 +475,8 @@ void SfxModelessDialogController::EndDialog()
 {
     m_xImpl->bClosing = true;
     SfxDialogController::EndDialog();
+    if (!m_xImpl)
+        return;
     m_xImpl->bClosing = false;
 }
 

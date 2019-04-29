@@ -247,15 +247,6 @@
     <glade-widget-class title="Glossary Tree List" name="swuilo-SwGlTreeListBox"
                         generic-name="Glossary Tree List" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Pivot Table List" name="sclo-ScPivotLayoutTreeList"
-                        generic-name="Pivot Table List" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Pivot Table Label List" name="sclo-ScPivotLayoutTreeListLabel"
-                        generic-name="Pivot Table Label List" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Pivot Table Data List" name="sclo-ScPivotLayoutTreeListData"
-                        generic-name="Pivot Table Data List" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Sidebar Dial Control" name="svxlo-SidebarDialControl"
                         generic-name="Sidebar Dial Control" parent="GtkSpinner"
                         icon-name="widget-gtk-spinner"/>

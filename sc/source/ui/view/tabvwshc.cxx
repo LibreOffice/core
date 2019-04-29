@@ -140,25 +140,8 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
     if(pCW)
         pCW->SetHideNotDelete(true);
 
-    ScDocument* pDoc = GetViewData().GetDocument();
-
     switch( nSlotId )
     {
-        case SID_OPENDLG_PIVOTTABLE:
-        {
-            // all settings must be in pDialogDPObject
-
-            if( pDialogDPObject )
-            {
-                // Check for an existing datapilot output.
-                ScViewData& rViewData = GetViewData();
-                rViewData.SetRefTabNo( rViewData.GetTabNo() );
-                ScDPObject* pObj = pDoc->GetDPAtCursor(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
-                pResult = VclPtr<ScPivotLayoutDialog>::Create(pB, pCW, pParent, &rViewData, pDialogDPObject.get(), pObj == nullptr);
-            }
-        }
-        break;
-
         case SID_OPENDLG_FUNCTION:
         {
             // dialog checks, what is in the cell
@@ -475,6 +458,21 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         case SID_MANAGE_XML_SOURCE:
         {
             xResult.reset(new ScXMLSourceDlg(pB, pCW, pParent, pDoc));
+            break;
+        }
+        case SID_OPENDLG_PIVOTTABLE:
+        {
+            // all settings must be in pDialogDPObject
+
+            if( pDialogDPObject )
+            {
+                // Check for an existing datapilot output.
+                ScViewData& rViewData = GetViewData();
+                rViewData.SetRefTabNo( rViewData.GetTabNo() );
+                ScDPObject* pObj = pDoc->GetDPAtCursor(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
+                xResult.reset(new ScPivotLayoutDialog(pB, pCW, pParent, &rViewData, pDialogDPObject.get(), pObj == nullptr));
+            }
+
             break;
         }
     }

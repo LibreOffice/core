@@ -78,6 +78,7 @@ class VCL_DLLPUBLIC Widget
 protected:
     Link<Widget&, void> m_aFocusInHdl;
     Link<Widget&, void> m_aFocusOutHdl;
+    Link<Widget&, bool> m_aMnemonicActivateHdl;
     Link<const Size&, void> m_aSizeAllocateHdl;
     Link<const KeyEvent&, bool> m_aKeyPressHdl;
     Link<const KeyEvent&, bool> m_aKeyReleaseHdl;
@@ -159,6 +160,15 @@ public:
     {
         assert(!m_aFocusOutHdl.IsSet() || !rLink.IsSet());
         m_aFocusOutHdl = rLink;
+    }
+
+    // rLink is called when the mnemonic for the Widget is called.
+    // If rLink returns true the Widget will not automatically gain
+    // focus as normally occurs
+    virtual void connect_mnemonic_activate(const Link<Widget&, bool>& rLink)
+    {
+        assert(!m_aMnemonicActivateHdl.IsSet() || !rLink.IsSet());
+        m_aMnemonicActivateHdl = rLink;
     }
 
     virtual void connect_size_allocate(const Link<const Size&, void>& rLink)
@@ -655,6 +665,7 @@ public:
     virtual std::vector<int> get_selected_rows() const = 0;
     virtual void set_font_color(int pos, const Color& rColor) const = 0;
     virtual void scroll_to_row(int pos) = 0;
+    virtual int get_cursor_index() const = 0;
     virtual void set_cursor(int pos) = 0;
 
     //by text
@@ -800,6 +811,11 @@ public:
     void save_value() { m_sSavedValue = get_selected_text(); }
     OUString const& get_saved_value() const { return m_sSavedValue; }
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_selected_text(); }
+
+    // for dnd
+    virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult) = 0;
+    // for dragging and dropping between TreeViews, return the active source
+    virtual TreeView* get_drag_source() const = 0;
 
     using Widget::set_sensitive;
 };
