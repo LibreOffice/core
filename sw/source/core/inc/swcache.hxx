@@ -102,6 +102,7 @@ public:
     void ToTop( SwCacheObj *pObj );
 
     bool Insert( SwCacheObj *pNew );
+    void Delete(const void * pOwner, sal_uInt16 nIndex);
     void Delete( const void *pOwner );
 
     void SetLRUOfst( const sal_uInt16 nOfst );  /// nOfst determines how many are not to be touched
