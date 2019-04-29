@@ -24,6 +24,8 @@
 #include <oox/drawingml/shape.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 
 namespace oox { namespace drawingml {
@@ -41,6 +43,9 @@ void loadDiagram( ShapePtr const & pShape,
                   const OUString& rQStylePath,
                   const OUString& rColorStylePath,
                   const oox::core::Relations& rRelations );
+
+OOX_DLLPUBLIC void reloadDiagram(css::uno::Reference<css::drawing::XShape>& rXShape,
+                                 core::XmlFilterBase& rFilter);
 
 } }
 
