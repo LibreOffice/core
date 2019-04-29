@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_281e600c",
+        "filename": "vcl/source/bitmap/BitmapScaleSuperFilter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-29T16:45:37Z",
+      "side": 1,
+      "message": "this doesn\u0027t make sense - now the nSourceBitcount variable potentially doesn\u0027t contain the actual bitcount of the source data, and the fast/slow-path checking will select the wrong thing?\n\nPerhaps you meant to do the std::max like this\n    Bitmap aOutBmp(Size(nDstW, nDstH), std::max(nSourceBitcount, 24));\n?",
+      "revId": "7a1538afbcffbbba9ea56e40500e3a1c9b32943b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
