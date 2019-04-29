@@ -21,6 +21,9 @@
 #include <txtfrm.hxx>
 #include "porlay.hxx"
 
+#include <sfx2/viewsh.hxx>
+#include <view.hxx>
+
 SwTextLine::SwTextLine( SwTextFrame const *pFrame, std::unique_ptr<SwParaPortion> pNew ) :
     SwCacheObj( static_cast<void const *>(pFrame) ),
     pLine( std::move(pNew) )
@@ -133,6 +136,39 @@ void SwTextFrame::SetPara( SwParaPortion *pNew, bool bDelete )
             OSL_FAIL( "+SetPara: InsertCache failed." );
         }
     }
+}
+
+/** Prevent the SwParaPortions of the *visible* paragraphs from being deleted;
+    they would just be recreated on the next paint.
+
+    Heuristic: 100 per view are visible
+
+    If the cache is too small, enlarge it to ensure there are sufficient free
+    entries for the layout so it doesn't have to throw away a node's
+    SwParaPortion when it starts formatting the next node.
+*/
+SwSaveSetLRUOfst::SwSaveSetLRUOfst()
+{
+    sal_uInt16 nVisibleShells(0);
+    for (auto pView = SfxViewShell::GetFirst(true, checkSfxViewShell<SwView>);
+         pView != nullptr;
+         pView = SfxViewShell::GetNext(*pView, true, checkSfxViewShell<SwView>))
+    {
+        ++nVisibleShells;
+    }
+
+    sal_uInt16 const nPreserved(100 * nVisibleShells);
+    SwCache & rCache(*SwTextFrame::GetTextCache());
+    if (rCache.GetCurMax() < nPreserved + 250)
+    {
+        rCache.IncreaseMax(nPreserved + 250 - rCache.GetCurMax());
+    }
+    rCache.SetLRUOfst(nPreserved);
+}
+
+SwSaveSetLRUOfst::~SwSaveSetLRUOfst()
+{
+    SwTextFrame::GetTextCache()->ResetLRUOfst();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
