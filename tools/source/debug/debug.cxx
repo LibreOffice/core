@@ -17,17 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if defined (UNX) || defined (__GNUC__)
-#include <unistd.h>
-#endif
-
-#include <errno.h>
-#include <time.h>
-#include <cstdarg>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-
 #include <com/sun/star/configuration/CorruptedConfigurationException.hpp>
 #include <com/sun/star/configuration/backend/BackendSetupException.hpp>
 #include <com/sun/star/configuration/backend/MalformedDataException.hpp>
@@ -37,6 +26,7 @@
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
 #include <com/sun/star/document/UndoFailedException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/ldap/LdapGenericException.hpp>
@@ -57,13 +47,10 @@
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <comphelper/anytostring.hxx>
 #include <tools/debug.hxx>
-#include <rtl/string.h>
 #include <sal/log.hxx>
-#include <sal/macros.h>
 #include <osl/thread.h>
 
 #include <typeinfo>
-#include <vector>
 
 #include <tools/diagnose_ex.h>
 

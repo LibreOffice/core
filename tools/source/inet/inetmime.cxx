@@ -18,12 +18,10 @@
  */
 
 #include <algorithm>
-#include <cstddef>
 #include <limits>
 #include <forward_list>
 #include <memory>
 
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>

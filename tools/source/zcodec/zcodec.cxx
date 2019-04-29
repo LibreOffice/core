@@ -27,7 +27,6 @@
 
 #include <tools/zcodec.hxx>
 #include <rtl/crc.h>
-#include <osl/endian.h>
 
 #define PZSTREAM static_cast<z_stream*>(mpsC_Stream)
 

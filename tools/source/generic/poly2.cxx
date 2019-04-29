@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <poly.h>
@@ -27,7 +26,6 @@
 #include <tools/vcompat.hxx>
 #include <tools/gen.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
 namespace tools {

@@ -20,7 +20,6 @@
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 #include <rtl/math.hxx>
 #include <tools/fract.hxx>

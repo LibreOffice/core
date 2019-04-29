@@ -19,8 +19,6 @@
 
 #include <cstddef>
 #include <cstdlib>
-#include <limits>
-#include <new>
 #include <string.h>
 
 #ifdef _WIN32
@@ -28,10 +26,7 @@
 #endif
 
 #include <osl/file.hxx>
-#include <tools/stream.hxx>
 #include <tools/config.hxx>
-#include <osl/security.h>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
 struct ImplKeyData

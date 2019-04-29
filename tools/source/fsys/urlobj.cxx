@@ -43,8 +43,6 @@
 #include <string.h>
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <sax/tools/converter.hxx>
-#include <rtl/uri.hxx>
 #include <comphelper/base64.hxx>
 
 using namespace css;

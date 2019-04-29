@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <limits>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-
-#include <rtl/math.hxx>
 
 #include <tools/bigint.hxx>
 

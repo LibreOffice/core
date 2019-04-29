@@ -22,7 +22,6 @@
 #endif
 #include <windows.h>
 #elif defined UNX
-#include <unistd.h>
 #include <sys/time.h>
 #endif
 
@@ -33,7 +32,6 @@
 #include <mach/mach_time.h>
 #endif
 
-#include <rtl/math.hxx>
 #include <osl/diagnose.h>
 #include <systemdatetime.hxx>
 

@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 #include <tools/inetmime.hxx>
 

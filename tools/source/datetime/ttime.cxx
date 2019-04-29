@@ -28,8 +28,6 @@
 #include <windows.h>
 #include <mmsystem.h>
 #elif defined UNX
-#include <unistd.h>
-#include <math.h>
 #include <sys/time.h>
 #endif
 
@@ -40,10 +38,8 @@
 #include <mach/mach_time.h>
 #endif
 
-#include <sal/log.hxx>
 #include <rtl/math.hxx>
 #include <tools/time.hxx>
-#include <osl/diagnose.h>
 #include <com/sun/star/util/DateTime.hpp>
 
 #include <systemdatetime.hxx>

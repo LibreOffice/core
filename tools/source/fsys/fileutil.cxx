@@ -8,8 +8,8 @@
  */
 
 #include <tools/fileutil.hxx>
-#include <tools/urlobj.hxx>
 #if defined _WIN32
+#include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <string.h>
 #include <o3tl/char16_t2wchar_t.hxx>

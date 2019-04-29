@@ -19,12 +19,8 @@
 
 #include <algorithm>
 #include <stdio.h>
-#include <string.h>
-#include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
-#include <unistd.h>
-#include <limits.h>
 
 #include <tools/stream.hxx>
 #include <vector>
@@ -37,7 +33,6 @@
 #include <osl/file.hxx>
 #include <osl/detail/file.h>
 #include <rtl/instance.hxx>
-#include <rtl/strbuf.hxx>
 
 using namespace osl;
 
