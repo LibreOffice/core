@@ -1692,6 +1692,9 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 if ( !aRegion.IsEmpty() && !mpWindowImpl->mpBorderWindow )
                     ImplInvalidateParentFrameRegion( aRegion );
             }
+
+            if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
+                LogicInvalidate(nullptr);
         }
 
         // adapt system objects
