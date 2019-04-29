@@ -973,7 +973,7 @@ void SvXMLExportPropertyMapper::_exportXML(
     else if ((mpImpl->mxPropMapper->GetEntryFlags(rProperty.mnIndex) & MID_FLAG_ELEMENT_ITEM_EXPORT ) == 0)
     {
         OUString aValue;
-        const OUString sName = rNamespaceMap.GetQNameByKey(
+        OUString sName = rNamespaceMap.GetQNameByKey(
             mpImpl->mxPropMapper->GetEntryNameSpace(rProperty.mnIndex),
             mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex));
 
@@ -988,6 +988,19 @@ void SvXMLExportPropertyMapper::_exportXML(
         {
             if( bRemove )
                 rAttrList.RemoveAttribute( sName );
+
+            if (IsXMLToken(mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex), XML_WRITING_MODE))
+            {
+                // We don't seem to have a generic mechanism to write an attribute in the extension
+                // namespace in case of certain attribute values only, so do this manually.
+                if (IsXMLToken(aValue, XML_BT_LR))
+                {
+                    sName = rNamespaceMap.GetQNameByKey(
+                            XML_NAMESPACE_LO_EXT,
+                            mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex));
+                }
+            }
+
             rAttrList.AddAttribute( sName, aValue );
         }
     }

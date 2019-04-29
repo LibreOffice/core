@@ -91,6 +91,7 @@ static SvXMLEnumMapEntry<sal_uInt16> const aXML_WritingDirection_Enum[] =
     { XML_RL_TB,    text::WritingMode2::RL_TB },
     { XML_TB_RL,    text::WritingMode2::TB_RL },
     { XML_TB_LR,    text::WritingMode2::TB_LR },
+    { XML_BT_LR,    text::WritingMode2::BT_LR },
 
     // alternative names of the above, as accepted by XSL
     { XML_LR,       text::WritingMode2::LR_TB },

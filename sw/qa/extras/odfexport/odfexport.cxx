@@ -1409,6 +1409,18 @@ DECLARE_ODFEXPORT_TEST(testBtlrCell, "btlr-cell.odt")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, getProperty<sal_Int16>(xC1, "WritingMode"));
 }
 
+DECLARE_ODFEXPORT_TEST(testBtlrFrame, "btlr-frame.odt")
+{
+    // Without the accompanying fix in place, this test would have failed, as
+    // the btlr text direction in the text frame was lost on ODF import and
+    // export.
+    uno::Reference<beans::XPropertySet> xTextFrame(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextFrame.is());
+
+    auto nActual = getProperty<sal_Int16>(xTextFrame, "WritingMode");
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, nActual);
+}
+
 DECLARE_ODFEXPORT_TEST(testFdo86963, "fdo86963.odt")
 {
     // Export of this document failed with beans::UnknownPropertyException.
