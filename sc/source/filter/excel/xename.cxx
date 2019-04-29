@@ -542,8 +542,14 @@ sal_uInt16 XclExpNameManagerImpl::FindBuiltInNameIdx(
         for( size_t nPos = 0; nPos < mnFirstUserIdx; ++nPos )
         {
             XclExpNameRef xName = maNameList.GetRecord( nPos );
-            if( xName->GetBuiltInName() == cBuiltIn && xName->GetSymbol() == sSymbol )
+            if( xName->GetBuiltInName() == cBuiltIn && xName->GetSymbol().replace(';', ',') == sSymbol.replace(';', ',') )
             {
+                // tdf#112567 restore the original built-in names with non-localized separators
+                // TODO: support more localizations, if needed
+                if ( xName->GetSymbol() != sSymbol )
+                {
+                    xName->SetSymbol(xName->GetSymbol().replace(';', ','));
+                }
                 return static_cast< sal_uInt16 >( nPos + 1 );
             }
         }
