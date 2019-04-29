@@ -296,14 +296,9 @@ bool Graphic::operator!=( const Graphic& rGraphic ) const
     return (*mxImpGraphic != *rGraphic.mxImpGraphic);
 }
 
-bool Graphic::operator!() const
+bool Graphic::IsNone() const
 {
-    return (GraphicType::NONE == mxImpGraphic->ImplGetType());
-}
-
-Graphic::operator bool() const
-{
-    return GraphicType::NONE != mxImpGraphic->ImplGetType();
+    return GraphicType::NONE == mxImpGraphic->ImplGetType();
 }
 
 void Graphic::Clear()

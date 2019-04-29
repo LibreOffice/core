@@ -632,7 +632,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXBitmapTable::createEntry(const OUString& 
         return nullptr;
 
     Graphic aGraphic(xGraphic);
-    if (!aGraphic)
+    if (aGraphic.IsNone())
         return nullptr;
 
     GraphicObject aGraphicObject(aGraphic);

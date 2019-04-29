@@ -1056,7 +1056,7 @@ void GalleryBrowser2::DispatchAdd(
 
     Graphic aGraphic;
     bool bGraphic = mpCurTheme->GetGraphic( mnCurActionPos, aGraphic );
-    if ( bGraphic && !!aGraphic )
+    if ( bGraphic && !aGraphic.IsNone() )
         xGraphic.set( aGraphic.GetXGraphic() );
     OSL_ENSURE( xGraphic.is(), "gallery item is graphic, but the reference is invalid!" );
 

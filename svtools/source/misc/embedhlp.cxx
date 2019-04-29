@@ -436,7 +436,7 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
 
     // note that UpdateReplacementOnDemand which resets mpImpl->pGraphic to null may have been called
     // e.g. when exporting ooo58458-1.odt to doc
-    if (bUpdate && (!mpImpl->pGraphic || !*mpImpl->pGraphic) && aOldGraphic)
+    if (bUpdate && (!mpImpl->pGraphic || mpImpl->pGraphic->IsNone()) && !aOldGraphic.IsNone())
     {
         // We used to have an old graphic, tried to update and the update
         // failed. Go back to the old graphic instead of having no graphic at

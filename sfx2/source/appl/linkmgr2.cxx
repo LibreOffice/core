@@ -515,7 +515,7 @@ bool LinkManager::GetGraphicFromAny(const OUString& rMimeType,
         OUString sURL = rValue.get<OUString>();
         if (!SvtSecurityOptions().isUntrustedReferer(rReferer))
             rGraphic = vcl::graphic::loadFromURL(sURL, pParentWin);
-        if (!rGraphic)
+        if (rGraphic.IsNone())
             rGraphic.SetDefaultType();
         rGraphic.setOriginURL(sURL);
         return true;

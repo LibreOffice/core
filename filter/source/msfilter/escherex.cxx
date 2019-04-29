@@ -1371,7 +1371,7 @@ void EscherPropertyContainer::CreateEmbeddedBitmapProperties(
     if (!xGraphic.is())
         return;
     const Graphic aGraphic(xGraphic);
-    if (!aGraphic)
+    if (aGraphic.IsNone())
         return;
     const GraphicObject aGraphicObject(aGraphic);
     if (aGraphicObject.GetType() == GraphicType::NONE)

@@ -2992,7 +2992,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 aGraphic = Graphic(xGraphic);
             }
 
-            if (aGraphic)
+            if (!aGraphic.IsNone())
             {
                 maStrLink.clear();
 
@@ -3001,11 +3001,11 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 ApplyGraphicTransparency_Impl();
                 xOldGrfObj.reset();
 
-                if (aGraphic && eGraphicPos == GPOS_NONE)
+                if (!aGraphic.IsNone() && eGraphicPos == GPOS_NONE)
                 {
                     eGraphicPos = GPOS_MM;
                 }
-                else if (!aGraphic)
+                else if (aGraphic.IsNone())
                 {
                     eGraphicPos = GPOS_NONE;
                 }
