@@ -34,6 +34,12 @@ protected:
     void CheckRedlineSectionsHidden();
     void CheckRedlineCharAttributesHidden();
 
+    virtual bool mustCalcLayoutOf(const char* filename)
+    {
+        // test relies on printing doing the layout (or not), suppress on load
+        return strcmp(filename, "tdf122607_leerzeile.odt") != 0;
+    }
+
     SwDoc* createDoc(const char* pName = nullptr);
 };
 
@@ -2709,6 +2715,54 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122607)
                 "/root/page[1]/anchored/fly/txt[1]/anchored/fly/tab/row[2]/cell/txt[7]/anchored/"
                 "fly/txt/Text[1]",
                 "Portion", "Fax:");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122607_regression)
+{
+    discardDumpedLayout();
+    if (mxComponent.is())
+        mxComponent->dispose();
+
+    auto const pName("tdf122607_leerzeile.odt");
+
+    OUString const url(m_directories.getURLFromSrc(DATA_DIRECTORY)
+                       + OUString::createFromAscii(pName));
+
+    // note: must set Hidden property, so that SfxFrameViewWindow_Impl::Resize()
+    // does *not* forward initial VCL Window Resize and thereby triggers a
+    // layout which does not happen on soffice --convert-to pdf.
+    std::vector<beans::PropertyValue> aFilterOptions = {
+        { beans::PropertyValue("Hidden", -1, uno::Any(true), beans::PropertyState_DIRECT_VALUE) },
+    };
+
+    std::cout << pName << ":\n";
+
+    // inline the loading because currently properties can't be passed...
+    mxComponent = loadFromDesktop(url, "com.sun.star.text.TextDocument",
+                                  comphelper::containerToSequence(aFilterOptions));
+
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Sequence<beans::PropertyValue> props(comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
+    }));
+    utl::TempFile aTempFile;
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->storeToURL(aTempFile.GetURL(), props);
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // somehow these 2 rows overlapped in the PDF unless CalcLayout() runs
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/infos/bounds", "mbFixSize",
+                "false");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/infos/bounds", "top", "2977");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/infos/bounds", "height", "241");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/infos/bounds", "mbFixSize",
+                "true");
+    // this was 3034, causing the overlap
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/infos/bounds", "top", "3218");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/infos/bounds", "height", "164");
+
+    aTempFile.EnableKillingFile();
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrCell)
