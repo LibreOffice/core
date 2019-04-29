@@ -46,6 +46,30 @@
       "revId": "4802bf32b84655f6e1d3389070c76371ede8fbce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_2d94328b",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-29T05:29:10Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "3fa0c359_cdb7ce3a",
+      "range": {
+        "startLine": 1340,
+        "startChar": 4,
+        "endLine": 1340,
+        "endChar": 37
+      },
+      "revId": "4802bf32b84655f6e1d3389070c76371ede8fbce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
