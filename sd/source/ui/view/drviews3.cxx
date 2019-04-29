@@ -82,10 +82,15 @@
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <editeng/lspcitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <memory>
+#include <comphelper/processfactory.hxx>
+#include <oox/drawingml/diagram/diagram.hxx>
+#include <oox/export/drawingml.hxx>
+#include <oox/shape/ShapeFilterBase.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
@@ -468,6 +473,35 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         {
             GetActiveWindow()->Invalidate();
             UpdatePreview( mpActualPage );
+            rReq.Done();
+        }
+        break;
+
+        case SID_REGENERATE_DIAGRAM:
+        {
+            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+            if (rMarkList.GetMarkCount() == 1)
+            {
+                SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                Reference<css::drawing::XShape> xShape(pObj->getUnoShape(), UNO_QUERY);
+
+                if (oox::drawingml::DrawingML::IsDiagram(xShape))
+                {
+                    mpDrawView->UnmarkAll();
+                    pObj->getChildrenOfSdrObject()->ClearSdrObjList();
+
+                    css::uno::Reference<css::uno::XComponentContext> xContext
+                        = comphelper::getProcessComponentContext();
+                    rtl::Reference<oox::shape::ShapeFilterBase> xFilter(
+                        new oox::shape::ShapeFilterBase(xContext));
+                    xFilter->setTargetDocument(GetDocSh()->GetModel());
+                    xFilter->importTheme();
+                    oox::drawingml::reloadDiagram(xShape, *xFilter);
+
+                    mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView());
+                }
+            }
+
             rReq.Done();
         }
         break;

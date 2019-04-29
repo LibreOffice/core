@@ -17,20 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_SOURCE_SHAPE_SHAPEFILTERBASE_HXX
-#define INCLUDED_OOX_SOURCE_SHAPE_SHAPEFILTERBASE_HXX
+#ifndef INCLUDED_OOX_SHAPE_SHAPEFILTERBASE_HXX
+#define INCLUDED_OOX_SHAPE_SHAPEFILTERBASE_HXX
 
 #include <memory>
 #include <rtl/ref.hxx>
+#include <oox/dllapi.h>
 #include <oox/vml/vmldrawing.hxx>
-#include <drawingml/table/tablestylelist.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+
+namespace oox { namespace drawingml { namespace table {
+
+class TableStyleList;
+typedef std::shared_ptr< TableStyleList > TableStyleListPtr;
+
+}}}
 
 namespace oox {
 namespace shape {
 
-class ShapeFilterBase : public core::XmlFilterBase
+class OOX_DLLPUBLIC ShapeFilterBase : public core::XmlFilterBase
 {
 public:
     typedef std::shared_ptr<ShapeFilterBase> Pointer_t;
@@ -58,6 +65,8 @@ public:
     virtual bool exportDocument() override { return true; }
 
     ::Color getSchemeColor( sal_Int32 nToken ) const;
+
+    void importTheme();
 
 private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;

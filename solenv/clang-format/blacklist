@@ -6462,6 +6462,7 @@ include/oox/drawingml/chart/modelbase.hxx
 include/oox/drawingml/clrscheme.hxx
 include/oox/drawingml/color.hxx
 include/oox/drawingml/connectorshapecontext.hxx
+include/oox/drawingml/diagram/diagram.hxx
 include/oox/drawingml/drawingmltypes.hxx
 include/oox/drawingml/graphicshapecontext.hxx
 include/oox/drawingml/shape.hxx
@@ -6538,6 +6539,7 @@ include/oox/ppt/slidetransitioncontext.hxx
 include/oox/ppt/soundactioncontext.hxx
 include/oox/ppt/timenode.hxx
 include/oox/ppt/timenodelistcontext.hxx
+include/oox/shape/ShapeFilterBase.hxx
 include/oox/token/namespacemap.hxx
 include/oox/token/propertynames.hxx
 include/oox/token/relationship.hxx
@@ -8825,7 +8827,6 @@ oox/inc/drawingml/clrschemecontext.hxx
 oox/inc/drawingml/colorchoicecontext.hxx
 oox/inc/drawingml/customshapegeometry.hxx
 oox/inc/drawingml/customshapeproperties.hxx
-oox/inc/drawingml/diagram/diagram.hxx
 oox/inc/drawingml/embeddedwavaudiofile.hxx
 oox/inc/drawingml/fillproperties.hxx
 oox/inc/drawingml/graphicproperties.hxx
@@ -9105,7 +9106,6 @@ oox/source/shape/ShapeContextHandler.hxx
 oox/source/shape/ShapeDrawingFragmentHandler.cxx
 oox/source/shape/ShapeDrawingFragmentHandler.hxx
 oox/source/shape/ShapeFilterBase.cxx
-oox/source/shape/ShapeFilterBase.hxx
 oox/source/shape/WpgContext.cxx
 oox/source/shape/WpgContext.hxx
 oox/source/token/namespacemap.cxx

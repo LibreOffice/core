@@ -460,6 +460,7 @@
 #define SID_HIDE_LAST_LEVEL                 (SID_SD_START+448)
 #define SID_SHOW_NEXT_LEVEL                 (SID_SD_START+449)
 #define SID_PRESENTATION_MINIMIZER          (SID_SD_START+450)
+#define SID_REGENERATE_DIAGRAM              (SID_SD_START+451)
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

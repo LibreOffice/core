@@ -20,7 +20,6 @@
 #include "layoutnodecontext.hxx"
 
 #include <oox/helper/attributelist.hxx>
-#include <drawingml/diagram/diagram.hxx>
 #include <oox/drawingml/shapecontext.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include "diagramdefinitioncontext.hxx"

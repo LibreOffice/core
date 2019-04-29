@@ -27,7 +27,7 @@
 #include <drawingml/misccontexts.hxx>
 #include <drawingml/graphicproperties.hxx>
 #include <drawingml/customshapeproperties.hxx>
-#include <drawingml/diagram/diagram.hxx>
+#include <oox/drawingml/diagram/diagram.hxx>
 #include <drawingml/table/tablecontext.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
