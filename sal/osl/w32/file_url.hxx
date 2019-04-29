@@ -52,13 +52,6 @@ DWORD IsValidFilePath (
     rtl_uString ** corrected
 );
 
-DWORD GetCaseCorrectPathName (
-    LPCWSTR lpszShortPath,  // file name
-    LPWSTR  lpszLongPath,   // path buffer
-    sal_uInt32 cchBuffer,   // size of path buffer
-    bool bCheckExistence
-);
-
 oslFileError osl_getSystemPathFromFileURL_ (
     rtl_uString * strURL,
     rtl_uString ** pustrPath,

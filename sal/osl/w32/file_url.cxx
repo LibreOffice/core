@@ -394,134 +394,6 @@ static bool IsPathSpecialPrefix(LPWSTR szPath, LPWSTR szFile)
     return false;
 }
 
-// Expects a proper absolute or relative path. NB: It is different from GetLongPathName WinAPI!
-static DWORD GetCaseCorrectPathNameEx(
-    LPWSTR  lpszPath,   // path buffer to convert
-    sal_uInt32 cchBuffer,      // size of path buffer
-    DWORD   nSkipLevels,
-    bool bCheckExistence )
-{
-        ::osl::LongPathBuffer< WCHAR > szFile( MAX_PATH + 1 );
-        sal_Int32 nRemoved = PathRemoveFileSpec( lpszPath, szFile, MAX_PATH + 1 );
-        sal_Int32 nLastStepRemoved = nRemoved;
-        while ( nLastStepRemoved && szFile[0] == 0 )
-        {
-            // remove separators
-            nLastStepRemoved = PathRemoveFileSpec( lpszPath, szFile, MAX_PATH + 1 );
-            nRemoved += nLastStepRemoved;
-        }
-
-        if ( nRemoved )
-        {
-            bool bSkipThis = false;
-
-            if ( 0 == wcscmp( szFile, L".." ) )
-            {
-                bSkipThis = true;
-                nSkipLevels += 1;
-            }
-            else if ( 0 == wcscmp( szFile, L"." ) )
-            {
-                bSkipThis = true;
-            }
-            else if ( nSkipLevels )
-            {
-                bSkipThis = true;
-                nSkipLevels--;
-            }
-            else
-                bSkipThis = false;
-
-            if ( !GetCaseCorrectPathNameEx( lpszPath, cchBuffer, nSkipLevels, bCheckExistence ) )
-                return 0;
-
-            PathAddBackslash( lpszPath, cchBuffer );
-
-            /* Analyze parent if not only a trailing backslash was cutted but a real file spec */
-            if ( !bSkipThis )
-            {
-                if ( bCheckExistence )
-                {
-
-                    if (IsPathSpecialPrefix(lpszPath, szFile))
-                    {
-                        /* add the segment name back */
-                        wcscat(lpszPath, szFile);
-                    }
-                    else
-                    {
-                        osl::LongPathBuffer<WCHAR> aShortPath(MAX_LONG_PATH);
-                        wcscpy(aShortPath, lpszPath);
-                        wcscat(aShortPath, szFile);
-
-                        WIN32_FIND_DATAW aFindFileData;
-                        HANDLE hFind = FindFirstFileW(aShortPath, &aFindFileData);
-
-                        if (IsValidHandle(hFind))
-                        {
-                            wcscat(lpszPath, aFindFileData.cFileName[0]
-                                                 ? aFindFileData.cFileName
-                                                 : aFindFileData.cAlternateFileName);
-
-                            FindClose(hFind);
-                        }
-                        else
-                            lpszPath[0] = 0;
-                    }
-                }
-                else
-                {
-                    /* add the segment name back */
-                    wcscat( lpszPath, szFile );
-                }
-            }
-        }
-        else
-        {
-            /* File specification can't be removed therefore the short path is either a drive
-               or a network share. If still levels to skip are left, the path specification
-               tries to travel below the file system root */
-            if ( nSkipLevels )
-                    lpszPath[0] = 0;
-            else
-                _wcsupr( lpszPath );
-        }
-
-        return wcslen( lpszPath );
-}
-
-DWORD GetCaseCorrectPathName(
-    LPCWSTR lpszShortPath,  // file name
-    LPWSTR  lpszLongPath,   // path buffer
-    sal_uInt32 cchBuffer,      // size of path buffer
-    bool bCheckExistence
-)
-{
-    /* Special handling for "\\.\" as system root */
-    if ( lpszShortPath && 0 == wcscmp( lpszShortPath, WSTR_SYSTEM_ROOT_PATH ) )
-    {
-        if ( cchBuffer >= SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) )
-        {
-            wcscpy( lpszLongPath, WSTR_SYSTEM_ROOT_PATH );
-            return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
-        }
-        else
-        {
-            return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
-        }
-    }
-    else if ( lpszShortPath )
-    {
-        if ( wcslen( lpszShortPath ) <= cchBuffer )
-        {
-            wcscpy( lpszLongPath, lpszShortPath );
-            return GetCaseCorrectPathNameEx( lpszLongPath, cchBuffer, 0, bCheckExistence );
-        }
-    }
-
-    return 0;
-}
-
 static bool osl_decodeURL_( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )
 {
     sal_Char        *pBuffer;
@@ -723,10 +595,9 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
                 else
                 {
                     ::osl::LongPathBuffer< sal_Unicode > aBuf( MAX_LONG_PATH );
-                    sal_uInt32 nNewLen = GetCaseCorrectPathName( o3tl::toW(pDecodedURL) + nSkip,
+                    sal_uInt32 nNewLen = GetLongPathNameW( o3tl::toW(pDecodedURL) + nSkip,
                                                                  o3tl::toW(aBuf),
-                                                                 aBuf.getBufSizeInSymbols(),
-                                                                 false );
+                                                                 aBuf.getBufSizeInSymbols());
 
                     if ( nNewLen <= MAX_PATH - 12
                       || 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, o3tl::toU(WSTR_SYSTEM_ROOT_PATH), SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1, SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1 )
