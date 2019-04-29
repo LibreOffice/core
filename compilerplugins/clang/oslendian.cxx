@@ -25,6 +25,22 @@ public:
 private:
     void run() override {}
 
+    virtual void FileChanged(SourceLocation, FileChangeReason, SrcMgr::CharacteristicKind, FileID) override {
+        if(!startChecked) {
+            // With precompiled headers MacroDefined() would not be called, so check already at the very
+            // start whether the macros exist.
+            startChecked = true;
+            if(const MacroInfo* macroBig = compiler.getPreprocessor().getMacroInfo(
+                &compiler.getPreprocessor().getIdentifierTable().get("OSL_BIGENDIAN"))) {
+                definedBig_ = macroBig->getDefinitionLoc();
+            }
+            if(const MacroInfo* macroLit = compiler.getPreprocessor().getMacroInfo(
+                &compiler.getPreprocessor().getIdentifierTable().get("OSL_LITENDIAN"))) {
+                definedLit_ = macroLit->getDefinitionLoc();
+            }
+        }
+    }
+
     void MacroDefined(Token const & MacroNameTok, MacroDirective const *)
         override
     {
@@ -107,6 +123,7 @@ private:
 
     SourceLocation definedBig_;
     SourceLocation definedLit_;
+    bool startChecked = false;
 };
 
 loplugin::Plugin::Registration<OslEndian> X("oslendian");
