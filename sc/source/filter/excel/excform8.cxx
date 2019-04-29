@@ -149,7 +149,7 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
 
     if( nFormulaLen == 0 )
     {
-        aPool.Store( OUString( "-/-" ) );
+        aPool.Store( "-/-" );
         aPool >> aStack;
         rpTokArray = aPool.GetTokenArray( aStack.Get());
         return ConvErr::OK;
@@ -1296,7 +1296,7 @@ void ExcelToSc8::ConvertExternName( std::unique_ptr<ScTokenArray>& rpArray, XclI
 
     if (nFormulaLen == 0)
     {
-        aPool.Store(OUString("-/-"));
+        aPool.Store("-/-");
         aPool >> aStack;
         rpArray = aPool.GetTokenArray( aStack.Get());
         return;

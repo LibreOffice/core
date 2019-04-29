@@ -2712,7 +2712,7 @@ namespace
             if ( aNode.isValid() )
             {
                 bool bTmp = bool();
-                css::uno::Any aValue = aNode.getNodeValue( OUString("UIMirroring") );
+                css::uno::Any aValue = aNode.getNodeValue( "UIMirroring" );
                 if( aValue >>= bTmp )
                 {
                     // found true or false; if it was nil, nothing is changed

@@ -3200,9 +3200,9 @@ void ScInterpreter::ScInfo()
         OUString aStr = GetString().getString();
         ScCellKeywordTranslator::transKeyword(aStr, ScGlobal::GetLocale(), ocInfo);
         if( aStr == "SYSTEM" )
-            PushString( OUString( SC_INFO_OSVERSION ) );
+            PushString( SC_INFO_OSVERSION );
         else if( aStr == "OSVERSION" )
-            PushString( OUString( "Windows (32-bit) NT 5.01" ) );
+            PushString( "Windows (32-bit) NT 5.01" );
         else if( aStr == "RELEASE" )
             PushString( ::utl::Bootstrap::getBuildIdData( OUString() ) );
         else if( aStr == "NUMFILE" )

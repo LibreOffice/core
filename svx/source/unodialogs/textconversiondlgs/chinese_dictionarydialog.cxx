@@ -324,7 +324,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog(weld::Window* pParent)
 
     SvtLinguConfig  aLngCfg;
     bool bValue;
-    Any aAny( aLngCfg.GetProperty( OUString( UPN_IS_REVERSE_MAPPING ) ) );
+    Any aAny( aLngCfg.GetProperty( UPN_IS_REVERSE_MAPPING ) );
     if( aAny >>= bValue )
         m_xCB_Reverse->set_active( bValue );
 
@@ -637,7 +637,7 @@ short ChineseDictionaryDialog::run()
     {
         //save settings to configuration
         SvtLinguConfig  aLngCfg;
-        aLngCfg.SetProperty( OUString( UPN_IS_REVERSE_MAPPING ), uno::Any(m_xCB_Reverse->get_active()) );
+        aLngCfg.SetProperty( UPN_IS_REVERSE_MAPPING, uno::Any(m_xCB_Reverse->get_active()) );
 
         m_xCT_DictionaryToSimplified->save();
         m_xCT_DictionaryToTraditional->save();

@@ -498,7 +498,7 @@ void PresenterWindowManager::StoreViewMode (const ViewMode eViewMode)
             mxComponentContext,
             "/org.openoffice.Office.PresenterScreen/",
             PresenterConfigurationAccess::READ_WRITE);
-        aConfiguration.GoToChild(OUString("Presenter"));
+        aConfiguration.GoToChild("Presenter");
         Any aValue;
         switch (eViewMode)
         {

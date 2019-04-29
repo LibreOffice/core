@@ -97,7 +97,7 @@ PresenterSlidePreview::PresenterSlidePreview (
                 rxContext),
             UNO_QUERY);
     mpBitmaps.reset(new PresenterBitmapContainer(
-            OUString("PresenterScreenSettings/ScrollBar/Bitmaps"),
+            "PresenterScreenSettings/ScrollBar/Bitmaps",
             std::shared_ptr<PresenterBitmapContainer>(),
             rxContext,
             mxCanvas));

@@ -789,7 +789,7 @@ void PrinterJob::writeJobPatch( osl::File* pFile, const JobData& rJobData )
     const PPDKey* pKey = nullptr;
 
     if( rJobData.m_pParser )
-        pKey = rJobData.m_pParser->getKey( OUString( "JobPatchFile"  ) );
+        pKey = rJobData.m_pParser->getKey( "JobPatchFile" );
     if( ! pKey )
         return;
 

@@ -249,7 +249,7 @@ void PresenterScrollBar::SetCanvas (const Reference<css::rendering::XCanvas>& rx
             try
             {
                 mpBitmaps.reset(new PresenterBitmapContainer(
-                    OUString("PresenterScreenSettings/ScrollBar/Bitmaps"),
+                    "PresenterScreenSettings/ScrollBar/Bitmaps",
                     std::shared_ptr<PresenterBitmapContainer>(),
                     mxComponentContext,
                     mxCanvas));

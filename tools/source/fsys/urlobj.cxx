@@ -2302,8 +2302,7 @@ bool INetURLObject::setPassword(OUString const & rThePassword,
     }
     else if (m_aHost.isPresent())
     {
-        m_aAbsURIRef.insert(m_aHost.getBegin(),
-            OUString( ":@" ));
+        m_aAbsURIRef.insert(m_aHost.getBegin(), ":@" );
         m_aUser.set(m_aAbsURIRef, OUString(), m_aHost.getBegin());
         nDelta
             = m_aAuth.set(m_aAbsURIRef, aNewAuth, m_aHost.getBegin() + 1) + 2;

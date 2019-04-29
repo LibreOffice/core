@@ -259,7 +259,7 @@ void RtfExport::WriteRevTab()
         return;
 
     // RTF always seems to use Unknown as the default first entry
-    GetRedline(OUString("Unknown"));
+    GetRedline("Unknown");
 
     for (SwRangeRedline* pRedl : m_pDoc->getIDocumentRedlineAccess().GetRedlineTable())
     {

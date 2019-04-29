@@ -40,7 +40,7 @@ private:
 CPPUNIT_TEST_SUITE_REGISTRATION(test::oustringbuffer::ToString);
 
 void test::oustringbuffer::ToString::testToString() {
-    OUStringBuffer sb(OUString("test string"));
+    OUStringBuffer sb("test string");
     OUString str = sb.toString();
     CPPUNIT_ASSERT_EQUAL( OUString("test string"), str );
     // returned OUString must be independent from sb

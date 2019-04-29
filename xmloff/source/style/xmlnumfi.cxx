@@ -1297,9 +1297,9 @@ void SvXMLNumFmtElementContext::EndElement()
                 rParent.AddNumber( aNumInfo );      // simple number
 
                 if ( aNumInfo.bExpSign )
-                    rParent.AddToCode( OUString("E+") );
+                    rParent.AddToCode( "E+" );
                 else
-                    rParent.AddToCode( OUString("E") );
+                    rParent.AddToCode( "E" );
                 for (sal_Int32 i=0; i<aNumInfo.nExpDigits; i++)
                 {
                     rParent.AddToCode( '0' );

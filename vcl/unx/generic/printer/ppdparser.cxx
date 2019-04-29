@@ -604,7 +604,7 @@ PPDParser::PPDParser(const OUString& rFile, const std::vector<PPDKey*>& keys)
     // fill in shortcuts
     const PPDKey* pKey;
 
-    pKey = getKey( OUString( "PageSize" ) );
+    pKey = getKey( "PageSize" );
 
     if ( pKey ) {
         std::unique_ptr<PPDKey> pImageableAreas(new PPDKey("ImageableArea"));
@@ -644,7 +644,7 @@ PPDParser::PPDParser(const OUString& rFile, const std::vector<PPDKey*>& keys)
         insertKey(std::move(pPaperDimensions));
     }
 
-    m_pImageableAreas = getKey(  OUString( "ImageableArea" ) );
+    m_pImageableAreas = getKey( "ImageableArea" );
     const PPDValue* pDefaultImageableArea = nullptr;
     if( m_pImageableAreas )
         pDefaultImageableArea = m_pImageableAreas->getDefaultValue();
@@ -655,7 +655,7 @@ PPDParser::PPDParser(const OUString& rFile, const std::vector<PPDKey*>& keys)
         SAL_WARN( "vcl.unx.print", "no DefaultImageableArea in " << m_aFile);
     }
 
-    m_pPaperDimensions = getKey( OUString( "PaperDimension" ) );
+    m_pPaperDimensions = getKey( "PaperDimension" );
     if( m_pPaperDimensions )
         m_pDefaultPaperDimension = m_pPaperDimensions->getDefaultValue();
     if (m_pPaperDimensions == nullptr) {
@@ -665,7 +665,7 @@ PPDParser::PPDParser(const OUString& rFile, const std::vector<PPDKey*>& keys)
         SAL_WARN( "vcl.unx.print", "no DefaultPaperDimensions in " << m_aFile);
     }
 
-    auto pResolutions = getKey( OUString( "Resolution" ) );
+    auto pResolutions = getKey( "Resolution" );
     if( pResolutions )
         m_pDefaultResolution = pResolutions->getDefaultValue();
     if (pResolutions == nullptr) {
@@ -673,19 +673,19 @@ PPDParser::PPDParser(const OUString& rFile, const std::vector<PPDKey*>& keys)
     }
     SAL_INFO_IF(!m_pDefaultResolution, "vcl.unx.print", "no DefaultResolution in " + m_aFile);
 
-    auto pInputSlots = getKey( OUString( "InputSlot" ) );
+    auto pInputSlots = getKey( "InputSlot" );
     if( pInputSlots )
         m_pDefaultInputSlot = pInputSlots->getDefaultValue();
     SAL_INFO_IF(!pInputSlots, "vcl.unx.print", "no InputSlot in " << m_aFile);
     SAL_INFO_IF(!m_pDefaultInputSlot, "vcl.unx.print", "no DefaultInputSlot in " << m_aFile);
 
-    auto pFontList = getKey( OUString( "Font" ) );
+    auto pFontList = getKey( "Font" );
     if (pFontList == nullptr) {
         SAL_WARN( "vcl.unx.print", "no Font in " << m_aFile);
     }
 
     // fill in direct values
-    if( (pKey = getKey( OUString( "print-color-mode" ) )) )
+    if( (pKey = getKey( "print-color-mode" )) )
         m_bColorDevice = pKey->countValues() > 1;
 }
 
@@ -810,7 +810,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
     // fill in shortcuts
     const PPDKey* pKey;
 
-    m_pImageableAreas = getKey(  OUString( "ImageableArea" ) );
+    m_pImageableAreas = getKey( "ImageableArea" );
     const PPDValue * pDefaultImageableArea = nullptr;
     if( m_pImageableAreas )
         pDefaultImageableArea = m_pImageableAreas->getDefaultValue();
@@ -821,7 +821,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
         SAL_WARN( "vcl.unx.print", "no DefaultImageableArea in " << m_aFile);
     }
 
-    m_pPaperDimensions = getKey( OUString( "PaperDimension" ) );
+    m_pPaperDimensions = getKey( "PaperDimension" );
     if( m_pPaperDimensions )
         m_pDefaultPaperDimension = m_pPaperDimensions->getDefaultValue();
     if (m_pPaperDimensions == nullptr) {
@@ -831,7 +831,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
         SAL_WARN( "vcl.unx.print", "no DefaultPaperDimensions in " << m_aFile);
     }
 
-    auto pResolutions = getKey( OUString( "Resolution" ) );
+    auto pResolutions = getKey( "Resolution" );
     if( pResolutions )
         m_pDefaultResolution = pResolutions->getDefaultValue();
     if (pResolutions == nullptr) {
@@ -839,30 +839,30 @@ PPDParser::PPDParser( const OUString& rFile ) :
     }
     SAL_INFO_IF(!m_pDefaultResolution, "vcl.unx.print", "no DefaultResolution in " + m_aFile);
 
-    auto pInputSlots = getKey( OUString( "InputSlot" ) );
+    auto pInputSlots = getKey( "InputSlot" );
     if( pInputSlots )
         m_pDefaultInputSlot = pInputSlots->getDefaultValue();
     SAL_INFO_IF(!pInputSlots, "vcl.unx.print", "no InputSlot in " << m_aFile);
     SAL_INFO_IF(!m_pDefaultInputSlot, "vcl.unx.print", "no DefaultInputSlot in " << m_aFile);
 
-    auto pFontList = getKey( OUString( "Font" ) );
+    auto pFontList = getKey( "Font" );
     if (pFontList == nullptr) {
         SAL_WARN( "vcl.unx.print", "no Font in " << m_aFile);
     }
 
     // fill in direct values
-    if ((pKey = getKey(OUString("ColorDevice"))))
+    if ((pKey = getKey("ColorDevice")))
     {
         if (const PPDValue* pValue = pKey->getValue(0))
             m_bColorDevice = pValue->m_aValue.startsWithIgnoreAsciiCase("true");
     }
 
-    if ((pKey = getKey(OUString("LanguageLevel"))))
+    if ((pKey = getKey("LanguageLevel")))
     {
         if (const PPDValue* pValue = pKey->getValue(0))
             m_nLanguageLevel = pValue->m_aValue.toInt32();
     }
-    if ((pKey = getKey(OUString("TTRasterizer"))))
+    if ((pKey = getKey("TTRasterizer")))
     {
         if (const PPDValue* pValue = pKey->getValue(0))
             m_bType42Capable = pValue->m_aValue.equalsIgnoreAsciiCase( "Type42" );
@@ -1757,9 +1757,9 @@ bool PPDContext::resetValue( const PPDKey* pKey, bool bDefaultable )
     if( ! pKey || ! m_pParser || ! m_pParser->hasKey( pKey ) )
         return false;
 
-    const PPDValue* pResetValue = pKey->getValue( OUString( "None" ) );
+    const PPDValue* pResetValue = pKey->getValue( "None" );
     if( ! pResetValue )
-        pResetValue = pKey->getValue( OUString( "False" ) );
+        pResetValue = pKey->getValue( "False" );
     if( ! pResetValue && bDefaultable )
         pResetValue = pKey->getDefaultValue();
 
@@ -1938,7 +1938,7 @@ int PPDContext::getRenderResolution() const
     if( m_pParser )
     {
         int nDPIx = 300, nDPIy = 300;
-        const PPDKey* pKey = m_pParser->getKey( OUString( "Resolution" ) );
+        const PPDKey* pKey = m_pParser->getKey( "Resolution" );
         if( pKey )
         {
             const PPDValue* pValue = getValue( pKey );
@@ -1963,7 +1963,7 @@ void PPDContext::getPageSize( OUString& rPaper, int& rWidth, int& rHeight ) cons
     rHeight = 842;
     if( m_pParser )
     {
-        const PPDKey* pKey = m_pParser->getKey( OUString( "PageSize" ) );
+        const PPDKey* pKey = m_pParser->getKey( "PageSize" );
         if( pKey )
         {
             const PPDValue* pValue = getValue( pKey );

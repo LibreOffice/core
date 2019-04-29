@@ -219,7 +219,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             }
             break;
         }
-        rObj.SetAngle( rObj.ImplGetInt32PropertyValue( OUString( "RotateAngle" ) ));
+        rObj.SetAngle( rObj.ImplGetInt32PropertyValue( "RotateAngle" ));
 
         if( ( rObj.ImplGetPropertyValue( "IsFontwork" ) &&
             ::cppu::any2bool( rObj.GetUsrAny() ) ) ||
@@ -722,7 +722,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj )
         if ( !mpPicStrm )
             mpPicStrm = mpEscherEx->QueryPictureStream();
         EscherPropertyContainer aPropOpt( mpEscherEx->GetGraphicProvider(), mpPicStrm, aRect100thmm );
-        rObj.SetAngle( rObj.ImplGetInt32PropertyValue( OUString( "RotateAngle" )));
+        rObj.SetAngle( rObj.ImplGetInt32PropertyValue( "RotateAngle" ));
         sal_Int32 nAngle = rObj.GetAngle();
         if( rObj.GetType() == "drawing.Line" )
         {

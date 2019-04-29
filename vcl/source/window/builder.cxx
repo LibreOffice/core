@@ -800,7 +800,7 @@ namespace
     bool extractDrawValue(VclBuilder::stringmap& rMap)
     {
         bool bDrawValue = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString("draw_value"));
+        VclBuilder::stringmap::iterator aFind = rMap.find("draw_value");
         if (aFind != rMap.end())
         {
             bDrawValue = toBool(aFind->second);
@@ -812,7 +812,7 @@ namespace
     OUString extractPopupMenu(VclBuilder::stringmap& rMap)
     {
         OUString sRet;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString("popup"));
+        VclBuilder::stringmap::iterator aFind = rMap.find("popup");
         if (aFind != rMap.end())
         {
             sRet = aFind->second;
@@ -824,7 +824,7 @@ namespace
     OUString extractValuePos(VclBuilder::stringmap& rMap)
     {
         OUString sRet("top");
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString("value_pos"));
+        VclBuilder::stringmap::iterator aFind = rMap.find("value_pos");
         if (aFind != rMap.end())
         {
             sRet = aFind->second;
@@ -836,7 +836,7 @@ namespace
     OUString extractTypeHint(VclBuilder::stringmap &rMap)
     {
         OUString sRet("normal");
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString("type-hint"));
+        VclBuilder::stringmap::iterator aFind = rMap.find("type-hint");
         if (aFind != rMap.end())
         {
             sRet = aFind->second;
@@ -848,7 +848,7 @@ namespace
     bool extractResizable(VclBuilder::stringmap &rMap)
     {
         bool bResizable = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString("resizable"));
+        VclBuilder::stringmap::iterator aFind = rMap.find("resizable");
         if (aFind != rMap.end())
         {
             bResizable = toBool(aFind->second);
@@ -861,7 +861,7 @@ namespace
     bool extractModal(VclBuilder::stringmap &rMap)
     {
         bool bModal = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString("modal"));
+        VclBuilder::stringmap::iterator aFind = rMap.find("modal");
         if (aFind != rMap.end())
         {
             bModal = toBool(aFind->second);
@@ -874,7 +874,7 @@ namespace
     bool extractDecorated(VclBuilder::stringmap &rMap)
     {
         bool bDecorated = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString("decorated"));
+        VclBuilder::stringmap::iterator aFind = rMap.find("decorated");
         if (aFind != rMap.end())
         {
             bDecorated = toBool(aFind->second);
@@ -886,7 +886,7 @@ namespace
     bool extractCloseable(VclBuilder::stringmap &rMap)
     {
         bool bCloseable = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString("deletable"));
+        VclBuilder::stringmap::iterator aFind = rMap.find("deletable");
         if (aFind != rMap.end())
         {
             bCloseable = toBool(aFind->second);
@@ -898,7 +898,7 @@ namespace
     bool extractEntry(VclBuilder::stringmap &rMap)
     {
         bool bHasEntry = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString("has-entry"));
+        VclBuilder::stringmap::iterator aFind = rMap.find("has-entry");
         if (aFind != rMap.end())
         {
             bHasEntry = toBool(aFind->second);
@@ -910,7 +910,7 @@ namespace
     bool extractOrientation(VclBuilder::stringmap &rMap)
     {
         bool bVertical = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString("orientation"));
+        VclBuilder::stringmap::iterator aFind = rMap.find("orientation");
         if (aFind != rMap.end())
         {
             bVertical = aFind->second.equalsIgnoreAsciiCase("vertical");
@@ -922,7 +922,7 @@ namespace
     bool extractInconsistent(VclBuilder::stringmap &rMap)
     {
         bool bInconsistent = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString("inconsistent"));
+        VclBuilder::stringmap::iterator aFind = rMap.find("inconsistent");
         if (aFind != rMap.end())
         {
             bInconsistent = toBool(aFind->second);
@@ -1072,7 +1072,7 @@ namespace
             sWidthRequest = aFind->second;
             rMap.erase(aFind);
         }
-        aFind = rMap.find(OString("height-request"));
+        aFind = rMap.find("height-request");
         if (aFind != rMap.end())
         {
             sHeightRequest = aFind->second;

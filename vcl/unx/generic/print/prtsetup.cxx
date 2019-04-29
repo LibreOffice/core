@@ -178,7 +178,7 @@ void RTSPaperPage::update()
 
     // duplex
     if( m_pParent->m_aJobData.m_pParser &&
-        (pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "Duplex" ) )) )
+        (pKey = m_pParent->m_aJobData.m_pParser->getKey( "Duplex" )) )
     {
         m_pParent->insertAllPPDValues( *m_xDuplexBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
@@ -190,7 +190,7 @@ void RTSPaperPage::update()
 
     // paper
     if( m_pParent->m_aJobData.m_pParser &&
-        (pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "PageSize" ) )) )
+        (pKey = m_pParent->m_aJobData.m_pParser->getKey( "PageSize" )) )
     {
         m_pParent->insertAllPPDValues( *m_xPaperBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
@@ -202,7 +202,7 @@ void RTSPaperPage::update()
 
     // input slots
     if( m_pParent->m_aJobData.m_pParser &&
-        (pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString("InputSlot") )) )
+        (pKey = m_pParent->m_aJobData.m_pParser->getKey( "InputSlot" )) )
     {
         m_pParent->insertAllPPDValues( *m_xSlotBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
@@ -236,17 +236,17 @@ IMPL_LINK( RTSPaperPage, SelectHdl, weld::ComboBox&, rBox, void )
     if( &rBox == m_xPaperBox.get() )
     {
         if( m_pParent->m_aJobData.m_pParser )
-            pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "PageSize" ) );
+            pKey = m_pParent->m_aJobData.m_pParser->getKey( "PageSize" );
     }
     else if( &rBox == m_xDuplexBox.get() )
     {
         if( m_pParent->m_aJobData.m_pParser )
-            pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "Duplex" ) );
+            pKey = m_pParent->m_aJobData.m_pParser->getKey( "Duplex" );
     }
     else if( &rBox == m_xSlotBox.get() )
     {
         if( m_pParent->m_aJobData.m_pParser )
-            pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "InputSlot" ) );
+            pKey = m_pParent->m_aJobData.m_pParser->getKey( "InputSlot" );
     }
     else if( &rBox == m_xOrientBox.get() )
     {

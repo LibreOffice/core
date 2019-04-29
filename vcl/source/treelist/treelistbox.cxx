@@ -1922,7 +1922,7 @@ void SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
 void SvTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
 {
     if( !pParent->HasChildren() )
-        InsertEntry( OUString("<dummy>"), pParent );
+        InsertEntry( "<dummy>", pParent );
 }
 
 void SvTreeListBox::GetFocus()

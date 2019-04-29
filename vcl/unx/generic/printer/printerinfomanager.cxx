@@ -501,8 +501,8 @@ void PrinterInfoManager::initialize()
     {
         PrinterInfo aDefaultInfo( getPrinterInfo( m_aDefaultPrinter ) );
 
-        const PPDKey* pDefKey           = aDefaultInfo.m_pParser->getKey( OUString( "PageSize" ) );
-        const PPDKey* pMergeKey         = aMergeInfo.m_pParser->getKey( OUString( "PageSize" ) );
+        const PPDKey* pDefKey           = aDefaultInfo.m_pParser->getKey( "PageSize" );
+        const PPDKey* pMergeKey         = aMergeInfo.m_pParser->getKey( "PageSize" );
         const PPDValue* pDefValue       = aDefaultInfo.m_aContext.getValue( pDefKey );
         const PPDValue* pMergeValue     = pMergeKey ? pMergeKey->getValue( pDefValue->m_aOption ) : nullptr;
         if( pMergeKey && pMergeValue )
@@ -603,7 +603,7 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
     if(  ! rContext.getParser() )
         return;
 
-    const PPDKey* pPageSizeKey = rContext.getParser()->getKey( OUString( "PageSize" ) );
+    const PPDKey* pPageSizeKey = rContext.getParser()->getKey( "PageSize" );
     if( ! pPageSizeKey )
         return;
 

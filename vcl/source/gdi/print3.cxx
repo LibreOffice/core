@@ -299,7 +299,7 @@ void Printer::PrintJob(const std::shared_ptr<PrinterController>& i_xController,
                        const JobSetup& i_rInitSetup)
 {
     bool bSynchronous = false;
-    css::beans::PropertyValue* pVal = i_xController->getValue( OUString( "Wait" ) );
+    css::beans::PropertyValue* pVal = i_xController->getValue( "Wait" );
     if( pVal )
         pVal->Value >>= bSynchronous;
 
@@ -355,12 +355,12 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     // "Pages" attribute from API is now equivalent to "PageRange"
     // AND "PrintContent" = 1 except calc where it is "PrintRange" = 1
     // Argh ! That sure needs cleaning up
-    css::beans::PropertyValue* pContentVal = xController->getValue(OUString("PrintRange"));
+    css::beans::PropertyValue* pContentVal = xController->getValue("PrintRange");
     if( ! pContentVal )
-        pContentVal = xController->getValue(OUString("PrintContent"));
+        pContentVal = xController->getValue("PrintContent");
 
     // case 1: UNO API has set "Pages"
-    css::beans::PropertyValue* pPagesVal = xController->getValue(OUString("Pages"));
+    css::beans::PropertyValue* pPagesVal = xController->getValue("Pages");
     if( pPagesVal )
     {
         OUString aPagesVal;
@@ -386,7 +386,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
             if( nContent == 0 )
             {
                 // do not overwrite PageRange if it is already set
-                css::beans::PropertyValue* pRangeVal = xController->getValue(OUString("PageRange"));
+                css::beans::PropertyValue* pRangeVal = xController->getValue("PageRange");
                 OUString aRange;
                 if( pRangeVal )
                     pRangeVal->Value >>= aRange;
@@ -409,7 +409,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
         }
     }
 
-    css::beans::PropertyValue* pReverseVal = xController->getValue(OUString("PrintReverse"));
+    css::beans::PropertyValue* pReverseVal = xController->getValue("PrintReverse");
     if( pReverseVal )
     {
         bool bReverse = false;
@@ -417,7 +417,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
         xController->setReversePrint( bReverse );
     }
 
-    css::beans::PropertyValue* pPapersizeFromSetupVal = xController->getValue(OUString("PapersizeFromSetup"));
+    css::beans::PropertyValue* pPapersizeFromSetupVal = xController->getValue("PapersizeFromSetup");
     if( pPapersizeFromSetupVal )
     {
         bool bPapersizeFromSetup = false;
@@ -454,7 +454,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
         aMPS.bDrawBorder = xController->getBoolProperty( "NUpDrawBorder", aMPS.bDrawBorder );
         aMPS.nOrder = static_cast<NupOrderType>(xController->getIntProperty( "NUpSubPageOrder", static_cast<sal_Int32>(aMPS.nOrder) ));
         aMPS.aPaperSize = xController->getPrinter()->PixelToLogic( xController->getPrinter()->GetPaperSizePixel(), MapMode( MapUnit::Map100thMM ) );
-        css::beans::PropertyValue* pPgSizeVal = xController->getValue( OUString( "NUpPaperSize" ) );
+        css::beans::PropertyValue* pPgSizeVal = xController->getValue( "NUpPaperSize" );
         css::awt::Size aSizeVal;
         if( pPgSizeVal && (pPgSizeVal->Value >>= aSizeVal) )
         {
@@ -524,7 +524,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
 bool Printer::ExecutePrintJob(const std::shared_ptr<PrinterController>& xController)
 {
     OUString aJobName;
-    css::beans::PropertyValue* pJobNameVal = xController->getValue( OUString( "JobName" ) );
+    css::beans::PropertyValue* pJobNameVal = xController->getValue( "JobName" );
     if( pJobNameVal )
         pJobNameVal->Value >>= aJobName;
 
@@ -585,13 +585,13 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
         return false;
 
     bool bSinglePrintJobs = false;
-    css::beans::PropertyValue* pSingleValue = i_xController->getValue(OUString("PrintCollateAsSingleJobs"));
+    css::beans::PropertyValue* pSingleValue = i_xController->getValue("PrintCollateAsSingleJobs");
     if( pSingleValue )
     {
         pSingleValue->Value >>= bSinglePrintJobs;
     }
 
-    css::beans::PropertyValue* pFileValue = i_xController->getValue(OUString("LocalFileName"));
+    css::beans::PropertyValue* pFileValue = i_xController->getValue("LocalFileName");
     if( pFileValue )
     {
         OUString aFile;
@@ -1436,7 +1436,7 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
             aResult[nCur++] = rPropVal;
     }
     // append IsFirstPage
-    if( aMergeSet.find( OUString( "IsFirstPage" ) ) == aMergeSet.end() )
+    if( aMergeSet.find( "IsFirstPage" ) == aMergeSet.end() )
     {
         css::beans::PropertyValue aVal;
         aVal.Name = "IsFirstPage";
@@ -1444,7 +1444,7 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
         aResult[nCur++] = aVal;
     }
     // append IsLastPage
-    if( aMergeSet.find( OUString( "IsLastPage" ) ) == aMergeSet.end() )
+    if( aMergeSet.find( "IsLastPage" ) == aMergeSet.end() )
     {
         css::beans::PropertyValue aVal;
         aVal.Name = "IsLastPage";
@@ -1452,7 +1452,7 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
         aResult[nCur++] = aVal;
     }
     // append IsPrinter
-    if( aMergeSet.find( OUString( "IsPrinter" ) ) == aMergeSet.end() )
+    if( aMergeSet.find( "IsPrinter" ) == aMergeSet.end() )
     {
         css::beans::PropertyValue aVal;
         aVal.Name = "IsPrinter";
@@ -1683,12 +1683,12 @@ void PrinterController::createProgressDialog()
     if (!mpImplData->mxProgress)
     {
         bool bShow = true;
-        css::beans::PropertyValue* pMonitor = getValue( OUString( "MonitorVisible" ) );
+        css::beans::PropertyValue* pMonitor = getValue( "MonitorVisible" );
         if( pMonitor )
             pMonitor->Value >>= bShow;
         else
         {
-            const css::beans::PropertyValue* pVal = getValue( OUString( "IsApi" ) );
+            const css::beans::PropertyValue* pVal = getValue( "IsApi" );
             if( pVal )
             {
                 bool bApi = false;
@@ -1735,17 +1735,17 @@ void PrinterController::pushPropertiesToPrinter()
 {
     sal_Int32 nCopyCount = 1;
     // set copycount and collate
-    const css::beans::PropertyValue* pVal = getValue( OUString( "CopyCount" ) );
+    const css::beans::PropertyValue* pVal = getValue( "CopyCount" );
     if( pVal )
         pVal->Value >>= nCopyCount;
     bool bCollate = false;
-    pVal = getValue( OUString( "Collate" ) );
+    pVal = getValue( "Collate" );
     if( pVal )
         pVal->Value >>= bCollate;
     mpImplData->mxPrinter->SetCopyCount( static_cast<sal_uInt16>(nCopyCount), bCollate );
 
     // duplex mode
-    pVal = getValue( OUString( "DuplexMode" ) );
+    pVal = getValue( "DuplexMode" );
     if( pVal )
     {
         sal_Int16 nDuplex = css::view::DuplexMode::UNKNOWN;

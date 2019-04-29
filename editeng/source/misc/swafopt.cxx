@@ -22,8 +22,7 @@
 #include <vcl/keycodes.hxx>
 
 SvxSwAutoFormatFlags::SvxSwAutoFormatFlags()
-    : aBulletFont( OUString("StarSymbol"),
-                    Size( 0, 14 ) )
+    : aBulletFont( "StarSymbol", Size( 0, 14 ) )
 {
     bAutoCorrect =
     bCapitalStartSentence =
