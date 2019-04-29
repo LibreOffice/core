@@ -234,7 +234,7 @@ namespace
 }
 
 ScDPFunctionDlg::ScDPFunctionDlg(
-        weld::Window* pParent, const ScDPLabelDataVector& rLabelVec,
+        weld::Widget* pParent, const ScDPLabelDataVector& rLabelVec,
         const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData)
     : GenericDialogController(pParent, "modules/scalc/ui/datafielddialog.ui", "DataFieldDialog")
     , mxLbFunc(new ScDPFunctionListBox(m_xBuilder->weld_tree_view("functions")))
@@ -443,7 +443,7 @@ IMPL_LINK_NOARG(ScDPFunctionDlg, DblClickHdl, weld::TreeView&, void)
     m_xDialog->response(RET_OK);
 }
 
-ScDPSubtotalDlg::ScDPSubtotalDlg(weld::Window* pParent, ScDPObject& rDPObj,
+ScDPSubtotalDlg::ScDPSubtotalDlg(weld::Widget* pParent, ScDPObject& rDPObj,
         const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData,
         const ScDPNameVec& rDataFields, bool bEnableLayout)
     : GenericDialogController(pParent, "modules/scalc/ui/pivotfielddialog.ui", "PivotFieldDialog")

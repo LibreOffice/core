@@ -658,12 +658,12 @@ public:
     virtual VclPtr<AbstractScPivotFilterDlg> CreateScPivotFilterDlg(weld::Window* pParent, const SfxItemSet& rArgSet,
                                                                     sal_uInt16 nSourceTab) override;
 
-    virtual VclPtr<AbstractScDPFunctionDlg> CreateScDPFunctionDlg(weld::Window* pParent,
+    virtual VclPtr<AbstractScDPFunctionDlg> CreateScDPFunctionDlg(weld::Widget* pParent,
                                                                   const ScDPLabelDataVector& rLabelVec,
                                                                   const ScDPLabelData& rLabelData,
                                                                   const ScPivotFuncData& rFuncData ) override;
 
-    virtual VclPtr<AbstractScDPSubtotalDlg> CreateScDPSubtotalDlg(weld::Window* pParent,
+    virtual VclPtr<AbstractScDPSubtotalDlg> CreateScDPSubtotalDlg(weld::Widget* pParent,
                                                                   ScDPObject& rDPObj,
                                                                   const ScDPLabelData& rLabelData,
                                                                   const ScPivotFuncData& rFuncData,

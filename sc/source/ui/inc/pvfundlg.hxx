@@ -54,7 +54,7 @@ class ScDPFunctionDlg : public weld::GenericDialogController
 {
     typedef std::unordered_map< OUString, OUString > NameMapType;
 public:
-    explicit ScDPFunctionDlg(weld::Window* pParent, const ScDPLabelDataVector& rLabelVec,
+    explicit ScDPFunctionDlg(weld::Widget* pParent, const ScDPLabelDataVector& rLabelVec,
                              const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
     virtual ~ScDPFunctionDlg() override;
     PivotFunc               GetFuncMask() const;
@@ -92,7 +92,7 @@ private:
 class ScDPSubtotalDlg : public weld::GenericDialogController
 {
 public:
-    explicit            ScDPSubtotalDlg(weld::Window* pParent, ScDPObject& rDPObj,
+    explicit            ScDPSubtotalDlg(weld::Widget* pParent, ScDPObject& rDPObj,
                             const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData,
                             const ScDPNameVec& rDataFields, bool bEnableLayout);
     virtual             ~ScDPSubtotalDlg() override;
