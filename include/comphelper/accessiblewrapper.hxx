@@ -36,7 +36,6 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/accessibleeventnotifier.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ref.hxx>
 
@@ -317,7 +316,6 @@ namespace comphelper
 
     typedef ::std::map  <   css::uno::Reference< css::accessibility::XAccessible >
                         ,   css::uno::Reference< css::accessibility::XAccessible >
-                        ,   OInterfaceCompare< css::accessibility::XAccessible >
                         >   AccessibleMap;
                         // TODO: think about if we should hold these objects weak
 

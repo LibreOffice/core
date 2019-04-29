@@ -86,8 +86,7 @@ namespace svxform
     // helper
 
 
-    typedef ::std::map< Reference< XInterface >, SdrObject*, ::comphelper::OInterfaceCompare< XInterface > >
-            MapModelToShape;
+    typedef ::std::map< Reference< XInterface >, SdrObject* > MapModelToShape;
 
 
     static void    collectShapeModelMapping( SdrPage const * _pPage, MapModelToShape& _rMapping )

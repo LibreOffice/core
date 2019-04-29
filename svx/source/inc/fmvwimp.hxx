@@ -41,7 +41,6 @@
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <comphelper/stl_types.hxx>
 #include <tools/link.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
@@ -130,13 +129,8 @@ private:
 
 typedef ::rtl::Reference< FormViewPageWindowAdapter >   PFormViewPageWindowAdapter;
 typedef ::std::vector< PFormViewPageWindowAdapter >     PageWindowAdapterList;
-typedef ::std::set  <   css::uno::Reference< css::form::XForm >
-                    ,   ::comphelper::OInterfaceCompare< css::form::XForm >
-                    >   SetOfForms;
-typedef ::std::map  <   css::uno::Reference< css::awt::XControlContainer >
-                    ,   SetOfForms
-                    ,   ::comphelper::OInterfaceCompare< css::awt::XControlContainer >
-                    >   MapControlContainerToSetOfForms;
+typedef ::std::set< css::uno::Reference< css::form::XForm > > SetOfForms;
+typedef ::std::map< css::uno::Reference< css::awt::XControlContainer >, SetOfForms > MapControlContainerToSetOfForms;
 class SdrModel;
 
 class FmXFormView : public ::cppu::WeakImplHelper<

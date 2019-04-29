@@ -24,7 +24,6 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
-#include <comphelper/stl_types.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/color.hxx>
 
@@ -111,8 +110,7 @@ namespace svxform
         };
 
         typedef ::std::set< ControlData, ControlDataCompare > ControlBag;
-        typedef ::std::set< css::uno::Reference< css::awt::XVclWindowPeer >,
-                            ::comphelper::OInterfaceCompare< css::awt::XVclWindowPeer > >  PeerBag;
+        typedef ::std::set< css::uno::Reference< css::awt::XVclWindowPeer > >  PeerBag;
 
         PeerBag     m_aColorableControls;
         PeerBag     m_aNonColorableControls;

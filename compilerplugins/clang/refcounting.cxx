@@ -140,8 +140,6 @@ bool containsXInterfaceSubclass(const clang::Type* pType0) {
                     .GlobalNamespace())
                 || (dc.Class("OAutoRegistration").Namespace("comphelper")
                     .GlobalNamespace())
-                || (dc.Struct("OInterfaceCompare").Namespace("comphelper")
-                    .GlobalNamespace())
                 || dc.Class("WeakBag").Namespace("comphelper").GlobalNamespace()
                 || (dc.Struct("class_").Namespace("service_decl")
                     .Namespace("comphelper").GlobalNamespace())

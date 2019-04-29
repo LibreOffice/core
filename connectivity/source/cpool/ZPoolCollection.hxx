@@ -38,7 +38,6 @@
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
-#include <comphelper/stl_types.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 
@@ -60,13 +59,11 @@ namespace connectivity
     {
 
 
-        typedef ::comphelper::OInterfaceCompare< css::sdbc::XDriver >  ODriverCompare;
         typedef std::map<OUString, rtl::Reference<OConnectionPool>> OConnectionPools;
 
         typedef std::map<
                 css::uno::Reference< css::sdbc::XDriver >,
-                css::uno::WeakReference< css::sdbc::XDriver >,
-                ODriverCompare>
+                css::uno::WeakReference< css::sdbc::XDriver >>
                 MapDriver2DriverRef;
 
         MapDriver2DriverRef                                       m_aDriverProxies;

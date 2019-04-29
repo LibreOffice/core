@@ -30,8 +30,6 @@
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 
-#include <comphelper/stl_types.hxx>
-
 #include <map>
 #include <unordered_map>
 
@@ -41,7 +39,6 @@ namespace func_provider
 //Typedefs
 typedef std::map  <   css::uno::Reference< css::uno::XInterface >
                   ,   css::uno::Reference< css::script::provider::XScriptProvider >
-                  ,   ::comphelper::OInterfaceCompare< css::uno::XInterface >
                   >   ScriptComponent_map;
 
 typedef std::unordered_map< OUString,

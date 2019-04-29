@@ -26,7 +26,6 @@
 
 #include <xmloff/XMLEventsImportContext.hxx>
 #include "callbacks.hxx"
-#include "ifacecompare.hxx"
 #include <com/sun/star/container/XIndexAccess.hpp>
 
 class SvXMLImport;
@@ -51,8 +50,7 @@ namespace xmloff
     {
         typedef std::map<
             css::uno::Reference< css::beans::XPropertySet >,
-            css::uno::Sequence< css::script::ScriptEventDescriptor >,
-            OPropertySetCompare>
+            css::uno::Sequence< css::script::ScriptEventDescriptor >>
             MapPropertySet2ScriptSequence;
         // usually an event attacher manager will need to collect all script events registered, 'cause
         // the _real_ XEventAttacherManager handles it's events by index, but out indices are not fixed

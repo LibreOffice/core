@@ -56,15 +56,10 @@ namespace comphelper {
 typedef std::unordered_map<OUString, uno::Reference<embed::XEmbeddedObject>> EmbeddedObjectContainerNameMap;
 struct EmbedImpl
 {
-    struct XEmbeddedObjectRefHash
-    {
-        size_t operator()(const uno::Reference<embed::XEmbeddedObject>& rObject) const
-            { return reinterpret_cast<size_t>(rObject.get()); }
-    };
     // TODO/LATER: remove objects from temp. Container storage when object is disposed
     EmbeddedObjectContainerNameMap maNameToObjectMap;
     // to speed up lookup by Reference
-    std::unordered_map<uno::Reference<embed::XEmbeddedObject>, OUString, XEmbeddedObjectRefHash> maObjectToNameMap;
+    std::unordered_map<uno::Reference<embed::XEmbeddedObject>, OUString> maObjectToNameMap;
     uno::Reference < embed::XStorage > mxStorage;
     EmbeddedObjectContainer* mpTempObjectContainer;
     uno::Reference < embed::XStorage > mxImageStorage;

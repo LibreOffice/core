@@ -29,8 +29,6 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <comphelper/stl_types.hxx>
-
 namespace basctl { namespace docs {
 
     using ::com::sun::star::uno::Exception;
@@ -105,7 +103,7 @@ namespace basctl { namespace docs {
             const IDocumentDescriptorFilter* _pFilter )
         {
             // ensure we don't encounter some models multiple times
-            std::set< Reference< XModel >, ::comphelper::OInterfaceCompare< XModel > > aEncounteredModels;
+            std::set< Reference< XModel > > aEncounteredModels;
 
             for ( auto const & rFrame : _rFrames )
             {

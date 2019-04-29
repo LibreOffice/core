@@ -25,6 +25,7 @@
 #include <map>
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/form/XFormsSupplier2.hpp>
 #include <rtl/ref.hxx>
 #include "formattributes.hxx"
@@ -60,7 +61,7 @@ namespace xmloff
         rtl::Reference<SvXMLStylesContext>  m_xAutoStyles;
 
         typedef std::map< OUString, css::uno::Reference< css::beans::XPropertySet > > MapString2PropertySet;
-        typedef std::map<css::uno::Reference<css::drawing::XDrawPage>, MapString2PropertySet, ODrawPageCompare> MapDrawPage2Map;
+        typedef std::map<css::uno::Reference<css::drawing::XDrawPage>, MapString2PropertySet> MapDrawPage2Map;
 
         MapDrawPage2Map         m_aControlIds;          // ids of the controls on all known page
         MapDrawPage2Map::iterator m_aCurrentPageIds;      // ifs of the controls on the current page

@@ -35,7 +35,6 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <unotools/eventlisteneradapter.hxx>
@@ -62,7 +61,7 @@ namespace basic
     using ::com::sun::star::document::XStorageBasedDocument;
     using ::com::sun::star::document::XEmbeddedScripts;
 
-    typedef std::map< Reference< XInterface >, std::unique_ptr<BasicManager>, ::comphelper::OInterfaceCompare< XInterface > > BasicManagerStore;
+    typedef std::map< Reference< XInterface >, std::unique_ptr<BasicManager> > BasicManagerStore;
 
     typedef std::vector< BasicManagerCreationListener* >  CreationListeners;
 
