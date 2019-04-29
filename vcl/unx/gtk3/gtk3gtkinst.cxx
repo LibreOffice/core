@@ -5470,7 +5470,6 @@ public:
         }
         if (!gtk_tree_model_iter_parent(pModel, &tmp, &iter))
             return false;
-        tmp = iter;
         if (gtk_tree_model_iter_next(pModel, &tmp))
         {
             rGtkIter.iter = tmp;
