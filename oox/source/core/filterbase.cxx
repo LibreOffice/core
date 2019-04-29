@@ -334,6 +334,8 @@ StorageRef const & FilterBase::getStorage() const
 
 Reference< XInputStream > FilterBase::openInputStream( const OUString& rStreamName ) const
 {
+    if (!mxImpl->mxStorage)
+        throw RuntimeException();
     return mxImpl->mxStorage->openInputStream( rStreamName );
 }
 

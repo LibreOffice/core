@@ -2789,5 +2789,10 @@ interface DrawView
     [
         ExecMethod = FuTemporary ;
     ]
+    SID_REGENERATE_DIAGRAM
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetMenuState ;
+    ]
 
 }
