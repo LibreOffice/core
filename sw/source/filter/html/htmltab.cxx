@@ -215,17 +215,17 @@ class HTMLTableCell
     std::shared_ptr<SvxBrushItem> m_xBGBrush;         // cell background
     std::shared_ptr<SvxBoxItem> m_xBoxItem;
 
-    double nValue;
-    sal_uInt32 nNumFormat;
-    sal_uInt16 nRowSpan;           // cell ROWSPAN
-    sal_uInt16 nColSpan;           // cell COLSPAN
-    sal_uInt16 nWidth;             // cell WIDTH
-    sal_Int16 eVertOri;             // vertical alignment of the cell
-    bool bProtected : 1;           // cell must not filled
-    bool bRelWidth : 1;            // nWidth is given in %
-    bool bHasNumFormat : 1;
-    bool bHasValue : 1;
-    bool bNoWrap : 1;
+    double m_nValue;
+    sal_uInt32 m_nNumFormat;
+    sal_uInt16 m_nRowSpan;           // cell ROWSPAN
+    sal_uInt16 m_nColSpan;           // cell COLSPAN
+    sal_uInt16 m_nWidth;             // cell WIDTH
+    sal_Int16 m_eVertOrient;             // vertical alignment of the cell
+    bool m_bProtected : 1;           // cell must not filled
+    bool m_bRelWidth : 1;            // nWidth is given in %
+    bool m_bHasNumFormat : 1;
+    bool m_bHasValue : 1;
+    bool m_bNoWrap : 1;
     bool mbCovered : 1;
 
 public:
@@ -247,11 +247,11 @@ public:
     const std::shared_ptr<HTMLTableCnts>& GetContents() const { return m_xContents; }
 
     // Set/Get cell ROWSPAN/COLSPAN
-    void SetRowSpan( sal_uInt16 nRSpan ) { nRowSpan = nRSpan; }
-    sal_uInt16 GetRowSpan() const { return nRowSpan; }
+    void SetRowSpan( sal_uInt16 nRSpan ) { m_nRowSpan = nRSpan; }
+    sal_uInt16 GetRowSpan() const { return m_nRowSpan; }
 
-    void SetColSpan( sal_uInt16 nCSpan ) { nColSpan = nCSpan; }
-    sal_uInt16 GetColSpan() const { return nColSpan; }
+    void SetColSpan( sal_uInt16 nCSpan ) { m_nColSpan = nCSpan; }
+    sal_uInt16 GetColSpan() const { return m_nColSpan; }
 
     inline void SetWidth( sal_uInt16 nWidth, bool bRelWidth );
 
@@ -261,10 +261,10 @@ public:
     inline bool GetNumFormat( sal_uInt32& rNumFormat ) const;
     inline bool GetValue( double& rValue ) const;
 
-    sal_Int16 GetVertOri() const { return eVertOri; }
+    sal_Int16 GetVertOri() const { return m_eVertOrient; }
 
     // Is the cell filled or protected ?
-    bool IsUsed() const { return m_xContents || bProtected; }
+    bool IsUsed() const { return m_xContents || m_bProtected; }
 
     std::unique_ptr<SwHTMLTableLayoutCell> CreateLayoutInfo();
 
@@ -689,17 +689,17 @@ const std::shared_ptr<SwHTMLTableLayoutCnts>& HTMLTableCnts::CreateLayoutInfo()
 }
 
 HTMLTableCell::HTMLTableCell():
-    nValue(0),
-    nNumFormat(0),
-    nRowSpan(1),
-    nColSpan(1),
-    nWidth( 0 ),
-    eVertOri( text::VertOrientation::NONE ),
-    bProtected(false),
-    bRelWidth( false ),
-    bHasNumFormat(false),
-    bHasValue(false),
-    bNoWrap(false),
+    m_nValue(0),
+    m_nNumFormat(0),
+    m_nRowSpan(1),
+    m_nColSpan(1),
+    m_nWidth( 0 ),
+    m_eVertOrient( text::VertOrientation::NONE ),
+    m_bProtected(false),
+    m_bRelWidth( false ),
+    m_bHasNumFormat(false),
+    m_bHasValue(false),
+    m_bNoWrap(false),
     mbCovered(false)
 {}
 
@@ -710,26 +710,26 @@ void HTMLTableCell::Set( std::shared_ptr<HTMLTableCnts> const& rCnts, sal_uInt16
                          bool bNWrap, bool bCovered )
 {
     m_xContents = rCnts;
-    nRowSpan = nRSpan;
-    nColSpan = nCSpan;
-    bProtected = false;
-    eVertOri = eVert;
+    m_nRowSpan = nRSpan;
+    m_nColSpan = nCSpan;
+    m_bProtected = false;
+    m_eVertOrient = eVert;
     m_xBGBrush = rBrush;
     m_xBoxItem = rBoxItem;
 
-    bHasNumFormat = bHasNF;
-    bHasValue = bHasV;
-    nNumFormat = nNF;
-    nValue = nVal;
+    m_bHasNumFormat = bHasNF;
+    m_bHasValue = bHasV;
+    m_nNumFormat = nNF;
+    m_nValue = nVal;
 
-    bNoWrap = bNWrap;
+    m_bNoWrap = bNWrap;
     mbCovered = bCovered;
 }
 
 inline void HTMLTableCell::SetWidth( sal_uInt16 nWdth, bool bRelWdth )
 {
-    nWidth = nWdth;
-    bRelWidth = bRelWdth;
+    m_nWidth = nWdth;
+    m_bRelWidth = bRelWdth;
 }
 
 void HTMLTableCell::SetProtected()
@@ -743,21 +743,21 @@ void HTMLTableCell::SetProtected()
     if (m_xBGBrush)
         m_xBGBrush.reset(new SvxBrushItem(*m_xBGBrush));
 
-    nRowSpan = 1;
-    nColSpan = 1;
-    bProtected = true;
+    m_nRowSpan = 1;
+    m_nColSpan = 1;
+    m_bProtected = true;
 }
 
 inline bool HTMLTableCell::GetNumFormat( sal_uInt32& rNumFormat ) const
 {
-    rNumFormat = nNumFormat;
-    return bHasNumFormat;
+    rNumFormat = m_nNumFormat;
+    return m_bHasNumFormat;
 }
 
 inline bool HTMLTableCell::GetValue( double& rValue ) const
 {
-    rValue = nValue;
-    return bHasValue;
+    rValue = m_nValue;
+    return m_bHasValue;
 }
 
 std::unique_ptr<SwHTMLTableLayoutCell> HTMLTableCell::CreateLayoutInfo()
@@ -765,8 +765,8 @@ std::unique_ptr<SwHTMLTableLayoutCell> HTMLTableCell::CreateLayoutInfo()
     std::shared_ptr<SwHTMLTableLayoutCnts> xCntInfo;
     if (m_xContents)
         xCntInfo = m_xContents->CreateLayoutInfo();
-    return std::unique_ptr<SwHTMLTableLayoutCell>(new SwHTMLTableLayoutCell(xCntInfo, nRowSpan, nColSpan, nWidth,
-                                      bRelWidth, bNoWrap));
+    return std::unique_ptr<SwHTMLTableLayoutCell>(new SwHTMLTableLayoutCell(xCntInfo, m_nRowSpan, m_nColSpan, m_nWidth,
+                                      m_bRelWidth, m_bNoWrap));
 }
 
 HTMLTableRow::HTMLTableRow(sal_uInt16 const nCells)
