@@ -81,10 +81,15 @@
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <editeng/lspcitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <memory>
+#include <comphelper/processfactory.hxx>
+#include <oox/drawingml/diagram/diagram.hxx>
+#include <oox/export/drawingml.hxx>
+#include <oox/helper/diagramrenderfilter.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
@@ -467,6 +472,37 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         {
             GetActiveWindow()->Invalidate();
             UpdatePreview( mpActualPage );
+            rReq.Done();
+        }
+        break;
+
+        case SID_REGENERATE_SMARTART:
+        {
+            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+            if (rMarkList.GetMarkCount() == 1)
+            {
+                SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                Reference<css::drawing::XShape> xShape(pObj->getUnoShape(), UNO_QUERY);
+
+                if (oox::drawingml::DrawingML::IsDiagram(xShape))
+                {
+                    mpDrawView->UnmarkAll();
+                    pObj->getChildrenOfSdrObject()->ClearSdrObjList();
+
+                    std::unique_ptr<weld::MessageDialog> xMsg(Application::CreateMessageDialog(
+                        nullptr, VclMessageType::Info, VclButtonsType::Ok,
+                        "Regenerate SmartArt " + pObj->GetName()));
+                    xMsg->run();
+
+                    css::uno::Reference<css::uno::XComponentContext> xContext
+                        = comphelper::getProcessComponentContext();
+                    oox::DiagramRenderFilter aRenderFilter(xContext);
+                    aRenderFilter.setTargetDocument(GetDocSh()->GetModel());
+                    aRenderFilter.importTheme();
+                    oox::drawingml::reloadDiagram(xShape, aRenderFilter);
+                }
+            }
+
             rReq.Done();
         }
         break;
