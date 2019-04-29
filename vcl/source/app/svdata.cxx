@@ -115,8 +115,7 @@ namespace
     public:
         SystemDependentDataBuffer(const sal_Char* pDebugName)
         :   basegfx::SystemDependentDataManager(),
-            maTimer(std::make_unique<AutoTimer>(pDebugName)),
-            maEntries()
+            maTimer(std::make_unique<AutoTimer>(pDebugName))
         {
             maTimer->SetTimeout(1000);
             maTimer->SetInvokeHandler(LINK(this, SystemDependentDataBuffer, implTimeoutHdl));
@@ -168,7 +167,6 @@ namespace
         void flushAll() override
         {
             ::osl::MutexGuard aGuard(m_aMutex);
-            EntryMap::iterator aIter(maEntries.begin());
 
             if(maTimer)
             {
@@ -176,12 +174,7 @@ namespace
                 maTimer.reset();
             }
 
-            while(aIter != maEntries.end())
-            {
-                EntryMap::iterator aDelete(aIter);
-                ++aIter;
-                maEntries.erase(aDelete);
-            }
+            maEntries.clear();
         }
     };
 
@@ -199,9 +192,7 @@ namespace
             }
             else
             {
-                EntryMap::iterator aDelete(aIter);
-                ++aIter;
-                maEntries.erase(aDelete);
+                aIter = maEntries.erase(aIter);
             }
         }
 
