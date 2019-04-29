@@ -218,7 +218,10 @@ ChartShapeInfo& Shape::setChartType( bool bEmbedShapes )
 {
     OSL_ENSURE( meFrameType == FRAMETYPE_GENERIC, "Shape::setChartType - multiple frame types" );
     meFrameType = FRAMETYPE_CHART;
-    msServiceName = "com.sun.star.drawing.OLE2Shape";
+    if (mbWps)
+        msServiceName = "com.sun.star.drawing.temporaryForXMLImportOLE2Shape";
+    else
+        msServiceName = "com.sun.star.drawing.OLE2Shape";
     mxChartShapeInfo.reset( new ChartShapeInfo( bEmbedShapes ) );
     return *mxChartShapeInfo;
 }

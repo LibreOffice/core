@@ -235,6 +235,18 @@ DECLARE_OOXMLIMPORT_TEST(testTdf112443, "tdf112443.docx")
 // and as result only one page should be generated.
 DECLARE_OOXMLIMPORT_TEST(testTdf113182, "tdf113182.docx") { CPPUNIT_ASSERT_EQUAL(1, getPages()); }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf124398, "tdf124398.docx")
+{
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 2; Actual:
+    // 1', i.e. the chart children of the group shape was lost.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xGroup->getCount());
+
+    uno::Reference<drawing::XShapeDescriptor> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.OLE2Shape"), xShape->getShapeType());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf113946, "tdf113946.docx")
 {
     OUString aTop = parseDump("/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds", "top");
