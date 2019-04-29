@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_ad64c2ba",
+        "filename": "svx/source/unodraw/unoprov.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1562,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-29T06:46:02Z",
+      "side": 1,
+      "message": "Is aShortString guaranteed to be ASCII-only here (see \"The caller has to make sure that all ASCII characters are in the allowed range between 0 and 127\" at OUString::equalsAscii definition)? Is equalsAscii actually faster than operator\u003d\u003d?",
+      "range": {
+        "startLine": 1562,
+        "startChar": 29,
+        "endLine": 1562,
+        "endChar": 40
+      },
+      "revId": "560a0f2fbe452d25fe78d6756919c11ec67f630f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
