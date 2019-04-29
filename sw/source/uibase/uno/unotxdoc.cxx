@@ -2614,9 +2614,10 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             // should be set for printing as well ...
             pViewShell->SetPDFExportOption( true );
 
-            // tdf#122607 Re-layout the doc. Calling CalcLayout here is not enough, as it depends
-            // on the currently visible area which is 0 when doing headless conversion.
-            pViewShell->Reformat();
+            // there is some redundancy between those two function calls, but right now
+            // there is no time to sort this out.
+            //TODO: check what exactly needs to be done and make just one function for that
+            pViewShell->CalcLayout();
             pViewShell->CalcPagesForPrint( pViewShell->GetPageCount() );
 
 
