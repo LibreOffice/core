@@ -20,9 +20,9 @@
  *************************************************************/
 
 
-#define null_curs_width 4
-#define null_curs_height 4
-#define null_curs_x_hot 2
-#define null_curs_y_hot 2
+#define nullcurs_width 4
+#define nullcurs_height 4
+#define nullcurs_x_hot 2
+#define nullcurs_y_hot 2
 
-static const unsigned char null_curs_bits[] = {0x00,0x00};
+static const unsigned char nullcurs_bits[] = {0x00,0x00};
