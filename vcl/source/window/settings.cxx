@@ -237,7 +237,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl ) c
             "org.openoffice.Office.Common/Accessibility" );    // note: case sensitive !
         if ( aNode.isValid() )
         {
-            css::uno::Any aValue = aNode.getNodeValue( OUString("AutoDetectSystemHC") );
+            css::uno::Any aValue = aNode.getNodeValue( "AutoDetectSystemHC" );
             bool bTmp = false;
             if( aValue >>= bTmp )
                 bAutoHCMode = bTmp;
