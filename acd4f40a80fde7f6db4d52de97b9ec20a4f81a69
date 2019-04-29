@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_e8e2b82f",
+        "filename": "compilerplugins/clang/stringconstant.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-29T15:24:11Z",
+      "side": 1,
+      "message": "but there can also be other problematic overloads for parameters like `void const *` or `std::string_view`.  I\u0027m not sure this change is worth the potential false positives.",
+      "revId": "acd4f40a80fde7f6db4d52de97b9ec20a4f81a69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
