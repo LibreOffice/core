@@ -22,7 +22,13 @@
 
 package net.adaptivebox.global;
 
+import java.util.Random;
+
 public class RandomGenerator {
+    /**
+     * Pseudo-random number generator instance.
+     */
+    private static Random PRNG = new Random();
 
     /**
      * This function returns a random integer number between the lowLimit and
@@ -34,8 +40,7 @@ public class RandomGenerator {
      * @return int return value Example: for find [0,1,2]
      */
     public static int intRangeRandom(int lowLimit, int upLimit) {
-        int num = (int) Math
-                .floor(doubleRangeRandom(lowLimit, upLimit + 1) - 1E-10);
+        int num = lowLimit + PRNG.nextInt(upLimit - lowLimit + 1);
         return num;
     }
 
@@ -49,7 +54,7 @@ public class RandomGenerator {
      * @return double return value
      */
     public static double doubleRangeRandom(double lowLimit, double upLimit) {
-        double num = lowLimit + Math.random() * (upLimit - lowLimit);
+        double num = lowLimit + PRNG.nextDouble() * (upLimit - lowLimit);
         return num;
     }
 
