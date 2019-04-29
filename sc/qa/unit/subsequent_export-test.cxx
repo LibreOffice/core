@@ -60,6 +60,8 @@
 #include <editeng/colritem.hxx>
 #include <formula/grammar.hxx>
 #include <unotools/useroptions.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #include <tools/datetime.hxx>
 #include <svl/zformat.hxx>
 
@@ -214,6 +216,7 @@ public:
     void testTdf115192XLSX();
     void testTdf91634XLSX();
     void testTdf115159();
+    void testTdf112567();
     void testTdf123645XLSX();
 
     void testXltxExport();
@@ -336,6 +339,7 @@ public:
     CPPUNIT_TEST(testTdf115192XLSX);
     CPPUNIT_TEST(testTdf91634XLSX);
     CPPUNIT_TEST(testTdf115159);
+    CPPUNIT_TEST(testTdf112567);
     CPPUNIT_TEST(testTdf123645XLSX);
 
     CPPUNIT_TEST(testXltxExport);
@@ -4185,6 +4189,32 @@ void ScExportTest::testTdf91634XLSX()
 void ScExportTest::testTdf115159()
 {
     ScDocShellRef xShell = loadDoc("tdf115159.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    xShell->DoClose();
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/workbook.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    //assert the existing OOXML built-in name is not duplicated
+    assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName", 1);
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf112567()
+{
+    // Set the system locale to Hungarian (a language with different range separator)
+    SvtSysLocaleOptions aOptions;
+    aOptions.SetLocaleConfigString("hu-HU");
+    aOptions.Commit();
+    comphelper::ScopeGuard g([&aOptions] {
+        aOptions.SetLocaleConfigString(OUString());
+        aOptions.Commit();
+    });
+
+    ScDocShellRef xShell = loadDoc("tdf112567.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
