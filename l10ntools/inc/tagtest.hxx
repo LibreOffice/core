@@ -105,7 +105,7 @@ explicit    TokenInfo( TokenId pnId, sal_uInt16 nP, String paStr, ParserMessageL
     sal_Bool IsPropertyInvariant( const ByteString &aName, const String &aValue ) const;
     /**
         a subset of IsPropertyInvariant but containing only those that are fixable
-        we dont wat to fix e.g.: ahelp :: visibility
+        we don't want to fix e.g.: ahelp :: visibility
     **/
     sal_Bool IsPropertyFixable( const ByteString &aName ) const;
     sal_Bool MatchesTranslation( TokenInfo& rInfo, sal_Bool bGenErrors, ParserMessageList &rErrorList, sal_Bool bFixTags = sal_False ) const;
