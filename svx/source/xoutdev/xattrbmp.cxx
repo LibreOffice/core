@@ -284,7 +284,7 @@ bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     if (bSetURL && !aURL.isEmpty())
     {
         Graphic aGraphic = vcl::graphic::loadFromURL(aURL);
-        if (aGraphic)
+        if (!aGraphic.IsNone())
         {
             maGraphicObject.SetGraphic(aGraphic.GetXGraphic());
         }

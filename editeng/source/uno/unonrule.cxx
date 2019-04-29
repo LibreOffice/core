@@ -361,7 +361,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
             if (aVal >>= aURL)
             {
                 Graphic aGraphic = vcl::graphic::loadFromURL(aURL);
-                if (aGraphic)
+                if (!aGraphic.IsNone())
                 {
                     SvxBrushItem aBrushItem(aGraphic, GPOS_AREA, SID_ATTR_BRUSH);
                     aFmt.SetGraphicBrush(&aBrushItem);

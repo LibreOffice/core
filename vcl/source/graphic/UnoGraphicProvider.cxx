@@ -408,10 +408,10 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
             if (bLazyRead)
             {
                 Graphic aGraphic = rFilter.ImportUnloadedGraphic(*pIStm);
-                if (aGraphic)
+                if (!aGraphic.IsNone())
                     aVCLGraphic = aGraphic;
             }
-            if (!aVCLGraphic)
+            if (aVCLGraphic.IsNone())
                 error = rFilter.ImportGraphic(aVCLGraphic, aPath, *pIStm, GRFILTER_FORMAT_DONTKNOW,
                                               nullptr, GraphicFilterImportFlags::NONE, pExtHeader);
 

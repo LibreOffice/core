@@ -993,10 +993,10 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 {
     ::SolarMutexGuard aGuard;
 
-    if( !maGraphic && nullptr == mpUnoPage )
+    if( maGraphic.IsNone() && nullptr == mpUnoPage )
         return false;
 
-    if( !maGraphic && ( nullptr == mpUnoPage->GetSdrPage() || nullptr == mpDoc ) )
+    if( maGraphic.IsNone() && ( nullptr == mpUnoPage->GetSdrPage() || nullptr == mpDoc ) )
         return false;
 
     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
@@ -1014,7 +1014,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     Graphic aGraphic = maGraphic;
 
     ErrCode nStatus = ERRCODE_NONE;
-    if (!maGraphic)
+    if (maGraphic.IsNone())
     {
         SvtOptionsDrawinglayer aOptions;
         bool bAntiAliasing = aOptions.IsAntiAliasing();
@@ -1147,7 +1147,7 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
                     break;
 
                 maGraphic = Graphic(xGraphic);
-                if (maGraphic)
+                if (!maGraphic.IsNone())
                     return;
                 else
                     break;

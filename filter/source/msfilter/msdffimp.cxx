@@ -6588,7 +6588,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
             // size to the size of this record.
             sal_uInt64 maxSize = pGrStream == &rBLIPStream ? nLength : 0;
             Graphic aGraphic = rGF.ImportUnloadedGraphic(*pGrStream, maxSize);
-            if (aGraphic)
+            if (!aGraphic.IsNone())
             {
                 rData = aGraphic;
                 nRes = ERRCODE_NONE;

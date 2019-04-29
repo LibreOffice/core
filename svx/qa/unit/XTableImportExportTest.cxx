@@ -76,7 +76,7 @@ CPPUNIT_TEST_FIXTURE(XTableImportExportTest, testImportExport)
         uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xGraphic.is());
         Graphic aGraphic(xGraphic);
-        CPPUNIT_ASSERT(aGraphic);
+        CPPUNIT_ASSERT(!aGraphic.IsNone());
         Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
         CPPUNIT_ASSERT_EQUAL(aChecksum, aBitmap.GetChecksum());
     }

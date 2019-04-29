@@ -281,7 +281,7 @@ void SAL_CALL GraphicRendererVCL::render( const uno::Reference< graphic::XGraphi
     if( mpOutDev && mxDevice.is() && rxGraphic.is() )
     {
         Graphic aGraphic(rxGraphic);
-        if (aGraphic)
+        if (!aGraphic.IsNone())
         {
             GraphicObject aGraphicObject(aGraphic);
             aGraphicObject.Draw( mpOutDev, maDestRect.TopLeft(), maDestRect.GetSize() );

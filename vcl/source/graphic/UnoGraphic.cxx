@@ -125,15 +125,10 @@ sal_Int8 SAL_CALL Graphic::getType()
 {
     sal_Int8 cRet = graphic::GraphicType::EMPTY;
 
-    if (!!maGraphic)
+    if (!maGraphic.IsNone())
     {
-        ::GraphicType eType = maGraphic.GetType();
-
-        if (eType != ::GraphicType::NONE)
-        {
-            cRet = (eType == ::GraphicType::Bitmap) ? graphic::GraphicType::PIXEL
-                                                  : graphic::GraphicType::VECTOR;
-        }
+        cRet = (maGraphic.GetType() == ::GraphicType::Bitmap) ? graphic::GraphicType::PIXEL
+                                              : graphic::GraphicType::VECTOR;
     }
 
     return cRet;
@@ -146,7 +141,7 @@ awt::Size SAL_CALL Graphic::getSize()
     SolarMutexGuard aGuard;
 
     Size aVclSize;
-    if (!!maGraphic && maGraphic.GetType() != ::GraphicType::NONE)
+    if (!maGraphic.IsNone())
     {
         aVclSize = maGraphic.GetSizePixel();
     }
@@ -157,7 +152,7 @@ uno::Sequence<sal_Int8> SAL_CALL Graphic::getDIB()
 {
     SolarMutexGuard aGuard;
 
-    if (!!maGraphic && maGraphic.GetType() != ::GraphicType::NONE)
+    if (!maGraphic.IsNone())
     {
         SvMemoryStream aMemoryStream;
 
@@ -174,7 +169,7 @@ uno::Sequence<sal_Int8> SAL_CALL Graphic::getMaskDIB()
 {
     SolarMutexGuard aGuard;
 
-    if (!!maGraphic && maGraphic.GetType() != ::GraphicType::NONE)
+    if (!maGraphic.IsNone())
     {
         SvMemoryStream aMemoryStream;
 

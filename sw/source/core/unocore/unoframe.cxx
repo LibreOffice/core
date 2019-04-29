@@ -1617,7 +1617,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 }
             }
 
-            if (aGraphic)
+            if (!aGraphic.IsNone())
             {
                 const ::SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
                 if (pIdx)
@@ -1653,7 +1653,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 }
             }
 
-            if (aGraphic)
+            if (!aGraphic.IsNone())
             {
                 const ::SwFormatContent* pCnt = &pFormat->GetContent();
                 if ( pCnt->GetContentIdx() && pDoc->GetNodes()[ pCnt->GetContentIdx()->GetIndex() + 1 ] )

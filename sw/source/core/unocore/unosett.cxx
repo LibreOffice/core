@@ -2020,7 +2020,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                         }
 
                         Graphic aGraphic = vcl::graphic::loadFromURL(aURL);
-                        if (aGraphic)
+                        if (!aGraphic.IsNone())
                             pSetBrush->SetGraphic(aGraphic);
                     }
                     else

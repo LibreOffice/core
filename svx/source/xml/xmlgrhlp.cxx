@@ -490,7 +490,7 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const OUString& rPictureStorageName
         GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
         std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(aStream.xStream));
         Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(*pStream);
-        if (aGraphic)
+        if (!aGraphic.IsNone())
             aReturnGraphic = aGraphic;
         else
             rGraphicFilter.ImportGraphic(aReturnGraphic, "", *pStream);

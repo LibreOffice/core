@@ -128,9 +128,8 @@ public:
     Graphic&        operator=( Graphic&& rGraphic );
     bool            operator==( const Graphic& rGraphic ) const;
     bool            operator!=( const Graphic& rGraphic ) const;
-    bool            operator!() const;
 
-    operator bool() const;
+    bool            IsNone() const;
 
     void            Clear();
 

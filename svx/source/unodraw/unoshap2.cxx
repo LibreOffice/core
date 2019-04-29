@@ -1273,7 +1273,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
         if (rValue >>= aURL)
         {
             Graphic aGraphic = vcl::graphic::loadFromURL(aURL);
-            if (aGraphic)
+            if (!aGraphic.IsNone())
             {
                 static_cast<SdrGrafObj*>(GetSdrObject())->SetGraphic(aGraphic);
                 bOk = true;
@@ -1285,7 +1285,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             if (xGraphic.is())
             {
                 Graphic aGraphic = xGraphic;
-                if (aGraphic)
+                if (!aGraphic.IsNone())
                 {
                     static_cast<SdrGrafObj*>(GetSdrObject())->SetGraphic(aGraphic);
                     bOk = true;

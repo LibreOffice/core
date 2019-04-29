@@ -71,7 +71,7 @@ void SearchForGraphics(uno::Reference<uno::XInterface> const & xInterface,
             if (!sURL.isEmpty() && !GraphicObject::isGraphicObjectUniqueIdURL(sURL))
             {
                 Graphic aGraphic = vcl::graphic::loadFromURL(sURL);
-                if (aGraphic)
+                if (!aGraphic.IsNone())
                 {
                     raGraphicList.push_back(aGraphic.GetXGraphic());
                 }

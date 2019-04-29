@@ -83,7 +83,7 @@ sal_uInt16 PPTExBulletProvider::GetId(Graphic const & rGraphic, Size& rGraphicSi
 {
     sal_uInt16 nRetValue = 0xffff;
 
-    if (rGraphic)
+    if (!rGraphic.IsNone())
     {
         Graphic         aMappedGraphic, aGraphic(rGraphic);
         std::unique_ptr<GraphicObject> xGraphicObject(new GraphicObject(aGraphic));
