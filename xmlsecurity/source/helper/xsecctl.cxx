@@ -33,6 +33,9 @@
 #include <com/sun/star/xml/crypto/sax/XReferenceCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/XSAXEventKeeperStatusChangeBroadcaster.hpp>
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
+#ifdef ANDROID
+#include <com/sun/star/xml/crypto/XXMLSignature.hpp>
+#endif
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
