@@ -79,6 +79,7 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
 
 #include <stlpool.hxx>
 #include <comphelper/processfactory.hxx>
@@ -198,6 +199,7 @@ public:
     void testTdf83247();
     void testTdf47365();
     void testTdf122899();
+    void testOOXTheme();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -286,6 +288,7 @@ public:
     CPPUNIT_TEST(testTdf83247);
     CPPUNIT_TEST(testTdf47365);
     CPPUNIT_TEST(testTdf122899);
+    CPPUNIT_TEST(testOOXTheme);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2723,6 +2726,31 @@ void SdImportTest::testTdf122899()
     xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRect;
     // original width is 9cm, add some tolerance
     CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(9020), aFrameRect.Width);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testOOXTheme()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/ooxtheme.pptx"), PPTX);
+
+    uno::Reference<beans::XPropertySet> xPropSet(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aGrabBag;
+    xPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+
+    bool bTheme = false;
+    for (int i = 0; i < aGrabBag.getLength(); i++)
+    {
+        if (aGrabBag[i].Name == "OOXTheme")
+        {
+            bTheme = true;
+            uno::Reference<xml::dom::XDocument> aThemeDom;
+            CPPUNIT_ASSERT(aGrabBag[i].Value >>= aThemeDom); // PropertyValue of proper type
+            CPPUNIT_ASSERT(aThemeDom.get()); // Reference not empty
+        }
+    }
+    CPPUNIT_ASSERT(bTheme); // Grab Bag has all the expected elements
 
     xDocShRef->DoClose();
 }

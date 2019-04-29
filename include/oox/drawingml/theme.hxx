@@ -97,6 +97,7 @@ public:
     Shape&                   getTxDef() { return maTxDef; }
     const Shape&             getTxDef() const { return maTxDef; }
 
+    const css::uno::Reference<css::xml::dom::XDocument>& getFragment() const { return mxFragment; }
     void                     setFragment( const css::uno::Reference< css::xml::dom::XDocument>& xRef ) { mxFragment=xRef; }
 
 private:

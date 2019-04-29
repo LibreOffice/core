@@ -179,7 +179,7 @@ void PresentationFragmentHandler::saveThemeToGrabBag(const oox::drawingml::Theme
                 // get existing grab bag
                 comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(aGrabBagPropName));
 
-                uno::Sequence<beans::PropertyValue> aTheme(1);
+                uno::Sequence<beans::PropertyValue> aTheme(2);
                 comphelper::SequenceAsHashMap aThemesHashMap;
 
                 // create current theme
@@ -203,6 +203,11 @@ void PresentationFragmentHandler::saveThemeToGrabBag(const oox::drawingml::Theme
                 aTheme[0].Name = sTheme;
                 const uno::Any& rCurrentTheme = makeAny(aCurrentTheme);
                 aTheme[0].Value = rCurrentTheme;
+
+                // store DOM fragment for SmartArt re-generation
+                aTheme[1].Name = "OOXTheme";
+                const uno::Any& rOOXTheme = makeAny(pThemePtr->getFragment());
+                aTheme[1].Value = rOOXTheme;
 
                 aThemesHashMap << aTheme;
 
