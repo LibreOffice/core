@@ -92,6 +92,7 @@ cmd/sc_insertdatefield.png cmd/sc_datefield.png
 cmd/sc_insertcolumnsbefore.png cmd/sc_insertcolumns.png
 cmd/sc_insertauthorfield.png cmd/sc_dbviewaliases.png
 cmd/sc_insertedit.png cmd/sc_text.png
+cmd/sc_formatobjectmenu.png cmd/sc_text.png
 cmd/sc_insertfield.png cmd/sc_addfield.png
 cmd/sc_insertctrl.png cmd/sc_inserttable.png
 cmd/sc_insertfilecontrol.png cmd/sc_open.png
@@ -418,8 +419,7 @@ cmd/sc_defaultparastyle.png cmd/sc_controlcodes.png
 # Group
 cmd/lc_leaveallgroups.png cmd/lc_leavegroup.png
 cmd/sc_leaveallgroups.png cmd/sc_leavegroup.png
-cmd/sc_formatungroup.png cmd/sc_ungroup.png
-cmd/sc_groupmenu.png cmd/sc_group.png
+cmd/sc_groupmenu.png cmd/sc_formatgroup.png
 
 # Undo
 cmd/lc_recundo.png cmd/lc_undo.png
@@ -613,8 +613,6 @@ cmd/sc_linespacing.png cmd/sc_spacepara15.png
 # calc menu entries
 cmd/lc_functionbox.png cmd/lc_dbviewfunctions.png
 cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
-cmd/sc_insertrowsmenu.png cmd/sc_insertrows.png
-cmd/sc_insertcolumnsmenu.png cmd/sc_insertcolumns.png
 cmd/sc_functiondialog.png cmd/sc_dbviewfunctions.png
 cmd/lc_functiondialog.png cmd/lc_dbviewfunctions.png
 cmd/sc_functionbox.png cmd/sc_dbviewfunctions.png
@@ -769,9 +767,6 @@ cmd/lc_insertgridcontrol.png cmd/lc_grid.png
 # Crop
 cmd/sc_transformdialog.png cmd/sc_crop.png
 
-# Group
-cmd/sc_formatgroup.png cmd/sc_group.png
-
 # Extrusion Rotate
 cmd/lc_rulerrowsvertical.png cmd/lc_extrusiontiltright.png
 cmd/lc_rulerrows.png cmd/lc_extrusiontiltleft.png
@@ -867,12 +862,10 @@ cmd/lc_insertauthoritiesentry.png cmd/lc_bibliographycomponent.png
 cmd/sc_insertauthoritiesentry.png cmd/sc_bibliographycomponent.png
 
 # Calc
-cmd/sc_fieldmenu.png cmd/sc_insertfieldctrl.png
 cmd/sc_numberformatmenu.png cmd/sc_numberformatstandard.png
 cmd/sc_mergecellsmenu.png cmd/sc_togglemergecells.png
 cmd/sc_printrangesmenu.png cmd/sc_defineprintarea.png
 cmd/sc_insertcell.png cmd/sc_insertcellsright.png
-cmd/sc_insertrowsmenu.png cmd/sc_insertrows.png
 
 # Reload
 cmd/lc_refresh.png cmd/lc_reload.png
@@ -1070,11 +1063,12 @@ cmd/sc_insertslidenumber.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertslidefield.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertslidesfield.png cmd/sc_insertpagecountfield.png
 cmd/sc_insertslidetitlefield.png cmd/sc_inserttitlefield.png
+cmd/sc_insertpagetitlefield.png cmd/sc_inserttitlefield.png
 cmd/sc_insertfilefield.png cmd/sc_open.png
 cmd/sc_insertdatefieldfix.png cmd/sc_datefield.png
 cmd/sc_insertdatefieldvar.png cmd/sc_datefield.png
 cmd/sc_inserttimefieldfix.png cmd/sc_timefield.png
-cmd/sc_inserttimefieldvar.png cmd/sc_timefield.png
+cmd/sc_insertpagesfield.png cmd/sc_insertpagenumberfield.png
 
 # dbaccess
 # ==============================================
@@ -1806,7 +1800,7 @@ cmd/lc_notecellstyles.png cmd/lc_showannotations.png
 cmd/sc_notecellstyles.png cmd/sc_showannotations.png
 
 # menubar icons
-cmd/sc_focustofindbar.png cmd/lc_recsearch.png
+cmd/sc_focustofindbar.png cmd/sc_recsearch.png
 cmd/sc_macroorganizer%3ftabid%3ashort=1.png cmd/sc_open.png
 cmd/sc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/sc_insertplugin.png
 

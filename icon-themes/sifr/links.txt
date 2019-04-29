@@ -520,8 +520,6 @@ cmd/sc_linespacing.png cmd/sc_spacepara15.png
 # calc menu entries
 cmd/lc_functionbox.png cmd/lc_dbviewfunctions.png
 cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
-cmd/sc_insertrowsmenu.png cmd/sc_insertrows.png
-cmd/sc_insertcolumnsmenu.png cmd/sc_insertcolumns.png
 cmd/sc_functiondialog.png cmd/sc_dbviewfunctions.png
 cmd/lc_functiondialog.png cmd/lc_dbviewfunctions.png
 cmd/sc_functionbox.png cmd/sc_dbviewfunctions.png
@@ -706,11 +704,9 @@ cmd/sc_arrangemenu.png cmd/sc_bringtofront.png
 cmd/sc_arrangeframemenu.png cmd/sc_bringtofront.png
 
 # Calc
-cmd/sc_fieldmenu.png cmd/sc_insertfieldctrl.png
 cmd/sc_numberformatmenu.png cmd/sc_numberformatstandard.png
 cmd/sc_mergecellsmenu.png cmd/sc_togglemergecells.png
 cmd/sc_printrangesmenu.png cmd/sc_defineprintarea.png
-cmd/sc_insertrowsmenu.png cmd/sc_insertrows.png
 
 # Reload
 cmd/lc_refresh.png cmd/lc_reload.png
@@ -830,9 +826,11 @@ cmd/sc_insertslidenumber.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertslidefield.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertslidesfield.png cmd/sc_insertpagecountfield.png
 cmd/sc_insertslidetitlefield.png cmd/sc_inserttitlefield.png
+cmd/sc_insertpagetitlefield.png cmd/sc_inserttitlefield.png
 cmd/sc_insertfilefield.png cmd/sc_open.png
 cmd/sc_insertdatefieldfix.png cmd/sc_datefield.png
 cmd/sc_inserttimefieldfix.png cmd/sc_timefield.png
+cmd/sc_insertpagesfield.png cmd/sc_insertpagenumberfield.png
 
 # dbaccess
 # ==============================================

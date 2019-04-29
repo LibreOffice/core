@@ -712,7 +712,7 @@
           <menu:menuitem menu:id=".uno:ChineseConversion"/>
           <menu:menuitem menu:id=".uno:HangulHanjaConversion"/>
           <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:MoreDictionaries"/>
+          <menu:menuitem menu:id=".uno:MoreDictionaries" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:WordCountDialog" menu:style="text"/>
@@ -722,7 +722,7 @@
           <menu:menuitem menu:id=".uno:OnlineAutoFormat"/>
           <menu:menuitem menu:id=".uno:AutoFormatApply"/>
           <menu:menuitem menu:id=".uno:AutoFormatRedlineApply"/>
-          <menu:menuitem menu:id=".uno:AutoCorrectDlg"/>
+          <menu:menuitem menu:id=".uno:AutoCorrectDlg" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:EditGlossary" menu:style="text"/>

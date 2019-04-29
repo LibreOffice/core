@@ -496,10 +496,10 @@
       <menu:menuitem menu:id=".uno:Accent3CellStyles" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:Heading1CellStyles" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:Heading2CellStyles" menu:style="radio"/>
-      <menu:menuitem menu:id=".uno:BadCellStyles" menu:style="radio"/>
-      <menu:menuitem menu:id=".uno:ErrorCellStyles" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:GoodCellStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:BadCellStyles" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:NeutralCellStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:ErrorCellStyles" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:WarningCellStyles" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:FootnoteCellStyles" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:NoteCellStyles" menu:style="radio"/>
@@ -548,6 +548,8 @@
       <menu:menuitem menu:id=".uno:InsertExternalDataSource" menu:style="text"/>
       <menu:menuitem menu:id=".uno:Remove" menu:style="text"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:Delete"/>
+      <menu:menuitem menu:id=".uno:ToggleRelative" menu:style="text"/>
       <menu:menu menu:id=".uno:FillCellsMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:FillDown"/>
@@ -561,15 +563,14 @@
       </menu:menu>
       <menu:menu menu:id=".uno:NamesMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:AddName"/>
-          <menu:menuitem menu:id=".uno:DefineName"/>
+          <menu:menuitem menu:id=".uno:AddName" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:DefineName" menu:style="text"/>
           <menu:menuitem menu:id=".uno:SheetInsertName"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:CreateNames"/>
           <menu:menuitem menu:id=".uno:DefineLabelRange"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:ToggleRelative" menu:style="text"/>
       <menu:menu menu:id=".uno:SheetCommentMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:EditAnnotation"/>
@@ -579,7 +580,6 @@
           <menu:menuitem menu:id=".uno:DeleteAllNotes"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:Delete"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:RenameTable" menu:style="text"/>
       <menu:menuitem menu:id=".uno:Hide" menu:style="text"/>
@@ -621,19 +621,19 @@
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:DataPilotMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:InsertPivotTable"/>
-          <menu:menuitem menu:id=".uno:RecalcPivotTable"/>
-          <menu:menuitem menu:id=".uno:DeletePivotTable"/>
+          <menu:menuitem menu:id=".uno:InsertPivotTable" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:RecalcPivotTable" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:DeletePivotTable" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:CellContentsMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:Calculate"/>
-          <menu:menuitem menu:id=".uno:CalculateHard"/>
+          <menu:menuitem menu:id=".uno:Calculate" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:CalculateHard" menu:style="text"/>
           <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:ConvertFormulaToValue"/>
-          <menu:menuitem menu:id=".uno:AutomaticCalculation"/>
+          <menu:menuitem menu:id=".uno:ConvertFormulaToValue" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:AutomaticCalculation" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:Validation" menu:style="text"/>
