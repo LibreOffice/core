@@ -12,26 +12,28 @@
 #define INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTTREELISTDATA_HXX
 
 #include "PivotLayoutTreeListBase.hxx"
+#include <tools/solar.h>
 #include <vector>
 #include <memory>
 
 class ScPivotLayoutTreeListData final : public ScPivotLayoutTreeListBase
 {
+private:
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(DoubleClickHdl, weld::TreeView&, void);
+
 public:
-    ScPivotLayoutTreeListData(vcl::Window* pParent, WinBits nBits);
+    ScPivotLayoutTreeListData(std::unique_ptr<weld::TreeView> xControl);
     virtual ~ScPivotLayoutTreeListData() override;
-    virtual bool DoubleClickHdl() override;
 
     void FillDataField(ScPivotFieldVector& rDataFields);
     void PushDataFieldNames(std::vector<ScDPName>& rDataFieldNames);
+    virtual void InsertEntryForSourceTarget(weld::TreeView& rSource, int nTarget) override;
 
 private:
-    virtual void InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget) override;
-    void InsertEntryForItem(ScItemValue* pItemValue, sal_uLong nPosition);
+    void InsertEntryForItem(ScItemValue* pItemValue, int nPosition);
 
     void AdjustDuplicateCount(ScItemValue* pInputItemValue);
-
-    virtual void KeyInput(const KeyEvent& rKeyEvent) override;
 
     std::vector<std::unique_ptr<ScItemValue> > maDataItemValues;
 };

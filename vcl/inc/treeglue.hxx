@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <vcl/svimpbox.hxx>
 #include <vcl/svtabbx.hxx>
 
 //the default NotifyStartDrag is weird to me, and defaults to enabling all
@@ -31,6 +32,8 @@ public:
 class LclTabListBox : public SvTabListBox
 {
     Link<SvTreeListBox*, void> m_aModelChangedHdl;
+    Link<SvTreeListBox*, void> m_aStartDragHdl;
+    Link<SvTreeListBox*, void> m_aEndDragHdl;
 
 public:
     LclTabListBox(vcl::Window* pParent, WinBits nWinStyle)
@@ -39,10 +42,24 @@ public:
     }
 
     void SetModelChangedHdl(const Link<SvTreeListBox*, void>& rLink) { m_aModelChangedHdl = rLink; }
+    void SetStartDragHdl(const Link<SvTreeListBox*, void>& rLink) { m_aStartDragHdl = rLink; }
+    void SetEndDragHdl(const Link<SvTreeListBox*, void>& rLink) { m_aEndDragHdl = rLink; }
 
     virtual DragDropMode NotifyStartDrag(TransferDataContainer&, SvTreeListEntry*) override
     {
         return GetDragDropMode();
+    }
+
+    virtual void StartDrag(sal_Int8 nAction, const Point& rPosPixel) override
+    {
+        m_aStartDragHdl.Call(this);
+        SvTabListBox::StartDrag(nAction, rPosPixel);
+    }
+
+    virtual void DragFinished(sal_Int8 nDropAction) override
+    {
+        m_aEndDragHdl.Call(this);
+        SvTabListBox::DragFinished(nDropAction);
     }
 
     virtual void ModelHasCleared() override
@@ -73,6 +90,29 @@ public:
     {
         SvTabListBox::ModelHasRemoved(pEntry);
         m_aModelChangedHdl.Call(this);
+    }
+
+    virtual SvTreeListEntry* GetDropTarget(const Point& rPos) override
+    {
+        pTargetEntry = pImpl->GetEntry(rPos);
+
+        // scroll
+        if (rPos.Y() < 12)
+        {
+            ImplShowTargetEmphasis(pTargetEntry, false);
+            ScrollOutputArea(+1);
+        }
+        else
+        {
+            Size aSize(pImpl->GetOutputSize());
+            if (rPos.Y() > aSize.Height() - 12)
+            {
+                ImplShowTargetEmphasis(pTargetEntry, false);
+                ScrollOutputArea(-1);
+            }
+        }
+
+        return pTargetEntry;
     }
 };
 

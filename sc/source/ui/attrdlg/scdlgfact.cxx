@@ -884,7 +884,7 @@ VclPtr<AbstractScPivotFilterDlg> ScAbstractDialogFactory_Impl::CreateScPivotFilt
     return VclPtr<AbstractScPivotFilterDlg_Impl>::Create(std::make_unique<ScPivotFilterDlg>(pParent, rArgSet, nSourceTab));
 }
 
-VclPtr<AbstractScDPFunctionDlg> ScAbstractDialogFactory_Impl::CreateScDPFunctionDlg(weld::Window* pParent,
+VclPtr<AbstractScDPFunctionDlg> ScAbstractDialogFactory_Impl::CreateScDPFunctionDlg(weld::Widget* pParent,
                                                                                     const ScDPLabelDataVector& rLabelVec,
                                                                                     const ScDPLabelData& rLabelData,
                                                                                     const ScPivotFuncData& rFuncData)
@@ -892,7 +892,7 @@ VclPtr<AbstractScDPFunctionDlg> ScAbstractDialogFactory_Impl::CreateScDPFunction
     return VclPtr<AbstractScDPFunctionDlg_Impl>::Create(std::make_unique<ScDPFunctionDlg>(pParent, rLabelVec, rLabelData, rFuncData));
 }
 
-VclPtr<AbstractScDPSubtotalDlg> ScAbstractDialogFactory_Impl::CreateScDPSubtotalDlg(weld::Window* pParent,
+VclPtr<AbstractScDPSubtotalDlg> ScAbstractDialogFactory_Impl::CreateScDPSubtotalDlg(weld::Widget* pParent,
                                                                                     ScDPObject& rDPObj,
                                                                                     const ScDPLabelData& rLabelData,
                                                                                     const ScPivotFuncData& rFuncData,

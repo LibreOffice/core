@@ -245,6 +245,7 @@ protected:
 private:
     DECL_LINK(EventListener, VclWindowEvent&, void);
     DECL_LINK(KeyEventListener, VclWindowEvent&, bool);
+    DECL_LINK(MnemonicActivateHdl, vcl::Window&, bool);
 
     const bool m_bTakeOwnership;
     bool m_bEventListener;
@@ -508,6 +509,12 @@ public:
         weld::Widget::connect_focus_in(rLink);
     }
 
+    virtual void connect_mnemonic_activate(const Link<Widget&, bool>& rLink) override
+    {
+        m_xWidget->SetMnemonicActivateHdl(LINK(this, SalInstanceWidget, MnemonicActivateHdl));
+        weld::Widget::connect_mnemonic_activate(rLink);
+    }
+
     virtual void connect_focus_out(const Link<Widget&, void>& rLink) override
     {
         ensure_event_listener();
@@ -599,6 +606,8 @@ public:
 
     virtual ~SalInstanceWidget() override
     {
+        if (m_aMnemonicActivateHdl.IsSet())
+            m_xWidget->SetMnemonicActivateHdl(Link<vcl::Window&,bool>());
         if (m_bKeyEventListener)
             Application::RemoveKeyListener(LINK(this, SalInstanceWidget, KeyEventListener));
         if (m_bEventListener)
@@ -702,6 +711,11 @@ IMPL_LINK(SalInstanceWidget, EventListener, VclWindowEvent&, rEvent, void)
 IMPL_LINK(SalInstanceWidget, KeyEventListener, VclWindowEvent&, rEvent, bool)
 {
     return HandleKeyEventListener(rEvent);
+}
+
+IMPL_LINK_NOARG(SalInstanceWidget, MnemonicActivateHdl, vcl::Window&, bool)
+{
+    return m_aMnemonicActivateHdl.Call(*this);
 }
 
 namespace
@@ -2431,6 +2445,10 @@ namespace
     }
 }
 
+class SalInstanceTreeView;
+
+static SalInstanceTreeView* g_DragSource;
+
 class SalInstanceTreeView : public SalInstanceContainer, public virtual weld::TreeView
 {
 private:
@@ -2450,6 +2468,8 @@ private:
     DECL_LINK(HeaderBarClickedHdl, HeaderBar*, void);
     DECL_LINK(ToggleHdl, SvLBoxButtonData*, void);
     DECL_LINK(ModelChangedHdl, SvTreeListBox*, void);
+    DECL_LINK(StartDragHdl, SvTreeListBox*, void);
+    DECL_STATIC_LINK(SalInstanceTreeView, FinishDragHdl, SvTreeListBox*, void);
     DECL_LINK(VisibleRangeChangedHdl, SvTreeListBox*, void);
     DECL_LINK(CompareHdl, const SvSortData&, sal_Int32);
     DECL_LINK(PopupMenuHdl, const CommandEvent&, bool);
@@ -2486,6 +2506,8 @@ public:
         else
         {
             static_cast<LclTabListBox&>(*m_xTreeView).SetModelChangedHdl(LINK(this, SalInstanceTreeView, ModelChangedHdl));
+            static_cast<LclTabListBox&>(*m_xTreeView).SetStartDragHdl(LINK(this, SalInstanceTreeView, StartDragHdl));
+            static_cast<LclTabListBox&>(*m_xTreeView).SetEndDragHdl(LINK(this, SalInstanceTreeView, FinishDragHdl));
         }
         m_aCheckButtonData.SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
         m_aRadioButtonData.SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
@@ -2704,6 +2726,14 @@ public:
             m_xTreeView->MakeVisible(pEntry);
         }
         enable_notify_events();
+    }
+
+    virtual int get_cursor_index() const override
+    {
+        SvTreeListEntry* pEntry = m_xTreeView->GetCurEntry();
+        if (!pEntry)
+            return -1;
+        return SvTreeList::GetRelPos(pEntry);
     }
 
     virtual void set_cursor(int pos) override
@@ -3425,6 +3455,24 @@ public:
         return *m_xTreeView;
     }
 
+    virtual bool get_dest_row_at_pos(const Point &rPos, weld::TreeIter* pResult) override
+    {
+        SvTreeListEntry* pTarget = m_xTreeView->GetDropTarget(rPos);
+
+        if (pTarget && pResult)
+        {
+            SalInstanceTreeIter& rSalIter = static_cast<SalInstanceTreeIter&>(*pResult);
+            rSalIter.iter = pTarget;
+        }
+
+        return pTarget != nullptr;
+    }
+
+    virtual TreeView* get_drag_source() const override
+    {
+        return g_DragSource;
+    }
+
     virtual ~SalInstanceTreeView() override
     {
         LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
@@ -3438,6 +3486,8 @@ public:
         }
         else
         {
+            static_cast<LclTabListBox&>(*m_xTreeView).SetEndDragHdl(Link<SvTreeListBox*, void>());
+            static_cast<LclTabListBox&>(*m_xTreeView).SetStartDragHdl(Link<SvTreeListBox*, void>());
             static_cast<LclTabListBox&>(*m_xTreeView).SetModelChangedHdl(Link<SvTreeListBox*, void>());
         }
         m_xTreeView->SetPopupMenuHdl(Link<const CommandEvent&, bool>());
@@ -3504,6 +3554,16 @@ IMPL_LINK_NOARG(SalInstanceTreeView, ModelChangedHdl, SvTreeListBox*, void)
     if (notify_events_disabled())
         return;
     signal_model_changed();
+}
+
+IMPL_LINK_NOARG(SalInstanceTreeView, StartDragHdl, SvTreeListBox*, void)
+{
+    g_DragSource = this;
+}
+
+IMPL_STATIC_LINK_NOARG(SalInstanceTreeView, FinishDragHdl, SvTreeListBox*, void)
+{
+    g_DragSource = nullptr;
 }
 
 IMPL_LINK(SalInstanceTreeView, ToggleHdl, SvLBoxButtonData*, pData, void)
