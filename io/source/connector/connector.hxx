@@ -31,28 +31,7 @@
 
 namespace stoc_connector
 {
-    template<class T>
-    struct ReferenceHash
-    {
-        size_t operator () (const css::uno::Reference<T> & ref) const
-        {
-            return reinterpret_cast<size_t>(ref.get());
-        }
-    };
-
-    template<class T>
-    struct ReferenceEqual
-    {
-        bool operator () (const css::uno::Reference<T> & op1,
-                          const css::uno::Reference<T> & op2) const
-        {
-            return op1.get() == op2.get();
-        }
-    };
-
-    typedef std::unordered_set< css::uno::Reference< css::io::XStreamListener>,
-                                ReferenceHash< css::io::XStreamListener>,
-                                ReferenceEqual< css::io::XStreamListener> >
+    typedef std::unordered_set< css::uno::Reference< css::io::XStreamListener> >
             XStreamListener_hash_set;
 
     class PipeConnection :

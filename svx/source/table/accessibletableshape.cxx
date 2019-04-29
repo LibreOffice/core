@@ -51,15 +51,7 @@ using namespace ::com::sun::star::container;
 namespace accessibility
 {
 
-struct hash
-{
-    std::size_t operator()( const Reference< XCell >& xCell ) const
-    {
-        return std::size_t( xCell.get() );
-    }
-};
-
-typedef std::unordered_map< Reference< XCell >, rtl::Reference< AccessibleCell >, hash > AccessibleCellMap;
+typedef std::unordered_map< Reference< XCell >, rtl::Reference< AccessibleCell > > AccessibleCellMap;
 
 class AccessibleTableShapeImpl : public cppu::WeakImplHelper< XModifyListener >
 {

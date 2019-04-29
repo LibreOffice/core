@@ -147,14 +147,6 @@ struct PagePropertySet
     }
 };
 
-struct HashReferenceXInterface
-{
-    size_t operator()( const Reference< XInterface >& rxIf ) const
-    {
-        return reinterpret_cast< size_t >( rxIf.get() );
-    }
-};
-
 struct HashUChar
 {
     size_t operator()( const sal_Unicode uchar ) const { return static_cast< size_t >( uchar ); }
@@ -181,16 +173,16 @@ class SVGFilter : public cppu::WeakImplHelper < XFilter,
                                                  XExtendedFilterDetection >
 {
 public:
-    typedef std::unordered_map< Reference< XInterface >, ObjectRepresentation, HashReferenceXInterface >    ObjectMap;
-    typedef std::unordered_set< Reference< XInterface >, HashReferenceXInterface >                          ObjectSet;
+    typedef std::unordered_map< Reference< XInterface >, ObjectRepresentation >    ObjectMap;
+    typedef std::unordered_set< Reference< XInterface > >                          ObjectSet;
 
-    typedef std::unordered_set< sal_Unicode, HashUChar >                                                    UCharSet;
-    typedef std::unordered_map< OUString, UCharSet >                                          UCharSetMap;
-    typedef std::unordered_map< Reference< XInterface >, UCharSetMap, HashReferenceXInterface >             UCharSetMapMap;
+    typedef std::unordered_set< sal_Unicode, HashUChar >                           UCharSet;
+    typedef std::unordered_map< OUString, UCharSet >                               UCharSetMap;
+    typedef std::unordered_map< Reference< XInterface >, UCharSetMap >             UCharSetMapMap;
 
-    typedef std::unordered_map< Reference< XInterface >, OUString, HashReferenceXInterface >         UOStringMap;
+    typedef std::unordered_map< Reference< XInterface >, OUString >                UOStringMap;
 
-    typedef std::unordered_set< ObjectRepresentation, HashBitmap, EqualityBitmap >                  MetaBitmapActionSet;
+    typedef std::unordered_set< ObjectRepresentation, HashBitmap, EqualityBitmap > MetaBitmapActionSet;
 
 private:
 
