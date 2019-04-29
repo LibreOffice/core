@@ -450,6 +450,26 @@ operator <<(
 }
 }
 
+#if defined LIBO_INTERNAL_ONLY
+namespace std
+{
+
+/**
+  Make css::uno::Reference hashable by default for use in STL containers.
+
+  @since LibreOffice 6.3
+*/
+template<typename T>
+struct hash<::css::uno::Reference<T>>
+{
+    std::size_t operator()(::css::uno::Reference<T> const & s) const
+    { return hash(s.get()); }
+};
+
+}
+
+#endif
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
