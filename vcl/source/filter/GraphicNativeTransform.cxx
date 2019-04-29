@@ -111,7 +111,7 @@ bool GraphicNativeTransform::rotateGeneric(sal_uInt16 aRotation, const OUString&
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
 
     Graphic aGraphic;
-    rFilter.ImportGraphic( aGraphic, OUString("import"), aStream );
+    rFilter.ImportGraphic( aGraphic, "import", aStream );
 
     mrGraphic = aGraphic;
     return true;
@@ -160,7 +160,7 @@ void GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
 
         Graphic aGraphic;
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-        rFilter.ImportGraphic( aGraphic, OUString("import"), aTargetStream );
+        rFilter.ImportGraphic( aGraphic, "import", aTargetStream );
         mrGraphic = aGraphic;
     }
 }

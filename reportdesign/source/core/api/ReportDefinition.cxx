@@ -200,9 +200,9 @@ static void lcl_setModelReadOnly(const uno::Reference< embed::XStorage >& _xStor
 }
 static void lcl_stripLoadArguments( utl::MediaDescriptor& _rDescriptor, uno::Sequence< beans::PropertyValue >& _rArgs )
 {
-    _rDescriptor.erase( OUString( "StatusIndicator" ) );
-    _rDescriptor.erase( OUString( "InteractionHandler" ) );
-    _rDescriptor.erase( OUString( "Model" ) );
+    _rDescriptor.erase( "StatusIndicator" );
+    _rDescriptor.erase( "InteractionHandler" );
+    _rDescriptor.erase( "Model" );
     _rDescriptor >> _rArgs;
 }
 

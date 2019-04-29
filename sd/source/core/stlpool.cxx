@@ -1173,7 +1173,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
 
 vcl::Font SdStyleSheetPool::GetBulletFont()
 {
-    vcl::Font aBulletFont( OUString( "StarSymbol" ), Size(0, 1000) );
+    vcl::Font aBulletFont( "StarSymbol", Size(0, 1000) );
     aBulletFont.SetCharSet(RTL_TEXTENCODING_UNICODE);
     aBulletFont.SetWeight(WEIGHT_NORMAL);
     aBulletFont.SetUnderline(LINESTYLE_NONE);

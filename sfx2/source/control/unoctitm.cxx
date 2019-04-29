@@ -1046,7 +1046,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
         const SfxUInt32Item* pUndoConflict = dynamic_cast< const SfxUInt32Item * >( pState );
         if ( pUndoConflict && pUndoConflict->GetValue() > 0 )
         {
-            aBuffer.append(OUString("disabled"));
+            aBuffer.append("disabled");
         }
         else
         {
@@ -1148,7 +1148,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
         }
         else
         {
-            aBuffer.append(OUString("disabled"));
+            aBuffer.append("disabled");
         }
     }
     else if (aEvent.FeatureURL.Path == "Position")
