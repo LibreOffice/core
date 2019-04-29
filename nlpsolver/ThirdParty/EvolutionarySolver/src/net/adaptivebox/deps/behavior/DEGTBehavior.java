@@ -57,7 +57,7 @@ public class DEGTBehavior extends AbsGTBehavior implements ILibEngine {
       if (Math.random()<CR || k == DIMENSION-1) {
         double Dabcd = 0;
         for(int i=0; i<referPoints.length; i++) {
-          Dabcd += Math.pow(-1, i%2)*referPoints[i].getLocation()[rj];
+          Dabcd += (i%2==0 ? +1D : -1D)*referPoints[i].getLocation()[rj];
         }
         trailPoint.getLocation()[rj] = gbest_t.getLocation()[rj]+FACTOR*Dabcd;
       } else {
