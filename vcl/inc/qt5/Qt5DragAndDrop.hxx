@@ -75,6 +75,8 @@ public:
     void fire_dragEnd(sal_Int8 nAction);
 
     static Qt5DragSource* m_ActiveDragSource;
+    static bool m_bDropSuccessSet;
+    static bool m_bDropSuccess;
 
     css::uno::Reference<css::datatransfer::XTransferable> const& GetTransferable() const
     {

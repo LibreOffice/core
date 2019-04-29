@@ -94,6 +94,9 @@ std::vector<css::datatransfer::DataFlavor> Qt5DnDTransferable::getTransferDataFl
     return aVector;
 }
 
+bool Qt5DragSource::m_bDropSuccessSet = false;
+bool Qt5DragSource::m_bDropSuccess = false;
+
 Qt5DragSource::~Qt5DragSource()
 {
     //if (m_pFrame)
@@ -140,6 +143,8 @@ void Qt5DragSource::startDrag(
     {
         Qt5Widget* qw = static_cast<Qt5Widget*>(m_pFrame->GetQWidget());
         m_ActiveDragSource = this;
+        m_bDropSuccessSet = false;
+        m_bDropSuccess = false;
         qw->startDrag(sourceActions);
     }
     else
@@ -165,7 +170,14 @@ void Qt5DragSource::fire_dragEnd(sal_Int8 nAction)
     {
         datatransfer::dnd::DragSourceDropEvent aEv;
         aEv.DropAction = nAction;
-        aEv.DropSuccess = true; // FIXME: what if drop didn't work out?
+
+        // internal DnD can accept the drop
+        // but still fail in Qt5DropTarget::dropComplete
+        if (m_bDropSuccessSet)
+            aEv.DropSuccess = m_bDropSuccess;
+        else
+            aEv.DropSuccess = true;
+
         auto xListener = m_xListener;
         m_xListener.clear();
         xListener->dragDropEnd(aEv);
@@ -341,6 +353,16 @@ void Qt5DropTarget::rejectDrop()
     return;
 }
 
-void Qt5DropTarget::dropComplete(sal_Bool /*success*/) { return; }
+void Qt5DropTarget::dropComplete(sal_Bool success)
+{
+    // internal DnD
+    if (Qt5DragSource::m_ActiveDragSource)
+    {
+        Qt5DragSource::m_bDropSuccessSet = true;
+        Qt5DragSource::m_bDropSuccess = success;
+    }
+
+    return;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
