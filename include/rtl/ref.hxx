@@ -22,9 +22,10 @@
 
 #include "sal/config.h"
 
-#include <cassert>
-
 #include "sal/types.h"
+
+#include <cassert>
+#include <functional>
 
 namespace rtl
 {
@@ -249,6 +250,28 @@ public:
 };
 
 } // namespace rtl
+
+/// @cond INTERNAL
+/**
+  Make rtl::Reference hashable by default for use in STL containers.
+
+  @since LibreOffice 6.3
+*/
+#if defined LIBO_INTERNAL_ONLY
+namespace std
+{
+
+template<typename T>
+struct hash<::rtl::Reference<T>>
+{
+    std::size_t operator()(::rtl::Reference<T> const & s) const
+    { return std::size_t(s.get()); }
+};
+
+}
+
+#endif
+/// @endcond
 
 #endif /* ! INCLUDED_RTL_REF_HXX */
 
