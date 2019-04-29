@@ -22,6 +22,30 @@
       "revId": "4802bf32b84655f6e1d3389070c76371ede8fbce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_cdb7ce3a",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-04-29T04:21:57Z",
+      "side": 1,
+      "message": "Yes, WriteText is what changes it.  Linked Textboxes aren\u0027t used much, so generally there is nothing created for it to clear.\n\nLikely it is \"far away\" from the other sections that use it because it needs to be handled differently for doc/docx. (That was so long ago that I forget the details, but I remember struggling to find a place to do this.  It was also my very early days of programming...)",
+      "parentUuid": "3fa0c359_373b1f39",
+      "range": {
+        "startLine": 1340,
+        "startChar": 4,
+        "endLine": 1340,
+        "endChar": 37
+      },
+      "revId": "4802bf32b84655f6e1d3389070c76371ede8fbce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
