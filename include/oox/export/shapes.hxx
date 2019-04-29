@@ -82,21 +82,9 @@ class OOX_DLLPUBLIC ShapeExport : public DrawingML {
 
 private:
     int m_nEmbeddedObjects;
-    struct ShapeCheck
-    {
-        bool operator()( const css::uno::Reference< css::drawing::XShape>& s1, const css::uno::Reference< css::drawing::XShape>& s2 ) const
-        {
-            return s1 == s2;
-        }
-    };
-
-    struct ShapeHash
-    {
-        size_t operator()( const css::uno::Reference < css::drawing::XShape >& ) const;
-    };
 
 public:
-    typedef std::unordered_map< css::uno::Reference< css::drawing::XShape>, sal_Int32, ShapeHash, ShapeCheck> ShapeHashMap;
+    typedef std::unordered_map< css::uno::Reference< css::drawing::XShape>, sal_Int32> ShapeHashMap;
 
 protected:
     sal_Int32           mnShapeIdMax, mnPictureIdMax;

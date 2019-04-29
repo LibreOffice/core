@@ -118,7 +118,7 @@ namespace
         }
     };
 
-    typedef ::std::map< Reference< XControlModel >, Reference< XControlModel >, ::comphelper::OInterfaceCompare< XControlModel > > MapControlModels;
+    typedef ::std::map< Reference< XControlModel >, Reference< XControlModel > > MapControlModels;
 
     class FormComponentAssignment
     {

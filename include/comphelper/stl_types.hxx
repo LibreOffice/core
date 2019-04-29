@@ -97,21 +97,6 @@ bool ContainerUniquePtrEquals(
 };
 
 
-/** STL-compliant structure for comparing Reference&lt; &lt;iface&gt; &gt; instances
-*/
-template < class IAFCE >
-struct OInterfaceCompare
-{
-    bool operator() (const css::uno::Reference< IAFCE >& lhs, const css::uno::Reference< IAFCE >& rhs) const
-    {
-        return lhs.get() < rhs.get();
-            // this does not make any sense if you see the semantics of the pointer returned by get:
-            // It's a pointer to a point in memory where an interface implementation lies.
-            // But for our purpose (provide a reliable less-operator which can be used with the STL), this is
-            // sufficient ....
-    }
-};
-
 template <class Tp, class Arg>
 class mem_fun1_t
 {

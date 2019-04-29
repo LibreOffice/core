@@ -45,27 +45,6 @@ using namespace ::com::sun::star;
 using namespace ::rtl::math;
 using namespace ::com::sun::star::chart2;
 
-namespace
-{
-
-struct XShapeCompare
-{
-    bool operator() (uno::Reference<drawing::XShape> const & lhs, uno::Reference<drawing::XShape> const & rhs) const
-    {
-        return lhs.get() < rhs.get();
-    }
-};
-
-struct XShapeHash
-{
-    bool operator()(uno::Reference<drawing::XShape> const & rXShape) const
-    {
-        return rXShape->getShapeType().hashCode();
-    }
-};
-
-} // end anonymous namespace
-
 BarChart::BarChart( const uno::Reference<XChartType>& xChartTypeModel
                     , sal_Int32 nDimensionCount )
         : VSeriesPlotter( xChartTypeModel, nDimensionCount )
@@ -501,7 +480,7 @@ void BarChart::createShapes()
     bool bDrawConnectionLinesInited = false;
     bool bOnlyConnectionLinesForThisPoint = false;
 
-    std::unordered_set<uno::Reference<drawing::XShape>, XShapeHash, XShapeCompare> aShapeSet;
+    std::unordered_set<uno::Reference<drawing::XShape>> aShapeSet;
 
     const comphelper::ScopeGuard aGuard([aShapeSet]() {
 

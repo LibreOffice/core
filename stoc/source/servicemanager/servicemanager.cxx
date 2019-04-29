@@ -133,28 +133,8 @@ Sequence< OUString > retrieveAsciiValueList(
 /*****************************************************************************
     Enumeration by ServiceName
 *****************************************************************************/
-struct hashRef_Impl
-{
-    size_t operator()(const Reference<XInterface > & rName) const
-    {
-        // query to XInterface. The cast to XInterface* must be the same for the same object
-        Reference<XInterface > x( Reference<XInterface >::query( rName ) );
-        return reinterpret_cast<size_t>(x.get());
-    }
-};
 
-struct equaltoRef_Impl
-{
-    bool operator()(const Reference<XInterface > & rName1, const Reference<XInterface > & rName2 ) const
-        { return rName1 == rName2; }
-};
-
-typedef std::unordered_set
-<
-    Reference<XInterface >,
-    hashRef_Impl,
-    equaltoRef_Impl
-> HashSet_Ref;
+typedef std::unordered_set< Reference<XInterface > > HashSet_Ref;
 
 
 class ServiceEnumeration_Impl : public WeakImplHelper< XEnumeration >

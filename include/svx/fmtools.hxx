@@ -58,7 +58,6 @@
 #include <rtl/ref.hxx>
 #include <tools/wintypes.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <comphelper/stl_types.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <set>
@@ -189,9 +188,7 @@ bool isRowSetAlive(const css::uno::Reference< css::uno::XInterface>& _rxRowSet);
     // checks if the css::sdbcx::XColumnsSupplier provided by _rxRowSet supplies any columns
 
 
-typedef ::std::set  < css::uno::Reference< css::uno::XInterface >
-                    , ::comphelper::OInterfaceCompare< css::uno::XInterface >
-                    > InterfaceBag;
+typedef ::std::set< css::uno::Reference< css::uno::XInterface > > InterfaceBag;
 
 #endif // INCLUDED_SVX_FMTOOLS_HXX
 

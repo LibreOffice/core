@@ -26,11 +26,11 @@
 #include <set>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include "callbacks.hxx"
-#include "ifacecompare.hxx"
 #include <rtl/ref.hxx>
 
 class SvXMLExport;
@@ -42,19 +42,16 @@ namespace xmloff
 {
 
     typedef ::std::set  <   css::uno::Reference< css::beans::XPropertySet >
-                        ,   OPropertySetCompare
                         >   PropertySetBag;
 
     // maps objects (property sets) to strings, e.g. control ids.
     typedef ::std::map  <   css::uno::Reference< css::beans::XPropertySet >
                         ,   OUString
-                        ,   OPropertySetCompare
                         >   MapPropertySet2String;
 
     // map pages to maps (of property sets to strings)
     typedef ::std::map  <   css::uno::Reference< css::drawing::XDrawPage >
                         ,   MapPropertySet2String
-                        ,   ODrawPageCompare
                         >   MapPropertySet2Map;
 
     //= OFormLayerXMLExport_Impl
@@ -111,7 +108,7 @@ namespace xmloff
         // TODO: To avoid this construct above, and to have a cleaner implementation, an class encapsulating the
         // export of a single page should be introduced.
 
-        typedef std::map<css::uno::Reference<css::beans::XPropertySet>, sal_Int32, OPropertySetCompare> MapPropertySet2Int;
+        typedef std::map<css::uno::Reference<css::beans::XPropertySet>, sal_Int32> MapPropertySet2Int;
         MapPropertySet2Int  m_aControlNumberFormats;
             // maps controls to format keys, which are relative to our own formats supplier
 

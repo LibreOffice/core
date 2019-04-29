@@ -2077,11 +2077,6 @@ ShapeExport& ShapeExport::WriteUnknownShape( const Reference< XShape >& )
     return *this;
 }
 
-size_t ShapeExport::ShapeHash::operator()( const Reference < XShape >& rXShape ) const
-{
-    return rXShape->getShapeType().hashCode();
-}
-
 sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape >& rXShape )
 {
     return GetNewShapeID( rXShape, GetFB() );
