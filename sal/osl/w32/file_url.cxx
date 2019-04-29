@@ -490,38 +490,6 @@ static DWORD GetCaseCorrectPathNameEx(
         return wcslen( lpszPath );
 }
 
-DWORD GetCaseCorrectPathName(
-    LPCWSTR lpszShortPath,  // file name
-    LPWSTR  lpszLongPath,   // path buffer
-    sal_uInt32 cchBuffer,      // size of path buffer
-    bool bCheckExistence
-)
-{
-    /* Special handling for "\\.\" as system root */
-    if ( lpszShortPath && 0 == wcscmp( lpszShortPath, WSTR_SYSTEM_ROOT_PATH ) )
-    {
-        if ( cchBuffer >= SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) )
-        {
-            wcscpy( lpszLongPath, WSTR_SYSTEM_ROOT_PATH );
-            return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
-        }
-        else
-        {
-            return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
-        }
-    }
-    else if ( lpszShortPath )
-    {
-        if ( wcslen( lpszShortPath ) <= cchBuffer )
-        {
-            wcscpy( lpszLongPath, lpszShortPath );
-            return GetCaseCorrectPathNameEx( lpszLongPath, cchBuffer, 0, bCheckExistence );
-        }
-    }
-
-    return 0;
-}
-
 static bool osl_decodeURL_( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )
 {
     sal_Char        *pBuffer;
