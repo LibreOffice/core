@@ -43,6 +43,7 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules):
         "array": ("debug/array", ),
         "bitset": ("debug/bitset", ),
         "deque": ("debug/deque", ),
+        "forward_list": ("debug/forward_list", ),
         "list": ("debug/list", ),
         "map": ("debug/map.h", ),
         "set": ("debug/set.h", "debug/multiset.h"),
