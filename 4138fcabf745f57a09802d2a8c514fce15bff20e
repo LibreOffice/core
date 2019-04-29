@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_cd06ee21",
+        "filename": "offapi/com/sun/star/text/TextGraphicObject.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2019-04-29T13:34:30Z",
+      "side": 1,
+      "message": "I backported this patch from another branch and I missed this unusefulf change",
+      "parentUuid": "9f91af0f_1faac384",
+      "revId": "4138fcabf745f57a09802d2a8c514fce15bff20e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f91af0f_3faf8795",
         "filename": "offapi/com/sun/star/text/TextGraphicObject.idl",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2019-04-11T07:46:43Z",
       "side": 1,
       "message": "* \"transformed\" in what way?  what is the rationale for providing both Graphic and TransformedGraphic?\n* please add a @since tag",
+      "revId": "4138fcabf745f57a09802d2a8c514fce15bff20e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_a803500d",
+        "filename": "offapi/com/sun/star/text/TextGraphicObject.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2019-04-29T13:34:30Z",
+      "side": 1,
+      "message": "I need it for images inserted into a Writer document:\nGraphic property is always the same as the original inserted image even if the image has been successively resized or rotated. I needed a way to get the transformed one, I could not think of a better solution.",
+      "parentUuid": "9f91af0f_3faf8795",
       "revId": "4138fcabf745f57a09802d2a8c514fce15bff20e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -65,6 +101,24 @@
       "side": 1,
       "message": "...nor should this change be necessary (as adding optional properties to published services is considered a compatible change).",
       "parentUuid": "9f91af0f_bf8dd77c",
+      "revId": "4138fcabf745f57a09802d2a8c514fce15bff20e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_48088c27",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 15028,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2019-04-29T13:34:30Z",
+      "side": 1,
+      "message": "I see, I was not aware that it is a bad idea to modify this file and that moreover it is not needed at all.",
+      "parentUuid": "9f91af0f_ffcb5f6f",
       "revId": "4138fcabf745f57a09802d2a8c514fce15bff20e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
