@@ -17,11 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ShapeFilterBase.hxx"
+#include <oox/shape/ShapeFilterBase.hxx>
 #include <oox/drawingml/chart/chartconverter.hxx>
+#include <oox/drawingml/themefragmenthandler.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/ole/vbaproject.hxx>
 #include <oox/drawingml/theme.hxx>
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 
 namespace oox {
 namespace shape {
@@ -107,6 +111,29 @@ GraphicHelper* ShapeFilterBase::implCreateGraphicHelper() const
         mpTheme->getClrScheme().getColor( nToken, nColor );
 
     return nColor;
+}
+
+void ShapeFilterBase::importTheme()
+{
+    drawingml::ThemePtr pTheme(new drawingml::Theme);
+    uno::Reference<beans::XPropertySet> xPropSet(getModel(), uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aGrabBag;
+    xPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+
+    for (int i = 0; i < aGrabBag.getLength(); i++)
+    {
+        if (aGrabBag[i].Name == "OOXTheme")
+        {
+            uno::Reference<xml::sax::XFastSAXSerializable> xDoc;
+            if (aGrabBag[i].Value >>= xDoc)
+            {
+                rtl::Reference<core::FragmentHandler> xFragmentHandler(
+                    new drawingml::ThemeFragmentHandler(*this, OUString(), *pTheme));
+                importFragment(xFragmentHandler, xDoc);
+                setCurrentTheme(pTheme);
+            }
+        }
+    }
 }
 
 }
