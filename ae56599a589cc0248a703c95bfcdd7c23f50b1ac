@@ -45,6 +45,30 @@
       "revId": "ae56599a589cc0248a703c95bfcdd7c23f50b1ac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_6de1dafe",
+        "filename": "sd/source/ui/slideshow/slideshow.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-29T08:11:47Z",
+      "side": 1,
+      "message": "The combination of\n\n  assert(!mbIsInStartup);\n  mbIsInStartup \u003d false;\n\ndoesn\u0027t make sense.  Either there is a guarantee that mbIsInStartup cannot be true here (so we can assert it), but then the second line is not needed.  Or there is no such guarantee, in which case we must not assert it.",
+      "parentUuid": "3fa0c359_9c7a5a86",
+      "range": {
+        "startLine": 650,
+        "startChar": 4,
+        "endLine": 650,
+        "endChar": 10
+      },
+      "revId": "ae56599a589cc0248a703c95bfcdd7c23f50b1ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
