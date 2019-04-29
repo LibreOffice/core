@@ -1100,6 +1100,7 @@ void Qt5Frame::registerDropTarget(Qt5DropTarget* pDropTarget)
 {
     assert(!m_pDropTarget);
     m_pDropTarget = pDropTarget;
+    m_pQWidget->setAcceptDrops(true);
 }
 
 void Qt5Frame::deregisterDropTarget(Qt5DropTarget const* pDropTarget)
