@@ -117,15 +117,12 @@ public:
     sal_uInt16 size() { return m_aCacheObjects.size(); }
 };
 
-/// Safely manipulate the cache
+/// Try to prevent visible SwParaPortions from being deleted.
 class SwSaveSetLRUOfst
 {
-    SwCache &rCache;
 public:
-    SwSaveSetLRUOfst( SwCache &rC, const sal_uInt16 nOfst )
-        : rCache( rC )          { rCache.SetLRUOfst( nOfst );  }
-
-    ~SwSaveSetLRUOfst()         { rCache.ResetLRUOfst(); }
+    SwSaveSetLRUOfst();
+    ~SwSaveSetLRUOfst();
 };
 
 /**
