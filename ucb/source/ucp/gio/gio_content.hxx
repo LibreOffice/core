@@ -116,6 +116,10 @@ private:
 
     bool exchangeIdentity(const css::uno::Reference< css::ucb::XContentIdentifier >&  xNewId);
 
+    void getFileInfo(
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & env, GFileInfo ** info,
+        bool fail);
+
 public:
     /// @throws css::ucb::ContentCreationException
     Content( const css::uno::Reference<
@@ -129,11 +133,6 @@ public:
         bool bIsFolder);
 
     virtual ~Content() override;
-
-    css::uno::Reference< css::sdbc::XRow > getPropertyValuesFromGFileInfo(
-        GFileInfo *pInfo, const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-        const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv,
-        const css::uno::Sequence< css::beans::Property >& rProperties);
 
     virtual css::uno::Sequence< css::beans::Property >
         getProperties( const css::uno::Reference<
