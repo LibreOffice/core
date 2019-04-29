@@ -176,8 +176,7 @@ DECLARE_LINKS_EXPORT_TEST(testRelativeToRelativeExport, "relative-link.docx", US
                           DONT_MODIFY_LINK)
 {
     xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]", "Target", "relative.docx");
 }
@@ -186,8 +185,7 @@ DECLARE_LINKS_EXPORT_TEST(testRelativeToAbsoluteExport, "relative-link.docx", US
                           DONT_MODIFY_LINK)
 {
     xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
 
     OUString sTarget = getXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]", "Target");
     CPPUNIT_ASSERT(sTarget.startsWith("file:///"));
@@ -198,8 +196,7 @@ DECLARE_LINKS_EXPORT_TEST(testAbsoluteToRelativeExport, "absolute-link.docx", US
                           USE_TEMP_DIR)
 {
     xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]", "Target", "test.docx");
 }
@@ -208,8 +205,7 @@ DECLARE_LINKS_EXPORT_TEST(testAbsoluteToAbsoluteExport, "absolute-link.docx", US
                           DONT_MODIFY_LINK)
 {
     xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
 
     OUString sTarget = getXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]", "Target");
     CPPUNIT_ASSERT(sTarget.startsWith("file:///"));

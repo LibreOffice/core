@@ -64,8 +64,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo81381, "fdo81381.docx")
 DECLARE_OOXMLEXPORT_TEST(testSdtAlias, "sdt-alias.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
 
     // <w:alias> was completely missing.
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:alias", "val", "Subtitle");
@@ -170,8 +169,7 @@ DECLARE_OOXMLEXPORT_TEST(testUnwantedSectionBreak, "unwanted-section-break.docx"
 DECLARE_OOXMLEXPORT_TEST(testfdo80897 , "fdo80897.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:bodyPr/a:prstTxWarp", "prst", "textTriangle");
 }
 
@@ -187,8 +185,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo80902, "fdo80902.docx")
 {
     // The problem was that the docGrid type was set as default so fix it for other grid type
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-       return;
+    CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:docGrid", "type", "lines");
 }
@@ -227,8 +224,7 @@ DECLARE_OOXMLEXPORT_TEST(testFDO83044, "fdo83044.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
 
-    if (!pXmlDoc)
-       return;
+    CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:text", 1);
 }
@@ -710,8 +706,7 @@ DECLARE_OOXMLEXPORT_TEST(testOoxmlTextOrdinalList, "text_ordinal_list.docx")
 DECLARE_OOXMLEXPORT_TEST(testOoxmlNumListZHTW, "numlist-zhtw.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath ( pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:numFmt","val","taiwaneseCountingThousand" );
 }
@@ -719,8 +714,7 @@ DECLARE_OOXMLEXPORT_TEST(testOoxmlNumListZHTW, "numlist-zhtw.odt")
 DECLARE_OOXMLEXPORT_TEST(testOoxmlNumListZHCN, "numlist-zhcn.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath ( pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:numFmt","val","chineseCountingThousand" );
 }
@@ -728,8 +722,7 @@ DECLARE_OOXMLEXPORT_TEST(testOoxmlNumListZHCN, "numlist-zhcn.odt")
 DECLARE_OOXMLEXPORT_TEST(testOOxmlOutlineNumberTypes, "outline-number-types.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:pStyle", "val", "Heading1");
     assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:numFmt", "val", "none");
@@ -939,8 +932,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf115094v3, "tdf115094v3.docx")
 {
     // floating table is now exported directly without surrounding frame
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblpPr", "tblpX", "1996");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblpPr", "tblpY", "1064");

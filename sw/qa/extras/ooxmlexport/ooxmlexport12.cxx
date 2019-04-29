@@ -820,8 +820,7 @@ DECLARE_OOXMLEXPORT_TEST(testWatermarkTrim, "tdf114308.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf73547, "tdf73547-dash.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     double nD = getXPath(pXmlDoc, "//a:custDash/a:ds[1]", "d").toDouble();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(105000.0, nD, 5000.0); // was 100000
     double nSp = getXPath(pXmlDoc, "//a:custDash/a:ds[1]", "sp").toDouble();
@@ -876,8 +875,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117137, "tdf117137.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf99631, "tdf99631.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "//w:object", 2);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object", 2);
     // first XSLX OLE object (1:1 scale)
@@ -891,8 +889,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99631, "tdf99631.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf122563, "tdf122563.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object", 1);
     // Size of the embedded OLE spreadsheet was the bad "width:28.35pt;height:28.35pt"
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:object/v:shape", "style",

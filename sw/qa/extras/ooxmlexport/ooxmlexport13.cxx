@@ -148,8 +148,7 @@ DECLARE_OOXMLEXPORT_TEST(testDateControl, "empty-date-control.odt")
 
     // check XML
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
 
     // We need to export date format and a dummy character (" ") for empty date control
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:date/w:dateFormat", "val", "dd/MM/yyyy");
@@ -189,8 +188,7 @@ DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
 {
     // We need to make sure we don't export the text itself next to the input list field
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 5);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:t", 0);
 }
@@ -209,8 +207,7 @@ DECLARE_OOXMLEXPORT_TEST(testFrameSizeExport, "floating-tables-anchor.docx")
 {
     // Make sure the table width is 4000
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tblPr/w:tblW", "w", "4000");
 }
 
@@ -231,8 +228,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119201, "tdf119201.docx")
 DECLARE_OOXMLEXPORT_TEST(testTextInput, "textinput.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     // Ensure we have a formfield
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:instrText", " FORMTEXT ");
     // and it's content is not gone

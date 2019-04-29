@@ -483,8 +483,7 @@ DECLARE_OOXMLEXPORT_TEST(testMultiColumnLineSeparator, "multi-column-line-separa
 {
     // Check for the Column Separator value.It should be FALSE as the document does not contain separator line.
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:sectPr/w:cols","sep","false");
 }
 
@@ -534,8 +533,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69644, "fdo69644.docx")
     // with only 3 columns, instead of 5 columns.
     // Check that the table grid is exported with 5 columns
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol", 5);
 }
 
@@ -548,8 +546,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70812, "fdo70812.docx")
 DECLARE_OOXMLEXPORT_TEST(testPgMargin, "testPgMargin.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar", "left", "1440");
 }
 
@@ -594,8 +591,7 @@ DECLARE_OOXMLEXPORT_TEST(testLineSpacingexport, "test_line_spacing.docx")
     style::LineSpacing alineSpacing = getProperty<style::LineSpacing>(xParaEnum->nextElement(), "ParaLineSpacing");
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(13200), static_cast<sal_Int16>(alineSpacing.Height));
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "line", "31680");
 #endif
 }
@@ -661,8 +657,7 @@ DECLARE_OOXMLEXPORT_TEST(testCellGridSpan, "cell-grid-span.docx")
     // used to get set wrongly to 5 and 65532 respectively which was the reason for crash during save operation
     // Verifying gridSpan element is not present in RoundTripped Document (As it's Default value is 1).
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:tcPr/w:gridSpan",0);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:gridSpan",0);
 }
@@ -682,8 +677,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo71646, "fdo71646.docx")
 DECLARE_OOXMLEXPORT_TEST(testParaAutoSpacing, "para-auto-spacing.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "beforeAutospacing","1");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "afterAutospacing","1");
 
@@ -761,16 +755,14 @@ DECLARE_OOXMLEXPORT_TEST(testFootnoteParagraphTag, "testFootnote.docx")
 DECLARE_OOXMLEXPORT_TEST(testSpacingLineRule,"table_lineRule.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "lineRule", "auto");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTableLineSpacing, "table_atleast.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:spacing", "line", "320");
 }
 
@@ -905,8 +897,7 @@ DECLARE_OOXMLEXPORT_TEST(testcantSplit, "2_table_doc.docx")
     // in table row property,As default row prop is allow row to break across page.
     // writing <w:cantSplit w:val="false"/> during export was causing problem that all the cell data used to come on same page
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:cantSplit",0);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:cantSplit","val","true");
 }
@@ -941,16 +932,14 @@ DECLARE_OOXMLEXPORT_TEST(testcolumnbreak, "columnbreak.docx")
 {
     CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE, getProperty<style::BreakType>(getParagraph(5, "This is first line after col brk."), "BreakType"));
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[1]/w:br", "type", "column");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testGlossary, "testGlossary.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/glossary/document.xml");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:glossaryDocument", "Ignorable", "w14 wp14");
 }
 
@@ -962,8 +951,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo71785, "fdo71785.docx")
 DECLARE_OOXMLEXPORT_TEST(testCrashWhileSave, "testCrashWhileSave.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/footer1.xml");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:ftr/w:tbl/w:tr/w:tc[1]/w:p[1]/w:pPr/w:pStyle", "val").match("Normal"));
 }
 
@@ -971,8 +959,7 @@ DECLARE_OOXMLEXPORT_TEST(testFileOpenInputOutputError,"floatingtbl_with_formula.
 {
     // Docx containing Floating table with formula was giving "General input/output error" while opening in LibreOffice
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pStyle", "val", "Normal");
 
     // let's also assert that the formula was exported properly
