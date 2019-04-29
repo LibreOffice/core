@@ -220,6 +220,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/helper/binaryoutputstream \
     oox/source/helper/binarystreambase \
     oox/source/helper/containerhelper \
+	oox/source/helper/diagramrenderfilter \
     oox/source/helper/graphichelper \
     oox/source/helper/grabbagstack \
     oox/source/helper/modelobjecthelper \
