@@ -21,16 +21,17 @@ private:
     std::vector<std::unique_ptr<ScItemValue> > maItemValues;
     SCCOL maDataItem;
 
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 public:
-    ScPivotLayoutTreeListLabel(vcl::Window* pParent, WinBits nBits);
+    ScPivotLayoutTreeListLabel(std::unique_ptr<weld::TreeView> xControl);
     virtual ~ScPivotLayoutTreeListLabel() override;
     void FillLabelFields(ScDPLabelDataVector& rLabelVector);
     ScItemValue* GetItem(SCCOL nColumn);
     bool IsDataElement(SCCOL nColumn);
-
+#if 0
 protected:
     virtual void InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget) override;
-    virtual void KeyInput(const KeyEvent& rKeyEvent) override;
+#endif
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

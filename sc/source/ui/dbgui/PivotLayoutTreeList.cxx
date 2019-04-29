@@ -19,17 +19,17 @@
 #include <pivot.hxx>
 #include <scabstdlg.hxx>
 
-VCL_BUILDER_FACTORY_ARGS(ScPivotLayoutTreeList,
-                         WB_BORDER | WB_TABSTOP | WB_CLIPCHILDREN)
-
-ScPivotLayoutTreeList::ScPivotLayoutTreeList(vcl::Window* pParent, WinBits nBits) :
-    ScPivotLayoutTreeListBase(pParent, nBits)
+ScPivotLayoutTreeList::ScPivotLayoutTreeList(std::unique_ptr<weld::TreeView> xControl)
+    : ScPivotLayoutTreeListBase(std::move(xControl))
 {
-    SetForceMakeVisible(true);
+    mxControl->connect_key_press(LINK(this, ScPivotLayoutTreeList, KeyInputHdl));
+    mxControl->connect_row_activated(LINK(this, ScPivotLayoutTreeList, DoubleClickHdl));
+//TODO    SetForceMakeVisible(true);
 }
 
 ScPivotLayoutTreeList::~ScPivotLayoutTreeList()
-{}
+{
+}
 
 void ScPivotLayoutTreeList::Setup(ScPivotLayoutDialog* pParent, SvPivotTreeListType eType)
 {
@@ -37,17 +37,17 @@ void ScPivotLayoutTreeList::Setup(ScPivotLayoutDialog* pParent, SvPivotTreeListT
     meType = eType;
 }
 
-bool ScPivotLayoutTreeList::DoubleClickHdl()
+IMPL_LINK_NOARG(ScPivotLayoutTreeList, DoubleClickHdl, weld::TreeView&, void)
 {
-    SvTreeListEntry* pEntry = GetCurEntry();
-    if (!pEntry)
-        return false;
+    int nEntry = mxControl->get_cursor_index();
+    if (nEntry == -1)
+        return;
 
-    ScItemValue* pCurrentItemValue = static_cast<ScItemValue*>(pEntry->GetUserData());
+    ScItemValue* pCurrentItemValue = reinterpret_cast<ScItemValue*>(mxControl->get_id(nEntry).toInt64());
     ScPivotFuncData& rCurrentFunctionData = pCurrentItemValue->maFunctionData;
 
     if (mpParent->IsDataElement(rCurrentFunctionData.mnCol))
-        return false;
+        return;
 
     SCCOL nCurrentColumn = rCurrentFunctionData.mnCol;
     ScDPLabelData& rCurrentLabelData = mpParent->GetLabelData(nCurrentColumn);
@@ -58,20 +58,18 @@ bool ScPivotLayoutTreeList::DoubleClickHdl()
     mpParent->PushDataFieldNames(aDataFieldNames);
 
     ScopedVclPtr<AbstractScDPSubtotalDlg> pDialog(
-        pFactory->CreateScDPSubtotalDlg(GetFrameWeld(), mpParent->maPivotTableObject, rCurrentLabelData, rCurrentFunctionData, aDataFieldNames));
+        pFactory->CreateScDPSubtotalDlg(mxControl.get(), mpParent->maPivotTableObject, rCurrentLabelData, rCurrentFunctionData, aDataFieldNames));
 
     if (pDialog->Execute() == RET_OK)
     {
         pDialog->FillLabelData(rCurrentLabelData);
         rCurrentFunctionData.mnFuncMask = pDialog->GetFuncMask();
     }
-
-    return true;
 }
 
 void ScPivotLayoutTreeList::FillFields(ScPivotFieldVector& rFieldVector)
 {
-    Clear();
+    mxControl->clear();
     maItemValues.clear();
 
     for (ScPivotField& rField : rFieldVector)
@@ -79,10 +77,12 @@ void ScPivotLayoutTreeList::FillFields(ScPivotFieldVector& rFieldVector)
         OUString aLabel = mpParent->GetItem( rField.nCol )->maName;
         ScItemValue* pItemValue = new ScItemValue( aLabel, rField.nCol, rField.nFuncMask );
         maItemValues.push_back(std::unique_ptr<ScItemValue>(pItemValue));
-        InsertEntry(pItemValue->maName, nullptr, false, TREELIST_APPEND, pItemValue);
+        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pItemValue)));
+        mxControl->append(sId, pItemValue->maName);
     }
 }
 
+#if 0
 void ScPivotLayoutTreeList::InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget)
 {
     ScItemValue* pItemValue = static_cast<ScItemValue*>(pSource->GetUserData());
@@ -94,31 +94,34 @@ void ScPivotLayoutTreeList::InsertEntryForSourceTarget(SvTreeListEntry* pSource,
 
     mpParent->ItemInserted(pOriginalItemValue, meType);
 
-    sal_uLong nPosition = (pTarget == nullptr) ? TREELIST_APPEND : GetModel()->GetAbsPos(pTarget) + 1;
+    int nPosition = (pTarget == nullptr) ? -1 : GetModel()->GetAbsPos(pTarget) + 1;
     InsertEntryForItem(pOriginalItemValue, nPosition);
 }
+#endif
 
-void ScPivotLayoutTreeList::InsertEntryForItem(const ScItemValue* pItemValue, sal_uLong nPosition)
+void ScPivotLayoutTreeList::InsertEntryForItem(const ScItemValue* pItemValue, int nPosition)
 {
     ScItemValue *pListItemValue = new ScItemValue(pItemValue);
     maItemValues.push_back(std::unique_ptr<ScItemValue>(pListItemValue));
-    OUString rName = pListItemValue->maName;
-    InsertEntry(rName, nullptr, false, nPosition, pListItemValue);
+    OUString sName = pListItemValue->maName;
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pListItemValue)));
+    mxControl->insert(nullptr, nPosition, &sName, &sId, nullptr, nullptr, nullptr, false, nullptr);
 }
 
-void ScPivotLayoutTreeList::KeyInput(const KeyEvent& rKeyEvent)
+IMPL_LINK(ScPivotLayoutTreeList, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
 {
     vcl::KeyCode aCode = rKeyEvent.GetKeyCode();
     sal_uInt16 nCode = aCode.GetCode();
 
     if (nCode == KEY_DELETE)
     {
-        const SvTreeListEntry* pEntry = GetCurEntry();
-        if (pEntry)
-            GetModel()->Remove(pEntry);
-        return;
+        const int nEntry = mxControl->get_cursor_index();
+        if (nEntry != -1)
+            mxControl->remove(nEntry);
+        return true;
     }
-    SvTreeListBox::KeyInput(rKeyEvent);
+
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

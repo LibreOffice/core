@@ -11,14 +11,14 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTTREELISTBASE_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTTREELISTBASE_HXX
 
-#include <vcl/treelistbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <pivot.hxx>
 
 class ScPivotLayoutDialog;
 class ScItemValue;
 
-class ScPivotLayoutTreeListBase : public SvTreeListBox
+class ScPivotLayoutTreeListBase
 {
 public:
     enum SvPivotTreeListType
@@ -32,16 +32,20 @@ public:
     };
 
 protected:
+    std::unique_ptr<weld::TreeView> mxControl;
     SvPivotTreeListType meType;
-    VclPtr<ScPivotLayoutDialog> mpParent;
+    ScPivotLayoutDialog* mpParent;
+
+    DECL_LINK(GetFocusHdl, weld::Widget&, void);
+    DECL_LINK(LoseFocusHdl, weld::Widget&, void);
 
 public:
     void Setup(ScPivotLayoutDialog* pParent);
 
-    ScPivotLayoutTreeListBase(vcl::Window* pParent, WinBits nBits, SvPivotTreeListType eType = UNDEFINED);
-    virtual ~ScPivotLayoutTreeListBase() override;
-    virtual void dispose() override;
+    ScPivotLayoutTreeListBase(std::unique_ptr<weld::TreeView> xControl, SvPivotTreeListType eType = UNDEFINED);
+    virtual ~ScPivotLayoutTreeListBase();
 
+#if 0
     virtual bool NotifyAcceptDrop(SvTreeListEntry* pEntry) override;
     virtual TriState NotifyMoving(SvTreeListEntry* pTarget, SvTreeListEntry* pSource,
                                   SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos) override;
@@ -50,18 +54,16 @@ public:
     virtual DragDropMode NotifyStartDrag(TransferDataContainer& aTransferDataContainer,
                                          SvTreeListEntry* pEntry) override;
     virtual void DragFinished(sal_Int8 nDropAction) override;
-
-    virtual void GetFocus() override;
-    virtual void LoseFocus() override;
+#endif
 
     void PushEntriesToPivotFieldVector(ScPivotFieldVector& rVector);
 
     void RemoveEntryForItem(const ScItemValue* pItemValue);
 
-    bool HasEntry(const SvTreeListEntry* pEntry);
+    bool HasEntry(const weld::TreeIter& rEntry);
 
 protected:
-    virtual void InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget);
+//TODO    virtual void InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

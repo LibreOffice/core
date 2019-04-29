@@ -2706,6 +2706,14 @@ public:
         enable_notify_events();
     }
 
+    virtual int get_cursor_index() const override
+    {
+        SvTreeListEntry* pEntry = m_xTreeView->GetCurEntry();
+        if (!pEntry)
+            return -1;
+        return SvTreeList::GetRelPos(pEntry);
+    }
+
     virtual void set_cursor(int pos) override
     {
         if (pos == -1)

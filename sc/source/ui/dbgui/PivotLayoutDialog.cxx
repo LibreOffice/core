@@ -68,96 +68,95 @@ ScRange lclGetRangeForNamedRange(OUString const & aName, const ScDocument* pDocu
 }
 
 ScPivotLayoutDialog::ScPivotLayoutDialog(
-                            SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow, vcl::Window* pParent,
-                            ScViewData* pViewData, const ScDPObject* pPivotTableObject, bool bNewPivotTable) :
-    ScAnyRefDlg           (pSfxBindings, pChildWindow, pParent, "PivotTableLayout", "modules/scalc/ui/pivottablelayoutdialog.ui"),
-    maPivotTableObject    (*pPivotTableObject),
-    mpPreviouslyFocusedListBox(nullptr),
-    mpViewData            (pViewData),
-    mpDocument            (pViewData->GetDocument()),
-    mbNewPivotTable       (bNewPivotTable),
-    mpActiveEdit          (nullptr),
-    maAddressDetails      (mpDocument->GetAddressConvention(), 0, 0),
-    mbDialogLostFocus     (false)
+                            SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow, weld::Window* pParent,
+                            ScViewData* pViewData, const ScDPObject* pPivotTableObject, bool bNewPivotTable)
+    : ScAnyRefDlgController(pSfxBindings, pChildWindow, pParent, "modules/scalc/ui/pivottablelayoutdialog.ui", "PivotTableLayout")
+    , maPivotTableObject(*pPivotTableObject)
+    , mpPreviouslyFocusedListBox(nullptr)
+    , mpViewData(pViewData)
+    , mpDocument(pViewData->GetDocument())
+    , mbNewPivotTable(bNewPivotTable)
+    , maAddressDetails(mpDocument->GetAddressConvention(), 0, 0)
+    , mbDialogLostFocus(false)
+    , mpActiveEdit(nullptr)
+    , mxListBoxField(new ScPivotLayoutTreeListLabel(m_xBuilder->weld_tree_view("listbox-fields")))
+    , mxListBoxPage(new ScPivotLayoutTreeList(m_xBuilder->weld_tree_view("listbox-page")))
+    , mxListBoxColumn(new ScPivotLayoutTreeList(m_xBuilder->weld_tree_view("listbox-column")))
+    , mxListBoxRow(new ScPivotLayoutTreeList(m_xBuilder->weld_tree_view("listbox-row")))
+    , mxListBoxData(new ScPivotLayoutTreeListData(m_xBuilder->weld_tree_view("listbox-data")))
+    , mxCheckIgnoreEmptyRows(m_xBuilder->weld_check_button("check-ignore-empty-rows"))
+    , mxCheckTotalColumns(m_xBuilder->weld_check_button("check-total-columns"))
+    , mxCheckAddFilter(m_xBuilder->weld_check_button("check-add-filter"))
+    , mxCheckIdentifyCategories(m_xBuilder->weld_check_button("check-identify-categories"))
+    , mxCheckTotalRows(m_xBuilder->weld_check_button("check-total-rows"))
+    , mxCheckDrillToDetail(m_xBuilder->weld_check_button("check-drill-to-details"))
+    , mxSourceRadioNamedRange(m_xBuilder->weld_radio_button("source-radio-named-range"))
+    , mxSourceRadioSelection(m_xBuilder->weld_radio_button("source-radio-selection"))
+    , mxSourceListBox(m_xBuilder->weld_combo_box("source-list"))
+    , mxSourceEdit(new formula::WeldRefEdit(m_xBuilder->weld_entry("source-edit")))
+    , mxSourceButton(new formula::WeldRefButton(m_xBuilder->weld_button("source-button")))
+    , mxDestinationRadioNewSheet(m_xBuilder->weld_radio_button("destination-radio-new-sheet"))
+    , mxDestinationRadioNamedRange(m_xBuilder->weld_radio_button("destination-radio-named-range"))
+    , mxDestinationRadioSelection(m_xBuilder->weld_radio_button("destination-radio-selection"))
+    , mxDestinationListBox(m_xBuilder->weld_combo_box("destination-list"))
+    , mxDestinationEdit(new formula::WeldRefEdit(m_xBuilder->weld_entry("destination-edit")))
+    , mxDestinationButton(new formula::WeldRefButton(m_xBuilder->weld_button("destination-button")))
+    , mxBtnOK(m_xBuilder->weld_button("ok"))
+    , mxBtnCancel(m_xBuilder->weld_button("cancel"))
+    , mxSourceFrame(m_xBuilder->weld_frame("frame2"))
+    , mxSourceLabel(mxSourceFrame->weld_label_widget())
+    , mxDestFrame(m_xBuilder->weld_frame("frame1"))
+    , mxDestLabel(mxDestFrame->weld_label_widget())
 {
-    get(mpListBoxField,    "listbox-fields");
-    get(mpListBoxPage,     "listbox-page");
-    get(mpListBoxColumn,   "listbox-column");
-    get(mpListBoxRow,      "listbox-row");
-    get(mpListBoxData,     "listbox-data");
-
-    get(mpCheckIgnoreEmptyRows,     "check-ignore-empty-rows");
-    get(mpCheckTotalColumns,        "check-total-columns");
-    get(mpCheckAddFilter,           "check-add-filter");
-    get(mpCheckIdentifyCategories,  "check-identify-categories");
-    get(mpCheckTotalRows,           "check-total-rows");
-    get(mpCheckDrillToDetail,       "check-drill-to-details");
-
-    get(mpBtnOK,  "ok");
-    get(mpBtnCancel,  "cancel");
-
-    get(mpSourceRadioNamedRange, "source-radio-named-range");
-    get(mpSourceRadioSelection,  "source-radio-selection");
-    get(mpSourceListBox,         "source-list");
-    get(mpSourceEdit,            "source-edit");
-    get(mpSourceButton,          "source-button");
-
-    get(mpDestinationRadioNewSheet,   "destination-radio-new-sheet");
-    get(mpDestinationRadioNamedRange, "destination-radio-named-range");
-    get(mpDestinationRadioSelection,  "destination-radio-selection");
-    get(mpDestinationListBox,         "destination-list");
-    get(mpDestinationEdit,            "destination-edit");
-    get(mpDestinationButton,          "destination-button");
-
     // Source UI
-    Link<RadioButton&,void> aLink2 = LINK(this, ScPivotLayoutDialog, ToggleSource);
-    mpSourceRadioNamedRange->SetToggleHdl(aLink2);
-    mpSourceRadioSelection->SetToggleHdl(aLink2);
+    Link<weld::ToggleButton&,void> aLink2 = LINK(this, ScPivotLayoutDialog, ToggleSource);
+    mxSourceRadioNamedRange->connect_toggled(aLink2);
+    mxSourceRadioSelection->connect_toggled(aLink2);
 
-    mpSourceEdit->SetReferences(this, mpSourceRadioSelection);
-    mpSourceButton->SetReferences(this, mpSourceEdit);
+    mxSourceEdit->SetReferences(this, mxSourceLabel.get());
+    mxSourceButton->SetReferences(this, mxSourceEdit.get());
 
-    Link<Control&,void> aLink = LINK(this, ScPivotLayoutDialog, GetFocusHandler);
-    mpSourceEdit->SetGetFocusHdl(aLink);
-    mpSourceButton->SetGetFocusHdl(aLink);
+    Link<formula::WeldRefEdit&,void> aEditLink = LINK(this, ScPivotLayoutDialog, GetEditFocusHandler);
+    mxDestinationEdit->SetGetFocusHdl(aEditLink);
+    mxSourceEdit->SetGetFocusHdl(aEditLink);
 
-    aLink = LINK(this, ScPivotLayoutDialog, LoseFocusHandler);
-    mpSourceEdit->SetLoseFocusHdl(aLink);
-    mpSourceButton->SetLoseFocusHdl(aLink);
+    aEditLink = LINK(this, ScPivotLayoutDialog, LoseEditFocusHandler);
+    mxDestinationEdit->SetLoseFocusHdl(aEditLink);
+    mxSourceEdit->SetLoseFocusHdl(aEditLink);
 
-    mpSourceEdit->SetModifyHdl(LINK(this, ScPivotLayoutDialog, SourceEditModified));
-    mpSourceListBox->SetSelectHdl(LINK(this, ScPivotLayoutDialog, SourceListSelected));
+    mxSourceEdit->SetModifyHdl(LINK(this, ScPivotLayoutDialog, SourceEditModified));
+    mxSourceListBox->connect_changed(LINK(this, ScPivotLayoutDialog, SourceListSelected));
 
     // Destination UI
     aLink2 = LINK(this, ScPivotLayoutDialog, ToggleDestination);
-    mpDestinationRadioNewSheet->SetToggleHdl(aLink2);
-    mpDestinationRadioNamedRange->SetToggleHdl(aLink2);
-    mpDestinationRadioSelection->SetToggleHdl(aLink2);
+    mxDestinationRadioNewSheet->connect_toggled(aLink2);
+    mxDestinationRadioNamedRange->connect_toggled(aLink2);
+    mxDestinationRadioSelection->connect_toggled(aLink2);
 
-    mpDestinationEdit->SetReferences(this, mpDestinationRadioNewSheet);
-    mpDestinationButton->SetReferences(this, mpDestinationEdit);
+    mxDestinationEdit->SetReferences(this, mxDestLabel.get());
+    mxDestinationButton->SetReferences(this, mxDestinationEdit.get());
 
-    aLink = LINK(this, ScPivotLayoutDialog, GetFocusHandler);
-    mpDestinationEdit->SetGetFocusHdl(aLink);
-    mpDestinationButton->SetGetFocusHdl(aLink);
+    Link<formula::WeldRefButton&,void> aButtonLink = LINK(this, ScPivotLayoutDialog, GetButtonFocusHandler);
+    mxSourceButton->SetGetFocusHdl(aButtonLink);
+    mxDestinationButton->SetGetFocusHdl(aButtonLink);
 
-    aLink = LINK(this, ScPivotLayoutDialog, LoseFocusHandler);
-    mpDestinationEdit->SetLoseFocusHdl(aLink);
-    mpDestinationButton->SetLoseFocusHdl(aLink);
+    aButtonLink = LINK(this, ScPivotLayoutDialog, LoseButtonFocusHandler);
+    mxSourceButton->SetLoseFocusHdl(aButtonLink);
+    mxDestinationButton->SetLoseFocusHdl(aButtonLink);
 
     // Buttons
-    mpBtnCancel->SetClickHdl(LINK(this, ScPivotLayoutDialog, CancelClicked));
-    mpBtnOK->SetClickHdl(LINK(this, ScPivotLayoutDialog, OKClicked));
+    mxBtnCancel->connect_clicked(LINK(this, ScPivotLayoutDialog, CancelClicked));
+    mxBtnOK->connect_clicked(LINK(this, ScPivotLayoutDialog, OKClicked));
 
     // Initialize Data
     maPivotTableObject.FillOldParam(maPivotParameters);
     maPivotTableObject.FillLabelData(maPivotParameters);
 
-    mpListBoxField->Setup (this);
-    mpListBoxPage->Setup  (this, ScPivotLayoutTreeList::PAGE_LIST);
-    mpListBoxColumn->Setup(this, ScPivotLayoutTreeList::COLUMN_LIST);
-    mpListBoxRow->Setup   (this, ScPivotLayoutTreeList::ROW_LIST);
-    mpListBoxData->Setup  (this);
+    mxListBoxField->Setup (this);
+    mxListBoxPage->Setup  (this, ScPivotLayoutTreeList::PAGE_LIST);
+    mxListBoxColumn->Setup(this, ScPivotLayoutTreeList::COLUMN_LIST);
+    mxListBoxRow->Setup   (this, ScPivotLayoutTreeList::ROW_LIST);
+    mxListBoxData->Setup  (this);
 
     FillValuesToListBoxes();
 
@@ -165,19 +164,19 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     const ScDPSaveData* pSaveData = maPivotTableObject.GetSaveData();
     if (pSaveData == nullptr)
     {
-        mpCheckAddFilter->Check(false);
-        mpCheckDrillToDetail->Check(false);
+        mxCheckAddFilter->set_active(false);
+        mxCheckDrillToDetail->set_active(false);
     }
     else
     {
-        mpCheckAddFilter->Check(pSaveData->GetFilterButton());
-        mpCheckDrillToDetail->Check(pSaveData->GetDrillDown());
+        mxCheckAddFilter->set_active(pSaveData->GetFilterButton());
+        mxCheckDrillToDetail->set_active(pSaveData->GetDrillDown());
     }
 
-    mpCheckIgnoreEmptyRows->Check(maPivotParameters.bIgnoreEmptyRows);
-    mpCheckIdentifyCategories->Check(maPivotParameters.bDetectCategories);
-    mpCheckTotalColumns->Check(maPivotParameters.bMakeTotalCol);
-    mpCheckTotalRows->Check(maPivotParameters.bMakeTotalRow);
+    mxCheckIgnoreEmptyRows->set_active(maPivotParameters.bIgnoreEmptyRows);
+    mxCheckIdentifyCategories->set_active(maPivotParameters.bDetectCategories);
+    mxCheckTotalColumns->set_active(maPivotParameters.bMakeTotalCol);
+    mxCheckTotalRows->set_active(maPivotParameters.bMakeTotalRow);
 
     SetupSource();
     SetupDestination();
@@ -185,43 +184,11 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
 
 ScPivotLayoutDialog::~ScPivotLayoutDialog()
 {
-    disposeOnce();
-}
-
-void ScPivotLayoutDialog::dispose()
-{
-    mpPreviouslyFocusedListBox.clear();
-    mpListBoxField.clear();
-    mpListBoxPage.clear();
-    mpListBoxColumn.clear();
-    mpListBoxRow.clear();
-    mpListBoxData.clear();
-    mpCheckIgnoreEmptyRows.clear();
-    mpCheckTotalColumns.clear();
-    mpCheckAddFilter.clear();
-    mpCheckIdentifyCategories.clear();
-    mpCheckTotalRows.clear();
-    mpCheckDrillToDetail.clear();
-    mpSourceRadioNamedRange.clear();
-    mpSourceRadioSelection.clear();
-    mpSourceListBox.clear();
-    mpSourceEdit.clear();
-    mpSourceButton.clear();
-    mpDestinationRadioNewSheet.clear();
-    mpDestinationRadioNamedRange.clear();
-    mpDestinationRadioSelection.clear();
-    mpDestinationListBox.clear();
-    mpDestinationEdit.clear();
-    mpDestinationButton.clear();
-    mpBtnOK.clear();
-    mpBtnCancel.clear();
-    mpActiveEdit.clear();
-    ScAnyRefDlg::dispose();
 }
 
 void ScPivotLayoutDialog::SetupSource()
 {
-    mpSourceListBox->Clear();
+    mxSourceListBox->clear();
 
     ScRange aSourceRange;
     OUString sSourceNamedRangeName;
@@ -234,21 +201,21 @@ void ScPivotLayoutDialog::SetupSource()
         if(!aSourceRange.IsValid())
         {
             // Source is probably a DB Range
-            mpSourceRadioNamedRange->Disable();
-            mpSourceRadioSelection->Disable();
+            mxSourceRadioNamedRange->set_sensitive(false);
+            mxSourceRadioSelection->set_sensitive(false);
             ToggleSource();
             return;
         }
         else
         {
             OUString aSourceRangeName = aSourceRange.Format(ScRefFlags::RANGE_ABS_3D, mpDocument, maAddressDetails);
-            mpSourceEdit->SetText(aSourceRangeName);
+            mxSourceEdit->SetText(aSourceRangeName);
         }
     }
     else
     {
-        mpSourceRadioNamedRange->Disable();
-        mpSourceRadioSelection->Disable();
+        mxSourceRadioNamedRange->set_sensitive(false);
+        mxSourceRadioSelection->set_sensitive(false);
         ToggleSource();
         return;
     }
@@ -264,7 +231,7 @@ void ScPivotLayoutDialog::SetupSource()
     {
         if (!aIterator.WasDBName())
         {
-            mpSourceListBox->InsertEntry(aEachName);
+            mxSourceListBox->append_text(aEachName);
             if (aEachRange == aSourceRange)
             {
                 sSourceNamedRangeName = aEachName;
@@ -275,25 +242,25 @@ void ScPivotLayoutDialog::SetupSource()
 
     if (bIsNamedRange)
     {
-        mpSourceListBox->SelectEntry(sSourceNamedRangeName);
-        mpSourceRadioNamedRange->Check();
+        mxSourceListBox->set_active_text(sSourceNamedRangeName);
+        mxSourceRadioNamedRange->set_active(true);
     }
     else
     {
-        mpSourceListBox->SelectEntryPos(0);
-        mpSourceRadioSelection->Check();
+        mxSourceListBox->set_active(0);
+        mxSourceRadioSelection->set_active(true);
     }
 
     // If entries - select first entry, otherwise disable the radio button.
-    if (mpSourceListBox->GetEntryCount() <= 0)
-        mpSourceRadioNamedRange->Disable();
+    if (mxSourceListBox->get_count() <= 0)
+        mxSourceRadioNamedRange->set_sensitive(false);
 
     ToggleSource();
 }
 
 void ScPivotLayoutDialog::SetupDestination()
 {
-    mpDestinationListBox->Clear();
+    mxDestinationListBox->clear();
 
     // Fill up named ranges
     ScAreaNameIterator aIterator(mpDocument);
@@ -304,20 +271,20 @@ void ScPivotLayoutDialog::SetupDestination()
     {
         if (!aIterator.WasDBName())
         {
-            mpDestinationListBox->InsertEntry(aName);
+            mxDestinationListBox->append_text(aName);
         }
     }
 
     // If entries - select first entry, otherwise disable the radio button.
-    if (mpDestinationListBox->GetEntryCount() > 0)
-        mpDestinationListBox->SelectEntryPos(0);
+    if (mxDestinationListBox->get_count() > 0)
+        mxDestinationListBox->set_active(0);
     else
-        mpDestinationRadioNamedRange->Disable();
+        mxDestinationRadioNamedRange->set_sensitive(false);
 
     //
     if (mbNewPivotTable)
     {
-        mpDestinationRadioNewSheet->Check();
+        mxDestinationRadioNewSheet->set_active(true);
     }
     else
     {
@@ -325,8 +292,8 @@ void ScPivotLayoutDialog::SetupDestination()
         {
             ScAddress aAddress(maPivotParameters.nCol, maPivotParameters.nRow, maPivotParameters.nTab);
             OUString aAddressString = aAddress.Format(ScRefFlags::ADDR_ABS_3D, mpDocument, maAddressDetails);
-            mpDestinationEdit->SetText(aAddressString);
-            mpDestinationRadioSelection->Check();
+            mxDestinationEdit->SetText(aAddressString);
+            mxDestinationRadioSelection->set_active(true);
         }
     }
 
@@ -335,11 +302,11 @@ void ScPivotLayoutDialog::SetupDestination()
 
 void ScPivotLayoutDialog::FillValuesToListBoxes()
 {
-    mpListBoxField->FillLabelFields(maPivotParameters.maLabelArray);
-    mpListBoxData->FillDataField(maPivotParameters.maDataFields);
-    mpListBoxColumn->FillFields(maPivotParameters.maColFields);
-    mpListBoxRow->FillFields(maPivotParameters.maRowFields);
-    mpListBoxPage->FillFields(maPivotParameters.maPageFields);
+    mxListBoxField->FillLabelFields(maPivotParameters.maLabelArray);
+    mxListBoxData->FillDataField(maPivotParameters.maDataFields);
+    mxListBoxColumn->FillFields(maPivotParameters.maColFields);
+    mxListBoxRow->FillFields(maPivotParameters.maRowFields);
+    mxListBoxPage->FillFields(maPivotParameters.maPageFields);
 }
 
 void ScPivotLayoutDialog::SetActive()
@@ -350,13 +317,13 @@ void ScPivotLayoutDialog::SetActive()
         if(mpActiveEdit != nullptr)
         {
             mpActiveEdit->GrabFocus();
-            if (mpActiveEdit == mpSourceEdit)
+            if (mpActiveEdit == mxSourceEdit.get())
                 UpdateSourceRange();
         }
     }
     else
     {
-        GrabFocus();
+        m_xDialog->grab_focus();
     }
 
     RefInputDone();
@@ -375,13 +342,13 @@ void ScPivotLayoutDialog::SetReference(const ScRange& rReferenceRange, ScDocumen
 
     OUString aReferenceString = rReferenceRange.Format(ScRefFlags::RANGE_ABS_3D, pDocument, maAddressDetails);
 
-    if (mpActiveEdit == mpSourceEdit)
+    if (mpActiveEdit == mxSourceEdit.get())
     {
-        mpSourceEdit->SetRefString(aReferenceString);
+        mxSourceEdit->SetRefString(aReferenceString);
     }
-    else if (mpActiveEdit == mpDestinationEdit)
+    else if (mpActiveEdit == mxDestinationEdit.get())
     {
-        mpDestinationEdit->SetRefString(aReferenceString);
+        mxDestinationEdit->SetRefString(aReferenceString);
     }
 }
 
@@ -401,17 +368,17 @@ void ScPivotLayoutDialog::ItemInserted(const ScItemValue* pItemValue, ScPivotLay
         case ScPivotLayoutTreeList::COLUMN_LIST:
         case ScPivotLayoutTreeList::PAGE_LIST:
         {
-            mpListBoxRow->RemoveEntryForItem(pItemValue);
-            mpListBoxColumn->RemoveEntryForItem(pItemValue);
-            mpListBoxPage->RemoveEntryForItem(pItemValue);
+            mxListBoxRow->RemoveEntryForItem(pItemValue);
+            mxListBoxColumn->RemoveEntryForItem(pItemValue);
+            mxListBoxPage->RemoveEntryForItem(pItemValue);
         }
         break;
         case ScPivotLayoutTreeList::LABEL_LIST:
         {
-            mpListBoxRow->RemoveEntryForItem(pItemValue);
-            mpListBoxColumn->RemoveEntryForItem(pItemValue);
-            mpListBoxPage->RemoveEntryForItem(pItemValue);
-            mpListBoxData->RemoveEntryForItem(pItemValue);
+            mxListBoxRow->RemoveEntryForItem(pItemValue);
+            mxListBoxColumn->RemoveEntryForItem(pItemValue);
+            mxListBoxPage->RemoveEntryForItem(pItemValue);
+            mxListBoxData->RemoveEntryForItem(pItemValue);
         }
         break;
         default:
@@ -426,23 +393,23 @@ void ScPivotLayoutDialog::UpdateSourceRange()
 
     ScSheetSourceDesc aSourceSheet = *maPivotTableObject.GetSheetDesc();
 
-    if (mpSourceRadioNamedRange->IsChecked())
+    if (mxSourceRadioNamedRange->get_active())
     {
-        OUString aEntryString = mpSourceListBox->GetSelectedEntry();
+        OUString aEntryString = mxSourceListBox->get_active_text();
         ScRange aSourceRange = lclGetRangeForNamedRange(aEntryString, mpDocument);
         if (!aSourceRange.IsValid() || aSourceSheet.GetSourceRange() == aSourceRange)
             return;
         aSourceSheet.SetRangeName(aEntryString);
     }
-    else if (mpSourceRadioSelection->IsChecked())
+    else if (mxSourceRadioSelection->get_active())
     {
-        OUString aSourceString = mpSourceEdit->GetText();
+        OUString aSourceString = mxSourceEdit->GetText();
         ScRange aSourceRange;
         ScRefFlags nResult = aSourceRange.Parse(aSourceString, mpDocument, maAddressDetails);
 
         bool bIsValid = (nResult & ScRefFlags::VALID) == ScRefFlags::VALID; // aSourceString is valid
 
-        mpSourceEdit->SetRefValid(true);
+        mxSourceEdit->SetRefValid(true);
 
         if (bIsValid)
         {
@@ -460,7 +427,7 @@ void ScPivotLayoutDialog::UpdateSourceRange()
 
         if (!aSourceRange.IsValid())
         {
-            mpSourceEdit->SetRefValid(false);
+            mxSourceEdit->SetRefValid(false);
             return;
         }
 
@@ -470,7 +437,7 @@ void ScPivotLayoutDialog::UpdateSourceRange()
         aSourceSheet.SetSourceRange(aSourceRange);
         if (aSourceSheet.CheckSourceRange() != nullptr)
         {
-            mpSourceEdit->SetRefValid(false);
+            mxSourceEdit->SetRefValid(false);
             return;
         }
     }
@@ -542,32 +509,32 @@ void ScPivotLayoutDialog::ApplyChanges()
 
 void ScPivotLayoutDialog::ApplySaveData(ScDPSaveData& rSaveData)
 {
-    rSaveData.SetIgnoreEmptyRows(mpCheckIgnoreEmptyRows->IsChecked());
-    rSaveData.SetRepeatIfEmpty(mpCheckIdentifyCategories->IsChecked());
-    rSaveData.SetColumnGrand(mpCheckTotalColumns->IsChecked());
-    rSaveData.SetRowGrand(mpCheckTotalRows->IsChecked());
-    rSaveData.SetFilterButton(mpCheckAddFilter->IsChecked());
-    rSaveData.SetDrillDown(mpCheckDrillToDetail->IsChecked());
+    rSaveData.SetIgnoreEmptyRows(mxCheckIgnoreEmptyRows->get_active());
+    rSaveData.SetRepeatIfEmpty(mxCheckIdentifyCategories->get_active());
+    rSaveData.SetColumnGrand(mxCheckTotalColumns->get_active());
+    rSaveData.SetRowGrand(mxCheckTotalRows->get_active());
+    rSaveData.SetFilterButton(mxCheckAddFilter->get_active());
+    rSaveData.SetDrillDown(mxCheckDrillToDetail->get_active());
 
     Reference<XDimensionsSupplier> xSource = maPivotTableObject.GetSource();
 
     ScPivotFieldVector aPageFieldVector;
-    mpListBoxPage->PushEntriesToPivotFieldVector(aPageFieldVector);
+    mxListBoxPage->PushEntriesToPivotFieldVector(aPageFieldVector);
     ScDPObject::ConvertOrientation(rSaveData, aPageFieldVector, DataPilotFieldOrientation_PAGE,
                                    xSource, maPivotParameters.maLabelArray);
 
     ScPivotFieldVector aColFieldVector;
-    mpListBoxColumn->PushEntriesToPivotFieldVector(aColFieldVector);
+    mxListBoxColumn->PushEntriesToPivotFieldVector(aColFieldVector);
     ScDPObject::ConvertOrientation(rSaveData, aColFieldVector, DataPilotFieldOrientation_COLUMN,
                                    xSource, maPivotParameters.maLabelArray);
 
     ScPivotFieldVector aRowFieldVector;
-    mpListBoxRow->PushEntriesToPivotFieldVector(aRowFieldVector);
+    mxListBoxRow->PushEntriesToPivotFieldVector(aRowFieldVector);
     ScDPObject::ConvertOrientation(rSaveData, aRowFieldVector, DataPilotFieldOrientation_ROW,
                                    xSource, maPivotParameters.maLabelArray);
 
     ScPivotFieldVector aDataFieldVector;
-    mpListBoxData->PushEntriesToPivotFieldVector(aDataFieldVector);
+    mxListBoxData->PushEntriesToPivotFieldVector(aDataFieldVector);
     ScDPObject::ConvertOrientation(rSaveData, aDataFieldVector, DataPilotFieldOrientation_DATA,
                                    xSource, maPivotParameters.maLabelArray,
                                    &aColFieldVector, &aRowFieldVector, &aPageFieldVector);
@@ -611,17 +578,17 @@ bool ScPivotLayoutDialog::GetDestination(ScRange& aDestinationRange, bool& bToNe
 {
     bToNewSheet = false;
 
-    if (mpDestinationRadioNamedRange->IsChecked())
+    if (mxDestinationRadioNamedRange->get_active())
     {
-        OUString aName = mpDestinationListBox->GetSelectedEntry();
+        OUString aName = mxDestinationListBox->get_active_text();
         aDestinationRange = lclGetRangeForNamedRange(aName, mpDocument);
         if (!aDestinationRange.IsValid())
             return false;
     }
-    else if (mpDestinationRadioSelection->IsChecked())
+    else if (mxDestinationRadioSelection->get_active())
     {
         ScAddress aAddress;
-        aAddress.Parse(mpDestinationEdit->GetText(), mpDocument, maAddressDetails);
+        aAddress.Parse(mxDestinationEdit->GetText(), mpDocument, maAddressDetails);
         aDestinationRange = ScRange(aAddress);
     }
     else
@@ -634,12 +601,12 @@ bool ScPivotLayoutDialog::GetDestination(ScRange& aDestinationRange, bool& bToNe
 
 ScItemValue* ScPivotLayoutDialog::GetItem(SCCOL nColumn)
 {
-    return mpListBoxField->GetItem(nColumn);
+    return mxListBoxField->GetItem(nColumn);
 }
 
 bool ScPivotLayoutDialog::IsDataElement(SCCOL nColumn)
 {
-    return mpListBoxField->IsDataElement(nColumn);
+    return mxListBoxField->IsDataElement(nColumn);
 }
 
 ScDPLabelData& ScPivotLayoutDialog::GetLabelData(SCCOL nColumn)
@@ -649,98 +616,103 @@ ScDPLabelData& ScPivotLayoutDialog::GetLabelData(SCCOL nColumn)
 
 void ScPivotLayoutDialog::PushDataFieldNames(std::vector<ScDPName>& rDataFieldNames)
 {
-    return mpListBoxData->PushDataFieldNames(rDataFieldNames);
+    mxListBoxData->PushDataFieldNames(rDataFieldNames);
 }
 
-bool ScPivotLayoutDialog::Close()
+void ScPivotLayoutDialog::Close()
 {
-    return DoClose( ScPivotLayoutWrapper::GetChildWindowId() );
+    DoClose( ScPivotLayoutWrapper::GetChildWindowId() );
 }
 
-IMPL_LINK_NOARG( ScPivotLayoutDialog, OKClicked, Button*, void )
+IMPL_LINK_NOARG( ScPivotLayoutDialog, OKClicked, weld::Button&, void )
 {
     ApplyChanges();
-    Close();
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG( ScPivotLayoutDialog, CancelClicked, Button*, void )
+IMPL_LINK_NOARG( ScPivotLayoutDialog, CancelClicked, weld::Button&, void )
 {
-    Close();
+    m_xDialog->response(RET_CANCEL);
 }
 
-IMPL_LINK(ScPivotLayoutDialog, GetFocusHandler, Control&, rCtrl, void)
+IMPL_LINK(ScPivotLayoutDialog, GetEditFocusHandler, formula::WeldRefEdit&, rCtrl, void)
+{
+    mpActiveEdit = &rCtrl;
+    mpActiveEdit->SelectAll();
+}
+
+IMPL_LINK(ScPivotLayoutDialog, GetButtonFocusHandler, formula::WeldRefButton&, rCtrl, void)
 {
     mpActiveEdit = nullptr;
 
-    if (&rCtrl == static_cast<Control*>(mpSourceEdit)  ||
-        &rCtrl == static_cast<Control*>(mpSourceButton))
-    {
-        mpActiveEdit = mpSourceEdit;
-    }
-    else if (&rCtrl == static_cast<Control*>(mpDestinationEdit)  ||
-             &rCtrl == static_cast<Control*>(mpDestinationButton))
-    {
-        mpActiveEdit = mpDestinationEdit;
-    }
+    if (&rCtrl == mxSourceButton.get())
+        mpActiveEdit = mxSourceEdit.get();
+    else if (&rCtrl == mxDestinationButton.get())
+        mpActiveEdit = mxDestinationEdit.get();
 
     if (mpActiveEdit)
-        mpActiveEdit->SetSelection(Selection(0, SELECTION_MAX));
+        mpActiveEdit->SelectAll();
 }
 
-IMPL_LINK_NOARG(ScPivotLayoutDialog, LoseFocusHandler, Control&, void)
+IMPL_LINK_NOARG(ScPivotLayoutDialog, LoseEditFocusHandler, formula::WeldRefEdit&, void)
 {
-    mbDialogLostFocus = !IsActive();
+    mbDialogLostFocus = !m_xDialog->has_toplevel_focus();
 }
 
-IMPL_LINK_NOARG(ScPivotLayoutDialog, SourceListSelected, ListBox&, void)
+IMPL_LINK_NOARG(ScPivotLayoutDialog, LoseButtonFocusHandler, formula::WeldRefButton&, void)
+{
+    mbDialogLostFocus = !m_xDialog->has_toplevel_focus();
+}
+
+IMPL_LINK_NOARG(ScPivotLayoutDialog, SourceListSelected, weld::ComboBox&, void)
 {
     UpdateSourceRange();
 }
 
-IMPL_LINK_NOARG(ScPivotLayoutDialog, SourceEditModified, Edit&, void)
+IMPL_LINK_NOARG(ScPivotLayoutDialog, SourceEditModified, formula::WeldRefEdit&, void)
 {
     UpdateSourceRange();
 }
 
-IMPL_LINK_NOARG(ScPivotLayoutDialog, ToggleSource, RadioButton&, void)
+IMPL_LINK_NOARG(ScPivotLayoutDialog, ToggleSource, weld::ToggleButton&, void)
 {
     ToggleSource();
 }
 
 void ScPivotLayoutDialog::ToggleSource()
 {
-    bool bNamedRange = mpSourceRadioNamedRange->IsChecked();
-    bool bSelection = mpSourceRadioSelection->IsChecked();
-    mpSourceListBox->Enable(bNamedRange);
-    mpSourceButton->Enable(bSelection);
-    mpSourceEdit->Enable(bSelection);
+    bool bNamedRange = mxSourceRadioNamedRange->get_active();
+    bool bSelection = mxSourceRadioSelection->get_active();
+    mxSourceListBox->set_sensitive(bNamedRange);
+    mxSourceButton->GetWidget()->set_sensitive(bSelection);
+    mxSourceEdit->GetWidget()->set_sensitive(bSelection);
     UpdateSourceRange();
 }
 
-IMPL_LINK_NOARG(ScPivotLayoutDialog, ToggleDestination, RadioButton&, void)
+IMPL_LINK_NOARG(ScPivotLayoutDialog, ToggleDestination, weld::ToggleButton&, void)
 {
     ToggleDestination();
 }
 
 void ScPivotLayoutDialog::ToggleDestination()
 {
-    bool bNamedRange = mpDestinationRadioNamedRange->IsChecked();
-    bool bSelection = mpDestinationRadioSelection->IsChecked();
-    mpDestinationListBox->Enable(bNamedRange);
-    mpDestinationButton->Enable(bSelection);
-    mpDestinationEdit->Enable(bSelection);
+    bool bNamedRange = mxDestinationRadioNamedRange->get_active();
+    bool bSelection = mxDestinationRadioSelection->get_active();
+    mxDestinationListBox->set_sensitive(bNamedRange);
+    mxDestinationButton->GetWidget()->set_sensitive(bSelection);
+    mxDestinationEdit->GetWidget()->set_sensitive(bSelection);
 }
 
-ScPivotLayoutTreeListBase* ScPivotLayoutDialog::FindListBoxFor(const SvTreeListEntry *pEntry)
+ScPivotLayoutTreeListBase* ScPivotLayoutDialog::FindListBoxFor(const weld::TreeIter& rEntry)
 {
-    if (mpListBoxPage->HasEntry(pEntry))
-        return mpListBoxPage.get();
-    if (mpListBoxColumn->HasEntry(pEntry))
-        return mpListBoxColumn.get();
-    if (mpListBoxRow->HasEntry(pEntry))
-        return mpListBoxRow.get();
-    if (mpListBoxData->HasEntry(pEntry))
-        return mpListBoxData.get();
+    if (mxListBoxPage->HasEntry(rEntry))
+        return mxListBoxPage.get();
+    if (mxListBoxColumn->HasEntry(rEntry))
+        return mxListBoxColumn.get();
+    if (mxListBoxRow->HasEntry(rEntry))
+        return mxListBoxRow.get();
+    if (mxListBoxData->HasEntry(rEntry))
+        return mxListBoxData.get();
     return nullptr;
 }
 

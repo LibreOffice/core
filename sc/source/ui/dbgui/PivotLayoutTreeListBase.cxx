@@ -14,24 +14,21 @@
 
 #include <vcl/treelistentry.hxx>
 
-ScPivotLayoutTreeListBase::ScPivotLayoutTreeListBase(vcl::Window* pParent, WinBits nBits, SvPivotTreeListType eType)
-    : SvTreeListBox(pParent, nBits)
+ScPivotLayoutTreeListBase::ScPivotLayoutTreeListBase(std::unique_ptr<weld::TreeView> xControl, SvPivotTreeListType eType)
+    : mxControl(std::move(xControl))
     , meType(eType)
     , mpParent(nullptr)
 {
-    SetHighlightRange();
+    mxControl->connect_focus_in(LINK(this, ScPivotLayoutTreeListBase, GetFocusHdl));
+    mxControl->connect_focus_out(LINK(this, ScPivotLayoutTreeListBase, LoseFocusHdl));
+
+#if 0
     SetDragDropMode(DragDropMode::CTRL_MOVE | DragDropMode::APP_MOVE  | DragDropMode::APP_DROP);
+#endif
 }
 
 ScPivotLayoutTreeListBase::~ScPivotLayoutTreeListBase()
 {
-    disposeOnce();
-}
-
-void ScPivotLayoutTreeListBase::dispose()
-{
-    mpParent.clear();
-    SvTreeListBox::dispose();
 }
 
 void ScPivotLayoutTreeListBase::Setup(ScPivotLayoutDialog* pParent)
@@ -39,6 +36,7 @@ void ScPivotLayoutTreeListBase::Setup(ScPivotLayoutDialog* pParent)
     mpParent = pParent;
 }
 
+#if 0
 DragDropMode ScPivotLayoutTreeListBase::NotifyStartDrag(TransferDataContainer& /*aTransferDataContainer*/,
                                                   SvTreeListEntry* /*pEntry*/ )
 {
@@ -65,24 +63,31 @@ TriState ScPivotLayoutTreeListBase::NotifyCopying(SvTreeListEntry* /*pTarget*/, 
 {
     return TRISTATE_FALSE;
 }
+#endif
 
-bool ScPivotLayoutTreeListBase::HasEntry(const SvTreeListEntry* pEntry)
+bool ScPivotLayoutTreeListBase::HasEntry(const weld::TreeIter& rEntry)
 {
-    SvTreeListEntry* pEachEntry;
-    for (pEachEntry = First(); pEachEntry != nullptr; pEachEntry = Next(pEachEntry))
+    std::unique_ptr<weld::TreeIter> xEntry(mxControl->make_iterator());
+    if (!mxControl->get_iter_first(*xEntry))
+        return false;
+
+    do
     {
-        if(pEachEntry == pEntry)
+        if (mxControl->iter_compare(*xEntry, rEntry))
             return true;
-    }
+    } while (mxControl->iter_next(*xEntry));
+
     return false;
 }
 
 void ScPivotLayoutTreeListBase::PushEntriesToPivotFieldVector(ScPivotFieldVector& rVector)
 {
-    SvTreeListEntry* pEachEntry;
-    for (pEachEntry = First(); pEachEntry != nullptr; pEachEntry = Next(pEachEntry))
+    std::unique_ptr<weld::TreeIter> xEachEntry(mxControl->make_iterator());
+    if (!mxControl->get_iter_first(*xEachEntry))
+        return;
+    do
     {
-        ScItemValue* pItemValue = static_cast<ScItemValue*>(pEachEntry->GetUserData());
+        ScItemValue* pItemValue = reinterpret_cast<ScItemValue*>(mxControl->get_id(*xEachEntry).toInt64());
         ScPivotFuncData& rFunctionData = pItemValue->maFunctionData;
 
         ScPivotField aField;
@@ -92,33 +97,25 @@ void ScPivotLayoutTreeListBase::PushEntriesToPivotFieldVector(ScPivotFieldVector
         aField.mnDupCount    = rFunctionData.mnDupCount;
         aField.maFieldRef    = rFunctionData.maFieldRef;
         rVector.push_back(aField);
-    }
+    } while (mxControl->iter_next(*xEachEntry));
 }
 
+#if 0
 void ScPivotLayoutTreeListBase::InsertEntryForSourceTarget(SvTreeListEntry* /*pSource*/, SvTreeListEntry* /*pTarget*/)
 {}
+#endif
 
 void ScPivotLayoutTreeListBase::RemoveEntryForItem(const ScItemValue* pItemValue)
 {
-    SvTreeListEntry* pEachEntry;
-    for (pEachEntry = First(); pEachEntry != nullptr; pEachEntry = Next(pEachEntry))
-    {
-        ScItemValue* pEachItemValue = static_cast<ScItemValue*>(pEachEntry->GetUserData());
-        if (pEachItemValue == pItemValue)
-        {
-            GetModel()->Remove(pEachEntry);
-            return;
-        }
-    }
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pItemValue)));
+    mxControl->remove_id(sId);
 }
 
-void ScPivotLayoutTreeListBase::GetFocus()
+IMPL_LINK_NOARG(ScPivotLayoutTreeListBase, GetFocusHdl, weld::Widget&, void)
 {
-    SvTreeListBox::GetFocus();
-
     if (!mpParent || !mpParent->mpPreviouslyFocusedListBox)
         return;
-
+#if 0
     if (GetGetFocusFlags() & GetFocusFlags::Mnemonic)
     {
         SvTreeListEntry* pEntry = mpParent->mpPreviouslyFocusedListBox->GetCurEntry();
@@ -126,11 +123,11 @@ void ScPivotLayoutTreeListBase::GetFocus()
             InsertEntryForSourceTarget(pEntry, nullptr);
         mpParent->mpPreviouslyFocusedListBox->GrabFocus();
     }
+#endif
 }
 
-void ScPivotLayoutTreeListBase::LoseFocus()
+IMPL_LINK_NOARG(ScPivotLayoutTreeListBase, LoseFocusHdl, weld::Widget&, void)
 {
-    SvTreeListBox::LoseFocus();
     if (mpParent)
         mpParent->mpPreviouslyFocusedListBox = this;
 }

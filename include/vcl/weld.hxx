@@ -655,6 +655,7 @@ public:
     virtual std::vector<int> get_selected_rows() const = 0;
     virtual void set_font_color(int pos, const Color& rColor) const = 0;
     virtual void scroll_to_row(int pos) = 0;
+    virtual int get_cursor_index() const = 0;
     virtual void set_cursor(int pos) = 0;
 
     //by text

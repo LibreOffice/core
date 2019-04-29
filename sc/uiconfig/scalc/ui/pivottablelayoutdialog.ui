@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="PivotTableLayout">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="pivottablelayoutdialog|PivotTableLayout">Pivot Table Layout</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -104,12 +108,12 @@
                           <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">0</property>
                             <property name="xpad">4</property>
                             <property name="label" translatable="yes" context="pivottablelayoutdialog|label3">Column Fields:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">listbox-column</property>
+                            <property name="xalign">0</property>
+                            <property name="yalign">0</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -121,7 +125,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sclo-ScPivotLayoutTreeList" id="listbox-column">
+                          <object class="GtkTreeView" id="listbox-column">
                             <property name="width_request">200</property>
                             <property name="height_request">100</property>
                             <property name="visible">True</property>
@@ -156,12 +160,12 @@
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">0</property>
                             <property name="xpad">4</property>
                             <property name="label" translatable="yes" context="pivottablelayoutdialog|label5">Data Fields:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">listbox-data</property>
+                            <property name="xalign">0</property>
+                            <property name="yalign">0</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -173,7 +177,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sclo-ScPivotLayoutTreeListData" id="listbox-data">
+                          <object class="GtkTreeView" id="listbox-data">
                             <property name="width_request">240</property>
                             <property name="height_request">120</property>
                             <property name="visible">True</property>
@@ -208,12 +212,12 @@
                           <object class="GtkLabel" id="label4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">0</property>
                             <property name="xpad">4</property>
                             <property name="label" translatable="yes" context="pivottablelayoutdialog|label4">Row Fields:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">listbox-row</property>
+                            <property name="xalign">0</property>
+                            <property name="yalign">0</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -225,7 +229,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sclo-ScPivotLayoutTreeList" id="listbox-row">
+                          <object class="GtkTreeView" id="listbox-row">
                             <property name="width_request">180</property>
                             <property name="height_request">100</property>
                             <property name="visible">True</property>
@@ -259,12 +263,12 @@
                           <object class="GtkLabel" id="label2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">0</property>
                             <property name="xpad">4</property>
                             <property name="label" translatable="yes" context="pivottablelayoutdialog|label2">Page Fields:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">listbox-page</property>
+                            <property name="xalign">0</property>
+                            <property name="yalign">0</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -276,7 +280,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sclo-ScPivotLayoutTreeList" id="listbox-page">
+                          <object class="GtkTreeView" id="listbox-page">
                             <property name="width_request">200</property>
                             <property name="height_request">100</property>
                             <property name="visible">True</property>
@@ -321,11 +325,11 @@
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="xpad">4</property>
                         <property name="label" translatable="yes" context="pivottablelayoutdialog|label1">Available Fields:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">listbox-fields</property>
+                        <property name="xalign">0</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -337,7 +341,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sclo-ScPivotLayoutTreeListLabel" id="listbox-fields">
+                      <object class="GtkTreeView" id="listbox-fields">
                         <property name="width_request">180</property>
                         <property name="height_request">150</property>
                         <property name="visible">True</property>
@@ -402,8 +406,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
                         <property name="hexpand">True</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -418,8 +422,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
                         <property name="hexpand">True</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -434,8 +438,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
                         <property name="hexpand">True</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -450,8 +454,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
                         <property name="hexpand">True</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -466,8 +470,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
                         <property name="hexpand">True</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -482,8 +486,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
                         <property name="hexpand">True</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -555,8 +559,8 @@
                                     <property name="receives_default">False</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
+                                    <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
-                                    <property name="group">destination-radio-named-range</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -581,7 +585,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="foruilo-RefEdit" id="destination-edit">
+                                  <object class="GtkEntry" id="destination-edit">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="hexpand">True</property>
@@ -592,7 +596,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="foruilo-RefButton" id="destination-button">
+                                  <object class="GtkButton" id="destination-button">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
@@ -622,7 +626,7 @@
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
-                                    <property name="group">destination-radio-selection</property>
+                                    <property name="group">destination-radio-new-sheet</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -679,8 +683,8 @@
                                     <property name="receives_default">False</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
+                                    <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
-                                    <property name="group">source-radio-named-range</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -688,7 +692,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="foruilo-RefEdit" id="source-edit">
+                                  <object class="GtkEntry" id="source-edit">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="hexpand">True</property>
@@ -699,7 +703,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="foruilo-RefButton" id="source-button">
+                                  <object class="GtkButton" id="source-button">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
