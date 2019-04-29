@@ -1243,7 +1243,7 @@ void SvmTest::checkWallpaper(const GDIMetaFile& rMetaFile)
 {
     xmlDocPtr pDoc = dumpMeta(rMetaFile);
 
-    // Fuuny enough - we don't serialize the rectangle of the wallpaper so it's always EMPTY
+    // Funny enough - we don't serialize the rectangle of the wallpaper so it's always EMPTY
     assertXPathAttrs(pDoc, "/metafile/wallpaper[1]",
     {
         {"left", "0"},
