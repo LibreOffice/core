@@ -1049,10 +1049,12 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
 
-        sal_Int16 nTargetBitcount = aBitmap.GetBitCount() == 32 ? 32 : 24;
+        sal_uInt16 nSourceBitcount = aBitmap.GetBitCount();
 
-        Bitmap aOutBmp(Size(nDstW, nDstH), nTargetBitcount);
+        Bitmap aOutBmp(Size(nDstW, nDstH), std::max(nSourceBitcount, sal_uInt16(24)));
         Size aOutSize = aOutBmp.GetSizePixel();
+        sal_uInt16 nTargetBitcount = aOutBmp.GetBitCount();
+
         if (!aOutSize.Width() || !aOutSize.Height())
         {
             SAL_WARN("vcl.gdi", "bmp creation failed");
@@ -1076,7 +1078,10 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
                                    bVMirr, bHMirr );
 
             bool bScaleUp = fScaleX >= fScaleThresh && fScaleY >= fScaleThresh;
-            if( pReadAccess->HasPalette() )
+            // If we have a source bitmap with a palette the scaling converts
+            // from up to 8 bit image -> 24 bit non-palette, which is then
+            // adapted back to the same type as original.
+            if (pReadAccess->HasPalette())
             {
                 switch( pReadAccess->GetScanlineFormat() )
                 {
@@ -1090,21 +1095,30 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
                     break;
                 }
             }
+            // Here we know that we are dealing with a non-palette source bitmap.
+            // The target is either 24 or 32 bit, depending on the image and
+            // the capabilities of the backend. If for some reason the destination
+            // is not the same bit-depth as the source, then we can't use
+            // a fast path, so we always need to process with a general scaler.
+            else if (nSourceBitcount != nTargetBitcount)
+            {
+                pScaleRangeFn = bScaleUp ? scaleUpNonPalleteGeneral : scaleDownNonPalleteGeneral;
+            }
+            // If we get here then we can only use a fast path, but let's
+            // still keep the fallback to the general scaler alive.
             else
             {
                 switch( pReadAccess->GetScanlineFormat() )
                 {
                 case ScanlineFormat::N24BitTcBgr:
                 case ScanlineFormat::N24BitTcRgb:
-                    pScaleRangeFn = bScaleUp ? scaleUp24bit
-                                             : scaleDown24bit;
+                    pScaleRangeFn = bScaleUp ? scaleUp24bit : scaleDown24bit;
                     break;
                 case ScanlineFormat::N32BitTcRgba:
                 case ScanlineFormat::N32BitTcBgra:
                 case ScanlineFormat::N32BitTcArgb:
                 case ScanlineFormat::N32BitTcAbgr:
-                    pScaleRangeFn = bScaleUp ? scaleUp32bit
-                                             : scaleDown32bit;
+                    pScaleRangeFn = bScaleUp ? scaleUp32bit : scaleDown32bit;
                     break;
                 default:
                     pScaleRangeFn = bScaleUp ? scaleUpNonPalleteGeneral
