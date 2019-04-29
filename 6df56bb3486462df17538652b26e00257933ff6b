@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_2d00b234",
+        "filename": "xmlsecurity/inc/xmlsignaturehelper.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-04-29T11:17:57Z",
+      "side": 1,
+      "message": "Maybe switch to the more compact form in a follow-up commit to have consistency?",
+      "revId": "6df56bb3486462df17538652b26e00257933ff6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
