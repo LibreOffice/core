@@ -445,7 +445,6 @@ Qt5Widget::Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
 {
     create();
     setMouseTracking(true);
-    setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
 }
 
