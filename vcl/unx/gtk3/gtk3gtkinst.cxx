@@ -1269,6 +1269,18 @@ protected:
         m_aFocusInHdl.Call(*this);
     }
 
+    static gboolean signalMnemonicActivate(GtkWidget*, gboolean, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        SolarMutexGuard aGuard;
+        return pThis->signal_mnemonic_activate();
+    }
+
+    bool signal_mnemonic_activate()
+    {
+        return m_aMnemonicActivateHdl.Call(*this);
+    }
+
     static gboolean signalFocusOut(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
@@ -1304,6 +1316,7 @@ private:
     bool m_bFrozen;
     sal_uInt16 m_nLastMouseButton;
     gulong m_nFocusInSignalId;
+    gulong m_nMnemonicActivateSignalId;
     gulong m_nFocusOutSignalId;
     gulong m_nKeyPressSignalId;
     gulong m_nKeyReleaseSignalId;
@@ -1484,6 +1497,7 @@ public:
         , m_bFrozen(false)
         , m_nLastMouseButton(0)
         , m_nFocusInSignalId(0)
+        , m_nMnemonicActivateSignalId(0)
         , m_nFocusOutSignalId(0)
         , m_nKeyPressSignalId(0)
         , m_nKeyReleaseSignalId(0)
@@ -1865,6 +1879,12 @@ public:
         weld::Widget::connect_focus_in(rLink);
     }
 
+    virtual void connect_mnemonic_activate(const Link<Widget&, bool>& rLink) override
+    {
+        m_nMnemonicActivateSignalId = g_signal_connect(m_pWidget, "mnemonic-activate", G_CALLBACK(signalMnemonicActivate), this);
+        weld::Widget::connect_mnemonic_activate(rLink);
+    }
+
     virtual void connect_focus_out(const Link<Widget&, void>& rLink) override
     {
         m_nFocusOutSignalId = g_signal_connect(m_pWidget, "focus-out-event", G_CALLBACK(signalFocusOut), this);
@@ -1971,6 +1991,8 @@ public:
             g_signal_handler_disconnect(m_pWidget, m_nButtonReleaseSignalId);
         if (m_nFocusInSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nFocusInSignalId);
+        if (m_nMnemonicActivateSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nMnemonicActivateSignalId);
         if (m_nFocusOutSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nFocusOutSignalId);
         if (m_nSizeAllocateSignalId)
@@ -1983,6 +2005,8 @@ public:
     {
         if (m_nFocusInSignalId)
             g_signal_handler_block(m_pWidget, m_nFocusInSignalId);
+        if (m_nMnemonicActivateSignalId)
+            g_signal_handler_block(m_pWidget, m_nMnemonicActivateSignalId);
         if (m_nFocusOutSignalId)
             g_signal_handler_block(m_pWidget, m_nFocusOutSignalId);
         if (m_nSizeAllocateSignalId)
@@ -1995,6 +2019,8 @@ public:
             g_signal_handler_unblock(m_pWidget, m_nSizeAllocateSignalId);
         if (m_nFocusOutSignalId)
             g_signal_handler_unblock(m_pWidget, m_nFocusOutSignalId);
+        if (m_nMnemonicActivateSignalId)
+            g_signal_handler_unblock(m_pWidget, m_nMnemonicActivateSignalId);
         if (m_nFocusInSignalId)
             g_signal_handler_unblock(m_pWidget, m_nFocusInSignalId);
     }
@@ -5854,6 +5880,10 @@ struct GtkInstanceTreeIter : public weld::TreeIter
     GtkTreeIter iter;
 };
 
+class GtkInstanceTreeView;
+
+static GtkInstanceTreeView* g_DragSource;
+
 class GtkInstanceTreeView : public GtkInstanceContainer, public virtual weld::TreeView
 {
 private:
@@ -5882,7 +5912,9 @@ private:
     gulong m_nVAdjustmentChangedSignalId;
     gulong m_nRowDeletedSignalId;
     gulong m_nRowInsertedSignalId;
-    gulong m_nPopupMenu;
+    gulong m_nPopupMenuSignalId;
+    gulong m_nDragBeginSignalId;
+    gulong m_nDragEndSignalId;
 
     DECL_LINK(async_signal_changed, void*, void);
 
@@ -6168,6 +6200,17 @@ private:
         return default_sort_func(pModel, a, b, m_xSorter.get());
     }
 
+    static void signalDragBegin(GtkWidget*, GdkDragContext*, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        g_DragSource = pThis;
+    }
+
+    static void signalDragEnd(GtkWidget*, GdkDragContext*, gpointer)
+    {
+        g_DragSource = nullptr;
+    }
+
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), pBuilder, bTakeOwnership)
@@ -6181,7 +6224,9 @@ public:
         , m_nRowActivatedSignalId(g_signal_connect(pTreeView, "row-activated", G_CALLBACK(signalRowActivated), this))
         , m_nTestExpandRowSignalId(g_signal_connect(pTreeView, "test-expand-row", G_CALLBACK(signalTestExpandRow), this))
         , m_nVAdjustmentChangedSignalId(0)
-        , m_nPopupMenu(g_signal_connect(pTreeView, "popup-menu", G_CALLBACK(signalPopupMenu), this))
+        , m_nPopupMenuSignalId(g_signal_connect(pTreeView, "popup-menu", G_CALLBACK(signalPopupMenu), this))
+        , m_nDragBeginSignalId(g_signal_connect(pTreeView, "drag-begin", G_CALLBACK(signalDragBegin), this))
+        , m_nDragEndSignalId(g_signal_connect(pTreeView, "drag-end", G_CALLBACK(signalDragEnd), this))
     {
         m_pColumns = gtk_tree_view_get_columns(m_pTreeView);
         int nIndex(0);
@@ -6962,6 +7007,23 @@ public:
         return path != nullptr;
     }
 
+    virtual int get_cursor_index() const override
+    {
+        int nRet = -1;
+
+        GtkTreePath* path;
+        gtk_tree_view_get_cursor(m_pTreeView, &path, nullptr);
+        if (path)
+        {
+            gint depth;
+            gint* indices = gtk_tree_path_get_indices_with_depth(path, &depth);
+            nRet = indices[depth-1];
+            gtk_tree_path_free(path);
+        }
+
+        return nRet;
+    }
+
     virtual void set_cursor(const weld::TreeIter& rIter) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
@@ -7309,9 +7371,100 @@ public:
         weld::TreeView::connect_popup_menu(rLink);
     }
 
+    virtual bool get_dest_row_at_pos(const Point &rPos, weld::TreeIter* pResult) override
+    {
+        // to keep it simple we'll default to always drop before the current row
+        // except for the special edge cases
+        GtkTreeViewDropPosition pos = GTK_TREE_VIEW_DROP_BEFORE;
+
+        // unhighlight current highlighted row
+        gtk_tree_view_set_drag_dest_row(m_pTreeView, nullptr, pos);
+
+        GtkTreePath *path = nullptr;
+        GtkTreeViewDropPosition gtkpos = GTK_TREE_VIEW_DROP_BEFORE;
+        bool ret = gtk_tree_view_get_dest_row_at_pos(m_pTreeView, rPos.X(), rPos.Y(),
+                                                     &path, &gtkpos);
+
+        // find the last entry in the model for comparison
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        int nChildren = gtk_tree_model_iter_n_children(pModel, nullptr);
+        GtkTreePath *lastpath;
+        if (nChildren)
+            lastpath = gtk_tree_path_new_from_indices(nChildren - 1, -1);
+        else
+            lastpath = gtk_tree_path_new_from_indices(0, -1);
+
+        if (!ret)
+        {
+            // empty space, draw an indicator at the last entry
+            assert(!path);
+            path = gtk_tree_path_copy(lastpath);
+            pos = GTK_TREE_VIEW_DROP_AFTER;
+        }
+        else if (gtk_tree_path_compare(path, lastpath) == 0)
+        {
+            // if we're on the last entry, see if gtk thinks
+            // the drop should be before or after it, and if
+            // its after, treat it like a drop into empty
+            // space, i.e. append it
+            if (gtkpos == GTK_TREE_VIEW_DROP_AFTER ||
+                gtkpos == GTK_TREE_VIEW_DROP_INTO_OR_AFTER)
+            {
+                ret = false;
+                pos = gtkpos;
+            }
+        }
+
+        if (ret && pResult)
+        {
+            GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(*pResult);
+            gtk_tree_model_get_iter(pModel, &rGtkIter.iter, path);
+        }
+
+        // highlight the row
+        gtk_tree_view_set_drag_dest_row(m_pTreeView, path, pos);
+
+        assert(path);
+        gtk_tree_path_free(path);
+        gtk_tree_path_free(lastpath);
+
+        // auto scroll if we're close to the edges
+        GtkAdjustment* pVAdjustment = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(m_pTreeView));
+        double fStep = gtk_adjustment_get_step_increment(pVAdjustment);
+        if (rPos.Y() < fStep)
+        {
+            double fValue = gtk_adjustment_get_value(pVAdjustment) - fStep;
+            if (fValue < 0)
+                fValue = 0.0;
+            gtk_adjustment_set_value(pVAdjustment, fValue);
+        }
+        else
+        {
+            GdkRectangle aRect;
+            gtk_tree_view_get_visible_rect(m_pTreeView, &aRect);
+            if (rPos.Y() > aRect.height - fStep)
+            {
+                double fValue = gtk_adjustment_get_value(pVAdjustment) + fStep;
+                double fMax = gtk_adjustment_get_upper(pVAdjustment);
+                if (fValue > fMax)
+                    fValue = fMax;
+                gtk_adjustment_set_value(pVAdjustment, fValue);
+            }
+        }
+
+        return ret;
+    }
+
+    virtual TreeView* get_drag_source() const override
+    {
+        return g_DragSource;
+    }
+
     virtual ~GtkInstanceTreeView() override
     {
-        g_signal_handler_disconnect(m_pTreeView, m_nPopupMenu);
+        g_signal_handler_disconnect(m_pTreeView, m_nDragEndSignalId);
+        g_signal_handler_disconnect(m_pTreeView, m_nDragBeginSignalId);
+        g_signal_handler_disconnect(m_pTreeView, m_nPopupMenuSignalId);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         g_signal_handler_disconnect(pModel, m_nRowDeletedSignalId);
         g_signal_handler_disconnect(pModel, m_nRowInsertedSignalId);

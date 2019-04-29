@@ -472,12 +472,12 @@ public:
                                                                     const SfxItemSet& rArgSet,
                                                                     sal_uInt16 nSourceTab) = 0;
 
-    virtual VclPtr<AbstractScDPFunctionDlg> CreateScDPFunctionDlg(weld::Window* pParent,
+    virtual VclPtr<AbstractScDPFunctionDlg> CreateScDPFunctionDlg(weld::Widget* pParent,
                                                                   const ScDPLabelDataVector& rLabelVec,
                                                                   const ScDPLabelData& rLabelData,
                                                                   const ScPivotFuncData& rFuncData ) = 0;
 
-    virtual VclPtr<AbstractScDPSubtotalDlg> CreateScDPSubtotalDlg(weld::Window* pParent,
+    virtual VclPtr<AbstractScDPSubtotalDlg> CreateScDPSubtotalDlg(weld::Widget* pParent,
                                                                   ScDPObject& rDPObj,
                                                                   const ScDPLabelData& rLabelData,
                                                                   const ScPivotFuncData& rFuncData,

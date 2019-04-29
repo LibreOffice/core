@@ -244,6 +244,7 @@ public:
     int mnChildEventListenersIteratingCount;
     std::set<Link<VclWindowEvent&,void>> maChildEventListenersDeleted;
     Link<vcl::Window&, bool> maHelpRequestHdl;
+    Link<vcl::Window&, bool> maMnemonicActivateHdl;
 
     // The canvas interface for this VCL window. Is persistent after the first GetCanvas() call
     css::uno::WeakReference< css::rendering::XCanvas >    mxCanvas;

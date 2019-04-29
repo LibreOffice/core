@@ -18,14 +18,11 @@
 #include <vcl/treelistentry.hxx>
 #include <pivot.hxx>
 
-VCL_BUILDER_FACTORY_ARGS(ScPivotLayoutTreeListLabel,
-                         WB_BORDER | WB_TABSTOP | WB_CLIPCHILDREN);
-
-ScPivotLayoutTreeListLabel::ScPivotLayoutTreeListLabel(vcl::Window* pParent, WinBits nBits)
-    : ScPivotLayoutTreeListBase(pParent, nBits, LABEL_LIST)
+ScPivotLayoutTreeListLabel::ScPivotLayoutTreeListLabel(std::unique_ptr<weld::TreeView> xControl)
+    : ScPivotLayoutTreeListBase(std::move(xControl), LABEL_LIST)
     , maDataItem(0)
 {
-    SetForceMakeVisible(true);
+    mxControl->connect_key_press(LINK(this, ScPivotLayoutTreeListLabel, KeyInputHdl));
 }
 
 ScPivotLayoutTreeListLabel::~ScPivotLayoutTreeListLabel()
@@ -33,7 +30,7 @@ ScPivotLayoutTreeListLabel::~ScPivotLayoutTreeListLabel()
 
 void ScPivotLayoutTreeListLabel::FillLabelFields(ScDPLabelDataVector& rLabelVector)
 {
-    Clear();
+    mxControl->clear();
     maItemValues.clear();
 
     for (std::unique_ptr<ScDPLabelData> const & pLabelData : rLabelVector)
@@ -47,17 +44,16 @@ void ScPivotLayoutTreeListLabel::FillLabelFields(ScDPLabelDataVector& rLabelVect
 
         if (pLabelData->mnOriginalDim < 0 && !pLabelData->mbDataLayout)
         {
-            SvTreeListEntry* pEntry = InsertEntry(pLabelData->maName);
-            pEntry->SetUserData(pValue);
+            mxControl->append(OUString::number(reinterpret_cast<sal_Int64>(pValue)), pLabelData->maName);
         }
     }
 }
 
-void ScPivotLayoutTreeListLabel::InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* /*pTarget*/)
+void ScPivotLayoutTreeListLabel::InsertEntryForSourceTarget(weld::TreeView& rSource, int /*nTarget*/)
 {
-    ScPivotLayoutTreeListBase *pSourceTree = mpParent->FindListBoxFor(pSource);
-    if (pSourceTree)
-        pSourceTree->RemoveSelection();
+    if (&rSource == mxControl.get())
+        return;
+    rSource.remove(rSource.get_selected_index());
 }
 
 bool ScPivotLayoutTreeListLabel::IsDataElement(SCCOL nColumn)
@@ -72,20 +68,20 @@ ScItemValue* ScPivotLayoutTreeListLabel::GetItem(SCCOL nColumn)
     return maItemValues[nColumn].get();
 }
 
-void ScPivotLayoutTreeListLabel::KeyInput(const KeyEvent& rKeyEvent)
+IMPL_LINK(ScPivotLayoutTreeListLabel, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
 {
     vcl::KeyCode aCode = rKeyEvent.GetKeyCode();
     sal_uInt16 nCode = aCode.GetCode();
 
     if (nCode == KEY_DELETE)
     {
-        const SvTreeListEntry* pEntry = GetCurEntry();
-        if (pEntry)
-            GetModel()->Remove(pEntry);
-        return;
+        int nEntry = mxControl->get_cursor_index();
+        if (nEntry != -1)
+            mxControl->remove(nEntry);
+        return true;
     }
 
-    SvTreeListBox::KeyInput(rKeyEvent);
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
