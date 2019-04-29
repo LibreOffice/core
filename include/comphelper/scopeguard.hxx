@@ -24,6 +24,28 @@
 
 #include <functional>
 
+
+// For some reason, Android buildbot issues -Werror like this:
+//   In file included from
+//   /home/android/lo/master-android-arm/filter/source/xmlfilteradaptor/XmlFilterAdaptor.cxx:50:
+//   /home/android/lo/master-android-arm/include/comphelper/scopeguard.hxx:36:14:
+//   error: function 'comphelper::<deduction guide for ScopeGuard><(lambda at
+//   /home/android/lo/master-android-arm/filter/source/xmlfilteradaptor/XmlFilterAdaptor.cxx:146:34)>'
+//   has internal linkage but is not defined [-Werror,-Wundefined-internal]
+//       explicit ScopeGuard( Func && func ) : m_func( std::move(func) ) {}
+//                ^
+//   /home/android/lo/master-android-arm/filter/source/xmlfilteradaptor/XmlFilterAdaptor.cxx:146:28:
+//   note: used here
+//       comphelper::ScopeGuard guard([&]() {
+//                              ^
+#ifdef ANDROID
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundefined-internal"
+#endif
+#endif
+
+
 namespace comphelper {
 
 /** ScopeGuard to ease writing exception-safe code.
@@ -54,6 +76,12 @@ private:
 };
 
 } // namespace comphelper
+
+#ifdef ANDROID
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
+#endif
 
 #endif // ! defined(INCLUDED_COMPHELPER_SCOPEGUARD_HXX)
 
