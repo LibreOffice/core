@@ -34,6 +34,7 @@ public:
     void testTdf119875();
     void testTdf116989();
     void testTdf122607();
+    void testTdf122607_regression();
     void testTdf123898();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
@@ -53,6 +54,7 @@ public:
     CPPUNIT_TEST(testTdf119875);
     CPPUNIT_TEST(testTdf116989);
     CPPUNIT_TEST(testTdf122607);
+    CPPUNIT_TEST(testTdf122607_regression);
     CPPUNIT_TEST(testTdf123898);
     CPPUNIT_TEST_SUITE_END();
 
@@ -321,6 +323,54 @@ void SwLayoutWriter::testTdf122607()
                 "/root/page[1]/anchored/fly/txt[1]/anchored/fly/tab/row[2]/cell/txt[7]/anchored/"
                 "fly/txt/Text[1]",
                 "nWidth", "428");
+}
+
+void SwLayoutWriter::testTdf122607_regression()
+{
+    discardDumpedLayout();
+    if (mxComponent.is())
+        mxComponent->dispose();
+
+    auto const pName("tdf122607_leerzeile.odt");
+
+    OUString const url(m_directories.getURLFromSrc(DATA_DIRECTORY)
+                       + OUString::createFromAscii(pName));
+
+    // note: must set Hidden property, so that SfxFrameViewWindow_Impl::Resize()
+    // does *not* forward initial VCL Window Resize and thereby triggers a
+    // layout which does not happen on soffice --convert-to pdf.
+    std::vector<beans::PropertyValue> aFilterOptions = {
+        { beans::PropertyValue("Hidden", -1, uno::Any(true), beans::PropertyState_DIRECT_VALUE) },
+    };
+
+    std::cout << pName << ":\n";
+
+    // inline the loading because currently properties can't be passed...
+    mxComponent = loadFromDesktop(url, "com.sun.star.text.TextDocument",
+                                  comphelper::containerToSequence(aFilterOptions));
+
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Sequence<beans::PropertyValue> props(comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
+    }));
+    utl::TempFile aTempFile;
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->storeToURL(aTempFile.GetURL(), props);
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // somehow these 2 rows overlapped in the PDF unless CalcLayout() runs
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/infos/bounds", "mbFixSize",
+                "false");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/infos/bounds", "top", "2977");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/infos/bounds", "height", "241");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/infos/bounds", "mbFixSize",
+                "true");
+    // this was 3034, causing the overlap
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/infos/bounds", "top", "3218");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/infos/bounds", "height", "164");
+
+    aTempFile.EnableKillingFile();
 }
 
 void SwLayoutWriter::testTdf123898()
