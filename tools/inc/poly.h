@@ -22,8 +22,6 @@
 #include <sal/types.h>
 #include <tools/poly.hxx>
 
-class Point;
-
 class SAL_WARN_UNUSED ImplPolygon
 {
 public:
@@ -54,10 +52,6 @@ public:
 };
 
 #define MAX_POLYGONS        SAL_MAX_UINT16
-
-namespace tools {
-class Polygon;
-}
 
 struct ImplPolyPolygon
 {

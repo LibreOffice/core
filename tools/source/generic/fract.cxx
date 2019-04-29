@@ -19,14 +19,11 @@
 
 #include <tools/fract.hxx>
 #include <tools/debug.hxx>
-#include <tools/lineend.hxx>
 #include <tools/stream.hxx>
 #include <o3tl/safeint.hxx>
-#include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
-#include <limits.h>
 #include <algorithm>
 #include <cmath>
 

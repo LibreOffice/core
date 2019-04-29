@@ -21,7 +21,6 @@
 
 #include <cassert>
 
-#include <sal/log.hxx>
 #include <sal/types.h>
 #include <rtl/strbuf.hxx>
 #include <tools/inetmsg.hxx>

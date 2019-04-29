@@ -24,7 +24,6 @@
 
 #include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 #include <osl/endian.h>
 #include <osl/diagnose.h>

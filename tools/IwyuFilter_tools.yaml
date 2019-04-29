@@ -1,0 +1,34 @@
+---
+assumeFilename: tools/source/generic/gen.cxx
+blacklist:
+    tools/qa/cppunit/test_pathutils.cxx:
+    # Needed for WIN32 specific unit test
+    - cppunit/TestAssert.h
+    - cppunit/plugin/TestPlugIn.h
+    - tools/pathutils.hxx
+    - cwchar
+    tools/source/debug/debug.cxx:
+    # Needed for linker visibility
+    - tools/diagnose_ex.h
+    tools/source/generic/poly.cxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h
+    tools/source/misc/extendapplicationenvironment.cxx:
+    # Needed on MACOSX
+    - config_folders.h
+    # Needed for linker visibility
+    - tools/extendapplicationenvironment.hxx
+    tools/source/ref/ref.cxx:
+    # Don't replace with impl. detail
+    - tools/weakbase.hxx
+    tools/source/stream/strmwnt.cxx:
+    # WIN32-specific file
+    - string.h
+    - osl/thread.h
+    - o3tl/char16_t2wchar_t.hxx
+    tools/source/stream/strmunx.cxx:
+    # Needed for OSL_DEBUG_LEVEL > 1
+    - osl/thread.h
+    tools/source/string/tenccvt.cxx:
+    # Needed for linker visibility
+    - tools/tenccvt.hxx
