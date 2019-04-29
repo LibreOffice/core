@@ -92,7 +92,7 @@
 
 using namespace com::sun::star::frame;
 using namespace com::sun::star::uno;
-//using namespace com::sun::star::util; geht wegen Color nicht
+//using namespace com::sun::star::util; can't be done because of Color
 using namespace com::sun::star::beans;
 using namespace svt;
 //using namespace svt::table;
@@ -155,7 +155,7 @@ StatementFlow::StatementFlow( sal_uLong nServiceId, SCmdStream *pCmdIn, ImplRemo
     if( nParams & PARAM_USHORT_1 )  pCmdIn->Read( nSNr1 );
     if( nParams & PARAM_ULONG_1 )   pCmdIn->Read( nLNr1 );
     if( nParams & PARAM_STR_1 )     pCmdIn->Read( aString1 );
-    if( nParams & PARAM_BOOL_1 )    pCmdIn->Read( bBool1 ); // sollte nie auftreten!!
+    if( nParams & PARAM_BOOL_1 )    pCmdIn->Read( bBool1 ); // should never occur!!
 
 #if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Reading FlowControl: " );
@@ -182,12 +182,12 @@ void StatementFlow::SendViaSocket()
     bSending = sal_True;
     if ( pCommLink )
     {
-        if ( !pCommLink->TransferDataStream( pRet->GetStream() ) )  // tritt ein Fehler auf, so wird sofort gelöscht ...
+        if ( !pCommLink->TransferDataStream( pRet->GetStream() ) )  // If an error occurs, it is deleted immediately. ...
             pCommLink = NULL;
     }
     else
     {
-        // Macht nix. Wenn das Basic nicht mehr da ist, ist sowiso alles egal
+        // It doesn't matter if there is no basic core for the testtool.
         DBG_ERROR("Cannot send results to TestTool");
     }
 
@@ -210,16 +210,16 @@ sal_Bool StatementFlow::Execute()
 
             if ( !bUseIPC )
             {
-                // bBool1 wurde im CTOR auf sal_False initialisiert
-                if ( !bBool1 )  // also erster Durchlauf
+                // bBool1 was initialized to sal_False in CTOR
+                if ( !bBool1 )  // so first run
                 {
                     pRemoteControl->pRetStream = pRet->GetStream();
-                    bBool1 = sal_True;  // wurde im CTOR auf sal_False initialisiert
+                    bBool1 = sal_True;  // was initialized to sal_False in CTOR
                     nRetryCount = nRetryCount * 4;
                 }
-                if ( pRemoteControl->pRetStream && (nRetryCount--) )    // also solange nicht abgeholt
+                if ( pRemoteControl->pRetStream && (nRetryCount--) )    // unless you picked up it.
                 {
-                    return sal_False;   // Bitte einmal vom Callstack runter
+                    return sal_False;   // Please get off the call stack once.
                 }
             }
 
@@ -232,7 +232,7 @@ sal_Bool StatementFlow::Execute()
     {
     case F_EndCommandBlock:
         if ( !bUseIPC )
-        {   // wird oben abgehandelt
+        {   // is discussed above
             pRet->Reset();
             IsError = sal_False;
         }
@@ -263,7 +263,7 @@ sal_Bool StatementFlow::Execute()
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-// neue Hilfsfunktion, die stetig erweitert werden muss
+// new auxiliary function, which must be constantly extended
 static short ImpGetRType( Window *pWin )
 {
     short nRT = C_NoType;
@@ -323,7 +323,7 @@ static short ImpGetRType( Window *pWin )
 
         case WINDOW_PATTERNBOX:         nRT = C_PatternBox;     break;
         case WINDOW_TOOLBOX:            nRT = C_ToolBox;        break;
-// Gibts nicht       case WINDOW_VALUESET:          nRT = C_ValueSet;       break;
+// Doesn't exist       case WINDOW_VALUESET:            nRT = C_ValueSet;       break;
         case WINDOW_CONTROL:            nRT = C_Control;        break;
         case WINDOW_OKBUTTON:           nRT = C_OkButton;       break;
         case WINDOW_CANCELBUTTON:       nRT = C_CancelButton;   break;
@@ -657,10 +657,10 @@ sal_Bool StatementSlot::Execute()
     }
 
 
-/*  Neues Verfahren ab 334!
-    Neue Methode zum einstellen, daß Modale Dialoge immer Asynchron aufgerufen werden
-    und echter Returnwert, ob Slot geklappt hat
-    und Testen ob Slot überhaupt durch UI aufgerufen werden kann        */
+/*  New method from the line 334!
+    New method for setting that modal dialogs are always called asynchronously
+    and a real return value, whether slot has worked
+    and testing whether slot can be called by UI at all       */
 
 
     SendProfile( SlotString( nFunctionId ) );
@@ -770,7 +770,7 @@ StatementCommand::StatementCommand( SCmdStream *pCmdIn )
         m_pDbgWin->AddText( "*Deleting all Commands:\n" );
         #endif
         bReadingCommands = sal_False;
-        while ( StatementList::pFirst != this ) // Alles Löschen außer mich selbst
+        while ( StatementList::pFirst != this ) // Delete everything except myself
         {
             StatementList *pDeQue = StatementList::pFirst;
             pDeQue->Advance();
@@ -800,7 +800,7 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
             pBase = pBase->GetParent();
     }
 
-    {   // Klammerung, so daß der String nicht während der Rekursion bestehen bleibt
+    {   // KParentheses, so that the string does not persist during recursion.
         String aName;
         sal_Bool bSkip = sal_False;
 
@@ -905,7 +905,7 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
                 TypeString(pBase->GetType()).Append(aTypeSuffix).AppendAscii(": ").Append(aName), sal_False );
 
 
-            if ( pBase->GetType() == WINDOW_TOOLBOX )   // Buttons und Controls auf Toolboxen.
+            if ( pBase->GetType() == WINDOW_TOOLBOX )   // Buttons and Controls in Toolboxes.
             {
                 ToolBox *pTB = ((ToolBox*)pBase);
                 sal_uInt16 i;
@@ -980,11 +980,11 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
                     }
                 }
 
-                return; // ToolBox ist hier schon komplett abgehandelt.
+                return; // ToolBox is already completely covered here..
             }
 
 
-            if ( pBase->GetType() == WINDOW_BUTTONDIALOG    // Buttons auf Buttondialogen mit ID
+            if ( pBase->GetType() == WINDOW_BUTTONDIALOG    // Buttons on button dialogs with ID
                 || pBase->GetType() == WINDOW_MESSBOX
                 || pBase->GetType() == WINDOW_INFOBOX
                 || pBase->GetType() == WINDOW_WARNINGBOX
@@ -1024,12 +1024,12 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
                             break;
                     }
 
-                    pRet->GenReturn ( RET_WinInfo, aID, (comm_ULONG)pBD->GetPushButton( pBD->GetButtonId(i) )->GetType(),   // So daß der Text angezeigt wird!
+                    pRet->GenReturn ( RET_WinInfo, aID, (comm_ULONG)pBD->GetPushButton( pBD->GetButtonId(i) )->GetType(),   // so the text is displayed!
                         TypeString(pBD->GetPushButton( pBD->GetButtonId(i) )->GetType()).AppendAscii(": ").Append(aName)
                         .AppendAscii(" ButtonId = ").AppendAscii( aID.GetBuffer() ), sal_False );
                 }
 
-                return; // ButtonDialog ist hier schon komplett abgehandelt.
+                return; // ButtonDialog is already completely covered here.
             }
 
 
@@ -1081,7 +1081,7 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
                     }
                 }
 
-                return; // Menu ist hier schon komplett abgehandelt.
+                return; // Menu is already completely covered here
             }
         }
     }
