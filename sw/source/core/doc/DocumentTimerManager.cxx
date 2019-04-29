@@ -124,8 +124,7 @@ DocumentTimerManager::IdleJob DocumentTimerManager::GetNextIdleJob() const
         {
             bool bIsOnlineSpell = pShell->GetViewOptions()->IsOnlineSpell();
             bool bIsAutoGrammar = false;
-            SvtLinguConfig().GetProperty( OUString(
-                        UPN_IS_GRAMMAR_AUTO ) ) >>= bIsAutoGrammar;
+            SvtLinguConfig().GetProperty( UPN_IS_GRAMMAR_AUTO ) >>= bIsAutoGrammar;
 
             if( bIsOnlineSpell && bIsAutoGrammar && m_rDoc.StartGrammarChecking( true ) )
                 return IdleJob::Grammar;

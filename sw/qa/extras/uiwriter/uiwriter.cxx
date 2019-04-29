@@ -2248,7 +2248,7 @@ void SwUiWriterTest::testTdf69282()
     verticalSpace.SetLower(14);
     rSourceMasterFormat.SetFormatAttr(verticalSpace);
     //Changing the style and copying it to target
-    source->ChgPageDesc(OUString("SourceStyle"), *sPageDesc);
+    source->ChgPageDesc("SourceStyle", *sPageDesc);
     target->CopyPageDesc(*sPageDesc, *tPageDesc);
     //Checking the set values on all Formats in target
     SwFrameFormat& rTargetMasterFormat = tPageDesc->GetMaster();
@@ -2309,7 +2309,7 @@ void SwUiWriterTest::testTdf69282WithMirror()
     verticalSpace.SetLower(14);
     rSourceMasterFormat.SetFormatAttr(verticalSpace);
     //Changing the style and copying it to target
-    source->ChgPageDesc(OUString("SourceStyle"), *sPageDesc);
+    source->ChgPageDesc("SourceStyle", *sPageDesc);
     target->CopyPageDesc(*sPageDesc, *tPageDesc);
     //Checking the set values on all Formats in target
     SwFrameFormat& rTargetMasterFormat = tPageDesc->GetMaster();

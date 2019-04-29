@@ -40,14 +40,14 @@ ChineseTranslationDialog::ChineseTranslationDialog(weld::Window* pParent)
 {
     SvtLinguConfig  aLngCfg;
     bool bValue = false;
-    Any aAny( aLngCfg.GetProperty( OUString( UPN_IS_DIRECTION_TO_SIMPLIFIED ) ) );
+    Any aAny( aLngCfg.GetProperty( UPN_IS_DIRECTION_TO_SIMPLIFIED ) );
     aAny >>= bValue;
     if( bValue )
         m_xRB_To_Simplified->set_active(true);
     else
         m_xRB_To_Traditional->set_active(true);
 
-    aAny = aLngCfg.GetProperty( OUString( UPN_IS_TRANSLATE_COMMON_TERMS ) );
+    aAny = aLngCfg.GetProperty( UPN_IS_TRANSLATE_COMMON_TERMS );
     if( aAny >>= bValue )
         m_xCB_Translate_Commonterms->set_active( bValue );
 
@@ -72,9 +72,9 @@ IMPL_LINK_NOARG(ChineseTranslationDialog, OkHdl, weld::Button&, void)
     SvtLinguConfig  aLngCfg;
     Any aAny;
     aAny <<= m_xRB_To_Simplified->get_active();
-    aLngCfg.SetProperty( OUString( UPN_IS_DIRECTION_TO_SIMPLIFIED ), aAny );
+    aLngCfg.SetProperty( UPN_IS_DIRECTION_TO_SIMPLIFIED, aAny );
     aAny <<= m_xCB_Translate_Commonterms->get_active();
-    aLngCfg.SetProperty( OUString( UPN_IS_TRANSLATE_COMMON_TERMS ), aAny );
+    aLngCfg.SetProperty( UPN_IS_TRANSLATE_COMMON_TERMS, aAny );
 
     m_xDialog->response(RET_OK);
 }

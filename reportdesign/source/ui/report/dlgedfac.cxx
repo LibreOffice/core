@@ -88,7 +88,7 @@ IMPL_STATIC_LINK(
                 pNewObj = new OOle2Obj(aParams.rSdrModel, SERVICE_REPORTDEFINITION, OBJ_DLG_SUBREPORT);
                 break;
             case OBJ_OLE2:
-                pNewObj = new OOle2Obj(aParams.rSdrModel, OUString("com.sun.star.chart2.ChartDocument"),OBJ_OLE2);
+                pNewObj = new OOle2Obj(aParams.rSdrModel, "com.sun.star.chart2.ChartDocument", OBJ_OLE2);
                 break;
             default:
                 OSL_FAIL("Unknown object id");

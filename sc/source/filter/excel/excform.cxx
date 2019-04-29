@@ -195,7 +195,7 @@ ExcelToSc::~ExcelToSc()
 
 std::unique_ptr<ScTokenArray> ExcelToSc::GetDummy()
 {
-    aPool.Store( OUString("Dummy()") );
+    aPool.Store( "Dummy()" );
     aPool >> aStack;
     return aPool.GetTokenArray( aStack.Get());
 }
@@ -221,7 +221,7 @@ ConvErr ExcelToSc::Convert( std::unique_ptr<ScTokenArray>& pResult, XclImpStream
 
     if( nFormulaLen == 0 )
     {
-        aPool.Store( OUString("-/-") );
+        aPool.Store( "-/-" );
         aPool >> aStack;
         pResult = aPool.GetTokenArray( aStack.Get());
         return ConvErr::OK;

@@ -60,7 +60,7 @@ using namespace ::com::sun::star;
 #define PROPERTYNAME_CONTEXT                            ADDONSMENUITEM_STRING_CONTEXT
 #define PROPERTYNAME_SUBMENU                            ADDONSMENUITEM_STRING_SUBMENU
 
-#define IMAGES_NODENAME                                 OUString("UserDefinedImages" )
+#define IMAGES_NODENAME                                 "UserDefinedImages"
 
 // The following order is mandatory. Please add properties at the end!
 #define INDEX_URL               0

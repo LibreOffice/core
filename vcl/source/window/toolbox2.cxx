@@ -1734,7 +1734,7 @@ bool ToolBox::AlwaysLocked()
         {
             // feature enabled ?
             bool bStatesEnabled = bool();
-            css::uno::Any aValue = aNode.getNodeValue( OUString("StatesEnabled") );
+            css::uno::Any aValue = aNode.getNodeValue( "StatesEnabled" );
             if( aValue >>= bStatesEnabled )
             {
                 if( bStatesEnabled )
@@ -1745,7 +1745,7 @@ bool ToolBox::AlwaysLocked()
                         "/org.openoffice.Office.UI.GlobalSettings/Toolbars/States" );    // note: case sensitive !
 
                     bool bLocked = bool();
-                    css::uno::Any aValue2 = aNode2.getNodeValue( OUString("Locked") );
+                    css::uno::Any aValue2 = aNode2.getNodeValue( "Locked" );
                     if( aValue2 >>= bLocked )
                         nAlwaysLocked = bLocked ? 1 : 0;
                 }
