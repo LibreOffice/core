@@ -331,7 +331,6 @@ void ScConflictsResolver::HandleAction( ScChangeAction* pAction, bool bIsSharedA
 
 ScConflictsDlg::ScConflictsDlg(weld::Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList)
     : GenericDialogController(pParent, "modules/scalc/ui/conflictsdialog.ui", "ConflictsDialog")
-    , maStrTitleConflict ( ScResId( STR_TITLE_CONFLICT ) )
     , maStrUnknownUser   ( ScResId( STR_UNKNOWN_USER_CONFLICT ) )
     , mpViewData         ( pViewData )
     , mpOwnDoc           ( nullptr )

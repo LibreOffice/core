@@ -182,7 +182,6 @@
 #define SCSTR_QHELP_EXPAND_FORMULA                  NC_("SCSTR_QHELP_EXPAND_FORMULA", "Expand Formula Bar")
 #define SCSTR_QHELP_COLLAPSE_FORMULA                NC_("SCSTR_QHELP_COLLAPSE_FORMULA", "Collapse Formula Bar")
 
-#define STR_TITLE_CONFLICT                          NC_("STR_TITLE_CONFLICT", "Conflict")
 #define STR_TITLE_AUTHOR                            NC_("STR_TITLE_AUTHOR", "Author")
 #define STR_TITLE_DATE                              NC_("STR_TITLE_DATE", "Date")
 #define STR_UNKNOWN_USER_CONFLICT                   NC_("STR_UNKNOWN_USER_CONFLICT", "Unknown User")

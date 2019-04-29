@@ -114,7 +114,6 @@ public:
 class ScConflictsDlg : public weld::GenericDialogController
 {
 private:
-    OUString const      maStrTitleConflict;
     OUString const      maStrUnknownUser;
 
     ScViewData* const   mpViewData;
