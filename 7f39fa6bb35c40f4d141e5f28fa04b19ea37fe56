@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_ed9aca6c",
+        "filename": "include/comphelper/scopeguard.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-04-29T08:47:07Z",
+      "side": 1,
+      "message": "Don\u0027t you need a push and pop, as done in e.g. embedserv/source/inc/stdafx.h?\n\nOtherwise this will silence warnings in all the code that ever includes this header, a bit much.",
+      "revId": "7f39fa6bb35c40f4d141e5f28fa04b19ea37fe56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
