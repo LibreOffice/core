@@ -799,6 +799,17 @@ void Dialog::StateChanged( StateChangedType nType )
         ImplInitSettings();
         Invalidate();
     }
+
+    if (!mbModalMode && nType == StateChangedType::Visible)
+    {
+        if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        {
+            std::vector<vcl::LOKPayloadItem> aPayload;
+            aPayload.emplace_back("title", GetText().toUtf8());
+            OUString aStatus = OUString(this->IsVisible() ? "show" : "hide");
+            pNotifier->notifyWindow(GetLOKWindowId(), aStatus, aPayload);
+        }
+    }
 }
 
 void Dialog::DataChanged( const DataChangedEvent& rDCEvt )
