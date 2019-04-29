@@ -871,6 +871,7 @@ bool SfxUndoManager::Repeat( SfxRepeatTarget &rTarget )
         aGuard.clear();
         if ( pAction->CanRepeat( rTarget ) )
             pAction->Repeat( rTarget );
+        aGuard.reset(); // allow clearing in guard dtor
         return true;
     }
 
