@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ShapeFilterBase.hxx"
+#include <oox/shape/ShapeFilterBase.hxx>
 #include <oox/drawingml/chart/chartconverter.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/ole/vbaproject.hxx>

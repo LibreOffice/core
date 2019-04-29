@@ -17,33 +17,33 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_DIAGRAM_DIAGRAM_HXX
-#define INCLUDED_OOX_DRAWINGML_DIAGRAM_DIAGRAM_HXX
+#ifndef INCLUDED_OOX_HELPER_DIAGRAMRENDERFILTER_HXX
+#define INCLUDED_OOX_HELPER_DIAGRAMRENDERFILTER_HXX
 
-#include <rtl/ustring.hxx>
-#include <oox/drawingml/shape.hxx>
+#include <oox/shape/ShapeFilterBase.hxx>
+#include <oox/core/relations.hxx>
 #include <oox/core/xmlfilterbase.hxx>
+#include <oox/dllapi.h>
+#include <oox/drawingml/chart/chartconverter.hxx>
+#include <oox/drawingml/theme.hxx>
+#include <oox/vml/vmldrawing.hxx>
 
-#include <com/sun/star/xml/dom/XDocument.hpp>
+namespace oox
+{
+class OOX_DLLPUBLIC DiagramRenderFilter : public oox::shape::ShapeFilterBase
+{
+public:
+    explicit DiagramRenderFilter(const css::uno::Reference<css::uno::XComponentContext>& xContext);
 
-namespace oox { namespace drawingml {
+    virtual ::oox::core::RelationsRef importRelations(const OUString& rFragmentPath) override;
+    void importTheme();
 
-/** load diagram data, and put resulting graphic into shape
+private:
+    virtual OUString SAL_CALL getImplementationName() override;
+};
 
-    This method loads the diagram data fragments from the given paths,
-    generate and layout the shapes, and push it as children into the
-    referenced shape.
- */
-void loadDiagram( ShapePtr const & pShape,
-                  core::XmlFilterBase& rFilter,
-                  const OUString& rDataModelPath,
-                  const OUString& rLayoutPath,
-                  const OUString& rQStylePath,
-                  const OUString& rColorStylePath,
-                  const oox::core::Relations& rRelations );
+} // namespace oox
 
-} }
-
-#endif
+#endif // INCLUDED_OOX_HELPER_DIAGRAMRENDERFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

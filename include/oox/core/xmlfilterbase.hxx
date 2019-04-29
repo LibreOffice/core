@@ -143,7 +143,7 @@ public:
 
         @return  The relations collection of the specified fragment.
      */
-    RelationsRef        importRelations( const OUString& rFragmentPath );
+    virtual RelationsRef importRelations( const OUString& rFragmentPath );
 
     /** Adds new relation.
 
