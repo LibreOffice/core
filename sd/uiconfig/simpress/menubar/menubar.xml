@@ -572,6 +572,7 @@
             </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AutoCorrectDlg"/>
+            <menu:menuitem menu:id=".uno:RedactDoc"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:BmpMask"/>
             <menu:menuitem menu:id=".uno:AVMediaPlayer"/>
