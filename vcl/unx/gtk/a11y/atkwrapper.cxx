@@ -68,6 +68,8 @@
 #include <string.h>
 #include <vector>
 
+#include <sal/log.hxx>
+
 using namespace ::com::sun::star;
 
 static GObjectClass *parent_class = nullptr;
@@ -817,6 +819,7 @@ atk_object_wrapper_ref( const uno::Reference< accessibility::XAccessible > &rxAc
     if( create )
         return atk_object_wrapper_new( rxAccessible );
 
+    SAL_DEBUG("atk_object_wrapper_ref: rxAccessible: " << rxAccessible.get());
     return nullptr;
 }
 
@@ -850,6 +853,7 @@ atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessib
         atk_obj->accessible_parent = parent;
 
         ooo_wrapper_registry_add( rxAccessible, atk_obj );
+
 
         if( parent )
             g_object_ref( atk_obj->accessible_parent );

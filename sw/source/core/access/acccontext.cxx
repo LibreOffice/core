@@ -1166,6 +1166,11 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
         // nothing to do;
         return;
     }
+    SAL_DEBUG("SwAccessibleContext this: " << this
+            << ", role: " << getAccessibleRole()
+            << ", name: " << getAccessibleName()
+            << ", parent: " << getAccessibleParent().get()
+            << ", child count: " << getAccessibleChildCount());
 
     const bool bVisibleChildrenOnly = SwAccessibleChild( GetFrame() ).IsVisibleChildrenOnly();
     const bool bNew = rOldFrame.IsEmpty() ||
@@ -1182,6 +1187,13 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
                 // The frame becomes visible. A child event must be send.
                 ::rtl::Reference< SwAccessibleContext > xAccImpl =
                     GetMap()->GetContextImpl( rChildFrameOrObj.GetSwFrame() );
+
+                SAL_DEBUG("SwAccessibleContext xAccImpl: " << xAccImpl.get()
+                        << ", role: " << xAccImpl->getAccessibleRole()
+                        << ", name: " << xAccImpl->getAccessibleName()
+                        << ", parent: " << xAccImpl->getAccessibleParent().get()
+                        << ", child count: " << xAccImpl->getAccessibleChildCount());
+
                 xAccImpl->ScrolledIn();
             }
             else if ( rChildFrameOrObj.GetDrawObject() )

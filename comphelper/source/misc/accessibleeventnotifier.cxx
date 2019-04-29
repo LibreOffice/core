@@ -22,6 +22,8 @@
 #include <rtl/instance.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 
+#include <sal/log.hxx>
+
 #include <map>
 #include <memory>
 #include <limits>
@@ -149,6 +151,9 @@ AccessibleEventNotifier::TClientId AccessibleEventNotifier::registerClient()
     // generate a new client id
     TClientId nNewClientId = generateId( );
 
+//    if (nNewClientId < 40)
+//    SAL_DEBUG("AccessibleEventNotifier::registerClient: nNewClientId: " << nNewClientId);
+
     // the event listeners for the new client
     ::comphelper::OInterfaceContainerHelper2 *const pNewListeners =
         new ::comphelper::OInterfaceContainerHelper2( lclMutex::get() );
@@ -225,6 +230,9 @@ sal_Int32 AccessibleEventNotifier::addEventListener(
     if ( _rxListener.is() )
         aClientPos->second->addInterface( _rxListener );
 
+//    if (_nClient < 40)
+//        SAL_DEBUG("AccessibleEventNotifier::addEventListener: _nClient: " << _nClient << ", _rxListener: " << _rxListener.get());
+
     return aClientPos->second->getLength();
 }
 
@@ -260,6 +268,7 @@ void AccessibleEventNotifier::addEvent( const TClientId _nClient, const Accessib
         aListeners = aClientPos->second->getElements();
     }
 
+    //SAL_DEBUG("AccessibleEventNotifier::addEvent: client id: " << _nClient << ", event id: " << _rEvent.EventId);
     // default handling: loop through all listeners, and notify them
     for ( const auto& rListener : aListeners )
     {

@@ -481,7 +481,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             AtkStateType eRealState = bState ? eNewState : eOldState;
 
             css::uno::Reference<css::accessibility::XAccessibleText>& xAccText = mpWrapper->mpText;
-            if( eNewState == ATK_STATE_FOCUSED && xAccText.is() )
+            if( false && eNewState == ATK_STATE_FOCUSED && xAccText.is() )
             {
                 OUString sText = xAccText->getText();
                 sal_Int32 nLength = sText.getLength();

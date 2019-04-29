@@ -32,6 +32,8 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <vcl/svapp.hxx>
 
+#include <sal/log.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
@@ -70,6 +72,8 @@ void ScAccessibleContextBase::Init()
     }
     msName = createAccessibleName();
     msDescription = createAccessibleDescription();
+
+    SAL_DEBUG("ScAccessibleContextBase::Init: this: " << this << ", msName: " << msName << ", msDescription: " << msDescription);
 }
 
 void SAL_CALL ScAccessibleContextBase::disposing()

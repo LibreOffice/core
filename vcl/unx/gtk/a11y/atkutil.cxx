@@ -35,6 +35,12 @@
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
 
+
+#include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
+#include <com/sun/star/accessibility/AccessibleTextType.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
+
+
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>
@@ -72,10 +78,11 @@ atk_wrapper_focus_idle_handler (gpointer data)
     SolarMutexGuard aGuard;
 
     focus_notify_handler = 0;
-
+    SAL_DEBUG("atk_wrapper_focus_idle_handler #0");
     uno::Reference< accessibility::XAccessible > xAccessible = theNextFocusObject::get();
     if( xAccessible.get() == static_cast < accessibility::XAccessible * > (data) )
     {
+        SAL_DEBUG("atk_wrapper_focus_idle_handler #1: xAccessible: " << xAccessible.get());
         AtkObject *atk_obj = xAccessible.is() ? atk_object_wrapper_ref( xAccessible ) : nullptr;
         // Gail does not notify focus changes to NULL, so do we ..
         if( atk_obj )
@@ -89,11 +96,16 @@ atk_wrapper_focus_idle_handler (gpointer data)
             // also emit state-changed:focused event under the same condition.
             {
                 AtkObjectWrapper* wrapper_obj = ATK_OBJECT_WRAPPER (atk_obj);
+                SAL_DEBUG("atk_wrapper_focus_idle_handler #2: mpText.is: " << wrapper_obj->mpText.is());
+                if (wrapper_obj->mpText.is())
+                    SAL_DEBUG("atk_wrapper_focus_idle_handler #3: text: " << wrapper_obj->mpText->getText());
                 if( wrapper_obj && !wrapper_obj->mpText.is() )
                 {
                     wrapper_obj->mpText.set(wrapper_obj->mpContext, css::uno::UNO_QUERY);
+                    SAL_DEBUG("atk_wrapper_focus_idle_handler #4: mpText.is: " << wrapper_obj->mpText.is());
                     if ( wrapper_obj->mpText.is() )
                     {
+                        SAL_DEBUG("atk_wrapper_focus_idle_handler #5: text: " << wrapper_obj->mpText->getText());
                         gint caretPos = -1;
 
                         try {
@@ -127,6 +139,8 @@ atk_wrapper_focus_tracker_notify_when_idle( const uno::Reference< accessibility:
 {
     if( focus_notify_handler )
         g_source_remove(focus_notify_handler);
+
+    SAL_DEBUG("atk_wrapper_focus_tracker_notify_when_idle: xAccessible: " << xAccessible.get());
 
     theNextFocusObject::get() = xAccessible;
 
@@ -209,6 +223,7 @@ void DocumentFocusListener::disposing( const lang::EventObject& aEvent )
 
 void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObject& aEvent )
 {
+    SAL_DEBUG("DocumentFocusListener::notifyEvent:event id: " << aEvent.EventId);
     try {
         switch( aEvent.EventId )
         {
@@ -216,9 +231,108 @@ void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObj
             {
                 sal_Int16 nState = accessibility::AccessibleStateType::INVALID;
                 aEvent.NewValue >>= nState;
+                SAL_DEBUG("DocumentFocusListener::notifyEvent: STATE_CHANGED: XAccessible: " << getAccessible(aEvent).get());
 
                 if( accessibility::AccessibleStateType::FOCUSED == nState )
-                    atk_wrapper_focus_tracker_notify_when_idle( getAccessible(aEvent) );
+                {
+                    SAL_DEBUG("DocumentFocusListener::notifyEvent: FOCUSED");
+
+                    uno::Reference<css::accessibility::XAccessibleText> xAccText(getAccessible(aEvent), uno::UNO_QUERY);
+                    if( false && xAccText.is() )
+                    {
+                        OUString sText = xAccText->getText();
+                        sal_Int32 nLength = sText.getLength();
+                        SAL_DEBUG("DocumentFocusListener::notifyEvent: xAccText: " << xAccText.get() << ", text: " << sText);
+
+                        if (nLength)
+                        {
+                            css::uno::Reference<css::accessibility::XAccessibleTextAttributes> xAccTextAttr(xAccText, uno::UNO_QUERY);
+                            css::uno::Sequence< OUString > aRequestedAttributes;
+
+                            sal_Int32 nPos = 0;
+                            while (nPos < nLength)
+                            {
+                                css::accessibility::TextSegment aTextSegment = xAccText->getTextAtIndex(nPos, css::accessibility::AccessibleTextType::ATTRIBUTE_RUN);
+                                SAL_DEBUG("DocumentFocusListener::notifyEvent: text segment: '" << aTextSegment.SegmentText << "', start: " << aTextSegment.SegmentStart << ", end: " << aTextSegment.SegmentEnd);
+
+                                css::uno::Sequence< css::beans::PropertyValue > aRunAttributeList;
+                                if (xAccTextAttr.is())
+                                {
+                                    aRunAttributeList = xAccTextAttr->getRunAttributes(nPos, aRequestedAttributes);
+                                }
+                                else
+                                {
+                                    aRunAttributeList = xAccText->getCharacterAttributes(nPos, aRequestedAttributes);
+                                }
+
+                                sal_Int32 nSize = aRunAttributeList.getLength();
+                                SAL_DEBUG("DocumentFocusListener::notifyEvent: attribute list size: " << nSize);
+                                if (nSize)
+                                {
+                                    OUString sValue;
+                                    OUString sAttributes = "{ ";
+                                    for (const auto& attribute: aRunAttributeList)
+                                    {
+                                        if (attribute.Name.isEmpty())
+                                            continue;
+
+        //                                OUString sType = attribute.Value.getValueTypeName();
+        //                                //attribute.Value >>= sValue;
+        //                                if (sAttributes != "{ ")
+        //                                    sAttributes += ", ";
+        //                                sAttributes += attribute.Name + ": " + sType;
+
+                                        if (attribute.Name == "CharHeight" || attribute.Name == "CharWeight")
+                                        {
+                                            float fValue;
+                                            attribute.Value >>= fValue;
+                                            sValue = OUString::number(fValue);
+                                        }
+                                        else if (attribute.Name == "CharPosture")
+                                        {
+                                            awt::FontSlant nValue;
+                                            attribute.Value >>= nValue;
+                                            sValue = OUString::number((unsigned int)(nValue));
+                                        }
+                                        else if (attribute.Name == "CharUnderline")
+                                        {
+                                            sal_Int16 nValue;
+                                            attribute.Value >>= nValue;
+                                            sValue = OUString::number(nValue);
+                                        }
+                                        else if (attribute.Name == "CharFontName")
+                                        {
+                                            attribute.Value >>= sValue;
+                                        }
+                                        else if (attribute.Name == "Rsid")
+                                        {
+                                            unsigned int nValue;
+                                            attribute.Value >>= nValue;
+                                            sValue = OUString::number(nValue);
+                                        }
+
+                                        if (!sValue.isEmpty())
+                                        {
+                                            if (sAttributes != "{ ")
+                                                sAttributes += ", ";
+                                            sAttributes += attribute.Name + ": ";
+                                            sAttributes += sValue;
+                                            sValue = "";
+                                        }
+                                    }
+                                    sAttributes += " }";
+                                    SAL_DEBUG("DocumentFocusListener::notifyEvent: attributes: " << sAttributes);
+                                    SAL_DEBUG("------------------------------------------");
+                                    }
+                                nPos = aTextSegment.SegmentEnd + 1;
+                            }
+                        }
+
+                    }
+
+
+                    //atk_wrapper_focus_tracker_notify_when_idle( getAccessible(aEvent) );
+                }
 
                 break;
             }
@@ -282,6 +396,8 @@ void DocumentFocusListener::attachRecursive(
     const uno::Reference< accessibility::XAccessible >& xAccessible
 )
 {
+    SAL_DEBUG("DocumentFocusListener::attachRecursive(1): xAccessible: " << xAccessible.get());
+
     uno::Reference< accessibility::XAccessibleContext > xContext =
         xAccessible->getAccessibleContext();
 
@@ -296,6 +412,12 @@ void DocumentFocusListener::attachRecursive(
     const uno::Reference< accessibility::XAccessibleContext >& xContext
 )
 {
+    SAL_DEBUG("DocumentFocusListener::attachRecursive(2): xAccessible: " << xAccessible.get()
+            << ", role: " << xContext->getAccessibleRole()
+            << ", name: " << xContext->getAccessibleName()
+            << ", parent: " << xContext->getAccessibleParent().get()
+            << ", child count: " << xContext->getAccessibleChildCount());
+
     uno::Reference< accessibility::XAccessibleStateSet > xStateSet =
         xContext->getAccessibleStateSet();
 
@@ -311,7 +433,13 @@ void DocumentFocusListener::attachRecursive(
     const uno::Reference< accessibility::XAccessibleStateSet >& xStateSet
 )
 {
-    if( xStateSet->contains(accessibility::AccessibleStateType::FOCUSED ) )
+    SAL_DEBUG("DocumentFocusListener::attachRecursive(3) #1: this: " << this
+            << ", xAccessible: " << xAccessible.get()
+            << ", role: " << xContext->getAccessibleRole()
+            << ", name: " << xContext->getAccessibleName()
+            << ", parent: " << xContext->getAccessibleParent().get()
+            << ", child count: " << xContext->getAccessibleChildCount());
+    if( false && xStateSet->contains(accessibility::AccessibleStateType::FOCUSED ) )
         atk_wrapper_focus_tracker_notify_when_idle( xAccessible );
 
     uno::Reference< accessibility::XAccessibleEventBroadcaster > xBroadcaster =
@@ -319,24 +447,39 @@ void DocumentFocusListener::attachRecursive(
 
     if (!xBroadcaster.is())
         return;
-
+    SAL_DEBUG("DocumentFocusListener::attachRecursive(3) #2: xBroadcaster.is()");
     // If not already done, add the broadcaster to the list and attach as listener.
     const uno::Reference< uno::XInterface >& xInterface = xBroadcaster;
     if( m_aRefList.insert(xInterface).second )
     {
+        SAL_DEBUG("DocumentFocusListener::attachRecursive(3) #3: m_aRefList.insert(xInterface).second");
         xBroadcaster->addAccessibleEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
 
-        if( ! xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) )
-        {
-            sal_Int32 n, nmax = xContext->getAccessibleChildCount();
-            for( n = 0; n < nmax; n++ )
-            {
-                uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
+        const sal_Int32 MAX_ATTACHABLE_CHILDREN = 10;
+        sal_Int32 n, nmax = xContext->getAccessibleChildCount();
+        if( xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) && nmax > MAX_ATTACHABLE_CHILDREN )
+            nmax = MAX_ATTACHABLE_CHILDREN;
 
-                if( xChild.is() )
-                    attachRecursive(xChild);
-            }
+        for( n = 0; n < nmax; n++ )
+        {
+            uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
+
+            if( xChild.is() )
+                attachRecursive(xChild);
         }
+
+//        if( ! xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) )
+//        {
+//            SAL_DEBUG("DocumentFocusListener::attachRecursive(3) #4: !MANAGES_DESCENDANTS");
+//            sal_Int32 n, nmax = xContext->getAccessibleChildCount();
+//            for( n = 0; n < nmax; n++ )
+//            {
+//                uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
+//
+//                if( xChild.is() )
+//                    attachRecursive(xChild);
+//            }
+//        }
     }
 }
 
@@ -534,6 +677,7 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
 
     vcl::Window *pWindow = pEvent->GetWindow();
 
+    SAL_DEBUG("handle_get_focus: pWindow: " << pWindow << ", window type: " << (unsigned int)(pWindow->GetType()));
     // The menu bar is handled through VclEventId::MenuHighlightED
     if( ! pWindow || !pWindow->IsReallyVisible() || pWindow->GetType() == WindowType::MENUBARWINDOW )
         return;
@@ -560,6 +704,12 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
     if( ! xContext.is() )
         return;
 
+    SAL_DEBUG("handle_get_focus: xAccessible: " << xAccessible.get()
+            << ", role: " << xContext->getAccessibleRole()
+            << ", name: " << xContext->getAccessibleName()
+            << ", parent: " << xContext->getAccessibleParent().get()
+            << ", child count: " << xContext->getAccessibleChildCount());
+
     uno::Reference< accessibility::XAccessibleStateSet > xStateSet =
         xContext->getAccessibleStateSet();
 
@@ -572,7 +722,7 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
     if( xStateSet->contains(accessibility::AccessibleStateType::FOCUSED) &&
         ( pWindow->GetType() != WindowType::TREELISTBOX ) )
     {
-        atk_wrapper_focus_tracker_notify_when_idle( xAccessible );
+        ;//atk_wrapper_focus_tracker_notify_when_idle( xAccessible );
     }
     else
     {
