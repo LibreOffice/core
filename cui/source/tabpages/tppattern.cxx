@@ -38,7 +38,6 @@
 
 #include <strings.hrc>
 #include <svx/xbtmpit.hxx>
-#include <svx/xattr.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xoutbmp.hxx>

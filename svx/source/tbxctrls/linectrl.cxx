@@ -32,7 +32,7 @@
 #include <helpids.h>
 
 #include <svx/drawitem.hxx>
-#include <svx/xattr.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnstit.hxx>

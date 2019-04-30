@@ -561,7 +561,6 @@
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unoshprp.hxx>
-#include <svx/xattr.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xenum.hxx>

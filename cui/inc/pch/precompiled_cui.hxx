@@ -405,7 +405,6 @@
 #include <svx/svdview.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/xattr.hxx>
 #include <svx/xcolit.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xenum.hxx>

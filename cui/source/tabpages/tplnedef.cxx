@@ -29,7 +29,6 @@
 
 #include <strings.hrc>
 
-#include <svx/xattr.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnclit.hxx>
