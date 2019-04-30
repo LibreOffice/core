@@ -260,6 +260,16 @@ DECLARE_OOXMLIMPORT_TEST(testTdf123460, "tdf123460.docx")
     CPPUNIT_ASSERT_EQUAL(true, bCaught);
 }
 
+//tdf#113483: fix handling of non-ascii characters in bookmark names and instrText xml tags
+DECLARE_OOXMLEXPORT_TEST(testTdf113483, "tdf113483_crossreflink_nonascii_bookmarkname.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:bookmarkStart[1]", "name", OUString::fromUtf8("Els\u0151"));
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[2]/w:instrText[1]", OUString::fromUtf8(" REF Els\u0151 \\h "));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
