@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_b1897827",
+        "filename": "vcl/win/gdi/DWriteTextRenderer.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-30T20:03:09Z",
+      "side": 1,
+      "message": "possibly 10.0 to make that double? iiuc,  D2D1::Matrix3x2F::Rotation takes that.",
+      "range": {
+        "startLine": 405,
+        "startChar": 82,
+        "endLine": 405,
+        "endChar": 84
+      },
+      "revId": "f7453b956bcf83ec13c805d243f20cb209289179",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
