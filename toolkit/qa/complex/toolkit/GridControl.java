@@ -128,7 +128,7 @@ public class GridControl
         // TODO: check all those generic properties for equality
 
         // the data model and the column model should have been cloned, too
-        // in particular, the clone should not share the sub models with the orignal
+        // in particular, the clone should not share the sub models with the original
         final XMutableGridDataModel originalDataModel = UnoRuntime.queryInterface( XMutableGridDataModel.class,
             m_gridControlModel.getPropertyValue( "GridDataModel" ) );
         final XMutableGridDataModel clonedDataModel = UnoRuntime.queryInterface( XMutableGridDataModel.class,
@@ -214,7 +214,7 @@ public class GridControl
         test.testUpdateRowHeading();
         test.cleanup();
 
-        // a somehwat less straight-forward test: the data model is expected to implicitly increase its column count
+        // a somewhat less straight-forward test: the data model is expected to implicitly increase its column count
         // when you add a row which has more columns than currently known
         final XMutableGridDataModel dataModel = DefaultGridDataModel.create( m_context );
         dataModel.addRow( 0, new Object[] { 1 } );
@@ -302,7 +302,7 @@ public class GridControl
                 removeColumnIndex, removalIndex );
         }
 
-        // calling addColumn with a column not created by the given model/implementatoion should not succeed
+        // calling addColumn with a column not created by the given model/implementation should not succeed
         boolean caughtExpected = false;
         try
         {
