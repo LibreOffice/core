@@ -96,6 +96,7 @@
 #include <svl/grabbagitem.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <tools/datetimeutils.hxx>
+#include <tools/urlobj.hxx>
 #include <svl/whiter.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
@@ -1611,7 +1612,7 @@ void DocxAttributeOutput::DoWriteBookmarkTagStart(const OUString & bookmarkName)
 {
     m_pSerializer->singleElementNS(XML_w, XML_bookmarkStart,
         FSNS(XML_w, XML_id), OString::number(m_nNextBookmarkId),
-        FSNS(XML_w, XML_name), BookmarkToWord(bookmarkName).toUtf8());
+        FSNS(XML_w, XML_name), BookmarkToWord(bookmarkName, false).toUtf8());
 }
 
 void DocxAttributeOutput::DoWriteBookmarkTagEnd(const OUString & bookmarkName)
@@ -1633,7 +1634,7 @@ void DocxAttributeOutput::DoWriteBookmarkStartIfExist(sal_Int32 nRunPos)
     {
         DoWriteBookmarkTagStart(aIter->second);
         m_rOpenedBookmarksIds[aIter->second] = m_nNextBookmarkId;
-        m_sLastOpenedBookmark = OUStringToOString(BookmarkToWord(aIter->second), RTL_TEXTENCODING_UTF8);
+        m_sLastOpenedBookmark = OUStringToOString(BookmarkToWord(aIter->second, false), RTL_TEXTENCODING_UTF8);
         m_nNextBookmarkId++;
     }
 }
@@ -1663,7 +1664,7 @@ void DocxAttributeOutput::DoWriteBookmarksStart(std::vector<OUString>& rStarts)
         DoWriteBookmarkTagStart(bookmarkName);
 
         m_rOpenedBookmarksIds[bookmarkName] = m_nNextBookmarkId;
-        m_sLastOpenedBookmark = OUStringToOString(BookmarkToWord(bookmarkName), RTL_TEXTENCODING_UTF8);
+        m_sLastOpenedBookmark = OUStringToOString(BookmarkToWord(bookmarkName, false), RTL_TEXTENCODING_UTF8);
         m_nNextBookmarkId++;
     }
     rStarts.clear();
@@ -1979,6 +1980,11 @@ void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos
             {
                sToken = sToken.replaceAll("NNNN", "dddd");
                sToken = sToken.replaceAll("NN", "ddd");
+            }
+            //tdf#113483: fix non-ascii characters inside instrText xml tags
+            else if ( rInfos.eType ==  ww::eREF )
+            {
+                sToken = INetURLObject::decode(sToken, INetURLObject::DecodeMechanism::Unambiguous, RTL_TEXTENCODING_UTF8);
             }
 
             // Write the Field command
