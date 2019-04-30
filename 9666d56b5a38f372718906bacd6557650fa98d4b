@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_f11aa015",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 5038,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-30T16:57:05Z",
+      "side": 1,
+      "message": "the commit message mentions clang but this seems to exclude it?",
+      "revId": "9666d56b5a38f372718906bacd6557650fa98d4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
