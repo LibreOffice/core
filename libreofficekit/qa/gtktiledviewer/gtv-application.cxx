@@ -28,6 +28,12 @@ getPrivate(GtvApplication* app)
 }
 
 static void
+gtv_application_activate(GApplication*)
+{
+    // If this isn't provided, some GTK versions fail to run us at all.
+}
+
+static void
 gtv_application_open(GApplication* app, GFile** file, gint /*nFiles*/, const gchar* /*hint*/)
 {
     // TODO: add some option to create a new view for existing document
@@ -145,6 +151,7 @@ gtv_application_handle_local_options(GApplication* app, GVariantDict* options)
 static void
 gtv_application_class_init(GtvApplicationClass* klass)
 {
+    G_APPLICATION_CLASS(klass)->activate = gtv_application_activate;
     G_APPLICATION_CLASS(klass)->open = gtv_application_open;
     G_APPLICATION_CLASS(klass)->handle_local_options = gtv_application_handle_local_options;
     G_OBJECT_CLASS(klass)->dispose = gtv_application_dispose;
