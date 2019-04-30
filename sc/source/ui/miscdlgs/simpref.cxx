@@ -165,6 +165,8 @@ void ScSimpleRefDlg::RefInputDone( bool bForced)
 
 IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl, weld::Button&, void)
 {
+    if (IsClosing())
+        return;
     bAutoReOpen = false;
     OUString aResult=m_xEdAssign->GetText();
     aCloseHdl.Call(&aResult);
@@ -175,6 +177,8 @@ IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl, weld::Button&, void)
 {
+    if (IsClosing())
+        return;
     bAutoReOpen = false;
     OUString aResult=m_xEdAssign->GetText();
     aCloseHdl.Call(nullptr);

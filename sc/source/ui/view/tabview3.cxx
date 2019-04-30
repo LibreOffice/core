@@ -64,6 +64,7 @@
 #include <AccessibilityHints.hxx>
 #include <rangeutl.hxx>
 #include <client.hxx>
+#include <simpref.hxx>
 #include <tabprotection.hxx>
 #include <markdata.hxx>
 #include <formula/FormulaCompiler.hxx>
@@ -436,6 +437,22 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     }
 }
 
+static bool lcl_IsScSimpleRefDlgOpen(SfxViewFrame* pViewFrm)
+{
+    if (pViewFrm->HasChildWindow(WID_SIMPLE_REF))
+    {
+        SfxChildWindow* pChild = pViewFrm->GetChildWindow(WID_SIMPLE_REF);
+        if (pChild)
+        {
+            auto xDlgController = pChild->GetController();
+            if (xDlgController && xDlgController->getDialog()->get_visible())
+                return true;
+        }
+    }
+
+    return false;
+}
+
 void ScTabView::CheckSelectionTransfer()
 {
     if ( aViewData.IsActive() )     // only for active view
@@ -451,7 +468,12 @@ void ScTabView::CheckSelectionTransfer()
                 pOld->ForgetView();
 
             pScMod->SetSelectionTransfer( pNew.get() );
-            pNew->CopyToSelection( GetActiveWin() );                    // may delete pOld
+
+            // tdf#124975 changing the calc selection can trigger removal of the
+            // selection of an open ScSimpleRefDlg dialog, so don't inform the
+            // desktop clipboard of the changed selection if that dialog is open
+            if (!lcl_IsScSimpleRefDlgOpen(aViewData.GetViewShell()->GetViewFrame()))
+                pNew->CopyToSelection( GetActiveWin() );                    // may delete pOld
 
             // Log the selection change
             ScMarkData& rMark = aViewData.GetMarkData();
