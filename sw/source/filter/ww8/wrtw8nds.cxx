@@ -1158,7 +1158,7 @@ OUString BookmarkToWord(const OUString &rBookmark)
         rBookmark.replace(' ', '_'), // Spaces are prohibited in bookmark name
         INetURLObject::PART_REL_SEGMENT_EXTRA,
         INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_ASCII_US));
-    return TruncateBookmark(sRet);
+    return TruncateBookmark(sRet); // Maximum bookmark length in OOXML is 40 characters
 }
 
 OUString BookmarkToWriter(const OUString &rBookmark)
