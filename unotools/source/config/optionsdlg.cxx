@@ -146,7 +146,7 @@ void SvtOptionsDlgOptions_Impl::ReadNode( const OUString& _rNode, NodeType _eTyp
     {
         OUString sNodes( sNode + sSet );
         Sequence< OUString > aNodes = GetNodeNames( sNodes );
-        if ( aNodes.getLength() > 0 )
+        if ( aNodes.hasElements() )
         {
             for ( sal_uInt32 n = 0; n < static_cast<sal_uInt32>(aNodes.getLength()); ++n )
             {

@@ -1397,7 +1397,7 @@ void exportDialogModel(
     // dump out stylebag
     all_styles.dump( xOut );
 
-    if ( xDialogModel->getElementNames().getLength() )
+    if ( xDialogModel->getElementNames().hasElements() )
     {
         // open up bulletinboard
         OUString aBBoardName( XMLNS_DIALOGS_PREFIX ":bulletinboard" );

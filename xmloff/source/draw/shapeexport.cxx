@@ -2053,7 +2053,7 @@ void XMLShapeExport::ImpExportLineShape(
         if (pSourcePolyPolygon->getLength() > 0)
         {
             const drawing::PointSequence& rInnerSequence = (*pSourcePolyPolygon)[0];
-            if (rInnerSequence.getLength() > 0)
+            if (rInnerSequence.hasElements())
             {
                 const awt::Point& rPoint = rInnerSequence[0];
                 aStart = awt::Point(rPoint.X + aBasePosition.X, rPoint.Y + aBasePosition.Y);
@@ -4674,7 +4674,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                         css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > aPathTextFrames;
                                         if ( rProp.Value >>= aPathTextFrames )
                                         {
-                                            if ( static_cast<sal_uInt16>(aPathTextFrames.getLength()) )
+                                            if ( aPathTextFrames.hasElements() )
                                             {
                                                 sal_uInt16 k, nElements = static_cast<sal_uInt16>(aPathTextFrames.getLength());
                                                 for ( k = 0; k < nElements; k++ )

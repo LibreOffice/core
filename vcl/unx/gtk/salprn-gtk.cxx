@@ -429,7 +429,7 @@ GtkPrintDialog::impl_initCustomTab()
 
         //Fix fdo#69381
         //Next options if this one is empty
-        if ( aOptProp.getLength() == 0)
+        if (!aOptProp.hasElements())
             continue;
 
         for (int n = 0; n != aOptProp.getLength(); n++)

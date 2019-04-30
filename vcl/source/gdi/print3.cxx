@@ -1508,7 +1508,7 @@ void PrinterController::setValue( const css::beans::PropertyValue& i_rPropertyVa
 
 void PrinterController::setUIOptions( const css::uno::Sequence< css::beans::PropertyValue >& i_rOptions )
 {
-    SAL_WARN_IF( mpImplData->maUIOptions.getLength() != 0, "vcl.gdi", "setUIOptions called twice !" );
+    SAL_WARN_IF( mpImplData->maUIOptions.hasElements(), "vcl.gdi", "setUIOptions called twice !" );
 
     mpImplData->maUIOptions = i_rOptions;
 
@@ -1564,7 +1564,7 @@ void PrinterController::setUIOptions( const css::uno::Sequence< css::beans::Prop
             }
             if( !aDep.maDependsOnName.isEmpty() )
                 mpImplData->maControlDependencies[ aPropName ] = aDep;
-            if( aChoicesDisabled.getLength() > 0 )
+            if( aChoicesDisabled.hasElements() )
                 mpImplData->maChoiceDisableMap[ aPropName ] = aChoicesDisabled;
         }
     }
@@ -1874,7 +1874,7 @@ css::uno::Any PrinterOptionsHelper::setUIControlOpt(const css::uno::Sequence< OU
     sal_Int32 nElements =
         2                                                             // ControlType + ID
         + (i_rTitle.isEmpty() ? 0 : 1)                                // Text
-        + (i_rHelpIds.getLength() ? 1 : 0)                            // HelpId
+        + (i_rHelpIds.hasElements() ? 1 : 0)                          // HelpId
         + (i_pVal ? 1 : 0)                                            // Property
         + i_rControlOptions.maAddProps.size()                         // additional props
         + (i_rControlOptions.maGroupHint.isEmpty() ? 0 : 1)           // grouping
@@ -1897,7 +1897,7 @@ css::uno::Any PrinterOptionsHelper::setUIControlOpt(const css::uno::Sequence< OU
         aCtrl[nUsed  ].Name  = "Text";
         aCtrl[nUsed++].Value <<= i_rTitle;
     }
-    if( i_rHelpIds.getLength() )
+    if( i_rHelpIds.hasElements() )
     {
         aCtrl[nUsed  ].Name = "HelpId";
         aCtrl[nUsed++].Value <<= i_rHelpIds;
@@ -2011,10 +2011,10 @@ css::uno::Any PrinterOptionsHelper::setChoiceRadiosControlOpt(const css::uno::Se
 {
     UIControlOptions aOpt( i_rControlOptions );
     sal_Int32 nUsed = aOpt.maAddProps.size();
-    aOpt.maAddProps.resize( nUsed + 1 + (i_rDisabledChoices.getLength() ? 1 : 0) );
+    aOpt.maAddProps.resize( nUsed + 1 + (i_rDisabledChoices.hasElements() ? 1 : 0) );
     aOpt.maAddProps[nUsed].Name = "Choices";
     aOpt.maAddProps[nUsed].Value <<= i_rChoices;
-    if( i_rDisabledChoices.getLength() )
+    if( i_rDisabledChoices.hasElements() )
     {
         aOpt.maAddProps[nUsed+1].Name = "ChoicesDisabled";
         aOpt.maAddProps[nUsed+1].Value <<= i_rDisabledChoices;
@@ -2037,10 +2037,10 @@ css::uno::Any PrinterOptionsHelper::setChoiceListControlOpt(const OUString& i_rI
 {
     UIControlOptions aOpt( i_rControlOptions );
     sal_Int32 nUsed = aOpt.maAddProps.size();
-    aOpt.maAddProps.resize( nUsed + 1 + (i_rDisabledChoices.getLength() ? 1 : 0) );
+    aOpt.maAddProps.resize( nUsed + 1 + (i_rDisabledChoices.hasElements() ? 1 : 0) );
     aOpt.maAddProps[nUsed].Name = "Choices";
     aOpt.maAddProps[nUsed].Value <<= i_rChoices;
-    if( i_rDisabledChoices.getLength() )
+    if( i_rDisabledChoices.hasElements() )
     {
         aOpt.maAddProps[nUsed+1].Name = "ChoicesDisabled";
         aOpt.maAddProps[nUsed+1].Value <<= i_rDisabledChoices;

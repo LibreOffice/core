@@ -351,7 +351,7 @@ public:
 
 bool FilterEntry::hasSubFilters() const
 {
-    return( 0 < m_aSubFilters.getLength() );
+    return m_aSubFilters.hasElements();
 }
 
 void FilterEntry::getSubFilters( css::uno::Sequence< css::beans::StringPair >& _rSubFilterList )
@@ -633,7 +633,7 @@ void SAL_CALL SalGtkFilePicker::appendFilterGroup( const OUString& /*sGroupTitle
 
     // ensure that we have a filter list
     OUString sInitialCurrentFilter;
-    if( aFilters.getLength() )
+    if( aFilters.hasElements() )
         sInitialCurrentFilter = aFilters[0].First;
 
     ensureFilterVector( sInitialCurrentFilter );
@@ -1580,7 +1580,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
 {
     // parameter checking
     uno::Any aAny;
-    if( 0 == aArguments.getLength() )
+    if( !aArguments.hasElements() )
         throw lang::IllegalArgumentException(
             "no arguments",
             static_cast<XFilePicker2*>( this ), 1 );

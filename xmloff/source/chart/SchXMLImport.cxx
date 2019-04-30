@@ -454,7 +454,7 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
                         uno::UNO_QUERY );
                     if( xCurrentType.is())
                     {
-                        if( bPushLastChartType && aChartTypes.getLength())
+                        if( bPushLastChartType && aChartTypes.hasElements())
                         {
                             sal_Int32 nIndex( aChartTypes.getLength() - 1 );
                             aChartTypes.realloc( aChartTypes.getLength() + 1 );

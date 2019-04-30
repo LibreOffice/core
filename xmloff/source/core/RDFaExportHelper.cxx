@@ -121,7 +121,7 @@ RDFaExportHelper::AddRDFa(
 
         uno::Sequence<rdf::Statement> const & rStatements( RDFaResult.First );
 
-        if (0 == rStatements.getLength())
+        if (!rStatements.hasElements())
         {
             return; // no RDFa
         }

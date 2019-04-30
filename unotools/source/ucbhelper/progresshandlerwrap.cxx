@@ -36,7 +36,7 @@ static bool getStatusFromAny_Impl( const Any& aAny, OUString& aText, sal_Int32& 
     bool bNumIsSet = false;
 
     Sequence< Any > aSetList;
-    if( ( aAny >>= aSetList ) && aSetList.getLength() )
+    if( ( aAny >>= aSetList ) && aSetList.hasElements() )
         for( int ind = 0; ind < aSetList.getLength(); ind++ )
         {
             if( !bNumIsSet && ( aSetList[ind] >>= nNum ) )

@@ -61,7 +61,7 @@ css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequenc
     rManager.initialize(mgrArgs);
 
     OUString sel;
-    if (arguments.getLength() == 0) {
+    if (!arguments.hasElements()) {
         sel = "CLIPBOARD";
     } else if (arguments.getLength() != 1 || !(arguments[0] >>= sel)) {
         throw css::lang::IllegalArgumentException(

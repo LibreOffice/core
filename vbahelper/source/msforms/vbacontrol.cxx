@@ -538,7 +538,7 @@ void SAL_CALL ScVbaControl::fireEvent( const script::ScriptEvent& rEvt )
             uno::Reference< uno::XInterface > xIf( xControlShape->getControl(), uno::UNO_QUERY_THROW );
             evt.ScriptCode = xNameQuery->getCodeNameForObject( xIf );
             // handle if we passed in our own arguments
-            if ( !rEvt.Arguments.getLength() )
+            if ( !rEvt.Arguments.hasElements() )
                 evt.Arguments[ 0 ] <<= aEvt;
             xScriptListener->firing( evt );
         }
