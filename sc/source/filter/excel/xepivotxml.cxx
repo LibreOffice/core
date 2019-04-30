@@ -350,6 +350,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         double fMin = std::numeric_limits<double>::infinity(), fMax = -std::numeric_limits<double>::infinity();
         bool isValueInteger = true;
         bool isContainsDate = rCache.IsDateDimension(i);
+        bool isLongText = false;
         for (const auto& rFieldItem : rFieldItems)
         {
             ScDPItemData::Type eType = rFieldItem.GetType();
@@ -368,6 +369,10 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
                 {
                     isValueInteger = false;
                 }
+            }
+            else if (eType == ScDPItemData::String && !isLongText)
+            {
+                isLongText = rFieldItem.GetString().getLength() > 255;
             }
         }
 
@@ -444,6 +449,12 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         {
             pAttList->add(XML_count, OString::number(static_cast<long>(rFieldItems.size())));
         }
+
+        if (isLongText)
+        {
+            pAttList->add(XML_longText, ToPsz10(true));
+        }
+
         sax_fastparser::XFastAttributeListRef xAttributeList(pAttList);
 
         pDefStrm->startElement(XML_sharedItems, xAttributeList);
