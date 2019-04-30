@@ -2741,10 +2741,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122607_regression)
     if (mxComponent.is())
         mxComponent->dispose();
 
-    auto const pName("tdf122607_leerzeile.odt");
+    OUString const pName("tdf122607_leerzeile.odt");
 
-    OUString const url(m_directories.getURLFromSrc(DATA_DIRECTORY)
-                       + OUString::createFromAscii(pName));
+    OUString const url(m_directories.getURLFromSrc(DATA_DIRECTORY) + pName);
 
     // note: must set Hidden property, so that SfxFrameViewWindow_Impl::Resize()
     // does *not* forward initial VCL Window Resize and thereby triggers a
