@@ -186,7 +186,7 @@ void scaleUp32bit(ScaleContext &rCtx, long nStartY, long nEndY)
     }
 }
 
-void scaleUpPallete8bit(ScaleContext &rCtx, long nStartY, long nEndY)
+void scaleUpPalette8bit(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1;
 
@@ -224,7 +224,7 @@ void scaleUpPallete8bit(ScaleContext &rCtx, long nStartY, long nEndY)
     }
 }
 
-void scaleUpPalleteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
+void scaleUpPaletteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1;
 
@@ -314,7 +314,7 @@ void scaleUp24bit(ScaleContext &rCtx, long nStartY, long nEndY)
     }
 }
 
-void scaleUpNonPalleteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
+void scaleUpNonPaletteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1;
 
@@ -491,7 +491,7 @@ void scaleDown32bit(ScaleContext &rCtx, long nStartY, long nEndY)
     }
 }
 
-void scaleDownPallete8bit(ScaleContext &rCtx, long nStartY, long nEndY)
+void scaleDownPalette8bit(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1;
 
@@ -616,7 +616,7 @@ void scaleDownPallete8bit(ScaleContext &rCtx, long nStartY, long nEndY)
     }
 }
 
-void scaleDownPalleteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
+void scaleDownPaletteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1;
 
@@ -876,7 +876,7 @@ void scaleDown24bit(ScaleContext &rCtx, long nStartY, long nEndY)
     }
 }
 
-void scaleDownNonPalleteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
+void scaleDownNonPaletteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1;
 
@@ -1086,12 +1086,12 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
                 switch( pReadAccess->GetScanlineFormat() )
                 {
                 case ScanlineFormat::N8BitPal:
-                    pScaleRangeFn = bScaleUp ? scaleUpPallete8bit
-                                             : scaleDownPallete8bit;
+                    pScaleRangeFn = bScaleUp ? scaleUpPalette8bit
+                                             : scaleDownPalette8bit;
                     break;
                 default:
-                    pScaleRangeFn = bScaleUp ? scaleUpPalleteGeneral
-                                             : scaleDownPalleteGeneral;
+                    pScaleRangeFn = bScaleUp ? scaleUpPaletteGeneral
+                                             : scaleDownPaletteGeneral;
                     break;
                 }
             }
@@ -1102,7 +1102,7 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
             // a fast path, so we always need to process with a general scaler.
             else if (nSourceBitcount != nTargetBitcount)
             {
-                pScaleRangeFn = bScaleUp ? scaleUpNonPalleteGeneral : scaleDownNonPalleteGeneral;
+                pScaleRangeFn = bScaleUp ? scaleUpNonPaletteGeneral : scaleDownNonPaletteGeneral;
             }
             // If we get here then we can only use a fast path, but let's
             // still keep the fallback to the general scaler alive.
@@ -1121,8 +1121,8 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
                     pScaleRangeFn = bScaleUp ? scaleUp32bit : scaleDown32bit;
                     break;
                 default:
-                    pScaleRangeFn = bScaleUp ? scaleUpNonPalleteGeneral
-                                             : scaleDownNonPalleteGeneral;
+                    pScaleRangeFn = bScaleUp ? scaleUpNonPaletteGeneral
+                                             : scaleDownNonPaletteGeneral;
                     break;
                 }
             }
