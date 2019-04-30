@@ -192,7 +192,9 @@ void SwWrtShell::StartInsertRegionDialog(const SwSectionData& rSectionData)
     VclPtr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
         GetView().GetViewFrame()->GetWindow().GetFrameWeld(), aSet, *this));
     aTabDlg->SetSectionData(rSectionData);
-    aTabDlg->StartExecuteAsync(nullptr);
+    aTabDlg->StartExecuteAsync([aTabDlg](sal_Int32 /*nResult*/){
+        aTabDlg->disposeOnce();
+    });
 }
 
 void SwBaseShell::EditRegionDialog(SfxRequest const & rReq)
