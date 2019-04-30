@@ -36,7 +36,6 @@
 
 #include <strings.hrc>
 #include <svx/xflclit.hxx>
-#include <svx/xattr.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>

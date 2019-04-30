@@ -28,7 +28,6 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
-#include <svx/xattr.hxx>
 #include <svx/xpool.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/drawitem.hxx>

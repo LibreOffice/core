@@ -25,7 +25,6 @@
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 
-#include <svx/xattr.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xflbckit.hxx>
 #include <svx/svdattr.hxx>

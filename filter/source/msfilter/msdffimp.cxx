@@ -121,7 +121,8 @@
 #include <svx/extrud3d.hxx>
 #include <svx/svditer.hxx>
 #include <svx/xpoly.hxx>
-#include <svx/xattr.hxx>
+#include <svx/xlncapit.hxx>
+#include <svx/xlinjoit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>

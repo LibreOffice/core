@@ -33,7 +33,6 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/colorbox.hxx>
-#include <svx/xattr.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>

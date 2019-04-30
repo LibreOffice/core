@@ -25,7 +25,8 @@
 #include <i18nutil/unicode.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
-#include <svx/xattr.hxx>
+#include <svx/xlinjoit.hxx>
+#include <svx/xlncapit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xftshtit.hxx>

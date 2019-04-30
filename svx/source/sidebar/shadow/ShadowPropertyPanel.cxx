@@ -21,7 +21,6 @@
 #include <svtools/valueset.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svx/xattr.hxx>
 #include <svx/svddef.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/sdshitm.hxx>

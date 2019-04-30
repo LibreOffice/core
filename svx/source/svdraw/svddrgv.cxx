@@ -20,7 +20,6 @@
 
 #include <svx/svddrgv.hxx>
 #include <svx/svdview.hxx>
-#include <svx/xattr.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdtrans.hxx>
