@@ -234,7 +234,6 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
 
     const WinFontInstance& rWinFont = static_cast<const WinFontInstance&>(rLayout.GetFont());
     float fHScale = rWinFont.getHScale();
-    WinFontStretchGuard aStretchGuard(mpRT, fHScale);
 
     tools::Rectangle bounds;
     bool succeeded = rLayout.GetBoundRect(bounds);
@@ -266,6 +265,7 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
             DWRITE_GLYPH_OFFSET glyphOffsets[] = { { 0.0f, 0.0f }, };
             D2D1_POINT_2F baseline = { static_cast<FLOAT>(aPos.X() - bounds.Left()) / fHScale,
                                        static_cast<FLOAT>(aPos.Y() - bounds.Top()) };
+            WinFontTransformGuard aTransformGuard(mpRT, fHScale, rLayout, baseline);
             DWRITE_GLYPH_RUN glyphs = {
                 mpFontFace,
                 mlfEmHeight,
@@ -384,18 +384,29 @@ bool D2DWriteTextOutRenderer::GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** p
     return succeeded;
 }
 
-WinFontStretchGuard::WinFontStretchGuard(ID2D1RenderTarget* pRenderTarget, float fHScale)
+WinFontTransformGuard::WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget, float fHScale,
+                                             const GenericSalLayout& rLayout,
+                                             const D2D1_POINT_2F& rBaseline)
     : mpRenderTarget(pRenderTarget)
 {
     pRenderTarget->GetTransform(&maTransform);
-    if (fHScale == 1.0f)
-        return;
+    D2D1::Matrix3x2F aTransform = maTransform;
+    if (fHScale != 1.0f)
+    {
+        aTransform
+            = aTransform * D2D1::Matrix3x2F::Scale(D2D1::Size(fHScale, 1.0f), D2D1::Point2F(0, 0));
+    }
 
-    D2D1::Matrix3x2F aTransform
-        = maTransform * D2D1::Matrix3x2F::Scale(D2D1::Size(fHScale, 1.0f), D2D1::Point2F(0, 0));
+    if (rLayout.GetOrientation() != 0)
+    {
+        // DWrite angle is in clockwise degrees, our orientation is in counter-clockwise 10th
+        // degrees.
+        aTransform
+            = aTransform * D2D1::Matrix3x2F::Rotation(-rLayout.GetOrientation() / 10, rBaseline);
+    }
     mpRenderTarget->SetTransform(aTransform);
 }
 
-WinFontStretchGuard::~WinFontStretchGuard() { mpRenderTarget->SetTransform(maTransform); }
+WinFontTransformGuard::~WinFontTransformGuard() { mpRenderTarget->SetTransform(maTransform); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

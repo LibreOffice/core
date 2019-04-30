@@ -57,7 +57,8 @@ GlobalOpenGLGlyphCache * GlobalOpenGLGlyphCache::get()
     return data->m_pGlobalOpenGLGlyphCache.get();
 }
 
-bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, SalGraphics& rGraphics)
+bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex,
+                                        SalGraphics& rGraphics, const GenericSalLayout& rLayout)
 {
     OpenGLGlyphDrawElement aElement;
 
@@ -171,7 +172,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
         0
     };
 
-    WinFontStretchGuard aStretchGuard(pRT, fHScale);
+    WinFontTransformGuard aTransformGuard(pRT, fHScale, rLayout, baseline);
     pRT->BeginDraw();
     pRT->DrawGlyphRun(baseline, &glyphs, pBrush);
     HRESULT hResult = pRT->EndDraw();
@@ -400,6 +401,10 @@ bool WinSalGraphics::CacheGlyphs(const GenericSalLayout& rLayout)
     if (!bDoGlyphCaching)
         return false;
 
+    if (rLayout.GetOrientation())
+        // Our caching is incomplete, skip it for non-horizontal text.
+        return false;
+
     HDC hDC = getHDC();
     WinFontInstance& rFont = *static_cast<WinFontInstance*>(&rLayout.GetFont());
     HFONT hFONT = rFont.GetHFONT();
@@ -411,7 +416,7 @@ bool WinSalGraphics::CacheGlyphs(const GenericSalLayout& rLayout)
     {
         if (!rFont.GetOpenGLGlyphCache().IsGlyphCached(pGlyph->m_aGlyphId))
         {
-            if (!rFont.CacheGlyphToAtlas(hDC, hFONT, pGlyph->m_aGlyphId, *this))
+            if (!rFont.CacheGlyphToAtlas(hDC, hFONT, pGlyph->m_aGlyphId, *this, rLayout))
                 return false;
         }
     }
@@ -472,8 +477,9 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     const HFONT hLayoutFont = pWinFont->GetHFONT();
     bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter;
 
-    // Our DirectWrite renderer is incomplete, skip it for non-horizontal text.
-    bool bForceGDI = rLayout.GetOrientation();
+    // Our DirectWrite renderer is incomplete, skip it for vertical text where glyphs are not
+    // rotated.
+    bool bForceGDI = rLayout.GetFont().GetFontSelectPattern().mbVertical;
 
     if (!bUseOpenGL)
     {

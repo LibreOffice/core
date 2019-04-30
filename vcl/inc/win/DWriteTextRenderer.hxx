@@ -81,12 +81,15 @@ private:
     D2DTextAntiAliasMode meTextAntiAliasMode;
 };
 
-/// Sets and unsets the needed DirectWrite transform to support the font's horizontal scaling.
-class WinFontStretchGuard
+/**
+ * Sets and unsets the needed DirectWrite transform to support the font's horizontal scaling and
+ * rotation.
+ */
+class WinFontTransformGuard
 {
 public:
-    WinFontStretchGuard(ID2D1RenderTarget* pRenderTarget, float fHScale);
-    ~WinFontStretchGuard();
+    WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget, float fHScale, const GenericSalLayout& rLayout, const D2D1_POINT_2F& rBaseline);
+    ~WinFontTransformGuard();
 
 private:
     ID2D1RenderTarget* mpRenderTarget;
