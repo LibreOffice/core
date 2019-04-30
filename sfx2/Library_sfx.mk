@@ -94,6 +94,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/childwin \
     sfx2/source/appl/childwinimpl \
     sfx2/source/appl/fileobj \
+    sfx2/source/appl/flatpak \
     sfx2/source/appl/fwkhelper \
     sfx2/source/appl/helpdispatch \
     sfx2/source/appl/helpinterceptor \
