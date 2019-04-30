@@ -36,7 +36,6 @@
 #include <svx/drawitem.hxx>
 #include <svx/xflclit.hxx>
 #include <editeng/colritem.hxx>
-#include <svx/xattr.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>

@@ -26,7 +26,8 @@
 
 #include <strings.hrc>
 #include <svx/colorbox.hxx>
-#include <svx/xattr.hxx>
+#include <svx/xlinjoit.hxx>
+#include <svx/xlncapit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnstwit.hxx>

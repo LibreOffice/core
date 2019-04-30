@@ -56,7 +56,6 @@
 #include <svx/xbitmap.hxx>
 #include <svx/xflbckit.hxx>
 #include <svx/xbtmpit.hxx>
-#include <svx/xattr.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/svdpage.hxx>
 #include <sfx2/bindings.hxx>

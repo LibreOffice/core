@@ -498,7 +498,6 @@
 #include <svx/unoshape.hxx>
 #include <svx/unoshtxt.hxx>
 #include <svx/viewpt3d.hxx>
-#include <svx/xattr.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xcolit.hxx>
 #include <svx/xdash.hxx>

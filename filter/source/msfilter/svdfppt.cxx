@@ -60,7 +60,6 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/numdef.hxx>
 #include <svx/svdattr.hxx>
-#include <svx/xattr.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/svdetc.hxx>
