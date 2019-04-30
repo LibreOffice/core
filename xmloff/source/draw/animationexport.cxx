@@ -1140,7 +1140,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         }
 
         Sequence< Any > aValues( xAnimate->getValues() );
-        if( aValues.getLength() )
+        if( aValues.hasElements() )
         {
             aTemp <<= aValues;
             convertValue( eAttributeName, sTmp, aTemp );
@@ -1173,7 +1173,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         if(nNodeType != AnimationNodeType::SET)
         {
             Sequence< double > aKeyTimes( xAnimate->getKeyTimes() );
-            if( aKeyTimes.getLength() )
+            if( aKeyTimes.hasElements() )
             {
                 sal_Int32 nLength = aKeyTimes.getLength();
                 const double* p = aKeyTimes.getConstArray();
@@ -1217,7 +1217,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
             }
 
             Sequence< TimeFilterPair > aTimeFilter( xAnimate->getTimeFilter() );
-            if( aTimeFilter.getLength() )
+            if( aTimeFilter.hasElements() )
             {
                 sal_Int32 nLength = aTimeFilter.getLength();
                 const TimeFilterPair* p = aTimeFilter.getConstArray();

@@ -207,7 +207,7 @@ void DocumentDigitalSignatures::initialize( const Sequence< Any >& aArguments)
 
     m_nArgumentsCount = aArguments.getLength();
 
-    if (aArguments.getLength() > 0)
+    if (aArguments.hasElements())
     {
         if (!(aArguments[0] >>= m_sODFVersion))
             throw css::lang::IllegalArgumentException(

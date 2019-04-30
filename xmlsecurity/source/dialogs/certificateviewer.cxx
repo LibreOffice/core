@@ -57,7 +57,7 @@ CertificateViewer::CertificateViewer(weld::Window* _pParent,
 
     mxGeneralPage.reset(new CertificateViewerGeneralTP(mxTabCtrl->get_page("general"), this));
     mxDetailsPage.reset(new CertificateViewerDetailsTP(mxTabCtrl->get_page("details"), this));
-    if (mxSecurityEnvironment->buildCertificatePath(mxCert).getLength() == 0)
+    if (!mxSecurityEnvironment->buildCertificatePath(mxCert).hasElements())
         mxTabCtrl->remove_page("path");
     else
         mxPathId.reset(new CertificateViewerCertPathTP(mxTabCtrl->get_page("path"), this));

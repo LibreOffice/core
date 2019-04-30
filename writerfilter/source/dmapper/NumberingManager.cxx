@@ -544,7 +544,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                     lcl_mergeProperties( rAbsCharStyleProps, rCharStyleProps );
                 }
 
-                if( aAbsCharStyleProps.getLength() )
+                if( aAbsCharStyleProps.hasElements() )
                 {
                     // Change the sequence into a vector
                     PropertyValueVector_t aStyleProps;

@@ -277,7 +277,7 @@ const char EOT_FORMAT[]      = "embedded-opentype";
 
 void XMLFontStyleContextFontFaceUri::EndElement()
 {
-    if( ( linkPath.getLength() == 0 ) && ( maFontData.getLength() == 0 ) )
+    if( ( linkPath.getLength() == 0 ) && ( !maFontData.hasElements() ) )
     {
         SAL_WARN( "xmloff", "svg:font-face-uri tag with no link or base64 data; ignoring." );
         return;
@@ -299,7 +299,7 @@ void XMLFontStyleContextFontFaceUri::EndElement()
         SAL_WARN( "xmloff", "Unknown format of embedded font; assuming TTF." );
         eot = false;
     }
-    if ( maFontData.getLength() == 0 )
+    if ( !maFontData.hasElements() )
         handleEmbeddedFont( linkPath, eot );
     else
         handleEmbeddedFont( maFontData, eot );

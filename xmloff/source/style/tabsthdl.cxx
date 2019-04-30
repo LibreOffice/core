@@ -45,7 +45,7 @@ bool XMLTabStopPropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
             if( aSeq1.getLength() == aSeq2.getLength() )
             {
                 bEqual = true;
-                if( aSeq1.getLength() > 0 )
+                if( aSeq1.hasElements() )
                 {
                     const style::TabStop* pTabs1 = aSeq1.getConstArray();
                     const style::TabStop* pTabs2 = aSeq2.getConstArray();

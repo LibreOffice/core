@@ -689,7 +689,7 @@ bool SvXMLImportPropertyMapper::FillTolerantMultiPropertySet_(
     try
     {
         Sequence< SetPropertyTolerantFailed > aResults(rTolMultiPropSet->setPropertyValuesTolerant( aNames, aValues ));
-        if (aResults.getLength() == 0)
+        if (!aResults.hasElements())
             bSuccessful = true;
         else
         {

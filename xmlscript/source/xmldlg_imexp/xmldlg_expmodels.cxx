@@ -89,7 +89,7 @@ void ElementDescriptor::readMultiPageModel( StyleBag * all_styles )
 
     readEvents();
     uno::Reference< container::XNameContainer > xPagesContainer( _xProps, uno::UNO_QUERY );
-    if ( xPagesContainer.is() && xPagesContainer->getElementNames().getLength() )
+    if ( xPagesContainer.is() && xPagesContainer->getElementNames().hasElements() )
     {
         ElementDescriptor * pElem = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":bulletinboard", _xDocument );
         pElem->readBullitinBoard( all_styles );
@@ -124,7 +124,7 @@ void ElementDescriptor::readFrameModel( StyleBag * all_styles )
         addSubElement( title );
     }
     uno::Reference< container::XNameContainer > xControlContainer( _xProps, uno::UNO_QUERY );
-    if ( xControlContainer.is() && xControlContainer->getElementNames().getLength() )
+    if ( xControlContainer.is() && xControlContainer->getElementNames().hasElements() )
     {
         ElementDescriptor * pElem = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":bulletinboard", _xDocument );
         pElem->readBullitinBoard( all_styles );
@@ -154,7 +154,7 @@ void ElementDescriptor::readPageModel( StyleBag * all_styles )
     readDefaults();
     readStringAttr( "Title", XMLNS_DIALOGS_PREFIX ":title" );
     uno::Reference< container::XNameContainer > xControlContainer( _xProps, uno::UNO_QUERY );
-    if ( xControlContainer.is() && xControlContainer->getElementNames().getLength() )
+    if ( xControlContainer.is() && xControlContainer->getElementNames().hasElements() )
     {
         ElementDescriptor * pElem = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":bulletinboard", _xDocument );
         pElem->readBullitinBoard( all_styles );
@@ -314,7 +314,7 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
 
     // string item list
     Sequence< OUString > itemValues;
-    if ((readProp( "StringItemList" ) >>= itemValues) &&  itemValues.getLength() > 0)
+    if ((readProp( "StringItemList" ) >>= itemValues) &&  itemValues.hasElements())
     {
         ElementDescriptor * popup = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menupopup", _xDocument );
 
@@ -362,7 +362,7 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
     readDataAwareAttr( XMLNS_DIALOGS_PREFIX ":source-cell-range" );
     // string item list
     Sequence< OUString > itemValues;
-    if ((readProp( "StringItemList" ) >>= itemValues) && itemValues.getLength() > 0)
+    if ((readProp( "StringItemList" ) >>= itemValues) && itemValues.hasElements())
     {
         ElementDescriptor * popup = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menupopup", _xDocument );
 

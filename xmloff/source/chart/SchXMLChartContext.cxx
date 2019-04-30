@@ -93,7 +93,7 @@ void lcl_MoveDataToCandleStickSeries(
     {
         uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledSeq(
             xDataSource->getDataSequences());
-        if( aLabeledSeq.getLength())
+        if( aLabeledSeq.hasElements())
         {
             lcl_setRoleAtLabeledSequence( aLabeledSeq[0], rRole );
 
@@ -121,7 +121,7 @@ void lcl_setRoleAtFirstSequence(
     if( xSource.is())
     {
         uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
-        if( aSeq.getLength())
+        if( aSeq.hasElements())
             lcl_setRoleAtLabeledSequence( aSeq[0], rRole );
     }
 }
@@ -156,7 +156,7 @@ void lcl_removeEmptyChartTypeGroups( const uno::Reference< chart2::XChartDocumen
             for( sal_Int32 nJ=aCTSeq.getLength(); nJ-- && (nRemainingGroups > 1); )
             {
                 uno::Reference< chart2::XDataSeriesContainer > xDSCnt( aCTSeq[nJ], uno::UNO_QUERY_THROW );
-                if( xDSCnt->getDataSeries().getLength() == 0 )
+                if( !xDSCnt->getDataSeries().hasElements() )
                 {
                     // note: iterator stays valid as we have a local sequence
                     xCTCnt->removeChartType( aCTSeq[nJ] );

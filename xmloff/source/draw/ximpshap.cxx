@@ -2867,7 +2867,7 @@ void SdXMLAppletShapeContext::EndElement()
             xProps->setPropertyValue("VisibleArea", Any(aRect) );
         }
 
-        if( maParams.getLength() )
+        if( maParams.hasElements() )
         {
             xProps->setPropertyValue("AppletCommands", Any(maParams) );
         }
@@ -3083,7 +3083,7 @@ void SdXMLPluginShapeContext::EndElement()
         if( !mbMedia )
         {
             // in case we have a plugin object
-            if( maParams.getLength() )
+            if( maParams.hasElements() )
             {
                 xProps->setPropertyValue("PluginCommands", Any(maParams) );
             }

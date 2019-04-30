@@ -133,7 +133,7 @@ bool DocumentSignatureManager::IsXAdESRelevant()
 bool DocumentSignatureManager::readManifest()
 {
     // Check if manifest was already read
-    if (m_manifest.getLength() > 0)
+    if (m_manifest.hasElements())
         return true;
 
     if (!mxContext.is())

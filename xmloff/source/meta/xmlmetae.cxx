@@ -254,7 +254,7 @@ void SvXMLMetaExport::MExport_()
     const uno::Sequence< beans::NamedValue > aDocStatistic =
             mxDocProps->getDocumentStatistics();
     // write document statistic if there is any provided
-    if ( aDocStatistic.getLength() )
+    if ( aDocStatistic.hasElements() )
     {
         for ( sal_Int32 nInd = 0; nInd < aDocStatistic.getLength(); nInd++ )
         {

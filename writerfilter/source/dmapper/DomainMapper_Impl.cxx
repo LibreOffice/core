@@ -136,7 +136,7 @@ static void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >
         const FFDataHandler::DropDownEntries_t& rEntries = pFFDataHandler->getDropDownEntries();
         uno::Sequence< OUString > sItems( rEntries.size() );
         ::std::copy( rEntries.begin(), rEntries.end(), sItems.begin());
-        if ( sItems.getLength() )
+        if ( sItems.hasElements() )
             rxFieldProps->setPropertyValue( "Items", uno::makeAny( sItems ) );
 
         sal_Int32 nResult = pFFDataHandler->getDropDownResult().toInt32();

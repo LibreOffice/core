@@ -77,7 +77,7 @@ OUString bigIntegerToNumericString ( const Sequence< sal_Int8 >& integer )
 {
     OUString aRet ;
 
-    if( integer.getLength() ) {
+    if( integer.hasElements() ) {
         xmlSecBn bn ;
         xmlChar* chNumeral ;
 

@@ -2852,7 +2852,7 @@ bool XMLTextFieldExport::GetDependentFieldPropertySet(
     aAny >>= aFields;
 
     // any fields?
-    if (aFields.getLength() > 0)
+    if (aFields.hasElements())
     {
         // get first one and return
         Reference<XDependentTextField> xTField = aFields[0];
