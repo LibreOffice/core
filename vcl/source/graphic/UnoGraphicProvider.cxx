@@ -202,7 +202,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadBitmap( const uno
 
     ReadDIB(aBmp, aBmpStream, true);
 
-    if( aMaskSeq.getLength() )
+    if( aMaskSeq.hasElements() )
     {
         SvMemoryStream aMaskStream( aMaskSeq.getArray(), aMaskSeq.getLength(), StreamMode::READ );
         Bitmap aMask;
@@ -816,7 +816,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
             {
                 rFilter.ExportGraphic( aGraphic, aPath, aMemStrm,
                                         rFilter.GetExportFormatNumberForShortName( OUString::createFromAscii( pFilterShortName ) ),
-                                            ( aFilterDataSeq.getLength() ? &aFilterDataSeq : nullptr ) );
+                                            ( aFilterDataSeq.hasElements() ? &aFilterDataSeq : nullptr ) );
             }
             pOStm->WriteBytes( aMemStrm.GetData(), aMemStrm.TellEnd() );
         }

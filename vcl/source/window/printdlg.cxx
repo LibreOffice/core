@@ -1461,11 +1461,11 @@ void PrintDialog::setupOptionalUI()
             mpTabCtrl->SetPageText(nPageId, aText);
 
             // set help id
-            if (aHelpIds.getLength() > 0)
+            if (aHelpIds.hasElements())
                 mpTabCtrl->SetHelpId(nPageId, OUStringToOString(aHelpIds.getConstArray()[0], RTL_TEXTENCODING_UTF8));
 
             // set help text
-            if (aHelpTexts.getLength() > 0)
+            if (aHelpTexts.hasElements())
                 mpTabCtrl->SetHelpText(nPageId, aHelpTexts.getConstArray()[0]);
 
             pPage->Show();

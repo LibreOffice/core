@@ -93,7 +93,7 @@ ScVbaComboBox::getListIndex()
     m_xProps->getPropertyValue( "StringItemList" ) >>= sItems;
     // should really return the item that has focus regardless of
     // it been selected
-    if ( sItems.getLength() > 0 )
+    if ( sItems.hasElements() )
     {
         OUString sText = getText();
         sal_Int32 nLen = sItems.getLength();
@@ -106,7 +106,7 @@ ScVbaComboBox::getListIndex()
             }
 
         }
-     }
+    }
     SAL_INFO("vbahelper", "getListIndex returning -1" );
     return uno::makeAny( sal_Int32( -1 ) );
 }

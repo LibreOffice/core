@@ -699,7 +699,7 @@ void VclGtkClipboard::removeClipboardListener( const Reference< datatransfer::cl
 Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& arguments)
 {
     OUString sel;
-    if (arguments.getLength() == 0) {
+    if (!arguments.hasElements()) {
         sel = "CLIPBOARD";
     } else if (arguments.getLength() != 1 || !(arguments[0] >>= sel)) {
         throw css::lang::IllegalArgumentException(

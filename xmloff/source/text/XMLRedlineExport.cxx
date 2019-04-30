@@ -377,7 +377,7 @@ void XMLRedlineExport::ExportChangedRegion(
 
     // if we actually got a hierarchical change, make element and
     // process change info
-    if (aSuccessorData.getLength() > 0)
+    if (aSuccessorData.hasElements())
     {
         // The only change that can be "undone" is an insertion -
         // after all, you can't re-insert an deletion, but you can

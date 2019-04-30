@@ -216,7 +216,7 @@ namespace xmloff
 
     void OElementExport::exportEvents()
     {
-        if (!m_aEvents.getLength())
+        if (!m_aEvents.hasElements())
             // nothing to do
             return;
 
@@ -1232,7 +1232,7 @@ namespace xmloff
         {
             Sequence< OUString > aListSourceSequence;
             aListSource >>= aListSourceSequence;
-            if ( aListSourceSequence.getLength() )
+            if ( aListSourceSequence.hasElements() )
                 sListSource = aListSourceSequence[ 0 ];
         }
         return sListSource;

@@ -529,7 +529,7 @@ void SchXMLAxisContext::CreateAxis()
                                 if( xCooSysCnt.is() )
                                 {
                                     uno::Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
-                                    if( aCooSysSeq.getLength() )
+                                    if( aCooSysSeq.hasElements() )
                                     {
                                         bool bSwapXandYAxis = false;
                                         Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[0] );
@@ -732,7 +732,7 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
         {
             Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xNewDoc->getFirstDiagram(), uno::UNO_QUERY_THROW );
             uno::Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
-            if( aCooSysSeq.getLength() )
+            if( aCooSysSeq.hasElements() )
             {
                 Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[0] );
                 if( xCooSys.is() )

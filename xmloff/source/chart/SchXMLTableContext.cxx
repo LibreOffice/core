@@ -379,7 +379,7 @@ void SchXMLTableContext::EndElement()
 void SchXMLTableContext::setRowPermutation( const uno::Sequence< sal_Int32 > & rPermutation )
 {
     maRowPermutation = rPermutation;
-    mbHasRowPermutation = ( rPermutation.getLength() > 0 );
+    mbHasRowPermutation = rPermutation.hasElements();
 
     if( mbHasRowPermutation && mbHasColumnPermutation )
     {
@@ -391,7 +391,7 @@ void SchXMLTableContext::setRowPermutation( const uno::Sequence< sal_Int32 > & r
 void SchXMLTableContext::setColumnPermutation( const uno::Sequence< sal_Int32 > & rPermutation )
 {
     maColumnPermutation = rPermutation;
-    mbHasColumnPermutation = ( rPermutation.getLength() > 0 );
+    mbHasColumnPermutation = rPermutation.hasElements();
 
     if( mbHasColumnPermutation && mbHasRowPermutation )
     {
@@ -716,7 +716,7 @@ static void lcl_ApplyCellToComplexLabel( const SchXMLCell& rCell, Sequence< uno:
         rComplexLabel.realloc(1);
         rComplexLabel[0] <<= rCell.aString;
     }
-    else if( rCell.aComplexString.getLength() && rCell.eType == SCH_CELL_TYPE_COMPLEX_STRING )
+    else if( rCell.aComplexString.hasElements() && rCell.eType == SCH_CELL_TYPE_COMPLEX_STRING )
     {
         sal_Int32 nCount = rCell.aComplexString.getLength();
         rComplexLabel.realloc( nCount );

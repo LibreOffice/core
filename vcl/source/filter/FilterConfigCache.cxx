@@ -87,7 +87,7 @@ void FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString
 OUString FilterConfigCache::FilterConfigCacheEntry::GetShortName()
 {
     OUString aShortName;
-    if ( lExtensionList.getLength() )
+    if ( lExtensionList.hasElements() )
     {
         aShortName = lExtensionList[ 0 ];
         if ( aShortName.startsWith( "*." ) )

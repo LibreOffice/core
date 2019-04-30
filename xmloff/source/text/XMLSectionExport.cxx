@@ -396,7 +396,7 @@ void XMLSectionExport::ExportRegularSectionStart(
     }
     Sequence<sal_Int8> aPassword;
     xPropSet->getPropertyValue("ProtectionKey") >>= aPassword;
-    if (aPassword.getLength() > 0)
+    if (aPassword.hasElements())
     {
         OUStringBuffer aBuffer;
         ::comphelper::Base64::encode(aBuffer, aPassword);

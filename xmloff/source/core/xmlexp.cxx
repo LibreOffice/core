@@ -1100,7 +1100,7 @@ void SvXMLExport::ImplExportSettings()
 
         for (auto const& settings : aSettings)
         {
-            if ( !settings.aSettings.getLength() )
+            if ( !settings.aSettings.hasElements() )
                 continue;
 
             const OUString& sSettingsName( GetXMLToken( settings.eGroupName ) );
@@ -1787,7 +1787,7 @@ void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& r
                 uno::Sequence<beans::PropertyValue> aProps;
                 if( aAny >>= aProps )
                 {
-                    if( aProps.getLength() > 0 )
+                    if( aProps.hasElements() )
                     {
                         bAdd = true;
                         break;

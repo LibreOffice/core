@@ -2011,14 +2011,14 @@ bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor, too
 {
     Sequence<sal_Int8> aSeq = GetSequence(rFlavor, OUString());
 
-    if (aSeq.getLength())
+    if (aSeq.hasElements())
     {
         rxStream = new SotStorageStream( "" );
         rxStream->WriteBytes( aSeq.getConstArray(), aSeq.getLength() );
         rxStream->Seek( 0 );
     }
 
-    return aSeq.getLength();
+    return aSeq.hasElements();
 }
 
 Reference<XInputStream> TransferableDataHelper::GetInputStream( SotClipboardFormatId nFormat, const OUString& rDestDoc )
@@ -2034,7 +2034,7 @@ Reference<XInputStream> TransferableDataHelper::GetInputStream( const DataFlavor
 {
     Sequence<sal_Int8> aSeq = GetSequence(rFlavor, rDestDoc);
 
-    if (!aSeq.getLength())
+    if (!aSeq.hasElements())
         return Reference<XInputStream>();
 
     Reference<XInputStream> xStream(new comphelper::SequenceInputStream(aSeq));

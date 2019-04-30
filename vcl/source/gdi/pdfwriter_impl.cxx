@@ -5639,7 +5639,7 @@ class PDFStreamIf :
 
 void SAL_CALL  PDFStreamIf::writeBytes( const css::uno::Sequence< sal_Int8 >& aData )
 {
-    if( m_bWrite && aData.getLength() )
+    if( m_bWrite && aData.hasElements() )
     {
         sal_Int32 nBytes = aData.getLength();
         m_pWriter->writeBuffer( aData.getConstArray(), nBytes );

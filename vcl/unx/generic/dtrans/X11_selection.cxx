@@ -330,7 +330,7 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
          *  needs to be added. The display used whould be that of the normal event loop
          *  and synchronization should be done via the SolarMutex.
          */
-        if( arguments.getLength() > 0 )
+        if( arguments.hasElements() )
             arguments.getConstArray()[0] >>= m_xDisplayConnection;
         if( ! m_xDisplayConnection.is() )
         {
@@ -1281,7 +1281,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
         aAtoms = Sequence< sal_Int8 >();
 
     std::vector< Atom > aNativeTypes;
-    if( aAtoms.getLength() )
+    if( aAtoms.hasElements() )
     {
         sal_Int32 nAtoms = aAtoms.getLength() / sizeof(Atom);
         Atom* pAtoms = reinterpret_cast<Atom*>(aAtoms.getArray());
@@ -3960,7 +3960,7 @@ void SelectionManagerHolder::initialize( const Sequence< Any >& arguments )
 {
     OUString aDisplayName;
 
-    if( arguments.getLength() > 0 )
+    if( arguments.hasElements() )
     {
         css::uno::Reference< XDisplayConnection > xConn;
         arguments.getConstArray()[0] >>= xConn;

@@ -1552,7 +1552,7 @@ void XMLTrackedChangesOASISTContext_Impl::StartElement(
             Any aAny = rPropSet->getPropertyValue( aPropName);
             Sequence < sal_Int8 > aKey;
             aAny >>= aKey;
-            if( aKey.getLength() )
+            if( aKey.hasElements() )
             {
                 OUStringBuffer aBuffer;
                 ::comphelper::Base64::encode( aBuffer, aKey );

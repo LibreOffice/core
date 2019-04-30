@@ -47,7 +47,7 @@ ScVbaListBox::getListIndex()
 {
     uno::Sequence< sal_Int16 > sSelection;
     m_xProps->getPropertyValue( "SelectedItems" ) >>= sSelection;
-    if ( sSelection.getLength() == 0 )
+    if ( !sSelection.hasElements() )
         return uno::Any( sal_Int32( -1 ) );
     return uno::Any( sSelection[ 0 ] );
 }
@@ -62,7 +62,7 @@ ScVbaListBox::getValue()
     if( getMultiSelect() )
         throw uno::RuntimeException( "Attribute use invalid." );
     uno::Any aRet;
-    if ( sSelection.getLength() )
+    if ( sSelection.hasElements() )
         aRet <<= sItems[ sSelection[ 0 ] ];
     return aRet;
 }

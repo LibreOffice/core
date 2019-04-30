@@ -665,7 +665,7 @@ bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSeque
         try
         {
             xProp->getPropertyValue("HiddenValues") >>= aHiddenValues;
-            if( !aHiddenValues.getLength() )
+            if( !aHiddenValues.hasElements() )
                 return true;
         }
         catch( const uno::Exception& )
@@ -673,7 +673,7 @@ bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSeque
             return true;
         }
     }
-    return xDataSequence->getData().getLength();
+    return xDataSequence->getData().hasElements();
 }
 
 typedef vector< OUString > tStringVector;
@@ -1230,7 +1230,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
             }
 
             //column-mapping or row-mapping
-            if( maSequenceMapping.getLength() )
+            if( maSequenceMapping.hasElements() )
             {
                 enum XMLTokenEnum eTransToken = ::xmloff::token::XML_ROW_MAPPING;
                 if( mbRowSourceColumns )
@@ -1633,7 +1633,7 @@ void SchXMLExportHelper_Impl::exportTable()
             if( nC < nComplexCount )
             {
                 const Sequence< uno::Any >& rComplexLabel = rComplexColumnDescriptions[nC];
-                if( rComplexLabel.getLength()>0 )
+                if( rComplexLabel.hasElements() )
                 {
                     double fValue=0.0;
                     if( rComplexLabel[0] >>=fValue )
@@ -1688,7 +1688,7 @@ void SchXMLExportHelper_Impl::exportTable()
                 if( nC < nComplexCount )
                 {
                     const Sequence< uno::Any >& rComplexLabel = rComplexRowDescriptions[nC];
-                    if( rComplexLabel.getLength()>0 )
+                    if( rComplexLabel.hasElements() )
                     {
                         double fValue=0.0;
                         if( rComplexLabel[0] >>=fValue )
@@ -1762,7 +1762,7 @@ Reference< chart2::XCoordinateSystem > lcl_getCooSys( const Reference< chart2::X
     if(xCooSysCnt.is())
     {
         Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
-        if(aCooSysSeq.getLength()>0)
+        if(aCooSysSeq.hasElements())
             xCooSys = aCooSysSeq[0];
     }
     return xCooSys;
@@ -2493,7 +2493,7 @@ namespace
         }
         else
         {
-            if( !aData.getLength() )
+            if( !aData.hasElements() )
                 aData = xDataSequence->getData();
             OUString aString;
             sal_Int32 nCount = aData.getLength();

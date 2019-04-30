@@ -482,7 +482,7 @@ X509Certificate_NssImpl* SecurityEnvironment_NssImpl::createX509CertificateFromD
 {
     X509Certificate_NssImpl* pX509Certificate = nullptr;
 
-    if (aDerCertificate.getLength() > 0)
+    if (aDerCertificate.hasElements())
     {
         pX509Certificate = new X509Certificate_NssImpl();
         if (pX509Certificate == nullptr)
