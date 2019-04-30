@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_51ccb488",
+        "filename": "offapi/com/sun/star/text/TextGraphicObject.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2019-04-30T19:27:41Z",
+      "side": 1,
+      "message": "The better description I can think of is: \"when the object is an image inserted into a text document in Writer, the above property \u0027Graphic\u0027 represents the original image, while this property represents the image as it currently looks like after possible transformations performed on it by the user (scaling, rotation, ...)\"\n\nAnyway if you think of this property to be not enough generic, I\u0027m fine to not list it here at all, as long as I can still use it.",
+      "parentUuid": "3fa0c359_884bf485",
+      "revId": "4138fcabf745f57a09802d2a8c514fce15bff20e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f91af0f_bf8dd77c",
         "filename": "offapi/type_reference/offapi.idl",
         "patchSetId": 1
