@@ -1597,7 +1597,7 @@ public:
 sal_Int16 GetWordFirstLineOffset(const SwNumFormat &rFormat);
 // A bit of a bag on the side for now
 OUString FieldString(ww::eField eIndex);
-OUString BookmarkToWord(const OUString &rBookmark);
+OUString BookmarkToWord(const OUString &rBookmark, bool bEncodeText = true);
 
 class WW8SHDLong
 {

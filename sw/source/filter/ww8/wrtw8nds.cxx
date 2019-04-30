@@ -1152,13 +1152,18 @@ bool WW8AttributeOutput::EndURL(bool const)
     return true;
 }
 
-OUString BookmarkToWord(const OUString &rBookmark)
+OUString BookmarkToWord(const OUString &rBookmark, bool bEncodeText)
 {
-    OUString sRet(INetURLObject::encode(
+    OUString sRet = rBookmark.replace(' ', '_'); // Spaces are prohibited in bookmark name
+    if ( bEncodeText )
+    {
+        sRet = INetURLObject::encode(sRet, INetURLObject::PART_REL_SEGMENT_EXTRA, INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_ASCII_US);
+    }
+    /*OUString sRet(INetURLObject::encode(
         rBookmark.replace(' ', '_'), // Spaces are prohibited in bookmark name
         INetURLObject::PART_REL_SEGMENT_EXTRA,
-        INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_ASCII_US));
-    return TruncateBookmark(sRet);
+        INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_ASCII_US));*/
+    return TruncateBookmark(sRet); // Maximum bookmark length in OOXML is 40 characters
 }
 
 OUString BookmarkToWriter(const OUString &rBookmark)
