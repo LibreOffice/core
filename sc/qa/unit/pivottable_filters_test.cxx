@@ -94,6 +94,7 @@ public:
     void tesTtdf124772NumFmt();
     void testTdf124810();
     void testTdf124883();
+    void testTdf125046();
 
     CPPUNIT_TEST_SUITE(ScPivotTableFiltersTest);
 
@@ -142,6 +143,7 @@ public:
     CPPUNIT_TEST(tesTtdf124772NumFmt);
     CPPUNIT_TEST(testTdf124810);
     CPPUNIT_TEST(testTdf124883);
+    CPPUNIT_TEST(testTdf125046);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2634,6 +2636,22 @@ void ScPivotTableFiltersTest::testTdf124883()
                 "Sum of Value");
     assertXPath(pTable, "/x:pivotTableDefinition/x:dataFields/x:dataField[2]", "name",
                 "Count of Value2");
+}
+
+void ScPivotTableFiltersTest::testTdf125046()
+{
+    ScDocShellRef xDocSh = loadDoc("pivottable_long_text.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(xDocSh.get(), FORMAT_XLSX);
+    xDocSh->DoClose();
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory,
+                                              "xl/pivotCache/pivotCacheDefinition1.xml");
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
+                "longText", "1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPivotTableFiltersTest);
