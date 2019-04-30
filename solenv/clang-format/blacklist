@@ -4066,8 +4066,8 @@ editeng/source/items/flditem.cxx
 editeng/source/items/frmitems.cxx
 editeng/source/items/itemtype.cxx
 editeng/source/items/justifyitem.cxx
-editeng/source/items/numitem.cxx
 editeng/source/items/legacyitem.cxx
+editeng/source/items/numitem.cxx
 editeng/source/items/optitems.cxx
 editeng/source/items/paperinf.cxx
 editeng/source/items/paraitem.cxx
@@ -7042,7 +7042,6 @@ include/svx/AccessibleShapeTreeInfo.hxx
 include/svx/AccessibleTextHelper.hxx
 include/svx/ActionDescriptionProvider.hxx
 include/svx/AffineMatrixItem.hxx
-include/svx/autoformathelper.hxx
 include/svx/ChildrenManager.hxx
 include/svx/ClassificationDialog.hxx
 include/svx/ClassificationEditView.hxx
@@ -7079,6 +7078,7 @@ include/svx/XPropertyEntry.hxx
 include/svx/XPropertyTable.hxx
 include/svx/algitem.hxx
 include/svx/anchorid.hxx
+include/svx/autoformathelper.hxx
 include/svx/bmpmask.hxx
 include/svx/camera3d.hxx
 include/svx/charmap.hxx
@@ -7782,10 +7782,10 @@ include/vbahelper/vbashapes.hxx
 include/vbahelper/vbatextframe.hxx
 include/vbahelper/vbawindowbase.hxx
 include/vcl/AccessibleBrowseBoxObjType.hxx
-include/vcl/BitmapTools.hxx
 include/vcl/BitmapBuffer.hxx
 include/vcl/BitmapColor.hxx
 include/vcl/BitmapPalette.hxx
+include/vcl/BitmapTools.hxx
 include/vcl/ColorMask.hxx
 include/vcl/EnumContext.hxx
 include/vcl/FilterConfigItem.hxx
@@ -13623,8 +13623,8 @@ svl/source/items/itemiter.cxx
 svl/source/items/itempool.cxx
 svl/source/items/itemprop.cxx
 svl/source/items/itemset.cxx
-svl/source/items/legacyitem.cxx
 svl/source/items/lckbitem.cxx
+svl/source/items/legacyitem.cxx
 svl/source/items/macitem.cxx
 svl/source/items/poolcach.cxx
 svl/source/items/poolio.cxx
@@ -14661,7 +14661,6 @@ sw/inc/IDocumentUndoRedo.hxx
 sw/inc/IGrammarContact.hxx
 sw/inc/IMark.hxx
 sw/inc/IShellCursorSupplier.hxx
-sw/inc/legacyitem.hxx
 sw/inc/PageColumnPopup.hxx
 sw/inc/PageMarginPopup.hxx
 sw/inc/PageOrientationPopup.hxx
@@ -14789,6 +14788,7 @@ sw/inc/init.hxx
 sw/inc/iodetect.hxx
 sw/inc/istyleaccess.hxx
 sw/inc/itabenum.hxx
+sw/inc/legacyitem.hxx
 sw/inc/lineinfo.hxx
 sw/inc/linkenum.hxx
 sw/inc/list.hxx
