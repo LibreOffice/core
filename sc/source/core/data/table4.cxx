@@ -2277,7 +2277,7 @@ bool ScTable::GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, bool bInSel,
         {
             if (ValidCol(rCol))
             {
-                bStop = aCol[rCol].GetNextSpellingCell(rRow, bInSel, rMark);
+                bStop = CreateColumnIfNotExists(rCol).GetNextSpellingCell(rRow, bInSel, rMark);
                 if (bStop)
                     return true;
                 else /*if (rRow == MAXROW+1) */
