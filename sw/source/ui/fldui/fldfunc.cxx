@@ -70,7 +70,8 @@ SwFieldFuncPage::SwFieldFuncPage(TabPageParent pParent, const SfxItemSet *const 
 {
     FillFieldSelect(*m_xSelectionLB);
     FillFieldSelect(*m_xFormatLB);
-    m_xListItemsLB->set_size_request(m_xListItemED->get_preferred_size().Width(), -1);
+    m_xListItemsLB->set_size_request(m_xListItemED->get_preferred_size().Width(),
+                                     m_xListItemED->get_height_rows(5));
 
     auto nWidth = m_xTypeLB->get_approximate_digit_width() * FIELD_COLUMN_WIDTH / 8;
     auto nHeight = m_xTypeLB->get_height_rows(20);
