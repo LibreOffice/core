@@ -6799,6 +6799,7 @@ include/sfx2/event.hxx
 include/sfx2/evntconf.hxx
 include/sfx2/fcontnr.hxx
 include/sfx2/filedlghelper.hxx
+include/sfx2/flatpak.hxx
 include/sfx2/frame.hxx
 include/sfx2/frmdescr.hxx
 include/sfx2/frmhtml.hxx
@@ -12802,6 +12803,7 @@ sfx2/source/appl/childwin.cxx
 sfx2/source/appl/childwinimpl.cxx
 sfx2/source/appl/fileobj.cxx
 sfx2/source/appl/fileobj.hxx
+sfx2/source/appl/flatpak.cxx
 sfx2/source/appl/fwkhelper.cxx
 sfx2/source/appl/helpdispatch.cxx
 sfx2/source/appl/helpdispatch.hxx

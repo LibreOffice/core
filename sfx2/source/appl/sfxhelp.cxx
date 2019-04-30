@@ -56,7 +56,6 @@
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/tempfile.hxx>
-#include <unotools/ucbhelper.hxx>
 #include <rtl/uri.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/layout.hxx>
@@ -73,6 +72,7 @@
 #include "newhelp.hxx"
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
+#include <sfx2/flatpak.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <helper.hxx>
 #include <sfx2/strings.hrc>
@@ -734,11 +734,6 @@ static bool impl_showOnlineHelp( const OUString& rURL )
 
 namespace {
 
-bool isFlatpak() {
-    static auto const flatpak = [] { return std::getenv("LIBO_FLATPAK") != nullptr; }();
-    return flatpak;
-}
-
 bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
     assert(helpRootUrl != nullptr);
     //TODO: This function for now assumes that the passed-in *helpRootUrl references
@@ -905,57 +900,6 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
     }
 }
 
-// Must only be accessed with SolarMutex locked:
-static struct {
-    bool created = false;
-    OUString url;
-} flatpakHelpTemporaryDirectoryStatus;
-
-bool createFlatpakHelpTemporaryDirectory(OUString ** url) {
-    assert(url != nullptr);
-    DBG_TESTSOLARMUTEX();
-    if (!flatpakHelpTemporaryDirectoryStatus.created) {
-        auto const env = std::getenv("XDG_CACHE_HOME");
-        if (env == nullptr) {
-            SAL_WARN("sfx.appl", "LIBO_FLATPAK mode but unset XDG_CACHE_HOME");
-            return false;
-        }
-        OUString path;
-        if (!rtl_convertStringToUString(
-                &path.pData, env, std::strlen(env), osl_getThreadTextEncoding(),
-                (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
-                 | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
-        {
-            SAL_WARN(
-                "sfx.appl",
-                "LIBO_FLATPAK mode failure converting XDG_CACHE_HOME \"" << env << "\" encoding");
-            return false;
-        }
-        OUString parent;
-        auto const err = osl::FileBase::getFileURLFromSystemPath(path, parent);
-        if (err != osl::FileBase::E_None) {
-            SAL_WARN(
-                "sfx.appl",
-                "LIBO_FLATPAK mode failure converting XDG_CACHE_HOME \"" << path << "\" to URL: "
-                    << err);
-            return false;
-        }
-        if (!parent.endsWith("/")) {
-            parent += "/";
-        }
-        auto const tmp = utl::TempFile(&parent, true);
-        if (!tmp.IsValid()) {
-            SAL_WARN(
-                "sfx.appl", "LIBO_FLATPAK mode failure creating temp dir at <" << parent << ">");
-            return false;
-        }
-        flatpakHelpTemporaryDirectoryStatus.url = tmp.GetURL();
-        flatpakHelpTemporaryDirectoryStatus.created = true;
-    }
-    *url = &flatpakHelpTemporaryDirectoryStatus.url;
-    return true;
-}
-
 }
 
 #define SHTML1 "<!DOCTYPE HTML><html lang=\"en-US\"><head><meta charset=\"UTF-8\">"
@@ -968,7 +912,7 @@ static bool impl_showOfflineHelp( const OUString& rURL )
     OUString aBaseInstallPath = getHelpRootURL();
     // For the flatpak case, find the pathname outside the flatpak sandbox that corresponds to
     // aBaseInstallPath, because that is what needs to be stored in aTempFile below:
-    if (isFlatpak() && !rewriteFlatpakHelpRootUrl(&aBaseInstallPath)) {
+    if (flatpak::isFlatpak() && !rewriteFlatpakHelpRootUrl(&aBaseInstallPath)) {
         return false;
     }
 
@@ -981,7 +925,7 @@ static bool impl_showOfflineHelp( const OUString& rURL )
     // technical reasons, so that it can be accessed by the browser running outside the sandbox):
     OUString const aExtension(".html");
     OUString * parent = nullptr;
-    if (isFlatpak() && !createFlatpakHelpTemporaryDirectory(&parent)) {
+    if (flatpak::isFlatpak() && !flatpak::createTemporaryHtmlDirectory(&parent)) {
         return false;
     }
     ::utl::TempFile aTempFile("NewHelp", true, &aExtension, parent, false );
@@ -1373,18 +1317,6 @@ OUString SfxHelp::GetCurrentModuleIdentifier()
 bool SfxHelp::IsHelpInstalled()
 {
     return impl_hasHelpInstalled();
-}
-
-void SfxHelp::removeFlatpakHelpTemporaryDirectory() {
-    DBG_TESTSOLARMUTEX();
-    if (flatpakHelpTemporaryDirectoryStatus.created) {
-        if (!utl::UCBContentHelper::Kill(flatpakHelpTemporaryDirectoryStatus.url)) {
-            SAL_INFO(
-                "sfx.appl",
-                "LIBO_FLATPAK mode failure removing directory <"
-                    << flatpakHelpTemporaryDirectoryStatus.url << ">");
-        }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

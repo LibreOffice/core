@@ -108,7 +108,7 @@
 #include <vcl/help.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
-#include <sfx2/sfxhelp.hxx>
+#include <sfx2/flatpak.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/safemode.hxx>
@@ -1712,7 +1712,7 @@ int Desktop::doShutdown()
 
     // remove temp directory
     RemoveTemporaryDirectory();
-    SfxHelp::removeFlatpakHelpTemporaryDirectory();
+    flatpak::removeTemporaryHtmlDirectory();
 
     // flush evtl. configuration changes so that all config files in user
     // dir are written
