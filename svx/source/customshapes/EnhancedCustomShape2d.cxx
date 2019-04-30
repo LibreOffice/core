@@ -1463,7 +1463,7 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
 
             sal_Int32 nFirstAdjustmentValue = -1, nSecondAdjustmentValue = -1;
 
-            // ODF shapes are expected to use a direct binding beween position and adjustment
+            // ODF shapes are expected to use a direct binding between position and adjustment
             // values. OOXML preset shapes use known formulas. These are calculated backward to
             // get the adjustment values. So far we do not have a general method to calculate
             // the adjustment values for any shape from the handle position.
