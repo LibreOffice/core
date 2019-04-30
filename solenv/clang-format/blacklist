@@ -7418,7 +7418,6 @@ include/svx/verttexttbxctrl.hxx
 include/svx/view3d.hxx
 include/svx/viewlayoutitem.hxx
 include/svx/viewpt3d.hxx
-include/svx/xattr.hxx
 include/svx/xbitmap.hxx
 include/svx/xbtmpit.hxx
 include/svx/xcolit.hxx

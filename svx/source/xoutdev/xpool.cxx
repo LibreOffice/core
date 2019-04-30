@@ -38,7 +38,11 @@
 #include <svx/xflbmsxy.hxx>
 #include <svx/xflbmsli.hxx>
 #include <svx/xflbtoxy.hxx>
-#include <svx/xattr.hxx>
+#include <svx/xlineit0.hxx>
+#include <svx/xlinjoit.hxx>
+#include <svx/xlncapit.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xtextit0.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnclit.hxx>

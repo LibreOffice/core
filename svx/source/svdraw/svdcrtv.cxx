@@ -19,7 +19,6 @@
 
 
 #include <svx/svdcrtv.hxx>
-#include <svx/xattr.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdocapt.hxx>
