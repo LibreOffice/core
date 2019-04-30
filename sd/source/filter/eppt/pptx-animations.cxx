@@ -635,8 +635,7 @@ class PPTXAnimationExport
     const FSHelperPtr& mpFS;
     const NodeContext* mpContext;
 
-    std::map<Reference<XAnimationNode>, sal_Int32, ::comphelper::OInterfaceCompare<XAnimationNode>>
-        maAnimationNodeIdMap;
+    std::map<Reference<XAnimationNode>, sal_Int32> maAnimationNodeIdMap;
     sal_Int32 GetNextAnimationNodeId(const Reference<XAnimationNode>& rNode);
     sal_Int32 GetAnimationNodeId(const Reference<XAnimationNode>& rNode);
 
