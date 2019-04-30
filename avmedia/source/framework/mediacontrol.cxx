@@ -274,6 +274,8 @@ IMPL_LINK( MediaControl, implTimeEndHdl, Slider*, p, void )
     MediaItem aExecItem;
 
     aExecItem.setTime( p->GetThumbPos() * maItem.getDuration() / AVMEDIA_TIME_RANGE );
+    // keep state (if the media was playing, keep it playing)
+    aExecItem.setState(maItem.getState());
     execute( aExecItem );
     update();
     maIdle.Start();

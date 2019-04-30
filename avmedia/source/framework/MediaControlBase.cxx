@@ -163,7 +163,7 @@ void MediaControlBase::UpdateToolBoxes(MediaItem aMediaItem)
             mpPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE, false );
             mpPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_STOP, false );
         }
-        else if( aMediaItem.getTime() > 0.0 && ( aMediaItem.getTime() < aMediaItem.getDuration() ) )
+        else if( aMediaItem.getState() == MediaState::Pause )
         {
             mpPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PLAY, false );
             mpPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE );
