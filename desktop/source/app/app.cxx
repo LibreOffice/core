@@ -119,6 +119,7 @@
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/apearcfg.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <osl/module.hxx>
 
 #include "langselect.hxx"
 
@@ -439,6 +440,13 @@ Desktop::Desktop()
     m_firstRunTimer.SetTimeout(3000); // 3 sec.
     m_firstRunTimer.SetInvokeHandler(LINK(this, Desktop, AsyncInitFirstRun));
     m_firstRunTimer.SetDebugName( "desktop::Desktop m_firstRunTimer" );
+
+    static ::osl::Module aMod;
+    aMod.load("explorerframe.dll");
+    if (aMod.is())
+        SAL_WARN("desktop.app", "loading explorerframe.dll successful");
+    else
+        SAL_WARN("desktop.app", "loading explorerframe.dll failed");
 }
 
 Desktop::~Desktop()
