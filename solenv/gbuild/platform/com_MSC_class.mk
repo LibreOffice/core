@@ -71,6 +71,8 @@ gb_PrecompiledHeader_get_enableflags = -Yu$(1).hxx \
 	-Fp$(call gb_PrecompiledHeader_get_target,$(1),$(2)) \
 	$(gb_PCHWARNINGS)
 
+gb_PrecompiledHeader_EXT := .pch
+
 # MSVC PCH needs extra .obj created during the creation of the PCH file
 gb_PrecompiledHeader_get_objectfile = $(1).obj
 
