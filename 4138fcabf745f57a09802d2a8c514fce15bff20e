@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_884bf485",
+        "filename": "offapi/com/sun/star/text/TextGraphicObject.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-30T06:45:17Z",
+      "side": 1,
+      "message": "The given description, \"contains the transformed graphic\", would probably leave me as an API user still clueless and puzzled.\n\nIf that property is really just a LO-internal hack, another option could be to just use it internally but not list it here at all.  But I\u0027m far from a domain expert here, can just comment from a general UNOIDL API viewpoint.",
+      "parentUuid": "3fa0c359_a803500d",
+      "revId": "4138fcabf745f57a09802d2a8c514fce15bff20e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f91af0f_bf8dd77c",
         "filename": "offapi/type_reference/offapi.idl",
         "patchSetId": 1
