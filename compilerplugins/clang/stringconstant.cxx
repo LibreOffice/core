@@ -58,19 +58,7 @@ bool isLhsOfAssignment(FunctionDecl const * decl, unsigned parameter) {
         || (oo >= OO_PlusEqual && oo <= OO_GreaterGreaterEqual);
 }
 
-bool typecheckIsOUStringParam(const clang::QualType t) {
-    return bool(loplugin::TypeCheck(t).NotSubstTemplateTypeParmType()
-            .LvalueReference().Const().NotSubstTemplateTypeParmType()
-            .Class("OUString").Namespace("rtl").GlobalNamespace());
-}
-
-bool typecheckIsOStringParam(const clang::QualType t) {
-    return bool(loplugin::TypeCheck(t).NotSubstTemplateTypeParmType()
-            .LvalueReference().Const().NotSubstTemplateTypeParmType()
-            .Class("OString").Namespace("rtl").GlobalNamespace());
-}
-
-bool hasOverloads(FunctionDecl const * decl, unsigned arguments, unsigned paramIndex) {
+bool hasOverloads(FunctionDecl const * decl, unsigned arguments) {
     int n = 0;
     auto ctx = decl->getDeclContext();
     if (ctx->getDeclKind() == Decl::LinkageSpec) {
@@ -79,32 +67,17 @@ bool hasOverloads(FunctionDecl const * decl, unsigned arguments, unsigned paramI
     auto res = ctx->lookup(decl->getDeclName());
     for (auto d = res.begin(); d != res.end(); ++d) {
         FunctionDecl const * f = dyn_cast<FunctionDecl>(*d);
-        if (f == nullptr || f->getMinRequiredArguments() > arguments
-            || f->getNumParams() < arguments) {
-            continue;
-        }
-        auto consDecl = dyn_cast<CXXConstructorDecl>(f);
-        if (consDecl && consDecl->isCopyOrMoveConstructor()) {
-            continue;
-        }
-        // Deleted stuff like in ORowSetValueDecorator in connectivity can cause
-        // trouble.
-        if (consDecl && consDecl->isDeleted()) {
-            return true;
-        }
-        if (paramIndex >= f->getNumParams()) {
-            continue;
-        }
-        auto t = f->getParamDecl(paramIndex)->getType();
-        // bool because 'const char *' converts to bool
-        if (!typecheckIsOUStringParam(t) && !typecheckIsOStringParam(t)
-            && !loplugin::TypeCheck(t).Pointer().Const().Char()
-            && !loplugin::TypeCheck(t).AnyBoolean()) {
-            continue;
-        }
-        ++n;
-        if (n == 2) {
-            return true;
+        if (f != nullptr && f->getMinRequiredArguments() <= arguments
+            && f->getNumParams() >= arguments)
+        {
+            auto consDecl = dyn_cast<CXXConstructorDecl>(f);
+            if (consDecl && consDecl->isCopyOrMoveConstructor()) {
+                continue;
+            }
+            ++n;
+            if (n == 2) {
+                return true;
+            }
         }
     }
     return false;
@@ -295,6 +268,29 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
     FunctionDecl const * fdecl = expr->getDirectCallee();
     if (fdecl == nullptr) {
         return true;
+    }
+    for (unsigned i = 0; i != fdecl->getNumParams(); ++i) {
+        auto t = fdecl->getParamDecl(i)->getType();
+        if (loplugin::TypeCheck(t).NotSubstTemplateTypeParmType()
+            .LvalueReference().Const().NotSubstTemplateTypeParmType()
+            .Class("OUString").Namespace("rtl").GlobalNamespace())
+        {
+            if (!(isLhsOfAssignment(fdecl, i)
+                  || hasOverloads(fdecl, expr->getNumArgs())))
+            {
+                handleOUStringCtor(expr, i, fdecl, true);
+            }
+        }
+        if (loplugin::TypeCheck(t).NotSubstTemplateTypeParmType()
+            .LvalueReference().Const().NotSubstTemplateTypeParmType()
+            .Class("OString").Namespace("rtl").GlobalNamespace())
+        {
+            if (!(isLhsOfAssignment(fdecl, i)
+                  || hasOverloads(fdecl, expr->getNumArgs())))
+            {
+                handleOStringCtor(expr, i, fdecl, true);
+            }
+        }
     }
     loplugin::DeclCheck dc(fdecl);
     //TODO: u.compareToAscii("foo") -> u.???("foo")
@@ -777,25 +773,6 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         }
         return true;
     }
-    for (unsigned i = 0; i != fdecl->getNumParams(); ++i) {
-        auto t = fdecl->getParamDecl(i)->getType();
-        if (typecheckIsOUStringParam(t))
-        {
-            if (!(isLhsOfAssignment(fdecl, i)
-                  || hasOverloads(fdecl, expr->getNumArgs(), i)))
-            {
-                handleOUStringCtor(expr, i, fdecl, true);
-            }
-        }
-        if (typecheckIsOStringParam(t))
-        {
-            if (!(isLhsOfAssignment(fdecl, i)
-                  || hasOverloads(fdecl, expr->getNumArgs(), i)))
-            {
-                handleOStringCtor(expr, i, fdecl, true);
-            }
-        }
-    }
     return true;
 }
 
@@ -1199,23 +1176,27 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
     auto consDecl = expr->getConstructor();
     for (unsigned i = 0; i != consDecl->getNumParams(); ++i) {
         auto t = consDecl->getParamDecl(i)->getType();
-        if (typecheckIsOUStringParam(t))
+        if (loplugin::TypeCheck(t).NotSubstTemplateTypeParmType()
+            .LvalueReference().Const().NotSubstTemplateTypeParmType()
+            .Class("OUString").Namespace("rtl").GlobalNamespace())
         {
             auto argExpr = expr->getArg(i);
             if (argExpr && i <= consDecl->getNumParams())
             {
-                if (!hasOverloads(consDecl, expr->getNumArgs(), i))
+                if (!hasOverloads(consDecl, expr->getNumArgs()))
                 {
                     handleOUStringCtor(expr, argExpr, consDecl, true);
                 }
             }
         }
-        if (typecheckIsOStringParam(t))
+        if (loplugin::TypeCheck(t).NotSubstTemplateTypeParmType()
+            .LvalueReference().Const().NotSubstTemplateTypeParmType()
+            .Class("OString").Namespace("rtl").GlobalNamespace())
         {
             auto argExpr = expr->getArg(i);
             if (argExpr && i <= consDecl->getNumParams())
             {
-                if (!hasOverloads(consDecl, expr->getNumArgs(), i))
+                if (!hasOverloads(consDecl, expr->getNumArgs()))
                 {
                     handleOStringCtor(expr, argExpr, consDecl, true);
                 }
