@@ -50,8 +50,6 @@ public:
     static OUString         GetCurrentModuleIdentifier();
     // Check for built-in help
     static bool             IsHelpInstalled();
-
-    static void removeFlatpakHelpTemporaryDirectory();
 };
 
 #endif // INCLUDED_SFX2_SFXHELP_HXX
