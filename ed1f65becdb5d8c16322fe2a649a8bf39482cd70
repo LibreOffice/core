@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_ced7c523",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1615,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-04-30T09:36:18Z",
+      "side": 1,
+      "message": "It would be better to add a bEncode argument to BookmarkToWord (default\u003dtrue), and call it here and at the other places, as BookmarkToWord(bookmarkName, false). This is not only nicer, but related to the 40 char truncating in BookmarkToWord, it allows 40 char bookmark names really and it avoids of the potential encoding problem, when truncating breaks an encoded character (ie. terminating %AB could be a % or %A).",
+      "range": {
+        "startLine": 1615,
+        "startChar": 31,
+        "endLine": 1615,
+        "endChar": 81
+      },
+      "revId": "ed1f65becdb5d8c16322fe2a649a8bf39482cd70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
