@@ -68,6 +68,7 @@
 
 #include <officecfg/Setup.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/flatpak.hxx>
 #include <sfx2/viewsh.hxx>
 #include "viewimp.hxx"
 #include <sfx2/sfxresid.hxx>
@@ -616,8 +617,15 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 OSL_ASSERT( !aFilterName.isEmpty() );
                 OSL_ASSERT( !aFileName.isEmpty() );
 
-                // Creates a temporary directory to store our predefined file into it.
-                ::utl::TempFile aTempDir( nullptr, true );
+                // Creates a temporary directory to store our predefined file into it (for the
+                // flatpak case, create it in XDG_CACHE_HOME instead of /tmp for technical reasons,
+                // so that it can be accessed by the browser running outside the sandbox):
+                OUString * parent = nullptr;
+                if (flatpak::isFlatpak() && !flatpak::createTemporaryHtmlDirectory(&parent))
+                {
+                    SAL_WARN("sfx.view", "cannot create Flatpak html temp dir");
+                }
+                ::utl::TempFile aTempDir( parent, true );
 
                 INetURLObject aFilePathObj( aTempDir.GetURL() );
                 aFilePathObj.insertName( aFileName );
