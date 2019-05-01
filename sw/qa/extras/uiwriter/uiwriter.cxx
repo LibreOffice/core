@@ -4680,12 +4680,10 @@ void SwUiWriterTest::testBookmarkCollapsed()
         const OString aPath("/office:document-content/office:body/office:text/text:p");
 
         const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark");
-        const int pos2 = getXPathPosition(pXmlDoc, aPath, "bookmark-start");
-        const int pos3 = getXPathPosition(pXmlDoc, aPath, "bookmark-end");
-
         CPPUNIT_ASSERT_EQUAL(0, pos1); // found, and it is first
-        CPPUNIT_ASSERT_EQUAL(2, pos2); // not found
-        CPPUNIT_ASSERT_EQUAL(2, pos3); // not found
+
+        CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pXmlDoc, aPath, "bookmark-start")); // not found
+        CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pXmlDoc, aPath, "bookmark-end")); // not found
     }
 }
 
@@ -4758,11 +4756,10 @@ void SwUiWriterTest::testRemoveBookmarkText()
     {
         const OString aPath("/office:document-content/office:body/office:text/text:p");
 
-        const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark");
+        CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pXmlDoc, aPath, "bookmark")); // not found
         const int pos2 = getXPathPosition(pXmlDoc, aPath, "bookmark-start");
         const int pos3 = getXPathPosition(pXmlDoc, aPath, "bookmark-end");
 
-        CPPUNIT_ASSERT_EQUAL(3, pos1); // not found
         CPPUNIT_ASSERT_EQUAL(0, pos2); // found, and it is first
         CPPUNIT_ASSERT_EQUAL(1, pos3); // found, and it is second
     }
@@ -4865,12 +4862,11 @@ void SwUiWriterTest::testRemoveBookmarkTextAndAddNew()
     {
         const OString aPath("/office:document-content/office:body/office:text/text:p");
 
-        const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark");
+        CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pXmlDoc, aPath, "bookmark")); // not found
         const int pos2 = getXPathPosition(pXmlDoc, aPath, "bookmark-start");
         const int pos3 = getXPathPosition(pXmlDoc, aPath, "text");
         const int pos4 = getXPathPosition(pXmlDoc, aPath, "bookmark-end");
 
-        CPPUNIT_ASSERT_EQUAL(4, pos1); // not found
         CPPUNIT_ASSERT_EQUAL(0, pos2);
         CPPUNIT_ASSERT_EQUAL(1, pos3);
         CPPUNIT_ASSERT_EQUAL(2, pos4);
@@ -4935,13 +4931,11 @@ void SwUiWriterTest::testRemoveBookmarkTextAndAddNewAfterReload()
         const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark");
         const int pos2 = getXPathPosition(pXmlDoc, aPath, "text");
 
-        const int pos3 = getXPathPosition(pXmlDoc, aPath, "bookmark-start");
-        const int pos4 = getXPathPosition(pXmlDoc, aPath, "bookmark-end");
-
         CPPUNIT_ASSERT_EQUAL(0, pos1);
         CPPUNIT_ASSERT_EQUAL(1, pos2);
-        CPPUNIT_ASSERT_EQUAL(2, pos3); // not found
-        CPPUNIT_ASSERT_EQUAL(2, pos4); // not found
+
+        CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pXmlDoc, aPath, "bookmark-start")); // not found
+        CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pXmlDoc, aPath, "bookmark-end")); // not found
     }
 }
 
@@ -6852,9 +6846,9 @@ void SwUiWriterTest::testInconsistentBookmark()
         {
             const OString aPath("/office:document-content/office:body/office:text/text:p");
 
-            const OUString aTagBookmarkStart("bookmark-start");
-            const OUString aTagControl("control");
-            const OUString aTagBookmarkEnd("bookmark-end");
+            const OString aTagBookmarkStart("bookmark-start");
+            const OString aTagControl("control");
+            const OString aTagBookmarkEnd("bookmark-end");
 
             const int pos1 = getXPathPosition(pXmlDoc, aPath, aTagBookmarkStart);
             const int pos2 = getXPathPosition(pXmlDoc, aPath, aTagControl);
