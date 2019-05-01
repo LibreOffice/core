@@ -3145,7 +3145,23 @@ public:
         gtk_container_set_border_width(GTK_CONTAINER(m_pDialog), 0);
         if (GtkWidget* pActionArea = gtk_dialog_get_action_area(m_pDialog))
             gtk_widget_hide(pActionArea);
+
+        // calc's insert->function is springing back to its original size if the ref-button
+        // is used to shrink the dialog down and then the user clicks in the calc area to do
+        // the selection
+#if defined(GDK_WINDOWING_WAYLAND)
+        bool bWorkaroundSizeSpringingBack = DLSYM_GDK_IS_WAYLAND_DISPLAY(gtk_widget_get_display(m_pWidget));
+        if (bWorkaroundSizeSpringingBack)
+            gtk_widget_unmap(GTK_WIDGET(m_pDialog));
+#endif
+
         resize_to_request();
+
+#if defined(GDK_WINDOWING_WAYLAND)
+        if (bWorkaroundSizeSpringingBack)
+            gtk_widget_map(GTK_WIDGET(m_pDialog));
+#endif
+
         m_pRefEdit = pRefEdit;
     }
 
@@ -5471,6 +5487,83 @@ public:
     }
 };
 
+namespace
+{
+    PangoAttrList* create_attr_list(const vcl::Font& rFont)
+    {
+        PangoAttrList* pAttrList = pango_attr_list_new();
+        pango_attr_list_insert(pAttrList, pango_attr_family_new(OUStringToOString(rFont.GetFamilyName(), RTL_TEXTENCODING_UTF8).getStr()));
+        pango_attr_list_insert(pAttrList, pango_attr_size_new(rFont.GetFontSize().Height() * PANGO_SCALE));
+        switch (rFont.GetItalic())
+        {
+            case ITALIC_NONE:
+                pango_attr_list_insert(pAttrList, pango_attr_style_new(PANGO_STYLE_NORMAL));
+                break;
+            case ITALIC_NORMAL:
+                pango_attr_list_insert(pAttrList, pango_attr_style_new(PANGO_STYLE_ITALIC));
+                break;
+            case ITALIC_OBLIQUE:
+                pango_attr_list_insert(pAttrList, pango_attr_style_new(PANGO_STYLE_OBLIQUE));
+                break;
+            default:
+                break;
+        }
+        switch (rFont.GetWeight())
+        {
+            case WEIGHT_ULTRALIGHT:
+                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_ULTRALIGHT));
+                break;
+            case WEIGHT_LIGHT:
+                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_LIGHT));
+                break;
+            case WEIGHT_NORMAL:
+                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_NORMAL));
+                break;
+            case WEIGHT_BOLD:
+                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_BOLD));
+                break;
+            case WEIGHT_ULTRABOLD:
+                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_ULTRABOLD));
+                break;
+            default:
+                break;
+        }
+        switch (rFont.GetWidthType())
+        {
+            case WIDTH_ULTRA_CONDENSED:
+                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_ULTRA_CONDENSED));
+                break;
+            case WIDTH_EXTRA_CONDENSED:
+                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXTRA_CONDENSED));
+                break;
+            case WIDTH_CONDENSED:
+                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_CONDENSED));
+                break;
+            case WIDTH_SEMI_CONDENSED:
+                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_SEMI_CONDENSED));
+                break;
+            case WIDTH_NORMAL:
+                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_NORMAL));
+                break;
+            case WIDTH_SEMI_EXPANDED:
+                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_SEMI_EXPANDED));
+                break;
+            case WIDTH_EXPANDED:
+                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXPANDED));
+                break;
+            case WIDTH_EXTRA_EXPANDED:
+                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXTRA_EXPANDED));
+                break;
+            case WIDTH_ULTRA_EXPANDED:
+                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_ULTRA_EXPANDED));
+                break;
+            default:
+                break;
+        }
+        return pAttrList;
+    }
+}
+
 class GtkInstanceEntry : public GtkInstanceWidget, public virtual weld::Entry
 {
 private:
@@ -5653,75 +5746,7 @@ public:
 
     virtual void set_font(const vcl::Font& rFont) override
     {
-        PangoAttrList* pAttrList = pango_attr_list_new();
-        pango_attr_list_insert(pAttrList, pango_attr_family_new(OUStringToOString(rFont.GetFamilyName(), RTL_TEXTENCODING_UTF8).getStr()));
-        pango_attr_list_insert(pAttrList, pango_attr_size_new(rFont.GetFontSize().Height() * PANGO_SCALE));
-        switch (rFont.GetItalic())
-        {
-            case ITALIC_NONE:
-                pango_attr_list_insert(pAttrList, pango_attr_style_new(PANGO_STYLE_NORMAL));
-                break;
-            case ITALIC_NORMAL:
-                pango_attr_list_insert(pAttrList, pango_attr_style_new(PANGO_STYLE_ITALIC));
-                break;
-            case ITALIC_OBLIQUE:
-                pango_attr_list_insert(pAttrList, pango_attr_style_new(PANGO_STYLE_OBLIQUE));
-                break;
-            default:
-                break;
-        }
-        switch (rFont.GetWeight())
-        {
-            case WEIGHT_ULTRALIGHT:
-                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_ULTRALIGHT));
-                break;
-            case WEIGHT_LIGHT:
-                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_LIGHT));
-                break;
-            case WEIGHT_NORMAL:
-                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_NORMAL));
-                break;
-            case WEIGHT_BOLD:
-                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_BOLD));
-                break;
-            case WEIGHT_ULTRABOLD:
-                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_ULTRABOLD));
-                break;
-            default:
-                break;
-        }
-        switch (rFont.GetWidthType())
-        {
-            case WIDTH_ULTRA_CONDENSED:
-                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_ULTRA_CONDENSED));
-                break;
-            case WIDTH_EXTRA_CONDENSED:
-                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXTRA_CONDENSED));
-                break;
-            case WIDTH_CONDENSED:
-                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_CONDENSED));
-                break;
-            case WIDTH_SEMI_CONDENSED:
-                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_SEMI_CONDENSED));
-                break;
-            case WIDTH_NORMAL:
-                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_NORMAL));
-                break;
-            case WIDTH_SEMI_EXPANDED:
-                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_SEMI_EXPANDED));
-                break;
-            case WIDTH_EXPANDED:
-                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXPANDED));
-                break;
-            case WIDTH_EXTRA_EXPANDED:
-                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXTRA_EXPANDED));
-                break;
-            case WIDTH_ULTRA_EXPANDED:
-                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_ULTRA_EXPANDED));
-                break;
-            default:
-                break;
-        }
+        PangoAttrList* pAttrList = create_attr_list(rFont);
         gtk_entry_set_attributes(m_pEntry, pAttrList);
         pango_attr_list_unref(pAttrList);
     }
@@ -7408,6 +7433,9 @@ public:
 
     virtual bool get_dest_row_at_pos(const Point &rPos, weld::TreeIter* pResult) override
     {
+        gtk_drag_unhighlight(GTK_WIDGET(m_pTreeView));
+        gtk_drag_highlight(gtk_widget_get_parent(GTK_WIDGET(m_pTreeView)));
+
         // to keep it simple we'll default to always drop before the current row
         // except for the special edge cases
         GtkTreeViewDropPosition pos = GTK_TREE_VIEW_DROP_BEFORE;
@@ -7931,6 +7959,13 @@ public:
         else
             gtk_label_set_attributes(m_pLabel, nullptr);
     }
+
+    virtual void set_font(const vcl::Font& rFont) override
+    {
+        PangoAttrList* pAttrList = create_attr_list(rFont);
+        gtk_label_set_attributes(m_pLabel, pAttrList);
+        pango_attr_list_unref(pAttrList);
+    }
 };
 
 std::unique_ptr<weld::Label> GtkInstanceFrame::weld_label_widget() const
@@ -7948,6 +7983,7 @@ private:
     GtkTextBuffer* m_pTextBuffer;
     GtkAdjustment* m_pVAdjustment;
     gulong m_nChangedSignalId;
+    gulong m_nCursorPosSignalId;
     gulong m_nVAdjustChangedSignalId;
 
     static void signalChanged(GtkTextView*, gpointer widget)
@@ -7955,6 +7991,12 @@ private:
         GtkInstanceTextView* pThis = static_cast<GtkInstanceTextView*>(widget);
         SolarMutexGuard aGuard;
         pThis->signal_changed();
+    }
+
+    static void signalCursorPosition(GtkTextView*, GParamSpec*, gpointer widget)
+    {
+        GtkInstanceTextView* pThis = static_cast<GtkInstanceTextView*>(widget);
+        pThis->signal_cursor_position();
     }
 
     static void signalVAdjustValueChanged(GtkAdjustment*, gpointer widget)
@@ -7971,6 +8013,7 @@ public:
         , m_pTextBuffer(gtk_text_view_get_buffer(pTextView))
         , m_pVAdjustment(gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(pTextView)))
         , m_nChangedSignalId(g_signal_connect(m_pTextBuffer, "changed", G_CALLBACK(signalChanged), this))
+        , m_nCursorPosSignalId(g_signal_connect(m_pTextBuffer, "notify::cursor-position", G_CALLBACK(signalCursorPosition), this))
         , m_nVAdjustChangedSignalId(g_signal_connect(m_pVAdjustment, "value-changed", G_CALLBACK(signalVAdjustValueChanged), this))
     {
     }
@@ -8053,6 +8096,7 @@ public:
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pVAdjustment, m_nVAdjustChangedSignalId);
+        g_signal_handler_block(m_pTextBuffer, m_nCursorPosSignalId);
         g_signal_handler_block(m_pTextBuffer, m_nChangedSignalId);
         GtkInstanceContainer::disable_notify_events();
     }
@@ -8061,6 +8105,7 @@ public:
     {
         GtkInstanceContainer::enable_notify_events();
         g_signal_handler_unblock(m_pTextBuffer, m_nChangedSignalId);
+        g_signal_handler_unblock(m_pTextBuffer, m_nCursorPosSignalId);
         g_signal_handler_unblock(m_pVAdjustment, m_nVAdjustChangedSignalId);
     }
 
@@ -8111,6 +8156,7 @@ public:
     {
         g_signal_handler_disconnect(m_pVAdjustment, m_nVAdjustChangedSignalId);
         g_signal_handler_disconnect(m_pTextBuffer, m_nChangedSignalId);
+        g_signal_handler_disconnect(m_pTextBuffer, m_nCursorPosSignalId);
     }
 };
 

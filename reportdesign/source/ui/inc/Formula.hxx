@@ -60,7 +60,7 @@ class FormulaDialog : public formula::FormulaModalDialog,
 
     DECL_LINK( OnClickHdl, OAddFieldWindow&, void );
 public:
-    FormulaDialog( vcl::Window* pParent
+    FormulaDialog( weld::Window* pParent
         , const css::uno::Reference< css::lang::XMultiServiceFactory>& _xServiceFactory
         , const std::shared_ptr< formula::IFunctionManager >& _pFunctionMgr
         , const OUString& _sFormula
@@ -68,7 +68,6 @@ public:
         , svl::SharedStringPool& rStrPool );
 
     virtual ~FormulaDialog() override;
-    virtual void dispose() override;
 
     // IFormulaEditorHelper
     virtual void notifyChange() override;

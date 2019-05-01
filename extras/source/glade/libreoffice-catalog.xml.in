@@ -287,9 +287,6 @@
     <glade-widget-class title="Edit" name="foruilo-ArgEdit"
                         generic-name="Edit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
-    <glade-widget-class title="Edit Box" name="foruilo-EditBox"
-                        generic-name="Edit Box" parent="GtkTextView"
-                        icon-name="widget-gtk-textview"/>
 
     <glade-widget-class title="URL Entry" name="cuilo-SvxHyperURLBox"
                         generic-name="URL Entry" parent="GtkEntry"
@@ -398,13 +395,6 @@
     <glade-widget-class title="Driver List Control" name="cuilo-DriverListControl"
                         generic-name="DriverListControl" parent="GtkEntry"
                         icon-name="widget-gtk-combobox"/>
-
-    <glade-widget-class title="Formula ListBox" name="foruilo-FormulaListBox"
-                        generic-name="Formula ListBox" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Formula ListBox" name="foruilo-StructListBox"
-                        generic-name="Formula ListBox" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
 
     <glade-widget-class title="Statusbar" name="svxlo-StatusBar"
                         generic-name="Statusbar" parent="GtkStatusbar"

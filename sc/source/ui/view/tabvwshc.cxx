@@ -142,14 +142,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
 
     switch( nSlotId )
     {
-        case SID_OPENDLG_FUNCTION:
-        {
-            // dialog checks, what is in the cell
-
-            pResult = VclPtr<ScFormulaDlg>::Create( pB, pCW, pParent, &GetViewData(),ScGlobal::GetStarCalcFunctionMgr() );
-        }
-        break;
-
         case WID_CONDFRMT_REF:
         {
             bool        bFound      = false;
@@ -473,6 +465,12 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                 xResult.reset(new ScPivotLayoutDialog(pB, pCW, pParent, &rViewData, pDialogDPObject.get(), pObj == nullptr));
             }
 
+            break;
+        }
+        case SID_OPENDLG_FUNCTION:
+        {
+            // dialog checks, what is in the cell
+            xResult.reset(new ScFormulaDlg(pB, pCW, pParent, &GetViewData(),ScGlobal::GetStarCalcFunctionMgr()));
             break;
         }
     }

@@ -1009,7 +1009,6 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
     {
         xFactory = _xContext->getServiceManager();
         xServiceFactory.set(xFactory,uno::UNO_QUERY);
-        VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( _xInspectorWindow );
 
         uno::Reference< report::meta::XFunctionManager> xMgr(xFactory->createInstanceWithContext("org.libreoffice.report.pentaho.SOFunctionManager",_xContext),uno::UNO_QUERY);
         if ( xMgr.is() )
@@ -1021,14 +1020,14 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
             CharClass aCC(_xContext, aLangTag);
             svl::SharedStringPool aStringPool(aCC);
 
-            ScopedVclPtrInstance<FormulaDialog> aDlg(
-                pParent, xServiceFactory, pFormulaManager,
+            FormulaDialog aDlg(
+                Application::GetFrameWeld(_xInspectorWindow), xServiceFactory, pFormulaManager,
                 aFormula.getUndecoratedContent(), _xRowSet, aStringPool);
 
-            bSuccess = aDlg->Execute() == RET_OK;
+            bSuccess = aDlg.run() == RET_OK;
             if ( bSuccess )
             {
-                OUString sFormula = aDlg->getCurrentFormula();
+                OUString sFormula = aDlg.getCurrentFormula();
                 if ( sFormula[0] == '=' )
                     _in_out_rFormula = "rpt:" + sFormula.copy(1);
                 else

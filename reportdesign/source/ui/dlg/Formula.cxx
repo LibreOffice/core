@@ -44,7 +44,7 @@ namespace rptui
 //      initialization / shared functions for the dialog
 
 
-FormulaDialog::FormulaDialog(vcl::Window* pParent
+FormulaDialog::FormulaDialog(weld::Window* pParent
                              , const uno::Reference<lang::XMultiServiceFactory>& _xServiceFactory
                              , const std::shared_ptr< IFunctionManager >&  _pFunctionMgr
                              , const OUString& _sFormula
@@ -88,11 +88,6 @@ void FormulaDialog::fill()
 
 FormulaDialog::~FormulaDialog()
 {
-    disposeOnce();
-}
-
-void FormulaDialog::dispose()
-{
     if ( m_pAddField )
     {
         SvtViewOptions aDlgOpt( EViewType::Window, HID_RPT_FIELD_SEL_WIN );
@@ -102,9 +97,7 @@ void FormulaDialog::dispose()
     StoreFormEditData( m_pFormulaData );
     m_pEdit.clear();
     m_pAddField.clear();
-    formula::FormulaModalDialog::dispose();
 }
-
 
 // functions for right side
 
@@ -126,8 +119,9 @@ std::unique_ptr<formula::FormulaCompiler> FormulaDialog::createCompiler( formula
 
 void FormulaDialog::doClose(bool _bOk)
 {
-    EndDialog(_bOk ? RET_OK : RET_CANCEL);
+    response(_bOk ? RET_OK : RET_CANCEL);
 }
+
 void FormulaDialog::insertEntryToLRUList(const IFunctionDescription*    /*_pDesc*/)
 {
 }
@@ -217,7 +211,7 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
 
     if ( !m_pAddField )
     {
-        m_pAddField = VclPtr<OAddFieldWindow>::Create(this,m_xRowSet);
+        m_pAddField = VclPtr<OAddFieldWindow>::Create(nullptr, m_xRowSet);
         m_pAddField->SetCreateHdl(LINK( this, FormulaDialog, OnClickHdl ) );
         SvtViewOptions aDlgOpt( EViewType::Window, HID_RPT_FIELD_SEL_WIN );
         if ( aDlgOpt.Exists() )
@@ -230,7 +224,6 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
     }
     RefInputStartAfter();
     m_pAddField->Show();
-
 }
 
 void FormulaDialog::ToggleCollapsed( WeldRefEdit* /*_pEdit*/, WeldRefButton* /*_pButton*/)

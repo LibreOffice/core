@@ -1138,7 +1138,9 @@ public:
         //hide everything except the aVisibleWidgets
         hideUnless(pContentArea, aVisibleWidgets, m_aHiddenWidgets);
 
-        pRefEdit->set_width_request(nOldEditWidth);
+        // the insert function case has an initially hidden edit widget, so it has
+        // not start size, so take larger of actual size and size request
+        pRefEdit->set_width_request(std::max(nOldEditWidth, m_nOldEditWidthReq));
         m_nOldBorderWidth = m_xDialog->get_border_width();
         m_xDialog->set_border_width(0);
         if (vcl::Window *pActionArea = m_xDialog->get_action_area())
@@ -3909,6 +3911,12 @@ public:
         else
             m_xLabel->SetControlBackground();
     }
+
+    virtual void set_font(const vcl::Font& rFont) override
+    {
+        m_xLabel->SetPointFont(*m_xLabel, rFont);
+        m_xLabel->Invalidate();
+    }
 };
 
 std::unique_ptr<weld::Label> SalInstanceFrame::weld_label_widget() const
@@ -3927,6 +3935,7 @@ private:
 
     DECL_LINK(ChangeHdl, Edit&, void);
     DECL_LINK(VscrollHdl, ScrollBar*, void);
+    DECL_LINK(CursorListener, VclWindowEvent&, void);
 public:
     SalInstanceTextView(VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : SalInstanceContainer(pTextView, pBuilder, bTakeOwnership)
@@ -3990,6 +3999,13 @@ public:
         m_xTextView->SetControlFont(aFont);
     }
 
+    virtual void connect_cursor_position(const Link<TextView&, void>& rLink) override
+    {
+        assert(!m_aCursorPositionHdl.IsSet());
+        m_xTextView->AddEventListener(LINK(this, SalInstanceTextView, CursorListener));
+        weld::TextView::connect_cursor_position(rLink);
+    }
+
     virtual int vadjustment_get_value() const override
     {
         ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
@@ -4025,6 +4041,8 @@ public:
     {
         if (!m_xTextView->IsDisposed())
         {
+            if (m_aCursorPositionHdl.IsSet())
+                m_xTextView->RemoveEventListener(LINK(this, SalInstanceTextView, CursorListener));
             m_xTextView->SetModifyHdl(Link<Edit&, void>());
             ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
             rVertScrollBar.SetScrollHdl(m_aOrigVScrollHdl);
@@ -4041,6 +4059,14 @@ IMPL_LINK(SalInstanceTextView, VscrollHdl, ScrollBar*, pScrollBar, void)
 IMPL_LINK_NOARG(SalInstanceTextView, ChangeHdl, Edit&, void)
 {
     signal_changed();
+}
+
+IMPL_LINK(SalInstanceTextView, CursorListener, VclWindowEvent&, rEvent, void)
+{
+    if (notify_events_disabled())
+        return;
+    if (rEvent.GetId() == VclEventId::EditSelectionChanged || rEvent.GetId() == VclEventId::EditCaretChanged)
+        signal_cursor_position();
 }
 
 class SalInstanceExpander : public SalInstanceContainer, public virtual weld::Expander

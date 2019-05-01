@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="for">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkBox" id="FunctionPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="orientation">vertical</property>
@@ -31,7 +37,7 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="halign">start</property>
-        <property name="hexpand">True</property>
+        <property name="activates_default">True</property>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -58,7 +64,6 @@
       <object class="GtkComboBoxText" id="category">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="hexpand">True</property>
         <items>
           <item translatable="yes" context="functionpage|category">Last Used</item>
           <item translatable="yes" context="functionpage|category">All</item>
@@ -86,13 +91,39 @@
       </packing>
     </child>
     <child>
-      <object class="foruilo-FormulaListBox" id="function">
+      <object class="GtkScrolledWindow">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
-        <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <child internal-child="selection">
-          <object class="GtkTreeSelection" id="Formula ListBox-selection1"/>
+        <property name="hscrollbar_policy">never</property>
+        <property name="shadow_type">in</property>
+        <child>
+          <object class="GtkTreeView" id="function">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="vexpand">True</property>
+            <property name="model">liststore1</property>
+            <property name="headers_visible">False</property>
+            <property name="rules_hint">True</property>
+            <property name="search_column">0</property>
+            <property name="show_expanders">False</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection"/>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                <property name="resizable">True</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderer3"/>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+          </object>
         </child>
       </object>
       <packing>

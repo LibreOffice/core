@@ -51,45 +51,53 @@ public:
                         sal_uLong nPos,
                         const FormulaToken* pToken );
 
-    void            SetActiveFlag(bool bFlag);
-    bool            GetActiveFlag() { return bActiveFlag;}
     void            GetFocus() override;
     void            LoseFocus() override;
 };
 
 
-class StructPage final : public TabPage
+class StructPage final
 {
 private:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xContainer;
+    std::unique_ptr<weld::TreeView> m_xTlbStruct;
+
     Link<StructPage&,void>  aSelLink;
 
-    VclPtr<StructListBox>   m_pTlbStruct;
-    Image           maImgEnd;
-    Image           maImgError;
+    OUString        maImgEnd;
+    OUString        maImgError;
 
     const FormulaToken* pSelectedToken;
+    bool            bActiveFlag;
 
-    DECL_LINK( SelectHdl, SvTreeListBox*, void );
+    DECL_LINK(SelectHdl, weld::TreeView&, void);
 
-    using Window::GetParent;
+    const FormulaToken* GetFunctionEntry(weld::TreeIter* pEntry);
 
-    const FormulaToken* GetFunctionEntry(SvTreeListEntry* pEntry);
+    void            SetActiveFlag(bool bFlag);
+    bool            GetActiveFlag() { return bActiveFlag;}
 
 public:
 
-    explicit StructPage(vcl::Window* pParent);
-    virtual         ~StructPage() override;
-    virtual void    dispose() override;
+    explicit StructPage(weld::Container* pParent);
+    ~StructPage();
 
     void            ClearStruct();
-    SvTreeListEntry* InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
-                                sal_uInt16 nFlag, sal_uLong nPos, const FormulaToken* pScToken);
+    bool InsertEntry(const OUString& rText, weld::TreeIter* pParent,
+                     sal_uInt16 nFlag, int nPos,
+                     const FormulaToken* pIFormulaToken,
+                     weld::TreeIter& rRet);
 
-    OUString        GetEntryText(SvTreeListEntry* pEntry) const;
+    OUString        GetEntryText(weld::TreeIter* pEntry) const;
 
     void            SetSelectionHdl( const Link<StructPage&,void>& rLink ) { aSelLink = rLink; }
 
-    StructListBox*  GetTlbStruct() const { return m_pTlbStruct; }
+    weld::TreeView&  GetTlbStruct() const { return *m_xTlbStruct; }
+
+    void            Show() { m_xContainer->show(); }
+    bool            IsVisible() { return m_xContainer->get_visible(); }
+    void            Hide() { m_xContainer->hide(); }
 };
 
 } // formula
