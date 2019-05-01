@@ -56,6 +56,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/lokcharthelper.hxx>
 #include <sfx2/viewsh.hxx>
+#include <array>
 
 using namespace com::sun::star;
 
