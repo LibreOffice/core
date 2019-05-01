@@ -21,6 +21,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
 #include "parawin.hxx"
@@ -34,73 +35,68 @@
 namespace formula
 {
 
-
-ParaWin::ParaWin(vcl::Window* pParent,IControlReferenceHandler* _pDlg):
-    TabPage         (pParent, "ParameterPage", "formula/ui/parameter.ui"),
-    pFuncDesc       ( nullptr ),
-    pMyParent       (_pDlg),
-    m_sOptional     ( ForResId( STR_OPTIONAL ) ),
-    m_sRequired     ( ForResId( STR_REQUIRED ) )
+ParaWin::ParaWin(weld::Container* pParent,IControlReferenceHandler* _pDlg)
+    : pFuncDesc(nullptr)
+    , pMyParent(_pDlg)
+    , m_sOptional(ForResId(STR_OPTIONAL))
+    , m_sRequired(ForResId(STR_REQUIRED))
+    , m_xBuilder(Application::CreateBuilder(pParent, "formula/ui/parameter.ui"))
+    , m_xContainer(m_xBuilder->weld_container("ParameterPage"))
+    , m_xSlider(m_xBuilder->weld_scrolled_window("scrollbar"))
+    , m_xParamGrid(m_xBuilder->weld_widget("paramgrid"))
+    , m_xGrid(m_xBuilder->weld_widget("grid"))
+    , m_xFtEditDesc(m_xBuilder->weld_label("editdesc"))
+    , m_xFtArgName(m_xBuilder->weld_label("parname"))
+    , m_xFtArgDesc(m_xBuilder->weld_label("pardesc"))
+    , m_xBtnFx1(m_xBuilder->weld_button("FX1"))
+    , m_xBtnFx2(m_xBuilder->weld_button("FX2"))
+    , m_xBtnFx3(m_xBuilder->weld_button("FX3"))
+    , m_xBtnFx4(m_xBuilder->weld_button("FX4"))
+    , m_xFtArg1(m_xBuilder->weld_label("FT_ARG1"))
+    , m_xFtArg2(m_xBuilder->weld_label("FT_ARG2"))
+    , m_xFtArg3(m_xBuilder->weld_label("FT_ARG3"))
+    , m_xFtArg4(m_xBuilder->weld_label("FT_ARG4"))
+    , m_xEdArg1(new ArgEdit(m_xBuilder->weld_entry("ED_ARG1")))
+    , m_xEdArg2(new ArgEdit(m_xBuilder->weld_entry("ED_ARG2")))
+    , m_xEdArg3(new ArgEdit(m_xBuilder->weld_entry("ED_ARG3")))
+    , m_xEdArg4(new ArgEdit(m_xBuilder->weld_entry("ED_ARG4")))
+    , m_xRefBtn1(new WeldRefButton(m_xBuilder->weld_button("RB_ARG1")))
+    , m_xRefBtn2(new WeldRefButton(m_xBuilder->weld_button("RB_ARG2")))
+    , m_xRefBtn3(new WeldRefButton(m_xBuilder->weld_button("RB_ARG3")))
+    , m_xRefBtn4(new WeldRefButton(m_xBuilder->weld_button("RB_ARG4")))
 {
-    get(m_pFtEditDesc, "editdesc");
-    get(m_pFtArgName, "parname");
-    get(m_pFtArgDesc, "pardesc");
-
     // Space for three lines of text in function description.
-    m_pFtEditDesc->SetText("X\nX\nX\n");
-    long nEditHeight = m_pFtEditDesc->GetOptimalSize().Height();
-    m_pFtEditDesc->set_height_request(nEditHeight);
-    m_pFtEditDesc->SetText("");
+    m_xFtEditDesc->set_label("X\nX\nX\n");
+    auto nEditHeight = m_xFtEditDesc->get_preferred_size().Height();
+    m_xFtEditDesc->set_size_request(-1, nEditHeight);
+    m_xFtEditDesc->set_label("");
     // Space for two lines of text in parameter description.
-    m_pFtArgDesc->SetText("X\nX\n");
-    long nArgHeight = m_pFtArgDesc->GetOptimalSize().Height();
-    m_pFtArgDesc->set_height_request(nArgHeight);
-    m_pFtArgDesc->SetText("");
+    m_xFtArgDesc->set_label("X\nX\n");
+    auto nArgHeight = m_xFtArgDesc->get_preferred_size().Height();
+    m_xFtArgDesc->set_size_request(-1, nArgHeight);
+    m_xFtArgDesc->set_label("");
 
-    get(m_pBtnFx1, "FX1");
-    m_pBtnFx1->SetModeImage(Image(StockImage::Yes, BMP_FX));
-    get(m_pBtnFx2, "FX2");
-    m_pBtnFx2->SetModeImage(Image(StockImage::Yes, BMP_FX));
-    get(m_pBtnFx3, "FX3");
-    m_pBtnFx3->SetModeImage(Image(StockImage::Yes, BMP_FX));
-    get(m_pBtnFx4, "FX4");
-    m_pBtnFx4->SetModeImage(Image(StockImage::Yes, BMP_FX));
-
-    get(m_pFtArg1, "FT_ARG1");
-    get(m_pFtArg2, "FT_ARG2");
-    get(m_pFtArg3, "FT_ARG3");
-    get(m_pFtArg4, "FT_ARG4");
-
-    get(m_pEdArg1, "ED_ARG1");
-    get(m_pEdArg2, "ED_ARG2");
-    get(m_pEdArg3, "ED_ARG3");
-    get(m_pEdArg4, "ED_ARG4");
-
-    get(m_pRefBtn1, "RB_ARG1");
-    get(m_pRefBtn2, "RB_ARG2");
-    get(m_pRefBtn3, "RB_ARG3");
-    get(m_pRefBtn4, "RB_ARG4");
-
-    get(m_pSlider, "scrollbar");
+    m_xBtnFx1->set_from_icon_name(BMP_FX);
+    m_xBtnFx2->set_from_icon_name(BMP_FX);
+    m_xBtnFx3->set_from_icon_name(BMP_FX);
+    m_xBtnFx4->set_from_icon_name(BMP_FX);
 
     //lock down initial preferences
-    vcl::Window *pGrid = get<vcl::Window>("paramgrid");
-    pGrid->set_height_request(pGrid->get_preferred_size().Height());
-    Size aSize(get_preferred_size());
-    set_width_request(aSize.Width());
-    set_height_request(aSize.Height());
+    m_xParamGrid->set_size_request(-1, m_xParamGrid->get_preferred_size().Height());
+    Size aSize(m_xContainer->get_preferred_size());
+    m_xContainer->set_size_request(aSize.Width(), aSize.Height());
 
-    aDefaultString=m_pFtEditDesc->GetText();
-    nEdFocus=NOT_FOUND;
-    nActiveLine=0;
+    aDefaultString = m_xFtEditDesc->get_label();
+    nEdFocus = NOT_FOUND;
+    nActiveLine = 0;
 
-    m_pSlider->SetEndScrollHdl( LINK( this, ParaWin, ScrollHdl ) );
-    m_pSlider->SetScrollHdl( LINK( this, ParaWin, ScrollHdl ) );
+    m_xSlider->set_user_managed_scrolling();
+    m_xSlider->connect_vadjustment_changed(LINK(this, ParaWin, ScrollHdl));
 
-    InitArgInput( 0, *m_pFtArg1, *m_pBtnFx1, *m_pEdArg1, *m_pRefBtn1);
-    InitArgInput( 1, *m_pFtArg2, *m_pBtnFx2, *m_pEdArg2, *m_pRefBtn2);
-    InitArgInput( 2, *m_pFtArg3, *m_pBtnFx3, *m_pEdArg3, *m_pRefBtn3);
-    InitArgInput( 3, *m_pFtArg4, *m_pBtnFx4, *m_pEdArg4, *m_pRefBtn4);
+    InitArgInput( 0, *m_xFtArg1, *m_xBtnFx1, *m_xEdArg1, *m_xRefBtn1);
+    InitArgInput( 1, *m_xFtArg2, *m_xBtnFx2, *m_xEdArg2, *m_xRefBtn2);
+    InitArgInput( 2, *m_xFtArg3, *m_xBtnFx3, *m_xEdArg3, *m_xRefBtn3);
+    InitArgInput( 3, *m_xFtArg4, *m_xBtnFx4, *m_xEdArg4, *m_xRefBtn4);
     ClearAll();
 }
 
@@ -228,41 +224,14 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
 
 ParaWin::~ParaWin()
 {
-    disposeOnce();
-}
-
-void ParaWin::dispose()
-{
     // #i66422# if the focus changes during destruction of the controls,
     // don't call the focus handlers
-    Link<Control&,void> aEmptyLink;
-    m_pBtnFx1->SetGetFocusHdl( aEmptyLink );
-    m_pBtnFx2->SetGetFocusHdl( aEmptyLink );
-    m_pBtnFx3->SetGetFocusHdl( aEmptyLink );
-    m_pBtnFx4->SetGetFocusHdl( aEmptyLink );
-    m_pFtEditDesc.clear();
-    m_pFtArgName.clear();
-    m_pFtArgDesc.clear();
-    m_pBtnFx1.clear();
-    m_pFtArg1.clear();
-    m_pEdArg1.clear();
-    m_pRefBtn1.clear();
-    m_pBtnFx2.clear();
-    m_pFtArg2.clear();
-    m_pEdArg2.clear();
-    m_pRefBtn2.clear();
-    m_pBtnFx3.clear();
-    m_pFtArg3.clear();
-    m_pEdArg3.clear();
-    m_pRefBtn3.clear();
-    m_pBtnFx4.clear();
-    m_pFtArg4.clear();
-    m_pEdArg4.clear();
-    m_pRefBtn4.clear();
-    m_pSlider.clear();
-    TabPage::dispose();
+    Link<weld::Widget&,void> aEmptyLink;
+    m_xBtnFx1->connect_focus_in(aEmptyLink);
+    m_xBtnFx2->connect_focus_in(aEmptyLink);
+    m_xBtnFx3->connect_focus_in(aEmptyLink);
+    m_xBtnFx4->connect_focus_in(aEmptyLink);
 }
-
 
 void ParaWin::SetActiveLine(sal_uInt16 no)
 {
@@ -282,7 +251,7 @@ void ParaWin::SetActiveLine(sal_uInt16 no)
     }
 }
 
-RefEdit* ParaWin::GetActiveEdit()
+WeldRefEdit* ParaWin::GetActiveEdit()
 {
     if(nArgs>0 && nEdFocus!=NOT_FOUND)
     {
@@ -350,13 +319,14 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
         }
         nArgs = pFuncDesc->getSuppressedArgumentCount();
         pFuncDesc->fillVisibleArgumentMapping(aVisibleArgMapping);
-        m_pSlider->Hide();
+        m_xSlider->set_vpolicy(VclPolicyType::NEVER);
+        m_xSlider->set_size_request(-1, -1);
         OString sHelpId = pFuncDesc->getHelpId();
-        SetHelpId( sHelpId );
-        m_pEdArg1->SetHelpId( sHelpId );
-        m_pEdArg2->SetHelpId( sHelpId );
-        m_pEdArg3->SetHelpId( sHelpId );
-        m_pEdArg4->SetHelpId( sHelpId );
+        m_xContainer->set_help_id(sHelpId);
+        m_xEdArg1->GetWidget()->set_help_id(sHelpId);
+        m_xEdArg2->GetWidget()->set_help_id(sHelpId);
+        m_xEdArg3->GetWidget()->set_help_id(sHelpId);
+        m_xEdArg4->GetWidget()->set_help_id(sHelpId);
 
         SetActiveLine(0);
     }
@@ -369,17 +339,17 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
 
 void ParaWin::SetArgumentText(const OUString& aText)
 {
-    m_pFtArgName->SetText(aText);
+    m_xFtArgName->set_label(aText);
 }
 
 void ParaWin::SetArgumentDesc(const OUString& aText)
 {
-    m_pFtArgDesc->SetText(aText);
+    m_xFtArgDesc->set_label(aText);
 }
 
 void ParaWin::SetEditDesc(const OUString& aText)
 {
-    m_pFtEditDesc->SetText(aText);
+    m_xFtEditDesc->set_label(aText);
 }
 
 void ParaWin::SetArgName(sal_uInt16 no,const OUString& aText)
@@ -400,9 +370,8 @@ void ParaWin::SetEdFocus()
         aArgInput[0].GetArgEdPtr()->GrabFocus();
 }
 
-
-void ParaWin::InitArgInput( sal_uInt16 nPos, FixedText& rFtArg, PushButton& rBtnFx,
-                        ArgEdit& rEdArg, RefButton& rRefBtn)
+void ParaWin::InitArgInput(sal_uInt16 nPos, weld::Label& rFtArg, weld::Button& rBtnFx,
+                           ArgEdit& rEdArg, WeldRefButton& rRefBtn)
 {
 
     rRefBtn.SetReferences(pMyParent, &rEdArg);
@@ -428,7 +397,7 @@ void ParaWin::ClearAll()
 void ParaWin::SetArgumentOffset(sal_uInt16 nOffset)
 {
     aParaArray.clear();
-    m_pSlider->SetThumbPos(0);
+    m_xSlider->vadjustment_set_value(0);
 
     aParaArray.resize(nArgs);
 
@@ -440,25 +409,24 @@ void ParaWin::SetArgumentOffset(sal_uInt16 nOffset)
             aArgInput[i].GetArgEdPtr()->Init(
                 (i==0)               ? nullptr : aArgInput[i-1].GetArgEdPtr(),
                 (i==3 || i==nArgs-1) ? nullptr : aArgInput[i+1].GetArgEdPtr(),
-                                       *m_pSlider, nArgs );
+                                       *m_xSlider, *this, nArgs );
         }
     }
 
+    UpdateParas();
+
     if ( nArgs < 5 )
     {
-        m_pSlider->Hide();
+        m_xSlider->set_vpolicy(VclPolicyType::NEVER);
+        m_xSlider->set_size_request(-1, -1);
     }
     else
     {
-        m_pSlider->SetPageSize( 4 );
-        m_pSlider->SetVisibleSize( 4 );
-        m_pSlider->SetLineSize( 1 );
-        m_pSlider->SetRange( Range( 0, nArgs ) );
-        m_pSlider->SetThumbPos( nOffset );
-        m_pSlider->Show();
+        m_xSlider->vadjustment_configure(nOffset, 0, nArgs, 1, 4, 4);
+        m_xSlider->set_vpolicy(VclPolicyType::ALWAYS);
+        Size aPrefSize(m_xGrid->get_preferred_size());
+        m_xSlider->set_size_request(aPrefSize.Width(), aPrefSize.Height());
     }
-
-    UpdateParas();
 }
 
 void ParaWin::UpdateParas()
@@ -482,16 +450,16 @@ void ParaWin::UpdateParas()
 
 sal_uInt16 ParaWin::GetSliderPos()
 {
-    return static_cast<sal_uInt16>(m_pSlider->GetThumbPos());
+    return static_cast<sal_uInt16>(m_xSlider->vadjustment_get_value());
 }
 
 void ParaWin::SetSliderPos(sal_uInt16 nSliderPos)
 {
     sal_uInt16 nOffset = GetSliderPos();
 
-    if(m_pSlider->IsVisible() && nOffset!=nSliderPos)
+    if(m_xSlider->get_visible() && nOffset!=nSliderPos)
     {
-        m_pSlider->SetThumbPos(nSliderPos);
+        m_xSlider->vadjustment_set_value(nSliderPos);
         for ( sal_uInt16 i=0; i<4; i++ )
         {
             UpdateArgInput( nSliderPos, i );
@@ -510,9 +478,10 @@ void ParaWin::SliderMoved()
     if(nEdFocus!=NOT_FOUND)
     {
         UpdateArgDesc( nEdFocus );
-        aArgInput[nEdFocus].SetArgSelection(Selection(0,SELECTION_MAX ));
+        aArgInput[nEdFocus].SelectAll();
         nActiveLine=nEdFocus+nOffset;
         ArgumentModified();
+        aArgInput[nEdFocus].SelectAll(); // ensure all is still selected
         aArgInput[nEdFocus].UpdateAccessibleNames();
     }
 }
@@ -537,7 +506,7 @@ IMPL_LINK( ParaWin, GetFxHdl, ArgInput&, rPtr, void )
 
     if(nEdFocus!=NOT_FOUND)
     {
-        aArgInput[nEdFocus].SetArgSelection(Selection(0,SELECTION_MAX ));
+        aArgInput[nEdFocus].SelectAll();
         nActiveLine=nEdFocus+nOffset;
         aFxLink.Call(*this);
     }
@@ -558,12 +527,11 @@ IMPL_LINK( ParaWin, GetFxFocusHdl, ArgInput&, rPtr, void )
 
     if(nEdFocus!=NOT_FOUND)
     {
-        aArgInput[nEdFocus].SetArgSelection(Selection(0,SELECTION_MAX ));
+        aArgInput[nEdFocus].SelectAll();
         UpdateArgDesc( nEdFocus );
         nActiveLine=nEdFocus+nOffset;
     }
 }
-
 
 IMPL_LINK( ParaWin, GetEdFocusHdl, ArgInput&, rPtr, void )
 {
@@ -580,16 +548,16 @@ IMPL_LINK( ParaWin, GetEdFocusHdl, ArgInput&, rPtr, void )
 
     if(nEdFocus!=NOT_FOUND)
     {
-        aArgInput[nEdFocus].SetArgSelection(Selection(0,SELECTION_MAX ));
+        aArgInput[nEdFocus].SelectAll();
         UpdateArgDesc( nEdFocus );
         nActiveLine=nEdFocus+nOffset;
         ArgumentModified();
+        aArgInput[nEdFocus].SelectAll(); // ensure all is still selected
         aArgInput[nEdFocus].UpdateAccessibleNames();
     }
 }
 
-
-IMPL_LINK_NOARG(ParaWin, ScrollHdl, ScrollBar*, void)
+IMPL_LINK_NOARG(ParaWin, ScrollHdl, weld::ScrolledWindow&, void)
 {
     SliderMoved();
 }

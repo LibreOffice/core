@@ -37,49 +37,39 @@ class IFunctionDescription;
 class IFunctionManager;
 class IFunctionCategory;
 
-
-class FormulaListBox : public ListBox
-{
-protected:
-
-    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-
-public:
-                    FormulaListBox( vcl::Window* pParent, WinBits nBits );
-
-};
-
-
 typedef const IFunctionDescription* TFunctionDesc;
 
-class FuncPage final : public TabPage
+class FuncPage final
 {
 private:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xContainer;
+
+    std::unique_ptr<weld::ComboBox> m_xLbCategory;
+    std::unique_ptr<weld::TreeView> m_xLbFunction;
+    std::unique_ptr<weld::Entry> m_xLbFunctionSearchString;
+
     Link<FuncPage&,void>     aDoubleClickLink;
     Link<FuncPage&,void>     aSelectionLink;
-    VclPtr<ListBox>          m_pLbCategory;
-    VclPtr<FormulaListBox>   m_pLbFunction;
-    VclPtr<Edit>             m_plbFunctionSearchString;
     const IFunctionManager*  m_pFunctionManager;
 
     ::std::vector< TFunctionDesc >  aLRUList;
     OString    m_aHelpId;
 
-
     void impl_addFunctions(const IFunctionCategory* _pCategory);
-                    DECL_LINK( SelHdl, ListBox&, void );
-                    DECL_LINK(DblClkHdl, ListBox&, void);
-                    DECL_LINK(ModifyHdl, Edit&, void);
+
+    DECL_LINK(SelComboBoxHdl, weld::ComboBox&, void);
+    DECL_LINK(SelTreeViewHdl, weld::TreeView&, void);
+    DECL_LINK(DblClkHdl, weld::TreeView&, void);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(ModifyHdl, weld::Entry&, void);
 
     void            UpdateFunctionList(const OUString&);
 
-
 public:
 
-                    FuncPage( vcl::Window* pParent,const IFunctionManager* _pFunctionManager);
-    virtual         ~FuncPage() override;
-    virtual void    dispose() override;
+    FuncPage(weld::Container* pContainer, const IFunctionManager* _pFunctionManager);
+    ~FuncPage();
 
     void            SetCategory(sal_Int32  nCat);
     void            SetFunction(sal_Int32  nFunc);
@@ -96,6 +86,9 @@ public:
 
     void            SetSelectHdl( const Link<FuncPage&,void>& rLink ) { aSelectionLink = rLink; }
 
+    void            Show() { m_xContainer->show(); }
+    bool            IsVisible() { return m_xContainer->get_visible(); }
+    void            Hide() { m_xContainer->hide(); }
 };
 
 } // formula
