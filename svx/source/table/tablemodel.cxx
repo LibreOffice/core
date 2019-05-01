@@ -27,6 +27,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <libxml/xmlwriter.h>
+#include <tools/debug.hxx>
 
 #include <cell.hxx>
 #include "cellcursor.hxx"

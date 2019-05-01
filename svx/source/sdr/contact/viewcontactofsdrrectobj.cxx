@@ -25,6 +25,7 @@
 #include <sdr/primitive2d/sdrprimitivetools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/sdmetitm.hxx>
 
 namespace sdr { namespace contact {
 

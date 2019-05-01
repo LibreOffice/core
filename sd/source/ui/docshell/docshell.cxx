@@ -39,6 +39,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itempool.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
 #include <comphelper/classids.hxx>

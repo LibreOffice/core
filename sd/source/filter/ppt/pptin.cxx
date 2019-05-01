@@ -28,7 +28,11 @@
 #include <sfx2/docfile.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdlayer.hxx>
+#include <svx/sdmetitm.hxx>
+#include <svx/sdtmfitm.hxx>
+#include <svx/sdtagitm.hxx>
 #include <svl/style.hxx>
+#include <svl/intitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
 #include <svx/svdoutl.hxx>
@@ -45,6 +49,7 @@
 #include <stlpool.hxx>
 #include <anminfo.hxx>
 #include <svx/gallery.hxx>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdomedia.hxx>

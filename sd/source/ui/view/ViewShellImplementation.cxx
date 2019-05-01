@@ -48,6 +48,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <svl/aeitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/imapdlg.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sberrors.hxx>

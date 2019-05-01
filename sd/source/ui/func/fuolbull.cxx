@@ -19,6 +19,7 @@
 
 #include <fuolbull.hxx>
 #include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/eeitem.hxx>
 #include <sfx2/request.hxx>

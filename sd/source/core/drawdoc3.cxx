@@ -24,6 +24,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>
+#include <tools/debug.hxx>
 
 #include <sfx2/fcontnr.hxx>
 #include <svl/style.hxx>

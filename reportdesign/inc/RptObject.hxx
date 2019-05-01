@@ -33,6 +33,8 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdoashp.hxx>
 
+#include <map>
+
 namespace rptui
 {
 typedef ::std::multimap< sal_Int16, OUString > IndexToNameMap;

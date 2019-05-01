@@ -31,7 +31,6 @@
 
 #include <sdr/contact/viewcontactofsdrcircobj.hxx>
 #include <sdr/properties/circleproperties.hxx>
-#include <svx/svdattr.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>

@@ -36,7 +36,12 @@
 #include <sal/log.hxx>
 
 #include <svx/sdrpaintwindow.hxx>
-#include <svx/svdattr.hxx>
+#include <svx/sdtaaitm.hxx>
+#include <svx/sdtacitm.hxx>
+#include <svx/sdtaiitm.hxx>
+#include <svx/sdtayitm.hxx>
+#include <svx/sdtfsitm.hxx>
+#include <svx/xcolit.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sxcaitm.hxx>

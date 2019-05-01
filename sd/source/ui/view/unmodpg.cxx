@@ -22,6 +22,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdviter.hxx>
 #include <svx/svdview.hxx>
+#include <tools/debug.hxx>
 
 #include <strings.hrc>
 #include <strings.hxx>

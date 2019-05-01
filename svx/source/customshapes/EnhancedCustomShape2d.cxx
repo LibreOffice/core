@@ -45,6 +45,7 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xhatch.hxx>
+#include <svx/sdshitm.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>

@@ -20,7 +20,8 @@
 #define INCLUDED_CUI_SOURCE_INC_TEXTANIM_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <svx/svdattr.hxx>
+#include <svx/sdtakitm.hxx>
+#include <svx/sdtaditm.hxx>
 #include <vcl/weld.hxx>
 
 class SdrView;

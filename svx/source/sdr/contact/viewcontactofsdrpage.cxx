@@ -26,6 +26,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
+#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>

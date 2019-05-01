@@ -37,6 +37,7 @@
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
+#include <svx/sdshitm.hxx>
 
 using namespace com::sun::star;
 

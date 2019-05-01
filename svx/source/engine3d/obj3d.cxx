@@ -22,7 +22,6 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/svdview.hxx>
-#include <svx/svdattr.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svditer.hxx>

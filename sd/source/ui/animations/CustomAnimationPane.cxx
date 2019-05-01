@@ -38,6 +38,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <tools/debug.hxx>
 #include "STLPropertySet.hxx"
 #include "CustomAnimationPane.hxx"
 #include "CustomAnimationDialog.hxx"

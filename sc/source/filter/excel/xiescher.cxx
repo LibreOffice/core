@@ -75,6 +75,12 @@
 #include <svx/xlnstit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
+#include <svx/sdasitm.hxx>
+#include <svx/sdshcitm.hxx>
+#include <svx/sdshitm.hxx>
+#include <svx/sdsxyitm.hxx>
+#include <svx/sdtagitm.hxx>
+#include <svx/sdtditm.hxx>
 
 #include <editeng/eeitem.hxx>
 #include <svx/xflclit.hxx>

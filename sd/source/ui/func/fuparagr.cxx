@@ -27,6 +27,7 @@
 #include <editeng/editdata.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svx/svdoutl.hxx>
+#include <svl/intitem.hxx>
 
 #include <View.hxx>
 #include <ViewShell.hxx>

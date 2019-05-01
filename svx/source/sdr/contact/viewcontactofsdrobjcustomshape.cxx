@@ -19,6 +19,7 @@
 
 #include <sdr/contact/viewcontactofsdrobjcustomshape.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/sdooitm.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svx/svditer.hxx>

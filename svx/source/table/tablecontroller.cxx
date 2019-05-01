@@ -36,6 +36,7 @@
 #include <vcl/settings.hxx>
 
 #include <svl/whiter.hxx>
+#include <svl/stritem.hxx>
 
 #include <sfx2/request.hxx>
 
@@ -63,6 +64,8 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/sdmetitm.hxx>
+#include <svx/sdtditm.hxx>
 #include "tableundo.hxx"
 #include "tablelayouter.hxx"
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

@@ -33,7 +33,9 @@
 #include <svx/gallery.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
+#include <svx/sdtfsitm.hxx>
 #include <svl/itempool.hxx>
+#include <svl/stritem.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <sfx2/bindings.hxx>
 #include <editeng/eeitem.hxx>

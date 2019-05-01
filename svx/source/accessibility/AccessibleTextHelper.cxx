@@ -69,6 +69,7 @@
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;

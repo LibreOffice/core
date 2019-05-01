@@ -91,6 +91,7 @@
 #include <svx/xlnedwit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
+#include <svx/sdtfsitm.hxx>
 
 #include <tools/diagnose_ex.h>
 

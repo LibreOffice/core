@@ -22,6 +22,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+#include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>

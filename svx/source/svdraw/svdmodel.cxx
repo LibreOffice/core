@@ -58,6 +58,7 @@
 #include <svdoutlinercache.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
+#include <svx/sdasitm.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/colritem.hxx>

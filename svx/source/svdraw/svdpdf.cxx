@@ -55,7 +55,9 @@
 #include <vcl/metric.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <svx/xflhtit.hxx>
-#include <svx/svdattr.hxx>
+#include <svx/sdtditm.hxx>
+#include <svx/sdtagitm.hxx>
+#include <svx/sdtfsitm.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>

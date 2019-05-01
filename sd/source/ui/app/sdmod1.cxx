@@ -18,6 +18,7 @@
  */
 
 #include <svl/lckbitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <unotools/moduleoptions.hxx>

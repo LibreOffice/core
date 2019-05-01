@@ -31,6 +31,7 @@
 #include "accessiblecell.hxx"
 
 #include <algorithm>
+#include <unordered_map>
 
 #include <cppuhelper/implbase.hxx>
 #include <svx/svdotable.hxx>

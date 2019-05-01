@@ -25,6 +25,7 @@
 
 #include <editeng/numitem.hxx>
 
+#include <tools/debug.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svdmark.hxx>
 #include <View.hxx>

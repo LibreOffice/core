@@ -25,6 +25,8 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
+#include <tools/debug.hxx>
+#include <svl/stritem.hxx>
 
 #include <svx/svxids.hrc>
 #include <app.hrc>

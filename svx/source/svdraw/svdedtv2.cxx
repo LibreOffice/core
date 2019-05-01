@@ -29,6 +29,8 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/dialmgr.hxx>
+#include <svx/sdooitm.hxx>
+#include <svx/sdshitm.hxx>
 #include "svdfmtf.hxx"
 #include "svdpdf.hxx"
 #include <svx/svdetc.hxx>
@@ -42,6 +44,7 @@
 #include <svx/svdoashp.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 #include <memory>
 #include <vector>
 

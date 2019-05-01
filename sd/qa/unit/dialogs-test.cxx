@@ -22,6 +22,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
+#include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/aeitem.hxx>
 #include <editeng/colritem.hxx>

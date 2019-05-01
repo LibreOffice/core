@@ -29,6 +29,7 @@
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedit.hxx>
 #include <svx/xlnedwit.hxx>
+#include <svx/sdynitm.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
