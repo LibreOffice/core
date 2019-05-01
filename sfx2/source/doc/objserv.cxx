@@ -546,9 +546,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             sal_Int32 nPages = aRenderer.getPageCount();
             std::vector< GDIMetaFile > aMetaFiles;
+            std::vector< ::Size > aPageSizes;
 
             // Convert the pages of the document to gdimetafiles
-            SfxRedactionHelper::getPageMetaFilesFromDoc(aMetaFiles, nPages, aRenderer, bIsWriter, bIsCalc);
+            SfxRedactionHelper::getPageMetaFilesFromDoc(aMetaFiles, aPageSizes, nPages, aRenderer, bIsWriter, bIsCalc);
 
             // Create an empty Draw component.
             uno::Reference<frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
@@ -556,7 +557,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL("private:factory/sdraw", "_default", 0, {});
 
             // Add the doc pages to the new draw document
-            SfxRedactionHelper::addPagesToDraw(xComponent, nPages, aMetaFiles, bIsCalc);
+            SfxRedactionHelper::addPagesToDraw(xComponent, nPages, aMetaFiles, aPageSizes, bIsCalc);
 
             // Show the Redaction toolbar
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();

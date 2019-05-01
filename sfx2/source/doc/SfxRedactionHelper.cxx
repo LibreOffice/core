@@ -61,6 +61,7 @@ OUString SfxRedactionHelper::getStringParam(const SfxRequest& rReq, const sal_uI
 }
 
 void SfxRedactionHelper::getPageMetaFilesFromDoc(std::vector<GDIMetaFile>& aMetaFiles,
+                                                 std::vector<::Size>& aPageSizes,
                                                  const sal_Int32& nPages,
                                                  DocumentToGraphicRenderer& aRenderer,
                                                  bool bIsWriter, bool bIsCalc)
@@ -75,6 +76,8 @@ void SfxRedactionHelper::getPageMetaFilesFromDoc(std::vector<GDIMetaFile>& aMeta
                                                          &aCalcPageContentSize);
         // FIXME: This is a temporary hack. Need to figure out a proper way to derive this scale factor.
         ::Size aTargetSize(aDocumentSizePixel.Width() * 1.23, aDocumentSizePixel.Height() * 1.23);
+
+        aPageSizes.push_back(aLogic);
 
         Graphic aGraphic
             = aRenderer.renderToGraphic(nPage, aDocumentSizePixel, aTargetSize, COL_TRANSPARENT);
@@ -109,7 +112,8 @@ void SfxRedactionHelper::getPageMetaFilesFromDoc(std::vector<GDIMetaFile>& aMeta
 
 void SfxRedactionHelper::addPagesToDraw(uno::Reference<XComponent>& xComponent,
                                         const sal_Int32& nPages,
-                                        const std::vector<GDIMetaFile>& aMetaFiles, bool bIsCalc)
+                                        const std::vector<GDIMetaFile>& aMetaFiles,
+                                        const std::vector<::Size>& aPageSizes, bool bIsCalc)
 {
     // Access the draw pages
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
@@ -122,8 +126,8 @@ void SfxRedactionHelper::addPagesToDraw(uno::Reference<XComponent>& xComponent,
         GDIMetaFile rGDIMetaFile = aMetaFiles[nPage];
         Graphic aGraphic(rGDIMetaFile);
 
-        sal_Int32 nPageHeight(rGDIMetaFile.GetPrefSize().Height());
-        sal_Int32 nPageWidth(rGDIMetaFile.GetPrefSize().Width());
+        sal_Int32 nPageHeight(aPageSizes[nPage].Height());
+        sal_Int32 nPageWidth(aPageSizes[nPage].Width());
 
         uno::Reference<graphic::XGraphic> xGraph = aGraphic.GetXGraphic();
         uno::Reference<drawing::XDrawPage> xPage = xDrawPages->insertNewByIndex(nPage);
