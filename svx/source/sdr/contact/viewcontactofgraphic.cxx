@@ -20,8 +20,15 @@
 #include <sdr/contact/viewcontactofgraphic.hxx>
 #include <sdr/contact/viewobjectcontactofgraphic.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/sdgtritm.hxx>
+#include <svx/sdgluitm.hxx>
+#include <svx/sdgcoitm.hxx>
+#include <svx/sdggaitm.hxx>
+#include <svx/sdginitm.hxx>
+#include <svx/sdgmoitm.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svl/itemset.hxx>
+#include <tools/debug.hxx>
 
 #include <svx/sdgcpitm.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>

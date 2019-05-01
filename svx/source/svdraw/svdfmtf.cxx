@@ -43,7 +43,12 @@
 #include <vcl/metric.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <svx/xflhtit.hxx>
-#include <svx/svdattr.hxx>
+#include <svx/sdmetitm.hxx>
+#include <svx/sdtagitm.hxx>
+#include <svx/sdtaitm.hxx>
+#include <svx/sdtakitm.hxx>
+#include <svx/sdtditm.hxx>
+#include <svx/sdtfsitm.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>

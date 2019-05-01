@@ -32,6 +32,8 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfltrit.hxx>
+#include <svx/sdmetitm.hxx>
+#include <svx/sdprcitm.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>

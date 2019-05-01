@@ -23,6 +23,7 @@
 #include <sfx2/request.hxx>
 #include <svx/fmmodel.hxx>
 #include <svl/itempool.hxx>
+#include <svl/stritem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoashp.hxx>
 #include <editeng/eeitem.hxx>

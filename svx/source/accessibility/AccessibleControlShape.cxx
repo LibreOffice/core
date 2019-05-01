@@ -49,6 +49,7 @@
 #include <svx/strings.hrc>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 #include <algorithm>
 
 using namespace ::accessibility;

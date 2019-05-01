@@ -49,6 +49,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <svx/svdoutl.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>

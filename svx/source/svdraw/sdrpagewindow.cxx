@@ -37,6 +37,7 @@
 #include <svx/fmview.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <tools/debug.hxx>
 
 using namespace ::com::sun::star;
 

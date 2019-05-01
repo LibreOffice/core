@@ -27,6 +27,7 @@
 #include <editeng/unoedhlp.hxx>
 #include <svl/lstner.hxx>
 #include <rtl/ref.hxx>
+#include <tools/debug.hxx>
 #include <svl/hint.hxx>
 #include <svl/style.hxx>
 #include <svx/svdmodel.hxx>

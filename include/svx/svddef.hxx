@@ -136,6 +136,7 @@ class SdrTransformRef2XItem;
 class SdrTransformRef2YItem;
 class SdrVertShearAllItem;
 class SdrVertShearOneItem;
+class SdrYesNoItem;
 class SfxBoolItem;
 class SfxStringItem;
 class SfxVoidItem;

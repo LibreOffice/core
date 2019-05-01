@@ -58,6 +58,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <vcl/svapp.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/stdtext.hxx>
 #include <svx/fmglob.hxx>

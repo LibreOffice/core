@@ -22,7 +22,6 @@
 #include <svx/xpool.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdattr.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdocapt.hxx>

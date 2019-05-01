@@ -53,7 +53,7 @@
 #include <svx/xlnstcit.hxx>
 #include <svx/xlnedcit.hxx>
 #include <svx/xpool.hxx>
-#include <svx/svdattr.hxx>
+#include <svx/svddef.hxx>
 #include <svx/svxids.hrc>
 #include <svl/itemset.hxx>
 #include <svx/xftadit.hxx>

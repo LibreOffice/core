@@ -23,7 +23,6 @@
 #include <math.h>
 #include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>
-#include <svx/svdattr.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svddrag.hxx>

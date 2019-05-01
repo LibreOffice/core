@@ -29,6 +29,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
 #include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/bindings.hxx>

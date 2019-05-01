@@ -43,6 +43,7 @@
 #include <uiobject.hxx>
 
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

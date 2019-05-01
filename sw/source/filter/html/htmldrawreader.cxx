@@ -24,6 +24,12 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/sdtagitm.hxx>
+#include <svx/sdtacitm.hxx>
+#include <svx/sdtayitm.hxx>
+#include <svx/sdtaaitm.hxx>
+#include <svx/sdtaiitm.hxx>
+#include <svx/sdtmfitm.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/xflclit.hxx>

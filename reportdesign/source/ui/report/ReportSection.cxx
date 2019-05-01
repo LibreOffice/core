@@ -37,6 +37,7 @@
 #include <svx/svxids.hrc>
 #include <svx/svditer.hxx>
 #include <svx/dbaexchange.hxx>
+#include <svx/sdtagitm.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

@@ -27,6 +27,8 @@
 
 #include <boost/optional.hpp>
 
+#include <map>
+
 namespace basctl
 {
 

@@ -36,6 +36,8 @@
 #include <svx/svdomedia.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/sdooitm.hxx>
+#include <svx/sdmetitm.hxx>
 #include <animations/animationnodehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <rtl/ustring.hxx>

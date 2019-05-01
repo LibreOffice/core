@@ -25,6 +25,7 @@
 #include <com/sun/star/animations/AnimationFill.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <tools/debug.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdopath.hxx>

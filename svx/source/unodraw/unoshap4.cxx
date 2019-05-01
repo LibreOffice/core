@@ -55,6 +55,7 @@
 #include <vcl/wmf.hxx>
 #include <svtools/embedhlp.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 
 #include <config_features.h>
 

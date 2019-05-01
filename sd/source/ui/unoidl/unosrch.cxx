@@ -27,6 +27,7 @@
 #include <svx/svdpool.hxx>
 #include <svx/unoprov.hxx>
 #include <editeng/unotext.hxx>
+#include <tools/debug.hxx>
 
 #include <unoprnms.hxx>
 #include <unosrch.hxx>

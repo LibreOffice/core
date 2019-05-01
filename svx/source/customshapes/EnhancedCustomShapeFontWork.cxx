@@ -38,6 +38,7 @@
 #include <svx/EnhancedCustomShapeTypeNames.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/sdshitm.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>

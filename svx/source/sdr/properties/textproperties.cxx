@@ -27,6 +27,8 @@
 #include <svx/svddef.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/sdmetitm.hxx>
+#include <svx/sdtditm.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <svx/svdmodel.hxx>
 #include <editeng/eeitem.hxx>

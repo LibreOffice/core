@@ -30,6 +30,7 @@
 #include <vcl/wrkwin.hxx>
 #include <svx/svdpool.hxx>
 #include <svl/itemprop.hxx>
+#include <tools/debug.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>

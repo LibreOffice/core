@@ -47,6 +47,7 @@
 #include <vcl/settings.hxx>
 
 #include <sal/log.hxx>
+#include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <editeng/editstat.hxx>
 #include <svl/itempool.hxx>

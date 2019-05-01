@@ -88,6 +88,7 @@
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svl/intitem.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/helpopt.hxx>
 #include <svtools/miscopt.hxx>
