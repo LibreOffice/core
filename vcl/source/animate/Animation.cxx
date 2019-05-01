@@ -86,25 +86,12 @@ Animation& Animation::operator=(const Animation& rAnimation)
 
 bool Animation::operator==(const Animation& rAnimation) const
 {
-    const size_t nCount = maList.size();
-    bool bRet = false;
-
-    if (rAnimation.maList.size() == nCount && rAnimation.maBitmapEx == maBitmapEx
-        && rAnimation.maGlobalSize == maGlobalSize)
-    {
-        bRet = true;
-
-        for (size_t n = 0; n < nCount; n++)
-        {
-            if ((*maList[n]) != (*rAnimation.maList[n]))
-            {
-                bRet = false;
-                break;
-            }
-        }
-    }
-
-    return bRet;
+    return maList.size() == rAnimation.maList.size() and maBitmapEx == rAnimation.maBitmapEx
+      and maGlobalSize == rAnimation.maGlobalSize and std::equal(maList.begin(), maList.end(), rAnimation.maList.begin(),
+      [] (const std::unique_ptr<AnimationBitmap>& pAnim1, const std::unique_ptr<AnimationBitmap>& pAnim2) -> bool
+      {
+          return *pAnim1 == *pAnim2;
+      });
 }
 
 void Animation::Clear()
