@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
+#include <test/util/searchdescriptor.hxx>
 #include <test/util/xsearchdescriptor.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -26,6 +27,7 @@ using namespace css;
 namespace sc_apitest
 {
 class ScCellSearchObj : public CalcUnoApiTest,
+                        public apitest::SearchDescriptor,
                         public apitest::XPropertySet,
                         public apitest::XSearchDescriptor
 {
@@ -37,6 +39,9 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScCellSearchObj);
+
+    // SearchDescriptor
+    CPPUNIT_TEST(testSearchDescriptorProperties);
 
     // XPropertSet
     CPPUNIT_TEST(testGetPropertySetInfo);
