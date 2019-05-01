@@ -55,16 +55,8 @@ SFX_IMPL_CHILDWINDOW_WITHID(ScValidityRefChildWin, SID_VALIDITY_REFERENCE)
 
 SfxChildWinInfo ScValidityRefChildWin::GetInfo() const
 {
-    SfxChildWinInfo anInfo = SfxChildWindow::GetInfo();
-
-    auto xDlgController = GetController();
-    if (xDlgController)
-    {
-        weld::Dialog* pDialog = xController->getDialog();
-        aInfo.aSize = pDialog->get_size();
-    }
-
-    return anInfo;
+    SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
+    return aInfo;
 }
 
 namespace
