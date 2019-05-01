@@ -54,37 +54,29 @@ public class RandomGenerator {
     }
 
     public static int[] randomSelection(int maxNum, int times) {
-        if (times <= 0)
-            return new int[0];
-        int realTimes = Math.min(maxNum, times);
-        boolean[] flags = new boolean[maxNum];
-        boolean isBelowHalf = times < maxNum * 0.5;
-        int virtualTimes = realTimes;
-        if (!isBelowHalf) {
-            virtualTimes = maxNum - realTimes;
+        if (maxNum < 0) {
+            maxNum = 0;
         }
-        int i = 0;
-        int upper = maxNum - 1;
-        int[] indices = new int[realTimes];
 
-        while (i < virtualTimes) {
-            indices[i] = intRangeRandom(0, upper);
-            if (!flags[indices[i]]) {
-                flags[indices[i]] = true;
-                i++;
-            }
+        if (times < 0) {
+            times = 0;
         }
-        if (!isBelowHalf) {
-            int j = 0;
-            for (i = 0; i < maxNum; i++) {
-                if (flags[i] == isBelowHalf) {
-                    indices[j] = i;
-                    j++;
-                    if (j == realTimes)
-                        break;
-                }
-            }
+
+        int[] all = new int[maxNum];
+        for (int i = 0; i < all.length; i++) {
+            all[i] = i;
         }
+
+        /* https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle */
+        int[] indices = new int[Math.min(maxNum, times)];
+        for (int i = 0, j, value; i < indices.length; i++) {
+            j = intRangeRandom(i, all.length - 1);
+
+            value = all[j];
+            all[j] = all[i];
+            indices[i] = all[i] = value;
+        }
+
         return indices;
     }
 }
