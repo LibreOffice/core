@@ -58,7 +58,7 @@ protected:
      * Get the position of the child named rName of the parent node specified by rXPath.
      * Useful for checking relative order of elements.
      */
-    int           getXPathPosition(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rChildName);
+    int           getXPathPosition(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rChildName);
     /**
      * Assert that rXPath exists, and returns exactly one node.
      */
