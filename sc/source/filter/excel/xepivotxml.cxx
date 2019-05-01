@@ -194,8 +194,10 @@ namespace {
  */
 OUString GetExcelFormattedDate( double fSerialDateTime, SvNumberFormatter& rFormatter )
 {
-    //::sax::Converter::convertDateTime(sBuf, (DateTime(rFormatter.GetNullDate()) + fSerialDateTime).GetUNODateTime(), 0, true);
-    css::util::DateTime aUDateTime = (DateTime(rFormatter.GetNullDate()) + fSerialDateTime).GetUNODateTime();
+    // tdf#125055: properly round the value to seconds when truncating nanoseconds below
+    constexpr double fHalfSecond = 1 / 86400.0 * 0.5;
+    css::util::DateTime aUDateTime
+        = (DateTime(rFormatter.GetNullDate()) + fSerialDateTime + fHalfSecond).GetUNODateTime();
     // We need to reset nanoseconds, to avoid string like: "1982-02-18T16:04:47.999999849"
     aUDateTime.NanoSeconds = 0;
     OUStringBuffer sBuf;

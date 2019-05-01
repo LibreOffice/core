@@ -95,6 +95,7 @@ public:
     void testTdf124810();
     void testTdf124883();
     void testTdf125046();
+    void testTdf125055();
 
     CPPUNIT_TEST_SUITE(ScPivotTableFiltersTest);
 
@@ -144,6 +145,7 @@ public:
     CPPUNIT_TEST(testTdf124810);
     CPPUNIT_TEST(testTdf124883);
     CPPUNIT_TEST(testTdf125046);
+    CPPUNIT_TEST(testTdf125055);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2652,6 +2654,46 @@ void ScPivotTableFiltersTest::testTdf125046()
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
                 "longText", "1");
+}
+
+void ScPivotTableFiltersTest::testTdf125055()
+{
+    ScDocShellRef xDocSh = loadDoc("pivottable_1s_difference.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(xDocSh.get(), FORMAT_XLSX);
+    xDocSh->DoClose();
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory,
+                                              "xl/pivotCache/pivotCacheDefinition1.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    // 1-second precision should not result in duplicated entries for values different by ~1 s.
+    // Previously truncating nanoseconds in GetExcelFormattedDate converted
+    // "2017-07-10T09:11:02.99999..." into "2017-07-10T09:11:02", creating two identical strings
+    // Only compare times here: see comment to ScPivotTableFiltersTest::testPivotCacheExportXLSX
+    // "TODO Date generator in tests are one day higher, than during standard xlsx export"
+    OUString sISODateTime = getXPath(
+        pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "minDate");
+    CPPUNIT_ASSERT_EQUAL(OUString("T09:11:02"), sISODateTime.copy(10));
+    sISODateTime = getXPath(
+        pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "maxDate");
+    CPPUNIT_ASSERT_EQUAL(OUString("T09:11:03"), sISODateTime.copy(10));
+    assertXPath(pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
+                "count", "3");
+    assertXPathChildren(pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
+                        3); // 2 different values + empty
+    sISODateTime = getXPath(
+        pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems/x:d[1]", "v");
+    CPPUNIT_ASSERT_EQUAL(OUString("T09:11:02"), sISODateTime.copy(10));
+    sISODateTime = getXPath(
+        pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems/x:d[2]", "v");
+    CPPUNIT_ASSERT_EQUAL(OUString("T09:11:03"), sISODateTime.copy(10));
+    // Trailing empty
+    CPPUNIT_ASSERT_EQUAL(
+        2, getXPathPosition(
+               pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "m"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPivotTableFiltersTest);
