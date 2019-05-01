@@ -190,15 +190,25 @@ namespace {
  * fSerialDateTime - a number representing the number of days since 1900-Jan-0 (integer portion of the number),
  * plus a fractional portion of a 24 hour day (fractional portion of the number).
  */
-OUString GetExcelFormattedDate( double fSerialDateTime, const SvNumberFormatter& rFormatter )
+OUString GetExcelFormattedDate(double fSerialDateTime, SvNumberFormatter& rFormatter)
 {
-    //::sax::Converter::convertDateTime(sBuf, (DateTime(rFormatter.GetNullDate()) + fSerialDateTime).GetUNODateTime(), 0, true);
-    css::util::DateTime aUDateTime = (DateTime(rFormatter.GetNullDate()) + fSerialDateTime).GetUNODateTime();
-    // We need to reset nanoseconds, to avoid string like: "1982-02-18T16:04:47.999999849"
-    aUDateTime.NanoSeconds = 0;
-    OUStringBuffer sBuf;
-    ::sax::Converter::convertDateTime(sBuf, aUDateTime, nullptr, true);
-    return sBuf.makeStringAndClear();
+    OUString sFormat = "YYYY-MM-DD\"T\"HH:MM:SS";
+    sal_uInt32 nNumFormat = rFormatter.GetEntryKey(sFormat, LANGUAGE_ENGLISH_US);
+    const bool bAddFormat = nNumFormat == NUMBERFORMAT_ENTRY_NOT_FOUND;
+    if (bAddFormat)
+    {
+        sal_Int32 nCheckPos;
+        SvNumFormatType eType = SvNumFormatType::DATETIME;
+        bool bRes = rFormatter.PutEntry(sFormat, nCheckPos, eType, nNumFormat, LANGUAGE_ENGLISH_US);
+        if (!bRes)
+            return OUString();
+    }
+    OUString aStr;
+    Color* pColor = nullptr;
+    rFormatter.GetOutputString(fSerialDateTime, nNumFormat, aStr, &pColor);
+    if (bAddFormat)
+        rFormatter.DeleteEntry(nNumFormat);
+    return aStr;
 }
 
 // Excel seems to expect different order of group item values; we need to rearrange elements
