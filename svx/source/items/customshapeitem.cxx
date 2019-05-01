@@ -21,7 +21,6 @@
 
 #include <o3tl/any.hxx>
 #include <svx/sdasitm.hxx>
-#include <svx/svdattr.hxx>
 
 using namespace ::std;
 using namespace com::sun::star;

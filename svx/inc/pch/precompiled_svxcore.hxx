@@ -517,7 +517,6 @@
 #include <svx/sdtfchim.hxx>
 #include <svx/selectioncontroller.hxx>
 #include <svx/sphere3d.hxx>
-#include <svx/svdattr.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdedtv.hxx>

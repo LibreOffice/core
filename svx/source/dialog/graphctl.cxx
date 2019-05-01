@@ -26,6 +26,7 @@
 #include <rtl/math.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/debug.hxx>
 
 #include <svx/graphctl.hxx>
 #include <GraphCtlAccessibleContext.hxx>

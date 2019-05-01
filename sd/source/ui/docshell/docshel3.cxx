@@ -23,6 +23,7 @@
 #include <svx/svxids.hrc>
 
 #include <svx/ofaitem.hxx>
+#include <svl/stritem.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/langtab.hxx>

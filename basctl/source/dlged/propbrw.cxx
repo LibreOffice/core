@@ -35,6 +35,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/component_context.hxx>
+#include <tools/debug.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdview.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

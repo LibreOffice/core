@@ -49,6 +49,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <tools/diagnose_ex.h>
 #include <svx/svdograf.hxx>
+#include <tools/debug.hxx>
 
 using namespace ::com::sun::star;
 using namespace sdr::contact;

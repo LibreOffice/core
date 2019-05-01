@@ -37,6 +37,7 @@
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <avmedia/mediaplayer.hxx>
+#include <svl/intitem.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>

@@ -30,6 +30,7 @@
 #include <svl/srchitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
+#include <tools/debug.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <unotools/useroptions.hxx>

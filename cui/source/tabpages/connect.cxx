@@ -28,7 +28,7 @@
 #include <svx/svxids.hrc>
 #include <svx/dlgutil.hxx>
 #include <svx/ofaitem.hxx>
-#include <svx/svdattr.hxx>
+
 #include <svx/svdoedge.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sxekitm.hxx>

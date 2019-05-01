@@ -60,7 +60,11 @@
 #include <filter/msfilter/mscodec.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xflclit.hxx>
-
+#include <svx/sdasitm.hxx>
+#include <svx/sdtagitm.hxx>
+#include <svx/sdtcfitm.hxx>
+#include <svx/sdtditm.hxx>
+#include <svx/sdtmfitm.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <fmtfld.hxx>
 #include <fmturl.hxx>

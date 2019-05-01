@@ -39,6 +39,7 @@
 #include <editeng/eeitem.hxx>
 #include <svl/style.hxx>
 #include <svx/dlgutil.hxx>
+#include <svx/sdshitm.hxx>
 
 #include <svx/dialmgr.hxx>
 #include <svx/viewpt3d.hxx>

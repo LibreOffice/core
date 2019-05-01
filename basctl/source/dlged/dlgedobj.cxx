@@ -46,6 +46,7 @@
 #include <o3tl/functional.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/debug.hxx>
 
 namespace basctl
 {

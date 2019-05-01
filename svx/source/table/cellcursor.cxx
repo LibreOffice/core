@@ -27,6 +27,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
+#include <tools/debug.hxx>
 
 
 using namespace ::com::sun::star::uno;

@@ -22,6 +22,7 @@
 #include <o3tl/any.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svxids.hrc>
+#include <tools/debug.hxx>
 #include <tools/helpers.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>

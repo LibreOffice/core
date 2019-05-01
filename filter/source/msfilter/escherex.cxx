@@ -29,6 +29,7 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/sdtfsitm.hxx>
 #include <editeng/outlobj.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>

@@ -43,6 +43,7 @@
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xtable.hxx>
+#include <svx/sdtagitm.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editobj.hxx>
 #include <svx/sxcecitm.hxx>

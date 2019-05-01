@@ -28,6 +28,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <sfx2/objsh.hxx>
+#include <tools/debug.hxx>
 
 #include <cppuhelper/queryinterface.hxx>
 #include <svx/svdobj.hxx>

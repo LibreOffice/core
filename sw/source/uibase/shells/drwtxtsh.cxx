@@ -21,6 +21,7 @@
 #include <i18nlangtag/lang.h>
 #include <i18nutil/transliteration.hxx>
 #include <svl/slstitm.hxx>
+#include <svl/stritem.hxx>
 #include <svl/cjkoptions.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
@@ -28,6 +29,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/sdooitm.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>

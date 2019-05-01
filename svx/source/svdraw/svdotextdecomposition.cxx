@@ -25,6 +25,10 @@
 #include <svx/svdmodel.hxx>
 #include <svx/textchain.hxx>
 #include <svx/textchainflow.hxx>
+#include <svx/sdtacitm.hxx>
+#include <svx/sdtayitm.hxx>
+#include <svx/sdtaiitm.hxx>
+#include <svx/sdtaaitm.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>

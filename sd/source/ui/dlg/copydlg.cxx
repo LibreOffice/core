@@ -21,6 +21,7 @@
 #include <svx/colorbox.hxx>
 #include <sfx2/module.hxx>
 #include <svx/xcolit.hxx>
+#include <svl/intitem.hxx>
 
 #include <unotools/viewoptions.hxx>
 #include <svtools/unitconv.hxx>

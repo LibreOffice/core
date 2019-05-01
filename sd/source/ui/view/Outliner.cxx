@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 
 #include <svl/srchitem.hxx>
+#include <svl/intitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
@@ -48,6 +49,7 @@
 #include <vcl/metric.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svtools/langtab.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <strings.hrc>

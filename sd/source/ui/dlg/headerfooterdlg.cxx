@@ -25,6 +25,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/outlobj.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <tools/debug.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>

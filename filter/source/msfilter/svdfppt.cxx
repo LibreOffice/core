@@ -59,7 +59,12 @@
 #include <svx/xfltrit.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/numdef.hxx>
-#include <svx/svdattr.hxx>
+#include <svx/sdasitm.hxx>
+#include <svx/sdmetitm.hxx>
+#include <svx/sdtagitm.hxx>
+#include <svx/sdtditm.hxx>
+#include <svx/sdtfsitm.hxx>
+#include <svx/sdtmfitm.hxx>
 #include <svx/xattr.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>

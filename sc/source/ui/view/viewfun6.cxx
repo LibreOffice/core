@@ -21,6 +21,7 @@
 #include <svx/svdocapt.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <editeng/editview.hxx>

@@ -34,6 +34,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/sdmetitm.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/util.hxx>
