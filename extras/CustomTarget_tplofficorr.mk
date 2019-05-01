@@ -29,50 +29,47 @@ extras_OFFICORR_XMLFILES := \
 	Modern_business_letter_serif/Thumbnails/thumbnail.png \
 
 
-extras_TPLOFFICORR_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_OFFICORR),$(atexts)/mimetype)
+extras_OFFICORR_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_OFFICORR),$(atexts)/mimetype)
 
-
-ifneq ($(sort $(foreach file,$(extras_OFFICORR_XMLFILES),$(wordlist 1, 1, $(subst /, ,$(file))))),$(sort $(extras_TEMPLATES_OFFICORR)))
-$(call gb_Output_error,defined template text do not match existing directories)
-endif
 
 $(call gb_CustomTarget_get_target,extras/source/templates/officorr) : \
 	$(foreach atexts,$(extras_TEMPLATES_OFFICORR),$(call gb_CustomTarget_get_workdir,extras/source/templates/officorr)/$(atexts).ott)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/officorr)/%/mimetype : $(SRCDIR)/extras/source/templates/officorr/%/mimetype
-	$(call gb_Output_announce,$*/mimetype,$(true),CPY,1)
+	$(call gb_Output_announce,templates/officorr/$*/mimetype,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/officorr)/%.jpg : $(SRCDIR)/extras/source/templates/officorr/%.jpg
-	$(call gb_Output_announce,$*.jpg,$(true),CPY,1)
+	$(call gb_Output_announce,templates/officorr/$*.jpg,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/officorr)/%.rdf : $(SRCDIR)/extras/source/templates/officorr/%.rdf
-	$(call gb_Output_announce,$*.rdf,$(true),CPY,1)
+	$(call gb_Output_announce,templates/officorr/$*.rdf,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/officorr)/%.png : $(SRCDIR)/extras/source/templates/officorr/%.png
-	$(call gb_Output_announce,$*.png,$(true),CPY,1)
+	$(call gb_Output_announce,templates/officorr/$*.png,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/officorr)/%.svg : $(SRCDIR)/extras/source/templates/officorr/%.svg
-	$(call gb_Output_announce,$*.svg,$(true),CPY,1)
+	$(call gb_Output_announce,templates/officorr/$*.svg,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/officorr)/%.svm : $(SRCDIR)/extras/source/templates/officorr/%.svm
-	$(call gb_Output_announce,$*.svm,$(true),CPY,1)
+	$(call gb_Output_announce,templates/officorr/$*.svm,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/officorr)/%.xml : $(SRCDIR)/extras/source/templates/officorr/%.xml \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
-	$(call gb_Output_announce,$*.xml,$(true),XSL,1)
+	$(call gb_Output_announce,templates/officorr/$*.xml,$(true),XSL,1)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/officorr)/%.ott :
-	$(call gb_Output_announce,$*.ott,$(true),ZIP,2)
+	$(call gb_Output_announce,templates/officorr/$*.ott,$(true),ZIP,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(EXTRAS_OFFICORR_DIR) && \
-		zip -qrX --filesync --must-match $@ $(EXTRAS_OFFICORR_FILES) \
+		zip -q0X --filesync --must-match $@ $(EXTRAS_OFFICORR_MIMEFILES_FILTER) && \
+		zip -qrX --must-match $@ $(EXTRAS_OFFICORR_XMLFILES_FILTER) \
 	)
 
 define extras_Tplofficorr_make_file_deps
@@ -83,18 +80,20 @@ endef
 
 define extras_Tplofficorr_make_zip_deps
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	$(addprefix $(call gb_CustomTarget_get_workdir,$(1))/,$(filter $(3)/%,$(extras_TPLOFFICORR_MIMETYPEFILES) $(extras_OFFICORR_XMLFILES))) \
+	$(addprefix $(call gb_CustomTarget_get_workdir,$(1))/,$(filter $(3)/%,$(extras_OFFICORR_MIMETYPEFILES) $(extras_OFFICORR_XMLFILES))) \
 	| $(dir $(call gb_CustomTarget_get_workdir,$(1))/$(2)).dir
 
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	EXTRAS_OFFICORR_FILES := $(foreach file,$(filter $(3)/%,$(extras_TPLOFFICORR_MIMETYPEFILES) $(extras_OFFICORR_XMLFILES)),$(subst $(3)/,,$(file)))
+	EXTRAS_OFFICORR_MIMEFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_OFFICORR_MIMETYPEFILES)),$(subst $(3)/,,$(file)))
+$(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
+	EXTRAS_OFFICORR_XMLFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_OFFICORR_XMLFILES)),$(subst $(3)/,,$(file)))
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
 	EXTRAS_OFFICORR_DIR := $(call gb_CustomTarget_get_workdir,$(1))/$(3)
 
 endef
 
-$(eval $(foreach file,$(extras_TPLOFFICORR_MIMETYPEFILES) $(extras_OFFICORR_XMLFILES),\
-	$(call extras_Tplofficorr_make_zip_deps,extras/source/templates/officorr,$(file)) \
+$(eval $(foreach file,$(extras_OFFICORR_MIMETYPEFILES) $(extras_OFFICORR_XMLFILES),\
+	$(call extras_Tplofficorr_make_file_deps,extras/source/templates/officorr,$(file)) \
 ))
 
 $(eval $(foreach atexts,$(extras_TEMPLATES_OFFICORR),\

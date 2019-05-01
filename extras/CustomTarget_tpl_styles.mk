@@ -25,50 +25,47 @@ extras_STYLES_XMLFILES := \
 	Modern/Thumbnails/thumbnail.png \
 
 
-extras_TPLSTYLES_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_STYLES),$(atexts)/mimetype)
+extras_STYLES_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_STYLES),$(atexts)/mimetype)
 
-
-ifneq ($(sort $(foreach file,$(extras_STYLES_XMLFILES),$(wordlist 1, 1, $(subst /, ,$(file))))),$(sort $(extras_TEMPLATES_STYLES)))
-$(call gb_Output_error,defined template text do not match existing directories)
-endif
 
 $(call gb_CustomTarget_get_target,extras/source/templates/styles) : \
 	$(foreach atexts,$(extras_TEMPLATES_STYLES),$(call gb_CustomTarget_get_workdir,extras/source/templates/styles)/$(atexts).ott)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/styles)/%/mimetype : $(SRCDIR)/extras/source/templates/styles/%/mimetype
-	$(call gb_Output_announce,$*/mimetype,$(true),CPY,1)
+	$(call gb_Output_announce,templates/styles/$*/mimetype,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/styles)/%.jpg : $(SRCDIR)/extras/source/templates/styles/%.jpg
-	$(call gb_Output_announce,$*.jpg,$(true),CPY,1)
+	$(call gb_Output_announce,templates/styles/$*.jpg,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/styles)/%.png : $(SRCDIR)/extras/source/templates/styles/%.png
-	$(call gb_Output_announce,$*.png,$(true),CPY,1)
+	$(call gb_Output_announce,templates/styles/$*.png,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/styles)/%.rdf : $(SRCDIR)/extras/source/templates/styles/%.rdf
-	$(call gb_Output_announce,$*.rdf,$(true),CPY,1)
+	$(call gb_Output_announce,templates/styles/$*.rdf,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/styles)/%.svg : $(SRCDIR)/extras/source/templates/styles/%.svg
-	$(call gb_Output_announce,$*.svg,$(true),CPY,1)
+	$(call gb_Output_announce,templates/styles/$*.svg,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/styles)/%.svm : $(SRCDIR)/extras/source/templates/styles/%.svm
-	$(call gb_Output_announce,$*.svm,$(true),CPY,1)
+	$(call gb_Output_announce,templates/styles/$*.svm,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/styles)/%.xml : $(SRCDIR)/extras/source/templates/styles/%.xml \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
-	$(call gb_Output_announce,$*.xml,$(true),XSL,1)
+	$(call gb_Output_announce,templates/styles/$*.xml,$(true),XSL,1)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/styles)/%.ott :
-	$(call gb_Output_announce,$*.ott,$(true),ZIP,2)
+	$(call gb_Output_announce,templates/styles/$*.ott,$(true),ZIP,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(EXTRAS_STYLES_DIR) && \
-		zip -qrX --filesync --must-match $@ $(EXTRAS_STYLES_FILES) \
+		zip -q0X --filesync --must-match $@ $(EXTRAS_STYLES_MIMEFILES_FILTER) && \
+		zip -qrX --must-match $@ $(EXTRAS_STYLES_XMLFILES_FILTER) \
 	)
 
 define extras_Tplstyles_make_file_deps
@@ -79,18 +76,20 @@ endef
 
 define extras_Tplstyles_make_zip_deps
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	$(addprefix $(call gb_CustomTarget_get_workdir,$(1))/,$(filter $(3)/%,$(extras_TPLSTYLES_MIMETYPEFILES) $(extras_STYLES_XMLFILES))) \
+	$(addprefix $(call gb_CustomTarget_get_workdir,$(1))/,$(filter $(3)/%,$(extras_STYLES_MIMETYPEFILES) $(extras_STYLES_XMLFILES))) \
 	| $(dir $(call gb_CustomTarget_get_workdir,$(1))/$(2)).dir
 
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	EXTRAS_STYLES_FILES := $(foreach file,$(filter $(3)/%,$(extras_TPLSTYLES_MIMETYPEFILES) $(extras_STYLES_XMLFILES)),$(subst $(3)/,,$(file)))
+	EXTRAS_STYLES_MIMEFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_STYLES_MIMETYPEFILES)),$(subst $(3)/,,$(file)))
+$(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
+	EXTRAS_STYLES_XMLFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_STYLES_XMLFILES)),$(subst $(3)/,,$(file)))
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
 	EXTRAS_STYLES_DIR := $(call gb_CustomTarget_get_workdir,$(1))/$(3)
 
 endef
 
-$(eval $(foreach file,$(extras_TPLSTYLES_MIMETYPEFILES) $(extras_STYLES_XMLFILES),\
-	$(call extras_Tplstyles_make_zip_deps,extras/source/templates/styles,$(file)) \
+$(eval $(foreach file,$(extras_STYLES_MIMETYPEFILES) $(extras_STYLES_XMLFILES),\
+	$(call extras_Tplstyles_make_file_deps,extras/source/templates/styles,$(file)) \
 ))
 
 $(eval $(foreach atexts,$(extras_TEMPLATES_STYLES),\
