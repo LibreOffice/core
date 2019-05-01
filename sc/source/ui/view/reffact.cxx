@@ -57,13 +57,11 @@ SfxChildWinInfo ScValidityRefChildWin::GetInfo() const
 {
     SfxChildWinInfo anInfo = SfxChildWindow::GetInfo();
 
-    if( vcl::Window *pWnd = GetWindow() )
+    auto xDlgController = GetController();
+    if (xDlgController)
     {
-        anInfo.aSize  = pWnd->GetSizePixel();
-
-        if( pWnd->IsDialog() )
-            if ( static_cast<Dialog*>(pWnd)->IsRollUp() )
-                anInfo.nFlags |= SfxChildWindowFlags::ZOOMIN;
+        weld::Dialog* pDialog = xController->getDialog();
+        aInfo.aSize = pDialog->get_size();
     }
 
     return anInfo;
