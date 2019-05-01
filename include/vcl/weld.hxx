@@ -1484,6 +1484,8 @@ public:
     virtual OUString get_label() const = 0;
     virtual void set_mnemonic_widget(Widget* pTarget) = 0;
     virtual void set_error(bool bShowError) = 0;
+    // font size is in points, not pixels, e.g. see Window::[G]etPointFont
+    virtual void set_font(const vcl::Font& rFont) = 0;
 };
 
 class VCL_DLLPUBLIC TextView : virtual public Container
@@ -1494,8 +1496,10 @@ private:
 protected:
     Link<TextView&, void> m_aChangeHdl;
     Link<TextView&, void> m_aVChangeHdl;
+    Link<TextView&, void> m_aCursorPositionHdl;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
+    void signal_cursor_position() { m_aCursorPositionHdl.Call(*this); }
     void signal_vadjustment_changed() { m_aVChangeHdl.Call(*this); }
 
 public:
@@ -1516,6 +1520,10 @@ public:
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_text(); }
 
     void connect_changed(const Link<TextView&, void>& rLink) { m_aChangeHdl = rLink; }
+    virtual void connect_cursor_position(const Link<TextView&, void>& rLink)
+    {
+        m_aCursorPositionHdl = rLink;
+    }
 
     virtual int vadjustment_get_value() const = 0;
     virtual int vadjustment_get_upper() const = 0;

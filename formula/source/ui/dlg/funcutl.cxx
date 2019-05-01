@@ -27,6 +27,7 @@
 #include <formula/funcutl.hxx>
 #include <formula/IControlReferenceHandler.hxx>
 #include "ControlHelper.hxx"
+#include "parawin.hxx"
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <core_resource.hxx>
@@ -36,41 +37,29 @@ namespace formula
 {
 
 // class ArgEdit
-ArgEdit::ArgEdit( vcl::Window* pParent, WinBits nBits )
-    :   RefEdit( pParent, nullptr, nBits ),
-        pEdPrev ( nullptr ),
-        pEdNext ( nullptr ),
-        pSlider ( nullptr ),
-        nArgs   ( 0 )
+ArgEdit::ArgEdit(std::unique_ptr<weld::Entry> xControl)
+    : WeldRefEdit(std::move(xControl))
+    , pEdPrev(nullptr)
+    , pEdNext(nullptr)
+    , pSlider(nullptr)
+    , pParaWin(nullptr)
+    , nArgs(0)
 {
 }
 
-ArgEdit::~ArgEdit()
-{
-    disposeOnce();
-}
-
-void ArgEdit::dispose()
-{
-    pEdPrev.clear();
-    pEdNext.clear();
-    pSlider.clear();
-    RefEdit::dispose();
-}
-
-VCL_BUILDER_FACTORY_ARGS(ArgEdit, WB_BORDER)
-
-void ArgEdit::Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
-                    ScrollBar& rArgSlider, sal_uInt16 nArgCount )
+void ArgEdit::Init(ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
+                   weld::ScrolledWindow& rArgSlider,
+                   ParaWin& rParaWin, sal_uInt16 nArgCount)
 {
     pEdPrev = pPrevEdit;
     pEdNext = pNextEdit;
     pSlider = &rArgSlider;
+    pParaWin = &rParaWin;
     nArgs   = nArgCount;
 }
 
 // Cursor control for Edit Fields in Argument Dialog
-void ArgEdit::KeyInput( const KeyEvent& rKEvt )
+IMPL_LINK(ArgEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
     vcl::KeyCode aCode = rKEvt.GetKeyCode();
     bool bUp = (aCode.GetCode() == KEY_UP);
@@ -83,7 +72,7 @@ void ArgEdit::KeyInput( const KeyEvent& rKEvt )
         if ( nArgs > 1 )
         {
             ArgEdit* pEd = nullptr;
-            long nThumb = pSlider->GetThumbPos();
+            int nThumb = pSlider->vadjustment_get_value();
             bool bDoScroll = false;
             bool bChangeFocus = false;
 
@@ -132,17 +121,17 @@ void ArgEdit::KeyInput( const KeyEvent& rKEvt )
 
             if ( bDoScroll )
             {
-                pSlider->SetThumbPos( nThumb );
-                pSlider->GetEndScrollHdl().Call( pSlider );
+                pSlider->vadjustment_set_value( nThumb );
+                pParaWin->SliderMoved();
             }
             else if ( bChangeFocus )
             {
                 pEd->GrabFocus();
             }
         }
+        return true;
     }
-    else
-        RefEdit::KeyInput( rKEvt );
+    return false;
 }
 
 // class ArgInput
@@ -154,8 +143,8 @@ ArgInput::ArgInput()
     pRefBtn=nullptr;
 }
 
-void ArgInput::InitArgInput( FixedText* pftArg, PushButton* pbtnFx,
-                             ArgEdit* pedArg, RefButton* prefBtn)
+void ArgInput::InitArgInput(weld::Label* pftArg, weld::Button* pbtnFx,
+                            ArgEdit* pedArg, WeldRefButton* prefBtn)
 {
     pFtArg =pftArg;
     pBtnFx =pbtnFx;
@@ -164,238 +153,122 @@ void ArgInput::InitArgInput( FixedText* pftArg, PushButton* pbtnFx,
 
     if(pBtnFx!=nullptr)
     {
-        pBtnFx->SetClickHdl   ( LINK( this, ArgInput, FxBtnClickHdl ) );
-        pBtnFx->SetGetFocusHdl( LINK( this, ArgInput, FxBtnFocusHdl ) );
+        pBtnFx->connect_clicked( LINK( this, ArgInput, FxBtnClickHdl ) );
+        pBtnFx->connect_focus_in( LINK( this, ArgInput, FxBtnFocusHdl ) );
     }
     if(pEdArg!=nullptr)
     {
         pEdArg->SetGetFocusHdl ( LINK( this, ArgInput, EdFocusHdl ) );
         pEdArg->SetModifyHdl   ( LINK( this, ArgInput, EdModifyHdl ) );
     }
-
 }
 
 // Sets the Name for the Argument
 void ArgInput::SetArgName(const OUString &aArg)
 {
-    if(pFtArg !=nullptr) pFtArg->SetText(aArg );
+    if (pFtArg)
+        pFtArg->set_label(aArg );
 }
 
 // Returns the Name for the Argument
 OUString ArgInput::GetArgName()
 {
     OUString aPrivArgName;
-    if(pFtArg !=nullptr)
-        aPrivArgName=pFtArg->GetText();
-
+    if (pFtArg)
+        aPrivArgName = pFtArg->get_label();
     return aPrivArgName;
 }
 
 //Sets the Name for the Argument
-void ArgInput::SetArgNameFont   (const vcl::Font &aFont)
+void ArgInput::SetArgNameFont(const vcl::Font &aFont)
 {
-    if(pFtArg !=nullptr) pFtArg->SetFont(aFont);
+    if (pFtArg)
+        pFtArg->set_font(aFont);
 }
 
 //Sets up the Selection for the EditBox.
-void ArgInput::SetArgSelection  (const Selection& rSel )
+void ArgInput::SetArgSelection(const Selection& rSel)
 {
-    if(pEdArg !=nullptr) pEdArg ->SetSelection(rSel );
+    if (pEdArg)
+        pEdArg->SetSelection(rSel);
 }
 
 //Sets the Value for the Argument
 void ArgInput::SetArgVal(const OUString &rVal)
 {
-    if(pEdArg != nullptr)
-    {
-        pEdArg ->SetRefString(rVal);
-    }
+    if (pEdArg)
+        pEdArg->SetRefString(rVal);
 }
 
 //Returns the Value for the Argument
 OUString ArgInput::GetArgVal()
 {
     OUString aResult;
-    if(pEdArg!=nullptr)
-    {
+    if (pEdArg)
         aResult=pEdArg->GetText();
-    }
     return aResult;
 }
 
 //Hides the Controls
 void ArgInput::Hide()
 {
-    if ( pFtArg && pBtnFx && pEdArg && pRefBtn)
+    if (pFtArg && pBtnFx && pEdArg && pRefBtn)
     {
-        pFtArg->Hide();
-        pBtnFx->Hide();
-        pEdArg->Hide();
-        pRefBtn->Hide();
+        pFtArg->hide();
+        pBtnFx->hide();
+        pEdArg->GetWidget()->hide();
+        pRefBtn->GetWidget()->hide();
     }
 }
 
 //Casts the Controls again.
 void ArgInput::Show()
 {
-    if ( pFtArg && pBtnFx && pEdArg && pRefBtn)
+    if (pFtArg && pBtnFx && pEdArg && pRefBtn)
     {
-        pFtArg->Show();
-        pBtnFx->Show();
-        pEdArg->Show();
-        pRefBtn->Show();
+        pFtArg->show();
+        pBtnFx->show();
+        pEdArg->GetWidget()->show();
+        pRefBtn->GetWidget()->show();
     }
 }
 
 void ArgInput::UpdateAccessibleNames()
 {
     OUString aArgName(":");
-    aArgName += pFtArg->GetText();
+    aArgName += pFtArg->get_label();
 
-    OUString aName = pBtnFx->GetQuickHelpText();
+    OUString aName = pBtnFx->get_tooltip_text();
     aName += aArgName;
-    pBtnFx->SetAccessibleName(aName);
+    pBtnFx->set_accessible_name(aName);
 
-    aName = pRefBtn->GetQuickHelpText();
+    aName = pRefBtn->GetWidget()->get_tooltip_text();
     aName += aArgName;
-    pRefBtn->SetAccessibleName(aName);
+    pRefBtn->GetWidget()->set_accessible_name(aName);
 }
 
-IMPL_LINK( ArgInput, FxBtnClickHdl, Button*, pBtn, void )
+IMPL_LINK(ArgInput, FxBtnClickHdl, weld::Button&, rBtn, void)
 {
-    if(pBtn == pBtnFx)
+    if (&rBtn == pBtnFx)
         aFxClickLink.Call(*this);
 }
 
-IMPL_LINK( ArgInput, FxBtnFocusHdl, Control&, rControl, void )
+IMPL_LINK( ArgInput, FxBtnFocusHdl, weld::Widget&, rControl, void )
 {
-    if(&rControl == pBtnFx)
+    if (&rControl == pBtnFx)
         aFxFocusLink.Call(*this);
 }
 
-IMPL_LINK( ArgInput, EdFocusHdl, Control&, rControl, void )
+IMPL_LINK( ArgInput, EdFocusHdl, WeldRefEdit&, rControl, void )
 {
-    if(&rControl == pEdArg)
+    if (&rControl == pEdArg)
         aEdFocusLink.Call(*this);
 }
 
-IMPL_LINK( ArgInput, EdModifyHdl, Edit&, rEdit, void )
+IMPL_LINK( ArgInput, EdModifyHdl, WeldRefEdit&, rEdit, void )
 {
-    if(&rEdit == pEdArg)
+    if (&rEdit == pEdArg)
         aEdModifyLink.Call(*this);
-}
-
-// class EditBox
-
-EditBox::EditBox( vcl::Window* pParent, WinBits nBits )
-        :Control(pParent,nBits)
-{
-    WinBits nStyle=GetStyle();
-    SetStyle( nStyle| WB_DIALOGCONTROL);
-
-    pMEdit=VclPtr<MultiLineEdit>::Create(this,WB_LEFT | WB_VSCROLL | (nStyle & WB_TABSTOP) |
-                    WB_NOBORDER | WB_NOHIDESELECTION | WB_IGNORETAB);
-    pMEdit->Show();
-    aOldSel=pMEdit->GetSelection();
-    Resize();
-    WinBits nWinStyle=GetStyle() | WB_DIALOGCONTROL;
-    SetStyle(nWinStyle);
-
-    //  #105582# the HelpId from the resource must be set for the MultiLineEdit,
-    //  not for the control that contains it.
-    pMEdit->SetHelpId( GetHelpId() );
-    SetHelpId( "" );
-}
-
-VCL_BUILDER_FACTORY_ARGS(EditBox, WB_BORDER)
-
-EditBox::~EditBox()
-{
-    disposeOnce();
-}
-
-void EditBox::dispose()
-{
-    pMEdit->Disable();
-    pMEdit.disposeAndClear();
-    Control::dispose();
-}
-
-// When the size is changed, MultiLineEdit must be adapted..
-void EditBox::Resize()
-{
-    Size aSize=GetOutputSizePixel();
-    if(pMEdit!=nullptr) pMEdit->SetOutputSizePixel(aSize);
-}
-
-// When the Control is activated, the Selection is repealed
-// and the Cursor set at the end.
-void EditBox::GetFocus()
-{
-    if(pMEdit!=nullptr)
-    {
-        pMEdit->GrabFocus();
-    }
-}
-
-// When an event is being triggered, this routine is called first and
-// a PostUserEvent is sent.
-bool EditBox::PreNotify( NotifyEvent& rNEvt )
-{
-    bool bResult = true;
-
-    if(pMEdit==nullptr) return bResult;
-
-    MouseNotifyEvent nSwitch=rNEvt.GetType();
-    if(nSwitch==MouseNotifyEvent::KEYINPUT)// || nSwitch==MouseNotifyEvent::KEYUP)
-    {
-        const vcl::KeyCode& aKeyCode=rNEvt.GetKeyEvent()->GetKeyCode();
-        sal_uInt16 nKey=aKeyCode.GetCode();
-        if( (nKey==KEY_RETURN && !aKeyCode.IsShift()) || nKey==KEY_TAB )
-        {
-            bResult = GetParent()->EventNotify(rNEvt);
-        }
-        else
-        {
-            bResult=Control::PreNotify(rNEvt);
-            Application::PostUserEvent( LINK( this, EditBox, ChangedHdl ), nullptr, true );
-        }
-
-    }
-    else
-    {
-        bResult=Control::PreNotify(rNEvt);
-
-        if(nSwitch==MouseNotifyEvent::MOUSEBUTTONDOWN || nSwitch==MouseNotifyEvent::MOUSEBUTTONUP)
-        {
-            Application::PostUserEvent( LINK( this, EditBox, ChangedHdl ), nullptr, true );
-        }
-    }
-    return bResult;
-}
-
-// When an event was triggered, this routine is called first.
-IMPL_LINK_NOARG(EditBox, ChangedHdl, void*, void)
-{
-    if(pMEdit!=nullptr)
-    {
-        Selection aNewSel=pMEdit->GetSelection();
-
-        if(aNewSel.Min()!=aOldSel.Min() || aNewSel.Max()!=aOldSel.Max())
-        {
-            aSelChangedLink.Call(*this);
-            aOldSel=aNewSel;
-        }
-    }
-}
-
-void EditBox::UpdateOldSel()
-{
-    //  if selection is set for editing a function, store it as aOldSel,
-    //  so SelectionChanged isn't called in the next ChangedHdl call
-
-    if (pMEdit)
-        aOldSel = pMEdit->GetSelection();
 }
 
 // class RefEdit

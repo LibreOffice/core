@@ -108,7 +108,7 @@ protected:
 
 public:
     WeldRefEdit(std::unique_ptr<weld::Entry> xControl);
-    weld::Widget* GetWidget() const { return xEntry.get(); }
+    weld::Entry* GetWidget() const { return xEntry.get(); }
     ~WeldRefEdit();
 
     void SetRefString( const OUString& rStr );
@@ -231,7 +231,7 @@ protected:
 
 public:
     WeldRefButton(std::unique_ptr<weld::Button> xControl);
-    weld::Widget* GetWidget() const { return xButton.get(); }
+    weld::Button* GetWidget() const { return xButton.get(); }
     ~WeldRefButton();
     void SetReferences(IControlReferenceHandler* pDlg, WeldRefEdit* pEdit);
     void SetStartImage();
