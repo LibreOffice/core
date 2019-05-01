@@ -44,7 +44,6 @@ public:
     sal_uInt16       GetOffset() const   { return nOffset; }
     const OUString&  GetUndoStr() const  { return aUndoStr; }
     bool             GetMatrixFlag()const{ return bMatrix;}
-    const VclPtr<vcl::Window>& GetFocusWindow()const  { return xFocusWin; }
     const Selection& GetSelection()const { return aSelection;}
 
     void             SetMode( FormulaDlgMode nNew )              { nMode = nNew; }
@@ -52,7 +51,6 @@ public:
     void             SetOffset( sal_uInt16 nNew )                { nOffset = nNew; }
     void             SetUndoStr( const OUString& rNew )          { aUndoStr = rNew; }
     void             SetMatrixFlag(bool bNew)                    { bMatrix=bNew;}
-    void             SetFocusWindow(const VclPtr<vcl::Window>& rWin) { xFocusWin=rWin;}
     void             SetSelection(const Selection& aSel)         { aSelection=aSel;}
 protected:
     void                Reset();
@@ -65,7 +63,6 @@ private:
     sal_uInt16          nOffset;
     OUString            aUndoStr;
     bool                bMatrix;
-    VclPtr<vcl::Window> xFocusWin;
     Selection           aSelection;
 };
 
