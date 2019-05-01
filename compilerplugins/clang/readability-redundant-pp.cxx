@@ -40,6 +40,10 @@ public:
     void Ifdef(clang::SourceLocation aLoc, const clang::Token& rMacroNameTok,
                const clang::MacroDefinition& rMacroDefinition) override;
     void Endif(clang::SourceLocation aLoc, clang::SourceLocation aIfLoc) override;
+    enum
+    {
+        isPPCallback = true
+    };
 
 private:
     clang::Preprocessor& m_rPP;
