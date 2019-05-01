@@ -21,6 +21,7 @@
 #include <border.hxx>
 #include <backgrnd.hxx>
 #include <svx/svxids.hrc>
+#include <svl/intitem.hxx>
 #include <cuitabarea.hxx>
 
 SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(weld::Window *pParent,

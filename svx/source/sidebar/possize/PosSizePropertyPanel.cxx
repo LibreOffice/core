@@ -41,6 +41,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/toolbox.hxx>
 #include <svl/aeitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/svdview.hxx>
 #include <svx/transfrmhelper.hxx>
 #include <comphelper/lok.hxx>

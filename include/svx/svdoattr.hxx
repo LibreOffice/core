@@ -25,7 +25,6 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xlnasit.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svdattr.hxx>
 #include <svx/svxdllapi.h>
 
 //   Initial Declarations

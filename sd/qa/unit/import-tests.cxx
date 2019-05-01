@@ -41,6 +41,9 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
+#include <svx/sdasitm.hxx>
+#include <svx/sdmetitm.hxx>
+#include <svx/sdooitm.hxx>
 #include <animations/animationnodehelper.hxx>
 #include <sax/tools/converter.hxx>
 

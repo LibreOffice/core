@@ -40,6 +40,7 @@
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/processfactory.hxx>
+#include <tools/debug.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/itempool.hxx>
 #include <svx/sdrpaintwindow.hxx>

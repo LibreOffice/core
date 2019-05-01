@@ -22,6 +22,9 @@
 #include <DrawViewShell.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>

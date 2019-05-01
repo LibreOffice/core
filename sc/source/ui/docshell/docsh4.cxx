@@ -38,6 +38,7 @@ using namespace ::com::sun::star;
 #include <basic/sberrors.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svx/ofaitem.hxx>
+#include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

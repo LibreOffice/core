@@ -45,6 +45,7 @@
 #include <svx/fmglob.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/dialogs.hrc>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <view/viewoverlaymanager.hxx>

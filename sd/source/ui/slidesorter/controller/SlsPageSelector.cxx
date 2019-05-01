@@ -37,6 +37,7 @@
 #include <ViewShellBase.hxx>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <tools/debug.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;

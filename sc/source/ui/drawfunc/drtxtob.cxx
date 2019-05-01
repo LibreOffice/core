@@ -37,6 +37,7 @@
 #include <editeng/ulspitem.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/sdooitm.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/shdditem.hxx>
@@ -50,6 +51,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/cliplistener.hxx>
 #include <vcl/transfer.hxx>
+#include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/languageoptions.hxx>
 

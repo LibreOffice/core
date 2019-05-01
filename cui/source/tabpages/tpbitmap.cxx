@@ -29,7 +29,6 @@
 #include <svx/xpool.hxx>
 #include <strings.hrc>
 #include <svx/xflbckit.hxx>
-#include <svx/svdattr.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/drawitem.hxx>

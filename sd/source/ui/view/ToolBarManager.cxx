@@ -43,6 +43,7 @@
 #include <svx/svxids.hrc>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
+#include <tools/debug.hxx>
 #include <tools/link.hxx>
 #include <vcl/svapp.hxx>
 

@@ -40,7 +40,9 @@
 #include <svx/rectenum.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
-#include <svx/svdattr.hxx>
+#include <svx/sdooitm.hxx>
+#include <svx/sderitm.hxx>
+#include <svx/sdtagitm.hxx>
 #include <svx/svdedtv.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdlayer.hxx>

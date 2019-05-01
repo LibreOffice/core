@@ -42,6 +42,11 @@
 #include <svx/unoshprp.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdpool.hxx>
+#include <svx/sdtaaitm.hxx>
+#include <svx/sdtacitm.hxx>
+#include <svx/sdtayitm.hxx>
+#include <svx/sdtaiitm.hxx>
+#include <svx/xit.hxx>
 #include <tools/diagnose_ex.h>
 #include <stlsheet.hxx>
 #include <sdresid.hxx>

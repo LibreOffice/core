@@ -46,6 +46,7 @@
 
 #include <svx/fmtools.hxx>
 #include <svl/macitem.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>

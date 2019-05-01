@@ -41,6 +41,7 @@
 #include <svx/xlnedwit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xtable.hxx>
+#include <svx/sdtagitm.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 using namespace ::com::sun::star;

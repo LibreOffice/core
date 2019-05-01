@@ -28,6 +28,7 @@
 #include <vcl/EnumContext.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itempool.hxx>
+#include <svl/intitem.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <svx/svxdlg.hxx>

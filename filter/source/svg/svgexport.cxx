@@ -47,6 +47,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/lang.h>
 #include <svl/zforlist.hxx>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>

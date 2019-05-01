@@ -36,6 +36,9 @@
 #include <svx/xlnedit.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/svdomeas.hxx>
+#include <svx/sdtagitm.hxx>
+#include <svx/sdtacitm.hxx>
+#include <svx/sdtaaitm.hxx>
 #include <sfx2/app.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/opaqitem.hxx>

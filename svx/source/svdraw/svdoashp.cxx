@@ -79,6 +79,12 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svdview.hxx>
+#include <svx/sdmetitm.hxx>
+#include <svx/sdprcitm.hxx>
+#include <svx/sdshitm.hxx>
+#include <svx/sdsxyitm.hxx>
+#include <svx/sdtmfitm.hxx>
+#include <svx/sdasitm.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

@@ -31,7 +31,9 @@
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 
+#include <tools/debug.hxx>
 #include <svl/style.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>

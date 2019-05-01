@@ -30,6 +30,7 @@
 #include <sot/storage.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
