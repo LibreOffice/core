@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_144cdac5",
+        "filename": "include/basegfx/color/bcolormodifier.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-05-01T20:41:59Z",
+      "side": 1,
+      "message": "No sure about this one.\nAny reference?\nIndeed, searching \"copyable\" on Google returns 470 000 results, \"copiable\" 262 000.",
+      "range": {
+        "startLine": 51,
+        "startChar": 33,
+        "endLine": 51,
+        "endChar": 34
+      },
+      "revId": "d0ce8f6eaad15a3d519ff4c921dd96f704888cc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
