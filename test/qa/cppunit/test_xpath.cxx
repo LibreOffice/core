@@ -33,6 +33,8 @@ CPPUNIT_TEST_FIXTURE(TestXPath, test_getXPath)
     CPPUNIT_ASSERT_EQUAL(OUString(), getXPath(pTable, "/xml/item", ""));
     // Must properly return attribute content
     CPPUNIT_ASSERT_EQUAL(OUString("val"), getXPath(pTable, "/xml/item", "attrib"));
+    // Trying to get position of missing child of a node must fail assertion
+    CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pTable, "/xml/item", "absent"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
