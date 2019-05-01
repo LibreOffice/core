@@ -114,10 +114,11 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_cellformatsenumeration \
 	CppunitTest_sc_cellformatsobj \
 	CppunitTest_sc_cellobj \
-	CppunitTest_sc_cellsobj \
 	CppunitTest_sc_cellrangeobj \
 	CppunitTest_sc_cellrangesobj \
+	CppunitTest_sc_cellsearchobj \
 	CppunitTest_sc_cellsenumeration \
+	CppunitTest_sc_cellsobj \
 	CppunitTest_sc_chart2dataprovider \
 	CppunitTest_sc_chartobj \
 	CppunitTest_sc_chartsobj \
