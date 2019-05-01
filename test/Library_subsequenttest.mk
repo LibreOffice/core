@@ -186,6 +186,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
     test/source/text/textprintersettings \
     test/source/text/textsettings \
     test/source/text/textdocumentindex \
+	test/source/util/searchdescriptor \
 	test/source/util/xindent \
 	test/source/util/xmergeable \
 	test/source/util/xrefreshable \
