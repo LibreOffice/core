@@ -179,6 +179,13 @@ DECLARE_WW8EXPORT_TEST(testTdf121111_fillStyleNone, "tdf121111_fillStyleNone.doc
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xText, "FillStyle"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf112618_textbox_no_bg, "tdf112618_textbox_no_bg.doc")
+{
+    sal_uInt16 nTransparence = getProperty<sal_Int16>(getShape(2), "FillTransparence");
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(100), nTransparence);
+    CPPUNIT_ASSERT_EQUAL(nTransparence, getProperty<sal_uInt16>(getShape(2), "BackColorTransparency"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf101826_xattrTextBoxFill, "tdf101826_xattrTextBoxFill.doc")
 {
     //Basic 1 Color Fill: gradient from yellow(FFFF00) to brown(767600) currently saves as mid-color

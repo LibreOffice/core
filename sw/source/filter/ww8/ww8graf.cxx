@@ -1715,7 +1715,13 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
             {
                 rFlySet.Put( *pPoolItem );
                 if ( i == XATTR_FILLSTYLE )
-                    bSkipResBackground = true;
+                {
+                    const drawing::FillStyle eFill = static_cast<const XFillStyleItem*>(pPoolItem)->GetValue();
+                    // Transparency forced in certain situations when fillstyle is none - use old logic for that case still
+                    // which is especially needed for export purposes (tdf112618).
+                    if ( eFill != drawing::FillStyle_NONE )
+                        bSkipResBackground = true;
+                }
             }
         }
     }
