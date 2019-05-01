@@ -44,10 +44,9 @@ class ScFormulaDlg final : public formula::FormulaDlg,
     mutable std::shared_ptr<ScCompiler> m_xCompiler;
 
 public:
-                    ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
-                        vcl::Window* pParent, const ScViewData* pViewData, const formula::IFunctionManager* _pFunctionMgr);
-                    virtual ~ScFormulaDlg() override;
-    virtual void dispose() override;
+    ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
+        weld::Window* pParent, const ScViewData* pViewData, const formula::IFunctionManager* _pFunctionMgr);
+    virtual ~ScFormulaDlg() override;
 
     // IFormulaEditorHelper
     virtual void notifyChange() override;
@@ -75,7 +74,7 @@ public:
     virtual css::uno::Reference< css::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const override;
     virtual css::table::CellAddress getReferencePosition() const override;
 
-    virtual bool    Close() override;
+    virtual void Close() override;
 
     // sc::IAnyRefDialog
     virtual void ShowReference(const OUString& _sRef) override;

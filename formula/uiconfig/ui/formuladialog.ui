@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="for">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="FormulaDialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -23,9 +27,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
                 <property name="halign">start</property>
                 <property name="hexpand">True</property>
+                <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
@@ -137,12 +141,35 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="vexpand">True</property>
-                    <property name="scrollable">True</property>
                     <property name="enable_popup">True</property>
                     <child>
                       <object class="GtkGrid">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
                         <child>
                           <placeholder/>
                         </child>
@@ -165,6 +192,30 @@
                         <child>
                           <placeholder/>
                         </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                       <packing>
                         <property name="position">1</property>
@@ -180,21 +231,6 @@
                         <property name="position">1</property>
                         <property name="tab_fill">False</property>
                       </packing>
-                    </child>
-                    <child>
-                      <object class="GtkGrid">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child type="tab">
-                      <placeholder/>
                     </child>
                   </object>
                   <packing>
@@ -236,6 +272,7 @@
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
                             <property name="editable">False</property>
+                            <property name="activates_default">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
@@ -392,6 +429,7 @@
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
                             <property name="editable">False</property>
+                            <property name="activates_default">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -406,13 +444,24 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-EditBox" id="ed_formula">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="ed_formula-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="formuladialog|ed_formula-atkobject">Formula</property>
+                        <property name="vscrollbar_policy">always</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkTextView" id="ed_formula">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="wrap_mode">word</property>
+                            <property name="accepts_tab">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="ed_formula-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="formuladialog|ed_formula-atkobject">Formula</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -444,7 +493,7 @@
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">6</property>
                 <child>
-                  <object class="foruilo-RefEdit" id="ED_REF">
+                  <object class="GtkEntry" id="ED_REF">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
@@ -456,7 +505,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="foruilo-RefButton" id="RB_REF">
+                  <object class="GtkButton" id="RB_REF">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -486,8 +535,8 @@
     </child>
     <action-widgets>
       <action-widget response="-11">help</action-widget>
-      <action-widget response="0">back</action-widget>
-      <action-widget response="0">next</action-widget>
+      <action-widget response="102">back</action-widget>
+      <action-widget response="101">next</action-widget>
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>
