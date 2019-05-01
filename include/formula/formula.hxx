@@ -61,24 +61,22 @@ class RefButton;
 class WeldRefButton;
 class FormEditData;
 
-class FORMULA_DLLPUBLIC FormulaModalDialog :   public ModalDialog, public formula::IFormulaEditorHelper
+class FORMULA_DLLPUBLIC FormulaModalDialog
+    : public weld::GenericDialogController, public formula::IFormulaEditorHelper
 {
     friend class FormulaDlg_Impl;
 public:
-                    FormulaModalDialog( vcl::Window* pParent
-                                            ,IFunctionManager const * _pFunctionMgr
-                                            ,IControlReferenceHandler* _pDlg );
+    FormulaModalDialog(weld::Window* pParent, IFunctionManager const * _pFunctionMgr,
+                       IControlReferenceHandler* _pDlg);
     virtual ~FormulaModalDialog() override;
-    virtual void dispose() override;
 
 private:
     std::unique_ptr<FormulaDlg_Impl, o3tl::default_delete<FormulaDlg_Impl>> m_pImpl;
 
 protected:
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
-    static ::std::pair<WeldRefButton*,WeldRefEdit*> RefInputStartBefore( WeldRefEdit* pEdit, WeldRefButton* pButton );
+    static ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
+    ::std::pair<WeldRefButton*,WeldRefEdit*> RefInputStartBefore( WeldRefEdit* pEdit, WeldRefButton* pButton );
     void            RefInputStartAfter();
     void            RefInputDoneAfter();
 
@@ -91,17 +89,15 @@ protected:
 };
 
 class FORMULA_DLLPUBLIC FormulaDlg:
-    public SfxModelessDialog, public IFormulaEditorHelper
+    public SfxModelessDialogController, public IFormulaEditorHelper
 {
     friend class FormulaDlg_Impl;
 public:
-                    FormulaDlg( SfxBindings* pB
-                                    , SfxChildWindow* pCW
-                                    , vcl::Window* pParent
-                                    , IFunctionManager const * _pFunctionMgr
-                                    , IControlReferenceHandler* _pDlg );
+    FormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
+               weld::Window* pParent,
+               IFunctionManager const * _pFunctionMgr,
+               IControlReferenceHandler* _pDlg);
     virtual ~FormulaDlg() override;
-    virtual void dispose() override;
 private:
     std::unique_ptr<FormulaDlg_Impl, o3tl::default_delete<FormulaDlg_Impl>> m_pImpl;
 
@@ -111,9 +107,8 @@ protected:
 
 protected:
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
-    static ::std::pair<WeldRefButton*,WeldRefEdit*> RefInputStartBefore( WeldRefEdit* pEdit, WeldRefButton* pButton );
+    static ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
+    ::std::pair<WeldRefButton*,WeldRefEdit*> RefInputStartBefore( WeldRefEdit* pEdit, WeldRefButton* pButton );
     void            RefInputStartAfter();
     void            RefInputDoneAfter( bool bForced );
 
@@ -127,7 +122,7 @@ protected:
     const IFunctionDescription* getCurrentFunctionDescription() const;
     bool            UpdateParaWin(Selection& _rSelection);
     void            UpdateParaWin(const Selection& _rSelection, const OUString& _sRefStr);
-    RefEdit*        GetActiveEdit();
+    WeldRefEdit*    GetActiveEdit();
     void            SetEdSelection();
 
     void            StoreFormEditData(FormEditData* pData);
