@@ -24,43 +24,43 @@ extras_OFFIMISC_XMLFILES := \
 	Businesscard-with-logo/Thumbnails/thumbnail.png \
 
 
-extras_TPLOFFIMISC_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_OFFIMISC),$(atexts)/mimetype)
+extras_OFFIMISC_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_OFFIMISC),$(atexts)/mimetype)
 
 
 $(call gb_CustomTarget_get_target,extras/source/templates/offimisc) : \
 	$(foreach atexts,$(extras_TEMPLATES_OFFIMISC),$(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/$(atexts).ott)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%/mimetype : $(SRCDIR)/extras/source/templates/offimisc/%/mimetype
-	$(call gb_Output_announce,$*/mimetype,$(true),CPY,1)
+	$(call gb_Output_announce,templates/offimisc/$*/mimetype,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.jpg : $(SRCDIR)/extras/source/templates/offimisc/%.jpg
-	$(call gb_Output_announce,$*.jpg,$(true),CPY,1)
+	$(call gb_Output_announce,templates/offimisc/$*.jpg,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.png : $(SRCDIR)/extras/source/templates/offimisc/%.png
-	$(call gb_Output_announce,$*.png,$(true),CPY,1)
+	$(call gb_Output_announce,templates/offimisc/$*.png,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.rdf : $(SRCDIR)/extras/source/templates/offimisc/%.rdf
-	$(call gb_Output_announce,$*.rdf,$(true),CPY,1)
+	$(call gb_Output_announce,templates/offimisc/$*.rdf,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.svg : $(SRCDIR)/extras/source/templates/offimisc/%.svg
-	$(call gb_Output_announce,$*.svg,$(true),CPY,1)
+	$(call gb_Output_announce,templates/offimisc/$*.svg,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.svm : $(SRCDIR)/extras/source/templates/offimisc/%.svm
-	$(call gb_Output_announce,$*.svm,$(true),CPY,1)
+	$(call gb_Output_announce,templates/offimisc/$*.svm,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.xml : $(SRCDIR)/extras/source/templates/offimisc/%.xml \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
-	$(call gb_Output_announce,$*.xml,$(true),XSL,1)
+	$(call gb_Output_announce,templates/offimisc/$*.xml,$(true),XSL,1)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.ott :
-	$(call gb_Output_announce,$*.ott,$(true),ZIP,2)
+	$(call gb_Output_announce,templates/offimisc/$*.ott,$(true),ZIP,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(EXTRAS_OFFIMISC_DIR) && \
 		zip -q0X --filesync --must-match $@ $(EXTRAS_OFFIMISC_MIMEFILES_FILTER) && \
@@ -75,11 +75,11 @@ endef
 
 define extras_Tploffimisc_make_zip_deps
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	$(addprefix $(call gb_CustomTarget_get_workdir,$(1))/,$(filter $(3)/%,$(extras_TPLOFFIMISC_MIMETYPEFILES) $(extras_OFFIMISC_XMLFILES))) \
+	$(addprefix $(call gb_CustomTarget_get_workdir,$(1))/,$(filter $(3)/%,$(extras_OFFIMISC_MIMETYPEFILES) $(extras_OFFIMISC_XMLFILES))) \
 	| $(dir $(call gb_CustomTarget_get_workdir,$(1))/$(2)).dir
 
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	EXTRAS_OFFIMISC_MIMEFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_TPLOFFIMISC_MIMETYPEFILES)),$(subst $(3)/,,$(file)))
+	EXTRAS_OFFIMISC_MIMEFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_OFFIMISC_MIMETYPEFILES)),$(subst $(3)/,,$(file)))
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
 	EXTRAS_OFFIMISC_XMLFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_OFFIMISC_XMLFILES)),$(subst $(3)/,,$(file)))
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
@@ -87,7 +87,7 @@ $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
 
 endef
 
-$(eval $(foreach file,$(extras_TPLOFFIMISC_MIMETYPEFILES) $(extras_OFFIMISC_XMLFILES),\
+$(eval $(foreach file,$(extras_OFFIMISC_MIMETYPEFILES) $(extras_OFFIMISC_XMLFILES),\
 	$(call extras_Tploffimisc_make_file_deps,extras/source/templates/offimisc,$(file)) \
 ))
 

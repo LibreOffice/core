@@ -29,50 +29,47 @@ extras_PERSONAL_XMLFILES := \
 	Resume1page/Thumbnails/thumbnail.png \
 
 
-extras_TPLPERSONAL_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_PERSONAL),$(atexts)/mimetype)
+extras_PERSONAL_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_PERSONAL),$(atexts)/mimetype)
 
-
-ifneq ($(sort $(foreach file,$(extras_PERSONAL_XMLFILES),$(wordlist 1, 1, $(subst /, ,$(file))))),$(sort $(extras_TEMPLATES_PERSONAL)))
-$(call gb_Output_error,defined template text do not match existing directories)
-endif
 
 $(call gb_CustomTarget_get_target,extras/source/templates/personal) : \
 	$(foreach atexts,$(extras_TEMPLATES_PERSONAL),$(call gb_CustomTarget_get_workdir,extras/source/templates/personal)/$(atexts).ott)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/personal)/%/mimetype : $(SRCDIR)/extras/source/templates/personal/%/mimetype
-	$(call gb_Output_announce,$*/mimetype,$(true),CPY,1)
+	$(call gb_Output_announce,templates/personal/$*/mimetype,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/personal)/%.jpg : $(SRCDIR)/extras/source/templates/personal/%.jpg
-	$(call gb_Output_announce,$*.jpg,$(true),CPY,1)
+	$(call gb_Output_announce,templates/personal/$*.jpg,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/personal)/%.png : $(SRCDIR)/extras/source/templates/personal/%.png
-	$(call gb_Output_announce,$*.png,$(true),CPY,1)
+	$(call gb_Output_announce,templates/personal/$*.png,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/personal)/%.rdf : $(SRCDIR)/extras/source/templates/personal/%.rdf
-	$(call gb_Output_announce,$*.rdf,$(true),CPY,1)
+	$(call gb_Output_announce,templates/personal/$*.rdf,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/personal)/%.svg : $(SRCDIR)/extras/source/templates/personal/%.svg
-	$(call gb_Output_announce,$*.svg,$(true),CPY,1)
+	$(call gb_Output_announce,templates/personal/$*.svg,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/personal)/%.svm : $(SRCDIR)/extras/source/templates/personal/%.svm
-	$(call gb_Output_announce,$*.svm,$(true),CPY,1)
+	$(call gb_Output_announce,templates/personal/$*.svm,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/personal)/%.xml : $(SRCDIR)/extras/source/templates/personal/%.xml \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
-	$(call gb_Output_announce,$*.xml,$(true),XSL,1)
+	$(call gb_Output_announce,templates/personal/$*.xml,$(true),XSL,1)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/personal)/%.ott :
-	$(call gb_Output_announce,$*.ott,$(true),ZIP,2)
+	$(call gb_Output_announce,templates/personal/$*.ott,$(true),ZIP,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(EXTRAS_PERSONAL_DIR) && \
-		zip -qrX --filesync --must-match $@ $(EXTRAS_PERSONAL_FILES) \
+		zip -q0X --filesync --must-match $@ $(EXTRAS_PERSONAL_MIMEFILES_FILTER) && \
+		zip -qrX --must-match $@ $(EXTRAS_PERSONAL_XMLFILES_FILTER) \
 	)
 
 define extras_Tplpersonal_make_file_deps
@@ -83,18 +80,20 @@ endef
 
 define extras_Tplpersonal_make_zip_deps
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	$(addprefix $(call gb_CustomTarget_get_workdir,$(1))/,$(filter $(3)/%,$(extras_TPLPERSONAL_MIMETYPEFILES) $(extras_PERSONAL_XMLFILES))) \
+	$(addprefix $(call gb_CustomTarget_get_workdir,$(1))/,$(filter $(3)/%,$(extras_PERSONAL_MIMETYPEFILES) $(extras_PERSONAL_XMLFILES))) \
 	| $(dir $(call gb_CustomTarget_get_workdir,$(1))/$(2)).dir
 
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	EXTRAS_PERSONAL_FILES := $(foreach file,$(filter $(3)/%,$(extras_TPLPERSONAL_MIMETYPEFILES) $(extras_PERSONAL_XMLFILES)),$(subst $(3)/,,$(file)))
+	EXTRAS_PERSONAL_MIMEFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_PERSONAL_MIMETYPEFILES)),$(subst $(3)/,,$(file)))
+$(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
+	EXTRAS_PERSONAL_XMLFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_PERSONAL_XMLFILES)),$(subst $(3)/,,$(file)))
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
 	EXTRAS_PERSONAL_DIR := $(call gb_CustomTarget_get_workdir,$(1))/$(3)
 
 endef
 
-$(eval $(foreach file,$(extras_TPLPERSONAL_MIMETYPEFILES) $(extras_PERSONAL_XMLFILES),\
-	$(call extras_Tplpersonal_make_zip_deps,extras/source/templates/personal,$(file)) \
+$(eval $(foreach file,$(extras_PERSONAL_MIMETYPEFILES) $(extras_PERSONAL_XMLFILES),\
+	$(call extras_Tplpersonal_make_file_deps,extras/source/templates/personal,$(file)) \
 ))
 
 $(eval $(foreach atexts,$(extras_TEMPLATES_PERSONAL),\

@@ -208,46 +208,43 @@ extras_PRESENTATIONS_XMLFILES := \
 	Vivid/Thumbnails/thumbnail.png \
 
 
-extras_TPLPRESNT_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_PRESENTATIONS),$(atexts)/mimetype)
+extras_PRESENTATIONS_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_PRESENTATIONS),$(atexts)/mimetype)
 
-
-ifneq ($(sort $(foreach file,$(extras_PRESENTATIONS_XMLFILES),$(wordlist 1, 1, $(subst /, ,$(file))))),$(sort $(extras_TEMPLATES_PRESENTATIONS)))
-$(call gb_Output_error,defined template presentation do not match existing directories)
-endif
 
 $(call gb_CustomTarget_get_target,extras/source/templates/presnt) : \
 	$(foreach atexts,$(extras_TEMPLATES_PRESENTATIONS),$(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/$(atexts).otp)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%/mimetype : $(SRCDIR)/extras/source/templates/presnt/%/mimetype
-	$(call gb_Output_announce,$*/mimetype,$(true),CPY,1)
+	$(call gb_Output_announce,templates/presnt/$*/mimetype,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.jpg : $(SRCDIR)/extras/source/templates/presnt/%.jpg
-	$(call gb_Output_announce,$*.jpg,$(true),CPY,1)
+	$(call gb_Output_announce,templates/presnt/$*.jpg,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.svg : $(SRCDIR)/extras/source/templates/presnt/%.svg
-	$(call gb_Output_announce,$*.svg,$(true),CPY,1)
+	$(call gb_Output_announce,templates/presnt/$*.svg,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.png : $(SRCDIR)/extras/source/templates/presnt/%.png
-	$(call gb_Output_announce,$*.png,$(true),CPY,1)
+	$(call gb_Output_announce,templates/presnt/$*.png,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.svm : $(SRCDIR)/extras/source/templates/presnt/%.svm
-	$(call gb_Output_announce,$*.svm,$(true),CPY,1)
+	$(call gb_Output_announce,templates/presnt/$*.svm,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.xml : $(SRCDIR)/extras/source/templates/presnt/%.xml \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
-	$(call gb_Output_announce,$*.xml,$(true),XSL,1)
+	$(call gb_Output_announce,templates/presnt/$*.xml,$(true),XSL,1)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.otp :
-	$(call gb_Output_announce,$*.otp,$(true),ZIP,2)
+	$(call gb_Output_announce,templates/presnt/$*.otp,$(true),ZIP,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(EXTRAS_PRESENTATIONS_DIR) && \
-		zip -qrX --filesync --must-match $@ $(EXTRAS_PRESENTATIONS_FILES) \
+		zip -q0X --filesync --must-match $@ $(EXTRAS_PRESENTATIONS_MIMEFILES_FILTER) && \
+		zip -qrX --must-match $@ $(EXTRAS_PRESENTATIONS_XMLFILES_FILTER) \
 	)
 
 define extras_Tplpresnt_make_file_deps
@@ -258,18 +255,20 @@ endef
 
 define extras_Tplpresnt_make_zip_deps
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	$(addprefix $(call gb_CustomTarget_get_workdir,$(1))/,$(filter $(3)/%,$(extras_TPLPRESNT_MIMETYPEFILES) $(extras_PRESENTATIONS_XMLFILES))) \
+	$(addprefix $(call gb_CustomTarget_get_workdir,$(1))/,$(filter $(3)/%,$(extras_PRESENTATIONS_MIMETYPEFILES) $(extras_PRESENTATIONS_XMLFILES))) \
 	| $(dir $(call gb_CustomTarget_get_workdir,$(1))/$(2)).dir
 
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	EXTRAS_PRESENTATIONS_FILES := $(foreach file,$(filter $(3)/%,$(extras_TPLPRESNT_MIMETYPEFILES) $(extras_PRESENTATIONS_XMLFILES)),$(subst $(3)/,,$(file)))
+	EXTRAS_PRESENTATIONS_MIMEFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_PRESENTATIONS_MIMETYPEFILES)),$(subst $(3)/,,$(file)))
+$(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
+	EXTRAS_PRESENTATIONS_XMLFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_PRESENTATIONS_XMLFILES)),$(subst $(3)/,,$(file)))
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
 	EXTRAS_PRESENTATIONS_DIR := $(call gb_CustomTarget_get_workdir,$(1))/$(3)
 
 endef
 
-$(eval $(foreach file,$(extras_TPLPRESNT_MIMETYPEFILES) $(extras_PRESENTATIONS_XMLFILES),\
-	$(call extras_Tplpresnt_make_zip_deps,extras/source/templates/presnt,$(file)) \
+$(eval $(foreach file,$(extras_PRESENTATIONS_MIMETYPEFILES) $(extras_PRESENTATIONS_XMLFILES),\
+	$(call extras_Tplpresnt_make_file_deps,extras/source/templates/presnt,$(file)) \
 ))
 
 $(eval $(foreach atexts,$(extras_TEMPLATES_PRESENTATIONS),\

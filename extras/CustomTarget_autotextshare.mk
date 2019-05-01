@@ -3809,39 +3809,36 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 extras_AUTOTEXTSHARE_MIMETYPEFILES := $(foreach atexts,$(extras_AUTOTEXTSHARE_AUTOTEXTS),$(atexts)/mimetype)
 
 
-ifneq ($(sort $(foreach file,$(extras_AUTOTEXTSHARE_XMLFILES),$(wordlist 1, 2, $(subst /, ,$(file))))),$(sort $(subst /, ,$(extras_AUTOTEXTSHARE_AUTOTEXTS))))
-$(call gb_Output_error,defined shared lang autotext do not match existing directories)
-endif
-
 $(call gb_CustomTarget_get_target,extras/source/autotext) : \
 	$(foreach atexts,$(extras_AUTOTEXTSHARE_AUTOTEXTS),$(call gb_CustomTarget_get_workdir,extras/source/autotext)/$(atexts).bau)
 
 $(call gb_CustomTarget_get_workdir,extras/source/autotext)/%/mimetype : $(SRCDIR)/extras/source/autotext/lang/%/mimetype
-	$(call gb_Output_announce,$*/mimetype,$(true),CPY,1)
+	$(call gb_Output_announce,autotext/$*/mimetype,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.rdf : $(SRCDIR)/extras/source/autotext/lang/%.rdf
-	$(call gb_Output_announce,$*.rdf,$(true),CPY,1)
+	$(call gb_Output_announce,autotext/$*.rdf,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.svm : $(SRCDIR)/extras/source/autotext/lang/%.svm
-	$(call gb_Output_announce,$*.svm,$(true),CPY,1)
+	$(call gb_Output_announce,autotext/$*.svm,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.png : $(SRCDIR)/extras/source/autotext/lang/%.png
-	$(call gb_Output_announce,$*.png,$(true),CPY,1)
+	$(call gb_Output_announce,autotext/$*.png,$(true),CPY,1)
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.xml : $(SRCDIR)/extras/source/autotext/lang/%.xml \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
-	$(call gb_Output_announce,$*.xml,$(true),XSL,1)
+	$(call gb_Output_announce,autotext/$*.xml,$(true),XSL,1)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 
 $(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.bau :
-	$(call gb_Output_announce,$*.bau,$(true),ZIP,2)
+	$(call gb_Output_announce,autotext/$*.bau,$(true),ZIP,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(EXTRAS_AUTOTEXTSHARE_DIR) && \
-		zip -qrX --filesync --must-match $@ $(EXTRAS_AUTOTEXTSHARE_FILES) \
+		zip -q0X --filesync --must-match $@ $(EXTRAS_AUTOTEXTSHARE_MIMEFILES_FILTER) && \
+		zip -qrX --must-match $@ $(EXTRAS_AUTOTEXTSHARE_XMLFILES_FILTER) \
 	)
 
 define extras_Autotextshare_make_file_deps
@@ -3856,7 +3853,9 @@ $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
 	| $(dir $(call gb_CustomTarget_get_workdir,$(1))/$(2)).dir
 
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	EXTRAS_AUTOTEXTSHARE_FILES := $(foreach file,$(filter $(3)/%,$(extras_AUTOTEXTSHARE_MIMETYPEFILES) $(extras_AUTOTEXTSHARE_XMLFILES)),$(subst $(3)/,,$(file)))
+	EXTRAS_AUTOTEXTSHARE_MIMEFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_AUTOTEXTSHARE_MIMETYPEFILES)),$(subst $(3)/,,$(file)))
+$(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
+	EXTRAS_AUTOTEXTSHARE_XMLFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_AUTOTEXTSHARE_XMLFILES)),$(subst $(3)/,,$(file)))
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
 	EXTRAS_AUTOTEXTSHARE_DIR := $(call gb_CustomTarget_get_workdir,$(1))/$(3)
 
