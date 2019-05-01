@@ -1314,6 +1314,7 @@ protected:
 private:
     bool m_bTakeOwnership;
     bool m_bFrozen;
+    bool m_bDraggedOver;
     sal_uInt16 m_nLastMouseButton;
     gulong m_nFocusInSignalId;
     gulong m_nMnemonicActivateSignalId;
@@ -1465,9 +1466,18 @@ private:
         return true;
     }
 
+    virtual void drag_started()
+    {
+    }
+
     static gboolean signalDragMotion(GtkWidget *pWidget, GdkDragContext *context, gint x, gint y, guint time, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        if (!pThis->m_bDraggedOver)
+        {
+            pThis->m_bDraggedOver = true;
+            pThis->drag_started();
+        }
         return pThis->m_xDropTarget->signalDragMotion(pWidget, context, x, y, time);
     }
 
@@ -1483,10 +1493,19 @@ private:
         pThis->m_xDropTarget->signalDragDropReceived(pWidget, context, x, y, data, ttype, time);
     }
 
+    virtual void drag_ended()
+    {
+    }
+
     static void signalDragLeave(GtkWidget *pWidget, GdkDragContext *context, guint time, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         pThis->m_xDropTarget->signalDragLeave(pWidget, context, time);
+        if (pThis->m_bDraggedOver)
+        {
+            pThis->m_bDraggedOver = false;
+            pThis->drag_ended();
+        }
     }
 
 public:
@@ -1495,6 +1514,7 @@ public:
         , m_pBuilder(pBuilder)
         , m_bTakeOwnership(bTakeOwnership)
         , m_bFrozen(false)
+        , m_bDraggedOver(false)
         , m_nLastMouseButton(0)
         , m_nFocusInSignalId(0)
         , m_nMnemonicActivateSignalId(0)
@@ -5902,6 +5922,7 @@ private:
     std::vector<int> m_aSavedSortColumns;
     std::vector<int> m_aViewColToModelCol;
     std::vector<int> m_aModelColToViewCol;
+    bool m_bWorkAroundBadDragRegion;
     gint m_nTextCol;
     gint m_nImageCol;
     gint m_nExpanderImageCol;
@@ -6216,6 +6237,7 @@ public:
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), pBuilder, bTakeOwnership)
         , m_pTreeView(pTreeView)
         , m_pTreeStore(GTK_TREE_STORE(gtk_tree_view_get_model(m_pTreeView)))
+        , m_bWorkAroundBadDragRegion(false)
         , m_nTextCol(-1)
         , m_nImageCol(-1)
         , m_nExpanderImageCol(-1)
@@ -7380,6 +7402,9 @@ public:
         // unhighlight current highlighted row
         gtk_tree_view_set_drag_dest_row(m_pTreeView, nullptr, pos);
 
+        if (m_bWorkAroundBadDragRegion)
+            gtk_drag_unhighlight(GTK_WIDGET(m_pTreeView));
+
         GtkTreePath *path = nullptr;
         GtkTreeViewDropPosition gtkpos = GTK_TREE_VIEW_DROP_BEFORE;
         bool ret = gtk_tree_view_get_dest_row_at_pos(m_pTreeView, rPos.X(), rPos.Y(),
@@ -7458,6 +7483,34 @@ public:
     virtual TreeView* get_drag_source() const override
     {
         return g_DragSource;
+    }
+
+    // Under gtk 3.24.8 dragging into the TreeView is not highlighting
+    // entire TreeView widget, just the rectangle which has no entries
+    // in it, so as a workaround highlight the parent container
+    // on drag start, and undo it on drag end, and trigger removal
+    // of the treeview's highlight effort
+    virtual void drag_started() override
+    {
+        GtkWidget* pWidget = GTK_WIDGET(m_pTreeView);
+        GtkWidget* pParent = gtk_widget_get_parent(pWidget);
+        if (GTK_IS_SCROLLED_WINDOW(pParent))
+        {
+            gtk_drag_unhighlight(pWidget);
+            gtk_drag_highlight(pParent);
+            m_bWorkAroundBadDragRegion = true;
+        }
+    }
+
+    virtual void drag_ended() override
+    {
+        if (m_bWorkAroundBadDragRegion)
+        {
+            GtkWidget* pWidget = GTK_WIDGET(m_pTreeView);
+            GtkWidget* pParent = gtk_widget_get_parent(pWidget);
+            gtk_drag_unhighlight(pParent);
+            m_bWorkAroundBadDragRegion = false;
+        }
     }
 
     virtual ~GtkInstanceTreeView() override
