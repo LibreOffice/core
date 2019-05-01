@@ -5067,18 +5067,6 @@ elif test "$enable_pch" = "no"; then
 else
     AC_MSG_ERROR([Unknown value for --enable-pch])
 fi
-if test -n "$ENABLE_PCH"; then
-    if test -n "$CCACHE"; then
-        if ! echo "$CCACHE_SLOPPINESS" | grep -q pch_defines | grep -q time_macros; then
-            AC_MSG_WARN([PCH with ccache requires CCACHE_SLOPPINESS to include 'pch_defines,time_macros'])
-            add_warning "PCH with ccache requires CCACHE_SLOPPINESS to include 'pch_defines,time_macros'"
-        fi
-        if test -z "$CCACHE_PCH_EXTSUM"; then
-            AC_MSG_WARN([It is recommended to set CCACHE_PCH_EXTSUM=1 for PCH with ccache.])
-            add_warning "It is recommended to set CCACHE_PCH_EXTSUM=1 for PCH with ccache."
-        fi
-    fi
-fi
 AC_SUBST(ENABLE_PCH)
 
 TAB=`printf '\t'`
