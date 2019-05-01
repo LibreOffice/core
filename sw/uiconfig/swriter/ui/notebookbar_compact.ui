@@ -1118,47 +1118,74 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="TitlePageDialogD">
+      <object class="GtkMenuItem" id="MenuPage-TitlePageDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:TitlePageDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="WatermarkD">
+      <object class="GtkMenuItem" id="MenuPage-Watermark">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Watermark</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator190">
+      <object class="GtkSeparatorMenuItem" id="MenuPage-separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="PageColumnDialogD">
+      <object class="GtkMenuItem" id="MenuPage-PageColumnDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:PageColumnDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="BorderDialogD">
+      <object class="GtkMenuItem" id="MenuPage-BorderDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:BorderDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator192">
+      <object class="GtkSeparatorMenuItem" id="MenuPage-separator2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="PageDialogD2">
+      <object class="GtkMenuItem" id="MenuPage-InsertPageHeader">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:InsertPageHeader</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuPage-InsertPageFooter">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:InsertPageFooter</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuPage-UseHeaderFooterMenu">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:UseHeaderFooterMenu</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuPage-separator3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuPage-PageDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:PageDialog</property>
