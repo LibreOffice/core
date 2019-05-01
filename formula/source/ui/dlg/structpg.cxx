@@ -21,6 +21,7 @@
 #include <svl/stritem.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/treelistentry.hxx>
+#include <vcl/svapp.hxx>
 
 #include "structpg.hxx"
 #include <formula/formdata.hxx>
@@ -34,8 +35,6 @@ namespace formula
 StructListBox::StructListBox(vcl::Window* pParent, WinBits nBits ):
     SvTreeListBox(pParent, nBits)
 {
-    bActiveFlag = false;
-
     vcl::Font aFont( GetFont() );
     Size aSize = aFont.GetFontSize();
     aSize.AdjustHeight(-2);
@@ -53,11 +52,10 @@ SvTreeListEntry* StructListBox::InsertStaticEntry(
     return pEntry;
 }
 
-void StructListBox::SetActiveFlag(bool bFlag)
+void StructPage::SetActiveFlag(bool bFlag)
 {
     bActiveFlag = bFlag;
 }
-
 
 void StructListBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -77,89 +75,88 @@ void StructListBox::LoseFocus()
     SvTreeListBox::LoseFocus();
 }
 
-VCL_BUILDER_FACTORY_ARGS(StructListBox, WB_BORDER)
-
-StructPage::StructPage(vcl::Window* pParent):
-    TabPage(pParent, "StructPage", "formula/ui/structpage.ui"),
-    maImgEnd(BitmapEx(BMP_STR_END)),
-    maImgError(BitmapEx(BMP_STR_ERROR)),
-    pSelectedToken  ( nullptr )
+StructPage::StructPage(weld::Container* pParent)
+    : m_xBuilder(Application::CreateBuilder(pParent, "formula/ui/structpage.ui"))
+    , m_xContainer(m_xBuilder->weld_container("StructPage"))
+    , m_xTlbStruct(m_xBuilder->weld_tree_view("struct"))
+    , maImgEnd(BMP_STR_END)
+    , maImgError(BMP_STR_ERROR)
+    , pSelectedToken(nullptr)
+    , bActiveFlag(false)
 {
-    get(m_pTlbStruct, "struct");
-    Size aSize(LogicToPixel(Size(86, 162), MapMode(MapUnit::MapAppFont)));
-    m_pTlbStruct->set_height_request(aSize.Height());
-    m_pTlbStruct->set_width_request(aSize.Width());
-    m_pTlbStruct->SetStyle(m_pTlbStruct->GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|
-                        WB_HASBUTTONS|WB_HSCROLL|WB_NOINITIALSELECTION);
+//TODO    Size aSize(LogicToPixel(Size(86, 162), MapMode(MapUnit::MapAppFont)));
+//    m_xTlbStruct->set_size_request(aSize.Width(), aSize.Height());
 
-    m_pTlbStruct->SetNodeDefaultImages();
-    m_pTlbStruct->SetDefaultExpandedEntryBmp(Image(StockImage::Yes, BMP_STR_OPEN));
-    m_pTlbStruct->SetDefaultCollapsedEntryBmp(Image(StockImage::Yes, BMP_STR_CLOSE));
-
-
-    m_pTlbStruct->SetSelectHdl(LINK( this, StructPage, SelectHdl ) );
+    m_xTlbStruct->connect_changed(LINK( this, StructPage, SelectHdl ) );
 }
 
 StructPage::~StructPage()
 {
-    disposeOnce();
-}
-
-void StructPage::dispose()
-{
-    m_pTlbStruct.clear();
-    TabPage::dispose();
 }
 
 void StructPage::ClearStruct()
 {
-    m_pTlbStruct->SetActiveFlag(false);
-    m_pTlbStruct->Clear();
+    SetActiveFlag(false);
+    m_xTlbStruct->clear();
 }
 
-SvTreeListEntry* StructPage::InsertEntry( const OUString& rText, SvTreeListEntry* pParent,
-                                       sal_uInt16 nFlag, sal_uLong nPos, const FormulaToken* pIFormulaToken )
+bool StructPage::InsertEntry(const OUString& rText, weld::TreeIter* pParent,
+                             sal_uInt16 nFlag, int nPos,
+                             const FormulaToken* pIFormulaToken,
+                             weld::TreeIter& rRet)
 {
-    m_pTlbStruct->SetActiveFlag( false );
+    SetActiveFlag(false);
 
-    SvTreeListEntry* pEntry = nullptr;
-    switch( nFlag )
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pIFormulaToken)));
+
+    bool bEntry = false;
+    switch (nFlag)
     {
         case STRUCT_FOLDER:
-            pEntry = m_pTlbStruct->InsertEntry( rText, pParent, false, nPos,
-                    const_cast<FormulaToken*>(pIFormulaToken));
-        break;
+            m_xTlbStruct->insert(pParent, nPos, &rText, &sId, nullptr, nullptr,
+                                 nullptr, false, &rRet);
+            bEntry = true;
+            break;
         case STRUCT_END:
-            pEntry = m_pTlbStruct->InsertStaticEntry( rText, maImgEnd, pParent, nPos, pIFormulaToken );
-        break;
+            m_xTlbStruct->insert(pParent, nPos, &rText, &sId, nullptr, nullptr,
+                                 nullptr, false, &rRet);
+            m_xTlbStruct->set_image(rRet, maImgEnd);
+            bEntry = true;
+            break;
         case STRUCT_ERROR:
-            pEntry = m_pTlbStruct->InsertStaticEntry( rText, maImgError, pParent, nPos, pIFormulaToken );
-        break;
+            m_xTlbStruct->insert(pParent, nPos, &rText, &sId, nullptr, nullptr,
+                                 nullptr, false, &rRet);
+            m_xTlbStruct->set_image(rRet, maImgError);
+            bEntry = true;
+            break;
     }
 
-    if ( pEntry && pParent )
-        m_pTlbStruct->Expand( pParent );
-    return pEntry;
+    if (bEntry && pParent)
+        m_xTlbStruct->expand_row(*pParent);
+    return bEntry;
 }
 
-OUString StructPage::GetEntryText(SvTreeListEntry* pEntry) const
+OUString StructPage::GetEntryText(weld::TreeIter* pEntry) const
 {
     OUString aString;
-    if (pEntry != nullptr)
-        aString = m_pTlbStruct->GetEntryText(pEntry);
-    return  aString;
+    if (pEntry)
+        aString = m_xTlbStruct->get_text(*pEntry);
+    return aString;
 }
 
-const FormulaToken* StructPage::GetFunctionEntry(SvTreeListEntry* pEntry)
+const FormulaToken* StructPage::GetFunctionEntry(weld::TreeIter* pEntry)
 {
-    if (pEntry != nullptr)
+    if (pEntry)
     {
-        const FormulaToken * pToken = static_cast<const FormulaToken *>(pEntry->GetUserData());
-        if (pToken != nullptr)
+        const FormulaToken * pToken = reinterpret_cast<const FormulaToken *>(m_xTlbStruct->get_id(*pEntry).toInt64());
+        if (pToken)
         {
             if ( !(pToken->IsFunction() || pToken->GetParamCount() > 1 ) )
             {
-                return GetFunctionEntry(m_pTlbStruct->GetParent(pEntry));
+                std::unique_ptr<weld::TreeIter> xParent(m_xTlbStruct->make_iterator(pEntry));
+                if (!m_xTlbStruct->iter_parent(*xParent))
+                    return nullptr;
+                return GetFunctionEntry(xParent.get());
             }
             else
             {
@@ -170,21 +167,21 @@ const FormulaToken* StructPage::GetFunctionEntry(SvTreeListEntry* pEntry)
     return nullptr;
 }
 
-IMPL_LINK( StructPage, SelectHdl, SvTreeListBox*, pTlb, void )
+IMPL_LINK(StructPage, SelectHdl, weld::TreeView&, rTlb, void)
 {
-    if (m_pTlbStruct->GetActiveFlag())
+    if (GetActiveFlag())
     {
-        if (pTlb == m_pTlbStruct)
+        if (&rTlb == m_xTlbStruct.get())
         {
-            SvTreeListEntry*    pCurEntry = m_pTlbStruct->GetCurEntry();
-            if (pCurEntry != nullptr)
+            std::unique_ptr<weld::TreeIter> xCurEntry(m_xTlbStruct->make_iterator());
+            if (m_xTlbStruct->get_cursor(xCurEntry.get()))
             {
-                pSelectedToken = static_cast<const FormulaToken *>(pCurEntry->GetUserData());
-                if (pSelectedToken != nullptr)
+                pSelectedToken = reinterpret_cast<const FormulaToken *>(m_xTlbStruct->get_id(*xCurEntry).toInt64());
+                if (pSelectedToken)
                 {
                     if ( !(pSelectedToken->IsFunction() || pSelectedToken->GetParamCount() > 1) )
                     {
-                        pSelectedToken = GetFunctionEntry(pCurEntry);
+                        pSelectedToken = GetFunctionEntry(xCurEntry.get());
                     }
                 }
             }

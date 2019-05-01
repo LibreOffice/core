@@ -7395,6 +7395,9 @@ public:
 
     virtual bool get_dest_row_at_pos(const Point &rPos, weld::TreeIter* pResult) override
     {
+        gtk_drag_unhighlight(GTK_WIDGET(m_pTreeView));
+        gtk_drag_highlight(gtk_widget_get_parent(GTK_WIDGET(m_pTreeView)));
+
         // to keep it simple we'll default to always drop before the current row
         // except for the special edge cases
         GtkTreeViewDropPosition pos = GTK_TREE_VIEW_DROP_BEFORE;

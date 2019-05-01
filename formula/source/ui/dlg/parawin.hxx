@@ -25,6 +25,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/weld.hxx>
 
 #include <vector>
 #include <formula/funcutl.hxx>
@@ -38,7 +39,7 @@ namespace formula
 class IFunctionDescription;
 class IControlReferenceHandler;
 
-class ParaWin final : public TabPage
+class ParaWin
 {
 private:
         Link<ParaWin&,void>  aFxLink;
@@ -51,31 +52,6 @@ private:
         vcl::Font        aFntBold;
         vcl::Font        aFntLight;
 
-        VclPtr<FixedText>       m_pFtEditDesc;
-        VclPtr<FixedText>       m_pFtArgName;
-        VclPtr<FixedText>       m_pFtArgDesc;
-
-        VclPtr<PushButton>      m_pBtnFx1;
-        VclPtr<FixedText>       m_pFtArg1;
-        VclPtr<ArgEdit>         m_pEdArg1;
-        VclPtr<RefButton>       m_pRefBtn1;
-
-        VclPtr<PushButton>      m_pBtnFx2;
-        VclPtr<FixedText>       m_pFtArg2;
-        VclPtr<ArgEdit>         m_pEdArg2;
-        VclPtr<RefButton>       m_pRefBtn2;
-
-        VclPtr<PushButton>      m_pBtnFx3;
-        VclPtr<FixedText>       m_pFtArg3;
-        VclPtr<ArgEdit>         m_pEdArg3;
-        VclPtr<RefButton>       m_pRefBtn3;
-
-        VclPtr<PushButton>      m_pBtnFx4;
-        VclPtr<FixedText>       m_pFtArg4;
-        VclPtr<ArgEdit>         m_pEdArg4;
-        VclPtr<RefButton>       m_pRefBtn4;
-
-        VclPtr<ScrollBar>       m_pSlider;
         OUString        m_sOptional;
         OUString        m_sRequired;
 
@@ -84,20 +60,48 @@ private:
 
         ArgInput        aArgInput[4];
         OUString        aDefaultString;
-        ::std::vector<OUString>
-                        aParaArray;
+        ::std::vector<OUString> aParaArray;
 
-        DECL_LINK( ScrollHdl, ScrollBar*, void);
+        std::unique_ptr<weld::Builder> m_xBuilder;
+        std::unique_ptr<weld::Container> m_xContainer;
+
+        std::unique_ptr<weld::Label> m_xFtEditDesc;
+        std::unique_ptr<weld::Label> m_xFtArgName;
+        std::unique_ptr<weld::Label> m_xFtArgDesc;
+
+        std::unique_ptr<weld::Button> m_xBtnFx1;
+        std::unique_ptr<weld::Button> m_xBtnFx2;
+        std::unique_ptr<weld::Button> m_xBtnFx3;
+        std::unique_ptr<weld::Button> m_xBtnFx4;
+
+        std::unique_ptr<weld::Label> m_xFtArg1;
+        std::unique_ptr<weld::Label> m_xFtArg2;
+        std::unique_ptr<weld::Label> m_xFtArg3;
+        std::unique_ptr<weld::Label> m_xFtArg4;
+
+        std::unique_ptr<ArgEdit> m_xEdArg1;
+        std::unique_ptr<ArgEdit> m_xEdArg2;
+        std::unique_ptr<ArgEdit> m_xEdArg3;
+        std::unique_ptr<ArgEdit> m_xEdArg4;
+
+        std::unique_ptr<WeldRefButton> m_xRefBtn1;
+        std::unique_ptr<WeldRefButton> m_xRefBtn2;
+        std::unique_ptr<WeldRefButton> m_xRefBtn3;
+        std::unique_ptr<WeldRefButton> m_xRefBtn4;
+
+        std::unique_ptr<weld::ScrolledWindow> m_xSlider;
+        std::unique_ptr<weld::Widget> m_xGrid;
+
+        DECL_LINK( ScrollHdl, weld::ScrolledWindow&, void);
         DECL_LINK( ModifyHdl, ArgInput&, void );
         DECL_LINK( GetEdFocusHdl, ArgInput&, void );
         DECL_LINK( GetFxFocusHdl, ArgInput&, void );
         DECL_LINK( GetFxHdl, ArgInput&, void );
 
-        void            SliderMoved();
         void            ArgumentModified();
 
-        void            InitArgInput( sal_uInt16 nPos, FixedText& rFtArg, PushButton& rBtnFx,
-                                        ArgEdit& rEdArg, RefButton& rRefBtn);
+        void            InitArgInput(sal_uInt16 nPos, weld::Label& rFtArg, weld::Button& rBtnFx,
+                                     ArgEdit& rEdArg, WeldRefButton& rRefBtn);
 
         void            SetArgumentDesc(const OUString& aText);
         void            SetArgumentText(const OUString& aText);
@@ -110,9 +114,8 @@ private:
         void            UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i );
 
 public:
-                        ParaWin(vcl::Window* pParent,IControlReferenceHandler* _pDlg);
-                        virtual ~ParaWin() override;
-        virtual void    dispose() override;
+        ParaWin(weld::Container* pParent, IControlReferenceHandler* _pDlg);
+        ~ParaWin();
 
         void            SetFunctionDesc(const IFunctionDescription* pFDesc);
         void            SetArgumentOffset(sal_uInt16 nOffset);
@@ -122,7 +125,7 @@ public:
 
         sal_uInt16      GetActiveLine() { return nActiveLine;}
         void            SetActiveLine(sal_uInt16 no);
-        RefEdit*        GetActiveEdit();
+        WeldRefEdit*    GetActiveEdit();
         OUString        GetActiveArgName();
 
         OUString        GetArgument(sal_uInt16 no);
@@ -135,6 +138,10 @@ public:
 
         void            SetArgModifiedHdl( const Link<ParaWin&,void>& rLink ) { aArgModifiedLink = rLink; }
         void            SetFxHdl( const Link<ParaWin&,void>& rLink ) { aFxLink = rLink; }
+
+        void            SliderMoved();
+
+        void            Show() { m_xContainer->show(); }
 };
 
 
