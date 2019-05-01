@@ -16,6 +16,24 @@
       "revId": "9666d56b5a38f372718906bacd6557650fa98d4b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_14605ace",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 5038,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-05-01T08:03:51Z",
+      "side": 1,
+      "message": "Clang is a special case of GCC.",
+      "parentUuid": "3fa0c359_f11aa015",
+      "revId": "9666d56b5a38f372718906bacd6557650fa98d4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
