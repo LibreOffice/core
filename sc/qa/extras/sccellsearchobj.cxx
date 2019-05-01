@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
 #include <test/util/searchdescriptor.hxx>
+#include <test/util/xreplacedescriptor.hxx>
 #include <test/util/xsearchdescriptor.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -29,6 +30,7 @@ namespace sc_apitest
 class ScCellSearchObj : public CalcUnoApiTest,
                         public apitest::SearchDescriptor,
                         public apitest::XPropertySet,
+                        public apitest::XReplaceDescriptor,
                         public apitest::XSearchDescriptor
 {
 public:
@@ -49,6 +51,9 @@ public:
     CPPUNIT_TEST(testGetPropertyValue);
     CPPUNIT_TEST(testPropertyChangeListener);
     CPPUNIT_TEST(testVetoableChangeListener);
+
+    // XReplaceDescriptor
+    CPPUNIT_TEST(testGetSetReplaceString);
 
     // XSearchDescriptor
     CPPUNIT_TEST(testGetSetSearchString);

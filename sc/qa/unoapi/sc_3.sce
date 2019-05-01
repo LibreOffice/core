@@ -17,5 +17,4 @@
 #
 -o sc.ScCellRangeObj
 -o sc.ScCellRangesObj
--o sc.ScCellSearchObj
 -o sc.ScCellTextCursor
