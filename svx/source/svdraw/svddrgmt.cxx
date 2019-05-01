@@ -38,6 +38,8 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/sdgcpitm.hxx>
+#include <svx/sdooitm.hxx>
+#include <svx/sdtagitm.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>

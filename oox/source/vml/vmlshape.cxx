@@ -72,6 +72,7 @@
 #include <svx/EnhancedCustomShapeTypeNames.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/sdtagitm.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>

@@ -49,6 +49,12 @@
 #include <svx/svdpool.hxx>
 #include <svx/xflclit.hxx>
 #include <svl/style.hxx>
+#include <svx/sderitm.hxx>
+#include <svx/sdooitm.hxx>
+#include <svx/sdshitm.hxx>
+#include <svx/sdtagitm.hxx>
+#include <svx/sdtfsitm.hxx>
+#include <svx/sdtmfitm.hxx>
 #include <editeng/editeng.hxx>
 #include <svl/itemiter.hxx>
 #include <sdr/properties/textproperties.hxx>

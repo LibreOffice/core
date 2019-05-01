@@ -31,6 +31,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
+#include <svl/stritem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/msg.hxx>

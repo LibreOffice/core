@@ -25,6 +25,8 @@
 #include <cppunit/AdditionalMessage.h>
 #include <sal/log.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <svl/gridprinter.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>

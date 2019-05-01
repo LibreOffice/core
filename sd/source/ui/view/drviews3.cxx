@@ -50,6 +50,7 @@
 #include <svx/fmshell.hxx>
 #include <svx/f3dchild.hxx>
 #include <svx/float3d.hxx>
+#include <svx/sdmetitm.hxx>
 #include <optsitem.hxx>
 
 #include <app.hrc>

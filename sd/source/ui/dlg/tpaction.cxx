@@ -31,11 +31,13 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
 
+#include <tools/debug.hxx>
 #include <vcl/waitobj.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svx/svdograf.hxx>
 #include <svl/aeitem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/xtable.hxx>

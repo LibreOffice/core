@@ -35,6 +35,7 @@
 #include <editeng/brushitem.hxx>
 #include <svx/svditer.hxx>
 #include <svx/sdr/properties/properties.hxx>
+#include <svl/intitem.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <svx/xlndsit.hxx>

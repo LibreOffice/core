@@ -23,6 +23,7 @@
 #include <svx/dlgutil.hxx>
 #include <svx/anchorid.hxx>
 #include <svl/aeitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/swframevalidation.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svx/svdview.hxx>

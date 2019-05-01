@@ -19,6 +19,7 @@
 
 #include <time.h>
 #include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
 #include <sfx2/dispatch.hxx>

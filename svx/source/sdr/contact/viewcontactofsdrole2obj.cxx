@@ -30,6 +30,7 @@
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/debug.hxx>
 #include <sdr/primitive2d/sdrolecontentprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>

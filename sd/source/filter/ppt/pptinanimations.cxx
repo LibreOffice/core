@@ -54,6 +54,7 @@
 #include <oox/ppt/pptfilterhelpers.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
+#include <tools/debug.hxx>
 
 #include <svx/svdotext.hxx>
 #include <editeng/outlobj.hxx>

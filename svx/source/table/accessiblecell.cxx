@@ -39,6 +39,7 @@
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/unoshtxt.hxx>
 #include <svx/svdotext.hxx>
+#include <tools/debug.hxx>
 
 using namespace sdr::table;
 using namespace ::com::sun::star;

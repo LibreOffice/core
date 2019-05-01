@@ -40,6 +40,16 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/sxctitm.hxx>
+#include <svx/sdggaitm.hxx>
+#include <svx/sdgluitm.hxx>
+#include <svx/sdgmoitm.hxx>
+#include <svx/sdmetitm.hxx>
+#include <svx/sdooitm.hxx>
+#include <svx/sdshitm.hxx>
+#include <svx/sdsxyitm.hxx>
+#include <svx/sdtagitm.hxx>
+#include <svx/sdtditm.hxx>
+#include <svx/sdtfsitm.hxx>
 #include <editeng/editeng.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx>

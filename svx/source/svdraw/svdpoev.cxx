@@ -29,6 +29,7 @@
 #include <svx/svdtrans.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <tools/debug.hxx>
 #include <tools/helpers.hxx>
 
 #include <svx/polypolygoneditor.hxx>

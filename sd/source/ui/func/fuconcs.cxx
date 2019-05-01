@@ -35,6 +35,7 @@
 #include <ToolBarManager.hxx>
 #include <svx/gallery.hxx>
 #include <svl/itempool.hxx>
+#include <svl/stritem.hxx>
 
 #include <View.hxx>
 #include <Window.hxx>

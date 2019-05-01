@@ -35,6 +35,7 @@
 #include <svx/svxids.hrc>
 #include <svx/rectenum.hxx>
 #include <svl/aeitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/svxdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <memory>

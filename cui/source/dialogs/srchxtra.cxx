@@ -20,6 +20,7 @@
 #include <srchxtra.hxx>
 #include <sal/log.hxx>
 #include <svl/cjkoptions.hxx>
+#include <svl/intitem.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/svxitems.hrc>
@@ -29,6 +30,7 @@
 #include <paragrph.hxx>
 #include <backgrnd.hxx>
 #include <svx/dialogs.hrc>
+#include <tools/debug.hxx>
 #include <tools/resary.hxx>
 #include <rtl/strbuf.hxx>
 #include <vcl/svapp.hxx>

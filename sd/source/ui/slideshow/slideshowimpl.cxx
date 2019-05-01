@@ -40,6 +40,7 @@
 #include <com/sun/star/presentation/SlideShow.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 #include <svl/aeitem.hxx>
+#include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/saveopt.hxx>
 #include <basic/sbstar.hxx>

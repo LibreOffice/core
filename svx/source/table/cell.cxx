@@ -42,7 +42,10 @@
 #include <svx/svdoutl.hxx>
 #include <svx/unoshtxt.hxx>
 #include <svx/svdmodel.hxx>
-
+#include <svx/sdooitm.hxx>
+#include <svx/sdtagitm.hxx>
+#include <svx/sdmetitm.hxx>
+#include <svx/xit.hxx>
 #include <getallcharpropids.hxx>
 #include "tableundo.hxx"
 #include <cell.hxx>

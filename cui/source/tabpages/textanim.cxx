@@ -27,6 +27,10 @@
 #include <svx/dlgutil.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
+#include <svx/sdtaaitm.hxx>
+#include <svx/sdtacitm.hxx>
+#include <svx/sdtaiitm.hxx>
+#include <svx/sdtayitm.hxx>
 #include <svtools/unitconv.hxx>
 
 const sal_uInt16 SvxTextAnimationPage::pRanges[] =

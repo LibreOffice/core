@@ -532,7 +532,6 @@
 #include <svx/sdtfsitm.hxx>
 #include <svx/sdtmfitm.hxx>
 #include <svx/sdynitm.hxx>
-#include <svx/svdattr.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdglue.hxx>
