@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_11a86c1d",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2280,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-05-01T06:09:48Z",
+      "side": 1,
+      "message": "I think we need to clamp rCol to the current set of available columns - there is no point in creating empty columns and then trying to spellcheck empty",
+      "revId": "59d04b0ea073973385881d655db5cab872ef1174",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
