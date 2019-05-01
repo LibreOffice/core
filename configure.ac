@@ -1370,6 +1370,8 @@ AC_ARG_ENABLE(ccache,
          By default, unless on Windows, we will try to detect if ccache is available; in that case if
          CC/CXX are not yet set, and --enable-icecream is not given, we
          attempt to use ccache. --disable-ccache disables ccache completely.
+         Additionally ccache's depend mode is enabled if possible,
+         use --enable-ccache=nodepend to enable ccache without depend mode.
 ]),
 ,)
 
@@ -2573,21 +2575,26 @@ AC_SUBST(WITH_GALLERY_BUILD)
 dnl ===================================================================
 dnl  Checks if ccache is available
 dnl ===================================================================
+CCACHE_DEPEND_MODE=
 if test "$_os" = "WINNT"; then
     # on windows/VC build do not use ccache
     CCACHE=""
-elif test "$enable_ccache" = "yes" -o \( "$enable_ccache" = "" -a "$enable_icecream" != "yes" \); then
+elif test "$enable_ccache" = "no"; then
+    CCACHE=""
+elif test -n "$enable_ccache" -o \( "$enable_ccache" = "" -a "$enable_icecream" != "yes" \); then
     case "%$CC%$CXX%" in
     # If $CC and/or $CXX already contain "ccache" (possibly suffixed with some version number etc),
     # assume that's good then
     *%ccache[[-_' ']]*|*/ccache[[-_' ']]*)
         AC_MSG_NOTICE([ccache seems to be included in a pre-defined CC and/or CXX])
+        CCACHE_DEPEND_MODE=1
         ;;
     *)
         AC_PATH_PROG([CCACHE],[ccache],[not found])
         if test "$CCACHE" = "not found"; then
             CCACHE=""
         else
+            CCACHE_DEPEND_MODE=1
             # Need to check for ccache version: otherwise prevents
             # caching of the results (like "-x objective-c++" for Mac)
             if test $_os = Darwin -o $_os = iOS; then
@@ -2600,6 +2607,7 @@ elif test "$enable_ccache" = "yes" -o \( "$enable_ccache" = "" -a "$enable_icecr
                 else
                     AC_MSG_RESULT([no, $CCACHE_VERSION])
                     CCACHE=""
+                    CCACHE_DEPEND_MODE=
                 fi
             fi
         fi
@@ -2608,6 +2616,10 @@ elif test "$enable_ccache" = "yes" -o \( "$enable_ccache" = "" -a "$enable_icecr
 else
     CCACHE=""
 fi
+if test "$enable_ccache" = "nodepend"; then
+    CCACHE_DEPEND_MODE=""
+fi
+AC_SUBST(CCACHE_DEPEND_MODE)
 
 if test "$CCACHE" != ""; then
     ccache_size_msg=$([ccache -s | tail -n 1 | sed 's/^[^0-9]*//' | sed -e 's/\.[0-9]*//'])

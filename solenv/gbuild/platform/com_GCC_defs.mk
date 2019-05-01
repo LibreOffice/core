@@ -303,4 +303,8 @@ endif
 gb_COMPILER_SETUP += $(gb_CCACHE_SLOPPINESS)
 endif
 
+ifneq ($(CCACHE_DEPEND_MODE),)
+gb_COMPILER_SETUP += CCACHE_DEPEND=1
+endif
+
 # vim: set noet sw=4:
