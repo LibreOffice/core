@@ -267,8 +267,13 @@ void Animation::Draw(OutputDevice* pOut, const Point& rDestPt, const Size& rDest
         else
         {
             const size_t nOldPos = mnPos;
-            const_cast<Animation*>(this)->mnPos = mbLoopTerminated ? (nCount - 1) : mnPos;
-            delete new ImplAnimView(const_cast<Animation*>(this), pOut, rDestPt, rDestSz, 0);
+            if (mbLoopTerminated)
+                const_cast<Animation*>(this)->mnPos = nCount - 1;
+
+            {
+                ImplAnimView{ const_cast<Animation*>(this), pOut, rDestPt, rDestSz, 0 };
+            }
+
             const_cast<Animation*>(this)->mnPos = nOldPos;
         }
     }
