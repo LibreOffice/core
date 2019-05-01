@@ -1,5 +1,3 @@
-"ScCellSearchObj";"com::sun::star::util::XSearchDescriptor";"getSearchString()"
-"ScCellSearchObj";"com::sun::star::util::XSearchDescriptor";"setSearchString()"
 "ScCellSearchObj";"com::sun::star::util::SearchDescriptor";"SearchBackwards"
 "ScCellSearchObj";"com::sun::star::util::SearchDescriptor";"SearchCaseSensitive"
 "ScCellSearchObj";"com::sun::star::util::SearchDescriptor";"SearchWords"
