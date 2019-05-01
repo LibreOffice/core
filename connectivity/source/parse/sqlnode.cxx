@@ -2073,8 +2073,8 @@ void OSQLParseNode::absorptions(OSQLParseNode*& pSearchCondition)
         pNewNode = pSearchCondition->removeAt(sal_uInt32(0));
         replaceAndReset(pSearchCondition,pNewNode);
     }
-    // (a or b) and a || ( b or c ) and a
-    // a and ( a or b) || a and ( b or c )
+    // ( a or b ) and a || ( b or c ) and a
+    // a and ( a or b ) || a and ( b or c )
     else if (   SQL_ISRULE(pSearchCondition,boolean_term)
             &&  (
                     (       SQL_ISRULE(pSearchCondition->getChild(nPos = 0),boolean_primary)
