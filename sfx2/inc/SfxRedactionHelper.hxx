@@ -15,6 +15,7 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include <tools/gen.hxx>
 
 #include <vector>
 
@@ -47,7 +48,7 @@ public:
      * and pushes into the given vector.
      * */
     static void getPageMetaFilesFromDoc(std::vector<GDIMetaFile>& aMetaFiles,
-                                        const sal_Int32& nPages,
+                                        std::vector<::Size>& aPageSizes, const sal_Int32& nPages,
                                         DocumentToGraphicRenderer& aRenderer, bool bIsWriter,
                                         bool bIsCalc);
     /*
@@ -55,7 +56,8 @@ public:
      * and inserts the shapes into the newly created draw pages.
      * */
     static void addPagesToDraw(uno::Reference<XComponent>& xComponent, const sal_Int32& nPages,
-                               const std::vector<GDIMetaFile>& aMetaFiles, bool bIsCalc);
+                               const std::vector<GDIMetaFile>& aMetaFiles,
+                               const std::vector<::Size>& aPageSizes, bool bIsCalc);
     /*
      * Makes the Redaction toolbar visible to the user.
      * Meant to be called after converting a document to a Draw doc
