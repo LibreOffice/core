@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_74f2fe08",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 6527,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-05-01T08:54:22Z",
+      "side": 1,
+      "message": "Is this element expected to exist? the test says nothing about that, and getXPathPosition simply returns total number of children when absent child is looked for - something I\u0027m trying to change in https://gerrit.libreoffice.org/71614, and don\u0027t know if absent \"bookmark-start\" is OK, or it\u0027s just that design flaw of getXPathPosition that I\u0027m trying to fix that allowed a unit test to continue passing when something already broke.",
+      "range": {
+        "startLine": 6527,
+        "startChar": 12,
+        "endLine": 6527,
+        "endChar": 81
+      },
+      "revId": "6126de0363b070a914f06a1b853979317aa0a183",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
