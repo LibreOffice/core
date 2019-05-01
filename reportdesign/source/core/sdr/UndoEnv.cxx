@@ -38,6 +38,7 @@
 
 #include <connectivity/dbtools.hxx>
 #include <svl/hint.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>

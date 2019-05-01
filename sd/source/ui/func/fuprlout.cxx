@@ -22,6 +22,7 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
+#include <svl/stritem.hxx>
 
 #include <sdattr.hrc>
 #include <drawdoc.hxx>

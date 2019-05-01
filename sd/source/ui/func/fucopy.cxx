@@ -19,6 +19,7 @@
 
 #include <fucopy.hxx>
 #include <sfx2/progress.hxx>
+#include <svl/intitem.hxx>
 
 #include <sdattr.hrc>
 #include <sdresid.hxx>

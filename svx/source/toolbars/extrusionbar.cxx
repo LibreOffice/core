@@ -38,6 +38,8 @@
 #include <svx/svdview.hxx>
 #include <editeng/colritem.hxx>
 #include <svx/chrtitem.hxx>
+#include <svx/sdasitm.hxx>
+#include <svl/intitem.hxx>
 
 #include <svx/extrusionbar.hxx>
 #include <extrusiondepthdialog.hxx>

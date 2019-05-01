@@ -127,6 +127,7 @@
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 
 #include <sfx2/lokcharthelper.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 #define TWIPS_PER_PIXEL 15

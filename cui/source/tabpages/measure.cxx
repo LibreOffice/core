@@ -30,7 +30,6 @@
 #include <svx/measctrl.hxx>
 #include <svx/ofaitem.hxx>
 #include <svx/strarray.hxx>
-#include <svx/svdattr.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sxekitm.hxx>

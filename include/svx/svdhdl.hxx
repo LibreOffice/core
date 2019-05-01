@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SVDHDL_HXX
 
 #include <tools/gen.hxx>
+#include <vcl/graph.hxx>
 
 #include <svl/solar.hrc>
 

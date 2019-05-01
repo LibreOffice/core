@@ -42,6 +42,7 @@
 #include <svl/whiter.hxx>
 #include <sfx2/app.hxx>
 #include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <svl/visitem.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <sfx2/objface.hxx>

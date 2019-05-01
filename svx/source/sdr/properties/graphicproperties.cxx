@@ -27,6 +27,12 @@
 #include <svx/svdograf.hxx>
 #include <svx/sdgcpitm.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/sdgluitm.hxx>
+#include <svx/sdgcoitm.hxx>
+#include <svx/sdggaitm.hxx>
+#include <svx/sdgtritm.hxx>
+#include <svx/sdginitm.hxx>
+#include <svx/sdgmoitm.hxx>
 
 namespace sdr
 {

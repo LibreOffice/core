@@ -26,6 +26,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/svdmodel.hxx>
 #include <vcl/canvastools.hxx>
+#include <svx/sdmetitm.hxx>
 
 namespace sdr { namespace contact {
 

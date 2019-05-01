@@ -405,7 +405,6 @@
 #include <svx/sdynitm.hxx>
 #include <svx/selectioncontroller.hxx>
 #include <svx/shapeproperty.hxx>
-#include <svx/svdattr.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svddrgv.hxx>

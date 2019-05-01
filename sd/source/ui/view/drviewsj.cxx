@@ -29,6 +29,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/sxelditm.hxx>
+#include <svx/sdtfsitm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svdopath.hxx>

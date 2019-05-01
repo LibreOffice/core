@@ -20,6 +20,7 @@
 #include <vcl/settings.hxx>
 
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/viewsh.hxx>
 #include <editeng/paperinf.hxx>

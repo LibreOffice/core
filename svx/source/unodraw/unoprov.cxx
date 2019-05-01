@@ -43,6 +43,10 @@
 #include <strings.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/sdtaaitm.hxx>
+#include <svx/sdtacitm.hxx>
+#include <svx/sdtaiitm.hxx>
+#include <svx/sdtayitm.hxx>
 
 #include "shapeimpl.hxx"
 #include <unordered_map>

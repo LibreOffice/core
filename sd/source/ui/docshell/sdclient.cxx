@@ -19,6 +19,7 @@
 
 #include <Client.hxx>
 #include <svx/svdoole2.hxx>
+#include <tools/debug.hxx>
 
 #include <ViewShell.hxx>
 #include <View.hxx>

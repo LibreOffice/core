@@ -23,6 +23,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/eeitem.hxx>
+#include <tools/debug.hxx>
 
 #include <svx/svxerr.hxx>
 #include <svx/dialmgr.hxx>

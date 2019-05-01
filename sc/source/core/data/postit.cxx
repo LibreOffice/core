@@ -37,6 +37,9 @@
 #include <svx/xflclit.hxx>
 #include <svx/sdshitm.hxx>
 #include <svx/sdsxyitm.hxx>
+#include <svx/sdtditm.hxx>
+#include <svx/sdtagitm.hxx>
+#include <svx/sdtmfitm.hxx>
 #include <tools/gen.hxx>
 
 #include <document.hxx>

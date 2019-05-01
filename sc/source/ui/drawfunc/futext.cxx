@@ -23,6 +23,7 @@
 #include <svx/sdtaaitm.hxx>
 #include <svx/sdtacitm.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/sdtagitm.hxx>
 #include <editeng/unolingu.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>

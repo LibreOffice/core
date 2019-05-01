@@ -19,9 +19,11 @@
 
 #include <fuprobjs.hxx>
 
+#include <svl/stritem.hxx>
 #include <svl/style.hxx>
 #include <editeng/outliner.hxx>
 #include <svl/hint.hxx>
+#include <tools/debug.hxx>
 
 #include <app.hrc>
 

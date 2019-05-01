@@ -32,6 +32,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 
 #include <svx/AccessibleShape.hxx>
 #include <svx/ChildrenManager.hxx>

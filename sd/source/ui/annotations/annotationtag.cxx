@@ -30,6 +30,7 @@
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svddrgmt.hxx>
+#include <tools/debug.hxx>
 
 #include <View.hxx>
 #include <sdresid.hxx>

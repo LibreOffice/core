@@ -43,6 +43,9 @@
 #include <svx/svxdlg.hxx>
 
 #include <svl/itempool.hxx>
+#include <svl/intitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>

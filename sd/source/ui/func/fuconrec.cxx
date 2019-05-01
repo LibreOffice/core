@@ -45,6 +45,8 @@
 #include <svx/xtable.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/sdtagitm.hxx>
+#include <svx/sdtditm.hxx>
 
 #include <svx/svdocapt.hxx>
 

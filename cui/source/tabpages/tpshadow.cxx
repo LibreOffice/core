@@ -29,7 +29,13 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xpool.hxx>
-#include <svx/svdattr.hxx>
+#include <svx/sdmetitm.hxx>
+#include <svx/sdooitm.hxx>
+#include <svx/sdprcitm.hxx>
+#include <svx/sdshcitm.hxx>
+#include <svx/sdshitm.hxx>
+#include <svx/sdshtitm.hxx>
+#include <svx/sdsxyitm.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/xfltrit.hxx>
 #include <cuitabarea.hxx>

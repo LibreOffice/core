@@ -27,6 +27,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
+#include <svl/stritem.hxx>
 
 #include <app.hrc>
 #include <fusel.hxx>

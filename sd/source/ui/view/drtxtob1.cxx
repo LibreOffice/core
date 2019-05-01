@@ -34,6 +34,7 @@
 #include <sfx2/app.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itempool.hxx>
+#include <svl/stritem.hxx>
 #include <svl/style.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/request.hxx>

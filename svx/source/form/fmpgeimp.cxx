@@ -40,6 +40,7 @@
 #include <svx/fmglob.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/fmmodel.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/stdtext.hxx>
 #include <svx/dialmgr.hxx>

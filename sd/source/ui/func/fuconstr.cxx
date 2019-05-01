@@ -25,6 +25,7 @@
 #include <svx/xfillit0.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <tools/debug.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>

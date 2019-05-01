@@ -20,6 +20,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <svx/svddef.hxx>
+#include <svx/sdasitm.hxx>
 #include <svx/sdtditm.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svx/sdtaitm.hxx>

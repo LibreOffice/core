@@ -28,6 +28,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <svl/whiter.hxx>
+#include <svl/stritem.hxx>
 
 #include "imapwrap.hxx"
 #include <tabvwsh.hxx>

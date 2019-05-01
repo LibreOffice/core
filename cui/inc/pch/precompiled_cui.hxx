@@ -332,7 +332,6 @@
 #include <svx/sdtmfitm.hxx>
 #include <svx/sdynitm.hxx>
 #include <svx/shapeproperty.hxx>
-#include <svx/svdattr.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svdhlpln.hxx>
 #include <svx/svdoattr.hxx>

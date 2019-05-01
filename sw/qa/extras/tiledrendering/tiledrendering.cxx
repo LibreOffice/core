@@ -25,6 +25,7 @@
 #include <editeng/outliner.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/slstitm.hxx>
+#include <svl/stritem.hxx>
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>

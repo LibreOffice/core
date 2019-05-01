@@ -33,6 +33,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/slstitm.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <comphelper/lok.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdoutl.hxx>

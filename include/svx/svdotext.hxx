@@ -23,6 +23,9 @@
 #include <vcl/field.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/svdoattr.hxx>
+#include <svx/sdtaitm.hxx>
+#include <svx/sdtakitm.hxx>
+#include <svx/sdtaditm.hxx>
 #include <svx/svdtrans.hxx>
 #include <tools/datetime.hxx>
 #include <svl/style.hxx>
@@ -35,6 +38,7 @@
 #include <memory>
 #include <vector>
 
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 
 //   forward declarations
 

@@ -34,6 +34,7 @@
 #include <ViewShellManager.hxx>
 #include <Window.hxx>
 
+#include <tools/debug.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

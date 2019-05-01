@@ -36,6 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <rtl/character.hxx>
+#include <tools/debug.hxx>
 
 namespace sd {
 
