@@ -273,6 +273,12 @@ OUString SAL_CALL AccessibleSlideSorterView::getAccessibleName()
     return SdResId(SID_SD_A11Y_I_SLIDEVIEW_N);
 }
 
+OUString SAL_CALL AccessibleSlideSorterView::getAccessibleId()
+{
+    ThrowIfDisposed();
+    return OUString();
+}
+
 Reference<XAccessibleRelationSet> SAL_CALL
     AccessibleSlideSorterView::getAccessibleRelationSet()
 {

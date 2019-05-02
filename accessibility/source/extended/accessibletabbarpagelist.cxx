@@ -462,6 +462,12 @@ namespace accessibility
     }
 
 
+    OUString AccessibleTabBarPageList::getAccessibleId(  )
+    {
+        return OUString();
+    }
+
+
     Reference< XAccessibleRelationSet > AccessibleTabBarPageList::getAccessibleRelationSet(  )
     {
         OExternalLockGuard aGuard( this );

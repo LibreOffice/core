@@ -211,6 +211,12 @@ OUString OAccessibleMenuComponent::getAccessibleName(  )
 }
 
 
+OUString OAccessibleMenuComponent::getAccessibleId(  )
+{
+    return OUString();
+}
+
+
 Reference< XAccessibleRelationSet > OAccessibleMenuComponent::getAccessibleRelationSet(  )
 {
     OExternalLockGuard aGuard( this );

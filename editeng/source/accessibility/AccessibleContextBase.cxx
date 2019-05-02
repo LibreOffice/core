@@ -274,6 +274,14 @@ OUString SAL_CALL
 }
 
 
+OUString SAL_CALL
+       AccessibleContextBase::getAccessibleId()
+{
+    ThrowIfDisposed ();
+    return OUString();
+}
+
+
 /** Return a copy of the relation set.
 */
 uno::Reference<XAccessibleRelationSet> SAL_CALL

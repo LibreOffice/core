@@ -290,6 +290,13 @@ OUString SAL_CALL ValueSetAcc::getAccessibleName()
 }
 
 
+OUString SAL_CALL ValueSetAcc::getAccessibleId()
+{
+    ThrowIfDisposed();
+    return OUString();
+}
+
+
 uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueSetAcc::getAccessibleRelationSet()
 {
     ThrowIfDisposed();
@@ -863,6 +870,12 @@ OUString SAL_CALL ValueItemAcc::getAccessibleName()
 }
 
 
+OUString SAL_CALL ValueItemAcc::getAccessibleId()
+{
+    return OUString();
+}
+
+
 uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueItemAcc::getAccessibleRelationSet()
 {
     return uno::Reference< accessibility::XAccessibleRelationSet >();
@@ -1202,6 +1215,12 @@ OUString SAL_CALL SvtValueItemAcc::getAccessibleName()
             return mpParent->maText;
     }
 
+    return OUString();
+}
+
+
+OUString SAL_CALL SvtValueItemAcc::getAccessibleId()
+{
     return OUString();
 }
 
@@ -1624,6 +1643,13 @@ OUString SAL_CALL SvtValueSetAcc::getAccessibleName()
     }
 
     return aRet;
+}
+
+
+OUString SAL_CALL SvtValueSetAcc::getAccessibleId()
+{
+    ThrowIfDisposed();
+    return OUString();
 }
 
 uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL SvtValueSetAcc::getAccessibleRelationSet()

@@ -597,6 +597,11 @@ OUString SAL_CALL AccessibleCell::getAccessibleName()
     return AccessibleCellBase::getAccessibleName();
 }
 
+OUString SAL_CALL AccessibleCell::getAccessibleId()
+{
+    return OUString();
+}
+
 void AccessibleCell::UpdateChildren()
 {
     if (mpText)

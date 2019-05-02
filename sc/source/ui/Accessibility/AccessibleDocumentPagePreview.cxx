@@ -1509,4 +1509,9 @@ OUString ScAccessibleDocumentPagePreview::getAccessibleName()
     return aName;
 }
 
+OUString ScAccessibleDocumentPagePreview::getAccessibleId()
+{
+    return OUString();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
