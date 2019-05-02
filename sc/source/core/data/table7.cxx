@@ -19,6 +19,7 @@
 #include <tabprotection.hxx>
 #include <columniterator.hxx>
 #include <drwlayer.hxx>
+#include <compressedarray.hxx>
 
 bool ScTable::IsMerged( SCCOL nCol, SCROW nRow ) const
 {
@@ -140,7 +141,16 @@ void ScTable::CopyOneCellFromClip(
     }
 
     if (nCol1 == 0 && nCol2 == MAXCOL && mpRowHeights)
+    {
         mpRowHeights->setValue(nRow1, nRow2, pSrcTab->GetOriginalHeight(nSrcRow));
+
+        if (pRowFlags && pSrcTab->pRowFlags) {
+           if (pSrcTab->pRowFlags->GetValue(nSrcRow) & CRFlags::ManualSize)
+               pRowFlags->OrValue(nRow1, CRFlags::ManualSize);
+           else
+               pRowFlags->AndValue(nRow1, ~CRFlags::ManualSize);
+        }
+    }
 
     // Copy graphics over too
     bool bCopyGraphics
