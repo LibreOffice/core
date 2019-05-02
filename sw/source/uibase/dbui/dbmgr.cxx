@@ -358,7 +358,7 @@ static bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
     bool bRet = false;
     try
     {
-        if(pParam->aSelection.getLength())
+        if(pParam->aSelection.hasElements())
         {
             if(pParam->aSelection.getLength() <= nAbsPos)
             {
@@ -939,7 +939,7 @@ static bool lcl_SaveDoc(
         if( pStoreToFilterOptions )
             pDstMed->GetItemSet()->Put( SfxStringItem(SID_FILE_FILTEROPTIONS,
                                         *pStoreToFilterOptions));
-        if( pSaveToFilterData->getLength() )
+        if( pSaveToFilterData->hasElements() )
             pDstMed->GetItemSet()->Put( SfxUnoAnyItem(SID_FILTER_DATA,
                                         uno::makeAny(*pSaveToFilterData)));
     }
@@ -2139,7 +2139,7 @@ bool SwDBManager::GetColumnCnt(const OUString& rSourceName, const OUString& rTab
     if (!pFound)
         return false;
     //check validity of supplied record Id
-    if(pFound->aSelection.getLength())
+    if(pFound->aSelection.hasElements())
     {
         //the destination has to be an element of the selection
         const uno::Any* pSelection = pFound->aSelection.getConstArray();
@@ -2303,7 +2303,7 @@ static bool lcl_ToNextRecord( SwDSParam* pParam, const SwDBNextRecord action )
 
     try
     {
-        if( pParam->aSelection.getLength() )
+        if( pParam->aSelection.hasElements() )
         {
             if( pParam->nSelectionIndex >= pParam->aSelection.getLength() )
                 pParam->bEndOfDB = true;
@@ -2479,7 +2479,7 @@ sal_uInt32      SwDBManager::GetSelectedRecordId(
         {
             try
             {   //if a selection array is set the current row at the result set may not be set yet
-                if(pFound->aSelection.getLength())
+                if(pFound->aSelection.hasElements())
                 {
                     sal_Int32 nSelIndex = pFound->nSelectionIndex;
                     if(nSelIndex >= pFound->aSelection.getLength())

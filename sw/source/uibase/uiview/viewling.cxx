@@ -679,7 +679,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
             sal_Int32 nErrorInResult = -1;
             uno::Sequence< OUString > aSuggestions;
             bool bCorrectionRes = false;
-            if (!xAlt.is() || xAlt->getAlternatives().getLength() == 0)
+            if (!xAlt.is() || !xAlt->getAlternatives().hasElements())
             {
                 sal_Int32 nErrorPosInText = -1;
                 bCorrectionRes = m_pWrtShell->GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, &rPt, aToFill );
@@ -689,12 +689,12 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                 // we like to use the grammar checking context menu if we either get
                 // some suggestions or at least a comment about the error found...
                 bUseGrammarContext = bCorrectionRes &&
-                        (aSuggestions.getLength() > 0 || !aMessageText.isEmpty());
+                        (aSuggestions.hasElements() || !aMessageText.isEmpty());
             }
 
             // open respective context menu for spell check or grammar errors with correction suggestions...
             if ((!bUseGrammarContext && xAlt.is()) ||
-                (bUseGrammarContext && bCorrectionRes && aGrammarCheckRes.aErrors.getLength() > 0))
+                (bUseGrammarContext && bCorrectionRes && aGrammarCheckRes.aErrors.hasElements()))
             {
                 // get paragraph text
                 OUString aParaText;

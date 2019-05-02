@@ -126,7 +126,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         {
             SvxAsianConfig aAsian;
             Sequence<lang::Locale> aLocales =  aAsian.GetStartEndCharLocales();
-            if (aLocales.getLength())
+            if (aLocales.hasElements())
             {
                 const lang::Locale* pLocales = aLocales.getConstArray();
                 for(sal_Int32 i = 0; i < aLocales.getLength(); i++)

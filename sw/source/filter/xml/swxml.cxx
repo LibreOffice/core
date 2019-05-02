@@ -320,7 +320,7 @@ ErrCode ReadThroughComponent(
 
     // set Base URL
     uno::Reference< beans::XPropertySet > xInfoSet;
-    if( rFilterArguments.getLength() > 0 )
+    if( rFilterArguments.hasElements() )
         rFilterArguments.getConstArray()[0] >>= xInfoSet;
     OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
@@ -903,7 +903,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     if ( *o3tl::doAccess<bool>(aAny) )
         nRedlineFlags |= RedlineFlags::ShowDelete;
     aAny = xInfoSet->getPropertyValue( sRecordChanges );
-    if ( *o3tl::doAccess<bool>(aAny) || (aKey.getLength() > 0) )
+    if ( *o3tl::doAccess<bool>(aAny) || aKey.hasElements() )
         nRedlineFlags |= RedlineFlags::On;
 
     // ... restore redline mode

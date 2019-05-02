@@ -921,7 +921,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 {
     auto xResultSet = xResultSet_in;
 
-    const Any* pSelection = rSelection.getLength() ? rSelection.getConstArray() : nullptr;
+    const Any* pSelection = rSelection.hasElements() ? rSelection.getConstArray() : nullptr;
     SwWrtShell& rSh = pView->GetWrtShell();
 
     //with the drag and drop interface no result set is initially available

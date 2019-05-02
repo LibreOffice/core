@@ -95,7 +95,7 @@ static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet> const & xSou
             xSourceProperties->getPropertyValue("TableFilter") >>= aFilters;
             uno::Sequence<PropertyValue> aInfo;
             xSourceProperties->getPropertyValue("Info") >>= aInfo;
-            if(aFilters.getLength() == 1 && aInfo.getLength() )
+            if(aFilters.getLength() == 1 && aInfo.hasElements() )
             {
                 OUString sExtension;
                 OUString sCharSet;
@@ -490,7 +490,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
             }
             else if(nTables == 1)
             {
-                if(aTables.getLength())
+                if(aTables.hasElements())
                 {
                     m_aDBData.sCommand = aTables[0];
                     m_aDBData.nCommandType = CommandType::TABLE;
