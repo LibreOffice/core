@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_97a9cce0",
+        "filename": "offapi/com/sun/star/text/TextGraphicObject.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-02T07:18:28Z",
+      "side": 1,
+      "message": "I\u0027m fine either way (with the updated description anyway; but remember---I\u0027m absolutely no domain expert here).  Just note that it is later on easier to add a \"forgotten\" optional property here than to remove one that had been added in error (i.e., if it turns out that the \"Graphic\" property should contain the transformed image after all).",
+      "parentUuid": "3fa0c359_51ccb488",
+      "revId": "4138fcabf745f57a09802d2a8c514fce15bff20e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f91af0f_bf8dd77c",
         "filename": "offapi/type_reference/offapi.idl",
         "patchSetId": 1
