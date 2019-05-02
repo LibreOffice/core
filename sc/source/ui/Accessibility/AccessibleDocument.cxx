@@ -1751,6 +1751,12 @@ OUString SAL_CALL
     return aName;
 }
 
+OUString SAL_CALL
+    ScAccessibleDocument::getAccessibleId()
+{
+    return OUString();
+}
+
 ///=====  XAccessibleSelection  ===========================================
 
 void SAL_CALL

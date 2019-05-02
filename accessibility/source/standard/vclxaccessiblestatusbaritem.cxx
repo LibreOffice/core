@@ -308,6 +308,12 @@ OUString VCLXAccessibleStatusBarItem::getAccessibleName(  )
 }
 
 
+OUString VCLXAccessibleStatusBarItem::getAccessibleId(  )
+{
+    return OUString();
+}
+
+
 Reference< XAccessibleRelationSet > VCLXAccessibleStatusBarItem::getAccessibleRelationSet(  )
 {
     OExternalLockGuard aGuard( this );

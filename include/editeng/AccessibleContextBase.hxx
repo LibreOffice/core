@@ -199,6 +199,10 @@ public:
     virtual OUString SAL_CALL
         getAccessibleName() override;
 
+    /// Return the object's Id.
+    virtual OUString SAL_CALL
+        getAccessibleId() override;
+
     /// Return NULL to indicate that an empty relation set.
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet() override;

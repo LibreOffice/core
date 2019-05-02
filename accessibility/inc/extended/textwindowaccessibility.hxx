@@ -186,6 +186,8 @@ private:
 
     virtual OUString SAL_CALL getAccessibleName() override;
 
+    virtual OUString SAL_CALL getAccessibleId() override;
+
     virtual
     css::uno::Reference< css::accessibility::XAccessibleRelationSet >
     SAL_CALL getAccessibleRelationSet() override;

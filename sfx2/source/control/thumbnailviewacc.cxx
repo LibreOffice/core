@@ -218,6 +218,12 @@ OUString SAL_CALL ThumbnailViewAcc::getAccessibleName()
     return aRet;
 }
 
+OUString SAL_CALL ThumbnailViewAcc::getAccessibleId()
+{
+    ThrowIfDisposed();
+    return OUString();
+}
+
 uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ThumbnailViewAcc::getAccessibleRelationSet()
 {
     ThrowIfDisposed();
@@ -693,6 +699,12 @@ OUString SAL_CALL SfxThumbnailViewAcc::getAccessibleName()
     }
 
     return aRet;
+}
+
+OUString SAL_CALL SfxThumbnailViewAcc::getAccessibleId()
+{
+    ThrowIfDisposed();
+    return OUString();
 }
 
 uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL SfxThumbnailViewAcc::getAccessibleRelationSet()
@@ -1174,6 +1186,11 @@ OUString SAL_CALL ThumbnailViewItemAcc::getAccessibleName()
     }
 
     return aRet;
+}
+
+OUString SAL_CALL ThumbnailViewItemAcc::getAccessibleId()
+{
+    return OUString();
 }
 
 uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ThumbnailViewItemAcc::getAccessibleRelationSet()

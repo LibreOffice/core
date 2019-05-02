@@ -664,6 +664,12 @@ OUString AccessibleDialogWindow::getAccessibleName(  )
 }
 
 
+OUString AccessibleDialogWindow::getAccessibleId(  )
+{
+    return OUString();
+}
+
+
 Reference< XAccessibleRelationSet > AccessibleDialogWindow::getAccessibleRelationSet(  )
 {
     OExternalLockGuard aGuard( this );

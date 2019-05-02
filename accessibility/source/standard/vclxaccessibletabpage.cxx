@@ -369,6 +369,12 @@ OUString VCLXAccessibleTabPage::getAccessibleName(  )
 }
 
 
+OUString VCLXAccessibleTabPage::getAccessibleId(  )
+{
+    return OUString();
+}
+
+
 Reference< XAccessibleRelationSet > VCLXAccessibleTabPage::getAccessibleRelationSet(  )
 {
     OExternalLockGuard aGuard( this );

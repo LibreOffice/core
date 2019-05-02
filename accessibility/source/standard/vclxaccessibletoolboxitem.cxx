@@ -379,6 +379,11 @@ OUString SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleName(  )
     return GetText();
 }
 
+OUString SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleId(  )
+{
+    return OUString();
+}
+
 Reference< XAccessibleRelationSet > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleRelationSet(  )
 {
     OContextEntryGuard aGuard( this );

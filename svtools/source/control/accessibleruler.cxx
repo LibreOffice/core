@@ -190,6 +190,11 @@ OUString SAL_CALL SvtRulerAccessible::getAccessibleName()
     return msName;
 }
 
+OUString SAL_CALL SvtRulerAccessible::getAccessibleId()
+{
+    return OUString();
+}
+
 /** Return empty uno::Reference to indicate that the relation set is not
     supported.
 */
