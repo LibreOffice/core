@@ -631,7 +631,7 @@ void EnhancedCustomShape2d::SetPathSize( sal_Int32 nIndex )
     sal_Int32 nWidth = 0;
     sal_Int32 nHeight = 0;
 
-    if ( seqSubViewSize.getLength() && nIndex < seqSubViewSize.getLength() ) {
+    if ( seqSubViewSize.hasElements() && nIndex < seqSubViewSize.getLength() ) {
         nWidth = seqSubViewSize[ nIndex ].Width;
         nHeight = seqSubViewSize[ nIndex ].Height;
         SAL_INFO(
@@ -1094,10 +1094,9 @@ Color EnhancedCustomShape2d::GetColorData( const Color& rFillColor, sal_uInt32 n
 
 tools::Rectangle EnhancedCustomShape2d::GetTextRect() const
 {
-    sal_Int32 nIndex, nSize = seqTextFrames.getLength();
-    if ( !nSize )
+    if ( !seqTextFrames.hasElements() )
         return aLogicRect;
-    nIndex = 0;
+    sal_Int32 nIndex = 0;
     Point aTopLeft( GetPoint( seqTextFrames[ nIndex ].TopLeft, !bOOXMLShape, true ) );
     Point aBottomRight( GetPoint( seqTextFrames[ nIndex ].BottomRight, !bOOXMLShape, true ) );
     if ( bFlipH )
@@ -2561,9 +2560,7 @@ void EnhancedCustomShape2d::AdaptObjColor(
 
 SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
 {
-    const sal_Int32 nCoordSize(seqCoordinates.getLength());
-
-    if ( !nCoordSize )
+    if ( !seqCoordinates.hasElements() )
     {
         return nullptr;
     }
@@ -2748,7 +2745,7 @@ SdrObject* EnhancedCustomShape2d::CreateObject( bool bLineGeometryNeededOnly )
 
 void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
 {
-    if ( pObj && seqGluePoints.getLength() )
+    if ( pObj && seqGluePoints.hasElements() )
     {
         sal_uInt32 i, nCount = seqGluePoints.getLength();
         for ( i = 0; i < nCount; i++ )

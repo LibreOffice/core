@@ -135,11 +135,11 @@ void SAL_CALL OFSStreamContainer::release()
 //  XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL OFSStreamContainer::getTypes()
 {
-    if ( m_aTypes.getLength() == 0 )
+    if ( !m_aTypes.hasElements() )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        if ( m_aTypes.getLength() == 0 )
+        if ( !m_aTypes.hasElements() )
         {
             std::vector<uno::Type> tmp;
             tmp.push_back(cppu::UnoType<lang::XTypeProvider>::get());

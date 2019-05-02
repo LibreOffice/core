@@ -241,7 +241,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
         aComponentDisplayNames[0] = componentName + sDisplayName;
         uno::Sequence< uno::Any > aComponentDisplayNamesValue = GetProperties( aComponentDisplayNames );
         OUString sComponentDisplayName;
-        if ( aComponentDisplayNamesValue.getLength() && (aComponentDisplayNamesValue[0] >>= sComponentDisplayName) )
+        if ( aComponentDisplayNamesValue.hasElements() && (aComponentDisplayNamesValue[0] >>= sComponentDisplayName) )
         {
             m_aComponentDisplayNames.emplace(componentName.getToken(1, '/'),sComponentDisplayName);
         }
@@ -327,7 +327,7 @@ void ExtendedColorConfig_Impl::FillComponentColors(uno::Sequence < OUString >& _
             const uno::Any* pColors = aColors.getConstArray();
 
             uno::Sequence< uno::Any > aDefaultColors = GetProperties( aDefaultColorNames );
-            bool bDefaultColorFound = aDefaultColors.getLength() != 0;
+            bool bDefaultColorFound = aDefaultColors.hasElements();
             const uno::Any* pDefaultColors = aDefaultColors.getConstArray();
 
             OUString* pColorIter = aColorNames.getArray();

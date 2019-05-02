@@ -1352,7 +1352,7 @@ OUString SfxDocTplService_Impl::CreateNewGroupFsys( const OUString& rGroupName, 
 {
     OUString aResultURL;
 
-    if ( maTemplateDirs.getLength() )
+    if ( maTemplateDirs.hasElements() )
     {
         OUString aTargetPath = maTemplateDirs[ maTemplateDirs.getLength() - 1 ];
 
@@ -1509,7 +1509,7 @@ bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
         if ( aGroupTargetURL.isEmpty() )
             return false; // nothing is allowed to be removed
 
-        if ( !maTemplateDirs.getLength() )
+        if ( !maTemplateDirs.hasElements() )
             return false;
 
         // check that the fs location is in writable folder and this is not a "My templates" folder
@@ -1622,7 +1622,7 @@ bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
     if ( aGroupTargetURL.isEmpty() )
         return false;
 
-    if ( !maTemplateDirs.getLength() )
+    if ( !maTemplateDirs.hasElements() )
         return false;
 
     // check that the fs location is in writable folder and this is not a "My templates" folder
@@ -1723,7 +1723,7 @@ bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         if ( getProperty( aTemplateToRemove, TARGET_URL, aValue ) )
             aValue >>= aTemplateToRemoveTargetURL;
 
-        if ( aGroupTargetURL.isEmpty() || !maTemplateDirs.getLength()
+        if ( aGroupTargetURL.isEmpty() || !maTemplateDirs.hasElements()
           || (!aTemplateToRemoveTargetURL.isEmpty() && isInternalTemplateDir(aTemplateToRemoveTargetURL)) )
             return false; // it is not allowed to remove the template
     }
@@ -1788,7 +1788,7 @@ bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         SequenceAsHashMap aTypeProps( xTypeDetection->getByName( aTypeName ) );
         uno::Sequence< OUString > aAllExt =
             aTypeProps.getUnpackedValueOrDefault("Extensions", Sequence< OUString >() );
-        if ( !aAllExt.getLength() )
+        if ( !aAllExt.hasElements() )
             throw uno::RuntimeException();
 
         const OUString aMediaType {aTypeProps.getUnpackedValueOrDefault("MediaType", OUString() )};

@@ -201,7 +201,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const OUString& rSequenceName
 
 void SdrCustomShapeGeometryItem::ClearPropertyValue( const OUString& rPropName )
 {
-    if ( aPropSeq.getLength() )
+    if ( aPropSeq.hasElements() )
     {
         PropertyHashMap::iterator aHashIter( aPropHashMap.find( rPropName ) );
         if ( aHashIter != aPropHashMap.end() )

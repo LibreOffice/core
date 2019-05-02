@@ -43,7 +43,7 @@ namespace svt { namespace uno
 
         sal_Int16 lcl_determineFirstPageID( const Sequence< Sequence< sal_Int16 > >& i_rPaths )
         {
-            ENSURE_OR_THROW( ( i_rPaths.getLength() > 0 ) && ( i_rPaths[0].getLength() > 0 ), "illegal paths" );
+            ENSURE_OR_THROW( i_rPaths.hasElements() && i_rPaths[0].hasElements(), "illegal paths" );
             return i_rPaths[0][0];
         }
     }

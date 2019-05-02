@@ -238,7 +238,7 @@ static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
                 if (rProp.Name == "Extensions")
                 {
                     css::uno::Sequence < OUString > aExtensions;
-                    if ( ( rProp.Value >>= aExtensions ) && aExtensions.getLength() > 0 )
+                    if ( ( rProp.Value >>= aExtensions ) && aExtensions.hasElements() )
                     {
                         const OUString* pExtensions = aExtensions.getConstArray();
                         aExtension = pExtensions[0];

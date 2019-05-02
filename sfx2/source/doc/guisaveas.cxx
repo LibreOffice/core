@@ -434,7 +434,7 @@ const ::comphelper::SequenceAsHashMap& ModelData_Impl::GetModuleProps()
     {
         uno::Sequence< beans::PropertyValue > aModuleProps;
         m_pOwner->GetModuleManager()->getByName( GetModuleName() ) >>= aModuleProps;
-        if ( !aModuleProps.getLength() )
+        if ( !aModuleProps.hasElements() )
             throw uno::RuntimeException(); // TODO;
         m_pModulePropsHM.reset( new ::comphelper::SequenceAsHashMap( aModuleProps ) );
     }
@@ -490,7 +490,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
 {
     uno::Sequence< beans::PropertyValue > aFilterProps;
     uno::Sequence< beans::PropertyValue > aProps = GetDocServiceDefaultFilter();
-    if ( aProps.getLength() )
+    if ( aProps.hasElements() )
     {
         ::comphelper::SequenceAsHashMap aFiltHM( aProps );
         SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aFiltHM.getUnpackedValueOrDefault("Flags",
@@ -547,7 +547,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl(
     {
         aFilterProps = GetDocServiceDefaultFilterCheckFlags( nMust, nDont );
 
-        if ( !aFilterProps.getLength() )
+        if ( !aFilterProps.hasElements() )
         {
             // the default filter was not found, use just the first acceptable one
             aFilterProps = GetDocServiceAnyFilter( nMust, nDont );
@@ -1136,13 +1136,13 @@ OUString ModelData_Impl::GetRecommendedExtension( const OUString& aTypeName )
     if ( xTypeDetection.is() )
     {
        uno::Sequence< beans::PropertyValue > aTypeNameProps;
-       if ( ( xTypeDetection->getByName( aTypeName ) >>= aTypeNameProps ) && aTypeNameProps.getLength() )
+       if ( ( xTypeDetection->getByName( aTypeName ) >>= aTypeNameProps ) && aTypeNameProps.hasElements() )
        {
            ::comphelper::SequenceAsHashMap aTypeNamePropsHM( aTypeNameProps );
            uno::Sequence< OUString > aExtensions = aTypeNamePropsHM.getUnpackedValueOrDefault(
                                            "Extensions",
                                            ::uno::Sequence< OUString >() );
-           if ( aExtensions.getLength() )
+           if ( aExtensions.hasElements() )
                return aExtensions[0];
        }
     }
@@ -1422,8 +1422,8 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
     // preselect a filter for the storing process
     uno::Sequence< beans::PropertyValue > aFilterProps = aModelData.GetPreselectedFilter_Impl( nStoreMode );
 
-    DBG_ASSERT( aFilterProps.getLength(), "No filter for storing!\n" );
-    if ( !aFilterProps.getLength() )
+    DBG_ASSERT( aFilterProps.hasElements(), "No filter for storing!\n" );
+    if ( !aFilterProps.hasElements() )
         throw task::ErrorCodeIOException(
             "SfxStoringHelper::GUIStoreModel: ERRCODE_IO_INVALIDPARAMETER",
             uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_INVALIDPARAMETER));

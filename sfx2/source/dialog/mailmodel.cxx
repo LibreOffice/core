@@ -432,7 +432,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                         uno::Sequence< OUString > aExtensions = aTypeNamePropsHM.getUnpackedValueOrDefault(
                                                         "Extensions",
                                                         ::uno::Sequence< OUString >() );
-                        if ( aExtensions.getLength() )
+                        if ( aExtensions.hasElements() )
                             aExtension = aExtensions[0];
                     }
                     catch ( css::container::NoSuchElementException& )

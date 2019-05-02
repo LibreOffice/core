@@ -299,7 +299,7 @@ void SAL_CALL SvxUnoDrawingModel::release() throw ( )
 // XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawingModel::getTypes(  )
 {
-    if( maTypeSequence.getLength() == 0 )
+    if( !maTypeSequence.hasElements() )
     {
         maTypeSequence = comphelper::concatSequences( SfxBaseModel::getTypes(),
             uno::Sequence {

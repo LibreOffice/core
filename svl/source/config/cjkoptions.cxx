@@ -146,7 +146,7 @@ void    SvtCJKOptions_Impl::SetAll(bool bSet)
 void SvtCJKOptions_Impl::Load()
 {
     Sequence<OUString> &rPropertyNames = PropertyNames::get();
-    if(!rPropertyNames.getLength())
+    if(!rPropertyNames.hasElements())
     {
         rPropertyNames.realloc(9);
         OUString* pNames = rPropertyNames.getArray();

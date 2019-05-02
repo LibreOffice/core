@@ -126,16 +126,16 @@ Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
     else if( aName == "to" &&  !m_aRecipient.isEmpty() )
         return makeAny( m_aRecipient );
 
-    else if( aName == "cc" &&  m_CcRecipients.getLength() )
+    else if( aName == "cc" &&  m_CcRecipients.hasElements() )
         return makeAny( m_CcRecipients );
 
-    else if( aName == "bcc" &&  m_BccRecipients.getLength() )
+    else if( aName == "bcc" &&  m_BccRecipients.hasElements() )
         return makeAny( m_BccRecipients );
 
     else if( aName == "subject" &&  !m_aSubject.isEmpty() )
         return makeAny( m_aSubject );
 
-    else if( aName == "attachment" &&  m_Attachments.getLength() )
+    else if( aName == "attachment" &&  m_Attachments.hasElements() )
         return makeAny( m_Attachments );
 
     throw NoSuchElementException("key not found: " + aName,
@@ -158,16 +158,16 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
     if( !m_aRecipient.isEmpty() )
         aRet[nItems++] = "to";
 
-    if( m_CcRecipients.getLength() )
+    if( m_CcRecipients.hasElements() )
         aRet[nItems++] = "cc";
 
-    if( m_BccRecipients.getLength() )
+    if( m_BccRecipients.hasElements() )
         aRet[nItems++] = "bcc";
 
     if( !m_aSubject.isEmpty() )
         aRet[nItems++] = "subject";
 
-    if( m_Attachments.getLength() )
+    if( m_Attachments.hasElements() )
         aRet[nItems++] = "attachment";
 
     aRet.realloc( nItems );
@@ -187,16 +187,16 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
     else if( aName == "to" &&  !m_aRecipient.isEmpty() )
         return true;
 
-    else if( aName == "cc" &&  m_CcRecipients.getLength() )
+    else if( aName == "cc" &&  m_CcRecipients.hasElements() )
         return true;
 
-    else if( aName == "bcc" &&  m_BccRecipients.getLength() )
+    else if( aName == "bcc" &&  m_BccRecipients.hasElements() )
         return true;
 
     else if( aName == "subject" &&  !m_aSubject.isEmpty() )
         return true;
 
-    else if( aName == "attachment" &&  m_Attachments.getLength() )
+    else if( aName == "attachment" &&  m_Attachments.hasElements() )
         return true;
 
     return false;
@@ -210,7 +210,7 @@ Type SAL_CALL CmdMailMsg::getElementType(  )
 
 sal_Bool SAL_CALL CmdMailMsg::hasElements(  )
 {
-    return 0 != getElementNames().getLength();
+    return getElementNames().hasElements();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -152,7 +152,7 @@ SfxPrintHelper::SfxPrintHelper()
 
 void SAL_CALL SfxPrintHelper::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
 {
-    if ( !aArguments.getLength() )
+    if ( !aArguments.hasElements() )
         return;
 
     css::uno::Reference < css::frame::XModel > xModel;

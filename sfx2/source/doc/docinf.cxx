@@ -235,7 +235,7 @@ bool SaveOlePropertySet(
 
     rGlobSect.SetStringValue( PROPID_REVNUMBER,
                 OUString::number( i_xDocProps->getEditingCycles() ) );
-    if ( i_pThumb && i_pThumb->getLength() )
+    if ( i_pThumb && i_pThumb->hasElements() )
         rGlobSect.SetThumbnailValue( PROPID_THUMBNAIL, *i_pThumb );
 
     // save the property set

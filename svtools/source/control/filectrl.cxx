@@ -222,7 +222,7 @@ IMPL_LINK_NOARG(FileControl, ButtonHdl, Button*, void)
         {
             Sequence < OUString > aPathSeq = xFilePicker->getSelectedFiles();
 
-            if ( aPathSeq.getLength() )
+            if ( aPathSeq.hasElements() )
             {
                 OUString aNewText = aPathSeq[0];
                 INetURLObject aObj( aNewText );

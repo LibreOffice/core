@@ -965,7 +965,7 @@ namespace svxform
             Sequence< Any > aOutArgs;
             EventObject aEvent;
             Any aCaller;
-            if ( ( _rArguments.getLength() > 0 ) && ( _rArguments[ 0 ] >>= aEvent ) )
+            if ( _rArguments.hasElements() && ( _rArguments[ 0 ] >>= aEvent ) )
             {
                 try
                 {

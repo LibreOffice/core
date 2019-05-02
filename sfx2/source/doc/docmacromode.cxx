@@ -311,7 +311,7 @@ namespace sfx2
                     const OUString aStdLibName( "Standard" );
                     const OUString aVBAProject( "VBAProject" );
                     Sequence< OUString > aElements = xContainer->getElementNames();
-                    if ( aElements.getLength() )
+                    if ( aElements.hasElements() )
                     {
                         sal_Int32 nElements = aElements.getLength();
                         for( sal_Int32 i = 0; i < nElements; ++i )

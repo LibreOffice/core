@@ -516,7 +516,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                             pDocInfoItem->UpdateDocumentInfo(getDocProperties());
                             const uno::Sequence< document::CmisProperty >& aNewCmisProperties =
                                 pDocInfoItem->GetCmisProperties( );
-                            if ( aNewCmisProperties.getLength( ) > 0 )
+                            if ( aNewCmisProperties.hasElements( ) )
                                 xCmisDoc->updateCmisProperties( aNewCmisProperties );
                             SetUseUserData( pDocInfoItem->IsUseUserData() );
                             SetUseThumbnailSave( pDocInfoItem-> IsUseThumbnailSave() );

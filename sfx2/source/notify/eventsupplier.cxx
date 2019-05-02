@@ -162,10 +162,7 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasElements()
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    if ( maEventNames.getLength() )
-        return true;
-    else
-        return false;
+    return maEventNames.hasElements();
 }
 
 void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::DocumentEvent& aTrigger, SfxObjectShell* pDoc )

@@ -1060,7 +1060,7 @@ void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
         pImpl->nFlagsInProgress |= SfxLoadedFlags::MAINDOCUMENT;
         static_cast<SfxHeaderAttributes_Impl*>(GetHeaderAttributes())->SetAttributes();
 
-        if ( ( GetModifyPasswordHash() || GetModifyPasswordInfo().getLength() ) && !IsModifyPasswordEntered() )
+        if ( ( GetModifyPasswordHash() || GetModifyPasswordInfo().hasElements() ) && !IsModifyPasswordEntered() )
             SetReadOnly();
 
         // Salvage
@@ -1758,7 +1758,7 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature( bool bAllowUIToAddAuthor
         {
             uno::Sequence< security::DocumentSignatureInformation > aInfo = rDocShell.GetDocumentSignatureInformation( true, xSigner );
 
-            if ( aInfo.getLength() )
+            if ( aInfo.hasElements() )
             {
                 if ( nScriptingSignatureState == SignatureState::UNKNOWN )
                     nScriptingSignatureState = SfxObjectShell::ImplCheckSignaturesInformation( aInfo );

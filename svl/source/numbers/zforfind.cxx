@@ -1234,7 +1234,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
     {
         nAcceptedDatePattern = -1;
     }
-    else if (!sDateAcceptancePatterns.getLength())
+    else if (!sDateAcceptancePatterns.hasElements())
     {
         // The current locale is the format's locale, if a format is present.
         const NfEvalDateFormat eEDF = pFormatter->GetEvalDateFormat();
@@ -1276,8 +1276,8 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                 break;
             }
         }
-        SAL_WARN_IF( !sDateAcceptancePatterns.getLength(), "svl.numbers", "ImpSvNumberInputScan::IsAcceptedDatePattern: no date acceptance patterns");
-        nAcceptedDatePattern = (sDateAcceptancePatterns.getLength() ? -2 : -1);
+        SAL_WARN_IF( !sDateAcceptancePatterns.hasElements(), "svl.numbers", "ImpSvNumberInputScan::IsAcceptedDatePattern: no date acceptance patterns");
+        nAcceptedDatePattern = (sDateAcceptancePatterns.hasElements() ? -2 : -1);
     }
 
     if (nAcceptedDatePattern == -1)
@@ -3590,7 +3590,7 @@ void ImpSvNumberInputScan::ChangeIntl()
 
 void ImpSvNumberInputScan::InvalidateDateAcceptancePatterns()
 {
-    if (sDateAcceptancePatterns.getLength())
+    if (sDateAcceptancePatterns.hasElements())
     {
         sDateAcceptancePatterns = css::uno::Sequence< OUString >();
     }

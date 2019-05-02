@@ -183,7 +183,7 @@ void SvxRubyData_Impl::disposing(const EventObject&)
 void SvxRubyData_Impl::AssertOneEntry()
 {
     //create one entry
-    if (!aRubyValues.getLength())
+    if (!aRubyValues.hasElements())
     {
         aRubyValues.realloc(1);
         Sequence<PropertyValue>& rValues = aRubyValues.getArray()[0];
@@ -521,7 +521,7 @@ IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, weld::ScrolledWindow&, rScroll, void)
 IMPL_LINK_NOARG(SvxRubyDialog, ApplyHdl_Impl, weld::Button&, void)
 {
     const Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
-    if (!aRubyValues.getLength())
+    if (!aRubyValues.hasElements())
     {
         AssertOneEntry();
         PositionHdl_Impl(*m_xPositionLB);

@@ -802,7 +802,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
     const Sequence< Type > & rTypes )
 {
     Reference< XInterface > xRet;
-    if (xReceiver.is() && rTypes.getLength())
+    if (xReceiver.is() && rTypes.hasElements())
     {
         t_ptr_set * adapter_set;
         AdapterImpl * that;

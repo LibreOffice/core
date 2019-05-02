@@ -1030,7 +1030,7 @@ void SAL_CALL SvXMLGraphicImportExportHelper::initialize(
     const Sequence< Any >& aArguments )
 {
     Reference< embed::XStorage > xStorage;
-    if( aArguments.getLength() > 0 )
+    if( aArguments.hasElements() )
         aArguments[0] >>= xStorage;
 
     rtl::Reference<SvXMLGraphicHelper> pHelper( SvXMLGraphicHelper::Create( xStorage, m_eGraphicHelperMode ));

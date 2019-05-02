@@ -1104,7 +1104,7 @@ namespace svxform
                     makeAny( Reference< XForm >( xCurrentChild, UNO_QUERY ) ) );
             }
 
-            if (aEvts.getLength())
+            if (aEvts.hasElements())
             {
                 xManager.set(xContainer, UNO_QUERY);
                 if (xManager.is())

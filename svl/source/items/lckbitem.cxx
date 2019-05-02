@@ -57,7 +57,7 @@ bool SfxLockBytesItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
     css::uno::Sequence< sal_Int8 > aSeq;
     if ( rVal >>= aSeq )
     {
-        if ( aSeq.getLength() )
+        if ( aSeq.hasElements() )
         {
             SvMemoryStream* pStream = new SvMemoryStream();
             pStream->WriteBytes( aSeq.getConstArray(), aSeq.getLength() );

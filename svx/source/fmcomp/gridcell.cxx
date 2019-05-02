@@ -2550,7 +2550,7 @@ void DbListBox::SetList(const Any& rItems)
                  pField->InsertEntry(*pStrings);
 
             m_rColumn.getModel()->getPropertyValue(FM_PROP_VALUE_SEQ) >>= m_aValueList;
-            m_bBound = m_aValueList.getLength() > 0;
+            m_bBound = m_aValueList.hasElements();
 
             // tell the grid control that this controller is invalid and has to be re-initialized
             invalidatedController();
@@ -2636,7 +2636,7 @@ void DbListBox::updateFromModel( Reference< XPropertySet > _rxModel )
     _rxModel->getPropertyValue( FM_PROP_SELECT_SEQ ) >>= aSelection;
 
     sal_Int16 nSelection = -1;
-    if ( aSelection.getLength() > 0 )
+    if ( aSelection.hasElements() )
         nSelection = aSelection[ 0 ];
 
     ListBox* pListBox = static_cast< ListBox* >( m_pWindow.get() );

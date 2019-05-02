@@ -987,7 +987,7 @@ void TreeControlPeer::updateTree( const css::awt::tree::TreeDataModelEvent& rEve
 
     Sequence< Reference< XTreeNode > > Nodes;
     Reference< XTreeNode > xNode( rEvent.ParentNode );
-    if( !xNode.is() && Nodes.getLength() )
+    if( !xNode.is() && Nodes.hasElements() )
     {
         xNode = Nodes[0];
     }

@@ -292,7 +292,7 @@ void SfxSecurityPage_Impl::Reset_Impl()
             uno::Sequence< sal_Int8 > aPasswordHash;
             // check if password is available
             if (pCurDocShell->GetProtectionHash( aPasswordHash ) &&
-                aPasswordHash.getLength() > 0)
+                aPasswordHash.hasElements())
                 m_bOrigPasswordIsConfirmed = false;  // password found, needs to be confirmed later on
         }
         else

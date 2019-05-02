@@ -1337,7 +1337,7 @@ void SmViewShell::Insert( SfxMedium& rMedium )
 
     uno::Reference <embed::XStorage> xStorage = rMedium.GetStorage();
     uno::Reference <container::XNameAccess> xNameAccess(xStorage, uno::UNO_QUERY);
-    if (xNameAccess.is() && xNameAccess->getElementNames().getLength())
+    if (xNameAccess.is() && xNameAccess->getElementNames().hasElements())
     {
         if (xNameAccess->hasByName("content.xml") || xNameAccess->hasByName("Content.xml"))
         {

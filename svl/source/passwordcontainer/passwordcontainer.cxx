@@ -703,7 +703,7 @@ bool PasswordContainer::createUrlRecord(
     {
         Sequence< UserRecord > aUsrRec
             = FindUsr( rIter->second, aName, aHandler );
-        if( aUsrRec.getLength() )
+        if( aUsrRec.hasElements() )
         {
             rRec = UrlRecord( rIter->first, aUsrRec );
             return true;
@@ -1001,7 +1001,7 @@ Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Refere
                 aUsers[ oldLen ] = UserRecord( aNP.GetUserName(), comphelper::containerToSequence( DecodePasswords( aNP.GetPersPasswords(), GetMasterPassword( xHandler ), css::task::PasswordRequestMode_PASSWORD_ENTER ) ) );
             }
 
-        if( aUsers.getLength() )
+        if( aUsers.hasElements() )
         {
             sal_Int32 oldLen = aResult.getLength();
             aResult.realloc( oldLen + 1 );

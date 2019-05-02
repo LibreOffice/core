@@ -127,7 +127,7 @@ void SmartTagMenuController::FillMenu()
         const css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > >& rActionComponents = rActionComponentsSequence[i];
         const css::uno::Sequence< sal_Int32 >& rActionIndices = rActionIndicesSequence[i];
 
-        if ( 0 == rActionComponents.getLength() || 0 == rActionIndices.getLength() )
+        if ( !rActionComponents.hasElements() || !rActionIndices.hasElements() )
             continue;
 
         // Ask first entry for the smart tag type caption

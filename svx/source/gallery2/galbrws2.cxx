@@ -191,7 +191,7 @@ void SAL_CALL GalleryThemePopup::statusChanged(
             {
                 mpBackgroundPopup->InsertItem( 1, sItem );
             }
-            else if ( ( rEvent.State >>= sItems ) && sItems.getLength() )
+            else if ( ( rEvent.State >>= sItems ) && sItems.hasElements() )
             {
                 const OUString *pStr = sItems.getConstArray();
                 const OUString *pEnd = pStr + sItems.getLength();
