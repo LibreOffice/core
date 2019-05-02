@@ -3,6 +3,7 @@ module com {
   module star {
    module accessibility {
     interface XAccessibleContext;
+    interface XAccessibleContext2;
     interface XAccessible {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::accessibility::XAccessibleContext getAccessibleContext();
