@@ -149,7 +149,7 @@ IFrameObject::IFrameObject(const uno::Reference < uno::XComponentContext >& rxCo
     : mxContext( rxContext )
     , maPropMap( lcl_GetIFramePropertyMap_Impl() )
 {
-    if ( aArguments.getLength() )
+    if ( aArguments.hasElements() )
         aArguments[0] >>= mxObj;
 }
 

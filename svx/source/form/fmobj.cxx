@@ -284,7 +284,7 @@ void FmFormObj::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
             xNewParent->insertByIndex(xNewParent->getCount(), makeAny(xMeAsFormComp));
 
             // transfer the events
-            if (aNewEvents.getLength())
+            if (aNewEvents.hasElements())
             {
                 try
                 {

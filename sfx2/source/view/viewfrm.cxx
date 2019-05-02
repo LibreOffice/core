@@ -216,7 +216,7 @@ bool IsSignPDF(const SfxObjectShellRef& xObjSh)
 bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHandler >& xHandler, const OUString& aPath, const std::shared_ptr<const SfxFilter>& pFilter, sal_uInt32 nPasswordHash, const uno::Sequence< beans::PropertyValue >& aInfo )
 {
     // TODO/LATER: In future the info should replace the direct hash completely
-    bool bResult = ( !nPasswordHash && !aInfo.getLength() );
+    bool bResult = ( !nPasswordHash && !aInfo.hasElements() );
 
     SAL_WARN_IF( !(pFilter && ( pFilter->GetFilterFlags() & SfxFilterFlags::PASSWORDTOMODIFY )), "sfx.view",
                        "PasswordToModify feature is active for a filter that does not support it!");
@@ -242,7 +242,7 @@ bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHandler >
 
             if ( pPasswordRequest->isPassword() )
             {
-                if ( aInfo.getLength() )
+                if ( aInfo.hasElements() )
                 {
                     bResult = ::comphelper::DocPasswordHelper::IsModifyPasswordCorrect( pPasswordRequest->getPasswordToModify(), aInfo );
                 }
@@ -358,7 +358,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             else
             {
                 if ( pSh->IsReadOnlyMedium()
-                  && ( pSh->GetModifyPasswordHash() || pSh->GetModifyPasswordInfo().getLength() )
+                  && ( pSh->GetModifyPasswordHash() || pSh->GetModifyPasswordInfo().hasElements() )
                   && !pSh->IsModifyPasswordEntered() )
                 {
                     const OUString aDocumentName = INetURLObject( pMed->GetOrigURL() ).GetMainURL( INetURLObject::DecodeMechanism::WithCharset );
@@ -1896,7 +1896,7 @@ SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc
 {
     Reference< XModel > xDocument( i_rDoc.GetModel(), UNO_SET_THROW );
 
-    ::comphelper::NamedValueCollection aTransformLoadArgs( i_rLoadArgs.getLength() ? i_rLoadArgs : xDocument->getArgs() );
+    ::comphelper::NamedValueCollection aTransformLoadArgs( i_rLoadArgs.hasElements() ? i_rLoadArgs : xDocument->getArgs() );
     aTransformLoadArgs.put( "Model", xDocument );
     if ( i_nViewId )
         aTransformLoadArgs.put( "ViewId", sal_uInt16( i_nViewId ) );

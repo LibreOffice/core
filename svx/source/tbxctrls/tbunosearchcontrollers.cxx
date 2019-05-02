@@ -1381,7 +1381,7 @@ css::uno::Sequence< OUString > SAL_CALL FindbarDispatcher::getSupportedServiceNa
 // XInitialization
 void SAL_CALL FindbarDispatcher::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
 {
-    if ( aArguments.getLength() )
+    if ( aArguments.hasElements() )
         aArguments[0] >>= m_xFrame;
 }
 

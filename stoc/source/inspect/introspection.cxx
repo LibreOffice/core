@@ -1978,7 +1978,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                         {
                             // Get methods must not have any parameters
                             Sequence< Reference<XIdlClass> > getParams = rxMethod_i->getParameterTypes();
-                            if( getParams.getLength() > 0 )
+                            if( getParams.hasElements() )
                             {
                                 continue;
                             }

@@ -166,7 +166,7 @@ namespace sfx2
         );
         aStrippedArguments.realloc( pStrippedArgsEnd - pStrippedArgs );
 
-        if ( aStrippedArguments.getLength() )
+        if ( aStrippedArguments.hasElements() )
         {
             Reference< XInitialization > xModelInit( xInstance, UNO_QUERY );
             OSL_ENSURE( xModelInit.is(), "SfxModelFactory::createInstanceWithArguments: no XInitialization!" );

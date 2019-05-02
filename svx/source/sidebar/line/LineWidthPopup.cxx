@@ -174,7 +174,7 @@ void LineWidthPopup::SetWidthSelect(long lValue, bool bValuable, MapUnit eMapUni
     {
         css::uno::Sequence <css::beans::NamedValue> aSeq = aWinOpt.GetUserData();
         OUString aTmp;
-        if ( aSeq.getLength())
+        if ( aSeq.hasElements())
             aSeq[0].Value >>= aTmp;
 
         OUString aWinData( aTmp );

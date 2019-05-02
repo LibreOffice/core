@@ -190,7 +190,7 @@ public:
     explicit            SfxOleThumbnailProperty( sal_Int32 nPropId,
                             const uno::Sequence<sal_Int8> & i_rData);
 
-    bool         IsValid() const { return mData.getLength() > 0; }
+    bool         IsValid() const { return mData.hasElements(); }
 
 private:
     virtual void        ImplLoad( SvStream& rStrm ) override;
@@ -211,7 +211,7 @@ class SfxOleBlobProperty : public SfxOlePropertyBase
 public:
     explicit            SfxOleBlobProperty( sal_Int32 nPropId,
                             const uno::Sequence<sal_Int8> & i_rData);
-    bool         IsValid() const { return mData.getLength() > 0; }
+    bool         IsValid() const { return mData.hasElements(); }
 
 private:
     virtual void        ImplLoad( SvStream& rStrm ) override;

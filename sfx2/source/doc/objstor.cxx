@@ -679,7 +679,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                     bWarnMediaTypeFallback = false;
                 }
 
-                if ( bWarnMediaTypeFallback || !xStorage->getElementNames().getLength() )
+                if ( bWarnMediaTypeFallback || !xStorage->getElementNames().hasElements() )
                     SetError(ERRCODE_IO_BROKENPACKAGE);
             }
             catch( uno::Exception& )
@@ -1434,7 +1434,7 @@ bool SfxObjectShell::SaveTo_Impl
                 try
                 {
                     Sequence < util::RevisionTag > aVersions = rMedium.GetVersionList();
-                    if ( aVersions.getLength() )
+                    if ( aVersions.hasElements() )
                     {
                         // copy the version streams
                         const OUString aVersionsName( "Versions"  );
@@ -2908,7 +2908,7 @@ HiddenInformation SfxObjectShell::GetHiddenInformationState( HiddenInformation n
     HiddenInformation nState = HiddenInformation::NONE;
     if ( nStates & HiddenInformation::DOCUMENTVERSIONS )
     {
-        if ( GetMedium()->GetVersionList().getLength() )
+        if ( GetMedium()->GetVersionList().hasElements() )
             nState |= HiddenInformation::DOCUMENTVERSIONS;
     }
 

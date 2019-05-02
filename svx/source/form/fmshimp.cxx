@@ -358,7 +358,7 @@ namespace
         if (!xEventManager.is())
             return; // nothing to do
 
-        if (!rTransferIfAvailable.getLength())
+        if (!rTransferIfAvailable.hasElements())
             return; // nothing to do
 
         // check for the index of the model within its parent
@@ -1203,7 +1203,7 @@ bool FmXFormShell::executeControlConversionSlot_Lock(const Reference<XFormCompon
 
             // transfer script events
             // (do this _after_ SetUnoControlModel as we need the new (implicitly created) control)
-            if (aOldScripts.getLength())
+            if (aOldScripts.hasElements())
             {
                 // find the control for the model
                 Reference<XControlContainer> xControlContainer(getControlContainerForView_Lock());

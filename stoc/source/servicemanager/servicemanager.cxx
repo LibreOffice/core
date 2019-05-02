@@ -90,7 +90,7 @@ Sequence< OUString > retrieveAsciiValueList(
             {
                 Sequence< OUString > seq2 = retrieveAsciiValueList( xTempReg, keyName );
 
-                if( seq2.getLength() )
+                if( seq2.hasElements() )
                 {
                     sal_Int32 n1Len = seq.getLength();
                     sal_Int32 n2Len = seq2.getLength();
@@ -978,7 +978,7 @@ Reference<XEnumeration > OServiceManager::createContentEnumeration(
     check_undisposed();
     Sequence< Reference< XInterface > > factories(
         OServiceManager::queryServiceFactories( aServiceName, m_xContext ) );
-    if (factories.getLength())
+    if (factories.hasElements())
         return new ServiceEnumeration_Impl( factories );
     else
         return Reference< XEnumeration >();
@@ -1371,7 +1371,7 @@ void ORegistryServiceManager::initialize(const Sequence< Any >& Arguments)
 {
     check_undisposed();
     MutexGuard aGuard( m_mutex );
-    if (Arguments.getLength() > 0)
+    if (Arguments.hasElements())
     {
         m_xRootKey.clear();
         Arguments[ 0 ] >>= m_xRegistry;
@@ -1413,7 +1413,7 @@ Sequence< Reference< XInterface > > ORegistryServiceManager::queryServiceFactori
 {
     Sequence< Reference< XInterface > > ret(
         OServiceManager::queryServiceFactories( aServiceName, xContext ) );
-    if (ret.getLength())
+    if (ret.hasElements())
     {
         return ret;
     }

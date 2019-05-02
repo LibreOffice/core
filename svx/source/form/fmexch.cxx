@@ -161,13 +161,13 @@ namespace svxform
 
         DataFlavorEx aFlavor;
 
-        if ( m_aHiddenControlModels.getLength() )
+        if ( m_aHiddenControlModels.hasElements() )
         {
             if ( lcl_fillDataFlavorEx( OControlExchange::getHiddenControlModelsFormatId(), aFlavor ) )
                 m_aCurrentFormats.push_back( aFlavor );
         }
 
-        if ( m_xFormsRoot.is() && m_aControlPaths.getLength() )
+        if ( m_xFormsRoot.is() && m_aControlPaths.hasElements() )
         {
             if ( lcl_fillDataFlavorEx( OControlExchange::getControlPathFormatId(), aFlavor ) )
                 m_aCurrentFormats.push_back( aFlavor );
@@ -300,10 +300,10 @@ namespace svxform
         if (m_pFocusEntry && !m_aSelectedEntries.empty())
             AddFormat(getFieldExchangeFormatId());
 
-        if (m_aControlPaths.getLength())
+        if (m_aControlPaths.hasElements())
             AddFormat(getControlPathFormatId());
 
-        if (m_aHiddenControlModels.getLength())
+        if (m_aHiddenControlModels.hasElements())
             AddFormat(getHiddenControlModelsFormatId());
     }
 

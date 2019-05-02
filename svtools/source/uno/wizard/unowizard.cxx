@@ -173,13 +173,13 @@ namespace {
     void lcl_checkPaths( const Sequence< Sequence< sal_Int16 > >& i_rPaths, const Reference< XInterface >& i_rContext )
     {
         // need at least one path
-        if ( i_rPaths.getLength() == 0 )
+        if ( !i_rPaths.hasElements() )
             throw IllegalArgumentException( OUString(), i_rContext, 2 );
 
         // each path must be of length 1, at least
         for ( sal_Int32 i = 0; i < i_rPaths.getLength(); ++i )
         {
-            if ( i_rPaths[i].getLength() == 0 )
+            if ( !i_rPaths[i].hasElements() )
                 throw IllegalArgumentException( OUString(), i_rContext, 2 );
 
             // page IDs must be in ascending order
@@ -232,7 +232,7 @@ namespace {
         Sequence< Sequence< sal_Int16 > > aMultiplePaths;
         i_Arguments[0] >>= aMultiplePaths;
 
-        if ( !aMultiplePaths.getLength() )
+        if ( !aMultiplePaths.hasElements() )
         {
             aMultiplePaths.realloc(1);
             aMultiplePaths[0] = aSinglePath;

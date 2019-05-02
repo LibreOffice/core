@@ -843,7 +843,7 @@ static Reference< XControl > lcl_firstFocussableControl( const Sequence< Referen
         }
     }
 
-    if ( !xReturn.is() && _rControls.getLength() )
+    if ( !xReturn.is() && _rControls.hasElements() )
         xReturn = _rControls[0];
 
     return xReturn;
@@ -935,7 +935,7 @@ IMPL_LINK_NOARG(FmXFormView, OnAutoFocus, void*, void)
 
         // go for the first control of the controller
         Sequence< Reference< XControl > > aControls( xTabController->getControls() );
-        if ( aControls.getLength() == 0 )
+        if ( !aControls.hasElements() )
         {
             Reference< XElementAccess > xFormElementAccess( xForm, UNO_QUERY_THROW );
             if (xFormElementAccess->hasElements() && pPage && m_pView)
@@ -947,7 +947,7 @@ IMPL_LINK_NOARG(FmXFormView, OnAutoFocus, void*, void)
                 // trigger the creation itself, so we must hack this ...
                 lcl_ensureControlsOfFormExist_nothrow( *pPage, *m_pView, *pWindow, xForm );
                 aControls = xTabController->getControls();
-                OSL_ENSURE( aControls.getLength(), "FmXFormView::OnAutoFocus: no controls at all!" );
+                OSL_ENSURE( aControls.hasElements(), "FmXFormView::OnAutoFocus: no controls at all!" );
             }
         }
 

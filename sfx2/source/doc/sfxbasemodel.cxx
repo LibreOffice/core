@@ -1979,7 +1979,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 const sal_uInt32 nLen = pStream->TellEnd();
                 Sequence< sal_Int8 > aSeq( nLen );
                 pStream->ReadBytes(aSeq.getArray(), nLen);
-                if( aSeq.getLength() )
+                if( aSeq.hasElements() )
                     aAny <<= aSeq;
             }
             catch ( Exception& )
@@ -2944,7 +2944,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                             if ( m_pData->m_pObjectShell->IsDocShared() )
                             {
                                 uno::Sequence< beans::NamedValue > aNewEncryptionData = aArgHash.getUnpackedValueOrDefault("EncryptionData", uno::Sequence< beans::NamedValue >() );
-                                if ( !aNewEncryptionData.getLength() )
+                                if ( !aNewEncryptionData.hasElements() )
                                 {
                                     aNewEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( aArgHash.getUnpackedValueOrDefault("Password", OUString()) );
                                 }
@@ -2952,7 +2952,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                                 uno::Sequence< beans::NamedValue > aOldEncryptionData;
                                 (void)GetEncryptionData_Impl( pMedium->GetItemSet(), aOldEncryptionData );
 
-                                if ( !aOldEncryptionData.getLength() && !aNewEncryptionData.getLength() )
+                                if ( !aOldEncryptionData.hasElements() && !aNewEncryptionData.hasElements() )
                                     throw;
                                 else
                                 {

@@ -199,7 +199,7 @@ SvtSystemLanguageOptions::SvtSystemLanguageOptions() :
     uno::Sequence< OUString > aPropertyNames { "SystemLocale" };
     uno::Sequence< uno::Any > aValues = GetProperties( aPropertyNames );
 
-    if ( aValues.getLength() )
+    if ( aValues.hasElements() )
     {
         aValues[0]>>= m_sWin16SystemLocale;
     }

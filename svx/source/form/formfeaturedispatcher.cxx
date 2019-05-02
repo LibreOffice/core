@@ -135,7 +135,7 @@ namespace svx
 
         try
         {
-            if ( !_rArguments.getLength() )
+            if ( !_rArguments.hasElements() )
             {
                 xFormOperations->execute( nFormFeature );
             }

@@ -268,7 +268,7 @@ sal_Bool CompoundIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & 
             else
             {
                 const Sequence< Reference< XIdlClass > > & rSeq = xType->getSuperclasses();
-                if (rSeq.getLength())
+                if (rSeq.hasElements())
                 {
                     OSL_ENSURE( rSeq.getLength() == 1, "### unexpected len of super classes!" );
                     return isAssignableFrom( rSeq[0] );

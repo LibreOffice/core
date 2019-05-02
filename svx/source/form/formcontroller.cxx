@@ -4031,7 +4031,7 @@ void SAL_CALL FormController::invalidateAllFeatures(  )
     Sequence< sal_Int16 > aInterceptedFeatures( comphelper::mapKeysToSequence(m_aFeatureDispatchers) );
 
     aGuard.clear();
-    if ( aInterceptedFeatures.getLength() )
+    if ( aInterceptedFeatures.hasElements() )
         invalidateFeatures( aInterceptedFeatures );
 }
 

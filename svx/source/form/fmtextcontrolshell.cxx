@@ -384,7 +384,7 @@ namespace svx
                     Sequence< PropertyValue > aComplexState;
                     if ( _rUnoState >>= aComplexState )
                     {
-                        if ( !aComplexState.getLength() )
+                        if ( !aComplexState.hasElements() )
                             _rSet.InvalidateItem( nWhich );
                         else
                         {
@@ -692,7 +692,7 @@ namespace svx
                         {
                             // these are no UNO slots, they need special handling since TransformItems cannot
                             // handle them
-                            DBG_ASSERT( aArgs.getLength() == 0, "FmTextControlShell::executeAttributeDialog: these are no UNO slots - are they?" );
+                            DBG_ASSERT( !aArgs.hasElements(), "FmTextControlShell::executeAttributeDialog: these are no UNO slots - are they?" );
 
                             const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>( pModifiedItem  );
                             DBG_ASSERT( pBoolItem, "FmTextControlShell::executeAttributeDialog: no bool item?!" );

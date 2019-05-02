@@ -1342,7 +1342,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                     {
                         Sequence< PropertyValue > aViewData;
                         OSL_VERIFY( xViewData->getByIndex( nViewDataIndex ) >>= aViewData );
-                        if ( aViewData.getLength() > 0 )
+                        if ( aViewData.hasElements() )
                             m_pData->m_pViewShell->ReadUserDataSequence( aViewData );
                     }
                 }

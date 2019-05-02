@@ -171,7 +171,7 @@ static void impl_FillURLList( sfx2::FileDialogHelper const * _pFileDlg, std::vec
 
     Sequence < OUString > aPathSeq = _pFileDlg->GetSelectedFiles();
 
-    if ( aPathSeq.getLength() )
+    if ( aPathSeq.hasElements() )
     {
         _rpURLList.clear();
 

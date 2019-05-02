@@ -230,7 +230,7 @@ void SvtCTLOptions_Impl::ImplCommit()
 void SvtCTLOptions_Impl::Load()
 {
     Sequence< OUString >& rPropertyNames = PropertyNames::get();
-    if ( !rPropertyNames.getLength() )
+    if ( !rPropertyNames.hasElements() )
     {
         rPropertyNames.realloc(6);
         OUString* pNames = rPropertyNames.getArray();
