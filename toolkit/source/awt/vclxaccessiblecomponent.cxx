@@ -620,6 +620,19 @@ OUString VCLXAccessibleComponent::getAccessibleName(  )
     return aName;
 }
 
+OUString VCLXAccessibleComponent::getAccessibleId(  )
+{
+    OExternalLockGuard aGuard( this );
+
+    OUString aId;
+    if ( GetWindow() )
+    {
+        const OUString &aWindowId = GetWindow()->get_id();
+        aId = aWindowId;
+    }
+    return aId;
+}
+
 uno::Reference< accessibility::XAccessibleRelationSet > VCLXAccessibleComponent::getAccessibleRelationSet(  )
 {
     OExternalLockGuard aGuard( this );

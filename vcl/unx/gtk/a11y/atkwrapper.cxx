@@ -31,6 +31,7 @@
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext2.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
@@ -879,6 +880,17 @@ atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessib
             else
                 OSL_ASSERT( false );
         }
+
+#if ATK_CHECK_VERSION(2,33,1)
+        {
+            css::uno::Reference<css::accessibility::XAccessibleContext2> xContext2(xContext, css::uno::UNO_QUERY);
+            if( xContext2.is() )
+            {
+                OString aId = OUStringToOString( xContext2->getAccessibleId(), RTL_TEXTENCODING_UTF8);
+                atk_object_set_accessible_id(atk_obj, aId.getStr());
+            }
+        }
+#endif
 
         return ATK_OBJECT( pWrap );
     }
