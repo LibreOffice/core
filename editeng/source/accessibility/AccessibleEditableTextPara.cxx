@@ -768,6 +768,11 @@ namespace accessibility
         return OUString();
     }
 
+    OUString SAL_CALL AccessibleEditableTextPara::getAccessibleId()
+    {
+        return OUString();
+    }
+
     uno::Reference< XAccessibleRelationSet > SAL_CALL AccessibleEditableTextPara::getAccessibleRelationSet()
     {
         // #i27138# - provide relations CONTENT_FLOWS_FROM

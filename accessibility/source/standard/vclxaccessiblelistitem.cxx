@@ -239,6 +239,11 @@ OUString SAL_CALL VCLXAccessibleListItem::getAccessibleName(  )
     return m_sEntryText;
 }
 
+OUString SAL_CALL VCLXAccessibleListItem::getAccessibleId(  )
+{
+    return OUString();
+}
+
 Reference< XAccessibleRelationSet > SAL_CALL VCLXAccessibleListItem::getAccessibleRelationSet(  )
 {
     utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;

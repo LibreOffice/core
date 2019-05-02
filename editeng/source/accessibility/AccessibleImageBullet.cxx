@@ -151,6 +151,11 @@ namespace accessibility
         return EditResId(RID_SVXSTR_A11Y_IMAGEBULLET_NAME);
     }
 
+    OUString SAL_CALL  AccessibleImageBullet::getAccessibleId()
+    {
+        return OUString();
+    }
+
     uno::Reference< XAccessibleRelationSet > SAL_CALL AccessibleImageBullet::getAccessibleRelationSet()
     {
 

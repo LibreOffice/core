@@ -327,6 +327,11 @@ OUString SAL_CALL SmGraphicAccessible::getAccessibleName()
     return aAccName;
 }
 
+OUString SAL_CALL SmGraphicAccessible::getAccessibleId()
+{
+    return OUString();
+}
+
 Reference< XAccessibleRelationSet > SAL_CALL SmGraphicAccessible::getAccessibleRelationSet()
 {
     SolarMutexGuard aGuard;
@@ -1701,6 +1706,11 @@ OUString SAL_CALL SmEditAccessible::getAccessibleName(  )
     SolarMutexGuard aGuard;
     // same name as displayed by the window when not docked
     return aAccName;
+}
+
+OUString SAL_CALL SmEditAccessible::getAccessibleId(  )
+{
+    return OUString();
 }
 
 uno::Reference< XAccessibleRelationSet > SAL_CALL SmEditAccessible::getAccessibleRelationSet(  )

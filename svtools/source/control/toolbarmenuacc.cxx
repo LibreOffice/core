@@ -224,6 +224,13 @@ OUString SAL_CALL ToolbarMenuAcc::getAccessibleName()
 }
 
 
+OUString SAL_CALL ToolbarMenuAcc::getAccessibleId()
+{
+    ThrowIfDisposed();
+    return OUString();
+}
+
+
 Reference< XAccessibleRelationSet > SAL_CALL ToolbarMenuAcc::getAccessibleRelationSet()
 {
     ThrowIfDisposed();
@@ -657,6 +664,12 @@ OUString SAL_CALL ToolbarMenuEntryAcc::getAccessibleName()
     }
 
     return aRet;
+}
+
+
+OUString SAL_CALL ToolbarMenuEntryAcc::getAccessibleId()
+{
+    return OUString();
 }
 
 

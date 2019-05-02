@@ -539,6 +539,12 @@ namespace comphelper
     }
 
 
+    OUString SAL_CALL OAccessibleContextWrapper::getAccessibleId(  )
+    {
+        return OUString();
+    }
+
+
     Reference< XAccessibleRelationSet > SAL_CALL OAccessibleContextWrapper::getAccessibleRelationSet(  )
     {
         return baseGetAccessibleRelationSet();

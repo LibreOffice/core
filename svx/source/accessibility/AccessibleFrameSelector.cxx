@@ -115,6 +115,11 @@ OUString AccFrameSelector::getAccessibleName(  )
     return SvxResId(RID_SVXSTR_FRMSEL_TEXTS[0].first);
 }
 
+OUString AccFrameSelector::getAccessibleId(  )
+{
+    return OUString();
+}
+
 Reference< XAccessibleRelationSet > AccFrameSelector::getAccessibleRelationSet(  )
 {
     SolarMutexGuard aGuard;

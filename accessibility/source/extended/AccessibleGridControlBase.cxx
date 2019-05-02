@@ -144,6 +144,11 @@ OUString SAL_CALL AccessibleGridControlBase::getAccessibleName()
     return m_aName;
 }
 
+OUString SAL_CALL AccessibleGridControlBase::getAccessibleId()
+{
+    return OUString();
+}
+
 css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL
 AccessibleGridControlBase::getAccessibleRelationSet()
 {

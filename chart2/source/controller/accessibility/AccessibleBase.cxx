@@ -542,6 +542,11 @@ sal_Int16 SAL_CALL AccessibleBase::getAccessibleRole()
     return AccessibleRole::SHAPE;
 }
 
+OUString SAL_CALL AccessibleBase::getAccessibleId()
+{
+    return OUString();
+}
+
 Reference< XAccessibleRelationSet > SAL_CALL AccessibleBase::getAccessibleRelationSet()
 {
     Reference< XAccessibleRelationSet > aResult;

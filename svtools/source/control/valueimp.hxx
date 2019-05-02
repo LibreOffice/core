@@ -138,6 +138,7 @@ public:
     virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
     virtual OUString SAL_CALL getAccessibleDescription(  ) override;
     virtual OUString SAL_CALL getAccessibleName(  ) override;
+    virtual OUString SAL_CALL getAccessibleId(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) override;
     virtual css::lang::Locale SAL_CALL getLocale(  ) override;
@@ -252,6 +253,7 @@ public:
     virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
     virtual OUString SAL_CALL getAccessibleDescription(  ) override;
     virtual OUString SAL_CALL getAccessibleName(  ) override;
+    virtual OUString SAL_CALL getAccessibleId(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) override;
     virtual css::lang::Locale SAL_CALL getLocale(  ) override;
@@ -370,6 +372,7 @@ public:
     virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
     virtual OUString SAL_CALL getAccessibleDescription(  ) override;
     virtual OUString SAL_CALL getAccessibleName(  ) override;
+    virtual OUString SAL_CALL getAccessibleId(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) override;
     virtual css::lang::Locale SAL_CALL getLocale(  ) override;
@@ -431,6 +434,7 @@ public:
     virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
     virtual OUString SAL_CALL getAccessibleDescription(  ) override;
     virtual OUString SAL_CALL getAccessibleName(  ) override;
+    virtual OUString SAL_CALL getAccessibleId(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) override;
     virtual css::lang::Locale SAL_CALL getLocale(  ) override;

@@ -880,6 +880,11 @@ atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessib
                 OSL_ASSERT( false );
         }
 
+#if ATK_CHECK_VERSION(2,33,1)
+        OString aId = OUStringToOString( xContext->getAccessibleId(), RTL_TEXTENCODING_UTF8);
+        atk_object_set_accessible_id(atk_obj, aId.getStr());
+#endif
+
         return ATK_OBJECT( pWrap );
     }
     catch (const uno::Exception &)
