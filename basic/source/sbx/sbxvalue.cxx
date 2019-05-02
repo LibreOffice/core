@@ -821,12 +821,6 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
     // Special rule 1: If one operand is null, the result is null
     else if( eThisType == SbxNULL || eOpType == SbxNULL )
         SetType( SbxNULL );
-    // Special rule 2: If the operand is Empty, the result is the 2. operand
-    else if( eThisType == SbxEMPTY
-    && !bVBAInterop
-    )
-        *this = rOp;
-    // 1996-2-13: Don't test for SbxEMPTY before Get
     else
     {
         SbxValues aL, aR;
@@ -846,7 +840,7 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                 rOp.Get( aR );
                 // From 1999-12-8, #70399: Here call GetType() again, Get() can change the type!
                 if( rOp.GetType() == SbxEMPTY )
-                    goto Lbl_OpIsEmpty;
+                    goto Lbl_OpIsEmpty;     // concatenate empty, *this stays lhs as result
                 Get( aL );
 
                 // #30576: To begin with test, if the conversion worked
@@ -891,13 +885,18 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
 
             if( rOp.Get( aR ) )     // re-do Get after type assigns above
             {
-                if( rOp.GetType() == SbxEMPTY )
-                {
-                    if ( !bVBAInterop || (  eOp != SbxNOT ) )
-                        goto Lbl_OpIsEmpty;
-                }
                 if( Get( aL ) ) switch( eOp )
                 {
+                    /* TODO: For SbxEMPTY operands with boolean operators use
+                     * the VBA Nothing definition of Comparing Nullable Types?
+                     * https://docs.microsoft.com/en-us/dotnet/visual-basic/programming-guide/language-features/data-types/nullable-value-types
+                     */
+                    /* TODO: it is unclear yet whether this also should be done
+                     * for the non-bVBAInterop case or not, or at all, consider
+                     * user defined spreadsheet functions where an empty cell
+                     * is SbxEMPTY and usually is treated as 0 zero or "" empty
+                     * string.
+                     */
                     case SbxIDIV:
                         if( aL.eType == SbxCURRENCY )
                             if( !aR.nInt64 ) SetError( ERRCODE_BASIC_ZERODIV );
@@ -984,11 +983,6 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
             bDecimal = true;
             if( rOp.Get( aR ) )
             {
-                if( rOp.GetType() == SbxEMPTY )
-                {
-                    releaseDecimalPtr( aL.pDecimal );
-                    goto Lbl_OpIsEmpty;
-                }
                 if( Get( aL ) )
                 {
                     if( aL.pDecimal && aR.pDecimal )
@@ -1034,9 +1028,6 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
 
             if( rOp.Get( aR ) )
             {
-                if( rOp.GetType() == SbxEMPTY )
-                    goto Lbl_OpIsEmpty;
-
                 if( Get( aL ) ) switch( eOp )
                 {
                     case SbxMUL:
@@ -1127,11 +1118,6 @@ Lbl_OpIsDouble:
             aL.eType = aR.eType = SbxDOUBLE;
             if( rOp.Get( aR ) )
             {
-                if( rOp.GetType() == SbxEMPTY )
-                {
-                    if ( !bVBAInterop || ( eOp != SbxNEG ) )
-                        goto Lbl_OpIsEmpty;
-                }
                 if( Get( aL ) )
                 {
                     switch( eOp )
