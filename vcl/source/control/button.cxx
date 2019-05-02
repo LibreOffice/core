@@ -812,7 +812,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
 
     if ( nDrawFlags & DrawFlags::Mono )
         aColor = COL_BLACK;
-#ifdef __APPLE__
+#ifdef MACOSX
     else if ((nButtonFlags & DrawButtonFlags::Default) && !(GetStyle() & WB_FLATBUTTON))
     {
         // Make text color white if the button is a default control on macOS.
