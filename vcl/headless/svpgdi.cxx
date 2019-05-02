@@ -548,7 +548,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
     cairo_t* cr = getCairoContext(false);
     clipRegion(cr);
 
-    const double fTransparency = (100 - nTransparency) * (1.0/100);
+    const double fTransparency = nTransparency * (1.0/100);
 
     // To make releaseCairoContext work, use empty extents
     basegfx::B2DRange extents;
@@ -557,10 +557,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
 
     if (bHasFill)
     {
-        cairo_set_source_rgba(cr, m_aFillColor.GetRed()/255.0,
-                                  m_aFillColor.GetGreen()/255.0,
-                                  m_aFillColor.GetBlue()/255.0,
-                                  fTransparency);
+        applyColor(cr, m_aFillColor, fTransparency);
 
         // set FillDamage
         extents = getClippedFillDamage(cr);
@@ -576,10 +573,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
         cairo_matrix_init_translate(&aMatrix, 0.5, 0.5);
         cairo_set_matrix(cr, &aMatrix);
 
-        cairo_set_source_rgba(cr, m_aLineColor.GetRed()/255.0,
-                                  m_aLineColor.GetGreen()/255.0,
-                                  m_aLineColor.GetBlue()/255.0,
-                                  fTransparency);
+        applyColor(cr, m_aLineColor, fTransparency);
 
         // expand with possible StrokeDamage
         extents.expand(getClippedStrokeDamage(cr));
@@ -1451,11 +1445,7 @@ bool SvpSalGraphics::drawPolyPolygon(
 
     if (bHasFill)
     {
-        cairo_set_source_rgba(cr, m_aFillColor.GetRed()/255.0,
-                                  m_aFillColor.GetGreen()/255.0,
-                                  m_aFillColor.GetBlue()/255.0,
-                                  1.0-fTransparency);
-
+        applyColor(cr, m_aFillColor, fTransparency);
         // Get FillDamage (will be extended for LineDamage below)
         extents = getClippedFillDamage(cr);
 
@@ -1469,12 +1459,7 @@ bool SvpSalGraphics::drawPolyPolygon(
         cairo_matrix_init_translate(&aMatrix, 0.5, 0.5);
         cairo_set_matrix(cr, &aMatrix);
 
-        // Note: Other methods use applyColor(...) to set the Color. That
-        // seems to do some more. Maybe it should be used here, too (?)
-        cairo_set_source_rgba(cr, m_aLineColor.GetRed()/255.0,
-                                  m_aLineColor.GetGreen()/255.0,
-                                  m_aLineColor.GetBlue()/255.0,
-                                  1.0-fTransparency);
+        applyColor(cr, m_aLineColor, fTransparency);
 
         // expand with possible StrokeDamage
         extents.expand(getClippedStrokeDamage(cr));
@@ -1490,14 +1475,14 @@ bool SvpSalGraphics::drawPolyPolygon(
     return true;
 }
 
-void SvpSalGraphics::applyColor(cairo_t *cr, Color aColor)
+void SvpSalGraphics::applyColor(cairo_t *cr, Color aColor, double fTransparency)
 {
     if (cairo_surface_get_content(m_pSurface) == CAIRO_CONTENT_COLOR_ALPHA)
     {
         cairo_set_source_rgba(cr, aColor.GetRed()/255.0,
                                   aColor.GetGreen()/255.0,
                                   aColor.GetBlue()/255.0,
-                                  1.0);
+                                  1.0 - fTransparency);
     }
     else
     {
