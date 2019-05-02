@@ -262,23 +262,23 @@ static sheet::DataPilotFieldOrientation lcl_GetDataGetOrientation( const uno::Re
     sheet::DataPilotFieldOrientation nRet = sheet::DataPilotFieldOrientation_HIDDEN;
     if ( xSource.is() )
     {
-        uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
-        uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
-        long nIntCount = xIntDims->getCount();
-        bool bFound = false;
-        for (long nIntDim=0; nIntDim<nIntCount && !bFound; nIntDim++)
+        uno::Reference<container::XNameAccess> xDimNames = xSource->getDimensions();
+        for (const OUString& rDimName: xDimNames->getElementNames())
         {
-            uno::Reference<beans::XPropertySet> xDimProp(xIntDims->getByIndex(nIntDim),
+            uno::Reference<beans::XPropertySet> xDimProp(xDimNames->getByName(rDimName),
                                                          uno::UNO_QUERY);
             if ( xDimProp.is() )
             {
-                bFound = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
+                const bool bFound = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
                     SC_UNO_DP_ISDATALAYOUT );
                 //TODO: error checking -- is "IsDataLayoutDimension" property required??
                 if (bFound)
+                {
                     nRet = ScUnoHelpFunctions::GetEnumProperty(
                             xDimProp, SC_UNO_DP_ORIENTATION,
                             sheet::DataPilotFieldOrientation_HIDDEN );
+                    break;
+                }
             }
         }
     }
