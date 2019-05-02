@@ -140,6 +140,7 @@ endif
 # general tests
 $(eval $(call gb_Module_add_check_targets,connectivity,\
 	CppunitTest_connectivity_commontools \
+	CppunitTest_connectivity_sharedresources \
 ))
 
 endif
