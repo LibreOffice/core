@@ -1016,7 +1016,7 @@ bool SwEditShell::GetGrammarCorrection(
                 }
             }
 
-            if (rResult.aErrors.getLength() > 0)    // error found?
+            if (rResult.aErrors.hasElements())    // error found?
             {
                 HandleCorrectionError( aText, aPos, nBegin, nLen, pPt, rSelectRect );
             }
@@ -1323,7 +1323,7 @@ bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCh
         aSpellRet >>= xSpellRet;
         aSpellRet >>= aGrammarResult;
         bGoOn = GetCursorCnt() > 1;
-        bGrammarErrorFound = aGrammarResult.aErrors.getLength() > 0;
+        bGrammarErrorFound = aGrammarResult.aErrors.hasElements();
         if( xSpellRet.is() || bGrammarErrorFound )
         {
             bGoOn = false;
@@ -1528,7 +1528,7 @@ void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > const & xAl
     else if(pGrammarResult)
     {
         aPortion.bIsGrammarError = true;
-        if(pGrammarResult->aErrors.getLength())
+        if(pGrammarResult->aErrors.hasElements())
         {
             aPortion.aGrammarError = pGrammarResult->aErrors[0];
             aPortion.sText = pGrammarResult->aText.copy( aPortion.aGrammarError.nErrorStart, aPortion.aGrammarError.nErrorLength );

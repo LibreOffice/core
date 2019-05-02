@@ -1096,7 +1096,7 @@ void DocxExport::WriteSettings()
                 uno::Sequence< beans::PropertyValue > rAttributeList;
                 propList[i].Value >>= rAttributeList;
 
-                if (rAttributeList.getLength())
+                if (rAttributeList.hasElements())
                 {
                     sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
                     for (sal_Int32 j = 0; j < rAttributeList.getLength(); ++j)

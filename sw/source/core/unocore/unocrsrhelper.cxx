@@ -731,7 +731,7 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
 
                 }
                 eNewState =
-                    aCharStyles.getLength() ?
+                    aCharStyles.hasElements() ?
                         PropertyState_DIRECT_VALUE : PropertyState_DEFAULT_VALUE;
                 if(pAny)
                     (*pAny) <<= aCharStyles;
@@ -1215,7 +1215,7 @@ void makeRedline( SwPaM const & rPaM,
         SfxItemPropertySet const& rPropSet = *aSwMapProvider.GetPropertySet(nMap);
 
         // Check if there are any properties
-        if (aRevertProperties.getLength())
+        if (aRevertProperties.hasElements())
         {
             SwDoc *const pDoc = rPaM.GetDoc();
 

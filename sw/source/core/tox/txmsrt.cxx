@@ -80,7 +80,7 @@ void SwTOXInternational::Init()
     if(m_sSortAlgorithm.isEmpty())
     {
         Sequence < OUString > aSeq( m_pIndexWrapper->GetAlgorithmList( aLcl ));
-        if(aSeq.getLength())
+        if(aSeq.hasElements())
             m_sSortAlgorithm = aSeq.getConstArray()[0];
     }
 

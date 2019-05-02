@@ -103,7 +103,7 @@ void SwXSelChgLstnr_Impl::selectionChanged( const EventObject&  )
     if(rParent.pImpl->xSelSupp.is())
         rParent.pImpl->xSelSupp->getSelection() >>= aSelection;
 
-    bool bEnable = aSelection.getLength() > 0;
+    bool bEnable = aSelection.hasElements();
     rParent.m_pMarkedRB->Enable(bEnable);
     if(bEnable)
         rParent.m_pMarkedRB->Check();
@@ -309,7 +309,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     if (m_pColumnLB->GetSelectedEntryCount() == 0)
         m_pColumnLB->SelectEntryPos(0);
 
-    const bool bEnable = m_aSelection.getLength() != 0;
+    const bool bEnable = m_aSelection.hasElements();
     m_pMarkedRB->Enable(bEnable);
     if (bEnable)
         m_pMarkedRB->Check();

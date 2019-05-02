@@ -1359,7 +1359,7 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
 
     bool bSupplementalMode = false;
     uno::Sequence< OUString > aNames = aRequestedAttributes;
-    if (aNames.getLength() == 0)
+    if (!aNames.hasElements())
     {
         bSupplementalMode = true;
         aNames = getAttributeNames();
@@ -1392,7 +1392,7 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
     if( bSupplementalMode )
     {
         uno::Sequence< OUString > aSupplementalNames = aRequestedAttributes;
-        if (aSupplementalNames.getLength() == 0)
+        if (!aSupplementalNames.hasElements())
             aSupplementalNames = getSupplementalAttributeNames();
 
         tAccParaPropValMap aSupplementalAttrSeq;
@@ -1586,7 +1586,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
         }
     }
 
-    if ( aRequestedAttributes.getLength() == 0 )
+    if ( !aRequestedAttributes.hasElements() )
     {
         rDefAttrSeq = aDefAttrSeq;
     }
@@ -1619,7 +1619,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
     static const char sMMToPixelRatio[] = "MMToPixelRatio";
     bool bProvideMMToPixelRatio( false );
     {
-        if ( aRequestedAttributes.getLength() == 0 )
+        if ( !aRequestedAttributes.hasElements() )
         {
             bProvideMMToPixelRatio = true;
         }
@@ -1742,7 +1742,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
             }
         }
 
-        if ( aRequestedAttributes.getLength() == 0 )
+        if ( !aRequestedAttributes.hasElements() )
         {
             rRunAttrSeq = aRunAttrSeq;
         }

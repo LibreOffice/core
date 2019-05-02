@@ -101,7 +101,7 @@ class SwNoteProps: public utl::ConfigItem
             css::uno::Sequence< css::uno::Any > aValues = GetProperties(rNames);
             const css::uno::Any* pValues = aValues.getConstArray();
             SAL_WARN_IF(aValues.getLength() != rNames.getLength(), "sw", "GetProperties failed");
-            if (aValues.getLength())
+            if (aValues.hasElements())
                     pValues[0]>>=m_bIsShowAnchor;
         }
 
@@ -112,7 +112,7 @@ class SwNoteProps: public utl::ConfigItem
         static css::uno::Sequence< OUString >& GetPropertyNames()
         {
             static css::uno::Sequence< OUString > aNames;
-            if(!aNames.getLength())
+            if(!aNames.hasElements())
             {
                 aNames.realloc(1);
                 OUString* pNames = aNames.getArray();

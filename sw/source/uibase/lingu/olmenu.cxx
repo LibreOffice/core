@@ -174,7 +174,7 @@ void SwSpellPopup::fillLangPopupMenu(
     if (xDocumentLanguages.is())
     {
         uno::Sequence< lang::Locale > rLocales( xDocumentLanguages->getDocumentLanguages( static_cast<sal_Int16>(nScriptType), nMaxCount ) );
-        if (rLocales.getLength() > 0)
+        if (rLocales.hasElements())
         {
             for (sal_Int32 i = 0; i < rLocales.getLength(); ++i)
             {
