@@ -90,6 +90,7 @@ certain functionality.
 @li @c connectivity.odbc
 @li @c connectivity.parse
 @li @c connectivity.postgresql
+@li @c connectivity.resource
 @li @c connectivity.writer
 
 @section comphelper
