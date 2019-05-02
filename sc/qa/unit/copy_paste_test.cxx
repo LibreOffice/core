@@ -32,10 +32,12 @@ public:
 
     void testCopyPasteXLS();
     void testTdf84411();
+    void testTdf124565();
 
     CPPUNIT_TEST_SUITE(ScCopyPasteTest);
     CPPUNIT_TEST(testCopyPasteXLS);
     CPPUNIT_TEST(testTdf84411);
+    CPPUNIT_TEST(testTdf124565);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -222,6 +224,63 @@ void ScCopyPasteTest::testTdf84411()
     // 5. Close the document (Ctrl-W)
     pModel->enableOpenCL(bOpenCLState);
     xComponent->dispose();
+}
+
+void ScCopyPasteTest::testTdf124565()
+{
+    // Create new document
+    ScDocShell* xDocSh = new ScDocShell(
+        SfxModelFlags::EMBEDDED_OBJECT |
+        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
+        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    xDocSh->DoInitNew();
+
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
+    CPPUNIT_ASSERT( xDesktop.is() );
+
+    Reference< frame::XFrame > xTargetFrame = xDesktop->findFrame( "_blank", 0 );
+    CPPUNIT_ASSERT( xTargetFrame.is() );
+
+    uno::Reference< frame::XModel2 > xModel2 ( xDocSh->GetModel(), UNO_QUERY );
+    CPPUNIT_ASSERT( xModel2.is() );
+
+    Reference< frame::XController2 > xController ( xModel2->createDefaultViewController( xTargetFrame ), UNO_QUERY );
+    CPPUNIT_ASSERT( xController.is() );
+
+    // introduce model/view/controller to each other
+    xController->attachModel( xModel2.get() );
+    xModel2->connectController( xController.get() );
+    xTargetFrame->setComponent( xController->getComponentWindow(), xController.get() );
+    xController->attachFrame( xTargetFrame );
+    xModel2->setCurrentController( xController.get() );
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell != nullptr);
+
+    // Set content and height of first row
+    rDoc.SetString(ScAddress(0, 0, 0), "Test");
+    rDoc.SetRowHeight(0, 0, 500);
+    rDoc.SetManualHeight(0, 0, 0, true);
+
+    // Copy first row
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScRange aCopyRange(0, 0, 0, MAXCOL, 0, 0);
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aCopyRange);
+    pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+
+    // Paste to second row
+    ScRange aPasteRange(0, 1, 0, MAXCOL, 1, 0);
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aPasteRange);
+    pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+
+    // Copy-pasted?
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("String was not pasted!", OUString("Test"), rDoc.GetString(0, 1, 0));
+
+    // And height same as in source?
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Row#2 height is invalid!", sal_uInt16(500), rDoc.GetRowHeight(1, 0, false));
+
+    CPPUNIT_ASSERT_MESSAGE("Row#2 must be manual height!", rDoc.IsManualRowHeight(1, 0));
 }
 
 ScCopyPasteTest::ScCopyPasteTest()
