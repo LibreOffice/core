@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_37b1d890",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-05-02T14:41:50Z",
+      "side": 1,
+      "message": "Or simply\n\n    *result \u003d std::clamp\u003cdouble\u003e(fResult, SAL_MIN_INT32, SAL_MAX_INT32);",
+      "range": {
+        "startLine": 292,
+        "startChar": 12,
+        "endLine": 292,
+        "endChar": 30
+      },
+      "revId": "ed67b443d1db273818737ef7996330a8f475361b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
