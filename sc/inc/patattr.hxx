@@ -65,8 +65,6 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool            operator==(const SfxPoolItem& rCmp) const override;
-    virtual bool            operator<(const SfxPoolItem& rCmp) const override;
-    virtual bool            IsSortable() const override { return true; }
 
     const SfxPoolItem&      GetItem( sal_uInt16 nWhichP ) const
                                         { return GetItemSet().Get(nWhichP); }
