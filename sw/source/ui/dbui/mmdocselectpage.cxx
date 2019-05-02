@@ -76,7 +76,7 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(SwMailMergeWizard* pWizard, T
         m_xRecentDocLB->insert_text(0, rDocs[nDoc]);
     }
     m_xRecentDocLB->set_active(0);
-    if(!rDocs.getLength())
+    if(!rDocs.hasElements())
     {
         m_xRecentDocRB->set_sensitive(false);
     }

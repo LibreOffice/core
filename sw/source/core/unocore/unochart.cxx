@@ -647,7 +647,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     // get table format for that single table from above
     SwFrameFormat    *pTableFormat  = nullptr;      // pointer to table format
     std::shared_ptr<SwUnoCursor> pUnoCursor;      // here required to check if the cells in the range do actually exist
-    if (aSubRanges.getLength() > 0)
+    if (aSubRanges.hasElements())
         GetFormatAndCreateCursorFromRangeRep( pDoc, pSubRanges[0], &pTableFormat, pUnoCursor );
 
     if (!pTableFormat || !pUnoCursor)
@@ -1297,7 +1297,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         aResult[nProps  ].Name = "DataRowSource";
         aResult[nProps++].Value <<= eDataRowSource;
 
-        if (aSequenceMapping.getLength() != 0)
+        if (aSequenceMapping.hasElements())
         {
             aResult[nProps  ].Name = "SequenceMapping";
             aResult[nProps++].Value <<= aSequenceMapping;

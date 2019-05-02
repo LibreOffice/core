@@ -61,7 +61,7 @@ SwFieldDialog::SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM, l
                 aListBox->InsertEntry(i);
         }
 
-        if (vListEntries.getLength() == 0)
+        if (!vListEntries.hasElements())
         {
             aListBox->InsertEntry(SwResId(STR_DROP_DOWN_EMPTY_LIST));
         }

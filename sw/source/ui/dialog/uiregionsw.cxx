@@ -408,8 +408,8 @@ bool SwEditRegionDlg::CheckPasswd(weld::ToggleButton* pBox)
 
     m_xTree->selected_foreach([this, &bRet](weld::TreeIter& rEntry){
         SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
-        if (!pRepr->GetTempPasswd().getLength()
-            && pRepr->GetSectionData().GetPassword().getLength())
+        if (!pRepr->GetTempPasswd().hasElements()
+            && pRepr->GetSectionData().GetPassword().hasElements())
         {
             SfxPasswordDialog aPasswdDlg(m_xDialog.get());
             bRet = false;
@@ -661,7 +661,7 @@ IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
             return;
         }
         else
-            m_xPasswdCB->set_active(aCurPasswd.getLength() > 0);
+            m_xPasswdCB->set_active(aCurPasswd.hasElements());
     }
     else if (bEntry )
     {
@@ -675,7 +675,7 @@ IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
         bool bHide = TRISTATE_TRUE == m_xHideCB->get_state();
         m_xConditionED->set_sensitive(bHide);
         m_xConditionFT->set_sensitive(bHide);
-        m_xPasswdCB->set_active(rData.GetPassword().getLength() > 0);
+        m_xPasswdCB->set_active(rData.GetPassword().hasElements());
 
         m_xOK->set_sensitive(true);
         m_xPasswdCB->set_sensitive(true);
@@ -1218,7 +1218,7 @@ void SwEditRegionDlg::ChangePasswd(bool bChange)
         SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
         if(bSet)
         {
-            if(!pRepr->GetTempPasswd().getLength() || bChange)
+            if(!pRepr->GetTempPasswd().hasElements() || bChange)
             {
                 SfxPasswordDialog aPasswdDlg(m_xDialog.get());
                 aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);
@@ -1638,7 +1638,7 @@ void SwInsertSectionTabPage::ChangePasswd(bool bChange)
     bool bSet = bChange ? bChange : m_xPasswdCB->get_active();
     if (bSet)
     {
-        if(!m_aNewPasswd.getLength() || bChange)
+        if(!m_aNewPasswd.hasElements() || bChange)
         {
             SfxPasswordDialog aPasswdDlg(GetDialogFrameWeld());
             aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);

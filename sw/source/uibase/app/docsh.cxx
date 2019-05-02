@@ -659,7 +659,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
                 if(xLib.is())
                 {
                     Sequence<OUString> aModNames = xLib->getElementNames();
-                    if(aModNames.getLength())
+                    if(aModNames.hasElements())
                     {
                         SetError(WARN_SWG_HTML_NO_MACROS);
                         break;
@@ -1362,7 +1362,7 @@ bool SwDocShell::HasChangeRecordProtection() const
 {
     if (!m_pWrtShell)
         return false;
-    return m_pWrtShell->getIDocumentRedlineAccess().GetRedlinePassword().getLength() > 0;
+    return m_pWrtShell->getIDocumentRedlineAccess().GetRedlinePassword().hasElements();
 }
 
 void SwDocShell::SetChangeRecording( bool bActivate )
@@ -1380,7 +1380,7 @@ void SwDocShell::SetProtectionPassword( const OUString &rNewPassword )
     IDocumentRedlineAccess& rIDRA = m_pWrtShell->getIDocumentRedlineAccess();
     Sequence< sal_Int8 > aPasswd = rIDRA.GetRedlinePassword();
     if (SfxItemState::SET == aSet.GetItemState(FN_REDLINE_PROTECT, false, &pItem)
-        && static_cast<const SfxBoolItem*>(pItem)->GetValue() == (aPasswd.getLength() > 0))
+        && static_cast<const SfxBoolItem*>(pItem)->GetValue() == aPasswd.hasElements())
         return;
 
     if (!rNewPassword.isEmpty())
@@ -1408,7 +1408,7 @@ bool SwDocShell::GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPas
     IDocumentRedlineAccess& rIDRA = m_pWrtShell->getIDocumentRedlineAccess();
     const Sequence< sal_Int8 >& aPasswdHash( rIDRA.GetRedlinePassword() );
     if (SfxItemState::SET == aSet.GetItemState(FN_REDLINE_PROTECT, false, &pItem)
-        && static_cast<const SfxBoolItem*>(pItem)->GetValue() == (aPasswdHash.getLength() != 0))
+        && static_cast<const SfxBoolItem*>(pItem)->GetValue() == aPasswdHash.hasElements())
         return false;
     rPasswordHash = aPasswdHash;
     bRes = true;

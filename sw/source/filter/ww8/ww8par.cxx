@@ -5567,7 +5567,7 @@ namespace
         if ( pEncryptionData && ( pEncryptionData->GetValue() >>= aEncryptionData ) && !rCodec.InitCodec( aEncryptionData ) )
             aEncryptionData.realloc( 0 );
 
-        if ( !aEncryptionData.getLength() )
+        if ( !aEncryptionData.hasElements() )
         {
             OUString sUniPassword = QueryPasswordForMedium( rMedium );
 
@@ -5621,7 +5621,7 @@ namespace
         if ( pEncryptionData && ( pEncryptionData->GetValue() >>= aEncryptionData ) && !rCodec.InitCodec( aEncryptionData ) )
             aEncryptionData.realloc( 0 );
 
-        if ( !aEncryptionData.getLength() )
+        if ( !aEncryptionData.hasElements() )
         {
             OUString sUniPassword = QueryPasswordForMedium( rMedium );
 
@@ -5767,7 +5767,7 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                     uno::Sequence< beans::NamedValue > aEncryptionData = InitXorWord95Codec(aCtx, *pMedium, m_xWwFib.get());
 
                     // if initialization has failed the EncryptionData should be empty
-                    if (aEncryptionData.getLength() && aCtx.VerifyKey(m_xWwFib->m_nKey, m_xWwFib->m_nHash))
+                    if (aEncryptionData.hasElements() && aCtx.VerifyKey(m_xWwFib->m_nKey, m_xWwFib->m_nHash))
                     {
                         nErrRet = ERRCODE_NONE;
                         pTempMain = MakeTemp(aDecryptMain);
@@ -5833,7 +5833,7 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                         aEncryptionData = Init97Codec(*xCtx, info.verifier.salt, *pMedium);
                     else
                         nErrRet = ERRCODE_SVX_READ_FILTER_CRYPT;
-                    if (aEncryptionData.getLength() && xCtx->VerifyKey(info.verifier.encryptedVerifier,
+                    if (aEncryptionData.hasElements() && xCtx->VerifyKey(info.verifier.encryptedVerifier,
                                                                        info.verifier.encryptedVerifierHash))
                     {
                         nErrRet = ERRCODE_NONE;

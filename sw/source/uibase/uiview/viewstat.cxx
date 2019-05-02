@@ -404,7 +404,7 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_DOCUMENT_COMPARE:
             case SID_DOCUMENT_MERGE:
                 if( dynamic_cast<const SwGlobalDocShell* >(GetDocShell()) != nullptr||
-                    (SID_DOCUMENT_MERGE == nWhich && m_pWrtShell->getIDocumentRedlineAccess().GetRedlinePassword().getLength()))
+                    (SID_DOCUMENT_MERGE == nWhich && m_pWrtShell->getIDocumentRedlineAccess().GetRedlinePassword().hasElements()))
                     rSet.DisableItem(nWhich);
             break;
             case  SID_VIEW_DATA_SOURCE_BROWSER:

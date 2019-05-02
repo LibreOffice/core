@@ -2322,7 +2322,7 @@ SwXTextColumns::SwXTextColumns(const SwFormatCol& rFormatCol) :
         pColumns[i].LeftMargin =    convertTwipToMm100(pCol->GetLeft ());
         pColumns[i].RightMargin =   convertTwipToMm100(pCol->GetRight());
     }
-    if(!m_aTextColumns.getLength())
+    if(!m_aTextColumns.hasElements())
         m_nReference = USHRT_MAX;
 
     m_nSepLineWidth = rFormatCol.GetLineWidth();

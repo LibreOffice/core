@@ -138,7 +138,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
                     uno::Reference< beans::XPropertySetInfo > xSetInfo = xCustomPropertySet->getPropertySetInfo();
                     const uno::Sequence< beans::Property > rProperties = xSetInfo->getProperties();
 
-                    if( rProperties.getLength() )
+                    if( rProperties.hasElements() )
                     {
                         std::unique_ptr<weld::TreeIter> xInfo(m_xTypeTLB->make_iterator());
 

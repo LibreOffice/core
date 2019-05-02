@@ -282,7 +282,7 @@ void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
     OUString sFoundNode;
     bool bManufacturerNodeFound;
     if ( m_aLabels.find( rManufacturer ) == m_aLabels.end() ||
-         GetNodeNames( rManufacturer ).getLength() == 0 )
+         !GetNodeNames( rManufacturer ).hasElements() )
     {
         bManufacturerNodeFound = false;
         // manufacturer node does not exist, add (and also to m_aManufacturers)

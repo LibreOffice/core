@@ -3248,7 +3248,7 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
             aEncryptionData.realloc( 0 );
         }
 
-        if ( !aEncryptionData.getLength() )
+        if ( !aEncryptionData.hasElements() )
         {
             // try to generate the encryption data based on password
             const SfxStringItem* pPasswordItem = SfxItemSet::GetItem<SfxStringItem>(mpMedium->GetItemSet(), SID_PASSWORD, false);
@@ -3275,12 +3275,12 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
             }
         }
 
-        if ( aEncryptionData.getLength() )
+        if ( aEncryptionData.hasElements() )
             mpMedium->GetItemSet()->ClearItem( SID_PASSWORD );
     }
 
     // nonempty encryption data means here that the codec was successfully initialized
-    return ( aEncryptionData.getLength() != 0 );
+    return aEncryptionData.hasElements();
 }
 
 ErrCode WW8Export::ExportDocument_Impl()

@@ -399,7 +399,7 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
         aSet.Put(*m_pImpl->m_pProps->m_pLRSpaceItem);
     }
     // section password
-    if (m_pImpl->m_pProps->m_Password.getLength() > 0)
+    if (m_pImpl->m_pProps->m_Password.hasElements())
     {
         aSect.SetPassword(m_pImpl->m_pProps->m_Password);
     }

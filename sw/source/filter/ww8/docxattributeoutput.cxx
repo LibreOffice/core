@@ -4338,7 +4338,7 @@ void DocxAttributeOutput::LatentStyles()
             break;
         }
     }
-    if (!aLatentStyles.getLength())
+    if (!aLatentStyles.hasElements())
         return;
 
     // Extract default attributes first.
