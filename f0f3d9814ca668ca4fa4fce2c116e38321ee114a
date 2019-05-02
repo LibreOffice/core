@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_17fa9c41",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-05-02T14:15:58Z",
+      "side": 1,
+      "message": "It\u0027s better to remove this comment, because there is no such limitation in OOXML. This is only a limitation of the recent UI of MSO for back-compatibility: https://social.msdn.microsoft.com/Forums/office/en-US/5e06f79c-ecbd-4301-a1ed-4801ee9c3858/the-restrictions-with-bookmark-name?forum\u003dworddev",
+      "range": {
+        "startLine": 1161,
+        "startChar": 34,
+        "endLine": 1161,
+        "endChar": 87
+      },
+      "revId": "f0f3d9814ca668ca4fa4fce2c116e38321ee114a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
