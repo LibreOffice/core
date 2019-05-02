@@ -1520,11 +1520,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     AttrOutput().SectFootnoteEndnotePr();
 
     // forms
-    bool bFormProtection = rSepInfo.IsProtected();
-    // use document settings when SepInfo has no protect settings (last section fragment or no sections at all)
-    if ( !rSepInfo.pSectionFormat || (reinterpret_cast<SwSectionFormat*>(sal_IntPtr(-1)) == rSepInfo.pSectionFormat) )
-        bFormProtection |= m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::PROTECT_FORM );
-    AttrOutput().SectionFormProtection( bFormProtection );
+    AttrOutput().SectionFormProtection( rSepInfo.IsProtected() );
 
     // line numbers
     const SwLineNumberInfo& rLnNumInfo = m_pDoc->GetLineNumberInfo();
