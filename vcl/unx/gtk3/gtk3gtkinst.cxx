@@ -7976,9 +7976,11 @@ public:
 
     virtual void set_text(const OUString& rText) override
     {
+        disable_notify_events();
         GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
         OString sText(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
         gtk_text_buffer_set_text(pBuffer, sText.getStr(), sText.getLength());
+        enable_notify_events();
     }
 
     virtual OUString get_text() const override
@@ -7994,10 +7996,12 @@ public:
 
     virtual void replace_selection(const OUString& rText) override
     {
+        disable_notify_events();
         GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
         gtk_text_buffer_delete_selection(pBuffer, false, gtk_text_view_get_editable(m_pTextView));
         OString sText(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
         gtk_text_buffer_insert_at_cursor(pBuffer, sText.getStr(), sText.getLength());
+        enable_notify_events();
     }
 
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) override
