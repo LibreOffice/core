@@ -17,6 +17,7 @@
 #include <cellvalues.hxx>
 #include "olinetab.hxx"
 #include <drwlayer.hxx>
+#include <compressedarray.hxx>
 
 bool ScTable::IsMerged( SCCOL nCol, SCROW nRow ) const
 {
@@ -68,7 +69,16 @@ void ScTable::CopyOneCellFromClip(
     }
 
     if (nCol1 == 0 && nCol2 == MAXCOL && mpRowHeights)
+    {
         mpRowHeights->setValue(nRow1, nRow2, pSrcTab->GetOriginalHeight(nSrcRow));
+
+        if (pRowFlags && pSrcTab->pRowFlags) {
+           if (pSrcTab->pRowFlags->GetValue(nSrcRow) & CR_MANUALSIZE)
+               pRowFlags->OrValue(nRow1, CR_MANUALSIZE);
+           else
+               pRowFlags->AndValue(nRow1, ~CR_MANUALSIZE);
+        }
+    }
 
     // Copy graphics over too
     bool bCopyGraphics
