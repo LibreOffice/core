@@ -158,7 +158,7 @@ namespace comphelper
 
             @return
                 <TRUE/> if there is a value with the given name, which could successfully
-                be extraced. In this case, <arg>_out_rValue</arg> will contain the requested
+                be extracted. In this case, <arg>_out_rValue</arg> will contain the requested
                 value.<br/>
                 <FALSE/>, if there is no value with the given name.
             @throws IllegalArgumentException
@@ -178,7 +178,7 @@ namespace comphelper
         }
 
         /** retrieves a value with a given name, or defaults it to a given value, if its not present
-            in the colllection
+            in the collection
         */
         template < typename VALUE_TYPE >
         VALUE_TYPE  getOrDefault( const sal_Char* _pAsciiValueName, const VALUE_TYPE& _rDefault ) const
