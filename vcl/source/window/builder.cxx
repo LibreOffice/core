@@ -281,7 +281,13 @@ namespace weld
         double fResult(0.0);
         bool bRet = MetricFormatter::TextToValue(get_text(), fResult, 0, m_xSpinButton->get_digits(), rLocaleData, m_eSrcUnit);
         if (bRet)
+        {
+            if (fResult > SAL_MAX_INT32)
+                fResult = SAL_MAX_INT32;
+            else if (fResult < SAL_MIN_INT32)
+                fResult = SAL_MIN_INT32;
             *result = fResult;
+        }
         return bRet;
     }
 
