@@ -417,9 +417,10 @@ sub main()
             }
         }
 
-        #         case LANGUAGE_ARABIC_SAUDI_ARABIA & LANGUAGE_MASK_PRIMARY :
+        # Find any special treatment, may need inspection then.
+        # $grepdef already has \b word delimiters.
         grepFile(
-            $modifier . '^\s*case\s*.*' . $grepdef . '.*(\s*&\s*\w+)?\s*:',
+            $modifier . $grepdef,
             "$SRC_ROOT", "i18nlangtag", "source/isolang/mslangid.cxx", 1, ());
 
         my $module = "svtools";
