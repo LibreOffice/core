@@ -25,6 +25,7 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/resmgr.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 namespace connectivity
 {
@@ -139,7 +140,8 @@ namespace connectivity
                 const sal_Char* _pAsciiPatternToReplace, const OUString& _rStringToSubstitute ) const
     {
         OUString sString( SharedResources_Impl::getInstance().getResourceString(pResId) );
-        OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace, _rStringToSubstitute ) );
+        if ( !lcl_substitute( sString, _pAsciiPatternToReplace, _rStringToSubstitute ) )
+            SAL_WARN("connectivity.resource", "Unable to substitute " << _pAsciiPatternToReplace << " with " << _rStringToSubstitute);
         return sString;
     }
 
@@ -149,8 +151,10 @@ namespace connectivity
                 const sal_Char* _pAsciiPatternToReplace2, const OUString& _rStringToSubstitute2 ) const
     {
         OUString sString( SharedResources_Impl::getInstance().getResourceString(pResId) );
-        OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace1, _rStringToSubstitute1 ) );
-        OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace2, _rStringToSubstitute2 ) );
+        if( !lcl_substitute( sString, _pAsciiPatternToReplace1, _rStringToSubstitute1 ) )
+            SAL_WARN("connectivity.resource", "Unable to substitute " << _pAsciiPatternToReplace1 << " with " << _rStringToSubstitute1);
+        if( !lcl_substitute( sString, _pAsciiPatternToReplace2, _rStringToSubstitute2 ) )
+            SAL_WARN("connectivity.resource", "Unable to substitute " << _pAsciiPatternToReplace2 << " with " << _rStringToSubstitute2);
         return sString;
     }
 
@@ -161,9 +165,12 @@ namespace connectivity
                 const sal_Char* _pAsciiPatternToReplace3, const OUString& _rStringToSubstitute3 ) const
     {
         OUString sString( SharedResources_Impl::getInstance().getResourceString(pResId) );
-        OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace1, _rStringToSubstitute1 ) );
-        OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace2, _rStringToSubstitute2 ) );
-        OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace3, _rStringToSubstitute3 ) );
+        if( !lcl_substitute( sString, _pAsciiPatternToReplace1, _rStringToSubstitute1 ) )
+            SAL_WARN("connectivity.resource", "Unable to substitute " << _pAsciiPatternToReplace1 << " with " << _rStringToSubstitute1);
+        if( !lcl_substitute( sString, _pAsciiPatternToReplace2, _rStringToSubstitute2 ) )
+            SAL_WARN("connectivity.resource", "Unable to substitute " << _pAsciiPatternToReplace2 << " with " << _rStringToSubstitute2);
+        if( !lcl_substitute( sString, _pAsciiPatternToReplace3, _rStringToSubstitute3 ) )
+            SAL_WARN("connectivity.resource", "Unable to substitute " << _pAsciiPatternToReplace3 << " with " << _rStringToSubstitute3);
         return sString;
     }
 
@@ -172,7 +179,8 @@ namespace connectivity
     {
         OUString sString( SharedResources_Impl::getInstance().getResourceString(pResId) );
         for(const auto& [rPattern, rReplace] : _rStringToSubstitutes)
-            OSL_VERIFY( lcl_substitute( sString, rPattern, rReplace ) );
+            if( !lcl_substitute( sString, rPattern, rReplace ) )
+                SAL_WARN("connectivity.resource", "Unable to substitute " << rPattern << " with " << rReplace);
 
         return sString;
     }
