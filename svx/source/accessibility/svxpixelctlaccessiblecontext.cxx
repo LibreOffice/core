@@ -108,6 +108,11 @@ OUString SvxPixelCtlAccessible::getAccessibleName(  )
     return mpPixelCtl ? mpPixelCtl->GetAccessibleName() : "";
 }
 
+OUString SvxPixelCtlAccessible::getAccessibleId(  )
+{
+    return OUString();
+}
+
 Reference< XAccessibleRelationSet > SAL_CALL SvxPixelCtlAccessible::getAccessibleRelationSet()
 {
     if (mpPixelCtl)
@@ -409,6 +414,11 @@ OUString SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleName()
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     return  GetName();
+}
+
+OUString SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleId()
+{
+    return  OUString();
 }
 
 /** Return empty uno::Reference to indicate that the relation set is not

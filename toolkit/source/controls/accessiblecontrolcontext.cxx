@@ -158,6 +158,12 @@ namespace toolkit
     }
 
 
+    OUString SAL_CALL OAccessibleControlContext::getAccessibleId(  )
+    {
+        return OUString();
+    }
+
+
     Reference< XAccessibleRelationSet > SAL_CALL OAccessibleControlContext::getAccessibleRelationSet(  )
     {
         return nullptr;

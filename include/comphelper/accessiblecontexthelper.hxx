@@ -22,7 +22,7 @@
 
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext2.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/solarmutex.hxx>
@@ -37,7 +37,7 @@ namespace comphelper
 
 
     class OContextHelper_Impl;
-    typedef ::cppu::WeakAggComponentImplHelper2 <   css::accessibility::XAccessibleContext,
+    typedef ::cppu::WeakAggComponentImplHelper2 <   css::accessibility::XAccessibleContext2,
                                                     css::accessibility::XAccessibleEventBroadcaster
                                                 >   OAccessibleContextHelper_Base;
 
@@ -90,6 +90,9 @@ namespace comphelper
         virtual OUString SAL_CALL getAccessibleName(  ) override = 0;
         virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override = 0;
         virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) override = 0;
+
+        // XAccessibleContext2 - still waiting to be overwritten
+        virtual OUString SAL_CALL getAccessibleId(  ) override = 0;
 
         // XAccessibleContext - default implementations
         /** default implementation for retrieving the index of this object within the parent
