@@ -877,8 +877,8 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         if (!pDim)
         {
             pPivotStrm->singleElement(XML_pivotField,
-                XML_showAll, ToPsz10(false),
-                XML_compact, ToPsz10(false));
+                XML_compact, ToPsz10(false),
+                XML_showAll, ToPsz10(false));
             continue;
         }
 
@@ -893,15 +893,15 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             if(bDimInTabularMode)
             {
                 pPivotStrm->singleElement(XML_pivotField,
-                    XML_showAll, ToPsz10(false),
                     XML_compact, ToPsz10(false),
+                    XML_showAll, ToPsz10(false),
                     XML_outline, ToPsz10(false));
             }
             else
             {
                 pPivotStrm->singleElement(XML_pivotField,
-                    XML_showAll, ToPsz10(false),
-                    XML_compact, ToPsz10(false));
+                    XML_compact, ToPsz10(false),
+                    XML_showAll, ToPsz10(false));
             }
             continue;
         }
@@ -912,16 +912,16 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             {
                 pPivotStrm->singleElement(XML_pivotField,
                     XML_dataField, ToPsz10(true),
-                    XML_showAll, ToPsz10(false),
                     XML_compact, ToPsz10(false),
+                    XML_showAll, ToPsz10(false),
                     XML_outline, ToPsz10(false));
             }
             else
             {
                 pPivotStrm->singleElement(XML_pivotField,
                     XML_dataField, ToPsz10(true),
-                    XML_showAll, ToPsz10(false),
-                    XML_compact, ToPsz10(false));
+                    XML_compact, ToPsz10(false),
+                    XML_showAll, ToPsz10(false));
             }
             continue;
         }
@@ -975,6 +975,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
 
         auto pAttList = sax_fastparser::FastSerializerHelper::createAttrList();
         pAttList->add(XML_axis, toOOXMLAxisType(eOrient));
+        pAttList->add(XML_compact, ToPsz10(false));
         pAttList->add(XML_showAll, ToPsz10(false));
 
         long nSubTotalCount = pDim->GetSubTotalsCount();
@@ -994,7 +995,6 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         if (!bHasDefaultSubtotal)
             pAttList->add(XML_defaultSubtotal, ToPsz10(false));
 
-        pAttList->add( XML_compact, ToPsz10(false));
         if(bDimInTabularMode)
             pAttList->add( XML_outline, ToPsz10(false));
         sax_fastparser::XFastAttributeListRef xAttributeList(pAttList);
