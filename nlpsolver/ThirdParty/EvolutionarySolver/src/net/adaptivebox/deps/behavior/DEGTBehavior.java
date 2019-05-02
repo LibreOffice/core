@@ -46,24 +46,59 @@ public class DEGTBehavior extends AbsGTBehavior implements ILibEngine {
     pbest_t = pbest;
   }
 
+  /**
+   * Crossover and mutation for a single vector element done in a single step.
+   *
+   * @param index
+   *            Index of the trial vector element to be changed.
+   * @param trialVector
+   *            Trial vector reference.
+   * @param globalVector
+   *            Global best found vector reference.
+   * @param differenceVectors
+   *            List of vectors used for difference delta calculation.
+   */
+  private void crossoverAndMutation(int index, double trialVector[], double globalVector[], BasicPoint differenceVectors[]) {
+    double delta = 0D;
+
+    for (int i = 0; i < differenceVectors.length; i++) {
+      delta += (i % 2 == 0 ? +1D : -1D) * differenceVectors[i].getLocation()[index];
+    }
+
+    trialVector[index] = globalVector[index] + FACTOR * delta;
+  }
+
   @Override
   public void generateBehavior(SearchPoint trailPoint, ProblemEncoder problemEncoder) {
-    SearchPoint gbest_t = socialLib.getGbest();
-
     BasicPoint[] referPoints = getReferPoints();
     int DIMENSION = problemEncoder.getDesignSpace().getDimension();
-    int rj = RandomGenerator.intRangeRandom(0, DIMENSION-1);
-    for (int k=0; k<DIMENSION; k++) {
-      if (Math.random()<CR || k == DIMENSION-1) {
-        double Dabcd = 0;
-        for(int i=0; i<referPoints.length; i++) {
-          Dabcd += (i%2==0 ? +1D : -1D)*referPoints[i].getLocation()[rj];
-        }
-        trailPoint.getLocation()[rj] = gbest_t.getLocation()[rj]+FACTOR*Dabcd;
-      } else {
-        trailPoint.getLocation()[rj] = pbest_t.getLocation()[rj];
+    int guaranteeIndex = RandomGenerator.intRangeRandom(0, DIMENSION - 1);
+
+    double[] trailVector = trailPoint.getLocation();
+    double[] locaclVector = pbest_t.getLocation();
+    double[] globalVector = socialLib.getGbest().getLocation();
+
+    /* Handle first part of the trial vector. */
+    for (int index = 0; index < guaranteeIndex; index++) {
+      if (CR <= Math.random()) {
+        trailVector[index] = locaclVector[index];
+        continue;
       }
-      rj = (rj+1)%DIMENSION;
+
+      crossoverAndMutation(index, trailVector, globalVector, referPoints);
+    }
+
+    /* Guarantee for at least one change in the trial vector. */
+    crossoverAndMutation(guaranteeIndex, trailVector, globalVector, referPoints);
+
+    /* Handle second part of the trial vector. */
+    for (int index = guaranteeIndex + 1; index < DIMENSION; index++) {
+      if (CR <= Math.random()) {
+        trailVector[index] = locaclVector[index];
+        continue;
+      }
+
+      crossoverAndMutation(index, trailVector, globalVector, referPoints);
     }
   }
 
