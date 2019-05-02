@@ -192,7 +192,7 @@ void PlaceEditDialog::InitDetails( )
     Sequence< OUString > aTypesNamesList( officecfg::Office::Common::Misc::CmisServersNames::get( xContext ) );
 
     int nPos = 0;
-    for ( sal_Int32 i = 0; i < aTypesUrlsList.getLength( ) && aTypesNamesList.getLength( ); ++i )
+    for ( sal_Int32 i = 0; i < aTypesUrlsList.getLength( ) && i < aTypesNamesList.getLength( ); ++i )
     {
         OUString sUrl = aTypesUrlsList[i].replaceFirst("<host", "<" + SvtResId(STR_SVT_HOST)).replaceFirst("port>",  SvtResId(STR_SVT_PORT) + ">");
 
