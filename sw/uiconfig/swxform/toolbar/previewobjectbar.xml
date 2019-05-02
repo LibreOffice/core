@@ -34,8 +34,8 @@
  <toolbar:toolbaritem xlink:href=".uno:PreviewZoom"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomPlus"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Print"/>
  <toolbar:toolbaritem xlink:href=".uno:FullScreen"/>
+ <toolbar:toolbaritem xlink:href=".uno:Print" toolbar:style="image text"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ClosePreview" toolbar:style="image text"/>
 </toolbar:toolbar>

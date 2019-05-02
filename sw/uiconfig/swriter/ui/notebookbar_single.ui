@@ -6254,6 +6254,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-12"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6291,7 +6294,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-12"/>
+                          <class name="priority-11"/>
                         </style>
                       </object>
                       <packing>
@@ -6330,7 +6333,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-11"/>
+                          <class name="priority-10"/>
                         </style>
                       </object>
                       <packing>
@@ -6368,9 +6371,6 @@
                             <property name="position">0</property>
                           </packing>
                         </child>
-                        <style>
-                          <class name="priority-10"/>
-                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6383,6 +6383,21 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
+                        <child>
+                          <object class="GtkSeparator" id="separator53">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
+                            <property name="orientation">vertical</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="padding">5</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
                         <child>
                           <object class="sfxlo-NotebookbarToolBox" id="ExtTop14">
                             <property name="visible">True</property>
@@ -6414,7 +6429,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">0</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                         <style>
@@ -6520,6 +6535,21 @@
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
                         <child>
+                          <object class="GtkSeparator" id="separator56">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
+                            <property name="orientation">vertical</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="padding">5</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="sfxlo-NotebookbarToolBox" id="ExtTop13">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -6561,7 +6591,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">0</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                         <style>
@@ -6659,6 +6689,21 @@
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
                         <child>
+                          <object class="GtkSeparator" id="separator57">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
+                            <property name="orientation">vertical</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="padding">5</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="sfxlo-NotebookbarToolBox" id="SectionBottom77">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -6679,7 +6724,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">0</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
