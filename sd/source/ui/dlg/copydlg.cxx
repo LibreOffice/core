@@ -88,18 +88,19 @@ void CopyDlg::Reset()
     // Set Min/Max values
     ::tools::Rectangle aRect = mpView->GetAllMarkedRect();
     Size aPageSize = mpView->GetSdrPageView()->GetPage()->GetSize();
-    auto const n1 = m_xMtrFldMoveX->normalize(long(1000000 / maUIScale));
-    auto const n2 = m_xMtrFldMoveX->convert_value_from(n1, FieldUnit::MM_100TH);
-    double fScaleFactor = m_xMtrFldMoveX->convert_value_to(n2, FieldUnit::NONE)/1000000.0;
 
-    long nPageWidth  = aPageSize.Width()  * fScaleFactor;
-    long nPageHeight = aPageSize.Height() * fScaleFactor;
-    long nRectWidth  = aRect.GetWidth()   * fScaleFactor;
-    long nRectHeight = aRect.GetHeight()  * fScaleFactor;
-    m_xMtrFldMoveX->set_range(-nPageWidth, nPageWidth, FieldUnit::NONE);
-    m_xMtrFldMoveY->set_range(-nPageHeight, nPageHeight, FieldUnit::NONE);
-    m_xMtrFldWidth->set_range(-nRectWidth, nPageWidth, FieldUnit::NONE);
-    m_xMtrFldHeight->set_range(-nRectHeight, nPageHeight, FieldUnit::NONE);
+    // tdf#125011 draw/impress sizes are in mm_100th already, "normalize" to
+    // decimal shift by number of decimal places the widgets are using (2) then
+    // scale by the ui scaling factor
+    auto nPageWidth = long(m_xMtrFldMoveX->normalize(aPageSize.Width()) / maUIScale);
+    auto nPageHeight = long(m_xMtrFldMoveX->normalize(aPageSize.Height()) / maUIScale);
+    auto nRectWidth = long(m_xMtrFldMoveX->normalize(aRect.GetWidth()) / maUIScale);
+    auto nRectHeight = long(m_xMtrFldMoveX->normalize(aRect.GetHeight()) / maUIScale);
+
+    m_xMtrFldMoveX->set_range(-nPageWidth, nPageWidth, FieldUnit::MM_100TH);
+    m_xMtrFldMoveY->set_range(-nPageHeight, nPageHeight, FieldUnit::MM_100TH);
+    m_xMtrFldWidth->set_range(-nRectWidth, nPageWidth, FieldUnit::MM_100TH);
+    m_xMtrFldHeight->set_range(-nRectHeight, nPageHeight, FieldUnit::MM_100TH);
 
     const SfxPoolItem* pPoolItem = nullptr;
     OUString aStr;
