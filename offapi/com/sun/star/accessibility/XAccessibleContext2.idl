@@ -1,0 +1,56 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef __com_sun_star_accessibility_XAccessibleContext2_idl__
+#define __com_sun_star_accessibility_XAccessibleContext2_idl__
+
+module com { module sun { module star { module accessibility {
+
+/** Implement this interface for exposing more aspects of a class's
+    content.
+
+    <p>This is an extension of XAccessibleContext to add getAccessibleId().</p>
+
+    @since LibreOffice 6.3
+*/
+interface XAccessibleContext2 : ::com::sun::star::accessibility::XAccessibleContext
+{
+    /** Return the object's identifier.
+
+        <p>This is not meant to be presented to the user, but to be an ID
+        which is stable over application development. Typically, this is
+        the gtkbuilder ID. Such an ID can then be used to identify a given
+        well-known accessible object independently from the current locale,
+        user-visible labelling, or dialog structure. This can then be used for
+        tailored screen reading (e.g. automatically announcing the content of a
+        well-known object), or for automatic regression testing (to check the
+        behavior of well-known objects). Uniqueness within the window is thus
+        desirable when returning a non-empty string.</p>
+
+        @return
+            The returned string is the object's identifier.
+    */
+    string  getAccessibleId ();
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
