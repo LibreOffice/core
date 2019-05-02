@@ -96,6 +96,7 @@ public:
     void testTdf124883();
     void testTdf125046();
     void testTdf125055();
+    void testTdf125086();
 
     CPPUNIT_TEST_SUITE(ScPivotTableFiltersTest);
 
@@ -146,6 +147,7 @@ public:
     CPPUNIT_TEST(testTdf124883);
     CPPUNIT_TEST(testTdf125046);
     CPPUNIT_TEST(testTdf125055);
+    CPPUNIT_TEST(testTdf125086);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2671,6 +2673,19 @@ void ScPivotTableFiltersTest::testTdf125055()
     CPPUNIT_ASSERT_EQUAL(
         2, getXPathPosition(
                pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "m"));
+}
+
+void ScPivotTableFiltersTest::testTdf125086()
+{
+    ScDocShellRef xDocSh = loadDoc("pivottable_fieldInRowsAndData.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+                                               "xl/pivotTables/pivotTable1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[2]", "axis", "axisRow");
+    // "dataField" attribute was not written for this "axisRow" field
+    assertXPath(pDoc, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[2]", "dataField", "1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPivotTableFiltersTest);
