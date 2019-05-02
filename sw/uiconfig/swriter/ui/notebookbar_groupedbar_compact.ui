@@ -2162,6 +2162,19 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="MenuPrint-FullScreen">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:FullScreen</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuPrint-separator3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="MenuPrint-Print">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -10203,6 +10216,7 @@
                                   <object class="sfxlo-NotebookbarToolBox" id="SectionBottom48">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="halign">center</property>
                                     <property name="hexpand">True</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
