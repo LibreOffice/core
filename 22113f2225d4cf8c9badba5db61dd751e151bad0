@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_825bcc2c",
+        "filename": "basic/qa/cppunit/test_language_conditionals.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-05-02T17:13:51Z",
+      "side": 1,
+      "message": "You only test with Option VBASupport - why?",
+      "range": {
+        "startLine": 38,
+        "startChar": 29,
+        "endLine": 38,
+        "endChar": 48
+      },
+      "revId": "22113f2225d4cf8c9badba5db61dd751e151bad0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
