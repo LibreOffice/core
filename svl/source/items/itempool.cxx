@@ -651,7 +651,7 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
                 if (**itr == rItem)
                 {
                     AddRef(**itr);
-                    assert(!bPassingOwnership && "can't be passing ownership and have the item already in the pool");
+                    assert((!bPassingOwnership || (&rItem != *itr)) && "can't be passing ownership and have the item already in the pool");
                     return **itr;
                 }
             }
