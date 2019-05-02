@@ -1310,8 +1310,10 @@ void SwAutoFormat::DelMoreLinesBlanks( bool bWithLineBreaks )
         std::vector<std::pair<TextFrameIndex, TextFrameIndex>> spaces;
         aFInfo.GetSpaces(spaces, !m_aFlags.bAFormatByInput || bWithLineBreaks);
 
-        for (auto & rSpaceRange : spaces)
+        // tdf#123285 iterate backwards - delete invalidates following indexes
+        for (auto iter = spaces.rbegin(); iter != spaces.rend(); ++iter)
         {
+            auto & rSpaceRange(*iter);
             assert(rSpaceRange.first != rSpaceRange.second);
             bool const bHasBlanks = HasSelBlanks(
                     m_pCurTextFrame, rSpaceRange.first,
