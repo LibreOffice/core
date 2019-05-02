@@ -1494,30 +1494,19 @@ static sal_Int32 lcl_GetFieldCount( const Reference<XDimensionsSupplier>& rSourc
     sal_Int32 nRet = 0;
 
     Reference<XNameAccess> xDimsName(rSource->getDimensions());
-    Reference<XIndexAccess> xIntDims(new ScNameToIndexAccess( xDimsName ));
-    sal_Int32 nIntCount = xIntDims->getCount();
-    if (rOrient.hasValue())
+    ScNameToIndexAccess xIntDims(xDimsName);
+    const sal_Int32 nIntCount = xIntDims.getCount();
+    for (sal_Int32 i = 0; i < nIntCount; ++i)
     {
-        // all fields of the specified orientation, including duplicated
-        Reference<XPropertySet> xDim;
-        for (sal_Int32 i = 0; i < nIntCount; ++i)
-        {
-            xDim.set(xIntDims->getByIndex(i), UNO_QUERY);
-            if (xDim.is() && (xDim->getPropertyValue(SC_UNO_DP_ORIENTATION) == rOrient))
-                ++nRet;
-        }
-    }
-    else
-    {
-        // count all non-duplicated fields
-
-        Reference<XPropertySet> xDim;
-        for (sal_Int32 i = 0; i < nIntCount; ++i)
-        {
-            xDim.set(xIntDims->getByIndex(i), UNO_QUERY);
-            if ( xDim.is() && !lcl_IsDuplicated( xDim ) )
-                ++nRet;
-        }
+        Reference<XPropertySet> xDim(xIntDims.getByIndex(i), UNO_QUERY);
+        const bool bMatch = xDim
+                            && (rOrient.hasValue()
+                                    // all fields of the specified orientation, including duplicated
+                                    ? (xDim->getPropertyValue(SC_UNO_DP_ORIENTATION) == rOrient)
+                                    // count all non-duplicated fields
+                                    : !lcl_IsDuplicated(xDim));
+        if (bMatch)
+            ++nRet;
     }
 
     return nRet;
@@ -1533,52 +1522,32 @@ static bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSour
     SCSIZE nPos = 0;
     sal_Int32 nDimIndex = 0;
 
-    Reference<XNameAccess> xDimsName(rSource->getDimensions());
-    Reference<XIndexAccess> xIntDims(new ScNameToIndexAccess( xDimsName ));
-    sal_Int32 nIntCount = xIntDims->getCount();
+    ScNameToIndexAccess xIntDims(rSource->getDimensions());
+    const sal_Int32 nIntCount = xIntDims.getCount();
     Reference<XPropertySet> xDim;
-    if (rOrient.hasValue())
+    for (sal_Int32 i = 0; i < nIntCount; ++i)
     {
-        sal_Int32 i = 0;
-        while (i < nIntCount && !bOk)
+        xDim.set(xIntDims.getByIndex(i), UNO_QUERY);
+        const bool bMatch = xDim
+                            && (rOrient.hasValue()
+                                    ? (xDim->getPropertyValue(SC_UNO_DP_ORIENTATION) == rOrient)
+                                    : !lcl_IsDuplicated(xDim));
+        if (bMatch)
         {
-            xDim.set(xIntDims->getByIndex(i), UNO_QUERY);
-            if (xDim.is() && (xDim->getPropertyValue(SC_UNO_DP_ORIENTATION) == rOrient))
+            if (nPos == nIndex)
             {
-                if (nPos == nIndex)
-                {
-                    bOk = true;
-                    nDimIndex = i;
-                }
-                else
-                    ++nPos;
+                bOk = true;
+                nDimIndex = i;
+                break;
             }
-            ++i;
-        }
-    }
-    else
-    {
-        sal_Int32 i = 0;
-        while (i < nIntCount && !bOk)
-        {
-            xDim.set(xIntDims->getByIndex(i), UNO_QUERY);
-            if ( xDim.is() && !lcl_IsDuplicated( xDim ) )
-            {
-                if (nPos == nIndex)
-                {
-                    bOk = true;
-                    nDimIndex = i;
-                }
-                else
-                    ++nPos;
-            }
-            ++i;
+            else
+                ++nPos;
         }
     }
 
     if ( bOk )
     {
-        xDim.set( xIntDims->getByIndex(nDimIndex), UNO_QUERY );
+        xDim.set(xIntDims.getByIndex(nDimIndex), UNO_QUERY);
         Reference<XNamed> xDimName( xDim, UNO_QUERY );
         if ( xDimName.is() )
         {
@@ -1596,7 +1565,7 @@ static bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSour
                 Reference<XNamed> xPrevName;
                 for (sal_Int32 i = 0; i < nDimIndex; ++i)
                 {
-                    xPrevName.set( xIntDims->getByIndex(i), UNO_QUERY );
+                    xPrevName.set(xIntDims.getByIndex(i), UNO_QUERY);
                     if ( xPrevName.is() && lcl_GetOriginalName( xPrevName ) == sOriginalName )
                         ++nRepeat;
                 }
