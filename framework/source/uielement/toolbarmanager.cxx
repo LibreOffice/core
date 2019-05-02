@@ -62,6 +62,7 @@
 #include <comphelper/sequence.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
+#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/syswin.hxx>
@@ -1567,6 +1568,13 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar, void )
     pOverflowToolBar->EnableDocking();
     pOverflowToolBar->AddEventListener( LINK( this, ToolBarManager, OverflowEventListener ) );
     vcl::Window::GetDockingManager()->StartPopupMode( pToolBar, pOverflowToolBar, FloatWinPopupFlags::AllMouseButtonClose );
+
+    // send HOME key to subtoolbar in order to select first item if keyboard activated
+    if(pToolBar->IsKeyEvent() )
+    {
+        ::KeyEvent aEvent( 0, vcl::KeyCode( KEY_HOME ) );
+        pOverflowToolBar->KeyInput(aEvent);
+    }
 }
 
 IMPL_LINK( ToolBarManager, OverflowEventListener, VclWindowEvent&, rWindowEvent, void )
