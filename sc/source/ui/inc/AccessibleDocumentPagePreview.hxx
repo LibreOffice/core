@@ -77,6 +77,7 @@ public:
         getAccessibleStateSet() override;
 
     virtual OUString SAL_CALL getAccessibleName() override;
+    virtual OUString SAL_CALL getAccessibleId() override;
     ///=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.

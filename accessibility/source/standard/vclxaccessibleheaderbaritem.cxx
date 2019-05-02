@@ -186,6 +186,12 @@ OUString VCLXAccessibleHeaderBarItem::getAccessibleName()
 }
 
 
+OUString VCLXAccessibleHeaderBarItem::getAccessibleId()
+{
+    return OUString();
+}
+
+
 Reference< XAccessibleRelationSet > VCLXAccessibleHeaderBarItem::getAccessibleRelationSet(  )
 {
     OExternalLockGuard aGuard( this );

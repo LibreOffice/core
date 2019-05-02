@@ -185,6 +185,12 @@ OUString SAL_CALL SvxShowCharSetAcc::getAccessibleName()
 }
 
 
+OUString SAL_CALL SvxShowCharSetAcc::getAccessibleId()
+{
+    return OUString();
+}
+
+
 uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL SvxShowCharSetAcc::getAccessibleRelationSet()
 {
     return uno::Reference< css::accessibility::XAccessibleRelationSet >();
@@ -459,6 +465,12 @@ OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleName()
     }
 
     return aRet;
+}
+
+
+OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleId()
+{
+    return OUString();
 }
 
 

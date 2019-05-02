@@ -141,6 +141,22 @@ interface XAccessibleContext : ::com::sun::star::uno::XInterface
     */
     string  getAccessibleName ();
 
+    /** Return the object's identifier.
+
+        <p>This is not meant to be presented to the user, but to be an ID
+        which is stable over application development. Typically, this is the
+        gtkbuilder ID. Such an ID can then be used for instance to identify a
+        given well-known accessible object for tailored screen reading (e.g.
+        automatically announcing the content of a well-known object), or for
+        automatic regression testing (to check the behavior of well-known
+        objects). Uniqueness within the window is thus desirable when returning
+        a non-empty string.</p>
+
+        @return
+            The returned string is the object's identifier.
+    */
+    string  getAccessibleId ();
+
     /** Returns the set of relations defined for this object.
 
         <p>The returned set of relations is a copy of this object's relation

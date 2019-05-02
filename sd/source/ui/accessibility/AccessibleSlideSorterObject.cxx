@@ -176,6 +176,12 @@ OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleName()
         return OUString();
 }
 
+OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleId()
+{
+    ThrowIfDisposed();
+    return OUString();
+}
+
 Reference<XAccessibleRelationSet> SAL_CALL
     AccessibleSlideSorterObject::getAccessibleRelationSet()
 {
