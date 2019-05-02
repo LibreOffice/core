@@ -93,8 +93,10 @@ void CountUsersOfDefaultParams::niceName(const FunctionDecl* functionDecl, MyFun
 {
     if (functionDecl->getInstantiatedFromMemberFunction())
         functionDecl = functionDecl->getInstantiatedFromMemberFunction();
+#if CLANG_VERSION < 90000
     else if (functionDecl->getClassScopeSpecializationPattern())
         functionDecl = functionDecl->getClassScopeSpecializationPattern();
+#endif
     else if (functionDecl->getTemplateInstantiationPattern())
         functionDecl = functionDecl->getTemplateInstantiationPattern();
 
@@ -155,8 +157,10 @@ bool CountUsersOfDefaultParams::VisitCallExpr(const CallExpr * callExpr) {
     // work our way back to the root definition for template methods
     if (functionDecl->getInstantiatedFromMemberFunction())
         functionDecl = functionDecl->getInstantiatedFromMemberFunction();
+#if CLANG_VERSION < 90000
     else if (functionDecl->getClassScopeSpecializationPattern())
         functionDecl = functionDecl->getClassScopeSpecializationPattern();
+#endif
     else if (functionDecl->getTemplateInstantiationPattern())
         functionDecl = functionDecl->getTemplateInstantiationPattern();
     int n = functionDecl->getNumParams() - 1;
@@ -184,8 +188,10 @@ bool CountUsersOfDefaultParams::VisitCXXConstructExpr(const CXXConstructExpr * c
     // work our way back to the root definition for template methods
     if (constructorDecl->getInstantiatedFromMemberFunction())
         constructorDecl = dyn_cast<CXXConstructorDecl>(constructorDecl->getInstantiatedFromMemberFunction());
+#if CLANG_VERSION < 90000
     else if (constructorDecl->getClassScopeSpecializationPattern())
         constructorDecl = dyn_cast<CXXConstructorDecl>(constructorDecl->getClassScopeSpecializationPattern());
+#endif
     else if (constructorDecl->getTemplateInstantiationPattern())
         constructorDecl = dyn_cast<CXXConstructorDecl>(constructorDecl->getTemplateInstantiationPattern());
     int n = constructorDecl->getNumParams() - 1;
