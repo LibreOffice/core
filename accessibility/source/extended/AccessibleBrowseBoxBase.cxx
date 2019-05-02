@@ -172,6 +172,11 @@ OUString SAL_CALL AccessibleBrowseBoxBase::getAccessibleName()
     return maName;
 }
 
+OUString SAL_CALL AccessibleBrowseBoxBase::getAccessibleId()
+{
+    return OUString();
+}
+
 Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL
 AccessibleBrowseBoxBase::getAccessibleRelationSet()
 {

@@ -131,6 +131,11 @@ public:
     virtual OUString SAL_CALL getAccessibleName() override;
 
     /** @return
+            The Id of this object.
+    */
+    virtual OUString SAL_CALL getAccessibleId() override;
+
+    /** @return
             The relation set (the BrowseBox does not have one).
     */
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet() override;

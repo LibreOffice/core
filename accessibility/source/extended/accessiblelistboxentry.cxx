@@ -478,6 +478,11 @@ namespace accessibility
         return sRet;
     }
 
+    OUString SAL_CALL AccessibleListBoxEntry::getAccessibleId(  )
+    {
+        return OUString();
+    }
+
     Reference< XAccessibleRelationSet > SAL_CALL AccessibleListBoxEntry::getAccessibleRelationSet(  )
     {
         Reference< XAccessibleRelationSet > xRelSet;

@@ -298,6 +298,11 @@ namespace accessibility
         return implGetText();
     }
 
+    OUString SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleId(  )
+    {
+        return OUString();
+    }
+
     Reference< XAccessibleRelationSet > SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleRelationSet(  )
     {
         return new utl::AccessibleRelationSetHelper;

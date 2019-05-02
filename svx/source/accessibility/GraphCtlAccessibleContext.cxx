@@ -340,6 +340,13 @@ OUString SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleName()
 }
 
 
+OUString SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleId()
+{
+    ::SolarMutexGuard aGuard;
+    return OUString();
+}
+
+
 /** Return empty reference to indicate that the relation set is not
     supported.
 */

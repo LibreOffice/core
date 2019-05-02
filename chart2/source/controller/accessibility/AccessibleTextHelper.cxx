@@ -144,6 +144,12 @@ OUString SAL_CALL AccessibleTextHelper::getAccessibleName()
     return OUString();
 }
 
+OUString SAL_CALL AccessibleTextHelper::getAccessibleId()
+{
+    OSL_FAIL( "Not implemented in this helper" );
+    return OUString();
+}
+
 Reference< XAccessibleRelationSet > SAL_CALL AccessibleTextHelper::getAccessibleRelationSet()
 {
     OSL_FAIL( "Not implemented in this helper" );

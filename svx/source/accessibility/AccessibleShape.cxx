@@ -318,6 +318,12 @@ OUString SAL_CALL AccessibleShape::getAccessibleDescription()
         return OUString(" ");
 }
 
+OUString SAL_CALL AccessibleShape::getAccessibleId()
+{
+    ThrowIfDisposed ();
+    return OUString();
+}
+
 // XAccessibleContext
 /** The children of this shape come from two sources: The children from
     group or scene shapes and the paragraphs of text.

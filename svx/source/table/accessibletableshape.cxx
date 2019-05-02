@@ -1047,6 +1047,11 @@ OUString SAL_CALL AccessibleTableHeaderShape::getAccessibleName()
     return mpTable->getAccessibleName();
 }
 
+OUString SAL_CALL AccessibleTableHeaderShape::getAccessibleId()
+{
+    return OUString();
+}
+
 Reference< XAccessibleStateSet > SAL_CALL AccessibleTableHeaderShape::getAccessibleStateSet()
 {
     return mpTable->getAccessibleStateSet();

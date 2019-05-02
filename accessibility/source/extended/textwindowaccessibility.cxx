@@ -176,6 +176,13 @@ OUString SAL_CALL Paragraph::getAccessibleName()
 }
 
 // virtual
+OUString SAL_CALL Paragraph::getAccessibleId()
+{
+    checkDisposed();
+    return OUString();
+}
+
+// virtual
 css::uno::Reference< css::accessibility::XAccessibleRelationSet >
 SAL_CALL Paragraph::getAccessibleRelationSet()
 {

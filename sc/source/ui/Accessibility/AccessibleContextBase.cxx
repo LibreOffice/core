@@ -327,6 +327,12 @@ OUString SAL_CALL
     return msName;
 }
 
+OUString SAL_CALL
+       ScAccessibleContextBase::getAccessibleId()
+{
+    return OUString();
+}
+
 uno::Reference<XAccessibleRelationSet> SAL_CALL
        ScAccessibleContextBase::getAccessibleRelationSet()
 {

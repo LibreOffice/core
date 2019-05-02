@@ -241,6 +241,7 @@ protected:
     // has to be implemented by derived classes
 //     virtual OUString SAL_CALL getAccessibleName()
 //         throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getAccessibleId() override;
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL
         getAccessibleRelationSet() override;
     virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL
