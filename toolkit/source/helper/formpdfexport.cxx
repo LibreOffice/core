@@ -585,7 +585,7 @@ namespace toolkitform
                 // get selected items
                 Sequence< sal_Int16 > aSelectIndices;
                 OSL_VERIFY( xModelProps->getPropertyValue("SelectedItems") >>= aSelectIndices );
-                if( aSelectIndices.getLength() > 0 )
+                if( aSelectIndices.hasElements() )
                 {
                     pListWidget->SelectedEntries.resize( 0 );
                     for( sal_Int32 i = 0; i < aSelectIndices.getLength(); i++ )

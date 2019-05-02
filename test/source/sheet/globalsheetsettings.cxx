@@ -172,8 +172,7 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
     aNewValue <<= uno::Sequence<OUString>();
     xGlobalSheetSettings->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aUserLists);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue UserLists", sal_Int32(0),
-                                 aUserLists.getLength());
+    CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue UserLists", !aUserLists.hasElements());
 
     propName = "LinkUpdateMode";
     sal_Int16 aLinkUpdateMode = 42;

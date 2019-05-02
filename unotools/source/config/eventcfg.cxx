@@ -207,7 +207,7 @@ void GlobalEventConfig_Impl::initBindingInfo()
         SAL_INFO("unotools", "reading binding for: " << lMacros[0]);
         Sequence< Any > lValues = GetProperties( lMacros );
         OUString sMacroURL;
-        if( lValues.getLength() > 0 )
+        if( lValues.hasElements() )
         {
             lValues[0] >>= sMacroURL;
             sal_Int32 startIndex = lEventNames[i].indexOf('\'');

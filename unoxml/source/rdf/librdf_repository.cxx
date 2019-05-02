@@ -1402,7 +1402,7 @@ void SAL_CALL librdf_Repository::setStatementRDFa(
         throw lang::IllegalArgumentException(
             "librdf_Repository::setStatementRDFa: Subject is null", *this, 0);
     }
-    if (!i_rPredicates.getLength()) {
+    if (!i_rPredicates.hasElements()) {
         throw lang::IllegalArgumentException(
             "librdf_Repository::setStatementRDFa: no Predicates",
             *this, 1);

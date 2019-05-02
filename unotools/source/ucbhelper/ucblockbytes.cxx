@@ -1281,7 +1281,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     else
         xSink = new UcbDataSink_Impl(xLockBytes.get());
 
-    if ( rProps.getLength() )
+    if ( rProps.hasElements() )
     {
         Reference < XCommandProcessor > xProcessor( xContent, UNO_QUERY );
         Command aCommand;

@@ -116,7 +116,7 @@ private:
 
 void SvtUserOptions::ChangeListener::changesOccurred (util::ChangesEvent const& rEvent)
 {
-    if (rEvent.Changes.getLength())
+    if (rEvent.Changes.hasElements())
         m_rParent.Notify();
 }
 

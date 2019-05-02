@@ -916,7 +916,7 @@ bool SvtLinguConfig::GetSupportedDictionaryFormatsFor(
         xNA.set( xNA->getByName( rSetEntry ), uno::UNO_QUERY_THROW );
         if (xNA->getByName( "SupportedDictionaryFormats" ) >>= rFormatList)
             bSuccess = true;
-        DBG_ASSERT( rFormatList.getLength(), "supported dictionary format list is empty" );
+        DBG_ASSERT( rFormatList.hasElements(), "supported dictionary format list is empty" );
     }
     catch (uno::Exception &)
     {
@@ -965,9 +965,9 @@ bool SvtLinguConfig::GetDictionaryEntry(
         bSuccess =  (xNA->getByName( "Locations" ) >>= aLocations)  &&
                     (xNA->getByName( "Format" )    >>= aFormatName) &&
                     (xNA->getByName( "Locales" )   >>= aLocaleNames);
-        DBG_ASSERT( aLocations.getLength(), "Dictionary locations not set" );
+        DBG_ASSERT( aLocations.hasElements(), "Dictionary locations not set" );
         DBG_ASSERT( !aFormatName.isEmpty(), "Dictionary format name not set" );
-        DBG_ASSERT( aLocaleNames.getLength(), "No locales set for the dictionary" );
+        DBG_ASSERT( aLocaleNames.hasElements(), "No locales set for the dictionary" );
 
         // if successful continue
         if (bSuccess)
@@ -1174,7 +1174,7 @@ bool SvtLinguConfig::HasGrammarChecker() const
         xNA.set( xNA->getByName("GrammarCheckerList"), uno::UNO_QUERY_THROW );
 
         uno::Sequence< OUString > aElementNames( xNA->getElementNames() );
-        bRes = aElementNames.getLength() > 0;
+        bRes = aElementNames.hasElements();
     }
     catch (const uno::Exception&)
     {

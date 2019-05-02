@@ -63,7 +63,7 @@ void XSubTotalField::testGetSetTotalColumns()
     uno::Reference< sheet::XSubTotalField > xSTF(init(), UNO_QUERY_THROW);
 
     uno::Sequence< sheet::SubTotalColumn > sDefaultCols = xSTF->getSubTotalColumns();
-    CPPUNIT_ASSERT_MESSAGE("Unable to get SubTotalColumns", sDefaultCols.getLength() != 0);
+    CPPUNIT_ASSERT_MESSAGE("Unable to get SubTotalColumns", sDefaultCols.hasElements());
 
     uno::Sequence< sheet::SubTotalColumn > sNewCols;
     sNewCols.realloc(1);

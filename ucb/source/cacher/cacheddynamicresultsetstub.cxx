@@ -235,7 +235,7 @@ void SAL_CALL CachedDynamicResultSetStubFactory
     OSL_ENSURE( TargetCache.is(), "a TargetCache is needed" );
 
     Reference< XDynamicResultSet > xSource( Source );
-    if( SortingInfo.getLength() &&
+    if( SortingInfo.hasElements() &&
         !( xSource->getCapabilities() & ContentResultSetCapability::SORTED )
         )
     {

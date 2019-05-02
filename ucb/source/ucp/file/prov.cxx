@@ -112,7 +112,7 @@ FileProvider::initialize(
 {
     if( ! m_pMyShell ) {
         OUString config;
-        if( aArguments.getLength() > 0 &&
+        if( aArguments.hasElements() &&
             (aArguments[0] >>= config) &&
             config == "NoConfig" )
             m_pMyShell.reset( new TaskManager( m_xContext, this, false ) );

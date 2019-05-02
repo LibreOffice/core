@@ -397,7 +397,7 @@ UUIInteractionHelper::handleRequest_impl(
             std::vector< OUString > aArguments;
             uno::Sequence< OUString > sModules
                 = aModSizeException.Names;
-            if ( sModules.getLength() )
+            if ( sModules.hasElements() )
             {
                 OUStringBuffer aName;
                 for ( sal_Int32 index=0; index< sModules.getLength(); ++index )
@@ -1142,7 +1142,7 @@ UUIInteractionHelper::handleMacroConfirmRequest(
 
     bool bApprove = false;
 
-    bool bShowSignatures = aSignInfo.getLength() > 0;
+    bool bShowSignatures = aSignInfo.hasElements();
     uno::Reference<awt::XWindow> xParent = getParentXWindow();
     MacroWarning aWarning(Application::GetFrameWeld(xParent), bShowSignatures);
 

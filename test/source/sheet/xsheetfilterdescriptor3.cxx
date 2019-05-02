@@ -27,8 +27,7 @@ void XSheetFilterDescriptor3::testGetSetFilterFields3()
     uno::Reference<sheet::XSheetFilterDescriptor3> xSFD(init(), uno::UNO_QUERY_THROW);
     uno::Sequence<sheet::TableFilterField3> aDefaultTFF = xSFD->getFilterFields3();
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get TableFilterField", sal_Int32(0),
-                                 aDefaultTFF.getLength());
+    CPPUNIT_ASSERT_MESSAGE("Unable to get TableFilterField", !aDefaultTFF.hasElements());
 
     uno::Sequence<sheet::TableFilterField3> aTFF;
     aTFF.realloc(1);

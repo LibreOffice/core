@@ -493,7 +493,7 @@ uno::Any SAL_CALL Content::execute(
             // Unreachable
         }
 
-        if ( !aProperties.getLength() )
+        if ( !aProperties.hasElements() )
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
@@ -1392,7 +1392,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     aProperties = rProperties;
                 }
 
-                if ( aProperties.getLength() > 0 )
+                if ( aProperties.hasElements() )
                     ContentProperties::UCBNamesToDAVNames(
                         aProperties, aPropNames );
 

@@ -38,7 +38,7 @@ void XNameAccess::testGetElementNames()
     uno::Reference<container::XNameAccess> xNA(init(), uno::UNO_QUERY_THROW);
     uno::Sequence<OUString> aNames = xNA->getElementNames();
 
-    CPPUNIT_ASSERT(aNames.getLength());
+    CPPUNIT_ASSERT(aNames.hasElements());
 }
 
 void XNameAccess::testHasByName()

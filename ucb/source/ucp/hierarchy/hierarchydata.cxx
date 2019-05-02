@@ -927,7 +927,7 @@ bool HierarchyEntry::first( iterator const & it )
         }
     }
 
-    if ( it.m_pImpl->names.getLength() == 0 )
+    if ( !it.m_pImpl->names.hasElements() )
         return false;
 
     it.m_pImpl->pos = 0;

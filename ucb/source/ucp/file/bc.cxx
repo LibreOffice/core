@@ -399,7 +399,7 @@ BaseContent::addPropertiesChangeListener(
         m_pPropertyListener.reset( new PropertyListeners( m_aEventListenerMutex ) );
 
 
-    if( PropertyNames.getLength() == 0 )
+    if( !PropertyNames.hasElements() )
         m_pPropertyListener->addInterface( OUString(),Listener );
     else
     {

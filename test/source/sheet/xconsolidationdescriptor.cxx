@@ -49,7 +49,7 @@ void XConsolidationDescriptor::testGetSources()
                                                                              UNO_QUERY_THROW);
 
     uno::Sequence<table::CellRangeAddress> aSources = xConsolidationDescriptor->getSources();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get sources", sal_Int32(0), aSources.getLength());
+    CPPUNIT_ASSERT_MESSAGE("Unable to get sources", !aSources.hasElements());
 }
 
 void XConsolidationDescriptor::testSetSources()

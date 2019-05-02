@@ -421,7 +421,7 @@ void UnoControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvent
                     ++pEvents;
             aEvents.realloc( pEventsEnd - aEvents.getConstArray() );
 
-            if ( !aEvents.getLength() )
+            if ( !aEvents.hasElements() )
                 return;
         }
     }

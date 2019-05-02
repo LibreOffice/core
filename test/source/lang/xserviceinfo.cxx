@@ -34,7 +34,7 @@ void XServiceInfo::testGetSupportedServiceNames()
     uno::Reference<lang::XServiceInfo> xSI(init(), uno::UNO_QUERY_THROW);
 
     uno::Sequence<OUString> aServiceNames = xSI->getSupportedServiceNames();
-    CPPUNIT_ASSERT(aServiceNames.getLength());
+    CPPUNIT_ASSERT(aServiceNames.hasElements());
 }
 
 void XServiceInfo::testSupportsService()

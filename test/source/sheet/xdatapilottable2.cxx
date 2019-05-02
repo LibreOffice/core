@@ -250,7 +250,7 @@ table::CellAddress getLastUsedCellAddress( uno::Reference< sheet::XSpreadsheet >
 void XDataPilotTable2::checkDrillDownSheetContent(uno::Reference< sheet::XSpreadsheet > const & xSheet, const uno::Sequence< uno::Sequence< Any > >& aData)
 {
     table::CellAddress aLastCell = getLastUsedCellAddress(xSheet, 0, 0);
-    CPPUNIT_ASSERT(aData.getLength() > 0);
+    CPPUNIT_ASSERT(aData.hasElements());
     CPPUNIT_ASSERT(aLastCell.Row);
     CPPUNIT_ASSERT(aLastCell.Column);
 

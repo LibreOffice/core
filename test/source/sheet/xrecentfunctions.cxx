@@ -46,7 +46,7 @@ void XRecentFunctions::testSetRecentFunctionIds()
     xRecentFunctions->setRecentFunctionIds(aIds);
 
     aIds = xRecentFunctions->getRecentFunctionIds();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set Ids (empty list)", sal_Int32(0), aIds.getLength());
+    CPPUNIT_ASSERT_MESSAGE("Unable to set Ids (empty list)", !aIds.hasElements());
 
     // max. size list
     aIds.realloc(nMaxNumber);

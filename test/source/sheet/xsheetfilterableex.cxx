@@ -36,7 +36,7 @@ void XSheetFilterableEx::testCreateFilterDescriptorByObject()
     CPPUNIT_ASSERT_MESSAGE("no XSheetFilterDescriptor", xSFD.is());
 
     uno::Sequence<sheet::TableFilterField> xTFF = xSFD->getFilterFields();
-    CPPUNIT_ASSERT_MESSAGE("The gained XSheetFilterDescriptor is empty", xTFF.getLength() != 0);
+    CPPUNIT_ASSERT_MESSAGE("The gained XSheetFilterDescriptor is empty", xTFF.hasElements());
 
     for (const auto& field : xTFF)
     {
