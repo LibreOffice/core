@@ -1012,8 +1012,24 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
                 aMemberSequence.emplace_back(nItem, true);
         }
 
+        // tdf#125086: check if this field *also* appears in Data region
+        bool bAppearsInData = false;
+        {
+            OUString aSrcName = ScDPUtil::getSourceDimensionName(pDim->GetName());
+            const auto it = std::find_if(
+                aDataFields.begin(), aDataFields.end(), [&aSrcName](const DataField& rDataField) {
+                    OUString aThisName
+                        = ScDPUtil::getSourceDimensionName(rDataField.mpDim->GetName());
+                    return aThisName == aSrcName;
+                });
+            if (it != aDataFields.end())
+                bAppearsInData = true;
+        }
+
         auto pAttList = sax_fastparser::FastSerializerHelper::createAttrList();
         pAttList->add(XML_axis, toOOXMLAxisType(eOrient));
+        if (bAppearsInData)
+            pAttList->add(XML_dataField, ToPsz10(true));
         pAttList->add(XML_showAll, ToPsz10(false));
 
         long nSubTotalCount = pDim->GetSubTotalsCount();
