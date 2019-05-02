@@ -99,6 +99,7 @@ public:
     sal_Int16 SAL_CALL getAccessibleRole(  ) override;
     OUString SAL_CALL getAccessibleDescription(  ) override;
     OUString SAL_CALL getAccessibleName(  ) override;
+    OUString SAL_CALL getAccessibleId(  ) override;
     css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
     css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) override;
     css::lang::Locale SAL_CALL getLocale(  ) override;
@@ -138,6 +139,7 @@ private:
     sal_Int16 getAccessibleRole() => VCL Window::GetAccessibleRole()
     OUString getAccessibleDescription() => VCL Window::GetAccessibleDescription
     OUString getAccessibleName() => VCL Window::GetAccessibleText() => Most windows return Window::GetText()
+    OUString getAccessibleId() => VCL Window::get_id()
     Reference< XAccessibleRelationSet > getAccessibleRelationSet()
     Reference< XAccessibleStateSet > getAccessibleStateSet() => override FillAccessibleStateSet( ... )
 

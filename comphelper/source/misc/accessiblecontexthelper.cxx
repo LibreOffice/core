@@ -196,6 +196,12 @@ namespace comphelper
     }
 
 
+    OUString SAL_CALL getAccessibleId(  )
+    {
+        return OUString();
+    }
+
+
     sal_Int32 SAL_CALL OAccessibleContextHelper::getAccessibleIndexInParent(  )
     {
         OExternalLockGuard aGuard( this );
