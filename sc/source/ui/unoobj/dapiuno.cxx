@@ -1496,28 +1496,17 @@ static sal_Int32 lcl_GetFieldCount( const Reference<XDimensionsSupplier>& rSourc
     Reference<XNameAccess> xDimsName(rSource->getDimensions());
     Reference<XIndexAccess> xIntDims(new ScNameToIndexAccess( xDimsName ));
     sal_Int32 nIntCount = xIntDims->getCount();
-    if (rOrient.hasValue())
+    for (sal_Int32 i = 0; i < nIntCount; ++i)
     {
-        // all fields of the specified orientation, including duplicated
-        Reference<XPropertySet> xDim;
-        for (sal_Int32 i = 0; i < nIntCount; ++i)
-        {
-            xDim.set(xIntDims->getByIndex(i), UNO_QUERY);
-            if (xDim.is() && (xDim->getPropertyValue(SC_UNO_DP_ORIENTATION) == rOrient))
-                ++nRet;
-        }
-    }
-    else
-    {
-        // count all non-duplicated fields
-
-        Reference<XPropertySet> xDim;
-        for (sal_Int32 i = 0; i < nIntCount; ++i)
-        {
-            xDim.set(xIntDims->getByIndex(i), UNO_QUERY);
-            if ( xDim.is() && !lcl_IsDuplicated( xDim ) )
-                ++nRet;
-        }
+        Reference<XPropertySet> xDim(xIntDims->getByIndex(i), UNO_QUERY);
+        const bool bMatch = xDim
+                            && (rOrient.hasValue()
+                                    // all fields of the specified orientation, including duplicated
+                                    ? (xDim->getPropertyValue(SC_UNO_DP_ORIENTATION) == rOrient)
+                                    // count all non-duplicated fields
+                                    : !lcl_IsDuplicated(xDim));
+        if (bMatch)
+            ++nRet;
     }
 
     return nRet;
@@ -1537,42 +1526,23 @@ static bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSour
     Reference<XIndexAccess> xIntDims(new ScNameToIndexAccess( xDimsName ));
     sal_Int32 nIntCount = xIntDims->getCount();
     Reference<XPropertySet> xDim;
-    if (rOrient.hasValue())
+    for (sal_Int32 i = 0; i < nIntCount; ++i)
     {
-        sal_Int32 i = 0;
-        while (i < nIntCount && !bOk)
+        xDim.set(xIntDims->getByIndex(i), UNO_QUERY);
+        const bool bMatch = xDim
+                            && (rOrient.hasValue()
+                                    ? (xDim->getPropertyValue(SC_UNO_DP_ORIENTATION) == rOrient)
+                                    : !lcl_IsDuplicated(xDim));
+        if (bMatch)
         {
-            xDim.set(xIntDims->getByIndex(i), UNO_QUERY);
-            if (xDim.is() && (xDim->getPropertyValue(SC_UNO_DP_ORIENTATION) == rOrient))
+            if (nPos == nIndex)
             {
-                if (nPos == nIndex)
-                {
-                    bOk = true;
-                    nDimIndex = i;
-                }
-                else
-                    ++nPos;
+                bOk = true;
+                nDimIndex = i;
+                break;
             }
-            ++i;
-        }
-    }
-    else
-    {
-        sal_Int32 i = 0;
-        while (i < nIntCount && !bOk)
-        {
-            xDim.set(xIntDims->getByIndex(i), UNO_QUERY);
-            if ( xDim.is() && !lcl_IsDuplicated( xDim ) )
-            {
-                if (nPos == nIndex)
-                {
-                    bOk = true;
-                    nDimIndex = i;
-                }
-                else
-                    ++nPos;
-            }
-            ++i;
+            else
+                ++nPos;
         }
     }
 
