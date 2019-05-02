@@ -889,7 +889,7 @@ Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
         {
             const Sequence< Any >& rInitArgs = m_pImpl->m_aInitArgs;
 
-            if ( rInitArgs.getLength() > 0 )
+            if ( rInitArgs.hasElements() )
             {
                 // Extract config provider from service init args.
                 rInitArgs[ 0 ] >>= m_pImpl->m_xConfigProvider;

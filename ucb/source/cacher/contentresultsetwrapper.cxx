@@ -544,7 +544,7 @@ void SAL_CALL ContentResultSetWrapper::addPropertyChangeListener( const OUString
 
     impl_getPropertyChangeListenerContainer();
     bool bNeedRegister = !m_pPropertyChangeListeners->
-                        getContainedTypes().getLength();
+                        getContainedTypes().hasElements();
     m_pPropertyChangeListeners->addInterface( aPropertyName, xListener );
     if( bNeedRegister )
     {
@@ -589,7 +589,7 @@ void SAL_CALL ContentResultSetWrapper::addVetoableChangeListener( const OUString
 
     impl_getVetoableChangeListenerContainer();
     bool bNeedRegister = !m_pVetoableChangeListeners->
-                        getContainedTypes().getLength();
+                        getContainedTypes().hasElements();
     m_pVetoableChangeListeners->addInterface( rPropertyName, xListener );
     if( bNeedRegister )
     {
@@ -645,7 +645,7 @@ void SAL_CALL ContentResultSetWrapper::removePropertyChangeListener( const OUStr
 
     m_pPropertyChangeListeners->removeInterface( rPropertyName, xListener );
 
-    if( !m_pPropertyChangeListeners->getContainedTypes().getLength() )
+    if( !m_pPropertyChangeListeners->getContainedTypes().hasElements() )
     {
         impl_init_xPropertySetOrigin();
         {
@@ -698,7 +698,7 @@ void SAL_CALL ContentResultSetWrapper::removeVetoableChangeListener( const OUStr
 
     m_pVetoableChangeListeners->removeInterface( rPropertyName, xListener );
 
-    if( !m_pVetoableChangeListeners->getContainedTypes().getLength() )
+    if( !m_pVetoableChangeListeners->getContainedTypes().hasElements() )
     {
         impl_init_xPropertySetOrigin();
         {

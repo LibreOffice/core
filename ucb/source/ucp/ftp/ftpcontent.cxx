@@ -830,7 +830,7 @@ Sequence<Any> FTPContent::setPropertyValues(
         }
     }
 
-    if(evt.getLength()) {
+    if(evt.hasElements()) {
         // title has changed
         notifyPropertiesChange(evt);
         (void)exchange(new FTPContentIdentifier(m_aFTPURL.ident(false,false)));

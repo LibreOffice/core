@@ -527,7 +527,7 @@ void SAL_CALL ContentImplHelper::removeProperty( const OUString& Name )
 
             // Success!
 
-            if ( xSet->getPropertySetInfo()->getProperties().getLength() == 0 )
+            if ( !xSet->getPropertySetInfo()->getProperties().hasElements() )
             {
                 // Remove empty propertyset from registry.
                 uno::Reference< css::ucb::XPropertySetRegistry >

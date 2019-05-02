@@ -211,7 +211,7 @@ namespace ucb { namespace ucp { namespace ext
                 // unreachable
             }
 
-            if ( !aProperties.getLength() )
+            if ( !aProperties.hasElements() )
             {
                 ::ucbhelper::cancelCommandExecution( makeAny( IllegalArgumentException(
                     OUString(), *this, -1 ) ),

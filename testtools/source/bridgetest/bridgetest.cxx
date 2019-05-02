@@ -576,7 +576,7 @@ static bool performTest(
                     !nullAny.hasValue() || (ifc && !ifc->is()),
                     "getNullPolyAny");
                 bRet &= check(
-                    xLBT->getNullPolySequence().member.getLength() == 0,
+                    !xLBT->getNullPolySequence().member.hasElements(),
                     "getNullPolySequence");
                 bRet &= check(
                     xLBT->getNullPolyEnum().member == TestEnum_TEST,
@@ -1105,7 +1105,7 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
     bool bRet = false;
     try
     {
-        if (! rArgs.getLength())
+        if (! rArgs.hasElements())
         {
             throw RuntimeException( "no test object specified!\n"
                                     "usage : ServiceName of test object | -u unourl of test object" );

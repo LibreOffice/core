@@ -163,7 +163,7 @@ HierarchyContentProvider::queryContent(
 void SAL_CALL HierarchyContentProvider::initialize(
                                 const uno::Sequence< uno::Any >& aArguments )
 {
-    if ( aArguments.getLength() > 0 )
+    if ( aArguments.hasElements() )
         OSL_FAIL( "HierarchyContentProvider::initialize : not supported!" );
 }
 

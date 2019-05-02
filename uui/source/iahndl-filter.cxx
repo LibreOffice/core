@@ -200,7 +200,7 @@ handleFilterOptionsRequest_(
     {
     }
 
-    if( xFilterCFG.is() && rRequest.rProperties.getLength() )
+    if( xFilterCFG.is() && rRequest.rProperties.hasElements() )
     {
         try
         {

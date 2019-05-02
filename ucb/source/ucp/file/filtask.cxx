@@ -2895,7 +2895,7 @@ TaskManager::copyPersistentSet( const OUString& srcUnqPath,
             uno::Sequence< beans::Property > seqProperty =
                 x_src->getPropertySetInfo()->getProperties();
 
-            if( seqProperty.getLength() )
+            if( seqProperty.hasElements() )
             {
                 uno::Reference< XPersistentPropertySet >
                     x_dstS = m_xFileRegistry->openPropertySet( new_Name,true );

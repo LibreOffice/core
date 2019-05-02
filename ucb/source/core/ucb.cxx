@@ -364,9 +364,9 @@ void SAL_CALL UniversalContentBroker::initialize( const css::uno::Sequence< Any 
 {
     {
         osl::MutexGuard aGuard(m_aMutex);
-        if (m_aArguments.getLength() != 0)
+        if (m_aArguments.hasElements())
         {
-            if (aArguments.getLength() != 0
+            if (aArguments.hasElements()
                 && !(m_aArguments.getLength() == 2
                      && aArguments.getLength() == 2
                      && m_aArguments[0] == aArguments[0]
@@ -378,7 +378,7 @@ void SAL_CALL UniversalContentBroker::initialize( const css::uno::Sequence< Any 
             }
             return;
         }
-        if (aArguments.getLength() == 0)
+        if (!aArguments.hasElements())
         {
             m_aArguments.realloc(2);
             m_aArguments[0] <<= OUString("Local");

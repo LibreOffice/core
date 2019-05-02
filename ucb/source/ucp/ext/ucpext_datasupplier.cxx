@@ -129,7 +129,7 @@ namespace ucb { namespace ucp { namespace ext
                 Sequence< Sequence< OUString > > aExtensionInfo( xPackageInfo->getExtensionList() );
                 for ( auto const & extInfo : aExtensionInfo )
                 {
-                    if ( extInfo.getLength() <= 0 )
+                    if ( !extInfo.hasElements() )
                     {
                         SAL_WARN( "ucb.ucp.ext", "illegal extension info" );
                         continue;

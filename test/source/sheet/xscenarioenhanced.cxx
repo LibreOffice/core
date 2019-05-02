@@ -29,7 +29,7 @@ void XScenarioEnhanced::testGetRanges()
     uno::Reference<sheet::XScenarioEnhanced> xSE(getScenarioSpreadsheet(), UNO_QUERY_THROW);
 
     uno::Sequence<table::CellRangeAddress> aCellRangeAddr = xSE->getRanges();
-    CPPUNIT_ASSERT_MESSAGE("No ranges found", aCellRangeAddr.getLength() != 0);
+    CPPUNIT_ASSERT_MESSAGE("No ranges found", aCellRangeAddr.hasElements());
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong CellRangeAddres", table::CellRangeAddress(1, 0, 0, 10, 10),
                                  aCellRangeAddr[0]);

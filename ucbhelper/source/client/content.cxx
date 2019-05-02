@@ -1201,7 +1201,7 @@ Reference< XContent > Content_Impl::getContent()
             Reference< XUniversalContentBroker > pBroker(
                 UniversalContentBroker::create( getComponentContext() ) );
 
-            OSL_ENSURE( pBroker->queryContentProviders().getLength(),
+            OSL_ENSURE( pBroker->queryContentProviders().hasElements(),
                         "Content Broker not configured (no providers)!" );
 
             Reference< XContentIdentifier > xId

@@ -27,7 +27,7 @@ void XSheetPageBreak::testGetColumnPageBreaks()
     uno::Reference< sheet::XSheetPageBreak > xSheetPageBreak(init(), UNO_QUERY_THROW);
 
     uno::Sequence< sheet::TablePageBreakData > xColPageBreak = xSheetPageBreak->getColumnPageBreaks();
-    CPPUNIT_ASSERT_MESSAGE("Unable to get column page breaks", xColPageBreak.getLength() != 0);
+    CPPUNIT_ASSERT_MESSAGE("Unable to get column page breaks", xColPageBreak.hasElements());
 }
 
 void XSheetPageBreak::testGetRowPageBreaks()
@@ -35,7 +35,7 @@ void XSheetPageBreak::testGetRowPageBreaks()
     uno::Reference< sheet::XSheetPageBreak > xSheetPageBreak(init(), UNO_QUERY_THROW);
 
     uno::Sequence< sheet::TablePageBreakData > xRowPageBreak = xSheetPageBreak->getRowPageBreaks();
-    CPPUNIT_ASSERT_MESSAGE("Unable to get row page breaks", xRowPageBreak.getLength() != 0);
+    CPPUNIT_ASSERT_MESSAGE("Unable to get row page breaks", xRowPageBreak.hasElements());
 }
 
 void XSheetPageBreak::testRemoveAllManualPageBreaks()

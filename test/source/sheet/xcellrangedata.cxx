@@ -69,7 +69,7 @@ void XCellRangeData::testGetDataArray()
 {
     uno::Reference< sheet::XCellRangeData > xCellRangeData( getXCellRangeData(), UNO_QUERY_THROW);
     uno::Sequence< uno::Sequence < Any > > aColRow = xCellRangeData->getDataArray();
-    CPPUNIT_ASSERT(aColRow.getLength());
+    CPPUNIT_ASSERT(aColRow.hasElements());
 }
 
 void XCellRangeData::testGetDataArrayOnTableSheet()

@@ -154,9 +154,9 @@ void LocaleDataWrapper::invalidateData()
     xDefaultCalendar.reset();
     xSecondaryCalendar.reset();
     bSecondaryCalendarValid = false;
-    if (aGrouping.getLength())
+    if (aGrouping.hasElements())
         aGrouping[0] = 0;
-    if (aDateAcceptancePatterns.getLength())
+    if (aDateAcceptancePatterns.hasElements())
         aDateAcceptancePatterns = Sequence<OUString>();
 }
 
@@ -259,7 +259,7 @@ css::uno::Sequence< css::lang::Locale > LocaleDataWrapper::getAllInstalledLocale
 {
     uno::Sequence< lang::Locale > &rInstalledLocales = InstalledLocales::get();
 
-    if ( rInstalledLocales.getLength() )
+    if ( rInstalledLocales.hasElements() )
         return rInstalledLocales;
 
     try
@@ -281,7 +281,7 @@ css::uno::Sequence< css::lang::Locale > LocaleDataWrapper::getInstalledLocaleNam
     const uno::Sequence< lang::Locale > &rInstalledLocales =
         InstalledLocales::get();
 
-    if ( !rInstalledLocales.getLength() )
+    if ( !rInstalledLocales.hasElements() )
     {
         LocaleDataWrapper aLDW( ::comphelper::getProcessComponentContext(), LanguageTag( LANGUAGE_SYSTEM) );
         aLDW.getAllInstalledLocaleNames();
@@ -1080,7 +1080,7 @@ void LocaleDataWrapper::getDigitGroupingImpl()
      * sequence. Needed additional API and a locale data element.
      */
 
-    if (!aGrouping.getLength())
+    if (!aGrouping.hasElements())
     {
         aGrouping.realloc(3);   // room for {3,2,0}
         aGrouping[0] = 0;       // invalidate
@@ -1106,7 +1106,7 @@ void LocaleDataWrapper::getDigitGroupingImpl()
 const css::uno::Sequence< sal_Int32 > LocaleDataWrapper::getDigitGrouping() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
-    if (!aGrouping.getLength() || aGrouping[0] == 0)
+    if (!aGrouping.hasElements() || aGrouping[0] == 0)
     {   // no cached content
         aGuard.changeReadToWrite();
         const_cast<LocaleDataWrapper*>(this)->getDigitGroupingImpl();
@@ -1789,7 +1789,7 @@ css::uno::Sequence< OUString > LocaleDataWrapper::getDateAcceptancePatterns() co
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
 
-    if (aDateAcceptancePatterns.getLength())
+    if (aDateAcceptancePatterns.hasElements())
         return aDateAcceptancePatterns;
 
     aGuard.changeReadToWrite();
@@ -1814,7 +1814,7 @@ void LocaleDataWrapper::setDateAcceptancePatterns(
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::Write );
 
-    if (!aDateAcceptancePatterns.getLength() || !rPatterns.getLength())
+    if (!aDateAcceptancePatterns.hasElements() || !rPatterns.hasElements())
     {
         try
         {
@@ -1824,9 +1824,9 @@ void LocaleDataWrapper::setDateAcceptancePatterns(
         {
             SAL_WARN( "unotools.i18n", "setDateAcceptancePatterns: Exception caught " << e );
         }
-        if (!rPatterns.getLength())
+        if (!rPatterns.hasElements())
             return;     // just a reset
-        if (!aDateAcceptancePatterns.getLength())
+        if (!aDateAcceptancePatterns.hasElements())
         {
             aDateAcceptancePatterns = rPatterns;
             return;

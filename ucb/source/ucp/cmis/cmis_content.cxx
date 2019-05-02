@@ -1794,7 +1794,7 @@ namespace cmis
         else if ( aCommand.Name == "setPropertyValues" )
         {
             uno::Sequence< beans::PropertyValue > aProperties;
-            if ( !( aCommand.Argument >>= aProperties ) || !aProperties.getLength() )
+            if ( !( aCommand.Argument >>= aProperties ) || !aProperties.hasElements() )
                 ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
             aRet <<= setPropertyValues( aProperties, xEnv );
         }
