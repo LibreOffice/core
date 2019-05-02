@@ -3896,11 +3896,20 @@ bool ToolBox::EventNotify( NotifyEvent& rNEvt )
         if( rNEvt.GetWindow() == this )
         {
             // the toolbar itself got the focus
-            if( mnLastFocusItemId != 0 )
+            if( mnLastFocusItemId != 0 || mpData->mbMenubuttonWasLastSelected )
             {
                 // restore last item
-                ImplChangeHighlight( ImplGetItem( mnLastFocusItemId ) );
-                mnLastFocusItemId = 0;
+                if( mpData->mbMenubuttonWasLastSelected )
+                {
+                    ImplChangeHighlight( nullptr );
+                    mpData->mbMenubuttonSelected = true;
+                    InvalidateMenuButton();
+                }
+                else
+                {
+                    ImplChangeHighlight( ImplGetItem( mnLastFocusItemId ) );
+                    mnLastFocusItemId = 0;
+                }
             }
             else if( (GetGetFocusFlags() & (GetFocusFlags::Backward|GetFocusFlags::Tab) ) == (GetFocusFlags::Backward|GetFocusFlags::Tab))
                 // Shift-TAB was pressed in the parent
@@ -3934,6 +3943,7 @@ bool ToolBox::EventNotify( NotifyEvent& rNEvt )
     {
         // deselect
         ImplHideFocus();
+        mpData->mbMenubuttonWasLastSelected = false;
         mnHighItemId = 0;
         mnCurPos = ITEM_NOTFOUND;
     }
@@ -4458,18 +4468,17 @@ bool ToolBox::ImplOpenItem( vcl::KeyCode aKeyCode )
     {
         if( ImplCloseLastPopup( GetParent() ) )
             return bRet;
-
+        mbIsKeyEvent = true;
         if ( maMenuButtonHdl.IsSet() )
             maMenuButtonHdl.Call( this );
         else
             ExecuteCustomMenu( mpData->maMenubuttonItem.maRect );
+        mpData->mbMenubuttonWasLastSelected = true;
+        mbIsKeyEvent = false;
     }
     else if( mnHighItemId &&  ImplGetItem( mnHighItemId ) &&
         (ImplGetItem( mnHighItemId )->mnBits & ToolBoxItemBits::DROPDOWN) )
     {
-        if( ImplCloseLastPopup( GetParent() ) )
-            return bRet;
-
         mnDownItemId = mnCurItemId = mnHighItemId;
         mnCurPos = GetItemPos( mnCurItemId );
         mnLastFocusItemId = mnCurItemId; // save item id for possible later focus restore
@@ -4844,6 +4853,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
         // menubutton highlighted ?
         if( mpData->mbMenubuttonSelected )
         {
+            mpData->mbMenubuttonSelected = false;
             if( bUp )
             {
                 // select last valid non-clipped item
@@ -4880,6 +4890,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
             if( (it != mpData->m_aItems.end() && &(*it) == ImplGetFirstClippedItem()) && IsMenuEnabled() )
             {
                 ImplChangeHighlight( nullptr );
+                mpData->mbMenubuttonSelected = true;
                 InvalidateMenuButton();
             }
             else
@@ -4891,9 +4902,10 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
             // Select last valid item
 
             // docked toolbars have the menubutton as last item - if this button is enabled
-            if( IsMenuEnabled() && !ImplIsFloatingMode() )
+            if( ImplHasClippedItems() && IsMenuEnabled() && !ImplIsFloatingMode() )
             {
                 ImplChangeHighlight( nullptr );
+                mpData->mbMenubuttonSelected = true;
                 InvalidateMenuButton();
             }
             else
@@ -4926,9 +4938,10 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
                     return false;
 
                 // highlight the menu button if it is the last item
-                if( IsMenuEnabled() && !ImplIsFloatingMode() )
+                if( ImplHasClippedItems() && IsMenuEnabled() && !ImplIsFloatingMode() )
                 {
                     ImplChangeHighlight( nullptr );
+                    mpData->mbMenubuttonSelected = true;
                     InvalidateMenuButton();
                     return true;
                 }
@@ -4944,9 +4957,10 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
                     return false;
 
                 // highlight the menu button if it is the last item
-                if( IsMenuEnabled() && !ImplIsFloatingMode() )
+                if( ImplHasClippedItems() && IsMenuEnabled() && !ImplIsFloatingMode() )
                 {
                     ImplChangeHighlight( nullptr );
+                    mpData->mbMenubuttonSelected = true;
                     InvalidateMenuButton();
                     return true;
                 }
@@ -4966,6 +4980,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
     {
         // select the menu button if a clipped item would be selected
         ImplChangeHighlight( nullptr );
+        mpData->mbMenubuttonSelected = true;
         InvalidateMenuButton();
     }
     else if( i != nCount )
@@ -4994,6 +5009,7 @@ void ToolBox::ImplHideFocus()
 {
     if( mnHighItemId )
     {
+        mpData->mbMenubuttonWasLastSelected = false;
         ImplToolItem* pItem = ImplGetItem( mnHighItemId );
         if( pItem && pItem->mpWindow )
         {
@@ -5005,7 +5021,9 @@ void ToolBox::ImplHideFocus()
 
     if ( mpData && mpData->mbMenubuttonSelected )
     {
+        mpData->mbMenubuttonWasLastSelected = true;
         // remove highlight from menubutton
+        mpData->mbMenubuttonSelected = false;
         InvalidateMenuButton();
     }
 }
