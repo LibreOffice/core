@@ -503,7 +503,7 @@ bool SwXMLWriter::WriteThroughComponent(
 
         // set Base URL
         uno::Reference< beans::XPropertySet > xInfoSet;
-        if( rArguments.getLength() > 0 )
+        if( rArguments.hasElements() )
             rArguments.getConstArray()[0] >>= xInfoSet;
         OSL_ENSURE( xInfoSet.is(), "missing property set" );
         if( xInfoSet.is() )

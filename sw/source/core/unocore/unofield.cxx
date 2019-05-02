@@ -1916,7 +1916,7 @@ void SAL_CALL SwXTextField::attach(
             xField.reset(new SwAuthorityField(static_cast<SwAuthorityFieldType*>(
                         pDoc->getIDocumentFieldsAccess().InsertFieldType(type)),
                     OUString()));
-            if (m_pImpl->m_pProps->aPropSeq.getLength())
+            if (m_pImpl->m_pProps->aPropSeq.hasElements())
             {
                 uno::Any aVal;
                 aVal <<= m_pImpl->m_pProps->aPropSeq;

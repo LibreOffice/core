@@ -291,7 +291,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
     }
     //read the list of data base assignments
     Sequence<OUString> aAssignments = GetNodeNames(cAddressDataAssignments);
-    if(aAssignments.getLength())
+    if(aAssignments.hasElements())
     {
         //create a list of property names to load the URLs of all data bases
         const OUString* pAssignments = aAssignments.getConstArray();
@@ -327,7 +327,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         }
     }
     //check if the saved documents still exist
-    if(m_aSavedDocuments.getLength())
+    if(m_aSavedDocuments.hasElements())
     {
         uno::Sequence< OUString > aTempDocuments(m_aSavedDocuments.getLength());
         OUString* pTempDocuments = aTempDocuments.getArray();
@@ -345,7 +345,6 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
             m_aSavedDocuments.realloc(nIndex);
         }
     }
-
 }
 
 void SwMailMergeConfigItem_Impl::SetCurrentAddressBlockIndex( sal_Int32 nSet )

@@ -1764,7 +1764,7 @@ Reference< XInterface >  SwXTextDocument::createInstanceWithArguments(
 Sequence< OUString > SwXTextDocument::getAvailableServiceNames()
 {
     static Sequence< OUString > aServices;
-    if ( aServices.getLength() == 0 )
+    if ( !aServices.hasElements() )
     {
         Sequence< OUString > aRet =  SvxFmMSFactory::getAvailableServiceNames();
         OUString* pRet = aRet.getArray();
@@ -1896,7 +1896,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
             {
                 SwDoc* pDoc = pDocShell->GetDoc();
                 pDoc->getIDocumentRedlineAccess().SetRedlinePassword(aNew);
-                if(aNew.getLength())
+                if(aNew.hasElements())
                 {
                     RedlineFlags eMode = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
                     eMode |= RedlineFlags::On;

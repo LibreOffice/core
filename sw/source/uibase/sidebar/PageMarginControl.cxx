@@ -513,7 +513,7 @@ bool PageMarginControl::GetUserCustomValues()
     {
         css::uno::Sequence < css::beans::NamedValue > aSeq = aWinOpt.GetUserData();
         OUString aTmp;
-        if ( aSeq.getLength())
+        if ( aSeq.hasElements())
             aSeq[0].Value >>= aTmp;
         OUString aWinData( aTmp );
         m_nUserCustomPageLeftMargin = aWinData.toInt32();
@@ -525,7 +525,7 @@ bool PageMarginControl::GetUserCustomValues()
     {
         css::uno::Sequence < css::beans::NamedValue > aSeq = aWinOpt2.GetUserData();
         OUString aTmp;
-        if ( aSeq.getLength())
+        if ( aSeq.hasElements())
             aSeq[0].Value >>= aTmp;
         OUString aWinData( aTmp );
         m_nUserCustomPageRightMargin = aWinData.toInt32();
@@ -537,7 +537,7 @@ bool PageMarginControl::GetUserCustomValues()
     {
         css::uno::Sequence < css::beans::NamedValue > aSeq = aWinOpt3.GetUserData();
         OUString aTmp;
-        if ( aSeq.getLength() )
+        if ( aSeq.hasElements() )
             aSeq[0].Value >>= aTmp;
         OUString aWinData( aTmp );
         m_nUserCustomPageTopMargin = aWinData.toInt32();
@@ -549,7 +549,7 @@ bool PageMarginControl::GetUserCustomValues()
     {
         css::uno::Sequence < css::beans::NamedValue > aSeq = aWinOpt4.GetUserData();
         OUString aTmp;
-        if ( aSeq.getLength())
+        if ( aSeq.hasElements())
             aSeq[0].Value >>= aTmp;
         OUString aWinData( aTmp );
         m_nUserCustomPageBottomMargin = aWinData.toInt32();
@@ -561,7 +561,7 @@ bool PageMarginControl::GetUserCustomValues()
     {
         css::uno::Sequence < css::beans::NamedValue > aSeq = aWinOpt5.GetUserData();
         OUString aTmp;
-        if ( aSeq.getLength())
+        if ( aSeq.hasElements())
             aSeq[0].Value >>= aTmp;
         OUString aWinData( aTmp );
         m_bUserCustomMirrored = aWinData.toInt32() != 0;

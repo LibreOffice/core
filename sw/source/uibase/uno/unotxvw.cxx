@@ -581,7 +581,7 @@ void SAL_CALL SwXTextView::setRubyList(
 {
     SolarMutexGuard aGuard;
 
-    if(!GetView() || !rRubyList.getLength())
+    if(!GetView() || !rRubyList.hasElements())
         throw RuntimeException();
     SwWrtShell& rSh = m_pView->GetWrtShell();
     ShellMode eSelMode = m_pView->GetShellMode();

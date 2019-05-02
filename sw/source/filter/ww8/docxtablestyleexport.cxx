@@ -142,7 +142,7 @@ void DocxTableStyleExport::TableStyles(sal_Int32 nCountStylesToWrite)
             break;
         }
     }
-    if (!aTableStyles.getLength())
+    if (!aTableStyles.hasElements())
         return;
 
     if (nCountStylesToWrite > aTableStyles.getLength())

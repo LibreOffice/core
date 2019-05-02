@@ -1444,7 +1444,7 @@ SwXText::insertTextContentWithProperties(
     // now attach the text content here
     insertTextContent( xInsertPosition, xTextContent, false );
     // now apply the properties to the anchor
-    if (rCharacterAndParagraphProperties.getLength())
+    if (rCharacterAndParagraphProperties.hasElements())
     {
         try
         {
