@@ -20,6 +20,7 @@
  *************************************************************/
 
 
+
 #ifndef _COMPHELPER_OBJECTCONTAINER_HXX_
 #define _COMPHELPER_OBJECTCONTAINER_HXX_
 
@@ -132,7 +133,7 @@ sal_Bool            RemoveEmbeddedObject( const ::rtl::OUString& rName, sal_Bool
 sal_Bool            RemoveEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, sal_Bool bClose = sal_True, sal_Bool bKeepToTempStorage = sal_True );
     // remove an embedded object from the container and from the storage; if object can't be closed
     //sal_Bool            RemoveEmbeddedObject( const ::rtl::OUString& rName, sal_Bool bClose=sal_True );
-   // sal_Bool            RemoveEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, sal_Bool bClose=sal_True );
+    //sal_Bool            RemoveEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, sal_Bool bClose=sal_True );
 
     // close and remove an embedded object from the container without removing it from the storage
     sal_Bool            CloseEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
@@ -149,7 +150,7 @@ sal_Bool            RemoveEmbeddedObject( const ::com::sun::star::uno::Reference
     // add a graphical representation for an object
     sal_Bool            InsertGraphicStream( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream, const ::rtl::OUString& rObjectName, const ::rtl::OUString& rMediaType );
 
-    // try to add a graphical representation for an object in optimized way ( might fail )
+    // try to add a graphical representation for an object in optimized way (might fail)
     sal_Bool            InsertGraphicStreamDirectly( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream, const ::rtl::OUString& rObjectName, const rtl::OUString& rMediaType );
 
     // remove a graphical representation for an object
@@ -173,8 +174,8 @@ sal_Bool            RemoveEmbeddedObject( const ::com::sun::star::uno::Reference
 
     /** call setPersistentEntry for each embedded object in the container
     *
-    * \param _xStorage The storeage where to store the objects.
-    * \param _bClearModifedFlag If <TRUE/> then the modifed flag will be set to <FALSE/> otherwise nothing happen.
+    * \param _xStorage The storage where to store the objects.
+    * \param _bClearModifedFlag If <TRUE/> then the modified flag will be set to <FALSE/> otherwise nothing happen.
     * \return <FALSE/> if no error occurred, otherwise <TRUE/>.
     */
     sal_Bool             SetPersistentEntries(const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& _xStorage,bool _bClearModifedFlag = true);
