@@ -87,11 +87,12 @@ Animation& Animation::operator=(const Animation& rAnimation)
 bool Animation::operator==(const Animation& rAnimation) const
 {
     return maList.size() == rAnimation.maList.size() and maBitmapEx == rAnimation.maBitmapEx
-      and maGlobalSize == rAnimation.maGlobalSize and std::equal(maList.begin(), maList.end(), rAnimation.maList.begin(),
-      [] (const std::unique_ptr<AnimationBitmap>& pAnim1, const std::unique_ptr<AnimationBitmap>& pAnim2) -> bool
-      {
-          return *pAnim1 == *pAnim2;
-      });
+           and maGlobalSize == rAnimation.maGlobalSize
+           and std::equal(maList.begin(), maList.end(), rAnimation.maList.begin(),
+                          [](const std::unique_ptr<AnimationBitmap>& pAnim1,
+                             const std::unique_ptr<AnimationBitmap>& pAnim2) -> bool {
+                              return *pAnim1 == *pAnim2;
+                          });
 }
 
 void Animation::Clear()
@@ -270,7 +271,7 @@ void Animation::Draw(OutputDevice* pOut, const Point& rDestPt, const Size& rDest
                 const_cast<Animation*>(this)->mnPos = nCount - 1;
 
             {
-                ImplAnimView{const_cast<Animation*>(this), pOut, rDestPt, rDestSz, 0};
+                ImplAnimView{ const_cast<Animation*>(this), pOut, rDestPt, rDestSz, 0 };
             }
 
             const_cast<Animation*>(this)->mnPos = nOldPos;
