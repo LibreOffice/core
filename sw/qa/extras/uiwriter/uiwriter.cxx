@@ -177,6 +177,7 @@ public:
     void testTdf98512();
     void testShapeTextboxSelect();
     void testShapeTextboxDelete();
+    void testAnchorChangeSelection();
     void testCp1000071();
     void testShapeTextboxVertadjust();
     void testShapeTextboxAutosize();
@@ -377,6 +378,7 @@ public:
     CPPUNIT_TEST(testTdf98512);
     CPPUNIT_TEST(testShapeTextboxSelect);
     CPPUNIT_TEST(testShapeTextboxDelete);
+    CPPUNIT_TEST(testAnchorChangeSelection);
     CPPUNIT_TEST(testCp1000071);
     CPPUNIT_TEST(testShapeTextboxVertadjust);
     CPPUNIT_TEST(testShapeTextboxAutosize);
@@ -1257,6 +1259,25 @@ void SwUiWriterTest::testShapeTextboxDelete()
     nActual = pPage->GetObjCount();
     // Both (not only the shape) should be removed by now (the textbox wasn't removed, so this was 1).
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), nActual);
+}
+
+void SwUiWriterTest::testAnchorChangeSelection()
+{
+    SwDoc* pDoc = createDoc("test_anchor_as_character.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pObject);
+
+    // Then select it.
+    pWrtShell->SelectObj(Point(), 0, pObject);
+    const SdrMarkList& rMarkList = pWrtShell->GetDrawView()->GetMarkedObjectList();
+    CPPUNIT_ASSERT_EQUAL(pObject, rMarkList.GetMark(0)->GetMarkedSdrObj());
+
+    pWrtShell->ChgAnchor(RndStdIds::FLY_AS_CHAR);
+
+    // tdf#125039 shape must still be selected, extensions depend on that
+    CPPUNIT_ASSERT_EQUAL(pObject, rMarkList.GetMark(0)->GetMarkedSdrObj());
 }
 
 void SwUiWriterTest::testCp1000071()
