@@ -274,7 +274,7 @@ void SwRedlineAcceptDlg::InitAuthors()
         pFilterPage->SelectAuthor(aStrings[0]);
 
     weld::TreeView& rTreeView = m_pTable->GetWidget();
-    bool bEnable = rTreeView.n_children() != 0 && !pSh->getIDocumentRedlineAccess().GetRedlinePassword().getLength();
+    bool bEnable = rTreeView.n_children() != 0 && !pSh->getIDocumentRedlineAccess().GetRedlinePassword().hasElements();
     bool bSel = rTreeView.get_selected(nullptr);
 
     rTreeView.selected_foreach([this, pSh, &bIsNotFormated](weld::TreeIter& rEntry){
@@ -978,7 +978,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
         }
     }
 
-    bool bEnable = !pSh->getIDocumentRedlineAccess().GetRedlinePassword().getLength();
+    bool bEnable = !pSh->getIDocumentRedlineAccess().GetRedlinePassword().hasElements();
     m_pTPView->EnableAccept( bEnable && bSel /*&& !bReadonlySel*/ );
     m_pTPView->EnableReject( bEnable && bSel /*&& !bReadonlySel*/ );
     m_pTPView->EnableClearFormat( bEnable && bSel && !bIsNotFormated /*&& !bReadonlySel*/ );

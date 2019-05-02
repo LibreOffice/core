@@ -573,7 +573,7 @@ void SwView::Execute(SfxRequest &rReq)
             {
                 IDocumentRedlineAccess& rIDRA = m_pWrtShell->getIDocumentRedlineAccess();
                 Sequence <sal_Int8> aPasswd = rIDRA.GetRedlinePassword();
-                if( aPasswd.getLength() )
+                if( aPasswd.hasElements() )
                 {
                     OSL_ENSURE( !static_cast<const SfxBoolItem*>(pItem)->GetValue(), "SwView::Execute(): password set an redlining off doesn't match!" );
                     // xmlsec05:    new password dialog
@@ -612,14 +612,14 @@ void SwView::Execute(SfxRequest &rReq)
             IDocumentRedlineAccess& rIDRA = m_pWrtShell->getIDocumentRedlineAccess();
             Sequence <sal_Int8> aPasswd = rIDRA.GetRedlinePassword();
             if( pArgs && SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem )
-                && static_cast<const SfxBoolItem*>(pItem)->GetValue() == ( aPasswd.getLength() != 0 ) )
+                && static_cast<const SfxBoolItem*>(pItem)->GetValue() == aPasswd.hasElements() )
                 break;
 
             // xmlsec05:    new password dialog
             //              message box for wrong password
             SfxPasswordDialog aPasswdDlg(GetFrameWeld());
             aPasswdDlg.SetMinLen(1);
-            if (!aPasswd.getLength())
+            if (!aPasswd.hasElements())
                 aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);
             if (aPasswdDlg.run())
             {
@@ -628,7 +628,7 @@ void SwView::Execute(SfxRequest &rReq)
                 Sequence <sal_Int8> aNewPasswd =
                         rIDRA.GetRedlinePassword();
                 SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
-                if(!aPasswd.getLength())
+                if(!aPasswd.hasElements())
                 {
                     rIDRA.SetRedlinePassword(aNewPasswd);
                 }
@@ -2291,7 +2291,7 @@ namespace
     {
         Sequence < OUString > aNames = _rDatasourceContext->getElementNames();
 
-        return  (   !aNames.getLength()
+        return  (   !aNames.hasElements()
                 ||  (   ( 1 == aNames.getLength() )
                     &&  aNames.getConstArray()[0] == SW_MOD()->GetDBConfig()->GetBibliographySource().sDataSource
                     )

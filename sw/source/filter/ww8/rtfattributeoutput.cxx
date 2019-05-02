@@ -2105,7 +2105,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                             m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFHASLISTBOX);
 
                             xPropSet->getPropertyValue("DefaultSelection") >>= aIntSeq;
-                            if (aIntSeq.getLength())
+                            if (aIntSeq.hasElements())
                             {
                                 m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFDEFRES);
                                 // a dropdown list can have only one 'selected item by default'
@@ -2113,7 +2113,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                             }
 
                             xPropSet->getPropertyValue("SelectedItems") >>= aIntSeq;
-                            if (aIntSeq.getLength())
+                            if (aIntSeq.hasElements())
                             {
                                 m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFRES);
                                 // a dropdown list can have only one 'currently selected item'

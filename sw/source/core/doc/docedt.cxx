@@ -610,7 +610,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
 
                                 // get error position of cursor in XFlatParagraph
                                 linguistic2::ProofreadingResult aResult;
-                                sal_Int32 nGrammarErrors;
+                                bool bGrammarErrors;
                                 do
                                 {
                                     aConversionMap.ConvertToViewPosition( nBeginGrammarCheck );
@@ -620,16 +620,16 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                     lcl_syncGrammarError( *pNd->GetTextNode(), aResult, aConversionMap );
 
                                     // get suggestions to use for the specific error position
-                                    nGrammarErrors = aResult.aErrors.getLength();
+                                    bGrammarErrors = aResult.aErrors.hasElements();
                                     // if grammar checking doesn't have any progress then quit
                                     if( aResult.nStartOfNextSentencePosition <= nBeginGrammarCheck )
                                         break;
                                     // prepare next iteration
                                     nBeginGrammarCheck = aResult.nStartOfNextSentencePosition;
                                 }
-                                while( nSpellErrorPosition > aResult.nBehindEndOfSentencePosition && !nGrammarErrors && aResult.nBehindEndOfSentencePosition < nEndGrammarCheck );
+                                while( nSpellErrorPosition > aResult.nBehindEndOfSentencePosition && !bGrammarErrors && aResult.nBehindEndOfSentencePosition < nEndGrammarCheck );
 
-                                if( nGrammarErrors > 0 && nSpellErrorPosition >= aResult.nBehindEndOfSentencePosition )
+                                if( bGrammarErrors && nSpellErrorPosition >= aResult.nBehindEndOfSentencePosition )
                                 {
                                     aRet <<= aResult;
                                     //put the cursor to the current error

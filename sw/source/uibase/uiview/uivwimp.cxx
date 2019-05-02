@@ -123,7 +123,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
                     const Sequence< ScannerContext >
                         aContexts( xScanMgr->getAvailableScanners() );
 
-                    if( aContexts.getLength() )
+                    if( aContexts.hasElements() )
                     {
                         Reference< XEventListener > xLstner = &rListener;
                         ScannerContext aContext( aContexts.getConstArray()[ 0 ] );
@@ -155,7 +155,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
                 try
                 {
                     const Sequence< scanner::ScannerContext >aContexts( xScanMgr->getAvailableScanners() );
-                    if( aContexts.getLength() )
+                    if( aContexts.hasElements() )
                     {
                         Reference< XEventListener > xLstner = &rListener;
                         xScanMgr->startScan( aContexts.getConstArray()[ 0 ], xLstner );

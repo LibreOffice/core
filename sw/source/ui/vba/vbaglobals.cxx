@@ -39,7 +39,7 @@ SwVbaGlobals::SwVbaGlobals(  uno::Sequence< uno::Any > const& aArgs, uno::Refere
     uno::Sequence< beans::PropertyValue > aInitArgs( aArgs.getLength() + 1 );
     aInitArgs[ 0 ].Name = "Application";
     aInitArgs[ 0 ].Value <<= getApplication();
-    if ( aArgs.getLength() > 0 )
+    if ( aArgs.hasElements() )
     {
         aInitArgs[ 1 ].Name = "WordDocumentContext";
         aInitArgs[ 1 ].Value <<= getXSomethingFromArgs< frame::XModel >( aArgs, 0 );

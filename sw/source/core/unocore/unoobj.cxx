@@ -1782,7 +1782,7 @@ void SwUnoCursorHelper::SetPropertyValues(
     const uno::Sequence< beans::PropertyValue > &rPropertyValues,
     const SetAttrMode nAttrMode)
 {
-    if (!rPropertyValues.getLength())
+    if (!rPropertyValues.hasElements())
         return;
 
     SwDoc *const pDoc = rPaM.GetDoc();
@@ -2543,10 +2543,10 @@ SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
     // get collator algorithm to be used for the locale
     uno::Sequence< OUString > aSeq(
             GetAppCollator().listCollatorAlgorithms( aLang ) );
-    const sal_Int32 nLen = aSeq.getLength();
-    OSL_ENSURE( nLen > 0, "list of collator algorithms is empty!");
+    const bool bHasElements = aSeq.hasElements();
+    OSL_ENSURE( bHasElements, "list of collator algorithms is empty!");
     OUString aCollAlg;
-    if (nLen > 0)
+    if (bHasElements)
     {
         aCollAlg = aSeq.getConstArray()[0];
     }

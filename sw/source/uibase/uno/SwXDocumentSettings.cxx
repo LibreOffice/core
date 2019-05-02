@@ -641,7 +641,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             if(rValue >>= aNew)
             {
                 mpDoc->getIDocumentRedlineAccess().SetRedlinePassword(aNew);
-                if(aNew.getLength())
+                if(aNew.hasElements())
                 {
                     RedlineFlags eMode = mpDoc->getIDocumentRedlineAccess().GetRedlineFlags();
                     eMode |= RedlineFlags::On;
