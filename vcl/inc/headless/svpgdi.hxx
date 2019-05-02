@@ -126,7 +126,7 @@ public:
 
 private:
     void invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags);
-    void applyColor(cairo_t *cr, Color rColor);
+    void applyColor(cairo_t *cr, Color rColor, double fTransparency = 0.0);
 
 protected:
     vcl::Region                         m_aClipRegion;
