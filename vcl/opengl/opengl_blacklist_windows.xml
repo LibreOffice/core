@@ -34,6 +34,10 @@
             <device id="0x591b"/>
             <device id="0x5916"/>
         </entry>
+        <!-- tdf#115092 -->
+        <entry os="all" vendor="intel" compare="equal" version="22.20.16.4735">
+            <device id="0x1912"/>
+        </entry>
         <entry os="7" vendor="intel">
             <device id="all"/>
         </entry>
