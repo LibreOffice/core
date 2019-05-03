@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <test/util/searchdescriptor.hxx>
 #include <test/util/xreplacedescriptor.hxx>
 #include <test/util/xsearchdescriptor.hxx>
@@ -31,7 +32,8 @@ class ScCellSearchObj : public CalcUnoApiTest,
                         public apitest::SearchDescriptor,
                         public apitest::XPropertySet,
                         public apitest::XReplaceDescriptor,
-                        public apitest::XSearchDescriptor
+                        public apitest::XSearchDescriptor,
+                        public apitest::XServiceInfo
 {
 public:
     ScCellSearchObj();
@@ -58,6 +60,11 @@ public:
     // XSearchDescriptor
     CPPUNIT_TEST(testGetSetSearchString);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -66,6 +73,8 @@ private:
 
 ScCellSearchObj::ScCellSearchObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XServiceInfo("ScCellSearchObj",
+                   { "com.sun.star.util.ReplaceDescriptor", "com.sun.star.util.SearchDescriptor" })
 {
 }
 
