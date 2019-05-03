@@ -43,7 +43,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			CXXFLAGS=' \
 				$(if $(filter ANDROID,$(OS)),-DHB_NO_MMAP=1,) \
-				$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS)) \
+				$(if $(call gb_LinkTarget__symbols_enabled,$(1)),$(gb_DEBUGINFO_FLAGS)) \
 				$(if $(ENABLE_OPTIMIZED), \
 					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
 				$(if $(ENABLE_RUNTIME_OPTIMIZATIONS),,-frtti) \
