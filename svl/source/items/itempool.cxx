@@ -631,17 +631,15 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
             }
         }
 
+        const SfxPoolItem* pFoundItem = nullptr;
         // 2. search for an item with matching attributes.
         if (rItem.IsSortable())
         {
-            auto pFoundItem = rItemArr.findByLessThan(&rItem);
+            pFoundItem = rItemArr.findByLessThan(&rItem);
             if (pFoundItem)
             {
                 assert(*pFoundItem == rItem);
                 AddRef(*pFoundItem);
-                if (bPassingOwnership)
-                    delete &rItem;
-                return *pFoundItem;
             }
         }
         else
@@ -650,11 +648,19 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
             {
                 if (**itr == rItem)
                 {
-                    AddRef(**itr);
+                    pFoundItem = *itr;
                     assert((!bPassingOwnership || (&rItem != *itr)) && "can't be passing ownership and have the item already in the pool");
-                    return **itr;
+                    AddRef(**itr);
+                    break;
                 }
             }
+        }
+
+        if (pFoundItem)
+        {
+            if (bPassingOwnership)
+                delete &rItem;
+            return *pFoundItem;
         }
     }
 
