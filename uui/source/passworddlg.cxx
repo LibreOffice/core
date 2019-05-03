@@ -42,7 +42,7 @@ PasswordDialog::PasswordDialog(weld::Window* pParent,
     , rResLocale(rLocale)
 {
     // tdf#115964 we can be launched before the parent has resized to its final size
-    m_xDialog->set_centered_on_parent_geometry_request();
+    m_xDialog->set_centered_on_parent(true);
 
     if( nDialogMode == task::PasswordRequestMode_PASSWORD_REENTER )
     {
