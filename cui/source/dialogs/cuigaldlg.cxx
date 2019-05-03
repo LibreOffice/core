@@ -216,8 +216,6 @@ IMPL_LINK_NOARG(SearchProgress, CleanUpHdl, void*, void)
         m_aSearchThread->join();
 
     m_xDialog->response(RET_OK);
-
-    m_xDialog.reset();
 }
 
 void SearchProgress::LaunchThread()
@@ -243,7 +241,6 @@ TakeThread::TakeThread(
 TakeThread::~TakeThread()
 {
 }
-
 
 void TakeThread::execute()
 {
@@ -289,9 +286,8 @@ void TakeThread::execute()
         pStatusProgress.reset();
     }
 
-    Application::PostUserEvent( LINK( mpProgress, TakeProgress, CleanUpHdl ), nullptr, true );
+    Application::PostUserEvent(LINK(mpProgress, TakeProgress, CleanUpHdl));
 }
-
 
 TakeProgress::TakeProgress(weld::Window* pParent, TPGalleryThemeProperties* pTabPage)
     : GenericDialogController(pParent, "cui/ui/galleryapplyprogress.ui",
@@ -364,7 +360,6 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl, void*, void)
     xWait.reset();
 
     m_xDialog->response(RET_OK);
-    m_xDialog.reset();
 }
 
 void TakeProgress::LaunchThread()
