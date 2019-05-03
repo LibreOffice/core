@@ -8016,6 +8016,7 @@ public:
 
     virtual void select_region(int nStartPos, int nEndPos) override
     {
+        disable_notify_events();
         GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
         GtkTextIter start, end;
         gtk_text_buffer_get_iter_at_offset(pBuffer, &start, nStartPos);
@@ -8023,6 +8024,7 @@ public:
         gtk_text_buffer_select_range(pBuffer, &start, &end);
         GtkTextMark* mark = gtk_text_buffer_create_mark(pBuffer, "scroll", &end, true);
         gtk_text_view_scroll_mark_onscreen(m_pTextView, mark);
+        enable_notify_events();
     }
 
     virtual void set_editable(bool bEditable) override
