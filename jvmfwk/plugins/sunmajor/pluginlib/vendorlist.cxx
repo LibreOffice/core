@@ -22,9 +22,6 @@
 #include "gnujre.hxx"
 #include "sunjre.hxx"
 #include "otherjre.hxx"
-#include <osl/thread.h>
-#include <stdio.h>
-
 
 namespace jfw_plugin
 {
@@ -51,20 +48,6 @@ BEGIN_VENDOR_MAP()
 #endif
     VENDOR_MAP_ENTRY("Azul Systems, Inc.", OtherInfo)
 END_VENDOR_MAP()
-
-
-bool isVendorSupported(const OUString& sVendor)
-{
-    const size_t count = SAL_N_ELEMENTS(gVendorMap) - 1;
-    for ( size_t pos = 0; pos < count; ++pos )
-    {
-        if (sVendor.equalsAscii(gVendorMap[pos].sVendorName))
-            return true;
-    }
-    SAL_INFO(
-        "jfw.level2", "sunjavaplugin does not support vendor: " << sVendor);
-    return false;
-}
 
 }
 

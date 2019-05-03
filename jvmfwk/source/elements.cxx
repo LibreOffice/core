@@ -26,9 +26,9 @@
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
 #include <fwkutil.hxx>
-#include "fwkbase.hxx"
+#include <fwkbase.hxx>
 #include "framework.hxx"
-#include "libxmlutil.hxx"
+#include <libxmlutil.hxx>
 #include <osl/thread.hxx>
 #include <algorithm>
 #include <libxml/parser.h>

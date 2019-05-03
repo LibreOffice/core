@@ -16,10 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_JVMFWK_SOURCE_FWKBASE_HXX
-#define INCLUDED_JVMFWK_SOURCE_FWKBASE_HXX
+#ifndef INCLUDED_JVMFWK_INC_FWKBASE_HXX
+#define INCLUDED_JVMFWK_INC_FWKBASE_HXX
+
+#include <sal/config.h>
+
+#include <boost/optional.hpp>
 
 #include <rtl/ustring.hxx>
+#include "elements.hxx"
 #include "libxmlutil.hxx"
 
 namespace jfw
@@ -34,7 +39,7 @@ class VendorSettings
 public:
     VendorSettings();
 
-    VersionInfo getVersionInformation(const OUString & sVendor) const;
+    boost::optional<VersionInfo> getVersionInformation(const OUString & sVendor) const;
 
     ::std::vector< OUString> getSupportedVendors() const;
 };

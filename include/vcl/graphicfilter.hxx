@@ -294,7 +294,8 @@ public:
                                    css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
                                    WmfExternal const *pExtHeader = nullptr );
 
-    Graphic ImportUnloadedGraphic(SvStream& rIStream);
+    // Setting sizeLimit limits how much will be read from the stream.
+    Graphic ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 sizeLimit = 0);
 
     const FilterErrorEx&    GetLastError() const { return *pErrorEx;}
     void                    ResetLastError();

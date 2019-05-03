@@ -8294,7 +8294,9 @@ jvmaccess/workbench/exceptiontest1.cxx
 jvmaccess/workbench/exceptiontest2.cxx
 jvmaccess/workbench/javainfo/javainfotest.cxx
 jvmfwk/inc/elements.hxx
+jvmfwk/inc/fwkbase.hxx
 jvmfwk/inc/fwkutil.hxx
+jvmfwk/inc/libxmlutil.hxx
 jvmfwk/inc/vendorbase.hxx
 jvmfwk/inc/vendorplugin.hxx
 jvmfwk/plugins/sunmajor/javaenvsetup/javaldx.cxx
@@ -8318,10 +8320,8 @@ jvmfwk/source/elements.cxx
 jvmfwk/source/framework.cxx
 jvmfwk/source/framework.hxx
 jvmfwk/source/fwkbase.cxx
-jvmfwk/source/fwkbase.hxx
 jvmfwk/source/fwkutil.cxx
 jvmfwk/source/libxmlutil.cxx
-jvmfwk/source/libxmlutil.hxx
 l10ntools/inc/cfglex.hxx
 l10ntools/inc/cfgmerge.hxx
 l10ntools/inc/common.hxx

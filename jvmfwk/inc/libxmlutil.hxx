@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_JVMFWK_SOURCE_LIBXMLUTIL_HXX
-#define INCLUDED_JVMFWK_SOURCE_LIBXMLUTIL_HXX
+#ifndef INCLUDED_JVMFWK_INC_LIBXMLUTIL_HXX
+#define INCLUDED_JVMFWK_INC_LIBXMLUTIL_HXX
 
 #include <libxml/parser.h>
 #include <libxml/xpath.h>
