@@ -342,10 +342,17 @@ public:
     virtual bool get_resizable() const = 0;
     virtual Size get_size() const = 0;
     virtual Point get_position() const = 0;
-    // ensure window will be centered on its parent, taking into account that
-    // there may currently be pending geometry requests for the parent
-    // not yet processed by the underlying toolkit
-    virtual void set_centered_on_parent_geometry_request() = 0;
+    // center window on is parent
+    //
+    // bTrackGeometryRequests set to true tries to ensure the window will end
+    // up still centered on its parent windows final size, taking into account
+    // that there may currently be pending geometry requests for the parent not
+    // yet processed by the underlying toolkit
+    //
+    // for e.g gtk this will means the window is always centered even when
+    // resized, calling set_centered_on_parent with false will turn this
+    // off again.
+    virtual void set_centered_on_parent(bool bTrackGeometryRequests) = 0;
     virtual bool has_toplevel_focus() const = 0;
     virtual void present() = 0;
     virtual void set_window_state(const OString& rStr) = 0;

@@ -15,6 +15,7 @@
 
 #include <set>
 
+#include <vcl/idle.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 
@@ -197,8 +198,10 @@ public:
 private:
     DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*, void);
     DECL_LINK(OkClickHdl, weld::Button&, void);
+    DECL_LINK(TimeOut, Timer*, void);
 
     OUString msTemplatePath;
+    Idle maIdle;
 };
 
 #endif // INCLUDED_SFX2_INC_TEMPLATEDLG_HXX
