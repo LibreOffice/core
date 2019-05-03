@@ -1225,8 +1225,10 @@ void SmDocShell::SetVisArea(const tools::Rectangle & rVisArea)
 
     aNewRect.SetPos(Point());
 
-    if (! aNewRect.Right()) aNewRect.SetRight( 2000 );
-    if (! aNewRect.Bottom()) aNewRect.SetBottom( 1000 );
+    if (aNewRect.IsWidthEmpty())
+        aNewRect.SetRight( 2000 );
+    if (aNewRect.IsHeightEmpty())
+        aNewRect.SetBottom( 1000 );
 
     bool bIsEnabled = IsEnableSetModified();
     if ( bIsEnabled )

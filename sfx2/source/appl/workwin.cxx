@@ -2334,7 +2334,7 @@ void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
                 // If a Window is visible to the right, then the free region
                 // starts to the left from it, for example at the Client area
                 long nRight = aPos.X();
-                if ( nRight < aArea.Right() )
+                if ( !aArea.IsWidthEmpty() && nRight < aArea.Right() )
                     aArea.SetRight( nRight );
                 break;
             }
