@@ -126,7 +126,7 @@ OUString ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
         }
         uno::Sequence< OUString > aSuffixes = xOrdinalSuffix->getOrdinalSuffix( nNumber,
                 ScGlobal::pLocaleData->getLanguageTag().getLocale());
-        if ( aSuffixes.getLength() > 0 )
+        if ( aSuffixes.hasElements() )
             return aSuffixes[0];
         else
             return OUString();

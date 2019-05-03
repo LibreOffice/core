@@ -135,7 +135,7 @@ public:
     css::uno::Sequence< OUString > getServiceNames() override
     {
         static css::uno::Sequence< OUString > aServiceNames;
-        if ( aServiceNames.getLength() == 0 )
+        if ( !aServiceNames.hasElements() )
         {
             aServiceNames.realloc( 1 );
             aServiceNames[ 0 ] = "ooo.vba.excel.XTitle";

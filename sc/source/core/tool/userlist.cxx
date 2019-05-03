@@ -210,7 +210,7 @@ ScUserList::ScUserList()
     for ( sal_Int32 j = 0; j < xCalendars.getLength(); ++j )
     {
         xCal = xCalendars[j].Days;
-        if ( xCal.getLength() )
+        if ( xCal.hasElements() )
         {
             OUStringBuffer aDayShortBuf, aDayLongBuf;
             sal_Int32 i;
@@ -242,7 +242,7 @@ ScUserList::ScUserList()
         }
 
         xCal = xCalendars[j].Months;
-        if ( xCal.getLength() )
+        if ( xCal.hasElements() )
         {
             OUStringBuffer aMonthShortBuf, aMonthLongBuf;
             sal_Int32 i;

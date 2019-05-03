@@ -213,14 +213,14 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
         if ( !aData.maPosStr.isEmpty() )
             pCoreEntry->SetSrcString( aData.maPosStr );
 
-        if ( aData.maTokens1.getLength() )
+        if ( aData.maTokens1.hasElements() )
         {
             ScTokenArray aTokenArray;
             if ( ScTokenConversion::ConvertToTokenArray(*pDoc, aTokenArray, aData.maTokens1) )
                 pCoreEntry->SetFormula1(aTokenArray);
         }
 
-        if ( aData.maTokens2.getLength() )
+        if ( aData.maTokens2.hasElements() )
         {
             ScTokenArray aTokenArray;
             if ( ScTokenConversion::ConvertToTokenArray(*pDoc, aTokenArray, aData.maTokens2) )
@@ -633,14 +633,14 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
     pRet->SetIgnoreBlank(bIgnoreBlank);
     pRet->SetListType(nShowList);
 
-    if ( aTokens1.getLength() )
+    if ( aTokens1.hasElements() )
     {
         ScTokenArray aTokenArray;
         if ( ScTokenConversion::ConvertToTokenArray(*pDoc, aTokenArray, aTokens1) )
             pRet->SetFormula1(aTokenArray);
     }
 
-    if ( aTokens2.getLength() )
+    if ( aTokens2.hasElements() )
     {
         ScTokenArray aTokenArray;
         if ( ScTokenConversion::ConvertToTokenArray(*pDoc, aTokenArray, aTokens2) )

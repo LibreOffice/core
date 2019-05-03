@@ -112,7 +112,7 @@ void SdOptionsGeneric::Init() const
     const Sequence< OUString >  aNames( GetPropertyNames() );
     const Sequence< Any >       aValues = mpCfgItem->GetProperties( aNames );
 
-    if( aNames.getLength() && ( aValues.getLength() == aNames.getLength() ) )
+    if( aNames.hasElements() && ( aValues.getLength() == aNames.getLength() ) )
     {
         const Any* pValues = aValues.getConstArray();
 
@@ -133,7 +133,7 @@ void SdOptionsGeneric::Commit( SdOptionsItem& rCfgItem ) const
     const Sequence< OUString >  aNames( GetPropertyNames() );
     Sequence< Any >             aValues( aNames.getLength() );
 
-    if( aNames.getLength() && ( aValues.getLength() == aNames.getLength() ) )
+    if( aNames.hasElements() && ( aValues.getLength() == aNames.getLength() ) )
     {
         if( WriteData( aValues.getArray() ) )
             rCfgItem.PutProperties( aNames, aValues );

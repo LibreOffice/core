@@ -802,7 +802,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
             SetNewCell(static_cast<ScMyContentAction*>(rxAction.get()));
         }
         aActions.clear();
-        if (aProtect.getLength())
+        if (aProtect.hasElements())
             pTrack->SetProtection(aProtect);
         else if (pDoc->GetChangeTrack() && pDoc->GetChangeTrack()->IsProtected())
             pTrack->SetProtection(pDoc->GetChangeTrack()->GetProtection());

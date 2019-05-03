@@ -1592,7 +1592,7 @@ sal_Bool SAL_CALL ScExternalDocLinkObj::hasElements()
     SolarMutexGuard aGuard;
 
     // #i116940# be consistent with getByName: count only table names which have a cache already
-    return ( getElementNames().getLength() > 0 );
+    return getElementNames().hasElements();
 }
 
 sal_Int32 SAL_CALL ScExternalDocLinkObj::getTokenIndex()

@@ -1325,7 +1325,7 @@ void ScDPResultMember::FillMemberResults(
     //  IsVisible() test is in ScDPResultDimension::FillMemberResults
     //  (not on data layout dimension)
 
-    if (!pSequences->getLength())
+    if (!pSequences->hasElements())
         // empty sequence.  Bail out.
         return;
 

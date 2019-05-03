@@ -301,11 +301,8 @@ bool XclExpRoot::IsDocumentEncrypted() const
     if (pDocProt && pDocProt->isProtected() && pDocProt->isOptionEnabled(ScDocProtection::STRUCTURE))
         return true;
 
-    if ( GetEncryptionData().getLength() > 0 )
-        // Password is entered directly into the save dialog.
-        return true;
-
-    return false;
+    // Whether password is entered directly into the save dialog.
+    return GetEncryptionData().hasElements();
 }
 
 uno::Sequence< beans::NamedValue > XclExpRoot::GenerateEncryptionData( const OUString& aPass )

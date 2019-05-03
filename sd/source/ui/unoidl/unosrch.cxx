@@ -778,7 +778,7 @@ uno::Type SAL_CALL SdUnoFindAllAccess::getElementType()
 
 sal_Bool SAL_CALL SdUnoFindAllAccess::hasElements()
 {
-    return maSequence.getLength() > 0;
+    return maSequence.hasElements();
 }
 
 // XIndexAccess

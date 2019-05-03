@@ -186,7 +186,7 @@ void ScXMLSourceDlg::SelectSourceFile()
         return;
 
     uno::Sequence<OUString> aFiles = xFilePicker->getSelectedFiles();
-    if (!aFiles.getLength())
+    if (!aFiles.hasElements())
         return;
 
     // There should only be one file returned from the file picker.

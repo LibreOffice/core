@@ -5051,7 +5051,7 @@ void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::Formula
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
-        if ( rTokens.getLength() )
+        if ( rTokens.hasElements() )
         {
             if ( ScTableSheetObj::getImplementation( static_cast<cppu::OWeakObject*>(this) ) )
             {

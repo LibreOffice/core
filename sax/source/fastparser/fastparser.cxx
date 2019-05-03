@@ -1334,7 +1334,7 @@ FastSaxParser::~FastSaxParser()
 void SAL_CALL
 FastSaxParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments)
 {
-    if (rArguments.getLength())
+    if (rArguments.hasElements())
     {
         OUString str;
         if ( rArguments[0] >>= str )

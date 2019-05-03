@@ -296,7 +296,7 @@ SaxLegacyFastParser::SaxLegacyFastParser( ) : m_aNamespaceHandler( new Namespace
 
 void SAL_CALL SaxLegacyFastParser::initialize(Sequence< Any > const& rArguments )
 {
-    if (rArguments.getLength())
+    if (rArguments.hasElements())
     {
         Reference< XFastTokenHandler > xTokenHandler;
         OUString str;

@@ -2886,7 +2886,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstanceWithArguments
     SolarMutexGuard aGuard;
     uno::Reference<uno::XInterface> xInt(create(ServiceSpecifier, &aArgs));
 
-    if ( aArgs.getLength() )
+    if ( aArgs.hasElements() )
     {
         //  used only for cell value binding so far - it can be initialized after creating
 

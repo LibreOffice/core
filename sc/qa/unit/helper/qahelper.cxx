@@ -359,7 +359,7 @@ std::vector<OUString> getChartRangeRepresentations(const SdrOle2Obj& rChartObj)
     }
 
     Sequence<Reference<chart2::data::XLabeledDataSequence> > xDataSeqs = xDataSource->getDataSequences();
-    if (!xDataSeqs.getLength())
+    if (!xDataSeqs.hasElements())
     {
         cout << "There should be at least one data sequences." << endl;
         return aRangeReps;

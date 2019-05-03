@@ -230,7 +230,7 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
 
 void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
 {
-    if (aArguments.getLength() <= 0)
+    if (!aArguments.hasElements())
         return;
 
     try

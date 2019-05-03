@@ -61,7 +61,7 @@ void AttributesTest::test()
 
     xAttributeList->clear();
     CPPUNIT_ASSERT( !xAttributeList->hasAttribute(1) );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), xAttributeList->getFastAttributes().getLength() );
+    CPPUNIT_ASSERT( !xAttributeList->getFastAttributes().hasElements() );
     xAttributeList->addUnknown("c", "c");
     CPPUNIT_ASSERT_EQUAL( sal_Int32(1), xAttributeList->getUnknownAttributes().getLength() );
 }

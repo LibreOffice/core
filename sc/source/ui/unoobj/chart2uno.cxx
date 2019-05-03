@@ -1521,7 +1521,7 @@ ScChart2DataProvider::createDataSource(
         }
         uno::Reference< chart2::data::XLabeledDataSequence > xChartSeries = lcl_createLabeledDataSequenceFromTokens(
             std::move(aValueTokens), std::move(aLabelTokens), m_pDocument, this, m_bIncludeHiddenCells ); //ownership of pointers is transferred!
-        if ( xChartSeries.is() && xChartSeries->getValues().is() && xChartSeries->getValues()->getData().getLength() )
+        if ( xChartSeries.is() && xChartSeries->getValues().is() && xChartSeries->getValues()->getData().hasElements() )
         {
             aSeqs.push_back( xChartSeries );
         }
@@ -2031,7 +2031,7 @@ uno::Reference< sheet::XRangeSelection > SAL_CALL ScChart2DataProvider::getRange
 sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByFormulaTokensPossible(
     const Sequence<sheet::FormulaToken>& aTokens )
 {
-    if (aTokens.getLength() <= 0)
+    if (!aTokens.hasElements())
         return false;
 
     ScTokenArray aCode;
@@ -2089,7 +2089,7 @@ ScChart2DataProvider::createDataSequenceByFormulaTokens(
     const Sequence<sheet::FormulaToken>& aTokens )
 {
     uno::Reference<chart2::data::XDataSequence> xResult;
-    if (aTokens.getLength() <= 0)
+    if (!aTokens.hasElements())
         return xResult;
 
     ScTokenArray aCode;
@@ -2875,7 +2875,7 @@ uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
 
     BuildDataCache();
 
-    if (!m_aMixedDataCache.getLength())
+    if (!m_aMixedDataCache.hasElements())
     {
         // Build a cache for the 1st time...
 

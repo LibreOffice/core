@@ -1769,7 +1769,7 @@ bool PowerPointExport::WriteColorSchemes(const FSHelperPtr& pFS, const OUString&
 
                 aGrabBag.getValue(rThemePath) >>= aCurrentTheme;
 
-                if (!aCurrentTheme.getLength())
+                if (!aCurrentTheme.hasElements())
                     return false;
 
                 // Order is important

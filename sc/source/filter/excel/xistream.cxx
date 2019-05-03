@@ -64,8 +64,8 @@ XclImpDecrypterRef XclImpDecrypter::Clone() const
 ::comphelper::DocPasswordVerifierResult XclImpDecrypter::verifyPassword( const OUString& rPassword, uno::Sequence< beans::NamedValue >& o_rEncryptionData )
 {
     o_rEncryptionData = OnVerifyPassword( rPassword );
-    mnError = o_rEncryptionData.getLength() ? ERRCODE_NONE : ERRCODE_ABORT;
-    return o_rEncryptionData.getLength() ? ::comphelper::DocPasswordVerifierResult::OK : ::comphelper::DocPasswordVerifierResult::WrongPassword;
+    mnError = o_rEncryptionData.hasElements() ? ERRCODE_NONE : ERRCODE_ABORT;
+    return o_rEncryptionData.hasElements() ? ::comphelper::DocPasswordVerifierResult::OK : ::comphelper::DocPasswordVerifierResult::WrongPassword;
 }
 
 ::comphelper::DocPasswordVerifierResult XclImpDecrypter::verifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData )
@@ -173,7 +173,7 @@ bool XclImpBiff5Decrypter::OnVerifyEncryptionData( const uno::Sequence< beans::N
 {
     maEncryptionData.realloc( 0 );
 
-    if( rEncryptionData.getLength() )
+    if( rEncryptionData.hasElements() )
     {
         // init codec
         maCodec.InitCodec( rEncryptionData );
@@ -182,7 +182,7 @@ bool XclImpBiff5Decrypter::OnVerifyEncryptionData( const uno::Sequence< beans::N
             maEncryptionData = rEncryptionData;
     }
 
-    return maEncryptionData.getLength();
+    return maEncryptionData.hasElements();
 }
 
 void XclImpBiff5Decrypter::OnUpdate( std::size_t /*nOldStrmPos*/, std::size_t nNewStrmPos, sal_uInt16 nRecSize )
@@ -273,7 +273,7 @@ bool XclImpBiff8Decrypter::OnVerifyEncryptionData( const uno::Sequence< beans::N
 {
     maEncryptionData.realloc( 0 );
 
-    if( rEncryptionData.getLength() )
+    if( rEncryptionData.hasElements() )
     {
         // init codec
         mpCodec->InitCodec( rEncryptionData );
@@ -282,7 +282,7 @@ bool XclImpBiff8Decrypter::OnVerifyEncryptionData( const uno::Sequence< beans::N
             maEncryptionData = rEncryptionData;
     }
 
-    return maEncryptionData.getLength();
+    return maEncryptionData.hasElements();
 }
 
 void XclImpBiff8Decrypter::OnUpdate( std::size_t nOldStrmPos, std::size_t nNewStrmPos, sal_uInt16 /*nRecSize*/ )

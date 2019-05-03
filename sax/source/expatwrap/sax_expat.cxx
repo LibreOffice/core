@@ -372,7 +372,7 @@ void SAL_CALL
 SaxExpatParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments)
 {
     // possible arguments: a string "DoSmeplease"
-    if (rArguments.getLength())
+    if (rArguments.hasElements())
     {
         OUString str;
         if ((rArguments[0] >>= str) && "DoSmeplease" == str)

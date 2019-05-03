@@ -240,7 +240,7 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
 
 void SAL_CALL ModuleController::initialize (const Sequence<Any>& aArguments)
 {
-    if (aArguments.getLength() > 0)
+    if (aArguments.hasElements())
     {
         try
         {

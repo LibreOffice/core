@@ -69,7 +69,7 @@ void BasicToolBarFactory::Shutdown()
 
 void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
 {
-    if (aArguments.getLength() <= 0)
+    if (!aArguments.hasElements())
         return;
 
     try

@@ -2057,7 +2057,7 @@ Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes()
 
     throwIfDisposed();
 
-    if( maTypeSequence.getLength() == 0 )
+    if( !maTypeSequence.hasElements() )
     {
         const PageKind ePageKind = GetPage() ? GetPage()->GetPageKind() : PageKind::Standard;
         bool bPresPage = IsImpressDocument() && ePageKind != PageKind::Handout;
@@ -2675,7 +2675,7 @@ Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes()
 
     throwIfDisposed();
 
-    if( maTypeSequence.getLength() == 0 )
+    if( !maTypeSequence.hasElements() )
     {
         const PageKind ePageKind = GetPage() ? GetPage()->GetPageKind() : PageKind::Standard;
         bool bPresPage = IsImpressDocument() && SvxFmDrawPage::mpPage && ePageKind != PageKind::Handout;

@@ -148,7 +148,7 @@ ProviderCache::populateCache()
 
             Sequence< OUString > serviceNames = xServiceInfo->getSupportedServiceNames();
 
-            if ( serviceNames.getLength() > 0 )
+            if ( serviceNames.hasElements() )
             {
                 for ( sal_Int32 index = 0; index < serviceNames.getLength(); index++ )
                 {

@@ -656,7 +656,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
     //  so the source knows it will be used for a link
 
     uno::Sequence<sal_Int8> aSequence = aDataHelper.GetSequence(SotClipboardFormatId::LINK, OUString());
-    if (!aSequence.getLength())
+    if (!aSequence.hasElements())
     {
         OSL_FAIL("DDE Data not found.");
         return false;

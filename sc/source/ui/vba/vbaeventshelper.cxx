@@ -93,7 +93,7 @@ SCTAB lclGetTabFromArgs( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nInde
     if( xRanges.is() )
     {
         uno::Sequence< table::CellRangeAddress > aRangeAddresses = xRanges->getRangeAddresses();
-        if( aRangeAddresses.getLength() > 0 )
+        if( aRangeAddresses.hasElements() )
             return aRangeAddresses[ 0 ].Sheet;
     }
 

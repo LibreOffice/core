@@ -224,7 +224,7 @@ namespace basprov
             if ( m_documentBasicManager && m_xDocumentScriptContext.is() )
                 aOldThisComponent = m_documentBasicManager->SetGlobalUNOConstant( "ThisComponent", makeAny( m_xDocumentScriptContext ) );
 
-            if ( m_caller.getLength() && m_caller[ 0 ].hasValue()  )
+            if ( m_caller.hasElements() && m_caller[ 0 ].hasValue()  )
             {
                 SbxVariableRef xCallerVar = new SbxVariable( SbxVARIANT );
                 unoToSbxValue( xCallerVar.get(), m_caller[ 0 ] );
