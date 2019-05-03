@@ -60,7 +60,7 @@ sal_Int8 ScPivotLayoutTreeDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt 
     if (rWidget.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get()))
         nTargetPos = rWidget.get_iter_index_in_parent(*xTarget);
     m_rTreeView.InsertEntryForSourceTarget(*pSource, nTargetPos);
-    return DND_ACTION_MOVE;
+    return DND_ACTION_NONE;
 }
 
 bool ScPivotLayoutTreeListBase::HasEntry(const weld::TreeIter& rEntry)
