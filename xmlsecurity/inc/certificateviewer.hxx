@@ -34,6 +34,7 @@ namespace xml { namespace crypto {
 class CertificateViewerGeneralTP;
 class CertificateViewerDetailsTP;
 class CertificateViewerCertPathTP;
+class CertificateChooser;
 
 class CertificateViewer : public weld::GenericDialogController
 {

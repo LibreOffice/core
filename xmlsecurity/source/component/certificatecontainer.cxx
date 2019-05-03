@@ -22,12 +22,13 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/security/XCertificateContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 
 #include <sal/config.h>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

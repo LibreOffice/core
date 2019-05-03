@@ -19,7 +19,6 @@
 
 
 #include <framework/securityengine.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 
 SecurityEngine::SecurityEngine()

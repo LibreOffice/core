@@ -68,6 +68,9 @@ blacklist:
     - com/sun/star/security/XCertificate.hpp
     - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/lang/XServiceInfo.hpp
+    xmlsecurity/source/gpg/GpgComponentFactory.cxx:
+    # Silence warning due to incorrect include path
+    - com/sun/star/lang/XSingleServiceFactory.hpp
     xmlsecurity/source/gpg/SecurityEnvironment.hxx:
     # Base class needs complete type
     - com/sun/star/xml/crypto/XSecurityEnvironment.hpp
@@ -95,6 +98,12 @@ blacklist:
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/xml/wrapper/XXMLElementWrapper.hpp
+    xmlsecurity/source/xmlsec/errorcallback.cxx:
+    # Needed for xmlsec/errors.h
+    - xmlsec-wrapper.h
+    xmlsecurity/source/xmlsec/xmlstreamio.cxx:
+    # comphelper::ScopeGuard is in use but not noticed by IWYU
+    - comphelper/scopeguard.hxx
     xmlsecurity/source/xmlsec/nss/sanextension_nssimpl.hxx:
     # Base class needs complete type
     - com/sun/star/security/XSanExtension.hpp
@@ -113,3 +122,11 @@ blacklist:
     - com/sun/star/xml/crypto/XCertificateCreator.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/lang/XUnoTunnel.hpp
+    xmlsecurity/source/xmlsec/nss/secerror.cxx:
+    # Used as array initializer
+    - certerrors.h
+    # Needed for macros used by certerrors.h
+    - nss.h
+    xmlsecurity/qa/unit/signing/signing.cxx:
+    # Don't replace URE header with impl. detail
+    - osl/thread.hxx
