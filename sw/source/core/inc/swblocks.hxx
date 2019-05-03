@@ -19,7 +19,8 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_SWBLOCKS_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_SWBLOCKS_HXX
 
-#include <tools/datetime.hxx>
+#include <tools/date.hxx>
+#include <tools/time.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <vcl/errcode.hxx>
 #include <rtl/ref.hxx>

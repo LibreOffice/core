@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_LAYCACHE_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_LAYCACHE_HXX
 
-#include <tools/solar.h>
+#include <sal/types.h>
 #include <memory>
 
 class SwDoc;

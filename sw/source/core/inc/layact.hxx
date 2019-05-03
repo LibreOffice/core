@@ -22,12 +22,14 @@
 #include <sal/config.h>
 
 #include <vcl/inputtypes.hxx>
+#include <tools/color.hxx>
 
 #include <ctime>
+#include <memory>
 
-#include <swtypes.hxx>
 #include <swrect.hxx>
 
+class OutputDevice;
 class SwRootFrame;
 class SwLayoutFrame;
 class SwPageFrame;

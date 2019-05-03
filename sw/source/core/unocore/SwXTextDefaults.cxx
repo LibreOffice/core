@@ -21,6 +21,7 @@
 
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
+#include <svl/itemprop.hxx>
 
 #include <SwXTextDefaults.hxx>
 #include <SwStyleNameMapper.hxx>

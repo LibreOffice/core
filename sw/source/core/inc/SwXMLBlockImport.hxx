@@ -21,12 +21,12 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_SWXMLBLOCKIMPORT_HXX
 
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <sax/fastattribs.hxx>
 #include <cppuhelper/implbase.hxx>
+
+namespace com::sun::star::xml::sax { class XFastTokenHandler; }
 
 using namespace css::xml::sax;
 using namespace xmloff::token;
