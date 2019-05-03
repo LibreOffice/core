@@ -20,8 +20,6 @@
 #include <window.h>
 #include <salwtype.hxx>
 
-#if OSL_DEBUG_LEVEL > 0
-
 DebugEventInjector::DebugEventInjector( sal_uInt32 nMaxEvents) :
       Timer("debug event injector")
     , mnEventsLeft( nMaxEvents )
@@ -272,7 +270,5 @@ DebugEventInjector *DebugEventInjector::getCreate()
     else
         return nullptr;
 }
-
-#endif // OSL_DEBUG_LEVEL > 0
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
