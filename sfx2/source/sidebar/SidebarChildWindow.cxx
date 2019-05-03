@@ -33,7 +33,7 @@ SFX_IMPL_DOCKINGWINDOW_WITHID(SidebarChildWindow, SID_SIDEBAR);
 SidebarChildWindow::SidebarChildWindow(vcl::Window* pParentWindow, sal_uInt16 nId,
                                        SfxBindings* pBindings, SfxChildWinInfo* pInfo)
     : SfxChildWindow(pParentWindow, nId)
-    , mbSidebarVisibleInLOK(pInfo && pInfo->aModule == "simpress")
+    , mbSidebarVisibleInLOK(pInfo && (pInfo->aModule == "scalc" || pInfo->aModule == "swriter"))
 {
     auto pDockWin = VclPtr<SidebarDockingWindow>::Create(
         pBindings, *this, pParentWindow, WB_STDDOCKWIN | WB_OWNERDRAWDECORATION | WB_CLIPCHILDREN
@@ -53,8 +53,12 @@ SidebarChildWindow::SidebarChildWindow(vcl::Window* pParentWindow, sal_uInt16 nI
         // HACK: unfortunately I haven't found a clean solution to do
         // this, so do it this way:
         //
-        pDockWin->SetSizePixel(Size(TabBar::GetDefaultWidth() * GetWindow()->GetDPIScaleFactor(),
-                                    pDockWin->GetSizePixel().Height()));
+        if (!comphelper::LibreOfficeKit::isActive())
+        {
+            pDockWin->SetSizePixel(
+                Size(TabBar::GetDefaultWidth() * GetWindow()->GetDPIScaleFactor(),
+                     pDockWin->GetSizePixel().Height()));
+        }
     }
 
     pDockWin->Initialize(pInfo);

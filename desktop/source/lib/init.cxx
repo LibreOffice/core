@@ -2809,6 +2809,22 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
+    // This is used by unit-tests to unregister stack-local callback objects where we have multiple views
+    // so we cannot rely on SfxLokHelper::getView
+    if (pCallback == nullptr && pData != nullptr)
+    {
+        for (auto& pair1 : pDocument->mpCallbackFlushHandlers)
+        {
+            int nView = pair1.first;
+            for (auto& pair2 : pDocument->mpCallbackFlushHandlers)
+            {
+                pair2.second->removeViewStates(nView);
+            }
+            pDocument->mpCallbackFlushHandlers[nView].reset(new CallbackFlushHandler(pThis, nullptr, nullptr));
+        }
+        return;
+    }
+
     int nView = SfxLokHelper::getView();
     if (nView < 0)
         return;
