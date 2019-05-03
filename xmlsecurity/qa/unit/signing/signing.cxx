@@ -13,7 +13,6 @@
 #include <sal/config.h>
 
 #include <cstdlib>
-#include <type_traits>
 
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>

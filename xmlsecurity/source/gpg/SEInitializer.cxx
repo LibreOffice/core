@@ -7,17 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_gpgme.h>
-
-#include <com/sun/star/uno/XComponentContext.hpp>
-
 #include <cppuhelper/supportsservice.hxx>
 #include <gpg/SEInitializer.hxx>
 #include "SecurityEnvironment.hxx"
 #include "XMLSecurityContext.hxx"
 
-#include <gpgme.h>
-#include <context.h>
+#include <global.h>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace css;
 using namespace css::lang;

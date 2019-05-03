@@ -18,9 +18,7 @@
  */
 
 #include <sal/config.h>
-#include <rtl/uuid.h>
 
-#include <xmlsec/xmldocumentwrapper_xmlsecimpl.hxx>
 #include <xmlelementwrapper_xmlsecimpl.hxx>
 #include <xmlsec/xmlstreamio.hxx>
 #include <xmlsec/errorcallback.hxx>
@@ -29,15 +27,15 @@
 
 #include <xmlsec-wrapper.h>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <memory>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;
 
 using ::com::sun::star::xml::wrapper::XXMLElementWrapper ;
-using ::com::sun::star::xml::wrapper::XXMLDocumentWrapper ;
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLSignature ;
 using ::com::sun::star::xml::crypto::XXMLSignatureTemplate ;

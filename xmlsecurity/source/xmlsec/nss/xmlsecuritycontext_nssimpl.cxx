@@ -19,11 +19,12 @@
 
 #include <sal/config.h>
 #include <vector>
-#include <rtl/uuid.h>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "securityenvironment_nssimpl.hxx"
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang ;

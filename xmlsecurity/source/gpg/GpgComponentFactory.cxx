@@ -9,8 +9,6 @@
 
 #include <sal/config.h>
 
-#include <osl/thread.h>
-#include <cppuhelper/factory.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include "xmlsignature_gpgimpl.hxx"
@@ -18,7 +16,6 @@
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
 
 extern "C"
 {

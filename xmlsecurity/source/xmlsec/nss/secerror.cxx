@@ -20,13 +20,9 @@
 
 #include <secerr.h>
 #include "secerror.hxx"
-#include <sslerr.h>
-#include <nspr.h>
 #include <nss.h>
 #include <certt.h>
 #include <sal/log.hxx>
-#include <sal/macros.h>
-#include <sal/types.h>
 
 struct ErrDesc {
     PRErrorCode const errNum;

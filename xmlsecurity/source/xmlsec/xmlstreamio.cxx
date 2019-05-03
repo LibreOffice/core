@@ -29,7 +29,6 @@
 
 #include <com/sun/star/xml/crypto/XUriBinding.hpp>
 
-#include <libxml/uri.h>
 #include <xmlsec-wrapper.h>
 
 static bool g_bInputCallbacksEnabled = false;

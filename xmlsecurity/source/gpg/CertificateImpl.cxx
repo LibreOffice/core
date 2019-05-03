@@ -19,7 +19,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <svl/sigstruct.hxx>
 
-#include <gpgme.h>
 #include <context.h>
 #include <data.h>
 

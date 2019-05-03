@@ -17,16 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <xmlsignaturehelper.hxx>
 #include <xmlsignaturehelper2.hxx>
 
 #include <tools/solar.h>
 #include <unotools/streamhelper.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/embed/XStorageRawAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/diagnose.h>
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>

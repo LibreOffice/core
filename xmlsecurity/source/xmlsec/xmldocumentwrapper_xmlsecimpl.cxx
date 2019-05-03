@@ -28,14 +28,6 @@
 
 #include <xmloff/attrlist.hxx>
 
-#include <stdlib.h>
-#include <string.h>
-
-#include <sys/types.h>
-#include <sys/stat.h>
-
-#include <vector>
-
 #ifdef UNX
 #define stricmp strcasecmp
 #endif

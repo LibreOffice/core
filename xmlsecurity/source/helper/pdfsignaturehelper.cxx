@@ -18,7 +18,6 @@
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 
-#include <tools/stream.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 

@@ -18,11 +18,6 @@
  */
 
 #include <sal/types.h>
-#include <rtl/bootstrap.hxx>
-#include <rtl/string.hxx>
-#include <rtl/strbuf.hxx>
-#include <osl/file.hxx>
-#include <osl/thread.h>
 #include <com/sun/star/xml/crypto/SecurityEnvironment.hpp>
 #include <com/sun/star/xml/crypto/XMLSecurityContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -30,12 +25,7 @@
 #include "seinitializer_nssimpl.hxx"
 #include "securityenvironment_nssimpl.hxx"
 
-#include <nspr.h>
 #include <cert.h>
-#include <nss.h>
-#include <pk11pub.h>
-#include <secmod.h>
-#include <nssckbi.h>
 
 
 namespace cssxc = css::xml::crypto;

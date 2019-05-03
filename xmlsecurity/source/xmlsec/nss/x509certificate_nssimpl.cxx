@@ -18,14 +18,12 @@
  */
 
 #include "nssrenam.h"
-#include <nspr.h>
-#include <nss.h>
 #include <secder.h>
 
 #include <cert.h>
 #include <hasht.h>
 #include <secoid.h>
-#include <pk11func.h>
+#include <pk11pub.h>
 
 #include <sal/config.h>
 #include <comphelper/servicehelper.hxx>

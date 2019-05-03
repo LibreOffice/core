@@ -27,27 +27,19 @@
 # include <gpg/xmlsignature_gpgimpl.hxx>
 #endif
 
-#include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
-#include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
 #include <com/sun/star/xml/crypto/sax/XMissionTaker.hpp>
-#include <com/sun/star/xml/crypto/sax/XReferenceCollector.hpp>
-#include <com/sun/star/xml/crypto/sax/XSAXEventKeeperStatusChangeBroadcaster.hpp>
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
 #ifdef ANDROID
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 #endif
-#include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 
 #include <xmloff/attrlist.hxx>
-#include <rtl/math.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <unotools/datetime.hxx>
-#include <sax/tools/converter.hxx>
 #include "ooxmlsecexporter.hxx"
 #include <xmlsignaturehelper2.hxx>
 

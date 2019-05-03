@@ -28,28 +28,25 @@
 #include <rtl/instance.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/string.hxx>
-#include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <sal/log.hxx>
 #include <unotools/tempfile.hxx>
 #include <salhelper/singletonref.hxx>
 
-#include "seinitializer_nssimpl.hxx"
+#include <nss/nssinitializer.hxx>
 
-#include "securityenvironment_nssimpl.hxx"
 #include "digestcontext.hxx"
 #include "ciphercontext.hxx"
 
 #include <memory>
 #include <vector>
 
-#include <nspr.h>
-#include <cert.h>
 #include <nss.h>
 #include <pk11pub.h>
 #include <secmod.h>
-#include <nssckbi.h>
+#include <prerror.h>
+#include <prinit.h>
 
 namespace cssu = css::uno;
 namespace cssl = css::lang;

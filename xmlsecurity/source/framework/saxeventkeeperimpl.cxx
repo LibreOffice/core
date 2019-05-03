@@ -22,7 +22,6 @@
 #include "buffernode.hxx"
 #include "elementmark.hxx"
 #include "elementcollector.hxx"
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/crypto/sax/ConstOfSecurityId.hpp>
 #include <com/sun/star/xml/wrapper/XXMLDocumentWrapper.hpp>
