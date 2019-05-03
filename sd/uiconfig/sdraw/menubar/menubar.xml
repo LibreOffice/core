@@ -482,19 +482,7 @@
           <menu:menuitem menu:id=".uno:CalloutShapes"/>
           <menu:menuitem menu:id=".uno:StarShapes"/>
           <menu:menuseparator/>
-          <menu:menu menu:id=".uno:Objects3DToolbox">
-            <menu:menupopup>
-              <menu:menuitem menu:id=".uno:Cube"/>
-              <menu:menuitem menu:id=".uno:Sphere"/>
-              <menu:menuitem menu:id=".uno:Cylinder"/>
-              <menu:menuitem menu:id=".uno:Cone"/>
-              <menu:menuseparator/>
-              <menu:menuitem menu:id=".uno:Cyramid"/>
-              <menu:menuitem menu:id=".uno:Torus"/>
-              <menu:menuitem menu:id=".uno:Shell3D"/>
-              <menu:menuitem menu:id=".uno:HalfSphere"/>
-            </menu:menupopup>
-          </menu:menu>
+          <menu:menuitem menu:id=".uno:Objects3DToolbox"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
