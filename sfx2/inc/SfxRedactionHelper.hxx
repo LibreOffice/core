@@ -49,15 +49,14 @@ public:
      * */
     static void getPageMetaFilesFromDoc(std::vector<GDIMetaFile>& aMetaFiles,
                                         std::vector<::Size>& aPageSizes, const sal_Int32& nPages,
-                                        DocumentToGraphicRenderer& aRenderer, bool bIsWriter,
-                                        bool bIsCalc);
+                                        DocumentToGraphicRenderer& aRenderer);
     /*
      * Creates one shape and one draw page for each gdimetafile,
      * and inserts the shapes into the newly created draw pages.
      * */
     static void addPagesToDraw(uno::Reference<XComponent>& xComponent, const sal_Int32& nPages,
                                const std::vector<GDIMetaFile>& aMetaFiles,
-                               const std::vector<::Size>& aPageSizes, bool bIsCalc);
+                               const std::vector<::Size>& aPageSizes);
     /*
      * Makes the Redaction toolbar visible to the user.
      * Meant to be called after converting a document to a Draw doc
