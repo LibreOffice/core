@@ -25,6 +25,7 @@
 #include <sdr/primitive2d/sdrprimitivetools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/svdmodel.hxx>
+#include <vcl/canvastools.hxx>
 
 namespace sdr { namespace contact {
 
@@ -52,9 +53,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrRectObj::createV
     // to current zoom so as objects relative position to grid
     // appears stable
     rRectangle += GetRectObj().GetGridOffset();
-    const ::basegfx::B2DRange aObjectRange(
-        rRectangle.Left(), rRectangle.Top(),
-        rRectangle.Right(), rRectangle.Bottom() );
+    const ::basegfx::B2DRange aObjectRange = vcl::unotools::b2DRectangleFromRectangle(rRectangle);
 
     const GeoStat& rGeoStat(GetRectObj().GetGeoStat());
 
