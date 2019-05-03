@@ -835,6 +835,10 @@ $(eval $(call gb_Helper_register_packages_for_install,calc,\
 	sc_res_xml \
 ))
 
+$(eval $(call gb_Helper_register_packages_for_install,chart2,\
+	chart2_res_xml \
+))
+
 $(eval $(call gb_Helper_register_packages_for_install,libreofficekit,\
 	$(if $(filter LINUX %BSD SOLARIS, $(OS)),libreofficekit_selectionhandles) \
 ))
