@@ -1381,6 +1381,7 @@ SfxTemplateSelectionDlg::SfxTemplateSelectionDlg(weld::Window* pParent)
 
 SfxTemplateSelectionDlg::~SfxTemplateSelectionDlg()
 {
+    maIdle.Stop();
 }
 
 short SfxTemplateSelectionDlg::run()
@@ -1389,8 +1390,19 @@ short SfxTemplateSelectionDlg::run()
     // has taken its final size. The parent size request is processed during
     // the dialogs event loop so configure this dialog to center to
     // the parents pending geometry request
-    m_xDialog->set_centered_on_parent_geometry_request();
+    m_xDialog->set_centered_on_parent(true);
+
+    // tdf#125079 toggle off the size tracking at some future idle point
+    maIdle.SetPriority(TaskPriority::LOWEST);
+    maIdle.SetInvokeHandler(LINK(this,SfxTemplateSelectionDlg,TimeOut));
+    maIdle.Start();
+
     return weld::GenericDialogController::run();
+}
+
+IMPL_LINK_NOARG(SfxTemplateSelectionDlg, TimeOut, Timer*, void)
+{
+    m_xDialog->set_centered_on_parent(false);
 }
 
 IMPL_LINK(SfxTemplateSelectionDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)

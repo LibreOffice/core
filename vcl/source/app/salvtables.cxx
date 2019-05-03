@@ -984,7 +984,7 @@ public:
         return m_xWindow->GetPosPixel();
     }
 
-    virtual void set_centered_on_parent_geometry_request() override
+    virtual void set_centered_on_parent(bool /*bTrackGeometryRequests*/) override
     {
         if (vcl::Window* pParent = m_xWidget->GetParent())
         {
