@@ -11,6 +11,18 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,epoxy))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,epoxy,$(EPOXY_TARBALL)))
 
+$(call gb_UnpackedTarball_get_target,epoxy) :| $(call gb_ExternalExecutable_get_dependencies,python)
+
+epoxy_PYTHON := $(call gb_ExternalExecutable_get_command,python)
+
+# previous versions of epoxy bundled the output, but now it has to be generated
+$(eval $(call gb_UnpackedTarball_set_pre_action,epoxy,\
+	$(epoxy_PYTHON) ./src/gen_dispatch.py --srcdir src --includedir include/epoxy registry/gl.xml && \
+	$(epoxy_PYTHON) ./src/gen_dispatch.py --srcdir src --includedir include/epoxy registry/glx.xml && \
+	$(epoxy_PYTHON) ./src/gen_dispatch.py --srcdir src --includedir include/epoxy registry/egl.xml && \
+	$(epoxy_PYTHON) ./src/gen_dispatch.py --srcdir src --includedir include/epoxy registry/wgl.xml \
+))
+
 $(eval $(call gb_UnpackedTarball_set_patchlevel,epoxy,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,epoxy, \
