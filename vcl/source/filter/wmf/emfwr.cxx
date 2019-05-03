@@ -607,11 +607,13 @@ void EMFWriter::ImplWriteSize( const Size& rSize)
 void EMFWriter::ImplWriteRect( const tools::Rectangle& rRect )
 {
     const tools::Rectangle aRect( OutputDevice::LogicToLogic ( rRect, maVDev->GetMapMode(), maDestMapMode ));
+    auto right = aRect.IsWidthEmpty() ? aRect.Left() : aRect.Right();
+    auto bottom = aRect.IsHeightEmpty() ? aRect.Top() : aRect.Bottom();
     m_rStm
        .WriteInt32( aRect.Left() )
        .WriteInt32( aRect.Top() )
-       .WriteInt32( aRect.Right() )
-       .WriteInt32( aRect.Bottom() );
+       .WriteInt32( right )
+       .WriteInt32( bottom );
 }
 
 void EMFWriter::ImplWritePolygonRecord( const tools::Polygon& rPoly, bool bClose )
