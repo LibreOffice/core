@@ -356,12 +356,29 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
 
     // unequal number of attributes
 #ifdef CPPUNIT_ASSERT
-    std::stringstream failStream("Unequal number of attributes ");
-
-    bool bAttr1 = attr1;
-    if (bAttr1)
+    if (attr1 || attr2)
     {
-        failStream << "Attr1: ";
+        std::stringstream failStream;
+        failStream << "Unequal number of attributes in ";
+        // print chain from document root
+        std::vector<std::string> parents;
+        auto n = node1;
+        while (n)
+        {
+            if (n->name)
+                parents.push_back(std::string(reinterpret_cast<const char *>(n->name)));
+            n = n->parent;
+        }
+        bool first = true;
+        for (auto it = parents.rbegin(); it != parents.rend(); ++it)
+        {
+            if (!first)
+                failStream << "->";
+            first = false;
+            failStream << *it;
+        }
+        failStream << " Attr1: ";
+        attr1 = node1->properties;
         while (attr1 != nullptr)
         {
             xmlChar* val1 = xmlGetProp(node1, attr1->name);
@@ -369,14 +386,9 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
             xmlFree(val1);
             attr1 = attr1->next;
         }
-    }
-    CPPUNIT_ASSERT_MESSAGE(failStream.str(), !bAttr1);
 
-    bool bAttr2 = attr2;
-    if (bAttr2)
-    {
-        failStream << "Attr2: ";
-
+        failStream << " Attr2: ";
+        attr2 = node2->properties;
         while (attr2 != nullptr)
         {
             xmlChar* val2 = xmlGetProp(node2, attr2->name);
@@ -384,8 +396,8 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
             xmlFree(val2);
             attr2 = attr2->next;
         }
+        CPPUNIT_ASSERT_MESSAGE(failStream.str(), false);
     }
-    CPPUNIT_ASSERT_MESSAGE(failStream.str(), !bAttr2);
 #else
     if (attr1 || attr2)
         return false;
