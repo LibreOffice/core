@@ -136,12 +136,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121456_tabsOffset, "tdf121456_tabsOffset.odt")
 }
 
 // tdf#121561: make sure w:sdt/w:sdtContent around TOC is written during ODT->DOCX conversion
-DECLARE_OOXMLEXPORT_TEST(testTdf121561_tocTitle, "tdf121456_tabsOffset.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121561_tocTitle, "tdf121456_tabsOffset.odt")
 {
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
-
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:t", "Inhaltsverzeichnis");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:instrText", " TOC \\f \\o \"1-9\" \\h");
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartGallery", "val", "Table of Contents");
@@ -158,11 +155,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124106, "tdf121456.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), text->getString().indexOf('y'));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf121561_tocTitleDocx, "tdf121456_tabsOffset.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121561_tocTitleDocx, "tdf121456_tabsOffset.odt")
 {
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
 
     // get TOC node
     uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
@@ -216,11 +211,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82065_Ind_start_strict, "tdf82065_Ind_start_stri
     CPPUNIT_ASSERT_EQUAL_MESSAGE("IndentAt defined", true, bFoundIndentAt);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf76683_negativeTwipsMeasure, "tdf76683_negativeTwipsMeasure.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf76683_negativeTwipsMeasure, "tdf76683_negativeTwipsMeasure.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col", 2);
     sal_uInt32 nColumn1 = getXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col[1]", "w").toUInt32();
     sal_uInt32 nColumn2 = getXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col[2]", "w").toUInt32();
@@ -322,12 +315,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117988, "tdf117988.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testParagraphSplitOnSectionBorder, "parasplit-on-section-border.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testParagraphSplitOnSectionBorder, "parasplit-on-section-border.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
-    if(!pXmlDoc)
-        return;
 
     // Test document has only two paragraphs. After splitting, it should contain
     // three of them.
@@ -335,13 +325,9 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphSplitOnSectionBorder, "parasplit-on-sectio
     assertXPath(pXmlDoc, "//w:p", 3);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf44832_testSectionWithDifferentHeader, "tdf44832_section_new_header.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf44832_testSectionWithDifferentHeader, "tdf44832_section_new_header.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
-    if(!pXmlDoc)
-        return;
-
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:headerReference", 1);
 }
 
@@ -383,11 +369,8 @@ DECLARE_OOXMLEXPORT_TEST(testSignatureLineShape, "signature-line-all-props-set.d
     CPPUNIT_ASSERT_EQUAL(OUString("Check the machines!"), aSigningInstructions);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf117805, "tdf117805.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf117805, "tdf117805.odt")
 {
-    if (!mbExported)
-        return;
-
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
@@ -831,48 +814,37 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119188_list_margin_in_cell, "tdf119188_list_marg
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494), getProperty<sal_Int32>(getParagraphOfText(3, xCell->getText()), "ParaBottomMargin"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testChart_BorderLine_Style, "Chart_BorderLine_Style.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testChart_BorderLine_Style, "Chart_BorderLine_Style.docx")
 {
     /* DOCX containing Chart with BorderLine Style as Dash Type should get preserved
      * inside an XML tag <a:prstDash> with value "dash", "sysDot, "lgDot", etc.
      */
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
-    if (!pXmlDoc)
-        return;
-
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:spPr/a:ln/a:prstDash", "val", "sysDot");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[2]/c:spPr/a:ln/a:prstDash", "val", "sysDash");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[3]/c:spPr/a:ln/a:prstDash", "val", "dash");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testChart_Plot_BorderLine_Style, "Chart_Plot_BorderLine_Style.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testChart_Plot_BorderLine_Style, "Chart_Plot_BorderLine_Style.docx")
 {
     /* DOCX containing Chart wall (plot area) and Chart Page with BorderLine Style as Dash Type
      * should get preserved inside an XML tag <a:prstDash> with value "dash", "sysDot, "lgDot", etc.
      */
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
-    if (!pXmlDoc)
-        return;
-
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:ln/a:prstDash", "val", "lgDashDot");
     assertXPath(pXmlDoc, "/c:chartSpace/c:spPr/a:ln/a:prstDash", "val", "sysDash");
 
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTrackChangesDeletedEmptyParagraph, "testTrackChangesDeletedEmptyParagraph.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTrackChangesDeletedEmptyParagraph, "testTrackChangesDeletedEmptyParagraph.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:rPr/w:del");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTrackChangesEmptyParagraphsInADeletion, "testTrackChangesEmptyParagraphsInADeletion.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTrackChangesEmptyParagraphsInADeletion, "testTrackChangesEmptyParagraphsInADeletion.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-
     for (int i = 1; i < 12; ++i)
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[" + OString::number(i) + "]/w:pPr/w:rPr/w:del");
 }
@@ -906,12 +878,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf64264, "tdf64264.docx")
                          parseDump("/root/page[2]/body/tab/row[2]/cell[1]/txt/text()"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testLOPresetDashesConvert, "lo_preset_dashes.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLOPresetDashesConvert, "lo_preset_dashes.odt")
 {
     // File asserting while saving in LO.
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash", "val", "sysDot");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash", "val", "sysDash");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash", "val", "sysDot");
@@ -938,11 +908,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf58944RepeatingTableHeader, "tdf58944-repeating-t
                          parseDump("/root/page[2]/body/tab/row[2]/cell[1]/txt/text()"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf121597TrackedDeletionOfMultipleParagraphs, "tdf121597.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121597TrackedDeletionOfMultipleParagraphs, "tdf121597.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
 
     // check paragraphs with removed paragraph mark
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:del");
