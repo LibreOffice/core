@@ -78,19 +78,27 @@ void BitmapWriteAccess::Erase( const Color& rColor )
     {
         aColor = BitmapColor(static_cast<sal_uInt8>(GetBestPaletteIndex(rColor)));
     }
+
     // try fast bitmap method first
     if (ImplFastEraseBitmap(*mpBuffer, aColor))
         return;
 
-    // use the canonical method to clear the bitmap
-    boost::optional<BitmapColor> pOldFillColor(mpFillColor);
-    const Point aPoint;
-    const tools::Rectangle aRect(aPoint, maBitmap.GetSizePixel());
-
-    SetFillColor(rColor);
-    FillRect(aRect);
-
-    mpFillColor = pOldFillColor;
+    tools::Rectangle aRect(Point(), maBitmap.GetSizePixel());
+    if (aRect.IsEmpty())
+        return;
+    // clear the bitmap by filling the first line pixel by pixel,
+    // then dup the first line over each other line
+    Scanline pFirstScanline = GetScanline(0);
+    const long nEndX = aRect.Right();
+    for (long nX = 0; nX <= nEndX; ++nX)
+        SetPixelOnData(pFirstScanline, nX, rColor);
+    const auto nScanlineSize = GetScanlineSize();
+    const long nEndY = aRect.Bottom();
+    for (long nY = 1; nY <= nEndY; nY++)
+    {
+        Scanline pDestScanline = GetScanline(nY);
+        memcpy(pDestScanline, pFirstScanline, nScanlineSize);
+    }
 }
 
 void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
