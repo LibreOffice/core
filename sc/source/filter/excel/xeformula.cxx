@@ -1875,7 +1875,7 @@ void XclExpFmlaCompImpl::ConvertRefData(
         rXclPos.mnCol = static_cast< sal_uInt16 >( nXclRelCol ) & mnMaxColMask;
 
         // convert row index (2-step-cast ScsROW->sal_Int16->sal_uInt16 to get all bits correctly)
-        sal_Int16 nXclRelRow = static_cast<sal_Int32>(rRefData.Row());
+        sal_Int32 nXclRelRow = static_cast<sal_Int32>(rRefData.Row());
         rXclPos.mnRow = static_cast< sal_uInt32 >( nXclRelRow ) & mnMaxRowMask;
     }
 
