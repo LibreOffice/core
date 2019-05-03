@@ -25,12 +25,9 @@
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 

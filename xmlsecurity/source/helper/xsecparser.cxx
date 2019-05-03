@@ -25,8 +25,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <sal/log.hxx>
 
-#include <string.h>
-
 namespace cssu = com::sun::star::uno;
 namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxs = com::sun::star::xml::sax;

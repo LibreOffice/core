@@ -13,7 +13,6 @@
 
 #include <xmlsec/xmlstreamio.hxx>
 #include <xmlsec-wrapper.h>
-#include <svl/cryptosign.hxx>
 #ifdef XMLSEC_CRYPTO_MSCRYPTO
 #include <xmlsec/mscng/crypto.h>
 #else

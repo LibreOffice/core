@@ -19,7 +19,6 @@
 
 
 #include <macrosecurity.hxx>
-#include <certificatechooser.hxx>
 #include <certificateviewer.hxx>
 #include <biginteger.hxx>
 
@@ -31,18 +30,14 @@
 
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <comphelper/sequence.hxx>
-#include <sfx2/filedlghelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/xmlsechelper.hxx>
 #include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <tools/urlobj.hxx>
 #include <unotools/datetime.hxx>
 #include <vcl/treelistentry.hxx>
-
-#include <strings.hrc>
 
 using namespace comphelper;
 using namespace ::com::sun::star;

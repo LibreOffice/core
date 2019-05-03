@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
-#include <rtl/uuid.h>
 #include <framework/xmlsignaturetemplateimpl.hxx>
 
 using namespace ::com::sun::star::uno ;

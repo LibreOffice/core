@@ -24,16 +24,13 @@
 
 #include <xmlsignaturehelper2.hxx>
 
-#include <tools/stream.hxx>
 #include <tools/datetime.hxx>
 
 #include <xmloff/attrlist.hxx>
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
@@ -42,7 +39,6 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
 
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/sequence.hxx>

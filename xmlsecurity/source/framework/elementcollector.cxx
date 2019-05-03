@@ -20,7 +20,6 @@
 
 #include "elementmark.hxx"
 #include "elementcollector.hxx"
-#include "buffernode.hxx"
 #include <com/sun/star/xml/crypto/sax/ConstOfSecurityId.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedListener.hpp>
 

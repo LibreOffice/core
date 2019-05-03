@@ -7,15 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_gpgme.h>
-
 #include "SecurityEnvironment.hxx"
 #include "CertificateImpl.hxx"
 
 #include <com/sun/star/security/CertificateCharacters.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
 
-#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <list>
 

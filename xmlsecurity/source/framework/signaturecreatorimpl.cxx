@@ -21,11 +21,11 @@
 #include <framework/signaturecreatorimpl.hxx>
 #include <framework/xmlsignaturetemplateimpl.hxx>
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
-#include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
+
+namespace com::sun::star::xml::wrapper { class XXMLElementWrapper; }
 
 using namespace com::sun::star::uno;
 namespace cssu = com::sun::star::uno;

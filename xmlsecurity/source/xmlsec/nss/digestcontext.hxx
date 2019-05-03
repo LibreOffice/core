@@ -24,6 +24,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
+#include <secmodt.h>
 
 class ODigestContext : public cppu::WeakImplHelper< css::xml::crypto::XDigestContext >
 {

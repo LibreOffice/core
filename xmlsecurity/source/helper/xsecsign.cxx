@@ -19,21 +19,16 @@
 
 
 #include <xsecctl.hxx>
-#include <certificate.hxx>
 
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
-#include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
-#include <com/sun/star/xml/crypto/sax/XBlockerMonitor.hpp>
-#include <com/sun/star/xml/crypto/sax/XReferenceCollector.hpp>
-#include <com/sun/star/xml/crypto/sax/XSignatureCreationResultBroadcaster.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <rtl/uuid.h>
 #include <sal/log.hxx>
 
 #include <framework/signaturecreatorimpl.hxx>
 #include <framework/saxeventkeeperimpl.hxx>
+
+namespace com::sun::star::graphic { class XGraphic; }
 
 using namespace css;
 using namespace css::uno;

@@ -38,6 +38,11 @@ namespace xml { namespace crypto {
     class XSecurityEnvironment; }}
 }}}
 
+class CertificateViewerGeneralTP;
+class CertificateViewerDetailsTP;
+class CertificateViewerCertPathTP;
+class CertificateChooser;
+
 class CertificateViewer : public TabDialog
 {
 private:

@@ -19,7 +19,6 @@
 
 
 #include "elementmark.hxx"
-#include "buffernode.hxx"
 
 namespace cssxc = com::sun::star::xml::crypto;
 
