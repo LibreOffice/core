@@ -71,11 +71,20 @@ void tools::Rectangle::SetSize( const Size& rSize )
     }
 
     if ( rSize.Height() < 0 )
+    {
         nBottom  = nTop + rSize.Height() +1;
+        mbHeightEmpty = false;
+    }
     else if ( rSize.Height() > 0 )
+    {
         nBottom  = nTop + rSize.Height() -1;
+        mbHeightEmpty = false;
+    }
     else
-        nBottom = RECT_EMPTY;
+    {
+        nBottom = 0;
+        mbHeightEmpty = true;
+    }
 }
 
 void tools::Rectangle::SaturatingSetSize(const Size& rSize)
@@ -97,11 +106,20 @@ void tools::Rectangle::SaturatingSetSize(const Size& rSize)
     }
 
     if ( rSize.Height() < 0 )
+    {
         nBottom = o3tl::saturating_add(nTop, (rSize.Height() + 1));
+        mbHeightEmpty = false;
+    }
     else if ( rSize.Height() > 0 )
+    {
         nBottom = o3tl::saturating_add(nTop, (rSize.Height() - 1));
+        mbHeightEmpty = true;
+    }
     else
-        nBottom = RECT_EMPTY;
+    {
+        nBottom = 0;
+        mbHeightEmpty = true;
+    }
 }
 
 void tools::Rectangle::SaturatingSetX(long x)
@@ -113,7 +131,8 @@ void tools::Rectangle::SaturatingSetX(long x)
 
 void tools::Rectangle::SaturatingSetY(long y)
 {
-    nBottom = o3tl::saturating_add(nBottom, y - nTop);
+    if (!mbHeightEmpty)
+        nBottom = o3tl::saturating_add(nBottom, y - nTop);
     nTop = y;
 }
 
@@ -170,7 +189,7 @@ void tools::Rectangle::Justify()
         std::swap(nLeft, nRight);
     }
 
-    if ( (nBottom < nTop) && (nBottom != RECT_EMPTY) )
+    if ( (nBottom < nTop) && !mbHeightEmpty )
     {
         std::swap(nBottom, nTop);
     }
@@ -217,6 +236,10 @@ bool tools::Rectangle::IsOver( const tools::Rectangle& rRect ) const
 
 namespace tools
 {
+// FIXME the use of RECT_EMPTY here is for backwards-compat, but it is problematic, because
+// we could lose data
+static constexpr short RECT_EMPTY = -32767;
+
 SvStream& ReadRectangle( SvStream& rIStream, tools::Rectangle& rRect )
 {
     sal_Int32 nTmpL(0), nTmpT(0), nTmpR(0), nTmpB(0);
@@ -225,9 +248,10 @@ SvStream& ReadRectangle( SvStream& rIStream, tools::Rectangle& rRect )
 
     rRect.nLeft = nTmpL;
     rRect.nTop = nTmpT;
-    rRect.nRight = nTmpR == Rectangle::RECT_EMPTY ? 0 : nTmpR;
-    rRect.nBottom = nTmpB;
-    rRect.mbWidthEmpty = nTmpR == Rectangle::RECT_EMPTY;
+    rRect.nRight = nTmpR == RECT_EMPTY ? 0 : nTmpR;
+    rRect.nBottom = nTmpB = RECT_EMPTY ? 0 : nTmpB;
+    rRect.mbWidthEmpty = nTmpR == RECT_EMPTY;
+    rRect.mbHeightEmpty = nTmpB == RECT_EMPTY;
 
     return rIStream;
 }
@@ -236,8 +260,8 @@ SvStream& WriteRectangle( SvStream& rOStream, const tools::Rectangle& rRect )
 {
     rOStream.WriteInt32( rRect.nLeft )
             .WriteInt32( rRect.nTop )
-            .WriteInt32( rRect.mbWidthEmpty ? Rectangle::RECT_EMPTY : rRect.nRight )
-            .WriteInt32( rRect.nBottom );
+            .WriteInt32( rRect.mbWidthEmpty ? RECT_EMPTY : rRect.nRight )
+            .WriteInt32( rRect.mbHeightEmpty ? RECT_EMPTY : rRect.nBottom );
 
     return rOStream;
 }
