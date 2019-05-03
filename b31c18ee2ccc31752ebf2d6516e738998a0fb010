@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_689ea108",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-05-03T20:37:13Z",
+      "side": 1,
+      "message": "We have INetURLObject::getAbbreviated for this.\n\nAdditionally: why have different labeling for this case vs next one, which would open either online or offline link; and even for offline link, it would open browser?\n\n    else\n    {\n        m_pLink-\u003eset_label(CuiResId(STR_HELP_LINK));\n        if (aLink.startsWith(\"http\"))\n        {\n            // set uri ...\n        }\n        else\n        {\n            // connect_clicked ...\n        }\n    }\n\nHopefully the http-based links to help would eventually be all replaced with normal internal links, by fixing the redirector.",
+      "range": {
+        "startLine": 83,
+        "startChar": 12,
+        "endLine": 83,
+        "endChar": 58
+      },
+      "revId": "b31c18ee2ccc31752ebf2d6516e738998a0fb010",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
