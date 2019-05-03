@@ -89,7 +89,7 @@ PresenterPreviewCache::~PresenterPreviewCache()
 
 void SAL_CALL PresenterPreviewCache::initialize (const Sequence<Any>& rArguments)
 {
-    if (rArguments.getLength() != 0)
+    if (rArguments.hasElements())
         throw RuntimeException();
 }
 

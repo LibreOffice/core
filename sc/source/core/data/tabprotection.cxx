@@ -180,7 +180,7 @@ Sequence<sal_Int8> ScTableProtectionImpl::hashPassword(const OUString& aPassText
 Sequence<sal_Int8> ScTableProtectionImpl::hashPassword(
     const Sequence<sal_Int8>& rPassHash, ScPasswordHash eHash)
 {
-    if (!rPassHash.getLength() || eHash == PASSHASH_UNSPECIFIED)
+    if (!rPassHash.hasElements() || eHash == PASSHASH_UNSPECIFIED)
         return rPassHash;
 
     // TODO: Right now, we only support double-hash by SHA1.
@@ -227,7 +227,7 @@ bool ScTableProtectionImpl::isProtectedWithPass() const
     if (!mbProtected)
         return false;
 
-    return !maPassText.isEmpty() || maPassHash.getLength() || maPasswordHash.hasPassword();
+    return !maPassText.isEmpty() || maPassHash.hasElements() || maPasswordHash.hasPassword();
 }
 
 void ScTableProtectionImpl::setProtected(bool bProtected)

@@ -59,7 +59,7 @@ sal_Int32 XMLFile2UTFConverter::readAndConvert( Sequence<sal_Int8> &seq , sal_In
             if( ! m_bStarted && nRead )
             {
                 // ensure that enough data is available to parse encoding
-                if( seqStart.getLength() )
+                if( seqStart.hasElements() )
                 {
                   // prefix with what we had so far.
                   sal_Int32 nLength = seq.getLength();
@@ -382,7 +382,7 @@ Sequence<sal_Unicode> Text2UnicodeConverter::convert( const Sequence<sal_Int8> &
     const sal_Int8 *pbSource = seqText.getConstArray();
     std::unique_ptr<sal_Int8[]> pbTempMem;
 
-    if( m_seqSource.getLength() ) {
+    if( m_seqSource.hasElements() ) {
         // put old rest and new byte sequence into one array
         pbTempMem.reset(new sal_Int8[ nSourceSize ]);
         memcpy( pbTempMem.get() , m_seqSource.getConstArray() , m_seqSource.getLength() );
@@ -450,7 +450,7 @@ Sequence<sal_Int8> Unicode2TextConverter::convert(const sal_Unicode *puSource , 
 {
     std::unique_ptr<sal_Unicode[]> puTempMem;
 
-    if( m_seqSource.getLength() ) {
+    if( m_seqSource.hasElements() ) {
         // For surrogates !
         // put old rest and new byte sequence into one array
         // In general when surrogates are used, they should be rarely

@@ -3414,7 +3414,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                                 uno::Sequence< OUString > aRepresentations(
                                     xReceiver->getUsedRangeRepresentations());
                                 SvXMLAttributeList* pAttrList = nullptr;
-                                if(aRepresentations.getLength())
+                                if(aRepresentations.hasElements())
                                 {
                                     // add the ranges used by the chart to the shape
                                     // element to be able to start listening after

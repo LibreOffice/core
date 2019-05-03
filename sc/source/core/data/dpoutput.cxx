@@ -1342,7 +1342,7 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionDa
                 break;
 
             const uno::Sequence<sheet::MemberResult> rSequence = pColFields[nField].maResult;
-            if (rSequence.getLength() == 0)
+            if (!rSequence.hasElements())
                 break;
             const sheet::MemberResult* pArray = rSequence.getConstArray();
 
@@ -1371,7 +1371,7 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionDa
                 break;
 
             const uno::Sequence<sheet::MemberResult> rSequence = pRowFields[nField].maResult;
-            if (rSequence.getLength() == 0)
+            if (!rSequence.hasElements())
                 break;
             const sheet::MemberResult* pArray = rSequence.getConstArray();
 

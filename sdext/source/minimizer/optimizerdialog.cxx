@@ -164,7 +164,7 @@ void OptimizerDialog::UpdateConfiguration()
     aAny = getControlProperty( "ListBox0Pg0", "SelectedItems" );
     if ( aAny >>= aSelectedItems )
     {
-        if ( aSelectedItems.getLength() )
+        if ( aSelectedItems.hasElements() )
         {
             sal_Int16 nSelectedItem = aSelectedItems[ 0 ];
             aAny = getControlProperty( "ListBox0Pg0", "StringItemList" );
@@ -184,7 +184,7 @@ void OptimizerDialog::UpdateConfiguration()
     if ( !(aAny >>= aSelectedItems) )
         return;
 
-    if ( aSelectedItems.getLength() )
+    if ( aSelectedItems.hasElements() )
     {
         sal_Int16 nSelectedItem = aSelectedItems[ 0 ];
         aAny = getControlProperty( "ListBox0Pg3", "StringItemList" );

@@ -1712,7 +1712,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     const css::uno::Sequence< css::scanner::ScannerContext >
                         aContexts( mxScannerManager->getAvailableScanners() );
 
-                    if( aContexts.getLength() )
+                    if( aContexts.hasElements() )
                     {
                         css::scanner::ScannerContext aContext( aContexts.getConstArray()[ 0 ] );
                         mxScannerManager->configureScannerAndScan( aContext, mxScannerListener );
@@ -1738,7 +1738,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     const css::uno::Sequence< css::scanner::ScannerContext > aContexts( mxScannerManager->getAvailableScanners() );
 
-                    if( aContexts.getLength() )
+                    if( aContexts.hasElements() )
                     {
                         mxScannerManager->startScan( aContexts.getConstArray()[ 0 ], mxScannerListener );
                         bDone = true;

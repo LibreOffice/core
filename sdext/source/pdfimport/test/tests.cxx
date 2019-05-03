@@ -161,7 +161,7 @@ namespace
                                   double                       start ) override
         {
             GraphicsContext& rContext( getCurrentContext() );
-            if( dashes.getLength() )
+            if( dashes.hasElements() )
                 comphelper::sequenceToContainer(rContext.DashArray,dashes);
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "line dashing start offset", 0.0, start, 0.000000001 );
         }

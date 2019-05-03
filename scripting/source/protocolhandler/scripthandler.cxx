@@ -76,7 +76,7 @@ void SAL_CALL ScriptProtocolHandler::initialize(
 
     // first argument contains a reference to the frame (may be empty or the desktop,
     // but usually it's a "real" frame)
-    if ( aArguments.getLength() && !( aArguments[ 0 ] >>= m_xFrame ) )
+    if ( aArguments.hasElements() && !( aArguments[ 0 ] >>= m_xFrame ) )
     {
         OUString temp = "ScriptProtocolHandler::initialize: could not extract reference to the frame";
         throw RuntimeException( temp );
@@ -183,7 +183,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             Sequence< Any > outArgs( 0 );
             Sequence< sal_Int16 > outIndex;
 
-            if ( lArgs.getLength() > 0 )
+            if ( lArgs.hasElements() )
             {
                int argCount = 0;
                for ( int index = 0; index < lArgs.getLength(); index++ )
@@ -226,7 +226,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                         // given name/signature
                         std::rethrow_exception(aFirstCaughtException);
 
-                    if ( inArgs.getLength() == 0 )
+                    if ( !inArgs.hasElements() )
                         // no chance to retry if we can't strip more in-args
                         std::rethrow_exception(aFirstCaughtException);
 

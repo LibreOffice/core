@@ -1101,7 +1101,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
                     {
                         uno::Sequence<sal_Int8> aPass;
                         ::comphelper::Base64::decode(aPass, sKey);
-                        if (aPass.getLength())
+                        if (aPass.hasElements())
                         {
                             if (pDoc->GetChangeTrack())
                                 pDoc->GetChangeTrack()->SetProtection(aPass);
@@ -1371,7 +1371,7 @@ void ScXMLImport::SetStyleToRanges()
                 // store first cell of first range for each style, once per sheet
                 uno::Sequence<table::CellRangeAddress> aAddresses(xSheetCellRanges->getRangeAddresses());
                 pStyle->ApplyCondFormat(aAddresses);
-                if ( aAddresses.getLength() > 0 )
+                if ( aAddresses.hasElements() )
                 {
                     const table::CellRangeAddress& rRange = aAddresses[0];
                     if ( rRange.Sheet != pStyle->GetLastSheet() )

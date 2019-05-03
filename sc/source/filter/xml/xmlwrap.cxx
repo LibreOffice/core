@@ -155,7 +155,7 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
 
     // set Base URL
     uno::Reference< beans::XPropertySet > xInfoSet;
-    if( aArgs.getLength() > 0 )
+    if( aArgs.hasElements() )
         aArgs.getConstArray()[0] >>= xInfoSet;
     OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
@@ -650,7 +650,7 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
 
     // set Base URL
     uno::Reference< beans::XPropertySet > xInfoSet;
-    if( aArgs.getLength() > 0 )
+    if( aArgs.hasElements() )
         aArgs.getConstArray()[0] >>= xInfoSet;
     OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )

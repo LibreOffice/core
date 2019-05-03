@@ -1134,7 +1134,7 @@ public:
                             { aProtectPass = rPass; }
     const css::uno::Sequence< sal_Int8 >& GetProtection() const
                                     { return aProtectPass; }
-    bool IsProtected() const { return aProtectPass.getLength() != 0; }
+    bool IsProtected() const { return aProtectPass.hasElements(); }
 
                                 // If time stamps of actions of this
                                 // ChangeTrack and a second one are to be

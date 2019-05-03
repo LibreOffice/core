@@ -2318,7 +2318,7 @@ css::uno::Sequence< css::uno::Any >
         if ( bSuccess )
         {
             uno::Sequence< uno::Any> aSeq = GetScAccFlowToSequence();
-            if ( aSeq.getLength() )
+            if ( aSeq.hasElements() )
             {
                 return aSeq;
             }

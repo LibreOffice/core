@@ -195,7 +195,7 @@ void WriteAnimateTo(const FSHelperPtr& pFS, const Any& rValue, const OUString& r
 void WriteAnimateValues(const FSHelperPtr& pFS, const Reference<XAnimate>& rXAnimate)
 {
     const Sequence<double> aKeyTimes = rXAnimate->getKeyTimes();
-    if (aKeyTimes.getLength() <= 0)
+    if (!aKeyTimes.hasElements())
         return;
     const Sequence<Any> aValues = rXAnimate->getValues();
     const OUString& sFormula = rXAnimate->getFormula();

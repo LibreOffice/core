@@ -86,12 +86,12 @@ static const sal_Int32 DELIMLEN = strlen(DELIM);
 
 static bool isKeyEventOk( awt::KeyEvent& evt, const Sequence< Any >& params )
 {
-    return ( params.getLength() > 0 ) && ( params[ 0 ] >>= evt );
+    return params.hasElements() && ( params[ 0 ] >>= evt );
 }
 
 static bool isMouseEventOk( awt::MouseEvent& evt, const Sequence< Any >& params )
 {
-    return ( params.getLength() > 0 ) && ( params[ 0 ] >>= evt );
+    return params.hasElements() && ( params[ 0 ] >>= evt );
 }
 
 static Sequence< Any > ooMouseEvtToVBADblClick( const Sequence< Any >& params )
@@ -890,7 +890,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
                 {
                     aArguments = evt.Arguments;
                 }
-                if ( aArguments.getLength() )
+                if ( aArguments.hasElements() )
                 {
                     // call basic event handlers for event
 

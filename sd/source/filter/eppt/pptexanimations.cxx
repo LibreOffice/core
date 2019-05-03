@@ -749,7 +749,7 @@ bool AnimationExporter::GetNodeType( const Reference< XAnimationNode >& xNode, s
 {
     // trying to get the nodetype
     Sequence< NamedValue > aUserData = xNode->getUserData();
-    if ( aUserData.getLength() )
+    if ( aUserData.hasElements() )
     {
     const NamedValue* p = aUserData.getConstArray();
     sal_Int32 nLength = aUserData.getLength();
@@ -862,7 +862,7 @@ void AnimationExporter::GetUserData( const Sequence< NamedValue >& rUserData, co
 {
     // storing user data into pAny, to allow direct access later
     memset( pAny, 0, nLen );
-    if ( !rUserData.getLength() )
+    if ( !rUserData.hasElements() )
         return;
 
     const NamedValue* p = rUserData.getConstArray();
@@ -1788,7 +1788,7 @@ void AnimationExporter::exportAnimateKeyPoints( SvStream& rStrm, const Reference
     Sequence< double > aKeyTimes( xAnimate->getKeyTimes() );
     Sequence< Any > aValues( xAnimate->getValues() );
     OUString aFormula( xAnimate->getFormula() );
-    if ( !aKeyTimes.getLength() )
+    if ( !aKeyTimes.hasElements() )
         return;
 
     EscherExContainer aAnimKeyPoints( rStrm, DFF_msofbtAnimKeyPoints );

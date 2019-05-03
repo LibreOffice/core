@@ -101,7 +101,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog(weld::Window* pParent,
     if ( nSelect >= 0 )                 // select in list box
         m_xLbEngine->set_active(nSelect);
 
-    if ( !maProperties.getLength() )
+    if ( !maProperties.hasElements() )
         ReadFromComponent();            // fill maProperties from component (using maEngine)
     FillListBox();                      // using maProperties
 }

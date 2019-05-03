@@ -198,7 +198,7 @@ ScVbaWorkbook::getFileFormat(  )
 void
 ScVbaWorkbook::init()
 {
-    if ( !ColorData.getLength() )
+    if ( !ColorData.hasElements() )
         ResetColors();
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY );
     if ( xModel.is() )

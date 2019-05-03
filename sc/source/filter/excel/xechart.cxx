@@ -2749,7 +2749,7 @@ void XclExpChValueRange::Convert( const ScaleData& rScaleData )
     // tdf#114168 If IntervalCount is 5, then enable automatic minor calculation.
     // During import, if minorUnit is set and majorUnit not, then it is impossible
     // to calculate IntervalCount.
-    const bool bAutoMinor = bLogScale || bAutoMajor || (rSubIncrementSeq.getLength() < 1) ||
+    const bool bAutoMinor = bLogScale || bAutoMajor || !rSubIncrementSeq.hasElements() ||
         lclIsAutoAnyOrGetValue( nCount, rSubIncrementSeq[ 0 ].IntervalCount ) || (nCount < 1) || (nCount == 5);
 
     if( maData.mfMajorStep && !bAutoMinor )
@@ -3090,7 +3090,7 @@ sal_uInt16 XclExpChAxesSet::Convert( Reference< XDiagram > const & xDiagram, sal
     if( xCoordSysCont.is() )
     {
         Sequence< Reference< XCoordinateSystem > > aCoordSysSeq = xCoordSysCont->getCoordinateSystems();
-        if( aCoordSysSeq.getLength() > 0 )
+        if( aCoordSysSeq.hasElements() )
         {
             /*  Process first coordinate system only. Import filter puts all
                 chart types into one coordinate system. */

@@ -191,7 +191,7 @@ bool IsValidObject( const XclObj& rObj )
             return false;
 
         uno::Sequence<uno::Reference<chart2::XCoordinateSystem> > xCooSysSeq = xCooSysContainer->getCoordinateSystems();
-        if (!xCooSysSeq.getLength())
+        if (!xCooSysSeq.hasElements())
             return false;
 
         for (sal_Int32 nCooSys = 0; nCooSys < xCooSysSeq.getLength(); ++nCooSys)
@@ -201,7 +201,7 @@ bool IsValidObject( const XclObj& rObj )
                 return false;
 
             uno::Sequence<uno::Reference<chart2::XChartType> > xChartTypeSeq = xChartTypeCont->getChartTypes();
-            if (!xChartTypeSeq.getLength())
+            if (!xChartTypeSeq.hasElements())
                 // No chart type.  Not good.
                 return false;
         }
