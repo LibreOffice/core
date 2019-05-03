@@ -19,7 +19,10 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_SWTHREADJOINER_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_SWTHREADJOINER_HXX
 
-#include <com/sun/star/util/XJobManager.hpp>
+#include <sal/types.h>
+
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace com::sun::star::util { class XJobManager; }
 
 /** Testing */
 namespace SwThreadJoiner

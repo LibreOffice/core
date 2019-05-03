@@ -23,9 +23,8 @@
 #include <vector>
 #include <deque>
 #include <unordered_set>
-#include <swscanner.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <osl/diagnose.h>
+#include <i18nlangtag/lang.h>
 #include "TextFrameIndex.hxx"
 
 class SwTextNode;

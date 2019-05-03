@@ -13,7 +13,6 @@
 #include <vcl/menubtn.hxx>
 #include <swrect.hxx>
 
-class SwFieldFormDropDownPortion;
 class SwEditWin;
 class FloatingWindow;
 namespace sw

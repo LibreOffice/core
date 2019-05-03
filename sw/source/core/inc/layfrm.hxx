@@ -24,7 +24,6 @@
 
 class SwAnchoredObject;
 class SwContentFrame;
-class SwFlowFrame;
 class SwFormatCol;
 struct SwCursorMoveState;
 class SwFrameFormat;

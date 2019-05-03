@@ -24,7 +24,6 @@
 #include <pagedesc.hxx>
 
 class SwDoc;
-class SwPageDesc;
 
 class SwUndoPageDesc : public SwUndo
 {

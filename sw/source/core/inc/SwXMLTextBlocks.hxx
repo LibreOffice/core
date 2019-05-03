@@ -21,11 +21,9 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_SWXMLTEXTBLOCKS_HXX
 
 #include <sfx2/objsh.hxx>
-#include <sfx2/docfile.hxx>
 #include "swblocks.hxx"
 #include <o3tl/typed_flags_set.hxx>
 
-class SwPaM;
 class SwDoc;
 class SvxMacroTableDtor;
 
