@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_08e35d35",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4629,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2019-05-03T14:45:07Z",
+      "side": 1,
+      "message": "So startmain expects it to be taken already? Perhaps we should take it before calling startmain, or would that deadlock?",
+      "revId": "eec921fd89e2eb6c1b09af3f0651b17a0da4225f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
