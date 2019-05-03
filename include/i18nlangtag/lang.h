@@ -749,6 +749,7 @@ namespace o3tl
 #define LANGUAGE_USER_JUHOAN                LanguageType(0x06A1)
 #define LANGUAGE_USER_NARO                  LanguageType(0x06A2)
 #define LANGUAGE_USER_ILOKO                 LanguageType(0x06A3)
+#define LANGUAGE_USER_ENGLISH_ZAMBIA        LanguageType(0xA009)  /* makeLangID( 0x28, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
 
 
 /* XXX Add new user defined LCIDs ^^^ there.
