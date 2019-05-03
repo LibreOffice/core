@@ -27,6 +27,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <vcl/canvastools.hxx>
 
 
 namespace sdr
@@ -76,10 +77,7 @@ namespace sdr
                 // to current zoom so as objects relative position to grid
                 // appears stable
                 aCurrentBoundRect += GetSdrObjGroup().GetGridOffset();
-                const basegfx::B2DRange aCurrentRange(
-                    aCurrentBoundRect.Left(), aCurrentBoundRect.Top(),
-                    aCurrentBoundRect.Right(), aCurrentBoundRect.Bottom());
-
+                const basegfx::B2DRange aCurrentRange = vcl::unotools::b2DRectangleFromRectangle(aCurrentBoundRect);
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                         false, aCurrentRange));
