@@ -471,10 +471,32 @@ void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
     {
         aInputEvent.maText = toOUString(pEvent->preeditString());
         aInputEvent.mnCursorPos = 0;
-        sal_Int32 nLength = aInputEvent.maText.getLength();
+
+        const sal_Int32 nLength = aInputEvent.maText.getLength();
+        const QList<QInputMethodEvent::Attribute>& rAttrList = pEvent->attributes();
         std::vector<ExtTextInputAttr> aTextAttrs(nLength, ExtTextInputAttr::Underline);
+
+        for (int i = 0; i < rAttrList.size(); ++i)
+        {
+            const QInputMethodEvent::Attribute& rAttr = rAttrList.at(i);
+            switch (rAttr.type)
+            {
+                case QInputMethodEvent::Cursor:
+                {
+                    aInputEvent.mnCursorPos = rAttr.start;
+                    if (rAttr.length == 0)
+                        aInputEvent.mnCursorFlags |= EXTTEXTINPUT_CURSOR_INVISIBLE;
+                    break;
+                }
+                default:
+                    SAL_WARN("vcl.qt5",
+                             "Unhandled QInputMethodEvent attribute: " << (int)rAttr.type);
+                    break;
+            }
+        }
         if (nLength)
             aInputEvent.mpTextAttr = &aTextAttrs[0];
+
         m_pFrame->CallCallback(SalEvent::ExtTextInput, &aInputEvent);
         pEvent->accept();
     }
