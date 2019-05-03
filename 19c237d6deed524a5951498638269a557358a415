@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_c867b525",
+        "filename": "connectivity/CppunitTest_connectivity_sharedresources.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2019-05-03T20:49:17Z",
+      "side": 1,
+      "message": "I don\u0027t have a Windows machine: So I couldn\u0027t test if the removal has any effects.",
+      "revId": "19c237d6deed524a5951498638269a557358a415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
