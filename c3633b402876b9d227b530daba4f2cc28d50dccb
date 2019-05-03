@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_88820d4f",
+        "filename": "svl/source/items/itempool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-05-03T14:37:54Z",
+      "side": 1,
+      "message": "might as well move the AddRef and the assert down to the common block, the rest looks good",
+      "revId": "c3633b402876b9d227b530daba4f2cc28d50dccb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
