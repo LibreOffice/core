@@ -127,6 +127,7 @@ public:
     void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xControl->connect_changed(rLink); }
     void grab_focus() { m_xControl->grab_focus(); }
     void show() { m_xControl->show(); }
+    void hide() { m_xControl->hide(); }
 };
 
 class SVX_DLLPUBLIC TextEncodingTreeView
@@ -190,6 +191,7 @@ public:
     void connect_row_activated(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_row_activated(rLink); }
     void grab_focus() { m_xControl->grab_focus(); }
     void show() { m_xControl->show(); }
+    void hide() { m_xControl->hide(); }
     int get_height_rows(int nRows) const
     {
         return m_xControl->get_height_rows(nRows);
