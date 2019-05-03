@@ -27,6 +27,8 @@
 #include <tipoftheday.hrc>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/virdev.hxx>
+#include <sfx2/sfxhelp.hxx>
+#include <vcl/svapp.hxx>
 
 TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/tipofthedaydialog.ui", "TipOfTheDayDialog")
@@ -64,35 +66,45 @@ static bool file_exists(const OUString& fileName)
 
 void TipOfTheDayDialog::UpdateTip()
 {
-    //get string
-    OUString aText;
-    aText = CuiResId(TIPOFTHEDAY_STRINGARRAY[nCurrentTip].first);
-    //move hyperlink into linkbutton
-    sal_Int32 nPos = aText.indexOf("http");
-    if (nPos > 0)
-    {
-        m_pLink->set_visible(true);
-        if (aText.getLength() - nPos > 40)
-            m_pLink->set_label(aText.copy(nPos, 40) + "...");
-        else
-            m_pLink->set_label(aText.copy(nPos));
-        m_pLink->set_uri(aText.copy(nPos));
-        aText = aText.copy(0, nPos - 1);
-    }
-    else
-        m_pLink->set_visible(false);
+    // text
+    OUString aText = CuiResId(std::get<0>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]));
     m_pText->set_label(aText);
 
-    // import the image
+    // hyperlink
+    aLink = std::get<1>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]);
+    if (aLink.isEmpty())
+    {
+        m_pLink->set_visible(false);
+    }
+    else if (aLink.startsWith("http"))
+    {
+        m_pLink->set_uri(aLink);
+        if (aLink.getLength() > 40)
+            m_pLink->set_label(aLink.copy(0, 40) + "...");
+        else
+            m_pLink->set_label(aLink);
+        m_pLink->set_visible(true);
+        m_pLink->connect_clicked(Link<weld::LinkButton&, void>());
+    }
+    else
+    {
+        m_pLink->set_uri("");
+        m_pLink->set_label(CuiResId(STR_HELP_LINK));
+        m_pLink->set_visible(true);
+        //converts aLink into the proper offline/online hyperlink
+        m_pLink->connect_clicked(LINK(this, TipOfTheDayDialog, OnLinkClick));
+    }
+
+    // image
     OUString aURL("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/tipoftheday/");
     rtl::Bootstrap::expandMacros(aURL);
-    OUString aName = TIPOFTHEDAY_STRINGARRAY[nCurrentTip].second;
+    OUString aImage = std::get<2>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]);
     // use default image if none is available with the number
-    if (aName.isEmpty() || !file_exists(aURL + aName))
-        aName = "tipoftheday.png";
+    if (aImage.isEmpty() || !file_exists(aURL + aImage))
+        aImage = "tipoftheday.png";
     // draw image
     Graphic aGraphic;
-    if (GraphicFilter::LoadGraphic(aURL + aName, OUString(), aGraphic) == ERRCODE_NONE)
+    if (GraphicFilter::LoadGraphic(aURL + aImage, OUString(), aGraphic) == ERRCODE_NONE)
     {
         ScopedVclPtr<VirtualDevice> m_pVirDev;
         m_pVirDev = m_pImage->create_virtual_device();
@@ -109,6 +121,11 @@ IMPL_STATIC_LINK(TipOfTheDayDialog, OnShowTipToggled, weld::ToggleButton&, rButt
         comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Misc::ShowTipOfTheDay::set(rButton.get_active(), xChanges);
     xChanges->commit();
+}
+
+IMPL_LINK_NOARG(TipOfTheDayDialog, OnLinkClick, weld::LinkButton&, void)
+{
+    Application::GetHelp()->Start(aLink, static_cast<weld::Widget*>(nullptr));
 }
 
 IMPL_LINK_NOARG(TipOfTheDayDialog, OnNextClick, weld::Button&, void)
