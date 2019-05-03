@@ -321,7 +321,7 @@ bool SpellCheckerDispatcher::isValid_Impl(
                         // Add correct words to the cache.
                         // But not those that are correct only because of
                         // the temporary supplied settings.
-                        if (bTmpRes  &&  0 == rProperties.getLength())
+                        if (bTmpRes  &&  !rProperties.hasElements())
                             GetCache().AddWord( aChkWord, nLanguage );
                     }
                 }
@@ -380,7 +380,7 @@ bool SpellCheckerDispatcher::isValid_Impl(
                          // Add correct words to the cache.
                         // But not those that are correct only because of
                         // the temporary supplied settings.
-                        if (bTmpRes  &&  0 == rProperties.getLength())
+                        if (bTmpRes  &&  !rProperties.hasElements())
                             GetCache().AddWord( aChkWord, nLanguage );
                     }
                 }
@@ -486,7 +486,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                         // Add correct words to the cache.
                         // But not those that are correct only because of
                         // the temporary supplied settings.
-                        if (!xTmpRes.is()  &&  0 == rProperties.getLength())
+                        if (!xTmpRes.is()  &&  !rProperties.hasElements())
                             GetCache().AddWord( aChkWord, nLanguage );
                     }
                 }
@@ -565,7 +565,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                         // Add correct words to the cache.
                         // But not those that are correct only because of
                         // the temporary supplied settings.
-                        if (!xTmpRes.is()  &&  0 == rProperties.getLength())
+                        if (!xTmpRes.is()  &&  !rProperties.hasElements())
                             GetCache().AddWord( aChkWord, nLanguage );
                     }
                 }

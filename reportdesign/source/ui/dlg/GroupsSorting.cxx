@@ -260,7 +260,7 @@ void OFieldExpressionControl::StartDrag( sal_Int8 /*_nAction*/ , const Point& /*
     {
         uno::Sequence<uno::Any> aClipboardList = fillSelectedGroups();
 
-        if( aClipboardList.getLength() )
+        if( aClipboardList.hasElements() )
         {
             rtl::Reference<OGroupExchange> pData = new OGroupExchange(aClipboardList);
             pData->StartDrag(this, DND_ACTION_MOVE );
@@ -297,7 +297,7 @@ sal_Int8 OFieldExpressionControl::ExecuteDrop( const BrowserExecuteDropEvent& rE
         uno::Any aDrop = aDropped.GetAny(OGroupExchange::getReportGroupId(), OUString());
         uno::Sequence< uno::Any > aGroups;
         aDrop >>= aGroups;
-        if ( aGroups.getLength() )
+        if ( aGroups.hasElements() )
         {
             moveGroups(aGroups,nRow);
             nAction = DND_ACTION_MOVE;
@@ -308,7 +308,7 @@ sal_Int8 OFieldExpressionControl::ExecuteDrop( const BrowserExecuteDropEvent& rE
 
 void OFieldExpressionControl::moveGroups(const uno::Sequence<uno::Any>& _aGroups,sal_Int32 _nRow,bool _bSelect)
 {
-    if ( _aGroups.getLength() )
+    if ( _aGroups.hasElements() )
     {
         m_bIgnoreEvent = true;
         {
@@ -1026,7 +1026,7 @@ IMPL_LINK_NOARG( OGroupsSortingDialog, OnFormatAction, ToolBox*, void )
         }
         else
         {
-            if ( nIndex >= 0 && aClipboardList.getLength() )
+            if ( nIndex >= 0 && aClipboardList.hasElements() )
             {
                 m_pFieldExpression->SetNoSelection();
                 m_pFieldExpression->moveGroups(aClipboardList,nIndex,false);

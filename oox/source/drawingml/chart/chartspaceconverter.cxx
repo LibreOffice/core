@@ -84,13 +84,13 @@ static bool lcl_useWorkaroundForNoGapInOOXML( Reference< chart2::XChartDocument 
     Reference< chart2::XCoordinateSystemContainer > xCooSysContainer( xDiagram, UNO_QUERY_THROW );
 
     Sequence< Reference< chart2::XCoordinateSystem > > xCooSysSequence( xCooSysContainer->getCoordinateSystems());
-    if ( xCooSysSequence.getLength() == 0 )
+    if ( !xCooSysSequence.hasElements() )
         return false;
 
     Reference< chart2::XChartTypeContainer > xChartTypeContainer( xCooSysSequence[0], UNO_QUERY_THROW );
 
     Sequence< Reference< chart2::XChartType > > xChartTypeSequence( xChartTypeContainer->getChartTypes() );
-    if ( xChartTypeSequence.getLength() == 0 )
+    if ( !xChartTypeSequence.hasElements() )
         return false;
 
     const Reference<chart2::XChartType>& xCT = xChartTypeSequence[0];

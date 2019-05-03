@@ -114,7 +114,7 @@ void ZipStorage::implGetElementNames( ::std::vector< OUString >& orElementNames 
     if( mxStorage.is() ) try
     {
         aNames = mxStorage->getElementNames();
-        if( aNames.getLength() > 0 )
+        if( aNames.hasElements() )
             orElementNames.insert( orElementNames.end(), aNames.begin(), aNames.end() );
     }
     catch (Exception const& e)

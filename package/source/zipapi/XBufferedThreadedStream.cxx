@@ -143,7 +143,7 @@ sal_Int32 SAL_CALL XBufferedThreadedStream::readBytes( Sequence< sal_Int8 >& rDa
     while( nPendingBytes )
     {
         const Buffer &pBuffer = getNextBlock();
-        if( pBuffer.getLength() <= 0 )
+        if( !pBuffer.hasElements() )
         {
             rData.realloc( nAvailableSize - nPendingBytes );
             return nAvailableSize - nPendingBytes;

@@ -321,7 +321,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                                                 comphelper::DocPasswordRequestType::MS,
                                                 &aDefaultPasswords );
 
-                if( aEncryptionData.getLength() == 0 )
+                if( !aEncryptionData.hasElements() )
                 {
                     rMediaDescriptor[ MediaDescriptor::PROP_ABORTED() ] <<= true;
                 }

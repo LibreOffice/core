@@ -744,7 +744,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
                 else if ( rProp.Name == "Handles" )
                 {
                     rProp.Value >>= aHandles;
-                    if ( aHandles.getLength() )
+                    if ( aHandles.hasElements() )
                         bHasHandles = true;
                     if( !bIsDefaultObject )
                         bPredefinedHandlesUsed = false;
