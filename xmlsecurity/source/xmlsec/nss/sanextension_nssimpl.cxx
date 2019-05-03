@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <rtl/uuid.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/security/ExtAltNameType.hpp>
 #include <com/sun/star/security/CertAltNameEntry.hpp>
@@ -27,8 +26,6 @@
 #include <seccomon.h>
 #include <cert.h>
 #include <certt.h>
-#include <secitem.h>
-#include <secport.h>
 
 #include "sanextension_nssimpl.hxx"
 
