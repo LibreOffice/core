@@ -16,6 +16,24 @@
       "revId": "2914b8cc638ec168b4e716ad53c00ee49995a25a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_bd506934",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleContext.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2019-05-03T13:35:58Z",
+      "side": 1,
+      "message": "What do you mean by \"published API\"?\n\nThis kind of stable ID has just been introduced in atk, is already available in firefox, and being introduced in gtk. It is already usable with the dogtail regression testing tool.\n\n\u003e instead create XAccessibleContext2\n\nIs it possible for atk_object_wrapper_new() to determine (dynamically, then) whether the XAccessible implements XAccessibleContext2, and not just XAccessibleContext?",
+      "parentUuid": "3fa0c359_fda7d14e",
+      "revId": "2914b8cc638ec168b4e716ad53c00ee49995a25a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
