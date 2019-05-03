@@ -301,6 +301,8 @@ void SAL_CALL UnoControlTabPageContainer::removeTabPageContainerListener( const 
 void UnoControlTabPageContainer::updateFromModel()
 {
     UnoControlTabPageContainer_Base::updateFromModel();
+    if (!getPeer().is())
+        throw RuntimeException("No peer for tabpage container!");
     Reference< XContainerListener > xContainerListener( getPeer(), UNO_QUERY );
     ENSURE_OR_RETURN_VOID( xContainerListener.is(), "UnoListBoxControl::updateFromModel: a peer which is no ItemListListener?!" );
 
@@ -320,10 +322,13 @@ void SAL_CALL UnoControlTabPageContainer::addControl( const OUString& Name, cons
 {
     SolarMutexGuard aSolarGuard;
     ControlContainerBase::addControl(Name,Control);
+    if (!getPeer().is())
+        throw RuntimeException("No peer for tabpage container!");
     Reference< XContainerListener > xContainerListener( getPeer(), UNO_QUERY );
     ContainerEvent aEvent;
     aEvent.Source = getModel();
     aEvent.Element <<= Control;
+
     xContainerListener->elementInserted( aEvent );
 }
 
