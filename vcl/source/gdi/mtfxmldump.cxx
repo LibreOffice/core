@@ -459,8 +459,8 @@ void writeRectangle(tools::XmlWriter& rWriter, tools::Rectangle const& rRectangl
 {
     rWriter.attribute("left", rRectangle.Left());
     rWriter.attribute("top", rRectangle.Top());
-    rWriter.attribute("right", rRectangle.Right());
-    rWriter.attribute("bottom", rRectangle.Bottom());
+    rWriter.attribute("right", rRectangle.IsWidthEmpty() ? -32767 : rRectangle.Right());
+    rWriter.attribute("bottom", rRectangle.IsHeightEmpty() ? -32767 : rRectangle.Bottom());
 }
 
 void writeLineInfo(tools::XmlWriter& rWriter, LineInfo const& rLineInfo)

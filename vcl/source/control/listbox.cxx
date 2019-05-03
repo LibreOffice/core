@@ -597,7 +597,8 @@ void ListBox::Resize()
 
             // Use the themes drop down size for the button
             aOutSz.setWidth( aContent.Left() );
-            mpBtn->setPosSizePixel( aContent.Left(), nTop, aContent.Right(), (nBottom-nTop) );
+// this look wrong, why are we passing aContent.Right() to a width parameter?
+            mpBtn->setPosSizePixel( aContent.Left(), nTop, aContent.IsWidthEmpty() ? 0 : aContent.Right(), (nBottom-nTop) );
 
             // Adjust the size of the edit field
             if ( GetNativeControlRegion( ControlType::Listbox, ControlPart::SubEdit,

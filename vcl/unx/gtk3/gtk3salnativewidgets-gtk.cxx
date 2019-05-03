@@ -731,15 +731,19 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         {
             tools::Rectangle aBtn1Rect = NWGetScrollButtonRect(ControlPart::ButtonLeft, aTrackRect);
             tools::Rectangle aBtn2Rect = NWGetScrollButtonRect(ControlPart::ButtonRight, aTrackRect);
-            aTrackRect.SetLeft( aBtn1Rect.Right() );
-            aTrackRect.SetRight( aBtn2Rect.Left() );
+            if (!aBtn1Rect.IsWidthEmpty())
+                aTrackRect.SetLeft( aBtn1Rect.Right() );
+            if (!aBtn2Rect.IsWidthEmpty())
+                aTrackRect.SetRight( aBtn2Rect.Left() );
         }
         else
         {
             tools::Rectangle aBtn1Rect = NWGetScrollButtonRect(ControlPart::ButtonUp, aTrackRect);
             tools::Rectangle aBtn2Rect = NWGetScrollButtonRect(ControlPart::ButtonDown, aTrackRect);
-            aTrackRect.SetTop( aBtn1Rect.Bottom() + 1 );
-            aTrackRect.SetBottom( aBtn2Rect.Top() );
+            if (!aBtn1Rect.IsHeightEmpty())
+                aTrackRect.SetTop( aBtn1Rect.Bottom() + 1 );
+            if (!aBtn2Rect.IsHeightEmpty())
+                aTrackRect.SetBottom( aBtn2Rect.Top() );
         }
 
         GtkStyleContext* pScrollbarTroughStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?

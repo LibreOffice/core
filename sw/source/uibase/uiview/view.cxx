@@ -1527,13 +1527,17 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
 
     aVector.push_back(comphelper::makePropertyValue("ViewTop", convertTwipToMm100 ( rRect.Top() )));
 
-    aVector.push_back(comphelper::makePropertyValue("VisibleLeft", convertTwipToMm100 ( rVis.Left() )));
+    auto visibleLeft = convertTwipToMm100 ( rVis.Left() );
+    aVector.push_back(comphelper::makePropertyValue("VisibleLeft", visibleLeft));
 
-    aVector.push_back(comphelper::makePropertyValue("VisibleTop", convertTwipToMm100 ( rVis.Top() )));
+    auto visibleTop = convertTwipToMm100 ( rVis.Top() );
+    aVector.push_back(comphelper::makePropertyValue("VisibleTop", visibleTop));
 
-    aVector.push_back(comphelper::makePropertyValue("VisibleRight", convertTwipToMm100 ( rVis.Right() )));
+    auto visibleRight = rVis.IsWidthEmpty() ? visibleLeft : convertTwipToMm100 ( rVis.Right() );
+    aVector.push_back(comphelper::makePropertyValue("VisibleRight", visibleRight));
 
-    aVector.push_back(comphelper::makePropertyValue("VisibleBottom", convertTwipToMm100 ( rVis.Bottom() )));
+    auto visibleBottom = rVis.IsHeightEmpty() ? visibleTop : convertTwipToMm100 ( rVis.Bottom() );
+    aVector.push_back(comphelper::makePropertyValue("VisibleBottom", visibleBottom));
 
     const sal_Int16 nZoomType = static_cast< sal_Int16 >(m_pWrtShell->GetViewOptions()->GetZoomType());
     aVector.push_back(comphelper::makePropertyValue("ZoomType", nZoomType));

@@ -1863,10 +1863,14 @@ tools::Rectangle OutputDevice::LogicToLogic( const tools::Rectangle& rRectSource
     {
         ENTER3( eUnitSource, eUnitDest );
 
-        return tools::Rectangle( fn3( rRectSource.Left(), nNumerator, nDenominator ),
-                          fn3( rRectSource.Top(), nNumerator, nDenominator ),
-                          fn3( rRectSource.Right(), nNumerator, nDenominator ),
-                          fn3( rRectSource.Bottom(), nNumerator, nDenominator ) );
+        auto left = fn3( rRectSource.Left(), nNumerator, nDenominator );
+        auto top = fn3( rRectSource.Top(), nNumerator, nDenominator );
+        if (rRectSource.IsEmpty())
+            return tools::Rectangle( left, top );
+
+        auto right = fn3( rRectSource.Right(), nNumerator, nDenominator );
+        auto bottom = fn3( rRectSource.Bottom(), nNumerator, nDenominator );
+        return tools::Rectangle(left, top, right, bottom);
     }
     else
     {

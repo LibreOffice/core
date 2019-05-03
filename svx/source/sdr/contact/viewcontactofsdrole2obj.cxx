@@ -35,6 +35,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <svx/charthelper.hxx>
 #include <svtools/embedhlp.hxx>
+#include <vcl/canvastools.hxx>
 
 namespace sdr { namespace contact {
 

@@ -982,8 +982,8 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs()
         Sequence< sal_Int32 > aRectSeq(4);
         aRectSeq[0] = aTmpRect.Left();
         aRectSeq[1] = aTmpRect.Top();
-        aRectSeq[2] = aTmpRect.Right();
-        aRectSeq[3] = aTmpRect.Bottom();
+        aRectSeq[2] = aTmpRect.IsWidthEmpty() ? aTmpRect.Left() : aTmpRect.Right();
+        aRectSeq[3] = aTmpRect.IsHeightEmpty() ? aTmpRect.Top() : aTmpRect.Bottom();
 
         seqArgsNew.realloc( ++nNewLength );
         seqArgsNew[ nNewLength - 1 ].Name = "WinExtent";

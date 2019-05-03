@@ -515,8 +515,6 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     long nDevSizeX = aRect.Right()-aRect.Left()+1;
     long nDevSizeY = aRect.Bottom()-aRect.Top()+1;
 
-    tools::Rectangle aLines;
-
     long nTwipsSizeX = 0;
     for (SCCOL i=nX1; i<=nX2; i++)
         nTwipsSizeX += pDoc->GetColWidth( i, nTab );
@@ -524,8 +522,8 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
     //  if no lines, still space for the outline frame (20 Twips = 1pt)
     //  (HasLines initializes aLines to 0,0,0,0)
-    nTwipsSizeX += aLines.Left() + std::max( aLines.Right(), 20L );
-    nTwipsSizeY += aLines.Top() +  std::max( aLines.Bottom(), 20L );
+    nTwipsSizeX += 20;
+    nTwipsSizeY += 20;
 
     double nScaleX = static_cast<double>(nDevSizeX) / nTwipsSizeX;
     double nScaleY = static_cast<double>(nDevSizeY) / nTwipsSizeY;
@@ -554,10 +552,8 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
     //  If no lines, still leave space for grid lines
     //  (would be elseways cut away)
-    long nAddX = static_cast<long>( aLines.Left() * nScaleX );
-    nScrX += ( nAddX ? nAddX : 1 );
-    long nAddY = static_cast<long>( aLines.Top() * nScaleY );
-    nScrY += ( nAddY ? nAddY : 1 );
+    nScrX += 1;
+    nScrY += 1;
 
     ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, pDoc, nTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nScaleX, nScaleY );
