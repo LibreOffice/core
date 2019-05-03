@@ -1921,6 +1921,7 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
     CPPUNIT_ASSERT(aView1.m_aOwnCursor.IsEmpty());
 
     Scheduler::ProcessEventsToIdle();
+    pDocument->m_pDocumentClass->registerCallback(pDocument, nullptr, reinterpret_cast<void*>(1));
 }
 
 #if HAVE_MORE_FONTS
@@ -2192,6 +2193,8 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
     CPPUNIT_ASSERT(!aStream.str().empty());
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), aTree.get_child("comments").size());
+
+    pDocument->m_pDocumentClass->registerCallback(pDocument, nullptr, reinterpret_cast<void*>(1));
 }
 
 void DesktopLOKTest::testRunMacro()
