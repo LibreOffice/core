@@ -4490,6 +4490,7 @@ static bool initialize_uno(const OUString& aAppProgramURL)
     return true;
 }
 
+// pre-unipoll version.
 static void lo_startmain(void*)
 {
     osl_setThreadName("lo_startmain");
@@ -4504,6 +4505,7 @@ static void lo_startmain(void*)
     Application::ReleaseSolarMutex();
 }
 
+// pre-unipoll version.
 static void lo_runLoop(LibreOfficeKit* /*pThis*/,
                        LibreOfficeKitPollCallback pPollCallback,
                        LibreOfficeKitWakeCallback pWakeCallback,
@@ -4514,9 +4516,10 @@ static void lo_runLoop(LibreOfficeKit* /*pThis*/,
 #endif
 
     SolarMutexGuard aGuard;
+
     vcl::lok::registerPollCallbacks(pPollCallback, pWakeCallback, pData);
-    lo_startmain(nullptr);
-    Application::AcquireSolarMutex(1); // startmain releases it.
+    Application::UpdateMainThread();
+    soffice_main();
 }
 
 static bool bInitialized = false;
