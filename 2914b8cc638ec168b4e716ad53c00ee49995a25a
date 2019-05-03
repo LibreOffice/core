@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_fda7d14e",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleContext.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-05-03T13:29:13Z",
+      "side": 1,
+      "message": "Not sure if this is considered published API (it at least is not marked published). Does this have any use outside of LO?\n\nIf so, you should probably not change this file, but instead create XAccessibleContext2.",
+      "revId": "2914b8cc638ec168b4e716ad53c00ee49995a25a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
