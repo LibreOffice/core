@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_e2e3b0a3",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-05-03T05:25:41Z",
+      "side": 1,
+      "message": "\u0026\u0026 :-)",
+      "range": {
+        "startLine": 89,
+        "startChar": 53,
+        "endLine": 89,
+        "endChar": 56
+      },
+      "revId": "d12febbdc138c8ea82c15e42b9b2ae85603b5f4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
