@@ -34,6 +34,7 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QResizeEvent>
 #include <QtGui/QShowEvent>
+#include <QtGui/QTextCharFormat>
 #include <QtGui/QWheelEvent>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QToolTip>
@@ -449,6 +450,24 @@ Qt5Widget::Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
     setFocusPolicy(Qt::StrongFocus);
 }
 
+static ExtTextInputAttr lcl_MapUndrelineStyle(QTextCharFormat::UnderlineStyle us)
+{
+    switch (us)
+    {
+        case QTextCharFormat::NoUnderline:
+            return ExtTextInputAttr::NONE;
+        case QTextCharFormat::DotLine:
+            return ExtTextInputAttr::DottedUnderline;
+        case QTextCharFormat::DashDotDotLine:
+        case QTextCharFormat::DashDotLine:
+            return ExtTextInputAttr::DashDotUnderline;
+        case QTextCharFormat::WaveUnderline:
+            return ExtTextInputAttr::GrayWaveline;
+        default:
+            return ExtTextInputAttr::Underline;
+    }
+}
+
 void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
 {
     SolarMutexGuard aGuard;
@@ -473,13 +492,31 @@ void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
 
         const sal_Int32 nLength = aInputEvent.maText.getLength();
         const QList<QInputMethodEvent::Attribute>& rAttrList = pEvent->attributes();
-        std::vector<ExtTextInputAttr> aTextAttrs(nLength, ExtTextInputAttr::Underline);
+        std::vector<ExtTextInputAttr> aTextAttrs(std::max(1, nLength), ExtTextInputAttr::NONE);
+        aInputEvent.mpTextAttr = &aTextAttrs[0];
 
         for (int i = 0; i < rAttrList.size(); ++i)
         {
             const QInputMethodEvent::Attribute& rAttr = rAttrList.at(i);
             switch (rAttr.type)
             {
+                case QInputMethodEvent::TextFormat:
+                {
+                    QTextCharFormat aCharFormat
+                        = qvariant_cast<QTextFormat>(rAttr.value).toCharFormat();
+                    if (aCharFormat.isValid())
+                    {
+                        ExtTextInputAttr aETIP
+                            = lcl_MapUndrelineStyle(aCharFormat.underlineStyle());
+                        if (aCharFormat.hasProperty(QTextFormat::BackgroundBrush))
+                            aETIP |= ExtTextInputAttr::Highlight;
+                        if (aCharFormat.fontStrikeOut())
+                            aETIP |= ExtTextInputAttr::RedText;
+                        for (int j = rAttr.start; j < rAttr.start + rAttr.length; j++)
+                            aTextAttrs[j] = aETIP;
+                    }
+                    break;
+                }
                 case QInputMethodEvent::Cursor:
                 {
                     aInputEvent.mnCursorPos = rAttr.start;
@@ -493,8 +530,6 @@ void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
                     break;
             }
         }
-        if (nLength)
-            aInputEvent.mpTextAttr = &aTextAttrs[0];
 
         m_pFrame->CallCallback(SalEvent::ExtTextInput, &aInputEvent);
         pEvent->accept();
