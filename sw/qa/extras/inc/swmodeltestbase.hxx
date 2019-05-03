@@ -83,8 +83,26 @@ using namespace css;
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
 
+#define DECLARE_SW_EXPORTONLY_TEST(TestName, filename, password, BaseClass) \
+    class TestName : public BaseClass { \
+        protected:\
+    virtual OUString getTestName() override { return OUString(#TestName); } \
+        public:\
+    CPPUNIT_TEST_SUITE(TestName); \
+    CPPUNIT_TEST(Import_Export_Import); \
+    CPPUNIT_TEST_SUITE_END(); \
+    \
+    void Import_Export_Import() {\
+        executeImportExportImportTest(filename, password);\
+    }\
+    void verify() override;\
+    }; \
+    CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
+    void TestName::verify()
+
 #define DECLARE_OOXMLIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, nullptr, Test)
 #define DECLARE_OOXMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
+#define DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(TestName, filename) DECLARE_SW_EXPORTONLY_TEST(TestName, filename, nullptr, Test)
 #define DECLARE_RTFIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, nullptr, Test)
 #define DECLARE_RTFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
 #define DECLARE_ODFIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, nullptr, Test)
