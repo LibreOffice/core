@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_62d000cb",
+        "filename": "sw/source/filter/ww8/ww8graf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1848,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-05-03T04:39:45Z",
+      "side": 1,
+      "message": "This is the part that could cause regressions.  If XATTR_FILLTRANSPARENCE is not SET, but only inherited(bInP) when FILLSTYLE is SET, then this InParents setting will be lost since it SkipsResBackground. Not sure why the previous code would search in parents.\n\nThis is a very different situation from FILL\u003d\u003dNONE since that deliberately inserts a transparency of 0xFE.",
+      "range": {
+        "startLine": 1848,
+        "startChar": 58,
+        "endLine": 1848,
+        "endChar": 62
+      },
+      "revId": "6b907367e3aee590d773028541d2764a359ab2de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
