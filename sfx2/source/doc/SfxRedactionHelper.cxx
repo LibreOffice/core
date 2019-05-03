@@ -28,6 +28,9 @@
 #include <vcl/graph.hxx>
 #include <sal/log.hxx>
 
+#include <vcl/wmf.hxx>
+#include <vcl/gdimetafiletools.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -61,11 +64,24 @@ OUString SfxRedactionHelper::getStringParam(const SfxRequest& rReq, const sal_uI
     return sStringParam;
 }
 
+namespace
+{
+void fixMetaFile(GDIMetaFile& tmpMtf)
+{
+    SvMemoryStream aDestStrm(65535, 65535);
+    ConvertGDIMetaFileToWMF(tmpMtf, aDestStrm, nullptr, false);
+    aDestStrm.Seek(0);
+
+    tmpMtf.Clear();
+
+    ReadWindowMetafile(aDestStrm, tmpMtf);
+}
+}
+
 void SfxRedactionHelper::getPageMetaFilesFromDoc(std::vector<GDIMetaFile>& aMetaFiles,
                                                  std::vector<::Size>& aPageSizes,
                                                  const sal_Int32& nPages,
-                                                 DocumentToGraphicRenderer& aRenderer,
-                                                 bool bIsWriter, bool bIsCalc)
+                                                 DocumentToGraphicRenderer& aRenderer)
 {
     for (sal_Int32 nPage = 1; nPage <= nPages; ++nPage)
     {
@@ -75,12 +91,10 @@ void SfxRedactionHelper::getPageMetaFilesFromDoc(std::vector<GDIMetaFile>& aMeta
         ::Size aCalcPageContentSize;
         ::Size aLogic = aRenderer.getDocumentSizeIn100mm(nPage, &aLogicPos, &aCalcPageLogicPos,
                                                          &aCalcPageContentSize);
-        // FIXME: This is a temporary hack. Need to figure out a proper way to derive this scale factor.
-        ::Size aTargetSize(aDocumentSizePixel.Width() * 1.23, aDocumentSizePixel.Height() * 1.23);
 
         aPageSizes.push_back(aLogic);
 
-        Graphic aGraphic = aRenderer.renderToGraphic(nPage, aDocumentSizePixel, aTargetSize,
+        Graphic aGraphic = aRenderer.renderToGraphic(nPage, aDocumentSizePixel, aDocumentSizePixel,
                                                      COL_TRANSPARENT, true);
         auto& rGDIMetaFile = const_cast<GDIMetaFile&>(aGraphic.GetGDIMetaFile());
 
@@ -88,24 +102,11 @@ void SfxRedactionHelper::getPageMetaFilesFromDoc(std::vector<GDIMetaFile>& aMeta
         // will be correct in MM.
         MapMode aMapMode;
         aMapMode.SetMapUnit(MapUnit::Map100thMM);
-        // FIXME: This is a temporary hack. Need to figure out a proper way to derive these magic numbers.
-        if (bIsWriter)
-            aMapMode.SetOrigin(::Point(-(aLogicPos.getX() - 512) * 1.53,
-                                       -((aLogicPos.getY() - 501) * 1.53 + (nPage - 1) * 740)));
-        else if (bIsCalc)
-            rGDIMetaFile.Scale(0.566, 0.566);
 
         rGDIMetaFile.SetPrefMapMode(aMapMode);
+        rGDIMetaFile.SetPrefSize(aLogic);
 
-        if (bIsCalc)
-        {
-            double aWidthRatio = static_cast<double>(aCalcPageContentSize.Width()) / aLogic.Width();
-            // FIXME: Get rid of these magic numbers. Also watch for floating point rounding errors
-            rGDIMetaFile.Move(-2400 + aCalcPageLogicPos.X() * (aWidthRatio - 0.0887),
-                              -3300 + aCalcPageLogicPos.Y() * 0.64175);
-        }
-
-        rGDIMetaFile.SetPrefSize(bIsCalc ? aCalcPageContentSize : aLogic);
+        fixMetaFile(rGDIMetaFile);
 
         aMetaFiles.push_back(rGDIMetaFile);
     }
@@ -114,7 +115,7 @@ void SfxRedactionHelper::getPageMetaFilesFromDoc(std::vector<GDIMetaFile>& aMeta
 void SfxRedactionHelper::addPagesToDraw(uno::Reference<XComponent>& xComponent,
                                         const sal_Int32& nPages,
                                         const std::vector<GDIMetaFile>& aMetaFiles,
-                                        const std::vector<::Size>& aPageSizes, bool bIsCalc)
+                                        const std::vector<::Size>& aPageSizes)
 {
     // Access the draw pages
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
@@ -146,16 +147,11 @@ void SfxRedactionHelper::addPagesToDraw(uno::Reference<XComponent>& xComponent,
         xShapeProperySet->setPropertyValue("MoveProtect", uno::Any(true));
         xShapeProperySet->setPropertyValue("SizeProtect", uno::Any(true));
 
-        // Set size and position
+        // Set size
         xShape->setSize(
             awt::Size(rGDIMetaFile.GetPrefSize().Width(), rGDIMetaFile.GetPrefSize().Height()));
 
         xPage->add(xShape);
-
-        // Shapes from Calc have the size of the content instead of the whole standard page (like A4)
-        // so it needs positioning on the draw page
-        if (bIsCalc)
-            xShape->setPosition(awt::Point(1000, 1000));
     }
 
     // Remove the extra page at the beginning
