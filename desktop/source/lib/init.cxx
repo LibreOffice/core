@@ -4527,6 +4527,7 @@ static void lo_runLoop(LibreOfficeKit* /*pThis*/,
     SolarMutexGuard aGuard;
     vcl::lok::registerPollCallbacks(pPollCallback, pWakeCallback, pData);
     lo_startmain(nullptr);
+    Application::AcquireSolarMutex(1); // startmain releases it.
 }
 
 static bool bInitialized = false;
