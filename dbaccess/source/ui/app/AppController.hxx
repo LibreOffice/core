@@ -246,7 +246,7 @@ namespace dbaui
             @param  _bMove
                 if <TRUE/> the name of the content must be inserted without any change, otherwise not.
             @return
-                <TRUE/> if the paste opertions was successful, otherwise <FALSE/>.
+                <TRUE/> if the paste operations was successful, otherwise <FALSE/>.
         */
         bool paste( ElementType _eType, const svx::ODataAccessDescriptor& _rPasteData, const OUString& _sParentFolder = OUString(), bool _bMove = false);
 
@@ -270,7 +270,7 @@ namespace dbaui
         */
         void addContainerListener(const css::uno::Reference< css::container::XNameAccess>& _xCollection);
 
-        /** opens a uno dialog with the currently selected data source as initialize argument
+        /** opens an uno dialog with the currently selected data source as initialize argument
             @param  _sServiceName
                 The service name of the dialog to be executed.
         */
@@ -302,7 +302,7 @@ namespace dbaui
             @param  _bMove
                 if <TRUE/> the name of the content must be inserted without any change, otherwise not.
             @return
-                <TRUE/> if the insert opertions was successful, otherwise <FALSE/>.
+                <TRUE/> if the insert operations was successful, otherwise <FALSE/>.
         */
         bool insertHierachyElement(  ElementType _eType
                                     ,const OUString& _sParentFolder
