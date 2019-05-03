@@ -46,6 +46,30 @@
       "revId": "d12febbdc138c8ea82c15e42b9b2ae85603b5f4e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_62456070",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-03T07:39:07Z",
+      "side": 1,
+      "message": "(Found \u003chttps://developercommunity.visualstudio.com/content/problem/72353/when-za-compiler-option-is-not-used-msvc-treats-al.html\u003e \"[MSConnect 3136433] When /Za compiler option is not used, MSVC treats alternative tokens for logical operations as identifiers thus resulting in an error.\")",
+      "parentUuid": "3fa0c359_a294c8e9",
+      "range": {
+        "startLine": 89,
+        "startChar": 53,
+        "endLine": 89,
+        "endChar": 56
+      },
+      "revId": "d12febbdc138c8ea82c15e42b9b2ae85603b5f4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
