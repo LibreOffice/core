@@ -28,6 +28,7 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 #include <tools/debug.hxx>
+#include <vcl/canvastools.hxx>
 
 
 namespace sdr
@@ -73,9 +74,7 @@ namespace sdr
             {
                 // append an invisible outline for the cases where no visible content exists
                 const tools::Rectangle aCurrentBoundRect(GetSdrObjGroup().GetLastBoundRect());
-                const basegfx::B2DRange aCurrentRange(
-                    aCurrentBoundRect.Left(), aCurrentBoundRect.Top(),
-                    aCurrentBoundRect.Right(), aCurrentBoundRect.Bottom());
+                const basegfx::B2DRange aCurrentRange = vcl::unotools::b2DRectangleFromRectangle(aCurrentBoundRect);
 
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(

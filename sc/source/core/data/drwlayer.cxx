@@ -2078,9 +2078,13 @@ void ScDrawLayer::GetCellAnchorFromPosition(
     rAnchor.maEnd = aRange.aEnd;
     aCellRect = rDoc.GetMMRect( aRange.aEnd.Col(), aRange.aEnd.Row(),
       aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aEnd.Tab(), bHiddenAsZero );
-    rAnchor.maEndOffset.setY( rObjRect.Bottom()-aCellRect.Top() );
+    if (!rObjRect.IsEmpty())
+        rAnchor.maEndOffset.setY( rObjRect.Bottom()-aCellRect.Top() );
     if (!rDoc.IsNegativePage(nTab))
-        rAnchor.maEndOffset.setX( rObjRect.Right()-aCellRect.Left() );
+    {
+        if (!rObjRect.IsEmpty())
+            rAnchor.maEndOffset.setX( rObjRect.Right()-aCellRect.Left() );
+    }
     else
         rAnchor.maEndOffset.setX( aCellRect.Right()-rObjRect.Left() );
 }

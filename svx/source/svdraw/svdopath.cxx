@@ -2363,6 +2363,14 @@ void SdrPathObj::RecalcSnapRect()
 void SdrPathObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
     tools::Rectangle aOld(GetSnapRect());
+    if (aOld.IsEmpty())
+    {
+        Fraction aX(1,1);
+        Fraction aY(1,1);
+        NbcResize(aOld.TopLeft(), aX, aY);
+        NbcMove(Size(rRect.Left() - aOld.Left(), rRect.Top() - aOld.Top()));
+        return;
+    }
 
     // Take empty into account when calculating scale factors
     long nMulX = rRect.IsWidthEmpty() ? 0 : rRect.Right()  - rRect.Left();

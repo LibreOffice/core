@@ -500,16 +500,25 @@ void SdrObjGroup::SetSnapRect(const tools::Rectangle& rRect)
 {
     tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     tools::Rectangle aOld(GetSnapRect());
-    long nMulX=rRect.Right()-rRect.Left();
-    long nDivX=aOld.Right()-aOld.Left();
-    long nMulY=rRect.Bottom()-rRect.Top();
-    long nDivY=aOld.Bottom()-aOld.Top();
-    if (nDivX==0) { nMulX=1; nDivX=1; }
-    if (nDivY==0) { nMulY=1; nDivY=1; }
-    if (nMulX!=nDivX || nMulY!=nDivY) {
-        Fraction aX(nMulX,nDivX);
-        Fraction aY(nMulY,nDivY);
+    if (aOld.IsEmpty())
+    {
+        Fraction aX(1,1);
+        Fraction aY(1,1);
         Resize(aOld.TopLeft(),aX,aY);
+    }
+    else
+    {
+        long nMulX=rRect.Right()-rRect.Left();
+        long nDivX=aOld.Right()-aOld.Left();
+        long nMulY=rRect.Bottom()-rRect.Top();
+        long nDivY=aOld.Bottom()-aOld.Top();
+        if (nDivX==0) { nMulX=1; nDivX=1; }
+        if (nDivY==0) { nMulY=1; nDivY=1; }
+        if (nMulX!=nDivX || nMulY!=nDivY) {
+            Fraction aX(nMulX,nDivX);
+            Fraction aY(nMulY,nDivY);
+            Resize(aOld.TopLeft(),aX,aY);
+        }
     }
     if (rRect.Left()!=aOld.Left() || rRect.Top()!=aOld.Top()) {
         Move(Size(rRect.Left()-aOld.Left(),rRect.Top()-aOld.Top()));

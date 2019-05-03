@@ -28,6 +28,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/obj3d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <vcl/canvastools.hxx>
 
 
 namespace sdr
@@ -48,10 +49,8 @@ namespace sdr
             const tools::Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
             tools::Rectangle aTextBound(aObjectBound);
             GetCustomShapeObj().GetTextBounds(aTextBound);
-            basegfx::B2DRange aTextRange(aTextBound.Left(), aTextBound.Top(), aTextBound.Right(), aTextBound.Bottom());
-            const basegfx::B2DRange aObjectRange(
-                aObjectBound.Left(), aObjectBound.Top(),
-                aObjectBound.Right(), aObjectBound.Bottom());
+            basegfx::B2DRange aTextRange = vcl::unotools::b2DRectangleFromRectangle(aTextBound);
+            const basegfx::B2DRange aObjectRange = vcl::unotools::b2DRectangleFromRectangle(aObjectBound);
 
             // no need to correct if no extra text range
             if(aTextRange != aObjectRange)
@@ -151,9 +150,7 @@ namespace sdr
                     // take unrotated snap rect as default, then get the
                     // unrotated text box. Rotation needs to be done centered
                     const tools::Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
-                    const basegfx::B2DRange aObjectRange(
-                        aObjectBound.Left(), aObjectBound.Top(),
-                        aObjectBound.Right(), aObjectBound.Bottom());
+                    const basegfx::B2DRange aObjectRange = vcl::unotools::b2DRectangleFromRectangle(aObjectBound);
 
                     // #i101684# get the text range unrotated and absolute to the object range
                     const basegfx::B2DRange aTextRange(getCorrectedTextBoundRect());
