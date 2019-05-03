@@ -36,6 +36,7 @@ class SwMsgPoolItem;
 class SwPtrMsgPoolItem;
 class SfxBoolItem;
 class SvxColorItem;
+class SvxLRSpaceItem;
 
 // For SwTextHints without end index the following char is added:
 

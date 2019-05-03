@@ -23,7 +23,6 @@
 #include <swtypes.hxx>
 #include "frame.hxx"
 #include "swcache.hxx"
-#include <editeng/lrspitem.hxx>
 #include <swatrset.hxx>
 
 class SwLayoutFrame;

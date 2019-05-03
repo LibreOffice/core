@@ -20,11 +20,11 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_OBSERVABLETHREAD_HXX
 
 #include <osl/thread.hxx>
-#include <rtl/ref.hxx>
 #include <osl/interlck.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include "ifinishedthreadlistener.hxx"
 #include <memory>
+
+class IFinishedThreadListener;
 
 /** class for an observable thread
 

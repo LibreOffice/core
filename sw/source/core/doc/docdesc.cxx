@@ -20,6 +20,7 @@
 #include <cmdid.h>
 #include <init.hxx>
 #include <svx/svdmodel.hxx>
+#include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/frmdiritem.hxx>

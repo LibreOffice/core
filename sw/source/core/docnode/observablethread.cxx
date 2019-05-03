@@ -18,6 +18,7 @@
  */
 
 #include <observablethread.hxx>
+#include <ifinishedthreadlistener.hxx>
 #include <memory>
 
 /* class for an observable thread

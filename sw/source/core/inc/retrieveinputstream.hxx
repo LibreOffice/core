@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_RETRIEVEINPUTSTREAM_HXX
 
 #include "observablethread.hxx"
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include "retrievedinputstreamdata.hxx"
 

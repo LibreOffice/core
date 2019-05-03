@@ -23,9 +23,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <svl/itemprop.hxx>
 
 class SwDoc;
+class SfxItemPropertySet;
 
 class SwXTextDefaults :  public cppu::WeakImplHelper
                         <

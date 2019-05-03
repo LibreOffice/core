@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_SORTEDOBJS_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_SORTEDOBJS_HXX
 
-#include <sal/types.h>
 #include <vector>
 #include <swdllapi.h>
 

@@ -21,7 +21,9 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_PAMTYP_HXX
 
 #include <unotools/textsearch.hxx>
-#include <node.hxx>
+#include <swdllapi.h>
+
+#include <memory>
 
 class SwpHints;
 struct SwPosition;
@@ -30,12 +32,13 @@ class SwTextAttr;
 class SwFormat;
 class SfxPoolItem;
 class SwRootFrame;
+class SwNode;
+class SwNodeIndex;
+class SwContentNode;
+class SwIndex;
 
 namespace i18nutil {
     struct SearchOptions2;
-}
-namespace utl {
-    class TextSearch;
 }
 
 // function prototypes for the move/find methods of SwPaM

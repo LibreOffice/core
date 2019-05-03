@@ -25,7 +25,6 @@
 #include <vcl/keycod.hxx>
 #include <tox.hxx>
 
-#include <SwNumberTreeTypes.hxx>
 #include <IDocumentMarkAccess.hxx>
 
 #include <memory>

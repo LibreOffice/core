@@ -52,6 +52,7 @@
 #include <txtfrm.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <rootfrm.hxx>
+#include <swscanner.hxx>
 
 #include <breakit.hxx>
 #include <crstate.hxx>

@@ -20,9 +20,10 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_SWTHREADMANAGER_HXX
 
 #include <osl/interlck.h>
-#include <rtl/ref.hxx>
 
 #include <memory>
+
+namespace rtl { template <class reference_type> class Reference; }
 
 class ObservableThread;
 class ThreadManager;

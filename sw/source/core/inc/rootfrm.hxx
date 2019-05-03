@@ -28,7 +28,6 @@
 #include <vector>
 
 class SwContentFrame;
-class SwViewShell;
 class SdrPage;
 class SwFrameFormat;
 class SwPaM;

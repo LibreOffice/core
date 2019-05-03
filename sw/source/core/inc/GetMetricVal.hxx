@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_GETMETRICVAL_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_GETMETRICVAL_HXX
 
-#include <tools/solar.h>
+#include <sal/types.h>
 
 #define CM_1  0         // 1 centimeter     or 1/2 inch
 #define CM_05 1         // 0.5 centimeter   or 1/4 inch

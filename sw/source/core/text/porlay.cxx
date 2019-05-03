@@ -52,6 +52,7 @@
 #include <section.hxx>
 #include <calbck.hxx>
 #include <doc.hxx>
+#include <swscanner.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentContentOperations.hxx>
