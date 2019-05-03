@@ -292,6 +292,26 @@
         </prop>
       </node>
 
+      <node oor:name="ChartStylesDeck" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Chart Styles</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ChartStylesDeck</value>
+        </prop>
+        <prop oor:name="IconURL" oor:type="xs:string">
+          <value>private:graphicrepository/sfx2/res/symphony/sidebar-style-large.png</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Chart, any, visible ;
+          </value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>10</value>
+        </prop>
+      </node>
+
     </node>
     <node oor:name="PanelList">
 
@@ -1570,6 +1590,33 @@
           <value>8</value>
         </prop>
       </node>
+
+      <node oor:name="ChartStylesPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Chart Styles</value>
+        </prop>
+        <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ChartStylesPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>ChartStylesDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Chart, any, visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/ChartPanelFactory/ChartStylesPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+
     </node>
   </node>
 </oor:component-data>
