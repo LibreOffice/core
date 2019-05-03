@@ -19,7 +19,7 @@ $(eval $(call gb_Library_set_include,epoxy,\
 	$$(INCLUDE) \
 ))
 
-# epoxy is riddled with warnings... let's spare use
+# epoxy is riddled with warnings... let's spare us
 # the pointless spamming
 $(eval $(call gb_Library_add_cxxflags,epoxy,\
 	-w \
