@@ -179,6 +179,8 @@ void SAL_CALL VCLXTabPageContainer::elementInserted( const css::container::Conta
     Reference< awt::tab::XTabPageModel > xP( xControl->getModel(), UNO_QUERY );
     sal_Int16 nPageID = xP->getTabPageID();
 
+    if (!xControl->getPeer().is())
+        throw RuntimeException("No peer for tabpage container!");
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xControl->getPeer());
     TabPage* pPage = static_cast<TabPage*>(pWindow.get());
     pTabCtrl->InsertPage(nPageID,pPage->GetText());
