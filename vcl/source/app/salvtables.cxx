@@ -3940,12 +3940,16 @@ public:
 
     virtual void set_text(const OUString& rText) override
     {
+        disable_notify_events();
         m_xTextView->SetText(rText);
+        enable_notify_events();
     }
 
     virtual void replace_selection(const OUString& rText) override
     {
+        disable_notify_events();
         m_xTextView->ReplaceSelected(rText);
+        enable_notify_events();
     }
 
     virtual OUString get_text() const override
