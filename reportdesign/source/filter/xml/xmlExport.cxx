@@ -347,7 +347,7 @@ void ORptExport::exportFunction(const uno::Reference< XFunction>& _xFunction)
 void ORptExport::exportMasterDetailFields(const Reference<XReportComponent>& _xReportComponet)
 {
     const uno::Sequence< OUString> aMasterFields = _xReportComponet->getMasterFields();
-    if ( aMasterFields.getLength() )
+    if ( aMasterFields.hasElements() )
     {
         SvXMLElementExport aElement(*this,XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELDS, true, true);
         const uno::Sequence< OUString> aDetailFields = _xReportComponet->getDetailFields();

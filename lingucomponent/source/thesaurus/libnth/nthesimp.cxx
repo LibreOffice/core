@@ -175,8 +175,8 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
             k = 0;
             for (auto const& dict : aDics)
             {
-                if (dict.aLocaleNames.getLength() > 0 &&
-                    dict.aLocations.getLength() > 0)
+                if (dict.aLocaleNames.hasElements() &&
+                    dict.aLocations.hasElements())
                 {
                     uno::Sequence< OUString > aLocaleNames(dict.aLocaleNames);
                     sal_Int32 nLocales = aLocaleNames.getLength();
@@ -220,7 +220,7 @@ sal_Bool SAL_CALL Thesaurus::hasLocale(const Locale& rLocale)
     MutexGuard  aGuard( GetLinguMutex() );
 
     bool bRes = false;
-    if (!aSuppLocales.getLength())
+    if (!aSuppLocales.hasElements())
         getLocales();
     sal_Int32 nLen = aSuppLocales.getLength();
     for (sal_Int32 i = 0;  i < nLen;  ++i)
@@ -344,7 +344,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
             if (xTmpRes2.is())
             {
                 Sequence<OUString>seq = xTmpRes2->getAlternatives();
-                if (seq.getLength() > 0)
+                if (seq.hasElements())
                 {
                     codeTerm = seq[0];
                     stem2 = 1;
@@ -381,7 +381,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
                         if (xTmpRes.is())
                         {
                             Sequence<OUString>seq = xTmpRes->getAlternatives();
-                            if (seq.getLength() > 0)
+                            if (seq.hasElements())
                                 sTerm = seq[0];
                         }
                     }
@@ -437,7 +437,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
         if (xTmpRes.is())
         {
             Sequence<OUString>seq = xTmpRes->getAlternatives();
-            if (seq.getLength() > 0)
+            if (seq.hasElements())
             {
                 aRTerm = seq[0];  // XXX Use only the first stem
                 continue;
@@ -454,7 +454,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
         if (xTmpRes.is())
         {
             Sequence<OUString>seq = xTmpRes->getAlternatives();
-            if (seq.getLength() > 0)
+            if (seq.hasElements())
             {
                 aPTerm = aRTerm.copy(pos + 1);
                 aRTerm = aRTerm.copy(0, pos + 1) + seq[0];

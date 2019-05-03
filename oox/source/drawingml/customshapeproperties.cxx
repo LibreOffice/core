@@ -203,7 +203,7 @@ void CustomShapeProperties::pushToPropSet(
                                         aAdjustmentVal.Name = adjustmentGuide.maName;
                                         aAdjustmentSeq[ nAdjustmentIndex ] = aAdjustmentVal;
                                     }
-                                } else if ( aAdjustmentSeq.getLength() > 0 ) {
+                                } else if ( aAdjustmentSeq.hasElements() ) {
                                     EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
                                     aAdjustmentVal.Value <<= adjustmentGuide.maFormula.toInt32();
                                     aAdjustmentVal.State = PropertyState_DIRECT_VALUE;

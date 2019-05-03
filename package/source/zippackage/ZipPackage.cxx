@@ -600,7 +600,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
 {
     beans::NamedValue aNamedValue;
 
-    if ( aArguments.getLength() )
+    if ( aArguments.hasElements() )
     {
         bool bHaveZipFile = true;
 
@@ -1000,7 +1000,7 @@ uno::Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( c
 {
     bool bArg = false;
     uno::Reference < XInterface > xRef;
-    if ( aArguments.getLength() )
+    if ( aArguments.hasElements() )
         aArguments[0] >>= bArg;
     if ( bArg )
         xRef = *new ZipPackageFolder( m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
@@ -1633,7 +1633,7 @@ const uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
 {
     uno::Sequence< sal_Int8 > aResult;
 
-    if ( m_aStorageEncryptionKeys.getLength() )
+    if ( m_aStorageEncryptionKeys.hasElements() )
     {
         OUString aNameToFind;
         if ( m_nStartKeyGenerationID == xml::crypto::DigestID::SHA256 )
@@ -1649,7 +1649,7 @@ const uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
 
         // empty keys are not allowed here
         // so it is not important whether there is no key, or the key is empty, it is an error
-        if ( !aResult.getLength() )
+        if ( !aResult.hasElements() )
             throw uno::RuntimeException(THROW_WHERE "No expected key is provided!" );
     }
     else
@@ -1753,10 +1753,10 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         // because of this support the storage has to operate with more than one key dependent on storage generation algorithm;
         // when this support is removed, the storage will get only one key from outside
         uno::Sequence< beans::NamedValue > aKeys;
-        if ( !( aValue >>= aKeys ) || ( aKeys.getLength() && aKeys.getLength() < 1 ) )
+        if ( !( aValue >>= aKeys ) )
             throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 2 );
 
-        if ( aKeys.getLength() )
+        if ( aKeys.hasElements() )
         {
             bool bHasSHA256 = false;
             bool bHasSHA1 = false;
@@ -1778,7 +1778,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
     else if ( aPropertyName == ENCRYPTION_ALGORITHMS_PROPERTY )
     {
         uno::Sequence< beans::NamedValue > aAlgorithms;
-        if ( m_pZipFile || !( aValue >>= aAlgorithms ) || aAlgorithms.getLength() == 0 )
+        if ( m_pZipFile || !( aValue >>= aAlgorithms ) || !aAlgorithms.hasElements() )
         {
             // the algorithms can not be changed if the file has a persistence based on the algorithms ( m_pZipFile )
             throw IllegalArgumentException(THROW_WHERE "unexpected algorithms list is provided.", uno::Reference< uno::XInterface >(), 2 );
@@ -1823,7 +1823,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
     else if ( aPropertyName == ENCRYPTION_GPG_PROPERTIES )
     {
         uno::Sequence< uno::Sequence< beans::NamedValue > > aGpgProps;
-        if ( !( aValue >>= aGpgProps ) || aGpgProps.getLength() == 0 )
+        if ( !( aValue >>= aGpgProps ) || !aGpgProps.hasElements() )
         {
             throw IllegalArgumentException(THROW_WHERE "unexpected Gpg properties are provided.", uno::Reference< uno::XInterface >(), 2 );
         }

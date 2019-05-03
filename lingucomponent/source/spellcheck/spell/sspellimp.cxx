@@ -197,8 +197,8 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             m_DictItems.reserve(nDictSize);
             for (auto const& dict : aDics)
             {
-                if (dict.aLocaleNames.getLength() > 0 &&
-                    dict.aLocations.getLength() > 0)
+                if (dict.aLocaleNames.hasElements() &&
+                    dict.aLocations.hasElements())
                 {
                     uno::Sequence< OUString > aLocaleNames( dict.aLocaleNames );
 
@@ -235,7 +235,7 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
     MutexGuard  aGuard( GetLinguMutex() );
 
     bool bRes = false;
-    if (!m_aSuppLocales.getLength())
+    if (!m_aSuppLocales.hasElements())
         getLocales();
 
     for (auto const& suppLocale : m_aSuppLocales)

@@ -89,7 +89,7 @@ bool PackageEncryptionDatasEqual( const ::comphelper::SequenceAsHashMap& aHash1,
           ++aIter )
     {
         uno::Sequence< sal_Int8 > aKey1;
-        bResult = ( ( aIter->second >>= aKey1 ) && aKey1.getLength() );
+        bResult = ( ( aIter->second >>= aKey1 ) && aKey1.hasElements() );
         if ( bResult )
         {
             uno::Sequence< sal_Int8 > aKey2 = aHash2.getUnpackedValueOrDefault( aIter->first, uno::Sequence< sal_Int8 >() );
@@ -401,7 +401,7 @@ bool OWriteStream_Impl::IsEncrypted()
     // That means that if it is intended to use common storage key
     // it is already has no encryption but is marked to be stored
     // encrypted and the key is empty.
-    if ( !bWasEncr && bToBeEncr && !aKey.getLength() )
+    if ( !bWasEncr && bToBeEncr && !aKey.hasElements() )
     {
         // the stream is intended to use common storage password
         m_bUseCommonEncryption = true;
@@ -926,7 +926,7 @@ void OWriteStream_Impl::Revert()
 
 uno::Sequence< beans::PropertyValue > const & OWriteStream_Impl::GetStreamProperties()
 {
-    if ( !m_aProps.getLength() )
+    if ( !m_aProps.hasElements() )
         m_aProps = ReadPackageStreamProperties();
 
     return m_aProps;
@@ -1551,7 +1551,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
 
             if ( m_nRelInfoStatus == RELINFO_CHANGED )
             {
-                if ( m_aNewRelInfo.getLength() )
+                if ( m_aNewRelInfo.hasElements() )
                 {
                     uno::Reference< io::XStream > xRelsStream =
                         xRelStorage->openStreamElement( aNewRelStreamName,

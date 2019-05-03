@@ -173,7 +173,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
     if ( m_pZipFile )
         throw uno::RuntimeException(THROW_WHERE ); // initialization is allowed only one time
 
-    if ( !aArguments.getLength() )
+    if ( !aArguments.hasElements() )
         throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
 
     OSL_ENSURE( aArguments.getLength() == 1, "Too many arguments are provided, only the first one will be used!" );

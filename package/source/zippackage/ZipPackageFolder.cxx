@@ -273,7 +273,7 @@ bool ZipPackageFolder::saveChild(
     saveContents( sTempName, rManList, rZipOut, rEncryptionKey, nPBKDF2IterationCount, rRandomPool);
 
     // folder can have a mediatype only in package format
-    if ( aPropSet.getLength() && ( m_nFormat == embed::StorageFormats::PACKAGE ) )
+    if ( aPropSet.hasElements() && ( m_nFormat == embed::StorageFormats::PACKAGE ) )
         rManList.push_back( aPropSet );
 
     return true;

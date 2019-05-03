@@ -43,7 +43,7 @@ namespace rptui
 
     void OGroupExchange::AddSupportedFormats()
     {
-        if ( m_aGroupRow.getLength() )
+        if ( m_aGroupRow.hasElements() )
         {
             AddFormat(OGroupExchange::getReportGroupId());
         }

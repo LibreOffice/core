@@ -220,7 +220,7 @@ uno::Sequence<sal_Int8> ZipPackageStream::GetEncryptionKey(Bugs const bugs)
     sal_Int32 nKeyGenID = GetStartKeyGenID();
     bool const bUseWinEncoding = (bugs == Bugs::WinEncodingWrongSHA1 || m_bUseWinEncoding);
 
-    if ( m_bHaveOwnKey && m_aStorageEncryptionKeys.getLength() )
+    if ( m_bHaveOwnKey && m_aStorageEncryptionKeys.hasElements() )
     {
         OUString aNameToFind;
         if ( nKeyGenID == xml::crypto::DigestID::SHA256 )
@@ -242,13 +242,13 @@ uno::Sequence<sal_Int8> ZipPackageStream::GetEncryptionKey(Bugs const bugs)
 
         // empty keys are not allowed here
         // so it is not important whether there is no key, or the key is empty, it is an error
-        if ( !aResult.getLength() )
+        if ( !aResult.hasElements() )
             throw uno::RuntimeException(THROW_WHERE "No expected key is provided!" );
     }
     else
         aResult = m_aEncryptionKey;
 
-    if ( !aResult.getLength() || !m_bHaveOwnKey )
+    if ( !aResult.hasElements() || !m_bHaveOwnKey )
         aResult = m_rZipPackage.GetEncryptionKey();
 
     return aResult;
@@ -271,7 +271,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
     if ( m_bToBeEncrypted )
     {
         aKey = GetEncryptionKey();
-        if ( !aKey.getLength() )
+        if ( !aKey.hasElements() )
             throw packages::NoEncryptionException(THROW_WHERE );
     }
 
@@ -538,7 +538,7 @@ bool ZipPackageStream::saveChild(
     pTempEntry->sPath = rPath;
     pTempEntry->nPathLen = static_cast<sal_Int16>( OUStringToOString( pTempEntry->sPath, RTL_TEXTENCODING_UTF8 ).getLength() );
 
-    const bool bToBeEncrypted = m_bToBeEncrypted && (rEncryptionKey.getLength() || m_bHaveOwnKey);
+    const bool bToBeEncrypted = m_bToBeEncrypted && (rEncryptionKey.hasElements() || m_bHaveOwnKey);
     const bool bToBeCompressed = bToBeEncrypted || m_bToBeCompressed;
 
     aPropSet[PKG_MNFST_MEDIATYPE].Name = sMediaTypeProperty;
@@ -880,7 +880,7 @@ bool ZipPackageStream::saveChild(
     if (bSuccess && !bParallelDeflate)
         successfullyWritten(pTempEntry);
 
-    if ( aPropSet.getLength()
+    if ( aPropSet.hasElements()
       && ( m_nFormat == embed::StorageFormats::PACKAGE || m_nFormat == embed::StorageFormats::OFOPXML ) )
         rManList.push_back( aPropSet );
 
@@ -1243,7 +1243,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
             aNewKey = aSequence;
         }
 
-        if ( aNewKey.getLength() )
+        if ( aNewKey.hasElements() )
         {
             if ( !m_xBaseEncryptionData.is() )
                 m_xBaseEncryptionData = new BaseEncryptionData;
@@ -1275,7 +1275,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
                                                 2 );
         }
 
-        if ( aKeys.getLength() )
+        if ( aKeys.hasElements() )
         {
             if ( !m_xBaseEncryptionData.is() )
                 m_xBaseEncryptionData = new BaseEncryptionData;

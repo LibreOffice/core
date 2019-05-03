@@ -224,7 +224,7 @@ static void lcl_getReportControlFormat(const Sequence< PropertyValue >& aArgs,
                                  ::std::vector< uno::Reference< uno::XInterface > >& _rControlsFormats)
 {
     uno::Reference< report::XReportControlFormat> xReportControlFormat;
-    if ( aArgs.getLength() )
+    if ( aArgs.hasElements() )
     {
         SequenceAsHashMap aMap(aArgs);
         xReportControlFormat = aMap.getUnpackedValueOrDefault(REPORTCONTROLFORMAT,uno::Reference< report::XReportControlFormat>());
@@ -1522,10 +1522,10 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                         if ( !xFormat.is() )
                             continue;
 
-                        if ( aSettings.getLength() == 0 )
+                        if ( !aSettings.hasElements() )
                         {
                             ::rptui::openCharDialog( xFormat, xWindow, aSettings );
-                            if ( aSettings.getLength() == 0 )
+                            if ( !aSettings.hasElements() )
                                 break;
                         }
 
@@ -1554,7 +1554,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_DATETIME:
             if ( m_xReportDefinition.is() )
             {
-                if ( !aArgs.getLength() )
+                if ( !aArgs.hasElements() )
                 {
                     ODateTimeDialog aDlg(getFrameWeld(), getDesignView()->getCurrentSection(), this);
                     aDlg.run();
@@ -1566,7 +1566,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_INSERT_FLD_PGNUMBER:
             if ( m_xReportDefinition.is() )
             {
-                if ( !aArgs.getLength() )
+                if ( !aArgs.hasElements() )
                 {
                     OPageNumberDialog aDlg(getFrameWeld(), m_xReportDefinition, this);
                     aDlg.run();
@@ -1590,7 +1590,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_GROUP:
             break;
         case SID_ATTR_ZOOM:
-            if ( aArgs.getLength() == 0 )
+            if ( !aArgs.hasElements() )
             {
                 openZoomDialog();
             }
@@ -1722,7 +1722,7 @@ IMPL_LINK( OReportController, OnCreateHdl, OAddFieldWindow& ,_rAddFieldDlg, void
     WaitObject aObj( getDesignView() );
     uno::Sequence< beans::PropertyValue > aArgs = _rAddFieldDlg.getSelectedFieldDescriptors();
     // we use this way to create undo actions
-    if ( aArgs.getLength() )
+    if ( aArgs.hasElements() )
     {
         executeChecked(SID_ADD_CONTROL_PAIR,aArgs);
     }
@@ -3019,7 +3019,7 @@ sal_Bool SAL_CALL OReportController::select( const Any& aSelection )
         uno::Sequence< uno::Reference<report::XReportComponent> > aElements;
         if ( aSelection >>= aElements )
         {
-            if ( aElements.getLength() > 0 )
+            if ( aElements.hasElements() )
                 getDesignView()->showProperties(uno::Reference<uno::XInterface>(aElements[0],uno::UNO_QUERY));
             getDesignView()->setMarked(aElements, true);
         }

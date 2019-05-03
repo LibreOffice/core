@@ -234,7 +234,7 @@ void OReportSection::fill()
 void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyCopiedObjects,bool _bForce)
 {
     OSL_ENSURE(m_xSection.is(),"Why is the section here NULL!");
-    if ( m_xSection.is() && _aAllreadyCopiedObjects.getLength() )
+    if ( m_xSection.is() && _aAllreadyCopiedObjects.hasElements() )
     {
         // stop all drawing actions
         m_pView->BrkAction();

@@ -139,7 +139,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
         {
             const Reference< XThesaurus > *pRef = pEntry->aSvcRefs.getConstArray();
             while (i <= pEntry->nLastTriedSvcIndex
-                   &&  aMeanings.getLength() == 0)
+                   &&  !aMeanings.hasElements())
             {
                 if (pRef[i].is()  &&  pRef[i]->hasLocale( rLocale ))
                     aMeanings = pRef[i]->queryMeanings( aChkWord, rLocale, rProperties );
@@ -148,7 +148,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
         }
 
         // if still no result instantiate new services and try those
-        if (aMeanings.getLength() == 0
+        if (!aMeanings.hasElements()
             &&  pEntry->nLastTriedSvcIndex < nLen - 1)
         {
             const OUString *pImplNames = pEntry->aSvcImplNames.getConstArray();
@@ -161,7 +161,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
             Sequence< Any > aArgs(1);
             aArgs.getArray()[0] <<= GetPropSet();
 
-            while (i < nLen  &&  aMeanings.getLength() == 0)
+            while (i < nLen  &&  !aMeanings.hasElements())
             {
                 // create specific service via it's implementation name
                 Reference< XThesaurus > xThes;
@@ -186,7 +186,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
 
             // if language is not supported by any of the services
             // remove it from the list.
-            if (i == nLen  &&  aMeanings.getLength() == 0)
+            if (i == nLen  &&  !aMeanings.hasElements())
             {
                 if (!SvcListHasLanguage( pEntry->aSvcRefs, rLocale ))
                     aSvcMap.erase( nLanguage );

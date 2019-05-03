@@ -1133,7 +1133,7 @@ void OReportDefinition::fillArgs(utl::MediaDescriptor& _aDescriptor)
 {
     uno::Sequence<beans::PropertyValue> aComponentData;
     aComponentData = _aDescriptor.getUnpackedValueOrDefault("ComponentData",aComponentData);
-    if ( aComponentData.getLength() && (!m_pImpl->m_xActiveConnection.is() || !m_pImpl->m_xNumberFormatsSupplier.is()) )
+    if ( aComponentData.hasElements() && (!m_pImpl->m_xActiveConnection.is() || !m_pImpl->m_xNumberFormatsSupplier.is()) )
     {
         ::comphelper::SequenceAsHashMap aComponentDataMap( aComponentData );
         m_pImpl->m_xActiveConnection = aComponentDataMap.getUnpackedValueOrDefault("ActiveConnection",m_pImpl->m_xActiveConnection);

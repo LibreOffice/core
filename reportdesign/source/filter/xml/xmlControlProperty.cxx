@@ -151,7 +151,7 @@ void OXMLControlProperty::EndElement()
 {
     if ( !m_aSetting.Name.isEmpty() && m_xControl.is() )
     {
-        if ( m_bIsList && !m_aSequence.getLength() )
+        if ( m_bIsList && !m_aSequence.hasElements() )
             m_aSetting.Value <<= m_aSequence;
         try
         {
