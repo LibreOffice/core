@@ -46,7 +46,7 @@
 #include <memory>
 #include <vector>
 
-#include <rtl/ustring.hxx>
+#include <rtl/string.hxx>
 
 class SwCacheObj;
 

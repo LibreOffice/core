@@ -20,7 +20,8 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_SWPORTIONHANDLER_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_SWPORTIONHANDLER_HXX
 
-#include <swtypes.hxx>
+#include <swdllapi.h>
+#include <rtl/ustring.hxx>
 #include "TextFrameIndex.hxx"
 
 class SwFont;

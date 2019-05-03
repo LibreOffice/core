@@ -28,7 +28,6 @@ class SwDoc;
 class SwTextFormatColl;
 class SwConditionTextFormatColl;
 class SwRewriter;
-class SfxItemSet;
 
 class SwUndoFormatCreate : public SwUndo
 {

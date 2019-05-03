@@ -22,12 +22,12 @@
 #include <tools/link.hxx>
 #include <sal/types.h>
 #include <osl/mutex.hxx>
-#include <rtl/instance.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
 
 #include <map>
 #include <memory>
+
+namespace com::sun::star::io { class XInputStream; }
 
 class SwAsyncRetrieveInputStreamThreadConsumer;
 

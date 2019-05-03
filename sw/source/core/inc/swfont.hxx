@@ -34,7 +34,6 @@
 class SfxItemSet;
 class SwAttrSet;
 class SwDoCapitals;     // DoCapitals
-class SwDrawTextInfo;   // DrawText_
 class SwScriptInfo;     // GetTextSize_
 class SwViewShell;
 class IDocumentSettingAccess;

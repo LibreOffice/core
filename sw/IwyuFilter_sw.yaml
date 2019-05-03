@@ -262,6 +262,14 @@ blacklist:
     sw/source/core/inc/frame.hxx:
     # Needed for direct member access
     - com/sun/star/style/TabStop.hpp
+    sw/source/core/inc/SwXTextDefaults.hxx:
+    # Base class needs complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sw/source/core/inc/swthreadjoiner.hxx:
+    # Needed for css shortcut
+    - sal/types.h
     sw/qa/extras/odfexport/odfexport.cxx:
     # Needed for getProperty template
     - com/sun/star/graphic/XGraphic.hpp
