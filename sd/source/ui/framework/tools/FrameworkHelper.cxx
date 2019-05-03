@@ -249,7 +249,7 @@ namespace
             Reference< XConfiguration > xConfiguration( i_rConfigController->getRequestedConfiguration(), UNO_SET_THROW );
             Sequence< Reference< XResourceId > > aViewIds( xConfiguration->getResources(
                 i_rPaneId, FrameworkHelper::msViewURLPrefix, AnchorBindingMode_DIRECT ) );
-            if ( aViewIds.getLength() > 0 )
+            if ( aViewIds.hasElements() )
                 return i_rConfigController->getResource( aViewIds[0] );
         }
         catch( const Exception& )

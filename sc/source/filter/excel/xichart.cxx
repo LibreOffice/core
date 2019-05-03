@@ -3643,7 +3643,7 @@ void XclImpChAxesSet::Convert( Reference< XDiagram > const & xDiagram ) const
             {
                 Reference< XCoordinateSystemContainer > xCoordSystemCont( xDiagram, UNO_QUERY_THROW );
                 Sequence< Reference< XCoordinateSystem > > aCoordSystems = xCoordSystemCont->getCoordinateSystems();
-                if( aCoordSystems.getLength() == 0 )
+                if( !aCoordSystems.hasElements() )
                     xCoordSystemCont->addCoordinateSystem( xCoordSystem );
             }
             catch( Exception& )
@@ -3730,7 +3730,7 @@ Reference< XCoordinateSystem > XclImpChAxesSet::CreateCoordSystem( Reference< XD
     {
         Sequence< Reference< XCoordinateSystem > > aCoordSystems = xCoordSystemCont->getCoordinateSystems();
         OSL_ENSURE( aCoordSystems.getLength() <= 1, "XclImpChAxesSet::CreateCoordSystem - too many existing coordinate systems" );
-        if( aCoordSystems.getLength() > 0 )
+        if( aCoordSystems.hasElements() )
             xCoordSystem = aCoordSystems[ 0 ];
     }
 

@@ -119,7 +119,7 @@ uno::Sequence< beans::NamedValue > ScfApiHelper::QueryEncryptionDataForMedium( S
     rMedium.GetItemSet()->ClearItem( SID_PASSWORD );
     rMedium.GetItemSet()->ClearItem( SID_ENCRYPTIONDATA );
 
-    if( !bIsDefaultPassword && (aEncryptionData.getLength() > 0) )
+    if( !bIsDefaultPassword && aEncryptionData.hasElements() )
         rMedium.GetItemSet()->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) ) );
 
     return aEncryptionData;

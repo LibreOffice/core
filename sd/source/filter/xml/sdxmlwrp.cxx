@@ -358,7 +358,7 @@ ErrCode ReadThroughComponent(
 
     // set Base URL
     uno::Reference< beans::XPropertySet > xInfoSet;
-    if( rFilterArguments.getLength() > 0 )
+    if( rFilterArguments.hasElements() )
         rFilterArguments.getConstArray()[0] >>= xInfoSet;
     DBG_ASSERT( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )

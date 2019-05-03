@@ -461,7 +461,7 @@ void OptimizerDialog::InitPage1()
     DeactivatePage( 1 );
 
     setControlProperty( "CheckBox3Pg3", "State", Any( false ) );
-    setControlProperty( "CheckBox3Pg3", "Enabled", Any( aCustomShowList.getLength() != 0 ) );
+    setControlProperty( "CheckBox3Pg3", "Enabled", Any( aCustomShowList.hasElements() ) );
     setControlProperty( "ListBox0Pg3", "Enabled", Any( false ) );
 
     UpdateControlStatesPage1();
@@ -646,7 +646,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
             Any aAny = getControlProperty( "ListBox0Pg3", "SelectedItems" );
             if ( aAny >>= aSelectedItems )
             {
-                if ( aSelectedItems.getLength() )
+                if ( aSelectedItems.hasElements() )
                 {
                     sal_Int16 nSelectedItem = aSelectedItems[ 0 ];
                     aAny = getControlProperty( "ListBox0Pg3", "StringItemList" );

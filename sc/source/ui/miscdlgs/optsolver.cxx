@@ -337,7 +337,7 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     // get available solver implementations
     //! sort by descriptions?
     ScSolverUtil::GetImplementations( maImplNames, maDescriptions );
-    sal_Int32 nImplCount = maImplNames.getLength();
+    bool bImplHasElements = maImplNames.hasElements();
 
     const ScOptSolverSave* pOldData = mpDocShell->GetSolverSaveData();
     if ( pOldData )
@@ -359,7 +359,7 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
         if ( !mrDoc.GetRangeAtBlock( ScRange(rCursorPos), &aCursorStr ) )
             aCursorStr = rCursorPos.Format(ScRefFlags::ADDR_ABS, nullptr, mrDoc.GetAddressConvention());
         m_xEdObjectiveCell->SetRefString( aCursorStr );
-        if ( nImplCount > 0 )
+        if ( bImplHasElements )
             maEngine = maImplNames[0];  // use first implementation
     }
     ShowConditions();
@@ -769,7 +769,7 @@ bool ScOptSolverDlg::FindTimeout( sal_Int32& rTimeout )
 {
     bool bFound = false;
 
-    if ( !maProperties.getLength() )
+    if ( !maProperties.hasElements() )
         maProperties = ScSolverUtil::GetDefaults( maEngine );   // get property defaults from component
 
     sal_Int32 nPropCount = maProperties.getLength();

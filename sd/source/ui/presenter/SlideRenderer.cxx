@@ -53,7 +53,7 @@ void SAL_CALL SlideRenderer::initialize (const Sequence<Any>& rArguments)
 {
     ThrowIfDisposed();
 
-    if (rArguments.getLength() != 0)
+    if (rArguments.hasElements())
     {
         throw RuntimeException("SlideRenderer: invalid number of arguments",
                 static_cast<XWeak*>(this));

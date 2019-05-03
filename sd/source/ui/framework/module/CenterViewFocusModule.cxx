@@ -126,7 +126,7 @@ void CenterViewFocusModule::HandleNewView (
         FrameworkHelper::msViewURLPrefix,
         AnchorBindingMode_DIRECT));
     Reference<XView> xView;
-    if (xViewIds.getLength() > 0)
+    if (xViewIds.hasElements())
         xView.set( mxConfigurationController->getResource(xViewIds[0]),UNO_QUERY);
     Reference<lang::XUnoTunnel> xTunnel (xView, UNO_QUERY);
     if (xTunnel.is() && mpBase!=nullptr)

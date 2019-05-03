@@ -832,7 +832,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
             OUString aDefText;
             if( aCtrlProp.GetProperty( aStringList, "StringItemList" ) &&
                 aCtrlProp.GetProperty( aDefText, "Text" ) &&
-                aStringList.getLength() && !aDefText.isEmpty() )
+                aStringList.hasElements() && !aDefText.isEmpty() )
             {
                 const OUString* pBegin = aStringList.getConstArray();
                 const OUString* pEnd = pBegin + aStringList.getLength();

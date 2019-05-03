@@ -134,7 +134,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
                         break;
                     }
                 }
-                if ( aExtensions.getLength() )
+                if ( aExtensions.hasElements() )
                 {
                     // The filter title must be formed in the same way it is
                     // currently done in the internal implementation:
@@ -166,7 +166,7 @@ void FileOpenDialog::setDefaultName( const OUString& rDefaultName )
 OUString FileOpenDialog::getURL() const
 {
     Sequence< OUString > aFileSeq( mxFilePicker->getSelectedFiles() );
-    return aFileSeq.getLength() ? aFileSeq[ 0 ] : OUString();
+    return aFileSeq.hasElements() ? aFileSeq[ 0 ] : OUString();
 };
 OUString FileOpenDialog::getFilterName() const
 {

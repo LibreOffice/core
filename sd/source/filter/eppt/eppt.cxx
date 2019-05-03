@@ -836,7 +836,7 @@ bool PPTWriter::ImplCreateDocument()
                     if ( aXCont.is() )
                     {
                         css::uno::Sequence< OUString> aNameSeq( aXCont->getElementNames() );
-                        if ( aNameSeq.getLength() )
+                        if ( aNameSeq.hasElements() )
                         {
                             mpPptEscherEx->OpenContainer( EPP_NamedShows );
                             sal_uInt32 nCustomShowIndex = 0;
