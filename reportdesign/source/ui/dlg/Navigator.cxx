@@ -488,7 +488,7 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent )
     uno::Any aSec = xSelectionSupplier->getSelection();
     uno::Sequence< uno::Reference< report::XReportComponent > > aSelection;
     aSec >>= aSelection;
-    if ( !aSelection.getLength() )
+    if ( !aSelection.hasElements() )
     {
         uno::Reference< uno::XInterface> xSelection(aSec,uno::UNO_QUERY);
         SvTreeListEntry* pEntry = find(xSelection);

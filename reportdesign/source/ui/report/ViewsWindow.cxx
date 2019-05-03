@@ -1212,7 +1212,7 @@ void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSe
                 pInSection->EndDragObj();
         }
 
-        if ( aAllreadyCopiedObjects.getLength() )
+        if ( aAllreadyCopiedObjects.hasElements() )
         {
             try
             {

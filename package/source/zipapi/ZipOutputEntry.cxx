@@ -229,7 +229,7 @@ void ZipOutputEntry::doDeflate()
     {
         // FIXME64: sequence not 64bit safe.
         uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->finalizeCipherContextAndDispose();
-        if ( aEncryptionBuffer.getLength() )
+        if ( aEncryptionBuffer.hasElements() )
         {
             m_xOutStream->writeBytes( aEncryptionBuffer );
 

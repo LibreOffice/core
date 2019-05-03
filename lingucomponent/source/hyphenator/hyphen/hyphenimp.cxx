@@ -171,8 +171,8 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
             k = 0;
             for (auto const& dict :  aDics)
             {
-                if (dict.aLocaleNames.getLength() > 0 &&
-                    dict.aLocations.getLength() > 0)
+                if (dict.aLocaleNames.hasElements() &&
+                    dict.aLocations.hasElements())
                 {
                     uno::Sequence< OUString > aLocaleNames(dict.aLocaleNames);
                     sal_Int32 nLocales = aLocaleNames.getLength();
@@ -218,7 +218,7 @@ sal_Bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
     MutexGuard  aGuard( GetLinguMutex() );
 
     bool bRes = false;
-    if (!aSuppLocales.getLength())
+    if (!aSuppLocales.hasElements())
         getLocales();
 
     const Locale *pLocale = aSuppLocales.getConstArray();

@@ -397,7 +397,7 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const rtl::R
     if ( !rData.is() )
         throw ZipIOException("Encrypted stream without encryption data!" );
 
-    if ( !rData->m_aKey.getLength() )
+    if ( !rData->m_aKey.hasElements() )
         throw packages::WrongPasswordException(THROW_WHERE );
 
     uno::Reference< XSeekable > xSeek( xStream, UNO_QUERY );
@@ -406,8 +406,8 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const rtl::R
 
     // if we have a digest, then this file is an encrypted one and we should
     // check if we can decrypt it or not
-    OSL_ENSURE( rData->m_aDigest.getLength(), "Can't detect password correctness without digest!" );
-    if ( rData->m_aDigest.getLength() )
+    OSL_ENSURE( rData->m_aDigest.hasElements(), "Can't detect password correctness without digest!" );
+    if ( rData->m_aDigest.hasElements() )
     {
         sal_Int32 nSize = sal::static_int_cast< sal_Int32 >( xSeek->getLength() );
         if ( nSize > n_ConstDigestLength + 32 )
@@ -446,7 +446,7 @@ void CheckSequence( const uno::Sequence< sal_Int8 >& aSequence )
 
 bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentContext >& rxContext, const Sequence< sal_Int8 > &aReadBuffer, const ::rtl::Reference< EncryptionData > &rData )
 {
-    if ( !rData.is() || !rData->m_aKey.getLength() )
+    if ( !rData.is() || !rData->m_aKey.hasElements() )
         return false;
 
     bool bRet = false;
@@ -466,7 +466,7 @@ bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentConte
         // it is no problem, actually this is why we read 32 additional bytes ( two of maximal possible encryption blocks )
     }
 
-    if ( aDecryptBuffer2.getLength() )
+    if ( aDecryptBuffer2.hasElements() )
     {
         sal_Int32 nOldLen = aDecryptBuffer.getLength();
         aDecryptBuffer.realloc( nOldLen + aDecryptBuffer2.getLength() );
@@ -483,7 +483,7 @@ bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentConte
     aDigestSeq = xDigestContext->finalizeDigestAndDispose();
 
     // If we don't have a digest, then we have to assume that the password is correct
-    if (  rData->m_aDigest.getLength() != 0  &&
+    if (  rData->m_aDigest.hasElements() &&
           ( aDigestSeq.getLength() != rData->m_aDigest.getLength() ||
             0 != memcmp ( aDigestSeq.getConstArray(),
                                      rData->m_aDigest.getConstArray(),
@@ -502,7 +502,7 @@ bool ZipFile::hasValidPassword ( ZipEntry const & rEntry, const ::rtl::Reference
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     bool bRet = false;
-    if ( rData.is() && rData->m_aKey.getLength() )
+    if ( rData.is() && rData->m_aKey.hasElements() )
     {
         css::uno::Reference < css::io::XSeekable > xSeek(xStream, UNO_QUERY_THROW);
         xSeek->seek( rEntry.nOffset );
@@ -667,7 +667,7 @@ uno::Reference< XInputStream > ZipFile::getInputStream( ZipEntry& rEntry,
 
     // if we have a digest, then this file is an encrypted one and we should
     // check if we can decrypt it or not
-    if ( bIsEncrypted && rData.is() && rData->m_aDigest.getLength() )
+    if ( bIsEncrypted && rData.is() && rData->m_aDigest.hasElements() )
         bNeedRawStream = !hasValidPassword ( rEntry, rData );
 
     return createStreamForZipEntry ( aMutexHolder,
@@ -699,8 +699,8 @@ uno::Reference< XInputStream > ZipFile::getDataStream( ZipEntry& rEntry,
 
         // if we have a digest, then this file is an encrypted one and we should
         // check if we can decrypt it or not
-        OSL_ENSURE( rData->m_aDigest.getLength(), "Can't detect password correctness without digest!" );
-        if ( rData->m_aDigest.getLength() && !hasValidPassword ( rEntry, rData ) )
+        OSL_ENSURE( rData->m_aDigest.hasElements(), "Can't detect password correctness without digest!" );
+        if ( rData->m_aDigest.hasElements() && !hasValidPassword ( rEntry, rData ) )
                 throw packages::WrongPasswordException(THROW_WHERE );
     }
     else

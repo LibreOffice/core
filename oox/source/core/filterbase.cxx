@@ -423,7 +423,7 @@ void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs )
     {
     }
 
-    if (rArgs.getLength() >= 1)
+    if (rArgs.hasElements())
     {
         Sequence<css::beans::PropertyValue> aSeq;
         rArgs[0] >>= aSeq;

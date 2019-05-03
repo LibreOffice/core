@@ -81,10 +81,10 @@ XUnbufferedStream::XUnbufferedStream(
     if (mnZipSize < 0)
         throw ZipIOException("The stream seems to be broken!");
 
-    bool bHaveEncryptData = rData.is() && rData->m_aInitVector.getLength() &&
-        ((rData->m_aSalt.getLength() && rData->m_nIterationCount != 0)
+    bool bHaveEncryptData = rData.is() && rData->m_aInitVector.hasElements() &&
+        ((rData->m_aSalt.hasElements() && rData->m_nIterationCount != 0)
          ||
-         rData->m_aKey.getLength());
+         rData->m_aKey.hasElements());
     bool bMustDecrypt = nStreamMode == UNBUFF_STREAM_DATA && bHaveEncryptData && bIsEncrypted;
 
     if ( bMustDecrypt )
@@ -268,7 +268,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                     if ( mnZipCurrent == mnZipEnd )
                     {
                         uno::Sequence< sal_Int8 > aSuffix = m_xCipherContext->finalizeCipherContextAndDispose();
-                        if ( aSuffix.getLength() )
+                        if ( aSuffix.hasElements() )
                         {
                             sal_Int32 nOldLen = maCompBuffer.getLength();
                             maCompBuffer.realloc( nOldLen + aSuffix.getLength() );

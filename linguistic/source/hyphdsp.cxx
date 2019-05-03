@@ -328,13 +328,13 @@ Reference< XHyphenatedWord > SAL_CALL
         }
         else
         {
-            sal_Int32 nLen = pEntry->aSvcImplNames.getLength() > 0 ? 1 : 0;
+            sal_Int32 nLen = pEntry->aSvcImplNames.hasElements() ? 1 : 0;
             DBG_ASSERT( pEntry->nLastTriedSvcIndex < nLen,
                     "lng : index out of range");
 
             sal_Int32 i = 0;
             Reference< XHyphenator > xHyph;
-            if (pEntry->aSvcRefs.getLength() > 0)
+            if (pEntry->aSvcRefs.hasElements())
                 xHyph = pEntry->aSvcRefs[0];
 
             // try already instantiated service
@@ -460,13 +460,13 @@ Reference< XHyphenatedWord > SAL_CALL
         }
         else
         {
-            sal_Int32 nLen = pEntry->aSvcImplNames.getLength() > 0 ? 1 : 0;
+            sal_Int32 nLen = pEntry->aSvcImplNames.hasElements() ? 1 : 0;
             DBG_ASSERT( pEntry->nLastTriedSvcIndex < nLen,
                     "lng : index out of range");
 
             sal_Int32 i = 0;
             Reference< XHyphenator > xHyph;
-            if (pEntry->aSvcRefs.getLength() > 0)
+            if (pEntry->aSvcRefs.hasElements())
                 xHyph = pEntry->aSvcRefs[0];
 
             // try already instantiated service
@@ -582,13 +582,13 @@ Reference< XPossibleHyphens > SAL_CALL
         }
         else
         {
-            sal_Int32 nLen = pEntry->aSvcImplNames.getLength() > 0 ? 1 : 0;
+            sal_Int32 nLen = pEntry->aSvcImplNames.hasElements() ? 1 : 0;
             DBG_ASSERT( pEntry->nLastTriedSvcIndex < nLen,
                     "lng : index out of range");
 
             sal_Int32 i = 0;
             Reference< XHyphenator > xHyph;
-            if (pEntry->aSvcRefs.getLength() > 0)
+            if (pEntry->aSvcRefs.hasElements())
                 xHyph = pEntry->aSvcRefs[0];
 
             // try already instantiated service
@@ -700,7 +700,7 @@ Sequence< OUString >
     if (pEntry)
     {
         aRes = pEntry->aSvcImplNames;
-        if (aRes.getLength() > 0)
+        if (aRes.hasElements())
             aRes.realloc(1);
     }
 

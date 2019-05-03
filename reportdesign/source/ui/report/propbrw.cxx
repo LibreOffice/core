@@ -328,7 +328,7 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
 OUString PropBrw::GetHeadlineName( const uno::Sequence< Reference<uno::XInterface> >& _aObjects )
 {
     OUString aName;
-    if ( !_aObjects.getLength() )
+    if ( !_aObjects.hasElements() )
     {
         aName = RptResId(RID_STR_BRWTITLE_NO_PROPERTIES);
     }
@@ -510,7 +510,7 @@ void PropBrw::Update( OSectionView* pNewView )
             }
         }
 
-        if ( aMarkedObjects.getLength() ) // multiple selection
+        if ( aMarkedObjects.hasElements() ) // multiple selection
         {
             m_xLastSection.clear();
             implSetNewObject( aMarkedObjects );

@@ -565,7 +565,7 @@ namespace
         {
             Sequence< OUString > aNames { rLastFoundList + "/" + rCfgLocaleStr };
             Sequence< Any > aValues( rCfg.GetProperties( aNames ) );
-            if (aValues.getLength())
+            if (aValues.hasElements())
             {
                 SAL_WARN_IF( aValues.getLength() != 1, "linguistic", "unexpected length of sequence" );
                 Sequence< OUString > aSvcImplNames;
@@ -799,7 +799,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                 pNames[0] = aSpellCheckerList + "/" + aKeyText;
                 aValues = /*aCfg.*/GetProperties( aNames );
                 uno::Sequence< OUString > aSvcImplNames;
-                if (aValues.getLength())
+                if (aValues.hasElements())
                     aSvcImplNames = GetLangSvcList( aValues.getConstArray()[0] );
 
                 LanguageType nLang = LANGUAGE_NONE;
@@ -822,7 +822,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                 pNames[0] = aGrammarCheckerList + "/" + aKeyText;
                 aValues = /*aCfg.*/GetProperties( aNames );
                 uno::Sequence< OUString > aSvcImplNames;
-                if (aValues.getLength())
+                if (aValues.hasElements())
                     aSvcImplNames = GetLangSvc( aValues.getConstArray()[0] );
 
                 LanguageType nLang = LANGUAGE_NONE;
@@ -848,7 +848,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                 pNames[0] = aHyphenatorList + "/" + aKeyText;
                 aValues = /*aCfg.*/GetProperties( aNames );
                 uno::Sequence< OUString > aSvcImplNames;
-                if (aValues.getLength())
+                if (aValues.hasElements())
                     aSvcImplNames = GetLangSvc( aValues.getConstArray()[0] );
 
                 LanguageType nLang = LANGUAGE_NONE;
@@ -871,7 +871,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                 pNames[0] = aThesaurusList + "/" + aKeyText;
                 aValues = /*aCfg.*/GetProperties( aNames );
                 uno::Sequence< OUString > aSvcImplNames;
-                if (aValues.getLength())
+                if (aValues.hasElements())
                     aSvcImplNames = GetLangSvcList( aValues.getConstArray()[0] );
 
                 LanguageType nLang = LANGUAGE_NONE;
@@ -1677,7 +1677,7 @@ bool LngSvcMgr::SaveCfgSvcs( const OUString &rServiceName )
         aLocales = getAvailableLocales( SN_THESAURUS );
     }
 
-    if (pDsp  &&  aLocales.getLength())
+    if (pDsp  &&  aLocales.hasElements())
     {
         sal_Int32 nLen = aLocales.getLength();
         const lang::Locale *pLocale = aLocales.getConstArray();
@@ -1809,7 +1809,7 @@ uno::Sequence< OUString > SAL_CALL
         {
             pNames[0] = aNode + "/" + aCfgLocale;
             aValues = /*aCfg.*/GetProperties( aNames );
-            if (aValues.getLength())
+            if (aValues.hasElements())
                 aSvcImplNames = GetLangSvcList( aValues.getConstArray()[0] );
         }
     }
@@ -1821,7 +1821,7 @@ uno::Sequence< OUString > SAL_CALL
         {
             pNames[0] = aNode + "/" + aCfgLocale;
             aValues = /*aCfg.*/GetProperties( aNames );
-            if (aValues.getLength())
+            if (aValues.hasElements())
                 aSvcImplNames = GetLangSvc( aValues.getConstArray()[0] );
         }
     }
@@ -1833,7 +1833,7 @@ uno::Sequence< OUString > SAL_CALL
         {
             pNames[0] = aNode + "/" + aCfgLocale;
             aValues = /*aCfg.*/GetProperties( aNames );
-            if (aValues.getLength())
+            if (aValues.hasElements())
                 aSvcImplNames = GetLangSvc( aValues.getConstArray()[0] );
         }
     }
@@ -1845,7 +1845,7 @@ uno::Sequence< OUString > SAL_CALL
         {
             pNames[0] = aNode + "/" + aCfgLocale;
             aValues = /*aCfg.*/GetProperties( aNames );
-            if (aValues.getLength())
+            if (aValues.hasElements())
                 aSvcImplNames = GetLangSvcList( aValues.getConstArray()[0] );
         }
     }

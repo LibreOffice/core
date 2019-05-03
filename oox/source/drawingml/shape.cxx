@@ -1291,7 +1291,7 @@ Reference< XShape > const & Shape::createAndInsert(
             Sequence< PropertyValue > aCamera3DEffects = get3DProperties().getCameraAttributes();
             Sequence< PropertyValue > aLightRig3DEffects = get3DProperties().getLightRigAttributes();
             Sequence< PropertyValue > aShape3DEffects = get3DProperties().getShape3DAttributes( rGraphicHelper, nFillPhClr );
-            if( aCamera3DEffects.getLength() > 0 || aLightRig3DEffects.getLength() > 0 || aShape3DEffects.getLength() > 0 )
+            if( aCamera3DEffects.hasElements() || aLightRig3DEffects.hasElements() || aShape3DEffects.hasElements() )
             {
                 uno::Sequence<beans::PropertyValue> a3DEffectsGrabBag = comphelper::InitPropertySequence(
                 {
@@ -1660,8 +1660,8 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                     {
                         Reference< chart2::data::XDataReceiver > xDataRec( xChartDoc, UNO_QUERY );
                         Reference< chart2::data::XDataSource > xData( xDataRec->getUsedData(), UNO_QUERY );
-                        if( xData->getDataSequences().getLength() <= 0 || !xData->getDataSequences()[0]->getValues().is() ||
-                                xData->getDataSequences()[0]->getValues()->getData().getLength() <= 0 )
+                        if( !xData->getDataSequences().hasElements() || !xData->getDataSequences()[0]->getValues().is() ||
+                                !xData->getDataSequences()[0]->getValues()->getData().hasElements() )
                         {
                             rFilter.useInternalChartDataTable( true );
                             rFilter.getChartConverter()->convertFromModel( rFilter, aModel, xChartDoc, xExternalPage, mxShape->getPosition(), mxShape->getSize() );

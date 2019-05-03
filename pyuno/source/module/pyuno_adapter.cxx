@@ -266,7 +266,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
                 // I can only decide for one solution by checking the method signature,
                 // so I need the reflection of the adapter !
                 aOutParamIndex = getOutIndexes( aFunctionName );
-                if( aOutParamIndex.getLength() )
+                if( aOutParamIndex.hasElements() )
                 {
                     // out parameters exist, extract the sequence
                     Sequence< Any  > seq;

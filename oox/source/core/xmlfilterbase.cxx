@@ -595,7 +595,7 @@ writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const util::DateTi
 static void
 writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const Sequence< OUString >& aItems )
 {
-    if( aItems.getLength() == 0 )
+    if( !aItems.hasElements() )
         return;
 
     OUStringBuffer sRep;

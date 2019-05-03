@@ -1403,7 +1403,7 @@ void ChartExport::exportBarChart( const Reference< chart2::XChartType >& xChartT
     {
         uno::Sequence< sal_Int32 > aBarPositionSequence;
         mAny >>= aBarPositionSequence;
-        if( aBarPositionSequence.getLength() )
+        if( aBarPositionSequence.hasElements() )
         {
             sal_Int32 nGapWidth = aBarPositionSequence[0];
             pFS->singleElement(FSNS(XML_c, XML_gapWidth), XML_val, OString::number(nGapWidth));
@@ -1441,7 +1441,7 @@ void ChartExport::exportBarChart( const Reference< chart2::XChartType >& xChartT
     {
         uno::Sequence< sal_Int32 > aBarPositionSequence;
         mAny >>= aBarPositionSequence;
-        if( aBarPositionSequence.getLength() )
+        if( aBarPositionSequence.hasElements() )
         {
             sal_Int32 nOverlap = aBarPositionSequence[0];
             // Stacked/Percent Bar/Column chart Overlap-workaround
@@ -1564,7 +1564,7 @@ void ChartExport::exportLineChart( const Reference< chart2::XChartType >& xChart
     std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
     for (auto & splitDataSeries : aSplitDataSeries)
     {
-        if (splitDataSeries.getLength() == 0)
+        if (!splitDataSeries.hasElements())
             continue;
 
         sal_Int32 nTypeId = XML_lineChart;
@@ -1686,7 +1686,7 @@ void ChartExport::exportScatterChart( const Reference< chart2::XChartType >& xCh
     bool bExported = false;
     for (auto & splitDataSeries : aSplitDataSeries)
     {
-        if (splitDataSeries.getLength() == 0)
+        if (!splitDataSeries.hasElements())
             continue;
 
         bExported = true;
@@ -2953,7 +2953,7 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
         pFS->endElement(FSNS(XML_c, XML_spPr));
     }
 
-    if (aCustomLabelFields.getLength() > 0)
+    if (aCustomLabelFields.hasElements())
         writeCustomLabel(pFS, pChartExport, aCustomLabelFields);
 
     if (rLabelParam.mbExport)

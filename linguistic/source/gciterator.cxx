@@ -1093,7 +1093,7 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
             uno::Any aTmp( xNA->getByName( pElementNames[i] ) );
             if (aTmp >>= aImplNames)
             {
-                if (aImplNames.getLength() > 0)
+                if (aImplNames.hasElements())
                 {
                     // only the first entry is used, there should be only one grammar checker per language
                     const OUString aImplName( aImplNames[0] );
@@ -1149,7 +1149,7 @@ void GrammarCheckingIterator::SetServiceList(
 
     LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
     OUString aImplName;
-    if (rSvcImplNames.getLength() > 0)
+    if (rSvcImplNames.hasElements())
         aImplName = rSvcImplNames[0];   // there is only one grammar checker per language
 
     if (!LinguIsUnspecified(nLanguage) && nLanguage != LANGUAGE_DONTKNOW)

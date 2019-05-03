@@ -3235,7 +3235,7 @@ void DrawingML::WriteFill( const Reference< XPropertySet >& xPropSet )
 
 void DrawingML::WriteStyleProperties( sal_Int32 nTokenId, const Sequence< PropertyValue >& aProperties )
 {
-    if( aProperties.getLength() > 0 )
+    if( aProperties.hasElements() )
     {
         OUString sSchemeClr;
         sal_uInt32 nIdx = 0;
@@ -3290,7 +3290,7 @@ void DrawingML::WriteShapeStyle( const Reference< XPropertySet >& xPropSet )
 
 void DrawingML::WriteShapeEffect( const OUString& sName, const Sequence< PropertyValue >& aEffectProps )
 {
-    if( aEffectProps.getLength() == 0 )
+    if( !aEffectProps.hasElements() )
         return;
 
     // assign the proper tag and enable bContainsColor if necessary
@@ -3502,7 +3502,7 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
         }
     }
 
-    if( aEffects.getLength() == 0 )
+    if( !aEffects.hasElements() )
     {
         bool bHasShadow = false;
         if( GetProperty( rXPropSet, "Shadow" ) )
@@ -3615,7 +3615,7 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
             break;
         }
     }
-    if( aEffectProps.getLength() == 0 && aLightRigProps.getLength() == 0 && aShape3DProps.getLength() == 0 )
+    if( !aEffectProps.hasElements() && !aLightRigProps.hasElements() && !aShape3DProps.hasElements() )
         return;
 
     bool bCameraRotationPresent = false;
@@ -3697,7 +3697,7 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
 
     mpFS->startElementNS(XML_a, XML_scene3d);
 
-    if( aEffectProps.getLength() > 0 )
+    if( aEffectProps.hasElements() )
     {
         mpFS->startElementNS( XML_a, XML_camera, xCameraAttrList );
         if( bCameraRotationPresent )
@@ -3712,7 +3712,7 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
         mpFS->singleElementNS(XML_a, XML_camera, XML_prst, "orthographicFront");
     }
 
-    if( aEffectProps.getLength() > 0 )
+    if( aEffectProps.hasElements() )
     {
         mpFS->startElementNS( XML_a, XML_lightRig, xLightAttrList );
         if( bLightRigRotationPresent )
@@ -3729,7 +3729,7 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
 
     mpFS->endElementNS( XML_a, XML_scene3d );
 
-    if( aShape3DProps.getLength() == 0 )
+    if( !aShape3DProps.hasElements() )
         return;
 
     bool bBevelTPresent = false, bBevelBPresent = false;
@@ -3771,7 +3771,7 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
         {
             Sequence< PropertyValue > aBevelProps;
             aShape3DProps[i].Value >>= aBevelProps;
-            if ( aBevelProps.getLength() == 0 )
+            if ( !aBevelProps.hasElements() )
                 continue;
 
             sax_fastparser::FastAttributeList *aBevelAttrList = nullptr;
@@ -3818,7 +3818,7 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
     {
         mpFS->singleElementNS( XML_a, XML_bevelB, xBevelBAttrList );
     }
-    if( aExtrusionColorProps.getLength() > 0 )
+    if( aExtrusionColorProps.hasElements() )
     {
         OUString sSchemeClr;
         ::Color nColor;
@@ -3844,7 +3844,7 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
 
         mpFS->endElementNS( XML_a, XML_extrusionClr );
     }
-    if( aContourColorProps.getLength() > 0 )
+    if( aContourColorProps.hasElements() )
     {
         OUString sSchemeClr;
         ::Color nColor;
