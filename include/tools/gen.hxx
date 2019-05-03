@@ -409,6 +409,8 @@ public:
 
     void                SetEmpty() { nRight = nBottom = RECT_EMPTY; }
     inline bool         IsEmpty() const;
+    bool                IsWidthEmpty() const { return nRight == RECT_EMPTY; }
+    bool                IsHeightEmpty() const { return nBottom == RECT_EMPTY; }
 
     inline bool         operator == ( const tools::Rectangle& rRect ) const;
     inline bool         operator != ( const tools::Rectangle& rRect ) const;
