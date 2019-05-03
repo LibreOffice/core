@@ -394,9 +394,9 @@ namespace vcl
         basegfx::B2DRange b2DRectangleFromRectangle( const ::tools::Rectangle& rRect )
         {
             return basegfx::B2DRange( rRect.Left(),
-                                        rRect.Top(),
-                                        rRect.Right(),
-                                        rRect.Bottom() );
+                                      rRect.Top(),
+                                      rRect.IsWidthEmpty() ? rRect.Left() :rRect.Right(),
+                                      rRect.IsHeightEmpty() ? rRect.Top() : rRect.Bottom() );
         }
 
         geometry::IntegerSize2D integerSize2DFromSize( const Size& rSize )
