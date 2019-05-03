@@ -75,6 +75,7 @@ static const struct {
     { "en_MW",  lcl_DATA_EN },
     { "en_GM",  lcl_DATA_EN },
     { "en_BW",  lcl_DATA_EN },
+    { "en_ZM",  lcl_DATA_EN },
 
     { "es_ES",  lcl_DATA_ES },
     { "es_AR",  lcl_DATA_ES },
