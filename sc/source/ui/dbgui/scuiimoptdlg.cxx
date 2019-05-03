@@ -129,11 +129,13 @@ ScImportOptionsDlg::ScImportOptionsDlg(weld::Window* pParent, bool bAscii,
     {
         m_xDialog->set_help_id(m_xDialog->get_help_id() + "?config=NonTextImport");
         m_xLbCharset->show();
+        m_xTvCharset->hide();
     }
     else
     {
         m_xTvCharset->set_size_request(-1, m_xTvCharset->get_height_rows(6));
         m_xEncGrid->set_vexpand(true);
+        m_xLbCharset->hide();
         m_xTvCharset->show();
     }
 
