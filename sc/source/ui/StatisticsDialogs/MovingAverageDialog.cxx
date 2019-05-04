@@ -75,6 +75,7 @@ ScRange ScMovingAverageDialog::ApplyOutput(ScDocShell* pDocShell)
         output.nextRow();
 
         DataCellIterator aDataCellIterator = pIterator->iterateCells();
+        std::vector<OUString> aFormulas;
 
         for (; aDataCellIterator.hasNext(); aDataCellIterator.next())
         {
@@ -98,14 +99,15 @@ ScRange ScMovingAverageDialog::ApplyOutput(ScDocShell* pDocShell)
             {
                 aTemplate.setTemplate("=AVERAGE(%RANGE%)");
                 aTemplate.applyRange("%RANGE%", ScRange(aIntervalStart, aIntervalEnd));
-                output.writeFormula(aTemplate.getTemplate());
+                aFormulas.push_back(aTemplate.getTemplate());
             }
             else
             {
-                output.writeFormula("=#N/A");
+                aFormulas.push_back("=#N/A");
             }
-            output.nextRow();
         }
+
+        output.writeFormulas(aFormulas);
         output.nextColumn();
     }
     return ScRange(output.mMinimumAddress, output.mMaximumAddress);

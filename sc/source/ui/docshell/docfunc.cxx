@@ -1023,6 +1023,61 @@ bool ScDocFunc::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, boo
     return true;
 }
 
+bool ScDocFunc::SetFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCell*>& rCells, bool bInteraction )
+{
+    const size_t nLength = rCells.size();
+    if (rPos.Row() + nLength - 1 > MAXROW)
+        // out of bound
+        return false;
+
+    ScRange aRange(rPos);
+    aRange.aEnd.IncRow(nLength - 1);
+
+    ScDocShellModificator aModificator( rDocShell );
+    ScDocument& rDoc = rDocShell.GetDocument();
+    bool bUndo = rDoc.IsUndoEnabled();
+
+    std::unique_ptr<sc::UndoSetCells> pUndoObj;
+    if (bUndo)
+    {
+        pUndoObj.reset(new sc::UndoSetCells(&rDocShell, rPos));
+        rDoc.TransferCellValuesTo(rPos, nLength, pUndoObj->GetOldValues());
+    }
+
+    rDoc.SetFormulaCells(rPos, rCells);
+
+    // For performance reasons API calls may disable calculation while
+    // operating and recalculate once when done. If through user interaction
+    // and AutoCalc is disabled, calculate the formula (without its
+    // dependencies) once so the result matches the current document's content.
+    if (bInteraction && !rDoc.GetAutoCalc())
+    {
+        for (auto* pCell : rCells)
+        {
+            // calculate just the cell once and set Dirty again
+            pCell->Interpret();
+            pCell->SetDirtyVar();
+            rDoc.PutInFormulaTree( pCell);
+        }
+    }
+
+    if (bUndo)
+    {
+        pUndoObj->SetNewValues(rCells);
+        SfxUndoManager* pUndoMgr = rDocShell.GetUndoManager();
+        pUndoMgr->AddUndoAction(std::move(pUndoObj));
+    }
+
+    rDocShell.PostPaint(aRange, PaintPartFlags::Grid);
+    aModificator.SetDocumentModified();
+
+    // #103934#; notify editline and cell in edit mode
+    if (!bInteraction)
+        NotifyInputHandler( rPos );
+
+    return true;
+}
+
 void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();

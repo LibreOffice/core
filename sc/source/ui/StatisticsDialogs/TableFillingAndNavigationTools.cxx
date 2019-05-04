@@ -163,6 +163,28 @@ void AddressWalkerWriter::writeFormula(const OUString& aFormula)
             new ScFormulaCell(mpDocument, mCurrentAddress, aFormula, meGrammar), true);
 }
 
+void AddressWalkerWriter::writeFormulas(const std::vector<OUString>& rFormulas)
+{
+    size_t nLength = rFormulas.size();
+    if (!nLength)
+        return;
+
+    const size_t nMaxLen = MAXROW - mCurrentAddress.Row() + 1;
+    // If not done already, trim the length to fit.
+    if (nLength > nMaxLen)
+        nLength = nMaxLen;
+
+    std::vector<ScFormulaCell*> aFormulaCells(nLength);
+    ScAddress aAddr(mCurrentAddress);
+    for (size_t nIdx = 0; nIdx < nLength; ++nIdx)
+    {
+        aFormulaCells[nIdx] = new ScFormulaCell(mpDocument, aAddr, rFormulas[nIdx], meGrammar);
+        aAddr.IncRow(1);
+    }
+
+    mpDocShell->GetDocFunc().SetFormulaCells(mCurrentAddress, aFormulaCells, true);
+}
+
 void AddressWalkerWriter::writeMatrixFormula(const OUString& aFormula, SCCOL nCols, SCROW nRows)
 {
     ScRange aRange;
