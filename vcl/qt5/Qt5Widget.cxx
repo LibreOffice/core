@@ -487,7 +487,7 @@ void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
     aInputEvent.mpTextAttr = nullptr;
     aInputEvent.mnCursorFlags = 0;
 
-    if (!pEvent->commitString().isEmpty())
+    if (!pEvent->commitString().isNull())
     {
         vcl::DeletionListener aDel(m_pFrame);
         aInputEvent.maText = toOUString(pEvent->commitString());
