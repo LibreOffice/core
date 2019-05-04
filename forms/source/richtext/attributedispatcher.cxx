@@ -89,7 +89,7 @@ namespace frm
         checkDisposed();
 
         OSL_ENSURE( _rURL.Complete == getFeatureURL().Complete, "OAttributeDispatcher::dispatch: invalid URL!" );
-        SAL_WARN_IF( _rArguments.getLength(), "forms.richtext",
+        SAL_WARN_IF( _rArguments.hasElements(), "forms.richtext",
                 "OAttributeDispatcher::dispatch: found arguments, but can't handle arguments at all"
                 " (URL: " << _rURL.Complete << ")");
 

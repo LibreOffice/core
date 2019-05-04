@@ -652,7 +652,7 @@ void RemoteFilesDialog::EnableControls()
 
                         UrlRecord aURLEntries = m_xMasterPasswd->find( sUrl, Reference< XInteractionHandler>() );
 
-                        if( aURLEntries.UserList.getLength() )
+                        if( aURLEntries.UserList.hasElements() )
                         {
                             m_pAddMenu->EnableItem( "change_password" );
                         }
@@ -872,7 +872,7 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, void )
 
                         UrlRecord aURLEntries = m_xMasterPasswd->find( sUrl, xInteractionHandler );
 
-                        if( aURLEntries.Url == sUrl && aURLEntries.UserList.getLength() )
+                        if( aURLEntries.Url == sUrl && aURLEntries.UserList.hasElements() )
                         {
                             OUString sUserName = aURLEntries.UserList[0].UserName;
 
@@ -914,7 +914,7 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, void )
 
                     UrlRecord aURLEntries = m_xMasterPasswd->find( sUrl, xInteractionHandler );
 
-                    if( aURLEntries.Url == sUrl && aURLEntries.UserList.getLength() )
+                    if( aURLEntries.Url == sUrl && aURLEntries.UserList.hasElements() )
                     {
                         OUString sUserName = aURLEntries.UserList[0].UserName;
 

@@ -468,7 +468,7 @@ namespace pcr
                 Sequence< Property > aProperties;
                 if ( xPSI.is() )
                     aProperties = xPSI->getProperties();
-                DBG_ASSERT( aProperties.getLength(), "GenericPropertyHandler::getSupportedProperties: no properties!" );
+                DBG_ASSERT( aProperties.hasElements(), "GenericPropertyHandler::getSupportedProperties: no properties!" );
 
                 for ( auto const & property : aProperties )
                 {

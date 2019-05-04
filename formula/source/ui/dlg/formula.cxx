@@ -989,7 +989,7 @@ OUString FormulaDlg_Impl::RepairFormula(const OUString& aFormula)
     {
         UpdateTokenArray(aFormula);
 
-        if ( m_aTokenList.getLength() )
+        if ( m_aTokenList.hasElements() )
         {
             const table::CellAddress aRefPos(m_pHelper->getReferencePosition());
             const OUString sFormula( m_pHelper->getFormulaParser()->printFormula( m_aTokenList, aRefPos));

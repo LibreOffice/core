@@ -69,7 +69,7 @@ StatusIndicatorFactory::~StatusIndicatorFactory()
 
 void SAL_CALL StatusIndicatorFactory::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
 {
-    if (lArguments.getLength() > 0) {
+    if (lArguments.hasElements()) {
         osl::MutexGuard g(m_mutex);
 
         css::uno::Reference< css::frame::XFrame > xTmpFrame;

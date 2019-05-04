@@ -194,8 +194,8 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                     // catch all other exceptions to allow
                     // querying the system dictionary in the next line
                 }
-                if (conversions.getLength() > 0) {
-                    if (offset.getLength() > 0) {
+                if (conversions.hasElements()) {
+                    if (offset.hasElements()) {
                         if (word.getLength() != conversions[0].getLength())
                             one2one=false;
                         while (current < conversions[0].getLength()) {
@@ -230,7 +230,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                         else  // Simplified/Traditionary conversion, forwards search for next word
                             current = entry[current] + word.getLength() + 1;
                         sal_Int32 start=current;
-                        if (offset.getLength() > 0) {
+                        if (offset.hasElements()) {
                             if (word.getLength() != OUString(&wordData[current]).getLength())
                                 one2one=false;
                             sal_Int32 convertedLength=OUString(&wordData[current]).getLength();
@@ -251,14 +251,14 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
             }
         }
         if (!found) {
-            if (offset.getLength() > 0)
+            if (offset.hasElements())
                 offset[count]=nStartPos+currPos;
             newStr[count++] =
                 getOneCharConversion(aText[nStartPos+currPos], charData, charIndex);
             currPos++;
         }
     }
-    if (offset.getLength() > 0)
+    if (offset.hasElements())
         offset.realloc(one2one ? 0 : count);
     OUString aRet(newStr.get(), count);
     return aRet;

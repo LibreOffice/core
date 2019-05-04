@@ -1760,7 +1760,7 @@ sal_Bool SAL_CALL OCommonEmbeddedObject::isStored()
     if (!xNA.is())
         return false;
 
-    return xNA->getElementNames().getLength() > 0;
+    return xNA->getElementNames().hasElements();
 }
 
 

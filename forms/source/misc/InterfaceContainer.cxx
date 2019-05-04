@@ -388,7 +388,7 @@ void OInterfaceContainer::transformEvents()
             // get the script events for this object
             aChildEvents = m_xEventAttacher->getScriptEvents( i );
 
-            if ( aChildEvents.getLength() )
+            if ( aChildEvents.hasElements() )
             {
                 // do the transformation
                 ::std::for_each( aChildEvents.begin(), aChildEvents.end(), TransformEventTo52Format() );

@@ -71,7 +71,7 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
     /* we don't get FilterData if we are exporting directly
        to pdf, but we have to use the last user settings (especially for the CompressMode) */
-    if ( !aFilterData.getLength() )
+    if ( !aFilterData.hasElements() )
     {
         FilterConfigItem aCfgItem( "Office.Common/Filter/PDF/Export/" );
         aCfgItem.ReadBool(  "UseLosslessCompression", false );

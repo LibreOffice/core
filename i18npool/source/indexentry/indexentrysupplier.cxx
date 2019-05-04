@@ -165,7 +165,7 @@ OUString SAL_CALL IndexEntrySupplier::getIndexFollowPageWord( sal_Bool bMorePage
     Sequence< OUString > aFollowPageWords = LocaleDataImpl::get()->getFollowPageWords(rLocale);
 
     return (bMorePages && aFollowPageWords.getLength() > 1) ?
-        aFollowPageWords[1] : (aFollowPageWords.getLength() > 0 ?
+        aFollowPageWords[1] : (aFollowPageWords.hasElements() ?
                 aFollowPageWords[0] : OUString());
 }
 

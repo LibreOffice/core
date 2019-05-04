@@ -113,7 +113,7 @@ namespace pcr
     void SAL_CALL ObjectInspectorModel::initialize( const Sequence< Any >& _arguments )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        if ( m_aFactories.getLength() )
+        if ( m_aFactories.hasElements() )
             throw AlreadyInitializedException();
 
         StlSyntaxSequence< Any > arguments( _arguments );
@@ -185,14 +185,14 @@ namespace pcr
 
     void ObjectInspectorModel::createWithHandlerFactories( const Sequence< Any >& _rFactories )
     {
-        impl_verifyArgument_throw( _rFactories.getLength() > 0, 1 );
+        impl_verifyArgument_throw( _rFactories.hasElements(), 1 );
         m_aFactories = _rFactories;
     }
 
 
     void ObjectInspectorModel::createWithHandlerFactoriesAndHelpSection( const Sequence< Any >& _rFactories, sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines )
     {
-        impl_verifyArgument_throw( _rFactories.getLength() > 0, 1 );
+        impl_verifyArgument_throw( _rFactories.hasElements(), 1 );
         impl_verifyArgument_throw( _nMinHelpTextLines >= 1, 2 );
         impl_verifyArgument_throw( _nMaxHelpTextLines >= 1, 3 );
         impl_verifyArgument_throw( _nMinHelpTextLines <= _nMaxHelpTextLines, 2 );

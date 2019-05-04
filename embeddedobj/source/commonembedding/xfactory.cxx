@@ -115,7 +115,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     if (!aObject.hasElements() && aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII)
         aObject = m_aConfigHelper.GetObjectPropsByMediaType(MIMETYPE_VND_SUN_XML_BASE_ASCII);
 
-    if ( !aObject.getLength() )
+    if ( !aObject.hasElements() )
         throw io::IOException(); // unexpected mimetype of the storage
 
     xResult.set(static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
@@ -164,7 +164,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         throw io::IOException(); // TODO:
     }
     uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByFilter( aFilterName );
-    if ( !aObject.getLength() )
+    if ( !aObject.hasElements() )
         throw io::IOException(); // unexpected mimetype of the storage
 
 
@@ -204,7 +204,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                             4 );
 
     uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
-    if ( !aObject.getLength() )
+    if ( !aObject.hasElements() )
         throw io::IOException(); // unexpected mimetype of the storage
 
     xResult.set( static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
@@ -245,7 +245,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                             2 );
 
     uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
-    if ( !aObject.getLength() )
+    if ( !aObject.hasElements() )
         throw io::IOException(); // unexpected mimetype of the storage
 
     uno::Sequence< beans::PropertyValue > aTempMedDescr( lArguments );
@@ -302,7 +302,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         throw io::IOException(); // TODO:
     }
     uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByFilter( aFilterName );
-    if ( !aObject.getLength() )
+    if ( !aObject.hasElements() )
         throw io::IOException(); // unexpected mimetype of the storage
 
 
@@ -350,7 +350,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                         3 );
 
     uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
-    if ( !aObject.getLength() )
+    if ( !aObject.hasElements() )
         throw io::IOException(); // unexpected mimetype of the storage
 
     OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, aObject );
@@ -415,7 +415,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::crea
             const uno::Sequence< beans::PropertyValue >& /*lObjArgs*/ )
 {
     uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
-    if ( !aObject.getLength() )
+    if ( !aObject.hasElements() )
         throw io::IOException(); // unexpected mimetype of the storage
 
     uno::Reference< uno::XInterface > xResult(

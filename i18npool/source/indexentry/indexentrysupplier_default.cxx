@@ -257,9 +257,9 @@ void Index::init(const lang::Locale &rLocale, const OUString& algorithm)
 
     Sequence< UnicodeScript > scriptList = LocaleDataImpl::get()->getUnicodeScripts( rLocale );
 
-    if (scriptList.getLength() == 0) {
+    if (!scriptList.hasElements()) {
         scriptList = LocaleDataImpl::get()->getUnicodeScripts(LOCALE_EN);
-        if (scriptList.getLength() == 0)
+        if (!scriptList.hasElements())
             throw RuntimeException();
     }
 

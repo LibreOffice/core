@@ -301,11 +301,11 @@ void PDFExportStreamDoc::write( const Reference< XOutputStream >& xStream )
     Reference< css::frame::XStorable > xStore( m_xSrcDoc, UNO_QUERY );
     if( xStore.is() )
     {
-        Sequence< beans::PropertyValue > aArgs( 2 + ((m_aPreparedPassword.getLength() > 0) ? 1 : 0) );
+        Sequence< beans::PropertyValue > aArgs( 2 + (m_aPreparedPassword.hasElements() ? 1 : 0) );
         aArgs.getArray()[0].Name = "FilterName";
         aArgs.getArray()[1].Name = "OutputStream";
         aArgs.getArray()[1].Value <<= xStream;
-        if( m_aPreparedPassword.getLength() )
+        if( m_aPreparedPassword.hasElements() )
         {
             aArgs.getArray()[2].Name = "EncryptionData";
             aArgs.getArray()[2].Value <<= m_aPreparedPassword;
@@ -740,7 +740,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 aContext.Encryption.CanExtractForAccessibility  = mbCanExtractForAccessibility;
                 if( mbEncrypt && ! xEnc.is() )
                     xEnc = vcl::PDFWriter::InitEncryption( aPermissionPassword, aOpenPassword );
-                if( mbEncrypt && !aPermissionPassword.isEmpty() && ! aPreparedPermissionPassword.getLength() )
+                if( mbEncrypt && !aPermissionPassword.isEmpty() && ! aPreparedPermissionPassword.hasElements() )
                     aPreparedPermissionPassword = comphelper::OStorageHelper::CreatePackageEncryptionData( aPermissionPassword );
             }
             // after this point we don't need the legacy clear passwords anymore

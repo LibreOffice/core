@@ -1254,7 +1254,7 @@ void ToolBarManager::RequestImages()
     while ( pIter != pEnd )
     {
         Image aImage;
-        if ( aDocGraphicSeq.getLength() > 0 )
+        if ( aDocGraphicSeq.hasElements() )
             aImage = Image( aDocGraphicSeq[i] );
         if ( !aImage )
         {

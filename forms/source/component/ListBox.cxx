@@ -1133,7 +1133,7 @@ namespace frm
 
         Sequence< sal_Int16 > aSelectedIndices;
         OSL_VERIFY( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) >>= aSelectedIndices );
-        if ( !aSelectedIndices.getLength() )
+        if ( !aSelectedIndices.hasElements() )
             // nothing selected at all
             return s_aEmptyValue;
 
@@ -1276,7 +1276,7 @@ namespace frm
     Any OListBoxModel::getDefaultForReset() const
     {
         Any aValue;
-        if (m_aDefaultSelectSeq.getLength())
+        if (m_aDefaultSelectSeq.hasElements())
             aValue <<= m_aDefaultSelectSeq;
         else if (m_nNULLPos != -1)  // bound Listbox
         {
@@ -1755,7 +1755,7 @@ namespace frm
             }
             else
             {
-                if ( m_aDefaultSelectSeq.getLength() )
+                if ( m_aDefaultSelectSeq.hasElements() )
                     setControlValue( makeAny( m_aDefaultSelectSeq ), eOther );
             }
         }

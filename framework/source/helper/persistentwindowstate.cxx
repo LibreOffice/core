@@ -50,7 +50,7 @@ void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< css::u
 {
     // check arguments
     css::uno::Reference< css::frame::XFrame > xFrame;
-    if (lArguments.getLength() < 1)
+    if (!lArguments.hasElements())
         throw css::lang::IllegalArgumentException(
                 "Empty argument list!",
                 static_cast< ::cppu::OWeakObject* >(this),

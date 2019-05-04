@@ -1233,7 +1233,7 @@ void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
     {
         uno::Sequence< OUString > aToolbarNames = xPersistentWindowState->getElementNames();
 
-        if ( aToolbarNames.getLength() > 0 )
+        if ( aToolbarNames.hasElements() )
         {
             OUString aElementType;
             OUString aElementName;

@@ -225,7 +225,7 @@ namespace pcr
                 {
                     xStringResourceResolver.set( _xComponent->getPropertyValue( "ResourceResolver" ),UNO_QUERY);
                     if( xStringResourceResolver.is() &&
-                        xStringResourceResolver->getLocales().getLength() > 0 )
+                        xStringResourceResolver->getLocales().hasElements() )
                     {
                         xRet = xStringResourceResolver;
                     }
@@ -1805,7 +1805,7 @@ namespace pcr
                     Any aListSourceValue( impl_getPropertyValue_throw( PROPERTY_LISTSOURCE ) );
                     if ( aListSourceValue >>= aListSource )
                     {
-                        if ( aListSource.getLength() )
+                        if ( aListSource.hasElements() )
                             sListSource = aListSource[0];
                     }
                     else
@@ -1887,7 +1887,7 @@ namespace pcr
             {
                 Sequence< OUString > aEntries;
                 impl_getPropertyValue_throw( PROPERTY_STRINGITEMLIST ) >>= aEntries;
-                bool isEnabled = aEntries.getLength() != 0;
+                bool isEnabled = aEntries.hasElements();
 
                 if ( ( m_nClassId == FormComponentType::LISTBOX ) && ( m_eComponentClass == eFormControl ) )
                 {
@@ -3104,7 +3104,7 @@ namespace pcr
             if ( aValue >>= aValueList )
             {
                 m_bPropertyValueIsList = true;
-                if ( aValueList.getLength() )
+                if ( aValueList.hasElements() )
                     sValue = aValueList[0];
                 return sValue;
             }

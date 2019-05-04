@@ -234,7 +234,7 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
     OUString aSMgr("com.sun.star.frame.SessionManagerClient");
     if ( (args.getLength() == 1) && (args[0] >>= m_bAllowUserInteractionOnQuit) )
        ;// do nothing
-    else if (args.getLength() > 0)
+    else if (args.hasElements())
     {
         NamedValue v;
         for (int i = 0; i < args.getLength(); i++)

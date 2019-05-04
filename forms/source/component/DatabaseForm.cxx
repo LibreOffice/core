@@ -1978,7 +1978,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
             if ( xParentColSupp.is() )
                 xParentCols = xParentColSupp->getColumns();
 
-            if ( xParentCols.is() && xParentCols->hasElements() && m_aMasterFields.getLength() )
+            if ( xParentCols.is() && xParentCols->hasElements() && m_aMasterFields.hasElements() )
             {
                 try
                 {
@@ -2211,7 +2211,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const css::a
                 SolarMutexGuard aGuard;
                 aData = GetDataMultiPartEncoded(Control, MouseEvt, aContentType);
             }
-            if (!aData.getLength())
+            if (!aData.hasElements())
                 return;
 
             Sequence<PropertyValue> aArgs(3);
