@@ -17,7 +17,7 @@
 #include <vector>
 #include <memory>
 
-extern sal_Int32 rStyleIdx; // Holds index of the <extlst> <cfRule> style (Will be reseted finalize import)
+extern sal_Int32 rStyleIdx; // Holds index of the <extlst> <cfRule> style (Will be reset by finalize import)
 
 struct ScDataBarFormatData;
 namespace oox { class AttributeList; }
