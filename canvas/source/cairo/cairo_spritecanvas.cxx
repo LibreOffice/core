@@ -54,7 +54,7 @@ namespace cairocanvas
         SAL_INFO("canvas.cairo", "CairoSpriteCanvas created " << this);
 
         // #i64742# Only call initialize when not in probe mode
-        if( maArguments.getLength() == 0 )
+        if( !maArguments.hasElements() )
             return;
 
         /* maArguments:

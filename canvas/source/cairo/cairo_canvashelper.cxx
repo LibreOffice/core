@@ -677,7 +677,7 @@ namespace cairocanvas
                                       rendering::FillRule eFillrule )
     {
         if( pTextures )
-            ENSURE_ARG_OR_THROW( pTextures->getLength(),
+            ENSURE_ARG_OR_THROW( pTextures->hasElements(),
                                  "CanvasHelper::fillTexturedPolyPolygon: empty texture sequence");
 
         bool bOpToDo = false;
@@ -960,7 +960,7 @@ namespace cairocanvas
             //tdf#103026 If the w scaling is 0, then all dashes become zero so
             //cairo will set the cairo_t status to CAIRO_STATUS_INVALID_DASH
             //and no further drawing will occur
-            if (strokeAttributes.DashArray.getLength() > 0 && w > 0.0)
+            if (strokeAttributes.DashArray.hasElements() && w > 0.0)
             {
                 auto aDashArray(comphelper::sequenceToContainer<std::vector<double>>(strokeAttributes.DashArray));
                 for (auto& rDash : aDashArray)

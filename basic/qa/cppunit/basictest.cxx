@@ -80,7 +80,7 @@ SbxVariableRef MacroSnippet::Run( const css::uno::Sequence< css::uno::Any >& rAr
     SbMethod* pMeth = mpMod.is() ? static_cast<SbMethod*>(mpMod->Find( "doUnitTest",  SbxClassType::Method )) : nullptr;
     if ( pMeth )
     {
-        if ( rArgs.getLength() )
+        if ( rArgs.hasElements() )
         {
             SbxArrayRef aArgs = new SbxArray;
             for ( int i=0; i < rArgs.getLength(); ++i )

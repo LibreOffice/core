@@ -571,7 +571,7 @@ namespace vclcanvas
     {
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
                          "CanvasHelper::fillPolyPolygon(): polygon is NULL");
-        ENSURE_ARG_OR_THROW( textures.getLength(),
+        ENSURE_ARG_OR_THROW( textures.hasElements(),
                          "CanvasHelper::fillTexturedPolyPolygon: empty texture sequence");
 
         if( mpOutDevProvider )
@@ -591,7 +591,7 @@ namespace vclcanvas
                 ::canvas::ParametricPolyPolygon* pGradient =
                       dynamic_cast< ::canvas::ParametricPolyPolygon* >( textures[0].Gradient.get() );
 
-                if( pGradient && pGradient->getValues().maColors.getLength() )
+                if( pGradient && pGradient->getValues().maColors.hasElements() )
                 {
                     // copy state from Gradient polypoly locally
                     // (given object might change!)

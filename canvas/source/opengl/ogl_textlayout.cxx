@@ -88,7 +88,7 @@ namespace oglcanvas
         const rendering::FontRequest& rFontRequest( mpFont->getFontRequest() );
         const double nFontSize( std::max( rFontRequest.CellSize,
                                             rFontRequest.ReferenceAdvancement ) );
-        if( maLogicalAdvancements.getLength() )
+        if( maLogicalAdvancements.hasElements() )
         {
             return geometry::RealRectangle2D( 0, -nFontSize/2,
                                               maLogicalAdvancements[ maLogicalAdvancements.getLength()-1 ],

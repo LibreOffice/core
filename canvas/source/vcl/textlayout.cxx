@@ -234,7 +234,7 @@ namespace vclcanvas
         const sal_Int32 nAboveBaseline( -aMetric.GetAscent() );
         const sal_Int32 nBelowBaseline( aMetric.GetDescent() );
 
-        if( maLogicalAdvancements.getLength() )
+        if( maLogicalAdvancements.hasElements() )
         {
             return geometry::RealRectangle2D( 0, nAboveBaseline,
                                               maLogicalAdvancements[ maLogicalAdvancements.getLength()-1 ],
@@ -330,7 +330,7 @@ namespace vclcanvas
 
         setupLayoutMode( rOutDev, mnTextDirection );
 
-        if( maLogicalAdvancements.getLength() )
+        if( maLogicalAdvancements.hasElements() )
         {
             // TODO(P2): cache that
             std::unique_ptr< long []> aOffsets(new long[maLogicalAdvancements.getLength()]);

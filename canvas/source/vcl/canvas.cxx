@@ -74,7 +74,7 @@ namespace vclcanvas
     void Canvas::initialize()
     {
         // #i64742# Only perform initialization when not in probe mode
-        if( maArguments.getLength() == 0 )
+        if( !maArguments.hasElements() )
             return;
 
         /* maArguments:

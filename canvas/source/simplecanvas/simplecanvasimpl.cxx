@@ -142,7 +142,7 @@ namespace
             uno::Reference<rendering::XCanvas> xRet;
 
             // can't do much without an XCanvas, can't we?
-            if( rArgs.getLength() < 1 )
+            if( !rArgs.hasElements() )
                 throw lang::IllegalArgumentException();
 
             xRet.set( rArgs[0], uno::UNO_QUERY );

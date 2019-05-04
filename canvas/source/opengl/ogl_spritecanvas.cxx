@@ -43,7 +43,7 @@ namespace oglcanvas
     void SpriteCanvas::initialize()
     {
         // Only call initialize when not in probe mode
-        if( maArguments.getLength() == 0 )
+        if( !maArguments.hasElements() )
             return;
 
         SAL_INFO("canvas.ogl", "SpriteCanvas::initialize called" );

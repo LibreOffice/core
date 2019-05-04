@@ -51,7 +51,7 @@ namespace cairocanvas
     void Canvas::initialize()
     {
         // #i64742# Only perform initialization when not in probe mode
-        if( maArguments.getLength() == 0 )
+        if( !maArguments.hasElements() )
             return;
 
         // tdf#93870 - force VCL canvas in OpenGL mode for now.

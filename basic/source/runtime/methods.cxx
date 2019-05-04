@@ -703,8 +703,7 @@ void SbRtl_RmDir(StarBASIC *, SbxArray & rPar, bool)
                     if( bCompatibility )
                     {
                         Sequence< OUString > aContent = xSFI->getFolderContents( aPath, true );
-                        sal_Int32 nCount = aContent.getLength();
-                        if( nCount > 0 )
+                        if( aContent.hasElements() )
                         {
                             StarBASIC::Error( ERRCODE_BASIC_ACCESS_ERROR );
                             return;
@@ -2704,7 +2703,7 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
                 }
 
 
-                if (rRTLData.aDirSeq.getLength() > 0)
+                if (rRTLData.aDirSeq.hasElements())
                 {
                     bool bFolderFlag = bool(rRTLData.nDirFlags & SbAttributes::DIRECTORY);
 
@@ -3760,7 +3759,7 @@ static OUString getObjectTypeName( SbxVariable* pVar )
                 {
                     // is this a VBA object ?
                     Sequence< OUString > sServices = xServInfo->getSupportedServiceNames();
-                    if ( sServices.getLength() )
+                    if ( sServices.hasElements() )
                     {
                         sRet = sServices[ 0 ];
                     }
