@@ -4147,7 +4147,7 @@ static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindo
             aArgs[1].Name == "Data" && (aArgs[1].Value >>= aData);
         }
 
-        if (!aMimeType.isEmpty() && aData.getLength() > 0)
+        if (!aMimeType.isEmpty() && aData.hasElements())
         {
             uno::Reference<datatransfer::XTransferable> xTransferable(new LOKTransferable(aMimeType, aData));
             uno::Reference<datatransfer::clipboard::XClipboard> xClipboard(new LOKClipboard);

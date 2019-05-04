@@ -815,7 +815,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
 
     // create sql string and set column types
     Sequence< OUString> aDestColumnNames = xDestColsSup->getColumns()->getElementNames();
-    if ( aDestColumnNames.getLength() == 0 )
+    if ( !aDestColumnNames.hasElements() )
     {
         return Reference< XPreparedStatement > ();
     }

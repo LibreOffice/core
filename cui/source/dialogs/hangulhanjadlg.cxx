@@ -1192,7 +1192,7 @@ namespace svx
                                                         _rOrg.getLength(),
                                                         ConversionDirection_FROM_LEFT,
                                                         css::i18n::TextConversionOption::NONE );
-                    bRet = _rEntries.getLength() > 0;
+                    bRet = _rEntries.hasElements();
                 }
                 catch( const IllegalArgumentException& )
                 {

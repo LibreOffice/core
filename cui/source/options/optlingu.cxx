@@ -649,7 +649,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
 
         const Sequence< Locale > aLocales( aInfo.xSpell->getLocales() );
         //! suppress display of entries with no supported languages (see feature 110994)
-        if (aLocales.getLength())
+        if (aLocales.hasElements())
         {
             lcl_MergeLocales( aAllServiceLocales, aLocales );
             lcl_MergeDisplayArray( *this, aInfo );
@@ -673,7 +673,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
 
         const Sequence< Locale > aLocales( aInfo.xGrammar->getLocales() );
         //! suppress display of entries with no supported languages (see feature 110994)
-        if (aLocales.getLength())
+        if (aLocales.hasElements())
         {
             lcl_MergeLocales( aAllServiceLocales, aLocales );
             lcl_MergeDisplayArray( *this, aInfo );
@@ -696,7 +696,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
 
         const Sequence< Locale > aLocales( aInfo.xHyph->getLocales() );
         //! suppress display of entries with no supported languages (see feature 110994)
-        if (aLocales.getLength())
+        if (aLocales.hasElements())
         {
             lcl_MergeLocales( aAllServiceLocales, aLocales );
             lcl_MergeDisplayArray( *this, aInfo );
@@ -719,7 +719,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
 
         const Sequence< Locale > aLocales( aInfo.xThes->getLocales() );
         //! suppress display of entries with no supported languages (see feature 110994)
-        if (aLocales.getLength())
+        if (aLocales.hasElements())
         {
             lcl_MergeLocales( aAllServiceLocales, aLocales );
             lcl_MergeDisplayArray( *this, aInfo );
@@ -734,22 +734,22 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
 
         aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cSpell, pAllLocales[nLocale]);
         SetChecked( aCfgSvcs );
-        if (aCfgSvcs.getLength())
+        if (aCfgSvcs.hasElements())
             aCfgSpellTable[ nLang ] = aCfgSvcs;
 
         aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cGrammar, pAllLocales[nLocale]);
         SetChecked( aCfgSvcs );
-        if (aCfgSvcs.getLength())
+        if (aCfgSvcs.hasElements())
             aCfgGrammarTable[ nLang ] = aCfgSvcs;
 
         aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cHyph, pAllLocales[nLocale]);
         SetChecked( aCfgSvcs );
-        if (aCfgSvcs.getLength())
+        if (aCfgSvcs.hasElements())
             aCfgHyphTable[ nLang ] = aCfgSvcs;
 
         aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cThes, pAllLocales[nLocale]);
         SetChecked( aCfgSvcs );
-        if (aCfgSvcs.getLength())
+        if (aCfgSvcs.hasElements())
             aCfgThesTable[ nLang ] = aCfgSvcs;
     }
 }

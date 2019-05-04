@@ -1951,7 +1951,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
                         aDescriptor[DataAccessDescriptorProperty::CommandType]  =   xProp->getPropertyValue(PROPERTY_COMMAND_TYPE);
                         aDescriptor[DataAccessDescriptorProperty::Connection]   =   xProp->getPropertyValue(PROPERTY_ACTIVE_CONNECTION);
                         aDescriptor[DataAccessDescriptorProperty::Cursor]       <<= xCursorClone;
-                        if ( aSelection.getLength() )
+                        if ( aSelection.hasElements() )
                         {
                             aDescriptor[DataAccessDescriptorProperty::Selection]            <<= aSelection;
                             aDescriptor[DataAccessDescriptorProperty::BookmarkSelection]    <<= false;

@@ -320,7 +320,7 @@ short SvInsertOleDlg::run()
 
 uno::Reference< io::XInputStream > SvInsertOleDlg::GetIconIfIconified( OUString* pGraphicMediaType )
 {
-    if ( m_aIconMetaFile.getLength() )
+    if ( m_aIconMetaFile.hasElements() )
     {
         if ( pGraphicMediaType )
             *pGraphicMediaType = m_aIconMediaType;

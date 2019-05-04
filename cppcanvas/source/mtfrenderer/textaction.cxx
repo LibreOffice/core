@@ -155,7 +155,7 @@ namespace cppcanvas
 
             void initLayoutWidth(double& rLayoutWidth, const uno::Sequence<double>& rOffsets)
             {
-                ENSURE_OR_THROW(rOffsets.getLength(),
+                ENSURE_OR_THROW(rOffsets.hasElements(),
                                   "::cppcanvas::internal::initLayoutWidth(): zero-length array" );
                 rLayoutWidth = *(std::max_element(rOffsets.begin(), rOffsets.end()));
             }
@@ -236,7 +236,7 @@ namespace cppcanvas
                                   const OutDevState&                        rState,
                                   const ::basegfx::B2DHomMatrix*            pTextTransform )
             {
-                ENSURE_OR_THROW( rOffsets.getLength(),
+                ENSURE_OR_THROW( rOffsets.hasElements(),
                                   "::cppcanvas::internal::initArrayAction(): zero-length DX array" );
 
                 const ::basegfx::B2DPoint aLocalStartPoint(

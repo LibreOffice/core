@@ -662,7 +662,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
     typedef std::vector< ColumnDescription > ColumnDescriptions;
     ColumnDescriptions aColumns;
     bool bFirstColumnIsCategory = _bHasCategories;
-    if ( i_aColumnNames.getLength() )
+    if ( i_aColumnNames.hasElements() )
     {
         // some normalizations ...
         uno::Sequence< OUString > aImposedColumnNames( i_aColumnNames );
@@ -683,7 +683,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
         // column. This, this results in a ColumnDescriptions array like <"", "col2", "col3">, where you'd expect
         // <"col1", "col2", "col3">.
         // Fix this with some heuristics:
-        if ( ( aImposedColumnNames.getLength() > 0 ) && ( !aImposedColumnNames[0].isEmpty() ) )
+        if ( aImposedColumnNames.hasElements() && ( !aImposedColumnNames[0].isEmpty() ) )
         {
             const sal_Int32 nAssumedRowSetColumnIndex = _bHasCategories ? 1 : 0;
             if ( nAssumedRowSetColumnIndex < aRowSetColumnNames.getLength() )
@@ -699,7 +699,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
 
             if ( _bHasCategories && aColumns.empty() )
             {
-                if ( aRowSetColumnNames.getLength() )
+                if ( aRowSetColumnNames.hasElements() )
                     aColumns.emplace_back( aRowSetColumnNames[0] );
                 else
                     aColumns.emplace_back( sColumnName );

@@ -167,7 +167,7 @@ namespace dbaui
 
     void OTableSubscriptionPage::implCompleteTablesCheck( const css::uno::Sequence< OUString >& _rTableFilter )
     {
-        if (!_rTableFilter.getLength())
+        if (!_rTableFilter.hasElements())
         {   // no tables visible
             CheckAll(false);
         }

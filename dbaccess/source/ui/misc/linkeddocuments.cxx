@@ -263,7 +263,7 @@ namespace dbaui
             if ( xORB.is() )
             {
                 ::comphelper::NamedValueCollection aCreationArgs( i_rCreationArgs );
-                if ( aClassId.getLength() )
+                if ( aClassId.hasElements() )
                     aCreationArgs.put( "ClassID", aClassId );
                 aCreationArgs.put( OUString(PROPERTY_ACTIVE_CONNECTION), m_xConnection );
 

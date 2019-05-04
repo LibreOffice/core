@@ -288,7 +288,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
         Reference< lang::XSingleComponentFactory > xFac;
         if (usesService >>= xFac) // try via factory
         {
-            xInstance = args.getLength()
+            xInstance = args.hasElements()
                 ? xFac->createInstanceWithArgumentsAndContext( args, this )
                 : xFac->createInstanceWithContext( this );
         }
@@ -298,7 +298,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
             if (usesService >>= xFac2)
             {
                 // try via old XSingleServiceFactory
-                xInstance = args.getLength()
+                xInstance = args.hasElements()
                     ? xFac2->createInstanceWithArguments( args )
                     : xFac2->createInstance();
             }
@@ -308,7 +308,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
                 if ((usesService >>= serviceName) &&
                     !serviceName.isEmpty())
                 {
-                    xInstance = args.getLength()
+                    xInstance = args.hasElements()
                         ? m_xSMgr->createInstanceWithArgumentsAndContext(
                             serviceName, args, this )
                         : m_xSMgr->createInstanceWithContext(

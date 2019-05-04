@@ -600,7 +600,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
             setModified(true);
             break;
         case SID_QUERY_LIMIT:
-            if ( aArgs.getLength() >= 1 && aArgs[0].Name == "DBLimit.Value" )
+            if ( aArgs.hasElements() && aArgs[0].Name == "DBLimit.Value" )
             {
                 aArgs[0].Value >>= m_nLimit;
                 setModified(true);
@@ -767,7 +767,7 @@ void OQueryController::impl_initialize()
     Sequence< PropertyValue > aCurrentQueryDesignProps;
     aCurrentQueryDesignProps = rArguments.getOrDefault( "CurrentQueryDesign", aCurrentQueryDesignProps );
 
-    if ( aCurrentQueryDesignProps.getLength() )
+    if ( aCurrentQueryDesignProps.hasElements() )
     {
         ::comphelper::NamedValueCollection aCurrentQueryDesign( aCurrentQueryDesignProps );
         if ( aCurrentQueryDesign.has( OUString(PROPERTY_GRAPHICAL_DESIGN) ) )
@@ -1678,7 +1678,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
     if ( bValid )
     {
         // load the layoutInformation
-        if ( aLayoutInformation.getLength() )
+        if ( aLayoutInformation.hasElements() )
         {
             try
             {

@@ -122,7 +122,7 @@ static typelib_TypeDescription * createCTD(
     const Reference< XStructTypeDescription > & xType )
 {
     typelib_TypeDescription * pRet = nullptr;
-    if (xType.is() && xType->getTypeParameters().getLength() == 0)
+    if (xType.is() && !xType->getTypeParameters().hasElements())
     {
         typelib_TypeDescription * pBaseType = createCTD(
             access, xType->getBaseType() );
@@ -171,7 +171,7 @@ static typelib_TypeDescription * createCTD(
             // string is held by rMemberNames
             rInit.aBase.pMemberName = pMemberNames[nPos].pData;
 
-            rInit.bParameterizedType = templateMemberTypes.getLength() != 0
+            rInit.bParameterizedType = templateMemberTypes.hasElements()
                 && (templateMemberTypes[nPos]->getTypeClass()
                     == TypeClass_UNKNOWN);
         }

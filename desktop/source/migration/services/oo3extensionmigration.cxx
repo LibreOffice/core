@@ -323,7 +323,7 @@ void OO3ExtensionMigration::initialize( const Sequence< Any >& aArguments )
         else if ( aValue.Name == "ExtensionBlackList" )
         {
             Sequence< OUString > aBlackList;
-            if ( (aValue.Value >>= aBlackList ) && ( aBlackList.getLength() > 0 ))
+            if ( (aValue.Value >>= aBlackList ) && aBlackList.hasElements())
             {
                 m_aBlackList.resize( aBlackList.getLength() );
                 ::comphelper::sequenceToArray< OUString >( &m_aBlackList[0], aBlackList );

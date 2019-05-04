@@ -752,7 +752,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 
     m_sLastFolderURL = xFilePicker->getDisplayDirectory();
     uno::Sequence< OUString > files( xFilePicker->getSelectedFiles() );
-    OSL_ASSERT( files.getLength() > 0 );
+    OSL_ASSERT( files.hasElements() );
     return files;
 }
 
@@ -928,7 +928,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleAddBtn, Button*, void)
 
     uno::Sequence< OUString > aFileList = raiseAddPicker();
 
-    if ( aFileList.getLength() )
+    if ( aFileList.hasElements() )
     {
         m_pManager->installPackage( aFileList[0] );
     }

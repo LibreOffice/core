@@ -203,7 +203,7 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
             dp_misc::DescriptionInfoset infoset(mxContext, info.info);
             uno::Sequence< uno::Reference< xml::dom::XElement > >
                 ds( dp_misc::Dependencies::check( infoset ) );
-            if ( ! ds.getLength() )
+            if ( ! ds.hasElements() )
                 sOnlineVersion = info.version;
         }
 

@@ -392,8 +392,8 @@ namespace cppcanvas
             const OutDevState& rState( rParms.mrStates.getState() );
             if( (!rState.isLineColorSet &&
                  !rState.isFillColorSet) ||
-                (rState.lineColor.getLength() == 0 &&
-                 rState.fillColor.getLength() == 0) )
+                (!rState.lineColor.hasElements() &&
+                 !rState.fillColor.hasElements()) )
             {
                 return false;
             }
@@ -1816,7 +1816,7 @@ namespace cppcanvas
                     case MetaActionType::POINT:
                     {
                         const OutDevState& rState( rStates.getState() );
-                        if( rState.lineColor.getLength() )
+                        if( rState.lineColor.hasElements() )
                         {
                             std::shared_ptr<Action> pPointAction(
                                 internal::PointActionFactory::createPointAction(
@@ -1840,7 +1840,7 @@ namespace cppcanvas
                     case MetaActionType::PIXEL:
                     {
                         const OutDevState& rState( rStates.getState() );
-                        if( rState.lineColor.getLength() )
+                        if( rState.lineColor.hasElements() )
                         {
                             std::shared_ptr<Action> pPointAction(
                                 internal::PointActionFactory::createPointAction(
@@ -1865,7 +1865,7 @@ namespace cppcanvas
                     case MetaActionType::LINE:
                     {
                         const OutDevState& rState( rStates.getState() );
-                        if( rState.lineColor.getLength() )
+                        if( rState.lineColor.hasElements() )
                         {
                             MetaLineAction* pLineAct = static_cast<MetaLineAction*>(pCurrAct);
 
@@ -2051,8 +2051,8 @@ namespace cppcanvas
                     case MetaActionType::POLYLINE:
                     {
                         const OutDevState& rState( rStates.getState() );
-                        if( rState.lineColor.getLength() ||
-                            rState.fillColor.getLength() )
+                        if( rState.lineColor.hasElements() ||
+                            rState.fillColor.hasElements() )
                         {
                             MetaPolyLineAction* pPolyLineAct = static_cast<MetaPolyLineAction*>(pCurrAct);
 
@@ -2398,8 +2398,8 @@ namespace cppcanvas
                     case MetaActionType::Transparent:
                     {
                         const OutDevState& rState( rStates.getState() );
-                        if( rState.lineColor.getLength() ||
-                            rState.fillColor.getLength() )
+                        if( rState.lineColor.hasElements() ||
+                            rState.fillColor.hasElements() )
                         {
                             MetaTransparentAction* pAct = static_cast<MetaTransparentAction*>(pCurrAct);
                             ::basegfx::B2DPolyPolygon aPoly( pAct->GetPolyPolygon().getB2DPolyPolygon() );

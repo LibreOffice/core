@@ -426,7 +426,7 @@ void UpdateDialog::Thread::prepareUpdateData(
 
     out_du.name = getUpdateDisplayString(out_data, infoset.getVersion());
 
-    if (out_du.unsatisfiedDependencies.getLength() == 0)
+    if (!out_du.unsatisfiedDependencies.hasElements())
     {
         out_data.aUpdateInfo = updateInfo;
         out_data.updateVersion = infoset.getVersion();
@@ -440,7 +440,7 @@ bool UpdateDialog::Thread::update(
     dp_gui::UpdateData const & data) const
 {
     bool ret = false;
-    if (du.unsatisfiedDependencies.getLength() == 0)
+    if (!du.unsatisfiedDependencies.hasElements())
     {
         SolarMutexGuard g;
         if (!m_stop) {
@@ -934,7 +934,7 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler, weld::TreeView&, void)
                     break;
 
                 UpdateDialog::DisabledUpdate & data = m_disabledUpdates[ pos ];
-                if (data.unsatisfiedDependencies.getLength() != 0)
+                if (data.unsatisfiedDependencies.hasElements())
                 {
                     // create error string for version mismatch
                     OUString sVersion( "%VERSION" );

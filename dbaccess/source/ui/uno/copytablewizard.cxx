@@ -795,7 +795,7 @@ void CopyTableWizard::impl_extractSourceResultSet_throw( const Reference< XPrope
 
     // sanity checks
     const bool bHasResultSet = m_xSourceResultSet.is();
-    const bool bHasSelection = ( m_aSourceSelection.getLength() != 0 );
+    const bool bHasSelection = m_aSourceSelection.hasElements();
     if ( bHasSelection && !bHasResultSet )
         throw IllegalArgumentException("A result set is needed when specifying a selection to copy.",
                                        // TODO: resource
@@ -896,7 +896,7 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
         // no connection pool installed
         xDriverManager.set( DriverManager::create( m_xContext ), UNO_QUERY_THROW );
 
-    if ( aConnectionInfo.getLength() )
+    if ( aConnectionInfo.hasElements() )
         xConnection.set( xDriverManager->getConnectionWithInfo( sConnectionResource, aConnectionInfo ), UNO_SET_THROW );
     else
         xConnection.set( xDriverManager->getConnection( sConnectionResource ), UNO_SET_THROW );
@@ -1124,7 +1124,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
     Reference< XPreparedStatement > xStatement( ODatabaseExport::createPreparedStatment( xDestMetaData, _rxDestTable, aColumnPositions ), UNO_SET_THROW );
     Reference< XParameters > xStatementParams( xStatement, UNO_QUERY_THROW );
 
-    const bool bSelectedRecordsOnly = m_aSourceSelection.getLength() != 0;
+    const bool bSelectedRecordsOnly = m_aSourceSelection.hasElements();
     const Any* pSelectedRow         = m_aSourceSelection.getConstArray();
     const Any* pSelEnd              = pSelectedRow + m_aSourceSelection.getLength();
 

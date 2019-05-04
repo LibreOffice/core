@@ -183,7 +183,7 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
             m_xRowLocate.set( m_xResultSet, UNO_QUERY );
         }
 
-        if ( m_aSelection.getLength() != 0 )
+        if ( m_aSelection.hasElements() )
         {
             if ( !m_xResultSet.is() )
             {
@@ -192,7 +192,7 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
             }
         }
 
-        if ( m_aSelection.getLength() != 0 )
+        if ( m_aSelection.hasElements() )
         {
             if ( m_bBookmarkSelection && !m_xRowLocate.is() )
             {
@@ -451,7 +451,7 @@ bool ORTFImportExport::Write()
 
         sal_Int32 k=1;
         sal_Int32 kk=0;
-        if ( m_aSelection.getLength() )
+        if ( m_aSelection.hasElements() )
         {
             const Any* pSelIter = m_aSelection.getConstArray();
             const Any* pEnd   = pSelIter + m_aSelection.getLength();
@@ -699,7 +699,7 @@ void OHTMLImportExport::WriteTables()
         Reference<XColumnsSupplier> xColSup(m_xObject,UNO_QUERY);
         xColumns = xColSup->getColumns();
         aNames = xColumns->getElementNames();
-        if ( !aNames.getLength() )
+        if ( !aNames.hasElements() )
         {
             sal_Int32 nCount = m_xResultSetMetaData->getColumnCount();
             aNames.realloc(nCount);

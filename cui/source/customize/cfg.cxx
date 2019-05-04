@@ -2723,7 +2723,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
     {
         name[ 0 ] = elem.first;
         uno::Sequence< uno::Reference< graphic::XGraphic> > graphics = m_xImportedImageManager->getImages( SvxConfigPageHelper::GetImageType(), name );
-        if ( graphics.getLength() > 0 )
+        if ( graphics.hasElements() )
         {
             m_aGraphics.push_back(graphics[0]);
             Image img(graphics[0]);
@@ -2769,7 +2769,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
             // added to the list
         }
 
-        if ( graphics.getLength() > 0 )
+        if ( graphics.hasElements() )
         {
             Image img(graphics[0]);
             if (!img.GetBitmapEx().IsEmpty())

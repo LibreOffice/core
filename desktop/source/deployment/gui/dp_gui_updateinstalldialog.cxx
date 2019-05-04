@@ -355,7 +355,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
             //remember occurring exceptions in case we need to print out error information
             std::vector< std::pair<OUString, cssu::Exception> > vecExceptions;
             cssu::Sequence<OUString> seqDownloadURLs = info.getUpdateDownloadUrls();
-            OSL_ENSURE(seqDownloadURLs.getLength() > 0, "No download URL provided!");
+            OSL_ENSURE(seqDownloadURLs.hasElements(), "No download URL provided!");
             for (sal_Int32 j = 0; j < seqDownloadURLs.getLength(); j++)
             {
                 try

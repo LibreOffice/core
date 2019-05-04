@@ -306,7 +306,7 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
             OUString sInherentTableTypeRestriction( getTableTypeRestriction() );
             if ( !sInherentTableTypeRestriction.isEmpty() )
             {
-                if ( _rTableTypeFilter.getLength() != 0 )
+                if ( _rTableTypeFilter.hasElements() )
                 {
                     const OUString* tableType    = _rTableTypeFilter.getConstArray();
                     const OUString* tableTypeEnd = tableType + _rTableTypeFilter.getLength();
@@ -328,7 +328,7 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
             else
             {
                 // no container-inherent restriction for the table types
-                if ( _rTableTypeFilter.getLength() == 0 )
+                if ( !_rTableTypeFilter.hasElements() )
                 {   // no externally-provided table type filter => use the default filter
                     getAllTableTypeFilter( aTableTypeFilter );
                 }

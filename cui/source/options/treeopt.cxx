@@ -269,7 +269,7 @@ MailMergeCfg_Impl::MailMergeCfg_Impl() :
     Sequence<OUString> aNames { "EMailSupported" };
     const Sequence< Any > aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    if(aValues.getLength() && pValues[0].hasValue())
+    if(aValues.hasElements() && pValues[0].hasValue())
         pValues[0] >>= bIsEmailSupported;
 }
 

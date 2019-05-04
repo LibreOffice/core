@@ -876,7 +876,7 @@ std::vector< MigrationModuleInfo > MigrationImpl::dectectUIChangesForAllModules(
             uno::Reference< embed::XStorage > xMenubar = xModule->openStorageElement(MENUBAR, embed::ElementModes::READ);
             if (xMenubar.is()) {
                 uno::Reference< container::XNameAccess > xNameAccess(xMenubar, uno::UNO_QUERY);
-                if (xNameAccess->getElementNames().getLength() > 0) {
+                if (xNameAccess->getElementNames().hasElements()) {
                     aModuleInfo.sModuleShortName = sModuleShortName;
                     aModuleInfo.bHasMenubar = true;
                 }

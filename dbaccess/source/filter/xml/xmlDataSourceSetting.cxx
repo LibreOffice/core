@@ -133,7 +133,7 @@ void OXMLDataSourceSetting::EndElement()
 {
     if ( !m_aSetting.Name.isEmpty() )
     {
-        if ( m_bIsList && m_aInfoSequence.getLength() )
+        if ( m_bIsList && m_aInfoSequence.hasElements() )
             m_aSetting.Value <<= m_aInfoSequence;
 
         // if our property is of type string, but was empty, ensure that
