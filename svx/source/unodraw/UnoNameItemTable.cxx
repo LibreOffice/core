@@ -159,16 +159,15 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
     bool bFound = false;
 
     if (mpModelPool)
-        for (const SfxPoolItem* pItem : mpModelPool->GetItemSurrogates(mnWhich))
-        {
-            NameOrIndex *pNameOrIndex = const_cast<NameOrIndex*>(static_cast<const NameOrIndex*>(pItem));
-            if (pNameOrIndex && aName == pNameOrIndex->GetName())
+    {
+        NameOrIndex aSample(mnWhich, aName);
+        for (const SfxPoolItem* pNameOrIndex : mpModelPool->FindItemSurrogate(mnWhich, aSample))
+            if (isValid(static_cast<const NameOrIndex*>(pNameOrIndex)))
             {
-                pNameOrIndex->PutValue( aElement, mnMemberId );
+                const_cast<SfxPoolItem*>(pNameOrIndex)->PutValue( aElement, mnMemberId );
                 bFound = true;
-                break;
             }
-        }
+    }
 
     if( !bFound )
         throw container::NoSuchElementException();
@@ -187,20 +186,16 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
 
     OUString aName = SvxUnogetInternalNameForItem(mnWhich, aApiName);
 
-    uno::Any aAny;
-
     if (mpModelPool && !aName.isEmpty())
     {
-        for (const SfxPoolItem* pItem : mpModelPool->GetItemSurrogates(mnWhich))
-        {
-            const NameOrIndex *pNameOrIndex = static_cast<const NameOrIndex*>(pItem);
-
-            if (isValid(pNameOrIndex) && aName == pNameOrIndex->GetName())
+        NameOrIndex aSample(mnWhich, aName);
+        for (const SfxPoolItem* pFindItem : mpModelPool->FindItemSurrogate(mnWhich, aSample))
+            if (isValid(static_cast<const NameOrIndex*>(pFindItem)))
             {
-                pNameOrIndex->QueryValue( aAny, mnMemberId );
+                uno::Any aAny;
+                pFindItem->QueryValue( aAny, mnMemberId );
                 return aAny;
             }
-        }
     }
 
     throw container::NoSuchElementException();
@@ -237,14 +232,13 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
     if (aName.isEmpty())
         return false;
 
-    if (mpModelPool)
-        for (const SfxPoolItem* pItem : mpModelPool->GetItemSurrogates(mnWhich))
-        {
-            const NameOrIndex *pNameOrIndex = static_cast<const NameOrIndex*>(pItem);
-            if (isValid(pNameOrIndex) && aName == pNameOrIndex->GetName())
-                return true;
-        }
+    if (!mpModelPool)
+        return false;
 
+    NameOrIndex aSample(mnWhich, aName);
+    for (const SfxPoolItem* pFindItem : mpModelPool->FindItemSurrogate(mnWhich, aSample))
+        if (isValid(static_cast<const NameOrIndex*>(pFindItem)))
+            return true;
     return false;
 }
 

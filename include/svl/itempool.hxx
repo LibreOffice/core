@@ -171,6 +171,12 @@ public:
 
     sal_uInt32                      GetItemCount2(sal_uInt16 nWhich) const;
     Item2Range                      GetItemSurrogates(sal_uInt16 nWhich) const;
+    /*
+        This is only valid for SfxPoolItem that override IsSortable and operator<.
+        Returns a range of items defined by using operator<.
+        @param rNeedle must be the same type or a supertype of the pool items for nWhich.
+    */
+    std::vector<const SfxPoolItem*> FindItemSurrogate(sal_uInt16 nWhich, SfxPoolItem const & rNeedle) const;
 
     sal_uInt16                      GetFirstWhich() const;
     sal_uInt16                      GetLastWhich() const;
