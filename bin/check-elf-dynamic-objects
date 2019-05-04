@@ -147,7 +147,7 @@ local file="$1"
         ;;
         */libvclplug_gtk3_kde5lo.so)
             if [ "$ENABLE_GTK3_KDE5" = TRUE ]; then
-                whitelist="${whitelist} ${x11whitelist} ${gtk3whitelist}"
+                whitelist="${whitelist} ${x11whitelist} ${gtk3whitelist} ${qt5whitelist} ${kf5whitelist} libxcb.so.1"
             fi
         ;;
         */lo_kde5filepicker)
