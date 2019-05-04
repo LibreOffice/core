@@ -34,6 +34,9 @@
 
 #include <memory>
 
+class Image;
+class QImage;
+
 inline OUString toOUString(const QString& s)
 {
     // QString stores UTF16, just like OUString
@@ -135,5 +138,7 @@ typedef std::unique_ptr<cairo_surface_t, CairoDeleter> UniqueCairoSurface;
 
 sal_uInt16 GetKeyModCode(Qt::KeyboardModifiers eKeyModifiers);
 sal_uInt16 GetMouseModCode(Qt::MouseButtons eButtons);
+
+QImage toQImage(const Image& rImage);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
