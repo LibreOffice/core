@@ -11,6 +11,7 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <cellvalues.hxx>
+#include <formulacell.hxx>
 
 namespace sc {
 
@@ -56,6 +57,11 @@ OUString UndoSetCells::GetComment() const
 }
 
 void UndoSetCells::SetNewValues( const std::vector<double>& rVals )
+{
+    maNewValues.assign(rVals);
+}
+
+void UndoSetCells::SetNewValues( const std::vector<ScFormulaCell*>& rVals )
 {
     maNewValues.assign(rVals);
 }
