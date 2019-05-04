@@ -38,6 +38,7 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
     // basically the same as 'GetTextBoundRect' (in class 'OutputDevice')
     // but with a string as argument.
 {
+    assert(!rText.isEmpty());
     // handle special case first
     if (rText.isEmpty())
     {
@@ -183,6 +184,7 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
     : aTopLeft(0, 0)
     , aSize(rDev.GetTextWidth(rText), rDev.GetTextHeight())
 {
+    assert(!rText.isEmpty());
     const FontMetric  aFM (rDev.GetFontMetric());
     bool              bIsMath  = aFM.GetFamilyName().equalsIgnoreAsciiCase( FONTNAME_MATH );
     bool              bAllowSmaller = bIsMath && !SmIsMathAlpha(rText);

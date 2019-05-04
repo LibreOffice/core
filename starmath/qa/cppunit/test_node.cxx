@@ -72,17 +72,21 @@ void NodeTest::testTdf47813()
 #undef MATRIX
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
     SmFormat aFmt;
+    pNodeA->Prepare(aFmt, *mxDocShell, 0);
     pNodeA->Arrange(*pOutputDevice, aFmt);
+    pNodeC->Prepare(aFmt, *mxDocShell, 0);
     pNodeC->Arrange(*pOutputDevice, aFmt);
+    pNodeL->Prepare(aFmt, *mxDocShell, 0);
     pNodeL->Arrange(*pOutputDevice, aFmt);
+    pNodeR->Prepare(aFmt, *mxDocShell, 0);
     pNodeR->Arrange(*pOutputDevice, aFmt);
     long nWidthA = pNodeA->GetRect().GetWidth();
     long nWidthC = pNodeC->GetRect().GetWidth();
     long nWidthL = pNodeL->GetRect().GetWidth();
     long nWidthR = pNodeR->GetRect().GetWidth();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, nWidthC/static_cast<double>(nWidthA), 0.01);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, nWidthL/static_cast<double>(nWidthA), 0.01);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, nWidthR/static_cast<double>(nWidthA), 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, nWidthL/static_cast<double>(nWidthA), 0.02);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, nWidthR/static_cast<double>(nWidthA), 0.02);
 }
 
 void NodeTest::testTdf52225()

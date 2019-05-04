@@ -2064,6 +2064,7 @@ void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, i
         SetRectHorAlign( RectHorAlign::Left );
 
     maText = GetToken().aText;
+    assert(!maText.isEmpty());
     GetFont() = rFormat.GetFont(GetFontDesc());
 
     if (IsItalic( GetFont() ))
@@ -2402,7 +2403,9 @@ void SmMathSymbolNode::AdaptToY(OutputDevice &rDev, sal_uLong nHeight)
 
     // get denominator of error factor for height
     long nTmpBorderWidth = GetFont().GetBorderWidth();
-    long nDenom = SmRect(aTmpDev, nullptr, GetText(), nTmpBorderWidth).GetHeight();
+    long nDenom = 0;
+    if (!GetText().isEmpty())
+        nDenom = SmRect(aTmpDev, nullptr, GetText(), nTmpBorderWidth).GetHeight();
 
     // scale fontwidth with this error factor
     aFntSize.setHeight( aFntSize.Height() * nHeight );
