@@ -603,7 +603,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
     css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
         unsatisfied(dp_misc::Dependencies::check(description));
 
-    if (unsatisfied.getLength() == 0) {
+    if (!unsatisfied.hasElements()) {
         return true;
     } else {
         OUString msg(

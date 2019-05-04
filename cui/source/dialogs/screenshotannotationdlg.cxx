@@ -357,7 +357,7 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, Button*, void)
         maLastFolderURL = xFilePicker->getDisplayDirectory();
         const uno::Sequence< OUString > files(xFilePicker->getSelectedFiles());
 
-        if (files.getLength())
+        if (files.hasElements())
         {
             OUString aConfirmedName = files[0];
 

@@ -191,7 +191,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             {
                 if(!_rUpdateTableName.isEmpty() && xTables->hasByName(_rUpdateTableName))
                     xTables->getByName(_rUpdateTableName) >>= m_aUpdateTable;
-                else if(xTables->getElementNames().getLength())
+                else if(xTables->getElementNames().hasElements())
                 {
                     aUpdateTableName = xTables->getElementNames()[0];
                     xTables->getByName(aUpdateTableName) >>= m_aUpdateTable;

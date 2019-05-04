@@ -772,7 +772,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     Sequence< Any> aTypeSettings;
     aTypeSettings = aProperties.getOrDefault("TypeInfoSettings",aTypeSettings);
     // here we have a special entry for types from oracle
-    if ( aTypeSettings.getLength() )
+    if ( aTypeSettings.hasElements() )
     {
         aRelevantSettings.insert(PropertyValue("TypeInfoSettings", 0, makeAny(aTypeSettings), PropertyState_DIRECT_VALUE));
     }

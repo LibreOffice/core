@@ -93,7 +93,7 @@ void getOwnUpdateInfos(
     {
         OSL_ASSERT(inout.second.extension.is());
         Sequence<OUString> urls(inout.second.extension->getUpdateInformationURLs());
-        if (urls.getLength())
+        if (urls.hasElements())
         {
             const OUString search_id = dp_misc::getIdentifier(inout.second.extension);
             SAL_INFO( "extensions.update", "Searching update for " << search_id );
@@ -307,7 +307,7 @@ Reference<deployment::XPackage>
 getExtensionWithHighestVersion(
     Sequence<Reference<deployment::XPackage> > const & seqExt)
 {
-    if (seqExt.getLength() == 0)
+    if (!seqExt.hasElements())
         return Reference<deployment::XPackage>();
 
     Reference<deployment::XPackage> greatest;

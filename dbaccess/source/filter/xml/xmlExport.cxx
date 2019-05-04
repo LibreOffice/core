@@ -517,14 +517,14 @@ void ODBExport::exportApplicationConnectionSettings(const TSettingsMap& _aSettin
     Reference<XPropertySet> xProp(getDataSource());
     Sequence< OUString> aValue;
     xProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aValue;
-    if ( aValue.getLength() )
+    if ( aValue.hasElements() )
     {
         SvXMLElementExport aElem2(*this,XML_NAMESPACE_DB, XML_TABLE_FILTER, true, true);
         exportSequence(aValue,XML_TABLE_INCLUDE_FILTER,XML_TABLE_FILTER_PATTERN);
     }
 
     xProp->getPropertyValue(PROPERTY_TABLETYPEFILTER) >>= aValue;
-    if ( aValue.getLength() )
+    if ( aValue.hasElements() )
         exportSequence(aValue,XML_TABLE_TYPE_FILTER,XML_TABLE_TYPE);
 
     exportDataSourceSettings();
@@ -687,7 +687,7 @@ void ODBExport::exportDataSourceSettings()
         {
             Sequence<Any> aSeq;
             aIter->Value >>= aSeq;
-            if ( aSeq.getLength() )
+            if ( aSeq.hasElements() )
                 sTypeName = lcl_implGetPropertyXMLType(aSeq[0].getValueType());
         }
 
@@ -773,7 +773,7 @@ void ODBExport::exportSequence(const Sequence< OUString>& _aValue
                             ,::xmloff::token::XMLTokenEnum _eTokenType)
 {
     Reference<XPropertySet> xProp(getDataSource());
-    if ( _aValue.getLength() )
+    if ( _aValue.hasElements() )
     {
         SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, _eTokenFilter, true, true);
 
@@ -1295,7 +1295,7 @@ void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
             Any aValue = xProp->getPropertyValue(PROPERTY_LAYOUTINFORMATION);
             Sequence< PropertyValue > aPropValues;
             aValue >>= aPropValues;
-            if ( aPropValues.getLength() )
+            if ( aPropValues.hasElements() )
             {
                 aProps.realloc(nLength + 1);
                 aProps[nLength].Name = "layout-settings";

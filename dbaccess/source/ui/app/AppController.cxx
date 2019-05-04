@@ -1038,7 +1038,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 break;
             case SID_DB_APP_PASTE_SPECIAL:
                 {
-                    if ( !aArgs.getLength() )
+                    if ( !aArgs.hasElements() )
                     {
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                         ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(getFrameWeld()));
@@ -2690,7 +2690,7 @@ sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection )
 
     // BEGIN compatibility
     Sequence< NamedValue > aCurrentSelection;
-    if ( (_aSelection >>= aCurrentSelection) && aCurrentSelection.getLength() )
+    if ( (_aSelection >>= aCurrentSelection) && aCurrentSelection.hasElements() )
     {
         ElementType eType = E_NONE;
         const NamedValue* pIter = aCurrentSelection.getConstArray();
@@ -2803,7 +2803,7 @@ Any SAL_CALL OApplicationController::getSelection(  )
     if ( eType != E_NONE )
     {
         getContainer()->describeCurrentSelectionForType( eType, aCurrentSelection );
-        if ( aCurrentSelection.getLength() == 0 )
+        if ( !aCurrentSelection.hasElements() )
         {   // if no objects are selected, add an entry to the sequence which describes the overall category
             // which is selected currently
             aCurrentSelection.realloc(1);

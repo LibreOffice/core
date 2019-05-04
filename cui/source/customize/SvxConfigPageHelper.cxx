@@ -101,7 +101,7 @@ css::uno::Reference< css::graphic::XGraphic > SvxConfigPageHelper::GetGraphic(
             aGraphicSeq =
                 xImageManager->getImages( GetImageType(), aImageCmdSeq );
 
-            if ( aGraphicSeq.getLength() > 0 )
+            if ( aGraphicSeq.hasElements() )
             {
                 result =  aGraphicSeq[0];
             }

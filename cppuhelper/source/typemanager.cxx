@@ -1690,7 +1690,7 @@ Enumeration::nextTypeDescription()
 }
 
 bool Enumeration::matches(css::uno::TypeClass tc) const {
-    if (types_.getLength() == 0) {
+    if (!types_.hasElements()) {
         return true;
     }
     for (sal_Int32 i = 0; i != types_.getLength(); ++i) {

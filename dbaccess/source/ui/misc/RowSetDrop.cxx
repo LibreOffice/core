@@ -105,7 +105,7 @@ bool ORowSetImportExport::Read()
                         [](sal_Int32 n) { return n > 0; }))
         return false;
     bool bContinue = true;
-    if(m_aSelection.getLength())
+    if(m_aSelection.hasElements())
     {
         const Any* pBegin = m_aSelection.getConstArray();
         const Any* pEnd   = pBegin + m_aSelection.getLength();

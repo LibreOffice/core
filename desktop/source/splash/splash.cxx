@@ -251,7 +251,7 @@ void SAL_CALL
 SplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
 {
     osl::MutexGuard  aGuard( _aMutex );
-    if (aArguments.getLength() > 0)
+    if (aArguments.hasElements())
     {
         aArguments[0] >>= _bVisible;
         if (aArguments.getLength() > 1 )

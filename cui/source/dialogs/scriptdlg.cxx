@@ -752,7 +752,7 @@ void SvxScriptOrgDialog::createEntry(weld::TreeIter& rEntry)
         {
             aNewName = aNewStdName + OUString::number(i);
             bool bFound = false;
-            if(childNodes.getLength() > 0 )
+            if(childNodes.hasElements() )
             {
                 OUString nodeName = childNodes[0]->getName();
                 sal_Int32 extnPos = nodeName.lastIndexOf( '.' );

@@ -142,7 +142,7 @@ IMPL_LINK_NOARG(SignSignatureLineDialog, loadImage, weld::Button&, void)
     if (xFilePicker->execute())
     {
         Sequence<OUString> aSelectedFiles = xFilePicker->getSelectedFiles();
-        if (aSelectedFiles.getLength() < 1)
+        if (!aSelectedFiles.hasElements())
             return;
 
         Reference<XGraphicProvider> xProvider = GraphicProvider::create(xContext);

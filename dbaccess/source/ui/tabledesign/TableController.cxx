@@ -1264,7 +1264,7 @@ void OTableController::alterColumns()
         bNeedAppendKey = true;
     }
 
-    if ( bNeedDropKey && xKeyColumns.is() && xKeyColumns->getElementNames().getLength() )
+    if ( bNeedDropKey && xKeyColumns.is() && xKeyColumns->getElementNames().hasElements() )
         dropPrimaryKey();
 
     if ( bNeedAppendKey )

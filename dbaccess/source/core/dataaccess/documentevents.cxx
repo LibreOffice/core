@@ -184,7 +184,7 @@ namespace dbaccess
 
         Any aReturn;
         const Sequence< PropertyValue >& rEventDesc( elementPos->second );
-        if ( rEventDesc.getLength() > 0 )
+        if ( rEventDesc.hasElements() )
             aReturn <<= rEventDesc;
         return aReturn;
     }

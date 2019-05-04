@@ -155,7 +155,7 @@ namespace cppcanvas
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
 
-                if( maFillColor.getLength() )
+                if( maFillColor.hasElements() )
                 {
                     // TODO(E3): Use DBO's finalizer here,
                     // fillPolyPolygon() might throw
@@ -169,7 +169,7 @@ namespace cppcanvas
                     aLocalState.DeviceColor = aTmpColor;
                 }
 
-                if( aLocalState.DeviceColor.getLength() )
+                if( aLocalState.DeviceColor.hasElements() )
                 {
                     rCachedPrimitive = mpCanvas->getUNOCanvas()->drawPolyPolygon( mxPolyPoly,
                                                                                   mpCanvas->getViewState(),

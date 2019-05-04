@@ -946,7 +946,7 @@ void ODBFilter::setPropertyInfo()
     aDataSourceSettings.merge( ::comphelper::NamedValueCollection( aInfo ), true );
 
     aDataSourceSettings >>= aInfo;
-    if ( aInfo.getLength() )
+    if ( aInfo.hasElements() )
     {
         try
         {

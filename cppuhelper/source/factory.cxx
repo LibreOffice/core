@@ -186,7 +186,7 @@ Reference< XInterface > OSingleFactoryHelper::createInstanceWithArgumentsAndCont
     }
     else
     {
-        if ( rArguments.getLength() )
+        if ( rArguments.hasElements() )
         {
             // dispose the here created UNO object before throwing out exception
             // to avoid risk of memory leaks #i113722#
@@ -747,7 +747,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
 Sequence< OUString > ORegistryFactoryHelper::getSupportedServiceNames()
 {
     MutexGuard aGuard( aMutex );
-    if( aServiceNames.getLength() == 0 )
+    if( !aServiceNames.hasElements() )
     {
         // not yet loaded
         try

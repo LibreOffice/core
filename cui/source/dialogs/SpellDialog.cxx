@@ -1612,7 +1612,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
         pAction->SetErrorMove(nOldErrorStart, nOldErrorEnd);
         const SpellErrorAttrib* pOldAttrib = static_cast<const SpellErrorAttrib*>(
                 pTextEngine->FindAttrib( TextPaM(0, nOldErrorStart), TEXTATTR_SPELL_ERROR ));
-        pAction->SetErrorLanguageSelected(pOldAttrib && pOldAttrib->GetErrorDescription().aSuggestions.getLength() &&
+        pAction->SetErrorLanguageSelected(pOldAttrib && pOldAttrib->GetErrorDescription().aSuggestions.hasElements() &&
                 LanguageTag( pOldAttrib->GetErrorDescription().aLocale).getLanguageType() ==
                                         GetSpellDialog()->m_pLanguageLB->GetSelectedLanguage());
         AddUndoAction(std::move(pAction));

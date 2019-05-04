@@ -1153,7 +1153,7 @@ void OCopyTableWizard::appendKey( Reference<XKeysSupplier> const & _rxSup, const
     {
         appendColumns(xColSup,_pVec,true);
         Reference<XNameAccess> xColumns = xColSup->getColumns();
-        if(xColumns.is() && xColumns->getElementNames().getLength())
+        if(xColumns.is() && xColumns->getElementNames().hasElements())
             xAppend->appendByDescriptor(xKey);
     }
 
@@ -1514,7 +1514,7 @@ OUString OCopyTableWizard::createUniqueName(const OUString& _sName)
 {
     OUString sName = _sName;
     Sequence< OUString > aColumnNames( m_rSourceObject.getColumnNames() );
-    if ( aColumnNames.getLength() )
+    if ( aColumnNames.hasElements() )
         sName = ::dbtools::createUniqueName( aColumnNames, sName, false );
     else
     {

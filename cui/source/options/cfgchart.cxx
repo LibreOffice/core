@@ -235,7 +235,7 @@ void SvxChartOptions::ImplCommit()
     uno::Sequence< OUString > aNames = GetPropertyNames();
     uno::Sequence< uno::Any > aValues( aNames.getLength());
 
-    if( aValues.getLength() >= 1 )
+    if( aValues.hasElements() )
     {
         // 1. default colors for series
         // convert list to sequence

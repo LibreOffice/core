@@ -611,7 +611,7 @@ sal_Bool ODatabaseContext::hasElements()
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
 
-    return 0 != getElementNames().getLength();
+    return getElementNames().hasElements();
 }
 
 // css::container::XEnumerationAccess

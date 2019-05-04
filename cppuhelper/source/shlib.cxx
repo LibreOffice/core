@@ -203,7 +203,7 @@ cppuhelper::WrapperConstructorFn mapConstructorFn(
             void *const ctxt = mapTo.mapInterface(
                 context,
                 cppu::UnoType<css::uno::XComponentContext>::get());
-            if (args.getLength() > 0) {
+            if (args.hasElements()) {
                 std::abort(); // TODO map args
             }
             void * instance = nullptr;

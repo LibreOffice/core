@@ -213,7 +213,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             if ( xElements.is() )
                 sPersistentName = ::dbtools::createUniqueName(xElements,sPersistentName);
 
-            const bool bNeedClassID = (0 == aClassID.getLength()) && sURL.isEmpty() ;
+            const bool bNeedClassID = !aClassID.hasElements() && sURL.isEmpty() ;
             if ( xCopyFrom.is() )
             {
                 Sequence<Any> aIni(2);
@@ -265,13 +265,13 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             pElementImpl = aFind->second;
 
         ::rtl::Reference< ODocumentDefinition > pDocDef = new ODocumentDefinition( *this, m_aContext, pElementImpl, m_bFormsContainer );
-        if ( aClassID.getLength() )
+        if ( aClassID.hasElements() )
         {
             pDocDef->initialLoad( aClassID, aCreationArgs, xConnection );
         }
         else
         {
-            OSL_ENSURE( aCreationArgs.getLength() == 0, "ODocumentContainer::createInstance: additional creation args are lost, if you do not provide a class ID." );
+            OSL_ENSURE( !aCreationArgs.hasElements(), "ODocumentContainer::createInstance: additional creation args are lost, if you do not provide a class ID." );
         }
         xContent = pDocDef.get();
 

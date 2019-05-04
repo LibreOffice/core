@@ -1531,7 +1531,7 @@ namespace
         const Sequence< PropertyValue >* pOrEnd = pOrIter + filter.getLength();
         while ( pOrIter != pOrEnd )
         {
-            if ( pOrIter->getLength() )
+            if ( pOrIter->hasElements() )
             {
                 sRet.append(L_BRACKET);
                 const PropertyValue* pAndIter = pOrIter->getConstArray();

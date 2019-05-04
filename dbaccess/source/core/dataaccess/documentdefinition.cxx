@@ -354,7 +354,7 @@ OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const OUString& _
         ::comphelper::MimeConfigurationHelper aConfigHelper( _rContext );
         sResult = aConfigHelper.GetDocServiceNameFromMediaType( _rMediaType );
         _rClassId = comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation(aConfigHelper.GetExplicitlyRegisteredObjClassID( _rMediaType ));
-        if ( !_rClassId.getLength() && !sResult.isEmpty() )
+        if ( !_rClassId.hasElements() && !sResult.isEmpty() )
         {
             Reference< XNameAccess > xObjConfig = aConfigHelper.GetObjConfiguration();
             if ( xObjConfig.is() )
@@ -409,8 +409,8 @@ ODocumentDefinition::ODocumentDefinition( const Reference< XInterface >& _rxCont
 void ODocumentDefinition::initialLoad( const Sequence< sal_Int8 >& i_rClassID, const Sequence< PropertyValue >& i_rCreationArgs,
                                        const Reference< XConnection >& i_rConnection )
 {
-    OSL_ENSURE( i_rClassID.getLength(), "ODocumentDefinition::initialLoad: illegal class ID!" );
-    if ( !i_rClassID.getLength() )
+    OSL_ENSURE( i_rClassID.hasElements(), "ODocumentDefinition::initialLoad: illegal class ID!" );
+    if ( !i_rClassID.hasElements() )
         return;
 
     loadEmbeddedObject( i_rConnection, i_rClassID, i_rCreationArgs, false, false );
@@ -1028,7 +1028,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
     {
         Sequence<Any> aIni;
         aCommand.Argument >>= aIni;
-        if ( !aIni.getLength() )
+        if ( !aIni.hasElements() )
         {
             OSL_FAIL( "Wrong argument count!" );
             ucbhelper::cancelCommandExecution(
@@ -1543,7 +1543,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
             bool bSetSize = false;
             sal_Int32 nEntryConnectionMode = EntryInitModes::DEFAULT_INIT;
             Sequence< sal_Int8 > aClassID = _aClassID;
-            if ( aClassID.getLength() )
+            if ( aClassID.hasElements() )
             {
                 nEntryConnectionMode = EntryInitModes::TRUNCATE_INIT;
                 bSetSize = true;
@@ -1566,7 +1566,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
                         throw aWFE;
                     }
                 }
-                if ( !aClassID.getLength() )
+                if ( !aClassID.hasElements() )
                 {
                     if ( m_bForm )
                         aClassID = MimeConfigurationHelper::GetSequenceClassID(SO3_SW_CLASSID);
@@ -1577,7 +1577,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
                 }
             }
 
-            OSL_ENSURE( aClassID.getLength(),"No Class ID" );
+            OSL_ENSURE( aClassID.hasElements(),"No Class ID" );
 
             Sequence< PropertyValue > aEmbeddedObjectDescriptor;
             Sequence< PropertyValue > aLoadArgs( fillLoadArgs(

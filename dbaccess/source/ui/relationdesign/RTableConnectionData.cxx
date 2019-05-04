@@ -348,7 +348,7 @@ bool ORelationTableConnectionData::Update()
                     {
                         xKey->getPropertyValue(PROPERTY_NAME) >>= sName;
                         m_aConnName = sName;
-                        bDropRelation = aNames.getLength() == 0; // the key contains no column, so it isn't valid and we have to drop it
+                        bDropRelation = !aNames.hasElements(); // the key contains no column, so it isn't valid and we have to drop it
                         //here we already know our column structure so we don't have to recreate the table connection data
                         xColSup.clear();
                         break;

@@ -198,7 +198,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
             // Unreachable
         }
 
-        if ( !aProperties.getLength() )
+        if ( !aProperties.hasElements() )
         {
             OSL_FAIL( "No properties!" );
             ucbhelper::cancelCommandExecution(
