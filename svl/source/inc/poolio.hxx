@@ -33,13 +33,10 @@ class SfxItemPoolUser;
 
 static const sal_uInt32 SFX_ITEMS_DEFAULT = 0xfffffffe;
 
-struct CompareSortablePoolItems
+static bool CompareSortablePoolItems(SfxPoolItem const* lhs, SfxPoolItem const* rhs)
 {
-    bool operator()(SfxPoolItem const* lhs, SfxPoolItem const* rhs) const
-    {
-        return (*lhs) < (*rhs);
-    }
-};
+    return (*lhs) < (*rhs);
+}
 /**
  * This array contains a set of SfxPoolItems, if those items are
  * poolable then each item has a unique set of properties, and we
@@ -50,7 +47,11 @@ struct SfxPoolItemArray_Impl
 {
 private:
     o3tl::sorted_vector<SfxPoolItem*> maPoolItemSet;
-    o3tl::sorted_vector<const SfxPoolItem*, CompareSortablePoolItems> maSortablePoolItems;
+    // In some cases, e.g. subclasses of NameOrIndex, the parent class (NameOrIndex) is sortable,
+    // but the subclasses do not define an operator<, which means that we don't get an ordering
+    // strong enough to enforce uniqueness purely with operator<, which means we need to do
+    // a partial scan with operator==
+    std::vector<SfxPoolItem*> maSortablePoolItems;
 public:
     o3tl::sorted_vector<SfxPoolItem*>::const_iterator begin() const { return maPoolItemSet.begin(); }
     o3tl::sorted_vector<SfxPoolItem*>::const_iterator end() const { return maPoolItemSet.end(); }
@@ -59,22 +60,87 @@ public:
     void clear();
     size_t size() const {return maPoolItemSet.size();}
     bool empty() const {return maPoolItemSet.empty();}
+    o3tl::sorted_vector<SfxPoolItem*>::const_iterator find(SfxPoolItem* pItem) const { return maPoolItemSet.find(pItem); }
     void insert(SfxPoolItem* pItem)
     {
         maPoolItemSet.insert(pItem);
         if (pItem->IsSortable())
-            maSortablePoolItems.insert(pItem);
+        {
+            // bail early if someone modified one of these things underneath me
+            assert( std::is_sorted_until(maSortablePoolItems.begin(), maSortablePoolItems.end(), CompareSortablePoolItems) == maSortablePoolItems.end());
+
+            auto it = std::lower_bound(maSortablePoolItems.begin(), maSortablePoolItems.end(), pItem, CompareSortablePoolItems);
+            maSortablePoolItems.insert(maSortablePoolItems.begin() + (it - maSortablePoolItems.begin()), pItem);
+        }
     }
-    o3tl::sorted_vector<SfxPoolItem*>::const_iterator find(SfxPoolItem* pItem) const { return maPoolItemSet.find(pItem); }
-    const SfxPoolItem* findByLessThan(const SfxPoolItem* pItem) const
+    const SfxPoolItem* findByLessThan(const SfxPoolItem* pNeedle) const
     {
-        auto it = maSortablePoolItems.find(pItem);
-        return it == maSortablePoolItems.end() ? nullptr : *it;
+        // bail early if someone modified one of these things underneath me
+        assert( std::is_sorted_until(maSortablePoolItems.begin(), maSortablePoolItems.end(), CompareSortablePoolItems) == maSortablePoolItems.end());
+        assert( maPoolItemSet.empty() || maPoolItemSet.front()->IsSortable() );
+
+        auto it = std::lower_bound(maSortablePoolItems.begin(), maSortablePoolItems.end(), pNeedle, CompareSortablePoolItems);
+        for (;;)
+        {
+            if (it == maSortablePoolItems.end())
+                return nullptr;
+            if (**it < *pNeedle)
+                return nullptr;
+            if (*pNeedle == **it)
+                return *it;
+            ++it;
+        }
+    }
+    std::vector<const SfxPoolItem*> findSurrogateRange(const SfxPoolItem* pNeedle) const
+    {
+        std::vector<const SfxPoolItem*> rv;
+        if (!maSortablePoolItems.empty())
+        {
+            // bail early if someone modified one of these things underneath me
+            assert( std::is_sorted_until(maSortablePoolItems.begin(), maSortablePoolItems.end(), CompareSortablePoolItems) == maSortablePoolItems.end());
+
+            auto range = std::equal_range(maSortablePoolItems.begin(), maSortablePoolItems.end(), pNeedle, CompareSortablePoolItems);
+            rv.reserve(std::distance(range.first, range.second));
+            for (auto it = range.first; it != range.second; ++it)
+                rv.push_back(*it);
+        }
+        else
+        {
+            for (const SfxPoolItem* p : maPoolItemSet)
+                if (*pNeedle == *p)
+                    rv.push_back(p);
+        }
+        return rv;
     }
     void erase(o3tl::sorted_vector<SfxPoolItem*>::const_iterator it)
     {
+        auto pNeedle = *it;
         if ((*it)->IsSortable())
-            maSortablePoolItems.erase(*it);
+        {
+            // bail early if someone modified one of these things underneath me
+            assert( std::is_sorted_until(maSortablePoolItems.begin(), maSortablePoolItems.end(), CompareSortablePoolItems) == maSortablePoolItems.end());
+
+            auto sortIt = std::lower_bound(maSortablePoolItems.begin(), maSortablePoolItems.end(), pNeedle, CompareSortablePoolItems);
+            for (;;)
+            {
+                if (sortIt == maSortablePoolItems.end())
+                {
+                    assert(false && "did not find item?");
+                    break;
+                }
+                if (**sortIt < *pNeedle)
+                {
+                    assert(false && "did not find item?");
+                    break;
+                }
+                if (**sortIt == *pNeedle)
+                {
+                    maSortablePoolItems.erase(sortIt);
+                    break;
+                }
+                ++sortIt;
+            }
+        }
         return maPoolItemSet.erase(it);
     }
 };
