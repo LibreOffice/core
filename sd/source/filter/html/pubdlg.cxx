@@ -481,7 +481,7 @@ SdPublishingDlg::~SdPublishingDlg()
 void SdPublishingDlg::dispose()
 {
     pPage1.clear();
-    pPage1_Titel.clear();
+    pPage1_Title.clear();
     pPage1_NewDesign.clear();
     pPage1_OldDesign.clear();
     pPage1_Designs.clear();
@@ -491,7 +491,7 @@ void SdPublishingDlg::dispose()
     pPage2Frame2.clear();
     pPage2Frame3.clear();
     pPage2Frame4.clear();
-    pPage2_Titel.clear();
+    pPage2_Title.clear();
     pPage2_Standard.clear();
     pPage2_Frames.clear();
     pPage2_SingleDocument.clear();
@@ -501,10 +501,10 @@ void SdPublishingDlg::dispose()
     pPage2_Frames_FB.clear();
     pPage2_Kiosk_FB.clear();
     pPage2_WebCast_FB.clear();
-    pPage2_Titel_Html.clear();
+    pPage2_Title_Html.clear();
     pPage2_Content.clear();
     pPage2_Notes.clear();
-    pPage2_Titel_WebCast.clear();
+    pPage2_Title_WebCast.clear();
     pPage2_ASP.clear();
     pPage2_PERL.clear();
     pPage2_URL_txt.clear();
@@ -513,43 +513,43 @@ void SdPublishingDlg::dispose()
     pPage2_CGI.clear();
     pPage2_Index_txt.clear();
     pPage2_Index.clear();
-    pPage2_Titel_Kiosk.clear();
+    pPage2_Title_Kiosk.clear();
     pPage2_ChgDefault.clear();
     pPage2_ChgAuto.clear();
     pPage2_Duration_txt.clear();
     pPage2_Duration.clear();
     pPage2_Endless.clear();
     pPage3.clear();
-    pPage3_Titel1.clear();
+    pPage3_Title1.clear();
     pPage3_Png.clear();
     pPage3_Gif.clear();
     pPage3_Jpg.clear();
     pPage3_Quality_txt.clear();
     pPage3_Quality.clear();
-    pPage3_Titel2.clear();
+    pPage3_Title2.clear();
     pPage3_Resolution_1.clear();
     pPage3_Resolution_2.clear();
     pPage3_Resolution_3.clear();
-    pPage3_Titel3.clear();
+    pPage3_Title3.clear();
     pPage3_SldSound.clear();
     pPage3_HiddenSlides.clear();
     pPage4.clear();
-    pPage4_Titel1.clear();
+    pPage4_Title1.clear();
     pPage4_Author_txt.clear();
     pPage4_Author.clear();
     pPage4_Email_txt.clear();
     pPage4_Email.clear();
     pPage4_WWW_txt.clear();
     pPage4_WWW.clear();
-    pPage4_Titel2.clear();
+    pPage4_Title2.clear();
     pPage4_Misc.clear();
     pPage4_Download.clear();
     pPage5.clear();
-    pPage5_Titel.clear();
+    pPage5_Title.clear();
     pPage5_TextOnly.clear();
     pPage5_Buttons.clear();
     pPage6.clear();
-    pPage6_Titel.clear();
+    pPage6_Title.clear();
     pPage6_Default.clear();
     pPage6_User.clear();
     pPage6_Back.clear();
@@ -571,13 +571,13 @@ void SdPublishingDlg::CreatePages()
 {
     // Page 1
     get(pPage1, "page1");
-    get(pPage1_Titel, "assignLabel");
+    get(pPage1_Title, "assignLabel");
     get(pPage1_NewDesign, "newDesignRadiobutton");
     get(pPage1_OldDesign, "oldDesignRadiobutton");
     get(pPage1_DelDesign, "delDesingButton");
     get(pPage1_Desc, "descLabel");
     aAssistentFunc.InsertControl(1, pPage1);
-    aAssistentFunc.InsertControl(1, pPage1_Titel);
+    aAssistentFunc.InsertControl(1, pPage1_Title);
     aAssistentFunc.InsertControl(1, pPage1_NewDesign);
     aAssistentFunc.InsertControl(1, pPage1_OldDesign);
     aAssistentFunc.InsertControl(1, pPage1_Designs);
@@ -589,7 +589,7 @@ void SdPublishingDlg::CreatePages()
     get(pPage2Frame2, "page2.2");
     get(pPage2Frame3, "page2.3");
     get(pPage2Frame4, "page2.4");
-    get(pPage2_Titel, "publicationLabel");
+    get(pPage2_Title, "publicationLabel");
     get(pPage2_Standard, "standardRadiobutton");
     get(pPage2_Frames, "framesRadiobutton");
     get(pPage2_SingleDocument, "singleDocumentRadiobutton");
@@ -599,7 +599,7 @@ void SdPublishingDlg::CreatePages()
     aAssistentFunc.InsertControl(2, pPage2Frame2);
     aAssistentFunc.InsertControl(2, pPage2Frame3);
     aAssistentFunc.InsertControl(2, pPage2Frame4);
-    aAssistentFunc.InsertControl(2, pPage2_Titel);
+    aAssistentFunc.InsertControl(2, pPage2_Title);
     aAssistentFunc.InsertControl(2, pPage2_Standard);
     aAssistentFunc.InsertControl(2, pPage2_Frames);
     aAssistentFunc.InsertControl(2, pPage2_SingleDocument);
@@ -610,15 +610,15 @@ void SdPublishingDlg::CreatePages()
     aAssistentFunc.InsertControl(2, pPage2_Kiosk_FB);
     aAssistentFunc.InsertControl(2, pPage2_WebCast_FB);
 
-    get(pPage2_Titel_Html, "htmlOptionsLabel");
+    get(pPage2_Title_Html, "htmlOptionsLabel");
     get(pPage2_Content, "contentCheckbutton");
     get(pPage2_Notes, "notesCheckbutton");
-    aAssistentFunc.InsertControl(2, pPage2_Titel_Html);
+    aAssistentFunc.InsertControl(2, pPage2_Title_Html);
     aAssistentFunc.InsertControl(2, pPage2_Content);
     if(m_bImpress)
         aAssistentFunc.InsertControl(2, pPage2_Notes);
 
-    get(pPage2_Titel_WebCast, "webCastLabel");
+    get(pPage2_Title_WebCast, "webCastLabel");
     get(pPage2_ASP, "ASPRadiobutton");
     get(pPage2_PERL, "perlRadiobutton");
     get(pPage2_URL_txt, "URLTxtLabel");
@@ -627,13 +627,13 @@ void SdPublishingDlg::CreatePages()
     get(pPage2_CGI, "CGIEntry");
     get(pPage2_Index_txt, "indexTxtLabel");
     get(pPage2_Index, "indexEntry");
-    get(pPage2_Titel_Kiosk, "kioskLabel");
+    get(pPage2_Title_Kiosk, "kioskLabel");
     get(pPage2_ChgDefault, "chgDefaultRadiobutton");
     get(pPage2_ChgAuto, "chgAutoRadiobutton");
     get(pPage2_Duration_txt, "durationTxtLabel");
     get(pPage2_Duration, "durationSpinbutton");
     get(pPage2_Endless, "endlessCheckbutton");
-    aAssistentFunc.InsertControl(2, pPage2_Titel_WebCast);
+    aAssistentFunc.InsertControl(2, pPage2_Title_WebCast);
     aAssistentFunc.InsertControl(2, pPage2_Index_txt);
     aAssistentFunc.InsertControl(2, pPage2_Index);
     aAssistentFunc.InsertControl(2, pPage2_ASP);
@@ -642,7 +642,7 @@ void SdPublishingDlg::CreatePages()
     aAssistentFunc.InsertControl(2, pPage2_URL);
     aAssistentFunc.InsertControl(2, pPage2_CGI_txt);
     aAssistentFunc.InsertControl(2, pPage2_CGI);
-    aAssistentFunc.InsertControl(2, pPage2_Titel_Kiosk);
+    aAssistentFunc.InsertControl(2, pPage2_Title_Kiosk);
     aAssistentFunc.InsertControl(2, pPage2_ChgDefault);
     aAssistentFunc.InsertControl(2, pPage2_ChgAuto);
     aAssistentFunc.InsertControl(2, pPage2_Duration_txt);
@@ -651,71 +651,71 @@ void SdPublishingDlg::CreatePages()
 
     // Page 3
     get(pPage3, "page3");
-    get(pPage3_Titel1, "saveImgAsLabel");
+    get(pPage3_Title1, "saveImgAsLabel");
     get(pPage3_Png, "pngRadiobutton");
     get(pPage3_Gif, "gifRadiobutton");
     get(pPage3_Jpg, "jpgRadiobutton");
     get(pPage3_Quality_txt, "qualityTxtLabel");
     get(pPage3_Quality, "qualityCombobox");
-    get(pPage3_Titel2, "monitorResolutionLabel");
+    get(pPage3_Title2, "monitorResolutionLabel");
     get(pPage3_Resolution_1, "resolution1Radiobutton");
     get(pPage3_Resolution_2, "resolution2Radiobutton");
     get(pPage3_Resolution_3, "resolution3Radiobutton");
-    get(pPage3_Titel3, "effectsLabel");
+    get(pPage3_Title3, "effectsLabel");
     get(pPage3_SldSound, "sldSoundCheckbutton");
     get(pPage3_HiddenSlides, "hiddenSlidesCheckbutton");
     aAssistentFunc.InsertControl(3, pPage3);
-    aAssistentFunc.InsertControl(3, pPage3_Titel1);
+    aAssistentFunc.InsertControl(3, pPage3_Title1);
     aAssistentFunc.InsertControl(3, pPage3_Png);
     aAssistentFunc.InsertControl(3, pPage3_Gif);
     aAssistentFunc.InsertControl(3, pPage3_Jpg);
     aAssistentFunc.InsertControl(3, pPage3_Quality_txt);
     aAssistentFunc.InsertControl(3, pPage3_Quality);
-    aAssistentFunc.InsertControl(3, pPage3_Titel2);
+    aAssistentFunc.InsertControl(3, pPage3_Title2);
     aAssistentFunc.InsertControl(3, pPage3_Resolution_1);
     aAssistentFunc.InsertControl(3, pPage3_Resolution_2);
     aAssistentFunc.InsertControl(3, pPage3_Resolution_3);
-    aAssistentFunc.InsertControl(3, pPage3_Titel3);
+    aAssistentFunc.InsertControl(3, pPage3_Title3);
     aAssistentFunc.InsertControl(3, pPage3_SldSound);
     aAssistentFunc.InsertControl(3, pPage3_HiddenSlides);
 
     // Page 4
     get(pPage4, "page4");
-    get(pPage4_Titel1, "infTitlePageLabel");
+    get(pPage4_Title1, "infTitlePageLabel");
     get(pPage4_Author_txt, "authorTxtLabel");
     get(pPage4_Author, "authorEntry");
     get(pPage4_Email_txt, "emailTxtLabel");
     get(pPage4_Email, "emailEntry");
     get(pPage4_WWW_txt, "wwwTxtLabel");
     get(pPage4_WWW, "wwwEntry");
-    get(pPage4_Titel2, "addInformLabel");
+    get(pPage4_Title2, "addInformLabel");
     get(pPage4_Download, "downloadCheckbutton");
     aAssistentFunc.InsertControl(4, pPage4);
-    aAssistentFunc.InsertControl(4, pPage4_Titel1);
+    aAssistentFunc.InsertControl(4, pPage4_Title1);
     aAssistentFunc.InsertControl(4, pPage4_Author_txt);
     aAssistentFunc.InsertControl(4, pPage4_Author);
     aAssistentFunc.InsertControl(4, pPage4_Email_txt);
     aAssistentFunc.InsertControl(4, pPage4_Email);
     aAssistentFunc.InsertControl(4, pPage4_WWW_txt);
     aAssistentFunc.InsertControl(4, pPage4_WWW);
-    aAssistentFunc.InsertControl(4, pPage4_Titel2);
+    aAssistentFunc.InsertControl(4, pPage4_Title2);
     aAssistentFunc.InsertControl(4, pPage4_Misc);
     if(m_bImpress)
         aAssistentFunc.InsertControl(4, pPage4_Download);
 
     // Page 5
     get(pPage5, "page5");
-    get(pPage5_Titel, "buttonStyleLabel");
+    get(pPage5_Title, "buttonStyleLabel");
     get(pPage5_TextOnly, "textOnlyCheckbutton");
     get(pPage5_Buttons, "buttonsDrawingarea");
     aAssistentFunc.InsertControl(5, pPage5);
-    aAssistentFunc.InsertControl(5, pPage5_Titel);
+    aAssistentFunc.InsertControl(5, pPage5_Title);
     aAssistentFunc.InsertControl(5, pPage5_TextOnly);
     aAssistentFunc.InsertControl(5, pPage5_Buttons);
 
     // Page 6
     get(pPage6, "page6");
-    get(pPage6_Titel, "selectColorLabel");
+    get(pPage6_Title, "selectColorLabel");
     get(pPage6_Default, "defaultRadiobutton");
     get(pPage6_User, "userRadiobutton");
     get(pPage6_Back, "backButton");
@@ -726,7 +726,7 @@ void SdPublishingDlg::CreatePages()
     get(pPage6_DocColors, "docColorsRadiobutton");
     get(pPage6_Preview, "previewDrawingarea");
     aAssistentFunc.InsertControl(6, pPage6);
-    aAssistentFunc.InsertControl(6, pPage6_Titel);
+    aAssistentFunc.InsertControl(6, pPage6_Title);
     aAssistentFunc.InsertControl(6, pPage6_DocColors);
     aAssistentFunc.InsertControl(6, pPage6_Default);
     aAssistentFunc.InsertControl(6, pPage6_User);
@@ -1208,7 +1208,7 @@ void SdPublishingDlg::UpdatePage()
         if( pPage2_WebCast->IsChecked() )
         {
             pPage2Frame4->Show();
-            pPage2_Titel_WebCast->Show();
+            pPage2_Title_WebCast->Show();
             pPage2_ASP->Show();
             pPage2_PERL->Show();
             pPage2_URL_txt->Show();
@@ -1229,7 +1229,7 @@ void SdPublishingDlg::UpdatePage()
         else
         {
             pPage2Frame4->Hide();
-            pPage2_Titel_WebCast->Hide();
+            pPage2_Title_WebCast->Hide();
             pPage2_ASP->Hide();
             pPage2_PERL->Hide();
             pPage2_URL_txt->Hide();
@@ -1243,7 +1243,7 @@ void SdPublishingDlg::UpdatePage()
         if( pPage2_Kiosk->IsChecked() )
         {
             pPage2Frame3->Show();
-            pPage2_Titel_Kiosk->Show();
+            pPage2_Title_Kiosk->Show();
             pPage2_ChgDefault->Show();
             pPage2_ChgAuto->Show();
             pPage2_Duration_txt->Show();
@@ -1256,7 +1256,7 @@ void SdPublishingDlg::UpdatePage()
         else
         {
             pPage2Frame3->Hide();
-            pPage2_Titel_Kiosk->Hide();
+            pPage2_Title_Kiosk->Hide();
             pPage2_ChgDefault->Hide();
             pPage2_ChgAuto->Hide();
             pPage2_Duration->Hide();
@@ -1267,7 +1267,7 @@ void SdPublishingDlg::UpdatePage()
         if( pPage2_Standard->IsChecked() || pPage2_Frames->IsChecked() )
         {
             pPage2Frame2->Show();
-            pPage2_Titel_Html->Show();
+            pPage2_Title_Html->Show();
             pPage2_Content->Show();
             if(m_bImpress)
                 pPage2_Notes->Show();
@@ -1275,7 +1275,7 @@ void SdPublishingDlg::UpdatePage()
         else
         {
             pPage2Frame2->Hide();
-            pPage2_Titel_Html->Hide();
+            pPage2_Title_Html->Hide();
             pPage2_Content->Hide();
             if(m_bImpress)
                 pPage2_Notes->Hide();
