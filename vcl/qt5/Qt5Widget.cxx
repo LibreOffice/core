@@ -46,6 +46,14 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
+
+using namespace com::sun::star;
+
 void Qt5Widget::paintEvent(QPaintEvent* pEvent)
 {
     QPainter p(this);
@@ -540,10 +548,98 @@ void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
     }
 }
 
+static uno::Reference<accessibility::XAccessibleEditableText>
+FindFocus(uno::Reference<accessibility::XAccessibleContext> const& xContext)
+{
+    if (!xContext.is())
+        return uno::Reference<accessibility::XAccessibleEditableText>();
+
+    uno::Reference<accessibility::XAccessibleStateSet> xState = xContext->getAccessibleStateSet();
+    if (xState.is())
+    {
+        if (xState->contains(accessibility::AccessibleStateType::FOCUSED))
+        {
+            uno::Reference<accessibility::XAccessibleEditableText> xText
+                = uno::Reference<accessibility::XAccessibleEditableText>(xContext, uno::UNO_QUERY);
+            if (xText.is())
+                return xText;
+            if (xState->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS))
+                return uno::Reference<accessibility::XAccessibleEditableText>();
+        }
+    }
+
+    bool bSafeToIterate = true;
+    sal_Int32 nCount = xContext->getAccessibleChildCount();
+    if (nCount < 0 || nCount > SAL_MAX_UINT16 /* slow enough for anyone */)
+        bSafeToIterate = false;
+    if (!bSafeToIterate)
+        return uno::Reference<accessibility::XAccessibleEditableText>();
+
+    for (sal_Int32 i = 0; i < xContext->getAccessibleChildCount(); ++i)
+    {
+        uno::Reference<accessibility::XAccessible> xChild = xContext->getAccessibleChild(i);
+        if (!xChild.is())
+            continue;
+        uno::Reference<accessibility::XAccessibleContext> xChildContext
+            = xChild->getAccessibleContext();
+        if (!xChildContext.is())
+            continue;
+        uno::Reference<accessibility::XAccessibleEditableText> xText = FindFocus(xChildContext);
+        if (xText.is())
+            return xText;
+    }
+    return uno::Reference<accessibility::XAccessibleEditableText>();
+}
+
+static bool retrieveSurrounding(sal_Int32& rPosition, QString* pText)
+{
+    vcl::Window* pFocusWin = Application::GetFocusWindow();
+    if (!pFocusWin)
+        return true;
+
+    uno::Reference<accessibility::XAccessibleEditableText> xText;
+    try
+    {
+        uno::Reference<accessibility::XAccessible> xAccessible(pFocusWin->GetAccessible());
+        if (xAccessible.is())
+            xText = FindFocus(xAccessible->getAccessibleContext());
+    }
+    catch (const uno::Exception& e)
+    {
+        SAL_WARN("vcl.qt5", "Exception in getting input method surrounding text: " << e);
+    }
+    if (xText.is())
+    {
+        rPosition = xText->getCaretPosition();
+        if (rPosition != -1 && pText)
+        {
+            *pText = toQString(xText->getText());
+            return true;
+        }
+    }
+
+    return false;
+}
+
 QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
 {
     switch (property)
     {
+        case Qt::ImSurroundingText:
+        {
+            QString aText;
+            sal_Int32 nCursorPos;
+            if (retrieveSurrounding(nCursorPos, &aText))
+                return QVariant(aText);
+            [[fallthrough]];
+        }
+        case Qt::ImCursorPosition:
+        {
+            sal_Int32 nCursorPos;
+            if (retrieveSurrounding(nCursorPos, nullptr))
+                return QVariant(nCursorPos);
+            [[fallthrough]];
+        }
         case Qt::ImCursorRectangle:
         {
             SalExtTextInputPosEvent aPosEvent;
@@ -554,6 +650,8 @@ QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
         default:
             return QWidget::inputMethodQuery(property);
     }
+
+    return QVariant();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
