@@ -46,6 +46,12 @@
 #include <headless/svpgdi.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <window.h>
+
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
+
+using namespace com::sun::star;
 
 void Qt5Widget::paintEvent(QPaintEvent* pEvent)
 {
@@ -552,10 +558,55 @@ void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
     pEvent->accept();
 }
 
+static bool lcl_retrieveSurrounding(sal_Int32& rPosition, QString* pText)
+{
+    vcl::Window* pFocusWin = Application::GetFocusWindow();
+    if (!pFocusWin)
+        return false;
+
+    uno::Reference<accessibility::XAccessibleEditableText> xText;
+    try
+    {
+        uno::Reference<accessibility::XAccessible> xAccessible(pFocusWin->GetAccessible());
+        if (xAccessible.is())
+            xText = FindFocusedEditableText(xAccessible->getAccessibleContext());
+    }
+    catch (const uno::Exception& e)
+    {
+        SAL_WARN("vcl.qt5", "Exception in getting input method surrounding text: " << e);
+    }
+    if (xText.is())
+    {
+        rPosition = xText->getCaretPosition();
+        if (rPosition != -1 && pText)
+        {
+            *pText = toQString(xText->getText());
+            return true;
+        }
+    }
+
+    return false;
+}
+
 QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
 {
     switch (property)
     {
+        case Qt::ImSurroundingText:
+        {
+            QString aText;
+            sal_Int32 nCursorPos;
+            if (lcl_retrieveSurrounding(nCursorPos, &aText))
+                return QVariant(aText);
+            [[fallthrough]];
+        }
+        case Qt::ImCursorPosition:
+        {
+            sal_Int32 nCursorPos;
+            if (lcl_retrieveSurrounding(nCursorPos, nullptr))
+                return QVariant(nCursorPos);
+            [[fallthrough]];
+        }
         case Qt::ImCursorRectangle:
         {
             SalExtTextInputPosEvent aPosEvent;
@@ -566,6 +617,8 @@ QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
         default:
             return QWidget::inputMethodQuery(property);
     }
+
+    return QVariant();
 }
 
 void Qt5Widget::endExtTextInput()
