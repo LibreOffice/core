@@ -23,10 +23,13 @@
 #include <svl/svldllapi.h>
 #include <tools/debug.hxx>
 #include <svl/poolitem.hxx>
+#include <cassert>
 
 class SVL_DLLPUBLIC CntUnencodedStringItem: public SfxPoolItem
 {
     OUString m_aValue;
+    // debugging code to catch anything mutating name after it is in a pool
+    mutable bool mbLessTouched = false;
 
 public:
 
@@ -35,6 +38,10 @@ public:
 
     CntUnencodedStringItem(sal_uInt16 which, const OUString & rTheValue):
         SfxPoolItem(which), m_aValue(rTheValue)
+    {}
+
+    CntUnencodedStringItem(const CntUnencodedStringItem & rOther):
+        SfxPoolItem(rOther), m_aValue(rOther.m_aValue), mbLessTouched(false)
     {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
@@ -60,8 +67,8 @@ public:
 
 inline void CntUnencodedStringItem::SetValue(const OUString & rTheValue)
 {
-    DBG_ASSERT(GetRefCount() == 0,
-               "CntUnencodedStringItem::SetValue(): Pooled item");
+    assert(GetRefCount() == 0 && "cannot modify name of pooled item");
+    assert(!mbLessTouched && "cannot modify name of pooled item");
     m_aValue = rTheValue;
 }
 

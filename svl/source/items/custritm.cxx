@@ -37,6 +37,7 @@ bool CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
 bool CntUnencodedStringItem::operator<(const SfxPoolItem & rItem) const
 {
     assert(dynamic_cast<const CntUnencodedStringItem*>( &rItem ));
+    mbLessTouched = true;
     return m_aValue
             < static_cast< const CntUnencodedStringItem * >(&rItem)->
                 m_aValue;
