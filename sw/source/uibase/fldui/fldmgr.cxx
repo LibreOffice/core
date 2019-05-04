@@ -139,21 +139,21 @@ static const sal_uInt16 VF_DB_COUNT = 1; // { nsSwExtendedSubType::SUB_OWN_FMT }
 
 static const char* FLD_EU_ARY[] =
 {
-    FLD_EU_FIRMA,
-    FLD_EU_VORNAME,
-    FLD_EU_NAME,
-    FLD_EU_ABK,
-    FLD_EU_STRASSE,
-    FLD_EU_LAND,
-    FLD_EU_PLZ,
-    FLD_EU_ORT,
-    FLD_EU_TITEL,
+    FLD_EU_COMPANY,
+    FLD_EU_GIVENNAME,
+    FLD_EU_SURNAME,
+    FLD_EU_INITIALS,
+    FLD_EU_STREET,
+    FLD_EU_COUNTRY,
+    FLD_EU_POSTCODE,
+    FLD_EU_TOWN,
+    FLD_EU_TITLE,
     FLD_EU_POS,
-    FLD_EU_TELPRIV,
-    FLD_EU_TELFIRMA,
+    FLD_EU_TELPERSONAL,
+    FLD_EU_TELWORK,
     FLD_EU_FAX,
     FLD_EU_EMAIL,
-    FLD_EU_STATE
+    FLD_EU_REGION
 };
 
 static const char* FMT_AUTHOR_ARY[] =
