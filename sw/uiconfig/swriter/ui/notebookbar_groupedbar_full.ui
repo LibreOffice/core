@@ -13702,7 +13702,7 @@
                   <object class="sfxlo-PriorityMergedHBox" id="PrintBox">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="PrintLayouot">
+                      <object class="sfxlo-OptionalBox" id="PrintLayout">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -14211,7 +14211,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="PrintLayouot1">
+                      <object class="sfxlo-OptionalBox" id="PrintLayout1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
