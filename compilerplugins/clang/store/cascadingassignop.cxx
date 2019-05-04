@@ -15,7 +15,7 @@
 This is a compile check.
 
 It checks for complex statements with conditional operators in conditional
-operators, which are errorprone, e.g.
+operators, which are error prone, e.g.
  Thing foo = IsBar() ? ( IsBaz() ? b1 : b2 ) : b3;
 
 However, it finds 556 cases in sw/source alone, thus likely needs some more
