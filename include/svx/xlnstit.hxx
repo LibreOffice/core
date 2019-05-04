@@ -41,8 +41,6 @@ public:
             XLineStartItem(const XLineStartItem& rItem);
 
     virtual bool            operator==(const SfxPoolItem& rItem) const override;
-    // NameOrIndex is sortable, but we are not
-    virtual bool            IsSortable() const override { return false; }
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

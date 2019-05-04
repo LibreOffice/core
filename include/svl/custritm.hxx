@@ -23,6 +23,7 @@
 #include <svl/svldllapi.h>
 #include <tools/debug.hxx>
 #include <svl/poolitem.hxx>
+#include <cassert>
 
 class SVL_DLLPUBLIC CntUnencodedStringItem: public SfxPoolItem
 {
@@ -60,8 +61,7 @@ public:
 
 inline void CntUnencodedStringItem::SetValue(const OUString & rTheValue)
 {
-    DBG_ASSERT(GetRefCount() == 0,
-               "CntUnencodedStringItem::SetValue(): Pooled item");
+    assert(GetRefCount() == 0 && "cannot modify name of pooled item");
     m_aValue = rTheValue;
 }
 
