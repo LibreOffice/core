@@ -300,7 +300,7 @@ DBChangeDialogConfig_Impl::~DBChangeDialogConfig_Impl()
 
 const Sequence<OUString>& DBChangeDialogConfig_Impl::GetDataSourceNames()
 {
-    if(!aSourceNames.getLength())
+    if(!aSourceNames.hasElements())
     {
         Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);

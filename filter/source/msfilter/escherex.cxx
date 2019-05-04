@@ -3067,7 +3067,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     if ( rrProp.Value >>= aSegments )
                                     {
                                         // creating seginfo
-                                        if ( static_cast<sal_uInt16>(aSegments.getLength()) )
+                                        if ( aSegments.hasElements() )
                                         {
                                             sal_uInt16 j, nElements = static_cast<sal_uInt16>(aSegments.getLength());
                                             sal_uInt16 nElementSize = 2;
@@ -3204,7 +3204,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     uno::Sequence<drawing::EnhancedCustomShapeTextFrame> aPathTextFrames;
                                     if ( rrProp.Value >>= aPathTextFrames )
                                     {
-                                        if ( static_cast<sal_uInt16>(aPathTextFrames.getLength()) )
+                                        if ( aPathTextFrames.hasElements() )
                                         {
                                             sal_uInt16 j, nElements = static_cast<sal_uInt16>(aPathTextFrames.getLength());
                                             sal_uInt16 nElementSize = 16;
@@ -3656,7 +3656,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                 if ( aPathCoordinatesProp >>= aCoordinates )
                 {
                     // creating the vertices
-                    if (aCoordinates.getLength() > 0)
+                    if (aCoordinates.hasElements())
                     {
                         sal_uInt16 j, nElements = static_cast<sal_uInt16>(aCoordinates.getLength());
                         sal_uInt16 nElementSize = 8;

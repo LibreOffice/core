@@ -93,7 +93,7 @@ FilterEntry::FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFil
 
 bool FilterEntry::hasSubFilters( ) const
 {
-    return ( 0 < m_aSubFilters.getLength() );
+    return m_aSubFilters.hasElements();
 }
 
 
@@ -910,7 +910,7 @@ void SAL_CALL SvtFilePicker::appendFilterGroup( const OUString& sGroupTitle,
 
     // ensure that we have a filter list
     OUString sInitialCurrentFilter;
-    if ( aFilters.getLength() )
+    if ( aFilters.hasElements() )
         sInitialCurrentFilter = aFilters[0].First;
     ensureFilterList( sInitialCurrentFilter );
 
@@ -978,7 +978,7 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
 
     m_nServiceType = TemplateDescription::FILEOPEN_SIMPLE;
 
-    if ( _rArguments.getLength() >= 1 )
+    if ( _rArguments.hasElements() )
     {
         // compatibility: one argument, type sal_Int16 , specifies the service type
         int index = 0;

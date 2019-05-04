@@ -378,7 +378,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     /* } SAFE */
 
     // Add all valid (not empty) lists to the return list
-    if (lConfigArgs.getLength()>0)
+    if (lConfigArgs.hasElements())
     {
         sal_Int32 nLength = lAllArgs.getLength();
         lAllArgs.realloc(nLength+1);
@@ -392,14 +392,14 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
         lAllArgs[nLength].Name = "JobConfig";
         lAllArgs[nLength].Value <<= comphelper::containerToSequence(lJobConfigArgs);
     }
-    if (lEnvArgs.getLength()>0)
+    if (lEnvArgs.hasElements())
     {
         sal_Int32 nLength = lAllArgs.getLength();
         lAllArgs.realloc(nLength+1);
         lAllArgs[nLength].Name = "Environment";
         lAllArgs[nLength].Value <<= lEnvArgs;
     }
-    if (lDynamicArgs.getLength()>0)
+    if (lDynamicArgs.hasElements())
     {
         sal_Int32 nLength = lAllArgs.getLength();
         lAllArgs.realloc(nLength+1);

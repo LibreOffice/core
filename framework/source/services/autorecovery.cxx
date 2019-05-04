@@ -1903,7 +1903,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
         OUString                       sTypeRegistration   = lFilterProps.getUnpackedValueOrDefault(FILTER_PROP_TYPE, OUString());
         ::comphelper::SequenceAsHashMap       lTypeProps          (xTypeCFG->getByName(sTypeRegistration));
         css::uno::Sequence< OUString > lExtensions         = lTypeProps.getUnpackedValueOrDefault(TYPE_PROP_EXTENSIONS, css::uno::Sequence< OUString >());
-        if (lExtensions.getLength())
+        if (lExtensions.hasElements())
         {
             rInfo.Extension = "." + lExtensions[0];
         }
@@ -2997,7 +2997,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     css::uno::Sequence< css::beans::NamedValue > aEncryptionData =
         lOldArgs.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ENCRYPTIONDATA(),
                 css::uno::Sequence< css::beans::NamedValue >());
-    if (aEncryptionData.getLength() > 0)
+    if (aEncryptionData.hasElements())
         lNewArgs[utl::MediaDescriptor::PROP_ENCRYPTIONDATA()] <<= aEncryptionData;
 
     // Further it must be saved using the default file format of that application.
@@ -3355,7 +3355,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
 
         // re-create all the views
         ::std::vector< OUString > aViewsToRestore( rInfo.ViewNames.getLength() );
-        if ( rInfo.ViewNames.getLength() )
+        if ( rInfo.ViewNames.hasElements() )
             ::std::copy( rInfo.ViewNames.begin(), rInfo.ViewNames.end(), aViewsToRestore.begin() );
         // if we don't have views for whatever reason, then create a default-view, at least
         if ( aViewsToRestore.empty() )

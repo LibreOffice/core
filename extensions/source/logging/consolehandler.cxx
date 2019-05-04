@@ -99,7 +99,7 @@ namespace logging
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        if ( arguments.getLength() == 0 )
+        if ( !arguments.hasElements() )
         {   // create() - nothing to init
             m_aHandlerHelper.setIsInitialized();
             return;

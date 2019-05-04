@@ -56,7 +56,7 @@ VclPtr<PopupMenu> AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& 
     sal_uInt16        nUniqueMenuId   = ADDONMENU_ITEMID_START;
 
     const Sequence< Sequence< PropertyValue > >& rAddonMenuEntries = aOptions.GetAddonsMenu();
-    if ( rAddonMenuEntries.getLength() > 0 )
+    if ( rAddonMenuEntries.hasElements() )
     {
         pAddonMenu = VclPtr<PopupMenu>::Create();
         OUString aModuleIdentifier = vcl::CommandInfoProvider::GetModuleIdentifier( rFrame );
@@ -170,7 +170,7 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
                                             aAddonSubMenu );
             if ( !aTitle.isEmpty() &&
                  !aURL.isEmpty()   &&
-                 aAddonSubMenu.getLength() > 0 &&
+                 aAddonSubMenu.hasElements() &&
                  AddonMenuManager::IsCorrectContext( aModuleIdentifier, aContext ))
             {
                 sal_uInt16          nId             = nUniqueMenuId++;
@@ -226,7 +226,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
         else
         {
             VclPtr<PopupMenu> pSubMenu;
-            if ( aAddonSubMenu.getLength() > 0 )
+            if ( aAddonSubMenu.hasElements() )
             {
                 pSubMenu = VclPtr<PopupMenu>::Create();
                 AddonMenuManager::BuildMenu( pSubMenu, MENU_APPEND, nUniqueMenuId, aAddonSubMenu, rFrame, rModuleIdentifier );

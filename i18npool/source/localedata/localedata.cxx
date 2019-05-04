@@ -670,7 +670,7 @@ Sequence< CalendarItem2 > &LocaleDataImpl::getCalendarItemByName(const OUString&
         // Referred locale not found, return name for en_US locale.
         if (index == cals.getLength()) {
             cals = getAllCalendars2( Locale("en", "US", OUString()) );
-            if (cals.getLength() <= 0)
+            if (!cals.hasElements())
                 throw RuntimeException();
             ref_cal = cals[0];
         }

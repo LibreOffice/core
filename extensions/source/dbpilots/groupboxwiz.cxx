@@ -100,7 +100,7 @@ namespace dbp
                 return GBW_STATE_OPTIONVALUES;
 
             case GBW_STATE_OPTIONVALUES:
-                if (getContext().aFieldNames.getLength())
+                if (getContext().aFieldNames.hasElements())
                     return GBW_STATE_DBFIELD;
                 else
                     return GBW_STATE_FINALIZE;
@@ -131,7 +131,7 @@ namespace dbp
                 if (!m_bVisitedDB)
                 {   // try to generate a default for the DB field
                     // (simply use the first field in the DB names collection)
-                    if (getContext().aFieldNames.getLength())
+                    if (getContext().aFieldNames.hasElements())
                         m_aSettings.sDBField = getContext().aFieldNames[0];
                 }
                 m_bVisitedDB = true;
@@ -180,7 +180,7 @@ namespace dbp
         get(m_pMoveLeft, "toleft");
         get(m_pExistingRadios, "radiobuttons");
 
-        if (getContext().aFieldNames.getLength())
+        if (getContext().aFieldNames.hasElements())
         {
             enableFormDatasourceDisplay();
         }

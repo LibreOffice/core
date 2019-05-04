@@ -99,7 +99,7 @@ public:
         const css::uno::Reference< css::document::XDocumentProperties> & i_xDocProps,
         bool i_bDoNotUpdateUserDefined = false)
         const;
-    bool        isCmisDocument() const { return m_aCmisProperties.getLength() > 0;}
+    bool        isCmisDocument() const { return m_aCmisProperties.hasElements();}
 
     bool        isAutoloadEnabled() const { return m_isAutoloadEnabled; }
     void        setAutoloadEnabled(bool i_val) { m_isAutoloadEnabled = i_val; }

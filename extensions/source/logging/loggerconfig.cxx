@@ -196,7 +196,7 @@ namespace logging
             if ( !sServiceName.isEmpty() )
             {
                 bool bSuccess = false;
-                if ( aSettings.getLength() )
+                if ( aSettings.hasElements() )
                 {
                     Sequence< Any > aConstructionArgs(1);
                     aConstructionArgs[0] <<= aSettings;

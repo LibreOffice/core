@@ -1570,7 +1570,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
             css::uno::Sequence< OUString > &rNames = m_aTypeProps[eOption];
 
             // read standard properties of a filter
-            if (rNames.getLength() > 0)
+            if (rNames.hasElements())
             {
                 css::uno::Reference< css::beans::XMultiPropertySet >
                     xPropSet( xItem, css::uno::UNO_QUERY_THROW);
@@ -1594,7 +1594,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
             css::uno::Sequence< OUString > &rNames = m_aStandardProps[eOption];
 
             // read standard properties of a filter
-            if (rNames.getLength() > 0)
+            if (rNames.hasElements())
             {
                 css::uno::Reference< css::beans::XMultiPropertySet >
                     xPropSet( xItem, css::uno::UNO_QUERY_THROW);

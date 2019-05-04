@@ -290,7 +290,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
     // NOTE: There is a race between checking this and connections being created/destroyed before
     //       we close the frame / terminate the app.
     css::uno::Reference<css::bridge::XBridgeFactory2> bridgeFac( css::bridge::BridgeFactory::create(xContext) );
-    bool bHasActiveConnections = bridgeFac->getExistingBridges().getLength() > 0;
+    bool bHasActiveConnections = bridgeFac->getExistingBridges().hasElements();
 
     // a) If the current frame (where the close dispatch was requested for) does not have
     //    any parent frame ... it will close this frame only. Such frame isn't part of the

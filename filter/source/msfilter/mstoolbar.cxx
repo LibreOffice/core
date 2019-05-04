@@ -324,7 +324,7 @@ void TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
                     uno::Reference< ui::XImageManager > xImageManager( helper.getAppCfgManager()->getImageManager(), uno::UNO_QUERY_THROW );
                     // 0 = default image size
                     uno::Sequence< uno::Reference< graphic::XGraphic > > sImages = xImageManager->getImages( 0, sCmds );
-                    if ( sImages.getLength() && sImages[0].is() )
+                    if ( sImages.hasElements() && sImages[0].is() )
                         helper.addIcon( sImages[0], sCommand );
                 }
             }

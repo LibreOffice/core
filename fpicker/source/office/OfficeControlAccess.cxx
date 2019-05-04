@@ -509,7 +509,7 @@ namespace svt
                 Sequence < OUString > aTemplateList;
                 _rValue >>= aTemplateList;
 
-                if ( aTemplateList.getLength() )
+                if ( aTemplateList.hasElements() )
                 {
                     for ( long i=0; i < aTemplateList.getLength(); i++ )
                         _pListbox->InsertEntry( aTemplateList[i] );

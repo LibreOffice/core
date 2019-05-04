@@ -57,7 +57,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
         {
             for (auto const& lInterceptionReg : m_lInterceptionRegs)
             {
-                if (!lInterceptionReg.lURLPattern.getLength())
+                if (!lInterceptionReg.lURLPattern.hasElements())
                 {
                     // no pattern -> need to ask this guy!
                     xInterceptor = lInterceptionReg.xInterceptor;

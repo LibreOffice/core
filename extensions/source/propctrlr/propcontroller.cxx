@@ -1218,7 +1218,7 @@ namespace pcr
             if ( !m_aPageIds.empty() )
             {
                 Sequence< PropertyCategoryDescriptor > aCategories( m_xModel->describeCategories() );
-                if ( aCategories.getLength() )
+                if ( aCategories.hasElements() )
                     m_pView->activatePage( m_aPageIds[ aCategories[0].ProgrammaticName ] );
                 else
                     // allowed: if we default-created the pages ...
