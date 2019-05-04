@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_e34732bc",
+        "filename": "sw/uiconfig/swriter/ui/optcompatpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-05-04T15:33:59Z",
+      "side": 0,
+      "message": "no longer protects whole document?\nIt still has a tiny bit of meaning...",
+      "revId": "2f9cd77c1cd480244f8c17221c2f74f3f97df57f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

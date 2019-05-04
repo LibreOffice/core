@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_83398e42",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-05-04T15:33:59Z",
+      "side": 1,
+      "message": "a few edge-cases prevent the user from deleting a form field by accident.",
+      "range": {
+        "startLine": 12,
+        "startChar": 45,
+        "endLine": 12,
+        "endChar": 62
+      },
+      "revId": "973d672c3426b14a31cc06b3fe44ad24efccfbfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_6334824b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-05-04T15:33:59Z",
+      "side": 1,
+      "message": "bug 122201",
+      "range": {
+        "startLine": 13,
+        "startChar": 1,
+        "endLine": 13,
+        "endChar": 8
+      },
+      "revId": "973d672c3426b14a31cc06b3fe44ad24efccfbfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
