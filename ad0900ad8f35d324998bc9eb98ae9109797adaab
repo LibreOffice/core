@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_43706673",
+        "filename": "sc/source/filter/excel/xeformula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1877,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-05-04T06:22:49Z",
+      "side": 1,
+      "message": "What Julien says",
+      "revId": "ad0900ad8f35d324998bc9eb98ae9109797adaab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
