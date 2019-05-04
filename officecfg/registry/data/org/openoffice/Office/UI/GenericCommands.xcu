@@ -3635,7 +3635,7 @@
       </node>
       <node oor:name=".uno:AutoFormat" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">AutoFormat Table Styles</value>
+          <value xml:lang="en-US">Table Styles</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Auto~Format Styles...</value>
