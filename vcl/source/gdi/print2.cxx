@@ -62,7 +62,7 @@ struct ConnectedComponents
     bool            bIsFullyTransparent;
 };
 
-typedef ::std::list< ConnectedComponents > ConnectedComponentsList;
+typedef ::std::vector< ConnectedComponents > ConnectedComponentsList;
 
 namespace {
 
