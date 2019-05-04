@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 #include <sal/config.h>
 
 #include <tools/stream.hxx>
@@ -107,28 +108,20 @@ void Animation::Clear()
 
 bool Animation::IsTransparent() const
 {
-    tools::Rectangle aRect(Point(), maGlobalSize);
-    bool bRet = false;
+    tools::Rectangle aRect{ Point(), maGlobalSize };
 
     // If some small bitmap needs to be replaced by the background,
     // we need to be transparent, in order to be displayed correctly
     // as the application (?) does not invalidate on non-transparent
     // graphics due to performance reasons.
-    for (auto const& pAnimationBitmap : maList)
-    {
-        if (Disposal::Back == pAnimationBitmap->meDisposal
-            && tools::Rectangle(pAnimationBitmap->maPositionPixel, pAnimationBitmap->maSizePixel)
-                   != aRect)
-        {
-            bRet = true;
-            break;
-        }
-    }
 
-    if (!bRet)
-        bRet = maBitmapEx.IsTransparent();
-
-    return bRet;
+    return std::any_of(maList.begin(), maList.end(),
+                       [&aRect](const std::unique_ptr<AnimationBitmap>& pAnim) -> bool {
+                           return pAnim->meDisposal == Disposal::Back
+                                  && tools::Rectangle{ pAnim->maPositionPixel, pAnim->maSizePixel }
+                                         != aRect;
+                       })
+           || maBitmapEx.IsTransparent();
 }
 
 sal_uLong Animation::GetSizeBytes() const
