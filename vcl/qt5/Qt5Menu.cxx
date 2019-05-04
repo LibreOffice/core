@@ -21,6 +21,8 @@
 #include <vcl/pngwrite.hxx>
 #include <tools/stream.hxx>
 
+#include <strings.hrc>
+
 Qt5Menu::Qt5Menu(bool bMenuBar)
     : mpVCLMenu(nullptr)
     , mpParentSalMenu(nullptr)
@@ -422,6 +424,7 @@ void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar)
 {
     // clear action groups since menu is rebuilt
     ResetAllActionGroups();
+    ShowCloseButton(false);
 
     for (sal_Int32 nItem = 0; nItem < static_cast<sal_Int32>(GetItemCount()); nItem++)
     {
@@ -606,6 +609,44 @@ void Qt5Menu::NativeItemText(OUString& rItemText)
     rItemText = rItemText.replaceAll("&", "&&");
 
     rItemText = rItemText.replace('~', '&');
+}
+
+void Qt5Menu::slotCloseDocument(bool)
+{
+    MenuBar* pVclMenuBar = static_cast<MenuBar*>(mpVCLMenu.get());
+    if (pVclMenuBar)
+        Application::PostUserEvent(pVclMenuBar->GetCloseButtonClickHdl());
+}
+
+void Qt5Menu::ShowCloseButton(bool bShow)
+{
+    if (!mpQMenuBar)
+        return;
+
+    QPushButton* pButton = static_cast<QPushButton*>(mpQMenuBar->cornerWidget(Qt::TopRightCorner));
+    if (!pButton)
+    {
+        QIcon aIcon = QIcon::fromTheme("window-close-symbolic");
+        pButton = new QPushButton(mpQMenuBar);
+        pButton->setIcon(aIcon);
+        pButton->setFlat(true);
+        pButton->setToolTip(toQString(VclResId(SV_HELPTEXT_CLOSEDOCUMENT)));
+        mpQMenuBar->setCornerWidget(pButton, Qt::TopRightCorner);
+    }
+
+    if (bShow)
+    {
+        // The mpQMenuBar is used in multiple Qt5Menu. If one Qt5Menu is deleted, the clicked button
+        // connection is severed. The reconnect could be handled in SetFrame, but ShowCloseButton is
+        // called so seldomly, that I decided to keep the reconnect in this function in one place. As
+        // we don't know the connection state, we unconditionally remove it, so slotCloseDocument
+        // isn't called multiple times on click.
+        pButton->disconnect(SIGNAL(clicked(bool)));
+        connect(pButton, SIGNAL(clicked(bool)), this, SLOT(slotCloseDocument(bool)));
+        pButton->show();
+    }
+    else
+        pButton->hide();
 }
 
 Qt5MenuItem::Qt5MenuItem(const SalItemParams* pItemData)
