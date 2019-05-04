@@ -335,8 +335,7 @@ void SAL_CALL XmlFilterAdaptor::setTargetDocument( const Reference< css::lang::X
 void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )
 {
     Sequence < PropertyValue > aAnySeq;
-    sal_Int32 nLength = aArguments.getLength();
-    if ( nLength && ( aArguments[0] >>= aAnySeq ) )
+    if ( aArguments.hasElements() && ( aArguments[0] >>= aAnySeq ) )
     {
         comphelper::SequenceAsHashMap aMap(aAnySeq);
         msFilterName = aMap.getUnpackedValueOrDefault(

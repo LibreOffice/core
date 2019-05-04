@@ -280,7 +280,7 @@ OUString StringRepresentation::convertSimpleToString( const uno::Any& _rValue )
     {
         try
         {
-            if ( m_aConstants.getLength() )
+            if ( m_aConstants.hasElements() )
             {
                 sal_Int16 nConstantValue = 0;
                 if ( _rValue >>= nConstantValue )
@@ -479,7 +479,7 @@ uno::Any StringRepresentation::convertStringToSimple( const OUString& _rValue,co
     {
         try
         {
-            if ( m_aConstants.getLength() && m_aValues.getLength() )
+            if ( m_aConstants.hasElements() && m_aValues.hasElements() )
             {
                 const OUString* pIter = m_aValues.getConstArray();
                 const OUString* pEnd   = pIter + m_aValues.getLength();

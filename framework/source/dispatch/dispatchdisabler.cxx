@@ -25,7 +25,7 @@ DispatchDisabler::DispatchDisabler(const uno::Reference< uno::XComponentContext 
 void SAL_CALL DispatchDisabler::initialize( const uno::Sequence< uno::Any >& aArguments )
 {
     uno::Sequence< OUString > aDisabledURLs;
-    if( aArguments.getLength() > 0 &&
+    if( aArguments.hasElements() &&
         ( aArguments[0] >>= aDisabledURLs ) )
     {
         for( sal_Int32 i = 0; i < aDisabledURLs.getLength(); ++i )

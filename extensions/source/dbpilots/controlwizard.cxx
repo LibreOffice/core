@@ -625,7 +625,7 @@ namespace dbp
             return false;
         }
 
-        return 0 != m_aContext.aFieldNames.getLength();
+        return m_aContext.aFieldNames.hasElements();
     }
 
 
@@ -683,7 +683,7 @@ namespace dbp
     bool OControlWizard::needDatasourceSelection()
     {
         // lemme see ...
-        return (0 == getContext().aFieldNames.getLength());
+        return !getContext().aFieldNames.hasElements();
             // if we got fields, the data source is valid ...
     }
 

@@ -148,7 +148,7 @@ static Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
     if (xSupplyCols.is())
         xReturn = xSupplyCols->getColumns();
 
-    if (!xReturn.is() || (xReturn->getElementNames().getLength() == 0))
+    if (!xReturn.is() || !xReturn->getElementNames().hasElements())
     {   // no ....
         xReturn = nullptr;
         // -> get the table the form is bound to and ask it for their columns
@@ -706,7 +706,7 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
             if (xTables.is())
                 aTableNameSeq = xTables->getElementNames();
 
-            if(aTableNameSeq.getLength() > 0)
+            if(aTableNameSeq.hasElements())
             {
                 if(!rDesc.sTableOrQuery.isEmpty())
                     aActiveDataTable = rDesc.sTableOrQuery;
@@ -830,7 +830,7 @@ OUString BibDataManager::getQueryField()
     if(aFieldString.isEmpty())
     {
         const Sequence< OUString > aSeq = getQueryFields();
-        if(aSeq.getLength()>0)
+        if(aSeq.hasElements())
         {
             aFieldString=aSeq[0];
         }
@@ -892,7 +892,7 @@ void BibDataManager::setActiveDataSource(const OUString& rURL)
             Reference< XNameAccess >  xAccess = xSupplyTables->getTables();
             aTableNameSeq = xAccess->getElementNames();
         }
-        if(aTableNameSeq.getLength() > 0)
+        if(aTableNameSeq.hasElements())
         {
             aActiveDataTable = aTableNameSeq[0];
             aVal <<= aActiveDataTable;

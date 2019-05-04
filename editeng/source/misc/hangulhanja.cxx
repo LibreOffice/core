@@ -541,7 +541,7 @@ namespace editeng
             if (!m_bIsInteractive)
             {
                 // silent conversion (e.g. for simplified/traditional Chinese)...
-                if(m_aCurrentSuggestions.getLength()>0)
+                if(m_aCurrentSuggestions.hasElements())
                     implChange( m_aCurrentSuggestions.getConstArray()[0] );
             }
             else if (bAutoChange)

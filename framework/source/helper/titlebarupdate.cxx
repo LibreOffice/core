@@ -63,7 +63,7 @@ void SAL_CALL TitleBarUpdate::initialize(const css::uno::Sequence< css::uno::Any
 {
     // check arguments
     css::uno::Reference< css::frame::XFrame > xFrame;
-    if (lArguments.getLength() < 1)
+    if (!lArguments.hasElements())
         throw css::lang::IllegalArgumentException(
                 "Empty argument list!",
                 static_cast< ::cppu::OWeakObject* >(this),

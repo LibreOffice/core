@@ -183,7 +183,7 @@ static void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, const Refer
                                     }
 
                                     aDIBSeq = xBitmap->getMaskDIB();
-                                    if ( aDIBSeq.getLength() > 0 )
+                                    if ( aDIBSeq.hasElements() )
                                     {
                                         Bitmap aMaskBitmap;
                                         SvMemoryStream aMem( const_cast<sal_Int8 *>(aDIBSeq.getConstArray()), aDIBSeq.getLength(), StreamMode::READ );

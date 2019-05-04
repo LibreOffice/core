@@ -430,7 +430,7 @@ void AddonsOptions_Impl::ImplCommit()
 
 bool AddonsOptions_Impl::HasAddonsMenu() const
 {
-    return ( m_aCachedMenuProperties.getLength() > 0 );
+    return m_aCachedMenuProperties.hasElements();
 }
 
 //  public method
@@ -1070,7 +1070,7 @@ bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< 
 
         OUString aRootSubMenuName( aAddonMenuItemTreeNode + m_aPropNames[ INDEX_SUBMENU ] );
         Sequence< OUString > aRootSubMenuNodeNames = GetNodeNames( aRootSubMenuName );
-        if ( aRootSubMenuNodeNames.getLength() > 0 && !bIgnoreSubMenu )
+        if ( aRootSubMenuNodeNames.hasElements() && !bIgnoreSubMenu )
         {
             // Set a unique prefixed Add-On popup menu URL so it can be identified later
             OUString aPopupMenuURL     = GeneratePrefixURL();
@@ -1141,7 +1141,7 @@ bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequ
 
         OUString aRootSubMenuName( aAddonPopupMenuTreeNode + m_aPropNames[ INDEX_SUBMENU ] );
         Sequence< OUString > aRootSubMenuNodeNames = GetNodeNames( aRootSubMenuName );
-        if ( aRootSubMenuNodeNames.getLength() > 0 )
+        if ( aRootSubMenuNodeNames.hasElements() )
         {
             // A top-level popup menu needs a title
             // Set a unique prefixed Add-On popup menu URL so it can be identified later
@@ -1344,7 +1344,7 @@ std::unique_ptr<AddonsOptions_Impl::ImageEntry> AddonsOptions_Impl::ReadImageDat
             // Extract image data from the embedded hex binary sequence
             Image aImage;
             if (( aPropertyData[i] >>= aImageDataSeq ) &&
-                aImageDataSeq.getLength() > 0 &&
+                aImageDataSeq.hasElements() &&
                 ( CreateImageFromSequence( aImage, aImageDataSeq ) ) )
             {
                 if ( !pEntry )
@@ -1374,7 +1374,7 @@ bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, Sequence< sal_I
 {
     bool bResult = false;
 
-    if ( rBitmapDataSeq.getLength() > 0 )
+    if ( rBitmapDataSeq.hasElements() )
     {
         SvMemoryStream  aMemStream( rBitmapDataSeq.getArray(), rBitmapDataSeq.getLength(), StreamMode::STD_READ );
         BitmapEx        aBitmapEx;

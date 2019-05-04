@@ -181,7 +181,7 @@ Reference< XUIElement > SAL_CALL AddonsToolBarFactory::createUIElement(
     // Identify frame and determine module identifier to look for context based buttons
     Reference< css::ui::XUIElement > xToolBar;
     if ( xFrame.is() &&
-         ( aConfigData.getLength()> 0 ) &&
+         aConfigData.hasElements() &&
          hasButtonsInContext( aConfigData, xFrame ))
     {
         PropertyValue aPropValue;

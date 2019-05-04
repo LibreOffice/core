@@ -259,7 +259,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame,
     {
         DBChangeDialogConfig_Impl aConfig;
         const Sequence<OUString> aSources = aConfig.GetDataSourceNames();
-        if(aSources.getLength())
+        if(aSources.hasElements())
             aBibDesc.sDataSource = aSources.getConstArray()[0];
     }
 
@@ -564,7 +564,7 @@ sal_Bool BibliographyLoader::hasElements()
 {
     Reference< XResultSet >  xCursor = GetDataCursor();
     Reference< XNameAccess >  xColumns = GetDataColumns();
-    return xColumns.is() && (xColumns->getElementNames().getLength() != 0);
+    return xColumns.is() && xColumns->getElementNames().hasElements();
 }
 
 Reference< XPropertySetInfo >  BibliographyLoader::getPropertySetInfo()

@@ -50,7 +50,7 @@ uno::Any SAL_CALL GraphicNameAccess::getByName( const OUString& aName )
 
 uno::Sequence< OUString > SAL_CALL GraphicNameAccess::getElementNames()
 {
-    if ( m_aSeq.getLength() == 0 )
+    if ( !m_aSeq.hasElements() )
     {
         m_aSeq = comphelper::mapKeysToSequence(m_aNameToElementMap);
     }

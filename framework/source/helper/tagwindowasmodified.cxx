@@ -49,7 +49,7 @@ void SAL_CALL TagWindowAsModified::initialize(const css::uno::Sequence< css::uno
 {
     css::uno::Reference< css::frame::XFrame > xFrame;
 
-    if (lArguments.getLength() > 0)
+    if (lArguments.hasElements())
         lArguments[0] >>= xFrame;
 
     if ( ! xFrame.is ())

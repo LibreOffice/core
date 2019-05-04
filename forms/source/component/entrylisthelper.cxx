@@ -89,11 +89,11 @@ namespace frm
 
         if  (   ( _rEvent.Position >= 0 )
             &&  ( _rEvent.Position < static_cast<sal_Int32>(m_aStringItems.size()) )
-            &&  ( _rEvent.Entries.getLength() > 0 )
+            &&  _rEvent.Entries.hasElements()
             )
         {
             m_aStringItems[ _rEvent.Position ] = _rEvent.Entries[ 0 ];
-            if (m_aTypedItems.getLength())
+            if (m_aTypedItems.hasElements())
                 m_aTypedItems = Sequence<Any>();    // doesn't match anymore
             stringItemListChanged( aLock );
         }
@@ -106,16 +106,16 @@ namespace frm
 
         OSL_ENSURE( _rEvent.Source == m_xListSource,
             "OEntryListHelper::entryRangeInserted: where did this come from?" );
-        OSL_ENSURE( ( _rEvent.Position > 0 ) && ( _rEvent.Position < static_cast<sal_Int32>(m_aStringItems.size()) ) && ( _rEvent.Entries.getLength() > 0 ),
+        OSL_ENSURE( ( _rEvent.Position > 0 ) && ( _rEvent.Position < static_cast<sal_Int32>(m_aStringItems.size()) ) && _rEvent.Entries.hasElements(),
             "OEntryListHelper::entryRangeRemoved: invalid count and/or position!" );
 
         if  (   ( _rEvent.Position > 0 )
             &&  ( _rEvent.Position < static_cast<sal_Int32>(m_aStringItems.size()) )
-            &&  ( _rEvent.Entries.getLength() > 0 )
+            &&  _rEvent.Entries.hasElements()
             )
         {
             m_aStringItems.insert(m_aStringItems.begin() + _rEvent.Position, _rEvent.Entries.begin(), _rEvent.Entries.end());
-            if (m_aTypedItems.getLength())
+            if (m_aTypedItems.hasElements())
                 m_aTypedItems = Sequence<Any>();    // doesn't match anymore
             stringItemListChanged( aLock );
         }
@@ -154,7 +154,7 @@ namespace frm
                 }
                 m_aTypedItems = aTmp;
             }
-            else if (m_aTypedItems.getLength())
+            else if (m_aTypedItems.hasElements())
             {
                 m_aTypedItems = Sequence<Any>();    // doesn't match anymore
             }
@@ -273,7 +273,7 @@ namespace frm
         else
         {
             comphelper::sequenceToContainer( m_aStringItems, m_xListSource->getAllListEntries());
-            if (m_aTypedItems.getLength())
+            if (m_aTypedItems.hasElements())
                 m_aTypedItems = Sequence<Any>();
         }
         stringItemListChanged( _rInstanceLock );
@@ -297,7 +297,7 @@ namespace frm
         css::uno::Sequence<OUString> aTmp;
         OSL_VERIFY( _rValue >>= aTmp );
         comphelper::sequenceToContainer(m_aStringItems, aTmp);
-        if (m_aTypedItems.getLength())
+        if (m_aTypedItems.hasElements())
             m_aTypedItems = Sequence<Any>();    // doesn't match anymore
         stringItemListChanged( _rInstanceLock );
     }
@@ -309,7 +309,7 @@ namespace frm
         if (!(_rValue >>= m_aTypedItems ))
         {
             OSL_VERIFY(false);
-            if (m_aTypedItems.getLength())
+            if (m_aTypedItems.hasElements())
                 m_aTypedItems = Sequence<Any>();    // doesn't match anymore
         }
         // Sets both properties, assuming that TypedItemList belongs to StringItemList.

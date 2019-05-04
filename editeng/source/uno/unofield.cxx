@@ -577,7 +577,7 @@ uno::Any SAL_CALL SvxUnoTextField::queryAggregation( const uno::Type & rType )
 
 uno::Sequence< uno::Type > SAL_CALL SvxUnoTextField::getTypes()
 {
-    if( maTypeSequence.getLength() == 0 )
+    if( !maTypeSequence.hasElements() )
     {
         maTypeSequence = comphelper::concatSequences(
             OComponentHelper::getTypes(),

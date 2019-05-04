@@ -101,7 +101,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
         }
 
         Reference< XFrame > xFrame( m_xWeakFrame );
-        if ( xFrame.is() && m_aConfigData.getLength() > 0 )
+        if ( xFrame.is() && m_aConfigData.hasElements() )
         {
             // Create VCL based toolbar which will be filled with settings data
             VclPtr<ToolBox> pToolBar;
@@ -122,7 +122,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
 
             try
             {
-                if (( m_aConfigData.getLength() > 0 ) && pToolBar && pToolBarManager )
+                if ( m_aConfigData.hasElements() && pToolBar && pToolBarManager )
                 {
                     // Fill toolbar with container contents
                     pToolBarManager->FillToolbar( m_aConfigData );

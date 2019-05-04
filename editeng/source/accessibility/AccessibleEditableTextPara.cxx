@@ -1208,7 +1208,7 @@ namespace accessibility
 
         bool bSupplementalMode = false;
         uno::Sequence< OUString > aPropertyNames = rRequestedAttributes;
-        if (aPropertyNames.getLength() == 0)
+        if (!aPropertyNames.hasElements())
         {
             bSupplementalMode = true;
             aPropertyNames = getAttributeNames();
