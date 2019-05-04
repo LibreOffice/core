@@ -78,7 +78,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			mode=dll \
 			VC=12 \
 			$(if $(filter X86_64,$(CPUNAME)),MACHINE=x64,MACHINE=x86) \
-			GEN_PDB=$(if $(gb_SYMBOL),yes,no) \
+			GEN_PDB=$(if $(call gb_Module__symbols_enabled,curl),yes,no) \
 			DEBUG=$(if $(MSVC_USE_DEBUG_RUNTIME),yes,no) \
 			ENABLE_IPV6=yes \
 			ENABLE_SSPI=yes \
