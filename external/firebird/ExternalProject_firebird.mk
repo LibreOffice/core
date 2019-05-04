@@ -74,7 +74,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			) \
 			$(CXXFLAGS_CXX11) \
 			$(firebird_NO_CXX11_NARROWING) \
-			$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS)) \
+			$(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED),$(gb_DEBUGINFO_FLAGS)) \
 		" \
 		&& export LDFLAGS=" \
 			$(if $(SYSTEM_ICU),$(ICU_LIBS), \

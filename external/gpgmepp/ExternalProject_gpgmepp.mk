@@ -37,7 +37,7 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build): $(call gb_Executable_
 		   CFLAGS='$(CFLAGS) \
 				$(if $(ENABLE_OPTIMIZED), \
 					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
-				$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS))' \
+				$(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED),$(gb_DEBUGINFO_FLAGS))' \
            --host=$(gb_ExternalProject_gpgmepp_host) \
 		   RC='windres -O COFF --target=$(gb_ExternalProject_gpgmepp_target) --preprocessor='\''$(call gb_Executable_get_target,cpp) -+ -DRC_INVOKED -DWINAPI_FAMILY=0 $(SOLARINC)'\' \
 		   MAKE=$(MAKE) \
@@ -57,12 +57,12 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build):
 		   CFLAGS='$(CFLAGS) \
 				$(if $(ENABLE_OPTIMIZED), \
 					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
-				$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS))' \
+				$(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED),$(gb_DEBUGINFO_FLAGS))' \
 		   CXXFLAGS='$(CXXFLAGS) \
 				$(if $(ENABLE_OPTIMIZED), \
 					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
 				$(if $(ENABLE_DBGUTIL),-D_GLIBCXX_DEBUG) \
-				$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS))' \
+				$(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED),$(gb_DEBUGINFO_FLAGS))' \
 		   $(if $(filter LINUX,$(OS)), \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
