@@ -10,6 +10,7 @@
 #include <memory>
 #include <cellvalues.hxx>
 #include <column.hxx>
+#include <formulacell.hxx>
 
 #include <cassert>
 
@@ -98,6 +99,25 @@ void CellValues::assign( const std::vector<double>& rVals )
     mpImpl->maCellTextAttrs.set(0, aDefaults.begin(), aDefaults.end());
 }
 
+void CellValues::assign( const std::vector<ScFormulaCell*>& rVals )
+{
+    std::vector<ScFormulaCell*> aCopyVals(rVals.size());
+    size_t nIdx = 0;
+    for (const auto* pCell : rVals)
+    {
+        aCopyVals[nIdx] = pCell->Clone();
+        ++nIdx;
+    }
+
+    mpImpl->maCells.resize(aCopyVals.size());
+    mpImpl->maCells.set(0, aCopyVals.begin(), aCopyVals.end());
+
+    // Set default text attributes.
+    std::vector<CellTextAttr> aDefaults(rVals.size(), CellTextAttr());
+    mpImpl->maCellTextAttrs.resize(rVals.size());
+    mpImpl->maCellTextAttrs.set(0, aDefaults.begin(), aDefaults.end());
+}
+
 size_t CellValues::size() const
 {
     assert(mpImpl->maCells.size() == mpImpl->maCellTextAttrs.size());
@@ -154,7 +174,7 @@ void CellValues::copyCellsTo( ScColumn& rCol, SCROW nRow ) const
     const CellStoreType& rSrc = mpImpl->maCells;
 
     // Caller must ensure the destination is long enough.
-    assert(rSrc.size() + static_cast<size_t>(nRow) < rDest.size());
+    assert(rSrc.size() + static_cast<size_t>(nRow) <= rDest.size());
 
     SCROW nCurRow = nRow;
     CellStoreType::iterator itPos = rDest.begin();
@@ -219,7 +239,7 @@ void CellValues::copyCellTextAttrsTo( ScColumn& rCol, SCROW nRow ) const
     const CellTextAttrStoreType& rSrc = mpImpl->maCellTextAttrs;
 
     // Caller must ensure the destination is long enough.
-    assert(rSrc.size() + static_cast<size_t>(nRow) < rDest.size());
+    assert(rSrc.size() + static_cast<size_t>(nRow) <= rDest.size());
 
     SCROW nCurRow = nRow;
     CellTextAttrStoreType::iterator itPos = rDest.begin();

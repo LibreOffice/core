@@ -104,10 +104,11 @@ public:
     bool SetStringOrEditCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction );
 
     /**
-     * This method takes ownership of the formula cell instance. The caller
+     * Below two methods take ownership of the formula cell instance(s). The caller
      * must not delete it after passing it to this call.
      */
     bool SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, bool bInteraction );
+    bool SetFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCell*>& rCells, bool bInteraction );
     void PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, bool bApi );
     bool SetCellText(
         const ScAddress& rPos, const OUString& rText, bool bInterpret, bool bEnglish, bool bApi,
