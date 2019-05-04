@@ -31,8 +31,6 @@
 
 #include <impanmvw.hxx>
 
-#define MIN_TIMEOUT 2
-
 sal_uLong Animation::mnAnimCount = 0;
 
 Animation::Animation()
@@ -272,9 +270,11 @@ void Animation::Draw(OutputDevice* pOut, const Point& rDestPt, const Size& rDest
     }
 }
 
+inline unsigned int Animation::MinTimeout() { return 2; }
+
 void Animation::ImplRestartTimer(sal_uLong nTimeout)
 {
-    maTimer.SetTimeout(std::max(nTimeout, static_cast<sal_uLong>(MIN_TIMEOUT)) * 10);
+    maTimer.SetTimeout(std::max(nTimeout, static_cast<sal_uLong>(MinTimeout())) * 10);
     maTimer.Start();
 }
 

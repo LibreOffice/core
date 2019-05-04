@@ -94,6 +94,7 @@ public:
 
 private:
     SAL_DLLPRIVATE static sal_uLong mnAnimCount;
+    SAL_DLLPRIVATE static unsigned int MinTimeout();
 
     std::vector<std::unique_ptr<AnimationBitmap>> maList;
     std::vector<std::unique_ptr<ImplAnimView>> maViewList;
