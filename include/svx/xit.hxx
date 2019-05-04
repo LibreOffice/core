@@ -24,6 +24,7 @@
 #include <svx/xtable.hxx>
 #include <svx/xdef.hxx>
 #include <svx/svxdllapi.h>
+#include <cassert>
 
 /************************************************************************/
 
