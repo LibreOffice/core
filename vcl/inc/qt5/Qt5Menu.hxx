@@ -64,6 +64,7 @@ public:
     virtual void SetAccelerator(unsigned nPos, SalMenuItem* pSalMenuItem,
                                 const vcl::KeyCode& rKeyCode, const OUString& rKeyName) override;
     virtual void GetSystemMenuData(SystemMenuData* pData) override;
+    virtual void ShowCloseButton(bool bShow) override;
 
     void SetMenu(Menu* pMenu) { mpVCLMenu = pMenu; }
     Menu* GetMenu() { return mpVCLMenu; }
@@ -77,6 +78,7 @@ private slots:
     static void slotMenuTriggered(Qt5MenuItem* pQItem);
     static void slotMenuAboutToShow(Qt5MenuItem* pQItem);
     static void slotMenuAboutToHide(Qt5MenuItem* pQItem);
+    void slotCloseDocument();
 };
 
 class Qt5MenuItem : public SalMenuItem

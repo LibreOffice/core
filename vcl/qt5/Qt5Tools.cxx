@@ -21,7 +21,12 @@
 
 #include <cairo.h>
 
+#include <tools/stream.hxx>
 #include <vcl/event.hxx>
+#include <vcl/image.hxx>
+#include <vcl/pngwrite.hxx>
+
+#include <QtGui/QImage>
 
 void CairoDeleter::operator()(cairo_surface_t* pSurface) const { cairo_surface_destroy(pSurface); }
 
@@ -87,6 +92,21 @@ Qt::DropAction getPreferredDropAction(sal_Int8 dragOperation)
         eAct = Qt::LinkAction;
 
     return eAct;
+}
+
+QImage toQImage(const Image& rImage)
+{
+    QImage aImage;
+
+    if (!!rImage)
+    {
+        SvMemoryStream aMemStm;
+        vcl::PNGWriter aWriter(rImage.GetBitmapEx());
+        aWriter.Write(aMemStm);
+        aImage.loadFromData(static_cast<const uchar*>(aMemStm.GetData()), aMemStm.TellEnd());
+    }
+
+    return aImage;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
