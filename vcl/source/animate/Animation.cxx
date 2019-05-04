@@ -229,16 +229,11 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
 
 void Animation::Stop(OutputDevice* pOut, long nExtraData)
 {
-    for (size_t i = 0; i < maViewList.size();)
-    {
-        ImplAnimView* pView = maViewList[i].get();
-        if (pView->matches(pOut, nExtraData))
-        {
-            maViewList.erase(maViewList.begin() + i);
-        }
-        else
-            i++;
-    }
+    maViewList.erase(std::remove_if(maViewList.begin(), maViewList.end(),
+                                    [=](const std::unique_ptr<ImplAnimView>& pAnimView) -> bool {
+                                        return pAnimView->matches(pOut, nExtraData);
+                                    }),
+                     maViewList.end());
 
     if (maViewList.empty())
     {
