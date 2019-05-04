@@ -11521,7 +11521,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="PrinSection">
+                  <object class="sfxlo-DropdownBox" id="PrintSection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
