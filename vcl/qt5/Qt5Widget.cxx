@@ -27,6 +27,7 @@
 #include <QtCore/QMimeData>
 #include <QtGui/QDrag>
 #include <QtGui/QFocusEvent>
+#include <QtGui/QGuiApplication>
 #include <QtGui/QImage>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QMouseEvent>
@@ -393,6 +394,8 @@ bool Qt5Widget::handleKeyEvent(QKeyEvent* pEvent, bool bDown)
     aEvent.mnRepeat = 0;
     aEvent.mnCode = GetKeyCode(pEvent->key(), pEvent->modifiers());
     aEvent.mnCode |= GetKeyModCode(pEvent->modifiers());
+
+    QGuiApplication::inputMethod()->update(Qt::ImCursorRectangle);
 
     bool bStopProcessingKey;
     if (bDown)
