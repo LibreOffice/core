@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_2488c6c4",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-05-04T15:17:07Z",
+      "side": 0,
+      "message": "Why was this removed?  It doesn\u0027t seem to have affected the rest of your patch (no unit test failure when added back in).  The only thing keeping the property does is cause exceptions to print on the screen when when properties are applied to the page style.\n\nOnce the true SW section element has the property applied, the temporary import property can be erased.",
+      "range": {
+        "startLine": 702,
+        "startChar": 7,
+        "endLine": 702,
+        "endChar": 33
+      },
+      "revId": "df1adbec35df3cdb16b97cf8a9b85bf4a935ff41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
