@@ -906,7 +906,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
                     aExplicitIncrementDest.Distance = aExplicitIncrementSource.Distance;
 
                 bool bAutoMinorInterval = true;
-                if( aScale.IncrementData.SubIncrements.getLength() )
+                if( aScale.IncrementData.SubIncrements.hasElements() )
                     bAutoMinorInterval = !( aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() );
                 if( bAutoMinorInterval )
                 {
@@ -1865,7 +1865,7 @@ bool lcl_getPropertySwapXAndYAxis( const uno::Reference< XDiagram >& xDiagram )
     if( xCooSysContainer.is() )
     {
         uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-        if( aCooSysList.getLength() )
+        if( aCooSysList.hasElements() )
         {
             uno::Reference<beans::XPropertySet> xProp(aCooSysList[0], uno::UNO_QUERY );
             if( xProp.is()) try
@@ -2886,7 +2886,7 @@ Reference< uno::XInterface > ChartView::createInstance( const OUString& aService
 
 Reference< uno::XInterface > ChartView::createInstanceWithArguments( const OUString& ServiceSpecifier, const uno::Sequence< uno::Any >& Arguments )
 {
-    OSL_ENSURE( Arguments.getLength(), "ChartView::createInstanceWithArguments: arguments are ignored" );
+    OSL_ENSURE( Arguments.hasElements(), "ChartView::createInstanceWithArguments: arguments are ignored" );
     return createInstance( ServiceSpecifier );
 }
 

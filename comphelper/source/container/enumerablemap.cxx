@@ -351,7 +351,7 @@ namespace comphelper
         m_aData.m_pValues.reset( new KeyedValues( *m_aData.m_pKeyCompare ) );
         m_aData.m_bMutable = bMutable;
 
-        if ( aInitialValues.getLength() )
+        if ( aInitialValues.hasElements() )
             impl_initValues_throw( aInitialValues );
 
         setInitialized();

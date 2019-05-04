@@ -845,7 +845,7 @@ void DataBrowserModel::updateFromModel()
                     if( xSource.is())
                     {
                         Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeqs( xSource->getDataSequences());
-                        if( aLSeqs.getLength() == 0 )
+                        if( !aLSeqs.hasElements() )
                             continue;
                         nHeaderEnd = nHeaderStart;
 

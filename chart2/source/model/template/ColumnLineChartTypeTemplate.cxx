@@ -161,7 +161,7 @@ void ColumnLineChartTypeTemplate::createChartTypes(
     const Sequence< Reference< XCoordinateSystem > > & rCoordSys,
     const Sequence< Reference< XChartType > >& aOldChartTypesSeq )
 {
-    if( rCoordSys.getLength() == 0 ||
+    if( ! rCoordSys.hasElements() ||
         ! rCoordSys[0].is() )
         return;
 

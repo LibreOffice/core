@@ -346,17 +346,17 @@ void SAL_CALL CachedDataSequence::initialize(const uno::Sequence< uno::Any > & _
 {
     ::comphelper::SequenceAsHashMap aMap(_aArguments);
     m_aNumericalSequence = aMap.getUnpackedValueOrDefault( "DataSequence" ,m_aNumericalSequence);
-    if ( m_aNumericalSequence.getLength() )
+    if ( m_aNumericalSequence.hasElements() )
         m_eCurrentDataType = NUMERICAL;
     else
     {
         m_aTextualSequence = aMap.getUnpackedValueOrDefault( "DataSequence" ,m_aTextualSequence);
-        if ( m_aTextualSequence.getLength() )
+        if ( m_aTextualSequence.hasElements() )
             m_eCurrentDataType = TEXTUAL;
         else
         {
             m_aMixedSequence = aMap.getUnpackedValueOrDefault( "DataSequence" ,m_aMixedSequence);
-            if ( m_aMixedSequence.getLength() )
+            if ( m_aMixedSequence.hasElements() )
                 m_eCurrentDataType = MIXED;
         }
     }

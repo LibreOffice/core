@@ -2302,7 +2302,7 @@ namespace
             aProps[0].Value     <<= sNewName;
             Sequence< Any > aValues;
             aContent.executeCommand( "setPropertyValues",makeAny(aProps) ) >>= aValues;
-            if(aValues.getLength() && aValues[0].hasValue())
+            if(aValues.hasElements() && aValues[0].hasValue())
                 throw Exception("setPropertyValues returned non-zero", nullptr);
         }
         catch(const Exception&)

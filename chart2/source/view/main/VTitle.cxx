@@ -105,7 +105,7 @@ void VTitle::createShapes(
         return;
 
     uno::Sequence< uno::Reference< XFormattedString > > aStringList = m_xTitle->getText();
-    if(aStringList.getLength()<=0)
+    if(!aStringList.hasElements())
         return;
 
     m_nXPos = rPos.X;

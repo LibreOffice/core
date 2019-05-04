@@ -283,7 +283,7 @@ sal_Bool SAL_CALL StockDataInterpreter::isDataCompatible(
     {
         OSL_ASSERT( aInterpretedData.Series.getLength() > (bHasVolume ? 1 : 0));
         Sequence< Reference< XDataSeries > > aSeries( aInterpretedData.Series[(bHasVolume ? 1 : 0)] );
-        if(!aSeries.getLength())
+        if(!aSeries.hasElements())
             return false;
         for( sal_Int32 i=0; i<aSeries.getLength(); ++i )
         {

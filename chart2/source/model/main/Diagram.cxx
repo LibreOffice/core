@@ -520,7 +520,7 @@ void SAL_CALL Diagram::setCoordinateSystems(
 {
     tCoordinateSystemContainerType aNew;
     tCoordinateSystemContainerType aOld;
-    if( aCoordinateSystems.getLength()>0 )
+    if( aCoordinateSystems.hasElements() )
     {
         OSL_ENSURE( aCoordinateSystems.getLength()<=1, "more than one coordinatesystem is not supported yet by the fileformat" );
         aNew.push_back( aCoordinateSystems[0] );

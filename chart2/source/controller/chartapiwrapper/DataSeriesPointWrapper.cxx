@@ -434,11 +434,11 @@ DataSeriesPointWrapper::DataSeriesPointWrapper(const std::shared_ptr<Chart2Model
 
 void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< uno::Any >& aArguments )
 {
-    OSL_PRECOND(aArguments.getLength() >= 1,"need at least 1 argument to initialize the DataSeriesPointWrapper: series reference + optional datapoint index");
+    OSL_PRECOND(aArguments.hasElements(),"need at least 1 argument to initialize the DataSeriesPointWrapper: series reference + optional datapoint index");
 
     m_nSeriesIndexInNewAPI = -1;//ignored in this case
     m_nPointIndex = -1;
-    if( aArguments.getLength() >= 1 )
+    if( aArguments.hasElements() )
     {
         aArguments[0] >>= m_xDataSeries;
         if( aArguments.getLength() >= 2 )

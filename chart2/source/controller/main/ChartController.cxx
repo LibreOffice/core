@@ -260,7 +260,7 @@ css::uno::Reference<css::chart2::XChartType> getChartType(
     Reference< chart2::XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY_THROW );
 
     Sequence< Reference< chart2::XCoordinateSystem > > xCooSysSequence( xCooSysContainer->getCoordinateSystems());
-    if (!xCooSysSequence.getLength()) {
+    if (!xCooSysSequence.hasElements()) {
         return css::uno::Reference<css::chart2::XChartType>();
     }
 

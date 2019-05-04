@@ -1353,7 +1353,7 @@ void checkGapWidth(Reference<beans::XPropertySet> const & xPropSet, sal_Int32 nV
     CPPUNIT_ASSERT(aAny.hasValue());
     uno::Sequence< sal_Int32 > aSequence;
     aAny >>= aSequence;
-    CPPUNIT_ASSERT(aSequence.getLength());
+    CPPUNIT_ASSERT(aSequence.hasElements());
     CPPUNIT_ASSERT_EQUAL(nValue, aSequence[0]);
 }
 
@@ -1363,7 +1363,7 @@ void checkOverlap(Reference<beans::XPropertySet> const & xPropSet, sal_Int32 nVa
     CPPUNIT_ASSERT(aAny.hasValue());
     uno::Sequence< sal_Int32 > aSequence;
     aAny >>= aSequence;
-    CPPUNIT_ASSERT(aSequence.getLength());
+    CPPUNIT_ASSERT(aSequence.hasElements());
     CPPUNIT_ASSERT_EQUAL(nValue, aSequence[0]);
 }
 

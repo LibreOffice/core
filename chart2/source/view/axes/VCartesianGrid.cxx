@@ -179,7 +179,7 @@ void VCartesianGrid::fillLinePropertiesFromGridModel( std::vector<VLinePropertie
                                      , const Sequence< Reference< beans::XPropertySet > > & rGridPropertiesList )
 {
     rLinePropertiesList.clear();
-    if( !rGridPropertiesList.getLength() )
+    if( !rGridPropertiesList.hasElements() )
         return;
 
     VLineProperties aLineProperties;
@@ -195,7 +195,7 @@ void VCartesianGrid::fillLinePropertiesFromGridModel( std::vector<VLinePropertie
 
 void VCartesianGrid::createShapes()
 {
-    if(!m_aGridPropertiesList.getLength())
+    if(!m_aGridPropertiesList.hasElements())
         return;
     //somehow equal to axis tickmarks
 

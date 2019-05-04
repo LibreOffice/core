@@ -265,7 +265,7 @@ Reference< beans::XPropertySet > TitleWrapper::getFirstCharacterPropertySet()
     if( xTitle.is())
     {
         Sequence< Reference< chart2::XFormattedString > > aStrings( xTitle->getText());
-        if( aStrings.getLength() > 0 )
+        if( aStrings.hasElements() )
             xProp.set( aStrings[0], uno::UNO_QUERY );
     }
 

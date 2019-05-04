@@ -353,7 +353,7 @@ bool DataInterpreter::HasCategories(
 {
     bool bHasCategories = false;
 
-    if( rArguments.getLength() > 0 )
+    if( rArguments.hasElements() )
         GetProperty( rArguments, "HasCategories" ) >>= bHasCategories;
 
     for( sal_Int32 nLSeqIdx=0; ! bHasCategories && nLSeqIdx<rData.getLength(); ++nLSeqIdx )
@@ -365,7 +365,7 @@ bool DataInterpreter::HasCategories(
 bool DataInterpreter::UseCategoriesAsX( const Sequence< beans::PropertyValue > & rArguments )
 {
     bool bUseCategoriesAsX = true;
-    if( rArguments.getLength() > 0 )
+    if( rArguments.hasElements() )
         GetProperty( rArguments, "UseCategoriesAsX" ) >>= bUseCategoriesAsX;
     return bUseCategoriesAsX;
 }

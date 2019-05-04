@@ -106,7 +106,7 @@ TitleItemConverter::TitleItemConverter(
     if( xTitle.is())
     {
         uno::Sequence< uno::Reference< chart2::XFormattedString > > aStringSeq( xTitle->getText());
-        if( aStringSeq.getLength() > 0 )
+        if( aStringSeq.hasElements() )
         {
             m_aConverters.emplace_back(
                 new FormattedStringsConverter( aStringSeq, rItemPool, pRefSize, rPropertySet ));

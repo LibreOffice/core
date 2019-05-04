@@ -84,7 +84,7 @@ void lcl_ensureCorrectLabelPlacement( const Reference< beans::XPropertySet >& xP
         {
             uno::Any aNewValue;
             //otherwise use the first supported one
-            if( rAvailablePlacements.getLength() )
+            if( rAvailablePlacements.hasElements() )
                 aNewValue <<=rAvailablePlacements[0];
             xProp->setPropertyValue( "LabelPlacement", aNewValue );
         }
@@ -110,7 +110,7 @@ void lcl_ensureCorrectMissingValueTreatment( const Reference< chart2::XDiagram >
         uno::Sequence < sal_Int32 > aAvailableMissingValueTreatment(
             ::chart::ChartTypeHelper::getSupportedMissingValueTreatments( xChartType ) );
 
-        if( aAvailableMissingValueTreatment.getLength() )
+        if( aAvailableMissingValueTreatment.hasElements() )
             xDiaProp->setPropertyValue( "MissingValueTreatment", uno::Any( aAvailableMissingValueTreatment[0] ) );
         else
             xDiaProp->setPropertyValue( "MissingValueTreatment", uno::Any() );
@@ -321,7 +321,7 @@ sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
             xCooSysCnt->getCoordinateSystems());
 
         // need to have at least one coordinate system
-        bResult = (aCooSysSeq.getLength() > 0);
+        bResult = aCooSysSeq.hasElements();
         if( bResult )
         {
             Sequence< Reference< XChartType > > aFormerlyUsedChartTypes;
@@ -488,7 +488,7 @@ void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram 
 
                         uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
                             xChartType, isSwapXAndY(), xSeries ) );
-                        if(!aAvailablePlacements.getLength())
+                        if(!aAvailablePlacements.hasElements())
                             continue;
 
                         sal_Int32 nDefaultPlacement = aAvailablePlacements[0];
@@ -555,7 +555,7 @@ void ChartTypeTemplate::createCoordinateSystems(
     Sequence< Reference< XCoordinateSystem > > aCoordinateSystems(
         xOutCooSysCnt->getCoordinateSystems());
 
-    if( aCoordinateSystems.getLength())
+    if( aCoordinateSystems.hasElements())
     {
         bool bOk = true;
         for( sal_Int32 i=0; bOk && i<aCoordinateSystems.getLength(); ++i )
@@ -568,7 +568,7 @@ void ChartTypeTemplate::createCoordinateSystems(
     }
 
     //copy as much info from former coordinate system as possible:
-    if( aCoordinateSystems.getLength() )
+    if( aCoordinateSystems.hasElements() )
     {
         Reference< XCoordinateSystem > xOldCooSys( aCoordinateSystems[0] );
         sal_Int32 nMaxDimensionCount = std::min( xCooSys->getDimension(), xOldCooSys->getDimension() );
@@ -679,7 +679,7 @@ void ChartTypeTemplate::createAxes(
     const Sequence< Reference< XCoordinateSystem > > & rCoordSys )
 {
     //create missing axes
-    if( rCoordSys.getLength() > 0 )
+    if( rCoordSys.hasElements() )
     {
         Reference< XCoordinateSystem > xCooSys( rCoordSys[0] );
         if(!xCooSys.is())
@@ -713,7 +713,7 @@ void ChartTypeTemplate::adaptAxes(
 {
     //adapt properties of existing axes and remove superfluous axes
 
-    if( rCoordSys.getLength() > 0 )
+    if( rCoordSys.hasElements() )
     {
         for( sal_Int32 nCooSysIdx=0; nCooSysIdx < rCoordSys.getLength(); ++nCooSysIdx )
         {
@@ -789,7 +789,7 @@ void ChartTypeTemplate::createChartTypes(
     const Sequence< Reference< XCoordinateSystem > > & rCoordSys,
     const Sequence< Reference< XChartType > >& aOldChartTypesSeq )
 {
-    if( rCoordSys.getLength() == 0 ||
+    if( ! rCoordSys.hasElements() ||
         ! rCoordSys[0].is() )
         return;
 
@@ -797,7 +797,7 @@ void ChartTypeTemplate::createChartTypes(
     {
         sal_Int32 nCooSysIdx=0;
         Reference< XChartType > xCT;
-        if( aSeriesSeq.getLength() == 0 )
+        if( !aSeriesSeq.hasElements() )
         {
             // we need a new chart type
             xCT.set( getChartTypeForNewSeries( aOldChartTypesSeq ));
@@ -817,7 +817,7 @@ void ChartTypeTemplate::createChartTypes(
                     xCT.set( getChartTypeForNewSeries( aOldChartTypesSeq ));
                     Reference< XChartTypeContainer > xCTCnt( rCoordSys[nCooSysIdx], uno::UNO_QUERY_THROW );
                     Sequence< Reference< XChartType > > aCTSeq( xCTCnt->getChartTypes());
-                    if( aCTSeq.getLength())
+                    if( aCTSeq.hasElements())
                     {
                         aCTSeq[0] = xCT;
                         xCTCnt->setChartTypes( aCTSeq );

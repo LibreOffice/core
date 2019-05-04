@@ -568,7 +568,7 @@ bool AxisHelper::isGridShown( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex,
     else
     {
         Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
-        if( aSubGrids.getLength() )
+        if( aSubGrids.hasElements() )
             bRet = AxisHelper::isGridVisible( aSubGrids[0] );
     }
 

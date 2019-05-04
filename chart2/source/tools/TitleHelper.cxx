@@ -354,7 +354,7 @@ void TitleHelper::setCompleteString( const OUString& rNewText
     uno::Sequence< uno::Reference< XFormattedString > > aNewStringList(1);
 
     uno::Sequence< uno::Reference< XFormattedString > >  aOldStringList = xTitle->getText();
-    if( aOldStringList.getLength() )
+    if( aOldStringList.hasElements() )
     {
         aNewStringList[0].set( aOldStringList[0] );
         aNewStringList[0]->setString( aNewText );

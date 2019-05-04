@@ -241,7 +241,7 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
         }
     }
 
-    if( rArguments.getLength() > 0 && xChartModel.is() && xChartView.is() )
+    if( rArguments.hasElements() && xChartModel.is() && xChartView.is() )
     {
         Reference< view::XSelectionSupplier > xNewSelectionSupplier;
         rArguments[0] >>= xNewSelectionSupplier;

@@ -1399,7 +1399,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
         m_pPosHelper->transformScaledLogicToScene( aRegressionPoly );
 
         awt::Point aDefaultPos;
-        if( aRegressionPoly.SequenceX.getLength() && aRegressionPoly.SequenceX[0].getLength() )
+        if( aRegressionPoly.SequenceX.hasElements() && aRegressionPoly.SequenceX[0].hasElements() )
         {
             VLineProperties aVLineProperties;
             aVLineProperties.initFromPropertySet( xProperties );

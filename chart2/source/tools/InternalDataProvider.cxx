@@ -915,7 +915,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
                 aData = m_aInternalData.getColumnValues(nIndex);
             else
                 aData = m_aInternalData.getRowValues(nIndex);
-            if( aData.getLength() )
+            if( aData.hasElements() )
             {
                 aResult.realloc( aData.getLength());
                 transform( aData.begin(), aData.end(),

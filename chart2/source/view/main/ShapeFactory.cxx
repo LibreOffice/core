@@ -701,7 +701,7 @@ uno::Reference<drawing::XShape>
 
 static void appendAndCloseBezierCoords( drawing::PolyPolygonBezierCoords& rReturn, const drawing::PolyPolygonBezierCoords& rAdd, bool bAppendInverse )
 {
-    if(!rAdd.Coordinates.getLength())
+    if(!rAdd.Coordinates.hasElements())
         return;
     sal_Int32 nAddCount = rAdd.Coordinates[0].getLength();
     if(!nAddCount)
@@ -1063,7 +1063,7 @@ uno::Reference< drawing::XShape >
     if( !xTarget.is() )
         return nullptr;
 
-    if( !rPolyPolygon.SequenceX.getLength())
+    if( !rPolyPolygon.SequenceX.hasElements())
         return nullptr;
 
     //create shape
@@ -1097,7 +1097,7 @@ uno::Reference< drawing::XShape >
             //so we need to translate the object via transformation matrix
 
             //Matrix for position
-            if (rPolyPolygon.SequenceZ.getLength()&& rPolyPolygon.SequenceZ[0].getLength())
+            if (rPolyPolygon.SequenceZ.hasElements()&& rPolyPolygon.SequenceZ[0].hasElements())
             {
                 basegfx::B3DHomMatrix aM;
                 aM.translate(0, 0, rPolyPolygon.SequenceZ[0][0]);
@@ -1908,7 +1908,7 @@ uno::Reference< drawing::XShape >
     if( !xTarget.is() )
         return nullptr;
 
-    if(!rPoints.SequenceX.getLength())
+    if(!rPoints.SequenceX.hasElements())
         return nullptr;
 
     //create shape
@@ -1983,7 +1983,7 @@ uno::Reference< drawing::XShape >
     if( !xTarget.is() )
         return nullptr;
 
-    if(!rPoints.getLength())
+    if(!rPoints.hasElements())
         return nullptr;
 
     //create shape
@@ -2433,7 +2433,7 @@ uno::Reference< drawing::XShape >
         if(bStackCharacters)
         {
             //if the characters should be stacked we use only the first character properties for code simplicity
-            if( xFormattedString.getLength()>0 )
+            if( xFormattedString.hasElements() )
             {
                 OUString aLabel;
                 for( sal_Int32 nN=0; nN<xFormattedString.getLength();nN++ )
@@ -2470,7 +2470,7 @@ uno::Reference< drawing::XShape >
             bool bHasRefPageSize =
                 ( xTextProperties->getPropertyValue( "ReferencePageSize") >>= aOldRefSize );
 
-            if( xFormattedString.getLength()>0 )
+            if( xFormattedString.hasElements() )
             {
                 uno::Reference< beans::XPropertySet > xTargetProps( xShape, uno::UNO_QUERY );
                 uno::Reference< beans::XPropertySet > xSourceProps( xFormattedString[0], uno::UNO_QUERY );
@@ -2648,7 +2648,7 @@ bool ShapeFactory::hasPolygonAnyLines( drawing::PolyPolygonShape3D& rPoly)
 bool ShapeFactory::isPolygonEmptyOrSinglePoint( drawing::PolyPolygonShape3D& rPoly)
 {
     // true, if empty polypolygon or one polygon with one point
-    return (rPoly.SequenceX.getLength() == 0) ||
+    return !rPoly.SequenceX.hasElements() ||
         ((rPoly.SequenceX.getLength() == 1) && (rPoly.SequenceX[0].getLength() <= 1));
 }
 

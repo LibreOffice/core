@@ -170,7 +170,7 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName
             if( xSeriesContainer.is() )
             {
                 Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesContainer->getDataSeries() );
-                if(aSeriesSeq.getLength())
+                if(aSeriesSeq.hasElements())
                 {
                     xPropSet.set(aSeriesSeq[0],uno::UNO_QUERY);
                     if(xPropSet.is())
@@ -208,7 +208,7 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const OUString& rProperty
             if( xSeriesContainer.is() )
             {
                 Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesContainer->getDataSeries() );
-                if(aSeriesSeq.getLength())
+                if(aSeriesSeq.hasElements())
                 {
                     xPropSet.set(aSeriesSeq[0],uno::UNO_QUERY);
                     break;
@@ -270,7 +270,7 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValues( const uno::Sequence< OUStrin
 uno::Sequence< uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyValues( const uno::Sequence< OUString >& rNameSeq )
 {
     Sequence< Any > aRetSeq;
-    if( rNameSeq.getLength() )
+    if( rNameSeq.hasElements() )
     {
         aRetSeq.realloc( rNameSeq.getLength() );
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
@@ -316,7 +316,7 @@ beans::PropertyState SAL_CALL MinMaxLineWrapper::getPropertyState( const OUStrin
 uno::Sequence< beans::PropertyState > SAL_CALL MinMaxLineWrapper::getPropertyStates( const uno::Sequence< OUString >& rNameSeq )
 {
     Sequence< beans::PropertyState > aRetSeq;
-    if( rNameSeq.getLength() )
+    if( rNameSeq.hasElements() )
     {
         aRetSeq.realloc( rNameSeq.getLength() );
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
@@ -363,7 +363,7 @@ void SAL_CALL MinMaxLineWrapper::setPropertiesToDefault( const uno::Sequence< OU
 uno::Sequence< uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyDefaults( const uno::Sequence< OUString >& rNameSeq )
 {
     Sequence< Any > aRetSeq;
-    if( rNameSeq.getLength() )
+    if( rNameSeq.hasElements() )
     {
         aRetSeq.realloc( rNameSeq.getLength() );
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)

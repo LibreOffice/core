@@ -267,7 +267,7 @@ VDataSeries::~VDataSeries()
 
 void VDataSeries::doSortByXValues()
 {
-    if( m_aValues_X.is() && m_aValues_X.Doubles.getLength() )
+    if( m_aValues_X.is() && m_aValues_X.Doubles.hasElements() )
     {
         //prepare a vector for sorting
         std::vector< std::vector< double > > aTmp;//outer vector are points, inner vector are the different values of the point
@@ -498,7 +498,7 @@ void VDataSeries::getMinMaxXValue(double& fMin, double& fMax) const
 
     uno::Sequence< double > aValuesX = getAllX();
 
-    if(aValuesX.getLength() > 0)
+    if(aValuesX.hasElements())
     {
         sal_Int32 i = 0;
         while ( i < aValuesX.getLength() && ::rtl::math::isNan(aValuesX[i]) )
@@ -619,7 +619,7 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
                 return nLabelPlacement; //ok
 
         //otherwise use the first supported one
-        if( aAvailablePlacements.getLength() )
+        if( aAvailablePlacements.hasElements() )
         {
             nLabelPlacement = aAvailablePlacements[0];
             return nLabelPlacement;

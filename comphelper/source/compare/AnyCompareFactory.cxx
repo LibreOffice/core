@@ -96,7 +96,7 @@ Reference< XAnyCompare > SAL_CALL AnyCompareFactory::createAnyCompareByName( con
 
 void SAL_CALL AnyCompareFactory::initialize( const Sequence< Any >& aArguments )
 {
-    if( aArguments.getLength() )
+    if( aArguments.hasElements() )
     {
         if( aArguments[0] >>= m_Locale )
         {

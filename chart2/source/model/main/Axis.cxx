@@ -345,7 +345,7 @@ Axis::Axis( const Axis & rOther ) :
     if( m_aScaleData.Categories.is())
         ModifyListenerHelper::addListener( m_aScaleData.Categories, m_xModifyEventForwarder );
 
-    if( rOther.m_aSubGridProperties.getLength() != 0 )
+    if( rOther.m_aSubGridProperties.hasElements() )
         lcl_CloneSubGrids( rOther.m_aSubGridProperties, m_aSubGridProperties );
     ModifyListenerHelper::addListenerToAllSequenceElements( m_aSubGridProperties, m_xModifyEventForwarder );
 

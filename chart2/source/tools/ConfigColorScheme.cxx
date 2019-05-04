@@ -93,7 +93,7 @@ uno::Any ChartConfigItem::getProperty( const OUString & aPropertyName )
 {
     Sequence< uno::Any > aValues(
         GetProperties( Sequence< OUString >( &aPropertyName, 1 )));
-    if( ! aValues.getLength())
+    if( ! aValues.hasElements())
         return uno::Any();
     return aValues[0];
 }
