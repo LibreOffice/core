@@ -26,6 +26,7 @@ public:
 
     void testAddEventListener();
     void testRemoveEventListener();
+    void testDispose();
     void testDisposedByDesktopTerminate();
 
 protected:
