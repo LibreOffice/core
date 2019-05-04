@@ -1,6 +1,3 @@
-"ScShapeObj";"com::sun::star::lang::XComponent";"dispose()"
-"ScShapeObj";"com::sun::star::lang::XComponent";"addEventListener()"
-"ScShapeObj";"com::sun::star::lang::XComponent";"removeEventListener()"
 "ScShapeObj";"com::sun::star::drawing::Shape";"ZOrder#optional"
 "ScShapeObj";"com::sun::star::drawing::Shape";"LayerID#optional"
 "ScShapeObj";"com::sun::star::drawing::Shape";"LayerName#optional"

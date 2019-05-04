@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/lang/xcomponent.hxx>
 #include <test/sheet/shape.hxx>
 
 #include <com/sun/star/awt/Point.hpp>
@@ -25,17 +26,17 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 using namespace css;
-using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScShapeObj : public CalcUnoApiTest, public apitest::Shape
+class ScShapeObj : public CalcUnoApiTest, public apitest::Shape, public apitest::XComponent
 {
 public:
     ScShapeObj();
 
     virtual uno::Reference<uno::XInterface> init() override;
     virtual uno::Reference<uno::XInterface> getXSheetDocument() override;
+    virtual void triggerDesktopTerminate() override{};
     virtual void setUp() override;
     virtual void tearDown() override;
 
@@ -44,6 +45,11 @@ public:
     // Shape
     CPPUNIT_TEST(testShapePropertiesAnchor);
     CPPUNIT_TEST(testShapePropertiesPosition);
+
+    // XComponent
+    CPPUNIT_TEST(testAddEventListener);
+    CPPUNIT_TEST(testDispose);
+    CPPUNIT_TEST(testRemoveEventListener);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -58,18 +64,18 @@ ScShapeObj::ScShapeObj()
 
 uno::Reference<uno::XInterface> ScShapeObj::init()
 {
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape(
-        xMSF->createInstance("com.sun.star.drawing.RectangleShape"), UNO_QUERY_THROW);
+        xMSF->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY_THROW);
     xShape->setPosition(awt::Point(5000, 3500));
     xShape->setSize(awt::Size(7500, 5000));
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDPS(xDoc, UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPagesSupplier> xDPS(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPages> xDrawPages = xDPS->getDrawPages();
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), UNO_QUERY_THROW);
-    uno::Reference<drawing::XShapes> xShapes(xDrawPage, UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShapes> xShapes(xDrawPage, uno::UNO_QUERY_THROW);
     xShapes->add(xShape);
 
     for (auto i = 0; i < 10; i++)
@@ -84,7 +90,7 @@ uno::Reference<uno::XInterface> ScShapeObj::init()
 
 uno::Reference<uno::XInterface> ScShapeObj::getXSheetDocument()
 {
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     return xDoc;
 }
 
@@ -103,7 +109,7 @@ void ScShapeObj::tearDown()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScShapeObj);
 
-} // end namespace
+} // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

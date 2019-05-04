@@ -57,6 +57,16 @@ void XComponent::testRemoveEventListener()
     CPPUNIT_ASSERT_EQUAL(false, pListenerAddedAndRemoved->m_hasDisposingCalled);
 }
 
+void XComponent::testDispose()
+{
+    Reference<lang::XComponent> xComponent(init(), uno::UNO_QUERY_THROW);
+    auto pListenerAdded(new TestEventListener());
+    Reference<lang::XEventListener> xListenerAdded(pListenerAdded);
+    xComponent->addEventListener(xListenerAdded);
+    xComponent->dispose();
+    CPPUNIT_ASSERT_EQUAL(true, pListenerAdded->m_hasDisposingCalled);
+}
+
 void XComponent::testDisposedByDesktopTerminate()
 {
     Reference<lang::XComponent> xComponent(init(), uno::UNO_QUERY_THROW);
