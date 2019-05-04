@@ -1080,7 +1080,7 @@ void Document::retrieveRunAttributesImpl(
         aPropVal.State = css::beans::PropertyState_DIRECT_VALUE;
         aRunAttrSeq[ aPropVal.Name ] = aPropVal;
     }
-    if ( RequestedAttributes.getLength() == 0 )
+    if ( !RequestedAttributes.hasElements() )
     {
         rRunAttrSeq = aRunAttrSeq;
     }

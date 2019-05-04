@@ -853,7 +853,7 @@ void DlgEditor::Paste()
             }
             bool bLocalized = false;
             if( xStringResourceManager.is() )
-                bLocalized = ( xStringResourceManager->getLocales().getLength() > 0 );
+                bLocalized = xStringResourceManager->getLocales().hasElements();
 
             if ( xTransf->isDataFlavorSupported( m_ClipboardDataFlavors[0] ) )
             {

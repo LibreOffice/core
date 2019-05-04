@@ -171,7 +171,7 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar )
 
 Sequence< Type > SAL_CALL DocObjectWrapper::getTypes()
 {
-    if ( m_Types.getLength() == 0 )
+    if ( !m_Types.hasElements() )
     {
         Sequence< Type > sTypes;
         if ( m_xAggregateTypeProv.is() )
@@ -2392,7 +2392,7 @@ void SbUserFormModule::triggerMethod( const OUString& aMethodToRun, Sequence< An
     SbxVariable* pMeth = SbObjModule::Find( aMethodToRun, SbxClassType::Method );
     if( pMeth )
     {
-        if ( aArguments.getLength() > 0 )   // Setup parameters
+        if ( aArguments.hasElements() )   // Setup parameters
         {
             auto xArray = tools::make_ref<SbxArray>();
             xArray->Put( pMeth, 0 );    // Method as parameter 0

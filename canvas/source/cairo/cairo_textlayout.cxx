@@ -166,7 +166,7 @@ namespace cairocanvas
         const sal_Int32 nAboveBaseline( -aMetric.GetAscent() );
         const sal_Int32 nBelowBaseline( aMetric.GetDescent() );
 
-        if( maLogicalAdvancements.getLength() )
+        if( maLogicalAdvancements.hasElements() )
         {
             return geometry::RealRectangle2D( 0, nAboveBaseline,
                                               maLogicalAdvancements[ maLogicalAdvancements.getLength()-1 ],
@@ -307,7 +307,7 @@ namespace cairocanvas
         // TODO(P2): cache that
         std::unique_ptr< long []> aOffsets(new long[maLogicalAdvancements.getLength()]);
 
-        if( maLogicalAdvancements.getLength() )
+        if( maLogicalAdvancements.hasElements() )
         {
             setupTextOffsets( aOffsets.get(), maLogicalAdvancements, viewState, renderState );
 
@@ -318,7 +318,7 @@ namespace cairocanvas
         aSysLayoutData = rOutDev.GetSysTextLayoutData(rOutpos, maText.Text,
                                                       ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
                                                       ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length),
-                                                      maLogicalAdvancements.getLength() ? aOffsets.get() : nullptr);
+                                                      maLogicalAdvancements.hasElements() ? aOffsets.get() : nullptr);
 
         // Sort them so that all glyphs on the same glyph fallback level are consecutive
         std::sort(aSysLayoutData.rGlyphData.begin(), aSysLayoutData.rGlyphData.end(), compareFallbacks);
@@ -337,7 +337,7 @@ namespace cairocanvas
                 {
                     bCairoRenderable = false;
                     SAL_INFO("canvas.cairo", ":cairocanvas::TextLayout::draw(S,O,p,v,r): VCL FALLBACK " <<
-                             (maLogicalAdvancements.getLength() ? "ADV " : "") <<
+                             (maLogicalAdvancements.hasElements() ? "ADV " : "") <<
                              (aFontData.back().first.bAntialias ? "AA " : "") <<
                              (aFontData.back().first.bFakeBold ? "FB " : "") <<
                              (aFontData.back().first.bFakeItalic ? "FI " : "") <<
@@ -352,7 +352,7 @@ namespace cairocanvas
         // The fallback checks need to be done after final font is known.
         if (!bCairoRenderable)    // VCL FALLBACKS
         {
-            if (maLogicalAdvancements.getLength())        // VCL FALLBACK - with glyph advances
+            if (maLogicalAdvancements.hasElements())        // VCL FALLBACK - with glyph advances
             {
                 rOutDev.DrawTextArray( rOutpos, maText.Text, aOffsets.get(),
                                        ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
@@ -465,7 +465,7 @@ namespace cairocanvas
                     << (cairo_glyphs.size() > 1 ? cairo_glyphs[1].index : -1)
                     << ","
                     << (cairo_glyphs.size() > 2 ? cairo_glyphs[2].index : -1)
-                    << ") " << (maLogicalAdvancements.getLength() ? "ADV " : "")
+                    << ") " << (maLogicalAdvancements.hasElements() ? "ADV " : "")
                     << (rSysFontData.bAntialias ? "AA " : "")
                     << (rSysFontData.bFakeBold ? "FB " : "")
                     << (rSysFontData.bFakeItalic ? "FI " : "") << " || Name:"

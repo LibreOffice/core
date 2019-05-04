@@ -515,7 +515,7 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
             aNewObjects = CreateMultiSelectionSequence( rMarkList );
         }
 
-        if ( aNewObjects.getLength() )
+        if ( aNewObjects.hasElements() )
             implSetNewObjectSequence( aNewObjects );
         else
             implSetNewObject( xNewObject );

@@ -2897,7 +2897,7 @@ std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassMethods() const
     if( bCanComplete && ( xClass != nullptr ) )
     {
         Sequence< Reference< reflection::XIdlMethod > > aMethods = xClass->getMethods();
-        if( aMethods.getLength() != 0 )
+        if( aMethods.hasElements() )
         {
             for(sal_Int32 l = 0; l < aMethods.getLength(); ++l)
             {
@@ -2914,7 +2914,7 @@ std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassFields() const
     if( bCanComplete && ( xClass != nullptr ) )
     {
         Sequence< Reference< reflection::XIdlField > > aFields = xClass->getFields();
-        if( aFields.getLength() != 0 )
+        if( aFields.hasElements() )
         {
             for(sal_Int32 l = 0; l < aFields.getLength(); ++l)
             {

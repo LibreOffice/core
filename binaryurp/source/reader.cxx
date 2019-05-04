@@ -102,7 +102,7 @@ void Reader::execute() {
             bridge_->getConnection());
         for (;;) {
             css::uno::Sequence< sal_Int8 > s(read(con, 8, true));
-            if (s.getLength() == 0) {
+            if (!s.hasElements()) {
                 break;
             }
             Unmarshal header(bridge_, state_, s);

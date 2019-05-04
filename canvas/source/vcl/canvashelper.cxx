@@ -334,7 +334,7 @@ namespace vclcanvas
             }
 
             // apply dashing, if any
-            if( strokeAttributes.DashArray.getLength() )
+            if( strokeAttributes.DashArray.hasElements() )
             {
                 const std::vector<double>& aDashArray(
                     ::comphelper::sequenceToContainer< std::vector<double> >(strokeAttributes.DashArray) );

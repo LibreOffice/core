@@ -675,8 +675,7 @@ void DialogWindow::SaveDialog()
             if( xStringResourceResolver.is() )
             {
                 Sequence< lang::Locale > aLocaleSeq = xStringResourceResolver->getLocales();
-                sal_Int32 nLocaleCount = aLocaleSeq.getLength();
-                if( nLocaleCount > 0 )
+                if( aLocaleSeq.hasElements() )
                     bResource = true;
             }
 

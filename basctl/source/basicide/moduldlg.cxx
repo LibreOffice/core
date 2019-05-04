@@ -164,7 +164,7 @@ DragDropMode ExtTreeListBox::NotifyStartDrag( TransferDataContainer&, SvTreeList
                     Reference< XStringResourceManager > xSourceMgr =
                         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
                     if( xSourceMgr.is() )
-                        bAllowMove = ( xSourceMgr->getLocales().getLength() == 0 );
+                        bAllowMove = !xSourceMgr->getLocales().hasElements();
                 }
                 if( bAllowMove )
                     nMode_ |= DragDropMode::CTRL_MOVE;
@@ -274,14 +274,14 @@ void Shell::CopyDialogResources(
         LocalizationMgr::getStringResourceFromDialogLibrary( xSourceDialogLib );
     if( !xSourceMgr.is() )
         return;
-    bool bSourceLocalized = ( xSourceMgr->getLocales().getLength() > 0 );
+    bool bSourceLocalized = xSourceMgr->getLocales().hasElements();
 
     Reference< container::XNameContainer > xDestDialogLib( rDestDoc.getLibrary( E_DIALOGS, rDestLibName, true ) );
     Reference< XStringResourceManager > xDestMgr =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDestDialogLib );
     if( !xDestMgr.is() )
         return;
-    bool bDestLocalized = ( xDestMgr->getLocales().getLength() > 0 );
+    bool bDestLocalized = xDestMgr->getLocales().hasElements();
 
     if( !bSourceLocalized && !bDestLocalized )
         return;

@@ -730,7 +730,7 @@ namespace oglcanvas
 
                 // handle custom spacing, if there
                 uno::Sequence<double> aLogicalAdvancements=xLayoutetText->queryLogicalAdvancements();
-                if( aLogicalAdvancements.getLength() )
+                if( aLogicalAdvancements.hasElements() )
                 {
                     // create the DXArray
                     const sal_Int32 nLen( aLogicalAdvancements.getLength() );
@@ -922,7 +922,7 @@ namespace oglcanvas
                 break;
         }
 
-        if (renderState.DeviceColor.getLength())
+        if (renderState.DeviceColor.hasElements())
             o_action.maARGBColor =
                 mpDevice->getDeviceColorSpace()->convertToARGB(renderState.DeviceColor)[0];
     }

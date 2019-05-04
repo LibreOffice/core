@@ -54,7 +54,7 @@ namespace vclcanvas
         SolarMutexGuard aGuard;
 
         // #i64742# Only call initialize when not in probe mode
-        if( maArguments.getLength() == 0 )
+        if( !maArguments.hasElements() )
             return;
 
         SAL_INFO("canvas.vcl", "SpriteCanvas created" );
@@ -71,7 +71,7 @@ namespace vclcanvas
 
         SAL_INFO("canvas.vcl", "VCLSpriteCanvas::initialize called" );
 
-        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 1,
+        ENSURE_ARG_OR_THROW( maArguments.hasElements(),
                              "VCLSpriteCanvas::initialize: wrong number of arguments" );
 
         /* maArguments:

@@ -565,7 +565,7 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
     }
     else
     {
-        if ( indices.getLength() < 1 )
+        if ( !indices.hasElements() )
         {
             // Should never ever get here ( indices.getLength()
             // should equal number of dimensions in the array )
@@ -3929,7 +3929,7 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
     Reference< XIdlClass > xReturnType = xMethod->getReturnType();
     Sequence< Reference< XIdlClass > > aExceptionSeq = xMethod->getExceptionTypes();
     if( ( xReturnType.is() && xReturnType->getTypeClass() != TypeClass_VOID ) ||
-        aExceptionSeq.getLength() > 0 )
+        aExceptionSeq.hasElements() )
     {
         bApproveFiring = true;
     }
