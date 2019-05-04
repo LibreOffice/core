@@ -272,7 +272,7 @@ void CandleStickChart::createShapes()
                             AddPointToPoly( aPoly, aPosRightLast, nLineIndex );
                         }
 
-                        if( aPoly.SequenceX.getLength() )
+                        if( aPoly.SequenceX.hasElements() )
                         {
                             uno::Reference< drawing::XShape > xShape =
                                 m_pShapeFactory->createLine2D( xPointGroupShape_Shapes,

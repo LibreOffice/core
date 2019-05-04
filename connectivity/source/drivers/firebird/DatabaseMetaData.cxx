@@ -1319,7 +1319,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             "WHERE ");
 
     // TODO: GLOBAL TEMPORARY, LOCAL TEMPORARY, ALIAS, SYNONYM
-    if ((types.getLength() == 0) || (types.getLength() == 1 && types[0].match(wld)))
+    if (!types.hasElements() || (types.getLength() == 1 && types[0].match(wld)))
     {
         // All table types? I.e. includes system tables.
         queryBuf.append("(RDB$RELATION_TYPE = 0 OR RDB$RELATION_TYPE = 1) ");

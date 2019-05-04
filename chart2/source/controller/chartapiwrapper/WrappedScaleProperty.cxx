@@ -173,7 +173,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
         case SCALE_PROP_STEPHELP:
         {
             Sequence< chart2::SubIncrement >& rSubIncrements( aScaleData.IncrementData.SubIncrements );
-            if( rSubIncrements.getLength() == 0 )
+            if( !rSubIncrements.hasElements() )
                 rSubIncrements.realloc( 1 );
 
             double fStepHelp = 0;
@@ -199,7 +199,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
         case SCALE_PROP_STEPHELP_COUNT:
         {
             Sequence< chart2::SubIncrement >& rSubIncrements( aScaleData.IncrementData.SubIncrements );
-            if( rSubIncrements.getLength() == 0 )
+            if( !rSubIncrements.hasElements() )
                 rSubIncrements.realloc( 1 );
             sal_Int32 nIntervalCount=0;
             if( rOuterValue>>=nIntervalCount )
@@ -239,7 +239,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
         case SCALE_PROP_AUTO_STEPHELP:
         {
             Sequence< chart2::SubIncrement >& rSubIncrements( aScaleData.IncrementData.SubIncrements );
-            if( rSubIncrements.getLength() == 0 )
+            if( !rSubIncrements.hasElements() )
                 rSubIncrements.realloc( 1 );
 
             if( (rOuterValue >>= bBool) && bBool )
@@ -402,7 +402,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
             Sequence< chart2::SubIncrement >& rSubIncrements( aScaleData.IncrementData.SubIncrements );
             if( bLogarithmic )
             {
-                if( rSubIncrements.getLength() > 0 )
+                if( rSubIncrements.hasElements() )
                 {
                     sal_Int32 nIntervalCount = 0;
                     rSubIncrements[ 0 ].IntervalCount >>= nIntervalCount;
@@ -412,7 +412,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
             }
             else if( aScaleData.IncrementData.Distance.hasValue() )
             {
-                if( rSubIncrements.getLength() > 0 )
+                if( rSubIncrements.hasElements() )
                 {
                     double fStepMain = 0;
                     sal_Int32 nIntervalCount = 0;
@@ -441,7 +441,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
                 {
                     if( bLogarithmic )
                     {
-                        if( rSubIncrements.getLength() > 0 )
+                        if( rSubIncrements.hasElements() )
                         {
                             sal_Int32 nIntervalCount = aExplicitIncrement.SubIncrements[ 0 ].IntervalCount;
                             aRet <<= double(nIntervalCount);
@@ -467,7 +467,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
             sal_Int32 nIntervalCount = 0;
             bool bNeedToCalculateExplicitValues = true;
             Sequence< chart2::SubIncrement >& rSubIncrements( aScaleData.IncrementData.SubIncrements );
-            if( rSubIncrements.getLength() > 0 )
+            if( rSubIncrements.hasElements() )
             {
                 if( (rSubIncrements[ 0 ].IntervalCount >>= nIntervalCount) && (nIntervalCount > 0) )
                     bNeedToCalculateExplicitValues = false;
@@ -499,7 +499,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
         case SCALE_PROP_AUTO_STEPHELP:
         {
             Sequence< chart2::SubIncrement >& rSubIncrements( aScaleData.IncrementData.SubIncrements );
-            if( rSubIncrements.getLength() > 0 )
+            if( rSubIncrements.hasElements() )
                 aRet <<= !rSubIncrements[ 0 ].IntervalCount.hasValue();
             else
                 aRet <<= true;

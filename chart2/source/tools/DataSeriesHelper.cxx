@@ -335,7 +335,7 @@ OUString getLabelForLabeledDataSequence(
                     chart2::data::LabelOrigin_SHORT_SIDE ) );
                 // no labels returned is interpreted as: auto-generation not
                 // supported by sequence
-                if( aLabels.getLength() )
+                if( aLabels.hasElements() )
                     aResult=aLabels[0];
                 else
                 {
@@ -646,7 +646,7 @@ bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSeque
         try
         {
             xProp->getPropertyValue( "HiddenValues" ) >>= aHiddenValues;
-            if( !aHiddenValues.getLength() )
+            if( !aHiddenValues.hasElements() )
                 return true;
         }
         catch( const uno::Exception& )
@@ -654,7 +654,7 @@ bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSeque
             return true;
         }
     }
-    return xDataSequence->getData().getLength();
+    return xDataSequence->getData().hasElements();
 }
 
 }
@@ -690,7 +690,7 @@ sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nIndex, const Refere
         {
             Sequence<sal_Int32> aHiddenIndicesSeq;
             xProp->getPropertyValue( "HiddenValues" ) >>= aHiddenIndicesSeq;
-            if( aHiddenIndicesSeq.getLength() )
+            if( aHiddenIndicesSeq.hasElements() )
             {
                 std::vector< sal_Int32 > aHiddenIndices( ContainerHelper::SequenceToVector( aHiddenIndicesSeq ) );
                 std::sort( aHiddenIndices.begin(), aHiddenIndices.end() );

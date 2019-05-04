@@ -1163,7 +1163,7 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString
 Reference< uno::XInterface > SAL_CALL ChartModel::createInstanceWithArguments(
             const OUString& rServiceSpecifier , const Sequence< Any >& Arguments )
 {
-    OSL_ENSURE( Arguments.getLength(), "createInstanceWithArguments: Warning: Arguments are ignored" );
+    OSL_ENSURE( Arguments.hasElements(), "createInstanceWithArguments: Warning: Arguments are ignored" );
     return createInstance( rServiceSpecifier );
 }
 

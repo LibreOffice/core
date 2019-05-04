@@ -409,7 +409,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                 sal_Int32 nOld =0;
                 if( !(GetPropertySet()->getPropertyValue( "LabelPlacement" ) >>= nOld) )
                 {
-                    if( m_aAvailableLabelPlacements.getLength() )
+                    if( m_aAvailableLabelPlacements.hasElements() )
                         nOld = m_aAvailableLabelPlacements[0];
                 }
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
@@ -641,7 +641,7 @@ void DataPointItemConverter::FillSpecialItem(
                 sal_Int32 nPlacement=0;
                 if( GetPropertySet()->getPropertyValue( "LabelPlacement" ) >>= nPlacement )
                     rOutItemSet.Put( SfxInt32Item( nWhichId, nPlacement ));
-                else if( m_aAvailableLabelPlacements.getLength() )
+                else if( m_aAvailableLabelPlacements.hasElements() )
                     rOutItemSet.Put( SfxInt32Item( nWhichId, m_aAvailableLabelPlacements[0] ));
             }
             catch( const uno::Exception& e )

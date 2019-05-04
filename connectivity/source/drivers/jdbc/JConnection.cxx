@@ -578,7 +578,7 @@ namespace
     bool lcl_setSystemProperties_nothrow( const java::sql::ConnectionLog& _rLogger,
         JNIEnv& _rEnv, const Sequence< NamedValue >& _rSystemProperties )
     {
-        if ( _rSystemProperties.getLength() == 0 )
+        if ( !_rSystemProperties.hasElements() )
             // nothing to do
             return true;
 

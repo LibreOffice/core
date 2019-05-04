@@ -710,7 +710,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
         //       in postgresql doc
 
         Sequence< OUString > keyColumnNames = getPrimaryKeyColumnNames( connection, schemaName, tableName );
-        if( keyColumnNames.getLength() )
+        if( keyColumnNames.hasElements() )
         {
             OUStringBuffer buf( 128 );
             buf.append( "SELECT * FROM " );

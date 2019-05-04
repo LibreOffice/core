@@ -45,7 +45,7 @@ ChainablePropertySetInfo::~ChainablePropertySetInfo()
 void ChainablePropertySetInfo::remove( const OUString& aName )
 {
     maMap.erase ( aName );
-    if ( maProperties.getLength() )
+    if ( maProperties.hasElements() )
          maProperties.realloc( 0 );
 }
 

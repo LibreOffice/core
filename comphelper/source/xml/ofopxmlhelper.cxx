@@ -379,7 +379,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
 
             m_aElementsSeq.push_back( aName );
 
-            if ( !m_aResultSeq.getLength() )
+            if ( !m_aResultSeq.hasElements() )
                 m_aResultSeq.realloc( 2 );
 
             return; // nothing to do
@@ -392,7 +392,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
 
             m_aElementsSeq.push_back( aName );
 
-            if ( !m_aResultSeq.getLength() )
+            if ( !m_aResultSeq.hasElements() )
                 m_aResultSeq.realloc( 2 );
 
             if ( m_aResultSeq.getLength() != 2 )
@@ -420,7 +420,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
 
             m_aElementsSeq.push_back( aName );
 
-            if ( !m_aResultSeq.getLength() )
+            if ( !m_aResultSeq.hasElements() )
                 m_aResultSeq.realloc( 2 );
 
             if ( m_aResultSeq.getLength() != 2 )

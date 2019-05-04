@@ -60,7 +60,7 @@ static uno::Sequence< sal_Int8 > GeneratePBKDF2Hash( const OUString& aPassword, 
 {
     uno::Sequence< sal_Int8 > aResult;
 
-    if ( !aPassword.isEmpty() && aSalt.getLength() && nCount && nHashLength )
+    if ( !aPassword.isEmpty() && aSalt.hasElements() && nCount && nHashLength )
     {
         OString aBytePass = OUStringToOString( aPassword, RTL_TEXTENCODING_UTF8 );
         // FIXME this is subject to the SHA1-bug tdf#114939 - see also
@@ -92,7 +92,7 @@ uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswo
     sal_Int32 const nPBKDF2IterationCount = 100000;
 
     uno::Sequence< sal_Int8 > aNewHash = GeneratePBKDF2Hash(aPassword, aSalt, nPBKDF2IterationCount, 16);
-    if ( aNewHash.getLength() )
+    if ( aNewHash.hasElements() )
     {
         aResult.realloc( 4 );
         aResult[0].Name = "algorithm-name";
@@ -112,7 +112,7 @@ uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswo
 bool DocPasswordHelper::IsModifyPasswordCorrect( const OUString& aPassword, const uno::Sequence< beans::PropertyValue >& aInfo )
 {
     bool bResult = false;
-    if ( !aPassword.isEmpty() && aInfo.getLength() )
+    if ( !aPassword.isEmpty() && aInfo.hasElements() )
     {
         OUString sAlgorithm;
         uno::Sequence< sal_Int8 > aSalt;
@@ -131,7 +131,7 @@ bool DocPasswordHelper::IsModifyPasswordCorrect( const OUString& aPassword, cons
                 aInfo[nInd].Value >>= aHash;
         }
 
-        if ( sAlgorithm == "PBKDF2" && aSalt.getLength() && nCount > 0 && aHash.getLength() )
+        if ( sAlgorithm == "PBKDF2" && aSalt.hasElements() && nCount > 0 && aHash.hasElements() )
         {
             uno::Sequence< sal_Int8 > aNewHash = GeneratePBKDF2Hash( aPassword, aSalt, nCount, aHash.getLength() );
             for ( sal_Int32 nInd = 0; nInd < aNewHash.getLength() && nInd < aHash.getLength() && aNewHash[nInd] == aHash[nInd]; nInd ++ )
@@ -446,7 +446,7 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
     // try media encryption data (skip, if result is OK or ABORT)
     if( eResult == DocPasswordVerifierResult::WrongPassword )
     {
-        if( rMediaEncData.getLength() > 0 )
+        if( rMediaEncData.hasElements() )
         {
             eResult = rVerifier.verifyEncryptionData( rMediaEncData );
             if( eResult == DocPasswordVerifierResult::OK )

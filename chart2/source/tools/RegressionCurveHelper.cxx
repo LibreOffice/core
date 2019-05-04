@@ -217,8 +217,8 @@ void RegressionCurveHelper::initializeCurveCalculator(
     }
 
     if( bXValuesFound && bYValuesFound &&
-        aXValues.getLength() > 0 &&
-        aYValues.getLength() > 0 )
+        aXValues.hasElements() &&
+        aYValues.hasElements() )
         xOutCurveCalculator->recalculateRegression( aXValues, aYValues );
 }
 

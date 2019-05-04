@@ -235,7 +235,7 @@ void SAL_CALL WrappedPropertySet::setPropertyValues( const Sequence< OUString >&
 Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyValues( const Sequence< OUString >& rNameSeq )
 {
     Sequence< Any > aRetSeq;
-    if( rNameSeq.getLength() )
+    if( rNameSeq.hasElements() )
     {
         aRetSeq.realloc( rNameSeq.getLength() );
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
@@ -307,7 +307,7 @@ const WrappedProperty* WrappedPropertySet::getWrappedProperty( sal_Int32 nHandle
 Sequence< beans::PropertyState > SAL_CALL WrappedPropertySet::getPropertyStates( const Sequence< OUString >& rNameSeq )
 {
     Sequence< beans::PropertyState > aRetSeq;
-    if( rNameSeq.getLength() )
+    if( rNameSeq.hasElements() )
     {
         aRetSeq.realloc( rNameSeq.getLength() );
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
@@ -367,7 +367,7 @@ void SAL_CALL WrappedPropertySet::setPropertiesToDefault( const Sequence< OUStri
 Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyDefaults( const Sequence< OUString >& rNameSeq )
 {
     Sequence< Any > aRetSeq;
-    if( rNameSeq.getLength() )
+    if( rNameSeq.hasElements() )
     {
         aRetSeq.realloc( rNameSeq.getLength() );
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)

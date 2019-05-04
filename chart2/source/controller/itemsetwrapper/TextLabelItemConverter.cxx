@@ -369,7 +369,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
                 sal_Int32 nOld = 0;
                 if (!(GetPropertySet()->getPropertyValue("LabelPlacement") >>= nOld))
                 {
-                    if (maAvailableLabelPlacements.getLength())
+                    if (maAvailableLabelPlacements.hasElements())
                         nOld = maAvailableLabelPlacements[0];
                 }
                 if (mbDataSeries)
@@ -590,7 +590,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
                 sal_Int32 nPlacement = 0;
                 if (GetPropertySet()->getPropertyValue("LabelPlacement") >>= nPlacement)
                     rOutItemSet.Put(SfxInt32Item(nWhichId, nPlacement));
-                else if (maAvailableLabelPlacements.getLength())
+                else if (maAvailableLabelPlacements.hasElements())
                     rOutItemSet.Put(SfxInt32Item(nWhichId, maAvailableLabelPlacements[0]));
             }
             catch (const uno::Exception& e)

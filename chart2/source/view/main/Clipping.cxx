@@ -215,7 +215,7 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
     aResult.SequenceY.realloc(0);
     aResult.SequenceZ.realloc(0);
 
-    if(!rPolygon.SequenceX.getLength())
+    if(!rPolygon.SequenceX.hasElements())
         return;
 
     //need clipping?:

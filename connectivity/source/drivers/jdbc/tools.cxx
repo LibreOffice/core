@@ -183,7 +183,7 @@ jobject connectivity::convertTypeMapToJavaMap(const Reference< css::container::X
     if ( _rMap.is() )
     {
         css::uno::Sequence< OUString > aNames = _rMap->getElementNames();
-        if ( aNames.getLength() > 0 )
+        if ( aNames.hasElements() )
             ::dbtools::throwFeatureNotImplementedSQLException( "Type maps", nullptr );
     }
     return nullptr;

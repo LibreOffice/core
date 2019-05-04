@@ -261,7 +261,7 @@ void PieChartTypeTemplate::createChartTypes(
     const Sequence< Reference< chart2::XCoordinateSystem > > & rCoordSys,
     const Sequence< Reference< chart2::XChartType > >& /* aOldChartTypesSeq */ )
 {
-    if( rCoordSys.getLength() == 0 ||
+    if( ! rCoordSys.hasElements() ||
         ! rCoordSys[0].is() )
         return;
 
@@ -281,7 +281,7 @@ void PieChartTypeTemplate::createChartTypes(
         Reference< chart2::XChartTypeContainer > xCTCnt( rCoordSys[0], uno::UNO_QUERY_THROW );
         xCTCnt->setChartTypes( Sequence< Reference< chart2::XChartType > >( &xCT, 1 ));
 
-        if( aSeriesSeq.getLength() > 0 )
+        if( aSeriesSeq.hasElements() )
         {
             Reference< chart2::XDataSeriesContainer > xDSCnt( xCT, uno::UNO_QUERY_THROW );
             Sequence< Reference< chart2::XDataSeries > > aFlatSeriesSeq( FlattenSequence( aSeriesSeq ));

@@ -1206,7 +1206,7 @@ css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
     css::uno::Sequence< css::uno::Any > const & aArguments)
 {
     assert(thisIs(IS_SET|IS_UPDATE));
-    if (aArguments.getLength() != 0) {
+    if (aArguments.hasElements()) {
         throw css::uno::Exception(
             ("configuration SimpleSetUpdate createInstanceWithArguments"
              " must not specify any arguments"),

@@ -182,7 +182,7 @@ uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
         beans::PropertyValue( "CellRangeRepresentation"
                               , -1, uno::Any( rRangeRepresentation )
                               , beans::PropertyState_DIRECT_VALUE );
-    if( rSequenceMapping.getLength() )
+    if( rSequenceMapping.hasElements() )
     {
         aArguments.realloc( aArguments.getLength() + 1 );
         aArguments[aArguments.getLength() - 1] =

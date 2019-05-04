@@ -139,7 +139,7 @@ bool isTrendlineVisible(const css::uno::Reference<css::frame::XModel>& xModel,
     if (!xRegressionCurveContainer.is())
         return false;
 
-    return xRegressionCurveContainer->getRegressionCurves().getLength() != 0;
+    return xRegressionCurveContainer->getRegressionCurves().hasElements();
 }
 
 void setTrendlineVisible(const css::uno::Reference<css::frame::XModel>&

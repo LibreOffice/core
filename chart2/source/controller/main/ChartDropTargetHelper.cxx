@@ -103,7 +103,7 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
         if( aDataHelper.HasFormat( SotClipboardFormatId::LINK ))
         {
             Sequence<sal_Int8> aBytes = aDataHelper.GetSequence(SotClipboardFormatId::LINK, OUString());
-            if (aBytes.getLength())
+            if (aBytes.hasElements())
             {
                 std::vector< OUString > aStrings( lcl_getStringsFromByteSequence( aBytes ));
                 if( aStrings.size() >= 3 && aStrings[0] == "soffice" )

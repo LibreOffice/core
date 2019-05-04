@@ -87,7 +87,7 @@ T lcl_getProperty(
     const OUString & rPropName )
 {
     T aResult;
-    if( rMediaDescriptor.getLength())
+    if( rMediaDescriptor.hasElements())
     {
         const beans::PropertyValue * pIt = rMediaDescriptor.getConstArray();
         const beans::PropertyValue * pEndIt = pIt +  + rMediaDescriptor.getLength();

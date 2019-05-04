@@ -303,7 +303,7 @@ void StockChartTypeTemplate::createChartTypes(
     const Sequence< Reference< XCoordinateSystem > > & rCoordSys,
     const Sequence< Reference< XChartType > >& /* aOldChartTypesSeq */ )
 {
-    if( rCoordSys.getLength() < 1 )
+    if( !rCoordSys.hasElements() )
         return;
 
     try
@@ -333,7 +333,7 @@ void StockChartTypeTemplate::createChartTypes(
             aChartTypeVec.push_back( xCT );
 
             if( aSeriesSeq.getLength() > nSeriesIndex &&
-                aSeriesSeq[nSeriesIndex].getLength() > 0 )
+                aSeriesSeq[nSeriesIndex].hasElements() )
             {
                 Reference< XDataSeriesContainer > xDSCnt( xCT, uno::UNO_QUERY_THROW );
                 xDSCnt->setDataSeries( aSeriesSeq[ nSeriesIndex ] );
@@ -355,7 +355,7 @@ void StockChartTypeTemplate::createChartTypes(
         }
 
         if( aSeriesSeq.getLength() > nSeriesIndex &&
-            aSeriesSeq[ nSeriesIndex ].getLength() > 0 )
+            aSeriesSeq[ nSeriesIndex ].hasElements() )
         {
             Reference< XDataSeriesContainer > xDSCnt( xCT, uno::UNO_QUERY_THROW );
             xDSCnt->setDataSeries( aSeriesSeq[ nSeriesIndex ] );
@@ -364,7 +364,7 @@ void StockChartTypeTemplate::createChartTypes(
 
         // Lines (remaining series)
         if( aSeriesSeq.getLength() > nSeriesIndex &&
-            aSeriesSeq[ nSeriesIndex ].getLength() > 0 )
+            aSeriesSeq[ nSeriesIndex ].hasElements() )
         {
             xCT.set(
                 xFact->createInstance(

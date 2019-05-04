@@ -699,7 +699,7 @@ ErrCode XMLFilter::impl_ExportStream(
         // set Base URL
         {
             uno::Reference< beans::XPropertySet > xInfoSet;
-            if( rFilterProperties.getLength() > 0 )
+            if( rFilterProperties.hasElements() )
                 rFilterProperties.getConstArray()[0] >>= xInfoSet;
             OSL_ENSURE( xInfoSet.is(), "missing infoset for export" );
             if( xInfoSet.is() )

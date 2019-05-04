@@ -46,7 +46,7 @@ MasterPropertySetInfo::~MasterPropertySetInfo()
 
 void MasterPropertySetInfo::add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
 {
-    if( maProperties.getLength() )
+    if( maProperties.hasElements() )
         maProperties.realloc( 0 );
 
     for( const auto& rObj : rHash )

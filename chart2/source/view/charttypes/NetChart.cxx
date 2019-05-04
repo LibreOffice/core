@@ -441,7 +441,7 @@ void NetChart::createShapes()
                             sal_Int32& rIndex = pSeries->m_nPolygonIndex;
                             if( 0<= rIndex && rIndex < rPolygon.SequenceX.getLength() )
                             {
-                                if( rPolygon.SequenceX[ rIndex ].getLength() )
+                                if( rPolygon.SequenceX[ rIndex ].hasElements() )
                                     rIndex++; //start a new polygon for the next point if the current poly is not empty
                             }
                         }

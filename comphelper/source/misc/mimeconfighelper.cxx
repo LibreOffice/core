@@ -422,7 +422,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByMedi
 {
     uno::Sequence< beans::NamedValue > aObject =
                                     GetObjectPropsByStringClassID( GetExplicitlyRegisteredObjClassID( aMediaType ) );
-    if ( aObject.getLength() )
+    if ( aObject.hasElements() )
         return aObject;
 
     OUString aDocumentName = GetDocServiceNameFromMediaType( aMediaType );
@@ -802,7 +802,7 @@ OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const OUStrin
                             SfxFilterFlags::EXPORT,
                             SfxFilterFlags::INTERNAL );
 
-                        if ( aExportFilterProps.getLength() )
+                        if ( aExportFilterProps.hasElements() )
                         {
                             SequenceAsHashMap aExpPropsHM( aExportFilterProps );
                             aExportFilterName = aExpPropsHM.getUnpackedValueOrDefault( "Name", OUString() );
@@ -849,7 +849,7 @@ uno::Sequence< beans::PropertyValue > MimeConfigurationHelper::SearchForFilter(
                         aFilterProps = aProps;
                         break;
                     }
-                    else if ( !aFilterProps.getLength() )
+                    else if ( !aFilterProps.hasElements() )
                         aFilterProps = aProps;
                 }
             }

@@ -133,7 +133,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
             m_bProvidesStartingAngle = ChartTypeHelper::isSupportingStartingAngle( xChartType );
 
             m_bProvidesMissingValueTreatments = ChartTypeHelper::getSupportedMissingValueTreatments( xChartType )
-                                            .getLength();
+                                            .hasElements();
         }
     }
 
@@ -252,8 +252,8 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
         }
 
         if( bXValuesFound && bYValuesFound &&
-            aXValues.getLength() > 0 &&
-            aYValues.getLength() > 0 )
+            aXValues.hasElements() &&
+            aYValues.hasElements() )
         {
             RegressionCalculationHelper::tDoubleVectorPair aValues(
                 RegressionCalculationHelper::cleanup( aXValues, aYValues, RegressionCalculationHelper::isValid()));

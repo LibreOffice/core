@@ -112,7 +112,7 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2:
                     }
                 }
             }
-            if( !m_aSplitCategoriesList.getLength() )
+            if( !m_aSplitCategoriesList.hasElements() )
             {
                 m_aSplitCategoriesList.realloc(1);
                 m_aSplitCategoriesList[0]=m_xOriginalCategories;
@@ -506,7 +506,7 @@ Sequence< OUString > const & ExplicitCategoriesProvider::getSimpleCategories()
                     SplitCategoriesProvider_ForLabeledDataSequences( m_aSplitCategoriesList, mrModel ), m_aComplexCats );
             }
         }
-        if(!m_aExplicitCategories.getLength())
+        if(!m_aExplicitCategories.hasElements())
             m_aExplicitCategories = DiagramHelper::generateAutomaticCategoriesFromCooSys( m_xCooSysModel );
         m_bIsExplicitCategoriesInited = true;
     }

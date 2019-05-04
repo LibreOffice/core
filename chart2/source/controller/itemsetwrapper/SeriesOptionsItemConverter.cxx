@@ -310,7 +310,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
 
         case SCHATTR_MISSING_VALUE_TREATMENT:
         {
-            if( m_aSupportedMissingValueTreatments.getLength() )
+            if( m_aSupportedMissingValueTreatments.hasElements() )
             {
                 sal_Int32 nNew = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
                 if( m_nMissingValueTreatment != nNew )
@@ -411,7 +411,7 @@ void SeriesOptionsItemConverter::FillSpecialItem(
         }
         case SCHATTR_MISSING_VALUE_TREATMENT:
         {
-            if( m_aSupportedMissingValueTreatments.getLength() )
+            if( m_aSupportedMissingValueTreatments.hasElements() )
                 rOutItemSet.Put( SfxInt32Item( nWhichId, m_nMissingValueTreatment ));
             break;
         }

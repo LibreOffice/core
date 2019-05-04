@@ -218,7 +218,7 @@ void VPolarGrid::createShapes()
     OSL_PRECOND(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
-    if(!m_aGridPropertiesList.getLength())
+    if(!m_aGridPropertiesList.hasElements())
         return;
 
     //create all scaled tickmark values

@@ -111,7 +111,7 @@ sal_Int32 SAL_CALL java_io_Reader::readBytes( css::uno::Sequence< sal_Int8 >& aD
 
     if (m_buf)
     {
-        if(aData.getLength() == 0)
+        if(!aData.hasElements())
         {
             aData.realloc(1);
             dst = aData.getArray();

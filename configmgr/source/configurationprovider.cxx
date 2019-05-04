@@ -395,7 +395,7 @@ Factory::createInstanceWithArgumentsAndContext(
     css::uno::Sequence< css::uno::Any > const & Arguments,
     css::uno::Reference< css::uno::XComponentContext > const & Context)
 {
-    if (Arguments.getLength() == 0) {
+    if (!Arguments.hasElements()) {
         return css::configuration::theDefaultProvider::get(Context);
     } else {
         OUString locale;

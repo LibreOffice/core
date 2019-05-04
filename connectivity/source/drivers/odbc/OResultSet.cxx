@@ -1160,7 +1160,7 @@ Sequence<sal_Int8> OResultSet::impl_getBookmark(  )
 
         Sequence<sal_Int8> bookmark = OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,0,SQL_C_VARBOOKMARK,m_bWasNull,**this);
         m_aPosToBookmarks[bookmark] = m_nRowPos;
-        OSL_ENSURE(bookmark.getLength(),"Invalid bookmark from length 0!");
+        OSL_ENSURE(bookmark.hasElements(),"Invalid bookmark from length 0!");
         return bookmark;
     }
     else
@@ -1177,8 +1177,8 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark )
     invalidateCache();
     Sequence<sal_Int8> aBookmark;
     bookmark >>= aBookmark;
-    OSL_ENSURE(aBookmark.getLength(),"Invalid bookmark from length 0!");
-    if(aBookmark.getLength())
+    OSL_ENSURE(aBookmark.hasElements(),"Invalid bookmark from length 0!");
+    if(aBookmark.hasElements())
     {
         SQLRETURN nReturn = setStmtOption<SQLLEN*, SQL_IS_POINTER>(SQL_ATTR_FETCH_BOOKMARK_PTR, reinterpret_cast<SQLLEN*>(aBookmark.getArray()));
 
@@ -1708,7 +1708,7 @@ bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nO
             ensureCacheForColumn(0);
             Sequence<sal_Int8> bookmark  = OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,0,SQL_C_VARBOOKMARK,m_bWasNull,**this);
             m_aPosToBookmarks[bookmark] = m_nRowPos;
-            OSL_ENSURE(bookmark.getLength(),"Invalid bookmark from length 0!");
+            OSL_ENSURE(bookmark.hasElements(),"Invalid bookmark from length 0!");
             m_aRow[0] = bookmark;
         }
         m_aRow[0].setBound(true);

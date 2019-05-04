@@ -255,7 +255,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
                 rOutItemSet.Put( SfxBoolItem( nWhichId, !lcl_hasTimeIntervalValue(rTimeIncrement.MinorTimeInterval) ) );
             else
                 rOutItemSet.Put( SfxBoolItem( nWhichId,
-                    ! ( rSubIncrements.getLength() > 0 && rSubIncrements[0].IntervalCount.hasValue() )));
+                    ! ( rSubIncrements.hasElements() && rSubIncrements[0].IntervalCount.hasValue() )));
             break;
 
         case SCHATTR_AXIS_HELP_TIME_UNIT:
@@ -279,7 +279,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             }
             else
             {
-                if( rSubIncrements.getLength() > 0 && rSubIncrements[0].IntervalCount.hasValue())
+                if( rSubIncrements.hasElements() && rSubIncrements[0].IntervalCount.hasValue())
                 {
                     rOutItemSet.Put( SfxInt32Item( nWhichId,
                             *o3tl::doAccess<sal_Int32>(
@@ -607,7 +607,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
         case SCHATTR_AXIS_AUTO_STEP_HELP:
             if( lcl_isAutoMinor(rItemSet) )
             {
-                if( aScale.IncrementData.SubIncrements.getLength() > 0 &&
+                if( aScale.IncrementData.SubIncrements.hasElements() &&
                     aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() )
                 {
                         aScale.IncrementData.SubIncrements[0].IntervalCount.clear();
@@ -649,7 +649,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                     aScale.TimeIncrement.MinorTimeInterval <<= aTimeInterval;
                     bSetScale = true;
                 }
-                else if( aScale.IncrementData.SubIncrements.getLength() > 0 )
+                else if( aScale.IncrementData.SubIncrements.hasElements() )
                 {
                     if( ! aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() ||
                         aScale.IncrementData.SubIncrements[0].IntervalCount != aValue )
