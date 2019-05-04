@@ -7,18 +7,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <Qt5Frame.hxx>
-#include <Qt5MainWindow.hxx>
-#include <Qt5Bitmap.hxx>
 #include <Qt5Menu.hxx>
 #include <Qt5Menu.moc>
 
-#include <QtWidgets/QtWidgets>
+#include <Qt5Frame.hxx>
+#include <Qt5Instance.hxx>
+#include <Qt5MainWindow.hxx>
+
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
-#include <vcl/pngwrite.hxx>
-#include <tools/stream.hxx>
+
+#include <strings.hrc>
+#include <bitmaps.hlst>
 
 Qt5Menu::Qt5Menu(bool bMenuBar)
     : mpVCLMenu(nullptr)
@@ -419,6 +422,7 @@ void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar)
 {
     // clear action groups since menu is rebuilt
     ResetAllActionGroups();
+    ShowCloseButton(false);
 
     for (sal_Int32 nItem = 0; nItem < static_cast<sal_Int32>(GetItemCount()); nItem++)
     {
@@ -505,21 +509,7 @@ void Qt5Menu::SetItemImage(unsigned, SalMenuItem* pItem, const Image& rImage)
     if (!pAction)
         return;
 
-    QImage aImage;
-
-    if (!!rImage)
-    {
-        SvMemoryStream aMemStm;
-        vcl::PNGWriter aWriter(rImage.GetBitmapEx());
-        aWriter.Write(aMemStm);
-
-        if (!aImage.loadFromData(static_cast<const uchar*>(aMemStm.GetData()), aMemStm.TellEnd()))
-        {
-            return;
-        }
-    }
-
-    pAction->setIcon(QPixmap::fromImage(aImage));
+    pAction->setIcon(QPixmap::fromImage(toQImage(rImage)));
 }
 
 void Qt5Menu::SetAccelerator(unsigned, SalMenuItem* pItem, const vcl::KeyCode&,
@@ -603,6 +593,49 @@ void Qt5Menu::NativeItemText(OUString& rItemText)
     rItemText = rItemText.replaceAll("&", "&&");
 
     rItemText = rItemText.replace('~', '&');
+}
+
+void Qt5Menu::slotCloseDocument()
+{
+    MenuBar* pVclMenuBar = static_cast<MenuBar*>(mpVCLMenu.get());
+    if (pVclMenuBar)
+        Application::PostUserEvent(pVclMenuBar->GetCloseButtonClickHdl());
+}
+
+void Qt5Menu::ShowCloseButton(bool bShow)
+{
+    if (!mpQMenuBar)
+        return;
+
+    QPushButton* pButton = static_cast<QPushButton*>(mpQMenuBar->cornerWidget(Qt::TopRightCorner));
+    if (!pButton)
+    {
+        QIcon aIcon;
+        if (QIcon::hasThemeIcon("window-close-symbolic"))
+            aIcon = QIcon::fromTheme("window-close-symbolic");
+        else
+            aIcon = QIcon(
+                QPixmap::fromImage((toQImage(Image(StockImage::Yes, SV_RESID_BITMAP_CLOSEDOC)))));
+        pButton = new QPushButton(mpQMenuBar);
+        pButton->setIcon(aIcon);
+        pButton->setFlat(true);
+        pButton->setToolTip(toQString(VclResId(SV_HELPTEXT_CLOSEDOCUMENT)));
+        mpQMenuBar->setCornerWidget(pButton, Qt::TopRightCorner);
+    }
+
+    if (bShow)
+    {
+        // The mpQMenuBar is used in multiple Qt5Menu. If one Qt5Menu is deleted, the clicked button
+        // connection is severed. The reconnect could be handled in SetFrame, but ShowCloseButton is
+        // called so seldomly, that I decided to keep the reconnect in this function in one place. As
+        // we don't know the connection state, we unconditionally remove it, so slotCloseDocument
+        // isn't called multiple times on click.
+        pButton->disconnect(SIGNAL(clicked(bool)));
+        connect(pButton, &QPushButton::clicked, this, &Qt5Menu::slotCloseDocument);
+        pButton->show();
+    }
+    else
+        pButton->hide();
 }
 
 Qt5MenuItem::Qt5MenuItem(const SalItemParams* pItemData)
