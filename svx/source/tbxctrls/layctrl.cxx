@@ -84,6 +84,7 @@ public:
     virtual void            MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void            Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& ) override;
     virtual void            PopupModeEnd() override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
 
 private:
     void                    Update( long nNewCol, long nNewLine );
@@ -137,13 +138,22 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, vcl::Window* pParent, const OUStri
 
     SetText( rText );
 
-    aTableButton->SetPosSizePixel( Point( nTablePosX, mnTableHeight + 5 ),
-            Size( mnTableWidth - nTablePosX, 24 ) );
-    aTableButton->SetText( SvxResId( RID_SVXSTR_MORE ) );
-    aTableButton->SetClickHdl( LINK( this, TableWindow, SelectHdl ) );
-    aTableButton->Show();
+    // if parent window is a toolbox only display table button when mouse activated
+    ToolBox* pToolBox = nullptr;
+    if (pParent->GetType() == WindowType::TOOLBOX)
+        pToolBox = dynamic_cast<ToolBox*>( pParent );
+    if ( !pToolBox || !pToolBox->IsKeyEvent() )
+    {
+        aTableButton->SetPosSizePixel( Point( nTablePosX, mnTableHeight + 5 ),
+                Size( mnTableWidth - nTablePosX, 24 ) );
+        aTableButton->SetText( SvxResId( RID_SVXSTR_MORE ) );
+        aTableButton->SetClickHdl( LINK( this, TableWindow, SelectHdl ) );
+        aTableButton->Show();
 
-    SetOutputSizePixel( Size( mnTableWidth + 3, mnTableHeight + 33 ) );
+        SetOutputSizePixel( Size( mnTableWidth + 3, mnTableHeight + 33 ) );
+    }
+    else
+        SetOutputSizePixel( Size( mnTableWidth + 3, mnTableHeight + 3 ) );
 }
 
 
@@ -373,6 +383,21 @@ void TableWindow::CloseAndShowTableDialog()
 
     // and open the table dialog instead
     TableDialog( Sequence< PropertyValue >() );
+}
+
+bool TableWindow::EventNotify( NotifyEvent& rNEvt )
+{
+    // handle table button key input
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    {
+        const vcl::KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
+        const sal_uInt16 nCode = rKey.GetCode();
+        if ( nCode != KEY_RETURN && nCode != KEY_SPACE && nCode != KEY_ESCAPE )
+        {
+            return true;
+        }
+    }
+    return SfxPopupWindow::EventNotify( rNEvt );
 }
 
 class ColumnsWindow : public SfxPopupWindow
