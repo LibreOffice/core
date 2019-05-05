@@ -1,0 +1,16 @@
+---
+assumeFilename: javaunohelper/source/vm.cxx
+blacklist:
+    javaunohelper/source/bootstrap.cxx:
+    # Needed for direct member access
+    - com/sun/star/uno/XComponentContext.hpp
+    - jvmaccess/unovirtualmachine.hxx
+    # Needed to avoid loplugin:unreffun error
+    - juhx-export-functions.hxx
+    javaunohelper/source/javaunohelper.cxx:
+    # Needed for direct member access
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/registry/XRegistryKey.hpp
+    - jvmaccess/unovirtualmachine.hxx
+    # Needed to avoid loplugin:unreffun error
+    - juhx-export-functions.hxx
