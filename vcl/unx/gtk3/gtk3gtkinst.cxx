@@ -1256,11 +1256,15 @@ protected:
     GtkWidget* m_pWidget;
     GtkInstanceBuilder* m_pBuilder;
 
+    DECL_LINK(async_signal_focus_in, void*, void);
+
     static gboolean signalFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
-        SolarMutexGuard aGuard;
-        pThis->signal_focus_in();
+        // in e.g. function wizard RefEdits we want to select all when we get focus
+        // but there are pending gtk handlers which change selection after our handler
+        // post our focus in event to happen after those finish
+        Application::PostUserEvent(LINK(pThis, GtkInstanceWidget, async_signal_focus_in));
         return false;
     }
 
@@ -2060,6 +2064,11 @@ public:
         return xRet;
     }
 };
+
+IMPL_LINK_NOARG(GtkInstanceWidget, async_signal_focus_in, void*, void)
+{
+    signal_focus_in();
+}
 
 namespace
 {
