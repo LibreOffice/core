@@ -114,7 +114,7 @@ private:
     void LoadPersistentValues();
 
     /** Save the list of recently used master pages to the registry to make
-        it presistent.
+        it persistent.
     */
     void SavePersistentValues();
 
