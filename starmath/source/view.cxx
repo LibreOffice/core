@@ -632,11 +632,11 @@ SmGraphicController::SmGraphicController(SmGraphicWindow &rSmGraphic,
 }
 
 
-void SmGraphicController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem)
+void SmGraphicController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase* pSlotItem)
 {
     rGraphic.SetTotalSize();
     rGraphic.Invalidate();
-    SfxControllerItem::StateChanged (nSID, eState, pState, rSlotItem);
+    SfxControllerItem::StateChanged (nSID, eState, pState, pSlotItem);
 }
 
 
@@ -653,13 +653,13 @@ SmEditController::SmEditController(SmEditWindow &rSmEdit,
 
 
 
-void SmEditController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem)
+void SmEditController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase* pSlotItem)
 {
     const SfxStringItem *pItem =  dynamic_cast<const SfxStringItem*>( pState);
 
     if ((pItem != nullptr) && (rEdit.GetText() != pItem->GetValue()))
         rEdit.SetText(pItem->GetValue());
-    SfxControllerItem::StateChanged (nSID, eState, pState, rSlotItem);
+    SfxControllerItem::StateChanged (nSID, eState, pState, pSlotItem);
 }
 
 /**************************************************************************/

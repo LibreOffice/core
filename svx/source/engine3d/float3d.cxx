@@ -2924,7 +2924,7 @@ Svx3DCtrlItem::Svx3DCtrlItem( sal_uInt16 _nId,
 
 
 void Svx3DCtrlItem::StateChanged( sal_uInt16 /*nSId*/,
-                        SfxItemState /*eState*/, const SfxPoolItem* /*pItem*/, const std::unique_ptr<const Item::ItemBase>& /*rSlotItem*/ )
+                        SfxItemState /*eState*/, const SfxPoolItem* /*pItem*/, const Item::ItemBase* /*pSlotItem*/ )
 {
 }
 
@@ -2936,7 +2936,7 @@ SvxConvertTo3DItem::SvxConvertTo3DItem(sal_uInt16 _nId, SfxBindings* _pBindings)
 {
 }
 
-void SvxConvertTo3DItem::StateChanged(sal_uInt16 /*_nId*/, SfxItemState eState, const SfxPoolItem* /*pState*/, const std::unique_ptr<const Item::ItemBase>& /*rSlotItem*/)
+void SvxConvertTo3DItem::StateChanged(sal_uInt16 /*_nId*/, SfxItemState eState, const SfxPoolItem* /*pState*/, const Item::ItemBase* /*pSlotItem*/)
 {
     bool bNewState = (eState != SfxItemState::DISABLED);
     if(bNewState != bState)

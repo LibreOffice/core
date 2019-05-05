@@ -27,6 +27,7 @@
 #include <vcl/floatwin.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <rtl/ref.hxx>
+#include <item/base/ItemBase.hxx>
 
 namespace com::sun::star::frame { class XDispatchProvider; }
 namespace com::sun::star::frame { class XFrame; }
@@ -131,7 +132,7 @@ protected:
     DECL_LINK( ClosePopupWindow, SfxPopupWindow *, void );
 
     // old SfxToolBoxControl methods
-    virtual void               StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem );
+    virtual void               StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase* pSlotItem );
     virtual void               Select( sal_uInt16 nSelectModifier );
 
     virtual void               DoubleClick();

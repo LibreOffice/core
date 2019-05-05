@@ -488,7 +488,7 @@ namespace svxform
     }
 
 
-    void NavigatorFrame::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& /*rSlotItem*/)
+    void NavigatorFrame::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase* /*pSlotItem*/)
     {
         if( !pState  || SID_FM_FMEXPLORER_CONTROL != nSID )
             return;

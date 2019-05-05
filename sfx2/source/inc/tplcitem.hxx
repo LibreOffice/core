@@ -32,7 +32,7 @@ class SfxTemplateControllerItem : public SfxControllerItem {
     DECL_LINK(SetWaterCanStateHdl_Impl, void*, void);
 
 protected:
-    virtual void StateChanged(sal_uInt16, SfxItemState, const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem) override;
+    virtual void StateChanged(sal_uInt16, SfxItemState, const SfxPoolItem* pState, const Item::ItemBase* pSlotItem) override;
 
 public:
     SfxTemplateControllerItem(sal_uInt16 nId, SfxCommonTemplateDialog_Impl& rDialog, SfxBindings& rBindings);

@@ -33,7 +33,7 @@ class SvxContourDlgItem : public SfxControllerItem
 
 protected:
 
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem ) override;
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase* pSlotItem ) override;
 
 public:
 

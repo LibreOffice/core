@@ -537,7 +537,7 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
             }
         }
 
-        StateChanged( nSlotId, eState, pItem.get(), aSlotItem );
+        StateChanged( nSlotId, eState, pItem.get(), aSlotItem.get() );
     }
 }
 
@@ -619,7 +619,7 @@ void SfxToolBoxControl::StateChanged
 (
     sal_uInt16              nId,
     SfxItemState        eState,
-    const SfxPoolItem*  pState, const std::unique_ptr<const Item::ItemBase>& /*rSlotItem*/
+    const SfxPoolItem*  pState, const Item::ItemBase* /*pSlotItem*/
 )
 {
     DBG_ASSERT( pImpl->pBox != nullptr, "setting state to dangling ToolBox" );

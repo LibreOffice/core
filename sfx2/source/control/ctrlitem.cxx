@@ -212,7 +212,7 @@ void SfxControllerItem::StateChanged
     sal_uInt16,          // <SID> of the triggering slot
     SfxItemState,       // <SfxItemState> of 'pState'
     const SfxPoolItem*,  // Slot-Status, NULL or IsInvalidItem()
-    const std::unique_ptr<const Item::ItemBase>& /*rSlotItem*/
+    const Item::ItemBase* /*pSlotItem*/
 )
 
 /*  [Description]
@@ -241,11 +241,11 @@ void SfxStatusForwarder::StateChanged
     sal_uInt16          nSID,    // <SID> of the triggering slot
     SfxItemState        eState,  // <SfxItemState> of 'pState'
     const SfxPoolItem*  pState,   // Slot-Status, NULL or IsInvalidItem()
-    const std::unique_ptr<const Item::ItemBase>& rSlotItem
+    const Item::ItemBase* pSlotItem
 )
 
 {
-    pMaster->StateChanged( nSID, eState, pState, rSlotItem );
+    pMaster->StateChanged( nSID, eState, pState, pSlotItem );
 }
 
 

@@ -51,7 +51,7 @@ ParaULSpacingControl::~ParaULSpacingControl()
 }
 
 void ParaULSpacingControl::StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& /*rSlotItem*/)
+                              const SfxPoolItem* pState, const Item::ItemBase* /*pSlotItem*/)
 {
     sal_uInt16 nId = GetId();
     ToolBox& rTbx = GetToolBox();
@@ -132,7 +132,7 @@ void SAL_CALL ParaLRSpacingControl::dispose()
 }
 
 void ParaLRSpacingControl::StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& /*rSlotItem*/)
+                              const SfxPoolItem* pState, const Item::ItemBase* /*pSlotItem*/)
 {
     sal_uInt16 nId = GetId();
     ToolBox& rTbx = GetToolBox();

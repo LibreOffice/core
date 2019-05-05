@@ -65,7 +65,7 @@ SfxStatusListener::~SfxStatusListener()
 }
 
 // old sfx controller item C++ API
-void SfxStatusListener::StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem*, const std::unique_ptr<const Item::ItemBase>& /*rSlotItem*/)
+void SfxStatusListener::StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem*, const Item::ItemBase* /*pSlotItem*/)
 {
     // must be implemented by sub class
 }
@@ -241,7 +241,7 @@ void SAL_CALL SfxStatusListener::statusChanged( const FeatureStateEvent& rEvent)
         }
     }
 
-    StateChanged( m_nSlotID, eState, pItem.get(), aSlotItem );
+    StateChanged( m_nSlotID, eState, pItem.get(), aSlotItem.get() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

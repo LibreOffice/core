@@ -138,7 +138,7 @@ public:
     SmGraphicController(SmGraphicWindow &, sal_uInt16, SfxBindings & );
     virtual void StateChanged(sal_uInt16             nSID,
                               SfxItemState       eState,
-                              const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem) override;
+                              const SfxPoolItem* pState, const Item::ItemBase* pSlotItem) override;
 };
 
 class SmEditController final : public SfxControllerItem
@@ -148,7 +148,7 @@ class SmEditController final : public SfxControllerItem
 public:
     SmEditController(SmEditWindow &, sal_uInt16, SfxBindings  & );
 
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem) override;
+    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase* pSlotItem) override;
 };
 
 class SmCmdBoxWindow : public SfxDockingWindow

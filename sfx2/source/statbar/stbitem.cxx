@@ -301,7 +301,7 @@ void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent
             }
         }
 
-        StateChanged( nSlotID, eState, pItem.get(), aSlotItem );
+        StateChanged( nSlotID, eState, pItem.get(), aSlotItem.get() );
     }
 }
 
@@ -404,7 +404,7 @@ void SfxStatusBarControl::StateChanged
 (
     sal_uInt16              nSID,
     SfxItemState        eState,
-    const SfxPoolItem*  pState, const std::unique_ptr<const Item::ItemBase>& /*rSlotItem*/  /* Pointer to SfxPoolItem, is only valid
+    const SfxPoolItem*  pState, const Item::ItemBase* /*pSlotItem*/  /* Pointer to SfxPoolItem, is only valid
                                    within this Method call. This can be a
                                    Null-Pointer, a Pointer to SfxVoidItem
                                    or of this Type found registered by the

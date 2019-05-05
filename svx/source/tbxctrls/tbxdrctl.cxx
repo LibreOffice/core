@@ -61,10 +61,10 @@ void SAL_CALL SvxTbxCtlDraw::initialize( const css::uno::Sequence< css::uno::Any
 
 
 void SvxTbxCtlDraw::StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem )
+                                  const SfxPoolItem* pState, const Item::ItemBase* pSlotItem )
 {
     GetToolBox().EnableItem( GetId(), ( eState != SfxItemState::DISABLED ) );
-    SfxToolBoxControl::StateChanged( nSID, eState, pState, rSlotItem );
+    SfxToolBoxControl::StateChanged( nSID, eState, pState, pSlotItem );
 
     Reference< XLayoutManager > xLayoutMgr = getLayoutManager();
     if ( xLayoutMgr.is() )

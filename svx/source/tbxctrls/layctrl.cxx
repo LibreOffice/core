@@ -698,7 +698,7 @@ VclPtr<SfxPopupWindow> SvxTableToolBoxControl::CreatePopupWindow()
     return nullptr;
 }
 
-void SvxTableToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& /*rSlotItem*/)
+void SvxTableToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase* /*pSlotItem*/)
 {
     if ( auto pUInt16Item = dynamic_cast<const SfxUInt16Item* >(pState) )
     {
@@ -745,10 +745,10 @@ VclPtr<SfxPopupWindow> SvxColumnsToolBoxControl::CreatePopupWindow()
 
 void SvxColumnsToolBoxControl::StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
-                                              const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem )
+                                              const SfxPoolItem* pState, const Item::ItemBase* pSlotItem )
 {
     bEnabled = SfxItemState::DISABLED != eState;
-    SfxToolBoxControl::StateChanged(nSID,   eState, pState, rSlotItem );
+    SfxToolBoxControl::StateChanged(nSID,   eState, pState, pSlotItem );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

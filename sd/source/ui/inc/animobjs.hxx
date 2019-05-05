@@ -154,7 +154,7 @@ public:
 
 protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
-        const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem ) override;
+        const SfxPoolItem* pState, const Item::ItemBase* pSlotItem ) override;
 private:
     VclPtr<AnimationWindow> pAnimationWin;
 };

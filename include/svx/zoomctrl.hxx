@@ -32,7 +32,7 @@ private:
 
 public:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem ) override;
+                                  const SfxPoolItem* pState, const Item::ItemBase* pSlotItem ) override;
     virtual void    Paint( const UserDrawEvent& rEvt ) override;
     virtual void    Command( const CommandEvent& rCEvt ) override;
 

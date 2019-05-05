@@ -51,7 +51,7 @@ class SFX2_DLLPUBLIC SfxStatusListener : public cppu::WeakImplHelper<
             sal_uInt16 nSID,
             SfxItemState eState,
             const SfxPoolItem* pState,
-            const std::unique_ptr<const Item::ItemBase>& rSlotItem );
+            const Item::ItemBase* pSlotItem );
 
         // XComponent
         virtual void SAL_CALL dispose() override;

@@ -30,7 +30,7 @@ private:
 
 protected:
     virtual void StateChanged( sal_uInt16,
-                               SfxItemState, const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem ) override;
+                               SfxItemState, const SfxPoolItem* pState, const Item::ItemBase* pSlotItem ) override;
 
 public:
     SvxRulerItem( sal_uInt16 nId, SvxRuler&, SfxBindings& );

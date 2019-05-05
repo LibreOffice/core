@@ -782,9 +782,9 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                 if ( pAppDispat )
                 {
                     const SfxPoolItem* pState=nullptr;
-                    const std::unique_ptr<const Item::ItemBase> aSlotItem;
+                    const Item::ItemBase* pSlotItem=nullptr;
                     SfxItemState eState = pDispatcher->QueryState( GetId(), pState );
-                    StateChanged( GetId(), eState, pState, aSlotItem );
+                    StateChanged( GetId(), eState, pState, pSlotItem );
                 }
             }
 
@@ -967,9 +967,9 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     }
 }
 
-void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& /*rSlotItem*/)
+void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase* pSlotItem)
 {
-    StateChanged( nSID, eState, pState, nullptr );
+    StateChanged( nSID, eState, pState, pSlotItem );
 }
 
 static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem* pState)

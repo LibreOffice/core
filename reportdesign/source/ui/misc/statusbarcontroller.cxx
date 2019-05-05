@@ -140,10 +140,9 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
             Sequence< PropertyValue > aSeq;
             if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 2 )
             {
-                const std::unique_ptr<const Item::ItemBase> aSlotItem;
                 SvxZoomSliderItem aZoomSlider(100,20,400);
                 aZoomSlider.PutValue(_aEvent.State, 0);
-                static_cast<SvxZoomSliderControl*>(m_rController.get())->StateChanged(m_nSlotId,SfxItemState::DEFAULT,&aZoomSlider,aSlotItem);
+                static_cast<SvxZoomSliderControl*>(m_rController.get())->StateChanged(m_nSlotId,SfxItemState::DEFAULT,&aZoomSlider,nullptr);
             }
         }
         else if ( m_aCommandURL == ".uno:Zoom" )
@@ -151,10 +150,9 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
             Sequence< PropertyValue > aSeq;
             if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 3 )
             {
-                const std::unique_ptr<const Item::ItemBase> aSlotItem;
                 SvxZoomItem aZoom;
                 aZoom.PutValue(_aEvent.State, 0 );
-                static_cast<SvxZoomStatusBarControl*>(m_rController.get())->StateChanged(m_nSlotId,SfxItemState::DEFAULT,&aZoom,aSlotItem);
+                static_cast<SvxZoomStatusBarControl*>(m_rController.get())->StateChanged(m_nSlotId,SfxItemState::DEFAULT,&aZoom,nullptr);
             }
         }
     }

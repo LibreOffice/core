@@ -155,7 +155,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateE
         for ( SfxControllerItem *pCtrl = pCache->GetItemLink();
             pCtrl;
             pCtrl = pCtrl->GetItemLink() )
-            pCtrl->StateChanged( nId, eState, pItem.get(), aSlotItem );
+            pCtrl->StateChanged( nId, eState, pItem.get(), aSlotItem.get() );
     }
 }
 
@@ -375,17 +375,15 @@ void SfxStateCache::SetVisibleState( bool bShow )
     // Update Controller
     if ( !mxDispatch.is() && pController )
     {
-        const std::unique_ptr<const Item::ItemBase> aSlotItem;
         for ( SfxControllerItem *pCtrl = pController;
                 pCtrl;
                 pCtrl = pCtrl->GetItemLink() )
-            pCtrl->StateChanged( nId, eState, pState, aSlotItem );
+            pCtrl->StateChanged( nId, eState, pState, nullptr );
     }
 
     if ( pInternalController )
     {
-        const std::unique_ptr<const Item::ItemBase> aSlotItem;
-        pInternalController->StateChanged( nId, eState, pState, aSlotItem );
+        pInternalController->StateChanged( nId, eState, pState, nullptr );
     }
 
     if ( bDeleteItem )
@@ -427,11 +425,10 @@ void SfxStateCache::SetState_Impl
         // Update Controller
         if ( !mxDispatch.is() && pController )
         {
-            const std::unique_ptr<const Item::ItemBase> aSlotItem;
             for ( SfxControllerItem *pCtrl = pController;
                 pCtrl;
                 pCtrl = pCtrl->GetItemLink() )
-                pCtrl->StateChanged( nId, eState, pState, aSlotItem );
+                pCtrl->StateChanged( nId, eState, pState, nullptr );
         }
 
         if ( pInternalController )
@@ -467,11 +464,10 @@ void SfxStateCache::SetCachedState( bool bAlways )
     // Update Controller
     if ( !mxDispatch.is() && pController )
     {
-        const std::unique_ptr<const Item::ItemBase> aSlotItem;
         for ( SfxControllerItem *pCtrl = pController;
             pCtrl;
             pCtrl = pCtrl->GetItemLink() )
-            pCtrl->StateChanged( nId, eLastState, pLastItem, aSlotItem );
+            pCtrl->StateChanged( nId, eLastState, pLastItem, nullptr );
     }
 
     if ( pInternalController )

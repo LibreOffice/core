@@ -76,7 +76,7 @@ SdTemplateControl::~SdTemplateControl()
 }
 
 void SdTemplateControl::StateChanged(
-    sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& /*rSlotItem*/ )
+    sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase* /*pSlotItem*/ )
 {
     if( eState != SfxItemState::DEFAULT || pState->IsVoidItem() )
         GetStatusBar().SetItemText( GetId(), OUString() );

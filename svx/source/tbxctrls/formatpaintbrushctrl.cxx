@@ -92,11 +92,11 @@ void FormatPaintBrushToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
 
 
 void FormatPaintBrushToolBoxControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem )
+                const SfxPoolItem* pState, const Item::ItemBase* pSlotItem )
 {
     if( eState != SfxItemState::DEFAULT && eState != SfxItemState::SET )
         m_bPersistentCopy = false;
-    SfxToolBoxControl::StateChanged( nSID, eState, pState, rSlotItem );
+    SfxToolBoxControl::StateChanged( nSID, eState, pState, pSlotItem );
 }
 
 

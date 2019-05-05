@@ -60,7 +60,7 @@ public:
      * @param pState --
      */
     virtual void StateChanged(sal_uInt16 nSlotID, SfxItemState eState,
-                              const SfxPoolItem* pState, const ::std::unique_ptr<const ::Item::ItemBase>& rSlotItem) override;
+                              const SfxPoolItem* pState, const ::Item::ItemBase* pSlotItem) override;
     /*!
      * Create combobox of Macro and Dialog Library
      *
@@ -189,7 +189,7 @@ public:
      * @param pState --
      */
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState, const ::std::unique_ptr<const ::Item::ItemBase>& rSlotItem) override;
+                              const SfxPoolItem* pState, const ::Item::ItemBase* pSlotItem) override;
     /*!
      * Create ComboBox of Language
      *

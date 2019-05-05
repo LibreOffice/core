@@ -37,7 +37,7 @@ public:
     virtual ~ParaULSpacingControl() override;
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem) override;
+                              const SfxPoolItem* pState, const Item::ItemBase* pSlotItem) override;
     virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override = 0;
 };
 
@@ -71,7 +71,7 @@ public:
     virtual void SAL_CALL dispose() override;
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem) override;
+                              const SfxPoolItem* pState, const Item::ItemBase* pSlotItem) override;
     virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override = 0;
 
     // XContextChangeEventListener

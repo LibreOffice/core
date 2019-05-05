@@ -84,7 +84,7 @@ MediaToolBoxControl::~MediaToolBoxControl()
 }
 
 
-void MediaToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& /*rSlotItem*/ )
+void MediaToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase* /*pSlotItem*/ )
 {
     MediaToolBoxControl_Impl* pCtrl = static_cast< MediaToolBoxControl_Impl* >( GetToolBox().GetItemWindow( GetId() ) );
 

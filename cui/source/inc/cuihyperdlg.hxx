@@ -61,7 +61,7 @@ public:
     virtual void dispose() override;
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem ) override;
+                                const SfxPoolItem* pState, const Item::ItemBase* pSlotItem ) override;
 };
 
 

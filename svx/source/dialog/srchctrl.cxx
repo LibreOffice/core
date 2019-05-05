@@ -40,7 +40,7 @@ SvxSearchController::SvxSearchController
 
 
 void SvxSearchController::StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                        const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& /*rSlotItem*/ )
+                                        const SfxPoolItem* pState, const Item::ItemBase* /*pSlotItem*/ )
 {
     if ( SfxItemState::DEFAULT == eState )
     {

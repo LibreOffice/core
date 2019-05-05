@@ -52,7 +52,7 @@ private:
 
 public:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
-                                const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem ) override;
+                                const SfxPoolItem* pState, const Item::ItemBase* pSlotItem ) override;
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;
 
             SFX_DECL_TOOLBOX_CONTROL();
