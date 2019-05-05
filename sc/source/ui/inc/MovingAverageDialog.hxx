@@ -19,6 +19,7 @@
 class ScMovingAverageDialog : public ScStatisticsInputOutputDialog
 {
 private:
+    std::unique_ptr<weld::CheckButton> mxTrimRangeCheck;
     std::unique_ptr<weld::SpinButton> mxIntervalSpin;
 
 public:
