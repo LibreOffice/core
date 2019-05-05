@@ -3153,6 +3153,7 @@ public:
         if (GtkWidget* pActionArea = gtk_dialog_get_action_area(m_pDialog))
             gtk_widget_show(pActionArea);
         resize_to_request();
+        present();
     }
 
     virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>&) override
