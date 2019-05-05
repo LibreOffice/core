@@ -1386,10 +1386,64 @@ static double lcl_getYAdjustmentValue(OUString& rShapeType, const sal_uInt32 nHa
     return fY; // method is unknown
 }
 
+static double lcl_getAngleInOOXMLUnit(double fDY, double fDX)
+{
+    if (fDX != 0.0 || fDY != 0.0)
+    {
+        double fAngleRad(atan2(fDY, fDX));
+        double fAngle = basegfx::rad2deg(fAngleRad);
+        // atan2 returns angle in ]-pi; pi], OOXML preset shapes use [0;360[.
+        if (fAngle < 0.0)
+            fAngle += 360.0;
+        // OOXML uses angle unit 1/60000 degree.
+        fAngle *= 60000.0;
+        return fAngle;
+    }
+    return 0.0; // no angle defined for origin in polar coordinate system
+}
+
+static double lcl_getRadiusDistance(double fWR, double fHR, double fX, double fY)
+{
+    // Get D so, that point (fX|fY) is on the ellipse, that has width fWR-D and
+    // height fHR-D and center in origin.
+    // Get solution of ellipse equation (fX/(fWR-D))^2 + (fY/(fHR-D)^2 = 1 by solving
+    // fX^2*(fHR-D)^2 + fY^2*(fWR-D)^2 - (fWR-D)^2 * (fHR-D)^2 = 0 with Newton-method.
+    if (fX == 0.0)
+        return std::min(fHR - fY, fWR);
+    else if (fY == 0.0)
+        return std::min(fWR - fX, fHR);
+
+    double fD = std::min(fWR, fHR) - sqrt(fX * fX + fY * fY); // iteration start value
+    sal_uInt8 nIter(0);
+    bool bFound(false);
+    do
+    {
+        ++nIter;
+        const double fOldD(fD);
+        const double fWRmD(fWR - fD);
+        const double fHRmD(fHR - fD);
+        double fNumerator
+            = fX * fX * fHRmD * fHRmD + fY * fY * fWRmD * fWRmD - fWRmD * fWRmD * fHRmD * fHRmD;
+        double fDenominator
+            = 2.0 * (fHRmD * (fWRmD * fWRmD - fX * fX) + fWRmD * (fHRmD * fHRmD - fY * fY));
+        if (fDenominator != 0.0)
+        {
+            fD = fD - fNumerator / fDenominator;
+            bFound = fabs(fOldD - fD) < 1.0E-12;
+        }
+        else
+            fD = fD * 0.9; // new start value
+    } while (nIter < 50 && !bFound);
+    return fD;
+}
+
 bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex, const css::awt::Point& rPosition )
 {
+    // The method name is misleading. Essentially it calculates the adjustment values from a given
+    // handle position.
+
     // For ooxml-foo shapes, the way to calculate the adjustment value from the handle position depends on
-    // the type of the shape.
+    // the type of the shape, therefore need 'Type'.
     OUString sShapeType("non-primitive"); // default for ODF
     const SdrCustomShapeGeometryItem& rGeometryItem(mrSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
     const Any* pAny = rGeometryItem.GetPropertyValueByName("Type");
@@ -1463,7 +1517,7 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
 
             sal_Int32 nFirstAdjustmentValue = -1, nSecondAdjustmentValue = -1;
 
-            // ODF shapes are expected to use a direct binding beween position and adjustment
+            // ODF shapes are expected to use a direct binding between position and adjustment
             // values. OOXML preset shapes use known formulas. These are calculated backward to
             // get the adjustment values. So far we do not have a general method to calculate
             // the adjustment values for any shape from the handle position.
@@ -1472,26 +1526,162 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
             if ( aHandle.aPosition.Second.Type == EnhancedCustomShapeParameterType::ADJUSTMENT )
                 aHandle.aPosition.Second.Value>>= nSecondAdjustmentValue;
 
-            // DrawingML polar handles set REFR or REFANGLE instead of POLAR
-            if ( aHandle.nFlags & ( HandleFlags::POLAR | HandleFlags::REFR | HandleFlags::REFANGLE ) )
-            {
-                double fXRef, fYRef, fAngle;
-                if ( aHandle.nFlags & HandleFlags::POLAR )
+            if ( aHandle.nFlags & ( HandleFlags::POLAR | HandleFlags::REFR | HandleFlags::REFANGLE))
+            { // Polar-Handle
+
+                if (aHandle.nFlags & HandleFlags::REFR)
+                    nFirstAdjustmentValue = aHandle.nRefR;
+                if (aHandle.nFlags & HandleFlags::REFANGLE)
+                    nSecondAdjustmentValue = aHandle.nRefAngle;
+
+                double fAngle(0.0);
+                double fRadius(0.0);
+                // 'then' treats only shapes of type "ooxml-foo", fontwork shapes have been mapped
+                // to MS binary import and will be treated in 'else'.
+                if (bOOXMLShape)
                 {
-                    GetParameter( fXRef, aHandle.aPolar.First, false, false );
-                    GetParameter( fYRef, aHandle.aPolar.Second, false, false );
+                    // DrawingML polar handles set REFR or REFANGLE instead of POLAR
+                    // use the shape center instead.
+                    double fDX = fPos1 - fWidth / 2.0;
+                    double fDY = fPos2 - fHeight / 2.0;
+
+                    // There exists no common pattern. 'radius' or 'angle' might have special meaning.
+                    if (sShapeType == "ooxml-blockArc" && nIndex == 1)
+                    {
+                        // usual angle, special radius
+                        fAngle = lcl_getAngleInOOXMLUnit(fDY, fDX);
+                        // The value connected to REFR is the _difference_ between the outer
+                        // ellipse given by shape width and height and the inner ellipse through
+                        // the handle position.
+                        double fRadiusDifference
+                            = lcl_getRadiusDistance(fWidth / 2.0, fHeight / 2.0, fDX, fDY);
+                        double fss(std::min(fWidth, fHeight));
+                        if (fss != 0)
+                            fRadius = fRadiusDifference * 100000.0 / fss;
+                    }
+                    else if (sShapeType == "ooxml-donut" || sShapeType == "ooxml-noSmoking")
+                    {
+                        // no angle adjustment, radius bound to x-coordinate of handle
+                        double fss(std::min(fWidth, fHeight));
+                        if (fss != 0.0)
+                            fRadius = fPos1 * 100000.0 / fss;
+                    }
+                    else if ((sShapeType == "ooxml-circularArrow"
+                              || sShapeType == "ooxml-leftRightCircularArrow"
+                              || sShapeType == "ooxml-leftCircularArrow")
+                             && nIndex == 0)
+                    {
+                        // The value adj2 is the increase compared to the angle in adj3
+                        double fHandleAngle = lcl_getAngleInOOXMLUnit(fDY, fDX);
+                        if (sShapeType == "ooxml-leftCircularArrow")
+                            fAngle = GetAdjustValueAsDouble(2) - fHandleAngle;
+                        else
+                            fAngle = fHandleAngle - GetAdjustValueAsDouble(2);
+                        if (fAngle < 0.0) // 0deg to 360deg cut
+                            fAngle += 21600000.0;
+                        // no REFR
+                    }
+                    else if ((sShapeType == "ooxml-circularArrow"
+                              || sShapeType == "ooxml-leftCircularArrow"
+                              || sShapeType == "ooxml-leftRightCircularArrow")
+                             && nIndex == 2)
+                    {
+                        // The value adj1 connected to REFR is the thickness of the arc. The adjustvalue adj5
+                        // has the _difference_ between the outer ellipse given by shape width and height
+                        // and the middle ellipse of the arc. The handle is on the outer side of the
+                        // arc. So we calculate the difference between the ellipse through the handle
+                        // and the outer ellipse and subtract then.
+                        double fRadiusDifferenceHandle
+                            = lcl_getRadiusDistance(fWidth / 2.0, fHeight / 2.0, fDX, fDY);
+                        double fadj5(GetAdjustValueAsDouble(4));
+                        double fss(std::min(fWidth, fHeight));
+                        if (fss != 0.0)
+                        {
+                            fadj5 = fadj5 * fss / 100000.0;
+                            fRadius = 2.0 * (fadj5 - fRadiusDifferenceHandle);
+                            fRadius = fRadius * 100000.0 / fss;
+                        }
+                        // ToDo: Get angle adj3 exact. Use approximation for now
+                        fAngle = lcl_getAngleInOOXMLUnit(fDY, fDX);
+                    }
+                    else if ((sShapeType == "ooxml-circularArrow"
+                              || sShapeType == "ooxml-leftCircularArrow"
+                              || sShapeType == "ooxml-leftRightCircularArrow")
+                             && nIndex == 3)
+                    {
+                        // ToDo: Getting handle position from adjustment value adj5 is complex.
+                        // Analytical or numerical solution for backward calculation is missing.
+                        // Approximation for now, using a line from center through handle position.
+                        double fAngleRad(0.0);
+                        if (fDX != 0.0 || fDY != 0.0)
+                            fAngleRad = atan2(fDY, fDX);
+                        double fHelpX = cos(fAngleRad) * fHeight / 2.0;
+                        double fHelpY = sin(fAngleRad) * fWidth / 2.0;
+                        if (fHelpX != 0.0 || fHelpY != 0.0)
+                        {
+                            double fHelpAngle = atan2(fHelpY, fHelpX);
+                            double fOuterX = fWidth / 2.0 * cos(fHelpAngle);
+                            double fOuterY = fHeight / 2.0 * sin(fHelpAngle);
+                            double fOuterRadius = sqrt(fOuterX * fOuterX + fOuterY * fOuterY);
+                            double fHandleRadius = sqrt(fDX * fDX + fDY * fDY);
+                            fRadius = (fOuterRadius - fHandleRadius) / 2.0;
+                            double fss(std::min(fWidth, fHeight));
+                            if (fss != 0.0)
+                                fRadius = fRadius * 100000.0 / fss;
+                        }
+                        // no REFANGLE
+                    }
+                    else if (sShapeType == "ooxml-mathNotEqual" && nIndex == 1)
+                    {
+                        double fadj1(GetAdjustValueAsDouble(0));
+                        double fadj3(GetAdjustValueAsDouble(2));
+                        fadj1 = fadj1 * fHeight / 100000.0;
+                        fadj3 = fadj3 * fHeight / 100000.0;
+                        double fDYRefHorizBar = fDY + fadj1 + fadj3;
+                        if (fDX != 0.0 || fDYRefHorizBar != 0.0)
+                        {
+                            double fRawAngleDeg = basegfx::rad2deg(atan2(fDYRefHorizBar, fDX));
+                            fAngle = (fRawAngleDeg + 180.0) * 60000.0;
+                        }
+                        // no REFR
+                    }
+                    else
+                    {
+                        // no special meaning of radius or angle, suitable for "ooxml-arc",
+                        // "ooxml-chord", "ooxml-pie" and circular arrows value adj4.
+                        fAngle = lcl_getAngleInOOXMLUnit(fDY, fDX);
+                        fRadius = sqrt(fDX * fDX + fDY * fDY);
+                        double fss(std::min(fWidth, fHeight));
+                        if (fss != 0.0)
+                            fRadius = fRadius * 100000.0 / fss;
+                    }
                 }
-                else
+                else // e.g. shapes from ODF, MS binary import or shape type "fontwork-foo"
                 {
-                    // DrawingML polar handles don't have reference center.
-                    fXRef = fWidth / 2;
-                    fYRef = fHeight / 2;
+                    double fXRef, fYRef;
+                    if (aHandle.nFlags & HandleFlags::POLAR)
+                    {
+                        GetParameter(fXRef, aHandle.aPolar.First, false, false);
+                        GetParameter(fYRef, aHandle.aPolar.Second, false, false);
+                    }
+                    else
+                    {
+                        fXRef = fWidth / 2.0;
+                        fYRef = fHeight / 2.0;
+                    }
+                    const double fDX = fPos1 - fXRef;
+                    const double fDY = fPos2 - fYRef;
+                    // ToDo: MS binary uses fixed-point number for the angle. Make sure conversion
+                    // to double is done in import and export.
+                    // ToDo: Angle unit is degree, but range ]-180;180] or [0;360[? Assume ]-180;180].
+                    if (fDX != 0.0 || fDY != 0.0)
+                    {
+                        fRadius = sqrt(fDX * fDX + fDY * fDY);
+                        fAngle = basegfx::rad2deg(atan2(fDY, fDX));
+                    }
                 }
-                const double fDX = fPos1 - fXRef;
-                fAngle = -basegfx::rad2deg(atan2(-fPos2 + fYRef, (fDX == 0.0) ? 0.000000001 : fDX));
-                double fX = fPos1 - fXRef;
-                double fY = fPos2 - fYRef;
-                double fRadius = sqrt( fX * fX + fY * fY );
+
+                // All formats can restrict the radius to a range
                 if ( aHandle.nFlags & HandleFlags::RADIUS_RANGE_MINIMUM )
                 {
                     double fMin;
@@ -1506,27 +1696,13 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                     if ( fRadius > fMax )
                         fRadius = fMax;
                 }
-                if (aHandle.nFlags & HandleFlags::REFR)
-                {
-                    fRadius *= 100000.0;
-                    fRadius /= sqrt( fWidth * fWidth + fHeight * fHeight );
-                    nFirstAdjustmentValue = aHandle.nRefR;
-                }
-                if (aHandle.nFlags & HandleFlags::REFANGLE)
-                {
-                    if ( fAngle < 0 )
-                        fAngle += 360.0;
-                    // Adjustment value referred by nRefAngle needs to be in 60000th a degree
-                    // from 0 to 21600000.
-                    fAngle *= 60000.0;
-                    nSecondAdjustmentValue = aHandle.nRefAngle;
-                }
+
                 if ( nFirstAdjustmentValue >= 0 )
                     SetAdjustValueAsDouble( fRadius, nFirstAdjustmentValue );
                 if ( nSecondAdjustmentValue >= 0 )
                     SetAdjustValueAsDouble( fAngle,  nSecondAdjustmentValue );
             }
-            else
+            else // XY-Handle
             {
                 // Calculating the adjustment values follows in most cases some patterns, which only
                 // need width and height of the shape and handle position. These patterns are calculated
