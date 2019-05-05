@@ -196,14 +196,6 @@ bool lcl_tableOfRangeMatches(
              (rRange.indexOf( rTableName ) != -1 ));
 }
 
-template< typename T >
-::std::vector< T > lcl_SequenceToVector( const uno::Sequence< T > & rSequence )
-{
-    ::std::vector< T > aResult( rSequence.getLength());
-    ::std::copy( rSequence.begin(), rSequence.end(), aResult.begin());
-    return aResult;
-}
-
 } // anonymous namespace
 
 // class SchXMLTableContext
@@ -298,7 +290,7 @@ void SchXMLTableContext::EndElement()
     if( mbHasColumnPermutation )
     {
         SAL_WARN_IF( mbHasRowPermutation, "xmloff.chart", "mbHasColumnPermutation is true" );
-        ::std::vector< sal_Int32 > aPermutation( lcl_SequenceToVector( maColumnPermutation ));
+        auto aPermutation( comphelper::sequenceToContainer<std::vector< sal_Int32 >>( maColumnPermutation ));
         SAL_WARN_IF( aPermutation.empty(), "xmloff.chart", "aPermutation is NULL");
         if( aPermutation.empty())
             return;
@@ -338,7 +330,7 @@ void SchXMLTableContext::EndElement()
     }
     else if( mbHasRowPermutation )
     {
-        ::std::vector< sal_Int32 > aPermutation( lcl_SequenceToVector( maRowPermutation ));
+        auto aPermutation( comphelper::sequenceToContainer<std::vector< sal_Int32 >>( maRowPermutation ));
         SAL_WARN_IF( aPermutation.empty(), "xmloff.chart", "aPermutation is NULL");
         if( aPermutation.empty())
             return;
