@@ -42,6 +42,8 @@ class Qt5Widget : public QWidget
 {
     Q_OBJECT
 
+    Qt5Frame& m_rFrame;
+
     bool handleKeyEvent(QKeyEvent*, bool);
     void handleMouseButtonEvent(QMouseEvent*, bool);
 
@@ -71,7 +73,8 @@ public slots:
 
 public:
     Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f = Qt::WindowFlags());
-    Qt5Frame* m_pFrame;
+
+    Qt5Frame& getFrame() const { return m_rFrame; }
     void startDrag(sal_Int8 nSourceActions);
 };
 
