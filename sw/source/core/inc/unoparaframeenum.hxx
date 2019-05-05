@@ -22,9 +22,6 @@
 
 #include <deque>
 
-
-#include <cppuhelper/implbase.hxx>
-
 #include <calbck.hxx>
 #include <unobaseclass.hxx>
 

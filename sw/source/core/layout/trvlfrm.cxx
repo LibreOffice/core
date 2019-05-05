@@ -47,6 +47,7 @@
 #include <fldbas.hxx>
 #include <frmatr.hxx>
 #include <frmtool.hxx>
+#include <ndtxt.hxx>
 
 #include <cfloat>
 #include <swselectionlist.hxx>

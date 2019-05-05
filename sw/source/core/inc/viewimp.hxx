@@ -19,15 +19,13 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_VIEWIMP_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_VIEWIMP_HXX
 
-#include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <svx/svdtypes.hxx>
-#include <vcl/timer.hxx>
 #include <swrect.hxx>
-#include <swtypes.hxx>
 #include <vector>
 #include <memory>
 
+class OutputDevice;
 class SwViewShell;
 class SwFlyFrame;
 class SwViewOption;
@@ -38,7 +36,6 @@ class SwLayIdle;
 class SwDrawView;
 class SdrPageView;
 class SwPageFrame;
-class SwRegionRects;
 class SwAccessibleMap;
 class SdrObject;
 class Fraction;

@@ -75,6 +75,7 @@
 #include <edtwin.hxx>
 #include <bodyfrm.hxx>
 #include <FrameControlsManager.hxx>
+#include <ndtxt.hxx>
 
 using namespace ::com::sun::star;
 

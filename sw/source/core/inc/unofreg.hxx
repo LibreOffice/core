@@ -23,7 +23,6 @@
 #include <sal/config.h>
 #include <sfx2/sfxmodelfactory.hxx>
 
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 namespace com { namespace sun { namespace star { namespace lang {

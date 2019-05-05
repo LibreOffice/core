@@ -25,6 +25,7 @@
 #include <frmtool.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
+#include <ndtxt.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <svx/sdtaitm.hxx>
