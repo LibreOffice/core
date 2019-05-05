@@ -69,9 +69,7 @@ namespace DOM { namespace events {
                 // erase all references to specified listener
                 if (iter->second.is() && iter->second == aListener)
                 {
-                    ListenerMap::iterator tmp_iter = iter;
-                    ++iter;
-                    rMap.erase(tmp_iter);
+                    iter = rMap.erase(iter);
                 }
                 else
                     ++iter;
