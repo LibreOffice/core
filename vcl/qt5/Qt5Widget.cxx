@@ -49,12 +49,12 @@
 void Qt5Widget::paintEvent(QPaintEvent* pEvent)
 {
     QPainter p(this);
-    if (!m_pFrame->m_bNullRegion)
-        p.setClipRegion(m_pFrame->m_aRegion);
+    if (!m_rFrame.m_bNullRegion)
+        p.setClipRegion(m_rFrame.m_aRegion);
 
-    if (m_pFrame->m_bUseCairo)
+    if (m_rFrame.m_bUseCairo)
     {
-        cairo_surface_t* pSurface = m_pFrame->m_pSurface.get();
+        cairo_surface_t* pSurface = m_rFrame.m_pSurface.get();
         cairo_surface_flush(pSurface);
 
         QImage aImage(cairo_image_surface_get_data(pSurface), size().width(), size().height(),
@@ -62,55 +62,55 @@ void Qt5Widget::paintEvent(QPaintEvent* pEvent)
         p.drawImage(pEvent->rect().topLeft(), aImage, pEvent->rect());
     }
     else
-        p.drawImage(pEvent->rect().topLeft(), *m_pFrame->m_pQImage, pEvent->rect());
+        p.drawImage(pEvent->rect().topLeft(), *m_rFrame.m_pQImage, pEvent->rect());
 }
 
 void Qt5Widget::resizeEvent(QResizeEvent* pEvent)
 {
-    if (m_pFrame->m_bUseCairo)
+    if (m_rFrame.m_bUseCairo)
     {
         int width = size().width();
         int height = size().height();
 
-        if (m_pFrame->m_pSvpGraphics)
+        if (m_rFrame.m_pSvpGraphics)
         {
             cairo_surface_t* pSurface
                 = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
             cairo_surface_set_user_data(pSurface, SvpSalGraphics::getDamageKey(),
-                                        &m_pFrame->m_aDamageHandler, nullptr);
-            m_pFrame->m_pSvpGraphics->setSurface(pSurface, basegfx::B2IVector(width, height));
-            UniqueCairoSurface old_surface(m_pFrame->m_pSurface.release());
-            m_pFrame->m_pSurface.reset(pSurface);
+                                        &m_rFrame.m_aDamageHandler, nullptr);
+            m_rFrame.m_pSvpGraphics->setSurface(pSurface, basegfx::B2IVector(width, height));
+            UniqueCairoSurface old_surface(m_rFrame.m_pSurface.release());
+            m_rFrame.m_pSurface.reset(pSurface);
 
             int min_width = qMin(pEvent->oldSize().width(), pEvent->size().width());
             int min_height = qMin(pEvent->oldSize().height(), pEvent->size().height());
 
             SalTwoRect rect(0, 0, min_width, min_height, 0, 0, min_width, min_height);
 
-            m_pFrame->m_pSvpGraphics->copySource(rect, old_surface.get());
+            m_rFrame.m_pSvpGraphics->copySource(rect, old_surface.get());
         }
     }
     else
     {
         QImage* pImage = nullptr;
 
-        if (m_pFrame->m_pQImage)
+        if (m_rFrame.m_pQImage)
             pImage = new QImage(
-                m_pFrame->m_pQImage->copy(0, 0, pEvent->size().width(), pEvent->size().height()));
+                m_rFrame.m_pQImage->copy(0, 0, pEvent->size().width(), pEvent->size().height()));
         else
         {
             pImage = new QImage(size(), Qt5_DefaultFormat32);
             pImage->fill(Qt::transparent);
         }
 
-        m_pFrame->m_pQt5Graphics->ChangeQImage(pImage);
-        m_pFrame->m_pQImage.reset(pImage);
+        m_rFrame.m_pQt5Graphics->ChangeQImage(pImage);
+        m_rFrame.m_pQImage.reset(pImage);
     }
 
-    m_pFrame->maGeometry.nWidth = size().width();
-    m_pFrame->maGeometry.nHeight = size().height();
+    m_rFrame.maGeometry.nWidth = size().width();
+    m_rFrame.maGeometry.nHeight = size().height();
 
-    m_pFrame->CallCallback(SalEvent::Resize, nullptr);
+    m_rFrame.CallCallback(SalEvent::Resize, nullptr);
 }
 
 void Qt5Widget::handleMouseButtonEvent(QMouseEvent* pEvent, bool bReleased)
@@ -141,7 +141,7 @@ void Qt5Widget::handleMouseButtonEvent(QMouseEvent* pEvent, bool bReleased)
         nEventType = SalEvent::MouseButtonUp;
     else
         nEventType = SalEvent::MouseButtonDown;
-    m_pFrame->CallCallback(nEventType, &aEvent);
+    m_rFrame.CallCallback(nEventType, &aEvent);
 }
 
 void Qt5Widget::mousePressEvent(QMouseEvent* pEvent) { handleMouseButtonEvent(pEvent, false); }
@@ -159,7 +159,7 @@ void Qt5Widget::mouseMoveEvent(QMouseEvent* pEvent)
     aEvent.mnCode = GetKeyModCode(pEvent->modifiers()) | GetMouseModCode(pEvent->buttons());
     aEvent.mnButton = 0;
 
-    m_pFrame->CallCallback(SalEvent::MouseMove, &aEvent);
+    m_rFrame.CallCallback(SalEvent::MouseMove, &aEvent);
     pEvent->accept();
 }
 
@@ -187,7 +187,7 @@ void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
     aEvent.mnNotchDelta = nDelta > 0 ? 1 : -1;
     aEvent.mnScrollLines = 3;
 
-    m_pFrame->CallCallback(SalEvent::WheelMouse, &aEvent);
+    m_rFrame.CallCallback(SalEvent::WheelMouse, &aEvent);
     pEvent->accept();
 }
 
@@ -214,7 +214,7 @@ void Qt5Widget::dragMoveEvent(QDragMoveEvent* event)
 {
     QPoint point = event->pos();
 
-    m_pFrame->draggingStarted(point.x(), point.y(), event->possibleActions(), event->mimeData());
+    m_rFrame.draggingStarted(point.x(), point.y(), event->possibleActions(), event->mimeData());
     QWidget::dragMoveEvent(event);
 }
 
@@ -222,22 +222,22 @@ void Qt5Widget::dropEvent(QDropEvent* event)
 {
     QPoint point = event->pos();
 
-    m_pFrame->dropping(point.x(), point.y(), event->mimeData());
+    m_rFrame.dropping(point.x(), point.y(), event->mimeData());
     QWidget::dropEvent(event);
 }
 
-void Qt5Widget::moveEvent(QMoveEvent*) { m_pFrame->CallCallback(SalEvent::Move, nullptr); }
+void Qt5Widget::moveEvent(QMoveEvent*) { m_rFrame.CallCallback(SalEvent::Move, nullptr); }
 
 void Qt5Widget::showEvent(QShowEvent*)
 {
-    QSize aSize(m_pFrame->GetQWidget()->size());
+    QSize aSize(m_rFrame.GetQWidget()->size());
     SalPaintEvent aPaintEvt(0, 0, aSize.width(), aSize.height(), true);
-    m_pFrame->CallCallback(SalEvent::Paint, &aPaintEvt);
+    m_rFrame.CallCallback(SalEvent::Paint, &aPaintEvt);
 }
 
 void Qt5Widget::closeEvent(QCloseEvent* /*pEvent*/)
 {
-    m_pFrame->CallCallback(SalEvent::Close, nullptr);
+    m_rFrame.CallCallback(SalEvent::Close, nullptr);
 }
 
 static sal_uInt16 GetKeyCode(int keyval, Qt::KeyboardModifiers modifiers)
@@ -399,9 +399,9 @@ bool Qt5Widget::handleKeyEvent(QKeyEvent* pEvent, bool bDown)
 
     bool bStopProcessingKey;
     if (bDown)
-        bStopProcessingKey = m_pFrame->CallCallback(SalEvent::KeyInput, &aEvent);
+        bStopProcessingKey = m_rFrame.CallCallback(SalEvent::KeyInput, &aEvent);
     else
-        bStopProcessingKey = m_pFrame->CallCallback(SalEvent::KeyUp, &aEvent);
+        bStopProcessingKey = m_rFrame.CallCallback(SalEvent::KeyUp, &aEvent);
     return bStopProcessingKey;
 }
 
@@ -431,12 +431,9 @@ void Qt5Widget::keyReleaseEvent(QKeyEvent* pEvent)
         pEvent->accept();
 }
 
-void Qt5Widget::focusInEvent(QFocusEvent*) { m_pFrame->CallCallback(SalEvent::GetFocus, nullptr); }
+void Qt5Widget::focusInEvent(QFocusEvent*) { m_rFrame.CallCallback(SalEvent::GetFocus, nullptr); }
 
-void Qt5Widget::focusOutEvent(QFocusEvent*)
-{
-    m_pFrame->CallCallback(SalEvent::LoseFocus, nullptr);
-}
+void Qt5Widget::focusOutEvent(QFocusEvent*) { m_rFrame.CallCallback(SalEvent::LoseFocus, nullptr); }
 
 void Qt5Widget::showTooltip(const OUString& rTooltip)
 {
@@ -446,7 +443,7 @@ void Qt5Widget::showTooltip(const OUString& rTooltip)
 
 Qt5Widget::Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
     : QWidget(Q_NULLPTR, f)
-    , m_pFrame(&rFrame)
+    , m_rFrame(rFrame)
 {
     create();
     setMouseTracking(true);
@@ -480,13 +477,13 @@ void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
 
     if (!pEvent->commitString().isNull())
     {
-        vcl::DeletionListener aDel(m_pFrame);
+        vcl::DeletionListener aDel(&m_rFrame);
         aInputEvent.maText = toOUString(pEvent->commitString());
         aInputEvent.mnCursorPos = aInputEvent.maText.getLength();
-        m_pFrame->CallCallback(SalEvent::ExtTextInput, &aInputEvent);
+        m_rFrame.CallCallback(SalEvent::ExtTextInput, &aInputEvent);
         pEvent->accept();
         if (!aDel.isDeleted())
-            m_pFrame->CallCallback(SalEvent::EndExtTextInput, nullptr);
+            m_rFrame.CallCallback(SalEvent::EndExtTextInput, nullptr);
     }
     else
     {
@@ -534,7 +531,7 @@ void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
             }
         }
 
-        m_pFrame->CallCallback(SalEvent::ExtTextInput, &aInputEvent);
+        m_rFrame.CallCallback(SalEvent::ExtTextInput, &aInputEvent);
         pEvent->accept();
     }
 }
@@ -546,7 +543,7 @@ QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
         case Qt::ImCursorRectangle:
         {
             SalExtTextInputPosEvent aPosEvent;
-            m_pFrame->CallCallback(SalEvent::ExtTextInputPos, &aPosEvent);
+            m_rFrame.CallCallback(SalEvent::ExtTextInputPos, &aPosEvent);
             return QVariant(
                 QRect(aPosEvent.mnX, aPosEvent.mnY, aPosEvent.mnWidth, aPosEvent.mnHeight));
         }
