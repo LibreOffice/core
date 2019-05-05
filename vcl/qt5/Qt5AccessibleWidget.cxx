@@ -718,7 +718,7 @@ QAccessibleInterface* Qt5AccessibleWidget::customFactory(const QString& classnam
     if (classname == QLatin1String("Qt5Widget") && object && object->isWidgetType())
     {
         Qt5Widget* pWidget = static_cast<Qt5Widget*>(object);
-        vcl::Window* pWindow = pWidget->m_pFrame->GetWindow();
+        vcl::Window* pWindow = pWidget->getFrame().GetWindow();
 
         if (pWindow)
             return new Qt5AccessibleWidget(pWindow->GetAccessible());
