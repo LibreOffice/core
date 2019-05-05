@@ -74,13 +74,13 @@ namespace
     const static sal_Int32 gnWidthCloseThreshold (70);
     const static sal_Int32 gnWidthOpenThreshold (40);
 
-    std::string UnoNameFromDeckId(const OUString& rsDeckId)
+    std::string UnoNameFromDeckId(const OUString& rsDeckId, bool isDraw=false)
     {
         if (rsDeckId == "SdCustomAnimationDeck")
             return ".uno:CustomAnimation";
 
         if (rsDeckId == "PropertyDeck")
-            return ".uno:ModifyPage";
+            return isDraw ? ".uno:ModifyPage" : ".uno:Sidebar";
 
         if (rsDeckId == "SdLayoutsDeck")
             return ".uno:ModifyPage";
@@ -234,7 +234,17 @@ void SidebarController::disposeDecks()
     SolarMutexGuard aSolarMutexGuard;
 
     if (comphelper::LibreOfficeKit::isActive())
+    {
+        if (const SfxViewShell* pViewShell = mpViewFrame->GetViewShell())
+        {
+            const std::string hide = UnoNameFromDeckId(msCurrentDeckId);
+            if (!hide.empty())
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                                       (hide + "=false").c_str());
+        }
+
         mpParentWindow->ReleaseLOKNotifier();
+    }
 
     mpCurrentDeck.clear();
     maFocusManager.Clear();
