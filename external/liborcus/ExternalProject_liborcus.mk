@@ -82,6 +82,11 @@ ifeq ($(OS),LINUX)
 liborcus_LDFLAGS+=-Wl,-z,origin -Wl,-rpath,\$$$$ORIGIN
 endif
 
+ifeq ($(ENABLE_GDB_INDEX),TRUE)
+liborcus_LDFLAGS+=-Wl,--gdb-index
+liborcus_CXXFLAGS+=-ggnu-pubnames
+endif
+
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	$(call gb_ExternalProject_run,build,\
 		$(if $(liborcus_LIBS),LIBS='$(liborcus_LIBS)') \
@@ -110,13 +115,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 				boost_cv_lib_filesystem=yes \
 			) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		&& $(if $(verbose),V=1) \
-		   $(MAKE) \
-		$(if $(filter MACOSX,$(OS)),\
-			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
-				$(EXTERNAL_WORKDIR)/src/liborcus/.libs/liborcus-0.14.0.dylib \
-				$(EXTERNAL_WORKDIR)/src/parser/.libs/liborcus-parser-0.14.0.dylib \
-		) \
+		; cat config.log; cat config.log >&2; false) \
 	)
 
 # vim: set noet sw=4 ts=4:
