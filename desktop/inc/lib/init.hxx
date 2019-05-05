@@ -130,7 +130,7 @@ namespace desktop {
         typedef std::vector<CallbackData> queue_type;
 
     private:
-        void removeAll(const std::function<bool (const queue_type::value_type&)>& rTestFunc);
+        bool removeAll(const std::function<bool (const queue_type::value_type&)>& rTestFunc);
 
         queue_type m_queue;
         std::map<int, std::string> m_states;
