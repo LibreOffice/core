@@ -35,6 +35,7 @@
 #include <calbck.hxx>
 #include <ndindex.hxx>
 #include <pam.hxx>
+#include <ndtxt.hxx>
 #include <sal/log.hxx>
 
 #define ENDNOTE 0x80000000

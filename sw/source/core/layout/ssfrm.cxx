@@ -33,6 +33,7 @@
 #include <sortedobjs.hxx>
 #include <hints.hxx>
 #include <frmtool.hxx>
+#include <ndtxt.hxx>
 
     // No inline cause we need the function pointers
 long SwFrame::GetTopMargin() const

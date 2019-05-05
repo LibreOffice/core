@@ -56,6 +56,7 @@
 #include <sortedobjs.hxx>
 #include <frmatr.hxx>
 #include <frmtool.hxx>
+#include <ndtxt.hxx>
 
 // RotateFlyFrame3
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

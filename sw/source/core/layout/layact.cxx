@@ -50,6 +50,7 @@
 #include <fmtsrnd.hxx>
 #include <docsh.hxx>
 
+#include <ndtxt.hxx>
 #include <tabfrm.hxx>
 #include <ftnfrm.hxx>
 #include <txtfrm.hxx>

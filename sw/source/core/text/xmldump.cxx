@@ -18,6 +18,7 @@
 #include <hffrm.hxx>
 #include <rootfrm.hxx>
 #include <editsh.hxx>
+#include <ndtxt.hxx>
 #include "porlin.hxx"
 #include "porlay.hxx"
 #include "portxt.hxx"

@@ -14,6 +14,7 @@
 #include <cntfrm.hxx>
 #include <txtfrm.hxx>
 #include <notxtfrm.hxx>
+#include <ndtxt.hxx>
 #include <DashedLine.hxx>
 #include <doc.hxx>
 #include <edtwin.hxx>

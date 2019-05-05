@@ -34,7 +34,6 @@ class SwFormatColl;
 class SwFormatAnchor;
 class SdrMarkList;
 class SwUndoDelete;
-class SwFormat;
 
 namespace sw {
     class UndoManager;

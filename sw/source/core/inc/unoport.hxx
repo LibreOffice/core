@@ -23,16 +23,12 @@
 #include <deque>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
-#include <com/sun/star/text/XTextField.hpp>
-#include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
@@ -42,8 +38,10 @@
 
 #include <unocrsr.hxx>
 #include <calbck.hxx>
-#include <unobaseclass.hxx>
-#include <IDocumentRedlineAccess.hxx>
+
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::text { class XTextField; }
+namespace com::sun::star::text { class XFootnote; }
 
 class SwFrameFormat;
 class SwRangeRedline;

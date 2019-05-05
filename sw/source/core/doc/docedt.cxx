@@ -44,6 +44,7 @@
 #include <SwGrammarMarkUp.hxx>
 #include <docedt.hxx>
 #include <frmfmt.hxx>
+#include <ndtxt.hxx>
 
 #include <vector>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>

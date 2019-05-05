@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_UNOREDLINE_HXX
 
 #include <svl/listener.hxx>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include "unotext.hxx"
 #include "ndindex.hxx"
 

@@ -21,10 +21,11 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include "cntfrm.hxx"
-#include <ndtxt.hxx>
 #include "TextFrameIndex.hxx"
 
 #include <boost/version.hpp>
+
+#include <set>
 
 namespace com { namespace sun { namespace star { namespace linguistic2 { class XHyphenatedWord; } } } }
 
@@ -36,19 +37,17 @@ class SwTextFormatter;
 class SwTextFormatInfo;
 class SwParaPortion;
 class WidowsAndOrphans;
-class SwBodyFrame;
 class SwTextFootnote;
 class SwInterHyphInfo;      // Hyphenate()
 class SwCache;
 class SwBorderAttrs;
 class SwFrameFormat;
-class OutputDevice;
-class SwTestFormat;
 struct SwCursorMoveState;
 struct SwFillData;
 class SwPortionHandler;
 class SwScriptInfo;
 enum class ExpandMode;
+class SwTextAttr;
 
 #define NON_PRINTING_CHARACTER_COLOR Color(0x26, 0x8b, 0xd2)
 

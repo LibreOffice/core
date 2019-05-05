@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_TXTTYPES_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_TXTTYPES_HXX
 
-#include <swtypes.hxx>
-
 enum class PortionType
 {
     NONE        = 0x0000,

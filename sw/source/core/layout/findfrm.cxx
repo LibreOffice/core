@@ -35,6 +35,7 @@
 #include <bodyfrm.hxx>
 #include <calbck.hxx>
 #include <viewopt.hxx>
+#include <ndtxt.hxx>
 #include <sal/log.hxx>
 
 /// Searches the first ContentFrame in BodyText below the page.

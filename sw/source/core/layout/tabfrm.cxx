@@ -60,6 +60,7 @@
 #include <sal/log.hxx>
 #include <frmatr.hxx>
 #include <frmtool.hxx>
+#include <ndtxt.hxx>
 
 using namespace ::com::sun::star;
 

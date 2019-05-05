@@ -64,6 +64,7 @@
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
 #include <calbck.hxx>
+#include <ndtxt.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentTimerAccess.hxx>

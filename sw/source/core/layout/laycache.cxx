@@ -44,6 +44,7 @@
 #include <sortedobjs.hxx>
 #include <ndindex.hxx>
 #include <node.hxx>
+#include <ndtxt.hxx>
 
 #include <limits>
 #include <set>

@@ -24,7 +24,6 @@
 #include <ndarr.hxx>
 #include <undobj.hxx>
 #include <set>
-#include <swtypes.hxx>
 #include <itabenum.hxx>
 #include <tblenum.hxx>
 #include <memory>

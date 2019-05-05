@@ -21,6 +21,7 @@
 #include <pamtyp.hxx>
 #include <pam.hxx>
 #include <txtfrm.hxx>
+#include <ndtxt.hxx>
 #include <memory>
 
 namespace sw {

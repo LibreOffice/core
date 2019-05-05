@@ -86,6 +86,7 @@
 #include <scriptinfo.hxx>
 #include <tools/datetime.hxx>
 #include <tools/urlobj.hxx>
+#include <svl/itemprop.hxx>
 #include <svl/listener.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <o3tl/any.hxx>

@@ -20,8 +20,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_UNOEVENT_HXX
 
 #include <svtools/unoevent.hxx>
-#include <unostyle.hxx>
-#include <svl/macitem.hxx>
 
 class SvxMacroItem;
 class SwXFrame;
@@ -29,6 +27,7 @@ class SwXTextFrame;
 class SwXTextGraphicObject;
 class SwXTextEmbeddedObject;
 class SwFormatINetFormat;
+namespace sw { class ICoreFrameStyle; }
 
 class SwHyperlinkEventDescriptor : public SvDetachedEventDescriptor
 {
