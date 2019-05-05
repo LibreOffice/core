@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_3551cdd9",
+        "filename": "sw/qa/python/xtext.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-05-05T14:47:32Z",
+      "side": 0,
+      "message": "Yeah the point of the matter was to make any change in behaviour identifiable.",
+      "revId": "8e475035a77b47001ad09ca0c333d3eabe82bf27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
