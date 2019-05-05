@@ -620,9 +620,8 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
         // if is already in a pool, then it is worth checking if it is in this one.
         if ( IsPooledItem(&rItem) )
         {
-            auto it = rItemArr.find(const_cast<SfxPoolItem *>(&rItem));
-
             // 1. search for an identical pointer in the pool
+            auto it = rItemArr.find(const_cast<SfxPoolItem *>(&rItem));
             if (it != rItemArr.end())
             {
                 AddRef(rItem);
@@ -637,10 +636,7 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
         {
             pFoundItem = rItemArr.findByLessThan(&rItem);
             if (pFoundItem)
-            {
                 assert(*pFoundItem == rItem);
-                AddRef(*pFoundItem);
-            }
         }
         else
         {
@@ -649,15 +645,14 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
                 if (**itr == rItem)
                 {
                     pFoundItem = *itr;
-                    assert((!bPassingOwnership || (&rItem != *itr)) && "can't be passing ownership and have the item already in the pool");
-                    AddRef(**itr);
                     break;
                 }
             }
         }
-
         if (pFoundItem)
         {
+            assert((!bPassingOwnership || (&rItem != pFoundItem)) && "can't be passing ownership and have the item already in the pool");
+            AddRef(*pFoundItem);
             if (bPassingOwnership)
                 delete &rItem;
             return *pFoundItem;
