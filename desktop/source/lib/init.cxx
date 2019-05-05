@@ -945,8 +945,8 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
 {
     SetPriority(TaskPriority::POST_PAINT);
 
-    // Add the states that are safe to skip duplicates on,
-    // even when not consequent.
+    // Add the states that are safe to skip duplicates on, even when
+    // not consequent (i.e. do no emmit them if unchanged from last).
     m_states.emplace(LOK_CALLBACK_TEXT_SELECTION, "NIL");
     m_states.emplace(LOK_CALLBACK_GRAPHIC_SELECTION, "NIL");
     m_states.emplace(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, "NIL");
@@ -1038,7 +1038,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         case LOK_CALLBACK_GRAPHIC_SELECTION:
         case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
         case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR :
+        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
         case LOK_CALLBACK_STATE_CHANGED:
         case LOK_CALLBACK_MOUSE_POINTER:
         case LOK_CALLBACK_CELL_CURSOR:
@@ -1122,6 +1122,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_CELL_VIEW_CURSOR:
             case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
             case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
+            case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
             case LOK_CALLBACK_TEXT_VIEW_SELECTION:
             case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
             {
@@ -1129,16 +1130,6 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                 removeAll(
                     [type, nViewId] (const queue_type::value_type& elem) {
                         return (elem.Type == type && nViewId == lcl_getViewId(elem));
-                    }
-                );
-            }
-            break;
-
-            case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-            {
-                removeAll(
-                    [type, &payload] (const queue_type::value_type& elem) {
-                        return (elem.Type == type && elem.PayloadString == payload);
                     }
                 );
             }
