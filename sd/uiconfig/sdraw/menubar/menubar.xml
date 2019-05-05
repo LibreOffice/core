@@ -612,6 +612,7 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:MacroRecorder"/>
           <menu:menuitem menu:id=".uno:RunMacro"/>
+          <menu:menuitem menu:id=".uno:BasicIDEAppear"/>
           <menu:menuitem menu:id=".uno:ScriptOrganizer"/>
           <menu:menuitem menu:id=".uno:MacroSignature"/>
           <menu:menuseparator/>
