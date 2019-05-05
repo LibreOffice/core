@@ -121,13 +121,12 @@ bool ExtTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewT
     if (SfxDispatcher* pDispatcher = GetDispatcher())
     {
         // I2TM
-        const std::shared_ptr<const ::Item::ItemBase> aSbxItem(
-            Item::Sbx::Create(
-                aDocument,
-                aLibName,
-                rNewText,
-                OUString(),
-                ConvertType(eType)));
+        const Item::Sbx aSbxItem(
+            aDocument,
+            aLibName,
+            rNewText,
+            OUString(),
+            ConvertType(eType));
         pDispatcher->ExecuteList2(
             SID_BASICIDE_SBXRENAMED,
             SfxCallMode::SYNCHRON,
@@ -365,13 +364,12 @@ TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
             if( pDispatcher )
             {
                 // I2TM
-                const std::shared_ptr<const ::Item::ItemBase> aSbxItem(
-                    Item::Sbx::Create(
-                        rSourceDoc,
-                        aSourceLibName,
-                        aSourceName,
-                        OUString(),
-                        ConvertType(eType)));
+                const Item::Sbx aSbxItem(
+                    rSourceDoc,
+                    aSourceLibName,
+                    aSourceName,
+                    OUString(),
+                    ConvertType(eType));
                 pDispatcher->ExecuteList2(
                     SID_BASICIDE_SBXDELETED,
                     SfxCallMode::SYNCHRON,
@@ -467,13 +465,12 @@ TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
         if( pDispatcher )
         {
             // I2TM
-            const std::shared_ptr<const ::Item::ItemBase> aSbxItem(
-                Item::Sbx::Create(
-                    rDestDoc,
-                    aDestLibName,
-                    aSourceName,
-                    OUString(),
-                    ConvertType(eType)));
+            const Item::Sbx aSbxItem(
+                rDestDoc,
+                aDestLibName,
+                aSourceName,
+                OUString(),
+                ConvertType(eType));
             pDispatcher->ExecuteList2(
                 SID_BASICIDE_SBXINSERTED,
                 SfxCallMode::SYNCHRON,
@@ -744,13 +741,12 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton, void )
                 }
 
                 // I2TM
-                const std::shared_ptr<const ::Item::ItemBase> aSbxItem(
-                    Item::Sbx::Create(
-                        aDesc.GetDocument(),
-                        aDesc.GetLibName(),
-                        aModName,
-                        OUString(),
-                        TreeListBox::ConvertType( aDesc.GetType())));
+                const Item::Sbx aSbxItem(
+                    aDesc.GetDocument(),
+                    aDesc.GetLibName(),
+                    aModName,
+                    OUString(),
+                    TreeListBox::ConvertType( aDesc.GetType()));
                 pDispatcher->ExecuteList2(
                     SID_BASICIDE_SHOWSBX,
                     SfxCallMode::SYNCHRON,
@@ -882,13 +878,12 @@ void ObjectPage::NewDialog()
                 if (SfxDispatcher* pDispatcher = GetDispatcher())
                 {
                     // I2TM
-                    const std::shared_ptr<const ::Item::ItemBase> aSbxItem(
-                        Item::Sbx::Create(
-                            aDocument,
-                            aLibName,
-                            aDlgName,
-                            OUString(),
-                            TYPE_DIALOG));
+                    const Item::Sbx aSbxItem(
+                        aDocument,
+                        aLibName,
+                        aDlgName,
+                        OUString(),
+                        TYPE_DIALOG);
                     pDispatcher->ExecuteList2(
                         SID_BASICIDE_SBXINSERTED,
                         SfxCallMode::SYNCHRON,
@@ -948,13 +943,12 @@ void ObjectPage::DeleteCurrent()
         if (SfxDispatcher* pDispatcher = GetDispatcher())
         {
             // I2TM
-            const std::shared_ptr<const ::Item::ItemBase> aSbxItem(
-                Item::Sbx::Create(
-                    aDocument,
-                    aLibName,
-                    aName,
-                    OUString(),
-                    TreeListBox::ConvertType(eType)));
+            const Item::Sbx aSbxItem(
+                aDocument,
+                aLibName,
+                aName,
+                OUString(),
+                TreeListBox::ConvertType(eType));
             pDispatcher->ExecuteList2(
                 SID_BASICIDE_SBXDELETED,
                 SfxCallMode::SYNCHRON,
@@ -1046,13 +1040,12 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
             if (SfxDispatcher* pDispatcher = GetDispatcher())
             {
                 // I2TM
-                const std::shared_ptr<const ::Item::ItemBase> aSbxItem(
-                    Item::Sbx::Create(
-                        rDocument,
-                        aLibName,
-                        aModName,
-                        OUString(),
-                        TYPE_MODULE));
+                const Item::Sbx aSbxItem(
+                    rDocument,
+                    aLibName,
+                    aModName,
+                    OUString(),
+                    TYPE_MODULE);
                 pDispatcher->ExecuteList2(
                     SID_BASICIDE_SBXINSERTED,
                     SfxCallMode::SYNCHRON,
@@ -1152,13 +1145,12 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
             if (SfxDispatcher* pDispatcher = GetDispatcher())
             {
                 // I2TM
-                const std::shared_ptr<const ::Item::ItemBase> aSbxItem(
-                    Item::Sbx::Create(
-                        rDocument,
-                        aLibName,
-                        aModName,
-                        OUString(),
-                        TYPE_MODULE));
+                const Item::Sbx aSbxItem(
+                    rDocument,
+                    aLibName,
+                    aModName,
+                    OUString(),
+                    TYPE_MODULE);
                 pDispatcher->ExecuteList2(
                     SID_BASICIDE_SBXINSERTED,
                     SfxCallMode::SYNCHRON,

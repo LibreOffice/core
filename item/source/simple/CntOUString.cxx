@@ -7,10 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <cassert>
 #include <item/simple/CntOUString.hxx>
-#include <item/base/ItemAdministrator.hxx>
 #include <item/base/ItemControlBlock.hxx>
+#include <cassert>
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,61 +18,28 @@ namespace Item
     ItemControlBlock& CntOUString::GetStaticItemControlBlock()
     {
         static ItemControlBlock aItemControlBlock(
-            std::shared_ptr<ItemAdministrator>(new IAdministrator_unordered_set()),
-            nullptr,
-            [](){ return new CntOUString(CntOUString::GetStaticItemControlBlock()); },
+            [](){ return new CntOUString(); },
             "CntOUString");
 
         return aItemControlBlock;
     }
 
-    CntOUString::CntOUString(
-        ItemControlBlock& rItemControlBlock,
-        const rtl::OUString& rValue)
-    :   ItemBase(rItemControlBlock),
+    CntOUString::CntOUString(const rtl::OUString& rValue)
+    :   ItemBase(CntOUString::GetStaticItemControlBlock()),
         m_aValue(rValue)
     {
     }
 
-    CntOUString::~CntOUString()
+    bool CntOUString::operator==(const ItemBase& rRef) const
     {
-        // needs to be called from here to have the fully derived implementation type
-        // in the helper method - do NOT move to a imaginable general
-        // implementation in ItemBaseStaticHelper (!)
-        implInstanceCleanup();
+        return ItemBase::operator==(rRef) || // ptr-compare
+            getValue() == static_cast<const CntOUString&>(rRef).getValue();
     }
 
-    std::shared_ptr<const CntOUString> CntOUString::Create(const rtl::OUString& rValue)
+    std::unique_ptr<ItemBase> CntOUString::clone() const
     {
-        // use ::Create(...) method with local incarnation, it will handle
-        // - detection of being default (will delete local incarnation)
-        // - detection of reuse (will delete local incarnation)
-        // - detectiomn of new use - will create shared_ptr for local incarnation and buffer
-        return std::static_pointer_cast<const CntOUString>(
-            CntOUString::GetStaticItemControlBlock().GetItemAdministrator()->Create(
-                new CntOUString(
-                    CntOUString::GetStaticItemControlBlock(),
-                    rValue)));
-    }
-
-    bool CntOUString::operator==(const ItemBase& rCandidate) const
-    {
-        if(ItemBase::operator==(rCandidate)) // compares ptrs
-        {
-            return true;
-        }
-
-        return (GetValue() == static_cast<const CntOUString&>(rCandidate).GetValue());
-    }
-
-    size_t CntOUString::GetUniqueKey() const
-    {
-        return static_cast<const CntOUString*>(this)->GetValue().hashCode();
-    }
-
-    const rtl::OUString& CntOUString::GetValue() const
-    {
-        return m_aValue;
+        // use direct value(s) and std::make_unique
+        return std::make_unique<CntOUString>(getValue());
     }
 } // end of namespace Item
 

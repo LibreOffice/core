@@ -327,7 +327,7 @@ SvxBmpMaskSelectItem::SvxBmpMaskSelectItem( SvxBmpMask& rMask,
 }
 
 void SvxBmpMaskSelectItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
-                                         const SfxPoolItem* pItem, const std::shared_ptr<const Item::ItemBase>& /*rSlotItem*/ )
+                                         const SfxPoolItem* pItem, const std::unique_ptr<const Item::ItemBase>& /*rSlotItem*/ )
 {
     if ( ( nSID == SID_BMPMASK_EXEC ) && pItem )
     {

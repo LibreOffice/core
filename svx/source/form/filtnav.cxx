@@ -1822,7 +1822,7 @@ void FmFilterNavigatorWin::UpdateContent(FmFormShell const * pFormShell)
 }
 
 
-void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::shared_ptr<const Item::ItemBase>& /*rSlotItem*/)
+void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& /*rSlotItem*/)
 {
     if( !pState  || SID_FM_FILTER_NAVIGATOR_CONTROL != nSID )
         return;

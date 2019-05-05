@@ -23,7 +23,9 @@
 #include <svl/poolitem.hxx>
 
 // I2TM
-#include <item/base/ItemBase.hxx>
+#include <item/base/ItemBuffered.hxx>
+#include <item/base/ItemControlBlock.hxx>
+#include <item/base/ItemAdministrator.hxx>
 // ~I2TM
 
 namespace basctl
@@ -42,44 +44,54 @@ enum ItemType
 // I2TM
 namespace Item
 {
-    class Sbx final : public ::Item::ItemBase
+    class Sbx : public ::Item::ItemBuffered
     {
     public:
         static ::Item::ItemControlBlock& GetStaticItemControlBlock();
 
-    private:
-        const ScriptDocument    m_aDocument;
-        const OUString          m_aLibName;
-        const OUString          m_aName;
-        const OUString          m_aMethodName;
-        ItemType                m_eType;
-
     protected:
-        Sbx(
-            ::Item::ItemControlBlock& rItemControlBlock,
-            const ScriptDocument* pDocument = nullptr,
-            const OUString& aLibName = OUString(),
-            const OUString& aName = OUString(),
-            const OUString& aMethodName = OUString(),
-            ItemType eType = TYPE_UNKNOWN);
+        class SbxData : public ::Item::ItemBuffered::ItemData
+        {
+        private:
+            const ScriptDocument    m_aDocument;
+            const OUString          m_aLibName;
+            const OUString          m_aName;
+            const OUString          m_aMethodName;
+            ItemType                m_eType;
+
+        protected:
+            virtual ::Item::ItemAdministrator& getItemAdministrator() const;
+
+        public:
+            SbxData(
+                const ScriptDocument& rDocument,
+                const OUString& aLibName = OUString(),
+                const OUString& aName = OUString(),
+                const OUString& aMethodName = OUString(),
+                ItemType eType = TYPE_UNKNOWN);
+
+            virtual bool operator==(const ItemData& rRef) const;
+
+            ScriptDocument const& GetDocument() const { return m_aDocument; }
+            OUString const& GetLibName() const { return m_aLibName; }
+            OUString const& GetName() const { return m_aName; }
+            OUString const& GetMethodName() const { return m_aMethodName; }
+            ItemType GetType() const { return m_eType; }
+        };
 
     public:
-        virtual ~Sbx();
-
-        // SharedPtr-construtcor
-        static std::shared_ptr<const Sbx> Create(
+        Sbx(
             const ScriptDocument& rDocument,
             const OUString& aLibName = OUString(),
             const OUString& aName = OUString(),
             const OUString& aMethodName = OUString(),
             ItemType eType = TYPE_UNKNOWN);
-        virtual bool operator==(const ItemBase& rCandidate) const override;
 
-        ScriptDocument const& GetDocument() const { return m_aDocument; }
-        OUString const& GetLibName() const { return m_aLibName; }
-        OUString const& GetName() const { return m_aName; }
-        OUString const& GetMethodName() const { return m_aMethodName; }
-        ItemType GetType() const { return m_eType; }
+        ScriptDocument const& GetDocument() const { return static_cast<SbxData const&>(getItemData()).GetDocument(); }
+        OUString const& GetLibName() const { return static_cast<SbxData const&>(getItemData()).GetLibName(); }
+        OUString const& GetName() const { return static_cast<SbxData const&>(getItemData()).GetName(); }
+        OUString const& GetMethodName() const { return static_cast<SbxData const&>(getItemData()).GetMethodName(); }
+        ItemType GetType() const { return static_cast<SbxData const&>(getItemData()).GetType(); }
     };
 }
 // ~I2TM

@@ -1071,8 +1071,8 @@ const SfxPoolItem* SfxDispatcher::ExecuteList(sal_uInt16 nSlot, SfxCallMode eCal
 const SfxPoolItem* SfxDispatcher::ExecuteList2(
     sal_uInt16 nSlot,
     SfxCallMode eCall,
-    std::initializer_list<const std::shared_ptr<const Item::ItemBase>*> args,
-    std::initializer_list<const std::shared_ptr<const Item::ItemBase>*> internalargs)
+    std::initializer_list<const Item::ItemBase*> args,
+    std::initializer_list<const Item::ItemBase*> internalargs)
 {
     if(IsLocked() || 0 == args.size())
     {
@@ -1086,10 +1086,10 @@ const SfxPoolItem* SfxDispatcher::ExecuteList2(
     {
         SfxAllItemSet aSet(pShell->GetPool());
 
-        for(const std::shared_ptr<const Item::ItemBase>* arg : args)
+        for(const Item::ItemBase* arg : args)
         {
             assert(arg);
-            aSet.itemSet().SetItem(*arg);
+            aSet.itemSet().setItem(*arg);
         }
 
         SfxRequest aReq(nSlot, eCall, aSet);
@@ -1098,10 +1098,10 @@ const SfxPoolItem* SfxDispatcher::ExecuteList2(
         {
             SfxAllItemSet aInternalSet(SfxGetpApp()->GetPool());
 
-            for(const std::shared_ptr<const Item::ItemBase>* arg : internalargs)
+            for(const Item::ItemBase* arg : internalargs)
             {
                 assert(arg);
-                aInternalSet.itemSet().SetItem(*arg);
+                aInternalSet.itemSet().setItem(*arg);
             }
 
             aReq.SetInternalArgs_Impl(aInternalSet);

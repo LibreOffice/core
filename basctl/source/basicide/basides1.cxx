@@ -574,22 +574,20 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             // I2TM
-            if(const auto Item(rReq.GetArgs()->itemSet().GetStateAndItem<const basctl::Item::Sbx>()); Item.HasItem())
-            {
-                const ScriptDocument& aDocument(Item.GetItem()->GetDocument());
-                const OUString& aLibName(Item.GetItem()->GetLibName());
-                const OUString& aName(Item.GetItem()->GetName());
+            const auto Item(rReq.GetArgs()->itemSet().getStateAndItem<const basctl::Item::Sbx>());
+            const ScriptDocument& aDocument(Item.getItem().GetDocument());
+            const OUString& aLibName(Item.getItem().GetLibName());
+            const OUString& aName(Item.getItem().GetName());
 
-                if(m_aCurLibName.isEmpty() || (aDocument == m_aCurDocument && aLibName == m_aCurLibName))
+            if(m_aCurLibName.isEmpty() || (aDocument == m_aCurDocument && aLibName == m_aCurLibName))
+            {
+                if(TYPE_MODULE == Item.getItem().GetType())
                 {
-                    if(TYPE_MODULE == Item.GetItem()->GetType())
-                    {
-                        FindBasWin(aDocument, aLibName, aName, true);
-                    }
-                    else if(TYPE_DIALOG == Item.GetItem()->GetType())
-                    {
-                        FindDlgWin(aDocument, aLibName, aName, true);
-                    }
+                    FindBasWin(aDocument, aLibName, aName, true);
+                }
+                else if(TYPE_DIALOG == Item.getItem().GetType())
+                {
+                    FindDlgWin(aDocument, aLibName, aName, true);
                 }
             }
             // ~I2TM
@@ -599,18 +597,16 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             // I2TM
-            if(const auto Item(rReq.GetArgs()->itemSet().GetStateAndItem<const basctl::Item::Sbx>()); Item.HasItem())
-            {
-                const ScriptDocument& aDocument(Item.GetItem()->GetDocument());
-                VclPtr<BaseWindow> pWin = FindWindow(
-                    aDocument,
-                    Item.GetItem()->GetLibName(),
-                    Item.GetItem()->GetName(),
-                    Item.GetItem()->GetType(),
-                    true);
-                if ( pWin )
-                    RemoveWindow( pWin, true );
-            }
+            const auto Item(rReq.GetArgs()->itemSet().getStateAndItem<const basctl::Item::Sbx>());
+            const ScriptDocument& aDocument(Item.getItem().GetDocument());
+            VclPtr<BaseWindow> pWin = FindWindow(
+                aDocument,
+                Item.getItem().GetLibName(),
+                Item.getItem().GetName(),
+                Item.getItem().GetType(),
+                true);
+            if ( pWin )
+                RemoveWindow( pWin, true );
             // ~I2TM
         }
         break;
@@ -618,32 +614,30 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             // I2TM
-            if(const auto Item(rReq.GetArgs()->itemSet().GetStateAndItem<const basctl::Item::Sbx>()); Item.HasItem())
+            const auto Item(rReq.GetArgs()->itemSet().getStateAndItem<const basctl::Item::Sbx>());
+            const ScriptDocument& aDocument(Item.getItem().GetDocument());
+            const OUString& aLibName(Item.getItem().GetLibName());
+            const OUString& aName(Item.getItem().GetName());
+
+            SetCurLib( aDocument, aLibName );
+            BaseWindow* pWin = nullptr;
+
+            if(TYPE_DIALOG == Item.getItem().GetType())
             {
-                const ScriptDocument& aDocument(Item.GetItem()->GetDocument());
-                const OUString& aLibName(Item.GetItem()->GetLibName());
-                const OUString& aName(Item.GetItem()->GetName());
-
-                SetCurLib( aDocument, aLibName );
-                BaseWindow* pWin = nullptr;
-
-                if(TYPE_DIALOG == Item.GetItem()->GetType())
-                {
-                    pWin = FindDlgWin( aDocument, aLibName, aName, true );
-                }
-                else if(TYPE_MODULE == Item.GetItem()->GetType())
-                {
-                    pWin = FindBasWin( aDocument, aLibName, aName, true );
-                }
-                else if(TYPE_METHOD == Item.GetItem()->GetType())
-                {
-                    pWin = FindBasWin( aDocument, aLibName, aName, true );
-                    static_cast<ModulWindow*>(pWin)->EditMacro(Item.GetItem()->GetMethodName());
-                }
-                DBG_ASSERT( pWin, "Window was not created!" );
-                SetCurWindow( pWin, true );
-                pTabBar->MakeVisible( pTabBar->GetCurPageId() );
+                pWin = FindDlgWin( aDocument, aLibName, aName, true );
             }
+            else if(TYPE_MODULE == Item.getItem().GetType())
+            {
+                pWin = FindBasWin( aDocument, aLibName, aName, true );
+            }
+            else if(TYPE_METHOD == Item.getItem().GetType())
+            {
+                pWin = FindBasWin( aDocument, aLibName, aName, true );
+                static_cast<ModulWindow*>(pWin)->EditMacro(Item.getItem().GetMethodName());
+            }
+            DBG_ASSERT( pWin, "Window was not created!" );
+            SetCurWindow( pWin, true );
+            pTabBar->MakeVisible( pTabBar->GetCurPageId() );
             // ~I2TM
         }
         break;

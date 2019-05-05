@@ -125,8 +125,8 @@ public:
     const SfxPoolItem* ExecuteList2(
         sal_uInt16 nSlot,
         SfxCallMode eCall,
-        std::initializer_list<const std::shared_ptr<const Item::ItemBase>*> args,
-        std::initializer_list<const std::shared_ptr<const Item::ItemBase>*> internalargs = std::initializer_list<const std::shared_ptr<const Item::ItemBase>*>());
+        std::initializer_list<const Item::ItemBase*> args,
+        std::initializer_list<const Item::ItemBase*> internalargs = std::initializer_list<const Item::ItemBase*>());
     // ~I2TM
 
     const SfxPoolItem*  Execute( sal_uInt16 nSlot,

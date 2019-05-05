@@ -16,95 +16,67 @@
 #include <item/base/ItemAdministrator.hxx>
 #include <item/base/ModelSpecificItemValues.hxx>
 #include <item/base/ItemSet.hxx>
+#include <item/base/ItemControlBlock.hxx>
 #include <item/simple/CntInt16.hxx>
 #include <item/simple/CntOUString.hxx>
-#include <item/base/ItemControlBlock.hxx>
 
 namespace Item
 {
-    // example for multi value Item
-    // if this should be based on faster IAdministrator_set, changes needed would be:
-    // - typedef ItemBaseStaticHelper<MultiValueAB, IAdministrator_set> MultiValueStaticHelperAB;
-    // - define virtual bool operator<(const ItemBase& rCandidate) const override
-    class MultiValueAB : public ItemBase
+    // example for simple multi value Item
+    class MultiValueSimple : public ItemBase
     {
     public:
         static ItemControlBlock& GetStaticItemControlBlock()
         {
             static ItemControlBlock aItemControlBlock(
-                std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
-                nullptr,
-                [](){ return new MultiValueAB(MultiValueAB::GetStaticItemControlBlock()); },
-                "MultiValueAB");
+                [](){ return new MultiValueSimple(); },
+                "MultiValueSimple");
 
             return aItemControlBlock;
         }
 
+    private:
         sal_Int16 m_nValueA;
         sal_Int32 m_nValueB;
 
     protected:
-        MultiValueAB(
-            ItemControlBlock& rItemControlBlock,
-            sal_Int16 nValueA = 0,
-            sal_Int16 nValueB = 0)
+        MultiValueSimple(ItemControlBlock& rItemControlBlock, sal_Int16 nValA, sal_Int32 nValB)
         :   ItemBase(rItemControlBlock),
-            m_nValueA(nValueA),
-            m_nValueB(nValueB)
+            m_nValueA(nValA),
+            m_nValueB(nValB)
         {
         }
 
     public:
-        virtual ~MultiValueAB()
+        MultiValueSimple(sal_Int16 nValA = 0, sal_Int32 nValB = 0)
+        :   ItemBase(MultiValueSimple::GetStaticItemControlBlock()),
+            m_nValueA(nValA),
+            m_nValueB(nValB)
         {
-            // needs to be called from here to have the fully derived implementation type
-            // in the helper method - do NOT move to a imaginable general
-            // implementation in ItemBaseStaticHelper (!)
-            implInstanceCleanup();
         }
 
-        static std::shared_ptr<const MultiValueAB> Create(sal_Int16 nValueA, sal_Int16 nValueB)
+        virtual bool operator==(const ItemBase& rRef) const
         {
-            // use ::Create(...) method with local incarnation, it will handle
-            // - detection of being default (will delete local incarnation)
-            // - detection of reuse (will delete local incarnation)
-            // - detectiomn of new use - will create shared_ptr for local incarnation and buffer
-            return std::static_pointer_cast<const MultiValueAB>(
-                MultiValueAB::GetStaticItemControlBlock().GetItemAdministrator()->Create(
-                    new MultiValueAB(
-                        MultiValueAB::GetStaticItemControlBlock(),
-                        nValueA,
-                        nValueB)));
+            return ItemBase::operator==(rRef) || // ptr-compare
+                (getValueA() == static_cast<const MultiValueSimple&>(rRef).getValueA() &&
+                 getValueB() == static_cast<const MultiValueSimple&>(rRef).getValueB());
         }
 
-        virtual bool operator==(const ItemBase& rCandidate) const override
+        virtual std::unique_ptr<ItemBase> clone() const
         {
-            if(ItemBase::operator==(rCandidate)) // compares ptrs
-            {
-                return true;
-            }
-
-            const MultiValueAB& rCand(static_cast<const MultiValueAB&>(rCandidate));
-
-            return (GetValueA() == rCand.GetValueA()
-                && GetValueB() == rCand.GetValueB());
+            // use direct value(s) and std::make_unique
+            return std::make_unique<MultiValueSimple>(getValueA(), getValueB());
         }
 
-        sal_Int16 GetValueA() const
+        sal_Int16 getValueA() const
         {
             return m_nValueA;
         }
 
-        sal_Int16 GetValueB() const
+        sal_Int32 getValueB() const
         {
             return m_nValueB;
         }
-
-        // virtual bool operator<(const ItemBase& rCandidate) const override
-        // {
-        //     return static_cast<const MultiValueAB*>(this)->GetValueA() < static_cast<const MultiValueAB&>(rCandidate).GetValueA()
-        //         && static_cast<const MultiValueAB*>(this)->GetValueB() < static_cast<const MultiValueAB&>(rCandidate).GetValueB();
-        // }
     };
 } // end of namespace Item
 
@@ -112,80 +84,84 @@ namespace Item
 
 namespace Item
 {
-    // example for multi value Item deived from already defined one,
-    // adding parameters (only one here)
-    class MultiValueABC : public MultiValueAB
+    // example for derived simple multi value Item to get another
+    // class identifier
+    class MultiValueSimple_derivedClass : public MultiValueSimple
     {
     public:
         static ItemControlBlock& GetStaticItemControlBlock()
         {
             static ItemControlBlock aItemControlBlock(
-                std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
-                nullptr,
-                [](){ return new MultiValueABC(MultiValueABC::GetStaticItemControlBlock()); },
-                "MultiValueABC");
+                [](){ return new MultiValueSimple_derivedClass(); },
+                "MultiValueSimple_derivedClass");
 
             return aItemControlBlock;
         }
 
+    public:
+        MultiValueSimple_derivedClass(sal_Int16 nValA = 0, sal_Int32 nValB = 0)
+        :   MultiValueSimple(MultiValueSimple_derivedClass::GetStaticItemControlBlock(), nValA, nValB)
+        {
+        }
+
+        virtual std::unique_ptr<ItemBase> clone() const
+        {
+            // use direct value(s) and std::make_unique
+            return std::make_unique<MultiValueSimple_derivedClass>(getValueA(), getValueB());
+        }
+    };
+} // end of namespace Item
+
+///////////////////////////////////////////////////////////////////////////////
+
+namespace Item
+{
+    // example for simple multi value Item, extended by one
+    class MultiValueSimple_plus : public MultiValueSimple
+    {
+    public:
+        static ItemControlBlock& GetStaticItemControlBlock()
+        {
+            static ItemControlBlock aItemControlBlock(
+                [](){ return new MultiValueSimple_plus(); },
+                "MultiValueSimple_plus");
+
+            return aItemControlBlock;
+        }
+
+    private:
         sal_Int64 m_nValueC;
 
     protected:
-        MultiValueABC(
-            ItemControlBlock& rItemControlBlock,
-            sal_Int16 nValueA = 0,
-            sal_Int16 nValueB = 0,
-            sal_Int16 nValueC = 0)
-        :   MultiValueAB(
-                rItemControlBlock,
-                nValueA,
-                nValueB),
-            m_nValueC(nValueC)
+        MultiValueSimple_plus(ItemControlBlock& rItemControlBlock, sal_Int16 nValA, sal_Int32 nValB, sal_Int64 nValC)
+        :   MultiValueSimple(rItemControlBlock, nValA, nValB),
+            m_nValueC(nValC)
         {
         }
 
     public:
-        virtual ~MultiValueABC()
+        MultiValueSimple_plus(sal_Int16 nValA = 0, sal_Int32 nValB = 0, sal_Int64 nValC = 0)
+        :   MultiValueSimple(MultiValueSimple_plus::GetStaticItemControlBlock(), nValA, nValB),
+            m_nValueC(nValC)
         {
-            // needs to be called from here to have the fully derived implementation type
-            // in the helper method - do NOT move to a imaginable general
-            // implementation in ItemBaseStaticHelper (!)
-            implInstanceCleanup();
         }
 
-        static std::shared_ptr<const MultiValueABC> Create(sal_Int16 nValueA, sal_Int16 nValueB, sal_Int16 nValueC)
+        virtual bool operator==(const ItemBase& rRef) const
         {
-            // use ::Create(...) method with local incarnation, it will handle
-            // - detection of being default (will delete local incarnation)
-            // - detection of reuse (will delete local incarnation)
-            // - detectiomn of new use - will create shared_ptr for local incarnation and buffer
-            return std::static_pointer_cast<const MultiValueABC>(
-                MultiValueABC::GetStaticItemControlBlock().GetItemAdministrator()->Create(
-                    new MultiValueABC(
-                        MultiValueABC::GetStaticItemControlBlock(),
-                        nValueA,
-                        nValueB,
-                        nValueC)));
+            return MultiValueSimple::operator==(rRef) || // ptr-compare && A,B
+                getValueC() == static_cast<const MultiValueSimple_plus&>(rRef).getValueC();
         }
 
-        virtual bool operator==(const ItemBase& rCandidate) const override
+        virtual std::unique_ptr<ItemBase> clone() const
         {
-            const MultiValueABC& rCand(static_cast<const MultiValueABC&>(rCandidate));
-
-            return (MultiValueAB::operator==(rCandidate)
-                && GetValueC() == rCand.GetValueC());
+            // use direct value(s) and std::make_unique
+            return std::make_unique<MultiValueSimple_plus>(getValueA(), getValueB(), getValueC());
         }
 
-        sal_Int16 GetValueC() const
+        sal_Int64 getValueC() const
         {
             return m_nValueC;
         }
-
-        // virtual bool operator<(const ItemBase& rCandidate) const override
-        // {
-        //     return MultiValueAB::operator<(rCandidate)
-        //         && static_cast<const MultiValueABC*>(this)->GetValueC() < static_cast<const MultiValueABC&>(rCandidate).GetValueC();
-        // }
     };
 } // end of namespace Item
 
@@ -193,42 +169,30 @@ namespace Item
 
 namespace Item
 {
-    // example for Item deived from existing one, only new type
-    class MultiValueABD : public MultiValueAB
+    // example for derived simple multi value plus Item to get another
+    // class identifier
+    class MultiValueSimple_plus_derivedClass : public MultiValueSimple_plus
     {
     public:
         static ItemControlBlock& GetStaticItemControlBlock()
         {
             static ItemControlBlock aItemControlBlock(
-                std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
-                nullptr,
-                [](){ return new MultiValueABD(MultiValueABD::GetStaticItemControlBlock()); },
-                "MultiValueABD");
+                [](){ return new MultiValueSimple_plus_derivedClass(); },
+                "MultiValueSimple_plus_derivedClass");
 
             return aItemControlBlock;
         }
 
-    protected:
-        MultiValueABD(
-            ItemControlBlock& rItemControlBlock,
-            sal_Int16 nValueA = 0,
-            sal_Int16 nValueB = 0)
-        :   MultiValueAB(
-            rItemControlBlock,
-            nValueA,
-            nValueB)
+    public:
+        MultiValueSimple_plus_derivedClass(sal_Int16 nValA = 0, sal_Int32 nValB = 0, sal_Int64 nValC = 0)
+        :   MultiValueSimple_plus(MultiValueSimple_plus_derivedClass::GetStaticItemControlBlock(), nValA, nValB, nValC)
         {
         }
 
-    public:
-        static std::shared_ptr<const MultiValueABD> Create(sal_Int16 nValueA, sal_Int16 nValueB)
+        virtual std::unique_ptr<ItemBase> clone() const
         {
-            return std::static_pointer_cast<const MultiValueABD>(
-                MultiValueABD::GetStaticItemControlBlock().GetItemAdministrator()->Create(
-                    new MultiValueABD(
-                        MultiValueABD::GetStaticItemControlBlock(),
-                        nValueA,
-                        nValueB)));
+            // use direct value(s) and std::make_unique
+            return std::make_unique<MultiValueSimple_plus_derivedClass>(getValueA(), getValueB(), getValueC());
         }
     };
 } // end of namespace Item
@@ -237,49 +201,250 @@ namespace Item
 
 namespace Item
 {
-    // example for Item deived from existing combined one, only new type
-    class MultiValueABCD : public MultiValueABC
+    // example for bufferd multi value Item
+    class MultiValueBuffered : public ItemBuffered
     {
     public:
         static ItemControlBlock& GetStaticItemControlBlock()
         {
             static ItemControlBlock aItemControlBlock(
-                std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
-                nullptr,
-                [](){ return new MultiValueABCD(MultiValueABCD::GetStaticItemControlBlock()); },
-                "MultiValueABCD");
+                [](){ return new MultiValueBuffered(); },
+                "MultiValueBuffered");
 
             return aItemControlBlock;
         }
 
     protected:
-        MultiValueABCD(
-            ItemControlBlock& rItemControlBlock,
-            sal_Int16 nValueA = 0,
-            sal_Int16 nValueB = 0,
-            sal_Int16 nValueC = 0)
-        :   MultiValueABC(
-            rItemControlBlock,
-            nValueA,
-            nValueB,
-            nValueC)
+        class MultiValueData : public ItemData
+        {
+        private:
+            sal_Int16 m_nValueA;
+            sal_Int32 m_nValueB;
+
+        protected:
+            virtual ItemAdministrator& getItemAdministrator() const
+            {
+                static ItemAdministrator_set aItemAdministrator_set(
+                    // hand over localized lambda call to construct a new instance of Item
+                    [](){ return new MultiValueData(0, 0); },
+                    // hand over localized lambda operator< to have a sorted set
+                    [](ItemData* A, ItemData* B)
+                    {
+                        if(static_cast<MultiValueData*>(A)->getValueA() == static_cast<MultiValueData*>(B)->getValueA())
+                        {
+                            return static_cast<MultiValueData*>(A)->getValueB() < static_cast<MultiValueData*>(B)->getValueB();
+                        }
+
+                        return static_cast<MultiValueData*>(A)->getValueA() < static_cast<MultiValueData*>(B)->getValueA();
+                    });
+                return aItemAdministrator_set;
+            }
+
+        public:
+            MultiValueData(sal_Int16 nValA = 0, sal_Int32 nValB = 0)
+            :   ItemData(),
+                m_nValueA(nValA),
+                m_nValueB(nValB)
+            {
+            }
+
+            virtual bool operator==(const ItemData& rRef) const
+            {
+                return ItemData::operator==(rRef) || // ptr-compare
+                    (getValueA() == static_cast<const MultiValueData&>(rRef).getValueA() &&
+                     getValueB() == static_cast<const MultiValueData&>(rRef).getValueB()); // content compare
+            }
+
+            sal_Int16 getValueA() const
+            {
+                return m_nValueA;
+            }
+
+            sal_Int32 getValueB() const
+            {
+                return m_nValueB;
+            }
+        };
+
+    protected:
+        MultiValueBuffered(ItemControlBlock& rItemControlBlock, sal_Int16 nValueA, sal_Int32 nValueB)
+        :   ItemBuffered(rItemControlBlock)
+        {
+            setItemData(new MultiValueData(nValueA, nValueB));
+        }
+
+        MultiValueBuffered(ItemControlBlock& rItemControlBlock)
+        :   ItemBuffered(rItemControlBlock)
         {
         }
 
     public:
-        static std::shared_ptr<const MultiValueABCD> Create(sal_Int16 nValueA, sal_Int16 nValueB, sal_Int16 nValueC)
+        MultiValueBuffered(sal_Int16 nValueA = 0, sal_Int32 nValueB = 0)
+        :   ItemBuffered(MultiValueBuffered::GetStaticItemControlBlock())
         {
-            return std::static_pointer_cast<const MultiValueABCD>(
-                MultiValueABCD::GetStaticItemControlBlock().GetItemAdministrator()->Create(
-                    new MultiValueABCD(
-                        MultiValueABCD::GetStaticItemControlBlock(),
-                        nValueA,
-                        nValueB,
-                        nValueC)));
+            // This call initializes the values and is *required*.
+            // Doing it hat way, it is possible to first
+            // set values or do operations on the to-be-created
+            // instance of ItemDt *before* it gets used as read-only
+            // value inside this ItemBuffered incarnation
+            setItemData(new MultiValueData(nValueA, nValueB));
+        }
+
+        sal_Int16 getValueA() const { return static_cast<MultiValueData const&>(getItemData()).getValueA(); }
+        sal_Int32 getValueB() const { return static_cast<MultiValueData const&>(getItemData()).getValueB(); }
+
+        void setValueA(sal_Int16 nNewA) { setItemData(new MultiValueData(nNewA, getValueB())); }
+        void setValueB(sal_Int32 nNewB) { setItemData(new MultiValueData(getValueA(), nNewB)); }
+    };
+} // end of namespace Item
+
+///////////////////////////////////////////////////////////////////////////////
+
+namespace Item
+{
+    // example for derived bufferd multi value Item to get another
+    // class identifier
+    class MultiValueBuffered_derivedClass : public MultiValueBuffered
+    {
+    public:
+        static ItemControlBlock& GetStaticItemControlBlock()
+        {
+            static ItemControlBlock aItemControlBlock(
+                [](){ return new MultiValueBuffered_derivedClass(); },
+                "MultiValueBuffered_derivedClass");
+
+            return aItemControlBlock;
+        }
+
+    public:
+        MultiValueBuffered_derivedClass(sal_Int16 nValueA = 0, sal_Int32 nValueB = 0)
+        :   MultiValueBuffered(MultiValueBuffered_derivedClass::GetStaticItemControlBlock(), nValueA, nValueB)
+        {
         }
     };
 } // end of namespace Item
 
+///////////////////////////////////////////////////////////////////////////////
+
+namespace Item
+{
+    // example for bufferd multi value Item, extended by one
+    class MultiValueBuffered_plus : public MultiValueBuffered
+    {
+    public:
+        static ItemControlBlock& GetStaticItemControlBlock()
+        {
+            static ItemControlBlock aItemControlBlock(
+                [](){ return new MultiValueBuffered_plus(); },
+                "MultiValueBuffered_plus");
+
+            return aItemControlBlock;
+        }
+
+    protected:
+        class MultiValueData_plus : public MultiValueData
+        {
+        private:
+            sal_Int64 m_nValueC;
+
+        protected:
+            virtual ItemAdministrator& getItemAdministrator() const
+            {
+                static ItemAdministrator_set aItemAdministrator_set(
+                    // hand over localized lambda call to construct a new instance of Item
+                    [](){ return new MultiValueData_plus(0, 0, 0); },
+                    // hand over localized lambda operator< to have a sorted set
+                    [](ItemData* A, ItemData* B)
+                    {
+                        if(static_cast<MultiValueData_plus*>(A)->getValueC() == static_cast<MultiValueData_plus*>(B)->getValueC())
+                        {
+                            // this inner part maybe reused from the MultiValueData ItemAdministrator_set
+                            // which is constructed above in the class we derive from. That would need
+                            // access to the used lambda there and remembering itz at ItemAdministrator at
+                            // all - currently just forwarded to std::set stuff. Thus - for now - just
+                            // completely formulate the operator< here
+                            if(static_cast<MultiValueData*>(A)->getValueA() == static_cast<MultiValueData*>(B)->getValueA())
+                            {
+                                return static_cast<MultiValueData*>(A)->getValueB() < static_cast<MultiValueData*>(B)->getValueB();
+                            }
+
+                            return static_cast<MultiValueData*>(A)->getValueA() < static_cast<MultiValueData*>(B)->getValueA();
+                        }
+
+                        return static_cast<MultiValueData_plus*>(A)->getValueC() < static_cast<MultiValueData_plus*>(B)->getValueC();
+                    });
+                return aItemAdministrator_set;
+            }
+
+        public:
+            MultiValueData_plus(sal_Int16 nValA = 0, sal_Int32 nValB = 0, sal_Int64 nValC = 0)
+            :   MultiValueData(nValA, nValB),
+                m_nValueC(nValC)
+            {
+            }
+
+            virtual bool operator==(const ItemData& rRef) const
+            {
+                return MultiValueData::operator==(rRef) || // ptr-compare && A, B
+                    getValueC() == static_cast<const MultiValueData_plus&>(rRef).getValueC(); // content compare
+            }
+
+            sal_Int64 getValueC() const
+            {
+                return m_nValueC;
+            }
+        };
+
+    protected:
+        MultiValueBuffered_plus(ItemControlBlock& rItemControlBlock, sal_Int16 nValueA, sal_Int32 nValueB, sal_Int64 nValueC)
+        :   MultiValueBuffered(rItemControlBlock)
+        {
+            // This call initializes the values and is *required*.
+            setItemData(new MultiValueData_plus(nValueA, nValueB, nValueC));
+        }
+
+    public:
+        MultiValueBuffered_plus(sal_Int16 nValueA = 0, sal_Int32 nValueB = 0, sal_Int64 nValueC = 0)
+        :   MultiValueBuffered(MultiValueBuffered_plus::GetStaticItemControlBlock())
+        {
+            // This call initializes the values and is *required*.
+            setItemData(new MultiValueData_plus(nValueA, nValueB, nValueC));
+        }
+
+        sal_Int64 getValueC() const { return static_cast<MultiValueData_plus const&>(getItemData()).getValueC(); }
+
+        void setValueC(sal_Int64 nNewC) { setItemData(new MultiValueData_plus(getValueA(), getValueB(), nNewC)); }
+    };
+} // end of namespace Item
+
+///////////////////////////////////////////////////////////////////////////////
+
+namespace Item
+{
+    // example for derived bufferd multi value plus Item to get another
+    // class identifier
+    class MultiValueBuffered_plus_derivedClass : public MultiValueBuffered_plus
+    {
+    public:
+        static ItemControlBlock& GetStaticItemControlBlock()
+        {
+            static ItemControlBlock aItemControlBlock(
+                [](){ return new MultiValueBuffered_plus_derivedClass(); },
+                "MultiValueBuffered_plus_derivedClass");
+
+            return aItemControlBlock;
+        }
+
+    public:
+        MultiValueBuffered_plus_derivedClass(sal_Int16 nValueA = 0, sal_Int32 nValueB = 0, sal_Int64 nValueC = 0)
+        :   MultiValueBuffered_plus(MultiValueBuffered_plus_derivedClass::GetStaticItemControlBlock(), nValueA, nValueB, nValueC)
+        {
+        }
+    };
+} // end of namespace Item
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace Item
@@ -288,345 +453,876 @@ namespace Item
     {
     private:
     public:
-        void checkMultiValueAB()
+        void checkMultiValueSimple()
         {
-            // make direct use of local MultiValueAB item
-
-            // for debug, change bLoop to true, start, attach and set to
-            // false again to debug (one possibility...)
+            // for debug, change bLoop to true, start, attach and set to false again to debug (one possibility...)
             static bool bLoop(false);
             while(bLoop)
             {
                 bLoop = true;
             }
 
-            // to see the diff between IAdministrator_vector and
-            // IAdministrator_set, see instructions in MultiValueAB above,
-            // create version for IAdministrator_set and raise this number.
-            // this demonstrates how/why this should be much faster than
-            // current SfxPoolItem/SfxItemSet/SfxItemPool stuff ...
             int nIncrement(0);
+            static MultiValueSimple a_sp, b_sp, c_sp;
+            static MultiValueSimple theDefault;
 
-            std::shared_ptr<const MultiValueAB> mhas3(MultiValueAB::Create(5,2));
-            std::shared_ptr<const MultiValueAB> mhas4(MultiValueAB::Create(2,3));
+            a_sp = MultiValueSimple(3, 3);
+            b_sp = MultiValueSimple(5, 5);
+            c_sp = MultiValueSimple(7, 7);
+            theDefault = Item::getDefault<MultiValueSimple>();
 
-            if(ItemBase::IsDefault(MultiValueAB::Create(3,0)))
+            MultiValueSimple mhas3(MultiValueSimple(5, 5));
+            MultiValueSimple mhas4(MultiValueSimple(2, 2));
+
+            if(MultiValueSimple(3, 0).isDefault())
             {
                 nIncrement++;
             }
 
-            if(ItemBase::IsDefault(MultiValueAB::Create(8,7)))
+            if(MultiValueSimple(0, 0).isDefault())
             {
                 nIncrement++;
             }
 
-            if(ItemBase::IsDefault(ItemBase::GetDefault<MultiValueAB>()))
+            if(theDefault.isDefault())
             {
                 nIncrement++;
             }
 
-            std::shared_ptr<const MultiValueAB> testAA(MultiValueAB::Create(11,22));
-            std::vector<std::shared_ptr<const MultiValueAB>> test;
+            MultiValueSimple testAA(11, 22);
+            std::vector<MultiValueSimple> testA;
+            std::vector<MultiValueSimple> testB;
             const sal_uInt32 nLoopNumber(50);
 
             for(sal_uInt32 aloop(0); aloop < nLoopNumber; aloop++)
             {
-                test.push_back(MultiValueAB::Create(aloop+1, (aloop+1)*2));
+                testA.push_back(MultiValueSimple(aloop+1, (aloop+1)*2));
+                testB.push_back(MultiValueSimple(nLoopNumber-(aloop+1), nLoopNumber-((aloop+1)*2)));
             }
 
-            std::shared_ptr<const MultiValueAB> testA(MultiValueAB::Create(2,4));
-            std::shared_ptr<const MultiValueAB> testB(MultiValueAB::Create(2,3));
+            MultiValueSimple hasA(MultiValueSimple(2, 4));
+            MultiValueSimple hasB(MultiValueSimple(2, 3));
 
-            for(sal_uInt32 dloop(0); dloop < nLoopNumber; dloop+=2)
+            testA.insert(testA.end(), testB.begin(), testB.end());
+            testB.clear();
+
+            MultiValueSimple hasC(testA.front());
+            MultiValueSimple hasD(testA.back());
+
+            while(testA.size() > nLoopNumber / 10)
             {
-                test[dloop] = nullptr;
-                if(dloop%5)
-                {
-                    test.push_back(MultiValueAB::Create(dloop+1, (dloop+1)*2));
-                }
+                testA.erase(testA.begin() + (testA.size() / 2));
             }
 
-            for(sal_uInt32 eloop(1); eloop < (nLoopNumber * 2) / 3; eloop+=2)
-            {
-                test[eloop] = nullptr;
-                if(eloop%7)
-                {
-                    test.push_back(MultiValueAB::Create(eloop+1, (eloop+1)*2));
-                }
-            }
-
-            test.clear();
+            testA.clear();
         }
 
-        void checkMultiValueABC()
+        void checkMultiValueSimple_derivedClass()
         {
-            // make direct use of local MultiValueABC item
+            // for debug, change bLoop to true, start, attach and set to false again to debug (one possibility...)
+            static bool bLoop(false);
+            while(bLoop)
+            {
+                bLoop = true;
+            }
+
             int nIncrement(0);
+            static MultiValueSimple_derivedClass a_sp, b_sp, c_sp;
+            static MultiValueSimple_derivedClass theDefault;
 
-            std::shared_ptr<const MultiValueABC> mhas3x(MultiValueABC::Create(5,2,5));
-            std::shared_ptr<const MultiValueABC> mhas4x(MultiValueABC::Create(2,3,7));
+            a_sp = MultiValueSimple_derivedClass(3, 3);
+            b_sp = MultiValueSimple_derivedClass(5, 5);
+            c_sp = MultiValueSimple_derivedClass(7, 7);
+            theDefault = Item::getDefault<MultiValueSimple_derivedClass>();
 
-            if(ItemBase::IsDefault(MultiValueABC::Create(3,0,5)))
+            MultiValueSimple_derivedClass mhas3(MultiValueSimple_derivedClass(5, 5));
+            MultiValueSimple_derivedClass mhas4(MultiValueSimple_derivedClass(2, 2));
+
+            if(MultiValueSimple_derivedClass(3, 0).isDefault())
             {
                 nIncrement++;
             }
 
-            if(ItemBase::IsDefault(MultiValueABC::Create(8,7,12)))
+            if(MultiValueSimple_derivedClass(0, 0).isDefault())
             {
                 nIncrement++;
             }
 
-            if(ItemBase::IsDefault(ItemBase::GetDefault<MultiValueABC>()))
+            if(theDefault.isDefault())
             {
                 nIncrement++;
             }
 
-            std::vector<std::shared_ptr<const MultiValueABC>> testx;
+            MultiValueSimple_derivedClass testAA(11, 22);
+            std::vector<MultiValueSimple_derivedClass> testA;
+            std::vector<MultiValueSimple_derivedClass> testB;
             const sal_uInt32 nLoopNumber(50);
 
             for(sal_uInt32 aloop(0); aloop < nLoopNumber; aloop++)
             {
-                testx.push_back(MultiValueABC::Create(aloop+1, (aloop+1)*2, (aloop+1)*4));
+                testA.push_back(MultiValueSimple_derivedClass(aloop+1, (aloop+1)*2));
+                testB.push_back(MultiValueSimple_derivedClass(nLoopNumber-(aloop+1), nLoopNumber-((aloop+1)*2)));
             }
 
-            std::shared_ptr<const MultiValueABC> testAx(MultiValueABC::Create(2,4,3));
-            std::shared_ptr<const MultiValueABC> testBx(MultiValueABC::Create(2,4,6));
+            MultiValueSimple_derivedClass hasA(MultiValueSimple_derivedClass(2, 4));
+            MultiValueSimple_derivedClass hasB(MultiValueSimple_derivedClass(2, 3));
 
-            for(sal_uInt32 dloop(0); dloop < nLoopNumber; dloop+=2)
+            testA.insert(testA.end(), testB.begin(), testB.end());
+            testB.clear();
+
+            MultiValueSimple_derivedClass hasC(testA.front());
+            MultiValueSimple_derivedClass hasD(testA.back());
+
+            while(testA.size() > nLoopNumber / 10)
             {
-                testx[dloop] = nullptr;
-                if(dloop%5)
-                {
-                    testx.push_back(MultiValueABC::Create(dloop+1, (dloop+1)*2, (dloop+1)*4));
-                }
+                testA.erase(testA.begin() + (testA.size() / 2));
             }
 
-            for(sal_uInt32 eloop(1); eloop < (nLoopNumber * 2) / 3; eloop+=2)
-            {
-                testx[eloop] = nullptr;
-                if(eloop%7)
-                {
-                    testx.push_back(MultiValueABC::Create(eloop+1, (eloop+1)*2, 123));
-                }
-            }
-
-            testx.clear();
+            testA.clear();
         }
 
-        void checkMultiValueABD()
+        void checkMultiValueSimple_plus()
         {
+            // for debug, change bLoop to true, start, attach and set to false again to debug (one possibility...)
+            static bool bLoop(false);
+            while(bLoop)
+            {
+                bLoop = true;
+            }
+
             int nIncrement(0);
+            static MultiValueSimple_plus a_sp, b_sp, c_sp;
+            static MultiValueSimple_plus theDefault;
+
+            a_sp = MultiValueSimple_plus(3, 3, 3);
+            b_sp = MultiValueSimple_plus(5, 5, 5);
+            c_sp = MultiValueSimple_plus(7, 7, 7);
+            theDefault = Item::getDefault<MultiValueSimple_plus>();
+
+            MultiValueSimple_plus mhas3(MultiValueSimple_plus(5, 5, 5));
+            MultiValueSimple_plus mhas4(MultiValueSimple_plus(2, 2, 2));
+
+            if(MultiValueSimple_plus(3, 0, 0).isDefault())
+            {
+                nIncrement++;
+            }
+
+            if(MultiValueSimple_plus(0, 0, 0).isDefault())
+            {
+                nIncrement++;
+            }
+
+            if(theDefault.isDefault())
+            {
+                nIncrement++;
+            }
+
+            MultiValueSimple_plus testAA(11, 22, 33);
+            std::vector<MultiValueSimple_plus> testA;
+            std::vector<MultiValueSimple_plus> testB;
             const sal_uInt32 nLoopNumber(50);
-            std::shared_ptr<const MultiValueABD> mhas3_A(MultiValueABD::Create(5,2));
-
-            if(ItemBase::IsDefault(MultiValueABD::Create(3,0)))
-            {
-                nIncrement++;
-            }
-
-            if(ItemBase::IsDefault(MultiValueABD::Create(8,7)))
-            {
-                nIncrement++;
-            }
-
-            if(ItemBase::IsDefault(ItemBase::GetDefault<MultiValueABD>()))
-            {
-                nIncrement++;
-            }
-
-            std::vector<std::shared_ptr<const MultiValueABD>> testAB_A;
 
             for(sal_uInt32 aloop(0); aloop < nLoopNumber; aloop++)
             {
-                testAB_A.push_back(MultiValueABD::Create(aloop+1, (aloop+1)*2));
+                testA.push_back(MultiValueSimple_plus(aloop+1, (aloop+1)*2, (aloop+1)*3));
+                testB.push_back(MultiValueSimple_plus(nLoopNumber-(aloop+1), nLoopNumber-((aloop+1)*2), nLoopNumber-((aloop+1)*3)));
             }
 
-            std::shared_ptr<const MultiValueABD> testA_A(MultiValueABD::Create(2,4));
-            std::shared_ptr<const MultiValueABD> testB_A(MultiValueABD::Create(2,3));
+            MultiValueSimple_plus hasA(MultiValueSimple_plus(2, 4, 6));
+            MultiValueSimple_plus hasB(MultiValueSimple_plus(2, 3, 4));
 
-            for(sal_uInt32 dloop(0); dloop < nLoopNumber; dloop+=2)
+            testA.insert(testA.end(), testB.begin(), testB.end());
+            testB.clear();
+
+            MultiValueSimple_plus hasC(testA.front());
+            MultiValueSimple_plus hasD(testA.back());
+
+            while(testA.size() > nLoopNumber / 10)
             {
-                testAB_A[dloop] = nullptr;
-                if(dloop%5)
-                {
-                    testAB_A.push_back(MultiValueABD::Create(dloop+1, (dloop+1)*2));
-                }
+                testA.erase(testA.begin() + (testA.size() / 2));
             }
 
-            for(sal_uInt32 eloop(1); eloop < (nLoopNumber * 2) / 3; eloop+=2)
-            {
-                testAB_A[eloop] = nullptr;
-                if(eloop%7)
-                {
-                    testAB_A.push_back(MultiValueABD::Create(eloop+1, (eloop+1)*2));
-                }
-            }
-
-            testAB_A.clear();
+            testA.clear();
         }
 
-        void checkMultiValueABCD()
+        void checkMultiValueSimple_plus_derivedClass()
         {
+            // for debug, change bLoop to true, start, attach and set to false again to debug (one possibility...)
+            static bool bLoop(false);
+            while(bLoop)
+            {
+                bLoop = true;
+            }
+
             int nIncrement(0);
+            static MultiValueSimple_plus_derivedClass a_sp, b_sp, c_sp;
+            static MultiValueSimple_plus_derivedClass theDefault;
+
+            a_sp = MultiValueSimple_plus_derivedClass(3, 3, 3);
+            b_sp = MultiValueSimple_plus_derivedClass(5, 5, 5);
+            c_sp = MultiValueSimple_plus_derivedClass(7, 7, 7);
+            theDefault = Item::getDefault<MultiValueSimple_plus_derivedClass>();
+
+            MultiValueSimple_plus_derivedClass mhas3(MultiValueSimple_plus_derivedClass(5, 5, 5));
+            MultiValueSimple_plus_derivedClass mhas4(MultiValueSimple_plus_derivedClass(2, 2, 2));
+
+            if(MultiValueSimple_plus_derivedClass(3, 0, 0).isDefault())
+            {
+                nIncrement++;
+            }
+
+            if(MultiValueSimple_plus_derivedClass(0, 0, 0).isDefault())
+            {
+                nIncrement++;
+            }
+
+            if(theDefault.isDefault())
+            {
+                nIncrement++;
+            }
+
+            MultiValueSimple_plus_derivedClass testAA(11, 22, 33);
+            std::vector<MultiValueSimple_plus_derivedClass> testA;
+            std::vector<MultiValueSimple_plus_derivedClass> testB;
             const sal_uInt32 nLoopNumber(50);
-            std::shared_ptr<const MultiValueABCD> mhas3_A(MultiValueABCD::Create(5,2, 3));
-
-            if(ItemBase::IsDefault(MultiValueABCD::Create(3,0, 4)))
-            {
-                nIncrement++;
-            }
-
-            if(ItemBase::IsDefault(MultiValueABCD::Create(8,7,2)))
-            {
-                nIncrement++;
-            }
-
-            if(ItemBase::IsDefault(ItemBase::GetDefault<MultiValueABCD>()))
-            {
-                nIncrement++;
-            }
-
-            std::vector<std::shared_ptr<const MultiValueABCD>> testAB_A;
 
             for(sal_uInt32 aloop(0); aloop < nLoopNumber; aloop++)
             {
-                testAB_A.push_back(MultiValueABCD::Create(aloop+1, (aloop+1)*2, (aloop+1)*5));
+                testA.push_back(MultiValueSimple_plus_derivedClass(aloop+1, (aloop+1)*2, (aloop+1)*3));
+                testB.push_back(MultiValueSimple_plus_derivedClass(nLoopNumber-(aloop+1), nLoopNumber-((aloop+1)*2), nLoopNumber-((aloop+1)*3)));
             }
 
-            std::shared_ptr<const MultiValueABCD> testA_A(MultiValueABCD::Create(2,4,7));
-            std::shared_ptr<const MultiValueABCD> testB_A(MultiValueABCD::Create(2,3,3));
+            MultiValueSimple_plus_derivedClass hasA(MultiValueSimple_plus_derivedClass(2, 4, 6));
+            MultiValueSimple_plus_derivedClass hasB(MultiValueSimple_plus_derivedClass(2, 3, 4));
 
-            for(sal_uInt32 dloop(0); dloop < nLoopNumber; dloop+=2)
+            testA.insert(testA.end(), testB.begin(), testB.end());
+            testB.clear();
+
+            MultiValueSimple_plus_derivedClass hasC(testA.front());
+            MultiValueSimple_plus_derivedClass hasD(testA.back());
+
+            while(testA.size() > nLoopNumber / 10)
             {
-                testAB_A[dloop] = nullptr;
-                if(dloop%5)
-                {
-                    testAB_A.push_back(MultiValueABCD::Create(dloop+1, (dloop+1)*2, (dloop+1)*6));
-                }
+                testA.erase(testA.begin() + (testA.size() / 2));
             }
 
-            for(sal_uInt32 eloop(1); eloop < (nLoopNumber * 2) / 3; eloop+=2)
+            testA.clear();
+        }
+
+        void checkMultiValueBuffered()
+        {
+            // for debug, change bLoop to true, start, attach and set to false again to debug (one possibility...)
+            static bool bLoop(false);
+            while(bLoop)
             {
-                testAB_A[eloop] = nullptr;
-                if(eloop%7)
-                {
-                    testAB_A.push_back(MultiValueABCD::Create(eloop+1, (eloop+1)*2, (eloop+1)*3));
-                }
+                bLoop = true;
             }
 
-            testAB_A.clear();
+            int nIncrement(0);
+            static MultiValueBuffered a_sp, b_sp, c_sp;
+            static MultiValueBuffered theDefault;
+
+            a_sp = MultiValueBuffered(3, 3);
+            b_sp = MultiValueBuffered(5, 5);
+            c_sp = MultiValueBuffered(7, 7);
+            theDefault = Item::getDefault<MultiValueBuffered>();
+
+            MultiValueBuffered mhas3(MultiValueBuffered(5, 5));
+            MultiValueBuffered mhas4(MultiValueBuffered(2, 2));
+
+            if(MultiValueBuffered(3, 0).isDefault())
+            {
+                nIncrement++;
+            }
+
+            if(MultiValueBuffered(0, 0).isDefault())
+            {
+                nIncrement++;
+            }
+
+            if(theDefault.isDefault())
+            {
+                nIncrement++;
+            }
+
+            MultiValueBuffered testAA(11, 22);
+            std::vector<MultiValueBuffered> testA;
+            std::vector<MultiValueBuffered> testB;
+            const sal_uInt32 nLoopNumber(50);
+
+            for(sal_uInt32 aloop(0); aloop < nLoopNumber; aloop++)
+            {
+                testA.push_back(MultiValueBuffered(aloop+1, (aloop+1)*2));
+                testB.push_back(MultiValueBuffered(nLoopNumber-(aloop+1), nLoopNumber-((aloop+1)*2)));
+            }
+
+            MultiValueBuffered hasA(MultiValueBuffered(2, 4));
+            MultiValueBuffered hasB(MultiValueBuffered(2, 3));
+
+            testA.insert(testA.end(), testB.begin(), testB.end());
+            testB.clear();
+
+            MultiValueBuffered hasC(testA.front());
+            MultiValueBuffered hasD(testA.back());
+
+            while(testA.size() > nLoopNumber / 10)
+            {
+                testA.erase(testA.begin() + (testA.size() / 2));
+            }
+
+            testA.clear();
+        }
+
+        void checkMultiValueBuffered_derivedClass()
+        {
+            // for debug, change bLoop to true, start, attach and set to false again to debug (one possibility...)
+            static bool bLoop(false);
+            while(bLoop)
+            {
+                bLoop = true;
+            }
+
+            int nIncrement(0);
+            static MultiValueBuffered_derivedClass a_sp, b_sp, c_sp;
+            static MultiValueBuffered_derivedClass theDefault;
+
+            a_sp = MultiValueBuffered_derivedClass(3, 3);
+            b_sp = MultiValueBuffered_derivedClass(5, 5);
+            c_sp = MultiValueBuffered_derivedClass(7, 7);
+            theDefault = Item::getDefault<MultiValueBuffered_derivedClass>();
+
+            MultiValueBuffered_derivedClass mhas3(MultiValueBuffered_derivedClass(5, 5));
+            MultiValueBuffered_derivedClass mhas4(MultiValueBuffered_derivedClass(2, 2));
+
+            if(MultiValueBuffered_derivedClass(3, 0).isDefault())
+            {
+                nIncrement++;
+            }
+
+            if(MultiValueBuffered_derivedClass(0, 0).isDefault())
+            {
+                nIncrement++;
+            }
+
+            if(theDefault.isDefault())
+            {
+                nIncrement++;
+            }
+
+            MultiValueBuffered_derivedClass testAA(11, 22);
+            std::vector<MultiValueBuffered_derivedClass> testA;
+            std::vector<MultiValueBuffered_derivedClass> testB;
+            const sal_uInt32 nLoopNumber(50);
+
+            for(sal_uInt32 aloop(0); aloop < nLoopNumber; aloop++)
+            {
+                testA.push_back(MultiValueBuffered_derivedClass(aloop+1, (aloop+1)*2));
+                testB.push_back(MultiValueBuffered_derivedClass(nLoopNumber-(aloop+1), nLoopNumber-((aloop+1)*2)));
+            }
+
+            MultiValueBuffered_derivedClass hasA(MultiValueBuffered_derivedClass(2, 4));
+            MultiValueBuffered_derivedClass hasB(MultiValueBuffered_derivedClass(2, 3));
+
+            testA.insert(testA.end(), testB.begin(), testB.end());
+            testB.clear();
+
+            MultiValueBuffered_derivedClass hasC(testA.front());
+            MultiValueBuffered_derivedClass hasD(testA.back());
+
+            while(testA.size() > nLoopNumber / 10)
+            {
+                testA.erase(testA.begin() + (testA.size() / 2));
+            }
+
+            testA.clear();
+        }
+
+        void checkMultiValueBuffered_plus()
+        {
+            // for debug, change bLoop to true, start, attach and set to false again to debug (one possibility...)
+            static bool bLoop(false);
+            while(bLoop)
+            {
+                bLoop = true;
+            }
+
+            int nIncrement(0);
+            static MultiValueBuffered_plus a_sp, b_sp, c_sp;
+            static MultiValueBuffered_plus theDefault;
+
+            a_sp = MultiValueBuffered_plus(3, 3, 3);
+            b_sp = MultiValueBuffered_plus(5, 5, 5);
+            c_sp = MultiValueBuffered_plus(7, 7, 7);
+            theDefault = Item::getDefault<MultiValueBuffered_plus>();
+
+            MultiValueBuffered_plus mhas3(MultiValueBuffered_plus(5, 5, 5));
+            MultiValueBuffered_plus mhas4(MultiValueBuffered_plus(2, 2, 2));
+
+            if(MultiValueBuffered_plus(3, 0, 0).isDefault())
+            {
+                nIncrement++;
+            }
+
+            if(MultiValueBuffered_plus(0, 0, 0).isDefault())
+            {
+                nIncrement++;
+            }
+
+            if(theDefault.isDefault())
+            {
+                nIncrement++;
+            }
+
+            MultiValueBuffered_plus testAA(11, 22, 33);
+            std::vector<MultiValueBuffered_plus> testA;
+            std::vector<MultiValueBuffered_plus> testB;
+            const sal_uInt32 nLoopNumber(50);
+
+            for(sal_uInt32 aloop(0); aloop < nLoopNumber; aloop++)
+            {
+                testA.push_back(MultiValueBuffered_plus(aloop+1, (aloop+1)*2, (aloop+1)*3));
+                testB.push_back(MultiValueBuffered_plus(nLoopNumber-(aloop+1), nLoopNumber-((aloop+1)*2), nLoopNumber-((aloop+1)*3)));
+            }
+
+            MultiValueBuffered_plus hasA(MultiValueBuffered_plus(2, 4, 6));
+            MultiValueBuffered_plus hasB(MultiValueBuffered_plus(2, 3, 4));
+
+            testA.insert(testA.end(), testB.begin(), testB.end());
+            testB.clear();
+
+            MultiValueBuffered_plus hasC(testA.front());
+            MultiValueBuffered_plus hasD(testA.back());
+
+            while(testA.size() > nLoopNumber / 10)
+            {
+                testA.erase(testA.begin() + (testA.size() / 2));
+            }
+
+            testA.clear();
+        }
+
+        void checkMultiValueBuffered_plus_derivedClass()
+        {
+            // for debug, change bLoop to true, start, attach and set to false again to debug (one possibility...)
+            static bool bLoop(false);
+            while(bLoop)
+            {
+                bLoop = true;
+            }
+
+            int nIncrement(0);
+            static MultiValueBuffered_plus_derivedClass a_sp, b_sp, c_sp;
+            static MultiValueBuffered_plus_derivedClass theDefault;
+
+            a_sp = MultiValueBuffered_plus_derivedClass(3, 3, 3);
+            b_sp = MultiValueBuffered_plus_derivedClass(5, 5, 5);
+            c_sp = MultiValueBuffered_plus_derivedClass(7, 7, 7);
+            theDefault = Item::getDefault<MultiValueBuffered_plus_derivedClass>();
+
+            MultiValueBuffered_plus_derivedClass mhas3(MultiValueBuffered_plus_derivedClass(5, 5, 5));
+            MultiValueBuffered_plus_derivedClass mhas4(MultiValueBuffered_plus_derivedClass(2, 2, 2));
+
+            if(MultiValueBuffered_plus_derivedClass(3, 0, 0).isDefault())
+            {
+                nIncrement++;
+            }
+
+            if(MultiValueBuffered_plus_derivedClass(0, 0, 0).isDefault())
+            {
+                nIncrement++;
+            }
+
+            if(theDefault.isDefault())
+            {
+                nIncrement++;
+            }
+
+            MultiValueBuffered_plus_derivedClass testAA(11, 22, 33);
+            std::vector<MultiValueBuffered_plus_derivedClass> testA;
+            std::vector<MultiValueBuffered_plus_derivedClass> testB;
+            const sal_uInt32 nLoopNumber(50);
+
+            for(sal_uInt32 aloop(0); aloop < nLoopNumber; aloop++)
+            {
+                testA.push_back(MultiValueBuffered_plus_derivedClass(aloop+1, (aloop+1)*2, (aloop+1)*3));
+                testB.push_back(MultiValueBuffered_plus_derivedClass(nLoopNumber-(aloop+1), nLoopNumber-((aloop+1)*2), nLoopNumber-((aloop+1)*3)));
+            }
+
+            MultiValueBuffered_plus_derivedClass hasA(MultiValueBuffered_plus_derivedClass(2, 4, 6));
+            MultiValueBuffered_plus_derivedClass hasB(MultiValueBuffered_plus_derivedClass(2, 3, 4));
+
+            testA.insert(testA.end(), testB.begin(), testB.end());
+            testB.clear();
+
+            MultiValueBuffered_plus_derivedClass hasC(testA.front());
+            MultiValueBuffered_plus_derivedClass hasD(testA.back());
+
+            while(testA.size() > nLoopNumber / 10)
+            {
+                testA.erase(testA.begin() + (testA.size() / 2));
+            }
+
+            testA.clear();
         }
 
         void checkMultiValuesAtISet()
         {
-            int nIncrement(0);
+            // for debug, change bLoop to true, start, attach and set to false again to debug (one possibility...)
+            static bool bLoop(false);
+            while(bLoop)
+            {
+                bLoop = true;
+            }
+
+           int nIncrement(0);
 
             // make use of local MultiValueAB item in conjuction with ItemSet
-            ModelSpecificItemValues::SharedPtr aModelSpecificIValues(ModelSpecificItemValues::Create());
-            ItemSet::SharedPtr aSet(ItemSet::Create(aModelSpecificIValues));
+            ModelSpecificItemValues::SharedPtr aModelSpecificIValues(ModelSpecificItemValues::create());
+            ItemSet::SharedPtr aSet(ItemSet::create(aModelSpecificIValues));
 
             ///////////////////////////////////////////////////////////////////////////////
 
-            std::shared_ptr<const MultiValueAB> testAB(MultiValueAB::Create(2,4));
-            std::shared_ptr<const MultiValueABC> testABC(MultiValueABC::Create(2,4,6));
-            std::shared_ptr<const MultiValueABD> testABD(MultiValueABD::Create(2,4));
-            std::shared_ptr<const MultiValueABCD> testABCD(MultiValueABCD::Create(2,4,6));
+            MultiValueSimple aSimple(2,2);
+            MultiValueSimple_derivedClass aSimple_derivedClass(3,3);
+            MultiValueSimple_plus aSimple_plus(4,4,4);
+            MultiValueSimple_plus_derivedClass aSimple_plus_derivedClass(5,5,5);
+            MultiValueBuffered aBuffered(6,6);
+            MultiValueBuffered_derivedClass aBuffered_derivedClass(7,7);
+            MultiValueBuffered_plus aBuffered_plus(8,8,8);
+            MultiValueBuffered_plus_derivedClass aBuffered_plus_derivedClass(9,9,9);
 
-            aSet->SetItem(testAB);
-            aSet->SetItem(testABC);
-            aSet->SetItem(testABD);
-            aSet->SetItem(testABCD);
-
-            ///////////////////////////////////////////////////////////////////////////////
-
-            if(const auto ItemAB(aSet->GetStateAndItem<const MultiValueAB>()); ItemAB.IsSet())
-            {
-                nIncrement += (ItemSet::IState::SET == ItemAB.GetIState()) ? 1 : 0;
-                nIncrement += (ItemAB.GetItem()) ? 1 : 0;
-                nIncrement += (nullptr != ItemAB.GetItemInstance()) ? 1 : 0;
-                nIncrement += ItemAB.HasItem();
-                nIncrement += ItemAB.IsDisabled();
-            }
-            else if(ItemAB.IsDefault())
-            {
-                nIncrement += ItemAB.IsDisabled();
-            }
-            else if(ItemAB.IsDontCare())
-            {
-                nIncrement += ItemAB.IsDisabled();
-            }
-            else
-            {
-                nIncrement += ItemAB.IsDisabled();
-            }
+            aSet->setItem(aSimple);
+            aSet->setItem(aSimple_derivedClass);
+            aSet->setItem(aSimple_plus);
+            aSet->setItem(aSimple_plus_derivedClass);
+            aSet->setItem(aBuffered);
+            aSet->setItem(aBuffered_derivedClass);
+            aSet->setItem(aBuffered_plus);
+            aSet->setItem(aBuffered_plus_derivedClass);
 
             ///////////////////////////////////////////////////////////////////////////////
 
-            if(const auto ItemABC(aSet->GetStateAndItem<const MultiValueABC>()); ItemABC.IsSet())
+            if(const auto Item(aSet->getStateAndItem<MultiValueSimple>()); Item.isSet())
             {
-                nIncrement += (ItemSet::IState::SET == ItemABC.GetIState()) ? 1 : 0;
-                nIncrement += (ItemABC.GetItem()) ? 1 : 0;
-                nIncrement += (nullptr != ItemABC.GetItemInstance()) ? 1 : 0;
-                nIncrement += ItemABC.HasItem();
-                nIncrement += ItemABC.IsDisabled();
+                nIncrement += (ItemSet::IState::SET == Item.getIState()) ? 1 : 0;
+                nIncrement += Item.isDisabled();
             }
-            else if(ItemABC.IsDefault())
+            else if(Item.isDefault())
             {
-                nIncrement += ItemABC.IsDisabled();
+                nIncrement++;
             }
-            else if(ItemABC.IsDontCare())
+            else if(Item.isDontCare())
             {
-                nIncrement += ItemABC.IsDisabled();
+                nIncrement++;
             }
-            else
+            else if(Item.isDisabled())
             {
-                nIncrement += ItemABC.IsDisabled();
+                nIncrement++;
             }
 
             ///////////////////////////////////////////////////////////////////////////////
 
-            if(const auto ItemABD(aSet->GetStateAndItem<const MultiValueABD>()); ItemABD.IsSet())
+            if(const auto Item(aSet->getStateAndItem<MultiValueSimple_derivedClass>()); Item.isSet())
             {
-                nIncrement += (ItemSet::IState::SET == ItemABD.GetIState()) ? 1 : 0;
-                nIncrement += (ItemABD.GetItem()) ? 1 : 0;
-                nIncrement += (nullptr != ItemABD.GetItemInstance()) ? 1 : 0;
-                nIncrement += ItemABD.HasItem();
-                nIncrement += ItemABD.IsDisabled();
+                nIncrement += (ItemSet::IState::SET == Item.getIState()) ? 1 : 0;
+                nIncrement += Item.isDisabled();
             }
-            else if(ItemABD.IsDefault())
+            else if(Item.isDefault())
             {
-                nIncrement += ItemABD.IsDisabled();
+                nIncrement++;
             }
-            else if(ItemABD.IsDontCare())
+            else if(Item.isDontCare())
             {
-                nIncrement += ItemABD.IsDisabled();
+                nIncrement++;
             }
-            else
+            else if(Item.isDisabled())
             {
-                nIncrement += ItemABD.IsDisabled();
+                nIncrement++;
             }
 
             ///////////////////////////////////////////////////////////////////////////////
 
-            if(const auto ItemABCD(aSet->GetStateAndItem<const MultiValueABCD>()); ItemABCD.IsSet())
+            if(const auto Item(aSet->getStateAndItem<MultiValueSimple_plus>()); Item.isSet())
             {
-                nIncrement += (ItemSet::IState::SET == ItemABCD.GetIState()) ? 1 : 0;
-                nIncrement += (ItemABCD.GetItem()) ? 1 : 0;
-                nIncrement += (nullptr != ItemABCD.GetItemInstance()) ? 1 : 0;
-                nIncrement += ItemABCD.HasItem();
-                nIncrement += ItemABCD.IsDisabled();
+                nIncrement += (ItemSet::IState::SET == Item.getIState()) ? 1 : 0;
+                nIncrement += Item.isDisabled();
             }
-            else if(ItemABCD.IsDefault())
+            else if(Item.isDefault())
             {
-                nIncrement += ItemABCD.IsDisabled();
+                nIncrement++;
             }
-            else if(ItemABCD.IsDontCare())
+            else if(Item.isDontCare())
             {
-                nIncrement += ItemABCD.IsDisabled();
+                nIncrement++;
             }
-            else
+            else if(Item.isDisabled())
             {
-                nIncrement += ItemABCD.IsDisabled();
+                nIncrement++;
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            if(const auto Item(aSet->getStateAndItem<MultiValueSimple_plus_derivedClass>()); Item.isSet())
+            {
+                nIncrement += (ItemSet::IState::SET == Item.getIState()) ? 1 : 0;
+                nIncrement += Item.isDisabled();
+            }
+            else if(Item.isDefault())
+            {
+                nIncrement++;
+            }
+            else if(Item.isDontCare())
+            {
+                nIncrement++;
+            }
+            else if(Item.isDisabled())
+            {
+                nIncrement++;
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            if(const auto Item(aSet->getStateAndItem<MultiValueBuffered>()); Item.isSet())
+            {
+                nIncrement += (ItemSet::IState::SET == Item.getIState()) ? 1 : 0;
+                nIncrement += Item.isDisabled();
+            }
+            else if(Item.isDefault())
+            {
+                nIncrement++;
+            }
+            else if(Item.isDontCare())
+            {
+                nIncrement++;
+            }
+            else if(Item.isDisabled())
+            {
+                nIncrement++;
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            if(const auto Item(aSet->getStateAndItem<MultiValueBuffered_derivedClass>()); Item.isSet())
+            {
+                nIncrement += (ItemSet::IState::SET == Item.getIState()) ? 1 : 0;
+                nIncrement += Item.isDisabled();
+            }
+            else if(Item.isDefault())
+            {
+                nIncrement++;
+            }
+            else if(Item.isDontCare())
+            {
+                nIncrement++;
+            }
+            else if(Item.isDisabled())
+            {
+                nIncrement++;
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            if(const auto Item(aSet->getStateAndItem<MultiValueBuffered_plus>()); Item.isSet())
+            {
+                nIncrement += (ItemSet::IState::SET == Item.getIState()) ? 1 : 0;
+                nIncrement += Item.isDisabled();
+            }
+            else if(Item.isDefault())
+            {
+                nIncrement++;
+            }
+            else if(Item.isDontCare())
+            {
+                nIncrement++;
+            }
+            else if(Item.isDisabled())
+            {
+                nIncrement++;
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            if(const auto Item(aSet->getStateAndItem<MultiValueBuffered_plus_derivedClass>()); Item.isSet())
+            {
+                nIncrement += (ItemSet::IState::SET == Item.getIState()) ? 1 : 0;
+                nIncrement += Item.isDisabled();
+            }
+            else if(Item.isDefault())
+            {
+                nIncrement++;
+            }
+            else if(Item.isDontCare())
+            {
+                nIncrement++;
+            }
+            else if(Item.isDisabled())
+            {
+                nIncrement++;
+            }
+
+            // CPPUNIT_ASSERT_EQUAL_MESSAGE("simple range rounding from double to integer",
+            //                              B2IRange(1, 2, 4, 5), fround(ibase(1.2, 2.3, 3.5, 4.8)));
+        }
+
+        void checkMultiValuesAtISetMixed()
+        {
+            // for debug, change bLoop to true, start, attach and set to false again to debug (one possibility...)
+            static bool bLoop(false);
+            while(bLoop)
+            {
+                bLoop = true;
+            }
+
+           int nIncrement(0);
+
+            // make use of local MultiValueAB item in conjuction with ItemSet
+            ModelSpecificItemValues::SharedPtr aModelSpecificIValues(ModelSpecificItemValues::create());
+            ItemSet::SharedPtr aSet(ItemSet::create(aModelSpecificIValues));
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            MultiValueSimple aSimple(2,2);
+            MultiValueSimple_derivedClass aSimple_derivedClass(3,3);
+            MultiValueSimple_plus aSimple_plus(4,4,4);
+            MultiValueSimple_plus_derivedClass aSimple_plus_derivedClass(5,5,5);
+            MultiValueBuffered aBuffered(6,6);
+            MultiValueBuffered_derivedClass aBuffered_derivedClass(7,7);
+            MultiValueBuffered_plus aBuffered_plus(8,8,8);
+            MultiValueBuffered_plus_derivedClass aBuffered_plus_derivedClass(9,9,9);
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            {
+                const auto ItemA(aSet->getStateAndItem<MultiValueSimple>());
+                aSet->setItem(aSimple);
+                const auto ItemB(aSet->getStateAndItem<MultiValueSimple>());
+                aSet->clearItem<MultiValueSimple>();
+                const auto ItemC(aSet->getStateAndItem<MultiValueSimple>());
+
+                if(ItemC.isSet())
+                {
+                    nIncrement++;
+                }
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            {
+                const auto ItemA(aSet->getStateAndItem<MultiValueSimple_derivedClass>());
+                aSet->setItem(aSimple);
+                const auto ItemB(aSet->getStateAndItem<MultiValueSimple_derivedClass>());
+                aSet->clearItem<MultiValueSimple_derivedClass>();
+                const auto ItemC(aSet->getStateAndItem<MultiValueSimple_derivedClass>());
+
+                if(ItemC.isSet())
+                {
+                    nIncrement++;
+                }
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            {
+                const auto ItemA(aSet->getStateAndItem<MultiValueSimple_plus>());
+                aSet->setItem(aSimple);
+                const auto ItemB(aSet->getStateAndItem<MultiValueSimple_plus>());
+                aSet->clearItem<MultiValueSimple_plus>();
+                const auto ItemC(aSet->getStateAndItem<MultiValueSimple_plus>());
+
+                if(ItemC.isSet())
+                {
+                    nIncrement++;
+                }
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            {
+                const auto ItemA(aSet->getStateAndItem<MultiValueSimple_plus_derivedClass>());
+                aSet->setItem(aSimple);
+                const auto ItemB(aSet->getStateAndItem<MultiValueSimple_plus_derivedClass>());
+                aSet->clearItem<MultiValueSimple_plus_derivedClass>();
+                const auto ItemC(aSet->getStateAndItem<MultiValueSimple_plus_derivedClass>());
+
+                if(ItemC.isSet())
+                {
+                    nIncrement++;
+                }
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            {
+                const auto ItemA(aSet->getStateAndItem<MultiValueBuffered>());
+                aSet->setItem(aSimple);
+                const auto ItemB(aSet->getStateAndItem<MultiValueBuffered>());
+                aSet->clearItem<MultiValueBuffered>();
+                const auto ItemC(aSet->getStateAndItem<MultiValueBuffered>());
+
+                if(ItemC.isSet())
+                {
+                    nIncrement++;
+                }
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            {
+                const auto ItemA(aSet->getStateAndItem<MultiValueBuffered_derivedClass>());
+                aSet->setItem(aSimple);
+                const auto ItemB(aSet->getStateAndItem<MultiValueBuffered_derivedClass>());
+                aSet->clearItem<MultiValueBuffered_derivedClass>();
+                const auto ItemC(aSet->getStateAndItem<MultiValueBuffered_derivedClass>());
+
+                if(ItemC.isSet())
+                {
+                    nIncrement++;
+                }
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            {
+                const auto ItemA(aSet->getStateAndItem<MultiValueBuffered_plus>());
+                aSet->setItem(aSimple);
+                const auto ItemB(aSet->getStateAndItem<MultiValueBuffered_plus>());
+                aSet->clearItem<MultiValueBuffered_plus>();
+                const auto ItemC(aSet->getStateAndItem<MultiValueBuffered_plus>());
+
+                if(ItemC.isSet())
+                {
+                    nIncrement++;
+                }
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            {
+                const auto ItemA(aSet->getStateAndItem<MultiValueBuffered_plus_derivedClass>());
+                aSet->setItem(aSimple);
+                const auto ItemB(aSet->getStateAndItem<MultiValueBuffered_plus_derivedClass>());
+                aSet->clearItem<MultiValueBuffered_plus_derivedClass>();
+                const auto ItemC(aSet->getStateAndItem<MultiValueBuffered_plus_derivedClass>());
+
+                if(ItemC.isSet())
+                {
+                    nIncrement++;
+                }
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            {
+                const auto ItemA(aSet->getStateAndItem<MultiValueSimple>());
+                aSet->setItem(aSimple);
+                const auto ItemB(aSet->getStateAndItem<MultiValueSimple>());
+                aSet->clearItem<MultiValueSimple>();
+                const auto ItemC(aSet->getStateAndItem<MultiValueSimple>());
+
+                if(ItemC.isSet())
+                {
+                    nIncrement++;
+                }
             }
 
             // CPPUNIT_ASSERT_EQUAL_MESSAGE("simple range rounding from double to integer",
@@ -636,81 +1332,81 @@ namespace Item
         void checkSimpleItems()
         {
             static bool bInit(false);
-            static std::shared_ptr<const CntInt16> a_sp, b_sp, c_sp;
-            static std::shared_ptr<const CntInt16> theDefault;
-            static std::shared_ptr<const CntOUString> sa_sp, sb_sp, sc_sp;
-            static std::shared_ptr<const CntOUString> stheDefault;
+            static CntInt16 a_sp, b_sp, c_sp;
+            static CntInt16 theDefault;
+            static CntOUString sa_sp, sb_sp, sc_sp;
+            static CntOUString stheDefault;
             const sal_uInt32 nLoopNumber(50);
             int nIncrement(0);
 
             if(!bInit)
             {
                 bInit = true;
-                a_sp = CntInt16::Create(3);
-                b_sp = CntInt16::Create(5);
-                c_sp = CntInt16::Create(7);
-                theDefault = ItemBase::GetDefault<CntInt16>();
+                a_sp = CntInt16(3);
+                b_sp = CntInt16(5);
+                c_sp = CntInt16(7);
+                theDefault = Item::getDefault<CntInt16>();
 
-                sa_sp = CntOUString::Create("Hello");
-                sb_sp = CntOUString::Create("World");
-                sc_sp = CntOUString::Create("..of Doom!");
-                stheDefault = ItemBase::GetDefault<CntOUString>();
+                sa_sp = CntOUString("Hello");
+                sb_sp = CntOUString("World");
+                sc_sp = CntOUString("..of Doom!");
+                stheDefault = Item::getDefault<CntOUString>();
             }
 
             ///////////////////////////////////////////////////////////////////////////////
 
-            std::shared_ptr<const CntInt16> has3(CntInt16::Create(3));
-            std::shared_ptr<const CntInt16> has4(CntInt16::Create(4));
+            CntInt16 has3(CntInt16(3));
+            CntInt16 has4(CntInt16(4));
 
-            if(ItemBase::IsDefault(CntInt16::Create(11)))
+            if(CntInt16(11).isDefault())
             {
                 nIncrement++;
             }
 
-            if(ItemBase::IsDefault(CntInt16::Create(0)))
+            if(CntInt16(0).isDefault())
             {
                 nIncrement++;
             }
 
-            if(ItemBase::IsDefault(theDefault))
+            if(theDefault.isDefault())
             {
                 nIncrement++;
             }
 
-            std::vector<std::shared_ptr<const CntInt16>> test16;
+            std::vector<CntInt16> test16;
 
             for(sal_uInt32 a(0); a < nLoopNumber; a++)
             {
-                test16.push_back(CntInt16::Create(a));
+                test16.push_back(CntInt16(a));
             }
 
             test16.clear();
 
             ///////////////////////////////////////////////////////////////////////////////
 
-            std::shared_ptr<const CntOUString> shas3(CntOUString::Create("Hello"));
-            std::shared_ptr<const CntOUString> shas4(CntOUString::Create("WhateverComesAlong"));
+            CntOUString shas3(CntOUString("Hello"));
+            CntOUString shas4(CntOUString("WhateverComesAlong"));
 
-            if(ItemBase::IsDefault(CntOUString::Create("NotDefault")))
+            if(CntOUString("NotDefault").isDefault())
             {
                 nIncrement++;
             }
 
-            if(ItemBase::IsDefault(CntOUString::Create(OUString())))
+            if(CntOUString(OUString()).isDefault())
             {
                 nIncrement++;
             }
 
-            if(ItemBase::IsDefault(stheDefault))
+            if(stheDefault.isDefault())
             {
                 nIncrement++;
             }
 
-            std::vector<std::shared_ptr<const CntOUString>> testStr;
+            std::vector<CntOUString> testStr;
 
             for(sal_uInt32 a(0); a < nLoopNumber; a++)
             {
-                testStr.push_back(CntOUString::Create(OUString::number(static_cast<int>(a))));
+                testStr.push_back(CntOUString(OUString::number(static_cast<int>(a))));
             }
 
             testStr.clear();
@@ -718,14 +1414,6 @@ namespace Item
             if(bInit)
             {
                 bInit = false;
-                a_sp.reset();
-                b_sp.reset();
-                c_sp.reset();
-                theDefault.reset();
-                sa_sp.reset();
-                sb_sp.reset();
-                sc_sp.reset();
-                stheDefault.reset();
             }
         }
 
@@ -733,58 +1421,113 @@ namespace Item
         {
             int nIncrement(0);
 
-            ModelSpecificItemValues::SharedPtr aModelSpecificIValues(ModelSpecificItemValues::Create());
-            aModelSpecificIValues->SetAlternativeDefaultItem(CntInt16::Create(3));
-            aModelSpecificIValues->SetAlternativeDefaultItem(CntInt16::Create(4));
+            ModelSpecificItemValues::SharedPtr aModelSpecificIValues(ModelSpecificItemValues::create());
+            aModelSpecificIValues->setAlternativeDefaultItem(CntInt16(3));
+            aModelSpecificIValues->setAlternativeDefaultItem(CntInt16(4));
 
-            ItemSet::SharedPtr aSet(ItemSet::Create(aModelSpecificIValues));
-            const auto aActEmpty(aSet->GetStateAndItem<const CntInt16>());
+            ItemSet::SharedPtr aSet(ItemSet::create(aModelSpecificIValues));
+            const auto aActEmpty(aSet->getStateAndItem<CntInt16>());
 
-            aSet->SetItem(CntInt16::Create(4));
-            const auto aActA(aSet->GetStateAndItem<const CntInt16>());
+            aSet->setItem(CntInt16(4));
+            const auto aActA(aSet->getStateAndItem<CntInt16>());
 
-            aSet->SetItem(ItemBase::GetDefault<CntInt16>());
-            const auto aActB(aSet->GetStateAndItem<const CntInt16>());
+            aSet->setItem(Item::getDefault<CntInt16>());
+            const auto aActB(aSet->getStateAndItem<CntInt16>());
 
-            aSet->SetItem(CntInt16::Create(12));
-            const auto aActC(aSet->GetStateAndItem<const CntInt16>());
+            aSet->setItem(CntInt16(12));
+            const auto aActC(aSet->getStateAndItem<CntInt16>());
 
-            aSet->SetItem(CntOUString::Create("Teststring - not really useful :-)"));
-            const auto aActStr(aSet->GetStateAndItem<const CntOUString>());
+            aSet->setItem(CntOUString("Teststring - not really useful :-)"));
+            const auto aActStr(aSet->getStateAndItem<CntOUString>());
 
-            const auto ItemDADA(aSet->GetStateAndItem<const CntInt16>());
+            const auto ItemDADA(aSet->getStateAndItem<CntInt16>());
 
-            if(const auto Item(aSet->GetStateAndItem<const CntOUString>()); Item.IsSet())
+            if(const auto Item(aSet->getStateAndItem<CntOUString>()); Item.isSet())
             {
-                nIncrement += (ItemSet::IState::SET == Item.GetIState()) ? 1 : 0;
-                nIncrement += (Item.GetItem()) ? 1 : 0;
-                nIncrement += (nullptr != Item.GetItemInstance()) ? 1 : 0;
-                nIncrement += Item.HasItem();
-                nIncrement += Item.IsDisabled();
+                nIncrement += (ItemSet::IState::SET == Item.getIState()) ? 1 : 0;
+                nIncrement += Item.isDisabled();
             }
-            else if(Item.IsDefault())
+            else if(Item.isDefault())
             {
-                nIncrement += Item.IsDisabled();
+                nIncrement++;
             }
-            else if(Item.IsDontCare())
+            else if(Item.isDontCare())
             {
-                nIncrement += Item.IsDisabled();
+                nIncrement++;
             }
-            else
+            else if(Item.isDisabled())
             {
-                nIncrement += Item.IsDisabled();
+                nIncrement++;
             }
 
             // check getting default at Set, this will include ModelSpecificItemValues
             // compared with the static ItemBase::GetDefault<CntInt16>() call
-            const std::shared_ptr<const CntInt16> aDefSet(aSet->GetDefault<CntInt16>());
-            const std::shared_ptr<const CntInt16> aDefGlobal(ItemBase::GetDefault<CntInt16>());
+            const CntInt16 aDefSet(aSet->getDefault<CntInt16>());
+            const CntInt16 aDefGlobal(Item::getDefault<CntInt16>());
 
-            const bool bClA(aSet->ClearItem<const CntInt16>());
+            const bool bClA(aSet->clearItem<const CntInt16>());
             nIncrement += bClA;
             // let one exist to check destruction when Set gets destructed
             // const bool bClB(aSet->ClearItem<const CntOUString>());
             nIncrement ++;
+        }
+
+        void checkItem2()
+        {
+            static bool bLoop(false);
+            while(bLoop)
+            {
+                bLoop = true;
+            }
+
+            static bool bInit(false);
+            static CntInt16 a_sp, b_sp, c_sp;
+            static CntInt16 theDefault;
+            const sal_uInt32 nLoopNumber(50);
+            int nIncrement(0);
+
+            if(!bInit)
+            {
+                bInit = true;
+                a_sp = CntInt16(3);
+                b_sp = CntInt16(5);
+                c_sp = CntInt16(7);
+                theDefault = Item::getDefault<CntInt16>();
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            CntInt16 has3(CntInt16(3));
+            CntInt16 has4(CntInt16(4));
+
+            if(CntInt16(11).isDefault())
+            {
+                nIncrement++;
+            }
+
+            if(CntInt16(0).isDefault())
+            {
+                nIncrement++;
+            }
+
+            if(theDefault.isDefault())
+            {
+                nIncrement++;
+            }
+
+            std::vector<CntInt16> test16;
+
+            for(sal_uInt32 a(0); a < nLoopNumber; a++)
+            {
+                test16.push_back(CntInt16(a));
+            }
+
+            test16.clear();
+
+            if(bInit)
+            {
+                bInit = false;
+            }
         }
 
         // Change the following lines only, if you add, remove or rename
@@ -792,13 +1535,19 @@ namespace Item
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(ibase);
-        CPPUNIT_TEST(checkMultiValueAB);
-        CPPUNIT_TEST(checkMultiValueABC);
-        CPPUNIT_TEST(checkMultiValueABD);
-        CPPUNIT_TEST(checkMultiValueABCD);
+        CPPUNIT_TEST(checkMultiValueSimple);
+        CPPUNIT_TEST(checkMultiValueSimple_derivedClass);
+        CPPUNIT_TEST(checkMultiValueSimple_plus);
+        CPPUNIT_TEST(checkMultiValueSimple_plus_derivedClass);
+        CPPUNIT_TEST(checkMultiValueBuffered);
+        CPPUNIT_TEST(checkMultiValueBuffered_derivedClass);
+        CPPUNIT_TEST(checkMultiValueBuffered_plus);
+        CPPUNIT_TEST(checkMultiValueBuffered_plus_derivedClass);
         CPPUNIT_TEST(checkMultiValuesAtISet);
+        CPPUNIT_TEST(checkMultiValuesAtISetMixed);
         CPPUNIT_TEST(checkSimpleItems);
         CPPUNIT_TEST(checkSimpleItemsAtISet);
+        CPPUNIT_TEST(checkItem2);
         CPPUNIT_TEST_SUITE_END();
     };
 } // end of namespace Item

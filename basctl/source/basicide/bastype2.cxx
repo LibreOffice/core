@@ -854,13 +854,12 @@ bool TreeListBox::OpenCurrent()
             if (SfxDispatcher* pDispatcher = GetDispatcher())
             {
                 // I2TM
-                const std::shared_ptr<const ::Item::ItemBase> aSbxItem(
-                    Item::Sbx::Create(
-                        aDesc.GetDocument(),
-                        aDesc.GetLibName(),
-                        aDesc.GetName(),
-                        aDesc.GetMethodName(),
-                        ConvertType(aDesc.GetType())));
+                const Item::Sbx aSbxItem(
+                    aDesc.GetDocument(),
+                    aDesc.GetLibName(),
+                    aDesc.GetName(),
+                    aDesc.GetMethodName(),
+                    ConvertType(aDesc.GetType()));
                 pDispatcher->ExecuteList2(
                     SID_BASICIDE_SHOWSBX,
                     SfxCallMode::SYNCHRON,
@@ -1543,13 +1542,12 @@ IMPL_LINK_NOARG(SbTreeListBox, OpenCurrentHdl, weld::TreeView&, void)
             if (SfxDispatcher* pDispatcher = GetDispatcher())
             {
                 // I2TM
-                const std::shared_ptr<const ::Item::ItemBase> aSbxItem(
-                    Item::Sbx::Create(
-                        aDesc.GetDocument(),
-                        aDesc.GetLibName(),
-                        aDesc.GetName(),
-                        aDesc.GetMethodName(),
-                        ConvertType(aDesc.GetType())));
+                const Item::Sbx aSbxItem(
+                    aDesc.GetDocument(),
+                    aDesc.GetLibName(),
+                    aDesc.GetName(),
+                    aDesc.GetMethodName(),
+                    ConvertType(aDesc.GetType()));
                 pDispatcher->ExecuteList2(
                     SID_BASICIDE_SHOWSBX,
                     SfxCallMode::SYNCHRON,

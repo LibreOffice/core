@@ -8,7 +8,7 @@
  */
 
 #include <item/base/ItemBase.hxx>
-#include <item/base/ItemAdministrator.hxx>
+// #include <item/base/ItemAdministrator.hxx>
 #include <item/base/ItemControlBlock.hxx>
 #include <cassert>
 
@@ -81,205 +81,67 @@ using the SfxItemPool::Put call, only their RefCount keeps them alive.
 Nonetheless these SlotItems STILL depend on the SfxItem-RANGES defined in the SfxItemSet
 -> SLOT ITEMS do NOT get POOLED (IsItemPoolable/IsPooledItem/...)
 -> SLOT ITEMS can be put in *any* ItemPool - due to not using the pooling mechanism
-
-class DriverPoolingSettingsItem final : public SfxPoolItem
-class DatabaseMapItem final : public SfxPoolItem
-class DbuTypeCollectionItem : public SfxPoolItem
-class OptionalBoolItem : public SfxPoolItem
-class OStringListItem : public SfxPoolItem
-class AVMEDIA_DLLPUBLIC MediaItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SvxBoxItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SvxColorItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SvxFontHeightItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SvxFieldItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SvxFontListItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SvxFontItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SvxHyphenZoneItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SvxLineItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SvxLRSpaceItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SvxNumBulletItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SfxHyphenRegionItem: public SfxPoolItem
-class EDITENG_DLLPUBLIC SvxProtectItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SvxSizeItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SvxTabStopItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SvxTwoLinesItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SvxULSpaceItem : public SfxPoolItem
-class EDITENG_DLLPUBLIC SvXMLAttrContainerItem: public SfxPoolItem
-class SFX2_DLLPUBLIC SfxLinkItem : public SfxPoolItem
-class SFX2_DLLPUBLIC SfxEventNamesItem : public SfxPoolItem
-class SFX2_DLLPUBLIC SfxFrameItem: public SfxPoolItem
-class SFX2_DLLPUBLIC SfxUnoAnyItem : public SfxPoolItem
-class SFX2_DLLPUBLIC SfxUnoFrameItem : public SfxPoolItem
-class SFX2_DLLPUBLIC SfxMacroInfoItem: public SfxPoolItem
-class SFX2_DLLPUBLIC SfxObjectItem: public SfxPoolItem
-class SFX2_DLLPUBLIC SfxObjectShellItem: public SfxPoolItem
-class SFX2_DLLPUBLIC SfxViewFrameItem: public SfxPoolItem
-class SFX2_DLLPUBLIC SfxWatermarkItem: public SfxPoolItem
-class SVL_DLLPUBLIC SfxEnumItemInterface: public SfxPoolItem
-class SVL_DLLPUBLIC CntByteItem: public SfxPoolItem
-class SVL_DLLPUBLIC CntUInt16Item: public SfxPoolItem
-class SVL_DLLPUBLIC CntInt32Item: public SfxPoolItem
-class SVL_DLLPUBLIC CntUInt32Item: public SfxPoolItem
-class SVL_DLLPUBLIC CntUnencodedStringItem: public SfxPoolItem
-class SVL_DLLPUBLIC SfxFlagItem: public SfxPoolItem
-class SVL_DLLPUBLIC SfxGlobalNameItem: public SfxPoolItem
-class SVL_DLLPUBLIC SfxGrabBagItem : public SfxPoolItem
-class SVL_DLLPUBLIC SfxIntegerListItem : public SfxPoolItem
-class SVL_DLLPUBLIC SfxInt64Item : public SfxPoolItem
-class SVL_DLLPUBLIC SfxInt16Item: public SfxPoolItem
-class SVL_DLLPUBLIC SfxLockBytesItem : public SfxPoolItem
-class SVL_DLLPUBLIC SvxMacroItem: public SfxPoolItem
-class SVL_DLLPUBLIC SfxVoidItem final: public SfxPoolItem
-class SVL_DLLPUBLIC SfxSetItem: public SfxPoolItem
-class SVL_DLLPUBLIC SfxPointItem: public SfxPoolItem
-class SVL_DLLPUBLIC SfxRectangleItem: public SfxPoolItem
-class SVL_DLLPUBLIC SfxRangeItem : public SfxPoolItem
-class SVL_DLLPUBLIC SfxStringListItem : public SfxPoolItem
-class SVL_DLLPUBLIC SfxVisibilityItem: public SfxPoolItem
-class SVX_DLLPUBLIC AffineMatrixItem : public SfxPoolItem
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxMarginItem: public SfxPoolItem
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxDoubleItem : public SfxPoolItem
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxClipboardFormatItem : public SfxPoolItem
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxColorListItem: public SfxPoolItem
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxGradientListItem : public SfxPoolItem
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxHatchListItem : public SfxPoolItem
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBitmapListItem : public SfxPoolItem
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxPatternListItem : public SfxPoolItem
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxDashListItem : public SfxPoolItem
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLineEndListItem : public SfxPoolItem
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxB3DVectorItem : public SfxPoolItem
-class SVX_DLLPUBLIC SvxGalleryItem : public SfxPoolItem
-class SVX_DLLPUBLIC SvxHyperlinkItem : public SfxPoolItem
-class SVX_DLLPUBLIC SvxNumberInfoItem : public SfxPoolItem
-class SVX_DLLPUBLIC OfaPtrItem : public SfxPoolItem
-class OfaRefItem : public SfxPoolItem
-class SVX_DLLPUBLIC SvxGridItem : public SvxOptionsGrid, public SfxPoolItem
-class SVX_DLLPUBLIC SvxPageItem: public SfxPoolItem
-class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
-class SVX_DLLPUBLIC SvxLongULSpaceItem : public SfxPoolItem
-class SVX_DLLPUBLIC SvxPagePosSizeItem : public SfxPoolItem
-class SVX_DLLPUBLIC SvxColumnItem : public SfxPoolItem
-class SVX_DLLPUBLIC SvxObjectItem : public SfxPoolItem
-class SVX_DLLPUBLIC SdrCustomShapeGeometryItem : public SfxPoolItem
-class SVX_DLLPUBLIC SvxSmartTagItem : public SfxPoolItem
-class SVX_DLLPUBLIC SvxGraphicItem: public SfxPoolItem
-class SdrFractionItem: public SfxPoolItem {
-class SC_DLLPUBLIC ScPageHFItem : public SfxPoolItem
-class SC_DLLPUBLIC ScPageScaleToItem : public SfxPoolItem
-class ScCondFormatItem : public SfxPoolItem
-class SC_DLLPUBLIC ScTpDefaultsItem : public SfxPoolItem
-class SC_DLLPUBLIC ScTpCalcItem : public SfxPoolItem
-class SC_DLLPUBLIC ScTpFormulaItem : public SfxPoolItem
-class SC_DLLPUBLIC ScTpPrintItem : public SfxPoolItem
-class SC_DLLPUBLIC ScTpViewItem : public SfxPoolItem
-class ScCondFormatDlgItem : public SfxPoolItem
-class ScInputStatusItem : public SfxPoolItem
-class SC_DLLPUBLIC ScSortItem : public SfxPoolItem
-class SC_DLLPUBLIC ScQueryItem : public SfxPoolItem
-class SC_DLLPUBLIC ScSubTotalItem : public SfxPoolItem
-class SC_DLLPUBLIC ScUserListItem : public SfxPoolItem
-class ScConsolidateItem : public SfxPoolItem
-class ScPivotItem : public SfxPoolItem
-class ScSolveItem : public SfxPoolItem
-class ScTabOpItem : public SfxPoolItem
-class SD_DLLPUBLIC SdOptionsLayoutItem : public SfxPoolItem
-class SD_DLLPUBLIC SdOptionsMiscItem : public SfxPoolItem
-class SD_DLLPUBLIC SdOptionsSnapItem : public SfxPoolItem
-class SD_DLLPUBLIC SdOptionsPrintItem : public SfxPoolItem
-class SW_DLLPUBLIC SwCondCollItem : public SfxPoolItem
-class SwMsgPoolItem : public SfxPoolItem
-class SW_DLLPUBLIC SwTextGridItem : public SfxPoolItem
-class SW_DLLPUBLIC SwDocDisplayItem : public SfxPoolItem
-class SW_DLLPUBLIC SwElemItem : public SfxPoolItem
-class SW_DLLPUBLIC SwAddPrinterItem : public SfxPoolItem, public SwPrintData
-class SW_DLLPUBLIC SwShadowCursorItem : public SfxPoolItem
-class SW_DLLPUBLIC SwTestItem : public SfxPoolItem
-class SW_DLLPUBLIC SwEnvItem : public SfxPoolItem
-class SW_DLLPUBLIC SwLabItem : public SfxPoolItem
-class SW_DLLPUBLIC SwWrtShellItem: public SfxPoolItem
-class SW_DLLPUBLIC SwPageFootnoteInfoItem : public SfxPoolItem
-class SW_DLLPUBLIC SwPtrItem : public SfxPoolItem
-class SW_DLLPUBLIC SwUINumRuleItem : public SfxPoolItem
-class SW_DLLPUBLIC SwPaMItem : public SfxPoolItem
 */
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace Item
 {
+    void ItemBase::putValues(const AnyIDArgs& rArgs)
+    {
+        if(!rArgs.empty())
+        {
+            for(const auto& arg : rArgs)
+            {
+                putValue(arg.first, arg.second);
+            }
+        }
+    }
+
+    void ItemBase::putValue(const css::uno::Any& /*rVal*/, sal_uInt8 /*nMemberId*/)
+    {
+    }
+
     ItemBase::ItemBase(ItemControlBlock& rItemControlBlock)
-    :   std::enable_shared_from_this<ItemBase>(),
-        m_rItemControlBlock(rItemControlBlock),
-        m_bAdministrated(false)
+    :   m_rItemControlBlock(rItemControlBlock)
     {
     }
 
-    void ItemBase::PutValues(const AnyIDArgs& rArgs)
-    {
-        for(const auto& arg : rArgs)
-        {
-            PutValue(arg.first, arg.second);
-        }
-    }
-
-    void ItemBase::PutValue(const css::uno::Any& /*rVal*/, sal_uInt8 /*nMemberId*/)
-    {
-        // not intended to be used, error
-        assert(false && "Error: Some instance tries to set an Any at an ::Item instance where this is not supported - implement ItemBase::PutValue method there (!)");
-    }
-
-    void ItemBase::implInstanceCleanup()
-    {
-        if(IsAdministrated())
-        {
-            m_rItemControlBlock.GetItemAdministrator()->HintExpired(this);
-        }
-    }
-
-    ItemBase::~ItemBase()
+    ItemBase::ItemBase(const ItemBase& rRef)
+    :   m_rItemControlBlock(rRef.m_rItemControlBlock)
     {
     }
 
-    bool ItemBase::operator==(const ItemBase& rCmp) const
+    ItemBase& ItemBase::operator=(const ItemBase&)
     {
-        // basic implementation compares pointers, no data available
-        return this == &rCmp;
+        return *this;
     }
 
-    bool ItemBase::operator<(const ItemBase& rCmp) const
+    bool ItemBase::operator==(const ItemBase& rRef) const
     {
-        // basic implementation uses addresses of instances to
-        // deliver a consistent result, but should *not* be used in
-        // this form - it will not compare any data
-        return this < &rCmp;
+        // ptr-compare
+        return (this == &rRef);
     }
 
-    size_t ItemBase::GetUniqueKey() const
+    bool ItemBase::operator!=(const ItemBase& rRef) const
     {
-        // basic implementation uses adress of instance as hash, to
-        // deliver a consistent result, but should *not* be used in
-        // this form - it will not compare any data
-        return static_cast<size_t>(sal_uInt64(this));
+        return !(*this == rRef);
     }
 
-    bool ItemBase::IsDefault() const
+    const ItemBase& ItemBase::getDefault() const
     {
         // callback to ItemControlBlock
-        return m_rItemControlBlock.IsDefault(*this);
+        return m_rItemControlBlock.getDefault();
     }
 
-    const std::shared_ptr<const ItemBase>& ItemBase::GetDefault() const
+    bool ItemBase::isDefault() const
     {
         // callback to ItemControlBlock
-        assert(m_rItemControlBlock.GetDefaultItem() && "empty DefaultItem detected - not allowed (!)");
-        return m_rItemControlBlock.GetDefaultItem();
+        return m_rItemControlBlock.isDefault(*this);
     }
 
-    bool ItemBase::IsDefault(const std::shared_ptr<const ItemBase>& rCandidate)
+    bool isDefault(const ItemBase& rCandidate)
     {
-        return rCandidate && rCandidate->m_rItemControlBlock.IsDefault(*rCandidate);
+        return rCandidate.m_rItemControlBlock.isDefault(rCandidate);
     }
 } // end of namespace Item
 

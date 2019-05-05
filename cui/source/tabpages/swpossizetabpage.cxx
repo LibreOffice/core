@@ -38,6 +38,7 @@
 
 // I2TM
 #include <svx/item/TransformAnchor.hxx>
+#include <item/base/ItemControlBlock.hxx>
 // ~I2TM
 
 using namespace ::com::sun::star::text;
@@ -753,7 +754,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
     if(bAnchorChanged)
     {
         // I2TM
-        rSet->itemSet().SetItem(Item::TransformAnchor::Create(nAnchor));
+        rSet->itemSet().setItem(Item::TransformAnchor(nAnchor));
         // ~I2TM
         bModified = true;
     }
@@ -902,9 +903,9 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
     RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA;
 
     // I2TM
-    if(const auto Item(rSet->itemSet().GetStateAndItem<const Item::TransformAnchor>()); Item.HasItem())
+    const auto Item(rSet->itemSet().getStateAndItem<const Item::TransformAnchor>());
     {
-        nAnchorType = Item.GetItem()->GetAnchorType();
+        nAnchorType = Item.getItem().GetAnchorType();
         // I2TM
         switch(nAnchorType)
         {
@@ -921,6 +922,7 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
         m_xAsCharRB->save_state();
         m_xToFrameRB->save_state();
     }
+
     if (bInvalidateAnchor)
     {
         m_xToPageRB->set_sensitive( false );

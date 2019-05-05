@@ -782,7 +782,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                 if ( pAppDispat )
                 {
                     const SfxPoolItem* pState=nullptr;
-                    const std::shared_ptr<const Item::ItemBase> aSlotItem;
+                    const std::unique_ptr<const Item::ItemBase> aSlotItem;
                     SfxItemState eState = pDispatcher->QueryState( GetId(), pState );
                     StateChanged( GetId(), eState, pState, aSlotItem );
                 }
@@ -967,7 +967,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     }
 }
 
-void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::shared_ptr<const Item::ItemBase>& /*rSlotItem*/)
+void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& /*rSlotItem*/)
 {
     StateChanged( nSID, eState, pState, nullptr );
 }

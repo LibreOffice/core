@@ -19,34 +19,23 @@ namespace Item
     ItemControlBlock& TransformAnchor::GetStaticItemControlBlock()
     {
         static ItemControlBlock aItemControlBlock(
-            std::shared_ptr<ItemAdministrator>(new IAdministrator_set()),
-            nullptr,
-            [](){ return new TransformAnchor(TransformAnchor::GetStaticItemControlBlock()); },
+            [](){ return new TransformAnchor(); },
             "TransformAnchor");
 
         return aItemControlBlock;
     }
 
-    TransformAnchor::TransformAnchor(
-        ItemControlBlock& rItemControlBlock,
-        RndStdIds nValue)
+    TransformAnchor::TransformAnchor(RndStdIds nValue)
     :   CntInt16(
-            rItemControlBlock,
+            TransformAnchor::GetStaticItemControlBlock(),
             static_cast<sal_Int16>(nValue))
     {
     }
 
-    std::shared_ptr<const TransformAnchor> TransformAnchor::Create(RndStdIds nValue)
+    std::unique_ptr<ItemBase> TransformAnchor::clone() const
     {
-        // use ::Create(...) method with local incarnation, it will handle
-        // - detection of being default (will delete local incarnation)
-        // - detection of reuse (will delete local incarnation)
-        // - detectiomn of new use - will create shared_ptr for local incarnation and buffer
-        return std::static_pointer_cast<const TransformAnchor>(
-            TransformAnchor::GetStaticItemControlBlock().GetItemAdministrator()->Create(
-                new TransformAnchor(
-                    TransformAnchor::GetStaticItemControlBlock(),
-                    nValue)));
+        // use direct value(s) and std::make_unique
+        return std::make_unique<TransformAnchor>(GetAnchorType());
     }
 } // end of namespace Item
 

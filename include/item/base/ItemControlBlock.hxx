@@ -20,56 +20,38 @@
 #ifndef INCLUDED_ITEM_BASE_ITEMCONTROLBLOCK_HXX
 #define INCLUDED_ITEM_BASE_ITEMCONTROLBLOCK_HXX
 
+#include <sal/types.h>
+#include <item/itemdllapi.h>
 #include <functional>
-#include <item/base/ItemAdministrator.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace Item
 {
-    // predefine ItemAdministrator and ItemBase - no need to include
-    class ItemAdministrator;
+    // predefine - no need to include
     class ItemBase;
 
-    // The ConstructDefaultItem may be zero, instead the
-    // ConstructItem lambda will be used
     class ITEM_DLLPUBLIC ItemControlBlock
     {
     private:
-        std::shared_ptr<ItemAdministrator>  m_aItemAdministrator;
-        std::shared_ptr<const ItemBase>     m_aDefaultItem;
+        std::unique_ptr<const ItemBase>     m_aDefaultItem;
         std::function<ItemBase*()>          m_aConstructDefaultItem;
-        std::function<ItemBase*()>          m_aConstructItem;
         OUString                            m_aName;
 
     public:
         ItemControlBlock(
-            const std::shared_ptr<ItemAdministrator>& rItemAdministrator,
-            std::function<ItemBase*()>constructDefaultItem,
-            std::function<ItemBase*()>constructItem,
+            std::function<ItemBase*()>aConstructDefaultItem,
             const OUString& rName);
         ItemControlBlock();
 
-        const std::shared_ptr<ItemAdministrator>& GetItemAdministrator()
-        {
-            return m_aItemAdministrator;
-        }
-
-        const std::shared_ptr<const ItemBase>& GetDefaultItem() const;
-
-        ItemBase* ConstructItem() const
-        {
-            return m_aConstructItem();
-        }
-
-        std::shared_ptr<const ItemBase> CreateFromAny(const ItemBase::AnyIDArgs& rArgs);
-
-        bool IsDefault(const ItemBase& rItem) const;
-
-        const OUString& GetName() const
+        const ItemBase& getDefault() const;
+        bool isDefault(const ItemBase& rItem) const;
+        const OUString& getName() const
         {
             return m_aName;
         }
+
+        std::unique_ptr<const ItemBase> createFromAny(const ItemBase::AnyIDArgs& rArgs);
     };
 } // end of namespace Item
 

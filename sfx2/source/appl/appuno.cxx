@@ -239,7 +239,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             {
                 Item::ItemBase::AnyIDArgs aArgs;
                 aArgs.push_back(Item::ItemBase::AnyIDPair(rProp.Value, bConvertTwips ? CONVERT_TWIPS : 0));
-                std::shared_ptr<const Item::ItemBase> aSlotItem(pType->CreateSlotItem(aArgs));
+                std::unique_ptr<const Item::ItemBase> aSlotItem(pType->CreateSlotItem(aArgs));
                 if(aSlotItem)
                 {
                     // I2TM To make this work, a correct typed Item
@@ -254,7 +254,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                     // now will be safe to use Item::ItemSet
                     //
                     // rSet.slotSet().SetSlot(nWhich, aSlotItem);
-                    rSet.itemSet().SetItem(aSlotItem);
+                    rSet.itemSet().setItem(*aSlotItem);
                 }
                 else
                 {
@@ -336,14 +336,14 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 }
                 else
                 {
-                    std::shared_ptr<const Item::ItemBase> aSlotItem(pType->CreateSlotItem(aArgs));
+                    std::unique_ptr<const Item::ItemBase> aSlotItem(pType->CreateSlotItem(aArgs));
                     if(aSlotItem)
                     {
                         // I2TM See comment for this line above for
                         // important more info (!)
                         //
                         // rSet.slotSet().SetSlot(nWhich, aSlotItem);
-                        rSet.itemSet().SetItem(aSlotItem);
+                        rSet.itemSet().setItem(*aSlotItem);
                     }
                     else
                     {

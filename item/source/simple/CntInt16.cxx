@@ -7,10 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <cassert>
 #include <item/simple/CntInt16.hxx>
-#include <item/base/ItemAdministrator.hxx>
 #include <item/base/ItemControlBlock.hxx>
+#include <cassert>
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,61 +18,34 @@ namespace Item
     ItemControlBlock& CntInt16::GetStaticItemControlBlock()
     {
         static ItemControlBlock aItemControlBlock(
-            std::shared_ptr<ItemAdministrator>(new IAdministrator_set()),
-            nullptr,
-            [](){ return new CntInt16(CntInt16::GetStaticItemControlBlock()); },
+            [](){ return new CntInt16(); },
             "CntInt16");
 
         return aItemControlBlock;
     }
 
-    CntInt16::CntInt16(
-        ItemControlBlock& rItemControlBlock,
-        sal_Int16 nValue)
+    CntInt16::CntInt16(ItemControlBlock& rItemControlBlock, sal_Int16 nVal)
     :   ItemBase(rItemControlBlock),
-        m_nValue(nValue)
+        m_nValue(nVal)
     {
     }
 
-    CntInt16::~CntInt16()
+    CntInt16::CntInt16(sal_Int16 nVal)
+    :   ItemBase(CntInt16::GetStaticItemControlBlock()),
+        m_nValue(nVal)
     {
-        // needs to be called from here to have the fully derived implementation type
-        // in the helper method - do NOT move to a imaginable general
-        // implementation in ItemBaseStaticHelper (!)
-        implInstanceCleanup();
     }
 
-    std::shared_ptr<const CntInt16> CntInt16::Create(sal_Int16 nValue)
+    bool CntInt16::operator==(const ItemBase& rRef) const
     {
-        // use ::Create(...) method with local incarnation, it will handle
-        // - detection of being default (will delete local incarnation)
-        // - detection of reuse (will delete local incarnation)
-        // - detectiomn of new use - will create shared_ptr for local incarnation and buffer
-        return std::static_pointer_cast<const CntInt16>(
-            CntInt16::GetStaticItemControlBlock().GetItemAdministrator()->Create(
-                new CntInt16(
-                    CntInt16::GetStaticItemControlBlock(),
-                    nValue)));
+        return ItemBase::operator==(rRef) || // ptr-compare
+            getValue() == static_cast<const CntInt16&>(rRef).getValue();
     }
 
-    bool CntInt16::operator==(const ItemBase& rCandidate) const
+    std::unique_ptr<ItemBase> CntInt16::clone() const
     {
-        if(ItemBase::operator==(rCandidate)) // compares ptrs
-        {
-            return true;
-        }
-
-        return (GetValue() == static_cast<const CntInt16&>(rCandidate).GetValue());
-    }
-
-    bool CntInt16::operator<(const ItemBase& rCandidate) const
-    {
-        return static_cast<const CntInt16*>(this)->GetValue() < static_cast<const CntInt16&>(rCandidate).GetValue();
-    }
-
-    sal_Int16 CntInt16::GetValue() const
-    {
-        return m_nValue;
+        // use direct value(s) and std::make_unique
+        return std::make_unique<CntInt16>(getValue());
     }
 } // end of namespace Item
 

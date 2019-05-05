@@ -13,25 +13,28 @@
 
 namespace Item
 {
-    void SetAdministratedFromItemAdministrator(ItemBase& rIBase)
+    ItemAdministrator::ItemAdministrator(std::function<ItemBuffered::ItemData*()> aConstructItem)
+    :   m_aConstructItem(aConstructItem)
     {
-        rIBase.m_bAdministrated = true;
-    }
-
-    ItemAdministrator::ItemAdministrator()
-    {
+        assert(nullptr != m_aConstructItem && "ItemAdministrator::ItemAdministrator called without valid constructItem lambda (!)");
     }
 
     ItemAdministrator::~ItemAdministrator()
     {
     }
 
-    void ItemAdministrator::HintExpired(const ItemBase* /*pIBase*/)
+    ItemBuffered::ItemData* ItemAdministrator::find_or_set(ItemBuffered::ItemData* pItemData)
     {
-        // Default does nothing and will be triggered from m_aDefault being destructed
-        // using the HintExpired calls in the administrated classes. This happens due to
-        // m_aDefault being destroyed from ~ItemAdministrator() above as last thing in
-        // ItemAdministrator cleanup, the derived classes are no longer available at that time.
+        return pItemData;
+    }
+
+    void ItemAdministrator::remove(ItemBuffered::ItemData* /*pItemData*/)
+    {
+    }
+
+    ItemBuffered::ItemData* ItemAdministrator::createNewDataInstance() const
+    {
+        return m_aConstructItem();
     }
 } // end of namespace Item
 
@@ -39,55 +42,32 @@ namespace Item
 
 namespace Item
 {
-    IAdministrator_set::IAdministrator_set()
-    :   ItemAdministrator(),
-        m_aEntries()
+    ItemAdministrator_set::ItemAdministrator_set(
+        std::function<ItemBuffered::ItemData*()> aConstructItem,
+        std::function<bool(ItemBuffered::ItemData*, ItemBuffered::ItemData*)> aLess)
+    :   ItemAdministrator(aConstructItem),
+        m_aEntries(aLess)
     {
     }
 
-    std::shared_ptr<const ItemBase> IAdministrator_set::Create(const ItemBase* pIBase)
+    ItemBuffered::ItemData* ItemAdministrator_set::find_or_set(ItemBuffered::ItemData* pItemData)
     {
-        assert(pIBase != nullptr && "nullptr not allowed (!)");
-
-        if(pIBase->IsDefault())
-        {
-            // if the Item to-be-created equals default, delete it and
-            // use the existing single global default
-            const std::shared_ptr<const ItemBase>& rDefault(pIBase->GetDefault());
-            delete pIBase;
-            return rDefault;
-        }
-
-        // check for existance
-        auto ExistingEntry(m_aEntries.find(pIBase));
+        auto ExistingEntry(m_aEntries.find(pItemData));
 
         if(m_aEntries.end() != ExistingEntry)
         {
-            // if the Item to-be-created exists already, delete it and
-            // use the existing instance
-            delete pIBase;
-            return (*ExistingEntry)->shared_from_this();
+            return *ExistingEntry;
         }
         else
         {
-            // start using offered instance and administrate it from now
-            SetAdministratedFromItemAdministrator(*const_cast<ItemBase*>(pIBase));
-            m_aEntries.insert(pIBase);
-            return std::shared_ptr<const ItemBase>(pIBase);
+            m_aEntries.insert(pItemData);
+            return pItemData;
         }
     }
 
-    void IAdministrator_set::HintExpired(const ItemBase* pIBase)
+    void ItemAdministrator_set::remove(ItemBuffered::ItemData* pItemData)
     {
-        // called from ::~Item. This happens in two cases:
-        // (1) a temporary Item instance gets deleted
-        // (2) last shared_ptr was deleted
-        // The caller should have already checked the
-        // Administrated-flag, so only administrated instances
-        // of ItemBase should be handled here which is case (2)
-        assert(pIBase != nullptr && "nullptr not allowed (!)");
-        assert(pIBase->IsAdministrated() && "call only for administrated instances of ItemBase (!)");
-        m_aEntries.erase(pIBase);
+        m_aEntries.erase(pItemData);
     }
 } // end of namespace Item
 
@@ -95,55 +75,36 @@ namespace Item
 
 namespace Item
 {
-    IAdministrator_unordered_set::IAdministrator_unordered_set()
-    :   ItemAdministrator(),
-        m_aEntries()
+    ItemAdministrator_unordered_set::ItemAdministrator_unordered_set(
+        std::function<ItemBuffered::ItemData*()> aConstructItem,
+        std::function<size_t(ItemBuffered::ItemData*)> aHash,
+        std::function<bool(ItemBuffered::ItemData*, ItemBuffered::ItemData*)> aCompare)
+    :   ItemAdministrator(aConstructItem),
+        m_aEntries(
+            0, // bucket_count -> not sure, want a system default. Will zero give me that?
+            aHash,
+            aCompare)
     {
     }
 
-    std::shared_ptr<const ItemBase> IAdministrator_unordered_set::Create(const ItemBase* pIBase)
+    ItemBuffered::ItemData* ItemAdministrator_unordered_set::find_or_set(ItemBuffered::ItemData* pItemData)
     {
-        assert(pIBase != nullptr && "nullptr not allowed (!)");
-
-        if(pIBase->IsDefault())
-        {
-            // if the Item to-be-created equals default, delete it and
-            // use the existing single global default
-            const std::shared_ptr<const ItemBase>& rDefault(pIBase->GetDefault());
-            delete pIBase;
-            return rDefault;
-        }
-
-        // check for existance
-        auto ExistingEntry(m_aEntries.find(pIBase));
+        auto ExistingEntry(m_aEntries.find(pItemData));
 
         if(m_aEntries.end() != ExistingEntry)
         {
-            // if the Item to-be-created exists already, delete it and
-            // use the existing instance
-            delete pIBase;
-            return (*ExistingEntry)->shared_from_this();
+            return *ExistingEntry;
         }
         else
         {
-            // start using offered instance and administrate it from now
-            SetAdministratedFromItemAdministrator(*const_cast<ItemBase*>(pIBase));
-            m_aEntries.insert(pIBase);
-            return std::shared_ptr<const ItemBase>(pIBase);
+            m_aEntries.insert(pItemData);
+            return pItemData;
         }
     }
 
-    void IAdministrator_unordered_set::HintExpired(const ItemBase* pIBase)
+    void ItemAdministrator_unordered_set::remove(ItemBuffered::ItemData* pItemData)
     {
-        // called from ::~Item. This happens in two cases:
-        // (1) a temporary Item instance gets deleted
-        // (2) last shared_ptr was deleted
-        // The caller should have already checked the
-        // Administrated-flag, so only administrated instances
-        // of ItemBase should be handled here which is case (2)
-        assert(pIBase != nullptr && "nullptr not allowed (!)");
-        assert(pIBase->IsAdministrated() && "call only for administrated instances of ItemBase (!)");
-        m_aEntries.erase(pIBase);
+        m_aEntries.erase(pItemData);
     }
 } // end of namespace Item
 
@@ -151,15 +112,15 @@ namespace Item
 
 namespace Item
 {
-    std::vector<const ItemBase*>::iterator IAdministrator_vector::find(const ItemBase* pIBase)
+    std::vector<ItemBuffered::ItemData*>::iterator ItemAdministrator_vector::find(ItemBuffered::ItemData* pIBase)
     {
         // find has to linearly traverse through instances and use operator==
         assert(pIBase != nullptr && "nullptr not allowed (!)");
-        for(std::vector<const ItemBase*>::iterator candidate(m_aEntries.begin()); candidate != m_aEntries.end(); candidate++)
+        for(std::vector<ItemBuffered::ItemData*>::iterator candidate(m_aEntries.begin()); candidate != m_aEntries.end(); candidate++)
         {
-            if(*candidate != nullptr)
+            if(nullptr != *candidate)
             {
-                if(*candidate == pIBase || (*candidate)->operator==(*pIBase))
+                if(*candidate == pIBase || m_aSame(*candidate, pIBase))
                 {
                     return candidate;
                 }
@@ -169,7 +130,7 @@ namespace Item
         return m_aEntries.end();
     }
 
-    void IAdministrator_vector::insert(const ItemBase* pIBase)
+    void ItemAdministrator_vector::insert(ItemBuffered::ItemData* pIBase)
     {
         // insert reuses free slots if there are some, else
         // appends to existing vector
@@ -186,7 +147,7 @@ namespace Item
         return;
     }
 
-    void IAdministrator_vector::erase(std::vector<const ItemBase*>::iterator& rIter)
+    void ItemAdministrator_vector::erase(std::vector<ItemBuffered::ItemData*>::iterator& rIter)
     {
         if(rIter != m_aEntries.end())
         {
@@ -201,10 +162,10 @@ namespace Item
                 && m_aEntries.size() > m_aFreeSlots.size()
                 && m_aFreeSlots.size() * 2 > m_aEntries.size())
             {
-                std::vector<const ItemBase*> aNewEntries;
+                std::vector<ItemBuffered::ItemData*> aNewEntries;
                 aNewEntries.reserve(m_aEntries.size() - m_aFreeSlots.size());
 
-                for(std::vector<const ItemBase*>::iterator candidate(m_aEntries.begin()); candidate != m_aEntries.end(); candidate++)
+                for(std::vector<ItemBuffered::ItemData*>::iterator candidate(m_aEntries.begin()); candidate != m_aEntries.end(); candidate++)
                 {
                     if(*candidate != nullptr)
                     {
@@ -223,56 +184,34 @@ namespace Item
         }
     }
 
-    IAdministrator_vector::IAdministrator_vector()
-    :   ItemAdministrator(),
+    ItemAdministrator_vector::ItemAdministrator_vector(
+        std::function<ItemBuffered::ItemData*()> aConstructItem,
+        std::function<bool(ItemBuffered::ItemData*, ItemBuffered::ItemData*)> aSame)
+    :   ItemAdministrator(aConstructItem),
         m_aEntries(),
-        m_aFreeSlots()
+        m_aFreeSlots(),
+        m_aSame(aSame)
     {
     }
 
-    std::shared_ptr<const ItemBase> IAdministrator_vector::Create(const ItemBase* pIBase)
+    ItemBuffered::ItemData* ItemAdministrator_vector::find_or_set(ItemBuffered::ItemData* pItemData)
     {
-        assert(pIBase != nullptr && "nullptr not allowed (!)");
-
-        if(pIBase->IsDefault())
-        {
-            // if the Item to-be-created equals default, delete it and
-            // use the existing single global default
-            const std::shared_ptr<const ItemBase>& rDefault(pIBase->GetDefault());
-            delete pIBase;
-            return rDefault;
-        }
-
-        // check for existance
-        auto ExistingEntry(find(pIBase));
+        auto ExistingEntry(find(pItemData));
 
         if(m_aEntries.end() != ExistingEntry)
         {
-            // if the Item to-be-created exists already, delete it and
-            // use the existing instance
-            delete pIBase;
-            return (*ExistingEntry)->shared_from_this();
+            return *ExistingEntry;
         }
         else
         {
-            // start using offered instance and administrate it from now
-            SetAdministratedFromItemAdministrator(*const_cast<ItemBase*>(pIBase));
-            insert(pIBase);
-            return std::shared_ptr<const ItemBase>(pIBase);
+            insert(pItemData);
+            return pItemData;
         }
     }
 
-    void IAdministrator_vector::HintExpired(const ItemBase* pIBase)
+    void ItemAdministrator_vector::remove(ItemBuffered::ItemData* pItemData)
     {
-        // called from ::~Item. This happens in two cases:
-        // (1) a temporary Item instance gets deleted
-        // (2) last shared_ptr was deleted
-        // The caller should have already checked the
-        // Administrated-flag, so only administrated instances
-        // of ItemBase should be handled here which is case (2)
-        assert(pIBase != nullptr && "nullptr not allowed (!)");
-        assert(pIBase->IsAdministrated() && "call only for administrated instances of ItemBase (!)");
-        auto iter(find(pIBase));
+        auto iter(find(pItemData));
         erase(iter);
     }
 } // end of namespace Item

@@ -26,22 +26,21 @@ namespace Item
         static ItemControlBlock& GetStaticItemControlBlock();
 
     private:
-        // local variavbles
         sal_Int16 m_nValue;
 
     protected:
-        // SharedPtr-constructor - protected BY DEFAULT - do NOT CHANGE (!)
-        CntInt16(
-            ItemControlBlock& rItemControlBlock,
-            sal_Int16 nValue = 0);
+        // constructor for derived classes that *have* to hand
+        // in the to-be-used ItemControlBlock
+        CntInt16(ItemControlBlock& rItemControlBlock, sal_Int16 nVal = 0);
 
     public:
-        virtual ~CntInt16();
+        CntInt16(sal_Int16 nVal = 0);
 
-        static std::shared_ptr<const CntInt16> Create(sal_Int16 nValue);
-        virtual bool operator==(const ItemBase& rCandidate) const override;
-        virtual bool operator<(const ItemBase& rCandidate) const override;
-        sal_Int16 GetValue() const;
+        virtual bool operator==(const ItemBase&) const;
+        virtual std::unique_ptr<ItemBase> clone() const;
+
+        sal_Int16 getValue() const { return m_nValue; }
+        void putValue(sal_Int16 nNew) { m_nValue = nNew; }
     };
 } // end of namespace Item
 

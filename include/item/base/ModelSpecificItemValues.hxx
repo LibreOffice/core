@@ -45,7 +45,7 @@ namespace Item
 
     private:
         // the alternative default items
-        std::unordered_map<size_t, std::shared_ptr<const ItemBase>> m_aAlternativeItems;
+        std::unordered_map<size_t, const ItemBase*> m_aAlternativeItems;
 
     protected:
         // constructor - protected BY DEFAULT - do NOT CHANGE (!)
@@ -60,12 +60,12 @@ namespace Item
         ModelSpecificItemValues& operator=(const ModelSpecificItemValues&) = delete;
 
         // create instance
-        static SharedPtr Create();
+        static SharedPtr create();
 
         // AlternativeDefault interface
-        void SetAlternativeDefaultItem(const std::shared_ptr<const ItemBase>& rItem);
-        bool IsDefault(const std::shared_ptr<const ItemBase>& rItem) const;
-        const std::shared_ptr<const ItemBase>& GetDefault(const std::shared_ptr<const ItemBase>& rItem) const;
+        void setAlternativeDefaultItem(const ItemBase& rItem);
+        bool isDefault(const ItemBase& rItem) const;
+        const ItemBase& getDefault(const ItemBase& rItem) const;
     };
 } // end of namespace Item
 

@@ -24,55 +24,57 @@ namespace Item
     {
     }
 
-    ModelSpecificItemValues::SharedPtr ModelSpecificItemValues::Create()
+    ModelSpecificItemValues::SharedPtr ModelSpecificItemValues::create()
     {
         return ModelSpecificItemValues::SharedPtr(new ModelSpecificItemValues());
     }
 
-    void ModelSpecificItemValues::SetAlternativeDefaultItem(const std::shared_ptr<const ItemBase>& rItem)
+    void ModelSpecificItemValues::setAlternativeDefaultItem(const ItemBase& rItem)
     {
-        assert(rItem && "empty std::shared_ptr<const ItemBase> not allowed - and should be unable to be created (!)");
-        const size_t hash_code(typeid(*rItem).hash_code());
+        const size_t hash_code(typeid(rItem).hash_code());
+        const auto aRetval(m_aAlternativeItems.find(hash_code));
 
-        m_aAlternativeItems[hash_code] = rItem;
+        if(aRetval == m_aAlternativeItems.end())
+        {
+            m_aAlternativeItems[hash_code] = rItem.clone().release();
+        }
+        else
+        {
+            delete aRetval->second;
+            aRetval->second = rItem.clone().release();
+        }
     }
 
-    bool ModelSpecificItemValues::IsDefault(const std::shared_ptr<const ItemBase>& rItem) const
+    bool ModelSpecificItemValues::isDefault(const ItemBase& rItem) const
     {
-        assert(rItem && "empty std::shared_ptr<const ItemBase> not allowed - and should be unable to be created (!)");
-
         if(!m_aAlternativeItems.empty())
         {
-            const size_t hash_code(typeid(*rItem).hash_code());
+            const size_t hash_code(typeid(rItem).hash_code());
             const auto aRetval(m_aAlternativeItems.find(hash_code));
 
             if(aRetval != m_aAlternativeItems.end())
             {
-                return aRetval->second.get() == rItem.get()
-                    || aRetval->second->operator==(*rItem);
+                return *aRetval->second == rItem;
             }
         }
 
         // use Item's own static global default
-        return ItemBase::IsDefault(rItem);
+        return rItem.isDefault();
     }
 
-    const std::shared_ptr<const ItemBase>& ModelSpecificItemValues::GetDefault(const std::shared_ptr<const ItemBase>& rItem) const
+    const ItemBase& ModelSpecificItemValues::getDefault(const ItemBase& rItem) const
     {
-        assert(rItem && "empty std::shared_ptr<const ItemBase> not allowed - and should be unable to be created (!)");
-
         if(!m_aAlternativeItems.empty())
         {
-            const size_t hash_code(typeid(*rItem).hash_code());
+            const size_t hash_code(typeid(rItem).hash_code());
             const auto aRetval(m_aAlternativeItems.find(hash_code));
 
             if(aRetval != m_aAlternativeItems.end())
             {
-                return aRetval->second;
+                return *aRetval->second;
             }
         }
 
-        // loop through given instance
         return rItem;
     }
 } // end of namespace Item

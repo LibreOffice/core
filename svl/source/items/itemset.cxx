@@ -542,7 +542,7 @@ bool SfxItemSet::Put( const SfxItemSet& rSet, bool bInvalidAsDefault )
     }
 
 // I2TM
-    itemSet().SetItems(rSet.itemSet(), bInvalidAsDefault);
+    itemSet().setItems(rSet.itemSet(), bInvalidAsDefault);
 // ~I2TM
 
     return bRet;
@@ -1489,7 +1489,7 @@ Item::ItemSet& SfxItemSet::itemSet() const
 {
     if(!m_aItemSetSharedPtr)
     {
-        const_cast<SfxItemSet*>(this)->m_aItemSetSharedPtr = Item::ItemSet::Create(m_pPool->getModelSpecificIValues());
+        const_cast<SfxItemSet*>(this)->m_aItemSetSharedPtr = Item::ItemSet::create(m_pPool->getModelSpecificIValues());
     }
 
     return *m_aItemSetSharedPtr;

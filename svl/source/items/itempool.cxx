@@ -943,7 +943,7 @@ Item::ModelSpecificItemValues::SharedPtr SfxItemPool::getModelSpecificIValues() 
 
     if(!aGlobalDefault)
     {
-        aGlobalDefault = Item::ModelSpecificItemValues::Create();
+        aGlobalDefault = Item::ModelSpecificItemValues::create();
     }
 
     return aGlobalDefault;

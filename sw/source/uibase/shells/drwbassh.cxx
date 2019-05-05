@@ -64,6 +64,7 @@
 
 // I2TM
 #include <svx/item/TransformAnchor.hxx>
+#include <item/base/ItemControlBlock.hxx>
 // ~I2TM
 
 using namespace ::com::sun::star;
@@ -218,7 +219,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                             pSdrView->GetAttributes( aSet );
 
                         // I2TM
-                        aSet.itemSet().SetItem(Item::TransformAnchor::Create(nAnchor));
+                        aSet.itemSet().setItem(Item::TransformAnchor(nAnchor));
                         // ~I2TM
 
                         bool bRTL;
@@ -269,16 +270,16 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                             bool bSingleSelection = rMarkList.GetMarkCount() == 1;
 
                             // I2TM
-                            if(const auto Item(pOutSet->itemSet().GetStateAndItem<const Item::TransformAnchor>()); Item.HasItem())
+                            if(const auto Item(pOutSet->itemSet().getStateAndItem<const Item::TransformAnchor>()); Item.isSet())
                             {
                                 if(!bSingleSelection)
                                 {
-                                    pSh->ChgAnchor(Item.GetItem()->GetAnchorType(), false, bPosCorr);
+                                    pSh->ChgAnchor(Item.getItem().GetAnchorType(), false, bPosCorr);
                                 }
                                 else
                                 {
                                     SwFormatAnchor aAnchor(pFrameFormat->GetAnchor());
-                                    aAnchor.SetType(Item.GetItem()->GetAnchorType());
+                                    aAnchor.SetType(Item.getItem().GetAnchorType());
                                     aFrameAttrSet.Put( aAnchor );
                                 }
                             }

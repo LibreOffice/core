@@ -108,7 +108,7 @@ SvxFmTbxCtlAbsRec::~SvxFmTbxCtlAbsRec()
 }
 
 
-void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::shared_ptr<const Item::ItemBase>& rSlotItem)
+void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem)
 {
     sal_uInt16              nId = GetId();
     ToolBox*            pToolBox = &GetToolBox();
@@ -215,7 +215,7 @@ VclPtr<vcl::Window> SvxFmTbxCtlRecTotal::CreateItemWindow( vcl::Window* pParent 
 }
 
 
-void SvxFmTbxCtlRecTotal::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::shared_ptr<const Item::ItemBase>& rSlotItem)
+void SvxFmTbxCtlRecTotal::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem)
 {
 
     // setting the FixedText

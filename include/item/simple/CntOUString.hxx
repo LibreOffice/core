@@ -28,22 +28,16 @@ namespace Item
         static ItemControlBlock& GetStaticItemControlBlock();
 
     private:
-        // local variavbles
         rtl::OUString m_aValue;
 
-    protected:
-        // SharedPtr-constructor - protected BY DEFAULT - do NOT CHANGE (!)
-        CntOUString(
-            ItemControlBlock& rItemControlBlock,
-            const rtl::OUString& rValue = rtl::OUString());
-
     public:
-        virtual ~CntOUString();
+        CntOUString(const rtl::OUString& rValue = rtl::OUString());
 
-        static std::shared_ptr<const CntOUString> Create(const rtl::OUString& rValue);
-        virtual bool operator==(const ItemBase& rCandidate) const override;
-        virtual size_t GetUniqueKey() const override;
-        const rtl::OUString& GetValue() const;
+        virtual bool operator==(const ItemBase&) const;
+        virtual std::unique_ptr<ItemBase> clone() const;
+
+        const rtl::OUString& getValue() const { return m_aValue; }
+        void putValue(const rtl::OUString& rValue) { m_aValue = rValue; }
     };
 } // end of namespace Item
 

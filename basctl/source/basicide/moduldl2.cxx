@@ -1493,13 +1493,12 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                 if(SfxDispatcher* pDispatcher = GetDispatcher())
                 {
                     // I2TM
-                    const std::shared_ptr<const ::Item::ItemBase> aSbxItem(
-                        Item::Sbx::Create(
-                            rDocument,
-                            aLibName,
-                            aModName,
-                            OUString(),
-                            TYPE_MODULE));
+                    const Item::Sbx aSbxItem(
+                        rDocument,
+                        aLibName,
+                        aModName,
+                        OUString(),
+                        TYPE_MODULE);
                     pDispatcher->ExecuteList2(
                         SID_BASICIDE_SBXINSERTED,
                         SfxCallMode::SYNCHRON,
@@ -1617,13 +1616,12 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                 if(SfxDispatcher* pDispatcher = GetDispatcher())
                 {
                     // I2TM
-                    const std::shared_ptr<const ::Item::ItemBase> aSbxItem(
-                        Item::Sbx::Create(
-                            rDocument,
-                            aLibName,
-                            aModName,
-                            OUString(),
-                            TYPE_MODULE));
+                    const Item::Sbx aSbxItem(
+                        rDocument,
+                        aLibName,
+                        aModName,
+                        OUString(),
+                        TYPE_MODULE);
                     pDispatcher->ExecuteList2(
                         SID_BASICIDE_SBXINSERTED,
                         SfxCallMode::SYNCHRON,

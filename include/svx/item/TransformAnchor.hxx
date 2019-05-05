@@ -23,14 +23,12 @@ namespace Item
     public:
         static ItemControlBlock& GetStaticItemControlBlock();
 
-    protected:
-        TransformAnchor(
-            ItemControlBlock& rItemControlBlock,
-            RndStdIds nValue = RndStdIds::UNKNOWN);
-
     public:
-        static std::shared_ptr<const TransformAnchor> Create(RndStdIds nValue);
-        RndStdIds GetAnchorType() const { return static_cast<RndStdIds>(GetValue()); }
+        TransformAnchor(RndStdIds nValue = RndStdIds::UNKNOWN);
+
+        virtual std::unique_ptr<ItemBase> clone() const;
+
+        RndStdIds GetAnchorType() const { return static_cast<RndStdIds>(getValue()); }
     };
 } // end of namespace Item
 

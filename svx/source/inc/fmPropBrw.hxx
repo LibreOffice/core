@@ -61,7 +61,7 @@ class FmPropBrw final : public SfxFloatingWindow, public SfxControllerItem
     css::uno::Reference< css::awt::XWindow >
                     m_xFrameContainerWindow;
 
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::shared_ptr<const Item::ItemBase>& rSlotItem) override;
+    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem) override;
     virtual void FillInfo( SfxChildWinInfo& rInfo ) const override;
     virtual bool Close() override;
 

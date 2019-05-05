@@ -30,23 +30,34 @@ namespace Item
     ::Item::ItemControlBlock& Sbx::GetStaticItemControlBlock()
     {
         static ::Item::ItemControlBlock aItemControlBlock(
-            std::shared_ptr<::Item::ItemAdministrator>(new ::Item::IAdministrator_vector()),
-            nullptr,
-            [](){ return new Sbx(Sbx::GetStaticItemControlBlock()); },
+            [](){ return new Sbx(ScriptDocument::getApplicationScriptDocument()); },
             "Sbx");
 
         return aItemControlBlock;
     }
 
-    Sbx::Sbx(
-        ::Item::ItemControlBlock& rItemControlBlock,
-        const ScriptDocument* pDocument,
+    ::Item::ItemAdministrator& Sbx::SbxData::getItemAdministrator() const
+    {
+        static ::Item::ItemAdministrator_vector aItemAdministrator_vector(
+            // hand over localized lambda call to construct a new instance of Item
+            [](){ return new Sbx::SbxData(ScriptDocument::getApplicationScriptDocument()); },
+            // hand over localized lambda operator==
+            [](ItemData* A, ItemData* B)
+            {
+                return static_cast<Sbx::SbxData*>(A)->operator==(*static_cast<Sbx::SbxData*>(B));
+            });
+
+        return aItemAdministrator_vector;
+    }
+
+    Sbx::SbxData::SbxData(
+        const ScriptDocument& rDocument,
         const OUString& aLibName,
         const OUString& aName,
         const OUString& aMethodName,
         ItemType eType)
-    :   ::Item::ItemBase(rItemControlBlock),
-        m_aDocument(nullptr != pDocument ? *pDocument : ScriptDocument::getApplicationScriptDocument()),
+    :   ::Item::ItemBuffered::ItemData(),
+        m_aDocument(rDocument),
         m_aLibName(aLibName),
         m_aName(aName),
         m_aMethodName(aMethodName),
@@ -54,43 +65,32 @@ namespace Item
     {
     }
 
-    Sbx::~Sbx()
+    bool Sbx::SbxData::operator==(const ItemData& rRef) const
     {
-        implInstanceCleanup();
+        return ItemData::operator==(rRef) || // ptr-compare
+            (GetDocument() == static_cast<const SbxData&>(rRef).GetDocument() &&
+             GetLibName() == static_cast<const SbxData&>(rRef).GetLibName() &&
+             GetName() == static_cast<const SbxData&>(rRef).GetName() &&
+             GetMethodName() == static_cast<const SbxData&>(rRef).GetMethodName() &&
+             GetType() == static_cast<const SbxData&>(rRef).GetType());
     }
 
-    std::shared_ptr<const Sbx> Sbx::Create(
+    Sbx::Sbx(
         const ScriptDocument& rDocument,
         const OUString& aLibName,
         const OUString& aName,
         const OUString& aMethodName,
         ItemType eType)
+    :   ::Item::ItemBuffered(Sbx::GetStaticItemControlBlock())
     {
-        return std::static_pointer_cast<const Sbx>(
-            Sbx::GetStaticItemControlBlock().GetItemAdministrator()->Create(
-                new Sbx(
-                    Sbx::GetStaticItemControlBlock(),
-                    &rDocument,
-                    aLibName,
-                    aName,
-                    aMethodName,
-                    eType)));
-    }
-
-    bool Sbx::operator==(const ItemBase& rCandidate) const
-    {
-        if(ItemBase::operator==(rCandidate)) // compares ptrs
-        {
-            return true;
-        }
-
-        const Sbx& rCand(static_cast<const Sbx&>(rCandidate));
-
-        return (GetDocument() == rCand.GetDocument()
-            && GetLibName() == rCand.GetLibName()
-            && GetName() == rCand.GetName()
-            && GetMethodName() == rCand.GetMethodName()
-            && GetType() == rCand.GetType());
+        // This call initializes the values and is *required*.
+        setItemData(
+            new Sbx::SbxData(
+                rDocument,
+                aLibName,
+                aName,
+                aMethodName,
+                eType));
     }
 }
 // ~I2TM

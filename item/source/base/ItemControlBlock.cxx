@@ -9,56 +9,52 @@
 
 #include <cassert>
 #include <item/base/ItemControlBlock.hxx>
+#include <item/base/ItemBase.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace Item
 {
     ItemControlBlock::ItemControlBlock(
-        const std::shared_ptr<ItemAdministrator>& rItemAdministrator,
-        std::function<ItemBase*()>constructDefaultItem,
-        std::function<ItemBase*()>constructItem,
+        std::function<ItemBase*()>aConstructDefaultItem,
         const OUString& rName)
-    :   m_aItemAdministrator(rItemAdministrator),
-        m_aDefaultItem(),
-        m_aConstructDefaultItem(constructDefaultItem),
-        m_aConstructItem(constructItem),
+    :   m_aDefaultItem(),
+        m_aConstructDefaultItem(aConstructDefaultItem),
         m_aName(rName)
     {
-        assert(rItemAdministrator && "nullptr not allowed, an ItemAdministrator *is* required (!)");
-        assert(constructItem != nullptr && "nullptr not allowed, a Item-Constructor *is* required (!)");
+        assert(nullptr != m_aConstructDefaultItem && "nullptr not allowed, a Item-Constructor *is* required (!)");
     }
 
     ItemControlBlock::ItemControlBlock()
-    :   m_aItemAdministrator(),
-        m_aDefaultItem(),
+    :   m_aDefaultItem(),
         m_aConstructDefaultItem(),
-        m_aConstructItem()
+        m_aName()
     {
     }
 
-    const std::shared_ptr<const ItemBase>& ItemControlBlock::GetDefaultItem() const
+    const ItemBase& ItemControlBlock::getDefault() const
     {
         if(!m_aDefaultItem)
         {
-            const_cast<ItemControlBlock*>(this)->m_aDefaultItem.reset(
-                nullptr != m_aConstructDefaultItem ? m_aConstructDefaultItem() : m_aConstructItem());
+            const_cast<ItemControlBlock*>(this)->m_aDefaultItem.reset(m_aConstructDefaultItem());
+            assert(m_aDefaultItem && "could *not* construct default item (!)");
         }
 
-        return m_aDefaultItem;
+        return *m_aDefaultItem;
     }
 
-    std::shared_ptr<const ItemBase> ItemControlBlock::CreateFromAny(const ItemBase::AnyIDArgs& rArgs)
+    bool ItemControlBlock::isDefault(const ItemBase& rItem) const
     {
-        ItemBase* pNewInstance(ConstructItem());
-        pNewInstance->PutValues(rArgs);
-        return std::shared_ptr<const ItemBase>(pNewInstance);
+        assert(typeid(rItem) == typeid(getDefault()) && "different types compared - not allowed (!)");
+        return &rItem == &getDefault() ||   // ptr-compare
+            rItem.operator==(getDefault()); // content-compare
     }
 
-    bool ItemControlBlock::IsDefault(const ItemBase& rItem) const
+    std::unique_ptr<const ItemBase> ItemControlBlock::createFromAny(const ItemBase::AnyIDArgs& rArgs)
     {
-        assert(typeid(rItem) == typeid(*GetDefaultItem()) && "different types compared - not allowed (!)");
-        return &rItem == GetDefaultItem().get() || rItem.operator==(*GetDefaultItem().get());
+        ItemBase* pNewInstance(m_aConstructDefaultItem());
+        pNewInstance->putValues(rArgs);
+        return std::unique_ptr<const ItemBase>(pNewInstance);
     }
 } // end of namespace Item
 

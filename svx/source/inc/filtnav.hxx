@@ -315,7 +315,7 @@ public:
     virtual void dispose() override;
 
     void UpdateContent( FmFormShell const * pFormShell );
-    void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::shared_ptr<const Item::ItemBase>& rSlotItem ) override;
+    void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::unique_ptr<const Item::ItemBase>& rSlotItem ) override;
     void FillInfo( SfxChildWinInfo& rInfo ) const override;
 
     using SfxDockingWindow::StateChanged;
