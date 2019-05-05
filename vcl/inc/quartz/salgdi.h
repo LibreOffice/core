@@ -176,6 +176,7 @@ class AquaSalGraphics : public SalGraphics
     bool mbForeignContext;
 
 #endif
+    float mfScaleCompensation;
 
 public:
                             AquaSalGraphics();
@@ -186,7 +187,7 @@ public:
 
     void                    SetWindowGraphics( AquaSalFrame* pFrame );
     void                    SetPrinterGraphics( CGContextRef, long nRealDPIX, long nRealDPIY );
-    void                    SetVirDevGraphics( CGLayerRef, CGContextRef, int nBitDepth = 0 );
+    void                    SetVirDevGraphics( CGLayerRef, CGContextRef, int nBitDepth = 0, float fScaleFactor = 1.0);
 #ifdef MACOSX
     void                    initResolution( NSWindow* );
     void                    copyResolution( AquaSalGraphics& );
@@ -387,6 +388,12 @@ public:
 
     virtual SystemGraphicsData
                             GetGraphicsData() const override;
+
+    bool isVirtualDevice() { return mbVirDev; }
+    float getScaleCompensation()
+    {
+        return mfScaleCompensation;
+    }
 
 private:
     // differences between VCL, Quartz and kHiThemeOrientation coordinate systems

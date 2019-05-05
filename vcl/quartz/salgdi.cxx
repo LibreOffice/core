@@ -208,6 +208,7 @@ AquaSalGraphics::AquaSalGraphics()
 #else
     , mbForeignContext( false )
 #endif
+    , mfScaleCompensation(1.0)
 {
     SAL_INFO( "vcl.quartz", "AquaSalGraphics::AquaSalGraphics() this=" << this );
 

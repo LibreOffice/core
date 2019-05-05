@@ -103,7 +103,7 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX
         }
         SAL_INFO( "vcl.cg",  "CGLayerCreateWithContext(" << pData->rCGContext <<
                   "," << CGSizeMake( nDX, nDY) << ",NULL) = " << mxLayer );
-        mpGraphics->SetVirDevGraphics( mxLayer, pData->rCGContext );
+        mpGraphics->SetVirDevGraphics(mxLayer, pData->rCGContext, 0, pGraphic->getScaleCompensation());
     }
     else
     {
@@ -228,69 +228,45 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 
     Destroy();
 
+    CGFloat fScale = [[NSScreen mainScreen] backingScaleFactor];
+
+    size_t nWidth = nDX * fScale;
+    size_t nHeight = nDY * fScale;
+
     // create a Quartz layer matching to the intended virdev usage
     CGContextRef xCGContext = nullptr;
     if( mnBitmapDepth && (mnBitmapDepth < 16) )
     {
         mnBitmapDepth = 8;  // TODO: are 1bit vdevs worth it?
-        const int nBytesPerRow = (mnBitmapDepth * nDX + 7) / 8;
+        const int nBytesPerRow = (mnBitmapDepth * nWidth + 7) / 8;
 
-        void* pRawData = std::malloc( nBytesPerRow * nDY );
-        mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
+        void* pRawData = std::malloc( nBytesPerRow * nHeight);
+        mxBitmapContext = CGBitmapContextCreate( pRawData, nWidth, nHeight,
                                                  mnBitmapDepth, nBytesPerRow,
                                                  GetSalData()->mxGraySpace, kCGImageAlphaNone );
-        SAL_INFO( "vcl.cg",  "CGBitmapContextCreate(" << nDX << "x" << nDY << "x" << mnBitmapDepth << ") = " << mxBitmapContext );
+        SAL_INFO( "vcl.cg",  "CGBitmapContextCreate(" << nWidth << "x" << nHeight << "x" << mnBitmapDepth << ") = " << mxBitmapContext );
         xCGContext = mxBitmapContext;
     }
     else
     {
-#ifdef MACOSX
-        // default to a NSView target context
-        AquaSalFrame* pSalFrame = mpGraphics->getGraphicsFrame();
-        if( !pSalFrame || !AquaSalFrame::isAlive( pSalFrame ))
-        {
-            pSalFrame = static_cast<AquaSalFrame*>( GetSalData()->mpInstance->anyFrame() );
-            if ( pSalFrame )
-                // update the frame reference
-                mpGraphics->setGraphicsFrame( pSalFrame );
-        }
-        if( pSalFrame )
-        {
-            // #i91990#
-            NSWindow* pNSWindow = pSalFrame->getNSWindow();
-            if ( pNSWindow )
-            {
-                NSGraphicsContext* pNSContext = [NSGraphicsContext graphicsContextWithWindow: pNSWindow];
-                if( pNSContext )
-                {
-                    xCGContext = [pNSContext CGContext];
-                }
-            }
-        }
-#endif
+        mnBitmapDepth = 32;
 
-        if (!xCGContext)
-        {
-            // assert(Application::IsBitmapRendering());
-            mnBitmapDepth = 32;
-
-            const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
-            void* pRawData = std::malloc( nBytesPerRow * nDY );
+        const int nBytesPerRow = (mnBitmapDepth * nWidth) / 8;
+        void* pRawData = std::malloc( nBytesPerRow * nHeight );
 #ifdef MACOSX
-            const int nFlags = kCGImageAlphaNoneSkipFirst;
+        const int nFlags = kCGImageAlphaNoneSkipFirst;
 #else
-            const int nFlags = kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little;
+        const int nFlags = kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little;
 #endif
-            mxBitmapContext = CGBitmapContextCreate(pRawData, nDX, nDY, 8, nBytesPerRow,
-                                                    GetSalData()->mxRGBSpace, nFlags);
-            SAL_INFO( "vcl.cg", "CGBitmapContextCreate(" << nDX << "x" << nDY << "x32) = " << mxBitmapContext );
-            xCGContext = mxBitmapContext;
-        }
+        mxBitmapContext = CGBitmapContextCreate(pRawData, nWidth, nHeight, 8, nBytesPerRow,
+                                                GetSalData()->mxRGBSpace, nFlags);
+        SAL_INFO( "vcl.cg", "CGBitmapContextCreate(" << nWidth << "x" << nHeight << "x32) = " << mxBitmapContext );
+        xCGContext = mxBitmapContext;
     }
 
     SAL_WARN_IF( !xCGContext, "vcl.quartz", "No context" );
 
-    const CGSize aNewSize = { static_cast<CGFloat>(nDX), static_cast<CGFloat>(nDY) };
+    const CGSize aNewSize = { static_cast<CGFloat>(nWidth), static_cast<CGFloat>(nHeight) };
     mxLayer = CGLayerCreateWithContext( xCGContext, aNewSize, nullptr );
     SAL_INFO( "vcl.cg",  "CGLayerCreateWithContext(" << xCGContext << "," << aNewSize << ",NULL) = " << mxLayer );
 
@@ -298,8 +274,9 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
     {
         // get the matching Quartz context
         CGContextRef xDrawContext = CGLayerGetContext( mxLayer );
+        CGContextScaleCTM(xDrawContext, fScale, fScale);
         SAL_INFO( "vcl.cg",  "CGLayerGetContext(" << mxLayer << ") = " << xDrawContext );
-        mpGraphics->SetVirDevGraphics( mxLayer, xDrawContext, mnBitmapDepth );
+        mpGraphics->SetVirDevGraphics(mxLayer, xDrawContext, mnBitmapDepth, fScale);
     }
 
     return (mxLayer != nullptr);

@@ -385,7 +385,12 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
 
         // TODO: pSrc->size() != this->size()
         SAL_INFO( "vcl.cg", "CGContextDrawLayerAtPoint(" << xCopyContext << "," << aDstPoint << "," << pSrc->mxLayer << ")" );
-        CGContextDrawLayerAtPoint( xCopyContext, aDstPoint, pSrc->mxLayer );
+        const CGSize aSize = CGLayerGetSize(pSrc->mxLayer);
+        float fWidth = aSize.width / pSrc->mfScaleCompensation;
+        float fHeight = aSize.height / pSrc->mfScaleCompensation;
+
+        const CGRect aDrawDstRect = CGRectMake(aDstPoint.x, aDstPoint.y, fWidth, fHeight);
+        CGContextDrawLayerInRect(xCopyContext, aDrawDstRect, pSrc->mxLayer);
 
         SAL_INFO( "vcl.cg", "CGContextRestoreGState(" << xCopyContext << ")" );
         CGContextRestoreGState( xCopyContext );
@@ -394,14 +399,23 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
     }
     else
     {
-        std::shared_ptr<SalBitmap> pBitmap = pSrc->getBitmap( rPosAry.mnSrcX, rPosAry.mnSrcY,
-                                              rPosAry.mnSrcWidth, rPosAry.mnSrcHeight );
-        if( pBitmap )
+        float fScale = 1.0;
+
+        if (pSrc->isVirtualDevice() && !isVirtualDevice())
+            fScale = pSrc->mfScaleCompensation;
+
+        std::shared_ptr<SalBitmap> pBitmap = pSrc->getBitmap(
+            rPosAry.mnSrcX * fScale, rPosAry.mnSrcY * fScale,
+            rPosAry.mnSrcWidth * fScale, rPosAry.mnSrcHeight * fScale);
+        if (pBitmap)
         {
-            SalTwoRect aPosAry( rPosAry );
+            SalTwoRect aPosAry(rPosAry);
             aPosAry.mnSrcX = 0;
             aPosAry.mnSrcY = 0;
-            drawBitmap( aPosAry, *pBitmap );
+            aPosAry.mnSrcWidth = aPosAry.mnSrcWidth * fScale;
+            aPosAry.mnSrcHeight = aPosAry.mnSrcHeight * fScale;
+
+            drawBitmap(aPosAry, *pBitmap);
         }
     }
 }
@@ -2074,11 +2088,12 @@ bool XorEmulation::UpdateTarget()
     return true;
 }
 
-void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext,
-    int nBitmapDepth )
+void AquaSalGraphics::SetVirDevGraphics(CGLayerRef xLayer, CGContextRef xContext,
+                                        int nBitmapDepth, float fScaleCompensation)
 {
     SAL_INFO( "vcl.quartz", "SetVirDevGraphics() this=" << this << " layer=" << xLayer << " context=" << xContext );
 
+    mfScaleCompensation = fScaleCompensation;
 #ifndef IOS
     mbWindow = false;
 #endif
