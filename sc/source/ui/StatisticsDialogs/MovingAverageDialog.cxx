@@ -23,6 +23,7 @@ ScMovingAverageDialog::ScMovingAverageDialog(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "modules/scalc/ui/movingaveragedialog.ui",
             "MovingAverageDialog")
+    , mxTrimRangeCheck(m_xBuilder->weld_check_button("trimrange-check"))
     , mxIntervalSpin(m_xBuilder->weld_spin_button("interval-spin"))
 {
 }
@@ -46,6 +47,9 @@ ScRange ScMovingAverageDialog::ApplyOutput(ScDocShell* pDocShell)
     AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument,
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(mDocument);
+
+    if (mxTrimRangeCheck->get_active())
+        mDocument->GetDataAreaSubrange(mInputRange);
 
     std::unique_ptr<DataRangeIterator> pIterator;
     if (mGroupedBy == BY_COLUMN)
