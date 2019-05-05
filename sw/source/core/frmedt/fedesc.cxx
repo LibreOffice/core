@@ -34,6 +34,7 @@
 #include <tabfrm.hxx>
 #include <edimp.hxx>
 #include <SwStyleNameMapper.hxx>
+#include <ndtxt.hxx>
 
 size_t SwFEShell::GetPageDescCnt() const
 {

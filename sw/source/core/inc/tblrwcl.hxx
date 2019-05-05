@@ -24,15 +24,12 @@
 #include <vector>
 
 #include <swtypes.hxx>
-#include <tblsel.hxx>
 #include <swtable.hxx>
 
 namespace editeng { class SvxBorderLine; }
 
 class SwDoc;
 class SwTableNode;
-class SwTableLine;
-class SwTableBox;
 class SwTableBoxFormat;
 class SwHistory;
 class SwContentNode;

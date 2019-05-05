@@ -27,7 +27,6 @@
 #include <com/sun/star/text/XFlatParagraph.hpp>
 #include <com/sun/star/text/XFlatParagraphIterator.hpp>
 #include <svl/listener.hxx>
-#include <modeltoviewhelper.hxx>
 #include "unotextmarkup.hxx"
 
 #include <set>
@@ -42,6 +41,7 @@ namespace com { namespace sun { namespace star { namespace text {
 
 class SwTextNode;
 class SwDoc;
+class ModelToViewHelper;
 
 typedef ::cppu::ImplInheritanceHelper
 <   SwXTextMarkup

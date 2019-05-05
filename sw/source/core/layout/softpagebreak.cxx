@@ -24,6 +24,7 @@
 #include <rowfrm.hxx>
 #include <tabfrm.hxx>
 #include <calbck.hxx>
+#include <ndtxt.hxx>
 
 void SwTextNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
 {

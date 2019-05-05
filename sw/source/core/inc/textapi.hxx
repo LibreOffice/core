@@ -22,11 +22,7 @@
 
 #include <editeng/unoedsrc.hxx>
 #include <editeng/unotext.hxx>
-#include <editeng/eeitem.hxx>
-#include <editeng/outliner.hxx>
-#include <editeng/unoipset.hxx>
-#include <editeng/unoprnms.hxx>
-#include <editeng/unoforou.hxx>
+#include <editeng/outlobj.hxx>
 
 class SwDoc;
 

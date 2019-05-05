@@ -22,6 +22,7 @@
 #include <rowfrm.hxx>
 #include <pagefrm.hxx>
 #include <calbck.hxx>
+#include <ndtxt.hxx>
 
 SwMovedFwdFramesByObjPos::SwMovedFwdFramesByObjPos()
 {

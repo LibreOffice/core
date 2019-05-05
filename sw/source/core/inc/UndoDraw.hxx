@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_UNDODRAW_HXX
 
 #include <undobj.hxx>
-#include <svx/svdundo.hxx>
 #include <memory>
 
 struct SwUndoGroupObjImpl;

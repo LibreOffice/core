@@ -61,6 +61,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/container/XEnumeration.hpp>
 #include <algorithm>
 #include <memory>
 #include <set>

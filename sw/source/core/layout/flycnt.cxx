@@ -46,6 +46,7 @@
 #include <layouter.hxx>
 #include "objectformattertxtfrm.hxx"
 #include <HandleAnchorNodeChg.hxx>
+#include <ndtxt.hxx>
 
 using namespace ::com::sun::star;
 

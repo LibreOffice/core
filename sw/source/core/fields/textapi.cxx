@@ -21,9 +21,14 @@
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>
+#include <comphelper/propertysetinfo.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/unoprnms.hxx>
+#include <editeng/unoforou.hxx>
+#include <editeng/unoipset.hxx>
 
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

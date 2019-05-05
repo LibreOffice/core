@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_TXTFLY_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_TXTFLY_HXX
 
+#include <editeng/txtrange.hxx>
 #include <tools/solar.h>
 #include <swtypes.hxx>
 #include <swrect.hxx>
@@ -27,11 +28,9 @@
 #include <vector>
 
 class OutputDevice;
-class SwContentFrame;
 class SwPageFrame;
 class SdrObject;
 class SwFormat;
-class TextRanger;
 class SwAnchoredObject;
 class SwTextFrame;
 class SwDrawTextInfo;

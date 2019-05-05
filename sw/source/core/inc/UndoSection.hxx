@@ -22,7 +22,6 @@
 
 #include <undobj.hxx>
 #include <memory>
-#include <swdllapi.h>
 
 class SfxItemSet;
 class SwTextNode;

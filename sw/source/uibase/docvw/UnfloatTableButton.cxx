@@ -24,6 +24,7 @@
 #include <txtfrm.hxx>
 #include <pagefrm.hxx>
 #include <ndindex.hxx>
+#include <ndtxt.hxx>
 #include <swtable.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentUndoRedo.hxx>

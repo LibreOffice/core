@@ -270,6 +270,101 @@ blacklist:
     sw/source/core/inc/swthreadjoiner.hxx:
     # Needed for css shortcut
     - sal/types.h
+    sw/source/core/inc/unobookmark.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/text/XTextContent.hpp
+    - com/sun/star/text/XFormField.hpp
+    # Needed for UnoImplPtr template
+    - unobaseclass.hxx
+    sw/source/core/inc/unofield.hxx:
+    # Base class needs complete type
+    - com/sun/star/container/XEnumeration.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/text/XDependentTextField.hpp
+    - com/sun/star/util/XUpdatable.hpp
+    # Needed for UnoImplPtr template
+    - unobaseclass.hxx
+    include/svtools/unoevent.hxx:
+    # Don't give false positives checking sw/source/core/inc/unoevent.hxx
+    - com/sun/star/container/XNameReplace.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sw/source/core/inc/unoflatpara.hxx:
+    # Base class needs complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/text/XFlatParagraph.hpp
+    - com/sun/star/text/XFlatParagraphIterator.hpp
+    sw/source/core/inc/unofootnote.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/text/XFootnote.hpp
+    sw/source/core/inc/unoidx.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/util/XRefreshable.hpp
+    - com/sun/star/text/XDocumentIndexMark.hpp
+    - com/sun/star/text/XDocumentIndex.hpp
+    # Needed for UnoImplPtr template
+    - unobaseclass.hxx
+    sw/source/core/inc/unometa.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XChild.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/text/XTextContent.hpp
+    - com/sun/star/text/XTextField.hpp
+    # Needed for UnoImplPtr template
+    - unobaseclass.hxx
+    sw/source/core/inc/unorefmark.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/text/XTextContent.hpp
+    # Needed for UnoImplPtr template
+    - unobaseclass.hxx
+    sw/source/core/inc/unoport.hxx:
+    # Base class needs complete type
+    - com/sun/star/text/XTextRange.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XEnumeration.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/container/XContentEnumerationAccess.hpp
+    - com/sun/star/beans/XMultiPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/beans/XTolerantMultiPropertySet.hpp
+    sw/source/core/inc/unotextmarkup.hxx:
+    # Base class needs complete type
+    - com/sun/star/text/XTextMarkup.hpp
+    - com/sun/star/text/XMultiTextMarkup.hpp
+    # Needed for UnoImplPtr template
+    - unobaseclass.hxx
+    sw/source/core/inc/unosection.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/beans/XMultiPropertySet.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/text/XTextSection.hpp
+    # Needed for UnoImplPtr template
+    - unobaseclass.hxx
     sw/qa/extras/odfexport/odfexport.cxx:
     # Needed for getProperty template
     - com/sun/star/graphic/XGraphic.hpp

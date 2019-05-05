@@ -32,7 +32,6 @@
 #include <unocoll.hxx>
 #include <fldbas.hxx>
 
-class SwFieldType;
 class SwDoc;
 class SwFormatField;
 class SwSetExpField;
