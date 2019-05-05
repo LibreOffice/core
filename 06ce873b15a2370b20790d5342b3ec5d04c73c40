@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_95f22106",
+        "filename": "include/vcl/animate/Animation.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-05-05T11:27:47Z",
+      "side": 1,
+      "message": "Don\u0027t add it to the header if it\u0027s not used outside the implementation source.",
+      "revId": "06ce873b15a2370b20790d5342b3ec5d04c73c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_55dc9973",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-05-05T11:27:47Z",
+      "side": 1,
+      "message": "In this cases we just use constexpr function in a anonymous namespace.\n\nsomething like:\nnamespace {\nconstexpr sal_uLong constMinTimeout \u003d 2;\n}",
+      "revId": "06ce873b15a2370b20790d5342b3ec5d04c73c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_b5f71df6",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-05-05T11:27:47Z",
+      "side": 1,
+      "message": "Why not use sal_uLong so you don\u0027t need to cast it?",
+      "range": {
+        "startLine": 273,
+        "startChar": 7,
+        "endLine": 273,
+        "endChar": 15
+      },
+      "revId": "06ce873b15a2370b20790d5342b3ec5d04c73c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
