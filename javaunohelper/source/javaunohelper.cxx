@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <osl/module.hxx>
-#include <osl/thread.h>
 
 #include <uno/environment.hxx>
 #include <uno/lbnames.h>
@@ -28,13 +27,10 @@
 
 #include <cppuhelper/factory.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include <jni.h>
-#include <jvmaccess/virtualmachine.hxx>
 #include <jvmaccess/unovirtualmachine.hxx>
 
 #include "juhx-export-functions.hxx"

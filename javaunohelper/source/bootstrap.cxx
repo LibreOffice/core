@@ -22,7 +22,6 @@
 
 #include <osl/diagnose.h>
 
-#include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/string.hxx>
 
@@ -33,10 +32,9 @@
 #include <cppuhelper/bootstrap.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <jni.h>
-#include <jvmaccess/virtualmachine.hxx>
 #include <jvmaccess/unovirtualmachine.hxx>
 #include <tools/diagnose_ex.h>
 
