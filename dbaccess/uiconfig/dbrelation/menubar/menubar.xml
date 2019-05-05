@@ -59,7 +59,7 @@
       <menu:menu menu:id=".uno:MacrosMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:MacroRecorder"/>
-          <menu:menuitem menu:id=".uno:RunMacro"/>22222
+          <menu:menuitem menu:id=".uno:RunMacro"/>
           <menu:menuitem menu:id=".uno:BasicIDEAppear"/>
           <menu:menuitem menu:id=".uno:ScriptOrganizer"/>
           <menu:menuseparator/>
