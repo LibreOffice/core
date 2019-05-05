@@ -248,7 +248,7 @@ void SmToolBoxWindow::StateChanged( StateChangedType nStateChange )
         AdjustPosSize( bSetPosition );
         bSetPosition = sal_False;
     }
-    //... otherwise the base class will remember the last position of the window
+    // ... otherwise the base class will remember the last position of the window
     SfxFloatingWindow::StateChanged( nStateChange );
 }
 
@@ -256,7 +256,7 @@ void SmToolBoxWindow::StateChanged( StateChangedType nStateChange )
 void SmToolBoxWindow::AdjustPosSize( sal_Bool bSetPos )
 {
     Size aCatSize( aToolBoxCat.CalcWindowSizePixel( 2 ) );
-    Size aCmdSize( pToolBoxCmd->CalcWindowSizePixel( 4 /* see nLines in SetCategory*/ ) );
+    Size aCmdSize( pToolBoxCmd->CalcWindowSizePixel( 4 /* see nLines in SetCategory */ ) );
     DBG_ASSERT( aCatSize.Width() == aCmdSize.Width(), "width mismatch" );
 
     // catalog settings
@@ -325,13 +325,13 @@ void SmToolBoxWindow::SetCategory(sal_uInt16 nCategoryRID)
     switch (nCategoryRID)
     {
         case RID_UNBINOPS_CAT :     nLines = 4; break;
-        case RID_RELATIONS_CAT:     nLines = 4; break;
-        case RID_SETOPERATIONS_CAT: nLines = 4; break;
-        case RID_FUNCTIONS_CAT:     nLines = 4; break;
+        case RID_RELATIONS_CAT:     nLines = 5; break;
+        case RID_SETOPERATIONS_CAT: nLines = 5; break;
+        case RID_FUNCTIONS_CAT:     nLines = 5; break;
         case RID_OPERATORS_CAT:     nLines = 3; break;
-        case RID_ATTRIBUTES_CAT:    nLines = 4; break;
+        case RID_ATTRIBUTES_CAT:    nLines = 5; break;
         case RID_MISC_CAT:          nLines = 4; break;
-        case RID_BRACKETS_CAT:      nLines = 4; break;
+        case RID_BRACKETS_CAT:      nLines = 5; break;
         case RID_FORMAT_CAT:        nLines = 3; break;
         default:
             // nothing to be done
@@ -396,5 +396,4 @@ SmToolBoxWrapper::SmToolBoxWrapper(Window *pParentWindow,
     pWindow = new SmToolBoxWindow(pBindings, this, pParentWindow);
     ((SfxFloatingWindow *)pWindow)->Initialize(pInfo);
 }
-
 
