@@ -1088,9 +1088,10 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_GRAPHIC_SELECTION:
             case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
             case LOK_CALLBACK_INVALIDATE_TILES:
-                SAL_INFO("lok", "Removing dups of [" << type << "]: [" << payload << "].");
-                removeAll([type] (const queue_type::value_type& elem) { return (elem.Type == type); });
-            break;
+                if (removeAll(
+                        [type](const queue_type::value_type& elem) { return (elem.Type == type); }))
+                    SAL_INFO("lok", "Removed dups of [" << type << "]: [" << payload << "].");
+                break;
         }
     }
     else
@@ -1112,7 +1113,9 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
             case LOK_CALLBACK_RULER_UPDATE:
             {
-                removeAll([type] (const queue_type::value_type& elem) { return (elem.Type == type); });
+                if (removeAll(
+                        [type](const queue_type::value_type& elem) { return (elem.Type == type); }))
+                    SAL_INFO("lok", "Removed dups of [" << type << "]: [" << payload << "].");
             }
             break;
 
@@ -1489,10 +1492,16 @@ void CallbackFlushHandler::Invoke()
     }
 }
 
-void CallbackFlushHandler::removeAll(const std::function<bool (const CallbackFlushHandler::queue_type::value_type&)>& rTestFunc)
+bool CallbackFlushHandler::removeAll(const std::function<bool (const CallbackFlushHandler::queue_type::value_type&)>& rTestFunc)
 {
     auto newEnd = std::remove_if(m_queue.begin(), m_queue.end(), rTestFunc);
-    m_queue.erase(newEnd, m_queue.end());
+    if (newEnd != m_queue.end())
+    {
+        m_queue.erase(newEnd, m_queue.end());
+        return true;
+    }
+
+    return false;
 }
 
 void CallbackFlushHandler::addViewStates(int viewId)
