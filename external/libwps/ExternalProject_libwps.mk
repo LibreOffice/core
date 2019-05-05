@@ -25,6 +25,20 @@ libwps_CPPFLAGS+=-D_GLIBCXX_DEBUG
 endif
 endif
 
+libwps_CXXFLAGS=$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))
+
+libwps_LDFLAGS=
+ifeq ($(OS),LINUX)
+ifeq ($(SYSTEM_REVENGE),)
+libwps_LDFLAGS+=-Wl,-z,origin -Wl,-rpath,\$$$$ORIGIN
+endif
+endif
+
+ifeq ($(ENABLE_GDB_INDEX),TRUE)
+libwps_LDFLAGS+=-Wl,--gdb-index
+libwps_CXXFLAGS+=-ggnu-pubnames
+endif
+
 $(call gb_ExternalProject_get_state_target,libwps,build) :
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
@@ -41,11 +55,9 @@ $(call gb_ExternalProject_get_state_target,libwps,build) :
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
+			$(if $(libwps_CXXFLAGS),CXXFLAGS='$(libwps_CXXFLAGS)') \
 			$(if $(libwps_CPPFLAGS),CPPFLAGS='$(libwps_CPPFLAGS)') \
-			$(if $(filter LINUX,$(OS)),$(if $(SYSTEM_REVENGE),, \
-				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
-					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN')) \
+			$(if $(libwps_LDFLAGS),LDFLAGS='$(libwps_LDFLAGS)') \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		&& $(MAKE) \

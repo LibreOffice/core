@@ -82,6 +82,11 @@ ifeq ($(OS),LINUX)
 liborcus_LDFLAGS+=-Wl,-z,origin -Wl,-rpath,\$$$$ORIGIN
 endif
 
+ifeq ($(ENABLE_GDB_INDEX),TRUE)
+liborcus_LDFLAGS+=-Wl,--gdb-index
+liborcus_CXXFLAGS+=-ggnu-pubnames
+endif
+
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	$(call gb_ExternalProject_run,build,\
 		$(if $(liborcus_LIBS),LIBS='$(liborcus_LIBS)') \
