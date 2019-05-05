@@ -20,6 +20,7 @@
  *************************************************************/
 
 
+
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #define _COMPHELPER_EXTRACT_HXX_
 
@@ -34,11 +35,11 @@ namespace cppu
 {
 
 /**
- * Sets enum from int32 value.  This function does NOT check for valid enum values!
+ * Sets enum from int32 value. This function does NOT check for valid enum values!
  *<BR>
  * @param nEnum         int32 enum value
  * @param rType         enum type
- * @return enum or emoty any.
+ * @return enum or empty any.
  */
 inline ::com::sun::star::uno::Any SAL_CALL int2enum(
     sal_Int32 nEnum, const ::com::sun::star::uno::Type & rType )
@@ -105,7 +106,7 @@ inline ::com::sun::star::uno::Any SAL_CALL enum2any( E eEnum )
 }
 
 /**
- * Extracts interface from an any.  If given any does not hold the demanded interface,
+ * Extracts interface from an any. If given any does not hold the demanded interface,
  * it will be queried for it.
  * If no interface is available, the out ref will be cleared.
  *<BR>
