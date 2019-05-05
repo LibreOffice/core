@@ -976,22 +976,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
 
     CallbackData aCallbackData(type, (data ? data : "(nil)"));
     const std::string& payload = aCallbackData.PayloadString;
-    SAL_INFO("lok", "Queue: " << type << " : " << payload);
-
-#ifdef DBG_UTIL
-    {
-        // Dump the queue state and validate cached data.
-        int i = 1;
-        std::ostringstream oss;
-        oss << '\n';
-        for (const CallbackData& c : m_queue)
-            oss << i++ << ": [" << c.Type << "] [" << c.PayloadString << "].\n";
-        const std::string aQueued = oss.str();
-        SAL_INFO("lok", "Current Queue: " << (aQueued.empty() ? "Empty" : aQueued));
-        for (const CallbackData& c : m_queue)
-            assert(c.validate());
-    }
-#endif
+    SAL_INFO("lok", "Queue: [" << type << "]: [" << payload << "] on " << m_queue.size() << " entries.");
 
     bool bIsChartActive = false;
     if (type == LOK_CALLBACK_GRAPHIC_SELECTION)
@@ -1420,6 +1405,21 @@ void CallbackFlushHandler::queue(const int type, const char* data)
     m_queue.emplace_back(aCallbackData);
     SAL_INFO("lok", "Queued #" << (m_queue.size() - 1) <<
              " [" << type << "]: [" << payload << "] to have " << m_queue.size() << " entries.");
+
+#ifdef DBG_UTIL
+    {
+        // Dump the queue state and validate cached data.
+        int i = 1;
+        std::ostringstream oss;
+        oss << '\n';
+        for (const CallbackData& c : m_queue)
+            oss << i++ << ": [" << c.Type << "] [" << c.PayloadString << "].\n";
+        const std::string aQueued = oss.str();
+        SAL_INFO("lok", "Current Queue: " << (aQueued.empty() ? "Empty" : aQueued));
+        for (const CallbackData& c : m_queue)
+            assert(c.validate());
+    }
+#endif
 
     lock.unlock();
     if (!IsActive())
