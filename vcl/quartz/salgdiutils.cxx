@@ -46,7 +46,7 @@ void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, lon
     mbPrinter = true;
     mbVirDev = false;
 
-    mrContext = xContext;
+    maContextHolder.set(xContext);
     mnRealDPIX = nDPIX;
     mnRealDPIY = nDPIY;
 
@@ -57,11 +57,11 @@ void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, lon
         mxClipPath = nullptr;
     }
 
-    if( mrContext )
+    if (maContextHolder.isSet())
     {
-        CGContextSetFillColorSpace( mrContext, GetSalData()->mxRGBSpace );
-        CGContextSetStrokeColorSpace( mrContext, GetSalData()->mxRGBSpace );
-        CGContextSaveGState( mrContext );
+        CGContextSetFillColorSpace( maContextHolder.get(), GetSalData()->mxRGBSpace );
+        CGContextSetStrokeColorSpace( maContextHolder.get(), GetSalData()->mxRGBSpace );
+        CGContextSaveGState( maContextHolder.get() );
         SetState();
     }
 }
@@ -69,16 +69,16 @@ void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, lon
 void AquaSalGraphics::InvalidateContext()
 {
     UnsetState();
-    mrContext = nullptr;
+    maContextHolder.set(nullptr);
 }
 
 void AquaSalGraphics::UnsetState()
 {
-    if( mrContext )
+    if (maContextHolder.isSet())
     {
-        SAL_INFO( "vcl.cg", "CGContextRestoreGState(" << mrContext << ")" );
-        CGContextRestoreGState( mrContext );
-        mrContext = nullptr;
+        SAL_INFO( "vcl.cg", "CGContextRestoreGState(" << maContextHolder.get() << ")" );
+        CGContextRestoreGState( maContextHolder.get() );
+        maContextHolder.set(nullptr);
     }
     if( mxClipPath )
     {
@@ -109,16 +109,16 @@ bool AquaSalGraphics::CheckContext()
             // prepare to release the corresponding resources
             if (mxLayer)
                 rReleaseLayer = mxLayer;
-            else if (mrContext)
+            else if (maContextHolder.isSet())
             {
-                SAL_INFO("vcl.cg", "CGContextRelease(" << mrContext << ")");
-                CGContextRelease(mrContext);
+                SAL_INFO("vcl.cg", "CGContextRelease(" << maContextHolder.get() << ")");
+                CGContextRelease(maContextHolder.get());
             }
-            mrContext = nullptr;
+            maContextHolder.set(nullptr);
             mxLayer = nullptr;
         }
 
-        if (!mrContext)
+        if (!maContextHolder.isSet())
         {
             if (mpFrame->getNSWindow())
             {
@@ -129,17 +129,17 @@ bool AquaSalGraphics::CheckContext()
                 SAL_INFO("vcl.cg", "CGLayerCreateWithContext(" << xCGContext << "," << aLayerSize << ",NULL) = " << mxLayer);
                 if (mxLayer)
                 {
-                    mrContext = CGLayerGetContext( mxLayer );
-                    SAL_INFO( "vcl.cg", "CGLayerGetContext(" << mxLayer << ") = " << mrContext );
+                    maContextHolder.set(CGLayerGetContext(mxLayer));
+                    SAL_INFO( "vcl.cg", "CGLayerGetContext(" << mxLayer << ") = " << maContextHolder.get() );
                 }
 
                 if (rReleaseLayer)
                 {
                     // copy original layer to resized layer
-                    if (mrContext)
+                    if (maContextHolder.isSet())
                     {
-                        SAL_INFO("vcl.cg", "CGContextDrawLayerAtPoint(" << mrContext << "," << CGPointZero << "," << rReleaseLayer << ")");
-                        CGContextDrawLayerAtPoint(mrContext, CGPointZero, rReleaseLayer);
+                        SAL_INFO("vcl.cg", "CGContextDrawLayerAtPoint(" << maContextHolder.get() << "," << CGPointZero << "," << rReleaseLayer << ")");
+                        CGContextDrawLayerAtPoint(maContextHolder.get(), CGPointZero, rReleaseLayer);
                     }
                     SAL_INFO("vcl.cg", "CGLayerRelease(" << rReleaseLayer << ")");
                     CGLayerRelease(rReleaseLayer);
@@ -152,40 +152,40 @@ bool AquaSalGraphics::CheckContext()
                 const int nBytesPerRow = (nBitmapDepth * mnWidth) / 8;
                 void* pRawData = std::malloc(nBytesPerRow * mnHeight);
                 const int nFlags = kCGImageAlphaNoneSkipFirst;
-                mrContext = CGBitmapContextCreate(pRawData, mnWidth, mnHeight, 8, nBytesPerRow,
-                                                  GetSalData()->mxRGBSpace, nFlags);
+                maContextHolder.set(CGBitmapContextCreate(pRawData, mnWidth, mnHeight, 8, nBytesPerRow,
+                                                  GetSalData()->mxRGBSpace, nFlags));
                 SAL_INFO("vcl.cg", "CGBitmapContextCreate(" << mnWidth << "x" << mnHeight
-                                   << "x" << nBitmapDepth << ") = " << mrContext);
+                                   << "x" << nBitmapDepth << ") = " << maContextHolder.get());
             }
 
-            if (mrContext)
+            if (maContextHolder.isSet())
             {
-                CGContextTranslateCTM(mrContext, 0, nHeight);
-                CGContextScaleCTM(mrContext, 1.0, -1.0);
-                CGContextSetFillColorSpace(mrContext, GetSalData()->mxRGBSpace);
-                CGContextSetStrokeColorSpace(mrContext, GetSalData()->mxRGBSpace);
-                SAL_INFO("vcl.cg", "CGContextSaveGState(" << mrContext << ") " << ++mnContextStackDepth);
-                CGContextSaveGState(mrContext);
+                CGContextTranslateCTM(maContextHolder.get(), 0, nHeight);
+                CGContextScaleCTM(maContextHolder.get(), 1.0, -1.0);
+                CGContextSetFillColorSpace(maContextHolder.get(), GetSalData()->mxRGBSpace);
+                CGContextSetStrokeColorSpace(maContextHolder.get(), GetSalData()->mxRGBSpace);
+                SAL_INFO("vcl.cg", "CGContextSaveGState(" << maContextHolder.get() << ") " << ++mnContextStackDepth);
+                CGContextSaveGState(maContextHolder.get());
                 SetState();
 
                 // re-enable XOR emulation for the new context
                 if (mpXorEmulation)
-                    mpXorEmulation->SetTarget(mnWidth, mnHeight, mnBitmapDepth, mrContext, mxLayer);
+                    mpXorEmulation->SetTarget(mnWidth, mnHeight, mnBitmapDepth, maContextHolder.get(), mxLayer);
             }
         }
     }
 
-    SAL_WARN_IF( !mrContext && !mbPrinter, "vcl", "<<<WARNING>>> AquaSalGraphics::CheckContext() FAILED!!!!" );
-    return (mrContext != nullptr);
+    SAL_WARN_IF( !maContextHolder.get() && !mbPrinter, "vcl", "<<<WARNING>>> AquaSalGraphics::CheckContext() FAILED!!!!" );
+    return maContextHolder.isSet();
 }
 
 CGContextRef AquaSalGraphics::GetContext()
 {
-    if(!mrContext)
+    if (!maContextHolder.isSet())
     {
         CheckContext();
     }
-    return mrContext;
+    return maContextHolder.get();
 }
 
 /**
