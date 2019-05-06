@@ -304,8 +304,8 @@ const unsigned char* FreetypeFontInfo::GetTable( const char* pTag, sal_uLong* pL
 
 void FreetypeFontInfo::AnnounceFont( PhysicalFontCollection* pFontCollection )
 {
-    FreetypeFontFace* pFD = new FreetypeFontFace( this, maDevFontAttributes );
-    pFontCollection->Add( pFD );
+    rtl::Reference<FreetypeFontFace> pFD(new FreetypeFontFace( this, maDevFontAttributes ));
+    pFontCollection->Add( pFD.get() );
 }
 
 void GlyphCache::InitFreetype()
