@@ -18,6 +18,7 @@
 class MenuItemList;
 class QAction;
 class QActionGroup;
+class QPushButton;
 class QMenu;
 class QMenuBar;
 class Qt5MenuItem;
@@ -34,6 +35,8 @@ private:
     bool mbMenuBar;
     QMenuBar* mpQMenuBar;
     QMenu* mpQMenu;
+    QPushButton* mpCloseButton;
+    QMetaObject::Connection maCloseButtonConnection;
 
     void DoFullMenuUpdate(Menu* pMenuBar);
     static void NativeItemText(OUString& rItemText);

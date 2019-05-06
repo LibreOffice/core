@@ -30,6 +30,7 @@ Qt5Menu::Qt5Menu(bool bMenuBar)
     , mbMenuBar(bMenuBar)
     , mpQMenuBar(nullptr)
     , mpQMenu(nullptr)
+    , mpCloseButton(nullptr)
 {
 }
 
@@ -411,7 +412,17 @@ void Qt5Menu::SetFrame(const SalFrame* pFrame)
     {
         mpQMenuBar = pMainWindow->menuBar();
         if (mpQMenuBar)
+        {
             mpQMenuBar->clear();
+            QPushButton* pButton
+                = static_cast<QPushButton*>(mpQMenuBar->cornerWidget(Qt::TopRightCorner));
+            if (pButton && ((mpCloseButton != pButton) || !maCloseButtonConnection))
+            {
+                maCloseButtonConnection
+                    = connect(pButton, &QPushButton::clicked, this, &Qt5Menu::slotCloseDocument);
+                mpCloseButton = pButton;
+            }
+        }
 
         mpQMenu = nullptr;
 
@@ -622,19 +633,13 @@ void Qt5Menu::ShowCloseButton(bool bShow)
         pButton->setFlat(true);
         pButton->setToolTip(toQString(VclResId(SV_HELPTEXT_CLOSEDOCUMENT)));
         mpQMenuBar->setCornerWidget(pButton, Qt::TopRightCorner);
+        maCloseButtonConnection
+            = connect(pButton, &QPushButton::clicked, this, &Qt5Menu::slotCloseDocument);
+        mpCloseButton = pButton;
     }
 
     if (bShow)
-    {
-        // The mpQMenuBar is used in multiple Qt5Menu. If one Qt5Menu is deleted, the clicked button
-        // connection is severed. The reconnect could be handled in SetFrame, but ShowCloseButton is
-        // called so seldomly, that I decided to keep the reconnect in this function in one place. As
-        // we don't know the connection state, we unconditionally remove it, so slotCloseDocument
-        // isn't called multiple times on click.
-        pButton->disconnect(SIGNAL(clicked(bool)));
-        connect(pButton, &QPushButton::clicked, this, &Qt5Menu::slotCloseDocument);
         pButton->show();
-    }
     else
         pButton->hide();
 }
