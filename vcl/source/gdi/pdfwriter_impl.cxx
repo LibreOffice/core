@@ -58,6 +58,7 @@
 #include <svl/cryptosign.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/image.hxx>
 #include <vcl/lineinfo.hxx>
@@ -10000,7 +10001,7 @@ void PDFWriterImpl::moveClipRegion( sal_Int32 nX, sal_Int32 nY )
 void PDFWriterImpl::intersectClipRegion( const tools::Rectangle& rRect )
 {
     basegfx::B2DPolyPolygon aRect( basegfx::utils::createPolygonFromRect(
-        basegfx::B2DRectangle( rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() ) ) );
+                                    vcl::unotools::b2DRectangleFromRectangle(rRect) ) );
     intersectClipRegion( aRect );
 }
 

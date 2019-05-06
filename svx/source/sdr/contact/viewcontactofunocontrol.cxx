@@ -30,6 +30,7 @@
 
 #include <svx/sdrpaintwindow.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/canvastools.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
@@ -94,10 +95,7 @@ namespace sdr { namespace contact {
         // create range. Use model data directly, not getBoundRect()/getSnapRect; these will use
         // the primitive data themselves in the long run. Use SdrUnoObj's (which is a SdrRectObj)
         // call to GetGeoRect() to access SdrTextObj::aRect directly and without executing anything
-        const tools::Rectangle aRectangle(GetSdrUnoObj().GetGeoRect());
-        const basegfx::B2DRange aRange(
-            aRectangle.Left(), aRectangle.Top(),
-            aRectangle.Right(), aRectangle.Bottom());
+        const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(GetSdrUnoObj().GetGeoRect());
 
         // create object transform
         basegfx::B2DHomMatrix aTransform;

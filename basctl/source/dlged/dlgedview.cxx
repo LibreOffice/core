@@ -23,6 +23,7 @@
 
 #include <svx/svxids.hrc>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/canvastools.hxx>
 
 #include <basidesh.hxx>
 #include <iderdll.hxx>
@@ -150,9 +151,7 @@ static SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, s
 
             if(!aOuterRectangle.IsEmpty())
             {
-                basegfx::B2DRange aOuterRange(
-                    aOuterRectangle.Left(), aOuterRectangle.Top(),
-                    aOuterRectangle.Right(), aOuterRectangle.Bottom());
+                basegfx::B2DRange aOuterRange = vcl::unotools::b2DRectangleFromRectangle(aOuterRectangle);
 
                 if(nTol)
                 {

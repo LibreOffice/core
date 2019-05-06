@@ -24,6 +24,7 @@
 #include <tools/fract.hxx>
 #include <tools/poly.hxx>
 #include <unotools/resmgr.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metaact.hxx>
@@ -1071,8 +1072,8 @@ void PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& 
     aCtx.m_nJPEGQuality             = mnQuality;
 
 
-    basegfx::B2DRectangle aB2DRect( aPageRect.Left(), aPageRect.Top(), aPageRect.Right(), aPageRect.Bottom() );
-    rWriter.SetClipRegion( basegfx::B2DPolyPolygon( basegfx::utils::createPolygonFromRect( aB2DRect ) ) );
+    rWriter.SetClipRegion( basegfx::B2DPolyPolygon(
+        basegfx::utils::createPolygonFromRect( vcl::unotools::b2DRectangleFromRectangle(aPageRect) ) ) );
 
     rWriter.PlayMetafile( aMtf, aCtx, &rPDFExtOutDevData );
 

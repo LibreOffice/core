@@ -2340,7 +2340,7 @@ basegfx::B2DPolyPolygon SdrTableObj::TakeCreatePoly(const SdrDragStat& rDrag) co
     aRect1.Justify();
 
     basegfx::B2DPolyPolygon aRetval;
-    const basegfx::B2DRange aRange(aRect1.Left(), aRect1.Top(), aRect1.Right(), aRect1.Bottom());
+    const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(aRect1);
     aRetval.append(basegfx::utils::createPolygonFromRect(aRange));
     return aRetval;
 }

@@ -24,6 +24,7 @@
 #include <set>
 #include <algorithm>
 #include <tools/debug.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <svx/sdr/primitive2d/sdrframeborderprimitive2d.hxx>
@@ -872,7 +873,7 @@ basegfx::B2DRange Array::GetCellRange( size_t nCol, size_t nRow, bool bExpandMer
             aRect.AdjustBottom(rCell.mnAddBottom );
         }
 
-        return basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+        return vcl::unotools::b2DRectangleFromRectangle(aRect);
     }
     else
     {
@@ -880,7 +881,7 @@ basegfx::B2DRange Array::GetCellRange( size_t nCol, size_t nRow, bool bExpandMer
         const Size aSize( GetColWidth( nCol, nCol ) + 1, GetRowHeight( nRow, nRow ) + 1 );
         const tools::Rectangle aRect(aPoint, aSize);
 
-        return basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+        return vcl::unotools::b2DRectangleFromRectangle(aRect);
     }
 }
 

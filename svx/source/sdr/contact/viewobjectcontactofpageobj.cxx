@@ -32,6 +32,7 @@
 #include <svx/unoapi.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <vcl/canvastools.hxx>
 
 using namespace com::sun::star;
 
@@ -192,9 +193,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::crea
     basegfx::B2DHomMatrix aPageObjectTransform;
     {
         const tools::Rectangle aPageObjectModelData(rPageObject.GetLastBoundRect());
-        const basegfx::B2DRange aPageObjectBound(
-            aPageObjectModelData.Left(), aPageObjectModelData.Top(),
-            aPageObjectModelData.Right(), aPageObjectModelData.Bottom());
+        const basegfx::B2DRange aPageObjectBound = vcl::unotools::b2DRectangleFromRectangle(aPageObjectModelData);
 
         aPageObjectTransform.set(0, 0, aPageObjectBound.getWidth());
         aPageObjectTransform.set(1, 1, aPageObjectBound.getHeight());

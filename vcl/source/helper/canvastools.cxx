@@ -375,8 +375,14 @@ namespace vcl
 
         basegfx::B2IRectangle b2IRectangleFromRectangle(tools::Rectangle const& rRect)
         {
-            return basegfx::B2IRectangle(rRect.Left(), rRect.Top(),
-                                         rRect.Right(), rRect.Bottom());
+            // although B2IRange internally has separate height/width emptiness, it doesn't
+            // expose any API to let us set them separately, so just do the best we can.
+            if (rRect.IsWidthEmpty() && rRect.IsHeightEmpty())
+                return basegfx::B2IRange( basegfx::B2ITuple( rRect.Left(), rRect.Top() ) );
+            return basegfx::B2IRange( rRect.Left(),
+                                  rRect.Top(),
+                                  rRect.IsWidthEmpty() ? rRect.Left() : rRect.Right(),
+                                  rRect.IsHeightEmpty() ? rRect.Top() : rRect.Bottom() );
         }
 
         basegfx::B2DVector b2DSizeFromSize( const ::Size& rSize )
@@ -393,10 +399,14 @@ namespace vcl
 
         basegfx::B2DRange b2DRectangleFromRectangle( const ::tools::Rectangle& rRect )
         {
-            return basegfx::B2DRange( rRect.Left(),
-                                        rRect.Top(),
-                                        rRect.Right(),
-                                        rRect.Bottom() );
+            // although B2DRange internally has separate heigh/width emptiness, it doesn't
+            // expose any API to let us set them separately, so just do the best we can.
+            if (rRect.IsWidthEmpty() && rRect.IsHeightEmpty())
+                return basegfx::B2DRange( basegfx::B2DTuple( rRect.Left(), rRect.Top() ) );
+            return basegfx::B2DRectangle( rRect.Left(),
+                                  rRect.Top(),
+                                  rRect.IsWidthEmpty() ? rRect.Left() : rRect.Right(),
+                                  rRect.IsHeightEmpty() ? rRect.Top() : rRect.Bottom() );
         }
 
         geometry::IntegerSize2D integerSize2DFromSize( const Size& rSize )

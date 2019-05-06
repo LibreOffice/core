@@ -43,6 +43,7 @@
 #include <editeng/scriptspaceitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/itempool.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <tools/globname.hxx>
@@ -761,7 +762,7 @@ void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData&
                     aChange.translate(aCurrentCellRect.getX(), aCurrentCellRect.getY());
 
                     // create B2DRange and transform by prepared scale
-                    basegfx::B2DRange aNewRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+                    basegfx::B2DRange aNewRange = vcl::unotools::b2DRectangleFromRectangle(aRect);
 
                     aNewRange.transform(aChange);
 

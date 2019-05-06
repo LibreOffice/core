@@ -25,6 +25,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/unique_disposing_ptr.hxx>
 #include <tools/gen.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/font.hxx>
@@ -303,9 +304,7 @@ namespace drawinglayer
                 // #i104432#, #i102556# take empty results into account
                 if(!aRect.IsEmpty())
                 {
-                    return basegfx::B2DRange(
-                        aRect.Left(), aRect.Top(),
-                        aRect.Right(), aRect.Bottom());
+                    return vcl::unotools::b2DRectangleFromRectangle(aRect);
                 }
             }
 

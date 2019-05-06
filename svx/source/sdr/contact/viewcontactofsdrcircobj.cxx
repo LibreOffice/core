@@ -25,6 +25,7 @@
 #include <svl/itemset.hxx>
 #include <svx/sxciaitm.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <vcl/canvastools.hxx>
 
 
 namespace sdr
@@ -50,10 +51,7 @@ namespace sdr
                     false));
 
             // take unrotated snap rect (direct model data) for position and size
-            const tools::Rectangle aRectangle(GetCircObj().GetGeoRect());
-            const basegfx::B2DRange aObjectRange(
-                aRectangle.Left(), aRectangle.Top(),
-                aRectangle.Right(), aRectangle.Bottom() );
+            const basegfx::B2DRange aObjectRange = vcl::unotools::b2DRectangleFromRectangle(GetCircObj().GetGeoRect());
             const GeoStat& rGeoStat(GetCircObj().GetGeoStat());
 
             // fill object matrix

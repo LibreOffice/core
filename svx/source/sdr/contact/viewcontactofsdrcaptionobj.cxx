@@ -35,6 +35,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <vcl/canvastools.hxx>
 
 using namespace com::sun::star;
 
@@ -64,9 +65,7 @@ namespace sdr
 
             // take unrotated snap rect (direct model data) for position and size
             const tools::Rectangle aRectangle(rCaptionObj.GetGeoRect());
-            const ::basegfx::B2DRange aObjectRange(
-                aRectangle.Left(), aRectangle.Top(),
-                aRectangle.Right(), aRectangle.Bottom());
+            const ::basegfx::B2DRange aObjectRange = vcl::unotools::b2DRectangleFromRectangle(aRectangle);
             const GeoStat& rGeoStat(rCaptionObj.GetGeoStat());
 
             // fill object matrix

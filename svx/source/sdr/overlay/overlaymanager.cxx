@@ -21,6 +21,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <tools/gen.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
@@ -241,9 +242,7 @@ namespace sdr
 
                 // paint members
                 const tools::Rectangle aRegionBoundRect(rRegion.GetBoundRect());
-                const basegfx::B2DRange aRegionRange(
-                    aRegionBoundRect.Left(), aRegionBoundRect.Top(),
-                    aRegionBoundRect.Right(), aRegionBoundRect.Bottom());
+                const basegfx::B2DRange aRegionRange = vcl::unotools::b2DRectangleFromRectangle(aRegionBoundRect);
 
                 OutputDevice& rTarget = pPreRenderDevice ? *pPreRenderDevice : getOutputDevice();
                 ImpDrawMembers(aRegionRange, rTarget);

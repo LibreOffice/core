@@ -22,6 +22,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <config_features.h>
@@ -1102,14 +1103,12 @@ bool OutputDevice::TransformAndReduceBitmapExToTargetRange(
 
     if(IsClipRegion())
     {
-        const tools::Rectangle aRegionRectangle(GetActiveClipRegion().GetBoundRect());
+        tools::Rectangle aRegionRectangle(GetActiveClipRegion().GetBoundRect());
 
-        aOutPixel.intersect( // caution! Range from rectangle, one too much (!)
-            basegfx::B2DRange(
-                aRegionRectangle.Left(),
-                aRegionRectangle.Top(),
-                aRegionRectangle.Right() + 1,
-                aRegionRectangle.Bottom() + 1));
+        // caution! Range from rectangle, one too much (!)
+        aRegionRectangle.AdjustRight(-1);
+        aRegionRectangle.AdjustBottom(-1);
+        aOutPixel.intersect( vcl::unotools::b2DRectangleFromRectangle(aRegionRectangle) );
     }
 
     if(aOutPixel.isEmpty())

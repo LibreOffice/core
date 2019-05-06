@@ -40,6 +40,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/framelink.hxx>
 #include <svx/framelinkarray.hxx>
+#include <vcl/canvastools.hxx>
 
 #include <cell.hxx>
 #include "tablelayouter.hxx"
@@ -223,10 +224,7 @@ namespace sdr
 
                     // create range using the model data directly. This is in SdrTextObj::aRect which i will access using
                     // GetGeoRect() to not trigger any calculations. It's the unrotated geometry.
-                    const tools::Rectangle& rObjectRectangle(rTableObj.GetGeoRect());
-                    const basegfx::B2DRange aObjectRange(
-                        rObjectRectangle.Left(), rObjectRectangle.Top(),
-                        rObjectRectangle.Right(), rObjectRectangle.Bottom());
+                    const basegfx::B2DRange aObjectRange = vcl::unotools::b2DRectangleFromRectangle(rTableObj.GetGeoRect());
 
                     // To create the CellBorderPrimitives, use the tolling from svx::frame::Array
                     // which is capable of creating the needed visualization. Fill it during the
@@ -392,10 +390,7 @@ namespace sdr
             else
             {
                 // take unrotated snap rect (direct model data) for position and size
-                const tools::Rectangle& rRectangle = rTableObj.GetGeoRect();
-                const basegfx::B2DRange aObjectRange(
-                    rRectangle.Left(), rRectangle.Top(),
-                    rRectangle.Right(), rRectangle.Bottom());
+                const basegfx::B2DRange aObjectRange = vcl::unotools::b2DRectangleFromRectangle(rTableObj.GetGeoRect());
 
                 // create object matrix
                 const GeoStat& rGeoStat(rTableObj.GetGeoStat());

@@ -46,6 +46,7 @@
 #include <sal/log.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/outdev.hxx>
@@ -1016,9 +1017,7 @@ namespace wmfemfhelper
         // use wallpaper rect if set
         if(rWallpaper.IsRect() && !rWallpaper.GetRect().IsEmpty())
         {
-            aWallpaperRange = basegfx::B2DRange(
-                rWallpaper.GetRect().Left(), rWallpaper.GetRect().Top(),
-                rWallpaper.GetRect().Right(), rWallpaper.GetRect().Bottom());
+            aWallpaperRange = vcl::unotools::b2DRectangleFromRectangle(rWallpaper.GetRect());
         }
 
         drawinglayer::primitive2d::BasePrimitive2D* pBitmapWallpaperFill =
@@ -1611,7 +1610,7 @@ namespace wmfemfhelper
 
                         if(!rRectangle.IsEmpty())
                         {
-                            const basegfx::B2DRange aRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
+                            const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(rRectangle);
 
                             if(!aRange.isEmpty())
                             {
@@ -1638,7 +1637,7 @@ namespace wmfemfhelper
 
                         if(!rRectangle.IsEmpty())
                         {
-                            const basegfx::B2DRange aRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
+                            const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(rRectangle);
 
                             if(!aRange.isEmpty())
                             {
@@ -1677,7 +1676,7 @@ namespace wmfemfhelper
 
                         if(!rRectangle.IsEmpty())
                         {
-                            const basegfx::B2DRange aRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
+                            const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(rRectangle);
 
                             if(!aRange.isEmpty())
                             {
@@ -2118,7 +2117,7 @@ namespace wmfemfhelper
 
                     if(!rRectangle.IsEmpty())
                     {
-                        basegfx::B2DRange aRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
+                        basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(rRectangle);
 
                         if(!aRange.isEmpty())
                         {
@@ -2210,9 +2209,7 @@ namespace wmfemfhelper
                     {
                         const Wallpaper& rWallpaper = pA->GetWallpaper();
                         const WallpaperStyle eWallpaperStyle(rWallpaper.GetStyle());
-                        basegfx::B2DRange aWallpaperRange(
-                            aWallpaperRectangle.Left(), aWallpaperRectangle.Top(),
-                            aWallpaperRectangle.Right(), aWallpaperRectangle.Bottom());
+                        basegfx::B2DRange aWallpaperRange = vcl::unotools::b2DRectangleFromRectangle(aWallpaperRectangle);
 
                         if(WallpaperStyle::NONE != eWallpaperStyle)
                         {
@@ -2290,9 +2287,7 @@ namespace wmfemfhelper
                     else
                     {
                         // create transformed ClipRange
-                        basegfx::B2DRange aClipRange(
-                            rRectangle.Left(), rRectangle.Top(),
-                            rRectangle.Right(), rRectangle.Bottom());
+                        basegfx::B2DRange aClipRange = vcl::unotools::b2DRectangleFromRectangle(rRectangle);
 
                         aClipRange.transform(rPropertyHolders.Current().getTransformation());
 
