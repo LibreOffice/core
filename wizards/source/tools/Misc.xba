@@ -841,36 +841,61 @@ End Function
 
 &apos; Sub that fixes various issues in tables imported from DOC/DOCX
 Sub FixTableProperties
-    sumTables = 0
-    sumSplit = 0
-    sumRelativeWidth = 0
-    sumRows = 0
-    oTables = ThisComponent.TextTables
-    For i = 0 To oTables.getCount() - 1
-        oTable = oTables(i)
-        sumTables = sumTables + 1
-        If oTable.getPropertyValue(&quot;Split&quot;) = false Then
-            sumSplit = sumSplit + 1
-            oTable.setPropertyValue(&quot;Split&quot;, true)
-        End If
-        If oTable.getPropertyValue(&quot;HoriOrient&quot;) &lt;&gt; 6 And _
-           oTable.getPropertyValue(&quot;IsWidthRelative&quot;) = false Then
-            sumRelativeWidth = sumRelativeWidth + 1
-            oTable.setPropertyValue(&quot;RelativeWidth&quot;, 100)
-        End If
-        For j = 0 To oTable.getRows.getCount - 1
-            oRow = oTable.getRows.getByIndex(j)
-            If oRow.getPropertyValue(&quot;IsSplitAllowed&quot;) = false Then
-                sumRows = sumRows + 1
-                oRow.setPropertyValue(&quot;IsSplitAllowed&quot;, true)
-            End If
-        Next
-    Next
+	sumTables = 0
+	sumSplit = 0
+	sumRelativeWidth = 0
+	sumRows = 0
+	sumPara = 0
+	oTables = ThisComponent.TextTables
+	For i = 0 To oTables.getCount() - 1
+		oTable = oTables(i)
+		sumTables = sumTables + 1
+		If oTable.getPropertyValue(&quot;Split&quot;) = false Then
+			sumSplit = sumSplit + 1
+			oTable.setPropertyValue(&quot;Split&quot;, true)
+		End If
+		If oTable.getPropertyValue(&quot;HoriOrient&quot;) &lt;&gt; 6 And _
+		   oTable.getPropertyValue(&quot;IsWidthRelative&quot;) = false Then
+			sumRelativeWidth = sumRelativeWidth + 1
+			oTable.setPropertyValue(&quot;RelativeWidth&quot;, 100)
+		End If
+		For j = 0 To oTable.getRows.getCount - 1
+			oRow = oTable.getRows.getByIndex(j)
+			If oRow.getPropertyValue(&quot;IsSplitAllowed&quot;) = false Then
+				sumRows = sumRows + 1
+				oRow.setPropertyValue(&quot;IsSplitAllowed&quot;, true)
+			End If
+		Next
 
-    s = &quot;Out of &quot; &amp; sumTables &amp; &quot; table(s)&quot; &amp; CHR(13) &amp; _
-        &quot;Relative setting was added to: &quot; &amp; sumRelativeWidth &amp; CHR(13) &amp; _
-        &quot;Property to enable breaking across pages was enabled for: &quot; &amp; sumSplit &amp; CHR(13) &amp; CHR(13) &amp; _
-        &quot;No. of rows property to enable breaking across pages was enabled for: &quot; &amp; sumRows &amp; CHR(13) &amp; CHR(13) &amp; &quot;Save the file afterwards!&quot;
-    MsgBox s, 0, &quot;Result&quot;
+		sNames = oTable.getCellNames()
+		For k = LBound(sNames) To UBound(sNames)
+			oCell = oTable.getCellByName(sNames(k))
+			cType = oCell.getType()
+			If oCell.getType() = com.sun.star.table.CellContentType.TEXT Then
+				oCellCursor = oCell.createTextCursor()
+				oParEnum = oCell.createEnumeration()
+				Do While oParEnum.hasMoreElements()
+					oPar = oParEnum.nextElement()
+					leftMargin = oPar.getPropertyValue(&quot;ParaLeftMargin&quot;)
+					rightMargin = oPar.getPropertyValue(&quot;ParaRightMargin&quot;)
+					firstLineIndent = oPar.getPropertyValue(&quot;ParaFirstLineIndent&quot;)
+					&apos;If any are &lt; 0, consider bad, and reset all to 0
+					If leftMargin &lt; 0 Or rightMargin &lt; 0 Or firstLineIndent &lt; 0 Then
+						sumPara = sumPara + 1
+						oPar.setPropertyValue(&quot;ParaLeftMargin&quot;, 0)
+						oPar.setPropertyValue(&quot;ParaRightMargin&quot;, 0)
+						oPar.setPropertyValue(&quot;ParaFirstLineIndent&quot;, 0)
+					End If
+				Loop
+			End If
+		Next
+	Next
+
+	s = &quot;Out of &quot; &amp; sumTables &amp; &quot; table(s)&quot; &amp; CHR(13) &amp; _
+		&quot;Relative setting was added to: &quot; &amp; sumRelativeWidth &amp; CHR(13) &amp; _
+		&quot;Property to enable breaking across pages was enabled for: &quot; &amp; sumSplit &amp; CHR(13) &amp; CHR(13) &amp; _
+		&quot;No. of rows property to enable breaking across pages was enabled for: &quot; &amp; sumRows &amp; CHR(13) &amp; _
+		&quot;No. of paragraphs in cells where paragraph properties were reset: &quot; &amp; sumPara &amp; CHR(13) &amp; CHR(13) &amp; &quot;Save the file afterwards!&quot;
+	MsgBox s, 0, &quot;Result&quot;
 End Sub
 </script:module>
