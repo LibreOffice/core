@@ -31,7 +31,7 @@
 
 namespace Item
 {
-    class ItemAdministrator
+    class ITEM_DLLPUBLIC ItemAdministrator
     {
     private:
         std::function<ItemBuffered::ItemData*()>    m_aConstructItem;

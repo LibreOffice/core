@@ -22,15 +22,16 @@
 
 #include <sal/types.h>
 #include <item/itemdllapi.h>
+#include <item/base/ItemBase.hxx>
 #include <functional>
+#include <memory>
+#include <rtl/ustring.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace Item
 {
     // predefine - no need to include
-    class ItemBase;
-
     class ITEM_DLLPUBLIC ItemControlBlock
     {
     private:

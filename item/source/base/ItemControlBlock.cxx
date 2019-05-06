@@ -53,7 +53,7 @@ namespace Item
     std::unique_ptr<const ItemBase> ItemControlBlock::createFromAny(const ItemBase::AnyIDArgs& rArgs)
     {
         ItemBase* pNewInstance(m_aConstructDefaultItem());
-        pNewInstance->putValues(rArgs);
+        pNewInstance->putAnyValues(rArgs);
         return std::unique_ptr<const ItemBase>(pNewInstance);
     }
 } // end of namespace Item

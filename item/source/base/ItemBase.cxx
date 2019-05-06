@@ -8,7 +8,6 @@
  */
 
 #include <item/base/ItemBase.hxx>
-// #include <item/base/ItemAdministrator.hxx>
 #include <item/base/ItemControlBlock.hxx>
 #include <cassert>
 
@@ -86,23 +85,27 @@ Nonetheless these SlotItems STILL depend on the SfxItem-RANGES defined in the Sf
 
 namespace Item
 {
-    void ItemBase::putValues(const AnyIDArgs& rArgs)
+    void ItemBase::putAnyValues(const AnyIDArgs& rArgs)
     {
         if(!rArgs.empty())
         {
             for(const auto& arg : rArgs)
             {
-                putValue(arg.first, arg.second);
+                putAnyValue(arg.first, arg.second);
             }
         }
     }
 
-    void ItemBase::putValue(const css::uno::Any& /*rVal*/, sal_uInt8 /*nMemberId*/)
+    void ItemBase::putAnyValue(const css::uno::Any& /*rVal*/, sal_uInt8 /*nMemberId*/)
     {
     }
 
     ItemBase::ItemBase(ItemControlBlock& rItemControlBlock)
     :   m_rItemControlBlock(rItemControlBlock)
+    {
+    }
+
+    ItemBase::~ItemBase()
     {
     }
 

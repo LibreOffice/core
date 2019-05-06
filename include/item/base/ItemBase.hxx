@@ -42,7 +42,7 @@ namespace Item
 
         // PutValue/Any interface for automated instance creation from SfxType
         // mechanism (UNO API and sfx2 stuff)
-        virtual void putValues(const AnyIDArgs& rArgs);
+        virtual void putAnyValues(const AnyIDArgs& rArgs);
 
     private:
         // local reference to instance of ItemControlBlock for this
@@ -55,10 +55,12 @@ namespace Item
     protected:
         // PutValue/Any interface for automated instance creation from SfxType
         // mechanism (UNO API and sfx2 stuff)
-        virtual void putValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);
+        virtual void putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);
 
     public:
         ItemBase(ItemControlBlock& rItemControlBlock);
+        virtual ~ItemBase();
+
         ItemBase(const ItemBase&);
         ItemBase& operator=(const ItemBase&);
 

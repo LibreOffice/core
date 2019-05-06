@@ -29,6 +29,8 @@
 
 namespace Item
 {
+    class ItemAdministrator;
+
     class ITEM_DLLPUBLIC ItemBuffered : public ItemBase
     {
     public:
@@ -44,7 +46,7 @@ namespace Item
 
             // PutValue/Any interface for automated instance creation from SfxType
             // mechanism (UNO API and sfx2 stuff)
-            virtual void putValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);
+            virtual void putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);
 
         public:
             ItemData();
@@ -67,7 +69,7 @@ namespace Item
     public:
         // PutValue/Any interface for automated instance creation from SfxType
         // mechanism (UNO API and sfx2 stuff)
-        virtual void putValues(const AnyIDArgs& rArgs);
+        virtual void putAnyValues(const AnyIDArgs& rArgs);
 
     protected:
         // Method to internally (thus protected) set a new ItemData
@@ -90,7 +92,7 @@ namespace Item
         virtual ~ItemBuffered();
         ItemBuffered& operator=(const ItemBuffered&);
 
-        virtual bool operator==(const ItemBuffered&) const;
+        virtual bool operator==(const ItemBase&) const;
         virtual std::unique_ptr<ItemBase> clone() const;
     };
 } // end of namespace Item

@@ -15,7 +15,7 @@
 
 namespace Item
 {
-    void ItemBuffered::ItemData::putValue(const css::uno::Any& /*rVal*/, sal_uInt8 /*nMemberId*/)
+    void ItemBuffered::ItemData::putAnyValue(const css::uno::Any& /*rVal*/, sal_uInt8 /*nMemberId*/)
     {
         // not intended to be used, error
         assert(false && "Error: Some instance tries to set an Any at an ::ItemData instance - implement ItemData::putValue method there (!)");
@@ -96,18 +96,18 @@ namespace Item
         }
     }
 
-    void ItemBuffered::putValues(const AnyIDArgs& rArgs)
+    void ItemBuffered::putAnyValues(const AnyIDArgs& rArgs)
     {
-        assert(nullptr != m_pItemData && "ItemBuffered::putValues called but m_pItemData not set (!)");
+        assert(nullptr != m_pItemData && "ItemBuffered::putAnyValues called but m_pItemData not set (!)");
 
         if(!rArgs.empty())
         {
             ItemData* pNewItemData(m_pItemData->getItemAdministrator().createNewDataInstance());
-            assert(nullptr != pNewItemData && "ItemBuffered::putValues could not create new ItemData instance (!)");
+            assert(nullptr != pNewItemData && "ItemBuffered::putAnyValues could not create new ItemData instance (!)");
 
             for(const auto& arg : rArgs)
             {
-                pNewItemData->putValue(arg.first, arg.second);
+                pNewItemData->putAnyValue(arg.first, arg.second);
             }
 
             setItemData(pNewItemData);
@@ -145,13 +145,14 @@ namespace Item
         return *this;
     }
 
-    bool ItemBuffered::operator==(const ItemBuffered& rRef) const
+    bool ItemBuffered::operator==(const ItemBase& rRef) const
     {
-        assert(nullptr != m_pItemData && nullptr != rRef.m_pItemData && "ItemBuffered::operator== called but not all m_pItemData set (!)");
+        const ItemBuffered& rTmpRef(static_cast<const ItemBuffered&>(rRef));
+        assert(nullptr != m_pItemData && nullptr != rTmpRef.m_pItemData && "ItemBuffered::operator== called but not all m_pItemData set (!)");
         return (
             ItemBase::operator==(rRef) || // ptr-compare
-            m_pItemData == rRef.m_pItemData || // ItemData ptr-compare
-            *m_pItemData == *rRef.m_pItemData); // ItemData content compare
+            m_pItemData == rTmpRef.m_pItemData || // ItemData ptr-compare
+            *m_pItemData == *rTmpRef.m_pItemData); // ItemData content compare
     }
 
     std::unique_ptr<ItemBase> ItemBuffered::clone() const
