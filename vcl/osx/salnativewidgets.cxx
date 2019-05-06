@@ -303,7 +303,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
     if( ! CheckContext() )
         return false;
 
-    CGContextSaveGState( maContextHolder.get() );
+    maContextHolder.saveState();
 
     tools::Rectangle buttonRect = rControlRegion;
     HIRect rc = ImplGetHIRectFromRectangle(buttonRect);
@@ -986,7 +986,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
     default: break;
     }
 
-    CGContextRestoreGState( maContextHolder.get() );
+    maContextHolder.restoreState();
 
     /* #i90291# in most cases invalidating the whole control region instead
        of just the unclipped part of it is sufficient (and probably faster).

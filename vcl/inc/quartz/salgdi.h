@@ -130,10 +130,16 @@ private:
 class CGContextHolder
 {
     CGContextRef mpContext;
+#if OSL_DEBUG_LEVEL > 0
+    int mnContextStackDepth;
+#endif
 public:
 
     CGContextHolder()
         : mpContext(nullptr)
+#if OSL_DEBUG_LEVEL > 0
+        , mnContextStackDepth( 0 )
+#endif
     {}
 
     CGContextRef get() const
@@ -150,6 +156,18 @@ public:
     {
         mpContext = pContext;
     }
+
+    void saveState()
+    {
+        SAL_INFO("vcl.cg", "CGContextSaveGState(" << mpContext << ") " << ++mnContextStackDepth );
+        CGContextSaveGState(mpContext);
+    }
+
+    void restoreState()
+    {
+        SAL_INFO( "vcl.cg", "CGContextRestoreGState(" << mpContext << ") " << mnContextStackDepth-- );
+        CGContextRestoreGState(mpContext);
+    }
 };
 
 class AquaSalGraphics : public SalGraphics
@@ -159,7 +177,6 @@ class AquaSalGraphics : public SalGraphics
 #ifdef MACOSX
     AquaSalFrame*                           mpFrame;
 #endif
-    int                                     mnContextStackDepth;
     XorEmulation*                           mpXorEmulation;
     int                                     mnXorMode; // 0: off 1: on 2: invert only
     int                                     mnWidth;
