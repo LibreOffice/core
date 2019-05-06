@@ -1917,7 +1917,7 @@ public:
 
     virtual void connect_size_allocate(const Link<const Size&, void>& rLink) override
     {
-        m_nSizeAllocateSignalId = g_signal_connect(m_pWidget, "size_allocate", G_CALLBACK(signalSizeAllocate), this);
+        m_nSizeAllocateSignalId = g_signal_connect(m_pWidget, "size-allocate", G_CALLBACK(signalSizeAllocate), this);
         weld::Widget::connect_size_allocate(rLink);
     }
 
@@ -2909,6 +2909,7 @@ private:
     std::function<void(sal_Int32)> m_aFunc;
     gulong m_nCloseSignalId;
     gulong m_nResponseSignalId;
+    gulong m_nSizeAllocateSignalId;
 
     // for calc ref dialog that shrink to range selection widgets and resize back
     GtkWidget* m_pRefEdit;
@@ -2966,6 +2967,26 @@ private:
         me.reset();
     }
 
+    void signal_shrunk_size_allocate()
+    {
+        // apply a bit of nose-down-trim to try and keep it shrunk, sometimes
+        // when the shrink was toggled by a ref-button it sprink back on moving
+        // the move to select the region
+        resize_to_request();
+        if (m_nSizeAllocateSignalId)
+        {
+            g_signal_handler_disconnect(m_pDialog, m_nSizeAllocateSignalId);
+            m_nSizeAllocateSignalId = 0;
+        }
+    }
+
+    static void signalShrunkSizeAllocate(GtkWidget*, GdkRectangle* allocation, gpointer widget)
+    {
+        GtkInstanceDialog* pThis = static_cast<GtkInstanceDialog*>(widget);
+        fprintf(stderr, "size %d %d\n", allocation->width, allocation->height);
+        pThis->signal_shrunk_size_allocate();
+    }
+
 public:
     GtkInstanceDialog(GtkDialog* pDialog, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWindow(GTK_WINDOW(pDialog), pBuilder, bTakeOwnership)
@@ -2973,6 +2994,7 @@ public:
         , m_aDialogRun(pDialog)
         , m_nCloseSignalId(g_signal_connect(m_pDialog, "close", G_CALLBACK(signalClose), this))
         , m_nResponseSignalId(0)
+        , m_nSizeAllocateSignalId(0)
         , m_pRefEdit(nullptr)
         , m_nOldEditWidth(0)
         , m_nOldEditWidthReq(0)
@@ -3145,13 +3167,19 @@ public:
         if (GtkWidget* pActionArea = gtk_dialog_get_action_area(m_pDialog))
             gtk_widget_hide(pActionArea);
         m_bOrigResizable = gtk_window_get_resizable(GTK_WINDOW(m_pDialog));
-//TODO        gtk_window_set_resizable(GTK_WINDOW(m_pDialog), false);
+        m_nSizeAllocateSignalId = g_signal_connect(m_pDialog, "size-allocate", G_CALLBACK(signalShrunkSizeAllocate), this);
         resize_to_request();
         m_pRefEdit = pRefEdit;
     }
 
     virtual void undo_collapse() override
     {
+        if (m_nSizeAllocateSignalId)
+        {
+            g_signal_handler_disconnect(m_pDialog, m_nSizeAllocateSignalId);
+            m_nSizeAllocateSignalId = 0;
+        }
+
         // All others: Show();
         for (GtkWidget* pWindow : m_aHiddenWidgets)
         {
