@@ -41,7 +41,7 @@ namespace drawinglayer
             {
                 // get target size
                 const ::tools::Rectangle aMtfTarget(getMetaFile().GetPrefMapMode().GetOrigin(), getMetaFile().GetPrefSize());
-                const basegfx::B2DRange aMtfRange(aMtfTarget.Left(), aMtfTarget.Top(), aMtfTarget.Right(), aMtfTarget.Bottom());
+                const basegfx::B2DRange aMtfRange(aMtfTarget.toB2DRectangle());
 
                 // tdf#113197 get content range and check if we have an overlap with
                 // defined target range (aMtfRange)

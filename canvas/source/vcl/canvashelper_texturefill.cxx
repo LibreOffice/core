@@ -146,7 +146,7 @@ namespace vclcanvas
                                                              aLeftBottom,
                                                              aRightTop,
                                                              aRightBottom,
-                                                             vcl::unotools::b2DRectangleFromRectangle( rBounds ) );
+                                                             rBounds.toB2DRectangle() );
 
 
             // render gradient
@@ -813,8 +813,7 @@ namespace vclcanvas
                     // start point from it.
                     ::basegfx::B2DRectangle aTextureSpacePolygonRect;
                     ::canvas::tools::calcTransformedRectBounds( aTextureSpacePolygonRect,
-                                                                vcl::unotools::b2DRectangleFromRectangle(
-                                                                    aPolygonDeviceRect ),
+                                                                aPolygonDeviceRect.toB2DRectangle(),
                                                                 aInverseTextureTransform );
 
                     // calc left, top of extended polygon rect in

@@ -73,14 +73,12 @@ namespace emfio
 
     void WinMtfClipPath::intersectClipRect( const tools::Rectangle& rRect )
     {
-        maClip.intersectRange(
-            vcl::unotools::b2DRectangleFromRectangle(rRect));
+        maClip.intersectRange(rRect.toB2DRectangle());
     }
 
     void WinMtfClipPath::excludeClipRect( const tools::Rectangle& rRect )
     {
-        maClip.subtractRange(
-            vcl::unotools::b2DRectangleFromRectangle(rRect));
+        maClip.subtractRange(rRect.toB2DRectangle());
     }
 
     void WinMtfClipPath::setClipPath( const tools::PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode )

@@ -1102,14 +1102,12 @@ bool OutputDevice::TransformAndReduceBitmapExToTargetRange(
 
     if(IsClipRegion())
     {
-        const tools::Rectangle aRegionRectangle(GetActiveClipRegion().GetBoundRect());
+        tools::Rectangle aRegionRectangle(GetActiveClipRegion().GetBoundRect());
 
-        aOutPixel.intersect( // caution! Range from rectangle, one too much (!)
-            basegfx::B2DRange(
-                aRegionRectangle.Left(),
-                aRegionRectangle.Top(),
-                aRegionRectangle.Right() + 1,
-                aRegionRectangle.Bottom() + 1));
+        // caution! Range from rectangle, one too much (!)
+        aRegionRectangle.AdjustRight(-1);
+        aRegionRectangle.AdjustBottom(-1);
+        aOutPixel.intersect( aRegionRectangle.toB2DRectangle() );
     }
 
     if(aOutPixel.isEmpty())

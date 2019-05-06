@@ -236,7 +236,7 @@ void SvxAngleTabPage::Construct()
     { // #i75273#
         ::tools::Rectangle aTempRect(pView->GetAllMarkedRect());
         pView->GetSdrPageView()->LogicToPagePos(aTempRect);
-        maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
+        maRange = aTempRect.toB2DRectangle();
     }
 
     // Take anchor into account (Writer)
@@ -857,13 +857,13 @@ void SvxPositionSizeTabPage::Construct()
     { // #i75273#
         ::tools::Rectangle aTempRect(mpView->GetAllMarkedRect());
         mpView->GetSdrPageView()->LogicToPagePos(aTempRect);
-        maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
+        maRange = aTempRect.toB2DRectangle();
     }
 
     { // #i75273#
         ::tools::Rectangle aTempRect(mpView->GetWorkArea());
         mpView->GetSdrPageView()->LogicToPagePos(aTempRect);
-        maWorkRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
+        maWorkRange = aTempRect.toB2DRectangle();
     }
 
     // take anchor into account (Writer)
@@ -958,7 +958,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
             { // #i75273#
                 ::tools::Rectangle aTempRect(mpView->GetAllMarkedRect());
                 mpView->GetSdrPageView()->LogicToPagePos(aTempRect);
-                maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
+                maRange = aTempRect.toB2DRectangle();
             }
 
             // #101581# GetTopLeftPosition(...) needs coordinates after UI scaling, in real PagePositions
@@ -1180,7 +1180,7 @@ void SvxPositionSizeTabPage::ActivatePage( const SfxItemSet& rSet )
     {
         { // #i75273#
             const ::tools::Rectangle aTempRect(pRectItem->GetValue());
-            maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
+            maRange = aTempRect.toB2DRectangle();
         }
 
         SetMinMaxPosition();

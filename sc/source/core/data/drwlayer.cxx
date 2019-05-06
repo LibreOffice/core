@@ -761,7 +761,7 @@ void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData&
                     aChange.translate(aCurrentCellRect.getX(), aCurrentCellRect.getY());
 
                     // create B2DRange and transform by prepared scale
-                    basegfx::B2DRange aNewRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+                    basegfx::B2DRange aNewRange = aRect.toB2DRectangle();
 
                     aNewRange.transform(aChange);
 

@@ -150,9 +150,7 @@ static SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, s
 
             if(!aOuterRectangle.IsEmpty())
             {
-                basegfx::B2DRange aOuterRange(
-                    aOuterRectangle.Left(), aOuterRectangle.Top(),
-                    aOuterRectangle.Right(), aOuterRectangle.Bottom());
+                basegfx::B2DRange aOuterRange = aOuterRectangle.toB2DRectangle();
 
                 if(nTol)
                 {

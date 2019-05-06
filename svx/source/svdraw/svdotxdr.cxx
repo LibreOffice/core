@@ -235,7 +235,7 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeCreatePoly(const SdrDragStat& rDrag) con
     aRect1.Justify();
 
     basegfx::B2DPolyPolygon aRetval;
-    const basegfx::B2DRange aRange(aRect1.Left(), aRect1.Top(), aRect1.Right(), aRect1.Bottom());
+    const basegfx::B2DRange aRange = aRect1.toB2DRectangle();
     aRetval.append(basegfx::utils::createPolygonFromRect(aRange));
     return aRetval;
 }

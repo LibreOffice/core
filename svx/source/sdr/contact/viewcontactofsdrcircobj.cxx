@@ -50,10 +50,7 @@ namespace sdr
                     false));
 
             // take unrotated snap rect (direct model data) for position and size
-            const tools::Rectangle aRectangle(GetCircObj().GetGeoRect());
-            const basegfx::B2DRange aObjectRange(
-                aRectangle.Left(), aRectangle.Top(),
-                aRectangle.Right(), aRectangle.Bottom() );
+            const basegfx::B2DRange aObjectRange = GetCircObj().GetGeoRect().toB2DRectangle();
             const GeoStat& rGeoStat(GetCircObj().GetGeoStat());
 
             // fill object matrix

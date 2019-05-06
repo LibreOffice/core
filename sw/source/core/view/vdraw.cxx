@@ -143,8 +143,7 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
         SdrView &rSdrView = GetPageView()->GetView();
         rSdrView.setHideDraw( !pPrintData->IsPrintDraw() );
     }
-    basegfx::B2IRectangle const pageFrame(
-        vcl::unotools::b2IRectangleFromRectangle(rPageFrame.getFrameArea().SVRect()));
+    basegfx::B2IRectangle const pageFrame = rPageFrame.getFrameArea().SVRect().toB2IRectangle();
     GetPageView()->DrawLayer(_nLayerID, pOutDev, pRedirector, aPaintRect.SVRect(), &pageFrame);
     pOutDev->Pop();
 

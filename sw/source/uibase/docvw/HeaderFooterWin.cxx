@@ -119,7 +119,7 @@ namespace
 
         if ( !bOnTop )
         {
-            B2DRectangle aBRect( rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() );
+            B2DRectangle aBRect = rRect.toB2DRectangle();
             B2DHomMatrix aRotation = createRotateAroundPoint(
                    aBRect.getCenterX(), aBRect.getCenterY(), M_PI );
             aPolygon.transform( aRotation );
@@ -151,7 +151,7 @@ void SwFrameButtonPainter::PaintButton(drawinglayer::primitive2d::Primitive2DCon
     }
     else
     {
-        B2DRectangle aGradientRect(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom());
+        B2DRectangle aGradientRect = rRect.toB2DRectangle();
         double nAngle = M_PI;
         if (bOnTop)
             nAngle = 0;

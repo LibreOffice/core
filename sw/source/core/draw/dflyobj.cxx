@@ -623,7 +623,7 @@ void SwVirtFlyDrawObj::NbcSetLogicRect(const tools::Rectangle& )
 ::basegfx::B2DPolyPolygon SwVirtFlyDrawObj::TakeXorPoly() const
 {
     const tools::Rectangle aSourceRectangle(GetFlyFrame()->getFrameArea().SVRect());
-    const ::basegfx::B2DRange aSourceRange(aSourceRectangle.Left(), aSourceRectangle.Top(), aSourceRectangle.Right(), aSourceRectangle.Bottom());
+    const ::basegfx::B2DRange aSourceRange = aSourceRectangle.toB2DRectangle();
     ::basegfx::B2DPolyPolygon aRetval;
 
     aRetval.append(::basegfx::utils::createPolygonFromRect(aSourceRange));
