@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_1835e8da",
+        "filename": "svl/source/items/itempool.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-05-06T09:32:27Z",
+      "side": 1,
+      "message": "GetItemSurrogates can\u0027t use this because it has nothing to search by.\nI suppose I could make it fall back to a linear search, but for now, I\u0027d prefer code that uses it to make the effort of making the item\u0027s sortable, so that we get the performance benefit.",
+      "parentUuid": "3fa0c359_152e11a5",
+      "range": {
+        "startLine": 845,
+        "startChar": 0,
+        "endLine": 845,
+        "endChar": 79
+      },
+      "revId": "e69b2a33a2e4c0a3f3c7851181f33f99e503f6f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_752195b4",
         "filename": "svl/source/items/itempool.cxx",
         "patchSetId": 4
@@ -59,6 +83,30 @@
       "writtenOn": "2019-05-06T08:58:52Z",
       "side": 1,
       "message": "This seems to require 4 string comparisons to detect equality? couldn\u0027t it be sorted by index first, then by name, like in\n\n    if (nPalIndex !\u003d rOther.nPalIndex)\n      return nPalIndex \u003c rOther.nPalIndex;\n    return SfxStringItem::operator\u003c(rItem);",
+      "range": {
+        "startLine": 119,
+        "startChar": 4,
+        "endLine": 124,
+        "endChar": 40
+      },
+      "revId": "e69b2a33a2e4c0a3f3c7851181f33f99e503f6f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_b85b942c",
+        "filename": "svx/source/xoutdev/xattr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-05-06T09:32:27Z",
+      "side": 1,
+      "message": "Unfortunately, nPalIndex can be mutated after the item is in the pool, so can\u0027t use that.\nI suppose I could make SfxStringItem implement some kind of compare method that returned -1/0/1, that would reduce the string comparisons.",
+      "parentUuid": "3fa0c359_d8fea004",
       "range": {
         "startLine": 119,
         "startChar": 4,
