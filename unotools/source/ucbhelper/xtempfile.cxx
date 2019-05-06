@@ -22,12 +22,8 @@
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/servicedecl.hxx>
-#include <osl/file.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/tempfile.hxx>
 #include <cppuhelper/propshlp.hxx>
 

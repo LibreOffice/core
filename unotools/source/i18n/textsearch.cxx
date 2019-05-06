@@ -25,7 +25,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <i18nutil/transliteration.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/TextSearch2.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>

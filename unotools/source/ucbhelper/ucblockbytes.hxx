@@ -20,18 +20,11 @@
 #define INCLUDED_UNOTOOLS_UCBLOCKBYTES_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/ucb/XContent.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <osl/thread.hxx>
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
-#include <tools/link.hxx>
 #include <vcl/errcode.hxx>
-#include <tools/datetime.hxx>
 
 namespace com
 {

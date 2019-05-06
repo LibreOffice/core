@@ -24,7 +24,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/transliteration.hxx>
 
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/i18n/Transliteration.hpp>
 
 using namespace ::com::sun::star::lang;

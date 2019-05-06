@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
 #include <stdio.h>
 #include <string>
 
@@ -26,7 +25,6 @@
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/digitgroupingiterator.hxx>
 #include <tools/debug.hxx>
-#include <tools/solar.h>
 #include <i18nlangtag/languagetag.hxx>
 
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
@@ -40,8 +38,6 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <osl/diagnose.h>
-#include <sal/macros.h>
 #include <rtl/math.hxx>
 
 static const sal_uInt16 nCurrFormatInvalid = 0xffff;

@@ -22,15 +22,15 @@
 #include <memory>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
-#include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XTempFile.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/propertysetmixin.hxx>
 #include <osl/mutex.hxx>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 class SvStream;
 namespace utl { class TempFile; }

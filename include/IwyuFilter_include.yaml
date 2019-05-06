@@ -243,6 +243,9 @@ blacklist:
     include/unotools/fontcfg.hxx:
     # Needed for a sal_uLong enum
     - tools/solar.h
+    include/unotools/progresshandlerwrap.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ucb/XProgressHandler.hpp
     include/unotools/streamwrap.hxx:
     # base class has to be a complete type
     - com/sun/star/io/XOutputStream.hpp

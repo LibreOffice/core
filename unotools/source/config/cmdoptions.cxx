@@ -21,14 +21,12 @@
 
 #include <sal/log.hxx>
 #include <unotools/cmdoptions.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <cppuhelper/weakref.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
 
 #include "itemholder1.hxx"

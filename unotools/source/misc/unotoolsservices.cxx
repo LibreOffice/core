@@ -8,8 +8,6 @@
  */
 
 #include <comphelper/servicedecl.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <uno/environment.h>
 
 #include <unotoolsservices.hxx>
 
