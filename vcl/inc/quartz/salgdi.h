@@ -127,11 +127,35 @@ private:
     std::unordered_map<sal_IntPtr, rtl::Reference<CoreTextFontFace>> maFontContainer;
 };
 
+class CGContextHolder
+{
+    CGContextRef mpContext;
+public:
+
+    CGContextHolder()
+        : mpContext(nullptr)
+    {}
+
+    CGContextRef get() const
+    {
+        return mpContext;
+    }
+
+    bool isSet() const
+    {
+        return mpContext != nullptr;
+    }
+
+    void set(CGContextRef const & pContext)
+    {
+        mpContext = pContext;
+    }
+};
 
 class AquaSalGraphics : public SalGraphics
 {
-    CGLayerRef                              mxLayer;    // Quartz graphics layer
-    CGContextRef                            mrContext;  // Quartz drawing context
+    CGLayerRef mxLayer; // Quartz graphics layer
+    CGContextHolder maContextHolder;  // Quartz drawing context
 #ifdef MACOSX
     AquaSalFrame*                           mpFrame;
 #endif

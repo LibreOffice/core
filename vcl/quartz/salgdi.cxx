@@ -182,7 +182,6 @@ bool CoreTextFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilit
 
 AquaSalGraphics::AquaSalGraphics()
     : mxLayer( nullptr )
-    , mrContext( nullptr )
 #ifdef MACOSX
     , mpFrame( nullptr )
 #endif
@@ -247,16 +246,16 @@ AquaSalGraphics::~AquaSalGraphics()
         SAL_INFO("vcl.cg", "CGLayerRelease(" << mxLayer << ")" );
         CGLayerRelease( mxLayer );
     }
-    else if( mrContext
+    else if (maContextHolder.isSet()
 #ifdef MACOSX
              && mbWindow
 #endif
              )
     {
         // destroy backbuffer bitmap context that we created ourself
-        SAL_INFO("vcl.cg", "CGContextRelease(" << mrContext << ")" );
-        CGContextRelease( mrContext );
-        mrContext = nullptr;
+        SAL_INFO("vcl.cg", "CGContextRelease(" << maContextHolder.get() << ")" );
+        CGContextRelease(maContextHolder.get());
+        maContextHolder.set(nullptr);
     }
 }
 
@@ -450,23 +449,23 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     std::cerr << "]\n";
 #endif
 
-    SAL_INFO("vcl.cg", "CGContextSaveGState(" << mrContext << ") " << ++mnContextStackDepth );
-    CGContextSaveGState(mrContext);
+    SAL_INFO("vcl.cg", "CGContextSaveGState(" << maContextHolder.get() << ") " << ++mnContextStackDepth );
+    CGContextSaveGState(maContextHolder.get());
 
     // The view is vertically flipped (no idea why), flip it back.
-    SAL_INFO("vcl.cg", "CGContextScaleCTM(" << mrContext << ",1,-1)");
-    CGContextScaleCTM(mrContext, 1.0, -1.0);
-    CGContextSetShouldAntialias(mrContext, !mbNonAntialiasedText);
-    SAL_INFO("vcl.cg", "CGContextSetFillColor(" << mrContext << "," << maTextColor << ")");
-    CGContextSetFillColor(mrContext, maTextColor.AsArray());
+    SAL_INFO("vcl.cg", "CGContextScaleCTM(" << maContextHolder.get() << ",1,-1)");
+    CGContextScaleCTM(maContextHolder.get(), 1.0, -1.0);
+    CGContextSetShouldAntialias(maContextHolder.get(), !mbNonAntialiasedText);
+    SAL_INFO("vcl.cg", "CGContextSetFillColor(" << maContextHolder.get() << "," << maTextColor << ")");
+    CGContextSetFillColor(maContextHolder.get(), maTextColor.AsArray());
 
     if (rStyle.mbFauxBold)
     {
 
         float fSize = rFontSelect.mnHeight / 23.0f;
-        CGContextSetStrokeColor(mrContext, maTextColor.AsArray());
-        CGContextSetLineWidth(mrContext, fSize);
-        CGContextSetTextDrawingMode(mrContext, kCGTextFillStroke);
+        CGContextSetStrokeColor(maContextHolder.get(), maTextColor.AsArray());
+        CGContextSetLineWidth(maContextHolder.get(), fSize);
+        CGContextSetTextDrawingMode(maContextHolder.get(), kCGTextFillStroke);
     }
 
     auto aIt = aGlyphOrientation.cbegin();
@@ -479,23 +478,23 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
         size_t nStartIndex = std::distance(aGlyphOrientation.cbegin(), aIt);
         size_t nLen = std::distance(aIt, aNext);
 
-        SAL_INFO("vcl.cg", "CGContextSaveGState(" << mrContext << ") " << ++mnContextStackDepth );
-        CGContextSaveGState(mrContext);
+        SAL_INFO("vcl.cg", "CGContextSaveGState(" << maContextHolder.get() << ") " << ++mnContextStackDepth );
+        CGContextSaveGState(maContextHolder.get());
         if (rStyle.mfFontRotation && !bUprightGlyph)
         {
-            SAL_INFO("vcl.cg", "CGContextRotateCTM(" << mrContext << "," << rStyle.mfFontRotation << ")");
-            CGContextRotateCTM(mrContext, rStyle.mfFontRotation);
+            SAL_INFO("vcl.cg", "CGContextRotateCTM(" << maContextHolder.get() << "," << rStyle.mfFontRotation << ")");
+            CGContextRotateCTM(maContextHolder.get(), rStyle.mfFontRotation);
         }
-        SAL_INFO("vcl.cg", "CTFontDrawGlyphs() @" << nStartIndex << ":" << nLen << "," << mrContext);
-        CTFontDrawGlyphs(pFont, &aGlyphIds[nStartIndex], &aGlyphPos[nStartIndex], nLen, mrContext);
-        SAL_INFO("vcl.cg", "CGContextRestoreGState(" << mrContext << ") " << mnContextStackDepth-- );
-        CGContextRestoreGState(mrContext);
+        SAL_INFO("vcl.cg", "CTFontDrawGlyphs() @" << nStartIndex << ":" << nLen << "," << maContextHolder.get());
+        CTFontDrawGlyphs(pFont, &aGlyphIds[nStartIndex], &aGlyphPos[nStartIndex], nLen, maContextHolder.get());
+        SAL_INFO("vcl.cg", "CGContextRestoreGState(" << maContextHolder.get() << ") " << mnContextStackDepth-- );
+        CGContextRestoreGState(maContextHolder.get());
 
         aIt = aNext;
     }
 
-    SAL_INFO( "vcl.cg", "CGContextRestoreGState(" << mrContext << ") " << mnContextStackDepth-- );
-    CGContextRestoreGState(mrContext);
+    SAL_INFO( "vcl.cg", "CGContextRestoreGState(" << maContextHolder.get() << ") " << mnContextStackDepth-- );
+    CGContextRestoreGState(maContextHolder.get());
 }
 
 void AquaSalGraphics::SetFont(LogicalFontInstance* pReqFont, int nFallbackLevel)
@@ -891,10 +890,10 @@ bool AquaSalGraphics::CheckContext()
 
 CGContextRef AquaSalGraphics::GetContext()
 {
-    if ( !mrContext )
+    if (!maContextHolder.isSet())
         CheckContext();
 
-    return mrContext;
+    return maContextHolder.get();
 }
 
 #endif
