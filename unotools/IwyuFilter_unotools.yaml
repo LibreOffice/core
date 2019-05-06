@@ -1,0 +1,44 @@
+---
+assumeFilename: unotools/source/i18n/resmgr.cxx
+blacklist:
+    unotools/inc/unotoolsservices.hxx:
+    # Needed for extern declaration
+    - namespace comphelper { namespace service_decl { class ServiceDecl; } }
+    unotools/source/config/itemholder1.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XEventListener.hpp
+    unotools/source/ucbhelper/XTempFile.hxx:
+    # Base class needs complete type
+    - com/sun/star/io/XInputStream.hpp
+    - com/sun/star/io/XOutputStream.hpp
+    - com/sun/star/io/XTempFile.hpp
+    - com/sun/star/io/XTruncate.hpp
+    - com/sun/star/beans/XFastPropertySet.hpp
+    - com/sun/star/beans/XPropertyAccess.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    unotools/source/config/configpaths.cxx:
+    # Needed for linker visibility
+    - unotools/configpaths.hxx
+    unotools/source/config/lingucfg.cxx:
+    # Needed for direct member access
+    - com/sun/star/util/XChangesBatch.hpp
+    unotools/source/config/useroptions.cxx:
+    # Needed for direct member access
+    - com/sun/star/container/XNameAccess.hpp
+    unotools/source/i18n/resmgr.cxx:
+    # Boost wrappers, used only here
+    - boost/locale.hpp
+    - boost/locale/gnu_gettext.hpp
+    unotools/source/ucbhelper/tempfile.cxx:
+    # Needed for non-DBG_UTIL build
+    - unistd.h
+    unotools/source/ucbhelper/ucbhelper.cxx:
+    # Needed for namespaced function declarations
+    - unotools/ucbhelper.hxx
+    unotools/source/ucbhelper/ucblockbytes.cxx:
+    # Needed for direct member access
+    - com/sun/star/beans/PropertyValue.hpp
+    unotools/source/ucbhelper/ucbstreamhelper.cxx:
+    # Needed for direct member access
+    - com/sun/star/beans/PropertyValue.hpp
+

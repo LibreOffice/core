@@ -19,10 +19,8 @@
 
 #include <sal/config.h>
 
-#include <sal/log.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/syslocale.hxx>
-#include <unotools/configmgr.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
@@ -33,8 +31,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/util/ChangesEvent.hpp>

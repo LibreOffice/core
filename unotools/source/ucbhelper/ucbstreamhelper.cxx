@@ -23,15 +23,15 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/ucb/UniversalContentBroker.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
-#include <com/sun/star/io/XActiveDataStreamer.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <comphelper/simplefileaccessinteraction.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/streamwrap.hxx>
 #include "ucblockbytes.hxx"
+
+namespace com::sun::star::ucb { class XCommandEnvironment; }
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;

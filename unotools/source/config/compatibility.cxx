@@ -18,7 +18,6 @@
  */
 
 #include <unotools/compatibility.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>

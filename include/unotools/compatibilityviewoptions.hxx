@@ -10,9 +10,13 @@
 #ifndef INCLUDED_SVTOOLS_COMPATIBILITYVIEWOPTIONS_HXX
 #define INCLUDED_SVTOOLS_COMPATIBILITYVIEWOPTIONS_HXX
 
-#include <svtools/svtdllapi.h>
+#include <unotools/unotoolsdllapi.h>
 #include <unotools/options.hxx>
-#include <osl/mutex.hxx>
+
+namespace osl
+{
+class Mutex;
+}
 
 class SvtCompatibilityViewOptions_Impl;
 
