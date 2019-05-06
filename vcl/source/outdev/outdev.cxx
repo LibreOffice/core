@@ -189,6 +189,11 @@ void OutputDevice::dispose()
     VclReferenceBase::dispose();
 }
 
+bool OutputDevice::IsVirtual() const
+{
+    return false;
+}
+
 SalGraphics* OutputDevice::GetGraphics()
 {
     DBG_TESTSOLARMUTEX();

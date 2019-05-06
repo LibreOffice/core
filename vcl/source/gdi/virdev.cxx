@@ -443,6 +443,11 @@ void VirtualDevice::SetReferenceDevice( sal_Int32 i_nDPIX, sal_Int32 i_nDPIY )
     ImplSetReferenceDevice( RefDevMode::Custom, i_nDPIX, i_nDPIY );
 }
 
+bool VirtualDevice::IsVirtual() const
+{
+    return true;
+}
+
 void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 i_nDPIX, sal_Int32 i_nDPIY )
 {
     mnDPIX = i_nDPIX;
