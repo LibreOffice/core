@@ -3772,8 +3772,6 @@ desktop/source/deployment/registry/sfwk/dp_sfwk.cxx
 desktop/source/inc/helpids.h
 desktop/source/lib/init.cxx
 desktop/source/lib/lokandroid.cxx
-desktop/source/lib/lokclipboard.cxx
-desktop/source/lib/lokclipboard.hxx
 desktop/source/lib/lokinteractionhandler.cxx
 desktop/source/lib/lokinteractionhandler.hxx
 desktop/source/migration/migration.cxx
