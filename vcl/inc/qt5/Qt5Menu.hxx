@@ -73,9 +73,6 @@ public:
     unsigned GetItemCount() { return maItems.size(); }
     Qt5MenuItem* GetItemAtPos(unsigned nPos) { return maItems[nPos]; }
 
-Q_SIGNALS:
-    void setFrameSignal(const SalFrame* pFrame);
-
 private slots:
     static void slotMenuTriggered(Qt5MenuItem* pQItem);
     static void slotMenuAboutToShow(Qt5MenuItem* pQItem);

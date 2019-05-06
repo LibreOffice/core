@@ -29,7 +29,6 @@ Qt5Menu::Qt5Menu(bool bMenuBar)
     , mpQMenuBar(nullptr)
     , mpQMenu(nullptr)
 {
-    connect(this, &Qt5Menu::setFrameSignal, this, &Qt5Menu::SetFrame, Qt::BlockingQueuedConnection);
 }
 
 bool Qt5Menu::VisibleMenuBar() { return true; }
