@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_98b578f1",
+        "filename": "vcl/qt5/Qt5Menu.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2019-05-06T13:22:21Z",
+      "side": 1,
+      "message": "Why not use new signal/slot syntax here? AFAIK, it\u0027s used everywhere at least in this file. As for connection tracking, QMetaObject::Connection may be used.\n\nhttps://doc.qt.io/qt-5/qmetaobject-connection.html",
+      "range": {
+        "startLine": 639,
+        "startChar": 0,
+        "endLine": 645,
+        "endChar": 85
+      },
+      "revId": "c5f4558450dacd30591d40064550a7a29a7531ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
