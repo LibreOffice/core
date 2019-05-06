@@ -401,8 +401,9 @@ WinFontTransformGuard::WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget, f
     {
         // DWrite angle is in clockwise degrees, our orientation is in counter-clockwise 10th
         // degrees.
-        aTransform
-            = aTransform * D2D1::Matrix3x2F::Rotation(-rLayout.GetOrientation() / 10, rBaseline);
+        aTransform = aTransform
+                     * D2D1::Matrix3x2F::Rotation(
+                           -static_cast<FLOAT>(rLayout.GetOrientation()) / 10, rBaseline);
     }
     mpRenderTarget->SetTransform(aTransform);
 }
