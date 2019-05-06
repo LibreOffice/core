@@ -238,7 +238,14 @@ bool SwTextFrame::CalcFollow(TextFrameIndex const nTextOfst)
         if ( !pMyFollow->GetNext() && !pMyFollow->HasFootnote() )
             nOldBottom =  aRectFnSet.IsVert() ? 0 : LONG_MAX;
 
-        while( true )
+        // tdf#122892 check flag:
+        // 1. WidowsAndOrphans::FindWidows() determines follow is a widow
+        // 2. SwTextFrame::PrepWidows() calls SetPrepWidows() on master;
+        //    if it can spare lines, master truncates one line
+        // 3. SwTextFrame::CalcPreps() on master (below);
+        //    unless IsPrepMustFit(), if master hasn't shrunk via 2., it will SetWidow()
+        // 4. loop must exit then, because the follow didn't grow so nothing will ever change
+        while (!IsWidow())
         {
             if( !FormatLevel::LastLevel() )
             {
