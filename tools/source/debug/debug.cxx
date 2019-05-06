@@ -128,6 +128,9 @@ OString exceptionToString(const css::uno::Any & caught)
 #endif
         sMessage += " context: ";
         sMessage += pContext;
+#if defined __GLIBCXX__
+        delete pContext;
+#endif
     }
     {
         css::configuration::CorruptedConfigurationException specialized;
