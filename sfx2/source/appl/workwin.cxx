@@ -580,6 +580,14 @@ void SfxWorkWindow::DeleteControllers_Impl()
         SfxChildWindow *pChild = pCW->pWin;
         if (pChild)
         {
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                vcl::Window* pWindow = pChild->GetWindow();
+                if (pWindow)
+                {
+                    pWindow->ReleaseLOKNotifier();
+                }
+            }
             pChild->Hide();
 
             // If the child window is a direct child window and not in a
