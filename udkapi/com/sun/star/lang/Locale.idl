@@ -61,7 +61,7 @@ published struct Locale
 
         <p>Since LibreOffice 4.2, if the locale can not be represented
         using only ISO 639 and ISO 3166 codes this field contains the
-        ISO 639-3 reserved for local use code "<strong>qlt</strong>" and
+        ISO 639-3 reserved for local use code <strong>"qlt"</strong> and
         a <strong>BCP 47</strong> language tag is present in the Variant
         field. </p>
      */
@@ -84,7 +84,7 @@ published struct Locale
     /** specifies a <strong>BCP 47</strong> Language Tag.
 
         <p>Since LibreOffice 4.2, <strong>if</strong> the Language field
-        is the code "<strong>qlt</strong>" this field contains the full
+        is the code <strong>"qlt"</strong> this field contains the full
         BCP 47 language tag. If the Language field is not "qlt" this
         field is empty. </p>
 
