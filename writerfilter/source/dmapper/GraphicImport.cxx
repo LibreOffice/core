@@ -534,19 +534,15 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
         break;
         case NS_ooxml::LN_CT_EffectExtent_l:
             m_pImpl->m_oEffectExtentLeft = nIntValue;
-            m_pImpl->nLeftMargin += oox::drawingml::convertEmuToHmm(nIntValue);
             break;
         case NS_ooxml::LN_CT_EffectExtent_t:
             m_pImpl->m_oEffectExtentTop = nIntValue;
-            m_pImpl->nTopMargin += oox::drawingml::convertEmuToHmm(nIntValue);
             break;
         case NS_ooxml::LN_CT_EffectExtent_r:
             m_pImpl->m_oEffectExtentRight = nIntValue;
-            m_pImpl->nRightMargin += oox::drawingml::convertEmuToHmm(nIntValue);
             break;
         case NS_ooxml::LN_CT_EffectExtent_b:
             m_pImpl->m_oEffectExtentBottom = nIntValue;
-            m_pImpl->nBottomMargin += oox::drawingml::convertEmuToHmm(nIntValue);
             break;
         case NS_ooxml::LN_CT_NonVisualDrawingProps_id:// 90650;
             //id of the object - ignored
@@ -770,7 +766,35 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         }
                         m_xShape->setSize(aSize);
                         if (bKeepRotation)
+                        {
                             xShapeProps->setPropertyValue("RotateAngle", uno::makeAny(nRotation));
+                            if (nRotation == 0)
+                            {
+                                // Include effect extent in the margin to bring Writer layout closer
+                                // to Word. But do this for non-rotated shapes only, where effect
+                                // extents map to increased margins as-is.
+                                if (m_pImpl->m_oEffectExtentLeft)
+                                {
+                                    m_pImpl->nLeftMargin += oox::drawingml::convertEmuToHmm(
+                                        *m_pImpl->m_oEffectExtentLeft);
+                                }
+                                if (m_pImpl->m_oEffectExtentTop)
+                                {
+                                    m_pImpl->nTopMargin += oox::drawingml::convertEmuToHmm(
+                                        *m_pImpl->m_oEffectExtentTop);
+                                }
+                                if (m_pImpl->m_oEffectExtentRight)
+                                {
+                                    m_pImpl->nRightMargin += oox::drawingml::convertEmuToHmm(
+                                        *m_pImpl->m_oEffectExtentRight);
+                                }
+                                if (m_pImpl->m_oEffectExtentBottom)
+                                {
+                                    m_pImpl->nBottomMargin += oox::drawingml::convertEmuToHmm(
+                                        *m_pImpl->m_oEffectExtentBottom);
+                                }
+                            }
+                        }
 
                         m_pImpl->bIsGraphic = true;
 
