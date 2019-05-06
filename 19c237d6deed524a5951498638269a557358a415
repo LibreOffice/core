@@ -33,6 +33,24 @@
       "revId": "19c237d6deed524a5951498638269a557358a415",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_750af526",
+        "filename": "connectivity/CppunitTest_connectivity_sharedresources.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-06T08:54:28Z",
+      "side": 1,
+      "message": "there is already a connectivity/CppunitTest_connectivity_commontools.mk:$(eval $(call gb_CppunitTest_use_library_objects,connectivity_commontools,dbtools))\n\n\nplease use gb_CppunitTest_use_library_objects only *once* per library, linking large libraries slows down the build a lot, if it can\u0027t be avoided for this test better add the test to the existing CppunitTest!",
+      "parentUuid": "3fa0c359_d5bd0969",
+      "revId": "19c237d6deed524a5951498638269a557358a415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
