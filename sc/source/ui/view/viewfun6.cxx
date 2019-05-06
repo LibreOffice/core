@@ -329,6 +329,11 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
     }
     else
     {
+        // Clear "Enter pastes" mode.
+        rViewData.SetPasteMode( ScPasteFlags::NONE );
+        // Clear CopySourceOverlay in each window of a split/frozen tabview.
+        rViewData.GetViewShell()->UpdateCopySourceOverlay();
+
         bool bForceReqFmt = false;
         const double fCell = rDoc.GetValue( aCurPos);
         // Combine requested date/time stamp with existing cell time/date, if any.
