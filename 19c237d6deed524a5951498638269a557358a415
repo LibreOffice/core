@@ -16,6 +16,23 @@
       "revId": "19c237d6deed524a5951498638269a557358a415",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_d5bd0969",
+        "filename": "connectivity/CppunitTest_connectivity_sharedresources.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-06T07:08:17Z",
+      "side": 1,
+      "message": "But can\u0027t you just link against dbtools?  The contents of connectivity/source/inc/resource/sharedresources.hxx is OOO_DLLPUBLIC_DBTOOLS, so there should be no need to use this hack to get at the innards of that lib.  (And most of the remaining cargo cult should then be dropable, too.)",
+      "revId": "19c237d6deed524a5951498638269a557358a415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
