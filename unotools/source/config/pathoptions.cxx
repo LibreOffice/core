@@ -21,24 +21,17 @@
 
 #include <sal/log.hxx>
 #include <unotools/pathoptions.hxx>
-#include <unotools/configitem.hxx>
-#include <unotools/configmgr.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/solar.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
-#include <unotools/bootstrap.hxx>
 
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>

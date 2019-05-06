@@ -8,9 +8,7 @@
  *
  */
 
-#include <cppunit/TestCase.h>
 #include <cppunit/TestFixture.h>
-#include <cppunit/TestSuite.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <unotools/fontdefs.hxx>

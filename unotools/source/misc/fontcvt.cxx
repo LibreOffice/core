@@ -27,8 +27,6 @@
 
 #include <map>
 #include <vector>
-#include <algorithm>
-#include <functional>
 
 //These conversion tables were designed for StarSymbol. OpenSymbol
 //originally didn't have the same code points as StarSymbol, and

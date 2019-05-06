@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <list>
-
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -30,7 +28,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <rtl/instance.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <unotools/configitem.hxx>

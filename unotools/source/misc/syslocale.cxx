@@ -22,7 +22,6 @@
 #include <sal/log.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <comphelper/lok.hxx>

@@ -22,7 +22,6 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
-#include <o3tl/typed_flags_set.hxx>
 
 
 enum class FontToSubsFontFlags

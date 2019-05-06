@@ -18,6 +18,7 @@
  */
 
 #include <unotools/progresshandlerwrap.hxx>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 
 namespace utl
 {

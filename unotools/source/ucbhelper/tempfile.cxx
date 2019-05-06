@@ -22,20 +22,15 @@
 #include <cassert>
 #include <utility>
 
-#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <unotools/tempfile.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/instance.hxx>
 #include <osl/detail/file.h>
 #include <osl/file.hxx>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
-#include <stdio.h>
 
 #ifdef UNX
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <unistd.h>
 #elif defined( WNT )
 #include <process.h>

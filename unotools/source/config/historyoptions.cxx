@@ -17,15 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/log.hxx>
 #include <unotools/historyoptions.hxx>
-#include <unotools/configmgr.hxx>
-#include <unotools/configitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <cassert>
-#include <deque>
 #include <algorithm>
 
 #include "itemholder1.hxx"

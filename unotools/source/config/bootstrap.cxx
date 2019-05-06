@@ -19,9 +19,6 @@
 
 #include <config_folders.h>
 
-#include <cstddef>
-#include <stdio.h>
-
 #include <unotools/bootstrap.hxx>
 
 #include <rtl/ustring.hxx>

@@ -22,8 +22,9 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
+
+namespace com::sun::star::task { class XStatusIndicator; }
 
 namespace utl
 {

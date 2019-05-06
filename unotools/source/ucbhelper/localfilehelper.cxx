@@ -26,7 +26,6 @@
 #include <unotools/localfilehelper.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
-#include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <vector>
 

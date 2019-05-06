@@ -19,17 +19,12 @@
 
 #include <sal/config.h>
 
-#include <sal/log.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
-
-#include <unotools/pathoptions.hxx>
 
 #include "itemholder1.hxx"
 

@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/io/XActiveDataControl.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -35,14 +31,13 @@
 #include <unotools/ZipPackageHelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <osl/file.hxx>
-#include <unotools/pathoptions.hxx>
 #include <unotools/streamwrap.hxx>
-#include <unotools/tempfile.hxx>
-#include <svl/urihelper.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 
 #include <rtl/uri.hxx>
+
+namespace com::sun::star::io { class XInputStream; }
 
 using namespace utl;
 using namespace osl;

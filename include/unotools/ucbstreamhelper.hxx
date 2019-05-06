@@ -19,7 +19,7 @@
 #ifndef INCLUDED_UNOTOOLS_UCBSTREAMHELPER_HXX
 #define INCLUDED_UNOTOOLS_UCBSTREAMHELPER_HXX
 
-#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <unotools/unotoolsdllapi.h>
 
@@ -40,7 +40,8 @@ namespace com
         }
     }
 }
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+
+namespace com::sun::star::awt { class XWindow; }
 
 namespace utl
 {
