@@ -1083,11 +1083,11 @@ void PosSizePropertyPanel::SetPosSizeMinMax()
         return;
     tools::Rectangle aTmpRect(mpView->GetAllMarkedRect());
     pPV->LogicToPagePos(aTmpRect);
-    maRect = basegfx::B2DRange(aTmpRect.Left(), aTmpRect.Top(), aTmpRect.Right(), aTmpRect.Bottom());
+    maRect = aTmpRect.toB2DRectangle();
 
     tools::Rectangle aTmpRect2(mpView->GetWorkArea());
     pPV->LogicToPagePos(aTmpRect2);
-    maWorkArea = basegfx::B2DRange(aTmpRect2.Left(), aTmpRect2.Top(), aTmpRect2.Right(), aTmpRect2.Bottom());
+    maWorkArea = aTmpRect2.toB2DRectangle();
 
     const Fraction aUIScale(mpView->GetModel()->GetUIScale());
     TransfrmHelper::ScaleRect( maWorkArea, aUIScale );

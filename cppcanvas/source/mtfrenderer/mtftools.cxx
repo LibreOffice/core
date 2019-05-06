@@ -169,11 +169,7 @@ namespace cppcanvas
                     // then transform that
                     ::basegfx::B2DPolygon aLocalClip(
                         ::basegfx::utils::createPolygonFromRect(
-                                ::basegfx::B2DRectangle(
-                                    static_cast<double>(aLocalClipRect.Left()),
-                                    static_cast<double>(aLocalClipRect.Top()),
-                                    static_cast<double>(aLocalClipRect.Right()),
-                                    static_cast<double>(aLocalClipRect.Bottom()) ) ) );
+                                    aLocalClipRect.toB2DRectangle() ) );
                     ::basegfx::B2DHomMatrix aTransform;
 
                     if( bOffsetting )

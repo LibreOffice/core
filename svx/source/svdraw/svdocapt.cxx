@@ -581,7 +581,7 @@ void SdrCaptionObj::BrkCreate(SdrDragStat& /*rStat*/)
 basegfx::B2DPolyPolygon SdrCaptionObj::TakeCreatePoly(const SdrDragStat& /*rDrag*/) const
 {
     basegfx::B2DPolyPolygon aRetval;
-    const basegfx::B2DRange aRange(maRect.Left(), maRect.Top(), maRect.Right(), maRect.Bottom());
+    const basegfx::B2DRange aRange = maRect.toB2DRectangle();
     aRetval.append(basegfx::utils::createPolygonFromRect(aRange));
     aRetval.append(aTailPoly.getB2DPolygon());
     return aRetval;

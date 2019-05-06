@@ -280,7 +280,7 @@ void TableBorderHdl::CreateB2dIAObject()
 
                 if (xManager.is())
                 {
-                    const basegfx::B2DRange aRange(vcl::unotools::b2DRectangleFromRectangle(maRectangle));
+                    const basegfx::B2DRange aRange = maRectangle.toB2DRectangle();
                     const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
                     const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
                     const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);

@@ -1080,15 +1080,15 @@ namespace cppcanvas
 
                     // convert rect to polygon beforehand, must revert
                     // to general polygon clipping here.
+                    ::tools::Rectangle aRect = rState.clipRect;
+                    // #121100# VCL rectangular clips always
+                    // include one more pixel to the right
+                    // and the bottom
+                    aRect.AdjustRight(1);
+                    aRect.AdjustBottom(1);
                     rState.clip = ::basegfx::B2DPolyPolygon(
                         ::basegfx::utils::createPolygonFromRect(
-                            // #121100# VCL rectangular clips always
-                            // include one more pixel to the right
-                            // and the bottom
-                            ::basegfx::B2DRectangle( rState.clipRect.Left(),
-                                                     rState.clipRect.Top(),
-                                                     rState.clipRect.Right()+1,
-                                                     rState.clipRect.Bottom()+1 ) ) );
+                            aRect.toB2DRectangle() ) );
                 }
 
                 // AW: Simplified
@@ -1108,17 +1108,17 @@ namespace cppcanvas
                 }
                 else
                 {
+                    ::tools::Rectangle aRect = rState.clipRect;
+                    // #121100# VCL rectangular clips
+                    // always include one more pixel to
+                    // the right and the bottom
+                    aRect.AdjustRight(1);
+                    aRect.AdjustBottom(1);
                     rState.xClipPoly = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
                         rParms.mrCanvas->getUNOCanvas()->getDevice(),
                         ::basegfx::B2DPolyPolygon(
                             ::basegfx::utils::createPolygonFromRect(
-                                // #121100# VCL rectangular clips
-                                // always include one more pixel to
-                                // the right and the bottom
-                                ::basegfx::B2DRectangle( rState.clipRect.Left(),
-                                                         rState.clipRect.Top(),
-                                                         rState.clipRect.Right()+1,
-                                                         rState.clipRect.Bottom()+1 ) ) ) );
+                                aRect.toB2DRectangle() ) ) );
                 }
             }
             else
@@ -1165,10 +1165,7 @@ namespace cppcanvas
                 // to general polygon clipping here.
                 ::basegfx::B2DPolyPolygon aClipPoly(
                     ::basegfx::utils::createPolygonFromRect(
-                        ::basegfx::B2DRectangle( rClipRect.Left(),
-                                                 rClipRect.Top(),
-                                                 rClipRect.Right(),
-                                                 rClipRect.Bottom() ) ) );
+                        rClipRect.toB2DRectangle() ) );
 
                 rState.clipRect.SetEmpty();
 
@@ -1185,17 +1182,17 @@ namespace cppcanvas
                 }
                 else
                 {
+                    // #121100# VCL rectangular clips
+                    // always include one more pixel to
+                    // the right and the bottom
+                    ::tools::Rectangle aRect = rState.clipRect;
+                    aRect.AdjustRight(1);
+                    aRect.AdjustBottom(1);
                     rState.xClipPoly = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
                         rParms.mrCanvas->getUNOCanvas()->getDevice(),
                         ::basegfx::B2DPolyPolygon(
                             ::basegfx::utils::createPolygonFromRect(
-                                // #121100# VCL rectangular clips
-                                // always include one more pixel to
-                                // the right and the bottom
-                                ::basegfx::B2DRectangle( rState.clipRect.Left(),
-                                                         rState.clipRect.Top(),
-                                                         rState.clipRect.Right()+1,
-                                                         rState.clipRect.Bottom()+1 ) ) ) );
+                                aRect.toB2DRectangle() ) ) );
                 }
             }
             else

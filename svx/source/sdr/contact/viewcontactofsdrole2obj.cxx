@@ -61,9 +61,7 @@ basegfx::B2DHomMatrix ViewContactOfSdrOle2Obj::createObjectTransform() const
 {
     // take unrotated snap rect (direct model data) for position and size
     const tools::Rectangle aRectangle(GetOle2Obj().GetGeoRect());
-    const basegfx::B2DRange aObjectRange(
-        aRectangle.Left(), aRectangle.Top(),
-        aRectangle.Right(), aRectangle.Bottom());
+    const basegfx::B2DRange aObjectRange = aRectangle.toB2DRectangle();
 
     // create object matrix
     const GeoStat& rGeoStat(GetOle2Obj().GetGeoStat());

@@ -373,12 +373,6 @@ namespace vcl
                                 rRect.getMaxY() );
         }
 
-        basegfx::B2IRectangle b2IRectangleFromRectangle(tools::Rectangle const& rRect)
-        {
-            return basegfx::B2IRectangle(rRect.Left(), rRect.Top(),
-                                         rRect.Right(), rRect.Bottom());
-        }
-
         basegfx::B2DVector b2DSizeFromSize( const ::Size& rSize )
         {
             return basegfx::B2DVector( rSize.Width(),
@@ -389,14 +383,6 @@ namespace vcl
         {
             return basegfx::B2DPoint( rPoint.X(),
                                         rPoint.Y() );
-        }
-
-        basegfx::B2DRange b2DRectangleFromRectangle( const ::tools::Rectangle& rRect )
-        {
-            return basegfx::B2DRange( rRect.Left(),
-                                        rRect.Top(),
-                                        rRect.Right(),
-                                        rRect.Bottom() );
         }
 
         geometry::IntegerSize2D integerSize2DFromSize( const Size& rSize )

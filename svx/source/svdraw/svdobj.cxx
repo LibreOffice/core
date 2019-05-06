@@ -1077,8 +1077,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeXorPoly() const
 {
     basegfx::B2DPolyPolygon aRetval;
     const tools::Rectangle aR(GetCurrentBoundRect());
-    const basegfx::B2DRange aRange(aR.Left(), aR.Top(), aR.Right(), aR.Bottom());
-    aRetval.append(basegfx::utils::createPolygonFromRect(aRange));
+    aRetval.append(basegfx::utils::createPolygonFromRect(aR.toB2DRectangle()));
 
     return aRetval;
 }
@@ -1371,8 +1370,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeCreatePoly(const SdrDragStat& rDrag) cons
     aRect1.Justify();
 
     basegfx::B2DPolyPolygon aRetval;
-    const basegfx::B2DRange aRange(aRect1.Left(), aRect1.Top(), aRect1.Right(), aRect1.Bottom());
-    aRetval.append(basegfx::utils::createPolygonFromRect(aRange));
+    aRetval.append(basegfx::utils::createPolygonFromRect(aRect1.toB2DRectangle()));
     return aRetval;
 }
 

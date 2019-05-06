@@ -325,21 +325,13 @@ void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
                                        const tools::Rectangle& rPaintRange,
                                        const tools::Rectangle& rDefineRange)
 {
-    const basegfx::B2DRange aPaintRange(
-        rPaintRange.Left(),
-        rPaintRange.Top(),
-        rPaintRange.Right(),
-        rPaintRange.Bottom());
+    const basegfx::B2DRange aPaintRange = rPaintRange.toB2DRectangle();
 
     if(!aPaintRange.isEmpty() &&
        !basegfx::fTools::equalZero(aPaintRange.getWidth()) &&
        !basegfx::fTools::equalZero(aPaintRange.getHeight()))
     {
-        const basegfx::B2DRange aDefineRange(
-            rDefineRange.Left(),
-            rDefineRange.Top(),
-            rDefineRange.Right(),
-            rDefineRange.Bottom());
+        const basegfx::B2DRange aDefineRange = rDefineRange.toB2DRectangle();
 
         // prepare primitive sequence
         drawinglayer::primitive2d::Primitive2DContainer aSequence;
