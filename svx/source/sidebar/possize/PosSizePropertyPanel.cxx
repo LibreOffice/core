@@ -35,6 +35,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/button.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/field.hxx>
@@ -1083,11 +1084,11 @@ void PosSizePropertyPanel::SetPosSizeMinMax()
         return;
     tools::Rectangle aTmpRect(mpView->GetAllMarkedRect());
     pPV->LogicToPagePos(aTmpRect);
-    maRect = basegfx::B2DRange(aTmpRect.Left(), aTmpRect.Top(), aTmpRect.Right(), aTmpRect.Bottom());
+    maRect = vcl::unotools::b2DRectangleFromRectangle(aTmpRect);
 
     tools::Rectangle aTmpRect2(mpView->GetWorkArea());
     pPV->LogicToPagePos(aTmpRect2);
-    maWorkArea = basegfx::B2DRange(aTmpRect2.Left(), aTmpRect2.Top(), aTmpRect2.Right(), aTmpRect2.Bottom());
+    maWorkArea = vcl::unotools::b2DRectangleFromRectangle(aTmpRect2);
 
     const Fraction aUIScale(mpView->GetModel()->GetUIScale());
     TransfrmHelper::ScaleRect( maWorkArea, aUIScale );

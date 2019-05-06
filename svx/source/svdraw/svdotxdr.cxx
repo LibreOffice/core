@@ -29,6 +29,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/ptrstyle.hxx>
 
 
@@ -235,7 +236,7 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeCreatePoly(const SdrDragStat& rDrag) con
     aRect1.Justify();
 
     basegfx::B2DPolyPolygon aRetval;
-    const basegfx::B2DRange aRange(aRect1.Left(), aRect1.Top(), aRect1.Right(), aRect1.Bottom());
+    const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(aRect1);
     aRetval.append(basegfx::utils::createPolygonFromRect(aRange));
     return aRetval;
 }

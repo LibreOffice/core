@@ -45,6 +45,7 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 
+#include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -1482,12 +1483,7 @@ namespace sdr { namespace contact {
         // use getBoundRect()/getSnapRect() here; these will use the sequence of
         // primitives themselves in the long run.
         const tools::Rectangle aSdrGeoData( _rVOC.GetSdrUnoObj().GetGeoRect() );
-        const basegfx::B2DRange aRange(
-            aSdrGeoData.Left(),
-            aSdrGeoData.Top(),
-            aSdrGeoData.Right(),
-            aSdrGeoData.Bottom()
-        );
+        const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(aSdrGeoData);
 
         _out_Transformation.identity();
         _out_Transformation.set( 0, 0, aRange.getWidth() );

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/canvastools.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
@@ -443,8 +444,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                         {
                             rWriter.Push();
                             basegfx::B2DPolyPolygon aRect( basegfx::utils::createPolygonFromRect(
-                                basegfx::B2DRectangle( aVisibleOutputRect.Left(), aVisibleOutputRect.Top(),
-                                                       aVisibleOutputRect.Right(), aVisibleOutputRect.Bottom() ) ) );
+                                vcl::unotools::b2DRectangleFromRectangle(aVisibleOutputRect) ) );
                             rWriter.SetClipRegion( aRect);
                         }
 

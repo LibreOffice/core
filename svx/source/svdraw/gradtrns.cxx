@@ -24,6 +24,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <tools/helpers.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
 
 
@@ -47,7 +48,7 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
 
     // calc the basic positions
     const tools::Rectangle aObjectSnapRectangle(pObj->GetSnapRect());
-    const basegfx::B2DRange aRange(aObjectSnapRectangle.Left(), aObjectSnapRectangle.Top(), aObjectSnapRectangle.Right(), aObjectSnapRectangle.Bottom());
+    const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(aObjectSnapRectangle);
     const basegfx::B2DPoint aCenter(aRange.getCenter());
     basegfx::B2DPoint aStartPos, aEndPos;
 
@@ -199,7 +200,7 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
 
     // calc the basic positions
     const tools::Rectangle aObjectSnapRectangle(pObj->GetSnapRect());
-    const basegfx::B2DRange aRange(aObjectSnapRectangle.Left(), aObjectSnapRectangle.Top(), aObjectSnapRectangle.Right(), aObjectSnapRectangle.Bottom());
+    const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(aObjectSnapRectangle);
     const basegfx::B2DPoint aCenter(aRange.getCenter());
     basegfx::B2DPoint aStartPos(rV.maPositionA);
     basegfx::B2DPoint aEndPos(rV.maPositionB);

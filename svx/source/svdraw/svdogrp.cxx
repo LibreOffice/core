@@ -49,6 +49,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <libxml/xmlwriter.h>
+#include <vcl/canvastools.hxx>
 
 // BaseProperties section
 std::unique_ptr<sdr::properties::BaseProperties> SdrObjGroup::CreateObjectSpecificProperties()
@@ -297,7 +298,7 @@ basegfx::B2DPolyPolygon SdrObjGroup::TakeXorPoly() const
 
     if(!aRetval.count())
     {
-        const basegfx::B2DRange aRange(aOutRect.Left(), aOutRect.Top(), aOutRect.Right(), aOutRect.Bottom());
+        const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(aOutRect);
         aRetval.append(basegfx::utils::createPolygonFromRect(aRange));
     }
 

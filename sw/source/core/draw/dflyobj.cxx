@@ -24,6 +24,7 @@
 #include <editeng/protitem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <svx/svdpage.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/ptrstyle.hxx>
 
@@ -623,7 +624,7 @@ void SwVirtFlyDrawObj::NbcSetLogicRect(const tools::Rectangle& )
 ::basegfx::B2DPolyPolygon SwVirtFlyDrawObj::TakeXorPoly() const
 {
     const tools::Rectangle aSourceRectangle(GetFlyFrame()->getFrameArea().SVRect());
-    const ::basegfx::B2DRange aSourceRange(aSourceRectangle.Left(), aSourceRectangle.Top(), aSourceRectangle.Right(), aSourceRectangle.Bottom());
+    const ::basegfx::B2DRange aSourceRange = vcl::unotools::b2DRectangleFromRectangle(aSourceRectangle);
     ::basegfx::B2DPolyPolygon aRetval;
 
     aRetval.append(::basegfx::utils::createPolygonFromRect(aSourceRange));

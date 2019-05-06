@@ -44,6 +44,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <memory>
@@ -159,8 +160,7 @@ void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
     bool bRtl = AllSettings::GetLayoutRTL();
 
     drawinglayer::primitive2d::Primitive2DContainer aSeq(3);
-    B2DRectangle aBRect(double(aRect.Left()), double(aRect.Top()),
-                        double(aRect.Right()), double(aRect.Bottom()));
+    B2DRectangle aBRect = vcl::unotools::b2DRectangleFromRectangle(aRect);
     B2DPolygon aPolygon = createPolygonFromRect(aBRect, 3.0 / BUTTON_WIDTH, 3.0 / BUTTON_HEIGHT);
 
     // Create the polygon primitives

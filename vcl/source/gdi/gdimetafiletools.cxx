@@ -19,6 +19,7 @@
 
 #include <vcl/gdimetafiletools.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -319,9 +320,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                 if(!rRect.IsEmpty() && !aClips.empty() && aClips.back().count())
                 {
-                    const basegfx::B2DRange aClipRange(
-                        rRect.Left(), rRect.Top(),
-                        rRect.Right(), rRect.Bottom());
+                    const basegfx::B2DRange aClipRange(vcl::unotools::b2DRectangleFromRectangle(rRect));
 
                     aClips.back() = basegfx::utils::clipPolyPolygonOnRange(
                         aClips.back(),
@@ -516,9 +515,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                             aClips.back(),
                             basegfx::B2DPolyPolygon(
                                 basegfx::utils::createPolygonFromRect(
-                                    basegfx::B2DRange(
-                                        rRect.Left(), rRect.Top(),
-                                        rRect.Right(), rRect.Bottom()))),
+                                        vcl::unotools::b2DRectangleFromRectangle(rRect))),
                             aTarget,
                             false); // stroke
                     }
@@ -538,7 +535,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     {
                         const sal_uInt32 nHor(pA->GetHorzRound());
                         const sal_uInt32 nVer(pA->GetVertRound());
-                        const basegfx::B2DRange aRange(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom());
+                        const basegfx::B2DRange aRange(vcl::unotools::b2DRectangleFromRectangle(rRect));
                         basegfx::B2DPolygon aOutline;
 
                         if(nHor || nVer)
@@ -575,7 +572,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     }
                     else
                     {
-                        const basegfx::B2DRange aRange(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom());
+                        const basegfx::B2DRange aRange(vcl::unotools::b2DRectangleFromRectangle(rRect));
 
                         bDone = handleGeometricContent(
                             aClips.back(),
@@ -978,9 +975,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                             aClips.back(),
                             basegfx::B2DPolyPolygon(
                                 basegfx::utils::createPolygonFromRect(
-                                    basegfx::B2DRange(
-                                        rRect.Left(), rRect.Top(),
-                                        rRect.Right(), rRect.Bottom()))),
+                                        vcl::unotools::b2DRectangleFromRectangle(rRect))),
                             pA->GetGradient(),
                             aTarget);
                     }

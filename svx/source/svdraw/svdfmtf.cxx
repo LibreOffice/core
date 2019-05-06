@@ -40,6 +40,7 @@
 #include <editeng/wrlmitem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/colritem.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/metric.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <svx/xflhtit.hxx>
@@ -1434,7 +1435,7 @@ namespace
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaGradientAction const & rAct)
 {
-    basegfx::B2DRange aRange(rAct.GetRect().Left(), rAct.GetRect().Top(), rAct.GetRect().Right(), rAct.GetRect().Bottom());
+    basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(rAct.GetRect());
 
     if(aRange.isEmpty())
         return;
@@ -1548,9 +1549,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction const & rAct)
     BitmapEx aBitmapEx(
         convertMetafileToBitmapEx(
             rMtf,
-            basegfx::B2DRange(
-                aRect.Left(), aRect.Top(),
-                aRect.Right(), aRect.Bottom()),
+            vcl::unotools::b2DRectangleFromRectangle(aRect),
             125000));
 
     // handle colors

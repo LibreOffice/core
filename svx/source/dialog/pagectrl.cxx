@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <vcl/bitmap.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/settings.hxx>
 #include <tools/fract.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -325,21 +326,13 @@ void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
                                        const tools::Rectangle& rPaintRange,
                                        const tools::Rectangle& rDefineRange)
 {
-    const basegfx::B2DRange aPaintRange(
-        rPaintRange.Left(),
-        rPaintRange.Top(),
-        rPaintRange.Right(),
-        rPaintRange.Bottom());
+    const basegfx::B2DRange aPaintRange = vcl::unotools::b2DRectangleFromRectangle(rPaintRange);
 
     if(!aPaintRange.isEmpty() &&
        !basegfx::fTools::equalZero(aPaintRange.getWidth()) &&
        !basegfx::fTools::equalZero(aPaintRange.getHeight()))
     {
-        const basegfx::B2DRange aDefineRange(
-            rDefineRange.Left(),
-            rDefineRange.Top(),
-            rDefineRange.Right(),
-            rDefineRange.Bottom());
+        const basegfx::B2DRange aDefineRange = vcl::unotools::b2DRectangleFromRectangle(rDefineRange);
 
         // prepare primitive sequence
         drawinglayer::primitive2d::Primitive2DContainer aSequence;

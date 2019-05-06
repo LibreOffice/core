@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <vcl/canvastools.hxx>
 
 using namespace com::sun::star;
 
@@ -41,7 +42,7 @@ namespace drawinglayer
             {
                 // get target size
                 const ::tools::Rectangle aMtfTarget(getMetaFile().GetPrefMapMode().GetOrigin(), getMetaFile().GetPrefSize());
-                const basegfx::B2DRange aMtfRange(aMtfTarget.Left(), aMtfTarget.Top(), aMtfTarget.Right(), aMtfTarget.Bottom());
+                const basegfx::B2DRange aMtfRange(vcl::unotools::b2DRectangleFromRectangle(aMtfTarget));
 
                 // tdf#113197 get content range and check if we have an overlap with
                 // defined target range (aMtfRange)

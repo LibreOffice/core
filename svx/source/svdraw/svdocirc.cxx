@@ -49,6 +49,7 @@
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xpool.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/ptrstyle.hxx>
 
 using namespace com::sun::star;
@@ -214,7 +215,7 @@ bool SdrCircObj::PaintNeedsXPolyCirc() const
 
 basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, const tools::Rectangle& rRect1, long nStart, long nEnd) const
 {
-    const basegfx::B2DRange aRange(rRect1.Left(), rRect1.Top(), rRect1.Right(), rRect1.Bottom());
+    const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(rRect1);
     basegfx::B2DPolygon aCircPolygon;
 
     if(OBJ_CIRC == eCicrleKind)
