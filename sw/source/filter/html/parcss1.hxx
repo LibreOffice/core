@@ -173,23 +173,23 @@ inline sal_Int32 CSS1Expression::GetSLength() const
  */
 class CSS1Parser
 {
-    bool bWhiteSpace : 1; // read a whitespace?
-    bool bEOF : 1; // is end of "file"?
+    bool m_bWhiteSpace : 1; // read a whitespace?
+    bool m_bEOF : 1; // is end of "file"?
 
-    sal_Unicode cNextCh; // next character
+    sal_Unicode m_cNextCh; // next character
 
-    sal_Int32 nInPos; // current position in the input string
+    sal_Int32 m_nInPos; // current position in the input string
 
-    sal_uInt32 nlLineNr; // current row number
-    sal_uInt32 nlLinePos; // current column number
+    sal_uInt32 m_nlLineNr; // current row number
+    sal_uInt32 m_nlLinePos; // current column number
 
-    double nValue; // value of the token as number
+    double m_nValue; // value of the token as number
 
-    CSS1ParserState eState; // current state of the parser
-    CSS1Token nToken; // the current token
+    CSS1ParserState m_eState; // current state of the parser
+    CSS1Token m_nToken; // the current token
 
-    OUString aIn; // the string to parse
-    OUString aToken; // token as string
+    OUString m_aIn; // the string to parse
+    OUString m_aToken; // token as string
 
     /// prepare parsing
     void InitRead( const OUString& rIn );
@@ -201,9 +201,9 @@ class CSS1Parser
     CSS1Token GetNextToken();
 
     /// Is the parser still working?
-    bool IsParserWorking() const { return CSS1_PAR_WORKING == eState; }
+    bool IsParserWorking() const { return CSS1_PAR_WORKING == m_eState; }
 
-    bool IsEOF() const { return bEOF; }
+    bool IsEOF() const { return m_bEOF; }
 
     // parse parts of the grammar
     void ParseRule();
