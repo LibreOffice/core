@@ -68,7 +68,7 @@ SidebarChildWindow::SidebarChildWindow(vcl::Window* pParentWindow, sal_uInt16 nI
         // Undock sidebar in LOK to allow for resizing freely
         // (i.e. when the client window is resized) and collapse
         // it so the client can open it on demand.
-        pDockWin->SetFloatingSize(Size(TabBar::GetDefaultWidth() * GetWindow()->GetDPIScaleFactor(),
+        pDockWin->SetFloatingSize(Size(pDockWin->GetSizePixel().Width() * GetWindow()->GetDPIScaleFactor(),
                                        pDockWin->GetSizePixel().Height()));
         pDockWin->SetFloatingMode(true);
     }
@@ -78,7 +78,7 @@ SidebarChildWindow::SidebarChildWindow(vcl::Window* pParentWindow, sal_uInt16 nI
     pDockWin->Show();
 }
 
-sal_Int32 SidebarChildWindow::GetDefaultWidth (vcl::Window const * pWindow)
+sal_Int32 SidebarChildWindow::GetDefaultWidth(vcl::Window const* pWindow)
 {
     if (pWindow != nullptr)
     {
