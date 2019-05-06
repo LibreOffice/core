@@ -1847,7 +1847,7 @@ void SAL_CALL OBoundControlModel::removeUpdateListener(const Reference< XUpdateL
 sal_Bool SAL_CALL OBoundControlModel::commit()
 {
     ControlModelLock aLock( *this );
-    OSL_PRECOND( m_bCommitable, "OBoundControlModel::commit: invalid call (I'm not commitable !) " );
+    OSL_PRECOND( m_bCommitable, "OBoundControlModel::commit: invalid call (I'm not committable!) " );
     if ( hasExternalValueBinding() )
     {
         // in most cases, no action is required: For most derivees, we know the value property of
