@@ -310,10 +310,7 @@ namespace sdr
 
             // take unrotated snap rect for position and size. Directly use model data, not getBoundRect() or getSnapRect()
             // which will use the primitive data we just create in the near future
-            const tools::Rectangle aRectangle(GetGrafObject().GetGeoRect());
-            const ::basegfx::B2DRange aObjectRange(
-                aRectangle.Left(), aRectangle.Top(),
-                aRectangle.Right(), aRectangle.Bottom());
+            const ::basegfx::B2DRange aObjectRange = GetGrafObject().GetGeoRect().toB2DRectangle();
 
             // look for mirroring
             const GeoStat& rGeoStat(GetGrafObject().GetGeoStat());

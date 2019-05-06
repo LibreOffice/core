@@ -48,9 +48,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrRectObj::createV
 
     // take unrotated snap rect (direct model data) for position and size
     const tools::Rectangle aRectangle(GetRectObj().GetGeoRect());
-    const ::basegfx::B2DRange aObjectRange(
-        aRectangle.Left(), aRectangle.Top(),
-        aRectangle.Right(), aRectangle.Bottom() );
+    const ::basegfx::B2DRange aObjectRange = aRectangle.toB2DRectangle();
 
     const GeoStat& rGeoStat(GetRectObj().GetGeoStat());
 

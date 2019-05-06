@@ -10000,7 +10000,7 @@ void PDFWriterImpl::moveClipRegion( sal_Int32 nX, sal_Int32 nY )
 void PDFWriterImpl::intersectClipRegion( const tools::Rectangle& rRect )
 {
     basegfx::B2DPolyPolygon aRect( basegfx::utils::createPolygonFromRect(
-        basegfx::B2DRectangle( rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() ) ) );
+                                    rRect.toB2DRectangle() ) );
     intersectClipRegion( aRect );
 }
 

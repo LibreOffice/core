@@ -443,8 +443,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                         {
                             rWriter.Push();
                             basegfx::B2DPolyPolygon aRect( basegfx::utils::createPolygonFromRect(
-                                basegfx::B2DRectangle( aVisibleOutputRect.Left(), aVisibleOutputRect.Top(),
-                                                       aVisibleOutputRect.Right(), aVisibleOutputRect.Bottom() ) ) );
+                                aVisibleOutputRect.toB2DRectangle() ) );
                             rWriter.SetClipRegion( aRect);
                         }
 

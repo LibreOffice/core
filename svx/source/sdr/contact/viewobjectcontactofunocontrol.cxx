@@ -1482,12 +1482,7 @@ namespace sdr { namespace contact {
         // use getBoundRect()/getSnapRect() here; these will use the sequence of
         // primitives themselves in the long run.
         const tools::Rectangle aSdrGeoData( _rVOC.GetSdrUnoObj().GetGeoRect() );
-        const basegfx::B2DRange aRange(
-            aSdrGeoData.Left(),
-            aSdrGeoData.Top(),
-            aSdrGeoData.Right(),
-            aSdrGeoData.Bottom()
-        );
+        const basegfx::B2DRange aRange = aSdrGeoData.toB2DRectangle();
 
         _out_Transformation.identity();
         _out_Transformation.set( 0, 0, aRange.getWidth() );

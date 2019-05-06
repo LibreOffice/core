@@ -297,7 +297,7 @@ basegfx::B2DPolyPolygon SdrObjGroup::TakeXorPoly() const
 
     if(!aRetval.count())
     {
-        const basegfx::B2DRange aRange(aOutRect.Left(), aOutRect.Top(), aOutRect.Right(), aOutRect.Bottom());
+        const basegfx::B2DRange aRange = aOutRect.toB2DRectangle();
         aRetval.append(basegfx::utils::createPolygonFromRect(aRange));
     }
 

@@ -241,9 +241,7 @@ namespace sdr
 
                 // paint members
                 const tools::Rectangle aRegionBoundRect(rRegion.GetBoundRect());
-                const basegfx::B2DRange aRegionRange(
-                    aRegionBoundRect.Left(), aRegionBoundRect.Top(),
-                    aRegionBoundRect.Right(), aRegionBoundRect.Bottom());
+                const basegfx::B2DRange aRegionRange = aRegionBoundRect.toB2DRectangle();
 
                 OutputDevice& rTarget = pPreRenderDevice ? *pPreRenderDevice : getOutputDevice();
                 ImpDrawMembers(aRegionRange, rTarget);

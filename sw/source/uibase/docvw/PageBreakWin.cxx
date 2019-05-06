@@ -159,8 +159,7 @@ void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
     bool bRtl = AllSettings::GetLayoutRTL();
 
     drawinglayer::primitive2d::Primitive2DContainer aSeq(3);
-    B2DRectangle aBRect(double(aRect.Left()), double(aRect.Top()),
-                        double(aRect.Right()), double(aRect.Bottom()));
+    B2DRectangle aBRect = aRect.toB2DRectangle();
     B2DPolygon aPolygon = createPolygonFromRect(aBRect, 3.0 / BUTTON_WIDTH, 3.0 / BUTTON_HEIGHT);
 
     // Create the polygon primitives

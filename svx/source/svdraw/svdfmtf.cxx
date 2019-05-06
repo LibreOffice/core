@@ -1434,7 +1434,7 @@ namespace
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaGradientAction const & rAct)
 {
-    basegfx::B2DRange aRange(rAct.GetRect().Left(), rAct.GetRect().Top(), rAct.GetRect().Right(), rAct.GetRect().Bottom());
+    basegfx::B2DRange aRange = rAct.GetRect().toB2DRectangle();
 
     if(aRange.isEmpty())
         return;
@@ -1548,9 +1548,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction const & rAct)
     BitmapEx aBitmapEx(
         convertMetafileToBitmapEx(
             rMtf,
-            basegfx::B2DRange(
-                aRect.Left(), aRect.Top(),
-                aRect.Right(), aRect.Bottom()),
+            aRect.toB2DRectangle(),
             125000));
 
     // handle colors

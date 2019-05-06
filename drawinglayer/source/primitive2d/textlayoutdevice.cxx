@@ -303,9 +303,7 @@ namespace drawinglayer
                 // #i104432#, #i102556# take empty results into account
                 if(!aRect.IsEmpty())
                 {
-                    return basegfx::B2DRange(
-                        aRect.Left(), aRect.Top(),
-                        aRect.Right(), aRect.Bottom());
+                    return aRect.toB2DRectangle();
                 }
             }
 

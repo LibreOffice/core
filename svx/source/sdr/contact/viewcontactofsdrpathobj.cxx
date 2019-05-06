@@ -177,9 +177,7 @@ namespace sdr
 
                     aUnitDefinitionPolyPolygon.append(
                         basegfx::utils::createPolygonFromRect(
-                            basegfx::B2DRange(
-                                rSnapRect.Left(), rSnapRect.Top(),
-                                rSnapRect.Right(), rSnapRect.Bottom())));
+                                rSnapRect.toB2DRectangle()));
 
                     // use same coordinate system as the shape geometry -> this
                     // makes it relative to shape's unit geometry and thus freely

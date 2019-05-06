@@ -1016,9 +1016,7 @@ namespace wmfemfhelper
         // use wallpaper rect if set
         if(rWallpaper.IsRect() && !rWallpaper.GetRect().IsEmpty())
         {
-            aWallpaperRange = basegfx::B2DRange(
-                rWallpaper.GetRect().Left(), rWallpaper.GetRect().Top(),
-                rWallpaper.GetRect().Right(), rWallpaper.GetRect().Bottom());
+            aWallpaperRange = rWallpaper.GetRect().toB2DRectangle();
         }
 
         drawinglayer::primitive2d::BasePrimitive2D* pBitmapWallpaperFill =
@@ -1611,7 +1609,7 @@ namespace wmfemfhelper
 
                         if(!rRectangle.IsEmpty())
                         {
-                            const basegfx::B2DRange aRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
+                            const basegfx::B2DRange aRange = rRectangle.toB2DRectangle();
 
                             if(!aRange.isEmpty())
                             {
@@ -1638,7 +1636,7 @@ namespace wmfemfhelper
 
                         if(!rRectangle.IsEmpty())
                         {
-                            const basegfx::B2DRange aRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
+                            const basegfx::B2DRange aRange = rRectangle.toB2DRectangle();
 
                             if(!aRange.isEmpty())
                             {
@@ -1677,7 +1675,7 @@ namespace wmfemfhelper
 
                         if(!rRectangle.IsEmpty())
                         {
-                            const basegfx::B2DRange aRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
+                            const basegfx::B2DRange aRange = rRectangle.toB2DRectangle();
 
                             if(!aRange.isEmpty())
                             {
@@ -2118,7 +2116,7 @@ namespace wmfemfhelper
 
                     if(!rRectangle.IsEmpty())
                     {
-                        basegfx::B2DRange aRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
+                        basegfx::B2DRange aRange = rRectangle.toB2DRectangle();
 
                         if(!aRange.isEmpty())
                         {
@@ -2210,9 +2208,7 @@ namespace wmfemfhelper
                     {
                         const Wallpaper& rWallpaper = pA->GetWallpaper();
                         const WallpaperStyle eWallpaperStyle(rWallpaper.GetStyle());
-                        basegfx::B2DRange aWallpaperRange(
-                            aWallpaperRectangle.Left(), aWallpaperRectangle.Top(),
-                            aWallpaperRectangle.Right(), aWallpaperRectangle.Bottom());
+                        basegfx::B2DRange aWallpaperRange = aWallpaperRectangle.toB2DRectangle();
 
                         if(WallpaperStyle::NONE != eWallpaperStyle)
                         {
@@ -2290,9 +2286,7 @@ namespace wmfemfhelper
                     else
                     {
                         // create transformed ClipRange
-                        basegfx::B2DRange aClipRange(
-                            rRectangle.Left(), rRectangle.Top(),
-                            rRectangle.Right(), rRectangle.Bottom());
+                        basegfx::B2DRange aClipRange = rRectangle.toB2DRectangle();
 
                         aClipRange.transform(rPropertyHolders.Current().getTransformation());
 

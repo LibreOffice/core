@@ -539,11 +539,7 @@ void vcl::Region::Union( const tools::Rectangle& rRect )
             // get the other B2DPolyPolygon and use logical Or-Operation
             const basegfx::B2DPolygon aRectPoly(
                 basegfx::utils::createPolygonFromRect(
-                    basegfx::B2DRectangle(
-                        rRect.Left(),
-                        rRect.Top(),
-                        rRect.Right(),
-                        rRect.Bottom())));
+                        rRect.toB2DRectangle()));
             const basegfx::B2DPolyPolygon aClip(
                 basegfx::utils::solvePolygonOperationOr(
                     aThisPolyPoly,
@@ -716,7 +712,7 @@ void vcl::Region::Exclude( const tools::Rectangle& rRect )
         // get the other B2DPolyPolygon
         const basegfx::B2DPolygon aRectPoly(
             basegfx::utils::createPolygonFromRect(
-                basegfx::B2DRectangle(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom())));
+                rRect.toB2DRectangle()));
         const basegfx::B2DPolyPolygon aOtherPolyPoly(aRectPoly);
         const basegfx::B2DPolyPolygon aClip = basegfx::utils::solvePolygonOperationDiff(aThisPolyPoly, aOtherPolyPoly);
 
@@ -797,7 +793,7 @@ void vcl::Region::XOr( const tools::Rectangle& rRect )
         // get the other B2DPolyPolygon
         const basegfx::B2DPolygon aRectPoly(
             basegfx::utils::createPolygonFromRect(
-                basegfx::B2DRectangle(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom())));
+                rRect.toB2DRectangle()));
         const basegfx::B2DPolyPolygon aOtherPolyPoly(aRectPoly);
         const basegfx::B2DPolyPolygon aClip = basegfx::utils::solvePolygonOperationXor(aThisPolyPoly, aOtherPolyPoly);
 

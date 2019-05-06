@@ -525,7 +525,7 @@ namespace
 
         // check current range
         const tools::Rectangle aOutArea(mrOutlinerView.GetOutputArea());
-        basegfx::B2DRange aNewRange(aOutArea.Left(), aOutArea.Top(), aOutArea.Right(), aOutArea.Bottom());
+        basegfx::B2DRange aNewRange = aOutArea.toB2DRectangle();
         aNewRange.expand(rMinTextEditArea);
 
         if (aNewRange != maRange)
@@ -630,9 +630,7 @@ void SdrObjEditView::EditViewInvalidate(const tools::Rectangle&) const
     if (IsTextEdit())
     {
         // MinTextRange may have changed. Forward it, too
-        const basegfx::B2DRange aMinTextRange(
-            aMinTextEditArea.Left(), aMinTextEditArea.Top(),
-            aMinTextEditArea.Right(), aMinTextEditArea.Bottom());
+        const basegfx::B2DRange aMinTextRange = aMinTextEditArea.toB2DRectangle();
 
         for (sal_uInt32 a(0); a < maTEOverlayGroup.count(); a++)
         {
@@ -753,7 +751,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::
         if (xProcessor)
         {
             const bool bMapModeEnabled(rTargetDevice.IsMapModeEnabled());
-            const basegfx::B2DRange aRange(aPixRect.Left(), aPixRect.Top(), aPixRect.Right(), aPixRect.Bottom());
+            const basegfx::B2DRange aRange = aPixRect.toB2DRectangle();
             const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
             const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
             const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
