@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_ab26e0b6",
+        "filename": "xmloff/source/core/PropertySetMerger.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-05-06T19:38:55Z",
+      "side": 1,
+      "message": "Looks like a typo.",
+      "revId": "7df7b7bd5f5f9f67ddc1d85a9ba2ab1789bcecf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
