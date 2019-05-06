@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_15ab711d",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 10
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-06T07:18:31Z",
+      "side": 1,
+      "message": "This is not meant to be added manually here.  This file is updated in a semi-automated way (see its git log).  (Also, as XAccessibleContext2 isn\u0027t published, it shall not appear here anyway.  Unpublished XAccessibleContext is only included here because it is used indirectly, via unpublished XAccessible, from published css.awt.UnoControl.)",
+      "revId": "5cd3baad7c55c8d30e0a249e882a1e65c528d587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
