@@ -115,13 +115,14 @@ bool Animation::IsTransparent() const
     // as the application (?) does not invalidate on non-transparent
     // graphics due to performance reasons.
 
-    return std::any_of(maList.begin(), maList.end(),
-                       [&aRect](const std::unique_ptr<AnimationBitmap>& pAnim) -> bool {
-                           return pAnim->meDisposal == Disposal::Back
-                                  && tools::Rectangle{ pAnim->maPositionPixel, pAnim->maSizePixel }
-                                         != aRect;
-                       })
-           || maBitmapEx.IsTransparent();
+    return maBitmapEx.IsTransparent()
+           || std::any_of(maList.begin(), maList.end(),
+                          [&aRect](const std::unique_ptr<AnimationBitmap>& pAnim) -> bool {
+                              return pAnim->meDisposal == Disposal::Back
+                                     && tools::Rectangle{ pAnim->maPositionPixel,
+                                                          pAnim->maSizePixel }
+                                            != aRect;
+                          });
 }
 
 sal_uLong Animation::GetSizeBytes() const
