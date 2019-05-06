@@ -62,7 +62,8 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules):
         "exception": "bits/exception.h",
         "memory": "bits/shared_ptr.h",
         "functional": "bits/std_function.h",
-        "cmath": "bits/std_abs.h"
+        "cmath": "bits/std_abs.h",
+        "ctime": "bits/types/clock_t.h"
     }
     for k, v in bits.items():
         if include == k and v in toAdd:
