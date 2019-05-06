@@ -469,7 +469,7 @@ void SidebarController::ProcessNewWidth (const sal_Int32 nNewWidth)
         return;
 
     if (mbIsDeckRequestedOpen.get())
-     {
+    {
         // Deck became large enough to be shown.  Show it.
         mnSavedSidebarWidth = nNewWidth;
         RequestOpenDeck();
@@ -743,6 +743,24 @@ void SidebarController::SwitchToDeck (
     const DeckDescriptor& rDeckDescriptor,
     const Context& rContext)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if (const SfxViewShell* pViewShell = mpViewFrame->GetViewShell())
+        {
+            if (msCurrentDeckId != rDeckDescriptor.msId)
+            {
+                const std::string hide = UnoNameFromDeckId(msCurrentDeckId);
+                if (!hide.empty())
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                                           (hide + "=false").c_str());
+            }
+
+            const std::string show = UnoNameFromDeckId(rDeckDescriptor.msId);
+            if (!show.empty())
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                                       (show + "=true").c_str());
+        }
+    }
 
     maFocusManager.Clear();
 
@@ -755,22 +773,6 @@ void SidebarController::SwitchToDeck (
     {
         if (mpCurrentDeck)
             mpCurrentDeck->Hide();
-
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            if (const SfxViewShell* pViewShell = mpViewFrame->GetViewShell())
-            {
-                const std::string hide = UnoNameFromDeckId(msCurrentDeckId);
-                if (!hide.empty())
-                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                                                           (hide + "=false").c_str());
-
-                const std::string show = UnoNameFromDeckId(rDeckDescriptor.msId);
-                if (!show.empty())
-                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                                                           (show + "=true").c_str());
-            }
-        }
 
         msCurrentDeckId = rDeckDescriptor.msId;
     }

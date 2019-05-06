@@ -122,7 +122,7 @@ void SidebarDockingWindow::NotifyResize()
         // Note: this means we *cannot* create a sidebar post attaching a new view because the
         // ViewShell will not change, and therefore we will never SetLOKNotifier. To avoid that
         // we hide sidebars instead of closing (see OnMenuItemSelected in SidebarController).
-        if (mpSidebarController.is() && !GetLOKNotifier() && mpOldViewShell != SfxViewShell::Current())
+        if (mpSidebarController.is() && !GetLOKNotifier())
             SetLOKNotifier(SfxViewShell::Current());
 
         if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
