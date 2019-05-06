@@ -46,6 +46,30 @@
       "revId": "c5f4558450dacd30591d40064550a7a29a7531ac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_18c5e83c",
+        "filename": "vcl/qt5/Qt5Menu.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-05-06T15:25:51Z",
+      "side": 1,
+      "message": "I couldn\u0027t find a way to severe all connections without using SIGNAL. I like the extra argument checks the compiler does for SIGNAL + SLOT. OTOH we don\u0027t use the argument, so with the new syntax it can be removed from the slot.",
+      "parentUuid": "3fa0c359_b888741f",
+      "range": {
+        "startLine": 639,
+        "startChar": 0,
+        "endLine": 645,
+        "endChar": 85
+      },
+      "revId": "c5f4558450dacd30591d40064550a7a29a7531ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
