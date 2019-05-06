@@ -22,6 +22,29 @@
       "revId": "d83b1383ffbe98502c196cccae4bcb2eb3978f6a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_b54abd7d",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-05-06T08:09:05Z",
+      "side": 1,
+      "message": "Also possibly moving this cheaper check above the iteration could be useful performance-wize?",
+      "range": {
+        "startLine": 124,
+        "startChar": 14,
+        "endLine": 124,
+        "endChar": 41
+      },
+      "revId": "d83b1383ffbe98502c196cccae4bcb2eb3978f6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
