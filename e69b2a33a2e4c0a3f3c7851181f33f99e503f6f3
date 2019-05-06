@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_152e11a5",
+        "filename": "svl/source/items/itempool.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-05-06T08:58:52Z",
+      "side": 1,
+      "message": "A thought: Shouldn\u0027t if fallback to GetItemSurrogates when !IsSortable? or vice-versa, GetItemSurrogates use this when IsSortable?",
+      "range": {
+        "startLine": 845,
+        "startChar": 0,
+        "endLine": 845,
+        "endChar": 79
+      },
+      "revId": "e69b2a33a2e4c0a3f3c7851181f33f99e503f6f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_752195b4",
+        "filename": "svl/source/items/itempool.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-05-06T08:58:52Z",
+      "side": 1,
+      "message": "a leftover",
+      "range": {
+        "startLine": 853,
+        "startChar": 23,
+        "endLine": 853,
+        "endChar": 24
+      },
+      "revId": "e69b2a33a2e4c0a3f3c7851181f33f99e503f6f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_d8fea004",
+        "filename": "svx/source/xoutdev/xattr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-05-06T08:58:52Z",
+      "side": 1,
+      "message": "This seems to require 4 string comparisons to detect equality? couldn\u0027t it be sorted by index first, then by name, like in\n\n    if (nPalIndex !\u003d rOther.nPalIndex)\n      return nPalIndex \u003c rOther.nPalIndex;\n    return SfxStringItem::operator\u003c(rItem);",
+      "range": {
+        "startLine": 119,
+        "startChar": 4,
+        "endLine": 124,
+        "endChar": 40
+      },
+      "revId": "e69b2a33a2e4c0a3f3c7851181f33f99e503f6f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
