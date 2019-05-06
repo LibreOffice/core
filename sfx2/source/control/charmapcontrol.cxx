@@ -20,6 +20,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/charmapcontrol.hxx>
+#include <vcl/event.hxx>
 
 using namespace css;
 
@@ -64,10 +65,14 @@ SfxCharmapCtrl::SfxCharmapCtrl(sal_uInt16 nId, vcl::Window* pParent, const css::
 
     for(int i = 0; i < 16; i++)
     {
+        m_pRecentCharView[i]->SetStyle(m_pRecentCharView[i]->GetStyle() | WB_GROUP);
         m_pRecentCharView[i]->setMouseClickHdl(LINK(this,SfxCharmapCtrl, CharClickHdl));
-        m_pRecentCharView[i]->SetLoseFocusHdl(LINK(this,SfxCharmapCtrl, LoseFocusHdl));
+        m_pRecentCharView[i]->SetGetFocusHdl(LINK(this,SfxCharmapCtrl, FocusHdl));
+        m_pRecentCharView[i]->SetLoseFocusHdl(LINK(this,SfxCharmapCtrl, FocusHdl));
+        m_pFavCharView[i]->SetStyle(m_pFavCharView[i]->GetStyle() | WB_GROUP);
         m_pFavCharView[i]->setMouseClickHdl(LINK(this,SfxCharmapCtrl, CharClickHdl));
-        m_pFavCharView[i]->SetLoseFocusHdl(LINK(this,SfxCharmapCtrl, LoseFocusHdl));
+        m_pFavCharView[i]->SetGetFocusHdl(LINK(this,SfxCharmapCtrl, FocusHdl));
+        m_pFavCharView[i]->SetLoseFocusHdl(LINK(this,SfxCharmapCtrl, FocusHdl));
     }
 
     maDlgBtn->SetClickHdl(LINK(this, SfxCharmapCtrl, OpenDlgHdl));
@@ -177,7 +182,32 @@ void SfxCharmapCtrl::updateRecentCharControl()
 }
 
 
-IMPL_STATIC_LINK(SfxCharmapCtrl, LoseFocusHdl, Control&, pItem, void)
+bool SfxCharmapCtrl::EventNotify( NotifyEvent& rNEvt )
+{
+    static bool bNeedsInit = true;
+    if ( maDlgBtn->HasFocus() && rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    {
+        const vcl::KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
+        const sal_uInt16 nCode = rKey.GetCode();
+        if ( nCode != KEY_TAB && nCode != KEY_RETURN && nCode != KEY_SPACE && nCode != KEY_ESCAPE )
+        {
+            return true;
+        }
+        if ( bNeedsInit && nCode == KEY_TAB )
+        {
+            for(int i = 0; i < 16; i++)
+            {
+                m_pRecentCharView[i]->set_property( "can-focus", "true" );
+                m_pFavCharView[i]->set_property( "can-focus", "true" );
+            }
+            bNeedsInit = false;
+        }
+    }
+    return SfxPopupWindow::EventNotify( rNEvt );
+}
+
+
+IMPL_STATIC_LINK(SfxCharmapCtrl, FocusHdl, Control&, pItem, void)
 {
     pItem.Invalidate();
 }
@@ -185,10 +215,8 @@ IMPL_STATIC_LINK(SfxCharmapCtrl, LoseFocusHdl, Control&, pItem, void)
 
 IMPL_LINK(SfxCharmapCtrl, CharClickHdl, SvxCharViewControl*, rView, void)
 {
-    rView->GrabFocus();
-    rView->Invalidate();
     rView->InsertCharToDoc();
-
+    GrabFocusToDocument();
     Close();
 }
 
