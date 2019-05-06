@@ -23,8 +23,10 @@ class LOKClipboard : public cppu::WeakImplHelper<css::datatransfer::clipboard::X
 public:
     css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getContents() override;
 
-    void SAL_CALL setContents(const css::uno::Reference<css::datatransfer::XTransferable>& xTransferable,
-                              const css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner) override;
+    void SAL_CALL setContents(
+        const css::uno::Reference<css::datatransfer::XTransferable>& xTransferable,
+        const css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
+        override;
 
     OUString SAL_CALL getName() override;
 };

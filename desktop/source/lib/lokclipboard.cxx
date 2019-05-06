@@ -17,26 +17,25 @@ uno::Reference<datatransfer::XTransferable> SAL_CALL LOKClipboard::getContents()
     return m_xTransferable;
 }
 
-void SAL_CALL LOKClipboard::setContents(const uno::Reference<datatransfer::XTransferable>& xTransferable,
-                                        const uno::Reference<datatransfer::clipboard::XClipboardOwner>& /*xClipboardOwner*/)
+void SAL_CALL LOKClipboard::setContents(
+    const uno::Reference<datatransfer::XTransferable>& xTransferable,
+    const uno::Reference<datatransfer::clipboard::XClipboardOwner>& /*xClipboardOwner*/)
 {
     m_xTransferable = xTransferable;
 }
 
-OUString SAL_CALL LOKClipboard::getName()
-{
-    return OUString();
-}
+OUString SAL_CALL LOKClipboard::getName() { return OUString(); }
 
 LOKTransferable::LOKTransferable(const char* pMimeType, const char* pData, std::size_t nSize)
-    : m_aMimeType(OUString::fromUtf8(pMimeType)),
-      m_aSequence(reinterpret_cast<const sal_Int8*>(pData), nSize)
+    : m_aMimeType(OUString::fromUtf8(pMimeType))
+    , m_aSequence(reinterpret_cast<const sal_Int8*>(pData), nSize)
 {
 }
 
-LOKTransferable::LOKTransferable(const OUString& sMimeType, const css::uno::Sequence<sal_Int8>& aSequence)
-        : m_aMimeType(sMimeType),
-          m_aSequence(aSequence)
+LOKTransferable::LOKTransferable(const OUString& sMimeType,
+                                 const css::uno::Sequence<sal_Int8>& aSequence)
+    : m_aMimeType(sMimeType)
+    , m_aSequence(aSequence)
 {
 }
 
@@ -58,7 +57,7 @@ std::vector<datatransfer::DataFlavor> LOKTransferable::getTransferDataFlavorsAsV
     std::vector<datatransfer::DataFlavor> aRet;
     datatransfer::DataFlavor aFlavor;
     aFlavor.MimeType = m_aMimeType;
-    aFlavor.DataType = cppu::UnoType< uno::Sequence<sal_Int8> >::get();
+    aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
 
     sal_Int32 nIndex(0);
     if (m_aMimeType.getToken(0, ';', nIndex) == "text/plain")
@@ -80,10 +79,10 @@ uno::Sequence<datatransfer::DataFlavor> SAL_CALL LOKTransferable::getTransferDat
 sal_Bool SAL_CALL LOKTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
 {
     const std::vector<datatransfer::DataFlavor> aFlavors = getTransferDataFlavorsAsVector();
-    return std::any_of(aFlavors.begin(), aFlavors.end(), [&rFlavor](const datatransfer::DataFlavor& i)
-    {
-        return i.MimeType == rFlavor.MimeType && i.DataType == rFlavor.DataType;
-    });
+    return std::any_of(aFlavors.begin(), aFlavors.end(),
+                       [&rFlavor](const datatransfer::DataFlavor& i) {
+                           return i.MimeType == rFlavor.MimeType && i.DataType == rFlavor.DataType;
+                       });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
