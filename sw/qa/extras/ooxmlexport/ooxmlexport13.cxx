@@ -70,6 +70,16 @@ DECLARE_OOXMLEXPORT_TEST(testFrameSizeExport, "floating-tables-anchor.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tblPr/w:tblW", "w", "4000");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf124594, "tdf124594.docx")
+{
+    xmlDocPtr pDump = parseLayoutDump();
+    // Without the accompanying fix in place, this test would have failed, as the portion text was
+    // only "Er horte leise Schritte hinter", which means the 1st line of the 2nd paragraph was
+    // split into two by a Special portion, i.e. the top margin of the shape was too large.
+    assertXPath(pDump, "/root/page/body/txt[2]/Text[1]", "Portion",
+                "Er horte leise Schritte hinter sich. Das bedeutete nichts Gutes. Wer wurde ihm ");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTextInput, "textinput.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
