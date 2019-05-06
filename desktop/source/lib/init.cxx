@@ -1389,6 +1389,19 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                         assert(aCallbackData.validate() && "Validation after setJson failed!");
                     }
                 }
+                else if (aTree.get<std::string>("action", "") == "created")
+                {
+                    // Remove all previous actions on same dialog, if we are creating it anew.
+                    removeAll([&nLOKWindowId](const queue_type::value_type& elem) {
+                        if (elem.Type == LOK_CALLBACK_WINDOW)
+                        {
+                            const boost::property_tree::ptree& aOldTree = elem.getJson();
+                            if (nLOKWindowId == aOldTree.get<unsigned>("id", 0))
+                                return true;
+                        }
+                        return false;
+                    });
+                }
             }
             break;
         }
