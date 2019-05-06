@@ -105,6 +105,7 @@ WidgetDefinitionPart::getStates(ControlType eType, ControlPart ePart, ControlSta
                 if (rPushButtonValue.mbIsAction)
                     sExtra = "action";
             }
+            break;
             default:
                 break;
         }
