@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_38e30436",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2549,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-06T10:56:55Z",
+      "side": 1,
+      "message": "i have a hard time believing this is correct; between the first selected node and its successor on the same level, and the next selected node and its successor on the same level, there aren\u0027t necessarily the same amount of higher-level nodes?\n\nyour test-document is a bit atypical in that regard :)",
+      "revId": "cf9f576909951eb70f4327ac36611888d5f84cce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
