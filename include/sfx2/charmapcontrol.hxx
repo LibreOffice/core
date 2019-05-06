@@ -40,6 +40,8 @@ public:
 
     virtual void dispose() override;
 
+    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
+
 private:
     VclPtr<SvxCharViewControl> m_pRecentCharView[16];
     VclPtr<SvxCharViewControl> m_pFavCharView[16];
@@ -50,7 +52,7 @@ private:
     VclPtr<Button>         maDlgBtn;
 
     DECL_LINK(CharClickHdl, SvxCharViewControl*, void);
-    DECL_STATIC_LINK(SfxCharmapCtrl, LoseFocusHdl, Control&, void);
+    DECL_STATIC_LINK(SfxCharmapCtrl, FocusHdl, Control&, void);
     DECL_LINK(OpenDlgHdl, Button*, void);
 
     void            getFavCharacterList();
