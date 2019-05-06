@@ -5845,7 +5845,7 @@ void ScGridWindow::UpdateCopySourceOverlay()
         Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
 
         tools::Rectangle aLogic = PixelToLogic(aRect, aDrawMode);
-        ::basegfx::B2DRange aRange(aLogic.Left(), aLogic.Top(), aLogic.Right(), aLogic.Bottom());
+        ::basegfx::B2DRange aRange = aLogic.toB2DRectangle();
         std::unique_ptr<ScOverlayDashedBorder> pDashedBorder(new ScOverlayDashedBorder(aRange, aHighlight));
         xOverlayManager->add(*pDashedBorder);
         mpOOSelectionBorder->append(std::move(pDashedBorder));
@@ -6053,7 +6053,7 @@ void ScGridWindow::UpdateCursorOverlay()
 
                 for(const tools::Rectangle & rRA : aPixelRects)
                 {
-                    basegfx::B2DRange aRB(rRA.Left(), rRA.Top(), rRA.Right() + 1, rRA.Bottom() + 1);
+                    basegfx::B2DRange aRB(rRA.Left(), rRA.Top(), rRA.Right() + 1, rRA.Bottom() + 1, true);
                     aRB.transform(aTransform);
                     aRanges.push_back(aRB);
                 }
@@ -6119,13 +6119,13 @@ void ScGridWindow::UpdateSelectionOverlay()
             {
                 if (bLayoutRTL)
                 {
-                    basegfx::B2DRange aRB(rRA.Left(), rRA.Top() - 1, rRA.Right() + 1, rRA.Bottom());
+                    basegfx::B2DRange aRB(rRA.Left(), rRA.Top() - 1, rRA.Right() + 1, rRA.Bottom(), true);
                     aRB.transform(aTransform);
                     aRanges.push_back(aRB);
                 }
                 else
                 {
-                    basegfx::B2DRange aRB(rRA.Left() - 1, rRA.Top() - 1, rRA.Right(), rRA.Bottom());
+                    basegfx::B2DRange aRB(rRA.Left() - 1, rRA.Top() - 1, rRA.Right(), rRA.Bottom(), true);
                     aRB.transform(aTransform);
                     aRanges.push_back(aRB);
                 }
@@ -6224,7 +6224,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
                 aHandleColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
-            basegfx::B2DRange aRB(aFillRect.Left(), aFillRect.Top(), aFillRect.Right(), aFillRect.Bottom());
+            basegfx::B2DRange aRB = aFillRect.toB2DRectangle();
 
             aRB.transform(aTransform);
             aRanges.push_back(aRB);
@@ -6351,7 +6351,7 @@ void ScGridWindow::UpdateDragRectOverlay()
 
             for(const tools::Rectangle & rRA : aPixelRects)
             {
-                basegfx::B2DRange aRB(rRA.Left(), rRA.Top(), rRA.Right() + 1, rRA.Bottom() + 1);
+                basegfx::B2DRange aRB(rRA.Left(), rRA.Top(), rRA.Right() + 1, rRA.Bottom() + 1, true);
                 aRB.transform(aTransform);
                 aRanges.push_back(aRB);
             }
@@ -6397,7 +6397,7 @@ void ScGridWindow::UpdateHeaderOverlay()
             // Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
-            basegfx::B2DRange aRB(aInvertRect.Left(), aInvertRect.Top(), aInvertRect.Right() + 1, aInvertRect.Bottom() + 1);
+            basegfx::B2DRange aRB(aInvertRect.Left(), aInvertRect.Top(), aInvertRect.Right() + 1, aInvertRect.Bottom() + 1, true);
 
             aRB.transform(aTransform);
             aRanges.push_back(aRB);
@@ -6464,7 +6464,7 @@ void ScGridWindow::UpdateShrinkOverlay()
         {
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
-            basegfx::B2DRange aRB(aPixRect.Left(), aPixRect.Top(), aPixRect.Right() + 1, aPixRect.Bottom() + 1);
+            basegfx::B2DRange aRB(aPixRect.Left(), aPixRect.Top(), aPixRect.Right() + 1, aPixRect.Bottom() + 1, true);
 
             aRB.transform(aTransform);
             aRanges.push_back(aRB);

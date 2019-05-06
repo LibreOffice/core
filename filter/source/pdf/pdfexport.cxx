@@ -1071,8 +1071,7 @@ void PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& 
     aCtx.m_nJPEGQuality             = mnQuality;
 
 
-    basegfx::B2DRectangle aB2DRect( aPageRect.Left(), aPageRect.Top(), aPageRect.Right(), aPageRect.Bottom() );
-    rWriter.SetClipRegion( basegfx::B2DPolyPolygon( basegfx::utils::createPolygonFromRect( aB2DRect ) ) );
+    rWriter.SetClipRegion( basegfx::B2DPolyPolygon( basegfx::utils::createPolygonFromRect( aPageRect.toB2DRectangle() ) ) );
 
     rWriter.PlayMetafile( aMtf, aCtx, &rPDFExtOutDevData );
 

@@ -131,7 +131,7 @@ namespace
 
         const basegfx::B2DRange aLogicBitmapRange(
             rPoint.X(), rPoint.Y(),
-            rPoint.X() + rSize.Width(), rPoint.Y() + rSize.Height());
+            rPoint.X() + rSize.Width(), rPoint.Y() + rSize.Height(), true);
         const basegfx::B2DPolyPolygon aClipOfBitmap(
             basegfx::utils::clipPolyPolygonOnRange(
                 rClip,
@@ -201,7 +201,7 @@ namespace
             basegfx::utils::createPolygonFromRect(
                 basegfx::B2DRange(
                     0.0, 0.0,
-                    aSizePixel.Width(), aSizePixel.Height())));
+                    aSizePixel.Width(), aSizePixel.Height(), true)));
         aInvertPixelPoly.append(aPixelPoly);
 
         // paint as alpha
@@ -319,9 +319,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                 if(!rRect.IsEmpty() && !aClips.empty() && aClips.back().count())
                 {
-                    const basegfx::B2DRange aClipRange(
-                        rRect.Left(), rRect.Top(),
-                        rRect.Right(), rRect.Bottom());
+                    const basegfx::B2DRange aClipRange(rRect.toB2DRectangle());
 
                     aClips.back() = basegfx::utils::clipPolyPolygonOnRange(
                         aClips.back(),
@@ -516,9 +514,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                             aClips.back(),
                             basegfx::B2DPolyPolygon(
                                 basegfx::utils::createPolygonFromRect(
-                                    basegfx::B2DRange(
-                                        rRect.Left(), rRect.Top(),
-                                        rRect.Right(), rRect.Bottom()))),
+                                        rRect.toB2DRectangle())),
                             aTarget,
                             false); // stroke
                     }
@@ -538,7 +534,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     {
                         const sal_uInt32 nHor(pA->GetHorzRound());
                         const sal_uInt32 nVer(pA->GetVertRound());
-                        const basegfx::B2DRange aRange(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom());
+                        const basegfx::B2DRange aRange(rRect.toB2DRectangle());
                         basegfx::B2DPolygon aOutline;
 
                         if(nHor || nVer)
@@ -575,7 +571,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     }
                     else
                     {
-                        const basegfx::B2DRange aRange(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom());
+                        const basegfx::B2DRange aRange(rRect.toB2DRectangle());
 
                         bDone = handleGeometricContent(
                             aClips.back(),
@@ -978,9 +974,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                             aClips.back(),
                             basegfx::B2DPolyPolygon(
                                 basegfx::utils::createPolygonFromRect(
-                                    basegfx::B2DRange(
-                                        rRect.Left(), rRect.Top(),
-                                        rRect.Right(), rRect.Bottom()))),
+                                        rRect.toB2DRectangle())),
                             pA->GetGradient(),
                             aTarget);
                     }

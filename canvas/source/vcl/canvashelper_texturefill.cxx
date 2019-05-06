@@ -146,7 +146,7 @@ namespace vclcanvas
                                                              aLeftBottom,
                                                              aRightTop,
                                                              aRightBottom,
-                                                             vcl::unotools::b2DRectangleFromRectangle( rBounds ) );
+                                                             rBounds.toB2DRectangle() );
 
 
             // render gradient
@@ -664,7 +664,7 @@ namespace vclcanvas
 
                 aTotalTransform *= aTextureTransform;
 
-                const ::basegfx::B2DRectangle aRect(0.0, 0.0, 1.0, 1.0);
+                const ::basegfx::B2DRectangle aRect(0.0, 0.0, 1.0, 1.0, true);
                 ::basegfx::B2DRectangle aTextureDeviceRect;
                 ::canvas::tools::calcTransformedRectBounds( aTextureDeviceRect,
                                                             aRect,
@@ -813,8 +813,7 @@ namespace vclcanvas
                     // start point from it.
                     ::basegfx::B2DRectangle aTextureSpacePolygonRect;
                     ::canvas::tools::calcTransformedRectBounds( aTextureSpacePolygonRect,
-                                                                vcl::unotools::b2DRectangleFromRectangle(
-                                                                    aPolygonDeviceRect ),
+                                                                aPolygonDeviceRect.toB2DRectangle(),
                                                                 aInverseTextureTransform );
 
                     // calc left, top of extended polygon rect in
@@ -833,7 +832,7 @@ namespace vclcanvas
                     const ::basegfx::B2DRectangle aSingleTextureRect(
                         nX1, nY1,
                         nX1 + 1.0,
-                        nY1 + 1.0 );
+                        nY1 + 1.0, true );
 
                     // and convert back to device space
                     ::basegfx::B2DRectangle aSingleDeviceTextureRect;

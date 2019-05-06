@@ -20,6 +20,8 @@
 #define INCLUDED_TOOLS_GEN_HXX
 
 #include <tools/toolsdllapi.h>
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/range/b2irectangle.hxx>
 
 #include <limits.h>
 #include <algorithm>
@@ -385,6 +387,9 @@ public:
                         Rectangle( long nLeft, long nTop );
                         Rectangle( const Point& rLT, const Size& rSize );
 
+    inline basegfx::B2DRectangle toB2DRectangle() const;
+    inline basegfx::B2IRectangle toB2IRectangle() const;
+
     long                Left() const    { return nLeft;   }
     long                Right() const   { return nRight;  }
     long                Top() const     { return nTop;    }
@@ -524,6 +529,22 @@ inline tools::Rectangle::Rectangle( const Point& rLT, const Size& rSize )
     nTop    = rLT.Y();
     nRight  = rSize.Width()  ? nLeft+(rSize.Width()-1) : RECT_EMPTY;
     nBottom = rSize.Height() ? nTop+(rSize.Height()-1) : RECT_EMPTY;
+}
+
+inline basegfx::B2DRectangle tools::Rectangle::toB2DRectangle() const
+{
+    return basegfx::B2DRectangle( Left(),
+                                  Top(),
+                                  IsWidthEmpty() ? Left() : Right(),
+                                  IsHeightEmpty() ? Top() : Bottom() );
+}
+
+inline basegfx::B2IRectangle tools::Rectangle::toB2IRectangle() const
+{
+    return basegfx::B2IRectangle( Left(),
+                                  Top(),
+                                  IsWidthEmpty() ? Left() : Right(),
+                                  IsHeightEmpty() ? Top() : Bottom() );
 }
 
 inline bool tools::Rectangle::IsEmpty() const

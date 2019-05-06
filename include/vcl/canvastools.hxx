@@ -154,13 +154,11 @@ namespace vcl
 
         basegfx::B2DVector          VCL_DLLPUBLIC b2DSizeFromSize( const Size& );
         basegfx::B2DPoint           VCL_DLLPUBLIC b2DPointFromPoint( const Point& );
-        basegfx::B2DRange           VCL_DLLPUBLIC b2DRectangleFromRectangle( const tools::Rectangle& );
 
         // basegfx::B2I
         Point                       VCL_DLLPUBLIC pointFromB2IPoint( const basegfx::B2IPoint& );
         tools::Rectangle                   VCL_DLLPUBLIC rectangleFromB2IRectangle( const basegfx::B2IRange& );
         basegfx::B2IPoint           VCL_DLLPUBLIC b2IPointFromPoint(const Point&);
-        basegfx::B2IRectangle       VCL_DLLPUBLIC b2IRectangleFromRectangle(const tools::Rectangle&);
     }
 }
 

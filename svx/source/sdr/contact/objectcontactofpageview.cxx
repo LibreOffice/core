@@ -179,9 +179,7 @@ namespace sdr
                     //           export, so why not do it always
                     const tools::Rectangle aLogicClipRectangle(rDisplayInfo.GetRedrawArea().GetBoundRect());
 
-                    aViewRange = basegfx::B2DRange(
-                        aLogicClipRectangle.Left(), aLogicClipRectangle.Top(),
-                        aLogicClipRectangle.Right(), aLogicClipRectangle.Bottom());
+                    aViewRange = aLogicClipRectangle.toB2DRectangle();
                 }
             }
             else
@@ -193,9 +191,7 @@ namespace sdr
                 {
                     // get logic clip range and create discrete one
                     const tools::Rectangle aLogicClipRectangle(rDisplayInfo.GetRedrawArea().GetBoundRect());
-                    basegfx::B2DRange aLogicClipRange(
-                        aLogicClipRectangle.Left(), aLogicClipRectangle.Top(),
-                        aLogicClipRectangle.Right(), aLogicClipRectangle.Bottom());
+                    basegfx::B2DRange aLogicClipRange = aLogicClipRectangle.toB2DRectangle();
                     basegfx::B2DRange aDiscreteClipRange(aLogicClipRange);
                     aDiscreteClipRange.transform(rTargetOutDev.GetViewTransformation());
 

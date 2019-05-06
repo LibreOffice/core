@@ -872,7 +872,7 @@ basegfx::B2DRange Array::GetCellRange( size_t nCol, size_t nRow, bool bExpandMer
             aRect.AdjustBottom(rCell.mnAddBottom );
         }
 
-        return basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+        return aRect.toB2DRectangle();
     }
     else
     {
@@ -880,7 +880,7 @@ basegfx::B2DRange Array::GetCellRange( size_t nCol, size_t nRow, bool bExpandMer
         const Size aSize( GetColWidth( nCol, nCol ) + 1, GetRowHeight( nRow, nRow ) + 1 );
         const tools::Rectangle aRect(aPoint, aSize);
 
-        return basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+        return aRect.toB2DRectangle();
     }
 }
 

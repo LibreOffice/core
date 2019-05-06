@@ -223,10 +223,7 @@ namespace sdr
 
                     // create range using the model data directly. This is in SdrTextObj::aRect which i will access using
                     // GetGeoRect() to not trigger any calculations. It's the unrotated geometry.
-                    const tools::Rectangle& rObjectRectangle(rTableObj.GetGeoRect());
-                    const basegfx::B2DRange aObjectRange(
-                        rObjectRectangle.Left(), rObjectRectangle.Top(),
-                        rObjectRectangle.Right(), rObjectRectangle.Bottom());
+                    const basegfx::B2DRange aObjectRange = rTableObj.GetGeoRect().toB2DRectangle();
 
                     // To create the CellBorderPrimitives, use the tolling from svx::frame::Array
                     // which is capable of creating the needed visualization. Fill it during the
@@ -392,10 +389,7 @@ namespace sdr
             else
             {
                 // take unrotated snap rect (direct model data) for position and size
-                const tools::Rectangle& rRectangle = rTableObj.GetGeoRect();
-                const basegfx::B2DRange aObjectRange(
-                    rRectangle.Left(), rRectangle.Top(),
-                    rRectangle.Right(), rRectangle.Bottom());
+                const basegfx::B2DRange aObjectRange = rTableObj.GetGeoRect().toB2DRectangle();
 
                 // create object matrix
                 const GeoStat& rGeoStat(rTableObj.GetGeoStat());

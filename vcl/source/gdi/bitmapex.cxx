@@ -918,7 +918,7 @@ BitmapEx BitmapEx::getTransformed(
         return aRetval;
 
     // Get aOutlineRange
-    basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
+    basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0, true);
 
     aOutlineRange.transform(rTransformation);
 

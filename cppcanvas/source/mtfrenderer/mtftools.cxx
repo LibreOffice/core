@@ -169,11 +169,7 @@ namespace cppcanvas
                     // then transform that
                     ::basegfx::B2DPolygon aLocalClip(
                         ::basegfx::utils::createPolygonFromRect(
-                                ::basegfx::B2DRectangle(
-                                    static_cast<double>(aLocalClipRect.Left()),
-                                    static_cast<double>(aLocalClipRect.Top()),
-                                    static_cast<double>(aLocalClipRect.Right()),
-                                    static_cast<double>(aLocalClipRect.Bottom()) ) ) );
+                                    aLocalClipRect.toB2DRectangle() ) );
                     ::basegfx::B2DHomMatrix aTransform;
 
                     if( bOffsetting )
@@ -202,7 +198,7 @@ namespace cppcanvas
                                     (aLocalClipRect.Left() - rOffset.getX())/pScaling->getX(),
                                     (aLocalClipRect.Top() - rOffset.getY())/pScaling->getY(),
                                     (aLocalClipRect.Right() - rOffset.getX())/pScaling->getX(),
-                                    (aLocalClipRect.Bottom() - rOffset.getY())/pScaling->getY() ) ) ) );
+                                    (aLocalClipRect.Bottom() - rOffset.getY())/pScaling->getY(),true ) ) ) );
                 }
                 else
                 {
@@ -215,7 +211,7 @@ namespace cppcanvas
                                 ::basegfx::B2DRectangle( aLocalClipRect.Left() - rOffset.getX(),
                                                          aLocalClipRect.Top() - rOffset.getY(),
                                                          aLocalClipRect.Right() - rOffset.getX(),
-                                                         aLocalClipRect.Bottom() - rOffset.getY() ) ) ) );
+                                                         aLocalClipRect.Bottom() - rOffset.getY(),true ) ) ) );
                 }
 
                 return true;
@@ -304,7 +300,7 @@ namespace cppcanvas
 
                 o_rPoly.append(
                     ::basegfx::utils::createPolygonFromRect(
-                        ::basegfx::B2DRectangle( x + nX1, y + nY1, x + nX2, y + nY2 ) ) );
+                        ::basegfx::B2DRectangle( x + nX1, y + nY1, x + nX2, y + nY2,true ) ) );
             }
 
             void appendRect( ::basegfx::B2DPolyPolygon& o_rPoly,
@@ -315,7 +311,7 @@ namespace cppcanvas
             {
                 o_rPoly.append(
                     ::basegfx::utils::createPolygonFromRect(
-                        ::basegfx::B2DRectangle( nX1, nY1, nX2, nY2 ) ) );
+                        ::basegfx::B2DRectangle( nX1, nY1, nX2, nY2, true ) ) );
             }
 
             bool appendDashes( ::basegfx::B2DPolyPolygon&   o_rPoly,

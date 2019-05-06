@@ -1098,18 +1098,16 @@ bool OutputDevice::TransformAndReduceBitmapExToTargetRange(
         0.0,
         0.0,
         GetOutputSizePixel().Width(),
-        GetOutputSizePixel().Height());
+        GetOutputSizePixel().Height(), true);
 
     if(IsClipRegion())
     {
-        const tools::Rectangle aRegionRectangle(GetActiveClipRegion().GetBoundRect());
+        tools::Rectangle aRegionRectangle(GetActiveClipRegion().GetBoundRect());
 
-        aOutPixel.intersect( // caution! Range from rectangle, one too much (!)
-            basegfx::B2DRange(
-                aRegionRectangle.Left(),
-                aRegionRectangle.Top(),
-                aRegionRectangle.Right() + 1,
-                aRegionRectangle.Bottom() + 1));
+        // caution! Range from rectangle, one too much (!)
+        aRegionRectangle.AdjustRight(-1);
+        aRegionRectangle.AdjustBottom(-1);
+        aOutPixel.intersect( aRegionRectangle.toB2DRectangle() );
     }
 
     if(aOutPixel.isEmpty())
@@ -1238,7 +1236,7 @@ void OutputDevice::DrawTransformedBitmapEx(
 
         // fallback; create transformed bitmap the hard way (back-transform
         // the pixels) and paint
-        basegfx::B2DRange aVisibleRange(0.0, 0.0, 1.0, 1.0);
+        basegfx::B2DRange aVisibleRange(0.0, 0.0, 1.0, 1.0, true);
 
         // limit maximum area to something looking good for non-pixel-based targets (metafile, printer)
         // by using a fixed minimum (allow at least, but no need to utilize) for good smoothing and an area
@@ -1277,7 +1275,7 @@ void OutputDevice::DrawTransformedBitmapEx(
                 aFullTransform,
                 aVisibleRange,
                 fMaximumArea);
-            basegfx::B2DRange aTargetRange(0.0, 0.0, 1.0, 1.0);
+            basegfx::B2DRange aTargetRange(0.0, 0.0, 1.0, 1.0, true);
 
             // get logic object target range
             aTargetRange.transform(rTransformation);

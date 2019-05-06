@@ -155,7 +155,7 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
 {
     basegfx::B2DRectangle aSVGRect = rDrawRoot.maRectangle;
 
-    basegfx::B2DRange aTargetSurface(nX, nY, nX + nWidth + 1, nY + nHeight + 1);
+    basegfx::B2DRange aTargetSurface(nX, nY, nX + nWidth + 1, nY + nHeight + 1, true);
 
     for (std::shared_ptr<gfx::DrawBase> const& pDrawBase : rDrawRoot.maChildren)
     {
@@ -172,7 +172,7 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
 
                 basegfx::B2DRange aFinalRectangle(
                     aInputRectangle.getMinX(), aInputRectangle.getMinY(),
-                    aInputRectangle.getMaxX() + fDeltaX, aInputRectangle.getMaxY() + fDeltaY);
+                    aInputRectangle.getMaxX() + fDeltaX, aInputRectangle.getMaxY() + fDeltaY, true);
 
                 aFinalRectangle.transform(basegfx::utils::createTranslateB2DHomMatrix(
                     aTargetSurface.getMinX() - 0.5, aTargetSurface.getMinY() - 0.5));
@@ -270,7 +270,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
 
                 basegfx::B2DRectangle rRect(
                     nX + (nWidth * rWidgetDraw.mfX1), nY + (nHeight * rWidgetDraw.mfY1),
-                    nX + (nWidth * rWidgetDraw.mfX2), nY + (nHeight * rWidgetDraw.mfY2));
+                    nX + (nWidth * rWidgetDraw.mfX2), nY + (nHeight * rWidgetDraw.mfY2), true);
 
                 basegfx::B2DPolygon aB2DPolygon = basegfx::utils::createPolygonFromRect(
                     rRect, rWidgetDraw.mnRx / rRect.getWidth() * 2.0,

@@ -72,10 +72,7 @@ namespace sdr
             else
             {
                 // append an invisible outline for the cases where no visible content exists
-                const tools::Rectangle aCurrentBoundRect(GetSdrObjGroup().GetLastBoundRect());
-                const basegfx::B2DRange aCurrentRange(
-                    aCurrentBoundRect.Left(), aCurrentBoundRect.Top(),
-                    aCurrentBoundRect.Right(), aCurrentBoundRect.Bottom());
+                const basegfx::B2DRange aCurrentRange = GetSdrObjGroup().GetLastBoundRect().toB2DRectangle();
 
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
