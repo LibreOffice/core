@@ -116,6 +116,30 @@
       "revId": "e69b2a33a2e4c0a3f3c7851181f33f99e503f6f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_783d0cba",
+        "filename": "svx/source/xoutdev/xattr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-05-06T09:34:44Z",
+      "side": 1,
+      "message": "Oh, but then you couldn\u0027t use this nPalIndex here at all?",
+      "parentUuid": "3fa0c359_b85b942c",
+      "range": {
+        "startLine": 119,
+        "startChar": 4,
+        "endLine": 124,
+        "endChar": 40
+      },
+      "revId": "e69b2a33a2e4c0a3f3c7851181f33f99e503f6f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
