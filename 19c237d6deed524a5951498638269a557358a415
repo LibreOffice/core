@@ -51,6 +51,24 @@
       "revId": "19c237d6deed524a5951498638269a557358a415",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_cbd1ec59",
+        "filename": "connectivity/CppunitTest_connectivity_sharedresources.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2019-05-06T22:29:13Z",
+      "side": 1,
+      "message": "I was able to link directly against dbtools.",
+      "parentUuid": "3fa0c359_d5bd0969",
+      "revId": "19c237d6deed524a5951498638269a557358a415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
