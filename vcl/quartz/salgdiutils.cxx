@@ -76,8 +76,7 @@ void AquaSalGraphics::UnsetState()
 {
     if (maContextHolder.isSet())
     {
-        SAL_INFO( "vcl.cg", "CGContextRestoreGState(" << maContextHolder.get() << ")" );
-        CGContextRestoreGState( maContextHolder.get() );
+        maContextHolder.restoreState();
         maContextHolder.set(nullptr);
     }
     if( mxClipPath )
@@ -164,8 +163,7 @@ bool AquaSalGraphics::CheckContext()
                 CGContextScaleCTM(maContextHolder.get(), 1.0, -1.0);
                 CGContextSetFillColorSpace(maContextHolder.get(), GetSalData()->mxRGBSpace);
                 CGContextSetStrokeColorSpace(maContextHolder.get(), GetSalData()->mxRGBSpace);
-                SAL_INFO("vcl.cg", "CGContextSaveGState(" << maContextHolder.get() << ") " << ++mnContextStackDepth);
-                CGContextSaveGState(maContextHolder.get());
+                maContextHolder.saveState();
                 SetState();
 
                 // re-enable XOR emulation for the new context

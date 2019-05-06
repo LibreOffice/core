@@ -185,9 +185,6 @@ AquaSalGraphics::AquaSalGraphics()
 #ifdef MACOSX
     , mpFrame( nullptr )
 #endif
-#if OSL_DEBUG_LEVEL > 0
-    , mnContextStackDepth( 0 )
-#endif
     , mpXorEmulation( nullptr )
     , mnXorMode( 0 )
     , mnWidth( 0 )
@@ -449,8 +446,7 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     std::cerr << "]\n";
 #endif
 
-    SAL_INFO("vcl.cg", "CGContextSaveGState(" << maContextHolder.get() << ") " << ++mnContextStackDepth );
-    CGContextSaveGState(maContextHolder.get());
+    maContextHolder.saveState();
 
     // The view is vertically flipped (no idea why), flip it back.
     SAL_INFO("vcl.cg", "CGContextScaleCTM(" << maContextHolder.get() << ",1,-1)");
@@ -478,8 +474,7 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
         size_t nStartIndex = std::distance(aGlyphOrientation.cbegin(), aIt);
         size_t nLen = std::distance(aIt, aNext);
 
-        SAL_INFO("vcl.cg", "CGContextSaveGState(" << maContextHolder.get() << ") " << ++mnContextStackDepth );
-        CGContextSaveGState(maContextHolder.get());
+        maContextHolder.saveState();
         if (rStyle.mfFontRotation && !bUprightGlyph)
         {
             SAL_INFO("vcl.cg", "CGContextRotateCTM(" << maContextHolder.get() << "," << rStyle.mfFontRotation << ")");
@@ -487,14 +482,12 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
         }
         SAL_INFO("vcl.cg", "CTFontDrawGlyphs() @" << nStartIndex << ":" << nLen << "," << maContextHolder.get());
         CTFontDrawGlyphs(pFont, &aGlyphIds[nStartIndex], &aGlyphPos[nStartIndex], nLen, maContextHolder.get());
-        SAL_INFO("vcl.cg", "CGContextRestoreGState(" << maContextHolder.get() << ") " << mnContextStackDepth-- );
-        CGContextRestoreGState(maContextHolder.get());
+        maContextHolder.restoreState();
 
         aIt = aNext;
     }
 
-    SAL_INFO( "vcl.cg", "CGContextRestoreGState(" << maContextHolder.get() << ") " << mnContextStackDepth-- );
-    CGContextRestoreGState(maContextHolder.get());
+    maContextHolder.restoreState();
 }
 
 void AquaSalGraphics::SetFont(LogicalFontInstance* pReqFont, int nFallbackLevel)
