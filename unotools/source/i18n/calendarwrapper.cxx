@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <unotools/calendarwrapper.hxx>
-#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/LocaleCalendar2.hpp>
 
 using namespace ::com::sun::star;

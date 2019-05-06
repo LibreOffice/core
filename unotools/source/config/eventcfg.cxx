@@ -23,8 +23,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <cppuhelper/weakref.hxx>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
 #include <rtl/ref.hxx>

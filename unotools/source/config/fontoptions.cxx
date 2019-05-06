@@ -18,7 +18,6 @@
  */
 
 #include <unotools/fontoptions.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>

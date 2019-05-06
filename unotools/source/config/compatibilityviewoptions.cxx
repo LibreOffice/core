@@ -8,7 +8,6 @@
  */
 
 #include <unotools/compatibilityviewoptions.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include "itemholder1.hxx"
 

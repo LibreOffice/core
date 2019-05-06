@@ -27,45 +27,27 @@
 #define _HAS_AUTO_PTR_ETC 1
 #endif
 
-#include <config_folders.h>
-
 #include <sal/config.h>
 
 #include <cassert>
 
 #include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
 #   include <libintl.h>
 #endif
 
 #include <comphelper/lok.hxx>
-#include <tools/debug.hxx>
-#include <tools/stream.hxx>
 #include <unotools/resmgr.hxx>
-#include <osl/endian.h>
-#include <osl/process.h>
 #include <osl/thread.h>
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
-#include <osl/signal.h>
 #include <rtl/crc.h>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/bootstrap.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <i18nlangtag/mslangid.hxx>
 
 #include <boost/locale.hpp>
 #include <boost/locale/gnu_gettext.hpp>
 
-#include <algorithm>
-#include <list>
-#include <set>
-#include <unordered_set>
 #include <unordered_map>
 #include <memory>
 

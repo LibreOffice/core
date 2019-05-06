@@ -19,7 +19,6 @@
 
 #include "ucblockbytes.hxx"
 
-#include <sal/macros.h>
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <salhelper/condition.hxx>
@@ -35,26 +34,24 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
+#include <com/sun/star/ucb/XContentIdentifier.hpp>
+#include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/io/TempFile.hpp>
-#include <com/sun/star/ucb/DocumentHeaderField.hpp>
-#include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
-#include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertiesChangeNotifier.hpp>
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <tools/inetmsg.hxx>
+#include <tools/debug.hxx>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 

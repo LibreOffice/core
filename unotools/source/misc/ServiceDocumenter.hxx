@@ -9,9 +9,10 @@
 #ifndef INCLUDED_UNOTOOLS_INC_SERVICEDOCUMENTER_HXX
 #define INCLUDED_UNOTOOLS_INC_SERVICEDOCUMENTER_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/script/XServiceDocumenter.hpp>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace unotools { namespace misc {
 

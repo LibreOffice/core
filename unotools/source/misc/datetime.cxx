@@ -26,7 +26,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
-#include <vcl/svapp.hxx>
 #include <comphelper/string.hxx>
 #include <sstream>
 

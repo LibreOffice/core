@@ -26,11 +26,9 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/propertysequence.hxx>
-#include <unotools/configpaths.hxx>
 #include <unotools/syslocale.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
@@ -39,7 +37,6 @@
 #include <sal/log.hxx>
 
 #include <string.h>
-#include <list>
 #include <algorithm>
 
 using namespace utl;

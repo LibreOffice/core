@@ -17,15 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #include <o3tl/any.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <tools/debug.hxx>
-#include <tools/solar.h>
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 
