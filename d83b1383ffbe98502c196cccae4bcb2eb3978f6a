@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_98457873",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-05-06T18:09:35Z",
+      "side": 1,
+      "message": "Please never insert unrelated changes. You are welcome to come with a dedicated change like \"Convert ctors to initializer lists\" - and *possibly* (but not necessarily!) you will receive positive review. But actually I see this specific change unnecessary - and just a commit noise. It is *not* \"strongly recommended\". It\u0027s just a change for the sake of change.",
+      "parentUuid": "3fa0c359_78ae6c2f",
+      "range": {
+        "startLine": 111,
+        "startChar": 4,
+        "endLine": 111,
+        "endChar": 52
+      },
+      "revId": "d83b1383ffbe98502c196cccae4bcb2eb3978f6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_b54abd7d",
         "filename": "vcl/source/animate/Animation.cxx",
         "patchSetId": 2
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "Yes, I think so.\nDo you want to do it yourself or do you want me to do it?",
       "parentUuid": "3fa0c359_b54abd7d",
+      "range": {
+        "startLine": 124,
+        "startChar": 14,
+        "endLine": 124,
+        "endChar": 41
+      },
+      "revId": "d83b1383ffbe98502c196cccae4bcb2eb3978f6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_b84ab47d",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-05-06T18:09:35Z",
+      "side": 1,
+      "message": "Please do.",
+      "parentUuid": "3fa0c359_18aba81d",
       "range": {
         "startLine": 124,
         "startChar": 14,
