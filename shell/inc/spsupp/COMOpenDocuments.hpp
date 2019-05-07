@@ -196,19 +196,10 @@ private:
             DWORD dwOptionSetMask,
             DWORD dwEnabledOptions) override;
 
-        // Non-COM methods
-
-        bool GetSafe_forUntrustedCaller() { return (m_iEnabledOptions & INTERFACESAFE_FOR_UNTRUSTED_CALLER) != 0; }
-        bool GetSafe_forUntrustedData() { return (m_iEnabledOptions & INTERFACESAFE_FOR_UNTRUSTED_DATA) != 0; }
-
     private:
         IUnknown* m_pOwner;
         DWORD m_iEnabledOptions = 0;
-        enum : DWORD { iSupportedOptionsMask = INTERFACESAFE_FOR_UNTRUSTED_CALLER | INTERFACESAFE_FOR_UNTRUSTED_DATA };
-
-        void SetMaskedOptions(DWORD iMask, DWORD iOptions);
-        void SetSafe_forUntrustedCaller(bool bSafe);
-        void SetSafe_forUntrustedData(bool bSafe);
+        static constexpr DWORD iSupportedOptionsMask = INTERFACESAFE_FOR_UNTRUSTED_CALLER | INTERFACESAFE_FOR_UNTRUSTED_DATA;
     };
 
     static long m_nObjCount;

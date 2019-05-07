@@ -14,6 +14,7 @@
 
 ITypeLib* GetTypeLib();
 const wchar_t* GetLOPath();
+HMODULE GetHModule();
 
 #endif
 

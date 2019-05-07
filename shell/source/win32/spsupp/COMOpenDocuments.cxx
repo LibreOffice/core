@@ -10,37 +10,69 @@
 #include <sal/config.h>
 
 #include <cstring>
+#include <memory>
 #include <vector>
 
 #include <COMOpenDocuments.hpp>
 #include <spsuppServ.hpp>
 #include <stdio.h>
+#include "res/resource.h"
 
 namespace
 {
 
-// Display confirmation dialog, return false on negative answer
-bool SecurityWarning(const wchar_t* sProgram, const wchar_t* sDocument)
+INT_PTR CALLBACK EditOrRODlgproc(HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-    // TODO: change wording (currently taken from MS Office), use LO localization
-    wchar_t sBuf[65536];
-    swprintf(sBuf, sizeof(sBuf) / sizeof(sBuf[0]),
-        L"Some files contain viruses that can be harmful to your computer. It is important to be certain that this file is from a trustworthy source.\n\n"
-        L"Do you want to open this file ?\n\n"
-        L"Program : %s\n\n"
-        L"Address : %s", sProgram, sDocument);
-    return (MessageBoxW(nullptr, sBuf, L"LibreOffice SharePoint integration", MB_YESNO | MB_ICONWARNING) == IDYES);
+    switch (Msg)
+    {
+    case WM_INITDIALOG:
+    {
+        if (const wchar_t* sFilePath = reinterpret_cast<const wchar_t*>(lParam))
+        {
+            static const wchar_t msgTemplate[]
+                = L"You are opening document <%s>.\n\nDo you want to open it to view or to edit?";
+            auto buf = std::make_unique<wchar_t[]>(sizeof(msgTemplate) / sizeof(*msgTemplate)
+                                                   + wcslen(sFilePath));
+            swprintf(buf.get(), msgTemplate, sFilePath);
+            SetWindowTextW(GetDlgItem(hDlg, IDC_EDIT_OR_RO), buf.get());
+        }
+        return TRUE; // set default focus
+    }
+    case WM_COMMAND:
+    {
+        WORD nId = LOWORD(wParam);
+        switch (nId)
+        {
+        case IDCANCEL:
+        case ID_RO:
+        case ID_EDIT:
+            EndDialog(hDlg, nId);
+            return TRUE;
+        }
+        break;
+    }
+    }
+    return FALSE;
+}
+
+enum class Answer { Cancel, ReadOnly, Edit };
+
+Answer AskIfUserWantsToEdit(const wchar_t* sFilePath)
+{
+    Answer res = Answer::Cancel;
+    INT_PTR nResult = DialogBoxParamW(GetHModule(), MAKEINTRESOURCEW(IDD_EDIT_OR_RO), nullptr,
+                                      EditOrRODlgproc, reinterpret_cast<LPARAM>(sFilePath));
+    if (nResult == ID_RO)
+        res = Answer::ReadOnly;
+    else if (nResult == ID_EDIT)
+        res = Answer::Edit;
+    return res;
 }
 
 // Returns S_OK if successful
-HRESULT LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath, bool bDoSecurityWarning)
+HRESULT LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath)
 {
     const wchar_t* sProgram = GetLOPath();
-    if (bDoSecurityWarning && !SecurityWarning(sProgram, sFilePath))
-    {
-        // Return success to avoid downloading in browser
-        return S_OK;
-    }
 
     STARTUPINFOW si;
     std::memset(&si, 0, sizeof si);
@@ -81,70 +113,45 @@ HRESULT LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath, bool bDoSecur
 
 VARIANT_BOOL toVBool(bool b) { return b ? VARIANT_TRUE : VARIANT_FALSE; }
 
-} // namespace
-
+}
 // IObjectSafety methods
-
-void COMOpenDocuments::COMObjectSafety::SetMaskedOptions(DWORD iMask, DWORD iOptions)
-{
-    m_iEnabledOptions &= ~iMask;
-    m_iEnabledOptions |= (iOptions & iMask);
-}
-
-void COMOpenDocuments::COMObjectSafety::SetSafe_forUntrustedCaller(bool bSafe)
-{
-    if (GetSafe_forUntrustedCaller() != bSafe)
-    {
-        SetMaskedOptions(INTERFACESAFE_FOR_UNTRUSTED_CALLER, bSafe ? 0xFFFFFFFF : 0);
-    }
-}
-
-void COMOpenDocuments::COMObjectSafety::SetSafe_forUntrustedData(bool bSafe)
-{
-    if (GetSafe_forUntrustedData() != bSafe)
-    {
-        SetMaskedOptions(INTERFACESAFE_FOR_UNTRUSTED_DATA, bSafe ? 0xFFFFFFFF : 0);
-    }
-}
 
 HRESULT STDMETHODCALLTYPE COMOpenDocuments::COMObjectSafety::GetInterfaceSafetyOptions(
     REFIID riid,
     DWORD *pdwSupportedOptions,
     DWORD *pdwEnabledOptions)
 {
-    void* ppvo;
-    HRESULT hr = m_pOwner->QueryInterface(riid, &ppvo);
+    IUnknown* pUnk;
+    HRESULT hr = m_pOwner->QueryInterface(riid, reinterpret_cast<void**>(&pUnk));
     if (FAILED(hr))
     {
         return hr;
     }
 
     // We know about it; release reference and return required information
-    static_cast<IUnknown*>(ppvo)->Release();
+    pUnk->Release();
     *pdwSupportedOptions = iSupportedOptionsMask;
     *pdwEnabledOptions = m_iEnabledOptions;
     return S_OK;
 }
 
 HRESULT STDMETHODCALLTYPE COMOpenDocuments::COMObjectSafety::SetInterfaceSafetyOptions(
-    REFIID /*riid*/,
+    REFIID riid,
     DWORD dwOptionSetMask,
     DWORD dwEnabledOptions)
 {
+    IUnknown* pUnk;
+    HRESULT hr = m_pOwner->QueryInterface(riid, reinterpret_cast<void**>(&pUnk));
+    if (FAILED(hr))
+    {
+        return hr;
+    }
+
     // Are there unsupported options in mask?
     if (dwOptionSetMask & ~iSupportedOptionsMask)
         return E_FAIL;
 
-    if (dwOptionSetMask & INTERFACESAFE_FOR_UNTRUSTED_CALLER)
-    {
-        SetSafe_forUntrustedCaller(dwEnabledOptions & INTERFACESAFE_FOR_UNTRUSTED_CALLER);
-    }
-
-    if (dwOptionSetMask & INTERFACESAFE_FOR_UNTRUSTED_DATA)
-    {
-        SetSafe_forUntrustedData((dwEnabledOptions & INTERFACESAFE_FOR_UNTRUSTED_DATA) != 0);
-    }
-
+    m_iEnabledOptions = (m_iEnabledOptions & ~dwOptionSetMask) | (dwOptionSetMask & dwEnabledOptions);
     return S_OK;
 }
 
@@ -314,8 +321,10 @@ STDMETHODIMP COMOpenDocuments::CreateNewDocument2(
     BSTR /*bstrDefaultSaveLocation*/, // A string that contains the path that specifies a suggested default location for saving the new document
     VARIANT_BOOL* pbResult)           // true if the document creation succeeds; otherwise false
 {
+    if (!pbResult)
+        return E_POINTER;
     // TODO: resolve the program from varProgID (nullptr -> default?)
-    HRESULT hr = LOStart(L"-n", bstrTemplateLocation, m_aObjectSafety.GetSafe_forUntrustedCaller() || m_aObjectSafety.GetSafe_forUntrustedData());
+    HRESULT hr = LOStart(L"-n", bstrTemplateLocation);
     *pbResult = toVBool(SUCCEEDED(hr));
     return hr;
 }
@@ -359,14 +368,26 @@ STDMETHODIMP COMOpenDocuments::PromptedOnLastOpen(
 // 3 When the document is not checked out and the document library requires that documents be checked out to be edited, the user can only read the document, or check it out and edit it
 // 4 When the current user has checked it out, the user can only edit the local copy of the document
 STDMETHODIMP COMOpenDocuments::ViewDocument3(
-    IDispatch* /*pdisp*/,      // An Object that represents the window from which the ViewDocument3 method is being activated
+    IDispatch* pdisp,          // An Object that represents the window from which the ViewDocument3 method is being activated
     BSTR bstrDocumentLocation, // A string that contains the URL of the document to open for reading
-    int /*OpenType*/,          // A Long integer that specifies the rights for opening the document
-    VARIANT /*varProgID*/,     // An optional string that contains the ProgID of the application with which to open the document. If this argument is omitted, the default viewer for the document is used
+    int OpenType,              // A Long integer that specifies the rights for opening the document
+    VARIANT varProgID,         // An optional string that contains the ProgID of the application with which to open the document. If this argument is omitted, the default viewer for the document is used
     VARIANT_BOOL *pbResult)    // true if the document was successfully opened; otherwise false
 {
+    if (!pbResult)
+        return E_POINTER;
+    if (OpenType == 0)
+    {
+        switch (AskIfUserWantsToEdit(bstrDocumentLocation))
+        {
+        case Answer::Cancel:
+            return S_FALSE;
+        case Answer::Edit:
+            return EditDocument3(pdisp, bstrDocumentLocation, VARIANT_FALSE, varProgID, pbResult);
+        }
+    }
     // TODO: resolve the program from varProgID (nullptr -> default?)
-    HRESULT hr = LOStart(L"--view", bstrDocumentLocation, m_aObjectSafety.GetSafe_forUntrustedCaller() || m_aObjectSafety.GetSafe_forUntrustedData());
+    HRESULT hr = LOStart(L"--view", bstrDocumentLocation);
     *pbResult = toVBool(SUCCEEDED(hr));
     return hr;
 }
@@ -425,10 +446,12 @@ STDMETHODIMP COMOpenDocuments::EditDocument3(
     BSTR bstrDocumentLocation,      // A string that contains the URL of the document to open for editing
     VARIANT_BOOL /*fUseLocalCopy*/, // true to use a local copy; otherwise false
     VARIANT /*varProgID*/,          // An optional string that contains the ProgID of the application with which to edit the document. If this argument is omitted, the default editor for the document is used
-    VARIANT_BOOL *pbResult)     // true if the document was successfully opened; otherwise false
+    VARIANT_BOOL *pbResult)         // true if the document was successfully opened; otherwise false
 {
+    if (!pbResult)
+        return E_POINTER;
     // TODO: resolve the program from varProgID (nullptr -> default?)
-    HRESULT hr = LOStart(L"-o", bstrDocumentLocation, m_aObjectSafety.GetSafe_forUntrustedCaller() || m_aObjectSafety.GetSafe_forUntrustedData());
+    HRESULT hr = LOStart(L"-o", bstrDocumentLocation);
     *pbResult = toVBool(SUCCEEDED(hr));
     return hr;
 }

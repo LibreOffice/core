@@ -34,47 +34,56 @@ HANDLE g_hModule;
 
 }
 
+HMODULE GetHModule()
+{
+    return static_cast<HMODULE>(g_hModule);
+}
+
 ITypeLib* GetTypeLib()
 {
     typedef std::unique_ptr<ITypeLib, void(*)(IUnknown* p)> ITypeLibGuard;
-    static ITypeLibGuard aITypeLibGuard(nullptr, [](IUnknown* p) { if (p) p->Release(); });
-    if (!aITypeLibGuard.get())
-    {
+    static ITypeLibGuard s_aITypeLibGuard = [] {
+        auto Deleter = [](IUnknown* p) {
+            if (p)
+                p->Release();
+        };
+        ITypeLibGuard aITypeLibGuard(nullptr, Deleter);
         wchar_t szFile[MAX_PATH];
-        if (GetModuleFileNameW(static_cast<HMODULE>(g_hModule), szFile, MAX_PATH) == 0)
-            return nullptr;
+        if (GetModuleFileNameW(GetHModule(), szFile, MAX_PATH) == 0)
+            return aITypeLibGuard;
         ITypeLib* pTypeLib;
-        HRESULT hr = LoadTypeLib(szFile, &pTypeLib);
-        if (FAILED(hr))
-            return nullptr;
+        if (FAILED(LoadTypeLib(szFile, &pTypeLib)))
+            return aITypeLibGuard;
         aITypeLibGuard.reset(pTypeLib);
-    }
-    return aITypeLibGuard.get();
+        return aITypeLibGuard;
+    }();
+    return s_aITypeLibGuard.get();
 }
 
 const wchar_t* GetLOPath()
 {
-    static wchar_t sPath[MAX_PATH] = { 0 };
-    if (*sPath == 0)
-    {
-        // Initialization
-        if (GetModuleFileNameW(static_cast<HMODULE>(g_hModule), sPath, MAX_PATH) == 0)
+    static wchar_t* s_sPath = []() -> wchar_t* {
+        static wchar_t sPath[MAX_PATH];
+        if (GetModuleFileNameW(GetHModule(), sPath, MAX_PATH) == 0)
             return nullptr;
         wchar_t* pSlashPos = wcsrchr(sPath, L'\\');
         if (pSlashPos == nullptr)
             return nullptr;
-        wcscpy(pSlashPos+1, L"soffice.exe");
-    }
-    return sPath;
+        wcscpy(pSlashPos + 1, L"soffice.exe");
+        return sPath;
+    }();
+    return s_sPath;
 }
 
 BOOL APIENTRY DllMain( HANDLE hinstDLL,
                        DWORD  fdwReason,
                        LPVOID /*lpvReserved*/ )
 {
+//    volatile int i(1);
     switch (fdwReason)
     {
         case DLL_PROCESS_ATTACH:
+            //while (i);
             g_hModule = hinstDLL;
             break;
 
@@ -122,7 +131,7 @@ STDAPI DllRegisterServer(void)
         return ResultFromScode(SELFREG_E_TYPELIB);
 
     wchar_t szFile[MAX_PATH];
-    if (GetModuleFileNameW(static_cast<HMODULE>(g_hModule), szFile, MAX_PATH) == 0)
+    if (GetModuleFileNameW(GetHModule(), szFile, MAX_PATH) == 0)
         return HRESULT_FROM_WIN32(GetLastError());
 
     HRESULT hr = RegisterTypeLib(pTypeLib, szFile, nullptr);
