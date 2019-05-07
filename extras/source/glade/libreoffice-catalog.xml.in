@@ -277,14 +277,6 @@
                         generic-name="LanguageBox" parent="VclComboBoxText"
                         icon-name="widget-gtk-combobox"/>
 
-    <glade-widget-class title="Reference Button" name="foruilo-RefButton"
-                        generic-name="Reference Button" parent="GtkButton"
-                        icon-name="widget-gtk-button"/>
-
-    <glade-widget-class title="Reference Edit" name="foruilo-RefEdit"
-                        generic-name="Reference Edit" parent="GtkEntry"
-                        icon-name="widget-gtk-textentry"/>
-
     <glade-widget-class title="URL Entry" name="cuilo-SvxHyperURLBox"
                         generic-name="URL Entry" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
@@ -356,10 +348,6 @@
 
     <glade-widget-class title="ClientBox" name="sduilo-ClientBox"
                         generic-name="ClientBox" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
-
-    <glade-widget-class title="ScCondFormatList" name="sclo-ScCondFormatList"
-                        generic-name="CondFormatList" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
 
     <glade-widget-class title="IndexFieldsControl" name="dbulo-DbaIndexFieldsControl"

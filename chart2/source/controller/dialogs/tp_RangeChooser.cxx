@@ -279,16 +279,14 @@ bool RangeChooserTabPage::isValid()
 
     if( bIsValid )
     {
-        m_xED_Range->set_error(false);
-        m_xED_Range->set_error(false);
+        m_xED_Range->set_message_type(weld::EntryMessageType::Normal);
         if( m_pTabPageNotifiable )
             m_pTabPageNotifiable->setValidPage( this );
         m_aLastValidRangeString = aRange;
     }
     else
     {
-        m_xED_Range->set_error(true);
-        m_xED_Range->set_error(true);
+        m_xED_Range->set_message_type(weld::EntryMessageType::Error);
         if( m_pTabPageNotifiable )
             m_pTabPageNotifiable->setInvalidPage( this );
     }

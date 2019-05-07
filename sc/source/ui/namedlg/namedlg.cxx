@@ -252,13 +252,13 @@ bool ScNameDlg::IsNameValid()
 
     if (ScRangeData::IsNameValid( aName, mpDoc ) != ScRangeData::NAME_VALID)
     {
-        m_xFtInfo->set_error(true);
+        m_xFtInfo->set_message_type(weld::EntryMessageType::Error);
         m_xFtInfo->set_label(maErrInvalidNameStr);
         return false;
     }
     else if (pRangeName && pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(aName)))
     {
-        m_xFtInfo->set_error(true);
+        m_xFtInfo->set_message_type(weld::EntryMessageType::Error);
         m_xFtInfo->set_label(maErrNameInUse);
         return false;
     }
@@ -272,7 +272,7 @@ bool ScNameDlg::IsFormulaValid()
     std::unique_ptr<ScTokenArray> pCode = aComp.CompileString(m_xEdAssign->GetText());
     if (pCode->GetCodeError() != FormulaError::NONE)
     {
-        m_xFtInfo->set_error(true);
+        m_xFtInfo->set_message_type(weld::EntryMessageType::Error);
         return false;
     }
     else
@@ -343,7 +343,7 @@ void ScNameDlg::NameModified()
     OUString aOldName = aLine.aName;
     OUString aNewName = m_xEdName->get_text();
     aNewName = aNewName.trim();
-    m_xFtInfo->set_error(false);
+    m_xFtInfo->set_message_type(weld::EntryMessageType::Normal);
     if (aNewName != aOldName)
     {
         if (!IsNameValid())

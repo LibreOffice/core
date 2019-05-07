@@ -2,7 +2,6 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="grid">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -106,6 +105,7 @@
         <child>
           <object class="GtkEntry" id="edcolscalemin">
             <property name="can_focus">True</property>
+            <property name="activates_default">True</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -115,6 +115,7 @@
         <child>
           <object class="GtkEntry" id="edcolscalemiddle">
             <property name="can_focus">True</property>
+            <property name="activates_default">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -124,6 +125,7 @@
         <child>
           <object class="GtkEntry" id="edcolscalemax">
             <property name="can_focus">True</property>
+            <property name="activates_default">True</property>
           </object>
           <packing>
             <property name="left_attach">2</property>
@@ -131,8 +133,15 @@
           </packing>
         </child>
         <child>
-          <object class="svxcorelo-SvxColorListBox" id="lbcolmin">
+          <object class="GtkMenuButton" id="lbcolmin">
+            <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+            <child>
+              <placeholder/>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -140,8 +149,15 @@
           </packing>
         </child>
         <child>
-          <object class="svxcorelo-SvxColorListBox" id="lbcolmiddle">
+          <object class="GtkMenuButton" id="lbcolmiddle">
+            <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+            <child>
+              <placeholder/>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -149,8 +165,15 @@
           </packing>
         </child>
         <child>
-          <object class="svxcorelo-SvxColorListBox" id="lbcolmax">
+          <object class="GtkMenuButton" id="lbcolmax">
+            <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+            <child>
+              <placeholder/>
+            </child>
           </object>
           <packing>
             <property name="left_attach">2</property>
@@ -220,17 +243,6 @@
           <packing>
             <property name="left_attach">2</property>
             <property name="top_attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="svxlo-SvxFontPrevWindow" id="preview:border">
-            <property name="can_focus">False</property>
-            <property name="tooltip_text" translatable="yes" context="conditionalentry|preview|tooltip_text">Example</property>
-            <property name="hexpand">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">3</property>
           </packing>
         </child>
         <child>
@@ -333,7 +345,7 @@
                 <property name="hexpand">True</property>
                 <property name="column_spacing">12</property>
                 <child>
-                  <object class="foruilo-RefEdit" id="val1">
+                  <object class="GtkEntry" id="val1">
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                   </object>
@@ -343,7 +355,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="foruilo-RefEdit" id="val2">
+                  <object class="GtkEntry" id="val2">
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                   </object>
@@ -392,7 +404,7 @@
               </packing>
             </child>
             <child>
-              <object class="foruilo-RefEdit" id="formula">
+              <object class="GtkEntry" id="formula">
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
               </object>
@@ -413,6 +425,30 @@
           <object class="GtkGrid" id="iconparent">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
             <child>
               <placeholder/>
             </child>
@@ -443,6 +479,33 @@
           <packing>
             <property name="left_attach">2</property>
             <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="hexpand">True</property>
+            <property name="hscrollbar_policy">never</property>
+            <property name="vscrollbar_policy">never</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkViewport">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkDrawingArea" id="preview">
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="conditionalentry|preview|tooltip_text">Example</property>
+                    <property name="hexpand">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">3</property>
           </packing>
         </child>
         <child>
