@@ -2331,14 +2331,23 @@ public:
         return !m_xEntry->IsReadOnly();
     }
 
-    virtual void set_error(bool bError) override
+    virtual void set_message_type(weld::EntryMessageType eType) override
     {
-        if (bError)
+        if (eType == weld::EntryMessageType::Error)
         {
-            // #i75179# enable setting the background to a different color
+            // tdf#114603: enable setting the background to a different color;
+            // relevant for GTK; see also #i75179#
             m_xEntry->SetForceControlBackground(true);
             m_xEntry->SetControlForeground(COL_WHITE);
             m_xEntry->SetControlBackground(0xff6563);
+        }
+        else if (eType == weld::EntryMessageType::Warning)
+        {
+            // tdf#114603: enable setting the background to a different color;
+            // relevant for GTK; see also #i75179#
+            m_xEntry->SetForceControlBackground(true);
+            m_xEntry->SetControlForeground();
+            m_xEntry->SetControlBackground(COL_YELLOW);
         }
         else
         {
@@ -3904,10 +3913,12 @@ public:
         pLabel->set_mnemonic_widget(pTargetWidget ? pTargetWidget->getWidget() : nullptr);
     }
 
-    virtual void set_error(bool bShowError) override
+    virtual void set_message_type(weld::EntryMessageType eType) override
     {
-        if (bShowError)
+        if (eType == weld::EntryMessageType::Error)
             m_xLabel->SetControlBackground(m_xLabel->GetSettings().GetStyleSettings().GetHighlightColor());
+        else if (eType == weld::EntryMessageType::Warning)
+            m_xLabel->SetControlBackground(COL_YELLOW);
         else
             m_xLabel->SetControlBackground();
     }
@@ -4520,7 +4531,7 @@ public:
         return false;
     }
 
-    virtual void set_entry_error(bool /*bError*/) override
+    virtual void set_entry_message_type(weld::EntryMessageType /*eType*/) override
     {
         assert(false);
     }
@@ -4588,10 +4599,12 @@ public:
         return true;
     }
 
-    virtual void set_entry_error(bool bError) override
+    virtual void set_entry_message_type(weld::EntryMessageType eType) override
     {
-        if (bError)
+        if (eType == weld::EntryMessageType::Error)
             m_xComboBox->SetControlForeground(Color(0xf0, 0, 0));
+        else if (eType == weld::EntryMessageType::Warning)
+            m_xComboBox->SetControlForeground(COL_YELLOW);
         else
             m_xComboBox->SetControlForeground();
     }

@@ -713,11 +713,11 @@ void ErrorBarResources::isRangeFieldContentValid(weld::Entry& rEdit)
 
     if( bIsValid || !rEdit.get_sensitive())
     {
-        rEdit.set_error(false);
+        rEdit.set_message_type(weld::EntryMessageType::Normal);
     }
     else
     {
-        rEdit.set_error(true);
+        rEdit.set_message_type(weld::EntryMessageType::Error);
     }
 }
 

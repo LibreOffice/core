@@ -137,10 +137,6 @@ gb_UIConfig_gla11y_PARAMETERS += -g $(UI_A11YSUPPRS)
 endif
 
 # Tell gla11y about LO-specific widgets
-# These are already automatically labelled Shrink/Expand
-gb_UIConfig_gla11y_PARAMETERS += --widgets-ignored +foruilo-RefButton
-# These, however, do need a label like a GtkEntry
-gb_UIConfig_gla11y_PARAMETERS += --widgets-needlabel +foruilo-RefEdit
 # These are storage, containers, or preview
 gb_UIConfig_gla11y_PARAMETERS += --widgets-suffixignored +ValueSet,HBox,VBox,ToolBox,Preview,PreviewWin,PreviewWindow,PrevWindow
 # These are buttons, thus already contain their label (but an image is not enough)
