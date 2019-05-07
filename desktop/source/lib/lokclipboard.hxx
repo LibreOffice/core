@@ -42,7 +42,7 @@ class LOKTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransfer
 
 public:
     LOKTransferable(const char* pMimeType, const char* pData, std::size_t nSize);
-    LOKTransferable(const OUString& sMimeType, const css::uno::Sequence<sal_Int8>& aSequence);
+    LOKTransferable(OUString sMimeType, const css::uno::Sequence<sal_Int8>& aSequence);
 
     css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
 

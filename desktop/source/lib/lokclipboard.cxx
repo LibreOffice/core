@@ -32,9 +32,8 @@ LOKTransferable::LOKTransferable(const char* pMimeType, const char* pData, std::
 {
 }
 
-LOKTransferable::LOKTransferable(const OUString& sMimeType,
-                                 const css::uno::Sequence<sal_Int8>& aSequence)
-    : m_aMimeType(sMimeType)
+LOKTransferable::LOKTransferable(OUString sMimeType, const css::uno::Sequence<sal_Int8>& aSequence)
+    : m_aMimeType(std::move(sMimeType))
     , m_aSequence(aSequence)
 {
 }
