@@ -44,12 +44,6 @@ SHELL_PROPERTYHDL_FILES := \
 SHELL_XMLPARSER_FILES := \
 	all/xml_parser
 
-SHELL_SPSUPP_FILES := \
-    win32/spsupp/COMOpenDocuments \
-    win32/spsupp/registrar \
-    win32/spsupp/spsuppClassFactory \
-    win32/spsupp/spsuppServ
-
 SHELL_HEADERS := \
 	win32/ooofilereader/autostyletag \
 	win32/ooofilereader/dummytag \
@@ -64,7 +58,7 @@ SHELL_HEADERS := \
 	win32/zipfile/zipexcptn
 
 $(call gb_CustomTarget_get_target,shell/source) : \
-	$(foreach source,$(SHELL_SHLXTHANDLER_COMMON_FILES) $(SHELL_SHLXTHDL_FILES) $(SHELL_OOOFILT_FILES) $(SHELL_PROPERTYHDL_FILES) $(SHELL_XMLPARSER_FILES) $(SHELL_SPSUPP_FILES),\
+	$(foreach source,$(SHELL_SHLXTHANDLER_COMMON_FILES) $(SHELL_SHLXTHDL_FILES) $(SHELL_OOOFILT_FILES) $(SHELL_PROPERTYHDL_FILES) $(SHELL_XMLPARSER_FILES),\
 		$(call gb_CustomTarget_get_workdir,shell/source)/$(source).cxx) \
 	$(foreach header,$(SHELL_HEADERS),\
 		$(call gb_CustomTarget_get_workdir,shell/source)/$(header).hxx)
