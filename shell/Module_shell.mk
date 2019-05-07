@@ -57,6 +57,7 @@ $(eval $(call gb_Module_add_targets,shell,\
 	CustomTarget_spsupp_idl \
 	Library_spsupp \
 	WinResTarget_spsupp \
+	WinResTarget_spsupp_dlg \
 ))
 
 $(eval $(call gb_Module_add_check_targets,shell,\
