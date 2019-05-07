@@ -12,12 +12,12 @@ $(eval $(call gb_Library_Library,spsupp_x64))
 $(eval $(call gb_Library_set_x64,spsupp_x64,YES))
 
 $(eval $(call gb_Library_use_custom_headers,spsupp_x64,\
-	shell/source \
 	shell/source/win32/spsupp/idl \
 ))
 
 $(eval $(call gb_Library_set_include,spsupp_x64,\
 	-I$(SRCDIR)/shell/inc/spsupp \
+	-I$(SRCDIR)/shell/source/win32/spsupp \
 	$$(INCLUDE) \
 ))
 
