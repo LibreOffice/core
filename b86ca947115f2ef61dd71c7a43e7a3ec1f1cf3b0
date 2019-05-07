@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_aba3404f",
+        "filename": "cppcanvas/source/mtfrenderer/mtftools.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-05-07T10:08:39Z",
+      "side": 0,
+      "message": "thx for this (and the other) cleanups - a few warts less ;)",
+      "revId": "b86ca947115f2ef61dd71c7a43e7a3ec1f1cf3b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_eb99481f",
+        "filename": "include/vcl/canvastools.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-05-07T10:08:39Z",
+      "side": 0,
+      "message": "Just curious - is there a need to move this into tools?\n\nAt least locally, this change removes conversion of one geometry class, and leaving many others..",
+      "revId": "b86ca947115f2ef61dd71c7a43e7a3ec1f1cf3b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

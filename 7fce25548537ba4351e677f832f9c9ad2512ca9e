@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_8b9e8405",
+        "filename": "include/tools/gen.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-05-07T10:08:39Z",
+      "side": 1,
+      "message": "Not sure this is better as a method - it\u0027s IMO more idiomatic to keep those converters as free functions.",
+      "revId": "7fce25548537ba4351e677f832f9c9ad2512ca9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
