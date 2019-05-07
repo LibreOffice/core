@@ -1,0 +1,232 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+* This file is part of the LibreOffice project.
+*
+* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/.
+*/
+
+#include <prewin.h>
+#include <postwin.h>
+
+#include <i18nlangtag/languagetag.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
+#include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
+#include <spsuppStrings.hrc>
+#include <unotools/resmgr.hxx>
+#include "res/spsuppDlg.h"
+
+// Since we need to show localized messages to user before starting LibreOffice, we need to
+// bootstrap part of LO (l10n machinery). This implies loading some LO libraries, and since
+// there are ActiveX controls for both x86 and x64 for use in corresponding clients, they
+// can't both load the libraries that exist only for one architecture, like sal. Thus we need
+// a dedicated helper process, which is launched by ActiveX, and handle user interactions.
+
+namespace
+{
+OUString GetSofficeExe()
+{
+    static const OUString s_sPath = []() {
+        OUString result;
+        wchar_t sPath[MAX_PATH];
+        if (GetModuleFileNameW(nullptr, sPath, MAX_PATH) == 0)
+            return result;
+        wchar_t* pSlashPos = wcsrchr(sPath, L'\\');
+        if (pSlashPos == nullptr)
+            return result;
+        wcscpy(pSlashPos + 1, L"soffice.exe");
+        result = o3tl::toU(sPath);
+        return result;
+    }();
+    return s_sPath;
+}
+
+OUString GetString(const char* pResId)
+{
+    static const std::locale s_pLocale = [] {
+        // Initialize soffice bootstrap: see getIniFileName_Impl for reference
+        OUString sPath = GetSofficeExe();
+        if (const sal_Int32 nDotPos = sPath.lastIndexOf('.'); nDotPos >= 0)
+        {
+            sPath = sPath.replaceAt(nDotPos, sPath.getLength() - nDotPos, SAL_CONFIGFILE(""));
+            osl::FileBase::getFileURLFromSystemPath(sPath, sPath);
+            rtl::Bootstrap::setIniFilename(sPath);
+            return Translate::Create("shell", LanguageTag(""));
+        }
+        return std::locale();
+    }();
+    return Translate::get(pResId, s_pLocale);
+}
+
+INT_PTR CALLBACK EditOrRODlgproc(HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+    switch (Msg)
+    {
+        case WM_INITDIALOG:
+        {
+            if (const wchar_t* sFilePath = reinterpret_cast<const wchar_t*>(lParam))
+            {
+                OUString sMsg = GetString(RID_STR_SP_VIEW_OR_EDIT_TITLE);
+                SetWindowTextW(hDlg, o3tl::toW(sMsg.getStr()));
+                sMsg = GetString(RID_STR_SP_VIEW_OR_EDIT_MESSAGE)
+                           .replaceFirst("%DOCNAME", o3tl::toU(sFilePath));
+                SetWindowTextW(GetDlgItem(hDlg, IDC_EDIT_OR_RO), o3tl::toW(sMsg.getStr()));
+                sMsg = GetString(RID_STR_SP_VIEW_OR_EDIT_VIEW);
+                SetWindowTextW(GetDlgItem(hDlg, ID_RO), o3tl::toW(sMsg.getStr()));
+                sMsg = GetString(RID_STR_SP_VIEW_OR_EDIT_EDIT);
+                SetWindowTextW(GetDlgItem(hDlg, ID_EDIT), o3tl::toW(sMsg.getStr()));
+                sMsg = GetString(RID_STR_SP_VIEW_OR_EDIT_CANCEL);
+                SetWindowTextW(GetDlgItem(hDlg, IDCANCEL), o3tl::toW(sMsg.getStr()));
+            }
+            return TRUE; // set default focus
+        }
+        case WM_COMMAND:
+        {
+            WORD nId = LOWORD(wParam);
+            switch (nId)
+            {
+                case IDCANCEL:
+                case ID_RO:
+                case ID_EDIT:
+                    EndDialog(hDlg, nId);
+                    return TRUE;
+            }
+            break;
+        }
+    }
+    return FALSE;
+}
+
+enum class Answer
+{
+    Cancel,
+    ReadOnly,
+    Edit
+};
+
+Answer AskIfUserWantsToEdit(const wchar_t* sFilePath)
+{
+    Answer res = Answer::Cancel;
+    INT_PTR nResult = DialogBoxParamW(nullptr, MAKEINTRESOURCEW(IDD_EDIT_OR_RO), nullptr,
+                                      EditOrRODlgproc, reinterpret_cast<LPARAM>(sFilePath));
+    if (nResult == ID_RO)
+        res = Answer::ReadOnly;
+    else if (nResult == ID_EDIT)
+        res = Answer::Edit;
+    return res;
+}
+
+// Returns ERROR_SUCCESS or Win32 error code
+DWORD LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath)
+{
+    STARTUPINFOW si;
+    std::memset(&si, 0, sizeof si);
+    si.cb = sizeof si;
+    si.dwFlags = STARTF_USESHOWWINDOW;
+    si.wShowWindow = SW_SHOW;
+    PROCESS_INFORMATION pi = {};
+    auto quote = [](const OUString& s) -> OUString { return "\"" + s + "\""; };
+    OUString sCmdLine = quote(GetSofficeExe()) + " " + OUString(o3tl::toU(sModeArg)) + " "
+                        + quote(o3tl::toU(sFilePath));
+    LPWSTR pCmdLine = const_cast<LPWSTR>(o3tl::toW(sCmdLine.getStr()));
+    if (!CreateProcessW(nullptr, pCmdLine, nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi))
+    {
+        DWORD dwError = GetLastError();
+        wchar_t* sMsgBuf = nullptr;
+        FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
+                           | FORMAT_MESSAGE_IGNORE_INSERTS,
+                       nullptr, dwError, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                       reinterpret_cast<LPWSTR>(&sMsgBuf), 0, nullptr);
+
+        size_t nBufSize = wcslen(sMsgBuf) + 100;
+        std::vector<wchar_t> sDisplayBuf(nBufSize);
+        swprintf(sDisplayBuf.data(), nBufSize,
+                 L"Could not start LibreOffice. Error is 0x%08X:\n\n%s", dwError, sMsgBuf);
+        HeapFree(GetProcessHeap(), 0, sMsgBuf);
+
+        // Report the error to user and return error
+        MessageBoxW(nullptr, sDisplayBuf.data(), nullptr, MB_ICONERROR);
+        return dwError;
+    }
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+    return ERROR_SUCCESS;
+}
+
+int CreateNewDocument(LPCWSTR TemplateLocation, LPCWSTR /*DefaultSaveLocation*/)
+{
+    // TODO: resolve the program from varProgID (nullptr -> default?)
+    DWORD nResult = LOStart(L"-n", TemplateLocation);
+    return nResult == ERROR_SUCCESS ? 0 : 2;
+}
+
+// UseLocalCopy would be either "0" or "1", denoting boolean value
+int EditDocument(LPCWSTR DocumentLocation, LPCWSTR /*UseLocalCopy*/, LPCWSTR /*varProgID*/)
+{
+    // TODO: resolve the program from varProgID (nullptr -> default?)
+    DWORD nResult = LOStart(L"-o", DocumentLocation);
+    return nResult == ERROR_SUCCESS ? 0 : 2;
+}
+
+// Possible values for OpenType
+//
+// "0" When checked out, or when the document library does not require check out, the user can read or edit the document
+// "1" When another user has checked it out, the user can only read the document
+// "2" When the current user has checked it out, the user can only edit the document
+// "3" When the document is not checked out and the document library requires that documents be checked out to be edited, the user can only read the document, or check it out and edit it
+// "4" When the current user has checked it out, the user can only edit the local copy of the document
+int ViewDocument(LPCWSTR DocumentLocation, LPCWSTR OpenType, LPCWSTR varProgID)
+{
+    if (wcscmp(OpenType, L"0") == 0)
+    {
+        switch (AskIfUserWantsToEdit(DocumentLocation))
+        {
+            case Answer::Cancel:
+                return 1;
+            case Answer::Edit:
+                return EditDocument(DocumentLocation, L"0", varProgID);
+        }
+    }
+    // TODO: resolve the program from varProgID (nullptr -> default?)
+    DWORD nResult = LOStart(L"--view", DocumentLocation);
+    return nResult == ERROR_SUCCESS ? 0 : 2;
+}
+} // namespace
+
+// Returns 0 on success, 1 when operation wasn't performed because user cancelled, 2 on an error
+int WINAPI wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
+{
+    int argc = 0;
+    const LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
+    if (argc < 2)
+        return 2; // Wrong argument count
+
+    if (wcscmp(argv[1], L"CreateNewDocument") == 0)
+    {
+        if (argc != 4)
+            return 2; // Wrong argument count
+        return CreateNewDocument(argv[2], argv[3]);
+    }
+
+    if (wcscmp(argv[1], L"ViewDocument") == 0)
+    {
+        if (argc != 4 && argc != 5)
+            return 2; // Wrong argument count
+        LPCWSTR pProgId = argc == 5 ? argv[4] : nullptr;
+        return ViewDocument(argv[2], argv[3], pProgId);
+    }
+
+    if (wcscmp(argv[1], L"EditDocument") == 0)
+    {
+        if (argc != 4 && argc != 5)
+            return 2; // Wrong argument count
+        LPCWSTR pProgId = argc == 5 ? argv[4] : nullptr;
+        return EditDocument(argv[2], argv[3], pProgId);
+    }
+
+    return 2; // Wrong command
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

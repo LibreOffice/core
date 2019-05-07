@@ -12,7 +12,6 @@ $(eval $(call gb_Library_Library,spsupp_x64))
 $(eval $(call gb_Library_set_x64,spsupp_x64,YES))
 
 $(eval $(call gb_Library_use_custom_headers,spsupp_x64,\
-	shell/source \
 	shell/source/win32/spsupp/idl \
 ))
 
@@ -36,10 +35,10 @@ $(eval $(call gb_Library_add_ldflags,spsupp_x64,\
 ))
 
 $(eval $(call gb_Library_add_x64_generated_exception_objects,spsupp_x64,\
-    CustomTarget/shell/source/win32/spsupp/COMOpenDocuments \
-    CustomTarget/shell/source/win32/spsupp/registrar \
-    CustomTarget/shell/source/win32/spsupp/spsuppClassFactory \
-    CustomTarget/shell/source/win32/spsupp/spsuppServ \
+    shell/source/win32/spsupp/COMOpenDocuments_x64 \
+    shell/source/win32/spsupp/registrar_x64 \
+    shell/source/win32/spsupp/spsuppClassFactory_x64 \
+    shell/source/win32/spsupp/spsuppServ_x64 \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

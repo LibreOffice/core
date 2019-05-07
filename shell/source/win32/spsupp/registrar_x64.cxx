@@ -7,6 +7,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-// Type library
+// A stub for generating x64 DLL without the need to copy source files to a temporary directory
+#include "registrar.cxx"
 
-1 TYPELIB TLB_FILE
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
