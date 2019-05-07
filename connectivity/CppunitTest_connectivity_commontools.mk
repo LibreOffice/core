@@ -17,56 +17,22 @@ $(eval $(call gb_CppunitTest_set_include,connectivity_commontools,\
 $(eval $(call gb_CppunitTest_use_ure,connectivity_commontools))
 $(eval $(call gb_CppunitTest_use_vcl,connectivity_commontools))
 
-$(eval $(call gb_CppunitTest_use_external,connectivity_commontools,boost_headers))
-
 $(eval $(call gb_CppunitTest_use_sdk_api,connectivity_commontools))
-
-ifeq ($(COM),GCC)
-ifneq ($(COM_IS_CLANG),TRUE)
-$(eval $(call gb_CppunitTest_add_cxxflags,connectivity_commontools,\
-	-fpermissive \
-))
-endif
-endif
-
-# In mergedlibs mode we have multiply-defined symbols, which Visual Studio
-# does not like. There is no good solution, so just force it.
-ifeq ($(COM),MSC)
-ifneq (,$(MERGELIBS))
-$(eval $(call gb_CppunitTest_add_ldflags,connectivity_commontools,\
-	 /FORCE:MULTIPLE \
-))
-endif
-endif
 
 $(eval $(call gb_CppunitTest_add_exception_objects,connectivity_commontools, \
 	connectivity/qa/connectivity/commontools/FValue_test \
 ))
 
-$(eval $(call gb_CppunitTest_use_library_objects,connectivity_commontools,dbtools))
-
 $(eval $(call gb_CppunitTest_use_libraries,connectivity_commontools, \
-    comphelper \
-    cppu \
-    cppuhelper \
-    i18nlangtag \
-    $(if $(ENABLE_JAVA), \
-        jvmaccess) \
-    sal \
-    salhelper \
-    test \
-    unotest \
-    utl \
-    tl \
-    svt \
-    vcl \
+	cppu \
+	dbtools \
+	sal \
+	test \
+	unotest \
 ))
 
 $(eval $(call gb_CppunitTest_use_components,connectivity_commontools,\
-    configmgr/source/configmgr \
-    i18npool/util/i18npool \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
+	configmgr/source/configmgr \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,connectivity_commontools))
