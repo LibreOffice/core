@@ -222,31 +222,47 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
     memcpy( m_pWhichRanges, rASet.m_pWhichRanges, sizeof( sal_uInt16 ) * cnt);
 }
 
+SfxItemSet::SfxItemSet( SfxItemSet&& rASet )
+    : m_pPool( rASet.m_pPool )
+    , m_pParent( rASet.m_pParent )
+    , m_pItems( std::move(rASet.m_pItems) )
+    , m_pWhichRanges( rASet.m_pWhichRanges )
+    , m_nCount( rASet.m_nCount )
+{
+    rASet.m_pPool = nullptr;
+    rASet.m_pParent = nullptr;
+    rASet.m_pWhichRanges = nullptr;
+    rASet.m_nCount = 0;
+}
+
 SfxItemSet::~SfxItemSet()
 {
-    sal_uInt16 nCount = TotalCount();
-    if( Count() )
+    if (m_pWhichRanges) // might be nullptr if we have been moved-from
     {
-        SfxPoolItem const** ppFnd = m_pItems.get();
-        for( sal_uInt16 nCnt = nCount; nCnt; --nCnt, ++ppFnd )
-            if( *ppFnd && !IsInvalidItem(*ppFnd) )
-            {
-                if( !(*ppFnd)->Which() )
-                    delete *ppFnd;
-                else {
-                    // Still multiple references present, so just alter the RefCount
-                    if ( 1 < (*ppFnd)->GetRefCount() && !IsDefaultItem(*ppFnd) )
-                        (*ppFnd)->ReleaseRef();
-                    else
-                        if ( !IsDefaultItem(*ppFnd) )
-                            // Delete from Pool
-                            m_pPool->Remove( **ppFnd );
+        sal_uInt16 nCount = TotalCount();
+        if( Count() )
+        {
+            SfxPoolItem const** ppFnd = m_pItems.get();
+            for( sal_uInt16 nCnt = nCount; nCnt; --nCnt, ++ppFnd )
+                if( *ppFnd && !IsInvalidItem(*ppFnd) )
+                {
+                    if( !(*ppFnd)->Which() )
+                        delete *ppFnd;
+                    else {
+                        // Still multiple references present, so just alter the RefCount
+                        if ( 1 < (*ppFnd)->GetRefCount() && !IsDefaultItem(*ppFnd) )
+                            (*ppFnd)->ReleaseRef();
+                        else
+                            if ( !IsDefaultItem(*ppFnd) )
+                                // Delete from Pool
+                                m_pPool->Remove( **ppFnd );
+                    }
                 }
-            }
+        }
     }
 
     m_pItems.reset();
-    if (m_pWhichRanges != m_pPool->GetFrozenIdRanges())
+    if (m_pPool && m_pWhichRanges != m_pPool->GetFrozenIdRanges())
         delete[] m_pWhichRanges;
     m_pWhichRanges = nullptr; // for invariant-testing
 }
