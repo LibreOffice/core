@@ -3542,7 +3542,6 @@ if test "$_os" = "WINNT"; then
 
     BUILD_X64=
     CXX_X64_BINARY=
-    LINK_X64_BINARY=
 
     if test "$BITNESS_OVERRIDE" = ""; then
         AC_MSG_CHECKING([for a x64 compiler and libraries for 64-bit Explorer extensions])
@@ -3552,11 +3551,9 @@ if test "$_os" = "WINNT"; then
             if "$VC_PRODUCT_DIR/bin/amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
                 BUILD_X64=TRUE
                 CXX_X64_BINARY="$VC_PRODUCT_DIR/bin/amd64/cl.exe"
-                LINK_X64_BINARY="$VC_PRODUCT_DIR/bin/amd64/link.exe"
             elif "$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
                 BUILD_X64=TRUE
                 CXX_X64_BINARY="$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"
-                LINK_X64_BINARY="$VC_PRODUCT_DIR/bin/x86_amd64/link.exe"
             fi
         elif test -f "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/atlmfc/lib/x64/atls.lib" || \
              test -f "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/atlmfc/lib/spectre/x64/atls.lib"; then
@@ -3564,7 +3561,6 @@ if test "$_os" = "WINNT"; then
             if "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64/cl.exe" -? </dev/null >/dev/null 2>&1; then
                 BUILD_X64=TRUE
                 CXX_X64_BINARY="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64/cl.exe"
-                LINK_X64_BINARY="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64/link.exe"
             fi
         fi
         if test "$BUILD_X64" = TRUE; then
@@ -3578,7 +3574,6 @@ if test "$_os" = "WINNT"; then
 
     # These are passed to the environment and then used in gbuild/platform/com_MSC_class.mk
     AC_SUBST(CXX_X64_BINARY)
-    AC_SUBST(LINK_X64_BINARY)
 
     # Check for 32-bit compiler to use to build the 32-bit TWAIN shim
     # needed to support TWAIN scan on both 32- and 64-bit systems
