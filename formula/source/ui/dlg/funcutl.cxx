@@ -401,7 +401,7 @@ void WeldRefEdit::SetRefString( const OUString& rStr )
 
 void WeldRefEdit::SetRefValid(bool bValid)
 {
-    xEntry->set_error(!bValid);
+    xEntry->set_message_type(bValid ? weld::EntryMessageType::Normal : weld::EntryMessageType::Error);
 }
 
 void WeldRefEdit::SetText(const OUString& rStr)

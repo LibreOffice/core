@@ -325,9 +325,6 @@ public:
     void            DeactivateOle();
 
     static ScTabViewShell* GetActiveViewShell();
-    VclPtr<SfxModelessDialog> CreateRefDialog( SfxBindings* pB, SfxChildWindow* pCW,
-                                               const SfxChildWinInfo* pInfo,
-                                               vcl::Window* pParent, sal_uInt16 nSlotId );
 
     std::unique_ptr<SfxModelessDialogController> CreateRefDialogController(SfxBindings* pB, SfxChildWindow* pCW,
                                                     const SfxChildWinInfo* pInfo,

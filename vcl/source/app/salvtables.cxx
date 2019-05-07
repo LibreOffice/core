@@ -245,11 +245,13 @@ protected:
 private:
     DECL_LINK(EventListener, VclWindowEvent&, void);
     DECL_LINK(KeyEventListener, VclWindowEvent&, bool);
+    DECL_LINK(MouseEventListener, VclSimpleEvent&, void);
     DECL_LINK(MnemonicActivateHdl, vcl::Window&, bool);
 
     const bool m_bTakeOwnership;
     bool m_bEventListener;
     bool m_bKeyEventListener;
+    bool m_bMouseEventListener;
     int m_nBlockNotify;
 
 protected:
@@ -274,8 +276,20 @@ protected:
         }
     }
 
+    // we want the ability to know about mouse events that happen in our children
+    // so use this variant, we will need to filter them later
+    void ensure_mouse_listener()
+    {
+        if (!m_bMouseEventListener)
+        {
+            Application::AddEventListener(LINK(this, SalInstanceWidget, MouseEventListener));
+            m_bMouseEventListener = true;
+        }
+    }
+
     virtual void HandleEventListener(VclWindowEvent& rEvent);
     virtual bool HandleKeyEventListener(VclWindowEvent& rEvent);
+    virtual void HandleMouseEventListener(VclSimpleEvent& rEvent);
 
 public:
     SalInstanceWidget(vcl::Window* pWidget, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
@@ -283,7 +297,7 @@ public:
         , m_pBuilder(pBuilder)
         , m_bTakeOwnership(bTakeOwnership)
         , m_bEventListener(false)
-        , m_bKeyEventListener(false)
+        , m_bMouseEventListener(false)
         , m_nBlockNotify(0)
     {
     }
@@ -529,19 +543,19 @@ public:
 
     virtual void connect_mouse_press(const Link<const MouseEvent&, bool>& rLink) override
     {
-        ensure_event_listener();
+        ensure_mouse_listener();
         weld::Widget::connect_mouse_press(rLink);
     }
 
     virtual void connect_mouse_move(const Link<const MouseEvent&, bool>& rLink) override
     {
-        ensure_event_listener();
+        ensure_mouse_listener();
         weld::Widget::connect_mouse_move(rLink);
     }
 
     virtual void connect_mouse_release(const Link<const MouseEvent&, bool>& rLink) override
     {
-        ensure_event_listener();
+        ensure_mouse_listener();
         weld::Widget::connect_mouse_release(rLink);
     }
 
@@ -608,6 +622,8 @@ public:
     {
         if (m_aMnemonicActivateHdl.IsSet())
             m_xWidget->SetMnemonicActivateHdl(Link<vcl::Window&,bool>());
+        if (m_bMouseEventListener)
+            Application::RemoveEventListener(LINK(this, SalInstanceWidget, MouseEventListener));
         if (m_bKeyEventListener)
             Application::RemoveKeyListener(LINK(this, SalInstanceWidget, KeyEventListener));
         if (m_bEventListener)
@@ -654,6 +670,15 @@ public:
         return m_xWidget->GetDropTarget();
     }
 
+    virtual void set_stack_background() override
+    {
+        m_xWidget->SetControlBackground(m_xWidget->GetSettings().GetStyleSettings().GetWindowColor());
+        m_xWidget->SetBackground(m_xWidget->GetControlBackground());
+        // turn off WB_CLIPCHILDREN otherwise the bg won't extend "under"
+        // transparent children of the widget
+        m_xWidget->SetStyle(m_xWidget->GetStyle() & ~WB_CLIPCHILDREN);
+    }
+
     SystemWindow* getSystemWindow()
     {
         return m_xWidget->GetSystemWindow();
@@ -668,20 +693,36 @@ void SalInstanceWidget::HandleEventListener(VclWindowEvent& rEvent)
         m_aFocusOutHdl.Call(*this);
     else if (rEvent.GetId() == VclEventId::WindowResize)
         m_aSizeAllocateHdl.Call(m_xWidget->GetSizePixel());
-    else if (rEvent.GetId() == VclEventId::WindowMouseButtonDown)
+}
+
+void SalInstanceWidget::HandleMouseEventListener(VclSimpleEvent& rEvent)
+{
+    if (rEvent.GetId() == VclEventId::WindowMouseButtonDown)
     {
-        const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rEvent.GetData());
-        m_aMousePressHdl.Call(*pMouseEvent);
+        auto& rWinEvent = static_cast<VclWindowEvent&>(rEvent);
+        if (m_xWidget->IsWindowOrChild(rWinEvent.GetWindow()))
+        {
+            const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
+            m_aMousePressHdl.Call(*pMouseEvent);
+        }
     }
     else if (rEvent.GetId() == VclEventId::WindowMouseButtonUp)
     {
-        const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rEvent.GetData());
-        m_aMouseReleaseHdl.Call(*pMouseEvent);
+        auto& rWinEvent = static_cast<VclWindowEvent&>(rEvent);
+        if (m_xWidget->IsWindowOrChild(rWinEvent.GetWindow()))
+        {
+            const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
+            m_aMouseReleaseHdl.Call(*pMouseEvent);
+        }
     }
     else if (rEvent.GetId() == VclEventId::WindowMouseMove)
     {
-        const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rEvent.GetData());
-        m_aMouseMotionHdl.Call(*pMouseEvent);
+        auto& rWinEvent = static_cast<VclWindowEvent&>(rEvent);
+        if (m_xWidget->IsWindowOrChild(rWinEvent.GetWindow()))
+        {
+            const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
+            m_aMouseMotionHdl.Call(*pMouseEvent);
+        }
     }
 }
 
@@ -711,6 +752,11 @@ IMPL_LINK(SalInstanceWidget, EventListener, VclWindowEvent&, rEvent, void)
 IMPL_LINK(SalInstanceWidget, KeyEventListener, VclWindowEvent&, rEvent, bool)
 {
     return HandleKeyEventListener(rEvent);
+}
+
+IMPL_LINK(SalInstanceWidget, MouseEventListener, VclSimpleEvent&, rEvent, void)
+{
+    HandleMouseEventListener(rEvent);
 }
 
 IMPL_LINK_NOARG(SalInstanceWidget, MnemonicActivateHdl, vcl::Window&, bool)
@@ -2331,14 +2377,23 @@ public:
         return !m_xEntry->IsReadOnly();
     }
 
-    virtual void set_error(bool bError) override
+    virtual void set_message_type(weld::EntryMessageType eType) override
     {
-        if (bError)
+        if (eType == weld::EntryMessageType::Error)
         {
-            // #i75179# enable setting the background to a different color
+            // tdf#114603: enable setting the background to a different color;
+            // relevant for GTK; see also #i75179#
             m_xEntry->SetForceControlBackground(true);
             m_xEntry->SetControlForeground(COL_WHITE);
             m_xEntry->SetControlBackground(0xff6563);
+        }
+        else if (eType == weld::EntryMessageType::Warning)
+        {
+            // tdf#114603: enable setting the background to a different color;
+            // relevant for GTK; see also #i75179#
+            m_xEntry->SetForceControlBackground(true);
+            m_xEntry->SetControlForeground();
+            m_xEntry->SetControlBackground(COL_YELLOW);
         }
         else
         {
@@ -3904,10 +3959,12 @@ public:
         pLabel->set_mnemonic_widget(pTargetWidget ? pTargetWidget->getWidget() : nullptr);
     }
 
-    virtual void set_error(bool bShowError) override
+    virtual void set_message_type(weld::EntryMessageType eType) override
     {
-        if (bShowError)
+        if (eType == weld::EntryMessageType::Error)
             m_xLabel->SetControlBackground(m_xLabel->GetSettings().GetStyleSettings().GetHighlightColor());
+        else if (eType == weld::EntryMessageType::Warning)
+            m_xLabel->SetControlBackground(COL_YELLOW);
         else
             m_xLabel->SetControlBackground();
     }
@@ -4127,15 +4184,22 @@ private:
     // in VclDrawingArea
     virtual void HandleEventListener(VclWindowEvent& rEvent) override
     {
-        if (rEvent.GetId() == VclEventId::WindowResize ||
-            rEvent.GetId() == VclEventId::WindowMouseButtonDown ||
+        if (rEvent.GetId() == VclEventId::WindowResize)
+            return;
+        SalInstanceWidget::HandleEventListener(rEvent);
+    }
+
+    virtual void HandleMouseEventListener(VclSimpleEvent& rEvent) override
+    {
+        if (rEvent.GetId() == VclEventId::WindowMouseButtonDown ||
             rEvent.GetId() == VclEventId::WindowMouseButtonUp ||
             rEvent.GetId() == VclEventId::WindowMouseMove)
         {
             return;
         }
-        SalInstanceWidget::HandleEventListener(rEvent);
+        SalInstanceWidget::HandleMouseEventListener(rEvent);
     }
+
 
     virtual bool HandleKeyEventListener(VclWindowEvent& /*rEvent*/) override
     {
@@ -4520,7 +4584,7 @@ public:
         return false;
     }
 
-    virtual void set_entry_error(bool /*bError*/) override
+    virtual void set_entry_message_type(weld::EntryMessageType /*eType*/) override
     {
         assert(false);
     }
@@ -4588,10 +4652,12 @@ public:
         return true;
     }
 
-    virtual void set_entry_error(bool bError) override
+    virtual void set_entry_message_type(weld::EntryMessageType eType) override
     {
-        if (bError)
+        if (eType == weld::EntryMessageType::Error)
             m_xComboBox->SetControlForeground(Color(0xf0, 0, 0));
+        else if (eType == weld::EntryMessageType::Warning)
+            m_xComboBox->SetControlForeground(COL_YELLOW);
         else
             m_xComboBox->SetControlForeground();
     }

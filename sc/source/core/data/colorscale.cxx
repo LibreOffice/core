@@ -1383,8 +1383,7 @@ sal_Int32 ScIconSetFormat::getIconSetElements( ScIconSetType eType )
     return 0;
 }
 
-BitmapEx& ScIconSetFormat::getBitmap(sc::IconSetBitmapMap & rIconSetBitmapMap,
-        ScIconSetType const eType, sal_Int32 const nIndex)
+OUString ScIconSetFormat::getIconName(ScIconSetType const eType, sal_Int32 const nIndex)
 {
     OUString sBitmap;
 
@@ -1398,6 +1397,14 @@ BitmapEx& ScIconSetFormat::getBitmap(sc::IconSetBitmapMap & rIconSetBitmapMap,
     }
 
     assert(!sBitmap.isEmpty());
+
+    return sBitmap;
+}
+
+BitmapEx& ScIconSetFormat::getBitmap(sc::IconSetBitmapMap & rIconSetBitmapMap,
+        ScIconSetType const eType, sal_Int32 const nIndex)
+{
+    OUString sBitmap(ScIconSetFormat::getIconName(eType, nIndex));
 
     std::map<OUString, BitmapEx>::iterator itr = rIconSetBitmapMap.find(sBitmap);
     if (itr != rIconSetBitmapMap.end())
