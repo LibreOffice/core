@@ -1,0 +1,23 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_SHELL_INC_SPSUPP_STRINGS_HRC
+#define INCLUDED_SHELL_INC_SPSUPP_STRINGS_HRC
+
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+
+#define RID_STR_SP_VIEW_OR_EDIT_TITLE   NC_("RID_STR_SP_VIEW_OR_EDIT_TITLE", "Open Document")
+#define RID_STR_SP_VIEW_OR_EDIT_MESSAGE NC_("RID_STR_SP_VIEW_OR_EDIT_MESSAGE", "You are opening document\n\n  %DOCNAME\n\nDo you want to open it to view or to edit?")
+#define RID_STR_SP_VIEW_OR_EDIT_VIEW    NC_("RID_STR_SP_VIEW_OR_EDIT_VIEW", "View")
+#define RID_STR_SP_VIEW_OR_EDIT_EDIT    NC_("RID_STR_SP_VIEW_OR_EDIT_EDIT", "Edit")
+#define RID_STR_SP_VIEW_OR_EDIT_CANCEL  NC_("RID_STR_SP_VIEW_OR_EDIT_CANCEL", "Cancel")
+
+#endif          // INCLUDED_SHELL_INC_SPSUPP_STRINGS_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

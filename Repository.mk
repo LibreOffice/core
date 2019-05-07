@@ -208,6 +208,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	) \
 	$(if $(filter WNT,$(OS)), \
 		senddoc \
+		spsupp_helper \
 	) \
 	$(if $(filter OPENCL,$(BUILD_TYPE)),opencltest) \
 ))
@@ -1120,6 +1121,7 @@ $(eval $(call gb_Helper_register_mos,\
 	scc \
 	sd \
 	sfx \
+	shell \
 	sm \
 	svl \
 	svt \
