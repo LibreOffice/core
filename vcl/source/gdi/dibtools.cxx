@@ -1065,7 +1065,7 @@ bool ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset )
 {
     bool bRet = false;
 
-    const sal_uInt64 nStreamLength = rIStm.remainingSize();
+    const sal_uInt64 nStreamLength = rIStm.TellEnd();
 
     sal_uInt16 nTmp16 = 0;
     rIStm.ReadUInt16( nTmp16 );
