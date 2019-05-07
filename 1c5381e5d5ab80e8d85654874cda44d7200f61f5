@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_ae710ee3",
+        "filename": "include/svl/zforlist.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-05-07T18:18:12Z",
+      "side": 1,
+      "message": "you\u0027re going to need to update the constant here\n0x1dff -\u003e 0x2dff",
+      "revId": "1c5381e5d5ab80e8d85654874cda44d7200f61f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
