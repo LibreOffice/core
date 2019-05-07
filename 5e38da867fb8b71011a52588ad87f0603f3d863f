@@ -16,6 +16,24 @@
       "revId": "5e38da867fb8b71011a52588ad87f0603f3d863f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_eb1868d4",
+        "filename": "tools/source/debug/debug.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-05-07T08:55:10Z",
+      "side": 1,
+      "message": "you are correct, this should be free, not delete. Want submit a patch?",
+      "parentUuid": "3fa0c359_0b77d43c",
+      "revId": "5e38da867fb8b71011a52588ad87f0603f3d863f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
