@@ -32,6 +32,39 @@ namespace Item
 {
     class ItemControlBlock;
 
+    // Baseclass for implementation of (refactored) Items. It is
+    // pure virtual (do not construct ItemBase itself). There
+    // are two kinds of Items now:
+    // (1) SimpleItems derived from ItemBase directly
+    // (2) BufferedItems derived from ItemBuffered
+    // Items in the old form were buffered at the ItemPool
+    // and needed as basic content the value, RefCnt, which
+    // and kind - thus the size of an incarnation will be not
+    // smaller than the naked item itself, the contrary. So
+    // where is the reason for buffering and keeping only one
+    // ref-conted instance of every possible incarnation?
+    // The new Item is similar, the buffered version (2) has
+    // the ItemControlBlock&, the item's value(s) itself and a
+    // refCounting of some kind. Thus the consequence is:
+    // As long as an Item including the ItemControlBlock& and
+    // it's data is smaller than the refCnted version, do not
+    // refCnt it, but profit from small footprint and simple
+    // copyability - derive from (1).
+    // Thus all new Items simple and small enough (ca. 3-4 'machine' words,
+    // depending on 32/64bit) should use ItemBase as base (see CntInt16
+    // as example)
+    // They should use ItemBuffered as soon as some relevant size
+    // is reached. That again will - due to the Item-incarnation
+    // referencing the ItemData - also have small footprint and simple
+    // copyability, but be a bit harder to implement.
+    // Note: All Items can be implemented either way, the diecision should
+    // be made upon size of one incarnation and copyability (some are better
+    // refCnted). (2) has all the tooling to do that in a unified way.
+    // For examples how to implement your Item, check
+    // item\test\ItemTest.cxx where for test purposes a simple two-
+    // value Item is implemented both ways, as example derived adding
+    // a third value, and derived to get a new ItemType for typeSafe
+    // future handling.
     class ITEM_DLLPUBLIC ItemBase
     {
     public:
@@ -42,7 +75,7 @@ namespace Item
 
         // PutValue/Any interface for automated instance creation from SfxType
         // mechanism (UNO API and sfx2 stuff)
-        virtual void putAnyValues(const AnyIDArgs& rArgs);
+        void putAnyValues(const AnyIDArgs& rArgs);
 
     private:
         // local reference to instance of ItemControlBlock for this
@@ -57,23 +90,28 @@ namespace Item
         // mechanism (UNO API and sfx2 stuff)
         virtual void putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);
 
-    public:
+        // constructor for derived classes, thus protected. Derived
+        // classes hand in their specific ItemControlBlock to be used
         ItemBase(ItemControlBlock& rItemControlBlock);
+
+    public:
         virtual ~ItemBase();
 
+        // copy constructor and assigment operator (both allowed)
         ItemBase(const ItemBase&);
         ItemBase& operator=(const ItemBase&);
 
+        // compare, != uses it internally and thus is not virtual
         virtual bool operator==(const ItemBase&) const;
         bool operator!=(const ItemBase&) const;
 
-        // default interface
+        // default-value interface
         const ItemBase& getDefault() const;
         bool isDefault() const;
 
-        // clone-op, secured by handing over a std::unique_ptr directly
-        // to make explicit the ownership you get when calling this
-        virtual std::unique_ptr<ItemBase> clone() const = 0;
+        // clone-op, secured by returning a std::unique_ptr to make
+        // explicit the ownership you get when calling this
+        std::unique_ptr<ItemBase> clone() const;
     };
 
     // static versions of default interface

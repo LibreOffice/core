@@ -17,17 +17,21 @@ namespace Item
 {
     ItemControlBlock::ItemControlBlock(
         std::function<ItemBase*()>aConstructDefaultItem,
+        std::function<ItemBase*(const ItemBase&)>aCloneItem,
         const OUString& rName)
     :   m_aDefaultItem(),
         m_aConstructDefaultItem(aConstructDefaultItem),
+        m_aCloneItem(aCloneItem),
         m_aName(rName)
     {
         assert(nullptr != m_aConstructDefaultItem && "nullptr not allowed, a Item-Constructor *is* required (!)");
+        assert(nullptr != aCloneItem && "nullptr not allowed, a Item-Cclone lambda *is* required (!)");
     }
 
     ItemControlBlock::ItemControlBlock()
     :   m_aDefaultItem(),
         m_aConstructDefaultItem(),
+        m_aCloneItem(),
         m_aName()
     {
     }
@@ -48,6 +52,11 @@ namespace Item
         assert(typeid(rItem) == typeid(getDefault()) && "different types compared - not allowed (!)");
         return &rItem == &getDefault() ||   // ptr-compare
             rItem.operator==(getDefault()); // content-compare
+    }
+
+    std::unique_ptr<ItemBase> ItemControlBlock::clone(const ItemBase& rRef) const
+    {
+        return std::unique_ptr<ItemBase>(m_aCloneItem(rRef));
     }
 
     std::unique_ptr<const ItemBase> ItemControlBlock::createFromAny(const ItemBase::AnyIDArgs& rArgs)

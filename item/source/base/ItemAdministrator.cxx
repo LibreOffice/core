@@ -13,10 +13,14 @@
 
 namespace Item
 {
-    ItemAdministrator::ItemAdministrator(std::function<ItemBuffered::ItemData*()> aConstructItem)
-    :   m_aConstructItem(aConstructItem)
+    ItemAdministrator::ItemAdministrator(
+        std::function<ItemBuffered::ItemData*()> aConstructItemData,
+        std::function<ItemBuffered::ItemData*(const ItemBuffered::ItemData&)> aCloneItemData)
+    :   m_aConstructItemData(aConstructItemData),
+        m_aCloneItemData(aCloneItemData)
     {
-        assert(nullptr != m_aConstructItem && "ItemAdministrator::ItemAdministrator called without valid constructItem lambda (!)");
+        assert(nullptr != m_aConstructItemData && "ItemAdministrator::ItemAdministrator called without valid ConstructItemData lambda (!)");
+        assert(nullptr != m_aCloneItemData && "ItemAdministrator::ItemAdministrator called without valid CloneItemData lambda (!)");
     }
 
     ItemAdministrator::~ItemAdministrator()
@@ -34,7 +38,12 @@ namespace Item
 
     ItemBuffered::ItemData* ItemAdministrator::createNewDataInstance() const
     {
-        return m_aConstructItem();
+        return m_aConstructItemData();
+    }
+
+    ItemBuffered::ItemData* ItemAdministrator::clone(const ItemBuffered::ItemData& rRef) const
+    {
+        return m_aCloneItemData(rRef);
     }
 } // end of namespace Item
 
@@ -43,9 +52,10 @@ namespace Item
 namespace Item
 {
     ItemAdministrator_set::ItemAdministrator_set(
-        std::function<ItemBuffered::ItemData*()> aConstructItem,
+        std::function<ItemBuffered::ItemData*()> aConstructItemData,
+        std::function<ItemBuffered::ItemData*(const ItemBuffered::ItemData&)> aCloneItemData,
         std::function<bool(ItemBuffered::ItemData*, ItemBuffered::ItemData*)> aLess)
-    :   ItemAdministrator(aConstructItem),
+    :   ItemAdministrator(aConstructItemData, aCloneItemData),
         m_aEntries(aLess)
     {
     }
@@ -76,10 +86,11 @@ namespace Item
 namespace Item
 {
     ItemAdministrator_unordered_set::ItemAdministrator_unordered_set(
-        std::function<ItemBuffered::ItemData*()> aConstructItem,
+        std::function<ItemBuffered::ItemData*()> aConstructItemData,
+        std::function<ItemBuffered::ItemData*(const ItemBuffered::ItemData&)> aCloneItemData,
         std::function<size_t(ItemBuffered::ItemData*)> aHash,
         std::function<bool(ItemBuffered::ItemData*, ItemBuffered::ItemData*)> aCompare)
-    :   ItemAdministrator(aConstructItem),
+    :   ItemAdministrator(aConstructItemData, aCloneItemData),
         m_aEntries(
             0, // bucket_count -> not sure, want a system default. Will zero give me that?
             aHash,
@@ -185,9 +196,10 @@ namespace Item
     }
 
     ItemAdministrator_vector::ItemAdministrator_vector(
-        std::function<ItemBuffered::ItemData*()> aConstructItem,
+        std::function<ItemBuffered::ItemData*()> aConstructItemData,
+        std::function<ItemBuffered::ItemData*(const ItemBuffered::ItemData&)> aCloneItemData,
         std::function<bool(ItemBuffered::ItemData*, ItemBuffered::ItemData*)> aSame)
-    :   ItemAdministrator(aConstructItem),
+    :   ItemAdministrator(aConstructItemData, aCloneItemData),
         m_aEntries(),
         m_aFreeSlots(),
         m_aSame(aSame)

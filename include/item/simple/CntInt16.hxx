@@ -35,9 +35,7 @@ namespace Item
 
     public:
         CntInt16(sal_Int16 nVal = 0);
-
         virtual bool operator==(const ItemBase&) const;
-        virtual std::unique_ptr<ItemBase> clone() const;
 
         sal_Int16 getValue() const { return m_nValue; }
         void putValue(sal_Int16 nNew) { m_nValue = nNew; }

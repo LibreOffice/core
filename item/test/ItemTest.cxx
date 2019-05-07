@@ -30,6 +30,7 @@ namespace Item
         {
             static ItemControlBlock aItemControlBlock(
                 [](){ return new MultiValueSimple(); },
+                [](const ItemBase& rRef){ return new MultiValueSimple(static_cast<const MultiValueSimple&>(rRef)); },
                 "MultiValueSimple");
 
             return aItemControlBlock;
@@ -62,12 +63,6 @@ namespace Item
                  getValueB() == static_cast<const MultiValueSimple&>(rRef).getValueB());
         }
 
-        virtual std::unique_ptr<ItemBase> clone() const
-        {
-            // use direct value(s) and std::make_unique
-            return std::make_unique<MultiValueSimple>(getValueA(), getValueB());
-        }
-
         sal_Int16 getValueA() const
         {
             return m_nValueA;
@@ -93,6 +88,7 @@ namespace Item
         {
             static ItemControlBlock aItemControlBlock(
                 [](){ return new MultiValueSimple_derivedClass(); },
+                [](const ItemBase& rRef){ return new MultiValueSimple_derivedClass(static_cast<const MultiValueSimple_derivedClass&>(rRef)); },
                 "MultiValueSimple_derivedClass");
 
             return aItemControlBlock;
@@ -102,12 +98,6 @@ namespace Item
         MultiValueSimple_derivedClass(sal_Int16 nValA = 0, sal_Int32 nValB = 0)
         :   MultiValueSimple(MultiValueSimple_derivedClass::GetStaticItemControlBlock(), nValA, nValB)
         {
-        }
-
-        virtual std::unique_ptr<ItemBase> clone() const
-        {
-            // use direct value(s) and std::make_unique
-            return std::make_unique<MultiValueSimple_derivedClass>(getValueA(), getValueB());
         }
     };
 } // end of namespace Item
@@ -124,6 +114,7 @@ namespace Item
         {
             static ItemControlBlock aItemControlBlock(
                 [](){ return new MultiValueSimple_plus(); },
+                [](const ItemBase& rRef){ return new MultiValueSimple_plus(static_cast<const MultiValueSimple_plus&>(rRef)); },
                 "MultiValueSimple_plus");
 
             return aItemControlBlock;
@@ -152,12 +143,6 @@ namespace Item
                 getValueC() == static_cast<const MultiValueSimple_plus&>(rRef).getValueC();
         }
 
-        virtual std::unique_ptr<ItemBase> clone() const
-        {
-            // use direct value(s) and std::make_unique
-            return std::make_unique<MultiValueSimple_plus>(getValueA(), getValueB(), getValueC());
-        }
-
         sal_Int64 getValueC() const
         {
             return m_nValueC;
@@ -178,6 +163,7 @@ namespace Item
         {
             static ItemControlBlock aItemControlBlock(
                 [](){ return new MultiValueSimple_plus_derivedClass(); },
+                [](const ItemBase& rRef){ return new MultiValueSimple_plus_derivedClass(static_cast<const MultiValueSimple_plus_derivedClass&>(rRef)); },
                 "MultiValueSimple_plus_derivedClass");
 
             return aItemControlBlock;
@@ -187,12 +173,6 @@ namespace Item
         MultiValueSimple_plus_derivedClass(sal_Int16 nValA = 0, sal_Int32 nValB = 0, sal_Int64 nValC = 0)
         :   MultiValueSimple_plus(MultiValueSimple_plus_derivedClass::GetStaticItemControlBlock(), nValA, nValB, nValC)
         {
-        }
-
-        virtual std::unique_ptr<ItemBase> clone() const
-        {
-            // use direct value(s) and std::make_unique
-            return std::make_unique<MultiValueSimple_plus_derivedClass>(getValueA(), getValueB(), getValueC());
         }
     };
 } // end of namespace Item
@@ -209,6 +189,7 @@ namespace Item
         {
             static ItemControlBlock aItemControlBlock(
                 [](){ return new MultiValueBuffered(); },
+                [](const ItemBase& rRef){ return new MultiValueBuffered(static_cast<const MultiValueBuffered&>(rRef)); },
                 "MultiValueBuffered");
 
             return aItemControlBlock;
@@ -227,6 +208,12 @@ namespace Item
                 static ItemAdministrator_set aItemAdministrator_set(
                     // hand over localized lambda call to construct a new instance of Item
                     [](){ return new MultiValueData(0, 0); },
+                    // hand over localized lambda call to clone an Item
+                    [](const ItemData& rRef)
+                    {
+                        const MultiValueData& rData(static_cast<const MultiValueData&>(rRef));
+                        return new MultiValueData(rData.getValueA(), rData.getValueB());
+                    },
                     // hand over localized lambda operator< to have a sorted set
                     [](ItemData* A, ItemData* B)
                     {
@@ -264,6 +251,16 @@ namespace Item
             {
                 return m_nValueB;
             }
+
+            void setValueA(sal_Int16 nNew)
+            {
+                m_nValueA = nNew;
+            }
+
+            void setValueB(sal_Int32 nNew)
+            {
+                m_nValueB = nNew;
+            }
         };
 
     protected:
@@ -290,11 +287,43 @@ namespace Item
             setItemData(new MultiValueData(nValueA, nValueB));
         }
 
-        sal_Int16 getValueA() const { return static_cast<MultiValueData const&>(getItemData()).getValueA(); }
-        sal_Int32 getValueB() const { return static_cast<MultiValueData const&>(getItemData()).getValueB(); }
+        sal_Int16 getValueA() const
+        {
+            return static_cast<MultiValueData&>(getItemData()).getValueA();
+        }
 
-        void setValueA(sal_Int16 nNewA) { setItemData(new MultiValueData(nNewA, getValueB())); }
-        void setValueB(sal_Int32 nNewB) { setItemData(new MultiValueData(getValueA(), nNewB)); }
+        sal_Int32 getValueB() const
+        {
+            return static_cast<MultiValueData&>(getItemData()).getValueB();
+        }
+
+        void setValueA(sal_Int16 nNewA)
+        {
+            setItemData(new MultiValueData(nNewA, getValueB()));
+        }
+
+        void setValueB(sal_Int32 nNewB)
+        {
+            setItemData(new MultiValueData(getValueA(), nNewB));
+        }
+
+        void setValueAA(sal_Int16 nNew) const
+        {
+            if(nNew != getValueA())
+            {
+                const_cast<MultiValueBuffered*>(this)->make_unique();
+                static_cast<MultiValueData&>(getItemData()).setValueA(nNew);
+            }
+        }
+
+        void setValueBB(sal_Int32 nNew) const
+        {
+            if(nNew != getValueB())
+            {
+                const_cast<MultiValueBuffered*>(this)->make_unique();
+                static_cast<MultiValueData&>(getItemData()).setValueB(nNew);
+            }
+        }
     };
 } // end of namespace Item
 
@@ -311,6 +340,7 @@ namespace Item
         {
             static ItemControlBlock aItemControlBlock(
                 [](){ return new MultiValueBuffered_derivedClass(); },
+                [](const ItemBase& rRef){ return new MultiValueBuffered_derivedClass(static_cast<const MultiValueBuffered_derivedClass&>(rRef)); },
                 "MultiValueBuffered_derivedClass");
 
             return aItemControlBlock;
@@ -336,6 +366,7 @@ namespace Item
         {
             static ItemControlBlock aItemControlBlock(
                 [](){ return new MultiValueBuffered_plus(); },
+                [](const ItemBase& rRef){ return new MultiValueBuffered_plus(static_cast<const MultiValueBuffered_plus&>(rRef)); },
                 "MultiValueBuffered_plus");
 
             return aItemControlBlock;
@@ -353,6 +384,12 @@ namespace Item
                 static ItemAdministrator_set aItemAdministrator_set(
                     // hand over localized lambda call to construct a new instance of Item
                     [](){ return new MultiValueData_plus(0, 0, 0); },
+                    // hand over localized lambda call to clone an Item
+                    [](const ItemData& rRef)
+                    {
+                        const MultiValueData_plus& rData(static_cast<const MultiValueData_plus&>(rRef));
+                        return new MultiValueData_plus(rData.getValueA(), rData.getValueB(), rData.getValueC());
+                    },
                     // hand over localized lambda operator< to have a sorted set
                     [](ItemData* A, ItemData* B)
                     {
@@ -393,6 +430,11 @@ namespace Item
             {
                 return m_nValueC;
             }
+
+            void setValueC(sal_Int64 nNew)
+            {
+                m_nValueC = nNew;
+            }
         };
 
     protected:
@@ -411,9 +453,18 @@ namespace Item
             setItemData(new MultiValueData_plus(nValueA, nValueB, nValueC));
         }
 
-        sal_Int64 getValueC() const { return static_cast<MultiValueData_plus const&>(getItemData()).getValueC(); }
+        sal_Int64 getValueC() const { return static_cast<MultiValueData_plus&>(getItemData()).getValueC(); }
 
         void setValueC(sal_Int64 nNewC) { setItemData(new MultiValueData_plus(getValueA(), getValueB(), nNewC)); }
+
+        void setValueCC(sal_Int64 nNew) const
+        {
+            if(nNew != getValueC())
+            {
+                const_cast<MultiValueBuffered_plus*>(this)->make_unique();
+                static_cast<MultiValueData_plus&>(getItemData()).setValueC(nNew);
+            }
+        }
     };
 } // end of namespace Item
 
@@ -430,6 +481,7 @@ namespace Item
         {
             static ItemControlBlock aItemControlBlock(
                 [](){ return new MultiValueBuffered_plus_derivedClass(); },
+                [](const ItemBase& rRef){ return new MultiValueBuffered_plus_derivedClass(static_cast<const MultiValueBuffered_plus_derivedClass&>(rRef)); },
                 "MultiValueBuffered_plus_derivedClass");
 
             return aItemControlBlock;

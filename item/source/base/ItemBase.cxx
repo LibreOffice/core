@@ -87,17 +87,16 @@ namespace Item
 {
     void ItemBase::putAnyValues(const AnyIDArgs& rArgs)
     {
-        if(!rArgs.empty())
+        // default implementation does spread given arguments to putAnyValue-call
+        for(const auto& arg : rArgs)
         {
-            for(const auto& arg : rArgs)
-            {
-                putAnyValue(arg.first, arg.second);
-            }
+            putAnyValue(arg.first, arg.second);
         }
     }
 
     void ItemBase::putAnyValue(const css::uno::Any& /*rVal*/, sal_uInt8 /*nMemberId*/)
     {
+        // default has nothing to to
     }
 
     ItemBase::ItemBase(ItemControlBlock& rItemControlBlock)
@@ -114,20 +113,30 @@ namespace Item
     {
     }
 
-    ItemBase& ItemBase::operator=(const ItemBase&)
+    ItemBase& ItemBase::operator=(const ItemBase& rRef)
     {
+        // nothing to copy - type has to be identical
+        assert(typeid(const_cast<ItemBase&>(rRef)) == typeid(*this) && "Unequal types in ItemBase::operator= not allowed (!)");
         return *this;
     }
 
     bool ItemBase::operator==(const ItemBase& rRef) const
     {
         // ptr-compare
+        assert(typeid(rRef) == typeid(*this) && "Unequal types in ItemBase::operator== not allowed (!)");
         return (this == &rRef);
     }
 
     bool ItemBase::operator!=(const ItemBase& rRef) const
     {
+        assert(typeid(rRef) == typeid(*this) && "Unequal types in ItemBase::operator!= not allowed (!)");
         return !(*this == rRef);
+    }
+
+    std::unique_ptr<ItemBase> ItemBase::clone() const
+    {
+        // callback to ItemControlBlock
+        return m_rItemControlBlock.clone(*this);
     }
 
     const ItemBase& ItemBase::getDefault() const
@@ -144,6 +153,7 @@ namespace Item
 
     bool isDefault(const ItemBase& rCandidate)
     {
+        // callback to ItemControlBlock
         return rCandidate.m_rItemControlBlock.isDefault(rCandidate);
     }
 } // end of namespace Item

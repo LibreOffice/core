@@ -19,6 +19,7 @@ namespace Item
     {
         static ItemControlBlock aItemControlBlock(
             [](){ return new CntInt16(); },
+            [](const ItemBase& rRef){ return new CntInt16(static_cast<const CntInt16&>(rRef)); },
             "CntInt16");
 
         return aItemControlBlock;
@@ -40,12 +41,6 @@ namespace Item
     {
         return ItemBase::operator==(rRef) || // ptr-compare
             getValue() == static_cast<const CntInt16&>(rRef).getValue();
-    }
-
-    std::unique_ptr<ItemBase> CntInt16::clone() const
-    {
-        // use direct value(s) and std::make_unique
-        return std::make_unique<CntInt16>(getValue());
     }
 } // end of namespace Item
 

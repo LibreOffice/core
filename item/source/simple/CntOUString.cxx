@@ -19,6 +19,7 @@ namespace Item
     {
         static ItemControlBlock aItemControlBlock(
             [](){ return new CntOUString(); },
+            [](const ItemBase& rRef){ return new CntOUString(static_cast<const CntOUString&>(rRef)); },
             "CntOUString");
 
         return aItemControlBlock;
@@ -34,12 +35,6 @@ namespace Item
     {
         return ItemBase::operator==(rRef) || // ptr-compare
             getValue() == static_cast<const CntOUString&>(rRef).getValue();
-    }
-
-    std::unique_ptr<ItemBase> CntOUString::clone() const
-    {
-        // use direct value(s) and std::make_unique
-        return std::make_unique<CntOUString>(getValue());
     }
 } // end of namespace Item
 

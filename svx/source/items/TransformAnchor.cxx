@@ -20,6 +20,7 @@ namespace Item
     {
         static ItemControlBlock aItemControlBlock(
             [](){ return new TransformAnchor(); },
+            [](const ItemBase& rRef){ return new TransformAnchor(static_cast<const TransformAnchor&>(rRef)); },
             "TransformAnchor");
 
         return aItemControlBlock;
@@ -30,12 +31,6 @@ namespace Item
             TransformAnchor::GetStaticItemControlBlock(),
             static_cast<sal_Int16>(nValue))
     {
-    }
-
-    std::unique_ptr<ItemBase> TransformAnchor::clone() const
-    {
-        // use direct value(s) and std::make_unique
-        return std::make_unique<TransformAnchor>(GetAnchorType());
     }
 } // end of namespace Item
 

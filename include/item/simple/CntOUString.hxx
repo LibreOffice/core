@@ -32,9 +32,7 @@ namespace Item
 
     public:
         CntOUString(const rtl::OUString& rValue = rtl::OUString());
-
         virtual bool operator==(const ItemBase&) const;
-        virtual std::unique_ptr<ItemBase> clone() const;
 
         const rtl::OUString& getValue() const { return m_aValue; }
         void putValue(const rtl::OUString& rValue) { m_aValue = rValue; }

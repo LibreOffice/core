@@ -31,9 +31,17 @@ namespace Item
 {
     class ItemAdministrator;
 
+    // Baseclass for implementing buffered Items. The class is
+    // pure virtual and can/should not be incarnated directly,
+    // only derivatiohns from it.
+    // Please see include\item\base\ItemBase.hxx for more basic
+    // discussion about that.
     class ITEM_DLLPUBLIC ItemBuffered : public ItemBase
     {
     public:
+        // This is the pattern for the ItemData block. It is by purpose
+        // included to class ItemBuffered to make clear that it's usage
+        // only makes sense inside that class
         class ITEM_DLLPUBLIC ItemData
         {
         private:
@@ -42,10 +50,12 @@ namespace Item
             sal_Int32   m_nRef;
 
         protected:
+            // access to the ItemAAdministrator (see include\item\base\ItemAdministrator.hxx)
             virtual ItemAdministrator& getItemAdministrator() const = 0;
 
             // PutValue/Any interface for automated instance creation from SfxType
-            // mechanism (UNO API and sfx2 stuff)
+            // mechanism (UNO API and sfx2 stuff). Default does nothing, but asserts
+            // for missing implementation
             virtual void putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);
 
         public:
@@ -56,20 +66,29 @@ namespace Item
             ItemData(const ItemData&) = delete;
             ItemData& operator=(const ItemData&) = delete;
 
+            // compare Op - operator!= is using operator==
+            // so only operator== needs to be implemented
             virtual bool operator==(const ItemData&) const;
             bool operator!=(const ItemData&) const;
+
+            // clone-op, needs to create new instance and copy content.
+            // Call is forwarded to ItemAdministrator which needs a copy
+            // operator at construction time
+            ItemData* clone() const;
         };
 
     private:
+        // reference to the data block, will never be nullptr
         ItemData*     m_pItemData;
 
+        // internal acquire/release of DataBlock
         void acquire();
         void release();
 
-    public:
+    protected:
         // PutValue/Any interface for automated instance creation from SfxType
         // mechanism (UNO API and sfx2 stuff)
-        virtual void putAnyValues(const AnyIDArgs& rArgs);
+        virtual void putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);
 
     protected:
         // Method to internally (thus protected) set a new ItemData
@@ -81,19 +100,33 @@ namespace Item
         // hand-over allowed (!)
         void setItemData(ItemData* pItemData);
 
-        // access to ItemData instance - only const (!) and
-        // only internal for derived classes to implement
-        // data read access methods (Get-Methods)
-        ItemData const& getItemData() const { return *m_pItemData; }
+        // guarantees local instance refCnt == 1, so only owner. Will
+        // execute needed actions when required.
+        // difference to setItemData is that it potentially has to
+        // clone a copy itself, thus setItemData may be more effective
+        void make_unique();
+
+        // access to ItemData instance. CAUTION! If you want to use this
+        // to change data at your derivation of ItemData, you *have* to
+        // use setItemData or make_unique to be safe (!)
+        ItemData& getItemData() const { return *m_pItemData; }
+
+        // constructor for derived classes, thus protected. Derived
+        // classes hand in their specific ItemControlBlock to be used
+        ItemBuffered(ItemControlBlock& rItemControlBlock);
 
     public:
-        ItemBuffered(ItemControlBlock& rItemControlBlock);
-        ItemBuffered(const ItemBuffered&);
         virtual ~ItemBuffered();
+
+        // copy constructor and assigment operator (both allowed).
+        // Both use the refCnted incarnation of ItemData and are
+        // complete
+        ItemBuffered(const ItemBuffered&);
         ItemBuffered& operator=(const ItemBuffered&);
 
+        // compare, default implementation uses ItemData and
+        // is complete
         virtual bool operator==(const ItemBase&) const;
-        virtual std::unique_ptr<ItemBase> clone() const;
     };
 } // end of namespace Item
 

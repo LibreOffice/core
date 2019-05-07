@@ -31,6 +31,7 @@ namespace Item
     {
         static ::Item::ItemControlBlock aItemControlBlock(
             [](){ return new Sbx(ScriptDocument::getApplicationScriptDocument()); },
+            [](const ItemBase& rRef){ return new Sbx(static_cast<const Sbx&>(rRef)); },
             "Sbx");
 
         return aItemControlBlock;
@@ -41,6 +42,17 @@ namespace Item
         static ::Item::ItemAdministrator_vector aItemAdministrator_vector(
             // hand over localized lambda call to construct a new instance of Item
             [](){ return new Sbx::SbxData(ScriptDocument::getApplicationScriptDocument()); },
+            // hand over localized lambda call to clone an Item
+            [](const ItemData& rRef)
+            {
+                const SbxData& rData(static_cast<const SbxData&>(rRef));
+                return new SbxData(
+                    rData.GetDocument(),
+                    rData.GetLibName(),
+                    rData.GetName(),
+                    rData.GetMethodName(),
+                    rData.GetType());
+            },
             // hand over localized lambda operator==
             [](ItemData* A, ItemData* B)
             {

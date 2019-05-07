@@ -26,8 +26,6 @@ namespace Item
     public:
         TransformAnchor(RndStdIds nValue = RndStdIds::UNKNOWN);
 
-        virtual std::unique_ptr<ItemBase> clone() const;
-
         RndStdIds GetAnchorType() const { return static_cast<RndStdIds>(getValue()); }
     };
 } // end of namespace Item

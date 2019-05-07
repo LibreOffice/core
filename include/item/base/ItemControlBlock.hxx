@@ -35,22 +35,29 @@ namespace Item
     class ITEM_DLLPUBLIC ItemControlBlock
     {
     private:
-        std::unique_ptr<const ItemBase>     m_aDefaultItem;
-        std::function<ItemBase*()>          m_aConstructDefaultItem;
-        OUString                            m_aName;
+        std::unique_ptr<const ItemBase>             m_aDefaultItem;
+        std::function<ItemBase*()>                  m_aConstructDefaultItem;
+        std::function<ItemBase*(const ItemBase&)>   m_aCloneItem;
+        OUString                                    m_aName;
 
     public:
         ItemControlBlock(
             std::function<ItemBase*()>aConstructDefaultItem,
+            std::function<ItemBase*(const ItemBase&)>aCloneItem,
             const OUString& rName);
         ItemControlBlock();
 
         const ItemBase& getDefault() const;
         bool isDefault(const ItemBase& rItem) const;
+
         const OUString& getName() const
         {
             return m_aName;
         }
+
+        // clone-op, secured by returning a std::unique_ptr to make
+        // explicit the ownership you get when calling this
+        std::unique_ptr<ItemBase> clone(const ItemBase&) const;
 
         std::unique_ptr<const ItemBase> createFromAny(const ItemBase::AnyIDArgs& rArgs);
     };

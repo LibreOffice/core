@@ -34,11 +34,14 @@ namespace Item
     class ITEM_DLLPUBLIC ItemAdministrator
     {
     private:
-        std::function<ItemBuffered::ItemData*()>    m_aConstructItem;
+        std::function<ItemBuffered::ItemData*()>                                m_aConstructItemData;
+        std::function<ItemBuffered::ItemData*(const ItemBuffered::ItemData&)>   m_aCloneItemData;
 
     protected:
     public:
-        ItemAdministrator(std::function<ItemBuffered::ItemData*()> aConstructItem);
+        ItemAdministrator(
+            std::function<ItemBuffered::ItemData*()> aConstructItemData,
+            std::function<ItemBuffered::ItemData*(const ItemBuffered::ItemData&)> aCloneItemData);
         virtual ~ItemAdministrator();
 
         // noncopyable
@@ -51,6 +54,9 @@ namespace Item
 
         // instance supplier
         ItemBuffered::ItemData* createNewDataInstance() const;
+
+        // clone operator
+        ItemBuffered::ItemData* clone(const ItemBuffered::ItemData& rRef) const;
     };
 } // end of namespace Item
 
@@ -73,7 +79,8 @@ namespace Item
     protected:
     public:
         ItemAdministrator_set(
-            std::function<ItemBuffered::ItemData*()> aConstructItem,
+            std::function<ItemBuffered::ItemData*()> aConstructItemData,
+            std::function<ItemBuffered::ItemData*(const ItemBuffered::ItemData&)> aCloneItemData,
             std::function<bool(ItemBuffered::ItemData*, ItemBuffered::ItemData*)> aLess);
 
         // buffer accesses
@@ -101,7 +108,8 @@ namespace Item
     protected:
     public:
         ItemAdministrator_unordered_set(
-            std::function<ItemBuffered::ItemData*()> aConstructItem,
+            std::function<ItemBuffered::ItemData*()> aConstructItemData,
+            std::function<ItemBuffered::ItemData*(const ItemBuffered::ItemData&)> aCloneItemData,
             std::function<size_t(ItemBuffered::ItemData*)> aHash,
             std::function<bool(ItemBuffered::ItemData*, ItemBuffered::ItemData*)> aCompare);
 
@@ -139,7 +147,8 @@ namespace Item
 
     public:
         ItemAdministrator_vector(
-            std::function<ItemBuffered::ItemData*()> aConstructItem,
+            std::function<ItemBuffered::ItemData*()> aConstructItemData,
+            std::function<ItemBuffered::ItemData*(const ItemBuffered::ItemData&)> aCloneItemData,
             std::function<bool(ItemBuffered::ItemData*, ItemBuffered::ItemData*)> aSame);
 
         // buffer accesses
