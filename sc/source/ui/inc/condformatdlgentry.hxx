@@ -15,12 +15,14 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <svl/lstner.hxx>
 #include <svx/fntctrl.hxx>
 
 class ScIconSetFrmtDataEntry;
 class ScCondFormatDlg;
-class SvxColorListBox;
+class ScCondFormatList;
+class ColorListBox;
 class ScColorScaleFormat;
 class ScDataBarFormat;
 class ScIconSetFormat;
@@ -45,22 +47,27 @@ enum ScCondFrmtEntryType
 
 }
 
-class ScCondFrmtEntry : public VclContainer
-                      , public VclBuilderContainer
+class ScCondFrmtEntry
 {
-private:
-    bool mbActive;
+protected:
+    ScCondFormatList* mpParent;
+    std::unique_ptr<weld::Builder> mxBuilder;
 
+private:
+    //general ui elements
+    std::unique_ptr<weld::Widget> mxEventBox;
+    std::unique_ptr<weld::Container> mxGrid;
+    std::unique_ptr<weld::Label> mxFtCondNr;
+    std::unique_ptr<weld::Label> mxFtCondition;
+
+    bool mbActive;
+    OUString const maStrCondition;
     Link<ScCondFrmtEntry&,void> maClickHdl;
 
-    //general ui elements
-    VclPtr<VclContainer> maGrid;
-    VclPtr<FixedText> maFtCondNr;
-    VclPtr<FixedText> maFtCondition;
+    DECL_LINK( EntrySelectHdl, const MouseEvent&, bool );
 
-    OUString const maStrCondition;
 protected:
-    VclPtr<ListBox> maLbType;
+    std::unique_ptr<weld::ComboBox> mxLbType;
 
     ScDocument* mpDoc;
     ScAddress maPos;
@@ -71,13 +78,19 @@ protected:
     virtual OUString GetExpressionString() = 0;
 
 public:
-    ScCondFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos );
-    virtual ~ScCondFrmtEntry() override;
+    ScCondFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, const ScAddress& rPos);
+    virtual ~ScCondFrmtEntry();
+#if 0
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
-    virtual void dispose() override;
 
     virtual bool EventNotify( NotifyEvent& rNEvt ) override;
+#endif
+
+    void Show() { mxGrid->show(); }
+    void Hide() { mxGrid->hide(); }
+
+    Size get_preferred_size() const { return mxGrid->get_preferred_size(); }
 
     void SetPos(const ScAddress& rPos) { maPos = rPos; };
     bool IsSelected() const { return mbActive;}
@@ -94,13 +107,15 @@ public:
 class ScConditionFrmtEntry : public ScCondFrmtEntry, public SfxListener
 {
     //cond format ui elements
-    VclPtr<ListBox> maLbCondType;
-    VclPtr<formula::RefEdit> maEdVal1;
-    VclPtr<formula::RefEdit> maEdVal2;
-    VclPtr<FixedText> maFtVal;
-    VclPtr<FixedText> maFtStyle;
-    VclPtr<ListBox> maLbStyle;
-    VclPtr<SvxFontPrevWindow> maWdPreview;
+    FontPrevWindow maWdPreview;
+    std::unique_ptr<weld::ComboBox> mxLbCondType;
+    std::unique_ptr<formula::WeldRefEdit> mxEdVal1;
+    std::unique_ptr<formula::WeldRefEdit> mxEdVal2;
+    std::unique_ptr<weld::Label> mxFtVal;
+    std::unique_ptr<weld::Label> mxFtStyle;
+    std::unique_ptr<weld::ComboBox> mxLbStyle;
+    std::unique_ptr<weld::Widget> mxWdPreviewWin;
+    std::unique_ptr<weld::CustomWeld> mxWdPreview;
     bool mbIsInStyleCreate;
 
     static const sal_Int32 NUM_COND_ENTRIES = 24;
@@ -111,9 +126,9 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry, public SfxListener
 
     virtual OUString GetExpressionString() override;
     void Init(ScCondFormatDlg* pDialogParent);
-    DECL_LINK( StyleSelectHdl, ListBox&, void );
-    DECL_LINK( ConditionTypeSelectHdl, ListBox&, void );
-    DECL_LINK( OnEdChanged, Edit&, void );
+    DECL_LINK( StyleSelectHdl, weld::ComboBox&, void );
+    DECL_LINK( ConditionTypeSelectHdl, weld::ComboBox&, void );
+    DECL_LINK( OnEdChanged, formula::WeldRefEdit&, void );
 
     // Searches the lookup table for the entry position, given condition mode
     static sal_Int32 ConditionModeToEntryPos( ScConditionMode eMode );
@@ -127,10 +142,9 @@ protected:
     virtual void Deselect() override;
 
 public:
-    ScConditionFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
-            const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = nullptr );
+    ScConditionFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
+            const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = nullptr);
     virtual ~ScConditionFrmtEntry() override;
-    virtual void dispose() override;
 
     virtual ScFormatEntry* GetEntry() const override;
     virtual void SetActive() override;
@@ -143,21 +157,22 @@ public:
 
 class ScFormulaFrmtEntry : public ScCondFrmtEntry
 {
-    VclPtr<FixedText> maFtStyle;
-    VclPtr<ListBox> maLbStyle;
-    VclPtr<SvxFontPrevWindow> maWdPreview;
-    VclPtr<formula::RefEdit> maEdFormula;
+    FontPrevWindow maWdPreview;
+    std::unique_ptr<weld::Label> mxFtStyle;
+    std::unique_ptr<weld::ComboBox> mxLbStyle;
+    std::unique_ptr<weld::Widget> mxWdPreviewWin;
+    std::unique_ptr<weld::CustomWeld> mxWdPreview;
+    std::unique_ptr<formula::WeldRefEdit> mxEdFormula;
 
     ScFormatEntry* createFormulaEntry() const;
     virtual OUString GetExpressionString() override;
     void Init(ScCondFormatDlg* pDialogParent);
 
-    DECL_LINK( StyleSelectHdl, ListBox&, void );
+    DECL_LINK(StyleSelectHdl, weld::ComboBox&, void);
 
 public:
-    ScFormulaFrmtEntry( vcl::Window* pParent, ScDocument* PDoc, ScCondFormatDlg* pDialogParent, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = nullptr );
+    ScFormulaFrmtEntry(ScCondFormatList* pParent, ScDocument* PDoc, ScCondFormatDlg* pDialogParent, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = nullptr);
     virtual ~ScFormulaFrmtEntry() override;
-    virtual void dispose() override;
 
     virtual ScFormatEntry* GetEntry() const override;
     virtual void SetActive() override;
@@ -169,31 +184,30 @@ class ScColorScale2FrmtEntry : public ScCondFrmtEntry
 {
 
     //color format ui elements
-    VclPtr<ListBox> maLbColorFormat;
+    std::unique_ptr<weld::ComboBox> mxLbColorFormat;
 
     //color scale ui elements
-    VclPtr<ListBox> maLbEntryTypeMin;
-    VclPtr<ListBox> maLbEntryTypeMax;
+    std::unique_ptr<weld::ComboBox> mxLbEntryTypeMin;
+    std::unique_ptr<weld::ComboBox> mxLbEntryTypeMax;
 
-    VclPtr<Edit> maEdMin;
-    VclPtr<Edit> maEdMax;
+    std::unique_ptr<weld::Entry> mxEdMin;
+    std::unique_ptr<weld::Entry> mxEdMax;
 
-    VclPtr<SvxColorListBox> maLbColMin;
-    VclPtr<SvxColorListBox> maLbColMax;
+    std::unique_ptr<ColorListBox> mxLbColMin;
+    std::unique_ptr<ColorListBox> mxLbColMax;
 
-    VclPtr<FixedText> maFtMin;
-    VclPtr<FixedText> maFtMax;
+    std::unique_ptr<weld::Label> mxFtMin;
+    std::unique_ptr<weld::Label> mxFtMax;
 
     ScFormatEntry* createColorscaleEntry() const;
 
     virtual OUString GetExpressionString() override;
     void Init();
 
-    DECL_LINK( EntryTypeHdl, ListBox&, void );
+    DECL_LINK( EntryTypeHdl, weld::ComboBox&, void );
 public:
-    ScColorScale2FrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat = nullptr );
+    ScColorScale2FrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat = nullptr);
     virtual ~ScColorScale2FrmtEntry() override;
-    virtual void dispose() override;
     virtual ScFormatEntry* GetEntry() const override;
     virtual void SetActive() override;
     virtual void SetInactive() override;
@@ -204,34 +218,33 @@ class ScColorScale3FrmtEntry : public ScCondFrmtEntry
 {
 
     //color format ui elements
-    VclPtr<ListBox> maLbColorFormat;
+    std::unique_ptr<weld::ComboBox> mxLbColorFormat;
 
     //color scale ui elements
-    VclPtr<ListBox> maLbEntryTypeMin;
-    VclPtr<ListBox> maLbEntryTypeMiddle;
-    VclPtr<ListBox> maLbEntryTypeMax;
+    std::unique_ptr<weld::ComboBox> mxLbEntryTypeMin;
+    std::unique_ptr<weld::ComboBox> mxLbEntryTypeMiddle;
+    std::unique_ptr<weld::ComboBox> mxLbEntryTypeMax;
 
-    VclPtr<Edit> maEdMin;
-    VclPtr<Edit> maEdMiddle;
-    VclPtr<Edit> maEdMax;
+    std::unique_ptr<weld::Entry> mxEdMin;
+    std::unique_ptr<weld::Entry> mxEdMiddle;
+    std::unique_ptr<weld::Entry> mxEdMax;
 
-    VclPtr<SvxColorListBox> maLbColMin;
-    VclPtr<SvxColorListBox> maLbColMiddle;
-    VclPtr<SvxColorListBox> maLbColMax;
+    std::unique_ptr<ColorListBox> mxLbColMin;
+    std::unique_ptr<ColorListBox> mxLbColMiddle;
+    std::unique_ptr<ColorListBox> mxLbColMax;
 
-    VclPtr<FixedText> maFtMin;
-    VclPtr<FixedText> maFtMax;
+    std::unique_ptr<weld::Label> mxFtMin;
+    std::unique_ptr<weld::Label> mxFtMax;
 
     ScFormatEntry* createColorscaleEntry() const;
 
     virtual OUString GetExpressionString() override;
     void Init();
 
-    DECL_LINK( EntryTypeHdl, ListBox&, void );
+    DECL_LINK( EntryTypeHdl, weld::ComboBox&, void );
 public:
-    ScColorScale3FrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat = nullptr );
+    ScColorScale3FrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat = nullptr);
     virtual ~ScColorScale3FrmtEntry() override;
-    virtual void dispose() override;
     virtual ScFormatEntry* GetEntry() const override;
     virtual void SetActive() override;
     virtual void SetInactive() override;
@@ -241,18 +254,17 @@ public:
 class ScDataBarFrmtEntry : public ScCondFrmtEntry
 {
     //color format ui elements
-    VclPtr<ListBox> maLbColorFormat;
+    std::unique_ptr<weld::ComboBox> mxLbColorFormat;
 
     //data bar ui elements
-    VclPtr<ListBox> maLbDataBarMinType;
-    VclPtr<ListBox> maLbDataBarMaxType;
-    VclPtr<Edit> maEdDataBarMin;
-    VclPtr<Edit> maEdDataBarMax;
+    std::unique_ptr<weld::ComboBox> mxLbDataBarMinType;
+    std::unique_ptr<weld::ComboBox> mxLbDataBarMaxType;
+    std::unique_ptr<weld::Entry> mxEdDataBarMin;
+    std::unique_ptr<weld::Entry> mxEdDataBarMax;
+    std::unique_ptr<weld::Button> mxBtOptions;
 
-    VclPtr<PushButton> maBtOptions;
-
-    VclPtr<FixedText> maFtMin;
-    VclPtr<FixedText> maFtMax;
+    std::unique_ptr<weld::Label> mxFtMin;
+    std::unique_ptr<weld::Label> mxFtMax;
 
     std::unique_ptr<ScDataBarFormatData> mpDataBarData;
 
@@ -261,12 +273,11 @@ class ScDataBarFrmtEntry : public ScCondFrmtEntry
     virtual OUString GetExpressionString() override;
     void Init();
 
-    DECL_LINK( OptionBtnHdl, Button*, void );
-    DECL_LINK( DataBarTypeSelectHdl, ListBox&, void );
+    DECL_LINK( OptionBtnHdl, weld::Button&, void );
+    DECL_LINK( DataBarTypeSelectHdl, weld::ComboBox&, void );
 public:
-    ScDataBarFrmtEntry( vcl::Window* pParemt, ScDocument* pDoc, const ScAddress& rPos, const ScDataBarFormat* pFormat = nullptr );
+    ScDataBarFrmtEntry(ScCondFormatList* pParemt, ScDocument* pDoc, const ScAddress& rPos, const ScDataBarFormat* pFormat = nullptr);
     virtual ~ScDataBarFrmtEntry() override;
-    virtual void dispose() override;
     virtual ScFormatEntry* GetEntry() const override;
     virtual void SetActive() override;
     virtual void SetInactive() override;
@@ -277,9 +288,8 @@ public:
 class ScDateFrmtEntry : public ScCondFrmtEntry, public SfxListener
 {
 public:
-    ScDateFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScCondDateFormatEntry* pFormat = nullptr );
+    ScDateFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, const ScCondDateFormatEntry* pFormat = nullptr);
     virtual ~ScDateFrmtEntry() override;
-    virtual void dispose() override;
     virtual ScFormatEntry* GetEntry() const override;
     virtual void SetActive() override;
     virtual void SetInactive() override;
@@ -293,12 +303,14 @@ protected:
 private:
     void Init();
 
-    DECL_LINK( StyleSelectHdl, ListBox&, void );
+    DECL_LINK( StyleSelectHdl, weld::ComboBox&, void );
 
-    VclPtr<ListBox> maLbDateEntry;
-    VclPtr<FixedText> maFtStyle;
-    VclPtr<ListBox> maLbStyle;
-    VclPtr<SvxFontPrevWindow> maWdPreview;
+    FontPrevWindow maWdPreview;
+    std::unique_ptr<weld::ComboBox> mxLbDateEntry;
+    std::unique_ptr<weld::Label> mxFtStyle;
+    std::unique_ptr<weld::ComboBox> mxLbStyle;
+    std::unique_ptr<weld::Widget> mxWdPreviewWin;
+    std::unique_ptr<weld::CustomWeld> mxWdPreview;
 
     bool mbIsInStyleCreate;
 };
@@ -306,26 +318,25 @@ private:
 class ScIconSetFrmtEntry : public ScCondFrmtEntry
 {
     //color format ui elements
-    VclPtr<ListBox> maLbColorFormat;
+    std::unique_ptr<weld::ComboBox> mxLbColorFormat;
 
     // icon set ui elements
-    VclPtr<ListBox> maLbIconSetType;
+    std::unique_ptr<weld::ComboBox> mxLbIconSetType;
 
-    VclPtr<VclContainer> maIconParent;
+    std::unique_ptr<weld::Container> mxIconParent;
 
-    typedef std::vector<VclPtr<ScIconSetFrmtDataEntry>> ScIconSetFrmtDataEntriesType;
+    typedef std::vector<std::unique_ptr<ScIconSetFrmtDataEntry>> ScIconSetFrmtDataEntriesType;
     ScIconSetFrmtDataEntriesType maEntries;
 
     virtual OUString GetExpressionString() override;
 
     void Init();
 
-    DECL_LINK( IconSetTypeHdl, ListBox&, void );
+    DECL_LINK(IconSetTypeHdl, weld::ComboBox&, void);
 
 public:
-    ScIconSetFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScIconSetFormat* pFormat = nullptr );
+    ScIconSetFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScIconSetFormat* pFormat = nullptr);
     virtual ~ScIconSetFrmtEntry() override;
-    virtual void dispose() override;
     virtual ScFormatEntry* GetEntry() const override;
     virtual void SetActive() override;
     virtual void SetInactive() override;

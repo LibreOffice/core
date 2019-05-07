@@ -5564,6 +5564,19 @@ namespace
     }
 }
 
+namespace
+{
+    void set_entry_message_type(GtkEntry* pEntry, weld::EntryMessageType eType)
+    {
+        if (eType == weld::EntryMessageType::Error)
+            gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, "dialog-error");
+        else if (eType == weld::EntryMessageType::Warning)
+            gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, "dialog-warning");
+        else
+            gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, nullptr);
+    }
+}
+
 class GtkInstanceEntry : public GtkInstanceWidget, public virtual weld::Entry
 {
 private:
@@ -5716,12 +5729,9 @@ public:
         return gtk_editable_get_editable(GTK_EDITABLE(m_pEntry));
     }
 
-    virtual void set_error(bool bError) override
+    virtual void set_message_type(weld::EntryMessageType eType) override
     {
-        if (bError)
-            gtk_entry_set_icon_from_icon_name(m_pEntry, GTK_ENTRY_ICON_SECONDARY, "dialog-error");
-        else
-            gtk_entry_set_icon_from_icon_name(m_pEntry, GTK_ENTRY_ICON_SECONDARY, nullptr);
+        ::set_entry_message_type(m_pEntry, eType);
     }
 
     virtual void disable_notify_events() override
@@ -7917,6 +7927,19 @@ class GtkInstanceLabel : public GtkInstanceWidget, public virtual weld::Label
 {
 private:
     GtkLabel* m_pLabel;
+
+    void set_text_color(const Color& rColor)
+    {
+        guint16 nRed = rColor.GetRed() << 8;
+        guint16 nGreen = rColor.GetRed() << 8;
+        guint16 nBlue = rColor.GetBlue() << 8;
+
+        PangoAttrList* pAttrs = pango_attr_list_new();
+        pango_attr_list_insert(pAttrs, pango_attr_background_new(nRed, nGreen, nBlue));
+        gtk_label_set_attributes(m_pLabel, pAttrs);
+        pango_attr_list_unref(pAttrs);
+    }
+
 public:
     GtkInstanceLabel(GtkLabel* pLabel, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pLabel), pBuilder, bTakeOwnership)
@@ -7941,21 +7964,12 @@ public:
         gtk_label_set_mnemonic_widget(m_pLabel, pTargetWidget ? pTargetWidget->getWidget() : nullptr);
     }
 
-    virtual void set_error(bool bShowError) override
+    virtual void set_message_type(weld::EntryMessageType eType) override
     {
-        if (bShowError)
-        {
-            Color aColor(Application::GetSettings().GetStyleSettings().GetHighlightColor());
-
-            guint16 nRed = aColor.GetRed() << 8;
-            guint16 nGreen = aColor.GetRed() << 8;
-            guint16 nBlue = aColor.GetBlue() << 8;
-
-            PangoAttrList* pAttrs = pango_attr_list_new();
-            pango_attr_list_insert(pAttrs, pango_attr_background_new(nRed, nGreen, nBlue));
-            gtk_label_set_attributes(m_pLabel, pAttrs);
-            pango_attr_list_unref(pAttrs);
-        }
+        if (eType == weld::EntryMessageType::Error)
+            set_text_color(Application::GetSettings().GetStyleSettings().GetHighlightColor());
+        else if (eType == weld::EntryMessageType::Warning)
+            set_text_color(COL_YELLOW);
         else
             gtk_label_set_attributes(m_pLabel, nullptr);
     }
@@ -9032,15 +9046,12 @@ public:
         return gtk_combo_box_get_has_entry(m_pComboBox);
     }
 
-    virtual void set_entry_error(bool bError) override
+    virtual void set_entry_message_type(weld::EntryMessageType eType) override
     {
         GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBox));
         assert(GTK_IS_ENTRY(pChild));
         GtkEntry* pEntry = GTK_ENTRY(pChild);
-        if (bError)
-            gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, "dialog-error");
-        else
-            gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, nullptr);
+        ::set_entry_message_type(pEntry, eType);
     }
 
     virtual void set_entry_text(const OUString& rText) override

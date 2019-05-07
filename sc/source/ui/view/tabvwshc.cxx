@@ -115,73 +115,6 @@ void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialogController* pDialo
    }
 }
 
-VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
-                                SfxBindings* pB, SfxChildWindow* pCW,
-                                const SfxChildWinInfo* pInfo,
-                                vcl::Window* pParent, sal_uInt16 nSlotId )
-{
-    // only open dialog when called through ScModule::SetRefDialog,
-    // so that it does not re appear for instance after a crash (#42341#).
-
-    if ( SC_MOD()->GetCurRefDlgId() != nSlotId )
-        return nullptr;
-
-    if ( nCurRefDlgId != nSlotId )
-    {
-        //  the dialog has been opened in a different view
-        //  -> lock the dispatcher for this view (modal mode)
-
-        GetViewData().GetDispatcher().Lock( true );    // lock is reset when closing dialog
-        return nullptr;
-    }
-
-    VclPtr<SfxModelessDialog> pResult;
-
-    if(pCW)
-        pCW->SetHideNotDelete(true);
-
-    switch( nSlotId )
-    {
-        case WID_CONDFRMT_REF:
-        {
-            bool        bFound      = false;
-            const ScCondFormatDlgItem* pDlgItem = nullptr;
-            // Get the pool item stored by Conditional Format Manager Dialog.
-            const SfxPoolItem* pItem = nullptr;
-            auto itemsRange = GetPool().GetItemSurrogates(SCITEM_CONDFORMATDLGDATA);
-            if (itemsRange.begin() != itemsRange.end())
-            {
-                pItem = *itemsRange.begin();
-                pDlgItem = static_cast<const ScCondFormatDlgItem*>(pItem);
-                bFound = true;
-            }
-
-            ScViewData& rViewData = GetViewData();
-            rViewData.SetRefTabNo( rViewData.GetTabNo() );
-
-            pResult = VclPtr<ScCondFormatDlg>::Create( pB, pCW, pParent, &rViewData, pDlgItem );
-
-            // Remove the pool item stored by Conditional Format Manager Dialog.
-            if ( bFound && pItem )
-                GetPool().Remove( *pItem );
-        }
-        break;
-    }
-
-    if (pResult)
-    {
-        // the dialogs are always displayed with the option button collapsed,
-        // the size has to be carried over initialize
-        // (or store the option status !!!)
-
-        Size aSize = pResult->GetSizePixel();
-        pResult->Initialize( pInfo );
-        pResult->SetSizePixel(aSize);
-    }
-
-    return pResult;
-}
-
 std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogController(
                                 SfxBindings* pB, SfxChildWindow* pCW,
                                 const SfxChildWinInfo* pInfo,
@@ -471,6 +404,30 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         {
             // dialog checks, what is in the cell
             xResult.reset(new ScFormulaDlg(pB, pCW, pParent, &GetViewData(),ScGlobal::GetStarCalcFunctionMgr()));
+            break;
+        }
+        case WID_CONDFRMT_REF:
+        {
+            bool        bFound      = false;
+            const ScCondFormatDlgItem* pDlgItem = nullptr;
+            // Get the pool item stored by Conditional Format Manager Dialog.
+            const SfxPoolItem* pItem = nullptr;
+            auto itemsRange = GetPool().GetItemSurrogates(SCITEM_CONDFORMATDLGDATA);
+            if (itemsRange.begin() != itemsRange.end())
+            {
+                pItem = *itemsRange.begin();
+                pDlgItem = static_cast<const ScCondFormatDlgItem*>(pItem);
+                bFound = true;
+            }
+
+            ScViewData& rViewData = GetViewData();
+            rViewData.SetRefTabNo( rViewData.GetTabNo() );
+
+            xResult.reset(new ScCondFormatDlg(pB, pCW, pParent, &rViewData, pDlgItem));
+
+            // Remove the pool item stored by Conditional Format Manager Dialog.
+            if ( bFound && pItem )
+                GetPool().Remove( *pItem );
             break;
         }
     }

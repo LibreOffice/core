@@ -5,6 +5,7 @@ sc/uiconfig/scalc/ui/analysisofvariancedialog.ui://GtkButton[@id='input-range-bu
 sc/uiconfig/scalc/ui/analysisofvariancedialog.ui://GtkButton[@id='output-range-button'] button-no-label
 sc/uiconfig/scalc/ui/chisquaretestdialog.ui://GtkButton[@id='input-range-button'] button-no-label
 sc/uiconfig/scalc/ui/chisquaretestdialog.ui://GtkButton[@id='output-range-button'] button-no-label
+sc/uiconfig/scalc/ui/conditionalformatdialog.ui://GtkButton[@id='rbassign'] button-no-label
 sc/uiconfig/scalc/ui/consolidatedialog.ui://GtkButton[@id='rbdataarea'] button-no-label
 sc/uiconfig/scalc/ui/consolidatedialog.ui://GtkButton[@id='rbdestarea'] button-no-label
 sc/uiconfig/scalc/ui/correlationdialog.ui://GtkButton[@id='input-range-button'] button-no-label

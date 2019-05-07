@@ -749,9 +749,9 @@ IMPL_LINK(LanguageBox, ChangeHdl, weld::ComboBox&, rControl, void)
         if (eOldState != m_eEditedAndValid)
         {
             if (m_eEditedAndValid == EditedAndValid::Invalid)
-                rControl.set_entry_error(true);
+                rControl.set_entry_message_type(weld::EntryMessageType::Error);
             else
-                rControl.set_entry_error(false);
+                rControl.set_entry_message_type(weld::EntryMessageType::Normal);
         }
     }
     m_aChangeHdl.Call(rControl);

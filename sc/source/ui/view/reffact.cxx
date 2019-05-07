@@ -38,18 +38,18 @@ SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScSolverDlgWrapper, SID_OPENDLG_SOLVE)
 SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScOptSolverDlgWrapper, SID_OPENDLG_OPTSOLVER)
 SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScXMLSourceDlgWrapper, SID_MANAGE_XML_SOURCE)
 SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScPivotLayoutWrapper, SID_OPENDLG_PIVOTTABLE)
-SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScTabOpDlgWrapper, SID_OPENDLG_TABOP )
-SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScFilterDlgWrapper, SID_FILTER )
-SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScSpecialFilterDlgWrapper, SID_SPECIAL_FILTER )
-SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScDbNameDlgWrapper, SID_DEFINE_DBNAME )
+SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScTabOpDlgWrapper, SID_OPENDLG_TABOP)
+SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScFilterDlgWrapper, SID_FILTER)
+SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScSpecialFilterDlgWrapper, SID_SPECIAL_FILTER)
+SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScDbNameDlgWrapper, SID_DEFINE_DBNAME)
 SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScConsolidateDlgWrapper, SID_OPENDLG_CONSOLIDATE)
-SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScPrintAreasDlgWrapper, SID_OPENDLG_EDIT_PRINTAREA )
-SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScColRowNameRangesDlgWrapper, SID_DEFINE_COLROWNAMERANGES )
+SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScPrintAreasDlgWrapper, SID_OPENDLG_EDIT_PRINTAREA)
+SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScColRowNameRangesDlgWrapper, SID_DEFINE_COLROWNAMERANGES)
 SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScFormulaDlgWrapper, SID_OPENDLG_FUNCTION)
 SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScAcceptChgDlgWrapper, FID_CHG_ACCEPT)
-SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScHighlightChgDlgWrapper, FID_CHG_SHOW )
-SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScSimpleRefDlgWrapper, WID_SIMPLE_REF )
-SFX_IMPL_MODELESSDIALOG_WITHID(ScCondFormatDlgWrapper, WID_CONDFRMT_REF )
+SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScHighlightChgDlgWrapper, FID_CHG_SHOW)
+SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScSimpleRefDlgWrapper, WID_SIMPLE_REF)
+SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(ScCondFormatDlgWrapper, WID_CONDFRMT_REF)
 
 SFX_IMPL_CHILDWINDOW_WITHID(ScValidityRefChildWin, SID_VALIDITY_REFERENCE)
 
@@ -63,29 +63,6 @@ namespace
 {
     ScTabViewShell* lcl_GetTabViewShell( const SfxBindings* pBindings );
 }
-
-#define IMPL_CHILD_CTOR(Class,sid) \
-    Class::Class( vcl::Window*               pParentP,                   \
-                    sal_uInt16              nId,                        \
-                    SfxBindings*        p,                          \
-                    const SfxChildWinInfo*  pInfo )                     \
-        : SfxChildWindow(pParentP, nId)                             \
-    {                                                               \
-        /************************************************************************************/\
-        /*      When a new document is creating, the SfxViewFrame may be ready,             */\
-        /*      But the ScTabViewShell may have not been activated yet. In this             */\
-        /*      situation, SfxViewShell::Current() does not get the correct shell,          */\
-        /*      and we should lcl_GetTabViewShell( p ) instead of SfxViewShell::Current()   */\
-        /************************************************************************************/\
-        ScTabViewShell* pViewShell = lcl_GetTabViewShell( p );      \
-        if (!pViewShell)                                            \
-            pViewShell = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  ); \
-        OSL_ENSURE( pViewShell, "missing view shell :-(" );         \
-        SetWindow( pViewShell ?                                      \
-            pViewShell->CreateRefDialog( p, this, pInfo, pParentP, sid ) : nullptr );    \
-        if (pViewShell && !GetWindow())                                             \
-            pViewShell->GetViewFrame()->SetChildWindow( nId, false );           \
-    }
 
 #define IMPL_CONTROLLER_CHILD_CTOR(Class,sid) \
     Class::Class( vcl::Window*               pParentP,                   \
@@ -325,6 +302,6 @@ ScValidityRefChildWin::~ScValidityRefChildWin()
         SetController(nullptr);
 }
 
-IMPL_CHILD_CTOR( ScCondFormatDlgWrapper, WID_CONDFRMT_REF )
+IMPL_CONTROLLER_CHILD_CTOR( ScCondFormatDlgWrapper, WID_CONDFRMT_REF )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
