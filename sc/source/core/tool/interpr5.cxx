@@ -1129,15 +1129,16 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
     return xResMat;
 }
 
-// for DATE, TIME, DATETIME
+// for DATE, TIME, DATETIME, DURATION
 static void lcl_GetDiffDateTimeFmtType( SvNumFormatType& nFuncFmt, SvNumFormatType nFmt1, SvNumFormatType nFmt2 )
 {
     if ( nFmt1 != SvNumFormatType::UNDEFINED || nFmt2 != SvNumFormatType::UNDEFINED )
     {
         if ( nFmt1 == nFmt2 )
         {
-            if ( nFmt1 == SvNumFormatType::TIME || nFmt1 == SvNumFormatType::DATETIME )
-                nFuncFmt = SvNumFormatType::TIME;   // times result in time
+            if ( nFmt1 == SvNumFormatType::TIME || nFmt1 == SvNumFormatType::DATETIME
+                    || nFmt1 == SvNumFormatType::DURATION )
+                nFuncFmt = SvNumFormatType::DURATION;   // times result in time duration
             // else: nothing special, number (date - date := days)
         }
         else if ( nFmt1 == SvNumFormatType::UNDEFINED )
@@ -1181,6 +1182,7 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
             case SvNumFormatType::DATE :
             case SvNumFormatType::TIME :
             case SvNumFormatType::DATETIME :
+            case SvNumFormatType::DURATION :
                 nFmt2 = nCurFmtType;
             break;
             case SvNumFormatType::CURRENCY :
@@ -1203,6 +1205,7 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
             case SvNumFormatType::DATE :
             case SvNumFormatType::TIME :
             case SvNumFormatType::DATETIME :
+            case SvNumFormatType::DURATION :
                 nFmt1 = nCurFmtType;
             break;
             case SvNumFormatType::CURRENCY :
