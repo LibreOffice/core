@@ -99,6 +99,13 @@ published constants NumberFormat
      */
     const short EMPTY = 4096;
 
+
+    /** @internal selects a time duration format.
+        8192 + TIME (4)
+        @since LibreOffice 6.2
+     */
+    const short DURATION = 8196;
+
 };
 
 
