@@ -12,13 +12,20 @@ $(eval $(call gb_Library_Library,spsupp_x64))
 $(eval $(call gb_Library_set_x64,spsupp_x64,YES))
 
 $(eval $(call gb_Library_use_custom_headers,spsupp_x64,\
-	shell/source \
 	shell/source/win32/spsupp/idl \
 ))
 
 $(eval $(call gb_Library_set_include,spsupp_x64,\
 	-I$(SRCDIR)/shell/inc/spsupp \
 	$$(INCLUDE) \
+))
+
+$(eval $(call gb_Library_use_sdk_api,spsupp_x64))
+
+$(eval $(call gb_Library_use_libraries,spsupp_x64,\
+	i18nlangtag \
+	sal \
+	utl \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,spsupp_x64,\
@@ -39,6 +46,7 @@ $(eval $(call gb_Library_add_x64_generated_exception_objects,spsupp_x64,\
     CustomTarget/shell/source/win32/spsupp/COMOpenDocuments \
     CustomTarget/shell/source/win32/spsupp/registrar \
     CustomTarget/shell/source/win32/spsupp/spsuppClassFactory \
+    CustomTarget/shell/source/win32/spsupp/spsuppEditOrRODlg \
     CustomTarget/shell/source/win32/spsupp/spsuppServ \
 ))
 

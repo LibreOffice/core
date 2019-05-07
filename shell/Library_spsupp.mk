@@ -18,6 +18,14 @@ $(eval $(call gb_Library_set_include,spsupp,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_use_sdk_api,spsupp))
+
+$(eval $(call gb_Library_use_libraries,spsupp,\
+	i18nlangtag \
+	sal \
+	utl \
+))
+
 $(eval $(call gb_Library_use_system_win32_libs,spsupp,\
 	advapi32 \
 	kernel32 \
@@ -36,6 +44,7 @@ $(eval $(call gb_Library_add_exception_objects,spsupp,\
     shell/source/win32/spsupp/COMOpenDocuments \
     shell/source/win32/spsupp/registrar \
     shell/source/win32/spsupp/spsuppClassFactory \
+    shell/source/win32/spsupp/spsuppEditOrRODlg \
     shell/source/win32/spsupp/spsuppServ \
 ))
 
