@@ -432,7 +432,7 @@ void SfxStateCache::SetState_Impl
         }
 
         if ( pInternalController )
-            static_cast<SfxDispatchController_Impl *>(pInternalController)->StateChanged( nId, eState, pState, &aSlotServ );
+            static_cast<SfxDispatchController_Impl *>(pInternalController)->StateChanged( nId, eState, pState, nullptr, &aSlotServ );
 
         // Remember new value
         if ( !IsInvalidItem(pLastItem) )
@@ -471,7 +471,7 @@ void SfxStateCache::SetCachedState( bool bAlways )
     }
 
     if ( pInternalController )
-        static_cast<SfxDispatchController_Impl *>(pInternalController)->StateChanged( nId, eLastState, pLastItem, &aSlotServ );
+        static_cast<SfxDispatchController_Impl *>(pInternalController)->StateChanged( nId, eLastState, pLastItem, nullptr, &aSlotServ );
 
     // Controller is now ok
     bCtrlDirty = true;
