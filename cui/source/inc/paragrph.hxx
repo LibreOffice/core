@@ -184,18 +184,6 @@ public:
     virtual void            PageCreated(const SfxAllItemSet& aSet) override;
 };
 
-struct TriStateEnabled
-{
-    TriState eState;
-    bool bTriStateEnabled;
-    TriStateEnabled()
-        : eState(TRISTATE_INDET)
-        , bTriStateEnabled(true)
-    {
-    }
-    void ButtonToggled(weld::ToggleButton& rToggle);
-};
-
 // class SvxExtParagraphTabPage ------------------------------------------
 /*
     [Description]
@@ -235,14 +223,14 @@ protected:
 private:
     SvxExtParagraphTabPage(TabPageParent pParent, const SfxItemSet& rSet);
 
-    TriStateEnabled aHyphenState;
-    TriStateEnabled aPageBreakState;
-    TriStateEnabled aApplyCollState;
-    TriStateEnabled aPageNumState;
-    TriStateEnabled aKeepTogetherState;
-    TriStateEnabled aKeepParaState;
-    TriStateEnabled aOrphanState;
-    TriStateEnabled aWidowState;
+    weld::TriStateEnabled aHyphenState;
+    weld::TriStateEnabled aPageBreakState;
+    weld::TriStateEnabled aApplyCollState;
+    weld::TriStateEnabled aPageNumState;
+    weld::TriStateEnabled aKeepTogetherState;
+    weld::TriStateEnabled aKeepParaState;
+    weld::TriStateEnabled aOrphanState;
+    weld::TriStateEnabled aWidowState;
 
     bool                bPageBreak;
     bool                bHtmlMode;

@@ -49,10 +49,10 @@ ScTabPageProtection::ScTabPageProtection(TabPageParent pParent, const SfxItemSet
     //  States will be set in Reset
     bTriEnabled = bDontCare = bProtect = bHideForm = bHideCell = bHidePrint = false;
 
-    m_xBtnProtect->connect_toggled(LINK(this, ScTabPageProtection, ButtonClickHdl));
-    m_xBtnHideCell->connect_toggled(LINK(this, ScTabPageProtection, ButtonClickHdl));
-    m_xBtnHideFormula->connect_toggled(LINK(this, ScTabPageProtection, ButtonClickHdl));
-    m_xBtnHidePrint->connect_toggled(LINK(this, ScTabPageProtection, ButtonClickHdl));
+    m_xBtnProtect->connect_toggled(LINK(this, ScTabPageProtection, ProtectClickHdl));
+    m_xBtnHideCell->connect_toggled(LINK(this, ScTabPageProtection, HideCellClickHdl));
+    m_xBtnHideFormula->connect_toggled(LINK(this, ScTabPageProtection, HideFormulaClickHdl));
+    m_xBtnHidePrint->connect_toggled(LINK(this, ScTabPageProtection, HidePrintClickHdl));
 }
 
 ScTabPageProtection::~ScTabPageProtection()
@@ -98,14 +98,10 @@ void ScTabPageProtection::Reset( const SfxItemSet* rCoreAttrs )
         bHidePrint = pProtAttr->GetHidePrint();
     }
 
-    //  Start Controls
-    if (bTriEnabled)
-    {
-        m_xBtnProtect->set_state(TRISTATE_INDET);
-        m_xBtnHideCell->set_state(TRISTATE_INDET);
-        m_xBtnHideFormula->set_state(TRISTATE_INDET);
-        m_xBtnHidePrint->set_state(TRISTATE_INDET);
-    }
+    aHideCellState.bTriStateEnabled = bTriEnabled;
+    aProtectState.bTriStateEnabled = bTriEnabled;
+    aHideFormulaState.bTriStateEnabled = bTriEnabled;
+    aHidePrintState.bTriStateEnabled = bTriEnabled;
 
     UpdateButtons();
 }
@@ -148,7 +144,31 @@ DeactivateRC ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
     return DeactivateRC::LeavePage;
 }
 
-IMPL_LINK(ScTabPageProtection, ButtonClickHdl, weld::ToggleButton&, rBox, void)
+IMPL_LINK(ScTabPageProtection, ProtectClickHdl, weld::ToggleButton&, rBox, void)
+{
+    aProtectState.ButtonToggled(rBox);
+    ButtonClick(rBox);
+}
+
+IMPL_LINK(ScTabPageProtection, HideCellClickHdl, weld::ToggleButton&, rBox, void)
+{
+    aHideCellState.ButtonToggled(rBox);
+    ButtonClick(rBox);
+}
+
+IMPL_LINK(ScTabPageProtection, HideFormulaClickHdl, weld::ToggleButton&, rBox, void)
+{
+    aHideFormulaState.ButtonToggled(rBox);
+    ButtonClick(rBox);
+}
+
+IMPL_LINK(ScTabPageProtection, HidePrintClickHdl, weld::ToggleButton&, rBox, void)
+{
+    aHidePrintState.ButtonToggled(rBox);
+    ButtonClick(rBox);
+}
+
+void ScTabPageProtection::ButtonClick(weld::ToggleButton& rBox)
 {
     TriState eState = rBox.get_state();
     if (eState == TRISTATE_INDET)
@@ -191,6 +211,11 @@ void ScTabPageProtection::UpdateButtons()
         m_xBtnHideFormula->set_state(bHideForm ? TRISTATE_TRUE : TRISTATE_FALSE);
         m_xBtnHidePrint->set_state(bHidePrint ? TRISTATE_TRUE : TRISTATE_FALSE);
     }
+
+    aHideCellState.eState = m_xBtnHideCell->get_state();
+    aProtectState.eState = m_xBtnProtect->get_state();
+    aHideFormulaState.eState = m_xBtnHideFormula->get_state();
+    aHidePrintState.eState = m_xBtnHidePrint->get_state();
 
     bool bEnable = (m_xBtnHideCell->get_state() != TRISTATE_TRUE);
     {

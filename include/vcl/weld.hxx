@@ -627,6 +627,18 @@ public:
     virtual void connect_toggled(const Link<ToggleButton&, void>& rLink) { m_aToggleHdl = rLink; }
 };
 
+struct VCL_DLLPUBLIC TriStateEnabled
+{
+    TriState eState;
+    bool bTriStateEnabled;
+    TriStateEnabled()
+        : eState(TRISTATE_INDET)
+        , bTriStateEnabled(true)
+    {
+    }
+    void ButtonToggled(ToggleButton& rToggle);
+};
+
 class VCL_DLLPUBLIC MenuButton : virtual public ToggleButton
 {
 protected:

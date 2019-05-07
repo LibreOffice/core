@@ -50,14 +50,23 @@ private:
     bool            bHideCell;
     bool            bHidePrint;
 
+    weld::TriStateEnabled aHideCellState;
+    weld::TriStateEnabled aProtectState;
+    weld::TriStateEnabled aHideFormulaState;
+    weld::TriStateEnabled aHidePrintState;
+
     std::unique_ptr<weld::CheckButton> m_xBtnHideCell;
     std::unique_ptr<weld::CheckButton> m_xBtnProtect;
     std::unique_ptr<weld::CheckButton> m_xBtnHideFormula;
     std::unique_ptr<weld::CheckButton> m_xBtnHidePrint;
 
     // Handler:
-    DECL_LINK(ButtonClickHdl, weld::ToggleButton&, void);
-    void        UpdateButtons();
+    DECL_LINK(ProtectClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(HideCellClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(HideFormulaClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(HidePrintClickHdl, weld::ToggleButton&, void);
+    void ButtonClick(weld::ToggleButton& rBox);
+    void UpdateButtons();
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TABPAGES_HXX

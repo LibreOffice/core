@@ -2063,26 +2063,6 @@ IMPL_LINK(SvxExtParagraphTabPage, WidowHdl_Impl, weld::ToggleButton&, rToggle, v
     WidowHdl();
 }
 
-void TriStateEnabled::ButtonToggled(weld::ToggleButton& rToggle)
-{
-    if (bTriStateEnabled)
-    {
-        switch (eState)
-        {
-            case TRISTATE_INDET:
-                rToggle.set_state(TRISTATE_FALSE);
-                break;
-            case TRISTATE_TRUE:
-                rToggle.set_state(TRISTATE_INDET);
-                break;
-            case TRISTATE_FALSE:
-                rToggle.set_state(TRISTATE_TRUE);
-                break;
-        }
-    }
-    eState = rToggle.get_state();
-}
-
 IMPL_LINK(SvxExtParagraphTabPage, OrphanHdl_Impl, weld::ToggleButton&, rToggle, void)
 {
     aOrphanState.ButtonToggled(rToggle);
