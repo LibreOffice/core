@@ -1076,7 +1076,7 @@ bool LoadEnv::impl_loadContent()
     // if it will be run out of scope.
 
     // Note further: ignore if this internal guard already contains a resource.
-    // Might impl_searchRecylcTarget() set it before. But in case this impl-method wasn't used
+    // Might impl_searchRecycleTarget() set it before. But in case this impl-method wasn't used
     // and the target frame was new created ... this lock here must be set!
     css::uno::Reference< css::document::XActionLockable > xTargetLock(xTargetFrame, css::uno::UNO_QUERY);
     m_aTargetLock.setResource(xTargetLock);
@@ -1514,6 +1514,15 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     css::uno::Reference< css::frame::XController > xOldDoc = xTask->getController();
     if (xOldDoc.is())
     {
+        utl::MediaDescriptor lOldDocDescriptor(xModel->getArgs());
+        bool bFromTemplate = lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ASTEMPLATE() , false);
+        OUString sReferrer = lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REFERRER(), OUString());
+
+        // tdf#83722: valid but unmodified document, either from template
+        // or opened by the user (File > New)
+        if (bFromTemplate || !sReferrer.isEmpty())
+            return css::uno::Reference< css::frame::XFrame >();
+
         bReactivateOldControllerOnError = xOldDoc->suspend(true);
         if (! bReactivateOldControllerOnError)
             return css::uno::Reference< css::frame::XFrame >();
