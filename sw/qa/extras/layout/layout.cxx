@@ -2921,6 +2921,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf123651)
     assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "top", "7639");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116501)
+{
+    //just care it doesn't freeze
+    createDoc("tdf116501.odt");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

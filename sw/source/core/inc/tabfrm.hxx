@@ -84,6 +84,8 @@ class SwTabFrame: public SwLayoutFrame, public SwFlowFrame
 
     bool m_bInRecalcLowerRow : 1;
 
+    bool m_bSplitRowDisabled : 1;          // loop control
+
     /**
      * Split() splits the Frame at the specified position: a Follow is
      * created and constructed and inserted directly after this.
@@ -172,6 +174,14 @@ public:
     void SetInRecalcLowerRow( bool bNew )
     {
         m_bInRecalcLowerRow = bNew;
+    }
+    bool IsSplitRowDisabled() const
+    {
+        return m_bSplitRowDisabled;
+    }
+    void SetSplitRowDisabled()
+    {
+        m_bSplitRowDisabled = true;
     }
 
     // #i26945#
