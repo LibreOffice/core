@@ -95,7 +95,7 @@ static void CheckParentsOnDelete( SbxObject* pObj, SbxArray* p )
         if( rRef->GetRefCount() > 1 )
         {
             rRef->SetParent( nullptr );
-            DBG_ASSERT( !rRef->IsBroadcaster() || rRef->GetBroadcaster().GetListenerCount(), "Object element with dangling parent" );
+            SAL_INFO_IF(rRef->IsBroadcaster() && rRef->GetBroadcaster().GetListenerCount(), "basic.sbx", "Object element with dangling parent");
         }
     }
 }
