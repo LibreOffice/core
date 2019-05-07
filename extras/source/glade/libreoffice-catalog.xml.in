@@ -284,9 +284,6 @@
     <glade-widget-class title="Reference Edit" name="foruilo-RefEdit"
                         generic-name="Reference Edit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
-    <glade-widget-class title="Edit" name="foruilo-ArgEdit"
-                        generic-name="Edit" parent="GtkEntry"
-                        icon-name="widget-gtk-textentry"/>
 
     <glade-widget-class title="URL Entry" name="cuilo-SvxHyperURLBox"
                         generic-name="URL Entry" parent="GtkEntry"
