@@ -89,9 +89,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes" context="safemodedialog|label1">%PRODUCTNAME is now running in safe mode which temporarily disables your user configuration and extensions.
 
-You can make one or more of the following changes to your user profile to return %PRODUCTNAME to a working state.
-
-The proposed changes get more radical from top down so it is recommended to try them successively one after another.</property>
+You can make one or more of the following changes to your user profile to return %PRODUCTNAME to a working state.</property>
             <property name="wrap">True</property>
             <property name="xalign">0</property>
             <property name="yalign">0</property>
