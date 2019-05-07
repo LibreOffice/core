@@ -7,18 +7,20 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Library_Library,spsupp))
+$(eval $(call gb_Library_Library,spsupp_x86))
 
-$(eval $(call gb_Library_use_custom_headers,spsupp,\
+$(eval $(call gb_Library_set_x86,spsupp_x86,YES))
+
+$(eval $(call gb_Library_use_custom_headers,spsupp_x86,\
 	shell/source/win32/spsupp/idl \
 ))
 
-$(eval $(call gb_Library_set_include,spsupp,\
+$(eval $(call gb_Library_set_include,spsupp_x86,\
 	-I$(SRCDIR)/shell/inc/spsupp \
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_system_win32_libs,spsupp,\
+$(eval $(call gb_Library_use_system_win32_libs,spsupp_x86,\
 	advapi32 \
 	kernel32 \
 	ole32 \
@@ -26,13 +28,13 @@ $(eval $(call gb_Library_use_system_win32_libs,spsupp,\
 	user32 \
 ))
 
-$(eval $(call gb_Library_add_nativeres,spsupp,spsupp))
+$(eval $(call gb_Library_add_nativeres,spsupp_x86,spsupp))
 
-$(eval $(call gb_Library_add_ldflags,spsupp,\
+$(eval $(call gb_Library_add_ldflags,spsupp_x86,\
 	/DEF:$(SRCDIR)/shell/source/win32/spsupp/spsupp.def \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,spsupp,\
+$(eval $(call gb_Library_add_exception_objects,spsupp_x86,\
     shell/source/win32/spsupp/COMOpenDocuments \
     shell/source/win32/spsupp/registrar \
     shell/source/win32/spsupp/spsuppClassFactory \
