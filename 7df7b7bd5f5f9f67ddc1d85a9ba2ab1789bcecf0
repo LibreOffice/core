@@ -16,6 +16,24 @@
       "revId": "7df7b7bd5f5f9f67ddc1d85a9ba2ab1789bcecf0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_ab2ca047",
+        "filename": "xmloff/source/core/PropertySetMerger.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-05-07T06:31:05Z",
+      "side": 1,
+      "message": "I agree, please submit a fix for that",
+      "parentUuid": "3fa0c359_ab26e0b6",
+      "revId": "7df7b7bd5f5f9f67ddc1d85a9ba2ab1789bcecf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
