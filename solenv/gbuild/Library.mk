@@ -204,6 +204,7 @@ gb_Library_set_include = $(call gb_Library__forward_to_Linktarget,$(subst gb_Lib
 gb_Library_add_ldflags = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
 gb_Library_set_ldflags = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
 gb_Library_set_x64 = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
+gb_Library_set_x86 = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
 gb_Library_add_libs = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
 gb_Library_disable_standard_system_libs = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
 gb_Library_use_system_darwin_frameworks = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
