@@ -1420,7 +1420,7 @@ void SwAnnotationWin::SetViewState(ViewState bViewState)
 
 SwAnnotationWin* SwAnnotationWin::GetTopReplyNote()
 {
-    SwAnnotationWin* pTopNote = nullptr;
+    SwAnnotationWin* pTopNote = this;
     SwAnnotationWin* pSidebarWin = IsFollow() ? mrMgr.GetNextPostIt(KEY_PAGEUP, this) : nullptr;
     while (pSidebarWin)
     {
