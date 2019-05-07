@@ -2366,6 +2366,22 @@ void SwPostItMgr::GetAllSidebarWinForFrame( const SwFrame& rFrame,
     }
 }
 
+void SwPostItMgr::UpdateResolvedStatus(sw::annotation::SwAnnotationWin* topNote) {
+    // Given the topmost note as an argument, scans over all notes and sets the
+    // 'resolved' state of each descendant of the top notes to the resolved state
+    // of the top note.
+    bool resolved = topNote->IsResolved();
+    for (auto const& pPage : mPages)
+    {
+        for(auto b = pPage->mvSidebarItems.begin(); b!= pPage->mvSidebarItems.end(); ++b)
+        {
+            if((*b)->pPostIt->GetTopReplyNote() == topNote) {
+               (*b)->pPostIt->SetResolved(resolved);
+            }
+        }
+    }
+}
+
 void SwNoteProps::ImplCommit() {}
 void SwNoteProps::Notify( const css::uno::Sequence< OUString >& ) {}
 

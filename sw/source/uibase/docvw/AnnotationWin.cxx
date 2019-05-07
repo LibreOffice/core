@@ -228,6 +228,32 @@ void SwAnnotationWin::SetPostItText()
     Invalidate();
 }
 
+void SwAnnotationWin::SetResolved(bool resolved)
+{
+    static_cast<SwPostItField*>(mpFormatField->GetField())->SetResolved(resolved);
+    mrSidebarItem.bShow = !resolved;
+    Invalidate();
+}
+
+void SwAnnotationWin::ToggleResolved()
+{
+    static_cast<SwPostItField*>(mpFormatField->GetField())->ToggleResolved();
+    mrSidebarItem.bShow = !IsResolved();
+    Invalidate();
+}
+
+
+bool SwAnnotationWin::IsResolved() const
+{
+    return static_cast<SwPostItField*>(mpFormatField->GetField())->GetResolved();
+}
+
+bool SwAnnotationWin::IsThreadResolved()
+{
+    // Not const because GetTopReplyNote isn't.
+    return GetTopReplyNote()->IsResolved();
+}
+
 void SwAnnotationWin::UpdateData()
 {
     if ( mpOutliner->IsModified() )

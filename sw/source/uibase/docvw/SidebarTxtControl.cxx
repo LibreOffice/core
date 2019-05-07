@@ -176,8 +176,9 @@ void SidebarTextControl::Paint(vcl::RenderContext& rRenderContext, const tools::
         GetTextView()->Paint(rRect, &rRenderContext);
     }
 
-    if (mrSidebarWin.GetLayoutStatus() == SwPostItHelper::DELETED)
+    if (mrSidebarWin.GetLayoutStatus() == SwPostItHelper::DELETED || mrSidebarWin.IsThreadResolved())
     {
+        // Draw a cross through the note in the change colour.
         rRenderContext.SetLineColor(mrSidebarWin.GetChangeColor());
         rRenderContext.DrawLine(rRenderContext.PixelToLogic(GetPosPixel()),
                                 rRenderContext.PixelToLogic(GetPosPixel() + Point(GetSizePixel().Width(),

@@ -191,6 +191,11 @@ class SwAnnotationWin : public vcl::Window
         bool IsHitWindow(const Point& rPointLogic);
         /// Allows adjusting the point or mark of the selection to a document coordinate.
         void SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark);
+        void SetResolved(bool resolved);
+        void ToggleResolved();
+        bool IsResolved() const;
+        bool IsThreadResolved();
+        SwAnnotationWin*   GetTopReplyNote();
 
     private:
         VclPtr<MenuButton> CreateMenuButton();
@@ -204,9 +209,9 @@ class SwAnnotationWin : public vcl::Window
         DECL_LINK(ModifyHdl, LinkParamNone*, void);
         DECL_LINK(ScrollHdl, ScrollBar*, void);
         DECL_LINK(DeleteHdl, void*, void);
+        DECL_LINK(ResolveHdl, void*, void);
 
         sal_uInt32 CountFollowing();
-        SwAnnotationWin*   GetTopReplyNote();
         SvxLanguageItem GetLanguage();
 
         VclBuilder      maBuilder;
