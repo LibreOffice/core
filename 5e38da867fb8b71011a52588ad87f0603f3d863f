@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_0b77d43c",
+        "filename": "tools/source/debug/debug.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1001483
+      },
+      "writtenOn": "2019-05-07T08:16:07Z",
+      "side": 1,
+      "message": "https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html says to use free. Do you confirm delete ?",
+      "revId": "5e38da867fb8b71011a52588ad87f0603f3d863f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
