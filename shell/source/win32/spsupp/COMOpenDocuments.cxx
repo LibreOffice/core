@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <cstring>
+#include <string>
 #include <vector>
 
 #include <COMOpenDocuments.hpp>
@@ -18,11 +19,12 @@
 
 namespace
 {
-
-// Returns S_OK if successful
-HRESULT LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath)
+template<class... Args>
+HRESULT LOStart(Args... args)
 {
-    const wchar_t* sProgram = GetLOPath();
+    auto quote = [](const std::wstring& s) { return L"\"" + s + L"\""; };
+    std::wstring sCmdLine((quote(GetHelperExe()) + ... + (L" " + quote(args))));
+    LPWSTR pCmdLine = const_cast<LPWSTR>(sCmdLine.c_str());
 
     STARTUPINFOW si;
     std::memset(&si, 0, sizeof si);
@@ -30,39 +32,57 @@ HRESULT LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath)
     si.dwFlags = STARTF_USESHOWWINDOW;
     si.wShowWindow = SW_SHOW;
     PROCESS_INFORMATION pi = {};
-    const size_t cchCommandLine = 32768;
-    wchar_t sCommandLine[cchCommandLine];
-    swprintf(sCommandLine, cchCommandLine, L"\"%s\" %s \"%s\"", sProgram, sModeArg, sFilePath);
-    if (CreateProcessW(nullptr, sCommandLine, nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi) == FALSE)
-    {
-        DWORD dwError = GetLastError();
-        wchar_t* sMsgBuf = nullptr;
-        FormatMessageW(
-            FORMAT_MESSAGE_ALLOCATE_BUFFER |
-            FORMAT_MESSAGE_FROM_SYSTEM |
-            FORMAT_MESSAGE_IGNORE_INSERTS,
-            nullptr,
-            dwError,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-            reinterpret_cast<LPWSTR>(&sMsgBuf),
-            0, nullptr);
+    if (!CreateProcessW(nullptr, pCmdLine, nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi))
+        return HRESULT_FROM_WIN32(GetLastError());
 
-        size_t nBufSize = wcslen(sMsgBuf) + 100;
-        std::vector<wchar_t> sDisplayBuf(nBufSize);
-        swprintf(sDisplayBuf.data(), nBufSize, L"Could not start LibreOffice. Error is 0x%08X:\n\n%s", dwError, sMsgBuf);
-        HeapFree(GetProcessHeap(), 0, sMsgBuf);
+    WaitForSingleObject(pi.hProcess, INFINITE);
+    DWORD nExitCode;
+    const bool bGotExitCode = GetExitCodeProcess(pi.hProcess, &nExitCode);
+    const DWORD nGetExitCodeError = GetLastError();
 
-        // Report the error to user and return error
-        MessageBoxW(nullptr, sDisplayBuf.data(), nullptr, MB_ICONERROR);
-        return HRESULT_FROM_WIN32(dwError);
-    }
     CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);
-    return S_OK;
+
+    if (!bGotExitCode)
+        return HRESULT_FROM_WIN32(nGetExitCodeError);
+    if (nExitCode == 0)
+        return S_OK;
+    if (nExitCode == 1)
+        return S_FALSE;
+    return E_FAIL;
 }
 
 VARIANT_BOOL toVBool(bool b) { return b ? VARIANT_TRUE : VARIANT_FALSE; }
 
+HRESULT ImplCreateNewDocument(IDispatch* /*pdisp*/, BSTR bstrTemplateLocation,
+                              BSTR bstrDefaultSaveLocation, VARIANT_BOOL* pbResult)
+{
+    HRESULT hr = LOStart(L"CreateNewDocument", bstrTemplateLocation, bstrDefaultSaveLocation);
+    *pbResult = toVBool(hr == S_OK);
+    return hr;
+}
+
+HRESULT ImplEditDocument(IDispatch* /*pdisp*/, BSTR bstrDocumentLocation,
+                         VARIANT_BOOL fUseLocalCopy, const VARIANT& varProgID,
+                         VARIANT_BOOL* pbResult)
+{
+    const wchar_t* sUseLocalCopy = (fUseLocalCopy == VARIANT_FALSE) ? L"0" : L"1";
+    const wchar_t* sProgId = (varProgID.vt == VT_BSTR) ? varProgID.bstrVal : L"";
+    HRESULT hr = LOStart(L"EditDocument", bstrDocumentLocation, sUseLocalCopy, sProgId);
+    *pbResult = toVBool(hr == S_OK);
+    return hr;
+}
+
+HRESULT ImplViewDocument(IDispatch* /*pdisp*/, BSTR bstrDocumentLocation, int OpenType,
+                         const VARIANT& varProgID, VARIANT_BOOL* pbResult)
+{
+    wchar_t sOpenType[16]{};
+    swprintf(sOpenType, L"%d", OpenType);
+    const wchar_t* sProgId = (varProgID.vt == VT_BSTR) ? varProgID.bstrVal : L"";
+    HRESULT hr = LOStart(L"ViewDocument", bstrDocumentLocation, sOpenType, sProgId);
+    *pbResult = toVBool(hr == S_OK);
+    return hr;
+}
 } // namespace
 
 long COMOpenDocuments::m_nObjCount = 0;
@@ -224,17 +244,15 @@ STDMETHODIMP COMOpenDocuments::EditDocument2(
 
 // Creates a document based on the specified document template and window object
 STDMETHODIMP COMOpenDocuments::CreateNewDocument2(
-    IDispatch* /*pdisp*/,             // An Object that represents the window from which the CreateNewDocument2 method is being activated
+    IDispatch* pdisp,                 // An Object that represents the window from which the CreateNewDocument2 method is being activated
     BSTR bstrTemplateLocation,        // A string that contains the URL of the document template from which the document is created, or the programmatic identifier (progID) of the application to invoke when creating the document
-    BSTR /*bstrDefaultSaveLocation*/, // A string that contains the path that specifies a suggested default location for saving the new document
+    BSTR bstrDefaultSaveLocation,     // A string that contains the path that specifies a suggested default location for saving the new document
     VARIANT_BOOL* pbResult)           // true if the document creation succeeds; otherwise false
 {
     if (!pbResult)
         return E_POINTER;
     // TODO: resolve the program from varProgID (nullptr -> default?)
-    HRESULT hr = LOStart(L"-n", bstrTemplateLocation);
-    *pbResult = toVBool(SUCCEEDED(hr));
-    return hr;
+    return ImplCreateNewDocument(pdisp, bstrTemplateLocation, bstrDefaultSaveLocation, pbResult);
 }
 
 // Used with the OpenDocuments.CreateNewDocument2 method to determine
@@ -276,18 +294,15 @@ STDMETHODIMP COMOpenDocuments::PromptedOnLastOpen(
 // 3 When the document is not checked out and the document library requires that documents be checked out to be edited, the user can only read the document, or check it out and edit it
 // 4 When the current user has checked it out, the user can only edit the local copy of the document
 STDMETHODIMP COMOpenDocuments::ViewDocument3(
-    IDispatch* /*pdisp*/,      // An Object that represents the window from which the ViewDocument3 method is being activated
+    IDispatch* pdisp,          // An Object that represents the window from which the ViewDocument3 method is being activated
     BSTR bstrDocumentLocation, // A string that contains the URL of the document to open for reading
-    int /*OpenType*/,          // A Long integer that specifies the rights for opening the document
-    VARIANT /*varProgID*/,     // An optional string that contains the ProgID of the application with which to open the document. If this argument is omitted, the default viewer for the document is used
+    int OpenType,              // A Long integer that specifies the rights for opening the document
+    VARIANT varProgID,         // An optional string that contains the ProgID of the application with which to open the document. If this argument is omitted, the default viewer for the document is used
     VARIANT_BOOL *pbResult)    // true if the document was successfully opened; otherwise false
 {
     if (!pbResult)
         return E_POINTER;
-    // TODO: resolve the program from varProgID (nullptr -> default?)
-    HRESULT hr = LOStart(L"--view", bstrDocumentLocation);
-    *pbResult = toVBool(SUCCEEDED(hr));
-    return hr;
+    return ImplViewDocument(pdisp, bstrDocumentLocation, OpenType, varProgID, pbResult);
 }
 
 // Checks in the specified document to a library
@@ -340,18 +355,16 @@ STDMETHODIMP COMOpenDocuments::CheckoutDocumentPrompt(
 // or with the specified editor based on the specified window object,
 // and specifies whether to use a local copy
 STDMETHODIMP COMOpenDocuments::EditDocument3(
-    IDispatch* /*pdisp*/,           // An Object that represents the window from which the EditDocument3 method is being activated
+    IDispatch* pdisp,               // An Object that represents the window from which the EditDocument3 method is being activated
     BSTR bstrDocumentLocation,      // A string that contains the URL of the document to open for editing
-    VARIANT_BOOL /*fUseLocalCopy*/, // true to use a local copy; otherwise false
-    VARIANT /*varProgID*/,          // An optional string that contains the ProgID of the application with which to edit the document. If this argument is omitted, the default editor for the document is used
-    VARIANT_BOOL *pbResult)     // true if the document was successfully opened; otherwise false
+    VARIANT_BOOL fUseLocalCopy,     // true to use a local copy; otherwise false
+    VARIANT varProgID,              // An optional string that contains the ProgID of the application with which to edit the document. If this argument is omitted, the default editor for the document is used
+    VARIANT_BOOL *pbResult)         // true if the document was successfully opened; otherwise false
 {
     if (!pbResult)
         return E_POINTER;
     // TODO: resolve the program from varProgID (nullptr -> default?)
-    HRESULT hr = LOStart(L"-o", bstrDocumentLocation);
-    *pbResult = toVBool(SUCCEEDED(hr));
-    return hr;
+    return ImplEditDocument(pdisp, bstrDocumentLocation, fUseLocalCopy, varProgID, pbResult);
 }
 
 // Creates a new blog post in the editing application

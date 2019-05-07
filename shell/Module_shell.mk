@@ -49,6 +49,7 @@ $(eval $(call gb_Module_add_targets,shell,\
 	Executable_senddoc \
 	Library_smplmail \
 	Library_wininetbe \
+	Executable_spsupp_helper \
 ))
 
 ifeq ($(COM),MSC)
@@ -63,6 +64,7 @@ $(eval $(call gb_Module_add_targets,shell,\
 	CustomTarget_spsupp_idl \
 	Library_spsupp \
 	WinResTarget_spsupp \
+	WinResTarget_spsupp_dlg \
 ))
 
 $(eval $(call gb_Module_add_check_targets,shell,\
@@ -115,5 +117,9 @@ $(eval $(call gb_Module_add_targets,shell,\
 endif
 
 endif
+
+$(eval $(call gb_Module_add_l10n_targets,shell,\
+    AllLangMoTarget_shell \
+))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

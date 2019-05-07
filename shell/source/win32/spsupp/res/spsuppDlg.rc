@@ -1,0 +1,29 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+* This file is part of the LibreOffice project.
+*
+* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/.
+*/
+
+#include "spsuppDlg.h"
+// We need to include windows.h to use IDI_QUESTION
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
+LANGUAGE LANG_NEUTRAL, SUBLANG_DEFAULT
+
+// Dialog
+
+IDD_EDIT_OR_RO DIALOGEX 0, 0, 309, 87
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Open Document"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    ICON            IDI_QUESTION,IDC_STATIC,7,7,21,20
+    LTEXT           "Do you want to open the document to view or to edit?",IDC_EDIT_OR_RO,36,7,266,44
+    DEFPUSHBUTTON   "View",ID_RO,91,66,77,14
+    PUSHBUTTON      "Edit",ID_EDIT,171,66,77,14
+    PUSHBUTTON      "Cancel",IDCANCEL,252,66,50,14
+END
