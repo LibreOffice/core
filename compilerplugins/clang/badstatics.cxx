@@ -209,6 +209,8 @@ public:
                 || name == "gStaticManager" // vcl/source/graphic/Manager.cxx - stores non-owning pointers
                 || name == "aThreadedInterpreterPool"    // ScInterpreterContext(Pool), not owning
                 || name == "aNonThreadedInterpreterPool" // ScInterpreterContext(Pool), not owning
+                || name == "lcl_parserContext" // getParserContext(), the chain from this to a VclPtr is not owning
+                || name == "aReaderWriter" // /home/noel/libo/sw/source/filter/basflt/fltini.cxx, non-owning
                ) // these variables appear unproblematic
             {
                 return true;
