@@ -95,9 +95,8 @@ void ScMyOpenCloseColumnRowGroup::OpenGroup(const ScMyColumnRowGroup& rGroup)
 void ScMyOpenCloseColumnRowGroup::OpenGroups(const sal_Int32 nField)
 {
     ScMyColumnRowGroupVec::iterator aItr(aTableStart.begin());
-    ScMyColumnRowGroupVec::iterator aEndItr(aTableStart.end());
     bool bReady(false);
-    while(!bReady && aItr != aEndItr)
+    while(!bReady && aItr != aTableStart.end())
     {
         if (aItr->nField == nField)
         {
@@ -144,7 +143,7 @@ sal_Int32 ScMyOpenCloseColumnRowGroup::GetLast()
 
 void ScMyOpenCloseColumnRowGroup::Sort()
 {
-    aTableStart.sort();
+    std::sort(aTableStart.begin(), aTableStart.end());
     std::sort(aTableEnd.begin(), aTableEnd.end());
 }
 
