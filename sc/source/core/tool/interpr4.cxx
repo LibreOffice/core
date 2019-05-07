@@ -4423,6 +4423,7 @@ StackVar ScInterpreter::Interpret()
                     case SvNumFormatType::DATE:
                     case SvNumFormatType::TIME:
                     case SvNumFormatType::DATETIME:
+                    case SvNumFormatType::DURATION:
                         nRetIndexExpr = nFuncFmtIndex;
                     break;
                     default:
@@ -4537,12 +4538,25 @@ StackVar ScInterpreter::Interpret()
                         // unnecessarily duplicate the information.
                         if (pCur->GetDoubleType() != 0)
                         {
-                            const double fVal = PopDouble();
+                            double fVal = PopDouble();
                             if (!bForcedResultType)
                             {
                                 if (nCurFmtType != nFuncFmtType)
                                     nRetIndexExpr = 0;  // carry format index only for matching type
                                 nRetTypeExpr = nFuncFmtType = nCurFmtType;
+                            }
+                            if (nRetTypeExpr == SvNumFormatType::DURATION)
+                            {
+                                // Round the duration in case a wall clock time
+                                // display format is used instead of a duration
+                                // format. To micro seconds which then catches
+                                // the converted hh:mm:ss.9999997 cases.
+                                if (fVal != 0.0)
+                                {
+                                    fVal *= 86400.0;
+                                    fVal = rtl::math::round( fVal, 6);
+                                    fVal /= 86400.0;
+                                }
                             }
                             PushTempToken( CreateFormulaDoubleToken( fVal));
                         }
@@ -4652,6 +4666,11 @@ StackVar ScInterpreter::Interpret()
     }
     else
         nRetFmtType = SvNumFormatType::NUMBER;
+
+    // Currently (2019-05-06) nothing else can cope with a duration format
+    // type, change to time as it was before.
+    if (nRetFmtType == SvNumFormatType::DURATION)
+        nRetFmtType = SvNumFormatType::TIME;
 
     if (nGlobalError != FormulaError::NONE && GetStackType() != svError )
         PushError( nGlobalError);
