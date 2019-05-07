@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_6ef546cb",
+        "filename": "sc/source/core/tool/viewopti.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-05-07T12:22:27Z",
+      "side": 1,
+      "message": "aNames[10] \u003d Window/SearchSummary",
+      "revId": "62d53e413a90e6b9202705d606e104d03b9fcbda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_0e0282b5",
+        "filename": "sc/source/core/tool/viewopti.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-05-07T12:22:27Z",
+      "side": 1,
+      "message": "aValues[10] \u003d 1",
+      "revId": "62d53e413a90e6b9202705d606e104d03b9fcbda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_2eff3eab",
+        "filename": "sc/source/core/tool/viewopti.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-05-07T12:22:27Z",
+      "side": 1,
+      "message": "pValues[10] \u003d 0",
+      "revId": "62d53e413a90e6b9202705d606e104d03b9fcbda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
