@@ -109,6 +109,7 @@ void ScViewOptions::SetDefaults()
     aOptArr[ VOPT_ANCHOR      ] = true;
     aOptArr[ VOPT_PAGEBREAKS  ] = true;
     aOptArr[ VOPT_CLIPMARKS   ] = true;
+    aOptArr[ VOPT_SUMMARY     ] = true;
 
     aModeArr[VOBJ_TYPE_OLE ]  = VOBJ_MODE_SHOW;
     aModeArr[VOBJ_TYPE_CHART] = VOBJ_MODE_SHOW;
@@ -214,6 +215,7 @@ SfxPoolItem* ScTpViewItem::Clone( SfxItemPool * ) const
 #define SCLAYOUTOPT_SHEETTAB        7
 #define SCLAYOUTOPT_OUTLINE         8
 #define SCLAYOUTOPT_GRID_ONCOLOR    9
+#define SCLAYOUTOPT_SUMMARY         10
 
 #define CFGPATH_DISPLAY     "Office.Calc/Content/Display"
 
@@ -251,7 +253,8 @@ Sequence<OUString> ScViewCfg::GetLayoutPropertyNames()
             "Window/VerticalScroll",    // SCLAYOUTOPT_VERTSCROLL
             "Window/SheetTab",          // SCLAYOUTOPT_SHEETTAB
             "Window/OutlineSymbol",     // SCLAYOUTOPT_OUTLINE
-            "Line/GridOnColoredCells"}; // SCLAYOUTOPT_GRID_ONCOLOR;
+            "Line/GridOnColoredCells",  // SCLAYOUTOPT_GRID_ONCOLOR;
+            "Window/SearchSummary"};    // SCLAYOUTOPT_SUMMARY
 }
 
 Sequence<OUString> ScViewCfg::GetDisplayPropertyNames()
@@ -338,6 +341,9 @@ ScViewCfg::ScViewCfg() :
                         break;
                     case SCLAYOUTOPT_OUTLINE:
                         SetOption( VOPT_OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
+                    case SCLAYOUTOPT_SUMMARY:
+                        SetOption( VOPT_SUMMARY, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                 }
             }
@@ -502,6 +508,9 @@ IMPL_LINK_NOARG(ScViewCfg, LayoutCommitHdl, ScLinkConfigItem&, void)
                 break;
             case SCLAYOUTOPT_OUTLINE:
                 pValues[nProp] <<= GetOption( VOPT_OUTLINER );
+                break;
+            case SCLAYOUTOPT_SUMMARY:
+                pValues[nProp] <<= GetOption( VOPT_SUMMARY );
                 break;
         }
     }
