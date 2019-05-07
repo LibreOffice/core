@@ -144,7 +144,7 @@ sal_Int32 ScMyOpenCloseColumnRowGroup::GetLast()
 
 void ScMyOpenCloseColumnRowGroup::Sort()
 {
-    aTableStart.sort();
+    std::sort(aTableStart.begin(), aTableStart.end());
     std::sort(aTableEnd.begin(), aTableEnd.end());
 }
 
