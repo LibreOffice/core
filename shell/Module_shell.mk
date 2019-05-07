@@ -48,6 +48,7 @@ $(eval $(call gb_Module_add_targets,shell,\
 ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_targets,shell,\
 	CustomTarget_shlxthdl_res \
+	CustomTarget_x64 \
 	Library_ooofilt \
 	Library_propertyhdl \
 	Library_shlxthdl \
@@ -55,7 +56,6 @@ $(eval $(call gb_Module_add_targets,shell,\
 	StaticLibrary_xmlparser \
 	WinResTarget_shlxthdl \
 	CustomTarget_spsupp_idl \
-	Library_spsupp \
 	WinResTarget_spsupp \
 ))
 
@@ -66,13 +66,23 @@ endif
 
 ifeq ($(BUILD_X64),TRUE)
 $(eval $(call gb_Module_add_targets,shell,\
-	CustomTarget_x64 \
 	Library_ooofilt_x64 \
 	Library_propertyhdl_x64 \
 	Library_shlxthdl_x64 \
 	StaticLibrary_shlxthandler_common_x64 \
 	StaticLibrary_xmlparser_x64 \
+))
+endif
+
+ifneq ($(CXX_X64_BINARY),)
+$(eval $(call gb_Module_add_targets,shell,\
 	Library_spsupp_x64 \
+))
+endif
+
+ifneq ($(CXX_X86_BINARY),)
+$(eval $(call gb_Module_add_targets,shell,\
+	Library_spsupp_x86 \
 ))
 endif
 

@@ -34,13 +34,18 @@ HANDLE g_hModule;
 
 }
 
+HMODULE GetHModule()
+{
+    return static_cast<HMODULE>(g_hModule);
+}
+
 ITypeLib* GetTypeLib()
 {
     typedef std::unique_ptr<ITypeLib, void(*)(IUnknown* p)> ITypeLibGuard;
     static ITypeLibGuard s_aITypeLibGuard = [] {
         ITypeLibGuard aITypeLibGuard(nullptr, [](IUnknown* p) { if (p) p->Release(); });
         wchar_t szFile[MAX_PATH];
-        if (GetModuleFileNameW(static_cast<HMODULE>(g_hModule), szFile, MAX_PATH) == 0)
+        if (GetModuleFileNameW(GetHModule(), szFile, MAX_PATH) == 0)
             return aITypeLibGuard;
         ITypeLib* pTypeLib;
         if (FAILED(LoadTypeLib(szFile, &pTypeLib)))
@@ -55,7 +60,7 @@ const wchar_t* GetLOPath()
 {
     static wchar_t* s_sPath = []() -> wchar_t* {
         static wchar_t sPath[MAX_PATH];
-        if (GetModuleFileNameW(static_cast<HMODULE>(g_hModule), sPath, MAX_PATH) == 0)
+        if (GetModuleFileNameW(GetHModule(), sPath, MAX_PATH) == 0)
             return nullptr;
         wchar_t* pSlashPos = wcsrchr(sPath, L'\\');
         if (pSlashPos == nullptr)
@@ -120,7 +125,7 @@ STDAPI DllRegisterServer(void)
         return ResultFromScode(SELFREG_E_TYPELIB);
 
     wchar_t szFile[MAX_PATH];
-    if (GetModuleFileNameW(static_cast<HMODULE>(g_hModule), szFile, MAX_PATH) == 0)
+    if (GetModuleFileNameW(GetHModule(), szFile, MAX_PATH) == 0)
         return HRESULT_FROM_WIN32(GetLastError());
 
     HRESULT hr = RegisterTypeLib(pTypeLib, szFile, nullptr);
