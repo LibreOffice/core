@@ -22,6 +22,7 @@
 
 #include <Qt5Frame.hxx>
 #include <Qt5Graphics.hxx>
+#include <Qt5Instance.hxx>
 #include <Qt5Tools.hxx>
 
 #include <QtCore/QMimeData>
@@ -45,6 +46,7 @@
 #include <headless/svpgdi.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <window.h>
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -590,8 +592,8 @@ FindFocus(uno::Reference<accessibility::XAccessibleContext> const& xContext)
     return uno::Reference<accessibility::XAccessibleEditableText>();
 }
 
-static bool lcl_retrieveSurrounding(sal_Int32& rPosition, sal_Int32& rAnchor, QString* pText,
-                                    QString* pSelection)
+static bool lcl_retrieveSurroundingA11y(sal_Int32& rPosition, sal_Int32& rAnchor, QString* pText,
+                                        QString* pSelection)
 {
     vcl::Window* pFocusWin = Application::GetFocusWindow();
     if (!pFocusWin)
@@ -643,6 +645,115 @@ static bool lcl_retrieveSurrounding(sal_Int32& rPosition, sal_Int32& rAnchor, QS
     return result;
 }
 
+#include <vcl/floatwin.hxx>
+#include <tools/time.hxx>
+
+static vcl::Window* ImplGetKeyInputWindow()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    vcl::Window* const pWindow = pSVData->maWinData.mpFocusWin;
+
+    // determine last input time
+    pSVData->maAppData.mnLastInputTime = tools::Time::GetSystemTicks();
+
+    // #127104# workaround for destroyed windows
+    if (pWindow->ImplGetWindowImpl() == nullptr)
+        return nullptr;
+
+    // find window - is every time the window which has currently the
+    // focus or the last time the focus.
+
+    // the first floating window always has the focus, try it, or any parent floating windows, first
+    vcl::Window* pChild = pSVData->maWinData.mpFirstFloat;
+    while (pChild)
+    {
+        if (pChild->ImplGetWindowImpl()->mbFloatWin)
+        {
+            if (static_cast<FloatingWindow*>(pChild)->GrabsFocus())
+                break;
+        }
+        else if (pChild->ImplGetWindowImpl()->mbDockWin)
+        {
+            vcl::Window* pParent = pChild->GetWindow(GetWindowType::RealParent);
+            if (pParent && pParent->ImplGetWindowImpl()->mbFloatWin
+                && static_cast<FloatingWindow*>(pParent)->GrabsFocus())
+                break;
+        }
+        pChild = pChild->GetParent();
+    }
+
+    if (!pChild)
+        pChild = pWindow;
+
+    pChild = pChild->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
+
+    // no child - then no input
+    if (!pChild)
+        return nullptr;
+
+    // We call also KeyInput if we haven't the focus, because on Unix
+    // system this is often the case when a Lookup Choice Window has
+    // the focus - because this windows send the KeyInput directly to
+    // the window without resetting the focus
+    SAL_WARN_IF(pChild != pSVData->maWinData.mpFocusWin, "vcl",
+                "ImplHandleKey: Keyboard-Input is sent to a frame without focus");
+
+    // no keyinput to disabled windows
+    if (!pChild->IsEnabled() || !pChild->IsInputEnabled() || pChild->IsInModalMode())
+        return nullptr;
+
+    return pChild;
+}
+
+static vcl::Window* ImplHandleSalSurroundingTextRequest(SalSurroundingTextRequestEvent& rEvt)
+{
+    Selection aSelRange;
+    vcl::Window* pChild = ImplGetKeyInputWindow();
+
+    if (!pChild)
+    {
+        rEvt.maText.clear();
+        aSelRange.setMin(0);
+        aSelRange.setMax(0);
+    }
+    else
+    {
+        rEvt.maText = pChild->GetSurroundingText();
+        Selection aSel = pChild->GetSurroundingTextSelection();
+        aSelRange.setMin(aSel.Min());
+        aSelRange.setMax(aSel.Max());
+    }
+
+    aSelRange.Justify();
+
+    if (aSelRange.Min() < 0)
+        rEvt.mnStart = 0;
+    else if (aSelRange.Min() > rEvt.maText.getLength())
+        rEvt.mnStart = rEvt.maText.getLength();
+    else
+        rEvt.mnStart = aSelRange.Min();
+
+    if (aSelRange.Max() < 0)
+        rEvt.mnStart = 0;
+    else if (aSelRange.Max() > rEvt.maText.getLength())
+        rEvt.mnEnd = rEvt.maText.getLength();
+    else
+        rEvt.mnEnd = aSelRange.Max();
+
+    return pChild;
+}
+
+static bool lcl_retrieveSurrounding(SalSurroundingTextRequestEvent& rEvt)
+{
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    vcl::Window* pInputWin;
+    SolarMutexGuard g;
+    pSalInst->RunInMainThread(
+        [&rEvt, &pInputWin]() { pInputWin = ImplHandleSalSurroundingTextRequest(rEvt); });
+    return !!pInputWin;
+}
+
 QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
 {
     switch (property)
@@ -651,14 +762,21 @@ QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
         {
             QString aText;
             sal_Int32 nCursorPos, nAnchor;
-            if (lcl_retrieveSurrounding(nCursorPos, nAnchor, &aText, nullptr))
+            bool bValidA11y = lcl_retrieveSurroundingA11y(nCursorPos, nAnchor, &aText, nullptr);
+
+            SalSurroundingTextRequestEvent aEvt;
+            bool bValidInt = lcl_retrieveSurrounding(aEvt);
+
+            assert(bValidInt == bValidA11y);
+            //assert(aText == toQString(aEvt.maText));
+            if (bValidA11y)
                 return QVariant(aText);
             [[fallthrough]];
         }
         case Qt::ImCursorPosition:
         {
             sal_Int32 nCursorPos, nAnchor;
-            if (lcl_retrieveSurrounding(nCursorPos, nAnchor, nullptr, nullptr))
+            if (lcl_retrieveSurroundingA11y(nCursorPos, nAnchor, nullptr, nullptr))
                 return QVariant(nCursorPos);
             [[fallthrough]];
         }
@@ -672,7 +790,7 @@ QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
         case Qt::ImAnchorPosition:
         {
             sal_Int32 nCursorPos, nAnchor;
-            if (lcl_retrieveSurrounding(nCursorPos, nAnchor, nullptr, nullptr))
+            if (lcl_retrieveSurroundingA11y(nCursorPos, nAnchor, nullptr, nullptr))
                 return QVariant(nAnchor);
             [[fallthrough]];
         }
@@ -680,7 +798,7 @@ QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
         {
             QString aSelection;
             sal_Int32 nCursorPos, nAnchor;
-            if (lcl_retrieveSurrounding(nCursorPos, nAnchor, nullptr, &aSelection))
+            if (lcl_retrieveSurroundingA11y(nCursorPos, nAnchor, nullptr, &aSelection))
                 return QVariant(aSelection);
             [[fallthrough]];
         }
