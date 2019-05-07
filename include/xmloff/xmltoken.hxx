@@ -3303,6 +3303,8 @@ namespace xmloff { namespace token {
 
         XML_CREATOR_INITIALS,
 
+        XML_RESOLVED,
+
         XML_TOKEN_END
     };
 

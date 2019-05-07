@@ -439,6 +439,7 @@ class SW_DLLPUBLIC SwPostItField : public SwField
     OUString sInitials; ///< Initials of the author.
     OUString sName;     ///< Name of the comment.
     DateTime    aDateTime;
+    bool     m_bResolved;
     OutlinerParaObject* mpText;
     rtl::Reference<SwTextAPIObject> m_xTextObject;
     sal_uInt32 m_nPostItId;
@@ -452,6 +453,7 @@ public:
                    const OUString& rInitials,
                    const OUString& rName,
                    const DateTime& rDate,
+                   const bool bResolved = false,
                    const sal_uInt32 nPostItId = 0);
 
     SwPostItField(const SwPostItField&) = delete;
