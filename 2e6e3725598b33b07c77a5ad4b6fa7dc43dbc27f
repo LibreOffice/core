@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_6b24580e",
+        "filename": "include/tools/gen.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2019-05-07T09:05:30Z",
+      "side": 1,
+      "message": "Should that be a 0 : ?",
+      "revId": "2e6e3725598b33b07c77a5ad4b6fa7dc43dbc27f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_0b2114fc",
+        "filename": "sc/source/ui/view/printfun.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2019-05-07T09:05:30Z",
+      "side": 1,
+      "message": "nice \u003d)",
+      "revId": "2e6e3725598b33b07c77a5ad4b6fa7dc43dbc27f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
