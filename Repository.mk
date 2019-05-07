@@ -665,13 +665,23 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activexbina
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activex, \
 	so_activex \
-	spsupp \
 ))
 
 ifneq ($(BUILD_X64),)
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activexwin64, \
 	so_activex_x64 \
+))
+endif
+
+ifneq ($(CXX_X64_BINARY),)
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	spsupp_x64 \
+))
+endif
+
+ifneq ($(CXX_X86_BINARY),)
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
+	spsupp_x86 \
 ))
 endif
 
