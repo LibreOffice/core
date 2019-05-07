@@ -14,6 +14,17 @@
 
 ITypeLib* GetTypeLib();
 const wchar_t* GetLOPath();
+const wchar_t* GetSofficeExe();
+HMODULE GetHModule();
+
+enum class Answer
+{
+    Cancel,
+    ReadOnly,
+    Edit
+};
+
+Answer AskIfUserWantsToEdit(const wchar_t* sFilePath);
 
 #endif
 
