@@ -549,7 +549,7 @@ void SvxSearchDialog::SetSearchLabel(const OUString& rStr)
     m_xSearchLabel->set_label(rStr);
 
     if (rStr == SvxResId(RID_SVXSTR_SEARCH_NOT_FOUND))
-        m_xSearchLB->set_entry_error(true);
+        m_xSearchLB->set_entry_message_type(weld::EntryMessageType::Error);
 }
 
 void SvxSearchDialog::ApplyTransliterationFlags_Impl( TransliterationFlags nSettings )
@@ -2184,7 +2184,7 @@ void SvxSearchDialog::SetModifyFlag_Impl( const weld::Widget* pCtrl )
     if (m_xSearchLB.get() == pCtrl)
     {
         nModifyFlag |= ModifyFlags::Search;
-        m_xSearchLB->set_entry_error(false);
+        m_xSearchLB->set_entry_message_type(weld::EntryMessageType::Normal);
         SvxSearchDialogWrapper::SetSearchLabel("");
     }
     else if ( m_xReplaceLB.get() == pCtrl )

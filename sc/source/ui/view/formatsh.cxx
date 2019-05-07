@@ -434,7 +434,10 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         aStyleName = static_cast<const SfxStringItem*>(pNameItem)->GetValue();
                     else if ( nSlotId == SID_STYLE_NEW_BY_EXAMPLE )
                     {
-                        SfxNewStyleDlg aDlg(pTabViewShell->GetFrameWeld(), *pStylePool);
+                        weld::Window* pDialogParent = rReq.GetFrameWeld();
+                        if (!pDialogParent)
+                            pDialogParent = pTabViewShell->GetFrameWeld();
+                        SfxNewStyleDlg aDlg(pDialogParent, *pStylePool);
                         if (aDlg.run() != RET_OK)
                             return;
                         aStyleName = aDlg.GetName();
@@ -848,7 +851,10 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                pDlg.disposeAndReset(pFact->CreateScStyleDlg(pTabViewShell->GetFrameWeld(), *pStyleSheet, bPage));
+                weld::Window* pDialogParent = rReq.GetFrameWeld();
+                if (!pDialogParent)
+                    pDialogParent = pTabViewShell->GetFrameWeld();
+                pDlg.disposeAndReset(pFact->CreateScStyleDlg(pDialogParent, *pStyleSheet, bPage));
                 short nResult = pDlg->Execute();
                 pTabViewShell->SetInFormatDialog(false);
 

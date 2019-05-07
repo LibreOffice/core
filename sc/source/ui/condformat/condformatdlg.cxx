@@ -25,42 +25,38 @@
 #include <condformatdlgentry.hxx>
 #include <condformatdlgitem.hxx>
 
-ScCondFormatList::ScCondFormatList(vcl::Window* pParent, WinBits nStyle)
-    : Control(pParent, nStyle | WB_DIALOGCONTROL)
-    , mbHasScrollBar(false)
-    , mbFrozen(false)
+ScCondFormatList::ScCondFormatList(ScCondFormatDlg* pDialogParent,
+                                   std::unique_ptr<weld::ScrolledWindow> xWindow,
+                                   std::unique_ptr<weld::Container> xGrid)
+    : mbFrozen(false)
     , mbNewEntry(false)
-    , mpScrollBar(VclPtr<ScrollBar>::Create(this, WB_VERT ))
     , mpDoc(nullptr)
-    , mpDialogParent(nullptr)
+    , mpDialogParent(pDialogParent)
+    , mxScrollWindow(std::move(xWindow))
+    , mxGrid(std::move(xGrid))
 {
-    mpScrollBar->SetScrollHdl( LINK( this, ScCondFormatList, ScrollHdl ) );
-    mpScrollBar->EnableDrag();
+    mxScrollWindow->set_size_request(mxScrollWindow->get_approximate_digit_width() * 85,
+                                     mxScrollWindow->get_text_height() * 23);
+#if 0
     SetControlBackground( GetSettings().GetStyleSettings().GetWindowColor() );
     SetBackground(GetControlBackground());
+#endif
+}
+
+weld::Window* ScCondFormatList::GetFrameWeld()
+{
+    return mpDialogParent->getDialog();
 }
 
 ScCondFormatList::~ScCondFormatList()
 {
-    disposeOnce();
-}
-
-void ScCondFormatList::dispose()
-{
     Freeze();
-    mpDialogParent.clear();
-    mpScrollBar.disposeAndClear();
-    for (auto& rxEntry : maEntries)
-        rxEntry.disposeAndClear();
-    maEntries.clear();
-    Control::dispose();
 }
 
-void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
+void ScCondFormatList::init(ScDocument* pDoc,
         const ScConditionalFormat* pFormat, const ScRangeList& rRanges,
         const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType)
 {
-    mpDialogParent = pDialogParent;
     mpDoc = pDoc;
     maPos = rPos;
     maRanges = rRanges;
@@ -80,9 +76,9 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
                     {
                         const ScCondFormatEntry* pConditionEntry = static_cast<const ScCondFormatEntry*>( pEntry );
                         if(pConditionEntry->GetOperation() != ScConditionMode::Direct)
-                            maEntries.push_back(VclPtr<ScConditionFrmtEntry>::Create( this, mpDoc, pDialogParent, maPos, pConditionEntry ) );
+                            maEntries.emplace_back(new ScConditionFrmtEntry( this, mpDoc, mpDialogParent, maPos, pConditionEntry ) );
                         else
-                            maEntries.push_back(VclPtr<ScFormulaFrmtEntry>::Create( this, mpDoc, pDialogParent, maPos, pConditionEntry ) );
+                            maEntries.emplace_back(new ScFormulaFrmtEntry( this, mpDoc, mpDialogParent, maPos, pConditionEntry ) );
 
                     }
                     break;
@@ -90,19 +86,19 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
                     {
                         const ScColorScaleFormat* pColorScale = static_cast<const ScColorScaleFormat*>( pEntry );
                         if( pColorScale->size() == 2 )
-                            maEntries.push_back(VclPtr<ScColorScale2FrmtEntry>::Create( this, mpDoc, maPos, pColorScale ) );
+                            maEntries.emplace_back(new ScColorScale2FrmtEntry( this, mpDoc, maPos, pColorScale ) );
                         else
-                            maEntries.push_back(VclPtr<ScColorScale3FrmtEntry>::Create( this, mpDoc, maPos, pColorScale ) );
+                            maEntries.emplace_back(new ScColorScale3FrmtEntry( this, mpDoc, maPos, pColorScale ) );
                     }
                     break;
                 case ScFormatEntry::Type::Databar:
-                    maEntries.push_back(VclPtr<ScDataBarFrmtEntry>::Create( this, mpDoc, maPos, static_cast<const ScDataBarFormat*>( pEntry ) ) );
+                    maEntries.emplace_back(new ScDataBarFrmtEntry( this, mpDoc, maPos, static_cast<const ScDataBarFormat*>( pEntry ) ) );
                     break;
                 case ScFormatEntry::Type::Iconset:
-                    maEntries.push_back(VclPtr<ScIconSetFrmtEntry>::Create( this, mpDoc, maPos, static_cast<const ScIconSetFormat*>( pEntry ) ) );
+                    maEntries.emplace_back(new ScIconSetFrmtEntry( this, mpDoc, maPos, static_cast<const ScIconSetFormat*>( pEntry ) ) );
                     break;
                 case ScFormatEntry::Type::Date:
-                    maEntries.push_back(VclPtr<ScDateFrmtEntry>::Create( this, mpDoc, static_cast<const ScCondDateFormatEntry*>( pEntry ) ) );
+                    maEntries.emplace_back(new ScDateFrmtEntry( this, mpDoc, static_cast<const ScCondDateFormatEntry*>( pEntry ) ) );
                     break;
             }
         }
@@ -114,19 +110,19 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
         switch(eType)
         {
             case condformat::dialog::CONDITION:
-                maEntries.push_back(VclPtr<ScConditionFrmtEntry>::Create( this, mpDoc, pDialogParent, maPos ));
+                maEntries.emplace_back(new ScConditionFrmtEntry( this, mpDoc, mpDialogParent, maPos ));
                 break;
             case condformat::dialog::COLORSCALE:
-                maEntries.push_back(VclPtr<ScColorScale3FrmtEntry>::Create( this, mpDoc, maPos ));
+                maEntries.emplace_back(new ScColorScale3FrmtEntry( this, mpDoc, maPos ));
                 break;
             case condformat::dialog::DATABAR:
-                maEntries.push_back(VclPtr<ScDataBarFrmtEntry>::Create( this, mpDoc, maPos ));
+                maEntries.emplace_back(new ScDataBarFrmtEntry( this, mpDoc, maPos ));
                 break;
             case condformat::dialog::ICONSET:
-                maEntries.push_back(VclPtr<ScIconSetFrmtEntry>::Create( this, mpDoc, maPos ));
+                maEntries.emplace_back(new ScIconSetFrmtEntry( this, mpDoc, maPos ));
                 break;
             case condformat::dialog::DATE:
-                maEntries.push_back(VclPtr<ScDateFrmtEntry>::Create( this, mpDoc ));
+                maEntries.emplace_back(new ScDateFrmtEntry( this, mpDoc ));
                 break;
             case condformat::dialog::NONE:
                 break;
@@ -147,27 +143,6 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
 void ScCondFormatList::SetRange(const ScRangeList& rRange)
 {
     maRanges = rRange;
-}
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(ScCondFormatList, 0)
-
-Size ScCondFormatList::GetOptimalSize() const
-{
-    return LogicToPixel(Size(300, 185), MapMode(MapUnit::MapAppFont));
-}
-
-void ScCondFormatList::Resize()
-{
-    Control::Resize();
-    RecalcAll();
-}
-
-void ScCondFormatList::queue_resize(StateChangedType eReason)
-{
-    Control::queue_resize(eReason);
-    if (!mpDialogParent) //detects that this is during dispose
-        return;
-    RecalcAll();
 }
 
 std::unique_ptr<ScConditionalFormat> ScCondFormatList::GetConditionalFormat() const
@@ -204,68 +179,30 @@ void ScCondFormatList::RecalcAll()
     if (mbFrozen)
         return;
 
-    sal_Int32 nTotalHeight = 0;
     sal_Int32 nIndex = 1;
     for (const auto& item : maEntries)
     {
         if (!item)
             continue;
-        nTotalHeight += item->GetSizePixel().Height();
         item->SetIndex(nIndex);
         ++nIndex;
     }
-
-    Size aCtrlSize = GetOutputSize();
-    long nSrcBarSize = GetSettings().GetStyleSettings().GetScrollBarSize();
-    if(nTotalHeight > GetSizePixel().Height())
-    {
-        mbHasScrollBar = true;
-        mpScrollBar->SetPosSizePixel(Point(aCtrlSize.Width() -nSrcBarSize, 0),
-                Size(nSrcBarSize, aCtrlSize.Height()) );
-        mpScrollBar->SetRangeMax(nTotalHeight);
-        mpScrollBar->SetVisibleSize(aCtrlSize.Height());
-        mpScrollBar->Show();
-    }
-    else
-    {
-        mbHasScrollBar = false;
-        mpScrollBar->Hide();
-    }
-
-    Point aPoint(0,-1*mpScrollBar->GetThumbPos());
-    for (const auto& item : maEntries)
-    {
-        if (!item)
-            continue;
-        item->SetPosPixel(aPoint);
-        Size aSize = item->GetSizePixel();
-        if(mbHasScrollBar)
-            aSize.setWidth( aCtrlSize.Width() - nSrcBarSize );
-        else
-            aSize.setWidth( aCtrlSize.Width() );
-        item->SetSizePixel(aSize);
-
-        aPoint.AdjustY(item->GetSizePixel().Height() );
-    }
 }
 
-void ScCondFormatList::DoScroll(long nDelta)
+IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, weld::ComboBox&, rBox, void)
 {
-    Point aNewPoint = mpScrollBar->GetPosPixel();
-    tools::Rectangle aRect(Point(), GetOutputSize());
-    aRect.AdjustRight( -(mpScrollBar->GetSizePixel().Width()) );
-    Scroll( 0, -nDelta, aRect );
-    mpScrollBar->SetPosPixel(aNewPoint);
+    Application::PostUserEvent(LINK(this, ScCondFormatList, AfterColFormatTypeHdl), &rBox);
 }
 
-IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox&, rBox, void)
+IMPL_LINK(ScCondFormatList, AfterColFormatTypeHdl, void*, p, void)
 {
+    weld::ComboBox* pBox = static_cast<weld::ComboBox*>(p);
     EntryContainer::iterator itr = std::find_if(maEntries.begin(), maEntries.end(),
-        [](const VclPtr<ScCondFrmtEntry>& widget) { return widget->IsSelected(); });
+        [](const std::unique_ptr<ScCondFrmtEntry>& widget) { return widget->IsSelected(); });
     if(itr == maEntries.end())
         return;
 
-    sal_Int32 nPos = rBox.GetSelectedEntryPos();
+    sal_Int32 nPos = pBox->get_active();
     switch(nPos)
     {
         case 0:
@@ -273,32 +210,28 @@ IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox&, rBox, void)
                 return;
 
             Freeze();
-            itr->disposeAndClear();
-            *itr = VclPtr<ScColorScale2FrmtEntry>::Create( this, mpDoc, maPos );
+            itr->reset(new ScColorScale2FrmtEntry(this, mpDoc, maPos));
             break;
         case 1:
             if((*itr)->GetType() == condformat::entry::COLORSCALE3)
                 return;
 
             Freeze();
-            itr->disposeAndClear();
-            *itr = VclPtr<ScColorScale3FrmtEntry>::Create( this, mpDoc, maPos );
+            itr->reset(new ScColorScale3FrmtEntry(this, mpDoc, maPos));
             break;
         case 2:
             if((*itr)->GetType() == condformat::entry::DATABAR)
                 return;
 
             Freeze();
-            itr->disposeAndClear();
-            *itr = VclPtr<ScDataBarFrmtEntry>::Create( this, mpDoc, maPos );
+            itr->reset(new ScDataBarFrmtEntry(this, mpDoc, maPos));
             break;
         case 3:
             if((*itr)->GetType() == condformat::entry::ICONSET)
                 return;
 
             Freeze();
-            itr->disposeAndClear();
-            *itr = VclPtr<ScIconSetFrmtEntry>::Create( this, mpDoc, maPos );
+            itr->reset(new ScIconSetFrmtEntry(this, mpDoc, maPos));
             break;
         default:
             break;
@@ -309,24 +242,24 @@ IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox&, rBox, void)
     RecalcAll();
 }
 
-IMPL_LINK(ScCondFormatList, TypeListHdl, ListBox&, rBox, void)
+IMPL_LINK(ScCondFormatList, TypeListHdl, weld::ComboBox&, rBox, void)
 {
     //Resolves: fdo#79021 At this point we are still inside the ListBox Select.
     //If we call maEntries.replace here then the pBox will be deleted before it
     //has finished Select and will crash on accessing its deleted this. So Post
     //to do the real work after the Select has completed
-    Application::PostUserEvent(LINK(this, ScCondFormatList, AfterTypeListHdl), &rBox, true);
+    Application::PostUserEvent(LINK(this, ScCondFormatList, AfterTypeListHdl), &rBox);
 }
 
 IMPL_LINK(ScCondFormatList, AfterTypeListHdl, void*, p, void)
 {
-    ListBox* pBox = static_cast<ListBox*>(p);
+    weld::ComboBox* pBox = static_cast<weld::ComboBox*>(p);
     EntryContainer::iterator itr = std::find_if(maEntries.begin(), maEntries.end(),
-        [](const VclPtr<ScCondFrmtEntry>& widget) { return widget->IsSelected(); });
+        [](const std::unique_ptr<ScCondFrmtEntry>& widget) { return widget->IsSelected(); });
     if(itr == maEntries.end())
         return;
 
-    sal_Int32 nPos = pBox->GetSelectedEntryPos();
+    sal_Int32 nPos = pBox->get_active();
     switch(nPos)
     {
         case 0:
@@ -343,8 +276,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, void*, p, void)
                     return;
             }
             Freeze();
-            itr->disposeAndClear();
-            *itr = VclPtr<ScColorScale3FrmtEntry>::Create(this, mpDoc, maPos);
+            itr->reset(new ScColorScale3FrmtEntry(this, mpDoc, maPos));
             mpDialogParent->InvalidateRefData();
             (*itr)->SetActive();
             break;
@@ -353,8 +285,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, void*, p, void)
                 return;
 
             Freeze();
-            itr->disposeAndClear();
-            *itr = VclPtr<ScConditionFrmtEntry>::Create(this, mpDoc, mpDialogParent, maPos);
+            itr->reset(new ScConditionFrmtEntry(this, mpDoc, mpDialogParent, maPos));
             mpDialogParent->InvalidateRefData();
             (*itr)->SetActive();
             break;
@@ -363,8 +294,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, void*, p, void)
                 return;
 
             Freeze();
-            itr->disposeAndClear();
-            *itr = VclPtr<ScFormulaFrmtEntry>::Create(this, mpDoc, mpDialogParent, maPos);
+            itr->reset(new ScFormulaFrmtEntry(this, mpDoc, mpDialogParent, maPos));
             mpDialogParent->InvalidateRefData();
             (*itr)->SetActive();
             break;
@@ -373,8 +303,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, void*, p, void)
                 return;
 
             Freeze();
-            itr->disposeAndClear();
-            *itr = VclPtr<ScDateFrmtEntry>::Create( this, mpDoc );
+            itr->reset(new ScDateFrmtEntry( this, mpDoc ));
             mpDialogParent->InvalidateRefData();
             (*itr)->SetActive();
             break;
@@ -384,30 +313,28 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, void*, p, void)
     RecalcAll();
 }
 
-IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl, Button*, void )
+IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl, weld::Button&, void )
 {
     Freeze();
-    VclPtr<ScCondFrmtEntry> pNewEntry = VclPtr<ScConditionFrmtEntry>::Create(this, mpDoc, mpDialogParent, maPos);
-    maEntries.push_back( pNewEntry );
+    maEntries.emplace_back(new ScConditionFrmtEntry(this, mpDoc, mpDialogParent, maPos));
     for(auto& rxEntry : maEntries)
     {
         rxEntry->SetInactive();
     }
     mpDialogParent->InvalidateRefData();
-    pNewEntry->SetActive();
+    maEntries.back()->SetActive();
     mpDialogParent->OnSelectionChange(maEntries.size() - 1, maEntries.size());
     Thaw();
     RecalcAll();
 }
 
-IMPL_LINK_NOARG( ScCondFormatList, RemoveBtnHdl, Button*, void )
+IMPL_LINK_NOARG( ScCondFormatList, RemoveBtnHdl, weld::Button&, void )
 {
     Freeze();
     auto itr = std::find_if(maEntries.begin(), maEntries.end(),
-        [](const VclPtr<ScCondFrmtEntry>& widget) { return widget->IsSelected(); });
+        [](const std::unique_ptr<ScCondFrmtEntry>& widget) { return widget->IsSelected(); });
     if (itr != maEntries.end())
     {
-        itr->disposeAndClear();
         maEntries.erase(itr);
     }
     mpDialogParent->InvalidateRefData();
@@ -416,16 +343,20 @@ IMPL_LINK_NOARG( ScCondFormatList, RemoveBtnHdl, Button*, void )
     RecalcAll();
 }
 
-IMPL_LINK_NOARG(ScCondFormatList, UpBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScCondFormatList, UpBtnHdl, weld::Button&, void)
 {
     Freeze();
     size_t index = 0;
     for (size_t i = 0; i < maEntries.size(); i++)
     {
-        auto widget = maEntries[i];
+        auto& widget = maEntries[i];
         if (widget->IsSelected() && i > 0)
         {
+            int nPos1 = maEntries[i]->get_grid_top_attach();
+            int nPos2 = maEntries[i - 1]->get_grid_top_attach();
             std::swap(maEntries[i], maEntries[i - 1]);
+            maEntries[i]->set_grid_top_attach(nPos1);
+            maEntries[i - 1]->set_grid_top_attach(nPos2);
             index = i - 1;
             break;
         }
@@ -436,19 +367,23 @@ IMPL_LINK_NOARG(ScCondFormatList, UpBtnHdl, Button*, void)
     RecalcAll();
 }
 
-IMPL_LINK_NOARG(ScCondFormatList, DownBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScCondFormatList, DownBtnHdl, weld::Button&, void)
 {
     Freeze();
     size_t index = 0;
     for (size_t i = 0; i < maEntries.size(); i++)
     {
-        auto widget = maEntries[i];
+        auto& widget = maEntries[i];
         if (widget->IsSelected())
         {
             index = i;
             if (i < maEntries.size()-1)
             {
+                int nPos1 = maEntries[i]->get_grid_top_attach();
+                int nPos2 = maEntries[i + 1]->get_grid_top_attach();
                 std::swap(maEntries[i], maEntries[i + 1]);
+                maEntries[i]->set_grid_top_attach(nPos1);
+                maEntries[i + 1]->set_grid_top_attach(nPos2);
                 index = i + 1;
                 break;
             }
@@ -466,13 +401,10 @@ IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry&, rEntry, void )
         return;
 
     Freeze();
-    //A child has focus, but we will hide that, so regrab to whatever new thing gets
-    //shown instead of leaving it stuck in the inaccessible hidden element
-    bool bReGrabFocus = HasChildPathFocus();
     size_t index = 0;
     for(size_t i = 0; i < maEntries.size(); i++)
     {
-        if (maEntries[i] == &rEntry)
+        if (maEntries[i].get() == &rEntry)
         {
             index = i;
         }
@@ -483,37 +415,31 @@ IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry&, rEntry, void )
     rEntry.SetActive();
     Thaw();
     RecalcAll();
-    if (bReGrabFocus)
-        GrabFocus();
-}
-
-IMPL_LINK_NOARG( ScCondFormatList, ScrollHdl, ScrollBar*, void )
-{
-    DoScroll(mpScrollBar->GetDelta());
 }
 
 ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
-    vcl::Window* pParent, ScViewData* pViewData,
+    weld::Window* pParent, ScViewData* pViewData,
     const ScCondFormatDlgItem* pItem)
-        : ScAnyRefDlg(pB, pCW, pParent, "ConditionalFormatDialog",
-                        "modules/scalc/ui/conditionalformatdialog.ui")
+        : ScAnyRefDlgController(pB, pCW, pParent,
+                        "modules/scalc/ui/conditionalformatdialog.ui",
+                        "ConditionalFormatDialog")
     , mpViewData(pViewData)
-    , mpLastEdit(nullptr)
     , mpDlgItem(static_cast<ScCondFormatDlgItem*>(pItem->Clone()))
+    , mpLastEdit(nullptr)
+    , mxBtnOk(m_xBuilder->weld_button("ok"))
+    , mxBtnAdd(m_xBuilder->weld_button("add"))
+    , mxBtnRemove(m_xBuilder->weld_button("delete"))
+    , mxBtnUp(m_xBuilder->weld_button("up"))
+    , mxBtnDown(m_xBuilder->weld_button("down"))
+    , mxBtnCancel(m_xBuilder->weld_button("cancel"))
+    , mxFtRange(m_xBuilder->weld_label("ftassign"))
+    , mxEdRange(new formula::WeldRefEdit(m_xBuilder->weld_entry("edassign")))
+    , mxRbRange(new formula::WeldRefButton(m_xBuilder->weld_button("rbassign")))
+    , mxCondFormList(new ScCondFormatList(this, m_xBuilder->weld_scrolled_window("listwindow"),
+                                          m_xBuilder->weld_container("list")))
 {
-    get(mpBtnOk, "ok");
-    get(mpBtnAdd, "add");
-    get(mpBtnUp, "up");
-    get(mpBtnDown, "down");
-    get(mpBtnRemove, "delete");
-    get(mpBtnCancel, "cancel");
-
-    get(mpFtRange, "ftassign");
-    get(mpEdRange, "edassign");
-    mpEdRange->SetReferences(this, mpFtRange);
-
-    get(mpRbRange, "rbassign");
-    mpRbRange->SetReferences(this, mpEdRange);
+    mxEdRange->SetReferences(this, mxFtRange.get());
+    mxRbRange->SetReferences(this, mxEdRange.get());
 
     ScConditionalFormat* pFormat = nullptr;
     mnKey = mpDlgItem->GetIndex();
@@ -545,58 +471,35 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     }
     maPos = aRange.GetTopLeftCorner();
 
-    get(mpCondFormList, "list");
-    mpCondFormList->init(mpViewData->GetDocument(), this, pFormat, aRange, maPos, mpDlgItem->GetDialogType());
+    mxCondFormList->init(mpViewData->GetDocument(), pFormat, aRange, maPos, mpDlgItem->GetDialogType());
 
-    // tdf#114603: enable setting the background to a different color;
-    // relevant for GTK; see also #i75179#
-    mpEdRange->SetForceControlBackground(true);
-
-    mpBtnOk->SetClickHdl(LINK(this, ScCondFormatDlg, BtnPressedHdl ) );
-    mpBtnAdd->SetClickHdl( LINK( mpCondFormList, ScCondFormatList, AddBtnHdl ) );
-    mpBtnRemove->SetClickHdl( LINK( mpCondFormList, ScCondFormatList, RemoveBtnHdl ) );
-    mpBtnUp->SetClickHdl(LINK(mpCondFormList, ScCondFormatList, UpBtnHdl));
-    mpBtnDown->SetClickHdl(LINK(mpCondFormList, ScCondFormatList, DownBtnHdl));
-    mpBtnCancel->SetClickHdl( LINK(this, ScCondFormatDlg, BtnPressedHdl ) );
-    mpEdRange->SetModifyHdl( LINK( this, ScCondFormatDlg, EdRangeModifyHdl ) );
-    mpEdRange->SetGetFocusHdl( LINK( this, ScCondFormatDlg, RangeGetFocusHdl ) );
+    mxBtnOk->connect_clicked(LINK(this, ScCondFormatDlg, BtnPressedHdl ) );
+    mxBtnAdd->connect_clicked( LINK( mxCondFormList.get(), ScCondFormatList, AddBtnHdl ) );
+    mxBtnRemove->connect_clicked( LINK( mxCondFormList.get(), ScCondFormatList, RemoveBtnHdl ) );
+    mxBtnUp->connect_clicked(LINK(mxCondFormList.get(), ScCondFormatList, UpBtnHdl));
+    mxBtnDown->connect_clicked(LINK(mxCondFormList.get(), ScCondFormatList, DownBtnHdl));
+    mxBtnCancel->connect_clicked( LINK(this, ScCondFormatDlg, BtnPressedHdl ) );
+    mxEdRange->SetModifyHdl( LINK( this, ScCondFormatDlg, EdRangeModifyHdl ) );
+    mxEdRange->SetGetFocusHdl( LINK( this, ScCondFormatDlg, RangeGetFocusHdl ) );
 
     OUString aRangeString;
     aRange.Format(aRangeString, ScRefFlags::VALID, pViewData->GetDocument(),
                     pViewData->GetDocument()->GetAddressConvention());
-    mpEdRange->SetText(aRangeString);
+    mxEdRange->SetText(aRangeString);
 
-    msBaseTitle = GetText();
+    msBaseTitle = m_xDialog->get_title();
     updateTitle();
 }
 
 void ScCondFormatDlg::updateTitle()
 {
-    OUString aTitle = msBaseTitle + " " + mpEdRange->GetText();
+    OUString aTitle = msBaseTitle + " " + mxEdRange->GetText();
 
-    SetText(aTitle);
+    m_xDialog->set_title(aTitle);
 }
 
 ScCondFormatDlg::~ScCondFormatDlg()
 {
-    disposeOnce();
-}
-
-void ScCondFormatDlg::dispose()
-{
-    mpBtnOk.clear();
-    mpBtnAdd.clear();
-    mpBtnRemove.clear();
-    mpBtnUp.clear();
-    mpBtnDown.clear();
-    mpBtnCancel.clear();
-    mpFtRange.clear();
-    mpEdRange.clear();
-    mpRbRange.clear();
-    mpCondFormList.clear();
-    mpLastEdit.clear();
-
-    ScAnyRefDlg::dispose();
 }
 
 void ScCondFormatDlg::SetActive()
@@ -604,14 +507,14 @@ void ScCondFormatDlg::SetActive()
     if(mpLastEdit)
         mpLastEdit->GrabFocus();
     else
-        mpEdRange->GrabFocus();
+        mxEdRange->GrabFocus();
 
     RefInputDone();
 }
 
 void ScCondFormatDlg::RefInputDone( bool bForced )
 {
-    ScAnyRefDlg::RefInputDone(bForced);
+    ScAnyRefDlgController::RefInputDone(bForced);
 
     // ScAnyRefModalDlg::RefInputDone resets the title back
     // to its original state.
@@ -627,39 +530,39 @@ void ScCondFormatDlg::RefInputDone( bool bForced )
 
 bool ScCondFormatDlg::IsTableLocked() const
 {
-    return !mpLastEdit || mpLastEdit == mpEdRange;
+    return !mpLastEdit || mpLastEdit == mxEdRange.get();
 }
 
 bool ScCondFormatDlg::IsRefInputMode() const
 {
-    return mpEdRange->IsEnabled();
+    return mxEdRange->GetWidget()->get_sensitive();
 }
 
 void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
 {
-    formula::RefEdit* pEdit = mpLastEdit;
+    formula::WeldRefEdit* pEdit = mpLastEdit;
     if (!mpLastEdit)
-        pEdit = mpEdRange;
+        pEdit = mxEdRange.get();
 
-    if( pEdit->IsEnabled() )
+    if (pEdit->GetWidget()->get_sensitive())
     {
         if(rRef.aStart != rRef.aEnd)
             RefInputStart(pEdit);
 
         ScRefFlags nFlags;
-        if (mpLastEdit && mpLastEdit != mpEdRange)
+        if (mpLastEdit && mpLastEdit != mxEdRange.get())
             nFlags = ScRefFlags::RANGE_ABS_3D;
         else
             nFlags = ScRefFlags::RANGE_ABS;
 
         OUString aRefStr(rRef.Format(nFlags, mpViewData->GetDocument(),
             ScAddress::Details(mpViewData->GetDocument()->GetAddressConvention(), 0, 0)));
-        if (pEdit != mpEdRange)
+        if (pEdit != mxEdRange.get())
         {
             Selection sel = pEdit->GetSelection();
-            sel.Justify();            // in case of RtL selection
+            sel.Justify();            // in case of RTL selection
             sel.Max() = sel.Min() + aRefStr.getLength();
-            pEdit->ReplaceSelected(aRefStr);
+            pEdit->GetWidget()->replace_selection(aRefStr);
             pEdit->SetSelection(sel); // to replace it again with next drag event
         }
         else
@@ -670,15 +573,15 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
 
 std::unique_ptr<ScConditionalFormat> ScCondFormatDlg::GetConditionalFormat() const
 {
-    OUString aRangeStr = mpEdRange->GetText();
+    OUString aRangeStr = mxEdRange->GetText();
     if(aRangeStr.isEmpty())
         return nullptr;
 
     ScRangeList aRange;
     ScRefFlags nFlags = aRange.Parse(aRangeStr, mpViewData->GetDocument(),
         mpViewData->GetDocument()->GetAddressConvention(), maPos.Tab());
-    mpCondFormList->SetRange(aRange);
-    std::unique_ptr<ScConditionalFormat> pFormat = mpCondFormList->GetConditionalFormat();
+    mxCondFormList->SetRange(aRange);
+    std::unique_ptr<ScConditionalFormat> pFormat = mxCondFormList->GetConditionalFormat();
 
     if((nFlags & ScRefFlags::VALID) && !aRange.empty() && pFormat)
         pFormat->SetRange(aRange);
@@ -695,9 +598,9 @@ void ScCondFormatDlg::InvalidateRefData()
 
 // Close the Conditional Format Dialog
 //
-bool ScCondFormatDlg::Close()
+void ScCondFormatDlg::Close()
 {
-    return DoClose( ScCondFormatDlgWrapper::GetChildWindowId() );
+    DoClose( ScCondFormatDlgWrapper::GetChildWindowId() );
 }
 
 // Occurs when the Conditional Format Dialog the OK button is pressed.
@@ -740,7 +643,7 @@ void ScCondFormatDlg::OkPressed()
         GetBindings().GetDispatcher()->Execute( SID_OPENDLG_CONDFRMT_MANAGER,
                                             SfxCallMode::ASYNCHRON );
     }
-    Close();
+    m_xDialog->response(RET_OK);
 }
 
 // Occurs when the Conditional Format Dialog is cancelled.
@@ -755,24 +658,24 @@ void ScCondFormatDlg::CancelPressed()
         GetBindings().GetDispatcher()->Execute( SID_OPENDLG_CONDFRMT_MANAGER,
                                             SfxCallMode::ASYNCHRON );
     }
-    Close();
+    m_xDialog->response(RET_CANCEL);
 }
 
 void ScCondFormatDlg::OnSelectionChange(size_t nIndex, size_t nSize, bool bSelected)
 {
     if (nSize <= 1 || !bSelected)
     {
-        mpBtnUp->Enable(false);
-        mpBtnDown->Enable(false);
+        mxBtnUp->set_sensitive(false);
+        mxBtnDown->set_sensitive(false);
     }
     else
     {
-        mpBtnUp->Enable(nIndex != 0);
-        mpBtnDown->Enable(nIndex < nSize - 1);
+        mxBtnUp->set_sensitive(nIndex != 0);
+        mxBtnDown->set_sensitive(nIndex < nSize - 1);
     }
 }
 
-IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit&, rEdit, void )
+IMPL_LINK(ScCondFormatDlg, EdRangeModifyHdl, formula::WeldRefEdit&, rEdit, void)
 {
     OUString aRangeStr = rEdit.GetText();
     ScRangeList aRange;
@@ -780,28 +683,28 @@ IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit&, rEdit, void )
         mpViewData->GetDocument()->GetAddressConvention());
     if(nFlags & ScRefFlags::VALID)
     {
-        rEdit.SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
-        mpBtnOk->Enable(true);
+        rEdit.GetWidget()->set_message_type(weld::EntryMessageType::Normal);
+        mxBtnOk->set_sensitive(true);
     }
     else
     {
-        rEdit.SetControlBackground(COL_LIGHTRED);
-        mpBtnOk->Enable(false);
+        rEdit.GetWidget()->set_message_type(weld::EntryMessageType::Error);
+        mxBtnOk->set_sensitive(false);
     }
 
     updateTitle();
 }
 
-IMPL_LINK( ScCondFormatDlg, RangeGetFocusHdl, Control&, rControl, void )
+IMPL_LINK(ScCondFormatDlg, RangeGetFocusHdl, formula::WeldRefEdit&, rControl, void)
 {
-    mpLastEdit = static_cast<formula::RefEdit*>(&rControl);
+    mpLastEdit = &rControl;
 }
 
-IMPL_LINK( ScCondFormatDlg, BtnPressedHdl, Button*, pBtn, void)
+IMPL_LINK( ScCondFormatDlg, BtnPressedHdl, weld::Button&, rBtn, void)
 {
-    if (pBtn == mpBtnOk)
+    if (&rBtn == mxBtnOk.get())
         OkPressed();
-    else if (pBtn == mpBtnCancel)
+    else if (&rBtn == mxBtnCancel.get())
         CancelPressed();
 }
 
