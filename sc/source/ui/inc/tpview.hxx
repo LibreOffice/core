@@ -55,6 +55,7 @@ class ScTpContentOptions : public SfxTabPage
     VclPtr<CheckBox>        pVScrollCB;
     VclPtr<CheckBox>        pTblRegCB;
     VclPtr<CheckBox>        pOutlineCB;
+    VclPtr<CheckBox>        pSummaryCB;
 
     std::unique_ptr<ScViewOptions> pLocalOptions;
 
