@@ -10,14 +10,64 @@
 #include <sal/config.h>
 
 #include <cstring>
+#include <memory>
 #include <vector>
 
 #include <COMOpenDocuments.hpp>
 #include <spsuppServ.hpp>
 #include <stdio.h>
+#include "res/resource.h"
 
 namespace
 {
+
+INT_PTR CALLBACK EditOrRODlgproc(HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+    switch (Msg)
+    {
+    case WM_INITDIALOG:
+    {
+        if (const wchar_t* sFilePath = reinterpret_cast<const wchar_t*>(lParam))
+        {
+            static const wchar_t msgTemplate[]
+                = L"You are opening document <%s>.\n\nDo you want to open it to view or to edit?";
+            auto buf = std::make_unique<wchar_t[]>(sizeof(msgTemplate) / sizeof(*msgTemplate)
+                                                   + wcslen(sFilePath));
+            swprintf(buf.get(), msgTemplate, sFilePath);
+            SetWindowTextW(GetDlgItem(hDlg, IDC_EDIT_OR_RO), buf.get());
+        }
+        return TRUE; // set default focus
+    }
+    case WM_COMMAND:
+    {
+        WORD nId = LOWORD(wParam);
+        switch (nId)
+        {
+        case IDCANCEL:
+        case ID_RO:
+        case ID_EDIT:
+            EndDialog(hDlg, nId);
+            return TRUE;
+        }
+        break;
+    }
+    }
+    return FALSE;
+}
+
+enum class Answer { Cancel, ReadOnly, Edit };
+
+Answer AskIfUserWantsToEdit(const wchar_t* sFilePath)
+{
+    Answer res = Answer::Cancel;
+    INT_PTR nResult = DialogBoxParamW(GetHModule(), MAKEINTRESOURCEW(IDD_EDIT_OR_RO), nullptr,
+                                      EditOrRODlgproc, reinterpret_cast<LPARAM>(sFilePath));
+    if (nResult == ID_RO)
+        res = Answer::ReadOnly;
+    else if (nResult == ID_EDIT)
+        res = Answer::Edit;
+    return res;
+}
 
 // Returns S_OK if successful
 HRESULT LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath)
@@ -277,14 +327,24 @@ STDMETHODIMP COMOpenDocuments::PromptedOnLastOpen(
 // 3 When the document is not checked out and the document library requires that documents be checked out to be edited, the user can only read the document, or check it out and edit it
 // 4 When the current user has checked it out, the user can only edit the local copy of the document
 STDMETHODIMP COMOpenDocuments::ViewDocument3(
-    IDispatch* /*pdisp*/,      // An Object that represents the window from which the ViewDocument3 method is being activated
+    IDispatch* pdisp,          // An Object that represents the window from which the ViewDocument3 method is being activated
     BSTR bstrDocumentLocation, // A string that contains the URL of the document to open for reading
-    int /*OpenType*/,          // A Long integer that specifies the rights for opening the document
-    VARIANT /*varProgID*/,     // An optional string that contains the ProgID of the application with which to open the document. If this argument is omitted, the default viewer for the document is used
+    int OpenType,              // A Long integer that specifies the rights for opening the document
+    VARIANT varProgID,         // An optional string that contains the ProgID of the application with which to open the document. If this argument is omitted, the default viewer for the document is used
     VARIANT_BOOL *pbResult)    // true if the document was successfully opened; otherwise false
 {
     if (!pbResult)
         return E_POINTER;
+    if (OpenType == 0)
+    {
+        switch (AskIfUserWantsToEdit(bstrDocumentLocation))
+        {
+        case Answer::Cancel:
+            return S_FALSE;
+        case Answer::Edit:
+            return EditDocument3(pdisp, bstrDocumentLocation, VARIANT_FALSE, varProgID, pbResult);
+        }
+    }
     // TODO: resolve the program from varProgID (nullptr -> default?)
     HRESULT hr = LOStart(L"--view", bstrDocumentLocation);
     *pbResult = toVBool(SUCCEEDED(hr));
@@ -345,7 +405,7 @@ STDMETHODIMP COMOpenDocuments::EditDocument3(
     BSTR bstrDocumentLocation,      // A string that contains the URL of the document to open for editing
     VARIANT_BOOL /*fUseLocalCopy*/, // true to use a local copy; otherwise false
     VARIANT /*varProgID*/,          // An optional string that contains the ProgID of the application with which to edit the document. If this argument is omitted, the default editor for the document is used
-    VARIANT_BOOL *pbResult)     // true if the document was successfully opened; otherwise false
+    VARIANT_BOOL *pbResult)         // true if the document was successfully opened; otherwise false
 {
     if (!pbResult)
         return E_POINTER;
