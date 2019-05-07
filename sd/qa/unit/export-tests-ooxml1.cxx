@@ -103,6 +103,7 @@ public:
     void testTdf112633();
     void testCustomXml();
     void testTdf94238();
+    void testPictureTransparency();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -134,6 +135,7 @@ public:
     CPPUNIT_TEST(testTdf112633);
     CPPUNIT_TEST(testCustomXml);
     CPPUNIT_TEST(testTdf94238);
+    CPPUNIT_TEST(testPictureTransparency);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -890,6 +892,30 @@ void SdOOXMLExportTest1::testTdf94238()
     // was incorrect.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aGradient.StartColor);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x8B8B8B), aGradient.EndColor);
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest1::testPictureTransparency()
+{
+    // Load document and export it to a temporary file.
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/image_transparency.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDoc.is());
+
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPage.is());
+
+    uno::Reference<beans::XPropertySet> xGraphicShape(getShape(0, xPage));
+    CPPUNIT_ASSERT(xGraphicShape.is());
+
+    sal_Int16 nTransparency = 0;
+    CPPUNIT_ASSERT(xGraphicShape->getPropertyValue("Transparency") >>= nTransparency);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(51), nTransparency);
 
     xDocShRef->DoClose();
 }

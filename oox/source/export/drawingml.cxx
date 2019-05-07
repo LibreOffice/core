@@ -1166,11 +1166,11 @@ OUString DrawingML::WriteBlip( const Reference< XPropertySet >& rXPropSet, const
     }
     sal_Int16 nBright = 0;
     sal_Int32 nContrast = 0;
-    sal_Int32 nTransparence = 0;
+    sal_Int16 nTransparence = 0;
 
     GET( nBright, AdjustLuminance );
     GET( nContrast, AdjustContrast );
-    GET( nTransparence, FillTransparence );
+    GET( nTransparence, Transparency );
 
     mpFS->startElementNS( XML_a, XML_blip,
             FSNS( XML_r, XML_embed), sRelId.toUtf8().getStr(),
