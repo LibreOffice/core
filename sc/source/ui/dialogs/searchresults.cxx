@@ -26,9 +26,10 @@ SearchResultsDlg::SearchResultsDlg(SfxBindings* _pBindings, weld::Window* pParen
     , mpDoc(nullptr)
     , mxList(m_xBuilder->weld_tree_view("results"))
     , mxSearchResults(m_xBuilder->weld_label("lbSearchResults"))
+    , mxShowDialog(m_xBuilder->weld_check_button("cbShow"))
 {
     mxList->set_size_request(mxList->get_approximate_digit_width() * 50, mxList->get_height_rows(15));
-
+    mxShowDialog->connect_toggled(LINK(this, SearchResultsDlg, OnShowToggled));
     std::vector<int> aWidths;
     aWidths.push_back(mxList->get_approximate_digit_width() * 10);
     aWidths.push_back(mxList->get_approximate_digit_width() * 10);
@@ -185,6 +186,14 @@ IMPL_LINK_NOARG( SearchResultsDlg, ListSelectHdl, weld::TreeView&, void )
     pScViewShell->SetTabNo(nTab);
     pScViewShell->SetCursor(aPos.Col(), aPos.Row());
     pScViewShell->AlignToCursor(aPos.Col(), aPos.Row(), SC_FOLLOW_JUMP);
+}
+
+IMPL_STATIC_LINK( SearchResultsDlg, OnShowToggled, weld::ToggleButton&, rButton, void )
+{
+    ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
+    ScViewOptions aViewOpt( pScViewShell->GetViewData().GetOptions() );
+    aViewOpt.SetOption( VOPT_SUMMARY, rButton.get_active() );
+    pScViewShell->GetViewData().SetOptions( aViewOpt );
 }
 
 SearchResultsDlgWrapper::SearchResultsDlgWrapper(
