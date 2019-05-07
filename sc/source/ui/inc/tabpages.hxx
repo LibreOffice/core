@@ -22,6 +22,18 @@
 
 #include <sfx2/tabdlg.hxx>
 
+struct TriStateEnabled
+{
+    TriState eState;
+    bool bTriStateEnabled;
+    TriStateEnabled()
+        : eState(TRISTATE_INDET)
+        , bTriStateEnabled(true)
+    {
+    }
+    void ButtonToggled(weld::ToggleButton& rToggle);
+};
+
 class ScTabPageProtection : public SfxTabPage
 {
     friend class VclPtr<ScTabPageProtection>;
@@ -50,14 +62,23 @@ private:
     bool            bHideCell;
     bool            bHidePrint;
 
+    TriStateEnabled aHideCellState;
+    TriStateEnabled aProtectState;
+    TriStateEnabled aHideFormulaState;
+    TriStateEnabled aHidePrintState;
+
     std::unique_ptr<weld::CheckButton> m_xBtnHideCell;
     std::unique_ptr<weld::CheckButton> m_xBtnProtect;
     std::unique_ptr<weld::CheckButton> m_xBtnHideFormula;
     std::unique_ptr<weld::CheckButton> m_xBtnHidePrint;
 
     // Handler:
-    DECL_LINK(ButtonClickHdl, weld::ToggleButton&, void);
-    void        UpdateButtons();
+    DECL_LINK(ProtectClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(HideCellClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(HideFormulaClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(HidePrintClickHdl, weld::ToggleButton&, void);
+    void ButtonClick(weld::ToggleButton& rBox);
+    void UpdateButtons();
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TABPAGES_HXX
