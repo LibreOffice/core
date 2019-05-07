@@ -553,6 +553,13 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             DocumentToGraphicRenderer aRenderer(xSourceDoc, false);
 
+            // Get the page margins of the original doc
+            PageMargins aPageMargins = {-1, -1, -1, -1};
+            if (aRenderer.isWriter())
+                aPageMargins = SfxRedactionHelper::getPageMarginsForWriter(xModel);
+            else if (aRenderer.isCalc())
+                aPageMargins = SfxRedactionHelper::getPageMarginsForCalc(xModel);
+
             sal_Int32 nPages = aRenderer.getPageCount();
             std::vector< GDIMetaFile > aMetaFiles;
             std::vector< ::Size > aPageSizes;
@@ -566,7 +573,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL("private:factory/sdraw", "_default", 0, {});
 
             // Add the doc pages to the new draw document
-            SfxRedactionHelper::addPagesToDraw(xComponent, nPages, aMetaFiles, aPageSizes);
+            SfxRedactionHelper::addPagesToDraw(xComponent, nPages, aMetaFiles, aPageSizes, aPageMargins);
 
             // Show the Redaction toolbar
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();

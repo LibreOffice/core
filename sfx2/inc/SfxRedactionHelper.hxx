@@ -12,6 +12,8 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -28,6 +30,15 @@ class SfxStringItem;
 class GDIMetaFile;
 class DocumentToGraphicRenderer;
 class SfxViewFrame;
+
+struct PageMargins
+{
+    // Page margins in mm100th
+    sal_Int32 nTop;
+    sal_Int32 nBottom;
+    sal_Int32 nLeft;
+    sal_Int32 nRight;
+};
 
 /*
  * Mostly a bunch of static methods to handle the redaction functionality at
@@ -56,13 +67,26 @@ public:
      * */
     static void addPagesToDraw(uno::Reference<XComponent>& xComponent, const sal_Int32& nPages,
                                const std::vector<GDIMetaFile>& aMetaFiles,
-                               const std::vector<::Size>& aPageSizes);
+                               const std::vector<::Size>& aPageSizes,
+                               const PageMargins& aPageMargins);
     /*
      * Makes the Redaction toolbar visible to the user.
      * Meant to be called after converting a document to a Draw doc
      * for redaction purposes.
      * */
     static void showRedactionToolbar(SfxViewFrame* pViewFrame);
+
+    /*
+     * Used to get the page margins from the original/source Writer document. Then we apply these values to the
+     * pages inserted into Draw for redaction.
+     * */
+    static PageMargins getPageMarginsForWriter(css::uno::Reference<css::frame::XModel>& xModel);
+
+    /*
+     * Used to get the page margins from the original/source Calc document. Then we apply these values to the
+     * pages inserted into Draw for redaction.
+     * */
+    static PageMargins getPageMarginsForCalc(css::uno::Reference<css::frame::XModel>& xModel);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_SFXREDACTIONHELPER_HXX

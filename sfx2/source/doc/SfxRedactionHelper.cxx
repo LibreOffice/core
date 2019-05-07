@@ -11,9 +11,16 @@
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+
+// For page margin related methods
+#include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/text/XTextViewCursor.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/sheet/XSpreadsheetView.hpp>
 
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -65,6 +72,12 @@ OUString SfxRedactionHelper::getStringParam(const SfxRequest& rReq, const sal_uI
 
 namespace
 {
+/*
+ * Roundtrip the gdimetafile to and from WMF
+ * to get rid of the position and size irregularities
+ * We better check the conversion method to see what it
+ * actually does to correct these issues, and do it ourselves.
+ * */
 void fixMetaFile(GDIMetaFile& tmpMtf)
 {
     SvMemoryStream aDestStrm(65535, 65535);
@@ -74,6 +87,22 @@ void fixMetaFile(GDIMetaFile& tmpMtf)
     tmpMtf.Clear();
 
     ReadWindowMetafile(aDestStrm, tmpMtf);
+}
+
+/*
+ * Sets page margins for a Draw page. Negative values are considered erronous.
+ * */
+void setPageMargins(uno::Reference<beans::XPropertySet>& xPageProperySet,
+                    const PageMargins& aPageMargins)
+{
+    if (aPageMargins.nTop < 0 || aPageMargins.nBottom < 0 || aPageMargins.nLeft < 0
+        || aPageMargins.nRight < 0)
+        return;
+
+    xPageProperySet->setPropertyValue("BorderTop", css::uno::makeAny(aPageMargins.nTop));
+    xPageProperySet->setPropertyValue("BorderBottom", css::uno::makeAny(aPageMargins.nBottom));
+    xPageProperySet->setPropertyValue("BorderLeft", css::uno::makeAny(aPageMargins.nLeft));
+    xPageProperySet->setPropertyValue("BorderRight", css::uno::makeAny(aPageMargins.nRight));
 }
 }
 
@@ -114,7 +143,8 @@ void SfxRedactionHelper::getPageMetaFilesFromDoc(std::vector<GDIMetaFile>& aMeta
 void SfxRedactionHelper::addPagesToDraw(uno::Reference<XComponent>& xComponent,
                                         const sal_Int32& nPages,
                                         const std::vector<GDIMetaFile>& aMetaFiles,
-                                        const std::vector<::Size>& aPageSizes)
+                                        const std::vector<::Size>& aPageSizes,
+                                        const PageMargins& aPageMargins)
 {
     // Access the draw pages
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
@@ -133,10 +163,12 @@ void SfxRedactionHelper::addPagesToDraw(uno::Reference<XComponent>& xComponent,
         uno::Reference<graphic::XGraphic> xGraph = aGraphic.GetXGraphic();
         uno::Reference<drawing::XDrawPage> xPage = xDrawPages->insertNewByIndex(nPage);
 
-        // Set page size
+        // Set page size & margins
         uno::Reference<beans::XPropertySet> xPageProperySet(xPage, uno::UNO_QUERY);
         xPageProperySet->setPropertyValue("Height", css::uno::makeAny(nPageHeight));
         xPageProperySet->setPropertyValue("Width", css::uno::makeAny(nPageWidth));
+
+        setPageMargins(xPageProperySet, aPageMargins);
 
         // Create and insert the shape
         uno::Reference<drawing::XShape> xShape(
@@ -185,6 +217,120 @@ void SfxRedactionHelper::showRedactionToolbar(SfxViewFrame* pViewFrame)
             SAL_WARN("sfx.doc", "Exception while trying to show the Redaction Toolbar!");
         }
     }
+}
+
+PageMargins
+SfxRedactionHelper::getPageMarginsForWriter(css::uno::Reference<css::frame::XModel>& xModel)
+{
+    PageMargins aPageMargins = { -1, -1, -1, -1 };
+
+    Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(),
+                                                                     UNO_QUERY);
+    if (!xTextViewCursorSupplier.is())
+    {
+        SAL_WARN("sfx.doc", "Ref to xTextViewCursorSupplier is null in setPageMargins().");
+        return aPageMargins;
+    }
+
+    Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), UNO_QUERY);
+
+    uno::Reference<beans::XPropertySet> xPageProperySet(xCursor, UNO_QUERY);
+    OUString sPageStyleName;
+    Any aValue = xPageProperySet->getPropertyValue("PageStyleName");
+    aValue >>= sPageStyleName;
+
+    Reference<css::style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, UNO_QUERY);
+    if (!xStyleFamiliesSupplier.is())
+    {
+        SAL_WARN("sfx.doc", "Ref to xStyleFamiliesSupplier is null in setPageMargins().");
+        return aPageMargins;
+    }
+    uno::Reference<container::XNameAccess> xStyleFamilies(
+        xStyleFamiliesSupplier->getStyleFamilies(), UNO_QUERY);
+
+    if (!xStyleFamilies.is())
+        return aPageMargins;
+
+    uno::Reference<container::XNameAccess> xPageStyles(xStyleFamilies->getByName("PageStyles"),
+                                                       UNO_QUERY);
+
+    if (!xPageStyles.is())
+        return aPageMargins;
+
+    uno::Reference<css::style::XStyle> xPageStyle(xPageStyles->getByName(sPageStyleName),
+                                                  UNO_QUERY);
+
+    if (!xPageStyle.is())
+        return aPageMargins;
+
+    uno::Reference<beans::XPropertySet> xPageProperties(xPageStyle, uno::UNO_QUERY);
+
+    if (!xPageProperties.is())
+        return aPageMargins;
+
+    xPageProperties->getPropertyValue("LeftMargin") >>= aPageMargins.nLeft;
+    xPageProperties->getPropertyValue("RightMargin") >>= aPageMargins.nRight;
+    xPageProperties->getPropertyValue("TopMargin") >>= aPageMargins.nTop;
+    xPageProperties->getPropertyValue("BottomMargin") >>= aPageMargins.nBottom;
+
+    return aPageMargins;
+}
+
+PageMargins
+SfxRedactionHelper::getPageMarginsForCalc(css::uno::Reference<css::frame::XModel>& xModel)
+{
+    PageMargins aPageMargins = { -1, -1, -1, -1 };
+    OUString sPageStyleName("Default");
+
+    css::uno::Reference<css::sheet::XSpreadsheetView> xSpreadsheetView(
+        xModel->getCurrentController(), UNO_QUERY);
+
+    if (!xSpreadsheetView.is())
+    {
+        SAL_WARN("sfx.doc", "Ref to xSpreadsheetView is null in getPageMarginsForCalc().");
+        return aPageMargins;
+    }
+
+    uno::Reference<beans::XPropertySet> xSheetProperties(xSpreadsheetView->getActiveSheet(),
+                                                         UNO_QUERY);
+
+    xSheetProperties->getPropertyValue("PageStyle") >>= sPageStyleName;
+
+    Reference<css::style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, UNO_QUERY);
+    if (!xStyleFamiliesSupplier.is())
+    {
+        SAL_WARN("sfx.doc", "Ref to xStyleFamiliesSupplier is null in getPageMarginsForCalc().");
+        return aPageMargins;
+    }
+    uno::Reference<container::XNameAccess> xStyleFamilies(
+        xStyleFamiliesSupplier->getStyleFamilies(), UNO_QUERY);
+
+    if (!xStyleFamilies.is())
+        return aPageMargins;
+
+    uno::Reference<container::XNameAccess> xPageStyles(xStyleFamilies->getByName("PageStyles"),
+                                                       UNO_QUERY);
+
+    if (!xPageStyles.is())
+        return aPageMargins;
+
+    uno::Reference<css::style::XStyle> xPageStyle(xPageStyles->getByName(sPageStyleName),
+                                                  UNO_QUERY);
+
+    if (!xPageStyle.is())
+        return aPageMargins;
+
+    uno::Reference<beans::XPropertySet> xPageProperties(xPageStyle, uno::UNO_QUERY);
+
+    if (!xPageProperties.is())
+        return aPageMargins;
+
+    xPageProperties->getPropertyValue("LeftMargin") >>= aPageMargins.nLeft;
+    xPageProperties->getPropertyValue("RightMargin") >>= aPageMargins.nRight;
+    xPageProperties->getPropertyValue("TopMargin") >>= aPageMargins.nTop;
+    xPageProperties->getPropertyValue("BottomMargin") >>= aPageMargins.nBottom;
+
+    return aPageMargins;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
