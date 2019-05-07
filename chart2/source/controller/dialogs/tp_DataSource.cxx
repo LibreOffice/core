@@ -296,7 +296,7 @@ bool DataSourceTabPage::isRangeFieldContentValid(weld::Entry& rEdit )
     OUString aRange(rEdit.get_text());
     bool bIsValid = aRange.isEmpty() ||
         m_rDialogModel.getRangeSelectionHelper()->verifyCellRange(aRange);
-    rEdit.set_error(!bIsValid);
+    rEdit.set_message_type(bIsValid ? weld::EntryMessageType::Normal : weld::EntryMessageType::Error);
     return bIsValid;
 }
 

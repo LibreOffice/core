@@ -232,6 +232,9 @@ public:
 
     virtual VclPtr<VirtualDevice> create_virtual_device() const = 0;
 
+    //make this widget look like a page in a notebook
+    virtual void set_stack_background() = 0;
+
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() = 0;
 
     virtual ~Widget() {}
@@ -448,6 +451,13 @@ struct VCL_DLLPUBLIC ComboBoxEntry
     }
 };
 
+enum class EntryMessageType
+{
+    Normal,
+    Warning,
+    Error,
+};
+
 class VCL_DLLPUBLIC ComboBox : virtual public Container
 {
 private:
@@ -520,7 +530,7 @@ public:
 
     //entry related
     virtual bool has_entry() const = 0;
-    virtual void set_entry_error(bool bError) = 0;
+    virtual void set_entry_message_type(EntryMessageType eType) = 0;
     virtual void set_entry_text(const OUString& rStr) = 0;
     virtual void set_entry_width_chars(int nChars) = 0;
     virtual void set_entry_max_length(int nChars) = 0;
@@ -1036,7 +1046,7 @@ public:
     virtual int get_position() const = 0;
     virtual void set_editable(bool bEditable) = 0;
     virtual bool get_editable() const = 0;
-    virtual void set_error(bool bShowError) = 0;
+    virtual void set_message_type(EntryMessageType eType) = 0;
 
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont
     virtual void set_font(const vcl::Font& rFont) = 0;
@@ -1250,7 +1260,10 @@ public:
 
     //entry related
     virtual bool has_entry() const override { return true; }
-    virtual void set_entry_error(bool bError) override { m_xEntry->set_error(bError); }
+    virtual void set_entry_message_type(EntryMessageType eType) override
+    {
+        m_xEntry->set_message_type(eType);
+    }
     virtual void set_entry_text(const OUString& rStr) override { m_xEntry->set_text(rStr); }
     virtual void set_entry_width_chars(int nChars) override { m_xEntry->set_width_chars(nChars); }
     virtual void set_entry_max_length(int nChars) override { m_xEntry->set_max_length(nChars); }
@@ -1502,7 +1515,7 @@ public:
     virtual void set_label(const OUString& rText) = 0;
     virtual OUString get_label() const = 0;
     virtual void set_mnemonic_widget(Widget* pTarget) = 0;
-    virtual void set_error(bool bShowError) = 0;
+    virtual void set_message_type(EntryMessageType eType) = 0;
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont
     virtual void set_font(const vcl::Font& rFont) = 0;
 };

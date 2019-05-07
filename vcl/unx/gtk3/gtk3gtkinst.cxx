@@ -1254,6 +1254,7 @@ class GtkInstanceWidget : public virtual weld::Widget
 {
 protected:
     GtkWidget* m_pWidget;
+    GtkWidget* m_pMouseEventBox;
     GtkInstanceBuilder* m_pBuilder;
 
     DECL_LINK(async_signal_focus_in, void*, void);
@@ -1298,10 +1299,69 @@ protected:
         m_aFocusOutHdl.Call(*this);
     }
 
+    void ensureEventWidget()
+    {
+        // not every widget has a GdkWindow and can get any event, so if we
+        // want an event it doesn't have, insert a GtkEventBox so we can get
+        // those
+        if (!m_pMouseEventBox)
+        {
+            if (gtk_widget_get_has_window(m_pWidget))
+                m_pMouseEventBox = m_pWidget;
+            else
+            {
+                // remove the widget and replace it with an eventbox and put the old
+                // widget into it
+                GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+
+                g_object_ref(m_pWidget);
+
+                gint nTopAttach(0), nLeftAttach(0), nHeight(1), nWidth(1);
+                if (GTK_IS_GRID(pParent))
+                {
+                    gtk_container_child_get(GTK_CONTAINER(pParent), m_pWidget,
+                            "left-attach", &nTopAttach,
+                            "top-attach", &nLeftAttach,
+                            "width", &nWidth,
+                            "height", &nHeight,
+                            nullptr);
+                }
+
+                gtk_container_remove(GTK_CONTAINER(pParent), m_pWidget);
+
+                m_pMouseEventBox = gtk_event_box_new();
+                gtk_event_box_set_above_child(GTK_EVENT_BOX(m_pMouseEventBox), false);
+                gtk_event_box_set_visible_window(GTK_EVENT_BOX(m_pMouseEventBox), false);
+                gtk_widget_show(m_pMouseEventBox);
+
+                gtk_container_add(GTK_CONTAINER(pParent), m_pMouseEventBox);
+
+                if (GTK_IS_GRID(pParent))
+                {
+                    gtk_container_child_set(GTK_CONTAINER(pParent), m_pMouseEventBox,
+                            "left-attach", nTopAttach,
+                            "top-attach", nLeftAttach,
+                            "width", nWidth,
+                            "height", nHeight,
+                            nullptr);
+                }
+
+                gtk_container_add(GTK_CONTAINER(m_pMouseEventBox), m_pWidget);
+                g_object_unref(m_pWidget);
+
+                gtk_widget_set_hexpand(m_pMouseEventBox, gtk_widget_get_hexpand(m_pWidget));
+                gtk_widget_set_vexpand(m_pMouseEventBox, gtk_widget_get_vexpand(m_pWidget));
+            }
+        }
+    }
+
     void ensureButtonPressSignal()
     {
         if (!m_nButtonPressSignalId)
-            m_nButtonPressSignalId = g_signal_connect(m_pWidget, "button-press-event", G_CALLBACK(signalButton), this);
+        {
+            ensureEventWidget();
+            m_nButtonPressSignalId = g_signal_connect(m_pMouseEventBox, "button-press-event", G_CALLBACK(signalButton), this);
+        }
     }
 
     static gboolean signalPopupMenu(GtkWidget* pWidget, gpointer widget)
@@ -1515,6 +1575,7 @@ private:
 public:
     GtkInstanceWidget(GtkWidget* pWidget, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : m_pWidget(pWidget)
+        , m_pMouseEventBox(nullptr)
         , m_pBuilder(pBuilder)
         , m_bTakeOwnership(bTakeOwnership)
         , m_bFrozen(false)
@@ -1556,13 +1617,15 @@ public:
 
     virtual void connect_mouse_move(const Link<const MouseEvent&, bool>& rLink) override
     {
-        m_nMotionSignalId = g_signal_connect(m_pWidget, "motion-notify-event", G_CALLBACK(signalMotion), this);
+        ensureEventWidget();
+        m_nMotionSignalId = g_signal_connect(m_pMouseEventBox, "motion-notify-event", G_CALLBACK(signalMotion), this);
         weld::Widget::connect_mouse_move(rLink);
     }
 
     virtual void connect_mouse_release(const Link<const MouseEvent&, bool>& rLink) override
     {
-        m_nButtonReleaseSignalId = g_signal_connect(m_pWidget, "button-release-event", G_CALLBACK(signalButton), this);
+        ensureEventWidget();
+        m_nButtonReleaseSignalId = g_signal_connect(m_pMouseEventBox, "button-release-event", G_CALLBACK(signalButton), this);
         weld::Widget::connect_mouse_release(rLink);
     }
 
@@ -1993,6 +2056,17 @@ public:
         return m_xDropTarget.get();
     }
 
+    virtual void set_stack_background() override
+    {
+        GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(GTK_WIDGET(m_pWidget));
+        GtkCssProvider *pProvider = gtk_css_provider_new();
+        OUString aBuffer = "* { background-color: #" + Application::GetSettings().GetStyleSettings().GetWindowColor().AsRGBHexString() + "; }";
+        OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
+        gtk_css_provider_load_from_data(pProvider, aResult.getStr(), aResult.getLength(), nullptr);
+        gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(pProvider),
+                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+
     virtual ~GtkInstanceWidget() override
     {
         if (m_nDragMotionSignalId)
@@ -2008,11 +2082,11 @@ public:
         if (m_nKeyReleaseSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nKeyReleaseSignalId);
         if (m_nButtonPressSignalId)
-            g_signal_handler_disconnect(m_pWidget, m_nButtonPressSignalId);
+            g_signal_handler_disconnect(m_pMouseEventBox, m_nButtonPressSignalId);
         if (m_nMotionSignalId)
-            g_signal_handler_disconnect(m_pWidget, m_nMotionSignalId);
+            g_signal_handler_disconnect(m_pMouseEventBox, m_nMotionSignalId);
         if (m_nButtonReleaseSignalId)
-            g_signal_handler_disconnect(m_pWidget, m_nButtonReleaseSignalId);
+            g_signal_handler_disconnect(m_pMouseEventBox, m_nButtonReleaseSignalId);
         if (m_nFocusInSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nFocusInSignalId);
         if (m_nMnemonicActivateSignalId)
@@ -2021,6 +2095,21 @@ public:
             g_signal_handler_disconnect(m_pWidget, m_nFocusOutSignalId);
         if (m_nSizeAllocateSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nSizeAllocateSignalId);
+
+        if (m_pMouseEventBox && m_pMouseEventBox != m_pWidget)
+        {
+            // put things back they way we found them
+            GtkWidget* pParent = gtk_widget_get_parent(m_pMouseEventBox);
+
+            g_object_ref(m_pWidget);
+            gtk_container_remove(GTK_CONTAINER(m_pMouseEventBox), m_pWidget);
+
+            gtk_widget_destroy(m_pMouseEventBox);
+
+            gtk_container_add(GTK_CONTAINER(pParent), m_pWidget);
+            g_object_unref(m_pWidget);
+        }
+
         if (m_bTakeOwnership)
             gtk_widget_destroy(m_pWidget);
     }
@@ -5564,6 +5653,19 @@ namespace
     }
 }
 
+namespace
+{
+    void set_entry_message_type(GtkEntry* pEntry, weld::EntryMessageType eType)
+    {
+        if (eType == weld::EntryMessageType::Error)
+            gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, "dialog-error");
+        else if (eType == weld::EntryMessageType::Warning)
+            gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, "dialog-warning");
+        else
+            gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, nullptr);
+    }
+}
+
 class GtkInstanceEntry : public GtkInstanceWidget, public virtual weld::Entry
 {
 private:
@@ -5716,12 +5818,9 @@ public:
         return gtk_editable_get_editable(GTK_EDITABLE(m_pEntry));
     }
 
-    virtual void set_error(bool bError) override
+    virtual void set_message_type(weld::EntryMessageType eType) override
     {
-        if (bError)
-            gtk_entry_set_icon_from_icon_name(m_pEntry, GTK_ENTRY_ICON_SECONDARY, "dialog-error");
-        else
-            gtk_entry_set_icon_from_icon_name(m_pEntry, GTK_ENTRY_ICON_SECONDARY, nullptr);
+        ::set_entry_message_type(m_pEntry, eType);
     }
 
     virtual void disable_notify_events() override
@@ -7917,6 +8016,19 @@ class GtkInstanceLabel : public GtkInstanceWidget, public virtual weld::Label
 {
 private:
     GtkLabel* m_pLabel;
+
+    void set_text_color(const Color& rColor)
+    {
+        guint16 nRed = rColor.GetRed() << 8;
+        guint16 nGreen = rColor.GetRed() << 8;
+        guint16 nBlue = rColor.GetBlue() << 8;
+
+        PangoAttrList* pAttrs = pango_attr_list_new();
+        pango_attr_list_insert(pAttrs, pango_attr_background_new(nRed, nGreen, nBlue));
+        gtk_label_set_attributes(m_pLabel, pAttrs);
+        pango_attr_list_unref(pAttrs);
+    }
+
 public:
     GtkInstanceLabel(GtkLabel* pLabel, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pLabel), pBuilder, bTakeOwnership)
@@ -7941,21 +8053,12 @@ public:
         gtk_label_set_mnemonic_widget(m_pLabel, pTargetWidget ? pTargetWidget->getWidget() : nullptr);
     }
 
-    virtual void set_error(bool bShowError) override
+    virtual void set_message_type(weld::EntryMessageType eType) override
     {
-        if (bShowError)
-        {
-            Color aColor(Application::GetSettings().GetStyleSettings().GetHighlightColor());
-
-            guint16 nRed = aColor.GetRed() << 8;
-            guint16 nGreen = aColor.GetRed() << 8;
-            guint16 nBlue = aColor.GetBlue() << 8;
-
-            PangoAttrList* pAttrs = pango_attr_list_new();
-            pango_attr_list_insert(pAttrs, pango_attr_background_new(nRed, nGreen, nBlue));
-            gtk_label_set_attributes(m_pLabel, pAttrs);
-            pango_attr_list_unref(pAttrs);
-        }
+        if (eType == weld::EntryMessageType::Error)
+            set_text_color(Application::GetSettings().GetStyleSettings().GetHighlightColor());
+        else if (eType == weld::EntryMessageType::Warning)
+            set_text_color(COL_YELLOW);
         else
             gtk_label_set_attributes(m_pLabel, nullptr);
     }
@@ -9032,15 +9135,12 @@ public:
         return gtk_combo_box_get_has_entry(m_pComboBox);
     }
 
-    virtual void set_entry_error(bool bError) override
+    virtual void set_entry_message_type(weld::EntryMessageType eType) override
     {
         GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBox));
         assert(GTK_IS_ENTRY(pChild));
         GtkEntry* pEntry = GTK_ENTRY(pChild);
-        if (bError)
-            gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, "dialog-error");
-        else
-            gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, nullptr);
+        ::set_entry_message_type(pEntry, eType);
     }
 
     virtual void set_entry_text(const OUString& rText) override

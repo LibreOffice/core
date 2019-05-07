@@ -31,83 +31,82 @@ class ScViewData;
 
 class ScCondFormatDlg;
 
-class ScCondFormatList : public Control
+class ScCondFormatList
 {
 private:
-    typedef std::vector<VclPtr<ScCondFrmtEntry>> EntryContainer;
+    std::unique_ptr<weld::ScrolledWindow> mxScrollWindow;
+    std::unique_ptr<weld::Container> mxGrid;
+
+    typedef std::vector<std::unique_ptr<ScCondFrmtEntry>> EntryContainer;
     EntryContainer maEntries;
 
-    bool mbHasScrollBar;
     bool mbFrozen;
     bool mbNewEntry;
-    VclPtr<ScrollBar> mpScrollBar;
 
     ScDocument* mpDoc;
     ScAddress maPos;
     ScRangeList maRanges;
-    VclPtr<ScCondFormatDlg> mpDialogParent;
-
-    void DoScroll(long nDiff);
+    ScCondFormatDlg* mpDialogParent;
 
 public:
-    ScCondFormatList(vcl::Window* pParent, WinBits nStyle);
-    virtual ~ScCondFormatList() override;
-    virtual void dispose() override;
+    ScCondFormatList(ScCondFormatDlg* pParent,
+                     std::unique_ptr<weld::ScrolledWindow> xWindow,
+                     std::unique_ptr<weld::Container> xGrid);
+    weld::ScrolledWindow* GetWidget() { return mxScrollWindow.get(); }
+    weld::Container* GetContainer() { return mxGrid.get(); }
+    ~ScCondFormatList();
 
-    void init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent, const ScConditionalFormat* pFormat,
+    void init(ScDocument* pDoc, const ScConditionalFormat* pFormat,
         const ScRangeList& rRanges, const ScAddress& rPos,
         condformat::dialog::ScCondFormatDialogType eType);
 
     void SetRange(const ScRangeList& rRange);
 
-    virtual Size GetOptimalSize() const override;
-    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
-    virtual void Resize() override;
-
     std::unique_ptr<ScConditionalFormat> GetConditionalFormat() const;
+    weld::Window* GetFrameWeld();
     void Freeze() { mbFrozen = true; }
     void Thaw() { mbFrozen = false; }
     void RecalcAll();
 
-    DECL_LINK( AddBtnHdl, Button*, void );
-    DECL_LINK( RemoveBtnHdl, Button*, void );
-    DECL_LINK( UpBtnHdl, Button*, void );
-    DECL_LINK( DownBtnHdl, Button*, void );
-    DECL_LINK( ScrollHdl, ScrollBar*, void );
+    DECL_LINK( AddBtnHdl, weld::Button&, void );
+    DECL_LINK( RemoveBtnHdl, weld::Button&, void );
+    DECL_LINK( UpBtnHdl, weld::Button&, void );
+    DECL_LINK( DownBtnHdl, weld::Button&, void );
+    DECL_LINK( ScrollHdl, weld::ScrolledWindow&, void );
     DECL_LINK( EntrySelectHdl, ScCondFrmtEntry&, void );
 
-    DECL_LINK( TypeListHdl, ListBox&, void );
+    DECL_LINK( TypeListHdl, weld::ComboBox&, void );
     DECL_LINK( AfterTypeListHdl, void*, void );
-    DECL_LINK( ColFormatTypeHdl, ListBox&, void );
+    DECL_LINK( ColFormatTypeHdl, weld::ComboBox&, void );
+    DECL_LINK( AfterColFormatTypeHdl, void*, void );
 };
 
-class ScCondFormatDlg : public ScAnyRefDlg
+class ScCondFormatDlg : public ScAnyRefDlgController
 {
 private:
-    VclPtr<PushButton> mpBtnOk;
-    VclPtr<PushButton> mpBtnAdd;
-    VclPtr<PushButton> mpBtnRemove;
-    VclPtr<PushButton> mpBtnUp;
-    VclPtr<PushButton> mpBtnDown;
-    VclPtr<PushButton> mpBtnCancel;
-    VclPtr<FixedText> mpFtRange;
-    VclPtr<formula::RefEdit> mpEdRange;
-    VclPtr<formula::RefButton> mpRbRange;
-
-    VclPtr<ScCondFormatList> mpCondFormList;
     sal_Int32 mnKey;
 
     ScAddress maPos;
     ScViewData* mpViewData;
 
-    VclPtr<formula::RefEdit> mpLastEdit;
-
     std::shared_ptr<ScCondFormatDlgItem> mpDlgItem;
 
     OUString msBaseTitle;
-    void updateTitle();
 
-    DECL_LINK( EdRangeModifyHdl, Edit&, void );
+    formula::WeldRefEdit* mpLastEdit;
+    std::unique_ptr<weld::Button> mxBtnOk;
+    std::unique_ptr<weld::Button> mxBtnAdd;
+    std::unique_ptr<weld::Button> mxBtnRemove;
+    std::unique_ptr<weld::Button> mxBtnUp;
+    std::unique_ptr<weld::Button> mxBtnDown;
+    std::unique_ptr<weld::Button> mxBtnCancel;
+    std::unique_ptr<weld::Label> mxFtRange;
+    std::unique_ptr<formula::WeldRefEdit> mxEdRange;
+    std::unique_ptr<formula::WeldRefButton> mxRbRange;
+    std::unique_ptr<ScCondFormatList> mxCondFormList;
+
+    void updateTitle();
+    DECL_LINK( EdRangeModifyHdl, formula::WeldRefEdit&, void );
 protected:
 
     virtual void RefInputDone( bool bForced = false ) override;
@@ -115,10 +114,9 @@ protected:
     void CancelPressed();
 
 public:
-    SC_DLLPUBLIC ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pWindow,
+    SC_DLLPUBLIC ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pWindow,
                                  ScViewData* pViewData, const ScCondFormatDlgItem* pDlgItem);
     virtual ~ScCondFormatDlg() override;
-    virtual void dispose() override;
 
     SC_DLLPUBLIC std::unique_ptr<ScConditionalFormat> GetConditionalFormat() const;
 
@@ -126,13 +124,13 @@ public:
     virtual bool IsRefInputMode() const override;
     virtual void SetActive() override;
     virtual bool IsTableLocked() const override;
-    virtual bool Close() override;
+    virtual void Close() override;
 
     void InvalidateRefData();
     void OnSelectionChange(size_t nIndex, size_t nSize, bool bSelected = true);
 
-    DECL_LINK( BtnPressedHdl, Button*, void );
-    DECL_LINK( RangeGetFocusHdl, Control&, void );
+    DECL_LINK( BtnPressedHdl, weld::Button&, void );
+    DECL_LINK( RangeGetFocusHdl, formula::WeldRefEdit&, void );
 };
 
 #endif
