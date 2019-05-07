@@ -26,7 +26,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <list>
+#include <deque>
 #include <memory>
 #include <stack>
 #include <unordered_map>
@@ -600,7 +600,7 @@ private:
         == 10     : 18549 pap, 47 chp
         == 5      : 18515 pap, 47 chp
     */
-    std::list<std::unique_ptr<WW8Fkp>> maFkpCache;
+    std::deque<std::unique_ptr<WW8Fkp>> maFkpCache;
     enum Limits {eMaxCache = 50000};
 
     bool NewFkp();
