@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_eea5d6b6",
+        "filename": "sw/inc/tblafmt.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-07T13:19:40Z",
+      "side": 0,
+      "message": "The explicit definition (in sw/source/core/doc/tblafmt.cxx) used to not copy m_wXObject, while the now-implicit definition will copy it.  Is that intentional?",
+      "revId": "5e4c1e6ba425ce0b75864e4584a846957b032e61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
