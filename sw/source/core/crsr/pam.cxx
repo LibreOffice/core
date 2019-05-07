@@ -702,9 +702,13 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
     }
 
     const SwDoc *pDoc = GetDoc();
+    // Legacy text/combo/checkbox: never return read-only when inside these form fields.
     const IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
     sw::mark::IFieldmark* pA = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : nullptr;
     sw::mark::IFieldmark* pB = GetMark()  ? pMarksAccess->getFieldmarkFor( *GetMark( ) ) : pA;
+    // prevent the user from accidentally deleting the field itself when modifying the text.
+    const bool bAtStartA = (pA != nullptr) && (pA->GetMarkStart() == *GetPoint());
+    const bool bAtStartB = (pB != nullptr) && (pB->GetMarkStart() == *GetMark());
 
     if (!bRet)
     {
@@ -714,9 +718,6 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
             bRet = true;
         else
         {
-            bool bAtStartA = (pA != nullptr) && (pA->GetMarkStart() == *GetPoint());
-            bool bAtStartB = (pB != nullptr) && (pB->GetMarkStart() == *GetMark());
-
             if ((pA == pB) && (bAtStartA != bAtStartB))
                 bRet = true;
             else if (pA != pB)
@@ -734,7 +735,8 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
     }
     else
     {
-        bRet = !( pA == pB && pA != nullptr );
+        // Allow editing when the cursor/selection is fully inside of a legacy form field.
+        bRet = !( pA == pB && pA != nullptr && !bAtStartA && !bAtStartB );
     }
 
     if (!bRet)
