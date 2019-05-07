@@ -303,6 +303,8 @@ public:
     void testTdf107362();
     void testTdf105417();
     void testTdf105625();
+    void testTdf125151_protected();
+    void testTdf125151_protectedB();
     void testTdf106736();
     void testTdf58604();
     void testTdf112025();
@@ -508,6 +510,8 @@ public:
     CPPUNIT_TEST(testTdf107362);
     CPPUNIT_TEST(testTdf105417);
     CPPUNIT_TEST(testTdf105625);
+    CPPUNIT_TEST(testTdf125151_protected);
+    CPPUNIT_TEST(testTdf125151_protectedB);
     CPPUNIT_TEST(testTdf106736);
     CPPUNIT_TEST(testTdf58604);
     CPPUNIT_TEST(testTdf112025);
@@ -5672,6 +5676,42 @@ void SwUiWriterTest::testTdf105625()
     pWrtShell->DelLeft();
     sal_Int32 nMarksAfter = pMarksAccess->getAllMarksCount();
     CPPUNIT_ASSERT_EQUAL(nMarksBefore, nMarksAfter + 1);
+}
+
+void SwUiWriterTest::testTdf125151_protected()
+{
+    // Similar to testTdf105625 except this is in a protected section,
+    // so read-only is already true when fieldmarks are considered.
+    SwDoc* pDoc = createDoc("tdf125151_protected.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+    // Ensure correct initial setting
+    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext,
+        "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea",
+        css::uno::Any(false), comphelper::EConfigurationModes::Standard);
+    pWrtShell->Down(/*bSelect=*/false);
+    // The cursor moved inside of the FieldMark textbox.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Readonly 1", false, pWrtShell->HasReadonlySel());
+    // Move left to the start/definition of the textbox
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Readonly 2", true, pWrtShell->HasReadonlySel());
+}
+
+void SwUiWriterTest::testTdf125151_protectedB()
+{
+    // Similar to testTdf105625 except this is protected with the Protect_Form compat setting
+    SwDoc* pDoc = createDoc("tdf125151_protectedB.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+    // Ensure correct initial setting
+    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext,
+        "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea",
+        css::uno::Any(false), comphelper::EConfigurationModes::Standard);
+    // The cursor starts inside of the FieldMark textbox.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Readonly 1", false, pWrtShell->HasReadonlySel());
+    // Move left to the start/definition of the textbox
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Readonly 2", true, pWrtShell->HasReadonlySel());
 }
 
 void SwUiWriterTest::testTdf106736()
