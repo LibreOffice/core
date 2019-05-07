@@ -35,6 +35,8 @@ $(eval $(call gb_Library_use_system_win32_libs,spsupp_x64,\
 
 $(eval $(call gb_Library_add_nativeres,spsupp_x64,spsupp))
 
+$(eval $(call gb_Library_add_nativeres,spsupp_x64,spsupp_dlg))
+
 $(eval $(call gb_Library_add_ldflags,spsupp_x64,\
 	/DEF:$(SRCDIR)/shell/source/win32/spsupp/spsupp.def \
 ))
