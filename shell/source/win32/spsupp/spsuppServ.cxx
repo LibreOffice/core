@@ -28,11 +28,12 @@
 
 #include <shlwapi.h> // declaration of DllInstall
 
-namespace {
-
+namespace
+{
 HANDLE g_hModule;
 
-}
+HMODULE GetHModule() { return static_cast<HMODULE>(g_hModule); }
+} // namespace
 
 ITypeLib* GetTypeLib()
 {
@@ -40,7 +41,7 @@ ITypeLib* GetTypeLib()
     static ITypeLibGuard s_aITypeLibGuard = [] {
         ITypeLibGuard aITypeLibGuard(nullptr, [](IUnknown* p) { if (p) p->Release(); });
         wchar_t szFile[MAX_PATH];
-        if (GetModuleFileNameW(static_cast<HMODULE>(g_hModule), szFile, MAX_PATH) == 0)
+        if (GetModuleFileNameW(GetHModule(), szFile, MAX_PATH) == 0)
             return aITypeLibGuard;
         ITypeLib* pTypeLib;
         if (FAILED(LoadTypeLib(szFile, &pTypeLib)))
@@ -51,16 +52,16 @@ ITypeLib* GetTypeLib()
     return s_aITypeLibGuard.get();
 }
 
-const wchar_t* GetLOPath()
+const wchar_t* GetHelperExe()
 {
     static wchar_t* s_sPath = []() -> wchar_t* {
         static wchar_t sPath[MAX_PATH];
-        if (GetModuleFileNameW(static_cast<HMODULE>(g_hModule), sPath, MAX_PATH) == 0)
+        if (GetModuleFileNameW(GetHModule(), sPath, MAX_PATH) == 0)
             return nullptr;
         wchar_t* pSlashPos = wcsrchr(sPath, L'\\');
         if (pSlashPos == nullptr)
             return nullptr;
-        wcscpy(pSlashPos + 1, L"soffice.exe");
+        wcscpy(pSlashPos + 1, L"spsupp_helper.exe");
         return sPath;
     }();
     return s_sPath;
@@ -120,7 +121,7 @@ STDAPI DllRegisterServer(void)
         return ResultFromScode(SELFREG_E_TYPELIB);
 
     wchar_t szFile[MAX_PATH];
-    if (GetModuleFileNameW(static_cast<HMODULE>(g_hModule), szFile, MAX_PATH) == 0)
+    if (GetModuleFileNameW(GetHModule(), szFile, MAX_PATH) == 0)
         return HRESULT_FROM_WIN32(GetLastError());
 
     HRESULT hr = RegisterTypeLib(pTypeLib, szFile, nullptr);

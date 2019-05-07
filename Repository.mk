@@ -205,6 +205,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	) \
 	$(if $(filter WNT,$(OS)), \
 		senddoc \
+		spsupp_helper \
 	) \
 ))
 
@@ -1127,6 +1128,7 @@ $(eval $(call gb_Helper_register_mos,\
 	scc \
 	sd \
 	sfx \
+	shell \
 	sm \
 	svl \
 	svt \
