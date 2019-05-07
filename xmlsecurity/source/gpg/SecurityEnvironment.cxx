@@ -17,7 +17,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <list>
+#include <vector>
 
 #ifdef _WIN32
 #include <config_folders.h>
@@ -120,8 +120,8 @@ OUString SecurityEnvironmentGpg::getSecurityEnvironmentInformation()
 Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getCertificatesImpl( bool bPrivateOnly )
 {
     CertificateImpl* xCert;
-    std::list< GpgME::Key > keyList;
-    std::list< CertificateImpl* > certsList;
+    std::vector< GpgME::Key > keyList;
+    std::vector< CertificateImpl* > certsList;
 
     m_ctx->setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);
     GpgME::Error err = m_ctx->startKeyListing("", bPrivateOnly );
