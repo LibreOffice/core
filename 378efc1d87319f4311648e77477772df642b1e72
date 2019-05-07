@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_0bf034c9",
+        "filename": "connectivity/CppunitTest_connectivity_sharedresources.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-07T06:51:22Z",
+      "side": 1,
+      "message": "this block should be removed; it was apparently only needed in the copied-from file because of using the gb_CppunitTest_use_library_objects hack",
+      "revId": "378efc1d87319f4311648e77477772df642b1e72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
