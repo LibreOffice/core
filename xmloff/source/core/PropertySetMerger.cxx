@@ -201,7 +201,7 @@ Any SAL_CALL PropertySetMergerImpl::getPropertyDefault( const OUString& aPropert
 Sequence< Property > SAL_CALL PropertySetMergerImpl::getProperties()
 {
     Sequence< Property > aProps1( mxPropSet1Info->getProperties() );
-    Sequence< Property > aProps2( mxPropSet1Info->getProperties() );
+    Sequence< Property > aProps2( mxPropSet2Info->getProperties() );
 
     return comphelper::concatSequences(aProps1, aProps2);
 }
