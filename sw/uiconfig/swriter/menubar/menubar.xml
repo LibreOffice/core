@@ -190,6 +190,7 @@
       <menu:menuitem menu:id=".uno:TableBoundaries"/>
       <menu:menuitem menu:id=".uno:ShowGraphics"/>
       <menu:menuitem menu:id=".uno:ShowAnnotations"/>
+      <menu:menuitem menu:id=".uno:ShowResolvedAnnotations"/>
       <menu:menuitem menu:id=".uno:ControlCodes"/>
       <menu:menu menu:id=".uno:GridMenu">
         <menu:menupopup>

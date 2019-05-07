@@ -231,14 +231,14 @@ void SwAnnotationWin::SetPostItText()
 void SwAnnotationWin::SetResolved(bool resolved)
 {
     static_cast<SwPostItField*>(mpFormatField->GetField())->SetResolved(resolved);
-    mrSidebarItem.bShow = !resolved;
+    mrSidebarItem.bShow = !resolved || mrMgr.ResolvedPostItsVisible();
     Invalidate();
 }
 
 void SwAnnotationWin::ToggleResolved()
 {
     static_cast<SwPostItField*>(mpFormatField->GetField())->ToggleResolved();
-    mrSidebarItem.bShow = !IsResolved();
+    mrSidebarItem.bShow = !IsResolved() || mrMgr.ResolvedPostItsVisible();
     Invalidate();
 }
 

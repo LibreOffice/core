@@ -2366,6 +2366,25 @@ void SwPostItMgr::GetAllSidebarWinForFrame( const SwFrame& rFrame,
     }
 }
 
+void SwPostItMgr::ShowHideResolvedNotes(bool visible) {
+    for (auto const& pPage : mPages)
+    {
+        for(auto b = pPage->mvSidebarItems.begin(); b!= pPage->mvSidebarItems.end(); ++b)
+            {
+                if ((*b)->pPostIt->IsThreadResolved())
+                    {
+                        (*b)->pPostIt->GetSidebarItem().bShow=visible;
+                    }
+            }
+
+    }
+    LayoutPostIts();
+}
+
+bool SwPostItMgr::ResolvedPostItsVisible() {
+    return !mpWrtShell->GetViewOptions()->IsResolvedPostIts();
+}
+
 void SwPostItMgr::UpdateResolvedStatus(sw::annotation::SwAnnotationWin* topNote) {
     // Given the topmost note as an argument, scans over all notes and sets the
     // 'resolved' state of each descendant of the top notes to the resolved state
