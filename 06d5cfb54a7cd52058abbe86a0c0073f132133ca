@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_ee1876d4",
+        "filename": "sc/source/core/tool/viewopti.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-05-07T14:59:52Z",
+      "side": 1,
+      "message": "The sequence positions have to be identical to the definition of SCLAYOUTOPT_... defines. See the places where GetLayoutPropertyNames() is called and the sequence used.\n\nYou now have \"Window/SearchSummary\" on the property position of SCLAYOUTOPT_GRID_ONCOLOR and \"Line/GridOnColoredCells\" on the position of SCLAYOUTOPT_SUMMARY.",
+      "revId": "06d5cfb54a7cd52058abbe86a0c0073f132133ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
