@@ -405,6 +405,7 @@ certain functionality.
 
 @li @c toolkit
 @li @c toolkit.controls
+@li @c toolkit.helper
 
 @section tools
 
