@@ -390,6 +390,14 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="SearchSummary" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - View - [Section] Window -->
+          <info>
+            <desc>Specifies whether a summarizing dialog is displayed after search.</desc>
+            <label>Search summary</label>
+          </info>
+          <value>true</value>
+        </prop>
       </group>
       <group oor:name="Other">
         <info>

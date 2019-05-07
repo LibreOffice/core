@@ -44,7 +44,8 @@ enum ScViewOption
     VOPT_HELPLINES,
     VOPT_ANCHOR,
     VOPT_PAGEBREAKS,
-    VOPT_CLIPMARKS
+    VOPT_SUMMARY,
+    VOPT_CLIPMARKS,
 };
 
 enum ScVObjType
