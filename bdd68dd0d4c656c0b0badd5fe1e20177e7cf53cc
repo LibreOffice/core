@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_6e24660e",
+        "filename": "sd/source/ui/slideshow/slideshow.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-05-07T15:07:27Z",
+      "side": 1,
+      "message": "please remove this for real - code history is in git, not in commented-out sections.",
+      "revId": "bdd68dd0d4c656c0b0badd5fe1e20177e7cf53cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
