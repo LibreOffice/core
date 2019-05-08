@@ -34,6 +34,24 @@
       "revId": "284e716be6b61faf76f229b95f9f36234c03b52b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_c49479eb",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-05-08T17:29:12Z",
+      "side": 1,
+      "message": "Actually, if display scaling is active, shouldn\u0027t we turn SnapHorVerLinesToDiscrete off, so it fixes not only this behavior, but all the other places where that setting is used?",
+      "parentUuid": "3fa0c359_84e99181",
+      "revId": "284e716be6b61faf76f229b95f9f36234c03b52b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
