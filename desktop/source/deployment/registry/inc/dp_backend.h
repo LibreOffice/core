@@ -201,7 +201,7 @@ class PackageRegistryBackend
 {
     //The map held originally WeakReferences. The map entries are removed in the disposing
     //function, which is called when the XPackages are destructed or they are
-    //explicitly disposed. The latter happens, for example, when a extension is
+    //explicitly disposed. The latter happens, for example, when an extension is
     //removed (see dp_manager.cxx). However, because of how the help systems work, now
     // XPackageManager::getDeployedPackages is called often. This results in a lot
     //of bindPackage calls which are costly. Therefore we keep hard references in
