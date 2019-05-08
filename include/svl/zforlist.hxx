@@ -116,7 +116,7 @@ enum class SvNumFormatType : sal_Int16
      DURATION = css::util::NumberFormat::DURATION, // 8196
 };
 namespace o3tl {
-    template<> struct typed_flags<SvNumFormatType> : is_typed_flags<SvNumFormatType, 0x2dff> {};
+    template<> struct typed_flags<SvNumFormatType> : is_typed_flags<SvNumFormatType, 0x3dff> {};
 }
 
 /** enum values for <method>SvNumberFormatter::GetFormatIndex</method>
