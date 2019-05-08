@@ -141,7 +141,7 @@ class Desktop : public Application
 
         static void             HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const OUString& aMsg );
 
-        // Create a error message depending on bootstrap failure code and an optional file url
+        // Create an error message depending on bootstrap failure code and an optional file url
         static OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
                                                       const OUString& aFileURL );
 
