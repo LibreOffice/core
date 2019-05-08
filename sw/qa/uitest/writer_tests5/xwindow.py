@@ -66,10 +66,7 @@ class XKeyListenerExtended(unohelper.Base, XKeyListener):
         keymouseEventsIntercepted += 1
         return super(XKeyListenerExtended, self).keyReleased(xKeyEvent)
 
-# registered mouse/key listeners for top window
-# do not receive any mouse/key events while
-# everything is passed only to focused child window
-# where we have no any registered mouse/key listeners
+# Test that registered mouse/key listeners for top window receive mouse/key events
 class XWindow(UITestCase):
     def test_listeners(self):
         global mouseListenerCount
