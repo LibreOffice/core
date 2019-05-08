@@ -908,6 +908,7 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
             reinterpret_cast<sal_uInt8*>(&nColor)[3] = nMaskColor.GetBlue();
 
             sal_uInt8* pSource = m_pUserBuffer.get();
+            // First to nY on y-axis, as that is our starting point (sub-image)
             if( nY )
                 pSource += nY * mnBytesPerRow;
 
@@ -915,7 +916,7 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
             while( y-- )
             {
                 pSourcePixels->StartLine( pSource );
-                pSourcePixels->SkipPixel(nX);
+                pSourcePixels->SkipPixel(nX); // Skip on x axis to nX
                 sal_uInt32 x = nWidth;
                 while( x-- )
                 {
