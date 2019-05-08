@@ -5561,9 +5561,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         }
         break;
         default:
-#if OSL_DEBUG_LEVEL > 0
-            OSL_ENSURE( false, "unknown command." );
-#endif
+            SAL_WARN("sw.ui", "unknown command.");
         break;
     }
     if (bCallBase)
