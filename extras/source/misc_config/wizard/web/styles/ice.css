@@ -81,6 +81,7 @@ body {
 }
 .tcolor {
 	background-color: #00CCFF;
+	background-image: url(images/background.gif);
 }
 .ccolor {
 	background-color: #CCCCCC;

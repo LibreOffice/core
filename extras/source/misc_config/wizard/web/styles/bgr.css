@@ -70,6 +70,7 @@
 }
 body {
 	background-color: #660033;
+	background-image: url(images/background.gif);
 }
 .toctitle {
 	font-family: Arial, Helvetica, sans-serif;

@@ -70,6 +70,7 @@
 }
 body {
 	background-color: #000000;
+	background-image: url(images/background.gif);
 }
 .toctitle {
 	font-family: "Times New Roman", Times, serif;
