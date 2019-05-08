@@ -62,6 +62,7 @@
 #include <sal/macros.h>
 #include <osl/thread.h>
 
+#include <cstdlib>
 #include <typeinfo>
 #include <vector>
 
@@ -129,7 +130,7 @@ OString exceptionToString(const css::uno::Any & caught)
         sMessage += " context: ";
         sMessage += pContext;
 #if defined __GLIBCXX__
-        delete pContext;
+        std::free(const_cast<char *>(pContext));
 #endif
     }
     {
