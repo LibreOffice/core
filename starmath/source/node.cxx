@@ -2064,7 +2064,6 @@ void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, i
         SetRectHorAlign( RectHorAlign::Left );
 
     maText = GetToken().aText;
-    assert(!maText.isEmpty());
     GetFont() = rFormat.GetFont(GetFontDesc());
 
     if (IsItalic( GetFont() ))
