@@ -68,6 +68,30 @@
       "revId": "9b1d568d1753e123e9e802ce89014de03d18385e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_a913480d",
+        "filename": "sw/source/core/crsr/pam.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-05-08T05:59:21Z",
+      "side": 1,
+      "message": "Yes, I initially did it because I saw that FieldMark \u003d\u003d Fieldmark is a bit expensive of a comparison, but since this is just pointer comparison, it isn\u0027t actually expensive...",
+      "parentUuid": "3fa0c359_6970e073",
+      "range": {
+        "startLine": 739,
+        "startChar": 18,
+        "endLine": 739,
+        "endChar": 71
+      },
+      "revId": "9b1d568d1753e123e9e802ce89014de03d18385e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
