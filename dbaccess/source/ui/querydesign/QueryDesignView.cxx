@@ -2250,7 +2250,7 @@ namespace
                 {
                     if( eOk == FillDragInfo(_pView,pArgument,aDragLeft))
                         _pSelectionBrw->AddOrder( aDragLeft, eOrderDir, i);
-                    else // it could be a alias name for a field
+                    else // it could be an alias name for a field
                     {
                         OUString aTableRange,aColumnName;
                         ::connectivity::OSQLParseTreeIterator& rParseIter = rController.getParseIterator();
@@ -2742,7 +2742,7 @@ OUString OQueryDesignView::getStatement()
     // Exception handling, if no fields have been passed we should not
     // change the tab page
     // TabBarSelectHdl will query the SQL-OUString for STATEMENT_NOFIELDS
-    // and trigger a error message
+    // and trigger an error message
     // ----------------- Build table list ----------------------
 
     const auto& rConnList = m_pTableView->getTableConnections();
