@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_a9458819",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5676,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-05-08T04:28:48Z",
+      "side": 1,
+      "message": "DelRight() and DelLeft() don\u0027t check the read-only status before (successfully) deleting, so I couldn\u0027t copy this nice section of code in my tests.\nMike\u0027s af42aab836626fdf7b29921dff5d344a8b0e47c6. Do you remember if you tried checking for all of the different isReadOnly/HonorReadOnly scenarios when developing that?",
+      "range": {
+        "startLine": 5676,
+        "startChar": 3,
+        "endLine": 5676,
+        "endChar": 25
+      },
+      "revId": "9b1d568d1753e123e9e802ce89014de03d18385e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_ae182e81",
+        "filename": "sw/source/core/crsr/pam.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-05-08T04:28:48Z",
+      "side": 1,
+      "message": "I tried to document what I believe to be the intentions of this section of code. Mike did quite a bit of work here in 2017. If he remembers, would he agree that this is accurate?",
+      "range": {
+        "startLine": 709,
+        "startChar": 4,
+        "endLine": 709,
+        "endChar": 92
+      },
+      "revId": "9b1d568d1753e123e9e802ce89014de03d18385e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
