@@ -366,7 +366,7 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
                 assignTable();
             }
             // now check if our datasource has set a tablefilter and if append the new table name to it
-            ::dbaui::appendToFilter(getConnection(), m_sName, getORB(), getFrameWeld()); // we are not interessted in the return value
+            ::dbaui::appendToFilter(getConnection(), m_sName, getORB(), getFrameWeld()); // we are not interested in the return value
             Reference< frame::XTitleChangeListener> xEventListener(impl_getTitleHelper_throw(),UNO_QUERY);
             if ( xEventListener.is() )
             {
