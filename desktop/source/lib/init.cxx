@@ -1407,6 +1407,24 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                         return false;
                     });
                 }
+                else if (aTree.get<std::string>("action", "") == "size_changed")
+                {
+                    // A size change is practically re-creation of the window.
+                    // But at a minimum it's a full invalidation.
+                    removeAll([&nLOKWindowId](const queue_type::value_type& elem) {
+                        if (elem.Type == LOK_CALLBACK_WINDOW)
+                        {
+                            const boost::property_tree::ptree& aOldTree = elem.getJson();
+                            if (nLOKWindowId == aOldTree.get<unsigned>("id", 0))
+                            {
+                                const std::string aOldAction = aOldTree.get<std::string>("action", "");
+                                if (aOldAction == "invalidate")
+                                    return true;
+                            }
+                        }
+                        return false;
+                    });
+                }
             }
             break;
         }
