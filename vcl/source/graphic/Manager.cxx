@@ -137,7 +137,7 @@ void Manager::registerGraphic(const std::shared_ptr<ImpGraphic>& pImpGraphic,
 
     if (calculatedSize != mnUsedSize)
     {
-        SAL_WARN_IF(calculatedSize != mnUsedSize, "vcl.gdi",
+        SAL_INFO_IF(calculatedSize != mnUsedSize, "vcl.gdi",
                     "Calculated size mismatch. Variable size is '"
                         << mnUsedSize << "' but calculated size is '" << calculatedSize << "'");
         mnUsedSize = calculatedSize;
