@@ -207,7 +207,7 @@ void OTableWindowListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPi
         EndSelection();
         // create a description of the source
         OJoinExchangeData jxdSource(this);
-        // put it into a exchange object
+        // put it into an exchange object
         rtl::Reference<OJoinExchObj> pJoin = new OJoinExchObj(jxdSource,bFirstNotAllowed);
         pJoin->StartDrag(this, DND_ACTION_LINK, this);
     }
@@ -217,7 +217,7 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
     sal_Int8 nDND_Action = DND_ACTION_NONE;
     // check the format
-    if ( !OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SotClipboardFormatId::SBA_TABID) // this means that the first entry is to be draged
+    if ( !OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SotClipboardFormatId::SBA_TABID) // this means that the first entry is to be dragged
         && OJoinExchObj::isFormatAvailable(GetDataFlavorExVector()) )
     {   // don't drop into the window if it's the drag source itself
 
