@@ -28,15 +28,13 @@
 #include "gio_inputstream.hxx"
 #include "gio_content.hxx"
 
-using namespace com::sun::star;
-
 namespace gio
 {
 
 InputStream::InputStream(GFileInputStream *pStream): mpStream(pStream)
 {
     if (!mpStream)
-        throw io::NotConnectedException();
+        throw css::io::NotConnectedException();
 }
 
 InputStream::~InputStream()
@@ -64,18 +62,18 @@ void SAL_CALL InputStream::skipBytes( sal_Int32 nBytesToSkip )
     readBytes(data, nBytesToSkip);
 }
 
-sal_Int32 SAL_CALL InputStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL InputStream::readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     if (!mpStream)
-        throw io::NotConnectedException();
+        throw css::io::NotConnectedException();
 
     try
     {
         aData.realloc( nBytesToRead );
     }
-    catch ( const uno::Exception & )
+    catch ( const css::uno::Exception & )
     {
-        throw io::BufferSizeExceededException();
+        throw css::io::BufferSizeExceededException();
     }
 
     gsize nBytesRead = 0;
@@ -86,7 +84,7 @@ sal_Int32 SAL_CALL InputStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal
     return nBytesRead;
 }
 
-sal_Int32 SAL_CALL InputStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 SAL_CALL InputStream::readSomeBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
     return readBytes(aData, nMaxBytesToRead);
 }

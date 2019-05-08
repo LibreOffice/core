@@ -29,19 +29,17 @@
 #include "gio_provider.hxx"
 #include "gio_content.hxx"
 
-using namespace com::sun::star;
-
 namespace gio
 {
-uno::Reference< css::ucb::XContent > SAL_CALL
+css::uno::Reference< css::ucb::XContent > SAL_CALL
 ContentProvider::queryContent(
-            const uno::Reference< css::ucb::XContentIdentifier >& Identifier )
+            const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
 {
     SAL_INFO("ucb.ucp.gio", "QueryContent: " << Identifier->getContentIdentifier());
     osl::MutexGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
-    uno::Reference< ucb::XContent > xContent = queryExistingContent( Identifier ).get();
+    css::uno::Reference< css::ucb::XContent > xContent = queryExistingContent( Identifier ).get();
     if ( xContent.is() )
         return xContent;
 
@@ -61,7 +59,7 @@ ContentProvider::queryContent(
 }
 
 ContentProvider::ContentProvider(
-    const uno::Reference< uno::XComponentContext >& rxContext )
+    const css::uno::Reference< css::uno::XComponentContext >& rxContext )
 : ::ucbhelper::ContentProviderImplHelper( rxContext )
 {
 }
@@ -86,16 +84,16 @@ void SAL_CALL ContentProvider::release()
 css::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
-                                               static_cast< lang::XTypeProvider* >(this),
-                                               static_cast< lang::XServiceInfo* >(this),
+                                               static_cast< css::lang::XTypeProvider* >(this),
+                                               static_cast< css::lang::XServiceInfo* >(this),
                                                static_cast< css::ucb::XContentProvider* >(this)
                                                );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
 XTYPEPROVIDER_IMPL_3( ContentProvider,
-                      lang::XTypeProvider,
-                      lang::XServiceInfo,
+                      css::lang::XTypeProvider,
+                      css::lang::XServiceInfo,
                       css::ucb::XContentProvider );
 
 XSERVICEINFO_COMMOM_IMPL( ContentProvider,
@@ -125,9 +123,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * ucpgio1_component_getFactory( const sal_C
 {
     void * pRet = nullptr;
 
-    uno::Reference< lang::XMultiServiceFactory > xSMgr
-        (static_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
-    uno::Reference< lang::XSingleServiceFactory > xFactory;
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMgr
+        (static_cast< css::lang::XMultiServiceFactory * >( pServiceManager ) );
+    css::uno::Reference< css::lang::XSingleServiceFactory > xFactory;
 #if !GLIB_CHECK_VERSION(2,36,0)
     g_type_init();
 #endif
