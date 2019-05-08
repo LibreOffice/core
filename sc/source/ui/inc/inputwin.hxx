@@ -35,6 +35,7 @@
 class EditView;
 class ScAccessibleEditLineTextData;
 class ScEditEngineDefaulter;
+class ScTextWndGroup;
 class ScInputBarGroup;
 class ScInputHandler;
 class ScTabViewShell;
@@ -61,7 +62,7 @@ public:
 class ScTextWnd : public ScTextWndBase, public DragSourceHelper     // edit window
 {
 public:
-    ScTextWnd(ScInputBarGroup* pParent, ScTabViewShell* pViewSh);
+    ScTextWnd(ScTextWndGroup* pParent, ScTabViewShell* pViewSh);
     virtual         ~ScTextWnd() override;
     virtual void    dispose() override;
 
@@ -142,10 +143,9 @@ private:
     bool        bInputMode;
 
     ScTabViewShell* mpViewShell;
-    ScInputBarGroup& mrGroupBar;
+    ScTextWndGroup& mrGroupBar;
     long mnLines;
     long mnLastExpandedLines;
-    long mnBorderHeight;
     bool mbInvalidate;
 };
 
@@ -181,42 +181,75 @@ private:
     void            ReleaseFocus_Impl();
 };
 
+class ScTextWndGroup : public ScTextWndBase
+{
+public:
+                 ScTextWndGroup(vcl::Window* pParent, ScTabViewShell* pViewSh);
+    virtual      ~ScTextWndGroup() override;
+    virtual void dispose() override;
+
+    virtual void            InsertAccessibleTextData(ScAccessibleEditLineTextData& rTextData) override;
+    virtual EditView*       GetEditView() override;
+    long                    GetLastNumExpandedLines();
+    long                    GetNumLines();
+    long                    GetPixelHeightForLines(long nLines);
+    ScrollBar&              GetScrollBar();
+    virtual const OUString& GetTextString() const override;
+    virtual bool            HasEditView() const override;
+    virtual bool            IsInputActive() override;
+    virtual void            MakeDialogEditView() override;
+    virtual void            Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void            RemoveAccessibleTextData(ScAccessibleEditLineTextData& rTextData) override;
+    virtual void            Resize() override;
+    void                    SetNumLines(long nLines);
+    virtual void            SetFormulaMode(bool bSet) override;
+    virtual void            SetTextString(const OUString& rString) override;
+    virtual void            StartEditEngine() override;
+    virtual void            StopEditEngine(bool bAll) override;
+    virtual void            TextGrabFocus() override;
+
+private:
+    VclPtr<ScTextWnd> maTextWnd;
+    VclPtr<ScrollBar> maScrollBar;
+
+    long mnBorderWidth, mnBorderHeight;
+
+    DECL_LINK(Impl_ScrollHdl, ScrollBar*, void);
+};
+
 class ScInputBarGroup : public ScTextWndBase
 {
-
 public:
-                    ScInputBarGroup( vcl::Window* Parent, ScTabViewShell* pViewSh );
-    virtual         ~ScInputBarGroup() override;
-    virtual void    dispose() override;
-    virtual void    InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) override;
-    virtual void    RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) override;
-    void            SetTextString( const OUString& rString ) override;
-    void            StartEditEngine() override;
-    virtual EditView* GetEditView() override;
-    virtual bool HasEditView() const override;
-    virtual void    Resize() override;
-    virtual const OUString&   GetTextString() const override;
-    virtual void            StopEditEngine( bool bAll ) override;
+                            ScInputBarGroup(vcl::Window* Parent, ScTabViewShell* pViewSh);
+    virtual                 ~ScInputBarGroup() override;
+    virtual void            dispose() override;
+    virtual void            InsertAccessibleTextData(ScAccessibleEditLineTextData& rTextData) override;
+    virtual void            RemoveAccessibleTextData(ScAccessibleEditLineTextData& rTextData) override;
+    void                    SetTextString(const OUString& rString) override;
+    void                    StartEditEngine() override;
+    virtual EditView*       GetEditView() override;
+    virtual bool            HasEditView() const override;
+    virtual void            Resize() override;
+    virtual const OUString& GetTextString() const override;
+    virtual void            StopEditEngine(bool bAll) override;
     virtual void            TextGrabFocus() override;
-    void            SetFormulaMode( bool bSet ) override;
-    void            MakeDialogEditView() override;
-    bool            IsInputActive() override;
-    ScrollBar&      GetScrollBar() { return *maScrollbar; }
-    void            IncrementVerticalSize();
-    void            DecrementVerticalSize();
-    long            GetNumLines() { return maTextWnd->GetNumLines(); }
-    long            GetVertOffset() { return  mnVertOffset; }
+    void                    SetFormulaMode(bool bSet) override;
+    void                    MakeDialogEditView() override;
+    bool                    IsInputActive() override;
+    ScrollBar&              GetScrollBar() { return maTextWndGroup->GetScrollBar(); }
+    void                    IncrementVerticalSize();
+    void                    DecrementVerticalSize();
+    long                    GetNumLines() { return maTextWndGroup->GetNumLines(); }
+    long                    GetVertOffset() { return  mnVertOffset; }
 
 private:
     void            TriggerToolboxLayout();
 
-    VclPtr<ScTextWnd> maTextWnd;
-    VclPtr<ImageButton> maButton;
-    VclPtr<ScrollBar> maScrollbar;
-    long            mnVertOffset;
+    VclPtr<ScTextWndGroup> maTextWndGroup;
+    VclPtr<ImageButton>    maButton;
+    long                   mnVertOffset;
 
-    DECL_LINK( ClickHdl, Button*, void );
-    DECL_LINK( Impl_ScrollHdl, ScrollBar*, void );
+    DECL_LINK(ClickHdl, Button*, void);
 };
 
 class ScInputWindow final : public ToolBox                        // Parent toolbox
