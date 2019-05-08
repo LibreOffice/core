@@ -1401,7 +1401,7 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OU
     m_aChildren.insert(m_aChildren.begin() + nIndex, xElement);
     m_aChildNames.insert(m_aChildNames.begin() + nIndex, sName);
 
-    // listen for a changes of the name
+    // listen for a change of the name
     xElementSet->addPropertyChangeListener(PROPERTY_NAME, static_cast<css::beans::XPropertyChangeListener*>(this));
 
     // we are now the parent of the new element
