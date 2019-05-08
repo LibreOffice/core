@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_VCL_UITEST_LOGGER_HXX
+#define INCLUDED_VCL_UITEST_LOGGER_HXX
+
 #include <vcl/dllapi.h>
 
 #include <tools/stream.hxx>
@@ -46,5 +49,7 @@ public:
     static UITestLogger& getInstance();
 
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
