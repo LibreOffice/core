@@ -16,6 +16,24 @@
       "revId": "284e716be6b61faf76f229b95f9f36234c03b52b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_84e99181",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-05-08T17:23:01Z",
+      "side": 1,
+      "message": "My understanding is that the definition of hairline line style is that it is drawn exactly as 1px wide, at a given pixel position. If you want something else, you need to use a normal polygon with a line width in logic units, not a hairline. But if it turns out I\u0027m wrong, we can restrict this behavior for the cases when we don\u0027t scale the display, not a problem (context is headless rendering, as mentioned in the commit msg).",
+      "parentUuid": "3fa0c359_6452456a",
+      "revId": "284e716be6b61faf76f229b95f9f36234c03b52b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
