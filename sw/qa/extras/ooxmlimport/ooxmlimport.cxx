@@ -1050,11 +1050,11 @@ DECLARE_OOXMLIMPORT_TEST(testFdo87488, "fdo87488.docx")
     // StarView MetaFile.
     uno::Reference<container::XIndexAccess> group(getShape(1), uno::UNO_QUERY);
     {
-        uno::Reference<text::XTextRange> text(group->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> text(group->getByIndex(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(OUString("text2"), text->getString());
     }
     {
-        uno::Reference<beans::XPropertySet> props(group->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> props(group->getByIndex(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(props->getPropertyValue("RotateAngle"),
                              uno::makeAny<sal_Int32>(270 * 100));
         comphelper::SequenceAsHashMap geom(props->getPropertyValue("CustomShapeGeometry"));

@@ -127,6 +127,7 @@ Shape::Shape( const sal_Char* pServiceName, bool bDefaultHeight )
 , mbFlipV( false )
 , mbHidden( false )
 , mbHiddenMasterShape( false )
+, mbLocked( false )
 , mbLockedCanvas( false )
 , mbWps( false )
 , mbTextBox( false )
@@ -170,6 +171,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mbFlipV( pSourceShape->mbFlipV )
 , mbHidden( pSourceShape->mbHidden )
 , mbHiddenMasterShape( pSourceShape->mbHiddenMasterShape )
+, mbLocked( pSourceShape->mbLocked )
 , mbLockedCanvas( pSourceShape->mbLockedCanvas )
 , mbWps( pSourceShape->mbWps )
 , mbTextBox( pSourceShape->mbTextBox )
@@ -333,6 +335,7 @@ void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
     mbFlipH = rReferencedShape.mbFlipH;
     mbFlipV = rReferencedShape.mbFlipV;
     mbHidden = rReferencedShape.mbHidden;
+    mbLocked = rReferencedShape.mbLocked;
 }
 
 struct ActionLockGuard
@@ -856,6 +859,12 @@ Reference< XShape > const & Shape::createAndInsert(
             // In Excel hidden means not printed, let's use visibility for now until that's handled separately
             const OUString sPrintable( "Printable" );
             xSet->setPropertyValue( sPrintable, Any( false ) );
+        }
+
+        if (mbLocked)
+        {
+            xSet->setPropertyValue("MoveProtect", Any(true));
+            xSet->setPropertyValue("SizeProtect", Any(true));
         }
 
         ActionLockGuard const alg(mxShape);

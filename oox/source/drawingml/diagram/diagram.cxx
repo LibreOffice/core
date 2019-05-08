@@ -29,6 +29,7 @@
 #include <drawingml/textrun.hxx>
 #include <drawingml/diagram/diagram.hxx>
 #include <drawingml/fillproperties.hxx>
+#include <drawingml/customshapeproperties.hxx>
 #include <oox/ppt/pptshapegroupcontext.hxx>
 #include <oox/ppt/pptshape.hxx>
 #include <oox/token/namespaces.hxx>
@@ -317,6 +318,16 @@ void Diagram::addTo( const ShapePtr & pParentShape )
         ShapeLayoutingVisitor aLayoutingVisitor;
         mpLayout->getNode()->accept(aLayoutingVisitor);
     }
+
+    ShapePtr pBackground(new Shape("com.sun.star.drawing.CustomShape"));
+    pBackground->setSubType(XML_rect);
+    pBackground->getCustomShapeProperties()->setShapePresetType(XML_rect);
+    pBackground->setSize(pParentShape->getSize());
+    pBackground->getFillProperties() = *mpData->getFillProperties();
+    pBackground->setLocked(true);
+    auto& aChildren = pParentShape->getChildren();
+    aChildren.insert(aChildren.begin(), pBackground);
+
     pParentShape->setDiagramDoms( getDomsAsPropertyValues() );
 }
 
