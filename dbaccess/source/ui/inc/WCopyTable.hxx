@@ -400,7 +400,7 @@ namespace dbaui
 
         OUString createUniqueName(const OUString& _sName);
 
-        // displays a error message that a column type is not supported
+        // displays an error message that a column type is not supported
         void showColumnTypeNotSupported(const OUString& _rColumnName);
 
         void removeColumnNameFromNameMap(const OUString& _sName);
