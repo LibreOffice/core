@@ -12,7 +12,8 @@
 # Invoke: make cmd cmd="./bin/update_pch.sh [..]"
 
 root=`dirname $0`
-root=`cd $root/.. && pwd`
+root=`cd $root/.. >/dev/null && pwd`
+root=`readlink -f $root`
 cd $root
 
 if test -z "$1"; then
