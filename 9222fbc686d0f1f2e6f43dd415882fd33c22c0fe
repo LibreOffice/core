@@ -16,6 +16,24 @@
       "revId": "9222fbc686d0f1f2e6f43dd415882fd33c22c0fe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_044821ca",
+        "filename": "vcl/inc/bitmap/ScanlineTools.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-05-08T16:08:32Z",
+      "side": 1,
+      "message": "Return by value polymorphic subclasses?",
+      "parentUuid": "3fa0c359_4494e944",
+      "revId": "9222fbc686d0f1f2e6f43dd415882fd33c22c0fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
