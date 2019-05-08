@@ -1390,7 +1390,7 @@ OUString OCopyTableWizard::convertColumnName(const TColumnFindFunctor&   _rCmpFu
                 sName = sAlias + OUString::number(++nPos);
             }
             sAlias = sName;
-            // we have to check again, it could happen that the name is already to long
+            // we have to check again, it could happen that the name is already too long
         }
         while(_nMaxNameLen && sAlias.getLength() > _nMaxNameLen);
     }
