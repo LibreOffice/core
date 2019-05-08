@@ -973,7 +973,7 @@ void SAL_CALL SbaXDataBrowserController::focusLost(const FocusEvent& e)
     if (xCommitable.is())
         xCommitable->commit();
     else
-        SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::focusLost : why is my control not commitable ?");
+        SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::focusLost : why is my control not committable?");
 }
 
 void SbaXDataBrowserController::disposingFormModel(const css::lang::EventObject& Source)
@@ -1803,7 +1803,7 @@ void SbaXDataBrowserController::ExecuteSearch()
 {
     // calculate the control source of the active field
     Reference< css::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
-    OSL_ENSURE(xGrid.is(), "SbaXDataBrowserController::ExecuteSearch : the control should have an css::form::XGrid interface !");
+    OSL_ENSURE(xGrid.is(), "SbaXDataBrowserController::ExecuteSearch : the control should have a css::form::XGrid interface !");
 
     Reference< css::form::XGridPeer >  xGridPeer(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
     Reference< css::container::XIndexContainer >  xColumns = xGridPeer->getColumns();
@@ -2002,7 +2002,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             if (!xField.is())
                 break;
 
-            // check if the column is a aggregate function
+            // check if the column is an aggregate function
             const bool bHaving(isAggregateColumn(m_xParser, xField));
 
             Reference< XSingleSelectQueryComposer > xParser = createParser_nothrow();
@@ -2258,7 +2258,7 @@ IMPL_LINK(SbaXDataBrowserController, OnInvalidateClipboard, Timer*, _pTimer, voi
     InvalidateFeature(ID_BROWSER_COPY);
 
     // if the invalidation was triggered by the timer, we do not need to invalidate PASTE.
-    // The timer is only for checking the CUT/COPY slots regulary, which depend on the
+    // The timer is only for checking the CUT/COPY slots regularly, which depend on the
     // selection state of the active cell
     // TODO: get a callback at the Edit which allows to be notified when the selection
     // changes. This would be much better than this cycle-eating polling mechanism here ....
@@ -2468,7 +2468,7 @@ void SbaXDataBrowserController::initializeParser() const
 void SbaXDataBrowserController::loaded(const EventObject& /*aEvent*/)
 {
     // not interested in
-    // we're loading within an separate thread and have a handling for its "finished event"
+    // we're loading within a separated thread and have a handling for its "finished event"
 }
 
 void SbaXDataBrowserController::unloading(const EventObject& /*aEvent*/)
