@@ -19,9 +19,6 @@
 
 #include <sal/config.h>
 
-#include <cstddef>
-#include <string_view>
-
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -38,27 +35,21 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <osl/conditn.hxx>
-#include <osl/thread.h>
-#include <osl/thread.hxx>
 #include <osl/time.h>
 #include <rtl/ref.hxx>
-#include <rtl/string.h>
-#include <rtl/textcvt.h>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/configurationlistener.hxx>
-#include <unotest/bootstrapfixturebase.hxx>
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 #include <officecfg/Office/Math.hxx>
 
 namespace {

@@ -19,10 +19,8 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
 #include <cassert>
 #include <chrono>
-#include <cstddef>
 #include <vector>
 #include <set>
 

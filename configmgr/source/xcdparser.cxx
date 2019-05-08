@@ -24,7 +24,6 @@
 #include <set>
 
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <rtl/ustring.hxx>
 #include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>

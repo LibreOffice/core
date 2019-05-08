@@ -13,7 +13,6 @@
 
 #include "data.hxx"
 #include "node.hxx"
-#include "nodemap.hxx"
 #include "rootnode.hxx"
 
 namespace configmgr {

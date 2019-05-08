@@ -27,7 +27,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -37,9 +36,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/string.h>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
@@ -47,7 +44,6 @@
 #include "childaccess.hxx"
 #include "components.hxx"
 #include "data.hxx"
-#include "groupnode.hxx"
 #include "localizedpropertynode.hxx"
 #include "localizedvaluenode.hxx"
 #include "lock.hxx"
@@ -55,7 +51,6 @@
 #include "node.hxx"
 #include "propertynode.hxx"
 #include "rootaccess.hxx"
-#include "setnode.hxx"
 #include "type.hxx"
 
 namespace configmgr {

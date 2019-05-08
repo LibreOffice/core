@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
 #include <cassert>
 
 #include <rtl/ustring.hxx>

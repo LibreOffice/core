@@ -22,8 +22,6 @@
 #include <cassert>
 
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/beans/XProperty.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -32,7 +30,6 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
 #include <com/sun/star/registry/InvalidValueException.hpp>
-#include <com/sun/star/registry/MergeConflictException.hpp>
 #include <com/sun/star/registry/RegistryKeyType.hpp>
 #include <com/sun/star/registry/RegistryValueType.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -54,7 +51,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 

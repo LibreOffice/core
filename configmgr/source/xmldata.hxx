@@ -22,6 +22,8 @@
 
 #include <sal/config.h>
 
+#include <rtl/ustring.hxx>
+
 #include "type.hxx"
 
 namespace xmlreader {
