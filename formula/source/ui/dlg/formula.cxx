@@ -72,10 +72,8 @@ using namespace ::com::sun::star;
 class FormulaDlg_Impl
 {
 public:
-    static ::std::pair<RefButton*, RefEdit*>
+    ::std::pair<RefButton*, RefEdit*>
         RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
-    ::std::pair<WeldRefButton*, WeldRefEdit*>
-        RefInputStartBefore( WeldRefEdit* pEdit, WeldRefButton* pButton );
     void            RefInputStartAfter();
     void            RefInputDoneAfter( bool bForced );
     bool            CalcValue( const OUString& rStrExp, OUString& rStrResult, bool bForceMatrixFormula = false );
@@ -118,7 +116,7 @@ public:
 
     void            SetData( sal_Int32 nFStart, sal_Int32 nNextFStart, sal_Int32 nNextFEnd, sal_Int32& PrivStart, sal_Int32& PrivEnd);
 
-    WeldRefEdit*    GetCurrRefEdit();
+    RefEdit*    GetCurrRefEdit();
 
     const FormulaHelper& GetFormulaHelper() const { return m_aFormulaHelper;}
     void InitFormulaOpCodeMapper();
@@ -174,8 +172,8 @@ public:
     int m_nSelectionStart;
     int m_nSelectionEnd;
 
-    WeldRefEdit* m_pTheRefEdit;
-    WeldRefButton* m_pTheRefButton;
+    RefEdit* m_pTheRefEdit;
+    RefButton* m_pTheRefButton;
 
     std::unique_ptr<weld::Notebook> m_xTabCtrl;
     std::unique_ptr<weld::Container> m_xParaWinBox;
@@ -202,8 +200,8 @@ public:
     std::unique_ptr<weld::Label> m_xFtFormResult;
     std::unique_ptr<weld::Entry> m_xWndFormResult;
 
-    std::unique_ptr<WeldRefEdit> m_xEdRef;
-    std::unique_ptr<WeldRefButton> m_xRefBtn;
+    std::unique_ptr<RefEdit> m_xEdRef;
+    std::unique_ptr<RefButton> m_xRefBtn;
 
     std::unique_ptr<FuncPage> m_xFuncPage;
     std::unique_ptr<StructPage> m_xStructPage;
@@ -260,8 +258,8 @@ FormulaDlg_Impl::FormulaDlg_Impl(weld::Dialog& rDialog,
     , m_xBtnEnd(rBuilder.weld_button("ok"))
     , m_xFtFormResult(rBuilder.weld_label("label1"))
     , m_xWndFormResult(rBuilder.weld_entry("formula_result"))
-    , m_xEdRef(new WeldRefEdit(rBuilder.weld_entry("ED_REF")))
-    , m_xRefBtn(new WeldRefButton(rBuilder.weld_button("RB_REF")))
+    , m_xEdRef(new RefEdit(rBuilder.weld_entry("ED_REF")))
+    , m_xRefBtn(new RefButton(rBuilder.weld_button("RB_REF")))
 {
     //Space for two lines of text
     m_xFtHeadLine->set_label("X\nX\n");
@@ -1508,7 +1506,7 @@ void FormulaDlg_Impl::UpdateSelection()
     UpdateOldSel();
 }
 
-::std::pair<WeldRefButton*, WeldRefEdit*> FormulaDlg_Impl::RefInputStartBefore(WeldRefEdit* pEdit, WeldRefButton* pButton)
+::std::pair<RefButton*, RefEdit*> FormulaDlg_Impl::RefInputStartBefore(RefEdit* pEdit, RefButton* pButton)
 {
     m_pTheRefEdit = pEdit;
     m_pTheRefButton = pButton;
@@ -1535,18 +1533,9 @@ void FormulaDlg_Impl::UpdateSelection()
 
     m_xRefBtn->GetWidget()->set_visible(pButton != nullptr);
 
-    ::std::pair<WeldRefButton*, WeldRefEdit*> aPair;
+    ::std::pair<RefButton*, RefEdit*> aPair;
     aPair.first = pButton ? m_xRefBtn.get() : nullptr;
     aPair.second = m_xEdRef.get();
-    return aPair;
-}
-
-::std::pair<RefButton*, RefEdit*> FormulaDlg_Impl::RefInputStartBefore( RefEdit* pEdit, RefButton* pButton )
-{
-    assert(!pEdit && !pButton);
-    ::std::pair<RefButton*, RefEdit*> aPair;
-    aPair.first = pButton;
-    aPair.second = pEdit;
     return aPair;
 }
 
@@ -1593,7 +1582,7 @@ void FormulaDlg_Impl::RefInputDoneAfter( bool bForced )
     }
 }
 
-WeldRefEdit* FormulaDlg_Impl::GetCurrRefEdit()
+RefEdit* FormulaDlg_Impl::GetCurrRefEdit()
 {
     return m_xEdRef->GetWidget()->get_visible() ? m_xEdRef.get() : m_xParaWin->GetActiveEdit();
 }
@@ -1727,7 +1716,7 @@ void FormulaDlg_Impl::UpdateParaWin( const Selection& _rSelection, const OUStrin
     m_xParaWin->SetArgument( nPrivActiv, m_xEdRef->GetText());
     m_xParaWin->UpdateParas();
 
-    WeldRefEdit* pEd = GetCurrRefEdit();
+    RefEdit* pEd = GetCurrRefEdit();
     if (pEd)
         pEd->SetSelection( theSel );
 }
@@ -1735,7 +1724,7 @@ void FormulaDlg_Impl::UpdateParaWin( const Selection& _rSelection, const OUStrin
 bool FormulaDlg_Impl::UpdateParaWin(Selection& _rSelection)
 {
     OUString      aStrEd;
-    WeldRefEdit* pEd = GetCurrRefEdit();
+    RefEdit* pEd = GetCurrRefEdit();
     if (pEd && !m_pTheRefEdit)
     {
         _rSelection = pEd->GetSelection();
@@ -1755,7 +1744,7 @@ bool FormulaDlg_Impl::UpdateParaWin(Selection& _rSelection)
 
 void FormulaDlg_Impl::SetEdSelection()
 {
-    WeldRefEdit* pEd = GetCurrRefEdit()/*aScParaWin.GetActiveEdit()*/;
+    RefEdit* pEd = GetCurrRefEdit()/*aScParaWin.GetActiveEdit()*/;
     if (pEd)
     {
         Selection theSel = m_xEdRef->GetSelection();
@@ -1800,14 +1789,9 @@ void FormulaModalDialog::Update()
     m_pImpl->Update();
 }
 
-::std::pair<WeldRefButton*, WeldRefEdit*> FormulaModalDialog::RefInputStartBefore( WeldRefEdit* pEdit, WeldRefButton* pButton )
-{
-    return m_pImpl->RefInputStartBefore( pEdit, pButton );
-}
-
 ::std::pair<RefButton*, RefEdit*> FormulaModalDialog::RefInputStartBefore( RefEdit* pEdit, RefButton* pButton )
 {
-    return formula::FormulaDlg_Impl::RefInputStartBefore(pEdit, pButton);
+    return m_pImpl->RefInputStartBefore( pEdit, pButton );
 }
 
 void FormulaModalDialog::RefInputStartAfter()
@@ -1877,14 +1861,9 @@ void FormulaDlg::DoEnter()
     m_pImpl->DoEnter(false);
 }
 
-::std::pair<WeldRefButton*, WeldRefEdit*> FormulaDlg::RefInputStartBefore( WeldRefEdit* pEdit, WeldRefButton* pButton )
-{
-    return m_pImpl->RefInputStartBefore( pEdit, pButton );
-}
-
 ::std::pair<RefButton*, RefEdit*> FormulaDlg::RefInputStartBefore( RefEdit* pEdit, RefButton* pButton )
 {
-    return formula::FormulaDlg_Impl::RefInputStartBefore(pEdit, pButton);
+    return m_pImpl->RefInputStartBefore( pEdit, pButton );
 }
 
 void FormulaDlg::RefInputStartAfter()
@@ -1926,7 +1905,7 @@ bool FormulaDlg::UpdateParaWin(Selection& _rSelection)
     return m_pImpl->UpdateParaWin(_rSelection);
 }
 
-WeldRefEdit* FormulaDlg::GetActiveEdit()
+RefEdit* FormulaDlg::GetActiveEdit()
 {
     return m_pImpl->m_xParaWin->GetActiveEdit();
 }
