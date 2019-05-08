@@ -1139,124 +1139,8 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             break;
 
             case LOK_CALLBACK_INVALIDATE_TILES:
-            {
-                RectangleAndPart& rcNew = aCallbackData.setRectangleAndPart(payload);
-                if (rcNew.isEmpty())
-                {
-                    SAL_INFO("lok", "Skipping invalid event [" << type << "]: [" << payload << "].");
+                if (processInvalidateTilesEvent(aCallbackData))
                     return;
-                }
-
-                // If we have to invalidate all tiles, we can skip any new tile invalidation.
-                // Find the last INVALIDATE_TILES entry, if any to see if it's invalidate-all.
-                const auto& pos = std::find_if(m_queue.rbegin(), m_queue.rend(),
-                        [] (const queue_type::value_type& elem) { return (elem.Type == LOK_CALLBACK_INVALIDATE_TILES); });
-                if (pos != m_queue.rend())
-                {
-                    const RectangleAndPart& rcOld = pos->getRectangleAndPart();
-                    if (rcOld.isInfinite() && (rcOld.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart))
-                    {
-                        SAL_INFO("lok", "Skipping queue [" << type << "]: [" << payload << "] since all tiles need to be invalidated.");
-                        return;
-                    }
-
-                    if (rcOld.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart)
-                    {
-                        // If fully overlapping.
-                        if (rcOld.m_aRectangle.IsInside(rcNew.m_aRectangle))
-                        {
-                            SAL_INFO("lok", "Skipping queue [" << type << "]: [" << payload << "] since overlaps existing all-parts.");
-                            return;
-                        }
-                    }
-                }
-
-                if (rcNew.isInfinite())
-                {
-                    SAL_INFO("lok", "Have Empty [" << type << "]: [" << payload << "] so removing all with part " << rcNew.m_nPart << ".");
-                    removeAll(
-                        [&rcNew] (const queue_type::value_type& elem) {
-                            if (elem.Type == LOK_CALLBACK_INVALIDATE_TILES)
-                            {
-                                // Remove exiting if new is all-encompassing, or if of the same part.
-                                const RectangleAndPart rcOld = RectangleAndPart::Create(elem.PayloadString);
-                                return (rcNew.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart);
-                            }
-
-                            // Keep others.
-                            return false;
-                        }
-                    );
-                }
-                else
-                {
-                    const auto rcOrig = rcNew;
-
-                    SAL_INFO("lok", "Have [" << type << "]: [" << payload << "] so merging overlapping.");
-                    removeAll(
-                        [&rcNew] (const queue_type::value_type& elem) {
-                            if (elem.Type == LOK_CALLBACK_INVALIDATE_TILES)
-                            {
-                                const RectangleAndPart& rcOld = elem.getRectangleAndPart();
-                                if (rcNew.m_nPart != -1 && rcOld.m_nPart != -1 && rcOld.m_nPart != rcNew.m_nPart)
-                                {
-                                    SAL_INFO("lok", "Nothing to merge between new: " << rcNew.toString() << ", and old: " << rcOld.toString());
-                                    return false;
-                                }
-
-                                if (rcNew.m_nPart == -1)
-                                {
-                                    // Don't merge unless fully overlapped.
-                                    SAL_INFO("lok", "New " << rcNew.toString() << " has " << rcOld.toString() << "?");
-                                    if (rcNew.m_aRectangle.IsInside(rcOld.m_aRectangle))
-                                    {
-                                        SAL_INFO("lok", "New " << rcNew.toString() << " engulfs old " << rcOld.toString() << ".");
-                                        return true;
-                                    }
-                                }
-                                else if (rcOld.m_nPart == -1)
-                                {
-                                    // Don't merge unless fully overlapped.
-                                    SAL_INFO("lok", "Old " << rcOld.toString() << " has " << rcNew.toString() << "?");
-                                    if (rcOld.m_aRectangle.IsInside(rcNew.m_aRectangle))
-                                    {
-                                        SAL_INFO("lok", "New " << rcNew.toString() << " engulfs old " << rcOld.toString() << ".");
-                                        return true;
-                                    }
-                                }
-                                else
-                                {
-                                    const tools::Rectangle rcOverlap = rcNew.m_aRectangle.GetIntersection(rcOld.m_aRectangle);
-                                    const bool bOverlap = !rcOverlap.IsEmpty();
-                                    SAL_INFO("lok", "Merging " << rcNew.toString() << " & " << rcOld.toString() << " => " <<
-                                            rcOverlap.toString() << " Overlap: " << bOverlap);
-                                    if (bOverlap)
-                                    {
-                                        rcNew.m_aRectangle.Union(rcOld.m_aRectangle);
-                                        SAL_INFO("lok", "Merged: " << rcNew.toString());
-                                        return true;
-                                    }
-                                }
-                            }
-
-                            // Keep others.
-                            return false;
-                        }
-                    );
-
-                    if (rcNew.m_aRectangle != rcOrig.m_aRectangle)
-                    {
-                        SAL_INFO("lok", "Replacing: " << rcOrig.toString() << " by " << rcNew.toString());
-                        if (rcNew.m_aRectangle.GetWidth() < rcOrig.m_aRectangle.GetWidth() ||
-                            rcNew.m_aRectangle.GetHeight() < rcOrig.m_aRectangle.GetHeight())
-                        {
-                            SAL_WARN("lok", "Error: merged rect smaller.");
-                        }
-                    }
-                }
-
-                aCallbackData.setRectangleAndPart(rcNew);
-            }
             break;
 
             // State changes with same name override previous ones with a different value.
@@ -1278,154 +1162,8 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             break;
 
             case LOK_CALLBACK_WINDOW:
-            {
-                // reading JSON by boost might be slow?
-                boost::property_tree::ptree& aTree = aCallbackData.setJson(payload);
-                const unsigned nLOKWindowId = aTree.get<unsigned>("id", 0);
-                if (aTree.get<std::string>("action", "") == "invalidate")
-                {
-                    std::string aRectStr = aTree.get<std::string>("rectangle", "");
-                    // no 'rectangle' field => invalidate all of the window =>
-                    // remove all previous window part invalidations
-                    if (aRectStr.empty())
-                    {
-                        removeAll([&nLOKWindowId] (const queue_type::value_type& elem) {
-                                if (elem.Type == LOK_CALLBACK_WINDOW)
-                                {
-                                    const boost::property_tree::ptree& aOldTree = elem.getJson();
-                                    const unsigned nOldDialogId = aOldTree.get<unsigned>("id", 0);
-                                    if (aOldTree.get<std::string>("action", "") == "invalidate" &&
-                                        nLOKWindowId == nOldDialogId)
-                                    {
-                                        return true;
-                                    }
-                                }
-                                return false;
-                            });
-                    }
-                    else
-                    {
-                        // if we have to invalidate all of the window, ignore
-                        // any part invalidation message
-                        const auto invAllExist = std::any_of(m_queue.rbegin(), m_queue.rend(),
-                                                       [&nLOKWindowId] (const queue_type::value_type& elem)
-                                                       {
-                                                           if (elem.Type != LOK_CALLBACK_WINDOW)
-                                                               return false;
-
-                                                           const boost::property_tree::ptree& aOldTree = elem.getJson();
-                                                           const unsigned nOldDialogId = aOldTree.get<unsigned>("id", 0);
-                                                           return aOldTree.get<std::string>("action", "") == "invalidate" &&
-                                                               nLOKWindowId == nOldDialogId &&
-                                                               aOldTree.get<std::string>("rectangle", "").empty();
-                                                       });
-
-                        // we found an invalidate-all window callback
-                        if (invAllExist)
-                        {
-                            SAL_INFO("lok.dialog", "Skipping queue [" << type << "]: [" << payload << "] since whole window needs to be invalidated.");
-                            return;
-                        }
-
-                        std::istringstream aRectStream(aRectStr);
-                        long nLeft, nTop, nWidth, nHeight;
-                        char nComma;
-                        aRectStream >> nLeft >> nComma >> nTop >> nComma >> nWidth >> nComma >> nHeight;
-                        tools::Rectangle aNewRect(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
-                        bool currentIsRedundant = false;
-                        removeAll([&aNewRect, &nLOKWindowId, &currentIsRedundant] (const queue_type::value_type& elem) {
-                                if (elem.Type != LOK_CALLBACK_WINDOW)
-                                    return false;
-
-                                const boost::property_tree::ptree& aOldTree = elem.getJson();
-                                if (aOldTree.get<std::string>("action", "") == "invalidate")
-                                {
-                                    const unsigned nOldDialogId = aOldTree.get<unsigned>("id", 0);
-                                    std::string aOldRectStr = aOldTree.get<std::string>("rectangle", "");
-                                    // not possible that we encounter an empty
-                                    // rectangle here; we already handled this
-                                    // case before
-                                    std::istringstream aOldRectStream(aOldRectStr);
-                                    long nOldLeft, nOldTop, nOldWidth, nOldHeight;
-                                    char nOldComma;
-                                    aOldRectStream >> nOldLeft >> nOldComma >> nOldTop >> nOldComma >> nOldWidth >> nOldComma >> nOldHeight;
-                                    tools::Rectangle aOldRect = tools::Rectangle(nOldLeft, nOldTop, nOldLeft + nOldWidth, nOldTop + nOldHeight);
-
-                                    if (nLOKWindowId == nOldDialogId)
-                                    {
-                                        // new one engulfs the old one?
-                                        if (aNewRect.IsInside(aOldRect))
-                                        {
-                                            SAL_INFO("lok.dialog", "New " << aNewRect.toString() << " engulfs old " << aOldRect.toString() << ".");
-                                            return true;
-                                        }
-                                        // old one engulfs the new one?
-                                        else if (aOldRect.IsInside(aNewRect))
-                                        {
-                                            SAL_INFO("lok.dialog", "Old " << aOldRect.toString() << " engulfs new " << aNewRect.toString() << ".");
-                                            // we have a rectangle in the queue
-                                            // already that makes the current
-                                            // Callback useless
-                                            currentIsRedundant = true;
-                                            return false;
-                                        }
-                                        else
-                                        {
-                                            SAL_INFO("lok.dialog", "Merging " << aNewRect.toString() << " & " << aOldRect.toString());
-                                            aNewRect.Union(aOldRect);
-                                            SAL_INFO("lok.dialog", "Merged: " << aNewRect.toString());
-                                            return true;
-                                        }
-                                    }
-                                }
-
-                                // keep rest
-                                return false;
-                            });
-
-                        if (currentIsRedundant)
-                        {
-                            SAL_INFO("lok.dialog", "Current payload is engulfed by one already in the queue. Skipping redundant payload: " << aNewRect.toString());
-                            return;
-                        }
-
-                        aTree.put("rectangle", aNewRect.toString().getStr());
-                        aCallbackData.setJson(aTree);
-                        assert(aCallbackData.validate() && "Validation after setJson failed!");
-                    }
-                }
-                else if (aTree.get<std::string>("action", "") == "created")
-                {
-                    // Remove all previous actions on same dialog, if we are creating it anew.
-                    removeAll([&nLOKWindowId](const queue_type::value_type& elem) {
-                        if (elem.Type == LOK_CALLBACK_WINDOW)
-                        {
-                            const boost::property_tree::ptree& aOldTree = elem.getJson();
-                            if (nLOKWindowId == aOldTree.get<unsigned>("id", 0))
-                                return true;
-                        }
-                        return false;
-                    });
-                }
-                else if (aTree.get<std::string>("action", "") == "size_changed")
-                {
-                    // A size change is practically re-creation of the window.
-                    // But at a minimum it's a full invalidation.
-                    removeAll([&nLOKWindowId](const queue_type::value_type& elem) {
-                        if (elem.Type == LOK_CALLBACK_WINDOW)
-                        {
-                            const boost::property_tree::ptree& aOldTree = elem.getJson();
-                            if (nLOKWindowId == aOldTree.get<unsigned>("id", 0))
-                            {
-                                const std::string aOldAction = aOldTree.get<std::string>("action", "");
-                                if (aOldAction == "invalidate")
-                                    return true;
-                            }
-                        }
-                        return false;
-                    });
-                }
-            }
+                if (processWindowEvent(aCallbackData))
+                    return;
             break;
         }
     }
@@ -1456,6 +1194,304 @@ void CallbackFlushHandler::queue(const int type, const char* data)
     {
         Start();
     }
+}
+
+bool CallbackFlushHandler::processInvalidateTilesEvent(CallbackData& aCallbackData)
+{
+    const std::string& payload = aCallbackData.PayloadString;
+    const int type = aCallbackData.Type;
+
+    RectangleAndPart& rcNew = aCallbackData.setRectangleAndPart(payload);
+    if (rcNew.isEmpty())
+    {
+        SAL_INFO("lok", "Skipping invalid event [" << type << "]: [" << payload << "].");
+        return true;
+    }
+
+    // If we have to invalidate all tiles, we can skip any new tile invalidation.
+    // Find the last INVALIDATE_TILES entry, if any to see if it's invalidate-all.
+    const auto& pos
+        = std::find_if(m_queue.rbegin(), m_queue.rend(), [](const queue_type::value_type& elem) {
+              return (elem.Type == LOK_CALLBACK_INVALIDATE_TILES);
+          });
+    if (pos != m_queue.rend())
+    {
+        const RectangleAndPart& rcOld = pos->getRectangleAndPart();
+        if (rcOld.isInfinite() && (rcOld.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart))
+        {
+            SAL_INFO("lok", "Skipping queue [" << type << "]: [" << payload
+                                               << "] since all tiles need to be invalidated.");
+            return true;
+        }
+
+        if (rcOld.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart)
+        {
+            // If fully overlapping.
+            if (rcOld.m_aRectangle.IsInside(rcNew.m_aRectangle))
+            {
+                SAL_INFO("lok", "Skipping queue [" << type << "]: [" << payload
+                                                   << "] since overlaps existing all-parts.");
+                return true;
+            }
+        }
+    }
+
+    if (rcNew.isInfinite())
+    {
+        SAL_INFO("lok", "Have Empty [" << type << "]: [" << payload
+                                       << "] so removing all with part " << rcNew.m_nPart << ".");
+        removeAll([&rcNew](const queue_type::value_type& elem) {
+            if (elem.Type == LOK_CALLBACK_INVALIDATE_TILES)
+            {
+                // Remove exiting if new is all-encompassing, or if of the same part.
+                const RectangleAndPart rcOld = RectangleAndPart::Create(elem.PayloadString);
+                return (rcNew.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart);
+            }
+
+            // Keep others.
+            return false;
+        });
+    }
+    else
+    {
+        const auto rcOrig = rcNew;
+
+        SAL_INFO("lok", "Have [" << type << "]: [" << payload << "] so merging overlapping.");
+        removeAll([&rcNew](const queue_type::value_type& elem) {
+            if (elem.Type == LOK_CALLBACK_INVALIDATE_TILES)
+            {
+                const RectangleAndPart& rcOld = elem.getRectangleAndPart();
+                if (rcNew.m_nPart != -1 && rcOld.m_nPart != -1 && rcOld.m_nPart != rcNew.m_nPart)
+                {
+                    SAL_INFO("lok", "Nothing to merge between new: "
+                                        << rcNew.toString() << ", and old: " << rcOld.toString());
+                    return false;
+                }
+
+                if (rcNew.m_nPart == -1)
+                {
+                    // Don't merge unless fully overlaped.
+                    SAL_INFO("lok", "New " << rcNew.toString() << " has " << rcOld.toString()
+                                           << "?");
+                    if (rcNew.m_aRectangle.IsInside(rcOld.m_aRectangle))
+                    {
+                        SAL_INFO("lok", "New " << rcNew.toString() << " engulfs old "
+                                               << rcOld.toString() << ".");
+                        return true;
+                    }
+                }
+                else if (rcOld.m_nPart == -1)
+                {
+                    // Don't merge unless fully overlaped.
+                    SAL_INFO("lok", "Old " << rcOld.toString() << " has " << rcNew.toString()
+                                           << "?");
+                    if (rcOld.m_aRectangle.IsInside(rcNew.m_aRectangle))
+                    {
+                        SAL_INFO("lok", "New " << rcNew.toString() << " engulfs old "
+                                               << rcOld.toString() << ".");
+                        return true;
+                    }
+                }
+                else
+                {
+                    const tools::Rectangle rcOverlap
+                        = rcNew.m_aRectangle.GetIntersection(rcOld.m_aRectangle);
+                    const bool bOverlap = !rcOverlap.IsEmpty();
+                    SAL_INFO("lok", "Merging " << rcNew.toString() << " & " << rcOld.toString()
+                                               << " => " << rcOverlap.toString()
+                                               << " Overlap: " << bOverlap);
+                    if (bOverlap)
+                    {
+                        rcNew.m_aRectangle.Union(rcOld.m_aRectangle);
+                        SAL_INFO("lok", "Merged: " << rcNew.toString());
+                        return true;
+                    }
+                }
+            }
+
+            // Keep others.
+            return false;
+        });
+
+        if (rcNew.m_aRectangle != rcOrig.m_aRectangle)
+        {
+            SAL_INFO("lok", "Replacing: " << rcOrig.toString() << " by " << rcNew.toString());
+            if (rcNew.m_aRectangle.GetWidth() < rcOrig.m_aRectangle.GetWidth()
+                || rcNew.m_aRectangle.GetHeight() < rcOrig.m_aRectangle.GetHeight())
+            {
+                SAL_WARN("lok", "Error: merged rect smaller.");
+            }
+        }
+    }
+
+    aCallbackData.setRectangleAndPart(rcNew);
+    // Queue this one.
+    return false;
+}
+
+bool CallbackFlushHandler::processWindowEvent(CallbackData& aCallbackData)
+{
+    const std::string& payload = aCallbackData.PayloadString;
+    const int type = aCallbackData.Type;
+
+    boost::property_tree::ptree& aTree = aCallbackData.setJson(payload);
+    const unsigned nLOKWindowId = aTree.get<unsigned>("id", 0);
+    if (aTree.get<std::string>("action", "") == "invalidate")
+    {
+        std::string aRectStr = aTree.get<std::string>("rectangle", "");
+        // no 'rectangle' field => invalidate all of the window =>
+        // remove all previous window part invalidations
+        if (aRectStr.empty())
+        {
+            removeAll([&nLOKWindowId](const queue_type::value_type& elem) {
+                if (elem.Type == LOK_CALLBACK_WINDOW)
+                {
+                    const boost::property_tree::ptree& aOldTree = elem.getJson();
+                    const unsigned nOldDialogId = aOldTree.get<unsigned>("id", 0);
+                    if (aOldTree.get<std::string>("action", "") == "invalidate"
+                        && nLOKWindowId == nOldDialogId)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            });
+        }
+        else
+        {
+            // if we have to invalidate all of the window, ignore
+            // any part invalidation message
+            const auto invAllExist = std::any_of(m_queue.rbegin(), m_queue.rend(),
+                                        [&nLOKWindowId] (const queue_type::value_type& elem)
+                                        {
+                                            if (elem.Type != LOK_CALLBACK_WINDOW)
+                                                return false;
+
+                                            const boost::property_tree::ptree& aOldTree = elem.getJson();
+                                            const unsigned nOldDialogId = aOldTree.get<unsigned>("id", 0);
+                                            return aOldTree.get<std::string>("action", "") == "invalidate" &&
+                                                nLOKWindowId == nOldDialogId &&
+                                                aOldTree.get<std::string>("rectangle", "").empty();
+                                        });
+
+            // we found a invalidate-all window callback
+            if (invAllExist)
+            {
+                SAL_INFO("lok.dialog", "Skipping queue ["
+                                           << type << "]: [" << payload
+                                           << "] since whole window needs to be invalidated.");
+                return true;
+            }
+
+            std::istringstream aRectStream(aRectStr);
+            long nLeft, nTop, nWidth, nHeight;
+            char nComma;
+            aRectStream >> nLeft >> nComma >> nTop >> nComma >> nWidth >> nComma >> nHeight;
+            tools::Rectangle aNewRect(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
+            bool currentIsRedundant = false;
+            removeAll([&aNewRect, &nLOKWindowId,
+                       &currentIsRedundant](const queue_type::value_type& elem) {
+                if (elem.Type != LOK_CALLBACK_WINDOW)
+                    return false;
+
+                const boost::property_tree::ptree& aOldTree = elem.getJson();
+                if (aOldTree.get<std::string>("action", "") == "invalidate")
+                {
+                    const unsigned nOldDialogId = aOldTree.get<unsigned>("id", 0);
+                    std::string aOldRectStr = aOldTree.get<std::string>("rectangle", "");
+                    // not possible that we encounter an empty
+                    // rectangle here; we already handled this
+                    // case before
+                    std::istringstream aOldRectStream(aOldRectStr);
+                    long nOldLeft, nOldTop, nOldWidth, nOldHeight;
+                    char nOldComma;
+                    aOldRectStream >> nOldLeft >> nOldComma >> nOldTop >> nOldComma >> nOldWidth
+                        >> nOldComma >> nOldHeight;
+                    tools::Rectangle aOldRect = tools::Rectangle(
+                        nOldLeft, nOldTop, nOldLeft + nOldWidth, nOldTop + nOldHeight);
+
+                    if (nLOKWindowId == nOldDialogId)
+                    {
+                        // new one engulfs the old one?
+                        if (aNewRect.IsInside(aOldRect))
+                        {
+                            SAL_INFO("lok.dialog", "New " << aNewRect.toString() << " engulfs old "
+                                                          << aOldRect.toString() << ".");
+                            return true;
+                        }
+                        // old one engulfs the new one?
+                        else if (aOldRect.IsInside(aNewRect))
+                        {
+                            SAL_INFO("lok.dialog", "Old " << aOldRect.toString() << " engulfs new "
+                                                          << aNewRect.toString() << ".");
+                            // we have a rectangle in the queue
+                            // already that makes the current
+                            // Callback useless
+                            currentIsRedundant = true;
+                            return false;
+                        }
+                        else
+                        {
+                            SAL_INFO("lok.dialog", "Merging " << aNewRect.toString() << " & "
+                                                              << aOldRect.toString());
+                            aNewRect.Union(aOldRect);
+                            SAL_INFO("lok.dialog", "Merged: " << aNewRect.toString());
+                            return true;
+                        }
+                    }
+                }
+
+                // keep rest
+                return false;
+            });
+
+            if (currentIsRedundant)
+            {
+                SAL_INFO("lok.dialog", "Current payload is engulfed by one already in the queue. "
+                                       "Skipping redundant payload: "
+                                           << aNewRect.toString());
+                return true;
+            }
+
+            aTree.put("rectangle", aNewRect.toString().getStr());
+            aCallbackData.setJson(aTree);
+            assert(aCallbackData.validate() && "Validation after setJson failed!");
+        }
+    }
+    else if (aTree.get<std::string>("action", "") == "created")
+    {
+        // Remove all previous actions on same dialog, if we are creating it anew.
+        removeAll([&nLOKWindowId](const queue_type::value_type& elem) {
+            if (elem.Type == LOK_CALLBACK_WINDOW)
+            {
+                const boost::property_tree::ptree& aOldTree = elem.getJson();
+                if (nLOKWindowId == aOldTree.get<unsigned>("id", 0))
+                    return true;
+            }
+            return false;
+        });
+    }
+    else if (aTree.get<std::string>("action", "") == "size_changed")
+    {
+        // A size change is practically re-creation of the window.
+        // But at a minimum it's a full invalidation.
+        removeAll([&nLOKWindowId](const queue_type::value_type& elem) {
+            if (elem.Type == LOK_CALLBACK_WINDOW)
+            {
+                const boost::property_tree::ptree& aOldTree = elem.getJson();
+                if (nLOKWindowId == aOldTree.get<unsigned>("id", 0))
+                {
+                    const std::string aOldAction = aOldTree.get<std::string>("action", "");
+                    if (aOldAction == "invalidate")
+                        return true;
+                }
+            }
+            return false;
+        });
+    }
+
+    // Queue this one.
+    return false;
 }
 
 void CallbackFlushHandler::Invoke()
