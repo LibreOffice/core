@@ -48,7 +48,7 @@ namespace dbaui
         OUString        m_sTypeNames;           // these type names are the ones out of the resource file
         TOTypeInfoSP    m_pTypeInfo;            // fall back when type is unknown because database driver has a failure
 
-        bool            m_bAllowAutoIncrementValue; // no : 1 NO BIT , is true when the datasource has a AutoIncrementValue property in their info property
+        bool            m_bAllowAutoIncrementValue; // no : 1 NO BIT , is true when the datasource has an AutoIncrementValue property in their info property
         bool            m_bNew      : 1;        // is true when we create a new table
 
 
