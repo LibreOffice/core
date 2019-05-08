@@ -109,8 +109,8 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry, public SfxListener
     //cond format ui elements
     FontPrevWindow maWdPreview;
     std::unique_ptr<weld::ComboBox> mxLbCondType;
-    std::unique_ptr<formula::WeldRefEdit> mxEdVal1;
-    std::unique_ptr<formula::WeldRefEdit> mxEdVal2;
+    std::unique_ptr<formula::RefEdit> mxEdVal1;
+    std::unique_ptr<formula::RefEdit> mxEdVal2;
     std::unique_ptr<weld::Label> mxFtVal;
     std::unique_ptr<weld::Label> mxFtStyle;
     std::unique_ptr<weld::ComboBox> mxLbStyle;
@@ -128,7 +128,7 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry, public SfxListener
     void Init(ScCondFormatDlg* pDialogParent);
     DECL_LINK( StyleSelectHdl, weld::ComboBox&, void );
     DECL_LINK( ConditionTypeSelectHdl, weld::ComboBox&, void );
-    DECL_LINK( OnEdChanged, formula::WeldRefEdit&, void );
+    DECL_LINK( OnEdChanged, formula::RefEdit&, void );
 
     // Searches the lookup table for the entry position, given condition mode
     static sal_Int32 ConditionModeToEntryPos( ScConditionMode eMode );
@@ -162,7 +162,7 @@ class ScFormulaFrmtEntry : public ScCondFrmtEntry
     std::unique_ptr<weld::ComboBox> mxLbStyle;
     std::unique_ptr<weld::Widget> mxWdPreviewWin;
     std::unique_ptr<weld::CustomWeld> mxWdPreview;
-    std::unique_ptr<formula::WeldRefEdit> mxEdFormula;
+    std::unique_ptr<formula::RefEdit> mxEdFormula;
 
     ScFormatEntry* createFormulaEntry() const;
     virtual OUString GetExpressionString() override;

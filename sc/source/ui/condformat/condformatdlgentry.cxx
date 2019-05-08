@@ -180,8 +180,8 @@ ScConditionFrmtEntry::ScConditionFrmtEntry(ScCondFormatList* pParent, ScDocument
         const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry)
     : ScCondFrmtEntry(pParent, pDoc, rPos)
     , mxLbCondType(mxBuilder->weld_combo_box("typeis"))
-    , mxEdVal1(new formula::WeldRefEdit(mxBuilder->weld_entry("val1")))
-    , mxEdVal2(new formula::WeldRefEdit(mxBuilder->weld_entry("val2")))
+    , mxEdVal1(new formula::RefEdit(mxBuilder->weld_entry("val1")))
+    , mxEdVal2(new formula::RefEdit(mxBuilder->weld_entry("val2")))
     , mxFtVal(mxBuilder->weld_label("valueft"))
     , mxFtStyle(mxBuilder->weld_label("styleft"))
     , mxLbStyle(mxBuilder->weld_combo_box("style"))
@@ -271,7 +271,7 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
     return pEntry;
 }
 
-IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, formula::WeldRefEdit&, rRefEdit, void)
+IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, formula::RefEdit&, rRefEdit, void)
 {
     weld::Entry& rEdit = *rRefEdit.GetWidget();
     OUString aFormula = rEdit.get_text();
@@ -524,7 +524,7 @@ ScFormulaFrmtEntry::ScFormulaFrmtEntry(ScCondFormatList* pParent, ScDocument* pD
     , mxLbStyle(mxBuilder->weld_combo_box("style"))
     , mxWdPreviewWin(mxBuilder->weld_widget("previewwin"))
     , mxWdPreview(new weld::CustomWeld(*mxBuilder, "preview", maWdPreview))
-    , mxEdFormula(new formula::WeldRefEdit(mxBuilder->weld_entry("formula")))
+    , mxEdFormula(new formula::RefEdit(mxBuilder->weld_entry("formula")))
 {
     mxWdPreview->set_size_request(-1, mxLbStyle->get_preferred_size().Height());
 

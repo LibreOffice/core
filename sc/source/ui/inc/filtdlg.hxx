@@ -130,8 +130,8 @@ private:
     std::unique_ptr<weld::CheckButton> m_xBtnUnique;
     std::unique_ptr<weld::CheckButton> m_xBtnCopyResult;
     std::unique_ptr<weld::ComboBox> m_xLbCopyArea;
-    std::unique_ptr<formula::WeldRefEdit> m_xEdCopyArea;
-    std::unique_ptr<formula::WeldRefButton> m_xRbCopyArea;
+    std::unique_ptr<formula::RefEdit> m_xEdCopyArea;
+    std::unique_ptr<formula::RefButton> m_xRbCopyArea;
     std::unique_ptr<weld::CheckButton> m_xBtnDestPers;
     std::unique_ptr<weld::Label> m_xFtDbAreaLabel;
     std::unique_ptr<weld::Label> m_xFtDbArea;
@@ -184,11 +184,11 @@ private:
 
     bool                bRefInputMode;
 
-    formula::WeldRefEdit* m_pRefInputEdit;
+    formula::RefEdit* m_pRefInputEdit;
 
     std::unique_ptr<weld::ComboBox> m_xLbFilterArea;
-    std::unique_ptr<formula::WeldRefEdit> m_xEdFilterArea;
-    std::unique_ptr<formula::WeldRefButton> m_xRbFilterArea;
+    std::unique_ptr<formula::RefEdit> m_xEdFilterArea;
+    std::unique_ptr<formula::RefButton> m_xRbFilterArea;
 
     std::unique_ptr<weld::Expander> m_xExpander;
     std::unique_ptr<weld::CheckButton> m_xBtnCase;
@@ -197,8 +197,8 @@ private:
     std::unique_ptr<weld::CheckButton> m_xBtnUnique;
     std::unique_ptr<weld::CheckButton> m_xBtnCopyResult;
     std::unique_ptr<weld::ComboBox> m_xLbCopyArea;
-    std::unique_ptr<formula::WeldRefEdit> m_xEdCopyArea;
-    std::unique_ptr<formula::WeldRefButton> m_xRbCopyArea;
+    std::unique_ptr<formula::RefEdit> m_xEdCopyArea;
+    std::unique_ptr<formula::RefButton> m_xRbCopyArea;
     std::unique_ptr<weld::CheckButton> m_xBtnDestPers;
     std::unique_ptr<weld::Label> m_xFtDbAreaLabel;
     std::unique_ptr<weld::Label> m_xFtDbArea;
@@ -216,12 +216,12 @@ private:
 
     // Handler
     DECL_LINK( FilterAreaSelHdl, weld::ComboBox&, void );
-    DECL_LINK( FilterAreaModHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( FilterAreaModHdl, formula::RefEdit&, void );
     DECL_LINK( EndDlgHdl,  weld::Button&, void );
 
     // RefInput control
-    DECL_LINK( RefInputEditHdl, formula::WeldRefEdit&, void );
-    DECL_LINK( RefInputButtonHdl, formula::WeldRefButton&, void );
+    DECL_LINK( RefInputEditHdl, formula::RefEdit&, void );
+    DECL_LINK( RefInputButtonHdl, formula::RefButton&, void );
     void RefInputHdl();
 };
 

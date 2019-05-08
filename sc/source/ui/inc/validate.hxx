@@ -40,7 +40,7 @@ protected:
 #endif
     void            (ScRefHandlerCaller::*m_pSetReferenceHdl)( const ScRange& , const ScDocument* );
     void            (ScRefHandlerCaller::*m_pSetActiveHdl)();
-    void            (ScRefHandlerCaller::*m_pRefInputStartPreHdl)( formula::WeldRefEdit* pEdit, const formula::WeldRefButton* pButton );
+    void            (ScRefHandlerCaller::*m_pRefInputStartPreHdl)( formula::RefEdit* pEdit, const formula::RefButton* pButton );
     void            (ScRefHandlerCaller::*m_pRefInputDonePostHdl)();
 #if defined( _WIN32)
    #pragma pack(pop)
@@ -49,7 +49,7 @@ protected:
 public:
     typedef void            (ScRefHandlerCaller::*PFUNCSETREFHDLTYPE)( const ScRange& , const ScDocument* );
     typedef void            (ScRefHandlerCaller::*PCOMMONHDLTYPE)();
-    typedef void            (ScRefHandlerCaller::*PINPUTSTARTDLTYPE)(  formula::WeldRefEdit* pEdit, const formula::WeldRefButton* pButton );
+    typedef void            (ScRefHandlerCaller::*PINPUTSTARTDLTYPE)(  formula::RefEdit* pEdit, const formula::RefButton* pButton );
 
     void SetSetRefHdl(  PFUNCSETREFHDLTYPE pNewHdl )
     {
@@ -107,12 +107,12 @@ private:
     OUString const                    maStrList;
     sal_Unicode                 mcFmlaSep;      /// List separator in formulas.
 
-    DECL_LINK( EditSetFocusHdl, formula::WeldRefEdit&, void );
-    DECL_LINK( KillEditFocusHdl, formula::WeldRefEdit&, void );
-    DECL_LINK( KillButtonFocusHdl, formula::WeldRefButton&, void );
-    DECL_LINK( ClickHdl, formula::WeldRefButton&, void );
+    DECL_LINK( EditSetFocusHdl, formula::RefEdit&, void );
+    DECL_LINK( KillEditFocusHdl, formula::RefEdit&, void );
+    DECL_LINK( KillButtonFocusHdl, formula::RefButton&, void );
+    DECL_LINK( ClickHdl, formula::RefButton&, void );
 
-    formula::WeldRefEdit* m_pRefEdit;
+    formula::RefEdit* m_pRefEdit;
 
     std::unique_ptr<weld::ComboBox> m_xLbAllow;
     std::unique_ptr<weld::CheckButton> m_xCbAllow;      /// Allow blank cells.
@@ -122,12 +122,12 @@ private:
     std::unique_ptr<weld::ComboBox> m_xLbValue;
     std::unique_ptr<weld::Label> m_xFtMin;
     std::unique_ptr<weld::Widget> m_xMinGrid;
-    std::unique_ptr<formula::WeldRefEdit> m_xEdMin;
+    std::unique_ptr<formula::RefEdit> m_xEdMin;
     std::unique_ptr<weld::TextView> m_xEdList;       /// Entries for explicit list
     std::unique_ptr<weld::Label> m_xFtMax;
-    std::unique_ptr<formula::WeldRefEdit> m_xEdMax;
+    std::unique_ptr<formula::RefEdit> m_xEdMax;
     std::unique_ptr<weld::Label> m_xFtHint;       /// Hint text for cell range validity.
-    std::unique_ptr<formula::WeldRefButton> m_xBtnRef;
+    std::unique_ptr<formula::RefButton> m_xBtnRef;
     std::unique_ptr<weld::Container> m_xRefGrid;
 
     weld::Container* m_pRefEditParent;
@@ -135,7 +135,7 @@ private:
 
     void            SetReferenceHdl( const ScRange& , const ScDocument* );
     void            SetActiveHdl();
-    void            RefInputStartPreHdl(formula::WeldRefEdit* pEdit, const formula::WeldRefButton* pButton);
+    void            RefInputStartPreHdl(formula::RefEdit* pEdit, const formula::RefButton* pButton);
     void            RefInputDonePostHdl();
     ScValidationDlg * GetValidationDlg();
 public:
@@ -192,7 +192,7 @@ public:
     bool IsRefInputting(){  return m_bRefInputting; }
     weld::Container* get_refinput_shrink_parent() { return m_xHBox.get(); }
 
-    virtual void        RefInputStart( formula::WeldRefEdit* pEdit, formula::WeldRefButton* pButton = nullptr ) override
+    virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) override
     {
         if( !CanInputStart( pEdit ) )
             return;
@@ -201,11 +201,6 @@ public:
             (m_pHandler->*m_pRefInputStartPreHdl)( pEdit, pButton );
         m_bRefInputting = true;
         ScValidationDlgBase::RefInputStart( pEdit, pButton );
-    }
-
-    virtual void        RefInputStart( formula::RefEdit* /*pEdit*/, formula::RefButton* /*pButton*/ = nullptr ) override
-    {
-        assert(false);
     }
 
     virtual void        RefInputDone( bool bForced = false ) override

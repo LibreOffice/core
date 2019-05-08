@@ -103,7 +103,7 @@ IMPL_LINK(ScSolverSuccessDialog, ClickHdl, weld::Button&, rBtn, void)
 }
 
 ScCursorRefEdit::ScCursorRefEdit(std::unique_ptr<weld::Entry> xControl)
-    : formula::WeldRefEdit(std::move(xControl))
+    : formula::RefEdit(std::move(xControl))
 {
     xEntry->connect_key_press(Link<const KeyEvent&, bool>()); //acknowledge we first remove the old one
     xEntry->connect_key_press(LINK(this, ScCursorRefEdit, KeyInputHdl));
@@ -128,7 +128,7 @@ IMPL_LINK(ScCursorRefEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
             maCursorDownLink.Call( *this );
         return true;
     }
-    return formula::WeldRefEdit::KeyInput(rKEvt);
+    return formula::RefEdit::KeyInput(rKEvt);
 }
 
 ScOptSolverSave::ScOptSolverSave( const OUString& rObjective, bool bMax, bool bMin, bool bValue,
@@ -163,42 +163,42 @@ ScOptSolverDlg::ScOptSolverDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     , nScrollPos(0)
     , mpEdActive(nullptr)
     , m_xFtObjectiveCell(m_xBuilder->weld_label("targetlabel"))
-    , m_xEdObjectiveCell(new formula::WeldRefEdit(m_xBuilder->weld_entry("targetedit")))
-    , m_xRBObjectiveCell(new formula::WeldRefButton(m_xBuilder->weld_button("targetbutton")))
+    , m_xEdObjectiveCell(new formula::RefEdit(m_xBuilder->weld_entry("targetedit")))
+    , m_xRBObjectiveCell(new formula::RefButton(m_xBuilder->weld_button("targetbutton")))
     , m_xRbMax(m_xBuilder->weld_radio_button("max"))
     , m_xRbMin(m_xBuilder->weld_radio_button("min"))
     , m_xRbValue(m_xBuilder->weld_radio_button("value"))
-    , m_xEdTargetValue(new formula::WeldRefEdit(m_xBuilder->weld_entry("valueedit")))
-    , m_xRBTargetValue(new formula::WeldRefButton(m_xBuilder->weld_button("valuebutton")))
+    , m_xEdTargetValue(new formula::RefEdit(m_xBuilder->weld_entry("valueedit")))
+    , m_xRBTargetValue(new formula::RefButton(m_xBuilder->weld_button("valuebutton")))
     , m_xFtVariableCells(m_xBuilder->weld_label("changelabel"))
-    , m_xEdVariableCells(new formula::WeldRefEdit(m_xBuilder->weld_entry("changeedit")))
-    , m_xRBVariableCells(new formula::WeldRefButton(m_xBuilder->weld_button("changebutton")))
+    , m_xEdVariableCells(new formula::RefEdit(m_xBuilder->weld_entry("changeedit")))
+    , m_xRBVariableCells(new formula::RefButton(m_xBuilder->weld_button("changebutton")))
     , m_xFtCellRef(m_xBuilder->weld_label("cellreflabel"))
     , m_xEdLeft1(new ScCursorRefEdit(m_xBuilder->weld_entry("ref1edit")))
-    , m_xRBLeft1(new formula::WeldRefButton(m_xBuilder->weld_button("ref1button")))
+    , m_xRBLeft1(new formula::RefButton(m_xBuilder->weld_button("ref1button")))
     , m_xFtOperator(m_xBuilder->weld_label("oplabel"))
     , m_xLbOp1(m_xBuilder->weld_combo_box("op1list"))
     , m_xFtConstraint(m_xBuilder->weld_label("constraintlabel"))
     , m_xEdRight1(new ScCursorRefEdit(m_xBuilder->weld_entry("val1edit")))
-    , m_xRBRight1(new formula::WeldRefButton(m_xBuilder->weld_button("val1button")))
+    , m_xRBRight1(new formula::RefButton(m_xBuilder->weld_button("val1button")))
     , m_xBtnDel1(m_xBuilder->weld_button("del1"))
     , m_xEdLeft2(new ScCursorRefEdit(m_xBuilder->weld_entry("ref2edit")))
-    , m_xRBLeft2(new formula::WeldRefButton(m_xBuilder->weld_button("ref2button")))
+    , m_xRBLeft2(new formula::RefButton(m_xBuilder->weld_button("ref2button")))
     , m_xLbOp2(m_xBuilder->weld_combo_box("op2list"))
     , m_xEdRight2(new ScCursorRefEdit(m_xBuilder->weld_entry("val2edit")))
-    , m_xRBRight2(new formula::WeldRefButton(m_xBuilder->weld_button("val2button")))
+    , m_xRBRight2(new formula::RefButton(m_xBuilder->weld_button("val2button")))
     , m_xBtnDel2(m_xBuilder->weld_button("del2"))
     , m_xEdLeft3(new ScCursorRefEdit(m_xBuilder->weld_entry("ref3edit")))
-    , m_xRBLeft3(new formula::WeldRefButton(m_xBuilder->weld_button("ref3button")))
+    , m_xRBLeft3(new formula::RefButton(m_xBuilder->weld_button("ref3button")))
     , m_xLbOp3(m_xBuilder->weld_combo_box("op3list"))
     , m_xEdRight3(new ScCursorRefEdit(m_xBuilder->weld_entry("val3edit")))
-    , m_xRBRight3(new formula::WeldRefButton(m_xBuilder->weld_button("val3button")))
+    , m_xRBRight3(new formula::RefButton(m_xBuilder->weld_button("val3button")))
     , m_xBtnDel3(m_xBuilder->weld_button("del3"))
     , m_xEdLeft4(new ScCursorRefEdit(m_xBuilder->weld_entry("ref4edit")))
-    , m_xRBLeft4(new formula::WeldRefButton(m_xBuilder->weld_button("ref4button")))
+    , m_xRBLeft4(new formula::RefButton(m_xBuilder->weld_button("ref4button")))
     , m_xLbOp4(m_xBuilder->weld_combo_box("op4list"))
     , m_xEdRight4(new ScCursorRefEdit(m_xBuilder->weld_entry("val4edit")))
-    , m_xRBRight4(new formula::WeldRefButton(m_xBuilder->weld_button("val4button")))
+    , m_xRBRight4(new formula::RefButton(m_xBuilder->weld_button("val4button")))
     , m_xBtnDel4(m_xBuilder->weld_button("del4"))
     , m_xScrollBar(m_xBuilder->weld_scrolled_window("scrollbar"))
     , m_xBtnOpt(m_xBuilder->weld_button("options"))
@@ -276,8 +276,8 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     m_xBtnCancel->connect_clicked( LINK( this, ScOptSolverDlg, BtnHdl ) );
     m_xBtnSolve->connect_clicked( LINK( this, ScOptSolverDlg, BtnHdl ) );
 
-    Link<formula::WeldRefEdit&,void> aEditLink = LINK( this, ScOptSolverDlg, GetEditFocusHdl );
-    Link<formula::WeldRefButton&,void> aButtonLink = LINK( this, ScOptSolverDlg, GetButtonFocusHdl );
+    Link<formula::RefEdit&,void> aEditLink = LINK( this, ScOptSolverDlg, GetEditFocusHdl );
+    Link<formula::RefButton&,void> aButtonLink = LINK( this, ScOptSolverDlg, GetButtonFocusHdl );
     m_xEdObjectiveCell->SetGetFocusHdl( aEditLink );
     m_xRBObjectiveCell->SetGetFocusHdl( aButtonLink );
     m_xEdTargetValue->SetGetFocusHdl( aEditLink );
@@ -313,7 +313,7 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
 
     Link<ScCursorRefEdit&,void> aCursorUp = LINK( this, ScOptSolverDlg, CursorUpHdl );
     Link<ScCursorRefEdit&,void> aCursorDown = LINK( this, ScOptSolverDlg, CursorDownHdl );
-    Link<formula::WeldRefEdit&,void> aCondModify = LINK( this, ScOptSolverDlg, CondModifyHdl );
+    Link<formula::RefEdit&,void> aCondModify = LINK( this, ScOptSolverDlg, CondModifyHdl );
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
         mpLeftEdit[nRow]->SetCursorLinks( aCursorUp, aCursorDown );
@@ -544,9 +544,9 @@ IMPL_LINK(ScOptSolverDlg, BtnHdl, weld::Button&, rBtn, void)
     }
 }
 
-IMPL_LINK( ScOptSolverDlg, GetEditFocusHdl, formula::WeldRefEdit&, rCtrl, void )
+IMPL_LINK( ScOptSolverDlg, GetEditFocusHdl, formula::RefEdit&, rCtrl, void )
 {
-    formula::WeldRefEdit* pEdit = nullptr;
+    formula::RefEdit* pEdit = nullptr;
     mpEdActive = nullptr;
 
     if( &rCtrl == m_xEdObjectiveCell.get() )
@@ -567,9 +567,9 @@ IMPL_LINK( ScOptSolverDlg, GetEditFocusHdl, formula::WeldRefEdit&, rCtrl, void )
         pEdit->SelectAll();
 }
 
-IMPL_LINK( ScOptSolverDlg, GetButtonFocusHdl, formula::WeldRefButton&, rCtrl, void )
+IMPL_LINK( ScOptSolverDlg, GetButtonFocusHdl, formula::RefButton&, rCtrl, void )
 {
-    formula::WeldRefEdit* pEdit = nullptr;
+    formula::RefEdit* pEdit = nullptr;
     mpEdActive = nullptr;
 
     if( &rCtrl == m_xRBObjectiveCell.get() )
@@ -605,12 +605,12 @@ IMPL_LINK(ScOptSolverDlg, GetFocusHdl, weld::Widget&, rCtrl, void)
     }
 }
 
-IMPL_LINK_NOARG(ScOptSolverDlg, LoseEditFocusHdl, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScOptSolverDlg, LoseEditFocusHdl, formula::RefEdit&, void)
 {
     mbDlgLostFocus = !m_xDialog->has_toplevel_focus();
 }
 
-IMPL_LINK_NOARG(ScOptSolverDlg, LoseButtonFocusHdl, formula::WeldRefButton&, void)
+IMPL_LINK_NOARG(ScOptSolverDlg, LoseButtonFocusHdl, formula::RefButton&, void)
 {
     mbDlgLostFocus = !m_xDialog->has_toplevel_focus();
 }
@@ -641,7 +641,7 @@ IMPL_LINK(ScOptSolverDlg, DelBtnHdl, weld::Button&, rBtn, void)
         }
 }
 
-IMPL_LINK_NOARG(ScOptSolverDlg, TargetModifyHdl, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScOptSolverDlg, TargetModifyHdl, formula::RefEdit&, void)
 {
     // modify handler for the target edit:
     //  select "Value of" if something is input into the edit
@@ -649,7 +649,7 @@ IMPL_LINK_NOARG(ScOptSolverDlg, TargetModifyHdl, formula::WeldRefEdit&, void)
         m_xRbValue->set_active(true);
 }
 
-IMPL_LINK_NOARG(ScOptSolverDlg, CondModifyHdl, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScOptSolverDlg, CondModifyHdl, formula::RefEdit&, void)
 {
     // modify handler for the condition edits, just to enable/disable "delete" buttons
     ReadConditions();
@@ -687,7 +687,7 @@ IMPL_LINK( ScOptSolverDlg, CursorUpHdl, ScCursorRefEdit&, rEdit, void )
     }
     else
     {
-        formula::WeldRefEdit* pFocus = nullptr;
+        formula::RefEdit* pFocus = nullptr;
         for ( sal_uInt16 nRow = 1; nRow < EDIT_ROW_COUNT; ++nRow )      // second row or below: move focus
         {
             if ( &rEdit == mpLeftEdit[nRow] )
@@ -716,7 +716,7 @@ IMPL_LINK( ScOptSolverDlg, CursorDownHdl, ScCursorRefEdit&, rEdit, void )
     }
     else
     {
-        formula::WeldRefEdit* pFocus = nullptr;
+        formula::RefEdit* pFocus = nullptr;
         for ( sal_uInt16 nRow = 0; nRow+1 < EDIT_ROW_COUNT; ++nRow )      // before last row: move focus
         {
             if ( &rEdit == mpLeftEdit[nRow] )
@@ -732,7 +732,7 @@ IMPL_LINK( ScOptSolverDlg, CursorDownHdl, ScCursorRefEdit&, rEdit, void )
     }
 }
 
-void ScOptSolverDlg::ShowError( bool bCondition, formula::WeldRefEdit* pFocus )
+void ScOptSolverDlg::ShowError( bool bCondition, formula::RefEdit* pFocus )
 {
     OUString aMessage = bCondition ? maConditionError : maInputError;
     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
