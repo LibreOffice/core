@@ -45,6 +45,29 @@
       "revId": "9b1d568d1753e123e9e802ce89014de03d18385e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_6970e073",
+        "filename": "sw/source/core/crsr/pam.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-05-08T05:44:43Z",
+      "side": 1,
+      "message": "this is equivalent to\n\n    pA \u003d\u003d pB \u0026\u0026 pA !\u003d nullptr \u0026\u0026 !bAtStartA \u0026\u0026 !bAtStartB\n\nwhich is more similar to original one, emphasizing what\u0027s changed ;-)",
+      "range": {
+        "startLine": 739,
+        "startChar": 18,
+        "endLine": 739,
+        "endChar": 71
+      },
+      "revId": "9b1d568d1753e123e9e802ce89014de03d18385e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
