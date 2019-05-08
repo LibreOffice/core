@@ -30,7 +30,7 @@ namespace dbaui
     typedef ::cppu::WeakImplHelper<   css::task::XInteractionHandler
                                   >   OFilePickerInteractionHandler_Base;
 
-    /** a InteractionHandler implementation which extends another handler with some customizability
+    /** an InteractionHandler implementation which extends another handler with some customizability
     */
     class OFilePickerInteractionHandler final : public OFilePickerInteractionHandler_Base
     {
