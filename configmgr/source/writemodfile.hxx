@@ -25,6 +25,8 @@
 #include <string_view>
 
 #include <rtl/strbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <osl/file.h>
 
 namespace configmgr {
 

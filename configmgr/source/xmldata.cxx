@@ -20,13 +20,8 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <climits>
-#include <stack>
 
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <osl/file.hxx>
-#include <rtl/ref.hxx>
 #include <rtl/string.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -34,15 +29,7 @@
 #include <xmlreader/xmlreader.hxx>
 
 #include "data.hxx"
-#include "groupnode.hxx"
-#include "localizedpropertynode.hxx"
-#include "localizedvaluenode.hxx"
-#include "node.hxx"
-#include "nodemap.hxx"
 #include "parsemanager.hxx"
-#include "parser.hxx"
-#include "propertynode.hxx"
-#include "setnode.hxx"
 #include "type.hxx"
 #include "xmldata.hxx"
 

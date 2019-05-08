@@ -22,9 +22,7 @@
 #include <algorithm>
 #include <cassert>
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <rtl/ref.hxx>
 #include <rtl/string.h>
 #include <rtl/ustrbuf.hxx>
@@ -35,7 +33,6 @@
 
 #include "additions.hxx"
 #include "data.hxx"
-#include "groupnode.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
 #include "rootnode.hxx"

@@ -24,10 +24,7 @@
 
 #include <set>
 
-#include <com/sun/star/container/NoSuchElementException.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <rtl/ref.hxx>
-#include <sal/types.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>

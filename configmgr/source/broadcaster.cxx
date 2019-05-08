@@ -33,9 +33,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <cppuhelper/exc_hlp.hxx>
-#include <rtl/string.h>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 
 #include "broadcaster.hxx"

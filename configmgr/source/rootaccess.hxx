@@ -26,9 +26,6 @@
 #include <set>
 #include <vector>
 
-#include <com/sun/star/lang/WrappedTargetException.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/util/ChangesSet.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <rtl/ref.hxx>

@@ -20,8 +20,6 @@
 #include <sal/config.h>
 
 #include <rtl/ref.hxx>
-#include <rtl/ustring.h>
-#include <rtl/ustring.hxx>
 
 #include "localizedpropertynode.hxx"
 #include "node.hxx"

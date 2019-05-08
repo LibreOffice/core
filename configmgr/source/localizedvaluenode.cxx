@@ -21,7 +21,6 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 
 #include "localizedvaluenode.hxx"

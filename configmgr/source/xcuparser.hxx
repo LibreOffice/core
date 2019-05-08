@@ -35,7 +35,6 @@
 #include "parser.hxx"
 #include "type.hxx"
 #include "valueparser.hxx"
-#include "xmldata.hxx"
 
 namespace xmlreader { struct Span; }
 

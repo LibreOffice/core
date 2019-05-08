@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <set>
 #include <vector>
 
 #include <rtl/ref.hxx>

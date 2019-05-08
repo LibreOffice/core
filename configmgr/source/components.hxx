@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <map>
 #include <memory>
 #include <set>
 

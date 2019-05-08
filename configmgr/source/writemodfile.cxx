@@ -25,18 +25,14 @@
 #include <string_view>
 
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>

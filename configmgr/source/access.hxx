@@ -22,14 +22,11 @@
 
 #include <sal/config.h>
 
-#include <map>
 #include <memory>
 #include <set>
 #include <vector>
 #include "config_map.hxx"
 
-#include <com/sun/star/beans/PropertyVetoException.hpp>
-#include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
 #include <com/sun/star/beans/XHierarchicalPropertySet.hpp>
 #include <com/sun/star/beans/XHierarchicalPropertySetInfo.hpp>
@@ -38,23 +35,16 @@
 #include <com/sun/star/beans/XProperty.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/container/ElementExistException.hpp>
-#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XHierarchicalName.hpp>
 #include <com/sun/star/container/XHierarchicalNameReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/interlck.h>

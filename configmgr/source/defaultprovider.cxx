@@ -21,10 +21,8 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <osl/mutex.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 
 #include "configurationprovider.hxx"
