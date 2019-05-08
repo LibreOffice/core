@@ -302,7 +302,7 @@ namespace dbaui
             @param  _pEntry
                 The entry to be cleared
             @param  _bListAction
-                When <TRUE/> an list action will be created.
+                When <TRUE/> a list action will be created.
         */
         void            clearEntryFunctionField(const OUString& _sFieldName,OTableFieldDescRef const & _pEntry, bool& _bListAction,sal_uInt16 _nColumnId);
 
