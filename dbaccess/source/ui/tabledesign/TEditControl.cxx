@@ -673,7 +673,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
     }
 
     SaveData(nRow,nColId);
-    // SaveData could create a undo action as well
+    // SaveData could create an undo action as well
     GetUndoManager().LeaveListAction();
     RowModified(nRow);
     CellControllerRef xController(Controller());
