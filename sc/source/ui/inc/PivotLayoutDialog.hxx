@@ -49,7 +49,7 @@ private:
     ScAddress::Details const  maAddressDetails;
     bool                mbDialogLostFocus;
 
-    formula::WeldRefEdit* mpActiveEdit;
+    formula::RefEdit* mpActiveEdit;
     std::unique_ptr<ScPivotLayoutTreeListLabel> mxListBoxField;
     std::unique_ptr<ScPivotLayoutTreeList> mxListBoxPage;
     std::unique_ptr<ScPivotLayoutTreeList> mxListBoxColumn;
@@ -67,16 +67,16 @@ private:
     std::unique_ptr<weld::RadioButton> mxSourceRadioSelection;
 
     std::unique_ptr<weld::ComboBox> mxSourceListBox;
-    std::unique_ptr<formula::WeldRefEdit> mxSourceEdit;
-    std::unique_ptr<formula::WeldRefButton> mxSourceButton;
+    std::unique_ptr<formula::RefEdit> mxSourceEdit;
+    std::unique_ptr<formula::RefButton> mxSourceButton;
 
     std::unique_ptr<weld::RadioButton> mxDestinationRadioNewSheet;
     std::unique_ptr<weld::RadioButton> mxDestinationRadioNamedRange;
     std::unique_ptr<weld::RadioButton> mxDestinationRadioSelection;
 
     std::unique_ptr<weld::ComboBox> mxDestinationListBox;
-    std::unique_ptr<formula::WeldRefEdit> mxDestinationEdit;
-    std::unique_ptr<formula::WeldRefButton> mxDestinationButton;
+    std::unique_ptr<formula::RefEdit> mxDestinationEdit;
+    std::unique_ptr<formula::RefButton> mxDestinationButton;
 
     std::unique_ptr<weld::Button> mxBtnOK;
     std::unique_ptr<weld::Button> mxBtnCancel;
@@ -91,14 +91,14 @@ private:
 
     DECL_LINK(CancelClicked, weld::Button&, void);
     DECL_LINK(OKClicked, weld::Button&, void);
-    DECL_LINK(GetEditFocusHandler, formula::WeldRefEdit&, void);
-    DECL_LINK(GetButtonFocusHandler, formula::WeldRefButton&, void);
-    DECL_LINK(LoseEditFocusHandler, formula::WeldRefEdit&, void);
-    DECL_LINK(LoseButtonFocusHandler, formula::WeldRefButton&, void);
+    DECL_LINK(GetEditFocusHandler, formula::RefEdit&, void);
+    DECL_LINK(GetButtonFocusHandler, formula::RefButton&, void);
+    DECL_LINK(LoseEditFocusHandler, formula::RefEdit&, void);
+    DECL_LINK(LoseButtonFocusHandler, formula::RefButton&, void);
     DECL_LINK(ToggleSource, weld::ToggleButton&, void);
     DECL_LINK(ToggleDestination, weld::ToggleButton&, void);
     DECL_LINK(SourceListSelected, weld::ComboBox&, void);
-    DECL_LINK(SourceEditModified, formula::WeldRefEdit&, void);
+    DECL_LINK(SourceEditModified, formula::RefEdit&, void);
     void ToggleSource();
     void ToggleDestination();
     virtual void Close() override;

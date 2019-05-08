@@ -57,8 +57,8 @@ private:
 
     std::unique_ptr<weld::Entry> m_xEdName;
     std::unique_ptr<weld::Label> m_xFtAssign;
-    std::unique_ptr<formula::WeldRefEdit>   m_xEdAssign;
-    std::unique_ptr<formula::WeldRefButton> m_xRbAssign;
+    std::unique_ptr<formula::RefEdit>   m_xEdAssign;
+    std::unique_ptr<formula::RefButton> m_xRbAssign;
     std::unique_ptr<weld::ComboBox> m_xLbScope;
 
     std::unique_ptr<weld::CheckButton> m_xBtnPrintArea;
@@ -101,9 +101,9 @@ private:
     DECL_LINK( AddBtnHdl, weld::Button&, void );
     DECL_LINK( RemoveBtnHdl, weld::Button&, void );
     DECL_LINK( EdModifyHdl, weld::Entry&, void );
-    DECL_LINK( RefEdModifyHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( RefEdModifyHdl, formula::RefEdit&, void );
     DECL_LINK( EdModifyCheckBoxHdl, weld::ToggleButton&, void );
-    DECL_LINK( AssignGetFocusHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( AssignGetFocusHdl, formula::RefEdit&, void );
     DECL_LINK( SelectionChangedHdl_Impl, weld::TreeView&, void );
     DECL_LINK( ScopeChangedHdl, weld::ComboBox&, void );
 

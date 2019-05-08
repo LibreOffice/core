@@ -49,14 +49,14 @@ ScTabOpDlg::ScTabOpDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPare
     , errMsgNoRowFormula(ScResId(STR_NOROWFORMULA))
     , m_pEdActive(nullptr)
     , m_xFtFormulaRange(m_xBuilder->weld_label("formulasft"))
-    , m_xEdFormulaRange(new formula::WeldRefEdit(m_xBuilder->weld_entry("formulas")))
-    , m_xRBFormulaRange(new formula::WeldRefButton(m_xBuilder->weld_button("formulasref")))
+    , m_xEdFormulaRange(new formula::RefEdit(m_xBuilder->weld_entry("formulas")))
+    , m_xRBFormulaRange(new formula::RefButton(m_xBuilder->weld_button("formulasref")))
     , m_xFtRowCell(m_xBuilder->weld_label("rowft"))
-    , m_xEdRowCell(new formula::WeldRefEdit(m_xBuilder->weld_entry("row")))
-    , m_xRBRowCell(new formula::WeldRefButton(m_xBuilder->weld_button("rowref")))
+    , m_xEdRowCell(new formula::RefEdit(m_xBuilder->weld_entry("row")))
+    , m_xRBRowCell(new formula::RefButton(m_xBuilder->weld_button("rowref")))
     , m_xFtColCell(m_xBuilder->weld_label("colft"))
-    , m_xEdColCell(new formula::WeldRefEdit(m_xBuilder->weld_entry("col")))
-    , m_xRBColCell(new formula::WeldRefButton(m_xBuilder->weld_button("colref")))
+    , m_xEdColCell(new formula::RefEdit(m_xBuilder->weld_entry("col")))
+    , m_xRBColCell(new formula::RefButton(m_xBuilder->weld_button("colref")))
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
     , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
 {
@@ -81,12 +81,12 @@ void ScTabOpDlg::Init()
     m_xBtnOk->connect_clicked( LINK( this, ScTabOpDlg, BtnHdl ) );
     m_xBtnCancel->connect_clicked( LINK( this, ScTabOpDlg, BtnHdl ) );
 
-    Link<formula::WeldRefEdit&,void> aEditLink = LINK( this, ScTabOpDlg, GetEditFocusHdl );
+    Link<formula::RefEdit&,void> aEditLink = LINK( this, ScTabOpDlg, GetEditFocusHdl );
     m_xEdFormulaRange->SetGetFocusHdl( aEditLink );
     m_xEdRowCell->SetGetFocusHdl( aEditLink );
     m_xEdColCell->SetGetFocusHdl( aEditLink );
 
-    Link<formula::WeldRefButton&,void> aButtonLink = LINK( this, ScTabOpDlg, GetButtonFocusHdl );
+    Link<formula::RefButton&,void> aButtonLink = LINK( this, ScTabOpDlg, GetButtonFocusHdl );
     m_xRBFormulaRange->SetGetFocusHdl( aButtonLink );
     m_xRBRowCell->SetGetFocusHdl( aButtonLink );
     m_xRBColCell->SetGetFocusHdl( aButtonLink );
@@ -162,7 +162,7 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 void ScTabOpDlg::RaiseError( ScTabOpErr eError )
 {
     const OUString* pMsg = &errMsgNoFormula;
-    formula::WeldRefEdit* pEd  = m_xEdFormulaRange.get();
+    formula::RefEdit* pEd  = m_xEdFormulaRange.get();
 
     switch ( eError )
     {
@@ -303,7 +303,7 @@ IMPL_LINK(ScTabOpDlg, BtnHdl, weld::Button&, rBtn, void)
         response(RET_CANCEL);
 }
 
-IMPL_LINK( ScTabOpDlg, GetEditFocusHdl, formula::WeldRefEdit&, rCtrl, void )
+IMPL_LINK( ScTabOpDlg, GetEditFocusHdl, formula::RefEdit&, rCtrl, void )
 {
     if (&rCtrl == m_xEdFormulaRange.get())
         m_pEdActive = m_xEdFormulaRange.get();
@@ -318,7 +318,7 @@ IMPL_LINK( ScTabOpDlg, GetEditFocusHdl, formula::WeldRefEdit&, rCtrl, void )
         m_pEdActive->SelectAll();
 }
 
-IMPL_LINK( ScTabOpDlg, GetButtonFocusHdl, formula::WeldRefButton&, rCtrl, void )
+IMPL_LINK( ScTabOpDlg, GetButtonFocusHdl, formula::RefButton&, rCtrl, void )
 {
     if (&rCtrl == m_xRBFormulaRange.get())
         m_pEdActive = m_xEdFormulaRange.get();
@@ -333,12 +333,12 @@ IMPL_LINK( ScTabOpDlg, GetButtonFocusHdl, formula::WeldRefButton&, rCtrl, void )
         m_pEdActive->SelectAll();
 }
 
-IMPL_LINK_NOARG(ScTabOpDlg, LoseEditFocusHdl, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScTabOpDlg, LoseEditFocusHdl, formula::RefEdit&, void)
 {
     bDlgLostFocus = !m_xDialog->has_toplevel_focus();
 }
 
-IMPL_LINK_NOARG(ScTabOpDlg, LoseButtonFocusHdl, formula::WeldRefButton&, void)
+IMPL_LINK_NOARG(ScTabOpDlg, LoseButtonFocusHdl, formula::RefButton&, void)
 {
     bDlgLostFocus = !m_xDialog->has_toplevel_focus();
 }

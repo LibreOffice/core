@@ -82,9 +82,7 @@ public:
     virtual void SetReference( const ScRange& rRef, ScDocument* pD ) override;
 
     virtual void ReleaseFocus( formula::RefEdit* pEdit ) override;
-    virtual void ReleaseFocus( formula::WeldRefEdit* pEdit ) override;
     virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton ) override;
-    virtual void ToggleCollapsed( formula::WeldRefEdit* pEdit, formula::WeldRefButton* pButton ) override;
     virtual void RefInputDone( bool bForced = false ) override;
     virtual bool IsTableLocked() const override;
     virtual bool IsRefInputMode() const override;
@@ -96,7 +94,6 @@ public:
 
 private:
     virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) override;
-    virtual void RefInputStart( formula::WeldRefEdit* pEdit, formula::WeldRefButton* pButton = nullptr ) override;
     static void  SaveLRUEntry(const ScFuncDesc* pFuncDesc);
 
     static bool  IsInputHdl(const ScInputHandler* pHdl);

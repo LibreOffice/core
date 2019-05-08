@@ -45,16 +45,16 @@ protected:
 
     // Widgets
     std::unique_ptr<weld::Label> mxVariable1RangeLabel;
-    std::unique_ptr<formula::WeldRefEdit> mxVariable1RangeEdit;
-    std::unique_ptr<formula::WeldRefButton> mxVariable1RangeButton;
+    std::unique_ptr<formula::RefEdit> mxVariable1RangeEdit;
+    std::unique_ptr<formula::RefButton> mxVariable1RangeButton;
 
     std::unique_ptr<weld::Label> mxVariable2RangeLabel;
-    std::unique_ptr<formula::WeldRefEdit> mxVariable2RangeEdit;
-    std::unique_ptr<formula::WeldRefButton> mxVariable2RangeButton;
+    std::unique_ptr<formula::RefEdit> mxVariable2RangeEdit;
+    std::unique_ptr<formula::RefButton> mxVariable2RangeButton;
 
     std::unique_ptr<weld::Label> mxOutputRangeLabel;
-    std::unique_ptr<formula::WeldRefEdit> mxOutputRangeEdit;
-    std::unique_ptr<formula::WeldRefButton> mxOutputRangeButton;
+    std::unique_ptr<formula::RefEdit> mxOutputRangeEdit;
+    std::unique_ptr<formula::RefButton> mxOutputRangeButton;
 
     // Data
     ScViewData* const         mViewData;
@@ -74,7 +74,7 @@ private:
     std::unique_ptr<weld::RadioButton> mxGroupByColumnsRadio;
     std::unique_ptr<weld::RadioButton> mxGroupByRowsRadio;
 
-    formula::WeldRefEdit*      mpActiveEdit;
+    formula::RefEdit*      mpActiveEdit;
     ScAddress const            mCurrentAddress;
     bool                       mDialogLostFocus;
 
@@ -83,11 +83,11 @@ private:
 
     DECL_LINK( GroupByChanged, weld::ToggleButton&, void );
     DECL_LINK( OkClicked, weld::Button&, void );
-    DECL_LINK( GetEditFocusHandler, formula::WeldRefEdit&, void );
-    DECL_LINK( GetButtonFocusHandler, formula::WeldRefButton&, void );
-    DECL_LINK( LoseEditFocusHandler, formula::WeldRefEdit&, void );
-    DECL_LINK( LoseButtonFocusHandler, formula::WeldRefButton&, void );
-    DECL_LINK( RefInputModifyHandler, formula::WeldRefEdit&, void );
+    DECL_LINK( GetEditFocusHandler, formula::RefEdit&, void );
+    DECL_LINK( GetButtonFocusHandler, formula::RefButton&, void );
+    DECL_LINK( LoseEditFocusHandler, formula::RefEdit&, void );
+    DECL_LINK( LoseButtonFocusHandler, formula::RefButton&, void );
+    DECL_LINK( RefInputModifyHandler, formula::RefEdit&, void );
 };
 
 #endif

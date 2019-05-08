@@ -102,14 +102,14 @@ ScPrintAreasDlg::ScPrintAreasDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Win
     , pViewData(nullptr)
     , nCurTab(0)
     , m_xLbPrintArea(m_xBuilder->weld_combo_box("lbprintarea"))
-    , m_xEdPrintArea(new formula::WeldRefEdit(m_xBuilder->weld_entry("edprintarea")))
-    , m_xRbPrintArea(new formula::WeldRefButton(m_xBuilder->weld_button("rbprintarea")))
+    , m_xEdPrintArea(new formula::RefEdit(m_xBuilder->weld_entry("edprintarea")))
+    , m_xRbPrintArea(new formula::RefButton(m_xBuilder->weld_button("rbprintarea")))
     , m_xLbRepeatRow(m_xBuilder->weld_combo_box("lbrepeatrow"))
-    , m_xEdRepeatRow(new formula::WeldRefEdit(m_xBuilder->weld_entry("edrepeatrow")))
-    , m_xRbRepeatRow(new formula::WeldRefButton(m_xBuilder->weld_button("rbrepeatrow")))
+    , m_xEdRepeatRow(new formula::RefEdit(m_xBuilder->weld_entry("edrepeatrow")))
+    , m_xRbRepeatRow(new formula::RefButton(m_xBuilder->weld_button("rbrepeatrow")))
     , m_xLbRepeatCol(m_xBuilder->weld_combo_box("lbrepeatcol"))
-    , m_xEdRepeatCol(new formula::WeldRefEdit(m_xBuilder->weld_entry("edrepeatcol")))
-    , m_xRbRepeatCol(new formula::WeldRefButton(m_xBuilder->weld_button("rbrepeatcol")))
+    , m_xEdRepeatCol(new formula::RefEdit(m_xBuilder->weld_entry("edrepeatcol")))
+    , m_xRbRepeatCol(new formula::RefButton(m_xBuilder->weld_button("rbrepeatcol")))
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
     , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
     , m_xPrintFrame(m_xBuilder->weld_frame("printframe"))
@@ -295,7 +295,7 @@ void ScPrintAreasDlg::Impl_Reset()
     m_xEdRepeatCol->SaveValue();
 }
 
-bool ScPrintAreasDlg::Impl_GetItem( const formula::WeldRefEdit* pEd, SfxStringItem& rItem )
+bool ScPrintAreasDlg::Impl_GetItem( const formula::RefEdit* pEd, SfxStringItem& rItem )
 {
     OUString  aRangeStr = pEd->GetText();
     bool bDataChanged = pEd->IsValueChangedFromSaved();
@@ -360,7 +360,7 @@ bool ScPrintAreasDlg::Impl_CheckRefStrings()
 
     if ( !bOk )
     {
-        formula::WeldRefEdit* pEd = nullptr;
+        formula::RefEdit* pEd = nullptr;
 
         if ( !bPrintAreaOk ) pEd = m_xEdPrintArea.get();
         else if ( !bRepeatRowOk ) pEd = m_xEdRepeatRow.get();
@@ -493,7 +493,7 @@ IMPL_LINK(ScPrintAreasDlg, Impl_BtnHdl, weld::Button&, rBtn, void)
         response(RET_CANCEL);
 }
 
-IMPL_LINK(ScPrintAreasDlg, Impl_GetEditFocusHdl, formula::WeldRefEdit&, rCtrl, void)
+IMPL_LINK(ScPrintAreasDlg, Impl_GetEditFocusHdl, formula::RefEdit&, rCtrl, void)
 {
     m_pRefInputEdit = &rCtrl;
 }
@@ -511,7 +511,7 @@ IMPL_LINK(ScPrintAreasDlg, Impl_GetFocusHdl, weld::Widget&, rCtrl, void)
 IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, weld::ComboBox&, rLb, void )
 {
     const sal_Int32 nSelPos = rLb.get_active();
-    formula::WeldRefEdit* pEd = nullptr;
+    formula::RefEdit* pEd = nullptr;
 
     // list box positions of specific entries, default to "repeat row/column" list boxes
     sal_Int32 nAllSheetPos = SC_AREASDLG_RR_NONE;
@@ -538,7 +538,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, weld::ComboBox&, rLb, void )
         pEd->SetText(rLb.get_id(nSelPos));
 }
 
-IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::WeldRefEdit&, rEd, void )
+IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit&, rEd, void )
 {
     weld::ComboBox* pLb = nullptr;
 
