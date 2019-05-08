@@ -67,12 +67,12 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
     , bDlgLostFocus(false)
     , m_pEdActive(nullptr)
     , m_xLbRange(m_xBuilder->weld_tree_view("range"))
-    , m_xEdAssign(new formula::WeldRefEdit(m_xBuilder->weld_entry("edassign")))
-    , m_xRbAssign(new formula::WeldRefButton(m_xBuilder->weld_button("rbassign")))
+    , m_xEdAssign(new formula::RefEdit(m_xBuilder->weld_entry("edassign")))
+    , m_xRbAssign(new formula::RefButton(m_xBuilder->weld_button("rbassign")))
     , m_xBtnColHead(m_xBuilder->weld_radio_button("colhead"))
     , m_xBtnRowHead(m_xBuilder->weld_radio_button("rowhead"))
-    , m_xEdAssign2(new formula::WeldRefEdit(m_xBuilder->weld_entry("edassign2")))
-    , m_xRbAssign2(new formula::WeldRefButton(m_xBuilder->weld_button("rbassign2")))
+    , m_xEdAssign2(new formula::RefEdit(m_xBuilder->weld_entry("edassign2")))
+    , m_xRbAssign2(new formula::RefButton(m_xBuilder->weld_button("rbassign2")))
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
     , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
     , m_xBtnAdd(m_xBuilder->weld_button("add"))
@@ -108,11 +108,11 @@ void ScColRowNameRangesDlg::Init()
     m_xBtnRowHead->connect_clicked ( LINK( this, ScColRowNameRangesDlg, RowClickHdl ) );
     m_xEdAssign2->SetModifyHdl ( LINK( this, ScColRowNameRangesDlg, Range2DataModifyHdl ) );
 
-    Link<formula::WeldRefEdit&,void> aEditLink = LINK( this, ScColRowNameRangesDlg, GetEditFocusHdl );
+    Link<formula::RefEdit&,void> aEditLink = LINK( this, ScColRowNameRangesDlg, GetEditFocusHdl );
     m_xEdAssign->SetGetFocusHdl( aEditLink );
     m_xEdAssign2->SetGetFocusHdl( aEditLink );
 
-    Link<formula::WeldRefButton&,void> aButtonLink = LINK( this, ScColRowNameRangesDlg, GetButtonFocusHdl );
+    Link<formula::RefButton&,void> aButtonLink = LINK( this, ScColRowNameRangesDlg, GetButtonFocusHdl );
     m_xRbAssign->SetGetFocusHdl( aButtonLink );
     m_xRbAssign2->SetGetFocusHdl( aButtonLink );
 
@@ -691,7 +691,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl, weld::TreeView&, void)
 }
 
 // handler called when the label range has changed
-IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1DataModifyHdl, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1DataModifyHdl, formula::RefEdit&, void)
 {
     OUString aNewArea( m_xEdAssign->GetText() );
     bool bValid = false;
@@ -724,7 +724,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1DataModifyHdl, formula::WeldRefEdit
 }
 
 // handler called when the data range has changed
-IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range2DataModifyHdl, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range2DataModifyHdl, formula::RefEdit&, void)
 {
     OUString aNewData( m_xEdAssign2->GetText() );
     if ( !aNewData.isEmpty() )
@@ -780,7 +780,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RowClickHdl, weld::Button&, void)
     }
 }
 
-IMPL_LINK( ScColRowNameRangesDlg, GetEditFocusHdl, formula::WeldRefEdit&, rCtrl, void )
+IMPL_LINK( ScColRowNameRangesDlg, GetEditFocusHdl, formula::RefEdit&, rCtrl, void )
 {
     if (&rCtrl == m_xEdAssign.get())
         m_pEdActive = m_xEdAssign.get();
@@ -793,7 +793,7 @@ IMPL_LINK( ScColRowNameRangesDlg, GetEditFocusHdl, formula::WeldRefEdit&, rCtrl,
         m_pEdActive->SelectAll();
 }
 
-IMPL_LINK( ScColRowNameRangesDlg, GetButtonFocusHdl, formula::WeldRefButton&, rCtrl, void )
+IMPL_LINK( ScColRowNameRangesDlg, GetButtonFocusHdl, formula::RefButton&, rCtrl, void )
 {
     if (&rCtrl == m_xRbAssign.get())
         m_pEdActive = m_xEdAssign.get();
@@ -806,12 +806,12 @@ IMPL_LINK( ScColRowNameRangesDlg, GetButtonFocusHdl, formula::WeldRefButton&, rC
         m_pEdActive->SelectAll();
 }
 
-IMPL_LINK_NOARG(ScColRowNameRangesDlg, LoseEditFocusHdl, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScColRowNameRangesDlg, LoseEditFocusHdl, formula::RefEdit&, void)
 {
     bDlgLostFocus = !m_xDialog->has_toplevel_focus();
 }
 
-IMPL_LINK_NOARG(ScColRowNameRangesDlg, LoseButtonFocusHdl, formula::WeldRefButton&, void)
+IMPL_LINK_NOARG(ScColRowNameRangesDlg, LoseButtonFocusHdl, formula::RefButton&, void)
 {
     bDlgLostFocus = !m_xDialog->has_toplevel_focus();
 }

@@ -37,8 +37,8 @@ ScHighlightChgDlg::ScHighlightChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld:
     , m_xCbAccept(m_xBuilder->weld_check_button("showaccepted"))
     , m_xCbReject(m_xBuilder->weld_check_button("showrejected"))
     , m_xOkButton(m_xBuilder->weld_button("ok"))
-    , m_xEdAssign(new formula::WeldRefEdit(m_xBuilder->weld_entry("range")))
-    , m_xRbAssign(new formula::WeldRefButton(m_xBuilder->weld_button("rangeref")))
+    , m_xEdAssign(new formula::RefEdit(m_xBuilder->weld_entry("range")))
+    , m_xRbAssign(new formula::RefButton(m_xBuilder->weld_button("rangeref")))
     , m_xBox(m_xBuilder->weld_container("box"))
     , m_xFilterCtr(new SvxTPFilter(m_xBox.get()))
 {

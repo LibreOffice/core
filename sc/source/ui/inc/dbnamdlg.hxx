@@ -67,8 +67,8 @@ private:
     std::unique_ptr<weld::EntryTreeView> m_xEdName;
 
     std::unique_ptr<weld::Frame> m_xAssignFrame;
-    std::unique_ptr<formula::WeldRefEdit> m_xEdAssign;
-    std::unique_ptr<formula::WeldRefButton> m_xRbAssign;
+    std::unique_ptr<formula::RefEdit> m_xEdAssign;
+    std::unique_ptr<formula::RefButton> m_xRbAssign;
 
     std::unique_ptr<weld::Widget> m_xOptions;
     std::unique_ptr<weld::CheckButton> m_xBtnHeader;
@@ -100,7 +100,7 @@ private:
     DECL_LINK( AddBtnHdl, weld::Button&, void );
     DECL_LINK( RemoveBtnHdl, weld::Button&, void );
     DECL_LINK( NameModifyHdl, weld::ComboBox&, void );
-    DECL_LINK( AssModifyHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( AssModifyHdl, formula::RefEdit&, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_DBNAMDLG_HXX

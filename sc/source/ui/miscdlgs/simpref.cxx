@@ -28,8 +28,8 @@ ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     , bSingleCell(false)
     , bMultiSelection(false)
     , m_xFtAssign(m_xBuilder->weld_label("area"))
-    , m_xEdAssign(new formula::WeldRefEdit(m_xBuilder->weld_entry("assign")))
-    , m_xRbAssign(new formula::WeldRefButton(m_xBuilder->weld_button("assignref")))
+    , m_xEdAssign(new formula::RefEdit(m_xBuilder->weld_entry("assign")))
+    , m_xRbAssign(new formula::RefButton(m_xBuilder->weld_button("assignref")))
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
     , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
 {
