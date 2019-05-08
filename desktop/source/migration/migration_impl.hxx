@@ -81,7 +81,7 @@ inline bool areBothOpenFrom(OUString const & cmd1, OUString const & cmd2)
 
 /**
     define the item, e.g.:menuitem, toolbaritem, to be migrated. we keep the information
-    of the command URL, the previous sibling node and the parent node of a item
+    of the command URL, the previous sibling node and the parent node of an item
 */
 struct MigrationItem
 {
