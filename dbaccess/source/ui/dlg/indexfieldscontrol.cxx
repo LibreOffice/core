@@ -385,7 +385,7 @@ static constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | Br
                 OSL_ENSURE((static_cast<sal_Int32>(m_aFields.size() + 1)) == rowCount, "IndexFieldsControl::OnListEntrySelected: inconsistence!");
 
                 if (!sSelectedEntry.isEmpty() && (nCurrentRow == rowCount - 1) /*&& (!m_nMaxColumnsInIndex || rowCount < m_nMaxColumnsInIndex )*/ )
-                {   // in the last row, an non-empty string has been selected
+                {   // in the last row, a non-empty string has been selected
                     // -> insert a new row
                     m_aFields.emplace_back();
                     RowInserted(GetRowCount());
