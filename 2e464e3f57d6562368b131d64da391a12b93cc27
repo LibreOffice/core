@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_249bdd72",
+        "filename": "vcl/uiconfig/ui/printdialog.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-05-08T14:39:05Z",
+      "side": 1,
+      "message": "why *current* page number? I guess any page number can be entered here?",
+      "range": {
+        "startLine": 289,
+        "startChar": 119,
+        "endLine": 289,
+        "endChar": 126
+      },
+      "revId": "2e464e3f57d6562368b131d64da391a12b93cc27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
