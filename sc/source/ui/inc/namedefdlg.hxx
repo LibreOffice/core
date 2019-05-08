@@ -44,8 +44,8 @@ private:
 
     std::unique_ptr<weld::Entry> m_xEdName;
 
-    std::unique_ptr<formula::WeldRefEdit> m_xEdRange;
-    std::unique_ptr<formula::WeldRefButton> m_xRbRange;
+    std::unique_ptr<formula::RefEdit> m_xEdRange;
+    std::unique_ptr<formula::RefButton> m_xRbRange;
 
     std::unique_ptr<weld::ComboBox> m_xLbScope;
 
@@ -69,7 +69,7 @@ private:
     DECL_LINK( CancelBtnHdl, weld::Button&, void );
     DECL_LINK( AddBtnHdl, weld::Button&, void );
     DECL_LINK( NameModifyHdl, weld::Entry&, void );
-    DECL_LINK( AssignGetFocusHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( AssignGetFocusHdl, formula::RefEdit&, void );
 
 protected:
     virtual void    RefInputDone( bool bForced = false ) override;

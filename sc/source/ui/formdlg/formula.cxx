@@ -380,16 +380,8 @@ std::unique_ptr<formula::FormulaCompiler> ScFormulaDlg::createCompiler( formula:
 //  virtual methods of ScAnyRefDlg:
 void ScFormulaDlg::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
-    pEdit->SetSelection(Selection(0, SELECTION_MAX));
-    ::std::pair<formula::RefButton*,formula::RefEdit*> aPair = RefInputStartBefore( pEdit, pButton );
-    m_aHelper.RefInputStart( aPair.second, aPair.first);
-    RefInputStartAfter();
-}
-
-void ScFormulaDlg::RefInputStart( formula::WeldRefEdit* pEdit, formula::WeldRefButton* pButton )
-{
     pEdit->SelectAll();
-    ::std::pair<formula::WeldRefButton*,formula::WeldRefEdit*> aPair = RefInputStartBefore( pEdit, pButton );
+    ::std::pair<formula::RefButton*,formula::RefEdit*> aPair = RefInputStartBefore( pEdit, pButton );
     m_aHelper.RefInputStart( aPair.second, aPair.first);
     RefInputStartAfter();
 }
@@ -528,22 +520,17 @@ bool ScFormulaDlg::IsTableLocked( ) const
     // default: reference input can also be used to switch the table
     return false;
 }
+
 void ScFormulaDlg::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton)
 {
     m_aHelper.ToggleCollapsed(pEdit,pButton);
 }
-void ScFormulaDlg::ToggleCollapsed( formula::WeldRefEdit* pEdit, formula::WeldRefButton* pButton)
-{
-    m_aHelper.ToggleCollapsed(pEdit,pButton);
-}
+
 void ScFormulaDlg::ReleaseFocus( formula::RefEdit* pEdit)
 {
     m_aHelper.ReleaseFocus(pEdit);
 }
-void ScFormulaDlg::ReleaseFocus( formula::WeldRefEdit* pEdit)
-{
-    m_aHelper.ReleaseFocus(pEdit);
-}
+
 void ScFormulaDlg::dispatch(bool _bOK, bool _bMatrixChecked)
 {
     SfxBoolItem   aRetItem( SID_DLG_RETOK, _bOK );

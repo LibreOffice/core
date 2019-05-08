@@ -93,14 +93,14 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     , mxSourceRadioNamedRange(m_xBuilder->weld_radio_button("source-radio-named-range"))
     , mxSourceRadioSelection(m_xBuilder->weld_radio_button("source-radio-selection"))
     , mxSourceListBox(m_xBuilder->weld_combo_box("source-list"))
-    , mxSourceEdit(new formula::WeldRefEdit(m_xBuilder->weld_entry("source-edit")))
-    , mxSourceButton(new formula::WeldRefButton(m_xBuilder->weld_button("source-button")))
+    , mxSourceEdit(new formula::RefEdit(m_xBuilder->weld_entry("source-edit")))
+    , mxSourceButton(new formula::RefButton(m_xBuilder->weld_button("source-button")))
     , mxDestinationRadioNewSheet(m_xBuilder->weld_radio_button("destination-radio-new-sheet"))
     , mxDestinationRadioNamedRange(m_xBuilder->weld_radio_button("destination-radio-named-range"))
     , mxDestinationRadioSelection(m_xBuilder->weld_radio_button("destination-radio-selection"))
     , mxDestinationListBox(m_xBuilder->weld_combo_box("destination-list"))
-    , mxDestinationEdit(new formula::WeldRefEdit(m_xBuilder->weld_entry("destination-edit")))
-    , mxDestinationButton(new formula::WeldRefButton(m_xBuilder->weld_button("destination-button")))
+    , mxDestinationEdit(new formula::RefEdit(m_xBuilder->weld_entry("destination-edit")))
+    , mxDestinationButton(new formula::RefButton(m_xBuilder->weld_button("destination-button")))
     , mxBtnOK(m_xBuilder->weld_button("ok"))
     , mxBtnCancel(m_xBuilder->weld_button("cancel"))
     , mxSourceFrame(m_xBuilder->weld_frame("frame2"))
@@ -118,7 +118,7 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     mxSourceEdit->SetReferences(this, mxSourceLabel.get());
     mxSourceButton->SetReferences(this, mxSourceEdit.get());
 
-    Link<formula::WeldRefEdit&,void> aEditLink = LINK(this, ScPivotLayoutDialog, GetEditFocusHandler);
+    Link<formula::RefEdit&,void> aEditLink = LINK(this, ScPivotLayoutDialog, GetEditFocusHandler);
     mxDestinationEdit->SetGetFocusHdl(aEditLink);
     mxSourceEdit->SetGetFocusHdl(aEditLink);
 
@@ -138,7 +138,7 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     mxDestinationEdit->SetReferences(this, mxDestLabel.get());
     mxDestinationButton->SetReferences(this, mxDestinationEdit.get());
 
-    Link<formula::WeldRefButton&,void> aButtonLink = LINK(this, ScPivotLayoutDialog, GetButtonFocusHandler);
+    Link<formula::RefButton&,void> aButtonLink = LINK(this, ScPivotLayoutDialog, GetButtonFocusHandler);
     mxSourceButton->SetGetFocusHdl(aButtonLink);
     mxDestinationButton->SetGetFocusHdl(aButtonLink);
 
@@ -637,13 +637,13 @@ IMPL_LINK_NOARG( ScPivotLayoutDialog, CancelClicked, weld::Button&, void )
     m_xDialog->response(RET_CANCEL);
 }
 
-IMPL_LINK(ScPivotLayoutDialog, GetEditFocusHandler, formula::WeldRefEdit&, rCtrl, void)
+IMPL_LINK(ScPivotLayoutDialog, GetEditFocusHandler, formula::RefEdit&, rCtrl, void)
 {
     mpActiveEdit = &rCtrl;
     mpActiveEdit->SelectAll();
 }
 
-IMPL_LINK(ScPivotLayoutDialog, GetButtonFocusHandler, formula::WeldRefButton&, rCtrl, void)
+IMPL_LINK(ScPivotLayoutDialog, GetButtonFocusHandler, formula::RefButton&, rCtrl, void)
 {
     mpActiveEdit = nullptr;
 
@@ -656,12 +656,12 @@ IMPL_LINK(ScPivotLayoutDialog, GetButtonFocusHandler, formula::WeldRefButton&, r
         mpActiveEdit->SelectAll();
 }
 
-IMPL_LINK_NOARG(ScPivotLayoutDialog, LoseEditFocusHandler, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScPivotLayoutDialog, LoseEditFocusHandler, formula::RefEdit&, void)
 {
     mbDialogLostFocus = !m_xDialog->has_toplevel_focus();
 }
 
-IMPL_LINK_NOARG(ScPivotLayoutDialog, LoseButtonFocusHandler, formula::WeldRefButton&, void)
+IMPL_LINK_NOARG(ScPivotLayoutDialog, LoseButtonFocusHandler, formula::RefButton&, void)
 {
     mbDialogLostFocus = !m_xDialog->has_toplevel_focus();
 }
@@ -671,7 +671,7 @@ IMPL_LINK_NOARG(ScPivotLayoutDialog, SourceListSelected, weld::ComboBox&, void)
     UpdateSourceRange();
 }
 
-IMPL_LINK_NOARG(ScPivotLayoutDialog, SourceEditModified, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScPivotLayoutDialog, SourceEditModified, formula::RefEdit&, void)
 {
     UpdateSourceRange();
 }
