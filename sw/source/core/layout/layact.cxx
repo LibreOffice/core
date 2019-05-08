@@ -1582,9 +1582,11 @@ bool SwLayAction::FormatLayoutTab( SwTabFrame *pTab, bool bAddRect )
     // format lowers, only if table frame is valid
     if ( pTab->isFrameAreaDefinitionValid() )
     {
+        FlowFrameJoinLockGuard tabG(pTab); // tdf#124675 prevent Join() if pTab becomes empty
         SwLayoutFrame *pLow = static_cast<SwLayoutFrame*>(pTab->Lower());
         while ( pLow )
         {
+            SwFrameDeleteGuard rowG(pLow); // tdf#124675 prevent RemoveFollowFlowLine()
             bChanged |= FormatLayout( m_pImp->GetShell()->GetOut(), pLow, bAddRect );
             if ( IsAgain() )
                 return false;
