@@ -104,7 +104,7 @@ private:
      */
     bool isRangeFieldContentValid(weld::Entry& rEdit);
 
-    /** @return </sal_True>, if the tab-page is in a consistent (commitable) state
+    /** @return </sal_True>, if the tab-page is in a consistent (committable) state
      */
     bool isValid();
     void setDirty();
