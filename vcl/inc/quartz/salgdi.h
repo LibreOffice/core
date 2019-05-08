@@ -38,6 +38,7 @@
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/metric.hxx>
 
+
 #include <fontinstance.hxx>
 #include <impfontmetricdata.hxx>
 #include <PhysicalFontFace.hxx>
@@ -46,6 +47,8 @@
 #include <quartz/salgdicommon.hxx>
 #include <unordered_map>
 #include <hb-ot.h>
+
+#include <quartz/CGHelpers.hxx>
 
 class AquaSalFrame;
 class FontAttributes;
@@ -125,49 +128,6 @@ private:
     CFArrayRef mpCTFontArray;
 
     std::unordered_map<sal_IntPtr, rtl::Reference<CoreTextFontFace>> maFontContainer;
-};
-
-class CGContextHolder
-{
-    CGContextRef mpContext;
-#if OSL_DEBUG_LEVEL > 0
-    int mnContextStackDepth;
-#endif
-public:
-
-    CGContextHolder()
-        : mpContext(nullptr)
-#if OSL_DEBUG_LEVEL > 0
-        , mnContextStackDepth( 0 )
-#endif
-    {}
-
-    CGContextRef get() const
-    {
-        return mpContext;
-    }
-
-    bool isSet() const
-    {
-        return mpContext != nullptr;
-    }
-
-    void set(CGContextRef const & pContext)
-    {
-        mpContext = pContext;
-    }
-
-    void saveState()
-    {
-        SAL_INFO("vcl.cg", "CGContextSaveGState(" << mpContext << ") " << ++mnContextStackDepth );
-        CGContextSaveGState(mpContext);
-    }
-
-    void restoreState()
-    {
-        SAL_INFO( "vcl.cg", "CGContextRestoreGState(" << mpContext << ") " << mnContextStackDepth-- );
-        CGContextRestoreGState(mpContext);
-    }
 };
 
 class AquaSalGraphics : public SalGraphics
