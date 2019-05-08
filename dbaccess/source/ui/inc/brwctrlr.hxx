@@ -107,7 +107,7 @@ namespace dbaui
         sal_uInt16              m_nFormActionNestingLevel;      // see enter-/leaveFormAction
 
         bool                    m_bLoadCanceled : 1;            // the load was canceled somehow
-        bool                    m_bCannotSelectUnfiltered : 1;  // received an DATA_CANNOT_SELECT_UNFILTERED error
+        bool                    m_bCannotSelectUnfiltered : 1;  // received a DATA_CANNOT_SELECT_UNFILTERED error
 
     protected:
         class FormErrorHelper final
@@ -260,7 +260,7 @@ namespace dbaui
 
         virtual bool LoadForm();
             // load the form
-            // the default implementation does an direct load or starts a load thread, depending on the multithread capabilities
+            // the default implementation does a direct load or starts a load thread, depending on the multithread capabilities
             // of the data source.
             // the default implementation also calls LoadFinished after a synchronous load, so be sure to do the same if you override
             // this method and don't call the base class' method
@@ -270,7 +270,7 @@ namespace dbaui
 
         virtual void criticalFail();
             // called whenever a reload operation on the rowset failed
-            // (a "operation" is not only a simple reload: If the user sets a filter, an reloading the form
+            // (an "operation" is not only a simple reload: if the user sets a filter, and reloading the form
             // after setting this filter fails, the filter is reset and the form is reloaded, again. Only the
             // whole process (_both_ XLoadable::reload calls _together_) form the "reload operation"
 
