@@ -217,7 +217,7 @@ namespace dbaui
         /** Hard deletion
 
             That means that all Conns and Wins are deleted from their respective
-            lists and the corresponding Datas removed from the document */
+            lists and the corresponding Data removed from the document */
         virtual void ClearAll();
 
         /** @note used by AddTabDlg to see if more tables can be added */
