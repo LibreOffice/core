@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_29c2d834",
+        "filename": "vcl/source/window/event.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-05-08T08:59:06Z",
+      "side": 1,
+      "message": "any better idea how to solve this?",
+      "revId": "3970a5e5febf6ce7ac7fd02a7f7287b32d6ab12f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
