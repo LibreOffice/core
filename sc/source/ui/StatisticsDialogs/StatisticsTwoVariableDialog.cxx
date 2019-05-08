@@ -23,14 +23,14 @@ ScStatisticsTwoVariableDialog::ScStatisticsTwoVariableDialog(
                     weld::Window* pParent, ScViewData* pViewData, const OUString& rUIXMLDescription, const OString& rID)
     : ScAnyRefDlgController(pSfxBindings, pChildWindow, pParent, rUIXMLDescription, rID)
     , mxVariable1RangeLabel(m_xBuilder->weld_label("variable1-range-label"))
-    , mxVariable1RangeEdit(new formula::WeldRefEdit(m_xBuilder->weld_entry("variable1-range-edit")))
-    , mxVariable1RangeButton(new formula::WeldRefButton(m_xBuilder->weld_button("variable1-range-button")))
+    , mxVariable1RangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("variable1-range-edit")))
+    , mxVariable1RangeButton(new formula::RefButton(m_xBuilder->weld_button("variable1-range-button")))
     , mxVariable2RangeLabel(m_xBuilder->weld_label("variable2-range-label"))
-    , mxVariable2RangeEdit(new formula::WeldRefEdit(m_xBuilder->weld_entry("variable2-range-edit")))
-    , mxVariable2RangeButton(new formula::WeldRefButton(m_xBuilder->weld_button("variable2-range-button")))
+    , mxVariable2RangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("variable2-range-edit")))
+    , mxVariable2RangeButton(new formula::RefButton(m_xBuilder->weld_button("variable2-range-button")))
     , mxOutputRangeLabel(m_xBuilder->weld_label("output-range-label"))
-    , mxOutputRangeEdit(new formula::WeldRefEdit(m_xBuilder->weld_entry("output-range-edit")))
-    , mxOutputRangeButton(new formula::WeldRefButton(m_xBuilder->weld_button("output-range-button")))
+    , mxOutputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("output-range-edit")))
+    , mxOutputRangeButton(new formula::RefButton(m_xBuilder->weld_button("output-range-button")))
     , mViewData(pViewData)
     , mDocument(pViewData->GetDocument())
     , mVariable1Range(ScAddress::INITIALIZE_INVALID)
@@ -67,12 +67,12 @@ void ScStatisticsTwoVariableDialog::Init()
     mxButtonOk->connect_clicked( LINK( this, ScStatisticsTwoVariableDialog, OkClicked ) );
     mxButtonOk->set_sensitive(false);
 
-    Link<formula::WeldRefEdit&,void> aEditLink = LINK( this, ScStatisticsTwoVariableDialog, GetEditFocusHandler );
+    Link<formula::RefEdit&,void> aEditLink = LINK( this, ScStatisticsTwoVariableDialog, GetEditFocusHandler );
     mxVariable1RangeEdit->SetGetFocusHdl( aEditLink );
     mxVariable2RangeEdit->SetGetFocusHdl( aEditLink );
     mxOutputRangeEdit->SetGetFocusHdl( aEditLink );
 
-    Link<formula::WeldRefButton&,void> aButtonLink = LINK( this, ScStatisticsTwoVariableDialog, GetButtonFocusHandler );
+    Link<formula::RefButton&,void> aButtonLink = LINK( this, ScStatisticsTwoVariableDialog, GetButtonFocusHandler );
     mxVariable1RangeButton->SetGetFocusHdl( aButtonLink );
     mxVariable2RangeButton->SetGetFocusHdl( aButtonLink );
     mxOutputRangeButton->SetGetFocusHdl( aButtonLink );
@@ -87,7 +87,7 @@ void ScStatisticsTwoVariableDialog::Init()
     mxVariable2RangeButton->SetLoseFocusHdl( aButtonLink );
     mxOutputRangeButton->SetLoseFocusHdl( aButtonLink );
 
-    Link<formula::WeldRefEdit&,void> aLink2 = LINK( this, ScStatisticsTwoVariableDialog, RefInputModifyHandler);
+    Link<formula::RefEdit&,void> aLink2 = LINK( this, ScStatisticsTwoVariableDialog, RefInputModifyHandler);
     mxVariable1RangeEdit->SetModifyHdl( aLink2);
     mxVariable2RangeEdit->SetModifyHdl( aLink2);
     mxOutputRangeEdit->SetModifyHdl( aLink2);
@@ -185,7 +185,7 @@ IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, OkClicked, weld::Button&, void )
     response(RET_OK);
 }
 
-IMPL_LINK(ScStatisticsTwoVariableDialog, GetEditFocusHandler, formula::WeldRefEdit&, rCtrl, void)
+IMPL_LINK(ScStatisticsTwoVariableDialog, GetEditFocusHandler, formula::RefEdit&, rCtrl, void)
 {
     mpActiveEdit = nullptr;
     if (&rCtrl == mxVariable1RangeEdit.get())
@@ -205,7 +205,7 @@ IMPL_LINK(ScStatisticsTwoVariableDialog, GetEditFocusHandler, formula::WeldRefEd
         mpActiveEdit->SelectAll();
 }
 
-IMPL_LINK( ScStatisticsTwoVariableDialog, GetButtonFocusHandler, formula::WeldRefButton&, rCtrl, void )
+IMPL_LINK( ScStatisticsTwoVariableDialog, GetButtonFocusHandler, formula::RefButton&, rCtrl, void )
 {
     mpActiveEdit = nullptr;
     if (&rCtrl == mxVariable1RangeButton.get())
@@ -225,12 +225,12 @@ IMPL_LINK( ScStatisticsTwoVariableDialog, GetButtonFocusHandler, formula::WeldRe
         mpActiveEdit->SelectAll();
 }
 
-IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, LoseEditFocusHandler, formula::WeldRefEdit&, void )
+IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, LoseEditFocusHandler, formula::RefEdit&, void )
 {
     mDialogLostFocus = !m_xDialog->has_toplevel_focus();
 }
 
-IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, LoseButtonFocusHandler, formula::WeldRefButton&, void )
+IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, LoseButtonFocusHandler, formula::RefButton&, void )
 {
     mDialogLostFocus = !m_xDialog->has_toplevel_focus();
 }
@@ -245,7 +245,7 @@ IMPL_LINK_NOARG(ScStatisticsTwoVariableDialog, GroupByChanged, weld::ToggleButto
     ValidateDialogInput();
 }
 
-IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, RefInputModifyHandler, formula::WeldRefEdit&, void )
+IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, RefInputModifyHandler, formula::RefEdit&, void )
 {
     if ( mpActiveEdit )
     {

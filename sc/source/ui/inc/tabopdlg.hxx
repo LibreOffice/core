@@ -64,18 +64,18 @@ private:
     const OUString      errMsgNoColFormula;
     const OUString      errMsgNoRowFormula;
 
-    formula::WeldRefEdit* m_pEdActive;
+    formula::RefEdit* m_pEdActive;
     std::unique_ptr<weld::Label> m_xFtFormulaRange;
-    std::unique_ptr<formula::WeldRefEdit> m_xEdFormulaRange;
-    std::unique_ptr<formula::WeldRefButton> m_xRBFormulaRange;
+    std::unique_ptr<formula::RefEdit> m_xEdFormulaRange;
+    std::unique_ptr<formula::RefButton> m_xRBFormulaRange;
 
     std::unique_ptr<weld::Label> m_xFtRowCell;
-    std::unique_ptr<formula::WeldRefEdit> m_xEdRowCell;
-    std::unique_ptr<formula::WeldRefButton> m_xRBRowCell;
+    std::unique_ptr<formula::RefEdit> m_xEdRowCell;
+    std::unique_ptr<formula::RefButton> m_xRBRowCell;
 
     std::unique_ptr<weld::Label> m_xFtColCell;
-    std::unique_ptr<formula::WeldRefEdit> m_xEdColCell;
-    std::unique_ptr<formula::WeldRefButton> m_xRBColCell;
+    std::unique_ptr<formula::RefEdit> m_xEdColCell;
+    std::unique_ptr<formula::RefButton> m_xRBColCell;
 
     std::unique_ptr<weld::Button> m_xBtnOk;
     std::unique_ptr<weld::Button> m_xBtnCancel;
@@ -84,10 +84,10 @@ private:
     void    RaiseError( ScTabOpErr eError );
 
     DECL_LINK( BtnHdl, weld::Button&, void );
-    DECL_LINK( GetEditFocusHdl, formula::WeldRefEdit&, void );
-    DECL_LINK( LoseEditFocusHdl, formula::WeldRefEdit&, void );
-    DECL_LINK( GetButtonFocusHdl, formula::WeldRefButton&, void );
-    DECL_LINK( LoseButtonFocusHdl, formula::WeldRefButton&, void );
+    DECL_LINK( GetEditFocusHdl, formula::RefEdit&, void );
+    DECL_LINK( LoseEditFocusHdl, formula::RefEdit&, void );
+    DECL_LINK( GetButtonFocusHdl, formula::RefButton&, void );
+    DECL_LINK( LoseButtonFocusHdl, formula::RefButton&, void );
 
 };
 

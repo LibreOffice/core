@@ -52,8 +52,8 @@ ScRandomNumberGeneratorDialog::ScRandomNumberGeneratorDialog(
     , mpDoc(pViewData->GetDocument())
     , mbDialogLostFocus(false)
     , mxInputRangeText(m_xBuilder->weld_label("cell-range-label"))
-    , mxInputRangeEdit(new formula::WeldRefEdit(m_xBuilder->weld_entry("cell-range-edit")))
-    , mxInputRangeButton(new formula::WeldRefButton(m_xBuilder->weld_button("cell-range-button")))
+    , mxInputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("cell-range-edit")))
+    , mxInputRangeButton(new formula::RefButton(m_xBuilder->weld_button("cell-range-button")))
     , mxDistributionCombo(m_xBuilder->weld_combo_box("distribution-combo"))
     , mxParameter1Text(m_xBuilder->weld_label("parameter1-label"))
     , mxParameter1Value(m_xBuilder->weld_spin_button("parameter1-spin"))
@@ -311,27 +311,27 @@ IMPL_LINK_NOARG( ScRandomNumberGeneratorDialog, CloseClicked, weld::Button&, voi
     response(RET_CLOSE);
 }
 
-IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, GetEditFocusHandler, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, GetEditFocusHandler, formula::RefEdit&, void)
 {
     mxInputRangeEdit->SelectAll();
 }
 
-IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, GetButtonFocusHandler, formula::WeldRefButton&, void)
+IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, GetButtonFocusHandler, formula::RefButton&, void)
 {
     mxInputRangeEdit->SelectAll();
 }
 
-IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, LoseEditFocusHandler, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, LoseEditFocusHandler, formula::RefEdit&, void)
 {
     mbDialogLostFocus = !m_xDialog->has_toplevel_focus();
 }
 
-IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, LoseButtonFocusHandler, formula::WeldRefButton&, void)
+IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, LoseButtonFocusHandler, formula::RefButton&, void)
 {
     mbDialogLostFocus = !m_xDialog->has_toplevel_focus();
 }
 
-IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, InputRangeModified, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, InputRangeModified, formula::RefEdit&, void)
 {
     ScRangeList aRangeList;
     bool bValid = ParseWithNames( aRangeList, mxInputRangeEdit->GetText(), mpDoc);

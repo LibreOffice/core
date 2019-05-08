@@ -39,8 +39,8 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* 
     , maErrNameInUse   ( ScResId(STR_ERR_NAME_EXISTS))
     , maRangeMap( aRangeMap )
     , m_xEdName(m_xBuilder->weld_entry("edit"))
-    , m_xEdRange(new formula::WeldRefEdit(m_xBuilder->weld_entry("range")))
-    , m_xRbRange(new formula::WeldRefButton(m_xBuilder->weld_button("refbutton")))
+    , m_xEdRange(new formula::RefEdit(m_xBuilder->weld_entry("range")))
+    , m_xRbRange(new formula::RefButton(m_xBuilder->weld_button("refbutton")))
     , m_xLbScope(m_xBuilder->weld_combo_box("scope"))
     , m_xBtnRowHeader(m_xBuilder->weld_check_button("rowheader"))
     , m_xBtnColHeader(m_xBuilder->weld_check_button("colheader"))
@@ -322,7 +322,7 @@ IMPL_LINK_NOARG(ScNameDefDlg, NameModifyHdl, weld::Entry&, void)
     IsNameValid();
 }
 
-IMPL_LINK_NOARG(ScNameDefDlg, AssignGetFocusHdl, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScNameDefDlg, AssignGetFocusHdl, formula::RefEdit&, void)
 {
     IsNameValid();
 }

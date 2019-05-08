@@ -88,10 +88,10 @@ private:
         std::unique_ptr<ArgEdit> m_xEdArg3;
         std::unique_ptr<ArgEdit> m_xEdArg4;
 
-        std::unique_ptr<WeldRefButton> m_xRefBtn1;
-        std::unique_ptr<WeldRefButton> m_xRefBtn2;
-        std::unique_ptr<WeldRefButton> m_xRefBtn3;
-        std::unique_ptr<WeldRefButton> m_xRefBtn4;
+        std::unique_ptr<RefButton> m_xRefBtn1;
+        std::unique_ptr<RefButton> m_xRefBtn2;
+        std::unique_ptr<RefButton> m_xRefBtn3;
+        std::unique_ptr<RefButton> m_xRefBtn4;
 
         DECL_LINK( ScrollHdl, weld::ScrolledWindow&, void);
         DECL_LINK( ModifyHdl, ArgInput&, void );
@@ -102,7 +102,7 @@ private:
         void            ArgumentModified();
 
         void            InitArgInput(sal_uInt16 nPos, weld::Label& rFtArg, weld::Button& rBtnFx,
-                                     ArgEdit& rEdArg, WeldRefButton& rRefBtn);
+                                     ArgEdit& rEdArg, RefButton& rRefBtn);
 
         void            SetArgumentDesc(const OUString& aText);
         void            SetArgumentText(const OUString& aText);
@@ -126,7 +126,7 @@ public:
 
         sal_uInt16      GetActiveLine() { return nActiveLine;}
         void            SetActiveLine(sal_uInt16 no);
-        WeldRefEdit*    GetActiveEdit();
+        RefEdit*    GetActiveEdit();
         OUString        GetActiveArgName();
 
         OUString        GetArgument(sal_uInt16 no);

@@ -41,8 +41,8 @@ private:
     bool            bMultiSelection;
 
     std::unique_ptr<weld::Label> m_xFtAssign;
-    std::unique_ptr<formula::WeldRefEdit> m_xEdAssign;
-    std::unique_ptr<formula::WeldRefButton> m_xRbAssign;
+    std::unique_ptr<formula::RefEdit> m_xEdAssign;
+    std::unique_ptr<formula::RefButton> m_xRbAssign;
     std::unique_ptr<weld::Button> m_xBtnOk;
     std::unique_ptr<weld::Button> m_xBtnCancel;
 

@@ -423,8 +423,8 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     , mxBtnDown(m_xBuilder->weld_button("down"))
     , mxBtnCancel(m_xBuilder->weld_button("cancel"))
     , mxFtRange(m_xBuilder->weld_label("ftassign"))
-    , mxEdRange(new formula::WeldRefEdit(m_xBuilder->weld_entry("edassign")))
-    , mxRbRange(new formula::WeldRefButton(m_xBuilder->weld_button("rbassign")))
+    , mxEdRange(new formula::RefEdit(m_xBuilder->weld_entry("edassign")))
+    , mxRbRange(new formula::RefButton(m_xBuilder->weld_button("rbassign")))
     , mxCondFormList(new ScCondFormatList(this, m_xBuilder->weld_scrolled_window("listwindow"),
                                           m_xBuilder->weld_container("list")))
 {
@@ -530,7 +530,7 @@ bool ScCondFormatDlg::IsRefInputMode() const
 
 void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
 {
-    formula::WeldRefEdit* pEdit = mpLastEdit;
+    formula::RefEdit* pEdit = mpLastEdit;
     if (!mpLastEdit)
         pEdit = mxEdRange.get();
 
@@ -665,7 +665,7 @@ void ScCondFormatDlg::OnSelectionChange(size_t nIndex, size_t nSize, bool bSelec
     }
 }
 
-IMPL_LINK(ScCondFormatDlg, EdRangeModifyHdl, formula::WeldRefEdit&, rEdit, void)
+IMPL_LINK(ScCondFormatDlg, EdRangeModifyHdl, formula::RefEdit&, rEdit, void)
 {
     OUString aRangeStr = rEdit.GetText();
     ScRangeList aRange;
@@ -685,7 +685,7 @@ IMPL_LINK(ScCondFormatDlg, EdRangeModifyHdl, formula::WeldRefEdit&, rEdit, void)
     updateTitle();
 }
 
-IMPL_LINK(ScCondFormatDlg, RangeGetFocusHdl, formula::WeldRefEdit&, rControl, void)
+IMPL_LINK(ScCondFormatDlg, RangeGetFocusHdl, formula::RefEdit&, rControl, void)
 {
     mpLastEdit = &rControl;
 }
