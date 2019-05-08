@@ -32,11 +32,15 @@ package net.adaptivebox.deps;
  *     -> an agent perspective
  */
 
-import net.adaptivebox.deps.behavior.*;
+import net.adaptivebox.deps.behavior.AbsGTBehavior;
+import net.adaptivebox.deps.behavior.DEGTBehavior;
+import net.adaptivebox.deps.behavior.PSGTBehavior;
 import net.adaptivebox.goodness.IGoodnessCompareEngine;
-import net.adaptivebox.knowledge.*;
-import net.adaptivebox.problem.*;
-import net.adaptivebox.space.*;
+import net.adaptivebox.knowledge.ILibEngine;
+import net.adaptivebox.knowledge.Library;
+import net.adaptivebox.knowledge.SearchPoint;
+import net.adaptivebox.problem.ProblemEncoder;
+import net.adaptivebox.space.BasicPoint;
 
 public class DEPSAgent implements ILibEngine {
 

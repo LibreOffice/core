@@ -55,10 +55,12 @@
 
 package net.adaptivebox.deps.behavior;
 
-import net.adaptivebox.goodness.*;
-import net.adaptivebox.knowledge.*;
-import net.adaptivebox.problem.*;
-import net.adaptivebox.space.*;
+import net.adaptivebox.goodness.IGoodnessCompareEngine;
+import net.adaptivebox.knowledge.Library;
+import net.adaptivebox.knowledge.SearchPoint;
+import net.adaptivebox.problem.ProblemEncoder;
+import net.adaptivebox.space.BasicPoint;
+import net.adaptivebox.space.DesignSpace;
 
 public class PSGTBehavior extends AbsGTBehavior {
   // Two normally choices for (c1, c2, weight), i.e., (2, 2, 0.4), or (1.494, 1.494, 0.729)
