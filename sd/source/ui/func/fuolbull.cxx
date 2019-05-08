@@ -335,8 +335,7 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
 
             //DBG_ASSERT( pItem, "No EE_PARA_NUMBULLET in the Pool!" );
 
-            std::unique_ptr<SfxPoolItem> pNewItem(pItem->CloneSetWhich(EE_PARA_NUMBULLET));
-            aNewAttr.Put(*pNewItem);
+            aNewAttr.Put(pItem->CloneSetWhich(EE_PARA_NUMBULLET));
 
             if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET )
             {

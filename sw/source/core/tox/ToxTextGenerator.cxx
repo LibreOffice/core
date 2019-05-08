@@ -291,9 +291,9 @@ ToxTextGenerator::CollectAttributesForTox(const SwTextAttr& hint, SwAttrPool& po
         if (pItem->Which() == RES_CHRATR_ESCAPEMENT ||
             pItem->Which() == RES_CHRATR_POSTURE ||
             pItem->Which() == RES_CHRATR_CJK_POSTURE ||
-            pItem->Which() == RES_CHRATR_CTL_POSTURE) {
-            std::unique_ptr<SfxPoolItem> clonedItem(pItem->Clone());
-            retval->Put(*clonedItem);
+            pItem->Which() == RES_CHRATR_CTL_POSTURE)
+        {
+            retval->Put(std::unique_ptr<SfxPoolItem>(pItem->Clone()));
         }
         if (aIter.IsAtEnd()) {
             break;

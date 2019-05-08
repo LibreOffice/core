@@ -2158,8 +2158,7 @@ void SwBaseShell::GetTextFontCtrlState( SfxItemSet& rSet )
                 const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
                 if( pI )
                 {
-                    std::unique_ptr<SfxPoolItem> pNewItem(pI->CloneSetWhich(nWhich));
-                    rSet.Put( *pNewItem );
+                    rSet.Put( pI->CloneSetWhich(nWhich) );
                 }
                 else
                     rSet.InvalidateItem( nWhich );

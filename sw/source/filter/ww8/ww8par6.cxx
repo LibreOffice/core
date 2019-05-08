@@ -3617,7 +3617,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
                 {
                     std::unique_ptr<SvxUnderlineItem> pUnderline(static_cast<SvxUnderlineItem*>(m_xCurrentItemSet->Get(RES_CHRATR_UNDERLINE, false).Clone()));
                     pUnderline->SetColor( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) );
-                    m_xCurrentItemSet->Put( *pUnderline );
+                    m_xCurrentItemSet->Put( std::move(pUnderline) );
                 }
             }
         }

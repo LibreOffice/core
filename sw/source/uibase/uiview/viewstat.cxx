@@ -255,23 +255,19 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_ATTR_LANGUAGE:
             {
-                std::unique_ptr<SfxPoolItem> pNewItem(
-                    m_pWrtShell->GetDefault(RES_CHRATR_LANGUAGE).CloneSetWhich(SID_ATTR_LANGUAGE));
-                rSet.Put(*pNewItem);
+                rSet.Put(m_pWrtShell->GetDefault(RES_CHRATR_LANGUAGE).CloneSetWhich(SID_ATTR_LANGUAGE));
             }
             break;
             case RES_CHRATR_CJK_LANGUAGE:
             {
-                std::unique_ptr<SfxPoolItem> pNewItem(
-                    m_pWrtShell->GetDefault(RES_CHRATR_CJK_LANGUAGE).CloneSetWhich(RES_CHRATR_CJK_LANGUAGE));
-                rSet.Put(*pNewItem);
+                rSet.Put(m_pWrtShell->GetDefault(RES_CHRATR_CJK_LANGUAGE)
+                            .CloneSetWhich(RES_CHRATR_CJK_LANGUAGE));
             }
             break;
             case RES_CHRATR_CTL_LANGUAGE:
             {
-                std::unique_ptr<SfxPoolItem> pNewItem(
-                    m_pWrtShell->GetDefault(RES_CHRATR_CTL_LANGUAGE).CloneSetWhich(RES_CHRATR_CTL_LANGUAGE));
-                rSet.Put(*pNewItem);
+                rSet.Put(m_pWrtShell->GetDefault(RES_CHRATR_CTL_LANGUAGE)
+                            .CloneSetWhich(RES_CHRATR_CTL_LANGUAGE));
             }
             break;
             case FN_REDLINE_ON:
@@ -479,8 +475,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 {
                     if (!(m_nSelectionType & SelectionType::DrawObject))
                     {
-                        std::unique_ptr<SfxPoolItem> pNewItem(pState->CloneSetWhich(nWhich));
-                        rSet.Put(*pNewItem);
+                        rSet.Put(pState->CloneSetWhich(nWhich));
                     }
                 }
                 else

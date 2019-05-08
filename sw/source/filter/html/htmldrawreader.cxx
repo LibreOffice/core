@@ -238,11 +238,7 @@ static void PutEEPoolItem( SfxItemSet &rEEItemSet,
     }
 
     if( nEEWhich )
-    {
-        std::unique_ptr<SfxPoolItem> pEEItem(rSwItem.Clone());
-        pEEItem->SetWhich( nEEWhich );
-        rEEItemSet.Put( *pEEItem );
-    }
+        rEEItemSet.Put( rSwItem.CloneSetWhich(nEEWhich) );
 }
 
 void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )

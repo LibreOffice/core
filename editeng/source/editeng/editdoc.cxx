@@ -901,12 +901,11 @@ void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const Map
                 std::unique_ptr<SfxPoolItem> pItem(rSource.Get( nSourceWhich ).Clone());
                 ConvertItem( pItem, eSourceUnit, eDestUnit );
                 pItem->SetWhich(nWhich);
-                rDest.Put( *pItem );
+                rDest.Put( std::move(pItem) );
             }
             else
             {
-                std::unique_ptr<SfxPoolItem> pNewItem(rSource.Get( nSourceWhich ).CloneSetWhich(nWhich));
-                rDest.Put( *pNewItem );
+                rDest.Put( rSource.Get( nSourceWhich ).CloneSetWhich(nWhich) );
             }
         }
     }

@@ -224,8 +224,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     }
                     else
                     {
-                        std::unique_ptr<SfxPoolItem> pNewItem(pI->CloneSetWhich(nWhich));
-                        aAttrSet.Put( *pNewItem );
+                        aAttrSet.Put( pI->CloneSetWhich(nWhich) );
                     }
                 }
                 else

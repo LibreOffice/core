@@ -149,7 +149,7 @@ void ConvertAttrCharToGen(SfxItemSet& rSet)
     else
         pGrabBag.reset(new SfxGrabBagItem(RES_CHRATR_GRABBAG));
     pGrabBag->GetGrabBag()["DialogUseCharAttr"] <<= true;
-    rSet.Put(*pGrabBag);
+    rSet.Put(std::move(pGrabBag));
 }
 
 void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet)

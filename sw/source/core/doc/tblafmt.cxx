@@ -548,12 +548,9 @@ void SwTableAutoFormat::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
             }
             else
             {
-                std::unique_ptr<SfxPoolItem> pNewItem(rChg.GetHeight().CloneSetWhich(RES_CHRATR_CJK_FONTSIZE));
-                rSet.Put( *pNewItem);
-                pNewItem = rChg.GetWeight().CloneSetWhich(RES_CHRATR_CJK_WEIGHT);
-                rSet.Put( *pNewItem);
-                pNewItem = rChg.GetPosture().CloneSetWhich(RES_CHRATR_CJK_POSTURE);
-                rSet.Put( *pNewItem);
+                rSet.Put( rChg.GetHeight().CloneSetWhich(RES_CHRATR_CJK_FONTSIZE) );
+                rSet.Put( rChg.GetWeight().CloneSetWhich(RES_CHRATR_CJK_WEIGHT) );
+                rSet.Put( rChg.GetPosture().CloneSetWhich(RES_CHRATR_CJK_POSTURE) );
             }
             // do not insert empty CTL font
             const SvxFontItem& rCTLFont = rChg.GetCTLFont();
@@ -566,12 +563,9 @@ void SwTableAutoFormat::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
             }
             else
             {
-                std::unique_ptr<SfxPoolItem> pNewItem(rChg.GetHeight().CloneSetWhich(RES_CHRATR_CTL_FONTSIZE));
-                rSet.Put( *pNewItem);
-                pNewItem = rChg.GetWeight().CloneSetWhich(RES_CHRATR_CTL_WEIGHT);
-                rSet.Put( *pNewItem);
-                pNewItem = rChg.GetPosture().CloneSetWhich(RES_CHRATR_CTL_POSTURE);
-                rSet.Put( *pNewItem);
+                rSet.Put( rChg.GetHeight().CloneSetWhich(RES_CHRATR_CTL_FONTSIZE) );
+                rSet.Put( rChg.GetWeight().CloneSetWhich(RES_CHRATR_CTL_WEIGHT) );
+                rSet.Put( rChg.GetPosture().CloneSetWhich(RES_CHRATR_CTL_POSTURE) );
             }
             rSet.Put( rChg.GetUnderline() );
             rSet.Put( rChg.GetOverline() );

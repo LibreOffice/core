@@ -113,7 +113,7 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
         {
             std::unique_ptr<SfxUInt16Item> pOutlineLv(static_cast<SfxUInt16Item*>(pOldOutlineLv->Clone()));
             pOutlineLv->SetValue( aOutlineLv );
-            rSet->Put(*pOutlineLv);
+            rSet->Put(std::move(pOutlineLv));
             bModified = true;
         }
     }
@@ -128,7 +128,7 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
         {
             std::unique_ptr<SfxStringItem> pRule(static_cast<SfxStringItem*>(pOldRule->Clone()));
             pRule->SetValue(aStyle);
-            rSet->Put(*pRule);
+            rSet->Put(std::move(pRule));
             bModified = true;
         }
     }

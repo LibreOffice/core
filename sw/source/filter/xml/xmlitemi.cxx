@@ -220,7 +220,7 @@ void SwXMLImportTableItemMapper_Impl::finished(
                         *pNewItem, m_FoMarginValue, Ids[i][1], rUnitConverter);
                 if (bPut)
                 {
-                    rSet.Put(*pNewItem);
+                    rSet.Put(std::move(pNewItem));
                 }
             }
             else

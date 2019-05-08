@@ -2238,7 +2238,7 @@ bool SvxAsianTabPage::FillItemSet( SfxItemSet* rSet )
         std::unique_ptr<SfxBoolItem> pNewItem(static_cast<SfxBoolItem*>(rSet->Get(
             pPool->GetWhich(SID_ATTR_PARA_SCRIPTSPACE)).Clone()));
         pNewItem->SetValue(m_xScriptSpaceCB->get_active());
-        rSet->Put(*pNewItem);
+        rSet->Put(std::move(pNewItem));
         bRet = true;
     }
     if (m_xHangingPunctCB->get_sensitive() && m_xHangingPunctCB->get_state_changed_from_saved())
@@ -2246,7 +2246,7 @@ bool SvxAsianTabPage::FillItemSet( SfxItemSet* rSet )
         std::unique_ptr<SfxBoolItem> pNewItem(static_cast<SfxBoolItem*>(rSet->Get(
             pPool->GetWhich(SID_ATTR_PARA_HANGPUNCTUATION)).Clone()));
         pNewItem->SetValue(m_xHangingPunctCB->get_active());
-        rSet->Put(*pNewItem);
+        rSet->Put(std::move(pNewItem));
         bRet = true;
     }
     if (m_xForbiddenRulesCB->get_sensitive() && m_xForbiddenRulesCB->get_state_changed_from_saved())
@@ -2254,7 +2254,7 @@ bool SvxAsianTabPage::FillItemSet( SfxItemSet* rSet )
         std::unique_ptr<SfxBoolItem> pNewItem(static_cast<SfxBoolItem*>(rSet->Get(
             pPool->GetWhich(SID_ATTR_PARA_FORBIDDEN_RULES)).Clone()));
         pNewItem->SetValue(m_xForbiddenRulesCB->get_active());
-        rSet->Put(*pNewItem);
+        rSet->Put(std::move(pNewItem));
         bRet = true;
     }
     return bRet;

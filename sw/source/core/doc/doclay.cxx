@@ -785,9 +785,9 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 pNewSet->Put( pOldFormat->GetAnchor() );
 
                 // The new one should be changeable in its height.
-                std::shared_ptr<SwFormatFrameSize> aFrameSize(static_cast<SwFormatFrameSize*>(pOldFormat->GetFrameSize().Clone()));
+                std::unique_ptr<SwFormatFrameSize> aFrameSize(static_cast<SwFormatFrameSize*>(pOldFormat->GetFrameSize().Clone()));
                 aFrameSize->SetHeightSizeType( ATT_MIN_SIZE );
-                pNewSet->Put( *aFrameSize );
+                pNewSet->Put( std::move(aFrameSize) );
 
                 SwStartNode* pSttNd = rDoc.GetNodes().MakeTextSection(
                             SwNodeIndex( rDoc.GetNodes().GetEndOfAutotext() ),
@@ -849,7 +849,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 }
                 aFrameSize->SetWidthPercent(isMath ? 0 : 100);
                 aFrameSize->SetHeightPercent(SwFormatFrameSize::SYNCED);
-                pNewSet->Put( *aFrameSize );
+                pNewSet->Put( std::move(aFrameSize) );
 
                 // Hard-set the attributes, because they could come from the Template
                 // and then size calculations could not be correct anymore.

@@ -2210,8 +2210,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
             break;
             case SID_ATTR_BRUSH:
             {
-                std::unique_ptr<SfxPoolItem> pNewItem(rBrushItem.CloneSetWhich(GetPool().GetWhich(nWhich)));
-                rSet.Put( *pNewItem );
+                rSet.Put( rBrushItem.CloneSetWhich(GetPool().GetWhich(nWhich)) );
             }
             break;
             case SID_SCATTR_CELLPROTECTION:

@@ -3004,10 +3004,10 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
             case FN_PARAM_FTN_INFO:
             {
                 const SfxPoolItem& rItem = aBaseImpl.GetItemSet().Get(FN_PARAM_FTN_INFO);
-                const std::unique_ptr<SfxPoolItem> pNewFootnoteItem(rItem.Clone());
+                std::unique_ptr<SfxPoolItem> pNewFootnoteItem(rItem.Clone());
                 if(!pNewFootnoteItem->PutValue(rValues[nProp], pEntry->nMemberId))
                     throw lang::IllegalArgumentException();
-                aBaseImpl.GetItemSet().Put(*pNewFootnoteItem);
+                aBaseImpl.GetItemSet().Put(std::move(pNewFootnoteItem));
                 break;
             }
             default:

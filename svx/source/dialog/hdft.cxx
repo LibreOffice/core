@@ -249,7 +249,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     {
         std::unique_ptr<SfxBoolItem> pBoolItem(static_cast<SfxBoolItem*>(pPool->GetDefaultItem(nWDynSpacing).Clone()));
         pBoolItem->SetValue(m_xDynSpacingCB->get_active());
-        aSet.Put(*pBoolItem);
+        aSet.Put(std::move(pBoolItem));
     }
 
     // Size

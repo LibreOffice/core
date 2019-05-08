@@ -1118,7 +1118,7 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
         {
             std::unique_ptr<SfxPoolItem> pItem(::GetDfltAttr( nIDs[nIndex] )->Clone());
             bRet &= pItem->PutValue(*pAny, nMId );
-            rGrSet.Put(*pItem);
+            rGrSet.Put(std::move(pItem));
         }
     }
 

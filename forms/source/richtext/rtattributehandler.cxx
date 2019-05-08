@@ -291,13 +291,12 @@ namespace frm
     {
         if ( _pAdditionalArg )
         {
-            std::unique_ptr<SfxPoolItem> pCorrectWich(_pAdditionalArg->Clone());
-            pCorrectWich->SetWhich( getWhich() );
+            std::unique_ptr<SfxPoolItem> pCorrectWich(_pAdditionalArg->CloneSetWhich(getWhich()));
 
             if ( m_bScriptDependent )
                 putItemForScript( _rNewAttribs, *pCorrectWich, _nForScriptType );
             else
-                _rNewAttribs.Put( *pCorrectWich );
+                _rNewAttribs.Put( std::move(pCorrectWich) );
         }
         else
             OSL_FAIL( "SlotHandler::executeAttribute: need attributes to do something!" );
@@ -433,9 +432,7 @@ namespace frm
         OSL_ENSURE( dynamic_cast<const SfxBoolItem*>( _pAdditionalArg) !=  nullptr, "BooleanHandler::executeAttribute: invalid argument!" );
         if ( _pAdditionalArg )
         {
-            std::unique_ptr<SfxPoolItem> pCorrectWich(_pAdditionalArg->Clone());
-            pCorrectWich->SetWhich( getWhich() );
-            _rNewAttribs.Put( *pCorrectWich );
+            _rNewAttribs.Put( _pAdditionalArg->CloneSetWhich(getWhich()) );
         }
     }
 
