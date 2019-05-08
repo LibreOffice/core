@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_6452456a",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-05-08T17:08:41Z",
+      "side": 1,
+      "message": "is this still true in the presence of display scaling?\n\ni.e. what if the line we are drawing maps to 1/3 of one pixel and 2/3 of the next pixel?",
+      "revId": "284e716be6b61faf76f229b95f9f36234c03b52b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
