@@ -94,7 +94,7 @@ namespace
 
         return bOk;
     }
-    /** connectionModified adds an undo action for the modified connection and forces an redraw
+    /** connectionModified adds an undo action for the modified connection and forces a redraw
         @param  _pView              the view which we use
         @param  _pConnection    the connection which was modified
         @param  _bAddUndo       true when an undo action should be appended
@@ -449,7 +449,7 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
 
         try
         {
-            // find relations between the table an the tables already inserted
+            // find relations between the table and the tables already inserted
             Reference< XIndexAccess> xKeyIndex = pNewTabWin->GetData()->getKeys();
             if ( !xKeyIndex.is() )
                 break;
@@ -771,7 +771,7 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
             pUndoAction->InsertConnection(xTmpEntry);
 
             // call base class because we append an undo action
-            // but this time we are in a undo action list
+            // but this time we are in an undo action list
             OJoinTableView::RemoveConnection(xTmpEntry, false);
             aIter2 = rTabConList.begin();
             ++nCnt;
