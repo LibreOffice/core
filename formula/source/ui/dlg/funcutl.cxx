@@ -38,7 +38,7 @@ namespace formula
 
 // class ArgEdit
 ArgEdit::ArgEdit(std::unique_ptr<weld::Entry> xControl)
-    : WeldRefEdit(std::move(xControl))
+    : RefEdit(std::move(xControl))
     , pEdPrev(nullptr)
     , pEdNext(nullptr)
     , pSlider(nullptr)
@@ -144,7 +144,7 @@ ArgInput::ArgInput()
 }
 
 void ArgInput::InitArgInput(weld::Label* pftArg, weld::Button* pbtnFx,
-                            ArgEdit* pedArg, WeldRefButton* prefBtn)
+                            ArgEdit* pedArg, RefButton* prefBtn)
 {
     pFtArg =pftArg;
     pBtnFx =pbtnFx;
@@ -259,58 +259,53 @@ IMPL_LINK( ArgInput, FxBtnFocusHdl, weld::Widget&, rControl, void )
         aFxFocusLink.Call(*this);
 }
 
-IMPL_LINK( ArgInput, EdFocusHdl, WeldRefEdit&, rControl, void )
+IMPL_LINK( ArgInput, EdFocusHdl, RefEdit&, rControl, void )
 {
     if (&rControl == pEdArg)
         aEdFocusLink.Call(*this);
 }
 
-IMPL_LINK( ArgInput, EdModifyHdl, WeldRefEdit&, rEdit, void )
+IMPL_LINK( ArgInput, EdModifyHdl, RefEdit&, rEdit, void )
 {
     if (&rEdit == pEdArg)
         aEdModifyLink.Call(*this);
 }
 
-// class RefEdit
-
-RefEdit::RefEdit( vcl::Window* _pParent, vcl::Window* pShrinkModeLabel, WinBits nStyle )
-    : Edit( _pParent, nStyle )
+RefEdit::RefEdit(std::unique_ptr<weld::Entry> xControl)
+    : xEntry(std::move(xControl))
     , aIdle("formula RefEdit Idle")
-    , pAnyRefDlg( nullptr )
-    , pLabelWidget(pShrinkModeLabel)
+    , pAnyRefDlg(nullptr)
+    , pLabelWidget(nullptr)
 {
+    xEntry->connect_focus_in(LINK(this, RefEdit, GetFocus));
+    xEntry->connect_focus_out(LINK(this, RefEdit, LoseFocus));
+    xEntry->connect_key_press(LINK(this, RefEdit, KeyInput));
+    xEntry->connect_changed(LINK(this, RefEdit, Modify));
     aIdle.SetInvokeHandler( LINK( this, RefEdit, UpdateHdl ) );
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeRefEdit(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
-{
-    rRet = VclPtr<RefEdit>::Create(pParent, nullptr, WB_BORDER);
 }
 
 RefEdit::~RefEdit()
 {
-    disposeOnce();
-}
-
-void RefEdit::dispose()
-{
     aIdle.ClearInvokeHandler();
     aIdle.Stop();
-    pLabelWidget.clear();
-    Edit::dispose();
 }
 
 void RefEdit::SetRefString( const OUString& rStr )
 {
     // Prevent unwanted side effects by setting only a differing string.
     // See commit message for reasons.
-    if (Edit::GetText() != rStr)
-        Edit::SetText( rStr );
+    if (xEntry->get_text() != rStr)
+        xEntry->set_text(rStr);
+}
+
+void RefEdit::SetRefValid(bool bValid)
+{
+    xEntry->set_message_type(bValid ? weld::EntryMessageType::Normal : weld::EntryMessageType::Error);
 }
 
 void RefEdit::SetText(const OUString& rStr)
 {
-    Edit::SetText( rStr );
+    xEntry->set_text(rStr);
     UpdateHdl( &aIdle );
 }
 
@@ -319,14 +314,14 @@ void RefEdit::StartUpdateData()
     aIdle.Start();
 }
 
-void RefEdit::SetReferences( IControlReferenceHandler* pDlg, vcl::Window* pLabel )
+void RefEdit::SetReferences(IControlReferenceHandler* pDlg, weld::Label* pLabel)
 {
     pAnyRefDlg = pDlg;
     pLabelWidget = pLabel;
 
     if( pDlg )
     {
-        aIdle.SetInvokeHandler( LINK( this, RefEdit, UpdateHdl ) );
+        aIdle.SetInvokeHandler(LINK(this, RefEdit, UpdateHdl));
     }
     else
     {
@@ -335,110 +330,14 @@ void RefEdit::SetReferences( IControlReferenceHandler* pDlg, vcl::Window* pLabel
     }
 }
 
-void RefEdit::Modify()
-{
-    Edit::Modify();
-    if( pAnyRefDlg )
-        pAnyRefDlg->HideReference();
-}
-
-void RefEdit::KeyInput( const KeyEvent& rKEvt )
-{
-    const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
-    if( pAnyRefDlg && !rKeyCode.GetModifier() && (rKeyCode.GetCode() == KEY_F2) )
-        pAnyRefDlg->ReleaseFocus( this );
-    else
-        Edit::KeyInput( rKEvt );
-}
-
-void RefEdit::GetFocus()
-{
-    Edit::GetFocus();
-    StartUpdateData();
-}
-
-void RefEdit::LoseFocus()
-{
-    Edit::LoseFocus();
-    if( pAnyRefDlg )
-        pAnyRefDlg->HideReference();
-}
-
-IMPL_LINK_NOARG(RefEdit, UpdateHdl, Timer *, void)
-{
-    if( pAnyRefDlg )
-        pAnyRefDlg->ShowReference( GetText() );
-}
-
-// class RefEdit
-
-WeldRefEdit::WeldRefEdit(std::unique_ptr<weld::Entry> xControl)
-    : xEntry(std::move(xControl))
-    , aIdle("formula RefEdit Idle")
-    , pAnyRefDlg(nullptr)
-    , pLabelWidget(nullptr)
-{
-    xEntry->connect_focus_in(LINK(this, WeldRefEdit, GetFocus));
-    xEntry->connect_focus_out(LINK(this, WeldRefEdit, LoseFocus));
-    xEntry->connect_key_press(LINK(this, WeldRefEdit, KeyInput));
-    xEntry->connect_changed(LINK(this, WeldRefEdit, Modify));
-    aIdle.SetInvokeHandler( LINK( this, WeldRefEdit, UpdateHdl ) );
-}
-
-WeldRefEdit::~WeldRefEdit()
-{
-    aIdle.ClearInvokeHandler();
-    aIdle.Stop();
-}
-
-void WeldRefEdit::SetRefString( const OUString& rStr )
-{
-    // Prevent unwanted side effects by setting only a differing string.
-    // See commit message for reasons.
-    if (xEntry->get_text() != rStr)
-        xEntry->set_text(rStr);
-}
-
-void WeldRefEdit::SetRefValid(bool bValid)
-{
-    xEntry->set_message_type(bValid ? weld::EntryMessageType::Normal : weld::EntryMessageType::Error);
-}
-
-void WeldRefEdit::SetText(const OUString& rStr)
-{
-    xEntry->set_text(rStr);
-    UpdateHdl( &aIdle );
-}
-
-void WeldRefEdit::StartUpdateData()
-{
-    aIdle.Start();
-}
-
-void WeldRefEdit::SetReferences(IControlReferenceHandler* pDlg, weld::Label* pLabel)
-{
-    pAnyRefDlg = pDlg;
-    pLabelWidget = pLabel;
-
-    if( pDlg )
-    {
-        aIdle.SetInvokeHandler(LINK(this, WeldRefEdit, UpdateHdl));
-    }
-    else
-    {
-        aIdle.ClearInvokeHandler();
-        aIdle.Stop();
-    }
-}
-
-IMPL_LINK_NOARG(WeldRefEdit, Modify, weld::Entry&, void)
+IMPL_LINK_NOARG(RefEdit, Modify, weld::Entry&, void)
 {
     maModifyHdl.Call(*this);
     if (pAnyRefDlg)
         pAnyRefDlg->HideReference();
 }
 
-IMPL_LINK(WeldRefEdit, KeyInput, const KeyEvent&, rKEvt, bool)
+IMPL_LINK(RefEdit, KeyInput, const KeyEvent&, rKEvt, bool)
 {
     const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
     if (pAnyRefDlg && !rKeyCode.GetModifier() && rKeyCode.GetCode() == KEY_F2)
@@ -457,61 +356,52 @@ IMPL_LINK(WeldRefEdit, KeyInput, const KeyEvent&, rKEvt, bool)
     return false;
 }
 
-IMPL_LINK_NOARG(WeldRefEdit, GetFocus, weld::Widget&, void)
+IMPL_LINK_NOARG(RefEdit, GetFocus, weld::Widget&, void)
 {
     maGetFocusHdl.Call(*this);
     StartUpdateData();
 }
 
-IMPL_LINK_NOARG(WeldRefEdit, LoseFocus, weld::Widget&, void)
+IMPL_LINK_NOARG(RefEdit, LoseFocus, weld::Widget&, void)
 {
     maLoseFocusHdl.Call(*this);
     if( pAnyRefDlg )
         pAnyRefDlg->HideReference();
 }
 
-IMPL_LINK_NOARG(WeldRefEdit, UpdateHdl, Timer *, void)
+IMPL_LINK_NOARG(RefEdit, UpdateHdl, Timer *, void)
 {
     if( pAnyRefDlg )
         pAnyRefDlg->ShowReference(xEntry->get_text());
 }
 
 //class RefButton
-RefButton::RefButton( vcl::Window* _pParent, WinBits nStyle ) :
-    ImageButton(_pParent, nStyle),
-    aImgRefStart(BitmapEx(RID_BMP_REFBTN1)),
-    aImgRefDone(BitmapEx(RID_BMP_REFBTN2)),
-    aShrinkQuickHelp( ForResId( RID_STR_SHRINK ) ),
-    aExpandQuickHelp( ForResId( RID_STR_EXPAND ) ),
-    pAnyRefDlg( nullptr ),
-    pRefEdit( nullptr )
+RefButton::RefButton(std::unique_ptr<weld::Button> xControl)
+    : xButton(std::move(xControl))
+    , pAnyRefDlg( nullptr )
+    , pRefEdit( nullptr )
 {
+    xButton->connect_focus_in(LINK(this, RefButton, GetFocus));
+    xButton->connect_focus_out(LINK(this, RefButton, LoseFocus));
+    xButton->connect_key_press(LINK(this, RefButton, KeyInput));
+    xButton->connect_clicked(LINK(this, RefButton, Click));
     SetStartImage();
 }
 
 RefButton::~RefButton()
 {
-    disposeOnce();
 }
-
-void RefButton::dispose()
-{
-    pRefEdit.clear();
-    ImageButton::dispose();
-}
-
-VCL_BUILDER_FACTORY_ARGS(RefButton, 0)
 
 void RefButton::SetStartImage()
 {
-    SetModeImage( aImgRefStart );
-    SetQuickHelpText( aShrinkQuickHelp );
+    xButton->set_from_icon_name(RID_BMP_REFBTN1);
+    xButton->set_tooltip_text(ForResId(RID_STR_SHRINK));
 }
 
 void RefButton::SetEndImage()
 {
-    SetModeImage( aImgRefDone );
-    SetQuickHelpText( aExpandQuickHelp );
+    xButton->set_from_icon_name(RID_BMP_REFBTN2);
+    xButton->set_tooltip_text(ForResId(RID_STR_EXPAND));
 }
 
 void RefButton::SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit )
@@ -520,78 +410,14 @@ void RefButton::SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit )
     pRefEdit = pEdit;
 }
 
-void RefButton::Click()
-{
-    if( pAnyRefDlg )
-        pAnyRefDlg->ToggleCollapsed( pRefEdit, this );
-}
-
-void RefButton::KeyInput( const KeyEvent& rKEvt )
-{
-    const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
-    if( pAnyRefDlg && !rKeyCode.GetModifier() && (rKeyCode.GetCode() == KEY_F2) )
-        pAnyRefDlg->ReleaseFocus( pRefEdit );
-    else
-        ImageButton::KeyInput( rKEvt );
-}
-
-void RefButton::GetFocus()
-{
-    ImageButton::GetFocus();
-    if( pRefEdit )
-        pRefEdit->StartUpdateData();
-}
-
-void RefButton::LoseFocus()
-{
-    ImageButton::LoseFocus();
-    if( pRefEdit )
-        pRefEdit->Modify();
-}
-
-//class RefButton
-WeldRefButton::WeldRefButton(std::unique_ptr<weld::Button> xControl)
-    : xButton(std::move(xControl))
-    , pAnyRefDlg( nullptr )
-    , pRefEdit( nullptr )
-{
-    xButton->connect_focus_in(LINK(this, WeldRefButton, GetFocus));
-    xButton->connect_focus_out(LINK(this, WeldRefButton, LoseFocus));
-    xButton->connect_key_press(LINK(this, WeldRefButton, KeyInput));
-    xButton->connect_clicked(LINK(this, WeldRefButton, Click));
-    SetStartImage();
-}
-
-WeldRefButton::~WeldRefButton()
-{
-}
-
-void WeldRefButton::SetStartImage()
-{
-    xButton->set_from_icon_name(RID_BMP_REFBTN1);
-    xButton->set_tooltip_text(ForResId(RID_STR_SHRINK));
-}
-
-void WeldRefButton::SetEndImage()
-{
-    xButton->set_from_icon_name(RID_BMP_REFBTN2);
-    xButton->set_tooltip_text(ForResId(RID_STR_EXPAND));
-}
-
-void WeldRefButton::SetReferences( IControlReferenceHandler* pDlg, WeldRefEdit* pEdit )
-{
-    pAnyRefDlg = pDlg;
-    pRefEdit = pEdit;
-}
-
-IMPL_LINK_NOARG(WeldRefButton, Click, weld::Button&, void)
+IMPL_LINK_NOARG(RefButton, Click, weld::Button&, void)
 {
     maClickHdl.Call(*this);
     if( pAnyRefDlg )
         pAnyRefDlg->ToggleCollapsed( pRefEdit, this );
 }
 
-IMPL_LINK(WeldRefButton, KeyInput, const KeyEvent&, rKEvt, bool)
+IMPL_LINK(RefButton, KeyInput, const KeyEvent&, rKEvt, bool)
 {
     const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
     if (pAnyRefDlg && !rKeyCode.GetModifier() && rKeyCode.GetCode() == KEY_F2)
@@ -610,14 +436,14 @@ IMPL_LINK(WeldRefButton, KeyInput, const KeyEvent&, rKEvt, bool)
     return false;
 }
 
-IMPL_LINK_NOARG(WeldRefButton, GetFocus, weld::Widget&, void)
+IMPL_LINK_NOARG(RefButton, GetFocus, weld::Widget&, void)
 {
     maGetFocusHdl.Call(*this);
     if (pRefEdit)
         pRefEdit->StartUpdateData();
 }
 
-IMPL_LINK_NOARG(WeldRefButton, LoseFocus, weld::Widget&, void)
+IMPL_LINK_NOARG(RefButton, LoseFocus, weld::Widget&, void)
 {
     maLoseFocusHdl.Call(*this);
     if (pRefEdit)

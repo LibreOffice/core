@@ -64,8 +64,8 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, we
     , bRefInputMode(false)
     , m_pRefInputEdit(nullptr)
     , m_xLbFilterArea(m_xBuilder->weld_combo_box("lbfilterarea"))
-    , m_xEdFilterArea(new formula::WeldRefEdit(m_xBuilder->weld_entry("edfilterarea")))
-    , m_xRbFilterArea(new formula::WeldRefButton(m_xBuilder->weld_button("rbfilterarea")))
+    , m_xEdFilterArea(new formula::RefEdit(m_xBuilder->weld_entry("edfilterarea")))
+    , m_xRbFilterArea(new formula::RefButton(m_xBuilder->weld_button("rbfilterarea")))
     , m_xExpander(m_xBuilder->weld_expander("more"))
     , m_xBtnCase(m_xBuilder->weld_check_button("case"))
     , m_xBtnRegExp(m_xBuilder->weld_check_button("regexp"))
@@ -73,8 +73,8 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, we
     , m_xBtnUnique(m_xBuilder->weld_check_button("unique"))
     , m_xBtnCopyResult(m_xBuilder->weld_check_button("copyresult"))
     , m_xLbCopyArea(m_xBuilder->weld_combo_box("lbcopyarea"))
-    , m_xEdCopyArea(new formula::WeldRefEdit(m_xBuilder->weld_entry("edcopyarea")))
-    , m_xRbCopyArea(new formula::WeldRefButton(m_xBuilder->weld_button("rbcopyarea")))
+    , m_xEdCopyArea(new formula::RefEdit(m_xBuilder->weld_entry("edcopyarea")))
+    , m_xRbCopyArea(new formula::RefButton(m_xBuilder->weld_button("rbcopyarea")))
     , m_xBtnDestPers(m_xBuilder->weld_check_button("destpers"))
     , m_xFtDbAreaLabel(m_xBuilder->weld_label("dbarealabel"))
     , m_xFtDbArea(m_xBuilder->weld_label("dbarea"))
@@ -90,8 +90,8 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, we
 
     Init( rArgSet );
 
-    Link<formula::WeldRefEdit&, void> aLinkEdit = LINK(this, ScSpecialFilterDlg, RefInputEditHdl);
-    Link<formula::WeldRefButton&, void> aLinkButton = LINK(this, ScSpecialFilterDlg, RefInputButtonHdl);
+    Link<formula::RefEdit&, void> aLinkEdit = LINK(this, ScSpecialFilterDlg, RefInputEditHdl);
+    Link<formula::RefButton&, void> aLinkButton = LINK(this, ScSpecialFilterDlg, RefInputButtonHdl);
     m_xEdCopyArea->SetGetFocusHdl(aLinkEdit);
     m_xRbCopyArea->SetGetFocusHdl(aLinkButton);
     m_xEdFilterArea->SetGetFocusHdl(aLinkEdit);
@@ -359,12 +359,12 @@ IMPL_LINK(ScSpecialFilterDlg, EndDlgHdl, weld::Button&, rBtn, void)
     }
 }
 
-IMPL_LINK_NOARG(ScSpecialFilterDlg, RefInputEditHdl, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScSpecialFilterDlg, RefInputEditHdl, formula::RefEdit&, void)
 {
     RefInputHdl();
 }
 
-IMPL_LINK_NOARG(ScSpecialFilterDlg, RefInputButtonHdl, formula::WeldRefButton&, void)
+IMPL_LINK_NOARG(ScSpecialFilterDlg, RefInputButtonHdl, formula::RefButton&, void)
 {
     RefInputHdl();
 }
@@ -405,7 +405,7 @@ IMPL_LINK(ScSpecialFilterDlg, FilterAreaSelHdl, weld::ComboBox&, rLb, void)
     }
 }
 
-IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::WeldRefEdit&, rEd, void )
+IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::RefEdit&, rEd, void )
 {
     if (&rEd == m_xEdFilterArea.get())
     {

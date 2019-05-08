@@ -37,44 +37,7 @@ namespace formula {
 
 class IControlReferenceHandler;
 
-class FORMULA_DLLPUBLIC RefEdit : public Edit
-{
-private:
-    Idle                      aIdle;
-    IControlReferenceHandler* pAnyRefDlg; // parent dialog
-    VclPtr<vcl::Window>       pLabelWidget;
-
-    DECL_LINK( UpdateHdl, Timer*, void );
-
-protected:
-    virtual void KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void GetFocus() override;
-    virtual void LoseFocus() override;
-
-public:
-    RefEdit( vcl::Window* _pParent, vcl::Window* pShrinkModeLabel, WinBits nStyle = WB_BORDER );
-
-    virtual ~RefEdit() override;
-    virtual void dispose() override;
-
-    void SetRefString( const OUString& rStr );
-
-    using Edit::SetText;
-
-    void         SetText( const OUString& rStr ) override;
-    virtual void Modify() override;
-
-    void         StartUpdateData();
-
-    void         SetReferences( IControlReferenceHandler* pDlg, vcl::Window *pLabelWidget );
-
-    vcl::Window*      GetLabelWidgetForShrinkMode()
-    {
-        return pLabelWidget;
-    }
-};
-
-class FORMULA_DLLPUBLIC WeldRefEdit
+class FORMULA_DLLPUBLIC RefEdit
 {
 protected:
     std::unique_ptr<weld::Entry> xEntry;
@@ -83,9 +46,9 @@ private:
     Idle aIdle;
     IControlReferenceHandler* pAnyRefDlg; // parent dialog
     weld::Label* pLabelWidget;
-    Link<WeldRefEdit&,void> maGetFocusHdl;
-    Link<WeldRefEdit&,void> maLoseFocusHdl;
-    Link<WeldRefEdit&,void> maModifyHdl;
+    Link<RefEdit&,void> maGetFocusHdl;
+    Link<RefEdit&,void> maLoseFocusHdl;
+    Link<RefEdit&,void> maModifyHdl;
     Link<weld::Widget&,bool> maActivateHdl;
 
     DECL_LINK( UpdateHdl, Timer*, void );
@@ -97,9 +60,9 @@ protected:
     DECL_LINK(Modify, weld::Entry&, void);
 
 public:
-    WeldRefEdit(std::unique_ptr<weld::Entry> xControl);
+    RefEdit(std::unique_ptr<weld::Entry> xControl);
     weld::Entry* GetWidget() const { return xEntry.get(); }
-    ~WeldRefEdit();
+    ~RefEdit();
 
     void SetRefString( const OUString& rStr );
 
@@ -166,48 +129,23 @@ public:
         return xEntry->get_value_changed_from_saved();
     }
 
-    void SetGetFocusHdl(const Link<WeldRefEdit&,void>& rLink) { maGetFocusHdl = rLink; }
-    void SetLoseFocusHdl(const Link<WeldRefEdit&,void>& rLink) { maLoseFocusHdl = rLink; }
-    void SetModifyHdl(const Link<WeldRefEdit&,void>& rLink) { maModifyHdl = rLink; }
-    const Link<WeldRefEdit&,void>& GetModifyHdl() const { return maModifyHdl; }
+    void SetGetFocusHdl(const Link<RefEdit&,void>& rLink) { maGetFocusHdl = rLink; }
+    void SetLoseFocusHdl(const Link<RefEdit&,void>& rLink) { maLoseFocusHdl = rLink; }
+    void SetModifyHdl(const Link<RefEdit&,void>& rLink) { maModifyHdl = rLink; }
+    const Link<RefEdit&,void>& GetModifyHdl() const { return maModifyHdl; }
     void SetActivateHdl(const Link<weld::Widget&,bool>& rLink) { maActivateHdl = rLink; }
 };
 
-class FORMULA_DLLPUBLIC RefButton : public ImageButton
-{
-private:
-    Image                     aImgRefStart; // Start reference input
-    Image                     aImgRefDone;  // Stop reference input
-    OUString                  aShrinkQuickHelp;
-    OUString                  aExpandQuickHelp;
-    IControlReferenceHandler* pAnyRefDlg;   // parent dialog
-    VclPtr<RefEdit>           pRefEdit; // associated Edit-Control
-
-protected:
-    virtual void Click() override;
-    virtual void KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void GetFocus() override;
-    virtual void LoseFocus() override;
-
-public:
-    RefButton(vcl::Window* _pParent, WinBits nStyle);
-    virtual ~RefButton() override;
-    virtual void dispose() override;
-    void SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit );
-    void SetStartImage();
-    void SetEndImage();
-};
-
-class FORMULA_DLLPUBLIC WeldRefButton
+class FORMULA_DLLPUBLIC RefButton
 {
 private:
     std::unique_ptr<weld::Button> xButton;
     IControlReferenceHandler* pAnyRefDlg;   // parent dialog
-    WeldRefEdit*              pRefEdit;     // associated Edit-Control
-    Link<WeldRefButton&,void> maGetFocusHdl;
-    Link<WeldRefButton&,void> maLoseFocusHdl;
+    RefEdit*              pRefEdit;     // associated Edit-Control
+    Link<RefButton&,void> maGetFocusHdl;
+    Link<RefButton&,void> maLoseFocusHdl;
     Link<weld::Widget&,bool> maActivateHdl;
-    Link<WeldRefButton&,void> maClickHdl;
+    Link<RefButton&,void> maClickHdl;
 
 protected:
     DECL_LINK(Click, weld::Button&, void);
@@ -216,22 +154,21 @@ protected:
     DECL_LINK(LoseFocus, weld::Widget&, void);
 
 public:
-    WeldRefButton(std::unique_ptr<weld::Button> xControl);
+    RefButton(std::unique_ptr<weld::Button> xControl);
     weld::Button* GetWidget() const { return xButton.get(); }
-    ~WeldRefButton();
-    void SetReferences(IControlReferenceHandler* pDlg, WeldRefEdit* pEdit);
+    ~RefButton();
+    void SetReferences(IControlReferenceHandler* pDlg, RefEdit* pEdit);
     void SetStartImage();
     void SetEndImage();
     void DoRef()
     {
         Click(*xButton);
     }
-    void SetGetFocusHdl(const Link<WeldRefButton&,void>& rLink) { maGetFocusHdl = rLink; }
-    void SetLoseFocusHdl(const Link<WeldRefButton&,void>& rLink) { maLoseFocusHdl = rLink; }
+    void SetGetFocusHdl(const Link<RefButton&,void>& rLink) { maGetFocusHdl = rLink; }
+    void SetLoseFocusHdl(const Link<RefButton&,void>& rLink) { maLoseFocusHdl = rLink; }
     void SetActivateHdl(const Link<weld::Widget&,bool>& rLink) { maActivateHdl = rLink; }
-    void SetClickHdl(const Link<WeldRefButton&,void>& rLink) { maClickHdl = rLink; }
+    void SetClickHdl(const Link<RefButton&,void>& rLink) { maClickHdl = rLink; }
 };
-
 
 } // formula
 

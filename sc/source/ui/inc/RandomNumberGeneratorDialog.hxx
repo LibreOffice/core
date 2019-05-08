@@ -44,8 +44,8 @@ private:
 
     // Widgets
     std::unique_ptr<weld::Label> mxInputRangeText;
-    std::unique_ptr<formula::WeldRefEdit>   mxInputRangeEdit;
-    std::unique_ptr<formula::WeldRefButton> mxInputRangeButton;
+    std::unique_ptr<formula::RefEdit>   mxInputRangeEdit;
+    std::unique_ptr<formula::RefButton> mxInputRangeButton;
     std::unique_ptr<weld::ComboBox> mxDistributionCombo;
     std::unique_ptr<weld::Label> mxParameter1Text;
     std::unique_ptr<weld::SpinButton> mxParameter1Value;
@@ -71,12 +71,12 @@ private:
     DECL_LINK( OkClicked, weld::Button&, void );
     DECL_LINK( CloseClicked, weld::Button&, void );
     DECL_LINK( ApplyClicked, weld::Button&, void );
-    DECL_LINK( GetEditFocusHandler,  formula::WeldRefEdit&, void );
-    DECL_LINK( GetButtonFocusHandler,  formula::WeldRefButton&, void );
-    DECL_LINK( LoseEditFocusHandler, formula::WeldRefEdit&, void );
-    DECL_LINK( LoseButtonFocusHandler, formula::WeldRefButton&, void );
+    DECL_LINK( GetEditFocusHandler,  formula::RefEdit&, void );
+    DECL_LINK( GetButtonFocusHandler,  formula::RefButton&, void );
+    DECL_LINK( LoseEditFocusHandler, formula::RefEdit&, void );
+    DECL_LINK( LoseButtonFocusHandler, formula::RefButton&, void );
 
-    DECL_LINK( InputRangeModified, formula::WeldRefEdit&, void );
+    DECL_LINK( InputRangeModified, formula::RefEdit&, void );
     DECL_LINK( Parameter1ValueModified, weld::SpinButton&, void );
     DECL_LINK( Parameter2ValueModified, weld::SpinButton&, void );
     DECL_LINK( DistributionChanged, weld::ComboBox&, void );

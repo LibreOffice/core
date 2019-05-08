@@ -34,11 +34,11 @@ ScSamplingDialog::ScSamplingDialog(SfxBindings* pSfxBindings, SfxChildWindow* pC
     , mnLastPeriodValue(1)
     , mDialogLostFocus(false)
     , mxInputRangeLabel(m_xBuilder->weld_label("input-range-label"))
-    , mxInputRangeEdit(new formula::WeldRefEdit(m_xBuilder->weld_entry("input-range-edit")))
-    , mxInputRangeButton(new formula::WeldRefButton(m_xBuilder->weld_button("input-range-button")))
+    , mxInputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("input-range-edit")))
+    , mxInputRangeButton(new formula::RefButton(m_xBuilder->weld_button("input-range-button")))
     , mxOutputRangeLabel(m_xBuilder->weld_label("output-range-label"))
-    , mxOutputRangeEdit(new formula::WeldRefEdit(m_xBuilder->weld_entry("output-range-edit")))
-    , mxOutputRangeButton(new formula::WeldRefButton(m_xBuilder->weld_button("output-range-button")))
+    , mxOutputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("output-range-edit")))
+    , mxOutputRangeButton(new formula::RefButton(m_xBuilder->weld_button("output-range-button")))
     , mxSampleSize(m_xBuilder->weld_spin_button("sample-size-spin"))
     , mxPeriod(m_xBuilder->weld_spin_button("period-spin"))
     , mxRandomMethodRadio(m_xBuilder->weld_radio_button("random-method-radio"))
@@ -66,10 +66,10 @@ void ScSamplingDialog::Init()
     mxButtonOk->connect_clicked( LINK( this, ScSamplingDialog, OkClicked ) );
     mxButtonOk->set_sensitive(false);
 
-    Link<formula::WeldRefEdit&,void> aEditLink = LINK( this, ScSamplingDialog, GetEditFocusHandler );
+    Link<formula::RefEdit&,void> aEditLink = LINK( this, ScSamplingDialog, GetEditFocusHandler );
     mxInputRangeEdit->SetGetFocusHdl( aEditLink );
     mxOutputRangeEdit->SetGetFocusHdl( aEditLink );
-    Link<formula::WeldRefButton&,void> aButtonLink = LINK( this, ScSamplingDialog, GetButtonFocusHandler );
+    Link<formula::RefButton&,void> aButtonLink = LINK( this, ScSamplingDialog, GetButtonFocusHandler );
     mxInputRangeButton->SetGetFocusHdl( aButtonLink );
     mxOutputRangeButton->SetGetFocusHdl( aButtonLink );
 
@@ -80,7 +80,7 @@ void ScSamplingDialog::Init()
     mxInputRangeButton->SetLoseFocusHdl( aButtonLink );
     mxOutputRangeButton->SetLoseFocusHdl( aButtonLink );
 
-    Link<formula::WeldRefEdit&,void> aLink2 = LINK( this, ScSamplingDialog, RefInputModifyHandler);
+    Link<formula::RefEdit&,void> aLink2 = LINK( this, ScSamplingDialog, RefInputModifyHandler);
     mxInputRangeEdit->SetModifyHdl( aLink2);
     mxOutputRangeEdit->SetModifyHdl( aLink2);
 
@@ -390,7 +390,7 @@ IMPL_LINK_NOARG(ScSamplingDialog, PeriodValueModified, weld::SpinButton&, void)
     mnLastPeriodValue = mxPeriod->get_value();
 }
 
-IMPL_LINK( ScSamplingDialog, GetEditFocusHandler, formula::WeldRefEdit&, rCtrl, void )
+IMPL_LINK( ScSamplingDialog, GetEditFocusHandler, formula::RefEdit&, rCtrl, void )
 {
     if (&rCtrl == mxInputRangeEdit.get())
         mpActiveEdit = mxInputRangeEdit.get();
@@ -403,7 +403,7 @@ IMPL_LINK( ScSamplingDialog, GetEditFocusHandler, formula::WeldRefEdit&, rCtrl, 
         mpActiveEdit->SelectAll();
 }
 
-IMPL_LINK(ScSamplingDialog, GetButtonFocusHandler, formula::WeldRefButton&, rCtrl, void)
+IMPL_LINK(ScSamplingDialog, GetButtonFocusHandler, formula::RefButton&, rCtrl, void)
 {
     if (&rCtrl == mxInputRangeButton.get())
         mpActiveEdit = mxInputRangeEdit.get();
@@ -423,12 +423,12 @@ IMPL_LINK_NOARG(ScSamplingDialog, OkClicked, weld::Button&, void)
     response(RET_OK);
 }
 
-IMPL_LINK_NOARG(ScSamplingDialog, LoseEditFocusHandler, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScSamplingDialog, LoseEditFocusHandler, formula::RefEdit&, void)
 {
     mDialogLostFocus = !m_xDialog->has_toplevel_focus();
 }
 
-IMPL_LINK_NOARG(ScSamplingDialog, LoseButtonFocusHandler, formula::WeldRefButton&, void)
+IMPL_LINK_NOARG(ScSamplingDialog, LoseButtonFocusHandler, formula::RefButton&, void)
 {
     mDialogLostFocus = !m_xDialog->has_toplevel_focus();
 }
@@ -490,7 +490,7 @@ IMPL_LINK(ScSamplingDialog, CheckHdl, weld::Button&, rBtn, void)
     }
 }
 
-IMPL_LINK_NOARG(ScSamplingDialog, RefInputModifyHandler, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScSamplingDialog, RefInputModifyHandler, formula::RefEdit&, void)
 {
     if ( mpActiveEdit )
     {

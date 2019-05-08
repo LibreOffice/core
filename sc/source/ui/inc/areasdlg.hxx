@@ -49,19 +49,19 @@ private:
     ScViewData*     pViewData;
     SCTAB           nCurTab;
 
-    formula::WeldRefEdit* m_pRefInputEdit;
+    formula::RefEdit* m_pRefInputEdit;
 
     std::unique_ptr<weld::ComboBox> m_xLbPrintArea;
-    std::unique_ptr<formula::WeldRefEdit> m_xEdPrintArea;
-    std::unique_ptr<formula::WeldRefButton> m_xRbPrintArea;
+    std::unique_ptr<formula::RefEdit> m_xEdPrintArea;
+    std::unique_ptr<formula::RefButton> m_xRbPrintArea;
 
     std::unique_ptr<weld::ComboBox> m_xLbRepeatRow;
-    std::unique_ptr<formula::WeldRefEdit> m_xEdRepeatRow;
-    std::unique_ptr<formula::WeldRefButton> m_xRbRepeatRow;
+    std::unique_ptr<formula::RefEdit> m_xEdRepeatRow;
+    std::unique_ptr<formula::RefButton> m_xRbRepeatRow;
 
     std::unique_ptr<weld::ComboBox> m_xLbRepeatCol;
-    std::unique_ptr<formula::WeldRefEdit> m_xEdRepeatCol;
-    std::unique_ptr<formula::WeldRefButton> m_xRbRepeatCol;
+    std::unique_ptr<formula::RefEdit> m_xEdRepeatCol;
+    std::unique_ptr<formula::RefButton> m_xRbRepeatCol;
 
     std::unique_ptr<weld::Button> m_xBtnOk;
     std::unique_ptr<weld::Button> m_xBtnCancel;
@@ -77,13 +77,13 @@ private:
     void Impl_Reset();
     bool Impl_CheckRefStrings();
     void Impl_FillLists();
-    bool Impl_GetItem( const formula::WeldRefEdit* pEd, SfxStringItem& rItem );
+    bool Impl_GetItem( const formula::RefEdit* pEd, SfxStringItem& rItem );
 
     // Handler:
     DECL_LINK( Impl_SelectHdl, weld::ComboBox&, void );
-    DECL_LINK( Impl_ModifyHdl, formula::WeldRefEdit&, void  );
+    DECL_LINK( Impl_ModifyHdl, formula::RefEdit&, void  );
     DECL_LINK( Impl_BtnHdl,    weld::Button&, void );
-    DECL_LINK( Impl_GetEditFocusHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( Impl_GetEditFocusHdl, formula::RefEdit&, void );
     DECL_LINK( Impl_GetFocusHdl, weld::Widget&, void );
 };
 
