@@ -16,6 +16,24 @@
       "revId": "85c0521f01f5c726e9f754b3175a550121e566c8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_c98ed426",
+        "filename": "include/svl/zforlist.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-05-08T08:46:23Z",
+      "side": 1,
+      "message": "Haha, me neither.. fix in https://gerrit.libreoffice.org/71946",
+      "parentUuid": "3fa0c359_0954bcc9",
+      "revId": "85c0521f01f5c726e9f754b3175a550121e566c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
