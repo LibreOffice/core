@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_24475d4e",
+        "filename": "framework/source/loadenv/loadenv.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1521,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-08T12:32:21Z",
+      "side": 1,
+      "message": "hmm ideally we would not reuse the frame in the File-\u003eNew case either but i have absolutely no idea how to differentiate that from a new document that was created \"automatically\"; likely it\u0027s not possible and then too much effort right now?\n\ni wonder, is it possible to set a \"default template\" somewhere in the configuration and then if you create a new document in any way does it have AsTemplate\u003dtrue or not?",
+      "revId": "30bcd76adb996ad9b4702a74b586a80e2c2c74d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
