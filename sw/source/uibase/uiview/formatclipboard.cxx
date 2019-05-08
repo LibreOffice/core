@@ -140,7 +140,7 @@ void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
 
     std::unique_ptr<SwFormatRowSplit> pSplit = rSh.GetRowSplit();
     if(pSplit)
-        rSet.Put(*pSplit);
+        rSet.Put(std::move(pSplit));
 }
 
 void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )

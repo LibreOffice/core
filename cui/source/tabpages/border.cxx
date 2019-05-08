@@ -900,7 +900,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
         {
             std::unique_ptr<SfxBoolItem> xNewItem(static_cast<SfxBoolItem*>(rCoreAttrs->Get(nMergeAdjacentBordersId).Clone()));
             xNewItem->SetValue(static_cast<bool>(nState));
-            rCoreAttrs->Put(*xNewItem);
+            rCoreAttrs->Put(std::move(xNewItem));
         }
         bAttrsChanged = true;
     }
@@ -915,7 +915,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
         {
             std::unique_ptr<SfxBoolItem> xNewItem(static_cast<SfxBoolItem*>(rCoreAttrs->Get(nMergeWithNextId).Clone()));
             xNewItem->SetValue(static_cast<bool>(nState));
-            rCoreAttrs->Put(*xNewItem);
+            rCoreAttrs->Put(std::move(xNewItem));
         }
         bAttrsChanged = true;
     }

@@ -96,8 +96,7 @@ OutlineBulletDlg::OutlineBulletDlg(weld::Window* pParent, const SfxItemSet* pAtt
 
         DBG_ASSERT( pItem, "No EE_PARA_NUMBULLET in Pool! [CL]" );
 
-        std::unique_ptr<SfxPoolItem> pNewItem(pItem->CloneSetWhich(EE_PARA_NUMBULLET));
-        m_aInputSet.Put(*pNewItem);
+        m_aInputSet.Put(pItem->CloneSetWhich(EE_PARA_NUMBULLET));
     }
 
     if (m_bTitle && m_aInputSet.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET )

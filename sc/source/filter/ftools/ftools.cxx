@@ -211,8 +211,7 @@ void ScfTools::PutItem( SfxItemSet& rItemSet, const SfxPoolItem& rItem, sal_uInt
 {
     if( !bSkipPoolDef || (rItem != rItemSet.GetPool()->GetDefaultItem( nWhichId )) )
     {
-        std::unique_ptr<SfxPoolItem> pNewItem(rItem.CloneSetWhich(nWhichId));
-        rItemSet.Put( *pNewItem );
+        rItemSet.Put( rItem.CloneSetWhich(nWhichId) );
     }
 }
 

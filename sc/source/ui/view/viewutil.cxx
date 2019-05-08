@@ -64,8 +64,7 @@ void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSe
     const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
     if (pI)
     {
-        std::unique_ptr<SfxPoolItem> pNewItem(pI->CloneSetWhich(nWhichId));
-        rShellSet.Put( *pNewItem );
+        rShellSet.Put( pI->CloneSetWhich(nWhichId) );
     }
     else
         rShellSet.InvalidateItem( nWhichId );

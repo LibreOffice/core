@@ -765,7 +765,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
         std::unique_ptr<SfxBoolItem> pRegItem(static_cast<SfxBoolItem*>(rRegItem.Clone()));
         bool bCheck = m_xRegisterCB->get_active();
         pRegItem->SetValue(bCheck);
-        rSet->Put(*pRegItem);
+        rSet->Put(std::move(pRegItem));
         bModified = true;
         if(bCheck)
         {

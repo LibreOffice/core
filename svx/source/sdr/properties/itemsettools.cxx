@@ -84,7 +84,7 @@ namespace sdr
                     {
                         std::unique_ptr<SfxPoolItem> pNewItem(pItem->Clone());
                         pNewItem->ScaleMetrics(nMul, nDiv);
-                        rSet.Put(*pNewItem);
+                        rSet.Put(std::move(pNewItem));
                     }
                 }
                 nWhich = aIter.NextWhich();

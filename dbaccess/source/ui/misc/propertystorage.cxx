@@ -60,7 +60,7 @@ namespace dbaui
                 std::unique_ptr< ITEMTYPE > pClone( pCloneItem);
                 assert(pClone.get());
                 pClone->SetValue( aValue );
-                _rSet.Put( *pClone );
+                _rSet.Put( std::move(pClone) );
                 return true;
             }
 

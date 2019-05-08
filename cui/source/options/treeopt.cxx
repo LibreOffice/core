@@ -1191,8 +1191,7 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
                 pRet->Put(aHyphen);
                 if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_AUTOSPELL_CHECK, pItem))
                 {
-                    std::unique_ptr<SfxPoolItem> pClone(pItem->Clone());
-                    pRet->Put(*pClone);
+                    pRet->Put(std::unique_ptr<SfxPoolItem>(pItem->Clone()));
                 }
                 else
                 {

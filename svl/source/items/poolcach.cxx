@@ -88,9 +88,7 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem )
     }
     else
         pNewItem->GetItemSet().Put( *pSetToPut );
-    const SfxSetItem* pNewPoolItem = &pPool->Put( *pNewItem );
-    DBG_ASSERT( pNewPoolItem != pNewItem.get(), "Pool: same in and out?" );
-    pNewItem.reset();
+    const SfxSetItem* pNewPoolItem = &pPool->Put( std::move(pNewItem) );
 
     // Adapt refcount; one each for the cache
     pNewPoolItem->AddRef( pNewPoolItem != &rOrigItem ? 2 : 1 );

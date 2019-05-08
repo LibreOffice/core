@@ -1378,8 +1378,7 @@ bool EditView::ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFo
             if( nHeight != static_cast<long>(aFontHeightItem.GetHeight()) )
             {
                 aFontHeightItem.SetHeight( nHeight );
-                std::unique_ptr<SfxPoolItem> pNewItem(aFontHeightItem.CloneSetWhich(*pWhich));
-                rSet.Put( *pNewItem );
+                rSet.Put( aFontHeightItem.CloneSetWhich(*pWhich) );
                 bRet = true;
             }
         }

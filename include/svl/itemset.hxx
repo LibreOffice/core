@@ -106,6 +106,8 @@ protected:
 
     void                        PutDirect(const SfxPoolItem &rItem);
 
+    virtual const SfxPoolItem*  PutImpl( const SfxPoolItem&, sal_uInt16 nWhich, bool bPassingOwnership );
+
 public:
     struct Pair { sal_uInt16 wid1, wid2; };
 
@@ -190,9 +192,14 @@ public:
 
     // add, delete items, work on items
 public:
-    virtual const SfxPoolItem*  Put( const SfxPoolItem&, sal_uInt16 nWhich );
+    const SfxPoolItem*          Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
+    { return PutImpl(rItem, nWhich, /*bPassingOwnership*/false); }
+    const SfxPoolItem*          Put( std::unique_ptr<SfxPoolItem> xItem, sal_uInt16 nWhich )
+    { return PutImpl(*xItem.release(), nWhich, /*bPassingOwnership*/true); }
     const SfxPoolItem*          Put( const SfxPoolItem& rItem )
                                 { return Put(rItem, rItem.Which()); }
+    const SfxPoolItem*          Put( std::unique_ptr<SfxPoolItem> xItem )
+                                { auto nWhich = xItem->Which(); return Put(std::move(xItem), nWhich); }
     bool                        Put( const SfxItemSet&,
                                      bool bInvalidAsDefault = true );
     void                        PutExtended( const SfxItemSet&,
@@ -248,8 +255,8 @@ public:
                                 SfxAllItemSet( const SfxAllItemSet & );
 
     virtual std::unique_ptr<SfxItemSet> Clone( bool bItems = true, SfxItemPool *pToPool = nullptr ) const override;
-    virtual const SfxPoolItem*  Put( const SfxPoolItem&, sal_uInt16 nWhich ) override;
-    using SfxItemSet::Put;
+protected:
+    virtual const SfxPoolItem*  PutImpl( const SfxPoolItem&, sal_uInt16 nWhich, bool bPassingOwnership ) override;
 };
 
 #endif // INCLUDED_SVL_ITEMSET_HXX

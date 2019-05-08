@@ -404,9 +404,9 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
     }
     else if( MINFLY > static_cast<const SwFormatFrameSize*>(pItem)->GetHeight() )
     {
-        std::shared_ptr<SwFormatFrameSize> aSz(static_cast<SwFormatFrameSize*>(pItem->Clone()));
+        std::unique_ptr<SwFormatFrameSize> aSz(static_cast<SwFormatFrameSize*>(pItem->Clone()));
         aSz->SetHeight( MINFLY );
-        rFlySet.Put( *aSz );
+        rFlySet.Put( std::move(aSz) );
     }
 }
 

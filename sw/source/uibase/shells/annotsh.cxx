@@ -598,8 +598,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
 
     if(nEEWhich && pNewAttrs)
     {
-        std::unique_ptr<SfxPoolItem> pNewItem(pNewAttrs->Get(nWhich).CloneSetWhich(nEEWhich));
-        aNewAttr.Put(*pNewItem);
+        aNewAttr.Put(pNewAttrs->Get(nWhich).CloneSetWhich(nEEWhich));
     }
 
     tools::Rectangle aOutRect = pOLV->GetOutputArea();
@@ -709,8 +708,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
                     if( pI )
                     {
-                        std::unique_ptr<SfxPoolItem> pNewItem(pI->CloneSetWhich(nWhich));
-                        rSet.Put( *pNewItem );
+                        rSet.Put(pI->CloneSetWhich(nWhich));
                     }
                     else
                         rSet.InvalidateItem( nWhich );
@@ -860,8 +858,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
 
         if(nEEWhich)
         {
-            std::unique_ptr<SfxPoolItem> pNewItem(aEditAttr.Get(nEEWhich).CloneSetWhich(nWhich));
-            rSet.Put(*pNewItem);
+            rSet.Put(aEditAttr.Get(nEEWhich).CloneSetWhich(nWhich));
             if(nEEWhich == EE_CHAR_KERNING)
             {
                 SfxItemState eState = aEditAttr.GetItemState( EE_CHAR_KERNING );

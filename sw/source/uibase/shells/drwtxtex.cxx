@@ -568,8 +568,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
     }
     if(nEEWhich && pNewAttrs)
     {
-        std::unique_ptr<SfxPoolItem> pNewItem(pNewAttrs->Get(nWhich).CloneSetWhich(nEEWhich));
-        aNewAttr.Put(*pNewItem);
+        aNewAttr.Put(pNewAttrs->Get(nWhich).CloneSetWhich(nEEWhich));
     }
 
     SetAttrToMarked(aNewAttr);
@@ -911,8 +910,7 @@ void SwDrawTextShell::GetDrawTextCtrlState(SfxItemSet& rSet)
                 const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
                 if( pI )
                 {
-                    std::unique_ptr<SfxPoolItem> pNewItem(pI->CloneSetWhich(nWhich));
-                    rSet.Put( *pNewItem );
+                    rSet.Put(pI->CloneSetWhich(nWhich));
                 }
                 else
                     rSet.InvalidateItem( nWhich );
@@ -964,8 +962,7 @@ void SwDrawTextShell::GetDrawTextCtrlState(SfxItemSet& rSet)
         }
         if(nEEWhich)
         {
-            std::unique_ptr<SfxPoolItem> pNewItem(aEditAttr.Get(nEEWhich).CloneSetWhich(nWhich));
-            rSet.Put(*pNewItem);
+            rSet.Put(aEditAttr.Get(nEEWhich).CloneSetWhich(nWhich));
         }
 
         nWhich = aIter.NextWhich();

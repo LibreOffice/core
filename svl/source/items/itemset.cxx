@@ -427,10 +427,13 @@ bool SfxItemSet::HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem) const
     return bRet;
 }
 
-const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
+const SfxPoolItem* SfxItemSet::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nWhich, bool bPassingOwnership )
 {
     if ( !nWhich )
+    {
+        assert(!bPassingOwnership);
         return nullptr; //FIXME: Only because of Outliner bug
+    }
 
     SfxPoolItem const** ppFnd = m_pItems.get();
     const sal_uInt16* pPtr = m_pWhichRanges;
@@ -444,13 +447,16 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
             {
                 // Same Item already present?
                 if ( *ppFnd == &rItem )
+                {
+                    assert(!bPassingOwnership);
                     return nullptr;
+                }
 
                 // Will 'dontcare' or 'disabled' be overwritten with some real value?
                 if ( rItem.Which() && ( IsInvalidItem(*ppFnd) || !(*ppFnd)->Which() ) )
                 {
                     auto const old = *ppFnd;
-                    *ppFnd = &m_pPool->Put( rItem, nWhich );
+                    *ppFnd = &m_pPool->PutImpl( rItem, nWhich, bPassingOwnership );
                     if (!IsInvalidItem(old)) {
                         assert(old->Which() == 0);
                         delete old;
@@ -464,16 +470,22 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
                     if (IsInvalidItem(*ppFnd) || (*ppFnd)->Which() != 0) {
                         *ppFnd = rItem.Clone(m_pPool);
                     }
+                    if (bPassingOwnership)
+                        delete &rItem;
                     return nullptr;
                 }
                 else
                 {
                     // Same value already present?
                     if ( rItem == **ppFnd )
+                    {
+                        if (bPassingOwnership)
+                            delete &rItem;
                         return nullptr;
+                    }
 
                     // Add the new one, remove the old one
-                    const SfxPoolItem& rNew = m_pPool->Put( rItem, nWhich );
+                    const SfxPoolItem& rNew = m_pPool->PutImpl( rItem, nWhich, bPassingOwnership );
                     const SfxPoolItem* pOld = *ppFnd;
                     *ppFnd = &rNew;
                     if (SfxItemPool::IsWhich(nWhich))
@@ -485,9 +497,14 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
             {
                 ++m_nCount;
                 if( !rItem.Which() )
+                {
                     *ppFnd = rItem.Clone(m_pPool);
-                else {
-                    const SfxPoolItem& rNew = m_pPool->Put( rItem, nWhich );
+                    if (bPassingOwnership)
+                        delete &rItem;
+                }
+                else
+                {
+                    const SfxPoolItem& rNew = m_pPool->PutImpl( rItem, nWhich, bPassingOwnership );
                     *ppFnd = &rNew;
                     if (SfxItemPool::IsWhich(nWhich))
                     {
@@ -498,7 +515,7 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
                     }
                 }
             }
-            SAL_WARN_IF(m_pPool->IsItemPoolable(nWhich) &&
+            SAL_WARN_IF(!bPassingOwnership && m_pPool->IsItemPoolable(nWhich) &&
                         dynamic_cast<const SfxSetItem*>( &rItem ) == nullptr &&
                         **ppFnd != rItem,
                         "svl.items", "putted Item unequal, with ID/pos " << nWhich );
@@ -507,6 +524,8 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
         ppFnd += *(pPtr+1) - *pPtr + 1;
         pPtr += 2;
     }
+    if (bPassingOwnership)
+        delete &rItem;
     return nullptr;
 }
 
@@ -1566,7 +1585,7 @@ static void AddItem_Impl(std::unique_ptr<SfxPoolItem const*[]> & rpItems, sal_uI
 /**
  * Putting with automatic extension of the WhichId with the ID of the Item.
  */
-const SfxPoolItem* SfxAllItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
+const SfxPoolItem* SfxAllItemSet::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nWhich, bool bPassingOwnership )
 {
     sal_uInt16 nPos = 0; // Position for 'rItem' in 'm_pItems'
     const sal_uInt16 nItemCount = TotalCount();
@@ -1652,7 +1671,7 @@ const SfxPoolItem* SfxAllItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhi
     }
 
     // Add new Item to Pool
-    const SfxPoolItem& rNew = m_pPool->Put( rItem, nWhich );
+    const SfxPoolItem& rNew = m_pPool->PutImpl( rItem, nWhich, bPassingOwnership );
 
     // Remember old Item
     bool bIncrementCount = false;

@@ -228,9 +228,7 @@ namespace frm
         WhichId nNormalizedWhichId = _rScriptSetItem.GetItemSet().GetPool()->GetWhich( _rScriptSetItem.Which() );
         if ( pNormalizedItem )
         {
-            std::unique_ptr<SfxPoolItem> pProperWhich(pNormalizedItem->Clone());
-            pProperWhich->SetWhich( nNormalizedWhichId );
-            _rScriptSetItem.GetItemSet().Put( *pProperWhich );
+            _rScriptSetItem.GetItemSet().Put( pNormalizedItem->CloneSetWhich(nNormalizedWhichId) );
         }
         else
             _rScriptSetItem.GetItemSet().InvalidateItem( nNormalizedWhichId );

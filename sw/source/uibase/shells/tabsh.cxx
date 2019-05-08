@@ -206,10 +206,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     //row split
     std::unique_ptr<SwFormatRowSplit> pSplit = rSh.GetRowSplit();
     if(pSplit)
-    {
-        rSet.Put(*pSplit);
-        pSplit.reset();
-    }
+        rSet.Put(std::move(pSplit));
 
     if(!bTableSel)
     {
@@ -1372,7 +1369,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 {
                     std::unique_ptr<SwFormatRowSplit> pSplit = rSh.GetRowSplit();
                     if(pSplit)
-                        rSet.Put(*pSplit);
+                        rSet.Put(std::move(pSplit));
                     else
                         rSet.InvalidateItem( nSlot );
                 }

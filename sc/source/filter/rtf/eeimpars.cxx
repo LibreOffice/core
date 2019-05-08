@@ -271,27 +271,23 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                         {
                             if ( pFont )
                             {
-                                std::unique_ptr<SfxPoolItem> pNewItem(pFont->CloneSetWhich(
-                                        ScGlobal::GetScriptedWhichID(nScript, ATTR_FONT )));
-                                pAttrItemSet->Put( *pNewItem );
+                                pAttrItemSet->Put( pFont->CloneSetWhich(
+                                        ScGlobal::GetScriptedWhichID(nScript, ATTR_FONT )) );
                             }
                             if ( pHeight )
                             {
-                                std::unique_ptr<SfxPoolItem> pNewItem(pHeight->CloneSetWhich(
-                                        ScGlobal::GetScriptedWhichID(nScript, ATTR_FONT_HEIGHT )));
-                                pAttrItemSet->Put( *pNewItem );
+                                pAttrItemSet->Put( pHeight->CloneSetWhich(
+                                        ScGlobal::GetScriptedWhichID(nScript, ATTR_FONT_HEIGHT )) );
                             }
                             if ( pWeight )
                             {
-                                std::unique_ptr<SfxPoolItem> pNewItem(pWeight->CloneSetWhich(
-                                        ScGlobal::GetScriptedWhichID(nScript, ATTR_FONT_WEIGHT )));
-                                pAttrItemSet->Put( *pNewItem );
+                                pAttrItemSet->Put( pWeight->CloneSetWhich(
+                                        ScGlobal::GetScriptedWhichID(nScript, ATTR_FONT_WEIGHT )) );
                             }
                             if ( pPosture )
                             {
-                                std::unique_ptr<SfxPoolItem> pNewItem(pPosture->CloneSetWhich(
-                                        ScGlobal::GetScriptedWhichID(nScript, ATTR_FONT_POSTURE )));
-                                pAttrItemSet->Put( *pNewItem );
+                                pAttrItemSet->Put( pPosture->CloneSetWhich(
+                                        ScGlobal::GetScriptedWhichID(nScript, ATTR_FONT_POSTURE )) );
                             }
                         }
                     }

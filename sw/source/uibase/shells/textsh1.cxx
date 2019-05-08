@@ -1589,8 +1589,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 SfxItemSet aSet( GetPool() );
                 rSh.GetCurAttr( aSet );
                 const SvxColorItem& aColorItem = aSet.Get(RES_CHRATR_COLOR);
-                std::unique_ptr<SfxPoolItem> pNewItem(aColorItem.CloneSetWhich(SID_ATTR_CHAR_COLOR2));
-                rSet.Put( *pNewItem );
+                rSet.Put( aColorItem.CloneSetWhich(SID_ATTR_CHAR_COLOR2) );
             }
             break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND:

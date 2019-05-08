@@ -57,6 +57,8 @@ protected:
 class SVL_DLLPUBLIC SfxItemPool
 {
     friend struct SfxItemPool_Impl;
+    friend class SfxItemSet;
+    friend class SfxAllItemSet;
 
     const SfxItemInfo*              pItemInfos;
     std::unique_ptr<SfxItemPool_Impl>               pImpl;

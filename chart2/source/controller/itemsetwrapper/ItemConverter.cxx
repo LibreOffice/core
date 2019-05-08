@@ -107,7 +107,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                                 ))
                         {
                             pItem->SetWhich(nWhich);
-                            rOutItemSet.Put( *pItem );
+                            rOutItemSet.Put( std::move(pItem) );
                         }
                     }
                     catch( const beans::UnknownPropertyException &ex )
