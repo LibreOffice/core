@@ -95,7 +95,7 @@ FormulaDialog::~FormulaDialog()
     }
 
     StoreFormEditData( m_pFormulaData );
-    m_pEdit.clear();
+    m_pEdit = nullptr;
     m_pAddField.clear();
 }
 
@@ -196,18 +196,14 @@ void FormulaDialog::ReleaseFocus( RefEdit* /*pEdit*/)
 {
 }
 
-void FormulaDialog::ReleaseFocus( WeldRefEdit* /*pEdit*/)
-{
-}
-
 void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
 {
     ::std::pair<RefButton*,RefEdit*> aPair = RefInputStartBefore( _pEdit, _pButton );
     m_pEdit = aPair.second;
     if ( m_pEdit )
-        m_pEdit->Hide();
+        m_pEdit->GetWidget()->hide();
     if ( aPair.first )
-        aPair.first->Hide();
+        aPair.first->GetWidget()->hide();
 
     if ( !m_pAddField )
     {
@@ -224,11 +220,6 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
     }
     RefInputStartAfter();
     m_pAddField->Show();
-}
-
-void FormulaDialog::ToggleCollapsed( WeldRefEdit* /*_pEdit*/, WeldRefButton* /*_pButton*/)
-{
-    assert(false);
 }
 
 IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow& ,_rAddFieldDlg, void)

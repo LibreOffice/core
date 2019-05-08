@@ -51,15 +51,15 @@ class ScXMLSourceDlg : public ScAnyRefDlgController
     ScDocument* mpDoc;
     bool mbDlgLostFocus;
 
-    formula::WeldRefEdit* mpActiveEdit;
+    formula::RefEdit* mpActiveEdit;
     std::unique_ptr<weld::Button> mxBtnSelectSource;
     std::unique_ptr<weld::Label> mxFtSourceFile;
 
     std::unique_ptr<weld::Container> mxMapGrid;
 
     std::unique_ptr<weld::TreeView> mxLbTree;
-    std::unique_ptr<formula::WeldRefEdit> mxRefEdit;
-    std::unique_ptr<formula::WeldRefButton> mxRefBtn;
+    std::unique_ptr<formula::RefEdit> mxRefEdit;
+    std::unique_ptr<formula::RefButton> mxRefBtn;
 
     std::unique_ptr<weld::Button> mxBtnOk;
     std::unique_ptr<weld::Button> mxBtnCancel;
@@ -108,7 +108,7 @@ private:
 
     DECL_LINK(BtnPressedHdl, weld::Button&, void);
     DECL_LINK(TreeItemSelectHdl, weld::TreeView&, void);
-    DECL_LINK(RefModifiedHdl, formula::WeldRefEdit&, void);
+    DECL_LINK(RefModifiedHdl, formula::RefEdit&, void);
 };
 
 #endif

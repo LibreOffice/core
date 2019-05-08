@@ -31,7 +31,7 @@ public:
     virtual void    Close() override;
 
 private:
-    formula::WeldRefEdit* mpActiveEdit;
+    formula::RefEdit* mpActiveEdit;
 
     // Data
     ScViewData* const         mViewData;
@@ -50,12 +50,12 @@ private:
 
     // Widgets
     std::unique_ptr<weld::Label> mxInputRangeLabel;
-    std::unique_ptr<formula::WeldRefEdit> mxInputRangeEdit;
-    std::unique_ptr<formula::WeldRefButton> mxInputRangeButton;
+    std::unique_ptr<formula::RefEdit> mxInputRangeEdit;
+    std::unique_ptr<formula::RefButton> mxInputRangeButton;
 
     std::unique_ptr<weld::Label> mxOutputRangeLabel;
-    std::unique_ptr<formula::WeldRefEdit> mxOutputRangeEdit;
-    std::unique_ptr<formula::WeldRefButton> mxOutputRangeButton;
+    std::unique_ptr<formula::RefEdit> mxOutputRangeEdit;
+    std::unique_ptr<formula::RefButton> mxOutputRangeButton;
 
     std::unique_ptr<weld::SpinButton> mxSampleSize;
     std::unique_ptr<weld::SpinButton> mxPeriod;
@@ -78,14 +78,14 @@ private:
     ScRange PerformPeriodicSampling(ScDocShell* pDocShell);
 
     DECL_LINK( OkClicked, weld::Button&, void );
-    DECL_LINK( GetEditFocusHandler, formula::WeldRefEdit&, void );
-    DECL_LINK( GetButtonFocusHandler, formula::WeldRefButton&, void );
-    DECL_LINK( LoseEditFocusHandler, formula::WeldRefEdit&, void );
-    DECL_LINK( LoseButtonFocusHandler, formula::WeldRefButton&, void );
+    DECL_LINK( GetEditFocusHandler, formula::RefEdit&, void );
+    DECL_LINK( GetButtonFocusHandler, formula::RefButton&, void );
+    DECL_LINK( LoseEditFocusHandler, formula::RefEdit&, void );
+    DECL_LINK( LoseButtonFocusHandler, formula::RefButton&, void );
     DECL_LINK( SamplingSizeValueModified, weld::SpinButton&, void );
     DECL_LINK( PeriodValueModified, weld::SpinButton&, void );
     DECL_LINK( ToggleSamplingMethod, weld::ToggleButton&, void );
-    DECL_LINK( RefInputModifyHandler, formula::WeldRefEdit&, void );
+    DECL_LINK( RefInputModifyHandler, formula::RefEdit&, void );
     DECL_LINK( CheckHdl, weld::Button&, void );
     void ToggleSamplingMethod();
 };

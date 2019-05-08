@@ -101,7 +101,7 @@ private:
 
     OUString msBaseTitle;
 
-    formula::WeldRefEdit* mpLastEdit;
+    formula::RefEdit* mpLastEdit;
     std::unique_ptr<weld::Button> mxBtnOk;
     std::unique_ptr<weld::Button> mxBtnAdd;
     std::unique_ptr<weld::Button> mxBtnRemove;
@@ -109,12 +109,12 @@ private:
     std::unique_ptr<weld::Button> mxBtnDown;
     std::unique_ptr<weld::Button> mxBtnCancel;
     std::unique_ptr<weld::Label> mxFtRange;
-    std::unique_ptr<formula::WeldRefEdit> mxEdRange;
-    std::unique_ptr<formula::WeldRefButton> mxRbRange;
+    std::unique_ptr<formula::RefEdit> mxEdRange;
+    std::unique_ptr<formula::RefButton> mxRbRange;
     std::unique_ptr<ScCondFormatList> mxCondFormList;
 
     void updateTitle();
-    DECL_LINK( EdRangeModifyHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( EdRangeModifyHdl, formula::RefEdit&, void );
 protected:
 
     virtual void RefInputDone( bool bForced = false ) override;
@@ -138,7 +138,7 @@ public:
     void OnSelectionChange(size_t nIndex, size_t nSize, bool bSelected = true);
 
     DECL_LINK( BtnPressedHdl, weld::Button&, void );
-    DECL_LINK( RangeGetFocusHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( RangeGetFocusHdl, formula::RefEdit&, void );
 };
 
 #endif

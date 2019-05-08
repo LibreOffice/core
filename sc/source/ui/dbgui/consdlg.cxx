@@ -84,11 +84,11 @@ ScConsolidateDlg::ScConsolidateDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::W
     , m_xLbFunc(m_xBuilder->weld_combo_box("func"))
     , m_xLbConsAreas(m_xBuilder->weld_tree_view("consareas"))
     , m_xLbDataArea(m_xBuilder->weld_combo_box("lbdataarea"))
-    , m_xEdDataArea(new formula::WeldRefEdit(m_xBuilder->weld_entry("eddataarea")))
-    , m_xRbDataArea(new formula::WeldRefButton(m_xBuilder->weld_button("rbdataarea")))
+    , m_xEdDataArea(new formula::RefEdit(m_xBuilder->weld_entry("eddataarea")))
+    , m_xRbDataArea(new formula::RefButton(m_xBuilder->weld_button("rbdataarea")))
     , m_xLbDestArea(m_xBuilder->weld_combo_box("lbdestarea"))
-    , m_xEdDestArea(new formula::WeldRefEdit(m_xBuilder->weld_entry("eddestarea")))
-    , m_xRbDestArea(new formula::WeldRefButton(m_xBuilder->weld_button("rbdestarea")))
+    , m_xEdDestArea(new formula::RefEdit(m_xBuilder->weld_entry("eddestarea")))
+    , m_xRbDestArea(new formula::RefButton(m_xBuilder->weld_button("rbdestarea")))
     , m_xExpander(m_xBuilder->weld_expander("more"))
     , m_xBtnByRow(m_xBuilder->weld_check_button("byrow"))
     , m_xBtnByCol(m_xBuilder->weld_check_button("bycol"))
@@ -283,7 +283,7 @@ void ScConsolidateDlg::Deactivate()
     bDlgLostFocus = true;
 }
 
-bool ScConsolidateDlg::VerifyEdit( formula::WeldRefEdit* pEd )
+bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 {
     if ( !pRangeUtil || !pDoc ||
          ((pEd != m_xEdDataArea.get()) && (pEd != m_xEdDestArea.get())) )
@@ -316,7 +316,7 @@ bool ScConsolidateDlg::VerifyEdit( formula::WeldRefEdit* pEd )
 
 // Handler:
 
-IMPL_LINK( ScConsolidateDlg, GetEditFocusHdl, formula::WeldRefEdit&, rControl, void )
+IMPL_LINK( ScConsolidateDlg, GetEditFocusHdl, formula::RefEdit&, rControl, void )
 {
     m_pRefInputEdit = &rControl;
 }
@@ -447,7 +447,7 @@ IMPL_LINK( ScConsolidateDlg, SelectTVHdl, weld::TreeView&, rLb, void )
 
 IMPL_LINK( ScConsolidateDlg, SelectCBHdl, weld::ComboBox&, rLb, void )
 {
-    formula::WeldRefEdit* pEd = (&rLb == m_xLbDataArea.get()) ? m_xEdDataArea.get() : m_xEdDestArea.get();
+    formula::RefEdit* pEd = (&rLb == m_xLbDataArea.get()) ? m_xEdDataArea.get() : m_xEdDestArea.get();
     const sal_Int32 nSelPos = rLb.get_active();
 
     if (    pRangeUtil
@@ -476,7 +476,7 @@ IMPL_LINK( ScConsolidateDlg, SelectCBHdl, weld::ComboBox&, rLb, void )
     }
 }
 
-IMPL_LINK( ScConsolidateDlg, ModifyHdl, formula::WeldRefEdit&, rEd, void )
+IMPL_LINK( ScConsolidateDlg, ModifyHdl, formula::RefEdit&, rEd, void )
 {
     if ( &rEd == m_xEdDataArea.get() )
     {

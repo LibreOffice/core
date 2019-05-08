@@ -27,8 +27,8 @@
 namespace formula
 {
     class RefButton;
-    class WeldRefButton;
-    class WeldRefEdit;
+    class RefButton;
+    class RefEdit;
 }
 struct ScQueryParam;
 class ScDocument;
@@ -46,8 +46,8 @@ public:
                      weld::CheckButton* refBtnCopyResult,
                      weld::CheckButton* refBtnDestPers,
                      weld::ComboBox* refLbCopyArea,
-                     formula::WeldRefEdit* refEdCopyArea,
-                     formula::WeldRefButton* refRbCopyArea,
+                     formula::RefEdit* refEdCopyArea,
+                     formula::RefButton* refRbCopyArea,
                      weld::Label* refFtDbAreaLabel,
                      weld::Label* refFtDbArea,
                      const OUString& refStrUndefined );
@@ -65,8 +65,8 @@ private:
     weld::CheckButton* pBtnCopyResult;
     weld::CheckButton* pBtnDestPers;
     weld::ComboBox* pLbCopyArea;
-    formula::WeldRefEdit* pEdCopyArea;
-    formula::WeldRefButton* pRbCopyArea;
+    formula::RefEdit* pEdCopyArea;
+    formula::RefButton* pRbCopyArea;
     weld::Label* pFtDbAreaLabel;
     weld::Label* pFtDbArea;
 
@@ -78,7 +78,7 @@ private:
     void Init();
 
     // Handler:
-    DECL_LINK( EdAreaModifyHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( EdAreaModifyHdl, formula::RefEdit&, void );
     DECL_LINK( LbAreaSelHdl, weld::ComboBox&, void );
     DECL_LINK( BtnCopyResultHdl, weld::ToggleButton&, void );
 };

@@ -57,18 +57,18 @@ private:
     sal_uInt16 const          nWhichCons;
     bool                bDlgLostFocus;
 
-    formula::WeldRefEdit*   m_pRefInputEdit;
+    formula::RefEdit*   m_pRefInputEdit;
 
     std::unique_ptr<weld::ComboBox> m_xLbFunc;
     std::unique_ptr<weld::TreeView> m_xLbConsAreas;
 
     std::unique_ptr<weld::ComboBox> m_xLbDataArea;
-    std::unique_ptr<formula::WeldRefEdit> m_xEdDataArea;
-    std::unique_ptr<formula::WeldRefButton> m_xRbDataArea;
+    std::unique_ptr<formula::RefEdit> m_xEdDataArea;
+    std::unique_ptr<formula::RefButton> m_xRbDataArea;
 
     std::unique_ptr<weld::ComboBox> m_xLbDestArea;
-    std::unique_ptr<formula::WeldRefEdit> m_xEdDestArea;
-    std::unique_ptr<formula::WeldRefButton> m_xRbDestArea;
+    std::unique_ptr<formula::RefEdit> m_xEdDestArea;
+    std::unique_ptr<formula::RefButton> m_xRbDestArea;
 
     std::unique_ptr<weld::Expander> m_xExpander;
     std::unique_ptr<weld::CheckButton> m_xBtnByRow;
@@ -86,13 +86,13 @@ private:
 
     void Init               ();
     void FillAreaLists      ();
-    bool VerifyEdit(formula::WeldRefEdit* pEd);
+    bool VerifyEdit(formula::RefEdit* pEd);
 
     DECL_LINK( OkHdl,    weld::Button&, void );
     DECL_LINK( ClickHdl, weld::Button&, void );
     DECL_LINK( GetFocusHdl, weld::Widget&, void );
-    DECL_LINK( GetEditFocusHdl, formula::WeldRefEdit&, void );
-    DECL_LINK( ModifyHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( GetEditFocusHdl, formula::RefEdit&, void );
+    DECL_LINK( ModifyHdl, formula::RefEdit&, void );
     DECL_LINK( SelectTVHdl, weld::TreeView&, void );
     DECL_LINK( SelectCBHdl, weld::ComboBox&, void );
 
