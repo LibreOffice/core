@@ -820,6 +820,12 @@ RedlineFlags DocumentRedlineManager::GetRedlineFlags() const
 
 void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
 {
+    if ( m_bFinalizeImport )
+    {
+        FinalizeImport();
+        m_bFinalizeImport = false;
+    }
+
     if( meRedlineFlags != eMode )
     {
         if( (RedlineFlags::ShowMask & meRedlineFlags) != (RedlineFlags::ShowMask & eMode)
@@ -1418,6 +1424,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                 // better fix it.
                                 n = 0;
                                 bDec = true;
+                                // or simply this is an OOXML import
+                                m_bFinalizeImport = true;
                             }
 
                             mpRedlineTable->DeleteAndDestroy( nToBeDeleted );
@@ -3006,6 +3014,30 @@ void DocumentRedlineManager::SetAutoFormatRedlineComment( const OUString* pText,
     }
 
     mnAutoFormatRedlnCommentNo = nSeqNo;
+}
+
+void DocumentRedlineManager::FinalizeImport()
+{
+    // tdf#118699 fix numbering after deletion of numbered list items
+    for( SwRedlineTable::size_type n = 0; n < mpRedlineTable->size(); ++n )
+    {
+        SwRangeRedline* pRedl = (*mpRedlineTable)[ n ];
+        if ( nsRedlineType_t::REDLINE_DELETE == pRedl->GetType() )
+        {
+            const SwPosition* pStt = pRedl->Start(),
+                            * pEnd = pStt == pRedl->GetPoint()
+                                ? pRedl->GetMark() : pRedl->GetPoint();
+            SwTextNode* pDelNode = pStt->nNode.GetNode().GetTextNode();
+            SwTextNode* pTextNode = pEnd->nNode.GetNode().GetTextNode();
+            // remove numbering of the first deleted list item
+            // to avoid of incorrect numbering after the deletion
+            if ( pDelNode->GetNumRule() && !pTextNode->GetNumRule() )
+            {
+                const SwPaM aPam( *pStt, *pStt );
+                m_rDoc.DelNumRules( aPam );
+            }
+       }
+    }
 }
 
 DocumentRedlineManager::~DocumentRedlineManager()

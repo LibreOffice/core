@@ -1231,4 +1231,25 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDocxAttributeTableExport)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf118699_redline_numbering)
+{
+    load(DATA_DIRECTORY, "tdf118699.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
+    rIDRA.AcceptAllRedline(true);
+
+    uno::Reference<beans::XPropertySet> xProps(getParagraph(2), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("first paragraph after the first deletion: erroneous numbering",
+                           !xProps->getPropertyValue("NumberingRules").hasValue());
+
+    CPPUNIT_ASSERT_MESSAGE(
+        "first paragraph after the second deletion: missing numbering",
+        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(5), "NumberingRules")
+            .is());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
