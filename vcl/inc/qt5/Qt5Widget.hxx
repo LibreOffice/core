@@ -43,6 +43,7 @@ class Qt5Widget : public QWidget
     Q_OBJECT
 
     Qt5Frame& m_rFrame;
+    bool m_bNonEmptyIMPreeditSeen;
 
     bool handleKeyEvent(QKeyEvent*, bool);
     void handleMouseButtonEvent(QMouseEvent*, bool);
@@ -51,6 +52,7 @@ class Qt5Widget : public QWidget
 
     virtual void focusInEvent(QFocusEvent*) override;
     virtual void focusOutEvent(QFocusEvent*) override;
+    // keyPressEvent(QKeyEvent*) is handled via event(QEvent*); see comment
     virtual void keyReleaseEvent(QKeyEvent*) override;
     virtual void mouseMoveEvent(QMouseEvent*) override;
     virtual void mousePressEvent(QMouseEvent*) override;
@@ -76,6 +78,7 @@ public:
 
     Qt5Frame& getFrame() const { return m_rFrame; }
     void startDrag(sal_Int8 nSourceActions);
+    void endExtTextInput();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
