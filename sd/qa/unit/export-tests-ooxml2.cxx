@@ -1375,10 +1375,10 @@ void SdOOXMLExportTest2::testSmartartRotation2()
 
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPathContent(pXmlDocContent,
-                       "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:txBody/a:p/a:r/a:t", "Text");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:txBody/a:bodyPr", "rot", "10800000");
-    double dX = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:spPr/a:xfrm/a:off", "x").toDouble();
-    double dY = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:spPr/a:xfrm/a:off", "y").toDouble();
+                       "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[4]/p:txBody/a:p/a:r/a:t", "Text");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[4]/p:txBody/a:bodyPr", "rot", "10800000");
+    double dX = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[4]/p:spPr/a:xfrm/a:off", "x").toDouble();
+    double dY = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[4]/p:spPr/a:xfrm/a:off", "y").toDouble();
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 2276280.0, dX, dX * .001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 3158280.0, dY, dY * .001);
 }

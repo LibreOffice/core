@@ -151,6 +151,7 @@ public:
     void                            setDescription( const OUString& rDescr ) { msDescription = rDescr; }
     void                            setHidden( bool bHidden ) { mbHidden = bHidden; }
     void                            setHiddenMasterShape( bool bHiddenMasterShape ) { mbHiddenMasterShape = bHiddenMasterShape; }
+    void                            setLocked( bool bLocked ) { mbLocked = bLocked; }
     void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
     sal_Int32                       getSubType() const { return mnSubType; }
     void                            setSubTypeIndex( sal_Int32 nSubTypeIndex ) { moSubTypeIndex = nSubTypeIndex; }
@@ -340,6 +341,7 @@ private:
     bool                            mbHiddenMasterShape; // master shapes can be hidden in layout slides
                                                          // we need separate flag because we don't want
                                                          // to propagate it when applying reference shape
+    bool                            mbLocked;
     bool mbLockedCanvas; ///< Is this shape part of a locked canvas?
     bool mbWps; ///< Is this a wps shape?
     bool mbTextBox; ///< This shape has a textbox.
