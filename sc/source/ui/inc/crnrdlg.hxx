@@ -55,15 +55,15 @@ private:
     ScDocument*     pDoc;
     bool            bDlgLostFocus;
 
-    formula::WeldRefEdit* m_pEdActive;
+    formula::RefEdit* m_pEdActive;
     std::unique_ptr<weld::TreeView> m_xLbRange;
 
-    std::unique_ptr<formula::WeldRefEdit> m_xEdAssign;
-    std::unique_ptr<formula::WeldRefButton> m_xRbAssign;
+    std::unique_ptr<formula::RefEdit> m_xEdAssign;
+    std::unique_ptr<formula::RefButton> m_xRbAssign;
     std::unique_ptr<weld::RadioButton> m_xBtnColHead;
     std::unique_ptr<weld::RadioButton> m_xBtnRowHead;
-    std::unique_ptr<formula::WeldRefEdit> m_xEdAssign2;
-    std::unique_ptr<formula::WeldRefButton> m_xRbAssign2;
+    std::unique_ptr<formula::RefEdit> m_xEdAssign2;
+    std::unique_ptr<formula::RefButton> m_xRbAssign2;
 
     std::unique_ptr<weld::Button> m_xBtnOk;
     std::unique_ptr<weld::Button> m_xBtnCancel;
@@ -84,14 +84,14 @@ private:
     DECL_LINK( AddBtnHdl, weld::Button&, void );
     DECL_LINK( RemoveBtnHdl, weld::Button&, void );
     DECL_LINK( Range1SelectHdl, weld::TreeView&, void );
-    DECL_LINK( Range1DataModifyHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( Range1DataModifyHdl, formula::RefEdit&, void );
     DECL_LINK( ColClickHdl, weld::Button&, void );
     DECL_LINK( RowClickHdl, weld::Button&, void );
-    DECL_LINK( Range2DataModifyHdl, formula::WeldRefEdit&, void );
-    DECL_LINK( GetEditFocusHdl, formula::WeldRefEdit&, void );
-    DECL_LINK( LoseEditFocusHdl, formula::WeldRefEdit&, void );
-    DECL_LINK( GetButtonFocusHdl, formula::WeldRefButton&, void );
-    DECL_LINK( LoseButtonFocusHdl, formula::WeldRefButton&, void );
+    DECL_LINK( Range2DataModifyHdl, formula::RefEdit&, void );
+    DECL_LINK( GetEditFocusHdl, formula::RefEdit&, void );
+    DECL_LINK( LoseEditFocusHdl, formula::RefEdit&, void );
+    DECL_LINK( GetButtonFocusHdl, formula::RefButton&, void );
+    DECL_LINK( LoseButtonFocusHdl, formula::RefButton&, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_CRNRDLG_HXX

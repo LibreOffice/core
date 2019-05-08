@@ -56,7 +56,7 @@ namespace
 class DBSaveData
 {
 public:
-    DBSaveData( formula::WeldRefEdit& rEd, weld::CheckButton& rHdr, weld::CheckButton& rTot, weld::CheckButton& rSize, weld::CheckButton& rFmt,
+    DBSaveData( formula::RefEdit& rEd, weld::CheckButton& rHdr, weld::CheckButton& rTot, weld::CheckButton& rSize, weld::CheckButton& rFmt,
                             weld::CheckButton& rStrip, ScRange& rArea )
         : rEdAssign(rEd)
         , rBtnHeader(rHdr)
@@ -77,7 +77,7 @@ public:
     void Restore();
 
 private:
-    formula::WeldRefEdit& rEdAssign;
+    formula::RefEdit& rEdAssign;
     weld::CheckButton& rBtnHeader;
     weld::CheckButton& rBtnTotals;
     weld::CheckButton& rBtnSize;
@@ -134,8 +134,8 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     , aLocalDbCol(*(pDoc->GetDBCollection()))
     , m_xEdName(m_xBuilder->weld_entry_tree_view("entrygrid", "entry", "entry-list"))
     , m_xAssignFrame(m_xBuilder->weld_frame("RangeFrame"))
-    , m_xEdAssign(new formula::WeldRefEdit(m_xBuilder->weld_entry("assign")))
-    , m_xRbAssign(new formula::WeldRefButton(m_xBuilder->weld_button("assignrb")))
+    , m_xEdAssign(new formula::RefEdit(m_xBuilder->weld_entry("assign")))
+    , m_xRbAssign(new formula::RefButton(m_xBuilder->weld_button("assignrb")))
     , m_xOptions(m_xBuilder->weld_widget("Options"))
     , m_xBtnHeader(m_xBuilder->weld_check_button("ContainsColumnLabels"))
     , m_xBtnTotals(m_xBuilder->weld_check_button("ContainsTotalsRow"))
@@ -605,7 +605,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl, weld::ComboBox&, void)
     }
 }
 
-IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl, formula::RefEdit&, void)
 {
     //  parse here for Save(), etc.
 

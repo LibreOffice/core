@@ -74,8 +74,8 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     , mxFtSourceFile(m_xBuilder->weld_label("sourcefile"))
     , mxMapGrid(m_xBuilder->weld_container("mapgrid"))
     , mxLbTree(m_xBuilder->weld_tree_view("tree"))
-    , mxRefEdit(new formula::WeldRefEdit(m_xBuilder->weld_entry("edit")))
-    , mxRefBtn(new formula::WeldRefButton(m_xBuilder->weld_button("ref")))
+    , mxRefEdit(new formula::RefEdit(m_xBuilder->weld_entry("edit")))
+    , mxRefBtn(new formula::RefButton(m_xBuilder->weld_button("ref")))
     , mxBtnOk(m_xBuilder->weld_button("ok"))
     , mxBtnCancel(m_xBuilder->weld_button("cancel"))
     , maCustomCompare(*mxLbTree)
@@ -101,7 +101,7 @@ ScXMLSourceDlg::ScXMLSourceDlg(
 
     mxLbTree->connect_changed(LINK(this, ScXMLSourceDlg, TreeItemSelectHdl));
 
-    Link<formula::WeldRefEdit&,void> aLink = LINK(this, ScXMLSourceDlg, RefModifiedHdl);
+    Link<formula::RefEdit&,void> aLink = LINK(this, ScXMLSourceDlg, RefModifiedHdl);
     mxRefEdit->SetModifyHdl(aLink);
 
     mxBtnOk->set_sensitive(false);
@@ -631,7 +631,7 @@ IMPL_LINK_NOARG(ScXMLSourceDlg, TreeItemSelectHdl, weld::TreeView&, void)
     TreeItemSelected();
 }
 
-IMPL_LINK_NOARG(ScXMLSourceDlg, RefModifiedHdl, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScXMLSourceDlg, RefModifiedHdl, formula::RefEdit&, void)
 {
     RefEditModified();
 }

@@ -51,7 +51,7 @@ class FormulaDialog : public formula::FormulaModalDialog,
     css::uno::Reference < css::beans::XPropertySet >          m_xRowSet;
     css::uno::Reference< css::report::meta::XFormulaParser>   m_xParser;
     css::uno::Reference< css::sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
-    VclPtr<formula::RefEdit>           m_pEdit;
+    formula::RefEdit*              m_pEdit;
     OUString                           m_sFormula;
     sal_Int32                          m_nStart;
     sal_Int32                          m_nEnd;
@@ -100,9 +100,7 @@ public:
     virtual void ShowReference(const OUString& _sRef) override;
     virtual void HideReference( bool bDoneRefMode = true ) override;
     virtual void ReleaseFocus( formula::RefEdit* pEdit ) override;
-    virtual void ReleaseFocus( formula::WeldRefEdit* pEdit ) override;
     virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton ) override;
-    virtual void ToggleCollapsed( formula::WeldRefEdit* pEdit, formula::WeldRefButton* pButton ) override;
 };
 
 

@@ -41,8 +41,8 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
                                 weld::CheckButton* refBtnCopyResult,
                                 weld::CheckButton* refBtnDestPers,
                                 weld::ComboBox* refLbCopyArea,
-                                formula::WeldRefEdit* refEdCopyArea,
-                                formula::WeldRefButton* refRbCopyArea,
+                                formula::RefEdit* refEdCopyArea,
+                                formula::RefButton* refRbCopyArea,
                                 weld::Label* refFtDbAreaLabel,
                                 weld::Label* refFtDbArea,
                                 const OUString&     refStrUndefined )
@@ -213,7 +213,7 @@ IMPL_LINK( ScFilterOptionsMgr, LbAreaSelHdl, weld::ComboBox&, rLb, void )
     }
 }
 
-IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, formula::WeldRefEdit&, rEd, void )
+IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, formula::RefEdit&, rEd, void )
 {
     if ( &rEd == pEdCopyArea )
     {

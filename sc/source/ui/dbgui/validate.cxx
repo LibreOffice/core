@@ -126,7 +126,7 @@ void ScTPValidationValue:: SetActiveHdl()
         }
 }
 
-void ScTPValidationValue::RefInputStartPreHdl( formula::WeldRefEdit* pEdit, const formula::WeldRefButton* pButton )
+void ScTPValidationValue::RefInputStartPreHdl( formula::RefEdit* pEdit, const formula::RefButton* pButton )
 {
     if (ScValidationDlg *pValidationDlg = GetValidationDlg())
     {
@@ -343,12 +343,12 @@ ScTPValidationValue::ScTPValidationValue(TabPageParent pParent, const SfxItemSet
     , m_xLbValue(m_xBuilder->weld_combo_box("data"))
     , m_xFtMin(m_xBuilder->weld_label("minft"))
     , m_xMinGrid(m_xBuilder->weld_widget("mingrid"))
-    , m_xEdMin(new formula::WeldRefEdit(m_xBuilder->weld_entry("min")))
+    , m_xEdMin(new formula::RefEdit(m_xBuilder->weld_entry("min")))
     , m_xEdList(m_xBuilder->weld_text_view("minlist"))
     , m_xFtMax(m_xBuilder->weld_label("maxft"))
-    , m_xEdMax(new formula::WeldRefEdit(m_xBuilder->weld_entry("max")))
+    , m_xEdMax(new formula::RefEdit(m_xBuilder->weld_entry("max")))
     , m_xFtHint(m_xBuilder->weld_label("hintft"))
-    , m_xBtnRef(new formula::WeldRefButton(m_xBuilder->weld_button("validref")))
+    , m_xBtnRef(new formula::RefButton(m_xBuilder->weld_button("validref")))
     , m_xRefGrid(m_xBuilder->weld_container("refgrid"))
     , m_pRefEditParent(m_xRefGrid.get())
     , m_pBtnRefParent(m_xRefGrid.get())
@@ -578,7 +578,7 @@ void ScTPValidationValue::RemoveRefDlg(bool bRestoreModal)
     }
 }
 
-IMPL_LINK_NOARG(ScTPValidationValue, EditSetFocusHdl, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScTPValidationValue, EditSetFocusHdl, formula::RefEdit&, void)
 {
     const sal_Int32 nPos = m_xLbAllow->get_active();
 
@@ -588,7 +588,7 @@ IMPL_LINK_NOARG(ScTPValidationValue, EditSetFocusHdl, formula::WeldRefEdit&, voi
     }
 }
 
-IMPL_LINK( ScTPValidationValue, KillEditFocusHdl, formula::WeldRefEdit&, rWnd, void )
+IMPL_LINK( ScTPValidationValue, KillEditFocusHdl, formula::RefEdit&, rWnd, void )
 {
     if (&rWnd != m_pRefEdit)
         return;
@@ -604,7 +604,7 @@ IMPL_LINK( ScTPValidationValue, KillEditFocusHdl, formula::WeldRefEdit&, rWnd, v
     }
 }
 
-IMPL_LINK( ScTPValidationValue, KillButtonFocusHdl, formula::WeldRefButton&, rWnd, void )
+IMPL_LINK( ScTPValidationValue, KillButtonFocusHdl, formula::RefButton&, rWnd, void )
 {
     if( &rWnd != m_xBtnRef.get())
         return;
@@ -909,7 +909,7 @@ bool ScValidationDlg::RemoveRefDlg( bool bRestoreModal /* = true */ )
     return true;
 }
 
-IMPL_LINK_NOARG(ScTPValidationValue, ClickHdl, formula::WeldRefButton&, void)
+IMPL_LINK_NOARG(ScTPValidationValue, ClickHdl, formula::RefButton&, void)
 {
     SetupRefDlg();
 }

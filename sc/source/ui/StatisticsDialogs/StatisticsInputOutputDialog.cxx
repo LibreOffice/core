@@ -51,11 +51,11 @@ ScStatisticsInputOutputDialog::ScStatisticsInputOutputDialog(
                     weld::Window* pParent, ScViewData* pViewData, const OUString& rUIXMLDescription, const OString& rID)
     : ScAnyRefDlgController(pSfxBindings, pChildWindow, pParent, rUIXMLDescription, rID)
     , mxInputRangeLabel(m_xBuilder->weld_label("input-range-label"))
-    , mxInputRangeEdit(new formula::WeldRefEdit(m_xBuilder->weld_entry("input-range-edit")))
-    , mxInputRangeButton(new formula::WeldRefButton(m_xBuilder->weld_button("input-range-button")))
+    , mxInputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("input-range-edit")))
+    , mxInputRangeButton(new formula::RefButton(m_xBuilder->weld_button("input-range-button")))
     , mxOutputRangeLabel(m_xBuilder->weld_label("output-range-label"))
-    , mxOutputRangeEdit(new formula::WeldRefEdit(m_xBuilder->weld_entry("output-range-edit")))
-    , mxOutputRangeButton(new formula::WeldRefButton(m_xBuilder->weld_button("output-range-button")))
+    , mxOutputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("output-range-edit")))
+    , mxOutputRangeButton(new formula::RefButton(m_xBuilder->weld_button("output-range-button")))
     , mxGroupByColumnsRadio(m_xBuilder->weld_radio_button("groupedby-columns-radio"))
     , mxGroupByRowsRadio(m_xBuilder->weld_radio_button("groupedby-rows-radio"))
     , mViewData(pViewData)
@@ -88,10 +88,10 @@ void ScStatisticsInputOutputDialog::Init()
     mxButtonOk->connect_clicked( LINK( this, ScStatisticsInputOutputDialog, OkClicked ) );
     mxButtonOk->set_sensitive(false);
 
-    Link<formula::WeldRefEdit&,void> aEditLink = LINK( this, ScStatisticsInputOutputDialog, GetEditFocusHandler );
+    Link<formula::RefEdit&,void> aEditLink = LINK( this, ScStatisticsInputOutputDialog, GetEditFocusHandler );
     mxInputRangeEdit->SetGetFocusHdl( aEditLink );
     mxOutputRangeEdit->SetGetFocusHdl( aEditLink );
-    Link<formula::WeldRefButton&,void> aButtonLink = LINK( this, ScStatisticsInputOutputDialog, GetButtonFocusHandler );
+    Link<formula::RefButton&,void> aButtonLink = LINK( this, ScStatisticsInputOutputDialog, GetButtonFocusHandler );
     mxInputRangeButton->SetGetFocusHdl( aButtonLink );
     mxOutputRangeButton->SetGetFocusHdl( aButtonLink );
 
@@ -102,7 +102,7 @@ void ScStatisticsInputOutputDialog::Init()
     mxInputRangeButton->SetLoseFocusHdl( aButtonLink );
     mxOutputRangeButton->SetLoseFocusHdl( aButtonLink );
 
-    Link<formula::WeldRefEdit&,void> aLink2 = LINK( this, ScStatisticsInputOutputDialog, RefInputModifyHandler);
+    Link<formula::RefEdit&,void> aLink2 = LINK( this, ScStatisticsInputOutputDialog, RefInputModifyHandler);
     mxInputRangeEdit->SetModifyHdl( aLink2);
     mxOutputRangeEdit->SetModifyHdl( aLink2);
 
@@ -173,7 +173,7 @@ IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, OkClicked, weld::Button&, void )
     response(RET_OK);
 }
 
-IMPL_LINK(ScStatisticsInputOutputDialog, GetEditFocusHandler, formula::WeldRefEdit&, rCtrl, void)
+IMPL_LINK(ScStatisticsInputOutputDialog, GetEditFocusHandler, formula::RefEdit&, rCtrl, void)
 {
     mpActiveEdit = nullptr;
 
@@ -186,7 +186,7 @@ IMPL_LINK(ScStatisticsInputOutputDialog, GetEditFocusHandler, formula::WeldRefEd
         mpActiveEdit->SelectAll();
 }
 
-IMPL_LINK(ScStatisticsInputOutputDialog, GetButtonFocusHandler, formula::WeldRefButton&, rCtrl, void)
+IMPL_LINK(ScStatisticsInputOutputDialog, GetButtonFocusHandler, formula::RefButton&, rCtrl, void)
 {
     mpActiveEdit = nullptr;
 
@@ -199,12 +199,12 @@ IMPL_LINK(ScStatisticsInputOutputDialog, GetButtonFocusHandler, formula::WeldRef
         mpActiveEdit->SelectAll();
 }
 
-IMPL_LINK_NOARG(ScStatisticsInputOutputDialog, LoseEditFocusHandler, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScStatisticsInputOutputDialog, LoseEditFocusHandler, formula::RefEdit&, void)
 {
     mDialogLostFocus = !m_xDialog->has_toplevel_focus();
 }
 
-IMPL_LINK_NOARG(ScStatisticsInputOutputDialog, LoseButtonFocusHandler, formula::WeldRefButton&, void)
+IMPL_LINK_NOARG(ScStatisticsInputOutputDialog, LoseButtonFocusHandler, formula::RefButton&, void)
 {
     mDialogLostFocus = !m_xDialog->has_toplevel_focus();
 }
@@ -219,7 +219,7 @@ IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, GroupByChanged, weld::ToggleButt
     ValidateDialogInput();
 }
 
-IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, RefInputModifyHandler, formula::WeldRefEdit&, void )
+IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, RefInputModifyHandler, formula::RefEdit&, void )
 {
     if ( mpActiveEdit )
     {

@@ -60,10 +60,10 @@ ParaWin::ParaWin(weld::Container* pParent,IControlReferenceHandler* _pDlg)
     , m_xEdArg2(new ArgEdit(m_xBuilder->weld_entry("ED_ARG2")))
     , m_xEdArg3(new ArgEdit(m_xBuilder->weld_entry("ED_ARG3")))
     , m_xEdArg4(new ArgEdit(m_xBuilder->weld_entry("ED_ARG4")))
-    , m_xRefBtn1(new WeldRefButton(m_xBuilder->weld_button("RB_ARG1")))
-    , m_xRefBtn2(new WeldRefButton(m_xBuilder->weld_button("RB_ARG2")))
-    , m_xRefBtn3(new WeldRefButton(m_xBuilder->weld_button("RB_ARG3")))
-    , m_xRefBtn4(new WeldRefButton(m_xBuilder->weld_button("RB_ARG4")))
+    , m_xRefBtn1(new RefButton(m_xBuilder->weld_button("RB_ARG1")))
+    , m_xRefBtn2(new RefButton(m_xBuilder->weld_button("RB_ARG2")))
+    , m_xRefBtn3(new RefButton(m_xBuilder->weld_button("RB_ARG3")))
+    , m_xRefBtn4(new RefButton(m_xBuilder->weld_button("RB_ARG4")))
 {
     // Space for three lines of text in function description.
     m_xFtEditDesc->set_label("X\nX\nX\n");
@@ -251,7 +251,7 @@ void ParaWin::SetActiveLine(sal_uInt16 no)
     }
 }
 
-WeldRefEdit* ParaWin::GetActiveEdit()
+RefEdit* ParaWin::GetActiveEdit()
 {
     if(nArgs>0 && nEdFocus!=NOT_FOUND)
     {
@@ -371,7 +371,7 @@ void ParaWin::SetEdFocus()
 }
 
 void ParaWin::InitArgInput(sal_uInt16 nPos, weld::Label& rFtArg, weld::Button& rBtnFx,
-                           ArgEdit& rEdArg, WeldRefButton& rRefBtn)
+                           ArgEdit& rEdArg, RefButton& rRefBtn)
 {
 
     rRefBtn.SetReferences(pMyParent, &rEdArg);

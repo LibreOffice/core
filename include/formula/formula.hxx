@@ -55,9 +55,7 @@ class FormulaDlg_Impl;
 class IControlReferenceHandler;
 class FormulaHelper;
 class RefEdit;
-class WeldRefEdit;
 class RefButton;
-class WeldRefButton;
 class FormEditData;
 
 class FORMULA_DLLPUBLIC FormulaModalDialog
@@ -74,8 +72,7 @@ private:
 
 protected:
 
-    static ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
-    ::std::pair<WeldRefButton*,WeldRefEdit*> RefInputStartBefore( WeldRefEdit* pEdit, WeldRefButton* pButton );
+    ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
     void            RefInputStartAfter();
     void            RefInputDoneAfter();
 
@@ -106,8 +103,7 @@ protected:
 
 protected:
 
-    static ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
-    ::std::pair<WeldRefButton*,WeldRefEdit*> RefInputStartBefore( WeldRefEdit* pEdit, WeldRefButton* pButton );
+    ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
     void            RefInputStartAfter();
     void            RefInputDoneAfter( bool bForced );
 
@@ -121,7 +117,7 @@ protected:
     const IFunctionDescription* getCurrentFunctionDescription() const;
     bool            UpdateParaWin(Selection& _rSelection);
     void            UpdateParaWin(const Selection& _rSelection, const OUString& _sRefStr);
-    WeldRefEdit*    GetActiveEdit();
+    RefEdit*    GetActiveEdit();
     void            SetEdSelection();
 
     void            StoreFormEditData(FormEditData* pData);

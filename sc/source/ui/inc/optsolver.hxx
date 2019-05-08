@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
 } } }
 
-class ScCursorRefEdit : public formula::WeldRefEdit
+class ScCursorRefEdit : public formula::RefEdit
 {
     Link<ScCursorRefEdit&,void>  maCursorUpLink;
     Link<ScCursorRefEdit&,void>  maCursorDownLink;
@@ -119,57 +119,57 @@ private:
 
     static const sal_uInt16 EDIT_ROW_COUNT = 4;
     ScCursorRefEdit* mpLeftEdit[EDIT_ROW_COUNT];
-    formula::WeldRefButton* mpLeftButton[EDIT_ROW_COUNT];
+    formula::RefButton* mpLeftButton[EDIT_ROW_COUNT];
     ScCursorRefEdit* mpRightEdit[EDIT_ROW_COUNT];
-    formula::WeldRefButton* mpRightButton[EDIT_ROW_COUNT];
+    formula::RefButton* mpRightButton[EDIT_ROW_COUNT];
     weld::ComboBox* mpOperator[EDIT_ROW_COUNT];
     weld::Button* mpDelButton[EDIT_ROW_COUNT];
 
-    formula::WeldRefEdit* mpEdActive;
+    formula::RefEdit* mpEdActive;
 
     std::unique_ptr<weld::Label> m_xFtObjectiveCell;
-    std::unique_ptr<formula::WeldRefEdit>    m_xEdObjectiveCell;
-    std::unique_ptr<formula::WeldRefButton>  m_xRBObjectiveCell;
+    std::unique_ptr<formula::RefEdit>    m_xEdObjectiveCell;
+    std::unique_ptr<formula::RefButton>  m_xRBObjectiveCell;
 
     std::unique_ptr<weld::RadioButton> m_xRbMax;
     std::unique_ptr<weld::RadioButton> m_xRbMin;
     std::unique_ptr<weld::RadioButton> m_xRbValue;
-    std::unique_ptr<formula::WeldRefEdit>   m_xEdTargetValue;
-    std::unique_ptr<formula::WeldRefButton> m_xRBTargetValue;
+    std::unique_ptr<formula::RefEdit>   m_xEdTargetValue;
+    std::unique_ptr<formula::RefButton> m_xRBTargetValue;
 
     std::unique_ptr<weld::Label> m_xFtVariableCells;
-    std::unique_ptr<formula::WeldRefEdit>   m_xEdVariableCells;
-    std::unique_ptr<formula::WeldRefButton> m_xRBVariableCells;
+    std::unique_ptr<formula::RefEdit>   m_xEdVariableCells;
+    std::unique_ptr<formula::RefButton> m_xRBVariableCells;
 
     std::unique_ptr<weld::Label> m_xFtCellRef; // labels are together with controls for the first row
     std::unique_ptr<ScCursorRefEdit> m_xEdLeft1;
-    std::unique_ptr<formula::WeldRefButton> m_xRBLeft1;
+    std::unique_ptr<formula::RefButton> m_xRBLeft1;
     std::unique_ptr<weld::Label> m_xFtOperator;
     std::unique_ptr<weld::ComboBox> m_xLbOp1;
     std::unique_ptr<weld::Label> m_xFtConstraint;
     std::unique_ptr<ScCursorRefEdit> m_xEdRight1;
-    std::unique_ptr<formula::WeldRefButton> m_xRBRight1;
+    std::unique_ptr<formula::RefButton> m_xRBRight1;
     std::unique_ptr<weld::Button> m_xBtnDel1;
 
     std::unique_ptr<ScCursorRefEdit> m_xEdLeft2;
-    std::unique_ptr<formula::WeldRefButton> m_xRBLeft2;
+    std::unique_ptr<formula::RefButton> m_xRBLeft2;
     std::unique_ptr<weld::ComboBox> m_xLbOp2;
     std::unique_ptr<ScCursorRefEdit> m_xEdRight2;
-    std::unique_ptr<formula::WeldRefButton> m_xRBRight2;
+    std::unique_ptr<formula::RefButton> m_xRBRight2;
     std::unique_ptr<weld::Button> m_xBtnDel2;
 
     std::unique_ptr<ScCursorRefEdit> m_xEdLeft3;
-    std::unique_ptr<formula::WeldRefButton> m_xRBLeft3;
+    std::unique_ptr<formula::RefButton> m_xRBLeft3;
     std::unique_ptr<weld::ComboBox> m_xLbOp3;
     std::unique_ptr<ScCursorRefEdit> m_xEdRight3;
-    std::unique_ptr<formula::WeldRefButton> m_xRBRight3;
+    std::unique_ptr<formula::RefButton> m_xRBRight3;
     std::unique_ptr<weld::Button> m_xBtnDel3;
 
     std::unique_ptr<ScCursorRefEdit> m_xEdLeft4;
-    std::unique_ptr<formula::WeldRefButton> m_xRBLeft4;
+    std::unique_ptr<formula::RefButton> m_xRBLeft4;
     std::unique_ptr<weld::ComboBox> m_xLbOp4;
     std::unique_ptr<ScCursorRefEdit> m_xEdRight4;
-    std::unique_ptr<formula::WeldRefButton> m_xRBRight4;
+    std::unique_ptr<formula::RefButton> m_xRBRight4;
     std::unique_ptr<weld::Button> m_xBtnDel4;
 
     std::unique_ptr<weld::ScrolledWindow> m_xScrollBar;
@@ -188,20 +188,20 @@ private:
     void    EnableButtons();
     bool    ParseRef( ScRange& rRange, const OUString& rInput, bool bAllowRange );
     bool    FindTimeout( sal_Int32& rTimeout );
-    void    ShowError( bool bCondition, formula::WeldRefEdit* pFocus );
+    void    ShowError( bool bCondition, formula::RefEdit* pFocus );
 
     DECL_LINK( BtnHdl, weld::Button&, void );
     DECL_LINK( DelBtnHdl, weld::Button&, void );
-    DECL_LINK( GetEditFocusHdl, formula::WeldRefEdit&, void );
-    DECL_LINK( GetButtonFocusHdl, formula::WeldRefButton&, void );
+    DECL_LINK( GetEditFocusHdl, formula::RefEdit&, void );
+    DECL_LINK( GetButtonFocusHdl, formula::RefButton&, void );
     DECL_LINK( GetFocusHdl, weld::Widget&, void );
-    DECL_LINK( LoseEditFocusHdl, formula::WeldRefEdit&, void );
-    DECL_LINK( LoseButtonFocusHdl, formula::WeldRefButton&, void );
+    DECL_LINK( LoseEditFocusHdl, formula::RefEdit&, void );
+    DECL_LINK( LoseButtonFocusHdl, formula::RefButton&, void );
     DECL_LINK( ScrollHdl, weld::ScrolledWindow&, void);
     DECL_LINK( CursorUpHdl, ScCursorRefEdit&, void );
     DECL_LINK( CursorDownHdl, ScCursorRefEdit&, void );
-    DECL_LINK( CondModifyHdl, formula::WeldRefEdit&, void );
-    DECL_LINK( TargetModifyHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( CondModifyHdl, formula::RefEdit&, void );
+    DECL_LINK( TargetModifyHdl, formula::RefEdit&, void );
     DECL_LINK( SelectHdl, weld::ComboBox&, void );
 };
 

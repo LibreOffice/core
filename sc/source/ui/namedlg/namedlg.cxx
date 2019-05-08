@@ -61,8 +61,8 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParen
 
     , m_xEdName(m_xBuilder->weld_entry("name"))
     , m_xFtAssign(m_xBuilder->weld_label("label3"))
-    , m_xEdAssign(new formula::WeldRefEdit(m_xBuilder->weld_entry("range")))
-    , m_xRbAssign(new formula::WeldRefButton(m_xBuilder->weld_button("assign")))
+    , m_xEdAssign(new formula::RefEdit(m_xBuilder->weld_entry("range")))
+    , m_xRbAssign(new formula::RefButton(m_xBuilder->weld_button("assign")))
     , m_xLbScope(m_xBuilder->weld_combo_box("scope"))
     , m_xBtnPrintArea(m_xBuilder->weld_check_button("printrange"))
     , m_xBtnColHeader(m_xBuilder->weld_check_button("colheader"))
@@ -482,12 +482,12 @@ IMPL_LINK_NOARG(ScNameDlg, EdModifyHdl, weld::Entry&, void)
     NameModified();
 }
 
-IMPL_LINK_NOARG(ScNameDlg, RefEdModifyHdl, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScNameDlg, RefEdModifyHdl, formula::RefEdit&, void)
 {
     NameModified();
 }
 
-IMPL_LINK_NOARG(ScNameDlg, AssignGetFocusHdl, formula::WeldRefEdit&, void)
+IMPL_LINK_NOARG(ScNameDlg, AssignGetFocusHdl, formula::RefEdit&, void)
 {
     RefEdModifyHdl(*m_xEdAssign);
 }

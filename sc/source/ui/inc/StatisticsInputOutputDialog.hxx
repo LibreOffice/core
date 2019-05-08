@@ -46,12 +46,12 @@ protected:
 
     // Widgets
     std::unique_ptr<weld::Label> mxInputRangeLabel;
-    std::unique_ptr<formula::WeldRefEdit> mxInputRangeEdit;
-    std::unique_ptr<formula::WeldRefButton> mxInputRangeButton;
+    std::unique_ptr<formula::RefEdit> mxInputRangeEdit;
+    std::unique_ptr<formula::RefButton> mxInputRangeButton;
 
     std::unique_ptr<weld::Label> mxOutputRangeLabel;
-    std::unique_ptr<formula::WeldRefEdit> mxOutputRangeEdit;
-    std::unique_ptr<formula::WeldRefButton> mxOutputRangeButton;
+    std::unique_ptr<formula::RefEdit> mxOutputRangeEdit;
+    std::unique_ptr<formula::RefButton> mxOutputRangeButton;
 
     std::unique_ptr<weld::RadioButton> mxGroupByColumnsRadio;
     std::unique_ptr<weld::RadioButton> mxGroupByRowsRadio;
@@ -72,7 +72,7 @@ private:
     // Widgets
     std::unique_ptr<weld::Button>       mxButtonOk;
 
-    formula::WeldRefEdit*      mpActiveEdit;
+    formula::RefEdit*      mpActiveEdit;
     ScAddress const            mCurrentAddress;
     bool                       mDialogLostFocus;
 
@@ -81,11 +81,11 @@ private:
 
     DECL_LINK( GroupByChanged, weld::ToggleButton&, void );
     DECL_LINK( OkClicked, weld::Button&, void );
-    DECL_LINK( GetEditFocusHandler,  formula::WeldRefEdit&, void );
-    DECL_LINK( GetButtonFocusHandler,  formula::WeldRefButton&, void );
-    DECL_LINK( LoseEditFocusHandler, formula::WeldRefEdit&, void );
-    DECL_LINK( LoseButtonFocusHandler, formula::WeldRefButton&, void );
-    DECL_LINK( RefInputModifyHandler, formula::WeldRefEdit&, void );
+    DECL_LINK( GetEditFocusHandler,  formula::RefEdit&, void );
+    DECL_LINK( GetButtonFocusHandler,  formula::RefButton&, void );
+    DECL_LINK( LoseEditFocusHandler, formula::RefEdit&, void );
+    DECL_LINK( LoseButtonFocusHandler, formula::RefButton&, void );
+    DECL_LINK( RefInputModifyHandler, formula::RefEdit&, void );
 };
 
 

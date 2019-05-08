@@ -41,8 +41,8 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbReject;
     std::unique_ptr<weld::Button> m_xOkButton;
 
-    std::unique_ptr<formula::WeldRefEdit> m_xEdAssign;
-    std::unique_ptr<formula::WeldRefButton> m_xRbAssign;
+    std::unique_ptr<formula::RefEdit> m_xEdAssign;
+    std::unique_ptr<formula::RefButton> m_xRbAssign;
 
     std::unique_ptr<weld::Container> m_xBox;
 

@@ -28,7 +28,7 @@ class ParaWin;
 
 // class ArgEdit
 
-class ArgEdit : public WeldRefEdit
+class ArgEdit : public RefEdit
 {
 public:
     ArgEdit(std::unique_ptr<weld::Entry> xControl);
@@ -62,12 +62,12 @@ private:
     weld::Label*pFtArg;
     weld::Button* pBtnFx;
     ArgEdit* pEdArg;
-    WeldRefButton* pRefBtn;
+    RefButton* pRefBtn;
 
     DECL_LINK( FxBtnClickHdl, weld::Button&, void );
     DECL_LINK( FxBtnFocusHdl, weld::Widget&, void );
-    DECL_LINK( EdFocusHdl, WeldRefEdit&, void );
-    DECL_LINK( EdModifyHdl, WeldRefEdit&, void );
+    DECL_LINK( EdFocusHdl, RefEdit&, void );
+    DECL_LINK( EdModifyHdl, RefEdit&, void );
 
 public:
 
@@ -76,7 +76,7 @@ public:
     void        InitArgInput(weld::Label* pftArg,
                              weld::Button* pbtnFx,
                              ArgEdit* pedArg,
-                             WeldRefButton* prefBtn);
+                             RefButton* prefBtn);
 
     void        SetArgName(const OUString &aArg);
     OUString    GetArgName();
