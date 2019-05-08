@@ -10,6 +10,7 @@ import unohelper
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.awt import XMouseListener
 from com.sun.star.awt import XToolkitRobot
+from com.sun.star.awt import MouseButton
 from com.sun.star.awt import MouseEvent
 from com.sun.star.awt import KeyEvent
 from com.sun.star.awt import XKeyListener
@@ -96,20 +97,34 @@ class XWindow(UITestCase):
         # create dummy mouse event
         xMouseEvent = MouseEvent()
         xMouseEvent.Modifiers = 0
-        xMouseEvent.Buttons = 0
+        xMouseEvent.Buttons = MouseButton.LEFT
         xMouseEvent.X = 10
         xMouseEvent.Y = 10
         xMouseEvent.ClickCount = 1
         xMouseEvent.PopupTrigger = False
         xMouseEvent.Source = xWindow
 
+        xMouseEvent2 = MouseEvent()
+        xMouseEvent2.Modifiers = 0
+        xMouseEvent2.Buttons = MouseButton.LEFT
+        xMouseEvent2.X = 300
+        xMouseEvent2.Y = 300
+        xMouseEvent2.ClickCount = 1
+        xMouseEvent2.PopupTrigger = False
+        xMouseEvent2.Source = xWindow
+
         # send mouse event
         xToolkitRobot = xWindow.getToolkit()
         self.assertIsNotNone(xToolkitRobot)
 
-        xToolkitRobot.mousePress(xMouseEvent)
+        # Click in the menubar/toolbar area
         xToolkitRobot.mouseMove(xMouseEvent)
+        xToolkitRobot.mousePress(xMouseEvent)
         xToolkitRobot.mouseRelease(xMouseEvent)
+
+        # Click into the document content
+        xToolkitRobot.mousePress(xMouseEvent2)
+        xToolkitRobot.mouseRelease(xMouseEvent2)
 
         # send key press event
         xKeyEvent = KeyEvent()
@@ -139,8 +154,8 @@ class XWindow(UITestCase):
         self.assertEqual(0, keymouseEventsIntercepted)
 
         global mouseEventsIntercepted
-        # mousePressed, mouseReleased and mouseEntered should be triggered
-        self.assertEqual(3, mouseEventsIntercepted)
+        # mousePressed (2x), mouseReleased (2x) and mouseEntered (1x) should be triggered
+        self.assertEqual(5, mouseEventsIntercepted)
 
         # close document
         self.ui_test.close_doc()
