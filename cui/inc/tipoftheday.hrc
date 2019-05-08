@@ -37,7 +37,7 @@
  * image:
    * leave the image string empty for the default tipoftheday.png
    * place new images at extra/source/tipoftheday and don't forget to add the files to vcl/Package_tipoftheday.mk
-   * don't exceed 100x120px too much - images dont get scaled
+   * don't exceed 100x120px too much - images don't get scaled
 */
 
 const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
@@ -54,7 +54,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "You can sort paragraphs or table rows alphabetically or numerically per Tools > Sort."), "modules/swriter/ui/sortdialog/SortDialog", "tipoftheday_w.png"}, //https://help.libreoffice.org/6.2/en-US/text/swriter/01/06100000.html
      { NC_("RID_CUI_TIPOFTHEDAY", "Use Sections in %PRODUCTNAME Writer to protect part of a text, show/hide text, reuse parts from other documents, use different column layout."), "modules/swriter/ui/sectionpage/SectionPage", "tipoftheday_w.png"}, //https://help.libreoffice.org/6.2/en-US/text/swriter/01/04020100.html
      { NC_("RID_CUI_TIPOFTHEDAY", "Use Sheet > Fill Cells > Random Number to generate a random series based on various distributions."), "modules/scalc/ui/randomnumbergenerator/RandomNumberGeneratorDialog", "tipoftheday_c.png"}, //https://help.libreoffice.org/6.2/en-US/text/scalc/01/02140700.html
-     { NC_("RID_CUI_TIPOFTHEDAY", "Use Format > Conditional Formating > Manage in Calc to find out which cells have been defined with conditional formating."), "modules/scalc/ui/conditionalformatdialog/ConditionalFormatDialog", "tipoftheday_c.png"}, //https://help.libreoffice.org/6.2/en-US/text/scalc/01/05120000.html
+     { NC_("RID_CUI_TIPOFTHEDAY", "Use Format > Conditional Formatting > Manage in Calc to find out which cells have been defined with conditional formatting."), "modules/scalc/ui/conditionalformatdialog/ConditionalFormatDialog", "tipoftheday_c.png"}, //https://help.libreoffice.org/6.2/en-US/text/scalc/01/05120000.html
      { NC_("RID_CUI_TIPOFTHEDAY", "Apart from table of contents, %PRODUCTNAME can create Alphabetical, Illustrations, Tables, Objects, Bibliography, User-Defined indexes."), "modules/swriter/ui/tocdialog/TocDialog", "tipoftheday_w.png"}, //https://help.libreoffice.org/6.2/en-US/text/swriter/guide/indices_toc.html
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to sort a series in %PRODUCTNAME Calc such as A1, A2, A3, A11, A15, not in alphabetical order but on the number? Enable natural sort in the Options tab."), "modules/scalc/ui/sortoptionspage/SortOptionsPage", "tipoftheday_c.png"}, //https://help.libreoffice.org/6.2/en-US/text/scalc/01/12030200.html
      { NC_("RID_CUI_TIPOFTHEDAY", "Enable massive parallel calculations of formula cells via Tools > Options > OpenCL."), "cui/ui/optopenclpage/OptOpenCLPage", "tipoftheday_c.png"}, //https://help.libreoffice.org/6.2/en-US/text/shared/optionen/opencl.html
@@ -105,7 +105,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Run %PRODUCTNAME in any browser via rollApp."), "https://www.rollapp.com/app/lowriter", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Developing new XSLT and xml filters?"), "http://fridrich.blogspot.com.tr/2013/08/extending-swiss-army-knife-overview.html", ""},
 
-     { NC_("RID_CUI_TIPOFTHEDAY", "Easily convert your documents to PDF with one click by clicking on the PDF icon inthe toolbar."), "", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Easily convert your documents to PDF with one click by clicking on the PDF icon in the toolbar."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Select a different icon set from Tools > Options > %PRODUCTNAME > View > User Interface > Icon size and style."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use font embedding for greater interoperability with other office suites at  File > Properties > Font."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Generate fully customized PDF documents with the exact format, image compression, comments, access rights, password, etc., via File > Export as PDF."), "", ""},
@@ -162,7 +162,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Keep column headers of a sheet visible when scrolling lines via View > Freeze Cells > Freeze First Row."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want your chapter titles to always begin a page? Edit Heading1 (paragraph style) > Text Flow > Breaks and check Insert > Page > Before."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to keep the text from, but remove a hyperlink, in Writer? Right click the link and ‘Remove Hyperlink’."), "", "tipoftheday_w.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Create a chart based on a Writer table by clicking in the table and chossing Insert > Chart."), "", "tipoftheday_w.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Create a chart based on a Writer table by clicking in the table and choosing Insert > Chart."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Move a column in Calc between two others in one step? Click the header then a cell in the column, keep mouse button and move to the target with Alt key."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use the Backspace key instead of Delete in Calc.  You can choose what to delete."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To distribute some text in multi-columns select the text and apply Format > Columns."), "", "tipoftheday_w.png"},
@@ -211,7 +211,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Typing in bold, italics, or underlined in Writer you can continue with the default attributes using only the shortcut Ctrl+Shift+X (remove direct character formats)."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You will search in several sheets when you select them before you start the search."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to change spell checking for some part of the text? Click in the language zone of the status bar or better, apply a style."), "", "tipoftheday_w.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "A date is a formated number of days since a date origin. An hour is a day divided by 24 with noon = 0.5."), "", "tipoftheday_c.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "A date is a formatted number of days since a date origin. An hour is a day divided by 24 with noon = 0.5."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Need custom contents for metadata properties? File > Properties > Custom Properties tab lets you create what you want."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Insert your metadata in your document with Insert > Fields > More Fields… > Document or DocInformation."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To delete multiple comments, copy the range, paste special, and select everything except comments."), "", "tipoftheday_c.png"},
