@@ -894,7 +894,7 @@ bool Dialog::ImplStartExecute()
 
     if (bKitActive)
     {
-        if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
         {
             std::vector<vcl::LOKPayloadItem> aItems;
             aItems.emplace_back("type", "dialog");
@@ -954,7 +954,8 @@ bool Dialog::ImplStartExecute()
     if (bModal)
         pSVData->maAppData.mnModalMode++;
 
-    css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(
+        css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
     css::document::DocumentEvent aObject;
     aObject.EventName = "DialogExecute";
     xEventBroadcaster->documentEventOccured(aObject);
@@ -962,6 +963,20 @@ bool Dialog::ImplStartExecute()
         UITestLogger::getInstance().log("ModalDialogExecuted Id:" + get_id());
     else
         UITestLogger::getInstance().log("ModelessDialogExecuted Id:" + get_id());
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        {
+            // Dialog boxes don't get the Resize call and they
+            // can have invalid size at 'created' message above.
+            // If there is no difference, the client should detect it and ignore us,
+            // otherwise, this should make sure that the window has the correct size.
+            std::vector<vcl::LOKPayloadItem> aItems;
+            aItems.emplace_back("size", GetSizePixel().toString());
+            pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
+        }
+    }
 
     return true;
 }
