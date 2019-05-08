@@ -210,7 +210,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/awt/_XToolkit \
     qadevOOo/tests/java/ifc/awt/_XTopWindow \
     qadevOOo/tests/java/ifc/awt/_XUnoControlContainer \
-    qadevOOo/tests/java/ifc/awt/_XUserInputInterception \
     qadevOOo/tests/java/ifc/awt/_XView \
     qadevOOo/tests/java/ifc/awt/_XWindow \
     qadevOOo/tests/java/ifc/beans/_XExactName \
