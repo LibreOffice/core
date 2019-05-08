@@ -109,6 +109,7 @@
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/apearcfg.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <osl/module.hxx>
 
 #include "langselect.hxx"
 
@@ -523,6 +524,12 @@ Desktop::Desktop()
     , m_aBootstrapError(BE_OK)
     , m_aBootstrapStatus(BS_OK)
 {
+    static ::osl::Module aMod;
+    aMod.load("explorerframe.dll");
+    if (aMod.is())
+        SAL_WARN("desktop.app", "loading explorerframe.dll successful");
+    else
+        SAL_WARN("desktop.app", "loading explorerframe.dll failed");
 }
 
 Desktop::~Desktop()
