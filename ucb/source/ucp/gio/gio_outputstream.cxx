@@ -28,15 +28,13 @@
 #include "gio_outputstream.hxx"
 #include "gio_content.hxx"
 
-using namespace com::sun::star;
-
 namespace gio
 {
 
 OutputStream::OutputStream(GFileOutputStream *pStream) : Seekable(G_SEEKABLE(pStream)), mpStream(pStream)
 {
     if (!mpStream)
-        throw io::NotConnectedException();
+        throw css::io::NotConnectedException();
 }
 
 OutputStream::~OutputStream()
@@ -47,7 +45,7 @@ OutputStream::~OutputStream()
 void SAL_CALL OutputStream::writeBytes( const css::uno::Sequence< sal_Int8 >& rData )
 {
     if (!mpStream)
-        throw io::NotConnectedException();
+        throw css::io::NotConnectedException();
 
     GError *pError=nullptr;
     if (!g_output_stream_write_all(G_OUTPUT_STREAM(mpStream), rData.getConstArray(), rData.getLength(), nullptr, nullptr, &pError))
@@ -57,7 +55,7 @@ void SAL_CALL OutputStream::writeBytes( const css::uno::Sequence< sal_Int8 >& rD
 void SAL_CALL OutputStream::flush()
 {
     if (!mpStream)
-        throw io::NotConnectedException();
+        throw css::io::NotConnectedException();
 
     GError *pError=nullptr;
     if (!g_output_stream_flush(G_OUTPUT_STREAM(mpStream), nullptr, &pError))
@@ -70,9 +68,9 @@ void SAL_CALL OutputStream::closeOutput()
         g_output_stream_close(G_OUTPUT_STREAM(mpStream), nullptr, nullptr);
 }
 
-uno::Any OutputStream::queryInterface( const uno::Type &type )
+css::uno::Any OutputStream::queryInterface( const css::uno::Type &type )
 {
-    uno::Any aRet = ::cppu::queryInterface ( type,
+    css::uno::Any aRet = ::cppu::queryInterface ( type,
         static_cast< XOutputStream * >( this ) );
 
     return aRet.hasValue() ? aRet : Seekable::queryInterface( type );

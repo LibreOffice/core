@@ -28,8 +28,6 @@
 #include "gio_content.hxx"
 #include "gio_provider.hxx"
 
-using namespace com::sun::star;
-
 using namespace gio;
 
 namespace gio
@@ -58,15 +56,15 @@ bool DataSupplier::getData()
     {
         switch ( mnOpenMode )
         {
-            case ucb::OpenMode::FOLDERS:
+            case css::ucb::OpenMode::FOLDERS:
                 if (g_file_info_get_file_type(pInfo) != G_FILE_TYPE_DIRECTORY)
                     continue;
                 break;
-            case ucb::OpenMode::DOCUMENTS:
+            case css::ucb::OpenMode::DOCUMENTS:
                 if (g_file_info_get_file_type(pInfo) != G_FILE_TYPE_REGULAR)
                     continue;
                 break;
-            case ucb::OpenMode::ALL:
+            case css::ucb::OpenMode::ALL:
             default:
                 break;
         }
@@ -121,11 +119,11 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
     return OUString();
 }
 
-uno::Reference< ucb::XContentIdentifier > DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
+css::uno::Reference< css::ucb::XContentIdentifier > DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 {
     if ( nIndex < maResults.size() )
     {
-        uno::Reference< ucb::XContentIdentifier > xId = maResults[ nIndex ]->xId;
+        css::uno::Reference< css::ucb::XContentIdentifier > xId = maResults[ nIndex ]->xId;
         if ( xId.is() )
         {
             // Already cached.
@@ -136,19 +134,19 @@ uno::Reference< ucb::XContentIdentifier > DataSupplier::queryContentIdentifier( 
     OUString aId = queryContentIdentifierString( nIndex );
     if ( aId.getLength() )
     {
-        uno::Reference< ucb::XContentIdentifier > xId = new ucbhelper::ContentIdentifier( aId );
+        css::uno::Reference< css::ucb::XContentIdentifier > xId = new ucbhelper::ContentIdentifier( aId );
         maResults[ nIndex ]->xId = xId;
         return xId;
     }
 
-    return uno::Reference< ucb::XContentIdentifier >();
+    return css::uno::Reference< css::ucb::XContentIdentifier >();
 }
 
-uno::Reference< ucb::XContent > DataSupplier::queryContent( sal_uInt32 nIndex )
+css::uno::Reference< css::ucb::XContent > DataSupplier::queryContent( sal_uInt32 nIndex )
 {
     if ( nIndex < maResults.size() )
     {
-        uno::Reference< ucb::XContent > xContent = maResults[ nIndex ]->xContent;
+        css::uno::Reference< css::ucb::XContent > xContent = maResults[ nIndex ]->xContent;
         if ( xContent.is() )
         {
             // Already cached.
@@ -156,20 +154,20 @@ uno::Reference< ucb::XContent > DataSupplier::queryContent( sal_uInt32 nIndex )
         }
     }
 
-    uno::Reference< ucb::XContentIdentifier > xId = queryContentIdentifier( nIndex );
+    css::uno::Reference< css::ucb::XContentIdentifier > xId = queryContentIdentifier( nIndex );
     if ( xId.is() )
     {
         try
         {
-            uno::Reference< ucb::XContent > xContent = mxContent->getProvider()->queryContent( xId );
+            css::uno::Reference< css::ucb::XContent > xContent = mxContent->getProvider()->queryContent( xId );
             maResults[ nIndex ]->xContent = xContent;
             return xContent;
         }
-        catch ( ucb::IllegalIdentifierException& )
+        catch ( css::ucb::IllegalIdentifierException& )
         {
         }
     }
-    return uno::Reference< ucb::XContent >();
+    return css::uno::Reference< css::ucb::XContent >();
 }
 
 bool DataSupplier::getResult( sal_uInt32 nIndex )
@@ -199,11 +197,11 @@ bool DataSupplier::isCountFinal()
     return mbCountFinal;
 }
 
-uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
+css::uno::Reference< css::sdbc::XRow > DataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
 {
     if ( nIndex < maResults.size() )
     {
-        uno::Reference< sdbc::XRow > xRow = maResults[ nIndex ]->xRow;
+        css::uno::Reference< css::sdbc::XRow > xRow = maResults[ nIndex ]->xRow;
         if ( xRow.is() )
         {
             // Already cached.
@@ -213,33 +211,33 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues( sal_uInt32 nInde
 
     if ( getResult( nIndex ) )
     {
-        uno::Reference< ucb::XContent > xContent( queryContent( nIndex ) );
+        css::uno::Reference< css::ucb::XContent > xContent( queryContent( nIndex ) );
         if ( xContent.is() )
         {
             try
             {
-                uno::Reference< ucb::XCommandProcessor > xCmdProc(
-                    xContent, uno::UNO_QUERY_THROW );
+                css::uno::Reference< css::ucb::XCommandProcessor > xCmdProc(
+                    xContent, css::uno::UNO_QUERY_THROW );
                 sal_Int32 nCmdId( xCmdProc->createCommandIdentifier() );
-                ucb::Command aCmd;
+                css::ucb::Command aCmd;
                 aCmd.Name = "getPropertyValues";
                 aCmd.Handle = -1;
                 aCmd.Argument <<= getResultSet()->getProperties();
-                uno::Any aResult( xCmdProc->execute(
+                css::uno::Any aResult( xCmdProc->execute(
                     aCmd, nCmdId, getResultSet()->getEnvironment() ) );
-                uno::Reference< sdbc::XRow > xRow;
+                css::uno::Reference< css::sdbc::XRow > xRow;
                 if ( aResult >>= xRow )
                 {
                     maResults[ nIndex ]->xRow = xRow;
                     return xRow;
                 }
             }
-            catch ( uno::Exception const & )
+            catch ( css::uno::Exception const & )
             {
             }
         }
     }
-    return uno::Reference< sdbc::XRow >();
+    return css::uno::Reference< css::sdbc::XRow >();
 }
 
 void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )

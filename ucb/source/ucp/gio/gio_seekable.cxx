@@ -29,15 +29,13 @@
 #include "gio_seekable.hxx"
 #include "gio_content.hxx"
 
-using namespace com::sun::star;
-
 namespace gio
 {
 
 Seekable::Seekable(GSeekable *pStream) : mpStream(pStream)
 {
     if (!mpStream)
-        throw io::NotConnectedException();
+        throw css::io::NotConnectedException();
 }
 
 Seekable::~Seekable()
@@ -47,10 +45,10 @@ Seekable::~Seekable()
 void SAL_CALL Seekable::truncate()
 {
     if (!mpStream)
-        throw io::NotConnectedException();
+        throw css::io::NotConnectedException();
 
     if (!g_seekable_can_truncate(mpStream))
-        throw io::IOException("Truncate unsupported",
+        throw css::io::IOException("Truncate unsupported",
             static_cast< cppu::OWeakObject * >(this));
 
     GError *pError=nullptr;
@@ -61,10 +59,10 @@ void SAL_CALL Seekable::truncate()
 void SAL_CALL Seekable::seek( sal_Int64 location )
 {
     if (!mpStream)
-        throw io::NotConnectedException();
+        throw css::io::NotConnectedException();
 
     if (!g_seekable_can_seek(mpStream))
-        throw io::IOException("Seek unsupported",
+        throw css::io::IOException("Seek unsupported",
             static_cast< cppu::OWeakObject * >(this));
 
     GError *pError=nullptr;
@@ -75,7 +73,7 @@ void SAL_CALL Seekable::seek( sal_Int64 location )
 sal_Int64 SAL_CALL Seekable::getPosition()
 {
     if (!mpStream)
-        throw io::NotConnectedException();
+        throw css::io::NotConnectedException();
 
     return g_seekable_tell(mpStream);
 }
@@ -83,7 +81,7 @@ sal_Int64 SAL_CALL Seekable::getPosition()
 sal_Int64 SAL_CALL Seekable::getLength()
 {
     if (!mpStream)
-        throw io::NotConnectedException();
+        throw css::io::NotConnectedException();
 
     bool bOk = false;
     sal_uInt64 nSize = 0;
@@ -115,9 +113,9 @@ sal_Int64 SAL_CALL Seekable::getLength()
     return nSize;
 }
 
-uno::Any Seekable::queryInterface( const uno::Type &type )
+css::uno::Any Seekable::queryInterface( const css::uno::Type &type )
 {
-    uno::Any aRet = ::cppu::queryInterface ( type,
+    css::uno::Any aRet = ::cppu::queryInterface ( type,
         static_cast< XSeekable * >( this ) );
 
     if (!aRet.hasValue() && g_seekable_can_truncate(mpStream))

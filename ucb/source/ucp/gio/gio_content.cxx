@@ -77,15 +77,13 @@
 #include "gio_outputstream.hxx"
 #include "gio_mount.hxx"
 
-using namespace com::sun::star;
-
 namespace gio
 {
 
 Content::Content(
-    const uno::Reference< uno::XComponentContext >& rxContext,
+    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
     ContentProvider* pProvider,
-    const uno::Reference< ucb::XContentIdentifier >& Identifier)
+    const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier)
     : ContentImplHelper( rxContext, pProvider, Identifier ),
       m_pProvider( pProvider ), mpFile (nullptr), mpInfo( nullptr ), mbTransient(false)
 {
@@ -93,9 +91,9 @@ Content::Content(
 }
 
 Content::Content(
-    const uno::Reference< uno::XComponentContext >& rxContext,
+    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
     ContentProvider* pProvider,
-    const uno::Reference< ucb::XContentIdentifier >& Identifier,
+    const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
     bool bIsFolder)
     : ContentImplHelper( rxContext, pProvider, Identifier ),
       m_pProvider( pProvider ), mpFile (nullptr), mpInfo( nullptr ), mbTransient(true)
@@ -133,7 +131,7 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 
 OUString SAL_CALL Content::getContentType()
 {
-    return isFolder(uno::Reference< ucb::XCommandEnvironment >())
+    return isFolder(css::uno::Reference< css::ucb::XCommandEnvironment >())
         ? OUString( GIO_FOLDER_TYPE )
         : OUString( GIO_FILE_TYPE );
 }
@@ -144,9 +142,9 @@ do { \
     aRet <<= aExcept;\
 } while(false)
 
-uno::Any convertToException(GError *pError, const uno::Reference< uno::XInterface >& rContext, bool bThrow)
+css::uno::Any convertToException(GError *pError, const css::uno::Reference< css::uno::XInterface >& rContext, bool bThrow)
 {
-    uno::Any aRet;
+    css::uno::Any aRet;
 
     gint eCode = pError->code;
     OUString sMessage(pError->message, strlen(pError->message), RTL_TEXTENCODING_UTF8);
@@ -154,113 +152,113 @@ uno::Any convertToException(GError *pError, const uno::Reference< uno::XInterfac
 
     OUString sName;
 
-    uno::Sequence< uno::Any > aArgs( 1 );
+    css::uno::Sequence< css::uno::Any > aArgs( 1 );
     aArgs[ 0 ] <<= sName;
 
     switch (eCode)
     {
         case G_IO_ERROR_FAILED:
-            { io::IOException aExcept(sMessage, rContext);
+            { css::io::IOException aExcept(sMessage, rContext);
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_NOT_MOUNTED:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_NOT_EXISTING_PATH, aArgs);
+            { css::ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR, css::ucb::IOErrorCode_NOT_EXISTING_PATH, aArgs);
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_NOT_FOUND:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_NOT_EXISTING, aArgs);
+            { css::ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR, css::ucb::IOErrorCode_NOT_EXISTING, aArgs);
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_EXISTS:
-            { ucb::NameClashException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, sName);
+            { css::ucb::NameClashException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR, sName);
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_INVALID_ARGUMENT:
-            { lang::IllegalArgumentException aExcept(sMessage, rContext, -1 );
+            { css::lang::IllegalArgumentException aExcept(sMessage, rContext, -1 );
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_PERMISSION_DENIED:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_ACCESS_DENIED, aArgs);
+            { css::ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR, css::ucb::IOErrorCode_ACCESS_DENIED, aArgs);
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_IS_DIRECTORY:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_NO_FILE, aArgs);
+            { css::ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR, css::ucb::IOErrorCode_NO_FILE, aArgs);
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_NOT_REGULAR_FILE:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_NO_FILE, aArgs);
+            { css::ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR, css::ucb::IOErrorCode_NO_FILE, aArgs);
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_NOT_DIRECTORY:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_NO_DIRECTORY, aArgs);
+            { css::ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR, css::ucb::IOErrorCode_NO_DIRECTORY, aArgs);
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_FILENAME_TOO_LONG:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_NAME_TOO_LONG, aArgs);
+            { css::ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR, css::ucb::IOErrorCode_NAME_TOO_LONG, aArgs);
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_PENDING:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_PENDING, aArgs);
+            { css::ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR, css::ucb::IOErrorCode_PENDING, aArgs);
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_CLOSED:
         case G_IO_ERROR_CANCELLED:
         case G_IO_ERROR_TOO_MANY_LINKS:
         case G_IO_ERROR_WRONG_ETAG:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_GENERAL, aArgs);
+            { css::ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR, css::ucb::IOErrorCode_GENERAL, aArgs);
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_NOT_SUPPORTED:
         case G_IO_ERROR_CANT_CREATE_BACKUP:
         case G_IO_ERROR_WOULD_MERGE:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_NOT_SUPPORTED, aArgs);
+            { css::ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR, css::ucb::IOErrorCode_NOT_SUPPORTED, aArgs);
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_NO_SPACE:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_OUT_OF_DISK_SPACE, aArgs);
+            { css::ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR, css::ucb::IOErrorCode_OUT_OF_DISK_SPACE, aArgs);
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_INVALID_FILENAME:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_INVALID_CHARACTER, aArgs);
+            { css::ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR, css::ucb::IOErrorCode_INVALID_CHARACTER, aArgs);
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_READ_ONLY:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_WRITE_PROTECTED, aArgs);
+            { css::ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR, css::ucb::IOErrorCode_WRITE_PROTECTED, aArgs);
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_TIMED_OUT:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_DEVICE_NOT_READY, aArgs);
+            { css::ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR, css::ucb::IOErrorCode_DEVICE_NOT_READY, aArgs);
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_WOULD_RECURSE:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_RECURSIVE, aArgs);
+            { css::ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR, css::ucb::IOErrorCode_RECURSIVE, aArgs);
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_BUSY:
         case G_IO_ERROR_WOULD_BLOCK:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_LOCKING_VIOLATION, aArgs);
+            { css::ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR, css::ucb::IOErrorCode_LOCKING_VIOLATION, aArgs);
               EXCEPT(aExcept); }
             break;
         case G_IO_ERROR_HOST_NOT_FOUND:
-            { ucb::InteractiveNetworkResolveNameException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, OUString());
+            { css::ucb::InteractiveNetworkResolveNameException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR, OUString());
               EXCEPT(aExcept);}
             break;
         default:
@@ -269,29 +267,29 @@ uno::Any convertToException(GError *pError, const uno::Reference< uno::XInterfac
         case G_IO_ERROR_NOT_SYMBOLIC_LINK:
         case G_IO_ERROR_NOT_MOUNTABLE_FILE:
         case G_IO_ERROR_FAILED_HANDLED:
-            { ucb::InteractiveNetworkGeneralException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR);
+            { css::ucb::InteractiveNetworkGeneralException aExcept(sMessage, rContext,
+                css::task::InteractionClassification_ERROR);
               EXCEPT(aExcept);}
             break;
     }
     return aRet;
 }
 
-void convertToIOException(GError *pError, const uno::Reference< uno::XInterface >& rContext)
+void convertToIOException(GError *pError, const css::uno::Reference< css::uno::XInterface >& rContext)
 {
     try
     {
         convertToException(pError, rContext);
     }
-    catch (const io::IOException&)
+    catch (const css::io::IOException&)
     {
         throw;
     }
-    catch (const uno::RuntimeException&)
+    catch (const css::uno::RuntimeException&)
     {
         throw;
     }
-    catch (const uno::Exception& e)
+    catch (const css::uno::Exception& e)
     {
         css::uno::Any a(cppu::getCaughtException());
         throw css::lang::WrappedTargetRuntimeException(
@@ -300,7 +298,7 @@ void convertToIOException(GError *pError, const uno::Reference< uno::XInterface 
     }
 }
 
-uno::Any Content::mapGIOError( GError *pError )
+css::uno::Any Content::mapGIOError( GError *pError )
 {
     if (!pError)
         return getBadArgExcept();
@@ -308,9 +306,9 @@ uno::Any Content::mapGIOError( GError *pError )
     return convertToException(pError, static_cast< cppu::OWeakObject * >(this), false);
 }
 
-uno::Any Content::getBadArgExcept()
+css::uno::Any Content::getBadArgExcept()
 {
-    return uno::makeAny( lang::IllegalArgumentException(
+    return css::uno::makeAny( css::lang::IllegalArgumentException(
         "Wrong argument type!",
         static_cast< cppu::OWeakObject * >( this ), -1) );
 }
@@ -322,12 +320,12 @@ class MountOperation
     GError *mpError;
     static void Completed(GObject *source, GAsyncResult *res, gpointer user_data);
 public:
-    explicit MountOperation(const uno::Reference< ucb::XCommandEnvironment >& xEnv);
+    explicit MountOperation(const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv);
     ~MountOperation();
     GError *Mount(GFile *pFile);
 };
 
-MountOperation::MountOperation(const uno::Reference< ucb::XCommandEnvironment >& xEnv) : mpError(nullptr)
+MountOperation::MountOperation(const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv) : mpError(nullptr)
 {
     mpLoop = g_main_loop_new(nullptr, FALSE);
     mpAuthentication = ooo_mount_operation_new(xEnv);
@@ -368,7 +366,7 @@ MountOperation::~MountOperation()
     g_main_loop_unref(mpLoop);
 }
 
-GFileInfo* Content::getGFileInfo(const uno::Reference< ucb::XCommandEnvironment >& xEnv, GError **ppError)
+GFileInfo* Content::getGFileInfo(const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv, GError **ppError)
 {
     GError * err = nullptr;
     if (mpInfo == nullptr && !mbTransient) {
@@ -412,13 +410,13 @@ GFile* Content::getGFile()
     return mpFile;
 }
 
-bool Content::isFolder(const uno::Reference< ucb::XCommandEnvironment >& xEnv)
+bool Content::isFolder(const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv)
 {
     GFileInfo *pInfo = getGFileInfo(xEnv);
     return pInfo && (g_file_info_get_file_type(pInfo) == G_FILE_TYPE_DIRECTORY);
 }
 
-static util::DateTime getDateFromUnix (time_t t)
+static css::util::DateTime getDateFromUnix (time_t t)
 {
     TimeValue tv;
     tv.Nanosec = 0;
@@ -426,20 +424,20 @@ static util::DateTime getDateFromUnix (time_t t)
     oslDateTime dt;
 
     if ( osl_getDateTimeFromTimeValue( &tv, &dt ) )
-        return util::DateTime( 0, dt.Seconds, dt.Minutes, dt.Hours,
+        return css::util::DateTime( 0, dt.Seconds, dt.Minutes, dt.Hours,
                    dt.Day, dt.Month, dt.Year, false);
     else
-        return util::DateTime();
+        return css::util::DateTime();
 }
 
-uno::Reference< sdbc::XRow > Content::getPropertyValues(
-                const uno::Sequence< beans::Property >& rProperties,
-                const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+css::uno::Reference< css::sdbc::XRow > Content::getPropertyValues(
+                const css::uno::Sequence< css::beans::Property >& rProperties,
+                const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
 {
     rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( m_xContext );
 
     sal_Int32 nProps;
-    const beans::Property* pProps;
+    const css::beans::Property* pProps;
 
     nProps = rProperties.getLength();
     pProps = rProperties.getConstArray();
@@ -447,7 +445,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     GFileInfo *pInfo = nullptr;
     for( sal_Int32 n = 0; n < nProps; ++n )
     {
-        const beans::Property& rProp = pProps[ n ];
+        const css::beans::Property& rProp = pProps[ n ];
 
         if ( rProp.Name == "IsDocument" )
         {
@@ -544,7 +542,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         }
         else if ( rProp.Name == "CreatableContentsInfo" )
         {
-            xRow->appendObject( rProp, uno::makeAny( queryCreatableContentsInfo( xEnv ) ) );
+            xRow->appendObject( rProp, css::uno::makeAny( queryCreatableContentsInfo( xEnv ) ) );
         }
         else
         {
@@ -554,13 +552,13 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         }
     }
 
-    return uno::Reference< sdbc::XRow >( xRow.get() );
+    return css::uno::Reference< css::sdbc::XRow >( xRow.get() );
 }
 
-static lang::IllegalAccessException
-getReadOnlyException( const uno::Reference< uno::XInterface >& rContext )
+static css::lang::IllegalAccessException
+getReadOnlyException( const css::uno::Reference< css::uno::XInterface >& rContext )
 {
-    return lang::IllegalAccessException ("Property is read-only!", rContext );
+    return css::lang::IllegalAccessException ("Property is read-only!", rContext );
 }
 
 void Content::queryChildren( ContentRefList& rChildren )
@@ -599,12 +597,12 @@ void Content::queryChildren( ContentRefList& rChildren )
     }
 }
 
-bool Content::exchangeIdentity( const uno::Reference< ucb::XContentIdentifier >& xNewId )
+bool Content::exchangeIdentity( const css::uno::Reference< css::ucb::XContentIdentifier >& xNewId )
 {
     if ( !xNewId.is() )
         return false;
 
-    uno::Reference< ucb::XContent > xThis = this;
+    css::uno::Reference< css::ucb::XContent > xThis = this;
 
     if ( mbTransient )
     {
@@ -626,12 +624,12 @@ bool Content::exchangeIdentity( const uno::Reference< ucb::XContentIdentifier >&
             ContentRef xChild = rChild;
 
             // Create new content identifier for the child...
-            uno::Reference< ucb::XContentIdentifier > xOldChildId = xChild->getIdentifier();
+            css::uno::Reference< css::ucb::XContentIdentifier > xOldChildId = xChild->getIdentifier();
             OUString aOldChildURL = xOldChildId->getContentIdentifier();
             OUString aNewChildURL = aOldChildURL.replaceAt(
                 0, aOldURL.getLength(), xNewId->getContentIdentifier() );
 
-            uno::Reference< ucb::XContentIdentifier > xNewChildId
+            css::uno::Reference< css::ucb::XContentIdentifier > xNewChildId
                 = new ::ucbhelper::ContentIdentifier( aNewChildURL );
 
             if ( !xChild->exchangeIdentity( xNewChildId ) )
@@ -662,9 +660,9 @@ void Content::getFileInfo(
     }
 }
 
-uno::Sequence< uno::Any > Content::setPropertyValues(
-    const uno::Sequence< beans::PropertyValue >& rValues,
-    const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
+    const css::uno::Sequence< css::beans::PropertyValue >& rValues,
+    const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
 {
     GError *pError=nullptr;
     GFileInfo *pNewInfo=nullptr;
@@ -685,20 +683,20 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     sal_Int32 nCount = rValues.getLength();
 
-    beans::PropertyChangeEvent aEvent;
+    css::beans::PropertyChangeEvent aEvent;
     aEvent.Source = static_cast< cppu::OWeakObject * >( this );
     aEvent.Further = false;
     aEvent.PropertyHandle = -1;
 
     sal_Int32 nChanged = 0, nTitlePos = -1;
     const char *newName = nullptr;
-    uno::Sequence< beans::PropertyChangeEvent > aChanges(nCount);
+    css::uno::Sequence< css::beans::PropertyChangeEvent > aChanges(nCount);
 
-    uno::Sequence< uno::Any > aRet( nCount );
-    const beans::PropertyValue* pValues = rValues.getConstArray();
+    css::uno::Sequence< css::uno::Any > aRet( nCount );
+    const css::beans::PropertyValue* pValues = rValues.getConstArray();
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
-        const beans::PropertyValue& rValue = pValues[ n ];
+        const css::beans::PropertyValue& rValue = pValues[ n ];
         SAL_INFO("ucb.ucp.gio", "Set prop '" << rValue.Name << "'");
         if ( rValue.Name == "ContentType" ||
              rValue.Name == "MediaType" ||
@@ -714,7 +712,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             OUString aNewTitle;
             if (!( rValue.Value >>= aNewTitle ))
             {
-                aRet[ n ] <<= beans::IllegalTypeException
+                aRet[ n ] <<= css::beans::IllegalTypeException
                     ( "Property value has wrong type!",
                       static_cast< cppu::OWeakObject * >( this ) );
                 continue;
@@ -722,7 +720,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
             if ( aNewTitle.getLength() <= 0 )
             {
-                aRet[ n ] <<= lang::IllegalArgumentException
+                aRet[ n ] <<= css::lang::IllegalArgumentException
                     ( "Empty title not allowed!",
                       static_cast< cppu::OWeakObject * >( this ), -1 );
                 continue;
@@ -773,12 +771,12 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             {
                 OUString aNewURL = getParentURL();
                 aNewURL += OUString( newName, strlen(newName), RTL_TEXTENCODING_UTF8 );
-                uno::Reference< ucb::XContentIdentifier > xNewId
+                css::uno::Reference< css::ucb::XContentIdentifier > xNewId
                     = new ::ucbhelper::ContentIdentifier( aNewURL );
 
                 if (!exchangeIdentity( xNewId ) )
                 {
-                    aRet[ nTitlePos ] <<= uno::Exception
+                    aRet[ nTitlePos ] <<= css::uno::Exception
                         ( "Exchange failed!",
                           static_cast< cppu::OWeakObject * >( this ) );
                 }
@@ -825,10 +823,10 @@ bool Content::doSetFileInfo(GFileInfo *pNewInfo)
 
 const int TRANSFER_BUFFER_SIZE = 65536;
 
-void Content::copyData( const uno::Reference< io::XInputStream >& xIn,
-    const uno::Reference< io::XOutputStream >& xOut )
+void Content::copyData( const css::uno::Reference< css::io::XInputStream >& xIn,
+    const css::uno::Reference< css::io::XOutputStream >& xOut )
 {
-    uno::Sequence< sal_Int8 > theData( TRANSFER_BUFFER_SIZE );
+    css::uno::Sequence< sal_Int8 > theData( TRANSFER_BUFFER_SIZE );
 
     g_return_if_fail( xIn.is() && xOut.is() );
 
@@ -838,13 +836,13 @@ void Content::copyData( const uno::Reference< io::XInputStream >& xIn,
     xOut->closeOutput();
 }
 
-bool Content::feedSink( const uno::Reference< uno::XInterface >& xSink )
+bool Content::feedSink( const css::uno::Reference< css::uno::XInterface >& xSink )
 {
     if ( !xSink.is() )
         return false;
 
-    uno::Reference< io::XOutputStream > xOut(xSink, uno::UNO_QUERY );
-    uno::Reference< io::XActiveDataSink > xDataSink(xSink, uno::UNO_QUERY );
+    css::uno::Reference< css::io::XOutputStream > xOut(xSink, css::uno::UNO_QUERY );
+    css::uno::Reference< css::io::XActiveDataSink > xDataSink(xSink, css::uno::UNO_QUERY );
 
     if ( !xOut.is() && !xDataSink.is() )
         return false;
@@ -854,7 +852,7 @@ bool Content::feedSink( const uno::Reference< uno::XInterface >& xSink )
     if (!pStream)
        convertToException(pError, static_cast< cppu::OWeakObject * >(this));
 
-    uno::Reference< io::XInputStream > xIn(
+    css::uno::Reference< css::io::XInputStream > xIn(
         new comphelper::OSeekableInputWrapper(
             new ::gio::InputStream(pStream), m_xContext));
 
@@ -867,47 +865,47 @@ bool Content::feedSink( const uno::Reference< uno::XInterface >& xSink )
     return true;
 }
 
-uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
-    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+css::uno::Any Content::open(const css::ucb::OpenCommandArgument2 & rOpenCommand,
+    const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
 {
     bool bIsFolder = isFolder(xEnv);
 
     if (!g_file_query_exists(getGFile(), nullptr))
     {
-        uno::Sequence< uno::Any > aArgs( 1 );
+        css::uno::Sequence< css::uno::Any > aArgs( 1 );
         aArgs[ 0 ] <<= m_xIdentifier->getContentIdentifier();
-        uno::Any aErr = uno::makeAny(
-            ucb::InteractiveAugmentedIOException(OUString(), static_cast< cppu::OWeakObject * >( this ),
-                task::InteractionClassification_ERROR,
-                bIsFolder ? ucb::IOErrorCode_NOT_EXISTING_PATH : ucb::IOErrorCode_NOT_EXISTING, aArgs)
+        css::uno::Any aErr = css::uno::makeAny(
+            css::ucb::InteractiveAugmentedIOException(OUString(), static_cast< cppu::OWeakObject * >( this ),
+                css::task::InteractionClassification_ERROR,
+                bIsFolder ? css::ucb::IOErrorCode_NOT_EXISTING_PATH : css::ucb::IOErrorCode_NOT_EXISTING, aArgs)
         );
 
         ucbhelper::cancelCommandExecution(aErr, xEnv);
     }
 
-    uno::Any aRet;
+    css::uno::Any aRet;
 
     bool bOpenFolder = (
-        ( rOpenCommand.Mode == ucb::OpenMode::ALL ) ||
-        ( rOpenCommand.Mode == ucb::OpenMode::FOLDERS ) ||
-        ( rOpenCommand.Mode == ucb::OpenMode::DOCUMENTS )
+        ( rOpenCommand.Mode == css::ucb::OpenMode::ALL ) ||
+        ( rOpenCommand.Mode == css::ucb::OpenMode::FOLDERS ) ||
+        ( rOpenCommand.Mode == css::ucb::OpenMode::DOCUMENTS )
      );
 
     if ( bOpenFolder && bIsFolder )
     {
-        uno::Reference< ucb::XDynamicResultSet > xSet
+        css::uno::Reference< css::ucb::XDynamicResultSet > xSet
             = new DynamicResultSet( m_xContext, this, rOpenCommand, xEnv );
         aRet <<= xSet;
     }
     else if ( rOpenCommand.Sink.is() )
     {
         if (
-            ( rOpenCommand.Mode == ucb::OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
-            ( rOpenCommand.Mode == ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE )
+            ( rOpenCommand.Mode == css::ucb::OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
+            ( rOpenCommand.Mode == css::ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE )
            )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny ( ucb::UnsupportedOpenModeException
+                css::uno::makeAny ( css::ucb::UnsupportedOpenModeException
                     ( OUString(), static_cast< cppu::OWeakObject * >( this ),
                       sal_Int16( rOpenCommand.Mode ) ) ),
                     xEnv );
@@ -921,7 +919,7 @@ uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
             SAL_WARN("ucb.ucp.gio", "Failed to load data from '" << m_xIdentifier->getContentIdentifier() << "'");
 
             ucbhelper::cancelCommandExecution(
-                uno::makeAny (ucb::UnsupportedDataSinkException
+                css::uno::makeAny (css::ucb::UnsupportedDataSinkException
                     ( OUString(), static_cast< cppu::OWeakObject * >( this ),
                       rOpenCommand.Sink ) ),
                     xEnv );
@@ -932,17 +930,17 @@ uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
     return aRet;
 }
 
-uno::Any SAL_CALL Content::execute(
-        const ucb::Command& aCommand,
+css::uno::Any SAL_CALL Content::execute(
+        const css::ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
-        const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
 {
     SAL_INFO("ucb.ucp.gio", "Content::execute " << aCommand.Name);
-    uno::Any aRet;
+    css::uno::Any aRet;
 
     if ( aCommand.Name == "getPropertyValues" )
     {
-        uno::Sequence< beans::Property > Properties;
+        css::uno::Sequence< css::beans::Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
             ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
         aRet <<= getPropertyValues( Properties, xEnv );
@@ -953,21 +951,21 @@ uno::Any SAL_CALL Content::execute(
         aRet <<= getCommandInfo( xEnv, false );
     else if ( aCommand.Name == "open" )
     {
-        ucb::OpenCommandArgument2 aOpenCommand;
+        css::ucb::OpenCommandArgument2 aOpenCommand;
         if ( !( aCommand.Argument >>= aOpenCommand ) )
             ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
         aRet = open( aOpenCommand, xEnv );
     }
     else if ( aCommand.Name == "transfer" )
     {
-        ucb::TransferInfo transferArgs;
+        css::ucb::TransferInfo transferArgs;
         if ( !( aCommand.Argument >>= transferArgs ) )
             ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
         transfer( transferArgs, xEnv );
     }
     else if ( aCommand.Name == "setPropertyValues" )
     {
-        uno::Sequence< beans::PropertyValue > aProperties;
+        css::uno::Sequence< css::beans::PropertyValue > aProperties;
         if ( !( aCommand.Argument >>= aProperties ) || !aProperties.hasElements() )
             ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
         aRet <<= setPropertyValues( aProperties, xEnv );
@@ -975,14 +973,14 @@ uno::Any SAL_CALL Content::execute(
     else if (aCommand.Name == "createNewContent"
              && isFolder( xEnv ) )
     {
-        ucb::ContentInfo arg;
+        css::ucb::ContentInfo arg;
         if ( !( aCommand.Argument >>= arg ) )
                 ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
         aRet <<= createNewContent( arg );
     }
     else if ( aCommand.Name == "insert" )
     {
-        ucb::InsertCommandArgument arg;
+        css::ucb::InsertCommandArgument arg;
         if ( !( aCommand.Argument >>= arg ) )
                 ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
         insert( arg.Data, arg.ReplaceExisting, xEnv );
@@ -1011,7 +1009,7 @@ uno::Any SAL_CALL Content::execute(
         SAL_WARN("ucb.ucp.gio", "Unknown command " << aCommand.Name);
 
         ucbhelper::cancelCommandExecution
-            ( uno::makeAny( ucb::UnsupportedCommandException
+            ( css::uno::makeAny( css::ucb::UnsupportedCommandException
               ( OUString(),
                 static_cast< cppu::OWeakObject * >( this ) ) ),
               xEnv );
@@ -1022,7 +1020,7 @@ uno::Any SAL_CALL Content::execute(
 
 void Content::destroy( bool bDeletePhysical )
 {
-    uno::Reference< ucb::XContent > xThis = this;
+    css::uno::Reference< css::ucb::XContent > xThis = this;
 
     deleted();
 
@@ -1035,8 +1033,8 @@ void Content::destroy( bool bDeletePhysical )
     }
 }
 
-void Content::insert(const uno::Reference< io::XInputStream > &xInputStream,
-    bool bReplaceExisting, const uno::Reference< ucb::XCommandEnvironment > &xEnv )
+void Content::insert(const css::uno::Reference< css::io::XInputStream > &xInputStream,
+    bool bReplaceExisting, const css::uno::Reference< css::ucb::XCommandEnvironment > &xEnv )
 {
     GError *pError = nullptr;
     GFileInfo *pInfo = getGFileInfo(xEnv);
@@ -1053,8 +1051,8 @@ void Content::insert(const uno::Reference< io::XInputStream > &xInputStream,
 
     if ( !xInputStream.is() )
     {
-        ucbhelper::cancelCommandExecution( uno::makeAny
-            ( ucb::MissingInputStreamException
+        ucbhelper::cancelCommandExecution( css::uno::makeAny
+            ( css::ucb::MissingInputStreamException
               ( OUString(), static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
     }
@@ -1071,7 +1069,7 @@ void Content::insert(const uno::Reference< io::XInputStream > &xInputStream,
             ucbhelper::cancelCommandExecution(mapGIOError(pError), xEnv);
     }
 
-    uno::Reference < io::XOutputStream > xOutput = new ::gio::OutputStream(pOutStream);
+    css::uno::Reference < css::io::XOutputStream > xOutput = new ::gio::OutputStream(pOutStream);
     copyData( xInputStream, xOutput );
 
     if (mbTransient)
@@ -1084,7 +1082,7 @@ void Content::insert(const uno::Reference< io::XInputStream > &xInputStream,
 const GFileCopyFlags DEFAULT_COPYDATA_FLAGS =
     static_cast<GFileCopyFlags>(G_FILE_COPY_OVERWRITE|G_FILE_COPY_TARGET_DEFAULT_PERMS);
 
-void Content::transfer( const ucb::TransferInfo& aTransferInfo, const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+void Content::transfer( const css::ucb::TransferInfo& aTransferInfo, const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
 {
     OUString sDest = m_xIdentifier->getContentIdentifier();
     if (!sDest.endsWith("/")) {
@@ -1110,47 +1108,47 @@ void Content::transfer( const ucb::TransferInfo& aTransferInfo, const uno::Refer
         ucbhelper::cancelCommandExecution(mapGIOError(pError), xEnv);
 }
 
-uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
-    const uno::Reference< ucb::XCommandEnvironment >& xEnv)
+css::uno::Sequence< css::ucb::ContentInfo > Content::queryCreatableContentsInfo(
+    const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv)
 {
     if ( isFolder( xEnv ) )
     {
-        uno::Sequence< ucb::ContentInfo > seq(2);
+        css::uno::Sequence< css::ucb::ContentInfo > seq(2);
 
         // Minimum set of props we really need
-        uno::Sequence< beans::Property > props( 1 );
-        props[0] = beans::Property(
+        css::uno::Sequence< css::beans::Property > props( 1 );
+        props[0] = css::beans::Property(
             "Title",
             -1,
             cppu::UnoType<OUString>::get(),
-            beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
+            css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::BOUND );
 
         // file
         seq[0].Type       = GIO_FILE_TYPE;
-        seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
-                              ucb::ContentInfoAttribute::KIND_DOCUMENT );
+        seq[0].Attributes = ( css::ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
+                              css::ucb::ContentInfoAttribute::KIND_DOCUMENT );
         seq[0].Properties = props;
 
         // folder
         seq[1].Type       = GIO_FOLDER_TYPE;
-        seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
+        seq[1].Attributes = css::ucb::ContentInfoAttribute::KIND_FOLDER;
         seq[1].Properties = props;
 
         return seq;
     }
     else
     {
-        return uno::Sequence< ucb::ContentInfo >();
+        return css::uno::Sequence< css::ucb::ContentInfo >();
     }
 }
 
-uno::Sequence< ucb::ContentInfo > SAL_CALL Content::queryCreatableContentsInfo()
+css::uno::Sequence< css::ucb::ContentInfo > SAL_CALL Content::queryCreatableContentsInfo()
 {
-    return queryCreatableContentsInfo( uno::Reference< ucb::XCommandEnvironment >() );
+    return queryCreatableContentsInfo( css::uno::Reference< css::ucb::XCommandEnvironment >() );
 }
 
-uno::Reference< ucb::XContent >
-    SAL_CALL Content::createNewContent( const ucb::ContentInfo& Info )
+css::uno::Reference< css::ucb::XContent >
+    SAL_CALL Content::createNewContent( const css::ucb::ContentInfo& Info )
 {
     bool create_document;
     const char *name;
@@ -1162,7 +1160,7 @@ uno::Reference< ucb::XContent >
     else
     {
         SAL_WARN("ucb.ucp.gio", "Failed to create new content '" << Info.Type << "'");
-        return uno::Reference< ucb::XContent >();
+        return css::uno::Reference< css::ucb::XContent >();
     }
 
     SAL_INFO("ucb.ucp.gio", "createNewContent (" << create_document << ")");
@@ -1174,140 +1172,140 @@ uno::Reference< ucb::XContent >
     name = create_document ? "[New_Content]" : "[New_Collection]";
     aURL += OUString::createFromAscii( name );
 
-    uno::Reference< ucb::XContentIdentifier > xId(new ::ucbhelper::ContentIdentifier(aURL));
+    css::uno::Reference< css::ucb::XContentIdentifier > xId(new ::ucbhelper::ContentIdentifier(aURL));
 
     try
     {
         return new ::gio::Content( m_xContext, m_pProvider, xId, !create_document );
-    } catch ( ucb::ContentCreationException & )
+    } catch ( css::ucb::ContentCreationException & )
     {
-            return uno::Reference< ucb::XContent >();
+            return css::uno::Reference< css::ucb::XContent >();
     }
 }
 
-uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
+css::uno::Sequence< css::uno::Type > SAL_CALL Content::getTypes()
 {
-    if ( isFolder( uno::Reference< ucb::XCommandEnvironment >() ) )
+    if ( isFolder( css::uno::Reference< css::ucb::XCommandEnvironment >() ) )
     {
         static cppu::OTypeCollection s_aFolderCollection
-            (CPPU_TYPE_REF( lang::XTypeProvider ),
-             CPPU_TYPE_REF( lang::XServiceInfo ),
-             CPPU_TYPE_REF( lang::XComponent ),
-             CPPU_TYPE_REF( ucb::XContent ),
-             CPPU_TYPE_REF( ucb::XCommandProcessor ),
-             CPPU_TYPE_REF( beans::XPropertiesChangeNotifier ),
-             CPPU_TYPE_REF( ucb::XCommandInfoChangeNotifier ),
-             CPPU_TYPE_REF( beans::XPropertyContainer ),
-             CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
-             CPPU_TYPE_REF( container::XChild ),
-             CPPU_TYPE_REF( ucb::XContentCreator ) );
+            (CPPU_TYPE_REF( css::lang::XTypeProvider ),
+             CPPU_TYPE_REF( css::lang::XServiceInfo ),
+             CPPU_TYPE_REF( css::lang::XComponent ),
+             CPPU_TYPE_REF( css::ucb::XContent ),
+             CPPU_TYPE_REF( css::ucb::XCommandProcessor ),
+             CPPU_TYPE_REF( css::beans::XPropertiesChangeNotifier ),
+             CPPU_TYPE_REF( css::ucb::XCommandInfoChangeNotifier ),
+             CPPU_TYPE_REF( css::beans::XPropertyContainer ),
+             CPPU_TYPE_REF( css::beans::XPropertySetInfoChangeNotifier ),
+             CPPU_TYPE_REF( css::container::XChild ),
+             CPPU_TYPE_REF( css::ucb::XContentCreator ) );
         return s_aFolderCollection.getTypes();
     }
     else
     {
         static cppu::OTypeCollection s_aFileCollection
-            (CPPU_TYPE_REF( lang::XTypeProvider ),
-             CPPU_TYPE_REF( lang::XServiceInfo ),
-             CPPU_TYPE_REF( lang::XComponent ),
-             CPPU_TYPE_REF( ucb::XContent ),
-             CPPU_TYPE_REF( ucb::XCommandProcessor ),
-             CPPU_TYPE_REF( beans::XPropertiesChangeNotifier ),
-             CPPU_TYPE_REF( ucb::XCommandInfoChangeNotifier ),
-             CPPU_TYPE_REF( beans::XPropertyContainer ),
-             CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
-             CPPU_TYPE_REF( container::XChild ) );
+            (CPPU_TYPE_REF( css::lang::XTypeProvider ),
+             CPPU_TYPE_REF( css::lang::XServiceInfo ),
+             CPPU_TYPE_REF( css::lang::XComponent ),
+             CPPU_TYPE_REF( css::ucb::XContent ),
+             CPPU_TYPE_REF( css::ucb::XCommandProcessor ),
+             CPPU_TYPE_REF( css::beans::XPropertiesChangeNotifier ),
+             CPPU_TYPE_REF( css::ucb::XCommandInfoChangeNotifier ),
+             CPPU_TYPE_REF( css::beans::XPropertyContainer ),
+             CPPU_TYPE_REF( css::beans::XPropertySetInfoChangeNotifier ),
+             CPPU_TYPE_REF( css::container::XChild ) );
 
         return s_aFileCollection.getTypes();
     }
 }
 
-uno::Sequence< beans::Property > Content::getProperties(
-    const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
+css::uno::Sequence< css::beans::Property > Content::getProperties(
+    const css::uno::Reference< css::ucb::XCommandEnvironment > & /*xEnv*/ )
 {
-    static const beans::Property aGenericProperties[] =
+    static const css::beans::Property aGenericProperties[] =
     {
-        beans::Property( "IsDocument",
+        css::beans::Property( "IsDocument",
             -1, cppu::UnoType<bool>::get(),
-            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( "IsFolder",
+            css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( "IsFolder",
             -1, cppu::UnoType<bool>::get(),
-            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( "Title",
+            css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( "Title",
             -1, cppu::UnoType<OUString>::get(),
-            beans::PropertyAttribute::BOUND ),
-        beans::Property( "IsReadOnly",
+            css::beans::PropertyAttribute::BOUND ),
+        css::beans::Property( "IsReadOnly",
             -1, cppu::UnoType<bool>::get(),
-            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( "DateCreated",
-            -1, cppu::UnoType<util::DateTime>::get(),
-            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( "DateModified",
-            -1, cppu::UnoType<util::DateTime>::get(),
-            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( "Size",
+            css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( "DateCreated",
+            -1, cppu::UnoType<css::util::DateTime>::get(),
+            css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( "DateModified",
+            -1, cppu::UnoType<css::util::DateTime>::get(),
+            css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( "Size",
             -1, cppu::UnoType<sal_Int64>::get(),
-            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( "IsVolume",
+            css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( "IsVolume",
             1, cppu::UnoType<bool>::get(),
-            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( "IsCompactDisc",
+            css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( "IsCompactDisc",
             -1, cppu::UnoType<bool>::get(),
-            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( "IsRemoveable",
+            css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( "IsRemoveable",
             -1, cppu::UnoType<bool>::get(),
-            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( "IsHidden",
+            css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( "IsHidden",
             -1, cppu::UnoType<bool>::get(),
-            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( "CreatableContentsInfo",
-            -1, cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
-            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY )
+            css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( "CreatableContentsInfo",
+            -1, cppu::UnoType<css::uno::Sequence< css::ucb::ContentInfo >>::get(),
+            css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY )
     };
 
     const int nProps = SAL_N_ELEMENTS(aGenericProperties);
-    return uno::Sequence< beans::Property > ( aGenericProperties, nProps );
+    return css::uno::Sequence< css::beans::Property > ( aGenericProperties, nProps );
 }
 
-uno::Sequence< ucb::CommandInfo > Content::getCommands( const uno::Reference< ucb::XCommandEnvironment > & xEnv)
+css::uno::Sequence< css::ucb::CommandInfo > Content::getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv)
 {
-    static const ucb::CommandInfo aCommandInfoTable[] =
+    static const css::ucb::CommandInfo aCommandInfoTable[] =
     {
         // Required commands
-        ucb::CommandInfo
+        css::ucb::CommandInfo
         ( "getCommandInfo",
           -1, cppu::UnoType<void>::get() ),
-        ucb::CommandInfo
+        css::ucb::CommandInfo
         ( "getPropertySetInfo",
           -1, cppu::UnoType<void>::get() ),
-        ucb::CommandInfo
+        css::ucb::CommandInfo
         ( "getPropertyValues",
-          -1, cppu::UnoType<uno::Sequence< beans::Property >>::get() ),
-        ucb::CommandInfo
+          -1, cppu::UnoType<css::uno::Sequence< css::beans::Property >>::get() ),
+        css::ucb::CommandInfo
         ( "setPropertyValues",
-          -1, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get() ),
+          -1, cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get() ),
 
         // Optional standard commands
-        ucb::CommandInfo
+        css::ucb::CommandInfo
         ( "delete",
           -1, cppu::UnoType<bool>::get() ),
-        ucb::CommandInfo
+        css::ucb::CommandInfo
         ( "insert",
-          -1, cppu::UnoType<ucb::InsertCommandArgument>::get() ),
-        ucb::CommandInfo
+          -1, cppu::UnoType<css::ucb::InsertCommandArgument>::get() ),
+        css::ucb::CommandInfo
         ( "open",
-          -1, cppu::UnoType<ucb::OpenCommandArgument2>::get() ),
+          -1, cppu::UnoType<css::ucb::OpenCommandArgument2>::get() ),
 
         // Folder Only, omitted if not a folder
-        ucb::CommandInfo
+        css::ucb::CommandInfo
         ( "transfer",
-          -1, cppu::UnoType<ucb::TransferInfo>::get() ),
-        ucb::CommandInfo
+          -1, cppu::UnoType<css::ucb::TransferInfo>::get() ),
+        css::ucb::CommandInfo
         ( "createNewContent",
-          -1, cppu::UnoType<ucb::ContentInfo>::get() )
+          -1, cppu::UnoType<css::ucb::ContentInfo>::get() )
     };
 
     const int nProps = SAL_N_ELEMENTS(aCommandInfoTable);
-    return uno::Sequence< ucb::CommandInfo >(aCommandInfoTable, isFolder(xEnv) ? nProps : nProps - 2);
+    return css::uno::Sequence< css::ucb::CommandInfo >(aCommandInfoTable, isFolder(xEnv) ? nProps : nProps - 2);
 }
 
 XTYPEPROVIDER_COMMON_IMPL( Content );
@@ -1322,9 +1320,9 @@ void SAL_CALL Content::release() throw()
     ContentImplHelper::release();
 }
 
-uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
+css::uno::Any SAL_CALL Content::queryInterface( const css::uno::Type & rType )
 {
-    uno::Any aRet = cppu::queryInterface( rType, static_cast< ucb::XContentCreator * >( this ) );
+    css::uno::Any aRet = cppu::queryInterface( rType, static_cast< css::ucb::XContentCreator * >( this ) );
     return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface(rType);
 }
 
@@ -1333,9 +1331,9 @@ OUString SAL_CALL Content::getImplementationName()
        return OUString("com.sun.star.comp.GIOContent");
 }
 
-uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
+css::uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 {
-       uno::Sequence<OUString> aSNS { "com.sun.star.ucb.GIOContent" };
+       css::uno::Sequence<OUString> aSNS { "com.sun.star.ucb.GIOContent" };
        return aSNS;
 }
 
