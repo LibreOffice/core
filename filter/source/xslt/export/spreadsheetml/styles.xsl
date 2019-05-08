@@ -291,7 +291,7 @@
                                     <xsl:when test="contains($numberStyle/number:text, '$')">
                                         <xsl:text>Currency</xsl:text>
                                     </xsl:when>
-                                    <!-- OASIS XML adapation -->
+                                    <!-- OASIS XML adaptation -->
                                     <xsl:otherwise>
                                         <xsl:text>General</xsl:text>
                                     </xsl:otherwise>
@@ -351,13 +351,13 @@
                                                     $numberStyle/number:year/@number:style='long'">
                                         <xsl:text>Short Date</xsl:text>
                                     </xsl:when>
-                                    <!-- OASIS XML adapation -->
+                                    <!-- OASIS XML adaptation -->
                                     <xsl:otherwise>
                                         <xsl:text>Short Date</xsl:text>
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </xsl:when>
-                            <!-- OASIS XML adapation -->
+                            <!-- OASIS XML adaptation -->
                             <xsl:otherwise>
                                 <xsl:text>General</xsl:text>
                             </xsl:otherwise>
