@@ -174,7 +174,7 @@ ExtensionDescription::ExtensionDescription(
         Reference<css::ucb::XCommandEnvironment> xFilter = new FileDoesNotExistFilter(xCmdEnv);
         ::ucbhelper::Content descContent(sDescriptionUri, xFilter, xContext);
 
-        //throws an css::uno::Exception if the file is not available
+        //throws a css::uno::Exception if the file is not available
         Reference<css::io::XInputStream> xIn;
         try
         {   //throws com.sun.star.ucb.InteractiveIOException
