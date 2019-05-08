@@ -127,6 +127,7 @@ public:
     bool IsHideRedlines() const { return m_bHideRedlines; }
     void SetHideRedlines(bool const bHideRedlines) { m_bHideRedlines = bHideRedlines; }
 
+    void FinalizeImport();
     virtual ~DocumentRedlineManager() override;
 
 private:
@@ -148,6 +149,8 @@ private:
     /// this flag is necessary for file import because the ViewShell/layout is
     /// created "too late" and the ShowRedlineChanges item is not below "Views"
     bool m_bHideRedlines = false;
+    /// need post-processing, eg. for OOXML import
+    bool m_bFinalizeImport = false;
 };
 
 }
