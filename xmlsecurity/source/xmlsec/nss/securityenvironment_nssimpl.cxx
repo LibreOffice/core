@@ -278,7 +278,7 @@ SecurityEnvironment_NssImpl::getPersonalCertificates()
 {
     sal_Int32 length ;
     X509Certificate_NssImpl* xcert ;
-    std::list< X509Certificate_NssImpl* > certsList ;
+    std::vector< X509Certificate_NssImpl* > certsList ;
 
     updateSlots();
     //firstly, we try to find private keys in slot

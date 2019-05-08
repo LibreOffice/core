@@ -330,7 +330,7 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
 {
     sal_Int32 length ;
     X509Certificate_MSCryptImpl* xcert ;
-    std::list< X509Certificate_MSCryptImpl* > certsList ;
+    std::vector< X509Certificate_MSCryptImpl* > certsList ;
     PCCERT_CONTEXT pCertContext = nullptr;
 
     //firstly, we try to find private keys in given key store.
