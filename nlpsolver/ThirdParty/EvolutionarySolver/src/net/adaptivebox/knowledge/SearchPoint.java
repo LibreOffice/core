@@ -19,9 +19,9 @@
  */
 package net.adaptivebox.knowledge;
 
-import net.adaptivebox.global.*;
-import net.adaptivebox.space.*;
-import net.adaptivebox.encode.*;
+import net.adaptivebox.encode.IEncodeEngine;
+import net.adaptivebox.global.BasicBound;
+import net.adaptivebox.space.BasicPoint;
 
 public class SearchPoint extends BasicPoint implements IEncodeEngine {
   //store the encode information for goodness evaluation
@@ -67,6 +67,5 @@ public class SearchPoint extends BasicPoint implements IEncodeEngine {
   public boolean isFeasible() {
       return encodeInfo[0] == 0; //no constraint violations
   }
-
 
 }

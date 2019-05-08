@@ -26,10 +26,12 @@
 
 package net.adaptivebox.problem;
 
-import net.adaptivebox.global.*;
-import net.adaptivebox.space.*;
-import net.adaptivebox.encode.*;
-import net.adaptivebox.knowledge.*;
+import net.adaptivebox.encode.EvalElement;
+import net.adaptivebox.encode.EvalStruct;
+import net.adaptivebox.global.BasicBound;
+import net.adaptivebox.knowledge.SearchPoint;
+import net.adaptivebox.space.DesignDim;
+import net.adaptivebox.space.DesignSpace;
 
 public abstract class ProblemEncoder {
   //Store the calculated results for the responses
@@ -61,16 +63,12 @@ public abstract class ProblemEncoder {
     designSpace.setElemAt(dd, i);
   }
 
-
-
   //set the default information for evaluation each response
   protected void setDefaultYAt(int i,  double min, double max) {
     EvalElement ee = new EvalElement();
     ee.targetBound = new BasicBound(min, max);
     evalStruct.setElemAt(ee, i);
   }
-
-
 
   //get a fresh point
   public SearchPoint getFreshSearchPoint() {

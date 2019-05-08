@@ -20,7 +20,7 @@
 
 package net.adaptivebox.encode;
 
-import net.adaptivebox.global.*;
+import net.adaptivebox.global.BasicBound;
 
 public class EvalElement {
 

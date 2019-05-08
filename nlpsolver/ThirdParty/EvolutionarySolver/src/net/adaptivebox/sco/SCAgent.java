@@ -33,12 +33,13 @@ package net.adaptivebox.sco;
  * optimization. Genetic and Evolutionary Computation Conference, 2004: 261-262
  */
 
-
-import net.adaptivebox.global.*;
-import net.adaptivebox.space.*;
-import net.adaptivebox.goodness.*;
-import net.adaptivebox.problem.*;
-import net.adaptivebox.knowledge.*;
+import net.adaptivebox.problem.ProblemEncoder;
+import net.adaptivebox.space.DesignSpace;
+import net.adaptivebox.space.ILocationEngine;
+import net.adaptivebox.global.RandomGenerator;
+import net.adaptivebox.goodness.IGoodnessCompareEngine;
+import net.adaptivebox.knowledge.Library;
+import net.adaptivebox.knowledge.SearchPoint;
 
 public class SCAgent {
 

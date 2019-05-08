@@ -31,9 +31,8 @@
 
 package net.adaptivebox.goodness;
 
-import net.adaptivebox.knowledge.*;
-import net.adaptivebox.global.*;
-
+import net.adaptivebox.global.IUpdateCycleEngine;
+import net.adaptivebox.knowledge.Library;
 
 public class ACRComparator implements IGoodnessCompareEngine, IUpdateCycleEngine {
   private final Library socialPool;
