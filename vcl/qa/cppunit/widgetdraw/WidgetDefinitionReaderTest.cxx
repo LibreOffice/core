@@ -58,7 +58,7 @@ void WidgetDefinitionReaderTest::testRead()
         std::vector<std::shared_ptr<vcl::WidgetDefinitionState>> aStates
             = aDefinition.getDefinition(ControlType::Pushbutton, ControlPart::Entire)
                   ->getStates(ControlType::Pushbutton, ControlPart::Entire, eState,
-                              ImplControlValue());
+                              PushButtonValue());
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), aStates.size());
 
