@@ -52,6 +52,24 @@
       "revId": "284e716be6b61faf76f229b95f9f36234c03b52b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_84b75187",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-05-08T17:55:44Z",
+      "side": 1,
+      "message": "I have no idea :-) I just know that display scaling is a problem for hairlines, such that alg spent some time plumbing some special logic for it through the svx stuff.\n\nI\u0027m still fuzzy on how display scaling, logic units, and our various drawing layers interact.",
+      "parentUuid": "3fa0c359_c49479eb",
+      "revId": "284e716be6b61faf76f229b95f9f36234c03b52b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
