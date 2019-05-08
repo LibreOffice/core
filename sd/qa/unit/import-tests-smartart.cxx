@@ -69,6 +69,8 @@ public:
     void testCycleMatrix();
     void testPictureStrip();
     void testInteropGrabBag();
+    void testBackground();
+    void testBackgroundDrawingmlFallback();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -102,6 +104,8 @@ public:
     CPPUNIT_TEST(testCycleMatrix);
     CPPUNIT_TEST(testPictureStrip);
     CPPUNIT_TEST(testInteropGrabBag);
+    CPPUNIT_TEST(testBackground);
+    CPPUNIT_TEST(testBackgroundDrawingmlFallback);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -110,20 +114,20 @@ void SdImportTestSmartArt::testBase()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart1.pptx"), PPTX);
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xShapeGroup->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xShapeGroup->getCount());
 
-    uno::Reference<text::XText> xText0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText0(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xText0->getString());
-    uno::Reference<text::XText> xText1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText1(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("b"), xText1->getString());
-    uno::Reference<text::XText> xText2(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText2(xShapeGroup->getByIndex(3), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("c"), xText2->getString());
-    uno::Reference<text::XText> xText3(xShapeGroup->getByIndex(3), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText3(xShapeGroup->getByIndex(4), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("d"), xText3->getString());
-    uno::Reference<text::XText> xText4(xShapeGroup->getByIndex(4), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText4(xShapeGroup->getByIndex(5), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("e"), xText4->getString());
 
-    uno::Reference<beans::XPropertySet> xShape(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
 
     sal_Int32 nFillColor = 0;
     xShape->getPropertyValue("FillColor") >>= nFillColor;
@@ -135,11 +139,11 @@ void SdImportTestSmartArt::testBase()
     xPropSet->getPropertyValue("ParaAdjust") >>= nParaAdjust;
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(nParaAdjust));
 
-    uno::Reference<drawing::XShape> xShape0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XShape> xShape1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XShape> xShape2(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XShape> xShape3(xShapeGroup->getByIndex(3), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XShape> xShape4(xShapeGroup->getByIndex(4), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape0(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape1(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape2(xShapeGroup->getByIndex(3), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape3(xShapeGroup->getByIndex(4), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape4(xShapeGroup->getByIndex(5), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(xShape0->getPosition().Y,xShape1->getPosition().Y);
     CPPUNIT_ASSERT_EQUAL(xShape2->getPosition().Y,xShape3->getPosition().Y);
     CPPUNIT_ASSERT(xShape2->getPosition().Y > xShape0->getPosition().Y);
@@ -155,9 +159,9 @@ void SdImportTestSmartArt::testChildren()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-children.pptx"), PPTX);
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xShapeGroup->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xShapeGroup->getCount());
 
-    uno::Reference<drawing::XShapes> xShapeGroup0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShapes> xShapeGroup0(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xShapeGroup0->getCount());
     uno::Reference<text::XText> xTextA(xShapeGroup0->getByIndex(0), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xTextA->getString());
@@ -171,7 +175,7 @@ void SdImportTestSmartArt::testChildren()
     uno::Reference<text::XText> xTextC(xChildC->getByIndex(0), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("c"), xTextC->getString());
 
-    uno::Reference<drawing::XShapes> xShapeGroup1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShapes> xShapeGroup1(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xShapeGroup1->getCount());
     uno::Reference<text::XText> xTextX(xShapeGroup1->getByIndex(0), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("x"), xTextX->getString());
@@ -192,7 +196,7 @@ void SdImportTestSmartArt::testText()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-text.pptx"), PPTX);
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XShapes> xShapeGroup2(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShapes> xShapeGroup2(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
 
     uno::Reference<text::XText> xText0(xShapeGroup2->getByIndex(0), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xText0->getString().isEmpty());
@@ -224,10 +228,10 @@ void SdImportTestSmartArt::testDir()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-dir.pptx"), PPTX);
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xShapeGroup->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xShapeGroup->getCount());
 
-    uno::Reference<drawing::XShape> xShape0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XShape> xShape1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape0(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape1(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xShape0->getPosition().X > xShape1->getPosition().X);
 
     xDocShRef->DoClose();
@@ -237,15 +241,15 @@ void SdImportTestSmartArt::testMaxDepth()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-maxdepth.pptx"), PPTX);
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xShapeGroup->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xShapeGroup->getCount());
 
-    uno::Reference<text::XText> xText0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText0(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("first"), xText0->getString());
-    uno::Reference<text::XText> xText1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText1(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("second"), xText1->getString());
 
-    uno::Reference<drawing::XShape> xShape0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XShape> xShape1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape0(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape1(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(xShape0->getPosition().Y , xShape1->getPosition().Y); // Confirms shapes are in same Y axis-level.
 
     xDocShRef->DoClose();
@@ -256,13 +260,13 @@ void SdImportTestSmartArt::testRotation()
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-rotation.pptx"), PPTX);
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
 
-    uno::Reference<beans::XPropertySet> xShape0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape0(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape0->getPropertyValue("RotateAngle").get<sal_Int32>());
 
-    uno::Reference<beans::XPropertySet> xShape1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape1(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(24000), xShape1->getPropertyValue("RotateAngle").get<sal_Int32>());
 
-    uno::Reference<beans::XPropertySet> xShape2(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape2(xShapeGroup->getByIndex(3), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12000), xShape2->getPropertyValue("RotateAngle").get<sal_Int32>());
 
     xDocShRef->DoClose();
@@ -282,18 +286,18 @@ void SdImportTestSmartArt::testChevron()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-chevron.pptx"), PPTX);
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xShapeGroup->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xShapeGroup->getCount());
 
-    uno::Reference<text::XText> xText0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText0(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xText0->getString());
-    uno::Reference<text::XText> xText1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText1(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("b"), xText1->getString());
-    uno::Reference<text::XText> xText2(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText2(xShapeGroup->getByIndex(3), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("c"), xText2->getString());
 
-    uno::Reference<drawing::XShape> xShape0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XShape> xShape1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XShape> xShape2(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape0(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape1(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape2(xShapeGroup->getByIndex(3), uno::UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT(xShape0->getPosition().X < xShape1->getPosition().X && xShape1->getPosition().X < xShape2->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(xShape0->getPosition().Y, xShape1->getPosition().Y);
@@ -356,20 +360,20 @@ void SdImportTestSmartArt::testBaseRtoL()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-rightoleftblockdiagram.pptx"), PPTX);
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xShapeGroup->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xShapeGroup->getCount());
 
-    uno::Reference<text::XText> xText0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText0(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xText0->getString());
-    uno::Reference<text::XText> xText1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText1(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("b"), xText1->getString());
-    uno::Reference<text::XText> xText2(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText2(xShapeGroup->getByIndex(3), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("c"), xText2->getString());
-    uno::Reference<text::XText> xText3(xShapeGroup->getByIndex(3), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText3(xShapeGroup->getByIndex(4), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("d"), xText3->getString());
-    uno::Reference<text::XText> xText4(xShapeGroup->getByIndex(4), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText4(xShapeGroup->getByIndex(5), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("e"), xText4->getString());
 
-    uno::Reference<beans::XPropertySet> xShape(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
 
     sal_Int32 nFillColor = 0;
     xShape->getPropertyValue("FillColor") >>= nFillColor;
@@ -381,11 +385,11 @@ void SdImportTestSmartArt::testBaseRtoL()
     xPropSet->getPropertyValue("ParaAdjust") >>= nParaAdjust;
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(nParaAdjust));
 
-    uno::Reference<drawing::XShape> xShape0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XShape> xShape1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XShape> xShape2(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XShape> xShape3(xShapeGroup->getByIndex(3), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XShape> xShape4(xShapeGroup->getByIndex(4), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape0(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape1(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape2(xShapeGroup->getByIndex(3), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape3(xShapeGroup->getByIndex(4), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape4(xShapeGroup->getByIndex(5), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(xShape0->getPosition().Y,xShape1->getPosition().Y);
     CPPUNIT_ASSERT_EQUAL(xShape2->getPosition().Y,xShape3->getPosition().Y);
     CPPUNIT_ASSERT(xShape2->getPosition().Y > xShape0->getPosition().Y);
@@ -405,9 +409,9 @@ void SdImportTestSmartArt::testVertialBoxList()
                                                  uno::UNO_QUERY_THROW);
     // Without the accompanying fix in place, this test would have failed with
     // 'actual: 0'.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xShapeGroup->getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xShapeGroup->getCount());
 
-    uno::Reference<drawing::XShapes> xFirstChild(xShapeGroup->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xFirstChild(xShapeGroup->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xFirstChild.is());
     uno::Reference<drawing::XShape> xParentText(xFirstChild->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xParentText.is());
@@ -416,7 +420,7 @@ void SdImportTestSmartArt::testVertialBoxList()
     // constraint wanted.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11852), xParentText->getSize().Width);
 
-    uno::Reference<drawing::XShape> xChildText(xShapeGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xChildText(xShapeGroup->getByIndex(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChildText.is());
     // Without the accompanying fix in place, this test would have failed with
     // 'actual: 7361' (and with the fix: 'actual: 16932', i.e. the width of the
@@ -439,9 +443,9 @@ void SdImportTestSmartArt::testVertialBracketList()
         m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/vertical-bracket-list.pptx"), PPTX);
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef),
                                                  uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xShapeGroup->getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xShapeGroup->getCount());
 
-    uno::Reference<drawing::XShapes> xFirstChild(xShapeGroup->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xFirstChild(xShapeGroup->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xFirstChild.is());
     // Without the accompanying fix in place, this test would have failed with
     // 'actual: 2', i.e. one child shape (with its "A" text) was missing.
@@ -456,16 +460,16 @@ void SdImportTestSmartArt::testTableList()
         m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/table-list.pptx"), PPTX);
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShapeGroup.is());
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xShapeGroup->getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xShapeGroup->getCount());
 
-    uno::Reference<text::XText> xParentText(xShapeGroup->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xParentText(xShapeGroup->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xParentText.is());
     CPPUNIT_ASSERT_EQUAL(OUString("Parent"), xParentText->getString());
     uno::Reference<drawing::XShape> xParent(xParentText, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xParent.is());
     int nParentRight = xParent->getPosition().X + xParent->getSize().Width;
 
-    uno::Reference<drawing::XShapes> xChildren(xShapeGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xChildren(xShapeGroup->getByIndex(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChildren.is());
     uno::Reference<text::XText> xChild2Text(xChildren->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChild2Text.is());
@@ -489,13 +493,13 @@ void SdImportTestSmartArt::testAccentProcess()
     uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroup.is());
     // 3 children: first pair, connector, second pair.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xGroup->getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xGroup->getCount());
     uno::Reference<drawing::XShape> xGroupShape(xGroup, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroupShape.is());
 
     // The pair is a parent (shape + text) and a child, so 3 shapes in total.
     // The order is important, first is at the back, last is at the front.
-    uno::Reference<drawing::XShapes> xFirstPair(xGroup->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xFirstPair(xGroup->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xFirstPair.is());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xFirstPair->getCount());
 
@@ -538,7 +542,7 @@ void SdImportTestSmartArt::testAccentProcess()
     CPPUNIT_ASSERT_LESS(nFirstChildTop, nFirstParentTop);
 
     // Make sure that we have an arrow shape between the two pairs.
-    uno::Reference<beans::XPropertySet> xArrow(xGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xArrow(xGroup->getByIndex(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xArrow.is());
     comphelper::SequenceAsHashMap aCustomShapeGeometry(
         xArrow->getPropertyValue("CustomShapeGeometry"));
@@ -554,7 +558,7 @@ void SdImportTestSmartArt::testAccentProcess()
     awt::Size aArrowSize = xArrowShape->getSize();
     CPPUNIT_ASSERT_LESS(aArrowSize.Width, aArrowSize.Height);
 
-    uno::Reference<drawing::XShapes> xSecondPair(xGroup->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xSecondPair(xGroup->getByIndex(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xSecondPair.is());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xSecondPair->getCount());
     uno::Reference<text::XText> xSecondParentText(xSecondPair->getByIndex(1), uno::UNO_QUERY);
@@ -580,10 +584,10 @@ void SdImportTestSmartArt::testContinuousBlockProcess()
         PPTX);
     uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroup.is());
-    // 2 children: background, foreground.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xGroup->getCount());
+    // 3 children: diagram background, background arrow, foreground.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xGroup->getCount());
 
-    uno::Reference<drawing::XShapes> xLinear(xGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xLinear(xGroup->getByIndex(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xLinear.is());
     // 3 children: A, B and C.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xLinear->getCount());
@@ -612,7 +616,7 @@ void SdImportTestSmartArt::testOrgChart()
     CPPUNIT_ASSERT(xGroup.is());
 
     uno::Reference<text::XText> xManager(
-        getChildShape(getChildShape(getChildShape(xGroup, 0), 0), 0), uno::UNO_QUERY);
+        getChildShape(getChildShape(getChildShape(xGroup, 1), 0), 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xManager.is());
     // Without the accompanying fix in place, this test would have failed: this
     // was just "Manager", and the second paragraph was lost.
@@ -637,7 +641,7 @@ void SdImportTestSmartArt::testOrgChart()
     awt::Size aManagerSize = xManagerShape->getSize();
 
     // Make sure that the manager has 2 employees.
-    uno::Reference<drawing::XShapes> xEmployees(getChildShape(getChildShape(xGroup, 0), 2),
+    uno::Reference<drawing::XShapes> xEmployees(getChildShape(getChildShape(xGroup, 1), 2),
                                                 uno::UNO_QUERY);
     CPPUNIT_ASSERT(xEmployees.is());
     // 4 children: connector, 1st employee, connector, 2nd employee.
@@ -645,7 +649,7 @@ void SdImportTestSmartArt::testOrgChart()
 
     uno::Reference<text::XText> xEmployee(
         getChildShape(
-            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 0), 2), 1), 0), 0),
+            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 1), 2), 1), 0), 0),
         uno::UNO_QUERY);
     CPPUNIT_ASSERT(xEmployee.is());
     CPPUNIT_ASSERT_EQUAL(OUString("Employee"), xEmployee->getString());
@@ -667,7 +671,7 @@ void SdImportTestSmartArt::testOrgChart()
     // the second employee was below the first one.
     uno::Reference<text::XText> xEmployee2(
         getChildShape(
-            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 0), 2), 3), 0), 0),
+            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 1), 2), 3), 0), 0),
         uno::UNO_QUERY);
     CPPUNIT_ASSERT(xEmployee2.is());
     CPPUNIT_ASSERT_EQUAL(OUString("Employee2"), xEmployee2->getString());
@@ -682,7 +686,7 @@ void SdImportTestSmartArt::testOrgChart()
     // Make sure that assistant is above employees.
     uno::Reference<text::XText> xAssistant(
         getChildShape(
-            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 0), 1), 1), 0), 0),
+            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 1), 1), 1), 0), 0),
         uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Assistant"), xAssistant->getString());
 
@@ -696,7 +700,7 @@ void SdImportTestSmartArt::testOrgChart()
 
     // Make sure the connector of the assistant is above the shape.
     uno::Reference<drawing::XShape> xAssistantConnector(
-        getChildShape(getChildShape(getChildShape(xGroup, 0), 1), 0), uno::UNO_QUERY);
+        getChildShape(getChildShape(getChildShape(xGroup, 1), 1), 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xAssistantConnector.is());
     awt::Point aAssistantConnectorPos = xAssistantConnector->getPosition();
     // This failed, the vertical positions of the connector and the shape of
@@ -705,7 +709,7 @@ void SdImportTestSmartArt::testOrgChart()
 
     // Make sure the height of xManager and xManager2 is the same.
     uno::Reference<text::XText> xManager2(
-        getChildShape(getChildShape(getChildShape(xGroup, 1), 0), 0), uno::UNO_QUERY);
+        getChildShape(getChildShape(getChildShape(xGroup, 2), 0), 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xManager2.is());
     CPPUNIT_ASSERT_EQUAL(OUString("Manager2"), xManager2->getString());
 
@@ -737,14 +741,14 @@ void SdImportTestSmartArt::testCycleMatrix()
 
     // Without the accompanying fix in place, this test would have failed: the height was 12162,
     // which is not the mm100 equivalent of the 4064000 EMU in the input file.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11287), xGroup->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11288), xGroup->getSize().Height);
 
-    uno::Reference<text::XText> xA1(getChildShape(getChildShape(xGroup, 1), 0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xA1(getChildShape(getChildShape(xGroup, 2), 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xA1.is());
     CPPUNIT_ASSERT_EQUAL(OUString("A1"), xA1->getString());
 
     // Test fill color of B1, should be orange.
-    uno::Reference<text::XText> xB1(getChildShape(getChildShape(xGroup, 1), 1), uno::UNO_QUERY);
+    uno::Reference<text::XText> xB1(getChildShape(getChildShape(xGroup, 2), 1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xB1.is());
     CPPUNIT_ASSERT_EQUAL(OUString("B1"), xB1->getString());
 
@@ -758,7 +762,7 @@ void SdImportTestSmartArt::testCycleMatrix()
 
     // Without the accompanying fix in place, this test would have failed: the
     // content of the "A2" shape was lost.
-    uno::Reference<text::XText> xA2(getChildShape(getChildShape(getChildShape(xGroup, 0), 0), 1),
+    uno::Reference<text::XText> xA2(getChildShape(getChildShape(getChildShape(xGroup, 1), 0), 1),
                                     uno::UNO_QUERY);
     CPPUNIT_ASSERT(xA2.is());
     CPPUNIT_ASSERT_EQUAL(OUString("A2"), xA2->getString());
@@ -770,7 +774,7 @@ void SdImportTestSmartArt::testCycleMatrix()
     uno::Reference<drawing::XShape> xA2Shape(xA2, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xA2Shape.is());
 
-    uno::Reference<text::XText> xB2(getChildShape(getChildShape(getChildShape(xGroup, 0), 1), 1),
+    uno::Reference<text::XText> xB2(getChildShape(getChildShape(getChildShape(xGroup, 1), 1), 1),
                                     uno::UNO_QUERY);
     CPPUNIT_ASSERT(xB2.is());
     CPPUNIT_ASSERT_EQUAL(OUString("B2"), xB2->getString());
@@ -784,7 +788,7 @@ void SdImportTestSmartArt::testCycleMatrix()
     xB2Props->getPropertyValue("LineColor") >>= nLineColor;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xf79646), nLineColor);
 
-    uno::Reference<text::XText> xC2(getChildShape(getChildShape(getChildShape(xGroup, 0), 2), 1),
+    uno::Reference<text::XText> xC2(getChildShape(getChildShape(getChildShape(xGroup, 1), 2), 1),
                                     uno::UNO_QUERY);
     CPPUNIT_ASSERT(xC2.is());
     // Without the accompanying fix in place, this test would have failed, i.e. the order of the
@@ -793,7 +797,7 @@ void SdImportTestSmartArt::testCycleMatrix()
     uno::Reference<drawing::XShape> xC2Shape(xC2, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xC2Shape.is());
 
-    uno::Reference<text::XText> xD2(getChildShape(getChildShape(getChildShape(xGroup, 0), 3), 1),
+    uno::Reference<text::XText> xD2(getChildShape(getChildShape(getChildShape(xGroup, 1), 3), 1),
                                     uno::UNO_QUERY);
     CPPUNIT_ASSERT(xD2.is());
     CPPUNIT_ASSERT_EQUAL(OUString("D2"), xD2->getString());
@@ -826,7 +830,7 @@ void SdImportTestSmartArt::testPictureStrip()
     uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroup.is());
 
-    uno::Reference<beans::XPropertySet> xFirstImage(getChildShape(getChildShape(xGroup, 0), 1),
+    uno::Reference<beans::XPropertySet> xFirstImage(getChildShape(getChildShape(xGroup, 1), 1),
                                                     uno::UNO_QUERY);
     CPPUNIT_ASSERT(xFirstImage.is());
     drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
@@ -839,7 +843,7 @@ void SdImportTestSmartArt::testPictureStrip()
     xFirstImage->getPropertyValue("FillBitmap") >>= xGraphic;
     Graphic aFirstGraphic(xGraphic);
 
-    uno::Reference<beans::XPropertySet> xSecondImage(getChildShape(getChildShape(xGroup, 1), 1),
+    uno::Reference<beans::XPropertySet> xSecondImage(getChildShape(getChildShape(xGroup, 2), 1),
                                                      uno::UNO_QUERY);
     CPPUNIT_ASSERT(xSecondImage.is());
     eFillStyle = drawing::FillStyle_NONE;
@@ -857,7 +861,7 @@ void SdImportTestSmartArt::testPictureStrip()
     CPPUNIT_ASSERT(xFirstImage.is());
     uno::Reference<drawing::XShape> xSecondImageShape(xSecondImage, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xSecondImage.is());
-    uno::Reference<drawing::XShape> xThirdImageShape(getChildShape(getChildShape(xGroup, 2), 1),
+    uno::Reference<drawing::XShape> xThirdImageShape(getChildShape(getChildShape(xGroup, 3), 1),
                                                      uno::UNO_QUERY);
     CPPUNIT_ASSERT(xThirdImageShape.is());
     // Without the accompanying fix in place, this test would have failed: the first and the second
@@ -874,11 +878,12 @@ void SdImportTestSmartArt::testPictureStrip()
     CPPUNIT_ASSERT(xTitle.is());
     // Without the accompanying fix in place, this test would have failed with 'Expected greater
     // than: 2873; Actual  : 2320', i.e. the title shape and the diagram overlapped.
+    uno::Reference<drawing::XShape> xFirstPair = getChildShape(xGroup, 1);
     CPPUNIT_ASSERT_GREATER(xTitle->getPosition().Y + xTitle->getSize().Height,
-                           xGroup->getPosition().Y);
+                           xFirstPair->getPosition().Y);
 
     // Make sure that left margin is 60% of width (if you count width in points and margin in mms).
-    uno::Reference<beans::XPropertySet> xFirstText(getChildShape(getChildShape(xGroup, 0), 0),
+    uno::Reference<beans::XPropertySet> xFirstText(getChildShape(getChildShape(xGroup, 1), 0),
                                                    uno::UNO_QUERY);
     CPPUNIT_ASSERT(xFirstText.is());
     sal_Int32 nTextLeftDistance = 0;
@@ -892,7 +897,6 @@ void SdImportTestSmartArt::testPictureStrip()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(nWidth * fFactor), nTextLeftDistance);
 
     // Make sure that aspect ratio is not ignored, i.e. width is not larger than height 3 times.
-    uno::Reference<drawing::XShape> xFirstPair = getChildShape(xGroup, 0);
     awt::Size aFirstPairSize = xFirstPair->getSize();
     // Without the accompanying fix in place, this test would have failed: bad width was 16932, good
     // width is 12540, but let's accept 12541 as well.
@@ -917,6 +921,78 @@ void SdImportTestSmartArt::testInteropGrabBag()
     CPPUNIT_ASSERT(aGrabBag.find("OOXStyle") != aGrabBag.end());
     CPPUNIT_ASSERT(aGrabBag.find("OOXColor") != aGrabBag.end());
     CPPUNIT_ASSERT(aGrabBag.find("OOXDrawing") != aGrabBag.end());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testBackground()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-background.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+
+    // background should fill whole diagram
+    uno::Reference<drawing::XShape> xShapeGroup(xGroup, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(xShape->getPosition().X, xShapeGroup->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(xShape->getPosition().Y, xShapeGroup->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(xShape->getSize().Width, xShapeGroup->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(xShape->getSize().Height, xShapeGroup->getSize().Height);
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY_THROW);
+    drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
+    xPropertySet->getPropertyValue("FillStyle") >>= eFillStyle;
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, eFillStyle);
+
+    sal_Int32 nFillColor = 0;
+    xPropertySet->getPropertyValue("FillColor") >>= nFillColor;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x339933), nFillColor);
+
+    bool bMoveProtect = false;
+    xPropertySet->getPropertyValue("MoveProtect") >>= bMoveProtect;
+    CPPUNIT_ASSERT_EQUAL(true, bMoveProtect);
+
+    bool bSizeProtect = false;
+    xPropertySet->getPropertyValue("SizeProtect") >>= bSizeProtect;
+    CPPUNIT_ASSERT_EQUAL(true, bSizeProtect);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testBackgroundDrawingmlFallback()
+{
+    // same as testBackground, but test file contains drawingML fallback
+
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-background-drawingml-fallback.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+
+    // background should fill whole diagram
+    uno::Reference<drawing::XShape> xShapeGroup(xGroup, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(xShape->getPosition().X, xShapeGroup->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(xShape->getPosition().Y, xShapeGroup->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(xShape->getSize().Width, xShapeGroup->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(xShape->getSize().Height, xShapeGroup->getSize().Height);
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY_THROW);
+    drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
+    xPropertySet->getPropertyValue("FillStyle") >>= eFillStyle;
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, eFillStyle);
+
+    sal_Int32 nFillColor = 0;
+    xPropertySet->getPropertyValue("FillColor") >>= nFillColor;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x339933), nFillColor);
+
+    bool bMoveProtect = false;
+    xPropertySet->getPropertyValue("MoveProtect") >>= bMoveProtect;
+    CPPUNIT_ASSERT_EQUAL(true, bMoveProtect);
+
+    bool bSizeProtect = false;
+    xPropertySet->getPropertyValue("SizeProtect") >>= bSizeProtect;
+    CPPUNIT_ASSERT_EQUAL(true, bSizeProtect);
 
     xDocShRef->DoClose();
 }
