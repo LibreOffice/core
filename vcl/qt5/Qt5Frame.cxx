@@ -1083,12 +1083,26 @@ void Qt5Frame::SetScreenNumber(unsigned int nScreen)
             QList<QScreen*> screens = QApplication::screens();
             if (static_cast<int>(nScreen) < screens.size())
             {
-                QWidget* const pWidget = m_pTopLevel ? m_pTopLevel : m_pQWidget;
-                pWindow->setScreen(QApplication::screens()[nScreen]);
+                bool bSpanAllScreens = (nScreen == static_cast<unsigned int>(-1));
+                QRect screenGeo;
+
+                if (!bSpanAllScreens)
+                {
+                    screenGeo = QApplication::desktop()->screenGeometry(nScreen);
+                    pWindow->setScreen(QApplication::screens()[nScreen]);
+                }
+                else // special case: fullscreen over all available screens
+                {
+                    // left-most screen
+                    int nLeftScreen = QApplication::desktop()->screenNumber(QPoint(0, 0));
+                    // entire virtual desktop
+                    screenGeo = QApplication::screens()[nLeftScreen]->availableVirtualGeometry();
+                    pWindow->setScreen(QApplication::screens()[nLeftScreen]);
+                }
 
                 // setScreen by itself has no effect, explicitly move the widget to
                 // the new screen
-                QRect screenGeo = QApplication::desktop()->screenGeometry(nScreen);
+                QWidget* const pWidget = m_pTopLevel ? m_pTopLevel : m_pQWidget;
                 pWidget->move(screenGeo.topLeft());
             }
             else
