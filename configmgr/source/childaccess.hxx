@@ -26,10 +26,8 @@
 #include <vector>
 
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
@@ -37,7 +35,6 @@
 #include "access.hxx"
 
 namespace com { namespace sun { namespace star { namespace uno {
-    class Any;
     class Type;
     class XInterface;
 } } } }

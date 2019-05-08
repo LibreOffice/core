@@ -43,6 +43,9 @@ blacklist:
     include/sfx2/toolbarids.hxx:
     # needed for enum definition
     - sal/types.h
+    include/xmlreader/span.hxx:
+    # Don't propose hxx -> h change in URE libs
+    - rtl/string.hxx
     include/cppuhelper/compbase1.hxx:
     # Needed for template functions
     - cppuhelper/implbase1.hxx

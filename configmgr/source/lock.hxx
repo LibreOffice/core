@@ -21,8 +21,9 @@
 #define INCLUDED_CONFIGMGR_SOURCE_LOCK_HXX
 
 #include <sal/config.h>
-#include <osl/mutex.hxx>
 #include <memory>
+
+namespace osl { class Mutex; }
 
 namespace configmgr {
 

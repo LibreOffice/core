@@ -24,14 +24,10 @@
 #include <set>
 
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
-#include <rtl/string.h>
 #include <rtl/string.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <xmlreader/span.hxx>

@@ -20,13 +20,10 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <set>
 
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <comphelper/sequence.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
@@ -42,7 +39,6 @@
 #include "propertynode.hxx"
 #include "type.hxx"
 #include "valueparser.hxx"
-#include "xmldata.hxx"
 
 namespace configmgr {
 

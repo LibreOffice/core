@@ -37,8 +37,6 @@
 
 namespace configmgr {
 
-class Node;
-
 struct Data {
     enum { NO_LAYER = INT_MAX };
 

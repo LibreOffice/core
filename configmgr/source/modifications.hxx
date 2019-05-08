@@ -24,6 +24,8 @@
 
 #include <vector>
 
+#include <rtl/ustring.hxx>
+
 #include <boost/unordered_map.hpp>
 #include <config_dconf.h>
 

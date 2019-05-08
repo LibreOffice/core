@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <set>
 #include <vector>
 
 #include <rtl/ref.hxx>
@@ -31,11 +30,10 @@
 #include <xmlreader/pad.hxx>
 #include <xmlreader/xmlreader.hxx>
 
+#include <com/sun/star/uno/Any.hxx>
+
 #include "type.hxx"
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class Any;
-} } } }
 namespace xmlreader { struct Span; }
 
 namespace configmgr {

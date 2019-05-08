@@ -20,12 +20,9 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <map>
 #include <set>
 
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 

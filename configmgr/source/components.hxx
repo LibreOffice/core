@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <map>
 #include <memory>
 #include <set>
 
@@ -32,7 +31,6 @@
 
 #include "additions.hxx"
 #include "data.hxx"
-#include "modifications.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
@@ -48,6 +46,7 @@ class Broadcaster;
 class Node;
 class Partial;
 class RootAccess;
+class Modifications;
 
 class Components {
 public:

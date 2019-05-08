@@ -1,0 +1,15 @@
+---
+assumeFilename: configmgr/source/access.cxx
+blacklist:
+    configmgr/source/nodemap.hxx:
+    # Needed for direct member access
+    - node.hxx
+    configmgr/source/type.hxx:
+    # Needed for css shortcut
+    - sal/types.h
+    configmgr/source/access.cxx:
+    # Safer to keep for use in cppu:UnoType template
+    - com/sun/star/uno/XWeak.hpp
+    configmgr/source/dconf.cxx:
+    # Generic wrapper for dconf
+    - dconf/dconf.h

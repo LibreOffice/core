@@ -21,9 +21,7 @@
 
 #include <cassert>
 
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
