@@ -95,7 +95,7 @@ class BackendImpl : public ImplBaseT
     class PackageImpl : public ::dp_registry::backend::Package
     {
         BackendImpl * getMyBackend() const;
-        /** constains the old tooltip description for the Extension Manager GUI in OOo v.2.x
+        /** contains the old tooltip description for the Extension Manager GUI in OOo v.2.x
             We keep it for backward compatibility.
         */
         OUString m_oldDescription;
