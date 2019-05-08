@@ -24,9 +24,10 @@
  */
 package net.adaptivebox.knowledge;
 
-import net.adaptivebox.global.*;
-import net.adaptivebox.goodness.*;
-import net.adaptivebox.problem.*;
+import net.adaptivebox.global.BasicBound;
+import net.adaptivebox.global.RandomGenerator;
+import net.adaptivebox.goodness.IGoodnessCompareEngine;
+import net.adaptivebox.problem.ProblemEncoder;
 
 public class Library {
   private final SearchPoint[] libPoints;

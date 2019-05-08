@@ -28,11 +28,13 @@
 
 package net.adaptivebox.deps.behavior;
 
-import net.adaptivebox.goodness.*;
-import net.adaptivebox.global.*;
-import net.adaptivebox.knowledge.*;
-import net.adaptivebox.problem.*;
-import net.adaptivebox.space.*;
+import net.adaptivebox.global.RandomGenerator;
+import net.adaptivebox.goodness.IGoodnessCompareEngine;
+import net.adaptivebox.knowledge.ILibEngine;
+import net.adaptivebox.knowledge.Library;
+import net.adaptivebox.knowledge.SearchPoint;
+import net.adaptivebox.problem.ProblemEncoder;
+import net.adaptivebox.space.BasicPoint;
 
 public class DEGTBehavior extends AbsGTBehavior implements ILibEngine {
   private static final int DVNum = 2;  //Number of differential vectors, normally be 1 or 2

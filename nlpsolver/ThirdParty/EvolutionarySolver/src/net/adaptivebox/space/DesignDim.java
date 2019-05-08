@@ -20,16 +20,14 @@
  */
 
 package net.adaptivebox.space;
-import net.adaptivebox.global.*;
+
+import net.adaptivebox.global.BasicBound;
 
 public class DesignDim {
   // To discrete space with the given step. For example, for an integer variable,
   // The grain value can be set as 1.
   public double grain = 0;
   public BasicBound paramBound = new BasicBound(); //the range of a parameter
-
-
-
 
   public boolean isDiscrete() {
     return grain!=0;

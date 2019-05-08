@@ -17,9 +17,10 @@
  */
 package net.adaptivebox.deps.behavior;
 
-import net.adaptivebox.goodness.*;
-import net.adaptivebox.knowledge.*;
-import net.adaptivebox.problem.*;
+import net.adaptivebox.goodness.IGoodnessCompareEngine;
+import net.adaptivebox.knowledge.Library;
+import net.adaptivebox.knowledge.SearchPoint;
+import net.adaptivebox.problem.ProblemEncoder;
 
 abstract public class AbsGTBehavior {
   //The referred social library
