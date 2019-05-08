@@ -1324,7 +1324,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                                                                aOldTree.get<std::string>("rectangle", "").empty();
                                                        });
 
-                        // we found a invalidate-all window callback
+                        // we found an invalidate-all window callback
                         if (invAllExist)
                         {
                             SAL_INFO("lok.dialog", "Skipping queue [" << type << "]: [" << payload << "] since whole window needs to be invalidated.");
@@ -2010,7 +2010,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         // add interaction handler too
         if (gImpl)
         {
-            // gImpl does not have to exist when running from a unit test
+            // gImpl does not have to exist when running from an unit test
             rtl::Reference<LOKInteractionHandler> const pInteraction(
                     new LOKInteractionHandler("saveas", gImpl, pDocument));
             uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction.get());
