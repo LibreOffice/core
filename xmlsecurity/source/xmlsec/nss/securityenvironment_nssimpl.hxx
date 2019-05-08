@@ -35,7 +35,7 @@
 
 #include <keythi.h>
 #include <certt.h>
-#include <list>
+#include <vector>
 
 #include <xmlsec-wrapper.h>
 
@@ -50,14 +50,14 @@ class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper<
 {
 private:
 
-    std::list< PK11SlotInfo* > m_Slots;
+    std::vector< PK11SlotInfo* > m_Slots;
     /// The last used certificate which has the private key for signing.
     css::uno::Reference<css::security::XCertificate> m_xSigningCertificate;
 
     osl::Mutex m_mutex;
 
         CERTCertDBHandle*                   m_pHandler ;
-        std::list< PK11SymKey* >            m_tSymKeyList ;
+        std::vector< PK11SymKey* >          m_tSymKeyList ;
 
     public:
         SecurityEnvironment_NssImpl();

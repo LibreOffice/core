@@ -41,7 +41,7 @@
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include <list>
+#include <vector>
 #include <xmlsec-wrapper.h>
 
 #include <sal/types.h>
