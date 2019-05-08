@@ -723,7 +723,9 @@ void Qt5Frame::SetInputContext(SalInputContext* pContext)
 
 void Qt5Frame::EndExtTextInput(EndExtTextInputFlags /*nFlags*/)
 {
-    // TODO fwd to IM handler
+    Qt5Widget* pQt5Widget = static_cast<Qt5Widget*>(m_pQWidget);
+    if (pQt5Widget)
+        pQt5Widget->endExtTextInput();
 }
 
 OUString Qt5Frame::GetKeyName(sal_uInt16 nKeyCode)

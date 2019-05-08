@@ -433,7 +433,11 @@ void Qt5Widget::keyReleaseEvent(QKeyEvent* pEvent)
 
 void Qt5Widget::focusInEvent(QFocusEvent*) { m_rFrame.CallCallback(SalEvent::GetFocus, nullptr); }
 
-void Qt5Widget::focusOutEvent(QFocusEvent*) { m_rFrame.CallCallback(SalEvent::LoseFocus, nullptr); }
+void Qt5Widget::focusOutEvent(QFocusEvent*)
+{
+    endExtTextInput();
+    m_rFrame.CallCallback(SalEvent::LoseFocus, nullptr);
+}
 
 void Qt5Widget::showTooltip(const OUString& rTooltip)
 {
@@ -444,6 +448,7 @@ void Qt5Widget::showTooltip(const OUString& rTooltip)
 Qt5Widget::Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
     : QWidget(Q_NULLPTR, f)
     , m_rFrame(rFrame)
+    , m_bNonEmptyIMPreeditSeen(false)
 {
     create();
     setMouseTracking(true);
@@ -475,13 +480,14 @@ void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
     aInputEvent.mpTextAttr = nullptr;
     aInputEvent.mnCursorFlags = 0;
 
+    vcl::DeletionListener aDel(&m_rFrame);
+
     if (!pEvent->commitString().isNull())
     {
-        vcl::DeletionListener aDel(&m_rFrame);
         aInputEvent.maText = toOUString(pEvent->commitString());
         aInputEvent.mnCursorPos = aInputEvent.maText.getLength();
-        m_rFrame.CallCallback(SalEvent::ExtTextInput, &aInputEvent);
-        pEvent->accept();
+        if (!aDel.isDeleted() && m_bNonEmptyIMPreeditSeen)
+            m_rFrame.CallCallback(SalEvent::ExtTextInput, &aInputEvent);
         if (!aDel.isDeleted())
             m_rFrame.CallCallback(SalEvent::EndExtTextInput, nullptr);
     }
@@ -531,9 +537,15 @@ void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
             }
         }
 
-        m_rFrame.CallCallback(SalEvent::ExtTextInput, &aInputEvent);
-        pEvent->accept();
+        if (m_bNonEmptyIMPreeditSeen || !pEvent->preeditString().isEmpty())
+        {
+            if (!aDel.isDeleted())
+                m_rFrame.CallCallback(SalEvent::ExtTextInput, &aInputEvent);
+            m_bNonEmptyIMPreeditSeen = !pEvent->preeditString().isEmpty();
+        }
     }
+
+    pEvent->accept();
 }
 
 QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
@@ -549,6 +561,15 @@ QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
         }
         default:
             return QWidget::inputMethodQuery(property);
+    }
+}
+
+void Qt5Widget::endExtTextInput()
+{
+    if (m_bNonEmptyIMPreeditSeen)
+    {
+        m_rFrame.CallCallback(SalEvent::EndExtTextInput, nullptr);
+        m_bNonEmptyIMPreeditSeen = false;
     }
 }
 
