@@ -95,9 +95,9 @@ namespace dbaui
 
         /** HandleKeyInput tries to handle the KeyEvent. Movement or deletion
             @param  rEvt
-                The KEyEvent
+                The KeyEvent
             @return
-                <TRUE/> when the table could handle the keyevent.
+                <TRUE/> when the table could handle the KeyEvent.
         */
         bool            HandleKeyInput( const KeyEvent& rEvt );
 
