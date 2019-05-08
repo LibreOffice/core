@@ -855,7 +855,7 @@ bool SwTabFrame::RemoveFollowFlowLine()
     if (pFollowFlowLine->IsDeleteForbidden())
     {
         SAL_WARN("sw.layout", "Cannot remove in-use Follow Flow Line");
-        return true;
+        return false;
     }
 
     // Move content
