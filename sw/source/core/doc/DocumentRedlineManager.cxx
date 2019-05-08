@@ -1949,6 +1949,20 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         }
                     }
                 }
+                else if ( nsRedlineType_t::REDLINE_DELETE == pNewRedl->GetType() && pStt->nContent == 0 )
+                {
+                    // tdf#118699 at deletion of numbered list items,
+                    // keep missing numbering of followed list item (actual text content)
+                    // by removing the numbering of the deleted list items
+                    SwTextNode* pDelNode = pStt->nNode.GetNode().GetTextNode();
+                    SwTextNode* pTextNode = pEnd->nNode.GetNode().GetTextNode();
+                    if (pDelNode->GetNumRule() && !pTextNode->GetNumRule())
+                    {
+                        const SwPaM aPam( *pStt, *pEnd );
+                        m_rDoc.DelNumRules( aPam );
+                    }
+                }
+
                 bool const ret = mpRedlineTable->Insert( pNewRedl );
                 assert(ret || !pNewRedl);
                 if (ret && !pNewRedl)
