@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_O3TL_TEMPORARY_HXX
+#define INCLUDED_O3TL_TEMPORARY_HXX
+
 #include <sal/config.h>
 
 namespace o3tl
@@ -18,5 +21,7 @@ namespace o3tl
 template <typename T> constexpr T& temporary(T&& x) { return x; }
 template <typename T> constexpr T& temporary(T&) = delete;
 }
+
+#endif /* INCLUDED_O3TL_TEMPORARY_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
