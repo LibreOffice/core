@@ -127,7 +127,8 @@
   <implementation name="XMLImpressSettingsExportOOO">
     <service name="com.sun.star.comp.Impress.XMLSettingsExporter"/>
   </implementation>
-  <implementation name="XMLImpressSettingsExportOasis">
+  <implementation name="XMLImpressSettingsExportOasis"
+    constructor="com_sun_star_comp_Impress_XMLOasisSettingsExporter_get_implementation">
     <service name="com.sun.star.comp.Impress.XMLOasisSettingsExporter"/>
   </implementation>
   <implementation name="XMLImpressSettingsImportOasis">
