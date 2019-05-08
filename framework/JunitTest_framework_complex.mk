@@ -34,7 +34,6 @@ $(eval $(call gb_JunitTest_add_sourcefiles,framework_complex,\
     framework/qa/complex/loadAllDocuments/StatusIndicator \
     framework/qa/complex/broken_document/TestDocument \
     framework/qa/complex/broken_document/LoadDocument \
-    framework/qa/complex/XUserInputInterception/EventTest \
     framework/qa/complex/framework/autosave/AutoSave \
     framework/qa/complex/framework/autosave/Protocol \
     framework/qa/complex/framework/autosave/ConfigHelper \
@@ -69,7 +68,6 @@ $(eval $(call gb_JunitTest_add_classes,framework_complex,\
 # these were disabled in the old build system too, please check
 # carefully before reenabling
 #	complex.ModuleManager.CheckXModuleManager \
-    complex.XUserInputInterception.EventTest \
     complex.accelerators.AcceleratorsConfigurationTest \
     complex.api_internal.CheckAPI \
     complex.broken_document.LoadDocument \
