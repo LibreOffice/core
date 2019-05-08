@@ -403,7 +403,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
         // we're not in the main thread. This is bad, as we want to raise windows here,
         // and VCL does not like windows to be opened in non-main threads (at least on Win32).
         // Okay, do this async. No problem with this, as XDispatch::dispatch is defined to be
-        // a one-way method.
+        // an one-way method.
 
         // save the args
         DispatchArgs aDispatchArgs;
@@ -841,7 +841,7 @@ void SbaGridControl::SetRowHeight()
         }
         catch(Exception&)
         {
-            OSL_FAIL("setPropertyValue: PROPERTY_ROW_HEIGHT throws a exception");
+            OSL_FAIL("setPropertyValue: PROPERTY_ROW_HEIGHT throws an exception");
         }
     }
 }
@@ -1045,7 +1045,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 
         long nCorrectRowCount = GetRowCount();
         if (GetOptions() & DbGridControlOptions::Insert)
-            --nCorrectRowCount; // there is a empty row for inserting records
+            --nCorrectRowCount; // there is an empty row for inserting records
         if (bCurrentRowVirtual)
             --nCorrectRowCount;
 
@@ -1253,7 +1253,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
 
         long nCorrectRowCount = GetRowCount();
         if (GetOptions() & DbGridControlOptions::Insert)
-            --nCorrectRowCount; // there is a empty row for inserting records
+            --nCorrectRowCount; // there is an empty row for inserting records
         if (IsCurrentAppending())
             --nCorrectRowCount; // the current data record doesn't really exist, we are appending a new one
 
@@ -1273,7 +1273,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
         CellControllerRef xCurrentController = Controller();
         if (xCurrentController.is() && xCurrentController->IsModified() && ((nRow != GetCurRow()) || (nCol != GetCurColumnId())))
             // the current controller is modified and the user wants to drop in another cell -> no chance
-            // (when leaving the modified cell a error may occur - this is deadly while dragging)
+            // (when leaving the modified cell an error may occur - this is deadly while dragging)
             break;
 
         Reference< XPropertySet >  xField = getField(GetModelColumnPos(nCol));
@@ -1346,7 +1346,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
 
         long nCorrectRowCount = GetRowCount();
         if (GetOptions() & DbGridControlOptions::Insert)
-            --nCorrectRowCount; // there is a empty row for inserting records
+            --nCorrectRowCount; // there is an empty row for inserting records
         if (IsCurrentAppending())
             --nCorrectRowCount; // the current data record doesn't really exist, we are appending a new one
 
