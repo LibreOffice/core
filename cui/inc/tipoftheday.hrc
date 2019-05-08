@@ -222,7 +222,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Need an unnumbered item in a list? Use 'Insert Unnumbered Entry' in the Bullets and Numbering toolbar."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to sort a pivot table? Click on drop-list's arrow in the row/col header and select sort method: ascending, descending, or custom."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Do not insert manual breaks to separate two paragraphs. Rather change Indents & Spacing > Spacing > Below paragraph at the style/paragraph properties."), "", "tipoftheday_w.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Your documents don’t open at the position where you have saved it? Check Tools > Options > %PRODUCTNAME > User Data > First/Last name is not empty."), "", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Your documents don’t open at the position where you have saved them? Check Tools > Options > %PRODUCTNAME > User Data > First/Last name is not empty."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "With the Navigator you can select & move up/down headings and the text below the heading, in the Navigator and in the document."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME doesn't calculate from left to right but respects the order Parentheses > Exponents > Multiplication > Division > Addition > Subtraction."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can change the default function in the status bar: right click on the area."), "", "tipoftheday_c.png"},
