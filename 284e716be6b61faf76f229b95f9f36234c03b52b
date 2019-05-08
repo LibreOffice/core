@@ -70,6 +70,24 @@
       "revId": "284e716be6b61faf76f229b95f9f36234c03b52b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_64aec52f",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-05-08T18:05:56Z",
+      "side": 1,
+      "message": "OK; I hope that having this conditional on the snapping setting is safe; if we find out that\u0027s not the case, let\u0027s revisit the topic.",
+      "parentUuid": "3fa0c359_84b75187",
+      "revId": "284e716be6b61faf76f229b95f9f36234c03b52b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
