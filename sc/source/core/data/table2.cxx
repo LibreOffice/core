@@ -1597,7 +1597,7 @@ ScFormulaCell* ScTable::GetFormulaCell( SCCOL nCol, SCROW nRow )
 
 std::unique_ptr<ScPostIt> ScTable::ReleaseNote( SCCOL nCol, SCROW nRow )
 {
-    if (!ValidCol(nCol))
+    if (!ValidCol(nCol) || nCol >= GetAllocatedColumnsCount())
         return nullptr;
 
     return aCol[nCol].ReleaseNote(nRow);
