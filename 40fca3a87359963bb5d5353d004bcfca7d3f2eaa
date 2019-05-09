@@ -22,6 +22,30 @@
       "revId": "40fca3a87359963bb5d5353d004bcfca7d3f2eaa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_3a7694da",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-05-09T19:00:30Z",
+      "side": 1,
+      "message": "We have to update every major release. Not a big deal and allows to change the accompanying image.",
+      "parentUuid": "3fa0c359_fafcac3f",
+      "range": {
+        "startLine": 264,
+        "startChar": 80,
+        "endLine": 264,
+        "endChar": 83
+      },
+      "revId": "40fca3a87359963bb5d5353d004bcfca7d3f2eaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
