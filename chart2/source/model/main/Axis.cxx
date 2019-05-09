@@ -333,7 +333,6 @@ Axis::Axis() :
 }
 
 Axis::Axis( const Axis & rOther ) :
-        MutexContainer(),
         impl::Axis_Base(rOther),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),

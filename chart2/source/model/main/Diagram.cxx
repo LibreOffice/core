@@ -294,7 +294,6 @@ Diagram::Diagram( uno::Reference< uno::XComponentContext > const & xContext ) :
 }
 
 Diagram::Diagram( const Diagram & rOther ) :
-        MutexContainer(),
         impl::Diagram_Base(rOther),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xContext( rOther.m_xContext ),

@@ -32,7 +32,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 
 WrappedPropertySet::WrappedPropertySet()
-                    : MutexContainer()
 {
 }
 WrappedPropertySet::~WrappedPropertySet()

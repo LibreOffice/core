@@ -183,7 +183,6 @@ Legend::Legend() :
 }
 
 Legend::Legend( const Legend & rOther ) :
-        MutexContainer(),
         impl::Legend_Base(rOther),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())

@@ -112,7 +112,6 @@ Wall::Wall() :
 {}
 
 Wall::Wall( const Wall & rOther ) :
-        MutexContainer(),
         impl::Wall_Base(rOther),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
