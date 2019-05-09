@@ -1359,7 +1359,6 @@ chart2/source/tools/MeanValueRegressionCurveCalculator.cxx
 chart2/source/tools/MediaDescriptorHelper.cxx
 chart2/source/tools/ModifyListenerHelper.cxx
 chart2/source/tools/MovingAverageRegressionCurveCalculator.cxx
-chart2/source/tools/MutexContainer.cxx
 chart2/source/tools/NameContainer.cxx
 chart2/source/tools/NumberFormatterWrapper.cxx
 chart2/source/tools/OPropertySet.cxx

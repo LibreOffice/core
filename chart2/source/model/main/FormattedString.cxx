@@ -124,14 +124,14 @@ uno::Reference< util::XCloneable > SAL_CALL FormattedString::createClone()
 // ____ XFormattedString ____
 OUString SAL_CALL FormattedString::getString()
 {
-    MutexGuard aGuard( GetMutex());
+    MutexGuard aGuard( m_aMutex);
     return m_aString;
 }
 
 void SAL_CALL FormattedString::setString( const OUString& String )
 {
     {
-        MutexGuard aGuard( GetMutex());
+        MutexGuard aGuard( m_aMutex);
         m_aString = String;
     }
     //don't keep the mutex locked while calling out
@@ -142,7 +142,7 @@ void SAL_CALL FormattedString::setString( const OUString& String )
 // ____ XDataPointCustomLabelField ____
 css::chart2::DataPointCustomLabelFieldType SAL_CALL FormattedString::getFieldType()
 {
-    MutexGuard aGuard(GetMutex());
+    MutexGuard aGuard(m_aMutex);
     return m_aType;
 }
 
@@ -150,7 +150,7 @@ void SAL_CALL
 FormattedString::setFieldType(const css::chart2::DataPointCustomLabelFieldType Type)
 {
     {
-        MutexGuard aGuard(GetMutex());
+        MutexGuard aGuard(m_aMutex);
         m_aType = Type;
     }
     //don't keep the mutex locked while calling out
@@ -159,14 +159,14 @@ FormattedString::setFieldType(const css::chart2::DataPointCustomLabelFieldType T
 
 OUString SAL_CALL FormattedString::getGuid()
 {
-    MutexGuard aGuard( GetMutex());
+    MutexGuard aGuard( m_aMutex);
     return m_aGuid;
 }
 
 void SAL_CALL FormattedString::setGuid( const OUString& guid )
 {
     {
-        MutexGuard aGuard( GetMutex());
+        MutexGuard aGuard( m_aMutex);
         m_aGuid= guid;
     }
     //don't keep the mutex locked while calling out
