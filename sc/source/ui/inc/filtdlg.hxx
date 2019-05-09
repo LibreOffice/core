@@ -206,6 +206,9 @@ private:
     VclPtr<formula::RefEdit>   pRefInputEdit;
     bool                bRefInputMode;
 
+    // Hack: RefInput control
+    std::unique_ptr<Timer> pTimer;
+
 private:
     void            Init( const SfxItemSet& rArgSet );
     ScQueryItem*    GetOutputItem( const ScQueryParam& rParam,

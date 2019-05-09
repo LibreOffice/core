@@ -83,17 +83,12 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
 
     Init( rArgSet );
 
-    Link<Control&, void> aLink = LINK(this, ScSpecialFilterDlg, RefInputControlHdl);
-    pEdCopyArea->SetGetFocusHdl(aLink);
-    pRbCopyArea->SetGetFocusHdl(aLink);
-    pEdFilterArea->SetGetFocusHdl(aLink);
-    pRbFilterArea->SetGetFocusHdl(aLink);
-    pEdCopyArea->SetLoseFocusHdl(aLink);
-    pRbCopyArea->SetLoseFocusHdl(aLink);
-    pEdFilterArea->SetLoseFocusHdl(aLink);
-    pRbFilterArea->SetLoseFocusHdl(aLink);
-
-    pEdFilterArea->GrabFocus();
+    // hack: control of RefInput
+    pTimer.reset( new Timer("Special Filter Dialog") );
+    // FIXME: this is an abomination
+    pTimer->SetTimeout(50);
+    pTimer->SetInvokeHandler( LINK( this, ScSpecialFilterDlg, TimeOutHdl ) );
+    pTimer->Start();
 }
 
 ScSpecialFilterDlg::~ScSpecialFilterDlg()
@@ -111,6 +106,10 @@ void ScSpecialFilterDlg::dispose()
     delete pOptionsMgr;
 
     delete pOutItem;
+
+    // hack: control of RefInput
+    pTimer->Stop();
+    pTimer.reset();
 
     pLbFilterArea.clear();
     pEdFilterArea.clear();
@@ -388,9 +387,11 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK_NOARG(ScSpecialFilterDlg, RefInputControlHdl, Control&, void)
+IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pTimer, void )
 {
-    if (IsActive())
+    // every 50ms check whether RefInputMode is still true
+
+    if( (_pTimer == pTimer.get()) && IsActive() )
     {
         if( pEdCopyArea->HasFocus() || pRbCopyArea->HasFocus() )
         {
@@ -408,6 +409,8 @@ IMPL_LINK_NOARG(ScSpecialFilterDlg, RefInputControlHdl, Control&, void)
             bRefInputMode = false;
         }
     }
+
+    pTimer->Start();
 }
 
 IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox&, rLb, void )
