@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_ff4edebf",
+        "filename": "sc/source/ui/view/viewfun2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1879,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-05-09T08:02:36Z",
+      "side": 1,
+      "message": "Not sure that bShow is suited here instead of inside the procedure.",
+      "revId": "d51036847f487718239c4c1f463874d17942dc38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
