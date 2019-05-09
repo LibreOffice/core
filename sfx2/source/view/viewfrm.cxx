@@ -1222,7 +1222,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 const auto t0 = std::chrono::system_clock::now().time_since_epoch();
 
                 // show tip-of-the-day dialog
-                const bool bShowTipOfTheDay = officecfg::Office::Common::Misc::ShowTipOfTheDay::get();
+                const bool bShowTipOfTheDay = officecfg::Office::Common::Misc::ShowTipOfTheDay::get() || utl::ConfigManager::IsNewVersion();
                 bool bIsUITest = false; //uitest.uicheck fails when the dialog is open
                 for( sal_uInt16 i = 0; i < Application::GetCommandLineParamCount(); i++ )
                 {

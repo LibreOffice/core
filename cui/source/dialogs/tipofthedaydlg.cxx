@@ -29,6 +29,7 @@
 #include <vcl/virdev.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <vcl/svapp.hxx>
+#include <officecfg/Setup.hxx>
 
 TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/tipofthedaydialog.ui", "TipOfTheDayDialog")
@@ -38,7 +39,9 @@ TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     , m_pNext(m_xBuilder->weld_button("btnNext"))
     , m_pLink(m_xBuilder->weld_link_button("btnLink"))
 {
-    m_pShowTip->connect_toggled(LINK(this, TipOfTheDayDialog, OnShowTipToggled));
+    m_pShowTip->set_active(officecfg::Office::Common::Misc::ShowTipOfTheDay::get());
+    m_pShowTip->set_sensitive(!bIsNewVersion);
+
     m_pNext->connect_clicked(LINK(this, TipOfTheDayDialog, OnNextClick));
 
     nNumberOfTips = SAL_N_ELEMENTS(TIPOFTHEDAY_STRINGARRAY);
@@ -55,6 +58,7 @@ TipOfTheDayDialog::~TipOfTheDayDialog()
     const sal_Int32 nDay
         = std::chrono::duration_cast<std::chrono::hours>(t0).count() / 24; // days since 1970-01-01
     officecfg::Office::Common::Misc::LastTipOfTheDayShown::set(nDay, xChanges);
+    officecfg::Office::Common::Misc::ShowTipOfTheDay::set(m_pShowTip->get_active(), xChanges);
     xChanges->commit();
 }
 
@@ -66,12 +70,35 @@ static bool file_exists(const OUString& fileName)
 
 void TipOfTheDayDialog::UpdateTip()
 {
+    OUString aText;
+    OUString aImage;
+
+    if (bIsNewVersion) //special "what's new" tip
+    {
+        aText = CuiResId(RID_CUI_WHATSNEW);
+        aLink = RID_CUI_WHATSNEW_LINK;
+        aImage = RID_CUI_WHATSNEW_IMAGE;
+        // save ooSetupLastVersion
+        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Setup::Product::ooSetupLastVersion::set(
+            officecfg::Setup::Product::ooSetupVersion::get(), xChanges);
+        xChanges->commit();
+        //don't show again
+        bIsNewVersion = false;
+    }
+    else
+    {
+        aText = CuiResId(std::get<0>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]));
+        aLink = std::get<1>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]);
+        aImage = std::get<2>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]);
+        m_pShowTip->set_sensitive(true);
+    }
+
     // text
-    OUString aText = CuiResId(std::get<0>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]));
     m_pText->set_label(aText);
 
     // hyperlink
-    aLink = std::get<1>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]);
     if (aLink.isEmpty())
     {
         m_pLink->set_visible(false);
@@ -79,6 +106,7 @@ void TipOfTheDayDialog::UpdateTip()
     else if (aLink.startsWith("http"))
     {
         m_pLink->set_uri(aLink);
+        // TODO show real link but shorten correctly with INetURLObject::getAbbreviated like in fltdlg.cxx
         m_pLink->set_label(CuiResId(STR_MORE_LINK));
         m_pLink->set_visible(true);
         m_pLink->connect_clicked(Link<weld::LinkButton&, void>());
@@ -95,7 +123,6 @@ void TipOfTheDayDialog::UpdateTip()
     // image
     OUString aURL("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/tipoftheday/");
     rtl::Bootstrap::expandMacros(aURL);
-    OUString aImage = std::get<2>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]);
     // use default image if none is available with the number
     if (aImage.isEmpty() || !file_exists(aURL + aImage))
         aImage = "tipoftheday.png";
@@ -110,14 +137,6 @@ void TipOfTheDayDialog::UpdateTip()
         m_pImage->set_image(m_pVirDev.get());
         m_pVirDev.disposeAndClear();
     }
-}
-
-IMPL_STATIC_LINK(TipOfTheDayDialog, OnShowTipToggled, weld::ToggleButton&, rButton, void)
-{
-    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::ShowTipOfTheDay::set(rButton.get_active(), xChanges);
-    xChanges->commit();
 }
 
 IMPL_LINK_NOARG(TipOfTheDayDialog, OnLinkClick, weld::LinkButton&, void)

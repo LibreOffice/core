@@ -144,6 +144,14 @@ OUString utl::ConfigManager::getVendor() {
         "Product/ooVendor");
 }
 
+bool utl::ConfigManager::IsNewVersion() {
+    OUString sTemp = getConfigurationString("/org.openoffice.Setup","Product/ooSetupVersion");
+    sal_Int32 iCurrent = sTemp.getToken(0,'.').toInt32() * 10 + sTemp.getToken(1,'.').toInt32();
+    sTemp = getConfigurationString("/org.openoffice.Setup","Product/ooSetupLastVersion");
+    sal_Int32 iLast = sTemp.getToken(0,'.').toInt32() * 10 + sTemp.getToken(1,'.').toInt32();
+    return iCurrent > iLast;
+}
+
 void utl::ConfigManager::storeConfigItems() {
     getConfigManager().doStoreConfigItems();
 }

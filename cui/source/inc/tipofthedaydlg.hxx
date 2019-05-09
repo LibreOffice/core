@@ -20,6 +20,7 @@
 #define INCLUDED_CUI_SOURCE_INC_TIPOFTHEDAYDLG_HXX
 
 #include <vcl/weld.hxx>
+#include <unotools/configmgr.hxx>
 
 class TipOfTheDayDialog : public weld::GenericDialogController
 {
@@ -33,8 +34,8 @@ private:
     sal_uInt32 nCurrentTip;
     sal_uInt32 nNumberOfTips;
     OUString aLink;
+    bool bIsNewVersion = utl::ConfigManager::IsNewVersion();
     void UpdateTip();
-    DECL_STATIC_LINK(TipOfTheDayDialog, OnShowTipToggled, weld::ToggleButton&, void);
     DECL_LINK(OnNextClick, weld::Button&, void);
     DECL_LINK(OnLinkClick, weld::LinkButton&, void);
 
