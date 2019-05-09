@@ -2272,22 +2272,17 @@ bool ScTable::GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, bool bInSel,
         return true;
     else
     {
-        bool bStop = false;
-        while (!bStop)
+        for (;;)
         {
-            if (ValidCol(rCol))
-            {
-                bStop = aCol[rCol].GetNextSpellingCell(rRow, bInSel, rMark);
-                if (bStop)
-                    return true;
-                else /*if (rRow == MAXROW+1) */
-                {
-                    rCol++;
-                    rRow = 0;
-                }
-            }
-            else
+            if (!ValidCol(rCol))
                 return true;
+            if (rCol >= GetAllocatedColumnsCount())
+                return true;
+            if (aCol[rCol].GetNextSpellingCell(rRow, bInSel, rMark))
+                return true;
+             /*else (rRow == MAXROW+1) */
+            rCol++;
+            rRow = 0;
         }
     }
     return false;
