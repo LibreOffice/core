@@ -450,9 +450,9 @@ namespace {
 void UpdateStyleList(ListBox& rLbStyle, const ScDocument* pDoc)
 {
     OUString aSelectedStyle = rLbStyle.GetSelectedEntry();
-    for(sal_Int32 i = rLbStyle.GetEntryCount(); i >= 1; --i)
+    for(sal_Int32 i = rLbStyle.GetEntryCount(); i > 1; --i)
     {
-        rLbStyle.RemoveEntry(i);
+        rLbStyle.RemoveEntry(i - 1);
     }
     FillStyleListBox(pDoc, rLbStyle);
     rLbStyle.SelectEntry(aSelectedStyle);
