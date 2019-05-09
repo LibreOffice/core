@@ -46,6 +46,7 @@ gtv_application_init(GtvApplication* app)
     {
         { "version", 0, 0, G_OPTION_ARG_NONE, nullptr, "Show LOkit version", nullptr },
         { "lo-path", 0, 0, G_OPTION_ARG_STRING, nullptr, "LO path", nullptr },
+        { "unipoll", 0, 0, G_OPTION_ARG_NONE, nullptr, "Enable unified polling loop", nullptr },
         { "user-profile", 0, 0, G_OPTION_ARG_STRING, nullptr, "User profile to use", nullptr },
         { "enable-tiled-annotations", 0, 0, G_OPTION_ARG_NONE, nullptr, "Whether tiled annotations should be enabled", nullptr },
         { "background-color", 0, 0, G_OPTION_ARG_STRING, nullptr, "Background color", nullptr },
@@ -92,11 +93,13 @@ gtv_application_handle_local_options(GApplication* app, GVariantDict* options)
         return 1; // Cannot afford to continue in absence of this param
     }
 
+    if (g_variant_dict_contains(options, "unipoll"))
+        priv->m_pRenderingArgs->m_bUnipoll = true;
+
     if (g_variant_dict_contains(options, "version"))
     {
         if (!priv->m_pRenderingArgs->m_aLoPath.empty())
         {
-            // FIXME: Crashes for some reason
             GtkWidget* pDocView = lok_doc_view_new(priv->m_pRenderingArgs->m_aLoPath.c_str(), nullptr, nullptr);
             const gchar* versionInfo = lok_doc_view_get_version_info(LOK_DOC_VIEW(pDocView));
             if (versionInfo)

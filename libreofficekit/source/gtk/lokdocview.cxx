@@ -85,6 +85,7 @@ struct LOKDocViewPrivateImpl
     gboolean m_bInit; // initializeForRendering() has been called
     gboolean m_bCanZoomIn;
     gboolean m_bCanZoomOut;
+    gboolean m_bUnipoll;
     LibreOfficeKit* m_pOffice;
     LibreOfficeKitDocument* m_pDocument;
 
@@ -198,6 +199,7 @@ struct LOKDocViewPrivateImpl
         m_bInit(false),
         m_bCanZoomIn(true),
         m_bCanZoomOut(true),
+        m_bUnipoll(false),
         m_pOffice(nullptr),
         m_pDocument(nullptr),
         lokThreadPool(nullptr),
@@ -287,6 +289,7 @@ enum
     PROP_0,
 
     PROP_LO_PATH,
+    PROP_LO_UNIPOLL,
     PROP_LO_POINTER,
     PROP_USER_PROFILE_URL,
     PROP_DOC_PATH,
@@ -2524,6 +2527,9 @@ static void lok_doc_view_set_property (GObject* object, guint propId, const GVal
     case PROP_LO_PATH:
         priv->m_aLOPath = g_value_get_string (value);
         break;
+    case PROP_LO_UNIPOLL:
+        priv->m_bUnipoll = g_value_get_boolean (value);
+        break;
     case PROP_LO_POINTER:
         priv->m_pOffice = static_cast<LibreOfficeKit*>(g_value_get_pointer(value));
         break;
@@ -2585,6 +2591,9 @@ static void lok_doc_view_get_property (GObject* object, guint propId, GValue *va
     {
     case PROP_LO_PATH:
         g_value_set_string (value, priv->m_aLOPath.c_str());
+        break;
+    case PROP_LO_UNIPOLL:
+        g_value_set_boolean (value, priv->m_bUnipoll);
         break;
     case PROP_LO_POINTER:
         g_value_set_pointer(value, priv->m_pOffice);
@@ -2711,6 +2720,41 @@ static void lok_doc_view_finalize (GObject* object)
     G_OBJECT_CLASS (lok_doc_view_parent_class)->finalize (object);
 }
 
+// kicks the mainloop awake
+static gboolean timeout_wakeup(void *)
+{
+    return FALSE;
+}
+
+// integrate our mainloop with LOK's
+static int lok_poll_callback(void*, int timeoutUs)
+{
+    if (timeoutUs)
+    {
+        guint timeout = g_timeout_add(timeoutUs / 1000, timeout_wakeup, nullptr);
+        g_main_context_iteration(nullptr, TRUE);
+        g_source_remove(timeout);
+    }
+    else
+        g_main_context_iteration(nullptr, FALSE);
+
+    return 0;
+}
+
+// thread-safe wakeup of our mainloop
+static void lok_wake_callback(void *)
+{
+    g_main_context_wakeup(nullptr);
+}
+
+static gboolean spin_lok_loop(void *pData)
+{
+    LOKDocView *pDocView = LOK_DOC_VIEW (pData);
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+    priv->m_pOffice->pClass->runLoop(priv->m_pOffice, lok_poll_callback, lok_wake_callback, nullptr);
+    return FALSE;
+}
+
 static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /*cancellable*/, GError **error)
 {
     LOKDocView *pDocView = LOK_DOC_VIEW (initable);
@@ -2718,6 +2762,9 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
 
     if (priv->m_pOffice != nullptr)
         return TRUE;
+
+    if (priv->m_bUnipoll)
+        g_setenv("SAL_LOK_OPTIONS", "unipoll", FALSE);
 
     priv->m_pOffice = lok_init_2(priv->m_aLOPath.c_str(), priv->m_aUserProfileURL.empty() ? nullptr : priv->m_aUserProfileURL.c_str());
 
@@ -2732,6 +2779,9 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
     priv->m_nLOKFeatures |= LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK;
     priv->m_nLOKFeatures |= LOK_FEATURE_VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK;
     priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nLOKFeatures);
+
+    if (priv->m_bUnipoll)
+        g_idle_add(spin_lok_loop, pDocView);
 
     return TRUE;
 }
@@ -2772,6 +2822,19 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                                                      G_PARAM_CONSTRUCT_ONLY |
                                                      G_PARAM_STATIC_STRINGS));
 
+    /**
+     * LOKDocView:unipoll:
+     *
+     * Whether we use our own unified polling mainloop in place of glib's
+     */
+    properties[PROP_LO_UNIPOLL] =
+        g_param_spec_boolean("unipoll",
+                             "Unified Polling",
+                             "Whether we use a custom unified polling loop",
+                             FALSE,
+                             static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                      G_PARAM_CONSTRUCT_ONLY |
+                                                      G_PARAM_STATIC_STRINGS));
     /**
      * LOKDocView:lopointer:
      *
