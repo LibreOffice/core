@@ -5,9 +5,9 @@ avmedia/source/vlc/wrapper/Types.hxx:44
 avmedia/source/vlc/wrapper/Types.hxx:45
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:43:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:43:7)
 avmedia/source/vlc/wrapper/Types.hxx:47
-    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:41:5)
+    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
 basctl/source/inc/dlged.hxx:122
@@ -34,7 +34,7 @@ chart2/source/controller/dialogs/tp_TitleRotation.hxx:44
     chart::SchAlignmentTabPage m_xFtTextDirection std::unique_ptr<weld::Label>
 chart2/source/controller/inc/RangeSelectionListener.hxx:63
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
-comphelper/source/container/enumerablemap.cxx:291
+comphelper/source/container/enumerablemap.cxx:290
     comphelper::MapEnumeration m_xKeepMapAlive Reference<class com::sun::star::uno::XInterface>
 connectivity/source/drivers/evoab2/EApi.h:122
     (anonymous) address_format char *
@@ -54,9 +54,9 @@ cui/source/dialogs/colorpicker.cxx:723
     cui::ColorPickerDialog m_xColorPreview std::unique_ptr<weld::CustomWeld>
 cui/source/inc/align.hxx:92
     svx::AlignmentTabPage m_xBoxDirection std::unique_ptr<weld::Widget>
-cui/source/inc/cfg.hxx:580
+cui/source/inc/cfg.hxx:576
     SvxNewToolbarDialog m_xBtnOK std::unique_ptr<weld::Button>
-cui/source/inc/cfg.hxx:613
+cui/source/inc/cfg.hxx:609
     SvxIconSelectorDialog m_xTbSymbolWin std::unique_ptr<weld::CustomWeld>
 cui/source/inc/cuicharmap.hxx:100
     SvxCharacterMap m_xShowChar std::unique_ptr<weld::CustomWeld>
@@ -74,9 +74,9 @@ cui/source/inc/cuigrfflt.hxx:78
     GraphicFilterDialog mxPreview std::unique_ptr<weld::CustomWeld>
 cui/source/inc/cuigrfflt.hxx:175
     GraphicFilterEmboss mxCtlLight std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuitabarea.hxx:714
+cui/source/inc/cuitabarea.hxx:712
     SvxColorTabPage m_xCtlPreviewOld std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuitabarea.hxx:715
+cui/source/inc/cuitabarea.hxx:713
     SvxColorTabPage m_xCtlPreviewNew std::unique_ptr<weld::CustomWeld>
 cui/source/inc/FontFeaturesDialog.hxx:52
     cui::FontFeaturesDialog m_xContentWindow std::unique_ptr<weld::ScrolledWindow>
@@ -138,11 +138,13 @@ filter/source/xsltdialog/xmlfiltertabpagebasic.hxx:36
     XMLFilterTabPageBasic m_xContainer std::unique_ptr<weld::Widget>
 filter/source/xsltdialog/xmlfiltertabpagexslt.hxx:48
     XMLFilterTabPageXSLT m_xContainer std::unique_ptr<weld::Widget>
+formula/source/ui/dlg/formula.cxx:151
+    formula::FormulaDlg_Impl m_rParent weld::Builder &
 helpcompiler/inc/HelpCompiler.hxx:206
     HelpCompiler lang const std::string
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:58
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
-include/editeng/unotext.hxx:612
+include/editeng/unotext.hxx:604
     SvxUnoTextRangeEnumeration mxParentText css::uno::Reference<css::text::XText>
 include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
@@ -152,8 +154,6 @@ include/oox/vml/vmlshapecontext.hxx:116
     oox::vml::ShapeTypeContext m_pShapeType std::shared_ptr<ShapeType>
 include/registry/registry.hxx:35
     Registry_Api acquire void (*)(RegHandle)
-include/sfx2/basedlgs.hxx:200
-    SingleTabDlgImpl m_pSfxPage VclPtr<class SfxTabPage>
 include/sfx2/mgetempl.hxx:63
     SfxManageStyleSheetPage m_xNameFt std::unique_ptr<weld::Label>
 include/sfx2/msg.hxx:117
@@ -280,9 +280,9 @@ include/sfx2/msg.hxx:147
     SfxType23 aAttrib struct SfxTypeAttrib [23]
 include/sfx2/msg.hxx:147
     SfxType23 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/templatedlg.hxx:138
-    SfxTemplateManagerDlg mxSearchViewWeld std::unique_ptr<weld::CustomWeld>
 include/sfx2/templatedlg.hxx:139
+    SfxTemplateManagerDlg mxSearchViewWeld std::unique_ptr<weld::CustomWeld>
+include/sfx2/templatedlg.hxx:140
     SfxTemplateManagerDlg mxLocalViewWeld std::unique_ptr<weld::CustomWeld>
 include/svtools/ctrlbox.hxx:281
     SvtLineListBox m_xLineSetWin std::unique_ptr<weld::CustomWeld>
@@ -294,7 +294,7 @@ include/svtools/unoevent.hxx:163
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
 include/svtools/wizardmachine.hxx:119
     svt::OWizardPage m_xContainer std::unique_ptr<weld::Container>
-include/svx/ClassificationDialog.hxx:53
+include/svx/ClassificationDialog.hxx:54
     svx::ClassificationDialog m_xEditWindowWeld std::unique_ptr<weld::CustomWeld>
 include/svx/colorwindow.hxx:133
     ColorWindow mxColorSetWin std::unique_ptr<weld::CustomWeld>
@@ -308,6 +308,8 @@ include/svx/rubydialog.hxx:68
     SvxRubyDialog m_xRightFT std::unique_ptr<weld::Label>
 include/svx/rubydialog.hxx:95
     SvxRubyDialog m_xPreview std::unique_ptr<weld::CustomWeld>
+include/svx/sidebar/PanelLayout.hxx:30
+    PanelLayout m_xContainer std::unique_ptr<weld::Container>
 include/vcl/commandevent.hxx:310
     CommandGestureData mfX const double
 include/vcl/commandevent.hxx:311
@@ -354,11 +356,11 @@ lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char [2]
 opencl/source/openclwrapper.cxx:304
     openclwrapper::(anonymous namespace)::OpenCLEnv mpOclCmdQueue cl_command_queue [1]
-pyuno/source/module/pyuno_callable.cxx:42
+pyuno/source/module/pyuno_callable.cxx:43
     pyuno::PyUNO_callable ob_base PyObject
-pyuno/source/module/pyuno_impl.hxx:224
+pyuno/source/module/pyuno_impl.hxx:223
     pyuno::(anonymous) ob_base PyObject
-pyuno/source/module/pyuno_impl.hxx:324
+pyuno/source/module/pyuno_impl.hxx:323
     pyuno::stRuntimeImpl ob_base PyObject
 reportdesign/source/ui/inc/PageNumber.hxx:38
     rptui::OPageNumberDialog m_xPageN std::unique_ptr<weld::RadioButton>
@@ -434,16 +436,20 @@ sc/source/core/data/document.cxx:1239
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch const sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1240
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk const class ScBulkBroadcast
-sc/source/filter/html/htmlpars.cxx:3003
-    (anonymous namespace)::CSSHandler::MemStr mp const char *
 sc/source/filter/html/htmlpars.cxx:3004
+    (anonymous namespace)::CSSHandler::MemStr mp const char *
+sc/source/filter/html/htmlpars.cxx:3005
     (anonymous namespace)::CSSHandler::MemStr mn size_t
 sc/source/filter/inc/sheetdatacontext.hxx:62
     oox::xls::SheetDataContext aReleaser const class SolarMutexReleaser
 sc/source/ui/inc/colorformat.hxx:32
     ScDataBarSettingsDlg mxBtnCancel std::unique_ptr<weld::Button>
+sc/source/ui/inc/consdlg.hxx:73
+    ScConsolidateDlg m_xExpander std::unique_ptr<weld::Expander>
 sc/source/ui/inc/crdlg.hxx:32
     ScColOrRowDlg m_xBtnRows std::unique_ptr<weld::RadioButton>
+sc/source/ui/inc/dbnamdlg.hxx:91
+    ScDbNameDlg m_xExpander std::unique_ptr<weld::Expander>
 sc/source/ui/inc/delcodlg.hxx:39
     ScDeleteContentsDlg m_xBtnOk std::unique_ptr<weld::Button>
 sc/source/ui/inc/docsh.hxx:452
@@ -454,6 +460,14 @@ sc/source/ui/inc/namedefdlg.hxx:60
     ScNameDefDlg m_xExpander std::unique_ptr<weld::Expander>
 sc/source/ui/inc/namedlg.hxx:76
     ScNameDlg m_xExpander std::unique_ptr<weld::Expander>
+sc/source/ui/inc/optsolver.hxx:147
+    ScOptSolverDlg m_xFtOperator std::unique_ptr<weld::Label>
+sc/source/ui/inc/PivotLayoutDialog.hxx:89
+    ScPivotLayoutDialog mxOptions std::unique_ptr<weld::Expander>
+sc/source/ui/inc/PivotLayoutDialog.hxx:90
+    ScPivotLayoutDialog mxMore std::unique_ptr<weld::Expander>
+sc/source/ui/inc/PivotLayoutTreeListBase.hxx:49
+    ScPivotLayoutTreeListBase maDropTargetHelper class ScPivotLayoutTreeDropTarget
 sc/source/ui/inc/pvfundlg.hxx:83
     ScDPFunctionDlg mxBtnOk std::unique_ptr<weld::Button>
 sc/source/ui/inc/pvfundlg.hxx:123
@@ -556,15 +570,15 @@ starmath/inc/view.hxx:217
     SmViewShell maGraphicController const class SmGraphicController
 starmath/source/accessibility.hxx:268
     SmEditSource rEditAcc class SmEditAccessible &
-svl/source/crypto/cryptosign.cxx:123
+svl/source/crypto/cryptosign.cxx:131
     (anonymous namespace)::Extension extnID const SECItem
-svl/source/crypto/cryptosign.cxx:124
+svl/source/crypto/cryptosign.cxx:132
     (anonymous namespace)::Extension critical const SECItem
-svl/source/crypto/cryptosign.cxx:125
+svl/source/crypto/cryptosign.cxx:133
     (anonymous namespace)::Extension extnValue const SECItem
-svl/source/crypto/cryptosign.cxx:283
+svl/source/crypto/cryptosign.cxx:291
     (anonymous namespace)::PKIStatusInfo statusString SECItem
-svl/source/crypto/cryptosign.cxx:284
+svl/source/crypto/cryptosign.cxx:292
     (anonymous namespace)::PKIStatusInfo failInfo SECItem
 svtools/source/filter/exportdialog.hxx:124
     ExportDialog mxEncoding std::unique_ptr<weld::Widget>
@@ -578,7 +592,7 @@ svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.hxx:154
     textconversiondlgs::ChineseDictionaryDialog m_xFT_Mapping std::unique_ptr<weld::Label>
 svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.hxx:157
     textconversiondlgs::ChineseDictionaryDialog m_xFT_Property std::unique_ptr<weld::Label>
-sw/qa/extras/layout/layout.cxx:2516
+sw/qa/extras/layout/layout.cxx:2541
       class SvtSysLocaleOptions &
 sw/source/core/crsr/crbm.cxx:66
     (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
@@ -682,7 +696,7 @@ vcl/inc/WidgetThemeLibrary.hxx:90
     vcl::ControlDrawParameters eState enum ControlState
 vcl/inc/WidgetThemeLibrary.hxx:106
     vcl::WidgetThemeLibrary_t nSize uint32_t
-vcl/source/app/salvtables.cxx:829
+vcl/source/app/salvtables.cxx:843
     SalInstanceContainer m_xContainer VclPtr<vcl::Window>
 vcl/source/gdi/jobset.cxx:36
     ImplOldJobSetupData cDeviceName char [32]
@@ -694,7 +708,7 @@ vcl/unx/generic/print/prtsetup.hxx:73
     RTSPaperPage m_xContainer std::unique_ptr<weld::Widget>
 vcl/unx/generic/print/prtsetup.hxx:108
     RTSDevicePage m_xContainer std::unique_ptr<weld::Widget>
-vcl/unx/gtk3/gtk3gtkinst.cxx:3143
+vcl/unx/gtk3/gtk3gtkinst.cxx:3279
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     HyperLink atk_hyper_link const AtkHyperlink
@@ -704,5 +718,5 @@ writerperfect/inc/WPFTEncodingDialog.hxx:37
     writerperfect::WPFTEncodingDialog m_xBtnOk std::unique_ptr<weld::Button>
 xmlsecurity/inc/certificateviewer.hxx:69
     CertificateViewerTP mxContainer std::unique_ptr<weld::Container>
-xmlsecurity/inc/macrosecurity.hxx:69
+xmlsecurity/inc/macrosecurity.hxx:67
     MacroSecurityTP m_xContainer std::unique_ptr<weld::Container>

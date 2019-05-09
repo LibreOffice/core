@@ -42,8 +42,6 @@ class OTableTreeListBox final : public OMarkableTreeListBox
                     m_xConnection;      // the connection we're working for, set in implOnNewConnection, called by UpdateTableList
     std::unique_ptr< ImageProvider >
                     m_xImageProvider;   // provider for our images
-    bool            m_bVirtualRoot;     // should the first entry be visible
-    bool            m_bNoEmptyFolders;  // should empty catalogs/schematas be prevented from being displayed?
 
 public:
     OTableTreeListBox(vcl::Window* pParent, WinBits nWinStyle);
@@ -103,8 +101,6 @@ public:
 
     SvTreeListEntry*    getEntryByQualifiedName( const OUString& _rName );
 
-    SvTreeListEntry*    getAllObjectsEntry() const;
-
 private:
     virtual void InitEntry(SvTreeListEntry* _pEntry, const OUString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap, SvLBoxButtonKind _eButtonKind) override;
 
@@ -128,8 +124,6 @@ private:
     void    implOnNewConnection( const css::uno::Reference< css::sdbc::XConnection >& _rxConnection );
 
     bool    impl_getAndAssertMetaData( css::uno::Reference< css::sdbc::XDatabaseMetaData >& _out_rMetaData ) const;
-
-    bool haveVirtualRoot() const { return m_bVirtualRoot; }
 
     /** fill the table list with the tables and views determined by the two given containers
         @param      _rxConnection   the connection where you got the object names from. Must not be NULL.

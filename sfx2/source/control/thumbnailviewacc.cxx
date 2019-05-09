@@ -552,8 +552,7 @@ void ThumbnailViewAcc::ThrowIfDisposed()
 
 SfxThumbnailViewAcc::SfxThumbnailViewAcc( SfxThumbnailView* pParent ) :
     ValueSetAccComponentBase (m_aMutex),
-    mpParent( pParent ),
-    mbIsFocused(false)
+    mpParent( pParent )
 {
 }
 
@@ -713,8 +712,6 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL SfxThumbnailViewAc
     pStateSet->AddState (accessibility::AccessibleStateType::VISIBLE);
     pStateSet->AddState (accessibility::AccessibleStateType::MANAGES_DESCENDANTS);
     pStateSet->AddState (accessibility::AccessibleStateType::FOCUSABLE);
-    if (mbIsFocused)
-        pStateSet->AddState (accessibility::AccessibleStateType::FOCUSED);
 
     return pStateSet;
 }

@@ -220,8 +220,6 @@ private:
     ::std::vector< css::uno::Reference<
         css::accessibility::XAccessibleEventListener > >   mxEventListeners;
     SfxThumbnailView*                                               mpParent;
-    /// The current FOCUSED state.
-    bool mbIsFocused;
 
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 

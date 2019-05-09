@@ -57,24 +57,6 @@ void StructPage::SetActiveFlag(bool bFlag)
     bActiveFlag = bFlag;
 }
 
-void StructListBox::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    bActiveFlag = true;
-    SvTreeListBox::MouseButtonDown(rMEvt);
-}
-
-void StructListBox::GetFocus()
-{
-    bActiveFlag = true;
-    SvTreeListBox::GetFocus();
-}
-
-void StructListBox::LoseFocus()
-{
-    bActiveFlag = false;
-    SvTreeListBox::LoseFocus();
-}
-
 StructPage::StructPage(weld::Container* pParent)
     : m_xBuilder(Application::CreateBuilder(pParent, "formula/ui/structpage.ui"))
     , m_xContainer(m_xBuilder->weld_container("StructPage"))

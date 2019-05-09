@@ -63,7 +63,6 @@ private:
 
     Color maSelectedColor;
     Color maCustomColor;
-    Color maUnselectedColor;
 
 public:
     bool mbSelected:1;
@@ -181,11 +180,6 @@ public:
     void setSelectedFillColor(const Color& rColor)
     {
         maSelectedColor = rColor;
-    }
-
-    void setUnselectedFillColor(const Color& rColor)
-    {
-        maUnselectedColor = rColor;
     }
 
     void setCustomColor(const Color& rColor)
@@ -1143,7 +1137,6 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
     TabDrawer aDrawer(rRenderContext);
 
     aDrawer.setSelectedFillColor(aSelectColor);
-    aDrawer.setUnselectedFillColor(aFaceColor);
 
     // Now, start drawing the tabs.
 
