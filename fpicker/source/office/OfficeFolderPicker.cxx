@@ -21,7 +21,7 @@
 
 #include "iodlg.hxx"
 
-#include <list>
+#include <vector>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XSet.hpp>

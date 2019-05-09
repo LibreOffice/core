@@ -22,7 +22,7 @@
 #include "iodlg.hxx"
 #include "RemoteFilesDialog.hxx"
 
-#include <list>
+#include <vector>
 #include <algorithm>
 #include <sal/log.hxx>
 #include <tools/urlobj.hxx>
