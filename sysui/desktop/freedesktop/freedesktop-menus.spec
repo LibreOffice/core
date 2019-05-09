@@ -25,6 +25,7 @@ Name: %pkgprefix-freedesktop-menus
 Group: Office
 License: LGPLv3 with MPLv2, ALv2 and others
 Provides: libreoffice-desktop-integration
+Provides: libreofficepoweredbycib-desktop-integration
 Conflicts: %pkgprefix-suse-menus
 Conflicts: %pkgprefix-debian-menus
 Conflicts: %pkgprefix-redhat-menus
@@ -390,7 +391,7 @@ done
 # glibc breaks rpm unless rpm is build with internal glob-matching (issue 49374)
 # https://bugzilla.redhat.com/beta/show_bug.cgi?id=134362
 %defattr(-, root, root)
-%if "%unixfilename" != "libreoffice%productversion" && "%unixfilename" != "libreofficedev%productversion"
+%if "%unixfilename" != "libreofficepoweredbycib%productversion" && "%unixfilename" != "libreofficepoweredbycibdev%productversion"
 # compat symlinks
 %attr(0755,root,root) /opt/%unixfilename
 %endif

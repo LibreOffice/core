@@ -1,1 +1,90 @@
-<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientTransform="matrix(3.9998072 0 0 3.9988898 -436.97803 -3904.3837)" gradientUnits="userSpaceOnUse" x1="122.75008" x2="111.74973" y1="991.62115" y2="977.11713"><stop offset="0" stop-color="#535353"/><stop offset="1" stop-color="#7e7e7e"/></linearGradient><path d="m7.62498-.000485c-.12518 0-.25035.0056-.37499.01758-1.83351.3499-2.28285 1.133123-2.24997 2.999024v58.984361c.0002 2.09375.90573 1.99932 2.99996 1.99952h47.99889c2.09422-.0002 2.99878-.90528 2.99898-2.99903v-35.909656c.024-1.05595-.39002-2.115123-1.12498-2.874024l-20.07993-21.075197c-.75909-.7346-1.81877-1.14945-2.87496-1.125h-26.918c-.1246-.012-.24981-.01758-.375-.01758zm38.00475.0068c-.10498 0-.20974.0084-.31347.02441-1.33122.4264-1.77919 2.452274-.75292 3.405273l11.04784 12.110392c1.11295 1.06085 3.329.153104 3.38764-1.387696v-12.110351c-.00012-1.05685-.95647-2.017428-2.00778-2.017578h-11.04687c-.10378-.016-.20946-.02441-.31444-.02441z" fill="url(#a)"/><path d="m7.99901 2.999515v58.000485h47.99986v-36.000485l-20.99983-22z" fill="#fff"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="64"
+   preserveAspectRatio="xMidYMid"
+   viewBox="0 0 1693.3332 1693.3332"
+   width="64"
+   version="1.1"
+   id="svg1868"
+   sodipodi:docname="main.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   style="fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+   inkscape:export-filename="C:\cygwin\home\Marina\lode\dev\FLOSS-194\sysui\desktop\icons\hicolor\64x64\apps\main.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <metadata
+     id="metadata1874">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs1872" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2520"
+     inkscape:window-height="1496"
+     id="namedview1870"
+     showgrid="false"
+     inkscape:zoom="6.7428571"
+     inkscape:cx="42.260936"
+     inkscape:cy="64.290578"
+     inkscape:window-x="2869"
+     inkscape:window-y="50"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g6082"
+     inkscape:showpageshadow="false"
+     units="px" />
+  <g
+     data-name="Ebene 4"
+     id="Ebene_4"
+     transform="matrix(99.215593,0,0,99.215593,82.797858,-5681.809)">
+    <g
+       id="g6082">
+      <g
+         id="g822"
+         transform="matrix(0.22786156,0,0,0.22754227,-0.6561009,57.369112)"
+         inkscape:export-filename="C:\cygwin\home\Marina\lode\dev\FLOSS-194\sysui\desktop\icons\hicolor\16x16\apps\main.png"
+         inkscape:export-xdpi="95.16349"
+         inkscape:export-ydpi="95.16349">
+        <rect
+           style="fill:#971e29;stroke-width:28.78103447"
+           y="-0.44744909"
+           x="-0.78303587"
+           width="74.901657"
+           height="75.00676"
+           id="rect2699" />
+        <path
+           style="fill:#ffffff"
+           inkscape:connector-curvature="0"
+           id="path6084"
+           d="m 49.49,11.51 a 1.41,1.41 0 0 0 -1.3,0.83 1.38,1.38 0 0 0 0.3,1.49 l 11.72,11.76 a 1.43,1.43 0 0 0 1.5,0.31 1.38,1.38 0 0 0 0.85,-1.25 V 12.87 a 1.42,1.42 0 0 0 -1.37,-1.36 z" />
+        <path
+           style="fill:#ffffff"
+           inkscape:connector-curvature="0"
+           id="path6088"
+           d="M 17.25,11.51 A 1.39,1.39 0 0 0 15.88,12.9 V 66.59 A 1.39,1.39 0 0 0 17.25,68 h 30.84 c 4.53,0 14.47,-9.74 14.47,-14.68 V 32 a 1.36,1.36 0 0 0 -0.4,-1 l -19,-19.09 a 1.43,1.43 0 0 0 -1,-0.43 z m 1.39,2.78 h 23 l 18.14,18.29 c 0,0 0,18.59 0,19.78 0,3.7 -8.53,12.83 -13,12.83 H 18.64 Z" />
+      </g>
+    </g>
+  </g>
+</svg>
