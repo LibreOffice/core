@@ -292,7 +292,11 @@ bool ScValueIterator::GetFirst(double& rValue, FormulaError& rErr)
     pAttrArray = nullptr;
     nAttrEndRow = 0;
 
-    mpCells = &pTab->aCol[maStartPos.Col()].maCells;
+    auto nCol = maStartPos.Col();
+    if (nCol >= pTab->GetAllocatedColumnsCount())
+        return false;
+
+    mpCells = &pTab->aCol[nCol].maCells;
     maCurPos = mpCells->position(maStartPos.Row());
     return GetThis(rValue, rErr);
 }
