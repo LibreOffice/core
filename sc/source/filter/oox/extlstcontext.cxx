@@ -106,6 +106,7 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
         OUString aType = rAttribs.getString(XML_type, OUString());
         OUString aId = rAttribs.getString(XML_id, OUString());
         nPriority = rAttribs.getInteger( XML_priority, -1 );
+        maPriorities.push_back(nPriority);
 
         if (aType == "dataBar")
         {
@@ -181,7 +182,6 @@ void ExtConditionalFormattingContext::onEndElement()
         case XM_TOKEN(f):
         {
             rFormulas.push_back(aChars);
-            maPriorities.push_back(nPriority);
         }
         break;
         case XLS14_TOKEN( cfRule ):
@@ -226,9 +226,7 @@ void ExtConditionalFormattingContext::onEndElement()
             std::vector< std::unique_ptr<ExtCfCondFormat> >& rExtFormats =  getCondFormats().importExtCondFormat();
             rExtFormats.push_back(o3tl::make_unique<ExtCfCondFormat>(aRange, maEntries, &maPriorities));
 
-            if (isPreviousElementF)
-                maPriorities.clear();
-
+            maPriorities.clear();
             isPreviousElementF = false;
         }
         break;
