@@ -361,6 +361,17 @@ vcl::Window* SfxRequest::GetFrameWindow() const
 
 weld::Window* SfxRequest::GetFrameWeld() const
 {
+    const SfxItemSet* pIntArgs = GetInternalArgs_Impl();
+    const SfxPoolItem* pItem = nullptr;
+    if (pIntArgs && pIntArgs->GetItemState(SID_DIALOG_PARENT, false, &pItem) == SfxItemState::SET)
+    {
+        assert(dynamic_cast<const SfxUnoAnyItem*>(pItem));
+        auto aAny = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
+        Reference<awt::XWindow> xWindow;
+        aAny >>= xWindow;
+        return Application::GetFrameWeld(xWindow);
+    }
+
     vcl::Window* pWin = GetFrameWindow();
     return pWin ? pWin->GetFrameWeld() : nullptr;
 }
