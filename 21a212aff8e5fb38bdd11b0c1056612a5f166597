@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_5ae36006",
+        "filename": "sc/source/core/data/dociter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-05-09T13:26:56Z",
+      "side": 1,
+      "message": "No, I think what would have happened previously is that we would have created a new empty column (possibly at position MAXCOL, because the constructor uses that as a \"invalid input\" marker, and I don\u0027t see that being checked here),\n\nthat new column would have results in mpCells pointing to an empty maCells, which meant we would have gone into GetThis and ended up in the \n    // Find the next available column.\nchunk of logic.\n\nPossibly we could set mpCells to nullptr, and then call GetThis, and use \n     mpCells \u003d\u003d nullptr\nas a indication to the GetThis logic that we need to do the \"find the next available column\" logic",
+      "revId": "21a212aff8e5fb38bdd11b0c1056612a5f166597",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
