@@ -294,6 +294,12 @@ namespace vclmain
 
 bool InitVCL()
 {
+    if (isInitVCL())
+    {
+        SAL_INFO("vcl.app", "Double initialization of vcl");
+        return true;
+    }
+
     if( pExceptionHandler != nullptr )
         return false;
 
