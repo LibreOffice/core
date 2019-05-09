@@ -127,6 +127,11 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
 
                 if ( SvxFrameDirection::Vertical_LR_TB == nDir )
                     mbVertLR = true;
+                else if (nDir == SvxFrameDirection::Vertical_LR_BT)
+                {
+                    mbVertLR = true;
+                    mbVertLRBT = true;
+                }
                 else
                     mbVertLR = false;
             }
