@@ -1793,14 +1793,30 @@ ShapeExport& ShapeExport::WriteTableShape( const Reference< XShape >& xShape )
 ShapeExport& ShapeExport::WriteTextShape( const Reference< XShape >& xShape )
 {
     FSHelperPtr pFS = GetFS();
-
+    Reference<XPropertySet> xShapeProps(xShape, UNO_QUERY);
     pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp));
 
     // non visual shape properties
     if (GetDocumentType() != DOCUMENT_DOCX)
     {
         pFS->startElementNS(mnXmlNamespace, XML_nvSpPr);
-        WriteNonVisualDrawingProperties( xShape, IDS( TextShape ) );
+        pFS->startElementNS(mnXmlNamespace, XML_cNvPr,
+                              XML_id, OString::number(GetNewShapeID(xShape)),
+                              XML_name, IDS(TextShape));
+        OUString sURL;
+        if (GetProperty(xShapeProps, "URL"))
+            mAny >>= sURL;
+
+        if (!sURL.isEmpty())
+        {
+            OUString sRelId = mpFB->addRelation(mpFS->getOutputStream(),
+                    oox::getRelationship(Relationship::HYPERLINK),
+                    mpURLTransformer->getTransformedString(sURL),
+                    mpURLTransformer->isExternalURL(sURL));
+
+            mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId.toUtf8());
+        }
+        pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
     }
     pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr, XML_txBox, "1");
     if (GetDocumentType() != DOCUMENT_DOCX)
