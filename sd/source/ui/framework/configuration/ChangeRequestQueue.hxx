@@ -22,7 +22,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <list>
+#include <queue>
 
 namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationChangeRequest; } } } } }
 
@@ -33,7 +33,7 @@ namespace sd { namespace framework {
     ChangeRequestQueueProcessor to process these requests.
 */
 class ChangeRequestQueue
-    : public ::std::list<css::uno::Reference< css::drawing::framework::XConfigurationChangeRequest> >
+    : public ::std::queue<css::uno::Reference< css::drawing::framework::XConfigurationChangeRequest> >
 {
 public:
     /** Create an empty queue.
