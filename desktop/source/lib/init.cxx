@@ -1331,7 +1331,8 @@ bool CallbackFlushHandler::processWindowEvent(CallbackData& aCallbackData)
 
     boost::property_tree::ptree& aTree = aCallbackData.setJson(payload);
     const unsigned nLOKWindowId = aTree.get<unsigned>("id", 0);
-    if (aTree.get<std::string>("action", "") == "invalidate")
+    const std::string aAction = aTree.get<std::string>("action", "");
+    if (aAction == "invalidate")
     {
         std::string aRectStr = aTree.get<std::string>("rectangle", "");
         // no 'rectangle' field => invalidate all of the window =>
@@ -1342,9 +1343,8 @@ bool CallbackFlushHandler::processWindowEvent(CallbackData& aCallbackData)
                 if (elem.Type == LOK_CALLBACK_WINDOW)
                 {
                     const boost::property_tree::ptree& aOldTree = elem.getJson();
-                    const unsigned nOldDialogId = aOldTree.get<unsigned>("id", 0);
-                    if (aOldTree.get<std::string>("action", "") == "invalidate"
-                        && nLOKWindowId == nOldDialogId)
+                    if (nLOKWindowId == aOldTree.get<unsigned>("id", 0)
+                        && aOldTree.get<std::string>("action", "") == "invalidate")
                     {
                         return true;
                     }
@@ -1363,10 +1363,9 @@ bool CallbackFlushHandler::processWindowEvent(CallbackData& aCallbackData)
                                                 return false;
 
                                             const boost::property_tree::ptree& aOldTree = elem.getJson();
-                                            const unsigned nOldDialogId = aOldTree.get<unsigned>("id", 0);
-                                            return aOldTree.get<std::string>("action", "") == "invalidate" &&
-                                                nLOKWindowId == nOldDialogId &&
-                                                aOldTree.get<std::string>("rectangle", "").empty();
+                                            return nLOKWindowId == aOldTree.get<unsigned>("id", 0)
+                                                && aOldTree.get<std::string>("action", "") == "invalidate"
+                                                && aOldTree.get<std::string>("rectangle", "").empty();
                                         });
 
             // we found a invalidate-all window callback
@@ -1440,6 +1439,7 @@ bool CallbackFlushHandler::processWindowEvent(CallbackData& aCallbackData)
                 return false;
             });
 
+            // Do not enqueue if redundant.
             if (currentIsRedundant)
             {
                 SAL_INFO("lok.dialog", "Current payload is engulfed by one already in the queue. "
@@ -1453,7 +1453,7 @@ bool CallbackFlushHandler::processWindowEvent(CallbackData& aCallbackData)
             assert(aCallbackData.validate() && "Validation after setJson failed!");
         }
     }
-    else if (aTree.get<std::string>("action", "") == "created")
+    else if (aAction == "created")
     {
         // Remove all previous actions on same dialog, if we are creating it anew.
         removeAll([&nLOKWindowId](const queue_type::value_type& elem) {
@@ -1466,7 +1466,7 @@ bool CallbackFlushHandler::processWindowEvent(CallbackData& aCallbackData)
             return false;
         });
     }
-    else if (aTree.get<std::string>("action", "") == "size_changed")
+    else if (aAction == "size_changed")
     {
         // A size change is practically re-creation of the window.
         // But at a minimum it's a full invalidation.
