@@ -58,7 +58,7 @@ include/basegfx/utils/unopolypolygon.hxx:97
     void basegfx::unotools::UnoPolyPolygon::modifying()const
 include/comphelper/interaction.hxx:54
     void comphelper::OInteraction::select()
-include/comphelper/proparrhlp.hxx:87
+include/comphelper/proparrhlp.hxx:83
     class cppu::IPropertyArrayHelper * comphelper::OAggregationArrayUsageHelper::createArrayHelper()const
 include/comphelper/servicedecl.hxx:164
     class rtl::OUString comphelper::service_decl::detail::OwnServiceImpl::getImplementationName()
@@ -66,18 +66,14 @@ include/comphelper/servicedecl.hxx:167
     unsigned char comphelper::service_decl::detail::OwnServiceImpl::supportsService(const class rtl::OUString &,)
 include/comphelper/servicedecl.hxx:171
     class com::sun::star::uno::Sequence<class rtl::OUString> comphelper::service_decl::detail::OwnServiceImpl::getSupportedServiceNames()
-include/comphelper/solarmutex.hxx:57
+include/comphelper/solarmutex.hxx:59
     _Bool comphelper::SolarMutex::tryToAcquire()
 include/comphelper/unique_disposing_ptr.hxx:169
     void comphelper::unique_disposing_solar_mutex_reset_ptr::reset(type-parameter-0-0 *,)
-include/comphelper/weakeventlistener.hxx:120
+include/comphelper/weakeventlistener.hxx:119
     void comphelper::OWeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
-include/sfx2/templatelocalview.hxx:205
-    void SfxTemplateLocalView::reload()
-include/sfx2/templatelocalview.hxx:207
-    void SfxTemplateLocalView::showAllTemplates()
-include/sfx2/thumbnailview.hxx:338
-    void SfxThumbnailView::Clear()
+include/sfx2/basedlgs.hxx:91
+    void SfxModelessDialog::FillInfo(struct SfxChildWinInfo &,)const
 include/svl/svdde.hxx:237
     class DdeData * DdeTopic::Get(enum SotClipboardFormatId,)
 include/svl/svdde.hxx:238
@@ -90,6 +86,8 @@ include/svl/svdde.hxx:244
     _Bool DdeTopic::StartAdviseLoop()
 include/svl/svdde.hxx:300
     void DdeService::~DdeService()
+include/svtools/simptabl.hxx:88
+    int SvSimpleTable::ColCompare(class SvTreeListEntry *,class SvTreeListEntry *,)
 include/toolkit/controls/geometrycontrolmodel.hxx:184
     void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
 include/vbahelper/vbacollectionimpl.hxx:290
@@ -116,7 +114,9 @@ include/vbahelper/vbareturntypes.hxx:41
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
 include/vcl/customweld.hxx:41
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
-include/vcl/weld.hxx:95
+include/vcl/treelistbox.hxx:471
+    class SvTreeListEntry * SvTreeListBox::CreateEntry()const
+include/vcl/weld.hxx:96
     void weld::Widget::set_visible(_Bool,)
 sc/source/core/opencl/formulagroupcl.cxx:1053
     _Bool sc::opencl::DynamicKernelSlidingArgument::NeedParallelReduction()const
@@ -128,10 +128,10 @@ sc/source/core/opencl/formulagroupcl.cxx:1520
     class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > sc::opencl::ParallelReductionVectorRef::GenSlidingWindowDeclRef(_Bool,)const
 sc/source/core/opencl/formulagroupcl.cxx:1555
     unsigned long sc::opencl::ParallelReductionVectorRef::Marshal(struct _cl_kernel *,int,int,struct _cl_program *,)
-sc/source/ui/inc/anyrefdg.hxx:222
+sc/source/filter/inc/xestyle.hxx:703
+    void XclExpDxf::SaveXmlExt(class XclExpXmlStream &,)
+sc/source/ui/inc/anyrefdg.hxx:220
     void ScRefHdlrImpl::dispose()
-sc/source/ui/inc/namemgrtable.hxx:42
-    void ScRangeManagerTable::InitListener::~InitListener()
 sc/source/ui/vba/vbacondition.hxx:41
     class rtl::OUString ScVbaCondition::Formula1()
 sc/source/ui/vba/vbacondition.hxx:42
