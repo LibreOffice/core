@@ -4894,24 +4894,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             force_c_locale();
         }
 
-        // We could use InitVCL() here -- and used to before using soffice_main,
-        // however that now deals with the initialisation for us (and it's not
-        // possible to try to set up VCL twice.
-
-        // Instead VCL init is done for us by soffice_main in a separate thread,
-        // however we specifically can't proceed until this setup is complete
-        // (or you get segfaults trying to use VCL and/or deadlocks due to other
-        //  setup within soffice_main). Specifically the various Application::
-        // functions depend on VCL being ready -- the deadlocks would happen
-        // if you try to use loadDocument too early.
-
-        // The RequestHandler is specifically set to be ready when all the other
-        // init in Desktop::Main (run from soffice_main) is done. We can enable
-        // the RequestHandler here (without starting any IPC thread;
-        // shortcutting the invocation in Desktop::Main that would start the IPC
-        // thread), and can then use it to wait until we're definitely ready to
-        // continue.
-
         if (eStage != PRE_INIT)
         {
             SAL_INFO("lok", "Re-initialize temp paths");
@@ -4920,6 +4902,13 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             osl::FileBase::getTempDirURL(aNewTemp);
             aOptions.SetTempPath(aNewTemp);
             desktop::Desktop::CreateTemporaryDirectory();
+
+            // The RequestHandler is specifically set to be ready when all the other
+            // init in Desktop::Main (run from soffice_main) is done. We can enable
+            // the RequestHandler here (without starting any IPC thread;
+            // shortcutting the invocation in Desktop::Main that would start the IPC
+            // thread), and can then use it to wait until we're definitely ready to
+            // continue.
 
             SAL_INFO("lok", "Enabling RequestHandler");
             RequestHandler::Enable(false);
@@ -4933,6 +4922,8 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 RequestHandler::WaitForReady();
                 SAL_INFO("lok", "RequestHandler ready -- continuing");
             }
+            else
+                InitVCL();
         }
 
         if (eStage != SECOND_INIT)
