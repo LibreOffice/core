@@ -78,7 +78,11 @@ public:
 
     virtual void tearDown() override
     {
+        if (m_pDocument)
+            m_pDocument->pClass->registerCallback(m_pDocument.get(), nullptr, nullptr);
         closeDoc();
+        comphelper::LibreOfficeKit::setActive(false);
+
         UnoApiTest::tearDown();
     };
 
@@ -211,6 +215,7 @@ public:
     osl::Condition m_aContextMenuCondition;
     boost::property_tree::ptree m_aContextMenuResult;
 
+    std::unique_ptr<LibLODocument_Impl> m_pDocument;
 };
 
 static Control* GetFocusControl(vcl::Window const * pParent)
@@ -255,7 +260,8 @@ LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, LibreOfficeKitDoc
     {
         CPPUNIT_ASSERT(false);
     }
-    return new LibLODocument_Impl(mxComponent);
+    m_pDocument.reset(new LibLODocument_Impl(mxComponent));
+    return m_pDocument.get();
 }
 
 void DesktopLOKTest::closeDoc()
@@ -367,7 +373,6 @@ void DesktopLOKTest::testGetStyles()
             CPPUNIT_FAIL("Unknown style family: " + rPair.first);
         }
     }
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testGetFonts()
@@ -389,7 +394,6 @@ void DesktopLOKTest::testGetFonts()
         CPPUNIT_ASSERT( !rPair.second.empty());
     }
     free(pJSON);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testCreateView()
@@ -416,7 +420,6 @@ void DesktopLOKTest::testCreateView()
 
     pDocument->m_pDocumentClass->destroyView(pDocument, nId1);
     CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViewsCount(pDocument));
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testGetPartPageRectangles()
@@ -440,7 +443,6 @@ void DesktopLOKTest::testGetPartPageRectangles()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aRectangles.size());
 
     free(pRectangles);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testGetFilterTypes()
@@ -456,7 +458,6 @@ void DesktopLOKTest::testGetFilterTypes()
     CPPUNIT_ASSERT(!aTree.empty());
     CPPUNIT_ASSERT_EQUAL(std::string("application/vnd.oasis.opendocument.text"), aTree.get_child("writer8").get_child("MediaType").get_value<std::string>());
     free(pJSON);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testSearchCalc()
@@ -490,9 +491,6 @@ void DesktopLOKTest::testSearchCalc()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), m_aSearchResultSelection.size());
     // Result is on the first sheet.
     CPPUNIT_ASSERT_EQUAL(0, m_aSearchResultPart[0]);
-
-    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testSearchAllNotificationsCalc()
@@ -517,9 +515,6 @@ void DesktopLOKTest::testSearchAllNotificationsCalc()
     CPPUNIT_ASSERT_EQUAL(0, m_nSelectionBeforeSearchResult);
     // But we do get the selection afterwards.
     CPPUNIT_ASSERT(m_nSelectionAfterSearchResult > 0);
-
-    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testPaintTile()
@@ -548,8 +543,6 @@ void DesktopLOKTest::testPaintTile()
     nTileHeight = 4000;
     aBuffer.resize(nCanvasWidth * nCanvasHeight * 4);
     pDocument->pClass->paintTile(pDocument, aBuffer.data(), nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testSaveAs()
@@ -560,8 +553,6 @@ void DesktopLOKTest::testSaveAs()
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testSaveAsCalc()
@@ -572,8 +563,6 @@ void DesktopLOKTest::testSaveAsCalc()
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testPasteWriter()
@@ -595,8 +584,6 @@ void DesktopLOKTest::testPasteWriter()
     CPPUNIT_ASSERT(!pDocument->pClass->paste(pDocument, "textt/plain;charset=utf-8", aText.getStr(), aText.getLength()));
     // Writer is expected to support text/html.
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/html", aText.getStr(), aText.getLength()));
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testPasteWriterJPEG()
@@ -631,8 +618,6 @@ void DesktopLOKTest::testPasteWriterJPEG()
     xShape.set(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     // This was text::TextContentAnchorType_AS_CHARACTER, AnchorType argument was ignored.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, xShape->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testUndoWriter()
@@ -653,8 +638,6 @@ void DesktopLOKTest::testUndoWriter()
     boost::property_tree::read_json(aStream, aTree);
     // Make sure that pressing a key creates exactly one undo action.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTree.get_child("actions").size());
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testRowColumnHeaders()
@@ -767,8 +750,6 @@ void DesktopLOKTest::testRowColumnHeaders()
         nPrevious = nSize;
     }
     CPPUNIT_ASSERT(!bNotEnoughHeaders);
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testHiddenRowHeaders()
@@ -809,7 +790,6 @@ void DesktopLOKTest::testHiddenRowHeaders()
         }
         nPrevious = nSize;
     }
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testCellCursor()
@@ -831,8 +811,6 @@ void DesktopLOKTest::testCellCursor()
     OString aRectangle(aTree.get<std::string>("commandValues").c_str());
     // cell cursor geometry + col + row
     CPPUNIT_ASSERT_EQUAL(OString("0, 0, 1274, 254, 0, 0"), aRectangle);
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testCommandResult()
@@ -869,9 +847,6 @@ void DesktopLOKTest::testCommandResult()
 
     CPPUNIT_ASSERT_EQUAL(std::string(".uno:Bold"), aTree.get_child("commandName").get_value<std::string>());
     CPPUNIT_ASSERT_EQUAL(true, aTree.get_child("success").get_value<bool>());
-
-    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testWriterComments()
@@ -913,9 +888,6 @@ void DesktopLOKTest::testWriterComments()
     auto xTextField = xTextPortion->getPropertyValue("TextField").get< uno::Reference<beans::XPropertySet> >();
     // This was empty, typed characters ended up in the body text.
     CPPUNIT_ASSERT_EQUAL(OUString("test"), xTextField->getPropertyValue("Content").get<OUString>());
-
-    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testTrackChanges()
@@ -938,9 +910,6 @@ void DesktopLOKTest::testTrackChanges()
     Scheduler::ProcessEventsToIdle();
     // This was 1, only the active view was notified.
     CPPUNIT_ASSERT_EQUAL(2, m_nTrackChanges);
-
-    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testSheetOperations()
@@ -973,9 +942,6 @@ void DesktopLOKTest::testSheetOperations()
     {
         CPPUNIT_ASSERT_EQUAL(aExpected[i], OString(pDocument->pClass->getPartName(pDocument, i)));
     }
-
-    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testSheetSelections()
@@ -1087,9 +1053,6 @@ void DesktopLOKTest::testSheetSelections()
         free(pUsedMimeType);
         free(pCopiedContent);
     }
-
-    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 namespace {
@@ -1270,9 +1233,6 @@ void DesktopLOKTest::testContextMenuCalc()
         CPPUNIT_ASSERT(aCheckedToCell);
         CPPUNIT_ASSERT_EQUAL(aCheckedToCell.get().data(), std::string("false"));
     }
-
-    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testContextMenuWriter()
@@ -1328,9 +1288,6 @@ void DesktopLOKTest::testContextMenuWriter()
         CPPUNIT_ASSERT(aEnabled);
         CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("true"));
     }
-
-    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testContextMenuImpress()
@@ -1457,9 +1414,6 @@ void DesktopLOKTest::testContextMenuImpress()
         CPPUNIT_ASSERT(aCheckedHelpFront);
         CPPUNIT_ASSERT_EQUAL(aCheckedHelpFront.get().data(), std::string("true"));
     }
-
-    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 static void callbackCompressionTest(const int type, const char* payload, void* data)
@@ -1554,8 +1508,6 @@ void DesktopLOKTest::testNotificationCompression()
 
     CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_STATE_CHANGED), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string(".uno:AssignLayout=1"), std::get<1>(notifs[i++]));
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testTileInvalidationCompression()
@@ -1693,8 +1645,6 @@ void DesktopLOKTest::testTileInvalidationCompression()
         CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
         CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 1000000000, 1000000000, 0"), std::get<1>(notifs[i++]));
     }
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testPartInInvalidation()
@@ -1768,8 +1718,6 @@ void DesktopLOKTest::testPartInInvalidation()
         // payload, so this was merged -> it was 1.
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), notifs.size());
     }
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testRedlineWriter()
@@ -1799,8 +1747,6 @@ void DesktopLOKTest::testRedlineWriter()
         CPPUNIT_ASSERT_EQUAL(std::string("Insert \xE2\x80\x9Ct\xE2\x80\x9D"), rRedline.second.get<std::string>("description"));
             // U+201C LEFT DOUBLE QUOTATION MARK, U+201D RIGHT DOUBLE QUOTATION
             // MARK
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testRedlineCalc()
@@ -1830,8 +1776,6 @@ void DesktopLOKTest::testRedlineCalc()
     for (boost::property_tree::ptree::value_type& rRedline : aTree.get_child("redlines"))
         // This failed with boost::property_tree::ptree_bad_path, as there were no description field.
         CPPUNIT_ASSERT_EQUAL(std::string("Cell B4 changed from '5' to 't'"), rRedline.second.get<std::string>("description"));
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 class ViewCallback
@@ -1892,8 +1836,7 @@ void DesktopLOKTest::testPaintPartTile()
 
     ViewCallback aView1;
     ViewCallback aView2;
-    std::unique_ptr<LibLODocument_Impl> xDocument(loadDoc("2slides.odp"));
-    LibLODocument_Impl* pDocument = xDocument.get();
+    LibLODocument_Impl* pDocument = loadDoc("2slides.odp");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
     pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView1);
     int nView1 = pDocument->m_pDocumentClass->getView(pDocument);
@@ -1927,11 +1870,6 @@ void DesktopLOKTest::testPaintPartTile()
     // This failed: paintPartTile() (as a side-effect) ended the text edit of
     // the first view, so there were no invalidations.
     //CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
-
-    mxComponent.clear();
-
-    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testWriterCommentInsertCursor()
@@ -1941,8 +1879,7 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
 
     ViewCallback aView1;
     ViewCallback aView2;
-    std::unique_ptr<LibLODocument_Impl> xDocument(loadDoc("blank_text.odt"));
-    LibLODocument_Impl* pDocument = xDocument.get();
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
     pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView1);
     pDocument->m_pDocumentClass->createView(pDocument);
@@ -1971,10 +1908,6 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
     CPPUNIT_ASSERT(aView1.m_aOwnCursor.IsEmpty());
 
     Scheduler::ProcessEventsToIdle();
-    mxComponent.clear();
-
-    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 #if HAVE_MORE_FONTS
@@ -1999,8 +1932,6 @@ void DesktopLOKTest::testGetFontSubset()
     boost::property_tree::ptree aValues = aTree.get_child("commandValues");
     CPPUNIT_ASSERT( !aValues.empty() );
     free(pJSON);
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 #endif
 
@@ -2054,7 +1985,6 @@ void DesktopLOKTest::testCommentsWriter()
     }
 
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 
@@ -2106,7 +2036,6 @@ void DesktopLOKTest::testCommentsCalc()
     CPPUNIT_ASSERT_EQUAL(2, nIdx);
 
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 
@@ -2164,7 +2093,6 @@ void DesktopLOKTest::testCommentsImpress()
     CPPUNIT_ASSERT_EQUAL(2, nIdx);
 
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testCommentsCallbacksWriter()
@@ -2251,9 +2179,6 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
     CPPUNIT_ASSERT(!aStream.str().empty());
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), aTree.get_child("comments").size());
-
-    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testRunMacro()
@@ -2269,8 +2194,6 @@ void DesktopLOKTest::testRunMacro()
 
     bNonExistentMacro = aOffice.m_pOfficeClass->runMacro(&aOffice, OString("macro:///I.Am.Not(There)").getStr());
     CPPUNIT_ASSERT(!bNonExistentMacro);
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testExtractParameter()
@@ -2301,8 +2224,6 @@ void DesktopLOKTest::testExtractParameter()
     aValue = extractParameter(aOptions, "Language");
     CPPUNIT_ASSERT_EQUAL(OUString(), aValue);
     CPPUNIT_ASSERT_EQUAL(OUString("Something1,Something2=blah,Something3"), aOptions);
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::readFileIntoByteVector(OUString const & sFilename, std::vector<unsigned char> & rByteVector)
@@ -2341,8 +2262,6 @@ void DesktopLOKTest::testGetSignatureState_Signed()
 
     nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
     CPPUNIT_ASSERT_EQUAL(int(1), nState);
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testGetSignatureState_NonSigned()
@@ -2353,7 +2272,6 @@ void DesktopLOKTest::testGetSignatureState_NonSigned()
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
     int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
     CPPUNIT_ASSERT_EQUAL(int(0), nState);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testInsertCertificate_DER_ODT()
@@ -2406,8 +2324,6 @@ void DesktopLOKTest::testInsertCertificate_DER_ODT()
 
     int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
     CPPUNIT_ASSERT_EQUAL(int(1), nState);
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 
@@ -2469,8 +2385,6 @@ void DesktopLOKTest::testInsertCertificate_PEM_ODT()
 
     int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
     CPPUNIT_ASSERT_EQUAL(int(1), nState);
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testInsertCertificate_PEM_DOCX()
@@ -2531,8 +2445,6 @@ void DesktopLOKTest::testInsertCertificate_PEM_DOCX()
 
     int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
     CPPUNIT_ASSERT_EQUAL(int(5), nState);
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testSignDocument_PEM_PDF()
@@ -2591,8 +2503,6 @@ void DesktopLOKTest::testSignDocument_PEM_PDF()
                                          aPrivateKey.data(), int(aPrivateKey.size()));
 
     CPPUNIT_ASSERT(bResult);
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testTextSelectionHandles()
@@ -2634,9 +2544,6 @@ void DesktopLOKTest::testTextSelectionHandles()
     free(pText);
     CPPUNIT_ASSERT_EQUAL(OString("1418, 1418, 0, 275"), m_aTextSelectionStart);
     CPPUNIT_ASSERT_EQUAL(OString("1898, 1418, 0, 275"), m_aTextSelectionEnd);
-
-    pDocument->pClass->registerCallback(pDocument, nullptr, nullptr);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testDialogPaste()
@@ -2664,7 +2571,6 @@ void DesktopLOKTest::testDialogPaste()
 
     static_cast<SystemWindow*>(pWindow.get())->Close();
     Scheduler::ProcessEventsToIdle();
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 namespace {
