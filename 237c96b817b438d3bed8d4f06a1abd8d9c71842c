@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_1fd70af0",
+        "filename": "sfx2/source/doc/SfxRedactionHelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-05-09T06:49:35Z",
+      "side": 1,
+      "message": "\"erroneous\"",
+      "range": {
+        "startLine": 94,
+        "startChar": 69,
+        "endLine": 94,
+        "endChar": 77
+      },
+      "revId": "237c96b817b438d3bed8d4f06a1abd8d9c71842c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_7fff2e67",
+        "filename": "sw/source/core/draw/dflyobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-05-09T06:49:35Z",
+      "side": 1,
+      "message": "\"expressable\" is the correct way, see https://en.wiktionary.org/wiki/expressable",
+      "range": {
+        "startLine": 524,
+        "startChar": 61,
+        "endLine": 524,
+        "endChar": 72
+      },
+      "revId": "237c96b817b438d3bed8d4f06a1abd8d9c71842c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
