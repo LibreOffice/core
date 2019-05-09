@@ -1377,8 +1377,7 @@ ExtCfCondFormat::ExtCfCondFormat(const ScRangeList& rRange, std::vector< std::un
     maEntries.swap(rEntries);
     if (pPriorities)
         maPriorities = *pPriorities;
-    else
-        maPriorities.resize(maEntries.size(), -1);
+    maPriorities.resize(maEntries.size(), -1);
 }
 
 ExtCfCondFormat::~ExtCfCondFormat()
