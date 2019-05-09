@@ -91,7 +91,7 @@ void ChangeRequestQueueProcessor::AddRequest (
     TraceRequest(rxRequest);
 #endif
 
-    maQueue.push_back(rxRequest);
+    maQueue.push(rxRequest);
     StartProcessing();
 }
 
@@ -135,7 +135,7 @@ void ChangeRequestQueueProcessor::ProcessOneEvent()
 
     // Get and remove the first entry from the queue.
     Reference<XConfigurationChangeRequest> xRequest (maQueue.front());
-    maQueue.pop_front();
+    maQueue.pop();
 
     // Execute the change request.
     if (xRequest.is())
@@ -176,7 +176,8 @@ void ChangeRequestQueueProcessor::ProcessUntilEmpty()
 void ChangeRequestQueueProcessor::Clear()
 {
     ::osl::MutexGuard aGuard (maMutex);
-    maQueue.clear();
+    ChangeRequestQueue aEmpty;
+    maQueue.swap(aEmpty);
 }
 
 } } // end of namespace sd::framework::configuration
