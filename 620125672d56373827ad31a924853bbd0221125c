@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_9abc886a",
+        "filename": "include/xmlreader/span.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-09T18:16:01Z",
+      "side": 1,
+      "message": "for the use of rtl_str_compare_WithLength below, better include \u003crtl/string.h\u003e (which had somewhat erroneously been removed with 826cb27cc80ae843927d68e0337ad2caffa9f023 \"reuse the ConstCharArrayDetector in Span\") (and please keep the block of includes lexicographically sorted)",
+      "revId": "620125672d56373827ad31a924853bbd0221125c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
