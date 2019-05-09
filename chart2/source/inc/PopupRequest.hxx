@@ -11,6 +11,8 @@
 #define INCLUDED_CHART2_SOURCE_INC_POPUPREQUEST_HXX
 
 #include "MutexContainer.hxx"
+#include "charttoolsdllapi.hxx"
+
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/XRequestCallback.hpp>
 

@@ -144,7 +144,7 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
     {
         bool bStop = false;
 
-        ClearableMutexGuard aGuard( GetMutex() );
+        ClearableMutexGuard aGuard( m_aMutex );
         // make local copy for notification
         ChildListVectorType aLocalChildList( m_aChildList );
         aGuard.clear();
@@ -182,7 +182,7 @@ bool AccessibleBase::UpdateChildren()
 {
     bool bMustUpdateChildren = false;
     {
-        MutexGuard aGuard( GetMutex() );
+        MutexGuard aGuard( m_aMutex );
         if( ! m_bMayHaveChildren ||
             m_bIsDisposed )
             return false;
@@ -253,7 +253,7 @@ void AccessibleBase::AddChild( AccessibleBase * pChild  )
     OSL_ENSURE( pChild != nullptr, "Invalid Child" );
     if( pChild )
     {
-        ClearableMutexGuard aGuard( GetMutex() );
+        ClearableMutexGuard aGuard( m_aMutex );
 
         Reference< XAccessible > xChild( pChild );
         m_aChildList.push_back( xChild );
@@ -277,7 +277,7 @@ void AccessibleBase::AddChild( AccessibleBase * pChild  )
  */
 void AccessibleBase::RemoveChildByOId( const ObjectIdentifier& rOId )
 {
-    ClearableMutexGuard aGuard( GetMutex() );
+    ClearableMutexGuard aGuard( m_aMutex );
 
     ChildOIDMap::iterator aIt( m_aChildOIDMap.find( rOId ));
     if( aIt != m_aChildOIDMap.end())
@@ -322,7 +322,7 @@ awt::Point AccessibleBase::GetUpperLeftOnScreen() const
     awt::Point aResult;
     if( m_aAccInfo.m_pParent )
     {
-        ClearableMutexGuard aGuard( GetMutex() );
+        ClearableMutexGuard aGuard( m_aMutex );
         AccessibleBase * pParent = m_aAccInfo.m_pParent;
         aGuard.clear();
 
@@ -343,7 +343,7 @@ void AccessibleBase::BroadcastAccEvent(
     const Any & rOld,
     bool bSendGlobally ) const
 {
-    ClearableMutexGuard aGuard( GetMutex() );
+    ClearableMutexGuard aGuard( m_aMutex );
 
     if ( !m_nEventNotifierId && !bSendGlobally )
         return;
@@ -370,7 +370,7 @@ void AccessibleBase::BroadcastAccEvent(
 
 void AccessibleBase::KillAllChildren()
 {
-    ClearableMutexGuard aGuard( GetMutex() );
+    ClearableMutexGuard aGuard( m_aMutex );
 
     // make local copy for notification
     ChildListVectorType aLocalChildList( m_aChildList );
@@ -412,7 +412,7 @@ void AccessibleBase::SetInfo( const AccessibleElementInfo & rNewInfo )
 void SAL_CALL AccessibleBase::disposing()
 {
     {
-        MutexGuard aGuard(GetMutex());
+        MutexGuard aGuard(m_aMutex);
         OSL_ENSURE(!m_bIsDisposed, "dispose() called twice");
 
         // notify disposing to all AccessibleEvent listeners asynchron
@@ -454,7 +454,7 @@ Reference< XAccessibleContext > SAL_CALL AccessibleBase::getAccessibleContext()
 // ________ AccessibleBase::XAccessibleContext ________
 sal_Int32 SAL_CALL AccessibleBase::getAccessibleChildCount()
 {
-    ClearableMutexGuard aGuard( GetMutex() );
+    ClearableMutexGuard aGuard( m_aMutex );
     if( ! m_bMayHaveChildren ||
         m_bIsDisposed )
         return 0;
@@ -481,7 +481,7 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleChild( sal_Int32 
     CheckDisposeState();
     Reference< XAccessible > xResult;
 
-    ClearableMutexGuard aGuard( GetMutex() );
+    ClearableMutexGuard aGuard( m_aMutex );
     bool bMustUpdateChildren = ( m_bMayHaveChildren &&
                                  ! m_bChildrenInitialized );
 
@@ -499,7 +499,7 @@ Reference< XAccessible > AccessibleBase::ImplGetAccessibleChildById( sal_Int32 i
 {
     Reference< XAccessible > xResult;
 
-    MutexGuard aGuard( GetMutex());
+    MutexGuard aGuard( m_aMutex);
     if( ! m_bMayHaveChildren ||
         i < 0 ||
         static_cast< ChildListVectorType::size_type >( i ) >= m_aChildList.size() )
@@ -604,7 +604,7 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleAtPoint( const aw
     if( ( aRect.X <= aPoint.X && aPoint.X <= (aRect.X + aRect.Width) ) &&
         ( aRect.Y <= aPoint.Y && aPoint.Y <= (aRect.Y + aRect.Height)))
     {
-        ClearableMutexGuard aGuard( GetMutex() );
+        ClearableMutexGuard aGuard( m_aMutex );
         ChildListVectorType aLocalChildList( m_aChildList );
         aGuard.clear();
 
@@ -833,7 +833,7 @@ void SAL_CALL AccessibleBase::disposing( const lang::EventObject& /*Source*/ )
 // ________ XAccessibleEventBroadcasters ________
 void SAL_CALL AccessibleBase::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
 {
-    MutexGuard aGuard( GetMutex() );
+    MutexGuard aGuard( m_aMutex );
 
     if ( xListener.is() )
     {
@@ -846,7 +846,7 @@ void SAL_CALL AccessibleBase::addAccessibleEventListener( const Reference< XAcce
 
 void SAL_CALL AccessibleBase::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
 {
-    MutexGuard aGuard( GetMutex() );
+    MutexGuard aGuard( m_aMutex );
 
     if ( xListener.is() && m_nEventNotifierId)
     {

@@ -174,7 +174,7 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
     Reference< XAccessible > xParent;
     Reference< awt::XWindow > xWindow;
     {
-        MutexGuard aGuard( GetMutex());
+        MutexGuard aGuard( m_aMutex);
         xSelectionSupplier.set( m_xSelectionSupplier );
         xChartModel.set( m_xChartModel );
         xChartView.set( m_xChartView );
@@ -276,7 +276,7 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
     }
 
     {
-        MutexGuard aGuard( GetMutex());
+        MutexGuard aGuard( m_aMutex);
         m_xSelectionSupplier = WeakReference< view::XSelectionSupplier >(xSelectionSupplier);
         m_xChartModel = WeakReference< frame::XModel >(xChartModel);
         m_xChartView = WeakReference< uno::XInterface >(xChartView);
@@ -292,7 +292,7 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
         {
             //before notification we prepare for creation of new context
             //the old context will be deleted after notification than
-            MutexGuard aGuard( GetMutex());
+            MutexGuard aGuard( m_aMutex);
             Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );
             if( xChartDoc.is())
                 m_spObjectHierarchy.reset(
@@ -327,7 +327,7 @@ void SAL_CALL AccessibleChartView::selectionChanged( const lang::EventObject& /*
 {
     Reference< view::XSelectionSupplier > xSelectionSupplier;
     {
-        MutexGuard aGuard( GetMutex());
+        MutexGuard aGuard( m_aMutex);
         xSelectionSupplier.set(m_xSelectionSupplier);
     }
 

@@ -336,7 +336,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getWall()
     uno::Reference< beans::XPropertySet > xRet;
     bool bAddListener = false;
     {
-        MutexGuard aGuard( GetMutex() );
+        MutexGuard aGuard( m_aMutex );
         if( !m_xWall.is() )
         {
             m_xWall.set( new Wall() );
@@ -354,7 +354,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getFloor()
     uno::Reference< beans::XPropertySet > xRet;
     bool bAddListener = false;
     {
-        MutexGuard aGuard( GetMutex() );
+        MutexGuard aGuard( m_aMutex );
         if( !m_xFloor.is() )
         {
             m_xFloor.set( new Wall() );
@@ -369,7 +369,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getFloor()
 
 uno::Reference< chart2::XLegend > SAL_CALL Diagram::getLegend()
 {
-    MutexGuard aGuard( GetMutex() );
+    MutexGuard aGuard( m_aMutex );
     return m_xLegend;
 }
 
@@ -377,7 +377,7 @@ void SAL_CALL Diagram::setLegend( const uno::Reference< chart2::XLegend >& xNewL
 {
     Reference< chart2::XLegend > xOldLegend;
     {
-        MutexGuard aGuard( GetMutex() );
+        MutexGuard aGuard( m_aMutex );
         if( m_xLegend == xNewLegend )
             return;
         xOldLegend = m_xLegend;
@@ -394,14 +394,14 @@ Reference< chart2::XColorScheme > SAL_CALL Diagram::getDefaultColorScheme()
 {
     Reference< chart2::XColorScheme > xRet;
     {
-        MutexGuard aGuard( GetMutex() );
+        MutexGuard aGuard( m_aMutex );
         xRet = m_xColorScheme;
     }
 
     if( !xRet.is())
     {
         xRet.set( createConfigColorScheme( m_xContext ));
-        MutexGuard aGuard( GetMutex() );
+        MutexGuard aGuard( m_aMutex );
         m_xColorScheme = xRet;
     }
     return xRet;
@@ -410,7 +410,7 @@ Reference< chart2::XColorScheme > SAL_CALL Diagram::getDefaultColorScheme()
 void SAL_CALL Diagram::setDefaultColorScheme( const Reference< chart2::XColorScheme >& xColorScheme )
 {
     {
-        MutexGuard aGuard( GetMutex() );
+        MutexGuard aGuard( m_aMutex );
         m_xColorScheme.set( xColorScheme );
     }
     fireModifyEvent();
@@ -434,7 +434,7 @@ void SAL_CALL Diagram::setDiagramData(
 // ____ XTitled ____
 uno::Reference< chart2::XTitle > SAL_CALL Diagram::getTitleObject()
 {
-    MutexGuard aGuard( GetMutex() );
+    MutexGuard aGuard( m_aMutex );
     return m_xTitle;
 }
 
@@ -442,7 +442,7 @@ void SAL_CALL Diagram::setTitleObject( const uno::Reference< chart2::XTitle >& x
 {
     Reference< chart2::XTitle > xOldTitle;
     {
-        MutexGuard aGuard( GetMutex() );
+        MutexGuard aGuard( m_aMutex );
         if( m_xTitle == xNewTitle )
             return;
         xOldTitle = m_xTitle;
@@ -476,7 +476,7 @@ void SAL_CALL Diagram::addCoordinateSystem(
     const uno::Reference< chart2::XCoordinateSystem >& aCoordSys )
 {
     {
-        MutexGuard aGuard( GetMutex() );
+        MutexGuard aGuard( m_aMutex );
         if( std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), aCoordSys )
             != m_aCoordSystems.end())
             throw lang::IllegalArgumentException();
@@ -496,7 +496,7 @@ void SAL_CALL Diagram::removeCoordinateSystem(
     const uno::Reference< chart2::XCoordinateSystem >& aCoordSys )
 {
     {
-        MutexGuard aGuard( GetMutex() );
+        MutexGuard aGuard( m_aMutex );
         std::vector< uno::Reference< chart2::XCoordinateSystem > >::iterator
               aIt( std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), aCoordSys ));
         if( aIt == m_aCoordSystems.end())
@@ -511,7 +511,7 @@ void SAL_CALL Diagram::removeCoordinateSystem(
 
 uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > SAL_CALL Diagram::getCoordinateSystems()
 {
-    MutexGuard aGuard( GetMutex() );
+    MutexGuard aGuard( m_aMutex );
     return comphelper::containerToSequence( m_aCoordSystems );
 }
 
@@ -526,7 +526,7 @@ void SAL_CALL Diagram::setCoordinateSystems(
         aNew.push_back( aCoordinateSystems[0] );
     }
     {
-        MutexGuard aGuard( GetMutex() );
+        MutexGuard aGuard( m_aMutex );
         std::swap( aOld, m_aCoordSystems );
         m_aCoordSystems = aNew;
     }
@@ -538,7 +538,7 @@ void SAL_CALL Diagram::setCoordinateSystems(
 // ____ XCloneable ____
 Reference< util::XCloneable > SAL_CALL Diagram::createClone()
 {
-    MutexGuard aGuard( GetMutex() );
+    MutexGuard aGuard( m_aMutex );
     return Reference< util::XCloneable >( new Diagram( *this ));
 }
 
