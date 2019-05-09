@@ -334,6 +334,7 @@
 #define STR_ANCHOR_TO_CELL                          NC_("STR_ANCHOR_TO_CELL", "To cell")
 #define STR_ANCHOR_TO_CELL_RESIZE                   NC_("STR_ANCHOR_TO_CELL_RESIZE", "To cell (resize with cell)")
 #define STR_ANCHOR_TO_PAGE                          NC_("STR_ANCHOR_TO_PAGE", "To page")
+#define STR_NO_NAMED_RANGES_AVAILABLE               NC_("STR_NO_NAMED_RANGES_AVAILABLE", "No named ranges available in the selected document")
 
 #endif
 
