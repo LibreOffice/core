@@ -35,6 +35,8 @@
 #include <rangeutl.hxx>
 #include <docsh.hxx>
 #include <tablink.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
 
 ScLinkedAreaDlg::ScLinkedAreaDlg(weld::Window* pParent)
     : GenericDialogController(pParent, "modules/scalc/ui/externaldata.ui", "ExternalDataDialog")
@@ -257,8 +259,13 @@ void ScLinkedAreaDlg::UpdateSourceRanges()
 
     m_xLbRanges->thaw();
 
-    if (m_xLbRanges->n_children() == 1)
+    if (m_xLbRanges->n_children() >= 1)
         m_xLbRanges->select(0);
+    else
+    {
+        m_xLbRanges->append_text(ScResId(STR_NO_NAMED_RANGES_AVAILABLE));
+        m_xLbRanges->set_sensitive(false);
+    }
 }
 
 void ScLinkedAreaDlg::UpdateEnable()
