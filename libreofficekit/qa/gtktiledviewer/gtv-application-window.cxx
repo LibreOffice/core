@@ -348,9 +348,18 @@ gtv_application_window_load_document(GtvApplicationWindow* window,
     *(priv->m_pRenderingArgs) = *aArgs;
 
     // setup lokdocview
-    window->lokdocview = lok_doc_view_new_from_user_profile(priv->m_pRenderingArgs->m_aLoPath.c_str(),
-                                                            priv->m_pRenderingArgs->m_aUserProfile.empty() ? nullptr : priv->m_pRenderingArgs->m_aUserProfile.c_str(),
-                                                          nullptr, nullptr);
+    const char *pUserProfile = priv->m_pRenderingArgs->m_aUserProfile.empty() ?
+        nullptr : priv->m_pRenderingArgs->m_aUserProfile.c_str();
+
+    window->lokdocview = GTK_WIDGET(
+        g_initable_new(LOK_TYPE_DOC_VIEW, nullptr, nullptr,
+                       "lopath", priv->m_pRenderingArgs->m_aLoPath.c_str(),
+                       "unipoll", priv->m_pRenderingArgs->m_bUnipoll,
+                       "userprofileurl", pUserProfile,
+                       "halign", GTK_ALIGN_CENTER,
+                       "valign", GTK_ALIGN_CENTER,
+                       nullptr));
+
     gtk_container_add(GTK_CONTAINER(window->scrolledwindow), window->lokdocview);
 
     setupDocView(window);
