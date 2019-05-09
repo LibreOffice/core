@@ -1,6 +1,4 @@
 svx/uiconfig/ui/classificationdialog.ui://GtkTreeViewColumn[@id='treeviewcolumn3'] no-labelled-by
-svx/uiconfig/ui/classificationdialog.ui:GtkDialog[@id='AdvancedDocumentClassificationDialog']/GtkBox[@id='dialog-vbox1']/GtkGrid/GtkGrid/GtkLabel orphan-label
-svx/uiconfig/ui/classificationdialog.ui://GtkDrawingArea[@id='classificationEditWindow'] no-labelled-by
 svx/uiconfig/ui/classificationdialog.ui://GtkTreeViewColumn[@id='treeviewcolumn6'] no-labelled-by
 svx/uiconfig/ui/classificationdialog.ui://GtkTreeViewColumn[@id='treeviewcolumn4'] no-labelled-by
 

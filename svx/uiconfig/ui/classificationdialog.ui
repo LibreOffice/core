@@ -274,12 +274,15 @@
                 <property name="vexpand">True</property>
                 <property name="row_spacing">3</property>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="classificationContentLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="classificationdialog|label-Content">Content</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="classificationEditWindow"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -341,6 +344,9 @@
                             <property name="can_focus">True</property>
                             <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
                             <property name="hexpand">True</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="classificationContentLabel"/>
+                            </accessibility>
                           </object>
                         </child>
                       </object>
