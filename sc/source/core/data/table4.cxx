@@ -2270,27 +2270,18 @@ bool ScTable::GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, bool bInSel,
     }
     if (rCol == MAXCOL+1)
         return true;
-    else
+    for (;;)
     {
-        bool bStop = false;
-        while (!bStop)
-        {
-            if (ValidCol(rCol))
-            {
-                bStop = aCol[rCol].GetNextSpellingCell(rRow, bInSel, rMark);
-                if (bStop)
-                    return true;
-                else /*if (rRow == MAXROW+1) */
-                {
-                    rCol++;
-                    rRow = 0;
-                }
-            }
-            else
-                return true;
-        }
+        if (!ValidCol(rCol))
+            return true;
+        if (rCol >= GetAllocatedColumnsCount())
+            return true;
+        if (aCol[rCol].GetNextSpellingCell(rRow, bInSel, rMark))
+            return true;
+         /*else (rRow == MAXROW+1) */
+        rCol++;
+        rRow = 0;
     }
-    return false;
 }
 
 void ScTable::TestTabRefAbs(SCTAB nTable) const
