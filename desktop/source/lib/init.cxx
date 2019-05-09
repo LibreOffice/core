@@ -252,7 +252,7 @@ static OUString getUString(const char* pString)
     return OStringToOUString(sString, RTL_TEXTENCODING_UTF8);
 }
 
-/// Try to convert a relative URL to an absolute one, unless it already looks like an URL.
+/// Try to convert a relative URL to an absolute one, unless it already looks like a URL.
 static OUString getAbsoluteURL(const char* pURL)
 {
     OUString aURL(getUString(pURL));

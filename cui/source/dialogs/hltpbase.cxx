@@ -393,7 +393,7 @@ OUString SvxHyperlinkTabPageBase::GetSchemeFromURL( const OUString& rStrURL )
     INetProtocol aProtocol = aURL.GetProtocol();
 
     // our new INetUrlObject now has the ability
-    // to detect if an Url is valid or not :-(
+    // to detect if a Url is valid or not :-(
     if ( aProtocol == INetProtocol::NotValid )
     {
         if ( rStrURL.startsWithIgnoreAsciiCase( INET_HTTP_SCHEME ) )

@@ -62,14 +62,14 @@ struct ImageListItemDescriptor
 {
     ImageListItemDescriptor() : nMaskMode( ImageMaskMode_Color ) {}
 
-    OUString                    aURL;               // an URL to a bitmap with several images inside
+    OUString                    aURL;               // a URL to a bitmap with several images inside
     Color                       aMaskColor;         // a color used as transparent
-    OUString                    aMaskURL;           // an URL to an optional bitmap used as a mask
+    OUString                    aMaskURL;           // a URL to an optional bitmap used as a mask
     ImageMaskMode               nMaskMode;            // an enum to describe the current mask mode
     std::unique_ptr<ImageItemListDescriptor>
                                 pImageItemList;       // an array of ImageItemDescriptors that describes every image
-    OUString                    aHighContrastURL;       // an URL to an optional high contrast bitmap with several images inside
-    OUString                    aHighContrastMaskURL;   // an URL to an optional high contrast bitmap as a mask
+    OUString                    aHighContrastURL;       // a URL to an optional high contrast bitmap with several images inside
+    OUString                    aHighContrastMaskURL;   // a URL to an optional high contrast bitmap as a mask
 };
 
 typedef std::vector<std::unique_ptr<ImageListItemDescriptor> > ImageListDescriptor;

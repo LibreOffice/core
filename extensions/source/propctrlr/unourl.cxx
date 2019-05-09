@@ -46,7 +46,7 @@ namespace pcr
             if ( _rxORB.is() )
             {
                 xTransform.set( URLTransformer::create(comphelper::getComponentContext(_rxORB)) );
-                OSL_ENSURE( xTransform.is(), "UnoURL::UnoURL: could not create an URL transformer!" );
+                OSL_ENSURE( xTransform.is(), "UnoURL::UnoURL: could not create a URL transformer!" );
                 if ( xTransform.is() )
                     xTransform->parseStrict( m_aURL );
             }

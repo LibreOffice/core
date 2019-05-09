@@ -41,7 +41,7 @@ published interface XSimpleRegistry: com::sun::star::uno::XInterface
     string  getURL();
 
     /** connects the registry to a persistent data source represented by
-        an URL.
+        a URL.
 
         <p>If a local registry is already open, this function
         will close the currently open registry.

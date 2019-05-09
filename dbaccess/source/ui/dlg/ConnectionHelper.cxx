@@ -581,7 +581,7 @@ namespace dbaui
 
     bool OConnectionHelper::createDirectoryDeep(const OUString& _rPathURL)
     {
-        // get an URL object analyzing the URL for us ...
+        // get a URL object analyzing the URL for us ...
         INetURLObject aParser;
         aParser.SetURL(_rPathURL);
 

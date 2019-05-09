@@ -60,7 +60,7 @@ FilterDialog::~FilterDialog()
 
 /*-************************************************************************************************************
     @short      set file name on dialog control
-    @descr      We convert given URL (it must be an URL!) into valid file name and show it on our dialog.
+    @descr      We convert given URL (it must be a URL!) into valid file name and show it on our dialog.
     @param      "sURL", URL for showing
     @threadsafe no
 *//*-*************************************************************************************************************/

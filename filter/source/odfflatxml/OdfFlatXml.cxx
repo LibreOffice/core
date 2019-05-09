@@ -113,7 +113,7 @@ OdfFlatXml::importer(
                      const Reference< XDocumentHandler >& docHandler,
                      const Sequence< OUString >& /* userData */)
 {
-    // Read InputStream to read from and an URL used for the system id
+    // Read InputStream to read from and a URL used for the system id
     // of the InputSource we create from the given sourceData sequence
     Reference<XInputStream> inputStream;
     OUString paramName;

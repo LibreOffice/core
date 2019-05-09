@@ -105,7 +105,7 @@ public class _FillProperties extends MultiPropertyTest {
     };
 
     /**
-     * This property must have an URL format
+     * This property must have a URL format
      */
     public void _FillBitmapURL() {
         log.println("Testing with custom Property tester");

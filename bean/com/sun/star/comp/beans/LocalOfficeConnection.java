@@ -632,7 +632,7 @@ public class LocalOfficeConnection
     */
     private static String getPipeName() throws UnsupportedEncodingException
     {
-        // turn user name into an URL and file system safe name (% chars will not work)
+        // turn user name into a URL and file system safe name (% chars will not work)
         String aPipeName = System.getProperty("user.name") + OFFICE_ID_SUFFIX;
         aPipeName = aPipeName.replace( "_", "%B7" );
         return java.net.URLEncoder.encode( aPipeName, "UTF-8" ).replace( "+", "%20" ).replace( "%", "_" );

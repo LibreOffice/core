@@ -1198,7 +1198,7 @@ OUString SfxViewShell::GetSelectionText
     sending emails.
 
     When called with "CompleteWords == TRUE", it is for example sufficient
-    with having the Cursor positioned somewhere within an URL in-order
+    with having the Cursor positioned somewhere within a URL in-order
     to have the entire URL returned.
 */
 

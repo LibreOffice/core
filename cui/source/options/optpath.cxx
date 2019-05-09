@@ -483,13 +483,13 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
     sUser = pPathImpl->sUserPath;
     sWritable = pPathImpl->sWritablePath;
 
-    // old path is an URL?
+    // old path is a URL?
     INetURLObject aObj( sWritable );
     bool bURL = ( aObj.GetProtocol() != INetProtocol::NotValid );
     INetURLObject aNewObj( _rFolder );
     aNewObj.removeFinalSlash();
 
-    // then the new path also an URL else system path
+    // then the new path also a URL else system path
     OUString sNewPathStr = bURL ? _rFolder : aNewObj.getFSysPath( FSysStyle::Detect );
 
     bool bChanged =

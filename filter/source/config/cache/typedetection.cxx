@@ -420,7 +420,7 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
         // verify every flat detected (or preselected!) type
         // by calling its registered deep detection service.
         // But break this loop if a type match to the given descriptor
-        // by an URL pattern(!) or if deep detection isn't allowed from
+        // by a URL pattern(!) or if deep detection isn't allowed from
         // outside (bAllowDeep=sal_False) or break the whole detection by
         // throwing an exception if creation of the might needed input
         // stream failed by e.g. an IO exception ...

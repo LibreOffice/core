@@ -118,7 +118,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDesciptorURL)
     uno::Reference<beans::XPropertySet> xTextGraphic(
         xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
 
-    // Set an URL on it.
+    // Set a URL on it.
     OUString aGraphicURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "test.jpg";
     xTextGraphic->setPropertyValue("GraphicURL", uno::makeAny(aGraphicURL));
     xTextGraphic->setPropertyValue("AnchorType",

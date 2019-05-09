@@ -267,7 +267,7 @@ public class checkdispatchapi
         impl_closeFrame(xFrame);
     }
 
-    /** @short  load an URL into the current test frame.
+    /** @short  load a URL into the current test frame.
      */
     private void impl_loadIntoFrame(XFrame xFrame, String sURL, PropertyValue args[]) throws Exception
     {

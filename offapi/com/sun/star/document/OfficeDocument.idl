@@ -47,7 +47,7 @@ module com {   module sun {   module star {   module document {
  */
 published service OfficeDocument
 {
-    /** represents a component which is created from an URL and arguments
+    /** represents a component which is created from a URL and arguments
 
         <p>
         It is a representation of a resource in the sense that it was
@@ -67,7 +67,7 @@ published service OfficeDocument
      */
     interface com::sun::star::util::XModifiable;
 
-    /** offers a simple way to store a component to an URL
+    /** offers a simple way to store a component to a URL
 
         <p>
         This interface supports functionality

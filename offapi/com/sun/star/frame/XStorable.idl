@@ -27,7 +27,7 @@
 
  module com {  module sun {  module star {  module frame {
 
-/** offers a simple way to store a component to an URL.
+/** offers a simple way to store a component to a URL.
 
     <p>
     It is usually only useful for two cases:

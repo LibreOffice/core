@@ -505,7 +505,7 @@ void RtfAttributeOutput::EndRuby(const SwTextNode& rNode, sal_Int32 nPos)
 bool RtfAttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget)
 {
     m_sURL = rUrl;
-    // Ignore hyperlink without an URL.
+    // Ignore hyperlink without a URL.
     if (!rUrl.isEmpty())
     {
         m_aRun->append('{');

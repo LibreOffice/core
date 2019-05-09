@@ -4965,7 +4965,7 @@ namespace osl_Directory
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-             "Cannot convert the system path back to an URL",
+             "Cannot convert the system path back to a URL",
              osl::FileBase::E_None, rc
             );
             return tmpTestPath;

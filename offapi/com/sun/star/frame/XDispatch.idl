@@ -53,7 +53,7 @@ module com {  module sun {  module star {  module frame {
  */
 published interface XDispatch: com::sun::star::uno::XInterface
 {
-    /** dispatches (executes) an URL
+    /** dispatches (executes) a URL
 
         <p>
         It is only allowed to dispatch URLs for which this XDispatch

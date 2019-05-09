@@ -457,7 +457,7 @@ void BackendDb::writeSimpleElement(
 
 }
 
-/// The key elements have an url attribute and are always children of the root element.
+/// The key elements have a url attribute and are always children of the root element.
 Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
     OUString const & url)
 {

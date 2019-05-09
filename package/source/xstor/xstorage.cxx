@@ -4719,7 +4719,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getRelati
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
             if ( aSeq[nInd1][nInd2].First == "Type" )
             {
-                // the type is usually an URL, so the check should be case insensitive
+                // the type is usually a URL, so the check should be case insensitive
                 if ( aSeq[nInd1][nInd2].Second.equalsIgnoreAsciiCase( sType ) )
                 {
                     aResult.realloc( ++nEntriesNum );

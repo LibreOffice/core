@@ -85,7 +85,7 @@ void MysqlTestDriver::setUp()
     test::BootstrapFixture::setUp();
 
     /* Get URL from environment variable. This test suite should run only when
-     * there is an URL given. This is because it can be used for testing connection to
+     * there is a URL given. This is because it can be used for testing connection to
      * external databases as well.
      *
      * Example URL:

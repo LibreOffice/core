@@ -128,7 +128,7 @@ public:
 
     void SetRect() const;
 
-    // if an URL is attached to a graphic than this is a macro object
+    // if a URL is attached to a graphic than this is a macro object
     virtual bool       HasMacro() const override;
     virtual SdrObject* CheckMacroHit       (const SdrObjMacroHitRec& rRec) const override;
     virtual PointerStyle GetMacroPointer     (const SdrObjMacroHitRec& rRec) const override;

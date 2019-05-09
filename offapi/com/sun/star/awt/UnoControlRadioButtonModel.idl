@@ -94,7 +94,7 @@ published service UnoControlRadioButtonModel
     [optional, property] short ImagePosition;
 
 
-    /** specifies an URL to an image to display besides the label of the control
+    /** specifies a URL to an image to display besides the label of the control
         @see Graphic
      */
     [optional, property] string ImageURL;

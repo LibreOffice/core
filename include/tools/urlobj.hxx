@@ -751,7 +751,7 @@ public:
 
     /** Create an INetURLObject from a file system path.
 
-        @param rFSysPath  A file system path.  An URL is not allowed here!
+        @param rFSysPath  A file system path.  A URL is not allowed here!
 
         @param eStyle  The notation of rFSysPath.
      */
@@ -760,7 +760,7 @@ public:
     /** Set this INetURLObject to a file URL constructed from a file system
         path.
 
-        @param rFSysPath  A file system path.  An URL is not allowed here!
+        @param rFSysPath  A file system path.  A URL is not allowed here!
 
         @param eStyle  The notation of rFSysPath.
 

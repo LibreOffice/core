@@ -23,7 +23,7 @@
 
  module com {  module sun {  module star {  module text {
 
-/** These constants are used to specify which parts of an URL are displayed
+/** These constants are used to specify which parts of a URL are displayed
         in a field.
  */
 published constants FilenameDisplayFormat

@@ -1140,7 +1140,7 @@ OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
         case text::textfield::Type::URL:
         {
             if (pField->GetClassId() != text::textfield::Type::URL)
-                // Not an URL field, but URL is expected.
+                // Not a URL field, but URL is expected.
                 throw uno::RuntimeException();
 
             const SvxURLField* pURL = static_cast<const SvxURLField*>(pField);

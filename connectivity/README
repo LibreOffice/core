@@ -9,5 +9,5 @@ Contains database pieces, drivers, etc.
 - This test does not run automatically. It can be triggered with setting
   the environment variable "CONNECTIVITY_TEST_MYSQL_DRIVER".
   
-- The environment variable should contain an URL of the following format:
+- The environment variable should contain a URL of the following format:
   [user]/[passwd]@sdbc:mysql:mysqlc:[host]:[port]/[db_name]

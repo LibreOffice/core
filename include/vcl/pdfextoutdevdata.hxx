@@ -270,7 +270,7 @@ public:
     */
     void SetLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId );
     /** Set the URL for a link
-        <p>will change a dest type link to an URL type link if necessary</p>
+        <p>will change a dest type link to a URL type link if necessary</p>
         @param nLinkId
         the link to be changed
 

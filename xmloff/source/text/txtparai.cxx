@@ -413,7 +413,7 @@ XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
 
     if ( mpHint->GetHRef().isEmpty() )
     {
-        // hyperlink without an URL is not imported.
+        // hyperlink without a URL is not imported.
         delete mpHint;
         mpHint = nullptr;
     }

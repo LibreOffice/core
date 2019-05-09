@@ -162,13 +162,13 @@ typedef std::unordered_map< OUString,
                             std::vector<OUString> > CacheItemRegistration;
 
 
-/** @short  is used to collect all matching types of an URL
+/** @short  is used to collect all matching types of a URL
             during type detection.
 
     @descr  Every type in this list is combined with an information,
             which property matched to the given URL. The user of this
             structure can decide then, if a deep detection should be
-            suppressed e.g. if an URLPattern was used.
+            suppressed e.g. if a URLPattern was used.
  */
 struct FlatDetectionInfo
 {

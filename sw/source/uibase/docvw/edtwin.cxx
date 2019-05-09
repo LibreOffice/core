@@ -3116,7 +3116,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     SwEditWin::m_nDDStartPosY = aDocPos.Y();
                     SwEditWin::m_nDDStartPosX = aDocPos.X();
 
-                    // hit an URL in DrawText object?
+                    // hit a URL in DrawText object?
                     if (bExecHyperlinks && pSdrView)
                     {
                         SdrViewEvent aVEvt;

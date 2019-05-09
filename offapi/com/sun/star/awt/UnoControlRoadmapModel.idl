@@ -68,7 +68,7 @@ service UnoControlRoadmapModel
 
 
 
-    /** specifies an URL to an image to use for the control.
+    /** specifies a URL to an image to use for the control.
         The image is placed in the lower right corner of the control
         @see Graphic
      */

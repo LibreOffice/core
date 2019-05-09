@@ -74,7 +74,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
     void kill( [in] string FileURL )
         raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
 
-    /** Checks if an URL represents a folder
+    /** Checks if a URL represents a folder
 
         @param FileURL
         URL to be checked

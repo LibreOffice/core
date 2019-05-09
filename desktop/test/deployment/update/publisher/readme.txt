@@ -77,7 +77,7 @@ Result:
 The Update Dialog should show the publisher name as provided in the description.xml. For example,
 when lang=en-US was selected: My OpenOffice en-US
 
-A release notes link is displayed with an URL to the release notes as provided in 
+A release notes link is displayed with a URL to the release notes as provided in 
 the description.xml. For example, when lang=en-US was selected:
 "http://extensions.openoffice.org/testarea/desktop/publisher/publisher_en-US.html
 
@@ -124,7 +124,7 @@ Result:
 The Update Dialog should show the publisher name as provided in the description.xml. For example,
 when lang=en-US was selected: My OpenOffice en-US
 
-A release notes link is displayed with an URL to the release notes as provided in the release notes
+A release notes link is displayed with a URL to the release notes as provided in the release notes
 field on the edit page for the extension in the repository.
 
 ================================================================================
@@ -165,7 +165,7 @@ Office:
 Result:
 The Update Dialog should show the publisher name as provided in the repository.
 
-A release notes link is displayed with an URL to the release notes as provided in the 
+A release notes link is displayed with a URL to the release notes as provided in the 
 pub10.oxt.  For example, when the locale of the office is en-US then this page will be 
 displayed:
 For example,

@@ -49,7 +49,7 @@ published service GraphicObjectShape
 
     service com::sun::star::drawing::RotationDescriptor;
 
-    /** This is an url to the source bitmap for this graphic shape.
+    /** This is a url to the source bitmap for this graphic shape.
 
         @deprecated as of LibreOffice 6.1 - use Graphic instead
 
@@ -61,7 +61,7 @@ published service GraphicObjectShape
     */
     [property] string GraphicURL;
 
-    /** This is an url to the stream ("in document" or linked graphic) for this graphic shape.
+    /** This is a url to the stream ("in document" or linked graphic) for this graphic shape.
     */
     [property] string GraphicStreamURL;
 

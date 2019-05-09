@@ -447,7 +447,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
             if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::BITMAP, *m_pClpBitmap ))
                 m_pOrigGraphic = m_pClpBitmap.get();
 
-            // is it an URL-Button ?
+            // is it a URL-Button ?
             OUString sURL;
             OUString sDesc;
             if( m_pWrtShell->GetURLFromButton( sURL, sDesc ) )
@@ -968,7 +968,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
             if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::BITMAP, *m_pClpBitmap ))
                 m_pOrigGraphic = m_pClpBitmap.get();
 
-            // is it an URL-Button ?
+            // is it a URL-Button ?
             OUString sURL;
             OUString sDesc;
             if( m_pWrtShell->GetURLFromButton( sURL, sDesc ) )
@@ -3302,7 +3302,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
             if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::BITMAP, *m_pClpBitmap ))
                 m_pOrigGraphic = m_pClpBitmap.get();
 
-            // is it an URL-Button ?
+            // is it a URL-Button ?
             OUString sURL;
             OUString sDesc;
             if( m_pWrtShell->GetURLFromButton( sURL, sDesc ) )
@@ -3678,7 +3678,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             rSrcSh.SelectTextAttr( RES_TXTATR_INETFMT );
         }
 
-        // is there an URL attribute at the insert point? Then replace that,
+        // is there a URL attribute at the insert point? Then replace that,
         // so simply put up a selection?
         rSh.DelINetAttrWithText();
         g_bDDINetAttr = true;

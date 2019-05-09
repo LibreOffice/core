@@ -55,7 +55,7 @@ interface XGalleryTheme : com::sun::star::container::XIndexAccess
         <p>This method iterates over each item of the Gallery theme
         and updates it accordingly. Main purpose is to automatically
         regenerate the thumbnails and to remove invalid items, that is items
-        who have got an URL that has become invalid. This method also
+        who have got a URL that has become invalid. This method also
         optimizes underlying data structures.</p>
      */
     void update();

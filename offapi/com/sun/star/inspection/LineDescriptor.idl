@@ -91,7 +91,7 @@ struct LineDescriptor
 
         <p>The property will be ignored if #HasPrimaryButton is `FALSE`.</p>
 
-        <p>If you need to specify a graphic which does not have an URL, but is available as
+        <p>If you need to specify a graphic which does not have a URL, but is available as
         com::sun::star::graphic::XGraphic only, then you must leave
         <code>PrimaryButtonImageURL</code> empty, and use the #PrimaryButtonImage property.
 
@@ -136,7 +136,7 @@ struct LineDescriptor
 
         <p>The property will be ignored if #HasSecondaryButton is `FALSE`.</p>
 
-        <p>If you need to specify a graphic which does not have an URL, but is available as
+        <p>If you need to specify a graphic which does not have a URL, but is available as
         com::sun::star::graphic::XGraphic only, then you must leave
         <code>SecondaryButtonImageURL</code> empty, and use the #SecondaryButtonImage property.
 

@@ -59,7 +59,7 @@ enum ExtAltNameType
     DIRECTORY_NAME,
 
     /**
-     * The entry contains an url.
+     * The entry contains a url.
      * The value of CertAltNameEntry contains a OUString.
      *
      * @see com::sun::star::security::CertAltNameEntry

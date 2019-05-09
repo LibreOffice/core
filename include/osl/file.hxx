@@ -139,7 +139,7 @@ public:
         Base directory URL to which the relative path is related to.
 
         @param[in] ustrRelativeFileURL
-        An URL of a file or directory relative to the directory path specified by ustrBaseDirectoryURL
+        A URL of a file or directory relative to the directory path specified by ustrBaseDirectoryURL
         or an absolute path.
         If ustrRelativeFileURL denotes an absolute path ustrBaseDirectoryURL will be ignored.
 

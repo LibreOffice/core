@@ -3252,7 +3252,7 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
         // QUESTION: there is some treatment of Salvage in Init_Impl; align!
         if ( !pSalvageItem->GetValue().isEmpty() )
         {
-            // if an URL is provided in SalvageItem that means that the FileName refers to a temporary file
+            // if a URL is provided in SalvageItem that means that the FileName refers to a temporary file
             // that must be copied here
 
             const SfxStringItem* pFileNameItem = SfxItemSet::GetItem<SfxStringItem>(pImpl->m_pSet.get(), SID_FILE_NAME, false);

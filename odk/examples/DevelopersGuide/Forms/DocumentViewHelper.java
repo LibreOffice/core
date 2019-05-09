@@ -95,7 +95,7 @@ class DocumentViewHelper
             XDispatchProvider.class, xController.getFrame() );
         if ( null != xProvider )
         {
-            // need an URLTransformer
+            // need a URLTransformer
             XURLTransformer xTransformer = UnoRuntime.queryInterface(
                     XURLTransformer.class, m_orb.createInstance( "com.sun.star.util.URLTransformer" ) );
             xTransformer.parseStrict( aURL );

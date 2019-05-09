@@ -66,7 +66,7 @@ public class OfficeDocumentView
         XDispatchProvider xProvider = UnoRuntime.queryInterface( XDispatchProvider.class, m_controller.getFrame() );
         if ( null != xProvider )
         {
-            // need an URLTransformer
+            // need a URLTransformer
             XURLTransformer xTransformer = UnoRuntime.queryInterface( XURLTransformer.class,
                 m_orb.createInstance( "com.sun.star.util.URLTransformer" ) );
             xTransformer.parseStrict( aURL );

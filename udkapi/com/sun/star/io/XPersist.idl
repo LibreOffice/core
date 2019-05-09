@@ -27,7 +27,7 @@
 
 module com {  module sun {  module star {  module io {
 
-/** makes it possible to write this object to an URL or read it from an URL.
+/** makes it possible to write this object to a URL or read it from a URL.
  */
 published interface XPersist: com::sun::star::uno::XInterface
 {

@@ -457,8 +457,8 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
 
     if ( !bCreateNew )
     {
-        // We need to XLoadable::load the document if it does not yet have an URL.
-        // If it already *does* have an URL, then it was either passed in the arguments, or a previous incarnation
+        // We need to XLoadable::load the document if it does not yet have a URL.
+        // If it already *does* have a URL, then it was either passed in the arguments, or a previous incarnation
         // of that model existed before (which can happen if a model is closed, but an associated DataSource is kept
         // alive 'til loading the document again).
         bool bNeedLoad = xModel->getURL().isEmpty();
