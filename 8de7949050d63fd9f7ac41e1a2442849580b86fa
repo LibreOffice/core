@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_9af7a8f6",
+        "filename": "configmgr/qa/unit/test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-09T11:53:00Z",
+      "side": 0,
+      "message": "but the code uses std::size_t (and while there\u0027s multiple standard headers that provide that, \u003ccstddef\u003e can be considered the canonical one; and none of the others are explicitly included here, either)",
+      "revId": "8de7949050d63fd9f7ac41e1a2442849580b86fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_3adc5473",
+        "filename": "configmgr/qa/unit/test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-09T11:53:00Z",
+      "side": 0,
+      "message": "but the code uses std::u16string_view",
+      "revId": "8de7949050d63fd9f7ac41e1a2442849580b86fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_fae58c39",
+        "filename": "configmgr/qa/unit/test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-09T11:53:00Z",
+      "side": 0,
+      "message": "but the code uses osl::Condition",
+      "revId": "8de7949050d63fd9f7ac41e1a2442849580b86fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_5ad92081",
+        "filename": "configmgr/qa/unit/test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-09T11:53:00Z",
+      "side": 0,
+      "message": "but the code uses osl::Thread",
+      "revId": "8de7949050d63fd9f7ac41e1a2442849580b86fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_1ae39835",
+        "filename": "configmgr/qa/unit/test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-09T11:53:00Z",
+      "side": 0,
+      "message": "but the code uses OUStringBuffer",
+      "revId": "8de7949050d63fd9f7ac41e1a2442849580b86fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
