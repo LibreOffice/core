@@ -92,6 +92,30 @@
       "revId": "9b1d568d1753e123e9e802ce89014de03d18385e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_dfbc42bd",
+        "filename": "sw/source/core/crsr/pam.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-05-09T08:03:28Z",
+      "side": 1,
+      "message": "In the end, I still stand by my initial ordering. By far the most normal situation will be that pA is null, so that will immediately eliminate the other tests.  The most rare situation would be pA !\u003d pB since that only occurs during a section. Granted, none of these comparisons are expensive, but it can only help. Since the line is being changed anyway, might as well optimize it as much as possible.",
+      "parentUuid": "3fa0c359_a913480d",
+      "range": {
+        "startLine": 739,
+        "startChar": 18,
+        "endLine": 739,
+        "endChar": 71
+      },
+      "revId": "9b1d568d1753e123e9e802ce89014de03d18385e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
