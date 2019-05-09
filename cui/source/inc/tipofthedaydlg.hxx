@@ -33,6 +33,7 @@ private:
     sal_uInt32 nCurrentTip;
     sal_uInt32 nNumberOfTips;
     OUString aLink;
+    bool bIsNewVersion;
     void UpdateTip();
     DECL_STATIC_LINK(TipOfTheDayDialog, OnShowTipToggled, weld::ToggleButton&, void);
     DECL_LINK(OnNextClick, weld::Button&, void);
