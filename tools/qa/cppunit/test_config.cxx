@@ -35,6 +35,11 @@ public:
         osl::File::copy(maOriginalConfigFile, maConfigFile);
     }
 
+    virtual void tearDown() override
+    {
+        osl::File::remove(maConfigFile);
+    }
+
     void testHasGroup()
     {
         Config aConfig(maConfigFile);
