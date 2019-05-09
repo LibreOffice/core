@@ -2015,4 +2015,14 @@ static bool lcl_canUsePDFAxialShading(const Gradient& rGradient) {
     return rGradient.GetSteps() <= 0;
 }
 
+void PDFWriterImpl::ImplClearFontData(bool bNewFontLists)
+{
+    VirtualDevice::ImplClearFontData(bNewFontLists);
+    if (bNewFontLists && AcquireGraphics())
+    {
+        ReleaseFontCollection();
+        ReleaseFontCache();
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

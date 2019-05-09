@@ -513,23 +513,6 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
     {
         if (mxFontCollection && mxFontCollection != pSVData->maGDIData.mxScreenFontList)
             mxFontCollection->Clear();
-
-        if (GetOutDevType() == OUTDEV_PDF)
-        {
-            mxFontCollection.reset();
-            mxFontCache.reset();
-        }
-    }
-
-    // also update child windows if needed
-    if ( GetOutDevType() == OUTDEV_WINDOW )
-    {
-        vcl::Window* pChild = static_cast<vcl::Window*>(this)->mpWindowImpl->mpFirstChild;
-        while ( pChild )
-        {
-            pChild->ImplClearFontData( true );
-            pChild = pChild->mpWindowImpl->mpNext;
-        }
     }
 }
 

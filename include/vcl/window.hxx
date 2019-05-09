@@ -741,6 +741,8 @@ protected:
 
     virtual void                        InitClipRegion() override;
 
+    void ImplClearFontData(bool bNewFontLists) override;
+
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void                 ImplAdjustNWFSizes();
 
