@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_3ad0d4f7",
+        "filename": "include/com/sun/star/uno/Reference.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-09T14:57:48Z",
+      "side": 1,
+      "message": "rather the other way around (code erroneously uses QUERY_THROW instead of SET_THROW)?",
+      "range": {
+        "startLine": 375,
+        "startChar": 42,
+        "endLine": 375,
+        "endChar": 79
+      },
+      "revId": "f7dbb69e82e850150d7f6474aba3cc72b20aba38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_5acda05b",
+        "filename": "include/com/sun/star/uno/Reference.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-09T14:57:48Z",
+      "side": 1,
+      "message": "dito",
+      "range": {
+        "startLine": 532,
+        "startChar": 42,
+        "endLine": 532,
+        "endChar": 79
+      },
+      "revId": "f7dbb69e82e850150d7f6474aba3cc72b20aba38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
