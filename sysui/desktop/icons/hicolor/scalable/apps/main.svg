@@ -1,1 +1,83 @@
-<svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="108.00134" x2="20.00134" y1="122" y2="6"><stop offset="0" stop-color="#e6e6e6"/><stop offset="1" stop-color="#fff"/></linearGradient><linearGradient id="b" gradientTransform="matrix(7.99974 0 0 7.9977797 -873.96742 -7808.7674)" gradientUnits="userSpaceOnUse" x1="122.75008" x2="111.74973" y1="991.62115" y2="977.11713"><stop offset="0" stop-color="#535353"/><stop offset="1" stop-color="#7e7e7e"/></linearGradient><path d="m17.253295 0c-.25037 0-.50072.011156-.75.035156-3.66708.6998-4.56576 2.2662469-4.5 5.9980468v115.9687472c.0004 4.1875 1.81149 5.99765 6 5.99805h91.998055c4.1885-.0004 5.99764-1.81055 5.99804-5.99805v-71.818356c.048-2.1119-.78004-4.230247-2.25-5.748047l-42.160145-42.1503908c-1.51819-1.4691999-3.63759-2.2988999-5.75-2.25h-47.83595c-.24919-.024-.49962-.0351562-.75-.0351562zm70.00978.013672c-.20997 0-.41948.016828-.62695.048828-2.66247.8528-3.55843 4.904547-1.50586 6.810547l24.095695 24.220703c2.22593 2.1217 6.6581.306209 6.77538-2.775391v-24.220703c-.00024-2.1136998-1.91298-4.034856-4.01561-4.035156h-24.093755c-.20758-.032-.41894-.048828-.6289-.048828z" fill="url(#b)"/><path d="m18.001355 6v116h92.000015v-72l-43.999995-44z" fill="url(#a)"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="128mm"
+   preserveAspectRatio="xMidYMid"
+   viewBox="0 0 12800 12800"
+   width="128mm"
+   version="1.1"
+   id="svg1868"
+   sodipodi:docname="main.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   style="fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round">
+  <metadata
+     id="metadata1874">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs1872" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2880"
+     inkscape:window-height="1721"
+     id="namedview1870"
+     showgrid="false"
+     inkscape:zoom="1.19198"
+     inkscape:cx="372.42041"
+     inkscape:cy="253.74975"
+     inkscape:window-x="2869"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g6082"
+     inkscape:showpageshadow="false" />
+  <g
+     data-name="Ebene 4"
+     id="Ebene_4"
+     transform="matrix(99.215593,0,0,99.215593,82.797858,5424.8566)">
+    <g
+       id="g6082">
+      <g
+         id="g822"
+         transform="matrix(1.718595,0,0,1.718595,0.6543779,-53.855609)">
+        <rect
+           style="fill:#971e29;stroke-width:28.78103447"
+           y="-0.44744909"
+           x="-0.78303587"
+           width="74.901657"
+           height="75.00676"
+           id="rect2699" />
+        <path
+           style="fill:#ffffff"
+           inkscape:connector-curvature="0"
+           id="path6084"
+           d="m 49.49,11.51 a 1.41,1.41 0 0 0 -1.3,0.83 1.38,1.38 0 0 0 0.3,1.49 l 11.72,11.76 a 1.43,1.43 0 0 0 1.5,0.31 1.38,1.38 0 0 0 0.85,-1.25 V 12.87 a 1.42,1.42 0 0 0 -1.37,-1.36 z" />
+        <path
+           style="fill:#ffffff"
+           inkscape:connector-curvature="0"
+           id="path6088"
+           d="M 17.25,11.51 A 1.39,1.39 0 0 0 15.88,12.9 V 66.59 A 1.39,1.39 0 0 0 17.25,68 h 30.84 c 4.53,0 14.47,-9.74 14.47,-14.68 V 32 a 1.36,1.36 0 0 0 -0.4,-1 l -19,-19.09 a 1.43,1.43 0 0 0 -1,-0.43 z m 1.39,2.78 h 23 l 18.14,18.29 c 0,0 0,18.59 0,19.78 0,3.7 -8.53,12.83 -13,12.83 H 18.64 Z" />
+      </g>
+    </g>
+  </g>
+</svg>

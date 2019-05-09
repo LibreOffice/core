@@ -1,1 +1,90 @@
-<svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientTransform="matrix(1.1249688 0 0 1.1245683 -120.99628 -1095.9935)" gradientUnits="userSpaceOnUse" x1="124.00017" x2="111.99994" y1="992.375" y2="976.36902"><stop offset="0" stop-color="#535353"/><stop offset="1" stop-color="#7e7e7e"/></linearGradient><path d="m2.914625.00675c-.515687.0984-.923302.60028-.914055 1.125l-.000066 19.74327c.000057.5888.535979 1.12493 1.124991 1.12499h15.749492c.589011-.00006 1.124934-.53619 1.12499-1.12499v-12.99553c.0068-.29695-.109687-.59516-.316404-.80858l-5.624951-6.74775c-.213496-.20658-.511528-.32329-.808586-.31641h-10.124475c-.07009-.007-.140829-.007-.210936 0zm12.972105 0c-.372926.11879-.498432.68372-.210935.94922l3.37497 3.37277c.311786.29553.932786.0425.949211-.38671v-3.37278c-.000034-.2944-.26799-.56246-.562495-.5625h-3.374971c-.05816-.009-.117664-.009-.17578 0z" fill="url(#a)"/><path d="m3.000553 1-.000066 20h15.999519v-13l-6-7z" fill="#fff"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="22"
+   preserveAspectRatio="xMidYMid"
+   viewBox="0 0 582.08329 582.08329"
+   width="22"
+   version="1.1"
+   id="svg1868"
+   sodipodi:docname="main.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   style="fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+   inkscape:export-filename="C:\cygwin\home\Marina\lode\dev\FLOSS-194\sysui\desktop\icons\hicolor\22x22\apps\main.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <metadata
+     id="metadata1874">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs1872" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2520"
+     inkscape:window-height="1496"
+     id="namedview1870"
+     showgrid="false"
+     inkscape:zoom="6.7428571"
+     inkscape:cx="42.260936"
+     inkscape:cy="64.290578"
+     inkscape:window-x="2869"
+     inkscape:window-y="50"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g6082"
+     inkscape:showpageshadow="false"
+     units="px" />
+  <g
+     data-name="Ebene 4"
+     id="Ebene_4"
+     transform="matrix(99.215593,0,0,99.215593,82.797858,-6793.059)">
+    <g
+       id="g6082">
+      <g
+         id="g822"
+         transform="matrix(0.07832741,0,0,0.07821766,-0.77319143,68.502653)"
+         inkscape:export-filename="C:\cygwin\home\Marina\lode\dev\FLOSS-194\sysui\desktop\icons\hicolor\16x16\apps\main.png"
+         inkscape:export-xdpi="95.16349"
+         inkscape:export-ydpi="95.16349">
+        <rect
+           style="fill:#971e29;stroke-width:28.78103447"
+           y="-0.44744909"
+           x="-0.78303587"
+           width="74.901657"
+           height="75.00676"
+           id="rect2699" />
+        <path
+           style="fill:#ffffff"
+           inkscape:connector-curvature="0"
+           id="path6084"
+           d="m 49.49,11.51 a 1.41,1.41 0 0 0 -1.3,0.83 1.38,1.38 0 0 0 0.3,1.49 l 11.72,11.76 a 1.43,1.43 0 0 0 1.5,0.31 1.38,1.38 0 0 0 0.85,-1.25 V 12.87 a 1.42,1.42 0 0 0 -1.37,-1.36 z" />
+        <path
+           style="fill:#ffffff"
+           inkscape:connector-curvature="0"
+           id="path6088"
+           d="M 17.25,11.51 A 1.39,1.39 0 0 0 15.88,12.9 V 66.59 A 1.39,1.39 0 0 0 17.25,68 h 30.84 c 4.53,0 14.47,-9.74 14.47,-14.68 V 32 a 1.36,1.36 0 0 0 -0.4,-1 l -19,-19.09 a 1.43,1.43 0 0 0 -1,-0.43 z m 1.39,2.78 h 23 l 18.14,18.29 c 0,0 0,18.59 0,19.78 0,3.7 -8.53,12.83 -13,12.83 H 18.64 Z" />
+      </g>
+    </g>
+  </g>
+</svg>
