@@ -694,12 +694,6 @@ void ScColumn::SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr )
 }
 
 void ScColumn::SetPatternArea( SCROW nStartRow, SCROW nEndRow,
-                                std::unique_ptr<ScPatternAttr> pPatAttr )
-{
-    pAttrArray->SetPatternArea( nStartRow, nEndRow, std::move(pPatAttr), true/*bPutToPool*/ );
-}
-
-void ScColumn::SetPatternArea( SCROW nStartRow, SCROW nEndRow,
                                 const ScPatternAttr& rPatAttr )
 {
     pAttrArray->SetPatternArea( nStartRow, nEndRow, &rPatAttr, true/*bPutToPool*/ );

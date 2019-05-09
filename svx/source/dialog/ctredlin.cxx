@@ -48,24 +48,6 @@ RedlinData::~RedlinData()
 {
 }
 
-SvxRedlinEntry::SvxRedlinEntry()
-    : SvTreeListEntry()
-{
-}
-
-SvxRedlinEntry::~SvxRedlinEntry()
-{
-    RedlinData* pRedDat=static_cast<RedlinData*>(GetUserData());
-    delete pRedDat;
-}
-
-SvLBoxColorString::SvLBoxColorString(const OUString& rStr, const Color& rCol)
-    : SvLBoxString(rStr)
-{
-    aPrivColor=rCol;
-    SetText( rStr );
-}
-
 SvLBoxColorString::SvLBoxColorString()
 : SvLBoxString()
 {
@@ -945,11 +927,6 @@ void SvxTPFilter::Enable(bool bEnable)
         RowEnableHdl(*m_xCbRange);
         RowEnableHdl(*m_xCbComment);
     }
-}
-
-void SvxTPFilter::Disable()
-{
-    Enable( false );
 }
 
 IMPL_LINK(SvxTPFilter, ModifyDate, SvtCalendarBox&, rTF, void)

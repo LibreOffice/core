@@ -61,11 +61,6 @@ void SvViewDataEntry::SetSelected( bool bSelected )
     mbHighlighted = bSelected;
 }
 
-void SvViewDataEntry::SetHighlighted( bool bHighlighted )
-{
-    mbHighlighted = bHighlighted;
-}
-
 void SvViewDataEntry::SetExpanded( bool bExpanded )
 {
     mbExpanded = bExpanded;

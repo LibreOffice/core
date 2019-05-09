@@ -184,15 +184,6 @@ ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( vcl::Window* pParentP,
     }
 }
 
-void ScSimpleRefDlgWrapper::SetDefaultPosSize(Point aPos, Size aSize)
-{
-    bScSimpleRefFlag=true;
-    nScSimpleRefX=aPos.X();
-    nScSimpleRefY=aPos.Y();
-    nScSimpleRefHeight=aSize.Height();
-    nScSimpleRefWidth=aSize.Width();
-}
-
 void ScSimpleRefDlgWrapper::SetAutoReOpen(bool bFlag)
 {
     bAutoReOpen=bFlag;

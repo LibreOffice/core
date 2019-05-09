@@ -286,18 +286,6 @@ void ScTable::RegroupFormulaCells( SCCOL nCol )
     aCol[nCol].RegroupFormulaCells();
 }
 
-void ScTable::CollectListeners(
-    std::vector<SvtListener*>& rListeners, const SCCOL nCol1, SCROW nRow1, const SCCOL nCol2, SCROW nRow2 )
-{
-    if (nCol2 < nCol1 || !IsColValid(nCol1) || !ValidCol(nCol2))
-        return;
-
-    const SCCOL nMaxCol2 = std::min<SCCOL>( nCol2, aCol.size() - 1 );
-
-    for (SCCOL nCol = nCol1; nCol <= nMaxCol2; ++nCol)
-        aCol[nCol].CollectListeners(rListeners, nRow1, nRow2);
-}
-
 bool ScTable::HasFormulaCell( const SCCOL nCol1, SCROW nRow1, const SCCOL nCol2, SCROW nRow2 ) const
 {
     if (nCol2 < nCol1 || !IsColValid(nCol1) || !ValidCol(nCol2))

@@ -112,7 +112,6 @@ public:
     ScAutoFormatDataField( const ScAutoFormatDataField& rCopy );
     ~ScAutoFormatDataField();
 
-    const AutoFormatSwBlob&     GetAutoFormatSwBlob() const { return m_swFields; }
     // number format
     const ScNumFormatAbbrev&    GetNumFormat() const    { return aNumFormat; }
 

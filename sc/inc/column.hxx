@@ -462,7 +462,6 @@ public:
                                   bool* const pIsChanged = nullptr);
     const ScPatternAttr* SetPattern( SCROW nRow, std::unique_ptr<ScPatternAttr> );
     void        SetPattern( SCROW nRow, const ScPatternAttr& );
-    void        SetPatternArea( SCROW nStartRow, SCROW nEndRow, std::unique_ptr<ScPatternAttr> );
     void        SetPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& );
     void        ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
                             const ScPatternAttr& rPattern, SvNumFormatType nNewType );

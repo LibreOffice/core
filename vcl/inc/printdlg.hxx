@@ -269,7 +269,6 @@ namespace vcl
         bool isCanceled() const { return mbCanceled; }
         void setProgress( int i_nCurrent );
         void tick();
-        void reset();
     };
 }
 

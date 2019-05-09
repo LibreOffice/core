@@ -30,20 +30,6 @@ namespace formula
 {
 
 class FormulaToken;
-class StructListBox : public SvTreeListBox
-{
-public:
-
-                    StructListBox(vcl::Window* pParent, WinBits nBits );
-
-    /** Inserts an entry with static image (no difference between collapsed/expanded). */
-    SvTreeListEntry*    InsertStaticEntry(
-                        const OUString& rText,
-                        const Image& rEntryImg,
-                        SvTreeListEntry* pParent,
-                        sal_uLong nPos,
-                        const FormulaToken* pToken );
-};
 
 
 class StructPage final
@@ -85,9 +71,7 @@ public:
 
     weld::TreeView&  GetTlbStruct() const { return *m_xTlbStruct; }
 
-    void            Show() { m_xContainer->show(); }
     bool            IsVisible() { return m_xContainer->get_visible(); }
-    void            Hide() { m_xContainer->hide(); }
 };
 
 } // formula

@@ -168,10 +168,6 @@ public:
     SfxThumbnailViewAcc( SfxThumbnailView* pParent );
     virtual ~SfxThumbnailViewAcc() override;
 
-    void FireAccessibleEvent( short nEventId,
-                              const css::uno::Any& rOldValue,
-                              const css::uno::Any& rNewValue );
-
 public:
 
     // XAccessible

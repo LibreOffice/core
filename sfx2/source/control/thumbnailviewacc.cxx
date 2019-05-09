@@ -560,31 +560,6 @@ SfxThumbnailViewAcc::~SfxThumbnailViewAcc()
 {
 }
 
-void SfxThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
-{
-    if( !nEventId )
-        return;
-
-    ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > > aTmpListeners( mxEventListeners );
-    accessibility::AccessibleEventObject aEvtObject;
-
-    aEvtObject.EventId = nEventId;
-    aEvtObject.Source = static_cast<uno::XWeak*>(this);
-    aEvtObject.NewValue = rNewValue;
-    aEvtObject.OldValue = rOldValue;
-
-    for (auto const& tmpListener : aTmpListeners)
-    {
-        try
-        {
-            tmpListener->notifyEvent( aEvtObject );
-        }
-        catch(const uno::Exception&)
-        {
-        }
-    }
-}
-
 namespace
 {
     class theSfxValueSetAccUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSfxValueSetAccUnoTunnelId > {};

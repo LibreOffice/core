@@ -75,8 +75,6 @@ typedef std::map<SvMacroItemId, SvxMacro> SvxMacroTable;
 #define SVX_MACROTBL_VERSION31  0
 #define SVX_MACROTBL_VERSION40  1
 
-#define SVX_MACROTBL_AKTVERSION SVX_MACROTBL_VERSION40
-
 class SVL_DLLPUBLIC SvxMacroTableDtor
 {
 private:
@@ -90,8 +88,6 @@ public:
 
     void        Read( SvStream & );
     SvStream&   Write( SvStream & ) const;
-
-    static sal_uInt16 GetVersion() { return SVX_MACROTBL_AKTVERSION; }
 
     bool empty() const { return aSvxMacroTable.empty(); }
 

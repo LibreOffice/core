@@ -63,21 +63,6 @@ sal_Int8 ScPivotLayoutTreeDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt 
     return DND_ACTION_NONE;
 }
 
-bool ScPivotLayoutTreeListBase::HasEntry(const weld::TreeIter& rEntry)
-{
-    std::unique_ptr<weld::TreeIter> xEntry(mxControl->make_iterator());
-    if (!mxControl->get_iter_first(*xEntry))
-        return false;
-
-    do
-    {
-        if (mxControl->iter_compare(*xEntry, rEntry))
-            return true;
-    } while (mxControl->iter_next(*xEntry));
-
-    return false;
-}
-
 void ScPivotLayoutTreeListBase::PushEntriesToPivotFieldVector(ScPivotFieldVector& rVector)
 {
     std::unique_ptr<weld::TreeIter> xEachEntry(mxControl->make_iterator());

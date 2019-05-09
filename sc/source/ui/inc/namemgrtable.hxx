@@ -70,7 +70,6 @@ public:
 
     void GetCurrentLine(ScRangeNameLine& rLine);
     bool IsMultiSelection();
-    bool HasSelection();
     std::vector<ScRangeNameLine> GetSelectedEntries();
 };
 

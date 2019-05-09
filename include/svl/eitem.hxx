@@ -78,8 +78,6 @@ public:
         , m_bValue(bValue)
     { }
 
-    SfxBoolItem(sal_uInt16 nWhich, SvStream & rStream);
-
     bool GetValue() const { return m_bValue; }
 
     void SetValue(bool const bTheValue) { m_bValue = bTheValue; }
