@@ -370,6 +370,7 @@
 
 #define STR_NO_USER_DATA_AVAILABLE                  NC_("sharedocumentdlg|nouserdata", "No user data available.")
 #define STR_EXCLUSIVE_ACCESS                        NC_("sharedocumentdlg|exclusive", "(exclusive access)")
+#define STR_NO_NAMED_RANGES_AVAILABLE               NC_("STR_NO_NAMED_RANGES_AVAILABLE", "No named ranges available in the selected document")
 
 #endif
 
