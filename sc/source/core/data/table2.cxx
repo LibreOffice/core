@@ -1859,18 +1859,6 @@ bool ScTable::BroadcastBroadcasters( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
     return bBroadcasted;
 }
 
-void ScTable::TransferListeners(
-    ScTable& rDestTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-    SCCOL nColDelta, SCROW nRowDelta )
-{
-    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-    {
-        ScColumn& rSrcCol = aCol[nCol];
-        ScColumn& rDestCol = rDestTab.aCol[nCol+nColDelta];
-        rSrcCol.TransferListeners(rDestCol, nRow1, nRow2, nRowDelta);
-    }
-}
-
 void ScTable::SetLoadingMedium(bool bLoading)
 {
     mpRowHeights->enableTreeSearch(!bLoading);
@@ -2799,12 +2787,6 @@ bool ScTable::RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
     for (SCCOL i = nStartCol; i <= nEndCol; i++)
         bChanged |= aCol[i].RemoveFlags(nStartRow, nEndRow, nFlags);
     return bChanged;
-}
-
-void ScTable::SetPattern( const ScAddress& rPos, std::unique_ptr<ScPatternAttr> pAttr )
-{
-    if (ValidColRow(rPos.Col(),rPos.Row()))
-        aCol[rPos.Col()].SetPattern( rPos.Row(), std::move(pAttr) );
 }
 
 void ScTable::SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr )

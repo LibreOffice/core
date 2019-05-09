@@ -1159,11 +1159,6 @@ void ThumbnailView::ShowTooltips( bool bShowTooltips )
     mbShowTooltips = bShowTooltips;
 }
 
-void ThumbnailView::SetMultiSelectionEnabled( bool bIsMultiSelectionEnabled )
-{
-    mbIsMultiSelectionEnabled = bIsMultiSelectionEnabled;
-}
-
 void ThumbnailView::filterItems(const std::function<bool (const ThumbnailViewItem*)> &func)
 {
     mnFirstLine = 0;        // start at the top of the list instead of the current position
@@ -2388,100 +2383,6 @@ void SfxThumbnailView::filterItems(const std::function<bool (const ThumbnailView
     CalculateItemPositions();
 
     Invalidate();
-}
-
-BitmapEx SfxThumbnailView::readThumbnail(const OUString &msURL)
-{
-    using namespace ::com::sun::star;
-    using namespace ::com::sun::star::uno;
-
-    // Load the thumbnail from a template document.
-    uno::Reference<io::XInputStream> xIStream;
-
-    uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
-    try
-    {
-        uno::Reference<lang::XSingleServiceFactory> xStorageFactory = embed::StorageFactory::create(xContext);
-
-        uno::Sequence<uno::Any> aArgs (2);
-        aArgs[0] <<= msURL;
-        aArgs[1] <<= embed::ElementModes::READ;
-        uno::Reference<embed::XStorage> xDocStorage (
-            xStorageFactory->createInstanceWithArguments(aArgs),
-            uno::UNO_QUERY);
-
-        try
-        {
-            if (xDocStorage.is())
-            {
-                uno::Reference<embed::XStorage> xStorage (
-                    xDocStorage->openStorageElement(
-                        "Thumbnails",
-                        embed::ElementModes::READ));
-                if (xStorage.is())
-                {
-                    uno::Reference<io::XStream> xThumbnailCopy (
-                        xStorage->cloneStreamElement("thumbnail.png"));
-                    if (xThumbnailCopy.is())
-                        xIStream = xThumbnailCopy->getInputStream();
-                }
-            }
-        }
-        catch (const uno::Exception& rException)
-        {
-            SAL_WARN("sfx",
-                "caught exception while trying to access Thumbnail/thumbnail.png of "
-                 << msURL << ": " << rException);
-        }
-
-        try
-        {
-            // An (older) implementation had a bug - The storage
-            // name was "Thumbnail" instead of "Thumbnails".  The
-            // old name is still used as fallback but this code can
-            // be removed soon.
-            if ( ! xIStream.is())
-            {
-                uno::Reference<embed::XStorage> xStorage (
-                    xDocStorage->openStorageElement( "Thumbnail",
-                        embed::ElementModes::READ));
-                if (xStorage.is())
-                {
-                    uno::Reference<io::XStream> xThumbnailCopy (
-                        xStorage->cloneStreamElement("thumbnail.png"));
-                    if (xThumbnailCopy.is())
-                        xIStream = xThumbnailCopy->getInputStream();
-                }
-            }
-        }
-        catch (const uno::Exception& rException)
-        {
-            SAL_WARN("sfx",
-                "caught exception while trying to access Thumbnails/thumbnail.png of "
-                << msURL << ": " << rException);
-        }
-    }
-    catch (const uno::Exception& rException)
-    {
-        SAL_WARN("sfx",
-            "caught exception while trying to access thumbnail of "
-            << msURL << ": " << rException);
-    }
-
-    // Extract the image from the stream.
-    BitmapEx aThumbnail;
-    if (xIStream.is())
-    {
-        std::unique_ptr<SvStream> pStream (
-            ::utl::UcbStreamHelper::CreateStream (xIStream));
-        vcl::PNGReader aReader (*pStream);
-        aThumbnail = aReader.Read ();
-    }
-
-    // Note that the preview is returned without scaling it to the desired
-    // width.  This gives the caller the chance to take advantage of a
-    // possibly larger resolution then was asked for.
-    return aThumbnail;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

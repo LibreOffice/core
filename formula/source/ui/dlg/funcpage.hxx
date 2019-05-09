@@ -86,9 +86,7 @@ public:
 
     void            SetSelectHdl( const Link<FuncPage&,void>& rLink ) { aSelectionLink = rLink; }
 
-    void            Show() { m_xContainer->show(); }
     bool            IsVisible() { return m_xContainer->get_visible(); }
-    void            Hide() { m_xContainer->hide(); }
 };
 
 } // formula

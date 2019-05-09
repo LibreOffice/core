@@ -78,8 +78,6 @@ public:
     void            EnableAutoSize( bool bAuto );
     bool            IsAutoSizeEnabled() const;
 
-    void            EnableDDAutoWidth( bool b );
-
     virtual void    SetText( const OUString& rStr ) override;
     virtual void    SetText( const OUString& rStr, const Selection& rNewSelection ) override;
 

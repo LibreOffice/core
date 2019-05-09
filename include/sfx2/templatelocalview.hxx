@@ -86,43 +86,11 @@ public:
 
     void showRegion (TemplateContainerItem const *pItem);
 
-    void showRegion (const OUString &rName);
-
-    void createContextMenu(const bool bIsDefault );
-
     DECL_LINK(ContextMenuSelectHdl, Menu*, bool);
 
     TemplateContainerItem* getRegion(OUString const & sStr);
 
-    sal_uInt16 getRegionId (size_t pos) const;
-
-    sal_uInt16 getRegionId (OUString const & sRegionName) const;
-
     OUString getRegionName(const sal_uInt16 nRegionId) const;
-
-    OUString getRegionItemName(const sal_uInt16 nItemId) const;
-
-    std::vector<OUString> getFolderNames ();
-
-    std::vector<TemplateItemProperties>
-        getFilteredItems (const std::function<bool (const TemplateItemProperties&) > &rFunc) const;
-
-    sal_uInt16 createRegion (const OUString &rName);
-
-    bool renameRegion(const OUString &rTitle, const OUString &rNewTitle);
-
-    bool removeRegion (const sal_uInt16 nItemId);
-
-    bool removeTemplate (const sal_uInt16 nItemId, const sal_uInt16 nSrcItemId);
-
-    bool moveTemplate (const ThumbnailViewItem* pItem, const sal_uInt16 nSrcItem,
-                       const sal_uInt16 nTargetItem);
-
-    void moveTemplates (const std::set<const ThumbnailViewItem*,selection_cmp_fn> &rItems, const sal_uInt16 nTargetItem);
-
-    bool copyFrom(TemplateContainerItem *pItem, const OUString &rPath);
-
-    bool exportTo (const sal_uInt16 nItemId, const sal_uInt16 nRegionItemId, const OUString &rName);
 
     virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle) override;
 
@@ -134,23 +102,13 @@ public:
 
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
-    sal_uInt16 getCurRegionId () const { return mnCurRegionId;}
-
-    void setOpenRegionHdl(const Link<void*,void> &rLink);
-
     void setCreateContextMenuHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
     void setOpenTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
     void setEditTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
-    void setDeleteTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
-
-    void setDefaultTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
-
     void updateThumbnailDimensions(long itemMaxSize);
-
-    void RemoveDefaultTemplateIcon( const OUString& rPath);
 
     static BitmapEx scaleImg (const BitmapEx &rImg, long width, long height);
 
@@ -267,8 +225,6 @@ public:
     void setDeleteTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
     void setDefaultTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
-
-    void updateThumbnailDimensions(long itemMaxSize);
 
     void RemoveDefaultTemplateIcon( const OUString& rPath);
 

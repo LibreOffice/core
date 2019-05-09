@@ -59,12 +59,6 @@ public:
 
     void SetRefString( const OUString& rStr );
 
-    /**
-     * Flag reference valid or invalid, which in turn changes the visual
-     * appearance of the control accordingly.
-     */
-    void SetRefValid(bool bValid);
-
     using Edit::SetText;
 
     void         SetText( const OUString& rStr ) override;
@@ -202,10 +196,6 @@ public:
     void SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit );
     void SetStartImage();
     void SetEndImage();
-    void DoRef()
-    {
-        Click();
-    }
 };
 
 class FORMULA_DLLPUBLIC WeldRefButton

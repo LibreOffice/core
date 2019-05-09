@@ -138,7 +138,7 @@ SvStream& SvxMacroTableDtor::Write( SvStream& rStream ) const
 {
     sal_uInt16 nVersion = SOFFICE_FILEFORMAT_31 == rStream.GetVersion()
                                     ? SVX_MACROTBL_VERSION31
-                                    : SVX_MACROTBL_AKTVERSION;
+                                    : SVX_MACROTBL_VERSION40;
 
     if( SVX_MACROTBL_VERSION40 <= nVersion )
         rStream.WriteUInt16( nVersion );

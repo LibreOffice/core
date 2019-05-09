@@ -32,25 +32,6 @@
 
 namespace formula
 {
-StructListBox::StructListBox(vcl::Window* pParent, WinBits nBits ):
-    SvTreeListBox(pParent, nBits)
-{
-    vcl::Font aFont( GetFont() );
-    Size aSize = aFont.GetFontSize();
-    aSize.AdjustHeight(-2);
-    aFont.SetFontSize( aSize );
-    SetFont( aFont );
-}
-
-SvTreeListEntry* StructListBox::InsertStaticEntry(
-        const OUString& rText,
-        const Image& rEntryImg,
-        SvTreeListEntry* pParent, sal_uLong nPos, const FormulaToken* pToken )
-{
-    SvTreeListEntry* pEntry = InsertEntry( rText, rEntryImg, rEntryImg, pParent, false, nPos,
-            const_cast<FormulaToken*>(pToken) );
-    return pEntry;
-}
 
 void StructPage::SetActiveFlag(bool bFlag)
 {

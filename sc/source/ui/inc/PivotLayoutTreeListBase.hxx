@@ -65,8 +65,6 @@ public:
 
     void RemoveEntryForItem(const ScItemValue* pItemValue);
 
-    bool HasEntry(const weld::TreeIter& rEntry);
-
     virtual void InsertEntryForSourceTarget(weld::TreeView& rSource, int nTarget);
 };
 

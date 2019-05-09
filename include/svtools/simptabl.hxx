@@ -100,22 +100,15 @@ public:
 
     using SvHeaderTabListBox::SetTabs;
 
-    void            ClearHeader();
-
-    void            ShowTable();
-
     void            EnableTable();
     void            DisableTable();
     bool            IsEnabled() const;
 
     void            SortByCol(sal_uInt16, bool bDir=true);
-    bool            GetSortDirection(){ return bSortDirection;}
     sal_uInt16      GetSortedCol(){ return nSortCol;}
     SvLBoxItem*     GetEntryAtPos( SvTreeListEntry* pEntry, sal_uInt16 nPos ) const;
 
-    const CommandEvent& GetCommandEvent() const { return aCEvt; }
     bool     IsFocusOnCellEnabled() const { return IsCellFocusEnabled(); }
-    void            SetCommandHdl( const Link<SvSimpleTable*,void>& rLink ) { aCommandLink = rLink; }
 
     HeaderBar&      GetTheHeaderBar() { return *aHeaderBar; }
 };

@@ -75,14 +75,6 @@ public:
     void*           pData;
 };
 
-/// Entries for list.
-class SAL_WARN_UNUSED SvxRedlinEntry : public SvTreeListEntry
-{
-public:
-                    SvxRedlinEntry();
-        virtual     ~SvxRedlinEntry() override;
-};
-
 /// Class for the representation of Strings depending on the font.
 class SAL_WARN_UNUSED SvLBoxColorString : public SvLBoxString
 {
@@ -91,7 +83,6 @@ private:
     Color           aPrivColor;
 
 public:
-                    SvLBoxColorString( const OUString& rStr, const Color& rCol);
                     SvLBoxColorString();
                     virtual ~SvLBoxColorString() override;
 
@@ -273,7 +264,6 @@ public:
     void            SetRefHdl( const Link<SvxTPFilter*,void>& rLink ) { aRefLink = rLink; }
 
     void            Enable( bool bEnable = true );
-    void            Disable();
     // } Methods for Calc
 };
 
@@ -307,8 +297,6 @@ public:
     SvxTPView(weld::Container* pParent, weld::Builder* pTopLevel);
     virtual ~SvxTPView() override;
 
-    void            InsertWriterHeader();
-    void            InsertCalcHeader();
     SvxRedlinTable* GetTableControl() { return m_xViewData.get(); }
 
     void            EnableAccept(bool bFlag);

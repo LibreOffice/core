@@ -56,8 +56,6 @@ private:
 protected:
     SfxModalDialog(vcl::Window *pParent, const OUString& rID, const OUString& rUIXMLDescription);
 
-    OUString&           GetExtraData()      { return aExtraData; }
-
 public:
     virtual ~SfxModalDialog() override;
     virtual void dispose() override;

@@ -89,14 +89,6 @@ SfxPoolItem* SfxBoolItem::CreateDefault()
     return new SfxBoolItem();
 }
 
-SfxBoolItem::SfxBoolItem(sal_uInt16 const nWhich, SvStream & rStream)
-    : SfxPoolItem(nWhich)
-{
-    bool tmp = false;
-    rStream.ReadCharAsBool( tmp );
-    m_bValue = tmp;
-}
-
 // virtual
 bool SfxBoolItem::operator ==(const SfxPoolItem & rItem) const
 {

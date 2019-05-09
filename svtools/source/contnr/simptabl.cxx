@@ -242,16 +242,6 @@ void SvSimpleTable::InsertHeaderEntry(const OUString& rText,
     SetTabs();
 }
 
-void SvSimpleTable::ClearHeader()
-{
-    aHeaderBar->Clear();
-}
-
-void SvSimpleTable::ShowTable()
-{
-    m_rParentTableContainer.Show();
-}
-
 void SvSimpleTable::EnableTable()
 {
     m_rParentTableContainer.Enable();

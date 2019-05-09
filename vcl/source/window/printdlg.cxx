@@ -2184,9 +2184,3 @@ void PrintProgressDialog::tick()
     if( mnCur < mnMax )
         setProgress( ++mnCur );
 }
-
-void PrintProgressDialog::reset()
-{
-    mbCanceled = false;
-    setProgress( 0 );
-}

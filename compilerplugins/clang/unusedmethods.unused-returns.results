@@ -1,4 +1,4 @@
-basctl/source/inc/bastype2.hxx:308
+basctl/source/inc/bastype2.hxx:310
     _Bool basctl::SbTreeListBox::get_selected(class weld::TreeIter *) const
 connectivity/source/inc/java/lang/Object.hxx:117
     int connectivity::java_lang_Object::callIntMethodWithIntArg_ThrowRuntime(const char *,struct _jmethodID *&,int) const
@@ -50,29 +50,29 @@ include/LibreOfficeKit/LibreOfficeKit.hxx:361
     _Bool lok::Document::paste(const char *,const char *,unsigned long)
 include/LibreOfficeKit/LibreOfficeKit.hxx:392
     char * lok::Document::getCommandValues(const char *)
-include/LibreOfficeKit/LibreOfficeKit.hxx:474
+include/LibreOfficeKit/LibreOfficeKit.hxx:478
     int lok::Document::getView()
-include/LibreOfficeKit/LibreOfficeKit.hxx:482
+include/LibreOfficeKit/LibreOfficeKit.hxx:486
     int lok::Document::getViewsCount()
-include/LibreOfficeKit/LibreOfficeKit.hxx:491
+include/LibreOfficeKit/LibreOfficeKit.hxx:495
     unsigned char * lok::Document::renderFont(const char *,const char *,int *,int *)
-include/LibreOfficeKit/LibreOfficeKit.hxx:530
+include/LibreOfficeKit/LibreOfficeKit.hxx:534
     _Bool lok::Document::getViewIds(int *,unsigned long)
-include/LibreOfficeKit/LibreOfficeKit.hxx:591
+include/LibreOfficeKit/LibreOfficeKit.hxx:595
     _Bool lok::Document::insertCertificate(const unsigned char *,const int,const unsigned char *,const int)
-include/LibreOfficeKit/LibreOfficeKit.hxx:605
+include/LibreOfficeKit/LibreOfficeKit.hxx:609
     _Bool lok::Document::addCertificate(const unsigned char *,const int)
-include/LibreOfficeKit/LibreOfficeKit.hxx:617
+include/LibreOfficeKit/LibreOfficeKit.hxx:621
     int lok::Document::getSignatureState()
-include/LibreOfficeKit/LibreOfficeKit.hxx:627
+include/LibreOfficeKit/LibreOfficeKit.hxx:631
     unsigned long lok::Document::renderShapeSelection(char **)
-include/LibreOfficeKit/LibreOfficeKit.hxx:722
+include/LibreOfficeKit/LibreOfficeKit.hxx:741
     char * lok::Office::getFilterTypes()
-include/LibreOfficeKit/LibreOfficeKit.hxx:776
+include/LibreOfficeKit/LibreOfficeKit.hxx:795
     char * lok::Office::getVersionInfo()
-include/LibreOfficeKit/LibreOfficeKit.hxx:790
+include/LibreOfficeKit/LibreOfficeKit.hxx:809
     _Bool lok::Office::runMacro(const char *)
-include/LibreOfficeKit/LibreOfficeKit.hxx:798
+include/LibreOfficeKit/LibreOfficeKit.hxx:817
     _Bool lok::Office::signDocument(const char *,const unsigned char *,const int,const unsigned char *,const int)
 include/oox/crypto/AgileEngine.hxx:121
     _Bool oox::core::AgileEngine::decryptHmacKey()
@@ -130,9 +130,7 @@ include/oox/dump/oledumper.hxx:326
     unsigned int oox::dump::AxPropertyObjectBase::dumpColorProperty(unsigned int)
 include/oox/dump/oledumper.hxx:327
     char16_t oox::dump::AxPropertyObjectBase::dumpUnicodeProperty()
-include/oox/export/shapes.hxx:203
-    class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &)
-include/oox/export/shapes.hxx:204
+include/oox/export/shapes.hxx:182
     class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteTextBox(const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,int)
 include/oox/helper/binaryoutputstream.hxx:78
     class oox::BinaryOutputStream & oox::BinaryOutputStream::WriteInt16(short)
@@ -146,26 +144,40 @@ include/oox/ole/olehelper.hxx:180
     _Bool oox::ole::MSConvertOCXControls::importControlFromStream(class oox::BinaryInputStream &,class com::sun::star::uno::Reference<class com::sun::star::form::XFormComponent> &,const class rtl::OUString &)
 include/oox/ole/olehelper.hxx:191
     _Bool oox::ole::MSConvertOCXControls::ReadOCXCtlsStream(const class tools::SvRef<class SotStorageStream> &,class com::sun::star::uno::Reference<class com::sun::star::form::XFormComponent> &,int,int)
-include/sax/fshelper.hxx:210
+include/sax/fshelper.hxx:135
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
-include/sax/fshelper.hxx:211
+include/sax/fshelper.hxx:136
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
-include/sax/fshelper.hxx:214
+include/sax/fshelper.hxx:139
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(const char *)
-include/sfx2/linkmgr.hxx:64
+include/sfx2/linkmgr.hxx:63
     _Bool sfx2::LinkManager::InsertLink(class sfx2::SvBaseLink *,unsigned short,enum SfxLinkUpdateMode,const class rtl::OUString *)
-include/sfx2/lnkbase.hxx:103
+include/sfx2/lnkbase.hxx:104
     class sfx2::SvLinkSource * sfx2::SvBaseLink::GetRealObject()
 include/svl/macitem.hxx:92
     class SvStream & SvxMacroTableDtor::Write(class SvStream &) const
-include/svl/poolitem.hxx:170
-    class SvStream & SfxPoolItem::Store(class SvStream &,unsigned short) const
-include/svx/dlgctrl.hxx:106
+include/svx/autoformathelper.hxx:208
+    _Bool AutoFormatBase::LoadBlockA(class SvStream &,const struct AutoFormatVersions &,unsigned short)
+include/svx/autoformathelper.hxx:209
+    _Bool AutoFormatBase::LoadBlockB(class SvStream &,const struct AutoFormatVersions &,unsigned short)
+include/svx/autoformathelper.hxx:211
+    _Bool AutoFormatBase::SaveBlockA(class SvStream &,unsigned short) const
+include/svx/autoformathelper.hxx:212
+    _Bool AutoFormatBase::SaveBlockB(class SvStream &,unsigned short) const
+include/svx/dlgctrl.hxx:102
     class Point SvxRectCtl::SetActualRPWithoutInvalidate(enum RectPoint)
 include/svx/framelink.hxx:195
     class svx::frame::Style & svx::frame::Style::MirrorSelf()
 include/svx/SvxColorValueSet.hxx:55
     class Size ColorValueSet::layoutToGivenHeight(unsigned int,unsigned int)
+include/test/helper/form.hxx:38
+    class com::sun::star::uno::Reference<class com::sun::star::drawing::XControlShape> apitest::helper::form::createCommandButton(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
+include/test/helper/shape.hxx:39
+    class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> apitest::helper::shape::createEllipse(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
+include/test/helper/shape.hxx:53
+    class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> apitest::helper::shape::createLine(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
+include/test/helper/shape.hxx:67
+    class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> apitest::helper::shape::createRectangle(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
 include/test/sheet/xcellrangedata.hxx:21
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XCellRangeData::init()
 include/test/sheet/xdocumentauditing.hxx:29
@@ -178,10 +190,6 @@ include/test/sheet/xspreadsheets2.hxx:40
     class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> apitest::XSpreadsheets2::getComponent()
 include/test/sheet/xusedareacursor.hxx:22
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XUsedAreaCursor::init()
-include/tools/color.hxx:151
-    class SvStream & Color::Read(class SvStream &)
-include/tools/color.hxx:152
-    class SvStream & Color::Write(class SvStream &) const
 include/tools/config.hxx:38
     _Bool Config::ImplUpdateConfig() const
 include/tools/multisel.hxx:93
@@ -190,7 +198,7 @@ include/vcl/bitmap.hxx:171
     _Bool Bitmap::Dither()
 include/vcl/bitmapex.hxx:241
     _Bool BitmapEx::Rotate(long,const class Color &)
-include/vcl/filter/PngImageReader.hxx:29
+include/vcl/filter/PngImageReader.hxx:36
     _Bool vcl::PngImageReader::read(class BitmapEx &)
 include/vcl/fontcharmap.hxx:49
     class tools::SvRef<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)
@@ -208,11 +216,11 @@ include/vcl/texteng.hxx:275
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/toolbox.hxx:510
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:356
+include/vcl/weld.hxx:402
     _Bool weld::Dialog::runAsync(const class std::function<void (int)> &)
-include/vcl/weld.hxx:656
+include/vcl/weld.hxx:717
     _Bool weld::TreeView::iter_nth_child(class weld::TreeIter &,int) const
-include/vcl/weld.hxx:1396
+include/vcl/weld.hxx:1528
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
@@ -220,9 +228,9 @@ lotuswordpro/inc/lwpsvstream.hxx:77
     class LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
 lotuswordpro/inc/lwpsvstream.hxx:78
     class LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
-sc/inc/document.hxx:1411
+sc/inc/document.hxx:1416
     _Bool ScDocument::GetDataAreaSubrange(class ScRange &) const
-sc/inc/document.hxx:2133
+sc/inc/document.hxx:2140
     const struct ScDocumentThreadSpecific & ScDocument::CalculateInColumnInThread(struct ScInterpreterContext &,const class ScAddress &,unsigned long,unsigned int,unsigned int)
 sc/inc/orcusfilters.hxx:44
     _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
@@ -286,9 +294,9 @@ sw/inc/calc.hxx:114
     class SwSbxValue & SwSbxValue::MakeDouble()
 sw/inc/doc.hxx:1081
     _Bool SwDoc::ReplaceNumRule(const struct SwPosition &,const class rtl::OUString &,const class rtl::OUString &)
-sw/inc/doc.hxx:1242
+sw/inc/doc.hxx:1244
     _Bool SwDoc::SetColRowWidthHeight(class SwTableBox &,enum TableChgWidthHeightType,long,long)
-sw/inc/doc.hxx:1267
+sw/inc/doc.hxx:1269
     _Bool SwDoc::SplitTable(const struct SwPosition &,enum SplitTable_HeadlineOption,_Bool)
 sw/inc/editsh.hxx:266
     _Bool SwEditShell::GetPaMParAttr(class SwPaM *,class SfxItemSet &) const
@@ -300,7 +308,7 @@ sw/inc/IDocumentUndoRedo.hxx:181
     _Bool IDocumentUndoRedo::Repeat(class sw::RepeatContext &,const unsigned short)
 sw/inc/swcrsr.hxx:159
     _Bool SwCursor::ExpandToSentenceBorders(const class SwRootFrame *)
-sw/inc/tblafmt.hxx:353
+sw/inc/tblafmt.hxx:285
     _Bool SwTableAutoFormatTable::Load(class SvStream &)
 sw/source/core/inc/laycache.hxx:64
     _Bool SwLayoutCache::CompareLayout(const class SwDoc &) const
@@ -320,11 +328,11 @@ ucb/source/ucp/webdav-neon/NeonSession.hxx:240
     _Bool webdav_ucp::NeonSession::UNLOCK(struct ne_lock *)
 vcl/inc/font/FeatureCollector.hxx:47
     _Bool vcl::font::FeatureCollector::collect()
-vcl/inc/opengl/salbmp.hxx:100
+vcl/inc/opengl/salbmp.hxx:101
     _Bool OpenGLSalBitmap::ImplScaleFilter(const class rtl::Reference<class OpenGLContext> &,const double &,const double &,unsigned int)
-vcl/inc/opengl/salbmp.hxx:102
-    _Bool OpenGLSalBitmap::ImplScaleConvolution(const class rtl::Reference<class OpenGLContext> &,const double &,const double &,const class vcl::Kernel &)
 vcl/inc/opengl/salbmp.hxx:103
+    _Bool OpenGLSalBitmap::ImplScaleConvolution(const class rtl::Reference<class OpenGLContext> &,const double &,const double &,const class vcl::Kernel &)
+vcl/inc/opengl/salbmp.hxx:104
     _Bool OpenGLSalBitmap::ImplScaleArea(const class rtl::Reference<class OpenGLContext> &,double,double)
 vcl/inc/opengl/texture.hxx:112
     _Bool OpenGLTexture::CopyData(int,int,int,int,const unsigned char *)
@@ -342,9 +350,9 @@ vcl/inc/widgetdraw/WidgetDefinitionReader.hxx:38
     _Bool vcl::WidgetDefinitionReader::read(class vcl::WidgetDefinition &)
 vcl/inc/WidgetDrawInterface.hxx:97
     _Bool vcl::WidgetDrawInterface::updateSettings(class AllSettings &)
-vcl/source/gdi/pdfwriter_impl.hxx:1226
-    _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
-vcl/source/gdi/pdfwriter_impl.hxx:1227
-    _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
 vcl/source/gdi/pdfwriter_impl.hxx:1228
+    _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
+vcl/source/gdi/pdfwriter_impl.hxx:1229
+    _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
+vcl/source/gdi/pdfwriter_impl.hxx:1230
     _Bool vcl::PDFWriterImpl::setStructureAttributeNumerical(enum vcl::PDFWriter::StructAttribute,int)

@@ -516,11 +516,6 @@ void ComboBox::EnableSelectAll()
 {
     m_pImpl->m_pSubEdit->SetSelectAllSingleClick(true);
 }
-void ComboBox::EnableDDAutoWidth( bool b )
-{
-    if (m_pImpl->m_pFloatWin)
-        m_pImpl->m_pFloatWin->SetAutoWidth( b );
-}
 
 void ComboBox::SetDropDownLineCount( sal_uInt16 nLines )
 {

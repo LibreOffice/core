@@ -707,7 +707,6 @@ public:
                                   const ScPatternAttr& rAttr, ScEditDataArray* pDataArray = nullptr,
                                   bool* const pIsChanged = nullptr );
 
-    void SetPattern( const ScAddress& rPos, std::unique_ptr<ScPatternAttr> );
     void        SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr );
     const ScPatternAttr* SetPattern( SCCOL nCol, SCROW nRow, std::unique_ptr<ScPatternAttr> );
     void        SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr );
@@ -1032,12 +1031,6 @@ public:
      * COLUMN() or ROW() which may change its value on move.
      */
     void BroadcastRecalcOnRefMove();
-
-    void CollectListeners( std::vector<SvtListener*>& rListeners, const SCCOL nCol1, SCROW nRow1, const SCCOL nCol2, SCROW nRow2 );
-
-    void TransferListeners(
-        ScTable& rDestTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-        SCCOL nColDelta, SCROW nRowDelta );
 
     void TransferCellValuesTo( const SCCOL nCol, SCROW nRow, size_t nLen, sc::CellValues& rDest );
     void CopyCellValuesFrom( const SCCOL nCol, SCROW nRow, const sc::CellValues& rSrc );

@@ -481,10 +481,6 @@ public:
     {
         return m_pUIBuilder->get<T>(sID);
     }
-    PopupMenu* get_menu(const OString & sID)
-    {
-        return m_pUIBuilder->get_menu(sID);
-    }
     void setDeferredProperties()
     {
         if (!m_pUIBuilder)

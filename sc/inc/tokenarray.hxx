@@ -165,13 +165,6 @@ public:
         const sc::RefUpdateContext& rCxt, const ScAddress& rOldPos, const ScAddress& rNewPos );
 
     /**
-     * Move reference positions that are within specified moved range.
-     *
-     * @param rPos position of this formula cell
-     */
-    sc::RefUpdateResult MoveReference( const ScAddress& rPos, const sc::RefUpdateContext& rCxt );
-
-    /**
      * Move reference positions in response to column reordering.  A range
      * reference gets moved only when the whole range fits in a single column.
      *

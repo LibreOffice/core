@@ -68,7 +68,6 @@ public:
     bool IsDragTarget() const { return mbDragTarget;}
     void SetFocus( bool bFocus );
     void SetSelected( bool bSelected );
-    void SetHighlighted( bool bHighlighted );
     void SetExpanded( bool bExpanded );
     void SetSelectable( bool bSelectable );
     void SetDragTarget( bool bDragTarget )
