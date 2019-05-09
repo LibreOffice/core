@@ -45,7 +45,7 @@ For example
 
 
 The different test folders for the update are also committed in project extensions/www
-so that the files can be obtain via an URL. The structure and the contents is about the
+so that the files can be obtain via a URL. The structure and the contents is about the
 same as the content
 of desktop/test/deployment/update
 For example in

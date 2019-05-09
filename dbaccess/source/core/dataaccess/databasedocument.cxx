@@ -178,7 +178,7 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
 
         if ( !m_pImpl->getURL().isEmpty() )
         {
-            // if the previous incarnation of the DatabaseDocument already had an URL, then creating this incarnation
+            // if the previous incarnation of the DatabaseDocument already had a URL, then creating this incarnation
             // here is effectively loading the document.
             // #i105505#
             m_aViewMonitor.onLoadedDocument();

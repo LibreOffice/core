@@ -266,7 +266,7 @@ Reference< css::frame::XDispatch >  SAL_CALL SbaExternalSourceBrowser::queryDisp
         css::util::URL aNewUrl = aURL;
 
         // split the css::util::URL
-        OSL_ENSURE( m_xUrlTransformer.is(), "SbaExternalSourceBrowser::queryDispatch : could not create an URLTransformer !" );
+        OSL_ENSURE( m_xUrlTransformer.is(), "SbaExternalSourceBrowser::queryDispatch : could not create a URLTransformer !" );
         if ( m_xUrlTransformer.is() )
             m_xUrlTransformer->parseStrict( aNewUrl );
 

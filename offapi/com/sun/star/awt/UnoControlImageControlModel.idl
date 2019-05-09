@@ -76,7 +76,7 @@ published service UnoControlImageControlModel
     [property] string HelpURL;
 
 
-    /** specifies an URL to an image to use for the control.
+    /** specifies a URL to an image to use for the control.
         @see Graphic
      */
     [property] string ImageURL;

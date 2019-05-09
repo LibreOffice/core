@@ -1604,7 +1604,7 @@ bool implIsInvalid( const OUString & rURL )
 
 OUString SvtFileDialog::implGetInitialURL( const OUString& _rPath, const OUString& _rFallback )
 {
-    // an URL parser for the fallback
+    // a URL parser for the fallback
     INetURLObject aURLParser;
 
     // set the path

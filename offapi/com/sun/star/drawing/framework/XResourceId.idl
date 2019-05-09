@@ -48,7 +48,7 @@ interface XResourceId
     */
     string getResourceURL ();
 
-    /** Return an URL object of the resource URL that may contain arguments.
+    /** Return a URL object of the resource URL that may contain arguments.
     */
     com::sun::star::util::URL getFullResourceURL ();
 

@@ -1396,7 +1396,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getCanonicalName(
     Base directory URL to which the relative path is related to.
 
     @param[in] pustrRelativeFileURL
-    An URL of a file or directory relative to the directory path specified by pustrBaseDirectoryURL
+    A URL of a file or directory relative to the directory path specified by pustrBaseDirectoryURL
     or an absolute path.
     If pustrRelativeFileURL denotes an absolute path pustrBaseDirectoryURL will be ignored.
 

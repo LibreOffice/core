@@ -645,7 +645,7 @@
       </info>
       <prop oor:name="URL" oor:type="xs:string">
         <info>
-          <desc>Specifies an URL that should be recovered after the next Office
+          <desc>Specifies a URL that should be recovered after the next Office
           start.</desc>
         </info>
       </prop>
@@ -1283,7 +1283,7 @@
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - URL
              recognition -->
         <info>
-          <desc>Specifies if character strings which could represent an URL
+          <desc>Specifies if character strings which could represent a URL
           should be converted to a hyperlink.</desc>
           <label>Detect URL</label>
         </info>

@@ -38,7 +38,7 @@ enum class EEControlBits
     ALLOWBIGOBJS       = 0x00000800,  // Portion info in text object
     ONLINESPELLING     = 0x00001000,  // During the edit Spelling
     STRETCHING         = 0x00002000,  // Stretch mode
-    MARKNONURLFIELDS   = 0x00004000,  // Mark fields other than URL with color
+    MARKNONURLFIELDS   = 0x00004000,  // Mark fields other tha URL with color
     MARKURLFIELDS      = 0x00008000,  // Mark URL fields with color
     MARKFIELDS         = (MARKNONURLFIELDS | MARKURLFIELDS),
     RTFSTYLESHEETS     = 0x00020000,  // Use Stylesheets when imported

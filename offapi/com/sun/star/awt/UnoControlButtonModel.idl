@@ -118,7 +118,7 @@ published service UnoControlButtonModel
     [optional, property] short ImagePosition;
 
 
-    /** specifies an URL to an image to use for the button.
+    /** specifies a URL to an image to use for the button.
         @see Graphic
      */
     [property] string ImageURL;

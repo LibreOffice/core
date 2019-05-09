@@ -127,7 +127,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     */
     Reference < XDesktop2 > xComponentLoader = Desktop::create(xComponentContext);
 
-    /* Loads a component specified by an URL into the specified new or existing
+    /* Loads a component specified by a URL into the specified new or existing
        frame.
     */
     OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl, sArgDocUrl;

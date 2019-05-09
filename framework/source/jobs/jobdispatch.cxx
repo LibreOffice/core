@@ -48,7 +48,7 @@ namespace {
 /**
     @short  implements a dispatch object for jobs
     @descr  Such dispatch object will be used by the generic dispatch mechanism if
-            an URL "vnd.sun.star.job:alias=<name>" occurs.
+            a URL "vnd.sun.star.job:alias=<name>" occurs.
             Then an instance of this class will be created and used.
             This new instance will be called within his method
             dispatch() or dispatchWithNotification() for executing the
@@ -185,7 +185,7 @@ void SAL_CALL JobDispatch::initialize( const css::uno::Sequence< css::uno::Any >
 
 /**
     @short  implementation of XDispatchProvider::queryDispatches()
-    @descr  Every protocol handler will be asked for his agreement, if an URL was queried
+    @descr  Every protocol handler will be asked for his agreement, if a URL was queried
             for which this handler is registered. It's the chance for this handler to validate
             the given URL and return a dispatch object (may be itself) or not.
 

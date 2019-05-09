@@ -29,18 +29,18 @@ module com {  module sun {  module star {  module document {
 
 /**
     <p>This interface encapsulates functionality to get/resolve binary data streams.
-    It is used to transform binary data to an URL or to transform an URL to binary
+    It is used to transform binary data to a URL or to transform a URL to binary
     data. The binary data is represented through input and output streams.</p>
 
-    <p>In the case of transforming an URL to binary data, the <code>getInputStream</code>
+    <p>In the case of transforming a URL to binary data, the <code>getInputStream</code>
     method is used. This returns a com::sun::star::io::XInputStream
     from which the binary data, transformed from the given URL, can be read.</p>
 
-    <p>In the case of transforming binary data to an URL, a
+    <p>In the case of transforming binary data to a URL, a
     com::sun::star::io::XOutputStream is created first to write
     the binary data to. After this, the <code>resolveOutputStream</code> method can
     be used to transform the binary data, represented through the
-    com::sun::star::io::XOutputStream interface, to an URL.</p>
+    com::sun::star::io::XOutputStream interface, to a URL.</p>
  */
 published interface XBinaryStreamResolver: com::sun::star::uno::XInterface
 {
@@ -50,12 +50,12 @@ published interface XBinaryStreamResolver: com::sun::star::uno::XInterface
     com::sun::star::io::XInputStream getInputStream( [in] string aURL );
 
     /** creates an output stream, to which binary data can be written.
-        After writing, an URL can be retrieved by a call to
+        After writing, a URL can be retrieved by a call to
         XBinaryStreamResolver::resolveOutputStream().
     */
     com::sun::star::io::XOutputStream createOutputStream();
 
-    /** converts the output stream, data has been written to, to an URL in
+    /** converts the output stream, data has been written to, to a URL in
         source URL namespace.
     */
     string resolveOutputStream( [in] com::sun::star::io::XOutputStream aBinaryStream );

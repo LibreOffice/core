@@ -59,7 +59,7 @@ namespace svx
         */
         void    setURL( const OUString& _rURL );
 
-        /** returns the current database location, in form of an URL (not a system path)
+        /** returns the current database location, in form of a URL (not a system path)
         */
         OUString  getURL() const;
 

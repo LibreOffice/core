@@ -914,7 +914,7 @@ oslFileError SAL_CALL osl_searchFileURL(
     rtl_uString     *ustrSysPath = nullptr;
     oslFileError    error;
 
-    /* First try to interpret the file name as an URL even a relative one */
+    /* First try to interpret the file name as a URL even a relative one */
     error = osl_getSystemPathFromFileURL_( ustrFileName, &ustrUNCPath, true );
 
     /* So far we either have an UNC path or something invalid

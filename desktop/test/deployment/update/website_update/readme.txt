@@ -77,7 +77,7 @@ Result:
 The Update Dialog should show the publisher name as provided in "Provider URL" field 
 of the extension edit page (not release).
 
-A release notes link is displayed with an URL to the release notes as provided in 
+A release notes link is displayed with a URL to the release notes as provided in 
 the "Provider Title" field of the extension release edit page.
 
 When running the update then the web browser should navigate to
@@ -125,7 +125,7 @@ Result:
 The Update Dialog should show the publisher name as provided in the description.xml.
 That is: My OpenOffice en-US and NOT "FOO".
 
-A release notes link is displayed with an URL to the release notes as provided in 
+A release notes link is displayed with a URL to the release notes as provided in 
 the description.xml. That is:
 http://extensions.openoffice.org/testarea/desktop/publisher/release-notes_xxx.html 
 

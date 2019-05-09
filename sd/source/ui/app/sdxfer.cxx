@@ -213,7 +213,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
 
                     if( auto pURL = dynamic_cast< const SvxURLField *>( pData ) )
                     {
-                        // #i63399# This special code identifies TextFrames which have just an URL
+                        // #i63399# This special code identifies TextFrames which have just a URL
                         // as content and directly add this to the clipboard, probably to avoid adding
                         // an unnecessary DrawObject to the target where paste may take place. This is
                         // wanted only for SdrObjects with no fill and no line, else it is necessary to

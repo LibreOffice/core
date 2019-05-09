@@ -141,7 +141,7 @@ bool HandlerCache::search( const OUString& sURL, ProtocolHandler* pReturn ) cons
 }
 
 /**
-    @short      search for a registered handler by using an URL struct
+    @short      search for a registered handler by using a URL struct
     @descr      We combine necessary parts of this struct to a valid URL string
                 and call our other search method ...
                 It's a helper for outside code.

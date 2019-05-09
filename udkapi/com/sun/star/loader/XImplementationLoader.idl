@@ -47,7 +47,7 @@ published interface XImplementationLoader: com::sun::star::uno::XInterface
         @param locationUrl Points to the location of the file containing
                the component (for instance a .jar-file or a shared library).
                This parameter
-               should be in an URL format (= protocol:protocol-dependent-part).
+               should be in a URL format (= protocol:protocol-dependent-part).
                In case the string contains no
                leading "protocol:", the implementation in general assumes,
                that it is a relative file url. <p>Special loaders may define
@@ -81,7 +81,7 @@ published interface XImplementationLoader: com::sun::star::uno::XInterface
         @param locationUrl Points to the location of the file containing
                the component (for instance a .jar-file or a shared library).
                This parameter
-               should be in an URL format (= protocol:protocol-dependent-part).
+               should be in a URL format (= protocol:protocol-dependent-part).
                In case the string contains no
                leading &quot;protocol:&quot;, the implementation in general assumes,
                that it is a relative file url. <p>Special loaders may define

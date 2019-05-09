@@ -46,7 +46,7 @@ namespace svt
         /** transforms the given URL content into a system-dependent notation, if possible, and
             sets it as current display text
 
-            <p>If the user enters an URL such as "file:///c:/some%20directory", then this will be converted
+            <p>If the user enters a URL such as "file:///c:/some%20directory", then this will be converted
             to "c:\some directory" for better readability.</p>
 
             @param _rURL

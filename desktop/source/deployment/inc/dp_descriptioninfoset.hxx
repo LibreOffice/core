@@ -153,7 +153,7 @@ public:
         was a value provided or not. This is necessary to flag the extension in the update dialog
         properly as "browser based update". The return value will only then not be initialized
         if there is no <code>&lt;update-website&gt;</code>. If the element exists, then it must
-        have at least one child element containing an URL.
+        have at least one child element containing a URL.
 
         The <code>&lt;update-website&gt;</code> and <code>&lt;update-download&gt;</code>
         elements are mutually exclusive.

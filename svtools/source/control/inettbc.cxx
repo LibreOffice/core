@@ -262,7 +262,7 @@ IMPL_LINK_NOARG( SvtMatchContext_Impl, Select_Impl, void*, void )
 
     for (auto const& completion : aCompletions)
     {
-        // convert the file into an URL
+        // convert the file into a URL
         OUString sURL;
         osl::FileBase::getFileURLFromSystemPath(completion, sURL);
             // note: if this doesn't work, we're not interested in: we're checking the
@@ -581,7 +581,7 @@ IMPL_LINK_NOARG( MatchContext_Impl, Select_Impl, void*, void )
 
     for (auto const& completion : aCompletions)
     {
-        // convert the file into an URL
+        // convert the file into a URL
         OUString sURL;
         osl::FileBase::getFileURLFromSystemPath(completion, sURL);
             // note: if this doesn't work, we're not interested in: we're checking the

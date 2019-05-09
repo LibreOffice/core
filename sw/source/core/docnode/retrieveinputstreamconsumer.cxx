@@ -23,7 +23,7 @@
 #include <swthreadmanager.hxx>
 
 /* class to provide creation of a thread to retrieve an input stream given by
-    an URL and to consume the retrieved input stream.
+    a URL and to consume the retrieved input stream.
 
     #i73788#
 */

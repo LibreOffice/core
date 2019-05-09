@@ -248,7 +248,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl, weld::Button&, void)
         INetURLObject aNewObj( aPathStr );
         aNewObj.removeFinalSlash();
 
-        // then the new path also an URL else system path
+        // then the new path also a URL else system path
         OUString aSystemFileURL = ( aNewObj.GetProtocol() != INetProtocol::NotValid ) ?
             aPathStr : aNewObj.getFSysPath( FSysStyle::Detect );
 

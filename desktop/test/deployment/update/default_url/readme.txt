@@ -1,6 +1,6 @@
 Tests for using the default URL for update information. This URL is currently contained in
 the version.ini (ExtensionUpdateURL) and is used to obtain update information for extensions which do not provide
-an URL themselves.
+a URL themselves.
 
 The extensions default1.oxt and default2.oxt do not have a URL for update information.
 

@@ -2422,7 +2422,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     implts_specifyAppModuleAndFactory(aNew);
 
     // Hack! Check for "illegal office documents"... as e.g. the Basic IDE
-    // It's not really a full featured office document. It doesn't provide an URL, any filter, a factory URL etcpp.
+    // It's not really a full featured office document. It doesn't provide a URL, any filter, a factory URL etcpp.
     // TODO file bug to Basic IDE developers. They must remove the office document API from its service.
     if (
         (aNew.OrgURL.isEmpty()) &&
@@ -3423,7 +3423,7 @@ void AutoRecovery::implts_generateNewTempURL(const OUString&               sBack
     // and define a unique name, so we can locate it later.
     // This unique name must solve an optimization problem too!
     // In case we are asked to save unmodified documents too - and one of them
-    // is an empty one (because it was new created using e.g. an URL private:factory/...)
+    // is an empty one (because it was new created using e.g. a URL private:factory/...)
     // we should not save it really. Then we put the information about such "empty document"
     // into the configuration and don't create any recovery file on disk.
     // We use the title of the document to make it unique.

@@ -70,7 +70,7 @@ OUString expandUnoRcUrl( OUString const & url );
 
 /** appends a relative path to a url.
 
-    The relative path must already be correctly encoded for use in an URL.
+    The relative path must already be correctly encoded for use in a URL.
     If the URL starts with vnd.sun.star.expand then the relative path will
     be again encoded for use in an "expand" URL.
  */

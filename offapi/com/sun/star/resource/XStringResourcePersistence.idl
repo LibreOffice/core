@@ -46,7 +46,7 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
         StringResourceWithLocation and
         StringResourceWithStorage
 
-        The StringResourceWithLocation is initialized with an URL
+        The StringResourceWithLocation is initialized with a URL
         specifying a location used to load data from and store data to,
         see StringResourceWithLocation.
 

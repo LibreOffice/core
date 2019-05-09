@@ -246,7 +246,7 @@ private:
 
 // URL conversion =============================================================
 
-/** This class contains static methods to decode an URL stored in an Excel file.
+/** This class contains static methods to decode a URL stored in an Excel file.
     @descr  Excel URLs can contain a sheet name, for instance: path\[test.xls]Sheet1
     This sheet name will be extracted automatically. */
 class XclImpUrlHelper

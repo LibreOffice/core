@@ -127,7 +127,7 @@ public class _XStorable extends MultiMethodTest {
     * and no exceptions were thrown.
     */
     public void _storeAsURL() {
-        // getting an url to store
+        // getting a url to store
         String url = utils.getOfficeTemp(
                                 tParam.getMSF());
 
@@ -145,7 +145,7 @@ public class _XStorable extends MultiMethodTest {
                 tRes.tested("storeAsURL()", false);
             }
         } else {
-            log.println("an url to store is not found");
+            log.println("a url to store is not found");
         }
     }
 
@@ -155,7 +155,7 @@ public class _XStorable extends MultiMethodTest {
     * and no exceptions were thrown.
     */
     public void _storeToURL() {
-        // getting an url to store
+        // getting a url to store
         String url = utils.getOfficeTemp(
                                 tParam.getMSF());
 
@@ -171,7 +171,7 @@ public class _XStorable extends MultiMethodTest {
                 tRes.tested("storeToURL()", false);
             }
         } else {
-            log.println("an url to store is not found");
+            log.println("a url to store is not found");
         }
     }
 

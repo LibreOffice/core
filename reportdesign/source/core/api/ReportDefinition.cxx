@@ -1552,7 +1552,7 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
 
     ::comphelper::NamedValueCollection aArguments( _rArguments );
 
-    // the source for the to-be-created storage: either an URL, or a stream
+    // the source for the to-be-created storage: either a URL, or a stream
     uno::Reference< io::XInputStream > xStream;
     OUString sURL;
 

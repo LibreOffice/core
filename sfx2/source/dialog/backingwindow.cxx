@@ -748,7 +748,7 @@ void BackingWindow::dispatchURL( const OUString& i_rURL,
     if( !xProvider.is())
         return;
 
-    // get an URL transformer to clean up the URL
+    // get a URL transformer to clean up the URL
     css::util::URL aDispatchURL;
     aDispatchURL.Complete = i_rURL;
 

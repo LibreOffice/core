@@ -29,7 +29,7 @@
 
  module com {  module sun {  module star {  module frame {
 
-/** represents a component which is created from an URL and arguments.
+/** represents a component which is created from a URL and arguments.
 
     <p>
     It is a representation of a resource in the sense that it was

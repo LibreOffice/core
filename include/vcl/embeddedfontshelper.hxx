@@ -52,7 +52,7 @@ public:
         std::vector< unsigned char > key, bool eot = false);
 
     /**
-      Returns an URL for a file where to store contents of a given temporary font.
+      Returns a URL for a file where to store contents of a given temporary font.
       The file may or not may not exist yet, and will be cleaned up automatically as appropriate.
       Use activateTemporaryFont() to actually enable usage of the font.
 

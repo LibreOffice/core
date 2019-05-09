@@ -316,7 +316,7 @@ public class AsciiReplaceFilter
         /**
         * Implements the real filter method. We detect if it must be an import or an export.
         * Depends on that we use an existing stream (given inside the MediaDescriptor)
-        * or open it by using an URL (must be a part of the descriptor too).
+        * or open it by using a URL (must be a part of the descriptor too).
         *
         * @param lDescriptor
         *          the MediaDescriptor which describes the document

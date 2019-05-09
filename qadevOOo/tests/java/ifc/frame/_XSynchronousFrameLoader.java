@@ -42,7 +42,7 @@ import com.sun.star.util.XURLTransformer;
  * This test needs the following object relations :
  * <ul>
  *  <li> <code>'FrameLoader.URL'</code> (of type <code>String</code>):
- *   an url of component to be loaded </li>
+ *   a url of component to be loaded </li>
  *  <li> <code>'FrameLoader.Frame'</code> <b>(optional)</b>
  *  (of type <code>com.sun.star.frame.XFrame</code>):
  *   a target frame where component to be loaded. If this

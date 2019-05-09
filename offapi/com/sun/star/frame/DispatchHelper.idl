@@ -24,7 +24,7 @@
 
 module com {  module sun {  module star {  module frame {
 
-/** provides an easy way to dispatch an URL using one call instead of multiple ones.
+/** provides an easy way to dispatch a URL using one call instead of multiple ones.
 
     <p>
     Normally a complete dispatch is split into different parts:

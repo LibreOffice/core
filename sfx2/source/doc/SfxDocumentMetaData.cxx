@@ -1868,7 +1868,7 @@ SfxDocumentMetaData::loadFromMedium(const OUString & URL,
 {
     css::uno::Reference<css::io::XInputStream> xIn;
     utl::MediaDescriptor md(Medium);
-    // if we have an URL parameter, it replaces the one in the media descriptor
+    // if we have a URL parameter, it replaces the one in the media descriptor
     if (!URL.isEmpty()) {
         md[ utl::MediaDescriptor::PROP_URL() ] <<= URL;
         md[ utl::MediaDescriptor::PROP_READONLY() ] <<= true;

@@ -44,7 +44,7 @@ import com.sun.star.uno.UnoRuntime;
   @title        helper to analyze necessary option properties of our filter
   @description  Our filter needs some necessary properties for working:
                     - a stream for input or output
-                    - or an URL for creating such streams
+                    - or a URL for creating such streams
                     - information about required action on filtering
 
   @attention    This class mustn't be threadsafe - because instances of it

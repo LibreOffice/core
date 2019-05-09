@@ -20,7 +20,7 @@ opened for editing. Possible parameters are
 As any ActiveX control this one should be registered.
 To let MSIE register it itself the "CODEBASE" parameter
 for the "OBJECT" tag should be specified
-with an URL to the library "so_activex.dll".
+with a URL to the library "so_activex.dll".
 The example of registration with "OBJECT" tag is in example.html.
 
 Also it can be done using regsvr32 application.

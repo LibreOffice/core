@@ -45,8 +45,8 @@ namespace svt
         {
             NOT_BOUND,  // never bound
             UNKNOWN,    // bound, but validity is unknown
-            VALID,      // bound to an URL, and valid
-            INVALID     // bound to an URL, and invalid
+            VALID,      // bound to a URL, and valid
+            INVALID     // bound to a URL, and invalid
         };
 
     private:

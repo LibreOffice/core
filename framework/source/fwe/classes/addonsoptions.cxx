@@ -735,7 +735,7 @@ void AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
 
         Sequence< Any > aAddonImageItemNodeValues = GetProperties( aAddonImageItemNodePropNames );
 
-        // An user-defined image entry must have an URL. As "ImageIdentifier" has a higher priority
+        // An user-defined image entry must have a URL. As "ImageIdentifier" has a higher priority
         // we also check if we already have an images association.
         if (( aAddonImageItemNodeValues[0] >>= aURL ) &&
             !aURL.isEmpty() &&

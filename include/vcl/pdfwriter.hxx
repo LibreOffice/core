@@ -933,7 +933,7 @@ The following structure describes the permissions used in PDF security
     */
     void           SetLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId );
     /** Set the URL for a link
-        will change a dest type link to an URL type link if necessary
+        will change a dest type link to a URL type link if necessary
         @param nLinkId
         the link to be changed
 

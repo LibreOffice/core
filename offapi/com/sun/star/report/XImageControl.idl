@@ -44,7 +44,7 @@ interface XImageControl
      */
     interface com::sun::star::form::XImageProducerSupplier;
 
-    /** specifies an URL to an image to use for the control.
+    /** specifies a URL to an image to use for the control.
      */
     [attribute,bound] string ImageURL;
 

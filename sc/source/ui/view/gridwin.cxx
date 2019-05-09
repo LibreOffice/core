@@ -2184,7 +2184,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     bool bAlt = rMEvt.IsMod2();
     if ( !bAlt && !bRefMode && !bDouble && nMouseStatus == SC_GM_URLDOWN )
     {
-        //  Only execute on ButtonUp, if ButtonDown also was done on an URL
+        //  Only execute on ButtonUp, if ButtonDown also was done on a URL
 
         OUString aName, aUrl, aTarget;
         if ( GetEditUrl( rMEvt.GetPosPixel(), &aName, &aUrl, &aTarget ) )

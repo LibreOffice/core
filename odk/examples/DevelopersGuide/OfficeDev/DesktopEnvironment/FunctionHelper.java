@@ -65,7 +65,7 @@ public class FunctionHelper
 
 
     /**
-     * This convert an URL (formatted as a string) to a struct com.sun.star.util.URL.
+     * This convert a URL (formatted as a string) to a struct com.sun.star.util.URL.
      * It use a special service to do that: the URLTransformer.
      * Because some API calls need it and it's not allowed to set "Complete"
      * part of the util struct only. The URL must be parsed.
@@ -425,7 +425,7 @@ public class FunctionHelper
 
 
     /**
-     * Dispatch an URL to given frame.
+     * Dispatch a URL to given frame.
      * Caller can register himself for following status events for dispatched
      * URL too. But nobody guarantee that such notifications will occur.
      * (see dispatchWithNotification() if you interest on that)
@@ -494,7 +494,7 @@ public class FunctionHelper
 
 
     /**
-     * Load document specified by an URL into given frame synchronously.
+     * Load document specified by a URL into given frame synchronously.
      * The result of this operation will be the loaded document for success
      * or null if loading failed.
      *
