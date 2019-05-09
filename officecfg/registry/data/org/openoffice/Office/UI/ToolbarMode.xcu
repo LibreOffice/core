@@ -109,7 +109,7 @@
             <value>false</value>
           </prop>
           <prop oor:name="MenuPosition">
-            <value>4</value>
+            <value>3</value>
           </prop>
           <prop oor:name="CommandArg">
             <value>notebookbar.ui</value>
@@ -137,7 +137,7 @@
             <value>false</value>
           </prop>
           <prop oor:name="MenuPosition">
-            <value>3</value>
+            <value>4</value>
           </prop>
           <prop oor:name="CommandArg">
             <value>notebookbar_compact.ui</value>
@@ -193,7 +193,7 @@
             <value>true</value>
           </prop>
           <prop oor:name="MenuPosition">
-            <value>6</value>
+            <value>7</value>
           </prop>
           <prop oor:name="CommandArg">
             <value>notebookbar_groupedbar_full.ui</value>
@@ -218,10 +218,10 @@
             <value>true</value>
           </prop>
           <prop oor:name="IsExperimental">
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="MenuPosition">
-            <value>7</value>
+            <value>6</value>
           </prop>
           <prop oor:name="CommandArg">
             <value>notebookbar_single.ui</value>
