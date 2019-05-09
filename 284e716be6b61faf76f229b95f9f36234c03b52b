@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3fa0c359_7f0e4ee6",
+        "filename": "basegfx/source/polygon/b2dpolypolygontools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2019-05-09T00:59:55Z",
+      "side": 1,
+      "message": "Why not start at i \u003d 1 and remove this?",
+      "revId": "284e716be6b61faf76f229b95f9f36234c03b52b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_6452456a",
         "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
         "patchSetId": 1
@@ -85,6 +102,40 @@
       "side": 1,
       "message": "OK; I hope that having this conditional on the snapping setting is safe; if we find out that\u0027s not the case, let\u0027s revisit the topic.",
       "parentUuid": "3fa0c359_84b75187",
+      "revId": "284e716be6b61faf76f229b95f9f36234c03b52b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_9f131a0e",
+        "filename": "drawinglayer/source/processor2d/vclprocessor2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2019-05-09T00:59:55Z",
+      "side": 1,
+      "message": "Can use nOriginalAA here instead of GetAntialiasing().",
+      "revId": "284e716be6b61faf76f229b95f9f36234c03b52b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_3ff8c6c2",
+        "filename": "drawinglayer/source/processor2d/vclprocessor2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2019-05-09T00:59:55Z",
+      "side": 1,
+      "message": "Is it possible that during DrawPolyLine above the antialiasing flags change?\n\nIn other words, is it not safer to simply restore the AntialiasingFlag we disable, rather than restore everything and potentially undo other flags (changed in DrawPolyLine? \n\ni.e. mpOutputDevice-\u003eSetAntialiasing(mpOutputDevice-\u003eGetAntialiasing() | AntialiasingFlags::EnableB2dDraw);",
       "revId": "284e716be6b61faf76f229b95f9f36234c03b52b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
