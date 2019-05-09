@@ -234,7 +234,6 @@ Title::Title() :
 {}
 
 Title::Title( const Title & rOther ) :
-        MutexContainer(),
         impl::Title_Base(rOther),
         ::property::OPropertySet( rOther, m_aMutex ),
         m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
