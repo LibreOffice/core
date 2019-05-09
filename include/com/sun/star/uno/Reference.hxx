@@ -189,6 +189,14 @@ inline Reference< interface_type >::Reference( const BaseReference & rRef, UnoRe
     _pInterface = iquery_throw( rRef.get() );
 }
 
+#ifdef LIBO_INTERNAL_ONLY
+template< class interface_type >
+inline Reference< interface_type >::Reference( const Reference< interface_type > & rRef, UnoReference_QueryThrow )
+{
+    _pInterface = castToXInterface( iset_throw( rRef.get() ) );
+}
+#endif
+
 template< class interface_type >
 inline Reference< interface_type >::Reference( XInterface * pInterface, UnoReference_QueryThrow )
 {
@@ -307,6 +315,14 @@ inline void Reference< interface_type >::set(
     set( castFromXInterface(iquery_throw( rRef.get() )), SAL_NO_ACQUIRE );
 }
 
+#ifdef LIBO_INTERNAL_ONLY
+template< class interface_type >
+inline void Reference< interface_type >::set(
+    const Reference< interface_type > & rRef, UnoReference_QueryThrow )
+{
+    set( rRef.get(), UNO_SET_THROW );
+}
+#endif
 
 template< class interface_type >
 inline void Reference< interface_type >::set(
