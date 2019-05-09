@@ -22,9 +22,6 @@
 namespace chart
 {
 
-MutexContainer::~MutexContainer()
-{}
-
 ::osl::Mutex & MutexContainer::GetMutex() const
 {
     return m_aMutex;
