@@ -88,7 +88,7 @@ protected:
     virtual void            StateChanged( StateChangedType nStateChange ) override;
 
 public:
-    virtual void            FillInfo(SfxChildWinInfo&) const;
+    void                    FillInfo(SfxChildWinInfo&) const;
     void                    Initialize (SfxChildWinInfo const * pInfo);
     virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     SfxBindings&            GetBindings()

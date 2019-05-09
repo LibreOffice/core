@@ -468,7 +468,7 @@ public:
     void                     SetDragOptions( sal_Int8 nOptions ) { nDragOptions = nOptions; }
 
     virtual SvTreeListEntry* CloneEntry( SvTreeListEntry* pSource );
-    virtual SvTreeListEntry* CreateEntry() const; // To create new Entries
+    SvTreeListEntry*         CreateEntry() const; // To create new Entries
 
     // Return value: TRISTATE_TRUE == Ok, TRISTATE_FALSE == Cancel, TRISTATE_INDET == Ok and Make visible moved entry
     virtual TriState NotifyMoving(
