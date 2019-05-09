@@ -199,12 +199,15 @@ bool PreviewRenderer::Initialize (
     const Size& rPixelSize,
     const bool bObeyHighContrastMode)
 {
-    if (pPage == nullptr)
+    if (!pPage)
         return false;
 
     SetupOutputSize(*pPage, rPixelSize);
     SdDrawDocument& rDocument(static_cast< SdDrawDocument& >(pPage->getSdrModelFromSdrPage()));
     DrawDocShell* pDocShell = rDocument.GetDocSh();
+
+    if (!pDocShell)
+        return false;
 
     // Create view
     ProvideView (pDocShell);
