@@ -27,10 +27,11 @@ namespace chart
 
 class OOO_DLLPUBLIC_CHARTTOOLS MutexContainer
 {
-public:
-    virtual ~MutexContainer();
-
 protected:
+    MutexContainer() = default;
+
+    ~MutexContainer() = default;
+
     mutable ::osl::Mutex m_aMutex;
 
     ::osl::Mutex & GetMutex() const;
