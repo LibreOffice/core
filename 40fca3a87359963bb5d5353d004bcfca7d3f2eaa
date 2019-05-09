@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_fafcac3f",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-05-09T17:58:52Z",
+      "side": 1,
+      "message": "Hardcoding is a recipe for disaster...",
+      "range": {
+        "startLine": 264,
+        "startChar": 80,
+        "endLine": 264,
+        "endChar": 83
+      },
+      "revId": "40fca3a87359963bb5d5353d004bcfca7d3f2eaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
