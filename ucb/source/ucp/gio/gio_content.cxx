@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -315,6 +319,7 @@ css::uno::Any Content::getBadArgExcept()
 
 class MountOperation
 {
+    ucb::ucp::gio::glib::MainContextRef mContext;
     GMainLoop *mpLoop;
     GMountOperation *mpAuthentication;
     GError *mpError;
@@ -327,8 +332,11 @@ public:
 
 MountOperation::MountOperation(const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv) : mpError(nullptr)
 {
-    mpLoop = g_main_loop_new(nullptr, FALSE);
-    mpAuthentication = ooo_mount_operation_new(xEnv);
+    ucb::ucp::gio::glib::MainContextRef oldContext(g_main_context_ref_thread_default());
+    mContext.reset(g_main_context_new());
+    mpLoop = g_main_loop_new(mContext.get(), FALSE);
+    g_main_context_push_thread_default(mContext.get());
+    mpAuthentication = ooo_mount_operation_new(std::move(oldContext), xEnv);
 }
 
 void MountOperation::Completed(GObject *source, GAsyncResult *res, gpointer user_data)
@@ -363,6 +371,7 @@ GError *MountOperation::Mount(GFile *pFile)
 MountOperation::~MountOperation()
 {
     g_object_unref(mpAuthentication);
+    g_main_context_pop_thread_default(mContext.get());
     g_main_loop_unref(mpLoop);
 }
 

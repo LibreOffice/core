@@ -20,6 +20,10 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_GIO_GIO_MOUNT_HXX
 #define INCLUDED_UCB_SOURCE_UCP_GIO_GIO_MOUNT_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <gio/gio.h>
 
@@ -32,13 +36,37 @@ G_BEGIN_DECLS
 #define OOO_IS_MOUNT_OPERATION_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), OOO_TYPE_MOUNT_OPERATION))
 #define OOO_MOUNT_OPERATION_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), OOO_TYPE_MOUNT_OPERATION, OOoMountOperationClass))
 
+namespace ucb::ucp::gio::glib {
+
+namespace detail {
+
+struct MainContextUnref {
+    void operator ()(GMainContext * context) {
+        if (context != nullptr) {
+            g_main_context_unref(context);
+        }
+    }
+};
+
+}
+
+using MainContextRef = std::unique_ptr<GMainContext, detail::MainContextUnref>;
+
+}
+
 struct OOoMountOperation
 {
     GMountOperation parent_instance;
 
+    ucb::ucp::gio::glib::MainContextRef context;
     const css::uno::Reference< css::ucb::XCommandEnvironment > *pEnv;
     char *m_pPrevUsername;
     char *m_pPrevPassword;
+
+private:
+    // Managed via ooo_mount_operation_new and ooo_mount_operation_finalize:
+    OOoMountOperation() = delete;
+    ~OOoMountOperation() = delete;
 };
 
 struct OOoMountOperationClass
@@ -54,7 +82,7 @@ struct OOoMountOperationClass
 
 
 GType            ooo_mount_operation_get_type();
-GMountOperation *ooo_mount_operation_new(const css::uno::Reference< css::ucb::XCommandEnvironment >& rEnv);
+GMountOperation *ooo_mount_operation_new(ucb::ucp::gio::glib::MainContextRef && context, const css::uno::Reference< css::ucb::XCommandEnvironment >& rEnv);
 
 G_END_DECLS
 #endif
