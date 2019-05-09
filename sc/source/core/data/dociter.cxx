@@ -152,15 +152,17 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
 {
     while (true)
     {
-        bool bNextColumn = maCurPos.first == mpCells->end();
+        bool bNextColumn = !mpCells || maCurPos.first == mpCells->end();
         if (!bNextColumn)
         {
             if (GetRow() > maEndPos.Row())
                 bNextColumn = true;
         }
 
-        ScColumn* pCol = &(pDoc->maTabs[mnTab])->aCol[mnCol];
-        if (bNextColumn)
+        ScColumn* pCol;
+        if (!bNextColumn)
+            pCol = &(pDoc->maTabs[mnTab])->aCol[mnCol];
+        else
         {
             // Find the next available column.
             do
@@ -292,8 +294,14 @@ bool ScValueIterator::GetFirst(double& rValue, FormulaError& rErr)
     pAttrArray = nullptr;
     nAttrEndRow = 0;
 
-    mpCells = &pTab->aCol[maStartPos.Col()].maCells;
-    maCurPos = mpCells->position(maStartPos.Row());
+    auto nCol = maStartPos.Col();
+    if (nCol < pTab->GetAllocatedColumnsCount())
+    {
+        mpCells = &pTab->aCol[nCol].maCells;
+        maCurPos = mpCells->position(maStartPos.Row());
+    }
+    else
+        mpCells = nullptr;
     return GetThis(rValue, rErr);
 }
 
