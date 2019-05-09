@@ -619,24 +619,15 @@ void DocumentDigitalSignatures::showCertificate(
 sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
     const Reference< css::security::XCertificate >& Author )
 {
-    bool bFound = false;
-
     OUString sSerialNum = xmlsecurity::bigIntegerToNumericString( Author->getSerialNumber() );
 
     Sequence< SvtSecurityOptions::Certificate > aTrustedAuthors = SvtSecurityOptions().GetTrustedAuthors();
-    const SvtSecurityOptions::Certificate* pAuthors = aTrustedAuthors.getConstArray();
-    const SvtSecurityOptions::Certificate* pAuthorsEnd = pAuthors + aTrustedAuthors.getLength();
-    for ( ; pAuthors != pAuthorsEnd; ++pAuthors )
-    {
-        SvtSecurityOptions::Certificate aAuthor = *pAuthors;
-        if ( ( aAuthor[0] == Author->getIssuerName() ) && ( aAuthor[1] == sSerialNum ) )
-        {
-            bFound = true;
-            break;
-        }
-    }
 
-    return bFound;
+    return std::any_of(aTrustedAuthors.begin(), aTrustedAuthors.end(),
+        [&Author, &sSerialNum](const SvtSecurityOptions::Certificate& rAuthor) {
+            return ( rAuthor[0] == Author->getIssuerName() )
+                && ( rAuthor[1] == sSerialNum );
+        });
 }
 
 uno::Sequence<Reference<css::security::XCertificate>>

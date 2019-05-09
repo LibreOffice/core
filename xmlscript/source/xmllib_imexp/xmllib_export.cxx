@@ -118,21 +118,16 @@ exportLibrary(
     if( rLib.bPreload )
         pLibElement->addAttribute( XMLNS_LIBRARY_PREFIX ":preload", sTrueStr );
 
-    sal_Int32 nElementCount = rLib.aElementNames.getLength();
-    if( nElementCount )
+    for( const auto& rElementName : rLib.aElementNames )
     {
-        const OUString* pElementNames = rLib.aElementNames.getConstArray();
-        for( sal_Int32 i = 0 ; i < nElementCount ; i++ )
-        {
-            XMLElement* pElement = new XMLElement( XMLNS_LIBRARY_PREFIX ":element" );
-            Reference< xml::sax::XAttributeList > xElementAttribs;
-            xElementAttribs = static_cast< xml::sax::XAttributeList* >( pElement );
+        XMLElement* pElement = new XMLElement( XMLNS_LIBRARY_PREFIX ":element" );
+        Reference< xml::sax::XAttributeList > xElementAttribs;
+        xElementAttribs = static_cast< xml::sax::XAttributeList* >( pElement );
 
-            pElement->addAttribute( XMLNS_LIBRARY_PREFIX ":name",
-                                        pElementNames[i] );
+        pElement->addAttribute( XMLNS_LIBRARY_PREFIX ":name",
+                                    rElementName );
 
-            pLibElement->addSubElement( pElement );
-        }
+        pLibElement->addSubElement( pElement );
     }
 
     pLibElement->dump( xOut.get() );

@@ -87,42 +87,40 @@ static void ImplFillElementList(
 {
     Reference < css::container::XNameAccess > xElements( rxStore, UNO_QUERY );
     Sequence< OUString > aElements = xElements->getElementNames();
-    sal_Int32 nElements = aElements.getLength();
-    const OUString* pNames = aElements.getConstArray();
 
-    for ( sal_Int32 n = 0; n < nElements; n++ )
+    for ( const auto& rName : aElements )
     {
-        if (pNames[n] == "[Content_Types].xml")
+        if (rName == "[Content_Types].xml")
             // OOXML
             continue;
 
         // If the user enabled validating according to OOo 3.0
         // then mimetype and all content of META-INF must be excluded.
         if (mode != DocumentSignatureAlgorithm::OOo3_2
-            && (pNames[n] == "META-INF" || pNames[n] == "mimetype"))
+            && (rName == "META-INF" || rName == "mimetype"))
         {
             continue;
         }
         else
         {
             OUString sEncName = ::rtl::Uri::encode(
-                pNames[n], rtl_UriCharClassRelSegment,
+                rName, rtl_UriCharClassRelSegment,
                 rtl_UriEncodeStrict, RTL_TEXTENCODING_UTF8);
-            if (sEncName.isEmpty() && !pNames[n].isEmpty())
+            if (sEncName.isEmpty() && !rName.isEmpty())
                 throw css::uno::RuntimeException("Failed to encode element name of XStorage", nullptr);
 
-            if ( rxStore->isStreamElement( pNames[n] ) )
+            if ( rxStore->isStreamElement( rName ) )
             {
                 //Exclude documentsignatures.xml!
-                if (pNames[n] ==
+                if (rName ==
                     DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName())
                     continue;
                 OUString aFullName( rRootStorageName + sEncName );
                 rList.push_back(aFullName);
             }
-            else if ( bRecursive && rxStore->isStorageElement( pNames[n] ) )
+            else if ( bRecursive && rxStore->isStorageElement( rName ) )
             {
-                Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( pNames[n], css::embed::ElementModes::READ );
+                Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( rName, css::embed::ElementModes::READ );
                 OUString aFullRootName( rRootStorageName + sEncName + "/"  );
                 ImplFillElementList(rList, xSubStore, aFullRootName, bRecursive, mode);
             }
@@ -217,14 +215,12 @@ DocumentSignatureHelper::CreateElementList(
                     // Object folders...
                     Reference < css::container::XNameAccess > xElements( rxStore, UNO_QUERY );
                     Sequence< OUString > aElementNames = xElements->getElementNames();
-                    sal_Int32 nElements = aElementNames.getLength();
-                    const OUString* pNames = aElementNames.getConstArray();
-                    for ( sal_Int32 n = 0; n < nElements; n++ )
+                    for ( const auto& rName : aElementNames )
                     {
-                        if ( ( pNames[n].match( "Object " ) ) && rxStore->isStorageElement( pNames[n] ) )
+                        if ( ( rName.match( "Object " ) ) && rxStore->isStorageElement( rName ) )
                         {
-                            Reference < css::embed::XStorage > xTmpSubStore = rxStore->openStorageElement( pNames[n], css::embed::ElementModes::READ );
-                            ImplFillElementList(aElements, xTmpSubStore, pNames[n]+aSep, true, mode);
+                            Reference < css::embed::XStorage > xTmpSubStore = rxStore->openStorageElement( rName, css::embed::ElementModes::READ );
+                            ImplFillElementList(aElements, xTmpSubStore, rName+aSep, true, mode);
                         }
                     }
                 }

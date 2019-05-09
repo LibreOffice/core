@@ -318,11 +318,10 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
     {
         ElementDescriptor * popup = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menupopup", _xDocument );
 
-        OUString const * pItemValues = itemValues.getConstArray();
-        for ( sal_Int32 nPos = 0; nPos < itemValues.getLength(); ++nPos )
+        for ( const auto& rItemValue : itemValues )
         {
             ElementDescriptor * item = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menuitem", _xDocument );
-            item->addAttribute( XMLNS_DIALOGS_PREFIX ":value", pItemValues[ nPos ] );
+            item->addAttribute( XMLNS_DIALOGS_PREFIX ":value", rItemValue );
             popup->addSubElement( item );
         }
 
@@ -366,12 +365,10 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
     {
         ElementDescriptor * popup = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menupopup", _xDocument );
 
-        OUString const * pItemValues = itemValues.getConstArray();
-        sal_Int32 nPos;
-        for ( nPos = 0; nPos < itemValues.getLength(); ++nPos )
+        for ( const auto& rItemValue : itemValues )
         {
             ElementDescriptor * item = new ElementDescriptor(_xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menuitem", _xDocument );
-            item->addAttribute( XMLNS_DIALOGS_PREFIX ":value", pItemValues[ nPos ] );
+            item->addAttribute( XMLNS_DIALOGS_PREFIX ":value", rItemValue );
             popup->addSubElement( item );
         }
 
@@ -379,7 +376,7 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
         if (readProp( "SelectedItems" ) >>= selected)
         {
             sal_Int16 const * pSelected = selected.getConstArray();
-            for ( nPos = selected.getLength(); nPos--; )
+            for ( sal_Int32 nPos = selected.getLength(); nPos--; )
             {
                 ElementDescriptor * item = static_cast< ElementDescriptor * >(
                     popup->getSubElement( pSelected[ nPos ] ).get() );
@@ -1090,14 +1087,12 @@ void ElementDescriptor::readBullitinBoard( StyleBag * all_styles )
     if ( !xDialogModel.is() )
         return; // #TODO throw???
     Sequence< OUString > aElements( xDialogModel->getElementNames() );
-    OUString const * pElements = aElements.getConstArray();
 
     ElementDescriptor * pRadioGroup = nullptr;
 
-    sal_Int32 nPos;
-    for ( nPos = 0; nPos < aElements.getLength(); ++nPos )
+    for ( const auto& rElement : aElements )
     {
-        Any aControlModel( xDialogModel->getByName( pElements[ nPos ] ) );
+        Any aControlModel( xDialogModel->getByName( rElement ) );
         Reference< beans::XPropertySet > xProps;
         OSL_VERIFY( aControlModel >>= xProps );
         if (! xProps.is())
