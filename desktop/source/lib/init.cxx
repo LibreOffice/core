@@ -1174,11 +1174,13 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         // Dump the queue state and validate cached data.
         int i = 1;
         std::ostringstream oss;
-        oss << '\n';
+        if (m_queue.empty())
+            oss << "Empty";
+        else
+            oss << m_queue.size() << " items\n";
         for (const CallbackData& c : m_queue)
             oss << i++ << ": [" << c.Type << "] [" << c.PayloadString << "].\n";
-        const std::string aQueued = oss.str();
-        SAL_INFO("lok", "Current Queue: " << (aQueued.empty() ? "Empty" : aQueued));
+        SAL_INFO("lok", "Current Queue: " << oss.str());
         for (const CallbackData& c : m_queue)
             assert(c.validate());
     }
@@ -1391,45 +1393,53 @@ bool CallbackFlushHandler::processWindowEvent(CallbackData& aCallbackData)
                 const boost::property_tree::ptree& aOldTree = elem.getJson();
                 if (aOldTree.get<std::string>("action", "") == "invalidate")
                 {
-                    const unsigned nOldDialogId = aOldTree.get<unsigned>("id", 0);
-                    std::string aOldRectStr = aOldTree.get<std::string>("rectangle", "");
-                    // not possible that we encounter an empty
-                    // rectangle here; we already handled this
-                    // case before
-                    std::istringstream aOldRectStream(aOldRectStr);
+                    // Not possible that we encounter an empty rectangle here; we already handled this case above.
+                    std::istringstream aOldRectStream(aOldTree.get<std::string>("rectangle", ""));
                     long nOldLeft, nOldTop, nOldWidth, nOldHeight;
                     char nOldComma;
                     aOldRectStream >> nOldLeft >> nOldComma >> nOldTop >> nOldComma >> nOldWidth
                         >> nOldComma >> nOldHeight;
-                    tools::Rectangle aOldRect = tools::Rectangle(
+                    const tools::Rectangle aOldRect = tools::Rectangle(
                         nOldLeft, nOldTop, nOldLeft + nOldWidth, nOldTop + nOldHeight);
 
-                    if (nLOKWindowId == nOldDialogId)
+                    if (nLOKWindowId == aOldTree.get<unsigned>("id", 0))
                     {
-                        // new one engulfs the old one?
-                        if (aNewRect.IsInside(aOldRect))
+                        if (aNewRect == aOldRect)
                         {
-                            SAL_INFO("lok.dialog", "New " << aNewRect.toString() << " engulfs old "
-                                                          << aOldRect.toString() << ".");
+                            SAL_INFO("lok.dialog", "Duplicate rect [" << aNewRect.toString()
+                                                                      << "]. Skipping new.");
+                            // We have a rectangle in the queue already that makes the current Callback useless.
+                            currentIsRedundant = true;
+                            return false;
+                        }
+                        // new one engulfs the old one?
+                        else if (aNewRect.IsInside(aOldRect))
+                        {
+                            SAL_INFO("lok.dialog",
+                                     "New rect [" << aNewRect.toString() << "] engulfs old ["
+                                                  << aOldRect.toString() << "]. Replacing old.");
                             return true;
                         }
                         // old one engulfs the new one?
                         else if (aOldRect.IsInside(aNewRect))
                         {
-                            SAL_INFO("lok.dialog", "Old " << aOldRect.toString() << " engulfs new "
-                                                          << aNewRect.toString() << ".");
-                            // we have a rectangle in the queue
-                            // already that makes the current
-                            // Callback useless
+                            SAL_INFO("lok.dialog",
+                                     "Old rect [" << aOldRect.toString() << "] engulfs new ["
+                                                  << aNewRect.toString() << "]. Skipping new.");
+                            // We have a rectangle in the queue already that makes the current Callback useless.
                             currentIsRedundant = true;
                             return false;
                         }
                         else
                         {
-                            SAL_INFO("lok.dialog", "Merging " << aNewRect.toString() << " & "
-                                                              << aOldRect.toString());
+                            // Overlapping rects.
+                            const tools::Rectangle aPreMergeRect = aNewRect;
                             aNewRect.Union(aOldRect);
-                            SAL_INFO("lok.dialog", "Merged: " << aNewRect.toString());
+                            SAL_INFO("lok.dialog", "Merging rects ["
+                                                       << aPreMergeRect.toString() << "] & ["
+                                                       << aOldRect.toString() << "] = ["
+                                                       << aNewRect.toString()
+                                                       << "]. Replacing old.");
                             return true;
                         }
                     }
@@ -1441,12 +1451,7 @@ bool CallbackFlushHandler::processWindowEvent(CallbackData& aCallbackData)
 
             // Do not enqueue if redundant.
             if (currentIsRedundant)
-            {
-                SAL_INFO("lok.dialog", "Current payload is engulfed by one already in the queue. "
-                                       "Skipping redundant payload: "
-                                           << aNewRect.toString());
                 return true;
-            }
 
             aTree.put("rectangle", aNewRect.toString().getStr());
             aCallbackData.setJson(aTree);
