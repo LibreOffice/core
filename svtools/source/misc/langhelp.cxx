@@ -30,6 +30,7 @@
 
 void localizeWebserviceURI( OUString& rURI )
 {
+    const OUString aPrefix = "?lang=";
     OUString aLang = Application::GetSettings().GetUILanguageTag().getLanguage();
     if ( aLang.equalsIgnoreAsciiCase("pt")
          && Application::GetSettings().GetUILanguageTag().getCountry().equalsIgnoreAsciiCase("br") )
@@ -44,6 +45,7 @@ void localizeWebserviceURI( OUString& rURI )
             aLang = "zh-tw";
     }
 
+    rURI += aPrefix;
     rURI += aLang;
 }
 
