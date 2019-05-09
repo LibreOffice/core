@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_9a45681a",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1843,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-05-09T12:27:48Z",
+      "side": 1,
+      "message": "I think a copy isn\u0027t necessary here and simply calling aFuncMark.SelectOneTable(nTab) would do. Furthermore, the copy should really not be done in every iteration of the loop..",
+      "revId": "505236995cb94fcd4d8e1dcf67e78bbc34e896ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
