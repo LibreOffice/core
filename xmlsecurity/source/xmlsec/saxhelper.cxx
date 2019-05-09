@@ -76,10 +76,11 @@ static const xmlChar** attrlist_to_nxmlstr( const cssu::Sequence< cssxcsax::XMLA
         return nullptr ;
     }
 
-    for( int i = 0 , j = 0 ; j < nLength ; ++j )
+    int i = 0;
+    for( const auto& rAttr : aAttributes )
     {
-        attname = ous_to_xmlstr( aAttributes[j].sName ) ;
-        attvalue = ous_to_xmlstr( aAttributes[j].sValue ) ;
+        attname = ous_to_xmlstr( rAttr.sName ) ;
+        attvalue = ous_to_xmlstr( rAttr.sValue ) ;
 
         if( attname != nullptr && attvalue != nullptr )
         {

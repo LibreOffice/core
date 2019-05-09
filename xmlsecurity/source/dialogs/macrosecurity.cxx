@@ -363,10 +363,9 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(weld::Container* pP
     m_xTrustFileLocLB->set_sensitive(!mbURLsReadonly);
     m_xAddLocPB->set_sensitive(!mbURLsReadonly);
 
-    sal_Int32 nEntryCnt = aSecureURLs.getLength();
-    for (sal_Int32 i = 0; i < nEntryCnt; ++i)
+    for (const auto& rSecureURL : aSecureURLs)
     {
-        OUString aSystemFileURL( aSecureURLs[ i ] );
+        OUString aSystemFileURL( rSecureURL );
         osl::FileBase::getSystemPathFromFileURL( aSystemFileURL, aSystemFileURL );
         m_xTrustFileLocLB->append_text(aSystemFileURL);
     }

@@ -181,15 +181,12 @@ bool DocumentSignatureManager::isXML(const OUString& rURI)
 
     if (readManifest())
     {
-        for (int i = 0; i < m_manifest.getLength(); i++)
+        for (const uno::Sequence<beans::PropertyValue>& entry : m_manifest)
         {
-            const uno::Sequence<beans::PropertyValue>& entry = m_manifest[i];
             OUString sPath, sMediaType;
             bool bEncrypted = false;
-            for (int j = 0; j < entry.getLength(); j++)
+            for (const beans::PropertyValue& prop : entry)
             {
-                const beans::PropertyValue& prop = entry[j];
-
                 if (prop.Name == sPropFullPath)
                     prop.Value >>= sPath;
                 else if (prop.Name == sPropMediaType)

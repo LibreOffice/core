@@ -198,23 +198,23 @@ void CertificateChooser::ImplInitialize()
 
 
         // fill list of certificates; the first entry will be selected
-        for ( sal_Int32 nC = 0; nC < nCertificates; ++nC )
+        for ( const auto& xCert : xCerts )
         {
             std::shared_ptr<UserData> userData = std::make_shared<UserData>();
-            userData->xCertificate = xCerts[ nC ];
+            userData->xCertificate = xCert;
             userData->xSecurityContext = secContext;
             userData->xSecurityEnvironment = secEnvironment;
             mvUserData.push_back(userData);
 
-            OUString sIssuer = xmlsec::GetContentPart( xCerts[ nC ]->getIssuerName() );
+            OUString sIssuer = xmlsec::GetContentPart( xCert->getIssuerName() );
 
             m_xCertLB->append();
             int nRow = m_xCertLB->n_children() - 1;
-            m_xCertLB->set_text(nRow, xmlsec::GetContentPart(xCerts[nC]->getSubjectName()), 0);
+            m_xCertLB->set_text(nRow, xmlsec::GetContentPart(xCert->getSubjectName()), 0);
             m_xCertLB->set_text(nRow, sIssuer, 1);
-            m_xCertLB->set_text(nRow, xmlsec::GetCertificateKind(xCerts[nC]->getCertificateKind()), 2);
-            m_xCertLB->set_text(nRow, utl::GetDateString(xCerts[nC]->getNotValidAfter()), 3);
-            m_xCertLB->set_text(nRow, UsageInClearText(xCerts[nC]->getCertificateUsage()), 4);
+            m_xCertLB->set_text(nRow, xmlsec::GetCertificateKind(xCert->getCertificateKind()), 2);
+            m_xCertLB->set_text(nRow, utl::GetDateString(xCert->getNotValidAfter()), 3);
+            m_xCertLB->set_text(nRow, UsageInClearText(xCert->getCertificateUsage()), 4);
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(userData.get())));
             m_xCertLB->set_id(nRow, sId);
 
@@ -226,7 +226,7 @@ void CertificateChooser::ImplInitialize()
                     m_xCertLB->select(nRow);
                 else if ( meAction == UserAction::Encrypt &&
                           aUserOpts.GetEncryptToSelf() )
-                    mxEncryptToSelf = xCerts[nC];
+                    mxEncryptToSelf = xCert;
             }
 #endif
         }

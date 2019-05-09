@@ -142,12 +142,7 @@ OUString SAL_CALL SecurityEnvironment_NssImpl::getImplementationName() {
 /* XServiceInfo */
 sal_Bool SAL_CALL SecurityEnvironment_NssImpl::supportsService( const OUString& serviceName) {
     Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
-    const OUString* pArray = seqServiceNames.getConstArray() ;
-    for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
-        if( *( pArray + i ) == serviceName )
-            return true ;
-    }
-    return false ;
+    return comphelper::findValue(seqServiceNames, serviceName) != -1;
 }
 
 /* XServiceInfo */
@@ -545,9 +540,9 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
     {
 
         //prepare the intermediate certificates
-        for (sal_Int32 i = 0; i < intermediateCerts.getLength(); i++)
+        for (const auto& rIntermediateCert : intermediateCerts)
         {
-            Sequence<sal_Int8> der = intermediateCerts[i]->getEncoded();
+            Sequence<sal_Int8> der = rIntermediateCert->getEncoded();
             SECItem item;
             item.type = siBuffer;
             item.data = reinterpret_cast<unsigned char*>(der.getArray());
@@ -559,7 +554,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
                                            PR_TRUE  /* copyDER */);
             if (!certTmp)
             {
-                 SAL_INFO("xmlsecurity.xmlsec", "Failed to add a temporary certificate: " << intermediateCerts[i]->getIssuerName());
+                 SAL_INFO("xmlsecurity.xmlsec", "Failed to add a temporary certificate: " << rIntermediateCert->getIssuerName());
 
             }
             else
