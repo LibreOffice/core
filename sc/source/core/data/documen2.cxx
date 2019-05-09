@@ -452,9 +452,9 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
         mpNoteEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
         ApplyAsianEditSettings( *mpNoteEngine );
         const SfxItemSet& rItemSet = GetDefPattern()->GetItemSet();
-        SfxItemSet* pEEItemSet = new SfxItemSet( mpNoteEngine->GetEmptyItemSet() );
+        std::unique_ptr<SfxItemSet> pEEItemSet(new SfxItemSet( mpNoteEngine->GetEmptyItemSet() ));
         ScPatternAttr::FillToEditItemSet( *pEEItemSet, rItemSet );
-        mpNoteEngine->SetDefaults( pEEItemSet );      // edit engine takes ownership
+        mpNoteEngine->SetDefaults( std::move(pEEItemSet) );      // edit engine takes ownership
     }
     return *mpNoteEngine;
 }

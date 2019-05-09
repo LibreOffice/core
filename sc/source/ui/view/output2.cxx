@@ -2406,8 +2406,8 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
     bool bCellContrast = bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
-    SfxItemSet* pSet = new SfxItemSet( mpEngine->GetEmptyItemSet() );
-    mpPattern->FillEditItemSet( pSet, mpCondSet );
+    auto pSet = std::make_unique<SfxItemSet>( mpEngine->GetEmptyItemSet() );
+    mpPattern->FillEditItemSet( pSet.get(), mpCondSet );
     if ( mpPreviewFontSet )
     {
         const SfxPoolItem* pItem;
@@ -2424,7 +2424,8 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
             pSet->Put(*pItem);
         }
     }
-    mpEngine->SetDefaults( pSet );
+    bool bParaHyphenate = pSet->Get(EE_PARA_HYPHENATE).GetValue();
+    mpEngine->SetDefaults( std::move(pSet) );
     mpOldPattern = mpPattern;
     mpOldCondSet = mpCondSet;
     mpOldPreviewFontSet = mpPreviewFontSet;
@@ -2436,7 +2437,7 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
         nControl &= ~EEControlBits::ONECHARPERLINE;
     mpEngine->SetControlWord( nControl );
 
-    if ( !mbHyphenatorSet && pSet->Get(EE_PARA_HYPHENATE).GetValue() )
+    if ( !mbHyphenatorSet && bParaHyphenate )
     {
         //  set hyphenator the first time it is needed
         css::uno::Reference<css::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
@@ -4573,8 +4574,8 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             // StringDiffer doesn't look at hyphenate, language items
                             if ( pPattern != pOldPattern || pCondSet != pOldCondSet )
                             {
-                                SfxItemSet* pSet = new SfxItemSet( pEngine->GetEmptyItemSet() );
-                                pPattern->FillEditItemSet( pSet, pCondSet );
+                                auto pSet = std::make_unique<SfxItemSet>( pEngine->GetEmptyItemSet() );
+                                pPattern->FillEditItemSet( pSet.get(), pCondSet );
 
                                                                     // adjustment for EditEngine
                                 SvxAdjust eSvxAdjust = SvxAdjust::Left;
@@ -4583,7 +4584,8 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 // adjustment for bBreak is omitted here
                                 pSet->Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
 
-                                pEngine->SetDefaults( pSet );
+                                bool bParaHyphenate = pSet->Get(EE_PARA_HYPHENATE).GetValue();
+                                pEngine->SetDefaults( std::move(pSet) );
                                 pOldPattern = pPattern;
                                 pOldCondSet = pCondSet;
 
@@ -4594,7 +4596,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     nControl &= ~EEControlBits::ONECHARPERLINE;
                                 pEngine->SetControlWord( nControl );
 
-                                if ( !bHyphenatorSet && pSet->Get(EE_PARA_HYPHENATE).GetValue() )
+                                if ( !bHyphenatorSet && bParaHyphenate )
                                 {
                                     //  set hyphenator the first time it is needed
                                     css::uno::Reference<css::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );

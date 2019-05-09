@@ -376,17 +376,17 @@ long ScColumn::GetNeededSize(
         pDev->SetMapMode( aHMMMode );
         pEngine->SetRefDevice( pDev );
         pDocument->ApplyAsianEditSettings( *pEngine );
-        SfxItemSet* pSet = new SfxItemSet( pEngine->GetEmptyItemSet() );
+        std::unique_ptr<SfxItemSet> pSet(new SfxItemSet( pEngine->GetEmptyItemSet() ));
         if ( ScStyleSheet* pPreviewStyle = pDocument->GetPreviewCellStyle( nCol, nRow, nTab ) )
         {
             std::unique_ptr<ScPatternAttr> pPreviewPattern(new ScPatternAttr( *pPattern ));
             pPreviewPattern->SetStyleSheet(pPreviewStyle);
-            pPreviewPattern->FillEditItemSet( pSet, pCondSet );
+            pPreviewPattern->FillEditItemSet( pSet.get(), pCondSet );
         }
         else
         {
             SfxItemSet* pFontSet = pDocument->GetPreviewFont( nCol, nRow, nTab );
-            pPattern->FillEditItemSet( pSet, pFontSet ? pFontSet : pCondSet );
+            pPattern->FillEditItemSet( pSet.get(), pFontSet ? pFontSet : pCondSet );
         }
 //          no longer needed, are set with the text (is faster)
 //          pEngine->SetDefaults( pSet );
@@ -437,7 +437,7 @@ long ScColumn::GetNeededSize(
 
         if (aCell.meType == CELLTYPE_EDIT)
         {
-            pEngine->SetTextNewDefaults(*aCell.mpEditText, pSet);
+            pEngine->SetTextNewDefaults(*aCell.mpEditText, std::move(pSet));
         }
         else
         {
@@ -448,9 +448,9 @@ long ScColumn::GetNeededSize(
                 rOptions.bFormula);
 
             if (!aString.isEmpty())
-                pEngine->SetTextNewDefaults(aString, pSet);
+                pEngine->SetTextNewDefaults(aString, std::move(pSet));
             else
-                pEngine->SetDefaults(pSet);
+                pEngine->SetDefaults(std::move(pSet));
         }
 
         bool bEngineVertical = pEngine->IsVertical();

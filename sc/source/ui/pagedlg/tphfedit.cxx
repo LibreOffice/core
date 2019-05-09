@@ -178,8 +178,8 @@ std::unique_ptr<EditTextObject> ScEditWindow::CreateTextObject()
 
 void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
 {
-    SfxItemSet* pSet = new SfxItemSet( pEdEngine->GetEmptyItemSet() );
-    rPattern.FillEditItemSet( pSet );
+    auto pSet = std::make_unique<SfxItemSet>( pEdEngine->GetEmptyItemSet() );
+    rPattern.FillEditItemSet( pSet.get() );
     //  FillEditItemSet adjusts font height to 1/100th mm,
     //  but for header/footer twips is needed, as in the PatternAttr:
     pSet->Put( rPattern.GetItem(ATTR_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT) );
@@ -187,7 +187,7 @@ void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
     pSet->Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL) );
     if (mbRTL)
         pSet->Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
-    pEdEngine->SetDefaults( pSet );
+    pEdEngine->SetDefaults( std::move(pSet) );
 }
 
 void ScEditWindow::SetText( const EditTextObject& rTextObject )

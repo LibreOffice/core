@@ -508,11 +508,11 @@ void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, bool bRememberC
         EnableUndo( true );
 }
 
-void ScEditEngineDefaulter::SetDefaults( SfxItemSet* pSet )
+void ScEditEngineDefaulter::SetDefaults( std::unique_ptr<SfxItemSet> pSet )
 {
     if ( bDeleteDefaults )
         delete pDefaults;
-    pDefaults = pSet;
+    pDefaults = pSet.release();
     bDeleteDefaults = true;
     if ( pDefaults )
         SetDefaults( *pDefaults, false );
@@ -564,13 +564,13 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObjec
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObject,
-            SfxItemSet* pSet )
+            std::unique_ptr<SfxItemSet> pSet )
 {
     bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
         SetUpdateMode( false );
     EditEngine::SetText( rTextObject );
-    SetDefaults( pSet );
+    SetDefaults( std::move(pSet) );
     if ( bUpdateMode )
         SetUpdateMode( true );
 }
@@ -600,13 +600,13 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
-            SfxItemSet* pSet )
+            std::unique_ptr<SfxItemSet> pSet )
 {
     bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
         SetUpdateMode( false );
     EditEngine::SetText( rText );
-    SetDefaults( pSet );
+    SetDefaults( std::move(pSet) );
     if ( bUpdateMode )
         SetUpdateMode( true );
 }
@@ -712,9 +712,9 @@ ScTabEditEngine::ScTabEditEngine( const ScPatternAttr& rPattern,
 void ScTabEditEngine::Init( const ScPatternAttr& rPattern )
 {
     SetRefMapMode(MapMode(MapUnit::Map100thMM));
-    SfxItemSet* pEditDefaults = new SfxItemSet( GetEmptyItemSet() );
-    rPattern.FillEditItemSet( pEditDefaults );
-    SetDefaults( pEditDefaults );
+    auto pEditDefaults = std::make_unique<SfxItemSet>( GetEmptyItemSet() );
+    rPattern.FillEditItemSet( pEditDefaults.get() );
+    SetDefaults( std::move(pEditDefaults) );
     // we have no StyleSheets for text
     SetControlWord( GetControlWord() & ~EEControlBits::RTFSTYLESHEETS );
 }

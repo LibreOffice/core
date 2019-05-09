@@ -384,14 +384,14 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
         rEE.SetControlWord( rEE.GetControlWord() & ~EEControlBits::ALLOWBIGOBJS );
 
         // set Calc header/footer defaults
-        SfxItemSet* pEditSet = new SfxItemSet( rEE.GetEmptyItemSet() );
+        auto pEditSet = std::make_unique<SfxItemSet>( rEE.GetEmptyItemSet() );
         SfxItemSet aItemSet( *GetDoc().GetPool(), svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} );
         ScPatternAttr::FillToEditItemSet( *pEditSet, aItemSet );
         // FillToEditItemSet() adjusts font height to 1/100th mm, we need twips
         pEditSet->Put( aItemSet.Get( ATTR_FONT_HEIGHT ).CloneSetWhich(EE_CHAR_FONTHEIGHT) );
         pEditSet->Put( aItemSet.Get( ATTR_CJK_FONT_HEIGHT ).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK) );
         pEditSet->Put( aItemSet.Get( ATTR_CTL_FONT_HEIGHT ).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL) );
-        rEE.SetDefaults( pEditSet );    // takes ownership
+        rEE.SetDefaults( std::move(pEditSet) );    // takes ownership
    }
     return *mrData.mxHFEditEngine;
 }

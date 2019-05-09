@@ -1267,19 +1267,19 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
 
                     // defaults from cell attributes must be set so right language is used
                     const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
-                    SfxItemSet* pDefaults = new SfxItemSet( pEngine->GetEmptyItemSet() );
+                    std::unique_ptr<SfxItemSet> pDefaults(new SfxItemSet( pEngine->GetEmptyItemSet() ));
                     if ( ScStyleSheet* pPreviewStyle = GetPreviewCellStyle( nCol, nRow, nTab ) )
                     {
                         std::unique_ptr<ScPatternAttr> pPreviewPattern(new ScPatternAttr( *pPattern ));
                         pPreviewPattern->SetStyleSheet(pPreviewStyle);
-                        pPreviewPattern->FillEditItemSet( pDefaults );
+                        pPreviewPattern->FillEditItemSet( pDefaults.get() );
                     }
                     else
                     {
                         SfxItemSet* pFontSet = GetPreviewFont( nCol, nRow, nTab );
-                        pPattern->FillEditItemSet( pDefaults, pFontSet );
+                        pPattern->FillEditItemSet( pDefaults.get(), pFontSet );
                     }
-                    pEngine->SetDefaults( pDefaults );
+                    pEngine->SetDefaults( std::move(pDefaults) );
                     if (aCell.meType == CELLTYPE_STRING)
                         pEngine->SetText(aCell.mpString->getString());
                     else if (aCell.mpEditText)
@@ -1301,8 +1301,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
                         if ( aTester.NeedsObject() )
                         {
                             // remove defaults (paragraph attributes) before creating text object
-                            SfxItemSet* pEmpty = new SfxItemSet( pEngine->GetEmptyItemSet() );
-                            pEngine->SetDefaults( pEmpty );
+                            pEngine->SetDefaults( std::make_unique<SfxItemSet>( pEngine->GetEmptyItemSet() ) );
 
                             // The cell will take ownership of the text object instance.
                             SetEditText(ScAddress(nCol,nRow,nTab), pEngine->CreateTextObject());
