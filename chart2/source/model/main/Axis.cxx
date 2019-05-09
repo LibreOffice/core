@@ -482,7 +482,7 @@ Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubTickProperties
 // ____ XTitled ____
 Reference< chart2::XTitle > SAL_CALL Axis::getTitleObject()
 {
-    MutexGuard aGuard( GetMutex() );
+    MutexGuard aGuard( m_aMutex );
     return m_xTitle;
 }
 
@@ -491,7 +491,7 @@ void SAL_CALL Axis::setTitleObject( const Reference< chart2::XTitle >& xNewTitle
     Reference< util::XModifyListener > xModifyEventForwarder;
     Reference< chart2::XTitle > xOldTitle;
     {
-        MutexGuard aGuard( GetMutex() );
+        MutexGuard aGuard( m_aMutex );
         xOldTitle = m_xTitle;
         xModifyEventForwarder = m_xModifyEventForwarder;
         m_xTitle = xNewTitle;

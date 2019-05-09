@@ -259,7 +259,7 @@ uno::Reference< util::XCloneable > SAL_CALL Title::createClone()
 // ____ XTitle ____
 uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL Title::getText()
 {
-    MutexGuard aGuard( GetMutex() );
+    MutexGuard aGuard( m_aMutex );
     return m_aStrings;
 }
 
@@ -267,7 +267,7 @@ void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XForm
 {
     uno::Sequence< uno::Reference< chart2::XFormattedString > > aOldStrings;
     {
-        MutexGuard aGuard( GetMutex() );
+        MutexGuard aGuard( m_aMutex );
         std::swap( m_aStrings, aOldStrings );
         m_aStrings = rNewStrings;
     }
