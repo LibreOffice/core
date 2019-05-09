@@ -841,7 +841,8 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         {
             if (GetMarkedObjectCount())
             {
-                SdrObject* pO = mpMarkedObj;
+                SdrMark* pM = GetSdrMarkByIndex(0);
+                SdrObject* pO = pM->GetMarkedSdrObj();
                 long nRotAngle = pO->GetRotateAngle();
                 // true if we are delaing with a RotGrfFlyFrame
                 // (SwVirtFlyDrawObj with a SwGrfNode)
