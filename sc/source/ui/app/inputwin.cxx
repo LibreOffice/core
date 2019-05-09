@@ -1233,14 +1233,14 @@ void ScTextWnd::InitEditEngine()
     UpdateAutoCorrFlag();
 
     {
-        SfxItemSet* pSet = new SfxItemSet( mpEditEngine->GetEmptyItemSet() );
+        auto pSet = std::make_unique<SfxItemSet>( mpEditEngine->GetEmptyItemSet() );
         EditEngine::SetFontInfoInItemSet( *pSet, aTextFont );
         lcl_ExtendEditFontAttribs( *pSet );
         // turn off script spacing to match DrawText output
         pSet->Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
         if ( bIsRTL )
             lcl_ModifyRTLDefaults( *pSet );
-        mpEditEngine->SetDefaults( pSet );
+        mpEditEngine->SetDefaults( std::move(pSet) );
     }
 
     // If the Cell contains URLFields, they need to be taken over into the entry row,
@@ -1756,12 +1756,12 @@ void ScTextWnd::MakeDialogEditView()
     mpEditEngine->SetWordDelimiters( mpEditEngine->GetWordDelimiters() + "=" );
     mpEditEngine->SetPaperSize( Size( bIsRTL ? USHRT_MAX : THESIZE, 300 ) );
 
-    SfxItemSet* pSet = new SfxItemSet( mpEditEngine->GetEmptyItemSet() );
+    auto pSet = std::make_unique<SfxItemSet>( mpEditEngine->GetEmptyItemSet() );
     EditEngine::SetFontInfoInItemSet( *pSet, aTextFont );
     lcl_ExtendEditFontAttribs( *pSet );
     if ( bIsRTL )
         lcl_ModifyRTLDefaults( *pSet );
-    mpEditEngine->SetDefaults( pSet );
+    mpEditEngine->SetDefaults( std::move(pSet) );
     mpEditEngine->SetUpdateMode( true );
 
     mpEditView = std::make_unique<EditView>(mpEditEngine.get(), this);

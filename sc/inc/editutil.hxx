@@ -134,7 +134,7 @@ public:
     void            SetDefaults( const SfxItemSet& rDefaults, bool bRememberCopy = true );
 
                     /// Becomes the owner of the SfxItemSet
-    void            SetDefaults( SfxItemSet* pDefaults );
+    void            SetDefaults( std::unique_ptr<SfxItemSet> pDefaults );
 
                     /// Set the item in the default ItemSet which is created
                     /// if it doesn't exist yet.
@@ -151,7 +151,7 @@ public:
                         const SfxItemSet& rDefaults, bool bRememberCopy = true );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const EditTextObject& rTextObject,
-                        SfxItemSet* pDefaults );
+                        std::unique_ptr<SfxItemSet> pDefaults );
 
                     /// Overwritten method to be able to apply defaults already set
     void            SetText( const OUString& rText );
@@ -160,7 +160,7 @@ public:
                         const SfxItemSet& rDefaults );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const OUString& rText,
-                        SfxItemSet* pDefaults );
+                        std::unique_ptr<SfxItemSet> pDefaults );
 
                     /// Paragraph attributes that are not defaults are copied to
                     /// character attributes and all paragraph attributes reset
