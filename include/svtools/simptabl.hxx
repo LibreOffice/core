@@ -85,7 +85,7 @@ protected:
 
     virtual void            Command( const CommandEvent& rCEvt ) override;
 
-    virtual sal_Int32       ColCompare(SvTreeListEntry*,SvTreeListEntry*);
+    sal_Int32               ColCompare(SvTreeListEntry*,SvTreeListEntry*);
 public:
 
     SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);

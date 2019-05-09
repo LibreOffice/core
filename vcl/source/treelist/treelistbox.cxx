@@ -918,11 +918,6 @@ void SvTreeListBox::ForbidEmptyText()
     mpImpl->m_bIsEmptyTextAllowed = false;
 }
 
-SvTreeListEntry* SvTreeListBox::CreateEntry() const
-{
-    return new SvTreeListEntry;
-}
-
 const void* SvTreeListBox::FirstSearchEntry( OUString& _rEntryText ) const
 {
     SvTreeListEntry* pEntry = GetCurEntry();
@@ -1587,7 +1582,7 @@ SvTreeListEntry* SvTreeListBox::InsertEntry(
     aCurInsertedExpBmp = rDefExpBmp;
     aCurInsertedColBmp = rDefColBmp;
 
-    SvTreeListEntry* pEntry = CreateEntry();
+    SvTreeListEntry* pEntry = new SvTreeListEntry;
     pEntry->SetUserData( pUser );
     InitEntry( pEntry, rText, rDefColBmp, rDefExpBmp, eButtonKind );
     pEntry->EnableChildrenOnDemand( bChildrenOnDemand );
@@ -1615,7 +1610,7 @@ SvTreeListEntry* SvTreeListBox::InsertEntry( const OUString& rText,
     aCurInsertedExpBmp = aExpEntryBmp;
     aCurInsertedColBmp = aCollEntryBmp;
 
-    SvTreeListEntry* pEntry = CreateEntry();
+    SvTreeListEntry* pEntry = new SvTreeListEntry;
     pEntry->SetUserData( pUser );
     InitEntry( pEntry, rText, aCollEntryBmp, aExpEntryBmp, eButtonKind );
 
@@ -1801,7 +1796,7 @@ SvTreeListEntry* SvTreeListBox::CloneEntry( SvTreeListEntry* pSource )
     SvLBoxButton* pButtonItem = static_cast<SvLBoxButton*>(pSource->GetFirstItem(SvLBoxItemType::Button));
     if( pButtonItem )
         eButtonKind = pButtonItem->GetKind();
-    SvTreeListEntry* pClone = CreateEntry();
+    SvTreeListEntry* pClone = new SvTreeListEntry;
     InitEntry( pClone, aStr, aCollEntryBmp, aExpEntryBmp, eButtonKind );
     pClone->SvTreeListEntry::Clone( pSource );
     pClone->EnableChildrenOnDemand( pSource->HasChildrenOnDemand() );
