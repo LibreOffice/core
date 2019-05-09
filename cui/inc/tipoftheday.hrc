@@ -260,6 +260,10 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "You can change the look of %PRODUCTNAME at Tools > Options > View > User Interface."), "", ""},
 };
 
+#define RID_CUI_WHATSNEW  NC_("RID_CUI_WHATSNEW", "You are starting version %PRODUCTVERSION of %PRODUCTNAME the first time. Do you want to learn what's new?")
+#define RID_CUI_WHATSNEW_LINK "https://wiki.documentfoundation.org/ReleaseNotes/6.3"
+#define RID_CUI_WHATSNEW_IMAGE "version_6-3.png"
+
 #define STR_HELP_LINK                   NC_("STR_HELP_LINK", "%PRODUCTNAME Help")
 #define STR_MORE_LINK                   NC_("STR_MORE_LINK", "More info")
 
