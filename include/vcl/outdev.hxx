@@ -1274,13 +1274,16 @@ protected:
     virtual void                SetFontOrientation( LogicalFontInstance* const pFontInstance ) const;
     virtual long                GetFontExtLeading() const;
 
+    virtual void ImplClearFontData(bool bNewFontLists);
+    void ReleaseFontCache();
+    void ReleaseFontCollection();
+
 private:
 
     typedef void ( OutputDevice::* FontUpdateHandler_t )( bool );
 
     SAL_DLLPRIVATE bool         ImplNewFont() const;
 
-    SAL_DLLPRIVATE void         ImplClearFontData( bool bNewFontLists );
     SAL_DLLPRIVATE void         ImplRefreshFontData( bool bNewFontLists );
     SAL_DLLPRIVATE static void  ImplUpdateFontDataForAllFrames( FontUpdateHandler_t pHdl, bool bNewFontLists );
 

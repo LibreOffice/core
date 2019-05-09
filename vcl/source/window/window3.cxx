@@ -20,6 +20,7 @@
 #include <vcl/window.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/button.hxx>
+#include <window.h>
 
 WaitObject::~WaitObject()
 {
@@ -58,6 +59,12 @@ void Window::ImplAdjustNWFSizes()
     }
 }
 
+void Window::ImplClearFontData(bool bNewFontLists)
+{
+    OutputDevice::ImplClearFontData(bNewFontLists);
+    for (Window* pChild = mpWindowImpl->mpFirstChild; pChild; pChild = pChild->mpWindowImpl->mpNext)
+        pChild->ImplClearFontData(bNewFontLists);
+}
 } /* namespace vcl */
 
 
