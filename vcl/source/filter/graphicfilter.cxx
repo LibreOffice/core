@@ -73,6 +73,8 @@
 #include "FilterConfigCache.hxx"
 #include "graphicfilter_internal.hxx"
 
+#include <graphic/GraphicFormatDetector.hxx>
+
 #define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
 
 typedef ::std::vector< GraphicFilter* > FilterList_impl;
@@ -238,52 +240,18 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
  *
  *************************************************************************/
 
-static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension, bool bTest )
+bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension, bool bTest )
 {
-    sal_uInt8   sFirstBytes[ 256 ];
-    sal_uLong   nFirstLong(0), nSecondLong(0);
-    sal_uLong   nStreamPos = rStream.Tell();
-    sal_uLong   nStreamLen = rStream.remainingSize();
-
-    if ( !nStreamLen )
-    {
-        SvLockBytes* pLockBytes = rStream.GetLockBytes();
-        if ( pLockBytes  )
-            pLockBytes->SetSynchronMode();
-
-        nStreamLen = rStream.remainingSize();
-    }
-
-    if (!nStreamLen)
-    {
-        return false; // this prevents at least a STL assertion
-    }
-    else if (nStreamLen >= 256)
-    {
-        // load first 256 bytes into a buffer
-        sal_uLong nRead = rStream.ReadBytes(sFirstBytes, 256);
-        if (nRead < 256)
-            nStreamLen = nRead;
-    }
-    else
-    {
-        nStreamLen = rStream.ReadBytes(sFirstBytes, nStreamLen);
-    }
-
-
-    if (rStream.GetError())
+    vcl::GraphicFormatDetector aDetector(rStream, rFormatExtension);
+    if (!aDetector.detect())
         return false;
 
-    for (sal_uLong i = nStreamLen; i < 256; ++i)
-        sFirstBytes[i] = 0;
+    sal_uInt8* sFirstBytes = aDetector.maFirstBytes.data();
+    sal_uLong nFirstLong = aDetector.mnFirstLong;
+    sal_uLong nSecondLong  = aDetector.mnSecondLong;
 
-    // Accommodate the first 8 bytes in nFirstLong, nSecondLong
-    // Big-Endian:
-    for (int i = 0; i < 4; ++i)
-    {
-        nFirstLong=(nFirstLong<<8)|static_cast<sal_uLong>(sFirstBytes[i]);
-        nSecondLong=(nSecondLong<<8)|static_cast<sal_uLong>(sFirstBytes[i+4]);
-    }
+    sal_uLong nStreamPos = aDetector.mnStreamPosition;
+    sal_uLong nStreamLen = aDetector.mnStreamLength;
 
     // The following variable is used when bTest == true. It remains false
     // if the format (rFormatExtension) has not yet been set.
