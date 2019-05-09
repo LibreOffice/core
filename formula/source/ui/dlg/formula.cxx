@@ -148,7 +148,6 @@ public:
     ::std::map<const FormulaToken*, sheet::FormulaToken>    m_aTokenMap;
     IFormulaEditorHelper*                                   m_pHelper;
     weld::Dialog&           m_rDialog;
-    weld::Builder&          m_rParent;
 
     OUString                m_aOldFormula;
     bool                    m_bStructUpdate;
@@ -230,7 +229,6 @@ FormulaDlg_Impl::FormulaDlg_Impl(weld::Dialog& rDialog,
     : m_pFunctionOpCodesEnd(nullptr)
     , m_pHelper(_pHelper)
     , m_rDialog(rDialog)
-    , m_rParent(rBuilder)
     , m_bUserMatrixFlag(false)
     , m_aTitle1( ForResId( STR_TITLE1 ) )
     , m_aTitle2( ForResId( STR_TITLE2 ) )

@@ -67,8 +67,6 @@ namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::Database
 OTableTreeListBox::OTableTreeListBox(vcl::Window* pParent, WinBits nWinStyle)
     :OMarkableTreeListBox(pParent, nWinStyle)
     ,m_xImageProvider( new ImageProvider )
-    ,m_bVirtualRoot(false)
-    ,m_bNoEmptyFolders( false )
 {
     implSetDefaultImages();
 }
@@ -319,20 +317,6 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
 
     try
     {
-        if (haveVirtualRoot())
-        {
-            OUString sRootEntryText;
-            if ( std::none_of(_rTables.begin(),_rTables.end(),
-                                [] (const TNames::value_type& name) { return !name.second; }) )
-                sRootEntryText  = DBA_RES(STR_ALL_TABLES);
-            else if ( std::none_of(_rTables.begin(),_rTables.end(),
-                                     [] (const TNames::value_type& name) { return name.second; }) )
-                sRootEntryText  = DBA_RES(STR_ALL_VIEWS);
-            else
-                sRootEntryText  = DBA_RES(STR_ALL_TABLES_AND_VIEWS);
-            InsertEntry( sRootEntryText, nullptr, false, TREELIST_APPEND, reinterpret_cast< void* >( DatabaseObjectContainer::TABLES ) );
-        }
-
         if ( _rTables.empty() )
             // nothing to do (besides inserting the root entry)
             return;
@@ -349,7 +333,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
             );
         }
 
-        if ( !m_bNoEmptyFolders && lcl_shouldDisplayEmptySchemasAndCatalogs( _rxConnection ) )
+        if ( lcl_shouldDisplayEmptySchemasAndCatalogs( _rxConnection ) )
         {
             bool bSupportsCatalogs = xMeta->supportsCatalogsInDataManipulation();
             bool bSupportsSchemas = xMeta->supportsSchemasInDataManipulation();
@@ -365,12 +349,11 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                     bCatalogs ? xMeta->getCatalogs() : xMeta->getSchemas(), 1 ) );
                 sal_Int32 nFolderType = bCatalogs ? DatabaseObjectContainer::CATALOG : DatabaseObjectContainer::SCHEMA;
 
-                SvTreeListEntry* pRootEntry = getAllObjectsEntry();
                 for (auto const& folderName : aFolderNames)
                 {
-                    SvTreeListEntry* pFolder = GetEntryPosByName( folderName, pRootEntry );
+                    SvTreeListEntry* pFolder = GetEntryPosByName( folderName, nullptr );
                     if ( !pFolder )
-                        InsertEntry( folderName, pRootEntry, false, TREELIST_APPEND, reinterpret_cast< void* >( nFolderType ) );
+                        InsertEntry( folderName, nullptr, false, TREELIST_APPEND, reinterpret_cast< void* >( nFolderType ) );
                 }
             }
         }
@@ -491,11 +474,6 @@ void TableTreeListBox::checkWildcard(weld::TreeIter& rEntry)
     checkedButton_noBroadcast(rEntry);
 }
 
-SvTreeListEntry* OTableTreeListBox::getAllObjectsEntry() const
-{
-    return haveVirtualRoot() ? First() : nullptr;
-}
-
 std::unique_ptr<weld::TreeIter> TableTreeListBox::getAllObjectsEntry() const
 {
     if (!haveVirtualRoot())
@@ -571,18 +549,11 @@ void OTableTreeListBox::implEmphasize(SvTreeListEntry* _pEntry, bool _bChecked, 
 {
     OSL_ENSURE(_pEntry, "OTableTreeListBox::implEmphasize: invalid entry (NULL)!");
 
-    // special emphasizing handling for the "all objects" entry
-    bool bAllObjectsEntryAffected = haveVirtualRoot() && (getAllObjectsEntry() == _pEntry);
-    if  (   GetModel()->HasChildren(_pEntry)              // the entry has children
-        ||  bAllObjectsEntryAffected                    // or it is the "all objects" entry
-        )
+    if ( GetModel()->HasChildren(_pEntry) )             // the entry has children
     {
         OBoldListboxString* pTextItem = static_cast<OBoldListboxString*>(_pEntry->GetFirstItem(SvLBoxItemType::String));
         if (pTextItem)
             pTextItem->emphasize(_bChecked);
-
-        if (bAllObjectsEntryAffected)
-            InvalidateEntry(_pEntry);
     }
 
     if (_bUpdateDescendants)
@@ -665,7 +636,7 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
     OUString sCatalog, sSchema, sName;
     qualifiedNameComponents( _rxMeta, _rTableName, sCatalog, sSchema, sName, ::dbtools::EComposeRule::InDataManipulation );
 
-    SvTreeListEntry* pParentEntry = getAllObjectsEntry();
+    SvTreeListEntry* pParentEntry = nullptr;
 
     // if the DB uses catalog at the start of identifiers, then our hierarchy is
     //   catalog
@@ -899,7 +870,7 @@ SvTreeListEntry* OTableTreeListBox::getEntryByQualifiedName( const OUString& _rN
         OUString sCatalog, sSchema, sName;
         qualifiedNameComponents(xMeta, _rName, sCatalog, sSchema, sName,::dbtools::EComposeRule::InDataManipulation);
 
-        SvTreeListEntry* pParent = getAllObjectsEntry();
+        SvTreeListEntry* pParent = nullptr;
         SvTreeListEntry* pCat = nullptr;
         SvTreeListEntry* pSchema = nullptr;
         if ( !sCatalog.isEmpty() )

@@ -9,9 +9,9 @@ avmedia/source/vlc/wrapper/Types.hxx:44
 avmedia/source/vlc/wrapper/Types.hxx:45
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:43:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:43:7)
 avmedia/source/vlc/wrapper/Types.hxx:47
-    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:41:5)
+    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
 basegfx/source/polygon/b2dtrapezoid.cxx:202
@@ -130,13 +130,13 @@ cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
 cui/source/dialogs/colorpicker.cxx:719
     cui::ColorPickerDialog m_aColorPrevious class cui::ColorPreviewControl
-cui/source/factory/dlgfact.cxx:1339
+cui/source/factory/dlgfact.cxx:1340
     SvxMacroAssignDialog m_aItems class SfxItemSet
 cui/source/inc/cfgutil.hxx:238
     SvxScriptSelectorDialog m_aStylesInfo struct SfxStylesInfo_Impl
-cui/source/inc/cuitabarea.hxx:230
+cui/source/inc/cuitabarea.hxx:228
     SvxAreaTabPage maFixed_ChangeType enum ChangeType
-cui/source/inc/cuitabarea.hxx:238
+cui/source/inc/cuitabarea.hxx:236
     SvxAreaTabPage m_aXFillAttr class XFillAttrSetItem
 cui/source/inc/tabstpge.hxx:88
     SvxTabulatorTabPage m_aLeftWin class TabWin_Impl
@@ -184,6 +184,8 @@ filter/source/graphicfilter/icgm/chart.hxx:46
     DataNode nBoxX2 sal_Int16
 filter/source/graphicfilter/icgm/chart.hxx:47
     DataNode nBoxY2 sal_Int16
+formula/source/ui/dlg/formula.cxx:151
+    formula::FormulaDlg_Impl m_rParent weld::Builder &
 helpcompiler/inc/HelpCompiler.hxx:206
     HelpCompiler lang const std::string
 include/basic/basmgr.hxx:56
@@ -194,17 +196,17 @@ include/drawinglayer/texture/texture3d.hxx:62
     drawinglayer::texture::GeoTexSvxBitmapEx maBitmap class Bitmap
 include/drawinglayer/texture/texture3d.hxx:64
     drawinglayer::texture::GeoTexSvxBitmapEx maTransparence class Bitmap
-include/filter/msfilter/svdfppt.hxx:882
+include/filter/msfilter/svdfppt.hxx:881
     ImplPPTParaPropSet nDontKnow1 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:883
+include/filter/msfilter/svdfppt.hxx:882
     ImplPPTParaPropSet nDontKnow2 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:884
+include/filter/msfilter/svdfppt.hxx:883
     ImplPPTParaPropSet nDontKnow2bit06 sal_uInt16
 include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
 include/LibreOfficeKit/LibreOfficeKitGtk.h:38
     _LOKDocViewClass parent_class GtkDrawingAreaClass
-include/oox/export/shapes.hxx:123
+include/oox/export/shapes.hxx:101
     oox::drawingml::ShapeExport maShapeMap oox::drawingml::ShapeExport::ShapeHashMap
 include/registry/registry.hxx:35
     Registry_Api acquire void (*)(RegHandle)
@@ -271,13 +273,13 @@ include/sfx2/msg.hxx:138
 include/sfx2/msg.hxx:138
     SfxType7 aAttrib struct SfxTypeAttrib [7]
 include/sfx2/msg.hxx:139
-    SfxType8 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:139
     SfxType8 aAttrib struct SfxTypeAttrib [8]
 include/sfx2/msg.hxx:139
     SfxType8 pType const std::type_info *
 include/sfx2/msg.hxx:139
     SfxType8 nAttribs sal_uInt16
+include/sfx2/msg.hxx:139
+    SfxType8 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:140
     SfxType10 pType const std::type_info *
 include/sfx2/msg.hxx:140
@@ -336,12 +338,10 @@ include/sfx2/msg.hxx:147
     SfxType23 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/svl/ondemand.hxx:55
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
-include/svx/ClassificationDialog.hxx:30
+include/svx/ClassificationDialog.hxx:31
     svx::ClassificationDialog m_bPerParagraph const _Bool
-include/svx/itemwin.hxx:34
+include/svx/itemwin.hxx:35
     SvxLineBox aDelayTimer class Timer
-include/svx/svdundo.hxx:336
-    SdrUndoReplaceObj nOrdNum sal_uInt32
 include/vcl/commandevent.hxx:310
     CommandGestureData mfX const double
 include/vcl/commandevent.hxx:311
@@ -390,7 +390,7 @@ lotuswordpro/source/filter/bento.hxx:353
     OpenStormBento::CBenNamedObject cNameListElmt class OpenStormBento::CBenNamedObjectListElmt
 lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char [2]
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:214
+oox/source/drawingml/diagram/diagramlayoutatoms.hxx:217
     oox::drawingml::ConditionAtom maIter struct oox::drawingml::IteratorAttr
 oox/source/drawingml/diagram/layoutnodecontext.cxx:92
     oox::drawingml::AlgorithmContext mnRevision sal_Int32
@@ -420,11 +420,11 @@ oox/source/ppt/timenodelistcontext.cxx:855
     oox::ppt::AnimMotionContext mnAngle sal_Int32
 opencl/source/openclwrapper.cxx:304
     openclwrapper::(anonymous namespace)::OpenCLEnv mpOclCmdQueue cl_command_queue [1]
-pyuno/source/module/pyuno_callable.cxx:42
+pyuno/source/module/pyuno_callable.cxx:43
     pyuno::PyUNO_callable ob_base PyObject
-pyuno/source/module/pyuno_impl.hxx:224
+pyuno/source/module/pyuno_impl.hxx:223
     pyuno::(anonymous) ob_base PyObject
-pyuno/source/module/pyuno_impl.hxx:324
+pyuno/source/module/pyuno_impl.hxx:323
     pyuno::stRuntimeImpl ob_base PyObject
 reportdesign/source/core/api/ReportDefinition.cxx:241
     reportdesign::OStyle m_aSize awt::Size
@@ -510,17 +510,17 @@ sc/source/core/data/document.cxx:1239
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch const sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1240
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk const class ScBulkBroadcast
-sc/source/filter/html/htmlpars.cxx:3003
-    (anonymous namespace)::CSSHandler::MemStr mp const char *
 sc/source/filter/html/htmlpars.cxx:3004
+    (anonymous namespace)::CSSHandler::MemStr mp const char *
+sc/source/filter/html/htmlpars.cxx:3005
     (anonymous namespace)::CSSHandler::MemStr mn size_t
 sc/source/filter/inc/htmlpars.hxx:614
     ScHTMLQueryParser mnUnusedId ScHTMLTableId
 sc/source/filter/inc/sheetdatacontext.hxx:62
     oox::xls::SheetDataContext aReleaser const class SolarMutexReleaser
-sc/source/filter/inc/xetable.hxx:1002
+sc/source/filter/inc/xetable.hxx:1005
     XclExpCellTable maArrayBfr class XclExpArrayBuffer
-sc/source/filter/inc/xetable.hxx:1003
+sc/source/filter/inc/xetable.hxx:1006
     XclExpCellTable maShrfmlaBfr class XclExpShrfmlaBuffer
 sc/source/filter/inc/xiescher.hxx:1200
     XclImpDffPropSet maDummyStrm class SvMemoryStream
@@ -530,7 +530,7 @@ sc/source/filter/inc/xistream.hxx:172
     XclImpBiff8StdDecrypter maCodec ::msfilter::MSCodec_Std97
 sc/source/filter/inc/xistream.hxx:194
     XclImpBiff8CryptoAPIDecrypter maCodec ::msfilter::MSCodec_CryptoAPI
-sc/source/filter/oox/worksheethelper.cxx:383
+sc/source/filter/oox/worksheethelper.cxx:384
     oox::xls::WorksheetGlobals mxProgressBar oox::ISegmentProgressBarRef
 sc/source/filter/xml/xmldrani.hxx:72
     ScXMLDatabaseRangeContext bIsSelection _Bool
@@ -562,6 +562,10 @@ sc/source/ui/inc/msgpool.hxx:44
     ScMessagePool aCondFormatDlgItem class ScCondFormatDlgItem
 sc/source/ui/inc/notemark.hxx:46
     ScNoteMarker m_aTimer class Timer
+sc/source/ui/inc/PivotLayoutTreeListBase.hxx:49
+    ScPivotLayoutTreeListBase maDropTargetHelper class ScPivotLayoutTreeDropTarget
+sc/source/ui/inc/xmlsourcedlg.hxx:67
+    ScXMLSourceDlg maCustomCompare struct CustomCompare
 sccomp/source/solver/DifferentialEvolution.hxx:35
     DifferentialEvolutionAlgorithm maRandomDevice std::random_device
 sccomp/source/solver/ParticelSwarmOptimization.hxx:56
@@ -593,8 +597,6 @@ sd/source/ui/view/viewshel.cxx:1212
 sd/source/ui/view/viewshel.cxx:1213
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext const sd::slidesorter::controller::class SelectionObserver::Context
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
-    PDFGrammar::definition boolean rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition comment rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition simple_type rule<ScannerT>
@@ -602,6 +604,8 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition null_object rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition stringtype rule<ScannerT>
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
+    PDFGrammar::definition boolean rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition name rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
@@ -613,9 +617,9 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     PDFGrammar::definition array rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
-    PDFGrammar::definition dict_end rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     PDFGrammar::definition dict_begin rule<ScannerT>
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
+    PDFGrammar::definition dict_end rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     PDFGrammar::definition value rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
@@ -664,15 +668,15 @@ starmath/source/accessibility.hxx:268
     SmEditSource rEditAcc class SmEditAccessible &
 svgio/inc/svgcharacternode.hxx:89
     svgio::svgreader::SvgTextPosition maY ::std::vector<double>
-svl/source/crypto/cryptosign.cxx:123
+svl/source/crypto/cryptosign.cxx:131
     (anonymous namespace)::Extension extnID const SECItem
-svl/source/crypto/cryptosign.cxx:124
+svl/source/crypto/cryptosign.cxx:132
     (anonymous namespace)::Extension critical const SECItem
-svl/source/crypto/cryptosign.cxx:125
+svl/source/crypto/cryptosign.cxx:133
     (anonymous namespace)::Extension extnValue const SECItem
-svl/source/crypto/cryptosign.cxx:283
+svl/source/crypto/cryptosign.cxx:291
     (anonymous namespace)::PKIStatusInfo statusString SECItem
-svl/source/crypto/cryptosign.cxx:284
+svl/source/crypto/cryptosign.cxx:292
     (anonymous namespace)::PKIStatusInfo failInfo SECItem
 svx/inc/GalleryControl.hxx:47
     svx::sidebar::GalleryControl mpGallery class Gallery *
@@ -698,7 +702,7 @@ svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1091
     (anonymous namespace)::ExpressionGrammar::definition modifierReference ::boost::spirit::rule<ScannerT>
 svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1092
     (anonymous namespace)::ExpressionGrammar::definition identifier ::boost::spirit::rule<ScannerT>
-svx/source/dialog/framelinkarray.cxx:380
+svx/source/dialog/framelinkarray.cxx:381
     svx::frame::MergedCellIterator mnFirstRow size_t
 svx/source/dialog/imapwnd.hxx:78
     IMapWindow maItemInfos struct SfxItemInfo [1]
@@ -716,15 +720,15 @@ svx/source/xml/xmleohlp.cxx:72
     OutputStorageWrapper_Impl aTempFile class utl::TempFile
 sw/inc/unosett.hxx:145
     SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
-sw/qa/core/test_ToxTextGenerator.cxx:141
+sw/qa/core/test_ToxTextGenerator.cxx:139
     ToxTextGeneratorWithMockedChapterField mChapterFieldType class SwChapterFieldType
-sw/qa/extras/layout/layout.cxx:2516
+sw/qa/extras/layout/layout.cxx:2541
       class SvtSysLocaleOptions &
-sw/qa/extras/uiwriter/uiwriter.cxx:4029
+sw/qa/extras/uiwriter/uiwriter.cxx:4072
     IdleTask maIdle class Idle
 sw/source/core/crsr/crbm.cxx:66
     (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
-sw/source/core/inc/swfont.hxx:985
+sw/source/core/inc/swfont.hxx:986
     SvStatistics nGetStretchTextSize sal_uInt16
 sw/source/core/layout/dbg_lay.cxx:171
     SwImplEnterLeave nAction const enum DbgAction
@@ -804,22 +808,22 @@ vcl/inc/WidgetThemeLibrary.hxx:90
     vcl::ControlDrawParameters eState enum ControlState
 vcl/inc/WidgetThemeLibrary.hxx:106
     vcl::WidgetThemeLibrary_t nSize uint32_t
-vcl/source/app/salvtables.cxx:2210
+vcl/source/app/salvtables.cxx:2250
     SalInstanceEntry m_aTextFilter class (anonymous namespace)::WeldTextFilter
-vcl/source/app/salvtables.cxx:4400
+vcl/source/app/salvtables.cxx:4575
     SalInstanceComboBoxWithEdit m_aTextFilter class (anonymous namespace)::WeldTextFilter
 vcl/source/gdi/jobset.cxx:36
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:37
     ImplOldJobSetupData cPortName char [32]
-vcl/unx/gtk3/gtk3gtkinst.cxx:3143
+vcl/unx/gtk3/gtk3gtkinst.cxx:3279
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     HyperLink atk_hyper_link const AtkHyperlink
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent const AtkObject
-vcl/unx/gtk/a11y/atkwrapper.hxx:78
-    AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
+vcl/unx/gtk/a11y/atkwrapper.hxx:80
+    AtkObjectWrapperClass aParentClass const AtkObjectClass
 vcl/unx/gtk/gloactiongroup.cxx:30
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20

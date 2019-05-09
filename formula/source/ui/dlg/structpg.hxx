@@ -32,13 +32,6 @@ namespace formula
 class FormulaToken;
 class StructListBox : public SvTreeListBox
 {
-private:
-
-    bool            bActiveFlag;
-
-protected:
-                    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
-
 public:
 
                     StructListBox(vcl::Window* pParent, WinBits nBits );
@@ -50,9 +43,6 @@ public:
                         SvTreeListEntry* pParent,
                         sal_uLong nPos,
                         const FormulaToken* pToken );
-
-    void            GetFocus() override;
-    void            LoseFocus() override;
 };
 
 

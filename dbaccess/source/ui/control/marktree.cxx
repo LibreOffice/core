@@ -166,7 +166,6 @@ void OMarkableTreeListBox::CheckButtons()
 void OMarkableTreeListBox::CheckButtonHdl()
 {
     checkedButton_noBroadcast(GetHdlEntry());
-    m_aCheckButtonHandler.Call(this);
 }
 
 void OMarkableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
