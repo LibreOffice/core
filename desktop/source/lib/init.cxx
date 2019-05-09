@@ -88,6 +88,7 @@
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 
 #include <editeng/fontitem.hxx>
 #include <editeng/flstitem.hxx>
@@ -914,7 +915,14 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
 
 LibLODocument_Impl::~LibLODocument_Impl()
 {
-    mxComponent->dispose();
+    try
+    {
+        mxComponent->dispose();
+    }
+    catch (const css::lang::DisposedException& rException)
+    {
+        SAL_WARN("lok", "failed to dispose document:" << rException.Message);
+    }
 }
 
 CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData)
