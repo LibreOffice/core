@@ -12,7 +12,7 @@
 
 #include <sal/config.h>
 
-#include <list>
+#include <vector>
 
 #include <vcl/dllapi.h>
 
@@ -53,7 +53,7 @@ private:
     GLuint          mnExtrusionVectorsAttrib;
     GLuint          mnVertexColorsAttrib;
 
-    std::list< OpenGLTexture >     maTextures;
+    std::vector< OpenGLTexture >     maTextures;
     bool            mbBlending;
 
     float mfLastWidth;
