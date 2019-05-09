@@ -360,31 +360,6 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
     }
 }
 
-typedef std::set<VclPtr<vcl::Window> > winset;
-
-namespace
-{
-    void hideUnless(const vcl::Window *pTop, const winset& rVisibleWidgets,
-        std::vector<VclPtr<vcl::Window> > &rWasVisibleWidgets)
-    {
-        for (vcl::Window* pChild = pTop->GetWindow(GetWindowType::FirstChild); pChild;
-            pChild = pChild->GetWindow(GetWindowType::Next))
-        {
-            if (!pChild->IsVisible())
-                continue;
-            if (rVisibleWidgets.find(pChild) == rVisibleWidgets.end())
-            {
-                rWasVisibleWidgets.emplace_back(pChild);
-                pChild->Hide();
-            }
-            else if (isContainerWindow(pChild))
-            {
-                hideUnless(pChild, rVisibleWidgets, rWasVisibleWidgets);
-            }
-        }
-    }
-}
-
 void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
     if (!m_pRefEdit)
