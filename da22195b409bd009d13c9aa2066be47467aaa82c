@@ -16,6 +16,41 @@
       "revId": "da22195b409bd009d13c9aa2066be47467aaa82c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_e30de837",
+        "filename": "cui/source/inc/tipofthedaydlg.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-05-10T09:06:47Z",
+      "side": 1,
+      "message": "Even better when done with a tristate so I wouldn\u0027t have to read again.",
+      "parentUuid": "3fa0c359_c03a22e6",
+      "revId": "da22195b409bd009d13c9aa2066be47467aaa82c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_23043015",
+        "filename": "unotools/source/config/configmgr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-05-10T09:06:47Z",
+      "side": 1,
+      "message": "Seems to be a dirty solution to read here but write somewhere else. Would it be cleaner to include cui/totd in viewfrm?",
+      "revId": "da22195b409bd009d13c9aa2066be47467aaa82c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
