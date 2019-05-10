@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_c08222c9",
+        "filename": "oox/source/drawingml/diagram/diagram.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-05-10T07:13:21Z",
+      "side": 1,
+      "message": "What if we have no fill properties? It seems we always create this custom shape, but I guess PowerPoint\u0027s \"convert to shapes\" only creates it if there are fill properties.\n\nI think this should be done conditionally.",
+      "revId": "1e3ed7a1aaaeb2d13e4d74f5acceee5869648678",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
