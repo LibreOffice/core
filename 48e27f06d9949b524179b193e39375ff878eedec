@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_c359ccfe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-10T10:38:21Z",
+      "side": 1,
+      "message": "but what if the follow SwTabFrame isn\u0027t empty because it has another row, will the follow-flow-line be removed?\n\njust double-checked, it turns out it will be removed in SwTabFrame::MakeAll, tabfrm.cxx:2151.",
+      "revId": "48e27f06d9949b524179b193e39375ff878eedec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
