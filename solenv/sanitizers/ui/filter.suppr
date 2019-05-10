@@ -23,5 +23,3 @@ filter/uiconfig/ui/testxmlfilter.ui://GtkLabel[@id='importxslttemplate'] orphan-
 filter/uiconfig/ui/testxmlfilter.ui://GtkLabel[@id='recentfilename'] orphan-label
 filter/uiconfig/ui/warnpdfdialog.ui://GtkLabel[@id='message'] orphan-label
 filter/uiconfig/ui/warnpdfdialog.ui://GtkTreeView[@id='errors'] no-labelled-by
-filter/uiconfig/ui/warnpdfdialog.ui://GtkTreeViewColumn[@id='treeviewcolumn1'] no-labelled-by
-filter/uiconfig/ui/warnpdfdialog.ui://GtkTreeViewColumn[@id='treeviewcolumn2'] no-labelled-by
