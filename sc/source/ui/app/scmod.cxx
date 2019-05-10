@@ -1625,6 +1625,9 @@ bool ScModule::IsTableLocked()
             bLocked = true;     // for other views, see IsModalMode
     }
 
+    // We can't stop LOK clients from switching part, and getting out of sync.
+    assert(!bLocked || !comphelper::LibreOfficeKit::isActive());
+
     return bLocked;
 }
 
