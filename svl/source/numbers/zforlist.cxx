@@ -68,6 +68,7 @@ using namespace ::std;
 #define ZF_STANDARD_CURRENCY    20
 #define ZF_STANDARD_DATE        30
 #define ZF_STANDARD_TIME        40
+#define ZF_STANDARD_DURATION    (ZF_STANDARD_TIME + 4)
 #define ZF_STANDARD_DATETIME    50
 #define ZF_STANDARD_SCIENTIFIC  60
 #define ZF_STANDARD_FRACTION    65
@@ -1224,6 +1225,8 @@ bool SvNumberFormatter::IsCompatible(SvNumFormatType eOldType, SvNumFormatType e
                 return false;
             }
             break;
+        case SvNumFormatType::DURATION:
+            return false;
         default:
             return false;
         }
@@ -1245,6 +1248,9 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultFormat( SvNumFormatType nType )
         break;
     case SvNumFormatType::DATETIME:
         nSearch = CLOffset + ZF_STANDARD_DATETIME;
+        break;
+    case SvNumFormatType::DURATION:
+        nSearch = CLOffset + ZF_STANDARD_DURATION;
         break;
     case SvNumFormatType::PERCENT:
         nSearch = CLOffset + ZF_STANDARD_PERCENT;
@@ -1289,6 +1295,9 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultFormat( SvNumFormatType nType )
             case SvNumFormatType::DATETIME:
                 nDefaultFormat = CLOffset + ZF_STANDARD_DATETIME;
                 break;
+            case SvNumFormatType::DURATION:
+                nDefaultFormat = CLOffset + ZF_STANDARD_DURATION;
+                break;
             case SvNumFormatType::PERCENT:
                 nDefaultFormat = CLOffset + ZF_STANDARD_PERCENT+1;
                 break;
@@ -1317,6 +1326,8 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( SvNumFormatType eType, Language
     {
     case SvNumFormatType::CURRENCY:
         return ( eLnge == LANGUAGE_SYSTEM ) ? ImpGetDefaultSystemCurrencyFormat() : ImpGetDefaultCurrencyFormat();
+    case SvNumFormatType::DURATION :
+        return GetFormatIndex( NF_TIME_HH_MMSS, eLnge);
     case SvNumFormatType::DATE:
     case SvNumFormatType::TIME:
     case SvNumFormatType::DATETIME:
@@ -1359,7 +1370,7 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( sal_uInt32 nFIndex, SvNumFormat
         return GetStandardFormat( eType, eLnge );
 }
 
-sal_uInt32 SvNumberFormatter::GetTimeFormat( double fNumber, LanguageType eLnge )
+sal_uInt32 SvNumberFormatter::GetTimeFormat( double fNumber, LanguageType eLnge, bool bForceDuration )
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
     bool bSign;
@@ -1373,14 +1384,14 @@ sal_uInt32 SvNumberFormatter::GetTimeFormat( double fNumber, LanguageType eLnge 
     double fSeconds = fNumber * 86400;
     if ( floor( fSeconds + 0.5 ) * 100 != floor( fSeconds * 100 + 0.5 ) )
     {   // with 100th seconds
-        if ( bSign || fSeconds >= 3600 )
+        if ( bForceDuration || bSign || fSeconds >= 3600 )
             return GetFormatIndex( NF_TIME_HH_MMSS00, eLnge );
         else
             return GetFormatIndex( NF_TIME_MMSS00, eLnge );
     }
     else
     {
-        if ( bSign || fNumber >= 1.0 )
+        if ( bForceDuration || bSign || fNumber >= 1.0 )
             return GetFormatIndex( NF_TIME_HH_MMSS, eLnge );
         else
             return GetStandardFormat( SvNumFormatType::TIME, eLnge );
@@ -1396,8 +1407,10 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( double fNumber, sal_uInt32 nFIn
 
     switch( eType )
     {
+        case SvNumFormatType::DURATION :
+            return GetTimeFormat( fNumber, eLnge, true);
         case SvNumFormatType::TIME :
-            return GetTimeFormat( fNumber, eLnge);
+            return GetTimeFormat( fNumber, eLnge, false);
         default:
             return GetStandardFormat( eType, eLnge );
     }
@@ -1414,13 +1427,15 @@ sal_uInt32 SvNumberFormatter::GuessDateTimeFormat( SvNumFormatType& rType, doubl
     {
         // Clearly a time.
         rType = SvNumFormatType::TIME;
-        nRet = GetTimeFormat( fNumber, eLnge);
+        nRet = GetTimeFormat( fNumber, eLnge, false);
     }
     else if (fabs( fNumber) * 24 < 0x7fff)
     {
-        // Assuming time within 32k hours or 3.7 years.
+        // Assuming duration within 32k hours or 3.7 years.
+        // This should be SvNumFormatType::DURATION instead, but the outer
+        // world can't cope with that.
         rType = SvNumFormatType::TIME;
-        nRet = GetTimeFormat( fNumber, eLnge);
+        nRet = GetTimeFormat( fNumber, eLnge, true);
     }
     else if (rtl::math::approxFloor( fNumber) != fNumber)
     {
@@ -1479,7 +1494,7 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
              * of a signed 16-bit. 32k hours are 3.7 years ... or
              * 1903-09-26 if date. */
             if (fabs( fNumber) * 24 < 0x7fff)
-                nKey = GetFormatIndex( NF_TIME_HH_MMSS, eLang );
+                nKey = GetTimeFormat( fNumber, eLang, true);
             // Preserve duration, use [HH]:MM:SS instead of time.
             else
                 nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
@@ -1488,6 +1503,9 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
         }
         else
             nKey = GetStandardFormat( fNumber, nFIndex, eType, eLang );
+        break;
+    case SvNumFormatType::DURATION :
+        nKey = GetTimeFormat( fNumber, eLang, true);
         break;
     case SvNumFormatType::DATETIME :
         if (nFIndex == GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, eLang) || (pFormat && pFormat->IsIso8601( 0 )))

@@ -4667,11 +4667,6 @@ StackVar ScInterpreter::Interpret()
     else
         nRetFmtType = SvNumFormatType::NUMBER;
 
-    // Currently (2019-05-06) nothing else can cope with a duration format
-    // type, change to time as it was before.
-    if (nRetFmtType == SvNumFormatType::DURATION)
-        nRetFmtType = SvNumFormatType::TIME;
-
     if (nGlobalError != FormulaError::NONE && GetStackType() != svError )
         PushError( nGlobalError);
 

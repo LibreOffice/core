@@ -640,7 +640,7 @@ public:
     bool IsSpecialStandardFormat( sal_uInt32 nFIndex, LanguageType eLnge );
 
     /** Return a time format that best matches fNumber. */
-    sal_uInt32 GetTimeFormat( double fNumber, LanguageType eLnge );
+    sal_uInt32 GetTimeFormat( double fNumber, LanguageType eLnge, bool bForceDuration );
 
     /** Return a format and type that best matches the value of fNumber if
         fNumber is assumed to be a date, time or datetime value, but unknown
