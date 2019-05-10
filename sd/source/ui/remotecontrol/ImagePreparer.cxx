@@ -209,7 +209,7 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
     uno::Reference<css::drawing::XDrawPage> aNotesPage;
     uno::Reference< drawing::XDrawPage > xSourceDoc(
         xController->getSlideByIndex( aSlideNumber ),
-        uno::UNO_QUERY_THROW );
+        uno::UNO_SET_THROW );
     uno::Reference<presentation::XPresentationPage> xPresentationPage(
         xSourceDoc, UNO_QUERY);
     if (xPresentationPage.is())

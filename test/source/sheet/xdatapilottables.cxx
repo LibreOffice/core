@@ -29,7 +29,7 @@ void XDataPilotTables::testXDataPilotTables()
     uno::Reference<sheet::XSpreadsheet> xSheet(getXSpreadsheet(), UNO_QUERY_THROW);
 
     uno::Reference<sheet::XDataPilotDescriptor> xDPD(xDPT->createDataPilotDescriptor(),
-                                                     UNO_QUERY_THROW);
+                                                     UNO_SET_THROW);
 
     xDPT->insertNewByName("XDataPilotTables", table::CellAddress(0, 9, 8), xDPD);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to insert new DataPilotTable", OUString("Filter"),

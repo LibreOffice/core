@@ -150,7 +150,7 @@ namespace sd
             case AnimationNodeType::SEQ:
             {
                 Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY_THROW );
-                Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+                Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_SET_THROW );
                 while( xEnumeration->hasMoreElements() )
                 {
                     Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY_THROW );

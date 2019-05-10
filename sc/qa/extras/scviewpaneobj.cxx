@@ -93,12 +93,12 @@ uno::Reference<uno::XInterface> ScViewPaneObj::init()
 
     uno::Reference<frame::XModel> xModel(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<frame::XController> xController(xModel->getCurrentController(),
-                                                   uno::UNO_QUERY_THROW);
+                                                   uno::UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xController, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XViewPane> xViewPane(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDPS(xDoc, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPages> xDP(xDPS->getDrawPages(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xDP(xDPS->getDrawPages(), uno::UNO_SET_THROW);
     xDP->insertNewByIndex(1);
     xDP->insertNewByIndex(2);
 
@@ -107,7 +107,7 @@ uno::Reference<uno::XInterface> ScViewPaneObj::init()
         apitest::helper::form::createCommandButton(mxComponent, 15000, 10000, 3000, 4500));
 
     uno::Reference<form::XFormsSupplier> xFS(xDrawPage, uno::UNO_QUERY_THROW);
-    uno::Reference<container::XNameContainer> xNC(xFS->getForms(), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNameContainer> xNC(xFS->getForms(), uno::UNO_SET_THROW);
 
     // XFormLayerAccess
     uno::Reference<form::XForm> xForm(xNC->getByName("Form"), uno::UNO_QUERY_THROW);

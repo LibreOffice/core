@@ -639,7 +639,7 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
     }
 
     uno::Reference< document::XUndoManagerSupplier > xSuppUndo( getModel(), uno::UNO_QUERY_THROW );
-    m_xUndoManager.set( xSuppUndo->getUndoManager(), uno::UNO_QUERY_THROW );
+    m_xUndoManager.set( xSuppUndo->getUndoManager(), uno::UNO_SET_THROW );
 
     return true;
 }
@@ -1429,7 +1429,7 @@ void ChartController::NotifyUndoActionHdl( std::unique_ptr<SdrUndoAction> pUndoA
         try
         {
             const Reference< document::XUndoManagerSupplier > xSuppUndo( getModel(), uno::UNO_QUERY_THROW );
-            const Reference< document::XUndoManager > xUndoManager( xSuppUndo->getUndoManager(), uno::UNO_QUERY_THROW );
+            const Reference< document::XUndoManager > xUndoManager( xSuppUndo->getUndoManager(), uno::UNO_SET_THROW );
             const Reference< document::XUndoAction > xAction( new impl::ShapeUndoElement( std::move(pUndoAction) ) );
             xUndoManager->addUndoAction( xAction );
         }

@@ -3218,7 +3218,7 @@ lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
         try // video is embedded
         {
             uno::Reference<embed::XStorage> const xTarget(
-                    rExport.GetTargetStorage(), uno::UNO_QUERY_THROW);
+                    rExport.GetTargetStorage(), uno::UNO_SET_THROW);
             uno::Reference<io::XInputStream> xInStream;
             xPropSet->getPropertyValue("PrivateStream")
                     >>= xInStream;
@@ -4879,9 +4879,9 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                 }
                 else
                 {
-                    xStorage.set( GetExport().GetTargetStorage(), uno::UNO_QUERY_THROW );
+                    xStorage.set( GetExport().GetTargetStorage(), uno::UNO_SET_THROW );
 
-                    xPictureStorage.set( xStorage->openStorageElement( "Pictures" , ::embed::ElementModes::READWRITE ), uno::UNO_QUERY_THROW );
+                    xPictureStorage.set( xStorage->openStorageElement( "Pictures" , ::embed::ElementModes::READWRITE ), uno::UNO_SET_THROW );
 
                     sal_Int32 nIndex = 0;
                     do
@@ -4890,7 +4890,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                     }
                     while( xPictureStorage->hasByName( sPictureName ) );
 
-                    xPictureStream.set( xPictureStorage->openStreamElement( sPictureName, ::embed::ElementModes::READWRITE ), uno::UNO_QUERY_THROW );
+                    xPictureStream.set( xPictureStorage->openStreamElement( sPictureName, ::embed::ElementModes::READWRITE ), uno::UNO_SET_THROW );
                 }
 
                 uno::Reference< graphic::XGraphicProvider > xProvider( graphic::GraphicProvider::create(xContext) );

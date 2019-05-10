@@ -265,7 +265,7 @@ void SdrTableRTFParser::FillTable()
     try
     {
         sal_Int32 nColCount = mxTable->getColumnCount();
-        Reference< XTableColumns > xCols( mxTable->getColumns(), UNO_QUERY_THROW );
+        Reference< XTableColumns > xCols( mxTable->getColumns(), UNO_SET_THROW );
         sal_Int32 nColMax = maColumnEdges.size();
         if( nColCount < nColMax )
         {
@@ -287,7 +287,7 @@ void SdrTableRTFParser::FillTable()
         const sal_Int32 nRowCount = mxTable->getRowCount();
         if( nRowCount < mnRowCnt )
         {
-            Reference< XTableRows > xRows( mxTable->getRows(), UNO_QUERY_THROW );
+            Reference< XTableRows > xRows( mxTable->getRows(), UNO_SET_THROW );
             xRows->insertByIndex( nRowCount, mnRowCnt - nRowCount );
         }
 

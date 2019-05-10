@@ -186,7 +186,7 @@ SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
                               bool            bFullScreen )
 :   SlideShowView_Base( m_aMutex ),
     mpCanvas( ::cppcanvas::VCLFactory::createSpriteCanvas( rOutputWindow ) ),
-    mxWindow( VCLUnoHelper::GetInterface( &rOutputWindow ), uno::UNO_QUERY_THROW ),
+    mxWindow( VCLUnoHelper::GetInterface( &rOutputWindow ), uno::UNO_SET_THROW ),
     mxWindowPeer( mxWindow, uno::UNO_QUERY_THROW ),
     mxPointer(),
     mpSlideShow( pSlideShow ),

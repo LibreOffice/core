@@ -243,7 +243,7 @@ namespace pcr
         xTransformer->parseStrict( aURL );
 
         Reference< XDesktop2 > xDispProv = Desktop::create( m_xContext );
-        Reference< XDispatch > xDispatch( xDispProv->queryDispatch( aURL, OUString(), 0 ), UNO_QUERY_THROW );
+        Reference< XDispatch > xDispatch( xDispProv->queryDispatch( aURL, OUString(), 0 ), UNO_SET_THROW );
 
         Sequence< PropertyValue > aDispatchArgs(1);
         aDispatchArgs[0].Name   = "URL";

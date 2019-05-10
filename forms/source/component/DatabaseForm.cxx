@@ -303,7 +303,7 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
             Reference< XPropertySetInfo > xSourcePSI( xSourceProps->getPropertySetInfo(), UNO_SET_THROW );
             Reference< XPropertyState > xSourcePropState( xSourceProps, UNO_QUERY );
 
-            Reference< XPropertySetInfo > xDestPSI( getPropertySetInfo(), UNO_QUERY_THROW );
+            Reference< XPropertySetInfo > xDestPSI( getPropertySetInfo(), UNO_SET_THROW );
 
             Sequence< Property > aSourceProperties( xSourcePSI->getProperties() );
             for ( auto const & sourceProperty : aSourceProperties )

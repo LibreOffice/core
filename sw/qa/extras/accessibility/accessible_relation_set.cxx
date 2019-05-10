@@ -107,7 +107,7 @@ AccessibleRelationSet::init(uno::Reference<css::accessibility::XAccessible>& par
         = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
     uno::Reference<text::XTextDocument> xTextDoc(xComponent, uno::UNO_QUERY);
 
-    css::uno::Reference<text::XText> oText(xTextDoc->getText(), uno::UNO_QUERY_THROW);
+    css::uno::Reference<text::XText> oText(xTextDoc->getText(), uno::UNO_SET_THROW);
 
     css::uno::Reference<text::XTextCursor> oCursor = oText->createTextCursor();
 

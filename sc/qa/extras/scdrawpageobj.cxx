@@ -85,7 +85,7 @@ uno::Reference<uno::XInterface> ScDrawPageObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPagesSupplier> xDPS(xDoc, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPages> xDP(xDPS->getDrawPages(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xDP(xDPS->getDrawPages(), uno::UNO_SET_THROW);
     xDP->insertNewByIndex(0);
     xDP->insertNewByIndex(1);
 
@@ -94,11 +94,11 @@ uno::Reference<uno::XInterface> ScDrawPageObj::init()
 
     uno::Reference<drawing::XShape> xRectangle0(
         apitest::helper::shape::createRectangle(m_xComponent, 7500, 5000, 5000, 3500),
-        uno::UNO_QUERY_THROW);
+        uno::UNO_SET_THROW);
     xShapes->add(xRectangle0);
     uno::Reference<drawing::XShape> xRectangle1(
         apitest::helper::shape::createRectangle(m_xComponent, 5000, 5000, 5000, 5500),
-        uno::UNO_QUERY_THROW);
+        uno::UNO_SET_THROW);
     xShapes->add(xRectangle1);
 
     // needed for XShapeGrouper tests

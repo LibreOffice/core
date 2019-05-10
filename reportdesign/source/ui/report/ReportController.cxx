@@ -3395,7 +3395,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 
                     // no column name - perhaps a parameter name?
                     uno::Reference< sdb::XParametersSupplier > xSuppParam( getRowSet(), uno::UNO_QUERY_THROW );
-                    uno::Reference< container::XIndexAccess > xParams( xSuppParam->getParameters(), uno::UNO_QUERY_THROW );
+                    uno::Reference< container::XIndexAccess > xParams( xSuppParam->getParameters(), uno::UNO_SET_THROW );
                     sal_Int32 nParamCount( xParams->getCount() );
                     for ( sal_Int32 i=0; i<nParamCount; ++i)
                     {

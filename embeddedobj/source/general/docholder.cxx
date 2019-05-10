@@ -523,7 +523,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
     {
         xUIConfigManager.set(
             xUIConfSupplier->getUIConfigurationManager(),
-            uno::UNO_QUERY_THROW );
+            uno::UNO_SET_THROW );
     }
 
     try
@@ -551,7 +551,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
                     ui::theModuleUIConfigurationManagerSupplier::get(m_xContext);
             uno::Reference< css::ui::XUIConfigurationManager > xModUIConfMan(
                     xModConfSupplier->getUIConfigurationManager( aModuleIdent ),
-                    uno::UNO_QUERY_THROW );
+                    uno::UNO_SET_THROW );
             xResult = xModUIConfMan->getSettings(
                     "private:resource/menubar/menubar",
                     false );

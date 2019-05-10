@@ -63,7 +63,7 @@ void lclModifyOrientation(uno::Reference<sheet::XDataPilotDescriptor> const & xD
                           OUString const & sFieldName,
                           sheet::DataPilotFieldOrientation eOrientation)
 {
-    uno::Reference<container::XIndexAccess> xIndexAccess(xDescriptor->getDataPilotFields(), UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xDescriptor->getDataPilotFields(), UNO_SET_THROW);
     sal_Int32 nCount = xIndexAccess->getCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
@@ -79,7 +79,7 @@ void lclModifyFunction(uno::Reference<sheet::XDataPilotDescriptor> const & xDesc
                           OUString const & sFieldName,
                           sheet::GeneralFunction eFunction)
 {
-    uno::Reference<container::XIndexAccess> xPilotIndexAccess(xDescriptor->getDataPilotFields(), UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xPilotIndexAccess(xDescriptor->getDataPilotFields(), UNO_SET_THROW);
     sal_Int32 nCount = xPilotIndexAccess->getCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
@@ -95,7 +95,7 @@ void lclModifyLayoutInfo(uno::Reference<sheet::XDataPilotDescriptor> const & xDe
                           OUString const & sFieldName,
                           sheet::DataPilotFieldLayoutInfo aLayoutInfo)
 {
-    uno::Reference<container::XIndexAccess> xIndexAccess(xDescriptor->getDataPilotFields(), UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xDescriptor->getDataPilotFields(), UNO_SET_THROW);
     sal_Int32 nCount = xIndexAccess->getCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
@@ -115,7 +115,7 @@ void lclModifySubtotals(uno::Reference<sheet::XDataPilotDescriptor> const & xDes
                         OUString const & sFieldName,
                         uno::Sequence<sheet::GeneralFunction> const & rSubtotalFunctions)
 {
-    uno::Reference<container::XIndexAccess> xIndexAccess(xDescriptor->getDataPilotFields(), UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xDescriptor->getDataPilotFields(), UNO_SET_THROW);
     sal_Int32 nCount = xIndexAccess->getCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
@@ -193,7 +193,7 @@ uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>>
     uno::Sequence<beans::PropertyValue> aArguments( comphelper::InitPropertySequence(
             {{"CellRangeRepresentation", uno::Any(OUString("PT@categories"))}} ));
 
-    uno::Reference<chart2::data::XDataProvider> xDataProvider(xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW);
+    uno::Reference<chart2::data::XDataProvider> xDataProvider(xChartDoc->getDataProvider(), uno::UNO_SET_THROW);
     return xDataProvider->createDataSource(aArguments)->getDataSequences();
 }
 

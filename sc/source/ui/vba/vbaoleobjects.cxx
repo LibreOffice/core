@@ -142,7 +142,7 @@ ScVbaOLEObjects::getItemByStringIndex( const OUString& sIndex )
     }
     catch (const uno::RuntimeException&)
     {
-        uno::Reference< container::XIndexAccess > xIndexAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
+        uno::Reference< container::XIndexAccess > xIndexAccess( m_xIndexAccess, uno::UNO_SET_THROW );
         sal_Int32 nCount = xIndexAccess->getCount();
         for( int index = 0; index < nCount; index++ )
         {

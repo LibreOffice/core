@@ -24,7 +24,7 @@ void XDataPilotField::testGetItems()
 {
     uno::Reference<sheet::XDataPilotField> xDPF(init(), UNO_QUERY_THROW);
 
-    uno::Reference<container::XIndexAccess> xIA(xDPF->getItems(), UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIA(xDPF->getItems(), UNO_SET_THROW);
 
     const sal_Int32 nCount = xIA->getCount();
     CPPUNIT_ASSERT_MESSAGE("No items found", sal_Int32(0) != nCount);

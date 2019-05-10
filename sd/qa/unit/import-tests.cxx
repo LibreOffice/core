@@ -1270,8 +1270,8 @@ void SdImportTest::testRowHeight()
 
     sal_Int32 nHeight;
     const OUString sHeight("Height");
-    uno::Reference< css::table::XTable > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
-    uno::Reference< css::table::XTableRows > xRows( xTable->getRows(), uno::UNO_QUERY_THROW);
+    uno::Reference< css::table::XTable > xTable(pTableObj->getTable(), uno::UNO_SET_THROW);
+    uno::Reference< css::table::XTableRows > xRows( xTable->getRows(), uno::UNO_SET_THROW);
     uno::Reference< beans::XPropertySet > xRefRow( xRows->getByIndex(0), uno::UNO_QUERY_THROW );
     xRefRow->getPropertyValue( sHeight ) >>= nHeight;
     CPPUNIT_ASSERT_EQUAL( sal_Int32(507), nHeight);
@@ -2222,7 +2222,7 @@ void SdImportTest::testTdf89064()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf89064.pptx"), PPTX);
     uno::Reference< presentation::XPresentationPage > xPage (getPage(0, xDocShRef), uno::UNO_QUERY_THROW);
-    uno::Reference< drawing::XDrawPage > xNotesPage (xPage->getNotesPage(), uno::UNO_QUERY_THROW);
+    uno::Reference< drawing::XDrawPage > xNotesPage (xPage->getNotesPage(), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xNotesPage->getCount());
 
     xDocShRef->DoClose();
@@ -2248,7 +2248,7 @@ void SdImportTest::testTdf108925()
 void SdImportTest::testTdf109067()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf109067.pptx"), PPTX);
-    uno::Reference< beans::XPropertySet > xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_SET_THROW);
     awt::Gradient gradient;
     CPPUNIT_ASSERT(xShape->getPropertyValue("FillGradient") >>= gradient);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(450), gradient.Angle);
@@ -2259,11 +2259,11 @@ void SdImportTest::testTdf109067()
 void SdImportTest::testTdf109187()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf109187.pptx"), PPTX);
-    uno::Reference< beans::XPropertySet > xArrow1(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xArrow1(getShapeFromPage(0, 0, xDocShRef), uno::UNO_SET_THROW);
     awt::Gradient aGradient1;
     CPPUNIT_ASSERT(xArrow1->getPropertyValue("FillGradient") >>= aGradient1);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2250), aGradient1.Angle);
-    uno::Reference< beans::XPropertySet > xArrow2(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xArrow2(getShapeFromPage(1, 0, xDocShRef), uno::UNO_SET_THROW);
     awt::Gradient aGradient2;
     CPPUNIT_ASSERT(xArrow2->getPropertyValue("FillGradient") >>= aGradient2);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1350), aGradient2.Angle);
@@ -2275,7 +2275,7 @@ void SdImportTest::testTdf108926()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf108926.ppt"), PPT);
     uno::Reference< presentation::XPresentationPage > xPage (getPage(0, xDocShRef), uno::UNO_QUERY_THROW);
-    uno::Reference< drawing::XDrawPage > xNotesPage (xPage->getNotesPage(), uno::UNO_QUERY_THROW);
+    uno::Reference< drawing::XDrawPage > xNotesPage (xPage->getNotesPage(), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xNotesPage->getCount());
 
     // Second object should be imported as an empty presentation shape
@@ -2329,7 +2329,7 @@ void SdImportTest::testTdf114488()
     // This doc has two images - one WMF and the other PNG (fallback image).
     // When loading this doc, the WMF image should be preferred over the PNG image.
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odg/tdf114488.fodg"), FODG);
-    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_SET_THROW);
     uno::Reference<graphic::XGraphic> xGraphic;
     xShape->getPropertyValue("Graphic") >>= xGraphic;
     CPPUNIT_ASSERT(xGraphic.is());
@@ -2583,7 +2583,7 @@ void SdImportTest::testTdf123090()
 
     sal_Int32 nWidth;
     const OUString sWidth("Width");
-    uno::Reference< css::table::XTableColumns > xColumns( xTable->getColumns(), uno::UNO_QUERY_THROW);
+    uno::Reference< css::table::XTableColumns > xColumns( xTable->getColumns(), uno::UNO_SET_THROW);
     uno::Reference< beans::XPropertySet > xRefColumn( xColumns->getByIndex(1), uno::UNO_QUERY_THROW );
     xRefColumn->getPropertyValue( sWidth ) >>= nWidth;
     CPPUNIT_ASSERT_EQUAL( sal_Int32(9136), nWidth);

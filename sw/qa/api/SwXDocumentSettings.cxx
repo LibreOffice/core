@@ -84,7 +84,7 @@ uno::Reference<uno::XInterface> SwXDocumentSettings::init()
     uno::Reference<lang::XMultiServiceFactory> xFactory(xTextDocument, uno::UNO_QUERY_THROW);
 
     uno::Reference<uno::XInterface> xDocumentSettings(
-        xFactory->createInstance("com.sun.star.text.DocumentSettings"), uno::UNO_QUERY_THROW);
+        xFactory->createInstance("com.sun.star.text.DocumentSettings"), uno::UNO_SET_THROW);
 
     return xDocumentSettings;
 }

@@ -108,13 +108,13 @@ uno::Reference<uno::XInterface> ScCellObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSpreadsheets> xSheets(xSheetDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xSheetDoc->getSheets(), UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xSheets, UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), UNO_QUERY_THROW);
 
     uno::Reference<sheet::XSheetAnnotationsSupplier> xSheetAnnosSupplier(xSheet, UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetAnnotations> xSheetAnnos(xSheetAnnosSupplier->getAnnotations(),
-                                                         UNO_QUERY_THROW);
+                                                         UNO_SET_THROW);
     xSheetAnnos->insertNew(table::CellAddress(0, 2, 3), "xSheetAnnotation");
 
     return xSheet->getCellByPosition(2, 3);
@@ -124,7 +124,7 @@ uno::Reference<uno::XInterface> ScCellObj::getXSpreadsheet()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSpreadsheets> xSheets(xSheetDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xSheetDoc->getSheets(), UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xSheets, UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), UNO_QUERY_THROW);
 

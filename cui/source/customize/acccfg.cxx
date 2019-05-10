@@ -1334,7 +1334,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, void
         if (xCfgMgr.is())
         {
             // open the configuration and update our UI
-            uno::Reference<ui::XAcceleratorConfiguration> xTempAccMgr(xCfgMgr->getShortCutManager(), uno::UNO_QUERY_THROW);
+            uno::Reference<ui::XAcceleratorConfiguration> xTempAccMgr(xCfgMgr->getShortCutManager(), uno::UNO_SET_THROW);
 
             m_xEntriesBox->freeze();
             ResetConfig();
@@ -1395,7 +1395,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void
 
         uno::Reference<embed::XStorage> xUIConfig(
                             xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, embed::ElementModes::WRITE),
-                            uno::UNO_QUERY_THROW);
+                            uno::UNO_SET_THROW);
         uno::Reference<beans::XPropertySet> xUIConfigProps(
                             xUIConfig,
                             uno::UNO_QUERY_THROW);
@@ -1413,7 +1413,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void
         // which are set currently at the UI!
         // Don't copy the m_xAct content to it... because m_xAct will be updated
         // from the UI on pressing the button "OK" only. And inbetween it's not up to date!
-        uno::Reference<ui::XAcceleratorConfiguration> xTargetAccMgr(xCfgMgr->getShortCutManager(), uno::UNO_QUERY_THROW);
+        uno::Reference<ui::XAcceleratorConfiguration> xTargetAccMgr(xCfgMgr->getShortCutManager(), uno::UNO_SET_THROW);
         Apply(xTargetAccMgr);
 
         // commit (order is important!)

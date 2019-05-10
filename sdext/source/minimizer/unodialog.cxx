@@ -42,7 +42,7 @@ UnoDialog::UnoDialog( const Reference< XComponentContext > &rxContext, Reference
     mxContext( rxContext ),
     mxController( rxFrame->getController() ),
     mxDialogModel( mxContext->getServiceManager()->createInstanceWithContext(
-        "com.sun.star.awt.UnoControlDialogModel", mxContext ), UNO_QUERY_THROW ),
+        "com.sun.star.awt.UnoControlDialogModel", mxContext ), UNO_SET_THROW ),
     mxDialogModelMultiPropertySet( mxDialogModel, UNO_QUERY_THROW ),
     mxDialogModelMSF( mxDialogModel, UNO_QUERY_THROW ),
     mxDialogModelNameContainer( mxDialogModel, UNO_QUERY_THROW ),
@@ -194,7 +194,7 @@ Reference< XControl > UnoDialog::insertFormattedField( const OUString& rName, co
         Reference< XPropertySet > xPropertySet( insertControlModel( "com.sun.star.awt.UnoControlFormattedFieldModel",
             rName, rPropertyNames, rPropertyValues ), UNO_QUERY_THROW );
         xPropertySet->setPropertyValue("Name", Any( rName ) );
-        xControl.set( mxDialog->getControl( rName ), UNO_QUERY_THROW );
+        xControl.set( mxDialog->getControl( rName ), UNO_SET_THROW );
     }
     catch ( Exception& )
     {
@@ -262,7 +262,7 @@ Reference< XControl > UnoDialog::insertImage( const OUString& rName, const Seque
         Reference< XPropertySet > xPropertySet( insertControlModel( "com.sun.star.awt.UnoControlImageControlModel",
             rName, rPropertyNames, rPropertyValues ), UNO_QUERY_THROW );
         xPropertySet->setPropertyValue("Name", Any( rName ) );
-        xControl.set( mxDialog->getControl( rName ), UNO_QUERY_THROW );
+        xControl.set( mxDialog->getControl( rName ), UNO_SET_THROW );
     }
     catch ( Exception& )
     {

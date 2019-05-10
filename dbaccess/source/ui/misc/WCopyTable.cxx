@@ -479,8 +479,8 @@ namespace
 
     bool lcl_sameConnection_throw( const Reference< XConnection >& _rxLHS, const Reference< XConnection >& _rxRHS )
     {
-        Reference< XDatabaseMetaData > xMetaLHS( _rxLHS->getMetaData(), UNO_QUERY_THROW );
-        Reference< XDatabaseMetaData > xMetaRHS( _rxRHS->getMetaData(), UNO_QUERY_THROW );
+        Reference< XDatabaseMetaData > xMetaLHS( _rxLHS->getMetaData(), UNO_SET_THROW );
+        Reference< XDatabaseMetaData > xMetaRHS( _rxRHS->getMetaData(), UNO_SET_THROW );
         return xMetaLHS->getURL() == xMetaRHS->getURL();
     }
 }

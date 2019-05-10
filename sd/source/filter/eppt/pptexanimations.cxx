@@ -339,7 +339,7 @@ void AnimationExporter::processAfterEffectNodes( const Reference< XAnimationNode
     try
     {
         Reference< XEnumerationAccess > xEnumerationAccess( xRootNode, UNO_QUERY_THROW );
-        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), css::uno::UNO_SET_THROW );
         while( xEnumeration->hasMoreElements() )
         {
             Reference< XAnimationNode > xNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
@@ -347,19 +347,19 @@ void AnimationExporter::processAfterEffectNodes( const Reference< XAnimationNode
             Reference< XEnumerationAccess > xEnumerationAccess2( xNode, UNO_QUERY );
             if ( xEnumerationAccess2.is() )
             {
-                Reference< XEnumeration > xEnumeration2( xEnumerationAccess2->createEnumeration(), UNO_QUERY_THROW );
+                Reference< XEnumeration > xEnumeration2( xEnumerationAccess2->createEnumeration(), css::uno::UNO_SET_THROW );
                 while( xEnumeration2->hasMoreElements() )
                 {
                     Reference< XAnimationNode > xChildNode( xEnumeration2->nextElement(), UNO_QUERY_THROW );
 
                     Reference< XEnumerationAccess > xEnumerationAccess3( xChildNode, UNO_QUERY_THROW );
-                    Reference< XEnumeration > xEnumeration3( xEnumerationAccess3->createEnumeration(), UNO_QUERY_THROW );
+                    Reference< XEnumeration > xEnumeration3( xEnumerationAccess3->createEnumeration(), css::uno::UNO_SET_THROW );
                     while( xEnumeration3->hasMoreElements() )
                     {
                         Reference< XAnimationNode > xChildNode2( xEnumeration3->nextElement(), UNO_QUERY_THROW );
 
                         Reference< XEnumerationAccess > xEnumerationAccess4( xChildNode2, UNO_QUERY_THROW );
-                        Reference< XEnumeration > xEnumeration4( xEnumerationAccess4->createEnumeration(), UNO_QUERY_THROW );
+                        Reference< XEnumeration > xEnumeration4( xEnumerationAccess4->createEnumeration(), css::uno::UNO_SET_THROW );
                         while( xEnumeration4->hasMoreElements() )
                         {
                             Reference< XAnimationNode > xChildNode3( xEnumeration4->nextElement(), UNO_QUERY_THROW );
@@ -1260,7 +1260,7 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
                     {
                         // taking the first child
                         Reference< XEnumerationAccess > xEA( xNode, UNO_QUERY_THROW );
-                        Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_QUERY_THROW );
+                        Reference< XEnumeration > xE( xEA->createEnumeration(), css::uno::UNO_SET_THROW );
                         if ( xE->hasMoreElements() )
                         {
                             Reference< XAnimationNode > xClickNode( xE->nextElement(), UNO_QUERY );

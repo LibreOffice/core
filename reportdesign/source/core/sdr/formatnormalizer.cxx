@@ -187,7 +187,7 @@ namespace rptui
             lcl_collectFields_throw( xColumns, m_aFields );
 
             Reference< XParametersSupplier > xSuppParams( xComposer, UNO_QUERY_THROW );
-            Reference< XIndexAccess > xParams( xSuppParams->getParameters(), UNO_QUERY_THROW );
+            Reference< XIndexAccess > xParams( xSuppParams->getParameters(), css::uno::UNO_SET_THROW );
             lcl_collectFields_throw( xParams, m_aFields );
         }
         catch( const SQLException& )
@@ -238,7 +238,7 @@ namespace rptui
                 // unknown field
                 return;
 
-            Reference< XNumberFormatsSupplier >  xSuppNumFmts( _rxFormatted->getFormatsSupplier(), UNO_QUERY_THROW );
+            Reference< XNumberFormatsSupplier >  xSuppNumFmts( _rxFormatted->getFormatsSupplier(), css::uno::UNO_SET_THROW );
             Reference< XNumberFormatTypes > xNumFmtTypes( xSuppNumFmts->getNumberFormats(), UNO_QUERY_THROW );
 
             nFormatKey = ::dbtools::getDefaultNumberFormat( field->nDataType, field->nScale, field->bIsCurrency, xNumFmtTypes,

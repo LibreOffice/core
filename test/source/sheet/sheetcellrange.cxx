@@ -67,7 +67,7 @@ void SheetCellRange::testSheetCellRangeProperties()
                            xSheetCellRange->getPropertyValue(propName) >>= aConditionalFormatGet);
 
     uno::Reference<sheet::XSheetConditionalEntries> aConditionalFormatNew(aConditionalFormatGet,
-                                                                          UNO_QUERY_THROW);
+                                                                          UNO_SET_THROW);
     aConditionalFormatNew->addNew(aPropValue);
 
     aNewValue <<= aConditionalFormatNew;
@@ -94,7 +94,7 @@ void SheetCellRange::testSheetCellRangeProperties()
                            >>= aConditionalFormatLocalGet);
 
     uno::Reference<sheet::XSheetConditionalEntries> aConditionalFormatLocalNew(
-        aConditionalFormatLocalGet, UNO_QUERY_THROW);
+        aConditionalFormatLocalGet, UNO_SET_THROW);
     aConditionalFormatLocalNew->addNew(aPropValue);
 
     aNewValue <<= aConditionalFormatLocalNew;
@@ -119,7 +119,7 @@ void SheetCellRange::testSheetCellRangeProperties()
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue Validation",
                            xSheetCellRange->getPropertyValue(propName) >>= aValidationGet);
 
-    uno::Reference<beans::XPropertySet> aValidationNew(aValidationGet, UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> aValidationNew(aValidationGet, UNO_SET_THROW);
     uno::Any aValidationType;
     aValidationType <<= sheet::ValidationType_WHOLE;
     aValidationNew->setPropertyValue("Type", aValidationType);
@@ -139,7 +139,7 @@ void SheetCellRange::testSheetCellRangeProperties()
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue ValidationLocal",
                            xSheetCellRange->getPropertyValue(propName) >>= aValidationLocalGet);
 
-    uno::Reference<beans::XPropertySet> aValidationLocalNew(aValidationLocalGet, UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> aValidationLocalNew(aValidationLocalGet, UNO_SET_THROW);
     aValidationType <<= sheet::ValidationType_WHOLE;
     aValidationLocalNew->setPropertyValue("Type", aValidationType);
 

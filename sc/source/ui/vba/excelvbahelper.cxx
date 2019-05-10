@@ -56,7 +56,7 @@ GetUnnamedDataBaseRanges( const ScDocShell* pShell )
 {
     uno::Reference< frame::XModel > xModel;
     if ( pShell )
-        xModel.set( pShell->GetModel(), uno::UNO_QUERY_THROW );
+        xModel.set( pShell->GetModel(), uno::UNO_SET_THROW );
     uno::Reference< beans::XPropertySet > xModelProps( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XUnnamedDatabaseRanges > xUnnamedDBRanges( xModelProps->getPropertyValue("UnnamedDatabaseRanges"), uno::UNO_QUERY_THROW );
     return xUnnamedDBRanges;
@@ -67,7 +67,7 @@ GetUnnamedDataBaseRanges( const ScDocShell* pShell )
 uno::Reference< sheet::XDatabaseRange >
 GetAutoFiltRange( const ScDocShell* pShell, sal_Int16 nSheet )
 {
-    uno::Reference< sheet::XUnnamedDatabaseRanges > xUnnamedDBRanges( GetUnnamedDataBaseRanges( pShell ), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XUnnamedDatabaseRanges > xUnnamedDBRanges( GetUnnamedDataBaseRanges( pShell ), uno::UNO_SET_THROW );
     uno::Reference< sheet::XDatabaseRange > xDataBaseRange;
     if (xUnnamedDBRanges->hasByTable( nSheet ) )
     {

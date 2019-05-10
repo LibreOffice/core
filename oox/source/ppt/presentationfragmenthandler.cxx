@@ -111,7 +111,7 @@ static void ResolveTextFields( XmlFilterBase const & rFilter )
         {
             const OUString sURL = "URL";
             Reference< drawing::XDrawPagesSupplier > xDPS( xModel, uno::UNO_QUERY_THROW );
-            Reference< drawing::XDrawPages > xDrawPages( xDPS->getDrawPages(), uno::UNO_QUERY_THROW );
+            Reference< drawing::XDrawPages > xDrawPages( xDPS->getDrawPages(), uno::UNO_SET_THROW );
 
             const oox::core::TextField& rTextField( textField );
             Reference< XPropertySet > xPropSet( rTextField.xTextField, UNO_QUERY );
@@ -234,7 +234,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
 
     // importing slide pages and its corresponding notes page
     Reference< drawing::XDrawPagesSupplier > xDPS( xModel, uno::UNO_QUERY_THROW );
-    Reference< drawing::XDrawPages > xDrawPages( xDPS->getDrawPages(), uno::UNO_QUERY_THROW );
+    Reference< drawing::XDrawPages > xDrawPages( xDPS->getDrawPages(), uno::UNO_SET_THROW );
 
     try {
 
@@ -277,7 +277,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                     {   // masterpersist not found, we have to load it
                         Reference< drawing::XDrawPage > xMasterPage;
                         Reference< drawing::XMasterPagesSupplier > xMPS( xModel, uno::UNO_QUERY_THROW );
-                        Reference< drawing::XDrawPages > xMasterPages( xMPS->getMasterPages(), uno::UNO_QUERY_THROW );
+                        Reference< drawing::XDrawPages > xMasterPages( xMPS->getMasterPages(), uno::UNO_SET_THROW );
 
                         if( rFilter.getMasterPages().empty() )
                             xMasterPages->getByIndex( 0 ) >>= xMasterPage;

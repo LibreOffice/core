@@ -207,8 +207,8 @@ namespace frm
         impl_nts_checkDisposed_throw();
 
         // check whether it's removable at all
-        Reference< XMultiPropertySet > xMe( m_rContext.getPropertiesInterface(), UNO_QUERY_THROW );
-        Reference< XPropertySetInfo > xPSI( xMe->getPropertySetInfo(), UNO_QUERY_THROW );
+        Reference< XMultiPropertySet > xMe( m_rContext.getPropertiesInterface(), css::uno::UNO_SET_THROW );
+        Reference< XPropertySetInfo > xPSI( xMe->getPropertySetInfo(), css::uno::UNO_SET_THROW );
         Property aProperty( xPSI->getPropertyByName( _rName ) );
         if ( ( aProperty.Attributes & PropertyAttribute::REMOVABLE ) == 0 )
             throw NotRemoveableException( _rName, xMe );
@@ -254,8 +254,8 @@ namespace frm
         ::osl::MutexGuard aGuard( m_rContext.getMutex() );
         impl_nts_checkDisposed_throw();
 
-        Reference< XMultiPropertySet > xMe( m_rContext.getPropertiesInterface(), UNO_QUERY_THROW );
-        Reference< XPropertySetInfo > xPSI( xMe->getPropertySetInfo(), UNO_QUERY_THROW );
+        Reference< XMultiPropertySet > xMe( m_rContext.getPropertiesInterface(), css::uno::UNO_SET_THROW );
+        Reference< XPropertySetInfo > xPSI( xMe->getPropertySetInfo(), css::uno::UNO_SET_THROW );
 
         Sequence< Property > aProperties( xPSI->getProperties() );
         Sequence< OUString > aPropertyNames( aProperties.getLength() );
@@ -326,7 +326,7 @@ namespace frm
         ::std::transform( aSortedProps.getConstArray(), aSortedProps.getConstArray() + nPropertyValues,
             aValues.getArray(), SelectValueOfPropertyValue() );
 
-        Reference< XMultiPropertySet > xMe( m_rContext.getPropertiesInterface(), UNO_QUERY_THROW );
+        Reference< XMultiPropertySet > xMe( m_rContext.getPropertiesInterface(), css::uno::UNO_SET_THROW );
 
         aGuard.clear();
         xMe->setPropertyValues( aNames, aValues );

@@ -101,7 +101,7 @@ namespace comphelper {
             if ( xDPS.is() )
             {
                 Reference< XDocumentProperties > xDocProps (
-                    xDPS->getDocumentProperties(), UNO_QUERY_THROW );
+                    xDPS->getDocumentProperties(), css::uno::UNO_SET_THROW );
                 sTitle = xDocProps->getTitle();
                 if ( !sTitle.isEmpty() )
                     return sTitle;

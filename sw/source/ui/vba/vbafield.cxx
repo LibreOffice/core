@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 
 SwVbaField::SwVbaField(  const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const  uno::Reference< css::text::XTextField >& xTextField) : SwVbaField_BASE( rParent, rContext )
 {
-    mxTextField.set( xTextField, uno::UNO_QUERY_THROW );
+    mxTextField.set( xTextField, uno::UNO_SET_THROW );
 }
 
 sal_Bool SAL_CALL SwVbaField::Update()
@@ -255,7 +255,7 @@ public:
     FieldCollectionHelper( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : mxParent( xParent ), mxContext( xContext ), mxModel( xModel )
     {
         uno::Reference< text::XTextFieldsSupplier > xSupp( xModel, uno::UNO_QUERY_THROW );
-        mxEnumerationAccess.set( xSupp->getTextFields(), uno::UNO_QUERY_THROW );
+        mxEnumerationAccess.set( xSupp->getTextFields(), uno::UNO_SET_THROW );
     }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override { return  mxEnumerationAccess->getElementType(); }

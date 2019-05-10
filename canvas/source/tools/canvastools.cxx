@@ -1100,7 +1100,7 @@ namespace canvas
                 try
                 {
                     uno::Reference< rendering::XGraphicDevice > xDevice( i_rxCanvas->getDevice(),
-                                                                         uno::UNO_QUERY_THROW );
+                                                                         uno::UNO_SET_THROW );
 
                     uno::Reference< lang::XServiceInfo >  xServiceInfo( xDevice,
                                                                         uno::UNO_QUERY_THROW );

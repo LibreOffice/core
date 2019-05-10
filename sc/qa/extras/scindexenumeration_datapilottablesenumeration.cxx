@@ -64,7 +64,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_DataPilotTablesEnumeration::i
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet0(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
 
@@ -79,9 +79,9 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_DataPilotTablesEnumeration::i
             xSheet0->getCellByPosition(x, y)->setValue(x * (y + 1));
 
     uno::Reference<sheet::XDataPilotTablesSupplier> xDPTS(xSheet0, uno::UNO_QUERY_THROW);
-    uno::Reference<sheet::XDataPilotTables> xDPT(xDPTS->getDataPilotTables(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XDataPilotTables> xDPT(xDPTS->getDataPilotTables(), uno::UNO_SET_THROW);
     uno::Reference<sheet::XDataPilotDescriptor> xDPD(xDPT->createDataPilotDescriptor(),
-                                                     uno::UNO_QUERY_THROW);
+                                                     uno::UNO_SET_THROW);
     xDPD->setSourceRange(table::CellRangeAddress(0, 0, 0, 4, 4));
     xDPT->insertNewByName("DataPilotTable", table::CellAddress(0, 5, 5), xDPD);
 

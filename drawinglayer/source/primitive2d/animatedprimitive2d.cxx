@@ -77,7 +77,7 @@ namespace drawinglayer
                     nIndex = nLen - 1;
                 }
 
-                const Primitive2DReference xRef(getChildren()[nIndex], uno::UNO_QUERY_THROW);
+                const Primitive2DReference xRef(getChildren()[nIndex], uno::UNO_SET_THROW);
                 rVisitor.append(xRef);
             }
         }

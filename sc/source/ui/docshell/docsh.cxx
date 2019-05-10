@@ -794,7 +794,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             try
                             {
                                 // load shared file
-                                xModel.set( LoadSharedDocument(), uno::UNO_QUERY_THROW );
+                                xModel.set( LoadSharedDocument(), uno::UNO_SET_THROW );
                                 uno::Reference< util::XCloseable > xCloseable( xModel, uno::UNO_QUERY_THROW );
 
                                 // check if shared flag is set in shared file
@@ -2598,7 +2598,7 @@ bool ScDocShell::QuerySlotExecutable( sal_uInt16 nSlotId )
     bool bSlotExecutable = true;
     if( nVbaEventId != VBAEventId::NO_EVENT ) try
     {
-        uno::Reference< XVBAEventProcessor > xEventProcessor( m_aDocument.GetVbaEventProcessor(), uno::UNO_QUERY_THROW );
+        uno::Reference< XVBAEventProcessor > xEventProcessor( m_aDocument.GetVbaEventProcessor(), uno::UNO_SET_THROW );
         xEventProcessor->processVbaEvent( nVbaEventId, aArgs );
     }
     catch( util::VetoException& )

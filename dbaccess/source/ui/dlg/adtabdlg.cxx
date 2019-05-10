@@ -119,7 +119,7 @@ OUString TableListFacade::getSelectedName( OUString& _out_rAliasName ) const
     OUString aComposedName;
     try
     {
-        Reference< XDatabaseMetaData > xMeta( m_xConnection->getMetaData(), UNO_QUERY_THROW );
+        Reference< XDatabaseMetaData > xMeta( m_xConnection->getMetaData(), UNO_SET_THROW );
         if (  aCatalog.isEmpty()
             && !aSchema.isEmpty()
             && xMeta->supportsCatalogsInDataManipulation()
@@ -294,7 +294,7 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
         OUString aQueryImage(ImageProvider::getDefaultImageResourceID(css::sdb::application::DatabaseObject::QUERY));
 
         Reference< XQueriesSupplier > xSuppQueries( m_xConnection, UNO_QUERY_THROW );
-        Reference< XNameAccess > xQueries( xSuppQueries->getQueries(), UNO_QUERY_THROW );
+        Reference< XNameAccess > xQueries( xSuppQueries->getQueries(), UNO_SET_THROW );
         if ( !m_pContainerListener.is() )
         {
             Reference< XContainer> xContainer(xQueries,UNO_QUERY_THROW);

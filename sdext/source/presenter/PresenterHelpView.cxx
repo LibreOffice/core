@@ -141,7 +141,7 @@ PresenterHelpView::PresenterHelpView (
         // Get the content window via the pane anchor.
         Reference<XControllerManager> xCM (rxController, UNO_QUERY_THROW);
         Reference<XConfigurationController> xCC (
-            xCM->getConfigurationController(), UNO_QUERY_THROW);
+            xCM->getConfigurationController(), UNO_SET_THROW);
         mxPane.set(xCC->getResource(rxViewId->getAnchor()), UNO_QUERY_THROW);
 
         mxWindow = mxPane->getWindow();

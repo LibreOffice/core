@@ -28,7 +28,7 @@ void XSimpleText::testCreateTextCursor()
 void XSimpleText::testCreateTextCursorByRange()
 {
     uno::Reference<text::XSimpleText> xSimpleText(init(), UNO_QUERY_THROW);
-    uno::Reference<text::XTextCursor> xCursor(xSimpleText->createTextCursor(), UNO_QUERY_THROW);
+    uno::Reference<text::XTextCursor> xCursor(xSimpleText->createTextCursor(), UNO_SET_THROW);
 
     xCursor->gotoStart(false);
 

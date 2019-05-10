@@ -25,7 +25,7 @@ void XSheetAnnotationsSupplier::testGetAnnotations()
     uno::Reference<sheet::XSheetAnnotationsSupplier> xSupplier(init(), UNO_QUERY_THROW);
 
     uno::Reference<sheet::XSheetAnnotations> xAnnotations(xSupplier->getAnnotations(),
-                                                          UNO_QUERY_THROW);
+                                                          UNO_SET_THROW);
 }
 }
 

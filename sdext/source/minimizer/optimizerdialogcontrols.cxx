@@ -548,7 +548,7 @@ void OptimizerDialog::InitPage3()
     int nOLECount = 0;
     Reference< XModel > xModel( mxController->getModel() );
     Reference< XDrawPagesSupplier > xDrawPagesSupplier( xModel, UNO_QUERY_THROW );
-    Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
+    Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_SET_THROW );
     for ( sal_Int32 i = 0; i < xDrawPages->getCount(); i++ )
     {
         Reference< XShapes > xShapes( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );
@@ -686,7 +686,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
         else
         {
             Reference< XDrawPagesSupplier > xDrawPagesSupplier( mxController->getModel(), UNO_QUERY_THROW );
-            Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
+            Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_SET_THROW );
             for( sal_Int32 i = 0; i < xDrawPages->getCount(); i++ )
             {
                 Reference< XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );
@@ -707,7 +707,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
         std::vector< PageCollector::MasterPageEntity > aMasterPageList;
         PageCollector::CollectMasterPages( mxController->getModel(), aMasterPageList );
         Reference< XMasterPagesSupplier > xMasterPagesSupplier( mxController->getModel(), UNO_QUERY_THROW );
-        Reference< XDrawPages > xMasterPages( xMasterPagesSupplier->getMasterPages(), UNO_QUERY_THROW );
+        Reference< XDrawPages > xMasterPages( xMasterPagesSupplier->getMasterPages(), UNO_SET_THROW );
         nDeletedSlides += std::count_if(aMasterPageList.begin(), aMasterPageList.end(),
             [](const PageCollector::MasterPageEntity& rEntity) { return !rEntity.bUsed; });
     }
@@ -754,7 +754,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
     {
         sal_Int32 nOLEReplacements = 0;
         Reference< XDrawPagesSupplier > xDrawPagesSupplier( mxController->getModel(), UNO_QUERY_THROW );
-        Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
+        Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_SET_THROW );
         for ( sal_Int32 i = 0; i < xDrawPages->getCount(); i++ )
         {
             Reference< XShapes > xShapes( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );

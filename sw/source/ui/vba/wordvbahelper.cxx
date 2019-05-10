@@ -75,7 +75,7 @@ uno::Reference< style::XStyle > getCurrentPageStyle( const uno::Reference< frame
     OUString aPageStyleName;
     xProps->getPropertyValue("PageStyleName") >>= aPageStyleName;
     uno::Reference< style::XStyleFamiliesSupplier > xSytleFamSupp( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_SET_THROW );
     uno::Reference< container::XNameAccess > xPageStyles( xSytleFamNames->getByName("PageStyles"), uno::UNO_QUERY_THROW );
     uno::Reference< style::XStyle > xStyle( xPageStyles->getByName( aPageStyleName ), uno::UNO_QUERY_THROW );
 
@@ -92,7 +92,7 @@ sal_Int32 getPageCount( const uno::Reference< frame::XModel>& xModel )
 uno::Reference< style::XStyle > getDefaultParagraphStyle( const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< style::XStyleFamiliesSupplier > xSytleFamSupp( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_SET_THROW );
     uno::Reference< container::XNameAccess > xParaStyles( xSytleFamNames->getByName("ParagraphStyles"), uno::UNO_QUERY_THROW );
     uno::Reference< style::XStyle > xStyle( xParaStyles->getByName("Standard"), uno::UNO_QUERY_THROW );
 
@@ -167,7 +167,7 @@ bool gotoSelectedObjectAnchor( const uno::Reference< frame::XModel>& xModel )
     uno::Reference< text::XTextContent > xTextContent( xModel->getCurrentSelection(), uno::UNO_QUERY );
     if( xTextContent.is() )
     {
-        uno::Reference< text::XTextRange > xTextRange( xTextContent->getAnchor(), uno::UNO_QUERY_THROW );
+        uno::Reference< text::XTextRange > xTextRange( xTextContent->getAnchor(), uno::UNO_SET_THROW );
         uno::Reference< view::XSelectionSupplier > xSelectSupp( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
         xSelectSupp->select( uno::makeAny( xTextRange ) );
         isObjectSelected = true;

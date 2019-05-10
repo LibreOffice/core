@@ -91,7 +91,7 @@ namespace frm
     void CachedRowSet::setCommandFromQuery( const OUString& _rQueryName )
     {
         Reference< XQueriesSupplier > xSupplyQueries( m_pData->xConnection, UNO_QUERY_THROW );
-        Reference< XNameAccess >      xQueries      ( xSupplyQueries->getQueries(), UNO_QUERY_THROW );
+        Reference< XNameAccess >      xQueries      ( xSupplyQueries->getQueries(), UNO_SET_THROW );
         Reference< XPropertySet >     xQuery        ( xQueries->getByName( _rQueryName ), UNO_QUERY_THROW );
 
         bool bEscapeProcessing( false );

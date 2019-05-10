@@ -55,7 +55,7 @@ ScSortDescriptorBaseObj::ScSortDescriptorBaseObj()
 uno::Reference<uno::XInterface> ScSortDescriptorBaseObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xSheets, UNO_QUERY_THROW);
 
     uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), UNO_QUERY_THROW);

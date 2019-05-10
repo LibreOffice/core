@@ -636,7 +636,7 @@ void Dialog::dispose()
 
     css::uno::Reference< css::uno::XComponentContext > xContext(
             comphelper::getProcessComponentContext() );
-    css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_SET_THROW);
     css::document::DocumentEvent aObject;
     aObject.EventName = "DialogClosed";
     xEventBroadcaster->documentEventOccured(aObject);
@@ -971,7 +971,7 @@ bool Dialog::ImplStartExecute()
     if (bModal)
         pSVData->maAppData.mnModalMode++;
 
-    css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_SET_THROW);
     css::document::DocumentEvent aObject;
     aObject.EventName = "DialogExecute";
     xEventBroadcaster->documentEventOccured(aObject);
@@ -1561,7 +1561,7 @@ void Dialog::Activate()
     {
         css::uno::Reference< css::uno::XComponentContext > xContext(
                 comphelper::getProcessComponentContext() );
-        css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_SET_THROW);
         css::document::DocumentEvent aObject;
         aObject.EventName = "ModelessDialogVisible";
         xEventBroadcaster->documentEventOccured(aObject);

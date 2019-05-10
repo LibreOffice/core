@@ -1922,7 +1922,7 @@ void XMLParaContext::EndElement()
             const uno::Reference<container::XEnumerationAccess> xEA
                 (xAttrCursor, uno::UNO_QUERY_THROW);
             const uno::Reference<container::XEnumeration> xEnum(
-                xEA->createEnumeration(), uno::UNO_QUERY_THROW);
+                xEA->createEnumeration(), uno::UNO_SET_THROW);
             SAL_WARN_IF(!xEnum->hasMoreElements(), "xmloff.text", "xml:id: no paragraph?");
             if (xEnum->hasMoreElements()) {
                 uno::Reference<rdf::XMetadatable> xMeta;

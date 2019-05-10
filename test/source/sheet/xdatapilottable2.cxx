@@ -215,7 +215,7 @@ void XDataPilotTable2::getOutputRanges( uno::Reference< sheet::XDataPilotTable2 
 void XDataPilotTable2::buildDataFields( uno::Reference< sheet::XDataPilotTable2 > const & xDPTable )
 {
     uno::Reference< sheet::XDataPilotDescriptor > xDesc(xDPTable, UNO_QUERY_THROW);
-    uno::Reference< container::XIndexAccess > xIndex(xDesc->getDataPilotFields(), UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIndex(xDesc->getDataPilotFields(), UNO_SET_THROW);
 
     sal_Int32 nFieldCount = xIndex->getCount();
     for( sal_Int32 i = 0; i < nFieldCount; ++i)

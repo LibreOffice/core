@@ -174,7 +174,7 @@ namespace framework
             {
                 Reference< XUndoManagerSupplier > xUndoSupplier( i_undoSupplierComponent, UNO_QUERY );
                 if ( xUndoSupplier.is() )
-                    i_data.xUndoManager.set( xUndoSupplier->getUndoManager(), UNO_QUERY_THROW );
+                    i_data.xUndoManager.set( xUndoSupplier->getUndoManager(), css::uno::UNO_SET_THROW );
 
                 if ( i_data.xUndoManager.is() )
                     i_data.pContextListener.set( new UndoManagerContextListener( i_data.xUndoManager ) );

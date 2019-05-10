@@ -108,7 +108,7 @@ TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBas
         mxView.set(mrBase.GetController(), UNO_QUERY);
         addListener();
 
-        Reference< XController > xController( mrBase.GetController(), UNO_QUERY_THROW );
+        Reference< XController > xController( mrBase.GetController(), UNO_SET_THROW );
         Reference< XStyleFamiliesSupplier > xFamiliesSupp( xController->getModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
         const OUString sFamilyName( "table" );

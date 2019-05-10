@@ -172,7 +172,7 @@ namespace svt { namespace table
     UnoGridColumnFacade::UnoGridColumnFacade( UnoControlTableModel const & i_owner, Reference< XGridColumn > const & i_gridColumn )
         :m_pOwner( &i_owner )
         ,m_nDataColumnIndex( -1 )
-        ,m_xGridColumn( i_gridColumn, UNO_QUERY_THROW )
+        ,m_xGridColumn( i_gridColumn, css::uno::UNO_SET_THROW )
         ,m_pChangeMultiplexer( new ColumnChangeMultiplexer( *this ) )
     {
         m_xGridColumn->addGridColumnListener( m_pChangeMultiplexer.get() );

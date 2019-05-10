@@ -66,7 +66,7 @@ uno::Reference< msforms::XShape > SAL_CALL
 ScVbaShapeRange::Group()
 {
     uno::Reference< drawing::XShapeGrouper > xShapeGrouper( m_xDrawPage, uno::UNO_QUERY_THROW );
-    uno::Reference< drawing::XShapeGroup > xShapeGroup( xShapeGrouper->group( getShapes() ), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XShapeGroup > xShapeGroup( xShapeGrouper->group( getShapes() ), uno::UNO_SET_THROW );
     uno::Reference< drawing::XShape > xShape( xShapeGroup, uno::UNO_QUERY_THROW );
     return uno::Reference< msforms::XShape >( new ScVbaShape( getParent(), mxContext, xShape, getShapes(), m_xModel, office::MsoShapeType::msoGroup ) );
 }

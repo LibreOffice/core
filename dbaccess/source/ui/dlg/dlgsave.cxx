@@ -161,7 +161,7 @@ void lcl_fillComboList( weld::ComboBox& _rList, const Reference< XConnection >& 
                         FGetMetaStrings GetAll, const OUString& _rCurrent )
 {
     try {
-        Reference< XDatabaseMetaData > xMetaData( _rxConnection->getMetaData(), UNO_QUERY_THROW );
+        Reference< XDatabaseMetaData > xMetaData( _rxConnection->getMetaData(), UNO_SET_THROW );
 
         Reference< XResultSet > xRes = (xMetaData.get()->*GetAll)();
         Reference< XRow > xRow( xRes, UNO_QUERY_THROW );

@@ -89,7 +89,7 @@ public:
     {
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
-        uno::Reference< text::XTextTable > xTable( mxTables[ Index ], uno::UNO_QUERY_THROW );
+        uno::Reference< text::XTextTable > xTable( mxTables[ Index ], uno::UNO_SET_THROW );
         return uno::makeAny( xTable );
     }
     // XElementAccess
@@ -100,7 +100,7 @@ public:
     {
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
-        uno::Reference< text::XTextTable > xTable( *cachePos, uno::UNO_QUERY_THROW );
+        uno::Reference< text::XTextTable > xTable( *cachePos, uno::UNO_SET_THROW );
         return uno::makeAny( xTable );
     }
     virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override

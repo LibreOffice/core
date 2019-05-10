@@ -266,7 +266,7 @@ namespace param
         :ParameterWrapperContainer_Base( m_aMutex )
     {
         Reference< XParametersSupplier > xSuppParams( _rxComposer, UNO_QUERY_THROW );
-        Reference< XIndexAccess > xParameters( xSuppParams->getParameters(), UNO_QUERY_THROW );
+        Reference< XIndexAccess > xParameters( xSuppParams->getParameters(), css::uno::UNO_SET_THROW );
         sal_Int32 nParamCount( xParameters->getCount() );
         m_aParameters.reserve( nParamCount );
         for ( sal_Int32 i=0; i<nParamCount; ++i )

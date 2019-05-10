@@ -114,7 +114,7 @@ std::shared_ptr<const SfxFilter> impl_lookupExportFilterForUrl( const OUString& 
     std::shared_ptr<const SfxFilter> pBestMatch;
 
     const Reference< XEnumeration > xFilterEnum(
-            xFilterFactory->createSubSetEnumerationByQuery( sQuery.makeStringAndClear() ), UNO_QUERY_THROW );
+            xFilterFactory->createSubSetEnumerationByQuery( sQuery.makeStringAndClear() ), UNO_SET_THROW );
     while ( xFilterEnum->hasMoreElements() )
     {
         comphelper::SequenceAsHashMap aFilterProps( xFilterEnum->nextElement() );

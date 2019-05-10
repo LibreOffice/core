@@ -392,7 +392,7 @@ void ScriptProtocolHandler::createScriptProvider()
             Any aContext;
             if ( getScriptInvocation() )
                 aContext <<= m_xScriptInvocation;
-            m_xScriptProvider.set( xFac->createScriptProvider( aContext ), UNO_QUERY_THROW );
+            m_xScriptProvider.set( xFac->createScriptProvider( aContext ), UNO_SET_THROW );
         }
     }
     catch ( const Exception & e )

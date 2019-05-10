@@ -1092,7 +1092,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
     if ( !m_xDestConnection.is() )
         throw RuntimeException( "m_xDestConnection is set to null, CopyTableWizard::impl_copyRows_throw: illegal call!", *this );
 
-    Reference< XDatabaseMetaData > xDestMetaData( m_xDestConnection->getMetaData(), UNO_QUERY_THROW );
+    Reference< XDatabaseMetaData > xDestMetaData( m_xDestConnection->getMetaData(), UNO_SET_THROW );
 
     const OCopyTableWizard& rWizard             = impl_getDialog_throw();
     ODatabaseExport::TPositions aColumnPositions = rWizard.GetColumnPositions();
@@ -1424,7 +1424,7 @@ OUString CopyTableWizard::impl_getServerSideCopyStatement_throw(const Reference<
 {
     const Reference<XColumnsSupplier> xDestColsSup(_xTable,UNO_QUERY_THROW);
     const Sequence< OUString> aDestColumnNames = xDestColsSup->getColumns()->getElementNames();
-    const Reference< XDatabaseMetaData > xDestMetaData( m_xDestConnection->getMetaData(), UNO_QUERY_THROW );
+    const Reference< XDatabaseMetaData > xDestMetaData( m_xDestConnection->getMetaData(), UNO_SET_THROW );
     const OUString sQuote = xDestMetaData->getIdentifierQuoteString();
     OUStringBuffer sColumns;
     // 1st check if the columns matching

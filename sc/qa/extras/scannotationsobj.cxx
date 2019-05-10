@@ -89,7 +89,7 @@ uno::Reference< sheet::XSheetAnnotations> ScAnnontationsObj::getAnnotations(long
 
     // get the annotations collection
     uno::Reference< sheet::XSheetAnnotationsSupplier > xAnnotationSupplier(xSheet, UNO_QUERY_THROW);
-    uno::Reference< sheet::XSheetAnnotations > xSheetAnnotations( xAnnotationSupplier->getAnnotations(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSheetAnnotations > xSheetAnnotations( xAnnotationSupplier->getAnnotations(), UNO_SET_THROW);
 
     return xSheetAnnotations;
 }

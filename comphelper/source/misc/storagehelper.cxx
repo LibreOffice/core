@@ -682,7 +682,7 @@ uno::Reference< io::XStream > OStorageHelper::GetStreamAtPath(
     sal_uInt32 nStorageMode = nOpenMode & ~embed::ElementModes::TRUNCATE;
     uno::Reference< embed::XStorage > xStorage(
         LookupStorageAtPath( xParentStorage, aElems, nStorageMode, rNastiness ),
-        uno::UNO_QUERY_THROW );
+        uno::UNO_SET_THROW );
     return xStorage->openStreamElement( aName, nOpenMode );
 }
 

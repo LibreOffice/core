@@ -326,7 +326,7 @@ uno::Any SAL_CALL
 ScVbaWorksheets::getVisible()
 {
     bool bVisible = true;
-    uno::Reference< container::XEnumeration > xEnum( createEnumeration(), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XEnumeration > xEnum( createEnumeration(), uno::UNO_SET_THROW );
     while ( xEnum->hasMoreElements() )
     {
         uno::Reference< excel::XWorksheet > xSheet( xEnum->nextElement(), uno::UNO_QUERY_THROW );
@@ -346,7 +346,7 @@ ScVbaWorksheets::setVisible( const uno::Any& _visible )
     if ( !(_visible >>= bState) )
         throw uno::RuntimeException("Visible property doesn't support non boolean #FIXME" );
 
-    uno::Reference< container::XEnumeration > xEnum( createEnumeration(), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XEnumeration > xEnum( createEnumeration(), uno::UNO_SET_THROW );
     while ( xEnum->hasMoreElements() )
     {
         uno::Reference< excel::XWorksheet > xSheet( xEnum->nextElement(), uno::UNO_QUERY_THROW );
@@ -442,7 +442,7 @@ ScVbaWorksheets::Item(const uno::Any& Index, const uno::Any& Index2)
         {
             uno::Reference< excel::XWorksheet > xWorkSheet( ScVbaWorksheets_BASE::Item( sIndices[ index ], Index2 ), uno::UNO_QUERY_THROW );
             ScVbaWorksheet* pWorkSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xWorkSheet );
-            uno::Reference< sheet::XSpreadsheet > xSheet( pWorkSheet->getSheet() , uno::UNO_QUERY_THROW );
+            uno::Reference< sheet::XSpreadsheet > xSheet( pWorkSheet->getSheet() , uno::UNO_SET_THROW );
             uno::Reference< container::XNamed > xName( xSheet, uno::UNO_QUERY_THROW );
             aSheets.push_back( xSheet );
         }

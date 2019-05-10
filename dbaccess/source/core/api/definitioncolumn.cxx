@@ -241,12 +241,12 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
 
         // retrieve the table in question
         Reference< XTablesSupplier > xSuppTables( _rxConnection, UNO_QUERY_THROW );
-        Reference< XNameAccess > xTables( xSuppTables->getTables(), UNO_QUERY_THROW );
+        Reference< XNameAccess > xTables( xSuppTables->getTables(), UNO_SET_THROW );
         if ( !xTables->hasByName( sComposedTableName ) )
             return nullptr;
 
         Reference< XColumnsSupplier > xSuppCols( xTables->getByName( sComposedTableName ), UNO_QUERY_THROW );
-        Reference< XNameAccess > xColumns( xSuppCols->getColumns(), UNO_QUERY_THROW );
+        Reference< XNameAccess > xColumns( xSuppCols->getColumns(), UNO_SET_THROW );
 
         OUString sColumn;
         OSL_VERIFY( getPropertyValue( PROPERTY_REALNAME ) >>= sColumn );

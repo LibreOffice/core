@@ -317,10 +317,10 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url, bo
     if( GetImport().IsPackageURL( url ))
     {
         uno::Reference< embed::XStorage > storage;
-        storage.set( GetImport().GetSourceStorage(), UNO_QUERY_THROW );
+        storage.set( GetImport().GetSourceStorage(), UNO_SET_THROW );
         if( url.indexOf( '/' ) > -1 ) // TODO what if more levels?
             storage.set( storage->openStorageElement( url.copy( 0, url.indexOf( '/' )),
-                ::embed::ElementModes::READ ), uno::UNO_QUERY_THROW );
+                ::embed::ElementModes::READ ), uno::UNO_SET_THROW );
         uno::Reference< io::XInputStream > inputStream;
         inputStream.set( storage->openStreamElement( url.copy( url.indexOf( '/' ) + 1 ), ::embed::ElementModes::READ ),
             UNO_QUERY_THROW );

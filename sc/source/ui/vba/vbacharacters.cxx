@@ -43,7 +43,7 @@ ScVbaCharacters::ScVbaCharacters( const uno::Reference< XHelperInterface >& xPar
         nStart = 1; // silently correct user error ( as ms )
     nStart--; // OOo is 0 based
     Length >>=nLength;
-    uno::Reference< text::XTextCursor > xTextCursor( m_xSimpleText->createTextCursor(), uno::UNO_QUERY_THROW );
+    uno::Reference< text::XTextCursor > xTextCursor( m_xSimpleText->createTextCursor(), uno::UNO_SET_THROW );
     xTextCursor->collapseToStart();
     if ( nStart )
     {

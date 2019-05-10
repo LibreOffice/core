@@ -49,7 +49,7 @@ CPPUNIT_TEST_FIXTURE(DialogTest, testDialogSizeable)
 {
     uno::Reference<awt::XDialog> xDialog;
     uno::Reference<lang::XMultiComponentFactory> xFactory(mxContext->getServiceManager(),
-                                                          uno::UNO_QUERY_THROW);
+                                                          uno::UNO_SET_THROW);
     uno::Reference<awt::XControlModel> xControlModel(
         xFactory->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", mxContext),
         uno::UNO_QUERY_THROW);

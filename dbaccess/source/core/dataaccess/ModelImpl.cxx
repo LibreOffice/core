@@ -1071,7 +1071,7 @@ Reference< XStorageBasedLibraryContainer > ODatabaseModelImpl::getLibraryContain
 
         rxContainer.set(
             (*Factory)( m_aContext, xDocument ),
-            UNO_QUERY_THROW
+            UNO_SET_THROW
         );
     }
     catch( const RuntimeException& )

@@ -197,7 +197,7 @@ void FormViewPageWindowAdapter::dispose()
     {
         try
         {
-            Reference< XFormController > xController( *i, UNO_QUERY_THROW );
+            Reference< XFormController > xController( *i, UNO_SET_THROW );
 
             // detaching the events
             Reference< XChild > xControllerModel( xController->getModel(), UNO_QUERY );
@@ -868,7 +868,7 @@ namespace
                     continue;
 
                 Reference< XChild > xModel( pFormObject->GetUnoControlModel(), UNO_QUERY_THROW );
-                Reference< XInterface > xModelParent( xModel->getParent(), UNO_QUERY_THROW );
+                Reference< XInterface > xModelParent( xModel->getParent(), UNO_SET_THROW );
 
                 if ( xNormalizedForm.get() != xModelParent.get() )
                     continue;

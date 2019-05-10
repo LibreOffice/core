@@ -57,7 +57,7 @@ uno::Reference<uno::XInterface> ScImportDescriptorBaseObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xSheets, UNO_QUERY_THROW);
 
     uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), UNO_QUERY_THROW);
@@ -68,7 +68,7 @@ uno::Reference<uno::XInterface> ScImportDescriptorBaseObj::getXImportable()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xSheets, UNO_QUERY_THROW);
 
     uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), UNO_QUERY_THROW);

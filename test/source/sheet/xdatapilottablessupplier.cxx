@@ -24,7 +24,7 @@ void XDataPilotTablesSupplier::testGetDataPilotTables()
 {
     uno::Reference<sheet::XDataPilotTablesSupplier> xDPTS(init(), UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XDataPilotTables> xDPT(xDPTS->getDataPilotTables(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XDataPilotTables> xDPT(xDPTS->getDataPilotTables(), UNO_SET_THROW);
 }
 }
 

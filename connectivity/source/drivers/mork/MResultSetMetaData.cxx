@@ -84,7 +84,7 @@ OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column )
     OUString sColumnName;
     try
     {
-        Reference< XPropertySet > xColumnProps( (m_xColumns->get())[column-1], UNO_QUERY_THROW );
+        Reference< XPropertySet > xColumnProps( (m_xColumns->get())[column-1], UNO_SET_THROW );
         OSL_VERIFY( xColumnProps->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_NAME ) ) >>= sColumnName );
     }
     catch( const Exception& )

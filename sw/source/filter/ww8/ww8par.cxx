@@ -5176,7 +5176,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
             m_pDocShell->SetIsTemplate( m_xWwFib->m_fDot ); // point at tgc record
             uno::Reference<document::XDocumentPropertiesSupplier> const
                 xDocPropSupp(m_pDocShell->GetModel(), uno::UNO_QUERY_THROW);
-            uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
+            uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_SET_THROW );
 
             OUString sCreatedFrom = xDocProps->getTemplateURL();
             uno::Reference< container::XNameContainer > xPrjNameCache;

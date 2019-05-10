@@ -97,7 +97,7 @@ TheExtensionManager::TheExtensionManager( const uno::Reference< awt::XWindow > &
     {
         // the registration should be done after the construction has been ended
         // otherwise an exception prevents object creation, but it is registered as a listener
-        m_xDesktop.set( frame::Desktop::create(xContext), uno::UNO_QUERY_THROW );
+        m_xDesktop.set( frame::Desktop::create(xContext), uno::UNO_SET_THROW );
         m_xDesktop->addTerminateListener( this );
     }
 }
