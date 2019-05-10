@@ -5174,8 +5174,8 @@ sal_uInt32 EscherEx::EnterGroup( const OUString& rShapeName, const tools::Rectan
                         mpOutStrm->Tell() );
     mpOutStrm ->WriteInt32( aRect.Left() )  // Bounding box for the grouped shapes to which they will be attached
                .WriteInt32( aRect.Top() )
-               .WriteInt32( aRect.Right() )
-               .WriteInt32( aRect.Bottom() );
+               .WriteInt32( aRect.IsWidthEmpty() ? aRect.Left() : aRect.Right() )
+               .WriteInt32( aRect.IsHeightEmpty() ? aRect.Top() : aRect.Bottom() );
 
     sal_uInt32 nShapeId = GenerateShapeId();
     if ( !mnGroupLevel )
