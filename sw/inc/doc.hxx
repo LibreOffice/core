@@ -1559,7 +1559,7 @@ public:
                    bool bBroadcast = false);
 
     // Change a TOX undoable.
-    void ChangeTOX(SwTOXBase & rTOX, const SwTOXBase & rNew, SwRootFrame const& rLayout);
+    void ChangeTOX(SwTOXBase & rTOX, const SwTOXBase & rNew);
 
     /**
        Returns a textual description of a PaM.
