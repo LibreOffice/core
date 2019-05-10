@@ -46,6 +46,30 @@
       "revId": "d5b7956d2baa5c778e047c7e10729f0141fa5847",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_c034624d",
+        "filename": "officecfg/registry/schema/org/openoffice/Setup.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-10T07:01:46Z",
+      "side": 1,
+      "message": "For one, probably better to document the expected format here anyway.\nBut for another, that string \u003e comparison apparently breaks down when we reach version \"10.0\".",
+      "parentUuid": "3fa0c359_80f97a81",
+      "range": {
+        "startLine": 263,
+        "startChar": 63,
+        "endLine": 263,
+        "endChar": 83
+      },
+      "revId": "d5b7956d2baa5c778e047c7e10729f0141fa5847",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
