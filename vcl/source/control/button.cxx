@@ -822,14 +822,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
         aColor = COL_WHITE;
     }
 #endif
-    else if( (nButtonFlags & DrawButtonFlags::Highlight) && IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire) )
-    {
-        if (nButtonFlags & DrawButtonFlags::Pressed)
-            aColor = rStyleSettings.GetButtonPressedRolloverTextColor();
-        else
-            aColor = rStyleSettings.GetButtonRolloverTextColor();
-    }
-    else if ( IsControlForeground() )
+    else if (IsControlForeground() && !IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire))
         aColor = GetControlForeground();
     else if( nButtonFlags & DrawButtonFlags::Highlight )
     {
