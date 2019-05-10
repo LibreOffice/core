@@ -1460,6 +1460,9 @@ void SfxViewShell::registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCa
 
     afterCallbackRegistered();
 
+    if (!pCallback)
+        return;
+
     // Ask other views to tell us about their cursors.
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
