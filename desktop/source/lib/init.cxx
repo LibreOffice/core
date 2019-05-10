@@ -3278,7 +3278,7 @@ static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned
         return;
     }
 
-    Point aPos(nX, nY);
+    const Point aPos(nX, nY);
     MouseEvent aEvent(aPos, nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
 
     if (Dialog* pDialog = dynamic_cast<Dialog*>(pWindow.get()))
