@@ -21,6 +21,7 @@
 #include <vcl/layout.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/viewfrm.hxx>
+#include <bitmaps.hlst>
 #include "OptionalBox.hxx"
 #include "PriorityHBox.hxx"
 #include "NotebookbarPopup.hxx"
@@ -43,8 +44,8 @@ public:
     {
         m_pButton = VclPtr<PushButton>::Create(this, WB_FLATBUTTON);
         m_pButton->SetClickHdl(LINK(this, PriorityMergedHBox, PBClickHdl));
-        m_pButton->SetSymbol(SymbolType::NEXT);
-        m_pButton->set_width_request(15);
+        m_pButton->SetModeImage(Image(StockImage::Yes, CHEVRON));
+        m_pButton->set_width_request(25);
         m_pButton->set_pack_type(VclPackType::End);
         m_pButton->Show();
     }

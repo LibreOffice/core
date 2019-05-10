@@ -32,6 +32,7 @@
 #define BMP_HELP_TOOLBOX_L_SEARCHDIALOG     "res/lc05961.png"
 
 //start, sfx2/source/sidebar/Theme.cxx
+#define CHEVRON                             "sfx2/res/chevron.png"
 #define CLOSEDOC                            "sfx2/res/closedoc.png"
 #define GRIP                                "sfx2/res/grip.png"
 #define OPEN_MORE                           "sfx2/res/symphony/open_more.png"
