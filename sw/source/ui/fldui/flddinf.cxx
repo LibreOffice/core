@@ -126,6 +126,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     std::vector<OUString> aLst;
     GetFieldMgr().GetSubTypes(TYP_DOCINFOFLD, aLst);
     std::unique_ptr<weld::TreeIter> xEntry(m_xTypeTLB->make_iterator());
+    std::unique_ptr<weld::TreeIter> xExpandEntry;
     for(size_t i = 0; i < aLst.size(); ++i)
     {
         if (!IsFieldEdit() || nSubType == i)
@@ -155,7 +156,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
                             if (m_sOldCustomFieldName == sEntry)
                             {
                                 m_xSelEntry = m_xTypeTLB->make_iterator(xEntry.get());
-                                m_xTypeTLB->expand_row(*xInfo);
+                                xExpandEntry = m_xTypeTLB->make_iterator(xInfo.get());
                             }
                         }
                     }
@@ -175,6 +176,9 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     }
 
     m_xTypeTLB->thaw();
+
+    if (xExpandEntry)
+        m_xTypeTLB->expand_row(*xExpandEntry);
 
     // select old Pos
     if (m_xSelEntry)
