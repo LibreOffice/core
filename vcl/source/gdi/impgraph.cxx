@@ -255,11 +255,11 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
             else
             {
                 mpGfxLink.reset();
-
                 mpGfxLink = std::make_shared<GfxLink>(*rImpGraphic.mpGfxLink);
             }
         }
 
+        maVectorGraphicData = rImpGraphic.maVectorGraphicData;
         mpPdfData = rImpGraphic.mpPdfData;
     }
 
