@@ -205,7 +205,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-17"/>
+                          <class name="priority-18"/>
                         </style>
                       </object>
                       <packing>
@@ -244,7 +244,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-16"/>
+                          <class name="priority-17"/>
                         </style>
                       </object>
                       <packing>
@@ -293,7 +293,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-15"/>
+                          <class name="priority-16"/>
                         </style>
                       </object>
                       <packing>
@@ -364,7 +364,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-14"/>
+                          <class name="priority-15"/>
                         </style>
                       </object>
                       <packing>
@@ -413,7 +413,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-13"/>
+                          <class name="priority-14"/>
                         </style>
                       </object>
                       <packing>
@@ -463,7 +463,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-12"/>
+                          <class name="priority-13"/>
                         </style>
                       </object>
                       <packing>
@@ -503,7 +503,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-11"/>
+                          <class name="priority-12"/>
                         </style>
                       </object>
                       <packing>
@@ -577,7 +577,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-10"/>
+                          <class name="priority-11"/>
                         </style>
                       </object>
                       <packing>
@@ -626,7 +626,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-9"/>
+                          <class name="priority-10"/>
                         </style>
                       </object>
                       <packing>
@@ -712,13 +712,63 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-8"/>
+                          <class name="priority-9"/>
                         </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">11</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="sfxlo-OptionalBox" id="Default-Section-LTR">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom137">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="toolbar_style">icons</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="Default-ParaLeftToRight">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:ParaLeftToRight</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="Default-ParaRightToLeft">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:ParaRightToLeft</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <style>
+                          <class name="priority-8"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">12</property>
                       </packing>
                     </child>
                     <child>
@@ -767,7 +817,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">12</property>
+                        <property name="position">13</property>
                       </packing>
                     </child>
                     <child>
@@ -817,7 +867,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">13</property>
+                        <property name="position">14</property>
                       </packing>
                     </child>
                     <child>
@@ -857,7 +907,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">14</property>
+                        <property name="position">15</property>
                       </packing>
                     </child>
                     <child>
@@ -943,7 +993,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">15</property>
+                        <property name="position">16</property>
                       </packing>
                     </child>
                     <child>
@@ -1029,7 +1079,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">16</property>
+                        <property name="position">17</property>
                       </packing>
                     </child>
                     <child>
@@ -1103,7 +1153,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">17</property>
+                        <property name="position">18</property>
                       </packing>
                     </child>
                     <child>
@@ -1178,7 +1228,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">18</property>
+                        <property name="position">19</property>
                       </packing>
                     </child>
                     <style>
@@ -1325,7 +1375,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-23"/>
+                          <class name="priority-25"/>
                         </style>
                       </object>
                       <packing>
@@ -1364,7 +1414,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-22"/>
+                          <class name="priority-24"/>
                         </style>
                       </object>
                       <packing>
@@ -1413,7 +1463,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-21"/>
+                          <class name="priority-23"/>
                         </style>
                       </object>
                       <packing>
@@ -1484,7 +1534,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-20"/>
+                          <class name="priority-22"/>
                         </style>
                       </object>
                       <packing>
@@ -1533,7 +1583,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-19"/>
+                          <class name="priority-21"/>
                         </style>
                       </object>
                       <packing>
@@ -1583,7 +1633,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-18"/>
+                          <class name="priority-20"/>
                         </style>
                       </object>
                       <packing>
@@ -1623,7 +1673,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-17"/>
+                          <class name="priority-19"/>
                         </style>
                       </object>
                       <packing>
@@ -1697,7 +1747,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-9"/>
+                          <class name="priority-11"/>
                         </style>
                       </object>
                       <packing>
@@ -1746,7 +1796,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-8"/>
+                          <class name="priority-10"/>
                         </style>
                       </object>
                       <packing>
@@ -1832,13 +1882,112 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-7"/>
+                          <class name="priority-9"/>
                         </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">11</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="sfxlo-OptionalBox" id="Table-Section-LTR">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom49">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="toolbar_style">icons</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="Table-ParaLeftToRight">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:ParaLeftToRight</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="Table-ParaRightToLeft">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:ParaRightToLeft</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <style>
+                          <class name="priority-8"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">12</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="sfxlo-OptionalBox" id="Table-Section-Spacing">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom50">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_left">5</property>
+                            <property name="toolbar_style">icons</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="Table-ParaspaceIncrease">
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:ParaspaceIncrease</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="Table-ParaspaceDecrease">
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:ParaspaceDecrease</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <style>
+                          <class name="priority-7"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">13</property>
                       </packing>
                     </child>
                     <child>
@@ -1888,7 +2037,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">12</property>
+                        <property name="position">14</property>
                       </packing>
                     </child>
                     <child>
@@ -1928,7 +2077,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">13</property>
+                        <property name="position">15</property>
                       </packing>
                     </child>
                     <child>
@@ -2008,13 +2157,13 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-16"/>
+                          <class name="priority-18"/>
                         </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">14</property>
+                        <property name="position">16</property>
                       </packing>
                     </child>
                     <child>
@@ -2048,13 +2197,13 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-15"/>
+                          <class name="priority-17"/>
                         </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">15</property>
+                        <property name="position">17</property>
                       </packing>
                     </child>
                     <child>
@@ -2123,13 +2272,13 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-14"/>
+                          <class name="priority-16"/>
                         </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">16</property>
+                        <property name="position">18</property>
                       </packing>
                     </child>
                     <child>
@@ -2163,13 +2312,13 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-13"/>
+                          <class name="priority-15"/>
                         </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">17</property>
+                        <property name="position">19</property>
                       </packing>
                     </child>
                     <child>
@@ -2250,13 +2399,13 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-12"/>
+                          <class name="priority-14"/>
                         </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">18</property>
+                        <property name="position">20</property>
                       </packing>
                     </child>
                     <child>
@@ -2322,13 +2471,13 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-11"/>
+                          <class name="priority-13"/>
                         </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">19</property>
+                        <property name="position">21</property>
                       </packing>
                     </child>
                     <child>
@@ -2362,13 +2511,13 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-10"/>
+                          <class name="priority-12"/>
                         </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">20</property>
+                        <property name="position">22</property>
                       </packing>
                     </child>
                     <child>
@@ -2454,7 +2603,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">21</property>
+                        <property name="position">23</property>
                       </packing>
                     </child>
                     <child>
@@ -2540,7 +2689,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">22</property>
+                        <property name="position">24</property>
                       </packing>
                     </child>
                     <child>
@@ -2614,7 +2763,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">23</property>
+                        <property name="position">25</property>
                       </packing>
                     </child>
                     <child>
@@ -2689,7 +2838,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">24</property>
+                        <property name="position">26</property>
                       </packing>
                     </child>
                     <style>
