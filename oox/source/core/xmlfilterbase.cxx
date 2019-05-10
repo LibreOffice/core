@@ -342,7 +342,7 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
         return false;
 
     // fragment handler must contain path to fragment stream
-    const OUString aFragmentPath = rxHandler->getFragmentPath();
+    OUString aFragmentPath = rxHandler->getFragmentPath();
     OSL_ENSURE( !aFragmentPath.isEmpty(), "XmlFilterBase::importFragment - missing fragment path" );
     if( aFragmentPath.isEmpty() )
         return false;
@@ -385,6 +385,18 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
             handler to create specialized input streams, e.g. VML streams that
             have to preprocess the raw input data. */
         Reference< XInputStream > xInStrm = rxHandler->openFragmentStream();
+        // Check again the aFragmentPath route if there is no any file with lowercase letter. (tdf#100084)
+        if ( !xInStrm.is() )
+        {
+            sal_Int32 nPathLen = aFragmentPath.lastIndexOf('/') + 1;
+            OUString fileName = aFragmentPath.copy(nPathLen);
+            if ( fileName != fileName.toAsciiLowerCase() )
+            {
+                fileName = fileName.toAsciiLowerCase();
+                aFragmentPath = OUStringBuffer(aFragmentPath.copy(0, nPathLen)).append(fileName).makeStringAndClear();
+                xInStrm = openInputStream(aFragmentPath);
+            }
+        }
 
         // own try/catch block for showing parser failure assertion with fragment path
         if( xInStrm.is() ) try

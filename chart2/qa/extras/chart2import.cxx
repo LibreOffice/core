@@ -70,6 +70,7 @@ public:
     void testTdf105517();
     void testTdf106217();
     void testTdf108021();
+    void testTdf100084();
     void testAutoBackgroundXLSX();
     void testAutoChartAreaBorderPropXLSX();
     void testChartAreaStyleBackgroundXLSX();
@@ -158,6 +159,7 @@ public:
     CPPUNIT_TEST(testTdf105517);
     CPPUNIT_TEST(testTdf106217);
     CPPUNIT_TEST(testTdf108021);
+    CPPUNIT_TEST(testTdf100084);
     CPPUNIT_TEST(testAutoBackgroundXLSX);
     CPPUNIT_TEST(testAutoChartAreaBorderPropXLSX);
     CPPUNIT_TEST(testChartAreaStyleBackgroundXLSX);
@@ -881,6 +883,16 @@ void Chart2ImportTest::testTdf108021()
     xAxisProp->getPropertyValue("TextBreak") >>= bTextBreak;
     // Expected value of 'TextBreak' is true
     CPPUNIT_ASSERT(bTextBreak);
+}
+
+void Chart2ImportTest::testTdf100084()
+{
+    // The test file was created with IBM Cognos, so just check there is a diagram.
+    load("/chart2/qa/extras/data/xlsx/", "tdf100084.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+    Reference<beans::XPropertySet> xDiagram(xChartDoc->getFirstDiagram(), UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("There should be a Diagram.", xDiagram.is());
 }
 
 void Chart2ImportTest::testTransparentBackground(OUString const & filename)
