@@ -70,6 +70,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <osl/process.h>
+#include <comphelper/lok.hxx>
 
 #include <cassert>
 #include <utility>
@@ -880,8 +881,12 @@ ImplSVEvent* Application::PostMouseEvent( VclEventId nEvent, vcl::Window *pWin, 
     {
         Point aTransformedPos( pMouseEvent->GetPosPixel() );
 
-        aTransformedPos.AdjustX(pWin->GetOutOffXPixel() );
-        aTransformedPos.AdjustY(pWin->GetOutOffYPixel() );
+        // LOK uses (0, 0) as the origin of all windows; don't offset.
+        if (!comphelper::LibreOfficeKit::isActive())
+        {
+            aTransformedPos.AdjustX(pWin->GetOutOffXPixel());
+            aTransformedPos.AdjustY(pWin->GetOutOffYPixel());
+        }
 
         const MouseEvent aTransformedEvent( aTransformedPos, pMouseEvent->GetClicks(), pMouseEvent->GetMode(),
                                             pMouseEvent->GetButtons(), pMouseEvent->GetModifier() );
