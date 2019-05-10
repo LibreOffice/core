@@ -724,7 +724,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     if ( !nLine )
     {
         aBulletArea = GetEditEnginePtr()->GetBulletArea( GetParaPortions().GetPos( pParaPortion ) );
-        if ( aBulletArea.Right() > 0 )
+        if ( !aBulletArea.IsWidthEmpty() && aBulletArea.Right() > 0 )
             pParaPortion->SetBulletX( static_cast<sal_Int32>(GetXValue( aBulletArea.Right() )) );
         else
             pParaPortion->SetBulletX( 0 ); // if Bullet is set incorrectly
@@ -1676,7 +1676,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion )
     else
     {
         aBulletArea = GetEditEnginePtr()->GetBulletArea( GetParaPortions().GetPos( pParaPortion ) );
-        if ( aBulletArea.Right() > 0 )
+        if ( !aBulletArea.IsEmpty() && aBulletArea.Right() > 0 )
             pParaPortion->SetBulletX( static_cast<sal_Int32>(GetXValue( aBulletArea.Right() )) );
         else
             pParaPortion->SetBulletX( 0 ); // If Bullet set incorrectly.

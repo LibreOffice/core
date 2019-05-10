@@ -647,9 +647,9 @@ void ImpEditView::SetOutputArea( const tools::Rectangle& rRect )
     tools::Rectangle aNewRect(rOutDev.LogicToPixel(rRect));
     aNewRect = rOutDev.PixelToLogic(aNewRect);
     aOutArea = aNewRect;
-    if ( aOutArea.Right() < aOutArea.Left() )
+    if ( !aOutArea.IsWidthEmpty() && aOutArea.Right() < aOutArea.Left() )
         aOutArea.SetRight( aOutArea.Left() );
-    if ( aOutArea.Bottom() < aOutArea.Top() )
+    if ( !aOutArea.IsHeightEmpty() && aOutArea.Bottom() < aOutArea.Top() )
         aOutArea.SetBottom( aOutArea.Top() );
 
     SetScrollDiffX( static_cast<sal_uInt16>(aOutArea.GetWidth()) * 2 / 10 );
@@ -867,6 +867,8 @@ void ImpEditView::CalcAnchorPoint()
 void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 {
     // No ShowCursor in an empty View ...
+    if (aOutArea.IsEmpty())
+        return;
     if ( ( aOutArea.Left() >= aOutArea.Right() ) && ( aOutArea.Top() >= aOutArea.Bottom() ) )
         return;
 
