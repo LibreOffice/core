@@ -936,10 +936,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf116084, "tdf116084.docx")
     // tracked line is not a single text portion: w:del is recognized within w:ins
     CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 1 ), 1 )->getString());
     CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(1), 1), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL( OUString( "There " ), getRun( getParagraph( 1 ), 2 )->getString());
-    CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 1 ), 4 )->getString());
-    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(1), 4), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL( OUString( "must" ), getRun( getParagraph( 1 ), 5 )->getString());
+    CPPUNIT_ASSERT_EQUAL( OUString( "There should be a better start to this. " ), getRun( getParagraph( 1 ), 2 )->getString());
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf121176, "tdf121176.docx")
