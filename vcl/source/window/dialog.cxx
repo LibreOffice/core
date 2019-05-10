@@ -883,16 +883,19 @@ bool Dialog::ImplStartExecute()
     ImplSVData* pSVData = ImplGetSVData();
 
     const bool bKitActive = comphelper::LibreOfficeKit::isActive();
-    if (bKitActive && !GetLOKNotifier())
-    {
-        if (vcl::ILibreOfficeKitNotifier* pViewShell = mpDialogImpl->m_aInstallLOKNotifierHdl.Call(nullptr))
-            SetLOKNotifier(pViewShell);
-    }
 
     const bool bModal = GetType() != WindowType::MODELESSDIALOG;
 
     if (bModal)
     {
+        if (bKitActive && !GetLOKNotifier())
+        {
+            if (vcl::ILibreOfficeKitNotifier* pViewShell = mpDialogImpl->m_aInstallLOKNotifierHdl.Call(nullptr))
+            {
+                SetLOKNotifier(pViewShell);
+            }
+        }
+
         switch ( Application::GetDialogCancelMode() )
         {
         case Application::DialogCancelMode::Off:
