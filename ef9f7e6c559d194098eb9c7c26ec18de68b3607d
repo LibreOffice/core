@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_80f89ac4",
+        "filename": "basegfx/source/polygon/b2dpolypolygontools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2019-05-10T03:16:02Z",
+      "side": 1,
+      "message": "Interesting. I guess there is no definition of what kind of a line a point is (or no points at all), but in that case, maybe we should default to the value that saves some cpu cycles?\n\nIn this case if we return true, we will not try to render, which seems to be more sensible. Assuming, of course, a single point doesn\u0027t render to anything (would we show a single pixel value?). But if it does, I suggest we return true for .count() \u003d\u003d 0, and false for 1.\n\nThen again, maybe it\u0027s not worth it.",
+      "revId": "ef9f7e6c559d194098eb9c7c26ec18de68b3607d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
