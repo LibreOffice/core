@@ -87,6 +87,24 @@
       "revId": "da22195b409bd009d13c9aa2066be47467aaa82c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_6347984d",
+        "filename": "unotools/source/config/configmgr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-05-10T09:26:06Z",
+      "side": 1,
+      "message": "Wouldn\u0027t change much as the writing is initiated somewhere else.",
+      "parentUuid": "3fa0c359_c356ac07",
+      "revId": "da22195b409bd009d13c9aa2066be47467aaa82c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
