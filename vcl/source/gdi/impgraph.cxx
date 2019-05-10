@@ -260,6 +260,7 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
             }
         }
 
+        maVectorGraphicData = rImpGraphic.maVectorGraphicData;
         mpPdfData = rImpGraphic.mpPdfData;
     }
 
