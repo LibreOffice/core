@@ -492,7 +492,6 @@ SwCaptionOptPage::SwCaptionOptPage(TabPageParent pParent, const SfxItemSet& rSet
 
     std::vector<int> aWidths;
     aWidths.push_back(m_xCheckLB->get_checkbox_column_width());
-    aWidths.push_back(m_xCheckLB->get_checkbox_column_width());
     m_xCheckLB->set_column_fixed_widths(aWidths);
 
     SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_ABB, m_sIllustration);
