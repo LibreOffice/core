@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_c03a22e6",
+        "filename": "cui/source/inc/tipofthedaydlg.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-10T08:42:41Z",
+      "side": 1,
+      "message": "bIsNewVersion can be a local var in the TipOfTheDayDialog ctor, right?",
+      "revId": "da22195b409bd009d13c9aa2066be47467aaa82c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
