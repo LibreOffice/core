@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_2352f014",
+        "filename": "cui/source/inc/tipofthedaydlg.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-10T09:21:57Z",
+      "side": 1,
+      "message": "ah no, ignore me; it\u0027s also used in TipOfTheDayDialog::UpdateTip (crappy Gerrit Web UI made me miss that)",
+      "parentUuid": "3fa0c359_c03a22e6",
+      "revId": "da22195b409bd009d13c9aa2066be47467aaa82c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_23043015",
         "filename": "unotools/source/config/configmgr.cxx",
         "patchSetId": 3
@@ -48,6 +66,24 @@
       "writtenOn": "2019-05-10T09:06:47Z",
       "side": 1,
       "message": "Seems to be a dirty solution to read here but write somewhere else. Would it be cleaner to include cui/totd in viewfrm?",
+      "revId": "da22195b409bd009d13c9aa2066be47467aaa82c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_c356ac07",
+        "filename": "unotools/source/config/configmgr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-10T09:21:57Z",
+      "side": 1,
+      "message": "then offer both reading and writing as utl::ConfigManager functions?",
+      "parentUuid": "3fa0c359_23043015",
       "revId": "da22195b409bd009d13c9aa2066be47467aaa82c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
