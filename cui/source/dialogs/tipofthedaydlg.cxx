@@ -127,7 +127,7 @@ IMPL_LINK_NOARG(TipOfTheDayDialog, OnLinkClick, weld::LinkButton&, void)
 
 IMPL_LINK_NOARG(TipOfTheDayDialog, OnNextClick, weld::Button&, void)
 {
-    nCurrentTip = rand() % nNumberOfTips;
+    nCurrentTip = (nCurrentTip + 1) % nNumberOfTips;
     UpdateTip();
 }
 
