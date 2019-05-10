@@ -122,7 +122,7 @@ namespace dbaui
 
         const MapInt2String& getIndirectProperties() const { return m_aIndirectPropTranslator; }
 
-        /** translates properties of an UNO data source into SfxItems
+        /** translates properties of a UNO data source into SfxItems
             @param  _rxSource
                 The data source
             @param  _rDest
@@ -132,7 +132,7 @@ namespace dbaui
                 const css::uno::Reference< css::beans::XPropertySet >& _rxSource,
                 SfxItemSet& _rDest);
 
-        /** translate SfxItems into properties of an UNO data source
+        /** translate SfxItems into properties of a UNO data source
             @param  _rSource
                 The item set to read from.
             @param  _rxDest

@@ -25,7 +25,7 @@ import com.sun.star.io.XOutputStream;
 import java.io.OutputStream;
 
 /** The <code>OutputStreamToXOutputStreamAdapter</code> wraps
-   an UNO <code>XOutputStream</code> into a Java <code>OutputStream</code>
+   a UNO <code>XOutputStream</code> into a Java <code>OutputStream</code>
    object in a Java.  This allows users to access an <code>OutputStream</code>
    as if it were an <code>XOutputStream</code>.
  */

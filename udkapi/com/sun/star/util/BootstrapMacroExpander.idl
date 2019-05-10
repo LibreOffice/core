@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module util {
     http://udk.openoffice.org/common/man/concept/micro_deployment.html#misc
 
     The service can be instantiated via arguments giving an ini/rc file url.
-    Otherwise it will read from an uno.ini/unorc file next to the cppuhelper
+    Otherwise it will read from a uno.ini/unorc file next to the cppuhelper
     library.
 
     @see theMacroExpander

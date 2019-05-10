@@ -50,7 +50,7 @@ class StartModuleDispatcher : public  ::cppu::WeakImplHelper<
 
     private:
 
-        /** @short reference to an uno service manager,
+        /** @short reference to a uno service manager,
                    which can be used to create own needed
                    uno resources. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
@@ -64,7 +64,7 @@ class StartModuleDispatcher : public  ::cppu::WeakImplHelper<
             @descr  Such "owner frame" is used as context for all related operations.
 
             @param  xContext
-                    an UNO service manager, which is needed to create UNO resource
+                    a UNO service manager, which is needed to create UNO resource
                     internally.
 
             @param  xFrame

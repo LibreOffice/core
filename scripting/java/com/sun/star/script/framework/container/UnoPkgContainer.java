@@ -388,7 +388,7 @@ public class UnoPkgContainer extends ParcelContainer {
             registerPackageContainer(uri,  pkgContainer);
         } else {
             // stand-alone library package, e.g. not contained in
-            // an uno package
+            // a uno package
             if (loadParcel(uri) == null) {
                 throw new com.sun.star.lang.IllegalArgumentException(
                     "Couldn't load script library package " + uri

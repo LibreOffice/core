@@ -50,7 +50,7 @@ module com { module sun { module star { module document {
         Note that this really means the implementation name of the service.
         Because it's not possible otherwise to distinguish between more than one
         registered detect services in same office installation! But it's possible for
-        the generic type detection to create an UNO service by his implementation name too.
+        the generic type detection to create a UNO service by his implementation name too.
         </li>
         <li>
         A list of <strong>Types</strong> able to be recognized by this service -

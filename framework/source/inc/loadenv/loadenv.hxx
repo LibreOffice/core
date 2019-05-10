@@ -103,7 +103,7 @@ public:
 private:
     mutable osl::Mutex m_mutex;
 
-    /** @short  reference to an uno service manager, which must be used
+    /** @short  reference to a uno service manager, which must be used
                 to created on needed services on demand.
      */
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
@@ -197,7 +197,7 @@ public:
     /** @short  initialize a new instance of this load environment.
 
         @param  xContext
-                reference to an uno service manager, which can be used internally
+                reference to a uno service manager, which can be used internally
                 to create on needed services on demand.
 
         @throw  Currently there is no reason to throw such exception!

@@ -595,10 +595,10 @@ XMultiPropertySet
      *  intended then use an Any variable rather than an Object.
      *
      *  If a member is an Object or Any and the argument <em>setVal</em> is an Object, other than String or array,
-     *  then it is presumed to be an UNO object and queried for XInterface. If successful, the out-param <em>newVal</em>
+     *  then it is presumed to be a UNO object and queried for XInterface. If successful, the out-param <em>newVal</em>
      *  returns the XInterface.
      *
-     *  If a member is an UNO interface, then <em>setVal</em> is queried for this interface and the result is returned.
+     *  If a member is a UNO interface, then <em>setVal</em> is queried for this interface and the result is returned.
      *  If <em>setVal</em> is null then <em>newVal</em> will be null too after return.
      *  <p>
      *  If a property value is stored using a primitive type the out-parameters

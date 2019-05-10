@@ -90,7 +90,7 @@ namespace abp
     /** a non-UNO wrapper for a data source
         <p>This class allows to access data sources without the need to compile the respective file with
         exception handling enabled (hopefully :).</p>
-        <p>In addition to wrapping an UNO data source, an instance of this class can handle at most
+        <p>In addition to wrapping a UNO data source, an instance of this class can handle at most
         one valid connection, as obtained from the data source.</p>
     */
     class ODataSource

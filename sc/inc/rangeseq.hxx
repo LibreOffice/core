@@ -63,7 +63,7 @@ class ScApiTypeConversion
 {
 public:
 
-    /** Convert an uno::Any to double if possible, including integer types.
+    /** Convert a uno::Any to double if possible, including integer types.
         @param o_fVal
             Out: the double value on successful conversion.
         @param o_eClass

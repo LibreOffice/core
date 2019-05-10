@@ -108,7 +108,7 @@ static char const ID_DBG_METHODS[] = "Dbg_Methods";
 
 static char const aSeqLevelStr[] = "[]";
 
-// Gets the default property for an uno object. Note: There is some
+// Gets the default property for a uno object. Note: There is some
 // redirection built in. The property name specifies the name
 // of the default property.
 
@@ -2824,7 +2824,7 @@ Any SbUnoObject::getUnoAny()
     return aRetAny;
 }
 
-// help method to create an Uno-Struct per CoreReflection
+// help method to create a Uno-Struct per CoreReflection
 static SbUnoObject* Impl_CreateUnoStruct( const OUString& aClassName )
 {
     // get CoreReflection
@@ -2869,7 +2869,7 @@ SbxObject* SbUnoFactory::CreateObject( const OUString& rClassName )
 
 
 // Provisional interface for the UNO-Connection
-// Deliver a SbxObject, that wrap an Uno-Interface
+// Deliver a SbxObject, that wrap a Uno-Interface
 SbxObjectRef GetSbUnoObject( const OUString& aName, const Any& aUnoObj_ )
 {
     return new SbUnoObject( aName, aUnoObj_ );
@@ -3395,7 +3395,7 @@ SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
                     }
                 }
 
-                // An UNO service?
+                // A UNO service?
                 if( !pRes )
                 {
                     SbUnoService* pUnoService = findUnoService( aNewName );
@@ -3407,7 +3407,7 @@ SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
                     }
                 }
 
-                // An UNO singleton?
+                // A UNO singleton?
                 if( !pRes )
                 {
                     SbUnoSingleton* pUnoSingleton = findUnoSingleton( aNewName );

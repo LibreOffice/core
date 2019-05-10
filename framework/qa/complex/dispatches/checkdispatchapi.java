@@ -285,7 +285,7 @@ public class checkdispatchapi
         }
     }
 
-    /** @short  create an uno implementation directly.
+    /** @short  create a uno implementation directly.
      */
     private Object impl_createUNOComponent(String sName)
     {

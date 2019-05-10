@@ -177,7 +177,7 @@ public class FunctionHelper
      *
      * Note: First mode (creation of a child window) can be reached by two different
      *       ways.
-     *   - pack the required window handle of our java window inside an UNO object
+     *   - pack the required window handle of our java window inside a UNO object
      *     to transport it to the remote office toolkit and get a child office
      *     window.
      *     This is the old way. It's better to use the second one - but to be

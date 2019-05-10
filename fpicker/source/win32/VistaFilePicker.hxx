@@ -56,7 +56,7 @@ typedef ::cppu::WeakComponentImplHelper<
 /** Implements the XFilePicker & friends interface(s)
     for Windows Vista and upcoming versions.
 
-    Note: This will be an UNO wrapper for the real file picker
+    Note: This will be a UNO wrapper for the real file picker
     implementation only. The real implementation is done in class
     VistaFilePickerImpl.
  */

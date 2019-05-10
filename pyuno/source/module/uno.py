@@ -359,7 +359,7 @@ def _uno_import(name, *optargs, **kwargs):
         globals, locals, fromlist = list(optargs)[:3] + [kwargs.get('globals', {}), kwargs.get('locals', {}),
                                                          kwargs.get('fromlist', [])][len(optargs):]
 
-        # from import form only, but skip if an uno lookup has already failed
+        # from import form only, but skip if a uno lookup has already failed
         if not fromlist or hasattr(e, '_uno_import_failed'):
             raise
 

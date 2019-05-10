@@ -62,7 +62,7 @@ module com { module sun { module star { module uno {
 
     @deprecated
     Aggregation will no longer be supported as a high-level concept of UNO.
-    You may still have the option to implement an UNO object consisting of
+    You may still have the option to implement a UNO object consisting of
     several single objects in your specific programming language, though this
     depends on your programming language.
 */

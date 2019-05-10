@@ -134,7 +134,7 @@ public class CheckXTitle
     }
 
 
-    // prepare an uno URL query and dispatch it
+    // prepare a uno URL query and dispatch it
     private void prepareQueryAndDispatch(XDispatchProvider xDisProv, String unoURL)
     {
         XDispatch xDispatcher = null;

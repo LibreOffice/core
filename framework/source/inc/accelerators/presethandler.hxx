@@ -119,7 +119,7 @@ class PresetHandler
         /** @short  does nothing real.
 
             @param  xContext
-                    points to an uno service manager, which is used internally
+                    points to a uno service manager, which is used internally
                     to create own needed uno resources.
          */
         PresetHandler(const css::uno::Reference< css::uno::XComponentContext >& xContext);

@@ -95,7 +95,7 @@ namespace sfx2
 
             @todo
                 This probably can also be obtained from the XModel, by calling getURL
-                or getLocation. If both are empty, then we need an UNO way to obtain
+                or getLocation. If both are empty, then we need a UNO way to obtain
                 the URL of the underlying template document - if any. If we have this,
                 we could replace this method with a newly introduced method
                 getDocumentModel and some internal code.

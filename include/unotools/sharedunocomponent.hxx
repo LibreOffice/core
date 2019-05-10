@@ -36,7 +36,7 @@ namespace utl
 
     //= DisposableComponent
 
-    /** is a class which controls lifetime of an UNO component via ->XComponent::dispose
+    /** is a class which controls lifetime of a UNO component via ->XComponent::dispose
 
         You'll usually never use this class directly, but only as parameter for a
         ->SharedUNOComponent class.
@@ -69,7 +69,7 @@ namespace utl
     //= CloseableComponent
 
     class CloseableComponentImpl;
-    /** is a class which controls lifetime of an UNO component via ->XCloseable::close
+    /** is a class which controls lifetime of a UNO component via ->XCloseable::close
 
         You'll usually never use this class directly, but only as parameter for a
         ->SharedUNOComponent class.
@@ -110,7 +110,7 @@ namespace utl
 
     /** is a helper class for sharing ownership of a UNO component
 
-        If you need to share an UNO component, which normally needs a dedicated owner,
+        If you need to share a UNO component, which normally needs a dedicated owner,
         and is lifetime controlled by an explicit disposal action (not necessarily ->XComponent::dispose,
         but <em>any</em> explicit method call, after which the object is considered
         to be disposed), between different classes, ->SharedUNOComponent is what you need.

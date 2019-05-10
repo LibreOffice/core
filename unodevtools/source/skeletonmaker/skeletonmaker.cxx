@@ -91,7 +91,7 @@ static const char usageText[] =
 "                           forwarding, or '<name>->|.' for composition.\n"
 "                           Using \"_\" means that a default bodies with default\n"
 "                           return values are dumped.\n"
-"    -t <name>              specifies an UNOIDL type name, e.g.\n"
+"    -t <name>              specifies a UNOIDL type name, e.g.\n"
 "                           com.sun.star.text.XText (can be used more than once)\n"
 "    -p <protocol:cmd(s)>   specifies an add-on protocol name and the corresponding\n"
 "                           command names, where the commands are a ',' separated list\n"

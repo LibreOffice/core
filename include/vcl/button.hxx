@@ -91,7 +91,7 @@ public:
     void                SetSmallSymbol();
     virtual bool        set_property(const OString &rKey, const OUString &rValue) override;
 
-    /// Sets the button state according to the FeatureStateEvent emitted by an Uno state change.
+    /// Sets the button state according to the FeatureStateEvent emitted by a Uno state change.
     virtual void        statusChanged(const css::frame::FeatureStateEvent& rEvent);
 
     virtual FactoryFunction GetUITestFactory() const override;

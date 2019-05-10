@@ -56,7 +56,7 @@ Table of Contents
 
 ---------------------------------------------------------------------
 
-The biggest difference is that the new exporter is an UNO component,
+The biggest difference is that the new exporter is a UNO component,
 and it?s based on the MSWord base classes, the vision here is that
 this way much less code can achieve the same set of features,
 reducing the amount of duplicated code.

@@ -96,7 +96,7 @@ public:
         The method GetUnoControl, used to retrieve the XControl whose parent is a given device, only works
         if the SdrUnoObj has already been painted at least once onto this device. However, there are valid
         scenarios where you need certain information on how a control is painted onto a window, without
-        actually painting it. For example, you might be interested in the DeviceInfo of an UNO control.
+        actually painting it. For example, you might be interested in the DeviceInfo of a UNO control.
 
         For those cases, you can contain an XControl which behaves as the control which *would* be used to
         paint onto a window.

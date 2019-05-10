@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module lang {
 
 /** allows to explicitly free resources and break cyclic references.
 
-    <p>Actually the real lifetime of an UNO object is controlled by
+    <p>Actually the real lifetime of a UNO object is controlled by
     references kept on interfaces of this object. But there are two
     distinct meanings in keeping a reference to an interface:
     1st to own the object and 2nd to know the object.

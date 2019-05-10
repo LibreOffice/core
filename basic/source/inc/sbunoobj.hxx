@@ -209,7 +209,7 @@ public:
     virtual SbxObject* CreateObject( const OUString& ) override;
 };
 
-// wrapper for an uno-class
+// wrapper for a uno-class
 class SbUnoClass : public SbxObject
 {
     const css::uno::Reference< css::reflection::XIdlClass >   m_xClass;

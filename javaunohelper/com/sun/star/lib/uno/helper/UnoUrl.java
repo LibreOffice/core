@@ -24,10 +24,10 @@ import java.util.HashMap;
 /**
  * Object representation and parsing of Uno Urls,
  * which allow to locate a named Uno object in a
- * different process. An Uno Url consists of the
+ * different process. A Uno Url consists of the
  * specification of a connection, protocol and
  * rootOid delimited with a ';'.
- * The syntax of an Uno Url is
+ * The syntax of a Uno Url is
  *
  * <code>
  * [uno:]connection-type,parameters;protocol-name,parameters;objectname";

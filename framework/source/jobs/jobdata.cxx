@@ -359,7 +359,7 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
 /**
     @short  return information, if this job is part of the global configuration package
             org.openoffice.Office.Jobs
-    @descr  Because jobs can be executed by the dispatch framework using an uno service name
+    @descr  Because jobs can be executed by the dispatch framework using a uno service name
             directly - an executed job must not have any configuration really. Such jobs
             must provide the right interfaces only! But after finishing jobs can return
             some information (e.g. for updating her configuration ...). We must know

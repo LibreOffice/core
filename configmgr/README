@@ -3,7 +3,7 @@ UNO services to access the configuration database
 == Functional Overview ==
 
 This code parses the settings that are described in the [[officecfg]]
-directory, and provides an UNO API that code can use to set and get
+directory, and provides a UNO API that code can use to set and get
 settings.
 
 == Source Overview ==
