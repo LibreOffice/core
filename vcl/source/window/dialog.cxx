@@ -752,22 +752,24 @@ void Dialog::StateChanged( StateChangedType nType )
 {
     if (nType == StateChangedType::InitShow)
     {
-        if (comphelper::LibreOfficeKit::isActive() && !GetLOKNotifier())
+        DoInitialLayout();
+
+        const bool bKitActive = comphelper::LibreOfficeKit::isActive();
+        if (bKitActive)
         {
-            vcl::ILibreOfficeKitNotifier* pViewShell = mpDialogImpl->m_aInstallLOKNotifierHdl.Call(nullptr);
-            if (pViewShell)
+            if (!GetLOKNotifier())
+                SetLOKNotifier(mpDialogImpl->m_aInstallLOKNotifierHdl.Call(nullptr));
+
+            if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
             {
-                SetLOKNotifier(pViewShell);
                 std::vector<vcl::LOKPayloadItem> aItems;
                 aItems.emplace_back("type", "dialog");
                 aItems.emplace_back("size", GetSizePixel().toString());
                 if (!GetText().isEmpty())
                     aItems.emplace_back("title", GetText().toUtf8());
-                pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
+                pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
             }
         }
-
-        DoInitialLayout();
 
         if ( !HasChildPathFocus() || HasFocus() )
             GrabFocusToFirstControl();
@@ -889,12 +891,7 @@ bool Dialog::ImplStartExecute()
     if (bModal)
     {
         if (bKitActive && !GetLOKNotifier())
-        {
-            if (vcl::ILibreOfficeKitNotifier* pViewShell = mpDialogImpl->m_aInstallLOKNotifierHdl.Call(nullptr))
-            {
-                SetLOKNotifier(pViewShell);
-            }
-        }
+            SetLOKNotifier(mpDialogImpl->m_aInstallLOKNotifierHdl.Call(nullptr));
 
         switch ( Application::GetDialogCancelMode() )
         {
@@ -923,19 +920,6 @@ bool Dialog::ImplStartExecute()
         default: // default cannot happen
         case DialogCancelMode::Fatal:
             std::abort();
-        }
-
-        if (bKitActive)
-        {
-            if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-            {
-                std::vector<vcl::LOKPayloadItem> aItems;
-                aItems.emplace_back("type", "dialog");
-                aItems.emplace_back("size", GetSizePixel().toString());
-                if (!GetText().isEmpty())
-                    aItems.emplace_back("title", GetText().toUtf8());
-                pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
-            }
         }
 
 #ifdef DBG_UTIL
