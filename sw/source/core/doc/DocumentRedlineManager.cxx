@@ -1471,7 +1471,10 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                 bCompress = true;
                             }
                             if( !bCallDelete && !bDec && *pEnd == *pREnd )
-                                pRedl->SetEnd( *pStt, pREnd );
+                            {
+                                m_rDoc.getIDocumentContentOperations().DeleteAndJoin( *pNewRedl );
+                                bCompress = true;
+                            }
                             else if ( bCallDelete || !bDec )
                             {
                                 // delete new redline, except in some cases of fallthrough from previous
