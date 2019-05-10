@@ -16,6 +16,24 @@
       "revId": "ef9f7e6c559d194098eb9c7c26ec18de68b3607d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_c0e6a2e9",
+        "filename": "basegfx/source/polygon/b2dpolypolygontools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-05-10T06:49:25Z",
+      "side": 1,
+      "message": "\u003e we should default to the value that saves some cpu cycles\n\nYes, a 1-pooint polygon is a nonsense, this check is here just to not read past the bounds of the point array. And the reason I return false there is to avoid the special \"hori or vert only\" path. I *think* that is the cheaper.\n\nThe decision is theoretical though, I think the point is to not crash on unusual input. :-)",
+      "parentUuid": "3fa0c359_80f89ac4",
+      "revId": "ef9f7e6c559d194098eb9c7c26ec18de68b3607d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
