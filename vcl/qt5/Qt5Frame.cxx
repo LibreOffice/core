@@ -315,7 +315,7 @@ void Qt5Frame::SetIcon(sal_uInt16 nIcon)
         || !isWindow())
         return;
 
-    const char* appicon;
+    QString appicon;
 
     if (nIcon == SV_ICON_ID_TEXT)
         appicon = "libreoffice-writer";
