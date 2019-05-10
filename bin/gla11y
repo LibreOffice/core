@@ -10,7 +10,7 @@
 # This file incorporates work covered by the following license notice:
 #
 #   Copyright (c) 2018 Martin Pieuchot
-#   Copyright (c) 2018 Samuel Thibault <sthibault@hypra.fr>
+#   Copyright (c) 2018-2019 Samuel Thibault <sthibault@hypra.fr>
 #
 #   Permission to use, copy, modify, and distribute this software for any
 #   purpose with or without fee is hereby granted, provided that the above
@@ -145,6 +145,7 @@ widgets_ignored = widgets_toplevel + [
     'GtkTreeSelection',
 
     'GtkListBoxRow',
+    'GtkTreeViewColumn',
 
     # Useless to label
     'GtkScrollbar',
@@ -216,7 +217,6 @@ widgets_labels = [
 
 # GtkCellView
 # GtkTreeView
-# GtkTreeViewColumn
 # GtkTextView
 # GtkIconView
 
