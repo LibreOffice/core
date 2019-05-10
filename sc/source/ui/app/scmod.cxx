@@ -1624,7 +1624,7 @@ bool ScModule::IsTableLocked()
                 bLocked = pRefDlg->IsTableLocked();
             }
         }
-        else
+        else if (!comphelper::LibreOfficeKit::isActive())
             bLocked = true;     // for other views, see IsModalMode
     }
 
