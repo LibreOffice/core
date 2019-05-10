@@ -2269,6 +2269,7 @@ static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
     }
 
     pDoc->setPart( nPart );
+    assert(nPart == pDoc->getPart() && "setPart not changed");
 }
 
 static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart)
