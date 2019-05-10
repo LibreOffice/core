@@ -74,9 +74,6 @@ public:
     void testInsertSetMember();
     void testReadCommands();
     void testListener();
-#if 0
-    void testThreads();
-#endif
     void testRecursive();
     void testCrossThreads();
 
@@ -103,9 +100,6 @@ public:
     CPPUNIT_TEST(testInsertSetMember);
     CPPUNIT_TEST(testReadCommands);
     CPPUNIT_TEST(testListener);
-#if 0
-    CPPUNIT_TEST(testThreads);
-#endif
     CPPUNIT_TEST(testRecursive);
     CPPUNIT_TEST(testCrossThreads);
     CPPUNIT_TEST_SUITE_END();
@@ -475,185 +469,6 @@ css::uno::Reference< css::uno::XInterface > Test::createUpdateAccess(
         "com.sun.star.configuration.ConfigurationUpdateAccess",
         css::uno::Sequence< css::uno::Any >(&arg, 1));
 }
-
-#if 0
-class TestThread: public osl::Thread {
-public:
-    TestThread(osl::Condition & stop);
-
-    bool getSuccess() const;
-
-protected:
-    virtual bool iteration() = 0;
-
-private:
-    virtual void SAL_CALL run() override;
-
-    osl::Condition & stop_;
-    bool success_;
-};
-
-TestThread::TestThread(
-    osl::Condition & stop):
-    stop_(stop), success_(true)
-{}
-
-bool TestThread::getSuccess() const
-{
-    return success_;
-}
-
-void TestThread::run()
-{
-    try {
-        while (!stop_.check()) {
-            if (!iteration()) {
-                success_ = false;
-            }
-        }
-    } catch (...) {
-        success_ = false;
-    }
-}
-
-class ReaderThread: public TestThread {
-public:
-    ReaderThread(
-        osl::Condition & stop, Test const & test, OUString const & path,
-        OUString const & relative);
-
-private:
-    virtual bool iteration() override;
-
-    Test const & test_;
-    OUString path_;
-    OUString relative_;
-};
-
-ReaderThread::ReaderThread(
-    osl::Condition & stop, Test const & test, OUString const & path,
-    OUString const & relative):
-    TestThread(stop), test_(test), path_(path), relative_(relative)
-{
-    create();
-}
-
-bool ReaderThread::iteration()
-{
-    return test_.getKey(path_, relative_).hasValue();
-}
-
-void normalize(
-    OUString const & path, OUString const & relative,
-    OUString * normalizedPath, OUString * name)
-{
-    sal_Int32 i = relative.lastIndexOf('/');
-    if (i == -1) {
-        *normalizedPath = path;
-        *name = relative;
-    } else {
-        OUStringBuffer buf(path);
-        buf.append('/');
-        buf.append(std::u16string_view(relative).substr(0, i));
-        *normalizedPath = buf.makeStringAndClear();
-        *name = relative.copy(i + 1);
-    }
-}
-
-class WriterThread: public TestThread {
-public:
-    WriterThread(
-        osl::Condition & stop, Test const & test, OUString const & path,
-        OUString const & relative);
-
-private:
-    virtual bool iteration() override;
-
-    Test const & test_;
-    OUString path_;
-    OUString name_;
-    std::size_t index_;
-};
-
-WriterThread::WriterThread(
-    osl::Condition & stop, Test const & test, OUString const & path,
-    OUString const & relative):
-    TestThread(stop), test_(test), index_(0)
-{
-    normalize(path, relative, &path_, &name_);
-    create();
-}
-
-bool WriterThread::iteration() {
-    OUString options[] = {
-        OUString("fish"),
-        OUString("chips"),
-        OUString("kippers"),
-        OUString("bloaters") };
-
-    test_.setKey(path_, name_, css::uno::Any(options[index_]));
-    index_ = (index_ + 1) % SAL_N_ELEMENTS(options);
-    return true;
-}
-
-void Test::testThreads()
-{
-    struct Entry { OUString path; OUString relative; };
-    Entry list[] = {
-        { OUString(
-                  "/org.openoffice.Office.UI.GenericCommands"),
-          OUString(
-                  "UserInterface/Commands/.uno:WebHtml") },
-        { OUString(
-                  "/org.openoffice.Office.UI.GenericCommands"),
-          OUString(
-                  "UserInterface/Commands/.uno:NewPresentation") },
-        { OUString(
-                  "/org.openoffice.Office.UI.GenericCommands"),
-          OUString(
-                  "UserInterface/Commands/.uno:RecentFileList") },
-        { OUString("/org.openoffice.System"),
-          OUString("L10N/Locale") }
-    };
-    std::size_t const numReaders = SAL_N_ELEMENTS(list);
-    std::size_t const numWriters = numReaders - 2;
-    ReaderThread * readers[numReaders];
-    WriterThread * writers[numWriters];
-    osl::Condition stop;
-    for (std::size_t i = 0; i < numReaders; ++i) {
-        CPPUNIT_ASSERT(getKey(list[i].path, list[i].relative).hasValue());
-        readers[i] = new ReaderThread(
-            stop, *this, list[i].path, list[i].relative);
-    }
-    for (std::size_t i = 0; i < numWriters; ++i) {
-        writers[i] = new WriterThread(
-            stop, *this, list[i].path, list[i].relative);
-    }
-    for (int i = 0; i < 5; ++i) {
-        for (std::size_t j = 0; j < numReaders; ++j) {
-            OUString path;
-            OUString name;
-            normalize(list[j].path, list[j].relative, &path, &name);
-            resetKey(path, name);
-            osl::Thread::yield();
-        }
-    }
-    stop.set();
-    bool success = true;
-    for (std::size_t i = 0; i < numReaders; ++i) {
-        readers[i]->join();
-        CPPUNIT_ASSERT(readers[i]->getSuccess());
-        delete readers[i];
-    }
-    for (std::size_t i = 0; i < numWriters; ++i) {
-        writers[i]->join();
-        CPPUNIT_ASSERT(writers[i]->getSuccess());
-        delete writers[i];
-    }
-
-    CPPUNIT_ASSERT(success);
-}
-#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
