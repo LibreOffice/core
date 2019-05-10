@@ -18,7 +18,7 @@ module com {  module sun {  module star {  module awt {
 
     @since LibreOffice 4.1
  */
-service PrinterServer: com::sun::star::awt::XPrinterServer;
+service PrinterServer: com::sun::star::awt::XPrinterServer2;
 
 }; }; }; };
 
