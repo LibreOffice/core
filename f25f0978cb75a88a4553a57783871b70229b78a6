@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_60ff8eaa",
+        "filename": "vcl/source/outdev/font.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2019-05-10T03:28:25Z",
+      "side": 0,
+      "message": "This is strange. I suspect this to be a bug.\nWhy don\u0027t we pass bNewFontLists?",
+      "range": {
+        "startLine": 528,
+        "startChar": 39,
+        "endLine": 528,
+        "endChar": 43
+      },
+      "revId": "f25f0978cb75a88a4553a57783871b70229b78a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_400292b6",
+        "filename": "vcl/source/window/window3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2019-05-10T03:28:25Z",
+      "side": 1,
+      "message": "I suspect this to be a bug. Why don\u0027t we pass bNewFontLists?",
+      "range": {
+        "startLine": 66,
+        "startChar": 34,
+        "endLine": 66,
+        "endChar": 38
+      },
+      "revId": "3d77e48c27013642da540e9bd254d74c2216283f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
