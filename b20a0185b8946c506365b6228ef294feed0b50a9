@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_20f50658",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2019-05-10T07:51:13Z",
+      "side": 1,
+      "message": "Please use tdf#100084 form here",
+      "range": {
+        "startLine": 388,
+        "startChar": 94,
+        "endLine": 388,
+        "endChar": 103
+      },
+      "revId": "b20a0185b8946c506365b6228ef294feed0b50a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
