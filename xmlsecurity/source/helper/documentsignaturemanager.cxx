@@ -153,7 +153,7 @@ bool DocumentSignatureManager::readManifest()
     {
         //Get the manifest.xml
         uno::Reference<embed::XStorage> xSubStore(
-            mxStore->openStorageElement("META-INF", embed::ElementModes::READ), UNO_QUERY_THROW);
+            mxStore->openStorageElement("META-INF", embed::ElementModes::READ), UNO_SET_THROW);
 
         uno::Reference<io::XInputStream> xStream(
             xSubStore->openStreamElement("manifest.xml", css::embed::ElementModes::READ),

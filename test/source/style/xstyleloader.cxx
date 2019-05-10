@@ -30,7 +30,7 @@ void XStyleLoader::testLoadStylesFromURL()
 {
     uno::Reference<style::XStyleLoader2> xStyleLoader(init(), uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(getTargetDoc(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(getTargetDoc(), uno::UNO_SET_THROW);
     const OUString aFileURL = getTestURL();
 
     uno::Sequence<beans::PropertyValue> aOptions = xStyleLoader->getStyleLoaderOptions();
@@ -44,8 +44,8 @@ void XStyleLoader::testLoadStylesFromDocument()
 {
     uno::Reference<style::XStyleLoader2> xStyleLoader(init(), uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(getTargetDoc(), uno::UNO_QUERY_THROW);
-    uno::Reference<lang::XComponent> xSrcComponent(getSourceComponent(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(getTargetDoc(), uno::UNO_SET_THROW);
+    uno::Reference<lang::XComponent> xSrcComponent(getSourceComponent(), UNO_SET_THROW);
 
     uno::Sequence<beans::PropertyValue> aOptions = xStyleLoader->getStyleLoaderOptions();
     xStyleLoader->loadStylesFromDocument(xSrcComponent, aOptions);
@@ -59,7 +59,7 @@ void XStyleLoader::checkStyleProperties(
 {
     // check if targetDocument has myStyle
     uno::Reference<container::XNameAccess> xFamilies(xFamilySupplier->getStyleFamilies(),
-                                                     UNO_QUERY_THROW);
+                                                     UNO_SET_THROW);
     uno::Reference<container::XNameContainer> xCellStyles(xFamilies->getByName("CellStyles"),
                                                           UNO_QUERY_THROW);
 

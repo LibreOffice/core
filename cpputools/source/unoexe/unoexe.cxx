@@ -153,7 +153,7 @@ static void createInstance(
         throw RuntimeException( "cannot get service instance \"" + rServiceName + "\"!" );
     }
 
-    rxOut.set( x, UNO_QUERY_THROW );
+    rxOut.set( x.get(), UNO_QUERY_THROW );
 }
 
 /// @throws Exception

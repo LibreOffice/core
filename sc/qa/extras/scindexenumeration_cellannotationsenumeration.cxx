@@ -61,16 +61,16 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_CellAnnotationsEnumeration::i
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet0(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
 
     uno::Reference<sheet::XSheetAnnotationsSupplier> xSAS(xSheet0, uno::UNO_QUERY_THROW);
-    uno::Reference<sheet::XSheetAnnotations> xSA(xSAS->getAnnotations(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetAnnotations> xSA(xSAS->getAnnotations(), uno::UNO_SET_THROW);
     xSA->insertNew(table::CellAddress(0, 5, 5), "Note");
 
     uno::Reference<container::XEnumerationAccess> xEA(xSA, uno::UNO_QUERY_THROW);
-    uno::Reference<container::XEnumeration> xE(xEA->createEnumeration(), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumeration> xE(xEA->createEnumeration(), uno::UNO_SET_THROW);
 
     return xEA->createEnumeration();
 }

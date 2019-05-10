@@ -25,7 +25,7 @@ void XHeaderFooterContent::testGetCenterText()
 {
     uno::Reference<sheet::XHeaderFooterContent> xHFC(init(), UNO_QUERY_THROW);
 
-    uno::Reference<text::XText> xText(xHFC->getCenterText(), UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText(xHFC->getCenterText(), UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get center text", OUString("CENTER"),
                                  xText->getString());
 }
@@ -34,14 +34,14 @@ void XHeaderFooterContent::testGetLeftText()
 {
     uno::Reference<sheet::XHeaderFooterContent> xHFC(init(), UNO_QUERY_THROW);
 
-    uno::Reference<text::XText> xText(xHFC->getLeftText(), UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText(xHFC->getLeftText(), UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get left text", OUString("LEFT"), xText->getString());
 }
 void XHeaderFooterContent::testGetRightText()
 {
     uno::Reference<sheet::XHeaderFooterContent> xHFC(init(), UNO_QUERY_THROW);
 
-    uno::Reference<text::XText> xText(xHFC->getRightText(), UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText(xHFC->getRightText(), UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get right text", OUString("RIGHT"), xText->getString());
 }
 }

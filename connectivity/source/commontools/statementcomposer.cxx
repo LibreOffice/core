@@ -138,7 +138,7 @@ namespace dbtools
                     {
                         // ask the connection for the query
                         Reference< XQueriesSupplier > xSupplyQueries( _rData.xConnection, UNO_QUERY_THROW );
-                        Reference< XNameAccess >      xQueries( xSupplyQueries->getQueries(), UNO_QUERY_THROW );
+                        Reference< XNameAccess >      xQueries( xSupplyQueries->getQueries(), css::uno::UNO_SET_THROW );
 
                         if ( !xQueries->hasByName( _rData.sCommand ) )
                             break;

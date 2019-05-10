@@ -582,7 +582,7 @@ void SAL_CALL FSStorage::copyStorageElementLastCommitTo(
         throw lang::DisposedException();
 
     uno::Reference< embed::XStorage > xSourceStor( openStorageElement( aStorName, embed::ElementModes::READ ),
-                                                    uno::UNO_QUERY_THROW );
+                                                    uno::UNO_SET_THROW );
     xSourceStor->copyToStorage( xTargetStorage );
 }
 
@@ -721,7 +721,7 @@ void SAL_CALL FSStorage::copyElementTo( const OUString& aElementName,
             ::ucbhelper::Content aSourceContent( aOwnURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext() );
             uno::Reference< embed::XStorage > xDestSubStor(
                                     xDest->openStorageElement( aNewName, embed::ElementModes::READWRITE ),
-                                    uno::UNO_QUERY_THROW );
+                                    uno::UNO_SET_THROW );
 
             CopyContentToStorage_Impl( aSourceContent, xDestSubStor );
         }

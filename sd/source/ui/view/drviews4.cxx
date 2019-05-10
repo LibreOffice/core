@@ -85,7 +85,7 @@ void DrawViewShell::DeleteActualPage()
     try
     {
         Reference<XDrawPagesSupplier> xDrawPagesSupplier( GetDoc()->getUnoModel(), UNO_QUERY_THROW );
-        Reference<XDrawPages> xPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
+        Reference<XDrawPages> xPages( xDrawPagesSupplier->getDrawPages(), UNO_SET_THROW );
         Reference< XDrawPage > xPage( xPages->getByIndex( nPage ), UNO_QUERY_THROW );
         xPages->remove( xPage );
     }

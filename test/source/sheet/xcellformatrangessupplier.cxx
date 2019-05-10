@@ -24,7 +24,7 @@ void XCellFormatRangesSupplier::testGetCellFormatRanges()
 {
     uno::Reference<sheet::XCellFormatRangesSupplier> xCFRS(init(), UNO_QUERY_THROW);
 
-    uno::Reference<container::XIndexAccess> xIA(xCFRS->getCellFormatRanges(), UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIA(xCFRS->getCellFormatRanges(), UNO_SET_THROW);
 
     const sal_Int32 nCount = xIA->getCount();
     CPPUNIT_ASSERT_MESSAGE("No items found", sal_Int32(0) != nCount);

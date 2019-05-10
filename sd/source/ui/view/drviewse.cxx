@@ -1523,7 +1523,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
 
                 SdrUnoObj* pUnoCtrl = static_cast< SdrUnoObj* >( pMarkedObj );
 
-                Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), UNO_QUERY_THROW );
+                Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), UNO_SET_THROW );
                 Reference< beans::XPropertySet > xPropSet( xControlModel, UNO_QUERY_THROW );
 
                 xPropSet->setPropertyValue("Label" , Any( rText ) );
@@ -1567,7 +1567,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
                 OBJ_FM_BUTTON)); //,
                 //mpDrawView->GetSdrPageView()->GetPage()));
 
-        Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), uno::UNO_QUERY_THROW );
+        Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), uno::UNO_SET_THROW );
         Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY_THROW );
 
         xPropSet->setPropertyValue( "Label" , Any( rText ) );

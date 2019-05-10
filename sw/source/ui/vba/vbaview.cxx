@@ -57,7 +57,7 @@ SwVbaView::SwVbaView( const uno::Reference< ooo::vba::XHelperInterface >& rParen
     mxViewCursor = xTextViewCursorSupp->getViewCursor();
 
     uno::Reference< view::XViewSettingsSupplier > xViewSettingSupp( xController, uno::UNO_QUERY_THROW );
-    mxViewSettings.set( xViewSettingSupp->getViewSettings(), uno::UNO_QUERY_THROW );
+    mxViewSettings.set( xViewSettingSupp->getViewSettings(), uno::UNO_SET_THROW );
 }
 
 SwVbaView::~SwVbaView()
@@ -141,7 +141,7 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview )
         case word::WdSeekView::wdSeekFootnotes:
         {
             uno::Reference< text::XFootnotesSupplier > xFootnotesSupp( mxModel, uno::UNO_QUERY_THROW );
-            uno::Reference< container::XIndexAccess > xFootnotes( xFootnotesSupp->getFootnotes(), uno::UNO_QUERY_THROW );
+            uno::Reference< container::XIndexAccess > xFootnotes( xFootnotesSupp->getFootnotes(), uno::UNO_SET_THROW );
             if( xFootnotes->getCount() > 0 )
             {
                 uno::Reference< text::XText > xText( xFootnotes->getByIndex(0), uno::UNO_QUERY_THROW );
@@ -156,7 +156,7 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview )
         case word::WdSeekView::wdSeekEndnotes:
         {
             uno::Reference< text::XEndnotesSupplier > xEndnotesSupp( mxModel, uno::UNO_QUERY_THROW );
-            uno::Reference< container::XIndexAccess > xEndnotes( xEndnotesSupp->getEndnotes(), uno::UNO_QUERY_THROW );
+            uno::Reference< container::XIndexAccess > xEndnotes( xEndnotesSupp->getEndnotes(), uno::UNO_SET_THROW );
             if( xEndnotes->getCount() > 0 )
             {
                 uno::Reference< text::XText > xText( xEndnotes->getByIndex(0), uno::UNO_QUERY_THROW );

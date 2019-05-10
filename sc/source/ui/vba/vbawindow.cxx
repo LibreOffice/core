@@ -715,7 +715,7 @@ void ScVbaWindow::SplitAtDefinedPosition( sal_Int32 nColumns, sal_Int32 nRows )
         xViewSplitable->splitAtPosition(0,0);
 
         uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
-        uno::Reference< excel::XWorksheet > xSheet( xApplication->getActiveSheet(), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XWorksheet > xSheet( xApplication->getActiveSheet(), uno::UNO_SET_THROW );
         xSheet->Cells(uno::makeAny(cellRow), uno::makeAny(cellColumn))->Select();
 
         //pViewShell->FreezeSplitters( FALSE );

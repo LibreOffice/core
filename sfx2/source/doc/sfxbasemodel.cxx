@@ -799,7 +799,7 @@ void
 IMPL_SfxBaseModel_DataContainer::impl_setDocumentProperties(
         const Reference< document::XDocumentProperties >& rxNewDocProps)
 {
-    m_xDocumentProperties.set(rxNewDocProps, UNO_QUERY_THROW);
+    m_xDocumentProperties.set(rxNewDocProps, UNO_SET_THROW);
     if (m_pObjectShell.is())
     {
         Reference<util::XModifyBroadcaster> const xMB(

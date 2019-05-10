@@ -80,7 +80,7 @@ uno::Reference<uno::XInterface> ScUniqueCellFormatsEnumeration::init()
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet0(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
 
@@ -115,7 +115,7 @@ void ScUniqueCellFormatsEnumeration::changeColor(const uno::Reference<sheet::XSp
                                                  const OUString& sRangeName, const RGBColor& rgb)
 {
     uno::Reference<table::XCellRange> xCellRange(xSheet->getCellRangeByName(sRangeName),
-                                                 uno::UNO_QUERY_THROW);
+                                                 uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xCellRange, uno::UNO_QUERY_THROW);
 
     sal_Int32 nColor = 16777216 + rgb.hashCode();

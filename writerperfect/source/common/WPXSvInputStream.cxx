@@ -778,7 +778,7 @@ bool WPXSvInputStreamImpl::isZip()
             aArgs[0] <<= mxStream;
 
             const Reference<XComponentContext> xContext(comphelper::getProcessComponentContext(),
-                                                        UNO_QUERY_THROW);
+                                                        UNO_SET_THROW);
             const Reference<packages::zip::XZipFileAccess2> xZip(
                 xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                     "com.sun.star.packages.zip.ZipFileAccess", aArgs, xContext),

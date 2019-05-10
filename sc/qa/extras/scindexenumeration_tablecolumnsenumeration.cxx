@@ -59,14 +59,14 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_TableColumnsEnumeration::init
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
     uno::Reference<container::XNameAccess> xNA(xSheets, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet0(xNA->getByName(xNA->getElementNames()[0]),
                                                 uno::UNO_QUERY_THROW);
 
     uno::Reference<table::XColumnRowRange> xColumnRowRange(xSheet0, uno::UNO_QUERY_THROW);
     uno::Reference<table::XTableColumns> xTableColumns(xColumnRowRange->getColumns(),
-                                                       uno::UNO_QUERY_THROW);
+                                                       uno::UNO_SET_THROW);
     uno::Reference<container::XEnumerationAccess> xEA(xTableColumns, uno::UNO_QUERY_THROW);
 
     return xEA->createEnumeration();

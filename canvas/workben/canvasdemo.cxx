@@ -542,9 +542,9 @@ void TestWindow::Paint(vcl::RenderContext&, const tools::Rectangle&)
     try
     {
         uno::Reference< rendering::XCanvas > xVDevCanvas( GetCanvas(),
-                                                          uno::UNO_QUERY_THROW );
+                                                          uno::UNO_SET_THROW );
         uno::Reference< rendering::XGraphicDevice > xVDevDevice( xVDevCanvas->getDevice(),
-                                                                 uno::UNO_QUERY_THROW );
+                                                                 uno::UNO_SET_THROW );
         DemoRenderer aVDevRenderer( xVDevDevice, xVDevCanvas, GetSizePixel());
         xVDevCanvas->clear();
         aVDevRenderer.drawGrid();
@@ -559,7 +559,7 @@ void TestWindow::Paint(vcl::RenderContext&, const tools::Rectangle&)
         uno::Reference< rendering::XCanvas > xCanvas( GetSpriteCanvas(),
                                                           uno::UNO_QUERY_THROW );
         uno::Reference< rendering::XGraphicDevice > xDevice( xCanvas->getDevice(),
-                                                             uno::UNO_QUERY_THROW );
+                                                             uno::UNO_SET_THROW );
 
         DemoRenderer aRenderer( xDevice, xCanvas, GetSizePixel() );
         xCanvas->clear();

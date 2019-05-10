@@ -44,7 +44,7 @@ UndoCommandDispatch::UndoCommandDispatch(
         m_xModel( xModel )
 {
     uno::Reference< document::XUndoManagerSupplier > xSuppUndo( m_xModel, uno::UNO_QUERY_THROW );
-    m_xUndoManager.set( xSuppUndo->getUndoManager(), uno::UNO_QUERY_THROW );
+    m_xUndoManager.set( xSuppUndo->getUndoManager(), uno::UNO_SET_THROW );
 }
 
 UndoCommandDispatch::~UndoCommandDispatch()

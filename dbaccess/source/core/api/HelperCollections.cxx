@@ -57,7 +57,7 @@ namespace dbaccess
         OUString sColumName;
         for (auto const& column : _rColumns->get())
         {
-            Reference< XPropertySet > xColumn(column, UNO_QUERY_THROW);
+            Reference< XPropertySet > xColumn(column, UNO_SET_THROW);
             xColumn->getPropertyValue( PROPERTY_NAME ) >>= sColumName;
             aNames.push_back( sColumName );
         }

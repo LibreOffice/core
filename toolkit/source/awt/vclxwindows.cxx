@@ -2143,7 +2143,7 @@ void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent )
     pListBox->Clear();
 
     uno::Reference< beans::XPropertySet > xPropSet( i_rEvent.Source, uno::UNO_QUERY_THROW );
-    uno::Reference< beans::XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), uno::UNO_SET_THROW );
     uno::Reference< resource::XStringResourceResolver > xStringResourceResolver;
     if ( xPSI->hasPropertyByName("ResourceResolver") )
     {
@@ -4602,7 +4602,7 @@ void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent )
     pComboBox->Clear();
 
     uno::Reference< beans::XPropertySet > xPropSet( i_rEvent.Source, uno::UNO_QUERY_THROW );
-    uno::Reference< beans::XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), uno::UNO_SET_THROW );
     // bool localize = xPSI->hasPropertyByName("ResourceResolver");
     uno::Reference< resource::XStringResourceResolver > xStringResourceResolver;
     if ( xPSI->hasPropertyByName("ResourceResolver") )

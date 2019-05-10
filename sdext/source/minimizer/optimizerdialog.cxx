@@ -138,7 +138,7 @@ void OptimizerDialog::InsertRoadmapItem( const sal_Int32 nIndex, const OUString&
     {
         Reference< XSingleServiceFactory > xSFRoadmap( mxRoadmapControlModel, UNO_QUERY_THROW );
         Reference< XIndexContainer > aIndexContainerRoadmap( mxRoadmapControlModel, UNO_QUERY_THROW );
-        Reference< XInterface > xRoadmapItem( xSFRoadmap->createInstance(), UNO_QUERY_THROW );
+        Reference< XInterface > xRoadmapItem( xSFRoadmap->createInstance(), UNO_SET_THROW );
         Reference< XPropertySet > xPropertySet( xRoadmapItem, UNO_QUERY_THROW );
         xPropertySet->setPropertyValue( "Label", Any( rLabel ) );
         xPropertySet->setPropertyValue( "Enabled", Any( true ) );

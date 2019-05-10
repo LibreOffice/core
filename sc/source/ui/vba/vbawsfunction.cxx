@@ -173,7 +173,7 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
 
     if( !aRet.hasValue() )
     {
-        uno::Reference< lang::XMultiComponentFactory > xSMgr( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
+        uno::Reference< lang::XMultiComponentFactory > xSMgr( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         uno::Reference< sheet::XFunctionAccess > xFunctionAccess( xSMgr->createInstanceWithContext(
             "com.sun.star.sheet.FunctionAccess", mxContext ),
             uno::UNO_QUERY_THROW );

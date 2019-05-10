@@ -258,7 +258,7 @@ void OTableTreeListBox::UpdateTableList(
     aTables.resize(_rTables.getLength());
     try
     {
-        Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData(), UNO_QUERY_THROW );
+        Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData(), UNO_SET_THROW );
         std::transform( _rTables.begin(), _rTables.end(),
             aTables.begin(), OViewSetter( _rViews, xMeta->supportsMixedCaseQuotedIdentifiers() ) );
     }
@@ -279,7 +279,7 @@ void TableTreeListBox::UpdateTableList(
     aTables.resize(_rTables.getLength());
     try
     {
-        Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData(), UNO_QUERY_THROW );
+        Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData(), UNO_SET_THROW );
         std::transform( _rTables.begin(), _rTables.end(),
             aTables.begin(), OViewSetter( _rViews, xMeta->supportsMixedCaseQuotedIdentifiers() ) );
     }
@@ -322,7 +322,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
             return;
 
         // get the table/view names
-        Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData(), UNO_QUERY_THROW );
+        Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData(), UNO_SET_THROW );
         for (auto const& table : _rTables)
         {
             // add the entry
@@ -406,7 +406,7 @@ void TableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConne
             return;
 
         // get the table/view names
-        Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData(), UNO_QUERY_THROW );
+        Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData(), UNO_SET_THROW );
         for (auto const& table : _rTables)
         {
             // add the entry

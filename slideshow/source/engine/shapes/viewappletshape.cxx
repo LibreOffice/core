@@ -75,7 +75,7 @@ namespace slideshow
 
             uno::Reference<lang::XMultiComponentFactory> xFactory(
                 mxComponentContext->getServiceManager(),
-                uno::UNO_QUERY_THROW );
+                uno::UNO_SET_THROW );
 
             mxViewer.set( xFactory->createInstanceWithContext( rServiceName,
                                                                mxComponentContext),
@@ -161,7 +161,7 @@ namespace slideshow
                     mxFrame->initialize( xOwnWindow );
 
                     uno::Reference < frame::XSynchronousFrameLoader > xLoader( mxViewer,
-                                                                               uno::UNO_QUERY_THROW );
+                                                                               uno::UNO_SET_THROW );
                     xLoader->load( uno::Sequence < beans::PropertyValue >(),
                                    uno::Reference<frame::XFrame>(mxFrame, uno::UNO_QUERY_THROW) );
 

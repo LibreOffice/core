@@ -482,11 +482,11 @@ namespace basctl
         Reference< XNameContainer > xLibrary;
         try
         {
-            Reference< XLibraryContainer > xLibContainer( getLibraryContainer( _eType ), UNO_QUERY_THROW );
+            Reference< XLibraryContainer > xLibContainer( getLibraryContainer( _eType ), UNO_SET_THROW );
             if ( xLibContainer->hasByName( _rLibName ) )
                 xLibrary.set( xLibContainer->getByName( _rLibName ), UNO_QUERY_THROW );
             else
-                xLibrary.set( xLibContainer->createLibrary( _rLibName ), UNO_QUERY_THROW );
+                xLibrary.set( xLibContainer->createLibrary( _rLibName ), UNO_SET_THROW );
 
             if ( !xLibContainer->isLibraryLoaded( _rLibName ) )
                 xLibContainer->loadLibrary( _rLibName );
@@ -569,7 +569,7 @@ namespace basctl
         _out_rModuleOrDialog.clear();
         try
         {
-            Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, true ), UNO_QUERY_THROW );
+            Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, true ), UNO_SET_THROW );
             if ( xLib->hasByName( _rObjectName ) )
             {
                 _out_rModuleOrDialog = xLib->getByName( _rObjectName );
@@ -593,7 +593,7 @@ namespace basctl
 
         try
         {
-            Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, true ), UNO_QUERY_THROW );
+            Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, true ), UNO_SET_THROW );
 
             // get element
             Any aElement( xLib->getByName( _rOldName ) );
@@ -622,7 +622,7 @@ namespace basctl
                 Reference< XInputStreamProvider > xISP( aElement, UNO_QUERY_THROW );
                 if ( !_rxExistingDialogModel.is() )
                 {
-                    Reference< XInputStream > xInput( xISP->createInputStream(), UNO_QUERY_THROW );
+                    Reference< XInputStream > xInput( xISP->createInputStream(), UNO_SET_THROW );
                     ::xmlscript::importDialogModel( xInput, xDialogModel, aContext, isDocument() ? getDocument() : Reference< XModel >() );
                 }
 
@@ -696,7 +696,7 @@ namespace basctl
     {
         try
         {
-            Reference< XNameContainer > xLib( getOrCreateLibrary( _eType, _rLibName ), UNO_QUERY_THROW );
+            Reference< XNameContainer > xLib( getOrCreateLibrary( _eType, _rLibName ), UNO_SET_THROW );
             if ( xLib->hasByName( _rObjectName ) )
                 return false;
 
@@ -715,7 +715,7 @@ namespace basctl
     {
         try
         {
-            Reference< XNameContainer > xLib( getOrCreateLibrary( E_SCRIPTS, _rLibName ), UNO_QUERY_THROW );
+            Reference< XNameContainer > xLib( getOrCreateLibrary( E_SCRIPTS, _rLibName ), UNO_SET_THROW );
             if ( !xLib->hasByName( _rModName ) )
                 return false;
             xLib->replaceByName( _rModName, Any( _rModuleCode ) );
@@ -733,7 +733,7 @@ namespace basctl
     {
         try
         {
-            Reference< XNameContainer > xLib( getLibrary( E_DIALOGS, _rLibName, true ), UNO_QUERY_THROW );
+            Reference< XNameContainer > xLib( getLibrary( E_DIALOGS, _rLibName, true ), UNO_SET_THROW );
 
             // create dialog
             _out_rDialogProvider.clear();
@@ -927,7 +927,7 @@ namespace basctl
             Reference< XUriReferenceFactory > xUriFac = UriReferenceFactory::create(xContext);
 
             OUString aLinkURL( xLibContainer->getLibraryLinkURL( _rLibName ) );
-            Reference< XUriReference > xUriRef( xUriFac->parse( aLinkURL ), UNO_QUERY_THROW );
+            Reference< XUriReference > xUriRef( xUriFac->parse( aLinkURL ), UNO_SET_THROW );
 
             OUString aScheme = xUriRef->getScheme();
             if ( aScheme.equalsIgnoreAsciiCase("file") )

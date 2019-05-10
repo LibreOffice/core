@@ -52,7 +52,7 @@ void XActivationBroadcaster::testAddRemoveActivationEventListener()
         uno::Reference<sheet::XActivationEventListener>(xListener.get()));
 
     uno::Reference<sheet::XSpreadsheetView> xView(xAB, UNO_QUERY_THROW);
-    uno::Reference<sheet::XSpreadsheet> xSheet1(xView->getActiveSheet(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet1(xView->getActiveSheet(), UNO_SET_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet2(getXSpreadsheet(1), UNO_QUERY_THROW);
 
     xView->setActiveSheet(xSheet2);

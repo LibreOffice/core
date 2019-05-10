@@ -122,13 +122,13 @@ ScTableColumnObj::ScTableColumnObj()
 uno::Reference<uno::XInterface> ScTableColumnObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
 
     uno::Reference<sheet::XSpreadsheet> xSheet0(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
     setSpreadsheet(xSheet0);
     uno::Reference<table::XColumnRowRange> xCRR(xSheet0, uno::UNO_QUERY_THROW);
-    uno::Reference<table::XTableColumns> xTC(xCRR->getColumns(), uno::UNO_QUERY_THROW);
+    uno::Reference<table::XTableColumns> xTC(xCRR->getColumns(), uno::UNO_SET_THROW);
 
     uno::Reference<container::XIndexAccess> xIA_TC(xTC, uno::UNO_QUERY_THROW);
     uno::Reference<uno::XInterface> xReturn(xIA_TC->getByIndex(10), uno::UNO_QUERY_THROW);

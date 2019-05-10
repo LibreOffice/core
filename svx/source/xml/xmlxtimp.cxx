@@ -324,7 +324,7 @@ static void openStorageStream( xml::sax::InputSource *pParserInput,
                                rtl::Reference<SvXMLGraphicHelper>& rxGraphicHelper,
                                const uno::Reference < embed::XStorage >& xStorage )
 {
-    uno::Reference < io::XStream > xIStm( xStorage->openStreamElement( "Content.xml", embed::ElementModes::READ ), uno::UNO_QUERY_THROW );
+    uno::Reference < io::XStream > xIStm( xStorage->openStreamElement( "Content.xml", embed::ElementModes::READ ), uno::UNO_SET_THROW );
     pParserInput->aInputStream = xIStm->getInputStream();
     rxGraphicHelper = SvXMLGraphicHelper::Create( xStorage, SvXMLGraphicHelperMode::Read );
 }
@@ -356,7 +356,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
 
             if( aMedium.IsStorage() )
             {
-                uno::Reference < embed::XStorage > xMediumStorage( aMedium.GetStorage( false ), uno::UNO_QUERY_THROW );
+                uno::Reference < embed::XStorage > xMediumStorage( aMedium.GetStorage( false ), uno::UNO_SET_THROW );
                 openStorageStream( &aParserInput, xGraphicHelper, xMediumStorage );
             }
             else

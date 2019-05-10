@@ -1028,7 +1028,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
         uno::Reference < css::ui::XUIConfigurationManager > xDocCfgMgr;
 
         uno::Reference< uno::XComponentContext > xContext(
-            ::comphelper::getProcessComponentContext(), uno::UNO_QUERY_THROW );
+            ::comphelper::getProcessComponentContext(), uno::UNO_SET_THROW );
 
         m_xFrame = GetFrame();
         OUString aModuleId = GetFrameWithDefaultAndIdentify( m_xFrame );

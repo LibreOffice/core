@@ -92,12 +92,12 @@ PresenterSlideShowView::PresenterSlideShowView (
 
 void PresenterSlideShowView::LateInit()
 {
-    mxSlideShow.set( mxSlideShowController->getSlideShow(), UNO_QUERY_THROW);
+    mxSlideShow.set( mxSlideShowController->getSlideShow(), UNO_SET_THROW);
     Reference<lang::XComponent> xSlideShowComponent (mxSlideShow, UNO_QUERY);
     xSlideShowComponent->addEventListener(static_cast<awt::XWindowListener*>(this));
 
     Reference<lang::XMultiComponentFactory> xFactory (
-        mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
+        mxComponentContext->getServiceManager(), UNO_SET_THROW);
     mxPresenterHelper.set (xFactory->createInstanceWithContext(
                    "com.sun.star.comp.Draw.PresenterHelper",
                    mxComponentContext),

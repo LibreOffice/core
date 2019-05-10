@@ -2540,7 +2540,7 @@ void SdXMLExport::collectAnnotationAutoStyles( const Reference<XDrawPage>& xDraw
         {
             while( xAnnotationEnumeration->hasMoreElements() )
             {
-                Reference< XAnnotation > xAnnotation( xAnnotationEnumeration->nextElement(), UNO_QUERY_THROW );
+                Reference< XAnnotation > xAnnotation( xAnnotationEnumeration->nextElement(), UNO_SET_THROW );
                 Reference< XText > xText( xAnnotation->getTextRange() );
                 if(xText.is() && !xText->getString().isEmpty())
                     GetTextParagraphExport()->collectTextAutoStyles( xText );
@@ -2568,7 +2568,7 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
             OUStringBuffer sStringBuffer;
             do
             {
-                Reference< XAnnotation > xAnnotation( xAnnotationEnumeration->nextElement(), UNO_QUERY_THROW );
+                Reference< XAnnotation > xAnnotation( xAnnotationEnumeration->nextElement(), UNO_SET_THROW );
 
                 RealPoint2D aPosition( xAnnotation->getPosition() );
 

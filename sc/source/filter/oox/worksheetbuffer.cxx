@@ -184,7 +184,7 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
     //FIXME: Rewrite this block using ScDocument[Import] instead of UNO
     try
     {
-        Reference< XSpreadsheets > xSheets( getDocument()->getSheets(), UNO_QUERY_THROW );
+        Reference< XSpreadsheets > xSheets( getDocument()->getSheets(), UNO_SET_THROW );
         Reference< XIndexAccess > xSheetsIA( xSheets, UNO_QUERY_THROW );
         sal_Int16 nCalcSheet = -1;
         OUString aSheetName = rPreferredName.isEmpty() ? "Sheet" : rPreferredName;

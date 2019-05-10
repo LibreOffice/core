@@ -99,13 +99,13 @@ uno::Reference<uno::XInterface> ScStyleFamilyObj::init()
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
 
     uno::Reference<style::XStyleFamiliesSupplier> xSFS(xDoc, uno::UNO_QUERY_THROW);
-    uno::Reference<container::XNameAccess> xNA(xSFS->getStyleFamilies(), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNameAccess> xNA(xSFS->getStyleFamilies(), uno::UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xNA, uno::UNO_QUERY_THROW);
     uno::Reference<container::XNameAccess> xNA_SF(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(m_xComponent, uno::UNO_QUERY_THROW);
     uno::Reference<uno::XInterface> xCS(xMSF->createInstance("com.sun.star.style.CellStyle"),
-                                        uno::UNO_QUERY_THROW);
+                                        uno::UNO_SET_THROW);
     // XNameContainer
     setElement(uno::makeAny(xMSF->createInstance("com.sun.star.style.CellStyle")));
     // XNameReplace

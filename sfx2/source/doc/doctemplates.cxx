@@ -2743,7 +2743,7 @@ void SfxURLRelocator_Impl::implExpandURL( OUString& io_url )
     {
         if ( !mxMacroExpander.is() )
         {
-            mxMacroExpander.set( theMacroExpander::get(mxContext), UNO_QUERY_THROW );
+            mxMacroExpander.set( theMacroExpander::get(mxContext), UNO_SET_THROW );
         }
         io_url = mxMacroExpander->expandMacros( io_url );
     }

@@ -68,14 +68,14 @@ uno::Reference<uno::XInterface> ScHeaderFieldsObj::init()
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
 
     uno::Reference<style::XStyleFamiliesSupplier> xSFS(xDoc, uno::UNO_QUERY_THROW);
-    uno::Reference<container::XNameAccess> xNA(xSFS->getStyleFamilies(), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNameAccess> xNA(xSFS->getStyleFamilies(), uno::UNO_SET_THROW);
     uno::Reference<container::XNameAccess> xNA1(xNA->getByName("PageStyles"), uno::UNO_QUERY_THROW);
     uno::Reference<style::XStyle> xStyle(xNA1->getByName("Default"), uno::UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XHeaderFooterContent> xHFC(
         xPropertySet->getPropertyValue("RightPageHeaderContent"), uno::UNO_QUERY_THROW);
-    uno::Reference<text::XText> xText(xHFC->getLeftText(), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText(xHFC->getLeftText(), uno::UNO_SET_THROW);
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<text::XTextContent> xTC(xMSF->createInstance("com.sun.star.text.TextField.Time"),

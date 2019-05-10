@@ -1762,7 +1762,7 @@ OUString SAL_CALL XFrameImpl::getTitle()
 
     // SAFE ->
     SolarMutexClearableGuard aReadLock;
-    css::uno::Reference< css::frame::XTitle > xTitle(m_xTitleHelper, css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XTitle > xTitle(m_xTitleHelper, css::uno::UNO_SET_THROW);
     aReadLock.clear();
     // <- SAFE
 
@@ -1775,7 +1775,7 @@ void SAL_CALL XFrameImpl::setTitle( const OUString& sTitle )
 
     // SAFE ->
     SolarMutexClearableGuard aReadLock;
-    css::uno::Reference< css::frame::XTitle > xTitle(m_xTitleHelper, css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XTitle > xTitle(m_xTitleHelper, css::uno::UNO_SET_THROW);
     aReadLock.clear();
     // <- SAFE
 

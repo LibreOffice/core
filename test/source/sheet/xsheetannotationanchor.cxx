@@ -25,7 +25,7 @@ namespace apitest
 void XSheetAnnotationAnchor::testGetAnnotation()
 {
     uno::Reference<sheet::XSheetAnnotationAnchor> xAnchor(init(), UNO_QUERY_THROW);
-    uno::Reference<sheet::XSheetAnnotation> xAnnotation(xAnchor->getAnnotation(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetAnnotation> xAnnotation(xAnchor->getAnnotation(), UNO_SET_THROW);
     CPPUNIT_ASSERT_MESSAGE("Unable to get XSheetAnnotation", xAnnotation.is());
 
     CPPUNIT_ASSERT_MESSAGE("Unable to check: getAuthor()", xAnnotation->getAuthor().isEmpty());

@@ -463,9 +463,9 @@ ScVbaApplication::setStatusBar( const uno::Any& _statusbar )
 {
     OUString sText;
     bool bDefault = false;
-    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
     uno::Reference< task::XStatusIndicatorSupplier > xStatusIndicatorSupplier( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    uno::Reference< task::XStatusIndicator > xStatusIndicator( xStatusIndicatorSupplier->getStatusIndicator(), uno::UNO_QUERY_THROW );
+    uno::Reference< task::XStatusIndicator > xStatusIndicator( xStatusIndicatorSupplier->getStatusIndicator(), uno::UNO_SET_THROW );
     if( _statusbar >>= sText )
     {
         setDisplayStatusBar( true );
@@ -551,7 +551,7 @@ ScVbaApplication::Range( const uno::Any& Cell1, const uno::Any& Cell2 )
 uno::Any SAL_CALL
 ScVbaApplication::Names( const css::uno::Any& aIndex )
 {
-    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
     uno::Reference< beans::XPropertySet > xPropertySet( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XNamedRanges > xNamedRanges( xPropertySet->getPropertyValue(
         "NamedRanges" ), uno::UNO_QUERY_THROW );
@@ -618,7 +618,7 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll )
     OUString sRangeName;
     if( Reference >>= sRangeName )
     {
-        uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
         uno::Reference< sheet::XSpreadsheetView > xSpreadsheet(
                 xModel->getCurrentController(), uno::UNO_QUERY_THROW );
 
@@ -718,7 +718,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor )
 {
     try
     {
-        uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
         switch( _cursor )
         {
             case excel::XlMousePointer::xlNorthwestArrow:
@@ -888,7 +888,7 @@ void SAL_CALL
 ScVbaApplication::setIteration( sal_Bool bSet )
 {
     uno::Reference< lang::XMultiComponentFactory > xSMgr(
-        mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
+        mxContext->getServiceManager(), uno::UNO_SET_THROW );
 
     uno::Reference< frame::XDesktop > xDesktop
         (xSMgr->createInstanceWithContext( "com.sun.star.frame.Desktop" , mxContext), uno::UNO_QUERY_THROW );
@@ -911,7 +911,7 @@ ScVbaApplication::setIteration( sal_Bool bSet )
 void SAL_CALL
 ScVbaApplication::Calculate()
 {
-    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
     uno::Reference< sheet::XCalculatable > xCalculatable( getCurrentDocument(), uno::UNO_QUERY_THROW );
     xCalculatable->calculateAll();
 }

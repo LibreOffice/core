@@ -23,7 +23,7 @@ namespace apitest
 void XScenariosSupplier::testGetScenarios()
 {
     uno::Reference<sheet::XScenariosSupplier> xSupplier(init(), UNO_QUERY_THROW);
-    uno::Reference<sheet::XScenarios> xScenarios(xSupplier->getScenarios(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XScenarios> xScenarios(xSupplier->getScenarios(), UNO_SET_THROW);
 }
 }
 

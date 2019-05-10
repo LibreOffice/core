@@ -100,7 +100,7 @@ uno::Reference<uno::XInterface> ScAutoFormatsObj::init()
 {
     uno::Reference<lang::XMultiServiceFactory> xMSF(m_xComponent, uno::UNO_QUERY_THROW);
     uno::Reference<uno::XInterface> xTAF(
-        xMSF->createInstance("com.sun.star.sheet.TableAutoFormats"), uno::UNO_QUERY_THROW);
+        xMSF->createInstance("com.sun.star.sheet.TableAutoFormats"), uno::UNO_SET_THROW);
 
     uno::Reference<container::XNameContainer> xNC(xTAF, uno::UNO_QUERY_THROW);
     if (!xNC->hasByName("ScAutoFormatsObj"))

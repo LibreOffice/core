@@ -59,9 +59,9 @@ ScVbaComment::ScVbaComment(
 uno::Reference< sheet::XSheetAnnotation >
 ScVbaComment::getAnnotation()
 {
-    uno::Reference< table::XCell > xCell( mxRange->getCellByPosition(0, 0), uno::UNO_QUERY_THROW );
+    uno::Reference< table::XCell > xCell( mxRange->getCellByPosition(0, 0), uno::UNO_SET_THROW );
     uno::Reference< sheet::XSheetAnnotationAnchor > xAnnoAnchor( xCell, uno::UNO_QUERY_THROW );
-    return uno::Reference< sheet::XSheetAnnotation > ( xAnnoAnchor->getAnnotation(), uno::UNO_QUERY_THROW );
+    return uno::Reference< sheet::XSheetAnnotation > ( xAnnoAnchor->getAnnotation(), uno::UNO_SET_THROW );
 }
 
 uno::Reference< sheet::XSheetAnnotations >
@@ -71,7 +71,7 @@ ScVbaComment::getAnnotations()
     uno::Reference< sheet::XSpreadsheet > xSheet = xSheetCellRange->getSpreadsheet();
     uno::Reference< sheet::XSheetAnnotationsSupplier > xAnnosSupp( xSheet, uno::UNO_QUERY_THROW );
 
-    return uno::Reference< sheet::XSheetAnnotations > ( xAnnosSupp->getAnnotations(), uno::UNO_QUERY_THROW );
+    return uno::Reference< sheet::XSheetAnnotations > ( xAnnosSupp->getAnnotations(), uno::UNO_SET_THROW );
 }
 
 sal_Int32
@@ -183,7 +183,7 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
 
         if ( aStart >>= nStart )
         {
-            uno::Reference< text::XTextCursor > xTextCursor( xAnnoText->createTextCursor(), uno::UNO_QUERY_THROW );
+            uno::Reference< text::XTextCursor > xTextCursor( xAnnoText->createTextCursor(), uno::UNO_SET_THROW );
 
             if ( bOverwrite )
             {

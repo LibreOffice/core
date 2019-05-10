@@ -133,7 +133,7 @@ static bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUSt
         // What an unpleasant API to use.
         css::uno::Reference< css::sheet::XCalculatable > xCalculatable( xComponent, css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::sheet::XSpreadsheetDocument > xSpreadDoc( xComponent, css::uno::UNO_QUERY_THROW );
-        css::uno::Reference< css::sheet::XSpreadsheets > xSheets( xSpreadDoc->getSheets(), css::uno::UNO_QUERY_THROW );
+        css::uno::Reference< css::sheet::XSpreadsheets > xSheets( xSpreadDoc->getSheets(), css::uno::UNO_SET_THROW );
         css::uno::Reference< css::container::XIndexAccess > xIndex( xSheets, css::uno::UNO_QUERY_THROW );
         css::uno::Reference< css::sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), css::uno::UNO_QUERY_THROW);
 

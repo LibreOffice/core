@@ -444,8 +444,8 @@ void SVTXGridControl::impl_checkTableModelInit()
     m_bTableModelInitCompleted = true;
 
     // ensure default columns exist, if they have not previously been added
-    Reference< XGridDataModel > const xDataModel( m_xTableModel->getDataModel(), UNO_QUERY_THROW );
-    Reference< XGridColumnModel > const xColumnModel( m_xTableModel->getColumnModel(), UNO_QUERY_THROW );
+    Reference< XGridDataModel > const xDataModel( m_xTableModel->getDataModel(), css::uno::UNO_SET_THROW );
+    Reference< XGridColumnModel > const xColumnModel( m_xTableModel->getColumnModel(), css::uno::UNO_SET_THROW );
 
     sal_Int32 const nDataColumnCount = xDataModel->getColumnCount();
     if ( ( nDataColumnCount > 0 ) && ( xColumnModel->getColumnCount() == 0 ) )

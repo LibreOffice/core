@@ -286,8 +286,8 @@ namespace sdbtools
         {
             Reference< XTablesSupplier > xSuppTables( _rxConnection, UNO_QUERY_THROW );
             Reference< XQueriesSupplier > xQueriesSupplier( _rxConnection, UNO_QUERY_THROW );
-            xTables.set( xSuppTables->getTables(), UNO_QUERY_THROW );
-            xQueries.set( xQueriesSupplier->getQueries(), UNO_QUERY_THROW );
+            xTables.set( xSuppTables->getTables(), css::uno::UNO_SET_THROW );
+            xQueries.set( xQueriesSupplier->getQueries(), css::uno::UNO_SET_THROW );
         }
         catch( const Exception& )
         {
@@ -318,7 +318,7 @@ namespace sdbtools
         Reference< XDatabaseMetaData > xMeta;
         try
         {
-            xMeta.set( _rxConnection->getMetaData(), UNO_QUERY_THROW );
+            xMeta.set( _rxConnection->getMetaData(), css::uno::UNO_SET_THROW );
         }
         catch( const Exception& )
         {
@@ -377,7 +377,7 @@ namespace sdbtools
     OUString SAL_CALL ObjectNames::convertToSQLName( const OUString& Name )
     {
         EntryGuard aGuard( *this );
-        Reference< XDatabaseMetaData > xMeta( getConnection()->getMetaData(), UNO_QUERY_THROW );
+        Reference< XDatabaseMetaData > xMeta( getConnection()->getMetaData(), css::uno::UNO_SET_THROW );
         return ::dbtools::convertName2SQLName( Name, xMeta->getExtraNameCharacters() );
     }
 

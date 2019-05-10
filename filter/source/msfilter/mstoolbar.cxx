@@ -86,7 +86,7 @@ void CustomToolBarImportHelper::addIcon( const uno::Reference< graphic::XGraphic
 CustomToolBarImportHelper::CustomToolBarImportHelper( SfxObjectShell& rDocShell,  const css::uno::Reference< css::ui::XUIConfigurationManager>& rxAppCfgMgr ) : mrDocSh( rDocShell )
 {
     m_xCfgSupp.set( mrDocSh.GetModel(), uno::UNO_QUERY_THROW );
-    m_xAppCfgMgr.set( rxAppCfgMgr, uno::UNO_QUERY_THROW );
+    m_xAppCfgMgr.set( rxAppCfgMgr, uno::UNO_SET_THROW );
 }
 
 uno::Reference< ui::XUIConfigurationManager >
@@ -130,7 +130,7 @@ CustomToolBarImportHelper::createMenu( const OUString& rName, const uno::Referen
         uno::Reference< ui::XUIConfigurationManager > xCfgManager( getCfgManager() );
         OUString sMenuBar("private:resource/menubar/");
         sMenuBar += rName;
-        uno::Reference< container::XIndexContainer > xPopup( xCfgManager->createSettings(), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XIndexContainer > xPopup( xCfgManager->createSettings(), uno::UNO_SET_THROW );
         uno::Reference< beans::XPropertySet > xProps( xPopup, uno::UNO_QUERY_THROW );
         // set name for menubar
         xProps->setPropertyValue("UIName", uno::makeAny( rName ) );

@@ -791,7 +791,7 @@ SfxDocumentMetaData::setMetaList(const char* i_name,
         for (sal_Int32 i = 0; i < i_rValue.getLength(); ++i) {
             css::uno::Reference<css::xml::dom::XElement> xElem(
                 m_xDoc->createElementNS(getNameSpace(i_name), name),
-                css::uno::UNO_QUERY_THROW);
+                css::uno::UNO_SET_THROW);
             css::uno::Reference<css::xml::dom::XNode> xNode(xElem,
                 css::uno::UNO_QUERY_THROW);
             css::uno::Reference<css::xml::dom::XNode> xTextNode(
@@ -939,7 +939,7 @@ SfxDocumentMetaData::updateElement(const char *i_name,
         if (nullptr != i_pAttrs) {
             css::uno::Reference<css::xml::dom::XElement> xElem(
                 m_xDoc->createElementNS(getNameSpace(i_name), name),
-                    css::uno::UNO_QUERY_THROW);
+                    css::uno::UNO_SET_THROW);
             xNode.set(xElem, css::uno::UNO_QUERY_THROW);
             // set attributes
             for (auto const& elem : *i_pAttrs)

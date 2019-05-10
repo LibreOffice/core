@@ -475,7 +475,7 @@ Assembly ^ TypeEmitter::type_resolve(
     if (nullptr == ret_type)
     {
         Reference< reflection::XConstantTypeDescription > xConstant(
-            xType, UNO_QUERY_THROW );
+            xType, UNO_SET_THROW );
         ::System::Object ^ constant =
               to_cli_constant( xConstant->getConstantValue() );
         Emit::TypeBuilder ^ type_builder =

@@ -1544,7 +1544,7 @@ librdf_Repository::getStatementRDFa(
     uno::Reference<rdf::XURI> xXmlId;
     try {
         xXmlId.set( rdf::URI::create(m_xContext, s_nsOOo + sXmlId),
-            uno::UNO_QUERY_THROW);
+            uno::UNO_SET_THROW);
     } catch (const lang::IllegalArgumentException &) {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(

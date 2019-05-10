@@ -89,13 +89,13 @@ const shared_ptr<RVNGInputStream> lcl_createStreamForURL(const OUString& rURL)
     using uno::UNO_QUERY_THROW;
 
     const Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
-                                                     UNO_QUERY_THROW);
+                                                     css::uno::UNO_SET_THROW);
     const Reference<ucb::XSimpleFileAccess> xFileAccess(
         xContext->getServiceManager()->createInstanceWithContext(
             "com.sun.star.ucb.SimpleFileAccess", xContext),
         UNO_QUERY_THROW);
     const Reference<io::XInputStream> xInputStream(xFileAccess->openFileRead(rURL),
-                                                   UNO_QUERY_THROW);
+                                                   css::uno::UNO_SET_THROW);
 
     const shared_ptr<RVNGInputStream> pInput(new WPXSvInputStream(xInputStream));
     return pInput;

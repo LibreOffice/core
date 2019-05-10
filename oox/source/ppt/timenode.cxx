@@ -114,7 +114,7 @@ namespace oox { namespace ppt {
         {
             bool bFirst = true;
             Reference< XEnumerationAccess > xEA( xNode, UNO_QUERY_THROW );
-            Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_QUERY_THROW );
+            Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_SET_THROW );
             while( xE->hasMoreElements() )
             {
                 // click node
@@ -129,7 +129,7 @@ namespace oox { namespace ppt {
                 {
                     bFirst = false;
                     Reference< XEnumerationAccess > xEA2( xClickNode, UNO_QUERY_THROW );
-                    Reference< XEnumeration > xE2( xEA2->createEnumeration(), UNO_QUERY_THROW );
+                    Reference< XEnumeration > xE2( xEA2->createEnumeration(), UNO_SET_THROW );
                     if( xE2->hasMoreElements() )
                     {
                         // with node
@@ -181,7 +181,7 @@ namespace oox { namespace ppt {
             xNode->setBegin( aEmpty );
 
             Reference< XEnumerationAccess > xEA( xNode, UNO_QUERY_THROW );
-            Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_QUERY_THROW );
+            Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_SET_THROW );
             while( xE->hasMoreElements() )
             {
                 // click node

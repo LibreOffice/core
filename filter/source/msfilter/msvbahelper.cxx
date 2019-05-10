@@ -112,7 +112,7 @@ static SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
             OUString aName = xModel->getURL() ;
             if (aName.isEmpty())
                 {
-                    uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
+                    uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_SET_THROW );
                     uno::Reference< beans::XPropertySet > xProps( xFrame, uno::UNO_QUERY_THROW );
                     xProps->getPropertyValue("Title") >>= aName;
                     aName = aName.getToken(0, '-').trim();
@@ -131,7 +131,7 @@ static SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
                 {
                     uno::Reference< document::XDocumentProperties > const
                         xDocProps(xDocPropSupp->getDocumentProperties(),
-                                    uno::UNO_QUERY_THROW);
+                                    uno::UNO_SET_THROW);
                     OUString sCurrName = xDocProps->getTemplateName();
                     if( sMacroURLOrPath.lastIndexOf( sCurrName ) >= 0 )
                     {
@@ -762,7 +762,7 @@ void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, c
     uno::Reference< ui::XUIConfigurationManagerSupplier > xCfgSupplier(rxModel, uno::UNO_QUERY_THROW);
     uno::Reference< ui::XUIConfigurationManager > xCfgMgr = xCfgSupplier->getUIConfigurationManager();
 
-    uno::Reference< ui::XAcceleratorConfiguration > xAcc( xCfgMgr->getShortCutManager(), uno::UNO_QUERY_THROW );
+    uno::Reference< ui::XAcceleratorConfiguration > xAcc( xCfgMgr->getShortCutManager(), uno::UNO_SET_THROW );
     if ( MacroName.isEmpty() )
         // I believe this should really restore the [application] default. Since
         // afaik we don't actually setup application default bindings on import

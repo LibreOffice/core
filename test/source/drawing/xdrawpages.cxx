@@ -29,7 +29,7 @@ void XDrawPages::testInsertNewByIndex()
     uno::Reference<drawing::XDrawPages> xDrawPages(init(), uno::UNO_QUERY_THROW);
     const sal_Int32 nCount = xDrawPages->getCount();
 
-    uno::Reference<drawing::XDrawPage> xDP(xDrawPages->insertNewByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDP(xDrawPages->insertNewByIndex(0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xDP.is());
     CPPUNIT_ASSERT_EQUAL(nCount + 1, xDrawPages->getCount());
 }
@@ -39,7 +39,7 @@ void XDrawPages::testRemove()
     uno::Reference<drawing::XDrawPages> xDrawPages(init(), uno::UNO_QUERY_THROW);
     const sal_Int32 nCount = xDrawPages->getCount();
 
-    uno::Reference<drawing::XDrawPage> xDP(xDrawPages->insertNewByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDP(xDrawPages->insertNewByIndex(0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xDP.is());
 
     xDrawPages->remove(xDP);

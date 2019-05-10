@@ -1823,7 +1823,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 }
             }
 
-            xTargetLibrariesStor.set( i_rStorage->openStorageElement( sTargetLibrariesStoreName, embed::ElementModes::READWRITE ), UNO_QUERY_THROW );
+            xTargetLibrariesStor.set( i_rStorage->openStorageElement( sTargetLibrariesStoreName, embed::ElementModes::READWRITE ), UNO_SET_THROW );
         }
         catch( const uno::Exception& )
         {
@@ -2654,7 +2654,7 @@ void SfxLibraryContainer::initializeFromDocument( const Reference< XStorageBased
         Reference< XServiceInfo > xSI( _rxDocument, UNO_QUERY_THROW );
         if ( xSI->supportsService("com.sun.star.document.OfficeDocument"))
         {
-            xDocStorage.set( _rxDocument->getDocumentStorage(), UNO_QUERY_THROW );
+            xDocStorage.set( _rxDocument->getDocumentStorage(), UNO_SET_THROW );
         }
         Reference< XModel > xDocument( _rxDocument, UNO_QUERY_THROW );
         Reference< XComponent > xDocComponent( _rxDocument, UNO_QUERY_THROW );

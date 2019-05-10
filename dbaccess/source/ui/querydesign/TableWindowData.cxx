@@ -90,11 +90,11 @@ bool OTableWindowData::init(const Reference< XConnection  >& _xConnection,bool _
     ::osl::MutexGuard aGuard( m_aMutex );
 
     Reference< XQueriesSupplier > xSupQueries( _xConnection, UNO_QUERY_THROW );
-    Reference< XNameAccess > xQueries( xSupQueries->getQueries(), UNO_QUERY_THROW );
+    Reference< XNameAccess > xQueries( xSupQueries->getQueries(), UNO_SET_THROW );
     bool bIsKnownQuery = _bAllowQueries && xQueries->hasByName( m_sComposedName );
 
     Reference< XTablesSupplier > xSupTables( _xConnection, UNO_QUERY_THROW );
-    Reference< XNameAccess > xTables( xSupTables->getTables(), UNO_QUERY_THROW );
+    Reference< XNameAccess > xTables( xSupTables->getTables(), UNO_SET_THROW );
     bool bIsKnownTable = xTables->hasByName( m_sComposedName );
 
     if ( bIsKnownQuery )
