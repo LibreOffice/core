@@ -44,7 +44,7 @@ struct Mapping : public uno_Mapping
 };
 
 // The environment will be created in uno_initEnvironment. See also the remarks there
-//Managed cli environment for cli objects an UNO proxies (which are cli
+//Managed cli environment for cli objects a UNO proxies (which are cli
 //objects. The uno_Environment is not used for cli objects.
 ref struct CliEnvHolder {
 static Cli_environment ^ g_cli_env = nullptr;

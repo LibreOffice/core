@@ -43,7 +43,7 @@ class HelpOnStartup : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css
     private:
         osl::Mutex m_mutex;
 
-        /** @short  reference to an uno service manager. */
+        /** @short  reference to a uno service manager. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /** @short  such module manager is used to classify new opened documents. */

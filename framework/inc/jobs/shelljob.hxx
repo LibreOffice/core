@@ -45,7 +45,7 @@ class ShellJob : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css::tas
     // member
     private:
 
-        /** @short  reference to an uno service manager. */
+        /** @short  reference to a uno service manager. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     // native interface

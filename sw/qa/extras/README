@@ -132,7 +132,7 @@ CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, "IsLandscape"));
 
 === sal_Bool
 
-In case an UNO method returns sal_Bool, and the assert fails, CppUnit won't be
+In case a UNO method returns sal_Bool, and the assert fails, CppUnit won't be
 able to print a usable error message, as it will think that the value is a
 printable character. Best to use `bool` for the expected value and cast the
 actual value to `bool` as well before comparing.

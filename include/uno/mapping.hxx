@@ -326,7 +326,7 @@ inline bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI )
 /** Deprecated. This function DOES NOT WORK with Purpose Environments
     (http://wiki.openoffice.org/wiki/Uno/Binary/Spec/Purpose Environments)
 
-    Maps an UNO interface of the currently used compiler environment to binary C UNO.
+    Maps a UNO interface of the currently used compiler environment to binary C UNO.
 
     @tparam C interface type
     @param ppRet inout returned interface pointer

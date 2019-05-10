@@ -28,7 +28,7 @@
 namespace cppu
 {
 
-/** Base class to implement an UNO object supporting weak references, i.e. the object can be held
+/** Base class to implement a UNO object supporting weak references, i.e. the object can be held
     weakly (by a css::uno::WeakReference) and aggregation, i.e. the object can be
     aggregated by another (delegator).
     This implementation copes with reference counting.  Upon last release(), the virtual dtor

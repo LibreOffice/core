@@ -430,7 +430,7 @@ public class AnyConverter
 
     /**
      * Converts a UNO object (struct, exception, sequence, enum or interface) or
-     * an Any containing these types into an UNO object of a specified destination
+     * an Any containing these types into a UNO object of a specified destination
      * type.
      *
      * <p> For interfaces, the argument <em>object</em> is queried for the interface
@@ -453,7 +453,7 @@ public class AnyConverter
     }
     /**
      * Converts a UNO object (struct, exception, sequence, enum or interface) or
-     * an Any containing these types into an UNO object of a specified destination
+     * an Any containing these types into a UNO object of a specified destination
      * type.
      *
      * <p>For interfaces, the argument <em>object</em> is queried for the interface

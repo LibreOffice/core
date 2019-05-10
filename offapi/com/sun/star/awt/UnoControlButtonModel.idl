@@ -30,7 +30,7 @@
  module com {  module sun {  module star {  module awt {
 
 
-/** specifies the standard model of an UnoControlButton.
+/** specifies the standard model of a UnoControlButton.
  */
 published service UnoControlButtonModel
 {

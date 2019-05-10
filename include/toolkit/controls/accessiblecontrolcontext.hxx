@@ -42,9 +42,9 @@ namespace toolkit
     typedef ::cppu::ImplHelper1 <   css::lang::XEventListener
                                 >   OAccessibleControlContext_IBase;
 
-    /** class implementing the AccessibleContext for an UNO control - to be used in design mode of the control.
+    /** class implementing the AccessibleContext for a UNO control - to be used in design mode of the control.
         <p><b>life time control<b/><br/>
-        This control should be held weak by the creator (an UNO control), it itself holds a hard reference to the
+        This control should be held weak by the creator (a UNO control), it itself holds a hard reference to the
         control model, and a weak reference to the control. The reference to the model is freed when the model
         is being disposed.</p>
     */
@@ -54,7 +54,7 @@ namespace toolkit
             ,public OAccessibleControlContext_IBase
     {
     public:
-        /** creates an accessible context for an uno control
+        /** creates an accessible context for a uno control
         @param _rxCreator
             the uno control's XAccessible interface. This must be an XControl, from which an XControlModel
             can be retrieved.

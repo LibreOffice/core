@@ -40,14 +40,14 @@ published interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XIn
 {
     /** Creates an enumeration for type descriptions.
 
-        <p>An enumeration is always created for an UNOIDL module. The
+        <p>An enumeration is always created for a UNOIDL module. The
         enumeration contents can be restricted by specifying type classes.
         Only types that match one of the supplied type classes will be part of
         the collection. Additionally, it is possible to specify the depth
         for the search within the underlying type description tree.
 
         @param moduleName
-            contains the name of an UNOIDL module. Modules are separated by a
+            contains the name of a UNOIDL module. Modules are separated by a
             single '.' (i.e., "com.sun.star.reflection"). The root of the module
             hierarchy is specified with an empty string. Module names are always
             absolute, never relative.
@@ -145,7 +145,7 @@ published interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XIn
 
         @throws InvalidTypeNameException
             in case that the given module name does exist, but does not specify
-            an UNOIDL module. This exception will never be thrown in case
+            a UNOIDL module. This exception will never be thrown in case
             moduleName is the empty string.
       */
     XTypeDescriptionEnumeration

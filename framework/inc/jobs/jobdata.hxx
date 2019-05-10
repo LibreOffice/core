@@ -113,7 +113,7 @@ class JobData final
                 - as a configured job
                 - as a job without any configuration
             First mode is triggered by an alias, which points to the
-            configuration entries. Second mode is specified by an uno service
+            configuration entries. Second mode is specified by a uno service
             or implementation name. Then we do the same things (use the same interfaces)
             but don't handle any configuration data.
             The effect: This mode can be detected by this member.

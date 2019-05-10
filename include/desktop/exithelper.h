@@ -23,7 +23,7 @@
 enum EExitCodes {
     /* e.g. used to force showing of the command line help */
     EXITHELPER_NO_ERROR = 0,
-    /* an uno exception was caught during startup */
+    /* a uno exception was caught during startup */
     EXITHELPER_FATAL_ERROR = 77,
     /* user force automatic restart after crash */
     EXITHELPER_CRASH_WITH_RESTART = 79,

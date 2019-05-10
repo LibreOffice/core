@@ -439,7 +439,7 @@ private:
     @descr      This constructor initialize a new instance of this class by valid factory,
                 and will be set valid values on his member and baseclasses.
 
-    @attention  a)  Don't use your own reference during an UNO-Service-ctor! There is no guarantee, that you
+    @attention  a)  Don't use your own reference during a UNO-Service-ctor! There is no guarantee, that you
                     will get over this. (e.g. using of your reference as parameter to initialize some member)
                     Do such things in DEFINE_INIT_SERVICE() method, which is called automatically after your ctor!!!
                 b)  Baseclass OBroadcastHelper is a typedef in namespace cppu!

@@ -86,7 +86,7 @@ protected:
 // This class realizes the service com.sun.star.bridge.OleBridgeSupplier2 and
 // com.sun.star.bridge.OleBridgeSupplierVar1. The class implements XBridgeSupplier2 which
 // interface does not need a Maschine Id in its createBridge function anymore,
-// If an UNO interface is to be converted then the member m_nUnoWrapperClass determines
+// If a UNO interface is to be converted then the member m_nUnoWrapperClass determines
 // what wrapper class is to be used. There are currently InterfaceOleWrapper and
 // UnoObjectWrapperRemoteOpt. The first is used for the OleBridgeSupplier2 and the
 // latter for OleBridgeSupplierVar1.

@@ -448,7 +448,7 @@ public class LocalOfficeConnection
 
     /**
      * Parses a connection URL.
-     * This method accepts an UNO URL with following format:<br>
+     * This method accepts a UNO URL with following format:<br>
      * <pre>
      * url    := uno:localoffice[,&lt;params&gt;];urp;StarOffice.NamingService
      * params := &lt;path&gt;[,&lt;pipe&gt;]

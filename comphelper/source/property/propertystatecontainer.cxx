@@ -35,7 +35,7 @@ namespace comphelper
         {
             // TODO: perhaps it's time to think about resources in the comphelper module?
             // Would be nice to have localized exception strings (a simply resource file containing
-            // strings only would suffice, and could be realized with an UNO service, so we do not
+            // strings only would suffice, and could be realized with a UNO service, so we do not
             // need the dependency to the Tools project)
             OUStringBuffer sMessage;
             sMessage.append( "The property \"" );

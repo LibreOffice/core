@@ -23,7 +23,7 @@ import org.jfree.report.expressions.FormulaExpression;
  * A formatted text element takes a formula, evaluates it and formats the
  * given element using some arbitrary style. (As this is totally undocumented,
  * we leave this out for now. Either we'll insert a field there or we call
- * an UNO-component to do the formatting.
+ * a UNO-component to do the formatting.
  *
  * @since 02.03.2007
  */

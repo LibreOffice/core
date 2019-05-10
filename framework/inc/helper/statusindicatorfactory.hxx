@@ -120,7 +120,7 @@ typedef ::std::vector< IndicatorInfo > IndicatorStack;
 
     @descr          Internally it uses:
                     - a vcl based
-                    - or an uno based and by the frame layouted
+                    - or a uno based and by the frame layouted
                     progress implementation.
 
                     This factory create different indicators and control his access
@@ -252,21 +252,21 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper<
         /** @short  creates a new internal used progress.
             @descr  This factory does not paint the progress itself.
                     It uses helper for that. They can be vcl based or
-                    layouted by the frame and provided as an uno interface.
+                    layouted by the frame and provided as a uno interface.
          */
         void impl_createProgress();
 
         /** @short  shows the internal used progress.
             @descr  This factory does not paint the progress itself.
                     It uses helper for that. They can be vcl based or
-                    layouted by the frame and provided as an uno interface.
+                    layouted by the frame and provided as a uno interface.
          */
         void impl_showProgress();
 
         /** @short  hides the internal used progress.
             @descr  This factory does not paint the progress itself.
                     It uses helper for that. They can be vcl based or
-                    layouted by the frame and provided as an uno interface.
+                    layouted by the frame and provided as a uno interface.
          */
         void impl_hideProgress();
 

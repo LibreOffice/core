@@ -76,7 +76,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper<
 
     private:
 
-        /** @short reference to an uno service manager,
+        /** @short reference to a uno service manager,
                    which can be used to create own needed
                    uno resources. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;

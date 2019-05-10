@@ -162,7 +162,7 @@ ServiceImpl::ServiceImpl( Sequence<Any> const& args,
     : m_xComponentContext(xComponentContext),
       m_bShowUpdateOnly( false )
 {
-    /* if true then this service is running in an unopkg process and not in an office process */
+    /* if true then this service is running in a unopkg process and not in an office process */
     boost::optional<sal_Bool> unopkg;
     boost::optional<OUString> view;
     try {

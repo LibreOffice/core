@@ -130,7 +130,7 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
                     will be used inside the new environment.
 
             @param  rxContext
-                    reference to an uno service manager.
+                    reference to a uno service manager.
 
             @param  xEnv
                     if it points to a valid frame it will be used

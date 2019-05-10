@@ -169,7 +169,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
                     this new instance. It should be passed to the new object
                     so it can be used internally to create own needed uno resources.
 
-            @return The new instance of this service as an uno reference.
+            @return The new instance of this service as a uno reference.
          */
         static css::uno::Reference< css::uno::XInterface > impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
 };

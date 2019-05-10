@@ -27,7 +27,7 @@
  module com {  module sun {  module star {  module awt {
 
 
-/** specifies the standard model of an UnoControlSpinButton.
+/** specifies the standard model of a UnoControlSpinButton.
 
     <p>A spin button is a control which has a numeric value associated with it,
     and allows to change this value using two spin buttons.</p>

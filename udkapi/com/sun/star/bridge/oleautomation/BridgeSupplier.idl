@@ -37,7 +37,7 @@ module com { module sun { module star { module bridge { module oleautomation {
     such as a service manager, then only that object needs to be explicitly
     mapped by a call to
     com::sun::star::bridge::XBridgeSupplier2::createBridge().
-    The same holds true if an automation  object is mapped to an UNO interface.
+    The same holds true if an automation  object is mapped to a UNO interface.
     </p>
     <p>
     For Automation objects to be mapped they have to implement

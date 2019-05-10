@@ -523,7 +523,7 @@ Public Sub Main()
 	Function testImplementedInterfaces() As Object
 		'Bridge_ImplementedInterfaces
 		'=================================================
-		' call an UNO function that takes an XEventListener interface
+		' call a UNO function that takes an XEventListener interface
 		'We provide a COM implementation (IDispatch) as EventListener
 		'Open a new empty writer document
 

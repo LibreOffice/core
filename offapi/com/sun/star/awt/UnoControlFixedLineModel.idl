@@ -28,7 +28,7 @@
  module com {  module sun {  module star {  module awt {
 
 
-/** specifies the standard model of an UnoControlFixedLine.
+/** specifies the standard model of a UnoControlFixedLine.
  */
 published service UnoControlFixedLineModel
 {

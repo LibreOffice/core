@@ -51,7 +51,7 @@ typedef std::unordered_map<OUString, pair<DISPID, unsigned short>> DispIdMap;
 typedef std::unordered_multimap<OUString, unsigned int> TLBFuncIndexMap;
 
 // This class wraps an IDispatch and maps XInvocation calls to IDispatch calls on the wrapped object.
-// If m_TypeDescription is set then this class represents an UNO interface implemented in a COM component.
+// If m_TypeDescription is set then this class represents a UNO interface implemented in a COM component.
 // The interface is not a real interface in terms of an abstract class but is realized through IDispatch.
 class IUnknownWrapper : public WeakImplHelper< XBridgeSupplier2, XInitialization, XAutomationObject, XDefaultProperty, XDefaultMethod, XDirectInvocation, XAutomationInvocation >,
 
@@ -214,7 +214,7 @@ protected:
     // wrapper class knows what type it is represting. The member m_TypeDescription holds this
     // information.
     // m_TypeDescription is only useful when an object wraps an IDispatch object that implements
-    // an UNO interface. The value is set during a call to XInitialization::initialize.
+    // a UNO interface. The value is set during a call to XInitialization::initialize.
     Sequence<Type> m_seqTypes;
     CComPtr<IUnknown> m_spUnknown;
     CComPtr<IDispatch> m_spDispatch;

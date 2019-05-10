@@ -35,7 +35,7 @@ struct _typelib_TypeDescriptionReference;
 struct _typelib_TypeDescription;
 struct _uno_Mapping;
 
-/** This is the binary specification of an UNO any.
+/** This is the binary specification of a UNO any.
 */
 typedef struct SAL_DLLPUBLIC_RTTI _uno_Any
 {

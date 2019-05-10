@@ -24,11 +24,11 @@
   <templates>
     <group oor:name="Job">
       <info>
-        <desc>Describes an UNO service, which is registered for a special event.</desc>
+        <desc>Describes a UNO service, which is registered for a special event.</desc>
       </info>
       <prop oor:name="Service" oor:type="xs:string">
         <info>
-          <desc>Must contain an UNO implementation(!) name of the implemented job component.</desc>
+          <desc>Must contain a UNO implementation(!) name of the implemented job component.</desc>
         </info>
       </prop>
       <prop oor:name="Context" oor:type="xs:string">

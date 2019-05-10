@@ -28,14 +28,14 @@ module com { module sun { module star { module bridge {
 /** maps UNO types to oleautomation types and vice versa.<p>
 
     The XBridgeSupplier2 interface provides the function <code>createBridge</code> which
-    maps a value of an UNO or Automation type to the desired target type. If an UNO interface
+    maps a value of a UNO or Automation type to the desired target type. If a UNO interface
     was mapped  to IDispatch, then all objects (interfaces, structs) and other
     types which
     are obtained from that Automation object are automatically mapped to the corresponding
      Automation types. Hence, if one provides an initial object which forms the root of all
      other objects, such as a service manager, then only that object needs to be explicitly
      mapped by a call to <code>createBridge</code>. The same holds true if an automation
-     object is mapped to an UNO interface.<br>
+     object is mapped to a UNO interface.<br>
     <p>The Automation types <code>VT_CY</code> and <code>VT_DATE</code> are not supported.
     For Automation objects to be mapped they have to implement IDispatch interface. Other
     COM interfaces,

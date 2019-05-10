@@ -206,7 +206,7 @@ namespace
             o3tl::sorted_vector<const sw::mark::IMark*> aSeenMarks;
             for (const SwIndex* pIndex = pTextNode->GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
             {
-                // Need a non-cost mark here, as we'll create an UNO wrapper around it.
+                // Need a non-cost mark here, as we'll create a UNO wrapper around it.
                 sw::mark::IMark* pBkmk = const_cast<sw::mark::IMark*>(pIndex->GetMark());
                 if (!pBkmk)
                     continue;

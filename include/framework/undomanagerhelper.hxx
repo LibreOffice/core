@@ -74,7 +74,7 @@ namespace framework
         */
         virtual SfxUndoManager&        getImplUndoManager() = 0;
 
-        /** provides access to an UNO interface for the XUndoManager implementation. Used when throwing exceptions.
+        /** provides access to a UNO interface for the XUndoManager implementation. Used when throwing exceptions.
         */
         virtual css::uno::Reference< css::document::XUndoManager >
                                         getThis() = 0;

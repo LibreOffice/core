@@ -1263,9 +1263,9 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
 // A JScriptValue (ValueObject) object is a COM object in that it implements IDispatch and the
 // IJScriptValue object interface. Such objects are provided by all UNO wrapper
 // objects used within a JScript script. To obtain an instance one has to call
-// "_GetValueObject() or Bridge_GetValueObject()" on an UNO wrapper object (class InterfaceOleWrapper).
+// "_GetValueObject() or Bridge_GetValueObject()" on a UNO wrapper object (class InterfaceOleWrapper).
 // A value object is appropriately initialized within the script and passed as
-// parameter to an UNO object method or property. The convertDispparamsArgs function
+// parameter to a UNO object method or property. The convertDispparamsArgs function
 // can easily find out that a param is such an object by querying for the
 // IJScriptValue interface. By this interface one the type and kind ( out, in/out)
 // can be determined and the right conversion can be applied.
@@ -1517,11 +1517,11 @@ void SAL_CALL InterfaceOleWrapper::initialize( const Sequence< Any >& aArguments
 {
     switch( aArguments.getLength() )
     {
-    case 2: // the object wraps an UNO struct
+    case 2: // the object wraps a UNO struct
         aArguments[0] >>= m_xInvocation;
         aArguments[1] >>= m_defaultValueType;
         break;
-    case 3: // the object wraps an UNO interface
+    case 3: // the object wraps a UNO interface
         aArguments[0] >>= m_xInvocation;
         aArguments[1] >>= m_xOrigin;
         aArguments[2] >>= m_defaultValueType;

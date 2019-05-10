@@ -219,7 +219,7 @@ bool UnoInterfaceProxy::CanCastTo(System::Type^ fromType,
         if (nullptr != findInfo( fromType )) // proxy supports demanded interface
             return true;
 
-        //query an uno interface for the required type
+        //query a uno interface for the required type
 
         // we use the first interface in the list (m_listIfaces) to make
         // the queryInterface call

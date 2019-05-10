@@ -827,7 +827,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 aCellIterator->get()->Insert( PROP_BOTTOM_BORDER_DISTANCE,
                                                  uno::makeAny(rInfo.nBottomBorderDistance ), false);
 
-                // Horizontal merge is not an UNO property, extract that info here to rMerges, and then remove it from the map.
+                // Horizontal merge is not a UNO property, extract that info here to rMerges, and then remove it from the map.
                 const boost::optional<PropertyMap::Property> aHorizontalMergeVal = (*aCellIterator)->getProperty(PROP_HORIZONTAL_MERGE);
                 if (aHorizontalMergeVal)
                 {

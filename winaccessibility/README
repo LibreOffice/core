@@ -30,7 +30,7 @@ Threading
 
 It's possible that the UNO components are called from threads other
 than the main thread, so they have to be synchronized. It would be nice
-to put the component into an UNO apartment (and the COM components into STA)
+to put the component into a UNO apartment (and the COM components into STA)
 but UNO would spawn a new thread for it so it's not possible.
 The COM components also call into the same global AccObjectWinManager
 as the UNO components do so both have to be synchronized in the same way.

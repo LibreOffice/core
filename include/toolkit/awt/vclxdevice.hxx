@@ -30,7 +30,7 @@
 
 #include <com/sun/star/awt/XUnitConversion.hpp>
 
-/// An UNO wrapper for the VCL OutputDevice
+/// A UNO wrapper for the VCL OutputDevice
 class TOOLKIT_DLLPUBLIC VCLXDevice :
                     public css::awt::XDevice,
                     public css::lang::XTypeProvider,

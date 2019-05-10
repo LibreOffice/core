@@ -383,7 +383,7 @@ void Bridge::call_java(
     }
 }
 
-// an UNO proxy wrapping a Java interface
+// a UNO proxy wrapping a Java interface
 struct UNO_proxy : public uno_Interface
 {
     mutable std::atomic<std::size_t>    m_ref;

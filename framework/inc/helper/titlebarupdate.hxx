@@ -62,7 +62,7 @@ class TitleBarUpdate : public  ::cppu::WeakImplHelper<
 
     private:
 
-        /// may we need an uno service manager to create own services
+        /// may we need a uno service manager to create own services
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /// reference to the frame which was created by the office himself

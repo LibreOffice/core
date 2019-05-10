@@ -91,7 +91,7 @@ public:
     void                SetSmallSymbol();
     virtual bool        set_property(const OString &rKey, const OUString &rValue) override;
 
-    /// Sets the button state according to the FeatureStateEvent emitted by an Uno state change.
+    /// Sets the button state according to the FeatureStateEvent emitted by a Uno state change.
     virtual void        statusChanged(const css::frame::FeatureStateEvent& rEvent);
 
     virtual FactoryFunction GetUITestFactory() const override;
@@ -456,7 +456,7 @@ public:
     bool            IsChecked() const;
 
     void            EnableTriState( bool bTriState = true );
-    bool            IsTriStateEnabled() const { return mbTriState; }
+    bool            Isweld::TriStateEnabled() const { return mbTriState; }
 
     void            SaveValue() { meSaveValue = GetState(); }
     TriState        GetSavedValue() const { return meSaveValue; }

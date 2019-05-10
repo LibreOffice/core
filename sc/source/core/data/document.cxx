@@ -3874,7 +3874,7 @@ void ScDocument::SetDirty( const ScRange& rRange, bool bIncludeEmptyCells )
             if (maTabs[i]) maTabs[i]->SetDirty( rRange,
                     (bIncludeEmptyCells ? ScColumn::BROADCAST_BROADCASTERS : ScColumn::BROADCAST_DATA_POSITIONS));
 
-        /* TODO: this now also notifies conditional formatting and does an UNO
+        /* TODO: this now also notifies conditional formatting and does a UNO
          * broadcast, which wasn't done here before. Is that an actually
          * desired side effect, or should we come up with a method that
          * doesn't? */
