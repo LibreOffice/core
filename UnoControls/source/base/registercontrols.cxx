@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
@@ -28,6 +27,8 @@
 #include <progressbar.hxx>
 #include <progressmonitor.hxx>
 #include <statusindicator.hxx>
+
+namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 namespace {
 

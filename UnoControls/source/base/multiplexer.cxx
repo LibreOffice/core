@@ -22,6 +22,9 @@
 #include <osl/diagnose.h>
 #include <cppuhelper/queryinterface.hxx>
 
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XTopWindow.hpp>
+
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;

@@ -19,15 +19,11 @@
 
 #include <progressbar.hxx>
 
-#include <com/sun/star/awt/GradientStyle.hpp>
-#include <com/sun/star/awt/RasterOperation.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <tools/debug.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-#include <math.h>
 #include <limits.h>
 
 using namespace ::cppu;

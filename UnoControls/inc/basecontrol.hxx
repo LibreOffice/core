@@ -20,78 +20,23 @@
 #ifndef INCLUDED_UNOCONTROLS_INC_BASECONTROL_HXX
 #define INCLUDED_UNOCONTROLS_INC_BASECONTROL_HXX
 
-#include <com/sun/star/awt/XKeyListener.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
-#include <com/sun/star/awt/KeyEvent.hpp>
-#include <com/sun/star/awt/KeyModifier.hpp>
-#include <com/sun/star/awt/XMouseMotionListener.hpp>
-#include <com/sun/star/awt/FocusEvent.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
-#include <com/sun/star/awt/XActivateListener.hpp>
-#include <com/sun/star/awt/MouseEvent.hpp>
-#include <com/sun/star/awt/XTopWindowListener.hpp>
-#include <com/sun/star/awt/PaintEvent.hpp>
-#include <com/sun/star/awt/InputEvent.hpp>
-#include <com/sun/star/awt/KeyGroup.hpp>
-#include <com/sun/star/awt/Key.hpp>
-#include <com/sun/star/awt/WindowEvent.hpp>
-#include <com/sun/star/awt/XMouseListener.hpp>
-#include <com/sun/star/awt/KeyFunction.hpp>
-#include <com/sun/star/awt/FocusChangeReason.hpp>
-#include <com/sun/star/awt/MouseButton.hpp>
-#include <com/sun/star/awt/XFocusListener.hpp>
-#include <com/sun/star/awt/XFileDialog.hpp>
-#include <com/sun/star/awt/XTextComponent.hpp>
-#include <com/sun/star/awt/XListBox.hpp>
-#include <com/sun/star/awt/XProgressMonitor.hpp>
-#include <com/sun/star/awt/TextAlign.hpp>
-#include <com/sun/star/awt/XScrollBar.hpp>
-#include <com/sun/star/awt/XVclContainerPeer.hpp>
-#include <com/sun/star/awt/XTabControllerModel.hpp>
-#include <com/sun/star/awt/XMessageBox.hpp>
-#include <com/sun/star/awt/XTextEditField.hpp>
-#include <com/sun/star/awt/Style.hpp>
-#include <com/sun/star/awt/XTimeField.hpp>
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
-#include <com/sun/star/awt/XControlModel.hpp>
-#include <com/sun/star/awt/XSpinField.hpp>
-#include <com/sun/star/awt/XUnoControlContainer.hpp>
-#include <com/sun/star/awt/XTextLayoutConstrains.hpp>
-#include <com/sun/star/awt/XNumericField.hpp>
-#include <com/sun/star/awt/XButton.hpp>
-#include <com/sun/star/awt/XTextArea.hpp>
-#include <com/sun/star/awt/XImageButton.hpp>
-#include <com/sun/star/awt/XFixedText.hpp>
-#include <com/sun/star/awt/XControlContainer.hpp>
-#include <com/sun/star/awt/XDialog.hpp>
-#include <com/sun/star/awt/ScrollBarOrientation.hpp>
-#include <com/sun/star/awt/XRadioButton.hpp>
-#include <com/sun/star/awt/XCurrencyField.hpp>
-#include <com/sun/star/awt/XPatternField.hpp>
-#include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
-#include <com/sun/star/awt/XTabController.hpp>
-#include <com/sun/star/awt/XVclContainer.hpp>
-#include <com/sun/star/awt/XDateField.hpp>
-#include <com/sun/star/awt/XComboBox.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/XCheckBox.hpp>
-#include <com/sun/star/awt/XLayoutConstrains.hpp>
-#include <com/sun/star/awt/XProgressBar.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <osl/mutex.hxx>
-#include <cppuhelper/weak.hxx>
 #include <cppuhelper/component.hxx>
 #include <rtl/ref.hxx>
 
-#include "multiplexer.hxx"
-
-namespace com { namespace sun { namespace star { namespace uno {
-    class XComponentContext;
-} } } }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::awt { class XFocusListener; }
+namespace com::sun::star::awt { class XMouseListener; }
+namespace com::sun::star::awt { class XMouseMotionListener; }
+namespace com::sun::star::awt { struct PaintEvent; }
+namespace com::sun::star::awt { struct WindowEvent; }
+namespace unocontrols { class OMRCListenerMultiplexerHelper; }
 
 namespace unocontrols {
 

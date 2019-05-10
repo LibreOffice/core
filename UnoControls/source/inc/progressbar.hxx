@@ -20,10 +20,8 @@
 #ifndef INCLUDED_UNOCONTROLS_SOURCE_INC_PROGRESSBAR_HXX
 #define INCLUDED_UNOCONTROLS_SOURCE_INC_PROGRESSBAR_HXX
 
-#include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/awt/XProgressBar.hpp>
 
-#include <vcl/vclptr.hxx>
 #include <tools/color.hxx>
 
 #include <basecontrol.hxx>

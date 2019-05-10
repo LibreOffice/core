@@ -18,14 +18,15 @@
  */
 
 #include <framecontrol.hxx>
+#include <OConnectionPointContainerHelper.hxx>
 
+#include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>

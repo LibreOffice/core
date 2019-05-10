@@ -22,30 +22,20 @@
 
 #include <com/sun/star/awt/XKeyListener.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
-#include <com/sun/star/awt/KeyEvent.hpp>
-#include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/XMouseMotionListener.hpp>
-#include <com/sun/star/awt/FocusEvent.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
-#include <com/sun/star/awt/XActivateListener.hpp>
-#include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/awt/XTopWindowListener.hpp>
-#include <com/sun/star/awt/PaintEvent.hpp>
-#include <com/sun/star/awt/InputEvent.hpp>
-#include <com/sun/star/awt/KeyGroup.hpp>
-#include <com/sun/star/awt/Key.hpp>
-#include <com/sun/star/awt/WindowEvent.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
-#include <com/sun/star/awt/KeyFunction.hpp>
-#include <com/sun/star/awt/FocusChangeReason.hpp>
-#include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+
+namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::awt { struct KeyEvent; }
+namespace com::sun::star::awt { struct MouseEvent; }
+namespace com::sun::star::awt { struct PaintEvent; }
+namespace com::sun::star::awt { struct WindowEvent; }
 
 namespace unocontrols {
 

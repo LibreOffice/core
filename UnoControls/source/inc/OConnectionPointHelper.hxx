@@ -20,13 +20,12 @@
 #ifndef INCLUDED_UNOCONTROLS_SOURCE_INC_OCONNECTIONPOINTHELPER_HXX
 #define INCLUDED_UNOCONTROLS_SOURCE_INC_OCONNECTIONPOINTHELPER_HXX
 
-#include <com/sun/star/lang/XConnectionPointContainer.hpp>
 #include <com/sun/star/lang/XConnectionPoint.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/propshlp.hxx>
 
-#include "OConnectionPointContainerHelper.hxx"
+namespace com::sun::star::lang { class XConnectionPointContainer; }
+namespace unocontrols { class OConnectionPointContainerHelper; }
 
 namespace unocontrols {
 

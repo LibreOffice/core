@@ -20,15 +20,15 @@
 #ifndef INCLUDED_UNOCONTROLS_SOURCE_INC_FRAMECONTROL_HXX
 #define INCLUDED_UNOCONTROLS_SOURCE_INC_FRAMECONTROL_HXX
 
-#include <com/sun/star/frame/XFrame2.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XConnectionPointContainer.hpp>
 #include <cppuhelper/propshlp.hxx>
 #include <rtl/ref.hxx>
 
 #include <basecontrol.hxx>
-#include "OConnectionPointContainerHelper.hxx"
+
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::frame { class XFrame2; }
+namespace unocontrols { class OConnectionPointContainerHelper; }
 
 namespace unocontrols {
 
