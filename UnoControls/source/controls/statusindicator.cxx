@@ -19,7 +19,8 @@
 
 #include <statusindicator.hxx>
 
-#include <com/sun/star/awt/WindowAttribute.hpp>
+#include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/awt/XFixedText.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>

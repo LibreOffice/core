@@ -20,18 +20,17 @@
 #ifndef INCLUDED_UNOCONTROLS_SOURCE_INC_STATUSINDICATOR_HXX
 #define INCLUDED_UNOCONTROLS_SOURCE_INC_STATUSINDICATOR_HXX
 
-#include <com/sun/star/awt/XControlModel.hpp>
-#include <com/sun/star/awt/XFixedText.hpp>
-#include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
-#include <com/sun/star/awt/XProgressBar.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/awt/XToolkit.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ref.hxx>
 
 #include <basecontainercontrol.hxx>
+
+namespace com::sun::star::awt { class XControlModel; }
+namespace com::sun::star::awt { class XFixedText; }
+namespace com::sun::star::awt { class XGraphics; }
+namespace com::sun::star::awt { class XToolkit; }
+namespace com::sun::star::awt { class XWindowPeer; }
 
 namespace unocontrols {
 

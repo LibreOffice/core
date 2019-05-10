@@ -18,10 +18,9 @@
  */
 
 #include <basecontrol.hxx>
+#include <multiplexer.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/awt/XDisplayBitmap.hpp>
-#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>

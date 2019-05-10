@@ -22,6 +22,10 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
+#include <com/sun/star/container/ContainerEvent.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/awt/XControlContainer.hpp>
+
 //  namespaces
 
 using namespace ::cppu;

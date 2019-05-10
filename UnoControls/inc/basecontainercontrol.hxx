@@ -20,20 +20,11 @@
 #ifndef INCLUDED_UNOCONTROLS_INC_BASECONTAINERCONTROL_HXX
 #define INCLUDED_UNOCONTROLS_INC_BASECONTAINERCONTROL_HXX
 
-#include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/container/XContainerListener.hpp>
-#include <com/sun/star/container/XSet.hpp>
-#include <com/sun/star/container/ContainerEvent.hpp>
-#include <com/sun/star/container/XIndexReplace.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <memory>
 #include <vector>
 
 #include "basecontrol.hxx"
+#include <com/sun/star/awt/XControlContainer.hpp>
 
 namespace unocontrols {
 
