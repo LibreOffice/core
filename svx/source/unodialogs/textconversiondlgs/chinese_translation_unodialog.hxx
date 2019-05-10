@@ -36,7 +36,7 @@ namespace textconversiondlgs
 {
 
 
-/** This class provides the chinese translation dialog as an uno component.
+/** This class provides the chinese translation dialog as a uno component.
 
 It can be created via lang::XMultiComponentFactory::createInstanceWithContext
 with servicename "com.sun.star.linguistic2.ChineseTranslationDialog"

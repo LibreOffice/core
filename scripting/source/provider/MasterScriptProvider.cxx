@@ -273,7 +273,7 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
     // we need to extract the value of location part from the
     // location attribute of the script, if the script is located in an
     // uno package then that is the location part up to and including
-    // ":uno_packages", if the script is not in an uno package then the
+    // ":uno_packages", if the script is not in a uno package then the
     // normal value is used e.g. user or share.
     // The value extracted will be used to determine if the script is
     // located in the same location context as this MSP.

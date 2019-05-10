@@ -91,7 +91,7 @@ published interface XInterface
         to the object.
 
         <p>
-        It is only allowed to invoke a method on an UNO object, when you keep
+        It is only allowed to invoke a method on a UNO object, when you keep
         a hard reference to it.
 
         <p> Every call to acquire must be followed by a corresponding call to release

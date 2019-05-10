@@ -38,7 +38,7 @@ namespace framework{
 
 /**
     @short      overloaded index operator of hash map to support pattern key search
-    @descr      All keys inside this hash map are URL pattern which points to an uno
+    @descr      All keys inside this hash map are URL pattern which points to a uno
                 implementation name of a protocol handler service which is registered
                 for this pattern. This operator makes it easy to find such registered
                 handler by using a full qualified URL and compare it with all pattern

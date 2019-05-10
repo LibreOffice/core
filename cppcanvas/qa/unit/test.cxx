@@ -75,7 +75,7 @@ void CanvasTest::testComposite()
         aRedTransparent[3] = 0.5; // A
         aDefaultState.DeviceColor = aRedTransparent;
 #if 0
-        // words fail me to describe the sheer beauty of allocating an UNO
+        // words fail me to describe the sheer beauty of allocating a UNO
         // object to represent a polygon, and manually handling the ViewState
         // and there being no public helper for this - to render ... a rectangle.
         XCachedPrimitive    fillPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState )

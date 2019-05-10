@@ -123,7 +123,7 @@ namespace ooo
 
         /// @throws css::uno::RuntimeException
         VBAHELPER_DLLPUBLIC OUString getAnyAsString( const css::uno::Any& pvargItem );
-        VBAHELPER_DLLPUBLIC OUString VBAToRegexp(const OUString &rIn); // needs to be in an uno service ( already this code is duplicated in basic )
+        VBAHELPER_DLLPUBLIC OUString VBAToRegexp(const OUString &rIn); // needs to be in a uno service ( already this code is duplicated in basic )
         VBAHELPER_DLLPUBLIC double getPixelTo100thMillimeterConversionFactor( const css::uno::Reference< css::awt::XDevice >& xDevice, bool bVertical);
         VBAHELPER_DLLPUBLIC double PointsToPixels( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, bool bVertical);
         VBAHELPER_DLLPUBLIC double PixelsToPoints( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, bool bVertical);

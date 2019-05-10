@@ -294,7 +294,7 @@ open class Document
     }
 
     /**
-     * Posts an UNO command to the document.
+     * Posts a UNO command to the document.
      *
      * Example argument string:
      *

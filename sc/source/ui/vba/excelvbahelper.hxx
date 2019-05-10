@@ -80,7 +80,7 @@ public:
     static SfxItemSet* GetDataSet( ScCellRangesBase* pRangeObj );
 };
 
-// Extracts a implementation object ( via XUnoTunnel ) from an uno object.
+// Extracts a implementation object ( via XUnoTunnel ) from a uno object.
 // Will throw if unsuccessful.
 /// @throws css::uno::RuntimeException
 template < typename ImplObject >

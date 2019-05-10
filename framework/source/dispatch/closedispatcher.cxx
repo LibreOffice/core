@@ -199,7 +199,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     // Do it asynchronous everytimes!
 
     // But don't forget to hold ourselves alive.
-    // We are called back from an environment, which doesn't know an uno reference.
+    // We are called back from an environment, which doesn't know a uno reference.
     // They call us back by using our c++ interface.
 
     m_xResultListener = xListener;

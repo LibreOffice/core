@@ -592,7 +592,7 @@ namespace frm
             return xReturn;
         }
 
-        // is it an UNO slot?
+        // is it a UNO slot?
         OUString sUnoProtocolPrefix( ".uno:" );
         if ( _rURL.Complete.startsWith( sUnoProtocolPrefix ) )
         {

@@ -29,7 +29,7 @@
  module com {  module sun {  module star {  module awt {
 
 
-/** specifies the standard model of an UnoControlFixedHyperlink.
+/** specifies the standard model of a UnoControlFixedHyperlink.
  */
 service UnoControlFixedHyperlinkModel
 {

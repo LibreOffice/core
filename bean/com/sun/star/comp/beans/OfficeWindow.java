@@ -38,7 +38,7 @@ public interface OfficeWindow
     Component getAWTComponent();
 
     /**
-     * Retrieves an UNO XWindowPeer object associated with the OfficeWindow.
+     * Retrieves a UNO XWindowPeer object associated with the OfficeWindow.
      *
      * @return The UNO XWindowPeer object associated with the OfficeWindow.
      */

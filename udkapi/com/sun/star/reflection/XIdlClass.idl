@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module reflection {
  published interface XIdlArray;
 
 
-/** Provides information reflecting an UNO type.
+/** Provides information reflecting a UNO type.
 */
 published interface XIdlClass: com::sun::star::uno::XInterface
 {

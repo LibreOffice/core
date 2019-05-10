@@ -326,7 +326,7 @@
         <!-- OldPath: Common-->
         <!-- OldLocation: soffice.ini -->
         <info>
-          <desc>Specifies the URL for an UNO connection that can be used to
+          <desc>Specifies the URL for a UNO connection that can be used to
           script the office from outside.</desc>
         </info>
         <value/>

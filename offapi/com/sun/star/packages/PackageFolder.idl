@@ -53,7 +53,7 @@ published service PackageFolder
     XElementAccess::getElementType returns service PackageStream
     XNameAccess::getByName returns either a PackageFolder or a PackageStream
         as a css::uno::Any
-    XNameAccess::getElementNames returns an uno::Sequence of strings containing
+    XNameAccess::getElementNames returns a uno::Sequence of strings containing
         the names of all children stored in the PackageFolder
     */
     interface com::sun::star::container::XNameContainer;

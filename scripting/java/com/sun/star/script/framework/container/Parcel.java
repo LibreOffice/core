@@ -56,8 +56,8 @@ public class Parcel implements XNameContainer {
     }
 
     /**
-     * Tests if this <tt>Parcel</tt> is in an UNO package
-     * or within a sub package within an UNO package
+     * Tests if this <tt>Parcel</tt> is in a UNO package
+     * or within a sub package within a UNO package
      *
      * @return    <tt>true</tt> if has parent <tt>false</tt> otherwise
      */

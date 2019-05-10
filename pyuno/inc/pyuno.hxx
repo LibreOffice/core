@@ -215,7 +215,7 @@ public:
      */
     static bool isInitialized();
 
-    /** converts something contained in an UNO Any to a Python object
+    /** converts something contained in a UNO Any to a Python object
 
         preconditions: python has been initialized before,
         the global interpreter lock is held and pyuno::Runtime

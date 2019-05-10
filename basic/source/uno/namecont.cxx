@@ -592,7 +592,7 @@ static void createVariableURL( OUString& rStr, const OUString& rLibName,
 void SfxLibraryContainer::init( const OUString& rInitialDocumentURL, const uno::Reference< embed::XStorage >& rxInitialStorage )
 {
     // this might be called from within the ctor, and the impl_init might (indirectly) create
-    // an UNO reference to ourself.
+    // a UNO reference to ourself.
     // Ensure that we're not destroyed while we're in here
     osl_atomic_increment( &m_refCount );
     init_Impl( rInitialDocumentURL, rxInitialStorage );

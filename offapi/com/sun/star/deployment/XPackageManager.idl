@@ -39,11 +39,11 @@ module com { module sun { module star { module deployment {
     repository.
     Packages are deployable files, e.g. scripts or UNO components.
     <p>
-    Adding an UNO package means that a copy of the package is stored
+    Adding a UNO package means that a copy of the package is stored
     in the repository.
     </p>
     <p>
-    Removing an UNO package means that the previously added package is
+    Removing a UNO package means that the previously added package is
     removed from the repository.
     </p>
     <p>
@@ -96,7 +96,7 @@ interface XPackageManager
     */
     com::sun::star::task::XAbortChannel createAbortChannel();
 
-    /** adds an UNO package.
+    /** adds a UNO package.
 
         The properties argument is currently only used to suppress the license information
         for shared extensions.
@@ -151,7 +151,7 @@ interface XPackageManager
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
 
-    /** removes an UNO package.
+    /** removes a UNO package.
 
         @param identifier
                package identifier

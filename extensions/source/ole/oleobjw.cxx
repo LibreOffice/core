@@ -446,7 +446,7 @@ Any SAL_CALL IUnknownWrapper::getValue( const OUString& aPropertyName )
         // I was going to implement an XServiceInfo interface to allow the type
         // of the automation object to be exposed.. but it seems
         // from looking at comments in the code that it is possible for
-        // this object to actually wrap an UNO object ( I guess if automation is
+        // this object to actually wrap a UNO object ( I guess if automation is
         // used from MSO to create Openoffice objects ) Therefore, those objects
         // will more than likely already have their own XServiceInfo interface.
         // Instead here I chose a name that should be illegal both in COM and

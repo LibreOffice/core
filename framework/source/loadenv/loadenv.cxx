@@ -722,7 +722,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     // SAFE ->
     osl::ClearableMutexGuard aReadLock(m_mutex);
 
-    // Attention: Because our stl media descriptor is a copy of an uno sequence
+    // Attention: Because our stl media descriptor is a copy of a uno sequence
     // we can't use as an in/out parameter here. Copy it before and don't forget to
     // update structure afterwards again!
     css::uno::Sequence< css::beans::PropertyValue >        lDescriptor = m_lMediaDescriptor.getAsConstPropertyValueList();

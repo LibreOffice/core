@@ -225,7 +225,7 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
             return true;
     }
 
-    // some base classes are overridden by sub-classes which override both the base-class and an UNO class
+    // some base classes are overridden by sub-classes which override both the base-class and a UNO class
     if (recordDecl)
     {
         auto dc = loplugin::DeclCheck(recordDecl);

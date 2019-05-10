@@ -176,7 +176,7 @@ namespace
         for(const auto pAnchoredObj : *pObjs)
         {
             SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
-            // Filter out textboxes, which are not interesting at an UNO level.
+            // Filter out textboxes, which are not interesting at a UNO level.
             if(SwTextBoxHelper::isTextBox(&rFormat, RES_FLYFRMFMT))
                 continue;
             if(rFormat.GetAnchor().GetAnchorId() == nAnchorType)

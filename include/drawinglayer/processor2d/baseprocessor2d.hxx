@@ -56,7 +56,7 @@ namespace drawinglayer
             The process(..) implementation makes a complete iteration over the given
             sequence of primitives. If the Primitive is not derived from BasePrimitive2D
             and thus not part of the C++ implementations, it converts ViewInformation2D
-            to the corresponding API implementation (an uno::Sequence< beans::PropertyValue >)
+            to the corresponding API implementation (a uno::Sequence< beans::PropertyValue >)
             and recursively calls the method process(..) at the primitive with the decomposition
             derived from that primitive. This is the preparation to handle unknown implementations
             of the css::graphic::XPrimitive2D interface in the future.

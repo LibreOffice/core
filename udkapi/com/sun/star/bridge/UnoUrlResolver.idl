@@ -26,7 +26,7 @@ published interface XUnoUrlResolver;
 
 
 /** provides the ability to access remote processes,
-    resolving them by an UNO url.
+    resolving them by a UNO url.
     <br>
  */
 published service UnoUrlResolver: XUnoUrlResolver;

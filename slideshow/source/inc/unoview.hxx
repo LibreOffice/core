@@ -39,7 +39,7 @@ namespace slideshow
     {
         /** Extend View with UNO interface retrieval.
 
-            This interface extends View with an UNO interface
+            This interface extends View with a UNO interface
             retrieval, to be used for Views which are set from
             external API.
          */

@@ -360,7 +360,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
 /**
     @short  dispatch a service
     @descr  We use the given name only to create and if possible to initialize
-            it as an uno service. It can be useful for creating (caching?)
+            it as a uno service. It can be useful for creating (caching?)
             of e.g. one instance services.
 
     @param  sService

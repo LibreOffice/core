@@ -29,7 +29,7 @@ namespace com::sun::star::beans { struct Property; }
 
 class SbxObject;
 
-// Returns a SbxObject that wraps an Uno Interface
+// Returns a SbxObject that wraps a Uno Interface
 // Implementation in basic/source/classes/sbunoobj.cxx
 BASIC_DLLPUBLIC SbxObjectRef GetSbUnoObject( const OUString& aName, const css::uno::Any& aUnoObj_ );
 

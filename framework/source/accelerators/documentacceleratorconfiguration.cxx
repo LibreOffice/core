@@ -64,7 +64,7 @@ public:
     /** initialize this instance and fill the internal cache.
 
         @param  xSMGR
-                reference to an uno service manager, which is used internally.
+                reference to a uno service manager, which is used internally.
      */
     DocumentAcceleratorConfiguration(
             const css::uno::Reference< css::uno::XComponentContext >& xContext,
