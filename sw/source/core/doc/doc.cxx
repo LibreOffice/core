@@ -1728,22 +1728,20 @@ void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, bool bIsTable )
     }
 }
 
-void SwDoc::ChangeTOX(SwTOXBase & rTOX, const SwTOXBase & rNew,
-        SwRootFrame const& rLayout)
+void SwDoc::ChangeTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
 {
+    assert(dynamic_cast<const SwTOXBaseSection*>(&rTOX));
+    SwTOXBaseSection& rTOXSect(static_cast<SwTOXBaseSection&>(rTOX));
+
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            std::make_unique<SwUndoTOXChange>(this, &rTOX, rNew));
+            std::make_unique<SwUndoTOXChange>(this, rTOXSect, rNew));
     }
 
     rTOX = rNew;
 
-    if (dynamic_cast<const SwTOXBaseSection*>( &rTOX) !=  nullptr)
-    {
-        static_cast<SwTOXBaseSection &>(rTOX).Update(nullptr, &rLayout);
-        static_cast<SwTOXBaseSection &>(rTOX).UpdatePageNum();
-    }
+    // note: do not Update the ToX here - the caller will do it, with a ViewShell!
 }
 
 OUString SwDoc::GetPaMDescr(const SwPaM & rPam)

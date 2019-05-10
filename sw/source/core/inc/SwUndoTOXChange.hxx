@@ -24,16 +24,18 @@
 #include <tox.hxx>
 
 class SwDoc;
+class SwTOXBaseSection;
 
 class SwUndoTOXChange : public SwUndo
 {
-    SwTOXBase * pTOX, aOld, aNew;
+private:
+    SwTOXBase m_Old;
+    SwTOXBase m_New;
 
-    void UpdateTOXBaseSection();
-    void DoImpl();
+    sal_uLong const m_nNodeIndex;
 
 public:
-    SwUndoTOXChange(const SwDoc* pDoc, SwTOXBase * pTOX, const SwTOXBase & rNew);
+    SwUndoTOXChange(const SwDoc* pDoc, SwTOXBaseSection const& rTOX, const SwTOXBase & rNew);
     virtual ~SwUndoTOXChange() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;

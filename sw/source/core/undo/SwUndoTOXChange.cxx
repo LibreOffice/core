@@ -19,10 +19,17 @@
 
 #include <SwUndoTOXChange.hxx>
 #include <swundo.hxx>
+#include <UndoCore.hxx>
 #include <doctxm.hxx>
+#include <doc.hxx>
+#include <node.hxx>
 
-SwUndoTOXChange::SwUndoTOXChange(const SwDoc *pDoc, SwTOXBase * _pTOX, const SwTOXBase & rNew)
-    : SwUndo(SwUndoId::TOXCHANGE, pDoc), pTOX(_pTOX), aOld(*_pTOX), aNew(rNew)
+SwUndoTOXChange::SwUndoTOXChange(const SwDoc *pDoc,
+        SwTOXBaseSection const& rTOX, SwTOXBase const& rNew)
+    : SwUndo(SwUndoId::TOXCHANGE, pDoc)
+    , m_Old(rTOX)
+    , m_New(rNew)
+    , m_nNodeIndex(rTOX.GetFormat()->GetSectionNode()->GetIndex())
 {
 }
 
@@ -30,38 +37,39 @@ SwUndoTOXChange::~SwUndoTOXChange()
 {
 }
 
-void SwUndoTOXChange::UpdateTOXBaseSection()
+// get the current ToXBase, which is not necessarily the same instance that existed there before
+static SwTOXBase & GetTOX(SwDoc & rDoc, sal_uLong const nNodeIndex)
 {
-    if ( dynamic_cast< const SwTOXBaseSection *>( pTOX ) != nullptr )
+    SwSectionNode *const pNode(rDoc.GetNodes()[nNodeIndex]->GetSectionNode());
+    assert(pNode);
+    assert(dynamic_cast<SwTOXBaseSection*>(&pNode->GetSection()));
+    auto & rTOX(static_cast<SwTOXBaseSection&>(pNode->GetSection()));
+    return rTOX;
+}
+
+void SwUndoTOXChange::UndoImpl(::sw::UndoRedoContext & rContext)
+{
+    SwDoc & rDoc(rContext.GetDoc());
+    SwTOXBase & rTOX(GetTOX(rDoc, m_nNodeIndex));
+    rTOX = m_Old;
+}
+
+void SwUndoTOXChange::RedoImpl(::sw::UndoRedoContext & rContext)
+{
+    SwDoc & rDoc(rContext.GetDoc());
+    SwTOXBase & rTOX(GetTOX(rDoc, m_nNodeIndex));
+    rTOX = m_New;
+}
+
+void SwUndoTOXChange::RepeatImpl(::sw::RepeatContext & rContext)
+{
+    SwDoc & rDoc(rContext.GetDoc());
+    SwTOXBase *const pTOX(SwDoc::GetCurTOX(*rContext.GetRepeatPaM().GetPoint()));
+    if (pTOX)
     {
-        SwTOXBaseSection * pTOXBase = static_cast<SwTOXBaseSection *>(pTOX);
-        pTOXBase->Update();
-        pTOXBase->UpdatePageNum();
+        rDoc.ChangeTOX(*pTOX, m_New);
+        // intentionally limited to not Update because we'd need layout
     }
-}
-
-void SwUndoTOXChange::UndoImpl(::sw::UndoRedoContext &)
-{
-    *pTOX = aOld;
-
-    UpdateTOXBaseSection();
-}
-
-void SwUndoTOXChange::DoImpl()
-{
-    *pTOX = aNew;
-
-    UpdateTOXBaseSection();
-}
-
-void SwUndoTOXChange::RedoImpl(::sw::UndoRedoContext &)
-{
-    DoImpl();
-}
-
-void SwUndoTOXChange::RepeatImpl(::sw::RepeatContext &)
-{
-    DoImpl();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
