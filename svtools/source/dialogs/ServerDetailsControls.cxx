@@ -452,7 +452,7 @@ IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl, weld::Button&, void  )
         // Get the Content
         ::ucbhelper::Content aCnt( sUrl, m_xCmdEnv, comphelper::getProcessComponentContext() );
         Sequence<OUString> aProps { "Title" };
-        Reference< XResultSet > xResultSet( aCnt.createCursor( aProps ), UNO_QUERY_THROW );
+        Reference< XResultSet > xResultSet( aCnt.createCursor( aProps ), UNO_SET_THROW );
         Reference< XContentAccess > xAccess( xResultSet, UNO_QUERY_THROW );
         while ( xResultSet->next() )
         {

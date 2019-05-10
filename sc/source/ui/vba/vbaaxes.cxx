@@ -74,7 +74,7 @@ ScVbaAxes::createAxis( const uno::Reference< excel::XChart >& xChart, const uno:
     {
         if ((nAxisGroup != xlPrimary) && (nAxisGroup != xlSecondary))
             DebugHelper::runtimeexception(ERRCODE_BASIC_METHOD_FAILED);
-        xAxisPropertySet.set( pChart->getAxisPropertySet(nType, nAxisGroup), uno::UNO_QUERY_THROW );
+        xAxisPropertySet.set( pChart->getAxisPropertySet(nType, nAxisGroup), uno::UNO_SET_THROW );
     }
     else
         DebugHelper::runtimeexception(ERRCODE_BASIC_METHOD_FAILED);

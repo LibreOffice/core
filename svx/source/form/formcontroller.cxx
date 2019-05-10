@@ -3498,7 +3498,7 @@ vcl::Window* FormController::getDialogParentWindow()
     try
     {
         Reference< XControl > xContainerControl( getContainer(), UNO_QUERY_THROW );
-        Reference< XWindowPeer > xContainerPeer( xContainerControl->getPeer(), UNO_QUERY_THROW );
+        Reference< XWindowPeer > xContainerPeer( xContainerControl->getPeer(), UNO_SET_THROW );
         pParentWindow = VCLUnoHelper::GetWindow( xContainerPeer ).get();
     }
     catch( const Exception& )

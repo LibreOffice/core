@@ -101,12 +101,12 @@ ScAnnontationObj::getAnnotation(table::CellAddress& xCellAddress)
 
     // get the cell
     uno::Reference<table::XCell> xCell(
-        xSheet->getCellByPosition(xCellAddress.Column, xCellAddress.Row), uno::UNO_QUERY_THROW);
+        xSheet->getCellByPosition(xCellAddress.Column, xCellAddress.Row), uno::UNO_SET_THROW);
 
     // get the annotation from cell
     uno::Reference<sheet::XSheetAnnotationAnchor> xAnnotationAnchor(xCell, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetAnnotation> xSheetAnnotation(xAnnotationAnchor->getAnnotation(),
-                                                             uno::UNO_QUERY_THROW);
+                                                             uno::UNO_SET_THROW);
 
     return xSheetAnnotation;
 }

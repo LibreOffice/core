@@ -287,7 +287,7 @@ namespace pcr
             OSL_PRECOND( _rxIntrospection.is(), "lcl_addListenerTypesFor_throw: this will crash!" );
 
             Reference< XIntrospectionAccess > xIntrospectionAccess(
-                _rxIntrospection->inspect( makeAny( _rxComponent ) ), UNO_QUERY_THROW );
+                _rxIntrospection->inspect( makeAny( _rxComponent ) ), UNO_SET_THROW );
 
             Sequence< Type > aListeners( xIntrospectionAccess->getSupportedListeners() );
 
@@ -952,7 +952,7 @@ namespace pcr
         try
         {
             Reference< XScriptEventsSupplier > xEventsSupplier( m_xComponent, UNO_QUERY_THROW );
-            Reference< XNameContainer > xEvents( xEventsSupplier->getEvents(), UNO_QUERY_THROW );
+            Reference< XNameContainer > xEvents( xEventsSupplier->getEvents(), UNO_SET_THROW );
             Sequence< OUString > aEventNames( xEvents->getElementNames() );
 
             sal_Int32 nEventCount = aEventNames.getLength();
@@ -1077,7 +1077,7 @@ namespace pcr
             bool bResetScript =  sScriptCode.isEmpty();
 
             Reference< XScriptEventsSupplier > xEventsSupplier( m_xComponent, UNO_QUERY_THROW );
-            Reference< XNameContainer > xEvents( xEventsSupplier->getEvents(), UNO_QUERY_THROW );
+            Reference< XNameContainer > xEvents( xEventsSupplier->getEvents(), UNO_SET_THROW );
 
             OUStringBuffer aCompleteName;
             aCompleteName.append( _rScriptEvent.ListenerType );

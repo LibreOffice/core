@@ -146,7 +146,7 @@ ErrCode LoadOlePropertySet(
     if( xCustomSect.get() )
     {
         uno::Reference < beans::XPropertyContainer > xUserDefined(
-            i_xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
+            i_xDocProps->getUserDefinedProperties(), uno::UNO_SET_THROW);
         ::std::vector< sal_Int32 > aPropIds;
         xCustomSect->GetPropertyIds( aPropIds );
         for( const auto& rPropId : aPropIds )

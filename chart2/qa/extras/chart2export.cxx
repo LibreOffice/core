@@ -1871,7 +1871,7 @@ void Chart2ExportTest::testCustomDataLabel()
     uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
 
     // 1
-    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aFields.getLength());
 
@@ -1887,7 +1887,7 @@ void Chart2ExportTest::testCustomDataLabel()
     CPPUNIT_ASSERT_EQUAL(OUString("{0C576297-5A9F-4B4E-A675-B6BA406B7D87}"), aFields[1]->getGuid());
 
     // 2
-    xPropertySet.set(xDataSeries->getDataPointByIndex(1), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(1), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8), aFields.getLength());
 
@@ -1929,7 +1929,7 @@ void Chart2ExportTest::testCustomDataLabel()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nCharUnderline);
 
     // 3
-    xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aFields.getLength());
 
@@ -1938,7 +1938,7 @@ void Chart2ExportTest::testCustomDataLabel()
     CPPUNIT_ASSERT_EQUAL(OUString("{C8F3EB90-8960-4F9A-A3AD-B4FAC4FE4566}"), aFields[0]->getGuid());
 
     // 4
-    xPropertySet.set(xDataSeries->getDataPointByIndex(3), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(3), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aFields.getLength());
 
@@ -1966,7 +1966,7 @@ void Chart2ExportTest::testCustomDataLabelMultipleSeries()
     uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
 
     // First series
-    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aFields.getLength());
 
@@ -1987,7 +1987,7 @@ void Chart2ExportTest::testCustomDataLabelMultipleSeries()
     xDataSeries = getDataSeriesFromDoc(xChartDoc, 0, 1);
     CPPUNIT_ASSERT(xDataSeries.is());
 
-    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aFields.getLength());
 

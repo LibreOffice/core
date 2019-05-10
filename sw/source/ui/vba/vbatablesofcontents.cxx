@@ -85,7 +85,7 @@ public:
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
 
-        uno::Reference< text::XDocumentIndex > xToc( maToc[Index], uno::UNO_QUERY_THROW );
+        uno::Reference< text::XDocumentIndex > xToc( maToc[Index], uno::UNO_SET_THROW );
         return uno::makeAny( uno::Reference< word::XTableOfContents >( new SwVbaTableOfContents( mxParent, mxContext, mxTextDocument, xToc ) ) );
     }
     virtual uno::Type SAL_CALL getElementType(  ) override

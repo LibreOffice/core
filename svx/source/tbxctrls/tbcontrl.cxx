@@ -3681,7 +3681,7 @@ void SvxCurrencyToolBoxControl::execute( sal_Int16 nSelectModifier )
             try
             {
                 uno::Reference< util::XNumberFormatsSupplier > xRef( m_xFrame->getController()->getModel(), uno::UNO_QUERY );
-                uno::Reference< util::XNumberFormats > rxNumberFormats( xRef->getNumberFormats(), uno::UNO_QUERY_THROW );
+                uno::Reference< util::XNumberFormats > rxNumberFormats( xRef->getNumberFormats(), uno::UNO_SET_THROW );
                 css::lang::Locale aLocale = LanguageTag::convertToLocale( m_eLanguage );
                 nFormatKey = rxNumberFormats->queryKey( m_aFormatString, aLocale, false );
                 if ( nFormatKey == NUMBERFORMAT_ENTRY_NOT_FOUND )

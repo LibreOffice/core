@@ -347,7 +347,7 @@ void SdMiscTest::testFillGradient()
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier = getDoc( xDocShRef );
     uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
     // Insert a new page.
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->insertNewByIndex(0), uno::UNO_QUERY_THROW );
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->insertNewByIndex(0), uno::UNO_SET_THROW );
     uno::Reference<drawing::XShapes> xShapes(xDrawPage,uno::UNO_QUERY_THROW);
     uno::Reference<lang::XMultiServiceFactory> const xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
     // Create a rectangle

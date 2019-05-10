@@ -1013,7 +1013,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             try
                             {
                                 // load shared file
-                                xModel.set( LoadSharedDocument(), uno::UNO_QUERY_THROW );
+                                xModel.set( LoadSharedDocument(), uno::UNO_SET_THROW );
                                 uno::Reference< util::XCloseable > xCloseable( xModel, uno::UNO_QUERY_THROW );
 
                                 // check if shared flag is set in shared file

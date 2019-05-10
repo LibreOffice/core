@@ -394,7 +394,7 @@ namespace cppcanvas
                     rOrigTextLayout->getFont()->createTextLayout( aContext,
                                                                   rOrigTextLayout->getMainTextDirection(),
                                                                   0 ),
-                    uno::UNO_QUERY_THROW );
+                    uno::UNO_SET_THROW );
 
                 return xTextLayout;
             }

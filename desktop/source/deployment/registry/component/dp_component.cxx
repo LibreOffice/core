@@ -1110,7 +1110,7 @@ void extractComponentData(
     css::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
         keys(registry->openKeys());
     css::uno::Reference< css::lang::XMultiComponentFactory > smgr(
-        context->getServiceManager(), css::uno::UNO_QUERY_THROW);
+        context->getServiceManager(), css::uno::UNO_SET_THROW);
     for (sal_Int32 i = 0; i < keys.getLength(); ++i) {
         OUString name(keys[i]->getKeyName().copy(prefix));
         data->implementationNames.push_back(name);

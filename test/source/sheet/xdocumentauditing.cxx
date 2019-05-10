@@ -46,7 +46,7 @@ void XDocumentAuditing::dispatch(const uno::Reference<frame::XFrame>& xFrame,
 {
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
     uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext),
-                                                           UNO_QUERY_THROW);
+                                                           UNO_SET_THROW);
     CPPUNIT_ASSERT(xDispatchHelper.is());
 
     uno::Reference<frame::XDispatchProvider> xDispatchProvider(xFrame, UNO_QUERY_THROW);
@@ -81,7 +81,7 @@ void XDocumentAuditing::testRefreshArrows()
     uno::Reference<sheet::XDocumentAuditing> xDocumentAuditing(init(), UNO_QUERY_THROW);
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(xDocumentAuditing, UNO_QUERY_THROW);
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xSheets, UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet1(xIA->getByIndex(0), UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet2(xIA->getByIndex(1), UNO_QUERY_THROW);

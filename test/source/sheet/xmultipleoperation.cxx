@@ -32,7 +32,7 @@ void XMultipleOperation::testSetTableOperation()
 
     uno::Reference<sheet::XSpreadsheet> xSheet(getXSpreadsheet(), UNO_QUERY_THROW);
     uno::Reference<table::XCellRange> xCellRange(xSheet->getCellRangeByName("$A$20:$A$20"),
-                                                 UNO_QUERY_THROW);
+                                                 UNO_SET_THROW);
     uno::Reference<sheet::XCellRangeAddressable> xCellRangeAddr(xCellRange, UNO_QUERY_THROW);
 
     uno::Reference<table::XCell> xCell = xSheet->getCellByPosition(0, 19);

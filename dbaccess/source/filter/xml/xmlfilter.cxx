@@ -346,7 +346,7 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             pMedium = new SfxMedium(sFileName, (StreamMode::READ | StreamMode::NOCREATE));
             try
             {
-                xStorage.set(pMedium->GetStorage(false), UNO_QUERY_THROW);
+                xStorage.set(pMedium->GetStorage(false), UNO_SET_THROW);
 
                 if (!sStreamRelPath.isEmpty())
                     xStorage = xStorage->openStorageElement(sStreamRelPath, embed::ElementModes::READ);

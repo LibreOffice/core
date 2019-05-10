@@ -26,7 +26,7 @@ void XConsolidatable::testCreateConsolidationDescriptor()
     uno::Reference<sheet::XConsolidatable> xConsolidatable(init(), UNO_QUERY_THROW);
 
     uno::Reference<sheet::XConsolidationDescriptor> xConsolidationDescriptor(
-        xConsolidatable->createConsolidationDescriptor(true), UNO_QUERY_THROW);
+        xConsolidatable->createConsolidationDescriptor(true), UNO_SET_THROW);
 }
 
 void XConsolidatable::testConsolidate()
@@ -34,7 +34,7 @@ void XConsolidatable::testConsolidate()
     uno::Reference<sheet::XConsolidatable> xConsolidatable(init(), UNO_QUERY_THROW);
 
     uno::Reference<sheet::XConsolidationDescriptor> xConsolidationDescriptor(
-        xConsolidatable->createConsolidationDescriptor(true), UNO_QUERY_THROW);
+        xConsolidatable->createConsolidationDescriptor(true), UNO_SET_THROW);
 
     xConsolidatable->consolidate(xConsolidationDescriptor);
     CPPUNIT_ASSERT_MESSAGE("consolidate()", true);

@@ -337,7 +337,7 @@ Any AnimationsImportHelperImpl::convertTarget( const OUString& rValue )
             Reference< XTextRangeCompare > xTextRangeCompare( xShape, UNO_QUERY_THROW );
 
             Reference< XEnumerationAccess > xParaEnumAccess( xShape, UNO_QUERY_THROW );
-            Reference< XEnumeration > xEnumeration( xParaEnumAccess->createEnumeration(), UNO_QUERY_THROW );
+            Reference< XEnumeration > xEnumeration( xParaEnumAccess->createEnumeration(), UNO_SET_THROW );
             sal_Int16 nParagraph = 0;
 
             while( xEnumeration->hasMoreElements() )
@@ -1298,7 +1298,7 @@ void AnimationNodeContext::postProcessRootNode( const Reference< XAnimationNode 
     if( xRootNode.is() && xPageProps.is() ) try
     {
         Reference< XEnumerationAccess > xEnumerationAccess( xRootNode, UNO_QUERY_THROW );
-        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_SET_THROW );
         if( xEnumeration->hasMoreElements() )
         {
             Reference< XAnimationNode > xNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
@@ -1309,7 +1309,7 @@ void AnimationNodeContext::postProcessRootNode( const Reference< XAnimationNode 
                 {
                     // found transition node
                     Reference< XEnumerationAccess > xChildEnumerationAccess( xNode, UNO_QUERY_THROW );
-                    Reference< XEnumeration > xChildEnumeration( xChildEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+                    Reference< XEnumeration > xChildEnumeration( xChildEnumerationAccess->createEnumeration(), UNO_SET_THROW );
                     while( xChildEnumeration->hasMoreElements() )
                     {
                         Reference< XAnimationNode > xChildNode( xChildEnumeration->nextElement(), UNO_QUERY_THROW );

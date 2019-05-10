@@ -82,7 +82,7 @@ ScVbaControl::getWindowPeer()
         return xWinPeer;
     }
     // form control
-    xControlModel.set( xControlShape->getControl(), uno::UNO_QUERY_THROW );
+    xControlModel.set( xControlShape->getControl(), uno::UNO_SET_THROW );
 
     uno::Reference< view::XControlAccess > xControlAccess( m_xModel->getCurrentController(), uno::UNO_QUERY_THROW );
     try
@@ -141,7 +141,7 @@ ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, c
         m_xProps.set( xControlShape->getControl(), uno::UNO_QUERY_THROW );
         OUString sDefaultControl;
         m_xProps->getPropertyValue( "DefaultControl" ) >>= sDefaultControl;
-        uno::Reference< lang::XMultiComponentFactory > xMFac( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
+        uno::Reference< lang::XMultiComponentFactory > xMFac( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         m_xEmptyFormControl.set( xMFac->createInstanceWithContext( sDefaultControl, mxContext ), uno::UNO_QUERY_THROW );
     }
     else if ( xUserFormControl.is() ) // userform control
@@ -512,7 +512,7 @@ ScVbaControl::setMousePointer( ::sal_Int32 _mousepointer )
 void SAL_CALL ScVbaControl::fireEvent( const script::ScriptEvent& rEvt )
 {
     script::ScriptEvent evt( rEvt );
-    uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
+    uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
     uno::Reference< script::XScriptListener > xScriptListener( xServiceManager->createInstanceWithContext( "ooo.vba.EventListener" , mxContext ), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySet > xProps( xScriptListener, uno::UNO_QUERY_THROW );
@@ -731,7 +731,7 @@ void ScVbaControl::setBackColor( sal_Int32 nBackColor )
 bool ScVbaControl::getAutoSize()
 {
     bool bIsResizeEnabled = false;
-    uno::Reference< uno::XInterface > xIf( m_xControl, uno::UNO_QUERY_THROW );
+    uno::Reference< uno::XInterface > xIf( m_xControl, uno::UNO_SET_THROW );
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape( xIf );
     if ( pObj )
         bIsResizeEnabled = !pObj->IsResizeProtect();
@@ -741,7 +741,7 @@ bool ScVbaControl::getAutoSize()
 // currently no implementation for this
 void ScVbaControl::setAutoSize( bool bAutoSize )
 {
-    uno::Reference< uno::XInterface > xIf( m_xControl, uno::UNO_QUERY_THROW );
+    uno::Reference< uno::XInterface > xIf( m_xControl, uno::UNO_SET_THROW );
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape( xIf );
     if ( pObj )
         pObj->SetResizeProtect( !bAutoSize );

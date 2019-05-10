@@ -77,9 +77,9 @@ void SAL_CALL SwVbaBookmark::setName( const OUString& _name )
 
 uno::Any SAL_CALL SwVbaBookmark::Range()
 {
-    uno::Reference< text::XTextContent > xTextContent( mxBookmark, uno::UNO_QUERY_THROW );
+    uno::Reference< text::XTextContent > xTextContent( mxBookmark, uno::UNO_SET_THROW );
     uno::Reference< text::XTextDocument > xTextDocument( mxModel, uno::UNO_QUERY_THROW );
-    uno::Reference< text::XTextRange > xTextRange( xTextContent->getAnchor(), uno::UNO_QUERY_THROW );
+    uno::Reference< text::XTextRange > xTextRange( xTextContent->getAnchor(), uno::UNO_SET_THROW );
     return uno::makeAny( uno::Reference< word::XRange>(  new SwVbaRange( this, mxContext, xTextDocument, xTextRange->getStart(), xTextRange->getEnd(), xTextRange->getText() ) ) );
 }
 

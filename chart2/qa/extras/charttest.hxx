@@ -195,7 +195,7 @@ Reference< lang::XComponent > getChartCompFromSheet( sal_Int32 nSheet, uno::Refe
 
     uno::Reference< document::XEmbeddedObjectSupplier > xEmbObjectSupplier(xChart, UNO_QUERY_THROW);
 
-    uno::Reference< lang::XComponent > xChartComp( xEmbObjectSupplier->getEmbeddedObject(), UNO_QUERY_THROW );
+    uno::Reference< lang::XComponent > xChartComp( xEmbObjectSupplier->getEmbeddedObject(), UNO_SET_THROW );
 
     return xChartComp;
 
@@ -230,7 +230,7 @@ Reference<lang::XComponent> getPivotChartCompFromSheet(sal_Int32 nSheet, uno::Re
 
     uno::Reference<document::XEmbeddedObjectSupplier> xEmbObjectSupplier(xTablePivotChart, UNO_QUERY_THROW);
 
-    uno::Reference<lang::XComponent> xChartComp(xEmbObjectSupplier->getEmbeddedObject(), UNO_QUERY_THROW);
+    uno::Reference<lang::XComponent> xChartComp(xEmbObjectSupplier->getEmbeddedObject(), UNO_SET_THROW);
 
     return xChartComp;
 }
@@ -248,7 +248,7 @@ Reference<chart2::XChartDocument> getPivotChartDocFromSheet(uno::Reference<table
 
     uno::Reference<document::XEmbeddedObjectSupplier> xEmbObjectSupplier(xTablePivotChart, UNO_QUERY_THROW);
 
-    uno::Reference<lang::XComponent> xChartComp(xEmbObjectSupplier->getEmbeddedObject(), UNO_QUERY_THROW);
+    uno::Reference<lang::XComponent> xChartComp(xEmbObjectSupplier->getEmbeddedObject(), UNO_SET_THROW);
 
     uno::Reference<chart2::XChartDocument> xChartDoc(xChartComp, UNO_QUERY_THROW);
     return xChartDoc;

@@ -66,7 +66,7 @@ namespace dbaccess
             throw DisposedException();
 
         Reference< XConnectionTools > xConnectionTools( xConnection, UNO_QUERY_THROW );
-        Reference< XObjectNames > xObjectNames( xConnectionTools->getObjectNames(), UNO_QUERY_THROW );
+        Reference< XObjectNames > xObjectNames( xConnectionTools->getObjectNames(), css::uno::UNO_SET_THROW );
         xObjectNames->checkNameForCreate( m_pImpl->nCommandType, _rName );
     }
 

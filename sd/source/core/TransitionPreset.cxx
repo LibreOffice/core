@@ -68,7 +68,7 @@ TransitionPreset::TransitionPreset( const css::uno::Reference< css::animations::
 
     // second, locate transition filter element
     Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY_THROW );
-    Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+    Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), css::uno::UNO_SET_THROW );
     Reference< XTransitionFilter > xTransition( xEnumeration->nextElement(), UNO_QUERY_THROW );
 
     mnTransition = xTransition->getTransition();
@@ -94,7 +94,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
     try {
         xAnimationNode = implImportEffects( xServiceFactory, aURL );
         Reference< XEnumerationAccess > xEnumerationAccess( xAnimationNode, UNO_QUERY_THROW );
-        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), css::uno::UNO_SET_THROW );
 
         while( xEnumeration->hasMoreElements() )
         {

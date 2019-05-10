@@ -205,7 +205,7 @@ uno::Reference<uno::XInterface> ScCellRangeObj::init()
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
     uno::Reference<table::XCellRange> xReturn(xSheet->getCellRangeByPosition(0, 0, 4, 4),
-                                              uno::UNO_QUERY_THROW);
+                                              uno::UNO_SET_THROW);
 
     return xReturn;
 }
@@ -230,7 +230,7 @@ uno::Reference<uno::XInterface> ScCellRangeObj::getXCellRangeData()
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(1), uno::UNO_QUERY_THROW);
 
     uno::Reference<table::XCellRange> xReturn(xSheet->getCellRangeByPosition(0, 0, 3, 3),
-                                              uno::UNO_QUERY_THROW);
+                                              uno::UNO_SET_THROW);
 
     return xReturn;
 }

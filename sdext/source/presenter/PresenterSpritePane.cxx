@@ -37,7 +37,7 @@ PresenterSpritePane::PresenterSpritePane (const Reference<XComponentContext>& rx
       mpSprite(new PresenterSprite())
 {
     Reference<lang::XMultiComponentFactory> xFactory (
-        mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
+        mxComponentContext->getServiceManager(), UNO_SET_THROW);
     mxPresenterHelper.set(
         xFactory->createInstanceWithContext(
             "com.sun.star.comp.Draw.PresenterHelper",

@@ -3173,7 +3173,7 @@ namespace pcr
             if ( !impl_ensureRowsetConnection_nothrow() )
                 return false;
 
-            Reference< XPropertySet > xComponentProperties( m_xComponent, UNO_QUERY_THROW );
+            Reference< XPropertySet > xComponentProperties( m_xComponent, UNO_SET_THROW );
 
             ::rtl::Reference< ISQLCommandPropertyUI > xCommandUI;
             switch ( _nDesignForProperty )

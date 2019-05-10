@@ -29,8 +29,8 @@ void XTextContent::testAttach()
 {
     uno::Reference< text::XTextContent > xTextContent(init(), UNO_QUERY_THROW);
 
-    uno::Reference< text::XTextContent > xContent(getTextContent(), UNO_QUERY_THROW);
-    uno::Reference< text::XTextRange > xRange(getTextRange(), UNO_QUERY_THROW);
+    uno::Reference< text::XTextContent > xContent(getTextContent(), UNO_SET_THROW);
+    uno::Reference< text::XTextRange > xRange(getTextRange(), UNO_SET_THROW);
 
     try
     {

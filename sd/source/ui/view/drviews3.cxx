@@ -373,7 +373,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 Reference<XControllerManager> xControllerManager (
                     GetViewShellBase().GetController(), UNO_QUERY_THROW);
                 Reference<XConfigurationController> xConfigurationController (
-                    xControllerManager->getConfigurationController(), UNO_QUERY_THROW );
+                    xControllerManager->getConfigurationController(), UNO_SET_THROW );
                 Reference<XConfiguration> xConfiguration (
                     xConfigurationController->getRequestedConfiguration(), UNO_SET_THROW );
 

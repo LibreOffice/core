@@ -2788,13 +2788,13 @@ void SdMasterPage::setBackground( const Any& rValue )
     {
         if( GetModel() && IsImpressDocument() )
         {
-            Reference< container::XNameAccess >  xFamilies( GetModel()->getStyleFamilies(), UNO_QUERY_THROW );
+            Reference< container::XNameAccess >  xFamilies( GetModel()->getStyleFamilies(), UNO_SET_THROW );
             Reference< container::XNameAccess > xFamily( xFamilies->getByName( getName() ), UNO_QUERY_THROW ) ;
             OUString aStyleName(sUNO_PseudoSheet_Background);
 
             Reference< beans::XPropertySet >  xStyleSet( xFamily->getByName( aStyleName ), UNO_QUERY_THROW );
 
-            Reference< beans::XPropertySetInfo >  xSetInfo( xInputSet->getPropertySetInfo(), UNO_QUERY_THROW );
+            Reference< beans::XPropertySetInfo >  xSetInfo( xInputSet->getPropertySetInfo(), UNO_SET_THROW );
             Reference< beans::XPropertyState > xSetStates( xInputSet, UNO_QUERY );
 
             PropertyEntryVector_t aBackgroundProperties = ImplGetPageBackgroundPropertySet()->getPropertyMap().getPropertyEntries();
@@ -2825,9 +2825,9 @@ void SdMasterPage::setBackground( const Any& rValue )
             {
                 SdUnoPageBackground* pBackground = new SdUnoPageBackground();
 
-                Reference< beans::XPropertySetInfo > xInputSetInfo( xInputSet->getPropertySetInfo(), UNO_QUERY_THROW );
+                Reference< beans::XPropertySetInfo > xInputSetInfo( xInputSet->getPropertySetInfo(), UNO_SET_THROW );
                 Reference< beans::XPropertySet > xDestSet( static_cast<beans::XPropertySet*>(pBackground) );
-                Reference< beans::XPropertySetInfo > xDestSetInfo( xDestSet->getPropertySetInfo(), UNO_QUERY_THROW );
+                Reference< beans::XPropertySetInfo > xDestSetInfo( xDestSet->getPropertySetInfo(), UNO_SET_THROW );
 
                 uno::Sequence< beans::Property> aProperties( xDestSetInfo->getProperties() );
                 sal_Int32 nCount = aProperties.getLength();
@@ -2885,7 +2885,7 @@ void SdMasterPage::getBackground( Any& rValue )
     {
         if( IsImpressDocument() )
         {
-            Reference< container::XNameAccess > xFamilies( GetModel()->getStyleFamilies(), UNO_QUERY_THROW );
+            Reference< container::XNameAccess > xFamilies( GetModel()->getStyleFamilies(), UNO_SET_THROW );
             Reference< container::XNameAccess > xFamily( xFamilies->getByName( getName() ), UNO_QUERY_THROW );
 
             const OUString aStyleName(sUNO_PseudoSheet_Background);

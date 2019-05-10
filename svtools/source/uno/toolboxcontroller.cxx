@@ -652,7 +652,7 @@ void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequ
         aURL.Complete = sCommandURL;
         getURLTransformer()->parseStrict( aURL );
 
-        Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch( aURL, sTarget, 0 ), UNO_QUERY_THROW );
+        Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch( aURL, sTarget, 0 ), UNO_SET_THROW );
 
         std::unique_ptr<DispatchInfo> pDispatchInfo(new DispatchInfo( xDispatch, aURL, rArgs ));
         if ( Application::PostUserEvent( LINK(nullptr, ToolboxController, ExecuteHdl_Impl),

@@ -1066,7 +1066,7 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
         }
 
         // store to current storage
-        Reference< XStorage > xCurrentStorage( m_pImpl->getOrCreateRootStorage(), UNO_QUERY_THROW );
+        Reference< XStorage > xCurrentStorage( m_pImpl->getOrCreateRootStorage(), UNO_SET_THROW );
         Sequence< PropertyValue > aMediaDescriptor( lcl_appendFileNameToDescriptor( _rArguments, _rURL ) );
         impl_storeToStorage_throw( xCurrentStorage, aMediaDescriptor, _rGuard );
 

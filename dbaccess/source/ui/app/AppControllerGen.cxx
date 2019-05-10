@@ -98,11 +98,11 @@ void OApplicationController::convertToView(const OUString& _sName)
     {
         SharedConnection xConnection( getConnection() );
         Reference< XQueriesSupplier > xSup( xConnection, UNO_QUERY_THROW );
-        Reference< XNameAccess > xQueries( xSup->getQueries(), UNO_QUERY_THROW );
+        Reference< XNameAccess > xQueries( xSup->getQueries(), UNO_SET_THROW );
         Reference< XPropertySet > xSourceObject( xQueries->getByName( _sName ), UNO_QUERY_THROW );
 
         Reference< XTablesSupplier > xTablesSup( xConnection, UNO_QUERY_THROW );
-        Reference< XNameAccess > xTables( xTablesSup->getTables(), UNO_QUERY_THROW );
+        Reference< XNameAccess > xTables( xTablesSup->getTables(), UNO_SET_THROW );
 
         Reference< XDatabaseMetaData  > xMeta = xConnection->getMetaData();
 
@@ -296,8 +296,8 @@ Reference< XDataSource > SAL_CALL OApplicationController::getDataSource()
 Reference< XWindow > SAL_CALL OApplicationController::getApplicationMainWindow()
 {
     ::osl::MutexGuard aGuard( getMutex() );
-    Reference< XFrame > xFrame( getFrame(), UNO_QUERY_THROW );
-    Reference< XWindow > xWindow( xFrame->getContainerWindow(), UNO_QUERY_THROW );
+    Reference< XFrame > xFrame( getFrame(), UNO_SET_THROW );
+    Reference< XWindow > xWindow( xFrame->getContainerWindow(), UNO_SET_THROW );
     return xWindow;
 }
 

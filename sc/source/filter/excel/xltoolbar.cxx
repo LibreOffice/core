@@ -144,7 +144,7 @@ bool ScCTB::ImportCustomToolBar( ScCTBWrapper& rWrapper, CustomToolBarImportHelp
             return true;  // didn't fail, just ignoring
 
         // Create default setting
-        uno::Reference< container::XIndexContainer > xIndexContainer( helper.getCfgManager()->createSettings(), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XIndexContainer > xIndexContainer( helper.getCfgManager()->createSettings(), uno::UNO_SET_THROW );
         uno::Reference< container::XIndexAccess > xIndexAccess( xIndexContainer, uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xProps( xIndexContainer, uno::UNO_QUERY_THROW );
         WString& name = tb.getName();

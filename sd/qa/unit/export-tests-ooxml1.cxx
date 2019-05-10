@@ -701,7 +701,7 @@ void SdOOXMLExportTest1::testCellLeftAndRightMargin()
     sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
     CPPUNIT_ASSERT( pTableObj );
 
-    uno::Reference< css::table::XTable > xTable (pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference< css::table::XTable > xTable (pTableObj->getTable(), uno::UNO_SET_THROW);
     uno::Reference< css::table::XMergeableCell > xCell( xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xCellPropSet(xCell, uno::UNO_QUERY_THROW);
 
@@ -730,7 +730,7 @@ void SdOOXMLExportTest1::testMergedCells()
     sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
 
     CPPUNIT_ASSERT( pTableObj );
-    uno::Reference< table::XTable > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference< table::XTable > xTable(pTableObj->getTable(), uno::UNO_SET_THROW);
     uno::Reference< text::XTextRange > xText1(xTable->getCellByPosition(3, 0), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL( OUString("0,3"), xText1->getString() );
 
@@ -750,7 +750,7 @@ void SdOOXMLExportTest1::testTableCellBorder()
 
     table::BorderLine2 aBorderLine;
 
-    uno::Reference< table::XTable > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference< table::XTable > xTable(pTableObj->getTable(), uno::UNO_SET_THROW);
     uno::Reference< css::table::XMergeableCell > xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     uno::Reference< beans::XPropertySet > xCellPropSet (xCell, uno::UNO_QUERY_THROW);
 

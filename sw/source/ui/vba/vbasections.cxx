@@ -65,7 +65,7 @@ public:
     SectionCollectionHelper( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : mxParent( xParent ), mxContext( xContext ), mxModel( xModel )
     {
         uno::Reference< style::XStyleFamiliesSupplier > xSytleFamSupp( mxModel, uno::UNO_QUERY_THROW );
-        uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_SET_THROW );
         uno::Reference< container::XIndexAccess > xPageStyles( xSytleFamNames->getByName("PageStyles"), uno::UNO_QUERY_THROW );
         sal_Int32 nCount = xPageStyles->getCount();
         for( sal_Int32 index = 0; index < nCount; ++index )
@@ -100,7 +100,7 @@ public:
         if ( Index < 0 || Index >= getCount() )
             throw css::lang::IndexOutOfBoundsException();
 
-        uno::Reference< beans::XPropertySet > xPageProps( mxSections[ Index ], uno::UNO_QUERY_THROW );
+        uno::Reference< beans::XPropertySet > xPageProps( mxSections[ Index ], uno::UNO_SET_THROW );
         return uno::makeAny( uno::Reference< word::XSection >( new SwVbaSection( mxParent,  mxContext, mxModel, xPageProps ) ) );
     }
     virtual uno::Type SAL_CALL getElementType(  ) override

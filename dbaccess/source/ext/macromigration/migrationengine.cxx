@@ -350,7 +350,7 @@ namespace dbmm
             try
             {
                 Reference< XStorageBasedDocument > xStorageDoc( _rxDocument, UNO_QUERY_THROW );
-                Reference< XStorage > xDocStorage( xStorageDoc->getDocumentStorage(), UNO_QUERY_THROW );
+                Reference< XStorage > xDocStorage( xStorageDoc->getDocumentStorage(), UNO_SET_THROW );
                 bSuccess = lcl_commitStorage_nothrow( xDocStorage );
             }
             catch( const Exception& )
@@ -614,7 +614,7 @@ namespace dbmm
         try
         {
             Reference< XStorageBasedDocument > xStorageDoc( _rxDocument, UNO_QUERY_THROW );
-            Reference< XStorage > xDocStorage( xStorageDoc->getDocumentStorage(), UNO_QUERY_THROW );
+            Reference< XStorage > xDocStorage( xStorageDoc->getDocumentStorage(), UNO_SET_THROW );
 
             // the "Scripts" storage exist, or if it does not (yet) exist and we are in write mode
             // => open the storage
@@ -692,7 +692,7 @@ namespace dbmm
         try
         {
             Reference< XStorageBasedDocument > xStorageDoc( _rxDocument, UNO_QUERY_THROW );
-            Reference< XStorage > xDocStorage( xStorageDoc->getDocumentStorage(), UNO_QUERY_THROW );
+            Reference< XStorage > xDocStorage( xStorageDoc->getDocumentStorage(), UNO_SET_THROW );
             xDocStorage->removeElement( sScriptsStorageName );
         }
         catch( const Exception& )
@@ -1356,7 +1356,7 @@ namespace dbmm
 
             Reference< XStorageBasedLibraryContainer > xSourceLibraries(
                 _eScriptType == eBasic ? xSubDocScripts->getBasicLibraries() : xSubDocScripts->getDialogLibraries(),
-                UNO_QUERY_THROW
+                UNO_SET_THROW
             );
             Reference< XLibraryContainerPassword > xSourcePasswords( xSourceLibraries, UNO_QUERY );
             OSL_ENSURE( xSourcePasswords.is(),
@@ -1377,12 +1377,12 @@ namespace dbmm
             if ( _eScriptType == eBasic )
             {
                 xTargetLibraries.set( DocumentScriptLibraryContainer::create(
-                    m_aContext, xStorageDoc ), UNO_QUERY_THROW );
+                    m_aContext, xStorageDoc ), UNO_SET_THROW );
             }
             else
             {
                 xTargetLibraries.set( DocumentDialogLibraryContainer::create(
-                    m_aContext, xStorageDoc ), UNO_QUERY_THROW );
+                    m_aContext, xStorageDoc ), UNO_SET_THROW );
             }
 
             // copy all libs to the target, with potentially renaming them
@@ -1429,7 +1429,7 @@ namespace dbmm
 
                     // copy the content of this particular library
                     Reference< XNameAccess > xSourceLib( xSourceLibraries->getByName( *pSourceLibName ), UNO_QUERY_THROW );
-                    Reference< XNameContainer > xTargetLib( xTargetLibraries->createLibrary( sNewLibName ), UNO_QUERY_THROW );
+                    Reference< XNameContainer > xTargetLib( xTargetLibraries->createLibrary( sNewLibName ), UNO_SET_THROW );
 
                     Sequence< OUString > aLibElementNames( xSourceLib->getElementNames() );
                     for ( auto const & sourceElementName : aLibElementNames )
@@ -1679,7 +1679,7 @@ namespace dbmm
         {
             // load a dialog model from the stream describing it
             Reference< XInputStreamProvider > xISP( _inout_rDialogLibraryElement, UNO_QUERY_THROW );
-            Reference< XInputStream > xInput( xISP->createInputStream(), UNO_QUERY_THROW );
+            Reference< XInputStream > xInput( xISP->createInputStream(), UNO_SET_THROW );
 
             Reference< XNameContainer > xDialogModel( m_aContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", m_aContext), UNO_QUERY_THROW );
             ::xmlscript::importDialogModel( xInput, xDialogModel, m_aContext, m_xDocumentModel );

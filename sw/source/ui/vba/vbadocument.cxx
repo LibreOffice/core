@@ -296,7 +296,7 @@ SwVbaDocument::getAttachedTemplate()
     uno::Reference< word::XTemplate > xTemplate;
     uno::Reference<css::document::XDocumentPropertiesSupplier> const xDocPropSupp(
             getModel(), uno::UNO_QUERY_THROW);
-    uno::Reference< css::document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
+    uno::Reference< css::document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_SET_THROW );
     OUString sTemplateUrl = xDocProps->getTemplateURL();
 
     xTemplate = new SwVbaTemplate( this, mxContext, sTemplateUrl );
@@ -322,7 +322,7 @@ SwVbaDocument::setAttachedTemplate( const css::uno::Any& _attachedtemplate )
 
     uno::Reference<css::document::XDocumentPropertiesSupplier> const xDocPropSupp(
             getModel(), uno::UNO_QUERY_THROW );
-    uno::Reference< css::document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
+    uno::Reference< css::document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_SET_THROW );
     xDocProps->setTemplateURL( aURL );
 }
 
@@ -565,7 +565,7 @@ SwVbaDocument::getValue( const OUString& aPropertyName )
 {
     uno::Reference< drawing::XControlShape > xControlShape( getControlShape( aPropertyName ), uno::UNO_QUERY_THROW );
 
-    uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
+    uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
     uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext("ooo.vba.ControlProvider", mxContext ), uno::UNO_QUERY_THROW );
     uno::Reference< msforms::XControl > xControl( xControlProvider->createControl(  xControlShape, getModel() ) );
     return uno::makeAny( xControl );

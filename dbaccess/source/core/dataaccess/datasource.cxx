@@ -911,7 +911,7 @@ namespace
         try
         {
             // obtain all properties currently known at the bag
-            Reference< XPropertySetInfo > xPSI( _rxPropertyBag->getPropertySetInfo(), UNO_QUERY_THROW );
+            Reference< XPropertySetInfo > xPSI( _rxPropertyBag->getPropertySetInfo(), UNO_SET_THROW );
             Sequence< Property > aAllExistentProperties( xPSI->getProperties() );
 
             Reference< XPropertyState > xPropertyState( _rxPropertyBag, UNO_QUERY_THROW );
@@ -1017,7 +1017,7 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
                 {
                     // collect the property attributes of all current settings
                     Reference< XPropertySet > xSettingsAsProps( m_pImpl->m_xSettings, UNO_QUERY_THROW );
-                    Reference< XPropertySetInfo > xPST( xSettingsAsProps->getPropertySetInfo(), UNO_QUERY_THROW );
+                    Reference< XPropertySetInfo > xPST( xSettingsAsProps->getPropertySetInfo(), UNO_SET_THROW );
                     Sequence< Property > aSettings( xPST->getProperties() );
                     std::map< OUString, sal_Int32 > aPropertyAttributes;
                     for ( auto const & setting : aSettings )

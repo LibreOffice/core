@@ -118,7 +118,7 @@ namespace sdbtools
         EntryGuard aGuard( *this );
 
         Reference< XTablesSupplier > xSuppTables( getConnection(), UNO_QUERY_THROW );
-        Reference< XNameAccess > xTables( xSuppTables->getTables(), UNO_QUERY_THROW );
+        Reference< XNameAccess > xTables( xSuppTables->getTables(), css::uno::UNO_SET_THROW );
 
         Reference< XPropertySet > xTable;
         try

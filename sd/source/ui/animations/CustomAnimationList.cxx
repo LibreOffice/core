@@ -185,7 +185,7 @@ static OUString getDescription( const Any& rTarget, bool bWithText )
         rTarget >>= aParaTarget;
 
         Reference< XEnumerationAccess > xText( aParaTarget.Shape, UNO_QUERY_THROW );
-        Reference< XEnumeration > xEnumeration( xText->createEnumeration(), UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xText->createEnumeration(), css::uno::UNO_SET_THROW );
         sal_Int32 nPara = aParaTarget.Paragraph;
 
         while( xEnumeration->hasMoreElements() && nPara )

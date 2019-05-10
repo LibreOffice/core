@@ -47,7 +47,7 @@ uno::Reference<drawing::XControlShape> OOO_DLLPUBLIC_TEST createControlShape(
         xMSF->createInstance("com.sun.star.drawing.ControlShape"), uno::UNO_QUERY_THROW);
 
     uno::Reference<uno::XInterface> aComponent(
-        xMSF->createInstance("com.sun.star.form.component." + r_aKind), uno::UNO_QUERY_THROW);
+        xMSF->createInstance("com.sun.star.form.component." + r_aKind), uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(aComponent, uno::UNO_QUERY_THROW);
     xPropertySet->setPropertyValue("DefaultControl",
                                    uno::makeAny("com.sun.star.form.control." + r_aKind));

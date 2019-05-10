@@ -457,7 +457,7 @@ ErrCode XMLFilter::impl_ImportStream(
                     uno::UNO_QUERY_THROW );
 
                 Reference< document::XImporter > xImporter( xDocHandler, uno::UNO_QUERY_THROW );
-                xImporter->setTargetDocument( Reference< lang::XComponent >( m_xTargetDoc, uno::UNO_QUERY_THROW ));
+                xImporter->setTargetDocument( Reference< lang::XComponent >( m_xTargetDoc, uno::UNO_SET_THROW ));
 
                 if ( !m_sDocumentHandler.isEmpty() )
                 {

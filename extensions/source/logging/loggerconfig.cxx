@@ -244,7 +244,7 @@ namespace logging
             {
                 // no node yet for this logger. Create default settings.
                 Reference< XSingleServiceFactory > xNodeFactory( xAllSettings, UNO_QUERY_THROW );
-                Reference< XInterface > xLoggerSettings( xNodeFactory->createInstance(), UNO_QUERY_THROW );
+                Reference< XInterface > xLoggerSettings( xNodeFactory->createInstance(), css::uno::UNO_SET_THROW );
                 xAllSettings->insertByName( sLoggerName, makeAny( xLoggerSettings ) );
                 Reference< XChangesBatch > xChanges( xAllSettings, UNO_QUERY_THROW );
                 xChanges->commitChanges();

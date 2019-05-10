@@ -35,8 +35,8 @@ SwVbaPageSetup::SwVbaPageSetup(const uno::Reference< XHelperInterface >& xParent
                 const uno::Reference< beans::XPropertySet >& xProps ):
            SwVbaPageSetup_BASE( xParent, xContext )
 {
-    mxModel.set( xModel, uno::UNO_QUERY_THROW );
-    mxPageProps.set( xProps, uno::UNO_QUERY_THROW );
+    mxModel.set( xModel, uno::UNO_SET_THROW );
+    mxPageProps.set( xProps, uno::UNO_SET_THROW );
     mnOrientPortrait = word::WdOrientation::wdOrientPortrait;
     mnOrientLandscape = word::WdOrientation::wdOrientLandscape;
 }

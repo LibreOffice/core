@@ -206,7 +206,7 @@ void MasterScriptProvider::createPkgProvider()
             provider::theMasterScriptProviderFactory::get( m_xContext );
 
         m_xMSPPkg.set(
-            xFac->createScriptProvider( location ), UNO_QUERY_THROW );
+            xFac->createScriptProvider( location ), UNO_SET_THROW );
 
     }
     catch ( const Exception& e )
@@ -316,7 +316,7 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
         {
             xScriptProvider.set(
                 providerCache()->getProvider( serviceName ),
-                UNO_QUERY_THROW );
+                UNO_SET_THROW );
         }
         catch( const Exception& e )
         {
@@ -334,7 +334,7 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
             provider::theMasterScriptProviderFactory::get( m_xContext );
 
         Reference< provider::XScriptProvider > xSP(
-            xFac_->createScriptProvider( makeAny( location ) ), UNO_QUERY_THROW );
+            xFac_->createScriptProvider( makeAny( location ) ), UNO_SET_THROW );
         xScript = xSP->getScript( scriptURI );
     }
 

@@ -537,8 +537,8 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         {
             const sal_Int32   FILTERFLAG_EXPORT    = 0x00000002;
 
-            css::uno::Reference< lang::XMultiServiceFactory > xSMGR(::comphelper::getProcessServiceFactory(), css::uno::UNO_QUERY_THROW);
-            css::uno::Reference< uno::XComponentContext >     xContext(::comphelper::getProcessComponentContext(), css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< lang::XMultiServiceFactory > xSMGR(::comphelper::getProcessServiceFactory(), css::uno::UNO_SET_THROW);
+            css::uno::Reference< uno::XComponentContext >     xContext(::comphelper::getProcessComponentContext(), css::uno::UNO_SET_THROW);
             css::uno::Reference< css::frame::XFrame >         xFrame( pFrame->GetFrame().GetFrameInterface() );
             css::uno::Reference< css::frame::XModel >         xModel;
 

@@ -488,7 +488,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         try
         {
             Reference< XModel2 > xModel2( xModel, UNO_QUERY_THROW );
-            Reference< XController2 > xController( xModel2->createViewController( sViewName, Sequence< PropertyValue >(), rFrame ), UNO_QUERY_THROW );
+            Reference< XController2 > xController( xModel2->createViewController( sViewName, Sequence< PropertyValue >(), rFrame ), UNO_SET_THROW );
 
             xController->attachModel( xModel );
             xModel->connectController( xController.get() );

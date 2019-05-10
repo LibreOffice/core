@@ -1238,7 +1238,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90789, "tdf90789.docx")
     xCtrl->select(uno::makeAny(xShape->getAnchor()));
 
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xCtrl, uno::UNO_QUERY_THROW);
-    uno::Reference<text::XTextViewCursor> xTextCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextViewCursor> xTextCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_SET_THROW);
     uno::Reference<text::XPageCursor> xPageCursor(xTextCursor.get(), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), xPageCursor->getPage());
 }

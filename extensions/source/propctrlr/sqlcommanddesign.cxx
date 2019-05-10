@@ -195,8 +195,8 @@ namespace pcr
         try
         {
             // activate the frame for this component
-            Reference< XFrame >     xFrame( m_xDesigner->getFrame(), UNO_QUERY_THROW );
-            Reference< XWindow >    xWindow( xFrame->getContainerWindow(), UNO_QUERY_THROW );
+            Reference< XFrame >     xFrame( m_xDesigner->getFrame(), css::uno::UNO_SET_THROW );
+            Reference< XWindow >    xWindow( xFrame->getContainerWindow(), css::uno::UNO_SET_THROW );
             Reference< XTopWindow > xTopWindow( xWindow, UNO_QUERY_THROW );
 
             xTopWindow->toFront();
@@ -283,7 +283,7 @@ namespace pcr
         {
             Reference< XDesktop2 > xDesktop = Desktop::create(m_xContext);
 
-            Reference< XFrames > xDesktopFramesCollection( xDesktop->getFrames(), UNO_QUERY_THROW );
+            Reference< XFrames > xDesktopFramesCollection( xDesktop->getFrames(), css::uno::UNO_SET_THROW );
             xFrame = xDesktop->findFrame( "_blank", FrameSearchFlag::CREATE );
             OSL_ENSURE( xFrame.is(), "SQLCommandDesigner::impl_createEmptyParentlessTask_nothrow: could not create an empty frame!" );
             xDesktopFramesCollection->remove( xFrame );

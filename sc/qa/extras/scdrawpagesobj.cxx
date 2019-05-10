@@ -80,7 +80,7 @@ uno::Reference<uno::XInterface> ScDrawPagesObj::init()
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDPS(xDoc, uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPages> xDP(xDPS->getDrawPages(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xDP(xDPS->getDrawPages(), uno::UNO_SET_THROW);
 
     xDP->insertNewByIndex(1);
     xDP->insertNewByIndex(2);

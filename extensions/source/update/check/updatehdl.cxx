@@ -702,8 +702,8 @@ void UpdateHandler::setControlProperty( const OUString &rCtrlName,
     if ( !mxUpdDlg.is() ) return;
 
     uno::Reference< awt::XControlContainer > xContainer( mxUpdDlg, uno::UNO_QUERY );
-    uno::Reference< awt::XControl > xControl( xContainer->getControl( rCtrlName ), uno::UNO_QUERY_THROW );
-    uno::Reference< awt::XControlModel > xControlModel( xControl->getModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< awt::XControl > xControl( xContainer->getControl( rCtrlName ), uno::UNO_SET_THROW );
+    uno::Reference< awt::XControlModel > xControlModel( xControl->getModel(), uno::UNO_SET_THROW );
     uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY_THROW );
 
     try {
@@ -1020,7 +1020,7 @@ void UpdateHandler::createDialog()
 
     loadStrings();
 
-    uno::Reference< lang::XMultiComponentFactory > xFactory( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
+    uno::Reference< lang::XMultiComponentFactory > xFactory( mxContext->getServiceManager(), uno::UNO_SET_THROW );
     uno::Reference< awt::XControlModel > xControlModel( xFactory->createInstanceWithContext(
                                                          "com.sun.star.awt.UnoControlDialogModel",
                                                          mxContext), uno::UNO_QUERY_THROW );

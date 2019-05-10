@@ -580,28 +580,28 @@ void Chart2ImportTest::testPPTXPercentageNumberFormats()
     const sal_Int32 nPercentFormatSimple = getNumberFormat(xChartDoc, "0%");
     const sal_Int32 nPercentFormatDecimal = getNumberFormat(xChartDoc, "0.00%");
 
-    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("Label") >>= aLabel;
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
     xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nPercentFormatSimple, nNumberFormat);
 
-    xPropertySet.set(xDataSeries->getDataPointByIndex(1), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(1), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("Label") >>= aLabel;
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
     xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nPercentFormatDecimal, nNumberFormat);
 
-    xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("Label") >>= aLabel;
     CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumber);
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
     xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nPercentFormatSimple, nNumberFormat);
 
-    xPropertySet.set(xDataSeries->getDataPointByIndex(3), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(3), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("Label") >>= aLabel;
     CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumber);
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
@@ -748,7 +748,7 @@ void Chart2ImportTest::testBnc882383()
     uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
     CPPUNIT_ASSERT(xDataSeries.is());
 
-    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
     OUString sGradientName;
     xPropertySet->getPropertyValue("GradientName") >>= sGradientName;
     CPPUNIT_ASSERT(!sGradientName.isEmpty());
@@ -991,7 +991,7 @@ void Chart2ImportTest::testChartHatchFillXLSX()
     uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
     CPPUNIT_ASSERT(xDataSeries.is());
 
-    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(1), uno::UNO_SET_THROW);
     OUString sHatchName;
     xPropertySet->getPropertyValue("HatchName") >>= sHatchName;
     CPPUNIT_ASSERT(!sHatchName.isEmpty());
@@ -1077,7 +1077,7 @@ void Chart2ImportTest::testNumberFormatsXLSX()
     const sal_Int32 nChartDataNumberFormat = getNumberFormat(
             xChartDoc, "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)");
 
-    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("Label") >>= aLabel;
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
@@ -1088,7 +1088,7 @@ void Chart2ImportTest::testNumberFormatsXLSX()
     bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
     CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess && bLinkNumberFormatToSource);
 
-    xPropertySet.set(xDataSeries->getDataPointByIndex(1), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(1), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("Label") >>= aLabel;
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
     CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumberInPercent);
@@ -1099,7 +1099,7 @@ void Chart2ImportTest::testNumberFormatsXLSX()
     bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
     CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess && bLinkNumberFormatToSource);
 
-    xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("Label") >>= aLabel;
     CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumber);
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
@@ -1213,7 +1213,7 @@ void Chart2ImportTest::testTrendlineDefaultValue2007XLSX()
 
     Reference<chart2::XRegressionCurve> xCurve = xRegressionCurveSequence[0];
 
-    Reference<beans::XPropertySet> xPropSet(xCurve->getEquationProperties(), uno::UNO_QUERY_THROW);
+    Reference<beans::XPropertySet> xPropSet(xCurve->getEquationProperties(), uno::UNO_SET_THROW);
     uno::Any aAny = xPropSet->getPropertyValue("ShowEquation");
     bool bShowEquation = true;
     CPPUNIT_ASSERT(aAny >>= bShowEquation);
@@ -1239,7 +1239,7 @@ void Chart2ImportTest::testTrendlineDefaultValue2013XLSX()
 
     Reference<chart2::XRegressionCurve> xCurve = xRegressionCurveSequence[0];
 
-    Reference<beans::XPropertySet> xPropSet(xCurve->getEquationProperties(), uno::UNO_QUERY_THROW);
+    Reference<beans::XPropertySet> xPropSet(xCurve->getEquationProperties(), uno::UNO_SET_THROW);
     uno::Any aAny = xPropSet->getPropertyValue("ShowEquation");
     bool bShowEquation = false;
     CPPUNIT_ASSERT(aAny >>= bShowEquation);
@@ -1476,7 +1476,7 @@ void Chart2ImportTest::testTdf90510()
 {
     load("/chart2/qa/extras/data/xls/", "piechart_outside.xls");
     uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW );
-    Reference<beans::XPropertySet> xPropSet( xChart1Doc->getDiagram()->getDataPointProperties( 0, 0 ), uno::UNO_QUERY_THROW );
+    Reference<beans::XPropertySet> xPropSet( xChart1Doc->getDiagram()->getDataPointProperties( 0, 0 ), uno::UNO_SET_THROW );
     uno::Any aAny = xPropSet->getPropertyValue( "LabelPlacement" );
     CPPUNIT_ASSERT( aAny.hasValue() );
     sal_Int32 nLabelPlacement = 0;
@@ -1488,7 +1488,7 @@ void Chart2ImportTest::testTdf109858()
 {
     load("/chart2/qa/extras/data/xlsx/", "piechart_outside.xlsx");
     uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW );
-    Reference<beans::XPropertySet> xPropSet( xChart1Doc->getDiagram()->getDataPointProperties( 0, 0 ), uno::UNO_QUERY_THROW );
+    Reference<beans::XPropertySet> xPropSet( xChart1Doc->getDiagram()->getDataPointProperties( 0, 0 ), uno::UNO_SET_THROW );
     uno::Any aAny = xPropSet->getPropertyValue( "LabelPlacement" );
     CPPUNIT_ASSERT( aAny.hasValue() );
     sal_Int32 nLabelPlacement = 0;
@@ -1508,9 +1508,9 @@ void Chart2ImportTest::testTdf122226()
     uno::Reference< chart2::XChartDocument > xChartDoc ( getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT( xChartDoc.is() );
 
-    css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_QUERY_THROW);
+    css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
-    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xPropertySet.is());
 
     uno::Any aAny = xPropertySet->getPropertyValue( "LabelSeparator" );
@@ -1536,7 +1536,7 @@ void Chart2ImportTest::testTdf115107()
     uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
 
     // 1
-    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aFields.getLength());
 
@@ -1551,7 +1551,7 @@ void Chart2ImportTest::testTdf115107()
     CPPUNIT_ASSERT_EQUAL(OUString("90"), aFields[1]->getString());
 
     // 2
-    xPropertySet.set(xDataSeries->getDataPointByIndex(1), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(1), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8), aFields.getLength());
 
@@ -1592,7 +1592,7 @@ void Chart2ImportTest::testTdf115107()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nCharUnderline);
 
     // 3
-    xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aFields.getLength());
 
@@ -1600,7 +1600,7 @@ void Chart2ImportTest::testTdf115107()
     CPPUNIT_ASSERT_EQUAL(OUString("DATA"), aFields[0]->getString());
 
     // 4
-    xPropertySet.set(xDataSeries->getDataPointByIndex(3), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(3), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aFields.getLength());
 
@@ -1626,7 +1626,7 @@ void Chart2ImportTest::testTdf115107_2()
     uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
 
     // First series
-    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aFields.getLength());
 
@@ -1647,7 +1647,7 @@ void Chart2ImportTest::testTdf115107_2()
     xDataSeries = getDataSeriesFromDoc(xChartDoc, 0, 1);
     CPPUNIT_ASSERT(xDataSeries.is());
 
-    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aFields.getLength());
 
@@ -1763,7 +1763,7 @@ namespace {
 
 void checkDataLabelProperties(const Reference<chart2::XDataSeries>& xDataSeries, sal_Int32 nDataPointIndex, bool bValueVisible)
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(nDataPointIndex), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(nDataPointIndex), uno::UNO_SET_THROW);
     chart2::DataPointLabel aLabel;
     xPropertySet->getPropertyValue("Label") >>= aLabel;
     CPPUNIT_ASSERT_EQUAL(bValueVisible, static_cast<bool>(aLabel.ShowNumber));
@@ -1793,10 +1793,10 @@ void Chart2ImportTest::testDataPointInheritedColorDOCX()
     load( "/chart2/qa/extras/data/docx/", "data_point_inherited_color.docx" );
     uno::Reference< chart2::XChartDocument > xChartDoc ( getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT( xChartDoc.is() );
-    css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_QUERY_THROW);
+    css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
 
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
-    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xPropertySet.is());
     sal_Int32 nColor = xPropertySet->getPropertyValue("FillColor").get<sal_Int32>();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(16776960), nColor);

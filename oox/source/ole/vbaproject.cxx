@@ -533,7 +533,7 @@ void VbaProject::copyStorage( StorageBase& rVbaPrjStrg )
     if( mxContext.is() ) try
     {
         Reference< XStorageBasedDocument > xStorageBasedDoc( mxDocModel, UNO_QUERY_THROW );
-        Reference< XStorage > xDocStorage( xStorageBasedDoc->getDocumentStorage(), UNO_QUERY_THROW );
+        Reference< XStorage > xDocStorage( xStorageBasedDoc->getDocumentStorage(), UNO_SET_THROW );
         {
             const sal_Int32 nOpenMode = ElementModes::SEEKABLE | ElementModes::WRITE | ElementModes::TRUNCATE;
             Reference< XStream > xDocStream( xDocStorage->openStreamElement( "_MS_VBA_Macros", nOpenMode ), UNO_SET_THROW );

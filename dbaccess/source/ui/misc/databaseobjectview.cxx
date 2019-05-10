@@ -134,7 +134,7 @@ namespace dbaui
                     pContainerWindow->SetExtendedStyle( pContainerWindow->GetExtendedStyle() | WindowExtendedStyle::Document );
                 }
 
-                Reference< XComponentLoader > xFrameLoader( m_xFrameLoader, UNO_QUERY_THROW );
+                Reference< XComponentLoader > xFrameLoader( m_xFrameLoader, UNO_SET_THROW );
                 xReturn = xFrameLoader->loadComponentFromURL(
                     m_sComponentURL,
                     "_self",

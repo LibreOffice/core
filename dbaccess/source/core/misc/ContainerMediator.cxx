@@ -209,7 +209,7 @@ void OContainerMediator::notifyElementCreated( const OUString& _sName, const Ref
         impl_initSettings_nothrow( _sName, _xDest );
 
         // collect the to-be-monitored properties
-        Reference< XPropertySetInfo > xPSI( _xDest->getPropertySetInfo(), UNO_QUERY_THROW );
+        Reference< XPropertySetInfo > xPSI( _xDest->getPropertySetInfo(), UNO_SET_THROW );
         Sequence< Property > aProperties( xPSI->getProperties() );
         for ( auto const & property : aProperties )
         {

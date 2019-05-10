@@ -57,7 +57,7 @@ namespace
 {
     Reference< XGridDataModel > lcl_getDefaultDataModel_throw( const Reference<XComponentContext> & i_context )
     {
-        Reference< XMutableGridDataModel > const xDelegatorModel( DefaultGridDataModel::create( i_context ), UNO_QUERY_THROW );
+        Reference< XMutableGridDataModel > const xDelegatorModel( DefaultGridDataModel::create( i_context ), UNO_SET_THROW );
         Reference< XGridDataModel > const xDataModel( SortableGridDataModel::create( i_context, xDelegatorModel ), UNO_QUERY_THROW );
         return xDataModel;
     }

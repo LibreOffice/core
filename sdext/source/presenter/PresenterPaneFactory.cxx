@@ -248,7 +248,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
 {
     Reference<XComponentContext> xContext (mxComponentContextWeak);
     Reference<lang::XMultiComponentFactory> xFactory (
-        xContext->getServiceManager(), UNO_QUERY_THROW);
+        xContext->getServiceManager(), UNO_SET_THROW);
 
     // Create a border window and canvas and store it in the pane
     // container.
@@ -287,7 +287,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
         pDescriptor->mbIsSprite = bIsSpritePane;
 
         // Get the window of the frame and make that visible.
-        Reference<awt::XWindow> xWindow (pDescriptor->mxBorderWindow, UNO_QUERY_THROW);
+        Reference<awt::XWindow> xWindow (pDescriptor->mxBorderWindow, UNO_SET_THROW);
         xWindow->setVisible(true);
     }
 

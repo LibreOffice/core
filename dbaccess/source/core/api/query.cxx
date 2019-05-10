@@ -142,7 +142,7 @@ void OQuery::rebuildColumns()
         {
             xComposer->setQuery( m_sCommand );
             Reference< XColumnsSupplier > xCols( xComposer, UNO_QUERY_THROW );
-            xColumns.set( xCols->getColumns(), UNO_QUERY_THROW );
+            xColumns.set( xCols->getColumns(), UNO_SET_THROW );
             xColumnsIndexed.set( xColumns, UNO_QUERY_THROW );
         }
         catch( const SQLException& ) { }
@@ -159,7 +159,7 @@ void OQuery::rebuildColumns()
                 ::dbtools::throwSQLException( sError, StandardSQLState::GENERAL_ERROR, *this );
             }
 
-            Reference< XDatabaseMetaData > xDBMeta( m_xConnection->getMetaData(), UNO_QUERY_THROW );
+            Reference< XDatabaseMetaData > xDBMeta( m_xConnection->getMetaData(), UNO_SET_THROW );
             ::rtl::Reference< OSQLColumns > aParseColumns(
                 ::connectivity::parse::OParseColumn::createColumnsForResultSet( xResultSetMeta, xDBMeta,xColumnDefinitions ) );
             xColumns = OPrivateColumns::createWithIntrinsicNames(

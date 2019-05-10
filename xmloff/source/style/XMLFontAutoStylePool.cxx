@@ -605,7 +605,7 @@ OUString XMLFontAutoStylePool::embedFontFile(OUString const & fileUrl, OUString 
 
         uno::Reference< embed::XStorage > storage;
         storage.set( GetExport().GetTargetStorage()->openStorageElement( "Fonts",
-            ::embed::ElementModes::WRITE ), uno::UNO_QUERY_THROW );
+            ::embed::ElementModes::WRITE ), uno::UNO_SET_THROW );
 
         OUString name = getFreeFontName(storage, rFamilyName);
 

@@ -378,7 +378,7 @@ void SdXMLShapeContext::EndElement()
 
         if( xEventsSupplier.is() )
         {
-            Reference< XNameReplace > xEvents( xEventsSupplier->getEvents(), UNO_QUERY_THROW );
+            Reference< XNameReplace > xEvents( xEventsSupplier->getEvents(), UNO_SET_THROW );
 
             uno::Sequence< beans::PropertyValue > aProperties( 3 );
             aProperties[0].Name = "EventType";

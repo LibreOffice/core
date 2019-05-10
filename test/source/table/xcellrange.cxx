@@ -25,7 +25,7 @@ void XCellRange::testGetCellByPosition()
 {
     uno::Reference<table::XCellRange> xCR(init(), uno::UNO_QUERY_THROW);
 
-    uno::Reference<table::XCell> xCell(xCR->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    uno::Reference<table::XCell> xCell(xCR->getCellByPosition(0, 0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xCell.is());
 
     CPPUNIT_ASSERT_THROW(xCR->getCellByPosition(-1, 1), lang::IndexOutOfBoundsException);
@@ -36,7 +36,7 @@ void XCellRange::testGetCellRangeByName()
     uno::Reference<table::XCellRange> xCR(init(), uno::UNO_QUERY_THROW);
 
     uno::Reference<table::XCellRange> xCellRange(xCR->getCellRangeByName(m_aRangeName),
-                                                 uno::UNO_QUERY_THROW);
+                                                 uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xCellRange.is());
 }
 
@@ -45,7 +45,7 @@ void XCellRange::testGetCellRangeByPosition()
     uno::Reference<table::XCellRange> xCR(init(), uno::UNO_QUERY_THROW);
 
     uno::Reference<table::XCellRange> xCellRange(xCR->getCellRangeByPosition(0, 0, 0, 0),
-                                                 uno::UNO_QUERY_THROW);
+                                                 uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xCellRange.is());
 
     CPPUNIT_ASSERT_THROW(xCR->getCellRangeByPosition(-1, 0, -1, 1),

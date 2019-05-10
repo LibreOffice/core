@@ -46,7 +46,7 @@ MasterScriptProviderFactory::~MasterScriptProviderFactory()
 Reference< provider::XScriptProvider > SAL_CALL
 MasterScriptProviderFactory::createScriptProvider( const Any& context )
 {
-    Reference< provider::XScriptProvider > xMsp( getActiveMSPList() ->getMSPFromAnyContext( context ), UNO_QUERY_THROW );
+    Reference< provider::XScriptProvider > xMsp( getActiveMSPList() ->getMSPFromAnyContext( context ), UNO_SET_THROW );
     return xMsp;
 }
 

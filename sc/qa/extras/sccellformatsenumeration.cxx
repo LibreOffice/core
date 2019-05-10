@@ -57,13 +57,13 @@ uno::Reference<uno::XInterface> ScCellFormatsEnumeration::init()
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet0(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
 
     uno::Reference<sheet::XCellFormatRangesSupplier> xCFRS(xSheet0, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIA_CFR(xCFRS->getCellFormatRanges(),
-                                                    uno::UNO_QUERY_THROW);
+                                                    uno::UNO_SET_THROW);
     uno::Reference<container::XEnumerationAccess> xEA(xIA_CFR, uno::UNO_QUERY_THROW);
 
     return xEA->createEnumeration();

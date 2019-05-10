@@ -70,7 +70,7 @@ uno::Reference<uno::XInterface> ScDataPilotItemObj::init()
     table::CellAddress aCellAddress(0, 7, 8);
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
 
     xSheets->insertNewByName("Some Sheet", 0);
 
@@ -97,9 +97,9 @@ uno::Reference<uno::XInterface> ScDataPilotItemObj::init()
     xSheet0->getCellByPosition(aCellAddress.Column, aCellAddress.Row + 3);
 
     uno::Reference<sheet::XDataPilotTablesSupplier> xDPTS(xSheet0, uno::UNO_QUERY_THROW);
-    uno::Reference<sheet::XDataPilotTables> xDPT(xDPTS->getDataPilotTables(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XDataPilotTables> xDPT(xDPTS->getDataPilotTables(), uno::UNO_SET_THROW);
     uno::Reference<sheet::XDataPilotDescriptor> xDPD(xDPT->createDataPilotDescriptor(),
-                                                     uno::UNO_QUERY_THROW);
+                                                     uno::UNO_SET_THROW);
     xDPD->setSourceRange(aCellRangeAddress);
 
     uno::Reference<beans::XPropertySet> xDataPilotFieldProp(
@@ -111,7 +111,7 @@ uno::Reference<uno::XInterface> ScDataPilotItemObj::init()
     if (xDPT->hasByName("DataPilotTable"))
         xDPT->removeByName("DataPilotTable");
 
-    uno::Reference<container::XIndexAccess> xIA_DPF(xDPD->getDataPilotFields(), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIA_DPF(xDPD->getDataPilotFields(), uno::UNO_SET_THROW);
 
     xDPT->insertNewByName("DataPilotTable", aCellAddress, xDPD);
     uno::Reference<sheet::XDataPilotField> xDPF(xIA_DPF->getByIndex(0), uno::UNO_QUERY_THROW);

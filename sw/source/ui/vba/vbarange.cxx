@@ -160,7 +160,7 @@ SwVbaRange::setText( const OUString& rText )
     if( !sName.isEmpty() )
     {
         uno::Reference< text::XBookmarksSupplier > xBookmarksSupplier( mxTextDocument, uno::UNO_QUERY_THROW );
-        uno::Reference< container::XNameAccess > xNameAccess( xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xNameAccess( xBookmarksSupplier->getBookmarks(), uno::UNO_SET_THROW );
         if( !xNameAccess->hasByName( sName ) )
         {
             uno::Reference< frame::XModel > xModel( mxTextDocument, uno::UNO_QUERY_THROW );
@@ -327,7 +327,7 @@ SwVbaRange::PageSetup( )
     OUString aPageStyleName;
     xParaProps->getPropertyValue("PageStyleName") >>= aPageStyleName;
     uno::Reference< style::XStyleFamiliesSupplier > xSytleFamSupp( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_SET_THROW );
     uno::Reference< container::XNameAccess > xPageStyles( xSytleFamNames->getByName("PageStyles"), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xPageProps( xPageStyles->getByName( aPageStyleName ), uno::UNO_QUERY_THROW );
     return uno::makeAny( uno::Reference< word::XPageSetup >( new SwVbaPageSetup( this, mxContext, xModel, xPageProps ) ) );

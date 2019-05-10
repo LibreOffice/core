@@ -122,7 +122,7 @@ void XGraphicTest::testGraphicProvider()
     { // Load lazy
         uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
         uno::Reference<graphic::XGraphicProvider> xGraphicProvider;
-        xGraphicProvider.set(graphic::GraphicProvider::create(xContext), uno::UNO_QUERY_THROW);
+        xGraphicProvider.set(graphic::GraphicProvider::create(xContext), uno::UNO_SET_THROW);
 
         auto aMediaProperties(comphelper::InitPropertySequence({
             { "URL", uno::makeAny(aGraphicURL) },
@@ -161,7 +161,7 @@ void XGraphicTest::testGraphicProvider()
     { // Load as link
         uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
         uno::Reference<graphic::XGraphicProvider> xGraphicProvider;
-        xGraphicProvider.set(graphic::GraphicProvider::create(xContext), uno::UNO_QUERY_THROW);
+        xGraphicProvider.set(graphic::GraphicProvider::create(xContext), uno::UNO_SET_THROW);
 
         auto aMediaProperties(comphelper::InitPropertySequence({
             { "URL", uno::makeAny(aGraphicURL) },
@@ -198,7 +198,7 @@ void XGraphicTest::testGraphicProvider()
     { // Load lazy and as link
         uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
         uno::Reference<graphic::XGraphicProvider> xGraphicProvider;
-        xGraphicProvider.set(graphic::GraphicProvider::create(xContext), uno::UNO_QUERY_THROW);
+        xGraphicProvider.set(graphic::GraphicProvider::create(xContext), uno::UNO_SET_THROW);
 
         auto aMediaProperties(comphelper::InitPropertySequence({
             { "URL", uno::makeAny(aGraphicURL) },

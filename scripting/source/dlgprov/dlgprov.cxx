@@ -104,7 +104,7 @@ namespace dlgprov
 
         Reference< task::XInteractionHandler > xDummyHandler;
         aArgs[5] <<= xDummyHandler;
-        Reference< XMultiComponentFactory > xSMgr_( i_xContext->getServiceManager(), UNO_QUERY_THROW );
+        Reference< XMultiComponentFactory > xSMgr_( i_xContext->getServiceManager(), UNO_SET_THROW );
         // TODO: Ctor
         Reference< resource::XStringResourceManager > xStringResourceManager( xSMgr_->createInstanceWithContext
             ( "com.sun.star.resource.StringResourceWithLocation",
@@ -119,7 +119,7 @@ namespace dlgprov
     }
     Reference< container::XNameContainer > lcl_createControlModel(const Reference< XComponentContext >& i_xContext)
     {
-        Reference< XMultiComponentFactory > xSMgr_( i_xContext->getServiceManager(), UNO_QUERY_THROW );
+        Reference< XMultiComponentFactory > xSMgr_( i_xContext->getServiceManager(), UNO_SET_THROW );
         Reference< container::XNameContainer > xControlModel( xSMgr_->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", i_xContext ), UNO_QUERY_THROW );
         return xControlModel;
     }
@@ -417,7 +417,7 @@ namespace dlgprov
             Any aDialogSourceURLAny;
             aDialogSourceURLAny <<= aURL;
 
-            Reference< container::XNameContainer > xDialogModel( createDialogModel( xInput , xStringResourceManager, aDialogSourceURLAny  ), UNO_QUERY_THROW);
+            Reference< container::XNameContainer > xDialogModel( createDialogModel( xInput , xStringResourceManager, aDialogSourceURLAny  ), UNO_SET_THROW);
 
             xCtrlModel.set( xDialogModel, UNO_QUERY );
         }

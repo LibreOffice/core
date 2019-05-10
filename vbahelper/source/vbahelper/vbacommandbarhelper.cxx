@@ -114,7 +114,7 @@ void VbaCommandBarHelper::Init( )
     css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUICfgMgrSupp(
         css::ui::theModuleUIConfigurationManagerSupplier::get(mxContext) );
 
-    m_xAppCfgMgr.set( xUICfgMgrSupp->getUIConfigurationManager( maModuleId ), uno::UNO_QUERY_THROW );
+    m_xAppCfgMgr.set( xUICfgMgrSupp->getUIConfigurationManager( maModuleId ), uno::UNO_SET_THROW );
 
     css::uno::Reference< css::container::XNameAccess > xNameAccess = css::ui::theWindowStateConfiguration::get( mxContext );
 
@@ -158,7 +158,7 @@ void VbaCommandBarHelper::ApplyTempChange( const OUString& sResourceUrl, const c
 
 uno::Reference< frame::XLayoutManager > VbaCommandBarHelper::getLayoutManager()
 {
-    uno::Reference< frame::XFrame > xFrame( getModel()->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XFrame > xFrame( getModel()->getCurrentController()->getFrame(), uno::UNO_SET_THROW );
     uno::Reference< beans::XPropertySet > xPropertySet( xFrame, uno::UNO_QUERY_THROW );
     uno::Reference< frame::XLayoutManager > xLayoutManager( xPropertySet->getPropertyValue( "LayoutManager" ), uno::UNO_QUERY_THROW );
     return xLayoutManager;

@@ -907,7 +907,7 @@ static sal_Int32 calcMaxParaDepth( const Reference< XShape >& xTargetShape )
         {
             Reference< XPropertySet > xParaSet;
 
-            Reference< XEnumeration > xEnumeration( xText->createEnumeration(), UNO_QUERY_THROW );
+            Reference< XEnumeration > xEnumeration( xText->createEnumeration(), UNO_SET_THROW );
             while( xEnumeration->hasMoreElements() )
             {
                 xEnumeration->nextElement() >>= xParaSet;
@@ -1664,7 +1664,7 @@ static bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape
 
         Reference< XTextRangeCompare > xTextRangeCompare( xShape, UNO_QUERY_THROW );
         Reference< XEnumerationAccess > xParaEnumAccess( xShape, UNO_QUERY_THROW );
-        Reference< XEnumeration > xParaEnum( xParaEnumAccess->createEnumeration(), UNO_QUERY_THROW );
+        Reference< XEnumeration > xParaEnum( xParaEnumAccess->createEnumeration(), UNO_SET_THROW );
         Reference< XTextRange > xRange;
         Reference< XTextRange > xStart( xSelectedText->getStart() );
         Reference< XTextRange > xEnd( xSelectedText->getEnd() );

@@ -124,7 +124,7 @@ uno::Reference<uno::XInterface> ScCellRangesObj::getXSpreadsheet()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSpreadsheets> xSheets (xSheetDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets (xSheetDoc->getSheets(), UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xSheets, UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), UNO_QUERY_THROW);
 

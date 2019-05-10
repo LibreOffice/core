@@ -810,9 +810,9 @@ void collectColumnInformation(const Reference< XConnection>& _xConnection,
         ::utl::SharedUNOComponent< XStatement > xStmt( _xConnection->createStatement() );
         Reference< XPropertySet > xStatementProps( xStmt, UNO_QUERY_THROW );
         xStatementProps->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_ESCAPEPROCESSING ), makeAny( false ) );
-        Reference< XResultSet > xResult( xStmt->executeQuery( sSelect ), UNO_QUERY_THROW );
+        Reference< XResultSet > xResult( xStmt->executeQuery( sSelect ), UNO_SET_THROW );
         Reference< XResultSetMetaDataSupplier > xSuppMeta( xResult, UNO_QUERY_THROW );
-        Reference< XResultSetMetaData > xMeta( xSuppMeta->getMetaData(), UNO_QUERY_THROW );
+        Reference< XResultSetMetaData > xMeta( xSuppMeta->getMetaData(), UNO_SET_THROW );
 
         sal_Int32 nCount = xMeta->getColumnCount();
         OSL_ENSURE( nCount != 0, "::dbtools::collectColumnInformation: result set has empty (column-less) meta data!" );

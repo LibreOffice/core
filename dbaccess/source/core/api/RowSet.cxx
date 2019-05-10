@@ -1718,7 +1718,7 @@ void ORowSet::impl_initializeColumnSettings_nothrow( const Reference< XPropertyS
     bool bHaveAnyColumnSetting = false;
     try
     {
-        Reference< XPropertySetInfo > xInfo( _rxTemplateColumn->getPropertySetInfo(), UNO_QUERY_THROW );
+        Reference< XPropertySetInfo > xInfo( _rxTemplateColumn->getPropertySetInfo(), UNO_SET_THROW );
 
         // a number of properties is plain copied
         const OUString aPropertyNames[] = {
@@ -1759,7 +1759,7 @@ void ORowSet::impl_initializeColumnSettings_nothrow( const Reference< XPropertyS
     // can use as new template column
     try
     {
-        Reference< XPropertySetInfo > xInfo( _rxTemplateColumn->getPropertySetInfo(), UNO_QUERY_THROW );
+        Reference< XPropertySetInfo > xInfo( _rxTemplateColumn->getPropertySetInfo(), UNO_SET_THROW );
         if ( !xInfo->hasPropertyByName( PROPERTY_TABLENAME ) )
             // no chance
             return;
@@ -1767,13 +1767,13 @@ void ORowSet::impl_initializeColumnSettings_nothrow( const Reference< XPropertyS
         OUString sTableName;
         OSL_VERIFY( _rxTemplateColumn->getPropertyValue( PROPERTY_TABLENAME ) >>= sTableName );
 
-        Reference< XNameAccess > xTables( impl_getTables_throw(), UNO_QUERY_THROW );
+        Reference< XNameAccess > xTables( impl_getTables_throw(), UNO_SET_THROW );
         if ( !xTables->hasByName( sTableName ) )
             // no chance
             return;
 
         Reference< XColumnsSupplier > xTableColSup( xTables->getByName( sTableName ), UNO_QUERY_THROW );
-        Reference< XNameAccess > xTableCols( xTableColSup->getColumns(), UNO_QUERY_THROW );
+        Reference< XNameAccess > xTableCols( xTableColSup->getColumns(), UNO_SET_THROW );
 
         OUString sTableColumnName;
 
@@ -1903,7 +1903,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
         else
         {
             // create the rowset columns
-            Reference< XResultSetMetaData > xMeta( getMetaData(), UNO_QUERY_THROW );
+            Reference< XResultSetMetaData > xMeta( getMetaData(), UNO_SET_THROW );
             sal_Int32 nCount = xMeta->getColumnCount();
             m_aDataColumns.reserve(nCount+1);
             aColumns->get().reserve(nCount+1);
@@ -2224,7 +2224,7 @@ Reference< XNameAccess > ORowSet::impl_getTables_throw()
     Reference< XTablesSupplier >  xTablesAccess( m_xActiveConnection, UNO_QUERY );
     if ( xTablesAccess.is() )
     {
-        xTables.set( xTablesAccess->getTables(), UNO_QUERY_THROW );
+        xTables.set( xTablesAccess->getTables(), UNO_SET_THROW );
     }
     else if ( m_xTables )
     {

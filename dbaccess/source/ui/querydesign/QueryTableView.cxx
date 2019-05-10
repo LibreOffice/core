@@ -463,7 +463,7 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
             {
                 Reference< XPropertySet > xProp( xKeyIndex->getByIndex(i), UNO_QUERY_THROW );
                 xColumnsSupplier.set( xProp, UNO_QUERY_THROW );
-                xFKeyColumns.set( xColumnsSupplier->getColumns(), UNO_QUERY_THROW );
+                xFKeyColumns.set( xColumnsSupplier->getColumns(), UNO_SET_THROW );
 
                 sal_Int32 nKeyType = 0;
                 xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
@@ -511,7 +511,7 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
                             continue;
 
                         Reference<XColumnsSupplier> xFKColumnsSupplier( xFKKey, UNO_QUERY_THROW );
-                        Reference< XNameAccess > xTColumns( xFKColumnsSupplier->getColumns(), UNO_QUERY_THROW );
+                        Reference< XNameAccess > xTColumns( xFKColumnsSupplier->getColumns(), UNO_SET_THROW );
                         addConnections( this, *pTabWinTmp, *pNewTabWin, xTColumns );
                     }
                 }

@@ -79,11 +79,11 @@ uno::Reference<uno::XInterface> ScCellFieldsObj::init()
     uno::Reference<text::XTextContent> xTC(xMSF->createInstance("com.sun.star.text.TextField.URL"),
                                            uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet0(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    uno::Reference<table::XCell> xCell(xSheet0->getCellByPosition(2, 3), uno::UNO_QUERY_THROW);
+    uno::Reference<table::XCell> xCell(xSheet0->getCellByPosition(2, 3), uno::UNO_SET_THROW);
     uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY_THROW);
     xText->insertTextContent(xText->createTextCursor(), xTC, true);
 
