@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_0006ca87",
+        "filename": "officecfg/registry/schema/org/openoffice/Setup.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-10T06:51:49Z",
+      "side": 1,
+      "message": "What is the format of this value?  Just an integer (in which case xs:int might be a better choice), or a dotted integer sequence (major.minor.micro), or some more free form text (major.minor.micro-rc1)?\n\nAnd better ways than using \"0\" for \"no previous version recorded\" might be to make the prop nillable, or to use an empty string.",
+      "range": {
+        "startLine": 263,
+        "startChar": 63,
+        "endLine": 263,
+        "endChar": 83
+      },
+      "revId": "d5b7956d2baa5c778e047c7e10729f0141fa5847",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
