@@ -468,6 +468,8 @@ public:
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
+    const SfxItemSet*   GetItemSet() const { return mpItemSet; }
+
 protected:
     explicit            XclExpXF( const XclExpRoot& rRoot, bool bCellXF );
 
@@ -680,6 +682,8 @@ private:
     typedef ::std::vector< XclExpCellArea >             XclExpFillList;
 
     XclExpXFList        maXFList;           /// List of all XF records.
+    std::unordered_map<const SfxItemSet*, std::vector<sal_uInt32>>
+                        maXFFindMap;        /// map of itemset to vector of positions, to speed up find
     XclExpStyleList     maStyleList;        /// List of all STYLE records.
     XclExpBuiltInMap    maBuiltInMap;       /// Contained elements describe built-in XFs.
     ScfUInt16Vec        maXFIndexVec;       /// Maps XF IDs to XF indexes.
