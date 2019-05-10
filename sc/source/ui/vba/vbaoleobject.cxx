@@ -38,12 +38,12 @@ ScVbaOLEObject::ScVbaOLEObject( const uno::Reference< XHelperInterface >& xParen
 : OLEObjectImpl_BASE( xParent, xContext )
 {
     //init m_xWindowPeer
-    uno::Reference< awt::XControlModel > xControlModel( xControlShape->getControl(), css::uno::UNO_QUERY_THROW );
+    uno::Reference< awt::XControlModel > xControlModel( xControlShape->getControl(), css::uno::UNO_SET_THROW );
     uno::Reference< container::XChild > xChild( xControlModel, uno::UNO_QUERY_THROW );
     xChild.set( xChild->getParent(), uno::UNO_QUERY_THROW );
     xChild.set( xChild->getParent(), uno::UNO_QUERY_THROW );
     uno::Reference<frame::XModel> xModel( xChild->getParent(), uno::UNO_QUERY_THROW );
-    uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
+    uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
     uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext("ooo.vba.ControlProvider", mxContext ), uno::UNO_QUERY_THROW );
     m_xControl.set( xControlProvider->createControl(  xControlShape, xModel ) );
 }

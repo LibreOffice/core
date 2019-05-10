@@ -60,7 +60,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_SpreadsheetViewPanesEnumerati
 
     uno::Reference<frame::XModel> xModel(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<frame::XController> xController(xModel->getCurrentController(),
-                                                   uno::UNO_QUERY_THROW);
+                                                   uno::UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xController, uno::UNO_QUERY_THROW);
     xIA->getByIndex(0);
 

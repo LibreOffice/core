@@ -198,8 +198,8 @@ void FindTextFieldControl::SetTextToSelected_Impl()
 
     try
     {
-        css::uno::Reference<css::frame::XController> xController(m_xFrame->getController(), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::frame::XModel> xModel(xController->getModel(), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::frame::XController> xController(m_xFrame->getController(), css::uno::UNO_SET_THROW);
+        css::uno::Reference<css::frame::XModel> xModel(xController->getModel(), css::uno::UNO_SET_THROW);
         css::uno::Reference<css::container::XIndexAccess> xIndexAccess(xModel->getCurrentSelection(), css::uno::UNO_QUERY_THROW);
         if (xIndexAccess->getCount() > 0)
         {

@@ -60,7 +60,7 @@ uno::Reference<uno::XInterface> ScHeaderFooterContentObj::init()
 
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamSupp(xDoc, UNO_QUERY_THROW);
     uno::Reference<container::XNameAccess> xStyleFamiliesNames(xStyleFamSupp->getStyleFamilies(),
-                                                               UNO_QUERY_THROW);
+                                                               UNO_SET_THROW);
     uno::Reference<container::XNameAccess> xPageStyles(xStyleFamiliesNames->getByName("PageStyles"),
                                                        UNO_QUERY_THROW);
     uno::Any aDefaultStyle = xPageStyles->getByName("Default");

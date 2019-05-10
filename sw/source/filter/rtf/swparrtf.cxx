@@ -79,7 +79,7 @@ ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam
         comphelper::getProcessServiceFactory());
     uno::Reference<uno::XInterface> xInterface(
         xMultiServiceFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"),
-        uno::UNO_QUERY_THROW);
+        uno::UNO_SET_THROW);
 
     uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
     uno::Reference<lang::XComponent> xDstDoc(pDocShell->GetModel(), uno::UNO_QUERY_THROW);
@@ -175,7 +175,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportRTF(SvStream& rStream)
         comphelper::getProcessServiceFactory());
     uno::Reference<uno::XInterface> xInterface(
         xMultiServiceFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"),
-        uno::UNO_QUERY_THROW);
+        uno::UNO_SET_THROW);
 
     uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
     uno::Reference<lang::XComponent> xDstDoc(xDocSh->GetModel(), uno::UNO_QUERY_THROW);

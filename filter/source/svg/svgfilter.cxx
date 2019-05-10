@@ -399,8 +399,8 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
         uno::Reference<frame::XController > xController;
         if (xDesktop->getCurrentFrame().is() && !bPageProvided) // Manage headless case
         {
-            uno::Reference<frame::XFrame> xFrame(xDesktop->getCurrentFrame(), uno::UNO_QUERY_THROW);
-            xController.set(xFrame->getController(), uno::UNO_QUERY_THROW);
+            uno::Reference<frame::XFrame> xFrame(xDesktop->getCurrentFrame(), uno::UNO_SET_THROW);
+            xController.set(xFrame->getController(), uno::UNO_SET_THROW);
             uno::Reference<drawing::XDrawView> xDrawView(xController, uno::UNO_QUERY_THROW);
             uno::Reference<drawing::framework::XControllerManager> xManager(xController, uno::UNO_QUERY_THROW);
             uno::Reference<drawing::framework::XConfigurationController> xConfigController(xManager->getConfigurationController());
@@ -570,8 +570,8 @@ bool SVGFilter::filterWriterOrCalc( const Sequence< PropertyValue >& rDescriptor
     uno::Reference<frame::XController > xController;
     if (xDesktop->getCurrentFrame().is())
     {
-        uno::Reference<frame::XFrame> xFrame(xDesktop->getCurrentFrame(), uno::UNO_QUERY_THROW);
-        xController.set(xFrame->getController(), uno::UNO_QUERY_THROW);
+        uno::Reference<frame::XFrame> xFrame(xDesktop->getCurrentFrame(), uno::UNO_SET_THROW);
+        xController.set(xFrame->getController(), uno::UNO_SET_THROW);
     }
 
     Reference< view::XSelectionSupplier > xSelection (xController, UNO_QUERY);

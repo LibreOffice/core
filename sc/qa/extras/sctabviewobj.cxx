@@ -97,7 +97,7 @@ uno::Reference<uno::XInterface> ScTabViewObj::getXSpreadsheet(const sal_Int16 nN
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_SET_THROW);
     xSheets->insertNewByName("Sheet2", 2);
     uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(nNumber), UNO_QUERY_THROW);

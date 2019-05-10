@@ -785,7 +785,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
         {
             xPreparedStatement.set( m_xConnection->prepareStatement( sSQL ), UNO_QUERY_THROW );
             xResMetaDataSup.set( xPreparedStatement, UNO_QUERY_THROW );
-            xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
+            xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_SET_THROW );
         }
         catch( const Exception& ) { }
 
@@ -801,19 +801,19 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
                 for(sal_Int32 i = 1;i <= xPara->getCount();++i)
                     xParameters->setNull(i,DataType::VARCHAR);
                 xResMetaDataSup.set(xPreparedStatement->executeQuery(), UNO_QUERY_THROW );
-                xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
+                xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_SET_THROW );
             }
             catch( const Exception& ) { }
         }
 
         if ( !xResultSetMeta.is() )
         {
-            xStatement.reset( Reference< XStatement >( m_xConnection->createStatement(), UNO_QUERY_THROW ) );
+            xStatement.reset( Reference< XStatement >( m_xConnection->createStatement(), UNO_SET_THROW ) );
             Reference< XPropertySet > xStatementProps( xStatement, UNO_QUERY_THROW );
             try { xStatementProps->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, makeAny( false ) ); }
             catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION("dbaccess"); }
             xResMetaDataSup.set( xStatement->executeQuery( sSQL ), UNO_QUERY_THROW );
-            xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
+            xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_SET_THROW );
 
             if (xResultSetMeta.is())
             {

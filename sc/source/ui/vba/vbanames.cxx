@@ -74,7 +74,7 @@ ScVbaNames::~ScVbaNames()
 ScDocument *
 ScVbaNames::getScDocument()
 {
-    uno::Reference< frame::XModel > xModel( getModel() , uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XModel > xModel( getModel() , uno::UNO_SET_THROW );
     ScTabViewShell * pTabViewShell = excel::getBestViewShell( xModel );
     if ( !pTabViewShell )
         throw uno::RuntimeException( "No ViewShell available" );

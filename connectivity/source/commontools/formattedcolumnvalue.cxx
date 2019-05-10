@@ -149,7 +149,7 @@ namespace dbtools
                 }
 
                 // get the format key of our bound field
-                Reference< XPropertySetInfo > xPSI( _rxColumn->getPropertySetInfo(), UNO_QUERY_THROW );
+                Reference< XPropertySetInfo > xPSI( _rxColumn->getPropertySetInfo(), UNO_SET_THROW );
                 bool bHaveFieldFormat = false;
                 const OUString sFormatKeyProperty( "FormatKey" );
                 if ( xPSI->hasPropertyByName( sFormatKeyProperty ) )
@@ -166,7 +166,7 @@ namespace dbtools
 
                 // some more formatter settings
                 _rData.m_nKeyType  = ::comphelper::getNumberFormatType( xNumberFormatsSupp->getNumberFormats(), _rData.m_nFormatKey );
-                Reference< XPropertySet > xFormatSettings( xNumberFormatsSupp->getNumberFormatSettings(), UNO_QUERY_THROW );
+                Reference< XPropertySet > xFormatSettings( xNumberFormatsSupp->getNumberFormatSettings(), UNO_SET_THROW );
                 OSL_VERIFY( xFormatSettings->getPropertyValue("NullDate") >>= _rData.m_aNullDate );
 
                 // remember the formatter
@@ -190,7 +190,7 @@ namespace dbtools
             try
             {
                 // get the number formats supplier of the connection of the form
-                Reference< XConnection > xConnection( getConnection( i_rRowSet ), UNO_QUERY_THROW );
+                Reference< XConnection > xConnection( getConnection( i_rRowSet ), UNO_SET_THROW );
                 Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( xConnection, true, i_rContext ), UNO_SET_THROW );
 
                 // create a number formatter for it

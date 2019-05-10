@@ -414,11 +414,11 @@ void SbaTableQueryBrowser::impl_sanitizeRowSetClauses_nothrow()
 
         // the tables participating in the statement
         const Reference< XTablesSupplier > xSuppTables( xComposer, UNO_QUERY_THROW );
-        const Reference< XNameAccess > xTableNames( xSuppTables->getTables(), UNO_QUERY_THROW );
+        const Reference< XNameAccess > xTableNames( xSuppTables->getTables(), UNO_SET_THROW );
 
         // the columns participating in the statement
         const Reference< XColumnsSupplier > xSuppColumns( xComposer, UNO_QUERY_THROW );
-        const Reference< XNameAccess > xColumnNames( xSuppColumns->getColumns(), UNO_QUERY_THROW );
+        const Reference< XNameAccess > xColumnNames( xSuppColumns->getColumns(), UNO_SET_THROW );
 
         // check if the order columns apply to tables which really exist in the statement
         const Reference< XIndexAccess > xOrderColumns( xComposer->getOrderColumns(), UNO_SET_THROW );
@@ -449,7 +449,7 @@ void SbaTableQueryBrowser::impl_sanitizeRowSetClauses_nothrow()
                 }
 
                 const Reference< XColumnsSupplier > xSuppTableColumns( xTableNames->getByName( sTableName ), UNO_QUERY_THROW );
-                const Reference< XNameAccess > xTableColumnNames( xSuppTableColumns->getColumns(), UNO_QUERY_THROW );
+                const Reference< XNameAccess > xTableColumnNames( xSuppTableColumns->getColumns(), UNO_SET_THROW );
                 if ( !xTableColumnNames->hasByName( sColumnName ) )
                 {
                     invalidColumn = true;

@@ -68,23 +68,23 @@ uno::Reference<uno::XInterface> ScCellsObj::init()
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
     uno::Reference<table::XCellRange> xCellRange(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    uno::Reference<table::XCell> xCell0(xCellRange->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    uno::Reference<table::XCell> xCell0(xCellRange->getCellByPosition(0, 0), uno::UNO_SET_THROW);
     uno::Reference<text::XTextRange> xTextRange0(xCell0, uno::UNO_QUERY_THROW);
     xTextRange0->setString("ScCellsObj test 1");
 
-    uno::Reference<table::XCell> xCell1(xCellRange->getCellByPosition(5, 1), uno::UNO_QUERY_THROW);
+    uno::Reference<table::XCell> xCell1(xCellRange->getCellByPosition(5, 1), uno::UNO_SET_THROW);
     xCell1->setValue(15);
 
-    uno::Reference<table::XCell> xCell2(xCellRange->getCellByPosition(3, 9), uno::UNO_QUERY_THROW);
+    uno::Reference<table::XCell> xCell2(xCellRange->getCellByPosition(3, 9), uno::UNO_SET_THROW);
     uno::Reference<text::XTextRange> xTextRange2(xCell2, uno::UNO_QUERY_THROW);
     xTextRange2->setString("ScCellsObj test 2");
 
     uno::Reference<sheet::XCellRangesQuery> xCRQ(xCellRange, uno::UNO_QUERY_THROW);
-    uno::Reference<sheet::XSheetCellRanges> xSCR(xCRQ->queryVisibleCells(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetCellRanges> xSCR(xCRQ->queryVisibleCells(), uno::UNO_SET_THROW);
 
     return xSCR->getCells();
 }

@@ -99,13 +99,13 @@ uno::Reference<uno::XInterface> ScDataPilotFieldObj::init()
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(1), uno::UNO_QUERY_THROW);
 
     uno::Reference<sheet::XDataPilotTablesSupplier> xDPTS(xSheet, uno::UNO_QUERY_THROW);
-    uno::Reference<sheet::XDataPilotTables> xDPT(xDPTS->getDataPilotTables(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XDataPilotTables> xDPT(xDPTS->getDataPilotTables(), uno::UNO_SET_THROW);
     uno::Sequence<OUString> aElementNames = xDPT->getElementNames();
     (void)aElementNames;
 
     uno::Reference<sheet::XDataPilotDescriptor> xDPDsc(xDPT->getByName("DataPilot1"),
                                                        uno::UNO_QUERY_THROW);
-    uno::Reference<container::XIndexAccess> xIA(xDPDsc->getDataPilotFields(), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIA(xDPDsc->getDataPilotFields(), uno::UNO_SET_THROW);
     uno::Reference<uno::XInterface> xReturnValue(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
     return xReturnValue;
 }

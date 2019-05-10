@@ -381,7 +381,7 @@ namespace slideshow
                                        css::uno::UNO_QUERY_THROW );
             css::uno::Reference< css::container::XEnumeration >
                    xEnumeration( xEnumerationAccess->createEnumeration(),
-                                 css::uno::UNO_QUERY_THROW );
+                                 css::uno::UNO_SET_THROW );
 
             while( xEnumeration->hasMoreElements() )
             {

@@ -324,7 +324,7 @@ Reference< XNameContainer > WorkbookGlobals::getStyleFamily( bool bPageStyles ) 
     try
     {
         Reference< XStyleFamiliesSupplier > xFamiliesSup( mxDoc, UNO_QUERY_THROW );
-        Reference< XNameAccess > xFamiliesNA( xFamiliesSup->getStyleFamilies(), UNO_QUERY_THROW );
+        Reference< XNameAccess > xFamiliesNA( xFamiliesSup->getStyleFamilies(), UNO_SET_THROW );
         xStylesNC.set( xFamiliesNA->getByName( bPageStyles ? maPageStyles : maCellStyles ), UNO_QUERY );
     }
     catch( Exception& )

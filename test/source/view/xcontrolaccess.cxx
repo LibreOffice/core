@@ -46,8 +46,8 @@ void XControlAccess::testGetControl()
     xShapes->add(xShape);
 
     uno::Reference<drawing::XControlShape> xCS(xShape, uno::UNO_QUERY_THROW);
-    uno::Reference<awt::XControlModel> xCM(xCS->getControl(), uno::UNO_QUERY_THROW);
-    uno::Reference<awt::XControl> xControl(xCA->getControl(xCM), uno::UNO_QUERY_THROW);
+    uno::Reference<awt::XControlModel> xCM(xCS->getControl(), uno::UNO_SET_THROW);
+    uno::Reference<awt::XControl> xControl(xCA->getControl(xCM), uno::UNO_SET_THROW);
 
     CPPUNIT_ASSERT(xControl.is());
 }

@@ -80,7 +80,7 @@ static void ImpExtractCustomShow( const Reference< XModel >& rxModel, const OUSt
     {
         PageCollector::CollectNonCustomShowPages( rxModel, rCustomShowName, vNonUsedPageList );
         Reference< XDrawPagesSupplier > xDrawPagesSupplier( rxModel, UNO_QUERY_THROW );
-        Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
+        Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_SET_THROW );
         for( const auto& rxPage : vNonUsedPageList )
             xDrawPages->remove( rxPage );
     }
@@ -97,7 +97,7 @@ static void ImpDeleteUnusedMasterPages( const Reference< XModel >& rxModel )
 
     // now master pages that are not marked can be deleted
     Reference< XMasterPagesSupplier > xMasterPagesSupplier( rxModel, UNO_QUERY_THROW );
-    Reference< XDrawPages > xMasterPages( xMasterPagesSupplier->getMasterPages(), UNO_QUERY_THROW );
+    Reference< XDrawPages > xMasterPages( xMasterPagesSupplier->getMasterPages(), UNO_SET_THROW );
     for( const auto& rMasterPage : aMasterPageList )
     {
         if ( !rMasterPage.bUsed )
@@ -110,7 +110,7 @@ static void ImpDeleteHiddenSlides(  const Reference< XModel >& rxModel )
     try
     {
         Reference< XDrawPagesSupplier > xDrawPagesSupplier( rxModel, UNO_QUERY_THROW );
-        Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
+        Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_SET_THROW );
         for( sal_Int32 i = 0; i < xDrawPages->getCount(); i++ )
         {
             Reference< XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );
@@ -137,7 +137,7 @@ static void ImpDeleteNotesPages( const Reference< XModel >& rxModel )
     try
     {
         Reference< XDrawPagesSupplier > xDrawPagesSupplier( rxModel, UNO_QUERY_THROW );
-        Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
+        Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_SET_THROW );
         sal_Int32 i, nPages = xDrawPages->getCount();
         for( i = 0; i < nPages; i++ )
         {
@@ -160,7 +160,7 @@ static void ImpConvertOLE( const Reference< XModel >& rxModel, sal_Int32 nOLEOpt
     try
     {
         Reference< XDrawPagesSupplier > xDrawPagesSupplier( rxModel, UNO_QUERY_THROW );
-        Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
+        Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_SET_THROW );
         for ( sal_Int32 i = 0; i < xDrawPages->getCount(); i++ )
         {
             Reference< XShapes > xShapes( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );

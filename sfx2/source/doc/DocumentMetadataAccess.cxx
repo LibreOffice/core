@@ -240,7 +240,7 @@ static uno::Reference<rdf::XURI> const &
 getURI(uno::Reference< uno::XComponentContext > const & i_xContext)
 {
     static uno::Reference< rdf::XURI > xURI(
-        rdf::URI::createKnown(i_xContext, Constant), uno::UNO_QUERY_THROW);
+        rdf::URI::createKnown(i_xContext, Constant), uno::UNO_SET_THROW);
     return xURI;
 }
 

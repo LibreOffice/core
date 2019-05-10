@@ -1250,7 +1250,7 @@ bool OKeySet::fetchRow()
         ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >((*m_pKeyColumnNames).size() + m_pForeignColumnNames->size());
 
         ::comphelper::disposeComponent(m_xSet);
-        m_xRow.set(m_xDriverRow, UNO_QUERY_THROW);
+        m_xRow.set(m_xDriverRow, UNO_SET_THROW);
 
         connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = aKeyRow->get().begin();
         // copy key columns

@@ -143,7 +143,7 @@ namespace connectivity { namespace hsqldb
                 {
                     if ( !m_bReadOnly )
                     {
-                        Reference< XStatement > xStmt( m_xConnection->createStatement(), UNO_QUERY_THROW );
+                        Reference< XStatement > xStmt( m_xConnection->createStatement(), css::uno::UNO_SET_THROW );
                         xStmt->execute( "CHECKPOINT DEFRAG" );
                     }
                 }
@@ -223,8 +223,8 @@ namespace connectivity { namespace hsqldb
         {
             Reference< XConnection > xMe( *this, UNO_QUERY );
             Reference< XDataDefinitionSupplier > xDefinitionsSupp( m_xDriver, UNO_QUERY_THROW );
-            Reference< XTablesSupplier > xTablesSupp( xDefinitionsSupp->getDataDefinitionByConnection( xMe ), UNO_QUERY_THROW );
-            xTables.set( xTablesSupp->getTables(), UNO_QUERY_THROW );
+            Reference< XTablesSupplier > xTablesSupp( xDefinitionsSupp->getDataDefinitionByConnection( xMe ), css::uno::UNO_SET_THROW );
+            xTables.set( xTablesSupp->getTables(), css::uno::UNO_SET_THROW );
         }
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )
@@ -246,7 +246,7 @@ namespace connectivity { namespace hsqldb
         bool bDoesExist = false;
         try
         {
-            Reference< XNameAccess > xTables( impl_getTableContainer_throw(), UNO_QUERY_THROW );
+            Reference< XNameAccess > xTables( impl_getTableContainer_throw(), css::uno::UNO_SET_THROW );
             bDoesExist = xTables->hasByName( _rTableName );
         }
         catch( const Exception& )
@@ -276,7 +276,7 @@ namespace connectivity { namespace hsqldb
             Reference< XConnection > xMe( *this, UNO_QUERY_THROW );
 
             // split the fully qualified name
-            Reference< XDatabaseMetaData > xMetaData( xMe->getMetaData(), UNO_QUERY_THROW );
+            Reference< XDatabaseMetaData > xMetaData( xMe->getMetaData(), css::uno::UNO_SET_THROW );
             OUString sCatalog, sSchema, sName;
             ::dbtools::qualifiedNameComponents( xMetaData, _rTableName, sCatalog, sSchema, sName, ::dbtools::EComposeRule::Complete );
 
@@ -286,8 +286,8 @@ namespace connectivity { namespace hsqldb
             HTools::appendTableFilterCrit( sSQL, sCatalog, sSchema, sName, true );
             sSQL.append( " AND TABLE_TYPE = 'TABLE'" );
 
-            Reference< XStatement > xStatement( xMe->createStatement(), UNO_QUERY_THROW );
-            Reference< XResultSet > xTableHsqlType( xStatement->executeQuery( sSQL.makeStringAndClear() ), UNO_QUERY_THROW );
+            Reference< XStatement > xStatement( xMe->createStatement(), css::uno::UNO_SET_THROW );
+            Reference< XResultSet > xTableHsqlType( xStatement->executeQuery( sSQL.makeStringAndClear() ), css::uno::UNO_SET_THROW );
 
             if ( xTableHsqlType->next() )   // might not succeed in case of VIEWs
             {

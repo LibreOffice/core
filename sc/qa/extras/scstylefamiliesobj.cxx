@@ -94,7 +94,7 @@ uno::Reference<uno::XInterface> ScStyleFamiliesObj::init()
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<style::XStyleFamiliesSupplier> xSFS(xDoc, uno::UNO_QUERY_THROW);
-    uno::Reference<container::XNameAccess> xNA(xSFS->getStyleFamilies(), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNameAccess> xNA(xSFS->getStyleFamilies(), uno::UNO_SET_THROW);
 
     return xNA;
 }

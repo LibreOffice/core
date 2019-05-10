@@ -561,7 +561,7 @@ void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
     if( sal::static_int_cast< sal_Int32 >( maColumns.size() ) != nColCount )
         maColumns.resize( nColCount );
 
-    Reference< XTableColumns > xCols( mxTable->getColumns(), UNO_QUERY_THROW );
+    Reference< XTableColumns > xCols( mxTable->getColumns(), UNO_SET_THROW );
 
     // first calculate current width and initial minimum width per column,
     // merged cells will be counted later
@@ -1090,7 +1090,7 @@ void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea,
     if( mxTable.is() ) try
     {
         const sal_Int32 nColCount = getColumnCount();
-        Reference< XTableColumns > xCols( mxTable->getColumns(), UNO_QUERY_THROW );
+        Reference< XTableColumns > xCols( mxTable->getColumns(), UNO_SET_THROW );
         const Size aSize(0xffffff, 0xffffff);
 
         //special case - optimize a single column
@@ -1184,7 +1184,7 @@ void TableLayouter::DistributeRows( ::tools::Rectangle& rArea,
     if( mxTable.is() ) try
     {
         const sal_Int32 nRowCount = mxTable->getRowCount();
-        Reference< XTableRows > xRows( mxTable->getRows(), UNO_QUERY_THROW );
+        Reference< XTableRows > xRows( mxTable->getRows(), UNO_SET_THROW );
         sal_Int32 nMinHeight = 0;
 
         //special case - minimize a single row

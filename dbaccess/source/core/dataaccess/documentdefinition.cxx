@@ -563,7 +563,7 @@ namespace
 void ODocumentDefinition::impl_removeFrameFromDesktop_throw( const Reference<XComponentContext> & _rxContext, const Reference< XFrame >& _rxFrame )
 {
     Reference< XDesktop2 > xDesktop = Desktop::create( _rxContext );
-    Reference< XFrames > xFrames( xDesktop->getFrames(), UNO_QUERY_THROW );
+    Reference< XFrames > xFrames( xDesktop->getFrames(), UNO_SET_THROW );
     xFrames->remove( _rxFrame );
 }
 
@@ -696,7 +696,7 @@ void ODocumentDefinition::impl_initFormEditView( const Reference< XController >&
     try
     {
         Reference< XViewSettingsSupplier > xSettingsSupplier( _rxController, UNO_QUERY_THROW );
-        Reference< XPropertySet > xViewSettings( xSettingsSupplier->getViewSettings(), UNO_QUERY_THROW );
+        Reference< XPropertySet > xViewSettings( xSettingsSupplier->getViewSettings(), UNO_SET_THROW );
 
         // the below code could indirectly tamper with the "modified" flag of the model, temporarily disable this
         LockModifiable aLockModify( _rxController->getModel() );

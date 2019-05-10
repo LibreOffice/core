@@ -200,7 +200,7 @@ ScVbaEventListener::ScVbaEventListener( ScVbaEventsHelper& rVbaEvents, const uno
     startModelListening();
     try
     {
-        uno::Reference< frame::XController > xController( mxModel->getCurrentController(), uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XController > xController( mxModel->getCurrentController(), uno::UNO_SET_THROW );
         startControllerListening( xController );
     }
     catch( uno::Exception& )

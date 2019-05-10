@@ -616,7 +616,7 @@ IMPL_LINK(SvxScriptOrgDialog, ButtonHdl, weld::Button&, rButton, void)
                 try
                 {
                     Reference< provider::XScript > xScript(
-                    mspNode->getScript( scriptURL ), UNO_QUERY_THROW );
+                        mspNode->getScript( scriptURL ), UNO_SET_THROW );
 
                     const Sequence< Any > args(0);
                     Sequence< sal_Int16 > outIndex;

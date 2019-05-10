@@ -269,7 +269,7 @@ VbaDocumentBase::Save()
 void
 VbaDocumentBase::Activate()
 {
-    uno::Reference< frame::XFrame > xFrame( getModel()->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XFrame > xFrame( getModel()->getCurrentController()->getFrame(), uno::UNO_SET_THROW );
     xFrame->activate();
 }
 

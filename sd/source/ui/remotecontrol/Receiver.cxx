@@ -73,12 +73,12 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
     uno::Reference<presentation::XSlideShow> xSlideShow;
     try {
         uno::Reference< frame::XDesktop2 > xFramesSupplier = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
-        uno::Reference< frame::XFrame > xFrame ( xFramesSupplier->getActiveFrame(), uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XFrame > xFrame ( xFramesSupplier->getActiveFrame(), uno::UNO_SET_THROW );
         uno::Reference<presentation::XPresentationSupplier> xPS ( xFrame->getController()->getModel(), uno::UNO_QUERY_THROW);
         xPresentation.set( xPS->getPresentation(), uno::UNO_QUERY_THROW);
         // Throws an exception if now slideshow running
-        xSlideShowController.set( xPresentation->getController(), uno::UNO_QUERY_THROW );
-        xSlideShow.set( xSlideShowController->getSlideShow(), uno::UNO_QUERY_THROW );
+        xSlideShowController.set( xPresentation->getController(), uno::UNO_SET_THROW );
+        xSlideShow.set( xSlideShowController->getSlideShow(), uno::UNO_SET_THROW );
     }
     catch (uno::RuntimeException &)
     {

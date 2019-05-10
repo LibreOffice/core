@@ -133,7 +133,7 @@ void PropBrw::ImplReCreateController()
             ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ), xOwnContext ) );
 
         // create a property browser controller
-        Reference< XMultiComponentFactory > xFactory( xInspectorContext->getServiceManager(), UNO_QUERY_THROW );
+        Reference< XMultiComponentFactory > xFactory( xInspectorContext->getServiceManager(), UNO_SET_THROW );
         static const char s_sControllerServiceName[] = "com.sun.star.awt.PropertyBrowserController";
         m_xBrowserController.set( xFactory->createInstanceWithContext( s_sControllerServiceName, xInspectorContext ), UNO_QUERY );
         if ( !m_xBrowserController.is() )

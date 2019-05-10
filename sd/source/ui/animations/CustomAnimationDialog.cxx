@@ -2239,7 +2239,7 @@ void CustomAnimationEffectTabPage::onSoundPreview()
     if( nPos >= 2 ) try
     {
         const OUString aSoundURL( maSoundList[ nPos-2 ] );
-        mxPlayer.set( avmedia::MediaWindow::createPlayer( aSoundURL, "" ), uno::UNO_QUERY_THROW );
+        mxPlayer.set( avmedia::MediaWindow::createPlayer( aSoundURL, "" ), uno::UNO_SET_THROW );
         mxPlayer->start();
     }
     catch( uno::Exception& )

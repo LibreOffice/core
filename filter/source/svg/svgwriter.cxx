@@ -914,7 +914,7 @@ void SVGTextWriter::createParagraphEnumeration()
         msShapeId = implGetValidIDFromInterface( Reference<XInterface>(mrTextShape, UNO_QUERY) );
 
         Reference< XEnumerationAccess > xEnumerationAccess( mrTextShape, UNO_QUERY_THROW );
-        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_SET_THROW );
         if( xEnumeration.is() )
         {
             mrParagraphEnumeration.set( xEnumeration );
@@ -1040,7 +1040,7 @@ bool SVGTextWriter::nextParagraph()
                 }
 
                 Reference< XEnumerationAccess > xEnumerationAccess( xTextContent, UNO_QUERY_THROW );
-                Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+                Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_SET_THROW );
                 if( xEnumeration.is() && xEnumeration->hasMoreElements() )
                 {
                     mrTextPortionEnumeration.set( xEnumeration );

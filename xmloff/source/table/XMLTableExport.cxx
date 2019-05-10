@@ -362,7 +362,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
             for ( sal_Int32 columnIndex = 0; columnIndex < columnCount; columnIndex++ )
             {
                 // get current cell, remarks row index is 0, because we get the range for each row separate
-                Reference< XCell > xCell( xCellRange->getCellByPosition(columnIndex, 0), UNO_QUERY_THROW );
+                Reference< XCell > xCell( xCellRange->getCellByPosition(columnIndex, 0), UNO_SET_THROW );
 
                 // use XMergeableCell interface from offapi
                 Reference< XMergeableCell > xMergeableCell( xCell, UNO_QUERY_THROW );

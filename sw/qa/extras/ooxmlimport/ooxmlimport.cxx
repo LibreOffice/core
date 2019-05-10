@@ -1121,7 +1121,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf95970, "tdf95970.docx")
     // Proper color order of image on test doc (left->right):
     // top row: green->red
     // bottom row: yellow->blue
-    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY_THROW);
     sal_Int32 aRotate = 0;
     xPropertySet->getPropertyValue("RotateAngle") >>= aRotate;

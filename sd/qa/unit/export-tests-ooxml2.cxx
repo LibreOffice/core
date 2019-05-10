@@ -1524,7 +1524,7 @@ void SdOOXMLExportTest2::testTdf107608()
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
 
     uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
-    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_SET_THROW );
 
     drawing::FillStyle aFillStyle( drawing::FillStyle_NONE );
     xPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
@@ -1549,7 +1549,7 @@ void SdOOXMLExportTest2::testTdf111786()
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
 
     uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
-    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_SET_THROW );
 
     sal_uInt32 nLineColor;
     xPropSet->getPropertyValue("LineColor") >>= nLineColor;

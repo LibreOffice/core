@@ -68,7 +68,7 @@ void XDataPilotDescriptor::testGetFilterDescriptor()
 
 void XDataPilotDescriptor::testGetDataPilotFields_Impl( uno::Reference< sheet::XDataPilotDescriptor > const & xDescr)
 {
-    uno::Reference< container::XIndexAccess > xIndex(xDescr->getDataPilotFields(), UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIndex(xDescr->getDataPilotFields(), UNO_SET_THROW);
 
     sal_Int32 nCount = xIndex->getCount();
 
@@ -133,7 +133,7 @@ void XDataPilotDescriptor::testGetColumnFields()
 {
     uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(),UNO_QUERY_THROW);
     testGetDataPilotFields_Impl( xDescr );
-    uno::Reference< container::XIndexAccess > xIndex(xDescr->getColumnFields(), UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIndex(xDescr->getColumnFields(), UNO_SET_THROW);
 
     checkName( xIndex, 0 );
 }
@@ -142,7 +142,7 @@ void XDataPilotDescriptor::testGetRowFields()
 {
     uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(),UNO_QUERY_THROW);
     testGetDataPilotFields_Impl( xDescr );
-    uno::Reference< container::XIndexAccess > xIndex(xDescr->getRowFields(), UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIndex(xDescr->getRowFields(), UNO_SET_THROW);
 
     //checkName( xIndex, 1 );
 }
@@ -151,7 +151,7 @@ void XDataPilotDescriptor::testGetPageFields()
 {
     uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(), UNO_QUERY_THROW);
     testGetDataPilotFields_Impl( xDescr );
-    uno::Reference< container::XIndexAccess > xIndex(xDescr->getPageFields(), UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIndex(xDescr->getPageFields(), UNO_SET_THROW);
 
     checkName( xIndex, 4 );
 }
@@ -160,7 +160,7 @@ void XDataPilotDescriptor::testGetDataFields()
 {
     uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(),UNO_QUERY_THROW);
     testGetDataPilotFields_Impl( xDescr );
-    uno::Reference< container::XIndexAccess > xIndex(xDescr->getDataFields(), UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIndex(xDescr->getDataFields(), UNO_SET_THROW);
 
     checkName( xIndex, 2 );
 }
@@ -169,7 +169,7 @@ void XDataPilotDescriptor::testGetHiddenFields()
 {
     uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(),UNO_QUERY_THROW);
     testGetDataPilotFields_Impl( xDescr );
-    uno::Reference< container::XIndexAccess > xIndex(xDescr->getHiddenFields(), UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIndex(xDescr->getHiddenFields(), UNO_SET_THROW);
 
     checkName( xIndex, 3 );
 }

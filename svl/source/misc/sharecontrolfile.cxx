@@ -99,8 +99,8 @@ ShareControlFile::ShareControlFile( const OUString& aOrigURL )
         }
 
         m_xSeekable.set( xStream, uno::UNO_QUERY_THROW );
-        m_xInputStream.set( xStream->getInputStream(), uno::UNO_QUERY_THROW );
-        m_xOutputStream.set( xStream->getOutputStream(), uno::UNO_QUERY_THROW );
+        m_xInputStream.set( xStream->getInputStream(), uno::UNO_SET_THROW );
+        m_xOutputStream.set( xStream->getOutputStream(), uno::UNO_SET_THROW );
         m_xTruncate.set( m_xOutputStream, uno::UNO_QUERY_THROW );
         m_xStream = xStream;
     }

@@ -85,7 +85,7 @@ namespace logging
         {
             try
             {
-                Reference< XLogFormatter > xFormatter( PlainTextFormatter::create( m_xContext ), UNO_QUERY_THROW );
+                Reference< XLogFormatter > xFormatter( PlainTextFormatter::create( m_xContext ), css::uno::UNO_SET_THROW );
                 setFormatter( xFormatter );
             }
             catch( const Exception& )
@@ -130,7 +130,7 @@ namespace logging
 
         try
         {
-            Reference< XLogFormatter > xFormatter( getFormatter(), UNO_QUERY_THROW );
+            Reference< XLogFormatter > xFormatter( getFormatter(), css::uno::UNO_SET_THROW );
             OUString sEntry( xFormatter->format( _rRecord ) );
             _out_rEntry = OUStringToOString( sEntry, getTextEncoding() );
             return true;
@@ -147,7 +147,7 @@ namespace logging
     {
         try
         {
-            Reference< XLogFormatter > xFormatter( getFormatter(), UNO_QUERY_THROW );
+            Reference< XLogFormatter > xFormatter( getFormatter(), css::uno::UNO_SET_THROW );
             OUString sHead( xFormatter->getHead() );
             _out_rHead = OUStringToOString( sHead, getTextEncoding() );
             return true;
@@ -164,7 +164,7 @@ namespace logging
     {
         try
         {
-            Reference< XLogFormatter > xFormatter( getFormatter(), UNO_QUERY_THROW );
+            Reference< XLogFormatter > xFormatter( getFormatter(), css::uno::UNO_SET_THROW );
             OUString sTail( xFormatter->getTail() );
             _out_rTail = OUStringToOString( sTail, getTextEncoding() );
             return true;

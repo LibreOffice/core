@@ -284,7 +284,7 @@ void CellCursor::split_column( sal_Int32 nCol, sal_Int32 nColumns, std::vector< 
     if( nNewCols > 0 )
     {
         const OUString sWidth("Width");
-        Reference< XTableColumns > xCols( mxTable->getColumns(), UNO_QUERY_THROW );
+        Reference< XTableColumns > xCols( mxTable->getColumns(), UNO_SET_THROW );
         Reference< XPropertySet > xRefColumn( xCols->getByIndex( nCol ), UNO_QUERY_THROW );
         sal_Int32 nWidth = 0;
         xRefColumn->getPropertyValue( sWidth ) >>= nWidth;
@@ -398,7 +398,7 @@ void CellCursor::split_row( sal_Int32 nRow, sal_Int32 nRows, std::vector< sal_In
     if( nNewRows > 0 )
     {
         const OUString sHeight("Height");
-        Reference< XTableRows > xRows( mxTable->getRows(), UNO_QUERY_THROW );
+        Reference< XTableRows > xRows( mxTable->getRows(), UNO_SET_THROW );
         Reference< XPropertySet > xRefRow( xRows->getByIndex( nRow ), UNO_QUERY_THROW );
         sal_Int32 nHeight = 0;
         xRefRow->getPropertyValue( sHeight ) >>= nHeight;

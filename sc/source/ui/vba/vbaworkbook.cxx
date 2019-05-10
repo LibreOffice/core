@@ -66,7 +66,7 @@ void ScVbaWorkbook::initColorData( const uno::Sequence< sal_Int32 >& sColors )
 void SAL_CALL
 ScVbaWorkbook::ResetColors(  )
 {
-        uno::Reference< container::XIndexAccess > xIndexAccess( ScVbaPalette::getDefaultPalette(), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XIndexAccess > xIndexAccess( ScVbaPalette::getDefaultPalette(), uno::UNO_SET_THROW );
         sal_Int32 nLen = xIndexAccess->getCount();
         ColorData.realloc( nLen );
 
@@ -280,14 +280,14 @@ ScVbaWorkbook::getProtectStructure()
 
 sal_Bool SAL_CALL ScVbaWorkbook::getPrecisionAsDisplayed()
 {
-    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
     ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
     return rDoc.GetDocOptions().IsCalcAsShown();
 }
 
 void SAL_CALL ScVbaWorkbook::setPrecisionAsDisplayed( sal_Bool _precisionAsDisplayed )
 {
-    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
     ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
     ScDocOptions aOpt = rDoc.GetDocOptions();
     aOpt.SetCalcAsShown( _precisionAsDisplayed );

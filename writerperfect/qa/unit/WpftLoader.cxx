@@ -92,7 +92,7 @@ bool WpftLoader::impl_load()
     // create an empty frame
     m_xDoc.set(m_xDesktop->loadComponentFromURL(m_aFactoryURL, "_blank", 0,
                                                 uno::Sequence<beans::PropertyValue>()),
-               uno::UNO_QUERY_THROW);
+               uno::UNO_SET_THROW);
 
     // Find the model and frame. We need them later.
     m_xFrame.set(m_xDoc, uno::UNO_QUERY);

@@ -89,13 +89,13 @@ uno::Reference<uno::XInterface> ScTableRowsObj::init()
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
     uno::Reference<container::XNameAccess> xNA(xSheets, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet0(xSheets->getByName(xNA->getElementNames()[0]),
                                                 uno::UNO_QUERY_THROW);
 
     uno::Reference<table::XColumnRowRange> xCRR(xSheet0, uno::UNO_QUERY_THROW);
-    uno::Reference<table::XTableRows> xTR(xCRR->getRows(), uno::UNO_QUERY_THROW);
+    uno::Reference<table::XTableRows> xTR(xCRR->getRows(), uno::UNO_SET_THROW);
 
     return xTR;
 }
@@ -105,7 +105,7 @@ uno::Reference<uno::XInterface> ScTableRowsObj::getXCellRange()
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
     uno::Reference<container::XNameAccess> xNA(xSheets, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet0(xSheets->getByName(xNA->getElementNames()[0]),
                                                 uno::UNO_QUERY_THROW);

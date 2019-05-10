@@ -348,7 +348,7 @@ static void insertSorted(migrations_available& rAvailableMigrations, supported_m
 void MigrationImpl::readAvailableMigrations(migrations_available& rAvailableMigrations)
 {
     // get supported version names
-    uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration/SupportedVersions"), uno::UNO_QUERY_THROW);
+    uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration/SupportedVersions"), uno::UNO_SET_THROW);
     uno::Sequence< OUString > seqSupportedVersions = aMigrationAccess->getElementNames();
 
     const OUString aVersionIdentifiers( "VersionIdentifiers" );
@@ -374,7 +374,7 @@ void MigrationImpl::readAvailableMigrations(migrations_available& rAvailableMigr
 migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
 {
     // get migration access
-    uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration/SupportedVersions"), uno::UNO_QUERY_THROW);
+    uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration/SupportedVersions"), uno::UNO_SET_THROW);
     uno::Reference< XNameAccess > xMigrationData( aMigrationAccess->getByName(rMigrationName), uno::UNO_QUERY_THROW );
 
     // get migration description from org.openoffice.Setup/Migration

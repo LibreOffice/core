@@ -899,7 +899,7 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
             xUIElementFactory->createUIElement(
                 rsImplementationURL,
                 aCreationArguments.getPropertyValues()),
-            UNO_QUERY_THROW);
+            UNO_SET_THROW);
 
         return xUIElement;
     }

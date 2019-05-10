@@ -401,7 +401,7 @@ namespace pcr
             aMediaProperties[0].Name = "URL";
             aMediaProperties[0].Value <<= _rImageURL;
 
-            Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties ), UNO_QUERY_THROW );
+            Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties ), css::uno::UNO_SET_THROW );
             aImage = Image( xGraphic );
         }
         catch( const Exception& )
@@ -471,7 +471,7 @@ namespace pcr
         {
             try
             {
-                Reference< XPropertyControlContext > xContext( m_xControl->getControlContext(), UNO_QUERY_THROW );
+                Reference< XPropertyControlContext > xContext( m_xControl->getControlContext(), css::uno::UNO_SET_THROW );
                 xContext->focusGained( m_xControl );
             }
             catch( const Exception& )

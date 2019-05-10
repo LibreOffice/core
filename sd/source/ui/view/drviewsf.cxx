@@ -128,9 +128,9 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
 
                     if(pUnoCtrl) try
                     {
-                        uno::Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), uno::UNO_QUERY_THROW );
+                        uno::Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), uno::UNO_SET_THROW );
                         uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY_THROW );
-                        uno::Reference< beans::XPropertySetInfo > xPropInfo( xPropSet->getPropertySetInfo(), uno::UNO_QUERY_THROW );
+                        uno::Reference< beans::XPropertySetInfo > xPropInfo( xPropSet->getPropertySetInfo(), uno::UNO_SET_THROW );
 
                         form::FormButtonType eButtonType = form::FormButtonType_URL;
                         const OUString sButtonType( "ButtonType" );

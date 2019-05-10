@@ -1878,7 +1878,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
             implts_openConfig();
             // open module config on demand and cache the update access
             xCFG.set(officecfg::Setup::Office::Factories::get(m_xContext),
-                    css::uno::UNO_QUERY_THROW);
+                    css::uno::UNO_SET_THROW);
 
             /* SAFE */ {
             osl::MutexGuard g2(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -2446,7 +2446,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     css::uno::Reference< css::document::XDocumentPropertiesSupplier > xSupplier(aNew.Document, css::uno::UNO_QUERY);
     if (xSupplier.is()) // optional interface!
     {
-        css::uno::Reference< css::document::XDocumentProperties > xDocProps(xSupplier->getDocumentProperties(), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::document::XDocumentProperties > xDocProps(xSupplier->getDocumentProperties(), css::uno::UNO_SET_THROW);
         aNew.TemplateURL = xDocProps->getTemplateURL();
     }
 

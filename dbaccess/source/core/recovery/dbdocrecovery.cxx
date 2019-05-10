@@ -298,7 +298,7 @@ namespace dbaccess
 
             // the storage for all components of the current type
             Reference< XStorage > xComponentsStor( xRecoveryStorage->openStorageElement(
-                SubComponentRecovery::getComponentsStorageName( eComponentType ), ElementModes::READ ), UNO_QUERY_THROW );
+                SubComponentRecovery::getComponentsStorageName( eComponentType ), ElementModes::READ ), UNO_SET_THROW );
 
             // loop through all components of this type
             for (auto const&  elem : elemMapCompDescs.second)

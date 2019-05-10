@@ -113,7 +113,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl, void*, void)
 #if HAVE_FEATURE_AVMEDIA
             try
             {
-                mxPlayer.set( avmedia::MediaWindow::createPlayer( aUrl, "" ), css::uno::UNO_QUERY_THROW );
+                mxPlayer.set( avmedia::MediaWindow::createPlayer( aUrl, "" ), css::uno::UNO_SET_THROW );
                 mxPlayer->start();
                 maUpdateIdle.Start();
             }

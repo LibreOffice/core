@@ -370,6 +370,12 @@ public:
                      to other constructors
     */
     inline Reference( const BaseReference & rRef, UnoReference_QueryThrow dummy );
+#ifdef LIBO_INTERNAL_ONLY
+    /**
+        Prevent code from calling the QUERY_THROW constructor, when they meant to use the SET_THROW constructor.
+    */
+    Reference( const Reference< interface_type > & rRef, UnoReference_QueryThrow dummy ) = delete;
+#endif
     /** Constructor: Queries given interface for reference interface type (interface_type).
         Throws a RuntimeException if the demanded interface cannot be queried.
 
@@ -520,6 +526,12 @@ public:
                to set methods
     */
     inline void SAL_CALL set( const BaseReference & rRef, UnoReference_QueryThrow dummy );
+#ifdef LIBO_INTERNAL_ONLY
+    /**
+        Prevent code from calling the QUERY_THROW version, when they meant to use the SET_THROW version.
+    */
+    void set( const Reference< interface_type > & rRef, UnoReference_QueryThrow dummy ) = delete;
+#endif
 
     /** Queries given any for reference interface type (interface_type) and
         sets it.  An interface already set will be released.

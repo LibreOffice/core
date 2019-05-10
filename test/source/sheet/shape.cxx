@@ -31,10 +31,10 @@ void Shape::testShapePropertiesAnchor()
     uno::Any aNewValue;
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(getXSheetDocument(), UNO_QUERY_THROW);
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_SET_THROW);
     uno::Sequence<OUString> sheetNames = xSheets->getElementNames();
     uno::Reference<sheet::XSpreadsheet> xSheet(xSheets->getByName(sheetNames[0]), UNO_QUERY_THROW);
-    uno::Reference<table::XCell> xCell(xSheet->getCellByPosition(0, 0), UNO_QUERY_THROW);
+    uno::Reference<table::XCell> xCell(xSheet->getCellByPosition(0, 0), UNO_SET_THROW);
 
     // Shape should be anchored to sheet by default
     uno::Reference<sheet::XSpreadsheet> xSheetGet;
@@ -58,7 +58,7 @@ void Shape::testShapePropertiesAnchor()
     CPPUNIT_ASSERT_MESSAGE("Shape should resize with the cell", bIsResizeWithCell);
 
     // Anchoring to a different cell should keep the "ResizeWithCell" attribute
-    uno::Reference<table::XCell> xCell2(xSheet->getCellByPosition(1, 2), UNO_QUERY_THROW);
+    uno::Reference<table::XCell> xCell2(xSheet->getCellByPosition(1, 2), UNO_SET_THROW);
     aNewValue <<= xCell2;
     xShape->setPropertyValue("Anchor", aNewValue);
     xShape->getPropertyValue("ResizeWithCell") >>= bIsResizeWithCell;

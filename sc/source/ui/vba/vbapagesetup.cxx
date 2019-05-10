@@ -51,7 +51,7 @@ ScVbaPageSetup::ScVbaPageSetup(const uno::Reference< XHelperInterface >& xParent
            ScVbaPageSetup_BASE( xParent, xContext ), mxSheet( xSheet ), mbIsLandscape( false )
 {
     // query for current page style
-    mxModel.set( xModel, uno::UNO_QUERY_THROW );
+    mxModel.set( xModel, uno::UNO_SET_THROW );
     uno::Reference< beans::XPropertySet > xSheetProps( mxSheet, uno::UNO_QUERY_THROW );
     uno::Any aValue = xSheetProps->getPropertyValue("PageStyle");
     OUString aStyleName;

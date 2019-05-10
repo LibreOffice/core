@@ -1053,7 +1053,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
 {
     try
     {
-        mxShow.set( createSlideShow(), UNO_QUERY_THROW );
+        mxShow.set( createSlideShow(), UNO_SET_THROW );
 
         mxView = new SlideShowView(
                                              *mpShowWindow,
@@ -1477,7 +1477,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape )
 #if HAVE_FEATURE_AVMEDIA
         try
         {
-            mxPlayer.set(avmedia::MediaWindow::createPlayer(pEvent->maStrBookmark, ""/*TODO?*/), uno::UNO_QUERY_THROW );
+            mxPlayer.set(avmedia::MediaWindow::createPlayer(pEvent->maStrBookmark, ""/*TODO?*/), uno::UNO_SET_THROW );
             mxPlayer->start();
         }
         catch( uno::Exception& )
@@ -2234,7 +2234,7 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow()
         Reference< uno::XComponentContext > xContext =
             ::comphelper::getProcessComponentContext();
 
-        xShow.set( presentation::SlideShow::create(xContext), UNO_QUERY_THROW );
+        xShow.set( presentation::SlideShow::create(xContext), UNO_SET_THROW );
     }
     catch( uno::Exception& )
     {

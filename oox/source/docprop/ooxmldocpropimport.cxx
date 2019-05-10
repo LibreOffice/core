@@ -72,7 +72,7 @@ Sequence< InputSource > lclGetRelatedStreams( const Reference< XStorage >& rxSto
                     aStreamPath = aStreamPath.copy(1);
 
                 Reference< XExtendedStorageStream > xExtStream(
-                    xHierarchy->openStreamElementByHierarchicalName( aStreamPath, ElementModes::READ ), UNO_QUERY_THROW );
+                    xHierarchy->openStreamElementByHierarchicalName( aStreamPath, ElementModes::READ ), UNO_SET_THROW );
                 Reference< XInputStream > xInStream = xExtStream->getInputStream();
                 if( xInStream.is() )
                 {
