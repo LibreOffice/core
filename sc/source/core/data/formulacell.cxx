@@ -2115,6 +2115,11 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
                 bChanged = true;
             }
 
+            // Currently (2019-05-10) nothing else can cope with a duration
+            // format type, change to time as it was before.
+            if (nFormatType == SvNumFormatType::DURATION)
+                nFormatType = SvNumFormatType::TIME;
+
             mbNeedsNumberFormat = false;
         }
 
