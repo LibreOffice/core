@@ -716,6 +716,10 @@ module com {
      ::com::sun::star::awt::XPrinter createPrinter([in] string printerName);
      ::com::sun::star::awt::XInfoPrinter createInfoPrinter([in] string printerName);
     };
+    published interface XPrinterServer2 {
+      interface ::com::sun::star::awt::XPrinterServer;
+      string getDefaultPrinterName();
+     };
     published enum PushButtonType {
      STANDARD = 0,
      OK = 1,
