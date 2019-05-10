@@ -78,6 +78,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/solarmutex.hxx>
 #include <osl/process.h>
+#include <comphelper/lok.hxx>
 
 #include <cassert>
 #include <utility>
@@ -935,8 +936,12 @@ ImplSVEvent* Application::PostMouseEvent( VclEventId nEvent, vcl::Window *pWin, 
     {
         Point aTransformedPos( pMouseEvent->GetPosPixel() );
 
-        aTransformedPos.X() += pWin->GetOutOffXPixel();
-        aTransformedPos.Y() += pWin->GetOutOffYPixel();
+        // LOK uses (0, 0) as the origin of all windows; don't offset.
+        if (!comphelper::LibreOfficeKit::isActive())
+        {
+            aTransformedPos.X() += pWin->GetOutOffXPixel();
+            aTransformedPos.Y() += pWin->GetOutOffYPixel();
+        }
 
         const MouseEvent aTransformedEvent( aTransformedPos, pMouseEvent->GetClicks(), pMouseEvent->GetMode(),
                                             pMouseEvent->GetButtons(), pMouseEvent->GetModifier() );
