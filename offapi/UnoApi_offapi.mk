@@ -1854,6 +1854,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/awt,\
 	XPrinter \
 	XPrinterPropertySet \
 	XPrinterServer \
+	XPrinterServer2 \
 	XProgressBar \
 	XProgressMonitor \
 	XRadioButton \
