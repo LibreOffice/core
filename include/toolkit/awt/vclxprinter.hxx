@@ -22,7 +22,7 @@
 
 
 #include <com/sun/star/awt/XPrinterPropertySet.hpp>
-#include <com/sun/star/awt/XPrinterServer.hpp>
+#include <com/sun/star/awt/XPrinterServer2.hpp>
 #include <com/sun/star/awt/XInfoPrinter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -175,14 +175,15 @@ public:
 //  class VCLXPrinterServer
 
 
-typedef ::cppu::WeakImplHelper <   css::awt::XPrinterServer,
+typedef ::cppu::WeakImplHelper <   css::awt::XPrinterServer2,
                                    css::lang::XServiceInfo
                                 >   VCLXPrinterServer_Base;
 class VCLXPrinterServer : public VCLXPrinterServer_Base
 {
 public:
-    // css::awt::XPrinterServer
+    // css::awt::XPrinterServer2
     css::uno::Sequence< OUString > SAL_CALL getPrinterNames(  ) override;
+    OUString SAL_CALL getDefaultPrinterName() override;
     css::uno::Reference< css::awt::XPrinter > SAL_CALL createPrinter( const OUString& printerName ) override;
     css::uno::Reference< css::awt::XInfoPrinter > SAL_CALL createInfoPrinter( const OUString& printerName ) override;
 
