@@ -82,7 +82,15 @@ short AbstractScColRowLabelDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractScCondFormatManagerDlg_Impl);
+short AbstractScCondFormatManagerDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+bool AbstractScCondFormatManagerDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
 
 short AbstractScDataPilotDatabaseDlg_Impl::Execute()
 {
@@ -510,22 +518,22 @@ sal_uLong AbstractScLinkedAreaDlg_Impl::GetRefresh()
 
 std::unique_ptr<ScConditionalFormatList> AbstractScCondFormatManagerDlg_Impl::GetConditionalFormatList()
 {
-    return pDlg->GetConditionalFormatList();
+    return m_xDlg->GetConditionalFormatList();
 }
 
 bool AbstractScCondFormatManagerDlg_Impl::CondFormatsChanged() const
 {
-    return pDlg->CondFormatsChanged();
+    return m_xDlg->CondFormatsChanged();
 }
 
 void AbstractScCondFormatManagerDlg_Impl::SetModified()
 {
-    return pDlg->SetModified();
+    return m_xDlg->SetModified();
 }
 
 ScConditionalFormat* AbstractScCondFormatManagerDlg_Impl::GetCondFormatSelected()
 {
-    return pDlg->GetCondFormatSelected();
+    return m_xDlg->GetCondFormatSelected();
 }
 
 int AbstractScMetricInputDlg_Impl::GetInputValue() const
@@ -761,10 +769,9 @@ VclPtr<AbstractScSortWarningDlg> ScAbstractDialogFactory_Impl::CreateScSortWarni
     return VclPtr<AbstractScSortWarningDlg_Impl>::Create(std::make_unique<ScSortWarningDlg>(pParent, rExtendText, rCurrentText));
 }
 
-VclPtr<AbstractScCondFormatManagerDlg> ScAbstractDialogFactory_Impl::CreateScCondFormatMgrDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList )
+VclPtr<AbstractScCondFormatManagerDlg> ScAbstractDialogFactory_Impl::CreateScCondFormatMgrDlg(weld::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList )
 {
-    VclPtr<ScCondFormatManagerDlg> pDlg = VclPtr<ScCondFormatManagerDlg>::Create( pParent, pDoc, pFormatList );
-    return VclPtr<AbstractScCondFormatManagerDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScCondFormatManagerDlg_Impl>::Create(std::make_unique<ScCondFormatManagerDlg>(pParent, pDoc, pFormatList));
 }
 
 VclPtr<AbstractScDataPilotDatabaseDlg> ScAbstractDialogFactory_Impl::CreateScDataPilotDatabaseDlg(weld::Window* pParent)

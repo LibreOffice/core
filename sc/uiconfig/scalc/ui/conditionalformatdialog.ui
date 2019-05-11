@@ -140,10 +140,6 @@
                                 <child>
                                   <placeholder/>
                                 </child>
-                                <style>
-                                  <class name="notebook"/>
-                                  <class name="stack"/>
-                                </style>
                               </object>
                             </child>
                           </object>

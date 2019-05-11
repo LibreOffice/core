@@ -131,14 +131,17 @@ public:
 
 class AbstractScCondFormatManagerDlg_Impl : public AbstractScCondFormatManagerDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScCondFormatManagerDlg_Impl, ScCondFormatManagerDlg)
-
+    std::shared_ptr<ScCondFormatManagerDlg> m_xDlg;
+public:
+    explicit AbstractScCondFormatManagerDlg_Impl(std::unique_ptr<ScCondFormatManagerDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual std::unique_ptr<ScConditionalFormatList> GetConditionalFormatList() override;
-
     virtual bool CondFormatsChanged() const override;
-
     virtual void SetModified() override;
-
     virtual ScConditionalFormat* GetCondFormatSelected() override;
 };
 
@@ -597,7 +600,7 @@ public:
 
     virtual VclPtr<AbstractScSortWarningDlg> CreateScSortWarningDlg(weld::Window* pParent, const OUString& rExtendText, const OUString& rCurrentText ) override;
 
-    virtual VclPtr<AbstractScCondFormatManagerDlg> CreateScCondFormatMgrDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList ) override;
+    virtual VclPtr<AbstractScCondFormatManagerDlg> CreateScCondFormatMgrDlg(weld::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList ) override;
 
     virtual VclPtr<AbstractScDataPilotDatabaseDlg> CreateScDataPilotDatabaseDlg(weld::Window* pParent) override;
 
