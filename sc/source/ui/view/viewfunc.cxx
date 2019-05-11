@@ -447,8 +447,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                     OUString aMessage( ScResId( SCSTR_FORMULA_AUTOCORRECTION ) );
                     aMessage += aCorrectedFormula;
 
-                    vcl::Window* pWin = GetViewData().GetDialogParent();
-                    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetViewData().GetFrameWeld(),
                                                                    VclMessageType::Question, VclButtonsType::YesNo,
                                                                    aMessage));
                     xQueryBox->set_default_response(RET_YES);

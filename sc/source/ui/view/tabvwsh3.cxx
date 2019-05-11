@@ -732,8 +732,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     aZoomItem.SetValueSet( nBtnFlags );
                     aSet.Put( aZoomItem );
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    vcl::Window* pWin = GetDialogParent();
-                    pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(pWin ? pWin->GetFrameWeld() : nullptr, aSet));
+                    pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(GetFrameWeld(), aSet));
                     pDlg->SetLimits( MINZOOM, MAXZOOM );
 
                     bCancel = ( RET_CANCEL == pDlg->Execute() );
@@ -1050,7 +1049,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
                 }
 
-                vcl::Window* pWin = GetDialogParent();
                 ScDocProtection* pProtect = pDoc->GetDocProtection();
                 if (pProtect && pProtect->isProtected())
                 {
@@ -1061,7 +1059,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     {
                         OUString aText(ScResId(SCSTR_PASSWORD));
 
-                        SfxPasswordDialog aDlg(pWin ? pWin->GetFrameWeld() : nullptr, &aText);
+                        SfxPasswordDialog aDlg(GetFrameWeld(), &aText);
                         aDlg.set_title(ScResId(SCSTR_UNPROTECTDOC));
                         aDlg.SetMinLen(0);
                         aDlg.set_help_id(GetStaticInterface()->GetSlot(FID_PROTECT_DOC)->GetCommand());
@@ -1083,7 +1081,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     OUString aText(ScResId(SCSTR_PASSWORDOPT));
 
-                    SfxPasswordDialog aDlg(pWin ? pWin->GetFrameWeld() : nullptr, &aText);
+                    SfxPasswordDialog aDlg(GetFrameWeld(), &aText);
                     aDlg.set_title(ScResId(SCSTR_PROTECTDOC));
                     aDlg.SetMinLen( 0 );
                     aDlg.set_help_id(GetStaticInterface()->GetSlot(FID_PROTECT_DOC)->GetCommand());
@@ -1130,8 +1128,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if (pProtect && pProtect->isProtectedWithPass())
                 {
                     OUString aText( ScResId(SCSTR_PASSWORDOPT) );
-                    vcl::Window* pWin = GetDialogParent();
-                    SfxPasswordDialog aDlg(pWin ? pWin->GetFrameWeld() : nullptr, &aText);
+                    SfxPasswordDialog aDlg(GetFrameWeld(), &aText);
                     aDlg.set_title(ScResId(SCSTR_UNPROTECTTAB));
                     aDlg.SetMinLen(0);
                     aDlg.set_help_id(GetStaticInterface()->GetSlot(FID_PROTECT_TABLE)->GetCommand());
@@ -1157,8 +1154,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 // Protect a current sheet.
 
-                vcl::Window* pWin = GetDialogParent();
-                ScTableProtectionDlg aDlg(pWin ? pWin->GetFrameWeld() : nullptr);
+                ScTableProtectionDlg aDlg(GetFrameWeld());
 
                 ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
                 if (pProtect)

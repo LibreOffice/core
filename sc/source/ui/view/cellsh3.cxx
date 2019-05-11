@@ -423,8 +423,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         bool bExtend = rReq.IsAPI();
                         if (!bExtend)
                         {
-                            vcl::Window* pWin = pTabViewShell->GetDialogParent();
-                            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pTabViewShell->GetFrameWeld(),
                                                                            VclMessageType::Question, VclButtonsType::YesNo,
                                                                            ScResId(STR_UPDATE_SCENARIO)));
                             xQueryBox->set_default_response(RET_YES);
@@ -439,8 +438,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     }
                     else if( ! rReq.IsAPI() )
                     {
-                        vcl::Window* pWin = pTabViewShell->GetDialogParent();
-                        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pTabViewShell->GetFrameWeld(),
                                                                        VclMessageType::Warning, VclButtonsType::Ok,
                                                                        ScResId(STR_NOAREASELECTED)));
                         xErrorBox->run();

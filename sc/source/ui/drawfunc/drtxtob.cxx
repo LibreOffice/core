@@ -866,8 +866,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             case SID_DRAWTEXT_ATTR_DLG:
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    vcl::Window* pWin = pViewData->GetDialogParent();
-                    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog( pWin ? pWin->GetFrameWeld() : nullptr, &aEditAttr, pView ));
+                    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(pViewData->GetFrameWeld(), &aEditAttr, pView));
 
                     bDone = ( RET_OK == pDlg->Execute() );
 

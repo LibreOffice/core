@@ -763,9 +763,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     m_pImpl->pDocInserter.reset();
 
                     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-                    vcl::Window* pParent = pViewSh ? pViewSh->GetDialogParent() : nullptr;
-
-                    m_pImpl->pDocInserter.reset( new ::sfx2::DocumentInserter(pParent ? pParent->GetFrameWeld() : nullptr,
+                    weld::Window* pParent = pViewSh ? pViewSh->GetFrameWeld() : nullptr;
+                    m_pImpl->pDocInserter.reset( new ::sfx2::DocumentInserter(pParent,
                         ScDocShell::Factory().GetFactoryName(), mode ) );
                     m_pImpl->pDocInserter->StartExecuteModal( LINK( this, ScDocShell, DialogClosedHdl ) );
                     return ;

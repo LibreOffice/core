@@ -409,9 +409,9 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq )
         pView->MergeAttrFromMarked( aNewAttr, false );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    vcl::Window* pWin = pViewData->GetDialogParent();
+    weld::Window* pWin = pViewData->GetFrameWeld();
     ScopedVclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
-        pWin ? pWin->GetFrameWeld() : nullptr, &aNewAttr,
+        pWin, &aNewAttr,
         pViewData->GetDocument()->GetDrawLayer(), true));
 
     if ( pDlg->Execute() == RET_OK )
@@ -436,8 +436,8 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq )
         pView->MergeAttrFromMarked( aNewAttr, false );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    vcl::Window* pWin = pViewData->GetDialogParent();
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(pWin ? pWin->GetFrameWeld() : nullptr, &aNewAttr, pView));
+    weld::Window* pWin = pViewData->GetFrameWeld();
+    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(pWin, &aNewAttr, pView));
 
     sal_uInt16 nResult = pDlg->Execute();
 

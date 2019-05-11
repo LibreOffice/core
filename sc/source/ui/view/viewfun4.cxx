@@ -398,8 +398,7 @@ void ScViewFunc::DoThesaurus()
         OUString aErr = SvtLanguageTable::GetLanguageString(eLnge);
         aErr += ScResId( STR_SPELLING_NO_LANG );
 
-        vcl::Window* pWin = GetViewData().GetDialogParent();
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetViewData().GetFrameWeld(),
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       aErr));
         xInfoBox->run();
