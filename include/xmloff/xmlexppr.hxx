@@ -124,10 +124,14 @@ public:
     std::vector<XMLPropertyState> FilterDefaults(
         const css::uno::Reference<css::beans::XPropertySet>& rPropSet ) const;
 
-    /** Compare to arrays of XMLPropertyState */
-    bool Equals( const ::std::vector< XMLPropertyState >& aProperties1,
+    /** Provides a partial ordering over two arrays of XMLPropertyState,
+       Partial because implementing a full order requires quite a lot of code. */
+    bool LessPartial( const ::std::vector< XMLPropertyState >& aProperties1,
                      const ::std::vector< XMLPropertyState >& aProperties2 ) const;
 
+    /** Compare two arrays of XMLPropertyState */
+    bool Equals( const ::std::vector< XMLPropertyState >& aProperties1,
+                     const ::std::vector< XMLPropertyState >& aProperties2 ) const;
     void exportXML(
             SvXMLExport& rExport,
             const ::std::vector< XMLPropertyState >& rProperties,
