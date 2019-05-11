@@ -270,39 +270,39 @@ XMLAutoStylePoolParent::~XMLAutoStylePoolParent()
 {
 }
 
+struct ComparePartial
+{
+    const XMLAutoStyleFamily& rFamilyData;
+
+    bool operator()(const vector< XMLPropertyState >& lhs,
+                    const std::unique_ptr<XMLAutoStylePoolProperties>& rhs) const
+    {
+        return rFamilyData.mxMapper->LessPartial(lhs, rhs->GetProperties());
+    }
+    bool operator()(const std::unique_ptr<XMLAutoStylePoolProperties>& lhs,
+                    const vector< XMLPropertyState >& rhs ) const
+    {
+        return rFamilyData.mxMapper->LessPartial(lhs->GetProperties(), rhs);
+    }
+};
+
 // Adds a array of XMLPropertyState ( vector< XMLPropertyState > ) to list
 // if not added, yet.
 
 bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek )
 {
-    bool bAdded = false;
     XMLAutoStylePoolProperties *pProperties = nullptr;
-    sal_Int32 nProperties = rProperties.size();
-    size_t i = 0;
-    for (size_t n = m_PropertiesList.size(); i < n; ++i)
-    {
-        XMLAutoStylePoolProperties *const pIS = m_PropertiesList[i].get();
-        if( nProperties > static_cast<sal_Int32>(pIS->GetProperties().size()) )
-        {
-            continue;
-        }
-        else if( nProperties < static_cast<sal_Int32>(pIS->GetProperties().size()) )
-        {
-            break;
-        }
-        else if( !bDontSeek && rFamilyData.mxMapper->Equals( pIS->GetProperties(), rProperties ) )
-        {
-            pProperties = pIS;
-            break;
-        }
-    }
+    auto [itBegin, itEnd] = std::equal_range(m_PropertiesList.begin(), m_PropertiesList.end(), rProperties, ComparePartial{rFamilyData});
+    if (!bDontSeek)
+        for (auto it = itBegin; it != itEnd; ++it)
+            if (rFamilyData.mxMapper->Equals((*it)->GetProperties(), rProperties))
+                pProperties = it->get();
 
-    if( !pProperties )
+    bool bAdded = false;
+    if( bDontSeek || !pProperties )
     {
         pProperties = new XMLAutoStylePoolProperties( rFamilyData, rProperties, msParent );
-        PropertiesListType::iterator it = m_PropertiesList.begin();
-        ::std::advance( it, i );
-        m_PropertiesList.insert(it, std::unique_ptr<XMLAutoStylePoolProperties>(pProperties));
+        m_PropertiesList.insert(itBegin, std::unique_ptr<XMLAutoStylePoolProperties>(pProperties));
         bAdded = true;
     }
 
@@ -319,31 +319,16 @@ bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vector<
 
 bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, const OUString& rName )
 {
-    bool bAdded = false;
-    sal_Int32 nProperties = rProperties.size();
-    size_t i = 0;
-    for (size_t n = m_PropertiesList.size(); i < n; ++i)
-    {
-        XMLAutoStylePoolProperties *const pIS = m_PropertiesList[i].get();
-        if( nProperties > static_cast<sal_Int32>(pIS->GetProperties().size()) )
-        {
-            continue;
-        }
-        else if( nProperties < static_cast<sal_Int32>(pIS->GetProperties().size()) )
-        {
-            break;
-        }
-    }
+    auto [itBegin,itEnd] = std::equal_range(m_PropertiesList.begin(), m_PropertiesList.end(), rProperties, ComparePartial{rFamilyData});
 
+    bool bAdded = false;
     if (rFamilyData.maNameSet.find(rName) == rFamilyData.maNameSet.end())
     {
         std::unique_ptr<XMLAutoStylePoolProperties> pProperties(
             new XMLAutoStylePoolProperties(rFamilyData, rProperties, msParent));
         // ignore the generated name
         pProperties->SetName( rName );
-        PropertiesListType::iterator it = m_PropertiesList.begin();
-        ::std::advance( it, i );
-        m_PropertiesList.insert(it, std::move(pProperties));
+        m_PropertiesList.insert(itBegin, std::move(pProperties));
         bAdded = true;
     }
 
@@ -357,24 +342,10 @@ bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, const ve
 OUString XMLAutoStylePoolParent::Find( const XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties ) const
 {
     OUString sName;
-    vector< XMLPropertyState>::size_type nItems = rProperties.size();
-    for (const auto & i : m_PropertiesList)
-    {
-        const XMLAutoStylePoolProperties *const pIS = i.get();
-        if( nItems > pIS->GetProperties().size() )
-        {
-            continue;
-        }
-        else if( nItems < pIS->GetProperties().size() )
-        {
-            break;
-        }
-        else if( rFamilyData.mxMapper->Equals( pIS->GetProperties(), rProperties ) )
-        {
-            sName = pIS->GetName();
-            break;
-        }
-    }
+    auto [itBegin,itEnd] = std::equal_range(m_PropertiesList.begin(), m_PropertiesList.end(), rProperties, ComparePartial{rFamilyData});
+    for (auto it = itBegin; it != itEnd; ++it)
+        if (rFamilyData.mxMapper->Equals((*it)->GetProperties(), rProperties))
+            sName = (*it)->GetName();
 
     return sName;
 }

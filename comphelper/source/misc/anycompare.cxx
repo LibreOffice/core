@@ -226,6 +226,17 @@ namespace comphelper
         return pComparator;
     }
 
+    bool anyLess( css::uno::Any const & lhs, css::uno::Any const & rhs)
+    {
+        auto lhsTypeClass = lhs.getValueType().getTypeClass();
+        auto rhsTypeClass = rhs.getValueType().getTypeClass();
+        if (lhsTypeClass != rhsTypeClass)
+            return lhsTypeClass < rhsTypeClass;
+        std::unique_ptr< IKeyPredicateLess > pred = getStandardLessPredicate( lhs.getValueType(), Reference< XCollator >() );
+        if (!pred) // type==VOID
+            return false;
+        return pred->isLess(lhs, rhs);
+    }
 
 } // namespace comphelper
 
