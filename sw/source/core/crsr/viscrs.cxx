@@ -59,6 +59,8 @@
 #include <paintfrm.hxx>
 #include <PostItMgr.hxx>
 
+#include <cellfrm.hxx>
+
 // Here static members are defined. They will get changed on alteration of the
 // MapMode. This is done so that on ShowCursor the same size does not have to be
 // expensively determined again and again.
@@ -843,6 +845,12 @@ bool SwShellTableCursor::IsInside( const Point& rPt ) const
         OSL_ENSURE( pFrame, "Node not in a table" );
         if( pFrame && pFrame->getFrameArea().IsInside( rPt ) )
             return true;
+
+        for ( SwCellFrame* pCellFrame = static_cast<SwCellFrame*>(pFrame); pCellFrame; pCellFrame = pCellFrame->GetFollowCell() )
+        {
+            if( pCellFrame->getFrameArea().IsInside( rPt ) )
+                return true;
+        }
     }
     return false;
 }
