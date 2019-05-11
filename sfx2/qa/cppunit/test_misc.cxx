@@ -161,7 +161,8 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testHardLinks)
     OString aOld = aTargetPath.toUtf8();
     aTargetPath += ".2";
     OString aNew = aTargetPath.toUtf8();
-    link(aOld.getStr(), aNew.getStr());
+    int nRet = link(aOld.getStr(), aNew.getStr());
+    CPPUNIT_ASSERT_EQUAL(0, nRet);
 
     uno::Reference<lang::XComponent> xComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument");
     CPPUNIT_ASSERT(xComponent.is());
@@ -171,7 +172,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testHardLinks)
 
     struct stat buf;
     // coverity[fs_check_call] - this is legitimate in the context of this text
-    int nRet = stat(aOld.getStr(), &buf);
+    nRet = stat(aOld.getStr(), &buf);
     CPPUNIT_ASSERT_EQUAL(0, nRet);
     // This failed: hard link count was 1, the hard link broke on store.
     CPPUNIT_ASSERT(buf.st_nlink > 1);
@@ -179,7 +180,8 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testHardLinks)
     // Test that symlinks are preserved as well.
     nRet = remove(aNew.getStr());
     CPPUNIT_ASSERT_EQUAL(0, nRet);
-    symlink(aOld.getStr(), aNew.getStr());
+    nRet = symlink(aOld.getStr(), aNew.getStr());
+    CPPUNIT_ASSERT_EQUAL(0, nRet);
     xStorable->storeToURL(aURL + ".2", {});
     nRet = lstat(aNew.getStr(), &buf);
     CPPUNIT_ASSERT_EQUAL(0, nRet);
