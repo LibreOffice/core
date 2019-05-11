@@ -399,7 +399,7 @@ namespace vcl
 
         basegfx::B2DRange b2DRectangleFromRectangle( const ::tools::Rectangle& rRect )
         {
-            // although B2DRange internally has separate heigh/width emptiness, it doesn't
+            // although B2DRange internally has separate height/width emptiness, it doesn't
             // expose any API to let us set them separately, so just do the best we can.
             if (rRect.IsWidthEmpty() && rRect.IsHeightEmpty())
                 return basegfx::B2DRange( basegfx::B2DTuple( rRect.Left(), rRect.Top() ) );
