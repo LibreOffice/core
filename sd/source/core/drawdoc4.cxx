@@ -82,7 +82,6 @@
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/sdsxyitm.hxx>
-#include <svx/sdshcitm.hxx>
 #include <svx/sdtditm.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/sdynitm.hxx>
