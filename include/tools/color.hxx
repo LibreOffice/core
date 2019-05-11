@@ -24,8 +24,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <basegfx/color/bcolor.hxx>
 
-class SvStream;
-
 namespace color
 {
 
@@ -38,28 +36,30 @@ constexpr sal_uInt32 extractRGB(sal_uInt32 nColorNumber)
 
 // Color
 
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Color final
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Color
 {
+    // data intentionally public; read the commit log!
 public:
     union
     {
         sal_uInt32 mValue;
         struct
         {
-    #ifdef OSL_BIGENDIAN
+#ifdef OSL_BIGENDIAN
                 sal_uInt8 A;
                 sal_uInt8 R;
                 sal_uInt8 G;
                 sal_uInt8 B;
-    #else
+#else
                 sal_uInt8 B;
                 sal_uInt8 G;
                 sal_uInt8 R;
                 sal_uInt8 A;
-    #endif
+#endif
         };
     };
 
+public:
     constexpr Color()
         : mValue(0) // black
     {}
@@ -217,6 +217,13 @@ constexpr sal_uInt8 ColorChannelMerge(sal_uInt8 nDst, sal_uInt8 nSrc, sal_uInt8 
     return sal_uInt8(((sal_Int32(nDst) - nSrc) * nSrcTrans + ((nSrc << 8) | nDst)) >> 8);
 }
 
+inline void Color::Invert()
+{
+    R = ~R;
+    G = ~G;
+    B = ~B;
+}
+
 inline void Color::Merge( const Color& rMergeColor, sal_uInt8 cTransparency )
 {
     R = ColorChannelMerge(R, rMergeColor.R, cTransparency);
@@ -233,6 +240,7 @@ inline bool operator >>=( const css::uno::Any & rAny, Color & value )
   value = Color(nTmp);
   return true;
 }
+
 inline void operator <<=( css::uno::Any & rAny, Color value )
 {
     rAny <<= sal_Int32(value);
@@ -300,6 +308,16 @@ constexpr ::Color COL_AUTHOR8_LIGHT           ( 226,  234, 241 );
 constexpr ::Color COL_AUTHOR9_DARK            ( 209,  118,   0 );
 constexpr ::Color COL_AUTHOR9_NORMAL          ( 255,  226, 185 );
 constexpr ::Color COL_AUTHOR9_LIGHT           ( 255,  231, 199 );
+
+template<typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator <<(std::basic_ostream<charT, traits>& rStream, const Color& rColor)
+{
+    return rStream << "c[" << std::hex << std::setfill ('0')
+                   << std::setw(2) << static_cast<int>(rColor.GetRed())
+                   << std::setw(2) << static_cast<int>(rColor.GetGreen())
+                   << std::setw(2) << static_cast<int>(rColor.GetBlue())
+                   << std::setw(2) << static_cast<int>(rColor.GetTransparency()) << "]";
+}
 
 #endif
 

@@ -421,7 +421,7 @@ public:
 
             // Caution(!) rPalette.GetEntryCount() may be != (depth^^2)-1 (!)
             if(nIndex < mnPaletteCount)
-                return mrPalette[nIndex].GetColor();
+                return mrPalette[nIndex];
             else
                 return COL_BLACK;
         }
@@ -471,7 +471,7 @@ public:
             mnShift ^= 4;
 
             if(nIndex < mnPaletteCount)
-                return mrPalette[nIndex].GetColor();
+                return mrPalette[nIndex];
             else
                 return COL_BLACK;
         }
@@ -516,7 +516,7 @@ public:
             mnX++;
 
             if(nIndex < mnPaletteCount)
-                return mrPalette[nIndex].GetColor();
+                return mrPalette[nIndex];
             else
                 return COL_BLACK;
         }
