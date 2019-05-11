@@ -523,7 +523,8 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                             for( sal_uInt16 i = 0; i < nCount; i++ )
                             {
                                 BitmapColor aCol( rPal[ i ] );
-                                pMap[ i ] = BitmapColor( static_cast<sal_uInt8>(rPal.GetBestIndex( aCol.Merge( aFillCol, cTrans ) )) );
+                                aCol.Merge( aFillCol, cTrans );
+                                pMap[ i ] = BitmapColor( static_cast<sal_uInt8>(rPal.GetBestIndex( aCol )) );
                             }
 
                             if( pR->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal &&
@@ -608,7 +609,8 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                                         if( pR->GetPixelFromData( pScanlineRead, nX ) == aBlack )
                                         {
                                             aPixCol = pW->GetColor( nY, nX );
-                                            pW->SetPixelOnData(pScanline, nX, aPixCol.Merge( aFillCol, cTrans ) );
+                                            aPixCol.Merge(aFillCol, cTrans);
+                                            pW->SetPixelOnData(pScanline, nX, aPixCol);
                                         }
                                     }
                                 }

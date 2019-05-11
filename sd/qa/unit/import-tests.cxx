@@ -1374,7 +1374,7 @@ void SdImportTest::testTdf93124()
         {
             for (long nX = 34; nX < (34 + 43); ++nX)
             {
-                const Color aColor = pReadAccess->GetColor(nY, nX).GetColor();
+                const Color aColor = pReadAccess->GetColor(nY, nX);
                 if ((aColor.GetRed() != 0xff) || (aColor.GetGreen() != 0xff) || (aColor.GetBlue() != 0xff))
                     ++nNonWhiteCount;
             }
@@ -1433,7 +1433,7 @@ void SdImportTest::testTdf99729()
         {
             for (long nY = 16; nY < (16 + 96); ++nY)
             {
-                const Color aColor = pRead->GetColor(nY, nX).GetColor();
+                const Color aColor = pRead->GetColor(nY, nX);
                 if ((aColor.GetRed() != 0xff) || (aColor.GetGreen() != 0xff) || (aColor.GetBlue() != 0xff))
                     ++nonwhitecounts[i];
             }
@@ -1873,7 +1873,7 @@ bool checkPatternValues(std::vector<sal_uInt8>& rExpected, Bitmap& rBitmap)
         Scanline pScanline = pAccess->GetScanline( y );
         for (long x = 0; x < pAccess->Width(); ++x)
         {
-            Color aColor = pAccess->GetPixelFromData(pScanline, x).GetColor();
+            Color aColor = pAccess->GetPixelFromData(pScanline, x);
             sal_uInt8 aValue = rExpected[y*8+x];
 
             if (aValue == 1 && aColor != aFGColor)

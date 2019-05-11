@@ -127,7 +127,7 @@ public:
     {
         const sal_uInt8 nIndex(*pData++);
         if (nIndex < mrPalette.GetEntryCount())
-            return mrPalette[nIndex].GetColor();
+            return mrPalette[nIndex];
         else
             return COL_BLACK;
     }
@@ -177,7 +177,7 @@ public:
         mnShift ^= 4;
 
         if (nIndex < mrPalette.GetEntryCount())
-            return mrPalette[nIndex].GetColor();
+            return mrPalette[nIndex];
         else
             return COL_BLACK;
     }
@@ -221,7 +221,7 @@ public:
         mnX++;
 
         if (nIndex < mrPalette.GetEntryCount())
-            return mrPalette[nIndex].GetColor();
+            return mrPalette[nIndex];
         else
             return COL_BLACK;
     }

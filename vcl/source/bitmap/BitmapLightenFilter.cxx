@@ -37,7 +37,8 @@ BitmapEx BitmapLightenFilter::execute(BitmapEx const& rBitmapEx) const
                     = pRead->HasPalette()
                           ? pRead->GetPaletteColor(pRead->GetIndexFromData(pScanlineRead, nX))
                           : pRead->GetPixelFromData(pScanlineRead, nX);
-                basegfx::BColor aBColor(aBmpColor.Invert().GetColor().getBColor());
+                aBmpColor.Invert();
+                basegfx::BColor aBColor(aBmpColor.getBColor());
                 aBColor = basegfx::utils::rgb2hsl(aBColor);
 
                 double fHue = aBColor.getRed();

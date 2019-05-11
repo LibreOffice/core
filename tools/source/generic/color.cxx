@@ -64,13 +64,6 @@ void Color::DecreaseContrast(sal_uInt8 nContDec)
     }
 }
 
-void Color::Invert()
-{
-    R = ~R;
-    G = ~G;
-    B = ~B;
-}
-
 bool Color::IsDark() const
 {
     return GetLuminance() <= 60;

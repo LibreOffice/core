@@ -1580,8 +1580,8 @@ Bitmap OutputDevice::BlendBitmap(
                                     nMapX = aBmpRect.Right() - nMapX;
                                 }
                                 aDstCol = pB->GetPixelFromData( pBScan, nX );
-                                pB->SetPixelOnData( pBScan, nX, aDstCol.Merge( pP->GetPaletteColor( pPScan[ nMapX ] ),
-                                                                                pAScan[ nMapX ] ) );
+                                aDstCol.Merge( pP->GetPaletteColor( pPScan[ nMapX ] ), pAScan[ nMapX ] );
+                                pB->SetPixelOnData( pBScan, nX, aDstCol );
                             }
                         }
                     }
@@ -1609,8 +1609,8 @@ Bitmap OutputDevice::BlendBitmap(
                                 nMapX = aBmpRect.Right() - nMapX;
                             }
                             aDstCol = pB->GetPixelFromData( pBScan, nX );
-                            pB->SetPixelOnData( pBScan, nX, aDstCol.Merge( pP->GetColor( nMapY, nMapX ),
-                                                                 pAScan[ nMapX ] ) );
+                            aDstCol.Merge( pP->GetColor( nMapY, nMapX ), pAScan[ nMapX ] );
+                            pB->SetPixelOnData( pBScan, nX, aDstCol );
                         }
                     }
                 }
