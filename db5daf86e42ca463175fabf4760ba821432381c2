@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_865f5240",
+        "filename": "dbaccess/source/ui/inc/UITools.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-05-11T19:29:00Z",
+      "side": 1,
+      "message": "\"were\" since there are several operations.",
+      "range": {
+        "startLine": 377,
+        "startChar": 45,
+        "endLine": 377,
+        "endChar": 48
+      },
+      "revId": "db5daf86e42ca463175fabf4760ba821432381c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
