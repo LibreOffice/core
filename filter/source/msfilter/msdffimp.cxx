@@ -135,7 +135,6 @@
 #include <svx/sdasitm.hxx>
 #include <svx/sdggaitm.hxx>
 #include <svx/sdshcitm.hxx>
-#include <svx/sdshcitm.hxx>
 #include <svx/sdshitm.hxx>
 #include <svx/sdshtitm.hxx>
 #include <svx/sdsxyitm.hxx>
