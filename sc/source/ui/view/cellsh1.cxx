@@ -2541,8 +2541,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if (!pList)
                     pList = pDoc->GetCondFormList( aPos.Tab() );
 
+                vcl::Window* pWin = pTabViewShell->GetDialogParent();
                 VclPtr<AbstractScCondFormatManagerDlg> pDlg(pFact->CreateScCondFormatMgrDlg(
-                    pTabViewShell->GetDialogParent(), pDoc, pList));
+                    pWin ? pWin->GetFrameWeld() : nullptr, pDoc, pList));
 
                 if (pDlgItem)
                     pDlg->SetModified();
@@ -2579,6 +2580,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if (pDlgItem)
                         pTabViewShell->GetPool().Remove(*pDlgItem);
+
+                    pDlg->disposeOnce();
                 });
             }
             break;
