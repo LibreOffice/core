@@ -79,6 +79,8 @@ public:
     SwBoxAutoFormat( const SwBoxAutoFormat& rNew );
     ~SwBoxAutoFormat();
 
+    SwBoxAutoFormat& operator=(const SwBoxAutoFormat& rNew);
+
     /// Comparing based of boxes backgrounds.
     bool operator==(const SwBoxAutoFormat& rRight);
 
