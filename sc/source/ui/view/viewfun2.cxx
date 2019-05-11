@@ -1182,8 +1182,7 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bCenter )
         bool bShowDialog = officecfg::Office::Calc::Compatibility::MergeCells::ShowDialog::get();
         if (!bApi && bShowDialog)
         {
-            vcl::Window* pWin = GetViewData().GetDialogParent();
-            ScMergeCellsDialog aBox(pWin ? pWin->GetFrameWeld() : nullptr);
+            ScMergeCellsDialog aBox(GetViewData().GetFrameWeld());
             sal_uInt16 nRetVal = aBox.run();
 
             if ( nRetVal == RET_OK )
@@ -2122,8 +2121,7 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
             aMsgStr += ScResId( STR_MSSG_SOLVE_4 );
         }
 
-        vcl::Window* pWin = GetViewData().GetDialogParent();
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetViewData().GetFrameWeld(),
                                                   VclMessageType::Question, VclButtonsType::YesNo, aMsgStr));
         xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0));
         xBox->set_default_response(RET_NO);

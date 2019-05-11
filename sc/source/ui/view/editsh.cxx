@@ -270,8 +270,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case SID_PASTE_SPECIAL:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                vcl::Window* pWin = pViewData->GetDialogParent();
-                ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(pWin ? pWin->GetFrameWeld() : nullptr));
+                ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(pViewData->GetFrameWeld()));
                 SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
                 pDlg->Insert( SotClipboardFormatId::STRING, EMPTY_OUSTRING );
                 pDlg->Insert( SotClipboardFormatId::RTF,    EMPTY_OUSTRING );

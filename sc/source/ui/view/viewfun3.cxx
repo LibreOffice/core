@@ -1062,8 +1062,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
             ScWaitCursorOff aWaitOff( GetFrameWin() );
             OUString aMessage = ScResId( STR_PASTE_BIGGER );
 
-            vcl::Window* pWin = GetViewData().GetDialogParent();
-            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetViewData().GetFrameWeld(),
                                                            VclMessageType::Question, VclButtonsType::YesNo,
                                                            aMessage));
             xQueryBox->set_default_response(RET_NO);
@@ -1151,8 +1150,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         if ( bAskIfNotEmpty )
         {
             ScRangeList aTestRanges(aUserRange);
-            vcl::Window* pWin = GetViewData().GetDialogParent();
-            if (!checkDestRangeForOverwrite(aTestRanges, pDoc, aFilteredMark, pWin ? pWin->GetFrameWeld() : nullptr))
+            if (!checkDestRangeForOverwrite(aTestRanges, pDoc, aFilteredMark, GetViewData().GetFrameWeld()))
                 return false;
         }
     }
@@ -1519,8 +1517,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     if (bAskIfNotEmpty)
     {
         ScRangeList aTestRanges(aMarkedRange);
-        vcl::Window* pWin = GetViewData().GetDialogParent();
-        if (!checkDestRangeForOverwrite(aTestRanges, pDoc, aMark, pWin ? pWin->GetFrameWeld() : nullptr))
+        if (!checkDestRangeForOverwrite(aTestRanges, pDoc, aMark, GetViewData().GetFrameWeld()))
             return false;
     }
 
@@ -1682,8 +1679,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
 
     if (bAskIfNotEmpty)
     {
-        vcl::Window* pWin = GetViewData().GetDialogParent();
-        if (!checkDestRangeForOverwrite(aRanges, pDoc, aMark, pWin ? pWin->GetFrameWeld() : nullptr))
+        if (!checkDestRangeForOverwrite(aRanges, pDoc, aMark, GetViewData().GetFrameWeld()))
             return false;
     }
 

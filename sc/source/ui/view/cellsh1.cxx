@@ -2022,8 +2022,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 // or should create a new overlapping conditional format
                 if(bContainsCondFormat && !bCondFormatDlg && bContainsExistingCondFormat)
                 {
-                    vcl::Window* pWin = pTabViewShell->GetDialogParent();
-                    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pTabViewShell->GetFrameWeld(),
                                                                    VclMessageType::Question, VclButtonsType::YesNo,
                                                                    ScResId(STR_EDIT_EXISTING_COND_FORMATS)));
                     xQueryBox->set_default_response(RET_YES);
@@ -2541,9 +2540,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if (!pList)
                     pList = pDoc->GetCondFormList( aPos.Tab() );
 
-                vcl::Window* pWin = pTabViewShell->GetDialogParent();
                 VclPtr<AbstractScCondFormatManagerDlg> pDlg(pFact->CreateScCondFormatMgrDlg(
-                    pWin ? pWin->GetFrameWeld() : nullptr, pDoc, pList));
+                    pTabViewShell->GetFrameWeld(), pDoc, pList));
 
                 if (pDlgItem)
                     pDlg->SetModified();
@@ -2918,8 +2916,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                     if ( pDoc->HasSubTotalCells( aRange ) )
                     {
                         //  confirm selection if it contains SubTotal cells
-                        vcl::Window* pWin = pTabViewShell->GetDialogParent();
-                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pTabViewShell->GetFrameWeld(),
                                                                        VclMessageType::Question, VclButtonsType::YesNo,
                                                                        ScResId(STR_DATAPILOT_SUBTOTAL)));
                         xQueryBox->set_default_response(RET_YES);
@@ -2950,8 +2947,7 @@ void ScCellShell::ExecuteDataPilotDialog()
         if (pSrcErrorId)
         {
             // Error occurred during data creation.  Launch an error and bail out.
-            vcl::Window* pWin = pTabViewShell->GetDialogParent();
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pTabViewShell->GetFrameWeld(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           ScResId(pSrcErrorId)));
             xInfoBox->run();

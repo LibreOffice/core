@@ -392,9 +392,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                    vcl::Window* pWin = GetDialogParent();
                     ScopedVclPtr<AbstractScStringInputDlg> pDlg(pFact->CreateScStringInputDlg(
-                        pWin ? pWin->GetFrameWeld() : nullptr, aDlgTitle, ScResId(SCSTR_NAME),
+                        GetFrameWeld(), aDlgTitle, ScResId(SCSTR_NAME),
                         aName, GetStaticInterface()->GetSlot(nSlot)->GetCommand(),
                         pHelpId));
 
@@ -432,7 +431,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 }
                                 else
                                 {
-                                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                                               VclMessageType::Warning, VclButtonsType::Ok, aErrMsg));
                                     nRet = xBox->run();
                                 }
@@ -621,10 +620,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         }
                     }
 
-                    vcl::Window* pWin = GetDialogParent();
                     if (bTabWithPivotTable)
                     {
-                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                                        VclMessageType::Question, VclButtonsType::YesNo,
                                                                        ScResId(STR_QUERY_PIVOTTABLE_DELTAB)));
                         xQueryBox->set_default_response(RET_NO);
@@ -634,7 +632,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     }
                     else
                     {
-                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                                        VclMessageType::Question, VclButtonsType::YesNo,
                                                                        ScResId(STR_QUERY_DELTAB)));
                         xQueryBox->set_default_response(RET_YES);
