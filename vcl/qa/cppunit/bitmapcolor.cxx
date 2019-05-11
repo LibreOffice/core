@@ -44,7 +44,6 @@ public:
     CPPUNIT_TEST(defaultConstructor);
     CPPUNIT_TEST(colorValueConstructor);
     CPPUNIT_TEST(colorClassConstructor);
-    CPPUNIT_TEST(getColor);
     CPPUNIT_TEST(setValue);
     CPPUNIT_TEST(invert);
     CPPUNIT_TEST(getLuminance);
@@ -149,17 +148,6 @@ void BitmapColorTest::colorClassConstructor()
     }
 }
 
-void BitmapColorTest::getColor()
-{
-    BitmapColor aBitmapColor(255, 128, 64, 32);
-    Color aColor = aBitmapColor.GetColor();
-
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Red wrong", sal_uInt8(255), aColor.GetRed());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Green wrong", sal_uInt8(128), aColor.GetGreen());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Blue wrong", sal_uInt8(64), aColor.GetBlue());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Transparency wrong", sal_uInt8(32), aColor.GetTransparency());
-}
-
 void BitmapColorTest::setValue()
 {
     BitmapColor aBmpColor;
@@ -177,7 +165,8 @@ void BitmapColorTest::setValue()
 void BitmapColorTest::invert()
 {
     BitmapColor aBmpColor(255, 255, 255);
-    BitmapColor aInvertedColor = aBmpColor.Invert();
+    BitmapColor aInvertedColor(aBmpColor);
+    aInvertedColor.Invert();
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(0), aInvertedColor.GetRed());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(0), aInvertedColor.GetGreen());
@@ -203,7 +192,7 @@ void BitmapColorTest::getLuminance()
 
     {
         BitmapColor aBmpColor(COL_CYAN);
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(89), aBmpColor.GetLuminance());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(90), aBmpColor.GetLuminance());
     }
 
     {
@@ -218,7 +207,7 @@ void BitmapColorTest::getLuminance()
 
     {
         BitmapColor aBmpColor(COL_BROWN);
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(114), aBmpColor.GetLuminance());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(113), aBmpColor.GetLuminance());
     }
 
     {
@@ -233,7 +222,7 @@ void BitmapColorTest::getLuminance()
 
     {
         BitmapColor aBmpColor(COL_LIGHTBLUE);
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(27), aBmpColor.GetLuminance());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(28), aBmpColor.GetLuminance());
     }
 
     {
@@ -243,12 +232,12 @@ void BitmapColorTest::getLuminance()
 
     {
         BitmapColor aBmpColor(COL_LIGHTCYAN);
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(178), aBmpColor.GetLuminance());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(179), aBmpColor.GetLuminance());
     }
 
     {
         BitmapColor aBmpColor(COL_LIGHTRED);
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(76), aBmpColor.GetLuminance());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(75), aBmpColor.GetLuminance());
     }
 
     {
@@ -258,7 +247,7 @@ void BitmapColorTest::getLuminance()
 
     {
         BitmapColor aBmpColor(COL_YELLOW);
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(227), aBmpColor.GetLuminance());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(226), aBmpColor.GetLuminance());
     }
 
     {
