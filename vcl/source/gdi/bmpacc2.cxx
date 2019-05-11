@@ -99,7 +99,7 @@ BitmapColor BitmapReadAccess::GetPixelForN8BitPal(ConstScanline pScanline, long 
 
 void BitmapReadAccess::SetPixelForN8BitPal(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask&)
 {
-    pScanline[ nX ] = rBitmapColor.GetBlueOrIndex();
+    pScanline[ nX ] = rBitmapColor.GetIndex();
 }
 
 BitmapColor BitmapReadAccess::GetPixelForN8BitTcMask(ConstScanline pScanline, long nX, const ColorMask& rMask)

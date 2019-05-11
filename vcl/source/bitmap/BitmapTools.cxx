@@ -675,7 +675,7 @@ static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, long nY, const lo
                 BitmapColor const& rColor(
                     pAlphaReadAcc->GetPaletteColor(*pReadScan));
                 pReadScan++;
-                nAlpha = data[ nOff ] = 255 - rColor.GetBlueOrIndex();
+                nAlpha = data[ nOff ] = 255 - rColor.GetIndex();
                 if( nAlpha != 255 )
                     bIsAlpha = true;
                 nOff += 4;
@@ -747,7 +747,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
                 else
                     nAlpha = data[ nOff + 3 ] = 255;
 #endif
-                aColor = pBitmapReadAcc->GetPaletteColor(*pReadScan++).GetColor();
+                aColor = pBitmapReadAcc->GetPaletteColor(*pReadScan++);
 
 #ifdef OSL_BIGENDIAN
                 data[ nOff++ ] = premultiply_table[nAlpha][aColor.GetRed()];
@@ -888,7 +888,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
 
             for( nX = 0; nX < nWidth; nX++ )
             {
-                aColor = pBitmapReadAcc->GetColor( nY, nX ).GetColor();
+                aColor = pBitmapReadAcc->GetColor( nY, nX );
 
                 // cairo need premultiplied color values
                 // TODO(rodo) handle endianness
@@ -1025,8 +1025,8 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
 
                             // #i123564# background and foreground were exchanged; of course
                             // rPalette[0] is the background color
-                            o_rFront = rPalette[1].GetColor();
-                            o_rBack = rPalette[0].GetColor();
+                            o_rFront = rPalette[1];
+                            o_rBack = rPalette[0];
 
                             bRet = true;
                         }
