@@ -430,7 +430,7 @@ void BitmapTest::testConvert()
 #endif
 
         CPPUNIT_ASSERT(!pReadAccess->HasPalette());
-        Color aColor = pReadAccess->GetPixel(0, 0).GetColor();
+        Color aColor = pReadAccess->GetPixel(0, 0);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(204), sal_Int32(aColor.GetRed()));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(204), sal_Int32(aColor.GetGreen()));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(255), sal_Int32(aColor.GetBlue()));
@@ -584,7 +584,7 @@ bool checkBitmapColor(Bitmap const& rBitmap, Color const& rExpectedColor)
         Scanline pScanlineRead = pReadAccess->GetScanline(y);
         for (long x = 0; x < nWidth; ++x)
         {
-            Color aColor = pReadAccess->GetPixelFromData(pScanlineRead, x).GetColor();
+            Color aColor = pReadAccess->GetPixelFromData(pScanlineRead, x);
             if (aColor != rExpectedColor)
                 bResult = false;
         }

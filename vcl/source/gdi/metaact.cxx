@@ -310,14 +310,16 @@ void MetaPixelAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     WritePair( rOStm, maPt );
-    rOStm.WriteUInt32(maColor.mValue);
+    rOStm.WriteUInt32(static_cast<sal_uInt32>(maColor));
 }
 
 void MetaPixelAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadPair( rIStm, maPt );
-    rIStm.ReadUInt32(maColor.mValue);
+    sal_uInt32 nColorValue;
+    rIStm.ReadUInt32(nColorValue);
+    maColor = Color(nColorValue);
 }
 
 MetaPointAction::MetaPointAction() :
@@ -1932,7 +1934,7 @@ void MetaMaskScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
         MetaAction::Write(rOStm, pData);
         VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
         WriteDIB(maBmp, rOStm, false, true);
-        rOStm.WriteUInt32(maColor.mValue);
+        rOStm.WriteUInt32(static_cast<sal_uInt32>(maColor));
         WritePair( rOStm, maDstPt );
         WritePair( rOStm, maDstSz );
         WritePair( rOStm, maSrcPt );
@@ -1944,7 +1946,9 @@ void MetaMaskScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadDIB(maBmp, rIStm, true);
-    rIStm.ReadUInt32(maColor.mValue);
+    sal_uInt32 nColorValue;
+    rIStm.ReadUInt32(nColorValue);
+    maColor = Color(nColorValue);
     ReadPair( rIStm, maDstPt );
     ReadPair( rIStm, maDstSz );
     ReadPair( rIStm, maSrcPt );
@@ -2380,14 +2384,16 @@ void MetaLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
-    rOStm.WriteUInt32(maColor.mValue);
+    rOStm.WriteUInt32(static_cast<sal_uInt32>(maColor));
     rOStm.WriteBool( mbSet );
 }
 
 void MetaLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     VersionCompat aCompat(rIStm, StreamMode::READ);
-    rIStm.ReadUInt32(maColor.mValue);
+    sal_uInt32 nColorValue;
+    rIStm.ReadUInt32(nColorValue);
+    maColor = Color(nColorValue);
     rIStm.ReadCharAsBool( mbSet );
 }
 
@@ -2422,14 +2428,16 @@ void MetaFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
-    rOStm.WriteUInt32(maColor.mValue);
+    rOStm.WriteUInt32(static_cast<sal_uInt32>(maColor));
     rOStm.WriteBool( mbSet );
 }
 
 void MetaFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     VersionCompat aCompat(rIStm, StreamMode::READ);
-    rIStm.ReadUInt32(maColor.mValue);
+    sal_uInt32 nColorValue;
+    rIStm.ReadUInt32(nColorValue);
+    maColor = Color(nColorValue);
     rIStm.ReadCharAsBool( mbSet );
 }
 
@@ -2459,13 +2467,15 @@ void MetaTextColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
-    rOStm.WriteUInt32(maColor.mValue);
+    rOStm.WriteUInt32(static_cast<sal_uInt32>(maColor));
 }
 
 void MetaTextColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     VersionCompat aCompat(rIStm, StreamMode::READ);
-    rIStm.ReadUInt32(maColor.mValue);
+    sal_uInt32 nColorValue;
+    rIStm.ReadUInt32(nColorValue);
+    maColor = Color(nColorValue);
 }
 
 MetaTextFillColorAction::MetaTextFillColorAction() :
@@ -2499,14 +2509,16 @@ void MetaTextFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
-    rOStm.WriteUInt32(maColor.mValue);
+    rOStm.WriteUInt32(static_cast<sal_uInt32>(maColor));
     rOStm.WriteBool( mbSet );
 }
 
 void MetaTextFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     VersionCompat aCompat(rIStm, StreamMode::READ);
-    rIStm.ReadUInt32(maColor.mValue);
+    sal_uInt32 nColorValue;
+    rIStm.ReadUInt32(nColorValue);
+    maColor = Color(nColorValue);
     rIStm.ReadCharAsBool( mbSet );
 }
 
@@ -2541,14 +2553,16 @@ void MetaTextLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
-    rOStm.WriteUInt32(maColor.mValue);
+    rOStm.WriteUInt32(static_cast<sal_uInt32>(maColor));
     rOStm.WriteBool( mbSet );
 }
 
 void MetaTextLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     VersionCompat aCompat(rIStm, StreamMode::READ);
-    rIStm.ReadUInt32(maColor.mValue);
+    sal_uInt32 nColorValue;
+    rIStm.ReadUInt32(nColorValue);
+    maColor = Color(nColorValue);
     rIStm.ReadCharAsBool( mbSet );
 }
 
@@ -2583,14 +2597,16 @@ void MetaOverlineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
-    rOStm.WriteUInt32(maColor.mValue);
+    rOStm.WriteUInt32(static_cast<sal_uInt32>(maColor));
     rOStm.WriteBool( mbSet );
 }
 
 void MetaOverlineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     VersionCompat aCompat(rIStm, StreamMode::READ);
-    rIStm.ReadUInt32(maColor.mValue);
+    sal_uInt32 nColorValue;
+    rIStm.ReadUInt32(nColorValue);
+    maColor = Color(nColorValue);
     rIStm.ReadCharAsBool( mbSet );
 }
 

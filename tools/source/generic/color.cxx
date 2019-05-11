@@ -28,7 +28,7 @@
 #include <tools/helpers.hxx>
 #include <basegfx/color/bcolortools.hxx>
 
-sal_uInt8 Color::GetColorError( const Color& rCompareColor ) const
+sal_uInt16 Color::GetColorError( const Color& rCompareColor ) const
 {
     const long nErrAbs = labs(long(rCompareColor.R) - R) +
                          labs(long(rCompareColor.G) - G) +
@@ -62,13 +62,6 @@ void Color::DecreaseContrast(sal_uInt8 nContDec)
         G = sal_uInt8(std::clamp(FRound(G * fM + fOff), 0L, 255L));
         B = sal_uInt8(std::clamp(FRound(B * fM + fOff), 0L, 255L));
     }
-}
-
-void Color::Invert()
-{
-    R = ~R;
-    G = ~G;
-    B = ~B;
 }
 
 bool Color::IsDark() const
