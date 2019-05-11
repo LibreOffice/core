@@ -31,6 +31,8 @@
 #include <connectivity/FValue.hxx>
 #include <connectivity/dbexception.hxx>
 
+#include <sal/log.hxx>
+
 #include <string.h>
 
 using namespace connectivity::odbc;
@@ -185,49 +187,68 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
     for(;pBegin != pEnd;++pBegin)
     {
         if( pBegin->Name == "Timeout")
-            OSL_VERIFY( pBegin->Value >>= nTimeout );
+        {
+            if( ! (pBegin->Value >>= nTimeout) )
+                SAL_WARN("connectivity.odbc", "Construct: unable to get property Timeout");
+        }
         else if( pBegin->Name == "Silent")
-            OSL_VERIFY( pBegin->Value >>= bSilent );
+        {
+            if( ! (pBegin->Value >>= bSilent) )
+                SAL_WARN("connectivity.odbc", "Construct: unable to get property Silent");
+        }
         else if( pBegin->Name == "IgnoreDriverPrivileges")
-            OSL_VERIFY( pBegin->Value >>= m_bIgnoreDriverPrivileges );
+        {
+            if( ! (pBegin->Value >>= m_bIgnoreDriverPrivileges) )
+                SAL_WARN("connectivity.odbc", "Construct: unable to get property IgnoreDriverPrivileges");
+        }
         else if( pBegin->Name == "PreventGetVersionColumns")
-            OSL_VERIFY( pBegin->Value >>= m_bPreventGetVersionColumns );
+        {
+            if( ! (pBegin->Value >>= m_bPreventGetVersionColumns) )
+                SAL_WARN("connectivity.odbc", "Construct: unable to get property PreventGetVersionColumns");
+        }
         else if( pBegin->Name == "IsAutoRetrievingEnabled")
         {
             bool bAutoRetrievingEnabled = false;
-            OSL_VERIFY( pBegin->Value >>= bAutoRetrievingEnabled );
+            if( ! (pBegin->Value >>= bAutoRetrievingEnabled) )
+                SAL_WARN("connectivity.odbc", "Construct: unable to get property IsAutoRetrievingEnabled");
             enableAutoRetrievingEnabled(bAutoRetrievingEnabled);
         }
         else if( pBegin->Name == "AutoRetrievingStatement")
         {
             OUString sGeneratedValueStatement;
-            OSL_VERIFY( pBegin->Value >>= sGeneratedValueStatement );
+            if( ! (pBegin->Value >>= sGeneratedValueStatement) )
+                SAL_WARN("connectivity.odbc", "Construct: unable to get property AutoRetrievingStatement");
             setAutoRetrievingStatement(sGeneratedValueStatement);
         }
         else if( pBegin->Name == "user")
         {
-            OSL_VERIFY( pBegin->Value >>= aUID );
+            if( ! (pBegin->Value >>= aUID) )
+                SAL_WARN("connectivity.odbc", "Construct: unable to get property user");
             aDSN = aDSN + ";UID=" + aUID;
         }
         else if( pBegin->Name == "password")
         {
-            OSL_VERIFY( pBegin->Value >>= aPWD );
+            if( ! (pBegin->Value >>= aPWD) )
+                SAL_WARN("connectivity.odbc", "Construct: unable to get property password");
             aDSN = aDSN + ";PWD=" + aPWD;
         }
         else if( pBegin->Name == "UseCatalog")
         {
-             OSL_VERIFY( pBegin->Value >>= m_bUseCatalog );
+             if( !( pBegin->Value >>= m_bUseCatalog) )
+                SAL_WARN("connectivity.odbc", "Construct: unable to get property UseCatalog");
         }
         else if( pBegin->Name == "SystemDriverSettings")
         {
-            OSL_VERIFY( pBegin->Value >>= aSysDrvSettings );
+            if( ! (pBegin->Value >>= aSysDrvSettings) )
+                SAL_WARN("connectivity.odbc", "Construct: unable to get property SystemDriverSettings");
             aDSN += ";";
             aDSN += aSysDrvSettings;
         }
         else if( pBegin->Name == "CharSet")
         {
             OUString sIanaName;
-            OSL_VERIFY( pBegin->Value >>= sIanaName );
+            if( ! (pBegin->Value >>= sIanaName) )
+                SAL_WARN("connectivity.odbc", "Construct: unable to get property CharSet");
 
             ::dbtools::OCharsetMap aLookupIanaName;
             ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.findIanaName(sIanaName);
