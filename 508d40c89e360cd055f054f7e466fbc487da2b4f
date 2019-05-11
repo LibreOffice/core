@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_2630be56",
+        "filename": "dbaccess/source/ui/browser/sbagrid.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-05-11T10:48:37Z",
+      "side": 1,
+      "message": "\"one\" begins with a consonant sound, so \"a\" is ok.",
+      "range": {
+        "startLine": 405,
+        "startChar": 17,
+        "endLine": 406,
+        "endChar": 11
+      },
+      "revId": "508d40c89e360cd055f054f7e466fbc487da2b4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
