@@ -156,7 +156,17 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     }
 
     m_aSystemData.nSize = sizeof(SystemEnvData);
-    m_aSystemData.aWindow = m_pQWidget->winId();
+
+    // Calling 'QWidget::winId()' implicitly enables native windows to be used
+    // rather than "alien widgets" that are unknown to the windowing system,
+    // s. https://doc.qt.io/qt-5/qwidget.html#native-widgets-vs-alien-widgets
+    // Avoid this on Wayland due to problems with missing 'mouseMoveEvent's,
+    // s. tdf#122293/QTBUG-75766
+    if (QGuiApplication::platformName() != "wayland")
+        m_aSystemData.aWindow = m_pQWidget->winId();
+    // TODO implement as needed for Wayland,
+    // s.a. commit c0d4f3ad3307c which did this for gtk3
+
     m_aSystemData.aShellWindow = reinterpret_cast<sal_IntPtr>(this);
     //m_aSystemData.pSalFrame = this;
     //m_aSystemData.pWidget = m_pQWidget;
@@ -265,10 +275,17 @@ bool Qt5Frame::isWindow() const
 
 QWindow* Qt5Frame::windowHandle() const
 {
+    // set attribute 'Qt::WA_NativeWindow' first to make sure a window handle actually exists
     if (m_pTopLevel)
+    {
+        m_pTopLevel->setAttribute(Qt::WA_NativeWindow);
         return m_pTopLevel->windowHandle();
+    }
     else
+    {
+        m_pQWidget->setAttribute(Qt::WA_NativeWindow);
         return m_pQWidget->windowHandle();
+    }
 }
 
 QScreen* Qt5Frame::screen() const
