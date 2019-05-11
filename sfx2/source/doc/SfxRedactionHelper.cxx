@@ -91,7 +91,7 @@ void fixMetaFile(GDIMetaFile& tmpMtf)
 }
 
 /*
- * Sets page margins for a Draw page. Negative values are considered erronous.
+ * Sets page margins for a Draw page. Negative values are considered erroneous
  * */
 void setPageMargins(uno::Reference<beans::XPropertySet>& xPageProperySet,
                     const PageMargins& aPageMargins)
