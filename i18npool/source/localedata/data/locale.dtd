@@ -129,7 +129,7 @@
      639-3 three letter code.
 
      If the Variant element designates a BCP 47 language tag (because the
-     locale is not expressable as a Language,Country pair, for example contains
+     locale is not expressible as a Language,Country pair, for example contains
      a script tag) then the LangID value MUST be the code 'qlt' (reserved by
      ISO 639-3 for private use) to tell the language tag processor that the
      actual language tag is in the Variant element.
