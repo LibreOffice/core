@@ -1129,7 +1129,7 @@ SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const OUString& _rDataSour
             }
         }
         if (_ppDataSourceEntry)
-            // (caller wants to have it ...)
+            // (caller wants to have it...)
             *_ppDataSourceEntry = pDataSource;
 
         if (pDataSource)
@@ -1630,7 +1630,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
             aReturn.bEnabled = !m_bEnableBrowser;
             return aReturn;
 
-            // "toggle explorer" is always enabled (if we have a explorer)
+            // "toggle explorer" is always enabled (if we have an explorer)
         case ID_BROWSER_EXPLORER:
             aReturn.bEnabled = m_bEnableBrowser;
             aReturn.bChecked = haveExplorer();
@@ -1972,7 +1972,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
 
         case ID_BROWSER_CLOSE:
             closeTask();
-            // if it's not 0, such a async close is already pending
+            // if it's not 0, such an async close is already pending
             break;
 
         case ID_BROWSER_COPY:
@@ -3121,7 +3121,7 @@ void SbaTableQueryBrowser::impl_initialize()
     }
 
     // if we have a connection at this point, it was either passed from outside, our
-    // determined from a outer DB document. In both cases, do not dispose it later on.
+    // determined from an outer DB document. In both cases, do not dispose it later on.
     SharedConnection xConnection( xForeignConnection, SharedConnection::NoTakeOwnership );
 
     // should we display all registered databases in the left hand side tree?
