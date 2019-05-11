@@ -268,6 +268,49 @@ SwBoxAutoFormat::~SwBoxAutoFormat()
 {
 }
 
+SwBoxAutoFormat& SwBoxAutoFormat::operator=( const SwBoxAutoFormat& rNew )
+{
+    m_aFont = rNew.m_aFont;
+    m_aHeight = rNew.m_aHeight;
+    m_aWeight = rNew.m_aWeight;
+    m_aPosture = rNew.m_aPosture;
+    m_aCJKFont = rNew.m_aCJKFont;
+    m_aCJKHeight = rNew.m_aCJKHeight;
+    m_aCJKWeight = rNew.m_aCJKWeight;
+    m_aCJKPosture = rNew.m_aCJKPosture;
+    m_aCTLFont = rNew.m_aCTLFont;
+    m_aCTLHeight = rNew.m_aCTLHeight;
+    m_aCTLWeight = rNew.m_aCTLWeight;
+    m_aCTLPosture = rNew.m_aCTLPosture;
+    m_aUnderline = rNew.m_aUnderline;
+    m_aOverline = rNew.m_aOverline;
+    m_aCrossedOut = rNew.m_aCrossedOut;
+    m_aContour = rNew.m_aContour;
+    m_aShadowed = rNew.m_aShadowed;
+    m_aColor = rNew.m_aColor;
+    SetAdjust( *rNew.m_aAdjust );
+    m_aTextOrientation = rNew.m_aTextOrientation;
+    m_aVerticalAlignment = rNew.m_aVerticalAlignment;
+    m_aBox = rNew.m_aBox;
+    m_aTLBR = rNew.m_aTLBR;
+    m_aBLTR = rNew.m_aBLTR;
+    m_aBackground = rNew.m_aBackground;
+
+    m_aHorJustify = rNew.m_aHorJustify;
+    m_aVerJustify = rNew.m_aVerJustify;
+    m_aStacked->SetValue( rNew.m_aStacked->GetValue() );
+    m_aMargin = rNew.m_aMargin;
+    m_aLinebreak->SetValue( rNew.m_aLinebreak->GetValue() );
+    m_aRotateAngle->SetValue( rNew.m_aRotateAngle->GetValue() );
+    m_aRotateMode->SetValue( rNew.m_aRotateMode->GetValue() );
+
+    m_sNumFormatString = rNew.m_sNumFormatString;
+    m_eSysLanguage = rNew.m_eSysLanguage;
+    m_eNumFormatLanguage = rNew.m_eNumFormatLanguage;
+
+    return *this;
+}
+
 bool SwBoxAutoFormat::operator==(const SwBoxAutoFormat& rRight)
 {
     return GetBackground().GetColor() == rRight.GetBackground().GetColor();
