@@ -246,13 +246,6 @@ bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension, bool b
     if (!aDetector.detect())
         return false;
 
-    sal_uInt8* sFirstBytes = aDetector.maFirstBytes.data();
-    sal_uLong nFirstLong = aDetector.mnFirstLong;
-    sal_uLong nSecondLong  = aDetector.mnSecondLong;
-
-    sal_uLong nStreamPos = aDetector.mnStreamPosition;
-    sal_uLong nStreamLen = aDetector.mnStreamLength;
-
     // The following variable is used when bTest == true. It remains false
     // if the format (rFormatExtension) has not yet been set.
     bool bSomethingTested = false;
@@ -264,446 +257,236 @@ bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension, bool b
     // Therefore, in the case of a format check (bTest == true)  we only test *exactly* this
     // format. Everything else could have fatal consequences, for example if the user says it is
     // a BMP file (and it is a BMP) file, and the file would go through the MET test ...
-    //--------------------------- MET ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "MET" ) )
-    {
-        bSomethingTested=true;
-        if( sFirstBytes[2] == 0xd3 )
-        {
-            rStream.SetEndian( SvStreamEndian::BIG );
-            rStream.Seek( nStreamPos );
-            sal_uInt16 nFieldSize;
-            sal_uInt8 nMagic;
-            bool bOK=true;
-            rStream.ReadUInt16( nFieldSize ).ReadUChar( nMagic );
-            for (int i=0; i<3; i++) {
-                if (nFieldSize<6) { bOK=false; break; }
-                if (nStreamLen < rStream.Tell() + nFieldSize ) { bOK=false; break; }
-                rStream.SeekRel(nFieldSize-3);
-                rStream.ReadUInt16( nFieldSize ).ReadUChar( nMagic );
-                if (nMagic!=0xd3) { bOK=false; break; }
-            }
-            rStream.SetEndian( SvStreamEndian::LITTLE );
-            if (bOK && !rStream.GetError()) {
-                rFormatExtension = "MET";
-                return true;
-            }
-        }
-    }
 
-    //--------------------------- BMP ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "BMP" )  )
-    {
-        sal_uInt8 nOffs;
-
-        bSomethingTested=true;
-
-        // We're possibly also able to read an OS/2 bitmap array
-        // ('BA'), therefore we must adjust the offset to discover the
-        // first bitmap in the array
-        if ( sFirstBytes[0] == 0x42 && sFirstBytes[1] == 0x41 )
-            nOffs = 14;
-        else
-            nOffs = 0;
-
-        // Now we initially test on 'BM'
-        if ( sFirstBytes[0+nOffs]==0x42 && sFirstBytes[1+nOffs]==0x4d )
-        {
-
-            // OS/2 can set the Reserved flags to a value other than 0
-            // (which they really should not do...);
-            // In this case we test the size of the BmpInfoHeaders
-            if ( ( sFirstBytes[6+nOffs]==0x00 &&
-                   sFirstBytes[7+nOffs]==0x00 &&
-                   sFirstBytes[8+nOffs]==0x00 &&
-                   sFirstBytes[9+nOffs]==0x00 ) ||
-                   sFirstBytes[14+nOffs] == 0x28 ||
-                   sFirstBytes[14+nOffs] == 0x0c )
-            {
-                rFormatExtension = "BMP";
-                return true;
-            }
-        }
-    }
-
-    //--------------------------- WMF/EMF ------------------------------------
-
-    if( !bTest ||
-        rFormatExtension.startsWith( "WMF" ) ||
-        rFormatExtension.startsWith( "EMF" ) )
+    if (!bTest || rFormatExtension.startsWith("MET"))
     {
         bSomethingTested = true;
-
-        if ( nFirstLong==0xd7cdc69a || nFirstLong==0x01000900 )
+        if (aDetector.checkMET())
         {
-            rFormatExtension = "WMF";
-            return true;
-        }
-        else if( nFirstLong == 0x01000000 && sFirstBytes[ 40 ] == 0x20 && sFirstBytes[ 41 ] == 0x45 &&
-            sFirstBytes[ 42 ] == 0x4d && sFirstBytes[ 43 ] == 0x46 )
-        {
-            rFormatExtension = "EMF";
+            rFormatExtension = aDetector.msDetectedFormat;
             return true;
         }
     }
 
-    //--------------------------- PCX ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "PCX" ) )
-    {
-        bSomethingTested=true;
-        if (sFirstBytes[0]==0x0a)
-        {
-            sal_uInt8 nVersion=sFirstBytes[1];
-            sal_uInt8 nEncoding=sFirstBytes[2];
-            if( ( nVersion==0 || nVersion==2 || nVersion==3 || nVersion==5 ) && nEncoding<=1 )
-            {
-                rFormatExtension = "PCX";
-                return true;
-            }
-        }
-    }
-
-    //--------------------------- TIF ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "TIF" ) )
-    {
-        bSomethingTested=true;
-        if ( nFirstLong==0x49492a00 || nFirstLong==0x4d4d002a )
-        {
-            rFormatExtension = "TIF";
-            return true;
-        }
-    }
-
-    //--------------------------- GIF ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "GIF" ) )
-    {
-        bSomethingTested=true;
-        if ( nFirstLong==0x47494638 && (sFirstBytes[4]==0x37 || sFirstBytes[4]==0x39) && sFirstBytes[5]==0x61 )
-        {
-            rFormatExtension = "GIF";
-            return true;
-        }
-    }
-
-    //--------------------------- PNG ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "PNG" ) )
-    {
-        bSomethingTested=true;
-        if (nFirstLong==0x89504e47 && nSecondLong==0x0d0a1a0a)
-        {
-            rFormatExtension = "PNG";
-            return true;
-        }
-    }
-
-    //--------------------------- JPG ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "JPG" ) )
-    {
-        bSomethingTested=true;
-        if ( ( nFirstLong==0xffd8ffe0 && sFirstBytes[6]==0x4a && sFirstBytes[7]==0x46 && sFirstBytes[8]==0x49 && sFirstBytes[9]==0x46 ) ||
-             ( nFirstLong==0xffd8fffe ) || ( 0xffd8ff00 == ( nFirstLong & 0xffffff00 ) ) )
-        {
-            rFormatExtension = "JPG";
-            return true;
-        }
-    }
-
-    //--------------------------- SVM ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "SVM" ) )
-    {
-        bSomethingTested=true;
-        if( nFirstLong==0x53564744 && sFirstBytes[4]==0x49 )
-        {
-            rFormatExtension = "SVM";
-            return true;
-        }
-        else if( sFirstBytes[0]==0x56 && sFirstBytes[1]==0x43 && sFirstBytes[2]==0x4C &&
-                 sFirstBytes[3]==0x4D && sFirstBytes[4]==0x54 && sFirstBytes[5]==0x46 )
-        {
-            rFormatExtension = "SVM";
-            return true;
-        }
-    }
-
-    //--------------------------- PCD ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "PCD" ) )
+    if (!bTest || rFormatExtension.startsWith("BMP"))
     {
         bSomethingTested = true;
-        if( nStreamLen >= 2055 )
+        if (aDetector.checkBMP())
         {
-            char sBuf[8];
-            rStream.Seek( nStreamPos + 2048 );
-            rStream.ReadBytes( sBuf, 7 );
-
-            if( strncmp( sBuf, "PCD_IPI", 7 ) == 0 )
-            {
-                rFormatExtension = "PCD";
-                return true;
-            }
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
         }
     }
 
-    //--------------------------- PSD ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "PSD" ) )
+    if (!bTest ||
+        rFormatExtension.startsWith("WMF") ||
+        rFormatExtension.startsWith("EMF"))
     {
         bSomethingTested = true;
-        if ( ( nFirstLong == 0x38425053 ) && ( (nSecondLong >> 16 ) == 1 ) )
+        if (aDetector.checkWMForEMF())
         {
-            rFormatExtension = "PSD";
+            rFormatExtension = aDetector.msDetectedFormat;
             return true;
         }
     }
 
-    //--------------------------- EPS ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "EPS" ) )
+    if (!bTest || rFormatExtension.startsWith("PCX"))
     {
         bSomethingTested = true;
-        if ( ( nFirstLong == 0xC5D0D3C6 ) || ( ImplSearchEntry( sFirstBytes, reinterpret_cast<sal_uInt8 const *>("%!PS-Adobe"), 10, 10 ) &&
-             ImplSearchEntry( &sFirstBytes[15], reinterpret_cast<sal_uInt8 const *>("EPS"), 3, 3 ) ) )
+        if (aDetector.checkPCX())
         {
-            rFormatExtension = "EPS";
+            rFormatExtension = aDetector.msDetectedFormat;
             return true;
         }
     }
 
-    //--------------------------- DXF ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "DXF" ) )
-    {
-        // Binary DXF File Format
-        if( strncmp( reinterpret_cast<char*>(sFirstBytes), "AutoCAD Binary DXF", 18 ) == 0 )
-        {
-            rFormatExtension = "DXF";
-            return true;
-        }
-
-        // ASCII DXF File Format
-        int i=0;
-        while (i<256 && sFirstBytes[i]<=32)
-            ++i;
-
-        if (i<256 && sFirstBytes[i]=='0')
-        {
-            ++i;
-
-            // only now do we have sufficient data to make a judgement
-            // based on a '0' + 'SECTION' == DXF argument
-            bSomethingTested=true;
-
-            while( i<256 && sFirstBytes[i]<=32 )
-                ++i;
-
-            if (i+7<256 && (strncmp(reinterpret_cast<char*>(sFirstBytes+i),"SECTION",7)==0))
-            {
-                rFormatExtension = "DXF";
-                return true;
-            }
-        }
-
-    }
-
-    //--------------------------- PCT ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "PCT" ) )
+    if (!bTest || rFormatExtension.startsWith("TIF"))
     {
         bSomethingTested = true;
-        if (isPCT(rStream, nStreamPos, nStreamLen))
+        if (aDetector.checkTIF())
         {
-            rFormatExtension = "PCT";
+            rFormatExtension = aDetector.msDetectedFormat;
             return true;
         }
     }
 
-    //------------------------- PBM + PGM + PPM ---------------------------
-    if( !bTest ||
-        rFormatExtension.startsWith( "PBM" ) ||
-        rFormatExtension.startsWith( "PGM" ) ||
-        rFormatExtension.startsWith( "PPM" ) )
-    {
-        bSomethingTested=true;
-        if ( sFirstBytes[ 0 ] == 'P' )
-        {
-            switch( sFirstBytes[ 1 ] )
-            {
-                case '1' :
-                case '4' :
-                    rFormatExtension = "PBM";
-                return true;
-
-                case '2' :
-                case '5' :
-                    rFormatExtension = "PGM";
-                return true;
-
-                case '3' :
-                case '6' :
-                    rFormatExtension = "PPM";
-                return true;
-            }
-        }
-    }
-
-    //--------------------------- RAS( SUN RasterFile )------------------
-    if( !bTest || rFormatExtension.startsWith( "RAS" ) )
-    {
-        bSomethingTested=true;
-        if( nFirstLong == 0x59a66a95 )
-        {
-            rFormatExtension = "RAS";
-            return true;
-        }
-    }
-
-    //--------------------------- XPM ------------------------------------
-    if( !bTest )
+    if (!bTest || rFormatExtension.startsWith("GIF"))
     {
         bSomethingTested = true;
-        if( ImplSearchEntry( sFirstBytes, reinterpret_cast<sal_uInt8 const *>("/* XPM */"), 256, 9 ) )
+        if (aDetector.checkGIF())
         {
-            rFormatExtension = "XPM";
+            rFormatExtension = aDetector.msDetectedFormat;
             return true;
         }
     }
-    else if( rFormatExtension.startsWith( "XPM" ) )
+
+    if (!bTest || rFormatExtension.startsWith("PNG"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkPNG())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("JPG"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkJPG())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("SVM"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkSVM())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("PCD"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkPCD())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("PSD"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkPSD())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("EPS"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkEPS())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("DXF"))
+    {
+        if (aDetector.checkDXF())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("PCT"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkPCT())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest ||
+        rFormatExtension.startsWith("PBM") ||
+        rFormatExtension.startsWith("PGM") ||
+        rFormatExtension.startsWith("PPM"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkPBMorPGMorPPM())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("RAS"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkRAS())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest)
+    {
+        bSomethingTested = true;
+        if (aDetector.checkXPM())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+
+    }
+    else if (rFormatExtension.startsWith("XPM"))
     {
         return true;
     }
 
-    //--------------------------- XBM ------------------------------------
-    if( !bTest )
+    if (!bTest)
     {
-        sal_uLong nSize = std::min<sal_uLong>( nStreamLen, 2048 );
-        std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8 [ nSize ]);
-
-        rStream.Seek( nStreamPos );
-        rStream.ReadBytes( pBuf.get(), nSize );
-        sal_uInt8* pPtr = ImplSearchEntry( pBuf.get(), reinterpret_cast<sal_uInt8 const *>("#define"), nSize, 7 );
-
-        if( pPtr )
+        if (aDetector.checkXBM())
         {
-            if( ImplSearchEntry( pPtr, reinterpret_cast<sal_uInt8 const *>("_width"), pBuf.get() + nSize - pPtr, 6 ) )
-            {
-                rFormatExtension = "XBM";
-                return true;
-            }
-        }
-    }
-    else if( rFormatExtension.startsWith( "XBM" ) )
-    {
-        return true;
-    }
-
-    //--------------------------- SVG ------------------------------------
-    if( !bTest )
-    {
-        sal_uInt8* pCheckArray = sFirstBytes;
-        sal_uLong nCheckSize = std::min<sal_uLong>(nStreamLen, 256);
-
-        sal_uInt8 sExtendedOrDecompressedFirstBytes[2048];
-        sal_uLong nDecompressedSize = nCheckSize;
-
-        bool bIsGZip(false);
-
-        // check if it is gzipped -> svgz
-        if(sFirstBytes[0] == 0x1F && sFirstBytes[1] == 0x8B)
-        {
-            ZCodec aCodec;
-            rStream.Seek(nStreamPos);
-            aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, false, true);
-            nDecompressedSize = aCodec.Read(rStream, sExtendedOrDecompressedFirstBytes, 2048);
-            nCheckSize = std::min<sal_uLong>(nDecompressedSize, 256);
-            aCodec.EndCompression();
-            pCheckArray = sExtendedOrDecompressedFirstBytes;
-
-            bIsGZip = true;
-        }
-
-        bool bIsSvg(false);
-
-        // check for Xml
-        // #119176# SVG files which have no xml header at all have shown up this is optional
-        if( ImplSearchEntry(pCheckArray, reinterpret_cast<sal_uInt8 const *>("<?xml"), nCheckSize, 5 ) // is it xml
-            && ImplSearchEntry(pCheckArray, reinterpret_cast<sal_uInt8 const *>("version"), nCheckSize, 7 )) // does it have a version (required for xml)
-        {
-
-            // check for DOCTYPE svg combination
-            if( ImplSearchEntry(pCheckArray, reinterpret_cast<sal_uInt8 const *>("DOCTYPE"), nCheckSize, 7 ) // 'DOCTYPE' is there
-                && ImplSearchEntry(pCheckArray, reinterpret_cast<sal_uInt8 const *>("svg"), nCheckSize, 3 )) // 'svg' is there
-            {
-                bIsSvg = true;
-            }
-        }
-
-        // check for svg element in 1st 256 bytes
-        if(!bIsSvg && ImplSearchEntry(pCheckArray, reinterpret_cast<sal_uInt8 const *>("<svg"), nCheckSize, 4 )) // '<svg'
-        {
-            bIsSvg = true;
-        }
-
-        // extended search for svg element
-        if(!bIsSvg)
-        {
-            // it's a xml, look for '<svg' in full file. Should not happen too
-            // often since the tests above will handle most cases, but can happen
-            // with Svg files containing big comment headers or Svg as the host
-            // language
-
-            pCheckArray = sExtendedOrDecompressedFirstBytes;
-
-            if (bIsGZip)
-            {
-                nCheckSize = std::min<sal_uLong>(nDecompressedSize, 2048);
-            }
-            else
-            {
-                nCheckSize = std::min<sal_uLong>(nStreamLen, 2048);
-                rStream.Seek(nStreamPos);
-                nCheckSize = rStream.ReadBytes(sExtendedOrDecompressedFirstBytes, nCheckSize);
-            }
-
-            if(ImplSearchEntry(pCheckArray, reinterpret_cast<sal_uInt8 const *>("<svg"), nCheckSize, 4)) // '<svg'
-            {
-                bIsSvg = true;
-            }
-        }
-
-        if(bIsSvg)
-        {
-            rFormatExtension = "SVG";
+            rFormatExtension = aDetector.msDetectedFormat;
             return true;
         }
     }
-    else if( rFormatExtension.startsWith( "SVG" ) )
+    else if (rFormatExtension.startsWith("XBM"))
     {
         return true;
     }
 
-    //--------------------------- TGA ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "TGA" ) )
+    if (!bTest)
+    {
+        if (aDetector.checkSVG())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+    else if (rFormatExtension.startsWith("SVG"))
+    {
+        return true;
+    }
+
+    if (!bTest || rFormatExtension.startsWith("TGA"))
     {
         bSomethingTested = true;
-
-        // just a simple test for the extension
-        if( rFormatExtension.startsWith( "TGA" ) )
+        if (aDetector.checkTGA())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
             return true;
+        }
     }
 
-    if(!bTest || rFormatExtension.startsWith( "MOV" ))
+    if (!bTest || rFormatExtension.startsWith("MOV"))
     {
-        if ((sFirstBytes[ 4 ] == 'f' && sFirstBytes[ 5 ] == 't' && sFirstBytes[ 6 ] == 'y' &&
-             sFirstBytes[ 7 ] == 'p' && sFirstBytes[ 8 ] == 'q' && sFirstBytes[ 9 ] == 't') ||
-            (sFirstBytes[ 4 ] == 'm' && sFirstBytes[ 5 ] == 'o' && sFirstBytes[ 6 ] == 'o' &&
-             sFirstBytes[ 7 ] == 'v' && sFirstBytes[ 11 ] == 'l' && sFirstBytes[ 12 ] == 'm'))
+        if (aDetector.checkMOV())
         {
-            rFormatExtension = "MOV";
+            rFormatExtension = aDetector.msDetectedFormat;
             return true;
         }
     }
 
     if (!bTest || rFormatExtension.startsWith("PDF"))
     {
-        if (sFirstBytes[0] == '%' && sFirstBytes[1] == 'P' && sFirstBytes[2] == 'D' &&
-            sFirstBytes[3] == 'F' && sFirstBytes[4] == '-')
+        if (aDetector.checkPDF())
         {
-            rFormatExtension = "PDF";
+            rFormatExtension = aDetector.msDetectedFormat;
             return true;
         }
     }
