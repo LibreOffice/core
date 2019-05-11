@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/anycompare.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <osl/diagnose.h>
 #include <list>
@@ -655,44 +656,90 @@ bool SvXMLExportPropertyMapper::Equals(
         const vector< XMLPropertyState >& aProperties1,
         const vector< XMLPropertyState >& aProperties2 ) const
 {
-    bool bRet = true;
+    if (aProperties1.size() < aProperties2.size())
+        return true;
+    if (aProperties1.size() > aProperties2.size())
+        return false;
+
     sal_uInt32 nCount = aProperties1.size();
 
-    if( nCount == aProperties2.size() )
+    for (sal_uInt32 nIndex = 0; nIndex < nCount; ++nIndex)
     {
-        sal_uInt32 nIndex = 0;
-        while( bRet && nIndex < nCount )
-        {
-            const XMLPropertyState& rProp1 = aProperties1[ nIndex ];
-            const XMLPropertyState& rProp2 = aProperties2[ nIndex ];
+        const XMLPropertyState& rProp1 = aProperties1[ nIndex ];
+        const XMLPropertyState& rProp2 = aProperties2[ nIndex ];
 
-            // Compare index. If equal, compare value
-            if( rProp1.mnIndex == rProp2.mnIndex )
+        // Compare index. If equal, compare value
+        if( rProp1.mnIndex < rProp2.mnIndex )
+            return true;
+        if( rProp1.mnIndex > rProp2.mnIndex )
+            return false;
+
+        if( rProp1.mnIndex != -1 )
+        {
+            // Now compare values
+            if ( (mpImpl->mxPropMapper->GetEntryType( rProp1.mnIndex ) &
+                  XML_TYPE_BUILDIN_CMP ) != 0 )
             {
-                if( rProp1.mnIndex != -1 )
-                {
-                    // Now compare values
-                    if ( (mpImpl->mxPropMapper->GetEntryType( rProp1.mnIndex ) &
-                          XML_TYPE_BUILDIN_CMP ) != 0 )
-                        // simple type ( binary compare )
-                        bRet = ( rProp1.maValue == rProp2.maValue );
-                    else
-                        // complex type ( ask for compare-function )
-                        bRet = mpImpl->mxPropMapper->GetPropertyHandler(
-                                    rProp1.mnIndex )->equals( rProp1.maValue,
-                                                              rProp2.maValue );
-                }
+                // simple type ( binary compare )
+                if ( rProp1.maValue != rProp2.maValue)
+                    return false;
             }
             else
-                bRet = false;
-
-            nIndex++;
+            {
+                // complex type ( ask for compare-function )
+                if (!mpImpl->mxPropMapper->GetPropertyHandler(
+                            rProp1.mnIndex )->equals( rProp1.maValue,
+                                                      rProp2.maValue ))
+                    return false;
+            }
         }
     }
-    else
-        bRet = false;
 
-    return bRet;
+    return true;
+}
+
+// Compares two Sequences of XMLPropertyState:
+//  1.Number of elements equal ?
+//  2.Index of each element equal ? (So I know whether the propertynames are the same)
+//  3.Value of each element equal ?
+bool SvXMLExportPropertyMapper::LessPartial(
+        const vector< XMLPropertyState >& aProperties1,
+        const vector< XMLPropertyState >& aProperties2 ) const
+{
+    if (aProperties1.size() < aProperties2.size())
+        return true;
+    if (aProperties1.size() > aProperties2.size())
+        return false;
+
+    sal_uInt32 nCount = aProperties1.size();
+
+    for (sal_uInt32 nIndex = 0; nIndex < nCount; ++nIndex)
+    {
+        const XMLPropertyState& rProp1 = aProperties1[ nIndex ];
+        const XMLPropertyState& rProp2 = aProperties2[ nIndex ];
+
+        // Compare index. If equal, compare value
+        if( rProp1.mnIndex < rProp2.mnIndex )
+            return true;
+        if( rProp1.mnIndex > rProp2.mnIndex )
+            return false;
+
+        if( rProp1.mnIndex != -1 )
+        {
+            // Now compare values
+            if ( (mpImpl->mxPropMapper->GetEntryType( rProp1.mnIndex ) &
+                  XML_TYPE_BUILDIN_CMP ) != 0 )
+            {
+                // simple type ( binary compare )
+                if ( comphelper::anyLess(rProp1.maValue, rProp2.maValue) )
+                    return true;
+                if ( comphelper::anyLess(rProp2.maValue, rProp1.maValue ) )
+                    return false;
+            }
+        }
+    }
+
+    return false;
 }
 
 /** fills the given attribute list with the items in the given set
