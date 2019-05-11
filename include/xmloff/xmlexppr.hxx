@@ -124,8 +124,8 @@ public:
     std::vector<XMLPropertyState> FilterDefaults(
         const css::uno::Reference<css::beans::XPropertySet>& rPropSet ) const;
 
-    /** Compare to arrays of XMLPropertyState */
-    bool Equals( const ::std::vector< XMLPropertyState >& aProperties1,
+    /** Compare two arrays of XMLPropertyState */
+    int Compare( const ::std::vector< XMLPropertyState >& aProperties1,
                      const ::std::vector< XMLPropertyState >& aProperties2 ) const;
 
     void exportXML(

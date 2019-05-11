@@ -205,6 +205,10 @@ namespace comphelper
             css::uno::Reference< css::i18n::XCollator > const & i_collator
         );
 
+    /**
+        Compare two Anys.
+    */
+    bool COMPHELPER_DLLPUBLIC anyLess( css::uno::Any const & lhs, css::uno::Any const & rhs);
 
 } // namespace comphelper
 
