@@ -1867,7 +1867,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
     if ( !maSeparators.empty() && ( isSeparator(nPos) || isSeparator(nPos-1) ) )
     {
         Color aOldLineColor(rRenderContext.GetLineColor());
-        rRenderContext.SetLineColor((GetBackground().GetColor() != COL_LIGHTGRAY) ? COL_LIGHTGRAY : COL_GRAY);
+        rRenderContext.SetLineColor((GetBackground() != COL_LIGHTGRAY) ? COL_LIGHTGRAY : COL_GRAY);
         Point aStartPos(0, nY);
         if (isSeparator(nPos))
             aStartPos.AdjustY(pEntry->getHeightWithMargin() - 1 );

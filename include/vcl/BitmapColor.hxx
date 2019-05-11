@@ -22,203 +22,72 @@
 
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
+#include <cassert>
 #include <memory>
 
-class VCL_DLLPUBLIC BitmapColor final
+class VCL_DLLPUBLIC BitmapColor final : public Color
 {
-private:
-    sal_uInt8 mcBlueOrIndex;
-    sal_uInt8 mcGreen;
-    sal_uInt8 mcRed;
-    sal_uInt8 mcAlpha;
-
 public:
-
     inline              BitmapColor();
     constexpr           BitmapColor( sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue, sal_uInt8 cAlpha = 0 );
 
     inline              BitmapColor( const Color& rColor );
     explicit inline     BitmapColor( sal_uInt8 cIndex );
 
-    inline bool         operator==( const BitmapColor& rBitmapColor ) const;
-    inline bool         operator!=( const BitmapColor& rBitmapColor ) const;
-
-    inline sal_uInt8    GetRed() const;
-    inline void         SetRed( sal_uInt8 cRed );
-
-    inline sal_uInt8    GetGreen() const;
-    inline void         SetGreen( sal_uInt8 cGreen );
-
-    inline sal_uInt8    GetBlue() const;
-    inline void         SetBlue( sal_uInt8 cBlue );
-
     inline sal_uInt8    GetIndex() const;
     inline void         SetIndex( sal_uInt8 cIndex );
-
-    Color               GetColor() const;
 
     inline sal_uInt8    GetAlpha() const;
     inline void         SetAlpha( sal_uInt8 cAlpha );
 
-    inline sal_uInt8    GetBlueOrIndex() const;
-
-    inline BitmapColor& Invert();
-
-    inline sal_uInt8    GetLuminance() const;
-
-    inline BitmapColor& Merge( const BitmapColor& rColor, sal_uInt8 cTransparency );
-
-    inline sal_uInt16   GetColorError( const BitmapColor& rBitmapColor ) const;
+    inline sal_uInt16 GetColorError( const BitmapColor& rColor ) const;
 };
 
-template<typename charT, typename traits>
-inline std::basic_ostream<charT, traits>& operator <<(std::basic_ostream<charT, traits>& rStream, const BitmapColor& rColor)
-{
-    return rStream << "#(" << std::hex << std::setfill ('0') << std::setw(2) << static_cast<int>(rColor.GetRed())
-                           << std::setw(2) << static_cast<int>(rColor.GetGreen())
-                           << std::setw(2) << static_cast<int>(rColor.GetBlueOrIndex())
-                           << std::setw(2) << static_cast<int>(rColor.GetAlpha()) << ")";
-}
-
-inline BitmapColor::BitmapColor() :
-            mcBlueOrIndex   (0),
-            mcGreen         (0),
-            mcRed           (0),
-            mcAlpha         (0)
+inline BitmapColor::BitmapColor()
 {
 }
 
-constexpr BitmapColor::BitmapColor(sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue, sal_uInt8 cAlpha) :
-            mcBlueOrIndex   ( cBlue ),
-            mcGreen         ( cGreen ),
-            mcRed           ( cRed ),
-            mcAlpha         ( cAlpha )
+inline BitmapColor::BitmapColor( const Color& rColor )
+    : Color(rColor)
 {
 }
 
-inline BitmapColor::BitmapColor( const Color& rColor ) :
-            mcBlueOrIndex   ( rColor.GetBlue() ),
-            mcGreen         ( rColor.GetGreen() ),
-            mcRed           ( rColor.GetRed() ),
-            mcAlpha         ( rColor.GetTransparency() )
+constexpr BitmapColor::BitmapColor(sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue, sal_uInt8 cAlpha)
+    : Color(cAlpha, cRed, cGreen, cBlue)
 {
 }
 
-inline BitmapColor::BitmapColor( sal_uInt8 cIndex ) :
-            mcBlueOrIndex   ( cIndex ),
-            mcGreen         ( 0 ),
-            mcRed           ( 0 ),
-            mcAlpha         ( 0 )
+inline BitmapColor::BitmapColor( sal_uInt8 cIndex )
 {
-}
-
-inline bool BitmapColor::operator==( const BitmapColor& rBitmapColor ) const
-{
-    return mcBlueOrIndex == rBitmapColor.mcBlueOrIndex &&
-           mcGreen == rBitmapColor.mcGreen &&
-           mcRed == rBitmapColor.mcRed &&
-           mcAlpha == rBitmapColor.mcAlpha;
-}
-
-inline bool BitmapColor::operator!=( const BitmapColor& rBitmapColor ) const
-{
-    return !( *this == rBitmapColor );
-}
-
-inline sal_uInt8 BitmapColor::GetRed() const
-{
-    return mcRed;
-}
-
-inline void BitmapColor::SetRed( sal_uInt8 cRed )
-{
-    mcRed = cRed;
-}
-
-inline sal_uInt8 BitmapColor::GetGreen() const
-{
-    return mcGreen;
-}
-
-inline void BitmapColor::SetGreen( sal_uInt8 cGreen )
-{
-    mcGreen = cGreen;
-}
-
-inline sal_uInt8 BitmapColor::GetBlue() const
-{
-    return mcBlueOrIndex;
-}
-
-inline void BitmapColor::SetBlue( sal_uInt8 cBlue )
-{
-    mcBlueOrIndex = cBlue;
+    SetIndex(cIndex);
 }
 
 inline sal_uInt8 BitmapColor::GetIndex() const
 {
-    return mcBlueOrIndex;
+    return GetBlue();
 }
 
 inline void BitmapColor::SetIndex( sal_uInt8 cIndex )
 {
-    mcBlueOrIndex = cIndex;
-}
-
-inline Color BitmapColor::GetColor() const
-{
-    return Color(mcAlpha, mcRed, mcGreen, mcBlueOrIndex);
+    SetBlue(cIndex);
 }
 
 inline sal_uInt8 BitmapColor::GetAlpha() const
 {
-    return mcAlpha;
+    return GetTransparency();
 }
 
 inline void BitmapColor::SetAlpha( sal_uInt8 cAlpha )
 {
-    mcAlpha = cAlpha;
+    SetTransparency(cAlpha);
 }
 
-inline sal_uInt8 BitmapColor::GetBlueOrIndex() const
-{
-    // #i47518# Yield a value regardless of mbIndex
-    return mcBlueOrIndex;
-}
-
-inline BitmapColor& BitmapColor::Invert()
-{
-    mcBlueOrIndex = ~mcBlueOrIndex;
-    mcGreen = ~mcGreen;
-    mcRed = ~mcRed;
-
-    return *this;
-}
-
-inline sal_uInt8 BitmapColor::GetLuminance() const
-{
-    return (static_cast<sal_uInt32>(mcBlueOrIndex) * 28
-            + static_cast<sal_uInt32>(mcGreen) * 151
-            + static_cast<sal_uInt32>(mcRed) * 77) >> 8;
-}
-
-
-inline BitmapColor& BitmapColor::Merge( const BitmapColor& rBitmapColor, sal_uInt8 cTransparency )
-{
-    mcBlueOrIndex = ColorChannelMerge( mcBlueOrIndex, rBitmapColor.mcBlueOrIndex, cTransparency );
-    mcGreen = ColorChannelMerge( mcGreen, rBitmapColor.mcGreen, cTransparency );
-    mcRed = ColorChannelMerge( mcRed, rBitmapColor.mcRed, cTransparency );
-
-    return *this;
-}
-
-
-inline sal_uInt16 BitmapColor::GetColorError( const BitmapColor& rBitmapColor ) const
+inline sal_uInt16 BitmapColor::GetColorError( const BitmapColor& rColor ) const
 {
     return static_cast<sal_uInt16>(
-        abs( static_cast<int>(mcBlueOrIndex) - static_cast<int>(rBitmapColor.mcBlueOrIndex) ) +
-        abs( static_cast<int>(mcGreen) - static_cast<int>(rBitmapColor.mcGreen) ) +
-        abs( static_cast<int>(mcRed) - static_cast<int>(rBitmapColor.mcRed) ) );
+        abs( static_cast<int>(GetBlue()) - static_cast<int>(rColor.GetBlue()) ) +
+        abs( static_cast<int>(GetGreen()) - static_cast<int>(rColor.GetGreen()) ) +
+        abs( static_cast<int>(GetRed()) - static_cast<int>(rColor.GetRed()) ) );
 }
 
 #endif // INCLUDED_VCL_BITMAPCOLOR_HXX
