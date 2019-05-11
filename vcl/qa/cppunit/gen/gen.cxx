@@ -71,7 +71,7 @@ CPPUNIT_TEST_FIXTURE(GenTest, testTdf121120)
     Bitmap aBitmap = load("tdf121120.png");
     Bitmap::ScopedReadAccess pAccess(aBitmap);
     const Size& rSize = aBitmap.GetPrefSize();
-    Color aColor(pAccess->GetPixel(rSize.getWidth() / 2, rSize.getHeight() / 2).GetColor());
+    Color aColor(pAccess->GetPixel(rSize.getWidth() / 2, rSize.getHeight() / 2));
     // Without the accompanying fix in place, this test would have failed with 'Expected: 255;
     // Actual  : 1'. I.e. center of the preview (which has the background color) was ~black, not
     // white.
@@ -107,7 +107,7 @@ CPPUNIT_TEST_FIXTURE(GenTest, testTdf107966)
     // Make sure that the polygon is visible.
     Bitmap aBitmap = pVirtualDevice->GetBitmap(Point(), Size(1350, 15));
     Bitmap::ScopedReadAccess pAccess(aBitmap);
-    Color aPixel(pAccess->GetPixel(0, 0).GetColor());
+    Color aPixel(pAccess->GetPixel(0, 0));
     // Without the accompanying fix in place, this test would have failed with 'Expected: 000000;
     // Actual: ffffff', i.e. the top left pixel was white, not black.
     CPPUNIT_ASSERT_EQUAL(OUString("000000"), aPixel.AsRGBHexString());

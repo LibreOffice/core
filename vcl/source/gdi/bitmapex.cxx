@@ -324,7 +324,7 @@ bool BitmapEx::Invert()
         bRet = maBitmap.Invert();
 
         if (bRet && (meTransparent == TransparentType::Color))
-            maTransparentColor = BitmapColor(maTransparentColor).Invert().GetColor();
+            maTransparentColor.Invert();
     }
 
     return bRet;
@@ -705,10 +705,9 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
                     if(pRead)
                     {
                         const BitmapColor aBmpColor = pRead->GetColor(nY, nX);
-                        const Color aColor = aBmpColor.GetColor();
 
                         // If color is not equal to TransparentColor, we are not transparent
-                        if (aColor != maTransparentColor)
+                        if (aBmpColor != maTransparentColor)
                             nTransparency = 0x00;
 
                     }
@@ -753,7 +752,7 @@ Color BitmapEx::GetPixelColor(sal_Int32 nX, sal_Int32 nY) const
     Bitmap::ScopedReadAccess pReadAccess( const_cast<Bitmap&>(maBitmap) );
     assert(pReadAccess);
 
-    Color aColor = pReadAccess->GetColor(nY, nX).GetColor();
+    BitmapColor aColor = pReadAccess->GetColor(nY, nX);
 
     if (IsAlpha())
     {
@@ -1310,7 +1309,7 @@ void BitmapEx::setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
             Scanline pScanlineRead = pReadAccess->GetScanline( nY );
             for ( long nX = 0; nX < pReadAccess->Width(); nX++ )
             {
-                const sal_uInt8 cIndex = pReadAccess->GetPixelFromData( pScanlineRead, nX ).GetBlueOrIndex();
+                const sal_uInt8 cIndex = pReadAccess->GetPixelFromData( pScanlineRead, nX ).GetIndex();
                 if ( cIndex == cIndexFrom )
                     pWriteAccess->SetPixelOnData( pScanline, nX, BitmapColor(nAlphaTo) );
             }

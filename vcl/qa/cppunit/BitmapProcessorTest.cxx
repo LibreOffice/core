@@ -51,7 +51,7 @@ void BitmapProcessorTest::testDisabledImage()
         Bitmap aDisabledBitmap(aDisabledBitmapEx.GetBitmap());
         {
             Bitmap::ScopedReadAccess pReadAccess(aDisabledBitmap);
-            Color aColor(pReadAccess->GetPixel(0, 0).GetColor());
+            Color aColor(pReadAccess->GetPixel(0, 0));
             CPPUNIT_ASSERT_EQUAL(Color(0x00C5C5C5), aColor);
         }
     }
@@ -75,13 +75,13 @@ void BitmapProcessorTest::testDisabledImage()
         Bitmap aDisabledBitmap(aDisabledBitmapEx.GetBitmap());
         {
             Bitmap::ScopedReadAccess pReadAccess(aDisabledBitmap);
-            Color aColor(pReadAccess->GetPixel(0, 0).GetColor());
+            Color aColor(pReadAccess->GetPixel(0, 0));
             CPPUNIT_ASSERT_EQUAL(Color(0x00C5C5C5), aColor);
         }
         AlphaMask aDisabledAlphaMask(aDisabledBitmapEx.GetAlpha());
         {
             AlphaMask::ScopedReadAccess pReadAccess(aDisabledAlphaMask);
-            Color aColor(pReadAccess->GetPixel(0, 0).GetColor());
+            Color aColor(pReadAccess->GetPixel(0, 0));
             CPPUNIT_ASSERT_EQUAL(Color(0x0000AA), aColor);
         }
     }

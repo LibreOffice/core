@@ -214,7 +214,7 @@ public:
 
     sal_uInt8 GetPixelIndex(long nY, long nX) const
     {
-        return GetPixel(nY, nX).GetBlueOrIndex();
+        return GetPixel(nY, nX).GetIndex();
     }
 
     /** Get the interpolated color at coordinates fY, fX; if outside, return rFallback */
