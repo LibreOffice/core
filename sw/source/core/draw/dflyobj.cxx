@@ -521,7 +521,7 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject(
             {
                 // it is also necessary to restore the VCL MapMode from ViewInformation since e.g.
                 // the VCL PixelRenderer resets it at the used OutputDevice. Unfortunately, this
-                // excludes shears and rotates which are not expressable in MapMode.
+                // excludes shears and rotates which are not expressible in MapMode.
                 // OD #i102707#
                 // new helper class to restore MapMode - restoration, only if
                 // needed and consideration of paint for meta file creation .

@@ -157,7 +157,7 @@ public:
         other code.
 
         ATTENTION! May return empty strings if the language tag is not
-        expressable in valid ISO codes!
+        expressible in valid ISO codes!
 
         @see isIsoODF()
 
@@ -191,7 +191,7 @@ public:
     OUString                        getLanguageAndScript() const;
 
     /** Get ISO 3166 country alpha code. Empty if the BCP 47 tags denote a
-        region not expressable as 2 character country code.
+        region not expressible as 2 character country code.
 
         Always resolves an empty tag to the system locale.
      */

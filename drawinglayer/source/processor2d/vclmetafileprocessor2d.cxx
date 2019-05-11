@@ -1846,7 +1846,7 @@ namespace drawinglayer
             {
                 // #i121185# When rotation or shear is used, a VCL Gradient cannot be used directly.
                 // This is because VCL Gradient mechanism does *not* support to rotate the gradient
-                // with objects and this case is not expressable in a Metafile (and cannot be added
+                // with objects and this case is not expressible in a Metafile (and cannot be added
                 // since the FileFormats used, e.g. *.wmf, do not support it either).
                 // Such cases happen when a graphic object uses a Metafile as graphic information or
                 // a fill style definition uses a Metafile. In this cases the graphic content is
