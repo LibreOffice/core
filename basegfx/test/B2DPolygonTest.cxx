@@ -81,7 +81,7 @@ public:
 
     void testContainsOnlyHorizontalOrVerticalLines()
     {
-        // First line is horziontal, second is vertical.
+        // First line is horizontal, second is vertical.
         B2DPolygon aPoly;
         aPoly.append(B2DPoint(0, 1));
         aPoly.append(B2DPoint(1, 1));
