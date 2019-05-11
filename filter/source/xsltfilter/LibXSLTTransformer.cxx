@@ -408,14 +408,14 @@ namespace XSLT
     void
     LibXSLTTransformer::addListener(const css::uno::Reference<XStreamListener>& listener)
     {
-        m_listeners.insert(m_listeners.begin(), listener);
+        m_listeners.push_front(listener);
     }
 
     void
     LibXSLTTransformer::removeListener(
             const css::uno::Reference<XStreamListener>& listener)
     {
-        m_listeners.remove(listener);
+        m_listeners.erase( std::remove(m_listeners.begin(), m_listeners.end(), listener ), m_listeners.end() );
     }
 
     void
