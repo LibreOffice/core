@@ -420,6 +420,7 @@ cmd/32/tablecellbackgroundcolor.png cmd/32/formatarea.png
 cmd/32/tabledeletemenu.png cmd/32/deletetable.png
 cmd/32/tableevents.png cmd/32/animationeffects.png
 cmd/32/tableinsertmenu.png cmd/32/insertrowsafter.png
+cmd/32/tablemenu.png cmd/32/tabledialog.png
 cmd/32/tableselectall.png cmd/32/selecttable.png
 cmd/32/tableselectmenu.png cmd/32/selecttable.png
 cmd/32/tablesort.png cmd/32/datasort.png
@@ -964,6 +965,7 @@ cmd/lc_tablecellbackgroundcolor.png cmd/lc_formatarea.png
 cmd/lc_tabledeletemenu.png cmd/lc_deletetable.png
 cmd/lc_tableevents.png cmd/lc_animationeffects.png
 cmd/lc_tableinsertmenu.png cmd/lc_insertrowsafter.png
+cmd/lc_tablemenu.png cmd/lc_tabledialog.png
 cmd/lc_tableselectall.png cmd/lc_selecttable.png
 cmd/lc_tableselectmenu.png cmd/lc_selecttable.png
 cmd/lc_tablesort.png cmd/lc_datasort.png
@@ -1315,6 +1317,7 @@ cmd/sc_tablecellbackgroundcolor.png cmd/sc_formatarea.png
 cmd/sc_tabledeletemenu.png cmd/sc_deletetable.png
 cmd/sc_tableevents.png cmd/sc_animationeffects.png
 cmd/sc_tableinsertmenu.png cmd/sc_insertrowsafter.png
+cmd/sc_tablemenu.png cmd/sc_tabledialog.png
 cmd/sc_tableselectall.png cmd/sc_selecttable.png
 cmd/sc_tableselectmenu.png cmd/sc_selecttable.png
 cmd/sc_tablesort.png cmd/sc_datasort.png
