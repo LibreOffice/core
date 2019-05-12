@@ -12,8 +12,6 @@
 #include <PivotLayoutTreeListBase.hxx>
 #include <PivotLayoutDialog.hxx>
 
-#include <vcl/treelistentry.hxx>
-
 ScPivotLayoutTreeListBase::ScPivotLayoutTreeListBase(std::unique_ptr<weld::TreeView> xControl, SvPivotTreeListType eType)
     : mxControl(std::move(xControl))
     , maDropTargetHelper(*this)

@@ -44,8 +44,6 @@
 #include <vector>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
 #include <bitmaps.hlst>
 
 #include <unomid.h>

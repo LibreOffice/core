@@ -512,9 +512,6 @@ blacklist:
     sc/source/ui/inc/RandomNumberGeneratorDialog.hxx:
     # base class has to be a complete type
     - viewdata.hxx
-    sc/source/ui/inc/searchresults.hxx:
-    # Needed for VclPtr type
-    - svtools/simptabl.hxx
     sc/source/ui/inc/StatisticsInputOutputDialog.hxx:
     # base class has to be a complete type
     - viewdata.hxx

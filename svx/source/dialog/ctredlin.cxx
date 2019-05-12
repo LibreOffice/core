@@ -18,11 +18,8 @@
  */
 
 #include <comphelper/processfactory.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <unotools/textsearch.hxx>

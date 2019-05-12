@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CONSDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CONSDLG_HXX
 
-#include <vcl/lstbox.hxx>
-#include <vcl/layout.hxx>
 #include <global.hxx>
 #include "anyrefdg.hxx"
 

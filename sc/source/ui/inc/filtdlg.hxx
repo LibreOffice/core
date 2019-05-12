@@ -20,9 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_FILTDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_FILTDLG_HXX
 
-#include <vcl/combobox.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/layout.hxx>
 #include <address.hxx>
 #include "anyrefdg.hxx"
 #include <queryparam.hxx>

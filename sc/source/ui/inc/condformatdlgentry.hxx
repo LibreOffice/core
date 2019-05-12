@@ -12,9 +12,6 @@
 
 #include <conditio.hxx>
 #include <formula/funcutl.hxx>
-#include <vcl/vclptr.hxx>
-#include <vcl/builder.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
 #include <svl/lstner.hxx>
 #include <svx/fntctrl.hxx>

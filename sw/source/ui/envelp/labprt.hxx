@@ -19,9 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_ENVELP_LABPRT_HXX
 #define INCLUDED_SW_SOURCE_UI_ENVELP_LABPRT_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
-#include <vcl/layout.hxx>
 #include <sfx2/tabdlg.hxx>
 
 class SwLabDlg;

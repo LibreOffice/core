@@ -10,11 +10,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_XMLSOURCEDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_XMLSOURCEDLG_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/treelistbox.hxx>
-
 #include "anyrefdg.hxx"
 #include <orcusxml.hxx>
 
