@@ -655,8 +655,12 @@ Reference< XShape > const & Shape::createAndInsert(
     {
         aServiceName = finalizeServiceName( rFilterBase, rServiceName, aShapeRectHmm );
     }
+    bool bIsCroppedGraphic = (aServiceName == "com.sun.star.drawing.GraphicObjectShape" && mpCustomShapePropertiesPtr->getShapePresetType() >= 0);
     bool bIsCustomShape = ( aServiceName == "com.sun.star.drawing.CustomShape" ||
-                            aServiceName == "com.sun.star.drawing.ConnectorShape" );
+                            aServiceName == "com.sun.star.drawing.ConnectorShape" ||
+                            bIsCroppedGraphic);
+    if(bIsCroppedGraphic)
+            aServiceName = "com.sun.star.drawing.CustomShape";
     bool bUseRotationTransform = ( !mbWps ||
             aServiceName == "com.sun.star.drawing.LineShape" ||
             aServiceName == "com.sun.star.drawing.GroupShape" ||
@@ -962,13 +966,14 @@ Reference< XShape > const & Shape::createAndInsert(
         // applying properties
         aShapeProps.assignUsed( getShapeProperties() );
         aShapeProps.assignUsed( maDefaultShapeProperties );
-        if ( bIsEmbMedia || aServiceName == "com.sun.star.drawing.GraphicObjectShape" || aServiceName == "com.sun.star.drawing.OLE2Shape" )
-            mpGraphicPropertiesPtr->pushToPropMap( aShapeProps, rGraphicHelper );
+        if ( bIsEmbMedia || aServiceName == "com.sun.star.drawing.GraphicObjectShape" || aServiceName == "com.sun.star.drawing.OLE2Shape" || bIsCustomShape )
+            mpGraphicPropertiesPtr->pushToPropMap( aShapeProps, rGraphicHelper, bIsCustomShape );
         if ( mpTablePropertiesPtr.get() && aServiceName == "com.sun.star.drawing.TableShape" )
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
 
         FillProperties aFillProperties = getActualFillProperties(pTheme, &rShapeOrParentShapeFillProps);
-        aFillProperties.pushToPropMap( aShapeProps, rGraphicHelper, mnRotation, nFillPhClr, mbFlipH, mbFlipV );
+        if(!bIsCroppedGraphic)
+            aFillProperties.pushToPropMap( aShapeProps, rGraphicHelper, mnRotation, nFillPhClr, mbFlipH, mbFlipV );
         LineProperties aLineProperties = getActualLineProperties(pTheme);
         aLineProperties.pushToPropMap( aShapeProps, rGraphicHelper, nLinePhClr );
         EffectProperties aEffectProperties = getActualEffectProperties(pTheme);
