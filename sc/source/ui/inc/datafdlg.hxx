@@ -10,11 +10,9 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DATAFDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DATAFDLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <types.hxx>
+#include "viewfunc.hxx"
 
 class ScTabViewShell;
 class ScDocument;
@@ -22,19 +20,9 @@ class ScDocument;
 #define MAX_DATAFORM_COLS   256
 #define MAX_DATAFORM_ROWS   32000
 
-class ScDataFormDlg : public ModalDialog
+class ScDataFormDlg : public weld::GenericDialogController
 {
 private:
-
-    VclPtr<PushButton>     m_pBtnNew;
-    VclPtr<PushButton>     m_pBtnDelete;
-    VclPtr<PushButton>     m_pBtnRestore;
-    VclPtr<PushButton>     m_pBtnPrev;
-    VclPtr<PushButton>     m_pBtnNext;
-    VclPtr<PushButton>     m_pBtnClose;
-    VclPtr<ScrollBar>      m_pSlider;
-    VclPtr<VclGrid>        m_pGrid;
-    VclPtr<FixedText>      m_pFixedText;
     OUString        sNewRecord;
 
     ScTabViewShell* pTabViewShell;
@@ -47,13 +35,20 @@ private:
     SCROW           nEndRow;
     SCTAB           nTab;
 
-    std::vector<VclPtr<FixedText> > maFixedTexts;
-    std::vector<VclPtr<Edit> >      maEdits;
+    std::unique_ptr<weld::Button> m_xBtnNew;
+    std::unique_ptr<weld::Button> m_xBtnDelete;
+    std::unique_ptr<weld::Button> m_xBtnRestore;
+    std::unique_ptr<weld::Button> m_xBtnPrev;
+    std::unique_ptr<weld::Button> m_xBtnNext;
+    std::unique_ptr<weld::Button> m_xBtnClose;
+    std::unique_ptr<weld::ScrolledWindow> m_xSlider;
+    std::unique_ptr<weld::Container> m_xGrid;
+    std::unique_ptr<weld::Label> m_xFixedText;
+    std::vector<std::unique_ptr<ScDataFormFragment>> m_aEntries;
 
 public:
-    ScDataFormDlg( vcl::Window* pParent, ScTabViewShell* pTabViewShell);
+    ScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShell);
     virtual ~ScDataFormDlg() override;
-    virtual void dispose() override;
 
     void FillCtrls();
 private:
@@ -61,16 +56,16 @@ private:
     void SetButtonState();
 
     // Handler:
-    DECL_LINK(Impl_NewHdl, Button*, void);
-    DECL_LINK(Impl_PrevHdl, Button*, void);
-    DECL_LINK(Impl_NextHdl, Button*, void);
+    DECL_LINK(Impl_NewHdl, weld::Button&, void);
+    DECL_LINK(Impl_PrevHdl, weld::Button&, void);
+    DECL_LINK(Impl_NextHdl, weld::Button&, void);
 
-    DECL_LINK(Impl_RestoreHdl, Button*, void);
-    DECL_LINK(Impl_DeleteHdl, Button*, void);
-    DECL_LINK(Impl_CloseHdl, Button*, void);
+    DECL_LINK(Impl_RestoreHdl, weld::Button&, void);
+    DECL_LINK(Impl_DeleteHdl, weld::Button&, void);
+    DECL_LINK(Impl_CloseHdl, weld::Button&, void);
 
-    DECL_LINK(Impl_ScrollHdl, ScrollBar*, void);
-    DECL_LINK(Impl_DataModifyHdl, Edit&, void);
+    DECL_LINK(Impl_ScrollHdl, weld::ScrolledWindow&, void);
+    DECL_LINK(Impl_DataModifyHdl, weld::Entry&, void);
 };
 #endif // INCLUDED_SC_SOURCE_UI_INC_DATAFDLG_HXX
 

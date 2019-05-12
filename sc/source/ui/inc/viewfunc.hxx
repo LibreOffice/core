@@ -59,6 +59,15 @@ struct ColRowSpan;
 
 namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
 
+struct ScDataFormFragment
+{
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Label> m_xLabel;
+    std::unique_ptr<weld::Entry> m_xEdit;
+
+    ScDataFormFragment(weld::Container* pGrid, int nLine);
+};
+
 class ScViewFunc : public ScTabView
 {
 private:
@@ -320,11 +329,11 @@ public:
     bool            SelectionEditable( bool* pOnlyNotBecauseOfMatrix = nullptr );
 
     SC_DLLPUBLIC void
-                    DataFormPutData( SCROW nCurrentRow ,
-                                     SCROW nStartRow , SCCOL nStartCol ,
-                                     SCROW nEndRow , SCCOL nEndCol ,
-                                     std::vector<VclPtr<Edit> >& aEdits,
-                                     sal_uInt16 aColLength );
+                    DataFormPutData(SCROW nCurrentRow ,
+                                    SCROW nStartRow , SCCOL nStartCol ,
+                                    SCROW nEndRow , SCCOL nEndCol ,
+                                    std::vector<std::unique_ptr<ScDataFormFragment>>& rEdits,
+                                    sal_uInt16 aColLength);
     void            UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAttr = nullptr );
 
     void            OnLOKInsertDeleteColumn(SCCOL nStartCol, long nOffset);

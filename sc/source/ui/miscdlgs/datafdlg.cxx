@@ -15,11 +15,12 @@
 #include <tabvwsh.hxx>
 
 #include <rtl/ustrbuf.hxx>
+#include <vcl/svapp.hxx>
 
 #define HDL(hdl)            LINK( this, ScDataFormDlg, hdl )
 
-ScDataFormDlg::ScDataFormDlg(vcl::Window* pParent, ScTabViewShell* pTabViewShellOri)
-    : ModalDialog(pParent, "DataFormDialog", "modules/scalc/ui/dataform.ui")
+ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShellOri)
+    : GenericDialogController(pParent, "modules/scalc/ui/dataform.ui", "DataFormDialog")
     , pTabViewShell(pTabViewShellOri)
     , aColLength(0)
     , nCurrentRow(0)
@@ -28,17 +29,19 @@ ScDataFormDlg::ScDataFormDlg(vcl::Window* pParent, ScTabViewShell* pTabViewShell
     , nStartRow(0)
     , nEndRow(0)
     , nTab(0)
+    , m_xBtnNew(m_xBuilder->weld_button("new"))
+    , m_xBtnDelete(m_xBuilder->weld_button("delete"))
+    , m_xBtnRestore(m_xBuilder->weld_button("restore"))
+    , m_xBtnPrev(m_xBuilder->weld_button("prev"))
+    , m_xBtnNext(m_xBuilder->weld_button("next"))
+    , m_xBtnClose(m_xBuilder->weld_button("close"))
+    , m_xSlider(m_xBuilder->weld_scrolled_window("scrollbar"))
+    , m_xGrid(m_xBuilder->weld_container("grid"))
+    , m_xFixedText(m_xBuilder->weld_label("label"))
 {
-    get(m_pBtnNew, "new");
-    get(m_pBtnDelete, "delete");
-    get(m_pBtnRestore, "restore");
-    get(m_pBtnPrev, "prev");
-    get(m_pBtnNext, "next");
-    get(m_pBtnClose, "close");
-    get(m_pFixedText, "label");
-    sNewRecord = m_pFixedText->GetText();
-    get(m_pSlider, "scrollbar");
-    get(m_pGrid, "grid");
+    m_xSlider->set_user_managed_scrolling();
+
+    sNewRecord = m_xFixedText->get_label();
 
     //read header form current document, and add new controls
     OSL_ENSURE( pTabViewShell, "pTabViewShell is NULL! :-/" );
@@ -142,8 +145,7 @@ ScDataFormDlg::ScDataFormDlg(vcl::Window* pParent, ScTabViewShell* pTabViewShell
         aColLength = nEndCol - nStartCol + 1;
 
         //new the controls
-        maFixedTexts.reserve(aColLength);
-        maEdits.reserve(aColLength);
+        m_aEntries.reserve(aColLength);
 
         sal_Int32 nGridRow = 0;
         for(sal_uInt16 nIndex = 0; nIndex < aColLength; ++nIndex)
@@ -152,92 +154,60 @@ ScDataFormDlg::ScDataFormDlg(vcl::Window* pParent, ScTabViewShell* pTabViewShell
             int nColWidth = pDoc->GetColWidth( nIndex + nStartCol, nTab );
             if (nColWidth)
             {
-                maFixedTexts.push_back( VclPtr<FixedText>::Create(m_pGrid) );
-                maEdits.push_back( VclPtr<Edit>::Create(m_pGrid, WB_BORDER) );
-
-                maFixedTexts[nIndex]->set_grid_left_attach(0);
-                maEdits[nIndex]->set_grid_left_attach(1);
-                maFixedTexts[nIndex]->set_grid_top_attach(nGridRow);
-                maEdits[nIndex]->set_grid_top_attach(nGridRow);
-
-                maEdits[nIndex]->SetWidthInChars(32);
-                maEdits[nIndex]->set_hexpand(true);
+                m_aEntries.emplace_back(new ScDataFormFragment(m_xGrid.get(), nGridRow));
 
                 ++nGridRow;
 
-                maFixedTexts[nIndex]->SetText(aFieldName);
-                maFixedTexts[nIndex]->Show();
-                maEdits[nIndex]->Show();
+                m_aEntries[nIndex]->m_xLabel->set_label(aFieldName);
+                m_aEntries[nIndex]->m_xLabel->show();
+                m_aEntries[nIndex]->m_xEdit->show();
             }
             else
             {
-                maFixedTexts.emplace_back(nullptr );
-                maEdits.emplace_back(nullptr );
+                m_aEntries.emplace_back(nullptr );
             }
-            if (maEdits[nIndex] != nullptr)
-                maEdits[nIndex]->SetModifyHdl( HDL(Impl_DataModifyHdl) );
+            if (m_aEntries[nIndex] != nullptr)
+            {
+                m_aEntries[nIndex]->m_xEdit->connect_changed(HDL(Impl_DataModifyHdl));
+                m_aEntries[nIndex]->m_xEdit->save_value();
+            }
         }
     }
 
     FillCtrls();
 
-    m_pSlider->SetPageSize( 10 );
-    m_pSlider->SetVisibleSize( 1 );
-    m_pSlider->SetLineSize( 1 );
-    m_pSlider->SetRange( Range( 0, nEndRow - nStartRow + 1) );
-    m_pSlider->Show();
+    m_xSlider->vadjustment_configure(0, 0, nEndRow - nStartRow + 1, 1, 10, 1);
 
-    m_pBtnNew->SetClickHdl(HDL(Impl_NewHdl));
-    m_pBtnPrev->SetClickHdl(HDL(Impl_PrevHdl));
-    m_pBtnNext->SetClickHdl(HDL(Impl_NextHdl));
+    m_xBtnNew->connect_clicked(HDL(Impl_NewHdl));
+    m_xBtnPrev->connect_clicked(HDL(Impl_PrevHdl));
+    m_xBtnNext->connect_clicked(HDL(Impl_NextHdl));
 
-    m_pBtnRestore->SetClickHdl(HDL(Impl_RestoreHdl));
-    m_pBtnDelete->SetClickHdl(HDL(Impl_DeleteHdl));
-    m_pBtnClose->SetClickHdl(HDL(Impl_CloseHdl));
+    m_xBtnRestore->connect_clicked(HDL(Impl_RestoreHdl));
+    m_xBtnDelete->connect_clicked(HDL(Impl_DeleteHdl));
+    m_xBtnClose->connect_clicked(HDL(Impl_CloseHdl));
 
-    m_pSlider->SetEndScrollHdl(HDL(Impl_ScrollHdl));
+    m_xSlider->connect_vadjustment_changed(HDL(Impl_ScrollHdl));
 
     SetButtonState();
 }
 
 ScDataFormDlg::~ScDataFormDlg()
 {
-    disposeOnce();
-}
-
-void ScDataFormDlg::dispose()
-{
-    m_pBtnNew.clear();
-    m_pBtnDelete.clear();
-    m_pBtnRestore.clear();
-    m_pBtnPrev.clear();
-    m_pBtnNext.clear();
-    m_pBtnClose.clear();
-    m_pSlider.clear();
-    m_pFixedText.clear();
-    for ( auto& rxFTIter : maFixedTexts )
-        rxFTIter.disposeAndClear();
-    for ( auto& rxEdit : maEdits )
-        rxEdit.disposeAndClear();
-    maFixedTexts.clear();
-    maEdits.clear();
-    m_pGrid.clear();
-    ModalDialog::dispose();
 }
 
 void ScDataFormDlg::FillCtrls()
 {
     for (sal_uInt16 i = 0; i < aColLength; ++i)
     {
-        if (maEdits[i] != nullptr)
+        if (m_aEntries[i])
         {
             if (nCurrentRow<=nEndRow && pDoc)
             {
-                OUString  aFieldName(pDoc->GetString(i + nStartCol, nCurrentRow, nTab));
-                maEdits[i]->SetText(aFieldName);
+                OUString aFieldName(pDoc->GetString(i + nStartCol, nCurrentRow, nTab));
+                m_aEntries[i]->m_xEdit->set_text(aFieldName);
             }
             else
-                maEdits[i]->SetText(OUString());
+                m_aEntries[i]->m_xEdit->set_text(OUString());
         }
     }
 
@@ -247,37 +217,37 @@ void ScDataFormDlg::FillCtrls()
         aBuf.append(static_cast<sal_Int32>(nCurrentRow - nStartRow));
         aBuf.append(" / ");
         aBuf.append(static_cast<sal_Int32>(nEndRow - nStartRow));
-        m_pFixedText->SetText(aBuf.makeStringAndClear());
+        m_xFixedText->set_label(aBuf.makeStringAndClear());
     }
     else
-        m_pFixedText->SetText(sNewRecord);
+        m_xFixedText->set_label(sNewRecord);
 
-    m_pSlider->SetThumbPos(nCurrentRow-nStartRow-1);
+    m_xSlider->vadjustment_set_value(nCurrentRow-nStartRow-1);
 }
 
-IMPL_LINK( ScDataFormDlg, Impl_DataModifyHdl, Edit&, rEdit, void)
+IMPL_LINK( ScDataFormDlg, Impl_DataModifyHdl, weld::Entry&, rEdit, void)
 {
-    if ( rEdit.IsModified() )
-        m_pBtnRestore->Enable();
+    if (rEdit.get_value_changed_from_saved())
+        m_xBtnRestore->set_sensitive(true);
 }
 
-IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl, Button*, void)
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl, weld::Button&, void)
 {
     ScViewData& rViewData = pTabViewShell->GetViewData();
     ScDocShell* pDocSh = rViewData.GetDocShell();
     if ( pDoc )
     {
-        bool bHasData = std::any_of(maEdits.begin(), maEdits.end(),
-            [](const VclPtr<Edit>& rxEdit) { return (rxEdit != nullptr) && (!rxEdit->GetText().isEmpty()); });
+        bool bHasData = std::any_of(m_aEntries.begin(), m_aEntries.end(),
+            [](const std::unique_ptr<ScDataFormFragment>& rElem) { return (rElem != nullptr) && (!rElem->m_xEdit->get_text().isEmpty()); });
 
         if ( bHasData )
         {
-            pTabViewShell->DataFormPutData( nCurrentRow , nStartRow , nStartCol , nEndRow , nEndCol , maEdits , aColLength );
+            pTabViewShell->DataFormPutData(nCurrentRow, nStartRow, nStartCol, nEndRow, nEndCol, m_aEntries, aColLength);
             nCurrentRow++;
             if (nCurrentRow >= nEndRow + 2)
             {
-                    nEndRow ++ ;
-                    m_pSlider->SetRange( Range( 0, nEndRow - nStartRow + 1) );
+                nEndRow++;
+                m_xSlider->vadjustment_set_upper(nEndRow - nStartRow + 1);
             }
             SetButtonState();
             FillCtrls();
@@ -287,7 +257,7 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(ScDataFormDlg, Impl_PrevHdl, Button*, void)
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_PrevHdl, weld::Button&, void)
 {
     if (pDoc)
     {
@@ -299,7 +269,7 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_PrevHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(ScDataFormDlg, Impl_NextHdl, Button*, void)
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_NextHdl, weld::Button&, void)
 {
     if (pDoc)
     {
@@ -311,7 +281,7 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NextHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(ScDataFormDlg, Impl_RestoreHdl, Button*, void)
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_RestoreHdl, weld::Button&, void)
 {
     if (pDoc)
     {
@@ -319,7 +289,7 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_RestoreHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(ScDataFormDlg, Impl_DeleteHdl, Button*, void)
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_DeleteHdl, weld::Button&, void)
 {
     ScViewData& rViewData = pTabViewShell->GetViewData();
     ScDocShell* pDocSh = rViewData.GetDocShell();
@@ -338,14 +308,14 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_DeleteHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(ScDataFormDlg, Impl_CloseHdl, Button*, void)
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_CloseHdl, weld::Button&, void)
 {
-    EndDialog( );
+    m_xDialog->response(RET_CANCEL);
 }
 
-IMPL_LINK_NOARG(ScDataFormDlg, Impl_ScrollHdl, ScrollBar*, void)
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_ScrollHdl, weld::ScrolledWindow&, void)
 {
-    long nOffset = m_pSlider->GetThumbPos();
+    auto nOffset = m_xSlider->vadjustment_get_value();
     nCurrentRow = nStartRow + nOffset + 1;
     SetButtonState();
     FillCtrls();
@@ -355,23 +325,35 @@ void ScDataFormDlg::SetButtonState()
 {
     if (nCurrentRow > nEndRow)
     {
-        m_pBtnDelete->Enable( false );
-        m_pBtnNext->Enable( false );
+        m_xBtnDelete->set_sensitive( false );
+        m_xBtnNext->set_sensitive( false );
     }
     else
     {
-        m_pBtnDelete->Enable();
-        m_pBtnNext->Enable();
+        m_xBtnDelete->set_sensitive(true);
+        m_xBtnNext->set_sensitive(true);
     }
 
     if (nCurrentRow == nStartRow + 1)
-        m_pBtnPrev->Enable( false );
+        m_xBtnPrev->set_sensitive( false );
     else
-        m_pBtnPrev->Enable();
+        m_xBtnPrev->set_sensitive(true);
 
-    m_pBtnRestore->Enable( false );
-    if ( !maEdits.empty() && maEdits[0] != nullptr )
-        maEdits[0]->GrabFocus();
+    m_xBtnRestore->set_sensitive( false );
+    if (!m_aEntries.empty() && m_aEntries[0] != nullptr)
+        m_aEntries[0]->m_xEdit->grab_focus();
+}
+
+ScDataFormFragment::ScDataFormFragment(weld::Container* pGrid, int nLine)
+    : m_xBuilder(Application::CreateBuilder(pGrid, "modules/scalc/ui/dataformfragment.ui"))
+    , m_xLabel(m_xBuilder->weld_label("label"))
+    , m_xEdit(m_xBuilder->weld_entry("entry"))
+{
+    m_xLabel->set_grid_left_attach(0);
+    m_xLabel->set_grid_top_attach(nLine);
+
+    m_xEdit->set_grid_left_attach(1);
+    m_xEdit->set_grid_top_attach(nLine);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1934,7 +1934,7 @@ bool ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPos )
 void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
                                   SCROW nStartRow , SCCOL nStartCol ,
                                   SCROW nEndRow , SCCOL nEndCol ,
-                                  std::vector<VclPtr<Edit> >& aEdits,
+                                  std::vector<std::unique_ptr<ScDataFormFragment>>& rEdits,
                                   sal_uInt16 aColLength )
 {
     ScDocument* pDoc = GetViewData().GetDocument();
@@ -1975,9 +1975,9 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
 
         for(sal_uInt16 i = 0; i < aColLength; i++)
         {
-            if (aEdits[i] != nullptr)
+            if (rEdits[i] != nullptr)
             {
-                OUString  aFieldName=aEdits[i]->GetText();
+                OUString aFieldName = rEdits[i]->m_xEdit->get_text();
                 pDoc->SetString( nStartCol + i, nCurrentRow, nTab, aFieldName );
             }
         }
