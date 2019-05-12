@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CONFLICTSDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CONFLICTSDLG_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/idle.hxx>
 #include <svx/ctredlin.hxx>
 
