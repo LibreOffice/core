@@ -205,6 +205,8 @@ Qt5Instance::Qt5Instance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
     , m_postUserEventId(-1)
     , m_bUseCairo(bUseCairo)
     , m_pQApplication(std::move(pQApp))
+    , m_aUpdateStyleTimer("vcl::qt5 m_aUpdateStyleTimer")
+    , m_bUpdateFonts(false)
 {
     ImplSVData* pSVData = ImplGetSVData();
     if (bUseCairo)
@@ -226,6 +228,9 @@ Qt5Instance::Qt5Instance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
     connect(this, &Qt5Instance::deleteObjectLaterSignal, this,
             [](QObject* pObject) { Qt5Instance::deleteObjectLater(pObject); },
             Qt::QueuedConnection);
+
+    m_aUpdateStyleTimer.SetTimeout(50);
+    m_aUpdateStyleTimer.SetInvokeHandler(LINK(this, Qt5Instance, updateStyleHdl));
 }
 
 Qt5Instance::~Qt5Instance()
@@ -438,6 +443,29 @@ Reference<XInterface> Qt5Instance::CreateDragSource()
 Reference<XInterface> Qt5Instance::CreateDropTarget()
 {
     return Reference<XInterface>(static_cast<cppu::OWeakObject*>(new Qt5DropTarget()));
+}
+
+IMPL_LINK_NOARG(Qt5Instance, updateStyleHdl, Timer*, void)
+{
+    SolarMutexGuard aGuard;
+    SalFrame* pFrame = anyFrame();
+    if (pFrame)
+    {
+        pFrame->CallCallback(SalEvent::SettingsChanged, nullptr);
+        if (m_bUpdateFonts)
+        {
+            pFrame->CallCallback(SalEvent::FontChanged, nullptr);
+            m_bUpdateFonts = false;
+        }
+    }
+}
+
+void Qt5Instance::UpdateStyle(bool bFontsChanged)
+{
+    if (bFontsChanged)
+        m_bUpdateFonts = true;
+    if (!m_aUpdateStyleTimer.IsActive())
+        m_aUpdateStyleTimer.Start();
 }
 
 void Qt5Instance::AllocFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
