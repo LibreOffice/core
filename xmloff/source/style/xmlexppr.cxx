@@ -287,27 +287,25 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
         if (!bDefault)
         {
             Sequence < beans::GetDirectPropertyTolerantResult > aResults(xTolPropSet->getDirectPropertyValuesTolerant(rApiNames));
-            sal_Int32 nResultCount(aResults.getLength());
-            if (nResultCount > 0)
+            if (aResults.hasElements())
             {
-                const beans::GetDirectPropertyTolerantResult *pResults = aResults.getConstArray();
                 FilterPropertyInfoList_Impl::iterator aPropIter(aPropInfos.begin());
                 XMLPropertyState aNewProperty( -1 );
                 sal_uInt32 i = 0;
-                while (nResultCount > 0 && i < nCount)
+                for (const auto& rResult : aResults)
                 {
-                    if (pResults->Name == aPropIter->GetApiName())
+                    if (i >= nCount)
+                        break;
+                    if (rResult.Name == aPropIter->GetApiName())
                     {
                         aNewProperty.mnIndex = -1;
-                        aNewProperty.maValue = pResults->Value;
+                        aNewProperty.maValue = rResult.Value;
 
                         for (auto const& index : aPropIter->GetIndexes())
                         {
                             aNewProperty.mnIndex = index;
                             aPropStates.AddPropertyState( aNewProperty );
                         }
-                        ++pResults;
-                        --nResultCount;
                     }
                     ++aPropIter;
                     ++i;
@@ -318,18 +316,16 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
         {
             Sequence < beans::GetPropertyTolerantResult > aResults(xTolPropSet->getPropertyValuesTolerant(rApiNames));
             OSL_ENSURE( rApiNames.getLength() == aResults.getLength(), "wrong implemented XTolerantMultiPropertySet" );
-            const beans::GetPropertyTolerantResult *pResults = aResults.getConstArray();
             FilterPropertyInfoList_Impl::iterator aPropIter(aPropInfos.begin());
             XMLPropertyState aNewProperty( -1 );
-            sal_uInt32 nResultCount(aResults.getLength());
-            OSL_ENSURE( nCount == nResultCount, "wrong implemented XTolerantMultiPropertySet??" );
-            for( sal_uInt32 i = 0; i < nResultCount; ++i )
+            OSL_ENSURE( nCount == aResults.getLength(), "wrong implemented XTolerantMultiPropertySet??" );
+            for( const auto& rResult : aResults )
             {
-                if ((pResults->Result == beans::TolerantPropertySetResultType::SUCCESS) &&
-                    ((pResults->State == PropertyState_DIRECT_VALUE) || (pResults->State == PropertyState_DEFAULT_VALUE)))
+                if ((rResult.Result == beans::TolerantPropertySetResultType::SUCCESS) &&
+                    ((rResult.State == PropertyState_DIRECT_VALUE) || (rResult.State == PropertyState_DEFAULT_VALUE)))
                 {
                     aNewProperty.mnIndex = -1;
-                    aNewProperty.maValue = pResults->Value;
+                    aNewProperty.maValue = rResult.Value;
 
                     for (auto const& index : aPropIter->GetIndexes())
                     {
@@ -337,7 +333,6 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                         aPropStates.AddPropertyState( aNewProperty );
                     }
                 }
-                ++pResults;
                 ++aPropIter;
             }
         }
@@ -923,23 +918,20 @@ void SvXMLExportPropertyMapper::_exportXML(
             const SvXMLNamespaceMap *pNamespaceMap = &rNamespaceMap;
 
             uno::Sequence< OUString > aAttribNames( xAttrContainer->getElementNames() );
-            const OUString* pAttribName = aAttribNames.getConstArray();
-
-            const sal_Int32 nCount = aAttribNames.getLength();
 
             OUStringBuffer sNameBuffer;
             xml::AttributeData aData;
-            for( sal_Int32 i=0; i < nCount; i++, pAttribName++ )
+            for( const auto& rAttribName : aAttribNames )
             {
-                xAttrContainer->getByName( *pAttribName ) >>= aData;
-                OUString sAttribName( *pAttribName );
+                xAttrContainer->getByName( rAttribName ) >>= aData;
+                OUString sAttribName( rAttribName );
 
                 // extract namespace prefix from attribute name if it exists
                 OUString sPrefix;
                 const sal_Int32 nColonPos =
-                    pAttribName->indexOf( ':' );
+                    rAttribName.indexOf( ':' );
                 if( nColonPos != -1 )
-                    sPrefix = pAttribName->copy( 0, nColonPos );
+                    sPrefix = rAttribName.copy( 0, nColonPos );
 
                 if( !sPrefix.isEmpty() )
                 {
@@ -986,7 +978,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                                 sPrefix = pNamespaceMap->GetPrefixByKey( nKey );
                             }
                             // In any case, the attribute name has to be adapted.
-                            sNameBuffer.append(sPrefix).append(":").append(std::u16string_view(*pAttribName).substr(nColonPos+1) );
+                            sNameBuffer.append(sPrefix).append(":").append(std::u16string_view(rAttribName).substr(nColonPos+1) );
                             sAttribName = sNameBuffer.makeStringAndClear();
                         }
 

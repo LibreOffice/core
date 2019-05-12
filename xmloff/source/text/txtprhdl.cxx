@@ -637,25 +637,13 @@ bool XMLTextColumnsPropertyHandler::equals(
 
     Sequence < TextColumn > aColumns1 = xColumns1->getColumns();
     Sequence < TextColumn > aColumns2 = xColumns2->getColumns();
-    sal_Int32 nCount = aColumns1.getLength();
-    if( aColumns2.getLength() != nCount )
-        return false;
 
-    const TextColumn *pColumns1 = aColumns1.getArray();
-    const TextColumn *pColumns2 = aColumns2.getArray();
-
-    while( nCount-- )
-    {
-        if( pColumns1->Width != pColumns2->Width ||
-             pColumns1->LeftMargin != pColumns2->LeftMargin ||
-             pColumns1->RightMargin != pColumns2->RightMargin )
-            return false;
-
-        pColumns1++;
-        pColumns2++;
-    }
-
-    return true;
+    return std::equal(aColumns1.begin(), aColumns1.end(), aColumns2.begin(), aColumns2.end(),
+        [](const TextColumn& a, const TextColumn& b) {
+            return a.Width == b.Width
+                && a.LeftMargin == b.LeftMargin
+                && a.RightMargin == b.RightMargin;
+        });
 }
 
 bool XMLTextColumnsPropertyHandler::importXML(
