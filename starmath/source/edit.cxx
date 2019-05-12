@@ -86,8 +86,6 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     // Even RTL languages don't use RTL for math
     EnableRTL( false );
 
-    ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
-
     // compare DataChanged
     SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
 
@@ -190,25 +188,15 @@ EditEngine * SmEditWindow::GetEditEngine()
     return pEditEng;
 }
 
-void SmEditWindow::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
+void SmEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    // Note: SetBackground still done in SmEditWindow::DataChanged
-    SetTextColor( rColorCfg.GetColorValue(svtools::FONTCOLOR).nColor );
-    Invalidate();
-}
+    Window::DataChanged( rDCEvt );
 
-void SmEditWindow::DataChanged( const DataChangedEvent& )
-{
-    const StyleSettings aSettings( GetSettings().GetStyleSettings() );
-
-    // FIXME RenderContext
-
-    ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
-    SetBackground( aSettings.GetWindowColor() );
-
-    // edit fields in other Applications use this font instead of
-    // the application font thus we use this one too
-    SetPointFont(*this, aSettings.GetFieldFont() /*aSettings.GetAppFont()*/);
+    if (!((rDCEvt.GetType() == DataChangedEventType::FONTS) ||
+          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
+          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
+           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))))
+        return;
 
     EditEngine *pEditEngine = GetEditEngine();
     SmDocShell *pDoc = GetDoc();
@@ -218,10 +206,13 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
         //!
         //! see also SmDocShell::GetEditEngine() !
         //!
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+
+        pDoc->UpdateEditEngineDefaultFonts();
 
         pEditEngine->SetDefTab(sal_uInt16(GetTextWidth("XXXX")));
-
-        SetEditEngineDefaultFonts(pDoc->GetEditEngineItemPool(), pDoc->GetLinguOptions());
+        pEditEngine->SetTextColor(rStyleSettings.GetFieldTextColor());
+        pEditEngine->SetBackgroundColor(rStyleSettings.GetFieldColor());
 
         // forces new settings to be used
         // unfortunately this resets the whole edit engine
@@ -229,10 +220,12 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
         OUString aTxt( pEditEngine->GetText() );
         pEditEngine->Clear();   //incorrect font size
         pEditEngine->SetText( aTxt );
+
+        AdjustScrollBars();
+        Resize();
     }
 
-    AdjustScrollBars();
-    Resize();
+    Invalidate();
 }
 
 IMPL_LINK_NOARG( SmEditWindow, ModifyTimerHdl, Timer *, void )
@@ -348,7 +341,6 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
             Window::Command (rCEvt);
     }
 }
-
 
 bool SmEditWindow::HandleWheelCommands( const CommandEvent &rCEvt )
 {

@@ -216,6 +216,8 @@ public:
 
     void            SetBackgroundColor( const Color& rColor );
     Color const &   GetBackgroundColor() const;
+    void            SetTextColor( const Color& rColor );
+    Color const &   GetTextColor() const;
     Color           GetAutoColor() const;
     void            EnableAutoColor( bool b );
     void            ForceAutoColor( bool b );

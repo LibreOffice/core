@@ -117,8 +117,6 @@ public:
     void Flush();
     void DeleteEditView();
 
-    void ApplyColorConfigValues(const svtools::ColorConfig& rColorCfg);
-
     bool HandleWheelCommands(const CommandEvent& rCEvt);
     bool IsInlineEditEnabled();
     void StartCursorMove();

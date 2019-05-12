@@ -4418,7 +4418,9 @@ Reference < i18n::XExtendedInputSequenceChecker > const & ImpEditEngine::ImplGet
 
 Color ImpEditEngine::GetAutoColor() const
 {
-    Color aColor = GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+    Color aColor = GetTextColor();
+    if ( aColor == COL_AUTO )
+        aColor = GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
 
     if ( GetBackgroundColor() != COL_AUTO )
     {
