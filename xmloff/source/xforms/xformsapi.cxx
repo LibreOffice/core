@@ -114,12 +114,10 @@ static Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
             {
                 // iterate over all models
                 Sequence<OUString> aNames = xForms->getElementNames();
-                const OUString* pNames = aNames.getConstArray();
-                sal_Int32 nNames = aNames.getLength();
-                for( sal_Int32 n = 0; (n < nNames) && !xRet.is(); n++ )
+                for( const auto& rName : aNames )
                 {
                     Reference<xforms::XModel2> xModel(
-                        xForms->getByName( pNames[n] ), UNO_QUERY );
+                        xForms->getByName( rName ), UNO_QUERY );
                     if( xModel.is() )
                     {
                         // ask model for bindings
@@ -134,6 +132,9 @@ static Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
                             xRet.set( xBindings->getByName( rBindingID ),
                                       UNO_QUERY );
                     }
+
+                    if (xRet.is())
+                        break;
                 }
             }
         }

@@ -63,7 +63,6 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
     rAny >>= xColumns;
 
     Sequence < TextColumn > aColumns = xColumns->getColumns();
-    const TextColumn *pColumns = aColumns.getArray();
     sal_Int32 nCount = aColumns.getLength();
 
     OUStringBuffer sValue;
@@ -166,28 +165,27 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
         }
     }
 
-    while( nCount-- )
+    for (const auto& rColumn : aColumns)
     {
         // style:rel-width
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_REL_WIDTH,
-                                  OUString::number(pColumns->Width) + "*" );
+                                  OUString::number(rColumn.Width) + "*" );
 
         // fo:margin-left
         GetExport().GetMM100UnitConverter().convertMeasureToXML( sValue,
-                                                       pColumns->LeftMargin );
+                                                       rColumn.LeftMargin );
         GetExport().AddAttribute( XML_NAMESPACE_FO, XML_START_INDENT,
                                        sValue.makeStringAndClear() );
 
         // fo:margin-right
         GetExport().GetMM100UnitConverter().convertMeasureToXML( sValue,
-                                                       pColumns->RightMargin );
+                                                       rColumn.RightMargin );
         GetExport().AddAttribute( XML_NAMESPACE_FO, XML_END_INDENT,
                                     sValue.makeStringAndClear() );
 
         // style:column
         SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_STYLE, XML_COLUMN,
                                   true, true );
-        pColumns++;
     }
 }
 

@@ -200,11 +200,9 @@ void XMLPageExport::exportStyles( bool bUsed, bool bAutoStyles )
     if( xPageStyles.is() )
     {
         uno::Sequence< OUString> aSeq = xPageStyles->getElementNames();
-        const OUString* pIter = aSeq.getConstArray();
-        const OUString* pEnd   = pIter + aSeq.getLength();
-        for(;pIter != pEnd;++pIter)
+        for(const auto& rName : aSeq)
         {
-            Reference< XStyle > xStyle(xPageStyles->getByName( *pIter ),uno::UNO_QUERY);
+            Reference< XStyle > xStyle(xPageStyles->getByName( rName ),uno::UNO_QUERY);
             if( !bUsed || xStyle->isInUse() )
                 exportStyle( xStyle, bAutoStyles );
         }

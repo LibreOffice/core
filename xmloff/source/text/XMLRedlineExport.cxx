@@ -470,11 +470,8 @@ void XMLRedlineExport::ExportChangeInfo(
 {
     OUString sComment;
 
-    sal_Int32 nCount = rPropertyValues.getLength();
-    for(sal_Int32 i = 0; i < nCount; i++)
+    for(const PropertyValue& rVal : rPropertyValues)
     {
-        const PropertyValue& rVal = rPropertyValues[i];
-
         if( rVal.Name == "RedlineAuthor" )
         {
             OUString sTmp;
@@ -536,28 +533,26 @@ void XMLRedlineExport::ExportStartOrEndRedline(
 
     Sequence<PropertyValue> aValues;
     aAny >>= aValues;
-    const PropertyValue* pValues = aValues.getConstArray();
 
     // seek for redline properties
     bool bIsCollapsed = false;
     bool bIsStart = true;
     OUString sId;
     bool bIdOK = false; // have we seen an ID?
-    sal_Int32 nLength = aValues.getLength();
-    for(sal_Int32 i = 0; i < nLength; i++)
+    for(const auto& rValue : aValues)
     {
-        if (pValues[i].Name == "RedlineIdentifier")
+        if (rValue.Name == "RedlineIdentifier")
         {
-            pValues[i].Value >>= sId;
+            rValue.Value >>= sId;
             bIdOK = true;
         }
-        else if (pValues[i].Name == "IsCollapsed")
+        else if (rValue.Name == "IsCollapsed")
         {
-            bIsCollapsed = *o3tl::doAccess<bool>(pValues[i].Value);
+            bIsCollapsed = *o3tl::doAccess<bool>(rValue.Value);
         }
-        else if (pValues[i].Name == "IsStart")
+        else if (rValue.Name == "IsStart")
         {
-            bIsStart = *o3tl::doAccess<bool>(pValues[i].Value);
+            bIsStart = *o3tl::doAccess<bool>(rValue.Value);
         }
     }
 

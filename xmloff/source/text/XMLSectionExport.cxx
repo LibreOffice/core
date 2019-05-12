@@ -1035,14 +1035,11 @@ bool XMLSectionExport::ExportIndexTemplate(
                                           true, true);
 
         // export sequence
-        sal_Int32 nTemplateCount = rValues.getLength();
-        for(sal_Int32 nTemplateNo = 0;
-            nTemplateNo < nTemplateCount;
-            nTemplateNo++)
+        for(auto& rValue : rValues)
         {
             ExportIndexTemplateElement(
                 eType,  //i90246
-                rValues[nTemplateNo]);
+                rValue);
         }
     }
 
@@ -1192,11 +1189,10 @@ void XMLSectionExport::ExportIndexTemplateElement(
     // token type
     enum TemplateTypeEnum nTokenType = TOK_TTYPE_INVALID;
 
-    sal_Int32 nCount = rValues.getLength();
-    for(sal_Int32 i = 0; i<nCount; i++)
+    for(const auto& rValue : rValues)
     {
         TemplateParamEnum nToken;
-        if ( SvXMLUnitConverter::convertEnum( nToken, rValues[i].Name,
+        if ( SvXMLUnitConverter::convertEnum( nToken, rValue.Name,
                                               aTemplateParamMap ) )
         {
             // Only use direct and default values.
@@ -1209,54 +1205,54 @@ void XMLSectionExport::ExportIndexTemplateElement(
                 case TOK_TPARAM_TOKEN_TYPE:
                 {
                     OUString sVal;
-                    rValues[i].Value >>= sVal;
+                    rValue.Value >>= sVal;
                     SvXMLUnitConverter::convertEnum( nTokenType, sVal, aTemplateTypeMap);
                     break;
                 }
 
                 case TOK_TPARAM_CHAR_STYLE:
                     // only valid, if not empty
-                    rValues[i].Value >>= sCharStyle;
+                    rValue.Value >>= sCharStyle;
                     bCharStyleOK = !sCharStyle.isEmpty();
                     break;
 
                 case TOK_TPARAM_TEXT:
-                    rValues[i].Value >>= sText;
+                    rValue.Value >>= sText;
                     bTextOK = true;
                     break;
 
                 case TOK_TPARAM_TAB_RIGHT_ALIGNED:
                     bRightAligned =
-                        *o3tl::doAccess<bool>(rValues[i].Value);
+                        *o3tl::doAccess<bool>(rValue.Value);
                     break;
 
                 case TOK_TPARAM_TAB_POSITION:
-                    rValues[i].Value >>= nTabPosition;
+                    rValue.Value >>= nTabPosition;
                     bTabPositionOK = true;
                     break;
 
                 // #i21237#
                 case TOK_TPARAM_TAB_WITH_TAB:
-                    bWithTabStop = *o3tl::doAccess<bool>(rValues[i].Value);
+                    bWithTabStop = *o3tl::doAccess<bool>(rValue.Value);
                     bWithTabStopOK = true;
                     break;
 
                 case TOK_TPARAM_TAB_FILL_CHAR:
-                    rValues[i].Value >>= sFillChar;
+                    rValue.Value >>= sFillChar;
                     bFillCharOK = true;
                     break;
 
                 case TOK_TPARAM_CHAPTER_FORMAT:
-                    rValues[i].Value >>= nChapterFormat;
+                    rValue.Value >>= nChapterFormat;
                     bChapterFormatOK = true;
                     break;
 //---> i53420
                 case TOK_TPARAM_CHAPTER_LEVEL:
-                    rValues[i].Value >>= nLevel;
+                    rValue.Value >>= nLevel;
                     bLevelOK = true;
                     break;
                 case TOK_TPARAM_BIBLIOGRAPHY_DATA:
-                    rValues[i].Value >>= nBibliographyData;
+                    rValue.Value >>= nBibliographyData;
                     bBibliographyDataOK = true;
                     break;
             }
@@ -1514,8 +1510,7 @@ void XMLSectionExport::ExportLevelParagraphStyles(
         aAny >>= aStyleNames;
 
         // export only if at least one style is contained
-        sal_Int32 nNamesCount = aStyleNames.getLength();
-        if (nNamesCount > 0)
+        if (aStyleNames.hasElements())
         {
             // level attribute; we count 1..10; API 0..9
             sal_Int32 nLevelPlusOne = nLevel + 1;
@@ -1530,12 +1525,12 @@ void XMLSectionExport::ExportLevelParagraphStyles(
                                            true, true);
 
             // iterate over styles in this level
-            for(sal_Int32 nName = 0; nName < nNamesCount; nName++)
+            for(const auto& rStyleName : aStyleNames)
             {
                 // stylename attribute
                 GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                          XML_STYLE_NAME,
-                             GetExport().EncodeStyleName( aStyleNames[nName]) );
+                             GetExport().EncodeStyleName(rStyleName) );
 
                 // element
                 SvXMLElementExport aParaStyle(GetExport(),
@@ -1648,16 +1643,10 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
             aAny = xPropSet->getPropertyValue(sSortKeys);
             Sequence<Sequence<PropertyValue> > aKeys;
             aAny >>= aKeys;
-            sal_Int32 nKeysCount = aKeys.getLength();
-            for(sal_Int32 nKeys = 0; nKeys < nKeysCount; nKeys++)
+            for(Sequence<PropertyValue> & rKey : aKeys)
             {
-                Sequence<PropertyValue> & rKey = aKeys[nKeys];
-
-                sal_Int32 nKeyCount = rKey.getLength();
-                for(sal_Int32 nPropertyKey = 0; nPropertyKey < nKeyCount; nPropertyKey++)
+                for(PropertyValue& rValue : rKey)
                 {
-                    PropertyValue& rValue = rKey[nPropertyKey];
-
                     if (rValue.Name == "SortKey")
                     {
                         sal_Int16 nKey = 0;
@@ -1817,14 +1806,11 @@ void XMLSectionExport::ExportMasterDocHeadingDummies()
         OUString sStyle;
         Sequence<PropertyValue> aProperties;
         xChapterNumbering->getByIndex( nLevel ) >>= aProperties;
-        for( sal_Int32 i = 0; i < aProperties.getLength(); i++ )
-        {
-            if( aProperties[i].Name == "HeadingStyleName" )
-            {
-                aProperties[i].Value >>= sStyle;
-                break;
-            }
-        }
+        auto pProp = std::find_if(aProperties.begin(), aProperties.end(),
+            [](const PropertyValue& rProp) { return rProp.Name == "HeadingStyleName"; });
+        if (pProp != aProperties.end())
+            pProp->Value >>= sStyle;
+
         if( !sStyle.isEmpty() )
         {
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,

@@ -107,12 +107,8 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
     sal_Int32 nFirstLineIndent( 0 );
     sal_Int32 nIndentAt( 0 );
 
-    const sal_Int32 nCount = rProps.getLength();
-    const beans::PropertyValue* pPropArray = rProps.getConstArray();
-    for( sal_Int32 i=0; i<nCount; i++ )
+    for( const beans::PropertyValue& rProp : rProps )
     {
-        const beans::PropertyValue& rProp = pPropArray[i];
-
         if( rProp.Name == "NumberingType" )
         {
             rProp.Value >>= eType;

@@ -392,40 +392,28 @@ enum FieldIdEnum XMLTextFieldExport::GetFieldID(
     // get service names for rTextField (via XServiceInfo service)
     Reference<XServiceInfo> xService(rTextField, UNO_QUERY);
     const Sequence<OUString> aServices = xService->getSupportedServiceNames();
-    const OUString* pNames = aServices.getConstArray();
-    sal_Int32 nCount = aServices.getLength();
 
     OUString sFieldName;    // service name postfix of current field
 
     // search for TextField service name
-    while( nCount-- )
+    const OUString* pNames = std::find_if(aServices.begin(), aServices.end(),
+        [](const OUString& rName) { return rName.matchIgnoreAsciiCase(gsServicePrefix); });
+    if (pNames != aServices.end())
     {
-        if (pNames->matchIgnoreAsciiCase(gsServicePrefix))
-        {
-            // TextField found => postfix is field type!
-            sFieldName = pNames->copy(gsServicePrefix.getLength());
-            break;
-        }
-
-        ++pNames;
+        // TextField found => postfix is field type!
+        sFieldName = pNames->copy(gsServicePrefix.getLength());
     }
 
     // if this is not a normal text field, check if it's a presentation text field
     if( sFieldName.isEmpty() )
     {
-        const OUString* pNames2 = aServices.getConstArray();
-        sal_Int32 nCount2 = aServices.getLength();
         // search for TextField service name
-        while( nCount2-- )
+        pNames = std::find_if(aServices.begin(), aServices.end(),
+            [](const OUString& rName) { return rName.startsWith(gsPresentationServicePrefix); });
+        if (pNames != aServices.end())
         {
-            if( pNames2->startsWith(gsPresentationServicePrefix) )
-            {
-                // TextField found => postfix is field type!
-                sFieldName = pNames2->copy(gsPresentationServicePrefix.getLength());
-                break;
-            }
-
-            ++pNames2;
+            // TextField found => postfix is field type!
+            sFieldName = pNames->copy(gsPresentationServicePrefix.getLength());
         }
 
         if( !sFieldName.isEmpty() )
@@ -1963,10 +1951,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
         aFieldMasters = xFieldMasterNameAccess->getElementNames();
     }
 
-    for(sal_Int32 i=0; i<aFieldMasters.getLength(); i++) {
-
-        // get field master name
-        OUString sFieldMaster = aFieldMasters[i];
+    for(const OUString& sFieldMaster : aFieldMasters) {
 
         // workaround for #no-bug#
         if ( sFieldMaster.startsWithIgnoreAsciiCase(
@@ -2707,13 +2692,12 @@ void XMLTextFieldExport::ProcessBibliographyData(
     aAny >>= aValues;
 
     // one attribute per value (unless empty)
-    sal_Int32 nLength = aValues.getLength();
-    for (sal_Int32 i = 0; i < nLength; i++)
+    for (const auto& rProp : aValues)
     {
-        if( aValues[i].Name == "BibiliographicType" )
+        if( rProp.Name == "BibiliographicType" )
         {
             sal_Int16 nTypeId = 0;
-            aValues[i].Value >>= nTypeId;
+            rProp.Value >>= nTypeId;
             OUStringBuffer sBuf;
 
             if (SvXMLUnitConverter::convertEnum(sBuf, nTypeId,
@@ -2728,12 +2712,12 @@ void XMLTextFieldExport::ProcessBibliographyData(
         else
         {
             OUString sStr;
-            aValues[i].Value >>= sStr;
+            rProp.Value >>= sStr;
 
             if (!sStr.isEmpty())
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT,
-                                     MapBibliographyFieldName(aValues[i].Name),
+                                     MapBibliographyFieldName(rProp.Name),
                                      sStr);
             }
         }
@@ -2762,14 +2746,7 @@ void XMLTextFieldExport::ProcessStringSequence(
     const OUString& sSelected )
 {
     // find selected element
-    sal_Int32 nSelected = -1;
-    sal_Int32 nLength = rSequence.getLength();
-    const OUString* pSequence = rSequence.getConstArray();
-    for( sal_Int32 i = 0; i < nLength; i++ )
-    {
-        if( pSequence[i] == sSelected )
-            nSelected = i;
-    }
+    sal_Int32 nSelected = comphelper::findValue(rSequence, sSelected);
 
     // delegate to ProcessStringSequence(OUString,sal_Int32)
     ProcessStringSequence( rSequence, nSelected );

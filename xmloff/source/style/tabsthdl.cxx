@@ -34,39 +34,23 @@ XMLTabStopPropHdl::~XMLTabStopPropHdl()
 
 bool XMLTabStopPropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
 {
-    bool bEqual = false;
-
     uno::Sequence< style::TabStop> aSeq1;
     if( r1 >>= aSeq1 )
     {
         uno::Sequence< style::TabStop> aSeq2;
         if( r2 >>= aSeq2 )
         {
-            if( aSeq1.getLength() == aSeq2.getLength() )
-            {
-                bEqual = true;
-                if( aSeq1.hasElements() )
-                {
-                    const style::TabStop* pTabs1 = aSeq1.getConstArray();
-                    const style::TabStop* pTabs2 = aSeq2.getConstArray();
-
-                    int i=0;
-
-                    do
-                    {
-                        bEqual = ( pTabs1[i].Position == pTabs2[i].Position       &&
-                                   pTabs1[i].Alignment == pTabs2[i].Alignment     &&
-                                   pTabs1[i].DecimalChar == pTabs2[i].DecimalChar &&
-                                   pTabs1[i].FillChar == pTabs2[i].FillChar );
-                        i++;
-
-                    } while( bEqual && i < aSeq1.getLength() );
-                }
-            }
+            return std::equal(aSeq1.begin(), aSeq1.end(), aSeq2.begin(), aSeq2.end(),
+                [](const style::TabStop& a, const style::TabStop& b) {
+                    return a.Position == b.Position
+                        && a.Alignment == b.Alignment
+                        && a.DecimalChar == b.DecimalChar
+                        && a.FillChar == b.FillChar;
+                });
         }
     }
 
-    return bEqual;
+    return false;
 }
 
 bool XMLTabStopPropHdl::importXML( const OUString&, css::uno::Any&, const SvXMLUnitConverter& ) const

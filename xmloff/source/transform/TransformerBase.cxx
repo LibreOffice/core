@@ -374,10 +374,7 @@ void SAL_CALL XMLTransformerBase::unknown( const OUString& /*rString*/ )
 // XInitialize
 void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments )
 {
-    const sal_Int32 nAnyCount = aArguments.getLength();
-    const Any* pAny = aArguments.getConstArray();
-
-    for( sal_Int32 nIndex = 0; nIndex < nAnyCount; nIndex++, pAny++ )
+    for( const auto& rArgument : aArguments )
     {
         // use isAssignableFrom instead of comparing the types to
         // allow XExtendedDocumentHandler instead of XDocumentHandler (used in
@@ -386,9 +383,9 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
         // uses queryInterface, and the model also has a XPropertySet interface.
 
         // document handler
-        if( cppu::UnoType<XDocumentHandler>::get().isAssignableFrom( pAny->getValueType() ) )
+        if( cppu::UnoType<XDocumentHandler>::get().isAssignableFrom( rArgument.getValueType() ) )
         {
-            m_xHandler.set( *pAny, UNO_QUERY );
+            m_xHandler.set( rArgument, UNO_QUERY );
         // Type change to avoid crashing of dynamic_cast
             if (SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport*>(
                                 uno::Reference< XFastDocumentHandler >( m_xHandler, uno::UNO_QUERY ).get() ) )
@@ -396,12 +393,12 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
         }
 
         // property set to transport data across
-        if( cppu::UnoType<XPropertySet>::get().isAssignableFrom( pAny->getValueType() ) )
-            m_xPropSet.set( *pAny, UNO_QUERY );
+        if( cppu::UnoType<XPropertySet>::get().isAssignableFrom( rArgument.getValueType() ) )
+            m_xPropSet.set( rArgument, UNO_QUERY );
 
         // xmodel
-        if( cppu::UnoType<css::frame::XModel>::get().isAssignableFrom( pAny->getValueType() ) )
-            mxModel.set( *pAny, UNO_QUERY );
+        if( cppu::UnoType<css::frame::XModel>::get().isAssignableFrom( rArgument.getValueType() ) )
+            mxModel.set( rArgument, UNO_QUERY );
     }
 
     if( m_xPropSet.is() )

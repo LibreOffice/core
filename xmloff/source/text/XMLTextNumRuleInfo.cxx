@@ -177,17 +177,11 @@ void XMLTextNumRuleInfo::Set(
         Sequence<PropertyValue> aProps;
         mxNumRules->getByIndex( mnListLevel ) >>= aProps;
 
-        const PropertyValue* pPropArray = aProps.getConstArray();
-        sal_Int32 nCount = aProps.getLength();
-        for( sal_Int32 i=0; i<nCount; i++ )
+        auto pProp = std::find_if(aProps.begin(), aProps.end(),
+            [](const PropertyValue& rProp) { return rProp.Name == "StartWith"; });
+        if (pProp != aProps.end())
         {
-            const PropertyValue& rProp = pPropArray[i];
-
-            if ( rProp.Name == "StartWith" )
-            {
-                rProp.Value >>= mnListLevelStartValue;
-                break;
-            }
+            pProp->Value >>= mnListLevelStartValue;
         }
 
         msListLabelString.clear();
