@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:45 using:
+ Generated on 2019-05-12 16:57:00 using:
  ./bin/update_pch reportdesign rptui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -252,7 +252,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
@@ -327,7 +326,6 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/svxfont.hxx>
 #include <editeng/unoipset.hxx>
-#include <formula/IFunctionDescription.hxx>
 #include <formula/compiler.hxx>
 #include <formula/formuladllapi.h>
 #include <formula/opcode.hxx>
@@ -386,42 +384,16 @@
 #include <svx/ipolypolygoneditorcontroller.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/sdangitm.hxx>
-#include <svx/sdasitm.hxx>
-#include <svx/sderitm.hxx>
-#include <svx/sdgcoitm.hxx>
 #include <svx/sdgcpitm.hxx>
-#include <svx/sdggaitm.hxx>
-#include <svx/sdginitm.hxx>
-#include <svx/sdgluitm.hxx>
-#include <svx/sdgmoitm.hxx>
-#include <svx/sdgtritm.hxx>
-#include <svx/sdmetitm.hxx>
-#include <svx/sdooitm.hxx>
-#include <svx/sdprcitm.hxx>
 #include <svx/sdr/animation/animationstate.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include <svx/sdrobjectuser.hxx>
 #include <svx/sdrpageuser.hxx>
-#include <svx/sdshcitm.hxx>
-#include <svx/sdshitm.hxx>
-#include <svx/sdshtitm.hxx>
-#include <svx/sdsxyitm.hxx>
-#include <svx/sdtaaitm.hxx>
-#include <svx/sdtacitm.hxx>
 #include <svx/sdtaditm.hxx>
-#include <svx/sdtagitm.hxx>
-#include <svx/sdtaiitm.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/sdtakitm.hxx>
-#include <svx/sdtayitm.hxx>
-#include <svx/sdtcfitm.hxx>
-#include <svx/sdtditm.hxx>
-#include <svx/sdtfsitm.hxx>
-#include <svx/sdtmfitm.hxx>
-#include <svx/sdynitm.hxx>
 #include <svx/selectioncontroller.hxx>
 #include <svx/shapeproperty.hxx>
 #include <svx/svdcrtv.hxx>

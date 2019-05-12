@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-03-11 18:28:02 using:
+ Generated on 2019-05-12 16:57:00 using:
  ./bin/update_pch sal sal --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -43,6 +43,10 @@
 #include <vector>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
 #include <osl/endian.h>
@@ -105,10 +109,6 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <salusesyslog.hxx>
-#endif // PCH_LEVEL >= 2
-#if PCH_LEVEL >= 3
-#endif // PCH_LEVEL >= 3
-#if PCH_LEVEL >= 4
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

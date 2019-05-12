@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:33 using:
+ Generated on 2019-05-12 16:56:43 using:
  ./bin/update_pch accessibility acc --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -82,8 +82,6 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <salhelper/salhelperdllapi.h>
-#include <salhelper/simplereferenceobject.hxx>
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/accel.hxx>
@@ -167,6 +165,7 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext2.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
@@ -275,6 +274,8 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <salhelper/salhelperdllapi.h>
+#include <salhelper/simplereferenceobject.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sot/sotdllapi.h>

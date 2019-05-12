@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:19:21 using:
+ Generated on 2019-05-12 16:58:06 using:
  ./bin/update_pch xmlsecurity xmlsecurity --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -66,9 +66,7 @@
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
-#include <rtl/unload.h>
 #include <rtl/uri.hxx>
-#include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -124,14 +122,11 @@
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -140,7 +135,6 @@
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
@@ -150,17 +144,12 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
-#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
-#include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
-#include <com/sun/star/xml/crypto/sax/XSAXEventKeeper.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/implbase_ex_post.hxx>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:38 using:
+ Generated on 2019-05-12 16:56:51 using:
  ./bin/update_pch dbaccess dbu --cutoff=12 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstring>
+#include <functional>
 #include <limits>
 #include <map>
 #include <memory>
@@ -58,8 +59,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/types.h>
-#include <salhelper/simplereferenceobject.hxx>
-#include <salhelper/singletonref.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
@@ -131,6 +130,8 @@
 #include <cppuhelper/weak.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <salhelper/simplereferenceobject.hxx>
+#include <salhelper/singletonref.hxx>
 #include <sfx2/dllapi.h>
 #include <sot/formats.hxx>
 #include <svl/eitem.hxx>

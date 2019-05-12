@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:19:00 using:
+ Generated on 2019-05-12 16:57:18 using:
  ./bin/update_pch sd sdui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -46,7 +46,6 @@
 #include <string_view>
 #include <type_traits>
 #include <typeinfo>
-#include <unordered_map>
 #include <utility>
 #include <vector>
 #include <boost/optional.hpp>
@@ -84,7 +83,6 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <salhelper/simplereferenceobject.hxx>
 #include <vcl/BitmapColor.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicExternalLink.hxx>
@@ -173,7 +171,6 @@
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
@@ -252,6 +249,7 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/linksrc.hxx>
@@ -283,35 +281,9 @@
 #include <svx/drawitem.hxx>
 #include <svx/flagsdef.hxx>
 #include <svx/itextprovider.hxx>
-#include <svx/sdangitm.hxx>
-#include <svx/sdasitm.hxx>
-#include <svx/sderitm.hxx>
-#include <svx/sdgcoitm.hxx>
-#include <svx/sdggaitm.hxx>
-#include <svx/sdginitm.hxx>
-#include <svx/sdgluitm.hxx>
-#include <svx/sdgmoitm.hxx>
-#include <svx/sdgtritm.hxx>
-#include <svx/sdmetitm.hxx>
-#include <svx/sdooitm.hxx>
-#include <svx/sdprcitm.hxx>
-#include <svx/sdshcitm.hxx>
-#include <svx/sdshitm.hxx>
-#include <svx/sdshtitm.hxx>
-#include <svx/sdsxyitm.hxx>
-#include <svx/sdtaaitm.hxx>
-#include <svx/sdtacitm.hxx>
 #include <svx/sdtaditm.hxx>
-#include <svx/sdtagitm.hxx>
-#include <svx/sdtaiitm.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/sdtakitm.hxx>
-#include <svx/sdtayitm.hxx>
-#include <svx/sdtcfitm.hxx>
-#include <svx/sdtditm.hxx>
-#include <svx/sdtfsitm.hxx>
-#include <svx/sdtmfitm.hxx>
-#include <svx/sdynitm.hxx>
 #include <svx/shapeproperty.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svdhlpln.hxx>
@@ -324,7 +296,6 @@
 #include <svx/svdtrans.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/xcolit.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xenum.hxx>
@@ -332,7 +303,6 @@
 #include <svx/xflasit.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xhatch.hxx>
-#include <svx/xit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnasit.hxx>
 #include <svx/xpoly.hxx>

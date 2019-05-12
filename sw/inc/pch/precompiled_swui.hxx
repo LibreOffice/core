@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:20:55 using:
+ Generated on 2019-05-12 16:57:52 using:
  ./bin/update_pch sw swui --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -85,8 +85,6 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <salhelper/salhelperdllapi.h>
-#include <salhelper/simplereferenceobject.hxx>
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GestureEvent.hxx>
@@ -362,6 +360,8 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <officecfg/Office/Writer.hxx>
+#include <salhelper/salhelperdllapi.h>
+#include <salhelper/simplereferenceobject.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
