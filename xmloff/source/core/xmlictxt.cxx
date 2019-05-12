@@ -103,11 +103,10 @@ void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & /*rNamesp
         }
 
         uno::Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
-        sal_Int32 len = unknownAttribs.getLength();
-        for ( sal_Int32 i = 0; i < len; i++ )
+        for ( const auto& rUnknownAttrib : unknownAttribs )
         {
-            const OUString& rAttrValue = unknownAttribs[i].Value;
-            const OUString& rAttrName = unknownAttribs[i].Name;
+            const OUString& rAttrValue = rUnknownAttrib.Value;
+            const OUString& rAttrName = rUnknownAttrib.Name;
             // note: rAttrName is expected to be namespace-prefixed here
             mrImport.maAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
         }

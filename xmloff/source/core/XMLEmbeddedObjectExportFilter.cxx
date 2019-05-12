@@ -116,16 +116,13 @@ void SAL_CALL XMLEmbeddedObjectExportFilter::unknown( const OUString& rString )
 void SAL_CALL XMLEmbeddedObjectExportFilter::initialize(
         const Sequence< Any >& aArguments )
 {
-    const sal_Int32 nAnyCount = aArguments.getLength();
-    const Any* pAny = aArguments.getConstArray();
-
-    for( sal_Int32 nIndex = 0; nIndex < nAnyCount; nIndex++, pAny++ )
+    for( const auto& rAny : aArguments )
     {
-        if( pAny->getValueType() ==
+        if( rAny.getValueType() ==
                 cppu::UnoType<XDocumentHandler>::get())
         {
-            *pAny >>= xHandler;
-            *pAny >>= xExtHandler;
+            rAny >>= xHandler;
+            rAny >>= xExtHandler;
         }
     }
 }

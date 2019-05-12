@@ -53,6 +53,7 @@
 #include <algorithm>
 #include <queue>
 #include <iterator>
+#include <numeric>
 
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -320,9 +321,9 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
             xDiagram, uno::UNO_QUERY_THROW );
         Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
             xCooSysCnt->getCoordinateSystems());
-        for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
+        for( const auto& rCooSys : aCooSysSeq )
         {
-            Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[i] );
+            Reference< chart2::XCoordinateSystem > xCooSys( rCooSys );
             SAL_WARN_IF( !xCooSys.is(), "xmloff.chart", "xCooSys is NULL" );
             for( sal_Int32 nN = xCooSys->getDimension(); nN--; )
             {
@@ -426,11 +427,8 @@ Reference< chart2::data::XDataSource > lcl_pressUsedDataIntoRectangularFormat( c
 
     //add all other sequences now without x-values
     lcl_MatchesRole aHasXValues( "values-x" );
-    for( sal_Int32 nN=0; nN<aSeriesSeqVector.getLength(); nN++ )
-    {
-        if( !aHasXValues( aSeriesSeqVector[nN] ) )
-            aLabeledSeqVector.push_back( aSeriesSeqVector[nN] );
-    }
+    std::copy_if(aSeriesSeqVector.begin(), aSeriesSeqVector.end(), std::back_inserter(aLabeledSeqVector),
+                 [&aHasXValues](const auto& rSeriesSeq) { return !aHasXValues( rSeriesSeq ); });
 
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( comphelper::containerToSequence(aLabeledSeqVector) );
 
@@ -516,13 +514,13 @@ OUString lcl_flattenStringSequence( const Sequence< OUString > & rSequence )
 {
     OUStringBuffer aResult;
     bool bPrecedeWithSpace = false;
-    for( sal_Int32 nIndex=0; nIndex<rSequence.getLength(); ++nIndex )
+    for( const auto& rString : rSequence )
     {
-        if( !rSequence[nIndex].isEmpty())
+        if( !rString.isEmpty())
         {
             if( bPrecedeWithSpace )
                 aResult.append( ' ' );
-            aResult.append( rSequence[nIndex] );
+            aResult.append( rString );
             bPrecedeWithSpace = true;
         }
     }
@@ -615,36 +613,19 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
         if( aRole.match("values-x") )
         {
             //lcl_clearIfNoValuesButTextIsContained - replace by indices if the values are not appropriate
-            bool bHasValue=false;
-            bool bHasText=false;
-            sal_Int32 nCount = aValuesSequence.getLength();
-            for( sal_Int32 j = 0; j < nCount; ++j )
-            {
-                if( !::rtl::math::isNan( aValuesSequence[j] ) )
-                {
-                    bHasValue=true;
-                    break;
-                }
-            }
+            bool bHasValue = std::any_of(aValuesSequence.begin(), aValuesSequence.end(),
+                [](double fValue) { return !::rtl::math::isNan( fValue ); });
             if(!bHasValue)
             {
                 //no double value is contained
                 //is there any text?
                 uno::Sequence< OUString > aStrings( lcl_DataSequenceToStringSequence( xSeq ) );
-                sal_Int32 nTextCount = aStrings.getLength();
-                for( sal_Int32 j = 0; j < nTextCount; ++j )
+                bool bHasText = std::any_of(aStrings.begin(), aStrings.end(),
+                    [](const OUString& rString) { return !rString.isEmpty(); });
+                if( bHasText )
                 {
-                    if( !aStrings[j].isEmpty() )
-                    {
-                        bHasText=true;
-                        break;
-                    }
+                    std::iota(aValuesSequence.begin(), aValuesSequence.end(), 1);
                 }
-            }
-            if( !bHasValue && bHasText )
-            {
-                for( sal_Int32 j = 0; j < nCount; ++j )
-                    aValuesSequence[j] = j+1;
             }
         }
     }
@@ -902,13 +883,13 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
 
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences(
         xErrorBarDataSource->getDataSequences());
-    for( sal_Int32 nI=0; nI< aSequences.getLength(); ++nI )
+    for( const auto& rSequence : aSequences )
     {
         try
         {
-            if( aSequences[nI].is())
+            if( rSequence.is())
             {
-                Reference< chart2::data::XDataSequence > xSequence( aSequences[nI]->getValues());
+                Reference< chart2::data::XDataSequence > xSequence( rSequence->getValues());
                 Reference< beans::XPropertySet > xSeqProp( xSequence, uno::UNO_QUERY_THROW );
                 OUString aRole;
                 if( ( xSeqProp->getPropertyValue( "Role" ) >>= aRole ) &&
@@ -1062,14 +1043,10 @@ void SchXMLExportHelper_Impl::exportChart( Reference< chart::XChartDocument > co
 
 static OUString lcl_GetStringFromNumberSequence( const css::uno::Sequence< sal_Int32 >& rSequenceMapping, bool bRemoveOneFromEachIndex /*should be true if having categories*/ )
 {
-    const sal_Int32* pArray = rSequenceMapping.getConstArray();
-    const sal_Int32 nSize = rSequenceMapping.getLength();
-    sal_Int32 i = 0;
     OUStringBuffer aBuf;
     bool bHasPredecessor = false;
-    for( i = 0; i < nSize; ++i )
+    for( sal_Int32 nIndex : rSequenceMapping )
     {
-        sal_Int32 nIndex = pArray[ i ];
         if( bRemoveOneFromEachIndex )
             --nIndex;
         if(nIndex>=0)
@@ -1512,11 +1489,11 @@ static void lcl_exportComplexLabel( const Sequence< uno::Any >& rComplexLabel, S
     if( nLength<=1 )
         return;
     SvXMLElementExport aTextList( rExport, XML_NAMESPACE_TEXT, XML_LIST, true, true );
-    for(sal_Int32 nN=0; nN<nLength; nN++)
+    for(const auto& rElem : rComplexLabel)
     {
         SvXMLElementExport aListItem( rExport, XML_NAMESPACE_TEXT, XML_LIST_ITEM, true, true );
         OUString aString;
-        if( !(rComplexLabel[nN]>>=aString) )
+        if( !(rElem >>= aString) )
         {
             //todo?
         }
@@ -2459,24 +2436,17 @@ namespace
         if( xNumericalDataSequence.is() )
         {
             Sequence< double >  aDoubles( xNumericalDataSequence->getNumericalData() );
-            sal_Int32 nCount = aDoubles.getLength();
-            for( sal_Int32 i = 0; i < nCount; ++i )
-            {
-                if( !::rtl::math::isNan( aDoubles[i] ) )
-                    return false;//have double value
-            }
+            if (std::any_of(aDoubles.begin(), aDoubles.end(), [](double fDouble) { return !::rtl::math::isNan( fDouble ); }))
+                return false;//have double value
         }
         else
         {
             aData = xDataSequence->getData();
             double fDouble = 0.0;
-            sal_Int32 nCount = aData.getLength();
-            for( sal_Int32 i = 0; i < nCount; ++i )
-            {
-                if( (aData[i] >>= fDouble) && !::rtl::math::isNan( fDouble ) )
-                    return false;//have double value
-            }
-
+            bool bHaveDouble = std::any_of(aData.begin(), aData.end(),
+                [&fDouble](const uno::Any& rData) { return (rData >>= fDouble) && !::rtl::math::isNan( fDouble ); });
+            if (bHaveDouble)
+                return false;//have double value
         }
         //no values found
 
@@ -2484,24 +2454,18 @@ namespace
         if( xTextualDataSequence.is() )
         {
             uno::Sequence< OUString > aStrings( xTextualDataSequence->getTextualData() );
-            sal_Int32 nCount = aStrings.getLength();
-            for( sal_Int32 i = 0; i < nCount; ++i )
-            {
-                if( !aStrings[i].isEmpty() )
-                    return true;//have text
-            }
+            if (std::any_of(aStrings.begin(), aStrings.end(), [](const OUString& rString) { return !rString.isEmpty(); }))
+                return true;//have text
         }
         else
         {
             if( !aData.hasElements() )
                 aData = xDataSequence->getData();
             OUString aString;
-            sal_Int32 nCount = aData.getLength();
-            for( sal_Int32 i = 0; i < nCount; ++i )
-            {
-                if( (aData[i]>>=aString) && !aString.isEmpty() )
-                    return true;//have text
-            }
+            bool bHaveText = std::any_of(aData.begin(), aData.end(),
+                [&aString](const uno::Any& rData) { return (rData >>= aString) && !aString.isEmpty(); });
+            if (bHaveText)
+                return true;//have text
         }
         //no doubles and no texts
         return false;
@@ -2526,26 +2490,26 @@ void SchXMLExportHelper_Impl::exportSeries(
 
     Sequence< Reference< chart2::XCoordinateSystem > >
         aCooSysSeq( xBCooSysCnt->getCoordinateSystems());
-    for( sal_Int32 nCSIdx=0; nCSIdx<aCooSysSeq.getLength(); ++nCSIdx )
+    for( const auto& rCooSys : aCooSysSeq )
     {
-        Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCSIdx], uno::UNO_QUERY );
+        Reference< chart2::XChartTypeContainer > xCTCnt( rCooSys, uno::UNO_QUERY );
         if( ! xCTCnt.is())
             continue;
         Sequence< Reference< chart2::XChartType > > aCTSeq( xCTCnt->getChartTypes());
-        for( sal_Int32 nCTIdx=0; nCTIdx<aCTSeq.getLength(); ++nCTIdx )
+        for( const auto& rChartType : aCTSeq )
         {
-            Reference< chart2::XDataSeriesContainer > xDSCnt( aCTSeq[nCTIdx], uno::UNO_QUERY );
+            Reference< chart2::XDataSeriesContainer > xDSCnt( rChartType, uno::UNO_QUERY );
             if( ! xDSCnt.is())
                 continue;
             // note: if xDSCnt.is() then also aCTSeq[nCTIdx]
-            OUString aChartType( aCTSeq[nCTIdx]->getChartType());
-            OUString aLabelRole = aCTSeq[nCTIdx]->getRoleOfSequenceForSeriesLabel();
+            OUString aChartType( rChartType->getChartType());
+            OUString aLabelRole = rChartType->getRoleOfSequenceForSeriesLabel();
 
             // special export for stock charts
             if ( aChartType == "com.sun.star.chart2.CandleStickChartType" )
             {
                 bool bJapaneseCandleSticks = false;
-                Reference< beans::XPropertySet > xCTProp( aCTSeq[nCTIdx], uno::UNO_QUERY );
+                Reference< beans::XPropertySet > xCTProp( rChartType, uno::UNO_QUERY );
                 if( xCTProp.is())
                     xCTProp->getPropertyValue("Japanese") >>= bJapaneseCandleSticks;
                 exportCandleStickSeries(
@@ -2835,7 +2799,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
                     if( bExportContent && nCurrentODFVersion > SvtSaveOptions::ODFVER_012 )//do not export to ODF 1.2 or older
                     {
-                        Sequence< OUString > aSupportedMappings = aCTSeq[nCTIdx]->getSupportedPropertyRoles();
+                        Sequence< OUString > aSupportedMappings = rChartType->getSupportedPropertyRoles();
                         exportPropertyMapping( xSource, aSupportedMappings );
                     }
 
@@ -2855,15 +2819,15 @@ void SchXMLExportHelper_Impl::exportPropertyMapping(
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
             xSource->getDataSequences());
 
-    for(sal_Int32 i = 0, n = rSupportedMappings.getLength(); i < n; ++i)
+    for(const auto& rSupportedMapping : rSupportedMappings)
     {
-        Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, rSupportedMappings[i] ) );
+        Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, rSupportedMapping ) );
         if(xSequence.is())
         {
             Reference< chart2::data::XDataSequence > xValues( xSequence->getValues() );
             if( xValues.is())
             {
-                mrExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_PROPERTY, rSupportedMappings[i]);
+                mrExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_PROPERTY, rSupportedMapping);
                 mrExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_CELL_RANGE_ADDRESS,
                         lcl_ConvertRange(
                             xValues->getSourceRangeRepresentation(),
@@ -2890,14 +2854,9 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
     {
         Sequence< Reference< chart2::XRegressionCurve > > aRegCurveSeq = xRegressionCurveContainer->getRegressionCurves();
 
-        const Reference< chart2::XRegressionCurve >* pBeg = aRegCurveSeq.getConstArray();
-        const Reference< chart2::XRegressionCurve >* pEnd = pBeg + aRegCurveSeq.getLength();
-        const Reference< chart2::XRegressionCurve >* pIt;
-
-        for( pIt = pBeg; pIt != pEnd; pIt++ )
+        for( const auto& xRegCurve : aRegCurveSeq )
         {
             std::vector< XMLPropertyState > aEquationPropertyStates;
-            Reference< chart2::XRegressionCurve > xRegCurve = *pIt;
             if (!xRegCurve.is())
                 continue;
 
@@ -3084,9 +3043,8 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
     bool bExportContent )
 {
 
-    for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeriesSeq.getLength(); ++nSeriesIdx )
+    for( const auto& xSeries : aSeriesSeq )
     {
-        Reference< chart2::XDataSeries > xSeries( aSeriesSeq[nSeriesIdx] );
         sal_Int32 nAttachedAxis = lcl_isSeriesAttachedToFirstAxis( xSeries )
             ? chart::ChartAxisAssign::PRIMARY_Y
             : chart::ChartAxisAssign::SECONDARY_Y;
@@ -3234,7 +3192,6 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     ::std::vector< SchXMLDataPointStruct > aDataPointVector;
 
     sal_Int32 nLastIndex = -1;
-    sal_Int32 nCurrIndex = 0;
 
     // collect elements
     if( bVaryColorsByPoint && xColorScheme.is() )
@@ -3301,10 +3258,9 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     }
     else
     {
-        for( nElement = 0; nElement < nSize; ++nElement )
+        for( sal_Int32 nCurrIndex : aDataPointSeq )
         {
             aPropertyStates.clear();
-            nCurrIndex = pPoints[ nElement ];
             //assuming sorted indices in pPoints
 
             if( nCurrIndex<0 || nCurrIndex>=nSeriesLength )
@@ -3641,23 +3597,23 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
                 Sequence< beans::PropertyValue > aArgs( xDataProvider->detectArguments( xDataSource ));
                 OUString sCellRange, sBrokenRange;
                 bool bBrokenRangeAvailable = false;
-                for( sal_Int32 i=0; i<aArgs.getLength(); ++i )
+                for( const auto& rArg : aArgs )
                 {
-                    if ( aArgs[i].Name == "CellRangeRepresentation" )
-                        aArgs[i].Value >>= sCellRange;
-                    else if ( aArgs[i].Name == "BrokenCellRangeForExport" )
+                    if ( rArg.Name == "CellRangeRepresentation" )
+                        rArg.Value >>= sCellRange;
+                    else if ( rArg.Name == "BrokenCellRangeForExport" )
                     {
-                        if( aArgs[i].Value >>= sBrokenRange )
+                        if( rArg.Value >>= sBrokenRange )
                             bBrokenRangeAvailable = true;
                     }
-                    else if ( aArgs[i].Name == "DataRowSource" )
+                    else if ( rArg.Name == "DataRowSource" )
                     {
                         chart::ChartDataRowSource eRowSource;
-                        aArgs[i].Value >>= eRowSource;
+                        rArg.Value >>= eRowSource;
                         mbRowSourceColumns = ( eRowSource == chart::ChartDataRowSource_COLUMNS );
                     }
-                    else if ( aArgs[i].Name == "SequenceMapping" )
-                        aArgs[i].Value >>= maSequenceMapping;
+                    else if ( rArg.Name == "SequenceMapping" )
+                        rArg.Value >>= maSequenceMapping;
                 }
 
                 // #i79009# For Writer we have to export a broken version of the
