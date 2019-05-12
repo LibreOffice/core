@@ -20,7 +20,6 @@
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
-#include <osl/doublecheckedlocking.h>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <uno/dispatcher.hxx>
@@ -36,7 +35,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 

@@ -1,0 +1,40 @@
+---
+assumeFilename: stoc/source/javavm/javavm.cxx
+blacklist:
+    stoc/source/implementationregistration/mergekeys.hxx:
+    # Needed for css shortcut
+    - sal/types.h
+    stoc/source/javavm/interact.hxx:
+    # Base class needs complete type
+    -  com/sun/star/task/XInteractionRequest.hpp
+    stoc/source/javavm/javavm.hxx:
+    # Base class needs complete type
+    - com/sun/star/container/XContainerListener.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/java/XJavaThreadRegister_11.hpp
+    - com/sun/star/java/XJavaVM.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    stoc/source/corereflection/crefl.cxx:
+    # Safer to keep for use in cppu::UnoType template
+    - com/sun/star/reflection/XTypeDescription.hpp
+    stoc/source/corereflection/criface.cxx:
+    # Keep for platform-independent alloca.h abstraction
+    - sal/alloca.h
+    # Safer to keep for use in cppu::UnoType template
+    - com/sun/star/uno/RuntimeException.hpp
+    stoc/source/invocation_adapterfactory/iafactory.cxx:
+    # Safer to keep for use in cppu::UnoType template
+    - com/sun/star/script/XInvocation.hpp
+    stoc/source/loader/dllcomponentloader.cxx:
+    # Needed for direct member access
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    stoc/source/security/permissions.cxx:
+    # Safer to keep for use in cppu::UnoType template
+    - com/sun/star/security/AllPermission.hpp
+    # Needed for __DIAGNOSE mode
+    - vector
+    - rtl/string.hxx
+    stoc/source/security/access_controller.cxx:
+    # Needed for __DIAGNOSE mode
+    - rtl/ustrbuf.hxx
+    - sal/log.hxx

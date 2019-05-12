@@ -22,7 +22,6 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
-#include <exception>
 #include <vector>
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>

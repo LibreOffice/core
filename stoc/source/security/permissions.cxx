@@ -26,7 +26,6 @@
 
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 #include <com/sun/star/security/RuntimePermission.hpp>
@@ -34,9 +33,9 @@
 #include <com/sun/star/io/FilePermission.hpp>
 #include <com/sun/star/connection/SocketPermission.hpp>
 #include <com/sun/star/security/AccessControlException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include "permissions.h"
-
 
 using namespace ::std;
 using namespace ::osl;

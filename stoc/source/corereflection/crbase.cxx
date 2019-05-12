@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cppuhelper/queryinterface.hxx>
 #include <uno/any2.h>
 
 #include "base.hxx"

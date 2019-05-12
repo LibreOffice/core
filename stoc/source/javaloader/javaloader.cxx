@@ -17,12 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cstdarg>
-
-#include <osl/process.h>
-
 #include <rtl/process.h>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
 #include <uno/environment.h>
@@ -39,8 +34,6 @@
 
 #include <com/sun/star/java/XJavaVM.hpp>
 
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-
 #include <jni.h>
 
 #include <cppuhelper/factory.hxx>
@@ -50,13 +43,14 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/loader/XImplementationLoader.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <jvmaccess/unovirtualmachine.hxx>
 #include <jvmaccess/virtualmachine.hxx>
+
+namespace com::sun::star::registry { class XRegistryKey; }
 
 using namespace css::java;
 using namespace css::lang;

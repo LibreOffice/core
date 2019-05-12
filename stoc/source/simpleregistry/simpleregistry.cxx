@@ -31,7 +31,6 @@
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -48,6 +47,8 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace {
 

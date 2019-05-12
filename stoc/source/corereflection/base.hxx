@@ -24,15 +24,11 @@
 #include <sal/config.h>
 
 #include <o3tl/any.hxx>
-#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <uno/mapping.hxx>
 #include <uno/dispatcher.h>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/weak.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/component.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 
@@ -45,15 +41,15 @@
 #include <unordered_map>
 #include <memory>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
-#include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
-#include <com/sun/star/reflection/XIdlField.hpp>
-#include <com/sun/star/reflection/XIdlField2.hpp>
-#include <com/sun/star/reflection/XIdlMethod.hpp>
+
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::reflection { class XIdlClass; }
+namespace com::sun::star::reflection { class XIdlField; }
+namespace com::sun::star::reflection { class XIdlMethod; }
 
 namespace stoc_corefl
 {

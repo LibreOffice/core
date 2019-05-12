@@ -26,20 +26,18 @@
 #ifdef SAL_UNX
 #include <sal/alloca.h>
 #endif
-#if !(defined(MACOSX) || defined(IOS) || defined(FREEBSD))
-#include <malloc.h>
-#endif
 #include <o3tl/any.hxx>
-#include <rtl/alloc.h>
 #include <typelib/typedescription.hxx>
 #include <uno/data.h>
 
 #include "base.hxx"
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/reflection/XIdlField2.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/typeprovider.hxx>
 
 using namespace css::lang;
 using namespace css::reflection;

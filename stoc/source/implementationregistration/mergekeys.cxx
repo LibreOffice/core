@@ -23,7 +23,6 @@
 #include <osl/diagnose.h>
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/registry/MergeConflictException.hpp>
 
 #include "mergekeys.hxx"
 

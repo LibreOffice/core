@@ -22,11 +22,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriSchemeParser.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrlReference.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -39,8 +35,11 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-#include <exception>
 #include <string_view>
+
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno { class XInterface; }
+namespace com::sun::star::uri { class XUriReference; }
 
 namespace {
 

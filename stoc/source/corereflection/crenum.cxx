@@ -20,6 +20,9 @@
 #include "base.hxx"
 
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/typeprovider.hxx>
+
+#include <com/sun/star/reflection/XIdlField2.hpp>
 
 using namespace css::lang;
 using namespace css::reflection;
