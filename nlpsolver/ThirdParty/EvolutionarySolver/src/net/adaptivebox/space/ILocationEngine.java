@@ -20,6 +20,6 @@
 
 package net.adaptivebox.space;
 
-public interface ILocationEngine{
+public interface ILocationEngine {
   double[] getLocation();
 }

@@ -20,11 +20,12 @@
 package net.adaptivebox.global;
 
 public class BasicBound {
-  public static final double MINDOUBLE= -1e308;
-  public static final double MAXDOUBLE= 1e308;
+  public static final double MINDOUBLE = -1e308;
+  public static final double MAXDOUBLE = 1e308;
 
   public double minValue = MINDOUBLE;
   public double maxValue = MAXDOUBLE;
+
   public BasicBound() {
   }
 
@@ -34,11 +35,11 @@ public class BasicBound {
   }
 
   public double getLength() {
-    return Math.abs(maxValue-minValue);
+    return Math.abs(maxValue - minValue);
   }
 
-  public double boundAdjust(double value){
-    if(value > maxValue) {
+  public double boundAdjust(double value) {
+    if (value > maxValue) {
       value = maxValue;
     } else if (value < minValue) {
       value = minValue;
@@ -46,20 +47,18 @@ public class BasicBound {
     return value;
   }
 
-  public double annulusAdjust (double value) {
-    if(value > maxValue) {
-      double extendsLen = (value-maxValue)%getLength();
-      value = minValue+extendsLen;
+  public double annulusAdjust(double value) {
+    if (value > maxValue) {
+      double extendsLen = (value - maxValue) % getLength();
+      value = minValue + extendsLen;
     } else if (value < minValue) {
-      double extendsLen = (minValue-value)%getLength();
-      value = maxValue-extendsLen;
+      double extendsLen = (minValue - value) % getLength();
+      value = maxValue - extendsLen;
     }
     return value;
   }
 
-
-
-  public double getRandomValue(){
+  public double getRandomValue() {
     return RandomGenerator.doubleRangeRandom(minValue, maxValue);
   }
 }
