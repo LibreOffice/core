@@ -37,11 +37,11 @@ import net.adaptivebox.problem.ProblemEncoder;
 import net.adaptivebox.space.BasicPoint;
 
 public class DEGTBehavior extends AbsGTBehavior implements ILibEngine {
-  private static final int DVNum = 2;  //Number of differential vectors, normally be 1 or 2
-  public double FACTOR = 0.5; //scale constant: (0, 1.2], normally be 0.5
-  public double CR = 0.9;     //crossover constant: [0, 1], normally be 0.1 or 0.9
+  private static final int DVNum = 2; // Number of differential vectors, normally be 1 or 2
+  public double FACTOR = 0.5; // scale constant: (0, 1.2], normally be 0.5
+  public double CR = 0.9; // crossover constant: [0, 1], normally be 0.1 or 0.9
 
-  //the own memory: store the point that generated in last learning cycle
+  // the own memory: store the point that generated in last learning cycle
   private SearchPoint pbest_t;
 
   public void setPbest(SearchPoint pbest) {
@@ -51,16 +51,14 @@ public class DEGTBehavior extends AbsGTBehavior implements ILibEngine {
   /**
    * Crossover and mutation for a single vector element done in a single step.
    *
-   * @param index
-   *            Index of the trial vector element to be changed.
-   * @param trialVector
-   *            Trial vector reference.
-   * @param globalVector
-   *            Global best found vector reference.
-   * @param differenceVectors
-   *            List of vectors used for difference delta calculation.
+   * @param index             Index of the trial vector element to be changed.
+   * @param trialVector       Trial vector reference.
+   * @param globalVector      Global best found vector reference.
+   * @param differenceVectors List of vectors used for difference delta
+   *                          calculation.
    */
-  private void crossoverAndMutation(int index, double trialVector[], double globalVector[], BasicPoint differenceVectors[]) {
+  private void crossoverAndMutation(int index, double trialVector[], double globalVector[],
+      BasicPoint differenceVectors[]) {
     double delta = 0D;
 
     for (int i = 0; i < differenceVectors.length; i++) {
@@ -110,11 +108,10 @@ public class DEGTBehavior extends AbsGTBehavior implements ILibEngine {
   }
 
   private SearchPoint[] getReferPoints() {
-    SearchPoint[] referPoints = new SearchPoint[DVNum*2];
-    for(int i=0; i<referPoints.length; i++) {
-      referPoints[i] = socialLib.getSelectedPoint(RandomGenerator.intRangeRandom(0, socialLib.getPopSize()-1));
+    SearchPoint[] referPoints = new SearchPoint[DVNum * 2];
+    for (int i = 0; i < referPoints.length; i++) {
+      referPoints[i] = socialLib.getSelectedPoint(RandomGenerator.intRangeRandom(0, socialLib.getPopSize() - 1));
     }
     return referPoints;
   }
 }
-

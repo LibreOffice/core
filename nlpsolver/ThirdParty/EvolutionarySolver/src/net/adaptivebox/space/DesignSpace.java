@@ -27,59 +27,48 @@
 package net.adaptivebox.space;
 
 public class DesignSpace {
-  //The information of all the dimension
+  // The information of all the dimension
   private DesignDim[] dimProps;
 
   public DesignSpace(int dim) {
     dimProps = new DesignDim[dim];
   }
 
-
-
   public void setElemAt(DesignDim elem, int index) {
     dimProps[index] = elem;
   }
 
   public int getDimension() {
-    if (dimProps==null) {
+    if (dimProps == null) {
       return -1;
     }
     return dimProps.length;
   }
 
-  public double boundAdjustAt(double val, int dim){
+  public double boundAdjustAt(double val, int dim) {
     return dimProps[dim].paramBound.boundAdjust(val);
   }
 
-  public void mutationAt(double[] location, int i){
+  public void mutationAt(double[] location, int i) {
     location[i] = dimProps[i].paramBound.getRandomValue();
   }
-
-
-
-
-
-
 
   public double getMagnitudeIn(int dimensionIndex) {
     return dimProps[dimensionIndex].paramBound.getLength();
   }
 
-
-
-
-  public void initializeGene(double[] tempX){
-    for(int i=0;i<tempX.length;i++) tempX[i] =  dimProps[i].paramBound.getRandomValue(); //Global.RandomGenerator.doubleRangeRandom(9.8, 10);
+  public void initializeGene(double[] tempX) {
+    for (int i = 0; i < tempX.length; i++)
+      tempX[i] = dimProps[i].paramBound.getRandomValue(); // Global.RandomGenerator.doubleRangeRandom(9.8, 10);
   }
 
   public void getMappingPoint(double[] point) {
-    for(int i=0; i<getDimension(); i++) {
+    for (int i = 0; i < getDimension(); i++) {
       point[i] = dimProps[i].paramBound.annulusAdjust(point[i]);
-      if(dimProps[i].isDiscrete()) {
+      if (dimProps[i].isDiscrete()) {
         point[i] = dimProps[i].getGrainedValue(point[i]);
       }
     }
   }
 
 }
-

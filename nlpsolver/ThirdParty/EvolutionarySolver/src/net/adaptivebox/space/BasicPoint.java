@@ -21,7 +21,7 @@
 package net.adaptivebox.space;
 
 public class BasicPoint implements ILocationEngine {
-  //store the location information in the search space (S)
+  // store the location information in the search space (S)
   private final double[] location;
 
   public BasicPoint(int dim) {
