@@ -463,7 +463,6 @@ private:
     EditSelectionEngine aSelEngine;
 
     Color               maBackgroundColor;
-    Color               maTextColor;
 
     sal_uInt16          nStretchX;
     sal_uInt16          nStretchY;
@@ -678,9 +677,6 @@ private:
 
     void                SetBackgroundColor( const Color& rColor ) { maBackgroundColor = rColor; }
     const Color&        GetBackgroundColor() const { return maBackgroundColor; }
-
-    void                SetTextColor( const Color& rColor ) { maTextColor = rColor; }
-    const Color&        GetTextColor() const { return maTextColor; }
 
     long                CalcVertLineSpacing(Point& rStartPos) const;
 

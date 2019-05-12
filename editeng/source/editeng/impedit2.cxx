@@ -124,7 +124,6 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
 
     eDefLanguage        = LANGUAGE_DONTKNOW;
     maBackgroundColor   = COL_AUTO;
-    maTextColor         = COL_AUTO;
 
     nAsianCompressionMode = CharCompressType::NONE;
 

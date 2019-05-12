@@ -275,7 +275,7 @@ void SmDocShell::ArrangeFormula()
     maAccText.clear();
 }
 
-void SmDocShell::UpdateEditEngineDefaultFonts()
+void SmDocShell::UpdateEditEngineDefaultFonts(const Color& aTextColor)
 {
     assert(mpEditEngineItemPool);
     if (!mpEditEngineItemPool)
@@ -310,6 +310,7 @@ void SmDocShell::UpdateEditEngineDefaultFonts()
                 rFntDta.nFallbackLang : rFntDta.nLang;
         vcl::Font aFont = OutputDevice::GetDefaultFont(
                     rFntDta.nFontType, nLang, GetDefaultFontFlags::OnlyOne );
+        aFont.SetColor(aTextColor);
         mpEditEngineItemPool->SetPoolDefaultItem(
                 SvxFontItem( aFont.GetFamilyType(), aFont.GetFamilyName(),
                     aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(),
@@ -338,7 +339,8 @@ EditEngine& SmDocShell::GetEditEngine()
 
         mpEditEngineItemPool = EditEngine::CreatePool();
 
-        UpdateEditEngineDefaultFonts();
+        const StyleSettings& rStyleSettings = Application::GetDefaultDevice()->GetSettings().GetStyleSettings();
+        UpdateEditEngineDefaultFonts(rStyleSettings.GetFieldTextColor());
 
         mpEditEngine.reset( new EditEngine( mpEditEngineItemPool ) );
 
@@ -348,8 +350,6 @@ EditEngine& SmDocShell::GetEditEngine()
         mpEditEngine->SetDefTab( sal_uInt16(
             Application::GetDefaultDevice()->GetTextWidth("XXXX")) );
 
-        const StyleSettings& rStyleSettings = Application::GetDefaultDevice()->GetSettings().GetStyleSettings();
-        mpEditEngine->SetTextColor(rStyleSettings.GetFieldTextColor());
         mpEditEngine->SetBackgroundColor(rStyleSettings.GetFieldColor());
 
         mpEditEngine->SetControlWord(
