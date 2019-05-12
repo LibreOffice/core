@@ -19,34 +19,14 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_CONTAINERHELPER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_CONTAINERHELPER_HXX
 
+#include <comphelper/sequence.hxx>
+
 #include <vector>
 
 namespace chart
 {
 namespace ContainerHelper
 {
-
-/** converts a UNO sequence into a standard "Sequence" container. For
-    convenience see the methods SequenceToVector, etc. below.
-
-    input:  uno::Sequence
-    output: a standard container of the same value type implementing the Concept
-            of a Sequence (vector, deque, list, slist)
-
-    example:
-
-    Sequence< sal_Int32 > aSequence;
-    std::vector< sal_Int32 > aVector(
-        ContainerToSequence::SequenceToSTLSequenceContainer< std::vector< sal_Int32 > >( aSequence );
-*/
-template< class Container >
-    Container
-    SequenceToSTLSequenceContainer( const css::uno::Sequence< typename Container::value_type > & rSeq )
-{
-    Container aResult( rSeq.getLength());
-    std::copy( rSeq.begin(), rSeq.end(), aResult.begin() );
-    return aResult;
-}
 
 // concrete container methods for convenience
 
@@ -61,7 +41,7 @@ template< typename T >
     std::vector< T >
     SequenceToVector( const css::uno::Sequence< T > & rSeq )
 {
-    return SequenceToSTLSequenceContainer< std::vector< T > >( rSeq );
+    return comphelper::sequenceToContainer< std::vector< T > >( rSeq );
 }
 
 } // namespace ContainerHelper
