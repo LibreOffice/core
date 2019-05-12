@@ -22,6 +22,7 @@
 #include <vclpluginapi.h>
 #include <unx/geninst.h>
 #include <salusereventlist.hxx>
+#include <vcl/timer.hxx>
 
 #include <osl/conditn.hxx>
 
@@ -57,6 +58,11 @@ class VCLPLUG_QT5_PUBLIC Qt5Instance : public QObject,
     std::vector<FreeableCStr> m_pFakeArgvFreeable;
     std::unique_ptr<char* []> m_pFakeArgv;
     std::unique_ptr<int> m_pFakeArgc;
+
+    Timer m_aUpdateStyleTimer;
+    bool m_bUpdateFonts;
+
+    DECL_LINK(updateStyleHdl, Timer*, void);
 
 private Q_SLOTS:
     bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
@@ -138,6 +144,8 @@ public:
     CreateClipboard(const css::uno::Sequence<css::uno::Any>& i_rArguments) override;
     virtual css::uno::Reference<css::uno::XInterface> CreateDragSource() override;
     virtual css::uno::Reference<css::uno::XInterface> CreateDropTarget() override;
+
+    void UpdateStyle(bool bFontsChanged);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

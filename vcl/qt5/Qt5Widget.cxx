@@ -22,6 +22,7 @@
 
 #include <Qt5Frame.hxx>
 #include <Qt5Graphics.hxx>
+#include <Qt5Instance.hxx>
 #include <Qt5Tools.hxx>
 
 #include <QtCore/QMimeData>
@@ -574,6 +575,27 @@ void Qt5Widget::endExtTextInput()
         m_rFrame.CallCallback(SalEvent::EndExtTextInput, nullptr);
         m_bNonEmptyIMPreeditSeen = false;
     }
+}
+
+void Qt5Widget::changeEvent(QEvent* pEvent)
+{
+    switch (pEvent->type())
+    {
+        case QEvent::FontChange:
+            [[fallthrough]];
+        case QEvent::PaletteChange:
+            [[fallthrough]];
+        case QEvent::StyleChange:
+        {
+            auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+            assert(pSalInst);
+            pSalInst->UpdateStyle(QEvent::FontChange == pEvent->type());
+            break;
+        }
+        default:
+            break;
+    }
+    QWidget::changeEvent(pEvent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
