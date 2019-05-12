@@ -1964,8 +1964,7 @@ void SdXMLExport::exportPresentationSettings()
 
         Reference< container::XNameContainer > xShows;
         Sequence< OUString > aShowNames;
-        const OUString* pShowNames = nullptr;
-        sal_Int32 nShowCount = 0;
+        bool bHasNames = false;
 
         Reference< XCustomPresentationSupplier > xSup( GetModel(), UNO_QUERY );
         if( xSup.is() )
@@ -1974,16 +1973,15 @@ void SdXMLExport::exportPresentationSettings()
             if( xShows.is() )
             {
                 aShowNames = xShows->getElementNames();
-                pShowNames = aShowNames.getArray();
-                nShowCount = aShowNames.getLength();
+                bHasNames = aShowNames.hasElements();
             }
         }
 
-        if( bHasAttr || nShowCount != 0 )
+        if( bHasAttr || bHasNames )
         {
             SvXMLElementExport aSettings(*this, XML_NAMESPACE_PRESENTATION, XML_SETTINGS, true, true);
 
-            if( nShowCount == 0 )
+            if( !bHasNames )
                 return;
 
             Reference< XIndexContainer > xShow;
@@ -1991,11 +1989,11 @@ void SdXMLExport::exportPresentationSettings()
 
             OUStringBuffer sTmp;
 
-            for( sal_Int32 nIndex = 0; nIndex < nShowCount; nIndex++, pShowNames++ )
+            for( const auto& rShowName : aShowNames )
             {
-                AddAttribute(XML_NAMESPACE_PRESENTATION, XML_NAME, *pShowNames );
+                AddAttribute(XML_NAMESPACE_PRESENTATION, XML_NAME, rShowName );
 
-                xShows->getByName( *pShowNames ) >>= xShow;
+                xShows->getByName( rShowName ) >>= xShow;
                 SAL_WARN_IF( !xShow.is(), "xmloff", "invalid custom show!" );
                 if( !xShow.is() )
                     continue;

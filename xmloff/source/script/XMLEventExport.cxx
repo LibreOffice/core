@@ -112,17 +112,16 @@ void XMLEventExport::Export( Reference<XNameAccess> const & rAccess,
 
     // iterate over all event types
     Sequence<OUString> aNames = rAccess->getElementNames();
-    sal_Int32 nCount = aNames.getLength();
-    for(sal_Int32 i = 0; i < nCount; i++)
+    for(const auto& rName : aNames)
     {
         // translate name
-        NameMap::iterator aIter = aNameTranslationMap.find(aNames[i]);
+        NameMap::iterator aIter = aNameTranslationMap.find(rName);
         if (aIter != aNameTranslationMap.end())
         {
             const XMLEventName& rXmlName = aIter->second;
 
             // get PropertyValues for this event
-            Any aAny = rAccess->getByName( aNames[i] );
+            Any aAny = rAccess->getByName( rName );
             Sequence<PropertyValue> aValues;
             aAny >>= aValues;
 
@@ -132,7 +131,7 @@ void XMLEventExport::Export( Reference<XNameAccess> const & rAccess,
         else
         {
             // don't proceed further
-            SAL_WARN("xmloff", "Unknown event name:" << aNames[i] );
+            SAL_WARN("xmloff", "Unknown event name:" << rName );
         }
     }
 
@@ -190,49 +189,42 @@ void XMLEventExport::ExportEvent(
     bool& rExported )
 {
     // search for EventType value and then delegate to EventHandler
-    sal_Int32 nValues = rEventValues.getLength();
-    const PropertyValue* pValues = rEventValues.getConstArray();
+    const PropertyValue* pValue = std::find_if(rEventValues.begin(), rEventValues.end(),
+        [](const PropertyValue& rValue) { return gsEventType == rValue.Name; });
 
-    for(sal_Int32 nVal = 0; nVal < nValues; nVal++)
+    if (pValue != rEventValues.end())
     {
-        if (gsEventType == pValues[nVal].Name)
+        // found! Now find handler and delegate
+        OUString sType;
+        pValue->Value >>= sType;
+
+        if (aHandlerMap.count(sType))
         {
-            // found! Now find handler and delegate
-            OUString sType;
-            pValues[nVal].Value >>= sType;
-
-            if (aHandlerMap.count(sType))
+            if (! rExported)
             {
-                if (! rExported)
-                {
-                    // OK, we have't yet exported the enclosing
-                    // element. So we do that now.
-                    rExported = true;
-                    StartElement(bUseWhitespace);
-                }
-
-                OUString aEventQName(
-                    rExport.GetNamespaceMap().GetQNameByKey(
-                            rXmlEventName.m_nPrefix, rXmlEventName.m_aName ) );
-
-                // delegate to proper ExportEventHandler
-                aHandlerMap[sType]->Export(rExport, aEventQName,
-                                           rEventValues, bUseWhitespace);
-            }
-            else
-            {
-                if ( sType != "None" )
-                {
-                    OSL_FAIL("unknown event type returned by API");
-                    // unknown type -> error (ignore)
-                }
-                // else: we ignore None fields
+                // OK, we have't yet exported the enclosing
+                // element. So we do that now.
+                rExported = true;
+                StartElement(bUseWhitespace);
             }
 
-            // early out: we don't need to look for another type
-            break;
+            OUString aEventQName(
+                rExport.GetNamespaceMap().GetQNameByKey(
+                        rXmlEventName.m_nPrefix, rXmlEventName.m_aName ) );
+
+            // delegate to proper ExportEventHandler
+            aHandlerMap[sType]->Export(rExport, aEventQName,
+                                       rEventValues, bUseWhitespace);
         }
-        // else: we only care for EventType -> ignore
+        else
+        {
+            if ( sType != "None" )
+            {
+                OSL_FAIL("unknown event type returned by API");
+                // unknown type -> error (ignore)
+            }
+            // else: we ignore None fields
+        }
     }
 }
 
