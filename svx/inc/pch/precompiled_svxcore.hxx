@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:19:04 using:
+ Generated on 2019-05-12 16:57:24 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -88,11 +88,10 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <salhelper/singletonref.hxx>
-#include <salhelper/thread.hxx>
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicExternalLink.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/IContext.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/accel.hxx>
@@ -105,6 +104,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/button.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/commandevent.hxx>
@@ -335,6 +335,8 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <salhelper/singletonref.hxx>
+#include <salhelper/thread.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -349,7 +351,6 @@
 #include <sot/sotdllapi.h>
 #include <sot/storage.hxx>
 #include <svl/SfxBroadcaster.hxx>
-#include <svl/custritm.hxx>
 #include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/intitem.hxx>
@@ -430,6 +431,7 @@
 #include <svx/lathe3d.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/scene3d.hxx>
+#include <svx/sdasitm.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
@@ -451,6 +453,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdtakitm.hxx>
 #include <svx/sdtfchim.hxx>
+#include <svx/sdynitm.hxx>
 #include <svx/selectioncontroller.hxx>
 #include <svx/sphere3d.hxx>
 #include <svx/svddef.hxx>
@@ -508,10 +511,14 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xgrad.hxx>
+#include <svx/xlineit0.hxx>
+#include <svx/xlinjoit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlndsit.hxx>
+#include <svx/xlnedcit.hxx>
 #include <svx/xlnedit.hxx>
 #include <svx/xlnedwit.hxx>
+#include <svx/xlnstcit.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlntrit.hxx>

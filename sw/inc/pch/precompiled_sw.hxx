@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:16:05 using:
+ Generated on 2019-05-12 16:57:46 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -79,10 +79,6 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <salhelper/condition.hxx>
-#include <salhelper/salhelperdllapi.h>
-#include <salhelper/simplereferenceobject.hxx>
-#include <salhelper/singletonref.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/alpha.hxx>
@@ -282,6 +278,10 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <salhelper/condition.hxx>
+#include <salhelper/salhelperdllapi.h>
+#include <salhelper/simplereferenceobject.hxx>
+#include <salhelper/singletonref.hxx>
 #include <sax/fastattribs.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -374,11 +374,11 @@
 #include <svx/svxdllapi.h>
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/unomid.hxx>
-#include <svx/xcolit.hxx>
+#include <svx/xbtmpit.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xenum.hxx>
 #include <svx/xfillit0.hxx>
-#include <svx/xit.hxx>
+#include <svx/xflclit.hxx>
 #include <svx/xoutbmp.hxx>
 #include <svx/xtable.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

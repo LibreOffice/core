@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:35 using:
+ Generated on 2019-05-12 16:56:47 using:
  ./bin/update_pch connectivity file --cutoff=2 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -69,8 +69,6 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <salhelper/salhelperdllapi.h>
-#include <salhelper/simplereferenceobject.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
 #endif // PCH_LEVEL >= 2
@@ -161,6 +159,8 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <salhelper/salhelperdllapi.h>
+#include <salhelper/simplereferenceobject.hxx>
 #include <svl/nfkeytab.hxx>
 #include <svl/ondemand.hxx>
 #include <svl/svldllapi.h>

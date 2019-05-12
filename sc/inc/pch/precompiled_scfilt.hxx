@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:16:42 using:
+ Generated on 2019-05-12 16:57:02 using:
  ./bin/update_pch sc scfilt --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -108,6 +108,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -204,6 +205,10 @@
 #include <svtools/svtdllapi.h>
 #include <svx/itextprovider.hxx>
 #include <svx/msdffdef.hxx>
+#include <svx/sdtaditm.hxx>
+#include <svx/sdtaitm.hxx>
+#include <svx/sdtakitm.hxx>
+#include <svx/svddef.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdorect.hxx>

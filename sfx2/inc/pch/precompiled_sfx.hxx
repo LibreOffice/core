@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:19:01 using:
+ Generated on 2019-05-12 16:57:18 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -57,7 +57,6 @@
 #include <osl/socket.hxx>
 #include <osl/thread.h>
 #include <osl/thread.hxx>
-#include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/byteseq.hxx>
@@ -70,6 +69,7 @@
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
+#include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
@@ -245,6 +245,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
@@ -257,6 +258,7 @@
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
@@ -460,6 +462,7 @@
 #include <sfx2/evntconf.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <sfx2/flatpak.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/hintpost.hxx>

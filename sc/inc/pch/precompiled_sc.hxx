@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:16:52 using:
+ Generated on 2019-05-12 16:57:13 using:
  ./bin/update_pch sc sc --cutoff=12 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -95,9 +95,6 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <salhelper/salhelperdllapi.h>
-#include <salhelper/simplereferenceobject.hxx>
-#include <salhelper/thread.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/GraphicObject.hxx>
@@ -319,6 +316,9 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <salhelper/salhelperdllapi.h>
+#include <salhelper/simplereferenceobject.hxx>
+#include <salhelper/thread.hxx>
 #include <sax/tools/converter.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -368,40 +368,14 @@
 #include <svx/ipolypolygoneditorcontroller.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/sdangitm.hxx>
-#include <svx/sdasitm.hxx>
-#include <svx/sderitm.hxx>
-#include <svx/sdgcoitm.hxx>
 #include <svx/sdgcpitm.hxx>
-#include <svx/sdggaitm.hxx>
-#include <svx/sdginitm.hxx>
-#include <svx/sdgluitm.hxx>
-#include <svx/sdgmoitm.hxx>
-#include <svx/sdgtritm.hxx>
-#include <svx/sdmetitm.hxx>
-#include <svx/sdooitm.hxx>
-#include <svx/sdprcitm.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include <svx/sdrobjectuser.hxx>
-#include <svx/sdshcitm.hxx>
-#include <svx/sdshitm.hxx>
-#include <svx/sdshtitm.hxx>
-#include <svx/sdsxyitm.hxx>
-#include <svx/sdtaaitm.hxx>
-#include <svx/sdtacitm.hxx>
 #include <svx/sdtaditm.hxx>
-#include <svx/sdtagitm.hxx>
-#include <svx/sdtaiitm.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/sdtakitm.hxx>
-#include <svx/sdtayitm.hxx>
-#include <svx/sdtcfitm.hxx>
-#include <svx/sdtditm.hxx>
-#include <svx/sdtfsitm.hxx>
-#include <svx/sdtmfitm.hxx>
-#include <svx/sdynitm.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdedtv.hxx>
@@ -432,7 +406,6 @@
 #include <svx/svdundo.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/xcolit.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xenum.hxx>
