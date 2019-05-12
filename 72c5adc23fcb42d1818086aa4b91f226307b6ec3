@@ -1,0 +1,141 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_c9dc8d48",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-05-12T12:55:27Z",
+      "side": 1,
+      "message": "Making it public was intentional...\n\nAlso what has this got to do with what this commit is about?",
+      "revId": "72c5adc23fcb42d1818086aa4b91f226307b6ec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_e9af0992",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-05-12T12:55:27Z",
+      "side": 1,
+      "message": "if we extend I\u0027d prefer to make it sal_uInt32 ..",
+      "revId": "72c5adc23fcb42d1818086aa4b91f226307b6ec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_e9baa9dc",
+        "filename": "include/vcl/BitmapColor.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-05-12T12:55:27Z",
+      "side": 1,
+      "message": "I\u0027d really rather we get rid of BitmapColor completely and just add GetIndex to Color. Mostly because getting rid of indexed bitmaps is something we want to do in the near future (practically no backend supports them anymore).",
+      "revId": "72c5adc23fcb42d1818086aa4b91f226307b6ec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_c9aa4d84",
+        "filename": "include/vcl/BitmapColor.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-05-12T12:55:27Z",
+      "side": 1,
+      "message": "Still having this constructor is scary..",
+      "range": {
+        "startLine": 32,
+        "startChar": 47,
+        "endLine": 32,
+        "endChar": 51
+      },
+      "revId": "72c5adc23fcb42d1818086aa4b91f226307b6ec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_89cf657e",
+        "filename": "include/vcl/BitmapColor.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-05-12T12:55:27Z",
+      "side": 1,
+      "message": "We had such asserts in the past and they were more of a PITA than helping.",
+      "revId": "72c5adc23fcb42d1818086aa4b91f226307b6ec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_09a115aa",
+        "filename": "vcl/qa/cppunit/outdev.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-05-12T12:55:27Z",
+      "side": 1,
+      "message": "AFAIK GetPixel returns a Color.. so this cast shouldn\u0027t be necessary",
+      "range": {
+        "startLine": 62,
+        "startChar": 48,
+        "endLine": 62,
+        "endChar": 53
+      },
+      "revId": "72c5adc23fcb42d1818086aa4b91f226307b6ec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_29a651c3",
+        "filename": "vcl/source/gdi/metaact.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-05-12T12:55:27Z",
+      "side": 1,
+      "message": "All this... nothing to do with what this is change is about",
+      "range": {
+        "startLine": 313,
+        "startChar": 34,
+        "endLine": 313,
+        "endChar": 44
+      },
+      "revId": "72c5adc23fcb42d1818086aa4b91f226307b6ec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
