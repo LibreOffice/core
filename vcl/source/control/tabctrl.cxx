@@ -544,11 +544,13 @@ tools::Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, long nWidth, l
             nLastPos = 0;
 
         tools::Rectangle aRect = ImplGetTabRect( nLastPos, nWidth, nHeight );
+        if (aRect.IsEmpty())
+            return aRect;
         long nW = nWidth-TAB_OFFSET*2;
         long nH = nHeight-aRect.Bottom()-TAB_OFFSET*2;
         aRect = (nW > 0 && nH > 0)
-        ? tools::Rectangle( Point( TAB_OFFSET, aRect.Bottom()+TAB_OFFSET ), Size( nW, nH ) )
-        : tools::Rectangle();
+            ? tools::Rectangle( Point( TAB_OFFSET, aRect.Bottom()+TAB_OFFSET ), Size( nW, nH ) )
+            : tools::Rectangle();
         return aRect;
     }
 
