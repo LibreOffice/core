@@ -649,7 +649,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
     }
 }
 
-// Create a error message depending on bootstrap failure code and an optional file url
+// Create an error message depending on bootstrap failure code and an optional file url
 OUString    Desktop::CreateErrorMsgString(
     utl::Bootstrap::FailureCode nFailureCode,
     const OUString& aFileURL )
