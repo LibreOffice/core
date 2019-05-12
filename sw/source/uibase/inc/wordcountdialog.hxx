@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_WORDCOUNTDIALOG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_WORDCOUNTDIALOG_HXX
 #include <sfx2/basedlgs.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/button.hxx>
 struct SwDocStat;
 #include <sfx2/childwin.hxx>
 #include <swabstdlg.hxx>

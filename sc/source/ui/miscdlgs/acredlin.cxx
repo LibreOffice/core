@@ -23,7 +23,6 @@
 #include <unotools/collatorwrapper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <vcl/layout.hxx>
 
 #include <acredlin.hxx>
 #include <global.hxx>

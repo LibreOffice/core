@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/dispatch.hxx>
-#include <vcl/waitobj.hxx>
 #include <sal/log.hxx>
 
 #include <uiitems.hxx>
@@ -35,6 +34,8 @@
 #include <strings.hrc>
 
 #include <filtdlg.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/waitobj.hxx>
 #include <vcl/weld.hxx>
 #include <svl/sharedstringpool.hxx>
 

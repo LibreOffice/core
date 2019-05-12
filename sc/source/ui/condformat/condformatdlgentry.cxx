@@ -24,6 +24,7 @@
 #include <svl/intitem.hxx>
 #include <svx/colorbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <formula/token.hxx>
 #include <formula/errorcodes.hxx>
 #include <tokenarray.hxx>

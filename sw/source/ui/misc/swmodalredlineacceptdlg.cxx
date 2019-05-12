@@ -18,7 +18,6 @@
  */
 
 #include <redline.hxx>
-#include <vcl/layout.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>

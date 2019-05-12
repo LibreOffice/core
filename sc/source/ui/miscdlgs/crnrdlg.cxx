@@ -23,9 +23,8 @@
 #include <scresid.hxx>
 #include <docsh.hxx>
 #include <crnrdlg.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/fixed.hxx>
 #include <memory>
 
 namespace

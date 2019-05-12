@@ -18,9 +18,6 @@
 
 #include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/svlbitm.hxx>
-#include <vcl/treelistentry.hxx>
-#include <vcl/viewdataentry.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <comphelper/processfactory.hxx>

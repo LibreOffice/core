@@ -13,8 +13,6 @@
 #include <document.hxx>
 #include <tokenarray.hxx>
 
-#include <vcl/treelistbox.hxx>
-#include <vcl/treelistentry.hxx>
 #include <vcl/weld.hxx>
 #include <ucbhelper/content.hxx>
 #include <sal/log.hxx>
