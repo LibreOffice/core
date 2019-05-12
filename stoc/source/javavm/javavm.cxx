@@ -24,8 +24,6 @@
 #include "jvmargs.hxx"
 
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/java/JavaNotFoundException.hpp>
 #include <com/sun/star/java/InvalidJavaSettingsException.hpp>
@@ -36,7 +34,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -50,7 +47,6 @@
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
@@ -60,19 +56,11 @@
 #include <jvmaccess/classpath.hxx>
 #include <jvmaccess/unovirtualmachine.hxx>
 #include <jvmaccess/virtualmachine.hxx>
-#include <osl/file.hxx>
-#include <osl/thread.h>
-#include <rtl/bootstrap.hxx>
 #include <rtl/process.h>
-#include <rtl/string.h>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
-#include <rtl/uri.hxx>
 #include <sal/types.h>
 #include <sal/log.hxx>
 #include <uno/current_context.hxx>
-#include <uno/environment.h>
 #include <jvmfwk/framework.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <jni.h>

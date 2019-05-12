@@ -18,20 +18,11 @@
  */
 
 
-#include <stdlib.h>
-#include <osl/file.h>
-#include <vector>
 #include <osl/diagnose.h>
-#include <osl/module.h>
-#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <uno/environment.h>
-#include <uno/mapping.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/shlib.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
@@ -39,8 +30,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+
+namespace com::sun::star::registry { class XRegistryKey; }
 
 using namespace com::sun::star;
 using namespace css::uno;

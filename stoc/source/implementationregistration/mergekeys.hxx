@@ -21,12 +21,12 @@
 #define INCLUDED_STOC_SOURCE_IMPLEMENTATIONREGISTRATION_MERGEKEYS_HXX
 
 #include <sal/config.h>
-
-#include <com/sun/star/uno/Reference.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star { namespace registry {
     class XRegistryKey;
 } } } }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 namespace stoc_impreg {
 

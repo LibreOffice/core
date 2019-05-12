@@ -20,13 +20,12 @@
 
 #include "interact.hxx"
 
-#include <com/sun/star/java/JavaDisabledException.hpp>
-#include <com/sun/star/java/JavaVMCreationFailureException.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
-#include <com/sun/star/task/XInteractionContinuation.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
+
+namespace com::sun::star::task { class XInteractionContinuation; }
 
 using stoc_javavm::InteractionRequest;
 

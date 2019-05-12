@@ -24,10 +24,11 @@
 
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 
 #include <memory>
 #include <unordered_map>
+
+namespace com::sun::star::uno { class Any; }
 
 /** Implementation of a least recently used (lru) cache.
     <br>

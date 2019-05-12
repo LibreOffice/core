@@ -21,8 +21,6 @@
 
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -36,19 +34,17 @@
 #endif
 #include <float.h>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/FailReason.hpp>
-#include <com/sun/star/container/XSet.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 using namespace css::uno;
 using namespace css::lang;
 using namespace css::script;
-using namespace css::registry;
 using namespace cppu;
 using namespace osl;
 

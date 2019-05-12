@@ -20,7 +20,7 @@
 #ifndef INCLUDED_STOC_SOURCE_JAVAVM_JAVAVM_HXX
 #define INCLUDED_STOC_SOURCE_JAVAVM_JAVAVM_HXX
 
-#include "jvmargs.hxx"
+#include <jni.h>
 
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

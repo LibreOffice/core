@@ -19,12 +19,7 @@
 
 
 #include <osl/mutex.hxx>
-#include <uno/dispatcher.h>
-#include <uno/mapping.hxx>
-#include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>

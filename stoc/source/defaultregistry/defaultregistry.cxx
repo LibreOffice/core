@@ -18,22 +18,18 @@
  */
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <registry/registry.hxx>
 #include <rtl/ref.hxx>
 
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace css::uno;
 using namespace css::registry;
@@ -43,8 +39,6 @@ using namespace cppu;
 using namespace osl;
 
 namespace {
-
-class NestedKeyImpl;
 
 class NestedRegistryImpl    : public WeakAggImplHelper4 < XSimpleRegistry, XInitialization, XServiceInfo, XEnumerationAccess >
 {

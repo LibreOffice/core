@@ -21,16 +21,13 @@
 #include <osl/diagnose.h>
 #include <osl/file.h>
 #include <rtl/byteseq.hxx>
-#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/access_control.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/security/XAccessController.hpp>
 #include <com/sun/star/security/XPolicy.hpp>
 #include <com/sun/star/security/AllPermission.hpp>
 #include <com/sun/star/security/RuntimePermission.hpp>

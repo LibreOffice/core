@@ -17,25 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdlib.h>
 #include <string.h>
 #include <vector>
 
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
-
-#include <uno/mapping.hxx>
-#include <osl/thread.h>
-
-#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <osl/process.h>
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -52,8 +42,6 @@
 
 #if defined(_WIN32)
 #include <io.h>
-#else
-#include <unistd.h>
 #endif
 
 

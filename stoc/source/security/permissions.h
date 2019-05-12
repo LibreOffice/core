@@ -23,9 +23,8 @@
 #include <rtl/ustring.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
 
 namespace stoc_sec
 {

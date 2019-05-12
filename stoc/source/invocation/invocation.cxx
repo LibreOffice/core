@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/mutex.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -25,7 +24,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/script/CannotConvertException.hpp>
@@ -45,15 +43,11 @@
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/PropertyConcept.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include <memory>
 #include <vector>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
 
 #define SERVICENAME "com.sun.star.script.Invocation"
 #define IMPLNAME     "com.sun.star.comp.stoc.Invocation"

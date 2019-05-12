@@ -22,19 +22,12 @@
 #include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
-#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
-#include <uno/mapping.hxx>
-#include <uno/dispatcher.h>
-#include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/factory.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/component_context.hxx>
-#include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
@@ -55,9 +48,7 @@
 #include <com/sun/star/container/XElementAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XUnloadingPreference.hpp>
 
 #include <unordered_map>
 #include <unordered_set>

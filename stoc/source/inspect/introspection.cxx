@@ -29,25 +29,18 @@
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
-#include <osl/thread.h>
 #include <sal/log.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/component.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
-#include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/lang/NoSuchMethodException.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
@@ -70,14 +63,12 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
 #include <unordered_map>
 
 using namespace css::uno;
 using namespace css::lang;
 using namespace css::reflection;
 using namespace css::container;
-using namespace css::registry;
 using namespace css::beans;
 using namespace css::beans::PropertyAttribute;
 using namespace css::beans::PropertyConcept;
@@ -158,7 +149,6 @@ typedef std::unordered_map
 LowerToExactNameMap;
 
 
-class ImplIntrospectionAccess;
 class IntrospectionAccessStatic_Impl: public salhelper::SimpleReferenceObject
 {
     friend class Implementation;
