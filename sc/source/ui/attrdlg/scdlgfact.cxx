@@ -113,7 +113,10 @@ short AbstractScDeleteCellDlg_Impl::Execute()
 }
 
 //for dataform
-IMPL_ABSTDLG_BASE(AbstractScDataFormDlg_Impl);
+short AbstractScDataFormDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractScDeleteContentsDlg_Impl::Execute()
 {
@@ -797,11 +800,10 @@ VclPtr<AbstractScDeleteCellDlg> ScAbstractDialogFactory_Impl::CreateScDeleteCell
     return VclPtr<AbstractScDeleteCellDlg_Impl>::Create(std::make_unique<ScDeleteCellDlg>(pParent, bDisallowCellMove));
 }
 
-VclPtr<AbstractScDataFormDlg> ScAbstractDialogFactory_Impl::CreateScDataFormDlg(vcl::Window* pParent,
+VclPtr<AbstractScDataFormDlg> ScAbstractDialogFactory_Impl::CreateScDataFormDlg(weld::Window* pParent,
     ScTabViewShell* pTabViewShell)
 {
-    VclPtr<ScDataFormDlg> pDlg = VclPtr<ScDataFormDlg>::Create(pParent, pTabViewShell);
-    return VclPtr<AbstractScDataFormDlg_Impl>::Create(pDlg);
+    return VclPtr<AbstractScDataFormDlg_Impl>::Create(std::make_unique<ScDataFormDlg>(pParent, pTabViewShell));
 }
 
 VclPtr<AbstractScDeleteContentsDlg> ScAbstractDialogFactory_Impl::CreateScDeleteContentsDlg(weld::Window* pParent)

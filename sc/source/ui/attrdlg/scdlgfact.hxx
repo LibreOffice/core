@@ -204,7 +204,14 @@ public:
 //for dataform
 class AbstractScDataFormDlg_Impl : public AbstractScDataFormDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScDataFormDlg_Impl,ScDataFormDlg);
+    std::unique_ptr<ScDataFormDlg> m_xDlg;
+public:
+    explicit AbstractScDataFormDlg_Impl(std::unique_ptr<ScDataFormDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+
 };
 
 class AbstractScDeleteContentsDlg_Impl : public AbstractScDeleteContentsDlg
@@ -612,8 +619,7 @@ public:
     virtual VclPtr<AbstractScDeleteCellDlg> CreateScDeleteCellDlg(weld::Window* pParent, bool bDisallowCellMove ) override;
 
     //for dataform
-    virtual VclPtr<AbstractScDataFormDlg> CreateScDataFormDlg(vcl::Window* pParent,
-        ScTabViewShell* pTabViewShell) override;
+    virtual VclPtr<AbstractScDataFormDlg> CreateScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShell) override;
 
     virtual VclPtr<AbstractScDeleteContentsDlg> CreateScDeleteContentsDlg(weld::Window* pParent) override;
 
