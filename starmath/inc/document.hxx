@@ -75,7 +75,6 @@ public:
     OutputDevice* GetRefDev()  { return pRefDev.get(); }
 };
 
-void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool, const SvtLinguOptions &rOpt);
 
 class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
 {
@@ -215,6 +214,8 @@ public:
             oox::drawingml::DocumentType documentType);
     void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding);
     void readFormulaOoxml( oox::formulaimport::XmlStream& stream );
+
+    void UpdateEditEngineDefaultFonts();
 };
 
 #endif

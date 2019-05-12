@@ -275,8 +275,12 @@ void SmDocShell::ArrangeFormula()
     maAccText.clear();
 }
 
-void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool, const SvtLinguOptions &rOpt)
+void SmDocShell::UpdateEditEngineDefaultFonts()
 {
+    assert(mpEditEngineItemPool);
+    if (!mpEditEngineItemPool)
+        return;
+
     // set fonts to be used
     struct FontDta {
         LanguageType const    nFallbackLang;
@@ -295,9 +299,10 @@ void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool, const SvtLinguO
         {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
             DefaultFontType::CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
     };
-    aTable[0].nLang = rOpt.nDefaultLanguage;
-    aTable[1].nLang = rOpt.nDefaultLanguage_CJK;
-    aTable[2].nLang = rOpt.nDefaultLanguage_CTL;
+
+    aTable[0].nLang = maLinguOptions.nDefaultLanguage;
+    aTable[1].nLang = maLinguOptions.nDefaultLanguage_CJK;
+    aTable[2].nLang = maLinguOptions.nDefaultLanguage_CTL;
 
     for (FontDta & rFntDta : aTable)
     {
@@ -305,7 +310,7 @@ void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool, const SvtLinguO
                 rFntDta.nFallbackLang : rFntDta.nLang;
         vcl::Font aFont = OutputDevice::GetDefaultFont(
                     rFntDta.nFontType, nLang, GetDefaultFontFlags::OnlyOne );
-        rEditEngineItemPool.SetPoolDefaultItem(
+        mpEditEngineItemPool->SetPoolDefaultItem(
                 SvxFontItem( aFont.GetFamilyType(), aFont.GetFamilyName(),
                     aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(),
                     rFntDta.nFontInfoId ) );
@@ -316,11 +321,11 @@ void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool, const SvtLinguO
                     Application::GetDefaultDevice()->LogicToPixel(
                     Size( 0, 11 ), MapMode( MapUnit::MapPoint ) ).Height(), 100,
                     EE_CHAR_FONTHEIGHT );
-    rEditEngineItemPool.SetPoolDefaultItem( aFontHeigt );
+    mpEditEngineItemPool->SetPoolDefaultItem( aFontHeigt );
     aFontHeigt.SetWhich( EE_CHAR_FONTHEIGHT_CJK );
-    rEditEngineItemPool.SetPoolDefaultItem( aFontHeigt );
+    mpEditEngineItemPool->SetPoolDefaultItem( aFontHeigt );
     aFontHeigt.SetWhich( EE_CHAR_FONTHEIGHT_CTL );
-    rEditEngineItemPool.SetPoolDefaultItem( aFontHeigt );
+    mpEditEngineItemPool->SetPoolDefaultItem( aFontHeigt );
 }
 
 EditEngine& SmDocShell::GetEditEngine()
@@ -333,7 +338,7 @@ EditEngine& SmDocShell::GetEditEngine()
 
         mpEditEngineItemPool = EditEngine::CreatePool();
 
-        SetEditEngineDefaultFonts(*mpEditEngineItemPool, maLinguOptions);
+        UpdateEditEngineDefaultFonts();
 
         mpEditEngine.reset( new EditEngine( mpEditEngineItemPool ) );
 
@@ -342,6 +347,10 @@ EditEngine& SmDocShell::GetEditEngine()
         mpEditEngine->EnableUndo( true );
         mpEditEngine->SetDefTab( sal_uInt16(
             Application::GetDefaultDevice()->GetTextWidth("XXXX")) );
+
+        const StyleSettings& rStyleSettings = Application::GetDefaultDevice()->GetSettings().GetStyleSettings();
+        mpEditEngine->SetTextColor(rStyleSettings.GetFieldTextColor());
+        mpEditEngine->SetBackgroundColor(rStyleSettings.GetFieldColor());
 
         mpEditEngine->SetControlWord(
                 (mpEditEngine->GetControlWord() | EEControlBits::AUTOINDENTING) &
