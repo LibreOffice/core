@@ -188,6 +188,12 @@ EditEngine * SmEditWindow::GetEditEngine()
     return pEditEng;
 }
 
+void SmEditWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    rRenderContext.SetBackground(rStyleSettings.GetWindowColor());
+}
+
 void SmEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -208,11 +214,9 @@ void SmEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
         //!
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-        pDoc->UpdateEditEngineDefaultFonts();
-
-        pEditEngine->SetDefTab(sal_uInt16(GetTextWidth("XXXX")));
-        pEditEngine->SetTextColor(rStyleSettings.GetFieldTextColor());
+        pDoc->UpdateEditEngineDefaultFonts(rStyleSettings.GetFieldTextColor());
         pEditEngine->SetBackgroundColor(rStyleSettings.GetFieldColor());
+        pEditEngine->SetDefTab(sal_uInt16(GetTextWidth("XXXX")));
 
         // forces new settings to be used
         // unfortunately this resets the whole edit engine

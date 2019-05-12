@@ -215,7 +215,7 @@ public:
     void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding);
     void readFormulaOoxml( oox::formulaimport::XmlStream& stream );
 
-    void UpdateEditEngineDefaultFonts();
+    void UpdateEditEngineDefaultFonts(const Color& aTextColor);
 };
 
 #endif

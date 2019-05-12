@@ -183,16 +183,6 @@ Color const & EditEngine::GetBackgroundColor() const
     return pImpEditEngine->GetBackgroundColor();
 }
 
-void EditEngine::SetTextColor( const Color& rColor )
-{
-    pImpEditEngine->SetTextColor( rColor );
-}
-
-Color const & EditEngine::GetTextColor() const
-{
-    return pImpEditEngine->GetTextColor();
-}
-
 Color EditEngine::GetAutoColor() const
 {
     return pImpEditEngine->GetAutoColor();
