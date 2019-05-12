@@ -23,7 +23,6 @@
 #include <UserDefinedProperties.hxx>
 #include <CharacterProperties.hxx>
 #include <PropertyHelper.hxx>
-#include <ContainerHelper.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <unonames.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -293,10 +292,12 @@ void SAL_CALL RegressionEquation::setText( const uno::Sequence< uno::Reference< 
 {
     MutexGuard aGuard( m_aMutex );
     ModifyListenerHelper::removeListenerFromAllElements(
-        ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
+        comphelper::sequenceToContainer<std::vector<uno::Reference< chart2::XFormattedString > > >( m_aStrings ),
+        m_xModifyEventForwarder );
     m_aStrings = Strings;
     ModifyListenerHelper::addListenerToAllElements(
-        ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
+        comphelper::sequenceToContainer<std::vector<uno::Reference< chart2::XFormattedString > > >( m_aStrings ),
+        m_xModifyEventForwarder );
     fireModifyEvent();
 }
 

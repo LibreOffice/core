@@ -26,7 +26,6 @@
 #include <servicenames_coosystems.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ExplicitCategoriesProvider.hxx>
-#include <ContainerHelper.hxx>
 #include "VAxisBase.hxx"
 #include <defines.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
@@ -202,7 +201,7 @@ Sequence< Reference< beans::XPropertySet > > VCoordinateSystem::getGridListFromA
     if( xAxis.is() )
     {
         aRet.push_back( xAxis->getGridProperties() );
-        std::vector< Reference< beans::XPropertySet > > aSubGrids( ContainerHelper::SequenceToVector( xAxis->getSubGridProperties() ) );
+        auto aSubGrids( comphelper::sequenceToContainer<std::vector< Reference< beans::XPropertySet > > >( xAxis->getSubGridProperties() ) );
         aRet.insert( aRet.end(), aSubGrids.begin(), aSubGrids.end() );
     }
 

@@ -1163,7 +1163,6 @@ chart2/source/inc/ColorPerPointHelper.hxx
 chart2/source/inc/CommonConverters.hxx
 chart2/source/inc/CommonFunctors.hxx
 chart2/source/inc/ConfigColorScheme.hxx
-chart2/source/inc/ContainerHelper.hxx
 chart2/source/inc/ControllerLockGuard.hxx
 chart2/source/inc/DataSeriesHelper.hxx
 chart2/source/inc/DataSource.hxx

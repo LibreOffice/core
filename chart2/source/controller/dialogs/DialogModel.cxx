@@ -24,7 +24,6 @@
 #include <DiagramHelper.hxx>
 #include <strings.hrc>
 #include <ResId.hxx>
-#include <ContainerHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>
@@ -489,7 +488,7 @@ void addNewSeriesToContainer(
     const Reference<XDataSeries>& xNewSeries )
 {
     Reference<XDataSeriesContainer> xSeriesCnt(xChartType, uno::UNO_QUERY_THROW);
-    std::vector<Reference<XDataSeries> > aSeries = ContainerHelper::SequenceToVector(xSeriesCnt->getDataSeries());
+    auto aSeries = comphelper::sequenceToContainer<std::vector<Reference<XDataSeries> >>(xSeriesCnt->getDataSeries());
 
     std::vector<Reference<XDataSeries> >::iterator aIt =
         std::find( aSeries.begin(), aSeries.end(), xSeries);
@@ -819,8 +818,8 @@ void DialogModel::applyInterpretedData(
 
         // data series
         std::vector< Reference< XDataSeriesContainer > > aSeriesCnt( getAllDataSeriesContainers());
-        std::vector< Sequence< Reference< XDataSeries > > > aNewSeries(
-            ContainerHelper::SequenceToVector( rNewData.Series ));
+        auto aNewSeries(
+            comphelper::sequenceToContainer<std::vector< Sequence< Reference< XDataSeries > > >>( rNewData.Series ));
 
         OSL_ASSERT( aSeriesCnt.size() == aNewSeries.size());
 
