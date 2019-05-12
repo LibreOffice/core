@@ -45,8 +45,10 @@ SvResizeHelper::SvResizeHelper()
 |*
 |*    Description: the eight handles to magnify
 *************************************************************************/
-void SvResizeHelper::FillHandleRectsPixel( tools::Rectangle aRects[ 8 ] ) const
+std::array<tools::Rectangle,8> SvResizeHelper::FillHandleRectsPixel() const
 {
+    std::array<tools::Rectangle,8> aRects;
+
     // only because of EMPTY_RECT
     Point aBottomRight = aOuter.BottomRight();
 
@@ -80,6 +82,7 @@ void SvResizeHelper::FillHandleRectsPixel( tools::Rectangle aRects[ 8 ] ) const
     aRects[ 7 ] = tools::Rectangle( Point( aOuter.Left(),
                                     aOuter.Center().Y() - aBorder.Height() / 2 ),
                             aBorder );
+    return aRects;
 }
 
 /*************************************************************************
@@ -87,20 +90,26 @@ void SvResizeHelper::FillHandleRectsPixel( tools::Rectangle aRects[ 8 ] ) const
 |*
 |*    Description: the four edges are calculated
 *************************************************************************/
-void SvResizeHelper::FillMoveRectsPixel( tools::Rectangle aRects[ 4 ] ) const
+std::array<tools::Rectangle,4> SvResizeHelper::FillMoveRectsPixel() const
 {
+    std::array<tools::Rectangle,4> aRects;
+
     // upper
     aRects[ 0 ] = aOuter;
     aRects[ 0 ].SetBottom( aRects[ 0 ].Top() + aBorder.Height() -1 );
     // right
     aRects[ 1 ] = aOuter;
-    aRects[ 1 ].SetLeft( aRects[ 1 ].Right() - aBorder.Width() -1 );
+    if (!aOuter.IsWidthEmpty())
+        aRects[ 1 ].SetLeft( aRects[ 1 ].Right() - aBorder.Width() -1 );
     // lower
     aRects[ 2 ] = aOuter;
-    aRects[ 2 ].SetTop( aRects[ 2 ].Bottom() - aBorder.Height() -1 );
+    if (!aOuter.IsHeightEmpty())
+        aRects[ 2 ].SetTop( aRects[ 2 ].Bottom() - aBorder.Height() -1 );
     // left
     aRects[ 3 ] = aOuter;
     aRects[ 3 ].SetRight( aRects[ 3 ].Left() + aBorder.Width() -1 );
+
+    return aRects;
 }
 
 /*************************************************************************
@@ -116,15 +125,13 @@ void SvResizeHelper::Draw(vcl::RenderContext& rRenderContext)
     rRenderContext.SetFillColor( COL_LIGHTGRAY );
     rRenderContext.SetLineColor();
 
-    tools::Rectangle aMoveRects[ 4 ];
-    FillMoveRectsPixel( aMoveRects );
+    std::array<tools::Rectangle,4> aMoveRects = FillMoveRectsPixel();
     sal_uInt16 i;
     for (i = 0; i < 4; i++)
         rRenderContext.DrawRect(aMoveRects[i]);
     // draw handles
     rRenderContext.SetFillColor(Color()); // black
-    tools::Rectangle aRects[ 8 ];
-    FillHandleRectsPixel(aRects);
+    std::array<tools::Rectangle,8> aRects = FillHandleRectsPixel();
     for (i = 0; i < 8; i++)
         rRenderContext.DrawRect( aRects[ i ] );
     rRenderContext.Pop();
@@ -137,8 +144,7 @@ void SvResizeHelper::Draw(vcl::RenderContext& rRenderContext)
 *************************************************************************/
 void SvResizeHelper::InvalidateBorder( vcl::Window * pWin )
 {
-    tools::Rectangle   aMoveRects[ 4 ];
-    FillMoveRectsPixel( aMoveRects );
+    std::array<tools::Rectangle,4> aMoveRects = FillMoveRectsPixel();
     for(const auto & rMoveRect : aMoveRects)
         pWin->Invalidate( rMoveRect );
 }
@@ -172,14 +178,12 @@ short SvResizeHelper::SelectMove( vcl::Window * pWin, const Point & rPos )
 {
     if( -1 == nGrab )
     {
-        tools::Rectangle aRects[ 8 ];
-        FillHandleRectsPixel( aRects );
+        std::array<tools::Rectangle,8> aRects = FillHandleRectsPixel();
         for( sal_uInt16 i = 0; i < 8; i++ )
             if( aRects[ i ].IsInside( rPos ) )
                 return i;
         // Move-Rect overlaps Handles
-        tools::Rectangle aMoveRects[ 4 ];
-        FillMoveRectsPixel( aMoveRects );
+        std::array<tools::Rectangle,4> aMoveRects = FillMoveRectsPixel();
         for(const auto & rMoveRect : aMoveRects)
             if( rMoveRect.IsInside( rPos ) )
                 return 8;
