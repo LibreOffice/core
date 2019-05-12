@@ -2490,24 +2490,23 @@ void XMLMacroFieldImportContext::PrepareField(
         Sequence<PropertyValue> aValues;
         pEvents->GetEventSequence( "OnClick", aValues );
 
-        sal_Int32 nLength = aValues.getLength();
-        for( sal_Int32 i = 0; i < nLength; i++ )
+        for( const auto& rValue : aValues )
         {
-            if ( aValues[i].Name == "ScriptType" )
+            if ( rValue.Name == "ScriptType" )
             {
                 // ignore ScriptType
             }
-            else if ( aValues[i].Name == "Library" )
+            else if ( rValue.Name == "Library" )
             {
-                aValues[i].Value >>= sLibraryName;
+                rValue.Value >>= sLibraryName;
             }
-            else if ( aValues[i].Name == "MacroName" )
+            else if ( rValue.Name == "MacroName" )
             {
-                aValues[i].Value >>= sMacroName;
+                rValue.Value >>= sMacroName;
             }
-            if ( aValues[i].Name == "Script" )
+            if ( rValue.Name == "Script" )
             {
-                aValues[i].Value >>= sScriptURL;
+                rValue.Value >>= sScriptURL;
             }
         }
     }
