@@ -576,4 +576,25 @@ void Qt5Widget::endExtTextInput()
     }
 }
 
+void Qt5Widget::changeEvent(QEvent* pEvent)
+{
+    switch (pEvent->type())
+    {
+        case QEvent::FontChange:
+            [[fallthrough]];
+        case QEvent::PaletteChange:
+            [[fallthrough]];
+        case QEvent::StyleChange:
+        {
+            auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+            assert(pSalInst);
+            pSalInst->UpdateStyle(QEvent::FontChange == pEvent->type());
+            break;
+        }
+        default:
+            break;
+    }
+    QWidget::changeEvent(pEvent);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

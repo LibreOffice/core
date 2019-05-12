@@ -27,6 +27,7 @@
 
 class Qt5Frame;
 class Qt5Object;
+class QEvent;
 class QFocusEvent;
 class QInputMethodEvent;
 class QKeyEvent;
@@ -66,6 +67,7 @@ class Qt5Widget : public QWidget
     virtual void showEvent(QShowEvent*) override;
     virtual void wheelEvent(QWheelEvent*) override;
     virtual void closeEvent(QCloseEvent*) override;
+    virtual void changeEvent(QEvent*) override;
 
     void inputMethodEvent(QInputMethodEvent*) override;
     QVariant inputMethodQuery(Qt::InputMethodQuery) const override;
