@@ -136,10 +136,10 @@ void SvXMLMetaExport::MExport_()
 
     //  keywords
     const uno::Sequence< OUString > keywords = mxDocProps->getKeywords();
-    for (sal_Int32 i = 0; i < keywords.getLength(); ++i) {
+    for (const auto& rKeyword : keywords) {
         SvXMLElementExport aKwElem( mrExport, XML_NAMESPACE_META, XML_KEYWORD,
                                     true, false );
-        mrExport.Characters( keywords[i] );
+        mrExport.Characters( rKeyword );
     }
 
     //  document language
@@ -236,14 +236,14 @@ void SvXMLMetaExport::MExport_()
         mxDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
     const uno::Sequence< beans::PropertyValue > props =
         xUserDefined->getPropertyValues();
-    for (sal_Int32 i = 0; i < props.getLength(); ++i) {
+    for (const auto& rProp : props) {
         OUStringBuffer sValueBuffer;
         OUStringBuffer sType;
-        if (!::sax::Converter::convertAny(sValueBuffer, sType, props[i].Value))
+        if (!::sax::Converter::convertAny(sValueBuffer, sType, rProp.Value))
         {
             continue;
         }
-        mrExport.AddAttribute( XML_NAMESPACE_META, XML_NAME, props[i].Name );
+        mrExport.AddAttribute( XML_NAMESPACE_META, XML_NAME, rProp.Name );
         mrExport.AddAttribute( XML_NAMESPACE_META, XML_VALUE_TYPE,
                               sType.makeStringAndClear() );
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_META,
@@ -256,34 +256,34 @@ void SvXMLMetaExport::MExport_()
     // write document statistic if there is any provided
     if ( aDocStatistic.hasElements() )
     {
-        for ( sal_Int32 nInd = 0; nInd < aDocStatistic.getLength(); nInd++ )
+        for ( const auto& rDocStat : aDocStatistic )
         {
             sal_Int32 nValue = 0;
-            if ( aDocStatistic[nInd].Value >>= nValue )
+            if ( rDocStat.Value >>= nValue )
             {
                 OUString aValue = OUString::number( nValue );
-                if ( aDocStatistic[nInd].Name == "TableCount" )
+                if ( rDocStat.Name == "TableCount" )
                     mrExport.AddAttribute(
                         XML_NAMESPACE_META, XML_TABLE_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name == "ObjectCount" )
+                else if ( rDocStat.Name == "ObjectCount" )
                     mrExport.AddAttribute(
                         XML_NAMESPACE_META, XML_OBJECT_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name == "ImageCount" )
+                else if ( rDocStat.Name == "ImageCount" )
                     mrExport.AddAttribute(
                         XML_NAMESPACE_META, XML_IMAGE_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name == "PageCount" )
+                else if ( rDocStat.Name == "PageCount" )
                     mrExport.AddAttribute(
                         XML_NAMESPACE_META, XML_PAGE_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name == "ParagraphCount" )
+                else if ( rDocStat.Name == "ParagraphCount" )
                     mrExport.AddAttribute(
                         XML_NAMESPACE_META, XML_PARAGRAPH_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name == "WordCount" )
+                else if ( rDocStat.Name == "WordCount" )
                     mrExport.AddAttribute(
                         XML_NAMESPACE_META, XML_WORD_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name == "CharacterCount" )
+                else if ( rDocStat.Name == "CharacterCount" )
                     mrExport.AddAttribute(
                         XML_NAMESPACE_META, XML_CHARACTER_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name == "CellCount" )
+                else if ( rDocStat.Name == "CellCount" )
                     mrExport.AddAttribute(
                         XML_NAMESPACE_META, XML_CELL_COUNT, aValue );
                 else

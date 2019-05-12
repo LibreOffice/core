@@ -224,18 +224,17 @@ namespace xmloff
     {
         m_aRemainingProps.clear();
         Sequence< Property > aProperties = m_xPropertyInfo->getProperties();
-        const Property* pProperties = aProperties.getConstArray();
-        for (sal_Int32 i=0; i<aProperties.getLength(); ++i, ++pProperties)
+        for (const auto& rProp : aProperties)
         {
             // no transient props
-            if ( pProperties->Attributes & PropertyAttribute::TRANSIENT )
+            if ( rProp.Attributes & PropertyAttribute::TRANSIENT )
                 continue;
             // no read-only props
-            if ( ( pProperties->Attributes & PropertyAttribute::READONLY ) != 0 )
+            if ( ( rProp.Attributes & PropertyAttribute::READONLY ) != 0 )
                 // except they're dynamically added
-                if ( ( pProperties->Attributes & PropertyAttribute::REMOVABLE ) == 0 )
+                if ( ( rProp.Attributes & PropertyAttribute::REMOVABLE ) == 0 )
                     continue;
-            m_aRemainingProps.insert(pProperties->Name);
+            m_aRemainingProps.insert(rProp.Name);
         }
     }
 

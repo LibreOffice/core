@@ -53,13 +53,12 @@ void XMLScriptExportHandler::Export(
                              XML_NAMESPACE_OOO, GetXMLToken(XML_SCRIPT) ) );
     rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, rEventQName);
 
-    sal_Int32 nCount = rValues.getLength();
-    for(sal_Int32 i = 0; i < nCount; i++)
+    for(const auto& rValue : rValues)
     {
-        if (gsURL == rValues[i].Name)
+        if (gsURL == rValue.Name)
         {
             OUString sTmp;
-            rValues[i].Value >>= sTmp;
+            rValue.Value >>= sTmp;
             rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sTmp);
 
             // #i110911# xlink:type="simple" is required

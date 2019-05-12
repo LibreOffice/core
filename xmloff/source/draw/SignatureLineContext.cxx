@@ -82,37 +82,38 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_uInt16 nPrf
         Sequence<DocumentSignatureInformation> xSignatureInfo
             = xSignatures->verifyDocumentContentSignatures(xStorage, Reference<XInputStream>());
 
-        for (int i = 0; i < xSignatureInfo.getLength(); i++)
+        // Try to find matching signature line image - if none exists that is fine,
+        // then the signature line is not digitally signed.
+        auto pSignatureInfo = std::find_if(
+            xSignatureInfo.begin(), xSignatureInfo.end(),
+            [&xAttrList](const DocumentSignatureInformation& rSignatureInfo) {
+                return rSignatureInfo.SignatureLineId == xAttrList->getValueByName("loext:id");
+            });
+        if (pSignatureInfo != xSignatureInfo.end())
         {
-            // Try to find matching signature line image - if none exists that is fine,
-            // then the signature line is not digitally signed.
-            if (xSignatureInfo[i].SignatureLineId == xAttrList->getValueByName("loext:id"))
+            bIsSigned = true;
+            if (pSignatureInfo->SignatureIsValid)
             {
-                bIsSigned = true;
-                if (xSignatureInfo[i].SignatureIsValid)
-                {
-                    // Signature is valid, use the 'valid' image
-                    SAL_WARN_IF(!xSignatureInfo[i].ValidSignatureLineImage.is(), "xmloff",
-                                "No ValidSignatureLineImage!");
-                    xGraphic = xSignatureInfo[i].ValidSignatureLineImage;
-                }
-                else
-                {
-                    // Signature is invalid, use the 'invalid' image
-                    SAL_WARN_IF(!xSignatureInfo[i].InvalidSignatureLineImage.is(), "xmloff",
-                                "No InvalidSignatureLineImage!");
-                    xGraphic = xSignatureInfo[i].InvalidSignatureLineImage;
-                }
-
-                // Save unsigned graphic
-                Reference<XGraphic> xUnsignedGraphic;
-                xPropSet->getPropertyValue("Graphic") >>= xUnsignedGraphic;
-                if (xUnsignedGraphic.is())
-                    xPropSet->setPropertyValue("SignatureLineUnsignedImage", Any(xUnsignedGraphic));
-
-                xPropSet->setPropertyValue("Graphic", Any(xGraphic));
-                break;
+                // Signature is valid, use the 'valid' image
+                SAL_WARN_IF(!pSignatureInfo->ValidSignatureLineImage.is(), "xmloff",
+                            "No ValidSignatureLineImage!");
+                xGraphic = pSignatureInfo->ValidSignatureLineImage;
             }
+            else
+            {
+                // Signature is invalid, use the 'invalid' image
+                SAL_WARN_IF(!pSignatureInfo->InvalidSignatureLineImage.is(), "xmloff",
+                            "No InvalidSignatureLineImage!");
+                xGraphic = pSignatureInfo->InvalidSignatureLineImage;
+            }
+
+            // Save unsigned graphic
+            Reference<XGraphic> xUnsignedGraphic;
+            xPropSet->getPropertyValue("Graphic") >>= xUnsignedGraphic;
+            if (xUnsignedGraphic.is())
+                xPropSet->setPropertyValue("SignatureLineUnsignedImage", Any(xUnsignedGraphic));
+
+            xPropSet->setPropertyValue("Graphic", Any(xGraphic));
         }
         xPropSet->setPropertyValue("SignatureLineIsSigned", Any(bIsSigned));
     }
