@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_298f312b",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-05-12T15:44:57Z",
+      "side": 1,
+      "message": "I\u0027ll make it public again and add a comment to read the commit log, so no one will try to hide it again ;-)\n\nI already wrote in the commit message that I\u0027m not sure this is worth the hassle.",
+      "parentUuid": "3fa0c359_c9dc8d48",
+      "revId": "72c5adc23fcb42d1818086aa4b91f226307b6ec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_e9af0992",
         "filename": "include/tools/color.hxx",
         "patchSetId": 1
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_c9832d04",
+        "filename": "include/vcl/BitmapColor.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-05-12T15:44:57Z",
+      "side": 1,
+      "message": "Feel free to add an additional patch. Personally I like the explicit class difference.",
+      "parentUuid": "3fa0c359_e9baa9dc",
+      "revId": "72c5adc23fcb42d1818086aa4b91f226307b6ec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_c9aa4d84",
         "filename": "include/vcl/BitmapColor.hxx",
         "patchSetId": 1
@@ -76,6 +112,30 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_49771d3c",
+        "filename": "include/vcl/BitmapColor.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-05-12T15:44:57Z",
+      "side": 1,
+      "message": "It\u0027s at least used by include/vcl/ColorMask.hxx, explicit with zero cAlpha-",
+      "parentUuid": "3fa0c359_c9aa4d84",
+      "range": {
+        "startLine": 32,
+        "startChar": 47,
+        "endLine": 32,
+        "endChar": 51
+      },
+      "revId": "72c5adc23fcb42d1818086aa4b91f226307b6ec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_89cf657e",
         "filename": "include/vcl/BitmapColor.hxx",
         "patchSetId": 1
@@ -87,6 +147,24 @@
       "writtenOn": "2019-05-12T12:55:27Z",
       "side": 1,
       "message": "We had such asserts in the past and they were more of a PITA than helping.",
+      "revId": "72c5adc23fcb42d1818086aa4b91f226307b6ec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_69745936",
+        "filename": "include/vcl/BitmapColor.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-05-12T15:44:57Z",
+      "side": 1,
+      "message": "Also wasn\u0027t sure about them - will remove.",
+      "parentUuid": "3fa0c359_89cf657e",
       "revId": "72c5adc23fcb42d1818086aa4b91f226307b6ec3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
