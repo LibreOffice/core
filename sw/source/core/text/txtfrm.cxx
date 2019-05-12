@@ -1337,8 +1337,7 @@ void SwTextFrame::ResetPreps()
 {
     if ( GetCacheIdx() != USHRT_MAX )
     {
-        SwParaPortion *pPara;
-        if( nullptr != (pPara = GetPara()) )
+        if (SwParaPortion *pPara = GetPara())
             pPara->ResetPreps();
     }
 }

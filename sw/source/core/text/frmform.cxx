@@ -108,10 +108,12 @@ void SwTextFrame::ValidateFrame()
 
     // We at least have to save the MustFit flag!
     OSL_ENSURE( HasPara(), "ResetPreps(), missing ParaPortion." );
-    SwParaPortion *pPara = GetPara();
-    const bool bMustFit = pPara->IsPrepMustFit();
-    ResetPreps();
-    pPara->SetPrepMustFit( bMustFit );
+    if (SwParaPortion *pPara = GetPara())
+    {
+        const bool bMustFit = pPara->IsPrepMustFit();
+        ResetPreps();
+        pPara->SetPrepMustFit( bMustFit );
+    }
 }
 
 // After a RemoveFootnote the BodyFrame and all Frames contained within it, need to be
