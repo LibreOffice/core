@@ -27,21 +27,20 @@ public class DesignDim {
   // To discrete space with the given step. For example, for an integer variable,
   // The grain value can be set as 1.
   public double grain = 0;
-  public BasicBound paramBound = new BasicBound(); //the range of a parameter
+  public BasicBound paramBound = new BasicBound(); // the range of a parameter
 
   public boolean isDiscrete() {
-    return grain!=0;
+    return grain != 0;
   }
 
   public double getGrainedValue(double value) {
-    if(grain==0) {
+    if (grain == 0) {
       return value;
-    } else if(grain>0) {
-      return paramBound.minValue+Math.rint((value-paramBound.minValue)/grain)*grain;
+    } else if (grain > 0) {
+      return paramBound.minValue + Math.rint((value - paramBound.minValue) / grain) * grain;
     } else {
-      return paramBound.maxValue-Math.rint((paramBound.maxValue-value)/grain)*grain;
+      return paramBound.maxValue - Math.rint((paramBound.maxValue - value) / grain) * grain;
     }
   }
 
 }
-

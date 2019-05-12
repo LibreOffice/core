@@ -24,15 +24,16 @@ import net.adaptivebox.global.BasicBound;
 import net.adaptivebox.space.BasicPoint;
 
 public class SearchPoint extends BasicPoint implements IEncodeEngine {
-  //store the encode information for goodness evaluation
-  //encodeInfo[0]: the sum of constraints (if it equals to 0, then be a feasible point)
-  //encodeInfo[1]: the value of objective function
+  // store the encode information for goodness evaluation
+  // encodeInfo[0]: the sum of constraints (if it equals to 0, then be a feasible
+  // point)
+  // encodeInfo[1]: the value of objective function
   private final double[] encodeInfo = new double[2];
   private double objectiveValue;
 
   public SearchPoint(int dim) {
     super(dim);
-    for(int i=0; i<encodeInfo.length; i++) {
+    for (int i = 0; i < encodeInfo.length; i++) {
       encodeInfo[i] = BasicBound.MAXDOUBLE;
     }
   }
@@ -49,7 +50,7 @@ public class SearchPoint extends BasicPoint implements IEncodeEngine {
     importEncodeInfo(point.getEncodeInfo());
   }
 
-  //Replace self by given point
+  // Replace self by given point
   public void importPoint(SearchPoint point) {
     importLocation(point);
     importEncodeInfo(point);
@@ -57,15 +58,15 @@ public class SearchPoint extends BasicPoint implements IEncodeEngine {
   }
 
   public double getObjectiveValue() {
-      return objectiveValue;
+    return objectiveValue;
   }
 
   public void setObjectiveValue(double objectiveValue) {
-      this.objectiveValue = objectiveValue;
+    this.objectiveValue = objectiveValue;
   }
 
   public boolean isFeasible() {
-      return encodeInfo[0] == 0; //no constraint violations
+    return encodeInfo[0] == 0; // no constraint violations
   }
 
 }

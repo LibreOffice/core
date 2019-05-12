@@ -51,7 +51,8 @@ public class ACRComparator implements IGoodnessCompareEngine, IUpdateCycleEngine
   public ACRComparator(Library lib, int T) {
     socialPool = lib;
     this.T = T;
-    //set the (epsilon_t|t=0) as the maximum CONS value among the SearchPoints in the library
+// set the (epsilon_t|t=0) as the maximum CONS value among the SearchPoints in
+// the library
     epsilon_t = lib.getExtremalVcon(true);
   }
 
@@ -65,7 +66,7 @@ public class ACRComparator implements IGoodnessCompareEngine, IUpdateCycleEngine
   }
 
   public int compare(double[] fit1, double[] fit2) {
-    if(Math.max(fit1[0], fit2[0])<=Math.max(0, epsilon_t)) { //epsilon>0
+    if (Math.max(fit1[0], fit2[0]) <= Math.max(0, epsilon_t)) { // epsilon>0
       return compare(fit1[1], fit2[1]);
     } else {
       return compare(fit1[0], fit2[0]);
@@ -73,16 +74,16 @@ public class ACRComparator implements IGoodnessCompareEngine, IUpdateCycleEngine
   }
 
   public void updateCycle(int t) {
-    //calculates the ratio
-    double rn = (double)socialPool.getVconThanNum(epsilon_t)/(double)socialPool.getPopSize();
-    if(t>TthR*T &&T!=-1) { //Forcing sub-rule
+// calculates the ratio
+    double rn = (double) socialPool.getVconThanNum(epsilon_t) / (double) socialPool.getPopSize();
+    if (t > TthR * T && T != -1) { // Forcing sub-rule
       epsilon_t *= BETAF;
-    } else {  	          //Ratio-keeping sub-rules
-      if(rn>RU) {
-        epsilon_t *= BETAL;  //Shrink
+    } else { // Ratio-keeping sub-rules
+      if (rn > RU) {
+        epsilon_t *= BETAL; // Shrink
       }
-      if(rn<RL) {
-        epsilon_t *= BETAU;  //Relax
+      if (rn < RL) {
+        epsilon_t *= BETAU; // Relax
       }
     }
   }

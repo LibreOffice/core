@@ -24,7 +24,7 @@ import net.adaptivebox.global.BasicBound;
 
 public class EvalElement {
 
-  //The weight for each response (target)
+  // The weight for each response (target)
   private static final double weight = 1;
   /**
    * The expected range of the response value, forms the following objective:
@@ -44,26 +44,25 @@ public class EvalElement {
   public BasicBound targetBound = new BasicBound();
 
   public boolean isOptType() {
-    return ((targetBound.minValue==BasicBound.MINDOUBLE&&targetBound.maxValue==BasicBound.MINDOUBLE)||
-            (targetBound.minValue==BasicBound.MAXDOUBLE&&targetBound.maxValue==BasicBound.MAXDOUBLE));
+    return ((targetBound.minValue == BasicBound.MINDOUBLE && targetBound.maxValue == BasicBound.MINDOUBLE)
+        || (targetBound.minValue == BasicBound.MAXDOUBLE && targetBound.maxValue == BasicBound.MAXDOUBLE));
   }
 
   public double evaluateCONS(double targetValue) {
-    if(targetValue<targetBound.minValue) {
-      return weight*(targetBound.minValue-targetValue);
+    if (targetValue < targetBound.minValue) {
+      return weight * (targetBound.minValue - targetValue);
     }
-    if(targetValue>targetBound.maxValue) {
-      return weight*(targetValue-targetBound.maxValue);
+    if (targetValue > targetBound.maxValue) {
+      return weight * (targetValue - targetBound.maxValue);
     }
     return 0;
   }
 
   public double evaluateOPTIM(double targetValue) {
-    if(targetBound.maxValue==BasicBound.MINDOUBLE) { //min mode
-      return weight*targetValue;
-    } else { //max
-      return -weight*targetValue;
+    if (targetBound.maxValue == BasicBound.MINDOUBLE) { // min mode
+      return weight * targetValue;
+    } else { // max
+      return -weight * targetValue;
     }
   }
 }
-

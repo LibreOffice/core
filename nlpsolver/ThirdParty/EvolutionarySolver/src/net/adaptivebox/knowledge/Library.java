@@ -33,9 +33,9 @@ public class Library {
   private final SearchPoint[] libPoints;
   private int gIndex = -1;
 
-  public Library(int number, ProblemEncoder problemEncoder){
+  public Library(int number, ProblemEncoder problemEncoder) {
     libPoints = new SearchPoint[number];
-    for (int i=0; i<number; i++) {
+    for (int i = 0; i < number; i++) {
       libPoints[i] = problemEncoder.getEncodedSearchPoint();
     }
   }
@@ -45,7 +45,7 @@ public class Library {
   }
 
   public void refreshGbest(IGoodnessCompareEngine qualityComparator) {
-    gIndex = tournamentSelection(qualityComparator, getPopSize()-1, true);
+    gIndex = tournamentSelection(qualityComparator, getPopSize() - 1, true);
   }
 
   public int getPopSize() {
@@ -56,9 +56,11 @@ public class Library {
     return libPoints[index];
   }
 
-  public static boolean replace(IGoodnessCompareEngine comparator, SearchPoint outPoint, SearchPoint tobeReplacedPoint) {
+  public static boolean replace(IGoodnessCompareEngine comparator, SearchPoint outPoint,
+      SearchPoint tobeReplacedPoint) {
     boolean isBetter = false;
-    if(comparator.compare(outPoint.getEncodeInfo(), tobeReplacedPoint.getEncodeInfo())<IGoodnessCompareEngine.LARGER_THAN) {
+    if (comparator.compare(outPoint.getEncodeInfo(),
+        tobeReplacedPoint.getEncodeInfo()) < IGoodnessCompareEngine.LARGER_THAN) {
       tobeReplacedPoint.importPoint(outPoint);
       isBetter = true;
     }
@@ -68,9 +70,10 @@ public class Library {
   public int tournamentSelection(IGoodnessCompareEngine comparator, int times, boolean isBetter) {
     int[] indices = RandomGenerator.randomSelection(getPopSize(), times);
     int currentIndex = indices[0];
-    for (int i=1; i<indices.length; i++) {
-      int compareValue = comparator.compare(libPoints[indices[i]].getEncodeInfo(), libPoints[currentIndex].getEncodeInfo());
-      if (isBetter == (compareValue<IGoodnessCompareEngine.LARGER_THAN)) {
+    for (int i = 1; i < indices.length; i++) {
+      int compareValue = comparator.compare(libPoints[indices[i]].getEncodeInfo(),
+          libPoints[currentIndex].getEncodeInfo());
+      if (isBetter == (compareValue < IGoodnessCompareEngine.LARGER_THAN)) {
         currentIndex = indices[i];
       }
     }
@@ -78,9 +81,9 @@ public class Library {
   }
 
   public double getExtremalVcon(boolean isMAX) {
-    double val=BasicBound.MINDOUBLE;
-    for(int i=0; i<libPoints.length; i++) {
-      if(libPoints[i].getEncodeInfo()[0]>val==isMAX) {
+    double val = BasicBound.MINDOUBLE;
+    for (int i = 0; i < libPoints.length; i++) {
+      if (libPoints[i].getEncodeInfo()[0] > val == isMAX) {
         val = libPoints[i].getEncodeInfo()[0];
       }
     }
@@ -88,9 +91,9 @@ public class Library {
   }
 
   public int getVconThanNum(double allowedCons) {
-    int num=0;
-    for(int i=0; i<libPoints.length; i++) {
-      if(libPoints[i].getEncodeInfo()[0]<=allowedCons) {
+    int num = 0;
+    for (int i = 0; i < libPoints.length; i++) {
+      if (libPoints[i].getEncodeInfo()[0] <= allowedCons) {
         num++;
       }
     }
@@ -98,6 +101,3 @@ public class Library {
   }
 
 }
-
-
-

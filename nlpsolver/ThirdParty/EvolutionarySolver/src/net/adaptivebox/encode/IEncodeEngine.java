@@ -19,6 +19,6 @@
 
 package net.adaptivebox.encode;
 
-public interface IEncodeEngine{
+public interface IEncodeEngine {
   double[] getEncodeInfo();
 }

@@ -37,21 +37,20 @@ public class EvalStruct {
     evalElems[index] = dim;
   }
 
-  //convert response values into encoded information double[2]
+  // convert response values into encoded information double[2]
   public void evaluate(double[] evalRes, double[] targetValues) {
     evalRes[0] = evalRes[1] = 0;
-    for(int i=0; i<evalElems.length; i++) {
+    for (int i = 0; i < evalElems.length; i++) {
       if (evalElems[i].isOptType()) {
-        //The objectives (OPTIM type)
-        //The multi-objective will be translated into single-objective
+// The objectives (OPTIM type)
+// The multi-objective will be translated into single-objective
         evalRes[1] += evalElems[i].evaluateOPTIM(targetValues[i]);
       } else {
-        //The constraints (CONS type)
-        //If evalRes[0] equals to 0, then be a feasible point, i.e. satisfies
-        // all the constraints
+// The constraints (CONS type)
+// If evalRes[0] equals to 0, then be a feasible point, i.e. satisfies
+// all the constraints
         evalRes[0] += evalElems[i].evaluateCONS(targetValues[i]);
       }
     }
   }
 }
-
