@@ -552,4 +552,15 @@ QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
     }
 }
 
+void Qt5Widget::changeEvent(QEvent* pEvent)
+{
+    if (QEvent::StyleChange == pEvent->type() || (QEvent::FontChange == pEvent->type())
+        || (QEvent::PaletteChange == pEvent->type()))
+    {
+        auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+        assert(pSalInst);
+        pSalInst->UpdateStyle(QEvent::FontChange == pEvent->type());
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
