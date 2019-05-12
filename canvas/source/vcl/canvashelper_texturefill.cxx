@@ -636,7 +636,7 @@ namespace vclcanvas
             }
             else if( textures[0].Bitmap.is() )
             {
-                const geometry::IntegerSize2D aBmpSize( textures[0].Bitmap->getSize() );
+                geometry::IntegerSize2D aBmpSize( textures[0].Bitmap->getSize() );
 
                 ENSURE_ARG_OR_THROW( aBmpSize.Width != 0 &&
                                  aBmpSize.Height != 0,
@@ -754,16 +754,35 @@ namespace vclcanvas
                         // GraphicObject only supports scaling, rotation
                         // and translation)
 
-                        // setup GraphicAttr
-                        aGrfAttr.SetMirrorFlags(
-                            ( aScale.getX() < 0.0 ? BmpMirrorFlags::Horizontal : BmpMirrorFlags::NONE ) |
-                            ( aScale.getY() < 0.0 ? BmpMirrorFlags::Vertical : BmpMirrorFlags::NONE ) );
-                        aGrfAttr.SetRotation( static_cast< sal_uInt16 >(::basegfx::fround( nRotate*10.0 )) );
+                        // #i75339# don't apply mirror flags, having
+                        // negative size values is enough to make
+                        // GraphicObject flip the bitmap
+
+                        // The angle has to be mapped from radian to tenths of
+                        // degress with the orientation reversed: [0,2Pi) ->
+                        // (3600,0].  Note that the original angle may have
+                        // values outside the [0,2Pi) interval.
+                        const double nAngleInTenthOfDegrees (3600.0 - nRotate * 3600.0 / (2*M_PI));
+                        aGrfAttr.SetRotation( static_cast< sal_uInt16 >(::basegfx::fround(nAngleInTenthOfDegrees)) );
 
                         pGrfObj.reset( new GraphicObject( aBmpEx ) );
                     }
                     else
                     {
+                        // modify output position, to account for the fact
+                        // that transformBitmap() always normalizes its output
+                        // bitmap into the smallest enclosing box.
+                        ::basegfx::B2DRectangle aDestRect;
+                        ::canvas::tools::calcTransformedRectBounds( aDestRect,
+                                                                    ::basegfx::B2DRectangle(0,
+                                                                                            0,
+                                                                                            aBmpSize.Width,
+                                                                                            aBmpSize.Height),
+                                                                    aMatrix );
+
+                        aOutputPos.setX( aDestRect.getMinX() );
+                        aOutputPos.setY( aDestRect.getMinY() );
+
                         // complex transformation, use generic affine bitmap
                         // transformation
                         aBmpEx = tools::transformBitmap( aBmpEx,
@@ -773,7 +792,10 @@ namespace vclcanvas
 
                         // clear scale values, generated bitmap already
                         // contains scaling
-                        aScale.setX( 0.0 ); aScale.setY( 0.0 );
+                        aScale.setX( 1.0 ); aScale.setY( 1.0 );
+
+                        // update bitmap size, bitmap has changed above.
+                        aBmpSize = vcl::unotools::integerSize2DFromSize(aBmpEx.GetSizePixel());
                     }
 
 
