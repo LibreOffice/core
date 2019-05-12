@@ -110,16 +110,13 @@ void SvxXMLTabStopExport::Export( const uno::Any& rAny )
     }
     else
     {
-        const css::style::TabStop* pTabs = aSeq.getConstArray();
-        const sal_Int32 nTabs   = aSeq.getLength();
-
         SvXMLElementExport rElem( rExport, XML_NAMESPACE_STYLE, XML_TAB_STOPS,
                                   true, true );
 
-        for( sal_Int32 nIndex = 0; nIndex < nTabs; nIndex++ )
+        for( const auto& rTab : aSeq )
         {
-            if( style::TabAlign_DEFAULT != pTabs[nIndex].Alignment )
-                exportTabStop( &(pTabs[nIndex]) );
+            if( style::TabAlign_DEFAULT != rTab.Alignment )
+                exportTabStop( &rTab );
         }
     }
 }

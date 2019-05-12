@@ -1917,8 +1917,7 @@ void OOo2OasisTransformer::Initialize(
     {
         Sequence<Any> aArgs( 1 + rArguments.getLength() );
         aArgs[0] <<= xDocHandler;
-        for(sal_Int32 i = 0; i < rArguments.getLength(); i++)
-            aArgs[i+1] = rArguments[i];
+        std::copy(rArguments.begin(), rArguments.end(), std::next(aArgs.begin()));
         XMLTransformerBase::initialize( aArgs );
 
         OSL_ENSURE( GetDocHandler() == xDocHandler,

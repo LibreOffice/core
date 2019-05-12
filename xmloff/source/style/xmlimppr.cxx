@@ -689,34 +689,29 @@ bool SvXMLImportPropertyMapper::FillTolerantMultiPropertySet_(
     try
     {
         Sequence< SetPropertyTolerantFailed > aResults(rTolMultiPropSet->setPropertyValuesTolerant( aNames, aValues ));
-        if (!aResults.hasElements())
-            bSuccessful = true;
-        else
+        bSuccessful = !aResults.hasElements();
+        for( const auto& rResult : aResults)
         {
-            sal_Int32 nCount(aResults.getLength());
-            for( sal_Int32 i = 0; i < nCount; ++i)
+            Sequence<OUString> aSeq { rResult.Name };
+            OUString sMessage;
+            switch (rResult.Result)
             {
-                Sequence<OUString> aSeq { aResults[i].Name };
-                OUString sMessage;
-                switch (aResults[i].Result)
-                {
-                case TolerantPropertySetResultType::UNKNOWN_PROPERTY :
-                    sMessage = "UNKNOWN_PROPERTY";
-                    break;
-                case TolerantPropertySetResultType::ILLEGAL_ARGUMENT :
-                    sMessage = "ILLEGAL_ARGUMENT";
-                    break;
-                case TolerantPropertySetResultType::PROPERTY_VETO :
-                    sMessage = "PROPERTY_VETO";
-                    break;
-                case TolerantPropertySetResultType::WRAPPED_TARGET :
-                    sMessage = "WRAPPED_TARGET";
-                    break;
-                };
-                rImport.SetError(
-                    XMLERROR_STYLE_PROP_OTHER | XMLERROR_FLAG_ERROR,
-                    aSeq, sMessage, nullptr );
+            case TolerantPropertySetResultType::UNKNOWN_PROPERTY :
+                sMessage = "UNKNOWN_PROPERTY";
+                break;
+            case TolerantPropertySetResultType::ILLEGAL_ARGUMENT :
+                sMessage = "ILLEGAL_ARGUMENT";
+                break;
+            case TolerantPropertySetResultType::PROPERTY_VETO :
+                sMessage = "PROPERTY_VETO";
+                break;
+            case TolerantPropertySetResultType::WRAPPED_TARGET :
+                sMessage = "WRAPPED_TARGET";
+                break;
             }
+            rImport.SetError(
+                XMLERROR_STYLE_PROP_OTHER | XMLERROR_FLAG_ERROR,
+                aSeq, sMessage, nullptr );
         }
     }
     catch ( ... )

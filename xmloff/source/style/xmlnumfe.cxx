@@ -194,11 +194,9 @@ uno::Sequence<sal_Int32> SvXMLNumUsedList_Impl::GetWasUsed()
 void SvXMLNumUsedList_Impl::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
 {
     DBG_ASSERT(nWasUsedCount == 0, "WasUsed should be empty");
-    sal_Int32 nCount(rWasUsed.getLength());
-    const sal_Int32* pWasUsed = rWasUsed.getConstArray();
-    for (sal_Int32 i = 0; i < nCount; i++, pWasUsed++)
+    for (const auto nWasUsed : rWasUsed)
     {
-        std::pair<SvXMLuInt32Set::const_iterator, bool> aPair = aWasUsed.insert( *pWasUsed );
+        std::pair<SvXMLuInt32Set::const_iterator, bool> aPair = aWasUsed.insert( nWasUsed );
         if (aPair.second)
             nWasUsedCount++;
     }
@@ -929,16 +927,10 @@ static OUString lcl_GetDefaultCalendar( SvNumberFormatter const * pFormatter, La
         lang::Locale aLocale( LanguageTag::convertToLocale( nLang ) );
 
         uno::Sequence<OUString> aCals = pCalendar->getAllCalendars( aLocale );
-        sal_Int32 nCnt = aCals.getLength();
-        bool bFound = false;
-        for ( sal_Int32 j=0; j < nCnt && !bFound; j++ )
-        {
-            if ( aCals[j] != "gregorian" )
-            {
-                aCalendar = aCals[j];
-                bFound = true;
-            }
-        }
+        auto pCal = std::find_if(aCals.begin(), aCals.end(),
+            [](const OUString& rCal) { return rCal != "gregorian"; });
+        if (pCal != aCals.end())
+            aCalendar = *pCal;
     }
     return aCalendar;
 }

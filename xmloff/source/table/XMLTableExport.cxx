@@ -155,17 +155,14 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
     if( xFac.is() ) try
     {
         Sequence< OUString > sSNS( xFac->getAvailableServiceNames() );
-        sal_Int32 n = sSNS.getLength();
-        const OUString* pSNS( sSNS.getConstArray() );
-        while( --n > 0 )
+        const OUString* pSNS = std::find_if(sSNS.begin(), sSNS.end(),
+            [](const OUString& rSNS) {
+                return rSNS == "com.sun.star.drawing.TableShape"
+                    || rSNS == "com.sun.star.style.TableStyle"; });
+        if (pSNS != sSNS.end())
         {
-            if( *pSNS == "com.sun.star.drawing.TableShape" || *pSNS == "com.sun.star.style.TableStyle" )
-            {
-                mbExportTables = true;
-                mbWriter = (*pSNS == "com.sun.star.style.TableStyle");
-                break;
-            }
-            pSNS++;
+            mbExportTables = true;
+            mbWriter = (*pSNS == "com.sun.star.style.TableStyle");
         }
     }
     catch(const Exception&)

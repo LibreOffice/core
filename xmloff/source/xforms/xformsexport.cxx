@@ -87,12 +87,10 @@ void exportXForms( SvXMLExport& rExport )
         if( xForms.is() )
         {
             Sequence<OUString> aNames = xForms->getElementNames();
-            const OUString* pNames = aNames.getConstArray();
-            sal_Int32 nNames = aNames.getLength();
 
-            for( sal_Int32 n = 0; n < nNames; n++ )
+            for( const auto& rName : aNames )
             {
-                Reference<XPropertySet> xModel( xForms->getByName( pNames[n] ),
+                Reference<XPropertySet> xModel( xForms->getByName( rName ),
                                                 UNO_QUERY );
                 exportXFormsModel( rExport, xModel );
             }
@@ -219,12 +217,10 @@ void exportXFormsInstance( SvXMLExport& rExport,
     OUString sURL;
     Reference<XDocument> xDoc;
 
-    const PropertyValue* pInstance = xInstance.getConstArray();
-    sal_Int32 nCount = xInstance.getLength();
-    for( sal_Int32 i = 0; i < nCount; i++ )
+    for( const auto& rProp : xInstance )
     {
-        OUString sName = pInstance[i].Name;
-        const Any& rAny = pInstance[i].Value;
+        OUString sName = rProp.Name;
+        const Any& rAny = rProp.Value;
         if ( sName == "ID" )
             rAny >>= sId;
         else if ( sName == "URL" )
@@ -337,11 +333,8 @@ void exportXFormsBinding( SvXMLExport& rExport,
     {
         // iterate over Prefixes for this binding
         Sequence<OUString> aPrefixes = xNamespaces->getElementNames();
-        const OUString* pPrefixes = aPrefixes.getConstArray();
-        sal_Int32 nPrefixes = aPrefixes.getLength();
-        for( sal_Int32 i = 0; i < nPrefixes; i++ )
+        for( const OUString& rPrefix : aPrefixes )
         {
-            const OUString& rPrefix = pPrefixes[i];
             OUString sURI;
             xNamespaces->getByName( rPrefix ) >>= sURI;
 

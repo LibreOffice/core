@@ -61,21 +61,20 @@ void XMLAutoTextEventImport::initialize(
 {
     // The events may come as either an XNameReplace or XEventsSupplier.
 
-    const sal_Int32 nLength = rArguments.getLength();
-    for( sal_Int32 i = 0; i < nLength; i++ )
+    for( const auto& rArgument : rArguments )
     {
-        const Type& rType = rArguments[i].getValueType();
+        const Type& rType = rArgument.getValueType();
         if ( rType == cppu::UnoType<XEventsSupplier>::get())
         {
             Reference<XEventsSupplier> xSupplier;
-            rArguments[i] >>= xSupplier;
+            rArgument >>= xSupplier;
             DBG_ASSERT(xSupplier.is(), "need XEventsSupplier or XNameReplace");
 
             xEvents = xSupplier->getEvents();
         }
         else if (rType == cppu::UnoType<XNameReplace>::get())
         {
-            rArguments[i] >>= xEvents;
+            rArgument >>= xEvents;
             DBG_ASSERT(xEvents.is(), "need XEventsSupplier or XNameReplace");
         }
     }

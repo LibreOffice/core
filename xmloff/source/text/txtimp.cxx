@@ -1954,16 +1954,14 @@ void XMLTextImportHelper::FindOutlineStyleName( OUString& rStyleName,
                 Sequence<PropertyValue> aProperties;
                 m_xImpl->m_xChapterNumbering->getByIndex( nOutlineLevel )
                     >>= aProperties;
-                for( sal_Int32 i = 0; i < aProperties.getLength(); i++ )
+                auto pProp = std::find_if(aProperties.begin(), aProperties.end(),
+                    [](const PropertyValue& rProp) { return rProp.Name == "HeadingStyleName"; });
+                if (pProp != aProperties.end())
                 {
-                    if (aProperties[i].Name == "HeadingStyleName")
-                    {
-                        OUString aOutlineStyle;
-                        aProperties[i].Value >>= aOutlineStyle;
-                        m_xImpl->m_xOutlineStylesCandidates[nOutlineLevel]
-                            .push_back( aOutlineStyle );
-                        break;  // early out, if we found it!.
-                    }
+                    OUString aOutlineStyle;
+                    pProp->Value >>= aOutlineStyle;
+                    m_xImpl->m_xOutlineStylesCandidates[nOutlineLevel]
+                        .push_back( aOutlineStyle );
                 }
             }
 
