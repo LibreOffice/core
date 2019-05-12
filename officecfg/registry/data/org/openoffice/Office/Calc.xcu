@@ -175,7 +175,7 @@
                 <value>MTL</value>
             </prop>
             <prop oor:name="Factor">
-              <value>.429300</value>
+                <value>.429300</value>
             </prop>
         </node>
         <node oor:name="CR15" oor:op="replace">
@@ -186,7 +186,7 @@
                 <value>CYP</value>
             </prop>
             <prop oor:name="Factor">
-              <value>.585274</value>
+                <value>.585274</value>
             </prop>
         </node>
         <node oor:name="CR16" oor:op="replace">
@@ -198,6 +198,39 @@
             </prop>
             <prop oor:name="Factor">
                 <value>30.1260</value>
+            </prop>
+        </node>
+        <node oor:name="CR17" oor:op="replace">
+            <prop oor:name="FromUnit">
+                <value>EUR</value>
+            </prop>
+            <prop oor:name="ToUnit">
+                <value>EEK</value>
+            </prop>
+            <prop oor:name="Factor">
+                <value>15.6466</value>
+            </prop>
+        </node>
+        <node oor:name="CR18" oor:op="replace">
+            <prop oor:name="FromUnit">
+                <value>EUR</value>
+            </prop>
+            <prop oor:name="ToUnit">
+                <value>LVL</value>
+            </prop>
+            <prop oor:name="Factor">
+                <value>0.702804</value>
+            </prop>
+        </node>
+        <node oor:name="CR19" oor:op="replace">
+            <prop oor:name="FromUnit">
+                <value>EUR</value>
+            </prop>
+            <prop oor:name="ToUnit">
+                <value>LTL</value>
+            </prop>
+            <prop oor:name="Factor">
+                <value>3.45280</value>
             </prop>
         </node>
     </node>
