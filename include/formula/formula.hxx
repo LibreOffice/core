@@ -31,15 +31,10 @@
 #include <sfx2/basedlgs.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
-#include <vcl/dialog.hxx>
 
 class NotifyEvent;
 class SfxBindings;
 class SfxChildWindow;
-
-namespace vcl {
-    class Window;
-}
 
 namespace formula
 {

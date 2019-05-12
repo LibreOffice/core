@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:58 using:
+ Generated on 2019-05-12 21:49:31 using:
  ./bin/update_pch sd sd --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -98,6 +98,7 @@
 #include <vcl/font.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/help.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/imapobj.hxx>
 #include <vcl/keycod.hxx>
@@ -387,6 +388,9 @@
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <svx/sdtagitm.hxx>
+#include <svx/sdtfsitm.hxx>
+#include <svx/sdtmfitm.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/svdcrtv.hxx>
 #include <svx/svddef.hxx>
@@ -419,7 +423,6 @@
 #include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/xbtmpit.hxx>
-#include <svx/xcolit.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xenum.hxx>
 #include <svx/xfillit0.hxx>

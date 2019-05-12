@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:16:05 using:
+ Generated on 2019-05-12 21:48:23 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -108,7 +108,6 @@
 #include <vcl/image.hxx>
 #include <vcl/imap.hxx>
 #include <vcl/imapobj.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
@@ -278,6 +277,7 @@
 #include <o3tl/any.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
@@ -374,11 +374,11 @@
 #include <svx/svxdllapi.h>
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/unomid.hxx>
-#include <svx/xcolit.hxx>
+#include <svx/xbtmpit.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xenum.hxx>
 #include <svx/xfillit0.hxx>
-#include <svx/xit.hxx>
+#include <svx/xflclit.hxx>
 #include <svx/xoutbmp.hxx>
 #include <svx/xtable.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
