@@ -23,11 +23,6 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
-#include <vcl/vclreferencebase.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/field.hxx>
-#include <vcl/layout.hxx>
 
 #include "wrtsh.hxx"
 #include "autoformatpreview.hxx"

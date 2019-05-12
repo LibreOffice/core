@@ -11,8 +11,7 @@
 
 #include <sfx2/dispatch.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/builderfactory.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/svapp.hxx>
 
 #include <anyrefdg.hxx>
 #include <document.hxx>

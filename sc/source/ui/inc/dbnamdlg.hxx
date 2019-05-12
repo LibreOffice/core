@@ -21,11 +21,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_DBNAMDLG_HXX
 
 #include <vector>
-
-#include <vcl/combobox.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-
 #include "anyrefdg.hxx"
 #include <dbdata.hxx>
 

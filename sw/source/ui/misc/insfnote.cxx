@@ -33,7 +33,6 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/layout.hxx>
 
 #include <memory>
 
