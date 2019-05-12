@@ -18,7 +18,6 @@
  */
 
 #include <ErrorBar.hxx>
-#include <ContainerHelper.hxx>
 #include <EventListenerHelper.hxx>
 #include <CloneHelper.hxx>
 #include <ModifyListenerHelper.hxx>
@@ -443,7 +442,7 @@ void SAL_CALL ErrorBar::setData( const uno::Sequence< uno::Reference< chart2::da
 {
     ModifyListenerHelper::removeListenerFromAllElements( m_aDataSequences, m_xModifyEventForwarder );
     EventListenerHelper::removeListenerFromAllElements( m_aDataSequences, this );
-    m_aDataSequences = ContainerHelper::SequenceToVector( aData );
+    m_aDataSequences = comphelper::sequenceToContainer<tDataSequenceContainer>( aData );
     EventListenerHelper::addListenerToAllElements( m_aDataSequences, this );
     ModifyListenerHelper::addListenerToAllElements( m_aDataSequences, m_xModifyEventForwarder );
 }

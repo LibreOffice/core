@@ -18,9 +18,9 @@
  */
 
 #include <PropertyHelper.hxx>
-#include <ContainerHelper.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 
@@ -118,7 +118,7 @@ OUString lcl_addNamedPropertyUniqueNameToTable(
     try
     {
         Reference< container::XNameAccess > xNameAccess( xNameContainer, uno::UNO_QUERY_THROW );
-        std::vector< OUString > aNames( ::chart::ContainerHelper::SequenceToVector( xNameAccess->getElementNames()));
+        auto aNames( comphelper::sequenceToContainer<std::vector< OUString >>( xNameAccess->getElementNames()));
         std::vector< OUString >::const_iterator aIt(
             std::find_if( aNames.begin(), aNames.end(), lcl_EqualsElement( rValue, xNameAccess )));
 

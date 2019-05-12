@@ -19,7 +19,6 @@
 
 #include <DataSeriesHelper.hxx>
 #include <DataSource.hxx>
-#include <ContainerHelper.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -517,8 +516,8 @@ void deleteSeries(
     try
     {
         Reference< chart2::XDataSeriesContainer > xSeriesCnt( xChartType, uno::UNO_QUERY_THROW );
-        std::vector< Reference< chart2::XDataSeries > > aSeries(
-            ContainerHelper::SequenceToVector( xSeriesCnt->getDataSeries()));
+        auto aSeries(
+            comphelper::sequenceToContainer<std::vector< Reference< chart2::XDataSeries > > >( xSeriesCnt->getDataSeries()));
         std::vector< Reference< chart2::XDataSeries > >::iterator aIt =
               std::find( aSeries.begin(), aSeries.end(), xSeries );
         if( aIt != aSeries.end())
@@ -692,7 +691,7 @@ sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nIndex, const Refere
             xProp->getPropertyValue( "HiddenValues" ) >>= aHiddenIndicesSeq;
             if( aHiddenIndicesSeq.getLength() )
             {
-                std::vector< sal_Int32 > aHiddenIndices( ContainerHelper::SequenceToVector( aHiddenIndicesSeq ) );
+                auto aHiddenIndices( comphelper::sequenceToContainer<std::vector< sal_Int32 >>( aHiddenIndicesSeq ) );
                 std::sort( aHiddenIndices.begin(), aHiddenIndices.end() );
 
                 sal_Int32 nHiddenCount = static_cast<sal_Int32>(aHiddenIndices.size());
@@ -777,7 +776,7 @@ bool hasDataLabelAtPoint( const Reference< chart2::XDataSeries >& xSeries, sal_I
             uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
             if( xSeriesProperties->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
             {
-                std::vector< sal_Int32 > aIndices( ContainerHelper::SequenceToVector( aAttributedDataPointIndexList ) );
+                auto aIndices( comphelper::sequenceToContainer<std::vector< sal_Int32 >>( aAttributedDataPointIndexList ) );
                 std::vector< sal_Int32 >::iterator aIt = std::find( aIndices.begin(), aIndices.end(), nPointIndex );
                 if( aIt != aIndices.end())
                     xProp = xSeries->getDataPointByIndex(nPointIndex);

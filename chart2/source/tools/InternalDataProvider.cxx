@@ -25,7 +25,6 @@
 #include <LabeledDataSequence.hxx>
 #include <DataSource.hxx>
 #include <XMLRangeHelper.hxx>
-#include <ContainerHelper.hxx>
 #include <CommonFunctors.hxx>
 #include <UncachedDataSequence.hxx>
 #include <DataSourceHelper.hxx>
@@ -132,7 +131,7 @@ struct lcl_internalizeSeries
 
                 if( xValues.is() )
                 {
-                    std::vector< double > aValues( ContainerHelper::SequenceToVector( xValues->getNumericalData()));
+                    auto aValues( comphelper::sequenceToContainer<std::vector< double >>( xValues->getNumericalData()));
                     if( m_bDataInColumns )
                         m_rInternalData.setColumnValues( nNewIndex, aValues );
                     else
@@ -931,7 +930,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
 void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
     const OUString& aRange, const Sequence< uno::Any >& aNewData )
 {
-    vector< uno::Any > aNewVector( ContainerHelper::SequenceToVector(aNewData) );
+    auto aNewVector( comphelper::sequenceToContainer<vector< uno::Any >>(aNewData) );
     if( aRange.match( lcl_aLabelRangePrefix ) )
     {
         sal_uInt32 nIndex = aRange.copy( strlen(lcl_aLabelRangePrefix)).toInt32();
@@ -1283,7 +1282,7 @@ vector< vector< Type > > lcl_convertSequenceSequenceToVectorVector( const Sequen
     {
         aRet.resize(nOuterCount);
         for( sal_Int32 nN=0; nN<nOuterCount; nN++)
-            aRet[nN]= ContainerHelper::SequenceToVector( rIn[nN] );
+            aRet[nN]= comphelper::sequenceToContainer<vector< Type >>( rIn[nN] );
     }
     return aRet;
 }

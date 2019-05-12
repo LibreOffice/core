@@ -20,7 +20,6 @@
 #include "Title.hxx"
 #include <LinePropertiesHelper.hxx>
 #include <FillProperties.hxx>
-#include <ContainerHelper.hxx>
 #include <CloneHelper.hxx>
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
@@ -241,13 +240,15 @@ Title::Title( const Title & rOther ) :
     CloneHelper::CloneRefSequence<chart2::XFormattedString>(
         rOther.m_aStrings, m_aStrings );
     ModifyListenerHelper::addListenerToAllElements(
-        ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
+        comphelper::sequenceToContainer<std::vector<uno::Reference< chart2::XFormattedString > > >( m_aStrings ),
+        m_xModifyEventForwarder );
 }
 
 Title::~Title()
 {
     ModifyListenerHelper::removeListenerFromAllElements(
-        ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
+        comphelper::sequenceToContainer<std::vector<uno::Reference< chart2::XFormattedString > > >( m_aStrings ),
+        m_xModifyEventForwarder );
 }
 
 // ____ XCloneable ____
@@ -273,9 +274,11 @@ void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XForm
     }
     //don't keep the mutex locked while calling out
     ModifyListenerHelper::removeListenerFromAllElements(
-        ContainerHelper::SequenceToVector( aOldStrings ), m_xModifyEventForwarder );
+        comphelper::sequenceToContainer<std::vector<uno::Reference< chart2::XFormattedString > > >( aOldStrings ),
+        m_xModifyEventForwarder );
     ModifyListenerHelper::addListenerToAllElements(
-        ContainerHelper::SequenceToVector( rNewStrings ), m_xModifyEventForwarder );
+        comphelper::sequenceToContainer<std::vector<uno::Reference< chart2::XFormattedString > > >( rNewStrings ),
+        m_xModifyEventForwarder );
     fireModifyEvent();
 }
 
