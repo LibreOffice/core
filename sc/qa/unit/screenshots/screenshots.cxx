@@ -192,8 +192,7 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
         case 8: // "modules/scalc/ui/inputstringdialog.ui"
         {
             const OString aEmpty("");
-            vcl::Window* pWindow = mpViewShell->GetDialogParent();
-            pReturnDialog = mpFact->CreateScStringInputDlg(pWindow ? pWindow->GetFrameWeld() : nullptr,
+            pReturnDialog = mpFact->CreateScStringInputDlg(mpViewShell->GetFrameWeld(),
                                 ScResId(SCSTR_APDTABLE), ScResId(SCSTR_NAME),
                                 aDefaultSheetName, aEmpty, aEmpty );
             break;
