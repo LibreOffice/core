@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:19:01 using:
+ Generated on 2019-05-12 16:57:19 using:
  ./bin/update_pch svl svl --cutoff=6 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -67,7 +67,6 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <salhelper/linkhelper.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <com/sun/star/lang/Locale.hpp>
@@ -95,6 +94,7 @@
 #include <libxml/xmlwriter.h>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <salhelper/linkhelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>

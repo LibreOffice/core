@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:16:18 using:
+ Generated on 2019-05-12 16:57:39 using:
  ./bin/update_pch sw msword --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -97,7 +97,6 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <salhelper/simplereferenceobject.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/IDialogRenderable.hxx>
@@ -186,7 +185,6 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -374,6 +372,7 @@
 #include <oox/helper/refmap.hxx>
 #include <oox/helper/storagebase.hxx>
 #include <oox/token/tokens.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/saxdllapi.h>
 #include <sfx2/dllapi.h>
@@ -414,40 +413,16 @@
 #include <svx/ipolypolygoneditorcontroller.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/msdffdef.hxx>
-#include <svx/sdangitm.hxx>
-#include <svx/sdasitm.hxx>
-#include <svx/sderitm.hxx>
-#include <svx/sdgcoitm.hxx>
 #include <svx/sdgcpitm.hxx>
-#include <svx/sdggaitm.hxx>
-#include <svx/sdginitm.hxx>
-#include <svx/sdgluitm.hxx>
-#include <svx/sdgmoitm.hxx>
-#include <svx/sdgtritm.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/sdooitm.hxx>
-#include <svx/sdprcitm.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include <svx/sdrobjectuser.hxx>
-#include <svx/sdshcitm.hxx>
-#include <svx/sdshitm.hxx>
-#include <svx/sdshtitm.hxx>
-#include <svx/sdsxyitm.hxx>
-#include <svx/sdtaaitm.hxx>
-#include <svx/sdtacitm.hxx>
 #include <svx/sdtaditm.hxx>
-#include <svx/sdtagitm.hxx>
-#include <svx/sdtaiitm.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/sdtakitm.hxx>
-#include <svx/sdtayitm.hxx>
-#include <svx/sdtcfitm.hxx>
-#include <svx/sdtditm.hxx>
-#include <svx/sdtfsitm.hxx>
-#include <svx/sdtmfitm.hxx>
-#include <svx/sdynitm.hxx>
 #include <svx/selectioncontroller.hxx>
 #include <svx/shapeproperty.hxx>
 #include <svx/svddef.hxx>
@@ -483,12 +458,12 @@
 #include <svx/svxdllapi.h>
 #include <svx/unoapi.hxx>
 #include <svx/unoprov.hxx>
-#include <svx/xcolit.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xenum.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflasit.hxx>
+#include <svx/xflclit.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/xit.hxx>

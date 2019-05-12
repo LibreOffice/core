@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:34 using:
+ Generated on 2019-05-12 16:56:47 using:
  ./bin/update_pch connectivity dbtools --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -59,7 +59,6 @@
 #include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
-#include <salhelper/simplereferenceobject.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -150,6 +149,7 @@
 #include <o3tl/any.hxx>
 #include <o3tl/functional.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/toolsdllapi.h>
 #include <unotools/resmgr.hxx>

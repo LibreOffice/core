@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:37 using:
+ Generated on 2019-05-12 16:56:49 using:
  ./bin/update_pch cui cui --cutoff=8 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -91,7 +91,6 @@
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicExternalLink.hxx>
-#include <vcl/GraphicObject.hxx>
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/alpha.hxx>
@@ -302,35 +301,10 @@
 #include <svx/dlgutil.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/itextprovider.hxx>
-#include <svx/sdangitm.hxx>
-#include <svx/sdasitm.hxx>
-#include <svx/sderitm.hxx>
-#include <svx/sdgcoitm.hxx>
-#include <svx/sdggaitm.hxx>
-#include <svx/sdginitm.hxx>
-#include <svx/sdgluitm.hxx>
-#include <svx/sdgmoitm.hxx>
-#include <svx/sdgtritm.hxx>
 #include <svx/sdmetitm.hxx>
-#include <svx/sdooitm.hxx>
-#include <svx/sdprcitm.hxx>
-#include <svx/sdshcitm.hxx>
-#include <svx/sdshitm.hxx>
-#include <svx/sdshtitm.hxx>
-#include <svx/sdsxyitm.hxx>
-#include <svx/sdtaaitm.hxx>
-#include <svx/sdtacitm.hxx>
 #include <svx/sdtaditm.hxx>
-#include <svx/sdtagitm.hxx>
-#include <svx/sdtaiitm.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/sdtakitm.hxx>
-#include <svx/sdtayitm.hxx>
-#include <svx/sdtcfitm.hxx>
-#include <svx/sdtditm.hxx>
-#include <svx/sdtfsitm.hxx>
-#include <svx/sdtmfitm.hxx>
-#include <svx/sdynitm.hxx>
 #include <svx/shapeproperty.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svdhlpln.hxx>
@@ -345,7 +319,6 @@
 #include <svx/svdview.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/xcolit.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xenum.hxx>
 #include <svx/xfillit0.hxx>

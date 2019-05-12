@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:35 using:
+ Generated on 2019-05-12 16:56:48 using:
  ./bin/update_pch cppcanvas cppcanvas --cutoff=11 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <cstring>
 #include <float.h>
+#include <functional>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
@@ -68,7 +69,6 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <salhelper/simplereferenceobject.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
@@ -113,6 +113,7 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <tools/mapunit.hxx>

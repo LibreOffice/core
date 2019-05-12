@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:44 using:
+ Generated on 2019-05-12 16:56:59 using:
  ./bin/update_pch reportdesign rpt --cutoff=9 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -89,7 +89,6 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <salhelper/simplereferenceobject.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/GraphicObject.hxx>
@@ -172,7 +171,6 @@
 #include <com/sun/star/drawing/DashStyle.hpp>
 #include <com/sun/star/drawing/HatchStyle.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
-#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -233,40 +231,31 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/cenumitm.hxx>
-#include <svl/cintitem.hxx>
-#include <svl/custritm.hxx>
 #include <svl/eitem.hxx>
 #include <svl/hint.hxx>
-#include <svl/intitem.hxx>
 #include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
-#include <svl/stritem.hxx>
 #include <svl/style.hxx>
 #include <svl/stylesheetuser.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svtools/svtdllapi.h>
 #include <svx/XPropertyEntry.hxx>
-#include <svx/sdmetitm.hxx>
-#include <svx/sdooitm.hxx>
-#include <svx/sdprcitm.hxx>
-#include <svx/sdynitm.hxx>
 #include <svx/shapeproperty.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdsob.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/xcolit.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xenum.hxx>
 #include <svx/xflasit.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xhatch.hxx>
-#include <svx/xit.hxx>
 #include <svx/xlnasit.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xtable.hxx>

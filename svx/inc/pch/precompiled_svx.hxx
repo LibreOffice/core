@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:19:04 using:
+ Generated on 2019-05-12 16:57:25 using:
  ./bin/update_pch svx svx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -77,7 +77,6 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <salhelper/simplereferenceobject.hxx>
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicObject.hxx>
@@ -153,6 +152,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
+#include <basegfx/range/b2irectangle.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b3dvector.hxx>
@@ -186,9 +186,9 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/drawing/DashStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -320,6 +320,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <sfx2//dllapi.h>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -443,8 +444,13 @@
 #include <svx/rulritem.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/sdasitm.hxx>
+#include <svx/sdprcitm.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <svx/sdshitm.hxx>
+#include <svx/sdtaditm.hxx>
+#include <svx/sdtaitm.hxx>
+#include <svx/sdtakitm.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/svddef.hxx>
@@ -479,9 +485,9 @@
 #include <svx/viewpt3d.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xcolit.hxx>
-#include <svx/xdash.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xenum.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xfltrit.hxx>
@@ -490,6 +496,8 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlndsit.hxx>
+#include <svx/xlnedit.hxx>
+#include <svx/xlnstit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xoutbmp.hxx>

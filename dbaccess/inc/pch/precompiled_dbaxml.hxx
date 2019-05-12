@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:37 using:
+ Generated on 2019-05-12 16:56:50 using:
  ./bin/update_pch dbaccess dbaxml --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,6 +23,7 @@
 #if PCH_LEVEL >= 1
 #include <cassert>
 #include <cstddef>
+#include <functional>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -41,7 +42,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/types.h>
-#include <salhelper/simplereferenceobject.hxx>
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/keycodes.hxx>
@@ -90,6 +90,7 @@
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/weak.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <sax/tools/converter.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/filenotation.hxx>
