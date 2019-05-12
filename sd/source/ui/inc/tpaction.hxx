@@ -21,8 +21,6 @@
 #define INCLUDED_SD_SOURCE_UI_INC_TPACTION_HXX
 
 #include <com/sun/star/presentation/ClickAction.hpp>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
 #include "sdtreelb.hxx"

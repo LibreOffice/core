@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/dispatch.hxx>
-#include <vcl/idle.hxx>
 
 #include <uiitems.hxx>
 #include <rangenam.hxx>
@@ -34,6 +33,8 @@
 #include <strings.hrc>
 
 #include <filtdlg.hxx>
+#include <vcl/idle.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
 // DEFINE --------------------------------------------------------------------
