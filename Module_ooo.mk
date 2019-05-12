@@ -77,6 +77,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     padmin \
     psprint_config \
     pyuno \
+    qadevOOo \
     rdbmaker \
     registry \
     remotebridges \
