@@ -693,15 +693,15 @@ void SvXMLUnitConverter::convertPropertySet(uno::Sequence<beans::PropertyValue>&
     if (xPropertySetInfo.is())
     {
         uno::Sequence< beans::Property > aProps = xPropertySetInfo->getProperties();
-        const sal_Int32 nCount(aProps.getLength());
-        if (nCount)
+        if (aProps.hasElements())
         {
-            rProps.realloc(nCount);
+            rProps.realloc(aProps.getLength());
             beans::PropertyValue* pProps = rProps.getArray();
-            for (sal_Int32 i = 0; i < nCount; i++, ++pProps)
+            for (const auto& rProp : aProps)
             {
-                pProps->Name = aProps[i].Name;
-                pProps->Value = aProperties->getPropertyValue(aProps[i].Name);
+                pProps->Name = rProp.Name;
+                pProps->Value = aProperties->getPropertyValue(rProp.Name);
+                ++pProps;
             }
         }
     }
@@ -710,16 +710,15 @@ void SvXMLUnitConverter::convertPropertySet(uno::Sequence<beans::PropertyValue>&
 void SvXMLUnitConverter::convertPropertySet(uno::Reference<beans::XPropertySet> const & rProperties,
                     const uno::Sequence<beans::PropertyValue>& aProps)
 {
-    sal_Int32 nCount(aProps.getLength());
-    if (nCount)
+    if (aProps.hasElements())
     {
         uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = rProperties->getPropertySetInfo();
         if (xPropertySetInfo.is())
         {
-            for (sal_Int32 i = 0; i < nCount; i++)
+            for (const auto& rProp : aProps)
             {
-                if (xPropertySetInfo->hasPropertyByName(aProps[i].Name))
-                    rProperties->setPropertyValue(aProps[i].Name, aProps[i].Value);
+                if (xPropertySetInfo->hasPropertyByName(rProp.Name))
+                    rProperties->setPropertyValue(rProp.Name, rProp.Value);
             }
         }
     }

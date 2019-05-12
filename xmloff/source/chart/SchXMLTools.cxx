@@ -685,10 +685,9 @@ void copyProperties(
         Reference< beans::XPropertySetInfo > xSrcInfo( xSource->getPropertySetInfo(), uno::UNO_SET_THROW );
         Reference< beans::XPropertySetInfo > xDestInfo( xDestination->getPropertySetInfo(), uno::UNO_SET_THROW );
         Sequence< beans::Property > aProperties( xSrcInfo->getProperties());
-        const sal_Int32 nLength = aProperties.getLength();
-        for( sal_Int32 i = 0; i < nLength; ++i )
+        for( const auto& rProperty : aProperties )
         {
-            OUString aName( aProperties[i].Name);
+            OUString aName( rProperty.Name);
             if( xDestInfo->hasPropertyByName( aName ))
             {
                 beans::Property aProp( xDestInfo->getPropertyByName( aName ));

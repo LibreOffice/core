@@ -504,10 +504,7 @@ void XMLConfigItemContext::Characters( const OUString& rChars )
             sal_uInt32 nStartPos(maDecoded.getLength());
             sal_uInt32 nCount(aBuffer.getLength());
             maDecoded.realloc(nStartPos + nCount);
-            sal_Int8* pDecoded = maDecoded.getArray();
-            sal_Int8* pBuffer = aBuffer.getArray();
-            for (sal_uInt32 i = 0; i < nCount; i++, pBuffer++)
-                pDecoded[nStartPos + i] = *pBuffer;
+            std::copy(aBuffer.begin(), aBuffer.end(), std::next(maDecoded.begin(), nStartPos));
             if( nCharsDecoded != sChars.getLength() )
                 msValue = sChars.copy( nCharsDecoded );
         }
