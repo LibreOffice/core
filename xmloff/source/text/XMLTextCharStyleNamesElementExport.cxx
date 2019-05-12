@@ -54,14 +54,11 @@ XMLTextCharStyleNamesElementExport::XMLTextCharStyleNamesElementExport(
             {
                 aName = rExport.GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_TEXT, GetXMLToken(XML_SPAN) );
-                sal_Int32 i = nCount;
-                const OUString *pName = aNames.getConstArray();
-                while( --i )
+                for (const auto& rName : aNames)
                 {
                     rExport.AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                                          rExport.EncodeStyleName( *pName ) );
+                                          rExport.EncodeStyleName( rName ) );
                     rExport.StartElement( aName, false );
-                    ++pName;
                 }
             }
         }

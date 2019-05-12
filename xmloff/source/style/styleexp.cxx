@@ -90,9 +90,8 @@ void XMLStyleExport::exportStyleContent( const Reference< XStyle >& rStyle )
 
         aProperty >>= aSeq;
 
-        for (sal_Int32 i = 0; i < aSeq.getLength(); ++i)
+        for (beans::NamedValue const& rNamedCond : aSeq)
         {
-            beans::NamedValue const& rNamedCond = aSeq[i];
             OUString aStyleName;
 
             if (rNamedCond.Value >>= aStyleName)
@@ -444,14 +443,12 @@ void XMLStyleExport::exportStyleFamily(
     bool bFirstStyle = true;
 
     const uno::Sequence< OUString> aSeq = xStyleCont->getElementNames();
-    const OUString* pIter = aSeq.getConstArray();
-    const OUString* pEnd   = pIter + aSeq.getLength();
-    for(;pIter != pEnd;++pIter)
+    for(const auto& rName : aSeq)
     {
         Reference< XStyle > xStyle;
         try
         {
-            xStyleCont->getByName( *pIter ) >>= xStyle;
+            xStyleCont->getByName( rName ) >>= xStyle;
         }
         catch(const lang::IndexOutOfBoundsException&)
         {
@@ -501,11 +498,10 @@ void XMLStyleExport::exportStyleFamily(
     {
         // if next styles are supported, export all next styles that are
         // unused and that for, haven't been exported in the first loop.
-        pIter = aSeq.getConstArray();
-        for(;pIter != pEnd;++pIter)
+        for(const auto& rName : aSeq)
         {
             Reference< XStyle > xStyle;
-            xStyleCont->getByName( *pIter ) >>= xStyle;
+            xStyleCont->getByName( rName ) >>= xStyle;
 
             assert(xStyle.is());
 

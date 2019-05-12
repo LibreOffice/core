@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/style/XStyle.hpp>
+#include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <xmloff/table/XMLTableImport.hxx>
@@ -194,16 +195,7 @@ XMLTableImport::XMLTableImport( SvXMLImport& rImport, const rtl::Reference< XMLP
     if (xFac.is()) try
     {
         Sequence<OUString> sSNS = xFac->getAvailableServiceNames();
-        const sal_Int32 nLength = sSNS.getLength();
-        const OUString* pSNS = sSNS.getConstArray();
-        for (sal_Int32 i=0; i < nLength; ++i, ++pSNS)
-        {
-            if (*pSNS == "com.sun.star.style.TableStyle")
-            {
-                bWriter = true;
-                break;
-            }
-        }
+        bWriter = comphelper::findValue(sSNS, "com.sun.star.style.TableStyle") != -1;
     }
     catch(const Exception&)
     {

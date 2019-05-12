@@ -30,6 +30,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
@@ -223,18 +224,8 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
     if( xFactory.is() )
     {
         Sequence<OUString> aServices = xFactory->getAvailableServiceNames();
-        bool bFound(false);
-        sal_Int32 i(0);
-        sal_Int32 nServiceCount(aServices.getLength());
-        while (i < nServiceCount && !bFound)
-        {
-            if (aServices[i] == gsFieldMaster_Bibliography)
-            // here we should use a method which compares in reverse order if available
-                bFound = true;
-            else
-                i++;
-        }
-        if (bFound)
+        // here we should use a method which compares in reverse order if available
+        if (comphelper::findValue(aServices, gsFieldMaster_Bibliography) != -1)
         {
             Reference<XInterface> xIfc =
                 xFactory->createInstance(gsFieldMaster_Bibliography);
@@ -259,12 +250,7 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
                     xPropSet->setPropertyValue(gsSortAlgorithm, Any(sAlgorithm));
                 }
 
-                sal_Int32 nCount = aSortKeys.size();
-                Sequence<Sequence<PropertyValue> > aKeysSeq(nCount);
-                for(i = 0; i < nCount; i++)
-                {
-                    aKeysSeq[i] = aSortKeys[i];
-                }
+                Sequence<Sequence<PropertyValue> > aKeysSeq = comphelper::containerToSequence(aSortKeys);
                 xPropSet->setPropertyValue(gsSortKeys, Any(aKeysSeq));
             }
             // else: can't get FieldMaster -> ignore
