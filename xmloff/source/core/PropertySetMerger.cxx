@@ -152,12 +152,9 @@ Sequence< PropertyState > SAL_CALL PropertySetMergerImpl::getPropertyStates( con
 {
     const sal_Int32 nCount = aPropertyName.getLength();
     Sequence< PropertyState > aPropStates( nCount );
-    PropertyState* pPropStates = aPropStates.getArray();
-    const OUString* pPropNames = aPropertyName.getConstArray();
 
-    sal_Int32 nIndex;
-    for( nIndex = 0; nIndex < nCount; nIndex++ )
-        *pPropStates++ = getPropertyState( *pPropNames++ );
+    std::transform(aPropertyName.begin(), aPropertyName.end(), aPropStates.begin(),
+        [this](const OUString& rPropName) -> PropertyState { return getPropertyState(rPropName); });
 
     return aPropStates;
 }

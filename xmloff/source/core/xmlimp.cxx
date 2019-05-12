@@ -1026,13 +1026,10 @@ void SAL_CALL SvXMLImport::cancel(  )
 // XInitialize
 void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArguments )
 {
-    const sal_Int32 nAnyCount = aArguments.getLength();
-    const uno::Any* pAny = aArguments.getConstArray();
-
-    for( sal_Int32 nIndex = 0; nIndex < nAnyCount; nIndex++, pAny++ )
+    for( const auto& rAny : aArguments )
     {
         Reference<XInterface> xValue;
-        *pAny >>= xValue;
+        rAny >>= xValue;
 
         uno::Reference<task::XStatusIndicator> xTmpStatusIndicator(
             xValue, UNO_QUERY );

@@ -273,13 +273,12 @@ void XMLSettingsExportHelper::exportSequencePropertyValue(
                     const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
-    sal_Int32 nLength(aProps.getLength());
-    if(nLength)
+    if(aProps.hasElements())
     {
         m_rContext.AddAttribute( XML_NAME, rName );
         m_rContext.StartElement( XML_CONFIG_ITEM_SET );
-        for (sal_Int32 i = 0; i < nLength; i++)
-            CallTypeFunction(aProps[i].Value, aProps[i].Name);
+        for (const auto& rProp : aProps)
+            CallTypeFunction(rProp.Value, rProp.Name);
         m_rContext.EndElement( true );
     }
 }
@@ -340,11 +339,10 @@ void XMLSettingsExportHelper::exportbase64Binary(
                     const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
-    sal_Int32 nLength(aProps.getLength());
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_BASE64BINARY );
     m_rContext.StartElement( XML_CONFIG_ITEM );
-    if(nLength)
+    if(aProps.hasElements())
     {
         OUStringBuffer sBuffer;
         ::comphelper::Base64::encode(sBuffer, aProps);
@@ -360,14 +358,13 @@ void XMLSettingsExportHelper::exportMapEntry(const uno::Any& rAny,
     DBG_ASSERT((bNameAccess && !rName.isEmpty()) || !bNameAccess, "no name");
     uno::Sequence<beans::PropertyValue> aProps;
     rAny >>= aProps;
-    sal_Int32 nLength = aProps.getLength();
-    if (nLength)
+    if (aProps.hasElements())
     {
         if (bNameAccess)
             m_rContext.AddAttribute( XML_NAME, rName );
         m_rContext.StartElement( XML_CONFIG_ITEM_MAP_ENTRY );
-        for (sal_Int32 i = 0; i < nLength; i++)
-            CallTypeFunction(aProps[i].Value, aProps[i].Name);
+        for (const auto& rProp : aProps)
+            CallTypeFunction(rProp.Value, rProp.Name);
         m_rContext.EndElement( true );
     }
 }
@@ -384,8 +381,8 @@ void XMLSettingsExportHelper::exportNameAccess(
         m_rContext.AddAttribute( XML_NAME, rName );
         m_rContext.StartElement( XML_CONFIG_ITEM_MAP_NAMED );
         uno::Sequence< OUString > aNames(aNamed->getElementNames());
-        for (sal_Int32 i = 0; i < aNames.getLength(); i++)
-            exportMapEntry(aNamed->getByName(aNames[i]), aNames[i], true);
+        for (const auto& rElementName : aNames)
+            exportMapEntry(aNamed->getByName(rElementName), rElementName, true);
         m_rContext.EndElement( true );
     }
 }
@@ -427,9 +424,6 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
 
     uno::Reference< container::XIndexContainer > xBox = document::IndexedPropertyValues::create(m_rContext.GetComponentContext());
     const uno::Sequence< lang::Locale > aLocales( xLocales->getLocales() );
-    const lang::Locale* pLocales = aLocales.getConstArray();
-
-    const sal_Int32 nCount = aLocales.getLength();
 
     /* FIXME-BCP47: this stupid and counterpart in
      * xmloff/source/core/DocumentSettingsContext.cxx
@@ -442,22 +436,22 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
     const OUString sEndLine   ( "EndLine" );
 
     sal_Int32 nPos = 0;
-    for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++, pLocales++ )
+    for( const auto& rLocale : aLocales )
     {
-        if( xForbChars->hasForbiddenCharacters( *pLocales ) )
+        if( xForbChars->hasForbiddenCharacters( rLocale ) )
         {
-            const i18n::ForbiddenCharacters aChars( xForbChars->getForbiddenCharacters( *pLocales ) );
+            const i18n::ForbiddenCharacters aChars( xForbChars->getForbiddenCharacters( rLocale ) );
 
 
             uno::Sequence < beans::PropertyValue > aSequence ( XML_FORBIDDEN_CHARACTER_MAX );
             beans::PropertyValue *pForChar = aSequence.getArray();
 
             pForChar[XML_FORBIDDEN_CHARACTER_LANGUAGE].Name    = sLanguage;
-            pForChar[XML_FORBIDDEN_CHARACTER_LANGUAGE].Value <<= pLocales->Language;
+            pForChar[XML_FORBIDDEN_CHARACTER_LANGUAGE].Value <<= rLocale.Language;
             pForChar[XML_FORBIDDEN_CHARACTER_COUNTRY].Name    = sCountry;
-            pForChar[XML_FORBIDDEN_CHARACTER_COUNTRY].Value <<= pLocales->Country;
+            pForChar[XML_FORBIDDEN_CHARACTER_COUNTRY].Value <<= rLocale.Country;
             pForChar[XML_FORBIDDEN_CHARACTER_VARIANT].Name    = sVariant;
-            pForChar[XML_FORBIDDEN_CHARACTER_VARIANT].Value <<= pLocales->Variant;
+            pForChar[XML_FORBIDDEN_CHARACTER_VARIANT].Value <<= rLocale.Variant;
             pForChar[XML_FORBIDDEN_CHARACTER_BEGIN_LINE].Name    = sBeginLine;
             pForChar[XML_FORBIDDEN_CHARACTER_BEGIN_LINE].Value <<= aChars.beginLine;
             pForChar[XML_FORBIDDEN_CHARACTER_END_LINE].Name    = sEndLine;

@@ -185,11 +185,11 @@ void lcl_insertErrorBarLSequencesToMap(
     {
         Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSequences(
             xErrorBarSource->getDataSequences());
-        for( sal_Int32 nIndex = 0; nIndex < aLSequences.getLength(); ++nIndex )
+        for( const auto& rLSequence : aLSequences )
         {
             // use "0" as data index. This is ok, as it is not used for error bars
             rInOutMap.emplace(
-                    tSchXMLIndexWithPart( 0, SCH_XML_PART_ERROR_BARS ), aLSequences[ nIndex ] );
+                    tSchXMLIndexWithPart( 0, SCH_XML_PART_ERROR_BARS ), rLSequence );
         }
     }
 }
@@ -222,8 +222,7 @@ Reference< chart2::data::XLabeledDataSequence2 > lcl_createAndAddSequenceToSerie
     sal_Int32 nOldCount = aOldSeq.getLength();
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aNewSeq( nOldCount + 1 );
     aNewSeq[0].set(xLabeledSeq, uno::UNO_QUERY_THROW);
-    for( sal_Int32 nN=0; nN<nOldCount; nN++ )
-        aNewSeq[nN+1] = aOldSeq[nN];
+    std::copy(aOldSeq.begin(), aOldSeq.end(), std::next(aNewSeq.begin()));
     xSeriesSink->setData( aNewSeq );
 
     return xLabeledSeq;
