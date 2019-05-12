@@ -22,6 +22,7 @@
 
 #include <tools/gen.hxx>
 #include <vcl/window.hxx>
+#include <array>
 
 /********************** SvResizeHelper ***********************************
 *************************************************************************/
@@ -48,8 +49,8 @@ public:
     }
                 // Clockwise, start at upper left
 
-    void        FillHandleRectsPixel( tools::Rectangle aRects[ 8 ] ) const;
-    void        FillMoveRectsPixel( tools::Rectangle aRects[ 4 ] ) const;
+    std::array<tools::Rectangle,8> FillHandleRectsPixel() const;
+    std::array<tools::Rectangle,4> FillMoveRectsPixel() const;
     void        Draw(vcl::RenderContext& rRenderContext);
     void        InvalidateBorder( vcl::Window * );
     bool        SelectBegin( vcl::Window *, const Point & rPos );
