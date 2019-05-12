@@ -40,12 +40,13 @@ struct GraphicProperties
 {
     BlipFillProperties      maBlipProps;            ///< Properties for the graphic.
     OUString                m_sMediaPackageURL;     ///< Audio/Video URL.
+    bool                    mbIsCustomShape = false;
     css::uno::Reference<css::io::XInputStream> m_xMediaStream; ///< Audio/Video input stream.
 
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,
-                            const GraphicHelper& rGraphicHelper ) const;
+                            const GraphicHelper& rGraphicHelper) const;
 };
 
 } // namespace drawingml

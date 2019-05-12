@@ -703,7 +703,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
     }
 }
 
-void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelper& rGraphicHelper ) const
+void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelper& rGraphicHelper) const
 {
     sal_Int16 nBrightness = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moBrightness.get( 0 ) / PER_PERCENT, -100, 100 );
     sal_Int16 nContrast = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moContrast.get( 0 ) / PER_PERCENT, -100, 100 );
@@ -734,7 +734,15 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
             nBrightness = 0;
             nContrast = 0;
         }
-        rPropMap.setProperty(PROP_Graphic, xGraphic);
+        if(mbIsCustomShape)
+        {
+            // it is a cropped graphic.
+            rPropMap.setProperty(PROP_FillStyle, FillStyle_BITMAP);
+            rPropMap.setProperty(PROP_FillBitmapMode, BitmapMode_STRETCH);
+            rPropMap.setProperty(PROP_FillBitmap, xGraphic);
+        }
+        else
+            rPropMap.setProperty(PROP_Graphic, xGraphic);
 
         // cropping
         if ( maBlipProps.moClipRect.has() )
