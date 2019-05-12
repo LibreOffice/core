@@ -1227,7 +1227,6 @@ void XMLEnhancedCustomShapeContext::EndElement()
         }
 
         // Path
-        sal_Int32 i;
         for ( beans::PropertyValue& rPathItem : maPath )
         {
             switch( EASGet( rPathItem.Name ) )
@@ -1238,10 +1237,10 @@ void XMLEnhancedCustomShapeContext::EndElement()
                     uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > const & rSeq =
                         *o3tl::doAccess<uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > >(
                             rPathItem.Value);
-                    for ( i = 0; i < rSeq.getLength(); i++ )
+                    for ( const auto& rElem : rSeq )
                     {
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].First), pH.get() );
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].Second), pH.get() );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rElem.First), pH.get() );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rElem.Second), pH.get() );
                     }
                 }
                 break;
@@ -1250,12 +1249,12 @@ void XMLEnhancedCustomShapeContext::EndElement()
                     uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > const & rSeq =
                         *o3tl::doAccess<uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > >(
                             rPathItem.Value);
-                    for ( i = 0; i < rSeq.getLength(); i++ )
+                    for ( const auto& rElem : rSeq )
                     {
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].TopLeft.First), pH.get() );
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].TopLeft.Second), pH.get() );
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].BottomRight.First), pH.get() );
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].BottomRight.Second), pH.get() );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rElem.TopLeft.First), pH.get() );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rElem.TopLeft.Second), pH.get() );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rElem.BottomRight.First), pH.get() );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rElem.BottomRight.Second), pH.get() );
                     }
                 }
                 break;

@@ -362,16 +362,13 @@ namespace xmloff
                     rPropValues.Value >>= aXMLValueList;
                     Sequence< sal_Int16 > aPropertyValueList( aXMLValueList.getLength() );
 
-                    const Any*       pXMLValue = aXMLValueList.getConstArray();
-                    sal_Int16* pPropValue = aPropertyValueList.getArray();
-
-                    for ( sal_Int32 i=0; i<aXMLValueList.getLength(); ++i, ++pXMLValue, ++pPropValue )
-                    {
-                        // only value sequences of numeric types implemented so far.
-                        double nVal( 0 );
-                        OSL_VERIFY( *pXMLValue >>= nVal );
-                        *pPropValue = static_cast< sal_Int16 >( nVal );
-                    }
+                    std::transform(aXMLValueList.begin(), aXMLValueList.end(), aPropertyValueList.begin(),
+                        [](const Any& rXMLValue) -> sal_Int16 {
+                            // only value sequences of numeric types implemented so far.
+                            double nVal( 0 );
+                            OSL_VERIFY( rXMLValue >>= nVal );
+                            return static_cast< sal_Int16 >( nVal );
+                        });
 
                     rPropValues.Value <<= aPropertyValueList;
                 }
@@ -441,24 +438,14 @@ namespace xmloff
             return OUString(sUnnamedName);
         Sequence< OUString > aNames = m_xParentContainer->getElementNames();
 
-        const OUString* pNames = nullptr;
-        const OUString* pNamesEnd = aNames.getConstArray() + aNames.getLength();
         for (sal_Int32 i=0; i<32768; ++i)   // the limit is nearly arbitrary ...
         {
             // assemble the new name (suggestion)
             OUString sReturn = sUnnamedName + OUString::number(i);
             // check the existence (this is the bad performance part ....)
-            for (pNames = aNames.getConstArray(); pNames<pNamesEnd; ++pNames)
-            {
-                if (*pNames == sReturn)
-                {
-                    break;
-                }
-            }
-            if (pNames<pNamesEnd)
-                // found the name
-                continue;
-            return sReturn;
+            if (comphelper::findValue(aNames, sReturn) == -1)
+                // not found the name
+                return sReturn;
         }
         OSL_FAIL("OElementImport::implGetDefaultName: did not find a free name!");
         return OUString(sUnnamedName);

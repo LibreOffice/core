@@ -1206,10 +1206,8 @@ void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape 
 
     uno::Sequence< sal_Int32 > aIdSequence( xGluePoints->getIdentifiers() );
 
-    const sal_Int32 nCount = aIdSequence.getLength();
-    for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+    for( const sal_Int32 nIdentifier : aIdSequence )
     {
-        const sal_Int32 nIdentifier = aIdSequence[nIndex];
         if( (xGluePoints->getByIdentifier( nIdentifier ) >>= aGluePoint) && aGluePoint.IsUserDefined )
         {
             // export only user defined glue points
@@ -1599,58 +1597,56 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
     uno::Sequence< beans::PropertyValue > aClickProperties;
     if( xEvents->hasByName( gsOnClick ) && (xEvents->getByName( gsOnClick ) >>= aClickProperties) )
     {
-        const beans::PropertyValue* pProperty = aClickProperties.getConstArray();
-        const beans::PropertyValue* pPropertyEnd = pProperty + aClickProperties.getLength();
-        for( ; pProperty != pPropertyEnd; ++pProperty )
+        for( const auto& rProperty : aClickProperties )
         {
-            if( !( nFound & Found::CLICKEVENTTYPE ) && pProperty->Name == gsEventType )
+            if( !( nFound & Found::CLICKEVENTTYPE ) && rProperty.Name == gsEventType )
             {
-                if( pProperty->Value >>= aClickEventType )
+                if( rProperty.Value >>= aClickEventType )
                     nFound |= Found::CLICKEVENTTYPE;
             }
-            else if( !( nFound & Found::CLICKACTION ) && pProperty->Name == gsClickAction )
+            else if( !( nFound & Found::CLICKACTION ) && rProperty.Name == gsClickAction )
             {
-                if( pProperty->Value >>= eClickAction )
+                if( rProperty.Value >>= eClickAction )
                     nFound |= Found::CLICKACTION;
             }
-            else if( !( nFound & Found::MACRO ) && ( pProperty->Name == gsMacroName || pProperty->Name == gsScript ) )
+            else if( !( nFound & Found::MACRO ) && ( rProperty.Name == gsMacroName || rProperty.Name == gsScript ) )
             {
-                if( pProperty->Value >>= aStrMacro )
+                if( rProperty.Value >>= aStrMacro )
                     nFound |= Found::MACRO;
             }
-            else if( !( nFound & Found::LIBRARY ) && pProperty->Name == gsLibrary )
+            else if( !( nFound & Found::LIBRARY ) && rProperty.Name == gsLibrary )
             {
-                if( pProperty->Value >>= aStrLibrary )
+                if( rProperty.Value >>= aStrLibrary )
                     nFound |= Found::LIBRARY;
             }
-            else if( !( nFound & Found::EFFECT ) && pProperty->Name == gsEffect )
+            else if( !( nFound & Found::EFFECT ) && rProperty.Name == gsEffect )
             {
-                if( pProperty->Value >>= eEffect )
+                if( rProperty.Value >>= eEffect )
                     nFound |= Found::EFFECT;
             }
-            else if( !( nFound & Found::BOOKMARK ) && pProperty->Name == gsBookmark )
+            else if( !( nFound & Found::BOOKMARK ) && rProperty.Name == gsBookmark )
             {
-                if( pProperty->Value >>= aStrBookmark )
+                if( rProperty.Value >>= aStrBookmark )
                     nFound |= Found::BOOKMARK;
             }
-            else if( !( nFound & Found::SPEED ) && pProperty->Name == gsSpeed )
+            else if( !( nFound & Found::SPEED ) && rProperty.Name == gsSpeed )
             {
-                if( pProperty->Value >>= eSpeed )
+                if( rProperty.Value >>= eSpeed )
                     nFound |= Found::SPEED;
             }
-            else if( !( nFound & Found::SOUNDURL ) && pProperty->Name == gsSoundURL )
+            else if( !( nFound & Found::SOUNDURL ) && rProperty.Name == gsSoundURL )
             {
-                if( pProperty->Value >>= aStrSoundURL )
+                if( rProperty.Value >>= aStrSoundURL )
                     nFound |= Found::SOUNDURL;
             }
-            else if( !( nFound & Found::PLAYFULL ) && pProperty->Name == gsPlayFull )
+            else if( !( nFound & Found::PLAYFULL ) && rProperty.Name == gsPlayFull )
             {
-                if( pProperty->Value >>= bPlayFull )
+                if( rProperty.Value >>= bPlayFull )
                     nFound |= Found::PLAYFULL;
             }
-            else if( !( nFound & Found::VERB ) && pProperty->Name == gsVerb )
+            else if( !( nFound & Found::VERB ) && rProperty.Name == gsVerb )
             {
-                if( pProperty->Value >>= nVerb )
+                if( rProperty.Value >>= nVerb )
                     nFound |= Found::VERB;
             }
         }
@@ -3118,11 +3114,10 @@ void XMLShapeExport::ImpExportAppletShape(
         // export parameters
         uno::Sequence< beans::PropertyValue > aCommands;
         xPropSet->getPropertyValue("AppletCommands") >>= aCommands;
-        const sal_Int32 nCount = aCommands.getLength();
-        for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+        for( const auto& rCommand : aCommands )
         {
-            aCommands[nIndex].Value >>= aStr;
-            mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aCommands[nIndex].Name );
+            rCommand.Value >>= aStr;
+            mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rCommand.Name );
             mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aStr );
             SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
         }
@@ -3165,11 +3160,10 @@ void XMLShapeExport::ImpExportPluginShape(
         // export parameters
         uno::Sequence< beans::PropertyValue > aCommands;
         xPropSet->getPropertyValue("PluginCommands") >>= aCommands;
-        const sal_Int32 nCount = aCommands.getLength();
-        for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+        for( const auto& rCommand : aCommands )
         {
-            aCommands[nIndex].Value >>= aStr;
-            mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aCommands[nIndex].Name );
+            rCommand.Value >>= aStr;
+            mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rCommand.Name );
             mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aStr );
             SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
         }
@@ -3797,19 +3791,16 @@ static void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< OUStr
 
 static void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::PropertyValues >& rHandles )
 {
-    sal_uInt32 i, j, nElements = rHandles.getLength();
-    if ( nElements )
+    if ( rHandles.hasElements() )
     {
         OUString       aStr;
         OUStringBuffer aStrBuffer;
 
-        for ( i = 0; i < nElements; i++ )
+        for ( const uno::Sequence< beans::PropertyValue >& rPropSeq : rHandles )
         {
             bool bPosition = false;
-            const uno::Sequence< beans::PropertyValue >& rPropSeq = rHandles[ i ];
-            for ( j = 0; j < static_cast<sal_uInt32>(rPropSeq.getLength()); j++ )
+            for ( const beans::PropertyValue& rPropVal : rPropSeq )
             {
-                const beans::PropertyValue& rPropVal = rPropSeq[ j ];
                 switch( EASGet( rPropVal.Name ) )
                 {
                     case EAS_Position :
@@ -4130,10 +4121,8 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
             bool bCoordinates = false;
             OUString aCustomShapeType( "non-primitive" );
 
-            sal_Int32 j, nGeoPropCount = aGeoPropSeq.getLength();
-            for ( j = 0; j < nGeoPropCount; j++ )
+            for ( const beans::PropertyValue& rGeoProp : aGeoPropSeq )
             {
-                const beans::PropertyValue& rGeoProp = aGeoPropSeq[ j ];
                 switch( EASGet( rGeoProp.Name ) )
                 {
                     case EAS_Type :
@@ -4185,10 +4174,8 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                         uno::Sequence< beans::PropertyValue > aExtrusionPropSeq;
                         if ( rGeoProp.Value >>= aExtrusionPropSeq )
                         {
-                            sal_Int32 i, nCount = aExtrusionPropSeq.getLength();
-                            for ( i = 0; i < nCount; i++ )
+                            for ( const beans::PropertyValue& rProp : aExtrusionPropSeq )
                             {
-                                const beans::PropertyValue& rProp = aExtrusionPropSeq[ i ];
                                 switch( EASGet( rProp.Name ) )
                                 {
                                     case EAS_Extrusion :
@@ -4495,10 +4482,8 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                         uno::Sequence< beans::PropertyValue > aTextPathPropSeq;
                         if ( rGeoProp.Value >>= aTextPathPropSeq )
                         {
-                            sal_Int32 i, nCount = aTextPathPropSeq.getLength();
-                            for ( i = 0; i < nCount; i++ )
+                            for ( const beans::PropertyValue& rProp : aTextPathPropSeq )
                             {
-                                const beans::PropertyValue& rProp = aTextPathPropSeq[ i ];
                                 switch( EASGet( rProp.Name ) )
                                 {
                                     case EAS_TextPath :
@@ -4557,11 +4542,8 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                         uno::Sequence< beans::PropertyValue > aPathPropSeq;
                         if ( rGeoProp.Value >>= aPathPropSeq )
                         {
-                            sal_Int32 i, nCount = aPathPropSeq.getLength();
-                            for ( i = 0; i < nCount; i++ )
+                            for ( const beans::PropertyValue& rProp : aPathPropSeq )
                             {
-                                const beans::PropertyValue& rProp = aPathPropSeq[ i ];
-
                                 switch( EASGet( rProp.Name ) )
                                 {
                                     case EAS_SubViewSize:
@@ -4615,13 +4597,12 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                         css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> aGluePoints;
                                         if ( rProp.Value >>= aGluePoints )
                                         {
-                                            sal_Int32 k, nElements = aGluePoints.getLength();
-                                            if ( nElements )
+                                            if ( aGluePoints.hasElements() )
                                             {
-                                                for( k = 0; k < nElements; k++ )
+                                                for( const auto& rGluePoint : aGluePoints )
                                                 {
-                                                    ExportParameter( aStrBuffer, aGluePoints[ k ].First );
-                                                    ExportParameter( aStrBuffer, aGluePoints[ k ].Second );
+                                                    ExportParameter( aStrBuffer, rGluePoint.First );
+                                                    ExportParameter( aStrBuffer, rGluePoint.Second );
                                                 }
                                                 aStr = aStrBuffer.makeStringAndClear();
                                             }
@@ -4676,13 +4657,12 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                         {
                                             if ( aPathTextFrames.hasElements() )
                                             {
-                                                sal_uInt16 k, nElements = static_cast<sal_uInt16>(aPathTextFrames.getLength());
-                                                for ( k = 0; k < nElements; k++ )
+                                                for ( const auto& rPathTextFrame : aPathTextFrames )
                                                 {
-                                                    ExportParameter( aStrBuffer, aPathTextFrames[ k ].TopLeft.First );
-                                                    ExportParameter( aStrBuffer, aPathTextFrames[ k ].TopLeft.Second );
-                                                    ExportParameter( aStrBuffer, aPathTextFrames[ k ].BottomRight.First );
-                                                    ExportParameter( aStrBuffer, aPathTextFrames[ k ].BottomRight.Second );
+                                                    ExportParameter( aStrBuffer, rPathTextFrame.TopLeft.First );
+                                                    ExportParameter( aStrBuffer, rPathTextFrame.TopLeft.Second );
+                                                    ExportParameter( aStrBuffer, rPathTextFrame.BottomRight.First );
+                                                    ExportParameter( aStrBuffer, rPathTextFrame.BottomRight.Second );
                                                 }
                                                 aStr = aStrBuffer.makeStringAndClear();
                                             }

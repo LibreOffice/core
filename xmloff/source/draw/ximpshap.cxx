@@ -3105,28 +3105,28 @@ void SdXMLPluginShapeContext::EndElement()
 
             xProps->setPropertyValue("MediaMimeType", uno::makeAny(maMimeType) );
 
-            for( sal_Int32 nParam = 0; nParam < maParams.getLength(); ++nParam )
+            for( const auto& rParam : maParams )
             {
-                const OUString& rName = maParams[ nParam ].Name;
+                const OUString& rName = rParam.Name;
 
                 if( rName == "Loop" )
                 {
                     OUString aValueStr;
-                    maParams[ nParam ].Value >>= aValueStr;
+                    rParam.Value >>= aValueStr;
                     xProps->setPropertyValue("Loop",
                         uno::makeAny( aValueStr == "true" ) );
                 }
                 else if( rName == "Mute" )
                 {
                     OUString aValueStr;
-                    maParams[ nParam ].Value >>= aValueStr;
+                    rParam.Value >>= aValueStr;
                     xProps->setPropertyValue("Mute",
                         uno::makeAny( aValueStr == "true" ) );
                 }
                 else if( rName == "VolumeDB" )
                 {
                     OUString aValueStr;
-                    maParams[ nParam ].Value >>= aValueStr;
+                    rParam.Value >>= aValueStr;
                     xProps->setPropertyValue("VolumeDB",
                                                 uno::makeAny( static_cast< sal_Int16 >( aValueStr.toInt32() ) ) );
                 }
@@ -3135,7 +3135,7 @@ void SdXMLPluginShapeContext::EndElement()
                     OUString            aZoomStr;
                     media::ZoomLevel    eZoomLevel;
 
-                    maParams[ nParam ].Value >>= aZoomStr;
+                    rParam.Value >>= aZoomStr;
 
                     if( aZoomStr == "25%" )
                         eZoomLevel = media::ZoomLevel_ZOOM_1_TO_4;

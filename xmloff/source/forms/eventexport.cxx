@@ -34,23 +34,20 @@ namespace xmloff
     //= OEventDescriptorMapper
     OEventDescriptorMapper::OEventDescriptorMapper(const Sequence< ScriptEventDescriptor >& _rEvents)
     {
-        sal_Int32 nEvents = _rEvents.getLength();
-
         // translate the events
-        const ScriptEventDescriptor* pEvents = _rEvents.getConstArray();
         OUString sLibrary, sLocalMacroName;
-        for (sal_Int32 i=0; i<nEvents; ++i, ++pEvents)
+        for (const auto& rEvent : _rEvents)
         {
             // the name of the event is build from listener interface and listener method name
-            OUString sName = pEvents->ListenerType
+            OUString sName = rEvent.ListenerType
                 + EVENT_NAME_SEPARATOR
-                + pEvents->EventMethod;
+                + rEvent.EventMethod;
 
             Sequence< PropertyValue >& rMappedEvent = m_aMappedEvents[sName];
 
-            sLocalMacroName = pEvents->ScriptCode;
+            sLocalMacroName = rEvent.ScriptCode;
             sLibrary.clear();
-            if (pEvents->ScriptType == EVENT_STARBASIC)
+            if (rEvent.ScriptType == EVENT_STARBASIC)
             {   // for StarBasic, the library name is part of the ScriptCode
                 sal_Int32 nPrefixLen = sLocalMacroName.indexOf( ':' );
                 SAL_WARN_IF( 0 > nPrefixLen, "xmloff", "OEventDescriptorMapper::OEventDescriptorMapper: invalid script code prefix!" );
@@ -67,7 +64,7 @@ namespace xmloff
                 rMappedEvent.realloc( sLibrary.isEmpty() ? 2 : 3 );
 
                 // ... the type
-                rMappedEvent[0] = PropertyValue(EVENT_TYPE, -1, makeAny(pEvents->ScriptType), PropertyState_DIRECT_VALUE);
+                rMappedEvent[0] = PropertyValue(EVENT_TYPE, -1, makeAny(rEvent.ScriptType), PropertyState_DIRECT_VALUE);
 
                 // and the macro name
                 rMappedEvent[1] = PropertyValue(EVENT_LOCALMACRONAME, -1, makeAny(sLocalMacroName), PropertyState_DIRECT_VALUE);
@@ -79,9 +76,9 @@ namespace xmloff
             else
             {
                 rMappedEvent.realloc( 2 );
-                rMappedEvent[0] = PropertyValue(EVENT_TYPE, -1, makeAny(pEvents->ScriptType), PropertyState_DIRECT_VALUE);
+                rMappedEvent[0] = PropertyValue(EVENT_TYPE, -1, makeAny(rEvent.ScriptType), PropertyState_DIRECT_VALUE);
                 // and the macro name
-                rMappedEvent[1] = PropertyValue(EVENT_SCRIPTURL, -1, makeAny(pEvents->ScriptCode), PropertyState_DIRECT_VALUE);
+                rMappedEvent[1] = PropertyValue(EVENT_SCRIPTURL, -1, makeAny(rEvent.ScriptCode), PropertyState_DIRECT_VALUE);
             }
         }
     }

@@ -136,11 +136,8 @@ void XMLImageMapExport::ExportMapEntry(
     // distinguish map entries by their service name
     Sequence<OUString> sServiceNames =
         xServiceInfo->getSupportedServiceNames();
-    sal_Int32 nLength = sServiceNames.getLength();
-    for( sal_Int32 i=0; i<nLength; i++ )
+    for( const OUString& rName : sServiceNames )
     {
-        OUString& rName = sServiceNames[i];
-
         if ( rName == "com.sun.star.image.ImageMapRectangleObject" )
         {
             eType = XML_AREA_RECTANGLE;

@@ -400,14 +400,13 @@ namespace xmloff
                     Sequence< OUString > aListItems;
                     m_xProps->getPropertyValue(PROPERTY_STRING_ITEM_LIST) >>= aListItems;
                     // loop through it and write the sub elements
-                    const OUString* pListItems = aListItems.getConstArray();
-                    for (sal_Int32 i=0; i<aListItems.getLength(); ++i, ++pListItems)
+                    for (const auto& rListItem : aListItems)
                     {
                         m_rContext.getGlobalContext().ClearAttrList();
                         AddAttribute(
                             OAttributeMetaData::getCommonControlAttributeNamespace(CCAFlags::Label),
                             OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Label),
-                            *pListItems);
+                            rListItem);
                         SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "item", true, true);
                     }
                 }
@@ -1261,9 +1260,8 @@ namespace xmloff
         DBG_CHECK_PROPERTY(_rPropertyName, Sequence< sal_Int16 >);
         m_xProps->getPropertyValue(_rPropertyName) >>= aValueSequence;
 
-        const sal_Int16* pValues = aValueSequence.getConstArray();
-        for (sal_Int32 i=0; i<aValueSequence.getLength(); ++i, ++pValues)
-            _rOut.insert(*pValues);
+        for (const auto& rValue : aValueSequence)
+            _rOut.insert(rValue);
     }
 
     void OControlExport::exportListSourceAsElements()

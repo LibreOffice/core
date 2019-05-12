@@ -58,21 +58,20 @@ void XMLStarBasicExportHandler::Export(
     rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, rEventQName);
 
     OUString sLocation, sName;
-    sal_Int32 nCount = rValues.getLength();
-    for(sal_Int32 i = 0; i < nCount; i++)
+    for(const auto& rValue : rValues)
     {
-        if (gsLibrary == rValues[i].Name)
+        if (gsLibrary == rValue.Name)
         {
             OUString sTmp;
-            rValues[i].Value >>= sTmp;
+            rValue.Value >>= sTmp;
             sLocation = GetXMLToken(
                 (sTmp.equalsIgnoreAsciiCase(gsApplication) ||
                  sTmp.equalsIgnoreAsciiCase(gsStarOffice) ) ? XML_APPLICATION
                                                            : XML_DOCUMENT );
         }
-        else if (gsMacroName == rValues[i].Name)
+        else if (gsMacroName == rValue.Name)
         {
-            rValues[i].Value >>= sName;
+            rValue.Value >>= sName;
         }
         // else: disregard
     }

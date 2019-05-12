@@ -724,20 +724,14 @@ void AnimationsExporterImpl::prepareNode( const Reference< XAnimationNode >& xNo
         }
 
         Sequence< NamedValue > aUserData( xNode->getUserData() );
-        if( aUserData.hasElements() )
+        for( const auto& rValue : aUserData )
         {
-            const NamedValue* pValue = aUserData.getConstArray();
-            const sal_Int32 nLength = aUserData.getLength();
-            sal_Int32 nElement;
-            for( nElement = 0; nElement < nLength; nElement++, pValue++ )
+            if( IsXMLToken( rValue.Name, XML_MASTER_ELEMENT ) )
             {
-                if( IsXMLToken( pValue->Name, XML_MASTER_ELEMENT ) )
-                {
-                    Reference< XInterface > xMaster;
-                    pValue->Value >>= xMaster;
-                    if( xMaster.is() )
-                        mxExport->getInterfaceToIdentifierMapper().registerReference( xMaster );
-                }
+                Reference< XInterface > xMaster;
+                rValue.Value >>= xMaster;
+                if( xMaster.is() )
+                    mxExport->getInterfaceToIdentifierMapper().registerReference( xMaster );
             }
         }
     }
@@ -881,68 +875,62 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
         sal_Int16 nContainerNodeType = EffectNodeType::DEFAULT;
         OUString aPresetId;
         Sequence< NamedValue > aUserData( xNode->getUserData() );
-        if( aUserData.hasElements() )
+        for( const auto& rValue : aUserData )
         {
-            const NamedValue* pValue = aUserData.getConstArray();
-            const sal_Int32 nLength = aUserData.getLength();
-            sal_Int32 nElement;
-            for( nElement = 0; nElement < nLength; nElement++, pValue++ )
+            if( IsXMLToken( rValue.Name, XML_NODE_TYPE ) )
             {
-                if( IsXMLToken( pValue->Name, XML_NODE_TYPE ) )
+                if( (rValue.Value >>= nContainerNodeType) && (nContainerNodeType != EffectNodeType::DEFAULT) )
                 {
-                    if( (pValue->Value >>= nContainerNodeType) && (nContainerNodeType != EffectNodeType::DEFAULT) )
-                    {
-                        SvXMLUnitConverter::convertEnum( sTmp, nContainerNodeType, aAnimations_EnumMap_EffectNodeType );
-                        mxExport->AddAttribute( XML_NAMESPACE_PRESENTATION, XML_NODE_TYPE, sTmp.makeStringAndClear() );
-                    }
+                    SvXMLUnitConverter::convertEnum( sTmp, nContainerNodeType, aAnimations_EnumMap_EffectNodeType );
+                    mxExport->AddAttribute( XML_NAMESPACE_PRESENTATION, XML_NODE_TYPE, sTmp.makeStringAndClear() );
                 }
-                else if( IsXMLToken( pValue->Name, XML_PRESET_ID ) )
+            }
+            else if( IsXMLToken( rValue.Name, XML_PRESET_ID ) )
+            {
+                if( rValue.Value >>= aPresetId )
                 {
-                    if( pValue->Value >>= aPresetId )
-                    {
-                        mxExport->AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PRESET_ID, aPresetId );
-                    }
+                    mxExport->AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PRESET_ID, aPresetId );
                 }
-                else if( IsXMLToken( pValue->Name, XML_PRESET_SUB_TYPE ) )
+            }
+            else if( IsXMLToken( rValue.Name, XML_PRESET_SUB_TYPE ) )
+            {
+                OUString aPresetSubType;
+                if( rValue.Value >>= aPresetSubType )
                 {
-                    OUString aPresetSubType;
-                    if( pValue->Value >>= aPresetSubType )
-                    {
-                        mxExport->AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PRESET_SUB_TYPE, aPresetSubType );
-                    }
+                    mxExport->AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PRESET_SUB_TYPE, aPresetSubType );
                 }
-                else if( IsXMLToken( pValue->Name, XML_PRESET_CLASS ) )
+            }
+            else if( IsXMLToken( rValue.Name, XML_PRESET_CLASS ) )
+            {
+                sal_Int16 nEffectPresetClass = sal_uInt16();
+                if( rValue.Value >>= nEffectPresetClass )
                 {
-                    sal_Int16 nEffectPresetClass = sal_uInt16();
-                    if( pValue->Value >>= nEffectPresetClass )
-                    {
-                        SvXMLUnitConverter::convertEnum( sTmp, nEffectPresetClass, aAnimations_EnumMap_EffectPresetClass );
-                        mxExport->AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PRESET_CLASS, sTmp.makeStringAndClear() );
-                    }
+                    SvXMLUnitConverter::convertEnum( sTmp, nEffectPresetClass, aAnimations_EnumMap_EffectPresetClass );
+                    mxExport->AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PRESET_CLASS, sTmp.makeStringAndClear() );
                 }
-                else if( IsXMLToken( pValue->Name, XML_MASTER_ELEMENT ) )
+            }
+            else if( IsXMLToken( rValue.Name, XML_MASTER_ELEMENT ) )
+            {
+                Reference< XInterface > xMaster;
+                rValue.Value >>= xMaster;
+                if( xMaster.is() )
                 {
-                    Reference< XInterface > xMaster;
-                    pValue->Value >>= xMaster;
-                    if( xMaster.is() )
-                    {
-                        const OUString& rIdentifier = mxExport->getInterfaceToIdentifierMapper().getIdentifier(xMaster);
-                        if( !rIdentifier.isEmpty() )
-                            mxExport->AddAttribute( XML_NAMESPACE_PRESENTATION, XML_MASTER_ELEMENT, rIdentifier );
-                    }
+                    const OUString& rIdentifier = mxExport->getInterfaceToIdentifierMapper().getIdentifier(xMaster);
+                    if( !rIdentifier.isEmpty() )
+                        mxExport->AddAttribute( XML_NAMESPACE_PRESENTATION, XML_MASTER_ELEMENT, rIdentifier );
                 }
-                else if( IsXMLToken( pValue->Name, XML_GROUP_ID ) )
-                {
-                    sal_Int32 nGroupId = 0;
-                    if( pValue->Value >>= nGroupId )
-                        mxExport->AddAttribute( XML_NAMESPACE_PRESENTATION, XML_GROUP_ID, OUString::number( nGroupId ) );
-                }
-                else
-                {
-                    OUString aTmp;
-                    if( pValue->Value >>= aTmp )
-                        mxExport->AddAttribute( XML_NAMESPACE_PRESENTATION, pValue->Name, aTmp );
-                }
+            }
+            else if( IsXMLToken( rValue.Name, XML_GROUP_ID ) )
+            {
+                sal_Int32 nGroupId = 0;
+                if( rValue.Value >>= nGroupId )
+                    mxExport->AddAttribute( XML_NAMESPACE_PRESENTATION, XML_GROUP_ID, OUString::number( nGroupId ) );
+            }
+            else
+            {
+                OUString aTmp;
+                if( rValue.Value >>= aTmp )
+                    mxExport->AddAttribute( XML_NAMESPACE_PRESENTATION, rValue.Name, aTmp );
             }
         }
 
@@ -1175,15 +1163,12 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
             Sequence< double > aKeyTimes( xAnimate->getKeyTimes() );
             if( aKeyTimes.hasElements() )
             {
-                sal_Int32 nLength = aKeyTimes.getLength();
-                const double* p = aKeyTimes.getConstArray();
-
-                while( nLength-- )
+                for( const auto& rKeyTime : aKeyTimes )
                 {
                     if( !sTmp.isEmpty() )
                         sTmp.append( ';' );
 
-                    sTmp.append( *p++ );
+                    sTmp.append( rKeyTime );
                 }
                 mxExport->AddAttribute( XML_NAMESPACE_SMIL, XML_KEYTIMES, sTmp.makeStringAndClear() );
             }
@@ -1219,17 +1204,12 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
             Sequence< TimeFilterPair > aTimeFilter( xAnimate->getTimeFilter() );
             if( aTimeFilter.hasElements() )
             {
-                sal_Int32 nLength = aTimeFilter.getLength();
-                const TimeFilterPair* p = aTimeFilter.getConstArray();
-
-                while( nLength-- )
+                for( const auto& rPair : aTimeFilter )
                 {
                     if( !sTmp.isEmpty() )
                         sTmp.append( ';' );
 
-                    sTmp.append( OUString::number(p->Time) ).append( "," ).append( OUString::number(p->Progress) );
-
-                    p++;
+                    sTmp.append( OUString::number(rPair.Time) ).append( "," ).append( OUString::number(rPair.Progress) );
                 }
 
                 mxExport->AddAttribute( XML_NAMESPACE_SMIL, XML_KEYSPLINES, sTmp.makeStringAndClear() );

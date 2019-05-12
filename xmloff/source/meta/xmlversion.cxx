@@ -76,9 +76,8 @@ ErrCode XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
         // the following object will write all collected attributes in its dtor
         SvXMLElementExport aRoot( *this, XML_NAMESPACE_FRAMEWORK, xmloff::token::XML_VERSION_LIST, true, true );
 
-        for ( sal_Int32 n=0; n<maVersions.getLength(); n++ )
+        for ( const util::RevisionTag& rInfo : maVersions )
         {
-            const util::RevisionTag& rInfo = maVersions[n];
             AddAttribute( XML_NAMESPACE_FRAMEWORK,
                           xmloff::token::XML_TITLE,
                           rInfo.Identifier );
