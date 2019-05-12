@@ -38,7 +38,6 @@
 class SdrOle2Obj;
 class SfxBindings;
 class SfxChildWindow;
-class SfxModelessDialog;
 class SvxNumberInfoItem;
 struct SfxChildWinInfo;
 
