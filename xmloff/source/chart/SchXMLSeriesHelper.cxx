@@ -48,13 +48,13 @@ using ::com::sun::star::uno::Sequence;
             xDiagram, uno::UNO_QUERY_THROW );
         Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
             xCooSysCnt->getCoordinateSystems());
-        for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
+        for( const auto& rCooSys : aCooSysSeq )
         {
-            Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[i], uno::UNO_QUERY_THROW );
+            Reference< chart2::XChartTypeContainer > xCTCnt( rCooSys, uno::UNO_QUERY_THROW );
             Sequence< Reference< chart2::XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
-            for( sal_Int32 j=0; j<aChartTypeSeq.getLength(); ++j )
+            for( const auto& rChartType : aChartTypeSeq )
             {
-                Reference< chart2::XDataSeriesContainer > xDSCnt( aChartTypeSeq[j], uno::UNO_QUERY_THROW );
+                Reference< chart2::XDataSeriesContainer > xDSCnt( rChartType, uno::UNO_QUERY_THROW );
                 Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries() );
                 ::std::copy( aSeriesSeq.begin(), aSeriesSeq.end(),
                              ::std::back_inserter( aResult ));
@@ -106,20 +106,16 @@ uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
         return nullptr;
 
     uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-    for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
+    for( const auto& xCooSys : aCooSysList )
     {
-        uno::Reference< chart2::XCoordinateSystem > xCooSys( aCooSysList[nCS] );
-
         //iterate through all chart types in the current coordinate system
         uno::Reference< chart2::XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
         SAL_WARN_IF( !xChartTypeContainer.is(), "xmloff.chart", "xChartTypeContainer is NULL");
         if( !xChartTypeContainer.is() )
             continue;
         uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
-        for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
+        for( const auto& xChartType : aChartTypeList )
         {
-            uno::Reference< chart2::XChartType > xChartType( aChartTypeList[nT] );
-
             //iterate through all series in this chart type
             uno::Reference< chart2::XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
             SAL_WARN_IF( !xDataSeriesContainer.is(), "xmloff.chart", "xDataSeriesContainer is NULL");
@@ -127,13 +123,8 @@ uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
                 continue;
 
             uno::Sequence< uno::Reference< chart2::XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
-            for( sal_Int32 nS = 0; nS < aSeriesList.getLength(); ++nS )
-            {
-                Reference< chart2::XDataSeries > xCurrentSeries( aSeriesList[nS] );
-
-                if( xSeries == xCurrentSeries )
-                    return xChartType;
-            }
+            if (std::find(aSeriesList.begin(), aSeriesList.end(), xSeries) != aSeriesList.end())
+                return xChartType;
         }
     }
     return nullptr;

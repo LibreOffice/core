@@ -382,26 +382,20 @@ void SchXMLImportHelper::DeleteDataSeries(
         Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
             xCooSysCnt->getCoordinateSystems());
 
-        sal_Int32 nCooSysIndex = 0;
-        for( nCooSysIndex=0; nCooSysIndex<aCooSysSeq.getLength(); nCooSysIndex++ )
+        for( const auto& rCooSys : aCooSysSeq )
         {
-            Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[ nCooSysIndex ], uno::UNO_QUERY_THROW );
+            Reference< chart2::XChartTypeContainer > xCTCnt( rCooSys, uno::UNO_QUERY_THROW );
             Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
 
-            sal_Int32 nChartTypeIndex = 0;
-            for( nChartTypeIndex=0; nChartTypeIndex<aChartTypes.getLength(); nChartTypeIndex++ )
+            for( const auto& rChartType : aChartTypes )
             {
-                Reference< chart2::XDataSeriesContainer > xSeriesCnt( aChartTypes[nChartTypeIndex], uno::UNO_QUERY_THROW );
+                Reference< chart2::XDataSeriesContainer > xSeriesCnt( rChartType, uno::UNO_QUERY_THROW );
                 Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesCnt->getDataSeries());
 
-                sal_Int32 nSeriesIndex = 0;
-                for( nSeriesIndex=0; nSeriesIndex<aSeriesSeq.getLength(); nSeriesIndex++ )
+                if (std::find(aSeriesSeq.begin(), aSeriesSeq.end(), xSeries) != aSeriesSeq.end())
                 {
-                    if( xSeries==aSeriesSeq[nSeriesIndex] )
-                    {
-                        xSeriesCnt->removeDataSeries(xSeries);
-                        return;
-                    }
+                    xSeriesCnt->removeDataSeries(xSeries);
+                    return;
                 }
             }
         }

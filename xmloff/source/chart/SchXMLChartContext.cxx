@@ -963,19 +963,17 @@ void SchXMLChartContext::MergeSeriesForStockChart()
         uno::Reference< chart2::XDataSeriesContainer > xDSContainer;
         uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
         uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
-        for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
+        for( const auto& rCooSys : aCooSysSeq )
         {
-            uno::Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );
+            uno::Reference< chart2::XChartTypeContainer > xCTCnt( rCooSys, uno::UNO_QUERY_THROW );
             uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
-            for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
+            auto pChartType = std::find_if(aChartTypes.begin(), aChartTypes.end(),
+                [](const auto& rChartType) { return rChartType->getChartType() == "com.sun.star.chart2.CandleStickChartType"; });
+            if (pChartType != aChartTypes.end())
             {
-                if( aChartTypes[nCTIdx]->getChartType() == "com.sun.star.chart2.CandleStickChartType" )
-                {
-                    xDSContainer.set( aChartTypes[nCTIdx], uno::UNO_QUERY_THROW );
-                    uno::Reference< beans::XPropertySet > xCTProp( aChartTypes[nCTIdx], uno::UNO_QUERY_THROW );
-                    xCTProp->getPropertyValue("Japanese") >>= bHasJapaneseCandlestick;
-                    break;
-                }
+                xDSContainer.set( *pChartType, uno::UNO_QUERY_THROW );
+                uno::Reference< beans::XPropertySet > xCTProp( *pChartType, uno::UNO_QUERY_THROW );
+                xCTProp->getPropertyValue("Japanese") >>= bHasJapaneseCandlestick;
             }
         }
 
