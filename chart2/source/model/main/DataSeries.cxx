@@ -24,7 +24,6 @@
 #include <UserDefinedProperties.hxx>
 #include "DataPoint.hxx"
 #include <DataSeriesHelper.hxx>
-#include <ContainerHelper.hxx>
 #include <CloneHelper.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <EventListenerHelper.hxx>
@@ -395,7 +394,7 @@ void SAL_CALL DataSeries::setData( const uno::Sequence< Reference< chart2::data:
         xModifyEventForwarder = m_xModifyEventForwarder;
         xListener = this;
         std::swap( aOldDataSequences, m_aDataSequences );
-        aNewDataSequences = ContainerHelper::SequenceToVector( aData );
+        aNewDataSequences = comphelper::sequenceToContainer<tDataSequenceContainer>( aData );
         m_aDataSequences = aNewDataSequences;
     }
     ModifyListenerHelper::removeListenerFromAllElements( aOldDataSequences, xModifyEventForwarder );
@@ -462,7 +461,7 @@ void SAL_CALL DataSeries::setRegressionCurves(
     const Sequence< Reference< chart2::XRegressionCurve > >& aRegressionCurves )
 {
     tRegressionCurveContainerType aOldCurves;
-    tRegressionCurveContainerType aNewCurves( ContainerHelper::SequenceToVector( aRegressionCurves ) );
+    auto aNewCurves( comphelper::sequenceToContainer<tRegressionCurveContainerType>( aRegressionCurves ) );
     Reference< util::XModifyListener > xModifyEventForwarder;
     {
         MutexGuard aGuard( m_aMutex );

@@ -20,7 +20,6 @@
 #include <DiagramHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <AxisHelper.hxx>
-#include <ContainerHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
@@ -1237,8 +1236,8 @@ bool DiagramHelper::areChartTypesCompatible( const Reference< ::chart2::XChartTy
     if( !xFirstType.is() || !xSecondType.is() )
         return false;
 
-    std::vector< OUString > aFirstRoles( ContainerHelper::SequenceToVector( xFirstType->getSupportedMandatoryRoles() ) );
-    std::vector< OUString > aSecondRoles( ContainerHelper::SequenceToVector( xSecondType->getSupportedMandatoryRoles() ) );
+    auto aFirstRoles( comphelper::sequenceToContainer<std::vector< OUString >>( xFirstType->getSupportedMandatoryRoles() ) );
+    auto aSecondRoles( comphelper::sequenceToContainer<std::vector< OUString >>( xSecondType->getSupportedMandatoryRoles() ) );
     std::sort( aFirstRoles.begin(), aFirstRoles.end() );
     std::sort( aSecondRoles.begin(), aSecondRoles.end() );
     return ( aFirstRoles == aSecondRoles );

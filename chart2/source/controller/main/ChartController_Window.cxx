@@ -39,7 +39,6 @@
 #include <RegressionCurveHelper.hxx>
 #include <StatisticsHelper.hxx>
 #include <DataSeriesHelper.hxx>
-#include <ContainerHelper.hxx>
 #include <AxisHelper.hxx>
 #include <LegendHelper.hxx>
 #include <servicenames_charttypes.hxx>
@@ -63,6 +62,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <toolkit/awt/vclxmenu.hxx>
 
@@ -1054,7 +1054,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                             {
                                 if( bIsPoint )
                                 {
-                                    std::vector< sal_Int32 > aIndices( ContainerHelper::SequenceToVector( aAttributedDataPointIndexList ) );
+                                    auto aIndices( comphelper::sequenceToContainer<std::vector< sal_Int32 >>( aAttributedDataPointIndexList ) );
                                     std::vector< sal_Int32 >::iterator aIt = std::find( aIndices.begin(), aIndices.end(), nPointIndex );
                                     if( aIt != aIndices.end())
                                         bSelectedPointIsFormatted = true;
