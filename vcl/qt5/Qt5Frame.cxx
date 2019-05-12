@@ -65,6 +65,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     , m_pSvpGraphics(nullptr)
     , m_bNullRegion(true)
     , m_bGraphicsInUse(false)
+    , m_bGraphicsInvalid(false)
     , m_ePointerStyle(PointerStyle::Arrow)
     , m_pDragSource(nullptr)
     , m_pDropTarget(nullptr)
@@ -215,21 +216,23 @@ SalGraphics* Qt5Frame::AcquireGraphics()
 
     if (m_bUseCairo)
     {
-        if (!m_pOurSvpGraphics.get())
+        if (!m_pOurSvpGraphics.get() || m_bGraphicsInvalid)
         {
             m_pOurSvpGraphics.reset(new SvpSalGraphics());
             InitSvpSalGraphics(m_pOurSvpGraphics.get());
+            m_bGraphicsInvalid = false;
         }
         return m_pOurSvpGraphics.get();
     }
     else
     {
-        if (!m_pQt5Graphics.get())
+        if (!m_pQt5Graphics.get() || m_bGraphicsInvalid)
         {
             m_pQt5Graphics.reset(new Qt5Graphics(this));
             m_pQImage.reset(new QImage(m_pQWidget->size(), Qt5_DefaultFormat32));
             m_pQImage->fill(Qt::transparent);
             m_pQt5Graphics->ChangeQImage(m_pQImage.get());
+            m_bGraphicsInvalid = false;
         }
         return m_pQt5Graphics.get();
     }
@@ -1015,6 +1018,7 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
     style.SetShadowColor(toColor(pal.color(QPalette::Disabled, QPalette::WindowText)));
     style.SetDarkShadowColor(toColor(pal.color(QPalette::Inactive, QPalette::WindowText)));
 
+    m_bGraphicsInvalid = true;
     rSettings.SetStyleSettings(style);
 }
 
