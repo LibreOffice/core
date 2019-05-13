@@ -203,7 +203,7 @@ bool SdrView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
     return bRet;
 }
 
-bool SdrView::MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin)
+bool SdrView::MouseButtonDown(const MouseEvent& rMEvt, OutputDevice* pWin)
 {
     SetActualWin(pWin);
     if (rMEvt.IsLeft()) maDragStat.SetMouseDown(true);
@@ -216,7 +216,7 @@ bool SdrView::MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin)
     return bRet;
 }
 
-bool SdrView::MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin)
+bool SdrView::MouseButtonUp(const MouseEvent& rMEvt, OutputDevice* pWin)
 {
     SetActualWin(pWin);
     if (rMEvt.IsLeft()) maDragStat.SetMouseDown(false);
@@ -230,7 +230,7 @@ bool SdrView::MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin)
     return bRet;
 }
 
-bool SdrView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
+bool SdrView::MouseMove(const MouseEvent& rMEvt, OutputDevice* pWin)
 {
     SetActualWin(pWin);
     maDragStat.SetMouseDown(rMEvt.IsLeft());
