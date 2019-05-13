@@ -44,6 +44,8 @@
 #include <svx/fmshell.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
+#include <svx/fmview.hxx>
+#include <svx/svxids.hrc>
 #include <unotxvw.hxx>
 #include <cmdid.h>
 #include <svl/hint.hxx>

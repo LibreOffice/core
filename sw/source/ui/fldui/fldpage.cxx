@@ -22,6 +22,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svx/svxids.hrc>
 #include <dbfld.hxx>
 #include <flddat.hxx>
 #include <fmtfld.hxx>

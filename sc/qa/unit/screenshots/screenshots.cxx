@@ -12,6 +12,7 @@
 
 #include <sfx2/sfxdlg.hxx>
 #include <svx/numinf.hxx>
+#include <svx/svxids.hrc>
 
 #include <tabvwsh.hxx>
 #include <docsh.hxx>

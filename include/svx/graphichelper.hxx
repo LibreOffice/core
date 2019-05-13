@@ -21,10 +21,11 @@
 #define INCLUDED_SVX_GRAPHICHELPER_HXX
 
 #include <vcl/graph.hxx>
-#include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 
-#include <com/sun/star/drawing/XShape.hpp>
+namespace com::sun::star::drawing { class XShape; }
+namespace weld { class Widget; }
+namespace weld { class Window; }
 
 class SVX_DLLPUBLIC GraphicHelper
 {

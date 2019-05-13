@@ -30,6 +30,7 @@
 #include <editeng/lrspitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svx/svxids.hrc>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <swmodule.hxx>

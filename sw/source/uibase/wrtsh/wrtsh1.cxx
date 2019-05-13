@@ -27,6 +27,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 
 #include <math.h>
 #include <hintids.hxx>

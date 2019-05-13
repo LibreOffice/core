@@ -26,6 +26,7 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xfillit0.hxx>
+#include <svx/svxids.hrc>
 #include <editeng/tstpitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>

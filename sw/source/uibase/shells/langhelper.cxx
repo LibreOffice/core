@@ -42,6 +42,7 @@
 #include <svtools/langtab.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
+#include <svx/svxids.hrc>
 
 #include <ndtxt.hxx>
 #include <pam.hxx>

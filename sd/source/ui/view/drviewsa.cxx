@@ -37,6 +37,7 @@
 #include <sdcommands.h>
 #include <svx/dialogs.hrc>
 #include <svx/extrusionbar.hxx>
+#include <svx/f3dchild.hxx>
 #include <svx/fontworkbar.hxx>
 #include <svx/clipfmtitem.hxx>
 

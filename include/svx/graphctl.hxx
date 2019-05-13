@@ -22,7 +22,6 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 
 #include <svx/svdview.hxx>

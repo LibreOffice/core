@@ -24,6 +24,7 @@
 
 #include <svx/svxids.hrc>
 #include <editeng/adjustitem.hxx>
+#include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <svtools/colorcfg.hxx>

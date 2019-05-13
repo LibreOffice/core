@@ -31,6 +31,7 @@
 #include <svx/e3ditem.hxx>
 #include <editeng/colritem.hxx>
 #include <svx/lathe3d.hxx>
+#include <svx/scene3d.hxx>
 #include <svx/sphere3d.hxx>
 #include <svx/extrud3d.hxx>
 #include <svx/e3dundo.hxx>

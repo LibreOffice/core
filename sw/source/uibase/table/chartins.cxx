@@ -48,6 +48,7 @@
 #include <cppuhelper/component_context.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/frame/XModel.hpp>

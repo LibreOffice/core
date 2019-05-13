@@ -106,6 +106,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
+#include <svx/svxids.hrc>
 
 #define ShellClass_SwDocShell
 #include <sfx2/msg.hxx>

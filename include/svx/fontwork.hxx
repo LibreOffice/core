@@ -23,22 +23,16 @@
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/idle.hxx>
-#include <svtools/valueset.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/ctrlitem.hxx>
-#include <svx/xenum.hxx>
-#include <svx/dlgctrl.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/xtextit0.hxx>
 
-class SdrView;
-class SdrPageView;
-class SdrObject;
 class SvxColorListBox;
 
 class XFormTextAdjustItem;
 class XFormTextDistanceItem;
 class XFormTextStartItem;
+class XFormTextStyleItem;
 class XFormTextMirrorItem;
 class XFormTextHideFormItem;
 class XFormTextOutlineItem;

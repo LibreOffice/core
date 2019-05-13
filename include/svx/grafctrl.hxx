@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_GRAFCTRL_HXX
 
 #include <svl/lstner.hxx>
-#include <svl/intitem.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <svx/svxdllapi.h>
 

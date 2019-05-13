@@ -24,6 +24,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <svtools/unitconv.hxx>
+#include <svx/svxids.hrc>
 #include <vcl/menu.hxx>
 
 #include <cmdid.h>

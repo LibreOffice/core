@@ -57,6 +57,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/svxids.hrc>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/svxacorr.hxx>

@@ -28,6 +28,7 @@
 #include <com/sun/star/form/runtime/FormOperations.hpp>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 
 #include <tools/diagnose_ex.h>
 #include <comphelper/anytostring.hxx>

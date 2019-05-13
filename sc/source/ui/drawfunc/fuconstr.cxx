@@ -20,6 +20,7 @@
 #include <editeng/outlobj.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdouno.hxx>
+#include <svx/svxids.hrc>
 #include <sfx2/dispatch.hxx>
 
 #include <fuconstr.hxx>

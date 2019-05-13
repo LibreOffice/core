@@ -34,6 +34,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdview.hxx>
+#include <svx/svxids.hrc>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
