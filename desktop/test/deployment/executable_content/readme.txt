@@ -9,4 +9,4 @@ solaris,
 linux
 
 Each directory contains a hello executable. On linux one should execute it in a 
-shell with an build environment, so that the c++ runtime is found.
+shell with a build environment, so that the C++ runtime is found.
