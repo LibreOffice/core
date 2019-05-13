@@ -60,7 +60,7 @@ using namespace ::com::sun::star::accessibility;
 /** initialize this component and set default values */
 SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
     const Reference< XAccessible >& rxParent,
-    GraphCtrl&                      rRepr ) :
+    SvxGraphCtrl&                   rRepr ) :
 
     SvxGraphCtrlAccessibleContext_Base( m_aMutex ),
     mxParent( rxParent ),
@@ -96,7 +96,7 @@ SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
     }
 
     maTreeInfo.SetSdrView( mpView );
-    maTreeInfo.SetWindow( mpControl );
+//TODO    maTreeInfo.SetWindow( mpControl );
     maTreeInfo.SetViewForwarder( this );
 }
 
@@ -180,7 +180,7 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAt
     }
 
     Point aPnt( rPoint.X, rPoint.Y );
-    mpControl->PixelToLogic( aPnt );
+    mpControl->GetDrawingArea()->get_ref_device().PixelToLogic( aPnt );
 
     SdrObject* pObj = nullptr;
 
@@ -652,7 +652,6 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::disposing()
     }
 }
 
-
 tools::Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBoxOnScreen()
 {
     ::SolarMutexGuard aGuard;
@@ -660,10 +659,14 @@ tools::Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBoxOnScreen()
     if( nullptr == mpControl )
         throw DisposedException();
 
+#if 0
     return tools::Rectangle(
         mpControl->GetAccessibleParentWindow()->OutputToAbsoluteScreenPixel(
             mpControl->GetPosPixel() ),
         mpControl->GetSizePixel() );
+#else
+    return tools::Rectangle();
+#endif
 }
 
 
@@ -677,6 +680,8 @@ tools::Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBox()
 
     tools::Rectangle aBounds ( 0, 0, 0, 0 );
 
+#if 0
+
     vcl::Window* pWindow = mpControl;
     if (pWindow == nullptr)
         throw DisposedException();
@@ -688,6 +693,8 @@ tools::Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBox()
         tools::Rectangle aParentRect = pParent->GetWindowExtentsRelative (nullptr);
         aBounds -= aParentRect.TopLeft();
     }
+
+#endif
 
     return aBounds;
 }
@@ -751,25 +758,25 @@ tools::Rectangle SvxGraphCtrlAccessibleContext::GetVisibleArea() const
     return aVisArea;
 }
 
-
 Point SvxGraphCtrlAccessibleContext::LogicToPixel (const Point& rPoint) const
 {
+#if 0
     if( mpControl )
     {
         tools::Rectangle aBBox(mpControl->GetWindowExtentsRelative(nullptr));
-        return mpControl->LogicToPixel (rPoint) + aBBox.TopLeft();
+        return mpControl->GetDrawingArea()->get_ref_device().LogicToPixel (rPoint) + aBBox.TopLeft();
     }
     else
+#endif
     {
         return rPoint;
     }
 }
 
-
 Size SvxGraphCtrlAccessibleContext::LogicToPixel (const Size& rSize) const
 {
     if( mpControl )
-        return mpControl->LogicToPixel (rSize);
+        return mpControl->GetDrawingArea()->get_ref_device().LogicToPixel(rSize);
     else
         return rSize;
 }

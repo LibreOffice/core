@@ -236,9 +236,9 @@ public:
     OutlinerView* GetTextEditOutlinerView() { return pTextEditOutlinerView; }
 
     virtual bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin) override;
-    virtual bool MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin) override;
-    virtual bool MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin) override;
-    virtual bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin) override;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt, OutputDevice* pWin) override;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt, OutputDevice* pWin) override;
+    virtual bool MouseMove(const MouseEvent& rMEvt, OutputDevice* pWin) override;
     virtual bool Command(const CommandEvent& rCEvt, vcl::Window* pWin) override;
 
     // #97766# make virtual to change implementation e.g. for SdOutlineView

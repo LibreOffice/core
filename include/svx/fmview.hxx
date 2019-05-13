@@ -107,7 +107,7 @@ public:
     virtual SdrPageView* ShowSdrPage(SdrPage* pPage) override;
     virtual void HideSdrPage() override;
 
-    virtual bool MouseButtonDown( const MouseEvent& _rMEvt, vcl::Window* _pWin ) override;
+    virtual bool MouseButtonDown( const MouseEvent& _rMEvt, OutputDevice* _pWin ) override;
 
     /** grab the focus to the first form control on the view
     */

@@ -527,7 +527,7 @@ bool FmFormView::checkUnMarkAll(const Reference< XInterface >& _xSource)
 }
 
 
-bool FmFormView::MouseButtonDown( const MouseEvent& _rMEvt, vcl::Window* _pWin )
+bool FmFormView::MouseButtonDown( const MouseEvent& _rMEvt, OutputDevice* _pWin )
 {
     bool bReturn = E3dView::MouseButtonDown( _rMEvt, _pWin );
 

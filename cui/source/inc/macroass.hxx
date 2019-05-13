@@ -80,7 +80,7 @@ public:
 class SfxMacroAssignDlg : public SfxSingleTabDialogController
 {
 public:
-    SfxMacroAssignDlg(weld::Window* pParent,
+    SfxMacroAssignDlg(weld::Widget* pParent,
                       const css::uno::Reference< css::frame::XFrame >& rxDocumentFrame,
                       const SfxItemSet& rSet);
     SfxMacroTabPage* GetTabPage()
