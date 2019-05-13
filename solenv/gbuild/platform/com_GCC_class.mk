@@ -82,8 +82,8 @@ ifeq ($(COM_IS_CLANG),TRUE)
 gb_PrecompiledHeader_get_enableflags = -include-pch $(call gb_PrecompiledHeader_get_target,$(1),$(2))
 gb_PrecompiledHeader_EXT := .pch
 else
-gb_PrecompiledHeader_get_enableflags = -include $(notdir $(subst .gch,,$(call gb_PrecompiledHeader_get_target,$(1),$(2)))) \
-				       -I $(dir $(call gb_PrecompiledHeader_get_target,$(1),$(2)))
+gb_PrecompiledHeader_get_enableflags = \
+-include $(dir $(call gb_PrecompiledHeader_get_target,$(1),$(2)))$(notdir $(subst .gch,,$(call gb_PrecompiledHeader_get_target,$(1),$(2))))
 gb_PrecompiledHeader_EXT := .gch
 endif
 
