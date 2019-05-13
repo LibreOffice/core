@@ -290,14 +290,6 @@ public:
             static_cast<SfxFloatingWindow*>(GetWindow())->FillInfo( aInfo );  \
             return aInfo; }
 
-#define SFX_IMPL_MODELESSDIALOG_WITHID(Class, MyID)    \
-        SFX_IMPL_CHILDWINDOW_WITHID(Class, MyID)       \
-        SfxChildWinInfo Class::GetInfo() const \
-        {                                       \
-            SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
-            static_cast<SfxModelessDialog*>(GetWindow())->FillInfo( aInfo );  \
-            return aInfo; }
-
 #define SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(Class, MyID)    \
         SFX_IMPL_CHILDWINDOW_WITHID(Class, MyID)       \
         SfxChildWinInfo Class::GetInfo() const \
