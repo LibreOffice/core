@@ -23,6 +23,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
+#include <vcl/edit.hxx>
 
 #include "wrtsh.hxx"
 #include "autoformatpreview.hxx"

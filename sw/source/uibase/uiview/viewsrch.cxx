@@ -42,6 +42,7 @@
 #include <sfx2/request.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <vcl/layout.hxx>
 #include <vcl/wrkwin.hxx>
 #include <editeng/unolingu.hxx>

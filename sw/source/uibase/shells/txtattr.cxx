@@ -23,6 +23,7 @@
 #include <svl/stritem.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/ctloptions.hxx>
+#include <svx/svxids.hrc>
 #include <swmodule.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>

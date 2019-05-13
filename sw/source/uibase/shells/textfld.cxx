@@ -38,6 +38,7 @@
 #include <svx/postattr.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/svxdlg.hxx>
+#include <svx/svxids.hrc>
 #include <sfx2/linkmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <sfx2/dispatch.hxx>

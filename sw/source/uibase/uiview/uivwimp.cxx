@@ -33,6 +33,7 @@
 
 #include <sfx2/docinsert.hxx>
 #include <sfx2/request.hxx>
+#include <svx/svxids.hrc>
 #include <uivwimp.hxx>
 #include <wview.hxx>
 #include <unotxvw.hxx>

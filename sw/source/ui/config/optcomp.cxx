@@ -40,6 +40,8 @@
 #include <officecfg/Office/Compatibility.hxx>
 #include <vcl/svlbitm.hxx>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::uno;

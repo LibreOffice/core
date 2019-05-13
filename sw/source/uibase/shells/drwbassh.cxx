@@ -50,6 +50,7 @@
 #include <svx/svditer.hxx>
 #define ShellClass_SwDrawBaseShell
 #include <sfx2/msg.hxx>
+#include <svx/svxids.hrc>
 #include <swslots.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>

@@ -64,6 +64,7 @@
 #include <strings.hrc>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/svxids.hrc>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>

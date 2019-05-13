@@ -36,6 +36,7 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <dbtree.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 #include <bitmaps.hlst>

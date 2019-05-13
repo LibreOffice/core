@@ -24,6 +24,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/ehdl.hxx>
+#include <svtools/accessibilityoptions.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/useroptions.hxx>
 #include <svl/ctloptions.hxx>
@@ -53,6 +54,7 @@
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/modctrl.hxx>
+#include <svx/svxids.hrc>
 #include <sfx2/emojipopup.hxx>
 #include <sfx2/charmappopup.hxx>
 #include <com/sun/star/scanner/ScannerManager.hpp>

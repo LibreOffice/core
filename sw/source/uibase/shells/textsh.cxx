@@ -30,6 +30,7 @@
 
 #include <vcl/errinf.hxx>
 #include <svx/svdview.hxx>
+#include <svx/svxids.hrc>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/moduleoptions.hxx>

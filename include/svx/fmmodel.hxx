@@ -27,10 +27,6 @@
 class SfxObjectShell;
 class SfxItemPool;
 class FmXUndoEnvironment;
-class SfxObjectShell;
-class SbxObject;
-class SbxArray;
-class SbxValue;
 
 struct FmFormModelImplData;
 class SVX_DLLPUBLIC FmFormModel :

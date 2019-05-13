@@ -39,6 +39,7 @@
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/fmshell.hxx>
+#include <svx/fmview.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/svdpagv.hxx>
@@ -71,6 +72,7 @@
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <com/sun/star/util/XModeSelector.hpp>

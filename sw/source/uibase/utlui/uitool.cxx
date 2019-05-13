@@ -39,6 +39,7 @@
 #include <editeng/sizeitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <svx/pageitem.hxx>
+#include <svx/svxids.hrc>
 #include <editeng/lrspitem.hxx>
 #include <svl/style.hxx>
 #include <vcl/lstbox.hxx>

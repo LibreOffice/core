@@ -51,6 +51,7 @@
 #include <svx/svdundo.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/sdasitm.hxx>
+#include <svx/svxids.hrc>
 
 #include <swundo.hxx>
 #include <wrtsh.hxx>

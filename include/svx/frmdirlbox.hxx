@@ -24,8 +24,6 @@
 #include <editeng/frmdir.hxx>
 #include <svx/svxdllapi.h>
 
-class SvxFrameDirectionItem;
-
 namespace svx {
 
 /** This listbox contains entries to select horizontal text direction.

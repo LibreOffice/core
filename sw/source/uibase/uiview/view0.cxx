@@ -34,6 +34,7 @@
 #include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
 #include <svx/srchdlg.hxx>
+#include <svx/svxids.hrc>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>

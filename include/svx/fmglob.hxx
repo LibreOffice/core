@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_FMGLOB_HXX
 
 #include <com/sun/star/form/FormComponentType.hpp>
-#include <svx/svdobj.hxx>
 
 const sal_uInt16 OBJ_FM_CONTROL         =   css::form::FormComponentType::CONTROL;
                                                                     // for form components
