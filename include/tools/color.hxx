@@ -257,7 +257,7 @@ constexpr ::Color COL_YELLOW                  ( 0xFF, 0xFF, 0x00 );
 constexpr ::Color COL_WHITE                   ( 0xFF, 0xFF, 0xFF );
 constexpr ::Color COL_TRANSPARENT             ( 0xFF, 0xFF, 0xFF, 0xFF );
 constexpr ::Color COL_AUTO                    ( 0xFF, 0xFF, 0xFF, 0xFF );
-constexpr ::Color COL_AUTHOR1_DARK            ( 198,  146,   0 );
+constexpr ::Color COL_AUTHOR1_DARK            ( 198,  146,   0 );  //dirty green
 constexpr ::Color COL_AUTHOR1_NORMAL          ( 255,  255, 158 );
 constexpr ::Color COL_AUTHOR1_LIGHT           ( 255,  255, 195 );
 constexpr ::Color COL_AUTHOR2_DARK            (   6,   70, 162 );
@@ -281,10 +281,14 @@ constexpr ::Color COL_AUTHOR7_LIGHT           ( 242,  254, 181 );
 constexpr ::Color COL_AUTHOR8_DARK            (  53,   85, 107 );
 constexpr ::Color COL_AUTHOR8_NORMAL          ( 211,  222, 232 );
 constexpr ::Color COL_AUTHOR8_LIGHT           ( 226,  234, 241 );
-constexpr ::Color COL_AUTHOR9_DARK            ( 209,  118,   0 );
+constexpr ::Color COL_AUTHOR9_DARK            ( 209,  118,   0 );  //light-brown
 constexpr ::Color COL_AUTHOR9_NORMAL          ( 255,  226, 185 );
 constexpr ::Color COL_AUTHOR9_LIGHT           ( 255,  231, 199 );
-
+constexpr ::Color COL_LIGHTGREEN_AUTHOR       (  88,  214, 141 );
+constexpr ::Color COL_BLUEONBLACK             (  23,   32,  42 );
+constexpr ::Color COL_ORANGE                  ( 255,  165,   0 );
+constexpr ::Color COL_WINE                    (  94,   18,  36 );
+constexpr ::Color COL_MADEIRAWINE             ( 144,  103, 106 );
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
