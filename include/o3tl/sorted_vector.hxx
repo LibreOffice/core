@@ -113,6 +113,11 @@ public:
         m_vector.clear();
     }
 
+    void swap(sorted_vector & other)
+    {
+        m_vector.swap(other.m_vector);
+    }
+
     void reserve(size_type amount)
     {
         m_vector.reserve(amount);
