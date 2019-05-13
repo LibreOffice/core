@@ -1174,7 +1174,7 @@ bool addProperty(
                 css::uno::Sequence<sal_Int8> seq(
                     value.get<css::uno::Sequence<sal_Int8>>());
                 static_assert(
-                    std::numeric_limits<sal_Int32>::max() <= G_MAXSIZE,
+                    sizeof(sal_Int32) <= sizeof(gsize),
                     "G_MAXSIZE too small");
                 static_assert(
                     sizeof (sal_Int8) == sizeof (guchar), "size mismatch");
@@ -1189,7 +1189,7 @@ bool addProperty(
                 css::uno::Sequence<sal_Bool> seq(
                     value.get<css::uno::Sequence<sal_Bool>>());
                 static_assert(
-                    std::numeric_limits<sal_Int32>::max() <= G_MAXSIZE,
+                    sizeof(sal_Int32) <= sizeof(gsize),
                     "G_MAXSIZE too small");
                 static_assert(sizeof (sal_Bool) == 1, "size mismatch");
                 v.reset(
@@ -1203,7 +1203,7 @@ bool addProperty(
                 css::uno::Sequence<sal_Int16> seq(
                     value.get<css::uno::Sequence<sal_Int16>>());
                 static_assert(
-                    std::numeric_limits<sal_Int32>::max() <= G_MAXSIZE,
+                    sizeof(sal_Int32) <= sizeof(gsize),
                     "G_MAXSIZE too small");
                 static_assert(
                     sizeof (sal_Int16) == sizeof (gint16), "size mismatch");
@@ -1219,7 +1219,7 @@ bool addProperty(
                 css::uno::Sequence<sal_Int32> seq(
                     value.get<css::uno::Sequence<sal_Int32>>());
                 static_assert(
-                    std::numeric_limits<sal_Int32>::max() <= G_MAXSIZE,
+                    sizeof(sal_Int32) <= sizeof(gsize),
                     "G_MAXSIZE too small");
                 static_assert(
                     sizeof (sal_Int32) == sizeof (gint32), "size mismatch");
@@ -1235,7 +1235,7 @@ bool addProperty(
                 css::uno::Sequence<sal_Int64> seq(
                     value.get<css::uno::Sequence<sal_Int64>>());
                 static_assert(
-                    std::numeric_limits<sal_Int32>::max() <= G_MAXSIZE,
+                    sizeof(sal_Int32) <= sizeof(gsize),
                     "G_MAXSIZE too small");
                 static_assert(
                     sizeof (sal_Int64) == sizeof (gint64), "size mismatch");
@@ -1251,7 +1251,7 @@ bool addProperty(
                 css::uno::Sequence<double> seq(
                     value.get<css::uno::Sequence<double>>());
                 static_assert(
-                    std::numeric_limits<sal_Int32>::max() <= G_MAXSIZE,
+                    sizeof(sal_Int32) <= sizeof(gsize),
                     "G_MAXSIZE too small");
                 static_assert(
                     sizeof (double) == sizeof (gdouble), "size mismatch");
@@ -1278,7 +1278,7 @@ bool addProperty(
                     vs.push_back(children.front().get());
                 }
                 static_assert(
-                    std::numeric_limits<sal_Int32>::max() <= G_MAXSIZE,
+                    sizeof(sal_Int32) <= sizeof(gsize),
                     "G_MAXSIZE too small");
                 v.reset(
                     g_variant_new_array(
@@ -1293,7 +1293,7 @@ bool addProperty(
                 std::vector<GVariant *> vs;
                 for (sal_Int32 i = 0; i != seq.getLength(); ++i) {
                     static_assert(
-                        std::numeric_limits<sal_Int32>::max() <= G_MAXSIZE,
+                        sizeof(sal_Int32) <= sizeof(gsize),
                         "G_MAXSIZE too small");
                     static_assert(
                         sizeof (sal_Int8) == sizeof (guchar), "size mismatch");
@@ -1315,7 +1315,7 @@ bool addProperty(
                     return false;
                 }
                 static_assert(
-                    std::numeric_limits<sal_Int32>::max() <= G_MAXSIZE,
+                    sizeof(sal_Int32) <= sizeof(gsize),
                     "G_MAXSIZE too small");
                 v.reset(
                     g_variant_new_array(ty.get(), vs.data(), seq.getLength()));
