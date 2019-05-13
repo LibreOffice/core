@@ -130,14 +130,14 @@ using namespace ::com::sun::star::scanner;
 
 bool bDocSzUpdated = true;
 
-SvxSearchItem*  SwView::m_pSrchItem   = nullptr;
+SvxSearchItem*  SwView::s_pSrchItem   = nullptr;
 
-bool            SwView::m_bExtra      = false;
-bool            SwView::m_bFound      = false;
-bool            SwView::m_bJustOpened = false;
+bool            SwView::s_bExtra      = false;
+bool            SwView::s_bFound      = false;
+bool            SwView::s_bJustOpened = false;
 
-SearchAttrItemList*     SwView::m_pSrchList   = nullptr;
-SearchAttrItemList*     SwView::m_pReplList   = nullptr;
+SearchAttrItemList*     SwView::s_pSearchList   = nullptr;
+SearchAttrItemList*     SwView::s_pReplaceList   = nullptr;
 
 SfxDispatcher &SwView::GetDispatcher()
 {
