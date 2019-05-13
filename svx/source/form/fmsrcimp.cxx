@@ -27,12 +27,20 @@
 #include <tools/wldcrd.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/textsearch.hxx>
+#include <com/sun/star/awt/XTextComponent.hpp>
+#include <com/sun/star/awt/XListBox.hpp>
+#include <com/sun/star/awt/XCheckBox.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchResult.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 
+#include <com/sun/star/sdb/XColumn.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>

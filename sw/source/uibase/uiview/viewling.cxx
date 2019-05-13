@@ -39,6 +39,7 @@
 #include <sfx2/request.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
+#include <svx/svxids.hrc>
 #include <editeng/langitem.hxx>
 #include <svx/svxerr.hxx>
 #include <editeng/unolingu.hxx>

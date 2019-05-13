@@ -52,10 +52,13 @@
 #include <svl/undo.hxx>
 #include <svl/stritem.hxx>
 
+#include <svx/svxids.hrc>
+
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 
+#include <vcl/event.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menubtn.hxx>

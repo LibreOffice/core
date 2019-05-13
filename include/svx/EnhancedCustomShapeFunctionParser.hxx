@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
-#include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <memory>
 #include <ostream>
 #include <vector>

@@ -26,6 +26,8 @@
 #include <sfx2/zoomitem.hxx>
 #include <svx/ruler.hxx>
 #include <svx/fmshell.hxx>
+#include <svx/svdobj.hxx>
+#include <svl/style.hxx>
 #include "swdllapi.h"
 #include "swtypes.hxx"
 #include "shellid.hxx"

@@ -23,7 +23,6 @@
 #include <tools/link.hxx>
 #include <svx/svxdllapi.h>
 
-class SdrObjFactory;
 class SdrObject;
 struct SdrObjCreatorParams;
 

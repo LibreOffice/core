@@ -29,6 +29,7 @@
 #include <sot/filelist.hxx>
 #include <svl/eitem.hxx>
 #include <svl/urlbmk.hxx>
+#include <svx/svxids.hrc>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/settings.hxx>
 

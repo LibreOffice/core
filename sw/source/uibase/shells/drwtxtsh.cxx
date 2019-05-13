@@ -30,6 +30,7 @@
 #include <sfx2/objface.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/sdooitm.hxx>
+#include <svx/svxids.hrc>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>

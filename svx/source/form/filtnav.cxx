@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
+#include <com/sun/star/sdb/SQLContext.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -50,6 +51,7 @@
 #include <vcl/settings.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/viewdataentry.hxx>

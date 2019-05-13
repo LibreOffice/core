@@ -47,6 +47,7 @@
 #include <svtools/ctrltool.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/debug.hxx>
+#include <tools/urlobj.hxx>
 
 #include <editeng/flstitem.hxx>
 

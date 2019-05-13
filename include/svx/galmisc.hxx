@@ -20,19 +20,19 @@
 #ifndef INCLUDED_SVX_GALMISC_HXX
 #define INCLUDED_SVX_GALMISC_HXX
 
-#include <sot/formats.hxx>
-#include <tools/urlobj.hxx>
 #include <vcl/imap.hxx>
 #include <svl/hint.hxx>
 #include <vcl/transfer.hxx>
 #include <svx/svdobj.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/awt/XProgressMonitor.hpp>
 #include <svx/svxdllapi.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <memory>
 
+namespace com::sun::star::awt { class XProgressBar; }
+
+class INetURLObject;
 class GalleryTheme;
 class SotStorageStream;
 
@@ -79,8 +79,6 @@ enum class GalleryGraphicImportRet
 class SvStream;
 class Graphic;
 class FmFormModel;
-class ImageMap;
-class Gallery;
 
 GalleryGraphicImportRet  GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, OUString& rFilterName );
 bool                GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel );
@@ -130,7 +128,6 @@ class SVX_DLLPUBLIC GalleryProgress
     void                            Update( sal_Int32 nVal, sal_Int32 nMaxVal );
 };
 
-class Gallery;
 class GalleryTheme;
 class GraphicObject;
 

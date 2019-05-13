@@ -20,13 +20,13 @@
 #ifndef INCLUDED_SVX_GRFFLT_HXX
 #define INCLUDED_SVX_GRFFLT_HXX
 
-#include <vcl/GraphicObject.hxx>
 #include <svx/svxdllapi.h>
 
 enum class SvxGraphicFilterResult {
     NONE, UnsupportedGraphicType, UnsupportedSlot
 };
 
+class GraphicObject;
 class SfxRequest;
 class SfxItemSet;
 

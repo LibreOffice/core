@@ -23,6 +23,7 @@
 
 // Create default drawing objects via keyboard
 #include <svx/svdocirc.hxx>
+#include <svx/svxids.hrc>
 #include <svx/sxciaitm.hxx>
 
 FuConstArc::FuConstArc(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,

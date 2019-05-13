@@ -16,6 +16,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <vcl/event.hxx>
 #include <vcl/scheduler.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>

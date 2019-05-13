@@ -29,8 +29,10 @@
 #include <basic/sbxobj.hxx>
 #include <uivwimp.hxx>
 #include <svx/fmshell.hxx>
+#include <svx/fmview.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
+#include <svx/svxids.hrc>
 #include <vcl/inputctx.hxx>
 
 #include <sfx2/objface.hxx>

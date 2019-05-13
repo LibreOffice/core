@@ -21,47 +21,26 @@
 
 #include <svx/svxdllapi.h>
 
-#include <com/sun/star/sdb/SQLContext.hpp>
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <com/sun/star/sdb/XColumn.hpp>
-#include <com/sun/star/sdb/XColumnUpdate.hpp>
-#include <com/sun/star/sdb/SQLErrorEvent.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/awt/XControlModel.hpp>
-#include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/FontSlant.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/awt/FontUnderline.hpp>
-#include <com/sun/star/awt/FontStrikeout.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/io/XObjectInputStream.hpp>
-#include <com/sun/star/io/XObjectOutputStream.hpp>
-#include <com/sun/star/io/XPersistObject.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#include <com/sun/star/util/XNumberFormats.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
 
 #include <rtl/ref.hxx>
-#include <tools/wintypes.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <set>
 
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::container { class XIndexAccess; }
+namespace com::sun::star::container { class XNameAccess; }
+namespace com::sun::star::lang { class XComponent; }
+namespace com::sun::star::lang { class XServiceInfo; }
+namespace com::sun::star::sdbc { class SQLException; }
+namespace com::sun::star::sdbc { class XRowSet; }
+namespace com::sun::star::sdb { class SQLContext; }
+namespace com::sun::star::sdb { struct SQLErrorEvent; }
 namespace vcl { class Window; }
 
 

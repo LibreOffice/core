@@ -20,6 +20,7 @@
 #include <hintids.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
+#include <svx/svxids.hrc>
 #include <sfx2/request.hxx>
 #include <editeng/fontitem.hxx>
 #include <fmtftn.hxx>

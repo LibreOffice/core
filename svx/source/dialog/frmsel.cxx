@@ -31,6 +31,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
 #include <bitmaps.hlst>
 

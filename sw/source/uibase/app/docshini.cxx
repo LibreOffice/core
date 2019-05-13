@@ -43,6 +43,7 @@
 #include <sfx2/docfilt.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/svxids.hrc>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/flstitem.hxx>

@@ -43,6 +43,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <svx/hdft.hxx>
+#include <svx/svxids.hrc>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>

@@ -20,19 +20,12 @@
 #ifndef INCLUDED_SVX_FRAMELINK_HXX
 #define INCLUDED_SVX_FRAMELINK_HXX
 
-#include <algorithm>
 #include <sal/types.h>
 #include <tools/color.hxx>
 #include <svx/svxdllapi.h>
-#include <vcl/outdev.hxx>
 #include <editeng/borderline.hxx>
 
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-
-class Point;
-namespace tools { class Rectangle; }
-class OutputDevice;
-namespace svx { namespace frame { class Cell; }}
+#include <memory>
 
 namespace svx {
 namespace frame {
