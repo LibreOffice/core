@@ -28,15 +28,6 @@
 #include <tools/helpers.hxx>
 #include <basegfx/color/bcolortools.hxx>
 
-sal_uInt8 Color::GetColorError( const Color& rCompareColor ) const
-{
-    const long nErrAbs = labs(long(rCompareColor.R) - R) +
-                         labs(long(rCompareColor.G) - G) +
-                         labs(long(rCompareColor.B) - B);
-
-    return sal_uInt8(FRound(double(nErrAbs) / 3.0));
-}
-
 void Color::IncreaseLuminance(sal_uInt8 cLumInc)
 {
     R = sal_uInt8(std::clamp(long(R) + cLumInc, 0L, 255L));
