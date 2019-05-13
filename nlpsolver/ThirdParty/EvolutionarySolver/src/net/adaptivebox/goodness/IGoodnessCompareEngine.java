@@ -29,9 +29,13 @@ public abstract interface IGoodnessCompareEngine {
   int LESS_THAN = 0;
 
   /**
-   * check the magnitude of two IEncodeEngine LARGER_THAN: goodness1 is worse than
-   * goodness2 LESS_THAN: goodness1 is better than goodness2 EQUAL_TO : goodness1
-   * is equal to goodness2
-   **/
+   * check the magnitude of two IEncodeEngine
+   *
+   * LARGER_THAN: goodness1 is worse than goodness2
+   *
+   * LESS_THAN: goodness1 is better than goodness2
+   *
+   * EQUAL_TO : goodness1 is equal to goodness2
+   */
   int compare(double[] goodness1, double[] goodness2);
 }

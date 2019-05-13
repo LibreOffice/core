@@ -85,11 +85,13 @@ public abstract class ProblemEncoder {
 
   // evaluate the point into encoded information
   public void evaluate(SearchPoint point) {
-// copy to temp point
+    // copy to temp point
     System.arraycopy(point.getLocation(), 0, this.tempLocation, 0, tempLocation.length);
-// mapping the temp point to original search space S
+
+    // mapping the temp point to original search space S
     designSpace.getMappingPoint(tempLocation);
-// calculate based on the temp point
+
+    // calculate based on the temp point
     calcTargets(tempResponseSet, tempLocation);
     evalStruct.evaluate(point.getEncodeInfo(), tempResponseSet);
     point.setObjectiveValue(tempResponseSet[0]);
