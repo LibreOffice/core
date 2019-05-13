@@ -24,11 +24,10 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/status.hxx>
+#include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 #include <memory>
 #include <vector>
@@ -77,69 +76,54 @@ public:
 
 class IMapOwnData;
 class IMapWindow;
-class GraphCtrl;
+class SvxGraphCtrl;
 
-class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
+class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialogController
 {
     friend class IMapOwnData;
     friend class IMapWindow;
 
-    VclPtr<ToolBox>             m_pTbxIMapDlg1;
-    VclPtr<FixedText>           m_pFtURL;
-    VclPtr<SvtURLBox>           m_pURLBox;
-    VclPtr<FixedText>           m_pFtText;
-    VclPtr<Edit>                m_pEdtText;
-    VclPtr<FixedText>           m_pFtTarget;
-    VclPtr<ComboBox>            m_pCbbTarget;
-    VclPtr<StatusBar>           m_pStbStatus;
-
-    sal_uInt16          mnApplyId;
-    sal_uInt16          mnOpenId;
-    sal_uInt16          mnSaveAsId;
-    sal_uInt16          mnSelectId;
-    sal_uInt16          mnRectId;
-    sal_uInt16          mnCircleId;
-    sal_uInt16          mnPolyId;
-    sal_uInt16          mnFreePolyId;
-    sal_uInt16          mnPolyEditId;
-    sal_uInt16          mnPolyMoveId;
-    sal_uInt16          mnPolyInsertId;
-    sal_uInt16          mnPolyDeleteId;
-    sal_uInt16          mnUndoId;
-    sal_uInt16          mnRedoId;
-    sal_uInt16          mnActiveId;
-    sal_uInt16          mnMacroId;
-    sal_uInt16          mnPropertyId;
-    sal_uInt16          mnCloseId;
-
-    VclPtr<IMapWindow>         pIMapWnd;
     std::unique_ptr<IMapOwnData> pOwnData;
     void*               pCheckObj;
     SvxIMapDlgItem      aIMapItem;
 
-    virtual bool    Close() override;
+    std::unique_ptr<IMapWindow> m_xIMapWnd;
+    std::unique_ptr<weld::Toolbar> m_xTbxIMapDlg1;
+    std::unique_ptr<weld::Label> m_xFtURL;
+    std::unique_ptr<URLBox> m_xURLBox;
+    std::unique_ptr<weld::Label> m_xFtText;
+    std::unique_ptr<weld::Entry> m_xEdtText;
+    std::unique_ptr<weld::Label> m_xFtTarget;
+    std::unique_ptr<weld::ComboBox> m_xCbbTarget;
+    std::unique_ptr<weld::Button> m_xCancelBtn;
+    std::unique_ptr<weld::Label> m_xStbStatus1;
+    std::unique_ptr<weld::Label> m_xStbStatus2;
+    std::unique_ptr<weld::Label> m_xStbStatus3;
+    std::unique_ptr<weld::CustomWeld> m_xIMapWndWeld;
 
-    DECL_LINK( TbxClickHdl, ToolBox*, void );
+    DECL_LINK( TbxClickHdl, const OString&, void );
     DECL_LINK( InfoHdl, IMapWindow&, void );
-    DECL_LINK( MousePosHdl, GraphCtrl*, void );
-    DECL_LINK( GraphSizeHdl, GraphCtrl*, void );
-    DECL_LINK( URLModifyHdl, Edit&, void );
-    DECL_LINK( URLModifyComboBoxHdl, ComboBox&, void );
-    DECL_LINK( URLLoseFocusHdl, Control&, void );
+    DECL_LINK( MousePosHdl, SvxGraphCtrl*, void );
+    DECL_LINK( GraphSizeHdl, SvxGraphCtrl*, void );
+    DECL_LINK( URLModifyHdl, weld::ComboBox&, void );
+    DECL_LINK( EntryModifyHdl, weld::Entry&, void );
+    DECL_LINK( URLModifyComboBoxHdl, weld::ComboBox&, void );
+    DECL_LINK( URLLoseFocusHdl, weld::Widget&, void );
     DECL_LINK( UpdateHdl, Timer *, void );
-    DECL_LINK( StateHdl, GraphCtrl*, void );
+    DECL_LINK( StateHdl, SvxGraphCtrl*, void );
     DECL_LINK( MiscHdl, LinkParamNone*, void );
+    DECL_LINK( CancelHdl, weld::Button&, void );
 
+    void                URLModify();
     void                DoOpen();
     bool                DoSave();
-    void                SetActiveTool( sal_uInt16 nId );
+    void                SetActiveTool(const OString& rId);
 
 public:
 
-                        SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
-                                    vcl::Window* pParent );
-                        virtual ~SvxIMapDlg() override;
-    virtual void        dispose() override;
+    SvxIMapDlg(SfxBindings *pBindings, SfxChildWindow *pCW,
+               weld::Window* pParent);
+    virtual ~SvxIMapDlg() override;
 
     void                SetExecState( bool bEnable );
 

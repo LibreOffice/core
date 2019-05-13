@@ -5331,6 +5331,100 @@ public:
     }
 };
 
+class GtkInstanceToolbar : public GtkInstanceWidget, public virtual weld::Toolbar
+{
+private:
+    GtkToolbar* m_pToolbar;
+
+    std::map<OString, GtkToolButton*> m_aMap;
+
+    static void collect(GtkWidget* pItem, gpointer widget)
+    {
+        GtkToolButton* pToolItem = GTK_TOOL_BUTTON(pItem);
+        GtkInstanceToolbar* pThis = static_cast<GtkInstanceToolbar*>(widget);
+        pThis->add_to_map(pToolItem);
+    }
+
+    void add_to_map(GtkToolButton* pToolItem)
+    {
+        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pToolItem));
+        OString id(pStr, pStr ? strlen(pStr) : 0);
+        m_aMap[id] = pToolItem;
+        g_signal_connect(pToolItem, "clicked", G_CALLBACK(signalItemClicked), this);
+    }
+
+    static void signalItemClicked(GtkToolButton* pItem, gpointer widget)
+    {
+        GtkInstanceToolbar* pThis = static_cast<GtkInstanceToolbar*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_item_clicked(pItem);
+    }
+
+    void signal_item_clicked(GtkToolButton* pItem)
+    {
+        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
+        signal_clicked(OString(pStr, pStr ? strlen(pStr) : 0));
+    }
+
+public:
+    GtkInstanceToolbar(GtkToolbar* pToolbar, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceWidget(GTK_WIDGET(pToolbar), pBuilder, bTakeOwnership)
+        , m_pToolbar(pToolbar)
+    {
+        gtk_container_foreach(GTK_CONTAINER(pToolbar), collect, this);
+    }
+
+    void disable_item_notify_events()
+    {
+        for (auto& a : m_aMap)
+            g_signal_handlers_block_by_func(a.second, reinterpret_cast<void*>(signalItemClicked), this);
+    }
+
+    void enable_item_notify_events()
+    {
+        for (auto& a : m_aMap)
+            g_signal_handlers_unblock_by_func(a.second, reinterpret_cast<void*>(signalItemClicked), this);
+    }
+
+    virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) override
+    {
+        disable_item_notify_events();
+        gtk_widget_set_sensitive(GTK_WIDGET(m_aMap[rIdent]), bSensitive);
+        enable_item_notify_events();
+    }
+
+    virtual bool get_item_sensitive(const OString& rIdent) const override
+    {
+        return gtk_widget_get_sensitive(GTK_WIDGET(m_aMap.find(rIdent)->second));
+    }
+
+    virtual void set_item_active(const OString& rIdent, bool bActive) override
+    {
+        disable_item_notify_events();
+        gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(m_aMap[rIdent]), bActive);
+        enable_item_notify_events();
+    }
+
+    virtual bool get_item_active(const OString& rIdent) const override
+    {
+        return gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(m_aMap.find(rIdent)->second));
+    }
+
+    virtual void insert_separator(int pos, const OUString& rId) override
+    {
+        GtkToolItem* pItem = gtk_separator_tool_item_new();
+        gtk_buildable_set_name(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr());
+        gtk_toolbar_insert(m_pToolbar, pItem, pos);
+        gtk_widget_show(GTK_WIDGET(pItem));
+    }
+
+    virtual ~GtkInstanceToolbar() override
+    {
+        for (auto& a : m_aMap)
+            g_signal_handlers_disconnect_by_data(a.second, this);
+    }
+};
+
 class GtkInstanceLinkButton : public GtkInstanceContainer, public virtual weld::LinkButton
 {
 private:
@@ -8445,9 +8539,10 @@ public:
         m_xDevice->EnableRTL(bRTL);
     }
 
-    virtual void set_text_cursor() override
+    virtual void set_cursor(PointerStyle ePointerStyle) override
     {
-        set_cursor(GTK_WIDGET(m_pDrawingArea), "text");
+        GdkCursor *pCursor = GtkSalFrame::getDisplay()->getCursor(ePointerStyle);
+        gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(m_pDrawingArea)), pCursor);
     }
 
     virtual void queue_draw() override
@@ -10227,6 +10322,15 @@ public:
         if (!pMenu)
             return nullptr;
         return std::make_unique<GtkInstanceMenu>(pMenu, bTakeOwnership);
+    }
+
+    virtual std::unique_ptr<weld::Toolbar> weld_toolbar(const OString &id, bool bTakeOwnership) override
+    {
+        GtkToolbar* pToolbar = GTK_TOOLBAR(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pToolbar)
+            return nullptr;
+        auto_add_parentless_widgets_to_container(GTK_WIDGET(pToolbar));
+        return std::make_unique<GtkInstanceToolbar>(pToolbar, this, bTakeOwnership);
     }
 
     virtual std::unique_ptr<weld::SizeGroup> create_size_group() override
