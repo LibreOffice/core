@@ -17,9 +17,6 @@
 #include <memory>
 
 #include <float.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 
 #include <clew/clew.h>
 #include <tools/stream.hxx>

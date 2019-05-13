@@ -7,17 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <math.h>
 #include <float.h>
 #include <iostream>
-#include <sstream>
 #include <memory>
 #include <vector>
 #include <algorithm>
 
 #include <comphelper/random.hxx>
 #include <opencl/openclconfig.hxx>
-#include <opencl/openclwrapper.hxx>
 #include <opencl/platforminfo.hxx>
 #include <sal/log.hxx>
 #include <rtl/math.hxx>
