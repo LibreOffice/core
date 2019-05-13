@@ -1631,6 +1631,7 @@ public:
     virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) = 0;
     virtual void set_sensitive(const OString& rIdent, bool bSensitive) = 0;
     virtual void set_active(const OString& rIdent, bool bActive) = 0;
+    virtual bool get_active(const OString& rIdent) const = 0;
     virtual void set_visible(const OString& rIdent, bool bVisible) = 0;
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,

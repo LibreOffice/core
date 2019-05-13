@@ -24,6 +24,7 @@
 #include <vcl/imaprect.hxx>
 #include <vcl/imapcirc.hxx>
 #include <vcl/imappoly.hxx>
+#include <vcl/svapp.hxx>
 #include <svl/urlbmk.hxx>
 
 #include <svx/xoutbmp.hxx>
@@ -491,20 +492,20 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
 
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
-        VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/imapmenu.ui", "");
-        VclPtr<PopupMenu> aMenu(aBuilder.get_menu("menu"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "svx/ui/imapmenu.ui"));
+        mxPopupMenu = xBuilder->weld_menu("menu");
         const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
         const size_t nMarked = rMarkList.GetMarkCount();
 
-        aMenu->EnableItem(aMenu->GetItemId("url"), false);
-        aMenu->EnableItem(aMenu->GetItemId("active"), false);
-        aMenu->EnableItem(aMenu->GetItemId("macro"), false);
-        aMenu->EnableItem(aMenu->GetItemId("selectall"), pModel->GetPage(0)->GetObjCount() != pView->GetMarkedObjectCount());
+        mxPopupMenu->set_sensitive("url", false);
+        mxPopupMenu->set_sensitive("active", false);
+        mxPopupMenu->set_sensitive("macro", false);
+        mxPopupMenu->set_sensitive("selectall", pModel->GetPage(0)->GetObjCount() != pView->GetMarkedObjectCount());
 
         if ( !nMarked )
         {
-            aMenu->EnableItem(aMenu->GetItemId("arrange"), false);
-            aMenu->EnableItem(aMenu->GetItemId("delete"), false);
+            mxPopupMenu->set_sensitive("arrange", false);
+            mxPopupMenu->set_sensitive("delete", false);
         }
         else
         {
@@ -512,18 +513,19 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
             {
                 SdrObject*  pSdrObj = GetSelectedSdrObject();
 
-                aMenu->EnableItem(aMenu->GetItemId("url"));
-                aMenu->EnableItem(aMenu->GetItemId("active"));
-                aMenu->EnableItem(aMenu->GetItemId("macro"));
-                aMenu->CheckItem("active", GetIMapObj(pSdrObj)->IsActive());
+                mxPopupMenu->set_sensitive("url", true);
+                mxPopupMenu->set_sensitive("active", true);
+                mxPopupMenu->set_sensitive("macro", true);
+                mxPopupMenu->set_active("active", GetIMapObj(pSdrObj)->IsActive());
             }
 
-            aMenu->EnableItem(aMenu->GetItemId("arrange"));
-            aMenu->EnableItem(aMenu->GetItemId("delete"));
+            mxPopupMenu->set_sensitive("arrange", true);
+            mxPopupMenu->set_sensitive("delete", true);
         }
 
-        aMenu->SetSelectHdl( LINK( this, IMapWindow, MenuSelectHdl ) );
-        aMenu->Execute( this, rCEvt.GetMousePosPixel() );
+        MenuSelectHdl(mxPopupMenu->popup_at_rect(GetFrameWeld(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
+
+        mxPopupMenu.reset();
     }
     else
         Window::Command(rCEvt);
@@ -713,39 +715,30 @@ void IMapWindow::DoPropertyDialog()
     }
 }
 
-IMPL_LINK( IMapWindow, MenuSelectHdl, Menu*, pMenu, bool )
+void IMapWindow::MenuSelectHdl(const OString& rId)
 {
-    if (!pMenu)
-        return false;
-
-    OString sId = pMenu->GetCurItemIdent();
-
-    if (sId == "url")
+    if (rId == "url")
         DoPropertyDialog();
-    else if (sId == "macro")
+    else if (rId == "macro")
         DoMacroAssign();
-    else if (sId == "active")
+    else if (rId == "active")
     {
-        const sal_uInt16 nActiveId = pMenu->GetItemId(sId);
-        const bool bNewState = !pMenu->IsItemChecked(nActiveId);
-        pMenu->CheckItem(nActiveId, bNewState);
+        const bool bNewState = !mxPopupMenu->get_active(rId);
         SetCurrentObjState(bNewState);
         UpdateInfo( false );
     }
-    else if (sId == "front")
+    else if (rId == "front")
         pView->PutMarkedToTop();
-    else if (sId == "forward")
+    else if (rId == "forward")
         pView->MovMarkedToTop();
-    else if (sId == "backward")
+    else if (rId == "backward")
         pView->MovMarkedToBtm();
-    else if (sId == "back")
+    else if (rId == "back")
         pView->PutMarkedToBtm();
-    else if (sId == "selectall")
+    else if (rId == "selectall")
         pView->MarkAll();
-    else if (sId == "delete")
+    else if (rId == "delete")
         pView->DeleteMarked();
-
-    return false;
 }
 
 void IMapWindow::CreateDefaultObject()

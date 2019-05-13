@@ -837,6 +837,10 @@ public:
     {
         m_xMenu->CheckItem(rIdent, bActive);
     }
+    virtual bool get_active(const OString& rIdent) const override
+    {
+        return m_xMenu->IsItemChecked(m_xMenu->GetItemId(rIdent));
+    }
     virtual void set_visible(const OString& rIdent, bool bShow) override
     {
         m_xMenu->ShowItem(m_xMenu->GetItemId(rIdent), bShow);
