@@ -10,6 +10,7 @@
 #include <config_folders.h>
 
 #include <opencl_device.hxx>
+#include <opencl_device_selection.h>
 
 #include <opencl/openclconfig.hxx>
 #include <opencl/openclwrapper.hxx>
@@ -24,13 +25,8 @@
 #include <opencl/OpenCLZone.hxx>
 
 #include <memory>
-#include <unicode/regex.h>
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-
-#include <cmath>
 
 #include <officecfg/Office/Common.hxx>
 
