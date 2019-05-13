@@ -79,7 +79,9 @@ class IMapWindow final : public GraphCtrl, public DropTargetHelper
     css::uno::Reference< css::frame::XFrame >
                         mxDocumentFrame;
 
-                        DECL_LINK( MenuSelectHdl, Menu*, bool );
+    std::unique_ptr<weld::Menu> mxPopupMenu;
+
+    void                MenuSelectHdl(const OString& rId);
 
     // GraphCtrl
     virtual void        MouseButtonUp(const MouseEvent& rMEvt) override;

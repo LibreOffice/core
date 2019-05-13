@@ -2447,6 +2447,11 @@ public:
         enable_item_notify_events();
     }
 
+    bool get_item_active(const OString& rIdent) const
+    {
+        return gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(m_aMap.find(rIdent)->second));
+    }
+
     void set_item_label(const OString& rIdent, const OUString& rText)
     {
         gtk_menu_item_set_label(m_aMap[rIdent], MapToGtkAccelerator(rText).getStr());
@@ -5199,6 +5204,11 @@ public:
     virtual void set_active(const OString& rIdent, bool bActive) override
     {
         set_item_active(rIdent, bActive);
+    }
+
+    virtual bool get_active(const OString& rIdent) const override
+    {
+        return get_item_active(rIdent);
     }
 
     virtual void set_visible(const OString& rIdent, bool bShow) override
