@@ -234,7 +234,7 @@ void ScPerfObj::testSheets()
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scBigFile.ods"), UNO_QUERY_THROW);
 
     // get getSheets
-    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
     OUString aSheetName = "NewSheet";
 
@@ -249,7 +249,7 @@ void ScPerfObj::testSheets()
     xSheets->copyByName(aSourceSheetName, aTargetSheetName, 70);
     callgrindDump("sc:copy_sheet_by_name");
 
-    uno::Reference< sheet::XSpreadsheets > xSheetsNameContainer (xSheets, UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheets > xSheetsNameContainer (xSheets, UNO_SET_THROW);
 
     callgrindStart();
     xSheetsNameContainer->removeByName(aSheetName);
@@ -264,7 +264,7 @@ void ScPerfObj::testSum()
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
-    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
     uno::Any rSheet = xSheets->getByName("SumSheet");
 
@@ -302,7 +302,7 @@ void ScPerfObj::testFTest()
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
-    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
     uno::Any rSheet = xSheets->getByName("FTestSheet");
 
@@ -325,7 +325,7 @@ void ScPerfObj::testChiTest()
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
-    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
     uno::Any rSheet = xSheets->getByName("ChiTestSheet");
 
@@ -348,7 +348,7 @@ void ScPerfObj::testSumX2PY2Test()
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
-    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
     uno::Any rSheet = xSheets->getByName("SumX2PY2Sheet");
 
@@ -371,7 +371,7 @@ void ScPerfObj::testTTest()
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
-    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
     uno::Any rSheet = xSheets->getByName("TTestSheet");
 
@@ -394,7 +394,7 @@ void ScPerfObj::testLcm()
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
-    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
     uno::Any rSheet = xSheets->getByName("LCMSheet");
 
@@ -417,7 +417,7 @@ void ScPerfObj::testGcd()
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
-    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
     uno::Any rSheet = xSheets->getByName("GCDSheet");
 
@@ -440,7 +440,7 @@ void ScPerfObj::testPearson()
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
-    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
     uno::Any rSheet = xSheets->getByName("PearsonSheet");
 
@@ -463,7 +463,7 @@ void ScPerfObj::testSubTotalWithFormulas()
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
-    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
     uno::Any rSheet = xSheets->getByName("scBigSingleSheet");
 
     // query for the XCellRange interface
@@ -499,7 +499,7 @@ void ScPerfObj::testSubTotalWithoutFormulas()
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
-    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
     uno::Any rSheet = xSheets->getByName("scBigSingleSheet");
 
     // query for the XCellRange interface
@@ -543,7 +543,7 @@ namespace {
         const OUString &rCellRange,
         const OUString &rFormula)
     {
-        uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+        uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
         uno::Any aSheet = xSheets->getByName(rSheetName);
         uno::Reference< table::XCellRange > xSheetCellRange(aSheet, UNO_QUERY);
@@ -575,7 +575,7 @@ void ScPerfObj::testFixedSum()
     xCalculatable->calculateAll();
     callgrindDump("sc:sum_with_fixed_array_formula");
 
-    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
     uno::Any aSheet = xSheets->getByName("FixedSumSheet");
     uno::Reference< sheet::XSpreadsheet > xSheet (aSheet, UNO_QUERY);
 
@@ -593,7 +593,7 @@ void ScPerfObj::testMatConcatSmall()
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
-    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
     uno::Any rSheet = xSheets->getByName("Sheet1");
 
@@ -620,7 +620,7 @@ void ScPerfObj::testMatConcatLarge()
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
-    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
     uno::Any rSheet = xSheets->getByName("Sheet1");
 
