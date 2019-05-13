@@ -390,10 +390,10 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
         {
             sal_Int32 nPathLen = aFragmentPath.lastIndexOf('/') + 1;
             OUString fileName = aFragmentPath.copy(nPathLen);
-            if ( fileName != fileName.toAsciiLowerCase() )
+            OUString lCaseFileName = fileName.toAsciiLowerCase();
+            if ( fileName != lCaseFileName)
             {
-                fileName = fileName.toAsciiLowerCase();
-                aFragmentPath = OUStringBuffer(aFragmentPath.copy(0, nPathLen)).append(fileName).makeStringAndClear();
+                aFragmentPath = aFragmentPath.copy(0, nPathLen) + lCaseFileName;
                 xInStrm = openInputStream(aFragmentPath);
             }
         }

@@ -887,7 +887,7 @@ void Chart2ImportTest::testTdf108021()
 
 void Chart2ImportTest::testTdf100084()
 {
-    // The test file was created with IBM Cognos, so just check there is a diagram.
+    // The test file was created with IBM Cognos, make sure there is a diagram.
     load("/chart2/qa/extras/data/xlsx/", "tdf100084.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
