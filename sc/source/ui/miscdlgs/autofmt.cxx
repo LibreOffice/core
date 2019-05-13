@@ -30,11 +30,13 @@
 #include <editeng/wghtitem.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/scriptedtext.hxx>
+#include <svx/framelink.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <comphelper/processfactory.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
 #include <strings.hrc>
 #include <zforauto.hxx>

@@ -39,6 +39,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/form/XChangeBroadcaster.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/interfacecontainer2.hxx>

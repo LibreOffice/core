@@ -29,6 +29,7 @@
 #include <editeng/outliner.hxx>
 #include <svx/fmview.hxx>
 #include <svx/dataaccessdescriptor.hxx>
+#include <svx/svxids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>

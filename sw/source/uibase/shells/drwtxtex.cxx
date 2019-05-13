@@ -60,6 +60,7 @@
 #include <svx/clipfmtitem.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/svxdlg.hxx>
+#include <svx/svxids.hrc>
 #include <sfx2/htmlmode.hxx>
 #include <svl/slstitm.hxx>
 #include <editeng/langitem.hxx>

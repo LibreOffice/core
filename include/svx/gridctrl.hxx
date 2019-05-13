@@ -19,14 +19,7 @@
 #ifndef INCLUDED_SVX_GRIDCTRL_HXX
 #define INCLUDED_SVX_GRIDCTRL_HXX
 
-#include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/sdbc/XRowSetListener.hpp>
-#include <com/sun/star/sdb/XRowsChangeListener.hpp>
-#include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 
@@ -34,14 +27,19 @@
 #include <tools/ref.hxx>
 #include <svtools/editbrowsebox.hxx>
 #include <osl/mutex.hxx>
-#include <comphelper/propmultiplex.hxx>
-#include <vcl/transfer.hxx>
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
 #include <vector>
 
-class DbGridControl;
+namespace comphelper { class OPropertyChangeMultiplexer; }
+namespace com::sun::star::beans { struct PropertyChangeEvent; }
+namespace com::sun::star::container { class XIndexAccess; }
+namespace com::sun::star::sdbc { class XRowSet; }
+namespace com::sun::star::sdb { class XRowsChangeListener; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::util { class XNumberFormatter; }
+
 class CursorWrapper;
 
 bool CompareBookmark(const css::uno::Any& aLeft, const css::uno::Any& aRight);

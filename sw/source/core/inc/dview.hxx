@@ -21,6 +21,7 @@
 
 #include <svx/fmview.hxx>
 
+class FmFormModel;
 class OutputDevice;
 class SwViewShellImp;
 class SwFrame;

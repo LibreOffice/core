@@ -54,6 +54,7 @@
 #include <swundo.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/svxids.hrc>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>

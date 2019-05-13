@@ -44,6 +44,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdview.hxx>
 #include <svl/srchitem.hxx>
 #include <tools/link.hxx>
 #include <unotools/configmgr.hxx>

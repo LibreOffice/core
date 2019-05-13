@@ -23,6 +23,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>
 #include <svl/macitem.hxx>
+#include <svx/svxids.hrc>
 #include <unotools/charclass.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <sfx2/event.hxx>

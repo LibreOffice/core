@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <svx/ruler.hxx>
 #include <viewopt.hxx>

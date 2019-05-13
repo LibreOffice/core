@@ -77,6 +77,7 @@
 
 #include <svx/dialogs.hrc>
 #include <svx/svxdlg.hxx>
+#include <svx/svxids.hrc>
 
 #include <docsh.hxx>
 #include <svx/drawitem.hxx>

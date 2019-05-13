@@ -29,6 +29,7 @@
 #include <svx/colorbox.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/svxids.hrc>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -37,6 +38,7 @@
 #include <svl/ctloptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 
 #include <swmodule.hxx>

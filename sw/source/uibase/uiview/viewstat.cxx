@@ -30,6 +30,7 @@
 #include <sfx2/objitem.hxx>
 #include <svl/imageitm.hxx>
 #include <svl/languageoptions.hxx>
+#include <svx/svxids.hrc>
 #include <editeng/protitem.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <editeng/langitem.hxx>

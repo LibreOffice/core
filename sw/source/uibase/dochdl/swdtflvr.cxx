@@ -55,6 +55,7 @@
 #include <svx/xmlexchg.hxx>
 #include <svx/dbaexchange.hxx>
 #include <svx/clipfmtitem.hxx>
+#include <svx/svxids.hrc>
 #include <sfx2/mieclip.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/xoutbmp.hxx>

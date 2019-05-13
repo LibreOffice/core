@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_E3DUNDO_HXX
 
 #include <svx/svdundo.hxx>
-#include <svx/scene3d.hxx>
+#include <svx/obj3d.hxx>
 #include <svx/svxdllapi.h>
 
 /************************************************************************\

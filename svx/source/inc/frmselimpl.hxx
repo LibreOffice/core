@@ -23,6 +23,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
 #include <svx/frmsel.hxx>
+#include <svx/framelink.hxx>
 #include <svx/framelinkarray.hxx>
 #include <editeng/borderline.hxx>
 

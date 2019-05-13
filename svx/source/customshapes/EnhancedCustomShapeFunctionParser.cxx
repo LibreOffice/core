@@ -25,6 +25,8 @@
 #include <osl/diagnose.h>
 #include <tools/fract.hxx>
 
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
+
 // Makes parser a static resource,
 // we're synchronized externally.
 // But watch out, the parser might have

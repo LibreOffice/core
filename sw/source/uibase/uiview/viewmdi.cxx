@@ -53,6 +53,8 @@
 #include <AnnotationWin.hxx>
 
 #include <svx/srchdlg.hxx>
+#include <svx/svdview.hxx>
+#include <svx/svxids.hrc>
 
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>

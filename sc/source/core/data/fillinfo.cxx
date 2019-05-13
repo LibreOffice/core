@@ -23,6 +23,7 @@
 #include <editeng/lineitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/brushitem.hxx>
+#include <svx/framelink.hxx>
 
 #include <fillinfo.hxx>
 #include <document.hxx>

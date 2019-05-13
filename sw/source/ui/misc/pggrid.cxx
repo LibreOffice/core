@@ -25,6 +25,7 @@
 #include <globals.hrc>
 #include <svx/colorbox.hxx>
 #include <svx/xtable.hxx>
+#include <svx/svxids.hrc>
 #include <uitool.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/lrspitem.hxx>

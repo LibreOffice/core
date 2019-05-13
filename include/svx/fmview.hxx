@@ -33,7 +33,6 @@ namespace com { namespace sun { namespace star {
 }}}
 
 class OutputDevice;
-class FmFormModel;
 class FmFormObj;
 class FmFormPage;
 class FmFormShell;

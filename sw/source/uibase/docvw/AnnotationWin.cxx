@@ -25,6 +25,7 @@
 #include <strings.hrc>
 #include <cmdid.h>
 
+#include <vcl/edit.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/scrbar.hxx>
 

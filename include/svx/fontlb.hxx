@@ -20,10 +20,7 @@
 #ifndef INCLUDED_SVX_FONTLB_HXX
 #define INCLUDED_SVX_FONTLB_HXX
 
-#include <vcl/svtabbx.hxx>
 #include <vcl/svlbitm.hxx>
-#include <vcl/virdev.hxx>
-#include <svx/svxdllapi.h>
 
 
 /** A list box string item which stores its text and font. */

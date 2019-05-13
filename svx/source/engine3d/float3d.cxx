@@ -23,9 +23,11 @@
 #include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>
+#include <svl/itempool.hxx>
 #include <svtools/colrdlg.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svx/colorbox.hxx>
+#include <svx/f3dchild.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/globl3d.hxx>

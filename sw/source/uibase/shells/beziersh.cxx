@@ -23,6 +23,7 @@
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/svxids.hrc>
 #include <vcl/EnumContext.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>

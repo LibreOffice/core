@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <salhelper/thread.hxx>
+#include <tools/urlobj.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/idle.hxx>
 #include <svl/slstitm.hxx>
