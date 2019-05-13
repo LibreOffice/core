@@ -1259,6 +1259,18 @@ namespace
             SAL_INFO( "sw.pageframe", "doInsertPage - insert empty p: "
                                       << pPage << " d: " << pDesc );
         pPage->Paste( pRoot, pSibling );
+
+        SwViewShell* pViewShell = pRoot->GetCurrShell();
+        if (pViewShell && pViewShell->GetViewOptions()->IsHideWhitespaceMode())
+        {
+            // Hide-whitespace mode does not shrink the last page, so resize the page that used to
+            // be the last one.
+            if (SwFrame* pPrevPage = pPage->GetPrev())
+            {
+                pPrevPage->InvalidateSize();
+            }
+        }
+
         pPage->PreparePage( bFootnote );
         // If the sibling has no body text, destroy it as long as it is no footnote page.
         if ( pSibling && !pSibling->IsFootnotePage() &&
