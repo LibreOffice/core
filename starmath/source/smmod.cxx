@@ -133,35 +133,28 @@ SmModule::~SmModule()
     mpVirtualDev.disposeAndClear();
 }
 
-void SmModule::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
-{
-    //invalidate all graphic and edit windows
-    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-    while (pViewShell)
-    {
-        if (dynamic_cast<const SmViewShell *>(pViewShell) != nullptr)
-        {
-            SmViewShell *pSmView = static_cast<SmViewShell *>(pViewShell);
-            pSmView->GetGraphicWindow().ApplyColorConfigValues( rColorCfg );
-        }
-        pViewShell = SfxViewShell::GetNext( *pViewShell );
-    }
-}
-
 svtools::ColorConfig & SmModule::GetColorConfig()
 {
     if(!mpColorConfig)
     {
         mpColorConfig.reset(new svtools::ColorConfig);
-        ApplyColorConfigValues( *mpColorConfig );
         mpColorConfig->AddListener(this);
     }
     return *mpColorConfig;
 }
 
-void SmModule::ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints )
+void SmModule::ConfigurationChanged(utl::ConfigurationBroadcaster* pBrdCst, ConfigurationHints)
 {
-    ApplyColorConfigValues(*mpColorConfig);
+    if (pBrdCst == mpColorConfig.get())
+    {
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while (pViewShell)
+        {
+            if (dynamic_cast<const SmViewShell *>(pViewShell) != nullptr)
+                pViewShell->GetWindow()->Invalidate();
+            pViewShell = SfxViewShell::GetNext(*pViewShell);
+        }
+    }
 }
 
 SmMathConfig * SmModule::GetConfig()
