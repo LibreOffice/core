@@ -176,7 +176,7 @@ public class TypeDetection extends ComplexTestCase {
 
     /**
      * @member m_xDetection     the object to test
-     * @member helper           instacne of helper class
+     * @member helper           instance of helper class
      */
 
     static XTypeDetection   m_xDetection;
