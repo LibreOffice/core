@@ -38,6 +38,7 @@ protected:
     uno::Reference<lang::XComponent> mxComponent;
     // get shape nShapeIndex from page 0
     uno::Reference<drawing::XShape> getShape(sal_uInt8 nShapeIndex);
+    sal_uInt8 countShapes();
 
 public:
     virtual void setUp() override
@@ -67,6 +68,17 @@ uno::Reference<drawing::XShape> CustomshapesTest::getShape(sal_uInt8 nShapeIndex
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(nShapeIndex), uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("Could not get xShape", xShape.is());
     return xShape;
+}
+
+sal_uInt8 CustomshapesTest::countShapes()
+{
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("Could not get XDrawPagesSupplier", xDrawPagesSupplier.is());
+    uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("Could not get xDrawPage", xDrawPage.is());
+    return xDrawPage->getCount();
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testViewBoxLeftTop)
@@ -317,6 +329,69 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124740_handle_path_coordsystem)
     double fX(aPosition.X());
     // tolerance for rounding to integer
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("handle X coordinate", 8000.0, fX, 2.0);
+}
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf115813_OOXML_XY_handle)
+{
+    // The test covers all preset shapes with handles. Only these ones are
+    // excluded: arc, blockArc, chord, circularArrow, gear6, gear9, mathNotEqual, pie,
+    // leftCircularArrow, leftRightCircularArrow, star24, star32, swooshArrow.
+    // Connectors are included as ordinary shapes to prevent converting.
+    // Error was, that the handle movement and the changes to the shape did not follow
+    // the mouse movement.
+    const OUString sFileName("tdf115813_HandleMovementOOXMLPresetShapes.pptx");
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+
+    OUString sErrors;
+    // values in vector InteractionsHandles are in 1/100 mm and refer to page
+    for (sal_uInt8 i = 0; i < countShapes(); i++)
+    {
+        uno::Reference<drawing::XShape> xShape(getShape(i));
+        SdrObjCustomShape& rSdrObjCustomShape(
+            static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+        OUString sShapeType("non-primitive"); // default for ODF
+        const SdrCustomShapeGeometryItem& rGeometryItem(
+            rSdrObjCustomShape.GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
+        const uno::Any* pAny = rGeometryItem.GetPropertyValueByName("Type");
+        if (pAny)
+            *pAny >>= sShapeType;
+
+        sal_uInt8 nHandlesCount = rSdrObjCustomShape.GetInteractionHandles().size();
+        for (sal_uInt8 j = 0; j < nHandlesCount; j++)
+        {
+            css::awt::Point aInitialPosition(
+                rSdrObjCustomShape.GetInteractionHandles()[j].aPosition);
+            // The handles are initialized in the test document, so that if the handle is moveable in
+            // that direction at all, then it can move at least with an amount of 100.
+            Point aDesiredPosition(aInitialPosition.X + 100, aInitialPosition.Y + 100);
+            rSdrObjCustomShape.DragMoveCustomShapeHdl(aDesiredPosition, j, false);
+            css::awt::Point aObservedPosition(
+                rSdrObjCustomShape.GetInteractionHandles()[j].aPosition);
+            sal_Int32 nDesiredX(aDesiredPosition.X()); // tools::Point
+            sal_Int32 nDesiredY(aDesiredPosition.Y());
+            sal_Int32 nObservedX(aObservedPosition.X); // css::awt::Point
+            sal_Int32 nObservedY(aObservedPosition.Y);
+            // If a handle only moves in one direction, the difference is 100 for the other direction.
+            // There exists some rounding differences, therefore '<= 1' instead of '== 0'.
+            // The condition has the form '!(good cases)'.
+            if (!((abs(nDesiredX - nObservedX) <= 1 && abs(nDesiredY - nObservedY) == 100)
+                  || (abs(nDesiredX - nObservedX) == 100 && abs(nDesiredY - nObservedY) <= 1)
+                  || (abs(nDesiredX - nObservedX) <= 1 && abs(nDesiredY - nObservedY) <= 1)))
+            {
+                sErrors += "\n";
+                //sErrors += OUString(sal_Unicode(10));
+                sErrors
+                    = sErrors + OUString::number(i) + " " + sShapeType + ": " + OUString::number(j);
+                sErrors = sErrors + " X " + OUString::number(nDesiredX) + "|"
+                          + OUString::number(nObservedX);
+                sErrors = sErrors + " Y " + OUString::number(nDesiredY) + "|"
+                          + OUString::number(nObservedY);
+            }
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
 }
 }
 

@@ -98,11 +98,11 @@ public:
 
     css::uno::Reference< css::drawing::XCustomShapeEngine > const & GetCustomShapeEngine() const;
 
-    SVX_DLLPRIVATE std::vector< SdrCustomShapeInteraction > GetInteractionHandles() const;
+    std::vector< SdrCustomShapeInteraction > GetInteractionHandles() const; // needed in unit test
     SVX_DLLPRIVATE void DragCreateObject( SdrDragStat& rDrag );
     SVX_DLLPRIVATE void DragResizeCustomShape( const tools::Rectangle& rNewRect );
-    SVX_DLLPRIVATE void DragMoveCustomShapeHdl( const Point& rDestination,
-            const sal_uInt16 nCustomShapeHdlNum, bool bMoveCalloutRectangle );
+    void DragMoveCustomShapeHdl( const Point& rDestination,
+            const sal_uInt16 nCustomShapeHdlNum, bool bMoveCalloutRectangle ); // needed in unit test
 
     // #i37011# centralize throw-away of render geometry
     void InvalidateRenderGeometry();

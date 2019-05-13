@@ -1206,6 +1206,7 @@ static double lcl_getXAdjustmentValue(OUString& rShapeType, const sal_uInt32 nHa
     if ((rShapeType == "ooxml-bentArrow" && nHandleIndex == 2) || (rShapeType == "ooxml-chevron")
         || (rShapeType == "ooxml-curvedRightArrow") || (rShapeType == "ooxml-foldedCorner")
         || (rShapeType == "ooxml-homePlate") || (rShapeType == "ooxml-notchedRightArrow")
+        || (rShapeType == "ooxml-nonIsoscelesTrapezoid" && nHandleIndex == 1)
         || (rShapeType == "ooxml-rightArrow")
         || (rShapeType == "ooxml-rightArrowCallout" && nHandleIndex == 2)
         || (rShapeType == "ooxml-round1Rect")
@@ -1215,7 +1216,7 @@ static double lcl_getXAdjustmentValue(OUString& rShapeType, const sal_uInt32 nHa
         || (rShapeType == "ooxml-snip2DiagRect" && nHandleIndex == 1)
         || (rShapeType == "ooxml-snip2SameRect" && nHandleIndex == 0)
         || (rShapeType == "ooxml-snipRoundRect" && nHandleIndex == 1)
-        || (rShapeType == "ooxml-stripedRightArrow"))
+        || (rShapeType == "ooxml-swooshArrow") || (rShapeType == "ooxml-stripedRightArrow"))
         return (fW - fX) / std::min(fW, fH) * 100000.0;
 
     // pattern  x / ss * 100000 or (x - l) / ss * 100000
@@ -1226,6 +1227,8 @@ static double lcl_getXAdjustmentValue(OUString& rShapeType, const sal_uInt32 nHa
         || (rShapeType == "ooxml-leftArrowCallout" && nHandleIndex == 2)
         || (rShapeType == "ooxml-leftRightArrow")
         || (rShapeType == "ooxml-leftRightArrowCallout" && nHandleIndex == 2)
+        || (rShapeType == "ooxml-leftRightRibbon")
+        || (rShapeType == "ooxml-nonIsoscelesTrapezoid" && nHandleIndex == 0)
         || (rShapeType == "ooxml-round2DiagRect" && nHandleIndex == 0)
         || (rShapeType == "ooxml-round2SameRect" && nHandleIndex == 1)
         || (rShapeType == "ooxml-roundRect")
@@ -1241,7 +1244,8 @@ static double lcl_getXAdjustmentValue(OUString& rShapeType, const sal_uInt32 nHa
         || (rShapeType == "ooxml-leftRightUpArrow" && nHandleIndex == 0)
         || (rShapeType == "ooxml-quadArrow" && nHandleIndex == 0)
         || (rShapeType == "ooxml-quadArrowCallout" && nHandleIndex == 0)
-        || (rShapeType == "ooxml-upArrowCallout" && nHandleIndex == 0))
+        || (rShapeType == "ooxml-upArrowCallout" && nHandleIndex == 0)
+        || (rShapeType == "ooxml-upDownArrowCallout" && nHandleIndex == 0))
         return (fW / 2.0 - fX) / std::min(fW, fH) * 200000.0;
 
     // pattern (hc - x) / ss * 100000
@@ -1249,13 +1253,18 @@ static double lcl_getXAdjustmentValue(OUString& rShapeType, const sal_uInt32 nHa
         || (rShapeType == "ooxml-leftRightUpArrow" && nHandleIndex == 1)
         || (rShapeType == "ooxml-quadArrow" && nHandleIndex == 1)
         || (rShapeType == "ooxml-quadArrowCallout" && nHandleIndex == 1)
-        || (rShapeType == "ooxml-upArrowCallout" && nHandleIndex == 1))
+        || (rShapeType == "ooxml-upArrowCallout" && nHandleIndex == 1)
+        || (rShapeType == "ooxml-upDownArrowCallout" && nHandleIndex == 1))
         return (fW / 2.0 - fX) / std::min(fW, fH) * 100000.0;
 
     // pattern (w - x) / ss * 50000 or (r - x) / ss * 50000
     if ((rShapeType == "ooxml-bentUpArrow") || (rShapeType == "ooxml-leftUpArrow")
         || (rShapeType == "ooxml-uturnArrow" && nHandleIndex == 1))
         return (fW - fX) / std::min(fW, fH) * 50000.0;
+
+    // pattern x / ss * 200000
+    if (rShapeType == "ooxml-nonIsoscelesTrapezoid" && nHandleIndex == 0)
+        return fX / std::min(fW, fH) * 200000.0;
 
     // pattern (hc - x) / w * 200000
     if ((rShapeType == "ooxml-downArrow" && nHandleIndex == 0)
@@ -1326,13 +1335,20 @@ static double lcl_getYAdjustmentValue(OUString& rShapeType, const sal_uInt32 nHa
 
     // pattern  y / ss * 100000 or (y - t) / ss * 100000
     if ((rShapeType == "ooxml-bentUpArrow" && nHandleIndex == 2)
-        || (rShapeType == "ooxml-curvedUpArrow") || (rShapeType == "ooxml-leftRightUpArrow")
+        || (rShapeType == "ooxml-bracePair") || (rShapeType == "ooxml-bracketPair")
+        || (rShapeType == "ooxml-can") || (rShapeType == "ooxml-cube")
+        || (rShapeType == "ooxml-curvedUpArrow") || (rShapeType == "ooxml-halfFrame")
+        || (rShapeType == "ooxml-leftBrace" && nHandleIndex == 0)
+        || (rShapeType == "ooxml-leftBracket") || (rShapeType == "ooxml-leftRightUpArrow")
         || (rShapeType == "ooxml-leftUpArrow" && nHandleIndex == 2)
         || (rShapeType == "ooxml-mathMultiply") || (rShapeType == "ooxml-quadArrow")
         || (rShapeType == "ooxml-quadArrowCallout" && nHandleIndex == 2)
-        || (rShapeType == "ooxml-upArrow")
+        || (rShapeType == "ooxml-rightBrace" && nHandleIndex == 0)
+        || (rShapeType == "ooxml-rightBracket") || (rShapeType == "ooxml-upArrow")
         || (rShapeType == "ooxml-upArrowCallout" && nHandleIndex == 2)
-        || (rShapeType == "ooxml-upDownArrow"))
+        || (rShapeType == "ooxml-upDownArrow")
+        || (rShapeType == "ooxml-upDownArrowCallout" && nHandleIndex == 2)
+        || (rShapeType == "ooxml-verticalScroll"))
         return fY / std::min(fW, fH) * 100000.0;
 
     // pattern y / ss * 50000
@@ -1356,7 +1372,8 @@ static double lcl_getYAdjustmentValue(OUString& rShapeType, const sal_uInt32 nHa
         || (rShapeType == "ooxml-mathMinus") || (rShapeType == "ooxml-notchedRightArrow")
         || (rShapeType == "ooxml-mathNotEqual" && nHandleIndex == 2)
         || (rShapeType == "ooxml-quadArrowCallout" && nHandleIndex == 3)
-        || (rShapeType == "ooxml-rightArrow") || (rShapeType == "ooxml-stripedRightArrow"))
+        || (rShapeType == "ooxml-rightArrow") || (rShapeType == "ooxml-stripedRightArrow")
+        || (rShapeType == "ooxml-upDownArrowCallout" && nHandleIndex == 3))
         return (fH / 2.0 - fY) / fH * 200000.0;
 
     // pattern (y - vc) / h * 100000
@@ -1374,7 +1391,7 @@ static double lcl_getYAdjustmentValue(OUString& rShapeType, const sal_uInt32 nHa
 
     // special pattern smiley
     if (rShapeType == "ooxml-smileyFace")
-        return (fY - fH * 16515.0 / 21600.0) / fY * 100000.0;
+        return (fY - fH * 16515.0 / 21600.0) / fH * 100000.0;
 
     // special pattern for star with odd number of tips, because center of star not center of shape
     if (rShapeType == "ooxml-star5")
@@ -1382,9 +1399,17 @@ static double lcl_getYAdjustmentValue(OUString& rShapeType, const sal_uInt32 nHa
     if (rShapeType == "ooxml-star7")
         return (fH / 2.0 - fY * 100000.0 / 105210.0) / fH * 100000.0;
 
+    // special pattern swooshArrow
+    if (rShapeType == "ooxml-swooshArrow")
+        return (fY - std::min(fW, fH) / 8.0) / fH * 100000.0;
+
+    // special pattern leftRightRibbon
+    if (rShapeType == "ooxml-leftRightRibbon")
+        return fY / fH * 200000 - 100000;
+
     // pattern y / h * 100000, simple scaling
     if (rShapeType.startsWith("ooxml-"))
-        return fY / fH * 100000;
+        return fY / fH * 100000.0;
 
     return fY; // method is unknown
 }
@@ -1749,6 +1774,7 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                         }
                     }
                 }
+
                 if (aHandle.nFlags & HandleFlags::REFY)
                 {
                     nSecondAdjustmentValue = aHandle.nRefY;
@@ -1801,6 +1827,13 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                             double fadj5(GetAdjustValueAsDouble(4));
                             fAdjustY += fHeight / fss * (fadj5 - 100000.0);
                         }
+                    }
+                    else if (sShapeType == "ooxml-leftRightRibbon")
+                    {
+                        if (nIndex == 0)
+                            fAdjustY = GetAdjustValueAsDouble(2) - fAdjustY;
+                        else // nIndex == 2
+                            fAdjustY = GetAdjustValueAsDouble(0) + fAdjustY;
                     }
                 }
 
