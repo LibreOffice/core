@@ -533,15 +533,15 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
         break;
 
         case NID_SRCH_REP:
-        if(m_pSrchItem)
+        if(s_pSrchItem)
         {
-            bool bBackward = m_pSrchItem->GetBackward();
+            bool bBackward = s_pSrchItem->GetBackward();
             if (rSh.HasSelection() && bNext != rSh.IsCursorPtAtEnd())
                 rSh.SwapPam();
-            m_pSrchItem->SetBackward(!bNext);
+            s_pSrchItem->SetBackward(!bNext);
             SfxRequest aReq(FN_REPEAT_SEARCH, SfxCallMode::SLOT, GetPool());
             ExecSearch(aReq);
-            m_pSrchItem->SetBackward(bBackward);
+            s_pSrchItem->SetBackward(bBackward);
         }
         break;
         case NID_INDEX_ENTRY:
