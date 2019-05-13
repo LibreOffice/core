@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_34eea422",
+        "filename": "nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/goodness/IGoodnessCompareEngine.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-05-13T07:16:38Z",
+      "side": 1,
+      "message": "This looks worse than before.\nCan you please fix this in a follow-up patch?",
+      "revId": "51387dc280dadf7a29d215a72d2d0026451d2be6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
