@@ -4527,7 +4527,7 @@ static void lo_startmain(void*)
     Application::ReleaseSolarMutex();
 }
 
-// pre-unipoll version.
+// unipoll version.
 static void lo_runLoop(LibreOfficeKit* /*pThis*/,
                        LibreOfficeKitPollCallback pPollCallback,
                        LibreOfficeKitWakeCallback pWakeCallback,
