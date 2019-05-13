@@ -133,7 +133,8 @@ public:
                     assert(false && "did not find item?");
                     break;
                 }
-                if (**sortIt == *pNeedle)
+                // need to compare by pointer here, since we might have duplicates
+                if (*sortIt == pNeedle)
                 {
                     maSortablePoolItems.erase(sortIt);
                     break;
@@ -141,7 +142,7 @@ public:
                 ++sortIt;
             }
         }
-        return maPoolItemSet.erase(it);
+        maPoolItemSet.erase(it);
     }
 };
 
