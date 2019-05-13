@@ -32,7 +32,7 @@ class URLDlg : public weld::GenericDialogController
 
 public:
 
-                        URLDlg(weld::Window* pWindow,
+                        URLDlg(weld::Widget* pWindow,
                                const OUString& rURL, const OUString& rAlternativeText, const OUString& rDescription,
                                const OUString& rTarget, const OUString& rName,
                                TargetList& rTargetList);

@@ -1790,7 +1790,7 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
     return SdrGlueEditView::KeyInput(rKEvt,pWin);
 }
 
-bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin)
+bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, OutputDevice* pWin)
 {
     if (pTextEditOutlinerView!=nullptr) {
         bool bPostIt=pTextEditOutliner->IsInSelectionMode();
@@ -1813,7 +1813,7 @@ bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin)
             MouseEvent aMEvt(aPixPos,rMEvt.GetClicks(),rMEvt.GetMode(),
                              rMEvt.GetButtons(),rMEvt.GetModifier());
             if (pTextEditOutlinerView->MouseButtonDown(aMEvt)) {
-                if (pWin!=nullptr && pWin!=pTextEditWin) SetTextEditWin(pWin);
+//TODO                if (pWin!=nullptr && pWin!=pTextEditWin) SetTextEditWin(pWin);
 #ifdef DBG_UTIL
                 if (mpItemBrowser!=nullptr) mpItemBrowser->SetDirty();
 #endif
@@ -1825,7 +1825,7 @@ bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin)
     return SdrGlueEditView::MouseButtonDown(rMEvt,pWin);
 }
 
-bool SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin)
+bool SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, OutputDevice* pWin)
 {
     if (pTextEditOutlinerView!=nullptr) {
         bool bPostIt=pTextEditOutliner->IsInSelectionMode();
@@ -1856,7 +1856,7 @@ bool SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin)
     return SdrGlueEditView::MouseButtonUp(rMEvt,pWin);
 }
 
-bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
+bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, OutputDevice* pWin)
 {
     if (pTextEditOutlinerView!=nullptr) {
         bool bSelMode=pTextEditOutliner->IsInSelectionMode();

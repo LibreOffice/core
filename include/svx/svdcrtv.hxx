@@ -84,7 +84,7 @@ public:
     virtual void BrkAction() override;
     virtual void TakeActionRect(tools::Rectangle& rRect) const override;
 
-    virtual bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin) override;
+    virtual bool MouseMove(const MouseEvent& rMEvt, OutputDevice* pWin) override;
 
     void SetMeasureLayer(const OUString& rName) { maMeasureLayer=rName; }
 
