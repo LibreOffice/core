@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_34f54458",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-05-13T12:10:08Z",
+      "side": 1,
+      "message": "Looks inefficient: filename is compared to a temporary created by toAsciiLowerCase then destroyed, then (in case condition is true) the call is repeated. In this case, having a dedicated lowercase variable would be no less efficient memory-wise, and better performance-wise.",
+      "range": {
+        "startLine": 393,
+        "startChar": 12,
+        "endLine": 395,
+        "endChar": 55
+      },
+      "revId": "b2fc2ad7beceaff660de684435a5c37d69cf8ae9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_9403f842",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-05-13T12:10:08Z",
+      "side": 1,
+      "message": "Why this strange usage of OUStringBuffer, after the work done on making string concatenation efficient? Using simple\n\n    aFragmentPath.copy(0, nPathLen) + fileName\n\nwould possibly be no less, and in some cases even more efficient: the concatenation object would count all necessary characters in advance and only called allocation once, while OUStringBuffer operation potentially could allocate twice (first time to hold the copy passed to ctor, second time to increase if initial buffer couldn\u0027t hold additional name).",
+      "range": {
+        "startLine": 396,
+        "startChar": 32,
+        "endLine": 396,
+        "endChar": 118
+      },
+      "revId": "b2fc2ad7beceaff660de684435a5c37d69cf8ae9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
