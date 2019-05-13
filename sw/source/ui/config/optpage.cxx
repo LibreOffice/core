@@ -71,6 +71,7 @@
 #include <svx/xtable.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/strarray.hxx>
+#include <svx/svxids.hrc>
 
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>

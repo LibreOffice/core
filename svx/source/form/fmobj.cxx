@@ -30,6 +30,7 @@
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/form/Forms.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>

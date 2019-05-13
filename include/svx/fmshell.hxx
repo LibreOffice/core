@@ -24,24 +24,23 @@
 // ***************************************************************************************************
 
 #include <memory>
+#include <rtl/ref.hxx>
 #include <sfx2/shell.hxx>
-#include <sfx2/module.hxx>
-#include <vcl/event.hxx>
+#include <vcl/outdev.hxx>
 
-#include <svx/svxids.hrc>
-#include <svx/fmview.hxx>
 #include <svx/svxdllapi.h>
-
 #include <svx/ifaceids.hxx>
+#include <svl/hint.hxx>
 
+#include <com/sun/star/uno/Reference.hxx>
 
 class FmFormModel;
 class FmFormPage;
 class FmXFormShell;
 class FmFormView;
 class SdrView;
-class SdrPage;
 class SdrUnoObj;
+class LinkParamNone;
 
 namespace com { namespace sun { namespace star { namespace form {
     class XForm;
@@ -49,6 +48,10 @@ namespace com { namespace sun { namespace star { namespace form {
         class XFormController;
     }
 } } } }
+
+namespace com::sun::star::awt { class XControl; }
+namespace com::sun::star::awt { class XControlModel; }
+template <typename Arg, typename Ret> class Link;
 
 namespace svx
 {

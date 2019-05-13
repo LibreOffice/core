@@ -50,6 +50,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <svl/itemiter.hxx>
+#include <svx/svxids.hrc>
 #include <unotools/localfilehelper.hxx>
 
 #include <editeng/eeitem.hxx>

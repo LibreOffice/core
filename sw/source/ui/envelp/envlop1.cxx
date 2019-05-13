@@ -19,6 +19,7 @@
 
 #include <dbmgr.hxx>
 #include <sfx2/app.hxx>
+#include <tools/lineend.hxx>
 #include <vcl/print.hxx>
 #include <vcl/settings.hxx>
 

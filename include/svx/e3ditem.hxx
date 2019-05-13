@@ -24,8 +24,6 @@
 #include <basegfx/vector/b3dvector.hxx>
 #include <svx/svxdllapi.h>
 
-class SvStream;
-
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxB3DVectorItem : public SfxPoolItem
 {
     basegfx::B3DVector  aVal;

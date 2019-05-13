@@ -23,8 +23,9 @@
 #include <svl/poolitem.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
+
+namespace com::sun::star::graphic { class XGraphic; }
+namespace com::sun::star::lang { class XComponent; }
 
 // property names map those from css::gallery::GalleryItem
 // with exception of "AsLink" and "FilterName"

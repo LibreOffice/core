@@ -31,6 +31,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/postattr.hxx>
+#include <svx/svxids.hrc>
 #include <unotools/misccfg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>

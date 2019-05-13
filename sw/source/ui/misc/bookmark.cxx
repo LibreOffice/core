@@ -19,6 +19,7 @@
 
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
+#include <svx/svxids.hrc>
 #include <vcl/weld.hxx>
 #include <vcl/headbar.hxx>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>

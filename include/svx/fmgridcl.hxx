@@ -19,14 +19,14 @@
 #ifndef INCLUDED_SVX_FMGRIDCL_HXX
 #define INCLUDED_SVX_FMGRIDCL_HXX
 
-#include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-
 #include <svx/gridctrl.hxx>
 #include <vcl/transfer.hxx>
 #include <svx/svxdllapi.h>
 #include <memory>
 
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::container { class XIndexContainer; }
+namespace com::sun::star::container { class XNameAccess; }
 
 // FmGridHeader
 

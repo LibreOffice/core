@@ -941,3 +941,31 @@ blacklist:
     include/svx/dbaexchange.hxx:
     # Needed for implicit dtor
     - com/sun/star/beans/PropertyValue.hpp
+    include/svx/EnhancedCustomShape2d.hxx:
+    # Needed for implicit dtor
+    - com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp
+    include/svx/fmgridif.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertyChangeListener.hpp
+    - com/sun/star/container/XContainer.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/form/XBoundComponent.hpp
+    - com/sun/star/form/XGridControl.hpp
+    - com/sun/star/form/XGridPeer.hpp
+    - com/sun/star/form/XLoadListener.hpp
+    - com/sun/star/form/XResetListener.hpp
+    - com/sun/star/frame/XDispatchProvider.hpp
+    - com/sun/star/frame/XDispatchProviderInterception.hpp
+    - com/sun/star/frame/XStatusListener.hpp
+    - com/sun/star/sdbc/XRowSetListener.hpp
+    - com/sun/star/sdb/XRowSetSupplier.hpp
+    - com/sun/star/util/XModeSelector.hpp
+    - com/sun/star/util/XModifyBroadcaster.hpp
+    - com/sun/star/view/XSelectionSupplier.hpp
+    - toolkit/awt/vclxwindow.hxx
+    include/svx/fmsrcimp.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertyChangeListener.hpp
+    include/svx/fmtools.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XEventListener.hpp

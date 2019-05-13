@@ -22,14 +22,13 @@
 #include <svx/svxdllapi.h>
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
 #include <com/sun/star/sdb/XRowSetSupplier.hpp>
-#include <com/sun/star/form/XReset.hpp>
+#include <com/sun/star/form/XResetListener.hpp>
 #include <com/sun/star/form/XBoundComponent.hpp>
 #include <com/sun/star/form/XLoadListener.hpp>
 #include <com/sun/star/form/XGridControl.hpp>
@@ -38,7 +37,6 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XModeSelector.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
@@ -50,6 +48,9 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase10.hxx>
 #include <memory>
+
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 class DbGridColumn;
 enum class DbGridControlNavigationBarState;

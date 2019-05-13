@@ -24,6 +24,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/app.hxx>
 #include <svx/optgenrl.hxx>
+#include <svx/svxids.hrc>
 #include <docufld.hxx>
 #include <expfld.hxx>
 #include <view.hxx>

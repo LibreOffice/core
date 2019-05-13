@@ -61,6 +61,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/svxdlg.hxx>
 #include <svx/flagsdef.hxx>
+#include <svx/svxids.hrc>
 #include <memory>
 
 using namespace ::com::sun::star;

@@ -30,6 +30,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <svx/svxids.hrc>
 #include <editeng/sizeitem.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <section.hxx>

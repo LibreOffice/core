@@ -20,17 +20,18 @@
 #ifndef INCLUDED_SVX_FRAMELINKARRAY_HXX
 #define INCLUDED_SVX_FRAMELINKARRAY_HXX
 
-#include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <svx/framelink.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/rotmodit.hxx>
 #include <memory>
-#include <vector>
+
+class Color;
 
 namespace svx {
 namespace frame {
 
 struct ArrayImpl;
+class Style;
 
 /** Stores frame styles of an array of cells, supports merged ranges.
 

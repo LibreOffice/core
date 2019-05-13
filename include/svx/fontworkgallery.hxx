@@ -23,16 +23,12 @@
 
 #include <svx/svxdllapi.h>
 #include <svtools/valueset.hxx>
-#include <sfx2/tbxctrl.hxx>
 #include <vcl/weld.hxx>
 #include <vector>
 
-class FmFormModel;
 class SdrView;
-class SdrTextObj;
 class SdrObject;
 class SdrModel;
-class SfxBindings;
 
 namespace svx
 {

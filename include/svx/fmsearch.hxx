@@ -20,15 +20,14 @@
 #ifndef INCLUDED_SVX_FMSEARCH_HXX
 #define INCLUDED_SVX_FMSEARCH_HXX
 
-#include <com/sun/star/sdbc/XResultSet.hpp>
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
 
-namespace com { namespace sun { namespace star {
-    namespace util {
-        class XNumberFormatsSupplier;
-    }
-}}}
+#include <com/sun/star/uno/Reference.hxx>
+
+#include <vector>
+
+namespace com::sun::star::sdbc { class XResultSet; }
 
 // Helper methods
 

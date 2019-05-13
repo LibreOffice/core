@@ -39,6 +39,7 @@
 #include <svx/sdgtritm.hxx>
 #include <svx/sdginitm.hxx>
 #include <svx/sdgmoitm.hxx>
+#include <svx/svdview.hxx>
 #include <editeng/brushitem.hxx>
 #include <svx/grfflt.hxx>
 #include <svx/compressgraphicdialog.hxx>
@@ -66,7 +67,7 @@
 #include <svx/graphichelper.hxx>
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-//#include <svx/svxids.hrc>
+#include <svx/svxids.hrc>
 #include <svx/drawitem.hxx>
 #define ShellClass_SwGrfShell
 

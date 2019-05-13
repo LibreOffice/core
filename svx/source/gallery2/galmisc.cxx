@@ -46,6 +46,7 @@
 #include <svx/gallery1.hxx>
 #include <svx/galtheme.hxx>
 #include <svx/galmisc.hxx>
+#include <com/sun/star/awt/XProgressMonitor.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>

@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_FILLCTRL_HXX
 
 #include <memory>
-#include <svl/lstner.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/drawing/FillStyle.hpp>
