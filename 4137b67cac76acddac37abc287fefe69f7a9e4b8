@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_340b048f",
+        "filename": "offapi/com/sun/star/awt/XPrinterServer2.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-13T10:29:46Z",
+      "side": 1,
+      "message": "do you want to backport this new interface to 6.2?  would be fine with me but i don\u0027t know what sberg would say :)",
+      "revId": "4137b67cac76acddac37abc287fefe69f7a9e4b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_14060888",
+        "filename": "offapi/com/sun/star/awt/XPrinterServer2.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-13T10:29:46Z",
+      "side": 1,
+      "message": "hmm... is it really necessary to declare it \"published\" right away?",
+      "revId": "4137b67cac76acddac37abc287fefe69f7a9e4b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_74d74cef",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-13T10:29:46Z",
+      "side": 1,
+      "message": "don\u0027t add this now, the reference will be regenerated when the next release is made",
+      "revId": "4137b67cac76acddac37abc287fefe69f7a9e4b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_54da5017",
+        "filename": "toolkit/source/awt/vclxprinter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-13T10:29:46Z",
+      "side": 1,
+      "message": "i think this needs a SolarMutexGuard\n\n... although the way mutexes are used / not used in this file looks quite broken already, sigh...",
+      "revId": "4137b67cac76acddac37abc287fefe69f7a9e4b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
