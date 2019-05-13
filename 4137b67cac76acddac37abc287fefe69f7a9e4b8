@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_afd90184",
+        "filename": "offapi/com/sun/star/awt/XPrinterServer2.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001073
+      },
+      "writtenOn": "2019-05-13T16:10:16Z",
+      "side": 1,
+      "message": "if possible, this would be great.",
+      "parentUuid": "3fa0c359_340b048f",
+      "revId": "4137b67cac76acddac37abc287fefe69f7a9e4b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_14060888",
         "filename": "offapi/com/sun/star/awt/XPrinterServer2.idl",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2019-05-13T10:29:46Z",
       "side": 1,
       "message": "hmm... is it really necessary to declare it \"published\" right away?",
+      "revId": "4137b67cac76acddac37abc287fefe69f7a9e4b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_4fe63d47",
+        "filename": "offapi/com/sun/star/awt/XPrinterServer2.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1001073
+      },
+      "writtenOn": "2019-05-13T16:10:16Z",
+      "side": 1,
+      "message": "no sure, i used XFolderPicker2 as a template",
+      "parentUuid": "3fa0c359_14060888",
       "revId": "4137b67cac76acddac37abc287fefe69f7a9e4b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_6fe3f934",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1001073
+      },
+      "writtenOn": "2019-05-13T16:10:16Z",
+      "side": 1,
+      "message": "ok, but did not compile without",
+      "parentUuid": "3fa0c359_74d74cef",
+      "revId": "4137b67cac76acddac37abc287fefe69f7a9e4b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_54da5017",
         "filename": "toolkit/source/awt/vclxprinter.cxx",
         "patchSetId": 3
@@ -64,6 +118,24 @@
       "writtenOn": "2019-05-13T10:29:46Z",
       "side": 1,
       "message": "i think this needs a SolarMutexGuard\n\n... although the way mutexes are used / not used in this file looks quite broken already, sigh...",
+      "revId": "4137b67cac76acddac37abc287fefe69f7a9e4b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_0fd2755d",
+        "filename": "toolkit/source/awt/vclxprinter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1001073
+      },
+      "writtenOn": "2019-05-13T16:10:16Z",
+      "side": 1,
+      "message": "uuhh, i think that exceeds my capabilities ;-)\ni just started to deal with the source code/gerrit, think i need some help ...",
+      "parentUuid": "3fa0c359_54da5017",
       "revId": "4137b67cac76acddac37abc287fefe69f7a9e4b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
