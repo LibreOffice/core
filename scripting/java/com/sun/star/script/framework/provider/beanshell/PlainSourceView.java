@@ -45,6 +45,9 @@ import javax.swing.undo.UndoManager;
 import java.util.List;
 import java.util.ArrayList;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class PlainSourceView extends JScrollPane implements
     ScriptSourceView, DocumentListener {
 
@@ -171,6 +174,25 @@ public class PlainSourceView extends JScrollPane implements
         ta.addKeyListener(new KeyAdapter(){
             @Override
             public void keyReleased(KeyEvent ke){
+                // if shift + tab was pressed, remove the first tab before any code begins
+                if (ke.isShiftDown() && ke.getKeyCode() == KeyEvent.VK_TAB) {
+                    try {
+                        int caretOffset = ta.getCaretPosition();
+                        int lineOffset = ta.getLineOfOffset(caretOffset);
+                        int startOffset = ta.getLineStartOffset(lineOffset);
+                        int endOffset = ta.getLineEndOffset(lineOffset);
+
+                        Pattern pattern = Pattern.compile("^ *(\\t)");
+                        Matcher matcher = pattern.matcher(ta.getText(startOffset, endOffset - startOffset));
+
+                        if (matcher.find()) {
+                            ta.replaceRange(null, startOffset + matcher.start(1), startOffset + matcher.end(1));
+                        }
+                    } catch (BadLocationException e) {
+                        // could not find correct location of the tab
+                    }
+                }
+
                 if(ke.getKeyCode() == KeyEvent.VK_SPACE || ke.getKeyCode() == KeyEvent.VK_ENTER){
                     compoundEdit.end();
                     undoManager.addEdit(compoundEdit);
