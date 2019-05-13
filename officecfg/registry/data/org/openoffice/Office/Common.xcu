@@ -394,6 +394,9 @@
     <prop oor:name="DonationURL" oor:type="xs:string">
       <value>https://hub.libreoffice.org/donation/</value>
     </prop>
+    <prop oor:name="ReleaseNotesURL" oor:type="xs:string">
+      <value>https://hub.libreoffice.org/ReleaseNotes/</value>
+    </prop>
   </node>
   <node oor:name="Forms">
     <node oor:name="ControlLayout">

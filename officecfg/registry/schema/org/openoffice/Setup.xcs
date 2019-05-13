@@ -260,6 +260,13 @@
         <!-- JB: Empty default inserted into empty property node. Remove if NIL
              was intended -->
       </prop>
+      <prop oor:name="ooSetupLastVersion" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the version number of the previously used product for 
+          whats-new comparison.</desc>
+        </info>
+        <value/>
+      </prop>
       <prop oor:name="ooSetupVersionAboutBox" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>Specifies the complete (major.minor.micro) version number of the
