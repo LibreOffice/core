@@ -67,7 +67,7 @@ FolderItemProperty gid_Fip_Soffice_Desktop_AppID
 End
 
 FolderItem gid_Folderitem_LibreOffice_SafeMode
-    Name = "%PRODUCTNAME (Safe Mode)";
+    ALL_LANG(Name, STR_FI_NAME_SAFEMODE);
     ModuleID = gid_Module_Root;
 #ifdef ENABLE_SILENT_MSI
     FolderID = PREDEFINED_STARTMENU;
