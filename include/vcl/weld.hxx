@@ -56,6 +56,7 @@ class XGraphic;
 typedef css::uno::Reference<css::accessibility::XAccessible> a11yref;
 typedef css::uno::Reference<css::accessibility::XAccessibleRelationSet> a11yrelationset;
 
+enum class PointerStyle;
 class SvNumberFormatter;
 class KeyEvent;
 class MouseEvent;
@@ -1615,7 +1616,7 @@ public:
     virtual void queue_draw_area(int x, int y, int width, int height) = 0;
     virtual void queue_resize() = 0;
 
-    virtual void set_text_cursor() = 0;
+    virtual void set_cursor(PointerStyle ePointerStyle) = 0;
 
     // use return here just to generate matching VirtualDevices
     virtual OutputDevice& get_ref_device() = 0;
@@ -1661,6 +1662,25 @@ public:
     }
 
     virtual ~Menu() {}
+};
+
+class VCL_DLLPUBLIC Toolbar : virtual public Widget
+{
+protected:
+    Link<const OString&, void> m_aClickHdl;
+
+    void signal_clicked(const OString& rIdent) { m_aClickHdl.Call(rIdent); }
+
+public:
+    virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) = 0;
+    virtual bool get_item_sensitive(const OString& rIdent) const = 0;
+    virtual void set_item_active(const OString& rIdent, bool bActive) = 0;
+    virtual bool get_item_active(const OString& rIdent) const = 0;
+
+    virtual void insert_separator(int pos, const OUString& rId) = 0;
+    void append_separator(const OUString& rId) { insert_separator(-1, rId); }
+
+    void connect_clicked(const Link<const OString&, void>& rLink) { m_aClickHdl = rLink; }
 };
 
 class VCL_DLLPUBLIC SizeGroup
@@ -1755,6 +1775,8 @@ public:
                          const OString& treeviewid, bool bTakeOwnership = false)
         = 0;
     virtual std::unique_ptr<Menu> weld_menu(const OString& id, bool bTakeOwnership = true) = 0;
+    virtual std::unique_ptr<Toolbar> weld_toolbar(const OString& id, bool bTakeOwnership = true)
+        = 0;
     virtual std::unique_ptr<SizeGroup> create_size_group() = 0;
     virtual ~Builder() {}
 };
