@@ -76,9 +76,7 @@ SvpSalInstance::SvpSalInstance( std::unique_ptr<SalYieldMutex> pMutex )
     m_nTimeoutMS            = 0;
 
     m_MainThread = osl::Thread::getCurrentIdentifier();
-#ifndef IOS
     CreateWakeupPipe(true);
-#endif
     if( s_pDefaultInstance == nullptr )
         s_pDefaultInstance = this;
 #if !defined(ANDROID) && !defined(IOS)
@@ -90,12 +88,8 @@ SvpSalInstance::~SvpSalInstance()
 {
     if( s_pDefaultInstance == this )
         s_pDefaultInstance = nullptr;
-#ifndef IOS
     CloseWakeupPipe(true);
-#endif
 }
-
-#ifndef IOS
 
 void SvpSalInstance::CloseWakeupPipe(bool log)
 {
@@ -151,8 +145,6 @@ void SvpSalInstance::CreateWakeupPipe(bool log)
         // retain the default blocking I/O for feedback pipe
     }
 }
-
-#endif
 
 void SvpSalInstance::TriggerUserEventProcessing()
 {
@@ -342,11 +334,7 @@ void SvpSalYieldMutex::doAcquire(sal_uInt32 const nLockCount)
                 m_bNoYieldLock = true;
                 bool const bEvents = pInst->DoYield(false, request == SvpRequest::MainThreadDispatchAllEvents);
                 m_bNoYieldLock = false;
-#ifdef IOS
-                (void)bEvents;
-#else
                 write(m_FeedbackFDs[1], &bEvents, sizeof(bool));
-#endif
             }
         }
         while (true);
@@ -506,11 +494,9 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
                 : SvpRequest::MainThreadDispatchOneEvent);
 
         bool bDidWork(false);
-#ifndef IOS
         // blocking read (for synchronisation)
         auto const nRet = read(pMutex->m_FeedbackFDs[0], &bDidWork, sizeof(bool));
         assert(nRet == 1); (void) nRet;
-#endif
         if (!bDidWork && bWait)
         {
             // block & release YieldMutex until the main thread does something
