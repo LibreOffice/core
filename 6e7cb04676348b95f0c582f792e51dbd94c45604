@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_34bd44b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-05-13T10:09:17Z",
+      "side": 1,
+      "message": "Nitpick: infobar, not window",
+      "range": {
+        "startLine": 7,
+        "startChar": 41,
+        "endLine": 7,
+        "endChar": 47
+      },
+      "revId": "6e7cb04676348b95f0c582f792e51dbd94c45604",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_f4b6fcd9",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1238,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-05-13T10:09:17Z",
+      "side": 1,
+      "message": "Whenever you set something in the config, you need to check if it is readonly.   See the other examples below that use !officecfg::Setup::Product::LastTimeDonateShown::isReadOnly()).\n\nI haven\u0027t checked the ::set implementation yet - perhaps you would just wrap it in try/catch, or perhaps the ::set itself could be changed to verify not read-only before writing (although I assume it should just default to throw, and let the calling code handle what to do in that case.)",
+      "range": {
+        "startLine": 1238,
+        "startChar": 19,
+        "endLine": 1238,
+        "endChar": 91
+      },
+      "revId": "6e7cb04676348b95f0c582f792e51dbd94c45604",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
