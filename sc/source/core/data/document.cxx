@@ -2063,25 +2063,10 @@ void ScDocument::CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             InsertDeleteFlags nFlags, bool bOnlyMarked, ScDocument& rDestDoc,
                             const ScMarkData* pMarks, bool bColRowFlags )
 {
-    PutInOrder( nCol1, nCol2 );
-    PutInOrder( nRow1, nRow2 );
-    PutInOrder( nTab1, nTab2 );
-    if (rDestDoc.aDocName.isEmpty())
-        rDestDoc.aDocName = aDocName;
     if (ValidTab(nTab1) && ValidTab(nTab2))
     {
-        sc::CopyToDocContext aCxt(rDestDoc);
-        bool bOldAutoCalc = rDestDoc.GetAutoCalc();
-        rDestDoc.SetAutoCalc( false );     // avoid multiple calculations
-        SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), rDestDoc.maTabs.size()));
-        for (SCTAB i = nTab1; i <= nTab2 && i < nMinSizeBothTabs; i++)
-        {
-            if (maTabs[i] && rDestDoc.maTabs[i])
-                maTabs[i]->CopyToTable(aCxt, nCol1, nRow1, nCol2, nRow2, nFlags,
-                                      bOnlyMarked, rDestDoc.maTabs[i].get(), pMarks,
-                                      false, bColRowFlags, /*bGlobalNamesToLocal*/false, /*bCopyCaptions*/true );
-        }
-        rDestDoc.SetAutoCalc(bOldAutoCalc);
+        ScRange aThisRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+        CopyToDocument(aThisRange, nFlags, bOnlyMarked, rDestDoc, pMarks, bColRowFlags);
     }
 }
 
