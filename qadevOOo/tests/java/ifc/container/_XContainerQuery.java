@@ -85,7 +85,7 @@ public class _XContainerQuery extends MultiMethodTest {
      * If object relation is available, the function was called with relation
      * as parameter. The returned <code>XEnumeration</code> must not be null and
      * elements of it must be valid.
-     * If object relation is not available, the result is always <code>true</coed>
+     * If object relation is not available, the result is always <code>true</code>
     */
     public void _createSubSetEnumerationByQuery() {
 
