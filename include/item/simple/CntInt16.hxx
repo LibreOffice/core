@@ -17,14 +17,12 @@
 namespace Item
 {
     // example for SfxInt16Item
-    // It uses IAdministrator_set to provide an Administrator using
-    // a sorted list for fast accesses. This requires ::operator< to be
-    // implemented.
+    // this is a helper base class, so it has *no* method
+    //     static ItemControlBlock& GetStaticItemControlBlock();
+    // and also no public constructor (!), but implements all the
+    // tooling methods for Items using a sal_Int16 internally
     class ITEM_DLLPUBLIC CntInt16 : public ItemBase
     {
-    public:
-        static ItemControlBlock& GetStaticItemControlBlock();
-
     private:
         sal_Int16 m_nValue;
 
@@ -34,11 +32,20 @@ namespace Item
         CntInt16(ItemControlBlock& rItemControlBlock, sal_Int16 nVal = 0);
 
     public:
-        CntInt16(sal_Int16 nVal = 0);
+        CntInt16() = delete;
         virtual bool operator==(const ItemBase&) const;
 
         sal_Int16 getValue() const { return m_nValue; }
         void putValue(sal_Int16 nNew) { m_nValue = nNew; }
+
+        virtual bool getPresentation(
+            SfxItemPresentation,
+            MapUnit,
+            MapUnit,
+            rtl::OUString&,
+            const IntlWrapper&) const override;
+        virtual bool queryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
+        virtual bool putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
     };
 } // end of namespace Item
 

@@ -15,18 +15,8 @@
 
 namespace Item
 {
-    ItemControlBlock& CntOUString::GetStaticItemControlBlock()
-    {
-        static ItemControlBlock aItemControlBlock(
-            [](){ return new CntOUString(); },
-            [](const ItemBase& rRef){ return new CntOUString(static_cast<const CntOUString&>(rRef)); },
-            "CntOUString");
-
-        return aItemControlBlock;
-    }
-
-    CntOUString::CntOUString(const rtl::OUString& rValue)
-    :   ItemBase(CntOUString::GetStaticItemControlBlock()),
+    CntOUString::CntOUString(ItemControlBlock& rItemControlBlock, const rtl::OUString& rValue)
+    :   ItemBase(rItemControlBlock),
         m_aValue(rValue)
     {
     }
@@ -35,6 +25,37 @@ namespace Item
     {
         return ItemBase::operator==(rRef) || // ptr-compare
             getValue() == static_cast<const CntOUString&>(rRef).getValue();
+    }
+
+    bool CntOUString::getPresentation(
+        SfxItemPresentation,
+        MapUnit,
+        MapUnit,
+        rtl::OUString& rText,
+        const IntlWrapper&) const
+    {
+        rText = m_aValue;
+        return true;
+    }
+
+    bool CntOUString::queryValue(css::uno::Any& rVal, sal_uInt8) const
+    {
+        rVal <<= m_aValue;
+        return true;
+    }
+
+    bool CntOUString::putAnyValue(const css::uno::Any& rVal, sal_uInt8)
+    {
+        rtl::OUString aTheValue;
+
+        if(rVal >>= aTheValue)
+        {
+            m_aValue = aTheValue;
+            return true;
+        }
+
+        assert(false && "CntOUString::putAnyValue - Wrong type!");
+        return false;
     }
 } // end of namespace Item
 

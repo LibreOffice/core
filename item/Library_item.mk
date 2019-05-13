@@ -9,7 +9,10 @@
 
 $(eval $(call gb_Library_Library,item))
 
-$(eval $(call gb_Library_use_external,item,boost_headers))
+$(eval $(call gb_Library_use_externals,item,\
+    boost_headers \
+    libxml2 \
+))
 
 $(eval $(call gb_Library_set_precompiled_header,item,$(SRCDIR)/item/inc/pch/precompiled_item))
 
@@ -19,12 +22,8 @@ $(eval $(call gb_Library_use_libraries,item,\
     cppu \
     cppuhelper \
     sal \
+    utl \
 ))
-
-#$(eval $(call gb_Library_set_include,item,\
-#    -I$(SRCDIR)/item/source/inc \
-#    $$(INCLUDE) \
-#))
 
 $(eval $(call gb_Library_add_defs,item,\
     -DITEM_DLLIMPLEMENTATION \

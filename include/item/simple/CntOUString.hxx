@@ -10,7 +10,6 @@
 #ifndef INCLUDED_ITEM_SIMPLE_CNTOUSTRING_HXX
 #define INCLUDED_ITEM_SIMPLE_CNTOUSTRING_HXX
 
-//#include <item/base/ItemBaseStaticHelper.hxx>
 #include <item/base/ItemBase.hxx>
 #include <rtl/ustring.hxx>
 
@@ -18,24 +17,36 @@
 
 namespace Item
 {
-    // example for OUStringItem
-    // It uses IAdministrator_unordered_set to provide an Administrator using
-    // a hashed list for fast accesses. This requires ::operator== and
-    // ::GetUniqueKey() to be implemented.
+    // example for CntUnencodedStringItem
+    // this is a helper base class, so it has *no* method
+    //     static ItemControlBlock& GetStaticItemControlBlock();
+    // and also no public constructor (!), but implements all the
+    // tooling methods for Items using a sal_Int16 internally
     class ITEM_DLLPUBLIC CntOUString : public ItemBase
     {
-    public:
-        static ItemControlBlock& GetStaticItemControlBlock();
-
     private:
         rtl::OUString m_aValue;
 
+    protected:
+        // constructor for derived classes that *have* to hand
+        // in the to-be-used ItemControlBlock
+        CntOUString(ItemControlBlock& rItemControlBlock, const rtl::OUString& rValue = rtl::OUString());
+
     public:
-        CntOUString(const rtl::OUString& rValue = rtl::OUString());
+        CntOUString() = delete;
         virtual bool operator==(const ItemBase&) const;
 
         const rtl::OUString& getValue() const { return m_aValue; }
         void putValue(const rtl::OUString& rValue) { m_aValue = rValue; }
+
+        virtual bool getPresentation(
+            SfxItemPresentation,
+            MapUnit,
+            MapUnit,
+            rtl::OUString&,
+            const IntlWrapper&) const override;
+        virtual bool queryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
+        virtual bool putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
     };
 } // end of namespace Item
 

@@ -10,6 +10,10 @@
 #include <item/base/ItemBase.hxx>
 #include <item/base/ItemControlBlock.hxx>
 #include <cassert>
+#include <osl/diagnose.h>
+#include <libxml/xmlwriter.h>
+#include <unotools/syslocale.hxx>
+#include <unotools/intlwrapper.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 // derived items from : public SfxPoolItem -> 123
@@ -85,18 +89,25 @@ Nonetheless these SlotItems STILL depend on the SfxItem-RANGES defined in the Sf
 
 namespace Item
 {
-    void ItemBase::putAnyValues(const AnyIDArgs& rArgs)
+    bool ItemBase::putAnyValues(const AnyIDArgs& rArgs)
     {
         // default implementation does spread given arguments to putAnyValue-call
         for(const auto& arg : rArgs)
         {
-            putAnyValue(arg.first, arg.second);
+            if(!putAnyValue(arg.first, arg.second))
+            {
+                return false;
+            }
         }
+
+        return true;
     }
 
-    void ItemBase::putAnyValue(const css::uno::Any& /*rVal*/, sal_uInt8 /*nMemberId*/)
+    bool ItemBase::putAnyValue(const css::uno::Any& /*rVal*/, sal_uInt8 /*nMemberId*/)
     {
         // default has nothing to to
+        OSL_FAIL("There is no implementation for putAnyValue for this item!");
+        return false;
     }
 
     ItemBase::ItemBase(ItemControlBlock& rItemControlBlock)
@@ -155,6 +166,79 @@ namespace Item
     {
         // callback to ItemControlBlock
         return rCandidate.m_rItemControlBlock.isDefault(rCandidate);
+    }
+
+    /**
+     * This virtual method allows to get a textual representation of the value
+     * for the SfxPoolItem subclasses. It should be overridden by all UI-relevant
+     * SfxPoolItem subclasses.
+     *
+     * Because the unit of measure of the value in the SfxItemPool is only
+     * queryable via @see SfxItemPool::GetMetric(sal_uInt16) const (and not
+     * via the SfxPoolItem instance or subclass, the own unit of measure is
+     * passed to 'eCoreMetric'.
+     *
+     * The corresponding unit of measure is passed as 'ePresentationMetric'.
+     *
+     *
+     * @return SfxItemPresentation     SfxItemPresentation::Nameless
+     *                                 A textual representation (if applicable
+     *                                 with a unit of measure) could be created,
+     *                                 but it doesn't contain any semantic meaning
+     *
+     *                                 SfxItemPresentation::Complete
+     *                                 A complete textual representation could be
+     *                                 created with semantic meaning (if applicable
+     *                                 with unit of measure)
+     *
+     * Example:
+     *
+     *    pSvxFontItem->GetPresentation( SFX_PRESENTATION_NAMELESS, ... )
+     *      "12pt" with return SfxItemPresentation::Nameless
+     *
+     *    pSvxColorItem->GetPresentation( SFX_PRESENTATION_COMPLETE, ... )
+     *        "red" with return SfxItemPresentation::Nameless
+     *        Because the SvxColorItem does not know which color it represents
+     *        it cannot provide a name, which is communicated by the return value
+     *
+     *    pSvxBorderItem->GetPresentation( SFX_PRESENTATION_COMPLETE, ... )
+     *        "1cm top border, 2cm left border, 0.2cm bottom border, ..."
+     */
+    bool ItemBase::getPresentation
+    (
+        SfxItemPresentation /*ePresentation*/,       // IN:  how we should format
+        MapUnit             /*eCoreMetric*/,         // IN:  current metric of the SfxPoolItems
+        MapUnit             /*ePresentationMetric*/, // IN:  target metric of the presentation
+        OUString&           /*rText*/,               // OUT: textual representation
+        const IntlWrapper&
+    )   const
+    {
+        return false;
+    }
+
+    void ItemBase::scaleMetrics( long /*lMult*/, long /*lDiv*/ )
+    {
+    }
+
+    bool ItemBase::queryValue( css::uno::Any&, sal_uInt8 ) const
+    {
+        OSL_FAIL("There is no implementation for queryValue for this item!");
+        return false;
+    }
+
+    void ItemBase::dumpAsXml(xmlTextWriterPtr pWriter) const
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("ItemBase"));
+        // no whichId anymore, type-safe
+        // xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("typeName"), BAD_CAST(typeid(*this).name()));
+        OUString rText;
+        IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
+        if(getPresentation(SfxItemPresentation::Complete, MapUnit::Map100thMM, MapUnit::Map100thMM, rText, aIntlWrapper))
+        {
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(rText.getStr()));
+        }
+        xmlTextWriterEndElement(pWriter);
     }
 } // end of namespace Item
 

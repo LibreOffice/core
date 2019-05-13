@@ -85,6 +85,21 @@ do { \
 #define CHECK_SLOTS() do {} while (false)
 #endif
 
+//////////////////////////////////////////////////////////////////////////////
+// list of classes derived from SfxItemPool
+//////////////////////////////////////////////////////////////////////////////
+//  ChartItemPool : public SfxItemPool
+//  EditEngineItemPool : public SfxItemPool
+//  XOutdevItemPool : public SfxItemPool
+//      SdrItemPool : public XOutdevItemPool
+//  ScDocumentPool: public SfxItemPool
+//  ScMessagePool: public SfxItemPool
+//  CntItemPool: public SfxItemPool
+//  SwAttrPool : public SfxItemPool
+//
+// mpStaticDefaults -> size of start_end fully set ptrs, static defaults, not to be changed, may be owned or not, may be cloned or not
+// maPoolDefaults -> size of start_end inited by nullptr, set/reset by SetPoolDefaultItem/ResetPoolDefaultItem
+// GetDefaultItem -> first checks maPoolDefaults, then uses mpStaticDefaults
 
 void SfxItemPool::AddSfxItemPoolUser(SfxItemPoolUser& rNewUser)
 {

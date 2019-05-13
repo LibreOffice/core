@@ -496,6 +496,57 @@ namespace Item
 } // end of namespace Item
 
 ///////////////////////////////////////////////////////////////////////////////
+
+namespace Item
+{
+    // example for class derived from CntInt16
+    class CntInt16_derived : public CntInt16
+    {
+    public:
+        static ItemControlBlock& GetStaticItemControlBlock()
+        {
+            static ItemControlBlock aItemControlBlock(
+                [](){ return new CntInt16_derived(); },
+                [](const ItemBase& rRef){ return new CntInt16_derived(static_cast<const CntInt16_derived&>(rRef)); },
+                "CntInt16_derived");
+
+            return aItemControlBlock;
+        }
+
+    public:
+        CntInt16_derived(sal_Int16 nValue = 0)
+        :   CntInt16(CntInt16_derived::GetStaticItemControlBlock(), nValue)
+        {
+        }
+    };
+} // end of namespace Item
+
+///////////////////////////////////////////////////////////////////////////////
+
+namespace Item
+{
+    // example for class derived from CntOUString
+    class CntOUString_derived : public CntOUString
+    {
+    public:
+        static ItemControlBlock& GetStaticItemControlBlock()
+        {
+            static ItemControlBlock aItemControlBlock(
+                [](){ return new CntOUString_derived(); },
+                [](const ItemBase& rRef){ return new CntOUString_derived(static_cast<const CntOUString_derived&>(rRef)); },
+                "CntOUString_derived");
+
+            return aItemControlBlock;
+        }
+
+    public:
+        CntOUString_derived(const rtl::OUString& rValue = rtl::OUString())
+        :   CntOUString(CntOUString_derived::GetStaticItemControlBlock(), rValue)
+        {
+        }
+    };
+} // end of namespace Item
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1225,7 +1276,7 @@ namespace Item
                 bLoop = true;
             }
 
-           int nIncrement(0);
+            int nIncrement(0);
 
             // make use of local MultiValueAB item in conjuction with ItemSet
             ModelSpecificItemValues::SharedPtr aModelSpecificIValues(ModelSpecificItemValues::create());
@@ -1384,38 +1435,38 @@ namespace Item
         void checkSimpleItems()
         {
             static bool bInit(false);
-            static CntInt16 a_sp, b_sp, c_sp;
-            static CntInt16 theDefault;
-            static CntOUString sa_sp, sb_sp, sc_sp;
-            static CntOUString stheDefault;
+            static CntInt16_derived a_sp, b_sp, c_sp;
+            static CntInt16_derived theDefault;
+            static CntOUString_derived sa_sp, sb_sp, sc_sp;
+            static CntOUString_derived stheDefault;
             const sal_uInt32 nLoopNumber(50);
             int nIncrement(0);
 
             if(!bInit)
             {
                 bInit = true;
-                a_sp = CntInt16(3);
-                b_sp = CntInt16(5);
-                c_sp = CntInt16(7);
-                theDefault = Item::getDefault<CntInt16>();
+                a_sp = CntInt16_derived(3);
+                b_sp = CntInt16_derived(5);
+                c_sp = CntInt16_derived(7);
+                theDefault = Item::getDefault<CntInt16_derived>();
 
-                sa_sp = CntOUString("Hello");
-                sb_sp = CntOUString("World");
-                sc_sp = CntOUString("..of Doom!");
-                stheDefault = Item::getDefault<CntOUString>();
+                sa_sp = CntOUString_derived("Hello");
+                sb_sp = CntOUString_derived("World");
+                sc_sp = CntOUString_derived("..of Doom!");
+                stheDefault = Item::getDefault<CntOUString_derived>();
             }
 
             ///////////////////////////////////////////////////////////////////////////////
 
-            CntInt16 has3(CntInt16(3));
-            CntInt16 has4(CntInt16(4));
+            CntInt16_derived has3(CntInt16_derived(3));
+            CntInt16_derived has4(CntInt16_derived(4));
 
-            if(CntInt16(11).isDefault())
+            if(CntInt16_derived(11).isDefault())
             {
                 nIncrement++;
             }
 
-            if(CntInt16(0).isDefault())
+            if(CntInt16_derived(0).isDefault())
             {
                 nIncrement++;
             }
@@ -1425,26 +1476,26 @@ namespace Item
                 nIncrement++;
             }
 
-            std::vector<CntInt16> test16;
+            std::vector<CntInt16_derived> test16;
 
             for(sal_uInt32 a(0); a < nLoopNumber; a++)
             {
-                test16.push_back(CntInt16(a));
+                test16.push_back(CntInt16_derived(a));
             }
 
             test16.clear();
 
             ///////////////////////////////////////////////////////////////////////////////
 
-            CntOUString shas3(CntOUString("Hello"));
-            CntOUString shas4(CntOUString("WhateverComesAlong"));
+            CntOUString_derived shas3(CntOUString_derived("Hello"));
+            CntOUString_derived shas4(CntOUString_derived("WhateverComesAlong"));
 
-            if(CntOUString("NotDefault").isDefault())
+            if(CntOUString_derived("NotDefault").isDefault())
             {
                 nIncrement++;
             }
 
-            if(CntOUString(OUString()).isDefault())
+            if(CntOUString_derived(OUString()).isDefault())
             {
                 nIncrement++;
             }
@@ -1454,11 +1505,11 @@ namespace Item
                 nIncrement++;
             }
 
-            std::vector<CntOUString> testStr;
+            std::vector<CntOUString_derived> testStr;
 
             for(sal_uInt32 a(0); a < nLoopNumber; a++)
             {
-                testStr.push_back(CntOUString(OUString::number(static_cast<int>(a))));
+                testStr.push_back(CntOUString_derived(OUString::number(static_cast<int>(a))));
             }
 
             testStr.clear();
@@ -1471,30 +1522,83 @@ namespace Item
 
         void checkSimpleItemsAtISet()
         {
+            // for debug, change bLoop to true, start, attach and set to false again to debug (one possibility...)
+            static bool bLoop(false);
+            while(bLoop)
+            {
+                bLoop = true;
+            }
+
             int nIncrement(0);
 
-            ModelSpecificItemValues::SharedPtr aModelSpecificIValues(ModelSpecificItemValues::create());
-            aModelSpecificIValues->setAlternativeDefaultItem(CntInt16(3));
-            aModelSpecificIValues->setAlternativeDefaultItem(CntInt16(4));
+            ModelSpecificItemValues::SharedPtr aModelSpecificIValues(
+                ModelSpecificItemValues::create(
+                    MapUnit::Map100thMM
+                ));
 
+            // check StaticDefaultItem
+            aModelSpecificIValues->setStaticDefaultItem(CntInt16_derived(6));
+            aModelSpecificIValues->setStaticDefaultItem(CntInt16_derived(7));
+            aModelSpecificIValues->clearStaticDefaultItem<CntInt16_derived>();
+            aModelSpecificIValues->setStaticDefaultItem(CntInt16_derived(8));
+            aModelSpecificIValues->clearStaticDefaultItems();
+
+            // check AlternativeDefaultItem
+            aModelSpecificIValues->setAlternativeDefaultItem(CntInt16_derived(3));
+            aModelSpecificIValues->setAlternativeDefaultItem(CntInt16_derived(4));
+            aModelSpecificIValues->clearAlternativeDefaultItem<CntInt16_derived>();
+            aModelSpecificIValues->setAlternativeDefaultItem(CntInt16_derived(5));
+            aModelSpecificIValues->clearAlternativeDefaultItems();
+
+            // both mixed...
+            const CntInt16_derived aInstance(CntInt16_derived(44));
+            const auto& rStateA(aModelSpecificIValues->getDefault(aInstance));
+            aModelSpecificIValues->setStaticDefaultItem(CntInt16_derived(9));
+            const auto& rStateB(aModelSpecificIValues->getDefault(aInstance));
+            aModelSpecificIValues->setStaticDefaultItem(CntInt16_derived(10));
+            const auto& rStateC(aModelSpecificIValues->getDefault(aInstance));
+            aModelSpecificIValues->clearStaticDefaultItem<CntInt16_derived>();
+            const auto& rStateD(aModelSpecificIValues->getDefault(aInstance));
+
+            aModelSpecificIValues->setAlternativeDefaultItem(CntInt16_derived(11));
+            const auto& rStateE(aModelSpecificIValues->getDefault(aInstance));
+            aModelSpecificIValues->setAlternativeDefaultItem(CntInt16_derived(12));
+            const auto& rStateF(aModelSpecificIValues->getDefault(aInstance));
+            aModelSpecificIValues->clearAlternativeDefaultItem<CntInt16_derived>();
+            const auto& rStateG(aModelSpecificIValues->getDefault(aInstance));
+
+            aModelSpecificIValues->setStaticDefaultItem(CntInt16_derived(13));
+            aModelSpecificIValues->setAlternativeDefaultItem(CntInt16_derived(14));
+            const auto& rStateH(aModelSpecificIValues->getDefault(aInstance));
+
+            if(44 == static_cast<const CntInt16_derived&>(rStateA).getValue()) nIncrement++;
+            if( 9 == static_cast<const CntInt16_derived&>(rStateB).getValue()) nIncrement++;
+            if(10 == static_cast<const CntInt16_derived&>(rStateC).getValue()) nIncrement++;
+            if(10 == static_cast<const CntInt16_derived&>(rStateD).getValue()) nIncrement++;
+            if(11 == static_cast<const CntInt16_derived&>(rStateE).getValue()) nIncrement++;
+            if(12 == static_cast<const CntInt16_derived&>(rStateF).getValue()) nIncrement++;
+            if(13 == static_cast<const CntInt16_derived&>(rStateG).getValue()) nIncrement++;
+            if(14 == static_cast<const CntInt16_derived&>(rStateH).getValue()) nIncrement++;
+
+            // create and play with TtemSet
             ItemSet::SharedPtr aSet(ItemSet::create(aModelSpecificIValues));
-            const auto aActEmpty(aSet->getStateAndItem<CntInt16>());
+            const auto aActEmpty(aSet->getStateAndItem<CntInt16_derived>());
 
-            aSet->setItem(CntInt16(4));
-            const auto aActA(aSet->getStateAndItem<CntInt16>());
+            aSet->setItem(CntInt16_derived(4));
+            const auto aActA(aSet->getStateAndItem<CntInt16_derived>());
 
-            aSet->setItem(Item::getDefault<CntInt16>());
-            const auto aActB(aSet->getStateAndItem<CntInt16>());
+            aSet->setItem(Item::getDefault<CntInt16_derived>());
+            const auto aActB(aSet->getStateAndItem<CntInt16_derived>());
 
-            aSet->setItem(CntInt16(12));
-            const auto aActC(aSet->getStateAndItem<CntInt16>());
+            aSet->setItem(CntInt16_derived(12));
+            const auto aActC(aSet->getStateAndItem<CntInt16_derived>());
 
-            aSet->setItem(CntOUString("Teststring - not really useful :-)"));
-            const auto aActStr(aSet->getStateAndItem<CntOUString>());
+            aSet->setItem(CntOUString_derived("Teststring - not really useful :-)"));
+            const auto aActStr(aSet->getStateAndItem<CntOUString_derived>());
 
-            const auto ItemDADA(aSet->getStateAndItem<CntInt16>());
+            const auto ItemDADA(aSet->getStateAndItem<CntInt16_derived>());
 
-            if(const auto Item(aSet->getStateAndItem<CntOUString>()); Item.isSet())
+            if(const auto Item(aSet->getStateAndItem<CntOUString_derived>()); Item.isSet())
             {
                 nIncrement += (ItemSet::IState::SET == Item.getIState()) ? 1 : 0;
                 nIncrement += Item.isDisabled();
@@ -1513,14 +1617,14 @@ namespace Item
             }
 
             // check getting default at Set, this will include ModelSpecificItemValues
-            // compared with the static ItemBase::GetDefault<CntInt16>() call
-            const CntInt16 aDefSet(aSet->getDefault<CntInt16>());
-            const CntInt16 aDefGlobal(Item::getDefault<CntInt16>());
+            // compared with the static ItemBase::GetDefault<CntInt16_derived>() call
+            const CntInt16_derived aDefSet(aSet->getDefault<CntInt16_derived>());
+            const CntInt16_derived aDefGlobal(Item::getDefault<CntInt16_derived>());
 
-            const bool bClA(aSet->clearItem<const CntInt16>());
+            const bool bClA(aSet->clearItem<const CntInt16_derived>());
             nIncrement += bClA;
             // let one exist to check destruction when Set gets destructed
-            // const bool bClB(aSet->ClearItem<const CntOUString>());
+            // const bool bClB(aSet->ClearItem<const CntOUString_derived>());
             nIncrement ++;
         }
 
@@ -1533,31 +1637,31 @@ namespace Item
             }
 
             static bool bInit(false);
-            static CntInt16 a_sp, b_sp, c_sp;
-            static CntInt16 theDefault;
+            static CntInt16_derived a_sp, b_sp, c_sp;
+            static CntInt16_derived theDefault;
             const sal_uInt32 nLoopNumber(50);
             int nIncrement(0);
 
             if(!bInit)
             {
                 bInit = true;
-                a_sp = CntInt16(3);
-                b_sp = CntInt16(5);
-                c_sp = CntInt16(7);
-                theDefault = Item::getDefault<CntInt16>();
+                a_sp = CntInt16_derived(3);
+                b_sp = CntInt16_derived(5);
+                c_sp = CntInt16_derived(7);
+                theDefault = Item::getDefault<CntInt16_derived>();
             }
 
             ///////////////////////////////////////////////////////////////////////////////
 
-            CntInt16 has3(CntInt16(3));
-            CntInt16 has4(CntInt16(4));
+            CntInt16_derived has3(CntInt16_derived(3));
+            CntInt16_derived has4(CntInt16_derived(4));
 
-            if(CntInt16(11).isDefault())
+            if(CntInt16_derived(11).isDefault())
             {
                 nIncrement++;
             }
 
-            if(CntInt16(0).isDefault())
+            if(CntInt16_derived(0).isDefault())
             {
                 nIncrement++;
             }
@@ -1567,11 +1671,11 @@ namespace Item
                 nIncrement++;
             }
 
-            std::vector<CntInt16> test16;
+            std::vector<CntInt16_derived> test16;
 
             for(sal_uInt32 a(0); a < nLoopNumber; a++)
             {
-                test16.push_back(CntInt16(a));
+                test16.push_back(CntInt16_derived(a));
             }
 
             test16.clear();

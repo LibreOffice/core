@@ -14,9 +14,12 @@
 
 namespace Item
 {
-    ModelSpecificItemValues::ModelSpecificItemValues()
+    ModelSpecificItemValues::ModelSpecificItemValues(
+        MapUnit aMapUnit)
     :   std::enable_shared_from_this<ModelSpecificItemValues>(),
-        m_aAlternativeItems()
+        m_aStaticItems(),
+        m_aAlternativeItems(),
+        m_aMapUnit(aMapUnit)
     {
     }
 
@@ -24,9 +27,52 @@ namespace Item
     {
     }
 
-    ModelSpecificItemValues::SharedPtr ModelSpecificItemValues::create()
+    ModelSpecificItemValues::SharedPtr ModelSpecificItemValues::create(
+        MapUnit aMapUnit)
     {
-        return ModelSpecificItemValues::SharedPtr(new ModelSpecificItemValues());
+        return ModelSpecificItemValues::SharedPtr(
+            new ModelSpecificItemValues(
+                aMapUnit
+            ));
+    }
+
+    void ModelSpecificItemValues::setStaticDefaultItem(const ItemBase& rItem)
+    {
+        const size_t hash_code(typeid(rItem).hash_code());
+        const auto aRetval(m_aStaticItems.find(hash_code));
+
+        if(aRetval == m_aStaticItems.end())
+        {
+            // new entry
+            m_aStaticItems[hash_code] = rItem.clone().release();
+        }
+        else
+        {
+            // replace existing entry
+            delete aRetval->second;
+            aRetval->second = rItem.clone().release();
+        }
+    }
+
+    void ModelSpecificItemValues::implclearStaticDefaultItem(size_t hash_code)
+    {
+        const auto aRetval(m_aStaticItems.find(hash_code));
+
+        if(aRetval != m_aStaticItems.end())
+        {
+            delete aRetval->second;
+            m_aStaticItems.erase(aRetval);
+        }
+    }
+
+    void ModelSpecificItemValues::clearStaticDefaultItems()
+    {
+        for(const auto& candidate : m_aStaticItems)
+        {
+            delete candidate.second;
+        }
+
+        m_aStaticItems.clear();
     }
 
     void ModelSpecificItemValues::setAlternativeDefaultItem(const ItemBase& rItem)
@@ -36,13 +82,36 @@ namespace Item
 
         if(aRetval == m_aAlternativeItems.end())
         {
+            // new entry
             m_aAlternativeItems[hash_code] = rItem.clone().release();
         }
         else
         {
+            // replace existing entry
             delete aRetval->second;
             aRetval->second = rItem.clone().release();
         }
+    }
+
+    void ModelSpecificItemValues::implclearAlternativeDefaultItem(size_t hash_code)
+    {
+        const auto aRetval(m_aAlternativeItems.find(hash_code));
+
+        if(aRetval != m_aAlternativeItems.end())
+        {
+            delete aRetval->second;
+            m_aAlternativeItems.erase(aRetval);
+        }
+    }
+
+    void ModelSpecificItemValues::clearAlternativeDefaultItems()
+    {
+        for(const auto& candidate : m_aAlternativeItems)
+        {
+            delete candidate.second;
+        }
+
+        m_aAlternativeItems.clear();
     }
 
     bool ModelSpecificItemValues::isDefault(const ItemBase& rItem) const
@@ -64,6 +133,7 @@ namespace Item
 
     const ItemBase& ModelSpecificItemValues::getDefault(const ItemBase& rItem) const
     {
+        // check AlternativeItems 1st
         if(!m_aAlternativeItems.empty())
         {
             const size_t hash_code(typeid(rItem).hash_code());
@@ -75,7 +145,20 @@ namespace Item
             }
         }
 
-        return rItem;
+        // check StaticItems 2nd
+        if(!m_aStaticItems.empty())
+        {
+            const size_t hash_code(typeid(rItem).hash_code());
+            const auto aRetval(m_aStaticItems.find(hash_code));
+
+            if(aRetval != m_aStaticItems.end())
+            {
+                return *aRetval->second;
+            }
+        }
+
+        // no limitations/replacements -> use given Item's default
+        return rItem.getDefault();
     }
 } // end of namespace Item
 

@@ -56,7 +56,7 @@ namespace Item
             // PutValue/Any interface for automated instance creation from SfxType
             // mechanism (UNO API and sfx2 stuff). Default does nothing, but asserts
             // for missing implementation
-            virtual void putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);
+            virtual bool putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);
 
         public:
             ItemData();
@@ -88,7 +88,7 @@ namespace Item
     protected:
         // PutValue/Any interface for automated instance creation from SfxType
         // mechanism (UNO API and sfx2 stuff)
-        virtual void putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);
+        virtual bool putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);
 
     protected:
         // Method to internally (thus protected) set a new ItemData

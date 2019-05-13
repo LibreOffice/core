@@ -15,24 +15,8 @@
 
 namespace Item
 {
-    ItemControlBlock& CntInt16::GetStaticItemControlBlock()
-    {
-        static ItemControlBlock aItemControlBlock(
-            [](){ return new CntInt16(); },
-            [](const ItemBase& rRef){ return new CntInt16(static_cast<const CntInt16&>(rRef)); },
-            "CntInt16");
-
-        return aItemControlBlock;
-    }
-
     CntInt16::CntInt16(ItemControlBlock& rItemControlBlock, sal_Int16 nVal)
     :   ItemBase(rItemControlBlock),
-        m_nValue(nVal)
-    {
-    }
-
-    CntInt16::CntInt16(sal_Int16 nVal)
-    :   ItemBase(CntInt16::GetStaticItemControlBlock()),
         m_nValue(nVal)
     {
     }
@@ -41,6 +25,38 @@ namespace Item
     {
         return ItemBase::operator==(rRef) || // ptr-compare
             getValue() == static_cast<const CntInt16&>(rRef).getValue();
+    }
+
+    bool CntInt16::getPresentation(
+        SfxItemPresentation,
+        MapUnit,
+        MapUnit,
+        rtl::OUString& rText,
+        const IntlWrapper&) const
+    {
+        rText = rtl::OUString::number(m_nValue);
+        return true;
+    }
+
+    bool CntInt16::queryValue(css::uno::Any& rVal, sal_uInt8) const
+    {
+        sal_Int16 nValue = m_nValue;
+        rVal <<= nValue;
+        return true;
+    }
+
+    bool CntInt16::putAnyValue(const css::uno::Any& rVal, sal_uInt8)
+    {
+        sal_Int16 nValue(0);
+
+        if(rVal >>= nValue)
+        {
+            m_nValue = nValue;
+            return true;
+        }
+
+        assert(false && "CntInt16::putAnyValue - Wrong type!");
+        return false;
     }
 } // end of namespace Item
 

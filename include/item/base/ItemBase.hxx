@@ -23,13 +23,31 @@
 #include <sal/types.h>
 #include <item/itemdllapi.h>
 #include <com/sun/star/uno/Any.hxx>
+#include <tools/mapunit.hxx>
 #include <memory>
 #include <vector>
+
+///////////////////////////////////////////////////////////////////////////////
+// predefines
+
+class IntlWrapper;
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace Item
 {
+    /*
+    * The values of this enum describe the degree of textual
+    * representation of an item after calling the virtual
+    * method <SfxPoolItem::GetPresentation()const>.
+    */
+    enum class SfxItemPresentation
+    {
+        Nameless,
+        Complete
+    };
+
     class ItemControlBlock;
 
     // Baseclass for implementation of (refactored) Items. It is
@@ -57,7 +75,7 @@ namespace Item
     // is reached. That again will - due to the Item-incarnation
     // referencing the ItemData - also have small footprint and simple
     // copyability, but be a bit harder to implement.
-    // Note: All Items can be implemented either way, the diecision should
+    // Note: All Items can be implemented either way, the decision should
     // be made upon size of one incarnation and copyability (some are better
     // refCnted). (2) has all the tooling to do that in a unified way.
     // For examples how to implement your Item, check
@@ -75,7 +93,7 @@ namespace Item
 
         // PutValue/Any interface for automated instance creation from SfxType
         // mechanism (UNO API and sfx2 stuff)
-        void putAnyValues(const AnyIDArgs& rArgs);
+        bool putAnyValues(const AnyIDArgs& rArgs);
 
     private:
         // local reference to instance of ItemControlBlock for this
@@ -88,7 +106,7 @@ namespace Item
     protected:
         // PutValue/Any interface for automated instance creation from SfxType
         // mechanism (UNO API and sfx2 stuff)
-        virtual void putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);
+        virtual bool putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);
 
         // constructor for derived classes, thus protected. Derived
         // classes hand in their specific ItemControlBlock to be used
@@ -112,6 +130,28 @@ namespace Item
         // clone-op, secured by returning a std::unique_ptr to make
         // explicit the ownership you get when calling this
         std::unique_ptr<ItemBase> clone() const;
+
+        // ca. 220 impls
+        // /**  @return true if it has a valid string representation */
+        virtual bool getPresentation(
+            SfxItemPresentation ePresentation,
+            MapUnit eCoreMetric,
+            MapUnit ePresentationMetric,
+            OUString &rText,
+            const IntlWrapper& rIntlWrapper) const;
+
+        // ::ScaleMetrics 18 implementations
+        // used by sdr::properties::ScaleItemSet / itemSetTools only
+        // used by DefaultProperties::DefaultProperties only -> probably copying SdrObjects between Writer/Draw/Impress
+        virtual void scaleMetrics(long lMult, long lDiv);
+
+        // around 250 impls for each
+        virtual bool queryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const;
+        // virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId );
+        // -> 'virtual bool putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);'
+
+        // ca. 150 impls
+        virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
     };
 
     // static versions of default interface

@@ -15,10 +15,11 @@
 
 namespace Item
 {
-    void ItemBuffered::ItemData::putAnyValue(const css::uno::Any& /*rVal*/, sal_uInt8 /*nMemberId*/)
+    bool ItemBuffered::ItemData::putAnyValue(const css::uno::Any& /*rVal*/, sal_uInt8 /*nMemberId*/)
     {
         // not intended to be used, error
         assert(false && "Error: Some instance tries to set an Any at an ::ItemData instance - implement ItemData::putValue method there (!)");
+        return false;
     }
 
     ItemBuffered::ItemData::ItemData()
@@ -134,9 +135,9 @@ namespace Item
         }
     }
 
-    void ItemBuffered::putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId)
+    bool ItemBuffered::putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId)
     {
-        assert(nullptr != m_pItemData && "ItemBuffered::putAnyValues called but m_pItemData not set (!)");
+        assert(nullptr != m_pItemData && "ItemBuffered::putAnyValue called but m_pItemData not set (!)");
 
         // make sure we are unique - would be nice to first test for change,
         // but main usage of putAnyValues() is anyways uno api and thus will
@@ -144,7 +145,7 @@ namespace Item
         make_unique();
 
         // forward call to ItemData incarnation
-        m_pItemData->putAnyValue(rVal, nMemberId);
+        return m_pItemData->putAnyValue(rVal, nMemberId);
     }
 
     ItemBuffered::ItemBuffered(ItemControlBlock& rItemControlBlock)
