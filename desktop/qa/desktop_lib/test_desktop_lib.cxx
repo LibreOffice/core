@@ -139,6 +139,7 @@ public:
     void testSignDocument_PEM_PDF();
     void testTextSelectionHandles();
     void testDialogPaste();
+    void testShowHideDialog();
     void testABI();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
@@ -190,6 +191,7 @@ public:
     CPPUNIT_TEST(testSignDocument_PEM_PDF);
     CPPUNIT_TEST(testTextSelectionHandles);
     CPPUNIT_TEST(testDialogPaste);
+    CPPUNIT_TEST(testShowHideDialog);
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
 
@@ -1784,6 +1786,7 @@ public:
     bool m_bTilesInvalidated;
     tools::Rectangle m_aOwnCursor;
     boost::property_tree::ptree m_aCommentCallbackResult;
+    boost::property_tree::ptree m_aCallbackWindowResult;
 
     ViewCallback()
         : m_bTilesInvalidated(false)
@@ -1823,6 +1826,13 @@ public:
             std::stringstream aStream(pPayload);
             boost::property_tree::read_json(aStream, m_aCommentCallbackResult);
             m_aCommentCallbackResult = m_aCommentCallbackResult.get_child("comment");
+        }
+        break;
+        case LOK_CALLBACK_WINDOW:
+        {
+            m_aCallbackWindowResult.clear();
+            std::stringstream aStream(pPayload);
+            boost::property_tree::read_json(aStream, m_aCallbackWindowResult);
         }
         break;
         }
@@ -2571,6 +2581,33 @@ void DesktopLOKTest::testDialogPaste()
 
     static_cast<SystemWindow*>(pWindow.get())->Close();
     Scheduler::ProcessEventsToIdle();
+}
+
+void DesktopLOKTest::testShowHideDialog()
+{
+    ViewCallback aView;
+
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView);
+
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:HyperlinkDialog", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    VclPtr<vcl::Window> pWindow(Application::GetActiveTopWindow());
+    CPPUNIT_ASSERT(pWindow);
+
+    pWindow->Hide();
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(std::string("hide"), aView.m_aCallbackWindowResult.get<std::string>("action"));
+
+    pWindow->Show();
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(std::string("invalidate"), aView.m_aCallbackWindowResult.get<std::string>("action"));
 }
 
 namespace {
