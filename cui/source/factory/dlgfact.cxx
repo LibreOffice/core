@@ -90,6 +90,7 @@
 #include <thesdlg.hxx>
 #include <about.hxx>
 #include <tipofthedaydlg.hxx>
+#include <autoredactdialog.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -919,6 +920,11 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateVclDialog( vcl::Wind
         case SID_ABOUT:
         {
             pDlg = VclPtr<AboutDialog>::Create(pParent);
+            break;
+        }
+        case SID_AUTOREDACTDIALOG:
+        {
+            pDlg = VclPtr<AutoRedactDialog>::Create(pParent);
             break;
         }
         case SID_OPTIONS_TREEDIALOG :
