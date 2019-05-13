@@ -1221,14 +1221,39 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
                 const auto t0 = std::chrono::system_clock::now().time_since_epoch();
 
-                // show tip-of-the-day dialog
-                const bool bShowTipOfTheDay = officecfg::Office::Common::Misc::ShowTipOfTheDay::get();
                 bool bIsUITest = false; //uitest.uicheck fails when the dialog is open
                 for( sal_uInt16 i = 0; i < Application::GetCommandLineParamCount(); i++ )
                 {
                     if( Application::GetCommandLineParam(i) == "--nologo" )
                         bIsUITest = true;
                 }
+
+                //what's new infobar
+                if (!officecfg::Setup::Product::ooSetupLastVersion::isReadOnly()) //don't show/update when readonly
+                {
+                    OUString sSetupVersion = utl::ConfigManager::getProductVersion();
+                    sal_Int32 iCurrent = sSetupVersion.getToken(0,'.').toInt32() * 10 + sSetupVersion.getToken(1,'.').toInt32();
+                    OUString sLastVersion = utl::ConfigManager::getLastProductVersion();
+                    if (sLastVersion.isEmpty()) sLastVersion="0.0";
+                    sal_Int32 iLast = sLastVersion.getToken(0,'.').toInt32() * 10 + sLastVersion.getToken(1,'.').toInt32();
+                    if ((iCurrent > iLast) && !Application::IsHeadlessModeEnabled() && !bIsUITest)
+                    {
+                        VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("whatsnew", SfxResId(STR_WHATSNEW_TEXT), InfoBarType::Info);
+                        VclPtrInstance<PushButton> xWhatsNewButton(&GetWindow());
+                        xWhatsNewButton->SetText(SfxResId(STR_WHATSNEW_BUTTON));
+                        xWhatsNewButton->SetSizePixel(xWhatsNewButton->GetOptimalSize());
+                        xWhatsNewButton->SetClickHdl(LINK(this, SfxViewFrame, WhatsNewHandler));
+                        pInfoBar->addButton(xWhatsNewButton);
+
+                        //update lastversion
+                        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+                        officecfg::Setup::Product::ooSetupLastVersion::set(sSetupVersion, batch);
+                        batch->commit();
+                    }
+                }
+
+                // show tip-of-the-day dialog
+                const bool bShowTipOfTheDay = officecfg::Office::Common::Misc::ShowTipOfTheDay::get();
                 if (bShowTipOfTheDay && !Application::IsHeadlessModeEnabled() && !bIsUITest) {
                     const sal_Int32 nLastTipOfTheDay = officecfg::Office::Common::Misc::LastTipOfTheDayShown::get();
                     const sal_Int32 nDay = std::chrono::duration_cast<std::chrono::hours>(t0).count()/24; // days since 1970-01-01
@@ -1279,13 +1304,13 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 {
                     bUpdateLastTimeDonateShown = true;
 
-                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("getdonate", SfxResId(STR_GET_DONATE_TEXT), InfoBarType::Info);
+                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("donate", SfxResId(STR_DONATE_TEXT), InfoBarType::Info);
 
-                    VclPtrInstance<PushButton> xGetDonateButton(&GetWindow());
-                    xGetDonateButton->SetText(SfxResId(STR_GET_DONATE_BUTTON));
-                    xGetDonateButton->SetSizePixel(xGetDonateButton->GetOptimalSize());
-                    xGetDonateButton->SetClickHdl(LINK(this, SfxViewFrame, GetDonateHandler));
-                    pInfoBar->addButton(xGetDonateButton);
+                    VclPtrInstance<PushButton> xDonateButton(&GetWindow());
+                    xDonateButton->SetText(SfxResId(STR_DONATE_BUTTON));
+                    xDonateButton->SetSizePixel(xDonateButton->GetOptimalSize());
+                    xDonateButton->SetClickHdl(LINK(this, SfxViewFrame, DonationHandler));
+                    pInfoBar->addButton(xDonateButton);
                 }
 
                 if (bUpdateLastTimeDonateShown
@@ -1419,12 +1444,17 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
+IMPL_LINK_NOARG(SfxViewFrame, WhatsNewHandler, Button*, void)
+{
+    GetDispatcher()->Execute(SID_WHATSNEW);
+}
+
 IMPL_LINK_NOARG(SfxViewFrame, GetInvolvedHandler, Button*, void)
 {
     GetDispatcher()->Execute(SID_GETINVOLVED);
 }
 
-IMPL_LINK_NOARG(SfxViewFrame, GetDonateHandler, Button*, void)
+IMPL_LINK_NOARG(SfxViewFrame, DonationHandler, Button*, void)
 {
     GetDispatcher()->Execute(SID_DONATION);
 }

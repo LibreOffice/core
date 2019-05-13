@@ -43,6 +43,7 @@ private:
     VclPtr<FixedText>           m_pLogoReplacement;
     VclPtr<PushButton>          m_pCreditsButton;
     VclPtr<PushButton>          m_pWebsiteButton;
+    VclPtr<PushButton>          m_pReleaseNotesButton;
 
     OUString m_aVersionTextStr;
     OUString m_aVendorTextStr;

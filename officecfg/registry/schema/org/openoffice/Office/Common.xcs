@@ -2075,6 +2075,11 @@
           <desc>Specifies the URL used with the UNO command Donation (SID_DONATION).</desc>
         </info>
       </prop>
+      <prop oor:name="ReleaseNotesURL" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the URL used with the UNO command WhatsNew (SID_WHATSNEW).</desc>
+        </info>
+      </prop>
     </group>
     <group oor:name="History">
       <!-- OldLocation: soffice.ini -->

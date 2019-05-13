@@ -76,6 +76,7 @@ AboutDialog::AboutDialog(vcl::Window* pParent)
     m_aCopyrightTextStr = m_pCopyrightText->GetText();
     get(m_pWebsiteButton, "website");
     get(m_pCreditsButton, "credits");
+    get(m_pReleaseNotesButton, "btnReleaseNotes");
     m_aCreditsLinkStr = get<FixedText>("link")->GetText();
     m_sBuildStr = get<FixedText>("buildid")->GetText();
     m_aVendorTextStr = get<FixedText>("vendor")->GetText();
@@ -100,6 +101,7 @@ AboutDialog::AboutDialog(vcl::Window* pParent)
     // Connect all handlers
     m_pCreditsButton->SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
     m_pWebsiteButton->SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
+    m_pReleaseNotesButton->SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
 
     get<PushButton>("close")->GrabFocus();
 }
@@ -119,6 +121,7 @@ void AboutDialog::dispose()
     m_pCreditsButton.clear();
     m_pWebsiteButton.clear();
     m_pBuildIdLink.clear();
+    m_pReleaseNotesButton.clear();
     SfxModalDialog::dispose();
 }
 
@@ -133,6 +136,12 @@ IMPL_LINK( AboutDialog, HandleClick, Button*, pButton, void )
     {
         sURL = officecfg::Office::Common::Help::StartCenter::InfoURL::get();
         localizeWebserviceURI(sURL);
+    }
+    else if (pButton == m_pReleaseNotesButton)
+    {
+        sURL = officecfg::Office::Common::Menus::ReleaseNotesURL::get() +
+               "?LOvers=" + utl::ConfigManager::getProductVersion() +
+               "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
     }
 
     // If the URL is empty, don't do anything
