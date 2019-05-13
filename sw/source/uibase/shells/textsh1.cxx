@@ -118,6 +118,7 @@
 #include <SwRewriter.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/svxids.hrc>
 #include <numrule.hxx>
 #include <memory>
 #include <xmloff/odffields.hxx>

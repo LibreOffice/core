@@ -25,14 +25,12 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/salctype.hxx>
-#include <vcl/weld.hxx>
 #include <svl/SfxBroadcaster.hxx>
-#include <svl/lstner.hxx>
-#include <vcl/transfer.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/galmisc.hxx>
 #include <memory>
 #include <vector>
+
+namespace weld { class ComboBox; }
 
 class SotStorage;
 class SotStorageStream;
@@ -58,7 +56,6 @@ class SgaObject;
 class FmFormModel;
 
 class Gallery;
-class GalleryProgress;
 
 namespace unogallery
 {

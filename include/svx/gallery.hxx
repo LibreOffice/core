@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_GALLERY_HXX
 
 #include <svx/svxdllapi.h>
-#include <tools/urlobj.hxx>
+#include <rtl/ustring.hxx>
 #include <vector>
 
 // Defines for preinstalled themes
@@ -92,14 +92,9 @@
 #define RID_GALLERY_THEME_FIRST          RID_GALLERY_THEME_3D
 #define RID_GALLERY_THEME_LAST           RID_GALLERY_THEME_TXTSHAPES
 
-class Gallery;
-class VCDrawModel;
-class FmFormModel;
 class SdrModel;
 class Graphic;
-class FmFormModel;
 class BitmapEx;
-class OutputDevice;
 
 class SVX_DLLPUBLIC GalleryExplorer
 {

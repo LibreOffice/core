@@ -24,14 +24,13 @@
 #include <svx/sdasitm.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValues.hpp>
-#include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/awt/Size.hpp>
 #include <svl/itemset.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+
 #include <svx/EnhancedCustomShapeFunctionParser.hxx>
 #include <tools/gen.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -39,6 +38,9 @@
 
 #include <memory>
 #include <vector>
+
+namespace com::sun::star::awt { struct Point; }
+namespace com::sun::star::awt { struct Size; }
 
 class Color;
 class SdrObject;

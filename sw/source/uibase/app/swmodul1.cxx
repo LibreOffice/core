@@ -34,6 +34,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <svx/colorwindow.hxx>
 #include <svx/dataaccessdescriptor.hxx>
+#include <svx/svxids.hrc>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>

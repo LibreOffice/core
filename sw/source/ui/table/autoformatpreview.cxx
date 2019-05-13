@@ -21,6 +21,8 @@
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svtools/scriptedtext.hxx>
+#include <svx/framelink.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <strings.hrc>
 

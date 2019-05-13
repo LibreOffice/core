@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
@@ -41,6 +42,7 @@
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <com/sun/star/sdb/ErrorMessageDialog.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdb/SQLErrorEvent.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
@@ -68,6 +70,7 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #include <sfx2/bindings.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

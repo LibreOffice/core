@@ -22,6 +22,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
 #include <svl/ptitem.hxx>
+#include <svx/svxids.hrc>
 #include <editeng/sizeitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>

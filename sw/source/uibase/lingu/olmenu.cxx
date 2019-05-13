@@ -70,6 +70,7 @@
 #include <svl/stritem.hxx>
 #include <svtools/langtab.hxx>
 #include <svx/dlgutil.hxx>
+#include <svx/svxids.hrc>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 #include <vcl/layout.hxx>

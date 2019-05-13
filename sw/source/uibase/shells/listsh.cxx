@@ -31,6 +31,7 @@
 #include <svl/whiter.hxx>
 #include <svl/intitem.hxx>
 #include <svl/srchitem.hxx>
+#include <svx/svxids.hrc>
 
 #include <numrule.hxx>
 #include <fmtornt.hxx>

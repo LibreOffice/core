@@ -21,6 +21,8 @@
 #include <tabvwsh.hxx>
 #include <drawview.hxx>
 
+#include <svx/svxids.hrc>
+
 FuConstUnoControl::FuConstUnoControl(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                                      SdrModel* pDoc, const SfxRequest& rReq)
     : FuConstruct(rViewSh, pWin, pViewP, pDoc, rReq)

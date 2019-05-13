@@ -22,6 +22,7 @@
 #include <svx/svdview.hxx>
 #include <svx/gallery.hxx>
 #include <svx/hlnkitem.hxx>
+#include <svx/svxids.hrc>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>

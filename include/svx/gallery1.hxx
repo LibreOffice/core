@@ -29,8 +29,6 @@
 #include <memory>
 #include <vector>
 
-class SvStream;
-
 
 class GalleryThemeEntry
 {

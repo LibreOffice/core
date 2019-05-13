@@ -21,6 +21,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/svxids.hrc>
 
 #include <fupoor.hxx>
 #include <tabvwsh.hxx>

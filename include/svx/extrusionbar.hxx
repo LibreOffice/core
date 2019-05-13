@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_EXTRUSIONBAR_HXX
 
 #include <sfx2/shell.hxx>
-#include <sfx2/module.hxx>
 #include <svx/ifaceids.hxx>
 #include <svx/svxdllapi.h>
 

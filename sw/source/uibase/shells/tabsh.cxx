@@ -38,6 +38,7 @@
 #include <svx/numinf.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxdlg.hxx>
+#include <svx/svxids.hrc>
 #include <svl/zformat.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/weld.hxx>

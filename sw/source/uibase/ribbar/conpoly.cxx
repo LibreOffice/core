@@ -20,6 +20,7 @@
 #include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/svxids.hrc>
 
 #include <view.hxx>
 #include <edtwin.hxx>

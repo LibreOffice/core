@@ -21,6 +21,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <svl/srchitem.hxx>
+#include <svx/svxids.hrc>
 #include <swtypes.hxx>
 #include <cmdid.h>
 #include <view.hxx>

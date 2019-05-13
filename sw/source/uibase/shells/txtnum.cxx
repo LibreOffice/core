@@ -39,6 +39,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/nbdtmg.hxx>
 #include <svx/nbdtmgfact.hxx>
+#include <svx/svxids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <memory>

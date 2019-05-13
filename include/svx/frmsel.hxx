@@ -21,19 +21,13 @@
 #define INCLUDED_SVX_FRMSEL_HXX
 
 #include <memory>
-#include <vcl/ctrl.hxx>
 #include <vcl/customweld.hxx>
-#include <vcl/bitmap.hxx>
 #include <editeng/borderline.hxx>
 #include <svx/framebordertype.hxx>
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 
 class Color;
-
-namespace editeng {
-    class SvxBorderLine;
-}
 
 enum class FrameSelFlags
 {

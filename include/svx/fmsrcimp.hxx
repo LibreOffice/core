@@ -23,21 +23,22 @@
 #include <svx/fmtools.hxx>
 #include <svx/svxdllapi.h>
 
-#include <com/sun/star/awt/XCheckBox.hpp>
-#include <com/sun/star/awt/XListBox.hpp>
-#include <com/sun/star/awt/XTextComponent.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <osl/thread.hxx>
+#include <tools/link.hxx>
 
 #include <deque>
 #include <memory>
 #include <vector>
+
+namespace com::sun::star::awt { class XCheckBox; }
+namespace com::sun::star::awt { class XListBox; }
+namespace com::sun::star::awt { class XTextComponent; }
+namespace com::sun::star::sdb { class XColumn; }
 
 enum class TransliterationFlags;
 

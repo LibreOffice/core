@@ -31,6 +31,7 @@
 #include <treevisitor.hxx>
 
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/container/EnumerableMap.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/form/Forms.hpp>

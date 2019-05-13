@@ -21,22 +21,16 @@
 #define INCLUDED_SVX_GALCTRL_HXX
 
 #include <vcl/graph.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/customweld.hxx>
-#include <svl/slstitm.hxx>
 #include <vcl/transfer.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/brwbox.hxx>
 #include <vcl/GraphicObject.hxx>
-#include <svx/galmisc.hxx>
 #include <svx/svxdllapi.h>
 
 class GalleryTheme;
 class GalleryBrowser2;
+class INetURLObject;
 
 class SVX_DLLPUBLIC GalleryPreview : public vcl::Window, public DropTargetHelper, public DragSourceHelper
 {

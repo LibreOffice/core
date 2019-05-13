@@ -22,6 +22,7 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/button.hxx>
+#include <vcl/edit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 

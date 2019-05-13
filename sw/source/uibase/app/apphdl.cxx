@@ -26,16 +26,20 @@
 #include <sfx2/objitem.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svtools/restartdialog.hxx>
+#include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/isethint.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svl/ctloptions.hxx>
+#include <svtools/colorcfg.hxx>
+#include <svtools/accessibilityoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objface.hxx>
+#include <vcl/settings.hxx>
 
 #include <view.hxx>
 #include <pview.hxx>

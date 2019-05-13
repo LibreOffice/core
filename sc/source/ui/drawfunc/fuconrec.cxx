@@ -25,6 +25,7 @@
 // Create default drawing objects via keyboard
 #include <svx/svdopath.hxx>
 #include <svx/svdocapt.hxx>
+#include <svx/svxids.hrc>
 #include <svx/strings.hrc>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnstwit.hxx>

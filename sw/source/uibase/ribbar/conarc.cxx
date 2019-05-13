@@ -18,6 +18,8 @@
  */
 
 #include <svx/svdobj.hxx>
+#include <svx/svxids.hrc>
+#include <vcl/event.hxx>
 
 #include <view.hxx>
 #include <edtwin.hxx>

@@ -30,6 +30,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/fmshell.hxx>
+#include <svx/fmview.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svxids.hrc>
