@@ -385,15 +385,16 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
             handler to create specialized input streams, e.g. VML streams that
             have to preprocess the raw input data. */
         Reference< XInputStream > xInStrm = rxHandler->openFragmentStream();
-        // Check again the aFragmentPath route if there is no any file with lowercase letter. (tdf#100084)
+        /*  tdf#100084 Check again the aFragmentPath route with lowercase file name
+            TODO: complete handling of case-insensitive file paths */
         if ( !xInStrm.is() )
         {
             sal_Int32 nPathLen = aFragmentPath.lastIndexOf('/') + 1;
             OUString fileName = aFragmentPath.copy(nPathLen);
-            if ( fileName != fileName.toAsciiLowerCase() )
+            OUString sLowerCaseFileName = fileName.toAsciiLowerCase();
+            if ( fileName != sLowerCaseFileName )
             {
-                fileName = fileName.toAsciiLowerCase();
-                aFragmentPath = OUStringBuffer(aFragmentPath.copy(0, nPathLen)).append(fileName).makeStringAndClear();
+                aFragmentPath = aFragmentPath.copy(0, nPathLen) + sLowerCaseFileName;
                 xInStrm = openInputStream(aFragmentPath);
             }
         }
