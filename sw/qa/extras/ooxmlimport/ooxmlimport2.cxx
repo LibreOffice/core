@@ -180,6 +180,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf117843, "tdf117843.docx")
         getProperty<sal_Int32>(getParagraphOfText(1, xHeaderText), "ParaTopMargin"));
 }
 
+// related tdf#124754
 DECLARE_OOXMLIMPORT_TEST(testTdf43017, "tdf43017.docx")
 {
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
@@ -187,6 +188,20 @@ DECLARE_OOXMLIMPORT_TEST(testTdf43017, "tdf43017.docx")
 
     // Ensure that hyperlink text color is not blue (0x0000ff), but default (-1)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Hyperlink color should be black!", sal_Int32(-1),
+                                 getProperty<sal_Int32>(xText, "CharColor"));
+}
+
+// related tdf#43017
+DECLARE_OOXMLIMPORT_TEST(testTdf124754, "tdf124754.docx")
+{
+    uno::Reference<text::XText> textbox(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs(textbox));
+
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, textbox);
+    uno::Reference<text::XTextRange> xText = getRun(xParagraph, 2);
+
+    // Ensure that hyperlink text color is not black
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Hyperlink color should be not black!", sal_Int32(353217),
                                  getProperty<sal_Int32>(xText, "CharColor"));
 }
 

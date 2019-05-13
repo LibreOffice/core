@@ -152,7 +152,14 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             if (ePropertyState == beans::PropertyState_DEFAULT_VALUE)
             {
                 uno::Reference<beans::XPropertySet> xTextBoxPropertySet(xTextCursor, uno::UNO_QUERY);
-                xTextBoxPropertySet->setPropertyValue("CharColor", xPropertySet->getPropertyValue("CharColor"));
+
+                uno::Any xCharColor = xPropertySet->getPropertyValue("CharColor");
+                Color aColor = COL_AUTO;
+                if (xCharColor >>= aColor)
+                {
+                    if (aColor != COL_AUTO)
+                        xTextBoxPropertySet->setPropertyValue("CharColor", xCharColor);
+                }
             }
             return this;
         }
