@@ -260,8 +260,8 @@ def get_through_rss_query(queryurl, mimetype, prefix, suffix):
     if files != []:
         print('looking for updated bugs having %s attachment(s)' % mimetype)
         query_changed = query.copy()
-        query_changed['field0-1-0'] = 'changed'
-        query_changed['type0-1-0'] = 'changedbefore'
+        query_changed['field0-1-0'] = 'delta_ts'
+        query_changed['type0-1-0'] = 'greaterthaneq'
         query_changed['value0-1-0'] = get_changed_date(files).isoformat()
         process(query_changed, False)
 
