@@ -40,7 +40,10 @@ protected:
 
 SwDoc* SwLayoutWriter::createDoc(const char* pName)
 {
-    load(DATA_DIRECTORY, pName);
+    if (!pName)
+        loadURL("private:factory/swriter", nullptr);
+    else
+        load(DATA_DIRECTORY, pName);
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -2971,6 +2974,28 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116501)
 {
     //just care it doesn't freeze
     createDoc("tdf116501.odt");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf118719)
+{
+    // Insert a page break.
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Enable hide whitespace mode.
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetHideWhitespaceMode(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+
+    pWrtShell->Insert("first");
+    pWrtShell->InsertPageBreak();
+    pWrtShell->Insert("second");
+
+    // Without the accompanying fix in place, this test would have failed, as the height of the
+    // first page was 15840 twips, instead of the much smaller 276.
+    sal_Int32 nOther = parseDump("/root/page[1]/infos/bounds", "height").toInt32();
+    sal_Int32 nLast = parseDump("/root/page[2]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(nOther, nLast);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
