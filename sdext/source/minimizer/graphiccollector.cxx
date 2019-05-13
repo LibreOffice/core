@@ -222,7 +222,8 @@ static void ImpCollectGraphicObjects( const Reference< XComponentContext >& rxMS
                 continue;
             }
 
-            if ( sShapeType == "com.sun.star.drawing.GraphicObjectShape" )
+            if ( sShapeType == "com.sun.star.drawing.GraphicObjectShape" ||
+                 sShapeType == "com.sun.star.presentation.GraphicObjectShape" )
                 ImpAddGraphicEntity( rxMSF, xShape, rGraphicSettings, rGraphicEntities );
 
             // now check for a fillstyle
@@ -342,7 +343,8 @@ static void ImpCountGraphicObjects( const Reference< XComponentContext >& rxMSF,
                 continue;
             }
 
-            if ( sShapeType == "com.sun.star.drawing.GraphicObjectShape" )
+            if ( sShapeType == "com.sun.star.drawing.GraphicObjectShape" ||
+                 sShapeType == "com.sun.star.presentation.GraphicObjectShape" )
             {
                 rnGraphics++;
             }
