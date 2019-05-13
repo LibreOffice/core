@@ -43,22 +43,24 @@ import net.adaptivebox.knowledge.SearchPoint;
 
 public class SCAgent {
 
-  // Describes the problem to be solved (encode the point into intermediate
-  // information)
+  // Describes the problem to be solved (encode the point into intermediate information)
   private ProblemEncoder problemEncoder;
+
   // Forms the goodness landscape
   private IGoodnessCompareEngine specComparator;
 
   // the coefficients of SCAgent
   private static final int TaoB = 2;
-  // The early version set TaoW as the size of external library (NL), but 4 is
-  // often enough
+
+  // The early version set TaoW as the size of external library (NL), but 4 is often enough
   private static final int TaoW = 4;
 
   // The referred external library
   private Library externalLib;
+
   // store the point that generated in current learning cycle
   private SearchPoint trailPoint;
+
   // the own memory: store the point that generated in last learning cycle
   private SearchPoint pcurrent_t;
 
@@ -77,9 +79,10 @@ public class SCAgent {
   }
 
   public SearchPoint generatePoint() {
-// generate a new point
+    // generate a new point
     generatePoint(trailPoint);
-// evaluate the generated point
+
+    // evaluate the generated point
     problemEncoder.evaluate(trailPoint);
     return trailPoint;
   }
@@ -87,13 +90,14 @@ public class SCAgent {
   private void generatePoint(ILocationEngine tempPoint) {
     SearchPoint Xmodel, Xrefer, libBPoint;
 
-// choose Selects a better point (libBPoint) from externalLib (L) based
-// on tournament selection
+    // choose Selects a better point (libBPoint) from externalLib (L) based
+    // on tournament selection
     int xb = externalLib.tournamentSelection(specComparator, TaoB, true);
     libBPoint = externalLib.getSelectedPoint(xb);
-// Compares pcurrent_t with libBPoint
-// The better one becomes model point (Xmodel)
-// The worse one becomes refer point (Xrefer)
+
+    // Compares pcurrent_t with libBPoint
+    // The better one becomes model point (Xmodel)
+    // The worse one becomes refer point (Xrefer)
     if (specComparator.compare(pcurrent_t.getEncodeInfo(),
         libBPoint.getEncodeInfo()) == IGoodnessCompareEngine.LARGER_THAN) {
       Xmodel = libBPoint;
@@ -102,19 +106,22 @@ public class SCAgent {
       Xmodel = pcurrent_t;
       Xrefer = libBPoint;
     }
-// observational learning: generates a new point near the model point, which
-// the variation range is decided by the difference of Xmodel and Xrefer
+
+    // observational learning: generates a new point near the model point, which
+    // the variation range is decided by the difference of Xmodel and Xrefer
     inferPoint(tempPoint, Xmodel, Xrefer, problemEncoder.getDesignSpace());
   }
 
   // 1. Update the current point into the external library
   // 2. Replace the current point by the generated point
   public void updateInfo() {
-// Selects a bad point kw from TaoW points in Library
+    // Selects a bad point kw from TaoW points in Library
     int xw = externalLib.tournamentSelection(specComparator, TaoW, false);
-// Replaces kw with pcurrent_t
+
+    // Replaces kw with pcurrent_t
     externalLib.getSelectedPoint(xw).importPoint(pcurrent_t);
-// Replaces pcurrent_t (x(t)) with trailPoint (x(t+1))
+
+    // Replaces pcurrent_t (x(t)) with trailPoint (x(t+1))
     pcurrent_t.importPoint(trailPoint);
   }
 

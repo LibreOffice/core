@@ -46,6 +46,7 @@ public class DEPSAgent implements ILibEngine {
 
   // Describes the problem to be solved
   private ProblemEncoder problemEncoder;
+
   // Forms the goodness landscape
   private IGoodnessCompareEngine qualityComparator;
 
@@ -57,8 +58,10 @@ public class DEPSAgent implements ILibEngine {
 
   // the own memory: store the point that generated in old learning cycle
   private BasicPoint pold_t;
+
   // the own memory: store the point that generated in last learning cycle
   private BasicPoint pcurrent_t;
+
   // the own memory: store the personal best point
   private SearchPoint pbest_t;
 
@@ -109,11 +112,12 @@ public class DEPSAgent implements ILibEngine {
   }
 
   public void generatePoint() {
-// generates a new point in the search space (S) based on
-// its memory and the library
+    // generates a new point in the search space (S) based on
+    // its memory and the library
     selectGTBehavior = this.getGTBehavior();
     selectGTBehavior.generateBehavior(trailPoint, problemEncoder);
-// evaluate into goodness information
+
+    // evaluate into goodness information
     problemEncoder.evaluate(trailPoint);
   }
 

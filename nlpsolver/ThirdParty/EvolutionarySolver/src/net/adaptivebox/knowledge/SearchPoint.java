@@ -25,8 +25,7 @@ import net.adaptivebox.space.BasicPoint;
 
 public class SearchPoint extends BasicPoint implements IEncodeEngine {
   // store the encode information for goodness evaluation
-  // encodeInfo[0]: the sum of constraints (if it equals to 0, then be a feasible
-  // point)
+  // encodeInfo[0]: the sum of constraints (if it equals to 0, then be a feasible point)
   // encodeInfo[1]: the value of objective function
   private final double[] encodeInfo = new double[2];
   private double objectiveValue;
@@ -68,5 +67,4 @@ public class SearchPoint extends BasicPoint implements IEncodeEngine {
   public boolean isFeasible() {
     return encodeInfo[0] == 0; // no constraint violations
   }
-
 }

@@ -42,5 +42,4 @@ public class DesignDim {
       return paramBound.maxValue - Math.rint((paramBound.maxValue - value) / grain) * grain;
     }
   }
-
 }

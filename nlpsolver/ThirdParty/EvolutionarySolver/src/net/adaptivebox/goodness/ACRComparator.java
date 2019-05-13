@@ -51,8 +51,8 @@ public class ACRComparator implements IGoodnessCompareEngine, IUpdateCycleEngine
   public ACRComparator(Library lib, int T) {
     socialPool = lib;
     this.T = T;
-// set the (epsilon_t|t=0) as the maximum CONS value among the SearchPoints in
-// the library
+
+    // set the (epsilon_t|t=0) as the maximum CONS value among the SearchPoints in the library
     epsilon_t = lib.getExtremalVcon(true);
   }
 
@@ -74,8 +74,9 @@ public class ACRComparator implements IGoodnessCompareEngine, IUpdateCycleEngine
   }
 
   public void updateCycle(int t) {
-// calculates the ratio
+    // calculates the ratio
     double rn = (double) socialPool.getVconThanNum(epsilon_t) / (double) socialPool.getPopSize();
+
     if (t > TthR * T && T != -1) { // Forcing sub-rule
       epsilon_t *= BETAF;
     } else { // Ratio-keeping sub-rules
