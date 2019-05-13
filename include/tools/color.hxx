@@ -284,7 +284,11 @@ constexpr ::Color COL_AUTHOR8_LIGHT           ( 226,  234, 241 );
 constexpr ::Color COL_AUTHOR9_DARK            ( 209,  118,   0 );
 constexpr ::Color COL_AUTHOR9_NORMAL          ( 255,  226, 185 );
 constexpr ::Color COL_AUTHOR9_LIGHT           ( 255,  231, 199 );
-
+constexpr ::Color COL_LIGHTGREEN_AUTHOR       (  88,  214, 141 );
+constexpr ::Color COL_BLUEONBLACK             (  23,   32,  42 );
+constexpr ::Color COL_ORANGE                  ( 255,  165,   0 );
+constexpr ::Color COL_WINE                    (  94,   18,  36 );
+constexpr ::Color COL_MADEIRAWINE             ( 144,  103, 106 );
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

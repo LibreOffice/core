@@ -20,11 +20,13 @@
 #include <rfindlst.hxx>
 #include <tools/debug.hxx>
 
-#define SC_RANGECOLORS  8
+#define SC_RANGECOLORS  16
 
 static const Color aColNames[SC_RANGECOLORS] =
     { COL_LIGHTBLUE, COL_LIGHTRED, COL_LIGHTMAGENTA, COL_GREEN,
-        COL_BLUE, COL_RED, COL_MAGENTA, COL_BROWN };
+        COL_MAGENTA, COL_BROWN, Color(74,74,74) /*gray-scale*/, COL_RED,
+        COL_CYAN, Color(60, 154, 176) /*krishna-Blue*/ , Color( 0,  128, 128 ) /*greenish-blue*/, COL_ORANGE,
+        COL_WINE, COL_MADEIRAWINE, COL_BLUEONBLACK, COL_LIGHTGREEN_AUTHOR };
 
 ScRangeFindList::ScRangeFindList(const OUString& rName) :
     aDocName( rName ),
