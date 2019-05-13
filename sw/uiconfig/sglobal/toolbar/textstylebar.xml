@@ -73,6 +73,11 @@
  <!-- These command can be enabled when tdf#107000 is fixed -->
  <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:text="List Styles" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:RightPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:JustifyPara"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BulletListStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberListStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:AlphaListStyle"/>
@@ -81,16 +86,11 @@
  <toolbar:toolbaritem xlink:href=".uno:RomanLowListStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:RemoveBullets"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
- <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
- <toolbar:toolbaritem xlink:href=".uno:RightPara"/>
- <toolbar:toolbaritem xlink:href=".uno:JustifyPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:IncrementIndent" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:DecrementIndent" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineSpacing"/>
  <toolbar:toolbaritem xlink:href=".uno:Spacing" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:IncrementIndent" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:DecrementIndent" toolbar:visible="false"/>
 </toolbar:toolbar>

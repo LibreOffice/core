@@ -46,11 +46,6 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ResetAttributes" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
- <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
- <toolbar:toolbaritem xlink:href=".uno:RightPara"/>
- <toolbar:toolbaritem xlink:href=".uno:JustifyPara"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:StyleApply"/>
  <toolbar:toolbaritem xlink:href=".uno:StyleUpdateByExample" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:StyleNewByExample" toolbar:visible="false"/>
@@ -61,12 +56,22 @@
  <toolbar:toolbaritem xlink:href=".uno:Grow" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Shrink" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LineSpacing"/>
+ <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:RightPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:JustifyPara"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultBullet"/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering"/>
+ <toolbar:toolbaritem xlink:href=".uno:SetOutline" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:IncrementIndent"/>
  <toolbar:toolbaritem xlink:href=".uno:DecrementIndent"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:LineSpacing"/>
+ <toolbar:toolbaritem xlink:href=".uno:Spacing" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertTable"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
