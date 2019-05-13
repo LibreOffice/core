@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_14d2885d",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-05-13T07:45:29Z",
+      "side": 1,
+      "message": "this is not necessary, because lastIndexOf + 1 is already 0 or greater",
+      "range": {
+        "startLine": 391,
+        "startChar": 33,
+        "endLine": 391,
+        "endChar": 56
+      },
+      "revId": "38f11d3eeccd26930af92e65efb2f00d1c7b1eeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_34d7844e",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-05-13T07:45:29Z",
+      "side": 1,
+      "message": "use the OUString API here, too: aFragmentPath.copy(nPathLen)",
+      "range": {
+        "startLine": 392,
+        "startChar": 32,
+        "endLine": 392,
+        "endChar": 83
+      },
+      "revId": "38f11d3eeccd26930af92e65efb2f00d1c7b1eeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
