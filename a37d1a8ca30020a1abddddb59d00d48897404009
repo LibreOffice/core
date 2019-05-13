@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_cfa48d0b",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-05-13T15:11:45Z",
+      "side": 1,
+      "message": "please use hub.libreoffice.org redirection service so that you are not dependent on this exact URL.",
+      "revId": "a37d1a8ca30020a1abddddb59d00d48897404009",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
