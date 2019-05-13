@@ -43,7 +43,7 @@
 |*
 \************************************************************************/
 
-URLDlg::URLDlg(weld::Window* pWindow, const OUString& rURL, const OUString& rAlternativeText,
+URLDlg::URLDlg(weld::Widget* pWindow, const OUString& rURL, const OUString& rAlternativeText,
                const OUString& rDescription, const OUString& rTarget, const OUString& rName,
                TargetList& rTargetList)
     : GenericDialogController(pWindow, "cui/ui/cuiimapdlg.ui", "IMapDialog")

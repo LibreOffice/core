@@ -351,7 +351,7 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateGalleryThemePropertiesDialog(weld::Window* pParent,
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet ) = 0;
-    virtual VclPtr<AbstractURLDlg> CreateURLDialog(weld::Window* pParent,
+    virtual VclPtr<AbstractURLDlg> CreateURLDialog(weld::Widget* pParent,
                                             const OUString& rURL, const OUString& rAltText, const OUString& rDescription,
                                             const OUString& rTarget, const OUString& rName,
                                             TargetList& rTargetList ) = 0;
@@ -427,8 +427,8 @@ public:
                                                                         sal_uInt32 nResId )=0;
     virtual VclPtr<SfxAbstractDialog>       CreateCharMapDialog(weld::Window* pParent, const SfxItemSet& rAttr,
                                                                 const css::uno::Reference<css::frame::XFrame>& rFrame) = 0;
-    virtual VclPtr<SfxAbstractDialog>       CreateEventConfigDialog(weld::Window* pParent, const SfxItemSet& rAttr,
-                                                                    const css::uno::Reference< css::frame::XFrame >& _rxFrame) = 0;
+    virtual VclPtr<SfxAbstractDialog>       CreateEventConfigDialog(weld::Widget* pParent, const SfxItemSet& rAttr,
+                                                                    const css::uno::Reference< css::frame::XFrame >& rFrame) = 0;
     virtual VclPtr<AbstractSvxPostItDialog>    CreateSvxPostItDialog(weld::Widget* pParent, const SfxItemSet& rCoreSet, bool bPrevNext = false) = 0;
     virtual VclPtr<VclAbstractDialog>          CreateSvxScriptOrgDialog(weld::Window* pParent, const OUString& rLanguage) override = 0;
 

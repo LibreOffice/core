@@ -146,7 +146,7 @@ namespace
     SvxIMapDlg* GetIMapDlg(SwView const &rView)
     {
         SfxChildWindow* pWnd = rView.GetViewFrame()->GetChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
-        return pWnd ? static_cast<SvxIMapDlg*>(pWnd->GetWindow()) : nullptr;
+        return pWnd ? static_cast<SvxIMapDlg*>(pWnd->GetController().get()) : nullptr;
     }
 }
 
@@ -1300,7 +1300,7 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
                     SfxChildWindow *pChildWindow = pVFrame->HasChildWindow(nId) ?
                         pVFrame->GetChildWindow(nId) : nullptr;
                     SvxIMapDlg *pDlg = pChildWindow ?
-                        static_cast<SvxIMapDlg*>(pChildWindow->GetWindow()) : nullptr;
+                        static_cast<SvxIMapDlg*>(pChildWindow->GetController().get()) : nullptr;
 
                     if( pDlg && ( SID_IMAP_EXEC == nSlot ||
                                 ( SID_IMAP == nSlot && !bProtect)) &&
@@ -1322,7 +1322,7 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
                     SfxChildWindow *pChildWindow = pVFrame->HasChildWindow(nId) ?
                         pVFrame->GetChildWindow(nId) : nullptr;
                     SvxIMapDlg *pDlg = pChildWindow ?
-                        static_cast<SvxIMapDlg*>(pChildWindow->GetWindow()) : nullptr;
+                        static_cast<SvxIMapDlg*>(pChildWindow->GetController().get()) : nullptr;
                     if( pDlg && pDlg->GetEditingObject() !=
                                 rSh.GetIMapInventor() )
                         lcl_UpdateContourDlg( rSh, SelectionType::Graphic );
