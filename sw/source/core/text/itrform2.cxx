@@ -1861,6 +1861,7 @@ void SwTextFormatter::FeedInf( SwTextFormatInfo &rInf ) const
 
 void SwTextFormatter::FormatReset( SwTextFormatInfo &rInf )
 {
+    m_pFirstOfBorderMerge = nullptr;
     m_pCurr->Truncate();
     m_pCurr->Init();
     if( pBlink && m_pCurr->IsBlinking() )
