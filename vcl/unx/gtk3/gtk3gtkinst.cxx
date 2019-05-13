@@ -9690,6 +9690,24 @@ private:
                 }
             }
         }
+        else if (GTK_IS_TOOL_BUTTON(pWidget))
+        {
+            GtkToolButton* pToolButton = GTK_TOOL_BUTTON(pWidget);
+            const gchar* icon_name = gtk_tool_button_get_icon_name(pToolButton);
+            if (icon_name)
+            {
+                OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
+                GdkPixbuf* pixbuf = load_icon_by_name(aIconName, m_aIconTheme, m_aUILang);
+                if (pixbuf)
+                {
+                    GtkWidget* pImage = gtk_image_new_from_pixbuf(pixbuf);
+                    g_object_unref(pixbuf);
+                    gtk_tool_button_set_icon_widget(pToolButton, pImage);
+                    gtk_widget_show(pImage);
+                }
+            }
+        }
+
         //set helpids
         const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pWidget));
         size_t nLen = pStr ? strlen(pStr) : 0;
