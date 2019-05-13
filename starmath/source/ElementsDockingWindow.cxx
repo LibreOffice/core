@@ -30,14 +30,15 @@
 #include "uiobject.hxx"
 #include <strings.hxx>
 
-#include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
+#include <svl/stritem.hxx>
+#include <svtools/colorcfg.hxx>
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
+#include <vcl/uitest/logger.hxx>
 
 SmElement::SmElement(std::unique_ptr<SmNode>&& pNode, const OUString& aText, const OUString& aHelpText) :
     mpNode(std::move(pNode)),
@@ -348,21 +349,21 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
                 }
             }
 
-            if (mpCurrentElement == element && pContext)
-            {
-                pContext->Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
-                pContext->SetFillColor(Color(230, 230, 230));
-                pContext->SetLineColor(Color(230, 230, 230));
-
-                pContext->DrawRect(PixelToLogic(tools::Rectangle(x + 2, y + 2, x + boxX - 2, y + boxY - 2)));
-                pContext->Pop();
-            }
-
             element->mBoxLocation = Point(x,y);
             element->mBoxSize = Size(boxX, boxY);
 
             if (pContext)
             {
+                if (mpCurrentElement == element)
+                {
+                    pContext->Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+                    pContext->SetFillColor(Color(230, 230, 230));
+                    pContext->SetLineColor(Color(230, 230, 230));
+
+                    pContext->DrawRect(PixelToLogic(tools::Rectangle(x + 2, y + 2, x + boxX - 2, y + boxY - 2)));
+                    pContext->Pop();
+                }
+
                 Size aSizePixel = LogicToPixel(Size(element->getNode()->GetWidth(),
                                                     element->getNode()->GetHeight()));
                 Point location(x + ((boxX - aSizePixel.Width()) / 2),
@@ -394,6 +395,11 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
         mxScroll->SetThumbPos(0);
         mxScroll->Hide();
     }
+}
+
+void SmElementsControl::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    rRenderContext.SetBackground(COL_WHITE);
 }
 
 void SmElementsControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)

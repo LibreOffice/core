@@ -135,15 +135,6 @@ void SmGraphicWindow::StateChanged(StateChangedType eType)
     ScrollableWindow::StateChanged(eType);
 }
 
-
-void SmGraphicWindow::ApplyColorConfigValues(const svtools::ColorConfig &rColorCfg)
-{
-    // Note: SetTextColor not necessary since the nodes that
-    // get painted have the color information.
-    SetBackground(rColorCfg.GetColorValue(svtools::DOCCOLOR).nColor);
-}
-
-
 void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
 {
     ScrollableWindow::MouseButtonDown(rMEvt);
@@ -368,10 +359,13 @@ const SmNode * SmGraphicWindow::SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol)
     return pNode;
 }
 
+void SmGraphicWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    rRenderContext.SetBackground(SM_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
+}
+
 void SmGraphicWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    ApplyColorConfigValues(SM_MOD()->GetColorConfig());
-
     SmDocShell& rDoc = *pViewShell->GetDoc();
     Point aPoint;
 

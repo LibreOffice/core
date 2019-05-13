@@ -70,8 +70,6 @@ class SmModule : public SfxModule, public utl::ConfigurationListener
     std::unique_ptr<SvtSysLocale> mpSysLocale;
     VclPtr<VirtualDevice>    mpVirtualDev;
 
-    static void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
-
 public:
     SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START + SfxInterfaceId(0))
 

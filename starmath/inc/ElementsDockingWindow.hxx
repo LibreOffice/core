@@ -72,6 +72,7 @@ class SmElementsControl : public Control
     static const std::pair<const char*, const char*> aFormats[];
     static const std::pair<const char*, const char*> aOthers[];
 
+    virtual void ApplySettings(vcl::RenderContext&) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual void MouseMove(const MouseEvent& rMEvt) override;

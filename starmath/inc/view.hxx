@@ -61,6 +61,7 @@ public:
     virtual void dispose() override;
 
     // Window
+    virtual void ApplySettings(vcl::RenderContext&) override;
     virtual void MouseButtonDown(const MouseEvent &rMEvt) override;
     virtual void MouseMove(const MouseEvent &rMEvt) override;
     virtual void GetFocus() override;
@@ -87,8 +88,6 @@ public:
     void ZoomToFitInWindow();
     using ScrollableWindow::SetTotalSize;
     void SetTotalSize();
-
-    void ApplyColorConfigValues(const svtools::ColorConfig &rColorCfg);
 
     // for Accessibility
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
