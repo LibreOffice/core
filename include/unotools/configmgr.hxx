@@ -53,6 +53,8 @@ public:
 
     static OUString getProductVersion();
 
+    static OUString getLastProductVersion();
+
     static OUString getVendor();
 
     static void storeConfigItems();
