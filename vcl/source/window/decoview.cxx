@@ -882,15 +882,15 @@ void DecorationView::DrawHighlightFrame( const tools::Rectangle& rRect,
         else
         {
             Color aBackColor = aBackground.GetColor();
-            if ( (aLightColor.GetColorError( aBackColor ) < 32) ||
-                 (aShadowColor.GetColorError( aBackColor ) < 32) )
+            if ( (aLightColor.GetColorError( aBackColor ) < 96) ||
+                 (aShadowColor.GetColorError( aBackColor ) < 96) )
             {
                 aLightColor = COL_WHITE;
                 aShadowColor = COL_BLACK;
 
-                if ( aLightColor.GetColorError( aBackColor ) < 32 )
+                if ( aLightColor.GetColorError( aBackColor ) < 96 )
                     aLightColor.DecreaseLuminance( 64 );
-                if ( aShadowColor.GetColorError( aBackColor ) < 32 )
+                if ( aShadowColor.GetColorError( aBackColor ) < 96 )
                     aShadowColor.IncreaseLuminance( 64 );
             }
         }

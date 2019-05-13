@@ -126,7 +126,7 @@ public:
         return color::extractRGB(mValue);
     }
 
-    sal_uInt8 GetColorError(const Color& rCompareColor) const;
+    sal_uInt16 GetColorError(const Color& rCompareColor) const;
 
     sal_uInt8 GetLuminance() const;
     void IncreaseLuminance(sal_uInt8 cLumInc);
@@ -222,6 +222,14 @@ inline void Color::Invert()
     R = ~R;
     G = ~G;
     B = ~B;
+}
+
+inline sal_uInt16 Color::GetColorError( const BitmapColor& rColor ) const
+{
+    return static_cast<sal_uInt16>(
+        abs(static_cast<int>(GetBlue()) - rColor.GetBlue()) +
+        abs(static_cast<int>(GetGreen()) - rColor.GetGreen()) +
+        abs(static_cast<int>(GetRed()) - rColor.GetRed()));
 }
 
 inline void Color::Merge( const Color& rMergeColor, sal_uInt8 cTransparency )

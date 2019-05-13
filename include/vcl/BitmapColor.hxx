@@ -22,7 +22,6 @@
 
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
-#include <cassert>
 #include <memory>
 
 class VCL_DLLPUBLIC BitmapColor final : public Color
@@ -39,8 +38,6 @@ public:
 
     inline sal_uInt8    GetAlpha() const;
     inline void         SetAlpha( sal_uInt8 cAlpha );
-
-    inline sal_uInt16 GetColorError( const BitmapColor& rColor ) const;
 };
 
 inline BitmapColor::BitmapColor()
@@ -80,14 +77,6 @@ inline sal_uInt8 BitmapColor::GetAlpha() const
 inline void BitmapColor::SetAlpha( sal_uInt8 cAlpha )
 {
     SetTransparency(cAlpha);
-}
-
-inline sal_uInt16 BitmapColor::GetColorError( const BitmapColor& rColor ) const
-{
-    return static_cast<sal_uInt16>(
-        abs( static_cast<int>(GetBlue()) - static_cast<int>(rColor.GetBlue()) ) +
-        abs( static_cast<int>(GetGreen()) - static_cast<int>(rColor.GetGreen()) ) +
-        abs( static_cast<int>(GetRed()) - static_cast<int>(rColor.GetRed()) ) );
 }
 
 #endif // INCLUDED_VCL_BITMAPCOLOR_HXX
