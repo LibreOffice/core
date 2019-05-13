@@ -592,14 +592,13 @@ void ListBox::Resize()
         if ( GetNativeControlRegion( ControlType::Listbox, ControlPart::ButtonDown,
                     aArea, ControlState::NONE, aControlValue, aBound, aContent) )
         {
-            long nTop = 0;
             // Convert back from border space to local coordinates
             aPoint = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aPoint ) );
             aContent.Move( -aPoint.X(), -aPoint.Y() );
 
             // Use the themes drop down size for the button
             aOutSz.setWidth( aContent.Left() );
-            mpBtn->setPosSizePixel( aContent.Left(), nTop, aContent.Right(), (nBottom-nTop) );
+            mpBtn->setPosSizePixel( aContent.Left(), 0, aContent.GetWidth(), nBottom );
 
             // Adjust the size of the edit field
             if ( GetNativeControlRegion( ControlType::Listbox, ControlPart::SubEdit,
