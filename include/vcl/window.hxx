@@ -583,7 +583,7 @@ public:
 protected:
 
     /** This is intended to be used to clear any locally held references to other Window-subclass objects */
-    virtual void                        dispose() override;
+    void                                dispose() override;
 
     SAL_DLLPRIVATE void                 ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
 
@@ -725,7 +725,7 @@ private:
                                         ImplGetCanvas( bool bSpriteCanvas ) const;
 
 public:
-    virtual vcl::Region                 GetActiveClipRegion() const override;
+    vcl::Region                         GetActiveClipRegion() const override;
 
 protected:
     // Single argument ctors shall be explicit.
@@ -736,17 +736,17 @@ protected:
             void                        CallEventListeners( VclEventId nEvent, void* pData = nullptr );
     static  void                        FireVclEvent( VclSimpleEvent& rEvent );
 
-    virtual bool                        AcquireGraphics() const override;
-    virtual void                        ReleaseGraphics( bool bRelease = true ) override;
+    bool                                AcquireGraphics() const override;
+    void                                ReleaseGraphics( bool bRelease = true ) override;
 
-    virtual void                        InitClipRegion() override;
+    void                                InitClipRegion() override;
 
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void                 ImplAdjustNWFSizes();
 
-    virtual void                        CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate) override;
-    virtual void                        ClipToPaintRegion( tools::Rectangle& rDstRect ) override;
-    virtual bool                        UsePolyPolygonForComplexGradient() override;
+    void                                CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate) override;
+    void                                ClipToPaintRegion( tools::Rectangle& rDstRect ) override;
+    bool                                UsePolyPolygonForComplexGradient() override;
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext);
 public:
@@ -756,12 +756,12 @@ public:
     // Single argument ctors shall be explicit.
     explicit                            Window( vcl::Window* pParent, WinBits nStyle = 0 );
 
-    virtual                             ~Window() override;
+    ~Window();
 
     ::OutputDevice const*               GetOutDev() const;
     ::OutputDevice*                     GetOutDev();
 
-    virtual void                        EnableRTL ( bool bEnable = true ) override;
+    void                                EnableRTL ( bool bEnable = true ) override;
     virtual void                        MouseMove( const MouseEvent& rMEvt );
     virtual void                        MouseButtonDown( const MouseEvent& rMEvt );
     virtual void                        MouseButtonUp( const MouseEvent& rMEvt );
@@ -873,7 +873,7 @@ public:
     void                                SetCompositionCharRect( const tools::Rectangle* pRect, long nCompositionLength, bool bVertical = false );
 
     using                               ::OutputDevice::SetSettings;
-    virtual void                        SetSettings( const AllSettings& rSettings ) override;
+    void                                SetSettings( const AllSettings& rSettings ) override;
     void                                SetSettings( const AllSettings& rSettings, bool bChild );
     void                                UpdateSettings( const AllSettings& rSettings, bool bChild = false );
     void                                NotifyAllChildren( DataChangedEvent& rDCEvt );

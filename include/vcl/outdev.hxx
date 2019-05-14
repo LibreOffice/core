@@ -399,7 +399,7 @@ private:
 
 protected:
                                 OutputDevice(OutDevType eOutDevType);
-    virtual                     ~OutputDevice() override;
+                                ~OutputDevice();
     virtual void                dispose() override;
 
 public:
