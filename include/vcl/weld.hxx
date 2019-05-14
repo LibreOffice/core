@@ -840,9 +840,16 @@ public:
 class VCL_DLLPUBLIC Button : virtual public Container
 {
 protected:
-    Link<Button&, void> m_aClickHdl;
+    Link<Button&, void> m_aClickHdl1;
+    std::function<void(Button&)> m_aClickHdl2;
 
-    void signal_clicked() { m_aClickHdl.Call(*this); }
+    void signal_clicked()
+    {
+        if (m_aClickHdl1.IsSet())
+            m_aClickHdl1.Call(*this);
+        else if (m_aClickHdl2)
+            m_aClickHdl2(*this);
+    }
 
 public:
     virtual void set_label(const OUString& rText) = 0;
@@ -854,7 +861,16 @@ public:
     virtual void set_label_line_wrap(bool wrap) = 0;
     void clicked() { signal_clicked(); }
 
-    void connect_clicked(const Link<Button&, void>& rLink) { m_aClickHdl = rLink; }
+    void connect_clicked(const Link<Button&, void>& rLink)
+    {
+        m_aClickHdl1 = rLink;
+        m_aClickHdl2 = nullptr;
+    }
+    void connect_clicked(const std::function<void(Button&)>& rLink)
+    {
+        m_aClickHdl2 = rLink;
+        m_aClickHdl1 = Link<Button&, void>();
+    }
 };
 
 class VCL_DLLPUBLIC ToggleButton : virtual public Button
