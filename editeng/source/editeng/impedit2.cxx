@@ -895,7 +895,7 @@ EditSelection const & ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, Edit
         CursorMoved( aOldPaM.GetNode() );
     }
 
-    // May cause, an CreateAnchor or deselection all
+    // May cause, a CreateAnchor or deselection all
     aSelEngine.SetCurView( pEditView );
     aSelEngine.CursorPosChanging( bKeyModifySelection, aTranslatedKeyEvent.GetKeyCode().IsMod1() );
     EditPaM aOldEnd( pEditView->pImpEditView->GetEditSelection().Max() );
