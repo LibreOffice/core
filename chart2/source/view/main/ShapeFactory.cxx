@@ -1804,7 +1804,7 @@ uno::Reference< drawing::XShapes >
 
         //it is necessary to set the transform matrix to initialize the scene properly
         //otherwise all objects which are placed into this Group will not be visible
-        //the following should be unnecessary after a the bug is fixed
+        //the following should be unnecessary after the bug is fixed
         {
             //set properties
             uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
