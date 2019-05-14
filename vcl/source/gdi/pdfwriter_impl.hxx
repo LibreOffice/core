@@ -593,6 +593,9 @@ public:
 
     static void convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter::ExtLineInfo& rOut );
 
+protected:
+    void ClipRegionIntersectRectangle(vcl::Region&) override;
+
 private:
     MapMode                             m_aMapMode; // PDFWriterImpl scaled units
     std::vector< PDFPage >              m_aPages;

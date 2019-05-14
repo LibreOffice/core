@@ -2015,4 +2015,6 @@ static bool lcl_canUsePDFAxialShading(const Gradient& rGradient) {
     return rGradient.GetSteps() <= 0;
 }
 
+void PDFWriterImpl::ClipRegionIntersectRectangle(vcl::Region&) {}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
