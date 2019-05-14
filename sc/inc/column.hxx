@@ -22,6 +22,7 @@
 
 #include "global.hxx"
 #include "address.hxx"
+#include "cellvalue.hxx"
 #include "rangelst.hxx"
 #include "types.hxx"
 #include "mtvelements.hxx"
@@ -355,9 +356,16 @@ public:
     void SetValue( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, double fVal, bool bBroadcast = true );
     void        SetError( SCROW nRow, const FormulaError nError);
 
-    void        GetString( SCROW nRow, OUString& rString, const ScInterpreterContext* pContext = nullptr ) const;
+    void        GetString( SCROW nRow, OUString& rString, const ScInterpreterContext* pContext = nullptr ) const
+        { return GetString( GetCellValue( nRow ), nRow, rString, pContext ); }
+    void        GetString( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow,
+                           OUString& rString, const ScInterpreterContext* pContext = nullptr ) const
+        { return GetString( GetCellValue( rBlockPos, nRow ), nRow, rString, pContext ); }
     double* GetValueCell( SCROW nRow );
-    void        GetInputString( SCROW nRow, OUString& rString ) const;
+    void        GetInputString( SCROW nRow, OUString& rString ) const
+        { return GetInputString( GetCellValue( nRow ), nRow, rString ); }
+    void        GetInputString( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow, OUString& rString ) const
+        { return GetInputString( GetCellValue( rBlockPos, nRow ), nRow, rString ); }
     double      GetValue( SCROW nRow ) const;
     const EditTextObject* GetEditText( SCROW nRow ) const;
     void RemoveEditTextCharAttribs( SCROW nRow, const ScPatternAttr& rAttr );
@@ -599,6 +607,7 @@ public:
     // cell notes
     ScPostIt* GetCellNote( SCROW nRow );
     const ScPostIt* GetCellNote( SCROW nRow ) const;
+    ScPostIt* GetCellNote( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow );
     const ScPostIt* GetCellNote( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
     void DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, bool bForgetCaptionOwnership );
     bool HasCellNotes() const;
@@ -728,6 +737,9 @@ private:
     SCROW FindNextVisibleRowWithContent(
         sc::CellStoreType::const_iterator& itPos, SCROW nRow, bool bForward) const;
     SCROW FindNextVisibleRow(SCROW nRow, bool bForward) const;
+
+    void GetString( const ScRefCellValue& cell, SCROW nRow, OUString& rString, const ScInterpreterContext* pContext = nullptr ) const;
+    void GetInputString( const ScRefCellValue& cell, SCROW nRow, OUString& rString ) const;
 
     /**
      * Called whenever the state of cell array gets modified i.e. new cell

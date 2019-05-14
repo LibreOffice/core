@@ -2822,10 +2822,8 @@ void ScColumn::SetValue(
         BroadcastNewCell(nRow);
 }
 
-void ScColumn::GetString( SCROW nRow, OUString& rString, const ScInterpreterContext* pContext ) const
+void ScColumn::GetString( const ScRefCellValue& aCell, SCROW nRow, OUString& rString, const ScInterpreterContext* pContext ) const
 {
-    ScRefCellValue aCell = GetCellValue(nRow);
-
     // ugly hack for ordering problem with GetNumberFormat and missing inherited formats
     if (aCell.meType == CELLTYPE_FORMULA)
         aCell.mpFormula->MaybeInterpret();
@@ -2849,9 +2847,8 @@ double* ScColumn::GetValueCell( SCROW nRow )
     return &sc::numeric_block::at(*it->data, aPos.second);
 }
 
-void ScColumn::GetInputString( SCROW nRow, OUString& rString ) const
+void ScColumn::GetInputString( const ScRefCellValue& aCell, SCROW nRow, OUString& rString ) const
 {
-    ScRefCellValue aCell = GetCellValue(nRow);
     sal_uLong nFormat = GetNumberFormat(GetDoc()->GetNonThreadedContext(), nRow);
     ScCellFormat::GetInputString(aCell, nFormat, rString, *(GetDoc()->GetFormatTable()), GetDoc());
 }

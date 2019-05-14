@@ -30,7 +30,7 @@
 #include <sc.hrc>
 #include <editutil.hxx>
 
-void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString,
+void ScCellFormat::GetString( const ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString,
                               Color** ppColor, SvNumberFormatter& rFormatter, const ScDocument* pDoc,
                               bool bNullVals, bool bFormula, bool bUseStarFormat )
 {
@@ -118,7 +118,7 @@ OUString ScCellFormat::GetString(
 }
 
 void ScCellFormat::GetInputString(
-    ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString, SvNumberFormatter& rFormatter, const ScDocument* pDoc )
+    const ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString, SvNumberFormatter& rFormatter, const ScDocument* pDoc )
 {
     switch (rCell.meType)
     {
