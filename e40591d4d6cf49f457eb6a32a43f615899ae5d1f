@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_ba1e1d0a",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1730,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-14T12:19:39Z",
+      "side": 1,
+      "message": "this will set m_aMergeStatus to Cancel but probably Error would be more appropriate?\n\nalso, what if there isn\u0027t a dialog?",
+      "revId": "e40591d4d6cf49f457eb6a32a43f615899ae5d1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_9a21e150",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1734,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-14T12:19:39Z",
+      "side": 1,
+      "message": "is this going to return true or false if there\u0027s an exception?",
+      "revId": "e40591d4d6cf49f457eb6a32a43f615899ae5d1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
