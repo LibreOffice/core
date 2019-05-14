@@ -3536,7 +3536,7 @@
                         <xsl:with-param name="preceding-cellstylename" select="''"/>
                         <xsl:with-param name="temp-num" select="'0'"/>
                         <xsl:with-param name="cellstylename" select="$cellstylename"/>
-                        <xsl:with-param name="table-collumns" select="$cell/ancestor::table:table//table:table-column "/>
+                        <xsl:with-param name="table-columns" select="$cell/ancestor::table:table//table:table-column "/>
                     </xsl:call-template>
                 </xsl:variable>
                 <xsl:choose>
@@ -3556,13 +3556,13 @@
         <xsl:param name="preceding-cellstylename"/>
         <xsl:param name="temp-num"/>
         <xsl:param name="cellstylename"/>
-        <xsl:param name="table-collumns"/>
+        <xsl:param name="table-columns"/>
         <xsl:choose>
             <xsl:when test="$temp-num&lt;$column-num">
                 <xsl:variable name="firstcolumn">
                     <xsl:choose>
-                        <xsl:when test="$table-collumns[1]/@table:number-columns-repeated">
-                            <xsl:value-of select="$table-collumns[1]/@table:number-columns-repeated"/>
+                        <xsl:when test="$table-columns[1]/@table:number-columns-repeated">
+                            <xsl:value-of select="$table-columns[1]/@table:number-columns-repeated"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:value-of select="'1'"/>
@@ -3571,8 +3571,8 @@
                 </xsl:variable>
                 <xsl:variable name="preceding-cellstylename-to-param">
                     <xsl:choose>
-                        <xsl:when test="$table-collumns[1]/@table:default-cell-style-name">
-                            <xsl:value-of select="$table-collumns[1]/@table:default-cell-style-name"/>
+                        <xsl:when test="$table-columns[1]/@table:default-cell-style-name">
+                            <xsl:value-of select="$table-columns[1]/@table:default-cell-style-name"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:value-of select="''"/>
@@ -3584,7 +3584,7 @@
                     <xsl:with-param name="temp-num" select="$temp-num + $firstcolumn"/>
                     <xsl:with-param name="preceding-cellstylename" select="$preceding-cellstylename-to-param"/>
                     <xsl:with-param name="cellstylename" select="$cellstylename"/>
-                    <xsl:with-param name="table-collumns" select="$table-collumns[position()!=1]"/>
+                    <xsl:with-param name="table-columns" select="$table-columns[position()!=1]"/>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
@@ -3734,7 +3734,7 @@
                     <!--xsl:if test="@style:parent-style-name">
                         <xsl:attribute name="表:基式样引用"><xsl:value-of select="@style:parent-style-name"/></xsl:attribute>
                     </xsl:if-->
-                    <!--chengxz chang the order-->
+                    <!--chengxz change the order-->
                     <xsl:variable name="styleProperties" select="key('styles', $styleName)/*"/>
                     <xsl:call-template name="Font">
                         <xsl:with-param name="styleProperties" select="$styleProperties"/>
