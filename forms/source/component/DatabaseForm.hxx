@@ -207,8 +207,8 @@ class ODatabaseForm :public OFormComponents
 //  </properties>
     bool                 m_bLoaded : 1;
     bool                 m_bSubForm : 1;
-    bool                 m_bForwardingConnection : 1;    // sal_True if we're setting the ActiveConnection on the aggregate
-    bool                 m_bSharingConnection : 1;       // sal_True if the connection we're using is shared with out parent
+    bool                 m_bForwardingConnection : 1;    // true if we're setting the ActiveConnection on the aggregate
+    bool                 m_bSharingConnection : 1;       // true if the connection we're using is shared with our parent
 
 public:
     explicit ODatabaseForm(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
