@@ -297,6 +297,7 @@ public:
         , m_pBuilder(pBuilder)
         , m_bTakeOwnership(bTakeOwnership)
         , m_bEventListener(false)
+        , m_bKeyEventListener(false)
         , m_bMouseEventListener(false)
         , m_nBlockNotify(0)
     {
