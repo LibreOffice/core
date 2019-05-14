@@ -22,6 +22,8 @@ class FileDefinitionWidgetDraw : public vcl::WidgetDrawInterface
 {
 private:
     SalGraphics& m_rGraphics;
+    bool m_bIsActive;
+
     std::shared_ptr<WidgetDefinition> m_pWidgetDefinition;
 
     bool resolveDefinition(ControlType eType, ControlPart ePart, ControlState eState,
@@ -30,6 +32,8 @@ private:
 
 public:
     FileDefinitionWidgetDraw(SalGraphics& rGraphics);
+
+    bool isActive() { return m_bIsActive; }
 
     bool isNativeControlSupported(ControlType eType, ControlPart ePart) override;
 
