@@ -170,7 +170,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 
     m_xCloseBtn->connect_clicked( LINK( this, DigitalSignaturesDialog, OKButtonHdl) );
 
-    switch( maSignatureManager.meSignatureMode )
+    switch( maSignatureManager.getSignatureMode() )
     {
         case DocumentSignatureMode::Content:
             m_xHintDocFT->show();
@@ -196,7 +196,7 @@ bool DigitalSignaturesDialog::Init()
 
     if ( bInit )
     {
-        maSignatureManager.maSignatureHelper.SetStartVerifySignatureHdl( LINK( this, DigitalSignaturesDialog, StartVerifySignatureHdl ) );
+        maSignatureManager.getSignatureHelper().SetStartVerifySignatureHdl( LINK( this, DigitalSignaturesDialog, StartVerifySignatureHdl ) );
     }
 
     return bInit;
@@ -212,13 +212,13 @@ void DigitalSignaturesDialog::SetStorage( const css::uno::Reference < css::embed
         return;
     }
 
-    maSignatureManager.mxStore = rxStore;
-    maSignatureManager.maSignatureHelper.SetStorage( maSignatureManager.mxStore, m_sODFVersion);
+    maSignatureManager.setStore(rxStore);
+    maSignatureManager.getSignatureHelper().SetStorage( maSignatureManager.getStore(), m_sODFVersion);
 }
 
 void DigitalSignaturesDialog::SetSignatureStream( const css::uno::Reference < css::io::XStream >& rxStream )
 {
-    maSignatureManager.mxSignatureStream = rxStream;
+    maSignatureManager.setSignatureStream(rxStream);
 }
 
 bool DigitalSignaturesDialog::canAddRemove()
@@ -227,16 +227,16 @@ bool DigitalSignaturesDialog::canAddRemove()
     //'canAdd' and 'canRemove' case
     bool ret = true;
 
-    uno::Reference<container::XNameAccess> xNameAccess(maSignatureManager.mxStore, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xNameAccess(maSignatureManager.getStore(), uno::UNO_QUERY);
     if (xNameAccess.is() && xNameAccess->hasByName("[Content_Types].xml"))
         // It's always possible to append an OOXML signature.
         return ret;
 
-    if (!maSignatureManager.mxStore.is())
+    if (!maSignatureManager.getStore().is())
         // It's always possible to append a PDF signature.
         return ret;
 
-    OSL_ASSERT(maSignatureManager.mxStore.is());
+    OSL_ASSERT(maSignatureManager.getStore().is());
     bool bDoc1_1 = DocumentSignatureHelper::isODFPre_1_2(m_sODFVersion);
     SaveODFItem item;
     bool bSave1_1 = item.isLessODF1_2();
@@ -258,7 +258,7 @@ bool DigitalSignaturesDialog::canAddRemove()
     //As of OOo 3.2 the document signature includes in macrosignatures.xml. That is
     //adding a macro signature will break an existing document signature.
     //The sfx2 will remove the documentsignature when the user adds a macro signature
-    if (maSignatureManager.meSignatureMode == DocumentSignatureMode::Macros
+    if (maSignatureManager.getSignatureMode() == DocumentSignatureMode::Macros
         && ret)
     {
         if (m_bHasDocumentSignature && !m_bWarningShowSignMacro)
@@ -290,7 +290,7 @@ bool DigitalSignaturesDialog::canRemove()
 {
     bool bRet = true;
 
-    if ( maSignatureManager.meSignatureMode == DocumentSignatureMode::Content )
+    if ( maSignatureManager.getSignatureMode() == DocumentSignatureMode::Content )
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                   VclMessageType::Question, VclButtonsType::YesNo,
@@ -319,7 +319,7 @@ short DigitalSignaturesDialog::run()
     // consequences, as I noticed when I tried to use DocumentSignatureManager::IsXAdESRelevant()
     // (which now is in #if 0).
 
-    if (!maSignatureManager.maCurrentSignatureInformations.empty())
+    if (!maSignatureManager.getCurrentSignatureInformations().empty())
     {
         // If the document has only SHA-1 signatures we probably want it to stay that way?
     }
@@ -371,7 +371,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, weld::Button&, void)
         std::vector<uno::Reference<xml::crypto::XXMLSecurityContext>> xSecContexts;
         xSecContexts.push_back(maSignatureManager.getSecurityContext());
         // Gpg signing is only possible with ODF >= 1.2 documents
-        if (DocumentSignatureHelper::CanSignWithGPG(maSignatureManager.mxStore, m_sODFVersion))
+        if (DocumentSignatureHelper::CanSignWithGPG(maSignatureManager.getStore(), m_sODFVersion))
             xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());
 
         CertificateChooser aChooser(m_xDialog.get(), xSecContexts, UserAction::Sign);
@@ -385,9 +385,9 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, weld::Button&, void)
 
             xml::crypto::SecurityOperationStatus nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
 
-            if (maSignatureManager.mxStore.is())
+            if (maSignatureManager.getStore().is())
                 // In the PDF case the signature information is only available after parsing.
-                nStatus = maSignatureManager.maSignatureHelper.GetSignatureInformation( nSecurityId ).nStatus;
+                nStatus = maSignatureManager.getSignatureHelper().GetSignatureInformation( nSecurityId ).nStatus;
 
             if ( nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
             {
@@ -502,7 +502,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 {
     m_xSignaturesLB->clear();
 
-    size_t nInfos = maSignatureManager.maCurrentSignatureInformations.size();
+    size_t nInfos = maSignatureManager.getCurrentSignatureInformations().size();
     size_t nValidSigs = 0, nValidCerts = 0;
     bool bAllNewSignatures = true;
 
@@ -511,12 +511,12 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
         for( size_t n = 0; n < nInfos; ++n )
         {
             DocumentSignatureAlgorithm mode = DocumentSignatureHelper::getDocumentAlgorithm(
-                m_sODFVersion, maSignatureManager.maCurrentSignatureInformations[n]);
+                m_sODFVersion, maSignatureManager.getCurrentSignatureInformations()[n]);
             std::vector< OUString > aElementsToBeVerified;
-            if (maSignatureManager.mxStore.is())
-                aElementsToBeVerified = DocumentSignatureHelper::CreateElementList(maSignatureManager.mxStore, maSignatureManager.meSignatureMode, mode);
+            if (maSignatureManager.getStore().is())
+                aElementsToBeVerified = DocumentSignatureHelper::CreateElementList(maSignatureManager.getStore(), maSignatureManager.getSignatureMode(), mode);
 
-            const SignatureInformation& rInfo = maSignatureManager.maCurrentSignatureInformations[n];
+            const SignatureInformation& rInfo = maSignatureManager.getCurrentSignatureInformations()[n];
             uno::Reference< css::security::XCertificate > xCert = getCertificate(rInfo);
 
             OUString aSubject;
@@ -555,7 +555,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             aDescription = rInfo.ouDescription;
 
             // Decide type string.
-            if (maSignatureManager.mxStore.is())
+            if (maSignatureManager.getStore().is())
             {
                 // OpenPGP
                 if (!rInfo.ouGpgCertificate.isEmpty())
@@ -599,20 +599,20 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             //by an version of OOo previous to 3.2
             // If there is no storage, then it's pointless to check storage
             // stream references.
-            else if (maSignatureManager.meSignatureMode == DocumentSignatureMode::Content
-                && (maSignatureManager.mxStore.is() && !DocumentSignatureHelper::isOOo3_2_Signature(
-                maSignatureManager.maCurrentSignatureInformations[n])))
+            else if (maSignatureManager.getSignatureMode() == DocumentSignatureMode::Content
+                && (maSignatureManager.getStore().is() && !DocumentSignatureHelper::isOOo3_2_Signature(
+                maSignatureManager.getCurrentSignatureInformations()[n])))
             {
                 sImage = BMP_SIG_NOT_VALIDATED;
                 bAllNewSignatures = false;
             }
-            else if (maSignatureManager.meSignatureMode == DocumentSignatureMode::Content
+            else if (maSignatureManager.getSignatureMode() == DocumentSignatureMode::Content
                 && DocumentSignatureHelper::isOOo3_2_Signature(
-                maSignatureManager.maCurrentSignatureInformations[n]))
+                maSignatureManager.getCurrentSignatureInformations()[n]))
             {
                 sImage = BMP_SIG_VALID;
             }
-            else if (maSignatureManager.meSignatureMode == DocumentSignatureMode::Macros)
+            else if (maSignatureManager.getSignatureMode() == DocumentSignatureMode::Macros)
             {
                 sImage = BMP_SIG_VALID;
             }
@@ -707,7 +707,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
     if (nEntry != -1)
     {
         sal_uInt16 nSelected = m_xSignaturesLB->get_id(nEntry).toUInt32();
-        const SignatureInformation& rInfo = maSignatureManager.maCurrentSignatureInformations[ nSelected ];
+        const SignatureInformation& rInfo = maSignatureManager.getCurrentSignatureInformations()[ nSelected ];
         uno::Reference<security::XCertificate> xCert = getCertificate(rInfo);
 
         if ( xCert.is() )
