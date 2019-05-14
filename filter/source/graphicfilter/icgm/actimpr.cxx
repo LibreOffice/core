@@ -461,7 +461,7 @@ void CGMImpressOutAct::DrawEllipse( FloatPoint const & rCenter, FloatPoint const
         uno::Any aAny( &eCircleKind, ::cppu::UnoType<drawing::CircleKind>::get() );
         maXPropSet->setPropertyValue( "CircleKind", aAny );
 
-        long nXSize = static_cast<long>( rSize.X * 2.0 );      // strange behaviour with a awt::Size of 0
+        long nXSize = static_cast<long>( rSize.X * 2.0 );      // strange behaviour with an awt::Size of 0
         long nYSize = static_cast<long>( rSize.Y * 2.0 );
         if ( nXSize < 1 )
             nXSize = 1;
@@ -487,7 +487,7 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint const & rCenter, FloatPoint
         drawing::CircleKind eCircleKind;
 
 
-        long nXSize = static_cast<long>( rSize.X * 2.0 );      // strange behaviour with a awt::Size of 0
+        long nXSize = static_cast<long>( rSize.X * 2.0 );      // strange behaviour with an awt::Size of 0
         long nYSize = static_cast<long>( rSize.Y * 2.0 );
         if ( nXSize < 1 )
             nXSize = 1;
