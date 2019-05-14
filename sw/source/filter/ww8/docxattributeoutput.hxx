@@ -393,7 +393,7 @@ private:
     void FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrameFormat* pOLEFrameFormat, SwOLENode* pOLENode, const SdrObject* pSdrObj = nullptr);
     void WriteSrcRect( const SdrObject* pSdrObj, const SwFrameFormat* pFrameFormat );
     void WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat);
-    bool WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize );
+    bool WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat);
     bool WriteOLEMath( const SwOLENode& rNode );
     void PostponeOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat );
     void WriteOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* rFlyFrameFormat );
@@ -882,7 +882,14 @@ private:
     std::vector<const SwOLENode*> m_aPostponedMaths;
     /// count charts consistently for unit tests
     unsigned int m_nChartCount;
-    std::vector<std::pair<const SdrObject*, Size>> m_aPostponedCharts;
+    struct PostponedChart
+    {
+        PostponedChart( const SdrObject* sdrObject, const Size& rSize, const SwFlyFrameFormat* rFrame ) : object(sdrObject), size(rSize), frame(rFrame) {};
+        const SdrObject* object;
+        const Size size;
+        const SwFlyFrameFormat* frame;
+    };
+    std::vector<PostponedChart> m_aPostponedCharts;
     std::vector<const SdrObject*> m_aPostponedFormControls;
     std::vector<PostponedDrawing> m_aPostponedActiveXControls;
     const SwField* pendingPlaceholder;
