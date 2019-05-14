@@ -113,7 +113,7 @@ private:
     sal_uInt8* getMapData(sal_uInt32 np);
 
     bool    ReadMap();
-        // reads/decompresses the bitmap data and fills aMap
+        // reads/decompress the bitmap data and fills aMap
 
     sal_uInt32 GetBits(const sal_uInt8 * pSrc, sal_uInt32 nBitsPos, sal_uInt32 nBitsCount);
         // fetches BitsCount bits from pSrc[..] at the position nBitsPos
