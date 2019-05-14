@@ -128,14 +128,14 @@ import "ocidl.idl";
         HRESULT optional5([out, optional] VARIANT* val1, [out, optional] VARIANT* val2);
         //midl creates for val4 a BSTR "4" as default value in the TLB. The midl complains
         //but the error message seems to be not for this case.
-        //in defaultvalue2 val4 has an VT_I4 in the TLB. This must be a bug!
+        //in defaultvalue2 val4 has a VT_I4 in the TLB. This must be a bug!
         [id(77), helpstring("method defaultvalue1")]
         HRESULT defaultvalue1([in, defaultvalue(1)] long val1,
                               [in, defaultvalue(2)] double* val2,
                              // [in, defaultvalue(3)] VARIANT val3, //ok
                               [in, defaultvalue(4)] VARIANT* val4);
 
-        // bug in midl: when val3 and val4 are pointers then the generated header cretates
+        // bug in midl: when val3 and val4 are pointers then the generated header creates
         // for all params default values:
         //HRESULT STDMETHODCALLTYPE defaultvalue2(
         //            /* [defaultvalue][in] */ long *val1 = 10,
