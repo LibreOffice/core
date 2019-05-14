@@ -86,7 +86,7 @@ namespace XSLT
         Reference<XSeekable> xSeek(m_rootStream->getInputStream(), UNO_QUERY);
         xSeek->seek(0);
 
-        //create an com.sun.star.embed.OLESimpleStorage from the temp stream
+        //create a com.sun.star.embed.OLESimpleStorage from the temp stream
         Sequence<Any> args(1);
         args[0] <<= xSeek;
         Reference<XNameContainer> cont(
