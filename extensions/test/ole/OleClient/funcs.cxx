@@ -323,7 +323,7 @@ void printSequence( Sequence<Any>& val)
              break;
         case TypeClass_INTERFACE:
             {
-            // we assume that the interface is XInvocation of a AxTestControls.Basic component.
+            // we assume that the interface is XInvocation of an AxTestControls.Basic component.
             Reference<XInvocation> inv;
             elem>>= inv;
             if( inv.is())
