@@ -110,7 +110,7 @@ namespace drawinglayer
             void RenderSvgLinearAtomPrimitive2D(const primitive2d::SvgLinearAtomPrimitive2D& rCandidate);
             void RenderSvgRadialAtomPrimitive2D(const primitive2d::SvgRadialAtomPrimitive2D& rCandidate);
 
-            // DrawMode adaption support
+            // DrawMode adaptation support
             void adaptLineToFillDrawMode() const;
             void adaptTextToFillDrawMode() const;
 
