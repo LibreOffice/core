@@ -90,7 +90,7 @@ namespace frm
 
     //= ControlModelLock
 
-    /** class whose instances lock a OControlModel
+    /** class whose instances lock an OControlModel
 
         Locking here merely means locking the OControlModel's mutex.
 
@@ -357,7 +357,7 @@ protected:
     );
     virtual ~OControlModel() override;
 
-    /** to be called after a OBoundControlModel (a derivee, respectively) has been cloned
+    /** to be called after an OBoundControlModel (a derivee, respectively) has been cloned
 
         <p>This method contains late initializations which cannot be done in the
         constructor of this base class, since the virtual method of derived classes do
@@ -397,7 +397,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL     getSupportedServiceNames() override;
     virtual OUString SAL_CALL    getImplementationName() override = 0;
 
-// XSericeInfo - static version(s)
+// XServiceInfo - static version(s)
     /// @throws css::uno::RuntimeException
     static  css::uno::Sequence<OUString> getSupportedServiceNames_Static();
 
@@ -640,7 +640,7 @@ protected:
                                                             // factory to create the aggregate with
         const OUString& _rUnoControlModelTypeName,   // service name of te model to aggregate
         const OUString& _rDefault,                   // service name of the default control
-        const bool _bCommitable,                        // is the control (model) commitable ?
+        const bool _bCommitable,                        // is the control (model) committable?
         const bool _bSupportExternalBinding,            // set to sal_True if you want to support XBindableValue
         const bool _bSupportsValidation                 // set to sal_True if you want to support XValidatable
     );
@@ -1137,7 +1137,7 @@ private:
     */
     void        impl_determineAmbientForm_nothrow();
 
-    /** connects to a value supplier which is an database column.
+    /** connects to a value supplier which is a database column.
 
         The column is take from our parent, which must be a database form respectively row set.
 
@@ -1153,7 +1153,7 @@ private:
                     bool  _bFromReload
                 );
 
-    /** disconnects from a value supplier which is an database column
+    /** disconnects from a value supplier which is a database column
 
         @precond The control does not have an external value supplier
         @see impl_connectDatabaseColumn_noNotify
