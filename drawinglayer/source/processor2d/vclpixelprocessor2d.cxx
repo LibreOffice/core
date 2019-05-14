@@ -165,16 +165,6 @@ namespace drawinglayer
             mpOutputDevice->SetLineColor(Color(aLineColor));
             aLocalPolygon.transform(maCurrentTransformation);
 
-            if (getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete())
-            {
-                if (basegfx::utils::containsOnlyHorizontalOrVerticalLines(aLocalPolygon))
-                {
-                    // DrawPolyLineDirect() only works in AA mode, but pure horizontal or vertical
-                    // lines are better with AA off.
-                    return false;
-                }
-            }
-
             // try drawing; if it did not work, use standard fallback
             return mpOutputDevice->DrawPolyLineDirect( aLocalPolygon, 0.0, fTransparency);
         }
