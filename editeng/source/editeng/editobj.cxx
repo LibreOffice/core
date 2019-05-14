@@ -59,7 +59,7 @@ using namespace com::sun::star;
 
 static std::unique_ptr<XEditAttribute> MakeXEditAttribute( SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd )
 {
-    // Create thw new attribute in the pool
+    // Create the new attribute in the pool
     const SfxPoolItem& rNew = rPool.Put( rItem );
 
     std::unique_ptr<XEditAttribute> pNew(new XEditAttribute( rNew, nStart, nEnd ));
@@ -504,7 +504,7 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pP 
     , bVertical(false)
     , bIsTopToBottomVert(false)
 {
-    // #i101239# ensure target is a EditEngineItemPool, else
+    // #i101239# ensure target is an EditEngineItemPool, else
     // fallback to pool ownership. This is needed to ensure that at
     // pool destruction time of an alien pool, the pool is still alive.
     // When registering would happen at an alien pool which just uses an
@@ -541,7 +541,7 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, const EditTextOb
 
     if ( !r.bOwnerOfPool )
     {
-        // reuse alien pool; this must be a EditEngineItemPool
+        // reuse alien pool; this must be an EditEngineItemPool
         // since there is no other way to construct a BinTextObject
         // than it's regular constructor where that is ensured
         pPool = r.pPool;
