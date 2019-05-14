@@ -27,7 +27,7 @@
 namespace frm
 {
 
-    /** a OBoundControlModel which features the exchange of a reference value
+    /** an OBoundControlModel which features the exchange of a reference value
     */
     class OReferenceValueComponent : public OBoundControlModel
     {
