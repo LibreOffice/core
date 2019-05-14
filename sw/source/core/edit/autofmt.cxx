@@ -2143,7 +2143,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
             if( m_aFlags.bAutoCorrect &&
                 aACorrDoc.ChgAutoCorrWord(reinterpret_cast<sal_Int32&>(nSttPos), sal_Int32(nPos), *pATst, nullptr))
             {
-                nPos = m_pCurTextFrame->MapModelToViewPos(*m_aDelPam.GetPoint()) - TextFrameIndex(1);
+                nPos = m_pCurTextFrame->MapModelToViewPos(*m_aDelPam.GetPoint());
 
                 if( m_aFlags.bWithRedlining )
                 {
@@ -2179,7 +2179,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                     SetRedlineText( STR_AUTOFMTREDL_DETECT_URL ) &&
                     pATst->FnSetINetAttr(aACorrDoc, *pText, sal_Int32(nLastBlank), sal_Int32(nPos), eLang)))
             {
-                nPos = m_pCurTextFrame->MapModelToViewPos(*m_aDelPam.GetPoint()) - TextFrameIndex(1);
+                nPos = m_pCurTextFrame->MapModelToViewPos(*m_aDelPam.GetPoint());
             }
             else
             {
