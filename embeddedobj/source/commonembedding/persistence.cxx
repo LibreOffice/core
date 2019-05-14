@@ -1399,7 +1399,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     m_aNewEntryName = sEntName;
     m_aNewDocMediaDescriptor = GetValuableArgs_Impl( lArguments, true );
 
-    // TODO: register listeners for storages above, in case thay are disposed
+    // TODO: register listeners for storages above, in case they are disposed
     //       an exception will be thrown on saveCompleted( true )
 
     // TODO: should the listener notification be done here or in saveCompleted?
