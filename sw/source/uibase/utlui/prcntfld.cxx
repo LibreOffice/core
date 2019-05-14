@@ -55,8 +55,6 @@ void SwPercentField::ShowPercent(bool bPercent)
 
     if (bPercent)
     {
-        int nCurrentWidth, nPercent;
-
         nOldValue = get_value();
 
         eOldUnit = m_pField->get_unit();
@@ -66,16 +64,16 @@ void SwPercentField::ShowPercent(bool bPercent)
         m_pField->set_unit(FieldUnit::PERCENT);
         m_pField->set_digits(0);
 
-        nCurrentWidth = MetricField::ConvertValue(nOldMin, 0, nOldDigits, eOldUnit, FieldUnit::TWIP);
+        int nCurrentWidth = MetricField::ConvertValue(nOldMin, 0, nOldDigits, eOldUnit, FieldUnit::TWIP);
         // round to 0.5 percent
-        nPercent = ((nCurrentWidth * 10) / nRefValue + 5) / 10;
+        int nPercent = nRefValue ? (((nCurrentWidth * 10) / nRefValue + 5) / 10) : 0;
 
         m_pField->set_range(std::max(1, nPercent), 100, FieldUnit::NONE);
         m_pField->set_increments(5, 10, FieldUnit::NONE);
         if (nOldValue != nLastValue)
         {
             nCurrentWidth = MetricField::ConvertValue(nOldValue, 0, nOldDigits, eOldUnit, FieldUnit::TWIP);
-            nPercent = ((nCurrentWidth * 10) / nRefValue + 5) / 10;
+            nPercent = nRefValue ? (((nCurrentWidth * 10) / nRefValue + 5) / 10) : 0;
             m_pField->set_value(nPercent, FieldUnit::NONE);
             nLastPercent = nPercent;
             nLastValue = nOldValue;
@@ -122,7 +120,7 @@ void SwPercentField::set_value(int nNewValue, FieldUnit eInUnit)
             int nValue = Convert(nNewValue, eInUnit, eOldUnit);
             nCurrentWidth = MetricField::ConvertValue(nValue, 0, nOldDigits, eOldUnit, FieldUnit::TWIP);
         }
-        nPercent = ((nCurrentWidth * 10) / nRefValue + 5) / 10;
+        nPercent = nRefValue ? (((nCurrentWidth * 10) / nRefValue + 5) / 10) : 0;
         m_pField->set_value(nPercent, FieldUnit::NONE);
     }
 }
@@ -221,7 +219,7 @@ int SwPercentField::Convert(int nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
         else
             nCurrentWidth = MetricField::ConvertValue(nValue, 0, nOldDigits, eInUnit, FieldUnit::TWIP);
         // Round to 0.5 percent
-        return ((nCurrentWidth * 1000) / nRefValue + 5) / 10;
+        return nRefValue ? (((nCurrentWidth * 1000) / nRefValue + 5) / 10) : 0;
     }
 
     return MetricField::ConvertValue(nValue, 0, nOldDigits, eInUnit, eOutUnit);
