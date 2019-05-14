@@ -39,7 +39,7 @@ css::uno::Sequence< sal_Int8 > WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile
 
 /*------------------------------------------------------------------------
     input:
-    aByteStream - a sequence of bytes containing a openoffice metafile
+    aByteStream - a sequence of bytes containing a LibreOffice metafile
                   picture with a leading METAFILEHEADER
 ------------------------------------------------------------------------*/
 HMETAFILEPICT OOMFPictToWinMFPict( css::uno::Sequence< sal_Int8 > const & aOOMetaFilePict );
@@ -60,7 +60,7 @@ css::uno::Sequence< sal_Int8 > WinBITMAPToOOBMP( HBITMAP );
 
 /*------------------------------------------------------------------------
     input:
-    aOOBmp - sequence of bytes containing a openoffice bitmap
+    aOOBmp - sequence of bytes containing a LibreOffice bitmap
     May contain CF_DIBV5 or CF_DIB, but removing the BITMAPFILEHEADER
     is always the same size
 ------------------------------------------------------------------------*/
@@ -77,7 +77,7 @@ css::uno::Sequence< sal_Int8 > TextHtmlToHTMLFormat( css::uno::Sequence< sal_Int
 
 /**
     Return a FileList in which Windows Shell Links (lnk) are resolved.
-    If for what ever reason a resolution is not possible leave the
+    If for whatever reason a resolution is not possible leave the
     original lnk file.
 */
 css::uno::Sequence< sal_Int8 > CF_HDROPToFileList(HGLOBAL hGlobal);
