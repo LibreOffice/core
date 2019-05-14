@@ -1,3 +1,2 @@
 gfxcmp    testgraphical     :       instsetoo_native qadevOOo NULL
-gfxcmp    testgraphical                             usr1     -  all    gfxcmp_mkout NULL
-gfxcmp    testgraphical\ui\java\ConvwatchGUIProject nmake    -  all    gfxcmp_java_ui NULL
+gfxcmp    testgraphical\prj                             nmake     -  all    gfxcmp_prj NULL

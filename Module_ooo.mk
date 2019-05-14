@@ -101,6 +101,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     svtools \
     svx \
     sw \
+    testgraphical \
     toolkit \
     tools \
     twain \
