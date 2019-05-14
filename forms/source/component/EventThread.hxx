@@ -68,7 +68,7 @@ protected:
 
     // Edit an Event:
     // The mutex is not locked, but pCompImpl stays valid in any case.
-    // pEvt can be a derrived type, namely the one that cloneEvent returns.
+    // pEvt can be a derived type, namely the one that cloneEvent returns.
     // rControl is only set, if a Control has been passed in addEvent.
     // Because the Control is only held as a WeakRef, it can disappear in the meantime.
     virtual void processEvent( ::cppu::OComponentHelper* _pCompImpl,
