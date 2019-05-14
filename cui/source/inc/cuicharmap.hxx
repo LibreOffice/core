@@ -19,6 +19,8 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_CUICHARMAP_HXX
 #define INCLUDED_CUI_SOURCE_INC_CUICHARMAP_HXX
 
+#include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
@@ -79,7 +81,9 @@ private:
     std::deque<OUString> maRecentCharFontList;
     std::deque<OUString> maFavCharList;
     std::deque<OUString> maFavCharFontList;
-    uno::Reference< uno::XComponentContext > mxContext;
+    uno::Reference<uno::XComponentContext> mxContext;
+    css::util::URL m_aInsertSymbol;
+    uno::Reference<css::frame::XDispatch> m_xDispatch;
 
     SvxCharView m_aRecentCharView[16];
     SvxCharView m_aFavCharView[16];

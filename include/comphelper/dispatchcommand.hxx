@@ -15,8 +15,9 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XDispatchResultListener; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XDispatch; class XDispatchResultListener; } } } }
 namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
+namespace com { namespace sun { namespace star { namespace util { class URL; } } } }
 
 namespace comphelper
 {
@@ -29,8 +30,13 @@ namespace comphelper
 */
 COMPHELPER_DLLPUBLIC bool dispatchCommand(const OUString& rCommand,
         const css::uno::Sequence<css::beans::PropertyValue>& rArguments,
-        const css::uno::Reference<css::frame::XDispatchResultListener>& aListener = css::uno::Reference<css::frame::XDispatchResultListener>());
+        const css::uno::Reference<css::frame::XDispatchResultListener>& rListener = css::uno::Reference<css::frame::XDispatchResultListener>());
 
+COMPHELPER_DLLPUBLIC css::uno::Reference<css::frame::XDispatch> queryDispatch(const OUString& rCommand, css::util::URL& rCommandURL);
+
+COMPHELPER_DLLPUBLIC void dispatchCommand(css::uno::Reference<css::frame::XDispatch>& rDisp, const css::util::URL& rCommandURL,
+        const css::uno::Sequence<css::beans::PropertyValue>& rArguments,
+        const css::uno::Reference<css::frame::XDispatchResultListener>& rListener = css::uno::Reference<css::frame::XDispatchResultListener>());
 }
 
 #endif // INCLUDED_COMPHELPER_DISPATCHCOMMAND_HXX

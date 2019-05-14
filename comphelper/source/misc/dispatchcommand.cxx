@@ -31,7 +31,7 @@ using namespace css;
 
 namespace comphelper {
 
-bool dispatchCommand(const OUString& rCommand, const css::uno::Sequence<css::beans::PropertyValue>& rArguments, const uno::Reference<css::frame::XDispatchResultListener>& aListener)
+uno::Reference<frame::XDispatch> queryDispatch(const OUString& rCommand, util::URL& rCommandURL)
 {
     // Target where we will execute the .uno: command
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
@@ -43,24 +43,32 @@ bool dispatchCommand(const OUString& rCommand, const css::uno::Sequence<css::bea
 
     uno::Reference<frame::XDispatchProvider> xDispatchProvider(xFrame, uno::UNO_QUERY);
     if (!xDispatchProvider.is())
-        return false;
+        return uno::Reference<frame::XDispatch>();
 
-    util::URL aCommandURL;
-    aCommandURL.Complete = rCommand;
+    rCommandURL.Complete = rCommand;
     uno::Reference<util::XURLTransformer> xParser = util::URLTransformer::create(xContext);
-    xParser->parseStrict(aCommandURL);
+    xParser->parseStrict(rCommandURL);
 
-    uno::Reference<frame::XDispatch> xDisp = xDispatchProvider->queryDispatch(aCommandURL, OUString(), 0);
+    return xDispatchProvider->queryDispatch(rCommandURL, OUString(), 0);
+}
+
+void dispatchCommand(uno::Reference<frame::XDispatch>& rDisp, const util::URL& rCommandURL, const css::uno::Sequence<css::beans::PropertyValue>& rArguments, const uno::Reference<css::frame::XDispatchResultListener>& rListener)
+{
+    // And do the work...
+    uno::Reference<frame::XNotifyingDispatch> xNotifyingDisp(rDisp, uno::UNO_QUERY);
+    if (xNotifyingDisp.is())
+        xNotifyingDisp->dispatchWithNotification(rCommandURL, rArguments, rListener);
+    else
+        rDisp->dispatch(rCommandURL, rArguments);
+}
+
+bool dispatchCommand(const OUString& rCommand, const css::uno::Sequence<css::beans::PropertyValue>& rArguments, const uno::Reference<css::frame::XDispatchResultListener>& rListener)
+{
+    util::URL aCommandURL;
+    uno::Reference<frame::XDispatch> xDisp = queryDispatch(rCommand, aCommandURL);
     if (!xDisp.is())
         return false;
-
-    // And do the work...
-    uno::Reference<frame::XNotifyingDispatch> xNotifyingDisp(xDisp, uno::UNO_QUERY);
-    if (xNotifyingDisp.is())
-        xNotifyingDisp->dispatchWithNotification(aCommandURL, rArguments, aListener);
-    else
-        xDisp->dispatch(aCommandURL, rArguments);
-
+    dispatchCommand(xDisp, aCommandURL, rArguments, rListener);
     return true;
 }
 

@@ -90,7 +90,6 @@ SvxCharacterMap::SvxCharacterMap(weld::Window* pParent, const SfxItemSet* pSet, 
                      SvxCharView(m_xVirDev),
                      SvxCharView(m_xVirDev)}
     , m_aShowChar(m_xVirDev)
-    , m_xOKBtn(bInsert ? m_xBuilder->weld_button("insert") : m_xBuilder->weld_button("ok"))
     , m_xFontText(m_xBuilder->weld_label("fontft"))
     , m_xFontLB(m_xBuilder->weld_combo_box("fontlb"))
     , m_xSubsetText(m_xBuilder->weld_label("subsetft"))
@@ -140,6 +139,17 @@ SvxCharacterMap::SvxCharacterMap(weld::Window* pParent, const SfxItemSet* pSet, 
     , m_xSearchSet(new SvxSearchCharSet(m_xBuilder->weld_scrolled_window("searchscroll"), m_xVirDev))
     , m_xSearchSetArea(new weld::CustomWeld(*m_xBuilder, "searchcharset", *m_xSearchSet))
 {
+    if (m_bHasInsert)
+    {
+        // tdf#120423 we might want to support insert, but it might be the case that
+        // the target doesn't support it, so check here and fall back in the absense
+        // of InsertSymbol support
+        m_xDispatch = comphelper::queryDispatch(".uno:InsertSymbol", m_aInsertSymbol);
+        if (!m_xDispatch.is())
+            m_bHasInsert = false;
+    }
+
+    m_xOKBtn = m_bHasInsert ? m_xBuilder->weld_button("insert") : m_xBuilder->weld_button("ok");
     m_aShowChar.SetCentered(true);
     m_xFontLB->make_sorted();
     //lock the size request of this widget to the width of all possible entries
@@ -616,7 +626,7 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
 
         aArgs[1].Name = "FontName";
         aArgs[1].Value <<= aFont.GetFamilyName();
-        comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
+        comphelper::dispatchCommand(m_xDispatch, m_aInsertSymbol, aArgs);
 
         updateRecentCharacterList(sGlyph, aFont.GetFamilyName());
 
