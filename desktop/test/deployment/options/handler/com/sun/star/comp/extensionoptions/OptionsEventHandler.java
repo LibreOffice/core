@@ -195,7 +195,7 @@ public class OptionsEventHandler {
                 XControl xControl = xContainer.getControl(m_arStringControls[i]);
 
                 //This generic handler and the corresponding registry schema support
-                //up to five text controls. However, if a options page does not use all
+                //up to five text controls. However, if an options page does not use all
                 //five controls then we will not complain here.
                 if (xControl == null)
                     continue;
@@ -290,7 +290,7 @@ public class OptionsEventHandler {
                 XControl xControl = xContainer.getControl(m_arStringControls[i]);
 
                 //This generic handler and the corresponding registry schema support
-                //up to five text controls. However, if a options page does not use all
+                //up to five text controls. However, if an options page does not use all
                 //five controls then we will not complain here.
                 if (xControl == null)
                     continue;
