@@ -116,7 +116,7 @@ sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
     else
     {
         /*
-          Well we don't have an available substition, and we're
+          Well we don't have an available substitution, and we're
           in our private area, so give up and show a standard
           bullet symbol
         */
