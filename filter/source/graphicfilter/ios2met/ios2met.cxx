@@ -413,7 +413,7 @@ public:
     ~OS2METReader();
 
     void ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaFile );
-        // Reads from the stream a OS2MET file and fills up the GDIMetaFile
+        // Reads from the stream an OS2MET file and fills up the GDIMetaFile
 
 };
 
@@ -1396,7 +1396,7 @@ void OS2METReader::ReadMarker(bool bGivenPos, sal_uInt16 nOrderLen)
                 pVirDev->DrawPolygon(aPoly);
                 break;
             }
-            case  4:   // SQARE
+            case  4:   // SQUARE
             case  8: { // SOLIDSUARE
                 tools::Polygon aPoly(4);
                 aPoly.SetPoint(Point(x+4,y+4),0);
