@@ -637,7 +637,7 @@ void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
 {
     // Like Paste, only EditView::Insert, instead of EditView::Paste.
     // Actually not quite true that possible indentations must be corrected,
-    // but that comes later by a universal import. The indentation level is
+    // but that comes later by an universal import. The indentation level is
     // then determined right in the Inserted method.
     // Possible structure:
     // pImportInfo with DestPara, DestPos, nFormat, pParaObj...
