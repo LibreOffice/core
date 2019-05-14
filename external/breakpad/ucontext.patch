@@ -107,7 +107,7 @@
 -  static uintptr_t GetInstructionPointer(const struct ucontext* uc);
 +  static uintptr_t GetInstructionPointer(const ucontext_t* uc);
  
-   // Juggle a arch-specific ucontext into a minidump format
+   // Juggle an arch-specific ucontext into a minidump format
    //   out: the minidump structure
    //   info: the collection of register structures.
  #if defined(__i386__) || defined(__x86_64)
