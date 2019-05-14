@@ -36,7 +36,7 @@ namespace Item
         virtual bool operator==(const ItemBase&) const;
 
         sal_Int16 getValue() const { return m_nValue; }
-        void putValue(sal_Int16 nNew) { m_nValue = nNew; }
+        void setValue(sal_Int16 nNew) { m_nValue = nNew; }
 
         virtual bool getPresentation(
             SfxItemPresentation,

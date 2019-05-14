@@ -1434,6 +1434,13 @@ namespace Item
 
         void checkSimpleItems()
         {
+            // for debug, change bLoop to true, start, attach and set to false again to debug (one possibility...)
+            static bool bLoop(false);
+            while(bLoop)
+            {
+                bLoop = true;
+            }
+
             static bool bInit(false);
             static CntInt16_derived a_sp, b_sp, c_sp;
             static CntInt16_derived theDefault;
@@ -1489,6 +1496,11 @@ namespace Item
 
             CntOUString_derived shas3(CntOUString_derived("Hello"));
             CntOUString_derived shas4(CntOUString_derived("WhateverComesAlong"));
+
+            CntOUString_derived shas5(CntOUString_derived("RgnfShoe2474"));
+            CntOUString_derived shas6(CntOUString_derived("RgnfShoe2474"));
+            CntOUString_derived shas7(CntOUString_derived("RgnfShoe2474"));
+            CntOUString_derived shas8(CntOUString_derived("RgnfShoe2474"));
 
             if(CntOUString_derived("NotDefault").isDefault())
             {

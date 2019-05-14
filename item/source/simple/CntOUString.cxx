@@ -9,22 +9,68 @@
 
 #include <item/simple/CntOUString.hxx>
 #include <item/base/ItemControlBlock.hxx>
+#include <item/base/ItemAdministrator.hxx>
 #include <cassert>
 
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace Item
 {
-    CntOUString::CntOUString(ItemControlBlock& rItemControlBlock, const rtl::OUString& rValue)
-    :   ItemBase(rItemControlBlock),
+    ItemAdministrator& CntOUString::CntOUString_Data::getItemAdministrator() const
+    {
+        static ItemAdministrator_set aItemAdministrator_set(
+            // hand over localized lambda call to construct a new instance of Item
+            []()
+            {
+                return new CntOUString_Data(rtl::OUString());
+            },
+            // hand over localized lambda call to clone an Item
+            [](const ItemData& rRef)
+            {
+                const CntOUString_Data& rData(static_cast<const CntOUString_Data&>(rRef));
+                return new CntOUString_Data(rData.getValue());
+            },
+            // hand over localized lambda operator< to have a sorted set
+            [](ItemData* A, ItemData* B)
+            {
+                return static_cast<CntOUString_Data*>(A)->getValue() < static_cast<CntOUString_Data*>(B)->getValue();
+            });
+
+        return aItemAdministrator_set;
+    }
+
+    CntOUString::CntOUString_Data::CntOUString_Data(const rtl::OUString& rValue)
+    :   ItemData(),
         m_aValue(rValue)
     {
+    }
+
+    bool CntOUString::CntOUString_Data::operator==(const ItemData& rRef) const
+    {
+        return ItemData::operator==(rRef) || // ptr-compare
+            getValue() == static_cast<const CntOUString_Data&>(rRef).getValue(); // content compare
+    }
+
+    CntOUString::CntOUString(ItemControlBlock& rItemControlBlock, const rtl::OUString& rValue)
+    :   ItemBuffered(rItemControlBlock)
+    {
+        setItemData(new CntOUString_Data(rValue));
     }
 
     bool CntOUString::operator==(const ItemBase& rRef) const
     {
         return ItemBase::operator==(rRef) || // ptr-compare
             getValue() == static_cast<const CntOUString&>(rRef).getValue();
+    }
+
+    const rtl::OUString& CntOUString::getValue() const
+    {
+        return static_cast<CntOUString_Data&>(getItemData()).getValue();
+    }
+
+    void CntOUString::setValue(const rtl::OUString& rValue)
+    {
+        setItemData(new CntOUString_Data(rValue));
     }
 
     bool CntOUString::getPresentation(
@@ -34,13 +80,13 @@ namespace Item
         rtl::OUString& rText,
         const IntlWrapper&) const
     {
-        rText = m_aValue;
+        rText = getValue();
         return true;
     }
 
     bool CntOUString::queryValue(css::uno::Any& rVal, sal_uInt8) const
     {
-        rVal <<= m_aValue;
+        rVal <<= getValue();
         return true;
     }
 
@@ -50,7 +96,7 @@ namespace Item
 
         if(rVal >>= aTheValue)
         {
-            m_aValue = aTheValue;
+            setValue(aTheValue);
             return true;
         }
 

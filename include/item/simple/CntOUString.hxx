@@ -10,7 +10,7 @@
 #ifndef INCLUDED_ITEM_SIMPLE_CNTOUSTRING_HXX
 #define INCLUDED_ITEM_SIMPLE_CNTOUSTRING_HXX
 
-#include <item/base/ItemBase.hxx>
+#include <item/base/ItemBuffered.hxx>
 #include <rtl/ustring.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,11 +21,33 @@ namespace Item
     // this is a helper base class, so it has *no* method
     //     static ItemControlBlock& GetStaticItemControlBlock();
     // and also no public constructor (!), but implements all the
-    // tooling methods for Items using a sal_Int16 internally
-    class ITEM_DLLPUBLIC CntOUString : public ItemBase
+    // tooling methods for Items using a sal_Int16 internally.
+    // I checked if rtl::OUString nowadays already does some
+    // office-wide runtime matching and buffering to hold the
+    // string data only once, but this is not the case. Construction
+    // is optimized, but no shared data usage. Thus, use ItemBuffered
+    // as base class and implement shared ItemData for rtl::OUString
+    // here now to always only have one instance for CntOUString-based
+    // derivations. This will use ItemAdministrator_set, see *.cxx
+    // for details
+    class ITEM_DLLPUBLIC CntOUString : public ItemBuffered
     {
-    private:
-        rtl::OUString m_aValue;
+    protected:
+        // ItemData class for ref-counted rtl::OUString instances
+        class CntOUString_Data : public ItemData
+        {
+        private:
+            rtl::OUString m_aValue;
+
+        protected:
+            virtual ItemAdministrator& getItemAdministrator() const override;
+
+        public:
+            CntOUString_Data(const rtl::OUString& rValue = rtl::OUString());
+            virtual bool operator==(const ItemData& rRef) const override;
+            const rtl::OUString& getValue() const { return m_aValue; }
+            void setValue(const rtl::OUString& rValue) { m_aValue = rValue; }
+        };
 
     protected:
         // constructor for derived classes that *have* to hand
@@ -34,10 +56,10 @@ namespace Item
 
     public:
         CntOUString() = delete;
-        virtual bool operator==(const ItemBase&) const;
+        virtual bool operator==(const ItemBase&) const override;
 
-        const rtl::OUString& getValue() const { return m_aValue; }
-        void putValue(const rtl::OUString& rValue) { m_aValue = rValue; }
+        const rtl::OUString& getValue() const;
+        void setValue(const rtl::OUString& rValue);
 
         virtual bool getPresentation(
             SfxItemPresentation,
