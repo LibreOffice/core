@@ -100,7 +100,7 @@ namespace drawinglayer
                     {
                         // create new transform; first take out old transform to get
                         // to unit coordinates by inverting. Inverting should be flawless
-                        // since we already cheched that object size is not zero in X or Y
+                        // since we already checked that object size is not zero in X or Y
                         basegfx::B2DHomMatrix aNewTransform(getTransformation());
 
                         aNewTransform.invert();
