@@ -163,7 +163,7 @@ namespace pcr
         */
         void impl_initFieldList_nothrow( std::vector< OUString >& rFieldNames ) const;
 
-        /** obtaines the RowSet to which our component belongs
+        /** obtains the RowSet to which our component belongs
 
             If the component is a RowSet itself, it's returned directly. Else, the parent
             is examined for the XRowSet interface. If the parent is no XRowSet, then
@@ -287,7 +287,7 @@ namespace pcr
         /** executes a dialog which allows to the user to change the ImageURL property
             of our component by browsing for an image file.
             @precond
-                our component actually has a ImageURL property
+                our component actually has an ImageURL property
             @param _out_rNewValue
                 the new property value, if the user chose a new image url
             @return
