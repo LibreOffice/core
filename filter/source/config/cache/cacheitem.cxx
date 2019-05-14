@@ -291,7 +291,7 @@ bool CacheItem::haveProps(const CacheItem& lProps) const
         }
     }
 
-    // this method was not breaked before =>
+    // this method was not broken before =>
     // the given property set seems to match with our
     // own properties in its minimum => return TRUE
     return true;
@@ -321,7 +321,7 @@ bool CacheItem::dontHaveProps(const CacheItem& lProps) const
         }
     }
 
-    // this method was not breaked before =>
+    // this method was not broken before =>
     // That means: this item has no matching property
     // of the given set. It "don't have" it ... => return true.
     return true;
