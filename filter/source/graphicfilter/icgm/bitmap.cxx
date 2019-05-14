@@ -93,7 +93,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
         for ( ny = 0; --nyCount ; ny++, rDesc.mpBuf += rDesc.mnScanSize ) {
             nxC = nxCount;
             for ( nx = 0; --nxC; nx++ ) {
-                // this is not fast, but a one bit/pixel format is rarely used
+                // this is not fast, but an one bit/pixel format is rarely used
                 sal_uInt8 colorIndex = static_cast<sal_uInt8>( (*( rDesc.mpBuf + (nx >> 3)) >> ((nx & 7)^7))) & 1;
                 aBitmap.SetPixel(ny, nx, palette[colorIndex]);
             }
