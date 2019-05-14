@@ -117,7 +117,7 @@ void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
     // the message queue of the calling thread. So if the current thread
     // (even if it's an STA thread) and the thread that created the window are not
     // identical we need to create a new thread as we do when the calling thread is
-    // an MTA thread.
+    // a MTA thread.
 
     if( aArguments.getLength() > 0)
     {
@@ -343,7 +343,7 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
 
             fire_dragEnter( e);
             // Check if the action derived from grfKeyState (m_nCurrentDropAction) or the action set
-            // by the listener (m_nCurrentDropAction) is allowed by the source. Only a allowed action is set
+            // by the listener (m_nCurrentDropAction) is allowed by the source. Only an allowed action is set
             // in pdwEffect. The listener notification is asynchron, that is we cannot expect that the listener
             // has already reacted to the notification.
             // If there is more than one valid action which is the case when ALT or RIGHT MOUSE BUTTON is pressed
@@ -391,7 +391,7 @@ HRESULT DropTarget::DragOver( DWORD grfKeyState,
             // The Event contains a XDropTargetDragContext implementation.
             fire_dragOver( e);
             // Check if the action derived from grfKeyState (m_nCurrentDropAction) or the action set
-            // by the listener (m_nCurrentDropAction) is allowed by the source. Only a allowed action is set
+            // by the listener (m_nCurrentDropAction) is allowed by the source. Only an allowed action is set
             // in pdwEffect. The listener notification is asynchron, that is we cannot expect that the listener
             // has already reacted to the notification.
             // If there is more than one valid action which is the case when ALT or RIGHT MOUSE BUTTON is pressed
@@ -565,7 +565,7 @@ void DropTarget::fire_dropActionChanged( const DropTargetDragEvent& dtde )
 // XDropTargetDropContext
 // Returning sal_False would cause the XDropTargetDropContext or ..DragContext implementation
 // to throw an InvalidDNDOperationException, meaning that a Drag is not currently performed.
-// return sal_False results in throwing a InvalidDNDOperationException in the caller.
+// return sal_False results in throwing an InvalidDNDOperationException in the caller.
 
 void DropTarget::_acceptDrop(sal_Int8 dropOperation, const Reference<XDropTargetDropContext>& context)
 {
