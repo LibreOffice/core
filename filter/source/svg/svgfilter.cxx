@@ -443,7 +443,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
                                 mSelectedPages[j] = xDrawPage;
                             }
 
-                            // and stop looping. it is likely not getting better
+                            // and stop looping. It is likely not getting better
                             break;
                         }
                     }
@@ -529,7 +529,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
                     aMasterPageTargetSet.insert( xMasterPageTarget->getMasterPage() );
                 }
             }
-            // Later we move them to a uno::Sequence so we can get them by index
+            // Later we move them to an uno::Sequence so we can get them by index
             mMasterPageTargets.resize( aMasterPageTargetSet.size() );
             sal_Int32 i = 0;
             for (auto const& masterPageTarget : aMasterPageTargetSet)
