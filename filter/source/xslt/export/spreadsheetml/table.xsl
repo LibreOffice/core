@@ -423,7 +423,7 @@
     <xsl:template name="optimized-row-repeating">
         <xsl:param name="tableRow" />
         <xsl:param name="repetition" />
-        <!-- resource optimation: instead of '1' it will be '1000' and the column is not full -->
+        <!-- resource optimization: instead of '1' it will be '1000' and the column is not full -->
         <xsl:param name="thresholdmax" select="512"/>
         <xsl:param name="thresholdmin" select="256"/>
 
