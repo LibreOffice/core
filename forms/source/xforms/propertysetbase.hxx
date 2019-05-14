@@ -240,7 +240,7 @@ protected:
         any notifications if the "current value" is also <FALSE/> - which might be wrong, since
         the guessing of the "old value" differed from the real initial value which was <TRUE/>.
 
-        Too confusing? Okay, than just call this method for every property you have.
+        Too confusing? Okay, then just call this method for every property you have.
 
         @param nHandle
             the handle of the property. Must denote a property supported by this instance, i.e.
