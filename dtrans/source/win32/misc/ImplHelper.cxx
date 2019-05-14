@@ -72,10 +72,10 @@ OUString getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
 {
     OSL_ASSERT( IsValidLocale( lcid, LCID_SUPPORTED ) );
 
-    // we set an default value
+    // we set a default value
     OUString winCP;
 
-    // set an default value
+    // set a default value
     if ( LOCALE_IDEFAULTCODEPAGE == lctype )
     {
         winCP = OUString::number( static_cast<sal_Int32>(GetOEMCP( )) );
