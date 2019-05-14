@@ -138,7 +138,7 @@ public class Helper  {
              // example: data = "firstData;secondData;;forthData"
              // => three tokens => missing one data because the imagine
              // "thirdData" was not received by data.nextToken()
-             // Therefore here comes a special handling for empty datas
+             // Therefore here comes a special handling for empty data
              boolean nextIsData = false;
              int dataCount = 0;
              while (data.hasMoreTokens()) {
