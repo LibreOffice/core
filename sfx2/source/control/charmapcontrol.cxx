@@ -184,7 +184,6 @@ void SfxCharmapCtrl::updateRecentCharControl()
 
 bool SfxCharmapCtrl::EventNotify( NotifyEvent& rNEvt )
 {
-    static bool bNeedsInit = true;
     if ( maDlgBtn->HasFocus() && rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const vcl::KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
@@ -193,14 +192,14 @@ bool SfxCharmapCtrl::EventNotify( NotifyEvent& rNEvt )
         {
             return true;
         }
-        if ( bNeedsInit && nCode == KEY_TAB )
+        if ( mbNeedsInit && nCode == KEY_TAB )
         {
             for(int i = 0; i < 16; i++)
             {
                 m_pRecentCharView[i]->set_property( "can-focus", "true" );
                 m_pFavCharView[i]->set_property( "can-focus", "true" );
             }
-            bNeedsInit = false;
+            mbNeedsInit = false;
         }
     }
     return SfxPopupWindow::EventNotify( rNEvt );
