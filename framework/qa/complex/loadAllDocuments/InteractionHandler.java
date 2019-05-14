@@ -95,7 +95,7 @@ public class InteractionHandler implements XInteractionHandler
             catch(com.sun.star.lang.IllegalArgumentException exArg) {}
         }
 
-        // try it again, but only if it wasn't tried to much before.
+        // try it again, but only if it wasn't tried too much before.
         if (xRetry != null)
         {
             synchronized(this)
