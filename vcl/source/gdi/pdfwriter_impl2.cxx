@@ -2025,4 +2025,6 @@ void PDFWriterImpl::ImplClearFontData(bool bNewFontLists)
     }
 }
 
+void PDFWriterImpl::ClipRegionIntersectRectangle(vcl::Region&) {}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

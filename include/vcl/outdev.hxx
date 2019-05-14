@@ -666,6 +666,7 @@ public:
 protected:
 
     virtual void                InitClipRegion();
+    virtual void                ClipRegionIntersectRectangle(vcl::Region&);
     virtual void                ClipToPaintRegion    ( tools::Rectangle& rDstRect );
 
 private:
