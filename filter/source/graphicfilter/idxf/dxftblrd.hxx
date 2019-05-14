@@ -153,7 +153,7 @@ public:
     ~DXFTables();
 
     void Read(DXFGroupReader & rDGR);
-        // Reads the table until a ENDSEC or EOF
+        // Reads the table until an ENDSEC or EOF
         // (Unknown things/tables will be skipped)
 
     void Clear();
