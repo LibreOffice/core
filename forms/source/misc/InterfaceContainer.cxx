@@ -525,7 +525,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
             catch(const WrongFormatException&)
             {
                 // the object could not be read
-                // create a object (so the readEvents below will assign the events to the right controls)
+                // create an object (so the readEvents below will assign the events to the right controls)
                 xObj = lcl_createPlaceHolder( m_xContext );
                 if ( !xObj.is() )
                     // couldn't handle it
