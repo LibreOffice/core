@@ -14,6 +14,7 @@
 #include <svdata.hxx>
 #include <rtl/bootstrap.hxx>
 #include <config_folders.h>
+#include <osl/file.hxx>
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -45,15 +46,40 @@ OUString lcl_getThemeDefinitionPath()
     return sPath;
 }
 
-std::shared_ptr<WidgetDefinition> setWidgetDefinition(OUString const& rDefinitionFile,
+bool lcl_directoryExists(OUString const& sDirectory)
+{
+    osl::DirectoryItem aDirectoryItem;
+    osl::FileBase::RC eRes = osl::DirectoryItem::get(sDirectory, aDirectoryItem);
+    return eRes == osl::FileBase::E_None;
+}
+
+bool lcl_fileExists(OUString const& sFilename)
+{
+    osl::File aFile(sFilename);
+    osl::FileBase::RC eRC = aFile.open(osl_File_OpenFlag_Read);
+    return osl::FileBase::E_None == eRC;
+}
+
+std::shared_ptr<WidgetDefinition> getWidgetDefinition(OUString const& rDefinitionFile,
                                                       OUString const& rDefinitionResourcesPath)
+{
+    auto pWidgetDefinition = std::make_shared<WidgetDefinition>();
+    WidgetDefinitionReader aReader(rDefinitionFile, rDefinitionResourcesPath);
+    if (aReader.read(*pWidgetDefinition))
+        return pWidgetDefinition;
+    return std::shared_ptr<WidgetDefinition>();
+}
+
+std::shared_ptr<WidgetDefinition> getWidgetDefinitionForTheme(OUString const& rThemenName)
 {
     static std::shared_ptr<WidgetDefinition> spDefinition;
     if (!spDefinition)
     {
-        spDefinition = std::make_shared<WidgetDefinition>();
-        WidgetDefinitionReader aReader(rDefinitionFile, rDefinitionResourcesPath);
-        aReader.read(*spDefinition);
+        OUString sSharedDefinitionBasePath = lcl_getThemeDefinitionPath();
+        OUString sThemeFolder = sSharedDefinitionBasePath + rThemenName + "/";
+        OUString sThemeDefinitionFile = sThemeFolder + "definition.xml";
+        if (lcl_directoryExists(sThemeFolder) && lcl_fileExists(sThemeDefinitionFile))
+            spDefinition = getWidgetDefinition(sThemeDefinitionFile, sThemeFolder);
     }
     return spDefinition;
 }
@@ -62,22 +88,25 @@ std::shared_ptr<WidgetDefinition> setWidgetDefinition(OUString const& rDefinitio
 
 FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
     : m_rGraphics(rGraphics)
+    , m_bIsActive(false)
 {
-    OUString sDefinitionBasePath = lcl_getThemeDefinitionPath();
-    OUString sThemeName = "ios";
-    OUString sThemeFolder = sDefinitionBasePath + sThemeName + "/";
+    if (!m_pWidgetDefinition)
+        m_pWidgetDefinition = getWidgetDefinitionForTheme("ios");
 
-    m_pWidgetDefinition = setWidgetDefinition(sThemeFolder + "definition.xml", sThemeFolder);
+    if (m_pWidgetDefinition)
+    {
+        ImplSVData* pSVData = ImplGetSVData();
+        pSVData->maNWFData.mbNoFocusRects = true;
+        pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
+        pSVData->maNWFData.mbNoActiveTabTextRaise = true;
+        pSVData->maNWFData.mbCenteredTabs = true;
+        pSVData->maNWFData.mbProgressNeedsErase = true;
+        pSVData->maNWFData.mnStatusBarLowerRightOffset = 10;
+        pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
+        pSVData->maNWFData.mnListBoxEntryMargin = 20;
 
-    ImplSVData* pSVData = ImplGetSVData();
-    pSVData->maNWFData.mbNoFocusRects = true;
-    pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
-    pSVData->maNWFData.mbNoActiveTabTextRaise = true;
-    pSVData->maNWFData.mbCenteredTabs = true;
-    pSVData->maNWFData.mbProgressNeedsErase = true;
-    pSVData->maNWFData.mnStatusBarLowerRightOffset = 10;
-    pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
-    pSVData->maNWFData.mnListBoxEntryMargin = 20;
+        m_bIsActive = true;
+    }
 }
 
 bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, ControlPart ePart)
