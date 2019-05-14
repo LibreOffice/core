@@ -371,7 +371,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
                         // wrong in selection  if invalidated....
                         // => better not invalidate, instead CHANGE!
                         // It would be better to fill each paragraph with
-                        // a itemset and compare this in large.
+                        // an itemset and compare this in large.
                         if ( nWhich <= EE_PARA_END )
                             aCurSet.InvalidateItem( nWhich );
                     }
