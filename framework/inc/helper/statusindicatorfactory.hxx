@@ -105,7 +105,7 @@ struct IndicatorInfo
         /** @short  Used to locate an info struct inside a stl structure...
 
             @descr  The indicator object itself is used as key. Its values
-                    are not interesting then. Because more then one child
+                    are not interesting then. Because more than one child
                     indicator can use the same values...
          */
         bool operator==(const css::uno::Reference< css::task::XStatusIndicator >& xIndicator)
@@ -114,7 +114,7 @@ struct IndicatorInfo
         }
 };
 
-/** @descr  Define a lits of child indicator objects and her data. */
+/** @descr  Define a list of child indicator objects and its data. */
 typedef ::std::vector< IndicatorInfo > IndicatorStack;
 
 /** @short          implement a factory service to create new status indicator objects
@@ -126,7 +126,7 @@ typedef ::std::vector< IndicatorInfo > IndicatorStack;
 
                     This factory create different indicators and control his access
                     to a shared output device! Only the last activated component
-                    can write his state to this device. All other requests will be
+                    can write its state to this device. All other requests will be
                     cached only.
 
     @devstatus      ready to use
