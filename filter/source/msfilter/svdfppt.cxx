@@ -4615,7 +4615,7 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, DffRecord
                         // *    first line text
                         // second line text
 
-                        // we add to bullet para indent 0xffff - bullet offset. it looks like
+                        // we add to bullet para indent 0xffff - bullet offset. It looks like
                         // best we can do for now
                         mxImplRuler->nTextOfs[ i ] += 0xffff - mxImplRuler->nBulletOfs[ i ];
                         mxImplRuler->nBulletOfs[ i ] = 0;
@@ -6695,7 +6695,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     {
                                         sal_uInt32 nCharIdx = rSpecInfo.nCharIdx;
 
-                                        // portions and text have to been splitted in some cases
+                                        // portions and text have to been split in some cases
                                         for ( ; nI < aStyleTextPropReader.aCharPropList.size(); ++nI)
                                         {
                                             PPTCharPropSet* pSet = aStyleTextPropReader.aCharPropList[nI].get();
@@ -6704,7 +6704,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                             pSet->mnLanguage[0] = rSpecInfo.nLanguage[0];
                                             pSet->mnLanguage[1] = rSpecInfo.nLanguage[1];
                                             pSet->mnLanguage[2] = rSpecInfo.nLanguage[2];
-                                            // test if the current portion needs to be splitted
+                                            // test if the current portion needs to be split
                                             if (pSet->maString.getLength() <= 1)
                                                 continue;
                                             sal_Int32 nIndexOfNextPortion = pSet->maString.getLength() + pSet->mnOriginalTextPos;
