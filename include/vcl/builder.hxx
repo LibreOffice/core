@@ -471,6 +471,7 @@ public:
     void            disposeBuilder();
 
     static OUString getUIRootDir();
+    static OUString getUIRootDirNotebookbar();
     bool            hasBuilder() const { return m_pUIBuilder != nullptr; }
 
     template <typename T> T* get(VclPtr<T>& ret, const OString& sID)

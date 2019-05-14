@@ -550,6 +550,13 @@ OUString VclBuilderContainer::getUIRootDir()
     return sShareLayer;
 }
 
+OUString VclBuilderContainer::getUIRootDirNotebookbar()
+{
+    OUString sShareLayer("$BRAND_BASE_DIR/user/config/soffice.cfg/");
+    rtl::Bootstrap::expandMacros(sShareLayer);
+    return sShareLayer;
+}
+
 //we can't change sizeable after the fact, so need to defer until we know and then
 //do the init. Find the real parent stashed in mpDialogParent.
 void Dialog::doDeferredInit(WinBits nBits)
