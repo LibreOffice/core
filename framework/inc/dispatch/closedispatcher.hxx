@@ -86,8 +86,8 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper<
         css::uno::WeakReference< css::frame::XFrame > m_xCloseFrame;
 
         /** @short  used for asynchronous callbacks within the main thread.
-            @descr  Internally we work asynchronous. Because our callis
-                    are not aware, that her request can kill its own environment ... */
+            @descr  Internally we work asynchronous. Because our calls
+                    are not aware, that her request can kill its own environment... */
         std::unique_ptr<vcl::EventPoster> m_aAsyncCallback;
 
         /** @short  used inside asynchronous callback to decide,
@@ -107,7 +107,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper<
     public:
 
         /** @short  connect a new CloseDispatcher instance to its frame.
-            @descr  One CloseDispatcher instance is bound to onw frame only.
+            @descr  One CloseDispatcher instance is bound to own frame only.
                     That makes an implementation (e.g. of listener support)
                     much more easier .-)
 
@@ -156,7 +156,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper<
         /** @short  a callback for asynchronous started operations.
 
             @descr  As already mentioned, we make internally all operations
-                    asynchronous. Otherwise our callis kill its own environment
+                    asynchronous. Otherwise our calls kill its own environment
                     during they call us...
         */
         DECL_LINK( impl_asyncCallback, LinkParamNone*, void );
