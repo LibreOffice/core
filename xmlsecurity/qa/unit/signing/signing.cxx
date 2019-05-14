@@ -209,8 +209,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDescription)
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
             ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
-    aManager.mxStore = xStorage;
-    aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
+    aManager.setStore(xStorage);
+    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
 
     // Then add a signature document.
     uno::Reference<security::XCertificate> xCertificate
@@ -223,7 +223,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDescription)
 
     // Read back the signature and make sure that the description survives the roundtrip.
     aManager.read(/*bUseTempStream=*/true);
-    std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    std::vector<SignatureInformation>& rInformations = aManager.getCurrentSignatureInformations();
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
     CPPUNIT_ASSERT_EQUAL(aDescription, rInformations[0].ouDescription);
 }
@@ -246,8 +246,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSA)
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
             ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
-    aManager.mxStore = xStorage;
-    aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
+    aManager.setStore(xStorage);
+    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
 
     // Then add a signature.
     uno::Reference<security::XCertificate> xCertificate
@@ -260,7 +260,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSA)
 
     // Read back the signature and make sure that it's valid.
     aManager.read(/*bUseTempStream=*/true);
-    std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    std::vector<SignatureInformation>& rInformations = aManager.getCurrentSignatureInformations();
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
     // This was SecurityOperationStatus_UNKNOWN, signing with an ECDSA key was
     // broken.
@@ -286,8 +286,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAOOXML)
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
             ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
-    aManager.mxStore = xStorage;
-    aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
+    aManager.setStore(xStorage);
+    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
 
     // Then add a document signature.
     uno::Reference<security::XCertificate> xCertificate
@@ -301,7 +301,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAOOXML)
 
     // Read back the signature and make sure that it's valid.
     aManager.read(/*bUseTempStream=*/true);
-    std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    std::vector<SignatureInformation>& rInformations = aManager.getCurrentSignatureInformations();
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
     // This was SecurityOperationStatus_UNKNOWN, signing with an ECDSA key was
     // broken.
@@ -328,7 +328,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAPDF)
         aTempFile.GetURL(), StreamMode::READ | StreamMode::WRITE));
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
     CPPUNIT_ASSERT(xStream.is());
-    aManager.mxSignatureStream = xStream;
+    aManager.setSignatureStream(xStream);
 
     // Then add a document signature.
     uno::Reference<security::XCertificate> xCertificate
@@ -342,7 +342,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAPDF)
 
     // Read back the signature and make sure that it's valid.
     aManager.read(/*bUseTempStream=*/false);
-    std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    std::vector<SignatureInformation>& rInformations = aManager.getCurrentSignatureInformations();
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
     // This was SecurityOperationStatus_UNKNOWN, signing with an ECDSA key was
     // broken.
@@ -368,8 +368,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLDescription)
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
             ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
-    aManager.mxStore = xStorage;
-    aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
+    aManager.setStore(xStorage);
+    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
 
     // Then add a document signature.
     uno::Reference<security::XCertificate> xCertificate
@@ -382,7 +382,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLDescription)
 
     // Read back the signature and make sure that the description survives the roundtrip.
     aManager.read(/*bUseTempStream=*/true);
-    std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    std::vector<SignatureInformation>& rInformations = aManager.getCurrentSignatureInformations();
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
     CPPUNIT_ASSERT_EQUAL(aDescription, rInformations[0].ouDescription);
 }
@@ -404,10 +404,10 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLAppend)
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL,
                                                                 embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
-    aManager.mxStore = xStorage;
-    aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
+    aManager.setStore(xStorage);
+    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
     aManager.read(/*bUseTempStream=*/false);
-    std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    std::vector<SignatureInformation>& rInformations = aManager.getCurrentSignatureInformations();
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
 
     // Then add a second document signature.
@@ -440,10 +440,10 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemove)
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL,
                                                                 embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
-    aManager.mxStore = xStorage;
-    aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
+    aManager.setStore(xStorage);
+    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
     aManager.read(/*bUseTempStream=*/false);
-    std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    std::vector<SignatureInformation>& rInformations = aManager.getCurrentSignatureInformations();
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), rInformations.size());
 
     // Then remove the last added signature.
@@ -476,10 +476,10 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemoveAll)
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL,
                                                                 embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
-    aManager.mxStore = xStorage;
-    aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
+    aManager.setStore(xStorage);
+    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
     aManager.read(/*bUseTempStream=*/false);
-    std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    std::vector<SignatureInformation>& rInformations = aManager.getCurrentSignatureInformations();
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
 
     // Then remove the only signature in the document.
@@ -714,8 +714,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESNotype)
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
             ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
-    aManager.mxStore = xStorage;
-    aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
+    aManager.setStore(xStorage);
+    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
     aManager.read(/*bUseTempStream=*/false);
 
     // Create a new signature.
@@ -775,8 +775,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdES)
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
             ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
-    aManager.mxStore = xStorage;
-    aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
+    aManager.setStore(xStorage);
+    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
 
     // Create a signature.
     uno::Reference<security::XCertificate> xCertificate

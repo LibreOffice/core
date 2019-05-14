@@ -285,9 +285,9 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFRemoveAll)
     std::unique_ptr<SvStream> pStream
         = utl::UcbStreamHelper::CreateStream(aOutURL, StreamMode::READ | StreamMode::WRITE);
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
-    aManager.mxSignatureStream = xStream;
+    aManager.setSignatureStream(xStream);
     aManager.read(/*bUseTempStream=*/false);
-    std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    std::vector<SignatureInformation>& rInformations = aManager.getCurrentSignatureInformations();
     // This was 1 when NSS_CMSSignerInfo_GetSigningCertificate() failed, which
     // means that we only used the locally imported certificates for
     // verification, not the ones provided in the PDF signature data.
@@ -315,12 +315,12 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testTdf107782)
     std::unique_ptr<SvStream> pStream
         = utl::UcbStreamHelper::CreateStream(aURL, StreamMode::READ | StreamMode::WRITE);
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
-    aManager.mxSignatureStream = xStream;
+    aManager.setSignatureStream(xStream);
     aManager.read(/*bUseTempStream=*/false);
-    CPPUNIT_ASSERT(aManager.mpPDFSignatureHelper);
+    CPPUNIT_ASSERT(aManager.hasPDFSignatureHelper());
 
     // This failed with an std::bad_alloc exception on Windows.
-    aManager.mpPDFSignatureHelper->GetDocumentSignatureInformations(
+    aManager.getPDFSignatureHelper().GetDocumentSignatureInformations(
         aManager.getSecurityEnvironment());
 }
 
@@ -486,11 +486,11 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testUnknownSubFilter)
         m_directories.getURLFromSrc(DATA_DIRECTORY) + "cr-comment.pdf", StreamMode::STD_READ);
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
-    aManager.mxSignatureStream = xStream;
+    aManager.setSignatureStream(xStream);
     aManager.read(/*bUseTempStream=*/false);
 
     // Make sure we find both signatures, even if the second has unknown SubFilter.
-    std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    std::vector<SignatureInformation>& rInformations = aManager.getCurrentSignatureInformations();
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), rInformations.size());
 }
 

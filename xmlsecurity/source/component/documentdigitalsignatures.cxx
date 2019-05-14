@@ -271,9 +271,9 @@ sal_Bool DocumentDigitalSignatures::signSignatureLine(
     if (!aSignatureManager.init())
         return false;
 
-    aSignatureManager.mxStore = rxStorage;
-    aSignatureManager.maSignatureHelper.SetStorage(rxStorage, m_sODFVersion);
-    aSignatureManager.mxSignatureStream = xSignStream;
+    aSignatureManager.setStore(rxStorage);
+    aSignatureManager.getSignatureHelper().SetStorage(rxStorage, m_sODFVersion);
+    aSignatureManager.setSignatureStream(xSignStream);
 
     Reference<XXMLSecurityContext> xSecurityContext;
     Reference<XServiceInfo> xServiceInfo(xCertificate, UNO_QUERY);
@@ -480,10 +480,10 @@ DocumentDigitalSignatures::ImplVerifySignatures(
         return Sequence< css::security::DocumentSignatureInformation >(0);
 
 
-    XMLSignatureHelper& rSignatureHelper = aSignatureManager.maSignatureHelper;
+    XMLSignatureHelper& rSignatureHelper = aSignatureManager.getSignatureHelper();
     rSignatureHelper.SetStorage(rxStorage, m_sODFVersion);
 
-    rSignatureHelper.StartMission(aSignatureManager.mxSecurityContext);
+    rSignatureHelper.StartMission(aSignatureManager.getSecurityContext());
 
     if (xInputStream.is())
         rSignatureHelper.ReadAndVerifySignature(xInputStream);
@@ -769,9 +769,9 @@ sal_Bool DocumentDigitalSignatures::signDocumentWithCertificate(
     if (!aSignatureManager.init())
         return false;
 
-    aSignatureManager.mxStore = xStorage;
-    aSignatureManager.maSignatureHelper.SetStorage(xStorage, m_sODFVersion);
-    aSignatureManager.mxSignatureStream = xStream;
+    aSignatureManager.setStore(xStorage);
+    aSignatureManager.getSignatureHelper().SetStorage(xStorage, m_sODFVersion);
+    aSignatureManager.setSignatureStream(xStream);
 
     Reference<XXMLSecurityContext> xSecurityContext;
     Reference<XServiceInfo> xServiceInfo(xCertificate, UNO_QUERY);

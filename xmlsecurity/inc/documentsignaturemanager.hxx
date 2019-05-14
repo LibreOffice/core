@@ -60,7 +60,7 @@ class PDFSignatureHelper;
 /// Manages signatures (addition, removal), used by DigitalSignaturesDialog.
 class XMLSECURITY_DLLPUBLIC DocumentSignatureManager
 {
-public:
+private:
     css::uno::Reference<css::uno::XComponentContext> mxContext;
     css::uno::Reference<css::embed::XStorage> mxStore;
     XMLSignatureHelper maSignatureHelper;
@@ -77,9 +77,11 @@ public:
     css::uno::Reference<css::xml::crypto::XSEInitializer> mxGpgSEInitializer;
     css::uno::Reference<css::xml::crypto::XXMLSecurityContext> mxGpgSecurityContext;
 
+public:
     DocumentSignatureManager(const css::uno::Reference<css::uno::XComponentContext>& xContext,
                              DocumentSignatureMode eMode);
     ~DocumentSignatureManager();
+
     /**
      * Checks if a particular stream is a valid xml stream. Those are treated
      * differently when they are signed (c14n transformation)
@@ -116,6 +118,19 @@ public:
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getGpgSecurityEnvironment();
     css::uno::Reference<css::xml::crypto::XXMLSecurityContext> const& getSecurityContext();
     css::uno::Reference<css::xml::crypto::XXMLSecurityContext> const& getGpgSecurityContext();
+    void setStore(const css::uno::Reference<css::embed::XStorage>& xStore) { mxStore = xStore; }
+    XMLSignatureHelper& getSignatureHelper() { return maSignatureHelper; }
+    bool hasPDFSignatureHelper() { return mpPDFSignatureHelper.get(); }
+    void setSignatureStream(const css::uno::Reference<css::io::XStream>& xSignatureStream)
+    {
+        mxSignatureStream = xSignatureStream;
+    }
+    css::uno::Reference<css::embed::XStorage> getStore() { return mxStore; }
+    DocumentSignatureMode getSignatureMode() const { return meSignatureMode; }
+    SignatureInformations& getCurrentSignatureInformations()
+    {
+        return maCurrentSignatureInformations;
+    }
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREMANAGER_HXX
