@@ -190,7 +190,7 @@ namespace pcr
         /// @throws css::uno::RuntimeException
         static css::uno::Reference< css::uno::XInterface > getContextDocument_throw( const css::uno::Reference<css::uno::XComponentContext> & _rContext );
 
-        /** gets the window of the ObjectInspector in which an property handler lives
+        /** gets the window of the ObjectInspector in which a property handler lives
 
             The method looks up a value called "DialogParentWindow" in the given UNO component context,
             queries it for XWindow, and returns the respective vcl::Window*. If either of those steps fails,
