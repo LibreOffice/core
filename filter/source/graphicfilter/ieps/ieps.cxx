@@ -638,7 +638,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
         if ( nBytesRead == nPSSize )
         {
             sal_uInt32 nSecurityCount = 32;
-            // if there is no tiff/wmf preview, we will parse for an preview in
+            // if there is no tiff/wmf preview, we will parse for a preview in
             // the eps prolog
             if (!bHasPreview && nBytesRead >= nSecurityCount)
             {
