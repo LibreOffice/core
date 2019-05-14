@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <!--***********************************************************
- * 
+ *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -9,18 +9,18 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
+ *
  ***********************************************************-->
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Common" script:language="StarBasic"> REM  *****  BASIC  *****
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Common" script:language="StarBasic"> REM ***** BASIC *****
 Public DialogModel as Object
 Public DialogConvert as Object
 Public DialogPassword as Object
@@ -29,12 +29,12 @@ Public PasswordModel as Object
 Sub	RetrieveDocumentObjects()
 	CurMimeType = Tools.GetDocumentType(oDocument)
 	If Instr(1, CurMimeType, &quot;calc&quot;) &lt;&gt; 0 Then
-	    oSheets = oDocument.Sheets
+		oSheets = oDocument.Sheets
 		oSheet = oDocument.Sheets.GetbyIndex(0)
 		oAddressRanges = oDocument.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
 	End If
-    &apos; Retrieve the indices for the cellformatations
-    oFormats = oDocument.NumberFormats
+	&apos; Retrieve the indices for the cellformatations
+	oFormats = oDocument.NumberFormats
 End Sub
 
 
@@ -81,9 +81,9 @@ Function ConvertDocument()
 			bRangeListDefined = False
 		End If
 	Else
-		DialogModel.ProgressBar.ProgressValue = 10  &apos; oStatusline.SetValue(10)
+		DialogModel.ProgressBar.ProgressValue = 10 &apos; oStatusline.SetValue(10)
 		ConvertTextFields()
-		DialogModel.ProgressBar.ProgressValue = 80  &apos; oStatusline.SetValue(80)
+		DialogModel.ProgressBar.ProgressValue = 80 &apos; oStatusline.SetValue(80)
 		ConvertWriterTables()
 	End If
 	EndStatusLine()
@@ -132,7 +132,7 @@ End Sub
 
 
 Function Numberformat( oFormats as Object, aFormatStr as String, oLocale as Object)
-Dim nRetkey 
+Dim nRetkey
 Dim l as String
 Dim c as String
 	nRetKey = oFormats.queryKey( aFormatStr, oLocale, True )
@@ -157,13 +157,13 @@ Dim oFormatofObject() as Object
 	&apos; Retrieve the Format of the Object
 	On Local Error GoTo NOKEY
 	oFormatofObject = oFormats.getByKey(FormatObject.NumberFormat)
-	On Local Error GoTo 0			
-  	If NOT INT(oFormatofObject.Type) AND com.sun.star.util.NumberFormat.CURRENCY Then
+	On Local Error GoTo 0
+	If NOT INT(oFormatofObject.Type) AND com.sun.star.util.NumberFormat.CURRENCY Then
 		CheckFormatType = False
 		Exit Function
 	End If
 	If FieldinArray(CurrSymbolList(),2,oFormatofObject.CurrencySymbol) Then
-		&apos; If the Currencysymbol of the object ist the one needed, then check the Currency extension
+		&apos; If the Currencysymbol of the object is the one needed, then check the Currency extension
 		sFormatCurrExt = oFormatofObject.CurrencyExtension
 
 		If FieldInList(CurExtension(),2,sFormatCurrExt) Then
