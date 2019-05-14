@@ -938,7 +938,9 @@ void SwTiledRenderingTest::testViewCursors()
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     ViewCallback aView1;
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
+    int nView2 = SfxLokHelper::getView();
     ViewCallback aView2;
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
     CPPUNIT_ASSERT(aView1.m_bOwnCursorInvalidated);
@@ -968,6 +970,11 @@ void SwTiledRenderingTest::testViewCursors()
     CPPUNIT_ASSERT(aView1.m_bViewSelectionSet);
     CPPUNIT_ASSERT(aView2.m_bOwnSelectionSet);
     CPPUNIT_ASSERT(!aView2.m_bViewSelectionSet);
+
+    SfxLokHelper::setView(nView1);
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+    SfxLokHelper::setView(nView2);
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testShapeViewCursors()
