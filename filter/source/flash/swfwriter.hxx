@@ -260,7 +260,7 @@ public:
         The coordinates must be in twips */
     sal_uInt16 defineShape( const tools::PolyPolygon& rPolyPoly, const FillStyle& rFillStyle );
 
-    /** defines a flash shape from a outlined polypolygon.
+    /** defines a flash shape from an outlined polypolygon.
         The coordinates must be in twips */
     sal_uInt16 defineShape( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nLineWidth, const Color& rLineColor );
 
