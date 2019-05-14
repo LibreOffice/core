@@ -85,7 +85,7 @@
 
     <xsl:template name="collect-global-odf-properties">
         <!-- to access the variable as a node-set by XPATH expressions, it is necessary to convert it
-             from a result-tree-fragment (RTF) to a node set by a in a XSLT 1.0 non standarized function -->
+             from a result-tree-fragment (RTF) to a node set by a in a XSLT 1.0 non standardized function -->
         <xsl:variable name="globalDataRTF">
             <xsl:call-template name="collect-document-links-RTF" />
         </xsl:variable>
@@ -522,7 +522,7 @@
 
             <xsl:if test="*/@style:font-size-rel">
 <!--
-    The intheritedStyleProperties should include a absolute Font Size, but
+    The intheritedStyleProperties should include an absolute Font Size, but
     <style:properties
         xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
         xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
