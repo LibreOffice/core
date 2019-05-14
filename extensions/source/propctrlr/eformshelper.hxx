@@ -71,7 +71,7 @@ namespace pcr
 
         /** determines whether the given document is an eForm
 
-            If this method returns <FALSE/>, you cannot instantiate a EFormsHelper with
+            If this method returns <FALSE/>, you cannot instantiate an EFormsHelper with
             this document, since none of its functionality will be available then.
         */
         static  bool
