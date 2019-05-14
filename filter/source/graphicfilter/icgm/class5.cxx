@@ -379,7 +379,7 @@ void CGM::ImplDoClass5()
             }
         }
         break;
-        case 0x24 : /*Pick Identifier" ) bre*/
+        case 0x24 : /*Pick Identifier*/ break;
         case 0x25 : /*Line Cap*/
         {
             switch( ImplGetUI16() )
