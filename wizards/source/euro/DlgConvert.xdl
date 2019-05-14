@@ -44,7 +44,7 @@
    </dlg:radio>
   </dlg:radiogroup>
   <dlg:text dlg:id="lblSelection" dlg:tab-index="7" dlg:left="170" dlg:top="84" dlg:width="73" dlg:height="8" dlg:page="1" dlg:value="lblSelection"/>
-  <dlg:menulist dlg:id="lstSelection" dlg:tab-index="8" dlg:left="170" dlg:top="96" dlg:width="90" dlg:height="52" dlg:page="1" dlg:help-url="HID:WIZARDS_HID_DLGCONVERT_LISTBOX1" dlg:multiselection="true">
+  <dlg:menulist dlg:id="lstSelection" dlg:tab-index="8" dlg:left="170" dlg:top="96" dlg:width="93" dlg:height="52" dlg:page="1" dlg:help-url="HID:WIZARDS_HID_DLGCONVERT_LISTBOX1" dlg:multiselection="true">
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:Euro.ConvertRun.SelectListItem?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:menulist>
   <dlg:radiogroup>
