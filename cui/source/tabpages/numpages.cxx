@@ -1950,7 +1950,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, weld::ToggleButton&
 
 IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, weld::Button&, void)
 {
-    SvxCharacterMap aMap(GetDialogFrameWeld(), nullptr, false);
+    SvxCharacterMap aMap(GetDialogFrameWeld(), nullptr, nullptr);
 
     sal_uInt16 nMask = 1;
     const vcl::Font* pFmtFont = nullptr;

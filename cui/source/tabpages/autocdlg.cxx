@@ -622,7 +622,7 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl, weld::Button&, void)
     int nSelEntryPos = m_xCheckLB->get_selected_index();
     if (nSelEntryPos == REPLACE_BULLETS || nSelEntryPos == APPLY_NUMBERING)
     {
-        SvxCharacterMap aMapDlg(GetDialogFrameWeld(), nullptr, false);
+        SvxCharacterMap aMapDlg(GetDialogFrameWeld(), nullptr, nullptr);
         ImpUserData* pUserData = reinterpret_cast<ImpUserData*>(m_xCheckLB->get_id(nSelEntryPos).toInt64());
         aMapDlg.SetCharFont(*pUserData->pFont);
         aMapDlg.SetChar( (*pUserData->pString)[0] );
@@ -1857,7 +1857,7 @@ IMPL_LINK(OfaQuoteTabPage, QuoteHdl, weld::Button&, rBtn, void)
     else if (&rBtn == m_xDblEndQuotePB.get())
         nMode = DBL_END;
     // start character selection dialog
-    SvxCharacterMap aMap(GetDialogFrameWeld(), nullptr, false);
+    SvxCharacterMap aMap(GetDialogFrameWeld(), nullptr, nullptr);
     aMap.SetCharFont( OutputDevice::GetDefaultFont(DefaultFontType::LATIN_TEXT,
                         LANGUAGE_ENGLISH_US, GetDefaultFontFlags::OnlyOne ));
     aMap.set_title(nMode < SGL_END ? CuiResId(RID_SVXSTR_STARTQUOTE)  : CuiResId(RID_SVXSTR_ENDQUOTE));
