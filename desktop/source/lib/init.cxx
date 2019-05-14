@@ -4535,13 +4535,20 @@ static void lo_runLoop(LibreOfficeKit* /*pThis*/,
 {
 #ifdef IOS // Maybe ANDROID, too?
     InitVCL();
+    Application::GetSolarMutex().acquire();
 #endif
 
-    SolarMutexGuard aGuard;
+    {
+        SolarMutexGuard aGuard;
 
-    vcl::lok::registerPollCallbacks(pPollCallback, pWakeCallback, pData);
-    Application::UpdateMainThread();
-    soffice_main();
+        vcl::lok::registerPollCallbacks(pPollCallback, pWakeCallback, pData);
+        Application::UpdateMainThread();
+        soffice_main();
+    }
+#ifdef IOS // ANDROID, too?
+    vcl::lok::unregisterPollCallbacks();
+    Application::ReleaseSolarMutex();
+#endif
 }
 
 static bool bInitialized = false;
