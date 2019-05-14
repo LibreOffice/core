@@ -320,10 +320,23 @@ STDMETHODIMP COMOpenDocuments::CreateNewDocument2(
 // refreshes itself the next time it receives focus. One refresh can occur after the new document
 // is saved to the server
 STDMETHODIMP COMOpenDocuments::PromptedOnLastOpen(
-    VARIANT_BOOL* /*pbResult*/) // true if the security dialog box that appears when a document is opened has already appeared; otherwise false
+    VARIANT_BOOL* pbResult) // true if the security dialog box that appears when a document is opened has already appeared; otherwise false
 {
-    // TODO
-    return E_NOTIMPL;
+    // This method is used by SharePoint e.g. after calling ViewDocument3. Needs to be implemented,
+    // otherwise IE would show download bar ("Do you want to open Foo.xls?"), as if opening with
+    // LibreOffice failed, even if actually it succeeded.
+    if (!pbResult)
+        return E_POINTER;
+    // Returning true makes SharePoint library to refresh only when focused next time; false makes
+    // it refresh instantly. The JavaScript code involved is this:
+    //			var fRefreshOnNextFocus=stsOpen.PromptedOnLastOpen();
+    //			if (fRefreshOnNextFocus)
+    //				window.onfocus=RefreshOnNextFocus;
+    //			else
+    //				SetWindowRefreshOnFocus();
+    // It seems to be no reason to require immediate refresh, so just return true.
+    *pbResult = VARIANT_TRUE;
+    return S_OK;
 }
 
 // IOWSNewDocument3 methods
