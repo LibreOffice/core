@@ -39,7 +39,7 @@ class DockingAreaDefaultAcceptor    :   public ::cppu::WeakImplHelper< css::ui::
         /*-****************************************************************************************************
             @short      constructor to initialize this instance
             @descr      A docking area acceptor
-                        But we need a instance to create more than one enumerations to the same tasklist!
+                        But we need an instance to create more than one enumerations to the same tasklist!
 
             @seealso    class Desktop
             @seealso    class OTasksEnumeration
