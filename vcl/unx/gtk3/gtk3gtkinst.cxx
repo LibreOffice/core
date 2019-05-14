@@ -2995,6 +2995,8 @@ namespace
     }
 }
 
+class GtkInstanceButton;
+
 class GtkInstanceDialog : public GtkInstanceWindow, public virtual weld::Dialog
 {
 private:
@@ -3006,6 +3008,7 @@ private:
     std::function<void(sal_Int32)> m_aFunc;
     gulong m_nCloseSignalId;
     gulong m_nResponseSignalId;
+    gulong m_nSignalDeleteId;
 
     // for calc ref dialog that shrink to range selection widgets and resize back
     GtkWidget* m_pRefEdit;
@@ -3026,6 +3029,11 @@ private:
         pThis->asyncresponse(ret);
     }
 
+    static gboolean signalAsyncDelete(GtkDialog*, GdkEventAny*, gpointer)
+    {
+        return true; /* Do not destroy */
+    }
+
     static int GtkToVcl(int ret)
     {
         if (ret == GTK_RESPONSE_OK)
@@ -3043,24 +3051,7 @@ private:
         return ret;
     }
 
-    void asyncresponse(gint ret)
-    {
-        if (ret == GTK_RESPONSE_HELP)
-        {
-            help();
-            return;
-        }
-        else if (has_click_handler(ret))
-            return;
-
-        hide();
-        m_aFunc(GtkToVcl(ret));
-        m_aFunc = nullptr;
-        // move the self pointer, otherwise it might be de-allocated by time we try to reset it
-        std::shared_ptr<GtkInstanceDialog> me = std::move(m_xRunAsyncSelf);
-        m_xDialogController.reset();
-        me.reset();
-    }
+    void asyncresponse(gint ret);
 
 public:
     GtkInstanceDialog(GtkDialog* pDialog, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
@@ -3069,6 +3060,7 @@ public:
         , m_aDialogRun(pDialog)
         , m_nCloseSignalId(g_signal_connect(m_pDialog, "close", G_CALLBACK(signalClose), this))
         , m_nResponseSignalId(0)
+        , m_nSignalDeleteId(0)
         , m_pRefEdit(nullptr)
         , m_nOldEditWidth(0)
         , m_nOldEditWidthReq(0)
@@ -3086,6 +3078,7 @@ public:
         show();
 
         m_nResponseSignalId = g_signal_connect(m_pDialog, "response", G_CALLBACK(signalAsyncResponse), this);
+        m_nSignalDeleteId = g_signal_connect(m_pDialog, "delete-event", G_CALLBACK(signalAsyncDelete), this);
 
         return true;
     }
@@ -3100,32 +3093,14 @@ public:
         show();
 
         m_nResponseSignalId = g_signal_connect(m_pDialog, "response", G_CALLBACK(signalAsyncResponse), this);
+        m_nSignalDeleteId = g_signal_connect(m_pDialog, "delete-event", G_CALLBACK(signalAsyncDelete), this);
 
         return true;
     }
 
-    bool has_click_handler(int nResponse);
+    GtkInstanceButton* has_click_handler(int nResponse);
 
-    virtual int run() override
-    {
-        sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
-        int ret;
-        while (true)
-        {
-            ret = m_aDialogRun.run();
-            if (ret == GTK_RESPONSE_HELP)
-            {
-                help();
-                continue;
-            }
-            else if (has_click_handler(ret))
-                continue;
-
-            break;
-        }
-        hide();
-        return GtkToVcl(ret);
-    }
+    virtual int run() override;
 
     virtual void show() override
     {
@@ -3295,6 +3270,8 @@ public:
         g_signal_handler_disconnect(m_pDialog, m_nCloseSignalId);
         if (m_nResponseSignalId)
             g_signal_handler_disconnect(m_pDialog, m_nResponseSignalId);
+        if (m_nSignalDeleteId)
+            g_signal_handler_disconnect(m_pDialog, m_nSignalDeleteId);
     }
 };
 
@@ -4610,6 +4587,60 @@ public:
     }
 };
 
+void GtkInstanceDialog::asyncresponse(gint ret)
+{
+    if (ret == GTK_RESPONSE_HELP)
+    {
+        help();
+        return;
+    }
+
+    GtkInstanceButton* pClickHandler = has_click_handler(ret);
+    if (pClickHandler)
+    {
+        // make GTK_RESPONSE_DELETE_EVENT act as if cancel button was pressed
+        if (ret == GTK_RESPONSE_DELETE_EVENT)
+            pClickHandler->clicked();
+        return;
+    }
+
+    hide();
+    m_aFunc(GtkToVcl(ret));
+    m_aFunc = nullptr;
+    // move the self pointer, otherwise it might be de-allocated by time we try to reset it
+    std::shared_ptr<GtkInstanceDialog> me = std::move(m_xRunAsyncSelf);
+    m_xDialogController.reset();
+    me.reset();
+}
+
+int GtkInstanceDialog::run()
+{
+    sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
+    int ret;
+    while (true)
+    {
+        ret = m_aDialogRun.run();
+        if (ret == GTK_RESPONSE_HELP)
+        {
+            help();
+            continue;
+        }
+
+        GtkInstanceButton* pClickHandler = has_click_handler(ret);
+        if (pClickHandler)
+        {
+            // make GTK_RESPONSE_DELETE_EVENT act as if cancel button was pressed
+            if (ret == GTK_RESPONSE_DELETE_EVENT)
+                pClickHandler->clicked();
+            continue;
+        }
+
+        break;
+    }
+    hide();
+    return GtkToVcl(ret);
+}
+
 weld::Button* GtkInstanceDialog::get_widget_for_response(int nResponse)
 {
     GtkButton* pButton = GTK_BUTTON(gtk_dialog_get_widget_for_response(m_pDialog, VclToGtk(nResponse)));
@@ -4631,15 +4662,19 @@ void GtkInstanceDialog::response(int nResponse)
     gtk_dialog_response(m_pDialog, VclToGtk(nResponse));
 }
 
-bool GtkInstanceDialog::has_click_handler(int nResponse)
+GtkInstanceButton* GtkInstanceDialog::has_click_handler(int nResponse)
 {
-    if (GtkWidget* pWidget = gtk_dialog_get_widget_for_response(m_pDialog, VclToGtk(nResponse)))
+    GtkInstanceButton* pButton = nullptr;
+    // e.g. map GTK_RESPONSE_DELETE_EVENT to GTK_RESPONSE_CANCEL
+    nResponse = VclToGtk(GtkToVcl(nResponse));
+    if (GtkWidget* pWidget = gtk_dialog_get_widget_for_response(m_pDialog, nResponse))
     {
         void* pData = g_object_get_data(G_OBJECT(pWidget), "g-lo-GtkInstanceButton");
-        GtkInstanceButton* pButton = static_cast<GtkInstanceButton*>(pData);
-        return pButton && pButton->has_click_handler();
+        pButton = static_cast<GtkInstanceButton*>(pData);
+        if (pButton && !pButton->has_click_handler())
+            pButton = nullptr;
     }
-    return false;
+    return pButton;
 }
 
 class GtkInstanceToggleButton : public GtkInstanceButton, public virtual weld::ToggleButton
