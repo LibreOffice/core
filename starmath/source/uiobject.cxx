@@ -62,7 +62,7 @@ StringMap ElementSelectorUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
 
-    SmElement* pElement = mxElementsSelector->mpCurrentElement;
+    SmElement* pElement = mxElementsSelector->current();
     if (pElement)
         aMap["CurrentEntry"] = pElement->getText();
 
