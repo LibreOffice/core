@@ -1286,16 +1286,17 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxLineTabDialog(
     return VclPtr<CuiAbstractTabController_Impl>::Create(std::make_unique<SvxLineTabDialog>(pParent, pAttr, pModel, pObj,bHasObj));
 }
 
-VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateCharMapDialog(weld::Window* pParent, const SfxItemSet& rAttr, bool bInsert)
+VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateCharMapDialog(weld::Window* pParent, const SfxItemSet& rAttr,
+                                                                          const Reference< XFrame >& rDocumentFrame)
 {
-    return VclPtr<AbstractSvxCharacterMapDialog_Impl>::Create(std::make_unique<SvxCharacterMap>(pParent, &rAttr, bInsert));
+    return VclPtr<AbstractSvxCharacterMapDialog_Impl>::Create(std::make_unique<SvxCharacterMap>(pParent, &rAttr, rDocumentFrame));
 }
 
 VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateEventConfigDialog(weld::Window* pParent,
                                                                               const SfxItemSet& rAttr,
-                                                                              const Reference< XFrame >& _rxDocumentFrame)
+                                                                              const Reference< XFrame >& rDocumentFrame)
 {
-    return VclPtr<CuiAbstractSingleTabController_Impl>::Create(std::make_unique<SfxMacroAssignDlg>(pParent, _rxDocumentFrame, rAttr));
+    return VclPtr<CuiAbstractSingleTabController_Impl>::Create(std::make_unique<SfxMacroAssignDlg>(pParent, rDocumentFrame, rAttr));
 }
 
 VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog(weld::Window* pParent,

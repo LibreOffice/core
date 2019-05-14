@@ -332,7 +332,8 @@ void ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
     SfxAllItemSet aSet( rFrame.GetObjectShell()->GetPool() );
     aSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
     aSet.Put( SvxFontItem( rOldFont.GetFamily(), rOldFont.GetFamilyName(), rOldFont.GetStyleName(), rOldFont.GetPitch(), rOldFont.GetCharSet(), aSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT ) ) );
-    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(rFrame.GetWindow().GetFrameWeld(), aSet, true));
+    auto xFrame = rFrame.GetFrame().GetFrameInterface();
+    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(rFrame.GetWindow().GetFrameWeld(), aSet, xFrame));
     pDlg->Execute();
 }
 

@@ -684,10 +684,10 @@ public:
                                             sal_uInt32 nResId ) override;
     virtual VclPtr<SfxAbstractDialog>    CreateCharMapDialog(weld::Window* pParent,
                                                              const SfxItemSet& rAttr,
-                                                             bool bInsert) override;
+                                                             const css::uno::Reference< css::frame::XFrame >& rFrame) override;
     virtual VclPtr<SfxAbstractDialog>    CreateEventConfigDialog(weld::Window* pParent,
                                                                  const SfxItemSet& rAttr,
-                                                                 const css::uno::Reference< css::frame::XFrame >& _rxFrame) override;
+                                                                 const css::uno::Reference< css::frame::XFrame >& rFrame) override;
     virtual VclPtr<VclAbstractDialog>    CreateFrameDialog(vcl::Window* pParent, const css::uno::Reference< css::frame::XFrame >& rxFrame,
                                                            sal_uInt32 nResId,
                                                            const OUString& rParameter ) override;
