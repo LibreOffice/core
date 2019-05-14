@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_f5f7d6f4",
+        "filename": "vcl/source/window/dialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-14T20:13:40Z",
+      "side": 1,
+      "message": "I think it would be better to move this code to Notebookbar class - it is not needed for all controls.",
+      "revId": "9f6d929961ee75734e84daf86992858f18aec466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
