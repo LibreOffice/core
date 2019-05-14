@@ -1,4 +1,4 @@
-Don't ever attempt to initialise a std::locale with a UTF-8 locale on Windows -*- Mode: Diff -*-
+Don't ever attempt to initialise a std::locale with an UTF-8 locale on Windows -*- Mode: Diff -*-
 
 --- libs/locale/src/std/std_backend.cpp
 +++ libs/locale/src/std/std_backend.cpp
