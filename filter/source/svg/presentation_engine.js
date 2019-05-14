@@ -288,7 +288,7 @@ function splitStr(str) {
 }
 
 /**
- * find if a array contains the object using indexOf or a simple polyFill
+ * find if an array contains the object using indexOf or a simple polyFill
  * @param {Array} src
  * @param {String} find
  * @param {String} [findByKey]
@@ -1372,8 +1372,8 @@ function getTouchActionProps() {
 
 /**
  * Recognizer flow explained; *
- * All recognizers have the initial state of POSSIBLE when a input session starts.
- * The definition of a input session is from the first input until the last input, with all it's movement in it. *
+ * All recognizers have the initial state of POSSIBLE when an input session starts.
+ * The definition of an input session is from the first input until the last input, with all it's movement in it. *
  * Example session for mouse-input: mousedown -> mousemove -> mouseup
  *
  * On each recognizing cycle (see Manager.recognize) the .recognize() method is executed
@@ -1448,7 +1448,7 @@ Recognizer.prototype = {
     },
 
     /**
-     * recognize simultaneous with an other recognizer.
+     * recognize simultaneous with another recognizer.
      * @param {Recognizer} otherRecognizer
      * @returns {Recognizer} this
      */
@@ -1467,7 +1467,7 @@ Recognizer.prototype = {
     },
 
     /**
-     * drop the simultaneous link. it doesnt remove the link on the other recognizer.
+     * drop the simultaneous link. It doesn't remove the link on the other recognizer.
      * @param {Recognizer} otherRecognizer
      * @returns {Recognizer} this
      */
@@ -1482,7 +1482,7 @@ Recognizer.prototype = {
     },
 
     /**
-     * recognizer can only run when an other is failing
+     * recognizer can only run when another is failing
      * @param {Recognizer} otherRecognizer
      * @returns {Recognizer} this
      */
@@ -1501,7 +1501,7 @@ Recognizer.prototype = {
     },
 
     /**
-     * drop the requireFailure link. it does not remove the link on the other recognizer.
+     * drop the requireFailure link. It does not remove the link on the other recognizer.
      * @param {Recognizer} otherRecognizer
      * @returns {Recognizer} this
      */
@@ -1527,7 +1527,7 @@ Recognizer.prototype = {
     },
 
     /**
-     * if the recognizer can recognize simultaneous with an other recognizer
+     * if the recognizer can recognize simultaneous with another recognizer
      * @param {Recognizer} otherRecognizer
      * @returns {Boolean}
      */
@@ -1603,7 +1603,7 @@ Recognizer.prototype = {
         // so we can change the inputData without messing up the other recognizers
         var inputDataClone = assign({}, inputData);
 
-        // is is enabled and allow recognizing?
+        // is it enabled and allow recognizing?
         if (!boolOrFn(this.options.enable, [this, inputDataClone])) {
             this.reset();
             this.state = STATE_FAILED;
@@ -2037,7 +2037,7 @@ inherit(SwipeRecognizer, AttrRecognizer, {
 });
 
 /**
- * A tap is ecognized when the pointer is doing a small tap/click. Multiple taps are recognized if they occur
+ * A tap is recognized when the pointer is doing a small tap/click. Multiple taps are recognized if they occur
  * between the given interval and position. The delay option can be used to recognize multi-taps without firing
  * a single tap.
  *
@@ -2113,7 +2113,7 @@ inherit(TapRecognizer, Recognizer, {
             this._input = input;
 
             // if tap count matches we have recognized it,
-            // else it has began recognizing...
+            // else it has begun recognizing...
             var tapCount = this.count % options.taps;
             if (tapCount === 0) {
                 // no failing requirements, immediately trigger the tap event
@@ -14247,7 +14247,7 @@ AnimatedElement.prototype.getBBoxWithStroke = function()
         var nHalfStrokeWidth = nStrokeWidth / 2;
         var nDoubleStrokeWidth = nStrokeWidth * 2;
 
-        // Note: IE10 don't let modify the values of a element BBox.
+        // Note: IE10 don't let modify the values of an element BBox.
         var aEBBox = document.documentElement.createSVGRect();
         aEBBox.x = aBBox.x - nHalfStrokeWidth;
         aEBBox.y = aBBox.y - nHalfStrokeWidth;
