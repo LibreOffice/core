@@ -36,7 +36,7 @@ namespace framework{
 /**
     @short  holds all necessary information about a job and
             handle it's configuration (if any exist!)
-    @descr  It can be used rom different use cases as a container
+    @descr  It can be used from different use cases as a container
             (or proxy) for all config data of a registered job.
             But it doesn't implement any execute functionality!
  */
