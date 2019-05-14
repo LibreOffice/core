@@ -37,7 +37,6 @@ main/automation/source/miniapp/test.sid
 main/testautomation/graphics/required/input/einfg.ini
 main/sd/res/webview/edit.pl
 main/sd/res/webview/index.pl
-main/qadevOOo/tests/java/mod/_javavm.uno/package.html
 main/sal/qa/rtl/random/makefile.add
 main/testautomation/writer/optional/input/export/filter/act_1.all
 main/icc/source/create_sRGB_profile/Makefile.am
@@ -850,7 +849,9 @@ main/ooo_custom_images/industrial/duplicates
 main/ooo_custom_images/industrial/missing
 main/psprint_config/configuration/delzip
 main/psprint_config/configuration/ppds/delzip
-main/qadevOOo/runner/manifest
+main/qadevOOo/java/OOoRunner/manifest
+main/qadevOOo/java/OOoRunner/src/main/java/mod/_javavm.uno/package.html
+main/qadevOOo/java/OOoRunnerLight/manifest
 main/qadevOOo/testdocs/backend/org/openoffice/manifest
 main/qadevOOo/testdocs/qadevlibs/source/com/sun/star/cmp/manifest
 main/qadevOOo/testdocs/qadevlibs/source/test/manifest
