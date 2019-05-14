@@ -1099,7 +1099,7 @@ namespace wmfemfhelper
     }
 
     /** helper which takes complete care for creating the needed text primitives. It
-        takes care of decorated stuff and all the geometry adaptions needed
+        takes care of decorated stuff and all the geometry adaptations needed
      */
     static void processMetaTextAction(
         const Point& rTextStartPosition,
