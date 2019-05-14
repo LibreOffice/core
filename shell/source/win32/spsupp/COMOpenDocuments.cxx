@@ -16,8 +16,11 @@
 #include <spsuppServ.hpp>
 #include <stdio.h>
 
+namespace
+{
+
 // Display confirmation dialog, return false on negative answer
-static bool SecurityWarning(const wchar_t* sProgram, const wchar_t* sDocument)
+bool SecurityWarning(const wchar_t* sProgram, const wchar_t* sDocument)
 {
     // TODO: change wording (currently taken from MS Office), use LO localization
     wchar_t sBuf[65536];
@@ -30,7 +33,7 @@ static bool SecurityWarning(const wchar_t* sProgram, const wchar_t* sDocument)
 }
 
 // Returns S_OK if successful
-static HRESULT LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath, bool bDoSecurityWarning)
+HRESULT LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath, bool bDoSecurityWarning)
 {
     const wchar_t* sProgram = GetLOPath();
     if (bDoSecurityWarning && !SecurityWarning(sProgram, sFilePath))
@@ -75,6 +78,10 @@ static HRESULT LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath, bool b
     CloseHandle(pi.hThread);
     return S_OK;
 }
+
+VARIANT_BOOL toVBool(bool b) { return b ? VARIANT_TRUE : VARIANT_FALSE; }
+
+} // namespace
 
 // IObjectSafety methods
 
@@ -309,7 +316,7 @@ STDMETHODIMP COMOpenDocuments::CreateNewDocument2(
 {
     // TODO: resolve the program from varProgID (nullptr -> default?)
     HRESULT hr = LOStart(L"-n", bstrTemplateLocation, m_aObjectSafety.GetSafe_forUntrustedCaller() || m_aObjectSafety.GetSafe_forUntrustedData());
-    *pbResult = VARIANT_BOOL(SUCCEEDED(hr));
+    *pbResult = toVBool(SUCCEEDED(hr));
     return hr;
 }
 
@@ -360,7 +367,7 @@ STDMETHODIMP COMOpenDocuments::ViewDocument3(
 {
     // TODO: resolve the program from varProgID (nullptr -> default?)
     HRESULT hr = LOStart(L"--view", bstrDocumentLocation, m_aObjectSafety.GetSafe_forUntrustedCaller() || m_aObjectSafety.GetSafe_forUntrustedData());
-    *pbResult = VARIANT_BOOL(SUCCEEDED(hr));
+    *pbResult = toVBool(SUCCEEDED(hr));
     return hr;
 }
 
@@ -422,7 +429,7 @@ STDMETHODIMP COMOpenDocuments::EditDocument3(
 {
     // TODO: resolve the program from varProgID (nullptr -> default?)
     HRESULT hr = LOStart(L"-o", bstrDocumentLocation, m_aObjectSafety.GetSafe_forUntrustedCaller() || m_aObjectSafety.GetSafe_forUntrustedData());
-    *pbResult = VARIANT_BOOL(SUCCEEDED(hr));
+    *pbResult = toVBool(SUCCEEDED(hr));
     return hr;
 }
 
