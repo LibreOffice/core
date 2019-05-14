@@ -113,7 +113,7 @@ public class CheckOGroupBoxModel
             }
         } // endfor
 
-        //get a array of bound properties
+        //get an array of bound properties
         String[] testPropsNames = tNames.toArray(new String[tNames.size()]);
         return testPropsNames;
     }
