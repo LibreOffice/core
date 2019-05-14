@@ -8972,7 +8972,7 @@
                         <xsl:with-param name="preceding-cellstylename" select="''"/>
                         <xsl:with-param name="temp-num" select="'0'"/>
                         <xsl:with-param name="cellstylename" select="$cellstylename"/>
-                        <xsl:with-param name="table-collumns" select="$cell/ancestor::表:工作表内容//表:列"/>
+                        <xsl:with-param name="table-columns" select="$cell/ancestor::表:工作表内容//表:列"/>
                     </xsl:call-template>
                 </xsl:variable>
                 <xsl:choose>
