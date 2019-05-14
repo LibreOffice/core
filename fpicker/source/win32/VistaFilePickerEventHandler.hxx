@@ -136,7 +136,7 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
         /** stop listening for file picker events on the internally cached dialog COM object.
          *
          *  The COM dialog provided on the startListening() call was cached internally.
-         *  And now its used to deregister this listener. Doing so the also internally cached
+         *  And now it's used to deregister this listener. Doing so the also internally cached
          *  listener handle is used. If listener was not already registered - nothing will happen.
          */
         void stopListening();
