@@ -742,7 +742,7 @@ void UpdateHandler::focusControl( DialogControls eID )
         return;
     }
 
-    OSL_ENSURE( (eID < BUTTON_COUNT), "UpdateHandler::focusControl: id to big!" );
+    OSL_ENSURE( (eID < BUTTON_COUNT), "UpdateHandler::focusControl: id too big!" );
 
     uno::Reference< awt::XWindow > xWindow( xContainer->getControl( msButtonIDs[static_cast<short>(eID)] ), uno::UNO_QUERY );
     if ( xWindow.is() )
