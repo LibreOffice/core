@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_ba85bdaf",
+        "filename": "offapi/com/sun/star/awt/PrinterServer.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001073
+      },
+      "writtenOn": "2019-05-14T16:41:57Z",
+      "side": 1,
+      "message": "maybe i am completly wrong, but for me \"css.awt.PrinterServer\" includes \"css.awt.XPS2\" and \"css.awt.XPS\" interface now (XPS2 includes XPS).\nadded two examples (beanshell/basic):\nhttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d125207\n\nbtw: i used the \"XFolderPicker2\" interface as a \"template\" for this.",
+      "parentUuid": "3fa0c359_3a044d15",
+      "revId": "4137b67cac76acddac37abc287fefe69f7a9e4b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_340b048f",
         "filename": "offapi/com/sun/star/awt/XPrinterServer2.idl",
         "patchSetId": 3
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "Why?  If there is no really compelling reason, I would prefer to keep this change (esp. if it means incompatibly changing the PritnerServer service, see there) to the upcoming 6.3, instead of sneaking it into a 6.2.z micro version.",
       "parentUuid": "3fa0c359_afd90184",
+      "revId": "4137b67cac76acddac37abc287fefe69f7a9e4b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_5a9279f8",
+        "filename": "offapi/com/sun/star/awt/XPrinterServer2.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001073
+      },
+      "writtenOn": "2019-05-14T16:41:57Z",
+      "side": 1,
+      "message": "you\u0027re right, 6.3 would be ok.",
+      "parentUuid": "3fa0c359_4fab9d1c",
       "revId": "4137b67cac76acddac37abc287fefe69f7a9e4b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -172,6 +208,24 @@
       "side": 1,
       "message": "that shouldn\u0027t be the case; what exactly failed?",
       "parentUuid": "3fa0c359_6fe3f934",
+      "revId": "4137b67cac76acddac37abc287fefe69f7a9e4b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_9ab1e192",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1001073
+      },
+      "writtenOn": "2019-05-14T16:41:57Z",
+      "side": 1,
+      "message": "not sure, but i think i did not build all dependend modules, will try again",
+      "parentUuid": "3fa0c359_6fa8d91e",
       "revId": "4137b67cac76acddac37abc287fefe69f7a9e4b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
