@@ -972,7 +972,7 @@ sal_uInt32 EscherEx::QueryTextID( const Reference< XShape >&, sal_uInt32 )
     return 0;
 }
 
-// add an dummy rectangle shape into the escher stream
+// add a dummy rectangle shape into the escher stream
 sal_uInt32 EscherEx::AddDummyShape()
 {
     OpenContainer( ESCHER_SpContainer );
