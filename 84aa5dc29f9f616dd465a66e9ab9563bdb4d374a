@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_4f2e3da6",
+        "filename": "officecfg/registry/schema/org/openoffice/Setup.xcs",
+        "patchSetId": 6
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-14T08:34:46Z",
+      "side": 1,
+      "message": "My comments from \u003chttps://gerrit.libreoffice.org/#/c/72064/\u003e \"Resolves: tdf#69042 - Add a \u0027What\u0027s New\u0027 window\" still apply:\n\n* \"[...]  And better ways than using \u00270\u0027 for \u0027no previous version recorded\u0027 might be to make the prop nillable, or to use an empty string.\"\n\n* \"For one, probably better to document the expected format here anyway.  [...]\"",
+      "revId": "84aa5dc29f9f616dd465a66e9ab9563bdb4d374a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_af2101b7",
+        "filename": "officecfg/registry/schema/org/openoffice/Setup.xcs",
+        "patchSetId": 6
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-14T08:34:46Z",
+      "side": 1,
+      "message": "spurious space at end of line",
+      "range": {
+        "startLine": 265,
+        "startChar": 79,
+        "endLine": 265,
+        "endChar": 80
+      },
+      "revId": "84aa5dc29f9f616dd465a66e9ab9563bdb4d374a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
