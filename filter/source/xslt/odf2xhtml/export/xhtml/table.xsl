@@ -159,7 +159,7 @@
             </xsl:if>
 
             <!-- empty cell tags produce problems with width CSS style on itself other table cells as well
-                therefore an non breakable space (&nbsp;/&#160;) have been inserted.-->
+                therefore a non breakable space (&nbsp;/&#160;) have been inserted.-->
             <xsl:choose>
                 <xsl:when test="node()">
                     <xsl:call-template name="apply-styles-and-content">
