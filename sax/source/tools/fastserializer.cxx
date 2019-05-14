@@ -59,6 +59,7 @@ namespace sax_fastparser {
         , mbMarkStackEmpty(true)
         , mpDoubleStr(nullptr)
         , mnDoubleStrCapacity(RTL_STR_MAX_VALUEOFDOUBLE)
+        , mbXescape(true)
     {
         rtl_string_new_WithLength(&mpDoubleStr, mnDoubleStrCapacity);
         mxFastTokenHandler = css::xml::sax::FastTokenHandler::create(
@@ -135,6 +136,7 @@ namespace sax_fastparser {
             return;
         }
 
+        bool bGood = true;
         const sal_Int32 kXescapeLen = 7;
         char bufXescape[kXescapeLen+1];
         sal_Int32 nNextXescape = 0;
@@ -195,6 +197,7 @@ namespace sax_fastparser {
                             }
                 break;
                 default:
+                            if (mbXescape)
                             {
                                 // Escape characters not valid in XML 1.0 as
                                 // _xHHHH_. A literal "_xHHHH_" has to be
@@ -239,10 +242,23 @@ namespace sax_fastparser {
                                  * scanning for both encoded sequences and
                                  * write as _xHHHH_? */
                             }
+#if OSL_DEBUG_LEVEL > 0
+                            else
+                            {
+                                if (bGood && invalidChar(pStr[i]))
+                                {
+                                    bGood = false;
+                                    // The SAL_WARN() for the single character is
+                                    // issued in writeBytes(), just gather for the
+                                    // SAL_WARN_IF() below.
+                                }
+                            }
+#endif
                             writeBytes( &c, 1 );
                 break;
             }
         }
+        SAL_WARN_IF( !bGood && nLen > 1, "sax", "in '" << OString(pStr,std::min<sal_Int32>(nLen,42)) << "'");
     }
 
     void FastSaxSerializer::endDocument()

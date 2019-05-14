@@ -228,6 +228,9 @@ private:
     rtl_String *mpDoubleStr;
     sal_Int32 mnDoubleStrCapacity;
     TokenValueList maTokenValues;
+    bool mbXescape;     ///< whether to escape invalid XML characters as _xHHHH_ in write(const char*,sal_Int32,true)
+                        /* TODO: make that configurable from the outside for
+                         * some specific cases? */
 
 #ifdef DBG_UTIL
     std::stack<sal_Int32> m_DebugStartedElements;
