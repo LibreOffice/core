@@ -34,7 +34,7 @@ namespace pcr
 
     struct MapHandlerToUI;
 
-    /** callback for an ComposedPropertyUIUpdate checking a given property for existence
+    /** callback for a ComposedPropertyUIUpdate checking a given property for existence
     */
     class SAL_NO_VTABLE IPropertyExistenceCheck
     {
@@ -157,7 +157,7 @@ namespace pcr
                 <li>If an element should have been rebuilt (->XObjectInspectorUI::rebuiltPropertyUI)
                     at least once, it's rebuilt at the delegator UI, too.<br/>
                     After that, the request to rebuild the UI for this property is cleared, so subsequent
-                    calls to ->fire will not trigger an new rebuilt request.
+                    calls to ->fire will not trigger a new rebuilt request.
             </ul>
 
             @precond
