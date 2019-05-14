@@ -808,7 +808,7 @@ HRESULT CSOActiveX::LoadURLToFrame( )
     // does not work for some documents, but it is no error
     // if( !SUCCEEDED( hr ) ) return hr;
 
-    // try to get the model and set the presetation specific property, the setting will fail for other document formats
+    // try to get the model and set the presentation specific property, the setting will fail for other document formats
     CComPtr<IDispatch> pdispController;
     hr = GetIDispByFunc( mpDispFrame, L"getController", nullptr, 0, pdispController );
     if ( SUCCEEDED( hr ) && pdispController )
