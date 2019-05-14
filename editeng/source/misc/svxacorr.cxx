@@ -1444,8 +1444,8 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                  FnCorrectCapsLock( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) )
             {
                 // Correct accidental use of cAPS LOCK key (do this only when
-                // the caps or shift lock key is pressed).  Turn off the caps
-                // lock afterwords.
+                // the caps or shift lock key is pressed). Turn off the caps
+                // lock afterwards.
                 pFrameWin->SimulateKeyPress( KEY_CAPSLOCK );
             }
 
