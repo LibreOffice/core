@@ -609,7 +609,7 @@ namespace drawinglayer
                                     OSL_ENSURE(pPoHair, "OOps, PrimitiveID and PrimitiveType do not match (!)");
 
                                     // do no tallow by default - problem is that self-overlapping parts of this geometry will
-                                    // not be in a all-same transparency but will already alpha-cover themselves with blending.
+                                    // not be in an all-same transparency but will already alpha-cover themselves with blending.
                                     // This is not what the UnifiedTransparencePrimitive2D defines: It requires all its
                                     // content to be uniformly transparent.
                                     // For hairline the effect is pretty minimal, but still not correct.
@@ -623,7 +623,7 @@ namespace drawinglayer
                                     OSL_ENSURE(pPoStroke, "OOps, PrimitiveID and PrimitiveType do not match (!)");
 
                                     // do no tallow by default - problem is that self-overlapping parts of this geometry will
-                                    // not be in a all-same transparency but will already alpha-cover themselves with blending.
+                                    // not be in an all-same transparency but will already alpha-cover themselves with blending.
                                     // This is not what the UnifiedTransparencePrimitive2D defines: It requires all its
                                     // content to be uniformly transparent.
                                     // To check, activate and draw a wide transparent self-crossing line/curve
@@ -714,7 +714,7 @@ namespace drawinglayer
 
             // polygon stroke primitive
 
-            // Lines with 1 and 2 pixel width without AA need special treatment since their vsiualisation
+            // Lines with 1 and 2 pixel width without AA need special treatment since their visualization
             // as filled polygons is geometrically correct but looks wrong since polygon filling avoids
             // the right and bottom pixels. The used method evaluates that and takes the correct action,
             // including calling recursively with decomposition if line is wide enough
