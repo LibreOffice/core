@@ -49,6 +49,7 @@ private:
     std::deque<OUString>   maFavCharList;
     std::deque<OUString>   maFavCharFontList;
     VclPtr<Button>         maDlgBtn;
+    bool                   mbNeedsInit = true;
 
     DECL_LINK(CharClickHdl, SvxCharViewControl*, void);
     DECL_STATIC_LINK(SfxCharmapCtrl, FocusHdl, Control&, void);
