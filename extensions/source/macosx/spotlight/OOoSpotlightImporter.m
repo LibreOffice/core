@@ -461,7 +461,7 @@ static NSData *getUncompressedData(NSFileHandle *file, NSString *name)
     return unzipFile;
 }
 
-/* metaDataFileFromZip extracts the file meta.xml from the zip file and returns it as an NSData* structure
+/* metaDataFileFromZip extracts the file meta.xml from the zip file and returns it as a NSData* structure
    or nil if the metadata is not present */
 - (NSData*) metaDataFileFromZip:(NSFileHandle*)unzipFile
 {
@@ -470,7 +470,7 @@ static NSData *getUncompressedData(NSFileHandle *file, NSString *name)
     return getUncompressedData(unzipFile, @"meta.xml");
 }
 
-/* contentDataFileFromZip extracts the file content.xml from the zip file and returns it as an NSData* structure
+/* contentDataFileFromZip extracts the file content.xml from the zip file and returns it as a NSData* structure
    or nil if the metadata is not present */
 - (NSData*) contentDataFileFromZip:(NSFileHandle*)unzipFile
 {
