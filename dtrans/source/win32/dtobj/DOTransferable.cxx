@@ -263,7 +263,7 @@ sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFla
 // the list of dataflavors currently on the clipboard will be initialized
 // only once; if the client of this Transferable will hold a reference
 // to it and the underlying clipboard content changes, the client does
-// possible operate on a invalid list
+// possible operate on an invalid list
 // if there is only text on the clipboard we will also offer unicode text
 // an synthesize this format on the fly if requested, to accomplish this
 // we save the first offered text format which we will later use for the
@@ -333,7 +333,7 @@ DataFlavor CDOTransferable::formatEtcToDataFlavor( const FORMATETC& aFormatEtc )
 {
     LCID lcid = 0;
 
-    // for non-unicode text format we must provid a locale to get
+    // for non-unicode text format we must provide a locale to get
     // the character-set of the text, if there is no locale on the
     // clipboard we assume the text is in a charset appropriate for
     // the current thread locale
