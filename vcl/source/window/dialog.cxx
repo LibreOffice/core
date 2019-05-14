@@ -1576,8 +1576,12 @@ void TopLevelWindowLocker::incBusy(const weld::Window* pIgnore)
     vcl::Window *pTopWin = Application::GetFirstTopLevelWindow();
     while (pTopWin)
     {
-        if (pTopWin->GetFrameWeld() != pIgnore)
-            aTopLevels.push_back(pTopWin);
+        vcl::Window* pCandidate = pTopWin;
+        if (pCandidate->GetType() == WindowType::BORDERWINDOW)
+            pCandidate = pCandidate->GetWindow(GetWindowType::FirstChild);
+        // tdf#125266 ignore HelpTextWindows
+        if (pCandidate && pCandidate->GetType() != WindowType::HELPTEXTWINDOW && pCandidate->GetFrameWeld() != pIgnore)
+            aTopLevels.push_back(pCandidate);
         pTopWin = Application::GetNextTopLevelWindow(pTopWin);
     }
     for (auto& a : aTopLevels)
