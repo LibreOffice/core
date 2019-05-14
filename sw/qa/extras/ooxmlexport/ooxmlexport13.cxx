@@ -323,6 +323,29 @@ DECLARE_OOXMLIMPORT_TEST(testTdf121784, "tdf121784.docx")
     CPPUNIT_ASSERT_EQUAL( OUString( "i" ), getRun( getParagraph( 2 ), 3 )->getString());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf125518, "tdf125518.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    // First diagram is anchored
+    OUString anchorName = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:drawing/wp:anchor/wp:docPr", "name");
+    CPPUNIT_ASSERT_EQUAL(OUString("Object1"), anchorName);
+
+    // Second diagram has anchor
+    anchorName = getXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:drawing/wp:anchor/wp:docPr", "name");
+    CPPUNIT_ASSERT_EQUAL(OUString("Objekt1"), anchorName);
+
+    // Third diagram has no anchor
+    anchorName = getXPath(pXmlDoc, "/w:document/w:body/w:p[12]/w:r[2]/w:drawing/wp:inline/wp:docPr", "name");
+    CPPUNIT_ASSERT_EQUAL(OUString("Object2"), anchorName);
+
+    // 4th diagram has anchor too
+    anchorName = getXPath(pXmlDoc, "/w:document/w:body/w:p[14]/w:r[3]/w:drawing/wp:anchor/wp:docPr", "name");
+    CPPUNIT_ASSERT_EQUAL(OUString("Object3"), anchorName);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
