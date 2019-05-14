@@ -684,7 +684,7 @@ void SbiParser::Enum()
 
 void SbiParser::DefEnum( bool bPrivate )
 {
-    // Read a the new Token. It had to be a symbol
+    // Read the new Token. It had to be a symbol
     if (!TestSymbol())
         return;
 
