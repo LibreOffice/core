@@ -6689,10 +6689,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Draw-ObjectForwardOne">
+                                      <object class="GtkToolButton" id="Draw-Forward">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:ObjectForwardOne</property>
+                                        <property name="action_name">.uno:Forward</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -6700,10 +6700,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Draw-ObjectBackOne">
+                                      <object class="GtkToolButton" id="Draw-Backward">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:ObjectBackOne</property>
+                                        <property name="action_name">.uno:Backward</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -8056,10 +8056,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Image-Section-ObjectForwardOne">
+                                      <object class="GtkToolButton" id="Image-Section-Forward">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:ObjectForwardOne</property>
+                                        <property name="action_name">.uno:Forward</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -8067,10 +8067,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Image-Section-ObjectBackOne">
+                                      <object class="GtkToolButton" id="Image-Section-Backward">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:ObjectBackOne</property>
+                                        <property name="action_name">.uno:Backward</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -9090,10 +9090,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="OLE-ObjectForwardOne">
+                                      <object class="GtkToolButton" id="OLE-Forward">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:ObjectForwardOne</property>
+                                        <property name="action_name">.uno:Forward</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -9101,10 +9101,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="OLE-ObjectBackOne">
+                                      <object class="GtkToolButton" id="OLE-Backward">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:ObjectBackOne</property>
+                                        <property name="action_name">.uno:Backward</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -9660,10 +9660,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Media-Section-ObjectForwardOne">
+                                      <object class="GtkToolButton" id="Media-Section-Forward">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:ObjectForwardOne</property>
+                                        <property name="action_name">.uno:Forward</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -9671,10 +9671,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Media-Section-ObjectBackOne">
+                                      <object class="GtkToolButton" id="Media-Section-Backward">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:ObjectBackOne</property>
+                                        <property name="action_name">.uno:Backward</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -10445,10 +10445,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Multi-ObjectForwardOne">
+                                      <object class="GtkToolButton" id="Multi-Forward">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:ObjectForwardOne</property>
+                                        <property name="action_name">.uno:Forward</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -10456,10 +10456,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Multi-ObjectBackOne">
+                                      <object class="GtkToolButton" id="Multi-Backward">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:ObjectBackOne</property>
+                                        <property name="action_name">.uno:Backward</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
