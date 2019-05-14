@@ -1000,7 +1000,7 @@
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$command = 'al' ">
-                <!-- ae command plus a implicitly moveto startpoint-->
+                <!-- ae command plus an implicitly moveto startpoint-->
                 <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' U ' ) "/>
                 <xsl:variable name="num-and-pos">
                     <xsl:call-template name="get-number-after">
@@ -1038,7 +1038,7 @@
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$command = 'ar' ">
-                <!-- at command plus a implicitly moveto startpoint-->
+                <!-- at command plus an implicitly moveto startpoint-->
                 <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' B ' ) "/>
                 <xsl:variable name="num-and-pos">
                     <xsl:call-template name="get-number-after">
@@ -1076,7 +1076,7 @@
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$command = 'wr' ">
-                <!-- wa command plus a implicitly moveto startpoint-->
+                <!-- wa command plus an implicitly moveto startpoint-->
                 <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' V ' ) "/>
                 <xsl:variable name="num-and-pos">
                     <xsl:call-template name="get-number-after">
@@ -1434,7 +1434,7 @@
                         </xsl:call-template>
                     </xsl:when>
                     <xsl:when test="string-length(translate($curr-char ,  '+-' ,'') ) = 0  and string-length($number) &gt; 0">
-                        <!-- finsh it with +/- -->
+                        <!-- finish it with +/- -->
                         <xsl:call-template name="format-number-pos">
                             <xsl:with-param name="number" select="$number"/>
                             <xsl:with-param name="position" select="$position"/>
@@ -1460,7 +1460,7 @@
                 <xsl:variable name="curr-char" select="substring($vml-path, $position , 1)"/>
                 <xsl:choose>
                     <xsl:when test="string-length(translate($curr-char ,  'mlcxetrvnfsawqyb' ,'')) = 0 ">
-                        <!-- "MmZzLlHhVvCcSsQqTtAa" are all possiable  command chars -->
+                        <!-- "MmZzLlHhVvCcSsQqTtAa" are all possible  command chars -->
                         <xsl:value-of select="concat( $curr-char , ':'  , $position +1)"/>
                     </xsl:when>
                     <xsl:when test="string-length(translate($curr-char ,  '+-.0123456789@' ,'')) = 0 ">
