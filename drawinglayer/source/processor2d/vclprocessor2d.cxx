@@ -328,7 +328,6 @@ namespace drawinglayer
             basegfx::B2DPolygon aLocalPolygon(rPolygonCandidate.getB2DPolygon());
             aLocalPolygon.transform(maCurrentTransformation);
 
-            bool bDisableAA = false;
             if(bPixelBased && getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete())
             {
                 // #i98289#
@@ -337,18 +336,9 @@ namespace drawinglayer
                 // not-AntiAliased such lines look more pleasing to the eye (e.g. 2D chart content). This
                 // NEEDS to be done in discrete coordinates, so only useful for pixel based rendering.
                 aLocalPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aLocalPolygon);
-
-                // Also disable AA, snap would leave the start/end of lines still anti-aliased when
-                // their coordinates are provided in logic units.
-                bDisableAA = basegfx::utils::containsOnlyHorizontalOrVerticalLines(aLocalPolygon);
             }
 
-            const AntialiasingFlags nOriginalAA(mpOutputDevice->GetAntialiasing());
-            if (bDisableAA && (nOriginalAA & AntialiasingFlags::EnableB2dDraw))
-                mpOutputDevice->SetAntialiasing(nOriginalAA & ~AntialiasingFlags::EnableB2dDraw);
             mpOutputDevice->DrawPolyLine(aLocalPolygon, 0.0);
-            if (bDisableAA && (nOriginalAA & AntialiasingFlags::EnableB2dDraw))
-                mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing() | AntialiasingFlags::EnableB2dDraw);
         }
 
         // direct draw of transformed BitmapEx primitive

@@ -438,9 +438,6 @@ namespace basegfx
         */
         BASEGFX_DLLPUBLIC B2DPolygon snapPointsOfHorizontalOrVerticalEdges(const B2DPolygon& rCandidate);
 
-        /// Determines if rPolygon lacks diagonal lines or not.
-        BASEGFX_DLLPUBLIC bool containsOnlyHorizontalOrVerticalLines(const basegfx::B2DPolygon& rPolygon);
-
         /// get the tangent with which the given point is entered seen from the previous
         /// polygon path data. Take into account all stuff like closed state, zero-length edges and others.
         BASEGFX_DLLPUBLIC B2DVector getTangentEnteringPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex);

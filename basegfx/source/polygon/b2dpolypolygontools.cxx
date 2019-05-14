@@ -456,24 +456,6 @@ namespace basegfx
             return aRetval;
         }
 
-        bool containsOnlyHorizontalOrVerticalLines(const basegfx::B2DPolygon& rPolygon)
-        {
-            if (rPolygon.count() <= 1)
-                return false;
-
-            for (size_t i = 1; i < rPolygon.count(); ++i)
-            {
-                const basegfx::B2DPoint& rPrevPoint = rPolygon.getB2DPoint(i - 1);
-                const basegfx::B2DPoint& rPoint = rPolygon.getB2DPoint(i);
-                if (rPrevPoint.getX() == rPoint.getX() || rPrevPoint.getY() == rPoint.getY())
-                    continue;
-
-                return false;
-            }
-
-            return true;
-        }
-
         B2DPolyPolygon createSevenSegmentPolyPolygon(sal_Char nNumber, bool bLitSegments)
         {
             // config here
