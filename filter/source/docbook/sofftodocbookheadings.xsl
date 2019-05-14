@@ -66,7 +66,7 @@
              use="@text:level"/>
 
     <!-- A further problem during mapping of Heading to sections is the quantity of levels. In OpenDocument there can exist more than 4 hierarchies (outline levels).
-    Furthermore an OpenDocument have not to start with heading outline level 1 nor does a outline level 2 have to follow.
+    Furthermore an OpenDocument have not to start with heading outline level 1 nor does an outline level 2 have to follow.
     Therefore all possible existing heading outline levels from 1 to 10 have to be mapped to the section1 to section4 in DocBook.
     The lowest outline number is mapped section1, second is section2... until fourth and higher are all mapped to section4 -->
 
