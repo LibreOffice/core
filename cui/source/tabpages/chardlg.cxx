@@ -3115,7 +3115,7 @@ void SvxCharTwoLinesPage::Initialize()
 void SvxCharTwoLinesPage::SelectCharacter(weld::TreeView* pBox)
 {
     bool bStart = pBox == m_xStartBracketLB.get();
-    SvxCharacterMap aDlg(GetFrameWeld(), nullptr, false);
+    SvxCharacterMap aDlg(GetFrameWeld(), nullptr, nullptr);
     aDlg.DisableFontSelection();
 
     if (aDlg.run() == RET_OK)
