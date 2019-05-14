@@ -179,7 +179,7 @@ namespace svt
             return false;
 
         assert( m_pContent && "SmartContent::implIs: inconsistence!" );
-            // if, after an bindTo, we don't have a content, then we should be INVALID, or at least
+            // if, after a bindTo, we don't have a content, then we should be INVALID, or at least
             // NOT_BOUND (the latter happens, for example, if somebody tries to ask for an empty URL)
 
         bool bIs = false;
