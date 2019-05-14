@@ -4948,14 +4948,14 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
 
 void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rOLENode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat )
 {
-    if( WriteOLEChart( pSdrObj, rSize ))
+    if( WriteOLEChart( pSdrObj, rSize, pFlyFrameFormat ))
         return;
     if( WriteOLEMath( rOLENode ))
         return;
     PostponeOLE( rOLENode, rSize, pFlyFrameFormat );
 }
 
-bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize )
+bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat )
 {
     uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY );
     if (!xShape.is())
@@ -4975,7 +4975,7 @@ bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& r
     if (!SotExchange::IsChart(aClassID))
         return false;
 
-    m_aPostponedCharts.push_back(std::pair<const SdrObject*, Size>(pSdrObj, rSize));
+    m_aPostponedCharts.push_back(PostponedChart(pSdrObj, rSize, pFlyFrameFormat));
     return true;
 }
 
@@ -4987,10 +4987,10 @@ void DocxAttributeOutput::WritePostponedChart()
     if (m_aPostponedCharts.empty())
         return;
 
-    for (const auto& itr : m_aPostponedCharts)
+    for (const PostponedChart& rChart : m_aPostponedCharts)
     {
         uno::Reference< chart2::XChartDocument > xChartDoc;
-        uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(itr.first)->getUnoShape(), uno::UNO_QUERY );
+        uno::Reference< drawing::XShape > xShape(const_cast<SdrObject*>(rChart.object)->getUnoShape(), uno::UNO_QUERY );
         if( xShape.is() )
         {
             uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
@@ -5001,16 +5001,8 @@ void DocxAttributeOutput::WritePostponedChart()
         if( xChartDoc.is() )
         {
             SAL_INFO("sw.ww8", "DocxAttributeOutput::WriteOLE2Obj: export chart ");
-            m_pSerializer->startElementNS(XML_w, XML_drawing);
-            m_pSerializer->startElementNS( XML_wp, XML_inline,
-                    XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0" );
 
-            OString aWidth( OString::number( TwipsToEMU( itr.second.Width() ) ) );
-            OString aHeight( OString::number( TwipsToEMU( itr.second.Height() ) ) );
-            m_pSerializer->singleElementNS(XML_wp, XML_extent, XML_cx, aWidth, XML_cy, aHeight);
-            // TODO - the right effectExtent, extent including the effect
-            m_pSerializer->singleElementNS( XML_wp, XML_effectExtent,
-                    XML_l, "0", XML_t, "0", XML_r, "0", XML_b, "0" );
+            m_rExport.SdrExporter().startDMLAnchorInline(rChart.frame, rChart.size);
 
             OUString sName("Object 1");
             uno::Reference< container::XNamed > xNamed( xShape, uno::UNO_QUERY );
@@ -5046,9 +5038,8 @@ void DocxAttributeOutput::WritePostponedChart()
 
             m_pSerializer->endElementNS( XML_a, XML_graphicData );
             m_pSerializer->endElementNS( XML_a, XML_graphic );
-            m_pSerializer->endElementNS( XML_wp, XML_inline );
-            m_pSerializer->endElementNS( XML_w, XML_drawing );
 
+            m_rExport.SdrExporter().endDMLAnchorInline(rChart.frame);
         }
     }
 
