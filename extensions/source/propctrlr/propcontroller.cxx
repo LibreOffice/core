@@ -721,7 +721,7 @@ namespace pcr
             getPropertyBox().SetPropertyValue( _rEvent.PropertyName, aNewValue, bAmbiguousValue );
         }
 
-        // if it's a actuating property, then update the UI for any dependent
+        // if it's an actuating property, then update the UI for any dependent
         // properties
         if ( impl_isActuatingProperty_nothrow( _rEvent.PropertyName ) )
             impl_broadcastPropertyChange_nothrow( _rEvent.PropertyName, aNewValue, _rEvent.OldValue, false );
@@ -1149,7 +1149,7 @@ namespace pcr
             std::set< sal_uInt16 > aUsedPages;
 
             // when building the UI below, remember which properties are actuating,
-            // to allow for a initial actuatingPropertyChanged call
+            // to allow for an initial actuatingPropertyChanged call
             std::vector< OUString > aActuatingProperties;
             std::vector< Any > aActuatingPropertyValues;
 
