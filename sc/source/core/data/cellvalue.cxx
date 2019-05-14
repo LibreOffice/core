@@ -491,7 +491,7 @@ void ScCellValue::release( ScColumn& rColumn, SCROW nRow, sc::StartListeningType
     mfValue = 0.0;
 }
 
-OUString ScCellValue::getString( const ScDocument* pDoc )
+OUString ScCellValue::getString( const ScDocument* pDoc ) const
 {
     return getStringImpl(*this, pDoc);
 }
@@ -647,7 +647,7 @@ double ScRefCellValue::getRawValue() const
     return 0.0;
 }
 
-OUString ScRefCellValue::getString( const ScDocument* pDoc )
+OUString ScRefCellValue::getString( const ScDocument* pDoc ) const
 {
     return getStringImpl(*this, pDoc);
 }
