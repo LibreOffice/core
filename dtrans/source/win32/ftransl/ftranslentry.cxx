@@ -38,7 +38,7 @@ using namespace ::com::sun::star::datatransfer;
 namespace
 {
 
-    // functions to create a new Clipboad instance; is needed by factory helper implementation
+    // functions to create a new Clipboard instance; is needed by factory helper implementation
     // @param rServiceManager - service manager, useful if the component needs other uno services
     // so we should give it to every UNO-Implementation component
 
