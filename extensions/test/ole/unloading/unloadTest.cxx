@@ -184,7 +184,7 @@ sal_Bool test4()
     void* pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);
     // true, instance alive
     bTest1= pSymbol ? sal_True : sal_False;
-    // ApplicationRegistration is a one-instance-service, therefore kill service manager first
+    // ApplicationRegistration is an one-instance-service, therefore kill service manager first
     Reference<XComponent> xcomp( context, UNO_QUERY);
     xcomp->dispose();
 
