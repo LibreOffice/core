@@ -45,7 +45,7 @@ public:
 
     void Read(DXFGroupReader & rDGR);
         // reads the block (including entities) from a dxf file
-        // by rGDR until a ENDBLK, ENDSEC or EOF.
+        // by rGDR until an ENDBLK, ENDSEC or EOF.
 };
 
 
@@ -63,7 +63,7 @@ public:
     ~DXFBlocks();
 
     void Read(DXFGroupReader & rDGR);
-        // reads all block per rDGR until a ENDSEC or EOF.
+        // reads all block per rDGR until an ENDSEC or EOF.
 
     DXFBlock * Search(OString const& rName) const;
         // looks for a block with the name, return NULL if not successful
