@@ -177,7 +177,7 @@ namespace drawinglayer
                                 // with stroke, we have a problem - a filled polygon would lose the
                                 // stroke. Let's represent the start and/or end as triangles, the main
                                 // line still as PolygonStrokePrimitive2D.
-                                // Fill default line Start/End for stroke, so we need no adaptions in else paths
+                                // Fill default line Start/End for stroke, so we need no adaptations in else paths
                                 basegfx::B2DPoint aStrokeStart(aStart - (aVector * candidate.getStartLeft()));
                                 basegfx::B2DPoint aStrokeEnd(aEnd + (aVector * candidate.getEndLeft()));
                                 const basegfx::B2DVector aHalfLineOffset(aPerpendicular * (candidate.getLineAttribute().getWidth() * 0.5));
@@ -391,7 +391,7 @@ namespace drawinglayer
                 else
                 {
                     // when not gap, the line extends have at least reach to the center ( > 0.0),
-                    // else there is a extend usage. When > 0.0 they just overlap, no problem
+                    // else there is an extend usage. When > 0.0 they just overlap, no problem
                     if(rBT.getEndLeft() >= 0.0
                         && rBT.getEndRight() >= 0.0
                         && rBC.getStartLeft() >= 0.0
