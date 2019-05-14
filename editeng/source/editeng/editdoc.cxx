@@ -1230,7 +1230,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
             // 0: Expand empty attribute, if at insertion point
             else if ( pAttrib->IsEmpty() )
             {
-                // Do not check Index, a empty one could only be there
+                // Do not check Index, an empty one could only be there
                 // When later checking it anyhow:
                 //   Special case: Start == 0; AbsLen == 1, nNew = 1
                 // => Expand, because of paragraph break!
@@ -1908,7 +1908,7 @@ EditDoc::EditDoc( SfxItemPool* pPool ) :
     bOwnerOfPool(pPool == nullptr),
     bModified(false)
 {
-    // Don't create a empty node, Clear() will be called in EditEngine-CTOR
+    // Don't create an empty node, Clear() will be called in EditEngine-CTOR
 };
 
 EditDoc::~EditDoc()
@@ -2340,7 +2340,7 @@ void EditDoc::RemoveChars( EditPaM aPaM, sal_Int32 nChars )
 void EditDoc::InsertAttribInSelection( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, const SfxPoolItem& rPoolItem )
 {
     assert(pNode);
-    DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribute to large!" );
+    DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribute too large!" );
 
     // for Optimization:
     // This ends at the beginning of the selection => can be expanded
@@ -2385,7 +2385,7 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
 {
 
     assert(pNode);
-    DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribute to large!" );
+    DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribute too large!" );
 
     // This ends at the beginning of the selection => can be expanded
     rpEnding = nullptr;
