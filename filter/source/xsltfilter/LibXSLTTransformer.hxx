@@ -80,7 +80,7 @@ namespace XSLT
     };
 
     /*
-     * LibXSLTTransformer provides an transforming pipe service to XSLTFilter.
+     * LibXSLTTransformer provides a transforming pipe service to XSLTFilter.
      *
      * It implements XActiveDataSource, XActiveDataSink and XActiveDataControl
      * to consume data. It also notifies upstream of important events such as
