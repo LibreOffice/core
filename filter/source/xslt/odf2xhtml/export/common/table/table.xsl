@@ -85,7 +85,7 @@
                                                          table:table-header-rows/descendant::table:table-row[not(@table:visibility = 'collapse' or @table:visibility = 'filter')][count(ancestor-or-self::table:table) = $tableLevel] |
                                                          table:table-row-group/descendant::table:table-row[not(@table:visibility = 'collapse' or @table:visibility = 'filter')][count(ancestor-or-self::table:table) = $tableLevel]" />
         <!-- As the alignment of a table is by 'align' attribute is deprecated and as the CSS 'float' attribute not well displayed,
-             we do a trick by encapsulating the table with a aligned 'div' element-->
+             we do a trick by encapsulating the table with an aligned 'div' element-->
         <xsl:variable name="table-alignment" select="key('styles', @style:name = current()/@table:style-name)/*/@table:align" />
         <xsl:choose>
             <xsl:when test="string-length($table-alignment) != 0">
