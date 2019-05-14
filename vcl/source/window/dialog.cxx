@@ -835,7 +835,25 @@ bool Dialog::Close()
     if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() && !IsInExecute() )
         return false;
 
+    // If there's a cancel button with a custom handler, then always give it a chance to
+    // handle Dialog::Close
+    PushButton* pCustomCancelButton;
+    PushButton* pCancelButton = dynamic_cast<PushButton*>(get_widget_for_response(RET_CANCEL));
+    if (!mbInClose && pCancelButton && pCancelButton->GetClickHdl().IsSet())
+        pCustomCancelButton = pCancelButton;
+    else
+        pCustomCancelButton = nullptr;
+
     mbInClose = true;
+
+    if (pCustomCancelButton)
+    {
+        pCustomCancelButton->Click();
+        if (xWindow->IsDisposed())
+            return true;
+        mbInClose = false;
+        return false;
+    }
 
     if ( !(GetStyle() & WB_CLOSEABLE) )
     {
