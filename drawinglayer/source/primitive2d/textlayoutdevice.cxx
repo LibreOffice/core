@@ -42,7 +42,7 @@ namespace
 {
     class ImpTimedRefDev;
 
-    //the scoped_timed_RefDev owns a ImpTimeRefDev and releases it on dtor
+    //the scoped_timed_RefDev owns an ImpTimeRefDev and releases it on dtor
     //or disposing of the default XComponentContext which causes the underlying
     //OutputDevice to get released
 
