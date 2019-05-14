@@ -242,7 +242,7 @@ void Writer::Impl_addCurvedEdgeRecord( BitStream& rBits, sal_Int16 control_dx, s
 }
 
 
-/** Exports a end shape record
+/** Exports an end shape record
 */
 void Writer::Impl_addEndShapeRecord( BitStream& rBits )
 {
@@ -1190,7 +1190,7 @@ bool Writer::Impl_writeFilling( SvtGraphicFill const & rFilling )
 }
 
 
-/* CL: The idea was to export page fields as text fields that get theire
+/* CL: The idea was to export page fields as text fields that get their
    string from a variable set with actionscript by each page. This didn't
    work out since the formatting is always wrong when text follows the
    page number field since pages greater one may require more space than
