@@ -595,6 +595,7 @@ public:
 
 protected:
     void ImplClearFontData(bool bNewFontLists) override;
+    void ClipRegionIntersectRectangle(vcl::Region&) override;
 
 private:
     MapMode                             m_aMapMode; // PDFWriterImpl scaled units
