@@ -270,7 +270,7 @@ void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt)
     else if (evt.PropertyName == PROPERTY_GROUP_NAME) {
         evt.OldValue >>= sGroupName;
         if (sGroupName.isEmpty()) {
-            // No prior GroupName; fallback to Nme
+            // No prior GroupName; fallback to Name
             xSet->getPropertyValue( PROPERTY_NAME ) >>= sGroupName;
         }
     }
