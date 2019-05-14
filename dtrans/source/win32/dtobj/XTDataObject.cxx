@@ -251,7 +251,7 @@ STDMETHODIMP CXTDataObject::GetData( FORMATETC * pFormatetc, STGMEDIUM * pmedium
         invalidateStgMedium( *pmedium );
         validateFormatEtc( pFormatetc );
 
-        // handle locale request, because locale is a artificial format for us
+        // handle locale request, because locale is an artificial format for us
         if ( CF_LOCALE == pFormatetc->cfFormat )
             renderLocaleAndSetupStgMedium( *pFormatetc, *pmedium );
         else if ( CF_UNICODETEXT == pFormatetc->cfFormat )
@@ -308,7 +308,7 @@ void CXTDataObject::renderUnicodeAndSetupStgMedium(
     Any aAny = m_XTransferable->getTransferData( aFlavor );
 
     // unfortunately not all transferables fulfill the
-    // spec. an do throw an UnsupportedFlavorException
+    // spec. and do throw an UnsupportedFlavorException
     // so we must check the any
     if ( !aAny.hasValue( ) )
     {
@@ -340,7 +340,7 @@ void CXTDataObject::renderAnyDataAndSetupStgMedium(
     Any aAny = m_XTransferable->getTransferData( aFlavor );
 
     // unfortunately not all transferables fulfill the
-    // spec. an do throw an UnsupportedFlavorException
+    // spec. and do throw an UnsupportedFlavorException
     // so we must check the any
     if ( !aAny.hasValue( ) )
     {
@@ -349,7 +349,7 @@ void CXTDataObject::renderAnyDataAndSetupStgMedium(
     }
 
     // unfortunately not all transferables fulfill the
-    // spec. an do throw an UnsupportedFlavorException
+    // spec. and do throw an UnsupportedFlavorException
     // so we must check the any
     if ( !aAny.hasValue( ) )
         throw UnsupportedFlavorException( );
@@ -446,7 +446,7 @@ void CXTDataObject::renderSynthesizedUnicodeAndSetupStgMedium( FORMATETC const &
     Any aAny = m_XTransferable->getTransferData( m_FormatRegistrar.getRegisteredTextFlavor( ) );
 
     // unfortunately not all transferables fulfill the
-    // spec. an do throw an UnsupportedFlavorException
+    // spec. and do throw an UnsupportedFlavorException
     // so we must check the any
     if ( !aAny.hasValue( ) )
     {
@@ -480,7 +480,7 @@ void CXTDataObject::renderSynthesizedTextAndSetupStgMedium( FORMATETC& fetc, STG
     Any aAny = m_XTransferable->getTransferData( aFlavor );
 
     // unfortunately not all transferables fulfill the
-    // spec. an do throw an UnsupportedFlavorException
+    // spec. and do throw an UnsupportedFlavorException
     // so we must check the any
     if ( !aAny.hasValue( ) )
     {
@@ -515,7 +515,7 @@ void CXTDataObject::renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& fetc, STG
     Any aAny = m_XTransferable->getTransferData( aFlavor );
 
     // unfortunately not all transferables fulfill the
-    // spec. an do throw an UnsupportedFlavorException
+    // spec. and do throw an UnsupportedFlavorException
     // so we must check the any
     if ( !aAny.hasValue( ) )
     {
