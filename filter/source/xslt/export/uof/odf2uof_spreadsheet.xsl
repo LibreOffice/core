@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:uof="http://schemas.uof.org/cn/2003/uof" xmlns:表="http://schemas.uof.org/cn/2003/uof-spreadsheet" xmlns:演="http://schemas.uof.org/cn/2003/uof-slideshow" xmlns:字="http://schemas.uof.org/cn/2003/uof-wordproc" xmlns:图="http://schemas.uof.org/cn/2003/graph" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:html="http://www.w3.org/TR/REC-html40" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" office:version="1.0" exclude-result-prefixes="office style text table draw fo xlink dc meta number presentation svg chart dr3d math form script config ooo ooow oooc dom xforms smil anim">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:uof="http://schemas.uof.org/cn/2003/uof" xmlns:表="http://schemas.uof.org/cn/2003/uof-spreadsheet" xmlns:演="http://schemas.uof.org/cn/2003/uof-slideshow" xmlns:字="http://schemas.uof.org/cn/2003/uof-wordproc" xmlns:图="http://schemas.uof.org/cn/2003/graph" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:html="http://www.w3.org/TR/REC-html40" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" office:version="1.0" exclude-result-prefixes="office style text table draw of xlink dc meta number presentation svg chart dr3d math form script config ooo ooow oooc dom xforms smil anim">
     <xsl:output method="xml" indent="no" encoding="UTF-8" version="1.0"/>
     <xsl:variable name="scValueWithUnit">
         <xsl:value-of select="/office:document/office:automatic-styles/style:style[@style:name='co1']/style:table-column-properties/@style:column-width"/>
@@ -3536,7 +3536,7 @@
                         <xsl:with-param name="preceding-cellstylename" select="''"/>
                         <xsl:with-param name="temp-num" select="'0'"/>
                         <xsl:with-param name="cellstylename" select="$cellstylename"/>
-                        <xsl:with-param name="table-collumns" select="$cell/ancestor::table:table//table:table-column "/>
+                        <xsl:with-param name="table-columns" select="$cell/ancestor::table:table//table:table-column "/>
                     </xsl:call-template>
                 </xsl:variable>
                 <xsl:choose>
@@ -3556,13 +3556,13 @@
         <xsl:param name="preceding-cellstylename"/>
         <xsl:param name="temp-num"/>
         <xsl:param name="cellstylename"/>
-        <xsl:param name="table-collumns"/>
+        <xsl:param name="table-columns"/>
         <xsl:choose>
             <xsl:when test="$temp-num&lt;$column-num">
                 <xsl:variable name="firstcolumn">
                     <xsl:choose>
-                        <xsl:when test="$table-collumns[1]/@table:number-columns-repeated">
-                            <xsl:value-of select="$table-collumns[1]/@table:number-columns-repeated"/>
+                        <xsl:when test="$table-columns[1]/@table:number-columns-repeated">
+                            <xsl:value-of select="$table-columns[1]/@table:number-columns-repeated"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:value-of select="'1'"/>
@@ -3571,8 +3571,8 @@
                 </xsl:variable>
                 <xsl:variable name="preceding-cellstylename-to-param">
                     <xsl:choose>
-                        <xsl:when test="$table-collumns[1]/@table:default-cell-style-name">
-                            <xsl:value-of select="$table-collumns[1]/@table:default-cell-style-name"/>
+                        <xsl:when test="$table-columns[1]/@table:default-cell-style-name">
+                            <xsl:value-of select="$table-columns[1]/@table:default-cell-style-name"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:value-of select="''"/>
@@ -3584,7 +3584,7 @@
                     <xsl:with-param name="temp-num" select="$temp-num + $firstcolumn"/>
                     <xsl:with-param name="preceding-cellstylename" select="$preceding-cellstylename-to-param"/>
                     <xsl:with-param name="cellstylename" select="$cellstylename"/>
-                    <xsl:with-param name="table-collumns" select="$table-collumns[position()!=1]"/>
+                    <xsl:with-param name="table-columns" select="$table-columns[position()!=1]"/>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
@@ -3734,7 +3734,7 @@
                     <!--xsl:if test="@style:parent-style-name">
                         <xsl:attribute name="表:基式样引用"><xsl:value-of select="@style:parent-style-name"/></xsl:attribute>
                     </xsl:if-->
-                    <!--chengxz chang the order-->
+                    <!--chengxz change the order-->
                     <xsl:variable name="styleProperties" select="key('styles', $styleName)/*"/>
                     <xsl:call-template name="Font">
                         <xsl:with-param name="styleProperties" select="$styleProperties"/>
