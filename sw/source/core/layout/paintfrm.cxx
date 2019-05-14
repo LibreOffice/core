@@ -112,6 +112,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <vcl/BitmapTools.hxx>
+#include <comphelper/lok.hxx>
 
 #define COL_NOTES_SIDEPANE                  Color(230,230,230)
 #define COL_NOTES_SIDEPANE_BORDER           Color(200,200,200)
@@ -3330,7 +3331,11 @@ void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
     }
 
     const SwPageFrame *pPage = nullptr;
-    const bool bWin   = gProp.pSGlobalShell->GetWin() != nullptr;
+    bool bWin = gProp.pSGlobalShell->GetWin() != nullptr;
+    if (comphelper::LibreOfficeKit::isTiledPainting())
+        // Tiled rendering is similar to printing in this case: painting transparently multiple
+        // times will result in darker colors: avoid that.
+        bWin = false;
 
     while ( IsAnLower( pFrame ) )
     {
