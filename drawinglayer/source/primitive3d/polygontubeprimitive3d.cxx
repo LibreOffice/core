@@ -249,7 +249,7 @@ namespace drawinglayer
 
                         if (nCount)
                         {
-                            // rotate to have sphere cap orientned to negative X-Axis; do not
+                            // rotate to have sphere cap oriented to negative X-Axis; do not
                             // forget to transform normals, too
                             basegfx::B3DHomMatrix aSphereTrans;
 
