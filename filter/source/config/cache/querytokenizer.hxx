@@ -68,7 +68,7 @@ class QueryTokenizer : public std::unordered_map< OUString, OUString >
         /** @short  create a new tokenizer instance with a
                     a new query.
 
-            @descr  The given query is immidiatly analyzed
+            @descr  The given query is immediately analyzed
                     and separated into its token, which can
                     be access by some specialized method later.
 
