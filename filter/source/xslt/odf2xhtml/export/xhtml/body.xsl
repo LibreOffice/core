@@ -736,8 +736,8 @@
         <!-- the footnote symbol is the prefix for a footnote in the footer -->
         <xsl:param name="footnotePrefix" />
 
-            <!-- empty paragraph tags does not provoke an carridge return,
-                therefore an non breakable space (&nbsp) have been inserted.-->
+            <!-- empty paragraph tags does not provoke a carriage return,
+                therefore a non breakable space (&nbsp) have been inserted.-->
         <xsl:choose>
             <xsl:when test="node()">
                 <xsl:call-template name="apply-styles-and-content">
@@ -992,7 +992,7 @@
         <xsl:if test="@text:anchor-type='paragraph'">
             <xsl:comment>Next 'div' is emulating the top height of a draw:frame.</xsl:comment>
             <!-- When the svg:y is set relative to the paragraph content, the best way to emulate a positive height,
-             is to add an invisbile division inbetween with a height.
+             is to add an invisible division inbetween with a height.
              Often text will flow into this 'gap', which is handled separately!
              -->
             <xsl:if test="$svgY &gt; 0">
@@ -1096,7 +1096,7 @@
                     <xsl:call-template name="widthAndHeight"/>
                     <xsl:text> padding:0; </xsl:text>
                     <xsl:if test="@text:anchor-type!='as-char'">
-                        <!-- all images float (CSS float reltaive) with a left position calculated by svg:x - parentMarginLeft - previousFrameWidths -->
+                        <!-- all images float (CSS float relative) with a left position calculated by svg:x - parentMarginLeft - previousFrameWidths -->
                         <xsl:text> float:left; position:relative; left:</xsl:text>
                         <xsl:value-of select="$leftPosition"/>
                         <xsl:text>cm; </xsl:text>
@@ -1176,7 +1176,7 @@
 
         <!-- no creation of empty headings (without text content)   -->
         <xsl:if test="text() or descendant::text()">
-            <!-- The URL linking of an table-of-content is due to a bug (cp. bug id# 102311) not mapped as URL in the XML.
+            <!-- The URL linking of a table-of-content is due to a bug (cp. bug id# 102311) not mapped as URL in the XML.
                  Linking of the table-of-content can therefore only be archieved by a work-around in HTML -->
             <xsl:call-template name="create-heading">
                 <xsl:with-param name="globalData" select="$globalData"/>
@@ -2017,8 +2017,8 @@
                                     </xsl:variable>
                                     <!-- Numbering is being done by this transformation creating a HTML span representing the number label
                                          The html:span represents the list item/header label (e.g. 1.A.III)
-                                         As the html:span is usually a inline element is formatted by CSS as block element to use width upon it,
-                                         to disable the caridge return float:left is used and later neglected -->
+                                         As the html:span is usually an inline element is formatted by CSS as block element to use width upon it,
+                                         to disable the carriage return float:left is used and later neglected -->
                                     <xsl:element name="span">
                                         <xsl:if test="$listLevelStyle/@text:style-name">
                                             <xsl:attribute name="class">
