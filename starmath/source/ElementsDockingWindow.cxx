@@ -241,6 +241,7 @@ SmElementsControl::SmElementsControl(vcl::Window *pParent)
     , mpCurrentElement(nullptr)
     , mbVerticalMode(true)
     , mxScroll(VclPtr<ScrollBar>::Create(this, WB_VERT))
+    , mbFirstPaintAfterLayout(false)
 {
     set_id("element_selector");
     SetMapMode( MapMode(MapUnit::Map100thMM) );
@@ -251,7 +252,6 @@ SmElementsControl::SmElementsControl(vcl::Window *pParent)
     maFormat.SetBaseSize(PixelToLogic(Size(0, SmPtsTo100th_mm(12))));
 
     mxScroll->SetScrollHdl( LINK(this, SmElementsControl, ScrollHdl) );
-    mxScroll->Show();
 }
 
 SmElementsControl::~SmElementsControl()
@@ -271,14 +271,19 @@ void SmElementsControl::setVerticalMode(bool bVerticalMode)
     mbVerticalMode = bVerticalMode;
 }
 
+/**
+ * !pContext => layout only
+ *
+ * Layouting is always done without a scrollbar and will show or hide it.
+ * The first paint (mbFirstPaintAfterLayout) therefore needs to update a
+ * visible scrollbar, because the layouting was wrong.
+ **/
 void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
 {
-    bool bOldVisibleState = mxScroll->IsVisible();
-
-    sal_Int32 nScrollbarWidth = bOldVisibleState ? GetSettings().GetStyleSettings().GetScrollBarSize() : 0;
-
-    sal_Int32 nControlWidth = GetOutputSizePixel().Width() - nScrollbarWidth;
-    sal_Int32 nControlHeight = GetOutputSizePixel().Height();
+    const sal_Int32 nScrollbarWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+    const sal_Int32 nControlWidth = GetOutputSizePixel().Width()
+                                    - (pContext && mxScroll->IsVisible() ? nScrollbarWidth : 0);
+    const sal_Int32 nControlHeight = GetOutputSizePixel().Height();
 
     sal_Int32 boxX = maMaxElementDimensions.Width()  + 10;
     sal_Int32 boxY = maMaxElementDimensions.Height() + 10;
@@ -382,15 +387,21 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
     }
 
     if (pContext)
-        return;
+    {
+        if (!mbFirstPaintAfterLayout || !mxScroll->IsVisible())
+            return;
+        mbFirstPaintAfterLayout = false;
+    }
+    else
+        mbFirstPaintAfterLayout = true;
 
     sal_Int32 nTotalControlHeight = y + boxY + mxScroll->GetThumbPos();
-
     if (nTotalControlHeight > GetOutputSizePixel().Height())
     {
         mxScroll->SetRangeMax(nTotalControlHeight);
         mxScroll->SetPosSizePixel(Point(nControlWidth, 0), Size(nScrollbarWidth, nControlHeight));
         mxScroll->SetVisibleSize(nControlHeight);
+        mxScroll->SetPageSize(nControlHeight);
         mxScroll->Show();
     }
     else
@@ -398,6 +409,12 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
         mxScroll->SetThumbPos(0);
         mxScroll->Hide();
     }
+}
+
+void SmElementsControl::Resize()
+{
+     Window::Resize();
+     LayoutOrPaintContents(nullptr);
 }
 
 void SmElementsControl::ApplySettings(vcl::RenderContext& rRenderContext)
@@ -464,7 +481,6 @@ void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
     mpCurrentElement = nullptr;
     if (rMouseEvent.IsLeaveWindow())
     {
-        LayoutOrPaintContents();
         Invalidate();
         return;
     }
@@ -479,7 +495,6 @@ void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
                 if (pPrevElement != element)
                 {
                     mpCurrentElement = element;
-                    LayoutOrPaintContents();
                     Invalidate();
                     return;
                 }
@@ -544,7 +559,6 @@ void SmElementsControl::DoScroll(long nDelta)
     aRect.AdjustRight( -(mxScroll->GetSizePixel().Width()) );
     Scroll( 0, -nDelta, aRect );
     mxScroll->SetPosPixel(aNewPoint);
-    LayoutOrPaintContents();
     Invalidate();
 }
 

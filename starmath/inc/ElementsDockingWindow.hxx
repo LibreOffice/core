@@ -89,6 +89,7 @@ class SmElementsControl : public Control
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual void MouseMove(const MouseEvent& rMEvt) override;
     virtual void RequestHelp(const HelpEvent& rHEvt) override;
+    virtual void Resize() override;
 
     SmDocShell*   mpDocShell;
     SmFormat      maFormat;
@@ -100,6 +101,7 @@ class SmElementsControl : public Control
     Size          maMaxElementDimensions;
     bool          mbVerticalMode;
     VclPtr< ScrollBar > mxScroll;
+    bool mbFirstPaintAfterLayout;
 
     void addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
 
