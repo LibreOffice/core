@@ -183,9 +183,9 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
     : m_pPool( rASet.m_pPool )
     , m_pParent( rASet.m_pParent )
     , m_nCount( rASet.m_nCount )
-// I2TM copy shared ptrs - no clone
+    // I2TM copy shared ptrs - no clone
     , m_aItemSetSharedPtr(rASet.m_aItemSetSharedPtr)
-// ~I2TM
+    // ~I2TM
 {
     // Calculate the attribute count
     sal_uInt16 nCnt = 0;
@@ -374,6 +374,25 @@ void SfxItemSet::InvalidateAllItems()
     memset(static_cast<void*>(m_pItems.get()), -1, m_nCount * sizeof(SfxPoolItem*));
 }
 
+void SfxItemSet::SetParent( const SfxItemSet* pNew )
+{
+    m_pParent = pNew;
+    // I2TM Transfer phase:
+    if(m_aItemSetSharedPtr)
+    {
+        if(nullptr == pNew)
+        {
+            m_aItemSetSharedPtr->setParent(Item::ItemSet::SharedPtr());
+        }
+        else
+        {
+            pNew->itemSet(); // access to evtl. create
+            m_aItemSetSharedPtr->setParent(pNew->m_aItemSetSharedPtr);
+        }
+    }
+    // ~I2TM
+}
+
 SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
                                         bool bSrchInParent,
                                         const SfxPoolItem **ppItem ) const
@@ -541,9 +560,9 @@ bool SfxItemSet::Put( const SfxItemSet& rSet, bool bInvalidAsDefault )
         }
     }
 
-// I2TM
+    // I2TM
     itemSet().setItems(rSet.itemSet(), bInvalidAsDefault);
-// ~I2TM
+    // ~I2TM
 
     return bRet;
 }
@@ -1481,6 +1500,19 @@ void SfxItemSet::dumpAsXml(xmlTextWriterPtr pWriter) const
     SfxItemIter aIter(*this);
     for (const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem())
          pItem->dumpAsXml(pWriter);
+
+    // I2TM Transfer phase:
+    if(m_aItemSetSharedPtr)
+    {
+        // dumpAsXml adaption: Use all IState::SET, see comments at include\svl\itemiter.hxx for I2TM
+        const std::vector<const Item::ItemBase*> aAllSetItems(m_aItemSetSharedPtr->getItemsOfState(Item::ItemSet::IState::SET));
+        for(const auto& candidate : aAllSetItems)
+        {
+            candidate->dumpAsXml(pWriter);
+        }
+    }
+    // ~I2TM
+
     xmlTextWriterEndElement(pWriter);
 }
 

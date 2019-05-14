@@ -24,6 +24,15 @@
 
 class SfxPoolItem;
 
+// I2TM notes:
+// SfxItemIter will check to not return nullptr, but it will *not* check
+// for other states of SfxPoolItem (see ::SfxItemIter and ::NextItem()),
+// thus it may
+// - return -1 -> invalid item -> SfxItemState::DONTCARE
+// - return SfxVoidItem* -> SfxItemState::DISABLED
+// - return a set item -> SfxItemState::SET
+// I see quite some usages that *do not care* for the returned ptr-value,
+// so these may stumble hard over de-referencing (-1) ptr's (!)
 class SVL_DLLPUBLIC SfxItemIter
 {
     const SfxItemSet&   m_rSet;

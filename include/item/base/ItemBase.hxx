@@ -95,6 +95,15 @@ namespace Item
         // mechanism (UNO API and sfx2 stuff)
         bool putAnyValues(const AnyIDArgs& rArgs);
 
+        // fast identifyer for invalidate/disable state extra-Items,
+        // only to be used internally for ItemSet stuff. This could be
+        // done using dynamic_cast, but is faster this way. This could
+        // be private or protected, but would require ItemSet to be
+        // declared as friend then. May be changed, but for now, use as
+        // simple public virtual bool methods
+        virtual bool isInvalidateItem() const;
+        virtual bool isDisableItem() const;
+
     private:
         // local reference to instance of ItemControlBlock for this
         // incarnation - same as type::GetStaticItemControlBlock(), but

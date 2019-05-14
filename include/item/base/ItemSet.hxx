@@ -221,8 +221,8 @@ namespace Item
         // helpers for reduction of template member implementations,
         // all based on typeid(<type>).hash_code()
         const ItemBase* implGetStateAndItem(size_t hash_code, IState& rIState, bool bSearchParent) const;
-        void implInvalidateItem(size_t hash_code);
-        void implDisableItem(size_t hash_code);
+        void implInvalidateItem(size_t hash_code, const ItemBase& rItemDefault);
+        void implDisableItem(size_t hash_code, const ItemBase& rItemDefault);
         bool implClearItem(size_t hash_code);
 
     protected:
@@ -251,6 +251,10 @@ namespace Item
         void setItem(const ItemBase& rItem);
         void setItems(const ItemSet& rSource, bool bDontCareToDefault = true);
 
+        // get methods for a whole selection of Items
+        std::vector<std::pair<const ItemBase*, IState>> getAllItemsAndStates() const;
+        std::vector<const ItemBase*> getItemsOfState(IState eIState = IState::SET) const;
+
         // from here are all the type-specific template methods,
         // as reduced as possible due to these being unfolded from
         // the compiler for each class.
@@ -258,12 +262,12 @@ namespace Item
         // on the fetched TypeID
         template< typename TItem > void invalidateItem()
         {
-            implInvalidateItem(typeid(TItem).hash_code());
+            implInvalidateItem(typeid(TItem).hash_code(), Item::getDefault<TItem>());
         }
 
         template< typename TItem > void disableItem()
         {
-            implDisableItem(typeid(TItem).hash_code());
+            implDisableItem(typeid(TItem).hash_code(), Item::getDefault<TItem>());
         }
 
         template< typename TItem > const TItem& getDefault() const
@@ -286,7 +290,10 @@ namespace Item
             IState aIState(IState::DEFAULT);
             const ItemBase* pItem(implGetStateAndItem(typeid(TItem).hash_code(), aIState, bSearchParent));
 
-            // SfxItemState::DEFAULT || SfxItemState::DONTCARE || SfxItemState::DISABLED
+            // SfxItemState::DEFAULT
+            // SfxItemState::DONTCARE || SfxItemState::DISABLED -> should already be
+            //  solved from ImplInvalidateItem/ImplDisableItem, but to have the
+            //  fallback here additionally is never wrong
             // in short: no specific ItemBase -> use default
             if(nullptr == pItem)
             {

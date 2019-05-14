@@ -10,6 +10,7 @@
 #include <item/simple/CntOUString.hxx>
 #include <item/base/ItemControlBlock.hxx>
 #include <item/base/ItemAdministrator.hxx>
+#include <libxml/xmlwriter.h>
 #include <cassert>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -102,6 +103,13 @@ namespace Item
 
         assert(false && "CntOUString::putAnyValue - Wrong type!");
         return false;
+    }
+
+    void CntOUString::dumpAsXml(xmlTextWriterPtr pWriter) const
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("CntOUString"));
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(getValue().toUtf8().getStr()));
+        xmlTextWriterEndElement(pWriter);
     }
 } // end of namespace Item
 

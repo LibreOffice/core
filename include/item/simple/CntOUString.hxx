@@ -30,6 +30,33 @@ namespace Item
     // here now to always only have one instance for CntOUString-based
     // derivations. This will use ItemAdministrator_set, see *.cxx
     // for details
+    //
+    //class CntUnencodedStringItem: public SfxPoolItem
+    //    class SfxStringItem: public CntUnencodedStringItem
+    //        class SvxPageModelItem : public SfxStringItem
+    //        class SfxDocumentInfoItem : public SfxStringItem
+    //        class SvxPostItAuthorItem: public SfxStringItem
+    //        class SvxPostItDateItem: public SfxStringItem
+    //        class SvxPostItTextItem: public SfxStringItem
+    //        class SvxPostItIdItem: public SfxStringItem
+    //        class SdrMeasureFormatStringItem: public SfxStringItem
+    //        class NameOrIndex : public SfxStringItem
+    //            class XFillBitmapItem : public NameOrIndex
+    //            class XColorItem : public NameOrIndex
+    //                class XFillColorItem : public XColorItem
+    //                class XFormTextShadowColorItem : public XColorItem
+    //                class XLineColorItem : public XColorItem
+    //                class XSecondaryFillColorItem : public XColorItem
+    //            class XFillGradientItem : public NameOrIndex
+    //                class XFillFloatTransparenceItem : public XFillGradientItem
+    //            class XFillHatchItem : public NameOrIndex
+    //            class XLineDashItem : public NameOrIndex
+    //            class XLineEndItem : public NameOrIndex
+    //            class XLineStartItem : public NameOrIndex
+    //        class SfxScriptOrganizerItem : public SfxStringItem
+    //        class SdrLayerNameItem: public SfxStringItem
+    //        class SwNumRuleItem : public SfxStringItem
+    //
     class ITEM_DLLPUBLIC CntOUString : public ItemBuffered
     {
     protected:
@@ -69,6 +96,9 @@ namespace Item
             const IntlWrapper&) const override;
         virtual bool queryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
         virtual bool putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
+
+        // from SfxStringItem, was not implemented in CntUnencodedStringItem
+        void dumpAsXml(xmlTextWriterPtr pWriter) const override;
     };
 } // end of namespace Item
 

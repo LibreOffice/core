@@ -1698,6 +1698,107 @@ namespace Item
             }
         }
 
+        void checkInvalidateAndDisableItem()
+        {
+            static bool bLoop(false);
+            while(bLoop)
+            {
+                bLoop = true;
+            }
+
+            int nIncrement(0);
+            ModelSpecificItemValues::SharedPtr aModelSpecificIValues(
+                ModelSpecificItemValues::create(
+                    MapUnit::Map100thMM
+                ));
+
+            // create and play with ItemSet
+            ItemSet::SharedPtr aSetA(ItemSet::create(aModelSpecificIValues));
+
+            {   auto aActA = aSetA->getStateAndItem<CntInt16_derived>(); if(aActA.getIState() == ItemSet::IState::SET) nIncrement++;
+                auto aStrA = aSetA->getStateAndItem<CntOUString_derived>(); if(aStrA.getIState() == ItemSet::IState::SET) nIncrement++;
+                auto aVecA = aSetA->getAllItemsAndStates(); if(aVecA.size() > 0) nIncrement++;
+                auto aItemsSETA = aSetA->getItemsOfState(ItemSet::IState::SET); if(aItemsSETA.size() > 0) nIncrement++;
+                auto aItemsDISA = aSetA->getItemsOfState(ItemSet::IState::DISABLED); if(aItemsDISA.size() > 0) nIncrement++;
+                auto aItemsDNTA = aSetA->getItemsOfState(ItemSet::IState::DONTCARE); if(aItemsDNTA.size() > 0) nIncrement++; }
+
+            aSetA->setItem(CntOUString_derived("StringStuff"));
+            aSetA->setItem(CntInt16_derived(22));
+
+            {   auto aActA = aSetA->getStateAndItem<CntInt16_derived>(); if(aActA.getIState() == ItemSet::IState::SET) nIncrement++;
+                auto aStrA = aSetA->getStateAndItem<CntOUString_derived>(); if(aStrA.getIState() == ItemSet::IState::SET) nIncrement++;
+                auto aVecA = aSetA->getAllItemsAndStates(); if(aVecA.size() > 0) nIncrement++;
+                auto aItemsSETA = aSetA->getItemsOfState(ItemSet::IState::SET); if(aItemsSETA.size() > 0) nIncrement++;
+                auto aItemsDISA = aSetA->getItemsOfState(ItemSet::IState::DISABLED); if(aItemsDISA.size() > 0) nIncrement++;
+                auto aItemsDNTA = aSetA->getItemsOfState(ItemSet::IState::DONTCARE); if(aItemsDNTA.size() > 0) nIncrement++; }
+
+            aSetA->invalidateItem<CntInt16_derived>();
+
+            {   auto aActA = aSetA->getStateAndItem<CntInt16_derived>(); if(aActA.getIState() == ItemSet::IState::SET) nIncrement++;
+                auto aStrA = aSetA->getStateAndItem<CntOUString_derived>(); if(aStrA.getIState() == ItemSet::IState::SET) nIncrement++;
+                auto aVecA = aSetA->getAllItemsAndStates(); if(aVecA.size() > 0) nIncrement++;
+                auto aItemsSETA = aSetA->getItemsOfState(ItemSet::IState::SET); if(aItemsSETA.size() > 0) nIncrement++;
+                auto aItemsDISA = aSetA->getItemsOfState(ItemSet::IState::DISABLED); if(aItemsDISA.size() > 0) nIncrement++;
+                auto aItemsDNTA = aSetA->getItemsOfState(ItemSet::IState::DONTCARE); if(aItemsDNTA.size() > 0) nIncrement++; }
+
+            aSetA->invalidateItem<CntOUString_derived>();
+
+            {   auto aActA = aSetA->getStateAndItem<CntInt16_derived>(); if(aActA.getIState() == ItemSet::IState::SET) nIncrement++;
+                auto aStrA = aSetA->getStateAndItem<CntOUString_derived>(); if(aStrA.getIState() == ItemSet::IState::SET) nIncrement++;
+                auto aVecA = aSetA->getAllItemsAndStates(); if(aVecA.size() > 0) nIncrement++;
+                auto aItemsSETA = aSetA->getItemsOfState(ItemSet::IState::SET); if(aItemsSETA.size() > 0) nIncrement++;
+                auto aItemsDISA = aSetA->getItemsOfState(ItemSet::IState::DISABLED); if(aItemsDISA.size() > 0) nIncrement++;
+                auto aItemsDNTA = aSetA->getItemsOfState(ItemSet::IState::DONTCARE); if(aItemsDNTA.size() > 0) nIncrement++; }
+
+            aSetA->setItem(CntOUString_derived("NewText"));
+            aSetA->setItem(CntInt16_derived(4422));
+
+            {   auto aActA = aSetA->getStateAndItem<CntInt16_derived>(); if(aActA.getIState() == ItemSet::IState::SET) nIncrement++;
+                auto aStrA = aSetA->getStateAndItem<CntOUString_derived>(); if(aStrA.getIState() == ItemSet::IState::SET) nIncrement++;
+                auto aVecA = aSetA->getAllItemsAndStates(); if(aVecA.size() > 0) nIncrement++;
+                auto aItemsSETA = aSetA->getItemsOfState(ItemSet::IState::SET); if(aItemsSETA.size() > 0) nIncrement++;
+                auto aItemsDISA = aSetA->getItemsOfState(ItemSet::IState::DISABLED); if(aItemsDISA.size() > 0) nIncrement++;
+                auto aItemsDNTA = aSetA->getItemsOfState(ItemSet::IState::DONTCARE); if(aItemsDNTA.size() > 0) nIncrement++; }
+
+            aSetA->disableItem<CntInt16_derived>();
+
+            {   auto aActA = aSetA->getStateAndItem<CntInt16_derived>(); if(aActA.getIState() == ItemSet::IState::SET) nIncrement++;
+                auto aStrA = aSetA->getStateAndItem<CntOUString_derived>(); if(aStrA.getIState() == ItemSet::IState::SET) nIncrement++;
+                auto aVecA = aSetA->getAllItemsAndStates(); if(aVecA.size() > 0) nIncrement++;
+                auto aItemsSETA = aSetA->getItemsOfState(ItemSet::IState::SET); if(aItemsSETA.size() > 0) nIncrement++;
+                auto aItemsDISA = aSetA->getItemsOfState(ItemSet::IState::DISABLED); if(aItemsDISA.size() > 0) nIncrement++;
+                auto aItemsDNTA = aSetA->getItemsOfState(ItemSet::IState::DONTCARE); if(aItemsDNTA.size() > 0) nIncrement++; }
+
+            aSetA->disableItem<CntOUString_derived>();
+
+            {   auto aActA = aSetA->getStateAndItem<CntInt16_derived>(); if(aActA.getIState() == ItemSet::IState::SET) nIncrement++;
+                auto aStrA = aSetA->getStateAndItem<CntOUString_derived>(); if(aStrA.getIState() == ItemSet::IState::SET) nIncrement++;
+                auto aVecA = aSetA->getAllItemsAndStates(); if(aVecA.size() > 0) nIncrement++;
+                auto aItemsSETA = aSetA->getItemsOfState(ItemSet::IState::SET); if(aItemsSETA.size() > 0) nIncrement++;
+                auto aItemsDISA = aSetA->getItemsOfState(ItemSet::IState::DISABLED); if(aItemsDISA.size() > 0) nIncrement++;
+                auto aItemsDNTA = aSetA->getItemsOfState(ItemSet::IState::DONTCARE); if(aItemsDNTA.size() > 0) nIncrement++; }
+
+            aSetA->setItem(CntOUString_derived("NewText"));
+            aSetA->setItem(CntInt16_derived(4422));
+
+            {   auto aActA = aSetA->getStateAndItem<CntInt16_derived>(); if(aActA.getIState() == ItemSet::IState::SET) nIncrement++;
+                auto aStrA = aSetA->getStateAndItem<CntOUString_derived>(); if(aStrA.getIState() == ItemSet::IState::SET) nIncrement++;
+                auto aVecA = aSetA->getAllItemsAndStates(); if(aVecA.size() > 0) nIncrement++;
+                auto aItemsSETA = aSetA->getItemsOfState(ItemSet::IState::SET); if(aItemsSETA.size() > 0) nIncrement++;
+                auto aItemsDISA = aSetA->getItemsOfState(ItemSet::IState::DISABLED); if(aItemsDISA.size() > 0) nIncrement++;
+                auto aItemsDNTA = aSetA->getItemsOfState(ItemSet::IState::DONTCARE); if(aItemsDNTA.size() > 0) nIncrement++; }
+
+            aSetA->invalidateItem<CntOUString_derived>();
+            aSetA->disableItem<CntInt16_derived>();
+
+            {   auto aActA = aSetA->getStateAndItem<CntInt16_derived>(); if(aActA.getIState() == ItemSet::IState::SET) nIncrement++;
+                auto aStrA = aSetA->getStateAndItem<CntOUString_derived>(); if(aStrA.getIState() == ItemSet::IState::SET) nIncrement++;
+                auto aVecA = aSetA->getAllItemsAndStates(); if(aVecA.size() > 0) nIncrement++;
+                auto aItemsSETA = aSetA->getItemsOfState(ItemSet::IState::SET); if(aItemsSETA.size() > 0) nIncrement++;
+                auto aItemsDISA = aSetA->getItemsOfState(ItemSet::IState::DISABLED); if(aItemsDISA.size() > 0) nIncrement++;
+                auto aItemsDNTA = aSetA->getItemsOfState(ItemSet::IState::DONTCARE); if(aItemsDNTA.size() > 0) nIncrement++; }
+        }
+
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
         // because these macros are need by auto register mechanism.
@@ -1716,6 +1817,7 @@ namespace Item
         CPPUNIT_TEST(checkSimpleItems);
         CPPUNIT_TEST(checkSimpleItemsAtISet);
         CPPUNIT_TEST(checkItem2);
+        CPPUNIT_TEST(checkInvalidateAndDisableItem);
         CPPUNIT_TEST_SUITE_END();
     };
 } // end of namespace Item

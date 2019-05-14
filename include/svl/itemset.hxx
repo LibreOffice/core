@@ -190,7 +190,7 @@ public:
     void                        ClearInvalidItems();
     void                        InvalidateAllItems(); // HACK(via nWhich = 0) ???
 
-    inline void                 SetParent( const SfxItemSet* pNew );
+    void                        SetParent( const SfxItemSet* pNew );
 
     // add, delete items, work on items
 public:
@@ -241,11 +241,6 @@ public:
     Item::ItemSet& itemSet() const;
     // ~I2TM
 };
-
-inline void SfxItemSet::SetParent( const SfxItemSet* pNew )
-{
-    m_pParent = pNew;
-}
 
 class SVL_DLLPUBLIC SfxAllItemSet: public SfxItemSet
 

@@ -21,6 +21,23 @@ namespace Item
     //     static ItemControlBlock& GetStaticItemControlBlock();
     // and also no public constructor (!), but implements all the
     // tooling methods for Items using a sal_Int16 internally
+    //
+    // class SfxInt16Item: public SfxPoolItem
+    //     class SvxKerningItem : public SfxInt16Item
+    //     class SfxImageItem : public SfxInt16Item
+    //     class SdrSignedPercentItem : public SfxInt16Item
+    //         class SdrGrafRedItem : public SdrSignedPercentItem
+    //         class SdrGrafGreenItem : public SdrSignedPercentItem
+    //         class SdrGrafBlueItem : public SdrSignedPercentItem
+    //         class SdrGrafLuminanceItem : public SdrSignedPercentItem
+    //         class SdrGrafContrastItem : public SdrSignedPercentItem
+    //     class SdrTextAniAmountItem: public SfxInt16Item
+    //     class SdrMeasureDecimalPlacesItem: public SfxInt16Item
+    //     class ScMergeFlagAttr: public SfxInt16Item
+    //     class SwLuminanceGrf : public SfxInt16Item
+    //     class SwContrastGrf : public SfxInt16Item
+    //     class SwChannelGrf : public SfxInt16Item
+    //
     class ITEM_DLLPUBLIC CntInt16 : public ItemBase
     {
     private:

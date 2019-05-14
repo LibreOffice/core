@@ -103,6 +103,16 @@ namespace Item
         return true;
     }
 
+    bool ItemBase::isInvalidateItem() const
+    {
+        return false;
+    }
+
+    bool ItemBase::isDisableItem() const
+    {
+        return false;
+    }
+
     bool ItemBase::putAnyValue(const css::uno::Any& /*rVal*/, sal_uInt8 /*nMemberId*/)
     {
         // default has nothing to to
