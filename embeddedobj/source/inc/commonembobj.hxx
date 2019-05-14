@@ -156,7 +156,7 @@ protected:
     bool m_bHasClonedSize; // the object has cached size
     css::awt::Size m_aClonedSize;
     sal_Int32 m_nClonedMapUnit;
-    css::awt::Size m_aDefaultSizeForChart_In_100TH_MM;//#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this member
+    css::awt::Size m_aDefaultSizeForChart_In_100TH_MM;//#i103460# charts do not necessarily have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this member
 
 private:
     void CommonInit_Impl( const css::uno::Sequence< css::beans::NamedValue >& aObjectProps );
@@ -396,7 +396,7 @@ public:
     virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
     // XDefaultSizeTransmitter
-    //#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this method
+    //#i103460# charts do not necessarily have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this method
     virtual void SAL_CALL setDefaultSize( const css::awt::Size& rSize_100TH_MM ) override;
 };
 
