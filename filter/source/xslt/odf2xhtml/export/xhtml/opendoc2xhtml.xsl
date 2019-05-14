@@ -81,16 +81,16 @@
     <!-- OPTIONAL: if the document content is provided in a directory structure. Opposite to a single flat XML stream -->
     <xsl:param name="isPackageFormat" />
 
-    <!-- OPTIONAL: (MANDATORY: for all input document with relative external links): parameter is a absolute file URL to the target directory.
+    <!-- OPTIONAL: (MANDATORY: for all input document with relative external links): parameter is an absolute file URL to the target directory.
          Relative links from the office document (e.g. to external graphics) will get this parameter as a prefix -->
     <xsl:param name="targetBaseURL" select="'./'" />
 
-    <!-- OPTIONAL: (MANDATORY: for all input document with content table) : parameter is a absolute file URL to the target document.
+    <!-- OPTIONAL: (MANDATORY: for all input document with content table) : parameter is an absolute file URL to the target document.
          Relative links to this office document (e.g. to internal anchor) will get this parameter as a prefix -->
     <xsl:param name="targetURL" select="'./'" />
 
     <!-- OPTIONAL: (MANDATORY: for input document with relative internal links)
-         To access contents of a office file (content like the meta.xml, styles.xml file or  graphics) a URL could be chosen.
+         To access contents of an office file (content like the meta.xml, styles.xml file or  graphics) a URL could be chosen.
      This could be even a JAR URL. The sourceBase of the content URL "jar:file:/C:/temp/Test.sxw!/content.xml" would be
      "jar:file:/C:/temp/Test.sxw!/" for example.
          When working with OpenOffice API a Package-URL encoded over HTTP can be used to access the jared contents of the jared document. -->
@@ -98,7 +98,7 @@
 
     <!-- OPTIONAL: (MANDATORY: for session management by URL rewriting)
          Useful for WebApplications: if a HTTP session is not cookie based, URL rewriting is being used (the session is appended to the URL).
-         This URL session is used for example when links to graphics are created by XSLT. Otherwise the user havt to log again in for every graphic he liks to see. -->
+         This URL session is used for example when links to graphics are created by XSLT. Otherwise the user have to log again in for every graphic he likes to see. -->
     <xsl:param name="optionalURLSuffix" />
 
     <!-- OPTIONAL: URL to office meta file (flat xml use the URL to the input file) -->
