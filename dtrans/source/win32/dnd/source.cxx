@@ -68,7 +68,7 @@ DragSource::~DragSource()
      ????
           Do we really need a separate thread for
           every Dnd operation or only if the source
-          thread is an MTA thread
+          thread is a MTA thread
      ????
 */
 void DragSource::StartDragImpl(
@@ -111,7 +111,7 @@ void DragSource::StartDragImpl(
     DWORD processId;
     m_threadIdWindow= GetWindowThreadProcessId( m_hAppWindow, &processId);
 
-    // hold the instance for the DnD thread, it's to late
+    // hold the instance for the DnD thread, it's too late
     // to acquire at the start of the thread procedure
     // the thread procedure is responsible for the release
     acquire();
