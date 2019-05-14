@@ -48,7 +48,7 @@ class JobResult final
             parts of an analyzed pure job execution result.
             An user of this class can decide, if a member of us can be valid
             or not. So it can indicate, if a job used the special part inside
-            his returned result protocol.
+            its returned result protocol.
             To be usable as flags - it must be values of set {0,1,2,4,8,16 ...}!
          */
         enum EParts
@@ -83,7 +83,7 @@ class JobResult final
             represent the part "DispatchResult"
             It's a fulfilled event type, which was given
             back by the executed job. Any user of us can send
-            it to his registered result listener directly.
+            it to its registered result listener directly.
          */
         css::frame::DispatchResultEvent m_aDispatchResult;
 
