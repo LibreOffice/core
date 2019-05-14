@@ -78,7 +78,7 @@ private:
     vcl::Font           aFont;
     std::unique_ptr<const SubsetMap> pSubsetMap;
     bool                isSearchMode;
-    bool                m_bHasInsert;
+    css::uno::Reference<css::frame::XFrame> m_xFrame;
     std::deque<OUString> maRecentCharList;
     std::deque<OUString> maRecentCharFontList;
     std::deque<OUString> maFavCharList;
@@ -140,7 +140,8 @@ private:
     void selectCharByCode(Radix radix);
 
 public:
-    SvxCharacterMap(weld::Window* pParent, const SfxItemSet* pSet, const bool bInsert=true);
+    SvxCharacterMap(weld::Window* pParent, const SfxItemSet* pSet,
+                    const css::uno::Reference<css::frame::XFrame>& rFrame);
     virtual short run() override;
 
     void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
