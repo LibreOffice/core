@@ -33,7 +33,7 @@ namespace pcr
         OUString m_sRequiredService;
         OUString m_aRequiredControlImage;
         std::unique_ptr<weld::TreeIter> m_xInitialSelection;
-        // the entry datas of the listbox entries
+        // the entry data of the listbox entries
         std::vector<std::unique_ptr<css::uno::Reference<css::beans::XPropertySet>>> m_xUserData;
         css::uno::Reference< css::beans::XPropertySet >   m_xInitialLabelControl;
 
