@@ -1015,8 +1015,8 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
         // Don't forget to convert stl descriptor to its uno representation.
 
         /* Attention!
-                You have to use an explicit instance of this uno sequence ...
-                Because its used as an in out parameter. And in case of a temp. used object
+                You have to use an explicit instance of this uno sequence...
+                Because it's used as an in out parameter. And in case of a temp. used object
                 we will run into memory corruptions!
         */
         css::uno::Sequence< css::beans::PropertyValue > lDescriptor;
@@ -1027,7 +1027,7 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
     catch (...)
     {
         // We should ignore errors here.
-        // Thrown exceptions mostly will end in crash recovery ...
+        // Thrown exceptions mostly will end in crash recovery...
         // But might be we find another deep detection service which can detect the same
         // document without a problem .-)
         sDeepType.clear();
