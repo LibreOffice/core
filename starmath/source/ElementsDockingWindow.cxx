@@ -48,10 +48,7 @@ SmElement::SmElement(std::unique_ptr<SmNode>&& pNode, const OUString& aText, con
 SmElement::~SmElement()
 {}
 
-const std::unique_ptr<SmNode>& SmElement::getNode()
-{
-    return mpNode;
-}
+const std::unique_ptr<SmNode>& SmElement::getNode() const { return mpNode; }
 
 SmElementSeparator::SmElementSeparator() :
     SmElement(std::unique_ptr<SmNode>(), OUString(), OUString())

@@ -34,6 +34,7 @@ class SmElement
     std::unique_ptr<SmNode> mpNode;
     OUString const          maText;
     OUString const          maHelpText;
+
 public:
     Point mBoxLocation;
     Size  mBoxSize;
@@ -41,21 +42,11 @@ public:
     SmElement(std::unique_ptr<SmNode>&& pNode, const OUString& aText, const OUString& aHelpText);
     virtual ~SmElement();
 
-    const std::unique_ptr<SmNode>& getNode();
-    const OUString& getText()
-    {
-        return maText;
-    }
+    const std::unique_ptr<SmNode>& getNode() const;
+    const OUString& getText() const { return maText; }
+    const OUString& getHelpText() const { return maHelpText; }
 
-    const OUString& getHelpText()
-    {
-        return maHelpText;
-    }
-
-    virtual bool isSeparator()
-    {
-        return false;
-    }
+    virtual bool isSeparator() const { return false; }
 };
 
 class SmElementSeparator : public SmElement
@@ -63,10 +54,7 @@ class SmElementSeparator : public SmElement
 public:
     SmElementSeparator();
 
-    virtual bool isSeparator() override
-    {
-        return true;
-    }
+    bool isSeparator() const override { return true; }
 };
 
 class SmElementsControl : public Control
