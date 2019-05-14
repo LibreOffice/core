@@ -1904,6 +1904,11 @@ const ScPostIt* ScColumn::GetCellNote( sc::ColumnBlockConstPosition& rBlockPos, 
     return sc::cellnote_block::at(*aPos.first->data, aPos.second);
 }
 
+ScPostIt* ScColumn::GetCellNote( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow )
+{
+    return const_cast<ScPostIt*>(const_cast<const ScColumn*>(this)->GetCellNote( rBlockPos, nRow ));
+}
+
 void ScColumn::SetCellNote(SCROW nRow, std::unique_ptr<ScPostIt> pNote)
 {
     //pNote->UpdateCaptionPos(ScAddress(nCol, nRow, nTab)); // TODO notes useful ? slow import with many notes

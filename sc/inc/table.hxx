@@ -1106,7 +1106,7 @@ private:
                                 const ScPatternAttr& rAttr, sal_uInt16 nFormatNo);
     void        GetAutoFormatAttr(SCCOL nCol, SCROW nRow, sal_uInt16 nIndex, ScAutoFormatData& rData);
     void        GetAutoFormatFrame(SCCOL nCol, SCROW nRow, sal_uInt16 nFlags, sal_uInt16 nIndex, ScAutoFormatData& rData);
-    bool        SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRow,
+    bool        SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow,
                            const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc);
     bool        Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                        const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc);

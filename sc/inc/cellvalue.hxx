@@ -78,7 +78,7 @@ struct SC_DLLPUBLIC ScCellValue
 
     void release( ScColumn& rColumn, SCROW nRow, sc::StartListeningType eListenType = sc::SingleCellListening );
 
-    OUString getString( const ScDocument* pDoc );
+    OUString getString( const ScDocument* pDoc ) const;
 
     bool isEmpty() const;
 
@@ -156,7 +156,7 @@ struct SC_DLLPUBLIC ScRefCellValue
      *          specific fields can not be resolved. See
      *          ScEditUtil::GetString().
      */
-    OUString getString( const ScDocument* pDoc );
+    OUString getString( const ScDocument* pDoc ) const;
 
     /**
      * Retrieve a string value without modifying the states of any objects in
