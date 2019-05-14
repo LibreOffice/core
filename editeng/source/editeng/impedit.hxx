@@ -264,7 +264,7 @@ private:
     /// mechanism to change from the classic refresh mode that simply
     // invalidates the area where text was changed. When set, the invalidate
     // and the direct repaint of the Window-plugged EditView will be suppressed.
-    // Instead, a consumer that has registered using a EditViewCallbacks
+    // Instead, a consumer that has registered using an EditViewCallbacks
     // incarnation has to handle that. Used e.g. to represent the edited text
     // in Draw/Impress in an OverlayObject which avoids evtl. expensive full
     // repaints of the EditView(s)
