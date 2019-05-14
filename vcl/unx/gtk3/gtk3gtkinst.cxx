@@ -9706,6 +9706,13 @@ private:
                     gtk_widget_show(pImage);
                 }
             }
+
+            // if no tooltip reuse the label as default tooltip
+            if (!gtk_widget_get_tooltip_text(pWidget))
+            {
+                if (const gchar* label = gtk_tool_button_get_label(pToolButton))
+                    gtk_widget_set_tooltip_text(pWidget, label);
+            }
         }
 
         //set helpids
