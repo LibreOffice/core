@@ -514,7 +514,7 @@ void OFormattedModel::loaded(const EventObject& rEvent)
 {
     // HACK: our onConnectedDbColumn accesses our NumberFormatter which locks the solar mutex (as it doesn't have
     // an own one). To prevent deadlocks with other threads which may request a property from us in an
-    // UI-triggered action (e.g. an tooltip) we lock the solar mutex _here_ before our base class locks
+    // UI-triggered action (e.g. a tooltip) we lock the solar mutex _here_ before our base class locks
     // its own mutex (which is used for property requests)
     // alternative a): we use two mutexes, one which is passed to the OPropertysetHelper and used for
     // property requests and one for our own code. This would need a lot of code rewriting
