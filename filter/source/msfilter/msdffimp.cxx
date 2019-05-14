@@ -191,7 +191,7 @@ static sal_uInt32 nMSOleObjCntr = 0;
 
 struct SvxMSDffBLIPInfo
 {
-    sal_uLong  nFilePos;    ///< offset of the BLIP in data strem
+    sal_uLong  nFilePos;    ///< offset of the BLIP in data stream
     explicit SvxMSDffBLIPInfo(sal_uLong nFPos)
         : nFilePos(nFPos)
     {
@@ -2827,7 +2827,7 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
     if(nAngle >= 0)
         nChgColors ^= 1;
 
-    //Translate a MS clockwise(+) or count clockwise angle(-) into a AOO count clock wise angle
+    //Translate a MS clockwise(+) or count clockwise angle(-) into an AOO count clock wise angle
     nAngle=3600 - ( ( Fix16ToAngle(nAngle) + 5 ) / 10 );
     //Make sure this angle belongs to 0~3600
     while ( nAngle >= 3600 ) nAngle -= 3600;
@@ -2840,8 +2840,8 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
         if(nRotateAngle)//fixed point number
             nRotateAngle = ( static_cast<sal_Int16>( nRotateAngle >> 16) * 100L ) + ( ( ( nRotateAngle & 0x0000ffff) * 100L ) >> 16 );
         nRotateAngle = ( nRotateAngle + 5 ) / 10 ;//round up
-        //nAngle is a clockwise angle. If nRotateAngle is a clockwise angle, then gradient need be rotated a little less
-        //Or it need be rotated a little more
+        //nAngle is a clockwise angle. If nRotateAngle is a clockwise angle, then gradient needs to be rotated a little less
+        //or it needs to be rotated a little more
         nAngle -=  nRotateAngle;
     }
     while ( nAngle >= 3600 ) nAngle -= 3600;
@@ -4825,7 +4825,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             aPoint1.setX( aPoint2.X() );
                             aPoint2.setX( n );
 
-                            // #i120437# reset hor filp
+                            // #i120437# reset hor flip
                             nSpFlags &= ~ShapeFlag::FlipH;
                         }
                         if ( nSpFlags & ShapeFlag::FlipV )
@@ -4834,7 +4834,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             aPoint1.setY( aPoint2.Y() );
                             aPoint2.setY( n );
 
-                            // #i120437# reset ver filp
+                            // #i120437# reset ver flip
                             nSpFlags &= ~ShapeFlag::FlipV;
                         }
 
@@ -6652,7 +6652,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
         if ( ERRCODE_IO_PENDING == pGrStream->GetError() )
           pGrStream->ResetError();
     }
-    rBLIPStream.Seek( nOldPos );    // restore old FilePos of the strem
+    rBLIPStream.Seek( nOldPos );    // restore old FilePos of the stream
 
     return ( ERRCODE_NONE == nRes ); // return result
 }
