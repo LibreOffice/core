@@ -29,20 +29,20 @@ index 3321b87..dd39ead 100644
 -
  struct Asserter
  {
-   /*! \brief Throws a Exception with the specified message and location.
+   /*! \brief Throws an Exception with the specified message and location.
     */
 -  NORETURN static void CPPUNIT_API fail( const Message &message, 
 +  [[noreturn]] static void CPPUNIT_API fail( const Message &message, 
                                  const SourceLine &sourceLine = SourceLine() );
  
-   /*! \brief Throws a Exception with the specified message and location.
+   /*! \brief Throws an Exception with the specified message and location.
     * \deprecated Use fail( Message, SourceLine ) instead.
     */
 -  NORETURN static void CPPUNIT_API fail( std::string message, 
 +  [[noreturn]] static void CPPUNIT_API fail( std::string message, 
                                  const SourceLine &sourceLine = SourceLine() );
  
-   /*! \brief Throws a Exception with the specified message and location.
+   /*! \brief Throws an Exception with the specified message and location.
 @@ -165,7 +159,7 @@ struct Asserter
     *                          what are the differences between the expected and actual value.
     * \param shortDescription Short description for the failure message.
