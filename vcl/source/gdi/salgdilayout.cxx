@@ -70,6 +70,12 @@ bool SalGraphics::initWidgetDrawBackends(bool bForce)
     if (bFileDefinitionsWidgetDraw || bForce)
     {
         m_pWidgetDraw.reset(new vcl::FileDefinitionWidgetDraw(*this));
+        auto pFileDefinitionWidgetDraw = static_cast<vcl::FileDefinitionWidgetDraw*>(m_pWidgetDraw.get());
+        if (!pFileDefinitionWidgetDraw->isActive())
+        {
+            m_pWidgetDraw.reset();
+            return false;
+        }
         return true;
     }
     return false;
