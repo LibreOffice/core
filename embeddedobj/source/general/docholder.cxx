@@ -960,7 +960,7 @@ bool DocumentHolder::LoadDocToFrame( bool bInPlace )
         uno::Reference < frame::XModel > xDoc( m_xComponent, uno::UNO_QUERY );
         if ( xDoc.is() )
         {
-            // load new document in to the frame
+            // load new document into the frame
             uno::Reference< frame::XComponentLoader > xComponentLoader( m_xFrame, uno::UNO_QUERY_THROW );
 
             ::comphelper::NamedValueCollection aArgs;
