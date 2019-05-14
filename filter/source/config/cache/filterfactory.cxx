@@ -349,7 +349,7 @@ class stlcomp_removeIfMatchFlags
                     // IFlags are interpreted as ALL_FLAGS_MUST_MATCH !
                     bMatch = ((nFlags & m_nFlags) == m_nFlags);
                 else
-                    // EFlags are interpreted as ATE_LEAST_ONE_FLAG_MUST_MATCH !
+                    // EFlags are interpreted as AT_LEAST_ONE_FLAG_MUST_MATCH !
                     bMatch = !(nFlags & m_nFlags);
                 // We are asked for bRemove ! And bMatch = !bRemove => so bRemove = !bMatch .-)
                 return !bMatch;
