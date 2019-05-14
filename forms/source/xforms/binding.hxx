@@ -65,7 +65,7 @@ namespace xforms
 /** An XForms Binding. Contains:
  *  # a connection to its model
  *  # an ID
- *  # an binding expression
+ *  # a binding expression
  *  # model item properties
  *  # (NOT YET IMPLEMENTED) child bindings (sequence of)
  *
