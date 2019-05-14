@@ -61,13 +61,7 @@ class SvxHyphenWordDialog : public SfxDialogController
 
     void            select_region(int nStart, int nEnd);
 
-    DECL_LINK(Left_Impl, weld::Button&, void);
-    DECL_LINK(Right_Impl, weld::Button&, void);
-    DECL_LINK(CutHdl_Impl, weld::Button&, void);
-    DECL_LINK(ContinueHdl_Impl, weld::Button&, void);
-    DECL_LINK(DeleteHdl_Impl, weld::Button&, void);
     DECL_LINK(HyphenateAllHdl_Impl, weld::Button&, void);
-    DECL_LINK(CancelHdl_Impl, weld::Button&, void);
     DECL_LINK(GetFocusHdl_Impl, weld::Widget&, void);
     DECL_LINK(CursorChangeHdl_Impl, weld::Entry&, void);
 

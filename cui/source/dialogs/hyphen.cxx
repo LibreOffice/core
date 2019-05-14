@@ -302,16 +302,6 @@ bool SvxHyphenWordDialog::SelRight()
     return bRet;
 }
 
-IMPL_LINK_NOARG(SvxHyphenWordDialog, CutHdl_Impl, weld::Button&, void)
-{
-    if( !m_bBusy )
-    {
-        m_bBusy = true;
-        ContinueHyph_Impl( /*m_nHyphPos*/m_nOldPos );
-        m_bBusy = false;
-    }
-}
-
 IMPL_LINK_NOARG(SvxHyphenWordDialog, HyphenateAllHdl_Impl, weld::Button&, void)
 {
     if( !m_bBusy )
@@ -332,56 +322,6 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, HyphenateAllHdl_Impl, weld::Button&, void)
         {
             SAL_WARN( "cui.dialogs", "Hyphenate All failed" );
         }
-    }
-}
-
-IMPL_LINK_NOARG(SvxHyphenWordDialog, DeleteHdl_Impl, weld::Button&, void)
-{
-    if( !m_bBusy )
-    {
-        m_bBusy = true;
-        ContinueHyph_Impl( 0 );
-        m_bBusy = false;
-    }
-}
-
-IMPL_LINK_NOARG(SvxHyphenWordDialog, ContinueHdl_Impl, weld::Button&, void)
-{
-    if( !m_bBusy )
-    {
-        m_bBusy = true;
-        ContinueHyph_Impl();
-        m_bBusy = false;
-    }
-}
-
-IMPL_LINK_NOARG(SvxHyphenWordDialog, CancelHdl_Impl, weld::Button&, void)
-{
-    if( !m_bBusy )
-    {
-        m_bBusy = true;
-        m_xDialog->response(RET_CANCEL);
-        m_bBusy = false;
-    }
-}
-
-IMPL_LINK_NOARG(SvxHyphenWordDialog, Left_Impl, weld::Button&, void)
-{
-    if( !m_bBusy )
-    {
-        m_bBusy = true;
-        SelLeft();
-        m_bBusy = false;
-    }
-}
-
-IMPL_LINK_NOARG(SvxHyphenWordDialog, Right_Impl, weld::Button&, void)
-{
-    if( !m_bBusy )
-    {
-        m_bBusy = true;
-        SelRight();
-        m_bBusy = false;
     }
 }
 
@@ -442,13 +382,30 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
     InitControls_Impl();
     m_xWordEdit->grab_focus();
 
-    m_xLeftBtn->connect_clicked( LINK( this, SvxHyphenWordDialog, Left_Impl ) );
-    m_xRightBtn->connect_clicked( LINK( this, SvxHyphenWordDialog, Right_Impl ) );
-    m_xOkBtn->connect_clicked( LINK( this, SvxHyphenWordDialog, CutHdl_Impl ) );
-    m_xContBtn->connect_clicked( LINK( this, SvxHyphenWordDialog, ContinueHdl_Impl ) );
-    m_xDelBtn->connect_clicked( LINK( this, SvxHyphenWordDialog, DeleteHdl_Impl ) );
+    auto createIfNotBusyFunc = [=](std::function<void()> const & func)
+    {
+        return [=](weld::Button&)
+        {
+            if( !m_bBusy )
+            {
+                m_bBusy = true;
+                func();
+                m_bBusy = false;
+            }
+        };
+    };
+
+    m_xLeftBtn->connect_clicked( createIfNotBusyFunc([&](){ SelLeft(); }) );
+    m_xRightBtn->connect_clicked( createIfNotBusyFunc([&](){ SelRight(); }) );
+    m_xOkBtn->connect_clicked(
+        createIfNotBusyFunc(
+            [&](){ ContinueHyph_Impl(/*m_nHyphPos*/m_nOldPos); } ) );
+    m_xContBtn->connect_clicked( createIfNotBusyFunc([&](){ ContinueHyph_Impl(); }) );
+    m_xDelBtn->connect_clicked( createIfNotBusyFunc([&](){ ContinueHyph_Impl(0); }) );
     m_xHyphAll->connect_clicked( LINK( this, SvxHyphenWordDialog, HyphenateAllHdl_Impl ) );
-    m_xCloseBtn->connect_clicked( LINK( this, SvxHyphenWordDialog, CancelHdl_Impl ) );
+    m_xCloseBtn->connect_clicked(
+        createIfNotBusyFunc(
+            [&]() { m_xDialog->response(RET_CANCEL); }) );
     m_xWordEdit->connect_focus_in( LINK( this, SvxHyphenWordDialog, GetFocusHdl_Impl ) );
     m_xWordEdit->connect_cursor_position( LINK( this, SvxHyphenWordDialog, CursorChangeHdl_Impl ) );
 
