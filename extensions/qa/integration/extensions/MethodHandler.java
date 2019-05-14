@@ -42,7 +42,7 @@ public class MethodHandler implements XPropertyHandler
         }
         catch( com.sun.star.uno.Exception e )
         {
-            System.err.println( "MethodHandler: could not create a Introspection service, not much functionality will be available." );
+            System.err.println( "MethodHandler: could not create an Introspection service, not much functionality will be available." );
         }
     }
 
