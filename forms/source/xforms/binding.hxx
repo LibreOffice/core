@@ -65,7 +65,7 @@ namespace xforms
 /** An XForms Binding. Contains:
  *  # a connection to its model
  *  # an ID
- *  # an binding expression
+ *  # a binding expression
  *  # model item properties
  *  # (NOT YET IMPLEMENTED) child bindings (sequence of)
  *
@@ -248,7 +248,7 @@ public:
     /// is this binding valid? (are constraint, type and required MIPs ok?)
     bool isValid();
 
-    /// determine whether this binding currently performs a useful
+    /// determine whether this binding currently performs an useful
     /// function, r whether is may be discarded
     bool isUseful();
 
@@ -316,7 +316,7 @@ private:
     /// implement set*Namespaces()
     void _setNamespaces( const css::uno::Reference<css::container::XNameContainer>&, bool bBinding );
 
-    /// set a useful default binding ID (if none is set)
+    /// set an useful default binding ID (if none is set)
     void _checkBindingID();
 
 public:
