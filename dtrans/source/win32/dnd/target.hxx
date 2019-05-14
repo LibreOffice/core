@@ -60,14 +60,14 @@ private:
     // to NULL
     HWND m_hWnd; // set by initialize
     // Holds the thread id of the thread which created the window that is the
-    // drop target. Only used when DropTarget::initialize is called from an MTA
+    // drop target. Only used when DropTarget::initialize is called from a MTA
     // thread
     DWORD m_threadIdWindow;
     // This is the thread id of the OLE thread that is created in DropTarget::initialize
-    // when the calling thread is an MTA
+    // when the calling thread is a MTA
     DWORD m_threadIdTarget;
     // The handle of the thread that is created in DropTarget::initialize
-    // when the calling thread is an MTA
+    // when the calling thread is a MTA
     HANDLE m_hOleThread;
     // The thread id of the thread which called initialize. When the service dies
     // than m_oleThreadId is used to determine if the service successfully called
