@@ -57,6 +57,7 @@ private:
 
     void UpdateDefaultSettings();
     void UpdatePersonaSettings();
+    static OUString getUIRootDirNotebookBar();
 
 };
 

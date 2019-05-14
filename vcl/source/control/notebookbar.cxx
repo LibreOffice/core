@@ -15,6 +15,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/vclevent.hxx>
+#include <rtl/bootstrap.hxx>
+#include <osl/file.h>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 /**
@@ -38,7 +40,13 @@ NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rU
     : Control(pParent), m_pEventListener(new NotebookBarContextChangeEventListener(this))
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
-    m_pUIBuilder.reset( new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame) );
+    oslFileHandle fileHandle_(nullptr);
+    OUString sUri = getUIRootDirNotebookBar() + rUIXMLDescription;
+    oslFileError e = osl_openFile(sUri.pData, &fileHandle_, osl_File_OpenFlag_Read);
+    if(e == osl_File_E_None)
+        m_pUIBuilder.reset( new VclBuilder(this, getUIRootDirNotebookBar(), rUIXMLDescription, rID, rFrame) );
+    else
+        m_pUIBuilder.reset( new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame) );
     mxFrame = rFrame;
     // In the Notebookbar's .ui file must exist control handling context
     // - implementing NotebookbarContextControl interface with id "ContextContainer"
@@ -250,5 +258,12 @@ void NotebookBar::UpdatePersonaSettings()
 
     aAllSettings.SetStyleSettings(aStyleSet);
     PersonaSettings = aAllSettings;
+}
+
+OUString NotebookBar::getUIRootDirNotebookBar()
+{
+    OUString sShareLayer("$BRAND_BASE_DIR/user/config/soffice.cfg/");
+    rtl::Bootstrap::expandMacros(sShareLayer);
+    return sShareLayer;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
