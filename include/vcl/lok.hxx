@@ -21,6 +21,7 @@ namespace lok
 bool VCL_DLLPUBLIC isUnipoll();
 void VCL_DLLPUBLIC registerPollCallbacks(LibreOfficeKitPollCallback pPollCallback,
                                          LibreOfficeKitWakeCallback pWakeCallback, void* pData);
+void VCL_DLLPUBLIC unregisterPollCallbacks();
 }
 }
 

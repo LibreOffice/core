@@ -1675,10 +1675,23 @@ void registerPollCallbacks(
     }
 }
 
+void unregisterPollCallbacks()
+{
+    ImplSVData * pSVData = ImplGetSVData();
+    if (pSVData)
+    {
+        // Just set mpPollClosure to null as that is what calling this means, that the callback data
+        // points to an object that no longer exists. In particular, don't set
+        // pSVData->mpPollCallback to nullptr as that is used to detect whether Unipoll is in use in
+        // isUnipoll().
+        pSVData->mpPollClosure = nullptr;
+    }
+}
+
 bool isUnipoll()
 {
     ImplSVData * pSVData = ImplGetSVData();
-    return pSVData && pSVData->mpPollClosure != nullptr;
+    return pSVData && pSVData->mpPollCallback != nullptr;
 }
 
 } } // namespace lok, namespace vcl

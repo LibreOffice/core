@@ -29,6 +29,7 @@
 
 #include <vcl/virdev.hxx>
 #include <vcl/inputtypes.hxx>
+#include <vcl/lok.hxx>
 #ifndef LIBO_HEADLESS
 # include <vcl/opengl/OpenGLContext.hxx>
 #endif
@@ -176,7 +177,7 @@ void SvpSalInstance::Wakeup(SvpRequest const request)
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    if (pSVData->mpWakeCallback)
+    if (pSVData->mpWakeCallback && pSVData->mpPollClosure)
         pSVData->mpWakeCallback(pSVData->mpPollClosure);
 
     SvpSalYieldMutex *const pMutex(static_cast<SvpSalYieldMutex*>(GetYieldMutex()));
@@ -377,8 +378,7 @@ sal_uInt32 SvpSalYieldMutex::doRelease(bool const bUnlockAll)
 
         if (isReleased)
         {
-            ImplSVData* pSVData = ImplGetSVData();
-            if (pSVData->mpPollCallback) // is unipoll
+            if (vcl::lok::isUnipoll())
             {
                 if (pInst)
                     pInst->Wakeup(SvpRequest::NONE);
@@ -472,7 +472,8 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
                     nTimeoutMS = 5000;
 
                 // External poll.
-                if (pSVData->mpPollCallback(pSVData->mpPollClosure, nTimeoutMS * 1000 /* us */) < 0)
+                if (pSVData->mpPollClosure != nullptr &&
+                    pSVData->mpPollCallback(pSVData->mpPollClosure, nTimeoutMS * 1000 /* us */) < 0)
                     pSVData->maAppData.mbAppQuit = true;
             }
             else
