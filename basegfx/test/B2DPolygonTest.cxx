@@ -22,7 +22,6 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 
 namespace basegfx
@@ -79,30 +78,12 @@ public:
                                      aPoly.getB2DPoint(1));
     }
 
-    void testContainsOnlyHorizontalOrVerticalLines()
-    {
-        // First line is horizontal, second is vertical.
-        B2DPolygon aPoly;
-        aPoly.append(B2DPoint(0, 1));
-        aPoly.append(B2DPoint(1, 1));
-        aPoly.append(B2DPoint(1, 0));
-        CPPUNIT_ASSERT(utils::containsOnlyHorizontalOrVerticalLines(aPoly));
-
-        // First line is diagonal, second is vertical.
-        aPoly.clear();
-        aPoly.append(B2DPoint(0, 0));
-        aPoly.append(B2DPoint(1, 1));
-        aPoly.append(B2DPoint(1, 0));
-        CPPUNIT_ASSERT(!utils::containsOnlyHorizontalOrVerticalLines(aPoly));
-    }
-
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(b2dpolygon);
     CPPUNIT_TEST(testBasics);
-    CPPUNIT_TEST(testContainsOnlyHorizontalOrVerticalLines);
     CPPUNIT_TEST_SUITE_END();
 }; // class b2dpolygon
 
