@@ -736,10 +736,10 @@ protected:
             void                        CallEventListeners( VclEventId nEvent, void* pData = nullptr );
     static  void                        FireVclEvent( VclSimpleEvent& rEvent );
 
-    virtual bool                        AcquireGraphics() const override;
-    virtual void                        ReleaseGraphics( bool bRelease = true ) override;
+    bool                                AcquireGraphics() const override;
+    void                                ReleaseGraphics( bool bRelease = true ) override;
 
-    virtual void                        InitClipRegion() override;
+    void                                InitClipRegion() override;
 
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void                 ImplAdjustNWFSizes();
