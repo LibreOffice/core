@@ -4191,7 +4191,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, GraphicObjec
                 if ( !aGraphic.IsAnimated() )
                     nErrCode = GraphicConverter::Export( aStream, aGraphic, ( eGraphicType == GraphicType::Bitmap ) ? ConvertDataFormat::PNG  : ConvertDataFormat::EMF );
                 else
-                {   // to store a animation, a gif has to be included into the msOG chunk of a png  #I5583#
+                {   // to store an animation, a gif has to be included into the msOG chunk of a png  #I5583#
                     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
                     SvMemoryStream  aGIFStream;
                     const char* const pString = "MSOFFICE9.0";
