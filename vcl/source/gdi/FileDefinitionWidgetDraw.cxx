@@ -90,8 +90,12 @@ FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
     : m_rGraphics(rGraphics)
     , m_bIsActive(false)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        m_pWidgetDefinition = getWidgetDefinitionForTheme("online");
+#ifdef IOS
     if (!m_pWidgetDefinition)
         m_pWidgetDefinition = getWidgetDefinitionForTheme("ios");
+#endif
 
     if (m_pWidgetDefinition)
     {
