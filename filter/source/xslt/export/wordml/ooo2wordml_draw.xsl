@@ -1398,7 +1398,7 @@
             <!-- end line special attribute-->
             <!-- polyline and polygon special attribute-->
             <xsl:if test="$ooshapename='polyline' or $ooshapename='polygon' ">
-                <!-- translate ' '  to in '  tranclate ',' to 'in,' -->
+                <!-- translate ' '  to in '  translate ',' to 'in,' -->
                 <xsl:variable name="points">
                     <xsl:call-template name="points2points">
                         <xsl:with-param name="input_x" select="$x"/>
@@ -1557,7 +1557,7 @@
                             <xsl:attribute name="src">
                                 <xsl:value-of select="concat( 'wordml://', $fill-image-name)"/>
                             </xsl:attribute>
-                            <xsl:attribute name="o:titile">
+                            <xsl:attribute name="o:title">
                                 <xsl:value-of select="$fill-image-name"/>
                             </xsl:attribute>
                             <xsl:attribute name="recolor">
