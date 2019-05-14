@@ -378,9 +378,10 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
                 if (pCurrentElement == element)
                 {
                     pContext->Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
-                    pContext->SetFillColor(Color(230, 230, 230));
-                    pContext->SetLineColor(Color(230, 230, 230));
-
+                    const StyleSettings& rStyleSettings = pContext->GetSettings().GetStyleSettings();
+                    pContext->SetLineColor(rStyleSettings.GetHighlightColor());
+                    pContext->SetFillColor(COL_TRANSPARENT);
+                    pContext->DrawRect(PixelToLogic(tools::Rectangle(x + 1, y + 1, x + boxX - 1, y + boxY - 1)));
                     pContext->DrawRect(PixelToLogic(tools::Rectangle(x + 2, y + 2, x + boxX - 2, y + boxY - 2)));
                     pContext->Pop();
                 }
@@ -452,7 +453,21 @@ void SmElementsControl::Resize()
 
 void SmElementsControl::ApplySettings(vcl::RenderContext& rRenderContext)
 {
-    rRenderContext.SetBackground(COL_WHITE);
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
+}
+
+void SmElementsControl::DataChanged(const DataChangedEvent& rDCEvt)
+{
+    Window::DataChanged(rDCEvt);
+
+    if (!((rDCEvt.GetType() == DataChangedEventType::FONTS) ||
+          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
+          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
+           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))))
+        return;
+
+    Invalidate();
 }
 
 void SmElementsControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
