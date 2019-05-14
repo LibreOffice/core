@@ -46,6 +46,7 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -192,6 +193,7 @@ public:
     void testTdf123090();
     void testTdf120028();
     void testTdf120028b();
+    void testCropToShape();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -277,6 +279,7 @@ public:
     CPPUNIT_TEST(testTdf123090);
     CPPUNIT_TEST(testTdf120028);
     CPPUNIT_TEST(testTdf120028b);
+    CPPUNIT_TEST(testCropToShape);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2645,6 +2648,29 @@ void SdImportTest::testTdf120028b()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), nCharColor);
 
     xDocShRef->DoClose();
+}
+
+void SdImportTest::testCropToShape()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/crop-to-shape.pptx"), PPTX);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("Could not get XDrawPagesSupplier", xDrawPagesSupplier.is());
+    uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("Could not get xDrawPage", xDrawPage.is());
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapeDescriptor> xDesc(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString{"com.sun.star.drawing.CustomShape"}, xDesc->getShapeType());
+    CPPUNIT_ASSERT_MESSAGE("Could not get xShape", xShape.is());
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    css::drawing::FillStyle fillStyle;
+    xShapeProps->getPropertyValue("FillStyle") >>= fillStyle;
+    CPPUNIT_ASSERT_EQUAL(fillStyle, css::drawing::FillStyle_BITMAP);
+    css::drawing::BitmapMode bitmapmode;
+    xShapeProps->getPropertyValue("FillBitmapMode") >>= bitmapmode;
+    CPPUNIT_ASSERT_EQUAL(bitmapmode, css::drawing::BitmapMode_STRETCH);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
