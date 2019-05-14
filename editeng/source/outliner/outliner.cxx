@@ -1478,7 +1478,7 @@ void Outliner::StyleSheetChanged( SfxStyleSheet const * pStyle )
 
     // The EditEngine calls StyleSheetChanged also for derived styles.
     // Here all the paragraphs, which had the said template, used to be
-    // hunted by a ImpRecalcParaAttribs, why?
+    // hunted by an ImpRecalcParaAttribs, why?
     // => only the Bullet-representation can really change...
     sal_Int32 nParas = pParaList->GetParagraphCount();
     for( sal_Int32 nPara = 0; nPara < nParas; nPara++ )
