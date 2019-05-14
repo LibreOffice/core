@@ -114,7 +114,7 @@ void CGM::ImplDoClass6()
                 case -162 : /*set gradient angle */break;
                 case -163 : /*set gradient description */break;
                 case -164 : /*set gradient style */break;
-                case -165 : /*set back ground style */break;
+                case -165 : /*set background style */break;
                 case -170 : /*geometric pattern draw style */break;
                 case -190 : /*set character width */break;
                 case -191 : /*hyperlink definitions */break;
