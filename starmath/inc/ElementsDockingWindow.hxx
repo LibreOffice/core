@@ -78,22 +78,28 @@ class SmElementsControl : public Control
     virtual void MouseMove(const MouseEvent& rMEvt) override;
     virtual void RequestHelp(const HelpEvent& rHEvt) override;
     virtual void Resize() override;
+    virtual void GetFocus() override;
+    virtual void LoseFocus() override;
+    virtual void KeyInput(const KeyEvent& rKEvt) override;
 
     SmDocShell*   mpDocShell;
     SmFormat      maFormat;
     OString       msCurrentSetId;
-    SmElement*    mpCurrentElement;
+    sal_uInt16    m_nCurrentElement;
+    sal_uInt16    m_nCurrentRolloverElement;
     Link<SmElement&,void> maSelectHdlLink;
 
     std::vector< std::unique_ptr<SmElement> > maElementList;
     Size          maMaxElementDimensions;
     bool          mbVerticalMode;
     VclPtr< ScrollBar > mxScroll;
-    bool mbFirstPaintAfterLayout;
+    bool m_bFirstPaintAfterLayout;
 
     void addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
-
     void addElements(const std::pair<const char*, const char*> aElementsArray[], sal_uInt16 size);
+    SmElement* current() const;
+    bool hasRollover() const { return m_nCurrentRolloverElement != SAL_MAX_UINT16; }
+    void stepFocus(const bool bBackward);
 
     void build();
 

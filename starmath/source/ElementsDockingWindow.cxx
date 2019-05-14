@@ -235,10 +235,11 @@ const std::pair<const char*, const char*> SmElementsControl::aOthers[] =
 SmElementsControl::SmElementsControl(vcl::Window *pParent)
     : Control(pParent, WB_TABSTOP)
     , mpDocShell(new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT))
-    , mpCurrentElement(nullptr)
+    , m_nCurrentElement(0)
+    , m_nCurrentRolloverElement(SAL_MAX_UINT16)
     , mbVerticalMode(true)
     , mxScroll(VclPtr<ScrollBar>::Create(this, WB_VERT))
-    , mbFirstPaintAfterLayout(false)
+    , m_bFirstPaintAfterLayout(false)
 {
     set_id("element_selector");
     SetMapMode( MapMode(MapUnit::Map100thMM) );
@@ -276,11 +277,19 @@ void SmElementsControl::setVerticalMode(bool bVerticalMode)
     Invalidate();
 }
 
+SmElement* SmElementsControl::current() const
+{
+    sal_uInt16 nCur = (m_nCurrentRolloverElement != SAL_MAX_UINT16)
+            ? m_nCurrentRolloverElement
+            : (HasFocus() ? m_nCurrentElement : SAL_MAX_UINT16);
+    return (nCur < maElementList.size()) ? maElementList[nCur].get() : nullptr;
+}
+
 /**
  * !pContext => layout only
  *
  * Layouting is always done without a scrollbar and will show or hide it.
- * The first paint (mbFirstPaintAfterLayout) therefore needs to update a
+ * The first paint (m_bFirstPaintAfterLayout) therefore needs to update a
  * visible scrollbar, because the layouting was wrong.
  **/
 void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
@@ -311,6 +320,7 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
     else
         boxX = nControlWidth / perLine;
 
+    const SmElement* pCurrentElement = current();
     for (std::unique_ptr<SmElement> & i : maElementList)
     {
         SmElement* element = i.get();
@@ -365,7 +375,7 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
 
             if (pContext)
             {
-                if (mpCurrentElement == element)
+                if (pCurrentElement == element)
                 {
                     pContext->Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
                     pContext->SetFillColor(Color(230, 230, 230));
@@ -391,12 +401,12 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
 
     if (pContext)
     {
-        if (!mbFirstPaintAfterLayout || !mxScroll->IsVisible())
+        if (!m_bFirstPaintAfterLayout || !mxScroll->IsVisible())
             return;
-        mbFirstPaintAfterLayout = false;
+        m_bFirstPaintAfterLayout = false;
     }
     else
-        mbFirstPaintAfterLayout = true;
+        m_bFirstPaintAfterLayout = true;
 
     if (mbVerticalMode)
     {
@@ -456,23 +466,10 @@ void SmElementsControl::RequestHelp(const HelpEvent& rHEvt)
 {
     if (rHEvt.GetMode() & (HelpEventMode::BALLOON | HelpEventMode::QUICK))
     {
-        SmElement* pHelpElement = mpCurrentElement;
+        if (!rHEvt.KeyboardActivated() && !hasRollover())
+            return;
 
-        if (!rHEvt.KeyboardActivated())
-        {
-            Point aHelpEventPos(ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
-            for (std::unique_ptr<SmElement> & i : maElementList)
-            {
-                SmElement* pElement = i.get();
-                tools::Rectangle aRect(pElement->mBoxLocation, pElement->mBoxSize);
-                if (aRect.IsInside(aHelpEventPos))
-                {
-                    pHelpElement = pElement;
-                    break;
-                }
-            }
-        }
-
+        const SmElement* pHelpElement = current();
         if (!pHelpElement)
             return;
 
@@ -498,29 +495,41 @@ void SmElementsControl::RequestHelp(const HelpEvent& rHEvt)
 
 void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
 {
-    SmElement* pPrevElement = mpCurrentElement;
-    mpCurrentElement = nullptr;
     if (rMouseEvent.IsLeaveWindow())
     {
+        m_nCurrentRolloverElement = SAL_MAX_UINT16;
         Invalidate();
         return;
     }
+
     if (tools::Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()))
     {
-        for (std::unique_ptr<SmElement> & i : maElementList)
+        const SmElement* pPrevElement = current();
+        if (pPrevElement)
         {
-            SmElement* element = i.get();
-            tools::Rectangle rect(element->mBoxLocation, element->mBoxSize);
+            const tools::Rectangle rect(pPrevElement->mBoxLocation, pPrevElement->mBoxSize);
+            if (rect.IsInside(rMouseEvent.GetPosPixel()))
+                return;
+        }
+
+        const sal_uInt16 nElementCount = maElementList.size();
+        for (sal_uInt16 n = 0; n < nElementCount; n++)
+        {
+            const SmElement* element = maElementList[n].get();
+            if (pPrevElement == element)
+                continue;
+
+            const tools::Rectangle rect(element->mBoxLocation, element->mBoxSize);
             if (rect.IsInside(rMouseEvent.GetPosPixel()))
             {
-                if (pPrevElement != element)
-                {
-                    mpCurrentElement = element;
-                    Invalidate();
-                    return;
-                }
+                m_nCurrentRolloverElement = n;
+                Invalidate();
+                return;
             }
         }
+        if (pPrevElement && hasRollover())
+            Invalidate();
+        m_nCurrentRolloverElement = SAL_MAX_UINT16;
         return;
     }
 
@@ -547,15 +556,27 @@ void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
 
     if (rMouseEvent.IsLeft() && tools::Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()) && maSelectHdlLink.IsSet())
     {
-        sal_uInt16 nElementCount = maElementList.size();
+        const SmElement* pPrevElement = hasRollover() ? current() : nullptr;
+        if (pPrevElement)
+        {
+            tools::Rectangle rect(pPrevElement->mBoxLocation, pPrevElement->mBoxSize);
+            if (rect.IsInside(rMouseEvent.GetPosPixel()))
+            {
+                m_nCurrentElement = m_nCurrentRolloverElement;
+                maSelectHdlLink.Call(*const_cast<SmElement*>(pPrevElement));
+                collectUIInformation(OUString::number(m_nCurrentRolloverElement));
+                return;
+            }
+        }
 
+        const sal_uInt16 nElementCount = maElementList.size();
         for (sal_uInt16 n = 0; n < nElementCount; n++)
         {
-            std::unique_ptr<SmElement> & i = maElementList[n];
-            SmElement* element = i.get();
+            SmElement* element = maElementList[n].get();
             tools::Rectangle rect(element->mBoxLocation, element->mBoxSize);
             if (rect.IsInside(rMouseEvent.GetPosPixel()))
             {
+                m_nCurrentElement = n;
                 maSelectHdlLink.Call(*element);
                 collectUIInformation(OUString::number(n));
                 return;
@@ -565,6 +586,115 @@ void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
     else
     {
         Control::MouseButtonDown (rMouseEvent);
+    }
+}
+
+void SmElementsControl::GetFocus()
+{
+    Control::GetFocus();
+    Invalidate();
+}
+
+void SmElementsControl::LoseFocus()
+{
+    Control::LoseFocus();
+    Invalidate();
+}
+
+void SmElementsControl::stepFocus(const bool bBackward)
+{
+    const sal_uInt16 nStartPos = m_nCurrentElement;
+    const sal_uInt16 nElementCount = maElementList.size();
+    sal_uInt16 nPos = nStartPos;
+    assert(nPos < nElementCount);
+
+    while (true)
+    {
+        if (bBackward)
+        {
+            if (nPos == 0)
+                nPos = nElementCount - 1;
+            else
+                nPos--;
+        }
+        else
+        {
+            nPos++;
+            if (nPos == nElementCount)
+                nPos = 0;
+        }
+
+        if (nStartPos == nPos)
+            break;
+        if (!maElementList[nPos]->isSeparator())
+            break;
+    }
+
+    if (nStartPos != nPos)
+    {
+        m_nCurrentElement = nPos;
+        if (!hasRollover())
+        {
+            const SmElement *pCur = current();
+            tools::Rectangle elementRect(pCur->mBoxLocation, pCur->mBoxSize);
+            tools::Rectangle outputRect(Point(0,0), GetOutputSizePixel());
+            if (!outputRect.IsInside(elementRect))
+            {
+                long nScrollPos = mxScroll->GetThumbPos() + pCur->mBoxLocation.Y();
+                if (!bBackward)
+                    nScrollPos += pCur->mBoxSize.Height() - GetOutputSizePixel().Height();
+                mxScroll->DoScroll(nScrollPos);
+            }
+        }
+        Invalidate();
+    }
+}
+
+void SmElementsControl::KeyInput(const KeyEvent& rKEvt)
+{
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
+
+    if (aKeyCode.GetModifier())
+    {
+        Control::KeyInput( rKEvt );
+        return;
+    }
+
+    switch(aKeyCode.GetCode())
+    {
+        case KEY_RETURN:
+            [[fallthrough]];
+        case KEY_SPACE:
+            assert(m_nCurrentElement < maElementList.size());
+            assert(maSelectHdlLink.IsSet());
+            maSelectHdlLink.Call(*maElementList[m_nCurrentElement].get());
+            collectUIInformation(OUString::number(m_nCurrentElement));
+            break;
+
+        case KEY_DOWN:
+            [[fallthrough]];
+        case KEY_RIGHT:
+            stepFocus(false);
+            break;
+
+        case KEY_LEFT:
+            [[fallthrough]];
+        case KEY_UP:
+            stepFocus(true);
+            break;
+
+        case KEY_HOME:
+            m_nCurrentElement = 0;
+            mxScroll->DoScroll(0);
+            break;
+        case KEY_END:
+            m_nCurrentElement = (maElementList.size() ? maElementList.size() - 1 : 0);
+            mxScroll->DoScroll(mxScroll->GetRangeMax());
+            break;
+
+        default:
+            Control::KeyInput( rKEvt );
+            break;
     }
 }
 
@@ -593,6 +723,7 @@ void SmElementsControl::DoScroll(long nDelta)
 
 void SmElementsControl::addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText)
 {
+    assert(maElementList.size() <= SAL_MAX_UINT16);
     auto pNode = SmParser().ParseExpression(aElementVisual);
 
     pNode->Prepare(maFormat, *mpDocShell, 0);
@@ -748,6 +879,9 @@ void SmElementsControl::build()
         aEquation = "f ( x ) = {1} over {%sigma sqrt{2%pi} }func e^-{{(x-%mu)^2} over {2%sigma^2}}";
         addElement(aEquation, aEquation, "");
     }
+
+    m_nCurrentElement = 0;
+    m_nCurrentRolloverElement = SAL_MAX_UINT16;
     LayoutOrPaintContents();
     Invalidate();
 }
