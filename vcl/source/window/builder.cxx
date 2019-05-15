@@ -1672,7 +1672,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         xWindow->set_border_width(12);
 #endif
     }
-    else if (name == "GtkBox")
+    else if (name == "GtkBox" || name == "GtkStatusbar")
     {
         bVertical = extractOrientation(rMap);
         if (bVertical)
