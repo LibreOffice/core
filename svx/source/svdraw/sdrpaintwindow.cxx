@@ -168,59 +168,63 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegio
     mpPreRenderDevice->EnableMapMode(bMapModeWasEnabledSource);
 }
 
+rtl::Reference<sdr::overlay::OverlayManager> SdrPaintView::CreateOverlayManager(OutputDevice& rOutputDevice) const
+{
+    rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager;
+    // is it a window?
+    if (OUTDEV_WINDOW == rOutputDevice.GetOutDevType())
+    {
+        vcl::Window& rWindow = dynamic_cast<vcl::Window&>(rOutputDevice);
+        // decide which OverlayManager to use
+        if (IsBufferedOverlayAllowed() && !rWindow.SupportsDoubleBuffering())
+        {
+            // buffered OverlayManager, buffers its background and refreshes from there
+            // for pure overlay changes (no system redraw). The 3rd parameter specifies
+            // whether that refresh itself will use a 2nd vdev to avoid flickering.
+            // Also hand over the old OverlayManager if existent; this means to take over
+            // the registered OverlayObjects from it
+            xOverlayManager = sdr::overlay::OverlayManagerBuffered::create(rOutputDevice);
+        }
+        else
+        {
+            // unbuffered OverlayManager, just invalidates places where changes
+            // take place
+            // Also hand over the old OverlayManager if existent; this means to take over
+            // the registered OverlayObjects from it
+            xOverlayManager = sdr::overlay::OverlayManager::create(rOutputDevice);
+        }
+
+        OSL_ENSURE(xOverlayManager.is(), "SdrPaintWindow::SdrPaintWindow: Could not allocate an overlayManager (!)");
+
+        // Request a repaint so that the buffered overlay manager fills
+        // its buffer properly.  This is a workaround for missing buffer
+        // updates.
+        if (!comphelper::LibreOfficeKit::isActive())
+        {
+            rWindow.Invalidate();
+        }
+
+        Color aColA(getOptionsDrawinglayer().GetStripeColorA());
+        Color aColB(getOptionsDrawinglayer().GetStripeColorB());
+
+        if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+        {
+            aColA = aColB = Application::GetSettings().GetStyleSettings().GetHighlightColor();
+            aColB.Invert();
+        }
+
+        xOverlayManager->setStripeColorA(aColA);
+        xOverlayManager->setStripeColorB(aColB);
+        xOverlayManager->setStripeLengthPixel(getOptionsDrawinglayer().GetStripeLength());
+    }
+    return xOverlayManager;
+}
 
 void SdrPaintWindow::impCreateOverlayManager()
 {
     // not yet one created?
     if(!mxOverlayManager.is())
-    {
-        // is it a window?
-        if(OUTDEV_WINDOW == GetOutputDevice().GetOutDevType())
-        {
-            vcl::Window& rWindow = dynamic_cast<vcl::Window&>(GetOutputDevice());
-            // decide which OverlayManager to use
-            if(GetPaintView().IsBufferedOverlayAllowed() && !rWindow.SupportsDoubleBuffering())
-            {
-                // buffered OverlayManager, buffers its background and refreshes from there
-                // for pure overlay changes (no system redraw). The 3rd parameter specifies
-                // whether that refresh itself will use a 2nd vdev to avoid flickering.
-                // Also hand over the old OverlayManager if existent; this means to take over
-                // the registered OverlayObjects from it
-                mxOverlayManager = sdr::overlay::OverlayManagerBuffered::create(GetOutputDevice());
-            }
-            else
-            {
-                // unbuffered OverlayManager, just invalidates places where changes
-                // take place
-                // Also hand over the old OverlayManager if existent; this means to take over
-                // the registered OverlayObjects from it
-                mxOverlayManager = sdr::overlay::OverlayManager::create(GetOutputDevice());
-            }
-
-            OSL_ENSURE(mxOverlayManager.is(), "SdrPaintWindow::SdrPaintWindow: Could not allocate an overlayManager (!)");
-
-            // Request a repaint so that the buffered overlay manager fills
-            // its buffer properly.  This is a workaround for missing buffer
-            // updates.
-            if (!comphelper::LibreOfficeKit::isActive())
-            {
-                rWindow.Invalidate();
-            }
-
-            Color aColA(GetPaintView().getOptionsDrawinglayer().GetStripeColorA());
-            Color aColB(GetPaintView().getOptionsDrawinglayer().GetStripeColorB());
-
-            if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
-            {
-                aColA = aColB = Application::GetSettings().GetStyleSettings().GetHighlightColor();
-                aColB.Invert();
-            }
-
-            mxOverlayManager->setStripeColorA(aColA);
-            mxOverlayManager->setStripeColorB(aColB);
-            mxOverlayManager->setStripeLengthPixel(GetPaintView().getOptionsDrawinglayer().GetStripeLength());
-        }
-    }
+        mxOverlayManager = GetPaintView().CreateOverlayManager(GetOutputDevice());
 }
 
 SdrPaintWindow::SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut, vcl::Window* pWindow)
