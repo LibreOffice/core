@@ -44,6 +44,9 @@ private:
     CGLayerRef mxLayer;              // Quartz layer
     AquaSalGraphics* mpGraphics;     // current VirDev graphics
 
+    long mnWidth;
+    long mnHeight;
+
     void Destroy();
 
 public:
@@ -54,8 +57,15 @@ public:
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) override;
     virtual bool                    SetSize( long nNewDX, long nNewDY ) override;
 
-    virtual long GetWidth() const override;
-    virtual long GetHeight() const override;
+    long GetWidth() const override
+    {
+        return mnWidth;
+    }
+
+    long GetHeight() const override
+    {
+        return mnHeight;
+    }
 };
 
 #endif // INCLUDED_VCL_INC_QUARTZ_SALVD_H
