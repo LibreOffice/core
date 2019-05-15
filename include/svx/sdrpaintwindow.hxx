@@ -87,6 +87,8 @@ private:
     // #i72889# flag if this is only a temporary target for repaint, default is false
     bool                                                mbTemporaryTarget : 1;
 
+    bool                                                mbOutputToWindow : 1;
+
     // helpers
     void impCreateOverlayManager();
 
@@ -112,7 +114,9 @@ public:
     bool OutputToPrinter() const { return (OUTDEV_PRINTER == mpOutputDevice->GetOutDevType()); }
 
     // Is OutDev a window?
-    bool OutputToWindow() const { return (OUTDEV_WINDOW == mpOutputDevice->GetOutDevType()); }
+    bool OutputToWindow() const { return mbOutputToWindow; }
+
+    void SetOutputToWindow(bool bOutputToWindow) { mbOutputToWindow = bOutputToWindow; }
 
     // Is OutDev a VirtualDevice?
     bool OutputIsVirtualDevice() const { return mpOutputDevice->IsVirtual(); }
