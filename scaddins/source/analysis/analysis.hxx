@@ -24,22 +24,17 @@
 #include <com/sun/star/sheet/XAddIn.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/addin/XAnalysis.hpp>
-#include <com/sun/star/sheet/LocalizedName.hpp>
 #include <com/sun/star/sheet/XCompatibilityNames.hpp>
-#include <com/sun/star/sheet/NoConvergenceException.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
-#include "analysisdefs.hxx"
 #include "analysishelper.hxx"
 
 #include <memory>
 
-namespace sca { namespace analysis {
-    class ConvertDataList;
-} }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
+namespace com::sun::star::sheet { struct LocalizedName; }
 
 css::uno::Reference< css::uno::XInterface > AnalysisAddIn_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
 

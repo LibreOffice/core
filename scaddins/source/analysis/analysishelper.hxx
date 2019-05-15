@@ -20,23 +20,16 @@
 #define INCLUDED_SCADDINS_SOURCE_ANALYSIS_ANALYSISHELPER_HXX
 
 
-#include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/XNumberFormatter2.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/sheet/XAddIn.hpp>
-#include <com/sun/star/sheet/addin/XAnalysis.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <math.h>
-
-#include "analysisdefs.hxx"
 
 #include <memory>
 #include <vector>
 
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::util { class XNumberFormatter2; }
 
 namespace sca { namespace analysis {
 
@@ -506,8 +499,6 @@ enum ConvertDataClass
 
 #define INV_MATCHLEV        1764                    // guess, what this is... :-)
 
-
-class ConvertDataList;
 
 class ConvertData
 {

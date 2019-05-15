@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "analysisdefs.hxx"
 #include "analysis.hxx"
 #include "analysishelper.hxx"
 #include <o3tl/temporary.hxx>

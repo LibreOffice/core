@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 
@@ -24,9 +25,9 @@
 #include <stdio.h>
 #include <o3tl/any.hxx>
 #include <rtl/math.hxx>
-#include <sal/macros.h>
 #include <algorithm>
 #include <memory>
+#include "analysisdefs.hxx"
 #include "analysishelper.hxx"
 #include <analysis.hrc>
 #include <strings.hrc>

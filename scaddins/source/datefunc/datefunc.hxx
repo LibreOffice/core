@@ -22,17 +22,17 @@
 #ifndef INCLUDED_SCADDINS_SOURCE_DATEFUNC_DATEFUNC_HXX
 #define INCLUDED_SCADDINS_SOURCE_DATEFUNC_DATEFUNC_HXX
 
-#include <string.h>
 #include <vector>
 #include <memory>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XAddIn.hpp>
 #include <com/sun/star/sheet/XCompatibilityNames.hpp>
 #include <com/sun/star/sheet/addin/XDateFunctions.hpp>
 #include <com/sun/star/sheet/addin/XMiscFunctions.hpp>
 #include <cppuhelper/implbase.hxx>
+
+namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 enum class ScaCategory
 {

@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SCADDINS_SOURCE_ANALYSIS_BESSEL_HXX
 #define INCLUDED_SCADDINS_SOURCE_ANALYSIS_BESSEL_HXX
 
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/sheet/NoConvergenceException.hpp>
 #include <sal/types.h>
 
 namespace sca {
