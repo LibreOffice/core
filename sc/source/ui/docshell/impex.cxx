@@ -50,6 +50,7 @@
 #include <tokenarray.hxx>
 #include <documentimport.hxx>
 #include <refundo.hxx>
+#include <mtvelements.hxx>
 
 #include <globstr.hrc>
 #include <scresid.hxx>
@@ -1654,6 +1655,10 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
 
     bool bConvertLF = (GetSystemLineEnd() != LINEEND_LF);
 
+    // We need to cache sc::ColumnBlockPosition per each column, tab is always nStartTab.
+    std::vector< sc::ColumnBlockPosition > blockPos( nEndCol + 1 );
+    for( SCCOL i = nStartCol; i <= nEndCol; ++i )
+        pDoc->InitColumnBlockPosition( blockPos[ i - nStartCol ], nStartTab, i );
     for (nRow = nStartRow; nRow <= nEndRow; nRow++)
     {
         if (bIncludeFiltered || !pDoc->RowFiltered( nRow, nStartTab ))
@@ -1664,7 +1669,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                 sal_uInt32 nNumFmt = pDoc->GetNumberFormat(aPos);
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
 
-                ScRefCellValue aCell(*pDoc, aPos);
+                ScRefCellValue aCell(*pDoc, aPos, blockPos[ nCol - nStartCol ]);
                 switch (aCell.meType)
                 {
                     case CELLTYPE_FORMULA:
