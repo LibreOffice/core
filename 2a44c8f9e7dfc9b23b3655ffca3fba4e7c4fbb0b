@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_8ac2f084",
+        "filename": "vcl/source/control/notebookbar.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-15T20:10:29Z",
+      "side": 1,
+      "message": "Don\u0027t we need to close the file, free the handler?",
+      "revId": "2a44c8f9e7dfc9b23b3655ffca3fba4e7c4fbb0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
