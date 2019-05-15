@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -44,7 +43,6 @@
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
@@ -61,6 +59,9 @@
 #include <vector>
 #include <algorithm>
 #include <string.h>
+
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::beans { struct NamedValue; }
 
 using ::osl::Mutex;
 using ::osl::Guard;

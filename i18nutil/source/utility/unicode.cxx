@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/i18n/UnicodeType.hpp>
-#include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/languagetagicu.hxx>
