@@ -709,7 +709,10 @@ namespace dbaui
         if ( aFileDlg.Execute() == ERRCODE_NONE )
         {
             OUString sPath = aFileDlg.GetPath();
-            if ( aFileDlg.GetCurrentFilter() != pFilter->GetUIName() || !pFilter->GetWildcard().Matches(sPath) )
+            // check for aFileDlg.GetCurrentFilter used to be here but current fpicker filter
+            // can be set to anything, see tdf#125267 how this breaks if other value
+            // than 'ODF Database' is selected. Let's therefore check only if wildcard matches
+            if ( !pFilter->GetWildcard().Matches(sPath) )
             {
                 OUString sMessage(DBA_RES(STR_ERR_USE_CONNECT_TO));
                 std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
