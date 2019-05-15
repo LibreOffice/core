@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_6acf647f",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-05-15T21:35:15Z",
+      "side": 1,
+      "message": "Yep, selection clipboard is text-only",
+      "range": {
+        "startLine": 253,
+        "startChar": 10,
+        "endLine": 254,
+        "endChar": 23
+      },
+      "revId": "4bab5cc2849d5053ed446b1e365eded9e2be4a3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
