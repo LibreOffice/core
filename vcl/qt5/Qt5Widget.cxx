@@ -499,7 +499,8 @@ void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
 
         const sal_Int32 nLength = aInputEvent.maText.getLength();
         const QList<QInputMethodEvent::Attribute>& rAttrList = pEvent->attributes();
-        std::vector<ExtTextInputAttr> aTextAttrs(std::max(1, nLength), ExtTextInputAttr::NONE);
+        std::vector<ExtTextInputAttr> aTextAttrs(std::max(static_cast<sal_Int32>(1), nLength),
+                                                 ExtTextInputAttr::NONE);
         aInputEvent.mpTextAttr = &aTextAttrs[0];
 
         for (int i = 0; i < rAttrList.size(); ++i)
