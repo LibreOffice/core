@@ -536,9 +536,9 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
         if (noReturnType
             && !(functionDecl->isVirtualAsWritten()
                  || (isa<CXXConstructorDecl>(functionDecl)
-                     && cast<CXXConstructorDecl>(functionDecl)->isExplicitSpecified())
+                     && compat::isExplicitSpecified(cast<CXXConstructorDecl>(functionDecl)))
                  || (isa<CXXConversionDecl>(functionDecl)
-                     && cast<CXXConversionDecl>(functionDecl)->isExplicitSpecified())))
+                     && compat::isExplicitSpecified(cast<CXXConversionDecl>(functionDecl)))))
         {
             SourceLocation endLoc1;
             if (macroStartLoc.isMacroID()
