@@ -286,7 +286,7 @@ struct ComparePartial
     }
 };
 
-// Adds a array of XMLPropertyState ( vector< XMLPropertyState > ) to list
+// Adds an array of XMLPropertyState ( vector< XMLPropertyState > ) to list
 // if not added, yet.
 
 bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek )
@@ -312,7 +312,7 @@ bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vector<
 }
 
 
-// Adds a array of XMLPropertyState ( vector< XMLPropertyState > ) with a given name.
+// Adds an array of XMLPropertyState ( vector< XMLPropertyState > ) with a given name.
 // If the name exists already, nothing is done. If a style with a different name and
 // the same properties exists, a new one is added (like with bDontSeek).
 
@@ -333,7 +333,7 @@ bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, const ve
 }
 
 
-// Search for a array of XMLPropertyState ( vector< XMLPropertyState > ) in list
+// Search for an array of XMLPropertyState ( vector< XMLPropertyState > ) in list
 
 
 OUString XMLAutoStylePoolParent::Find( const XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties ) const
@@ -465,7 +465,7 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
     std::copy( aNames.begin(), aNames.end(), rNames.getArray() );
 }
 
-// Adds a array of XMLPropertyState ( vector< XMLPropertyState > ) to list
+// Adds an array of XMLPropertyState ( vector< XMLPropertyState > ) to list
 // if not added, yet.
 
 bool SvXMLAutoStylePoolP_Impl::Add(
@@ -520,7 +520,7 @@ bool SvXMLAutoStylePoolP_Impl::AddNamed(
 }
 
 
-// Search for a array of XMLPropertyState ( vector< XMLPropertyState > ) in list
+// Search for an array of XMLPropertyState ( vector< XMLPropertyState > ) in list
 
 
 OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
