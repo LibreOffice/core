@@ -314,6 +314,8 @@ STDMETHODIMP COMOpenDocuments::CreateNewDocument2(
     BSTR /*bstrDefaultSaveLocation*/, // A string that contains the path that specifies a suggested default location for saving the new document
     VARIANT_BOOL* pbResult)           // true if the document creation succeeds; otherwise false
 {
+    if (!pbResult)
+        return E_POINTER;
     // TODO: resolve the program from varProgID (nullptr -> default?)
     HRESULT hr = LOStart(L"-n", bstrTemplateLocation, m_aObjectSafety.GetSafe_forUntrustedCaller() || m_aObjectSafety.GetSafe_forUntrustedData());
     *pbResult = toVBool(SUCCEEDED(hr));
@@ -365,6 +367,8 @@ STDMETHODIMP COMOpenDocuments::ViewDocument3(
     VARIANT /*varProgID*/,     // An optional string that contains the ProgID of the application with which to open the document. If this argument is omitted, the default viewer for the document is used
     VARIANT_BOOL *pbResult)    // true if the document was successfully opened; otherwise false
 {
+    if (!pbResult)
+        return E_POINTER;
     // TODO: resolve the program from varProgID (nullptr -> default?)
     HRESULT hr = LOStart(L"--view", bstrDocumentLocation, m_aObjectSafety.GetSafe_forUntrustedCaller() || m_aObjectSafety.GetSafe_forUntrustedData());
     *pbResult = toVBool(SUCCEEDED(hr));
@@ -427,6 +431,8 @@ STDMETHODIMP COMOpenDocuments::EditDocument3(
     VARIANT /*varProgID*/,          // An optional string that contains the ProgID of the application with which to edit the document. If this argument is omitted, the default editor for the document is used
     VARIANT_BOOL *pbResult)     // true if the document was successfully opened; otherwise false
 {
+    if (!pbResult)
+        return E_POINTER;
     // TODO: resolve the program from varProgID (nullptr -> default?)
     HRESULT hr = LOStart(L"-o", bstrDocumentLocation, m_aObjectSafety.GetSafe_forUntrustedCaller() || m_aObjectSafety.GetSafe_forUntrustedData());
     *pbResult = toVBool(SUCCEEDED(hr));
