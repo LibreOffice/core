@@ -168,6 +168,22 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegio
     mpPreRenderDevice->EnableMapMode(bMapModeWasEnabledSource);
 }
 
+void SdrPaintView::InitOverlayManager(rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager) const
+{
+    Color aColA(getOptionsDrawinglayer().GetStripeColorA());
+    Color aColB(getOptionsDrawinglayer().GetStripeColorB());
+
+    if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+    {
+        aColA = aColB = Application::GetSettings().GetStyleSettings().GetHighlightColor();
+        aColB.Invert();
+    }
+
+    xOverlayManager->setStripeColorA(aColA);
+    xOverlayManager->setStripeColorB(aColB);
+    xOverlayManager->setStripeLengthPixel(getOptionsDrawinglayer().GetStripeLength());
+}
+
 rtl::Reference<sdr::overlay::OverlayManager> SdrPaintView::CreateOverlayManager(OutputDevice& rOutputDevice) const
 {
     rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager;
@@ -204,18 +220,7 @@ rtl::Reference<sdr::overlay::OverlayManager> SdrPaintView::CreateOverlayManager(
             rWindow.Invalidate();
         }
 
-        Color aColA(getOptionsDrawinglayer().GetStripeColorA());
-        Color aColB(getOptionsDrawinglayer().GetStripeColorB());
-
-        if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
-        {
-            aColA = aColB = Application::GetSettings().GetStyleSettings().GetHighlightColor();
-            aColB.Invert();
-        }
-
-        xOverlayManager->setStripeColorA(aColA);
-        xOverlayManager->setStripeColorB(aColB);
-        xOverlayManager->setStripeLengthPixel(getOptionsDrawinglayer().GetStripeLength());
+        InitOverlayManager(xOverlayManager);
     }
     return xOverlayManager;
 }

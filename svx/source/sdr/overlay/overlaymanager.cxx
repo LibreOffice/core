@@ -283,34 +283,37 @@ namespace sdr
             }
         }
 
+        tools::Rectangle OverlayManager::RangeToInvalidateRectangle(const basegfx::B2DRange& rRange) const
+        {
+            if (getDrawinglayerOpt().IsAntiAliasing())
+            {
+                // assume AA needs one pixel more and invalidate one pixel more
+                const double fDiscreteOne(getDiscreteOne());
+                const tools::Rectangle aInvalidateRectangle(
+                    static_cast<sal_Int32>(floor(rRange.getMinX() - fDiscreteOne)),
+                    static_cast<sal_Int32>(floor(rRange.getMinY() - fDiscreteOne)),
+                    static_cast<sal_Int32>(ceil(rRange.getMaxX() + fDiscreteOne)),
+                    static_cast<sal_Int32>(ceil(rRange.getMaxY() + fDiscreteOne)));
+                return aInvalidateRectangle;
+            }
+            else
+            {
+                // #i77674# transform to rectangle. Use floor/ceil to get all covered
+                // discrete pixels, see #i75163# and OverlayManagerBuffered::invalidateRange
+                const tools::Rectangle aInvalidateRectangle(
+                    static_cast<sal_Int32>(floor(rRange.getMinX())), static_cast<sal_Int32>(floor(rRange.getMinY())),
+                    static_cast<sal_Int32>(ceil(rRange.getMaxX())), static_cast<sal_Int32>(ceil(rRange.getMaxY())));
+                return aInvalidateRectangle;
+            }
+        }
+
         void OverlayManager::invalidateRange(const basegfx::B2DRange& rRange)
         {
-            if(OUTDEV_WINDOW == getOutputDevice().GetOutDevType())
+            if (OUTDEV_WINDOW == getOutputDevice().GetOutDevType())
             {
-                if(getDrawinglayerOpt().IsAntiAliasing())
-                {
-                    // assume AA needs one pixel more and invalidate one pixel more
-                    const double fDiscreteOne(getDiscreteOne());
-                    const tools::Rectangle aInvalidateRectangle(
-                        static_cast<sal_Int32>(floor(rRange.getMinX() - fDiscreteOne)),
-                        static_cast<sal_Int32>(floor(rRange.getMinY() - fDiscreteOne)),
-                        static_cast<sal_Int32>(ceil(rRange.getMaxX() + fDiscreteOne)),
-                        static_cast<sal_Int32>(ceil(rRange.getMaxY() + fDiscreteOne)));
-
-                    // simply invalidate
-                    static_cast<vcl::Window&>(getOutputDevice()).Invalidate(aInvalidateRectangle, InvalidateFlags::NoErase);
-                }
-                else
-                {
-                    // #i77674# transform to rectangle. Use floor/ceil to get all covered
-                    // discrete pixels, see #i75163# and OverlayManagerBuffered::invalidateRange
-                    const tools::Rectangle aInvalidateRectangle(
-                        static_cast<sal_Int32>(floor(rRange.getMinX())), static_cast<sal_Int32>(floor(rRange.getMinY())),
-                        static_cast<sal_Int32>(ceil(rRange.getMaxX())), static_cast<sal_Int32>(ceil(rRange.getMaxY())));
-
-                    // simply invalidate
-                    static_cast<vcl::Window&>(getOutputDevice()).Invalidate(aInvalidateRectangle, InvalidateFlags::NoErase);
-                }
+                tools::Rectangle aInvalidateRectangle(RangeToInvalidateRectangle(rRange));
+                // simply invalidate
+                static_cast<vcl::Window&>(getOutputDevice()).Invalidate(aInvalidateRectangle, InvalidateFlags::NoErase);
             }
         }
 
