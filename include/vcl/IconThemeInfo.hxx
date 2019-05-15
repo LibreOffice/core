@@ -51,7 +51,7 @@ public:
      */
     static Size SizeByThemeName(const OUString&);
 
-    /** Check whether a IconThemeInfo can be constructed from a URL */
+    /** Check whether an IconThemeInfo can be constructed from a URL */
     static bool UrlCanBeParsed(const OUString& url);
 
     /** Find an icon theme by its id in a vector.
