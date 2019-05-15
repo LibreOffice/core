@@ -16,6 +16,24 @@
       "revId": "2a44c8f9e7dfc9b23b3655ffca3fba4e7c4fbb0b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_ea3614b5",
+        "filename": "vcl/source/control/notebookbar.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-15T20:15:15Z",
+      "side": 1,
+      "message": "Maybe use C++ style - File class from https://opengrok.libreoffice.org/xref/core/include/osl/file.hxx",
+      "parentUuid": "3fa0c359_8ac2f084",
+      "revId": "2a44c8f9e7dfc9b23b3655ffca3fba4e7c4fbb0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
