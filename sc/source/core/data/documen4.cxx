@@ -782,19 +782,24 @@ const SfxPoolItem* ScDocument::GetEffItem(
     return nullptr;
 }
 
-const SfxItemSet* ScDocument::GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
+const SfxItemSet* ScDocument::GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab, ScRefCellValue* pCell ) const
 {
     ScConditionalFormatList* pFormatList = GetCondFormList(nTab);
     if (!pFormatList)
         return nullptr;
 
     ScAddress aPos(nCol, nRow, nTab);
-    ScRefCellValue aCell(const_cast<ScDocument&>(*this), aPos);
+    ScRefCellValue aCell;
+    if( pCell == nullptr )
+    {
+        aCell.assign(const_cast<ScDocument&>(*this), aPos);
+        pCell = &aCell;
+    }
     const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
     const ScCondFormatIndexes& rIndex =
         pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
 
-    return GetCondResult(aCell, aPos, *pFormatList, rIndex);
+    return GetCondResult(*pCell, aPos, *pFormatList, rIndex);
 }
 
 const SfxItemSet* ScDocument::GetCondResult(

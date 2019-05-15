@@ -59,6 +59,7 @@
 #include <editutil.hxx>
 #include <ftools.hxx>
 #include <cellvalue.hxx>
+#include <mtvelements.hxx>
 
 #include <editeng/flditem.hxx>
 #include <editeng/borderline.hxx>
@@ -764,6 +765,10 @@ void ScHTMLExport::WriteTables()
         // At least old (3.x, 4.x?) Netscape doesn't follow <TABLE COLS=n> and
         // <COL WIDTH=x> specified, but needs a width at every column.
         bool bHasHiddenRows = pDoc->HasHiddenRows(nStartRow, nEndRow, nTab);
+        // We need to cache sc::ColumnBlockPosition per each column.
+        std::vector< sc::ColumnBlockPosition > blockPos( nEndCol + 1 );
+        for( SCCOL i = nStartCol; i <= nEndCol; ++i )
+            pDoc->InitColumnBlockPosition( blockPos[ i - nStartCol ], nTab, i );
         for ( SCROW nRow=nStartRow; nRow<=nEndRow; nRow++ )
         {
             if ( bHasHiddenRows && pDoc->RowHidden(nRow, nTab) )
@@ -782,7 +787,7 @@ void ScHTMLExport::WriteTables()
 
                 if ( nCol2 == nEndCol )
                     IncIndent(-1);
-                WriteCell( nCol2, nRow, nTab );
+                WriteCell( blockPos[ nCol2 - nStartCol ], nCol2, nRow, nTab );
                 bTableDataHeight = false;
             }
 
@@ -822,16 +827,17 @@ void ScHTMLExport::WriteTables()
     }
 }
 
-void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
+void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
+    ScAddress aPos( nCol, nRow, nTab );
+    ScRefCellValue aCell(*pDoc, aPos, rBlockPos);
     const ScPatternAttr* pAttr = pDoc->GetPattern( nCol, nRow, nTab );
-    const SfxItemSet* pCondItemSet = pDoc->GetCondResult( nCol, nRow, nTab );
+    const SfxItemSet* pCondItemSet = pDoc->GetCondResult( nCol, nRow, nTab, &aCell );
 
     const ScMergeFlagAttr& rMergeFlagAttr = pAttr->GetItem( ATTR_MERGE_FLAG, pCondItemSet );
     if ( rMergeFlagAttr.IsOverlapped() )
         return ;
 
-    ScAddress aPos( nCol, nRow, nTab );
     ScHTMLGraphEntry* pGraphEntry = nullptr;
     if ( bTabHasGraphics && !mbSkipImages )
     {
@@ -852,13 +858,11 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         }
     }
 
-    ScRefCellValue aCell(*pDoc, aPos);
-
     sal_uInt32 nFormat = pAttr->GetNumberFormat( pFormatter );
     bool bValueData = aCell.hasNumeric();
     SvtScriptType nScriptType = SvtScriptType::NONE;
     if (!aCell.isEmpty())
-        nScriptType = pDoc->GetScriptType(nCol, nRow, nTab);
+        nScriptType = pDoc->GetScriptType(nCol, nRow, nTab, &aCell);
 
     if ( nScriptType == SvtScriptType::NONE )
         nScriptType = aHTMLStyle.nDefaultScriptType;
