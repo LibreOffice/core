@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_27fd153a",
+        "filename": "vcl/source/control/notebookbar.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-15T16:20:25Z",
+      "side": 1,
+      "message": "please add separate method doesFileExist",
+      "revId": "280b5f6cc15afbb797dfa31989b4f9a0c7aebbb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_8700a936",
+        "filename": "vcl/source/control/notebookbar.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-15T16:20:25Z",
+      "side": 1,
+      "message": "in the if else statement please just assign OUString value which will be passed to the builder - cleaner code",
+      "revId": "280b5f6cc15afbb797dfa31989b4f9a0c7aebbb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_47faa142",
+        "filename": "vcl/source/control/notebookbar.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-15T16:20:25Z",
+      "side": 1,
+      "message": "I prefer more meaningful name like getCustomizedUIRootDir()",
+      "revId": "280b5f6cc15afbb797dfa31989b4f9a0c7aebbb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
