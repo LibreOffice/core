@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_6769ddbc",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Common.xcu",
+        "patchSetId": 7
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-05-15T10:24:53Z",
+      "side": 1,
+      "message": "Trailing slash not effective yet but requested at infra for consistency",
+      "revId": "b15ccfd28a2da242f0a720970d4af024830d36d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
