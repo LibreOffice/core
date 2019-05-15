@@ -943,7 +943,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
         default:
             //TypeClass_SERVICE:
             //TypeClass_EXCEPTION:
-            //When a InvocationTargetException is thrown when calling XInvocation::invoke
+            //When an InvocationTargetException is thrown when calling XInvocation::invoke
             //on a UNO object, then the target exception is directly used to create a
             //EXEPINFO structure
             //TypeClass_TYPEDEF
