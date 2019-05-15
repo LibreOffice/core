@@ -27,7 +27,7 @@ information in that file, you can write your XPath expression to turn that into
 a testcase.
 
 (Similarly, Shift-F12 produces a `nodes.xml` for the document model dump, but
-it's unlikely that you'll need that in a unit test.)
+it's unlikely that you'll need that in an unit test.)
 
 == Export tests
 
@@ -133,7 +133,7 @@ CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, "IsLandscape"));
 === sal_Bool
 
 In case a UNO method returns sal_Bool, and the assert fails, CppUnit won't be
-able to print a usable error message, as it will think that the value is a
+able to print an usable error message, as it will think that the value is a
 printable character. Best to use `bool` for the expected value and cast the
 actual value to `bool` as well before comparing.
 
