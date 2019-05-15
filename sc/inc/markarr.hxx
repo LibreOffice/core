@@ -23,6 +23,8 @@
 #include "address.hxx"
 #include <memory>
 
+class ScRangeList;
+
 #define SC_MARKARRAY_DELTA    4
 
 struct ScMarkEntry
@@ -53,6 +55,7 @@ public:
     void    Reset( bool bMarked = false, SCSIZE nNeeded = 1 );
     bool    GetMark( SCROW nRow ) const;
     void    SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked );
+    void    Set( std::vector<ScMarkEntry> const & );
     bool    IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const;
     bool    HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const;
 
