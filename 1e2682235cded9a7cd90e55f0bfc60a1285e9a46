@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_75042618",
+        "filename": "solenv/clang-format/blacklist",
+        "patchSetId": 15
+      },
+      "lineNbr": 4070,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2019-05-15T09:04:45Z",
+      "side": 1,
+      "message": "Yes - the format used is bad - which is of course a question of personal preferences.\nI have no idea how this was agreed upon. Having func params being tabbed below the 1st param which has to be after the opening bracket makes stuff *unreadable* with long func names - what happens more often. Just one point of many - how about making a \u0027vote\u0027 for a standard formatting?\nAnd does a OpenSource project need that at all --- we talk about freedom for everyone (see above - personal preferences), limited by - of course - places where you \u0027hurt\u0027 others. But is code formatting hurting others...? I have doubts...",
+      "parentUuid": "3fa0c359_e303c10e",
+      "revId": "1e2682235cded9a7cd90e55f0bfc60a1285e9a46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_cea01aa9",
         "filename": "sw/source/core/doc/tblafmt.cxx",
         "patchSetId": 15
