@@ -75,9 +75,6 @@
 #include <cmath>
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
@@ -4051,48 +4048,6 @@ void GtkSalFrame::IMHandler::signalIMPreeditEnd( GtkIMContext*, gpointer im_hand
         pThis->updateIMSpotLocation();
 }
 
-static uno::Reference<accessibility::XAccessibleEditableText>
-    FindFocus(uno::Reference< accessibility::XAccessibleContext > const & xContext)
-{
-    if (!xContext.is())
-        return uno::Reference< accessibility::XAccessibleEditableText >();
-
-    uno::Reference<accessibility::XAccessibleStateSet> xState = xContext->getAccessibleStateSet();
-    if (xState.is())
-    {
-        if (xState->contains(accessibility::AccessibleStateType::FOCUSED))
-        {
-            uno::Reference< accessibility::XAccessibleEditableText > xText =
-                uno::Reference<accessibility::XAccessibleEditableText>(xContext, uno::UNO_QUERY);
-            if (xText.is())
-                return xText;
-            if (xState->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS))
-                return uno::Reference< accessibility::XAccessibleEditableText >();
-        }
-    }
-
-    bool bSafeToIterate = true;
-    sal_Int32 nCount = xContext->getAccessibleChildCount();
-    if (nCount < 0 || nCount > SAL_MAX_UINT16 /* slow enough for anyone */)
-        bSafeToIterate = false;
-    if (!bSafeToIterate)
-        return uno::Reference< accessibility::XAccessibleEditableText >();
-
-    for (sal_Int32 i = 0; i < xContext->getAccessibleChildCount(); ++i)
-    {
-        uno::Reference< accessibility::XAccessible > xChild = xContext->getAccessibleChild(i);
-        if (!xChild.is())
-            continue;
-        uno::Reference< accessibility::XAccessibleContext > xChildContext = xChild->getAccessibleContext();
-        if (!xChildContext.is())
-            continue;
-        uno::Reference< accessibility::XAccessibleEditableText > xText = FindFocus(xChildContext);
-        if (xText.is())
-            return xText;
-    }
-    return uno::Reference< accessibility::XAccessibleEditableText >();
-}
-
 static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText(vcl::Window *pFocusWin)
 {
     uno::Reference<accessibility::XAccessibleEditableText> xText;
@@ -4100,7 +4055,7 @@ static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText(vcl::
     {
         uno::Reference< accessibility::XAccessible > xAccessible( pFocusWin->GetAccessible() );
         if (xAccessible.is())
-            xText = FindFocus(xAccessible->getAccessibleContext());
+            xText = FindFocusedEditableText(xAccessible->getAccessibleContext());
     }
     catch(const uno::Exception& e)
     {
