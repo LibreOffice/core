@@ -132,11 +132,9 @@ private:
 
 class AquaSalGraphics : public SalGraphics
 {
-    CGLayerRef mxLayer; // Quartz graphics layer
+    CGLayerHolder maLayer; // Quartz graphics layer
     CGContextHolder maContextHolder;  // Quartz drawing context
-#ifdef MACOSX
-    AquaSalFrame*                           mpFrame;
-#endif
+
     XorEmulation*                           mpXorEmulation;
     int                                     mnXorMode; // 0: off 1: on 2: invert only
     int                                     mnWidth;
@@ -160,6 +158,10 @@ class AquaSalGraphics : public SalGraphics
     RGBAColor                               maTextColor;
     /// allows text to be rendered without antialiasing
     bool                                    mbNonAntialiasedText;
+
+#ifdef MACOSX
+    AquaSalFrame*                           mpFrame;
+#endif
 
     // Graphics types
 
@@ -187,7 +189,7 @@ public:
 
     void                    SetWindowGraphics( AquaSalFrame* pFrame );
     void                    SetPrinterGraphics( CGContextRef, long nRealDPIX, long nRealDPIY );
-    void                    SetVirDevGraphics( CGLayerRef, CGContextRef, int nBitDepth = 0 );
+    void                    SetVirDevGraphics(CGLayerHolder const & rLayer, CGContextRef, int nBitDepth = 0);
 #ifdef MACOSX
     void                    initResolution( NSWindow* );
     void                    copyResolution( AquaSalGraphics& );

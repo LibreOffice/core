@@ -89,7 +89,7 @@ private:
                                        sal_uInt16 nSrcBits, sal_uInt32 nSrcBytesPerRow, const BitmapPalette& rSrcPalette, sal_uInt8* pSrcData );
 
 public:
-    bool            Create( CGLayerRef xLayer, int nBitCount, int nX, int nY, int nWidth, int nHeight, bool bFlipped );
+    bool            Create(CGLayerHolder const & rLayerHolder, int nBitCount, int nX, int nY, int nWidth, int nHeight, bool bFlipped);
 
 public:
     CGImageRef      CreateWithMask( const QuartzSalBitmap& rMask, int nX, int nY, int nWidth, int nHeight ) const;

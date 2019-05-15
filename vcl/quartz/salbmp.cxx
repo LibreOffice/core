@@ -69,10 +69,9 @@ QuartzSalBitmap::~QuartzSalBitmap()
     Destroy();
 }
 
-bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
-    int nX, int nY, int nWidth, int nHeight, bool bFlipped )
+bool QuartzSalBitmap::Create(CGLayerHolder const & rLayerHolder, int nBitmapBits, int nX, int nY, int nWidth, int nHeight, bool bFlipped)
 {
-    SAL_WARN_IF( !xLayer, "vcl", "QuartzSalBitmap::Create() from non-layered context" );
+    SAL_WARN_IF(!rLayerHolder.isSet(), "vcl", "QuartzSalBitmap::Create() from non-layered context");
 
     // sanitize input parameters
     if( nX < 0 ) {
@@ -85,8 +84,8 @@ bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
         nY = 0;
     }
 
-    const CGSize aLayerSize = CGLayerGetSize( xLayer );
-    SAL_INFO("vcl.cg", "CGLayerGetSize(" << xLayer << ") = " << aLayerSize );
+    const CGSize aLayerSize = CGLayerGetSize(rLayerHolder.get());
+    SAL_INFO("vcl.cg", "CGLayerGetSize(" << rLayerHolder.get() << ") = " << aLayerSize );
     if( nWidth >= static_cast<int>(aLayerSize.width) - nX )
         nWidth = static_cast<int>(aLayerSize.width) - nX;
 
@@ -108,7 +107,7 @@ bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
     const CGPoint aSrcPoint = { static_cast<CGFloat>(-nX), static_cast<CGFloat>(-nY) };
     if(mxGraphicContext) // remove warning
     {
-        SAL_INFO("vcl.cg", "CGContextDrawLayerAtPoint(" << mxGraphicContext << "," << aSrcPoint << "," << xLayer << ")" );
+        SAL_INFO("vcl.cg", "CGContextDrawLayerAtPoint(" << mxGraphicContext << "," << aSrcPoint << "," << rLayerHolder.get() << ")" );
         if( bFlipped )
         {
             SAL_INFO( "vcl.cg", "CGContextTranslateCTM(" << mxGraphicContext << ",0," << mnHeight << ")" );
@@ -117,7 +116,7 @@ bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
             CGContextScaleCTM( mxGraphicContext, +1, -1 );
         }
 
-        CGContextDrawLayerAtPoint( mxGraphicContext, aSrcPoint, xLayer );
+        CGContextDrawLayerAtPoint( mxGraphicContext, aSrcPoint, rLayerHolder.get() );
     }
     return true;
 }
