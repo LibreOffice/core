@@ -594,9 +594,10 @@ SvpSalGraphics::SvpSalGraphics()
     , m_ePaintMode(PaintMode::Over)
     , m_aTextRenderImpl(*this)
 {
-    if (!initWidgetDrawBackends())
+    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+    if (!initWidgetDrawBackends(bLOKActive))
     {
-        if (comphelper::LibreOfficeKit::isActive())
+        if (bLOKActive)
             m_pWidgetDraw.reset(new vcl::CustomWidgetDraw(*this));
     }
 }
