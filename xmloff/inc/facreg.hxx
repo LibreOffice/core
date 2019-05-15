@@ -83,11 +83,6 @@ css::uno::Reference<css::uno::XInterface> XMLImpressSettingsExportOOO_createInst
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // draw oasis import
-OUString XMLDrawImportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> XMLDrawImportOasis_getSupportedServiceNames() throw();
-/// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> XMLDrawImportOasis_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 OUString XMLDrawStylesImportOasis_getImplementationName() throw();
 css::uno::Sequence<OUString> XMLDrawStylesImportOasis_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception

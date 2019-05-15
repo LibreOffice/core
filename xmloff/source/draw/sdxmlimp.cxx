@@ -281,7 +281,12 @@ com_sun_star_comp_Impress_XMLOasisImporter_get_implementation(
         new SdXMLImport(pCtx, "XMLImpressImportOasis", false, SvXMLImportFlags::ALL));
 }
 
-SERVICE( XMLDrawImportOasis, "com.sun.star.comp.Draw.XMLOasisImporter", "XMLDrawImportOasis", true, SvXMLImportFlags::ALL )
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Draw_XMLOasisImporter_get_implementation(uno::XComponentContext* pCtx,
+                                                           uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new SdXMLImport(pCtx, "XMLDrawImportOasis", true, SvXMLImportFlags::ALL));
+}
 
 SERVICE( XMLImpressStylesImportOasis, "com.sun.star.comp.Impress.XMLOasisStylesImporter", "XMLImpressStylesImportOasis", false, SvXMLImportFlags::STYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::MASTERSTYLES )
 SERVICE( XMLDrawStylesImportOasis, "com.sun.star.comp.Draw.XMLOasisStylesImporter", "XMLImpressStylesImportOasis", true, SvXMLImportFlags::STYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::MASTERSTYLES )

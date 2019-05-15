@@ -72,7 +72,6 @@ XMLOFF_DLLPUBLIC void * xo_component_getFactory( const sal_Char * pImplName, voi
         else SINGLEFACTORY( XMLImpressSettingsExportOOO )
 
         // draw oasis import
-        else SINGLEFACTORY( XMLDrawImportOasis )
         else SINGLEFACTORY( XMLDrawStylesImportOasis )
         else SINGLEFACTORY( XMLDrawContentImportOasis )
         else SINGLEFACTORY( XMLDrawMetaImportOasis )
