@@ -946,7 +946,7 @@ inline bool ScRefAddress::operator==( const ScRefAddress& rRefAddress ) const
 #define BCA_BRDCST_ALWAYS ScAddress( 0, SCROW_MAX, 0 )
 #define BCA_LISTEN_ALWAYS ScRange( BCA_BRDCST_ALWAYS, BCA_BRDCST_ALWAYS )
 
-template< typename T > void PutInOrder( T& nStart, T& nEnd )
+template< typename T > inline void PutInOrder( T& nStart, T& nEnd )
 {
     if (nEnd < nStart)
     {
