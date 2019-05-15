@@ -8406,7 +8406,9 @@ public:
 
     virtual void queue_draw_area(int x, int y, int width, int height) override
     {
-        gtk_widget_queue_draw_area(GTK_WIDGET(m_pDrawingArea), x, y, width, height);
+        tools::Rectangle aRect(Point(x, y), Size(width, height));
+        aRect = m_xDevice->LogicToPixel(aRect);
+        gtk_widget_queue_draw_area(GTK_WIDGET(m_pDrawingArea), aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight());
     }
 
     virtual void queue_resize() override
