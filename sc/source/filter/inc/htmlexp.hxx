@@ -42,6 +42,10 @@ class EditTextObject;
 enum class SvtScriptType;
 namespace editeng { class SvxBorderLine; }
 
+namespace sc {
+struct ColumnBlockPosition;
+}
+
 struct ScHTMLStyle
 {   // Defaults from stylesheet
     Color               aBackgroundColor;
@@ -133,7 +137,7 @@ class ScHTMLExport : public ScExportBase
     void WriteHeader();
     void WriteOverview();
     void WriteTables();
-    void WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    void WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SCROW nRow, SCTAB nTab );
     void WriteGraphEntry( ScHTMLGraphEntry* );
     void WriteImage( OUString& rLinkName,
                      const Graphic&, const OString& rImgOptions,

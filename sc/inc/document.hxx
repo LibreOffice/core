@@ -1550,7 +1550,7 @@ public:
     void CopyTabToClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         SCTAB nTab, ScDocument* pClipDoc);
 
-    bool InitColumnBlockPosition( sc::ColumnBlockPosition& rBlockPos, SCTAB nTab, SCCOL nCol );
+    SC_DLLPUBLIC bool InitColumnBlockPosition( sc::ColumnBlockPosition& rBlockPos, SCTAB nTab, SCCOL nCol );
 
     void DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const ScMarkData& rMark,
                                    sc::ColumnSpanSet& rBroadcastSpans );
@@ -1692,7 +1692,9 @@ public:
     void                                    RemoveCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex );
 
     SC_DLLPUBLIC ScConditionalFormat*       GetCondFormat( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
-    SC_DLLPUBLIC const SfxItemSet*          GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+    // pCell is an optimization, must point to rPos
+    SC_DLLPUBLIC const SfxItemSet*          GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab,
+                                                           ScRefCellValue* pCell = nullptr ) const;
     const SfxItemSet*                       GetCondResult( ScRefCellValue& rCell, const ScAddress& rPos,
                                                            const ScConditionalFormatList& rList,
                                                            const ScCondFormatIndexes& rIndex ) const;
@@ -1705,8 +1707,12 @@ public:
     SC_DLLPUBLIC const css::uno::Reference< css::i18n::XBreakIterator >& GetBreakIterator();
     bool                        HasStringWeakCharacters( const OUString& rString );
     SC_DLLPUBLIC SvtScriptType  GetStringScriptType( const OUString& rString );
-    SC_DLLPUBLIC SvtScriptType  GetCellScriptType( const ScAddress& rPos, sal_uInt32 nNumberFormat );
-    SC_DLLPUBLIC SvtScriptType  GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    // pCell is an optimization, must point to rPos
+    SC_DLLPUBLIC SvtScriptType  GetCellScriptType( const ScAddress& rPos, sal_uInt32 nNumberFormat,
+                                                   ScRefCellValue* pCell = nullptr );
+    // pCell is an optimization, must point to nCol,nRow,nTab
+    SC_DLLPUBLIC SvtScriptType  GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab,
+                                               ScRefCellValue* pCell = nullptr );
     SvtScriptType               GetRangeScriptType( sc::ColumnBlockPosition& rBlockPos, const ScAddress& rPos, SCROW nLength );
     SvtScriptType               GetRangeScriptType( const ScRangeList& rRanges );
 
@@ -2527,6 +2533,7 @@ private:
     bool    HasPartOfMerged( const ScRange& rRange );
 
     ScRefCellValue GetRefCellValue( const ScAddress& rPos );
+    ScRefCellValue GetRefCellValue( const ScAddress& rPos, sc::ColumnBlockPosition& rBlockPos );
 
     std::map< SCTAB, ScSortParam > mSheetSortParams;
 

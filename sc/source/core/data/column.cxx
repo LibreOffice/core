@@ -726,6 +726,16 @@ ScRefCellValue ScColumn::GetCellValue( SCROW nRow ) const
     return GetCellValue(aPos.first, aPos.second);
 }
 
+ScRefCellValue ScColumn::GetCellValue( sc::ColumnBlockPosition& rBlockPos, SCROW nRow )
+{
+    std::pair<sc::CellStoreType::iterator,size_t> aPos = maCells.position(rBlockPos.miCellPos, nRow);
+    if (aPos.first == maCells.end())
+        return ScRefCellValue();
+
+    rBlockPos.miCellPos = aPos.first; // Store this for next call.
+    return GetCellValue(aPos.first, aPos.second);
+}
+
 ScRefCellValue ScColumn::GetCellValue( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const
 {
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(rBlockPos.miCellPos, nRow);

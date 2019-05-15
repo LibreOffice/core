@@ -108,14 +108,19 @@ SvtScriptType ScDocument::GetStringScriptType( const OUString& rString )
     return nRet;
 }
 
-SvtScriptType ScDocument::GetCellScriptType( const ScAddress& rPos, sal_uInt32 nNumberFormat )
+SvtScriptType ScDocument::GetCellScriptType( const ScAddress& rPos, sal_uInt32 nNumberFormat,
+                                             ScRefCellValue* pCell )
 {
     SvtScriptType nStored = GetScriptType(rPos);
     if ( nStored != SvtScriptType::UNKNOWN )         // stored value valid?
         return nStored;                             // use stored value
 
     Color* pColor;
-    OUString aStr = ScCellFormat::GetString(*this, rPos, nNumberFormat, &pColor, *mxPoolHelper->GetFormTable());
+    OUString aStr;
+    if( pCell )
+        ScCellFormat::GetString(*pCell, nNumberFormat, aStr, &pColor, *mxPoolHelper->GetFormTable(), this);
+    else
+        ScCellFormat::GetString(*this, rPos, nNumberFormat, &pColor, *mxPoolHelper->GetFormTable());
 
     SvtScriptType nRet = GetStringScriptType( aStr );
 
@@ -124,7 +129,7 @@ SvtScriptType ScDocument::GetCellScriptType( const ScAddress& rPos, sal_uInt32 n
     return nRet;
 }
 
-SvtScriptType ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab )
+SvtScriptType ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab, ScRefCellValue* pCell )
 {
     // if script type is set, don't have to get number formats
 
@@ -143,7 +148,7 @@ SvtScriptType ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
     sal_uInt32 nFormat = pPattern->GetNumberFormat( mxPoolHelper->GetFormTable(), pCondSet );
 
-    return GetCellScriptType(aPos, nFormat);
+    return GetCellScriptType(aPos, nFormat, pCell);
 }
 
 namespace {
