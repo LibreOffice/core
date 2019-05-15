@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "analysisdefs.hxx"
 #include "analysis.hxx"
-#include <strings.hrc>
 #include "bessel.hxx"
 #include <cppuhelper/factory.hxx>
 #include <comphelper/processfactory.hxx>
@@ -26,12 +26,10 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <o3tl/any.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <sal/macros.h>
-#include <string.h>
 #include <unotools/resmgr.hxx>
-#include <unotools/charclass.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <algorithm>
 #include <cmath>
 #include <float.h>

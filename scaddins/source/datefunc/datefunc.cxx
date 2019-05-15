@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/resmgr.hxx>
-#include <unotools/charclass.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <algorithm>
 #include "deffuncname.hxx"
 

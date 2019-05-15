@@ -28,16 +28,16 @@
 #define INCLUDED_SCADDINS_SOURCE_PRICING_PRICING_HXX
 
 
-#include <string.h>
 #include <vector>
 #include <memory>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XAddIn.hpp>
 #include <com/sun/star/sheet/XCompatibilityNames.hpp>
 #include <com/sun/star/sheet/addin/XPricingFunctions.hpp>
 #include <cppuhelper/implbase.hxx>
+
+namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 #define RETURN_FINITE(d)    if( !::rtl::math::isFinite( d ) ) throw css::lang::IllegalArgumentException(); return d;
 

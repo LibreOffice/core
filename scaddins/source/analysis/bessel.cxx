@@ -18,9 +18,11 @@
  */
 
 #include "bessel.hxx"
-#include "analysishelper.hxx"
 
 #include <rtl/math.hxx>
+
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/sheet/NoConvergenceException.hpp>
 
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::sheet::NoConvergenceException;

@@ -1,0 +1,25 @@
+---
+assumeFilename: scaddins/source/analysis/analysis.cxx
+blacklist:
+    scaddins/source/analysis/analysis.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XServiceName.hpp
+    - com/sun/star/sheet/addin/XAnalysis.hpp
+    - com/sun/star/sheet/XAddIn.hpp
+    - com/sun/star/sheet/XCompatibilityNames.hpp
+    scaddins/source/datefunc/datefunc.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XServiceName.hpp
+    - com/sun/star/sheet/addin/XDateFunctions.hpp
+    - com/sun/star/sheet/addin/XMiscFunctions.hpp
+    - com/sun/star/sheet/XAddIn.hpp
+    - com/sun/star/sheet/XCompatibilityNames.hpp
+    scaddins/source/pricing/pricing.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XServiceName.hpp
+    - com/sun/star/sheet/addin/XPricingFunctions.hpp
+    - com/sun/star/sheet/XAddIn.hpp
+    - com/sun/star/sheet/XCompatibilityNames.hpp
