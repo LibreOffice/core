@@ -64,6 +64,7 @@ class ColumnSpanSet;
 class RangeColumnSpanSet;
 class ColumnSet;
 struct ColumnBlockPosition;
+class TableColumnBlockPositionSet;
 struct RefUpdateContext;
 struct RefUpdateInsertTabContext;
 struct RefUpdateDeleteTabContext;
@@ -930,7 +931,8 @@ public:
 
     bool ValidQuery(
         SCROW nRow, const ScQueryParam& rQueryParam, const ScRefCellValue* pCell = nullptr,
-        bool* pbTestEqualCondition = nullptr, const ScInterpreterContext* pContext = nullptr);
+        bool* pbTestEqualCondition = nullptr, const ScInterpreterContext* pContext = nullptr,
+        sc::TableColumnBlockPositionSet* pBlockPos = nullptr );
     void        TopTenQuery( ScQueryParam& );
     SCSIZE      Query(const ScQueryParam& rQueryParam, bool bKeepSub);
     bool        CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
