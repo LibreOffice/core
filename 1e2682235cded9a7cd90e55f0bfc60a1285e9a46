@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_273515db",
+        "filename": "solenv/clang-format/blacklist",
+        "patchSetId": 15
+      },
+      "lineNbr": 4070,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-15T09:27:45Z",
+      "side": 1,
+      "message": "See e.g. \u003chttps://lists.freedesktop.org/archives/libreoffice/2017-November/078781.html\u003e \"minutes of ESC call ...\", section \"clang-format-ness (Miklos)\" and ensuing email thread for details.  The use of clang-format is not about readability, but a (failed?) experiment at avoiding commits that include reformatting of existing code (which can be considered a distraction) (by enforcing a specific formatting at least for new code, thereby preventing such unwanted later reformatting of at least that code).",
+      "parentUuid": "3fa0c359_75042618",
+      "revId": "1e2682235cded9a7cd90e55f0bfc60a1285e9a46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_cea01aa9",
         "filename": "sw/source/core/doc/tblafmt.cxx",
         "patchSetId": 15
