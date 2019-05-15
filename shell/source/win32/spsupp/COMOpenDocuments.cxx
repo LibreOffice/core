@@ -19,28 +19,10 @@
 namespace
 {
 
-// Display confirmation dialog, return false on negative answer
-bool SecurityWarning(const wchar_t* sProgram, const wchar_t* sDocument)
-{
-    // TODO: change wording (currently taken from MS Office), use LO localization
-    wchar_t sBuf[65536];
-    swprintf(sBuf, sizeof(sBuf) / sizeof(sBuf[0]),
-        L"Some files contain viruses that can be harmful to your computer. It is important to be certain that this file is from a trustworthy source.\n\n"
-        L"Do you want to open this file ?\n\n"
-        L"Program : %s\n\n"
-        L"Address : %s", sProgram, sDocument);
-    return (MessageBoxW(nullptr, sBuf, L"LibreOffice SharePoint integration", MB_YESNO | MB_ICONWARNING) == IDYES);
-}
-
 // Returns S_OK if successful
-HRESULT LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath, bool bDoSecurityWarning)
+HRESULT LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath)
 {
     const wchar_t* sProgram = GetLOPath();
-    if (bDoSecurityWarning && !SecurityWarning(sProgram, sFilePath))
-    {
-        // Return success to avoid downloading in browser
-        return S_OK;
-    }
 
     STARTUPINFOW si;
     std::memset(&si, 0, sizeof si);
@@ -83,76 +65,10 @@ VARIANT_BOOL toVBool(bool b) { return b ? VARIANT_TRUE : VARIANT_FALSE; }
 
 } // namespace
 
-// IObjectSafety methods
-
-void COMOpenDocuments::COMObjectSafety::SetMaskedOptions(DWORD iMask, DWORD iOptions)
-{
-    m_iEnabledOptions &= ~iMask;
-    m_iEnabledOptions |= (iOptions & iMask);
-}
-
-void COMOpenDocuments::COMObjectSafety::SetSafe_forUntrustedCaller(bool bSafe)
-{
-    if (GetSafe_forUntrustedCaller() != bSafe)
-    {
-        SetMaskedOptions(INTERFACESAFE_FOR_UNTRUSTED_CALLER, bSafe ? 0xFFFFFFFF : 0);
-    }
-}
-
-void COMOpenDocuments::COMObjectSafety::SetSafe_forUntrustedData(bool bSafe)
-{
-    if (GetSafe_forUntrustedData() != bSafe)
-    {
-        SetMaskedOptions(INTERFACESAFE_FOR_UNTRUSTED_DATA, bSafe ? 0xFFFFFFFF : 0);
-    }
-}
-
-HRESULT STDMETHODCALLTYPE COMOpenDocuments::COMObjectSafety::GetInterfaceSafetyOptions(
-    REFIID riid,
-    DWORD *pdwSupportedOptions,
-    DWORD *pdwEnabledOptions)
-{
-    void* ppvo;
-    HRESULT hr = m_pOwner->QueryInterface(riid, &ppvo);
-    if (FAILED(hr))
-    {
-        return hr;
-    }
-
-    // We know about it; release reference and return required information
-    static_cast<IUnknown*>(ppvo)->Release();
-    *pdwSupportedOptions = iSupportedOptionsMask;
-    *pdwEnabledOptions = m_iEnabledOptions;
-    return S_OK;
-}
-
-HRESULT STDMETHODCALLTYPE COMOpenDocuments::COMObjectSafety::SetInterfaceSafetyOptions(
-    REFIID /*riid*/,
-    DWORD dwOptionSetMask,
-    DWORD dwEnabledOptions)
-{
-    // Are there unsupported options in mask?
-    if (dwOptionSetMask & ~iSupportedOptionsMask)
-        return E_FAIL;
-
-    if (dwOptionSetMask & INTERFACESAFE_FOR_UNTRUSTED_CALLER)
-    {
-        SetSafe_forUntrustedCaller(dwEnabledOptions & INTERFACESAFE_FOR_UNTRUSTED_CALLER);
-    }
-
-    if (dwOptionSetMask & INTERFACESAFE_FOR_UNTRUSTED_DATA)
-    {
-        SetSafe_forUntrustedData((dwEnabledOptions & INTERFACESAFE_FOR_UNTRUSTED_DATA) != 0);
-    }
-
-    return S_OK;
-}
-
 long COMOpenDocuments::m_nObjCount = 0;
 ITypeInfo* COMOpenDocuments::m_pTypeInfo = nullptr;
 
 COMOpenDocuments::COMOpenDocuments()
-    : m_aObjectSafety(this)
 {
     ::InterlockedIncrement(&m_nObjCount);
     if (m_pTypeInfo == nullptr)
@@ -184,11 +100,11 @@ STDMETHODIMP COMOpenDocuments::QueryInterface(REFIID riid, void **ppvObject)
         IsEqualIID(riid, __uuidof(IOWSNewDocument2)) ||
         IsEqualIID(riid, __uuidof(IOWSNewDocument3)))
     {
-        *ppvObject = this;
+        *ppvObject = static_cast<IOWSNewDocument3*>(this);
     }
     else if (IsEqualIID(riid, __uuidof(IObjectSafety)))
     {
-        *ppvObject = &m_aObjectSafety;
+        *ppvObject = static_cast<IObjectSafety*>(this);
     }
     else
     {
@@ -317,7 +233,7 @@ STDMETHODIMP COMOpenDocuments::CreateNewDocument2(
     if (!pbResult)
         return E_POINTER;
     // TODO: resolve the program from varProgID (nullptr -> default?)
-    HRESULT hr = LOStart(L"-n", bstrTemplateLocation, m_aObjectSafety.GetSafe_forUntrustedCaller() || m_aObjectSafety.GetSafe_forUntrustedData());
+    HRESULT hr = LOStart(L"-n", bstrTemplateLocation);
     *pbResult = toVBool(SUCCEEDED(hr));
     return hr;
 }
@@ -370,7 +286,7 @@ STDMETHODIMP COMOpenDocuments::ViewDocument3(
     if (!pbResult)
         return E_POINTER;
     // TODO: resolve the program from varProgID (nullptr -> default?)
-    HRESULT hr = LOStart(L"--view", bstrDocumentLocation, m_aObjectSafety.GetSafe_forUntrustedCaller() || m_aObjectSafety.GetSafe_forUntrustedData());
+    HRESULT hr = LOStart(L"--view", bstrDocumentLocation);
     *pbResult = toVBool(SUCCEEDED(hr));
     return hr;
 }
@@ -434,7 +350,7 @@ STDMETHODIMP COMOpenDocuments::EditDocument3(
     if (!pbResult)
         return E_POINTER;
     // TODO: resolve the program from varProgID (nullptr -> default?)
-    HRESULT hr = LOStart(L"-o", bstrDocumentLocation, m_aObjectSafety.GetSafe_forUntrustedCaller() || m_aObjectSafety.GetSafe_forUntrustedData());
+    HRESULT hr = LOStart(L"-o", bstrDocumentLocation);
     *pbResult = toVBool(SUCCEEDED(hr));
     return hr;
 }
@@ -447,6 +363,50 @@ STDMETHODIMP COMOpenDocuments::NewBlogPost(
 {
     return E_NOTIMPL;
 }
+
+// IObjectSafety methods
+
+HRESULT STDMETHODCALLTYPE COMOpenDocuments::GetInterfaceSafetyOptions(
+    REFIID riid,
+    DWORD *pdwSupportedOptions,
+    DWORD *pdwEnabledOptions)
+{
+    IUnknown* pUnk;
+    HRESULT hr = QueryInterface(riid, reinterpret_cast<void**>(&pUnk));
+    if (FAILED(hr))
+    {
+        return hr;
+    }
+
+    // We know about it; release reference and return required information
+    pUnk->Release();
+    *pdwSupportedOptions = iSupportedOptionsMask;
+    *pdwEnabledOptions = m_iEnabledOptions;
+    return S_OK;
+}
+
+HRESULT STDMETHODCALLTYPE COMOpenDocuments::SetInterfaceSafetyOptions(
+    REFIID riid,
+    DWORD dwOptionSetMask,
+    DWORD dwEnabledOptions)
+{
+    IUnknown* pUnk;
+    HRESULT hr = QueryInterface(riid, reinterpret_cast<void**>(&pUnk));
+    if (FAILED(hr))
+    {
+        return hr;
+    }
+    pUnk->Release();
+
+    // Are there unsupported options in mask?
+    if (dwOptionSetMask & ~iSupportedOptionsMask)
+        return E_FAIL;
+
+    m_iEnabledOptions = (m_iEnabledOptions & ~dwOptionSetMask) | (dwOptionSetMask & dwEnabledOptions);
+    return S_OK;
+}
+
+// Non-COM methods
 
 long COMOpenDocuments::GetObjectCount() { return m_nObjCount; }
 
