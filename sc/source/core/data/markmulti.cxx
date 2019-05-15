@@ -19,7 +19,10 @@
 
 #include <markmulti.hxx>
 #include <markarr.hxx>
+#include <rangelst.hxx>
 #include <segmenttree.hxx>
+#include <sal/log.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 #include <algorithm>
 
@@ -233,6 +236,69 @@ void ScMultiSel::SetMarkArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, S
         aMultiSelContainer.resize(nEndCol+1);
     for ( SCCOL nColIter = nEndCol; nColIter >= nStartCol; --nColIter )
         aMultiSelContainer[nColIter].SetMarkArea( nStartRow, nEndRow, bMark );
+}
+
+/**
+  optimised init-from-range-list. Specifically this is optimised for cases
+  where we have very large data columns with lots and lots of ranges.
+*/
+void ScMultiSel::Set( ScRangeList const & rList )
+{
+    Clear();
+    if (rList.size() == 0)
+        return;
+
+    // sort by row to make the combining/merging faster
+    auto aNewList = rList;
+    std::sort(aNewList.begin(), aNewList.end(),
+        [](const ScRange& lhs, const ScRange& rhs)
+        {
+            return lhs.aStart.Row() < rhs.aStart.Row();
+        });
+
+    std::vector<std::vector<ScMarkEntry>> aMarkEntriesPerCol(MAXCOL+1);
+
+    SCCOL nMaxCol = -1;
+    int i = 0;
+    for (const ScRange& rRange : aNewList)
+    {
+        SCCOL nStartCol = rRange.aStart.Col();
+        SCROW nStartRow = rRange.aStart.Row();
+        SCCOL nEndCol = rRange.aEnd.Col();
+        SCROW nEndRow = rRange.aEnd.Row();
+        assert( nEndRow >= nStartRow && "this method assumes the input data has ranges with endrow>=startrow");
+        assert( nEndCol >= nStartCol && "this method assumes the input data has ranges with endcol>=startcol");
+        if ( nStartCol == 0 && nEndCol == MAXCOL )
+            aRowSel.SetMarkArea( nStartRow, nEndRow, /*bMark*/true );
+        else
+        {
+            for ( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
+            {
+                auto & rMarkEntries = aMarkEntriesPerCol[nCol];
+                int nEntries = rMarkEntries.size();
+                if (nEntries > 1 && nStartRow >= rMarkEntries[nEntries-2].nRow+1
+                   && nStartRow <= rMarkEntries[nEntries-1].nRow)
+                {
+                    // overlaps previous range
+                    rMarkEntries.back().nRow = nEndRow;
+                }
+                else
+                {
+                    // new range
+                    if (nStartRow > 0)
+	                    rMarkEntries.emplace_back(ScMarkEntry{nStartRow-1, false});
+                    rMarkEntries.emplace_back(ScMarkEntry{nEndRow, true});
+                }
+            }
+            nMaxCol = std::max(nMaxCol, nEndCol);
+        }
+        ++i;
+    }
+
+    aMultiSelContainer.resize(nMaxCol+1);
+    for (SCCOL nCol = 0; nCol<=nMaxCol; ++nCol)
+        if (!aMarkEntriesPerCol[nCol].empty())
+            aMultiSelContainer[nCol].Set( aMarkEntriesPerCol[nCol] );
 }
 
 bool ScMultiSel::IsRowMarked( SCROW nRow ) const

@@ -19,6 +19,7 @@
 
 #include <markarr.hxx>
 #include <address.hxx>
+#include <rangelst.hxx>
 #include <vector>
 
 #include <osl/diagnose.h>
@@ -241,6 +242,19 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
             }
         }
     }
+}
+
+/**
+  optimised init-from-range-list. Specifically this is optimised for cases
+  where we have very large data columns with lots and lots of ranges.
+*/
+void ScMarkArray::Set( const std::vector<ScMarkEntry> & rMarkEntries )
+{
+    nCount = rMarkEntries.size()+1;
+    nLimit = nCount;
+    pData.reset( new ScMarkEntry[nLimit] );
+    memcpy(pData.get(), rMarkEntries.data(), sizeof(ScMarkEntry) * rMarkEntries.size());
+    pData[nCount-1] = ScMarkEntry{MAXROW, false};
 }
 
 bool ScMarkArray::IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const
