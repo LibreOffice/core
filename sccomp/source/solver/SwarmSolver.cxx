@@ -11,7 +11,6 @@
 #include <sal/config.h>
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -42,6 +41,11 @@
 #include "ParticelSwarmOptimization.hxx"
 
 #include <strings.hrc>
+
+namespace com::sun::star::uno
+{
+class XComponentContext;
+}
 
 using namespace css;
 

@@ -26,11 +26,8 @@
 #include <com/sun/star/table/CellAddress.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <vector>
 
 #include <unotools/resmgr.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
 

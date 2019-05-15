@@ -9,14 +9,10 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sheet/XSolver.hpp>
 #include <com/sun/star/sheet/XSolverDescription.hpp>
 #include <test/bootstrapfixture.hxx>
-
-#include <address.hxx>
 
 using namespace css;
 

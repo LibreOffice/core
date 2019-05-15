@@ -25,12 +25,13 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <rtl/math.hxx>
 #include <stdexcept>
 #include <vector>
 #include <float.h>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace com::sun::star;
 
