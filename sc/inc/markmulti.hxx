@@ -25,6 +25,8 @@
 
 #include <vector>
 
+class ScRangeList;
+
 class ScMultiSel
 {
 
@@ -51,6 +53,7 @@ public:
     bool HasEqualRowsMarked( SCCOL nCol1, SCCOL nCol2 ) const;
     SCROW GetNextMarked( SCCOL nCol, SCROW nRow, bool bUp ) const;
     void SetMarkArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow, bool bMark );
+    void Set( ScRangeList const & );
     bool IsRowMarked( SCROW nRow ) const;
     bool IsRowRangeMarked( SCROW nStartRow, SCROW nEndRow ) const;
     bool IsEmpty() const { return ( aMultiSelContainer.empty() && !aRowSel.HasMarks() ); }

@@ -1538,8 +1538,7 @@ const ScMarkData* ScCellRangesBase::GetMarkData()
 {
     if (!pMarkData)
     {
-        pMarkData.reset( new ScMarkData() );
-        pMarkData->MarkFromRangeList( aRanges, false );
+        pMarkData.reset( new ScMarkData(aRanges) );
     }
     return pMarkData.get();
 }
