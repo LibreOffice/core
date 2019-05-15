@@ -31,6 +31,11 @@ struct ScMarkEntry
     bool            bMarked;
 };
 
+/**
+  This is a rather odd datastructure. We store alternating marked/not-marked entries,
+  and for each entry the range is defined as :
+      [previousEntry.nRow+1, currentEntry.nRow]
+*/
 class ScMarkArray
 {
     SCSIZE                            nCount;
