@@ -43,6 +43,7 @@ class SdrPageWindow;
 namespace com { namespace sun { namespace star { namespace awt {
     class XControlContainer;
 }}}}
+namespace sdr { namespace overlay { class OverlayManager; } }
 
 class SdrPage;
 class SdrView;
@@ -219,6 +220,8 @@ public:
     // Allow page painting at all?
     bool IsPagePaintingAllowed() const { return mbPagePaintingAllowed;}
     void SetPagePaintingAllowed(bool bNew);
+
+    rtl::Reference<sdr::overlay::OverlayManager> CreateOverlayManager(OutputDevice& rDevice) const;
 
 protected:
     svtools::ColorConfig            maColorConfig;
