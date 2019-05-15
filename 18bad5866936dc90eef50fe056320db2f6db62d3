@@ -22,6 +22,30 @@
       "revId": "18bad5866936dc90eef50fe056320db2f6db62d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_e7364db5",
+        "filename": "vcl/qt5/Qt5Widget.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-05-15T11:39:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fa0c359_47e38134",
+      "range": {
+        "startLine": 502,
+        "startChar": 58,
+        "endLine": 502,
+        "endChar": 80
+      },
+      "revId": "18bad5866936dc90eef50fe056320db2f6db62d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
