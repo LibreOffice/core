@@ -27,14 +27,12 @@
 
 #include <i18nutil/paper.hxx>
 
-#include <utility>
 #include <cstdlib>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 
 #ifdef UNX
 #include <stdio.h>
-#include <string.h>
 #include <locale.h>
 #if defined(LC_PAPER) && defined(_GNU_SOURCE)
 #include <langinfo.h>
