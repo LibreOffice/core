@@ -39,7 +39,7 @@ enum ExtAltNameType
 
     /**
      * The entry contains rfc822 name.
-     * The value of CertAltNameEntry contains a OUString.
+     * The value of CertAltNameEntry contains an OUString.
      *
      * @see com::sun::star::security::CertAltNameEntry
      */
