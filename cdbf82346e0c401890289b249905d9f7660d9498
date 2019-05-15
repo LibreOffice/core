@@ -22,6 +22,30 @@
       "revId": "cdbf82346e0c401890289b249905d9f7660d9498",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_ca26b8b8",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-05-15T17:48:42Z",
+      "side": 1,
+      "message": "Right, thanks.",
+      "parentUuid": "3fa0c359_071fb96c",
+      "range": {
+        "startLine": 1659,
+        "startChar": 53,
+        "endLine": 1659,
+        "endChar": 64
+      },
+      "revId": "cdbf82346e0c401890289b249905d9f7660d9498",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
