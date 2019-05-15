@@ -801,6 +801,11 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
     bool bBottom = false;
     bool bChanged = false;
 
+    // We need to cache sc::ColumnBlockConstPosition per each column.
+    std::vector< sc::ColumnBlockConstPosition > blockPos( rEndCol + 1 );
+    for( SCCOL i = 0; i <= rEndCol; ++i )
+        aCol[ i ].InitBlockPosition( blockPos[ i ] );
+
     do
     {
         bChanged = false;
@@ -815,7 +820,10 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
             if (rEndCol < (aCol.size()-1))
                 if (!aCol[rEndCol+1].IsEmptyBlock(nStart,nEnd))
                 {
+                    assert( int( blockPos.size()) == rEndCol + 1 );
                     ++rEndCol;
+                    blockPos.resize( blockPos.size() + 1 );
+                    aCol[ rEndCol ].InitBlockPosition( blockPos[ rEndCol ] );
                     bChanged = true;
                     bRight = true;
                 }
@@ -833,7 +841,7 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
                 SCROW nTest = rStartRow-1;
                 bool needExtend = false;
                 for ( SCCOL i = rStartCol; i<=rEndCol && !needExtend; i++)
-                    if (aCol[i].HasDataAt(nTest))
+                    if (aCol[i].HasDataAt(blockPos[i], nTest))
                         needExtend = true;
                 if (needExtend)
                 {
@@ -849,7 +857,7 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
             SCROW nTest = rEndRow+1;
             bool needExtend = false;
             for ( SCCOL i = rStartCol; i<=rEndCol && !needExtend; i++)
-                if (aCol[i].HasDataAt(nTest))
+                if (aCol[i].HasDataAt(blockPos[ i ], nTest))
                     needExtend = true;
             if (needExtend)
             {

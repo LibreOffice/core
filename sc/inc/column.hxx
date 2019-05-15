@@ -216,6 +216,8 @@ public:
     SCSIZE      GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const;
     bool        HasDataAt(SCROW nRow, bool bConsiderCellNotes=false,
                           bool bConsiderCellDrawObjects=false) const;
+    bool        HasDataAt(sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow, bool bConsiderCellNotes=false,
+                          bool bConsiderCellDrawObjects=false) const;
     bool        HasVisibleDataAt(SCROW nRow) const;
     SCROW       GetFirstDataPos() const;
     SCROW       GetLastDataPos() const;
