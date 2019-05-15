@@ -3100,6 +3100,22 @@ bool ScColumn::HasDataAt(sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow,
     return aPos.first->type != sc::element_type_empty;
 }
 
+bool ScColumn::HasDataAt(sc::ColumnBlockPosition& rBlockPos, SCROW nRow,
+                         bool bConsiderCellNotes, bool bConsiderCellDrawObjects)
+{
+    if (bConsiderCellNotes && !IsNotesEmptyBlock(nRow, nRow))
+        return true;
+
+    if (bConsiderCellDrawObjects && !IsDrawObjectsEmptyBlock(nRow, nRow))
+        return true;
+
+    std::pair<sc::CellStoreType::iterator,size_t> aPos = maCells.position(rBlockPos.miCellPos, nRow);
+    if (aPos.first == maCells.end())
+        return false;
+    rBlockPos.miCellPos = aPos.first; // Store this for next call.
+    return aPos.first->type != sc::element_type_empty;
+}
+
 bool ScColumn::IsAllAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const
 {
     if (pAttrArray && rCol.pAttrArray)

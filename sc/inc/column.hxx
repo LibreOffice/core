@@ -218,6 +218,8 @@ public:
                           bool bConsiderCellDrawObjects=false) const;
     bool        HasDataAt(sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow, bool bConsiderCellNotes=false,
                           bool bConsiderCellDrawObjects=false) const;
+    bool        HasDataAt(sc::ColumnBlockPosition& rBlockPos, SCROW nRow, bool bConsiderCellNotes=false,
+                          bool bConsiderCellDrawObjects=false);
     bool        HasVisibleDataAt(SCROW nRow) const;
     SCROW       GetFirstDataPos() const;
     SCROW       GetLastDataPos() const;
