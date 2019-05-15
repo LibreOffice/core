@@ -37,35 +37,33 @@ HANDLE g_hModule;
 ITypeLib* GetTypeLib()
 {
     typedef std::unique_ptr<ITypeLib, void(*)(IUnknown* p)> ITypeLibGuard;
-    static ITypeLibGuard aITypeLibGuard(nullptr, [](IUnknown* p) { if (p) p->Release(); });
-    if (!aITypeLibGuard.get())
-    {
+    static ITypeLibGuard s_aITypeLibGuard = [] {
+        ITypeLibGuard aITypeLibGuard(nullptr, [](IUnknown* p) { if (p) p->Release(); });
         wchar_t szFile[MAX_PATH];
         if (GetModuleFileNameW(static_cast<HMODULE>(g_hModule), szFile, MAX_PATH) == 0)
-            return nullptr;
+            return aITypeLibGuard;
         ITypeLib* pTypeLib;
-        HRESULT hr = LoadTypeLib(szFile, &pTypeLib);
-        if (FAILED(hr))
-            return nullptr;
+        if (FAILED(LoadTypeLib(szFile, &pTypeLib)))
+            return aITypeLibGuard;
         aITypeLibGuard.reset(pTypeLib);
-    }
-    return aITypeLibGuard.get();
+        return aITypeLibGuard;
+    }();
+    return s_aITypeLibGuard.get();
 }
 
 const wchar_t* GetLOPath()
 {
-    static wchar_t sPath[MAX_PATH] = { 0 };
-    if (*sPath == 0)
-    {
-        // Initialization
+    static wchar_t* s_sPath = []() -> wchar_t* {
+        static wchar_t sPath[MAX_PATH];
         if (GetModuleFileNameW(static_cast<HMODULE>(g_hModule), sPath, MAX_PATH) == 0)
             return nullptr;
         wchar_t* pSlashPos = wcsrchr(sPath, L'\\');
         if (pSlashPos == nullptr)
             return nullptr;
-        wcscpy(pSlashPos+1, L"soffice.exe");
-    }
-    return sPath;
+        wcscpy(pSlashPos + 1, L"soffice.exe");
+        return sPath;
+    }();
+    return s_sPath;
 }
 
 BOOL APIENTRY DllMain( HANDLE hinstDLL,
