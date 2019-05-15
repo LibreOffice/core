@@ -268,6 +268,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_27abd51d",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1001073
+      },
+      "writtenOn": "2019-05-15T16:47:04Z",
+      "side": 1,
+      "message": "i have a question: if changing this file is not necessary, how can i remove it from the patch set? \ni would like to update the patch set with a changed \"XPS2.idl\" (@since tag lo 6.3) and a new commit message [API CHANGE].",
+      "parentUuid": "3fa0c359_6fa8d91e",
+      "revId": "4137b67cac76acddac37abc287fefe69f7a9e4b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_54da5017",
         "filename": "toolkit/source/awt/vclxprinter.cxx",
         "patchSetId": 3
