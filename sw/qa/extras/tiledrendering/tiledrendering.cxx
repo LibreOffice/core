@@ -2406,8 +2406,6 @@ void SwTiledRenderingTest::testDeselectCustomShape()
     pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pWrtShell->GetDrawView()->GetMarkedObjectList().GetMarkCount());
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SwTiledRenderingTest::testSemiTransparent()
