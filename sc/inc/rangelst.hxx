@@ -92,6 +92,10 @@ public:
     ScRange&        back() { return maRanges.back(); }
     const ScRange&  back() const { return maRanges.back(); }
     void            push_back(const ScRange & rRange);
+    ::std::vector<ScRange>::const_iterator begin() const { return maRanges.begin(); }
+    ::std::vector<ScRange>::const_iterator end() const { return maRanges.end(); }
+    ::std::vector<ScRange>::iterator begin() { return maRanges.begin(); }
+    ::std::vector<ScRange>::iterator end() { return maRanges.end(); }
 
     void swap( ScRangeList& r );
 
