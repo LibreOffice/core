@@ -1,4 +1,4 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -7,20 +7,20 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+import importlib
 import os.path
 import sys
-import importlib
 
 import gdb
 
-pythondir = os.path.normpath('%PYTHONDIR%')
+PP_PATH = os.path.normpath('%PYTHONDIR%')
 
 if gdb.current_objfile():
-    if pythondir not in sys.path:
-        sys.path.insert(0, pythondir)
+    if PP_PATH not in sys.path:
+        sys.path.insert(0, PP_PATH)
 
-for mod in str.split("%MODULES%"):
-    module=importlib.import_module("libreoffice."+mod)
+for mod in '%MODULES%'.split():
+    module = importlib.import_module('libreoffice.' + mod)
     module.register_pretty_printers(gdb.current_objfile())
 
 try:
