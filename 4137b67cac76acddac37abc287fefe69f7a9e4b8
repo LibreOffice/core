@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_d50dfa90",
+        "filename": "offapi/com/sun/star/awt/PrinterServer.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-15T06:57:31Z",
+      "side": 1,
+      "message": "\"yes, exactly: because of the inheritance of XPrinterServer2, it should be entirely compatible for code that uses LO\u0027s implementation of PrinterServer\":  Whether that works depends on the details of the UNO language binding; nominally, it is an incompatible change.  (But, as already discussed, probably acceptable for this unpublished service that was only added in \"recent\" LO times.)",
+      "parentUuid": "3fa0c359_5a80398c",
+      "revId": "4137b67cac76acddac37abc287fefe69f7a9e4b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_340b048f",
         "filename": "offapi/com/sun/star/awt/XPrinterServer2.idl",
         "patchSetId": 3
