@@ -88,7 +88,7 @@ void AquaSalGraphics::UnsetState()
 }
 
 /**
- * (re-)create the off-screen mxLayer we render everything to if
+ * (re-)create the off-screen maLayer we render everything to if
  * necessary: eg. not initialized yet, or it has an incorrect size.
  */
 bool AquaSalGraphics::CheckContext()
@@ -106,15 +106,15 @@ bool AquaSalGraphics::CheckContext()
             mnWidth = nWidth;
             mnHeight = nHeight;
             // prepare to release the corresponding resources
-            if (mxLayer)
-                rReleaseLayer = mxLayer;
+            if (maLayer.isSet())
+                rReleaseLayer = maLayer.get();
             else if (maContextHolder.isSet())
             {
                 SAL_INFO("vcl.cg", "CGContextRelease(" << maContextHolder.get() << ")");
                 CGContextRelease(maContextHolder.get());
             }
             maContextHolder.set(nullptr);
-            mxLayer = nullptr;
+            maLayer.set(nullptr);
         }
 
         if (!maContextHolder.isSet())
@@ -124,12 +124,12 @@ bool AquaSalGraphics::CheckContext()
                 const CGSize aLayerSize = { static_cast<CGFloat>(nWidth), static_cast<CGFloat>(nHeight) };
                 NSGraphicsContext* pNSGContext = [NSGraphicsContext graphicsContextWithWindow: mpFrame->getNSWindow()];
                 CGContextRef xCGContext = [pNSGContext CGContext];
-                mxLayer = CGLayerCreateWithContext(xCGContext, aLayerSize, nullptr);
-                SAL_INFO("vcl.cg", "CGLayerCreateWithContext(" << xCGContext << "," << aLayerSize << ",NULL) = " << mxLayer);
-                if (mxLayer)
+                maLayer.set(CGLayerCreateWithContext(xCGContext, aLayerSize, nullptr));
+                SAL_INFO("vcl.cg", "CGLayerCreateWithContext(" << xCGContext << "," << aLayerSize << ",NULL) = " << maLayer.get());
+                if (maLayer.isSet())
                 {
-                    maContextHolder.set(CGLayerGetContext(mxLayer));
-                    SAL_INFO( "vcl.cg", "CGLayerGetContext(" << mxLayer << ") = " << maContextHolder.get() );
+                    maContextHolder.set(CGLayerGetContext(maLayer.get()));
+                    SAL_INFO( "vcl.cg", "CGLayerGetContext(" << maLayer.get() << ") = " << maContextHolder.get() );
                 }
 
                 if (rReleaseLayer)
@@ -168,7 +168,7 @@ bool AquaSalGraphics::CheckContext()
 
                 // re-enable XOR emulation for the new context
                 if (mpXorEmulation)
-                    mpXorEmulation->SetTarget(mnWidth, mnHeight, mnBitmapDepth, maContextHolder.get(), mxLayer);
+                    mpXorEmulation->SetTarget(mnWidth, mnHeight, mnBitmapDepth, maContextHolder.get(), maLayer.get());
             }
         }
     }
@@ -187,7 +187,7 @@ CGContextRef AquaSalGraphics::GetContext()
 }
 
 /**
- * Blit the contents of our internal mxLayer state to the
+ * Blit the contents of our internal maLayer state to the
  * associated window, if any; cf. drawRect event handling
  * on the frame.
  */
@@ -199,7 +199,7 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
     }
 
     NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
-    if( (mxLayer != nullptr) && (pContext != nullptr) )
+    if (maLayer.isSet() && pContext != nullptr)
     {
         CGContextRef rCGContext = [pContext CGContext];
         SAL_INFO( "vcl.cg", "[[NSGraphicsContext currentContext] CGContext] = " << rCGContext );
@@ -217,8 +217,8 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
         }
 
         ApplyXorContext();
-        SAL_INFO( "vcl.cg", "CGContextDrawLayerAtPoint(" << rCGContext << "," << CGPointZero << "," << mxLayer << ")" );
-        CGContextDrawLayerAtPoint( rCGContext, CGPointZero, mxLayer );
+        SAL_INFO( "vcl.cg", "CGContextDrawLayerAtPoint(" << rCGContext << "," << CGPointZero << "," << maLayer.get() << ")" );
+        CGContextDrawLayerAtPoint( rCGContext, CGPointZero, maLayer.get() );
         if( rClip ) // cleanup clipping
         {
             CGContextRestoreGState( rCGContext );

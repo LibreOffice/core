@@ -181,11 +181,7 @@ bool CoreTextFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilit
 }
 
 AquaSalGraphics::AquaSalGraphics()
-    : mxLayer( nullptr )
-#ifdef MACOSX
-    , mpFrame( nullptr )
-#endif
-    , mpXorEmulation( nullptr )
+    : mpXorEmulation( nullptr )
     , mnXorMode( 0 )
     , mnWidth( 0 )
     , mnHeight( 0 )
@@ -197,6 +193,9 @@ AquaSalGraphics::AquaSalGraphics()
     , maFillColor( COL_BLACK )
     , maTextColor( COL_BLACK )
     , mbNonAntialiasedText( false )
+#ifdef MACOSX
+    , mpFrame( nullptr )
+#endif
     , mbPrinter( false )
     , mbVirDev( false )
 #ifdef MACOSX
@@ -238,10 +237,10 @@ AquaSalGraphics::~AquaSalGraphics()
     if (mbForeignContext)
         return;
 #endif
-    if( mxLayer )
+    if (maLayer.isSet())
     {
-        SAL_INFO("vcl.cg", "CGLayerRelease(" << mxLayer << ")" );
-        CGLayerRelease( mxLayer );
+        SAL_INFO("vcl.cg", "CGLayerRelease(" << maLayer.get() << ")" );
+        CGLayerRelease(maLayer.get());
     }
     else if (maContextHolder.isSet()
 #ifdef MACOSX

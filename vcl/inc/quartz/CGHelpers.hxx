@@ -15,8 +15,34 @@
 #include <CoreGraphics/CoreGraphics.h>
 #include <postmac.h>
 
+#include <quartz/utils.h>
+
+class CGLayerHolder
+{
+private:
+    CGLayerRef mpLayer;
+
+public:
+    CGLayerHolder()
+        : mpLayer(nullptr)
+    {
+    }
+
+    CGLayerHolder(CGLayerRef pLayer)
+        : mpLayer(pLayer)
+    {
+    }
+
+    CGLayerRef get() const { return mpLayer; }
+
+    bool isSet() const { return mpLayer != nullptr; }
+
+    void set(CGLayerRef const& pLayer) { mpLayer = pLayer; }
+};
+
 class CGContextHolder
 {
+private:
     CGContextRef mpContext;
 #if OSL_DEBUG_LEVEL > 0
     int mnContextStackDepth;
@@ -25,6 +51,14 @@ class CGContextHolder
 public:
     CGContextHolder()
         : mpContext(nullptr)
+#if OSL_DEBUG_LEVEL > 0
+        , mnContextStackDepth(0)
+#endif
+    {
+    }
+
+    CGContextHolder(CGContextRef pContext)
+        : mpContext(pContext)
 #if OSL_DEBUG_LEVEL > 0
         , mnContextStackDepth(0)
 #endif
