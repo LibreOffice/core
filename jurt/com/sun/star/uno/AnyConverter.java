@@ -215,7 +215,7 @@ public class AnyConverter
     }
 
     /**
-     * Converts an Char object or an Any object containing a Char object into a
+     * Converts a Char object or an Any object containing a Char object into a
      * simple char.
      *
      * @param object the object to convert.
@@ -231,7 +231,7 @@ public class AnyConverter
     }
 
     /**
-     * Converts an Boolean object or an Any object containing a Boolean object
+     * Converts a Boolean object or an Any object containing a Boolean object
      * into a simple boolean.
      *
      * @param object the object to convert.
@@ -247,7 +247,7 @@ public class AnyConverter
     }
 
     /**
-     * Converts an Byte object or an Any object containing a Byte object into a
+     * Converts a Byte object or an Any object containing a Byte object into a
      * simple byte.
      *
      * @param object the object to convert.
