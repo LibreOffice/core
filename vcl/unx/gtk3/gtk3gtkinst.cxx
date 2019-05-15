@@ -8304,7 +8304,8 @@ private:
         if (!gdk_cairo_get_clip_rectangle(cr, &rect))
             return;
         tools::Rectangle aRect(Point(rect.x, rect.y), Size(rect.width, rect.height));
-        m_xDevice->Erase(m_xDevice->PixelToLogic(aRect));
+        aRect = m_xDevice->PixelToLogic(aRect);
+        m_xDevice->Erase(aRect);
         m_aDrawHdl.Call(std::pair<vcl::RenderContext&, const tools::Rectangle&>(*m_xDevice, aRect));
         cairo_surface_mark_dirty(m_pSurface);
 
