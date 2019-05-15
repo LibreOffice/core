@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_cae1d800",
+        "filename": "sc/source/ui/app/inputwin.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-05-15T22:15:21Z",
+      "side": 1,
+      "message": "Instead of converting const ... to even more #define ... values I\u0027d rather like to see consistent properly typed constexpr values instead.",
+      "revId": "e9047bb588b03e9668521bc8a6cf94006431ce8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
