@@ -67,7 +67,6 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX
   : mbGraphicsUsed( false )
   , mxBitmapContext( nullptr )
   , mnBitmapDepth( 0 )
-  , mxLayer( nullptr )
   , mnWidth(0)
   , mnHeight(0)
 {
@@ -90,11 +89,11 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX
         {
             nDY = 1;
         }
-        mxLayer = CGLayerCreateWithContext( pData->rCGContext, CGSizeMake( nDX, nDY), nullptr );
+        maLayer.set(CGLayerCreateWithContext(pData->rCGContext, CGSizeMake(nDX, nDY), nullptr));
         // Interrogate the context as to its real size
-        if (mxLayer)
+        if (maLayer.isSet())
         {
-            const CGSize aSize = CGLayerGetSize( mxLayer );
+            const CGSize aSize = CGLayerGetSize(maLayer.get());
             nDX = static_cast<long>(aSize.width);
             nDY = static_cast<long>(aSize.height);
         }
@@ -104,8 +103,8 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX
             nDY = 0;
         }
         SAL_INFO( "vcl.cg",  "CGLayerCreateWithContext(" << pData->rCGContext <<
-                  "," << CGSizeMake( nDX, nDY) << ",NULL) = " << mxLayer );
-        mpGraphics->SetVirDevGraphics( mxLayer, pData->rCGContext );
+                  "," << CGSizeMake( nDX, nDY) << ",NULL) = " << maLayer.get());
+        mpGraphics->SetVirDevGraphics(maLayer, pData->rCGContext);
     }
     else
     {
@@ -166,19 +165,19 @@ void AquaSalVirtualDevice::Destroy()
     if( mbForeignContext )
     {
         // Do not delete mxContext that we have received from outside VCL
-        mxLayer = nullptr;
+        maLayer.set(nullptr);
         return;
     }
 
-    if( mxLayer )
+    if (maLayer.isSet())
     {
         if( mpGraphics )
         {
-            mpGraphics->SetVirDevGraphics( nullptr, nullptr );
+            mpGraphics->SetVirDevGraphics(nullptr, nullptr);
         }
-        SAL_INFO( "vcl.cg",  "CGLayerRelease(" << mxLayer << ")" );
-        CGLayerRelease( mxLayer );
-        mxLayer = nullptr;
+        SAL_INFO("vcl.cg",  "CGLayerRelease(" << maLayer.get() << ")");
+        CGLayerRelease(maLayer.get());
+        maLayer.set(nullptr);
     }
 
     if( mxBitmapContext )
@@ -217,10 +216,10 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
         return true;
     }
 
-    if( mxLayer )
+    if (maLayer.isSet())
     {
-        const CGSize aSize = CGLayerGetSize( mxLayer );
-        SAL_INFO( "vcl.cg",  "CGlayerGetSize(" << mxLayer << ") = " << aSize );
+        const CGSize aSize = CGLayerGetSize(maLayer.get());
+        SAL_INFO( "vcl.cg",  "CGlayerGetSize(" << maLayer.get() << ") = " << aSize );
         if( (nDX == aSize.width) && (nDY == aSize.height) )
         {
             // Yay, we do not have to do anything :)
@@ -296,18 +295,18 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
     SAL_WARN_IF( !xCGContext, "vcl.quartz", "No context" );
 
     const CGSize aNewSize = { static_cast<CGFloat>(nDX), static_cast<CGFloat>(nDY) };
-    mxLayer = CGLayerCreateWithContext( xCGContext, aNewSize, nullptr );
-    SAL_INFO( "vcl.cg",  "CGLayerCreateWithContext(" << xCGContext << "," << aNewSize << ",NULL) = " << mxLayer );
+    maLayer.set(CGLayerCreateWithContext(xCGContext, aNewSize, nullptr));
+    SAL_INFO("vcl.cg",  "CGLayerCreateWithContext(" << xCGContext << "," << aNewSize << ",NULL) = " << maLayer.get());
 
-    if( mxLayer && mpGraphics )
+    if (maLayer.isSet() && mpGraphics)
     {
         // get the matching Quartz context
-        CGContextRef xDrawContext = CGLayerGetContext( mxLayer );
-        SAL_INFO( "vcl.cg",  "CGLayerGetContext(" << mxLayer << ") = " << xDrawContext );
-        mpGraphics->SetVirDevGraphics( mxLayer, xDrawContext, mnBitmapDepth );
+        CGContextRef xDrawContext = CGLayerGetContext( maLayer.get() );
+        SAL_INFO( "vcl.cg",  "CGLayerGetContext(" << maLayer.get() << ") = " << xDrawContext );
+        mpGraphics->SetVirDevGraphics(maLayer.get(), xDrawContext, mnBitmapDepth);
     }
 
-    return (mxLayer != nullptr);
+    return maLayer.isSet();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

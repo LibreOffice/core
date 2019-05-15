@@ -41,7 +41,7 @@ private:
     bool mbForeignContext;           // is mxContext from outside VCL
     CGContextRef mxBitmapContext;
     int mnBitmapDepth;
-    CGLayerRef mxLayer;              // Quartz layer
+    CGLayerHolder maLayer; // Quartz layer
     AquaSalGraphics* mpGraphics;     // current VirDev graphics
 
     long mnWidth;
