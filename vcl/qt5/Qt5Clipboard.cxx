@@ -249,8 +249,13 @@ void VclQt5Clipboard::setContents(
     {
         css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
             = xTrans->getTransferDataFlavors();
+        // Do not add non-text formats for the selection buffer,
+        // I don't think that one is ever used for anything else
+        // besides text and this gets called whenever something
+        // in LO gets selected (which may be e.g. an entire Calc sheet).
         bool bHasHtml = false, bHasImage = false;
-        lcl_peekFormats(aFormats, bHasHtml, bHasImage);
+        if (m_aClipboardMode != QClipboard::Selection)
+            lcl_peekFormats(aFormats, bHasHtml, bHasImage);
 
         std::unique_ptr<QMimeData> pMimeData(new QMimeData);
 
