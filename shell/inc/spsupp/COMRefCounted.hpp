@@ -13,8 +13,8 @@
 #include <objbase.h>
 #include <assert.h>
 
-template <class Interface>
-class COMRefCounted : public Interface
+template <class... Interfaces>
+class COMRefCounted : public Interfaces...
 {
 public:
     COMRefCounted() {}
