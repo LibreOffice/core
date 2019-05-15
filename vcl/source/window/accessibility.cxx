@@ -73,6 +73,8 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
@@ -637,5 +639,49 @@ void Window::SetAccessibilityEventsSuppressed(bool bSuppressed)
 }
 
 } /* namespace vcl */
+
+uno::Reference<accessibility::XAccessibleEditableText>
+FindFocusedEditableText(uno::Reference<accessibility::XAccessibleContext> const& xContext)
+{
+    if (!xContext.is())
+        return uno::Reference<accessibility::XAccessibleEditableText>();
+
+    uno::Reference<accessibility::XAccessibleStateSet> xState = xContext->getAccessibleStateSet();
+    if (xState.is())
+    {
+        if (xState->contains(accessibility::AccessibleStateType::FOCUSED))
+        {
+            uno::Reference<accessibility::XAccessibleEditableText> xText
+                = uno::Reference<accessibility::XAccessibleEditableText>(xContext, uno::UNO_QUERY);
+            if (xText.is())
+                return xText;
+            if (xState->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS))
+                return uno::Reference<accessibility::XAccessibleEditableText>();
+        }
+    }
+
+    bool bSafeToIterate = true;
+    sal_Int32 nCount = xContext->getAccessibleChildCount();
+    if (nCount < 0 || nCount > SAL_MAX_UINT16 /* slow enough for anyone */)
+        bSafeToIterate = false;
+    if (!bSafeToIterate)
+        return uno::Reference<accessibility::XAccessibleEditableText>();
+
+    for (sal_Int32 i = 0; i < xContext->getAccessibleChildCount(); ++i)
+    {
+        uno::Reference<accessibility::XAccessible> xChild = xContext->getAccessibleChild(i);
+        if (!xChild.is())
+            continue;
+        uno::Reference<accessibility::XAccessibleContext> xChildContext
+            = xChild->getAccessibleContext();
+        if (!xChildContext.is())
+            continue;
+        uno::Reference<accessibility::XAccessibleEditableText> xText
+            = FindFocusedEditableText(xChildContext);
+        if (xText.is())
+            return xText;
+    }
+    return uno::Reference<accessibility::XAccessibleEditableText>();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
