@@ -37,7 +37,6 @@
  ************************************************************************/
 
 #include <sal/config.h>
-#include <config_lgpl.h>
 
 #undef LANGUAGE_NONE
 #if defined _WIN32
@@ -57,11 +56,11 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/math.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <memory>
 #include <vector>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace com::sun::star;
 

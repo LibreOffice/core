@@ -1,0 +1,8 @@
+---
+assumeFilename: sccomp/source/solver/SolverComponent.cxx
+blacklist:
+    sccomp/source/solver/SolverComponent.hxx:
+    # Base class needs full type
+    - com/sun/star/sheet/XSolver.hpp
+    - com/sun/star/sheet/XSolverDescription.hpp
+    - com/sun/star/lang/XServiceInfo.hpp

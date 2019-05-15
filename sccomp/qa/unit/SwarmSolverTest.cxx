@@ -9,19 +9,12 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sheet/XSolver.hpp>
-#include <com/sun/star/sheet/XSolverDescription.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <test/calc_unoapi_test.hxx>
-
-#include <address.hxx>
 
 using namespace css;
 
