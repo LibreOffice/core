@@ -93,50 +93,51 @@ class SVX_DLLPUBLIC AutoFormatBase
 protected:
     // common attributes of Calc and Writer
     // --- from 641 on: CJK and CTL font settings
-    std::shared_ptr<SvxFontItem>            m_aFont;
-    std::shared_ptr<SvxFontHeightItem>      m_aHeight;
-    std::shared_ptr<SvxWeightItem>          m_aWeight;
-    std::shared_ptr<SvxPostureItem>         m_aPosture;
+    std::unique_ptr<SvxFontItem>            m_aFont;
+    std::unique_ptr<SvxFontHeightItem>      m_aHeight;
+    std::unique_ptr<SvxWeightItem>          m_aWeight;
+    std::unique_ptr<SvxPostureItem>         m_aPosture;
 
-    std::shared_ptr<SvxFontItem>            m_aCJKFont;
-    std::shared_ptr<SvxFontHeightItem>      m_aCJKHeight;
-    std::shared_ptr<SvxWeightItem>          m_aCJKWeight;
-    std::shared_ptr<SvxPostureItem>         m_aCJKPosture;
+    std::unique_ptr<SvxFontItem>            m_aCJKFont;
+    std::unique_ptr<SvxFontHeightItem>      m_aCJKHeight;
+    std::unique_ptr<SvxWeightItem>          m_aCJKWeight;
+    std::unique_ptr<SvxPostureItem>         m_aCJKPosture;
 
-    std::shared_ptr<SvxFontItem>            m_aCTLFont;
-    std::shared_ptr<SvxFontHeightItem>      m_aCTLHeight;
-    std::shared_ptr<SvxWeightItem>          m_aCTLWeight;
-    std::shared_ptr<SvxPostureItem>         m_aCTLPosture;
+    std::unique_ptr<SvxFontItem>            m_aCTLFont;
+    std::unique_ptr<SvxFontHeightItem>      m_aCTLHeight;
+    std::unique_ptr<SvxWeightItem>          m_aCTLWeight;
+    std::unique_ptr<SvxPostureItem>         m_aCTLPosture;
 
-    std::shared_ptr<SvxUnderlineItem>       m_aUnderline;
-    std::shared_ptr<SvxOverlineItem>        m_aOverline;
-    std::shared_ptr<SvxCrossedOutItem>      m_aCrossedOut;
-    std::shared_ptr<SvxContourItem>         m_aContour;
-    std::shared_ptr<SvxShadowedItem>        m_aShadowed;
-    std::shared_ptr<SvxColorItem>           m_aColor;
-    std::shared_ptr<SvxBoxItem>             m_aBox;
-    std::shared_ptr<SvxLineItem>            m_aTLBR;
-    std::shared_ptr<SvxLineItem>            m_aBLTR;
-    std::shared_ptr<SvxBrushItem>           m_aBackground;
+    std::unique_ptr<SvxUnderlineItem>       m_aUnderline;
+    std::unique_ptr<SvxOverlineItem>        m_aOverline;
+    std::unique_ptr<SvxCrossedOutItem>      m_aCrossedOut;
+    std::unique_ptr<SvxContourItem>         m_aContour;
+    std::unique_ptr<SvxShadowedItem>        m_aShadowed;
+    std::unique_ptr<SvxColorItem>           m_aColor;
+    std::unique_ptr<SvxBoxItem>             m_aBox;
+    std::unique_ptr<SvxLineItem>            m_aTLBR;
+    std::unique_ptr<SvxLineItem>            m_aBLTR;
+    std::unique_ptr<SvxBrushItem>           m_aBackground;
 
     // Writer specific
-    std::shared_ptr<SvxAdjustItem>          m_aAdjust;
+    std::unique_ptr<SvxAdjustItem>          m_aAdjust;
 
     // Calc specific
-    std::shared_ptr<SvxHorJustifyItem>      m_aHorJustify;
-    std::shared_ptr<SvxVerJustifyItem>      m_aVerJustify;
-    std::shared_ptr<SfxBoolItem>            m_aStacked;
-    std::shared_ptr<SvxMarginItem>          m_aMargin;
-    std::shared_ptr<SfxBoolItem>            m_aLinebreak;
+    std::unique_ptr<SvxHorJustifyItem>      m_aHorJustify;
+    std::unique_ptr<SvxVerJustifyItem>      m_aVerJustify;
+    std::unique_ptr<SfxBoolItem>            m_aStacked;
+    std::unique_ptr<SvxMarginItem>          m_aMargin;
+    std::unique_ptr<SfxBoolItem>            m_aLinebreak;
 
     // from SO5, 504k on, rotated text
-    std::shared_ptr<SfxInt32Item>           m_aRotateAngle;
-    std::shared_ptr<SvxRotateModeItem>      m_aRotateMode;
+    std::unique_ptr<SfxInt32Item>           m_aRotateAngle;
+    std::unique_ptr<SvxRotateModeItem>      m_aRotateMode;
 
 public:
     AutoFormatBase();
     AutoFormatBase( const AutoFormatBase& rNew );
     ~AutoFormatBase();
+    AutoFormatBase& operator=(const AutoFormatBase&);
 
     /// Comparing based of boxes backgrounds.
     bool operator==(const AutoFormatBase& rRight);

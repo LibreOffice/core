@@ -111,6 +111,7 @@ public:
     ScAutoFormatDataField();
     ScAutoFormatDataField( const ScAutoFormatDataField& rCopy );
     ~ScAutoFormatDataField();
+    ScAutoFormatDataField& operator=(const ScAutoFormatDataField& rRef) = delete;
 
     // number format
     const ScNumFormatAbbrev&    GetNumFormat() const    { return aNumFormat; }

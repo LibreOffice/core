@@ -244,6 +244,42 @@ AutoFormatBase::~AutoFormatBase()
 {
 }
 
+AutoFormatBase& AutoFormatBase::operator=(const AutoFormatBase& rRef)
+{
+    SetFont(rRef.GetFont());
+    SetHeight(rRef.GetHeight());
+    SetWeight(rRef.GetWeight());
+    SetPosture(rRef.GetPosture());
+    SetCJKFont(rRef.GetCJKFont());
+    SetCJKHeight(rRef.GetCJKHeight());
+    SetCJKWeight(rRef.GetCJKWeight());
+    SetCJKPosture(rRef.GetCJKPosture());
+    SetCTLFont(rRef.GetCTLFont());
+    SetCTLHeight(rRef.GetCTLHeight());
+    SetCTLWeight(rRef.GetCTLWeight());
+    SetCTLPosture(rRef.GetCTLPosture());
+    SetUnderline(rRef.GetUnderline());
+    SetOverline(rRef.GetOverline());
+    SetCrossedOut(rRef.GetCrossedOut());
+    SetContour(rRef.GetContour());
+    SetShadowed(rRef.GetShadowed());
+    SetColor(rRef.GetColor());
+    SetBox(rRef.GetBox());
+    SetTLBR(rRef.GetTLBR());
+    SetBLTR(rRef.GetBLTR());
+    SetBackground(rRef.GetBackground());
+    SetAdjust(rRef.GetAdjust());
+    SetHorJustify(rRef.GetHorJustify());
+    SetVerJustify(rRef.GetVerJustify());
+    SetStacked(rRef.GetStacked());
+    SetMargin(rRef.GetMargin());
+    SetLinebreak(rRef.GetLinebreak());
+    SetRotateAngle(rRef.GetRotateAngle());
+    SetRotateMode(rRef.GetRotateMode());
+
+    return *this;
+}
+
 const sal_uInt16 AUTOFORMAT_DATA_ID_641 = 10002;
 const sal_uInt16 AUTOFORMAT_DATA_ID_300OVRLN = 10032;
 const sal_uInt16 AUTOFORMAT_DATA_ID_680DR14 = 10012;

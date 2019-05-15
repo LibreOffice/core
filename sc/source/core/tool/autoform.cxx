@@ -149,36 +149,36 @@ ScAutoFormatDataField::ScAutoFormatDataField()
     // need to set default instances for base class AutoFormatBase here
     // due to resource defines (e.g. ATTR_FONT) which are not available
     // in svx and different in the different usages of derivations
-    m_aFont = std::make_shared<SvxFontItem>(ATTR_FONT);
-    m_aHeight = std::make_shared<SvxFontHeightItem>(240, 100, ATTR_FONT_HEIGHT);
-    m_aWeight = std::make_shared<SvxWeightItem>(WEIGHT_NORMAL, ATTR_FONT_WEIGHT);
-    m_aPosture = std::make_shared<SvxPostureItem>(ITALIC_NONE, ATTR_FONT_POSTURE);
-    m_aCJKFont = std::make_shared<SvxFontItem>(ATTR_CJK_FONT);
-    m_aCJKHeight = std::make_shared<SvxFontHeightItem>(240, 100, ATTR_CJK_FONT_HEIGHT);
-    m_aCJKWeight = std::make_shared<SvxWeightItem>(WEIGHT_NORMAL, ATTR_CJK_FONT_WEIGHT);
-    m_aCJKPosture = std::make_shared<SvxPostureItem>(ITALIC_NONE, ATTR_CJK_FONT_POSTURE);
-    m_aCTLFont = std::make_shared<SvxFontItem>(ATTR_CTL_FONT);
-    m_aCTLHeight = std::make_shared<SvxFontHeightItem>(240, 100, ATTR_CTL_FONT_HEIGHT);
-    m_aCTLWeight = std::make_shared<SvxWeightItem>(WEIGHT_NORMAL, ATTR_CTL_FONT_WEIGHT);
-    m_aCTLPosture = std::make_shared<SvxPostureItem>(ITALIC_NONE, ATTR_CTL_FONT_POSTURE);
-    m_aUnderline = std::make_shared<SvxUnderlineItem>(LINESTYLE_NONE,ATTR_FONT_UNDERLINE);
-    m_aOverline = std::make_shared<SvxOverlineItem>(LINESTYLE_NONE,ATTR_FONT_OVERLINE);
-    m_aCrossedOut = std::make_shared<SvxCrossedOutItem>(STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT);
-    m_aContour = std::make_shared<SvxContourItem>(false, ATTR_FONT_CONTOUR);
-    m_aShadowed = std::make_shared<SvxShadowedItem>(false, ATTR_FONT_SHADOWED);
-    m_aColor = std::make_shared<SvxColorItem>(ATTR_FONT_COLOR);
-    m_aBox = std::make_shared<SvxBoxItem>(ATTR_BORDER);
-    m_aTLBR = std::make_shared<SvxLineItem>(ATTR_BORDER_TLBR);
-    m_aBLTR = std::make_shared<SvxLineItem>(ATTR_BORDER_BLTR);
-    m_aBackground = std::make_shared<SvxBrushItem>(ATTR_BACKGROUND);
-    m_aAdjust = std::make_shared<SvxAdjustItem>(SvxAdjust::Left, 0);
-    m_aHorJustify = std::make_shared<SvxHorJustifyItem>(SvxCellHorJustify::Standard, ATTR_HOR_JUSTIFY);
-    m_aVerJustify = std::make_shared<SvxVerJustifyItem>(SvxCellVerJustify::Standard, ATTR_VER_JUSTIFY);
-    m_aStacked = std::make_shared<SfxBoolItem>();
-    m_aMargin = std::make_shared<SvxMarginItem>(ATTR_MARGIN);
-    m_aLinebreak = std::make_shared<SfxBoolItem>(ATTR_LINEBREAK);
-    m_aRotateAngle = std::make_shared<SfxInt32Item>(ATTR_ROTATE_VALUE);
-    m_aRotateMode = std::make_shared<SvxRotateModeItem>(SVX_ROTATE_MODE_STANDARD, ATTR_ROTATE_MODE);
+    m_aFont = std::make_unique<SvxFontItem>(ATTR_FONT);
+    m_aHeight = std::make_unique<SvxFontHeightItem>(240, 100, ATTR_FONT_HEIGHT);
+    m_aWeight = std::make_unique<SvxWeightItem>(WEIGHT_NORMAL, ATTR_FONT_WEIGHT);
+    m_aPosture = std::make_unique<SvxPostureItem>(ITALIC_NONE, ATTR_FONT_POSTURE);
+    m_aCJKFont = std::make_unique<SvxFontItem>(ATTR_CJK_FONT);
+    m_aCJKHeight = std::make_unique<SvxFontHeightItem>(240, 100, ATTR_CJK_FONT_HEIGHT);
+    m_aCJKWeight = std::make_unique<SvxWeightItem>(WEIGHT_NORMAL, ATTR_CJK_FONT_WEIGHT);
+    m_aCJKPosture = std::make_unique<SvxPostureItem>(ITALIC_NONE, ATTR_CJK_FONT_POSTURE);
+    m_aCTLFont = std::make_unique<SvxFontItem>(ATTR_CTL_FONT);
+    m_aCTLHeight = std::make_unique<SvxFontHeightItem>(240, 100, ATTR_CTL_FONT_HEIGHT);
+    m_aCTLWeight = std::make_unique<SvxWeightItem>(WEIGHT_NORMAL, ATTR_CTL_FONT_WEIGHT);
+    m_aCTLPosture = std::make_unique<SvxPostureItem>(ITALIC_NONE, ATTR_CTL_FONT_POSTURE);
+    m_aUnderline = std::make_unique<SvxUnderlineItem>(LINESTYLE_NONE,ATTR_FONT_UNDERLINE);
+    m_aOverline = std::make_unique<SvxOverlineItem>(LINESTYLE_NONE,ATTR_FONT_OVERLINE);
+    m_aCrossedOut = std::make_unique<SvxCrossedOutItem>(STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT);
+    m_aContour = std::make_unique<SvxContourItem>(false, ATTR_FONT_CONTOUR);
+    m_aShadowed = std::make_unique<SvxShadowedItem>(false, ATTR_FONT_SHADOWED);
+    m_aColor = std::make_unique<SvxColorItem>(ATTR_FONT_COLOR);
+    m_aBox = std::make_unique<SvxBoxItem>(ATTR_BORDER);
+    m_aTLBR = std::make_unique<SvxLineItem>(ATTR_BORDER_TLBR);
+    m_aBLTR = std::make_unique<SvxLineItem>(ATTR_BORDER_BLTR);
+    m_aBackground = std::make_unique<SvxBrushItem>(ATTR_BACKGROUND);
+    m_aAdjust = std::make_unique<SvxAdjustItem>(SvxAdjust::Left, 0);
+    m_aHorJustify = std::make_unique<SvxHorJustifyItem>(SvxCellHorJustify::Standard, ATTR_HOR_JUSTIFY);
+    m_aVerJustify = std::make_unique<SvxVerJustifyItem>(SvxCellVerJustify::Standard, ATTR_VER_JUSTIFY);
+    m_aStacked = std::make_unique<SfxBoolItem>();
+    m_aMargin = std::make_unique<SvxMarginItem>(ATTR_MARGIN);
+    m_aLinebreak = std::make_unique<SfxBoolItem>(ATTR_LINEBREAK);
+    m_aRotateAngle = std::make_unique<SfxInt32Item>(ATTR_ROTATE_VALUE);
+    m_aRotateMode = std::make_unique<SvxRotateModeItem>(SVX_ROTATE_MODE_STANDARD, ATTR_ROTATE_MODE);
 }
 
 ScAutoFormatDataField::ScAutoFormatDataField( const ScAutoFormatDataField& rCopy )
