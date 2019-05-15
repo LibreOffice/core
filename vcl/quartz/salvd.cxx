@@ -68,6 +68,8 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX
   , mxBitmapContext( nullptr )
   , mnBitmapDepth( 0 )
   , mxLayer( nullptr )
+  , mnWidth(0)
+  , mnHeight(0)
 {
     SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::AquaSalVirtualDevice() this=" << this
               << " size=(" << nDX << "x" << nDY << ") bitcount=" << static_cast<int>(eFormat) <<
@@ -228,6 +230,9 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 
     Destroy();
 
+    mnWidth = nDX;
+    mnHeight = nDY;
+
     // create a Quartz layer matching to the intended virdev usage
     CGContextRef xCGContext = nullptr;
     if( mnBitmapDepth && (mnBitmapDepth < 16) )
@@ -303,18 +308,6 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
     }
 
     return (mxLayer != nullptr);
-}
-
-long AquaSalVirtualDevice::GetWidth() const
-{
-    const CGSize aSize = CGLayerGetSize( mxLayer );
-    return aSize.width;
-}
-
-long AquaSalVirtualDevice::GetHeight() const
-{
-    const CGSize aSize = CGLayerGetSize( mxLayer );
-    return aSize.height;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
