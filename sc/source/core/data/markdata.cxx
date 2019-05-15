@@ -356,6 +356,23 @@ void ScMarkData::MarkFromRangeList( const ScRangeList& rList, bool bReset )
     }
 }
 
+/**
+  Optimise the case of constructing from a range list, speeds up import.
+*/
+ScMarkData::ScMarkData(const ScRangeList& rList)
+{
+    ResetMark();
+
+    for (const ScRange& rRange : rList)
+        maTabMarked.insert( rRange.aStart.Tab() );
+
+    bMultiMarked = true;
+    aMultiRange = rList.Combine();
+
+    aMultiSel.Set( rList );
+}
+
+
 void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, bool bClear, SCTAB nForTab ) const
 {
     if (!pList)

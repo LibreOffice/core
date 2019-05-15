@@ -60,10 +60,10 @@ private:
     ScRangeList     aLeftEnvelope;            // list of ranges in the left envelope of the multi selection
     ScRangeList     aRightEnvelope;           // list of ranges in the right envelope of the multi selection
 
-
 public:
                 ScMarkData();
                 ScMarkData(const ScMarkData& rData);
+                ScMarkData(const ScRangeList& rList);
                 ~ScMarkData();
 
     ScMarkData& operator=(const ScMarkData& rData);
