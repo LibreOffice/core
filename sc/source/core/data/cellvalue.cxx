@@ -567,6 +567,11 @@ ScRefCellValue::ScRefCellValue( ScDocument& rDoc, const ScAddress& rPos )
     assign( rDoc, rPos);
 }
 
+ScRefCellValue::ScRefCellValue( ScDocument& rDoc, const ScAddress& rPos, sc::ColumnBlockPosition& rBlockPos )
+{
+    assign( rDoc, rPos, rBlockPos );
+}
+
 void ScRefCellValue::clear()
 {
     // Reset to empty value.
@@ -577,6 +582,11 @@ void ScRefCellValue::clear()
 void ScRefCellValue::assign( ScDocument& rDoc, const ScAddress& rPos )
 {
     *this = rDoc.GetRefCellValue(rPos);
+}
+
+void ScRefCellValue::assign( ScDocument& rDoc, const ScAddress& rPos, sc::ColumnBlockPosition& rBlockPos )
+{
+    *this = rDoc.GetRefCellValue(rPos, rBlockPos);
 }
 
 void ScRefCellValue::commit( ScDocument& rDoc, const ScAddress& rPos ) const

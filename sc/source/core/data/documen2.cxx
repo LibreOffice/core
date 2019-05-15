@@ -529,6 +529,14 @@ ScRefCellValue ScDocument::GetRefCellValue( const ScAddress& rPos )
     return maTabs[rPos.Tab()]->GetRefCellValue(rPos.Col(), rPos.Row());
 }
 
+ScRefCellValue ScDocument::GetRefCellValue( const ScAddress& rPos, sc::ColumnBlockPosition& rBlockPos )
+{
+    if (!TableExists(rPos.Tab()))
+        return ScRefCellValue(); // empty
+
+    return maTabs[rPos.Tab()]->GetRefCellValue(rPos.Col(), rPos.Row(), rBlockPos);
+}
+
 svl::SharedStringPool& ScDocument::GetSharedStringPool()
 {
     return *mpCellStringPool;

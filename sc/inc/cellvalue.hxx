@@ -18,6 +18,10 @@ class EditTextObject;
 class ScColumn;
 struct ScRefCellValue;
 
+namespace sc {
+struct ColumnBlockPosition;
+}
+
 namespace svl {
 
 class SharedString;
@@ -117,6 +121,7 @@ struct SC_DLLPUBLIC ScRefCellValue
      * Take cell value from specified position in specified document.
      */
     ScRefCellValue( ScDocument& rDoc, const ScAddress& rPos );
+    ScRefCellValue( ScDocument& rDoc, const ScAddress& rPos, sc::ColumnBlockPosition& rBlockPos );
 
     void clear();
 
@@ -124,6 +129,7 @@ struct SC_DLLPUBLIC ScRefCellValue
      * Take cell value from specified position in specified document.
      */
     void assign( ScDocument& rDoc, const ScAddress& rPos );
+    void assign( ScDocument& rDoc, const ScAddress& rPos, sc::ColumnBlockPosition& rBlockPos );
 
     /**
      * Set cell value at specified position in specified document.
