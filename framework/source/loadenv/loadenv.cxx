@@ -1517,8 +1517,8 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
         OUString sReferrer = lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REFERRER(), OUString());
 
         // tdf#83722: valid but unmodified document, either from template
-        // or opened by the user (File > New)
-        if (bFromTemplate || !sReferrer.isEmpty())
+        // or opened by the user (via File > New, referrer is set to private:user)
+        if (bFromTemplate || (sReferrer == "private:user"))
             return css::uno::Reference< css::frame::XFrame >();
 
         bReactivateOldControllerOnError = xOldDoc->suspend(true);
