@@ -2421,6 +2421,14 @@ ScRefCellValue ScTable::GetRefCellValue( SCCOL nCol, SCROW nRow )
     return aCol[nCol].GetCellValue(nRow);
 }
 
+ScRefCellValue ScTable::GetRefCellValue( SCCOL nCol, SCROW nRow, sc::ColumnBlockPosition& rBlockPos )
+{
+    if ( !IsColRowValid( nCol, nRow ) )
+        return ScRefCellValue();
+
+    return aCol[nCol].GetCellValue(rBlockPos, nRow);
+}
+
 SvtBroadcaster* ScTable::GetBroadcaster( SCCOL nCol, SCROW nRow )
 {
     if ( !IsColRowValid( nCol, nRow ) )

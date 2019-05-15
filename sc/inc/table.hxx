@@ -998,6 +998,7 @@ public:
     void RegroupFormulaCells( SCCOL nCol );
 
     ScRefCellValue GetRefCellValue( SCCOL nCol, SCROW nRow );
+    ScRefCellValue GetRefCellValue( SCCOL nCol, SCROW nRow, sc::ColumnBlockPosition& rBlockPos );
 
     SvtBroadcaster* GetBroadcaster( SCCOL nCol, SCROW nRow );
     const SvtBroadcaster* GetBroadcaster( SCCOL nCol, SCROW nRow ) const;
