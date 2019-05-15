@@ -31,6 +31,7 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -172,20 +173,36 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, co
     registerProperty( PROPERTY_LABEL, PROPERTY_ID_LABEL, nPropAttr, &m_sLabel, cppu::UnoType<decltype(m_sLabel)>::get() );
 
 
-    OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_TYPENAME ) >>= m_aTypeName );
-    OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_ISNULLABLE ) >>= m_nIsNullable );
-    OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_PRECISION ) >>= m_nPrecision );
-    OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_SCALE ) >>= m_nScale );
-    OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_TYPE ) >>= m_nType );
-    OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_ISAUTOINCREMENT ) >>= m_bAutoIncrement );
-    OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_ISCURRENCY ) >>= m_bCurrency );
-    OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_NAME ) >>= m_sName );
+    if( ! (_rxParserColumn->getPropertyValue( PROPERTY_TYPENAME ) >>= m_aTypeName) )
+        SAL_WARN("dbaccess.core", "OQueryColumn: unable to get property " << PROPERTY_TYPENAME);
+
+    if( ! (_rxParserColumn->getPropertyValue( PROPERTY_ISNULLABLE ) >>= m_nIsNullable) )
+        SAL_WARN("dbaccess.core", "OQueryColumn: unable to get property " << PROPERTY_ISNULLABLE);
+
+    if( ! (_rxParserColumn->getPropertyValue( PROPERTY_PRECISION ) >>= m_nPrecision) )
+        SAL_WARN("dbaccess.core", "OQueryColumn: unable to get property " << PROPERTY_PRECISION);
+
+    if( ! (_rxParserColumn->getPropertyValue( PROPERTY_SCALE ) >>= m_nScale) )
+        SAL_WARN("dbaccess.core", "OQueryColumn: unable to get property " << PROPERTY_SCALE);
+
+    if( ! (_rxParserColumn->getPropertyValue( PROPERTY_TYPE ) >>= m_nType) )
+        SAL_WARN("dbaccess.core", "OQueryColumn: unable to get property " << PROPERTY_TYPE);
+
+    if( ! (_rxParserColumn->getPropertyValue( PROPERTY_ISAUTOINCREMENT ) >>= m_bAutoIncrement) )
+        SAL_WARN("dbaccess.core", "OQueryColumn: unable to get property " << PROPERTY_ISAUTOINCREMENT);
+
+    if( ! (_rxParserColumn->getPropertyValue( PROPERTY_ISCURRENCY ) >>= m_bCurrency) )
+        SAL_WARN("dbaccess.core", "OQueryColumn: unable to get property " << PROPERTY_ISCURRENCY);
+
+    if( ! (_rxParserColumn->getPropertyValue( PROPERTY_NAME ) >>= m_sName) )
+        SAL_WARN("dbaccess.core", "OQueryColumn: unable to get property " << PROPERTY_NAME);
 
     m_bRowVersion = false;
 
     Reference< XPropertySetInfo > xPSI( _rxParserColumn->getPropertySetInfo(), UNO_SET_THROW );
     if ( xPSI->hasPropertyByName( PROPERTY_DEFAULTVALUE ) )
-        OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_DEFAULTVALUE ) >>= m_aDefaultValue );
+        if( ! (_rxParserColumn->getPropertyValue( PROPERTY_DEFAULTVALUE ) >>= m_aDefaultValue) )
+            SAL_WARN("dbaccess.core", "OQueryColumn: unable to get property " << PROPERTY_DEFAULTVALUE);
 
     // copy some optional properties from the parser column
     struct PropertyDescriptor
@@ -230,9 +247,12 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
         // determine the composed table name, plus the column name, as indicated by the
         // respective properties
         OUString sCatalog, sSchema, sTable;
-        OSL_VERIFY( getPropertyValue( PROPERTY_CATALOGNAME ) >>= sCatalog );
-        OSL_VERIFY( getPropertyValue( PROPERTY_SCHEMANAME ) >>= sSchema );
-        OSL_VERIFY( getPropertyValue( PROPERTY_TABLENAME ) >>= sTable );
+        if( ! (getPropertyValue( PROPERTY_CATALOGNAME ) >>= sCatalog) )
+            SAL_WARN("dbaccess.core", "impl_determineOriginalTableColumn: unable to get property " << PROPERTY_CATALOGNAME);
+        if( ! (getPropertyValue( PROPERTY_SCHEMANAME ) >>= sSchema) )
+            SAL_WARN("dbaccess.core", "impl_determineOriginalTableColumn: unable to get property " << PROPERTY_SCHEMANAME);
+        if( ! (getPropertyValue( PROPERTY_TABLENAME ) >>= sTable) )
+            SAL_WARN("dbaccess.core", "impl_determineOriginalTableColumn: unable to get property " << PROPERTY_TABLENAME);
         if ( sCatalog.isEmpty() && sSchema.isEmpty() && sTable.isEmpty() )
             return nullptr;
 
@@ -249,7 +269,8 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
         Reference< XNameAccess > xColumns( xSuppCols->getColumns(), UNO_SET_THROW );
 
         OUString sColumn;
-        OSL_VERIFY( getPropertyValue( PROPERTY_REALNAME ) >>= sColumn );
+        if( ! (getPropertyValue( PROPERTY_REALNAME ) >>= sColumn) )
+            SAL_WARN("dbaccess.core", "impl_determineOriginalTableColumn: unable to get property " << PROPERTY_REALNAME);
         if ( !xColumns->hasByName( sColumn ) )
             return nullptr;
 
