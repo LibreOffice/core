@@ -59,7 +59,8 @@ public final class DEPSSolverImpl extends BaseEvolutionarySolver
         super(context, "DEPS Evolutionary Algorithm");
 
         registerProperty(m_agentSwitchRate);
-        registerProperty(m_factor);
+        registerProperty(m_minFactor);
+        registerProperty(m_maxFactor);
         registerProperty(m_CR);
         registerProperty(m_c1);
         registerProperty(m_c2);
@@ -102,7 +103,8 @@ public final class DEPSSolverImpl extends BaseEvolutionarySolver
 
     private final PropertyInfo<Double> m_agentSwitchRate = new PropertyInfo<Double>("AgentSwitchRate", 0.5, "Agent Switch Rate (DE Probability)");
     // --DE
-    private final PropertyInfo<Double> m_factor = new PropertyInfo<Double>("DEFactor", 0.5, "DE: Scaling Factor (0-1.2)");
+    private final PropertyInfo<Double> m_minFactor = new PropertyInfo<Double>("DEFactorMin", 0.5, "DE: Min Scaling Factor (0-1.2)");
+    private final PropertyInfo<Double> m_maxFactor = new PropertyInfo<Double>("DEFactorMax", 0.5, "DE: Max Scaling Factor (0-1.2)");
     private final PropertyInfo<Double> m_CR = new PropertyInfo<Double>("DECR", 0.9, "DE: Crossover Probability (0-1)");
     // --PS
     private final PropertyInfo<Double> m_c1 = new PropertyInfo<Double>("PSC1", 1.494, "PS: Cognitive Constant");
@@ -126,7 +128,8 @@ public final class DEPSSolverImpl extends BaseEvolutionarySolver
             agents[i].setPbest(m_library.getSelectedPoint(i));
 
             DEGTBehavior deGTBehavior = new DEGTBehavior();
-            deGTBehavior.FACTOR = m_factor.getValue();
+            deGTBehavior.MIN_FACTOR = m_minFactor.getValue();
+            deGTBehavior.MAX_FACTOR = m_maxFactor.getValue();
             deGTBehavior.CR = m_CR.getValue();
 
             PSGTBehavior psGTBehavior = new PSGTBehavior();

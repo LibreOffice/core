@@ -41,7 +41,10 @@ public class DEGTBehavior extends AbsGTBehavior implements ILibEngine {
   private static final int DVNum = 2;
 
   //scale constant: (0, 1.2], normally be 0.5
-  public double FACTOR = 0.5;
+  public double MIN_FACTOR = 0.5;
+
+  //scale constant: (0, 1.2], normally be 0.5
+  public double MAX_FACTOR = 0.5;
 
   //crossover constant: [0, 1], normally be 0.1 or 0.9
   public double CR = 0.9;
@@ -70,7 +73,7 @@ public class DEGTBehavior extends AbsGTBehavior implements ILibEngine {
       delta += (i % 2 == 0 ? +1D : -1D) * differenceVectors[i].getLocation()[index];
     }
 
-    trialVector[index] = globalVector[index] + FACTOR * delta;
+    trialVector[index] = globalVector[index] + RandomGenerator.doubleRangeRandom(MIN_FACTOR, MAX_FACTOR) * delta;
   }
 
   @Override
