@@ -88,6 +88,8 @@ namespace sdr
             // ViewTransformation and evtl. correct mfDiscreteOne
             double getDiscreteOne() const;
 
+            tools::Rectangle RangeToInvalidateRectangle(const basegfx::B2DRange& rRange) const;
+
             OverlayManager(OutputDevice& rOutputDevice);
             virtual ~OverlayManager() override;
 
