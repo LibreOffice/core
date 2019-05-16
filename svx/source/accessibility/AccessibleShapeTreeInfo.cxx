@@ -72,13 +72,11 @@ AccessibleShapeTreeInfo& AccessibleShapeTreeInfo::operator= (const AccessibleSha
     return *this;
 }
 
-
 AccessibleShapeTreeInfo::~AccessibleShapeTreeInfo()
 {
     SolarMutexGuard g;
     mpWindow.reset();
 }
-
 
 void AccessibleShapeTreeInfo::SetDocumentWindow (
     const Reference<XAccessibleComponent>& rxDocumentWindow)
@@ -93,12 +91,10 @@ void AccessibleShapeTreeInfo::SetModelBroadcaster (
     mxModelBroadcaster = rxModelBroadcaster;
 }
 
-
 void AccessibleShapeTreeInfo::SetSdrView (SdrView* pView)
 {
     mpView = pView;
 }
-
 
 void AccessibleShapeTreeInfo::SetController (
     const Reference<frame::XController>& rxController)
@@ -106,18 +102,15 @@ void AccessibleShapeTreeInfo::SetController (
     mxController = rxController;
 }
 
-
-void AccessibleShapeTreeInfo::SetWindow (vcl::Window* pWindow)
+void AccessibleShapeTreeInfo::SetDevice(OutputDevice* pDevice)
 {
-    mpWindow = pWindow;
+    mpWindow = pDevice;
 }
-
 
 void AccessibleShapeTreeInfo::SetViewForwarder (const IAccessibleViewForwarder* pViewForwarder)
 {
     mpViewForwarder = pViewForwarder;
 }
-
 
 } // end of namespace accessibility
 

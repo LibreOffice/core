@@ -317,7 +317,7 @@ ScChildrenShapes::ScChildrenShapes(ScAccessibleDocument* pAccessibleDocument, Sc
             maShapeTreeInfo.SetModelBroadcaster( new ScDrawModelBroadcaster(rViewData.GetDocument()->GetDrawLayer()) );
             maShapeTreeInfo.SetSdrView(rViewData.GetScDrawView());
             maShapeTreeInfo.SetController(nullptr);
-            maShapeTreeInfo.SetWindow(pViewShell->GetWindowByPos(meSplitPos));
+            maShapeTreeInfo.SetDevice(pViewShell->GetWindowByPos(meSplitPos));
             maShapeTreeInfo.SetViewForwarder(mpAccessibleDocument);
         }
     }
@@ -350,7 +350,7 @@ void ScChildrenShapes::SetDrawBroadcaster()
             maShapeTreeInfo.SetModelBroadcaster( new ScDrawModelBroadcaster(rViewData.GetDocument()->GetDrawLayer()) );
             maShapeTreeInfo.SetSdrView(rViewData.GetScDrawView());
             maShapeTreeInfo.SetController(nullptr);
-            maShapeTreeInfo.SetWindow(mpViewShell->GetWindowByPos(meSplitPos));
+            maShapeTreeInfo.SetDevice(mpViewShell->GetWindowByPos(meSplitPos));
             maShapeTreeInfo.SetViewForwarder(mpAccessibleDocument);
         }
     }

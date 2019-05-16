@@ -96,7 +96,7 @@ SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
     }
 
     maTreeInfo.SetSdrView( mpView );
-    maTreeInfo.SetWindow( mpControl );
+    maTreeInfo.SetDevice( mpControl );
     maTreeInfo.SetViewForwarder( this );
 }
 
