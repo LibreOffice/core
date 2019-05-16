@@ -146,7 +146,7 @@ AccessibleControlShape::~AccessibleControlShape()
 }
 
 namespace {
-    Reference< XContainer > lcl_getControlContainer( const vcl::Window* _pWin, const SdrView* _pView )
+    Reference< XContainer > lcl_getControlContainer( const OutputDevice* _pWin, const SdrView* _pView )
     {
         Reference< XContainer > xReturn;
         DBG_ASSERT( _pView, "lcl_getControlContainer: invalid view!" );
@@ -189,7 +189,7 @@ void AccessibleControlShape::Init()
         // I'm aware of at the moment .....
 
         // get the control which belongs to our model (relative to our view)
-        const vcl::Window* pViewWindow = maShapeTreeInfo.GetWindow();
+        const OutputDevice* pViewWindow = maShapeTreeInfo.GetWindow();
         SdrUnoObj* pUnoObjectImpl = dynamic_cast<SdrUnoObj*>( GetSdrObjectFromXShape(mxShape)  );
         SdrView* pView = maShapeTreeInfo.GetSdrView();
         OSL_ENSURE( pView && pViewWindow && pUnoObjectImpl, "AccessibleControlShape::Init: no view, or no view window, no SdrUnoObj!" );
