@@ -91,6 +91,7 @@
 #include <oox/drawingml/diagram/diagram.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/shape/ShapeFilterBase.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
@@ -479,6 +480,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
         case SID_REGENERATE_DIAGRAM:
         {
+            SAL_INFO("oox", "RegenerateDiagram command");
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             if (rMarkList.GetMarkCount() == 1)
             {

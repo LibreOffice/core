@@ -119,6 +119,7 @@ public:
     void testTdf115873();
     void testTdf115873Group();
     void testCutSelectionChange();
+    void testRegenerateDiagram();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -165,6 +166,7 @@ public:
     CPPUNIT_TEST(testTdf115873);
     CPPUNIT_TEST(testTdf115873Group);
     CPPUNIT_TEST(testCutSelectionChange);
+    CPPUNIT_TEST(testRegenerateDiagram);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2246,6 +2248,59 @@ void SdTiledRenderingTest::testCutSelectionChange()
 
     // Selection is removed
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), m_aSelection.size());
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testRegenerateDiagram()
+{
+    // Load the document.
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("regenerate-diagram.pptx");
+    CPPUNIT_ASSERT(pXImpressDocument);
+
+    SdPage* pActualPage = pXImpressDocument->GetDocShell()->GetViewShell()->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pActualPage->GetObj(0)->GetSubList()->GetObjCount());
+
+    // select diagram
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    Scheduler::ProcessEventsToIdle();
+
+    // enter group
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::F3);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::F3);
+    Scheduler::ProcessEventsToIdle();
+
+    // select shape and delete
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
+    Scheduler::ProcessEventsToIdle();
+
+    // exit group
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::F3);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::F3);
+    Scheduler::ProcessEventsToIdle();
+
+    // select diagram
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObj(0)->GetSubList()->GetObjCount());
+
+    // regenerate diagram
+    comphelper::dispatchCommand(".uno:RegenerateDiagram", uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+
+    // diagram content (child shape count) should be the same as in the beginning
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pActualPage->GetObj(0)->GetSubList()->GetObjCount());
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 
