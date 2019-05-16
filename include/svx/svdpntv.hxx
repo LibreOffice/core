@@ -238,6 +238,7 @@ public:
     SdrPaintWindow* GetPaintWindow(sal_uInt32 nIndex) const;
     // Replacement for GetWin(0), may return 0L (!)
     OutputDevice* GetFirstOutputDevice() const;
+    void InvalidateWindow(const tools::Rectangle& rArea, OutputDevice& rDevice) const;
 
 private:
     SVX_DLLPRIVATE void ImpClearVars();
