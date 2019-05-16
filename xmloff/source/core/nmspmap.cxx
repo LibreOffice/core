@@ -46,6 +46,8 @@ using namespace ::xmloff::token;
  * Martin 13/06/01
  */
 
+static const OUString sEmpty;
+
 SvXMLNamespaceMap::SvXMLNamespaceMap()
 : sXMLNS( GetXMLToken ( XML_XMLNS ) )
 {
@@ -302,47 +304,50 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName_( const OUString& rAttrName,
     }
     else
     {
-        rtl::Reference<NameSpaceEntry> xEntry(new NameSpaceEntry);
+        OUString sEntryPrefix, sEntryName;
 
         sal_Int32 nColonPos = rAttrName.indexOf( ':' );
         if( -1 == nColonPos )
         {
             // case: no ':' found -> default namespace
-            xEntry->sPrefix.clear();
-            xEntry->sName = rAttrName;
+            sEntryName = rAttrName;
         }
         else
         {
             // normal case: ':' found -> get prefix/suffix
-            xEntry->sPrefix = rAttrName.copy( 0L, nColonPos );
-            xEntry->sName = rAttrName.copy( nColonPos + 1 );
+            sEntryPrefix = rAttrName.copy( 0L, nColonPos );
+            sEntryName = rAttrName.copy( nColonPos + 1 );
         }
 
         if( pPrefix )
-            *pPrefix = xEntry->sPrefix;
+            *pPrefix = sEntryPrefix;
         if( pLocalName )
-            *pLocalName = xEntry->sName;
+            *pLocalName = sEntryName;
 
-        NameSpaceHash::const_iterator aIter = aNameHash.find( xEntry->sPrefix );
+        NameSpaceHash::const_iterator aIter = aNameHash.find( sEntryPrefix );
         if ( aIter != aNameHash.end() )
         {
             // found: retrieve namespace key
-            nKey = xEntry->nKey = (*aIter).second->nKey;
+            nKey = (*aIter).second->nKey;
             if ( pNamespace )
                 *pNamespace = (*aIter).second->sName;
         }
-        else if ( xEntry->sPrefix == sXMLNS )
+        else if ( sEntryPrefix == sXMLNS )
             // not found, but xmlns prefix: return xmlns 'namespace'
-            nKey = xEntry->nKey = XML_NAMESPACE_XMLNS;
+            nKey = XML_NAMESPACE_XMLNS;
         else if( nColonPos == -1 )
             // not found, and no namespace: 'namespace' none
-            nKey = xEntry->nKey = XML_NAMESPACE_NONE;
+            nKey = XML_NAMESPACE_NONE;
         else
-            nKey = xEntry->nKey = XML_NAMESPACE_UNKNOWN;
+            nKey = XML_NAMESPACE_UNKNOWN;
 
         if (bCache)
         {
-            aNameCache.emplace(rAttrName, xEntry);
+            rtl::Reference<NameSpaceEntry> xEntry(new NameSpaceEntry);
+            xEntry->sPrefix = std::move(sEntryPrefix);
+            xEntry->sName = std::move(sEntryName);
+            xEntry->nKey = std::move(nKey);
+            aNameCache.emplace(rAttrName, std::move(xEntry));
         }
     }
 
