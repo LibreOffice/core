@@ -125,6 +125,35 @@ oslSecurity SAL_CALL osl_getCurrentSecurity()
         if (p == nullptr) {
             return nullptr;
         }
+#if defined(IOS) && defined(X86_64)
+        // getpwuid_r() does not work in the iOS simulator
+        (void) found;
+        char * buffer = p->m_buffer;
+        assert(n >= 100);
+        strcpy(buffer, "mobile");
+        p->m_pPasswd.pw_name = buffer;
+        buffer += strlen(buffer) + 1;
+        strcpy(buffer, "*");
+        p->m_pPasswd.pw_passwd = buffer;
+        buffer += strlen(buffer) + 1;
+        p->m_pPasswd.pw_uid = geteuid();
+        p->m_pPasswd.pw_gid = getegid();
+        p->m_pPasswd.pw_change = 0;
+        strcpy(buffer, "");
+        p->m_pPasswd.pw_class = buffer;
+        buffer += strlen(buffer) + 1;
+        strcpy(buffer, "Mobile User");
+        p->m_pPasswd.pw_gecos = buffer;
+        buffer += strlen(buffer) + 1;
+        strcpy(buffer, "/var/mobile"); // ???
+        p->m_pPasswd.pw_dir = buffer;
+        buffer += strlen(buffer) + 1;
+        strcpy(buffer, "");
+        p->m_pPasswd.pw_shell = buffer;
+        buffer += strlen(buffer) + 1;
+        p->m_pPasswd.pw_expire = 0;
+        return p;
+#else
         switch (getpwuid_r(getuid(), &p->m_pPasswd, p->m_buffer, n, &found)) {
         case ERANGE:
             break;
@@ -137,6 +166,7 @@ oslSecurity SAL_CALL osl_getCurrentSecurity()
             deleteSecurityImpl(p);
             return nullptr;
         }
+#endif
     }
 }
 
