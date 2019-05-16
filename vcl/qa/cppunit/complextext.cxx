@@ -87,6 +87,7 @@ void VclComplexTextTest::testArabic()
 
     // absolute character widths AKA text array.
 #if !defined(_WIN32)
+    // FIXME: fails on some windows tinderboxes
     std::vector<long> aRefCharWidths {6,  9,  16, 16, 22, 22, 26, 29, 32, 32,
                                       36, 40, 49, 53, 56, 63, 63, 66, 72, 72};
     std::vector<long> aCharWidths(aOneTwoThree.getLength(), 0);
@@ -100,21 +101,15 @@ void VclComplexTextTest::testArabic()
     // text advance width and line height
     CPPUNIT_ASSERT_EQUAL(72L, pOutDev->GetTextWidth(aOneTwoThree));
     CPPUNIT_ASSERT_EQUAL(14L, pOutDev->GetTextHeight());
-#endif
 
     // exact bounding rectangle, not essentially the same as text width/height
-#if defined(MACOSX) || defined(_WIN32)
+#if defined(MACOSX)
     // FIXME: fails on some Linux tinderboxes, might be a FreeType issue.
     tools::Rectangle aBoundRect, aTestRect( 0, 1, 71, 15 );
     pOutDev->GetTextBoundRect(aBoundRect, aOneTwoThree);
-#if defined(_WIN32)
-    // if run on Win7 KVM QXL / Spice GUI, we "miss" the first pixel column?!
-    if ( 1 == aBoundRect.Left() )
-    {
-        aTestRect.AdjustLeft(1);
-    }
-#endif
     CPPUNIT_ASSERT_EQUAL(aTestRect, aBoundRect);
+#endif
+
 #endif
 
     // normal orientation
