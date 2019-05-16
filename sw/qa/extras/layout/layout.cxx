@@ -2999,6 +2999,17 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf118719)
     CPPUNIT_ASSERT_GREATER(nOther, nLast);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTabOverMargin)
+{
+    createDoc("tab-over-margin.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // 2nd paragraph has a tab over the right margin, and with the TabOverMargin compat option,
+    // there is enough space to have all content in a single line.
+    // Without the accompanying fix in place, this test would have failed, there were 2 lines.
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/LineBreak", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
