@@ -38,8 +38,8 @@ public:
 
     /* if the view should not do a Invalidate() on the windows, you have to
        override the following two methods and do something different */
-    virtual void InvalidateOneWin(vcl::Window& rWin) override;
-    virtual void InvalidateOneWin(vcl::Window& rWin, const ::tools::Rectangle& rRect) override;
+    virtual void InvalidateOneWin(OutputDevice& rWin) override;
+    virtual void InvalidateOneWin(OutputDevice& rWin, const ::tools::Rectangle& rRect) override;
 };
 
 } // end of namespace sd
