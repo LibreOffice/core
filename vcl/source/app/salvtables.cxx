@@ -4466,14 +4466,14 @@ public:
         m_xComboBox->SetEntryData(row, m_aUserData.back().get());
     }
 
-    virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems, bool bKeepExisting) override
+    virtual void insert_vector(const std::vector<weld::BlockInsertEntry>& rItems, bool bKeepExisting) override
     {
         freeze();
         if (!bKeepExisting)
             clear();
         for (const auto& rItem : rItems)
         {
-            insert(-1, rItem.sString, rItem.sId.isEmpty() ? nullptr : &rItem.sId,
+            insert(-1, rItem.sString1, rItem.sId.isEmpty() ? nullptr : &rItem.sId,
                    rItem.sImage.isEmpty() ? nullptr : &rItem.sImage, nullptr);
         }
         thaw();

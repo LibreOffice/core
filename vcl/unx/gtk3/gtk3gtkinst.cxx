@@ -9060,7 +9060,7 @@ public:
 #endif
     }
 
-    virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems, bool bKeepExisting) override
+    virtual void insert_vector(const std::vector<weld::BlockInsertEntry>& rItems, bool bKeepExisting) override
     {
         freeze();
         if (!bKeepExisting)
@@ -9069,7 +9069,7 @@ public:
         for (const auto& rItem : rItems)
         {
             insert_row(GTK_LIST_STORE(m_pTreeModel), iter, -1, rItem.sId.isEmpty() ? nullptr : &rItem.sId,
-                       rItem.sString, rItem.sImage.isEmpty() ? nullptr : &rItem.sImage, nullptr);
+                       rItem.sString1, rItem.sImage.isEmpty() ? nullptr : &rItem.sImage, nullptr);
         }
         thaw();
     }

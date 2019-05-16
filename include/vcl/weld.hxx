@@ -429,22 +429,23 @@ public:
     virtual Container* weld_message_area() = 0;
 };
 
-struct VCL_DLLPUBLIC ComboBoxEntry
+struct VCL_DLLPUBLIC BlockInsertEntry
 {
-    OUString sString;
+    OUString sString1;
+    OUString sString2;
     OUString sId;
     OUString sImage;
-    ComboBoxEntry(const OUString& rString)
-        : sString(rString)
+    BlockInsertEntry(const OUString& rString)
+        : sString1(rString)
     {
     }
-    ComboBoxEntry(const OUString& rString, const OUString& rId)
-        : sString(rString)
+    BlockInsertEntry(const OUString& rString, const OUString& rId)
+        : sString2(rString)
         , sId(rId)
     {
     }
-    ComboBoxEntry(const OUString& rString, const OUString& rId, const OUString& rImage)
-        : sString(rString)
+    BlockInsertEntry(const OUString& rString, const OUString& rId, const OUString& rImage)
+        : sString2(rString)
         , sId(rId)
         , sImage(rImage)
     {
@@ -476,7 +477,8 @@ public:
     virtual void insert(int pos, const OUString& rStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface)
         = 0;
-    virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems, bool bKeepExisting)
+    virtual void insert_vector(const std::vector<weld::BlockInsertEntry>& rItems,
+                               bool bKeepExisting)
         = 0;
     void insert_text(int pos, const OUString& rStr)
     {
@@ -1206,7 +1208,7 @@ protected:
 public:
     EntryTreeView(std::unique_ptr<Entry> xEntry, std::unique_ptr<TreeView> xTreeView);
 
-    virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems,
+    virtual void insert_vector(const std::vector<weld::BlockInsertEntry>& rItems,
                                bool bKeepExisting) override
     {
         m_xTreeView->freeze();
@@ -1214,7 +1216,7 @@ public:
             m_xTreeView->clear();
         for (const auto& rItem : rItems)
         {
-            m_xTreeView->insert(-1, rItem.sString, rItem.sId.isEmpty() ? nullptr : &rItem.sId,
+            m_xTreeView->insert(-1, rItem.sString1, rItem.sId.isEmpty() ? nullptr : &rItem.sId,
                                 rItem.sImage.isEmpty() ? nullptr : &rItem.sImage, nullptr);
         }
         m_xTreeView->thaw();

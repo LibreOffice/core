@@ -610,7 +610,7 @@ namespace
     {
         // insert fonts
         sal_uInt16 nFontCount = rList.GetFontNameCount();
-        std::vector<weld::ComboBoxEntry> aVector;
+        std::vector<weld::BlockInsertEntry> aVector;
         aVector.reserve(nFontCount);
         for (sal_uInt16 i = 0; i < nFontCount; ++i)
         {
