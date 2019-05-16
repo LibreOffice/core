@@ -26,15 +26,13 @@
 
 #include <algorithm>
 #include <cassert>
-#include <deque>
+#include <vector>
 #include <memory>
 #include <map>
 
-typedef std::deque<SfxBroadcaster*> SfxBroadcasterArr_Impl;
-
 struct SfxListener::Impl
 {
-    SfxBroadcasterArr_Impl maBCs;
+    std::vector<SfxBroadcaster*> maBCs;
 #ifdef DBG_UTIL
     std::map<SfxBroadcaster*, std::unique_ptr<sal::BacktraceState>>
         maCallStacks;
@@ -117,10 +115,10 @@ void SfxListener::StartListening(SfxBroadcaster& rBroadcaster, DuplicateHandling
 
 void SfxListener::EndListening( SfxBroadcaster& rBroadcaster, bool bRemoveAllDuplicates )
 {
-    SfxBroadcasterArr_Impl::iterator beginIt = mpImpl->maBCs.begin();
+    auto beginIt = mpImpl->maBCs.begin();
     do
     {
-        SfxBroadcasterArr_Impl::iterator it = std::find( beginIt, mpImpl->maBCs.end(), &rBroadcaster );
+        auto it = std::find( beginIt, mpImpl->maBCs.end(), &rBroadcaster );
         if ( it == mpImpl->maBCs.end() )
         {
             break;
@@ -139,13 +137,10 @@ void SfxListener::EndListening( SfxBroadcaster& rBroadcaster, bool bRemoveAllDup
 
 void SfxListener::EndListeningAll()
 {
-    // Attention: when optimizing this: respect side effects of RemoveListener!
-    while ( !mpImpl->maBCs.empty() )
-    {
-        SfxBroadcaster *pBC = mpImpl->maBCs.front();
+    std::vector<SfxBroadcaster*> aBroadcasters;
+    std::swap(mpImpl->maBCs, aBroadcasters);
+    for (SfxBroadcaster *pBC : aBroadcasters)
         pBC->RemoveListener(*this);
-        mpImpl->maBCs.pop_front();
-    }
 #ifdef DBG_UTIL
     mpImpl->maCallStacks.clear();
 #endif
