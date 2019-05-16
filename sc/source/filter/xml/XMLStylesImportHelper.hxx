@@ -82,7 +82,7 @@ struct LessCurrencyStyle
 
 typedef std::set<ScMyCurrencyStyle, LessCurrencyStyle>  ScMyCurrencyStylesSet;
 
-class ScMyStyleRanges : public SvRefBase
+class ScMyStyleRanges
 {
     std::shared_ptr<ScSimpleRangeList>     mpTextList;
     std::shared_ptr<ScSimpleRangeList>     mpNumberList;
@@ -98,36 +98,21 @@ class ScMyStyleRanges : public SvRefBase
         const OUString* pCurrency, ScXMLImport& rImport);
 public:
     ScMyStyleRanges();
-    virtual ~ScMyStyleRanges() override;
+    ~ScMyStyleRanges();
     void AddRange(const ScRange& rRange, const sal_Int16 nType);
     void AddCurrencyRange(const ScRange& rRange, const boost::optional<OUString> & pCurrency);
     void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab);
     void SetStylesToRanges(const OUString* pStyleName, ScXMLImport& rImport);
 };
 
-struct ScMyStyle
-{
-    OUString                      sStyleName;
-    tools::SvRef<ScMyStyleRanges> xRanges;
-
-    ScMyStyle() : xRanges(new ScMyStyleRanges()) {}
-};
-
-struct LessStyle
-{
-    bool operator() (const ScMyStyle& rValue1, const ScMyStyle& rValue2) const
-    {
-        return rValue1.sStyleName < rValue2.sStyleName;
-    }
-};
-
-typedef std::set<ScMyStyle, LessStyle>  ScMyStylesSet;
+/** map from style name to ScMyStyleRanges */
+typedef std::unordered_map<OUString, std::unique_ptr<ScMyStyleRanges>>  ScMyStylesMap;
 
 class ScMyStylesImportHelper
 {
-    ScMyStylesSet       aCellStyles;
-    std::vector<ScMyStylesSet::iterator>  aColDefaultStyles;
-    ScMyStylesSet::iterator aRowDefaultStyle;
+    ScMyStylesMap       aCellStyles;
+    std::vector<ScMyStylesMap::iterator>  aColDefaultStyles;
+    ScMyStylesMap::iterator aRowDefaultStyle;
     ScXMLImport&        rImport;
     boost::optional<OUString>
                         pStyleName;
@@ -143,7 +128,7 @@ class ScMyStylesImportHelper
     bool                bPrevRangeAdded;
 
     void ResetAttributes();
-    ScMyStylesSet::iterator GetIterator(const boost::optional<OUString> & pStyleName);
+    ScMyStylesMap::iterator GetIterator(const OUString & rStyleName);
     void AddDefaultRange(const ScRange& rRange);
     void AddSingleRange(const ScRange& rRange);
     void AddRange();
