@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_fd881c72",
+        "filename": "shell/CustomTarget_x64.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-16T11:10:51Z",
+      "side": 1,
+      "message": "it shouldn\u0027t be necessary to copy the headers becuase they\u0027re not compilation units, just set the include path to the source dir",
+      "revId": "a024a0898d261f348d528c469f74b91ad79f3db3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
