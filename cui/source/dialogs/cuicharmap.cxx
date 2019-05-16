@@ -422,7 +422,7 @@ void SvxCharacterMap::init()
     OUString aDefStr( aFont.GetFamilyName() );
     OUString aLastName;
     int nCount = m_xVirDev->GetDevFontCount();
-    std::vector<weld::ComboBoxEntry> aEntries;
+    std::vector<weld::BlockInsertEntry> aEntries;
     aEntries.reserve(nCount);
     for (int i = 0; i < nCount; ++i)
     {
@@ -599,7 +599,7 @@ void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
 void SvxCharacterMap::fillAllSubsets(weld::ComboBox& rListBox)
 {
     SubsetMap aAll(nullptr);
-    std::vector<weld::ComboBoxEntry> aEntries;
+    std::vector<weld::BlockInsertEntry> aEntries;
     for (auto & subset : aAll.GetSubsetMap())
         aEntries.emplace_back(subset.GetName());
     rListBox.insert_vector(aEntries, true);

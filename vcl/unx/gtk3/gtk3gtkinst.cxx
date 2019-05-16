@@ -8663,6 +8663,13 @@ private:
         }
     }
 
+    void insert_row(GtkTreeIter& iter, GtkTreeIter* parent, int pos, const OUString* pId, const OUString* pText,
+                    const OUString* pIconName, VirtualDevice* pDevice, const OUString* pExpanderName)
+    {
+        gtk_tree_store_insert(m_pTreeStore, &iter, parent, pos);
+        set_row(iter, pId, pText, pIconName, pDevice, pExpanderName);
+    }
+
     OUString get(int pos, int col) const
     {
         OUString sRet;
@@ -9060,16 +9067,17 @@ public:
 #endif
     }
 
-    virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems, bool bKeepExisting) override
+    virtual void insert_vector(const std::vector<weld::BlockInsertEntry>& rItems, bool bKeepExisting) override
     {
         freeze();
         if (!bKeepExisting)
             clear();
         GtkTreeIter iter;
+        int nRow = get_count();
         for (const auto& rItem : rItems)
         {
-            insert_row(GTK_LIST_STORE(m_pTreeModel), iter, -1, rItem.sId.isEmpty() ? nullptr : &rItem.sId,
-                       rItem.sString, rItem.sImage.isEmpty() ? nullptr : &rItem.sImage, nullptr);
+            insert_row(GTK_LIST_STORE(m_pTreeModel), iter, nRow++, rItem.sId.isEmpty() ? nullptr : &rItem.sId,
+                       rItem.sString1, rItem.sImage.isEmpty() ? nullptr : &rItem.sImage, nullptr);
         }
         thaw();
     }
