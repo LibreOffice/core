@@ -40,6 +40,7 @@ public:
     virtual ~ClipContextBase();
 
     ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
+    ColumnBlockPositionSet* getBlockPositionSet() { return mpSet.get(); }
 };
 
 class CopyFromClipContext : public ClipContextBase

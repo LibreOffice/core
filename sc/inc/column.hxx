@@ -417,7 +417,7 @@ public:
 
     void        ResetChanged( SCROW nStartRow, SCROW nEndRow );
 
-    bool UpdateReferenceOnCopy( const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = nullptr );
+    bool UpdateReferenceOnCopy( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = nullptr );
 
     /**
      * Update reference addresses in formula cell in response to mass cell

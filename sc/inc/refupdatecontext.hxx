@@ -21,6 +21,9 @@ class ScDocument;
 
 namespace sc {
 
+struct ColumnBlockPosition;
+class ColumnBlockPositionSet;
+
 /**
  * Keep track of all named expressions that have been updated during
  * reference update.
@@ -76,10 +79,15 @@ struct RefUpdateContext
     UpdatedRangeNames maUpdatedNames;
     ColumnSet maRegroupCols;
 
+    ColumnBlockPositionSet* mpBlockPos; // not owning
+
     RefUpdateContext(ScDocument& rDoc);
 
     bool isInserted() const;
     bool isDeleted() const;
+
+    void setBlockPositionReference( ColumnBlockPositionSet* blockPos );
+    ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
 };
 
 struct RefUpdateResult
