@@ -358,37 +358,35 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
     {
         // in XOR mode the drawing context is redirected to the XOR mask
         // if source and target are identical then copyBits() paints onto the target context though
-        CGContextRef xCopyContext = maContextHolder.get();
+        CGContextHolder aCopyContext = maContextHolder;
         if( mpXorEmulation && mpXorEmulation->IsEnabled() )
         {
             if( pSrcGraphics == this )
             {
-                xCopyContext = mpXorEmulation->GetTargetContext();
+                aCopyContext.set(mpXorEmulation->GetTargetContext());
             }
         }
-        SAL_INFO( "vcl.cg", "CGContextSaveGState(" << xCopyContext << ")" );
-        CGContextSaveGState( xCopyContext );
+        aCopyContext.saveState();
 
         const CGRect aDstRect = CGRectMake(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
-        SAL_INFO( "vcl.cg", "CGContextClipToRect(" << xCopyContext << "," << aDstRect << ")" );
-        CGContextClipToRect( xCopyContext, aDstRect );
+        SAL_INFO( "vcl.cg", "CGContextClipToRect(" << aCopyContext.get() << "," << aDstRect << ")" );
+        CGContextClipToRect(aCopyContext.get(), aDstRect);
 
         // draw at new destination
         // NOTE: flipped drawing gets disabled for this, else the subimage would be drawn upside down
         if( pSrc->IsFlipped() )
         {
-            SAL_INFO( "vcl.cg", "CGContextTranslateCTM(" << xCopyContext << ",0," << mnHeight << ")" );
-            CGContextTranslateCTM( xCopyContext, 0, +mnHeight );
-            SAL_INFO( "vcl.cg", "CGContextScaleCTM(" << xCopyContext << ",+1,-1)" );
-            CGContextScaleCTM( xCopyContext, +1, -1 );
+            SAL_INFO( "vcl.cg", "CGContextTranslateCTM(" << aCopyContext.get() << ",0," << mnHeight << ")" );
+            CGContextTranslateCTM( aCopyContext.get(), 0, +mnHeight );
+            SAL_INFO( "vcl.cg", "CGContextScaleCTM(" << aCopyContext.get() << ",+1,-1)" );
+            CGContextScaleCTM( aCopyContext.get(), +1, -1 );
         }
 
         // TODO: pSrc->size() != this->size()
-        SAL_INFO( "vcl.cg", "CGContextDrawLayerAtPoint(" << xCopyContext << "," << aDstPoint << "," << pSrc->maLayer.get() << ")");
-        CGContextDrawLayerAtPoint(xCopyContext, aDstPoint, pSrc->maLayer.get());
+        SAL_INFO("vcl.cg", "CGContextDrawLayerAtPoint(" << aCopyContext.get() << "," << aDstPoint << "," << pSrc->maLayer.get() << ")");
+        CGContextDrawLayerAtPoint(aCopyContext.get(), aDstPoint, pSrc->maLayer.get());
 
-        SAL_INFO( "vcl.cg", "CGContextRestoreGState(" << xCopyContext << ")" );
-        CGContextRestoreGState( xCopyContext );
+        aCopyContext.restoreState();
         // mark the destination rectangle as updated
         RefreshRect( aDstRect );
     }
