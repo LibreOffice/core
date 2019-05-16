@@ -238,7 +238,6 @@ public:
     SdrPaintWindow* GetPaintWindow(sal_uInt32 nIndex) const;
     // Replacement for GetWin(0), may return 0L (!)
     OutputDevice* GetFirstOutputDevice() const;
-    virtual void InvalidateWindow(const tools::Rectangle& rArea, OutputDevice& rDevice) const;
 
 private:
     SVX_DLLPRIVATE void ImpClearVars();
@@ -432,8 +431,8 @@ public:
 
     /// If the View should not call Invalidate() on the windows, override
     /// the following 2 methods and do something else.
-    virtual void InvalidateOneWin(vcl::Window& rWin);
-    virtual void InvalidateOneWin(vcl::Window& rWin, const tools::Rectangle& rRect);
+    virtual void InvalidateOneWin(OutputDevice& rWin);
+    virtual void InvalidateOneWin(OutputDevice& rWin, const tools::Rectangle& rRect);
 
     void SetActiveLayer(const OUString& rName) { maActualLayer=rName; }
     const OUString&  GetActiveLayer() const { return maActualLayer; }
