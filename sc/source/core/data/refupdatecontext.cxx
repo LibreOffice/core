@@ -9,6 +9,7 @@
 
 #include <refupdatecontext.hxx>
 #include <algorithm>
+#include <mtvelements.hxx>
 
 namespace sc {
 
@@ -64,7 +65,7 @@ bool UpdatedRangeNames::isEmpty(SCTAB nTab) const
 
 
 RefUpdateContext::RefUpdateContext(ScDocument& rDoc) :
-    mrDoc(rDoc), meMode(URM_INSDEL), mnColDelta(0), mnRowDelta(0), mnTabDelta(0) {}
+    mrDoc(rDoc), meMode(URM_INSDEL), mnColDelta(0), mnRowDelta(0), mnTabDelta(0), mpBlockPos( nullptr ) {}
 
 bool RefUpdateContext::isInserted() const
 {
@@ -74,6 +75,16 @@ bool RefUpdateContext::isInserted() const
 bool RefUpdateContext::isDeleted() const
 {
     return (meMode == URM_INSDEL) && (mnColDelta < 0 || mnRowDelta < 0 || mnTabDelta < 0);
+}
+
+void RefUpdateContext::setBlockPositionReference( ColumnBlockPositionSet* blockPos )
+{
+    mpBlockPos = blockPos;
+}
+
+ColumnBlockPosition* RefUpdateContext::getBlockPosition(SCTAB nTab, SCCOL nCol)
+{
+    return mpBlockPos ? mpBlockPos->getBlockPosition(nTab, nCol) : nullptr;
 }
 
 RefUpdateResult::RefUpdateResult() : mbValueChanged(false), mbReferenceModified(false), mbNameModified(false) {}
