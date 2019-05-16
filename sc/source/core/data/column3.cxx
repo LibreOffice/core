@@ -1330,13 +1330,32 @@ public:
 
 class CopyTextAttrsFromClipHandler
 {
+    sc::CopyFromClipContext& mrCxt;
     sc::CellTextAttrStoreType& mrAttrs;
-    sc::CellTextAttrStoreType::iterator miPos;
     size_t const mnDelta;
+    sc::ColumnBlockPosition maDestBlockPos;
+    sc::ColumnBlockPosition* mpDestBlockPos; // to save it for next iteration.
 
 public:
-    CopyTextAttrsFromClipHandler( sc::CellTextAttrStoreType& rAttrs, size_t nDelta ) :
-        mrAttrs(rAttrs), miPos(mrAttrs.begin()), mnDelta(nDelta) {}
+    CopyTextAttrsFromClipHandler( sc::CopyFromClipContext& rCxt, sc::CellTextAttrStoreType& rAttrs,
+                                  ScColumn& rDestCol, SCTAB nDestTab, SCCOL nDestCol, size_t nDelta ) :
+        mrCxt( rCxt ),
+        mrAttrs(rAttrs),
+        mnDelta(nDelta),
+        mpDestBlockPos(mrCxt.getBlockPosition(nDestTab, nDestCol))
+    {
+        if (mpDestBlockPos)
+            maDestBlockPos = *mpDestBlockPos;
+        else
+            rDestCol.InitBlockPosition(maDestBlockPos);
+    }
+
+    ~CopyTextAttrsFromClipHandler()
+    {
+        if (mpDestBlockPos)
+            // Don't forget to save this to the context!
+            *mpDestBlockPos = maDestBlockPos;
+    }
 
     void operator() ( const sc::CellTextAttrStoreType::value_type& aNode, size_t nOffset, size_t nDataSize )
     {
@@ -1349,7 +1368,7 @@ public:
         std::advance(itEnd, nDataSize);
 
         size_t nPos = aNode.position + nOffset + mnDelta;
-        miPos = mrAttrs.set(miPos, nPos, it, itEnd);
+        maDestBlockPos.miCellTextAttrPos = mrAttrs.set(maDestBlockPos.miCellTextAttrPos, nPos, it, itEnd);
     }
 };
 
@@ -1406,7 +1425,7 @@ void ScColumn::CopyFromClip(
         }
 
         // Don't forget to copy the cell text attributes.
-        CopyTextAttrsFromClipHandler aFunc(maCellTextAttrs, nDy);
+        CopyTextAttrsFromClipHandler aFunc(rCxt, maCellTextAttrs, *this, nTab, nCol, nDy);
         sc::ParseBlock(rColumn.maCellTextAttrs.begin(), rColumn.maCellTextAttrs, aFunc, nRow1-nDy, nRow2-nDy);
 
         return;
@@ -1426,7 +1445,7 @@ void ScColumn::CopyFromClip(
 
     {
         // Don't forget to copy the cell text attributes.
-        CopyTextAttrsFromClipHandler aFunc(maCellTextAttrs, nDy);
+        CopyTextAttrsFromClipHandler aFunc(rCxt, maCellTextAttrs, *this, nTab, nCol, nDy);
         sc::ParseBlock(rColumn.maCellTextAttrs.begin(), rColumn.maCellTextAttrs, aFunc, nRow1-nDy, nRow2-nDy);
     }
 }
