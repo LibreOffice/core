@@ -35,7 +35,7 @@ class tdf124829(UITestCase):
             self.xUITest.executeCommand(".uno:Undo")
 
         #verify; no crashes
-        self.assertEqual(get_cell_by_position(document, 5, 0, 0).getString(), "First Name")
+        self.assertEqual(document.Sheets.getCount(), 6)
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
