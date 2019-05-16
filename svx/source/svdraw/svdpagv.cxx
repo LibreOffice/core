@@ -670,7 +670,7 @@ void SdrPageView::ImpInvalidateHelpLineArea(sal_uInt16 nNum) const
                 aR.AdjustRight(aSiz.Width() );
                 aR.AdjustTop( -(aSiz.Height()) );
                 aR.AdjustBottom(aSiz.Height() );
-                const_cast<SdrView&>(GetView()).InvalidateOneWin(static_cast<vcl::Window&>(rOutDev), aR);
+                const_cast<SdrView&>(GetView()).InvalidateOneWin(rOutDev, aR);
             }
         }
     }
