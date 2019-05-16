@@ -140,6 +140,10 @@ class XWindow(UITestCase):
         xToolkitRobot.keyPress(xKeyEvent)
         xToolkitRobot.keyRelease(xKeyEvent)
 
+        # Wait for async events to be processed
+        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+        xToolkit.processEventsToIdle()
+
         # remove mouse listener
         xWindow.removeMouseListener(xMouseListener)
         self.assertEqual(1, mouseListenerCount)
@@ -148,10 +152,6 @@ class XWindow(UITestCase):
         # remove key listener
         xWindow.removeKeyListener(xKeyListener)
         del xKeyListener
-
-        # Wait for async events to be processed
-        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
-        xToolkit.processEventsToIdle()
 
         global keymousePressedEventsIntercepted
         # Not expected any interceptions
