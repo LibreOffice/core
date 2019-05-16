@@ -206,8 +206,8 @@ void SwAfVersions::Write(SvStream& rStream, sal_uInt16 fileVersion)
 
 SwBoxAutoFormat::SwBoxAutoFormat()
 :   AutoFormatBase(),
-    m_aTextOrientation(std::make_shared<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR)),
-    m_aVerticalAlignment(std::make_shared<SwFormatVertOrient>(0, css::text::VertOrientation::NONE, css::text::RelOrientation::FRAME)),
+    m_aTextOrientation(std::make_unique<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR)),
+    m_aVerticalAlignment(std::make_unique<SwFormatVertOrient>(0, css::text::VertOrientation::NONE, css::text::RelOrientation::FRAME)),
     m_sNumFormatString(),
     m_eSysLanguage(::GetAppLanguage()),
     m_eNumFormatLanguage(::GetAppLanguage()),
@@ -216,36 +216,36 @@ SwBoxAutoFormat::SwBoxAutoFormat()
     // need to set default instances for base class AutoFormatBase here
     // due to resource defines (e.g. RES_CHRATR_FONT) which are not available
     // in svx and different in the different usages of derivations
-    m_aFont = std::make_shared<SvxFontItem>(*GetDfltAttr( RES_CHRATR_FONT ) );
-    m_aHeight = std::make_shared<SvxFontHeightItem>(240, 100, RES_CHRATR_FONTSIZE );
-    m_aWeight = std::make_shared<SvxWeightItem>(WEIGHT_NORMAL, RES_CHRATR_WEIGHT );
-    m_aPosture = std::make_shared<SvxPostureItem>(ITALIC_NONE, RES_CHRATR_POSTURE );
-    m_aCJKFont = std::make_shared<SvxFontItem>(*GetDfltAttr( RES_CHRATR_CJK_FONT ) );
-    m_aCJKHeight = std::make_shared<SvxFontHeightItem>(240, 100, RES_CHRATR_CJK_FONTSIZE );
-    m_aCJKWeight = std::make_shared<SvxWeightItem>(WEIGHT_NORMAL, RES_CHRATR_CJK_WEIGHT );
-    m_aCJKPosture = std::make_shared<SvxPostureItem>(ITALIC_NONE, RES_CHRATR_CJK_POSTURE );
-    m_aCTLFont = std::make_shared<SvxFontItem>(*GetDfltAttr( RES_CHRATR_CTL_FONT ) );
-    m_aCTLHeight = std::make_shared<SvxFontHeightItem>(240, 100, RES_CHRATR_CTL_FONTSIZE );
-    m_aCTLWeight = std::make_shared<SvxWeightItem>(WEIGHT_NORMAL, RES_CHRATR_CTL_WEIGHT );
-    m_aCTLPosture = std::make_shared<SvxPostureItem>(ITALIC_NONE, RES_CHRATR_CTL_POSTURE );
-    m_aUnderline = std::make_shared<SvxUnderlineItem>(LINESTYLE_NONE, RES_CHRATR_UNDERLINE );
-    m_aOverline = std::make_shared<SvxOverlineItem>(LINESTYLE_NONE, RES_CHRATR_OVERLINE );
-    m_aCrossedOut = std::make_shared<SvxCrossedOutItem>(STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT );
-    m_aContour = std::make_shared<SvxContourItem>(false, RES_CHRATR_CONTOUR );
-    m_aShadowed = std::make_shared<SvxShadowedItem>(false, RES_CHRATR_SHADOWED );
-    m_aColor = std::make_shared<SvxColorItem>(RES_CHRATR_COLOR );
-    m_aBox = std::make_shared<SvxBoxItem>(RES_BOX );
-    m_aTLBR = std::make_shared<SvxLineItem>(0 );
-    m_aBLTR = std::make_shared<SvxLineItem>(0 );
-    m_aBackground = std::make_shared<SvxBrushItem>(RES_BACKGROUND );
-    m_aAdjust = std::make_shared<SvxAdjustItem>(SvxAdjust::Left, RES_PARATR_ADJUST );
-    m_aHorJustify = std::make_shared<SvxHorJustifyItem>(SvxCellHorJustify::Standard, 0);
-    m_aVerJustify = std::make_shared<SvxVerJustifyItem>(SvxCellVerJustify::Standard, 0);
-    m_aStacked = std::make_shared<SfxBoolItem>(0 );
-    m_aMargin = std::make_shared<SvxMarginItem>(0 );
-    m_aLinebreak = std::make_shared<SfxBoolItem>(0 );
-    m_aRotateAngle = std::make_shared<SfxInt32Item>(0 );
-    m_aRotateMode = std::make_shared<SvxRotateModeItem>(SVX_ROTATE_MODE_STANDARD, 0 );
+    m_aFont = std::make_unique<SvxFontItem>(*GetDfltAttr( RES_CHRATR_FONT ) );
+    m_aHeight = std::make_unique<SvxFontHeightItem>(240, 100, RES_CHRATR_FONTSIZE );
+    m_aWeight = std::make_unique<SvxWeightItem>(WEIGHT_NORMAL, RES_CHRATR_WEIGHT );
+    m_aPosture = std::make_unique<SvxPostureItem>(ITALIC_NONE, RES_CHRATR_POSTURE );
+    m_aCJKFont = std::make_unique<SvxFontItem>(*GetDfltAttr( RES_CHRATR_CJK_FONT ) );
+    m_aCJKHeight = std::make_unique<SvxFontHeightItem>(240, 100, RES_CHRATR_CJK_FONTSIZE );
+    m_aCJKWeight = std::make_unique<SvxWeightItem>(WEIGHT_NORMAL, RES_CHRATR_CJK_WEIGHT );
+    m_aCJKPosture = std::make_unique<SvxPostureItem>(ITALIC_NONE, RES_CHRATR_CJK_POSTURE );
+    m_aCTLFont = std::make_unique<SvxFontItem>(*GetDfltAttr( RES_CHRATR_CTL_FONT ) );
+    m_aCTLHeight = std::make_unique<SvxFontHeightItem>(240, 100, RES_CHRATR_CTL_FONTSIZE );
+    m_aCTLWeight = std::make_unique<SvxWeightItem>(WEIGHT_NORMAL, RES_CHRATR_CTL_WEIGHT );
+    m_aCTLPosture = std::make_unique<SvxPostureItem>(ITALIC_NONE, RES_CHRATR_CTL_POSTURE );
+    m_aUnderline = std::make_unique<SvxUnderlineItem>(LINESTYLE_NONE, RES_CHRATR_UNDERLINE );
+    m_aOverline = std::make_unique<SvxOverlineItem>(LINESTYLE_NONE, RES_CHRATR_OVERLINE );
+    m_aCrossedOut = std::make_unique<SvxCrossedOutItem>(STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT );
+    m_aContour = std::make_unique<SvxContourItem>(false, RES_CHRATR_CONTOUR );
+    m_aShadowed = std::make_unique<SvxShadowedItem>(false, RES_CHRATR_SHADOWED );
+    m_aColor = std::make_unique<SvxColorItem>(RES_CHRATR_COLOR );
+    m_aBox = std::make_unique<SvxBoxItem>(RES_BOX );
+    m_aTLBR = std::make_unique<SvxLineItem>(0 );
+    m_aBLTR = std::make_unique<SvxLineItem>(0 );
+    m_aBackground = std::make_unique<SvxBrushItem>(RES_BACKGROUND );
+    m_aAdjust = std::make_unique<SvxAdjustItem>(SvxAdjust::Left, RES_PARATR_ADJUST );
+    m_aHorJustify = std::make_unique<SvxHorJustifyItem>(SvxCellHorJustify::Standard, 0);
+    m_aVerJustify = std::make_unique<SvxVerJustifyItem>(SvxCellVerJustify::Standard, 0);
+    m_aStacked = std::make_unique<SfxBoolItem>(0 );
+    m_aMargin = std::make_unique<SvxMarginItem>(0 );
+    m_aLinebreak = std::make_unique<SfxBoolItem>(0 );
+    m_aRotateAngle = std::make_unique<SfxInt32Item>(0 );
+    m_aRotateMode = std::make_unique<SvxRotateModeItem>(SVX_ROTATE_MODE_STANDARD, 0 );
 
 // FIXME - add attribute IDs for the diagonal line items
 //    aTLBR( RES_... ),
@@ -268,45 +268,30 @@ SwBoxAutoFormat::~SwBoxAutoFormat()
 {
 }
 
-SwBoxAutoFormat& SwBoxAutoFormat::operator=( const SwBoxAutoFormat& rNew )
+SwBoxAutoFormat& SwBoxAutoFormat::operator=(const SwBoxAutoFormat& rRef)
 {
-    m_aFont = rNew.m_aFont;
-    m_aHeight = rNew.m_aHeight;
-    m_aWeight = rNew.m_aWeight;
-    m_aPosture = rNew.m_aPosture;
-    m_aCJKFont = rNew.m_aCJKFont;
-    m_aCJKHeight = rNew.m_aCJKHeight;
-    m_aCJKWeight = rNew.m_aCJKWeight;
-    m_aCJKPosture = rNew.m_aCJKPosture;
-    m_aCTLFont = rNew.m_aCTLFont;
-    m_aCTLHeight = rNew.m_aCTLHeight;
-    m_aCTLWeight = rNew.m_aCTLWeight;
-    m_aCTLPosture = rNew.m_aCTLPosture;
-    m_aUnderline = rNew.m_aUnderline;
-    m_aOverline = rNew.m_aOverline;
-    m_aCrossedOut = rNew.m_aCrossedOut;
-    m_aContour = rNew.m_aContour;
-    m_aShadowed = rNew.m_aShadowed;
-    m_aColor = rNew.m_aColor;
-    SetAdjust( *rNew.m_aAdjust );
-    m_aTextOrientation = rNew.m_aTextOrientation;
-    m_aVerticalAlignment = rNew.m_aVerticalAlignment;
-    m_aBox = rNew.m_aBox;
-    m_aTLBR = rNew.m_aTLBR;
-    m_aBLTR = rNew.m_aBLTR;
-    m_aBackground = rNew.m_aBackground;
+    // assert types
+    assert(typeid(rRef) == typeid(*this) && "Unequal types detected (!)");
 
-    m_aHorJustify = rNew.m_aHorJustify;
-    m_aVerJustify = rNew.m_aVerJustify;
-    m_aStacked->SetValue( rNew.m_aStacked->GetValue() );
-    m_aMargin = rNew.m_aMargin;
-    m_aLinebreak->SetValue( rNew.m_aLinebreak->GetValue() );
-    m_aRotateAngle->SetValue( rNew.m_aRotateAngle->GetValue() );
-    m_aRotateMode->SetValue( rNew.m_aRotateMode->GetValue() );
+    // check self-assignment
+    if(this == &rRef)
+    {
+        return *this;
+    }
 
-    m_sNumFormatString = rNew.m_sNumFormatString;
-    m_eSysLanguage = rNew.m_eSysLanguage;
-    m_eNumFormatLanguage = rNew.m_eNumFormatLanguage;
+    // call baseclass implementation
+    AutoFormatBase::operator=(rRef);
+
+    // copy local members - this will use ::Clone() on all involved Items
+    SetTextOrientation(rRef.GetTextOrientation());
+    SetVerticalAlignment(rRef.GetVerticalAlignment());
+    SetNumFormatString(rRef.GetNumFormatString());
+    SetSysLanguage(rRef.GetSysLanguage());
+    SetNumFormatLanguage(rRef.GetNumFormatLanguage());
+
+    // m_wXObject used to not be copied before 1e2682235cded9a7cd90e55f0bfc60a1285e9a46
+    // "WIP: Further preparations for deeper Item changes" by this operator, so do not do it now, too
+    // rRef.SetXObject(GetXObject());
 
     return *this;
 }
