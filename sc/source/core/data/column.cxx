@@ -42,6 +42,7 @@
 #include <listenercontext.hxx>
 #include <formulagroup.hxx>
 #include <drwlayer.hxx>
+#include <mtvelements.hxx>
 
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
@@ -2424,14 +2425,17 @@ public:
 
 }
 
-bool ScColumn::UpdateReferenceOnCopy( const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc )
+bool ScColumn::UpdateReferenceOnCopy( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc )
 {
     // When copying, the range equals the destination range where cells
     // are pasted, and the dx, dy, dz refer to the distance from the
     // source range.
 
     UpdateRefOnCopy aHandler(rCxt, pUndoDoc);
-    sc::CellStoreType::position_type aPos = maCells.position(rCxt.maRange.aStart.Row());
+    sc::ColumnBlockPosition* blockPos = rCxt.getBlockPosition(nTab, nCol);
+    sc::CellStoreType::position_type aPos = blockPos
+        ? maCells.position(blockPos->miCellPos, rCxt.maRange.aStart.Row())
+        : maCells.position(rCxt.maRange.aStart.Row());
     sc::ProcessBlock(aPos.first, maCells, aHandler, rCxt.maRange.aStart.Row(), rCxt.maRange.aEnd.Row());
 
     // The formula groups at the top and bottom boundaries are expected to
