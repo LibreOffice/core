@@ -189,7 +189,7 @@ void AccessibleControlShape::Init()
         // I'm aware of at the moment .....
 
         // get the control which belongs to our model (relative to our view)
-        const OutputDevice* pViewWindow = maShapeTreeInfo.GetWindow();
+        const OutputDevice* pViewWindow = maShapeTreeInfo.GetDevice();
         SdrUnoObj* pUnoObjectImpl = dynamic_cast<SdrUnoObj*>( GetSdrObjectFromXShape(mxShape)  );
         SdrView* pView = maShapeTreeInfo.GetSdrView();
         OSL_ENSURE( pView && pViewWindow && pUnoObjectImpl, "AccessibleControlShape::Init: no view, or no view window, no SdrUnoObj!" );
@@ -637,7 +637,7 @@ void SAL_CALL AccessibleControlShape::disposing()
     if ( m_bWaitingForControl )
     {
         OSL_FAIL( "AccessibleControlShape::disposing: this should never happen!" );
-        Reference< XContainer > xContainer = lcl_getControlContainer( maShapeTreeInfo.GetWindow(), maShapeTreeInfo.GetSdrView() );
+        Reference< XContainer > xContainer = lcl_getControlContainer( maShapeTreeInfo.GetDevice(), maShapeTreeInfo.GetSdrView() );
         if ( xContainer.is() )
         {
             m_bWaitingForControl = false;
