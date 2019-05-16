@@ -114,7 +114,7 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const OUString& _rName, TableInde
 
 void ODbaseIndexDialog::implInsertIndex(const OTableIndex& _rIndex, TableIndexList& _rList, weld::TreeView& _rDisplay)
 {
-    _rList.push_front(_rIndex);
+    _rList.push_back(_rIndex);
     _rDisplay.append_text(_rIndex.GetIndexFileName());
     _rDisplay.select(0);
 }
