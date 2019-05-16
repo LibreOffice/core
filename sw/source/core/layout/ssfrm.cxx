@@ -447,10 +447,12 @@ SwContentFrame::~SwContentFrame()
 void SwTextFrame::RegisterToNode(SwTextNode & rNode, bool const isForceNodeAsFirst)
 {
     if (isForceNodeAsFirst && m_pMergedPara)
-    {   // nothing registered here, in particular no redlines
+    {   // nothing registered here, in particular no delete redlines
+        // (insert redline might contain it if it starts before and ends after)
         assert(m_pMergedPara->pFirstNode->GetIndex() + 1 == rNode.GetIndex());
         assert(rNode.GetDoc()->getIDocumentRedlineAccess().GetRedlinePos(
-                *m_pMergedPara->pFirstNode, USHRT_MAX) == SwRedlineTable::npos);
+                *m_pMergedPara->pFirstNode, nsRedlineType_t::REDLINE_DELETE)
+            == SwRedlineTable::npos);
     }
     assert(&rNode != GetDep());
     assert(!m_pMergedPara
