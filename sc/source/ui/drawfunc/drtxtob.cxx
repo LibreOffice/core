@@ -239,7 +239,15 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 if ( !aString.isEmpty() )
                 {
                     SfxItemSet aSet( pOutliner->GetEmptyItemSet() );
-                    aSet.Put( *aNewItem );
+                    // tdf#125054
+                    // checked against original, indeed aNewItem looks as if it can have
+                    // either WhichID EE_CHAR_FONTINFO or ATTR_FONT when it was reset
+                    // above, original uses '= SvxFontItem(..., ATTR_FONT).
+                    // BUT beware: the operator=() did not copy the WhichID when resetting,
+                    // so it indeed has WhichID of EE_CHAR_FONTINFO despite copying an Item
+                    // that was constructed using ATTR_FONT as WhichID (!)
+                    aSet.Put( *aNewItem, EE_CHAR_FONTINFO );
+
                     //  If nothing is selected, then SetAttribs of the View selects a word
                     pOutView->GetOutliner()->QuickSetAttribs( aSet, pOutView->GetSelection() );
                     pOutView->InsertText(aString);

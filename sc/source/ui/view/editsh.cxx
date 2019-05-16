@@ -407,6 +407,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     {
                         const OUString& aFontName(pFontItem->GetValue());
                         vcl::Font aFont(aFontName, Size(1,1)); // Size just because CTOR
+                        // tdf#125054 see comment in drtxob.cxx, same ID
                         aNewItem = std::make_shared<SvxFontItem>(
                             aFont.GetFamilyType(), aFont.GetFamilyName(),
                             aFont.GetStyleName(), aFont.GetPitch(),
@@ -416,6 +417,9 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     {
                         aNewItem.reset(static_cast<SvxFontItem*>(rItem.Clone()));
                     }
+
+                    // tdf#125054 force Item to correct intended ID
+                    aNewItem->SetWhich(EE_CHAR_FONTINFO);
                 }
                 else
                 {

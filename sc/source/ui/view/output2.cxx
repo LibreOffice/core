@@ -2413,15 +2413,18 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
         const SfxPoolItem* pItem;
         if ( mpPreviewFontSet->GetItemState( ATTR_FONT, true, &pItem ) == SfxItemState::SET )
         {
-            pSet->Put(*pItem);
+            // tdf#125054 adapt WhichID
+            pSet->Put(*pItem, EE_CHAR_FONTINFO);
         }
         if ( mpPreviewFontSet->GetItemState( ATTR_CJK_FONT, true, &pItem ) == SfxItemState::SET )
         {
-            pSet->Put(*pItem);
+            // tdf#125054 adapt WhichID
+            pSet->Put(*pItem, EE_CHAR_FONTINFO_CJK);
         }
         if ( mpPreviewFontSet->GetItemState( ATTR_CTL_FONT, true, &pItem ) == SfxItemState::SET )
         {
-            pSet->Put(*pItem);
+            // tdf#125054 adapt WhichID
+            pSet->Put(*pItem, EE_CHAR_FONTINFO_CTL);
         }
     }
     bool bParaHyphenate = pSet->Get(EE_PARA_HYPHENATE).GetValue();

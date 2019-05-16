@@ -717,20 +717,26 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     }
     else
     {
-        rEditSet.Put( *aColorItem );
+        // tdf#125054 adapt WhichID
+        rEditSet.Put( *aColorItem, EE_CHAR_COLOR );
     }
 
-    rEditSet.Put( *aFontItem );
-    rEditSet.Put( *aCjkFontItem );
-    rEditSet.Put( *aCtlFontItem );
+    // tdf#125054 adapt WhichID
+    rEditSet.Put( *aFontItem, EE_CHAR_FONTINFO );
+    rEditSet.Put( *aCjkFontItem, EE_CHAR_FONTINFO_CJK );
+    rEditSet.Put( *aCtlFontItem, EE_CHAR_FONTINFO_CTL );
+
     rEditSet.Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
     rEditSet.Put( SvxFontHeightItem( nCjkHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
     rEditSet.Put( SvxFontHeightItem( nCtlHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
     rEditSet.Put( SvxWeightItem ( eWeight,      EE_CHAR_WEIGHT ) );
     rEditSet.Put( SvxWeightItem ( eCjkWeight,   EE_CHAR_WEIGHT_CJK ) );
     rEditSet.Put( SvxWeightItem ( eCtlWeight,   EE_CHAR_WEIGHT_CTL ) );
-    rEditSet.Put( *aUnderlineItem );
-    rEditSet.Put( *aOverlineItem );
+
+    // tdf#125054 adapt WhichID
+    rEditSet.Put( *aUnderlineItem, EE_CHAR_UNDERLINE );
+    rEditSet.Put( *aOverlineItem, EE_CHAR_OVERLINE );
+
     rEditSet.Put( SvxWordLineModeItem( bWordLine,   EE_CHAR_WLM ) );
     rEditSet.Put( SvxCrossedOutItem( eStrike,       EE_CHAR_STRIKEOUT ) );
     rEditSet.Put( SvxPostureItem    ( eItalic,      EE_CHAR_ITALIC ) );
