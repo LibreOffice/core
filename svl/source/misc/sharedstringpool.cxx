@@ -49,13 +49,21 @@ SharedString SharedStringPool::intern( const OUString& rStr )
 {
     osl::MutexGuard aGuard(&mpImpl->maMutex);
 
-    auto mapIt = mpImpl->maStrMap.find(rStr);
-    if (mapIt == mpImpl->maStrMap.end())
+    auto [mapIt,bInserted] = mpImpl->maStrMap.emplace(rStr, rStr.pData);
+    if (bInserted)
     {
         // This is a new string insertion. Establish mapping to upper-case variant.
         OUString aUpper = mpImpl->mrCharClass.uppercase(rStr);
-        auto insertResult = mpImpl->maStrPoolUpper.insert(aUpper);
-        mapIt = mpImpl->maStrMap.emplace_hint(mapIt, rStr, insertResult.first->pData);
+        if (aUpper == rStr)
+        {
+            auto insertResult = mpImpl->maStrPoolUpper.insert(rStr);
+            mapIt->second = insertResult.first->pData;
+        }
+        else
+        {
+            auto insertResult = mpImpl->maStrPoolUpper.insert(aUpper);
+            mapIt->second = insertResult.first->pData;
+        }
     }
     return SharedString(mapIt->first.pData, mapIt->second);
 }
