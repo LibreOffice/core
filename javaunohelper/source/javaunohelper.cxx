@@ -40,6 +40,10 @@
 #include "juhx-export-functions.hxx"
 #include "vm.hxx"
 
+#ifdef DISABLE_DYNLOADING
+#include <osl/thread.h>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
