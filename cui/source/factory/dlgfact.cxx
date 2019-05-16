@@ -1103,7 +1103,7 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateGalleryThemeProperti
                                                          pParent, pData, pItemSet));
 }
 
-VclPtr<AbstractURLDlg> AbstractDialogFactory_Impl::CreateURLDialog(weld::Window* pParent,
+VclPtr<AbstractURLDlg> AbstractDialogFactory_Impl::CreateURLDialog(weld::Widget* pParent,
                                             const OUString& rURL, const OUString& rAltText, const OUString& rDescription,
                                             const OUString& rTarget, const OUString& rName,
                                             TargetList& rTargetList )
@@ -1292,7 +1292,7 @@ VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateCharMapDialog(weld::
     return VclPtr<AbstractSvxCharacterMapDialog_Impl>::Create(std::make_unique<SvxCharacterMap>(pParent, &rAttr, rDocumentFrame));
 }
 
-VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateEventConfigDialog(weld::Window* pParent,
+VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateEventConfigDialog(weld::Widget* pParent,
                                                                               const SfxItemSet& rAttr,
                                                                               const Reference< XFrame >& rDocumentFrame)
 {
