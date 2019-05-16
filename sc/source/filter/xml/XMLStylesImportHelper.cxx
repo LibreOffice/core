@@ -238,29 +238,24 @@ void ScMyStylesImportHelper::ResetAttributes()
     nCellType = 0;
 }
 
-ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const boost::optional<OUString> & pStyleNameP)
+ScMyStylesMap::iterator ScMyStylesImportHelper::GetIterator(const OUString & rStyleName)
 {
-    ScMyStyle aStyle;
-    if (pStyleNameP)
-        aStyle.sStyleName = *pStyleNameP;
-    else
-    {
-        OSL_FAIL("here is no stylename given");
-    }
-    auto itPair = aCellStyles.insert(aStyle);
-    return itPair.first;
+    auto it = aCellStyles.find(rStyleName);
+    if (it == aCellStyles.end())
+        it = aCellStyles.emplace_hint(it, rStyleName, std::make_unique<ScMyStyleRanges>());
+    return it;
 }
 
 void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
 {
     OSL_ENSURE(aRowDefaultStyle != aCellStyles.end(), "no row default style");
-    if (aRowDefaultStyle->sStyleName.isEmpty())
+    if (aRowDefaultStyle->first.isEmpty())
     {
         SCCOL nStartCol(rRange.aStart.Col());
         SCCOL nEndCol(rRange.aEnd.Col());
         if (aColDefaultStyles.size() > sal::static_int_cast<sal_uInt32>(nStartCol))
         {
-            ScMyStylesSet::iterator aPrevItr(aColDefaultStyles[nStartCol]);
+            ScMyStylesMap::iterator aPrevItr(aColDefaultStyles[nStartCol]);
             OSL_ENSURE(aColDefaultStyles.size() > sal::static_int_cast<sal_uInt32>(nEndCol), "to much columns");
             for (SCCOL i = nStartCol + 1; (i <= nEndCol) && (i < sal::static_int_cast<SCCOL>(aColDefaultStyles.size())); ++i)
             {
@@ -270,7 +265,7 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
                     ScRange aRange(rRange);
                     aRange.aStart.SetCol(nStartCol);
                     aRange.aEnd.SetCol(i - 1);
-                    pPrevStyleName = aPrevItr->sStyleName;
+                    pPrevStyleName = aPrevItr->first;
                     AddSingleRange(aRange);
                     nStartCol = i;
                     aPrevItr = aColDefaultStyles[i];
@@ -280,7 +275,7 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
             {
                 ScRange aRange(rRange);
                 aRange.aStart.SetCol(nStartCol);
-                pPrevStyleName = aPrevItr->sStyleName;
+                pPrevStyleName = aPrevItr->first;
                 AddSingleRange(aRange);
             }
             else
@@ -295,21 +290,18 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
     }
     else
     {
-        pPrevStyleName = aRowDefaultStyle->sStyleName;
+        pPrevStyleName = aRowDefaultStyle->first;
         AddSingleRange(rRange);
     }
 }
 
 void ScMyStylesImportHelper::AddSingleRange(const ScRange& rRange)
 {
-    ScMyStylesSet::iterator aItr(GetIterator(pPrevStyleName));
-    if (aItr != aCellStyles.end())
-    {
-        if (nPrevCellType != util::NumberFormat::CURRENCY)
-            aItr->xRanges->AddRange(rRange, nPrevCellType);
-        else
-            aItr->xRanges->AddCurrencyRange(rRange, pPrevCurrency);
-    }
+    ScMyStylesMap::iterator aItr(GetIterator(*pPrevStyleName));
+    if (nPrevCellType != util::NumberFormat::CURRENCY)
+        aItr->second->AddRange(rRange, nPrevCellType);
+    else
+        aItr->second->AddCurrencyRange(rRange, pPrevCurrency);
 }
 
 void ScMyStylesImportHelper::AddRange()
@@ -324,8 +316,7 @@ void ScMyStylesImportHelper::AddRange()
 void ScMyStylesImportHelper::AddColumnStyle(const OUString& sStyleName, const sal_Int32 nColumn, const sal_Int32 nRepeat)
 {
     OSL_ENSURE(static_cast<sal_uInt32>(nColumn) == aColDefaultStyles.size(), "some columns are absent");
-    ScMyStylesSet::iterator aItr(GetIterator(sStyleName));
-    OSL_ENSURE(aItr != aCellStyles.end(), "no column default style");
+    ScMyStylesMap::iterator aItr(GetIterator(sStyleName));
     aColDefaultStyles.reserve(aColDefaultStyles.size() + nRepeat);
     for (sal_Int32 i = 0; i < nRepeat; ++i)
         aColDefaultStyles.push_back(aItr);
@@ -402,7 +393,7 @@ void ScMyStylesImportHelper::InsertCol(const sal_Int32 nCol, const sal_Int32 nTa
     ScXMLImport::MutexGuard aGuard(rImport);
     for (auto& rCellStyle : aCellStyles)
     {
-        rCellStyle.xRanges->InsertCol(nCol, nTab);
+        rCellStyle.second->InsertCol(nCol, nTab);
     }
 }
 
@@ -419,7 +410,7 @@ void ScMyStylesImportHelper::SetStylesToRanges()
 {
     for (auto& rCellStyle : aCellStyles)
     {
-        rCellStyle.xRanges->SetStylesToRanges(&rCellStyle.sStyleName, rImport);
+        rCellStyle.second->SetStylesToRanges(&rCellStyle.first, rImport);
     }
     aColDefaultStyles.clear();
     aCellStyles.clear();
