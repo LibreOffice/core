@@ -39,7 +39,7 @@ class AquaSalVirtualDevice : public SalVirtualDevice
 private:
     bool mbGraphicsUsed;             // is Graphics used
     bool mbForeignContext;           // is mxContext from outside VCL
-    CGContextRef mxBitmapContext;
+    CGContextHolder maBitmapContext;
     int mnBitmapDepth;
     CGLayerHolder maLayer; // Quartz layer
     AquaSalGraphics* mpGraphics;     // current VirDev graphics
