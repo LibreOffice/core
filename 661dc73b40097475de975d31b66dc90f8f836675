@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_1dc94877",
+        "filename": "forms/qa/unoapi/forms_2.sce",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-05-16T13:40:00Z",
+      "side": 1,
+      "message": "I had to disable this test as I could not find any hint what\u0027s going wrong here.",
+      "range": {
+        "startLine": 18,
+        "startChar": 28,
+        "endLine": 18,
+        "endChar": 44
+      },
+      "revId": "661dc73b40097475de975d31b66dc90f8f836675",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
