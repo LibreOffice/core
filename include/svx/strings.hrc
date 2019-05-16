@@ -1666,6 +1666,7 @@
 #define RID_SVXSTR_PAGEDIR_RTL_HORI                         NC_("RID_SVXSTR_PAGEDIR_RTL_HORI", "Right-to-left (horizontal)")
 #define RID_SVXSTR_PAGEDIR_RTL_VERT                         NC_("RID_SVXSTR_PAGEDIR_RTL_VERT", "Right-to-left (vertical)")
 #define RID_SVXSTR_PAGEDIR_LTR_VERT                         NC_("RID_SVXSTR_PAGEDIR_LTR_VERT", "Left-to-right (vertical)")
+#define RID_SVXSTR_PAGEDIR_LTR_BTT_VERT                     NC_("RID_SVXSTR_PAGEDIR_LTR_BTT_VERT", "Bottom-to-top, left-to-right (vertical)")
 
 #endif
 
