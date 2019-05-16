@@ -221,7 +221,7 @@ public:
     bool IsPagePaintingAllowed() const { return mbPagePaintingAllowed;}
     void SetPagePaintingAllowed(bool bNew);
 
-    rtl::Reference<sdr::overlay::OverlayManager> CreateOverlayManager(OutputDevice& rDevice) const;
+    virtual rtl::Reference<sdr::overlay::OverlayManager> CreateOverlayManager(OutputDevice& rDevice) const;
 
 protected:
     svtools::ColorConfig            maColorConfig;
@@ -238,7 +238,7 @@ public:
     SdrPaintWindow* GetPaintWindow(sal_uInt32 nIndex) const;
     // Replacement for GetWin(0), may return 0L (!)
     OutputDevice* GetFirstOutputDevice() const;
-    static void InvalidateWindow(const tools::Rectangle& rArea, OutputDevice& rDevice);
+    virtual void InvalidateWindow(const tools::Rectangle& rArea, OutputDevice& rDevice) const;
 
 private:
     SVX_DLLPRIVATE void ImpClearVars();
@@ -465,9 +465,9 @@ public:
     void SetSwapAsynchron(bool bJa=true) { mbSwapAsynchron=bJa; }
     virtual bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin);
 
-    virtual bool MouseButtonDown(const MouseEvent& /*rMEvt*/, vcl::Window* /*pWin*/) { return false; }
-    virtual bool MouseButtonUp(const MouseEvent& /*rMEvt*/, vcl::Window* /*pWin*/) { return false; }
-    virtual bool MouseMove(const MouseEvent& /*rMEvt*/, vcl::Window* /*pWin*/) { return false; }
+    virtual bool MouseButtonDown(const MouseEvent& /*rMEvt*/, OutputDevice* /*pWin*/) { return false; }
+    virtual bool MouseButtonUp(const MouseEvent& /*rMEvt*/, OutputDevice* /*pWin*/) { return false; }
+    virtual bool MouseMove(const MouseEvent& /*rMEvt*/, OutputDevice* /*pWin*/) { return false; }
     virtual bool RequestHelp(const HelpEvent& /*rHEvt*/) { return false; }
     virtual bool Command(const CommandEvent& /*rCEvt*/, vcl::Window* /*pWin*/) { return false; }
 

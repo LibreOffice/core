@@ -80,7 +80,7 @@ void ClassificationEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     pEdView->SetBackgroundColor(aBgColor);
     pEdEngine->InsertView(pEdView.get());
 
-    pDrawingArea->set_text_cursor();
+    pDrawingArea->set_cursor(PointerStyle::Text);
 }
 
 ClassificationEditView::~ClassificationEditView()

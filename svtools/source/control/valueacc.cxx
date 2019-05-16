@@ -1760,7 +1760,6 @@ awt::Rectangle SAL_CALL SvtValueSetAcc::getBounds()
     return aRet;
 }
 
-
 awt::Point SAL_CALL SvtValueSetAcc::getLocation()
 {
     ThrowIfDisposed();
@@ -1772,7 +1771,6 @@ awt::Point SAL_CALL SvtValueSetAcc::getLocation()
 
     return aRet;
 }
-
 
 awt::Point SAL_CALL SvtValueSetAcc::getLocationOnScreen()
 {
@@ -1797,7 +1795,6 @@ awt::Point SAL_CALL SvtValueSetAcc::getLocationOnScreen()
 
     return aScreenLoc;
 }
-
 
 awt::Size SAL_CALL SvtValueSetAcc::getSize()
 {
