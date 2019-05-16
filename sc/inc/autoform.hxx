@@ -107,6 +107,9 @@ private:
     // number format
     ScNumFormatAbbrev                           aNumFormat;
 
+protected:
+    ScAutoFormatDataField& operator=(const ScAutoFormatDataField& rRef) = delete;
+
 public:
     ScAutoFormatDataField();
     ScAutoFormatDataField( const ScAutoFormatDataField& rCopy );

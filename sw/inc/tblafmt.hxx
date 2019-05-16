@@ -63,9 +63,10 @@ class SwTable;
 
 class SwBoxAutoFormat : public AutoFormatBase
 {
+private:
     // Writer specific
-    std::shared_ptr<SvxFrameDirectionItem>  m_aTextOrientation;
-    std::shared_ptr<SwFormatVertOrient>     m_aVerticalAlignment;
+    std::unique_ptr<SvxFrameDirectionItem>  m_aTextOrientation;
+    std::unique_ptr<SwFormatVertOrient>     m_aVerticalAlignment;
 
     // number format
     OUString                                m_sNumFormatString;
@@ -79,7 +80,8 @@ public:
     SwBoxAutoFormat( const SwBoxAutoFormat& rNew );
     ~SwBoxAutoFormat();
 
-    SwBoxAutoFormat& operator=(const SwBoxAutoFormat& rNew);
+    /// assignemt-op (still used)
+    SwBoxAutoFormat& operator=(const SwBoxAutoFormat& rRef);
 
     /// Comparing based of boxes backgrounds.
     bool operator==(const SwBoxAutoFormat& rRight);
