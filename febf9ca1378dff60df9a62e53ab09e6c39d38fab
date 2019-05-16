@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_8a5c304c",
+        "filename": "include/IwyuFilter_include.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-16T09:49:17Z",
+      "side": 1,
+      "message": "bah .... does iwyu really need to be manually told about that? how disappointing C++ tooling is...",
+      "revId": "febf9ca1378dff60df9a62e53ab09e6c39d38fab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
