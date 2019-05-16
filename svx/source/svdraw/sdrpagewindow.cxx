@@ -432,7 +432,7 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
 
         const bool bWasMapModeEnabled(rWindow.IsMapModeEnabled());
         rWindow.EnableMapMode(false);
-        GetPageView().GetView().InvalidateWindow(aVCLDiscreteRectangle, rWindow);
+        GetPageView().GetView().InvalidateOneWin(rWindow, aVCLDiscreteRectangle);
         rWindow.EnableMapMode(bWasMapModeEnabled);
     }
     else if (comphelper::LibreOfficeKit::isActive())
