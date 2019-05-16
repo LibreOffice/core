@@ -384,7 +384,7 @@ VclPtr<SfxTabPage> SfxMacroTabPage::Create(TabPageParent pParent, const SfxItemS
     return CreateSfxMacroTabPage(pParent, *rAttrSet);
 }
 
-SfxMacroAssignDlg::SfxMacroAssignDlg(weld::Window* pParent,
+SfxMacroAssignDlg::SfxMacroAssignDlg(weld::Widget* pParent,
     const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet)
     : SfxSingleTabDialogController(pParent, &rSet,"cui/ui/eventassigndialog.ui",
                                    "EventAssignDialog")

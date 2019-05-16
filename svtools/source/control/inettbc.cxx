@@ -2143,6 +2143,7 @@ IMPL_LINK_NOARG(URLBox, FocusOutHdl, weld::Widget&, void)
         pCtx->join();
         pCtx.clear();
     }
+    aFocusOutHdl.Call(*m_xWidget);
 }
 
 OUString URLBox::GetURL()
