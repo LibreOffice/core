@@ -170,8 +170,9 @@ void TextEngine::SetActiveView( TextView* pTextView )
 
 void TextEngine::SetFont( const vcl::Font& rFont )
 {
-    if ( rFont == maFont )
+    if (rFont == maOrigFont)
         return;
+    maOrigFont = rFont;
 
     maFont = rFont;
     // #i40221# As the font's color now defaults to transparent (since i35764)
@@ -206,9 +207,9 @@ void TextEngine::SetFont( const vcl::Font& rFont )
     for ( auto nView = mpViews->size(); nView; )
     {
         TextView* pView = (*mpViews)[ --nView ];
-        pView->GetWindow()->SetInputContext( InputContext( GetFont(), !pView->IsReadOnly() ? InputContextFlags::Text|InputContextFlags::ExtText : InputContextFlags::NONE ) );
+        pView->GetWindow()->SetInputContext(InputContext(maFont, !pView->IsReadOnly()
+            ? InputContextFlags::Text|InputContextFlags::ExtText : InputContextFlags::NONE));
     }
-
 }
 
 void TextEngine::SetMaxTextLen( sal_Int32 nLen )

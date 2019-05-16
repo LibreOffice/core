@@ -913,36 +913,8 @@ WinBits VclMultiLineEdit::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-void VclMultiLineEdit::ApplySettings(vcl::RenderContext& rRenderContext)
+void VclMultiLineEdit::ApplyBackgroundSettings(vcl::RenderContext& rRenderContext, const StyleSettings& rStyleSettings)
 {
-    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-
-    // The Font has to be adjusted, as the TextEngine does not take care of
-    // TextColor/Background
-
-    Color aTextColor = rStyleSettings.GetFieldTextColor();
-    if (IsControlForeground())
-        aTextColor = GetControlForeground();
-
-    if (!IsEnabled())
-        aTextColor = rStyleSettings.GetDisableColor();
-
-    vcl::Font aFont = rStyleSettings.GetFieldFont();
-    aFont.SetTransparent(IsPaintTransparent());
-    ApplyControlFont(rRenderContext, aFont);
-
-    vcl::Font theFont = rRenderContext.GetFont();
-    theFont.SetColor(aTextColor);
-    if (IsPaintTransparent())
-        theFont.SetFillColor(COL_TRANSPARENT);
-    else
-        theFont.SetFillColor(IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor());
-
-    pImpVclMEdit->GetTextWindow()->SetFont(theFont);
-    // FIXME: next call causes infinite invalidation loop, rethink how to properly fix this situation
-    // pImpVclMEdit->GetTextWindow()->GetTextEngine()->SetFont(theFont);
-    pImpVclMEdit->GetTextWindow()->SetTextColor(aTextColor);
-
     if (IsPaintTransparent())
     {
         pImpVclMEdit->GetTextWindow()->SetPaintTransparent(true);
@@ -962,10 +934,8 @@ void VclMultiLineEdit::ApplySettings(vcl::RenderContext& rRenderContext)
     }
 }
 
-void VclMultiLineEdit::ImplInitSettings(bool bBackground)
+void VclMultiLineEdit::ApplyFontSettings(vcl::RenderContext& rRenderContext, const StyleSettings& rStyleSettings)
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
     // The Font has to be adjusted, as the TextEngine does not take care of
     // TextColor/Background
 
@@ -977,38 +947,36 @@ void VclMultiLineEdit::ImplInitSettings(bool bBackground)
 
     vcl::Font aFont = rStyleSettings.GetFieldFont();
     aFont.SetTransparent(IsPaintTransparent());
-    ApplyControlFont(*this, aFont);
+    ApplyControlFont(rRenderContext, aFont);
 
-    vcl::Font TheFont = GetFont();
+    vcl::Font TheFont = rRenderContext.GetFont();
     TheFont.SetColor(aTextColor);
     if (IsPaintTransparent())
         TheFont.SetFillColor(COL_TRANSPARENT);
     else
         TheFont.SetFillColor(IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor());
+
     pImpVclMEdit->GetTextWindow()->SetFont(TheFont);
     pImpVclMEdit->GetTextWindow()->GetTextEngine()->SetFont(TheFont);
     pImpVclMEdit->GetTextWindow()->SetTextColor(aTextColor);
+}
+
+void VclMultiLineEdit::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+    ApplyFontSettings(rRenderContext, rStyleSettings);
+    ApplyBackgroundSettings(rRenderContext, rStyleSettings);
+}
+
+void VclMultiLineEdit::ImplInitSettings(bool bBackground)
+{
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+
+    ApplyFontSettings(*this, rStyleSettings);
 
     if (bBackground)
-    {
-        if (IsPaintTransparent())
-        {
-            pImpVclMEdit->GetTextWindow()->SetPaintTransparent(true);
-            pImpVclMEdit->GetTextWindow()->SetBackground();
-            pImpVclMEdit->GetTextWindow()->SetControlBackground();
-            SetBackground();
-            SetControlBackground();
-        }
-        else
-        {
-            if (IsControlBackground())
-                pImpVclMEdit->GetTextWindow()->SetBackground(GetControlBackground());
-            else
-                pImpVclMEdit->GetTextWindow()->SetBackground(rStyleSettings.GetFieldColor());
-            // also adjust for VclMultiLineEdit as the TextComponent might hide Scrollbars
-            SetBackground(pImpVclMEdit->GetTextWindow()->GetBackground());
-        }
-    }
+        ApplyBackgroundSettings(*this, rStyleSettings);
 }
 
 void VclMultiLineEdit::Modify()

@@ -98,7 +98,10 @@ protected:
     TextView*       GetTextView() const;
     ExtTextEngine*  GetTextEngine() const;
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    void ApplySettings(vcl::RenderContext&) override;
+    void ApplyBackgroundSettings(vcl::RenderContext&, const StyleSettings&);
+    void ApplyFontSettings(vcl::RenderContext&, const StyleSettings&);
+
 public:
                     VclMultiLineEdit( vcl::Window* pParent,
                                       WinBits nWinStyle );
