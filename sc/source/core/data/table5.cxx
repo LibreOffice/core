@@ -1205,12 +1205,14 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
     {
         ScColumnTextWidthIterator aIter(aCol[nCol], nRow1, nRow2);
+        sc::ColumnBlockPosition blockPos; // cache mdds position
+        InitColumnBlockPosition( blockPos, nCol );
 
         for (; aIter.hasCell(); aIter.next())
         {
             SCROW nRow = aIter.getPos();
             aIter.setValue(TEXTWIDTH_DIRTY);
-            ScRefCellValue aCell = aCol[nCol].GetCellValue(nRow);
+            ScRefCellValue aCell = aCol[nCol].GetCellValue(blockPos, nRow);
             if (aCell.isEmpty())
                 continue;
 
