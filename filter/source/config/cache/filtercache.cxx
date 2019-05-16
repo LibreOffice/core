@@ -72,8 +72,8 @@ namespace css = ::com::sun::star;
 // definitions
 
 // Error message in case filter config seems to be corrupted.
-// Note: Dont tell user something about "setup -repair"!
-// Its no longer supported by using native installers ...
+// Note: Don't tell user something about "setup -repair"!
+// It's no longer supported by using native installers ...
 static ::rtl::OUString MESSAGE_CORRUPTED_FILTERCONFIG = ::rtl::OUString::createFromAscii("The filter configuration appears to be defective. Please install the office suite again.");
 
 /*-----------------------------------------------
@@ -105,7 +105,7 @@ FilterCache* FilterCache::clone() const
 
     FilterCache* pClone = new FilterCache();
 
-    // Dont copy the configuration access points here.
+    // Don't copy the configuration access points here.
     // They will be created on demand inside the cloned instance,
     // if they are needed.
 
@@ -145,7 +145,7 @@ void FilterCache::takeOver(const FilterCache& rClone)
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // a)
-    // Dont copy the configuration access points here!
+    // Don't copy the configuration access points here!
     // We must use our own ones ...
 
     // b)
@@ -154,7 +154,7 @@ void FilterCache::takeOver(const FilterCache& rClone)
 
     // c)
     // Take over only changed items!
-    // Otherwhise we risk the following scenario:
+    // Otherwise we risk the following scenario:
     // c1) clone_1 contains changed filters
     // c2) clone_2 container changed types
     // c3) clone_1 take over changed filters and unchanged types
@@ -178,12 +178,12 @@ void FilterCache::takeOver(const FilterCache& rClone)
     m_lChangedFrameLoaders.clear();
     m_lChangedContentHandlers.clear();
 
-    m_sActLocale     = rClone.m_sActLocale;
+    m_sActLocale = rClone.m_sActLocale;
     m_sProductName = rClone.m_sProductName;
     m_sOOoXMLFormatName = rClone.m_sOOoXMLFormatName;
     m_sOOoXMLFormatVersion = rClone.m_sOOoXMLFormatVersion;
 
-    m_eFillState     = rClone.m_eFillState;
+    m_eFillState = rClone.m_eFillState;
 
     // renew all dependencies and optimizations
     // Because we can't be sure, that changed filters on one clone
@@ -226,10 +226,10 @@ void FilterCache::load(EFillState eRequired,
     }
 #endif
 
-    // Otherwhise load the missing items.
+    // Otherwise load the missing items.
 
     // ------------------------------------------
-    // a) load some const values from configration.
+    // a) load some const values from configuration.
     //    These values are needed there for loading
     //    config items ...
     //    Further we load some std items from the
@@ -260,13 +260,13 @@ void FilterCache::load(EFillState eRequired,
             m_sOOoXMLFormatVersion = DEFAULT_FORMATVERSION;
         }
 
-        // Support the old configuration support. Read it only one times during office runtime!
+        // Support the old configuration support. Read it only one time during office runtime!
         impl_readOldFormat();
 
         // enable "loadOnDemand" feature ...
         // Create uno listener, which waits for finishing the office startup
         // and starts a thread, which calls loadAll() at this filter cache.
-        // Note: Its not a leak to create this listener with new here.
+        // Note: It's not a leak to create this listener with new here.
         // It kills itself after working!
         /* LateInitListener* pLateInit = */ new LateInitListener(m_xSMGR);
     }
@@ -303,8 +303,8 @@ OUStringList FilterCache::getMatchingItemsByProps(      EItemType  eType  ,
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown �f "eType" is unknown.
-    // => rList will be valid everytimes next line is reached.
+    // An exception is thrown if "eType" is unknown.
+    // => rList will be valid every time the next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
     OUStringList lKeys;
@@ -340,8 +340,8 @@ sal_Bool FilterCache::hasItems(EItemType eType) const
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown �f "eType" is unknown.
-    // => rList will be valid everytimes next line is reached.
+    // An exception is thrown if "eType" is unknown.
+    // => rList will be valid every time the next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
     return (rList.size()>0);
@@ -358,8 +358,8 @@ OUStringList FilterCache::getItemNames(EItemType eType) const
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown �f "eType" is unknown.
-    // => rList will be valid everytimes next line is reached.
+    // An exception is thrown if "eType" is unknown.
+    // => rList will be valid every time the next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
     OUStringList lKeys;
@@ -384,8 +384,8 @@ sal_Bool FilterCache::hasItem(      EItemType        eType,
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown �f "eType" is unknown.
-    // => rList will be valid everytimes next line is reached.
+    // An exception is thrown if "eType" is unknown.
+    // => rList will be valid every time the next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
     // if item could not be found - check if it can be loaded
@@ -420,7 +420,7 @@ CacheItem FilterCache::getItem(      EItemType        eType,
 
     // search for right list
     // An exception is thrown if "eType" is unknown.
-    // => rList will be valid everytimes next line is reached.
+    // => rList will be valid every time the next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
     // check if item exists ...
@@ -456,7 +456,7 @@ CacheItem FilterCache::getItem(      EItemType        eType,
             ::rtl::OUStringBuffer sMsg(256);
             sMsg.appendAscii("The requested filter '"                                                               );
             sMsg.append     (sItem                                                                                  );
-            sMsg.appendAscii("' exists ... but it shouldn't; because the corresponding OOo module was not installed.");
+            sMsg.appendAscii("' exists ... but it shouldn't; because the corresponding AOO module was not installed.");
             throw css::container::NoSuchElementException(sMsg.makeStringAndClear(), css::uno::Reference< css::uno::XInterface >());
         }
     }
@@ -476,8 +476,8 @@ void FilterCache::removeItem(      EItemType        eType,
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown �f "eType" is unknown.
-    // => rList will be valid everytimes next line is reached.
+    // An exception is thrown if "eType" is unknown.
+    // => rList will be valid every time the next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
     CacheItemList::iterator pItem = rList.find(sItem);
@@ -500,18 +500,18 @@ void FilterCache::setItem(      EItemType        eType ,
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown �f "eType" is unknown.
-    // => rList will be valid everytimes next line is reached.
+    // An exception is thrown if "eType" is unknown.
+    // => rList will be valid every time the next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
-    // name must be part of the property set too ... otherwhise our
+    // name must be part of the property set too ... otherwise our
     // container query can't work correctly
     CacheItem aItem = aValue;
     aItem[PROPNAME_NAME] <<= sItem;
     aItem.validateUINames(m_sActLocale);
 
     // remove implicit properties as e.g. FINALIZED or MANDATORY
-    // They can't be saved here and must be readed on demand later, if they are needed.
+    // They can't be saved here and must be read on demand later, if they are needed.
     removeStatePropsFromItem(aItem);
 
     rList[sItem] = aItem;
@@ -541,7 +541,7 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // Note: Opening of the configuration layer throws some exceptions
-    // if it failed. So we dont must check any reference here ...
+    // if it failed. So we don't have to check any reference here ...
     css::uno::Reference< css::container::XNameAccess > xPackage;
     css::uno::Reference< css::container::XNameAccess > xSet;
     switch(eType)
@@ -564,10 +564,10 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
             {
                 /* TODO
                     Hack -->
-                        The default frame loader can't be located inside te normal set of frame loaders.
-                        Its an atomic property inside the misc cfg package. So we can't retrieve the information
+                        The default frame loader can't be located inside the normal set of frame loaders.
+                        It's an atomic property inside the misc cfg package. So we can't retrieve the information
                         about FINALIZED and MANDATORY very easy ... :-(
-                        => set it to readonly/required everytimes :-)
+                        => set it to readonly/required every time :-)
                 */
                 css::uno::Any   aDirectValue       = impl_getDirectCFGValue(CFGDIRECTKEY_DEFAULTFRAMELOADER);
                 ::rtl::OUString sDefaultFrameLoader;
@@ -612,13 +612,13 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
     catch(const css::container::NoSuchElementException&)
     {
         /*  Ignore exceptions for missing elements inside configuration.
-            May by the following reason exists:
+            Maybe the following reason exists:
                 -   The item does not exists inside the new configuration package org.openoffice.TypeDetection - but
-                    we got it from the old package org.openoffice.Office/TypeDetection. We dont migrate such items
+                    we got it from the old package org.openoffice.Office/TypeDetection. We don't migrate such items
                     automatically to the new format. Because it will disturb e.g. the deinstallation of an external filter
                     package. Because such external filter can remove the old file - but not the automatically created new one ...
 
-            => mark item as FINALIZED / MANDATORY, we dont support writing to the old format
+            => mark item as FINALIZED / MANDATORY, we don't support writing to the old format
         */
         rItem[PROPNAME_FINALIZED] <<= sal_True;
         rItem[PROPNAME_MANDATORY] <<= sal_True;
@@ -713,7 +713,7 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                 css::uno::Reference< css::container::XNameReplace > xItem (xFactory->createInstance(), css::uno::UNO_QUERY);
 
                 // special case. no exception - but not a valid item => set must be finalized or mandatory!
-                // Reject flush operation by throwing an exception. At least one item couldnt be flushed.
+                // Reject flush operation by throwing an exception. At least one item couldn't be flushed.
                 if (!xItem.is())
                     throw css::uno::Exception(::rtl::OUString::createFromAscii("Can't add item. Set is finalized or mandatory!"),
                                               css::uno::Reference< css::uno::XInterface >()                                   );
@@ -730,9 +730,9 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                 xSet->getByName(sItem) >>= xItem;
 
                 // special case. no exception - but not a valid item => it must be finalized or mandatory!
-                // Reject flush operation by throwing an exception. At least one item couldnt be flushed.
+                // Reject flush operation by throwing an exception. At least one item couldn't be flushed.
                 if (!xItem.is())
-                    throw css::uno::Exception(::rtl::OUString::createFromAscii("Can't change item. Its finalized or mandatory!"),
+                    throw css::uno::Exception(::rtl::OUString::createFromAscii("Can't change item. It's finalized or mandatory!"),
                                               css::uno::Reference< css::uno::XInterface >()                                    );
 
                 CacheItemList::const_iterator pItem = rCache.find(sItem);
@@ -789,8 +789,8 @@ void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
 
     //*******************************************
     // ii) search types matching to the given extension.
-    //     Copy every macthing type without changing its order!
-    //     Because preferred types was added as first one during
+    //     Copy every matching type without changing its order!
+    //     Because preferred type was added as first one during
     //     loading configuration.
     CacheItemRegistration::const_iterator pExtReg = m_lExtensions2Types.find(sExtension);
     if (pExtReg != m_lExtensions2Types.end())
@@ -892,7 +892,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
         case E_PROVIDER_OLD :
         {
             // This special provider is used to work with
-            // the old configuration format only. Its not cached!
+            // the old configuration format only. It's not cached!
             sPath   = CFGPACKAGE_TD_OLD;
             pConfig = &xOld;
             sRtlLog = ::rtl::OString("framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_OLD)");
@@ -911,7 +911,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
 
     // Start listening for changes on that configuration access.
     // We must not control the lifetime of this listener. Itself
-    // checks, when ist time to die :-)
+    // checks, when it's time to die :-)
     if (bStartListening)
     {
         CacheUpdateListener* pListener = new CacheUpdateListener(m_xSMGR, *pConfig, eItemType);
@@ -1011,7 +1011,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
         else
             xCfg = xConfigProvider->createInstanceWithArguments(SERVICE_CONFIGURATIONUPDATEACCESS, lParams.getAsConstList());
 
-        // If configuration could not be opened ... but factory method does not throwed an exception
+        // If configuration could not be opened ... but factory method does not throw an exception
         // trigger throwing of our own CorruptedFilterConfigurationException.
         // Let message empty. The normal exception text show enough informations to the user.
         if (! xCfg.is())
@@ -1042,7 +1042,7 @@ void FilterCache::impl_validateAndOptimize()
 
     RTL_LOGFILE_CONTEXT( aLog, "framework (as96863) ::FilterCache::impl_validateAndOptimize");
 
-    // First check if any filter or type could be readed
+    // First check if any filter or type could be read
     // from the underlying configuration!
     sal_Bool bSomeTypesShouldExist   = ((m_eFillState & E_CONTAINS_STANDARD       ) == E_CONTAINS_STANDARD       );
     sal_Bool bAllFiltersShouldExist  = ((m_eFillState & E_CONTAINS_FILTERS        ) == E_CONTAINS_FILTERS        );
@@ -1074,7 +1074,7 @@ void FilterCache::impl_validateAndOptimize()
     }
 
     // Create a log for all detected problems, which
-    // occur in the next feew lines.
+    // occur in the next few lines.
     // If there are some real errors throw a RuntimException!
     // If there are some warnings only, show an assertion.
     sal_Int32             nErrors   = 0;
@@ -1131,12 +1131,12 @@ void FilterCache::impl_validateAndOptimize()
 #endif
 
         // create an optimized registration for this type to
-        // its set list of extensions/url pattern. If its a "normal" type
-        // set it at the end of this optimized list. But if its
+        // its set list of extensions/url pattern. If it's a "normal" type
+        // set it at the end of this optimized list. But if it's
         // a "Preferred" one - set it to the front of this list.
         // Of course multiple "Preferred" registrations can occur
         // (they shouldn't - but they can!) ... Ignore it. The last
-        // preferred type is useable in the same manner then every
+        // preferred type is usable in the same manner then every
         // other type!
         sal_Bool bPreferred = sal_False;
         aType[PROPNAME_PREFERRED] >>= bPreferred;
@@ -1173,7 +1173,7 @@ void FilterCache::impl_validateAndOptimize()
 
 #if OSL_DEBUG_LEVEL > 0
 
-        // Dont check cross references between types and filters, if
+        // Don't check cross references between types and filters, if
         // not all filters read from disk!
         // OK - this cache can read single filters on demand too ...
         // but then the fill state of this cache shouldn't be set to E_CONTAINS_FILTERS!
@@ -1185,8 +1185,8 @@ void FilterCache::impl_validateAndOptimize()
         if (!sPrefFilter.getLength())
         {
             // OK - there is no filter for this type. But thats not an error.
-            // May be it can be handled by a ContentHandler ...
-            // But at this time its not guaranteed that there is any ContentHandler
+            // Maybe it can be handled by a ContentHandler ...
+            // But at this time it's not guaranteed that there is any ContentHandler
             // or FrameLoader inside this cache ... but on disk ...
             sal_Bool bReferencedByLoader  = sal_True;
             sal_Bool bReferencedByHandler = sal_True;
@@ -1303,9 +1303,9 @@ void FilterCache::impl_validateAndOptimize()
          ++pIt                           )
     {
         // Note: of course the default loader must be ignored here.
-        // Because we replace its registration later completly with all
+        // Because we replace its registration later completely with all
         // types, which are not referenced by any other loader.
-        // So we can avaoid our code against the complexity of a diff!
+        // So we can avoid our code against the complexity of a diff!
         ::rtl::OUString sLoader = pIt->first;
         if (sLoader.equals(sDefaultFrameLoader))
             continue;
@@ -1391,7 +1391,7 @@ FilterCache::EItemFlushState FilterCache::impl_specifyFlushOperation(const css::
 
     EItemFlushState eState( E_ITEM_UNCHANGED );
 
-    // !? ... such situation can occur, if an item was added and(!) removed before it was flushed :-)
+    // !? ... such a situation can occur, if an item was added and(!) removed before it was flushed :-)
     if (!bExistsInConfigLayer && !bExistsInMemory)
         eState = E_ITEM_UNCHANGED;
     else
@@ -1416,9 +1416,9 @@ void FilterCache::impl_resolveItem4TypeRegistration(      CacheItemList*   pList
     throw(css::uno::Exception)
 {
     CacheItem& rItem = (*pList)[sItem];
-    // In case its a new created entry (automatically done by the hash_map index operator!)
-    // we must be shure, that this entry has its own name as property available.
-    // Its needed later at our container interface!
+    // In case it's a new created entry (automatically done by the hash_map index operator!)
+    // we must be sure, that this entry has its own name as property available.
+    // It's needed later at our container interface!
     rItem[PROPNAME_NAME] <<= sItem;
 
     OUStringList lTypeRegs(rItem[PROPNAME_TYPES]);
@@ -1439,7 +1439,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // Attention: Detect services are part of the standard set!
-    // So there is no need to handle it seperatly.
+    // So there is no need to handle it separately.
 
     // ------------------------------------------
     // a) The standard set of config value is needed.
@@ -1448,7 +1448,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         ((m_eFillState   & E_CONTAINS_STANDARD) != E_CONTAINS_STANDARD)
        )
     {
-        // Attention! If config couldnt be opened successfully
+        // Attention! If config couldn't be opened successfully
         // and exception os thrown automatically and must be forwarded
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY);
@@ -1465,7 +1465,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         ((m_eFillState   & E_CONTAINS_TYPES) != E_CONTAINS_TYPES)
        )
     {
-        // Attention! If config couldnt be opened successfully
+        // Attention! If config couldn't be opened successfully
         // and exception os thrown automatically and must be forwarded
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY);
@@ -1482,7 +1482,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         ((m_eFillState   & E_CONTAINS_FILTERS) != E_CONTAINS_FILTERS)
        )
     {
-        // Attention! If config couldnt be opened successfully
+        // Attention! If config couldn't be opened successfully
         // and exception os thrown automatically and must be forwarded
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xFilters(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY);
@@ -1499,7 +1499,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         ((m_eFillState   & E_CONTAINS_FRAMELOADERS) != E_CONTAINS_FRAMELOADERS)
        )
     {
-        // Attention! If config couldnt be opened successfully
+        // Attention! If config couldn't be opened successfully
         // and exception os thrown automatically and must be forwarded
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xLoaders(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY);
@@ -1516,7 +1516,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         ((m_eFillState   & E_CONTAINS_CONTENTHANDLERS) != E_CONTAINS_CONTENTHANDLERS)
        )
     {
-        // Attention! If config couldnt be opened successfully
+        // Attention! If config couldn't be opened successfully
         // and exception os thrown automatically and must be forwarded
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xHandlers(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY);
@@ -1526,10 +1526,10 @@ void FilterCache::impl_load(EFillState eRequiredState)
         }
     }
 
-    // update fill state. Note: its a bit field, which combines different parts.
+    // update fill state. Note: it's a bit field, which combines different parts.
     m_eFillState = (EFillState) ((sal_Int32)m_eFillState | (sal_Int32)eRequiredState);
 
-    // any data readed?
+    // any data read?
     // yes! => validate it and update optimized structures.
     impl_validateAndOptimize();
 
@@ -1596,7 +1596,7 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
     // get names of all existing sub items of this set
     // step over it and fill internal cache structures.
 
-    // But dont update optimized structures like e.g. hash
+    // But don't update optimized structures like e.g. hash
     // for mapping extensions to its types!
 
     const ::rtl::OUString* pItems = lItems.getConstArray();
@@ -1815,10 +1815,10 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
     #endif
 
     // The internal name of an item must(!) be part of the property
-    // set too. Of course its already used as key into the e.g. outside
+    // set too. Of course it's already used as key into the e.g. outside
     // used hash map ... but some of our API methods provide
     // this property set as result only. But the user of this CacheItem
-    // should know, which value the key names has :-) ITS IMPORTANT!
+    // should know, which value the key names has :-) IT'S IMPORTANT!
     CacheItem aItem;
     aItem[PROPNAME_NAME] = css::uno::makeAny(sItem);
     switch(eType)
@@ -1874,7 +1874,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
                     aItem[PROPNAME_FLAGS] <<= FilterCache::impl_convertFlagNames2FlagField(lFlagNames);
             }
             // read optional properties of a filter
-            // no else here! Is an additional switch ...
+            // no else here! It's an additional switch ...
             if (
                 (eOption == E_READ_UPDATE) ||
                 (eOption == E_READ_ALL   )
@@ -1951,7 +1951,7 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
 
         case E_DETECTSERVICE :
         {
-            OSL_ENSURE(sal_False, "Can't load detect services on demand. Who use this unsupported feature?");
+            OSL_ENSURE(sal_False, "Can't load detect services on demand. Who uses this unsupported feature?");
         }
         break;
     }
@@ -1975,10 +1975,10 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
     {
         if (pItemInCache != pList->end())
             pList->erase(pItemInCache);
-        // OK - this item does not exists inside configuration.
+        // OK - this item does not exist inside configuration.
         // And we already updated our internal cache.
         // But the outside code needs this NoSuchElementException
-        // to know, that this item does notexists.
+        // to know, that this item does not exist.
         // Nobody checks the iterator!
         throw css::container::NoSuchElementException();
     }
@@ -2056,7 +2056,7 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
             // special handling for flags! Convert it from an integer flag field back
             // to a list of names ...
             // But note: because we work directly on a reference to the cache item,
-            // its not allowd to change the value here. We must work on a copy!
+            // it's not allowed to change the value here. We must work on a copy!
             sal_Int32 nFlags = 0;
             pIt = aItem.find(PROPNAME_FLAGS);
             if (pIt != aItem.end())
@@ -2347,7 +2347,7 @@ void FilterCache::impl_readOldFormat()
     static ::rtl::OUString FILTER_SET = ::rtl::OUString::createFromAscii("Filters");
 
     // Attention: Opening/Reading of this old configuration format has to be handled gracefully.
-    // Its optional and shouldn't disturb our normal work!
+    // It's optional and shouldn't disturb our normal work!
     // E.g. we must check, if the package exists ...
 
     css::uno::Reference< css::container::XNameAccess > xCfg;
@@ -2357,13 +2357,13 @@ void FilterCache::impl_readOldFormat()
         xCfg = css::uno::Reference< css::container::XNameAccess >(xInt, css::uno::UNO_QUERY_THROW);
     }
     /* corrupt filter addon ? because it's external (optional) code .. we can ignore it. Addon wont work then ...
-       but that seams to be acceptable.
+       but that seems to be acceptable.
        see #139088# for further informations
     */
     catch(const css::uno::Exception&)
         { return; }
 
-    // May be there is no type set ...
+    // Maybe there is no type set ...
     if (xCfg->hasByName(TYPES_SET))
     {
         css::uno::Reference< css::container::XNameAccess > xSet;
@@ -2374,7 +2374,7 @@ void FilterCache::impl_readOldFormat()
             m_lTypes[pItems[i]] = impl_readOldItem(xSet, E_TYPE, pItems[i]);
     }
 
-    // May be there is no filter set ...
+    // Maybe there is no filter set ...
     if (xCfg->hasByName(FILTER_SET))
     {
         css::uno::Reference< css::container::XNameAccess > xSet;
