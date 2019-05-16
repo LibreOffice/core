@@ -30,7 +30,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
-#include <cppuhelper/weak.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <limits.h>
 
@@ -39,7 +39,7 @@ const sal_uInt16 XML_NAMESPACE_NONE          = USHRT_MAX-1;
 const sal_uInt16 XML_NAMESPACE_UNKNOWN       = USHRT_MAX;
 const sal_uInt16 XML_NAMESPACE_UNKNOWN_FLAG  = 0x8000;
 
-class NameSpaceEntry : public cppu::OWeakObject
+class NameSpaceEntry : public salhelper::SimpleReferenceObject
 {
 public:
     // sName refers to the full namespace name
@@ -47,7 +47,7 @@ public:
     // sPrefix is the prefix used to declare a given item to be from a given namespace
     OUString     sPrefix;
     // nKey is the unique identifier of a namespace
-    sal_uInt16          nKey;
+    sal_uInt16   nKey;
 };
 
 typedef ::std::pair < sal_uInt16, OUString > QNamePair;
@@ -65,12 +65,11 @@ struct QNamePairHash
 
 typedef std::unordered_map < QNamePair, OUString, QNamePairHash > QNameCache;
 typedef std::unordered_map < OUString, ::rtl::Reference <NameSpaceEntry > > NameSpaceHash;
-typedef std::map < sal_uInt16, ::rtl::Reference < NameSpaceEntry > > NameSpaceMap;
+typedef std::unordered_map < sal_uInt16, ::rtl::Reference < NameSpaceEntry > > NameSpaceMap;
 
 class XMLOFF_DLLPUBLIC SvXMLNamespaceMap
 {
-    const OUString       sXMLNS;
-    const OUString       sEmpty;
+    OUString                    sXMLNS;
 
     NameSpaceHash               aNameHash;
     mutable NameSpaceHash       aNameCache;
