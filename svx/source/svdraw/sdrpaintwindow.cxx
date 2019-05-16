@@ -225,7 +225,7 @@ rtl::Reference<sdr::overlay::OverlayManager> SdrPaintView::CreateOverlayManager(
     return xOverlayManager;
 }
 
-void SdrPaintView::InvalidateWindow(const tools::Rectangle& rArea, OutputDevice& rDevice)
+void SdrPaintView::InvalidateWindow(const tools::Rectangle& rArea, OutputDevice& rDevice) const
 {
     vcl::Window& rWindow(static_cast<vcl::Window&>(rDevice));
     rWindow.Invalidate(rArea, InvalidateFlags::NoErase);
