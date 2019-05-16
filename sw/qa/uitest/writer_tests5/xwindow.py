@@ -17,8 +17,12 @@ from com.sun.star.awt import XKeyListener
 
 
 mouseListenerCount = 0
-mouseEventsIntercepted = 0
-keymouseEventsIntercepted = 0
+mousePressedEventsIntercepted = 0
+mouseReleasedEventsIntercepted = 0
+mouseEnteredEventsIntercepted = 0
+mouseExitedEventsIntercepted = 0
+keymousePressedEventsIntercepted = 0
+keymouseReleasedEventsIntercepted = 0
 
 
 class XMouseListenerExtended(unohelper.Base, XMouseListener):
@@ -30,41 +34,41 @@ class XMouseListenerExtended(unohelper.Base, XMouseListener):
     # is invoked when a mouse button has been pressed on a window.
     @classmethod
     def mousePressed(self, xMouseEvent):
-        global mouseEventsIntercepted
-        mouseEventsIntercepted += 1
+        global mousePressedEventsIntercepted
+        mousePressedEventsIntercepted += 1
 
     # is invoked when a mouse button has been released on a window.
     @classmethod
     def mouseReleased(self, xMouseEvent):
-        global mouseEventsIntercepted
-        mouseEventsIntercepted += 1
+        global mouseReleasedEventsIntercepted
+        mouseReleasedEventsIntercepted += 1
 
     # is invoked when the mouse enters a window.
     @classmethod
     def mouseEntered(self, xMouseEvent):
-        global mouseEventsIntercepted
-        mouseEventsIntercepted += 1
+        global mouseEnteredEventsIntercepted
+        mouseEnteredEventsIntercepted += 1
 
     # is invoked when the mouse exits a window.
     @classmethod
     def mouseExited(self, xMouseEvent):
-        global mouseEventsIntercepted
-        mouseEventsIntercepted += 1
+        global mouseExitedEventsIntercepted
+        mouseExitedEventsIntercepted += 1
 
 
 class XKeyListenerExtended(unohelper.Base, XKeyListener):
     # is invoked when a key has been pressed
     @classmethod
     def keyPressed(self, xKeyEvent):
-        global keymouseEventsIntercepted
-        keymouseEventsIntercepted += 1
+        global keymousePressedEventsIntercepted
+        keymousePressedEventsIntercepted += 1
         return super(XKeyListenerExtended, self).keyPressed(xKeyEvent)
 
     # is invoked when a key has been released
     @classmethod
     def keyReleased(self, xKeyEvent):
-        global keymouseEventsIntercepted
-        keymouseEventsIntercepted += 1
+        global keymouseReleasedEventsIntercepted
+        keymouseReleasedEventsIntercepted += 1
         return super(XKeyListenerExtended, self).keyReleased(xKeyEvent)
 
 # Test that registered mouse/key listeners for top window receive mouse/key events
@@ -149,13 +153,25 @@ class XWindow(UITestCase):
         xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
         xToolkit.processEventsToIdle()
 
-        global keymouseEventsIntercepted
-        # Not expected 2 interceptions
-        self.assertEqual(0, keymouseEventsIntercepted)
+        global keymousePressedEventsIntercepted
+        # Not expected any interceptions
+        self.assertEqual(0, keymousePressedEventsIntercepted)
 
-        global mouseEventsIntercepted
-        # mousePressed (2x), mouseReleased (2x) and mouseEntered (1x) should be triggered
-        self.assertEqual(5, mouseEventsIntercepted)
+        global keymouseReleasedEventsIntercepted
+        # Not expected any interceptions
+        self.assertEqual(0, keymouseReleasedEventsIntercepted)
+
+        global mousePressedEventsIntercepted
+        self.assertEqual(2, mousePressedEventsIntercepted)
+
+        global mouseReleasedEventsIntercepted
+        self.assertEqual(2, mouseReleasedEventsIntercepted)
+
+        global mouseEnteredEventsIntercepted
+        self.assertEqual(1, mouseEnteredEventsIntercepted)
+
+        global mouseExitedEventsIntercepted
+        self.assertEqual(0, mouseExitedEventsIntercepted)
 
         # close document
         self.ui_test.close_doc()
