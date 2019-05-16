@@ -159,7 +159,6 @@ STDMETHODIMP COMOpenDocuments::Invoke(
     EXCEPINFO *pExcepInfo,
     UINT *puArgErr)
 {
-//    ReportInvoke(m_pTypeInfo, dispIdMember, pDispParams);
     return DispInvoke(this, m_pTypeInfo, dispIdMember, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr);
 }
 
