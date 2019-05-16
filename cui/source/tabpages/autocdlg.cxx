@@ -816,7 +816,6 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
             // formatted text is only in Writer
             if (bSWriter || bTextOnly)
             {
-                m_xTextOnlyCB->set_active(bTextOnly);
                 OUString sId;
                 if (!bTextOnly)
                 {
@@ -843,7 +842,6 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
             // formatted text is only in Writer
             if (bSWriter || bTextOnly)
             {
-                m_xTextOnlyCB->set_active(elem->IsTextOnly());
                 OUString sId;
                 if (!bTextOnly)
                 {
@@ -875,6 +873,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
     }
     else
     {
+        m_xTextOnlyCB->set_active(true);
         m_xTextOnlyCB->set_sensitive(false);
     }
 }
