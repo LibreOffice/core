@@ -685,7 +685,7 @@ public:
     virtual VclPtr<SfxAbstractDialog>    CreateCharMapDialog(weld::Window* pParent,
                                                              const SfxItemSet& rAttr,
                                                              const css::uno::Reference< css::frame::XFrame >& rFrame) override;
-    virtual VclPtr<SfxAbstractDialog>    CreateEventConfigDialog(weld::Window* pParent,
+    virtual VclPtr<SfxAbstractDialog>    CreateEventConfigDialog(weld::Widget* pParent,
                                                                  const SfxItemSet& rAttr,
                                                                  const css::uno::Reference< css::frame::XFrame >& rFrame) override;
     virtual VclPtr<VclAbstractDialog>    CreateFrameDialog(vcl::Window* pParent, const css::uno::Reference< css::frame::XFrame >& rxFrame,
@@ -751,7 +751,7 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateGalleryThemePropertiesDialog(weld::Window* pParent,
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet) override;
-    virtual VclPtr<AbstractURLDlg> CreateURLDialog(weld::Window* pParent,
+    virtual VclPtr<AbstractURLDlg> CreateURLDialog(weld::Widget* pParent,
                                             const OUString& rURL, const OUString& rAltText, const OUString& rDescription,
                                             const OUString& rTarget, const OUString& rName,
                                             TargetList& rTargetList ) override;

@@ -68,6 +68,7 @@ public:
     void EnableRTL(bool bEnable) { m_pDrawingArea->set_direction(bEnable); }
     bool IsRTLEnabled() const { return m_pDrawingArea->get_direction(); }
     void ReleaseMouse() { m_pDrawingArea->grab_remove(); }
+    void SetPointer(PointerStyle ePointerStyle) { m_pDrawingArea->set_cursor(ePointerStyle); }
     void SetHelpId(const OString& rHelpId) { m_pDrawingArea->set_help_id(rHelpId); }
     void SetAccessibleName(const OUString& rName) { m_pDrawingArea->set_accessible_name(rName); }
     void set_size_request(int nWidth, int nHeight)

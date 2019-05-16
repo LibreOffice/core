@@ -54,7 +54,7 @@ namespace com { namespace sun { namespace star { namespace awt {
 } } } }
 
 namespace tools { class Rectangle; }
-class GraphCtrl;
+class SvxGraphCtrl;
 class SdrObject;
 class SdrModel;
 class SdrPage;
@@ -80,12 +80,10 @@ class SvxGraphCtrlAccessibleContext final :
     public SfxListener, public ::accessibility::IAccessibleViewForwarder
 {
 public:
-    friend class GraphCtrl;
+    friend class SvxGraphCtrl;
 
     // internal
-    SvxGraphCtrlAccessibleContext(
-        const css::uno::Reference< css::accessibility::XAccessible>& rxParent,
-        GraphCtrl&              rRepresentation );
+    SvxGraphCtrlAccessibleContext(SvxGraphCtrl& rRepresentation);
 
     void Notify( SfxBroadcaster& aBC, const SfxHint& aHint ) override;
 
@@ -158,22 +156,6 @@ private:
     /// @throws css::lang::IndexOutOfBoundsException
     void checkChildIndexOnSelection( long nIndexOfChild );
 
-    /** Return the object's current bounding box relative to the desktop,
-        i.e in absolute pixel coordinates.
-        @return
-            The returned rectangle is a bounding box of the object given in
-            absolute screen coordinates.
-        @throws DisposedException
-            When the object is already disposed then a
-            <type>DisposedException</type> is thrown.
-    */
-     tools::Rectangle GetBoundingBoxOnScreen();
-
-    /// Return the object's current bounding box relative to the parent object.
-    ///
-    /// @throws css::uno::RuntimeException
-    tools::Rectangle GetBoundingBox();
-
     virtual void SAL_CALL disposing() final override;
 
     /// @throws css::uno::RuntimeException
@@ -185,9 +167,6 @@ private:
     css::uno::Reference< css::accessibility::XAccessible > getAccessible( const SdrObject* pObj );
 
     ::accessibility::AccessibleShapeTreeInfo maTreeInfo;
-
-    /// Reference to the parent object.
-    css::uno::Reference<css::accessibility::XAccessible> mxParent;
 
     /** Description of this object.  This is not a constant because it can
         be set from the outside.
@@ -202,7 +181,7 @@ private:
     typedef ::std::map< const SdrObject*, rtl::Reference<::accessibility::AccessibleShape> > ShapesMapType;
     ShapesMapType mxShapes;
 
-    VclPtr<GraphCtrl>  mpControl;
+    SvxGraphCtrl*  mpControl;
 
     SdrModel* mpModel;
     SdrPage* mpPage;
