@@ -21,7 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_DLG_DBFINDEX_HXX
 
 #include <vcl/weld.hxx>
-#include <list>
+#include <deque>
 
 namespace dbaui
 {
@@ -40,7 +40,7 @@ public:
     const OUString& GetIndexFileName() const { return aIndexFileName; }
 };
 
-typedef std::list< OTableIndex >  TableIndexList;
+typedef std::deque< OTableIndex >  TableIndexList;
 
 // OTableInfo
 class ODbaseIndexDialog;
@@ -59,7 +59,7 @@ public:
     void WriteInfFile( const OUString& rDSN ) const;
 };
 
-typedef std::list< OTableInfo >   TableInfoList;
+typedef std::deque< OTableInfo >   TableInfoList;
 
 // IndexDialog
 class ODbaseIndexDialog : public weld::GenericDialogController
