@@ -82,8 +82,8 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
         SwPosition const*const pStart(pRed->Start());
         SwPosition const*const pEnd(pRed->End());
         if (*pStart == *pEnd)
-        {   // only allowed while moving
-            assert(IDocumentRedlineAccess::IsHideChanges(rIDRA.GetRedlineFlags()));
+        {   // only allowed while moving (either way?)
+//            assert(IDocumentRedlineAccess::IsHideChanges(rIDRA.GetRedlineFlags()));
             continue;
         }
         if (pStart->nNode.GetNode().IsTableNode())
@@ -222,14 +222,14 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     if (extents.empty()) // there was no text anywhere
     {
         assert(mergedText.isEmpty());
-//        pParaPropsNode = &rTextNode; // if every node is empty, the first one wins
+        pParaPropsNode = &rTextNode; // if every node is empty, the first one wins
     }
     else
     {
         assert(!mergedText.isEmpty());
-//        pParaPropsNode = extents.begin()->pNode; // para props from first node that isn't empty
+        pParaPropsNode = extents.begin()->pNode; // para props from first node that isn't empty
     }
-    pParaPropsNode = &rTextNode; // well, actually...
+//    pParaPropsNode = &rTextNode; // well, actually...
     // keep lists up to date with visible nodes
     if (pParaPropsNode->IsInList() && !pParaPropsNode->GetNum(rFrame.getRootFrame()))
     {

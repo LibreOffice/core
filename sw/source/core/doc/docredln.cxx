@@ -1458,7 +1458,8 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
         if( pCSttNd && pCEndNd )
         {
             // #i100466# - force a <join next> on <delete and join> operation
-            pDoc->getIDocumentContentOperations().DeleteAndJoin( aPam, true );
+            // tdf#125319 - rather not?
+            pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam/*, true*/);
         }
         else if( pCSttNd || pCEndNd )
         {

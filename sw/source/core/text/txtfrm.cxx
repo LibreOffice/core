@@ -1135,7 +1135,7 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
     // pFirstNode is never updated
     if (nErased && nErased == nFoundNode)
     {   // all visible text from node was erased
-#if 0
+#if 1
         if (rMerged.pParaPropsNode == &rNode)
         {
             rMerged.pParaPropsNode->RemoveFromListRLHidden();
@@ -1296,7 +1296,7 @@ SwTextNode const* SwTextFrame::GetTextNodeForParaProps() const
     sw::MergedPara const*const pMerged(GetMergedPara());
     if (pMerged)
     {
-        assert(pMerged->pFirstNode == pMerged->pParaPropsNode); // surprising news!
+//        assert(pMerged->pFirstNode == pMerged->pParaPropsNode); // surprising news!
         return pMerged->pParaPropsNode;
     }
     else
