@@ -1136,12 +1136,12 @@ ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange, ScInterprete
     ScLookupCacheMap*& rpCacheMap = pContext->mScLookupCache;
     if (!rpCacheMap)
         rpCacheMap = new ScLookupCacheMap;
-    auto findIt(rpCacheMap->aCacheMap.find(rRange));
-    if (findIt == rpCacheMap->aCacheMap.end())
+    // insert with temporary value to avoid doing two lookups
+    auto [findIt, bInserted] = rpCacheMap->aCacheMap.emplace(rRange, nullptr);
+    if (bInserted)
     {
-        auto insertIt = rpCacheMap->aCacheMap.emplace_hint(findIt,
-                    rRange, std::make_unique<ScLookupCache>(this, rRange, *rpCacheMap) );
-        pCache = insertIt->second.get();
+        findIt->second = std::make_unique<ScLookupCache>(this, rRange, *rpCacheMap);
+        pCache = findIt->second.get();
         // The StartListeningArea() call is not thread-safe, as all threads
         // would access the same SvtBroadcaster.
         osl::MutexGuard guard( mScLookupMutex );
