@@ -65,7 +65,6 @@ std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraph
 AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX, long &nDY,
                                             DeviceFormat eFormat, const SystemGraphicsData *pData )
   : mbGraphicsUsed( false )
-  , mxBitmapContext( nullptr )
   , mnBitmapDepth( 0 )
   , mnWidth(0)
   , mnHeight(0)
@@ -180,13 +179,13 @@ void AquaSalVirtualDevice::Destroy()
         maLayer.set(nullptr);
     }
 
-    if( mxBitmapContext )
+    if (maBitmapContext.isSet())
     {
-        void* pRawData = CGBitmapContextGetData( mxBitmapContext );
-        std::free( pRawData );
-        SAL_INFO( "vcl.cg",  "CGContextRelease(" << mxBitmapContext << ")" );
-        CGContextRelease( mxBitmapContext );
-        mxBitmapContext = nullptr;
+        void* pRawData = CGBitmapContextGetData(maBitmapContext.get());
+        std::free(pRawData);
+        SAL_INFO( "vcl.cg",  "CGContextRelease(" << maBitmapContext.get() << ")" );
+        CGContextRelease(maBitmapContext.get());
+        maBitmapContext.set(nullptr);
     }
 }
 
@@ -233,18 +232,18 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
     mnHeight = nDY;
 
     // create a Quartz layer matching to the intended virdev usage
-    CGContextRef xCGContext = nullptr;
+    CGContextHolder xCGContextHolder;
     if( mnBitmapDepth && (mnBitmapDepth < 16) )
     {
         mnBitmapDepth = 8;  // TODO: are 1bit vdevs worth it?
         const int nBytesPerRow = (mnBitmapDepth * nDX + 7) / 8;
 
         void* pRawData = std::malloc( nBytesPerRow * nDY );
-        mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
+        maBitmapContext.set(CGBitmapContextCreate( pRawData, nDX, nDY,
                                                  mnBitmapDepth, nBytesPerRow,
-                                                 GetSalData()->mxGraySpace, kCGImageAlphaNone );
-        SAL_INFO( "vcl.cg",  "CGBitmapContextCreate(" << nDX << "x" << nDY << "x" << mnBitmapDepth << ") = " << mxBitmapContext );
-        xCGContext = mxBitmapContext;
+                                                 GetSalData()->mxGraySpace, kCGImageAlphaNone));
+        SAL_INFO("vcl.cg",  "CGBitmapContextCreate(" << nDX << "x" << nDY << "x" << mnBitmapDepth << ") = " << maBitmapContext.get());
+        xCGContextHolder = maBitmapContext;
     }
     else
     {
@@ -267,13 +266,13 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
                 NSGraphicsContext* pNSContext = [NSGraphicsContext graphicsContextWithWindow: pNSWindow];
                 if( pNSContext )
                 {
-                    xCGContext = [pNSContext CGContext];
+                    xCGContextHolder.set([pNSContext CGContext]);
                 }
             }
         }
 #endif
 
-        if (!xCGContext)
+        if (!xCGContextHolder.isSet())
         {
             // assert(Application::IsBitmapRendering());
             mnBitmapDepth = 32;
@@ -285,18 +284,18 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 #else
             const int nFlags = kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little;
 #endif
-            mxBitmapContext = CGBitmapContextCreate(pRawData, nDX, nDY, 8, nBytesPerRow,
-                                                    GetSalData()->mxRGBSpace, nFlags);
-            SAL_INFO( "vcl.cg", "CGBitmapContextCreate(" << nDX << "x" << nDY << "x32) = " << mxBitmapContext );
-            xCGContext = mxBitmapContext;
+            maBitmapContext.set(CGBitmapContextCreate(pRawData, nDX, nDY, 8, nBytesPerRow,
+                                                      GetSalData()->mxRGBSpace, nFlags));
+            SAL_INFO("vcl.cg", "CGBitmapContextCreate(" << nDX << "x" << nDY << "x32) = " << maBitmapContext.get());
+            xCGContextHolder = maBitmapContext;
         }
     }
 
-    SAL_WARN_IF( !xCGContext, "vcl.quartz", "No context" );
+    SAL_WARN_IF(!xCGContextHolder.isSet(), "vcl.quartz", "No context");
 
     const CGSize aNewSize = { static_cast<CGFloat>(nDX), static_cast<CGFloat>(nDY) };
-    maLayer.set(CGLayerCreateWithContext(xCGContext, aNewSize, nullptr));
-    SAL_INFO("vcl.cg",  "CGLayerCreateWithContext(" << xCGContext << "," << aNewSize << ",NULL) = " << maLayer.get());
+    maLayer.set(CGLayerCreateWithContext(xCGContextHolder.get(), aNewSize, nullptr));
+    SAL_INFO("vcl.cg",  "CGLayerCreateWithContext(" << xCGContextHolder.get() << "," << aNewSize << ",NULL) = " << maLayer.get());
 
     if (maLayer.isSet() && mpGraphics)
     {
