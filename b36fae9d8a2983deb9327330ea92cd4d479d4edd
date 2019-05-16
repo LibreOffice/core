@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_8a24300f",
+        "filename": "svx/source/items/autoformathelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-16T06:51:37Z",
+      "side": 1,
+      "message": "is all the cloning done in case of self assignment intentional (or should there be an appropriate check here? or maybe an appropriate assert, clarifying that this base class operator\u003d, which might then better be protected, must only be called when the derived class operator\u003d has already filtered out self assignment?)",
+      "revId": "b36fae9d8a2983deb9327330ea92cd4d479d4edd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_2a215cfc",
+        "filename": "sw/source/core/doc/tblafmt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-16T06:51:37Z",
+      "side": 1,
+      "message": "see AutoFormatBase::operator\u003d:  is all the cloning done in case of self assignment intentional (or should there be an appropriate check here?)",
+      "revId": "b36fae9d8a2983deb9327330ea92cd4d479d4edd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_6a276414",
+        "filename": "sw/source/core/doc/tblafmt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-16T06:51:37Z",
+      "side": 1,
+      "message": "The \"was\" is confusing when you read that comment outside the context of this (and its predecesor 1e2682235cded9a7cd90e55f0bfc60a1285e9a46 \"WIP: Further preparations for deeper Item changes\") commit.  Better say that it used to not be copied before that 1e2682235cded9a7cd90e55f0bfc60a1285e9a46 \"WIP: Further preparations for deeper Item changes\" commit?",
+      "revId": "b36fae9d8a2983deb9327330ea92cd4d479d4edd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
