@@ -2675,6 +2675,7 @@ void ScDocument::CopyBlockFromClip(
                 aRefCxt.mnColDelta = nDx;
                 aRefCxt.mnRowDelta = nDy;
                 aRefCxt.mnTabDelta = nDz;
+                aRefCxt.setBlockPositionReference(rCxt.getBlockPositionSet()); // share mdds position caching
                 if (rCxt.getClipDoc()->GetClipParam().mbCutMode)
                 {
                     // Update references only if cut originates from the same
