@@ -1494,7 +1494,18 @@ rtl::Reference<sdr::overlay::OverlayManager> SvxGraphCtrlView::CreateOverlayMana
     return SdrView::CreateOverlayManager(rDevice);
 }
 
-void SvxGraphCtrlView::InvalidateWindow(const tools::Rectangle& rArea, OutputDevice& rDevice) const
+void SvxGraphCtrlView::InvalidateOneWin(OutputDevice& rDevice)
+{
+    assert(&rDevice == &rGraphCtrl.GetDrawingArea()->get_ref_device());
+    if (rDevice.GetOutDevType() == OUTDEV_VIRDEV)
+    {
+        rGraphCtrl.Invalidate();
+        return;
+    }
+    SdrView::InvalidateOneWin(rDevice);
+}
+
+void SvxGraphCtrlView::InvalidateOneWin(OutputDevice& rDevice, const tools::Rectangle& rArea)
 {
     assert(&rDevice == &rGraphCtrl.GetDrawingArea()->get_ref_device());
     if (rDevice.GetOutDevType() == OUTDEV_VIRDEV)
@@ -1502,7 +1513,7 @@ void SvxGraphCtrlView::InvalidateWindow(const tools::Rectangle& rArea, OutputDev
         rGraphCtrl.Invalidate(rArea);
         return;
     }
-    SdrView::InvalidateWindow(rArea, rDevice);
+    SdrView::InvalidateOneWin(rDevice, rArea);
 }
 
 Point SvxGraphCtrl::GetPositionInDialog() const
