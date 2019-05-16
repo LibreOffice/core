@@ -867,6 +867,58 @@ public:
     }
 };
 
+class SalInstanceToolbar : public SalInstanceWidget, public virtual weld::Toolbar
+{
+private:
+    VclPtr<ToolBox> m_xToolBox;
+
+    DECL_LINK(ClickHdl, ToolBox*, void);
+public:
+    SalInstanceToolbar(ToolBox* pToolBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceWidget(pToolBox, pBuilder, bTakeOwnership)
+        , m_xToolBox(pToolBox)
+    {
+        m_xToolBox->SetSelectHdl(LINK(this, SalInstanceToolbar, ClickHdl));
+    }
+
+    virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) override
+    {
+        m_xToolBox->EnableItem(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), bSensitive);
+    }
+
+    virtual bool get_item_sensitive(const OString& rIdent) const override
+    {
+        return m_xToolBox->IsItemEnabled(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)));
+    }
+
+    virtual void set_item_active(const OString& rIdent, bool bActive) override
+    {
+        m_xToolBox->CheckItem(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), bActive);
+    }
+
+    virtual bool get_item_active(const OString& rIdent) const override
+    {
+        return m_xToolBox->IsItemChecked(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)));
+    }
+
+    virtual void insert_separator(int pos, const OUString& /*rId*/) override
+    {
+        auto nInsertPos = pos == -1 ? ToolBox::APPEND : pos;
+        m_xToolBox->InsertSeparator(nInsertPos, 5);
+    }
+
+    virtual ~SalInstanceToolbar() override
+    {
+        m_xToolBox->SetSelectHdl(Link<ToolBox*, void>());
+    }
+};
+
+IMPL_LINK_NOARG(SalInstanceToolbar, ClickHdl, ToolBox*, void)
+{
+    sal_uInt16 nItemId = m_xToolBox->GetCurItemId();
+    signal_clicked(m_xToolBox->GetItemCommand(nItemId).toUtf8());
+}
+
 class SalInstanceSizeGroup : public weld::SizeGroup
 {
 private:
@@ -4261,9 +4313,9 @@ public:
         weld::Widget::connect_key_release(rLink);
     }
 
-    virtual void set_text_cursor() override
+    virtual void set_cursor(PointerStyle ePointerStyle) override
     {
-        m_xDrawingArea->SetPointer(PointerStyle::Text);
+        m_xDrawingArea->SetPointer(ePointerStyle);
     }
 
     virtual a11yref get_accessible_parent() override
@@ -5106,6 +5158,12 @@ public:
     {
         PopupMenu* pMenu = m_xBuilder->get_menu(id);
         return pMenu ? std::make_unique<SalInstanceMenu>(pMenu, bTakeOwnership) : nullptr;
+    }
+
+    virtual std::unique_ptr<weld::Toolbar> weld_toolbar(const OString &id, bool bTakeOwnership) override
+    {
+        ToolBox* pToolBox = m_xBuilder->get<ToolBox>(id);
+        return pToolBox ? std::make_unique<SalInstanceToolbar>(pToolBox, this, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::SizeGroup> create_size_group() override

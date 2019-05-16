@@ -42,6 +42,7 @@ namespace sd
 SdPhotoAlbumDialog::SdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument* pActDoc)
     : GenericDialogController(pWindow, "modules/simpress/ui/photoalbum.ui", "PhotoAlbumCreatorDialog")
     , m_pDoc(pActDoc)
+    , m_aImg(m_xDialog.get())
     , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
     , m_xCreateBtn(m_xBuilder->weld_button("ok"))
     , m_xAddBtn(m_xBuilder->weld_button("add_btn"))
