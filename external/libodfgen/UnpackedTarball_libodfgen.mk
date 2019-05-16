@@ -37,6 +37,7 @@ endif
 
 $(eval $(call gb_UnpackedTarball_add_patches,libodfgen, \
 	external/libodfgen/0001-tdf-101077-make-double-string-conversion-locale-agno.patch.1 \
+	external/libodfgen/c++11.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
