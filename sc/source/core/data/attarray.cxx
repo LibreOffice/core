@@ -42,6 +42,7 @@
 #include <editdataarray.hxx>
 #include <cellvalue.hxx>
 #include <editutil.hxx>
+#include <mtvelements.hxx>
 #include <memory>
 
 using ::editeng::SvxBorderLine;
@@ -397,10 +398,13 @@ void ScAttrArray::RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
                                        const ScPatternAttr* pPattern, ScEditDataArray* pDataArray )
 {
     assert( nCol != -1 );
+    // cache mdds position, this doesn't modify the mdds container, just EditTextObject's
+    sc::ColumnBlockPosition blockPos;
+    pDocument->InitColumnBlockPosition( blockPos, nTab, nCol );
     for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
     {
         ScAddress aPos(nCol, nRow, nTab);
-        ScRefCellValue aCell(*pDocument, aPos);
+        ScRefCellValue aCell(*pDocument, aPos, blockPos);
         if (aCell.meType != CELLTYPE_EDIT || !aCell.mpEditText)
             continue;
 
