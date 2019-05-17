@@ -84,9 +84,6 @@ endif
 
 ifneq ($(HAVE_LD_BSYMBOLIC_FUNCTIONS),)
 gb_LinkTarget_LDFLAGS += -Wl,-Bsymbolic-functions
-ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
-gb_LinkTarget_LDFLAGS += -Wl,--dynamic-list-cpp-typeinfo
-endif
 endif
 
 gb_LINKEROPTFLAGS := -Wl,-O1

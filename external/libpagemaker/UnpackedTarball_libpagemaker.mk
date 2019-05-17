@@ -15,10 +15,4 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libpagemaker,0))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libpagemaker))
 
-ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
-$(eval $(call gb_UnpackedTarball_add_patches,libpagemaker, \
-    external/libpagemaker/ubsan-visibility.patch \
-))
-endif
-
 # vim: set noet sw=4 ts=4:

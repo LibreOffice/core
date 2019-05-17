@@ -15,12 +15,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libzmf,0))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libzmf))
 
-ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
-$(eval $(call gb_UnpackedTarball_add_patches,libzmf, \
-    external/libzmf/ubsan-visibility.patch \
-))
-endif
-
 $(eval $(call gb_UnpackedTarball_add_patches,libzmf, \
     external/libzmf/android-workaround.patch.1 \
 ))
