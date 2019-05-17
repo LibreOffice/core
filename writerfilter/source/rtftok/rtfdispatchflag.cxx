@@ -133,7 +133,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     if (nParam >= 0)
     {
         auto pValue = new RTFValue(nParam);
-        m_aStates.top().aTabAttributes.set(NS_ooxml::LN_CT_TabStop_val, pValue);
+        m_aStates.top().getTabAttributes().set(NS_ooxml::LN_CT_TabStop_val, pValue);
         return RTFError::OK;
     }
 
@@ -164,7 +164,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     if (nParam >= 0)
     {
         auto pValue = new RTFValue(nParam);
-        m_aStates.top().aTabAttributes.set(NS_ooxml::LN_CT_TabStop_leader, pValue);
+        m_aStates.top().getTabAttributes().set(NS_ooxml::LN_CT_TabStop_leader, pValue);
         return RTFError::OK;
     }
 
@@ -451,24 +451,24 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             // TODO ooxml:CT_Font_family seems to be ignored by the domain mapper
             break;
         case RTF_ANSI:
-            m_aStates.top().nCurrentEncoding = RTL_TEXTENCODING_MS_1252;
+            m_aStates.top().setCurrentEncoding(RTL_TEXTENCODING_MS_1252);
             break;
         case RTF_MAC:
-            m_aDefaultState.nCurrentEncoding = RTL_TEXTENCODING_APPLE_ROMAN;
-            m_aStates.top().nCurrentEncoding = m_aDefaultState.nCurrentEncoding;
+            m_aDefaultState.setCurrentEncoding(RTL_TEXTENCODING_APPLE_ROMAN);
+            m_aStates.top().setCurrentEncoding(m_aDefaultState.getCurrentEncoding());
             break;
         case RTF_PC:
-            m_aDefaultState.nCurrentEncoding = RTL_TEXTENCODING_IBM_437;
-            m_aStates.top().nCurrentEncoding = m_aDefaultState.nCurrentEncoding;
+            m_aDefaultState.setCurrentEncoding(RTL_TEXTENCODING_IBM_437);
+            m_aStates.top().setCurrentEncoding(m_aDefaultState.getCurrentEncoding());
             break;
         case RTF_PCA:
-            m_aDefaultState.nCurrentEncoding = RTL_TEXTENCODING_IBM_850;
-            m_aStates.top().nCurrentEncoding = m_aDefaultState.nCurrentEncoding;
+            m_aDefaultState.setCurrentEncoding(RTL_TEXTENCODING_IBM_850);
+            m_aStates.top().setCurrentEncoding(m_aDefaultState.getCurrentEncoding());
             break;
         case RTF_PLAIN:
         {
             m_aStates.top().aCharacterSprms = getDefaultState().aCharacterSprms;
-            m_aStates.top().nCurrentEncoding = getEncoding(getFontIndex(m_nDefaultFontIndex));
+            m_aStates.top().setCurrentEncoding(getEncoding(getFontIndex(m_nDefaultFontIndex)));
             m_aStates.top().aCharacterAttributes = getDefaultState().aCharacterAttributes;
             m_aStates.top().setCurrentCharacterStyleIndex(-1);
             m_aStates.top().setIsRightToLeft(false);
@@ -583,8 +583,8 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         case RTF_RTLCH:
             m_aStates.top().setIsRightToLeft(true);
-            if (m_aDefaultState.nCurrentEncoding == RTL_TEXTENCODING_MS_1255)
-                m_aStates.top().nCurrentEncoding = m_aDefaultState.nCurrentEncoding;
+            if (m_aDefaultState.getCurrentEncoding() == RTL_TEXTENCODING_MS_1255)
+                m_aStates.top().setCurrentEncoding(m_aDefaultState.getCurrentEncoding());
             break;
         case RTF_ULNONE:
         {
