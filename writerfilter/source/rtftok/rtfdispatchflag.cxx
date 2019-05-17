@@ -470,7 +470,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().aCharacterSprms = getDefaultState().aCharacterSprms;
             m_aStates.top().nCurrentEncoding = getEncoding(getFontIndex(m_nDefaultFontIndex));
             m_aStates.top().aCharacterAttributes = getDefaultState().aCharacterAttributes;
-            m_aStates.top().nCurrentCharacterStyleIndex = -1;
+            m_aStates.top().setCurrentCharacterStyleIndex(-1);
             m_aStates.top().isRightToLeft = false;
             m_aStates.top().eRunType = RTFParserState::RunType::LOCH;
         }
@@ -514,11 +514,11 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 {
                     m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_pStyle,
                                                         new RTFValue(aName));
-                    m_aStates.top().nCurrentStyleIndex = 0;
+                    m_aStates.top().setCurrentStyleIndex(0);
                 }
                 else
                 {
-                    m_aStates.top().nCurrentStyleIndex = -1;
+                    m_aStates.top().setCurrentStyleIndex(-1);
                 }
             }
             // Need to send paragraph properties again, if there will be any.

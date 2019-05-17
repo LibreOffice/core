@@ -431,7 +431,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
         case RTF_S:
         {
-            m_aStates.top().nCurrentStyleIndex = nParam;
+            m_aStates.top().setCurrentStyleIndex(nParam);
 
             if (m_aStates.top().eDestination == Destination::STYLESHEET
                 || m_aStates.top().eDestination == Destination::STYLEENTRY)
@@ -457,7 +457,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         }
         break;
         case RTF_CS:
-            m_aStates.top().nCurrentCharacterStyleIndex = nParam;
+            m_aStates.top().setCurrentCharacterStyleIndex(nParam);
             if (m_aStates.top().eDestination == Destination::STYLESHEET
                 || m_aStates.top().eDestination == Destination::STYLEENTRY)
             {
@@ -667,7 +667,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                                                      pIntValue);
             else if (m_aStates.top().eDestination == Destination::LISTOVERRIDEENTRY)
                 m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Num_abstractNumId, pIntValue);
-            m_aStates.top().nCurrentListIndex = nParam;
+            m_aStates.top().setCurrentListIndex(nParam);
         }
         break;
         case RTF_LS:
@@ -675,7 +675,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (m_aStates.top().eDestination == Destination::LISTOVERRIDEENTRY)
             {
                 m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_AbstractNum_nsid, pIntValue);
-                m_aStates.top().nCurrentListOverrideIndex = nParam;
+                m_aStates.top().setCurrentListOverrideIndex(nParam);
             }
             else
             {
