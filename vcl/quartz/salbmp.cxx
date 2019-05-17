@@ -55,8 +55,7 @@ static bool isValidBitCount( sal_uInt16 nBitCount )
 }
 
 QuartzSalBitmap::QuartzSalBitmap()
-  : mxGraphicContext( nullptr )
-  , mxCachedImage( nullptr )
+  : mxCachedImage( nullptr )
   , mnBits(0)
   , mnWidth(0)
   , mnHeight(0)
@@ -105,18 +104,18 @@ bool QuartzSalBitmap::Create(CGLayerHolder const & rLayerHolder, int nBitmapBits
 
     // copy layer content into the bitmap buffer
     const CGPoint aSrcPoint = { static_cast<CGFloat>(-nX), static_cast<CGFloat>(-nY) };
-    if(mxGraphicContext) // remove warning
+    if (maGraphicContext.isSet()) // remove warning
     {
-        SAL_INFO("vcl.cg", "CGContextDrawLayerAtPoint(" << mxGraphicContext << "," << aSrcPoint << "," << rLayerHolder.get() << ")" );
+        SAL_INFO("vcl.cg", "CGContextDrawLayerAtPoint(" << maGraphicContext.get() << "," << aSrcPoint << "," << rLayerHolder.get() << ")");
         if( bFlipped )
         {
-            SAL_INFO( "vcl.cg", "CGContextTranslateCTM(" << mxGraphicContext << ",0," << mnHeight << ")" );
-            CGContextTranslateCTM( mxGraphicContext, 0, +mnHeight );
-            SAL_INFO( "vcl.cg", "CGContextScaleCTM(" << mxGraphicContext << ",+1,-1)" );
-            CGContextScaleCTM( mxGraphicContext, +1, -1 );
+            SAL_INFO( "vcl.cg", "CGContextTranslateCTM(" << maGraphicContext.get() << ",0," << mnHeight << ")" );
+            CGContextTranslateCTM( maGraphicContext.get(), 0, +mnHeight );
+            SAL_INFO( "vcl.cg", "CGContextScaleCTM(" << maGraphicContext.get() << ",+1,-1)" );
+            CGContextScaleCTM( maGraphicContext.get(), +1, -1 );
         }
 
-        CGContextDrawLayerAtPoint( mxGraphicContext, aSrcPoint, rLayerHolder.get() );
+        CGContextDrawLayerAtPoint(maGraphicContext.get(), aSrcPoint, rLayerHolder.get());
     }
     return true;
 }
@@ -187,11 +186,11 @@ void QuartzSalBitmap::DestroyContext()
         mxCachedImage = nullptr;
     }
 
-    if( mxGraphicContext )
+    if (maGraphicContext.isSet())
     {
-        SAL_INFO("vcl.cg", "CGContextRelease(" << mxGraphicContext << ")" );
-        CGContextRelease( mxGraphicContext );
-        mxGraphicContext = nullptr;
+        SAL_INFO("vcl.cg", "CGContextRelease(" << maGraphicContext.get() << ")" );
+        CGContextRelease(maGraphicContext.get());
+        maGraphicContext.set(nullptr);
         m_pContextBuffer.reset();
     }
 }
@@ -244,22 +243,22 @@ bool QuartzSalBitmap::CreateContext()
         }
         catch( const std::bad_alloc& )
         {
-            mxGraphicContext = nullptr;
+            maGraphicContext.set(nullptr);
         }
     }
 
     if (m_pContextBuffer.get())
     {
-        mxGraphicContext = CGBitmapContextCreate( m_pContextBuffer.get(), mnWidth, mnHeight,
-                                                  bitsPerComponent, nContextBytesPerRow,
-                                                  aCGColorSpace, aCGBmpInfo );
-        SAL_INFO("vcl.cg", "CGBitmapContextCreate(" << mnWidth << "x" << mnHeight << "x" << bitsPerComponent << ") = " << mxGraphicContext );
+        maGraphicContext.set(CGBitmapContextCreate(m_pContextBuffer.get(), mnWidth, mnHeight,
+                                                   bitsPerComponent, nContextBytesPerRow,
+                                                   aCGColorSpace, aCGBmpInfo));
+        SAL_INFO("vcl.cg", "CGBitmapContextCreate(" << mnWidth << "x" << mnHeight << "x" << bitsPerComponent << ") = " << maGraphicContext.get());
     }
 
-    if( !mxGraphicContext )
+    if (!maGraphicContext.isSet())
         m_pContextBuffer.reset();
 
-    return mxGraphicContext != nullptr;
+    return maGraphicContext.isSet();
 }
 
 bool QuartzSalBitmap::AllocateUserData()
@@ -783,7 +782,7 @@ void QuartzSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMo
     if( nMode == BitmapAccessMode::Write )
     {
         maPalette = pBuffer->maPalette;
-        if( mxGraphicContext )
+        if (maGraphicContext.isSet())
         {
             DestroyContext();
         }
@@ -797,15 +796,15 @@ CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, i
 {
     if( !mxCachedImage )
     {
-        if( !mxGraphicContext )
+        if (!maGraphicContext.isSet())
         {
             if( !const_cast<QuartzSalBitmap*>(this)->CreateContext() )
             {
                 return nullptr;
             }
         }
-        mxCachedImage = CGBitmapContextCreateImage( mxGraphicContext );
-        SAL_INFO("vcl.cg", "CGBitmapContextCreateImage(" << mxGraphicContext << ") = " << mxCachedImage );
+        mxCachedImage = CGBitmapContextCreateImage(maGraphicContext.get());
+        SAL_INFO("vcl.cg", "CGBitmapContextCreateImage(" << maGraphicContext.get() << ") = " << mxCachedImage );
     }
 
     CGImageRef xCroppedImage = nullptr;
@@ -942,15 +941,15 @@ bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
 {
     bool bRet = false;
 
-    if( !mxGraphicContext )
+    if (!maGraphicContext.isSet())
         CreateContext();
 
-    if ( mxGraphicContext )
+    if (maGraphicContext.isSet())
     {
         bRet = true;
 
-        if ((CGBitmapContextGetBitsPerPixel(mxGraphicContext) == 32) &&
-            (CGBitmapContextGetBitmapInfo(mxGraphicContext) & kCGBitmapByteOrderMask) != kCGBitmapByteOrder32Host)
+        if ((CGBitmapContextGetBitsPerPixel(maGraphicContext.get()) == 32) &&
+            (CGBitmapContextGetBitmapInfo(maGraphicContext.get()) & kCGBitmapByteOrderMask) != kCGBitmapByteOrder32Host)
         {
             /**
              * We need to hack things because VCL does not use kCGBitmapByteOrder32Host, while Cairo requires it.
@@ -962,40 +961,42 @@ bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
              */
             SAL_INFO("vcl.cg", "QuartzSalBitmap::" << __func__ << "(): kCGBitmapByteOrder32Host not found => inserting it.");
 
-            CGImageRef xImage = CGBitmapContextCreateImage (mxGraphicContext);
-            SAL_INFO("vcl.cg", "CGBitmapContextCreateImage(" << mxGraphicContext << ") = " << xImage );
+            CGImageRef xImage = CGBitmapContextCreateImage(maGraphicContext.get());
+            SAL_INFO("vcl.cg", "CGBitmapContextCreateImage(" << maGraphicContext.get() << ") = " << xImage );
 
             // re-create the context with single change: include kCGBitmapByteOrder32Host flag.
-            CGContextRef mxGraphicContextNew = CGBitmapContextCreate( CGBitmapContextGetData(mxGraphicContext),
-                                                                      CGBitmapContextGetWidth(mxGraphicContext),
-                                                                      CGBitmapContextGetHeight(mxGraphicContext),
-                                                                      CGBitmapContextGetBitsPerComponent(mxGraphicContext),
-                                                                      CGBitmapContextGetBytesPerRow(mxGraphicContext),
-                                                                      CGBitmapContextGetColorSpace(mxGraphicContext),
-                                                                      CGBitmapContextGetBitmapInfo(mxGraphicContext) | kCGBitmapByteOrder32Host);
-            SAL_INFO("vcl.cg", "CGBitmapContextCreate(" << CGBitmapContextGetWidth(mxGraphicContext) << "x" << CGBitmapContextGetHeight(mxGraphicContext) << "x" << CGBitmapContextGetBitsPerComponent(mxGraphicContext) << ") = " << mxGraphicContextNew );
+            CGContextHolder maGraphicContextNew(CGBitmapContextCreate(CGBitmapContextGetData(maGraphicContext.get()),
+                                                                      CGBitmapContextGetWidth(maGraphicContext.get()),
+                                                                      CGBitmapContextGetHeight(maGraphicContext.get()),
+                                                                      CGBitmapContextGetBitsPerComponent(maGraphicContext.get()),
+                                                                      CGBitmapContextGetBytesPerRow(maGraphicContext.get()),
+                                                                      CGBitmapContextGetColorSpace(maGraphicContext.get()),
+                                                                      CGBitmapContextGetBitmapInfo(maGraphicContext.get()) | kCGBitmapByteOrder32Host));
+            SAL_INFO("vcl.cg", "CGBitmapContextCreate(" << CGBitmapContextGetWidth(maGraphicContext.get()) << "x"
+                                                        << CGBitmapContextGetHeight(maGraphicContext.get()) << "x"
+                                                        << CGBitmapContextGetBitsPerComponent(maGraphicContext.get()) << ") = "
+                                                        << maGraphicContextNew.get());
 
-            SAL_INFO("vcl.cg", "CFRelease(" << mxGraphicContext << ")" );
-            CFRelease(mxGraphicContext);
+            SAL_INFO("vcl.cg", "CFRelease(" << maGraphicContext.get() << ")");
+            CFRelease(maGraphicContext.get());
 
             // Needs to be flipped
-            SAL_INFO("vcl.cg", "CGContextSaveGState(" << mxGraphicContextNew << ")" );
-            CGContextSaveGState( mxGraphicContextNew );
-            SAL_INFO("vcl.cg", "CGContextTranslateCTM(" << mxGraphicContextNew << ",0," << CGBitmapContextGetHeight(mxGraphicContextNew) << ")" );
-            CGContextTranslateCTM (mxGraphicContextNew, 0, CGBitmapContextGetHeight(mxGraphicContextNew));
-            SAL_INFO("vcl.cg", "CGContextScaleCTM(" << mxGraphicContextNew << ",1,-1)" );
-            CGContextScaleCTM (mxGraphicContextNew, 1.0, -1.0);
+            maGraphicContextNew.saveState();
+            SAL_INFO("vcl.cg", "CGContextTranslateCTM(" << maGraphicContextNew.get() << ",0," << CGBitmapContextGetHeight(maGraphicContextNew.get()) << ")" );
+            CGContextTranslateCTM (maGraphicContextNew.get(), 0, CGBitmapContextGetHeight(maGraphicContextNew.get()));
+            SAL_INFO("vcl.cg", "CGContextScaleCTM(" << maGraphicContextNew.get() << ",1,-1)" );
+            CGContextScaleCTM (maGraphicContextNew.get(), 1.0, -1.0);
 
-            SAL_INFO("vcl.cg", "CGContextDrawImage(" << mxGraphicContextNew << "," << CGRectMake(0, 0, CGImageGetWidth(xImage), CGImageGetHeight(xImage)) << "," << xImage << ")" );
-            CGContextDrawImage(mxGraphicContextNew, CGRectMake( 0, 0, CGImageGetWidth(xImage), CGImageGetHeight(xImage)), xImage);
+            SAL_INFO("vcl.cg", "CGContextDrawImage(" << maGraphicContextNew.get() << "," << CGRectMake(0, 0, CGImageGetWidth(xImage), CGImageGetHeight(xImage)) << "," << xImage << ")" );
+            CGContextDrawImage(maGraphicContextNew.get(), CGRectMake( 0, 0, CGImageGetWidth(xImage), CGImageGetHeight(xImage)), xImage);
 
             // Flip back
-            SAL_INFO("vcl.cg", "CGContextRestoreGState(" << mxGraphicContextNew << ")" );
-            CGContextRestoreGState( mxGraphicContextNew );
+            SAL_INFO("vcl.cg", "CGContextRestoreGState(" << maGraphicContextNew.get() << ")" );
+            CGContextRestoreGState( maGraphicContextNew.get() );
 
             SAL_INFO("vcl.cg", "CGImageRelease(" << xImage << ")" );
             CGImageRelease( xImage );
-            mxGraphicContext = mxGraphicContextNew;
+            maGraphicContext = maGraphicContextNew;
         }
 
         rData.mnWidth = mnWidth;
