@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_76a2e99c",
+        "filename": "vcl/source/control/notebookbar.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-17T18:10:07Z",
+      "side": 1,
+      "message": "please try to avoid variable names like that - meaningful names are better",
+      "revId": "57d0474d7378b882fad25aae79954761d2c3a7e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_16bda5b6",
+        "filename": "vcl/source/control/notebookbar.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-17T18:10:07Z",
+      "side": 1,
+      "message": "instead \u0027e \u003d\u003d true\u0027 -\u003e \u0027e\u0027 (but with better name)\neg. doesCustomizedUIExist",
+      "revId": "57d0474d7378b882fad25aae79954761d2c3a7e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_969f754f",
+        "filename": "vcl/source/control/notebookbar.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-17T18:10:07Z",
+      "side": 1,
+      "message": "can\u0027t we pass full path instead of 2 parts?",
+      "revId": "57d0474d7378b882fad25aae79954761d2c3a7e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_36ac618b",
+        "filename": "vcl/source/control/notebookbar.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-17T18:10:07Z",
+      "side": 1,
+      "message": "return file.open(flag) \u003d\u003d osl::FileBase::E_None;\n? is not needed",
+      "revId": "57d0474d7378b882fad25aae79954761d2c3a7e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
