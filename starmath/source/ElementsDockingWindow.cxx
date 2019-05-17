@@ -601,27 +601,23 @@ void SmElementsControl::LoseFocus()
     Invalidate();
 }
 
-void SmElementsControl::stepFocus(const bool bBackward)
+sal_uInt16 SmElementsControl::nextElement(const bool bBackward, const sal_uInt16 nStartPos, const sal_uInt16 nLastElement)
 {
-    const sal_uInt16 nStartPos = m_nCurrentElement;
-    const sal_uInt16 nElementCount = maElementList.size();
     sal_uInt16 nPos = nStartPos;
-    assert(nPos < nElementCount);
 
     while (true)
     {
         if (bBackward)
         {
             if (nPos == 0)
-                nPos = nElementCount - 1;
-            else
-                nPos--;
+                break;
+            nPos--;
         }
         else
         {
+            if (nPos == nLastElement)
+                break;
             nPos++;
-            if (nPos == nElementCount)
-                nPos = 0;
         }
 
         if (nStartPos == nPos)
@@ -630,22 +626,94 @@ void SmElementsControl::stepFocus(const bool bBackward)
             break;
     }
 
+    return nPos;
+}
+
+void SmElementsControl::scrollToElement(const bool bBackward, const SmElement *pCur)
+{
+    long nScrollPos = mxScroll->GetThumbPos();
+    if (mbVerticalMode)
+    {
+        nScrollPos += pCur->mBoxLocation.X();
+        if (!bBackward)
+            nScrollPos += pCur->mBoxSize.Width() - GetOutputSizePixel().Width();
+    }
+    else
+    {
+        nScrollPos += pCur->mBoxLocation.Y();
+        if (!bBackward)
+            nScrollPos += pCur->mBoxSize.Height() - GetOutputSizePixel().Height();
+    }
+    mxScroll->DoScroll(nScrollPos);
+}
+
+void SmElementsControl::stepFocus(const bool bBackward)
+{
+    const sal_uInt16 nStartPos = m_nCurrentElement;
+    const sal_uInt16 nLastElement = (maElementList.size() ? maElementList.size() - 1 : 0);
+    assert(nStartPos <= nLastElement);
+
+    sal_uInt16 nPos = nextElement(bBackward, nStartPos, nLastElement);
     if (nStartPos != nPos)
     {
         m_nCurrentElement = nPos;
-        if (!hasRollover())
+        m_nCurrentRolloverElement = SAL_MAX_UINT16;
+
+        const tools::Rectangle outputRect(Point(0,0), GetOutputSizePixel());
+        const SmElement *pCur = maElementList[nPos].get();
+        tools::Rectangle elementRect(pCur->mBoxLocation, pCur->mBoxSize);
+        if (!outputRect.IsInside(elementRect))
+            scrollToElement(bBackward, pCur);
+        Invalidate();
+    }
+}
+
+void SmElementsControl::pageFocus(const bool bBackward)
+{
+    const sal_uInt16 nStartPos = m_nCurrentElement;
+    const sal_uInt16 nLastElement = (maElementList.size() ? maElementList.size() - 1 : 0);
+    assert(nStartPos <= nLastElement);
+    tools::Rectangle outputRect(Point(0,0), GetOutputSizePixel());
+    sal_uInt16 nPrevPos = nStartPos;
+    sal_uInt16 nPos = nPrevPos;
+
+    bool bMoved = false;
+    while (true)
+    {
+        nPrevPos = nPos;
+        nPos = nextElement(bBackward, nPrevPos, nLastElement);
+        if (nPrevPos == nPos)
+            break;
+
+        m_nCurrentRolloverElement = SAL_MAX_UINT16;
+
+        SmElement *pCur = maElementList[nPos].get();
+        tools::Rectangle elementRect(pCur->mBoxLocation, pCur->mBoxSize);
+        if (!outputRect.IsInside(elementRect))
         {
-            const SmElement *pCur = current();
-            tools::Rectangle elementRect(pCur->mBoxLocation, pCur->mBoxSize);
-            tools::Rectangle outputRect(Point(0,0), GetOutputSizePixel());
-            if (!outputRect.IsInside(elementRect))
+            if (nPrevPos != nStartPos)
             {
-                long nScrollPos = mxScroll->GetThumbPos() + pCur->mBoxLocation.Y();
-                if (!bBackward)
-                    nScrollPos += pCur->mBoxSize.Height() - GetOutputSizePixel().Height();
-                mxScroll->DoScroll(nScrollPos);
+                nPos = nPrevPos;
+                break;
             }
+            if (bMoved)
+                break;
+            pCur = maElementList[nPrevPos].get();
+
+            elementRect = tools::Rectangle(pCur->mBoxLocation, pCur->mBoxSize);
+            if (mbVerticalMode)
+                outputRect.Move(((bBackward) ? -outputRect.GetWidth() + elementRect.Right() : elementRect.Left()), 0);
+            else
+                outputRect.Move(0, ((bBackward) ? -outputRect.GetHeight() + elementRect.Bottom() : elementRect.Top()));
+            bMoved = true;
         }
+    }
+
+    if (nStartPos != nPos)
+    {
+        m_nCurrentElement = nPos;
+        if (bMoved)
+            scrollToElement(bBackward, maElementList[nPos].get());
         Invalidate();
     }
 }
@@ -690,6 +758,13 @@ void SmElementsControl::KeyInput(const KeyEvent& rKEvt)
         case KEY_END:
             m_nCurrentElement = (maElementList.size() ? maElementList.size() - 1 : 0);
             mxScroll->DoScroll(mxScroll->GetRangeMax());
+            break;
+
+        case KEY_PAGEUP:
+            pageFocus(true);
+            break;
+        case KEY_PAGEDOWN:
+            pageFocus(false);
             break;
 
         default:
