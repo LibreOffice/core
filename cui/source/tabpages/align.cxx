@@ -141,8 +141,12 @@ AlignmentTabPage::AlignmentTabPage(TabPageParent pParent, const SfxItemSet& rCor
     InitVsRefEgde();
 
     m_xLbHorAlign->connect_changed(LINK(this, AlignmentTabPage, UpdateEnableHdl));
-    m_xBtnWrap->connect_toggled(LINK(this, AlignmentTabPage, UpdateEnableClickHdl));
-    m_xCbStacked->connect_toggled(LINK(this, AlignmentTabPage, UpdateEnableClickHdl));
+
+    m_xCbStacked->connect_toggled(LINK(this, AlignmentTabPage, StackedClickHdl));
+    m_xCbAsianMode->connect_toggled(LINK(this, AlignmentTabPage, AsianModeClickHdl));
+    m_xBtnWrap->connect_toggled(LINK(this, AlignmentTabPage, WrapClickHdl));
+    m_xBtnHyphen->connect_toggled(LINK(this, AlignmentTabPage, HyphenClickHdl));
+    m_xBtnShrink->connect_toggled(LINK(this, AlignmentTabPage, ShrinkClickHdl));
 
     // Asian vertical mode
     m_xCbAsianMode->show(SvtCJKOptions().IsVerticalTextEnabled());
@@ -320,26 +324,30 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
 
 namespace
 {
-    void ResetBool(sal_uInt16 nWhich, const SfxItemSet* pSet, weld::CheckButton& rBtn)
+    void ResetBool(sal_uInt16 nWhich, const SfxItemSet* pSet, weld::CheckButton& rBtn, weld::TriStateEnabled& rTriState)
     {
         SfxItemState eState = pSet->GetItemState(nWhich);
         switch (eState)
         {
             case SfxItemState::UNKNOWN:
                 rBtn.hide();
+                rTriState.bTriStateEnabled = false;
                 break;
             case SfxItemState::DISABLED:
             case SfxItemState::READONLY:
                 rBtn.set_sensitive(false);
+                rTriState.bTriStateEnabled = false;
                 break;
             case SfxItemState::DONTCARE:
                 rBtn.set_state(TRISTATE_INDET);
+                rTriState.bTriStateEnabled = true;
                 break;
             case SfxItemState::DEFAULT:
             case SfxItemState::SET:
             {
                 const SfxBoolItem& rItem = static_cast<const SfxBoolItem&>(pSet->Get(nWhich));
                 rBtn.set_state(static_cast<TriState>(rItem.GetValue()));
+                rTriState.bTriStateEnabled = false;
                 break;
             }
         }
@@ -351,11 +359,11 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
 {
     SfxTabPage::Reset(pCoreAttrs);
 
-    ResetBool(GetWhich(SID_ATTR_ALIGN_STACKED), pCoreAttrs, *m_xCbStacked);
-    ResetBool(GetWhich(SID_ATTR_ALIGN_ASIANVERTICAL), pCoreAttrs, *m_xCbAsianMode);
-    ResetBool(GetWhich(SID_ATTR_ALIGN_LINEBREAK), pCoreAttrs, *m_xBtnWrap);
-    ResetBool(GetWhich(SID_ATTR_ALIGN_HYPHENATION), pCoreAttrs, *m_xBtnHyphen);
-    ResetBool(GetWhich(SID_ATTR_ALIGN_SHRINKTOFIT), pCoreAttrs, *m_xBtnShrink);
+    ResetBool(GetWhich(SID_ATTR_ALIGN_STACKED), pCoreAttrs, *m_xCbStacked, m_aStackedState);
+    ResetBool(GetWhich(SID_ATTR_ALIGN_ASIANVERTICAL), pCoreAttrs, *m_xCbAsianMode, m_aAsianModeState);
+    ResetBool(GetWhich(SID_ATTR_ALIGN_LINEBREAK), pCoreAttrs, *m_xBtnWrap, m_aWrapState);
+    ResetBool(GetWhich(SID_ATTR_ALIGN_HYPHENATION), pCoreAttrs, *m_xBtnHyphen, m_aHyphenState);
+    ResetBool(GetWhich(SID_ATTR_ALIGN_SHRINKTOFIT), pCoreAttrs, *m_xBtnShrink, m_aShrinkState);
 
     sal_uInt16 nWhich = GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY);
     SfxItemState eState = pCoreAttrs->GetItemState(nWhich);
@@ -681,9 +689,31 @@ bool AlignmentTabPage::HasAlignmentChanged( const SfxItemSet& rNew, sal_uInt16 n
     return eMethodOld != eMethodNew;
 }
 
-IMPL_LINK_NOARG(AlignmentTabPage, UpdateEnableClickHdl, weld::ToggleButton&, void)
+IMPL_LINK(AlignmentTabPage, StackedClickHdl, weld::ToggleButton&, rToggle, void)
 {
+    m_aStackedState.ButtonToggled(rToggle);
     UpdateEnableControls();
+}
+
+IMPL_LINK(AlignmentTabPage, AsianModeClickHdl, weld::ToggleButton&, rToggle, void)
+{
+    m_aAsianModeState.ButtonToggled(rToggle);
+}
+
+IMPL_LINK(AlignmentTabPage, WrapClickHdl, weld::ToggleButton&, rToggle, void)
+{
+    m_aWrapState.ButtonToggled(rToggle);
+    UpdateEnableControls();
+}
+
+IMPL_LINK(AlignmentTabPage, HyphenClickHdl, weld::ToggleButton&, rToggle, void)
+{
+    m_aHyphenState.ButtonToggled(rToggle);
+}
+
+IMPL_LINK(AlignmentTabPage, ShrinkClickHdl, weld::ToggleButton&, rToggle, void)
+{
+    m_aShrinkState.ButtonToggled(rToggle);
 }
 
 IMPL_LINK_NOARG(AlignmentTabPage, UpdateEnableHdl, weld::ComboBox&, void)
