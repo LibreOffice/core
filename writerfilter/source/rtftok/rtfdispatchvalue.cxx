@@ -373,17 +373,17 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_EG_RPrBase_rFonts,
                                    nSprm, pValue);
                 if (nKeyword == RTF_F)
-                    m_aStates.top().nCurrentEncoding = getEncoding(m_nCurrentFontIndex);
+                    m_aStates.top().setCurrentEncoding(getEncoding(m_nCurrentFontIndex));
             }
             break;
         case RTF_RED:
-            m_aStates.top().aCurrentColor.SetRed(nParam);
+            m_aStates.top().getCurrentColor().SetRed(nParam);
             break;
         case RTF_GREEN:
-            m_aStates.top().aCurrentColor.SetGreen(nParam);
+            m_aStates.top().getCurrentColor().SetGreen(nParam);
             break;
         case RTF_BLUE:
-            m_aStates.top().aCurrentColor.SetBlue(nParam);
+            m_aStates.top().getCurrentColor().SetBlue(nParam);
             break;
         case RTF_FCHARSET:
         {
@@ -403,7 +403,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 = aRTFEncodings[i].codepage == 0 // Default (CP_ACP)
                       ? osl_getThreadTextEncoding()
                       : rtl_getTextEncodingFromWindowsCodePage(aRTFEncodings[i].codepage);
-            m_aStates.top().nCurrentEncoding = m_nCurrentEncoding;
+            m_aStates.top().setCurrentEncoding(m_nCurrentEncoding);
         }
         break;
         case RTF_ANSICPG:
@@ -414,10 +414,10 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                       ? utl_getWinTextEncodingFromLangStr(getLODefaultLanguage().toUtf8().getStr())
                       : rtl_getTextEncodingFromWindowsCodePage(nParam);
             if (nKeyword == RTF_ANSICPG)
-                m_aDefaultState.nCurrentEncoding = nEncoding;
+                m_aDefaultState.setCurrentEncoding(nEncoding);
             else
                 m_nCurrentEncoding = nEncoding;
-            m_aStates.top().nCurrentEncoding = nEncoding;
+            m_aStates.top().setCurrentEncoding(nEncoding);
         }
         break;
         case RTF_CF:
@@ -642,15 +642,15 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
         case RTF_TX:
         {
-            m_aStates.top().aTabAttributes.set(NS_ooxml::LN_CT_TabStop_pos, pIntValue);
-            auto pValue = new RTFValue(m_aStates.top().aTabAttributes);
+            m_aStates.top().getTabAttributes().set(NS_ooxml::LN_CT_TabStop_pos, pIntValue);
+            auto pValue = new RTFValue(m_aStates.top().getTabAttributes());
             if (m_aStates.top().eDestination == Destination::LISTLEVEL)
                 putNestedSprm(m_aStates.top().aTableSprms, NS_ooxml::LN_CT_PPrBase_tabs,
                               NS_ooxml::LN_CT_Tabs_tab, pValue);
             else
                 putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_tabs,
                               NS_ooxml::LN_CT_Tabs_tab, pValue);
-            m_aStates.top().aTabAttributes.clear();
+            m_aStates.top().getTabAttributes().clear();
         }
         break;
         case RTF_ILVL:
@@ -690,7 +690,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
         case RTF_UC:
             if ((SAL_MIN_INT16 <= nParam) && (nParam <= SAL_MAX_INT16))
-                m_aStates.top().nUc = nParam;
+                m_aStates.top().setUc(nParam);
             break;
         case RTF_U:
             // sal_Unicode is unsigned 16-bit, RTF may represent that as a
@@ -701,14 +701,14 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 if (m_aStates.top().eDestination == Destination::LEVELNUMBERS)
                 {
                     if (nParam != ';')
-                        m_aStates.top().aLevelNumbers.push_back(sal_Int32(nParam));
+                        m_aStates.top().getLevelNumbers().push_back(sal_Int32(nParam));
                     else
                         // ';' in \u form is not considered valid.
-                        m_aStates.top().bLevelNumbersValid = false;
+                        m_aStates.top().setLevelNumbersValid(false);
                 }
                 else
                     m_aUnicodeBuffer.append(static_cast<sal_Unicode>(nParam));
-                m_aStates.top().nCharsToSkip = m_aStates.top().nUc;
+                m_aStates.top().getCharsToSkip() = m_aStates.top().getUc();
             }
             break;
         case RTF_LEVELFOLLOW:
@@ -874,18 +874,18 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_nNestedCells++;
                 // Push cell properties.
                 m_aNestedTableCellsSprms.push_back(m_aStates.top().aTableCellSprms);
-                m_aNestedTableCellsAttributes.push_back(m_aStates.top().aTableCellAttributes);
+                m_aNestedTableCellsAttributes.push_back(m_aStates.top().getTableCellAttributes());
             }
             else
             {
                 m_nTopLevelCells++;
                 // Push cell properties.
                 m_aTopLevelTableCellsSprms.push_back(m_aStates.top().aTableCellSprms);
-                m_aTopLevelTableCellsAttributes.push_back(m_aStates.top().aTableCellAttributes);
+                m_aTopLevelTableCellsAttributes.push_back(m_aStates.top().getTableCellAttributes());
             }
 
             m_aStates.top().aTableCellSprms = m_aDefaultState.aTableCellSprms;
-            m_aStates.top().aTableCellAttributes = m_aDefaultState.aTableCellAttributes;
+            m_aStates.top().getTableCellAttributes() = m_aDefaultState.getTableCellAttributes();
             // We assume text after a row definition always belongs to the table, to handle text before the real INTBL token
             dispatchFlag(RTF_INTBL);
             if (!m_nCellxMax)
@@ -1053,7 +1053,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_REVDTTMDEL:
         {
             OUString aStr(
-                OStringToOUString(DTTM22OString(nParam), m_aStates.top().nCurrentEncoding));
+                OStringToOUString(DTTM22OString(nParam), m_aStates.top().getCurrentEncoding()));
             auto pValue = new RTFValue(aStr);
             putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_trackchange,
                                NS_ooxml::LN_CT_TrackChange_date, pValue);
@@ -1235,7 +1235,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_BIN:
         {
             m_aStates.top().nInternalState = RTFInternalState::BIN;
-            m_aStates.top().nBinaryToRead = nParam;
+            m_aStates.top().setBinaryToRead(nParam);
         }
         break;
         case RTF_DPLINECOR:
@@ -1486,7 +1486,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         {
             if (m_aStates.top().eDestination == Destination::LISTLEVEL)
             {
-                if (m_aStates.top().bLevelNumbersValid)
+                if (m_aStates.top().getLevelNumbersValid())
                     putNestedAttribute(m_aStates.top().aTableSprms, NS_ooxml::LN_CT_PPrBase_ind,
                                        NS_ooxml::LN_CT_Ind_firstLine, pIntValue);
                 else
@@ -1501,7 +1501,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         {
             if (m_aStates.top().eDestination == Destination::LISTLEVEL)
             {
-                if (m_aStates.top().bLevelNumbersValid)
+                if (m_aStates.top().getLevelNumbersValid())
                     putNestedAttribute(m_aStates.top().aTableSprms, NS_ooxml::LN_CT_PPrBase_ind,
                                        NS_ooxml::LN_CT_Ind_left, pIntValue);
             }

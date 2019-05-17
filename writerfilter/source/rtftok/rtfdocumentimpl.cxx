@@ -727,9 +727,9 @@ rtl_TextEncoding RTFDocumentImpl::getEncoding(int nFontIndex)
         if (it != m_aFontEncodings.end())
             // We have a font encoding associated to this font.
             return it->second;
-        if (m_aDefaultState.nCurrentEncoding != rtl_getTextEncodingFromWindowsCharset(0))
+        if (m_aDefaultState.getCurrentEncoding() != rtl_getTextEncodingFromWindowsCharset(0))
             // We have a default encoding.
-            return m_aDefaultState.nCurrentEncoding;
+            return m_aDefaultState.getCurrentEncoding();
         // Guess based on locale.
         return msfilter::util::getBestTextEncodingFromLocale(
             Application::GetSettings().GetLanguageTag().getLocale());
@@ -1165,7 +1165,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
     {
         m_pBinaryData.reset(new SvMemoryStream());
         m_pBinaryData->WriteChar(ch);
-        for (int i = 0; i < m_aStates.top().nBinaryToRead - 1; ++i)
+        for (int i = 0; i < m_aStates.top().getBinaryToRead() - 1; ++i)
         {
             Strm().ReadChar(ch);
             m_pBinaryData->WriteChar(ch);
@@ -1185,7 +1185,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
     {
         if (m_aStates.top().nInternalState == RTFInternalState::HEX || (ch != 0x0d && ch != 0x0a))
         {
-            if (m_aStates.top().nCharsToSkip == 0)
+            if (m_aStates.top().getCharsToSkip() == 0)
             {
                 if (!bUnicodeChecked)
                 {
@@ -1197,7 +1197,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
             else
             {
                 bSkipped = true;
-                m_aStates.top().nCharsToSkip--;
+                m_aStates.top().getCharsToSkip()--;
             }
         }
 
@@ -1205,14 +1205,14 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
         if (m_aStates.top().nInternalState == RTFInternalState::HEX)
             break;
 
-        if (RTL_TEXTENCODING_MS_932 == m_aStates.top().nCurrentEncoding)
+        if (RTL_TEXTENCODING_MS_932 == m_aStates.top().getCurrentEncoding())
         {
             unsigned char uch = ch;
             if ((uch >= 0x80 && uch <= 0x9F) || uch >= 0xE0)
             {
                 // read second byte of 2-byte Shift-JIS - may be \ { }
                 Strm().ReadChar(ch);
-                if (m_aStates.top().nCharsToSkip == 0)
+                if (m_aStates.top().getCharsToSkip() == 0)
                 {
                     // fdo#79384: Word will reject Shift-JIS following \loch
                     // but apparently OOo could read and (worse) write such documents
@@ -1225,7 +1225,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
                 {
                     assert(bSkipped);
                     // anybody who uses \ucN with Shift-JIS is insane
-                    m_aStates.top().nCharsToSkip--;
+                    m_aStates.top().getCharsToSkip()--;
                 }
             }
         }
@@ -1262,19 +1262,19 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
     if (m_aStates.top().eDestination == Destination::LEVELNUMBERS)
     {
         if (aStr.toChar() != ';')
-            m_aStates.top().aLevelNumbers.push_back(sal_Int32(ch));
+            m_aStates.top().getLevelNumbers().push_back(sal_Int32(ch));
         return RTFError::OK;
     }
 
-    OUString aOUStr(OStringToOUString(aStr, m_aStates.top().nCurrentEncoding));
+    OUString aOUStr(OStringToOUString(aStr, m_aStates.top().getCurrentEncoding()));
     SAL_INFO("writerfilter.rtf", "RTFDocumentImpl::resolveChars: collected '" << aOUStr << "'");
 
     if (m_aStates.top().eDestination == Destination::COLORTABLE)
     {
         // we hit a ';' at the end of each color entry
-        m_aColorTable.push_back(m_aStates.top().aCurrentColor.GetColor());
+        m_aColorTable.push_back(m_aStates.top().getCurrentColor().GetColor());
         // set components back to zero
-        m_aStates.top().aCurrentColor = RTFColorTableEntry();
+        m_aStates.top().getCurrentColor() = RTFColorTableEntry();
     }
     else if (!aStr.isEmpty())
         m_aHexBuffer.append(aStr);
@@ -2177,7 +2177,7 @@ RTFError RTFDocumentImpl::popState()
         }
         break;
         case Destination::LISTENTRY:
-            for (auto& rListLevelEntry : aState.aListLevelEntries)
+            for (auto& rListLevelEntry : aState.getListLevelEntries())
                 aState.aTableSprms.set(rListLevelEntry.first, rListLevelEntry.second,
                                        RTFOverwrite::NO_APPEND);
             break;
@@ -2278,7 +2278,7 @@ RTFError RTFDocumentImpl::popState()
                 RTFSprms& rAttributes
                     = aState.aTableSprms.find(NS_ooxml::LN_CT_Lvl_lvlText)->getAttributes();
                 RTFValue::Pointer_t pValue = rAttributes.find(NS_ooxml::LN_CT_LevelText_val);
-                if (pValue && aState.bLevelNumbersValid)
+                if (pValue && aState.getLevelNumbersValid())
                 {
                     OUString aOrig = pValue->getString();
 
@@ -2286,14 +2286,14 @@ RTFError RTFDocumentImpl::popState()
                     sal_Int32 nReplaces = 1;
                     for (int i = 0; i < aOrig.getLength(); i++)
                     {
-                        if (std::find(aState.aLevelNumbers.begin(), aState.aLevelNumbers.end(),
-                                      i + 1)
-                            != aState.aLevelNumbers.end())
+                        if (std::find(aState.getLevelNumbers().begin(),
+                                      aState.getLevelNumbers().end(), i + 1)
+                            != aState.getLevelNumbers().end())
                         {
                             aBuf.append('%');
                             // '1.1.1' -> '%1.%2.%3', but '1.' (with '2.' prefix omitted) is %2.
-                            aBuf.append(sal_Int32(nReplaces++ + aState.nListLevelNum + 1
-                                                  - aState.aLevelNumbers.size()));
+                            aBuf.append(sal_Int32(nReplaces++ + aState.getListLevelNum() + 1
+                                                  - aState.getLevelNumbers().size()));
                         }
                         else
                             aBuf.append(std::u16string_view(aOrig).substr(i, 1));
@@ -2459,7 +2459,7 @@ RTFError RTFDocumentImpl::popState()
                     break; // not for nested group
                 OString aStr = OUStringToOString(
                     m_aStates.top().getCurrentDestinationText()->makeStringAndClear(),
-                    aState.nCurrentEncoding);
+                    aState.getCurrentEncoding());
                 // decode hex dump
                 OStringBuffer aBuf;
                 int b = 0, count = 2;
@@ -2501,13 +2501,13 @@ RTFError RTFDocumentImpl::popState()
                 nLength = aStr.toChar();
                 if (!aStr.isEmpty())
                     aStr = aStr.copy(1);
-                auto pNValue = new RTFValue(OStringToOUString(aName, aState.nCurrentEncoding));
+                auto pNValue = new RTFValue(OStringToOUString(aName, aState.getCurrentEncoding()));
                 m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFData_name, pNValue);
                 if (nLength > 0)
                 {
                     OString aDefaultText = aStr.copy(0, std::min(nLength, aStr.getLength()));
-                    auto pDValue
-                        = new RTFValue(OStringToOUString(aDefaultText, aState.nCurrentEncoding));
+                    auto pDValue = new RTFValue(
+                        OStringToOUString(aDefaultText, aState.getCurrentEncoding()));
                     m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFTextInput_default, pDValue);
                 }
 
@@ -2666,7 +2666,7 @@ RTFError RTFDocumentImpl::popState()
             OUString aStr(OStringToOUString(
                 DTTM22OString(
                     m_aStates.top().getCurrentDestinationText()->makeStringAndClear().toInt32()),
-                aState.nCurrentEncoding));
+                aState.getCurrentEncoding()));
             auto pValue = new RTFValue(aStr);
             RTFSprms aAnnAttributes;
             aAnnAttributes.set(NS_ooxml::LN_CT_TrackChange_date, pValue);
@@ -3278,13 +3278,13 @@ RTFError RTFDocumentImpl::popState()
         case Destination::LISTLEVEL:
             if (!m_aStates.empty())
             {
-                auto pInnerValue = new RTFValue(m_aStates.top().nListLevelNum++);
+                auto pInnerValue = new RTFValue(m_aStates.top().getListLevelNum()++);
                 aState.aTableAttributes.set(NS_ooxml::LN_CT_Lvl_ilvl, pInnerValue);
 
                 auto pValue = new RTFValue(aState.aTableAttributes, aState.aTableSprms);
                 if (m_aStates.top().eDestination != Destination::LFOLEVEL)
-                    m_aStates.top().aListLevelEntries.set(NS_ooxml::LN_CT_AbstractNum_lvl, pValue,
-                                                          RTFOverwrite::NO_APPEND);
+                    m_aStates.top().getListLevelEntries().set(NS_ooxml::LN_CT_AbstractNum_lvl,
+                                                              pValue, RTFOverwrite::NO_APPEND);
                 else
                     m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_NumLvl_lvl, pValue);
             }
@@ -3292,7 +3292,7 @@ RTFError RTFDocumentImpl::popState()
         case Destination::LFOLEVEL:
             if (!m_aStates.empty())
             {
-                auto pInnerValue = new RTFValue(m_aStates.top().nListLevelNum++);
+                auto pInnerValue = new RTFValue(m_aStates.top().getListLevelNum()++);
                 aState.aTableAttributes.set(NS_ooxml::LN_CT_NumLvl_ilvl, pInnerValue);
 
                 auto pValue = new RTFValue(aState.aTableAttributes, aState.aTableSprms);
@@ -3335,7 +3335,7 @@ RTFError RTFDocumentImpl::popState()
                     || m_aStates.top().eDestination == Destination::LISTLEVEL)
                     // Parent state is level number or list level, current state is
                     // level numbers: mark parent as invalid as well if necessary.
-                    m_aStates.top().bLevelNumbersValid = aState.bLevelNumbersValid;
+                    m_aStates.top().setLevelNumbersValid(aState.getLevelNumbersValid());
             }
             break;
         case Destination::FIELDINSTRUCTION:
@@ -3525,9 +3525,9 @@ void RTFDocumentImpl::checkUnicode(bool bUnicode, bool bHex)
     }
     if (bHex && !m_aHexBuffer.isEmpty())
     {
-        rtl_TextEncoding nEncoding = m_aStates.top().nCurrentEncoding;
+        rtl_TextEncoding nEncoding = m_aStates.top().getCurrentEncoding();
         if (m_aStates.top().eDestination == Destination::FONTENTRY
-            && m_aStates.top().nCurrentEncoding == RTL_TEXTENCODING_SYMBOL)
+            && m_aStates.top().getCurrentEncoding() == RTL_TEXTENCODING_SYMBOL)
             nEncoding = RTL_TEXTENCODING_MS_1252;
         OUString aString = OStringToOUString(m_aHexBuffer.makeStringAndClear(), nEncoding);
         text(aString);
@@ -3540,12 +3540,12 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
     , eDestination(Destination::NORMAL)
     , eFieldStatus(RTFFieldStatus::NONE)
     , nBorderState(RTFBorderState::NONE)
-    , nCurrentEncoding(rtl_getTextEncodingFromWindowsCharset(0))
-    , nUc(1)
-    , nCharsToSkip(0)
-    , nBinaryToRead(0)
-    , nListLevelNum(0)
-    , bLevelNumbersValid(true)
+    , m_nCurrentEncoding(rtl_getTextEncodingFromWindowsCharset(0))
+    , m_nUc(1)
+    , m_nCharsToSkip(0)
+    , m_nBinaryToRead(0)
+    , m_nListLevelNum(0)
+    , m_bLevelNumbersValid(true)
     , m_aFrame(this)
     , m_eRunType(RunType::LOCH)
     , m_bIsRightToLeft(false)

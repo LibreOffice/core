@@ -483,6 +483,27 @@ public:
     RTFDrawingObject& getDrawingObject() { return m_aDrawingObject; }
     RTFShape& getShape() { return m_aShape; }
     RTFPicture& getPicture() { return m_aPicture; }
+    void setLevelNumbersValid(bool bLevelNumbersValid)
+    {
+        m_bLevelNumbersValid = bLevelNumbersValid;
+    }
+    bool getLevelNumbersValid() const { return m_bLevelNumbersValid; }
+    std::vector<sal_Int32>& getLevelNumbers() { return m_aLevelNumbers; }
+    RTFSprms& getListLevelEntries() { return m_aListLevelEntries; }
+    int& getListLevelNum() { return m_nListLevelNum; }
+    void setBinaryToRead(int nBinaryToRead) { m_nBinaryToRead = nBinaryToRead; }
+    int getBinaryToRead() const { return m_nBinaryToRead; }
+    int& getCharsToSkip() { return m_nCharsToSkip; }
+    void setUc(int nUc) { m_nUc = nUc; }
+    int getUc() const { return m_nUc; }
+    void setCurrentEncoding(rtl_TextEncoding nCurrentEncoding)
+    {
+        m_nCurrentEncoding = nCurrentEncoding;
+    }
+    rtl_TextEncoding getCurrentEncoding() const { return m_nCurrentEncoding; }
+    RTFColorTableEntry& getCurrentColor() { return m_aCurrentColor; }
+    RTFSprms& getTabAttributes() { return m_aTabAttributes; }
+    RTFSprms& getTableCellAttributes() { return m_aTableCellAttributes; }
 
     RTFDocumentImpl* m_pDocumentImpl;
     RTFInternalState nInternalState;
@@ -506,32 +527,32 @@ public:
     RTFSprms aTableRowAttributes;
     // reset by cellx
     RTFSprms aTableCellSprms;
-    RTFSprms aTableCellAttributes;
-    // reset by tx
-    RTFSprms aTabAttributes;
-
-    RTFColorTableEntry aCurrentColor;
-
-    rtl_TextEncoding nCurrentEncoding;
-
-    /// Current \uc value.
-    int nUc;
-    /// Characters to skip, set to nUc by \u.
-    int nCharsToSkip;
-    /// Characters to read, once in binary mode.
-    int nBinaryToRead;
-
-    /// Next list level index to use when parsing list table.
-    int nListLevelNum;
-    /// List level entries, which will form a list entry later.
-    RTFSprms aListLevelEntries;
-
-    /// List of character positions in leveltext to replace.
-    std::vector<sal_Int32> aLevelNumbers;
-    /// If aLevelNumbers should be read at all.
-    bool bLevelNumbersValid;
 
 private:
+    RTFSprms m_aTableCellAttributes;
+    // reset by tx
+    RTFSprms m_aTabAttributes;
+
+    RTFColorTableEntry m_aCurrentColor;
+
+    rtl_TextEncoding m_nCurrentEncoding;
+
+    /// Current \uc value.
+    int m_nUc;
+    /// Characters to skip, set to nUc by \u.
+    int m_nCharsToSkip;
+    /// Characters to read, once in binary mode.
+    int m_nBinaryToRead;
+
+    /// Next list level index to use when parsing list table.
+    int m_nListLevelNum;
+    /// List level entries, which will form a list entry later.
+    RTFSprms m_aListLevelEntries;
+    /// List of character positions in leveltext to replace.
+    std::vector<sal_Int32> m_aLevelNumbers;
+    /// If aLevelNumbers should be read at all.
+    bool m_bLevelNumbersValid;
+
     RTFPicture m_aPicture;
     RTFShape m_aShape;
     RTFDrawingObject m_aDrawingObject;
