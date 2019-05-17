@@ -350,13 +350,13 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 assert(m_aStates.top().getRunType() == RTFParserState::RunType::LOCH);
                 nSprm = NS_ooxml::LN_CT_Fonts_ascii;
             }
-            if (m_aStates.top().eDestination == Destination::FONTTABLE
-                || m_aStates.top().eDestination == Destination::FONTENTRY)
+            if (m_aStates.top().getDestination() == Destination::FONTTABLE
+                || m_aStates.top().getDestination() == Destination::FONTENTRY)
             {
                 m_aFontIndexes.push_back(nParam);
                 m_nCurrentFontIndex = getFontIndex(nParam);
             }
-            else if (m_aStates.top().eDestination == Destination::LISTLEVEL)
+            else if (m_aStates.top().getDestination() == Destination::LISTLEVEL)
             {
                 RTFSprms aFontAttributes;
                 aFontAttributes.set(nSprm, new RTFValue(m_aFontNames[getFontIndex(nParam)]));
@@ -433,8 +433,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         {
             m_aStates.top().setCurrentStyleIndex(nParam);
 
-            if (m_aStates.top().eDestination == Destination::STYLESHEET
-                || m_aStates.top().eDestination == Destination::STYLEENTRY)
+            if (m_aStates.top().getDestination() == Destination::STYLESHEET
+                || m_aStates.top().getDestination() == Destination::STYLEENTRY)
             {
                 m_nCurrentStyleIndex = nParam;
                 auto pValue = new RTFValue(NS_ooxml::LN_Value_ST_StyleType_paragraph);
@@ -446,7 +446,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 OUString aName = getStyleName(nParam);
                 if (!aName.isEmpty())
                 {
-                    if (m_aStates.top().eDestination == Destination::LISTLEVEL)
+                    if (m_aStates.top().getDestination() == Destination::LISTLEVEL)
                         m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Lvl_pStyle,
                                                             new RTFValue(aName));
                     else
@@ -458,8 +458,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
         case RTF_CS:
             m_aStates.top().setCurrentCharacterStyleIndex(nParam);
-            if (m_aStates.top().eDestination == Destination::STYLESHEET
-                || m_aStates.top().eDestination == Destination::STYLEENTRY)
+            if (m_aStates.top().getDestination() == Destination::STYLESHEET
+                || m_aStates.top().getDestination() == Destination::STYLEENTRY)
             {
                 m_nCurrentStyleIndex = nParam;
                 auto pValue = new RTFValue(NS_ooxml::LN_Value_ST_StyleType_character);
@@ -475,8 +475,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_DS:
-            if (m_aStates.top().eDestination == Destination::STYLESHEET
-                || m_aStates.top().eDestination == Destination::STYLEENTRY)
+            if (m_aStates.top().getDestination() == Destination::STYLESHEET
+                || m_aStates.top().getDestination() == Destination::STYLEENTRY)
             {
                 m_nCurrentStyleIndex = nParam;
                 auto pValue = new RTFValue(0); // TODO no value in enum StyleType?
@@ -485,8 +485,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_TS:
-            if (m_aStates.top().eDestination == Destination::STYLESHEET
-                || m_aStates.top().eDestination == Destination::STYLEENTRY)
+            if (m_aStates.top().getDestination() == Destination::STYLESHEET
+                || m_aStates.top().getDestination() == Destination::STYLEENTRY)
             {
                 m_nCurrentStyleIndex = nParam;
                 // FIXME the correct value would be NS_ooxml::LN_Value_ST_StyleType_table but maybe table styles mess things up in dmapper, be cautious and disable them for now
@@ -646,7 +646,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         {
             m_aStates.top().getTabAttributes().set(NS_ooxml::LN_CT_TabStop_pos, pIntValue);
             auto pValue = new RTFValue(m_aStates.top().getTabAttributes());
-            if (m_aStates.top().eDestination == Destination::LISTLEVEL)
+            if (m_aStates.top().getDestination() == Destination::LISTLEVEL)
                 putNestedSprm(m_aStates.top().getTableSprms(), NS_ooxml::LN_CT_PPrBase_tabs,
                               NS_ooxml::LN_CT_Tabs_tab, pValue);
             else
@@ -664,17 +664,17 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_LISTID:
         {
-            if (m_aStates.top().eDestination == Destination::LISTENTRY)
+            if (m_aStates.top().getDestination() == Destination::LISTENTRY)
                 m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_AbstractNum_abstractNumId,
                                                          pIntValue);
-            else if (m_aStates.top().eDestination == Destination::LISTOVERRIDEENTRY)
+            else if (m_aStates.top().getDestination() == Destination::LISTOVERRIDEENTRY)
                 m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Num_abstractNumId, pIntValue);
             m_aStates.top().setCurrentListIndex(nParam);
         }
         break;
         case RTF_LS:
         {
-            if (m_aStates.top().eDestination == Destination::LISTOVERRIDEENTRY)
+            if (m_aStates.top().getDestination() == Destination::LISTOVERRIDEENTRY)
             {
                 m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_AbstractNum_nsid,
                                                          pIntValue);
@@ -701,7 +701,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             // static_cast() will do the right thing.
             if ((SAL_MIN_INT16 <= nParam) && (nParam <= SAL_MAX_UINT16))
             {
-                if (m_aStates.top().eDestination == Destination::LEVELNUMBERS)
+                if (m_aStates.top().getDestination() == Destination::LEVELNUMBERS)
                 {
                     if (nParam != ';')
                         m_aStates.top().getLevelNumbers().push_back(sal_Int32(nParam));
@@ -848,9 +848,10 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
         case RTF_CELLX:
         {
-            int& rCurrentCellX((Destination::NESTEDTABLEPROPERTIES == m_aStates.top().eDestination)
-                                   ? m_nNestedCurrentCellX
-                                   : m_nTopLevelCurrentCellX);
+            int& rCurrentCellX(
+                (Destination::NESTEDTABLEPROPERTIES == m_aStates.top().getDestination())
+                    ? m_nNestedCurrentCellX
+                    : m_nTopLevelCurrentCellX);
             int nCellX = nParam - rCurrentCellX;
             const int COL_DFLT_WIDTH
                 = 41; // sw/source/filter/inc/wrtswtbl.hxx, minimal possible width of cells.
@@ -872,7 +873,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             auto pXValue = new RTFValue(nCellX);
             m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
                                                    RTFOverwrite::NO_APPEND);
-            if (Destination::NESTEDTABLEPROPERTIES == m_aStates.top().eDestination)
+            if (Destination::NESTEDTABLEPROPERTIES == m_aStates.top().getDestination())
             {
                 m_nNestedCells++;
                 // Push cell properties.
@@ -935,7 +936,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                                new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
             putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblInd,
                                NS_ooxml::LN_CT_TblWidth_w, new RTFValue(nParam));
-            auto const aDestination = m_aStates.top().eDestination;
+            auto const aDestination = m_aStates.top().getDestination();
             int& rCurrentTRLeft((Destination::NESTEDTABLEPROPERTIES == aDestination)
                                     ? m_nNestedTRLeft
                                     : m_nTopLevelTRLeft);
@@ -1507,7 +1508,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
         case RTF_FI:
         {
-            if (m_aStates.top().eDestination == Destination::LISTLEVEL)
+            if (m_aStates.top().getDestination() == Destination::LISTLEVEL)
             {
                 if (m_aStates.top().getLevelNumbersValid())
                     putNestedAttribute(m_aStates.top().getTableSprms(), NS_ooxml::LN_CT_PPrBase_ind,
@@ -1522,7 +1523,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         }
         case RTF_LI:
         {
-            if (m_aStates.top().eDestination == Destination::LISTLEVEL)
+            if (m_aStates.top().getDestination() == Destination::LISTLEVEL)
             {
                 if (m_aStates.top().getLevelNumbersValid())
                     putNestedAttribute(m_aStates.top().getTableSprms(), NS_ooxml::LN_CT_PPrBase_ind,

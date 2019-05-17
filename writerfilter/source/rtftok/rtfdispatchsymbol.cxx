@@ -98,7 +98,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         break;
         case RTF_PAR:
         {
-            if (m_aStates.top().eDestination == Destination::FOOTNOTESEPARATOR)
+            if (m_aStates.top().getDestination() == Destination::FOOTNOTESEPARATOR)
                 break; // just ignore it - only thing we read in here is CHFTNSEP
             checkFirstRun();
             bool bNeedPap = m_bNeedPap;
@@ -121,7 +121,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 }
                 m_nCellxMax = 0;
             }
-            else if (m_aStates.top().eDestination != Destination::SHAPETEXT)
+            else if (m_aStates.top().getDestination() != Destination::SHAPETEXT)
             {
                 RTFValue::Pointer_t pValue;
                 m_aStates.top().getCurrentBuffer()->push_back(Buf_t(BUFFER_PAR, pValue, nullptr));
