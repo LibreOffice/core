@@ -237,8 +237,8 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 // Add fake cellx / cell, RTF equivalent of
                 // OOXMLFastContextHandlerTextTableRow::handleGridAfter().
                 auto pXValue = new RTFValue(m_aStates.top().getTableRowWidthAfter());
-                m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
-                                                   RTFOverwrite::NO_APPEND);
+                m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
+                                                       RTFOverwrite::NO_APPEND);
                 dispatchSymbol(RTF_CELL);
 
                 // Adjust total width, which is done in the \cellx handler for normal cells.
@@ -260,13 +260,13 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             const int MINLAY = 23; // sw/inc/swtypes.hxx, minimal possible size of frames.
             if ((m_nCellxMax - m_nTopLevelCurrentCellX) >= MINLAY)
             {
-                auto pXValueLast = m_aStates.top().aTableRowSprms.find(
+                auto pXValueLast = m_aStates.top().getTableRowSprms().find(
                     NS_ooxml::LN_CT_TblGridBase_gridCol, false);
                 const int nXValueLast = pXValueLast ? pXValueLast->getInt() : 0;
                 auto pXValue = new RTFValue(nXValueLast + m_nCellxMax - m_nTopLevelCurrentCellX);
-                m_aStates.top().aTableRowSprms.eraseLast(NS_ooxml::LN_CT_TblGridBase_gridCol);
-                m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
-                                                   RTFOverwrite::NO_APPEND);
+                m_aStates.top().getTableRowSprms().eraseLast(NS_ooxml::LN_CT_TblGridBase_gridCol);
+                m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
+                                                       RTFOverwrite::NO_APPEND);
                 m_nTopLevelCurrentCellX = m_nCellxMax;
             }
 
@@ -303,8 +303,8 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                             m_aTopLevelTableCellsAttributes, m_nTopLevelCells);
 
             // The scope of the table cell defaults is one row.
-            m_aDefaultState.aTableCellSprms.clear();
-            m_aStates.top().aTableCellSprms = m_aDefaultState.aTableCellSprms;
+            m_aDefaultState.getTableCellSprms().clear();
+            m_aStates.top().getTableCellSprms() = m_aDefaultState.getTableCellSprms();
             m_aStates.top().getTableCellAttributes() = m_aDefaultState.getTableCellAttributes();
 
             writerfilter::Reference<Properties>::Pointer_t paraProperties;
@@ -329,7 +329,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         {
             bool bColumns = false; // If we have multiple columns
             RTFValue::Pointer_t pCols
-                = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_cols);
+                = m_aStates.top().getSectionSprms().find(NS_ooxml::LN_EG_SectPrContents_cols);
             if (pCols)
             {
                 RTFValue::Pointer_t pNum = pCols->getAttributes().find(NS_ooxml::LN_CT_Columns_num);
@@ -363,10 +363,10 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 
             // If we're inside a continuous section, we should send a section break, not a page one.
             RTFValue::Pointer_t pBreak
-                = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_type);
+                = m_aStates.top().getSectionSprms().find(NS_ooxml::LN_EG_SectPrContents_type);
             // Unless we're on a title page.
             RTFValue::Pointer_t pTitlePg
-                = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_titlePg);
+                = m_aStates.top().getSectionSprms().find(NS_ooxml::LN_EG_SectPrContents_titlePg);
             if (((pBreak.get()
                   && pBreak->getInt()
                          == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous))

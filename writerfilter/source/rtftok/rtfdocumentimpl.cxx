@@ -180,10 +180,10 @@ void putBorderProperty(RTFStack& aStates, Id nId, const RTFValue::Pointer_t& pVa
         pAttributes
             = &getLastAttributes(aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PrBase_pBdr);
     else if (aStates.top().nBorderState == RTFBorderState::CELL)
-        pAttributes
-            = &getLastAttributes(aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders);
+        pAttributes = &getLastAttributes(aStates.top().getTableCellSprms(),
+                                         NS_ooxml::LN_CT_TcPrBase_tcBorders);
     else if (aStates.top().nBorderState == RTFBorderState::PAGE)
-        pAttributes = &getLastAttributes(aStates.top().aSectionSprms,
+        pAttributes = &getLastAttributes(aStates.top().getSectionSprms(),
                                          NS_ooxml::LN_EG_SectPrContents_pgBorders);
     if (pAttributes)
         pAttributes->set(nId, pValue);
@@ -650,7 +650,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
              OSL_THIS_FUNC << ": final? " << bFinal << ", needed? " << m_bNeedSect);
     bool bNeedSect = m_bNeedSect;
     RTFValue::Pointer_t pBreak
-        = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_type);
+        = m_aStates.top().getSectionSprms().find(NS_ooxml::LN_EG_SectPrContents_type);
     bool bContinuous
         = pBreak.get()
           && pBreak->getInt()
@@ -680,11 +680,12 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
     {
         // In case the last section is a continuous one, we don't need to output a section break.
         if (bFinal && bContinuous)
-            m_aStates.top().aSectionSprms.erase(NS_ooxml::LN_EG_SectPrContents_type);
+            m_aStates.top().getSectionSprms().erase(NS_ooxml::LN_EG_SectPrContents_type);
     }
 
     // Section properties are a paragraph sprm.
-    auto pValue = new RTFValue(m_aStates.top().aSectionAttributes, m_aStates.top().aSectionSprms);
+    auto pValue
+        = new RTFValue(m_aStates.top().getSectionAttributes(), m_aStates.top().getSectionSprms());
     RTFSprms aAttributes;
     RTFSprms aSprms;
     aSprms.set(NS_ooxml::LN_CT_PPr_sectPr, pValue);
@@ -1476,7 +1477,7 @@ void RTFDocumentImpl::text(OUString& rString)
     }
 
     // Are we in the middle of the table definition? (No cell defs yet, but we already have some cell props.)
-    if (m_aStates.top().aTableCellSprms.find(NS_ooxml::LN_CT_TcPrBase_vAlign).get()
+    if (m_aStates.top().getTableCellSprms().find(NS_ooxml::LN_CT_TcPrBase_vAlign).get()
         && m_nTopLevelCells == 0)
     {
         m_aTableBufferStack.back().emplace_back(
@@ -1544,22 +1545,22 @@ void RTFDocumentImpl::prepareProperties(
 
     // Table width.
     RTFValue::Pointer_t const pTableWidthProps
-        = rState.aTableRowSprms.find(NS_ooxml::LN_CT_TblPrBase_tblW);
+        = rState.getTableRowSprms().find(NS_ooxml::LN_CT_TblPrBase_tblW);
     if (!pTableWidthProps.get())
     {
         auto pUnitValue = new RTFValue(3);
-        putNestedAttribute(rState.aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblW,
+        putNestedAttribute(rState.getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblW,
                            NS_ooxml::LN_CT_TblWidth_type, pUnitValue);
         auto pWValue = new RTFValue(nCurrentCellX);
-        putNestedAttribute(rState.aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblW,
+        putNestedAttribute(rState.getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblW,
                            NS_ooxml::LN_CT_TblWidth_w, pWValue);
     }
 
     if (nCells > 0)
-        rState.aTableRowSprms.set(NS_ooxml::LN_tblRow, new RTFValue(1));
+        rState.getTableRowSprms().set(NS_ooxml::LN_tblRow, new RTFValue(1));
 
     RTFValue::Pointer_t const pCellMar
-        = rState.aTableRowSprms.find(NS_ooxml::LN_CT_TblPrBase_tblCellMar);
+        = rState.getTableRowSprms().find(NS_ooxml::LN_CT_TblPrBase_tblCellMar);
     if (!pCellMar.get())
     {
         // If no cell margins are defined, the default left/right margin is 0 in Word, but not in Writer.
@@ -1567,14 +1568,14 @@ void RTFDocumentImpl::prepareProperties(
         aAttributes.set(NS_ooxml::LN_CT_TblWidth_type,
                         new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
         aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, new RTFValue(0));
-        putNestedSprm(rState.aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblCellMar,
+        putNestedSprm(rState.getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblCellMar,
                       NS_ooxml::LN_CT_TblCellMar_left, new RTFValue(aAttributes));
-        putNestedSprm(rState.aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblCellMar,
+        putNestedSprm(rState.getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblCellMar,
                       NS_ooxml::LN_CT_TblCellMar_right, new RTFValue(aAttributes));
     }
 
     o_rpTableRowProperties
-        = new RTFReferenceProperties(rState.aTableRowAttributes, rState.aTableRowSprms);
+        = new RTFReferenceProperties(rState.getTableRowAttributes(), rState.getTableRowSprms());
 }
 
 void RTFDocumentImpl::sendProperties(
@@ -1715,25 +1716,25 @@ void RTFDocumentImpl::backupTableRowProperties()
 {
     if (m_nTopLevelCurrentCellX)
     {
-        m_aBackupTableRowSprms = m_aStates.top().aTableRowSprms;
-        m_aBackupTableRowAttributes = m_aStates.top().aTableRowAttributes;
+        m_aBackupTableRowSprms = m_aStates.top().getTableRowSprms();
+        m_aBackupTableRowAttributes = m_aStates.top().getTableRowAttributes();
         m_nBackupTopLevelCurrentCellX = m_nTopLevelCurrentCellX;
     }
 }
 
 void RTFDocumentImpl::restoreTableRowProperties()
 {
-    m_aStates.top().aTableRowSprms = m_aBackupTableRowSprms;
-    m_aStates.top().aTableRowAttributes = m_aBackupTableRowAttributes;
+    m_aStates.top().getTableRowSprms() = m_aBackupTableRowSprms;
+    m_aStates.top().getTableRowAttributes() = m_aBackupTableRowAttributes;
     m_nTopLevelCurrentCellX = m_nBackupTopLevelCurrentCellX;
 }
 
 void RTFDocumentImpl::resetTableRowProperties()
 {
-    m_aStates.top().aTableRowSprms = m_aDefaultState.aTableRowSprms;
-    m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, new RTFValue(-1),
-                                       RTFOverwrite::NO_APPEND);
-    m_aStates.top().aTableRowAttributes = m_aDefaultState.aTableRowAttributes;
+    m_aStates.top().getTableRowSprms() = m_aDefaultState.getTableRowSprms();
+    m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TblGridBase_gridCol, new RTFValue(-1),
+                                           RTFOverwrite::NO_APPEND);
+    m_aStates.top().getTableRowAttributes() = m_aDefaultState.getTableRowAttributes();
     if (Destination::NESTEDTABLEPROPERTIES == m_aStates.top().eDestination)
     {
         m_nNestedTRLeft = 0;
@@ -3469,9 +3470,10 @@ RTFError RTFDocumentImpl::popState()
     {
         // Section break type created for \page still has an effect in the
         // outer state as well.
-        RTFValue::Pointer_t pType = aState.aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_type);
+        RTFValue::Pointer_t pType
+            = aState.getSectionSprms().find(NS_ooxml::LN_EG_SectPrContents_type);
         if (pType)
-            m_aStates.top().aSectionSprms.set(NS_ooxml::LN_EG_SectPrContents_type, pType);
+            m_aStates.top().getSectionSprms().set(NS_ooxml::LN_EG_SectPrContents_type, pType);
     }
 
     return RTFError::OK;
