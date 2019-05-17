@@ -402,8 +402,8 @@ public:
 
     void appendDestinationText(const OUString& rString)
     {
-        if (pDestinationText)
-            pDestinationText->append(rString);
+        if (m_pCurrentDestinationText)
+            m_pCurrentDestinationText->append(rString);
     }
 
     void setPropName(const OUString& rPropName) { m_aPropName = rPropName; }
@@ -437,6 +437,25 @@ public:
     bool getInListpicture() const { return m_bInListpicture; }
     void setCurrentBuffer(RTFBuffer_t* pCurrentBuffer) { m_pCurrentBuffer = pCurrentBuffer; }
     RTFBuffer_t* getCurrentBuffer() const { return m_pCurrentBuffer; }
+    void setCurrentListOverrideIndex(int nCurrentListOverrideIndex)
+    {
+        m_nCurrentListOverrideIndex = nCurrentListOverrideIndex;
+    }
+    int getCurrentListOverrideIndex() const { return m_nCurrentListOverrideIndex; }
+    void setCurrentListIndex(int nCurrentListIndex) { m_nCurrentListIndex = nCurrentListIndex; }
+    int getCurrentListIndex() const { return m_nCurrentListIndex; }
+    void setCurrentCharacterStyleIndex(int nCurrentCharacterStyleIndex)
+    {
+        m_nCurrentCharacterStyleIndex = nCurrentCharacterStyleIndex;
+    }
+    int getCurrentCharacterStyleIndex() const { return m_nCurrentCharacterStyleIndex; }
+    void setCurrentStyleIndex(int nCurrentStyleIndex) { m_nCurrentStyleIndex = nCurrentStyleIndex; }
+    int getCurrentStyleIndex() const { return m_nCurrentStyleIndex; }
+    void setCurrentDestinationText(OUStringBuffer* pDestinationText)
+    {
+        m_pCurrentDestinationText = pDestinationText;
+    }
+    OUStringBuffer* getCurrentDestinationText() const { return m_pCurrentDestinationText; }
 
     RTFDocumentImpl* m_pDocumentImpl;
     RTFInternalState nInternalState;
@@ -510,19 +529,20 @@ public:
 
     /// Text from special destinations.
     OUStringBuffer aDestinationText;
-    /// point to the buffer of the current destination
-    OUStringBuffer* pDestinationText;
-
-    /// Index of the current style.
-    int nCurrentStyleIndex;
-    /// Index of the current character style.
-    int nCurrentCharacterStyleIndex;
-    /// Current listid, points to a listtable entry.
-    int nCurrentListIndex = -1;
-    /// Current ls, points to a listoverridetable entry.
-    int nCurrentListOverrideIndex = -1;
 
 private:
+    /// point to the buffer of the current destination
+    OUStringBuffer* m_pCurrentDestinationText;
+
+    /// Index of the current style.
+    int m_nCurrentStyleIndex;
+    /// Index of the current character style.
+    int m_nCurrentCharacterStyleIndex;
+    /// Current listid, points to a listtable entry.
+    int m_nCurrentListIndex = -1;
+    /// Current ls, points to a listoverridetable entry.
+    int m_nCurrentListOverrideIndex = -1;
+
     /// Points to the active buffer, if there is one.
     RTFBuffer_t* m_pCurrentBuffer;
 
