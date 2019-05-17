@@ -70,6 +70,30 @@
       "revId": "15e1f88c963579c4a6bbc4275b7831ad38c6e833",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_160b658e",
+        "filename": "external/mdds/use-position-hint-also-back.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-05-17T19:08:06Z",
+      "side": 1,
+      "message": "I think it could be just as well argued that there can be many cases where forward search should be preferred even more than it is in this patch[*], and without knowledge of the data this just cannot be predicted. So I don\u0027t think there would be a better generic heuristic than simply guessing the middle.\n\n[*] Somebody might reuse a position hint from a previous iteration for a new iteration. Also going backwards possibly may have worse CPU cache prefetching than going forwards.",
+      "parentUuid": "3fa0c359_369ea163",
+      "range": {
+        "startLine": 27,
+        "startChar": 12,
+        "endLine": 27,
+        "endChar": 33
+      },
+      "revId": "15e1f88c963579c4a6bbc4275b7831ad38c6e833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
