@@ -76,10 +76,8 @@ class XWindow(UITestCase):
     def test_listeners(self):
         global mouseListenerCount
 
-        writer_doc = self.ui_test.create_doc_in_start_center("writer")
+        self.ui_test.create_doc_in_start_center("writer")
         xDoc = self.ui_test.get_component()
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
 
         # create new mouse listener
         xFrame = xDoc.getCurrentController().getFrame()
