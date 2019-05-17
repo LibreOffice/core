@@ -158,7 +158,7 @@ void putBorderProperty(RTFStack& aStates, Id nId, const RTFValue::Pointer_t& pVa
     if (aStates.top().nBorderState == RTFBorderState::PARAGRAPH_BOX)
         for (int i = 0; i < 4; i++)
         {
-            RTFValue::Pointer_t p = aStates.top().aParagraphSprms.find(getParagraphBorder(i));
+            RTFValue::Pointer_t p = aStates.top().getParagraphSprms().find(getParagraphBorder(i));
             if (p)
             {
                 RTFSprms& rAttributes = p->getAttributes();
@@ -178,7 +178,7 @@ void putBorderProperty(RTFStack& aStates, Id nId, const RTFValue::Pointer_t& pVa
     // Attributes of the last border type
     else if (aStates.top().nBorderState == RTFBorderState::PARAGRAPH)
         pAttributes
-            = &getLastAttributes(aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PrBase_pBdr);
+            = &getLastAttributes(aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PrBase_pBdr);
     else if (aStates.top().nBorderState == RTFBorderState::CELL)
         pAttributes = &getLastAttributes(aStates.top().getTableCellSprms(),
                                          NS_ooxml::LN_CT_TcPrBase_tcBorders);
@@ -546,16 +546,16 @@ void RTFDocumentImpl::checkNeedPap()
 
         if (!m_aStates.top().getCurrentBuffer())
         {
-            writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
-                getProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms,
-                              NS_ooxml::LN_Value_ST_StyleType_paragraph));
+            writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(getProperties(
+                m_aStates.top().getParagraphAttributes(), m_aStates.top().getParagraphSprms(),
+                NS_ooxml::LN_Value_ST_StyleType_paragraph));
 
             // Writer will ignore a page break before a text frame, so guard it with empty paragraphs
-            bool hasBreakBeforeFrame
-                = m_aStates.top().getFrame().hasProperties()
-                  && m_aStates.top()
-                         .aParagraphSprms.find(NS_ooxml::LN_CT_PPrBase_pageBreakBefore)
-                         .get();
+            bool hasBreakBeforeFrame = m_aStates.top().getFrame().hasProperties()
+                                       && m_aStates.top()
+                                              .getParagraphSprms()
+                                              .find(NS_ooxml::LN_CT_PPrBase_pageBreakBefore)
+                                              .get();
             if (hasBreakBeforeFrame)
             {
                 dispatchSymbol(RTF_PAR);
@@ -574,8 +574,8 @@ void RTFDocumentImpl::checkNeedPap()
         }
         else
         {
-            auto pValue = new RTFValue(m_aStates.top().aParagraphAttributes,
-                                       m_aStates.top().aParagraphSprms);
+            auto pValue = new RTFValue(m_aStates.top().getParagraphAttributes(),
+                                       m_aStates.top().getParagraphSprms());
             bufferProperties(*m_aStates.top().getCurrentBuffer(), pValue, nullptr);
         }
     }
@@ -585,15 +585,15 @@ void RTFDocumentImpl::runProps()
 {
     if (!m_aStates.top().getCurrentBuffer())
     {
-        Reference<Properties>::Pointer_t const pProperties
-            = getProperties(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms,
-                            NS_ooxml::LN_Value_ST_StyleType_character);
+        Reference<Properties>::Pointer_t const pProperties = getProperties(
+            m_aStates.top().getCharacterAttributes(), m_aStates.top().aCharacterSprms,
+            NS_ooxml::LN_Value_ST_StyleType_character);
         Mapper().props(pProperties);
     }
     else
     {
-        auto pValue
-            = new RTFValue(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms);
+        auto pValue = new RTFValue(m_aStates.top().getCharacterAttributes(),
+                                   m_aStates.top().aCharacterSprms);
         bufferProperties(*m_aStates.top().getCurrentBuffer(), pValue, nullptr);
     }
 
@@ -1041,7 +1041,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     auto pExtentValue = new RTFValue(aExtentAttributes);
     // docpr sprm
     RTFSprms aDocprAttributes;
-    for (auto& rCharacterAttribute : m_aStates.top().aCharacterAttributes)
+    for (auto& rCharacterAttribute : m_aStates.top().getCharacterAttributes())
         if (rCharacterAttribute.first == NS_ooxml::LN_CT_NonVisualDrawingProps_name
             || rCharacterAttribute.first == NS_ooxml::LN_CT_NonVisualDrawingProps_descr)
             aDocprAttributes.set(rCharacterAttribute.first, rCharacterAttribute.second);
@@ -1069,7 +1069,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
             NS_ooxml::LN_CT_Anchor_behindDoc,
             new RTFValue((m_aStates.top().getShape().getInBackground()) ? 1 : 0));
         RTFSprms aAnchorSprms;
-        for (auto& rCharacterAttribute : m_aStates.top().aCharacterAttributes)
+        for (auto& rCharacterAttribute : m_aStates.top().getCharacterAttributes())
         {
             if (rCharacterAttribute.first == NS_ooxml::LN_CT_WrapSquare_wrapText)
                 aAnchorWrapAttributes.set(rCharacterAttribute.first, rCharacterAttribute.second);
@@ -1529,8 +1529,9 @@ void RTFDocumentImpl::prepareProperties(
     writerfilter::Reference<Properties>::Pointer_t& o_rpTableRowProperties, int const nCells,
     int const nCurrentCellX)
 {
-    o_rpParagraphProperties = getProperties(rState.aParagraphAttributes, rState.aParagraphSprms,
-                                            NS_ooxml::LN_Value_ST_StyleType_paragraph);
+    o_rpParagraphProperties
+        = getProperties(rState.getParagraphAttributes(), rState.getParagraphSprms(),
+                        NS_ooxml::LN_Value_ST_StyleType_paragraph);
 
     if (rState.getFrame().hasProperties())
     {
@@ -1804,7 +1805,7 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
     {
         auto pValue
             = new RTFValue((!bParam || nParam != 0) ? nSprm : NS_ooxml::LN_Value_ST_Underline_none);
-        m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_Underline_val, pValue);
+        m_aStates.top().getCharacterAttributes().set(NS_ooxml::LN_CT_Underline_val, pValue);
         return RTFError::OK;
     }
 
@@ -1889,7 +1890,8 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
     switch (nKeyword)
     {
         case RTF_ASPALPHA:
-            m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_autoSpaceDE, pBoolValue);
+            m_aStates.top().getParagraphSprms().set(NS_ooxml::LN_CT_PPrBase_autoSpaceDE,
+                                                    pBoolValue);
             break;
         case RTF_DELETED:
         case RTF_REVISED:
@@ -1900,11 +1902,11 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
         }
         break;
         case RTF_SBAUTO:
-            putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing,
+            putNestedAttribute(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_spacing,
                                NS_ooxml::LN_CT_Spacing_beforeAutospacing, pBoolValue);
             break;
         case RTF_SAAUTO:
-            putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing,
+            putNestedAttribute(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_spacing,
                                NS_ooxml::LN_CT_Spacing_afterAutospacing, pBoolValue);
             break;
         case RTF_FACINGP:
@@ -1914,8 +1916,8 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
             m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_autoHyphenation, pBoolValue);
             break;
         case RTF_HYPHPAR:
-            m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_suppressAutoHyphens,
-                                                new RTFValue(int(bParam && nParam == 0)));
+            m_aStates.top().getParagraphSprms().set(NS_ooxml::LN_CT_PPrBase_suppressAutoHyphens,
+                                                    new RTFValue(int(bParam && nParam == 0)));
             break;
         default:
         {
@@ -2019,18 +2021,18 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::createStylePrope
              { NS_ooxml::LN_CT_Ind_firstLine, NS_ooxml::LN_CT_Ind_left, NS_ooxml::LN_CT_Ind_right,
                NS_ooxml::LN_CT_Ind_start, NS_ooxml::LN_CT_Ind_end })
         {
-            RTFValue::Pointer_t pValue = getNestedAttribute(m_aStates.top().aParagraphSprms,
+            RTFValue::Pointer_t pValue = getNestedAttribute(m_aStates.top().getParagraphSprms(),
                                                             NS_ooxml::LN_CT_PPrBase_ind, nId);
             if (pValue && pValue->getInt() == 0)
-                eraseNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind,
-                                     nId);
+                eraseNestedAttribute(m_aStates.top().getParagraphSprms(),
+                                     NS_ooxml::LN_CT_PPrBase_ind, nId);
         }
     }
 
-    RTFValue::Pointer_t pParaProps
-        = new RTFValue(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms);
+    RTFValue::Pointer_t pParaProps = new RTFValue(m_aStates.top().getParagraphAttributes(),
+                                                  m_aStates.top().getParagraphSprms());
     RTFValue::Pointer_t pCharProps
-        = new RTFValue(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms);
+        = new RTFValue(m_aStates.top().getCharacterAttributes(), m_aStates.top().aCharacterSprms);
 
     // resetSprms will clean up this modification
     m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Style_pPr, pParaProps);
@@ -2100,14 +2102,14 @@ void RTFDocumentImpl::resetSprms()
 {
     m_aStates.top().aTableSprms.clear();
     m_aStates.top().aCharacterSprms.clear();
-    m_aStates.top().aParagraphSprms.clear();
+    m_aStates.top().getParagraphSprms().clear();
 }
 
 void RTFDocumentImpl::resetAttributes()
 {
     m_aStates.top().aTableAttributes.clear();
-    m_aStates.top().aCharacterAttributes.clear();
-    m_aStates.top().aParagraphAttributes.clear();
+    m_aStates.top().getCharacterAttributes().clear();
+    m_aStates.top().getParagraphAttributes().clear();
 }
 
 static bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties,
@@ -3251,9 +3253,9 @@ RTFError RTFDocumentImpl::popState()
                 Mapper().table(NS_ooxml::LN_NUMBERING, pTable);
 
                 // Use it
-                putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_numPr,
+                putNestedSprm(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_numPr,
                               NS_ooxml::LN_CT_NumPr_ilvl, pIlvlValue);
-                putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_numPr,
+                putNestedSprm(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_numPr,
                               NS_ooxml::LN_CT_NumPr_numId, pIdValue);
             }
         }
@@ -3370,7 +3372,7 @@ RTFError RTFDocumentImpl::popState()
             {
                 m_aStates.top().getShape() = aState.getShape();
                 m_aStates.top().getPicture() = aState.getPicture();
-                m_aStates.top().aCharacterAttributes = aState.aCharacterAttributes;
+                m_aStates.top().getCharacterAttributes() = aState.getCharacterAttributes();
             }
             break;
         case Destination::SHAPEINSTRUCTION:
@@ -3381,7 +3383,7 @@ RTFError RTFDocumentImpl::popState()
                 m_aStates.top().getShape() = aState.getShape();
                 m_aStates.top().getPicture() = aState.getPicture();
                 m_aStates.top().aCharacterSprms = aState.aCharacterSprms;
-                m_aStates.top().aCharacterAttributes = aState.aCharacterAttributes;
+                m_aStates.top().getCharacterAttributes() = aState.getCharacterAttributes();
             }
             break;
         case Destination::FLYMAINCONTENT:
