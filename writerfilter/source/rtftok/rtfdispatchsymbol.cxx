@@ -305,7 +305,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             // The scope of the table cell defaults is one row.
             m_aDefaultState.aTableCellSprms.clear();
             m_aStates.top().aTableCellSprms = m_aDefaultState.aTableCellSprms;
-            m_aStates.top().aTableCellAttributes = m_aDefaultState.aTableCellAttributes;
+            m_aStates.top().getTableCellAttributes() = m_aDefaultState.getTableCellAttributes();
 
             writerfilter::Reference<Properties>::Pointer_t paraProperties;
             writerfilter::Reference<Properties>::Pointer_t frameProperties;
