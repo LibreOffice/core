@@ -122,7 +122,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 break;
             case RTF_LISTPICTURE:
                 m_aStates.top().eDestination = Destination::LISTPICTURE;
-                m_aStates.top().bInListpicture = true;
+                m_aStates.top().setInListpicture(true);
                 break;
             case RTF_LIST:
                 m_aStates.top().eDestination = Destination::LISTENTRY;
@@ -176,7 +176,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             case RTF_SHP:
                 m_bNeedCrOrig = m_bNeedCr;
                 m_aStates.top().eDestination = Destination::SHAPE;
-                m_aStates.top().bInShape = true;
+                m_aStates.top().setInShape(true);
                 break;
             case RTF_SHPINST:
                 m_aStates.top().eDestination = Destination::SHAPEINSTRUCTION;
@@ -274,8 +274,8 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     if (aKeyword == "\\ftnalt")
                         nId = NS_ooxml::LN_endnote;
 
-                    if (m_aStates.top().pCurrentBuffer == &m_aSuperBuffer)
-                        m_aStates.top().pCurrentBuffer = nullptr;
+                    if (m_aStates.top().getCurrentBuffer() == &m_aSuperBuffer)
+                        m_aStates.top().setCurrentBuffer(nullptr);
                     bool bCustomMark = false;
                     OUString aCustomMark;
                     for (auto const& elem : m_aSuperBuffer)
@@ -290,7 +290,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     m_aStates.top().eDestination = Destination::FOOTNOTE;
                     Mapper().startCharacterGroup();
                     runProps();
-                    if (!m_aStates.top().pCurrentBuffer)
+                    if (!m_aStates.top().getCurrentBuffer())
                         resolveSubstream(m_nGroupStartPos - 1, nId, aCustomMark);
                     else
                     {
@@ -298,7 +298,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                         aAttributes.set(Id(0), new RTFValue(m_nGroupStartPos - 1));
                         aAttributes.set(Id(1), new RTFValue(nId));
                         aAttributes.set(Id(2), new RTFValue(aCustomMark));
-                        m_aStates.top().pCurrentBuffer->push_back(
+                        m_aStates.top().getCurrentBuffer()->push_back(
                             Buf_t(BUFFER_RESOLVESUBSTREAM, new RTFValue(aAttributes), nullptr));
                     }
                     if (bCustomMark)
@@ -382,13 +382,13 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     m_bNeedPap = true;
                     if (nKeyword == RTF_SHPTXT)
                     {
-                        if (!m_aStates.top().pCurrentBuffer)
+                        if (!m_aStates.top().getCurrentBuffer())
                             m_pSdrImport->resolve(m_aStates.top().aShape, false,
                                                   RTFSdrImport::SHAPE);
                         else
                         {
                             auto pValue = new RTFValue(m_aStates.top().aShape);
-                            m_aStates.top().pCurrentBuffer->push_back(
+                            m_aStates.top().getCurrentBuffer()->push_back(
                                 Buf_t(BUFFER_STARTSHAPE, pValue, nullptr));
                         }
                     }
@@ -441,7 +441,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 m_aStates.top().eDestination = Destination::OBJECT;
 
                 // check if the object is in a special container (e.g. a table)
-                if (!m_aStates.top().pCurrentBuffer)
+                if (!m_aStates.top().getCurrentBuffer())
                 {
                     // the object is in a table or another container.
                     // Don't try to treat it as an OLE object (fdo#53594).
@@ -453,7 +453,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
             case RTF_OBJDATA:
                 // check if the object is in a special container (e.g. a table)
-                if (m_aStates.top().pCurrentBuffer)
+                if (m_aStates.top().getCurrentBuffer())
                 {
                     // the object is in a table or another container.
                     // Use the \result (RTF_RESULT) element of the object instead,
@@ -585,7 +585,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 break;
             case RTF_BACKGROUND:
                 m_aStates.top().eDestination = Destination::BACKGROUND;
-                m_aStates.top().bInBackground = true;
+                m_aStates.top().setInBackground(true);
                 break;
             case RTF_SHPGRP:
             {
@@ -607,10 +607,10 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                         xDrawSupplier->getDrawPage()->add(xShape);
                     }
                     m_pSdrImport->pushParent(xGroupShape);
-                    m_aStates.top().bCreatedShapeGroup = true;
+                    m_aStates.top().setCreatedShapeGroup(true);
                 }
                 m_aStates.top().eDestination = Destination::SHAPEGROUP;
-                m_aStates.top().bInShapeGroup = true;
+                m_aStates.top().setInShapeGroup(true);
             }
             break;
             case RTF_FTNSEP:

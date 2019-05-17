@@ -544,7 +544,7 @@ void RTFDocumentImpl::checkNeedPap()
         if (m_aStates.empty())
             return;
 
-        if (!m_aStates.top().pCurrentBuffer)
+        if (!m_aStates.top().getCurrentBuffer())
         {
             writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
                 getProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms,
@@ -576,14 +576,14 @@ void RTFDocumentImpl::checkNeedPap()
         {
             auto pValue = new RTFValue(m_aStates.top().aParagraphAttributes,
                                        m_aStates.top().aParagraphSprms);
-            bufferProperties(*m_aStates.top().pCurrentBuffer, pValue, nullptr);
+            bufferProperties(*m_aStates.top().getCurrentBuffer(), pValue, nullptr);
         }
     }
 }
 
 void RTFDocumentImpl::runProps()
 {
-    if (!m_aStates.top().pCurrentBuffer)
+    if (!m_aStates.top().getCurrentBuffer())
     {
         Reference<Properties>::Pointer_t const pProperties
             = getProperties(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms,
@@ -594,7 +594,7 @@ void RTFDocumentImpl::runProps()
     {
         auto pValue
             = new RTFValue(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms);
-        bufferProperties(*m_aStates.top().pCurrentBuffer, pValue, nullptr);
+        bufferProperties(*m_aStates.top().getCurrentBuffer(), pValue, nullptr);
     }
 
     // Delete the sprm, so the trackchange range will be started only once.
@@ -603,7 +603,7 @@ void RTFDocumentImpl::runProps()
         = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_trackchange);
     if (pTrackchange)
     {
-        m_aStates.top().bStartedTrackchange = true;
+        m_aStates.top().setStartedTrackchange(true);
         m_aStates.top().aCharacterSprms.erase(NS_ooxml::LN_trackchange);
     }
 }
@@ -981,7 +981,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         return;
     }
 
-    if (m_aStates.top().bInListpicture)
+    if (m_aStates.top().getInListpicture())
     {
         // Send the shape directly, no section is started, to additional properties will be ignored anyway.
         Mapper().startShape(xShape);
@@ -1023,7 +1023,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         nYExt = (static_cast<long>(m_aStates.top().aPicture.nScaleY)
                  * (nYExt - (m_aStates.top().aPicture.nCropT + m_aStates.top().aPicture.nCropB)))
                 / 100L;
-    if (m_aStates.top().bInShape)
+    if (m_aStates.top().getInShape())
     {
         // Picture in shape: it looks like pib picture, so we will stretch the picture to shape size (tdf#49893)
         nXExt = m_aStates.top().aShape.getRight() - m_aStates.top().aShape.getLeft();
@@ -1140,7 +1140,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         = new RTFReferenceProperties(aAttributes, aSprms);
     checkFirstRun();
 
-    if (!m_aStates.top().pCurrentBuffer)
+    if (!m_aStates.top().getCurrentBuffer())
     {
         Mapper().props(pProperties);
         // Make sure we don't lose these properties with a too early reset.
@@ -1149,7 +1149,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     else
     {
         auto pValue = new RTFValue(aAttributes, aSprms);
-        bufferProperties(*m_aStates.top().pCurrentBuffer, pValue, nullptr);
+        bufferProperties(*m_aStates.top().getCurrentBuffer(), pValue, nullptr);
     }
 }
 
@@ -1282,7 +1282,7 @@ bool RTFFrame::inFrame() { return m_nW > 0 || m_nH > 0 || m_nX > 0 || m_nY > 0; 
 void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
 {
     sal_uInt8 sValue[] = { nValue };
-    RTFBuffer_t* pCurrentBuffer = m_aStates.top().pCurrentBuffer;
+    RTFBuffer_t* pCurrentBuffer = m_aStates.top().getCurrentBuffer();
 
     if (!pCurrentBuffer)
     {
@@ -1481,7 +1481,7 @@ void RTFDocumentImpl::text(OUString& rString)
         return;
     }
 
-    RTFBuffer_t* pCurrentBuffer = m_aStates.top().pCurrentBuffer;
+    RTFBuffer_t* pCurrentBuffer = m_aStates.top().getCurrentBuffer();
 
     if (!pCurrentBuffer && m_aStates.top().eDestination != Destination::FOOTNOTE)
         Mapper().startCharacterGroup();
@@ -1656,15 +1656,15 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
         {
             // Make sure there is no current buffer while replaying the shape,
             // otherwise it gets re-buffered.
-            RTFBuffer_t* pCurrentBuffer = m_aStates.top().pCurrentBuffer;
-            m_aStates.top().pCurrentBuffer = nullptr;
+            RTFBuffer_t* pCurrentBuffer = m_aStates.top().getCurrentBuffer();
+            m_aStates.top().setCurrentBuffer(nullptr);
 
             // Set current shape during replay, needed by e.g. wrap in
             // background.
             m_aStates.top().aShape = std::get<1>(aTuple)->getShape();
 
             m_pSdrImport->resolve(std::get<1>(aTuple)->getShape(), true, RTFSdrImport::SHAPE);
-            m_aStates.top().pCurrentBuffer = pCurrentBuffer;
+            m_aStates.top().setCurrentBuffer(pCurrentBuffer);
         }
         else if (std::get<0>(aTuple) == BUFFER_ENDSHAPE)
             m_pSdrImport->close();
@@ -1991,7 +1991,7 @@ RTFError RTFDocumentImpl::pushState()
     // If this is true, then ooxml:endtrackchange will be generated.  Make sure
     // we don't generate more ooxml:endtrackchange than ooxml:trackchange: new
     // state does not inherit this flag.
-    m_aStates.top().bStartedTrackchange = false;
+    m_aStates.top().setStartedTrackchange(false);
 
     return RTFError::OK;
 }
@@ -2179,7 +2179,7 @@ RTFError RTFDocumentImpl::popState()
             RTFSprms aFFAttributes;
             RTFSprms aFFSprms;
             aFFSprms.set(NS_ooxml::LN_ffdata, pValue);
-            if (!m_aStates.top().pCurrentBuffer)
+            if (!m_aStates.top().getCurrentBuffer())
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties
                     = new RTFReferenceProperties(aFFAttributes, aFFSprms);
@@ -2188,7 +2188,7 @@ RTFError RTFDocumentImpl::popState()
             else
             {
                 auto pFFValue = new RTFValue(aFFAttributes, aFFSprms);
-                bufferProperties(*m_aStates.top().pCurrentBuffer, pFFValue, nullptr);
+                bufferProperties(*m_aStates.top().getCurrentBuffer(), pFFValue, nullptr);
             }
             m_aFormfieldAttributes.clear();
             m_aFormfieldSprms.clear();
@@ -2309,10 +2309,10 @@ RTFError RTFDocumentImpl::popState()
             {
                 aState.aShape.getProperties().back().second
                     = m_aStates.top().pDestinationText->makeStringAndClear();
-                if (m_aStates.top().bHadShapeText)
+                if (m_aStates.top().getHadShapeText())
                     m_pSdrImport->append(aState.aShape.getProperties().back().first,
                                          aState.aShape.getProperties().back().second);
-                else if (aState.bInShapeGroup && !aState.bInShape
+                else if (aState.getInShapeGroup() && !aState.getInShape()
                          && aState.aShape.getProperties().back().first == "rotation")
                 {
                     // Rotation should be applied on the groupshape itself, not on each shape.
@@ -2329,14 +2329,14 @@ RTFError RTFDocumentImpl::popState()
             {
                 // Do not resolve shape if shape instruction destination is inside other shape instruction
             }
-            else if (!m_bObject && !aState.bInListpicture && !aState.bHadShapeText
-                     && !(aState.bInShapeGroup && !aState.bInShape))
+            else if (!m_bObject && !aState.getInListpicture() && !aState.getHadShapeText()
+                     && !(aState.getInShapeGroup() && !aState.getInShape()))
             {
                 // Don't trigger a shape import in case we're only leaving the \shpinst of the groupshape itself.
                 RTFSdrImport::ShapeOrPict eType
                     = (aState.eDestination == Destination::SHAPEINSTRUCTION) ? RTFSdrImport::SHAPE
                                                                              : RTFSdrImport::PICT;
-                if (!m_aStates.top().pCurrentBuffer || eType != RTFSdrImport::SHAPE)
+                if (!m_aStates.top().getCurrentBuffer() || eType != RTFSdrImport::SHAPE)
                     m_pSdrImport->resolve(m_aStates.top().aShape, true, eType);
                 else
                 {
@@ -2344,7 +2344,7 @@ RTFError RTFDocumentImpl::popState()
                     // Also buffer the RTFPicture of the state stack as it contains
                     // the shape size.
                     auto pPictureValue = new RTFValue(m_aStates.top().aPicture);
-                    m_aStates.top().pCurrentBuffer->push_back(
+                    m_aStates.top().getCurrentBuffer()->push_back(
                         Buf_t(BUFFER_PICTURE, pPictureValue, nullptr));
                     auto pValue = new RTFValue(m_aStates.top().aShape);
 
@@ -2359,11 +2359,11 @@ RTFError RTFDocumentImpl::popState()
                         }
                     }
 
-                    m_aStates.top().pCurrentBuffer->push_back(
+                    m_aStates.top().getCurrentBuffer()->push_back(
                         Buf_t(BUFFER_RESOLVESHAPE, pValue, nullptr));
                 }
             }
-            else if (aState.bInShapeGroup && !aState.bInShape)
+            else if (aState.getInShapeGroup() && !aState.getInShape())
             {
                 // End of a groupshape, as we're in shapegroup, but not in a real shape.
                 for (auto& rGroupProperty : aState.aShape.getGroupProperties())
@@ -2378,10 +2378,10 @@ RTFError RTFDocumentImpl::popState()
             OUString aStr = m_aStates.top().pDestinationText->makeStringAndClear();
             int nPos = m_aBookmarks.size();
             m_aBookmarks[aStr] = nPos;
-            if (!m_aStates.top().pCurrentBuffer)
+            if (!m_aStates.top().getCurrentBuffer())
                 Mapper().props(new RTFReferenceProperties(lcl_getBookmarkProperties(nPos, aStr)));
             else
-                bufferProperties(*m_aStates.top().pCurrentBuffer,
+                bufferProperties(*m_aStates.top().getCurrentBuffer(),
                                  new RTFValue(lcl_getBookmarkProperties(nPos, aStr)), nullptr);
         }
         break;
@@ -2390,11 +2390,11 @@ RTFError RTFDocumentImpl::popState()
             if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
                 break; // not for nested group
             OUString aStr = m_aStates.top().pDestinationText->makeStringAndClear();
-            if (!m_aStates.top().pCurrentBuffer)
+            if (!m_aStates.top().getCurrentBuffer())
                 Mapper().props(new RTFReferenceProperties(
                     lcl_getBookmarkProperties(m_aBookmarks[aStr], aStr)));
             else
-                bufferProperties(*m_aStates.top().pCurrentBuffer,
+                bufferProperties(*m_aStates.top().getCurrentBuffer(),
                                  new RTFValue(lcl_getBookmarkProperties(m_aBookmarks[aStr], aStr)),
                                  nullptr);
         }
@@ -2990,13 +2990,13 @@ RTFError RTFDocumentImpl::popState()
             m_aMathBuffer.appendClosingTag(M_TOKEN(eqArr));
             break;
         case Destination::SHAPEGROUP:
-            if (aState.bCreatedShapeGroup)
+            if (aState.getCreatedShapeGroup())
                 m_pSdrImport->popParent();
             break;
         case Destination::PROPNAME:
             if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
                 break; // not for nested group
-            aState.aPropName = m_aStates.top().pDestinationText->makeStringAndClear();
+            aState.setPropName(m_aStates.top().pDestinationText->makeStringAndClear());
             break;
         case Destination::STATICVAL:
             if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
@@ -3006,18 +3006,18 @@ RTFError RTFDocumentImpl::popState()
                 // Find out what is the key, value type and value we want to set.
                 uno::Reference<beans::XPropertyContainer> xPropertyContainer
                     = m_xDocumentProperties->getUserDefinedProperties();
-                const OUString& rKey = m_aStates.top().aPropName;
+                const OUString& rKey = m_aStates.top().getPropName();
                 OUString aStaticVal = m_aStates.top().pDestinationText->makeStringAndClear();
                 uno::Any aAny;
-                if (m_aStates.top().aPropType == cppu::UnoType<OUString>::get())
+                if (m_aStates.top().getPropType() == cppu::UnoType<OUString>::get())
                     aAny <<= aStaticVal;
-                else if (m_aStates.top().aPropType == cppu::UnoType<sal_Int32>::get())
+                else if (m_aStates.top().getPropType() == cppu::UnoType<sal_Int32>::get())
                     aAny <<= aStaticVal.toInt32();
-                else if (m_aStates.top().aPropType == cppu::UnoType<bool>::get())
+                else if (m_aStates.top().getPropType() == cppu::UnoType<bool>::get())
                     aAny <<= aStaticVal.toBoolean();
-                else if (m_aStates.top().aPropType == cppu::UnoType<util::DateTime>::get())
+                else if (m_aStates.top().getPropType() == cppu::UnoType<util::DateTime>::get())
                     aAny <<= getDateTimeFromUserProp(aStaticVal);
-                else if (m_aStates.top().aPropType == cppu::UnoType<double>::get())
+                else if (m_aStates.top().getPropType() == cppu::UnoType<double>::get())
                     aAny <<= aStaticVal.toDouble();
 
                 xPropertyContainer->addProperty(rKey, beans::PropertyAttribute::REMOVABLE, aAny);
@@ -3090,16 +3090,16 @@ RTFError RTFDocumentImpl::popState()
     }
 
     // See if we need to end a track change
-    if (aState.bStartedTrackchange)
+    if (aState.getStartedTrackchange())
     {
         RTFSprms aTCSprms;
         auto pValue = new RTFValue(0);
         aTCSprms.set(NS_ooxml::LN_endtrackchange, pValue);
-        if (!m_aStates.top().pCurrentBuffer)
+        if (!m_aStates.top().getCurrentBuffer())
             Mapper().props(new RTFReferenceProperties(RTFSprms(), aTCSprms));
         else
-            bufferProperties(*m_aStates.top().pCurrentBuffer, new RTFValue(RTFSprms(), aTCSprms),
-                             nullptr);
+            bufferProperties(*m_aStates.top().getCurrentBuffer(),
+                             new RTFValue(RTFSprms(), aTCSprms), nullptr);
     }
 
     // This is the end of the doc, see if we need to close the last section.
@@ -3370,11 +3370,11 @@ RTFError RTFDocumentImpl::popState()
                 if (m_aStates.top().eDestination != Destination::SHAPETEXT
                     && !m_aStates.top().aDrawingObject.getHadShapeText())
                 {
-                    m_aStates.top().bHadShapeText = true;
-                    if (!m_aStates.top().pCurrentBuffer)
+                    m_aStates.top().setHadShapeText(true);
+                    if (!m_aStates.top().getCurrentBuffer())
                         m_pSdrImport->close();
                     else
-                        m_aStates.top().pCurrentBuffer->push_back(
+                        m_aStates.top().getCurrentBuffer()->push_back(
                             Buf_t(BUFFER_ENDSHAPE, nullptr, nullptr));
                 }
 
@@ -3392,7 +3392,7 @@ RTFError RTFDocumentImpl::popState()
             break;
         case Destination::PROPNAME:
             if (m_aStates.top().eDestination == Destination::USERPROPS)
-                m_aStates.top().aPropName = aState.aPropName;
+                m_aStates.top().setPropName(aState.getPropName());
             break;
         default:
         {
@@ -3402,19 +3402,19 @@ RTFError RTFDocumentImpl::popState()
         break;
     }
 
-    if (aState.pCurrentBuffer == &m_aSuperBuffer)
+    if (aState.getCurrentBuffer() == &m_aSuperBuffer)
     {
-        OSL_ASSERT(!m_aStates.empty() && m_aStates.top().pCurrentBuffer == nullptr);
+        OSL_ASSERT(!m_aStates.empty() && m_aStates.top().getCurrentBuffer() == nullptr);
 
         if (!m_aSuperBuffer.empty())
             replayBuffer(m_aSuperBuffer, nullptr, nullptr);
     }
 
-    if (!m_aStates.empty() && m_aStates.top().nTableRowWidthAfter > 0
-        && aState.nTableRowWidthAfter == 0)
+    if (!m_aStates.empty() && m_aStates.top().getTableRowWidthAfter() > 0
+        && aState.getTableRowWidthAfter() == 0)
         // An RTF_ROW in the inner group already parsed nTableRowWidthAfter,
         // don't do it again in the outer state later.
-        m_aStates.top().nTableRowWidthAfter = 0;
+        m_aStates.top().setTableRowWidthAfter(0);
 
     if (m_nResetBreakOnSectBreak != RTF_invalid && !m_aStates.empty())
     {
@@ -3444,7 +3444,7 @@ RTFError RTFDocumentImpl::handleEmbeddedObject()
     return RTFError::OK;
 }
 
-bool RTFDocumentImpl::isInBackground() { return m_aStates.top().bInBackground; }
+bool RTFDocumentImpl::isInBackground() { return m_aStates.top().getInBackground(); }
 
 RTFInternalState RTFDocumentImpl::getInternalState() { return m_aStates.top().nInternalState; }
 
@@ -3513,15 +3513,15 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
     , pDestinationText(nullptr)
     , nCurrentStyleIndex(-1)
     , nCurrentCharacterStyleIndex(-1)
-    , pCurrentBuffer(nullptr)
-    , bInListpicture(false)
-    , bInBackground(false)
-    , bHadShapeText(false)
-    , bInShapeGroup(false)
-    , bInShape(false)
-    , bCreatedShapeGroup(false)
-    , bStartedTrackchange(false)
-    , nTableRowWidthAfter(0)
+    , m_pCurrentBuffer(nullptr)
+    , m_bInListpicture(false)
+    , m_bInBackground(false)
+    , m_bHadShapeText(false)
+    , m_bInShapeGroup(false)
+    , m_bInShape(false)
+    , m_bCreatedShapeGroup(false)
+    , m_bStartedTrackchange(false)
+    , m_nTableRowWidthAfter(0)
 {
 }
 
