@@ -220,8 +220,8 @@ const char* keywordToString(RTFKeyword nKeyword)
 
 static util::DateTime lcl_getDateTime(RTFParserState const& aState)
 {
-    return { 0 /*100sec*/, 0 /*sec*/,     aState.nMinute, aState.nHour,
-             aState.nDay,  aState.nMonth, aState.nYear,   false };
+    return { 0 /*100sec*/,    0 /*sec*/,         aState.getMinute(), aState.getHour(),
+             aState.getDay(), aState.getMonth(), aState.getYear(),   false };
 }
 
 static void lcl_DestinationToMath(OUStringBuffer* pDestinationText,
@@ -842,7 +842,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         int b = 0, count = 2;
 
         // Feed the destination text to a stream.
-        OString aStr = OUStringToOString(m_aStates.top().aDestinationText.makeStringAndClear(),
+        OString aStr = OUStringToOString(m_aStates.top().getDestinationText().makeStringAndClear(),
                                          RTL_TEXTENCODING_ASCII_US);
         for (int i = 0; i < aStr.getLength(); ++i)
         {
@@ -1834,14 +1834,14 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
     {
         case RTF_B:
         case RTF_AB:
-            nSprm = (m_aStates.top().isRightToLeft
+            nSprm = (m_aStates.top().getIsRightToLeft()
                      || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
                         ? NS_ooxml::LN_EG_RPrBase_bCs
                         : NS_ooxml::LN_EG_RPrBase_b;
             break;
         case RTF_I:
         case RTF_AI:
-            nSprm = (m_aStates.top().isRightToLeft
+            nSprm = (m_aStates.top().getIsRightToLeft()
                      || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
                         ? NS_ooxml::LN_EG_RPrBase_iCs
                         : NS_ooxml::LN_EG_RPrBase_i;
@@ -1940,7 +1940,7 @@ RTFError RTFDocumentImpl::pushState()
                                   m_bMathNor);
         m_aStates.push(m_aStates.top());
     }
-    m_aStates.top().aDestinationText.setLength(0); // was copied: always reset!
+    m_aStates.top().getDestinationText().setLength(0); // was copied: always reset!
 
     m_pTokenizer->pushGroup();
 
@@ -1948,12 +1948,12 @@ RTFError RTFDocumentImpl::pushState()
     {
         case Destination::FONTTABLE:
             // this is a "faked" destination for the font entry
-            m_aStates.top().setCurrentDestinationText(&m_aStates.top().aDestinationText);
+            m_aStates.top().setCurrentDestinationText(&m_aStates.top().getDestinationText());
             m_aStates.top().eDestination = Destination::FONTENTRY;
             break;
         case Destination::STYLESHEET:
             // this is a "faked" destination for the style sheet entry
-            m_aStates.top().setCurrentDestinationText(&m_aStates.top().aDestinationText);
+            m_aStates.top().setCurrentDestinationText(&m_aStates.top().getDestinationText());
             m_aStates.top().eDestination = Destination::STYLEENTRY;
             {
                 // the *default* is \s0 i.e. paragraph style default
@@ -1983,7 +1983,7 @@ RTFError RTFDocumentImpl::pushState()
             break;
         case Destination::REVISIONTABLE:
             // this is a "faked" destination for the revision table entry
-            m_aStates.top().setCurrentDestinationText(&m_aStates.top().aDestinationText);
+            m_aStates.top().setCurrentDestinationText(&m_aStates.top().getDestinationText());
             m_aStates.top().eDestination = Destination::REVISIONENTRY;
             break;
         default:
@@ -2234,7 +2234,7 @@ RTFError RTFDocumentImpl::popState()
                                 aBuf.append("0");
                             aBuf.append(OUString::number(ch, 16));
                         }
-                        m_aStates.top().aDestinationText = aBuf;
+                        m_aStates.top().getDestinationText() = aBuf;
                     }
                 }
                 popState();
@@ -2244,7 +2244,8 @@ RTFError RTFDocumentImpl::popState()
             break;
         case Destination::LEVELTEXT:
         {
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             OUString aStr = m_aStates.top().getCurrentDestinationText()->makeStringAndClear();
 
@@ -2301,7 +2302,8 @@ RTFError RTFDocumentImpl::popState()
             break;
         }
         case Destination::SHAPEPROPERTYNAME:
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             aState.aShape.getProperties().emplace_back(
                 m_aStates.top().getCurrentDestinationText()->makeStringAndClear(), OUString());
@@ -2375,7 +2377,8 @@ RTFError RTFDocumentImpl::popState()
             break;
         case Destination::BOOKMARKSTART:
         {
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             OUString aStr = m_aStates.top().getCurrentDestinationText()->makeStringAndClear();
             int nPos = m_aBookmarks.size();
@@ -2389,7 +2392,8 @@ RTFError RTFDocumentImpl::popState()
         break;
         case Destination::BOOKMARKEND:
         {
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             OUString aStr = m_aStates.top().getCurrentDestinationText()->makeStringAndClear();
             if (!m_aStates.top().getCurrentBuffer())
@@ -2404,7 +2408,8 @@ RTFError RTFDocumentImpl::popState()
         case Destination::INDEXENTRY:
         case Destination::TOCENTRY:
         {
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             OUString str(m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
             // dmapper expects this as a field, so let's fake something...
@@ -2421,7 +2426,8 @@ RTFError RTFDocumentImpl::popState()
         break;
         case Destination::FORMFIELDNAME:
         {
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             auto pValue
                 = new RTFValue(m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
@@ -2430,7 +2436,8 @@ RTFError RTFDocumentImpl::popState()
         break;
         case Destination::FORMFIELDLIST:
         {
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             auto pValue
                 = new RTFValue(m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
@@ -2441,7 +2448,7 @@ RTFError RTFDocumentImpl::popState()
         {
             if (m_bFormField)
             {
-                if (&m_aStates.top().aDestinationText
+                if (&m_aStates.top().getDestinationText()
                     != m_aStates.top().getCurrentDestinationText())
                     break; // not for nested group
                 OString aStr = OUStringToOString(
@@ -2515,28 +2522,32 @@ RTFError RTFDocumentImpl::popState()
                 m_xDocumentProperties->setPrintDate(lcl_getDateTime(aState));
             break;
         case Destination::AUTHOR:
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             if (m_xDocumentProperties.is())
                 m_xDocumentProperties->setAuthor(
                     m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
             break;
         case Destination::KEYWORDS:
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             if (m_xDocumentProperties.is())
                 m_xDocumentProperties->setKeywords(comphelper::string::convertCommaSeparated(
                     m_aStates.top().getCurrentDestinationText()->makeStringAndClear()));
             break;
         case Destination::COMMENT:
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             if (m_xDocumentProperties.is())
                 m_xDocumentProperties->setGenerator(
                     m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
             break;
         case Destination::SUBJECT:
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             if (m_xDocumentProperties.is())
                 m_xDocumentProperties->setSubject(
@@ -2544,7 +2555,8 @@ RTFError RTFDocumentImpl::popState()
             break;
         case Destination::TITLE:
         {
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             if (m_xDocumentProperties.is())
                 m_xDocumentProperties->setTitle(
@@ -2553,7 +2565,8 @@ RTFError RTFDocumentImpl::popState()
         break;
 
         case Destination::DOCCOMM:
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             if (m_xDocumentProperties.is())
                 m_xDocumentProperties->setDescription(
@@ -2562,7 +2575,8 @@ RTFError RTFDocumentImpl::popState()
         case Destination::OPERATOR:
         case Destination::COMPANY:
         {
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             OUString aName = aState.eDestination == Destination::OPERATOR ? OUString("Operator")
                                                                           : OUString("Company");
@@ -2586,7 +2600,8 @@ RTFError RTFDocumentImpl::popState()
         break;
         case Destination::OBJDATA:
         {
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
 
             RTFError eError = handleEmbeddedObject();
@@ -2639,7 +2654,8 @@ RTFError RTFDocumentImpl::popState()
         break;
         case Destination::ANNOTATIONDATE:
         {
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             OUString aStr(OStringToOUString(
                 DTTM22OString(
@@ -2654,19 +2670,22 @@ RTFError RTFDocumentImpl::popState()
         }
         break;
         case Destination::ANNOTATIONAUTHOR:
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             m_aAuthor = m_aStates.top().getCurrentDestinationText()->makeStringAndClear();
             break;
         case Destination::ATNID:
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             m_aAuthorInitials = m_aStates.top().getCurrentDestinationText()->makeStringAndClear();
             break;
         case Destination::ANNOTATIONREFERENCESTART:
         case Destination::ANNOTATIONREFERENCEEND:
         {
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             OUString aStr = m_aStates.top().getCurrentDestinationText()->makeStringAndClear();
             auto pValue = new RTFValue(aStr.toInt32());
@@ -2682,7 +2701,8 @@ RTFError RTFDocumentImpl::popState()
         break;
         case Destination::ANNOTATIONREFERENCE:
         {
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             OUString aStr = m_aStates.top().getCurrentDestinationText()->makeStringAndClear();
             RTFSprms aAnnAttributes;
@@ -2692,7 +2712,8 @@ RTFError RTFDocumentImpl::popState()
         break;
         case Destination::FALT:
         {
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             OUString aStr(m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
             auto pValue = new RTFValue(aStr);
@@ -3005,12 +3026,14 @@ RTFError RTFDocumentImpl::popState()
                 m_pSdrImport->popParent();
             break;
         case Destination::PROPNAME:
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             aState.setPropName(m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
             break;
         case Destination::STATICVAL:
-            if (&m_aStates.top().aDestinationText != m_aStates.top().getCurrentDestinationText())
+            if (&m_aStates.top().getDestinationText()
+                != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             if (m_xDocumentProperties.is())
             {
@@ -3232,7 +3255,7 @@ RTFError RTFDocumentImpl::popState()
             if (!m_aStates.empty())
             {
                 // FIXME: don't use pDestinationText, points to popped state
-                auto pValue = new RTFValue(aState.aDestinationText.makeStringAndClear(), true);
+                auto pValue = new RTFValue(aState.getDestinationText().makeStringAndClear(), true);
                 m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_LevelSuffix_val, pValue);
             }
             break;
@@ -3240,7 +3263,7 @@ RTFError RTFDocumentImpl::popState()
             if (!m_aStates.empty())
             {
                 // FIXME: don't use pDestinationText, points to popped state
-                auto pValue = new RTFValue(aState.aDestinationText.makeStringAndClear(), true);
+                auto pValue = new RTFValue(aState.getDestinationText().makeStringAndClear(), true);
                 m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_LevelText_val, pValue);
             }
             break;
@@ -3326,7 +3349,7 @@ RTFError RTFDocumentImpl::popState()
             {
                 m_aStates.top().aPicture = aState.aPicture;
                 // both \sp and \sv are destinations, copy the text up-ward for later
-                m_aStates.top().aDestinationText = aState.aDestinationText;
+                m_aStates.top().getDestinationText() = aState.getDestinationText();
             }
             break;
         case Destination::FALT:
@@ -3477,8 +3500,8 @@ void RTFDocumentImpl::setDestination(Destination eDestination)
 // situation where it looks like the "current" buffer is needed?
 void RTFDocumentImpl::setDestinationText(OUString const& rString)
 {
-    m_aStates.top().aDestinationText.setLength(0);
-    m_aStates.top().aDestinationText.append(rString);
+    m_aStates.top().getDestinationText().setLength(0);
+    m_aStates.top().getDestinationText().append(rString);
 }
 
 bool RTFDocumentImpl::getSkipUnknown() { return m_bSkipUnknown; }
@@ -3517,12 +3540,12 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
     , bLevelNumbersValid(true)
     , aFrame(this)
     , eRunType(RunType::LOCH)
-    , isRightToLeft(false)
-    , nYear(0)
-    , nMonth(0)
-    , nDay(0)
-    , nHour(0)
-    , nMinute(0)
+    , m_bIsRightToLeft(false)
+    , m_nYear(0)
+    , m_nMonth(0)
+    , m_nDay(0)
+    , m_nHour(0)
+    , m_nMinute(0)
     , m_pCurrentDestinationText(nullptr)
     , m_nCurrentStyleIndex(-1)
     , m_nCurrentCharacterStyleIndex(-1)

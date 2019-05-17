@@ -164,7 +164,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         case RTF_FS:
         case RTF_AFS:
-            nSprm = (m_aStates.top().isRightToLeft
+            nSprm = (m_aStates.top().getIsRightToLeft()
                      || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
                         ? NS_ooxml::LN_EG_RPrBase_szCs
                         : NS_ooxml::LN_EG_RPrBase_sz;
@@ -191,7 +191,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         case RTF_LANG:
         case RTF_ALANG:
-            if (m_aStates.top().isRightToLeft
+            if (m_aStates.top().getIsRightToLeft()
                 || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
             {
                 nSprm = NS_ooxml::LN_CT_Language_bidi;
@@ -261,31 +261,31 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         case RTF_YR:
         {
-            m_aStates.top().nYear = nParam;
+            m_aStates.top().setYear(nParam);
             nSprm = 1;
         }
         break;
         case RTF_MO:
         {
-            m_aStates.top().nMonth = nParam;
+            m_aStates.top().setMonth(nParam);
             nSprm = 1;
         }
         break;
         case RTF_DY:
         {
-            m_aStates.top().nDay = nParam;
+            m_aStates.top().setDay(nParam);
             nSprm = 1;
         }
         break;
         case RTF_HR:
         {
-            m_aStates.top().nHour = nParam;
+            m_aStates.top().setHour(nParam);
             nSprm = 1;
         }
         break;
         case RTF_MIN:
         {
-            m_aStates.top().nMinute = nParam;
+            m_aStates.top().setMinute(nParam);
             nSprm = 1;
         }
         break;
@@ -336,7 +336,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         case RTF_F:
         case RTF_AF:
-            if (m_aStates.top().isRightToLeft
+            if (m_aStates.top().getIsRightToLeft()
                 || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
             {
                 nSprm = NS_ooxml::LN_CT_Fonts_cs;
