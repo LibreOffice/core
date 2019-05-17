@@ -156,7 +156,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     if (nSprm > 0)
     {
-        m_aStates.top().aTableSprms.set(nSprm, pIntValue);
+        m_aStates.top().getTableSprms().set(nSprm, pIntValue);
         return RTFError::OK;
     }
     // Trivial character sprms.
@@ -183,7 +183,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     if (nSprm > 0)
     {
-        m_aStates.top().aCharacterSprms.set(nSprm, pIntValue);
+        m_aStates.top().getCharacterSprms().set(nSprm, pIntValue);
         return RTFError::OK;
     }
     // Trivial character attributes.
@@ -216,7 +216,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         LanguageTag aTag((LanguageType(static_cast<sal_uInt16>(nParam))));
         auto pValue = new RTFValue(aTag.getBcp47());
-        putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_EG_RPrBase_lang, nSprm,
+        putNestedAttribute(m_aStates.top().getCharacterSprms(), NS_ooxml::LN_EG_RPrBase_lang, nSprm,
                            pValue);
         // Language is a character property, but we should store it at a paragraph level as well for fields.
         if (nKeyword == RTF_LANG && m_bNeedPap)
@@ -362,16 +362,16 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 aFontAttributes.set(nSprm, new RTFValue(m_aFontNames[getFontIndex(nParam)]));
                 RTFSprms aRunPropsSprms;
                 aRunPropsSprms.set(NS_ooxml::LN_EG_RPrBase_rFonts, new RTFValue(aFontAttributes));
-                m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_rPr,
-                                                new RTFValue(RTFSprms(), aRunPropsSprms),
-                                                RTFOverwrite::NO_APPEND);
+                m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Lvl_rPr,
+                                                    new RTFValue(RTFSprms(), aRunPropsSprms),
+                                                    RTFOverwrite::NO_APPEND);
             }
             else
             {
                 m_nCurrentFontIndex = getFontIndex(nParam);
                 auto pValue = new RTFValue(getFontName(m_nCurrentFontIndex));
-                putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_EG_RPrBase_rFonts,
-                                   nSprm, pValue);
+                putNestedAttribute(m_aStates.top().getCharacterSprms(),
+                                   NS_ooxml::LN_EG_RPrBase_rFonts, nSprm, pValue);
                 if (nKeyword == RTF_F)
                     m_aStates.top().setCurrentEncoding(getEncoding(m_nCurrentFontIndex));
             }
@@ -425,8 +425,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             RTFSprms aAttributes;
             auto pValue = new RTFValue(sal_uInt32(getColorTable(nParam)));
             aAttributes.set(NS_ooxml::LN_CT_Color_val, pValue);
-            m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_color,
-                                                new RTFValue(aAttributes));
+            m_aStates.top().getCharacterSprms().set(NS_ooxml::LN_EG_RPrBase_color,
+                                                    new RTFValue(aAttributes));
         }
         break;
         case RTF_S:
@@ -438,8 +438,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 m_nCurrentStyleIndex = nParam;
                 auto pValue = new RTFValue(NS_ooxml::LN_Value_ST_StyleType_paragraph);
-                m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type,
-                                                     pValue); // paragraph style
+                m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_Style_type,
+                                                         pValue); // paragraph style
             }
             else
             {
@@ -447,8 +447,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 if (!aName.isEmpty())
                 {
                     if (m_aStates.top().eDestination == Destination::LISTLEVEL)
-                        m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_pStyle,
-                                                        new RTFValue(aName));
+                        m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Lvl_pStyle,
+                                                            new RTFValue(aName));
                     else
                         m_aStates.top().getParagraphSprms().set(NS_ooxml::LN_CT_PPrBase_pStyle,
                                                                 new RTFValue(aName));
@@ -463,15 +463,15 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 m_nCurrentStyleIndex = nParam;
                 auto pValue = new RTFValue(NS_ooxml::LN_Value_ST_StyleType_character);
-                m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type,
-                                                     pValue); // character style
+                m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_Style_type,
+                                                         pValue); // character style
             }
             else
             {
                 OUString aName = getStyleName(nParam);
                 if (!aName.isEmpty())
-                    m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_rStyle,
-                                                        new RTFValue(aName));
+                    m_aStates.top().getCharacterSprms().set(NS_ooxml::LN_EG_RPrBase_rStyle,
+                                                            new RTFValue(aName));
             }
             break;
         case RTF_DS:
@@ -480,8 +480,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 m_nCurrentStyleIndex = nParam;
                 auto pValue = new RTFValue(0); // TODO no value in enum StyleType?
-                m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type,
-                                                     pValue); // section style
+                m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_Style_type,
+                                                         pValue); // section style
             }
             break;
         case RTF_TS:
@@ -491,8 +491,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_nCurrentStyleIndex = nParam;
                 // FIXME the correct value would be NS_ooxml::LN_Value_ST_StyleType_table but maybe table styles mess things up in dmapper, be cautious and disable them for now
                 auto pValue = new RTFValue(0);
-                m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type,
-                                                     pValue); // table style
+                m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_Style_type,
+                                                         pValue); // table style
             }
             break;
         case RTF_DEFF:
@@ -503,7 +503,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         {
             LanguageTag aTag((LanguageType(static_cast<sal_uInt16>(nParam))));
             auto pValue = new RTFValue(aTag.getBcp47());
-            putNestedAttribute(m_aStates.top().aCharacterSprms,
+            putNestedAttribute(m_aStates.top().getCharacterSprms(),
                                (nKeyword == RTF_DEFLANG ? NS_ooxml::LN_EG_RPrBase_lang
                                                         : NS_ooxml::LN_CT_Language_bidi),
                                nSprm, pValue);
@@ -512,7 +512,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CHCBPAT:
         {
             auto pValue = new RTFValue(sal_uInt32(nParam ? getColorTable(nParam) : COL_AUTO));
-            putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_EG_RPrBase_shd,
+            putNestedAttribute(m_aStates.top().getCharacterSprms(), NS_ooxml::LN_EG_RPrBase_shd,
                                NS_ooxml::LN_CT_Shd_fill, pValue);
         }
         break;
@@ -535,20 +535,20 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_ULC:
         {
             auto pValue = new RTFValue(sal_uInt32(getColorTable(nParam)));
-            m_aStates.top().aCharacterSprms.set(0x6877, pValue);
+            m_aStates.top().getCharacterSprms().set(0x6877, pValue);
         }
         break;
         case RTF_HIGHLIGHT:
         {
             auto pValue = new RTFValue(sal_uInt32(nParam ? getColorTable(nParam) : COL_AUTO));
-            m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_highlight, pValue);
+            m_aStates.top().getCharacterSprms().set(NS_ooxml::LN_EG_RPrBase_highlight, pValue);
         }
         break;
         case RTF_UP:
         case RTF_DN:
         {
             auto pValue = new RTFValue(nParam * (nKeyword == RTF_UP ? 1 : -1));
-            m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_position, pValue);
+            m_aStates.top().getCharacterSprms().set(NS_ooxml::LN_EG_RPrBase_position, pValue);
         }
         break;
         case RTF_HORZVERT:
@@ -566,7 +566,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         {
             // Convert quarter-points to twentieths of a point
             auto pValue = new RTFValue(nParam * 5);
-            m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_spacing, pValue);
+            m_aStates.top().getCharacterSprms().set(NS_ooxml::LN_EG_RPrBase_spacing, pValue);
         }
         break;
         case RTF_TWOINONE:
@@ -647,7 +647,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             m_aStates.top().getTabAttributes().set(NS_ooxml::LN_CT_TabStop_pos, pIntValue);
             auto pValue = new RTFValue(m_aStates.top().getTabAttributes());
             if (m_aStates.top().eDestination == Destination::LISTLEVEL)
-                putNestedSprm(m_aStates.top().aTableSprms, NS_ooxml::LN_CT_PPrBase_tabs,
+                putNestedSprm(m_aStates.top().getTableSprms(), NS_ooxml::LN_CT_PPrBase_tabs,
                               NS_ooxml::LN_CT_Tabs_tab, pValue);
             else
                 putNestedSprm(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_tabs,
@@ -665,10 +665,10 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_LISTID:
         {
             if (m_aStates.top().eDestination == Destination::LISTENTRY)
-                m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_AbstractNum_abstractNumId,
-                                                     pIntValue);
+                m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_AbstractNum_abstractNumId,
+                                                         pIntValue);
             else if (m_aStates.top().eDestination == Destination::LISTOVERRIDEENTRY)
-                m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Num_abstractNumId, pIntValue);
+                m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Num_abstractNumId, pIntValue);
             m_aStates.top().setCurrentListIndex(nParam);
         }
         break;
@@ -676,7 +676,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         {
             if (m_aStates.top().eDestination == Destination::LISTOVERRIDEENTRY)
             {
-                m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_AbstractNum_nsid, pIntValue);
+                m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_AbstractNum_nsid,
+                                                         pIntValue);
                 m_aStates.top().setCurrentListOverrideIndex(nParam);
             }
             else
@@ -729,7 +730,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     break;
             }
             if (!sValue.isEmpty())
-                m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_suff, new RTFValue(sValue));
+                m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Lvl_suff, new RTFValue(sValue));
         }
         break;
         case RTF_FPRQ:
@@ -751,8 +752,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 RTFSprms aAttributes;
                 aAttributes.set(NS_ooxml::LN_CT_Pitch_val, new RTFValue(nValue));
-                m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Font_pitch,
-                                                new RTFValue(aAttributes));
+                m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Font_pitch,
+                                                    new RTFValue(aAttributes));
             }
         }
         break;
@@ -811,7 +812,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             auto pValue = new RTFValue(nValue);
             RTFValue::Pointer_t pTight
-                = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_EG_WrapType_wrapTight);
+                = m_aStates.top().getCharacterSprms().find(NS_ooxml::LN_EG_WrapType_wrapTight);
             if (pTight)
                 pTight->getAttributes().set(NS_ooxml::LN_CT_WrapTight_wrapText, pValue);
             else
@@ -831,13 +832,13 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     break;
                 case 3:
                     m_aStates.top().getShape().setWrap(text::WrapTextMode_THROUGH);
-                    m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_WrapType_wrapNone,
-                                                        new RTFValue());
+                    m_aStates.top().getCharacterSprms().set(NS_ooxml::LN_EG_WrapType_wrapNone,
+                                                            new RTFValue());
                     break;
                 case 4:
                     m_aStates.top().getShape().setWrap(text::WrapTextMode_PARALLEL);
-                    m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_WrapType_wrapTight,
-                                                        new RTFValue());
+                    m_aStates.top().getCharacterSprms().set(NS_ooxml::LN_EG_WrapType_wrapTight,
+                                                            new RTFValue());
                     break;
                 case 5:
                     m_aStates.top().getShape().setWrap(text::WrapTextMode_THROUGH);
@@ -1065,7 +1066,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_REVAUTHDEL:
         {
             auto pValue = new RTFValue(m_aAuthors[nParam]);
-            putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_trackchange,
+            putNestedAttribute(m_aStates.top().getCharacterSprms(), NS_ooxml::LN_trackchange,
                                NS_ooxml::LN_CT_TrackChange_author, pValue);
         }
         break;
@@ -1075,7 +1076,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             OUString aStr(
                 OStringToOUString(DTTM22OString(nParam), m_aStates.top().getCurrentEncoding()));
             auto pValue = new RTFValue(aStr);
-            putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_trackchange,
+            putNestedAttribute(m_aStates.top().getCharacterSprms(), NS_ooxml::LN_trackchange,
                                NS_ooxml::LN_CT_TrackChange_date, pValue);
         }
         break;
@@ -1239,14 +1240,14 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             m_aStates.top().getDrawingObject().setBottom(convertTwipToMm100(nParam));
             break;
         case RTF_PNSTART:
-            m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_start, pIntValue);
+            m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Lvl_start, pIntValue);
             break;
         case RTF_PNF:
         {
             auto pValue = new RTFValue(m_aFontNames[getFontIndex(nParam)]);
             RTFSprms aAttributes;
             aAttributes.set(NS_ooxml::LN_CT_Fonts_ascii, pValue);
-            putNestedSprm(m_aStates.top().aTableSprms, NS_ooxml::LN_CT_Lvl_rPr,
+            putNestedSprm(m_aStates.top().getTableSprms(), NS_ooxml::LN_CT_Lvl_rPr,
                           NS_ooxml::LN_EG_RPrBase_rFonts, new RTFValue(aAttributes));
         }
         break;
@@ -1509,7 +1510,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (m_aStates.top().eDestination == Destination::LISTLEVEL)
             {
                 if (m_aStates.top().getLevelNumbersValid())
-                    putNestedAttribute(m_aStates.top().aTableSprms, NS_ooxml::LN_CT_PPrBase_ind,
+                    putNestedAttribute(m_aStates.top().getTableSprms(), NS_ooxml::LN_CT_PPrBase_ind,
                                        NS_ooxml::LN_CT_Ind_firstLine, pIntValue);
                 else
                     m_aInvalidListLevelFirstIndents[m_nListLevel] = nParam;
@@ -1524,7 +1525,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (m_aStates.top().eDestination == Destination::LISTLEVEL)
             {
                 if (m_aStates.top().getLevelNumbersValid())
-                    putNestedAttribute(m_aStates.top().aTableSprms, NS_ooxml::LN_CT_PPrBase_ind,
+                    putNestedAttribute(m_aStates.top().getTableSprms(), NS_ooxml::LN_CT_PPrBase_ind,
                                        NS_ooxml::LN_CT_Ind_left, pIntValue);
             }
             else
@@ -1620,8 +1621,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
 
             if (nId > 0)
-                m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_effect,
-                                                    new RTFValue(nId));
+                m_aStates.top().getCharacterSprms().set(NS_ooxml::LN_EG_RPrBase_effect,
+                                                        new RTFValue(nId));
             break;
         }
         case RTF_VIEWBKSP:
