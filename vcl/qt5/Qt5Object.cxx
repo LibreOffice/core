@@ -40,7 +40,7 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
         m_pQWidget->show();
 
     m_aSystemData.nSize = sizeof(SystemEnvData);
-    m_aSystemData.aWindow = pParent->GetQWidget()->winId();
+    m_aSystemData.aWindow = m_pQWindow->winId(); // ID of the embedded window
     m_aSystemData.aShellWindow = reinterpret_cast<sal_IntPtr>(this);
     //m_aSystemData.pSalFrame = this;
     //m_aSystemData.pWidget = m_pQWidget;
