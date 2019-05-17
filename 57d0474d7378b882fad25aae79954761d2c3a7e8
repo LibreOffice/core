@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_f6dcb919",
+        "filename": "vcl/source/control/notebookbar.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-05-17T18:35:28Z",
+      "side": 1,
+      "message": "To send the full path, we have to concatenate them before where the function doesFileExist() is called.It wouldn\u0027t be a good idea to concatenate them before or inside function call . Hence I concatenated them here.",
+      "parentUuid": "3fa0c359_969f754f",
+      "revId": "57d0474d7378b882fad25aae79954761d2c3a7e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_36ac618b",
         "filename": "vcl/source/control/notebookbar.cxx",
         "patchSetId": 7
