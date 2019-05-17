@@ -167,11 +167,12 @@ class XWindow(UITestCase):
         global mouseReleasedEventsIntercepted
         self.assertEqual(2, mouseReleasedEventsIntercepted)
 
+        # Upon xMouseEvent, enter the vcl::Window with GetText() being "Standard", then upon
+        # xMouseEvent2, exit that vcl::Window and enter the one with get_id() being "writer_edit":
         global mouseEnteredEventsIntercepted
-        #TODO: self.assertEqual(1, mouseEnteredEventsIntercepted)
-
+        self.assertEqual(2, mouseEnteredEventsIntercepted)
         global mouseExitedEventsIntercepted
-        #TODO: self.assertEqual(0, mouseExitedEventsIntercepted)
+        self.assertEqual(1, mouseExitedEventsIntercepted)
 
         # close document
         self.ui_test.close_doc()
