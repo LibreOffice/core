@@ -456,6 +456,19 @@ public:
         m_pCurrentDestinationText = pDestinationText;
     }
     OUStringBuffer* getCurrentDestinationText() const { return m_pCurrentDestinationText; }
+    OUStringBuffer& getDestinationText() { return m_aDestinationText; }
+    void setMinute(sal_uInt16 nMinute) { m_nMinute = nMinute; }
+    sal_uInt16 getMinute() const { return m_nMinute; }
+    void setHour(sal_uInt16 nHour) { m_nHour = nHour; }
+    sal_uInt16 getHour() const { return m_nHour; }
+    void setDay(sal_uInt16 nDay) { m_nDay = nDay; }
+    sal_uInt16 getDay() const { return m_nDay; }
+    void setMonth(sal_uInt16 nMonth) { m_nMonth = nMonth; }
+    sal_uInt16 getMonth() const { return m_nMonth; }
+    void setYear(sal_uInt16 nYear) { m_nYear = nYear; }
+    sal_uInt16 getYear() const { return m_nYear; }
+    void setIsRightToLeft(bool bIsRightToLeft) { m_bIsRightToLeft = bIsRightToLeft; }
+    bool getIsRightToLeft() const { return m_bIsRightToLeft; }
 
     RTFDocumentImpl* m_pDocumentImpl;
     RTFInternalState nInternalState;
@@ -517,20 +530,20 @@ public:
         DBCH
     };
     RunType eRunType;
-    /// ltrch or rtlch
-    bool isRightToLeft;
-
-    // Info group.
-    sal_Int16 nYear;
-    sal_uInt16 nMonth;
-    sal_uInt16 nDay;
-    sal_uInt16 nHour;
-    sal_uInt16 nMinute;
-
-    /// Text from special destinations.
-    OUStringBuffer aDestinationText;
 
 private:
+    /// ltrch or rtlch
+    bool m_bIsRightToLeft;
+
+    // Info group.
+    sal_Int16 m_nYear;
+    sal_uInt16 m_nMonth;
+    sal_uInt16 m_nDay;
+    sal_uInt16 m_nHour;
+    sal_uInt16 m_nMinute;
+
+    /// Text from special destinations.
+    OUStringBuffer m_aDestinationText;
     /// point to the buffer of the current destination
     OUStringBuffer* m_pCurrentDestinationText;
 
