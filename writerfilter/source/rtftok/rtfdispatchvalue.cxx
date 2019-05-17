@@ -758,34 +758,34 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             // Ignore this for now, the exporter always emits it with a zero parameter.
             break;
         case RTF_PICSCALEX:
-            m_aStates.top().aPicture.nScaleX = nParam;
+            m_aStates.top().getPicture().nScaleX = nParam;
             break;
         case RTF_PICSCALEY:
-            m_aStates.top().aPicture.nScaleY = nParam;
+            m_aStates.top().getPicture().nScaleY = nParam;
             break;
         case RTF_PICW:
-            m_aStates.top().aPicture.nWidth = nParam;
+            m_aStates.top().getPicture().nWidth = nParam;
             break;
         case RTF_PICH:
-            m_aStates.top().aPicture.nHeight = nParam;
+            m_aStates.top().getPicture().nHeight = nParam;
             break;
         case RTF_PICWGOAL:
-            m_aStates.top().aPicture.nGoalWidth = convertTwipToMm100(nParam);
+            m_aStates.top().getPicture().nGoalWidth = convertTwipToMm100(nParam);
             break;
         case RTF_PICHGOAL:
-            m_aStates.top().aPicture.nGoalHeight = convertTwipToMm100(nParam);
+            m_aStates.top().getPicture().nGoalHeight = convertTwipToMm100(nParam);
             break;
         case RTF_PICCROPL:
-            m_aStates.top().aPicture.nCropL = convertTwipToMm100(nParam);
+            m_aStates.top().getPicture().nCropL = convertTwipToMm100(nParam);
             break;
         case RTF_PICCROPR:
-            m_aStates.top().aPicture.nCropR = convertTwipToMm100(nParam);
+            m_aStates.top().getPicture().nCropR = convertTwipToMm100(nParam);
             break;
         case RTF_PICCROPT:
-            m_aStates.top().aPicture.nCropT = convertTwipToMm100(nParam);
+            m_aStates.top().getPicture().nCropT = convertTwipToMm100(nParam);
             break;
         case RTF_PICCROPB:
-            m_aStates.top().aPicture.nCropB = convertTwipToMm100(nParam);
+            m_aStates.top().getPicture().nCropB = convertTwipToMm100(nParam);
             break;
         case RTF_SHPWRK:
         {
@@ -822,23 +822,23 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             switch (nParam)
             {
                 case 1:
-                    m_aStates.top().aShape.setWrap(text::WrapTextMode_NONE);
+                    m_aStates.top().getShape().setWrap(text::WrapTextMode_NONE);
                     break;
                 case 2:
-                    m_aStates.top().aShape.setWrap(text::WrapTextMode_PARALLEL);
+                    m_aStates.top().getShape().setWrap(text::WrapTextMode_PARALLEL);
                     break;
                 case 3:
-                    m_aStates.top().aShape.setWrap(text::WrapTextMode_THROUGH);
+                    m_aStates.top().getShape().setWrap(text::WrapTextMode_THROUGH);
                     m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_WrapType_wrapNone,
                                                         new RTFValue());
                     break;
                 case 4:
-                    m_aStates.top().aShape.setWrap(text::WrapTextMode_PARALLEL);
+                    m_aStates.top().getShape().setWrap(text::WrapTextMode_PARALLEL);
                     m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_WrapType_wrapTight,
                                                         new RTFValue());
                     break;
                 case 5:
-                    m_aStates.top().aShape.setWrap(text::WrapTextMode_THROUGH);
+                    m_aStates.top().getShape().setWrap(text::WrapTextMode_THROUGH);
                     break;
             }
         }
@@ -1060,19 +1060,19 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         }
         break;
         case RTF_SHPLEFT:
-            m_aStates.top().aShape.setLeft(convertTwipToMm100(nParam));
+            m_aStates.top().getShape().setLeft(convertTwipToMm100(nParam));
             break;
         case RTF_SHPTOP:
-            m_aStates.top().aShape.setTop(convertTwipToMm100(nParam));
+            m_aStates.top().getShape().setTop(convertTwipToMm100(nParam));
             break;
         case RTF_SHPRIGHT:
-            m_aStates.top().aShape.setRight(convertTwipToMm100(nParam));
+            m_aStates.top().getShape().setRight(convertTwipToMm100(nParam));
             break;
         case RTF_SHPBOTTOM:
-            m_aStates.top().aShape.setBottom(convertTwipToMm100(nParam));
+            m_aStates.top().getShape().setBottom(convertTwipToMm100(nParam));
             break;
         case RTF_SHPZ:
-            m_aStates.top().aShape.setZ(nParam);
+            m_aStates.top().getShape().setZ(nParam);
             break;
         case RTF_FFTYPE:
             switch (nParam)
@@ -1195,7 +1195,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_FLYANCHOR:
             break;
         case RTF_WMETAFILE:
-            m_aStates.top().aPicture.eWMetafile = nParam;
+            m_aStates.top().getPicture().eWMetafile = nParam;
             break;
         case RTF_SB:
             putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing,
@@ -1383,7 +1383,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
         case RTF_SHPFBLWTXT:
             // Shape is below text -> send it to the background.
-            m_aStates.top().aShape.setInBackground(nParam != 0);
+            m_aStates.top().getShape().setInBackground(nParam != 0);
             break;
         case RTF_CLPADB:
         case RTF_CLPADL:
@@ -1577,7 +1577,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         }
         break;
         case RTF_DIBITMAP:
-            m_aStates.top().aPicture.eStyle = RTFBmpStyle::DIBITMAP;
+            m_aStates.top().getPicture().eStyle = RTFBmpStyle::DIBITMAP;
             break;
         case RTF_TRWWIDTHA:
             m_aStates.top().setTableRowWidthAfter(nParam);

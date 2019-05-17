@@ -481,6 +481,8 @@ public:
     RunType getRunType() const { return m_eRunType; }
     RTFFrame& getFrame() { return m_aFrame; }
     RTFDrawingObject& getDrawingObject() { return m_aDrawingObject; }
+    RTFShape& getShape() { return m_aShape; }
+    RTFPicture& getPicture() { return m_aPicture; }
 
     RTFDocumentImpl* m_pDocumentImpl;
     RTFInternalState nInternalState;
@@ -529,10 +531,9 @@ public:
     /// If aLevelNumbers should be read at all.
     bool bLevelNumbersValid;
 
-    RTFPicture aPicture;
-    RTFShape aShape;
-
 private:
+    RTFPicture m_aPicture;
+    RTFShape m_aShape;
     RTFDrawingObject m_aDrawingObject;
     RTFFrame m_aFrame;
 
