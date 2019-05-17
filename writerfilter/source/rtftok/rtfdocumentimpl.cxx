@@ -558,7 +558,7 @@ void RTFDocumentImpl::checkNeedPap()
 
             // Writer will ignore a page break before a text frame, so guard it with empty paragraphs
             bool hasBreakBeforeFrame
-                = m_aStates.top().aFrame.hasProperties()
+                = m_aStates.top().getFrame().hasProperties()
                   && m_aStates.top()
                          .aParagraphSprms.find(NS_ooxml::LN_CT_PPrBase_pageBreakBefore)
                          .get();
@@ -571,10 +571,10 @@ void RTFDocumentImpl::checkNeedPap()
             if (hasBreakBeforeFrame)
                 dispatchSymbol(RTF_PAR);
 
-            if (m_aStates.top().aFrame.hasProperties())
+            if (m_aStates.top().getFrame().hasProperties())
             {
                 writerfilter::Reference<Properties>::Pointer_t const pFrameProperties(
-                    new RTFReferenceProperties(RTFSprms(), m_aStates.top().aFrame.getSprms()));
+                    new RTFReferenceProperties(RTFSprms(), m_aStates.top().getFrame().getSprms()));
                 Mapper().props(pFrameProperties);
             }
         }
@@ -907,7 +907,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         std::clamp<sal_Int32>(m_aStates.top().aPicture.nHeight, 0,
                               SAL_MAX_UINT16)); //TODO: better way to handle out-of-bounds values?
     WmfExternal* pExtHeader = &aExtHeader;
-    uno::Reference<lang::XServiceInfo> xServiceInfo(m_aStates.top().aDrawingObject.getShape(),
+    uno::Reference<lang::XServiceInfo> xServiceInfo(m_aStates.top().getDrawingObject().getShape(),
                                                     uno::UNO_QUERY);
     if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
         pExtHeader = nullptr;
@@ -1216,7 +1216,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
                 {
                     // fdo#79384: Word will reject Shift-JIS following \loch
                     // but apparently OOo could read and (worse) write such documents
-                    SAL_INFO_IF(m_aStates.top().eRunType != RTFParserState::RunType::DBCH,
+                    SAL_INFO_IF(m_aStates.top().getRunType() != RTFParserState::RunType::DBCH,
                                 "writerfilter.rtf", "invalid Shift-JIS without DBCH");
                     assert(bUnicodeChecked);
                     aBuf.append(ch);
@@ -1531,9 +1531,9 @@ void RTFDocumentImpl::prepareProperties(
     o_rpParagraphProperties = getProperties(rState.aParagraphAttributes, rState.aParagraphSprms,
                                             NS_ooxml::LN_Value_ST_StyleType_paragraph);
 
-    if (rState.aFrame.hasProperties())
+    if (rState.getFrame().hasProperties())
     {
-        o_rpFrameProperties = new RTFReferenceProperties(RTFSprms(), rState.aFrame.getSprms());
+        o_rpFrameProperties = new RTFReferenceProperties(RTFSprms(), rState.getFrame().getSprms());
     }
 
     // Table width.
@@ -1841,14 +1841,14 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
         case RTF_B:
         case RTF_AB:
             nSprm = (m_aStates.top().getIsRightToLeft()
-                     || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
+                     || m_aStates.top().getRunType() == RTFParserState::RunType::HICH)
                         ? NS_ooxml::LN_EG_RPrBase_bCs
                         : NS_ooxml::LN_EG_RPrBase_b;
             break;
         case RTF_I:
         case RTF_AI:
             nSprm = (m_aStates.top().getIsRightToLeft()
-                     || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
+                     || m_aStates.top().getRunType() == RTFParserState::RunType::HICH)
                         ? NS_ooxml::LN_EG_RPrBase_iCs
                         : NS_ooxml::LN_EG_RPrBase_i;
             break;
@@ -1939,7 +1939,7 @@ RTFError RTFDocumentImpl::pushState()
     else
     {
         // fdo#85812 group resets run type of _current_ and new state (but not RTL)
-        m_aStates.top().eRunType = RTFParserState::RunType::LOCH;
+        m_aStates.top().setRunType(RTFParserState::RunType::LOCH);
 
         if (m_aStates.top().eDestination == Destination::MR)
             lcl_DestinationToMath(m_aStates.top().getCurrentDestinationText(), m_aMathBuffer,
@@ -2123,7 +2123,7 @@ RTFError RTFDocumentImpl::popState()
 
     checkUnicode(/*bUnicode =*/true, /*bHex =*/true);
     RTFParserState aState(m_aStates.top());
-    m_bWasInFrame = aState.aFrame.inFrame();
+    m_bWasInFrame = aState.getFrame().inFrame();
 
     // dmapper expects some content in header/footer, so if there would be nothing, add an empty paragraph.
     if (m_pTokenizer->getGroup() == 1 && m_bFirstRun)
@@ -2727,9 +2727,9 @@ RTFError RTFDocumentImpl::popState()
         }
         break;
         case Destination::DRAWINGOBJECT:
-            if (m_aStates.top().aDrawingObject.getShape().is())
+            if (m_aStates.top().getDrawingObject().getShape().is())
             {
-                RTFDrawingObject& rDrawing = m_aStates.top().aDrawingObject;
+                RTFDrawingObject& rDrawing = m_aStates.top().getDrawingObject();
                 uno::Reference<drawing::XShape> xShape(rDrawing.getShape());
                 uno::Reference<beans::XPropertySet> xPropertySet(rDrawing.getPropertySet());
 
@@ -2774,7 +2774,7 @@ RTFError RTFDocumentImpl::popState()
 
                 RTFSdrImport::resolveFLine(xPropertySet, rDrawing.getFLine());
 
-                if (!m_aStates.top().aDrawingObject.getHadShapeText())
+                if (!m_aStates.top().getDrawingObject().getHadShapeText())
                 {
                     Mapper().startShape(xShape);
                 }
@@ -2792,7 +2792,7 @@ RTFError RTFDocumentImpl::popState()
         case Destination::SHAPE:
             m_bNeedFinalPar = true;
             m_bNeedCr = m_bNeedCrOrig;
-            if (aState.aFrame.inFrame())
+            if (aState.getFrame().inFrame())
             {
                 // parBreak() modifies m_aStates.top() so we can't apply resetFrame() directly on aState
                 resetFrame();
@@ -3388,7 +3388,7 @@ RTFError RTFDocumentImpl::popState()
         case Destination::SHAPE:
             if (!m_aStates.empty())
             {
-                m_aStates.top().aFrame = aState.aFrame;
+                m_aStates.top().getFrame() = aState.getFrame();
                 if (aState.eDestination == Destination::SHPPICT
                     && m_aStates.top().eDestination == Destination::LISTPICTURE)
                 {
@@ -3409,7 +3409,7 @@ RTFError RTFDocumentImpl::popState()
             {
                 // If we're leaving the shapetext group (it may have nested ones) and this is a shape, not an old drawingobject.
                 if (m_aStates.top().eDestination != Destination::SHAPETEXT
-                    && !m_aStates.top().aDrawingObject.getHadShapeText())
+                    && !m_aStates.top().getDrawingObject().getHadShapeText())
                 {
                     m_aStates.top().setHadShapeText(true);
                     if (!m_aStates.top().getCurrentBuffer())
@@ -3421,14 +3421,16 @@ RTFError RTFDocumentImpl::popState()
 
                 // It's allowed to declare these inside the shape text, and they
                 // are expected to have an effect for the whole shape.
-                if (aState.aDrawingObject.getLeft())
-                    m_aStates.top().aDrawingObject.setLeft(aState.aDrawingObject.getLeft());
-                if (aState.aDrawingObject.getTop())
-                    m_aStates.top().aDrawingObject.setTop(aState.aDrawingObject.getTop());
-                if (aState.aDrawingObject.getRight())
-                    m_aStates.top().aDrawingObject.setRight(aState.aDrawingObject.getRight());
-                if (aState.aDrawingObject.getBottom())
-                    m_aStates.top().aDrawingObject.setBottom(aState.aDrawingObject.getBottom());
+                if (aState.getDrawingObject().getLeft())
+                    m_aStates.top().getDrawingObject().setLeft(aState.getDrawingObject().getLeft());
+                if (aState.getDrawingObject().getTop())
+                    m_aStates.top().getDrawingObject().setTop(aState.getDrawingObject().getTop());
+                if (aState.getDrawingObject().getRight())
+                    m_aStates.top().getDrawingObject().setRight(
+                        aState.getDrawingObject().getRight());
+                if (aState.getDrawingObject().getBottom())
+                    m_aStates.top().getDrawingObject().setBottom(
+                        aState.getDrawingObject().getBottom());
             }
             break;
         case Destination::PROPNAME:
@@ -3544,8 +3546,8 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
     , nBinaryToRead(0)
     , nListLevelNum(0)
     , bLevelNumbersValid(true)
-    , aFrame(this)
-    , eRunType(RunType::LOCH)
+    , m_aFrame(this)
+    , m_eRunType(RunType::LOCH)
     , m_bIsRightToLeft(false)
     , m_nYear(0)
     , m_nMonth(0)
@@ -3567,7 +3569,7 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
 {
 }
 
-void RTFDocumentImpl::resetFrame() { m_aStates.top().aFrame = RTFFrame(&m_aStates.top()); }
+void RTFDocumentImpl::resetFrame() { m_aStates.top().getFrame() = RTFFrame(&m_aStates.top()); }
 
 void RTFDocumentImpl::bufferProperties(RTFBuffer_t& rBuffer, const RTFValue::Pointer_t& pValue,
                                        const tools::SvRef<TableRowBuffer>& pTableProperties)
@@ -3739,7 +3741,7 @@ RTFSprms RTFFrame::getSprms()
     return frameprSprms;
 }
 
-bool RTFFrame::hasProperties()
+bool RTFFrame::hasProperties() const
 {
     return m_nX != 0 || m_nY != 0 || m_nW != 0 || m_nH != 0 || m_nHoriPadding != 0
            || m_nVertPadding != 0 || m_nHoriAlign != 0 || m_nHoriAnchor != 0 || m_nVertAlign != 0

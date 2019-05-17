@@ -389,7 +389,7 @@ public:
     RTFSprms getSprms();
     /// Store a property
     void setSprm(Id nId, Id nValue);
-    bool hasProperties();
+    bool hasProperties() const;
     /// If we got tokens indicating we're in a frame.
     bool inFrame();
 };
@@ -398,6 +398,14 @@ public:
 class RTFParserState
 {
 public:
+    /// Maps to OOXML's ascii, cs or eastAsia.
+    enum class RunType
+    {
+        LOCH,
+        HICH,
+        DBCH
+    };
+
     explicit RTFParserState(RTFDocumentImpl* pDocumentImpl);
 
     void appendDestinationText(const OUString& rString)
@@ -469,6 +477,10 @@ public:
     sal_uInt16 getYear() const { return m_nYear; }
     void setIsRightToLeft(bool bIsRightToLeft) { m_bIsRightToLeft = bIsRightToLeft; }
     bool getIsRightToLeft() const { return m_bIsRightToLeft; }
+    void setRunType(RunType eRunType) { m_eRunType = eRunType; }
+    RunType getRunType() const { return m_eRunType; }
+    RTFFrame& getFrame() { return m_aFrame; }
+    RTFDrawingObject& getDrawingObject() { return m_aDrawingObject; }
 
     RTFDocumentImpl* m_pDocumentImpl;
     RTFInternalState nInternalState;
@@ -519,19 +531,12 @@ public:
 
     RTFPicture aPicture;
     RTFShape aShape;
-    RTFDrawingObject aDrawingObject;
-    RTFFrame aFrame;
-
-    /// Maps to OOXML's ascii, cs or eastAsia.
-    enum class RunType
-    {
-        LOCH,
-        HICH,
-        DBCH
-    };
-    RunType eRunType;
 
 private:
+    RTFDrawingObject m_aDrawingObject;
+    RTFFrame m_aFrame;
+
+    RunType m_eRunType;
     /// ltrch or rtlch
     bool m_bIsRightToLeft;
 

@@ -165,7 +165,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_FS:
         case RTF_AFS:
             nSprm = (m_aStates.top().getIsRightToLeft()
-                     || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
+                     || m_aStates.top().getRunType() == RTFParserState::RunType::HICH)
                         ? NS_ooxml::LN_EG_RPrBase_szCs
                         : NS_ooxml::LN_EG_RPrBase_sz;
             break;
@@ -192,17 +192,17 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_LANG:
         case RTF_ALANG:
             if (m_aStates.top().getIsRightToLeft()
-                || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
+                || m_aStates.top().getRunType() == RTFParserState::RunType::HICH)
             {
                 nSprm = NS_ooxml::LN_CT_Language_bidi;
             }
-            else if (m_aStates.top().eRunType == RTFParserState::RunType::DBCH)
+            else if (m_aStates.top().getRunType() == RTFParserState::RunType::DBCH)
             {
                 nSprm = NS_ooxml::LN_CT_Language_eastAsia;
             }
             else
             {
-                assert(m_aStates.top().eRunType == RTFParserState::RunType::LOCH);
+                assert(m_aStates.top().getRunType() == RTFParserState::RunType::LOCH);
                 nSprm = NS_ooxml::LN_CT_Language_val;
             }
             break;
@@ -308,13 +308,13 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_POSX:
         {
             nId = NS_ooxml::LN_CT_FramePr_x;
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, 0);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_xAlign, 0);
         }
         break;
         case RTF_POSY:
         {
             nId = NS_ooxml::LN_CT_FramePr_y;
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, 0);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_yAlign, 0);
         }
         break;
         default:
@@ -326,7 +326,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         m_bNeedPap = true;
         // Don't try to support text frames inside tables for now.
         if (m_aStates.top().getCurrentBuffer() != &m_aTableBufferStack.back())
-            m_aStates.top().aFrame.setSprm(nId, nParam);
+            m_aStates.top().getFrame().setSprm(nId, nParam);
 
         return RTFError::OK;
     }
@@ -337,17 +337,17 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_F:
         case RTF_AF:
             if (m_aStates.top().getIsRightToLeft()
-                || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
+                || m_aStates.top().getRunType() == RTFParserState::RunType::HICH)
             {
                 nSprm = NS_ooxml::LN_CT_Fonts_cs;
             }
-            else if (m_aStates.top().eRunType == RTFParserState::RunType::DBCH)
+            else if (m_aStates.top().getRunType() == RTFParserState::RunType::DBCH)
             {
                 nSprm = NS_ooxml::LN_CT_Fonts_eastAsia;
             }
             else
             {
-                assert(m_aStates.top().eRunType == RTFParserState::RunType::LOCH);
+                assert(m_aStates.top().getRunType() == RTFParserState::RunType::LOCH);
                 nSprm = NS_ooxml::LN_CT_Fonts_ascii;
             }
             if (m_aStates.top().eDestination == Destination::FONTTABLE
@@ -1163,31 +1163,33 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                           NS_ooxml::LN_EG_FtnEdnNumProps_numStart, pIntValue);
             break;
         case RTF_DFRMTXTX:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_hSpace, nParam);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_hSpace, nParam);
             break;
         case RTF_DFRMTXTY:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_vSpace, nParam);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_vSpace, nParam);
             break;
         case RTF_DXFRTEXT:
         {
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_hSpace, nParam);
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_vSpace, nParam);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_hSpace, nParam);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_vSpace, nParam);
         }
         break;
         case RTF_FLYVERT:
         {
             RTFVertOrient aVertOrient(nParam);
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, aVertOrient.GetAlign());
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_vAnchor,
-                                           aVertOrient.GetAnchor());
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_yAlign,
+                                               aVertOrient.GetAlign());
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_vAnchor,
+                                               aVertOrient.GetAnchor());
         }
         break;
         case RTF_FLYHORZ:
         {
             RTFHoriOrient aHoriOrient(nParam);
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, aHoriOrient.GetAlign());
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_hAnchor,
-                                           aHoriOrient.GetAnchor());
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_xAlign,
+                                               aHoriOrient.GetAlign());
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_hAnchor,
+                                               aHoriOrient.GetAnchor());
         }
         break;
         case RTF_FLYANCHOR:
@@ -1204,16 +1206,16 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                                NS_ooxml::LN_CT_Spacing_after, pIntValue);
             break;
         case RTF_DPX:
-            m_aStates.top().aDrawingObject.setLeft(convertTwipToMm100(nParam));
+            m_aStates.top().getDrawingObject().setLeft(convertTwipToMm100(nParam));
             break;
         case RTF_DPY:
-            m_aStates.top().aDrawingObject.setTop(convertTwipToMm100(nParam));
+            m_aStates.top().getDrawingObject().setTop(convertTwipToMm100(nParam));
             break;
         case RTF_DPXSIZE:
-            m_aStates.top().aDrawingObject.setRight(convertTwipToMm100(nParam));
+            m_aStates.top().getDrawingObject().setRight(convertTwipToMm100(nParam));
             break;
         case RTF_DPYSIZE:
-            m_aStates.top().aDrawingObject.setBottom(convertTwipToMm100(nParam));
+            m_aStates.top().getDrawingObject().setBottom(convertTwipToMm100(nParam));
             break;
         case RTF_PNSTART:
             m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_start, pIntValue);
@@ -1237,28 +1239,28 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         }
         break;
         case RTF_DPLINECOR:
-            m_aStates.top().aDrawingObject.setLineColorR(nParam);
-            m_aStates.top().aDrawingObject.setHasLineColor(true);
+            m_aStates.top().getDrawingObject().setLineColorR(nParam);
+            m_aStates.top().getDrawingObject().setHasLineColor(true);
             break;
         case RTF_DPLINECOG:
-            m_aStates.top().aDrawingObject.setLineColorG(nParam);
-            m_aStates.top().aDrawingObject.setHasLineColor(true);
+            m_aStates.top().getDrawingObject().setLineColorG(nParam);
+            m_aStates.top().getDrawingObject().setHasLineColor(true);
             break;
         case RTF_DPLINECOB:
-            m_aStates.top().aDrawingObject.setLineColorB(nParam);
-            m_aStates.top().aDrawingObject.setHasLineColor(true);
+            m_aStates.top().getDrawingObject().setLineColorB(nParam);
+            m_aStates.top().getDrawingObject().setHasLineColor(true);
             break;
         case RTF_DPFILLBGCR:
-            m_aStates.top().aDrawingObject.setFillColorR(nParam);
-            m_aStates.top().aDrawingObject.setHasFillColor(true);
+            m_aStates.top().getDrawingObject().setFillColorR(nParam);
+            m_aStates.top().getDrawingObject().setHasFillColor(true);
             break;
         case RTF_DPFILLBGCG:
-            m_aStates.top().aDrawingObject.setFillColorG(nParam);
-            m_aStates.top().aDrawingObject.setHasFillColor(true);
+            m_aStates.top().getDrawingObject().setFillColorG(nParam);
+            m_aStates.top().getDrawingObject().setHasFillColor(true);
             break;
         case RTF_DPFILLBGCB:
-            m_aStates.top().aDrawingObject.setFillColorB(nParam);
-            m_aStates.top().aDrawingObject.setHasFillColor(true);
+            m_aStates.top().getDrawingObject().setFillColorB(nParam);
+            m_aStates.top().getDrawingObject().setHasFillColor(true);
             break;
         case RTF_CLSHDNG:
         {
@@ -1343,17 +1345,17 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         }
         break;
         case RTF_DODHGT:
-            m_aStates.top().aDrawingObject.setDhgt(nParam);
+            m_aStates.top().getDrawingObject().setDhgt(nParam);
             break;
         case RTF_DPPOLYCOUNT:
             if (nParam >= 0)
             {
-                m_aStates.top().aDrawingObject.setPolyLineCount(nParam);
+                m_aStates.top().getDrawingObject().setPolyLineCount(nParam);
             }
             break;
         case RTF_DPPTX:
         {
-            RTFDrawingObject& rDrawingObject = m_aStates.top().aDrawingObject;
+            RTFDrawingObject& rDrawingObject = m_aStates.top().getDrawingObject();
 
             if (rDrawingObject.getPolyLinePoints().empty())
                 dispatchValue(RTF_DPPOLYCOUNT, 2);
@@ -1364,7 +1366,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
         case RTF_DPPTY:
         {
-            RTFDrawingObject& rDrawingObject = m_aStates.top().aDrawingObject;
+            RTFDrawingObject& rDrawingObject = m_aStates.top().getDrawingObject();
             if (!rDrawingObject.getPolyLinePoints().empty())
             {
                 rDrawingObject.getPolyLinePoints().back().Y = convertTwipToMm100(nParam);
