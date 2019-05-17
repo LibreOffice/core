@@ -262,7 +262,7 @@
       </prop>
       <prop oor:name="ooSetupLastVersion" oor:type="xs:string" oor:nillable="true">
         <info>
-          <desc>Specifies the version number of the previously used product for 
+          <desc>Specifies the version number of the previously used product for
           whats-new comparison.</desc>
         </info>
         <value/>
