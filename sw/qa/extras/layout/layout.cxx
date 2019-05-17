@@ -2324,7 +2324,25 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf108021)
         pXmlDoc,
         "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[@length='22']",
         8);
-    // This failed, if the textarray length of the first axis label not 17.
+    // This failed, if the textarray length of the first axis label not 22.
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf125334)
+{
+    SwDoc* pDoc = createDoc("tdf125334.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(
+        pXmlDoc,
+        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[@length='17']",
+        4);
+    // This failed, if the textarray length of the category axis label not 17.
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122800)
