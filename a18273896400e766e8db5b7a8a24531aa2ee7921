@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_dbba08dd",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2019-05-17T11:34:57Z",
+      "side": 1,
+      "message": "I\u0027d move nRememberSize \u003d 1; to the next line, it makes it cleaner for reading",
+      "revId": "a18273896400e766e8db5b7a8a24531aa2ee7921",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
