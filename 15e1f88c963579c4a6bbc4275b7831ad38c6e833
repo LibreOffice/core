@@ -22,6 +22,30 @@
       "revId": "15e1f88c963579c4a6bbc4275b7831ad38c6e833",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_9647751e",
+        "filename": "external/mdds/use-position-hint-also-back.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-05-17T15:16:37Z",
+      "side": 1,
+      "message": "There\u0027s no way to find out pos of a random block. If there were, get_block_position() could do a binary search. To find out pos, get_block_position() needs to sum up m_size, which is the root cause of all these problems.",
+      "parentUuid": "3fa0c359_f627d9b5",
+      "range": {
+        "startLine": 27,
+        "startChar": 12,
+        "endLine": 27,
+        "endChar": 33
+      },
+      "revId": "15e1f88c963579c4a6bbc4275b7831ad38c6e833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
