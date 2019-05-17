@@ -400,6 +400,44 @@ class RTFParserState
 public:
     explicit RTFParserState(RTFDocumentImpl* pDocumentImpl);
 
+    void appendDestinationText(const OUString& rString)
+    {
+        if (pDestinationText)
+            pDestinationText->append(rString);
+    }
+
+    void setPropName(const OUString& rPropName) { m_aPropName = rPropName; }
+    OUString getPropName() const { return m_aPropName; }
+    void setPropType(const css::uno::Type& rPropType) { m_aPropType = rPropType; }
+    css::uno::Type getPropType() const { return m_aPropType; }
+    void setTableRowWidthAfter(int nTableRowWidthAfter)
+    {
+        m_nTableRowWidthAfter = nTableRowWidthAfter;
+    }
+    int getTableRowWidthAfter() const { return m_nTableRowWidthAfter; }
+    void setStartedTrackchange(bool bStartedTrackchange)
+    {
+        m_bStartedTrackchange = bStartedTrackchange;
+    }
+    bool getStartedTrackchange() const { return m_bStartedTrackchange; }
+    void setCreatedShapeGroup(bool bCreatedShapeGroup)
+    {
+        m_bCreatedShapeGroup = bCreatedShapeGroup;
+    }
+    bool getCreatedShapeGroup() const { return m_bCreatedShapeGroup; }
+    void setInShape(bool bInShape) { m_bInShape = bInShape; }
+    bool getInShape() const { return m_bInShape; }
+    void setInShapeGroup(bool bInShapeGroup) { m_bInShapeGroup = bInShapeGroup; }
+    bool getInShapeGroup() const { return m_bInShapeGroup; }
+    void setHadShapeText(bool bHadShapeText) { m_bHadShapeText = bHadShapeText; }
+    bool getHadShapeText() const { return m_bHadShapeText; }
+    void setInBackground(bool bInBackground) { m_bInBackground = bInBackground; }
+    bool getInBackground() const { return m_bInBackground; }
+    void setInListpicture(bool bInListpicture) { m_bInListpicture = bInListpicture; }
+    bool getInListpicture() const { return m_bInListpicture; }
+    void setCurrentBuffer(RTFBuffer_t* pCurrentBuffer) { m_pCurrentBuffer = pCurrentBuffer; }
+    RTFBuffer_t* getCurrentBuffer() const { return m_pCurrentBuffer; }
+
     RTFDocumentImpl* m_pDocumentImpl;
     RTFInternalState nInternalState;
     Destination eDestination;
@@ -475,12 +513,6 @@ public:
     /// point to the buffer of the current destination
     OUStringBuffer* pDestinationText;
 
-    void appendDestinationText(const OUString& rString)
-    {
-        if (pDestinationText)
-            pDestinationText->append(rString);
-    }
-
     /// Index of the current style.
     int nCurrentStyleIndex;
     /// Index of the current character style.
@@ -490,28 +522,29 @@ public:
     /// Current ls, points to a listoverridetable entry.
     int nCurrentListOverrideIndex = -1;
 
+private:
     /// Points to the active buffer, if there is one.
-    RTFBuffer_t* pCurrentBuffer;
+    RTFBuffer_t* m_pCurrentBuffer;
 
     /// If we're inside a \listpicture group.
-    bool bInListpicture;
+    bool m_bInListpicture;
 
     /// If we're inside a \background group.
-    bool bInBackground;
+    bool m_bInBackground;
 
-    bool bHadShapeText;
-    bool bInShapeGroup; ///< If we're inside a \shpgrp group.
-    bool bInShape; ///< If we're inside a \shp group.
-    bool bCreatedShapeGroup; ///< A GroupShape was created and pushed to the parent stack.
-    bool bStartedTrackchange; ///< Track change is started, need to end it before popping.
+    bool m_bHadShapeText;
+    bool m_bInShapeGroup; ///< If we're inside a \shpgrp group.
+    bool m_bInShape; ///< If we're inside a \shp group.
+    bool m_bCreatedShapeGroup; ///< A GroupShape was created and pushed to the parent stack.
+    bool m_bStartedTrackchange; ///< Track change is started, need to end it before popping.
 
     /// User-defined property: key name.
-    OUString aPropName;
+    OUString m_aPropName;
     /// User-defined property: value type.
-    css::uno::Type aPropType;
+    css::uno::Type m_aPropType;
 
     /// Width of invisible cell at the end of the row.
-    int nTableRowWidthAfter;
+    int m_nTableRowWidthAfter;
 };
 
 /// An RTF stack is similar to std::stack, except that it has an operator[].

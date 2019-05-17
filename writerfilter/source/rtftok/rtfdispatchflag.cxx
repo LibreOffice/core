@@ -411,16 +411,16 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     switch (nKeyword)
     {
         case RTF_KEEP:
-            if (m_aStates.top().pCurrentBuffer != &m_aTableBufferStack.back())
+            if (m_aStates.top().getCurrentBuffer() != &m_aTableBufferStack.back())
                 nParam = NS_ooxml::LN_CT_PPrBase_keepLines;
             break;
         case RTF_KEEPN:
-            if (m_aStates.top().pCurrentBuffer != &m_aTableBufferStack.back())
+            if (m_aStates.top().getCurrentBuffer() != &m_aTableBufferStack.back())
                 nParam = NS_ooxml::LN_CT_PPrBase_keepNext;
             break;
         case RTF_INTBL:
         {
-            m_aStates.top().pCurrentBuffer = &m_aTableBufferStack.back();
+            m_aStates.top().setCurrentBuffer(&m_aTableBufferStack.back());
             nParam = NS_ooxml::LN_inTbl;
         }
         break;
@@ -489,7 +489,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             if (m_nTopLevelCells == 0 && m_nNestedCells == 0)
             {
                 // Reset that we're in a table.
-                m_aStates.top().pCurrentBuffer = nullptr;
+                m_aStates.top().setCurrentBuffer(nullptr);
             }
             else
             {
@@ -781,8 +781,8 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 checkNeedPap();
             }
 
-            if (!m_aStates.top().pCurrentBuffer)
-                m_aStates.top().pCurrentBuffer = &m_aSuperBuffer;
+            if (!m_aStates.top().getCurrentBuffer())
+                m_aStates.top().setCurrentBuffer(&m_aSuperBuffer);
 
             auto pValue = new RTFValue("superscript");
             m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue);
@@ -796,10 +796,10 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         break;
         case RTF_NOSUPERSUB:
         {
-            if (m_aStates.top().pCurrentBuffer == &m_aSuperBuffer)
+            if (m_aStates.top().getCurrentBuffer() == &m_aSuperBuffer)
             {
                 replayBuffer(m_aSuperBuffer, nullptr, nullptr);
-                m_aStates.top().pCurrentBuffer = nullptr;
+                m_aStates.top().setCurrentBuffer(nullptr);
             }
             m_aStates.top().aCharacterSprms.erase(NS_ooxml::LN_EG_RPrBase_vertAlign);
         }

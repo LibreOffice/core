@@ -251,7 +251,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             // Invalid tables may omit INTBL after ITAP
             dispatchFlag(RTF_INTBL); // sets newly pushed buffer as current
-            assert(m_aStates.top().pCurrentBuffer == &m_aTableBufferStack.back());
+            assert(m_aStates.top().getCurrentBuffer() == &m_aTableBufferStack.back());
         }
         return RTFError::OK;
     }
@@ -325,7 +325,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         m_bNeedPap = true;
         // Don't try to support text frames inside tables for now.
-        if (m_aStates.top().pCurrentBuffer != &m_aTableBufferStack.back())
+        if (m_aStates.top().getCurrentBuffer() != &m_aTableBufferStack.back())
             m_aStates.top().aFrame.setSprm(nId, nParam);
 
         return RTFError::OK;
@@ -1557,19 +1557,19 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             switch (nParam)
             {
                 case 3:
-                    m_aStates.top().aPropType = cppu::UnoType<sal_Int32>::get();
+                    m_aStates.top().setPropType(cppu::UnoType<sal_Int32>::get());
                     break;
                 case 5:
-                    m_aStates.top().aPropType = cppu::UnoType<double>::get();
+                    m_aStates.top().setPropType(cppu::UnoType<double>::get());
                     break;
                 case 11:
-                    m_aStates.top().aPropType = cppu::UnoType<bool>::get();
+                    m_aStates.top().setPropType(cppu::UnoType<bool>::get());
                     break;
                 case 30:
-                    m_aStates.top().aPropType = cppu::UnoType<OUString>::get();
+                    m_aStates.top().setPropType(cppu::UnoType<OUString>::get());
                     break;
                 case 64:
-                    m_aStates.top().aPropType = cppu::UnoType<util::DateTime>::get();
+                    m_aStates.top().setPropType(cppu::UnoType<util::DateTime>::get());
                     break;
             }
         }
@@ -1578,7 +1578,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             m_aStates.top().aPicture.eStyle = RTFBmpStyle::DIBITMAP;
             break;
         case RTF_TRWWIDTHA:
-            m_aStates.top().nTableRowWidthAfter = nParam;
+            m_aStates.top().setTableRowWidthAfter(nParam);
             break;
         case RTF_ANIMTEXT:
         {
