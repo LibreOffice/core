@@ -265,7 +265,6 @@
           <desc>Specifies the version number of the previously used product for 
           whats-new comparison.</desc>
         </info>
-        <value/>
       </prop>
       <prop oor:name="ooSetupVersionAboutBox" oor:type="xs:string" oor:nillable="false">
         <info>
