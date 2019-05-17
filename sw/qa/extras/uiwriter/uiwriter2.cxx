@@ -29,6 +29,7 @@
 #include <xmloff/odffields.hxx>
 #include <txtfrm.hxx>
 #include <redline.hxx>
+#include <com/sun/star/style/BreakType.hpp>
 
 namespace
 {
@@ -1250,6 +1251,45 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf118699_redline_numbering)
         "first paragraph after the second deletion: missing numbering",
         getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(5), "NumberingRules")
             .is());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf125310)
+{
+    load(DATA_DIRECTORY, "tdf125310.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    // turn on red-lining and show changes
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // paragraph join
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->EndPara(/*bSelect=*/true);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
+    pTransfer->Cut();
+
+    // copied paragraph style
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+
+    // without copying the page break
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
