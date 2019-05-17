@@ -126,11 +126,7 @@ endif
 
 # If CC or CXX already include -fvisibility=hidden, don't duplicate it
 ifeq (,$(filter -fvisibility=hidden,$(CC)))
-ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
-gb_VISIBILITY_FLAGS := -fvisibility-ms-compat
-else
 gb_VISIBILITY_FLAGS := -fvisibility=hidden
-endif
 endif
 gb_VISIBILITY_FLAGS_CXX := -fvisibility-inlines-hidden
 gb_CXXFLAGS_COMMON += $(gb_VISIBILITY_FLAGS_CXX)

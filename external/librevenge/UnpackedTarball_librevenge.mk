@@ -19,12 +19,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,librevenge, \
     external/librevenge/rpath.patch \
 ))
 
-ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
-$(eval $(call gb_UnpackedTarball_add_patches,librevenge, \
-    external/librevenge/ubsan-visibility.patch \
-))
-endif
-
 ifneq ($(OS),MACOSX)
 ifneq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,librevenge, \

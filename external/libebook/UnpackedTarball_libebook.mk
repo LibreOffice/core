@@ -11,14 +11,6 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libebook))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libebook,$(EBOOK_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,libebook,0))
-
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libebook))
-
-ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
-$(eval $(call gb_UnpackedTarball_add_patches,libebook, \
-    external/libebook/ubsan-visibility.patch \
-))
-endif
 
 # vim: set noet sw=4 ts=4:

@@ -19,10 +19,4 @@ $(eval $(call gb_UnpackedTarball_add_patches,libvisio, \
     external/libvisio/ubsan.patch \
 ))
 
-ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
-$(eval $(call gb_UnpackedTarball_add_patches,libvisio, \
-    external/libvisio/ubsan-visibility.patch \
-))
-endif
-
 # vim: set noet sw=4 ts=4:

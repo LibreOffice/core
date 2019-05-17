@@ -3914,30 +3914,6 @@ else
 fi
 AC_SUBST(ENABLE_DEBUG)
 
-AC_MSG_CHECKING([whether special RTTI visibility flags are needed for Clang Linux UBSan])
-NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY=
-dnl Clang 9 is known fixed since
-dnl <https://github.com/llvm/llvm-project/commit/5745eccef54ddd3caca278d1d292a88b2281528b> "Adapt
-dnl -fsanitize=function to SANITIZER_NON_UNIQUE_TYPEINFO":
-if test "$COM_IS_CLANG" = TRUE -a "$_os" = Linux; then
-    if test "$CLANGVER" -lt 90000; then
-        for i in $CC; do
-            case $i in
-            -fsanitize=*)
-                NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY=TRUE
-                break
-                ;;
-            esac
-        done
-    fi
-fi
-if test "$NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY" = TRUE; then
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST([NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY])
-
 dnl ===================================================================
 dnl Select the linker to use (gold/lld/ld.bfd).
 dnl This is done only after compiler checks (need to know if Clang is
@@ -3962,30 +3938,6 @@ printf ("hello world\n");
     if test -n "$USE_LD"; then
         AC_MSG_RESULT( yes )
         use_ld_ok=yes
-        dnl For obscure reasons, unxgcc.mk uses the --dynamic-list-cpp-typeinfo linker option
-        dnl if NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY, and lld doesn't support this option.
-        if test -n "$NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY"; then
-            AC_MSG_CHECKING([for --dynamic-list-cpp-typeinfo linker support (-fuse-ld=$use_ld)])
-            use_ld_ldflags_save_2="$LDFLAGS"
-            LDFLAGS="$LDFLAGS -Wl,--dynamic-list-cpp-typeinfo"
-            use_ld_has_cpp_typeinfo=
-            AC_LINK_IFELSE([AC_LANG_PROGRAM([
-#include <stdio.h>
-                ],[
-printf ("hello world\n");
-                ])], use_ld_has_cpp_typeinfo=yes, [])
-            LDFLAGS="$use_ld_ldflags_save_2"
-            if test -n "$use_ld_has_cpp_typeinfo"; then
-                AC_MSG_RESULT( yes )
-            else
-                if test -n "$use_ld_fail_if_error"; then
-                    AC_MSG_ERROR( no )
-                else
-                    AC_MSG_RESULT( no )
-                fi
-                use_ld_ok=
-            fi
-        fi
     else
         if test -n "$use_ld_fail_if_error"; then
             AC_MSG_ERROR( no )
