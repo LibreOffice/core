@@ -6698,6 +6698,22 @@ public:
         return aSearch.index;
     }
 
+    virtual void bulk_insert_for_each(int nSourceCount, const std::function<void(weld::TreeIter&, int nSourceIndex)>& func) override
+    {
+        freeze();
+        clear();
+        GtkInstanceTreeIter aGtkIter(nullptr);
+
+        while (nSourceCount)
+        {
+            // tdf#125241 inserting backwards is massively faster
+            gtk_tree_store_prepend(m_pTreeStore, &aGtkIter.iter, nullptr);
+            func(aGtkIter, --nSourceCount);
+        }
+
+        thaw();
+    }
+
     void move_before(int pos, int before)
     {
         if (pos == before)

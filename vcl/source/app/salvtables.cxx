@@ -2768,6 +2768,26 @@ public:
         enable_notify_events();
     }
 
+    virtual void bulk_insert_for_each(int nSourceCount, const std::function<void(weld::TreeIter&, int nSourceIndex)>& func) override
+    {
+        freeze();
+        clear();
+        SalInstanceTreeIter aVclIter(static_cast<SvTreeListEntry*>(nullptr));
+
+        m_xTreeView->nTreeFlags |= SvTreeFlags::MANINS;
+
+        for (int i = 0; i < nSourceCount; ++i)
+        {
+            aVclIter.iter = new SvTreeListEntry;
+            m_xTreeView->Insert(aVclIter.iter, nullptr, TREELIST_APPEND);
+            func(aVclIter, i);
+        }
+
+        m_xTreeView->nTreeFlags &= ~SvTreeFlags::MANINS;
+
+        thaw();
+    }
+
     virtual void set_font_color(int pos, const Color& rColor) const override
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
