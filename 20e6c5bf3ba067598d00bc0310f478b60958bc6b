@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_3b91ac9a",
+        "filename": "avmedia/source/gstreamer/gstplayer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-05-17T09:59:46Z",
+      "side": 0,
+      "message": "With this code, video overlay during the slideshow is oddly misplaced with generic X11 vclplug (SAL_USE_VCLPLUGIN\u003dgen) and now also with kde5 one.\n\nIt\u0027s as if its position was transled twice: once relative to the top-left corner of the slide and second time relative to the embedded window. If I remove this code, overlay position is back to normal.",
+      "revId": "20e6c5bf3ba067598d00bc0310f478b60958bc6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
