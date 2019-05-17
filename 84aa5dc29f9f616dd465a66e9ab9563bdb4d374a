@@ -39,6 +39,30 @@
       "revId": "84aa5dc29f9f616dd465a66e9ab9563bdb4d374a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_3b1c4c69",
+        "filename": "officecfg/registry/schema/org/openoffice/Setup.xcs",
+        "patchSetId": 6
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-17T09:05:57Z",
+      "side": 1,
+      "message": "addressed now with \u003chttps://gerrit.libreoffice.org/#/c/72454/\u003e \"Remove spurious trailing whitespace\"",
+      "parentUuid": "3fa0c359_af2101b7",
+      "range": {
+        "startLine": 265,
+        "startChar": 79,
+        "endLine": 265,
+        "endChar": 80
+      },
+      "revId": "84aa5dc29f9f616dd465a66e9ab9563bdb4d374a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
