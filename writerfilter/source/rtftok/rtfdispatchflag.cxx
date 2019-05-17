@@ -847,10 +847,10 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             // Noop, this is the default in Writer.
             break;
         case RTF_PNGBLIP:
-            m_aStates.top().aPicture.eStyle = RTFBmpStyle::PNG;
+            m_aStates.top().getPicture().eStyle = RTFBmpStyle::PNG;
             break;
         case RTF_JPEGBLIP:
-            m_aStates.top().aPicture.eStyle = RTFBmpStyle::JPEG;
+            m_aStates.top().getPicture().eStyle = RTFBmpStyle::JPEG;
             break;
         case RTF_POSYT:
             m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_yAlign,
@@ -1107,13 +1107,13 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         }
         break;
         case RTF_SHPBXPAGE:
-            m_aStates.top().aShape.setHoriOrientRelation(text::RelOrientation::PAGE_FRAME);
-            m_aStates.top().aShape.setHoriOrientRelationToken(
+            m_aStates.top().getShape().setHoriOrientRelation(text::RelOrientation::PAGE_FRAME);
+            m_aStates.top().getShape().setHoriOrientRelationToken(
                 NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_page);
             break;
         case RTF_SHPBYPAGE:
-            m_aStates.top().aShape.setVertOrientRelation(text::RelOrientation::PAGE_FRAME);
-            m_aStates.top().aShape.setVertOrientRelationToken(
+            m_aStates.top().getShape().setVertOrientRelation(text::RelOrientation::PAGE_FRAME);
+            m_aStates.top().getShape().setVertOrientRelationToken(
                 NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_page);
             break;
         case RTF_DPLINEHOLLOW:
