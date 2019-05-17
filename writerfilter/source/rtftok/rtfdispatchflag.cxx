@@ -469,7 +469,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         case RTF_PLAIN:
         {
-            m_aStates.top().aCharacterSprms = getDefaultState().aCharacterSprms;
+            m_aStates.top().getCharacterSprms() = getDefaultState().getCharacterSprms();
             m_aStates.top().setCurrentEncoding(getEncoding(getFontIndex(m_nDefaultFontIndex)));
             m_aStates.top().getCharacterAttributes() = getDefaultState().getCharacterAttributes();
             m_aStates.top().setCurrentCharacterStyleIndex(-1);
@@ -694,7 +694,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         {
             RTFSprms aAttributes;
             auto pValue = new RTFValue(aAttributes);
-            m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_bdr, pValue);
+            m_aStates.top().getCharacterSprms().set(NS_ooxml::LN_EG_RPrBase_bdr, pValue);
             m_aStates.top().nBorderState = RTFBorderState::CHARACTER;
         }
         break;
@@ -789,13 +789,13 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 m_aStates.top().setCurrentBuffer(&m_aSuperBuffer);
 
             auto pValue = new RTFValue("superscript");
-            m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue);
+            m_aStates.top().getCharacterSprms().set(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue);
         }
         break;
         case RTF_SUB:
         {
             auto pValue = new RTFValue("subscript");
-            m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue);
+            m_aStates.top().getCharacterSprms().set(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue);
         }
         break;
         case RTF_NOSUPERSUB:
@@ -805,7 +805,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 replayBuffer(m_aSuperBuffer, nullptr, nullptr);
                 m_aStates.top().setCurrentBuffer(nullptr);
             }
-            m_aStates.top().aCharacterSprms.erase(NS_ooxml::LN_EG_RPrBase_vertAlign);
+            m_aStates.top().getCharacterSprms().erase(NS_ooxml::LN_EG_RPrBase_vertAlign);
         }
         break;
         case RTF_LINEPPAGE:
@@ -1080,19 +1080,20 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PNLVLBODY:
         {
             auto pValue = new RTFValue(2);
-            m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_AbstractNum_nsid, pValue);
+            m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_AbstractNum_nsid, pValue);
         }
         break;
         case RTF_PNDEC:
         {
             auto pValue = new RTFValue(NS_ooxml::LN_Value_ST_NumberFormat_decimal);
-            m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_numFmt, pValue);
+            m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Lvl_numFmt, pValue);
         }
         break;
         case RTF_PNLVLBLT:
         {
-            m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_AbstractNum_nsid, new RTFValue(1));
-            m_aStates.top().aTableSprms.set(
+            m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_AbstractNum_nsid,
+                                                     new RTFValue(1));
+            m_aStates.top().getTableSprms().set(
                 NS_ooxml::LN_CT_Lvl_numFmt,
                 new RTFValue(NS_ooxml::LN_Value_ST_NumberFormat_bullet));
         }
@@ -1152,7 +1153,8 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_mirrorMargins, new RTFValue(1));
             break;
         case RTF_SAUTOUPD:
-            m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Style_autoRedefine, new RTFValue(1));
+            m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Style_autoRedefine,
+                                                new RTFValue(1));
             break;
         case RTF_WIDOWCTRL:
             m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_widowControl, new RTFValue(1));
