@@ -220,8 +220,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                            pValue);
         // Language is a character property, but we should store it at a paragraph level as well for fields.
         if (nKeyword == RTF_LANG && m_bNeedPap)
-            putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_EG_RPrBase_lang, nSprm,
-                               pValue);
+            putNestedAttribute(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_EG_RPrBase_lang,
+                               nSprm, pValue);
         return RTFError::OK;
     }
     // Trivial paragraph sprms.
@@ -242,7 +242,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     if (nSprm > 0)
     {
-        m_aStates.top().aParagraphSprms.set(nSprm, pIntValue);
+        m_aStates.top().getParagraphSprms().set(nSprm, pIntValue);
         if (nKeyword == RTF_ITAP && nParam > 0)
         {
             while (m_aTableBufferStack.size() < sal::static_int_cast<std::size_t>(nParam))
@@ -450,8 +450,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                         m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_pStyle,
                                                         new RTFValue(aName));
                     else
-                        m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_pStyle,
-                                                            new RTFValue(aName));
+                        m_aStates.top().getParagraphSprms().set(NS_ooxml::LN_CT_PPrBase_pStyle,
+                                                                new RTFValue(aName));
                 }
             }
         }
@@ -528,7 +528,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (nParam)
             {
                 auto pValue = new RTFValue(sal_uInt32(getColorTable(nParam)));
-                putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PrBase_shd,
+                putNestedAttribute(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PrBase_shd,
                                    NS_ooxml::LN_CT_Shd_fill, pValue);
             }
             break;
@@ -554,10 +554,11 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_HORZVERT:
         {
             auto pValue = new RTFValue(int(true));
-            m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_EastAsianLayout_vert, pValue);
+            m_aStates.top().getCharacterAttributes().set(NS_ooxml::LN_CT_EastAsianLayout_vert,
+                                                         pValue);
             if (nParam)
                 // rotate fits to a single line
-                m_aStates.top().aCharacterAttributes.set(
+                m_aStates.top().getCharacterAttributes().set(
                     NS_ooxml::LN_CT_EastAsianLayout_vertCompress, pValue);
         }
         break;
@@ -571,8 +572,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_TWOINONE:
         {
             auto pValue = new RTFValue(int(true));
-            m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_EastAsianLayout_combine,
-                                                     pValue);
+            m_aStates.top().getCharacterAttributes().set(NS_ooxml::LN_CT_EastAsianLayout_combine,
+                                                         pValue);
             nId = 0;
             switch (nParam)
             {
@@ -593,7 +594,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     break;
             }
             if (nId > 0)
-                m_aStates.top().aCharacterAttributes.set(
+                m_aStates.top().getCharacterAttributes().set(
                     NS_ooxml::LN_CT_EastAsianLayout_combineBrackets, new RTFValue(nId));
         }
         break;
@@ -607,15 +608,16 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 pValue = new RTFValue(NS_ooxml::LN_Value_doc_ST_LineSpacingRule_exact);
                 pIntValue = new RTFValue(-nParam);
             }
-            m_aStates.top().aParagraphAttributes.set(NS_ooxml::LN_CT_Spacing_lineRule, pValue);
-            m_aStates.top().aParagraphAttributes.set(NS_ooxml::LN_CT_Spacing_line, pIntValue);
+            m_aStates.top().getParagraphAttributes().set(NS_ooxml::LN_CT_Spacing_lineRule, pValue);
+            m_aStates.top().getParagraphAttributes().set(NS_ooxml::LN_CT_Spacing_line, pIntValue);
         }
         break;
         case RTF_SLMULT:
             if (nParam > 0)
             {
                 auto pValue = new RTFValue(NS_ooxml::LN_Value_doc_ST_LineSpacingRule_auto);
-                m_aStates.top().aParagraphAttributes.set(NS_ooxml::LN_CT_Spacing_lineRule, pValue);
+                m_aStates.top().getParagraphAttributes().set(NS_ooxml::LN_CT_Spacing_lineRule,
+                                                             pValue);
             }
             break;
         case RTF_BRDRW:
@@ -648,13 +650,13 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 putNestedSprm(m_aStates.top().aTableSprms, NS_ooxml::LN_CT_PPrBase_tabs,
                               NS_ooxml::LN_CT_Tabs_tab, pValue);
             else
-                putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_tabs,
+                putNestedSprm(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_tabs,
                               NS_ooxml::LN_CT_Tabs_tab, pValue);
             m_aStates.top().getTabAttributes().clear();
         }
         break;
         case RTF_ILVL:
-            putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_numPr,
+            putNestedSprm(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_numPr,
                           NS_ooxml::LN_CT_NumPr_ilvl, pIntValue);
             break;
         case RTF_LISTTEMPLATEID:
@@ -683,7 +685,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 // can be overridden by direct formatting. But still allow the
                 // case when old-style paragraph numbering is already
                 // tokenized.
-                putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_numPr,
+                putNestedSprm(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_numPr,
                               NS_ooxml::LN_CT_NumPr_numId, pIntValue, RTFOverwrite::YES_PREPEND);
             }
         }
@@ -813,8 +815,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (pTight)
                 pTight->getAttributes().set(NS_ooxml::LN_CT_WrapTight_wrapText, pValue);
             else
-                m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_WrapSquare_wrapText,
-                                                         pValue);
+                m_aStates.top().getCharacterAttributes().set(NS_ooxml::LN_CT_WrapSquare_wrapText,
+                                                             pValue);
         }
         break;
         case RTF_SHPWR:
@@ -1172,12 +1174,13 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             // Ignore this for now, later the RTF writer version could be used to add hacks for older buggy writers.
             break;
         case RTF_FTNSTART:
-            putNestedSprm(m_aDefaultState.aParagraphSprms,
+            putNestedSprm(m_aDefaultState.getParagraphSprms(),
                           NS_ooxml::LN_EG_SectPrContents_footnotePr,
                           NS_ooxml::LN_EG_FtnEdnNumProps_numStart, pIntValue);
             break;
         case RTF_AFTNSTART:
-            putNestedSprm(m_aDefaultState.aParagraphSprms, NS_ooxml::LN_EG_SectPrContents_endnotePr,
+            putNestedSprm(m_aDefaultState.getParagraphSprms(),
+                          NS_ooxml::LN_EG_SectPrContents_endnotePr,
                           NS_ooxml::LN_EG_FtnEdnNumProps_numStart, pIntValue);
             break;
         case RTF_DFRMTXTX:
@@ -1216,11 +1219,11 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             m_aStates.top().getPicture().eWMetafile = nParam;
             break;
         case RTF_SB:
-            putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing,
+            putNestedAttribute(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_spacing,
                                NS_ooxml::LN_CT_Spacing_before, pIntValue);
             break;
         case RTF_SA:
-            putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing,
+            putNestedAttribute(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_spacing,
                                NS_ooxml::LN_CT_Spacing_after, pIntValue);
             break;
         case RTF_DPX:
@@ -1512,7 +1515,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     m_aInvalidListLevelFirstIndents[m_nListLevel] = nParam;
             }
             else
-                putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind,
+                putNestedAttribute(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_ind,
                                    NS_ooxml::LN_CT_Ind_firstLine, pIntValue);
             break;
         }
@@ -1526,30 +1529,30 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             else
             {
-                putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind,
+                putNestedAttribute(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_ind,
                                    NS_ooxml::LN_CT_Ind_left, pIntValue);
             }
             // It turns out \li should reset the \fi inherited from the stylesheet.
             // So set the direct formatting to zero, if we don't have such direct formatting yet.
-            putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind,
+            putNestedAttribute(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_ind,
                                NS_ooxml::LN_CT_Ind_firstLine, new RTFValue(0),
                                RTFOverwrite::NO_IGNORE);
         }
         break;
         case RTF_RI:
-            putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind,
+            putNestedAttribute(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_ind,
                                NS_ooxml::LN_CT_Ind_right, pIntValue);
             break;
         case RTF_LIN:
-            putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind,
+            putNestedAttribute(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_ind,
                                NS_ooxml::LN_CT_Ind_start, pIntValue);
             break;
         case RTF_RIN:
-            putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind,
+            putNestedAttribute(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_ind,
                                NS_ooxml::LN_CT_Ind_end, pIntValue);
             break;
         case RTF_OUTLINELEVEL:
-            m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_outlineLvl, pIntValue);
+            m_aStates.top().getParagraphSprms().set(NS_ooxml::LN_CT_PPrBase_outlineLvl, pIntValue);
             break;
         case RTF_TRGAPH:
             // Half of the space between the cells of a table row: default left/right table cell margin.
