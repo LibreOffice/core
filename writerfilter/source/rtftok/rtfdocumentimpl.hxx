@@ -509,6 +509,9 @@ public:
     RTFSprms& getTableRowSprms() { return m_aTableRowSprms; }
     RTFSprms& getSectionAttributes() { return m_aSectionAttributes; }
     RTFSprms& getSectionSprms() { return m_aSectionSprms; }
+    RTFSprms& getParagraphAttributes() { return m_aParagraphAttributes; }
+    RTFSprms& getParagraphSprms() { return m_aParagraphSprms; }
+    RTFSprms& getCharacterAttributes() { return m_aCharacterAttributes; }
 
     RTFDocumentImpl* m_pDocumentImpl;
     RTFInternalState nInternalState;
@@ -520,12 +523,12 @@ public:
     RTFSprms aTableAttributes;
     // reset by plain
     RTFSprms aCharacterSprms;
-    RTFSprms aCharacterAttributes;
-    // reset by pard
-    RTFSprms aParagraphSprms;
-    RTFSprms aParagraphAttributes;
 
 private:
+    RTFSprms m_aCharacterAttributes;
+    // reset by pard
+    RTFSprms m_aParagraphSprms;
+    RTFSprms m_aParagraphAttributes;
     // reset by sectd
     RTFSprms m_aSectionSprms;
     RTFSprms m_aSectionAttributes;

@@ -182,10 +182,10 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             if (m_bNeedPap)
             {
                 // There were no runs in the cell, so we need to send paragraph and character properties here.
-                auto pPValue = new RTFValue(m_aStates.top().aParagraphAttributes,
-                                            m_aStates.top().aParagraphSprms);
+                auto pPValue = new RTFValue(m_aStates.top().getParagraphAttributes(),
+                                            m_aStates.top().getParagraphSprms());
                 bufferProperties(m_aTableBufferStack.back(), pPValue, nullptr);
-                auto pCValue = new RTFValue(m_aStates.top().aCharacterAttributes,
+                auto pCValue = new RTFValue(m_aStates.top().getCharacterAttributes(),
                                             m_aStates.top().aCharacterSprms);
                 bufferProperties(m_aTableBufferStack.back(), pCValue, nullptr);
             }

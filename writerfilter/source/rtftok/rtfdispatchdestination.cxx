@@ -303,10 +303,10 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     }
                     if (bCustomMark)
                     {
-                        m_aStates.top().aCharacterAttributes.clear();
+                        m_aStates.top().getCharacterAttributes().clear();
                         m_aStates.top().aCharacterSprms.clear();
                         auto pValue = new RTFValue(1);
-                        m_aStates.top().aCharacterAttributes.set(
+                        m_aStates.top().getCharacterAttributes().set(
                             NS_ooxml::LN_CT_FtnEdnRef_customMarkFollows, pValue);
                         text(aCustomMark);
                     }
@@ -615,7 +615,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
             case RTF_FTNSEP:
                 m_aStates.top().eDestination = Destination::FOOTNOTESEPARATOR;
-                m_aStates.top().aCharacterAttributes.set(
+                m_aStates.top().getCharacterAttributes().set(
                     NS_ooxml::LN_CT_FtnEdn_type,
                     new RTFValue(NS_ooxml::LN_Value_doc_ST_FtnEdn_separator));
                 break;
