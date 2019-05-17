@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_a0458b72",
+        "filename": "include/svx/autoformathelper.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2019-05-17T08:48:42Z",
+      "side": 1,
+      "message": "Not private, protected. The whole class is a tooling class and usages independent from derived stuff is not intended",
+      "parentUuid": "3fa0c359_60f9c37e",
+      "revId": "1c6f932ae7c9e3e0ddc6140e1d5acb6079efc66d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_803baf36",
         "filename": "svx/source/items/autoformathelper.cxx",
         "patchSetId": 2
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_c04a177f",
+        "filename": "svx/source/items/autoformathelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2019-05-17T08:48:42Z",
+      "side": 1,
+      "message": "true :-)",
+      "parentUuid": "3fa0c359_803baf36",
+      "range": {
+        "startLine": 249,
+        "startChar": 19,
+        "endLine": 249,
+        "endChar": 39
+      },
+      "revId": "1c6f932ae7c9e3e0ddc6140e1d5acb6079efc66d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_20489bca",
         "filename": "sw/source/core/doc/tblafmt.cxx",
         "patchSetId": 2
@@ -53,6 +95,24 @@
       "writtenOn": "2019-05-17T07:30:07Z",
       "side": 1,
       "message": "why?  (that\u0027s a rather unusual check to have, so there should IMO be a compelling reason for it)",
+      "revId": "1c6f932ae7c9e3e0ddc6140e1d5acb6079efc66d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_4056072c",
+        "filename": "sw/source/core/doc/tblafmt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2019-05-17T08:48:42Z",
+      "side": 1,
+      "message": "Also true - somehow I had virtual functions in mind and that the input param type is some baseclass definition that needs to be casted - which is not the case - will change that",
+      "parentUuid": "3fa0c359_20489bca",
       "revId": "1c6f932ae7c9e3e0ddc6140e1d5acb6079efc66d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
