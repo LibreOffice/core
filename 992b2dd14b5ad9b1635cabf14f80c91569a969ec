@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_40d7e7ee",
+        "filename": "UnoControls/IwyuFilter_UnoControls.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-05-17T07:21:48Z",
+      "side": 1,
+      "message": "Would it make sense to do a follow-up change to replace this manual blacklisting with blacklisting in find-unused-includes itself? I assume we want to avoid .hxx -\u003e .h changes for URE headers in all modules, correct?",
+      "revId": "992b2dd14b5ad9b1635cabf14f80c91569a969ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
