@@ -11,14 +11,6 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libfreehand))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libfreehand,$(FREEHAND_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,libfreehand,0))
-
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libfreehand))
-
-ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
-$(eval $(call gb_UnpackedTarball_add_patches,libfreehand, \
-    external/libfreehand/ubsan-visibility.patch \
-))
-endif
 
 # vim: set noet sw=4 ts=4:

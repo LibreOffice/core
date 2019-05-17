@@ -11,15 +11,7 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libqxp))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libqxp,$(QXP_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,libqxp,0))
-
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libqxp))
-
-ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
-$(eval $(call gb_UnpackedTarball_add_patches,libqxp, \
-    external/libqxp/ubsan-visibility.patch \
-))
-endif
 
 $(eval $(call gb_UnpackedTarball_add_patches,libqxp, \
 	external/libqxp/android-workaround.patch.1 \

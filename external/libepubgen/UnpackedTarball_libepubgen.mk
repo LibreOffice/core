@@ -10,10 +10,6 @@
 epubgen_patches :=
 epubgen_patches += tdf-120491.patch
 
-ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
-epubgen_patches += ubsan-visibility.patch
-endif
-
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,libepubgen))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libepubgen,$(EPUBGEN_TARBALL)))
