@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_60f9c37e",
+        "filename": "include/svx/autoformathelper.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-17T07:30:07Z",
+      "side": 1,
+      "message": "this operator shall also be private? why?",
+      "revId": "1c6f932ae7c9e3e0ddc6140e1d5acb6079efc66d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_803baf36",
+        "filename": "svx/source/items/autoformathelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-17T07:30:07Z",
+      "side": 1,
+      "message": "this part of the comment is no longer accurate",
+      "range": {
+        "startLine": 249,
+        "startChar": 19,
+        "endLine": 249,
+        "endChar": 39
+      },
+      "revId": "1c6f932ae7c9e3e0ddc6140e1d5acb6079efc66d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_20489bca",
+        "filename": "sw/source/core/doc/tblafmt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-17T07:30:07Z",
+      "side": 1,
+      "message": "why?  (that\u0027s a rather unusual check to have, so there should IMO be a compelling reason for it)",
+      "revId": "1c6f932ae7c9e3e0ddc6140e1d5acb6079efc66d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
