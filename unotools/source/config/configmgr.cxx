@@ -135,12 +135,6 @@ OUString utl::ConfigManager::getProductVersion() {
         "Product/ooSetupVersion");
 }
 
-OUString utl::ConfigManager::getLastProductVersion() {
-    return getConfigurationString(
-        "/org.openoffice.Setup",
-        "Product/ooSetupLastVersion");
-}
-
 OUString utl::ConfigManager::getVendor() {
     return getConfigurationString(
         "/org.openoffice.Setup",
