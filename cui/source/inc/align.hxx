@@ -71,9 +71,19 @@ private:
     bool                HasAlignmentChanged( const SfxItemSet& rNew, sal_uInt16 nWhich ) const;
 
     DECL_LINK(UpdateEnableHdl, weld::ComboBox&, void);
-    DECL_LINK(UpdateEnableClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(StackedClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(AsianModeClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(WrapClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(HyphenClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(ShrinkClickHdl, weld::ToggleButton&, void);
 
 private:
+    weld::TriStateEnabled m_aStackedState;
+    weld::TriStateEnabled m_aAsianModeState;
+    weld::TriStateEnabled m_aWrapState;
+    weld::TriStateEnabled m_aHyphenState;
+    weld::TriStateEnabled m_aShrinkState;
+
     SvxDialControl m_aCtrlDial;
     SvtValueSet m_aVsRefEdge;
 
