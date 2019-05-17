@@ -143,7 +143,9 @@ void StyleLBoxString::Paint(
             {
                 if (pStylePreviewRenderer->recalculate())
                 {
-                    mpViewData->maSize = pStylePreviewRenderer->getRenderSize();
+                    Size aSize(pStylePreviewRenderer->getRenderSize());
+                    mpViewData->mnWidth = aSize.Width();
+                    mpViewData->mnHeight = aSize.Height();
                 }
                 else
                 {

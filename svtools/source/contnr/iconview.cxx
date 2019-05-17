@@ -130,7 +130,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, long nX, long nY,
             continue;
         }
 
-        Size aSize(SvLBoxItem::GetSize(pViewDataEntry, nCurItem));
+        auto nItemHeight = SvLBoxItem::GetHeight(pViewDataEntry, nCurItem);
 
         aEntryPos.setX( nX );
         aEntryPos.setY( nY );
@@ -189,7 +189,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, long nX, long nY,
         }
 
         // center vertically
-        aEntryPos.AdjustY((nTempEntryHeight - aSize.Height()) / 2 );
+        aEntryPos.AdjustY((nTempEntryHeight - nItemHeight) / 2 );
 
         // draw item
         pViewDataEntry->SetPaintRectangle(aRect);
@@ -206,15 +206,16 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, long nX, long nY,
     // draw icon
     if(nIconItem != nItemCount && nIconItem < nItemCount)
     {
-        Size aSize(SvLBoxItem::GetSize(pViewDataEntry, nIconItem));
+        auto nItemWidth = SvLBoxItem::GetWidth(pViewDataEntry, nIconItem);
+        auto nItemHeight = SvLBoxItem::GetHeight(pViewDataEntry, nIconItem);
 
         aEntryPos.setX( nX );
         aEntryPos.setY( nY );
 
         // center horizontally
-        aEntryPos.AdjustX((nTempEntryWidth - aSize.Width()) / 2 );
+        aEntryPos.AdjustX((nTempEntryWidth - nItemWidth) / 2 );
         // center vertically
-        aEntryPos.AdjustY((nTempEntryHeight - aSize.Height()) / 2 );
+        aEntryPos.AdjustY((nTempEntryHeight - nItemHeight) / 2 );
 
         aEntryPos.AdjustY( -10 );
 

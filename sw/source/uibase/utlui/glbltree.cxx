@@ -505,7 +505,7 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
                 Point aEntryPos = GetEntryPosition( pEntry );
 
                 aEntryPos.setX( GetTabPos( pEntry, pTab ) );
-                Size aSize( pItem->GetSize( this, pEntry ) );
+                Size aSize(pItem->GetWidth(this, pEntry), pItem->GetHeight(this, pEntry));
 
                 if((aEntryPos.X() + aSize.Width()) > GetSizePixel().Width())
                     aSize.setWidth( GetSizePixel().Width() - aEntryPos.X() );
