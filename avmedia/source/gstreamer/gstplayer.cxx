@@ -926,13 +926,6 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
             rArguments[ 2 ] >>= pIntPtr;
             SystemChildWindow *pParentWindow = reinterpret_cast< SystemChildWindow* >( pIntPtr );
 
-            if (pParentWindow)
-            {
-                Point aPoint = pParentWindow->GetPosPixel();
-                maArea.X = aPoint.getX();
-                maArea.Y = aPoint.getY();
-            }
-
             const SystemEnvData* pEnvData = pParentWindow ? pParentWindow->GetSystemData() : nullptr;
             OSL_ASSERT(pEnvData);
             if (pEnvData)
