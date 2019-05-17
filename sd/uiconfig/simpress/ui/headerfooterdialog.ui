@@ -144,8 +144,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">apply_all</action-widget>
-      <action-widget response="0">apply</action-widget>
+      <action-widget response="101">apply_all</action-widget>
+      <action-widget response="102">apply</action-widget>
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>

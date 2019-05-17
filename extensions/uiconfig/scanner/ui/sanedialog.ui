@@ -676,9 +676,9 @@
     <action-widgets>
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
-      <action-widget response="0">deviceInfoButton</action-widget>
-      <action-widget response="0">previewButton</action-widget>
-      <action-widget response="0">scanButton</action-widget>
+      <action-widget response="101">deviceInfoButton</action-widget>
+      <action-widget response="102">previewButton</action-widget>
+      <action-widget response="103">scanButton</action-widget>
     </action-widgets>
   </object>
 </interface>
