@@ -512,19 +512,22 @@ public:
     RTFSprms& getParagraphAttributes() { return m_aParagraphAttributes; }
     RTFSprms& getParagraphSprms() { return m_aParagraphSprms; }
     RTFSprms& getCharacterAttributes() { return m_aCharacterAttributes; }
+    RTFSprms& getCharacterSprms() { return m_aCharacterSprms; }
+    RTFSprms& getTableAttributes() { return m_aTableAttributes; }
+    RTFSprms& getTableSprms() { return m_aTableSprms; }
 
     RTFDocumentImpl* m_pDocumentImpl;
     RTFInternalState nInternalState;
     Destination eDestination;
     RTFFieldStatus eFieldStatus;
     RTFBorderState nBorderState;
-    // font table, stylesheet table
-    RTFSprms aTableSprms;
-    RTFSprms aTableAttributes;
-    // reset by plain
-    RTFSprms aCharacterSprms;
 
 private:
+    // font table, stylesheet table
+    RTFSprms m_aTableSprms;
+    RTFSprms m_aTableAttributes;
+    // reset by plain
+    RTFSprms m_aCharacterSprms;
     RTFSprms m_aCharacterAttributes;
     // reset by pard
     RTFSprms m_aParagraphSprms;

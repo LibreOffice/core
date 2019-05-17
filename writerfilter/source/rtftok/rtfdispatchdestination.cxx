@@ -132,7 +132,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 break;
             case RTF_LFOLEVEL:
                 m_aStates.top().eDestination = Destination::LFOLEVEL;
-                m_aStates.top().aTableSprms.clear();
+                m_aStates.top().getTableSprms().clear();
                 break;
             case RTF_LISTOVERRIDETABLE:
                 m_aStates.top().eDestination = Destination::LISTOVERRIDETABLE;
@@ -304,7 +304,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     if (bCustomMark)
                     {
                         m_aStates.top().getCharacterAttributes().clear();
-                        m_aStates.top().aCharacterSprms.clear();
+                        m_aStates.top().getCharacterSprms().clear();
                         auto pValue = new RTFValue(1);
                         m_aStates.top().getCharacterAttributes().set(
                             NS_ooxml::LN_CT_FtnEdnRef_customMarkFollows, pValue);
