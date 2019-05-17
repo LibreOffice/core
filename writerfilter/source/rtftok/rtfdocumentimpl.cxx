@@ -1168,7 +1168,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
 
 RTFError RTFDocumentImpl::resolveChars(char ch)
 {
-    if (m_aStates.top().nInternalState == RTFInternalState::BIN)
+    if (m_aStates.top().getInternalState() == RTFInternalState::BIN)
     {
         m_pBinaryData.reset(new SvMemoryStream());
         m_pBinaryData->WriteChar(ch);
@@ -1177,7 +1177,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
             Strm().ReadChar(ch);
             m_pBinaryData->WriteChar(ch);
         }
-        m_aStates.top().nInternalState = RTFInternalState::NORMAL;
+        m_aStates.top().setInternalState(RTFInternalState::NORMAL);
         return RTFError::OK;
     }
 
@@ -1187,10 +1187,11 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
     bool bSkipped = false;
 
     while (!Strm().eof()
-           && (m_aStates.top().nInternalState == RTFInternalState::HEX
+           && (m_aStates.top().getInternalState() == RTFInternalState::HEX
                || (ch != '{' && ch != '}' && ch != '\\')))
     {
-        if (m_aStates.top().nInternalState == RTFInternalState::HEX || (ch != 0x0d && ch != 0x0a))
+        if (m_aStates.top().getInternalState() == RTFInternalState::HEX
+            || (ch != 0x0d && ch != 0x0a))
         {
             if (m_aStates.top().getCharsToSkip() == 0)
             {
@@ -1209,7 +1210,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
         }
 
         // read a single char if we're in hex mode
-        if (m_aStates.top().nInternalState == RTFInternalState::HEX)
+        if (m_aStates.top().getInternalState() == RTFInternalState::HEX)
             break;
 
         if (RTL_TEXTENCODING_MS_932 == m_aStates.top().getCurrentEncoding())
@@ -1239,10 +1240,10 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
 
         Strm().ReadChar(ch);
     }
-    if (m_aStates.top().nInternalState != RTFInternalState::HEX && !Strm().eof())
+    if (m_aStates.top().getInternalState() != RTFInternalState::HEX && !Strm().eof())
         Strm().SeekRel(-1);
 
-    if (m_aStates.top().nInternalState == RTFInternalState::HEX
+    if (m_aStates.top().getInternalState() == RTFInternalState::HEX
         && m_aStates.top().getDestination() != Destination::LEVELNUMBERS)
     {
         if (!bSkipped)
@@ -3508,11 +3509,11 @@ RTFError RTFDocumentImpl::handleEmbeddedObject()
 
 bool RTFDocumentImpl::isInBackground() { return m_aStates.top().getInBackground(); }
 
-RTFInternalState RTFDocumentImpl::getInternalState() { return m_aStates.top().nInternalState; }
+RTFInternalState RTFDocumentImpl::getInternalState() { return m_aStates.top().getInternalState(); }
 
 void RTFDocumentImpl::setInternalState(RTFInternalState nInternalState)
 {
-    m_aStates.top().nInternalState = nInternalState;
+    m_aStates.top().setInternalState(nInternalState);
 }
 
 Destination RTFDocumentImpl::getDestination() { return m_aStates.top().getDestination(); }
@@ -3554,7 +3555,7 @@ void RTFDocumentImpl::checkUnicode(bool bUnicode, bool bHex)
 
 RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
     : m_pDocumentImpl(pDocumentImpl)
-    , nInternalState(RTFInternalState::NORMAL)
+    , m_nInternalState(RTFInternalState::NORMAL)
     , m_eDestination(Destination::NORMAL)
     , m_eFieldStatus(RTFFieldStatus::NONE)
     , m_nBorderState(RTFBorderState::NONE)
@@ -3602,7 +3603,7 @@ RTFShape::RTFShape() = default;
 RTFDrawingObject::RTFDrawingObject() = default;
 
 RTFFrame::RTFFrame(RTFParserState* pParserState)
-    : m_pDocumentImpl(pParserState->m_pDocumentImpl)
+    : m_pDocumentImpl(pParserState->getDocumentImpl())
     , m_nX(0)
     , m_nY(0)
     , m_nW(0)
