@@ -46,6 +46,30 @@
       "revId": "15e1f88c963579c4a6bbc4275b7831ad38c6e833",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_369ea163",
+        "filename": "external/mdds/use-position-hint-also-back.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2019-05-17T17:20:08Z",
+      "side": 1,
+      "message": "So, I just wanted to highlight the implication of this condition. The problem with the restrictive condition in backward search (pos \u003e start_row/2) is that there are many cases where it is cheaper to do backward search even if the condition is false. Consider for example, the guessed block is at index 1024 where as the wanted block lies at 1022. If the size of block-1023 is high enough, the condition becomes false, thus forcing forward search that needs to go through 1023 blocks where as backward search would find it in just a couple of tries. \n\nThe if-condition makes perfect sense in cases where the block size distribution is fairly flat(there are more or less same number of elements per block), but not true often in practice.\n\nOn the other hand as we have MAXROW of only 1M, we wont notice much difference with or without the restrictive condition for the specific problem in the bug-report or Calc in general. But mdds as such has much wider field of applicability where this might be important.",
+      "parentUuid": "3fa0c359_9647751e",
+      "range": {
+        "startLine": 27,
+        "startChar": 12,
+        "endLine": 27,
+        "endChar": 33
+      },
+      "revId": "15e1f88c963579c4a6bbc4275b7831ad38c6e833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
