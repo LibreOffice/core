@@ -28,7 +28,8 @@
 
 struct SvViewDataItem
 {
-    Size maSize;
+    int mnWidth = 0;
+    int mnHeight = 0;
 };
 
 /**
