@@ -99,7 +99,12 @@ class SmElementsControl : public Control
     void addElements(const std::pair<const char*, const char*> aElementsArray[], sal_uInt16 size);
     SmElement* current() const;
     bool hasRollover() const { return m_nCurrentRolloverElement != SAL_MAX_UINT16; }
+
     void stepFocus(const bool bBackward);
+    void pageFocus(const bool bBackward);
+    // common code of page and step focus
+    inline void scrollToElement(const bool, const SmElement*);
+    inline sal_uInt16 nextElement(const bool, const sal_uInt16, const sal_uInt16);
 
     void build();
 
