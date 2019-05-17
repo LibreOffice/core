@@ -873,7 +873,7 @@ void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         if(pItem)
         {
             aPos = GetEntryPosition( pEntry );
-            Size aSize(pItem->GetSize( this, pEntry ));
+            Size aSize(pItem->GetWidth(this, pEntry), pItem->GetHeight(this, pEntry));
             aPos.setX( GetTabPos( pEntry, pTab ) );
 
             if((aPos.X() + aSize.Width()) > GetSizePixel().Width())

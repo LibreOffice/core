@@ -196,7 +196,7 @@ void SvLBoxString::Paint(
     const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
     const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
-    Size aSize = GetSize(&rDev, &rEntry);
+    Size aSize;
     DrawTextFlags nStyle = (rDev.IsEnabled() && !mbDisabled) ? DrawTextFlags::NONE : DrawTextFlags::Disable;
     if (rDev.IsEntryMnemonicsEnabled())
         nStyle |= DrawTextFlags::Mnemonic;
@@ -205,6 +205,9 @@ void SvLBoxString::Paint(
         nStyle |= DrawTextFlags::PathEllipsis | DrawTextFlags::Center;
         aSize.setWidth( rDev.GetEntryWidth() );
     }
+    else
+        aSize.setWidth(GetWidth(&rDev, &rEntry));
+    aSize.setHeight(GetHeight(&rDev, &rEntry));
 
     if (mbEmphasized)
     {
@@ -241,7 +244,8 @@ void SvLBoxString::InitViewData(
         pView->Control::SetFont( aFont );
     }
 
-    pViewData->maSize = Size(pView->GetTextWidth(maText), pView->GetTextHeight());
+    pViewData->mnWidth = pView->GetTextWidth(maText);
+    pViewData->mnHeight = pView->GetTextHeight();
 
     if (mbEmphasized)
         pView->Pop();
@@ -379,7 +383,8 @@ void SvLBoxButton::InitViewData(SvTreeListBox* pView,SvTreeListEntry* pEntry, Sv
     ControlType eCtrlType = (pData->IsRadio())? ControlType::Radiobutton : ControlType::Checkbox;
     if ( eKind != SvLBoxButtonKind::StaticImage && pView )
         ImplAdjustBoxSize(aSize, eCtrlType, *pView);
-    pViewData->maSize = aSize;
+    pViewData->mnWidth = aSize.Width();
+    pViewData->mnHeight = aSize.Height();
 }
 
 bool SvLBoxButton::CheckModification() const
@@ -444,7 +449,9 @@ void SvLBoxContextBmp::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntr
 {
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
-    pViewData->maSize = m_pImpl->m_aImage1.GetSizePixel();
+    Size aSize = m_pImpl->m_aImage1.GetSizePixel();
+    pViewData->mnWidth = aSize.Width();
+    pViewData->mnHeight = aSize.Height();
 }
 
 void SvLBoxContextBmp::Paint(

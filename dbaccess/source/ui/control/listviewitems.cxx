@@ -35,7 +35,8 @@ namespace dbaui
         vcl::Font aFont( pView->GetFont());
         aFont.SetWeight(WEIGHT_BOLD);
         pView->Control::SetFont( aFont );
-        _pViewData->maSize = Size(pView->GetTextWidth(GetText()), pView->GetTextHeight());
+        _pViewData->mnWidth = pView->GetTextWidth(GetText());
+        _pViewData->mnHeight = pView->GetTextHeight();
         pView->Pop();
     }
 
