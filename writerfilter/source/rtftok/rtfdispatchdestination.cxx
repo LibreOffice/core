@@ -362,7 +362,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             case RTF_DPTXBXTEXT:
             {
                 bool bPictureFrame = false;
-                for (auto& rProperty : m_aStates.top().aShape.getProperties())
+                for (auto& rProperty : m_aStates.top().getShape().getProperties())
                 {
                     if (rProperty.first == "shapeType"
                         && rProperty.second == OUString::number(ESCHER_ShpInst_PictureFrame))
@@ -383,11 +383,11 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     if (nKeyword == RTF_SHPTXT)
                     {
                         if (!m_aStates.top().getCurrentBuffer())
-                            m_pSdrImport->resolve(m_aStates.top().aShape, false,
+                            m_pSdrImport->resolve(m_aStates.top().getShape(), false,
                                                   RTFSdrImport::SHAPE);
                         else
                         {
-                            auto pValue = new RTFValue(m_aStates.top().aShape);
+                            auto pValue = new RTFValue(m_aStates.top().getShape());
                             m_aStates.top().getCurrentBuffer()->push_back(
                                 Buf_t(BUFFER_STARTSHAPE, pValue, nullptr));
                         }

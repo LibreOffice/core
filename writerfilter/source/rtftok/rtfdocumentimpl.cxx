@@ -878,7 +878,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         return;
 
     SvMemoryStream aDIBStream;
-    if (m_aStates.top().aPicture.eStyle == RTFBmpStyle::DIBITMAP)
+    if (m_aStates.top().getPicture().eStyle == RTFBmpStyle::DIBITMAP)
     {
         // Construct a BITMAPFILEHEADER structure before the real data.
         SvStream& rBodyStream = *pStream;
@@ -899,12 +899,12 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     pStream->Seek(0);
     uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(pStream));
     WmfExternal aExtHeader;
-    aExtHeader.mapMode = m_aStates.top().aPicture.eWMetafile;
+    aExtHeader.mapMode = m_aStates.top().getPicture().eWMetafile;
     aExtHeader.xExt = sal_uInt16(
-        std::clamp<sal_Int32>(m_aStates.top().aPicture.nWidth, 0,
+        std::clamp<sal_Int32>(m_aStates.top().getPicture().nWidth, 0,
                               SAL_MAX_UINT16)); //TODO: better way to handle out-of-bounds values?
     aExtHeader.yExt = sal_uInt16(
-        std::clamp<sal_Int32>(m_aStates.top().aPicture.nHeight, 0,
+        std::clamp<sal_Int32>(m_aStates.top().getPicture().nHeight, 0,
                               SAL_MAX_UINT16)); //TODO: better way to handle out-of-bounds values?
     WmfExternal* pExtHeader = &aExtHeader;
     uno::Reference<lang::XServiceInfo> xServiceInfo(m_aStates.top().getDrawingObject().getShape(),
@@ -915,7 +915,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     uno::Reference<graphic::XGraphic> xGraphic
         = m_pGraphicHelper->importGraphic(xInputStream, pExtHeader);
 
-    if (m_aStates.top().aPicture.eStyle != RTFBmpStyle::NONE)
+    if (m_aStates.top().getPicture().eStyle != RTFBmpStyle::NONE)
     {
         // In case of PNG/JPEG, the real size is known, don't use the values
         // provided by picw and pich.
@@ -927,8 +927,8 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
             aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMap);
         else
             aSize = OutputDevice::LogicToLogic(aSize, aGraphic.GetPrefMapMode(), aMap);
-        m_aStates.top().aPicture.nWidth = aSize.Width();
-        m_aStates.top().aPicture.nHeight = aSize.Height();
+        m_aStates.top().getPicture().nWidth = aSize.Width();
+        m_aStates.top().getPicture().nHeight = aSize.Height();
     }
 
     // Wrap it in an XShape.
@@ -972,10 +972,12 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     {
         // Set the object size
         awt::Size aSize;
-        aSize.Width = (m_aStates.top().aPicture.nGoalWidth ? m_aStates.top().aPicture.nGoalWidth
-                                                           : m_aStates.top().aPicture.nWidth);
-        aSize.Height = (m_aStates.top().aPicture.nGoalHeight ? m_aStates.top().aPicture.nGoalHeight
-                                                             : m_aStates.top().aPicture.nHeight);
+        aSize.Width
+            = (m_aStates.top().getPicture().nGoalWidth ? m_aStates.top().getPicture().nGoalWidth
+                                                       : m_aStates.top().getPicture().nWidth);
+        aSize.Height
+            = (m_aStates.top().getPicture().nGoalHeight ? m_aStates.top().getPicture().nGoalHeight
+                                                        : m_aStates.top().getPicture().nHeight);
         xShape->setSize(aSize);
 
         // Replacement graphic is inline by default, see oox::vml::SimpleShape::implConvertAndInsert().
@@ -1017,23 +1019,25 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     // extent sprm
     RTFSprms aExtentAttributes;
     int nXExt, nYExt;
-    nXExt = (m_aStates.top().aPicture.nGoalWidth ? m_aStates.top().aPicture.nGoalWidth
-                                                 : m_aStates.top().aPicture.nWidth);
-    nYExt = (m_aStates.top().aPicture.nGoalHeight ? m_aStates.top().aPicture.nGoalHeight
-                                                  : m_aStates.top().aPicture.nHeight);
-    if (m_aStates.top().aPicture.nScaleX != 100)
-        nXExt = (static_cast<long>(m_aStates.top().aPicture.nScaleX)
-                 * (nXExt - (m_aStates.top().aPicture.nCropL + m_aStates.top().aPicture.nCropR)))
+    nXExt = (m_aStates.top().getPicture().nGoalWidth ? m_aStates.top().getPicture().nGoalWidth
+                                                     : m_aStates.top().getPicture().nWidth);
+    nYExt = (m_aStates.top().getPicture().nGoalHeight ? m_aStates.top().getPicture().nGoalHeight
+                                                      : m_aStates.top().getPicture().nHeight);
+    if (m_aStates.top().getPicture().nScaleX != 100)
+        nXExt = (static_cast<long>(m_aStates.top().getPicture().nScaleX)
+                 * (nXExt
+                    - (m_aStates.top().getPicture().nCropL + m_aStates.top().getPicture().nCropR)))
                 / 100L;
-    if (m_aStates.top().aPicture.nScaleY != 100)
-        nYExt = (static_cast<long>(m_aStates.top().aPicture.nScaleY)
-                 * (nYExt - (m_aStates.top().aPicture.nCropT + m_aStates.top().aPicture.nCropB)))
+    if (m_aStates.top().getPicture().nScaleY != 100)
+        nYExt = (static_cast<long>(m_aStates.top().getPicture().nScaleY)
+                 * (nYExt
+                    - (m_aStates.top().getPicture().nCropT + m_aStates.top().getPicture().nCropB)))
                 / 100L;
     if (m_aStates.top().getInShape())
     {
         // Picture in shape: it looks like pib picture, so we will stretch the picture to shape size (tdf#49893)
-        nXExt = m_aStates.top().aShape.getRight() - m_aStates.top().aShape.getLeft();
-        nYExt = m_aStates.top().aShape.getBottom() - m_aStates.top().aShape.getTop();
+        nXExt = m_aStates.top().getShape().getRight() - m_aStates.top().getShape().getLeft();
+        nYExt = m_aStates.top().getShape().getBottom() - m_aStates.top().getShape().getTop();
     }
     auto pXExtValue = new RTFValue(oox::drawingml::convertHmmToEmu(nXExt));
     auto pYExtValue = new RTFValue(oox::drawingml::convertHmmToEmu(nYExt));
@@ -1066,9 +1070,9 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     {
         // wrap sprm
         RTFSprms aAnchorWrapAttributes;
-        m_aStates.top().aShape.getAnchorAttributes().set(
+        m_aStates.top().getShape().getAnchorAttributes().set(
             NS_ooxml::LN_CT_Anchor_behindDoc,
-            new RTFValue((m_aStates.top().aShape.getInBackground()) ? 1 : 0));
+            new RTFValue((m_aStates.top().getShape().getInBackground()) ? 1 : 0));
         RTFSprms aAnchorSprms;
         for (auto& rCharacterAttribute : m_aStates.top().aCharacterAttributes)
         {
@@ -1085,20 +1089,20 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
 
                 // If there is a wrap polygon prepared by RTFSdrImport, pick it up here.
                 if (rCharacterSprm.first == NS_ooxml::LN_EG_WrapType_wrapTight
-                    && !m_aStates.top().aShape.getWrapPolygonSprms().empty())
+                    && !m_aStates.top().getShape().getWrapPolygonSprms().empty())
                     rCharacterSprm.second->getSprms().set(
                         NS_ooxml::LN_CT_WrapTight_wrapPolygon,
-                        new RTFValue(RTFSprms(), m_aStates.top().aShape.getWrapPolygonSprms()));
+                        new RTFValue(RTFSprms(), m_aStates.top().getShape().getWrapPolygonSprms()));
 
                 aAnchorSprms.set(rCharacterSprm.first, rCharacterSprm.second);
             }
         }
 
-        if (m_aStates.top().aShape.getWrapSprm().first != 0)
+        if (m_aStates.top().getShape().getWrapSprm().first != 0)
             // Replay of a buffered shape, wrap sprm there has priority over
             // character sprms of the current state.
-            aAnchorSprms.set(m_aStates.top().aShape.getWrapSprm().first,
-                             m_aStates.top().aShape.getWrapSprm().second);
+            aAnchorSprms.set(m_aStates.top().getShape().getWrapSprm().first,
+                             m_aStates.top().getShape().getWrapSprm().second);
 
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_extent, pExtentValue);
         if (!aAnchorWrapAttributes.empty() && nWrap == -1)
@@ -1108,14 +1112,15 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         // See OOXMLFastContextHandler::positionOffset(), we can't just put offset values in an RTFValue.
         RTFSprms aPoshAttributes;
         RTFSprms aPoshSprms;
-        if (m_aStates.top().aShape.getHoriOrientRelationToken() > 0)
-            aPoshAttributes.set(NS_ooxml::LN_CT_PosH_relativeFrom,
-                                new RTFValue(m_aStates.top().aShape.getHoriOrientRelationToken()));
-        if (m_aStates.top().aShape.getLeft() != 0)
+        if (m_aStates.top().getShape().getHoriOrientRelationToken() > 0)
+            aPoshAttributes.set(
+                NS_ooxml::LN_CT_PosH_relativeFrom,
+                new RTFValue(m_aStates.top().getShape().getHoriOrientRelationToken()));
+        if (m_aStates.top().getShape().getLeft() != 0)
         {
-            Mapper().positionOffset(
-                OUString::number(oox::drawingml::convertHmmToEmu(m_aStates.top().aShape.getLeft())),
-                /*bVertical=*/false);
+            Mapper().positionOffset(OUString::number(oox::drawingml::convertHmmToEmu(
+                                        m_aStates.top().getShape().getLeft())),
+                                    /*bVertical=*/false);
             aPoshSprms.set(NS_ooxml::LN_CT_PosH_posOffset, new RTFValue());
         }
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_positionH,
@@ -1123,14 +1128,15 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
 
         RTFSprms aPosvAttributes;
         RTFSprms aPosvSprms;
-        if (m_aStates.top().aShape.getVertOrientRelationToken() > 0)
-            aPosvAttributes.set(NS_ooxml::LN_CT_PosV_relativeFrom,
-                                new RTFValue(m_aStates.top().aShape.getVertOrientRelationToken()));
-        if (m_aStates.top().aShape.getTop() != 0)
+        if (m_aStates.top().getShape().getVertOrientRelationToken() > 0)
+            aPosvAttributes.set(
+                NS_ooxml::LN_CT_PosV_relativeFrom,
+                new RTFValue(m_aStates.top().getShape().getVertOrientRelationToken()));
+        if (m_aStates.top().getShape().getTop() != 0)
         {
-            Mapper().positionOffset(
-                OUString::number(oox::drawingml::convertHmmToEmu(m_aStates.top().aShape.getTop())),
-                /*bVertical=*/true);
+            Mapper().positionOffset(OUString::number(oox::drawingml::convertHmmToEmu(
+                                        m_aStates.top().getShape().getTop())),
+                                    /*bVertical=*/true);
             aPosvSprms.set(NS_ooxml::LN_CT_PosV_posOffset, new RTFValue());
         }
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_positionV,
@@ -1139,7 +1145,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_docPr, pDocprValue);
         aAnchorSprms.set(NS_ooxml::LN_graphic_graphic, pGraphicValue);
         // anchor sprm
-        auto pValue = new RTFValue(m_aStates.top().aShape.getAnchorAttributes(), aAnchorSprms);
+        auto pValue = new RTFValue(m_aStates.top().getShape().getAnchorAttributes(), aAnchorSprms);
         aSprms.set(NS_ooxml::LN_anchor_anchor, pValue);
     }
     writerfilter::Reference<Properties>::Pointer_t pProperties
@@ -1668,7 +1674,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
 
             // Set current shape during replay, needed by e.g. wrap in
             // background.
-            m_aStates.top().aShape = std::get<1>(aTuple)->getShape();
+            m_aStates.top().getShape() = std::get<1>(aTuple)->getShape();
 
             m_pSdrImport->resolve(std::get<1>(aTuple)->getShape(), true, RTFSdrImport::SHAPE);
             m_aStates.top().setCurrentBuffer(pCurrentBuffer);
@@ -1684,7 +1690,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
             resolveSubstream(nPos, nId, aCustomMark);
         }
         else if (std::get<0>(aTuple) == BUFFER_PICTURE)
-            m_aStates.top().aPicture = std::get<1>(aTuple)->getPicture();
+            m_aStates.top().getPicture() = std::get<1>(aTuple)->getPicture();
         else if (std::get<0>(aTuple) == BUFFER_SETSTYLE)
         {
             if (!m_aStates.empty())
@@ -2311,24 +2317,24 @@ RTFError RTFDocumentImpl::popState()
             if (&m_aStates.top().getDestinationText()
                 != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
-            aState.aShape.getProperties().emplace_back(
+            aState.getShape().getProperties().emplace_back(
                 m_aStates.top().getCurrentDestinationText()->makeStringAndClear(), OUString());
             break;
         case Destination::SHAPEPROPERTYVALUE:
-            if (!aState.aShape.getProperties().empty())
+            if (!aState.getShape().getProperties().empty())
             {
-                aState.aShape.getProperties().back().second
+                aState.getShape().getProperties().back().second
                     = m_aStates.top().getCurrentDestinationText()->makeStringAndClear();
                 if (m_aStates.top().getHadShapeText())
-                    m_pSdrImport->append(aState.aShape.getProperties().back().first,
-                                         aState.aShape.getProperties().back().second);
+                    m_pSdrImport->append(aState.getShape().getProperties().back().first,
+                                         aState.getShape().getProperties().back().second);
                 else if (aState.getInShapeGroup() && !aState.getInShape()
-                         && aState.aShape.getProperties().back().first == "rotation")
+                         && aState.getShape().getProperties().back().first == "rotation")
                 {
                     // Rotation should be applied on the groupshape itself, not on each shape.
-                    aState.aShape.getGroupProperties().push_back(
-                        aState.aShape.getProperties().back());
-                    aState.aShape.getProperties().pop_back();
+                    aState.getShape().getGroupProperties().push_back(
+                        aState.getShape().getProperties().back());
+                    aState.getShape().getProperties().pop_back();
                 }
             }
             break;
@@ -2347,16 +2353,16 @@ RTFError RTFDocumentImpl::popState()
                     = (aState.eDestination == Destination::SHAPEINSTRUCTION) ? RTFSdrImport::SHAPE
                                                                              : RTFSdrImport::PICT;
                 if (!m_aStates.top().getCurrentBuffer() || eType != RTFSdrImport::SHAPE)
-                    m_pSdrImport->resolve(m_aStates.top().aShape, true, eType);
+                    m_pSdrImport->resolve(m_aStates.top().getShape(), true, eType);
                 else
                 {
                     // Shape inside table: buffer the import to have correct anchor position.
                     // Also buffer the RTFPicture of the state stack as it contains
                     // the shape size.
-                    auto pPictureValue = new RTFValue(m_aStates.top().aPicture);
+                    auto pPictureValue = new RTFValue(m_aStates.top().getPicture());
                     m_aStates.top().getCurrentBuffer()->push_back(
                         Buf_t(BUFFER_PICTURE, pPictureValue, nullptr));
-                    auto pValue = new RTFValue(m_aStates.top().aShape);
+                    auto pValue = new RTFValue(m_aStates.top().getShape());
 
                     // Buffer wrap type.
                     for (auto& rCharacterSprm : m_aStates.top().aCharacterSprms)
@@ -2364,7 +2370,7 @@ RTFError RTFDocumentImpl::popState()
                         if (rCharacterSprm.first == NS_ooxml::LN_EG_WrapType_wrapNone
                             || rCharacterSprm.first == NS_ooxml::LN_EG_WrapType_wrapTight)
                         {
-                            m_aStates.top().aShape.getWrapSprm() = rCharacterSprm;
+                            m_aStates.top().getShape().getWrapSprm() = rCharacterSprm;
                             break;
                         }
                     }
@@ -2376,9 +2382,9 @@ RTFError RTFDocumentImpl::popState()
             else if (aState.getInShapeGroup() && !aState.getInShape())
             {
                 // End of a groupshape, as we're in shapegroup, but not in a real shape.
-                for (auto& rGroupProperty : aState.aShape.getGroupProperties())
+                for (auto& rGroupProperty : aState.getShape().getGroupProperties())
                     m_pSdrImport->appendGroupProperty(rGroupProperty.first, rGroupProperty.second);
-                aState.aShape.getGroupProperties().clear();
+                aState.getShape().getGroupProperties().clear();
             }
             break;
         case Destination::BOOKMARKSTART:
@@ -3353,7 +3359,7 @@ RTFError RTFDocumentImpl::popState()
         case Destination::SHAPEPROPERTYVALUEPICT:
             if (!m_aStates.empty())
             {
-                m_aStates.top().aPicture = aState.aPicture;
+                m_aStates.top().getPicture() = aState.getPicture();
                 // both \sp and \sv are destinations, copy the text up-ward for later
                 m_aStates.top().getDestinationText() = aState.getDestinationText();
             }
@@ -3367,8 +3373,8 @@ RTFError RTFDocumentImpl::popState()
         case Destination::SHAPEPROPERTY:
             if (!m_aStates.empty())
             {
-                m_aStates.top().aShape = aState.aShape;
-                m_aStates.top().aPicture = aState.aPicture;
+                m_aStates.top().getShape() = aState.getShape();
+                m_aStates.top().getPicture() = aState.getPicture();
                 m_aStates.top().aCharacterAttributes = aState.aCharacterAttributes;
             }
             break;
@@ -3377,8 +3383,8 @@ RTFError RTFDocumentImpl::popState()
             {
                 // Shape instruction inside other shape instruction: just copy new shape settings:
                 // it will be resolved on end of topmost shape instruction destination
-                m_aStates.top().aShape = aState.aShape;
-                m_aStates.top().aPicture = aState.aPicture;
+                m_aStates.top().getShape() = aState.getShape();
+                m_aStates.top().getPicture() = aState.getPicture();
                 m_aStates.top().aCharacterSprms = aState.aCharacterSprms;
                 m_aStates.top().aCharacterAttributes = aState.aCharacterAttributes;
             }
@@ -3440,7 +3446,7 @@ RTFError RTFDocumentImpl::popState()
         default:
         {
             if (!m_aStates.empty() && m_aStates.top().eDestination == Destination::PICT)
-                m_aStates.top().aPicture = aState.aPicture;
+                m_aStates.top().getPicture() = aState.getPicture();
         }
         break;
     }
