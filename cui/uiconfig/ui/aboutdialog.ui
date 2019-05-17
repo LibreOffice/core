@@ -326,9 +326,9 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">btnReleaseNotes</action-widget>
-      <action-widget response="0">credits</action-widget>
-      <action-widget response="0">website</action-widget>
+      <action-widget response="101">btnReleaseNotes</action-widget>
+      <action-widget response="102">credits</action-widget>
+      <action-widget response="103">website</action-widget>
       <action-widget response="-7">close</action-widget>
     </action-widgets>
   </object>

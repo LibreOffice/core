@@ -4062,9 +4062,10 @@ void VclBuilder::set_response(const OString& sID, short nResponse)
         case -11:
             nResponse = RET_HELP;
             break;
+        default:
+            assert(nResponse >= 100 && "keep non-canned responses in range 100+ to avoid collision with vcl RET_*");
+            break;
     };
-
-    assert(nResponse >= 0);
 
     for (auto & child : m_aChildren)
     {

@@ -1629,9 +1629,9 @@
     <action-widgets>
       <action-widget response="-11">help</action-widget>
       <action-widget response="-6">cancel</action-widget>
-      <action-widget response="0">lastPageButton</action-widget>
-      <action-widget response="0">nextPageButton</action-widget>
-      <action-widget response="0">finishButton</action-widget>
+      <action-widget response="101">lastPageButton</action-widget>
+      <action-widget response="102">nextPageButton</action-widget>
+      <action-widget response="103">finishButton</action-widget>
     </action-widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

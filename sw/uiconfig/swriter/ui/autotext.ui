@@ -364,12 +364,12 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">insert</action-widget>
+      <action-widget response="101">insert</action-widget>
       <action-widget response="-7">close</action-widget>
       <action-widget response="-11">help</action-widget>
-      <action-widget response="0">autotext:editmenu</action-widget>
-      <action-widget response="0">categories</action-widget>
-      <action-widget response="0">path</action-widget>
+      <action-widget response="102">autotext:editmenu</action-widget>
+      <action-widget response="103">categories</action-widget>
+      <action-widget response="104">path</action-widget>
     </action-widgets>
   </object>
   <object class="GtkMenu" id="editmenu">
