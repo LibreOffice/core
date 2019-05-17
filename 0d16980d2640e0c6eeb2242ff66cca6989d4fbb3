@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_c02c5749",
+        "filename": "dbaccess/source/ui/dlg/dbfindex.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2019-05-17T04:21:04Z",
+      "side": 1,
+      "message": "It seems to me that the content of _rList and _rDisplay seem to be linked. _rList contains a list of indexes, and _rDisplay a concatenation of filenames of these indexes?\n\nIn the old implementation, the order of things seemed to be the inverse of the order of things in _rDisplay.  Your patch changes it to the same order. Is that important? How are _rList and _rDisplay used? What do they actually contain?",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 24
+      },
+      "revId": "0d16980d2640e0c6eeb2242ff66cca6989d4fbb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
