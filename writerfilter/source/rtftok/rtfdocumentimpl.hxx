@@ -515,14 +515,20 @@ public:
     RTFSprms& getCharacterSprms() { return m_aCharacterSprms; }
     RTFSprms& getTableAttributes() { return m_aTableAttributes; }
     RTFSprms& getTableSprms() { return m_aTableSprms; }
+    void setBorderState(RTFBorderState nBorderState) { m_nBorderState = nBorderState; }
+    RTFBorderState getBorderState() const { return m_nBorderState; }
+    void setFieldStatus(RTFFieldStatus eFieldStatus) { m_eFieldStatus = eFieldStatus; }
+    RTFFieldStatus getFieldStatus() const { return m_eFieldStatus; }
+    void setDestination(Destination eDestination) { m_eDestination = eDestination; }
+    Destination getDestination() const { return m_eDestination; }
 
     RTFDocumentImpl* m_pDocumentImpl;
     RTFInternalState nInternalState;
-    Destination eDestination;
-    RTFFieldStatus eFieldStatus;
-    RTFBorderState nBorderState;
 
 private:
+    Destination m_eDestination;
+    RTFFieldStatus m_eFieldStatus;
+    RTFBorderState m_nBorderState;
     // font table, stylesheet table
     RTFSprms m_aTableSprms;
     RTFSprms m_aTableAttributes;

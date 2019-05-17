@@ -558,7 +558,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             auto pValue = new RTFValue(aAttributes);
             for (int i = 0; i < 4; i++)
                 m_aStates.top().getParagraphSprms().set(getParagraphBorder(i), pValue);
-            m_aStates.top().nBorderState = RTFBorderState::PARAGRAPH_BOX;
+            m_aStates.top().setBorderState(RTFBorderState::PARAGRAPH_BOX);
         }
         break;
         case RTF_LTRSECT:
@@ -598,7 +598,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         break;
         case RTF_NONSHPPICT:
         case RTF_MMATHPICT: // Picture group used by readers not understanding \moMath group
-            m_aStates.top().eDestination = Destination::SKIP;
+            m_aStates.top().setDestination(Destination::SKIP);
             break;
         case RTF_CLBRDRT:
         case RTF_CLBRDRL:
@@ -627,7 +627,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             }
             putNestedSprm(m_aStates.top().getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcBorders,
                           nParam, pValue);
-            m_aStates.top().nBorderState = RTFBorderState::CELL;
+            m_aStates.top().setBorderState(RTFBorderState::CELL);
         }
         break;
         case RTF_PGBRDRT:
@@ -657,7 +657,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             }
             putNestedSprm(m_aStates.top().getSectionSprms(),
                           NS_ooxml::LN_EG_SectPrContents_pgBorders, nParam, pValue);
-            m_aStates.top().nBorderState = RTFBorderState::PAGE;
+            m_aStates.top().setBorderState(RTFBorderState::PAGE);
         }
         break;
         case RTF_BRDRT:
@@ -687,7 +687,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             }
             putNestedSprm(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PrBase_pBdr, nParam,
                           pValue);
-            m_aStates.top().nBorderState = RTFBorderState::PARAGRAPH;
+            m_aStates.top().setBorderState(RTFBorderState::PARAGRAPH);
         }
         break;
         case RTF_CHBRDR:
@@ -695,7 +695,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             RTFSprms aAttributes;
             auto pValue = new RTFValue(aAttributes);
             m_aStates.top().getCharacterSprms().set(NS_ooxml::LN_EG_RPrBase_bdr, pValue);
-            m_aStates.top().nBorderState = RTFBorderState::CHARACTER;
+            m_aStates.top().setBorderState(RTFBorderState::CHARACTER);
         }
         break;
         case RTF_CLMGF:
