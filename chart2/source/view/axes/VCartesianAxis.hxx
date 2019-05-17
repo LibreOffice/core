@@ -150,7 +150,7 @@ private: //methods
      * @return true if we can break a single line label text into multiple
      *         lines for better fitting, otherwise false.
      */
-    bool isBreakOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis ) const;
+    bool isBreakOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis, bool bIsVerticalAxis ) const;
 
     ::basegfx::B2DVector getScreenPosition( double fLogicX, double fLogicY, double fLogicZ ) const;
     ScreenPosAndLogicPos getScreenPosAndLogicPos( double fLogicX, double fLogicY, double fLogicZ ) const;
