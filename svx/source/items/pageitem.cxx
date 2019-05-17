@@ -22,10 +22,15 @@
 #include <utility>
 
 #include <osl/diagnose.h>
+#include <comphelper/processfactory.hxx>
 #include <tools/stream.hxx>
+#include <tools/resary.hxx>
 #include <svx/pageitem.hxx>
+#include <svx/strarray.hxx>
 #include <editeng/itemtype.hxx>
 #include <svx/unomid.hxx>
+#include <com/sun/star/text/DefaultNumberingProvider.hpp>
+#include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/BreakType.hpp>
@@ -95,6 +100,26 @@ static const char* RID_SVXITEMS_PAGE_NUMS[] =
     RID_SVXITEMS_PAGE_NUM_NONE
 };
 
+namespace
+{
+    OUString GetNumberingDescription(SvxNumType eNumType)
+    {
+        // classic ones, keep displaying the old name
+        if (eNumType <= css::style::NumberingType::NUMBER_NONE)
+            return SvxResId(RID_SVXITEMS_PAGE_NUMS[eNumType]);
+        // new ones, reuse the text used in the numbering dropdown list
+        sal_uInt32 n = SvxNumberingTypeTable::FindIndex(eNumType);
+        if (n != RESARRAY_INDEX_NOTFOUND)
+            return SvxNumberingTypeTable::GetString(n);
+        css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+        css::uno::Reference<css::text::XDefaultNumberingProvider> xDefNum = css::text::DefaultNumberingProvider::create(xContext);
+        css::uno::Reference<css::text::XNumberingTypeInfo> xInfo(xDefNum, css::uno::UNO_QUERY);
+        if (!xInfo.is())
+            return OUString();
+        return xInfo->getNumberingIdentifier(eNumType);
+    }
+}
+
 bool SvxPageItem::GetPresentation
 (
     SfxItemPresentation ePres,
@@ -114,8 +139,7 @@ bool SvxPageItem::GetPresentation
             {
                 rText = aDescName + cpDelimTmp;
             }
-            assert(eNumType <= css::style::NumberingType::NUMBER_NONE && "enum overflow");
-            rText += SvxResId(RID_SVXITEMS_PAGE_NUMS[eNumType]) + cpDelimTmp;
+            rText += GetNumberingDescription(eNumType) + cpDelimTmp;
             if ( bLandscape )
                 rText += SvxResId(RID_SVXITEMS_PAGE_LAND_TRUE);
             else
@@ -134,8 +158,7 @@ bool SvxPageItem::GetPresentation
             {
                 rText += aDescName + cpDelimTmp;
             }
-            assert(eNumType <= css::style::NumberingType::NUMBER_NONE && "enum overflow");
-            rText += SvxResId(RID_SVXITEMS_PAGE_NUMS[eNumType]) + cpDelimTmp;
+            rText += GetNumberingDescription(eNumType) + cpDelimTmp;
             if ( bLandscape )
                 rText += SvxResId(RID_SVXITEMS_PAGE_LAND_TRUE);
             else
