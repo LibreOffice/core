@@ -510,7 +510,7 @@ TickInfo* MaxLabelTickIter::nextInfo()
 }
 
 bool VCartesianAxis::isBreakOfLabelsAllowed(
-    const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis ) const
+    const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis, bool bIsVerticalAxis) const
 {
     if( m_aTextLabels.getLength() > 100 )
         return false;
@@ -525,8 +525,10 @@ bool VCartesianAxis::isBreakOfLabelsAllowed(
            rAxisLabelProperties.fRotationAngleDegree == 90.0 ||
            rAxisLabelProperties.fRotationAngleDegree == 270.0 ) )
         return false;
-    //break only for horizontal axis
-    return bIsHorizontalAxis;
+    if ( !m_aAxisProperties.m_bSwapXAndY )
+        return bIsHorizontalAxis;
+    else
+        return bIsVerticalAxis;
 }
 namespace{
 
@@ -702,7 +704,7 @@ bool VCartesianAxis::createTextShapes(
     const bool bIsHorizontalAxis = pTickFactory->isHorizontalAxis();
     const bool bIsVerticalAxis = pTickFactory->isVerticalAxis();
 
-    if (!isBreakOfLabelsAllowed(rAxisLabelProperties, bIsHorizontalAxis) &&
+    if (!isBreakOfLabelsAllowed(rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis) &&
         !isAutoStaggeringOfLabelsAllowed(rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis) &&
         !rAxisLabelProperties.isStaggered())
         return createTextShapesSimple(xTarget, rTickIter, rAxisLabelProperties, pTickFactory);
@@ -714,7 +716,7 @@ bool VCartesianAxis::createTextShapes(
     B2DVector aTextToTickDistance = pTickFactory->getDistanceAxisTickToText(m_aAxisProperties, true);
     sal_Int32 nLimitedSpaceForText = -1;
 
-    if( isBreakOfLabelsAllowed( rAxisLabelProperties, bIsHorizontalAxis ) )
+    if( isBreakOfLabelsAllowed( rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis ) )
     {
         nLimitedSpaceForText = nScreenDistanceBetweenTicks;
         if( bIsStaggered )
@@ -742,6 +744,12 @@ bool VCartesianAxis::createTextShapes(
                 nLimitedSpaceForText = -1;
             }
         }
+
+        // recalculate the nLimitedSpaceForText in case of vertical category axis if the text break is true
+        if ( m_aAxisProperties.m_bSwapXAndY && bIsVerticalAxis && rAxisLabelProperties.fRotationAngleDegree == 0.0 )
+        {
+            nLimitedSpaceForText = rAxisLabelProperties.m_aMaximumSpaceForLabels.X;
+        }
     }
 
      // Stores an array of text label strings in case of a normal
@@ -750,8 +758,11 @@ bool VCartesianAxis::createTextShapes(
     if( m_bUseTextLabels && !m_aAxisProperties.m_bComplexCategories )
         pCategories = &m_aTextLabels;
 
-    bool bLimitedHeight = fabs(aTextToTickDistance.getX()) > fabs(aTextToTickDistance.getY());
-
+    bool bLimitedHeight;
+    if( !m_aAxisProperties.m_bSwapXAndY )
+        bLimitedHeight = fabs(aTextToTickDistance.getX()) > fabs(aTextToTickDistance.getY());
+    else
+        bLimitedHeight = fabs(aTextToTickDistance.getX()) < fabs(aTextToTickDistance.getY());
     //prepare properties for multipropertyset-interface of shape
     tNameSequence aPropNames;
     tAnySequence aPropValues;
