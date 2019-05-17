@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_9b3800d4",
+        "filename": "include/svx/autoformathelper.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-17T09:11:10Z",
+      "side": 1,
+      "message": "oops, yeah (had assumed you\u0027d included it in the make-special-member-functions protected by accident)",
+      "parentUuid": "3fa0c359_a0458b72",
+      "revId": "1c6f932ae7c9e3e0ddc6140e1d5acb6079efc66d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_803baf36",
         "filename": "svx/source/items/autoformathelper.cxx",
         "patchSetId": 2
@@ -113,6 +131,24 @@
       "side": 1,
       "message": "Also true - somehow I had virtual functions in mind and that the input param type is some baseclass definition that needs to be casted - which is not the case - will change that",
       "parentUuid": "3fa0c359_20489bca",
+      "revId": "1c6f932ae7c9e3e0ddc6140e1d5acb6079efc66d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_5b3278f3",
+        "filename": "sw/source/core/doc/tblafmt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-17T09:11:10Z",
+      "side": 1,
+      "message": "Indded, AutoFormatBase isn\u0027t even virtual, so no use of having that assert in AutoFormatBase::operator\u003d, either.",
+      "parentUuid": "3fa0c359_4056072c",
       "revId": "1c6f932ae7c9e3e0ddc6140e1d5acb6079efc66d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
