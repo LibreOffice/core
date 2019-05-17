@@ -1898,6 +1898,18 @@ public:
         m_aRadioButtonData.SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
     }
 
+    virtual void freeze() override
+    {
+        SalInstanceWidget::freeze();
+        m_xTreeView->SetUpdateMode(false);
+    }
+
+    virtual void thaw() override
+    {
+        m_xTreeView->SetUpdateMode(true);
+        SalInstanceWidget::thaw();
+    }
+
     virtual void set_column_fixed_widths(const std::vector<int>& rWidths) override
     {
         std::vector<long> aTabPositions;
