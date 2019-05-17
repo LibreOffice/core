@@ -1257,7 +1257,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_BIN:
         {
-            m_aStates.top().nInternalState = RTFInternalState::BIN;
+            m_aStates.top().setInternalState(RTFInternalState::BIN);
             m_aStates.top().setBinaryToRead(nParam);
         }
         break;

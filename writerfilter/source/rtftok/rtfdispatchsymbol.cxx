@@ -170,7 +170,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         }
         break;
         case RTF_HEXCHAR:
-            m_aStates.top().nInternalState = RTFInternalState::HEX;
+            m_aStates.top().setInternalState(RTFInternalState::HEX);
             break;
         case RTF_CELL:
         case RTF_NESTCELL:
