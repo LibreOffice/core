@@ -1079,7 +1079,8 @@ bool OfaAutocorrReplacePage::NewDelHdl(const weld::Widget* pBtn)
 
 IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, weld::Entry&, rEdt, void)
 {
-    int nFirstSel = m_xReplaceTLB->get_selected_index();
+    std::unique_ptr<weld::TreeIter> xFirstSel(m_xReplaceTLB->make_iterator());
+    bool bFirstSelIterSet = m_xReplaceTLB->get_selected(xFirstSel.get());
     bool bShort = &rEdt == m_xShortED.get();
     const OUString rEntry = rEdt.get_text();
     const OUString rRepString = m_xReplaceED->get_text();
@@ -1092,37 +1093,36 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, weld::Entry&, rEdt, void)
             bool bFound = false;
             bool bTmpSelEntry=false;
 
-            int nCount = m_xReplaceTLB->n_children();
-            for (int i = 0; i < nCount; ++i)
-            {
-                int nEntry = i;
-                OUString aTestStr = m_xReplaceTLB->get_text(i, 0);
+            m_xReplaceTLB->all_foreach([this, &rEntry, &rRepString, &bFound,
+                                        &bTmpSelEntry, &bFirstSelIterSet,
+                                        &xFirstSel, &aWordStr](weld::TreeIter& rIter){
+                OUString aTestStr = m_xReplaceTLB->get_text(rIter, 0);
                 if( pCompareClass->compareString(rEntry, aTestStr ) == 0 )
                 {
-                    if( !rRepString.isEmpty() )
-                    {
+                    if (!rRepString.isEmpty())
                         bFirstSelect = true;
-                    }
-                    m_xReplaceTLB->set_cursor(nEntry);
-                    nFirstSel = i;
+                    m_xReplaceTLB->set_cursor(rIter);
+                    m_xReplaceTLB->copy_iterator(rIter, *xFirstSel);
+                    bFirstSelIterSet = true;
                     m_xNewReplacePB->set_label(sModify);
                     bFound = true;
-                    break;
+                    return true;
                 }
                 else
                 {
                     aTestStr = pCharClass->lowercase( aTestStr );
                     if( aTestStr.startsWith(aWordStr) && !bTmpSelEntry )
                     {
-                        m_xReplaceTLB->scroll_to_row(nEntry);
+                        m_xReplaceTLB->scroll_to_row(rIter);
                         bTmpSelEntry = true;
                     }
                 }
-            }
+                return false;
+            });
             if( !bFound )
             {
                 m_xReplaceTLB->select(-1);
-                nFirstSel = -1;
+                bFirstSelIterSet = false;
                 m_xNewReplacePB->set_label(sNew);
                 if( bReplaceEditChanged )
                     m_xTextOnlyCB->set_sensitive(false);
@@ -1138,7 +1138,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, weld::Entry&, rEdt, void)
     else if( !bShort )
     {
         bReplaceEditChanged = true;
-        if (nFirstSel != -1)
+        if (bFirstSelIterSet)
         {
             m_xNewReplacePB->set_label(sModify);
         }
@@ -1148,8 +1148,8 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, weld::Entry&, rEdt, void)
     bool bEnableNew = !rShortTxt.isEmpty() &&
                         ( !rRepString.isEmpty() ||
                                 ( bHasSelectionText && bSWriter )) &&
-                        ( nFirstSel == -1 || rRepString !=
-                                m_xReplaceTLB->get_text(nFirstSel, 1) );
+                        ( !bFirstSelIterSet || rRepString !=
+                                m_xReplaceTLB->get_text(*xFirstSel, 1) );
     if( bEnableNew )
     {
         for (auto const& elem : aFormatText)
