@@ -170,8 +170,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">check</action-widget>
-      <action-widget response="0">disable</action-widget>
+      <action-widget response="101">check</action-widget>
+      <action-widget response="102">disable</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>

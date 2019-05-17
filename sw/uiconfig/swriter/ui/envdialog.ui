@@ -270,11 +270,11 @@
     </child>
     <action-widgets>
       <action-widget response="-5">ok</action-widget>
-      <action-widget response="0">user</action-widget>
-      <action-widget response="0">modify</action-widget>
+      <action-widget response="103">user</action-widget>
+      <action-widget response="102">modify</action-widget>
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
-      <action-widget response="0">reset</action-widget>
+      <action-widget response="101">reset</action-widget>
     </action-widgets>
     <child>
       <placeholder/>
