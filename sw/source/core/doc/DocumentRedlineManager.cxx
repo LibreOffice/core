@@ -1955,7 +1955,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         {
                             pTextNode = pTextNd->GetTextNode();
                             if (pTextNode && pDelNode != pTextNode )
-                                pDelNode->CopyCollFormat( *pTextNode );
+                                pTextNode->ChgFormatColl( pDelNode->GetTextColl() );
                             pTextNd = SwNodes::GoPrevious( &aIdx );
                         }
                     }
