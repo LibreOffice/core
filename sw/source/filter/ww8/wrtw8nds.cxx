@@ -1157,6 +1157,8 @@ OUString BookmarkToWord(const OUString &rBookmark)
         rBookmark.replace(' ', '_'), // Spaces are prohibited in bookmark name
         INetURLObject::PART_REL_SEGMENT_EXTRA,
         INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_ASCII_US));
+    // Unicode letters are allowed
+    sRet = INetURLObject::decode(sRet, INetURLObject::DecodeMechanism::Unambiguous, RTL_TEXTENCODING_UTF8);
     return TruncateBookmark(sRet);
 }
 
