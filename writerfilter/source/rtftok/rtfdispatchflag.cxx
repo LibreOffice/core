@@ -472,7 +472,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().aCharacterAttributes = getDefaultState().aCharacterAttributes;
             m_aStates.top().setCurrentCharacterStyleIndex(-1);
             m_aStates.top().setIsRightToLeft(false);
-            m_aStates.top().eRunType = RTFParserState::RunType::LOCH;
+            m_aStates.top().setRunType(RTFParserState::RunType::LOCH);
         }
         break;
         case RTF_PARD:
@@ -757,13 +757,13 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             // These should be mapped to NS_ooxml::LN_EG_SectPrContents_pgNumType, but dmapper has no API for that at the moment.
             break;
         case RTF_LOCH:
-            m_aStates.top().eRunType = RTFParserState::RunType::LOCH;
+            m_aStates.top().setRunType(RTFParserState::RunType::LOCH);
             break;
         case RTF_HICH:
-            m_aStates.top().eRunType = RTFParserState::RunType::HICH;
+            m_aStates.top().setRunType(RTFParserState::RunType::HICH);
             break;
         case RTF_DBCH:
-            m_aStates.top().eRunType = RTFParserState::RunType::DBCH;
+            m_aStates.top().setRunType(RTFParserState::RunType::DBCH);
             break;
         case RTF_TITLEPG:
         {
@@ -853,74 +853,74 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().aPicture.eStyle = RTFBmpStyle::JPEG;
             break;
         case RTF_POSYT:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign,
-                                           NS_ooxml::LN_Value_doc_ST_YAlign_top);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_yAlign,
+                                               NS_ooxml::LN_Value_doc_ST_YAlign_top);
             break;
         case RTF_POSYB:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign,
-                                           NS_ooxml::LN_Value_doc_ST_YAlign_bottom);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_yAlign,
+                                               NS_ooxml::LN_Value_doc_ST_YAlign_bottom);
             break;
         case RTF_POSYC:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign,
-                                           NS_ooxml::LN_Value_doc_ST_YAlign_center);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_yAlign,
+                                               NS_ooxml::LN_Value_doc_ST_YAlign_center);
             break;
         case RTF_POSYIN:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign,
-                                           NS_ooxml::LN_Value_doc_ST_YAlign_inside);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_yAlign,
+                                               NS_ooxml::LN_Value_doc_ST_YAlign_inside);
             break;
         case RTF_POSYOUT:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign,
-                                           NS_ooxml::LN_Value_doc_ST_YAlign_outside);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_yAlign,
+                                               NS_ooxml::LN_Value_doc_ST_YAlign_outside);
             break;
         case RTF_POSYIL:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign,
-                                           NS_ooxml::LN_Value_doc_ST_YAlign_inline);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_yAlign,
+                                               NS_ooxml::LN_Value_doc_ST_YAlign_inline);
             break;
 
         case RTF_PHMRG:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_hAnchor,
-                                           NS_ooxml::LN_Value_doc_ST_HAnchor_margin);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_hAnchor,
+                                               NS_ooxml::LN_Value_doc_ST_HAnchor_margin);
             break;
         case RTF_PVMRG:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_vAnchor,
-                                           NS_ooxml::LN_Value_doc_ST_VAnchor_margin);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_vAnchor,
+                                               NS_ooxml::LN_Value_doc_ST_VAnchor_margin);
             break;
         case RTF_PHPG:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_hAnchor,
-                                           NS_ooxml::LN_Value_doc_ST_HAnchor_page);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_hAnchor,
+                                               NS_ooxml::LN_Value_doc_ST_HAnchor_page);
             break;
         case RTF_PVPG:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_vAnchor,
-                                           NS_ooxml::LN_Value_doc_ST_VAnchor_page);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_vAnchor,
+                                               NS_ooxml::LN_Value_doc_ST_VAnchor_page);
             break;
         case RTF_PHCOL:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_hAnchor,
-                                           NS_ooxml::LN_Value_doc_ST_HAnchor_text);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_hAnchor,
+                                               NS_ooxml::LN_Value_doc_ST_HAnchor_text);
             break;
         case RTF_PVPARA:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_vAnchor,
-                                           NS_ooxml::LN_Value_doc_ST_VAnchor_text);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_vAnchor,
+                                               NS_ooxml::LN_Value_doc_ST_VAnchor_text);
             break;
 
         case RTF_POSXC:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign,
-                                           NS_ooxml::LN_Value_doc_ST_XAlign_center);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_xAlign,
+                                               NS_ooxml::LN_Value_doc_ST_XAlign_center);
             break;
         case RTF_POSXI:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign,
-                                           NS_ooxml::LN_Value_doc_ST_XAlign_inside);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_xAlign,
+                                               NS_ooxml::LN_Value_doc_ST_XAlign_inside);
             break;
         case RTF_POSXO:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign,
-                                           NS_ooxml::LN_Value_doc_ST_XAlign_outside);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_xAlign,
+                                               NS_ooxml::LN_Value_doc_ST_XAlign_outside);
             break;
         case RTF_POSXL:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign,
-                                           NS_ooxml::LN_Value_doc_ST_XAlign_left);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_xAlign,
+                                               NS_ooxml::LN_Value_doc_ST_XAlign_left);
             break;
         case RTF_POSXR:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign,
-                                           NS_ooxml::LN_Value_doc_ST_XAlign_right);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_xAlign,
+                                               NS_ooxml::LN_Value_doc_ST_XAlign_right);
             break;
 
         case RTF_DPLINE:
@@ -938,7 +938,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     uno::Reference<drawing::XShape> xShape(
                         getModelFactory()->createInstance("com.sun.star.drawing.LineShape"),
                         uno::UNO_QUERY);
-                    m_aStates.top().aDrawingObject.setShape(xShape);
+                    m_aStates.top().getDrawingObject().setShape(xShape);
                     break;
                 }
                 case RTF_DPPOLYLINE:
@@ -947,7 +947,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     uno::Reference<drawing::XShape> xShape(
                         getModelFactory()->createInstance("com.sun.star.drawing.PolyLineShape"),
                         uno::UNO_QUERY);
-                    m_aStates.top().aDrawingObject.setShape(xShape);
+                    m_aStates.top().getDrawingObject().setShape(xShape);
                     break;
                 }
                 case RTF_DPPOLYGON:
@@ -955,7 +955,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     uno::Reference<drawing::XShape> xShape(
                         getModelFactory()->createInstance("com.sun.star.drawing.PolyPolygonShape"),
                         uno::UNO_QUERY);
-                    m_aStates.top().aDrawingObject.setShape(xShape);
+                    m_aStates.top().getDrawingObject().setShape(xShape);
                     break;
                 }
                 case RTF_DPRECT:
@@ -963,7 +963,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     uno::Reference<drawing::XShape> xShape(
                         getModelFactory()->createInstance("com.sun.star.drawing.RectangleShape"),
                         uno::UNO_QUERY);
-                    m_aStates.top().aDrawingObject.setShape(xShape);
+                    m_aStates.top().getDrawingObject().setShape(xShape);
                     break;
                 }
                 case RTF_DPELLIPSE:
@@ -974,19 +974,20 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     uno::Reference<drawing::XShape> xShape(
                         getModelFactory()->createInstance("com.sun.star.text.TextFrame"),
                         uno::UNO_QUERY);
-                    m_aStates.top().aDrawingObject.setShape(xShape);
+                    m_aStates.top().getDrawingObject().setShape(xShape);
                     std::vector<beans::PropertyValue> aDefaults
                         = RTFSdrImport::getTextFrameDefaults(false);
                     for (const auto& rDefault : aDefaults)
                     {
-                        if (!findPropertyName(m_aStates.top().aDrawingObject.getPendingProperties(),
-                                              rDefault.Name))
-                            m_aStates.top().aDrawingObject.getPendingProperties().push_back(
+                        if (!findPropertyName(
+                                m_aStates.top().getDrawingObject().getPendingProperties(),
+                                rDefault.Name))
+                            m_aStates.top().getDrawingObject().getPendingProperties().push_back(
                                 rDefault);
                     }
                     checkFirstRun();
-                    Mapper().startShape(m_aStates.top().aDrawingObject.getShape());
-                    m_aStates.top().aDrawingObject.setHadShapeText(true);
+                    Mapper().startShape(m_aStates.top().getDrawingObject().getShape());
+                    m_aStates.top().getDrawingObject().setHadShapeText(true);
                 }
                 break;
                 default:
@@ -997,12 +998,12 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 uno::Reference<drawing::XShape> xShape(
                     getModelFactory()->createInstance("com.sun.star.drawing.CustomShape"),
                     uno::UNO_QUERY);
-                m_aStates.top().aDrawingObject.setShape(xShape);
+                m_aStates.top().getDrawingObject().setShape(xShape);
             }
             uno::Reference<drawing::XDrawPageSupplier> xDrawSupplier(m_xDstDoc, uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xPropertySet(
-                m_aStates.top().aDrawingObject.getShape(), uno::UNO_QUERY);
-            m_aStates.top().aDrawingObject.setPropertySet(xPropertySet);
+                m_aStates.top().getDrawingObject().getShape(), uno::UNO_QUERY);
+            m_aStates.top().getDrawingObject().setPropertySet(xPropertySet);
             if (xDrawSupplier.is())
             {
                 uno::Reference<drawing::XShapes> xShapes(xDrawSupplier->getDrawPage(),
@@ -1010,24 +1011,25 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 if (xShapes.is() && nKeyword != RTF_DPTXBX)
                 {
                     // set default VertOrient before inserting
-                    m_aStates.top().aDrawingObject.getPropertySet()->setPropertyValue(
+                    m_aStates.top().getDrawingObject().getPropertySet()->setPropertyValue(
                         "VertOrient", uno::makeAny(text::VertOrientation::NONE));
-                    xShapes->add(m_aStates.top().aDrawingObject.getShape());
+                    xShapes->add(m_aStates.top().getDrawingObject().getShape());
                 }
             }
             if (nType)
             {
                 uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(
-                    m_aStates.top().aDrawingObject.getShape(), uno::UNO_QUERY);
+                    m_aStates.top().getDrawingObject().getShape(), uno::UNO_QUERY);
                 xDefaulter->createCustomShapeDefaults(OUString::number(nType));
             }
             std::vector<beans::PropertyValue>& rPendingProperties
-                = m_aStates.top().aDrawingObject.getPendingProperties();
+                = m_aStates.top().getDrawingObject().getPendingProperties();
             for (auto& rPendingProperty : rPendingProperties)
-                m_aStates.top().aDrawingObject.getPropertySet()->setPropertyValue(
+                m_aStates.top().getDrawingObject().getPropertySet()->setPropertyValue(
                     rPendingProperty.Name, rPendingProperty.Value);
-            m_pSdrImport->resolveDhgt(m_aStates.top().aDrawingObject.getPropertySet(),
-                                      m_aStates.top().aDrawingObject.getDhgt(), /*bOldStyle=*/true);
+            m_pSdrImport->resolveDhgt(m_aStates.top().getDrawingObject().getPropertySet(),
+                                      m_aStates.top().getDrawingObject().getDhgt(),
+                                      /*bOldStyle=*/true);
         }
         break;
         case RTF_DOBXMARGIN:
@@ -1037,7 +1039,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             aPropertyValue.Name = (nKeyword == RTF_DOBXMARGIN ? OUString("HoriOrientRelation")
                                                               : OUString("VertOrientRelation"));
             aPropertyValue.Value <<= text::RelOrientation::PAGE_PRINT_AREA;
-            m_aStates.top().aDrawingObject.getPendingProperties().push_back(aPropertyValue);
+            m_aStates.top().getDrawingObject().getPendingProperties().push_back(aPropertyValue);
         }
         break;
         case RTF_DOBXPAGE:
@@ -1047,7 +1049,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             aPropertyValue.Name = (nKeyword == RTF_DOBXPAGE ? OUString("HoriOrientRelation")
                                                             : OUString("VertOrientRelation"));
             aPropertyValue.Value <<= text::RelOrientation::PAGE_FRAME;
-            m_aStates.top().aDrawingObject.getPendingProperties().push_back(aPropertyValue);
+            m_aStates.top().getDrawingObject().getPendingProperties().push_back(aPropertyValue);
         }
         break;
         case RTF_DOBYPARA:
@@ -1055,7 +1057,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             beans::PropertyValue aPropertyValue;
             aPropertyValue.Name = "VertOrientRelation";
             aPropertyValue.Value <<= text::RelOrientation::FRAME;
-            m_aStates.top().aDrawingObject.getPendingProperties().push_back(aPropertyValue);
+            m_aStates.top().getDrawingObject().getPendingProperties().push_back(aPropertyValue);
         }
         break;
         case RTF_CONTEXTUALSPACE:
@@ -1115,17 +1117,17 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_page);
             break;
         case RTF_DPLINEHOLLOW:
-            m_aStates.top().aDrawingObject.setFLine(0);
+            m_aStates.top().getDrawingObject().setFLine(0);
             break;
         case RTF_DPROUNDR:
-            if (m_aStates.top().aDrawingObject.getPropertySet().is())
+            if (m_aStates.top().getDrawingObject().getPropertySet().is())
                 // Seems this old syntax has no way to specify a custom radius, and this is the default
-                m_aStates.top().aDrawingObject.getPropertySet()->setPropertyValue(
+                m_aStates.top().getDrawingObject().getPropertySet()->setPropertyValue(
                     "CornerRadius", uno::makeAny(sal_Int32(83)));
             break;
         case RTF_NOWRAP:
-            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_wrap,
-                                           NS_ooxml::LN_Value_doc_ST_Wrap_notBeside);
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_wrap,
+                                               NS_ooxml::LN_Value_doc_ST_Wrap_notBeside);
             break;
         case RTF_MNOR:
             m_bMathNor = true;
