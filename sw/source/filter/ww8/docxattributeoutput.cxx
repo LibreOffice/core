@@ -1612,7 +1612,7 @@ void DocxAttributeOutput::DoWriteBookmarkTagStart(const OUString & bookmarkName)
 {
     m_pSerializer->singleElementNS(XML_w, XML_bookmarkStart,
         FSNS(XML_w, XML_id), OString::number(m_nNextBookmarkId),
-        FSNS(XML_w, XML_name), INetURLObject::decode(BookmarkToWord(bookmarkName), INetURLObject::DecodeMechanism::Unambiguous, RTL_TEXTENCODING_UTF8).toUtf8());
+        FSNS(XML_w, XML_name), BookmarkToWord(bookmarkName).toUtf8());
 }
 
 void DocxAttributeOutput::DoWriteBookmarkTagEnd(const OUString & bookmarkName)
@@ -1980,12 +1980,6 @@ void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos
             {
                sToken = sToken.replaceAll("NNNN", "dddd");
                sToken = sToken.replaceAll("NN", "ddd");
-            }
-            //tdf#113483: fix non-ascii characters inside instrText xml tags
-            else if ( rInfos.eType ==  ww::eREF
-              || rInfos.eType ==  ww::ePAGEREF )
-            {
-                sToken = INetURLObject::decode(sToken, INetURLObject::DecodeMechanism::Unambiguous, RTL_TEXTENCODING_UTF8);
             }
 
             // Write the Field command
