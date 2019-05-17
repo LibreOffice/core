@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_16d7e54d",
+        "filename": "officecfg/registry/schema/org/openoffice/Setup.xcs",
+        "patchSetId": 9
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-17T15:02:53Z",
+      "side": 1,
+      "message": "addressed now with \u003chttps://gerrit.libreoffice.org/#/c/72485/\u003e \"Fix nillability of ooSetupLastVersion\"",
+      "parentUuid": "3fa0c359_5b191877",
+      "revId": "5187d3ae495a07373a12fd5980c9269bc8ce3f8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_1b515037",
         "filename": "sfx2/source/view/viewfrm.cxx",
         "patchSetId": 9
