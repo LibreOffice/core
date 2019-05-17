@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_f627d9b5",
+        "filename": "external/mdds/use-position-hint-also-back.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2019-05-17T14:17:10Z",
+      "side": 1,
+      "message": "Nice idea! The cost of the search is only tied to the number of blocks traversed rather than rows. So the restriction here could instead be based on the start-pos in the block of index \u003d block_index/2 rather than with start_row/2. Just a thought.",
+      "range": {
+        "startLine": 27,
+        "startChar": 12,
+        "endLine": 27,
+        "endChar": 33
+      },
+      "revId": "15e1f88c963579c4a6bbc4275b7831ad38c6e833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
