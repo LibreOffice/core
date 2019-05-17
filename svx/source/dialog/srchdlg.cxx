@@ -332,6 +332,8 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
 
     //tdf#122322
     nRememberSize = officecfg::Office::Common::Misc::FindReplaceRememberedSearches::get();
+    if (nRememberSize<1)
+        nRememberSize = 1; //0 crashes with no results found
 
     auto nTermWidth = m_xSearchLB->get_approximate_digit_width() * 28;
     m_xSearchLB->set_size_request(nTermWidth, -1);
