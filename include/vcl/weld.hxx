@@ -765,12 +765,20 @@ public:
     virtual void move_subtree(TreeIter& rNode, const TreeIter* pNewParent, int nIndexInNewParent)
         = 0;
 
-    //calling func on each element until func returns true or we run out of elements
+    // call func on each element until func returns true or we run out of elements
     virtual void all_foreach(const std::function<bool(TreeIter&)>& func) = 0;
-    //calling func on each selected element until func returns true or we run out of elements
+    // call func on each selected element until func returns true or we run out of elements
     virtual void selected_foreach(const std::function<bool(TreeIter&)>& func) = 0;
-    //calling func on each visible element until func returns true or we run out of elements
+    // call func on each visible element until func returns true or we run out of elements
     virtual void visible_foreach(const std::function<bool(TreeIter&)>& func) = 0;
+    // clear the tree, then add nSourceCount rows, call func on each row
+    // inserted with an arg of the index that this row will be when bulk insert
+    // ends.
+    //
+    // this enables inserting the entries backwards in models where that is faster
+    virtual void bulk_insert_for_each(int nSourceCount,
+                                      const std::function<void(TreeIter&, int nSourceIndex)>& func)
+        = 0;
 
     void connect_expanding(const Link<const TreeIter&, bool>& rLink) { m_aExpandingHdl = rLink; }
 
