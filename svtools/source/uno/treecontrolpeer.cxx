@@ -1497,7 +1497,7 @@ void UnoTreeListItem::Paint(
     const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext, const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
     Point aPos(rPos);
-    Size aSize(GetSize(&rDev, &rEntry));
+    Size aSize(GetWidth(&rDev, &rEntry), GetHeight(&rDev, &rEntry));
     if (!!maImage)
     {
         rRenderContext.DrawImage(aPos, maImage, rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable);
@@ -1536,18 +1536,21 @@ void UnoTreeListItem::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
 
-    pViewData->maSize = maImage.GetSizePixel();
+    Size aSize(maImage.GetSizePixel());
+    pViewData->mnWidth = aSize.Width();
+    pViewData->mnHeight = aSize.Height();
 
     const Size aTextSize(pView->GetTextWidth( maText ), pView->GetTextHeight());
-    if( pViewData->maSize.Width() )
+    if( pViewData->mnWidth )
     {
-        pViewData->maSize.AdjustWidth(6 + aTextSize.Width() );
-        if( pViewData->maSize.Height() < aTextSize.Height() )
-            pViewData->maSize.setHeight( aTextSize.Height() );
+        pViewData->mnWidth += (6 + aTextSize.Width());
+        if( pViewData->mnHeight < aTextSize.Height() )
+            pViewData->mnHeight = aTextSize.Height();
     }
     else
     {
-        pViewData->maSize = aTextSize;
+        pViewData->mnWidth = aTextSize.Width();
+        pViewData->mnHeight = aTextSize.Height();
     }
 }
 

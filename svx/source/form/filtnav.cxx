@@ -965,7 +965,8 @@ void FmFilterItemsString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::Ren
         rRenderContext.Push(PushFlags::LINECOLOR);
         rRenderContext.SetLineColor(rRenderContext.GetTextColor());
 
-        tools::Rectangle aRect(rPos, GetSize(&rDev, &rEntry));
+        Size aSize(GetWidth(&rDev, &rEntry), GetHeight(&rDev, &rEntry));
+        tools::Rectangle aRect(rPos, aSize);
         Point aFirst(rPos.X(), aRect.Bottom() - 6);
         Point aSecond(aFirst .X() + 2, aFirst.Y() + 3);
 
@@ -991,7 +992,8 @@ void FmFilterItemsString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pE
 
     Size aSize(pView->GetTextWidth(GetText()), pView->GetTextHeight());
     aSize.AdjustWidth(nxDBmp );
-    pViewData->maSize = aSize;
+    pViewData->mnWidth = aSize.Width();
+    pViewData->mnHeight = aSize.Height();
 }
 
 class FmFilterString : public SvLBoxString
@@ -1013,7 +1015,6 @@ public:
 
 const int nxD = 4;
 
-
 void FmFilterString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData)
 {
     if( !pViewData )
@@ -1027,9 +1028,9 @@ void FmFilterString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
     Size aSize(pView->GetTextWidth(m_aName), pView->GetTextHeight());
     pView->Control::SetFont( aOldFont );
     aSize.AdjustWidth(pView->GetTextWidth(GetText()) + nxD );
-    pViewData->maSize = aSize;
+    pViewData->mnWidth = aSize.Width();
+    pViewData->mnHeight = aSize.Height();
 }
-
 
 void FmFilterString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
                            const SvViewDataEntry* /*pView*/, const SvTreeListEntry& /*rEntry*/)

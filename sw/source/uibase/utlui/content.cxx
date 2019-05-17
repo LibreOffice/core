@@ -3031,7 +3031,7 @@ void SwContentTree::RequestHelp( const HelpEvent& rHEvt )
                     aPos = GetEntryPosition( pEntry );
 
                     aPos.setX( GetTabPos( pEntry, pTab ) );
-                    Size aSize( pItem->GetSize( this, pEntry ) );
+                    Size aSize(pItem->GetWidth(this, pEntry), pItem->GetHeight(this, pEntry));
 
                     if((aPos.X() + aSize.Width()) > GetSizePixel().Width())
                         aSize.setWidth( GetSizePixel().Width() - aPos.X() );

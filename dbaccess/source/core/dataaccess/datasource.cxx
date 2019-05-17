@@ -584,13 +584,20 @@ namespace
         if (!rModel.is())
             return nullptr;
         Reference<XController> xController(rModel->getCurrentController());
-        if (!xController.is())
-            return nullptr;
-        Reference<XFrame> xFrame(xController->getFrame());
-        if (!xFrame.is())
-            return nullptr;
-        Reference<css::awt::XWindow> xWindow(xFrame->getContainerWindow());
-        return Application::GetFrameWeld(xWindow);
+        if (xController.is())
+        {
+            Reference<XFrame> xFrame(xController->getFrame());
+            if (!xFrame.is())
+                return nullptr;
+            Reference<css::awt::XWindow> xWindow(xFrame->getContainerWindow());
+            return Application::GetFrameWeld(xWindow);
+        }
+        css::uno::Reference<css::task::XInteractionHandler> xHandler;
+        // check whether the document has its own interaction handler set
+        ::comphelper::NamedValueCollection aDocArgs(rModel->getArgs());
+        xHandler = aDocArgs.getOrDefault("InteractionHandler", xHandler);
+        fprintf(stderr, "here\n");
+        return nullptr;
     }
 #endif
 }
