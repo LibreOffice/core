@@ -520,7 +520,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CLCBPATRAW:
         {
             auto pValue = new RTFValue(sal_uInt32(getColorTable(nParam)));
-            putNestedAttribute(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_shd,
+            putNestedAttribute(m_aStates.top().getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_shd,
                                NS_ooxml::LN_CT_Shd_fill, pValue);
         }
         break;
@@ -856,7 +856,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 
             // If there is a negative left margin, then the first cellx is relative to that.
             RTFValue::Pointer_t pTblInd
-                = m_aStates.top().aTableRowSprms.find(NS_ooxml::LN_CT_TblPrBase_tblInd);
+                = m_aStates.top().getTableRowSprms().find(NS_ooxml::LN_CT_TblPrBase_tblInd);
             if (rCurrentCellX == 0 && pTblInd.get())
             {
                 RTFValue::Pointer_t pWidth
@@ -867,24 +867,24 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 
             rCurrentCellX = nParam;
             auto pXValue = new RTFValue(nCellX);
-            m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
-                                               RTFOverwrite::NO_APPEND);
+            m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
+                                                   RTFOverwrite::NO_APPEND);
             if (Destination::NESTEDTABLEPROPERTIES == m_aStates.top().eDestination)
             {
                 m_nNestedCells++;
                 // Push cell properties.
-                m_aNestedTableCellsSprms.push_back(m_aStates.top().aTableCellSprms);
+                m_aNestedTableCellsSprms.push_back(m_aStates.top().getTableCellSprms());
                 m_aNestedTableCellsAttributes.push_back(m_aStates.top().getTableCellAttributes());
             }
             else
             {
                 m_nTopLevelCells++;
                 // Push cell properties.
-                m_aTopLevelTableCellsSprms.push_back(m_aStates.top().aTableCellSprms);
+                m_aTopLevelTableCellsSprms.push_back(m_aStates.top().getTableCellSprms());
                 m_aTopLevelTableCellsAttributes.push_back(m_aStates.top().getTableCellAttributes());
             }
 
-            m_aStates.top().aTableCellSprms = m_aDefaultState.aTableCellSprms;
+            m_aStates.top().getTableCellSprms() = m_aDefaultState.getTableCellSprms();
             m_aStates.top().getTableCellAttributes() = m_aDefaultState.getTableCellAttributes();
             // We assume text after a row definition always belongs to the table, to handle text before the real INTBL token
             dispatchFlag(RTF_INTBL);
@@ -914,21 +914,23 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             else if (nParam > 0)
                 hRule = "atLeast";
 
-            putNestedAttribute(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TrPrBase_trHeight,
-                               NS_ooxml::LN_CT_Height_val, pIntValue);
+            putNestedAttribute(m_aStates.top().getTableRowSprms(),
+                               NS_ooxml::LN_CT_TrPrBase_trHeight, NS_ooxml::LN_CT_Height_val,
+                               pIntValue);
 
             auto pHRule = new RTFValue(hRule);
-            putNestedAttribute(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TrPrBase_trHeight,
-                               NS_ooxml::LN_CT_Height_hRule, pHRule);
+            putNestedAttribute(m_aStates.top().getTableRowSprms(),
+                               NS_ooxml::LN_CT_TrPrBase_trHeight, NS_ooxml::LN_CT_Height_hRule,
+                               pHRule);
         }
         break;
         case RTF_TRLEFT:
         {
             // the value is in twips
-            putNestedAttribute(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblInd,
+            putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblInd,
                                NS_ooxml::LN_CT_TblWidth_type,
                                new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
-            putNestedAttribute(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblInd,
+            putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblInd,
                                NS_ooxml::LN_CT_TblWidth_w, new RTFValue(nParam));
             auto const aDestination = m_aStates.top().eDestination;
             int& rCurrentTRLeft((Destination::NESTEDTABLEPROPERTIES == aDestination)
@@ -941,21 +943,23 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         }
         break;
         case RTF_COLS:
-            putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_cols,
-                               NS_ooxml::LN_CT_Columns_num, pIntValue);
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_cols, NS_ooxml::LN_CT_Columns_num,
+                               pIntValue);
             break;
         case RTF_COLSX:
-            putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_cols,
-                               NS_ooxml::LN_CT_Columns_space, pIntValue);
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_cols, NS_ooxml::LN_CT_Columns_space,
+                               pIntValue);
             break;
         case RTF_COLNO:
-            putNestedSprm(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_cols,
+            putNestedSprm(m_aStates.top().getSectionSprms(), NS_ooxml::LN_EG_SectPrContents_cols,
                           NS_ooxml::LN_CT_Columns_col, pIntValue);
             break;
         case RTF_COLW:
         case RTF_COLSR:
         {
-            RTFSprms& rAttributes = getLastAttributes(m_aStates.top().aSectionSprms,
+            RTFSprms& rAttributes = getLastAttributes(m_aStates.top().getSectionSprms(),
                                                       NS_ooxml::LN_EG_SectPrContents_cols);
             rAttributes.set(
                 (nKeyword == RTF_COLW ? NS_ooxml::LN_CT_Column_w : NS_ooxml::LN_CT_Column_space),
@@ -963,72 +967,86 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         }
         break;
         case RTF_PAPERH:
-            putNestedAttribute(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz,
-                               NS_ooxml::LN_CT_PageSz_h, pIntValue);
+            putNestedAttribute(m_aDefaultState.getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_h,
+                               pIntValue);
             [[fallthrough]]; // set the default + current value
         case RTF_PGHSXN:
-            putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz,
-                               NS_ooxml::LN_CT_PageSz_h, pIntValue);
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_h,
+                               pIntValue);
             break;
         case RTF_PAPERW:
-            putNestedAttribute(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz,
-                               NS_ooxml::LN_CT_PageSz_w, pIntValue);
+            putNestedAttribute(m_aDefaultState.getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w,
+                               pIntValue);
             [[fallthrough]]; // set the default + current value
         case RTF_PGWSXN:
-            putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz,
-                               NS_ooxml::LN_CT_PageSz_w, pIntValue);
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w,
+                               pIntValue);
             break;
         case RTF_MARGL:
-            putNestedAttribute(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar,
-                               NS_ooxml::LN_CT_PageMar_left, pIntValue);
+            putNestedAttribute(m_aDefaultState.getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_left,
+                               pIntValue);
             [[fallthrough]]; // set the default + current value
         case RTF_MARGLSXN:
-            putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar,
-                               NS_ooxml::LN_CT_PageMar_left, pIntValue);
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_left,
+                               pIntValue);
             break;
         case RTF_MARGR:
-            putNestedAttribute(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar,
-                               NS_ooxml::LN_CT_PageMar_right, pIntValue);
+            putNestedAttribute(m_aDefaultState.getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_right,
+                               pIntValue);
             [[fallthrough]]; // set the default + current value
         case RTF_MARGRSXN:
-            putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar,
-                               NS_ooxml::LN_CT_PageMar_right, pIntValue);
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_right,
+                               pIntValue);
             break;
         case RTF_MARGT:
-            putNestedAttribute(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar,
-                               NS_ooxml::LN_CT_PageMar_top, pIntValue);
+            putNestedAttribute(m_aDefaultState.getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_top,
+                               pIntValue);
             [[fallthrough]]; // set the default + current value
         case RTF_MARGTSXN:
-            putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar,
-                               NS_ooxml::LN_CT_PageMar_top, pIntValue);
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_top,
+                               pIntValue);
             break;
         case RTF_MARGB:
-            putNestedAttribute(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar,
-                               NS_ooxml::LN_CT_PageMar_bottom, pIntValue);
+            putNestedAttribute(m_aDefaultState.getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_bottom,
+                               pIntValue);
             [[fallthrough]]; // set the default + current value
         case RTF_MARGBSXN:
-            putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar,
-                               NS_ooxml::LN_CT_PageMar_bottom, pIntValue);
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_bottom,
+                               pIntValue);
             break;
         case RTF_HEADERY:
-            putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar,
-                               NS_ooxml::LN_CT_PageMar_header, pIntValue);
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_header,
+                               pIntValue);
             break;
         case RTF_FOOTERY:
-            putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar,
-                               NS_ooxml::LN_CT_PageMar_footer, pIntValue);
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_footer,
+                               pIntValue);
             break;
         case RTF_DEFTAB:
             m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_defaultTabStop, pIntValue);
             break;
         case RTF_LINEMOD:
-            putNestedAttribute(m_aStates.top().aSectionSprms,
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
                                NS_ooxml::LN_EG_SectPrContents_lnNumType,
                                NS_ooxml::LN_CT_LineNumber_countBy, pIntValue);
             break;
         case RTF_LINEX:
             if (nParam)
-                putNestedAttribute(m_aStates.top().aSectionSprms,
+                putNestedAttribute(m_aStates.top().getSectionSprms(),
                                    NS_ooxml::LN_EG_SectPrContents_lnNumType,
                                    NS_ooxml::LN_CT_LineNumber_distance, pIntValue);
             break;
@@ -1036,7 +1054,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         {
             // OOXML <w:lnNumType w:start="..."/> is 0-based, RTF is 1-based.
             auto pStart = tools::make_ref<RTFValue>(nParam - 1);
-            putNestedAttribute(m_aStates.top().aSectionSprms,
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
                                NS_ooxml::LN_EG_SectPrContents_lnNumType,
                                NS_ooxml::LN_CT_LineNumber_start, pStart);
         }
@@ -1340,8 +1358,9 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     break;
             }
             if (nValue != -1)
-                putNestedAttribute(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_shd,
-                                   NS_ooxml::LN_CT_Shd_val, new RTFValue(nValue));
+                putNestedAttribute(m_aStates.top().getTableCellSprms(),
+                                   NS_ooxml::LN_CT_TcPrBase_shd, NS_ooxml::LN_CT_Shd_val,
+                                   new RTFValue(nValue));
         }
         break;
         case RTF_DODHGT:
@@ -1412,8 +1431,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 default:
                     break;
             }
-            putNestedSprm(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar, nSprm,
-                          new RTFValue(aAttributes));
+            putNestedSprm(m_aStates.top().getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
+                          nSprm, new RTFValue(aAttributes));
         }
         break;
         case RTF_TRPADDFB:
@@ -1446,9 +1465,9 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 default:
                     break;
             }
-            putNestedAttribute(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar,
+            putNestedAttribute(m_aStates.top().getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
                                nSprm, new RTFValue(aAttributes));
-            putNestedAttribute(m_aDefaultState.aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar,
+            putNestedAttribute(m_aDefaultState.getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
                                nSprm, new RTFValue(aAttributes));
         }
         break;
@@ -1476,10 +1495,10 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 default:
                     break;
             }
-            putNestedSprm(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar, nSprm,
-                          new RTFValue(aAttributes));
-            putNestedSprm(m_aDefaultState.aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar, nSprm,
-                          new RTFValue(aAttributes));
+            putNestedSprm(m_aStates.top().getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
+                          nSprm, new RTFValue(aAttributes));
+            putNestedSprm(m_aDefaultState.getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
+                          nSprm, new RTFValue(aAttributes));
         }
         break;
         case RTF_FI:
@@ -1540,18 +1559,20 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 aAttributes.set(NS_ooxml::LN_CT_TblWidth_type,
                                 new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
                 aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, pIntValue);
-                putNestedSprm(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblCellMar,
-                              NS_ooxml::LN_CT_TblCellMar_left, new RTFValue(aAttributes));
-                putNestedSprm(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblCellMar,
+                putNestedSprm(m_aStates.top().getTableRowSprms(),
+                              NS_ooxml::LN_CT_TblPrBase_tblCellMar, NS_ooxml::LN_CT_TblCellMar_left,
+                              new RTFValue(aAttributes));
+                putNestedSprm(m_aStates.top().getTableRowSprms(),
+                              NS_ooxml::LN_CT_TblPrBase_tblCellMar,
                               NS_ooxml::LN_CT_TblCellMar_right, new RTFValue(aAttributes));
             }
             break;
         case RTF_TRFTSWIDTH:
-            putNestedAttribute(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblW,
+            putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblW,
                                NS_ooxml::LN_CT_TblWidth_type, pIntValue);
             break;
         case RTF_TRWWIDTH:
-            putNestedAttribute(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblW,
+            putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblW,
                                NS_ooxml::LN_CT_TblWidth_w, pIntValue);
             break;
         case RTF_PROPTYPE:

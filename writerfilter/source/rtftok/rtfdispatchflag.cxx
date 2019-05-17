@@ -268,7 +268,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_nResetBreakOnSectBreak = nKeyword;
         }
         auto pValue = new RTFValue(nParam);
-        m_aStates.top().aSectionSprms.set(NS_ooxml::LN_EG_SectPrContents_type, pValue);
+        m_aStates.top().getSectionSprms().set(NS_ooxml::LN_EG_SectPrContents_type, pValue);
         return RTFError::OK;
     }
 
@@ -376,7 +376,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     if (nParam >= 0)
     {
         auto pValue = new RTFValue(nParam);
-        m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TrPrBase_jc, pValue);
+        m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TrPrBase_jc, pValue);
         return RTFError::OK;
     }
 
@@ -404,7 +404,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     if (nParam >= 0)
     {
         auto pValue = new RTFValue(nParam);
-        m_aStates.top().aTableCellSprms.set(NS_ooxml::LN_CT_TcPrBase_textDirection, pValue);
+        m_aStates.top().getTableCellSprms().set(NS_ooxml::LN_CT_TcPrBase_textDirection, pValue);
     }
 
     // Trivial paragraph flags
@@ -527,8 +527,8 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         }
         case RTF_SECTD:
         {
-            m_aStates.top().aSectionSprms = m_aDefaultState.aSectionSprms;
-            m_aStates.top().aSectionAttributes = m_aDefaultState.aSectionAttributes;
+            m_aStates.top().getSectionSprms() = m_aDefaultState.getSectionSprms();
+            m_aStates.top().getSectionAttributes() = m_aDefaultState.getSectionAttributes();
         }
         break;
         case RTF_TROWD:
@@ -574,8 +574,8 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         break;
         case RTF_LTRROW:
         case RTF_RTLROW:
-            m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblPrBase_bidiVisual,
-                                               new RTFValue(int(nKeyword == RTF_RTLROW)));
+            m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TblPrBase_bidiVisual,
+                                                   new RTFValue(int(nKeyword == RTF_RTLROW)));
             break;
         case RTF_LTRCH:
             // dmapper does not support this.
@@ -621,7 +621,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 default:
                     break;
             }
-            putNestedSprm(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders,
+            putNestedSprm(m_aStates.top().getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcBorders,
                           nParam, pValue);
             m_aStates.top().nBorderState = RTFBorderState::CELL;
         }
@@ -651,8 +651,8 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 default:
                     break;
             }
-            putNestedSprm(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgBorders,
-                          nParam, pValue);
+            putNestedSprm(m_aStates.top().getSectionSprms(),
+                          NS_ooxml::LN_EG_SectPrContents_pgBorders, nParam, pValue);
             m_aStates.top().nBorderState = RTFBorderState::PAGE;
         }
         break;
@@ -697,25 +697,25 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_CLMGF:
         {
             auto pValue = new RTFValue(NS_ooxml::LN_Value_ST_Merge_restart);
-            m_aStates.top().aTableCellSprms.set(NS_ooxml::LN_CT_TcPrBase_hMerge, pValue);
+            m_aStates.top().getTableCellSprms().set(NS_ooxml::LN_CT_TcPrBase_hMerge, pValue);
         }
         break;
         case RTF_CLMRG:
         {
             auto pValue = new RTFValue(NS_ooxml::LN_Value_ST_Merge_continue);
-            m_aStates.top().aTableCellSprms.set(NS_ooxml::LN_CT_TcPrBase_hMerge, pValue);
+            m_aStates.top().getTableCellSprms().set(NS_ooxml::LN_CT_TcPrBase_hMerge, pValue);
         }
         break;
         case RTF_CLVMGF:
         {
             auto pValue = new RTFValue(NS_ooxml::LN_Value_ST_Merge_restart);
-            m_aStates.top().aTableCellSprms.set(NS_ooxml::LN_CT_TcPrBase_vMerge, pValue);
+            m_aStates.top().getTableCellSprms().set(NS_ooxml::LN_CT_TcPrBase_vMerge, pValue);
         }
         break;
         case RTF_CLVMRG:
         {
             auto pValue = new RTFValue(NS_ooxml::LN_Value_ST_Merge_continue);
-            m_aStates.top().aTableCellSprms.set(NS_ooxml::LN_CT_TcPrBase_vMerge, pValue);
+            m_aStates.top().getTableCellSprms().set(NS_ooxml::LN_CT_TcPrBase_vMerge, pValue);
         }
         break;
         case RTF_CLVERTALT:
@@ -737,19 +737,19 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     break;
             }
             auto pValue = new RTFValue(nParam);
-            m_aStates.top().aTableCellSprms.set(NS_ooxml::LN_CT_TcPrBase_vAlign, pValue);
+            m_aStates.top().getTableCellSprms().set(NS_ooxml::LN_CT_TcPrBase_vAlign, pValue);
         }
         break;
         case RTF_TRKEEP:
         {
             auto pValue = new RTFValue(1);
-            m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TrPrBase_cantSplit, pValue);
+            m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TrPrBase_cantSplit, pValue);
         }
         break;
         case RTF_SECTUNLOCKED:
         {
             auto pValue = new RTFValue(0);
-            m_aStates.top().aSectionSprms.set(NS_ooxml::LN_EG_SectPrContents_formProt, pValue);
+            m_aStates.top().getSectionSprms().set(NS_ooxml::LN_EG_SectPrContents_formProt, pValue);
         }
         break;
         case RTF_PGNBIDIA:
@@ -768,7 +768,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_TITLEPG:
         {
             auto pValue = new RTFValue(1);
-            m_aStates.top().aSectionSprms.set(NS_ooxml::LN_EG_SectPrContents_titlePg, pValue);
+            m_aStates.top().getSectionSprms().set(NS_ooxml::LN_EG_SectPrContents_titlePg, pValue);
         }
         break;
         case RTF_SUPER:
@@ -810,7 +810,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             auto pValue = new RTFValue(nKeyword == RTF_LINEPPAGE
                                            ? NS_ooxml::LN_Value_ST_LineNumberRestart_newPage
                                            : NS_ooxml::LN_Value_ST_LineNumberRestart_continuous);
-            putNestedAttribute(m_aStates.top().aSectionSprms,
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
                                NS_ooxml::LN_EG_SectPrContents_lnNumType,
                                NS_ooxml::LN_CT_LineNumber_restart, pValue);
         }
@@ -839,7 +839,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         }
         break;
         case RTF_NOLINE:
-            eraseNestedAttribute(m_aStates.top().aSectionSprms,
+            eraseNestedAttribute(m_aStates.top().getSectionSprms(),
                                  NS_ooxml::LN_EG_SectPrContents_lnNumType,
                                  NS_ooxml::LN_CT_LineNumber_distance);
             break;
@@ -1095,15 +1095,17 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_LANDSCAPE:
         {
             auto pValue = new RTFValue(NS_ooxml::LN_Value_ST_PageOrientation_landscape);
-            putNestedAttribute(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz,
-                               NS_ooxml::LN_CT_PageSz_orient, pValue);
+            putNestedAttribute(m_aDefaultState.getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_orient,
+                               pValue);
             [[fallthrough]]; // set the default + current value
         }
         case RTF_LNDSCPSXN:
         {
             auto pValue = new RTFValue(NS_ooxml::LN_Value_ST_PageOrientation_landscape);
-            putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz,
-                               NS_ooxml::LN_CT_PageSz_orient, pValue);
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_orient,
+                               pValue);
         }
         break;
         case RTF_SHPBXPAGE:
@@ -1151,18 +1153,19 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_widowControl, new RTFValue(1));
             break;
         case RTF_LINEBETCOL:
-            putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_cols,
-                               NS_ooxml::LN_CT_Columns_sep, new RTFValue(1));
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_cols, NS_ooxml::LN_CT_Columns_sep,
+                               new RTFValue(1));
             break;
         case RTF_PGNRESTART:
-            putNestedAttribute(m_aStates.top().aSectionSprms,
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
                                NS_ooxml::LN_EG_SectPrContents_pgNumType,
                                NS_ooxml::LN_CT_PageNumber_start, new RTFValue(1));
             break;
         case RTF_PGNUCLTR:
         {
             auto pIntValue = new RTFValue(NS_ooxml::LN_Value_ST_NumberFormat_upperLetter);
-            putNestedAttribute(m_aStates.top().aSectionSprms,
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
                                NS_ooxml::LN_EG_SectPrContents_pgNumType,
                                NS_ooxml::LN_CT_PageNumber_fmt, pIntValue);
         }
@@ -1170,7 +1173,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PGNLCLTR:
         {
             auto pIntValue = new RTFValue(NS_ooxml::LN_Value_ST_NumberFormat_lowerLetter);
-            putNestedAttribute(m_aStates.top().aSectionSprms,
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
                                NS_ooxml::LN_EG_SectPrContents_pgNumType,
                                NS_ooxml::LN_CT_PageNumber_fmt, pIntValue);
         }
@@ -1178,7 +1181,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PGNUCRM:
         {
             auto pIntValue = new RTFValue(NS_ooxml::LN_Value_ST_NumberFormat_upperRoman);
-            putNestedAttribute(m_aStates.top().aSectionSprms,
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
                                NS_ooxml::LN_EG_SectPrContents_pgNumType,
                                NS_ooxml::LN_CT_PageNumber_fmt, pIntValue);
         }
@@ -1186,7 +1189,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PGNLCRM:
         {
             auto pIntValue = new RTFValue(NS_ooxml::LN_Value_ST_NumberFormat_lowerRoman);
-            putNestedAttribute(m_aStates.top().aSectionSprms,
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
                                NS_ooxml::LN_EG_SectPrContents_pgNumType,
                                NS_ooxml::LN_CT_PageNumber_fmt, pIntValue);
         }
@@ -1194,7 +1197,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PGNDEC:
         {
             auto pIntValue = new RTFValue(NS_ooxml::LN_Value_ST_NumberFormat_decimal);
-            putNestedAttribute(m_aStates.top().aSectionSprms,
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
                                NS_ooxml::LN_EG_SectPrContents_pgNumType,
                                NS_ooxml::LN_CT_PageNumber_fmt, pIntValue);
         }

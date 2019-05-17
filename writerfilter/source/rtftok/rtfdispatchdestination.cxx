@@ -183,7 +183,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 break;
             case RTF_NESTTABLEPROPS:
                 // do not set any properties of outer table at nested table!
-                m_aStates.top().aTableCellSprms = m_aDefaultState.aTableCellSprms;
+                m_aStates.top().getTableCellSprms() = m_aDefaultState.getTableCellSprms();
                 m_aStates.top().getTableCellAttributes() = m_aDefaultState.getTableCellAttributes();
                 m_aNestedTableCellsSprms.clear();
                 m_aNestedTableCellsAttributes.clear();
