@@ -140,8 +140,10 @@ public:
                         SvLBoxItem();
     virtual             ~SvLBoxItem();
     virtual SvLBoxItemType GetType() const = 0;
-    const Size&         GetSize(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const;
-    static const Size&  GetSize(const SvViewDataEntry* pData, sal_uInt16 nItemPos);
+    int GetWidth(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const;
+    int GetHeight(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const;
+    static int GetWidth(const SvViewDataEntry* pData, sal_uInt16 nItemPos);
+    static int GetHeight(const SvViewDataEntry* pData, sal_uInt16 nItemPos);
     void Enable(bool bEnabled) { mbDisabled = !bEnabled; }
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext, const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) = 0;

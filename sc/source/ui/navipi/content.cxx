@@ -730,7 +730,7 @@ void ScContentTree::RequestHelp( const HelpEvent& rHEvt )
                     aPos = GetEntryPosition( pEntry );
                     aPos.setX( GetTabPos( pEntry, pTab ) );
                     aPos = OutputToScreenPixel(aPos);
-                    Size aSize( pItem->GetSize( this, pEntry ) );
+                    Size aSize(pItem->GetWidth(this, pEntry), pItem->GetHeight(this, pEntry));
 
                     tools::Rectangle aItemRect( aPos, aSize );
                     Help::ShowQuickHelp( this, aItemRect, aHelpText );
