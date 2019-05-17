@@ -653,7 +653,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         }
 
     // new destination => use new destination text
-    m_aStates.top().setCurrentDestinationText(&m_aStates.top().aDestinationText);
+    m_aStates.top().setCurrentDestinationText(&m_aStates.top().getDestinationText());
 
     return RTFError::OK;
 }
