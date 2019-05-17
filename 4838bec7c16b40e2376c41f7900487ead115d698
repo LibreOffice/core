@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_20597b59",
+        "filename": "vcl/source/control/notebookbar.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-17T16:36:05Z",
+      "side": 1,
+      "message": "doesFileExist should return bool, no need to expose internal enums of File to the upper level",
+      "revId": "4838bec7c16b40e2376c41f7900487ead115d698",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
