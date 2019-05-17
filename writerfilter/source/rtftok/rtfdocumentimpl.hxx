@@ -521,11 +521,13 @@ public:
     RTFFieldStatus getFieldStatus() const { return m_eFieldStatus; }
     void setDestination(Destination eDestination) { m_eDestination = eDestination; }
     Destination getDestination() const { return m_eDestination; }
-
-    RTFDocumentImpl* m_pDocumentImpl;
-    RTFInternalState nInternalState;
+    void setInternalState(RTFInternalState nInternalState) { m_nInternalState = nInternalState; }
+    RTFInternalState getInternalState() const { return m_nInternalState; }
+    RTFDocumentImpl* getDocumentImpl() { return m_pDocumentImpl; }
 
 private:
+    RTFDocumentImpl* m_pDocumentImpl;
+    RTFInternalState m_nInternalState;
     Destination m_eDestination;
     RTFFieldStatus m_eFieldStatus;
     RTFBorderState m_nBorderState;
