@@ -39,7 +39,7 @@ class   BitmapPalette;
 class QuartzSalBitmap : public SalBitmap
 {
 public:
-    CGContextRef                    mxGraphicContext;
+    CGContextHolder                 maGraphicContext;
     mutable CGImageRef              mxCachedImage;
     BitmapPalette                   maPalette;
     std::shared_ptr<sal_uInt8> m_pUserBuffer;
