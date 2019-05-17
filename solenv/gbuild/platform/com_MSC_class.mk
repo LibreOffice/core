@@ -39,7 +39,7 @@ define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	unset INCLUDE && \
-	$(if $(filter YES,$(CXXOBJECT_X64)), $(CXX_X64_BINARY), \
+	$(if $(filter YES,$(LIBRARY_X64)), $(CXX_X64_BINARY), \
 		$(if $(filter YES,$(PE_X86)), $(CXX_X86_BINARY), \
 			$(if $(filter %.c,$(3)), $(gb_CC), \
 				$(if $(filter -clr,$(2)), \
@@ -57,7 +57,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(PCHFLAGS) \
 		$(if $(COMPILER_TEST),,$(gb_COMPILERDEPFLAGS)) \
 		$(INCLUDE) \
-		$(if $(filter YES,$(CXXOBJECT_X64)), -U_X86_ -D_AMD64_,) \
+		$(if $(filter YES,$(LIBRARY_X64)), -U_X86_ -D_AMD64_,) \
 		$(if $(filter YES,$(PE_X86)), -D_X86_ -U_AMD64_,) \
 		-c $(3) \
 		-Fo$(1)) $(if $(filter $(true),$(6)),/link /DEBUG:FASTLINK) \
