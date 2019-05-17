@@ -128,8 +128,8 @@ public final class DEPSSolverImpl extends BaseEvolutionarySolver
             agents[i].setPbest(m_library.getSelectedPoint(i));
 
             DEGTBehavior deGTBehavior = new DEGTBehavior();
-            deGTBehavior.MIN_FACTOR = m_minFactor.getValue();
-            deGTBehavior.MAX_FACTOR = m_maxFactor.getValue();
+            deGTBehavior.MIN_FACTOR = Math.min(m_minFactor.getValue(), m_maxFactor.getValue());
+            deGTBehavior.MAX_FACTOR = Math.max(m_minFactor.getValue(), m_maxFactor.getValue());
             deGTBehavior.CR = m_CR.getValue();
 
             PSGTBehavior psGTBehavior = new PSGTBehavior();
