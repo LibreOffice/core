@@ -504,6 +504,11 @@ public:
     RTFColorTableEntry& getCurrentColor() { return m_aCurrentColor; }
     RTFSprms& getTabAttributes() { return m_aTabAttributes; }
     RTFSprms& getTableCellAttributes() { return m_aTableCellAttributes; }
+    RTFSprms& getTableCellSprms() { return m_aTableCellSprms; }
+    RTFSprms& getTableRowAttributes() { return m_aTableRowAttributes; }
+    RTFSprms& getTableRowSprms() { return m_aTableRowSprms; }
+    RTFSprms& getSectionAttributes() { return m_aSectionAttributes; }
+    RTFSprms& getSectionSprms() { return m_aSectionSprms; }
 
     RTFDocumentImpl* m_pDocumentImpl;
     RTFInternalState nInternalState;
@@ -519,16 +524,16 @@ public:
     // reset by pard
     RTFSprms aParagraphSprms;
     RTFSprms aParagraphAttributes;
-    // reset by sectd
-    RTFSprms aSectionSprms;
-    RTFSprms aSectionAttributes;
-    // reset by trowd
-    RTFSprms aTableRowSprms;
-    RTFSprms aTableRowAttributes;
-    // reset by cellx
-    RTFSprms aTableCellSprms;
 
 private:
+    // reset by sectd
+    RTFSprms m_aSectionSprms;
+    RTFSprms m_aSectionAttributes;
+    // reset by trowd
+    RTFSprms m_aTableRowSprms;
+    RTFSprms m_aTableRowAttributes;
+    // reset by cellx
+    RTFSprms m_aTableCellSprms;
     RTFSprms m_aTableCellAttributes;
     // reset by tx
     RTFSprms m_aTabAttributes;
