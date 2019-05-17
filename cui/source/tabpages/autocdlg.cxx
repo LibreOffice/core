@@ -801,68 +801,62 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
         }
     }
 
-    m_xReplaceTLB->clear();
     if( !bSWriter )
         aFormatText.clear();
 
-    m_xReplaceTLB->freeze();
-
-    if( aDoubleStringTable.find(eLang) != aDoubleStringTable.end() )
+    if (aDoubleStringTable.find(eLang) != aDoubleStringTable.end())
     {
         DoubleStringArray& rArray = aDoubleStringTable[eNewLanguage];
-        for(DoubleString & rDouble : rArray)
-        {
+
+        m_xReplaceTLB->bulk_insert_for_each(rArray.size(), [this, &rArray](weld::TreeIter& rIter, int nIndex) {
+            DoubleString &rDouble = rArray[nIndex];
             bool bTextOnly = nullptr == rDouble.pUserData;
             // formatted text is only in Writer
             if (bSWriter || bTextOnly)
             {
-                m_xTextOnlyCB->set_active(bTextOnly);
-                OUString sId;
                 if (!bTextOnly)
                 {
                     // that means: with format info or even with selection text
-                    sId = OUString::number(reinterpret_cast<sal_Int64>(rDouble.pUserData));
+                    OUString sId = OUString::number(reinterpret_cast<sal_Int64>(rDouble.pUserData));
+                    m_xReplaceTLB->set_id(rIter, sId);
                 }
-                m_xReplaceTLB->append(sId, rDouble.sShort);
-                m_xReplaceTLB->set_text(m_xReplaceTLB->n_children() - 1, rDouble.sLong, 1);
+                m_xReplaceTLB->set_text(rIter, rDouble.sShort, 0);
+                m_xReplaceTLB->set_text(rIter, rDouble.sLong, 1);
             }
             else
             {
                 aFormatText.insert(rDouble.sShort);
             }
-        }
+        });
     }
     else
     {
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
         SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eLang);
         SvxAutocorrWordList::Content aContent = pWordList->getSortedContent();
-        for (auto const& elem : aContent)
-        {
+        m_xReplaceTLB->bulk_insert_for_each(aContent.size(), [this, &aContent](weld::TreeIter& rIter, int nIndex) {
+            auto const& elem = aContent[nIndex];
             bool bTextOnly = elem->IsTextOnly();
             // formatted text is only in Writer
             if (bSWriter || bTextOnly)
             {
-                m_xTextOnlyCB->set_active(elem->IsTextOnly());
-                OUString sId;
                 if (!bTextOnly)
                 {
                     // that means: with format info or even with selection text
-                    sId = OUString::number(reinterpret_cast<sal_Int64>(m_xTextOnlyCB.get()));
+                    OUString sId = OUString::number(reinterpret_cast<sal_Int64>(m_xTextOnlyCB.get()));
+                    m_xReplaceTLB->set_id(rIter, sId);
                 }
-                m_xReplaceTLB->append(sId, elem->GetShort());
-                m_xReplaceTLB->set_text(m_xReplaceTLB->n_children() - 1, elem->GetLong(), 1);
+                m_xReplaceTLB->set_text(rIter, elem->GetShort(), 0);
+                m_xReplaceTLB->set_text(rIter, elem->GetLong(), 1);
             }
             else
             {
                 aFormatText.insert(elem->GetShort());
             }
-        }
+        });
         m_xNewReplacePB->set_sensitive(false);
         m_xDeleteReplacePB->set_sensitive(false);
     }
-
-    m_xReplaceTLB->thaw();
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (pViewShell && pViewShell->HasSelection())
