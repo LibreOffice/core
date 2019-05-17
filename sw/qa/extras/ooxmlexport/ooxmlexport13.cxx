@@ -266,8 +266,32 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113483, "tdf113483_crossreflink_nonascii_bookmar
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
+    // check whether test file keeps non-ascii values or not
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:bookmarkStart[1]", "name", OUString::fromUtf8("Els\u0151"));
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[2]/w:instrText[1]", OUString::fromUtf8(" REF Els\u0151 \\h "));
+}
+
+//tdf#125298: fix charlimit restrictions in bookmarknames and field references if they contain non-ascii characters
+DECLARE_OOXMLEXPORT_TEST(testTdf125298, "tdf125298_crossreflink_nonascii_charlimit.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // check whether test file keeps non-ascii values or not
+    OUString bookmarkName1 = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:bookmarkStart[1]", "name");
+    CPPUNIT_ASSERT_EQUAL(bookmarkName1, OUString::fromUtf8("\u001arv\u00edzt\u0171r\u0151_t\u00fck\u00f6rf\u00far\u00f3g\u00e9p"));
+    OUString bookmarkName2 = getXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:bookmarkStart[1]", "name");
+    CPPUNIT_ASSERT_EQUAL(bookmarkName2, OUString::fromUtf8("\u00e91\u00e12\u01713\u01514\u00fa5\u00f66\u00fc7\u00f38\u00ed9"));
+    OUString fieldName1 = getXPathContent(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[2]/w:instrText[1]", OUString::fromUtf8(" REF \u001arv\u00edzt\u0171r\u0151_t\u00fck\u00f6rf\u00far\u00f3g\u00e9p \\h "));
+    OUString expectedFieldName1(" REF ");
+    expectedFieldName1 += bookmarkName1;
+    expectedFieldName1 += " \\h ";
+    CPPUNIT_ASSERT_EQUAL(expectedFieldName1, fieldName1);
+    OUString fieldName2 = getXPathContent(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[2]/w:instrText[1]", OUString::fromUtf8(" REF Els\u0151 \\h "));
+    OUString expectedFieldName2(" REF ");
+    expectedFieldName2 += bookmarkName2;
+    expectedFieldName2 += " \\h ";
+    CPPUNIT_ASSERT_EQUAL(expectedFieldName2, fieldName2);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
