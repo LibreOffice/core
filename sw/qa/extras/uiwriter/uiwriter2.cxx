@@ -1015,7 +1015,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTableWidth)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTextFormFieldInsertion)
 {
-    load(DATA_DIRECTORY, "frame_size_export.docx");
     SwDoc* pDoc = createDoc();
     CPPUNIT_ASSERT(pDoc);
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
