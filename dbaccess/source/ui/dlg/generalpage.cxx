@@ -574,6 +574,15 @@ namespace dbaui
             m_pFT_DocListLabel->Enable( false );
             m_pLB_DocumentList->Enable( false );
         }
+        else
+        {
+            m_pEmbeddedDBType->Enable( false );
+            m_pFT_EmbeddedDBLabel->Enable( false );
+            m_pDatasourceType->Enable( false );
+            m_pPB_OpenDatabase->Enable( false );
+            m_pFT_DocListLabel->Enable( false );
+            m_pLB_DocumentList->Enable( false );
+        }
 
         m_pLB_DocumentList->SetDropDownLineCount( 20 );
         if ( m_pLB_DocumentList->GetEntryCount() )
@@ -671,7 +680,7 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK( OGeneralPageWizard, OnSetupModeSelected, Button*, pButton, void )
+    IMPL_LINK_NOARG( OGeneralPageWizard, OnSetupModeSelected, Button*, void )
     {
         m_aCreationModeHandler.Call( *this );
         OnDatasourceTypeSelected(*m_pDatasourceType);
@@ -680,14 +689,12 @@ namespace dbaui
         getFlags( GetItemSet(), bValid, bReadonly );
         if ( bValid && !bReadonly )
         {
-            if (pButton == m_pRB_ConnectDatabase.get())
-                m_pDatasourceType->Enable(m_pRB_ConnectDatabase->IsChecked());
-            else if (pButton == m_pRB_OpenExistingDatabase.get())
-            {
-                m_pPB_OpenDatabase->Enable(m_pRB_OpenExistingDatabase->IsChecked());
-                m_pFT_DocListLabel->Enable(m_pRB_OpenExistingDatabase->IsChecked());
-                m_pLB_DocumentList->Enable(m_pRB_OpenExistingDatabase->IsChecked());
-            }
+            m_pEmbeddedDBType->Enable(m_pRB_CreateDatabase->IsChecked());
+            m_pFT_EmbeddedDBLabel->Enable(m_pRB_CreateDatabase->IsChecked());
+            m_pDatasourceType->Enable(m_pRB_ConnectDatabase->IsChecked());
+            m_pPB_OpenDatabase->Enable(m_pRB_OpenExistingDatabase->IsChecked());
+            m_pFT_DocListLabel->Enable(m_pRB_OpenExistingDatabase->IsChecked());
+            m_pLB_DocumentList->Enable(m_pRB_OpenExistingDatabase->IsChecked());
         }
     }
 
