@@ -23,6 +23,7 @@
 
 #include <unotools/lingucfg.hxx>
 #include <editeng/langitem.hxx>
+#include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/svdpagv.hxx>

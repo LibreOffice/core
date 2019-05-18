@@ -19,18 +19,18 @@
 #ifndef INCLUDED_SVX_PALETTEMANAGER_HXX
 #define INCLUDED_SVX_PALETTEMANAGER_HXX
 
-#include <svx/SvxColorValueSet.hxx>
 #include <svx/Palette.hxx>
 #include <rtl/ustring.hxx>
-#include <svx/tbxcolorupdate.hxx>
-
-#include <tools/urlobj.hxx>
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/util/URLTransformer.hpp>
+#include <svx/xtable.hxx>
 
 #include <deque>
 #include <vector>
 #include <memory>
+
+class SvxColorValueSet;
+namespace com::sun::star::uno { class XComponentContext; }
+namespace svx { class ToolboxButtonColorUpdater; }
+namespace weld { class Window; }
 
 class SVX_DLLPUBLIC PaletteManager
 {

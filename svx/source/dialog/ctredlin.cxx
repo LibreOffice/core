@@ -18,10 +18,12 @@
  */
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
+#include <svtools/ctrlbox.hxx>
 #include <unotools/textsearch.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/viewdataentry.hxx>

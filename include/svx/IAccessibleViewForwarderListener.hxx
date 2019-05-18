@@ -20,12 +20,8 @@
 #ifndef INCLUDED_SVX_IACCESSIBLEVIEWFORWARDERLISTENER_HXX
 #define INCLUDED_SVX_IACCESSIBLEVIEWFORWARDERLISTENER_HXX
 
-#include <sal/types.h>
-
 
 namespace accessibility {
-
-class IAccessibleViewForwarder;
 
 /** <p>The purpose of this interface is to notify a user of an
     IAccessibleViewForwarder when that view forwarder changes its

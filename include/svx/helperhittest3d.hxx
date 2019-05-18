@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_HELPERHITTEST3D_HXX
 
 #include <svx/svxdllapi.h>
-#include <sal/types.h>
 #include <vector>
 
 

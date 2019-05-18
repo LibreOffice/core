@@ -20,19 +20,25 @@
 #ifndef INCLUDED_SVX_IMAPDLG_HXX
 #define INCLUDED_SVX_IMAPDLG_HXX
 
-#include <svtools/inettbc.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <vcl/customweld.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/status.hxx>
-#include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 #include <memory>
 #include <vector>
 
+namespace vcl { class Window; }
+namespace weld { class Button; }
+namespace weld { class ComboBox; }
+namespace weld { class CustomWeld; }
+namespace weld { class Entry; }
+namespace weld { class Label; }
+namespace weld { class Toolbar; }
+namespace weld { class Widget; }
+namespace weld { class Window; }
+
 class ImageMap;
+class URLBox;
 
 /*************************************************************************
 |*

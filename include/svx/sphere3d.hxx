@@ -20,8 +20,13 @@
 #ifndef INCLUDED_SVX_SPHERE3D_HXX
 #define INCLUDED_SVX_SPHERE3D_HXX
 
+#include <svl/intitem.hxx>
+#include <svl/itemset.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/svddef.hxx>
+
+class E3dDefaultAttributes;
 
 /**
  * SphereObject with diameter r3DSize.

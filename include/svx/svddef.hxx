@@ -138,6 +138,8 @@ class SdrVertShearAllItem;
 class SdrVertShearOneItem;
 class SdrYesNoItem;
 class SfxBoolItem;
+class SfxUInt16Item;
+class SfxUInt32Item;
 class SfxStringItem;
 class SfxVoidItem;
 class Svx3DCharacterModeItem;

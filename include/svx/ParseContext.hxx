@@ -19,10 +19,11 @@
 #ifndef INCLUDED_SVX_PARSECONTEXT_HXX
 #define INCLUDED_SVX_PARSECONTEXT_HXX
 
+#include <com/sun/star/lang/Locale.hpp>
+
 #include <connectivity/IParseContext.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
-#include <unotools/localedatawrapper.hxx>
 #include <vector>
 
 namespace svxform

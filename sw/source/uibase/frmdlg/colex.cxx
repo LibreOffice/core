@@ -30,6 +30,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <tgrditem.hxx>
 #include <viewopt.hxx>

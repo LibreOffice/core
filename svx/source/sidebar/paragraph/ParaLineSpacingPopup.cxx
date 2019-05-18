@@ -19,6 +19,7 @@
 
 #include "ParaLineSpacingControl.hxx"
 
+#include <editeng/lspcitem.hxx>
 #include <svx/ParaLineSpacingPopup.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/toolbox.hxx>

@@ -20,11 +20,13 @@
 #define INCLUDED_SVX_OPTGRID_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <svl/eitem.hxx>
-#include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 
-class SvxGridTabPage;
+namespace weld { class CheckButton; }
+namespace weld { class MetricSpinButton; }
+namespace weld { class SpinButton; }
+namespace weld { class ToggleButton; }
+namespace weld { class Widget; }
 
 class SVX_DLLPUBLIC SvxOptionsGrid
 {

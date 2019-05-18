@@ -30,6 +30,7 @@
 #include <svl/urihelper.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/ehdl.hxx>
+#include <svtools/inettbc.hxx>
 #include <svtools/sfxecode.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
@@ -49,6 +50,7 @@
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/status.hxx>
 #include <vcl/builderfactory.hxx>
 #include "dlgunit.hxx"
 #include <memory>

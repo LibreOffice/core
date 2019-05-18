@@ -18,6 +18,7 @@
  */
 
 #include <fusldlg.hxx>
+#include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>

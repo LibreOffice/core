@@ -24,6 +24,7 @@
 
 #include <svx/dialmgr.hxx>
 
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocale.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>

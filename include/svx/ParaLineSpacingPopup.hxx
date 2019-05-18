@@ -19,12 +19,8 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGPOPUP_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGPOPUP_HXX
 
-#include <editeng/lspcitem.hxx>
-#include <vcl/EnumContext.hxx>
 #include <sfx2/tbxctrl.hxx>
-#include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
-#include <tools/fldunit.hxx>
 
 namespace svx {
 

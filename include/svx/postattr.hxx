@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVX_POSTATTR_HXX
 #define INCLUDED_SVX_POSTATTR_HXX
 
-#include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svx/svxdllapi.h>
 

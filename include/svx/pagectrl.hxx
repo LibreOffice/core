@@ -20,11 +20,9 @@
 #define INCLUDED_SVX_PAGECTRL_HXX
 
 #include <vcl/customweld.hxx>
-#include <vcl/window.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 
-class SvxBoxItem;
 enum class SvxPageUsage;
 enum class SvxFrameDirection;
 

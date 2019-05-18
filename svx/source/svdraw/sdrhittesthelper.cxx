@@ -21,6 +21,7 @@
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/helperhittest3d.hxx>
+#include <svx/svdpage.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>

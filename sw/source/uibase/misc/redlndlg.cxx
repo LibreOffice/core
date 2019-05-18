@@ -24,6 +24,8 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/ctredlin.hxx>
 #include <svx/postattr.hxx>
+#include <vcl/commandevent.hxx>
+#include <vcl/lstbox.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>

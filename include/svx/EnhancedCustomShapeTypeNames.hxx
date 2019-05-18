@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_ENHANCEDCUSTOMSHAPETYPENAMES_HXX
 #define INCLUDED_SVX_ENHANCEDCUSTOMSHAPETYPENAMES_HXX
 #include <svx/msdffdef.hxx>
+#include <svx/svxdllapi.h>
 #include <rtl/ustring.hxx>
 
 namespace EnhancedCustomShapeTypeNames

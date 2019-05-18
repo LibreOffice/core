@@ -45,6 +45,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
+#include <tools/stream.hxx>
 
 using namespace com::sun::star;
 

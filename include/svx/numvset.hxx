@@ -21,7 +21,6 @@
 
 #include <vcl/idle.hxx>
 #include <svtools/valueset.hxx>
-#include <limits.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/lang/Locale.hpp>
@@ -38,9 +37,6 @@ namespace com{namespace sun{ namespace star{
         class XNumberingFormatter;
     }
 }}}
-
-class SvxBrushItem;
-class SvxNumRule;
 
 enum class NumberingPageType
 {

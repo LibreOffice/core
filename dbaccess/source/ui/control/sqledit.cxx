@@ -34,6 +34,7 @@
 #include <QueryDesignView.hxx>
 #include <vcl/settings.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 

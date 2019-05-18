@@ -26,7 +26,6 @@
 #include <svl/zforlist.hxx>
 
 #include <vector>
-#include <map>
 
 class Color;
 

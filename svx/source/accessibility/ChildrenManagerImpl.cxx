@@ -23,6 +23,7 @@
 
 #include "ChildrenManagerImpl.hxx"
 #include <svx/ShapeTypeHandler.hxx>
+#include <svx/AccessibleControlShape.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <vcl/svapp.hxx>

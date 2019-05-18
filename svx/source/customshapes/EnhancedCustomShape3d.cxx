@@ -18,6 +18,7 @@
  */
 
 #include "EnhancedCustomShape3d.hxx"
+#include <svx/deflt3d.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>
 #include <tools/poly.hxx>

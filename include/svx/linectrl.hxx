@@ -20,17 +20,12 @@
 #define INCLUDED_SVX_LINECTRL_HXX
 
 
-#include <svtools/valueset.hxx>
-#include <svl/lstner.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/xtable.hxx>
 #include <memory>
 
 class XLineStyleItem;
 class XLineDashItem;
-class SvxLineBox;
-class SvxMetricField;
 
 
 // SvxLineStyleController:

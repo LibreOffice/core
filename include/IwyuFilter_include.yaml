@@ -974,3 +974,9 @@ blacklist:
     include/svx/fmtools.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XEventListener.hpp
+    include/svx/ifaceids.hxx:
+    # Keep for macro define
+    - sfx2/shell.hxx
+    include/svx/measctrl.hxx:
+    # Needed for template class
+    - svx/svdobj.hxx
