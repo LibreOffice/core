@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # -*- Mode: python; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
@@ -702,7 +702,7 @@ def make_command_line():
     args = sys.argv[:]
     # Remove command line flags and
     # use internal flags.
-    for i in xrange(len(args)-1, 0, -1):
+    for i in range(len(args)-1, 0, -1):
         if args[i].startswith('--'):
             args.pop(i)
 
@@ -726,7 +726,7 @@ def generate_includes(includes):
     """Generates the include lines of the pch.
     """
     lines = []
-    for osname, group in includes.iteritems():
+    for osname, group in includes.items():
         if not len(group):
             continue
 
@@ -815,7 +815,7 @@ def remove_from_tree(filename, tree):
         tree = remove_from_tree(i, tree)
 
     # Also remove if included from another.
-    for (k, v) in tree.iteritems():
+    for (k, v) in tree.items():
         if filename in v:
             v.remove(filename)
 
@@ -884,7 +884,7 @@ def main():
         EXCLUDE_LOCAL = DEFAULTS[key][3]
 
     force_update = False
-    for x in xrange(3, len(sys.argv)):
+    for x in range(3, len(sys.argv)):
         i = sys.argv[x]
         if i.startswith('--cutoff='):
             CUTOFF = int(i.split('=')[1])
@@ -921,7 +921,7 @@ def main():
     groups = process_makefile(root, module, makefile)
 
     generic = []
-    for osname, group in groups.iteritems():
+    for osname, group in groups.items():
         if not len(group):
             continue
 
@@ -952,7 +952,7 @@ def main():
             tree = remove_from_tree(filename, tree)
 
         extra = []
-        for (k, v) in tree.iteritems():
+        for (k, v) in tree.items():
             extra += tree_to_list([], k, tree)
 
         promoted += promote(extra)
@@ -960,7 +960,7 @@ def main():
         promoted = process_list(promoted, filter_local.proc)
         promoted = set(promoted)
         # If a promoted header includes others, remove the rest.
-        for (k, v) in tree.iteritems():
+        for (k, v) in tree.items():
             if k in promoted:
                 for i in v:
                     promoted.discard(i)
@@ -977,7 +977,7 @@ def main():
 
         includes = map(lambda x: '#include <' + x + '>', includes)
         sorted = sort_by_category(includes, root, module, filter_local)
-        includes = fixes + sorted
+        includes = list(fixes) + sorted
 
         if len(osname):
             for i in generic:
@@ -996,7 +996,7 @@ def main():
         new_lines = generate_includes(groups)
         # Find the first include in the old pch.
         start = -1
-        for i in xrange(len(old_pch_lines)):
+        for i in range(len(old_pch_lines)):
             if old_pch_lines[i].startswith('#include') or old_pch_lines[i].startswith('#if PCH_LEVEL'):
                 start = i
                 break
@@ -1005,13 +1005,13 @@ def main():
             generate(new_lines, libname, header, module)
             return 0
         else:
-            for i in xrange(len(new_lines)):
+            for i in range(len(new_lines)):
                 if new_lines[i] != old_pch_lines[start + i]:
                     generate(new_lines, libname, header, module)
                     return 0
             else:
                 # Identical, but see if new pch removed anything.
-                for i in xrange(start + len(new_lines), len(old_pch_lines)):
+                for i in range(start + len(new_lines), len(old_pch_lines)):
                     if '#include' in old_pch_lines[i]:
                         generate(new_lines, libname, header, module)
                         return 0
