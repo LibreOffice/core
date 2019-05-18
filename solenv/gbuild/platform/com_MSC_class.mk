@@ -91,6 +91,10 @@ $(call gb_Helper_abbreviate_dirs,\
 		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(call gb_PrecompiledHeader_get_dep_target_tmp,$(2),$(7)),$(1),$(3))
 endef
 
+# No ccache with MSVC, no need to create a checksum for it.
+define gb_PrecompiledHeader__sum_command
+endef
+
 # AsmObject class
 
 gb_AsmObject_get_source = $(1)/$(2).asm
