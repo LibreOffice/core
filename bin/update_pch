@@ -423,6 +423,10 @@ def filter_ignore(line, module):
             'xmlsec/*',
             'xmlsecurity/xmlsec-wrapper.h',
             ]
+    if module == 'external/pdfium':
+        ignore_list += [
+            'third_party/freetype/include/pstables.h',
+            ]
 
     for i in ignore_list:
         if line.startswith(i):
