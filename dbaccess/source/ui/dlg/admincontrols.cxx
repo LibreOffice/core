@@ -73,23 +73,20 @@ namespace dbaui
     {
         if (&rRadioButton == &*m_pSocketRadio || &rRadioButton == &*m_pNamedPipeRadio)
             m_aControlModificationLink.Call(&rRadioButton);
-        bool bSelected = rRadioButton.IsChecked();
+        m_pHostNameLabel->Enable(m_pHostPortRadio->IsChecked());
+        m_pHostName->Enable(m_pHostPortRadio->IsChecked());
+        m_pPortLabel->Enable(m_pHostPortRadio->IsChecked());
+        m_pPort->Enable(m_pHostPortRadio->IsChecked());
+        m_pDefaultPort->Enable(m_pHostPortRadio->IsChecked());
+        m_pSocket->Enable(m_pSocketRadio->IsChecked());
+        m_pNamedPipe->Enable(m_pNamedPipeRadio->IsChecked());
         if (&rRadioButton == &*m_pHostPortRadio)
         {
-            m_pHostNameLabel->Enable(bSelected);
-            m_pHostName->Enable(bSelected);
-            m_pPortLabel->Enable(bSelected);
-            m_pPort->Enable(bSelected);
-            m_pDefaultPort->Enable(bSelected);
-            if (bSelected)
+            if (rRadioButton.IsChecked())
                 m_pHostName->SetText(m_sHostNameUserText);
             else
                 m_pHostName->SetText("localhost");
         }
-        else if (&rRadioButton == &*m_pSocketRadio)
-            m_pSocket->Enable(bSelected);
-        else if (&rRadioButton == &*m_pNamedPipeRadio)
-            m_pNamedPipe->Enable(bSelected);
     }
 
     IMPL_LINK(MySQLNativeSettings, EditModifyHdl, Edit&, rEdit, void)
