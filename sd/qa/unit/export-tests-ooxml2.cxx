@@ -196,6 +196,8 @@ public:
     void testTdf118825();
     void testTdf119118();
     void testTdf99213();
+    void testTdf125346();
+    void testTdf125346_2();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -275,6 +277,8 @@ public:
     CPPUNIT_TEST(testTdf118825);
     CPPUNIT_TEST(testTdf119118);
     CPPUNIT_TEST(testTdf99213);
+    CPPUNIT_TEST(testTdf125346);
+    CPPUNIT_TEST(testTdf125346_2);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2040,6 +2044,77 @@ void SdOOXMLExportTest2::testTdf99213()
     assertXPath(pXmlDocContent, "//p:attrNameLst", 2);
     // Timenode that miss its target element should be filtered.
     assertXPath(pXmlDocContent, "//p:attrNameLst/preceding-sibling::p:tgtEl", 2);
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf125346()
+{
+    // There are two themes in the test document, make sure we use the right theme
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf125346.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_SET_THROW );
+
+    drawing::FillStyle aFillStyle( drawing::FillStyle_NONE );
+    xPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, aFillStyle);
+
+    sal_Int32 nFillColor;
+    xPropSet->getPropertyValue("FillColor") >>= nFillColor;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x90C226), nFillColor);
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf125346_2()
+{
+    // There are two themes in the test document, make sure we use the right theme
+    // Test more slides with different themes
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf125346_2.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    {
+        uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+        uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_SET_THROW );
+
+        drawing::FillStyle aFillStyle( drawing::FillStyle_NONE );
+        xPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, aFillStyle);
+
+        sal_Int32 nFillColor;
+        xPropSet->getPropertyValue("FillColor") >>= nFillColor;
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x90C226), nFillColor);
+    }
+
+    {
+        uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 1, xDocShRef ) );
+        uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_SET_THROW );
+
+        drawing::FillStyle aFillStyle( drawing::FillStyle_NONE );
+        xPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, aFillStyle);
+
+        sal_Int32 nFillColor;
+        xPropSet->getPropertyValue("FillColor") >>= nFillColor;
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x052F61), nFillColor);
+    }
+
+    {
+        uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 2, xDocShRef ) );
+        uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_SET_THROW );
+
+        drawing::FillStyle aFillStyle( drawing::FillStyle_NONE );
+        xPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, aFillStyle);
+
+        sal_Int32 nFillColor;
+        xPropSet->getPropertyValue("FillColor") >>= nFillColor;
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x90C226), nFillColor);
+    }
+
     xDocShRef->DoClose();
 }
 
