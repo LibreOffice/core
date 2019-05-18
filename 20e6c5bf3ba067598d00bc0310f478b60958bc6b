@@ -16,6 +16,24 @@
       "revId": "20e6c5bf3ba067598d00bc0310f478b60958bc6b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_767669db",
+        "filename": "avmedia/source/gstreamer/gstplayer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2019-05-18T02:32:36Z",
+      "side": 0,
+      "message": "I made the patch gtk3 vclplug without gtksink. (i.e. Ubuntu 18.04 without \"gstreamer1.0-gtk3\" ) I don\u0027t know why there are differences. Is it possible we detect vclplug, or anything that makes difference here? That\u0027s beyond my knowledge.",
+      "parentUuid": "3fa0c359_3b91ac9a",
+      "revId": "20e6c5bf3ba067598d00bc0310f478b60958bc6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
