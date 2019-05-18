@@ -110,6 +110,32 @@ $(call gb_Helper_abbreviate_dirs,\
 		)
 endef
 
+ifeq ($(COM_IS_CLANG),TRUE)
+# Clang has -fno-pch-timestamp, just checksum the file for CCACHE_PCH_EXTSUM
+define gb_PrecompiledHeader__sum_command
+	$(SHA256SUM) $(1) >$(1).sum
+endef
+else
+# GCC does not generate the same .gch for the same input, so checksum the (preprocessed) input
+define gb_PrecompiledHeader__sum_command
+$(call gb_Helper_abbreviate_dirs,\
+	CCACHE_DISABLE=1 $(gb_COMPILER_SETUP) \
+	$(gb_CXX) \
+		-x c++-header \
+		$(4) $(5) \
+		$(gb_COMPILERDEPFLAGS) \
+		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
+		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
+		$(gb_NO_PCH_TIMESTAMP) \
+		$(6) \
+		-E $(patsubst %.cxx,%.hxx,$(3)) \
+		-o- \
+		| $(SHA256SUM) >$(1).sum \
+		)
+endef
+endif
+
+
 # YaccTarget class
 
 define gb_YaccTarget__command
