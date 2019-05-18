@@ -420,7 +420,7 @@ void SfxInfoBarContainerWindow::Resize()
 {
     // Only need to change the width of the infobars
     long nWidth = GetSizePixel().getWidth();
-    long nHeight = GetSizePixel().getHeight();
+    long nHeight = 0;
 
     for (auto& rxInfoBar : m_pInfoBars)
     {
