@@ -23,6 +23,8 @@ $(eval $(call gb_Library_use_externals,etonyek,\
 
 $(eval $(call gb_Library_set_warnings_not_errors,etonyek))
 
+$(eval $(call gb_Library_set_precompiled_header,etonyek,$(SRCDIR)/external/libetonyek/inc/pch/precompiled_etonyek))
+
 $(eval $(call gb_Library_set_include,etonyek,\
 	-I$(call gb_UnpackedTarball_get_dir,libetonyek)/inc \
 	-I$(call gb_UnpackedTarball_get_dir,libetonyek)/src/lib \
