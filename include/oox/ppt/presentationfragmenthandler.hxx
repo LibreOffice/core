@@ -50,7 +50,7 @@ private:
     void importSlide( const ::oox::core::FragmentHandlerRef& rSlideFragmentHandler,
                         const oox::ppt::SlidePersistPtr& rPersist );
     void importSlide(sal_uInt32 nSlide, bool bFirstSlide, bool bImportNotes);
-    void saveThemeToGrabBag(oox::drawingml::ThemePtr pThemePtr, const OUString& sTheme);
+    void saveThemeToGrabBag(oox::drawingml::ThemePtr pThemePtr, sal_Int32 nThemeIdx);
 
     std::vector< OUString > maSlideMasterVector;
     std::vector< OUString > maSlidesVector;
