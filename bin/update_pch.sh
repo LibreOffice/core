@@ -37,7 +37,9 @@ for x in $headers; do
     if [ -d "$x" ]; then
         # We got a directory, find pch files to update.
         headers=`find $root/$x/ -type f -iname "precompiled_*.hxx"`
-        $0 "$headers"
+        if test -n "$headers"; then
+            $0 "$headers"
+        fi
     else
         header=$x
         echo updating `echo $header | sed -e s%$root/%%`
