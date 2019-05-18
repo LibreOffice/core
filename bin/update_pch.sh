@@ -42,6 +42,9 @@ for x in $headers; do
         header=$x
         echo updating `echo $header | sed -e s%$root/%%`
         module=`readlink -f $header | sed -e s%$root/%% -e s%/.*%%`
+        if [ "$module" = "external" ]; then
+            module=external/`readlink -f $header | sed -e s%$root/external/%% -e s%/.*%%`
+        fi
         libname=`echo $header | sed -e s/.*precompiled_// -e s/\.hxx//`
 
         ./bin/update_pch "$module" "$libname"
