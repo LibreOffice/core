@@ -429,11 +429,8 @@ void SfxInfoBarContainerWindow::Resize()
         rxInfoBar->SetSizePixel(aSize);
         rxInfoBar->Resize();
 
-        // Stretch to fit the infobar(s)
-        if (aSize.getHeight() > nHeight)
-        {
-            nHeight = aSize.getHeight();
-        }
+        // Update height if main window is resized
+        nHeight = aSize.getHeight();
     }
 
     SetSizePixel(Size(nWidth, nHeight));
