@@ -23,6 +23,8 @@ $(eval $(call gb_StaticLibrary_add_defs,libcmis, \
 	-DBOOST_ALL_NO_LIB \
 ))
 
+$(eval $(call gb_StaticLibrary_set_precompiled_header,libcmis,$(SRCDIR)/external/libcmis/inc/pch/precompiled_libcmis))
+
 $(eval $(call gb_StaticLibrary_set_include,libcmis, \
     -I$(call gb_UnpackedTarball_get_dir,libcmis/inc) \
     -I$(call gb_UnpackedTarball_get_dir,libcmis/src/libcmis) \
