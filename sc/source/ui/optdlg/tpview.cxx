@@ -28,6 +28,7 @@
 #include <units.hrc>
 #include <appoptio.hxx>
 #include <scmod.hxx>
+#include <svl/eitem.hxx>
 #include <svx/colorbox.hxx>
 #include <svtools/unitconv.hxx>
 

@@ -22,6 +22,7 @@
 
 #include <sal/types.h>
 #include <svx/msdffdef.hxx>
+#include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 
 struct SvxMSDffVertPair

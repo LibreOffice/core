@@ -28,6 +28,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/view3d.hxx>
+#include <svx/xflclit.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/svdouno.hxx>

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVX_NUMINF_HXX
 #define INCLUDED_SVX_NUMINF_HXX
 
-#include <memory>
 #include <svl/poolitem.hxx>
 #include <svx/numfmtsh.hxx>
 #include <svx/svxdllapi.h>

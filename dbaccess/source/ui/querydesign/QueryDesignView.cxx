@@ -53,6 +53,7 @@
 #include <UITools.hxx>
 #include <querycontainerwindow.hxx>
 #include <sqlmessage.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <memory>
 #include <set>

@@ -19,6 +19,7 @@
 
 
 #include <svx/strings.hrc>
+#include <svx/deflt3d.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/globl3d.hxx>

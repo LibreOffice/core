@@ -21,15 +21,13 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#include <vcl/customweld.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
 #include <svx/pagectrl.hxx>
 #include <svx/svxdllapi.h>
 #include <memory>
+
+namespace weld { class CustomWeld; }
 
 namespace svx
 {

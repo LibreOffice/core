@@ -19,11 +19,12 @@
 #ifndef INCLUDED_SVX_PALETTE_HXX
 #define INCLUDED_SVX_PALETTE_HXX
 
-#include <svx/SvxColorValueSet.hxx>
-#include <svx/xtable.hxx>
 #include <rtl/ustring.hxx>
+#include <svx/svxdllapi.h>
 
 class Color;
+class ColorValueSet;
+class SvxColorValueSet;
 
 typedef std::pair<Color, OUString> NamedColor;
 

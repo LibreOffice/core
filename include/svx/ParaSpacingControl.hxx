@@ -21,10 +21,11 @@
 
 #include <sfx2/tbxctrl.hxx>
 #include <svx/svxdllapi.h>
-#include <vcl/window.hxx>
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
-#include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
-#include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
+
+namespace com::sun::star::ui { class XContextChangeEventMultiplexer; }
+namespace com::sun::star::ui { struct ContextChangeEventObject; }
+namespace vcl { class Window; }
 
 namespace svx {
 

@@ -22,8 +22,10 @@
 
 #include <svx/camera3d.hxx>
 #include <tools/b3dtrans.hxx>
+#include <svx/svdpage.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/obj3d.hxx>
+#include <svx/svx3ditems.hxx>
 #include <memory>
 
 namespace sdr { namespace properties {

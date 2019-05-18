@@ -20,13 +20,13 @@
 #ifndef INCLUDED_SVX_HEXCOLOR_HXX
 #define INCLUDED_SVX_HEXCOLOR_HXX
 
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <vcl/weld.hxx>
-#include <sot/exchange.hxx>
-#include <sax/tools/converter.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/color.hxx>
+#include <tools/link.hxx>
+
+namespace weld { class Entry; }
+
+struct ImplSVEvent;
 
 namespace weld {
 

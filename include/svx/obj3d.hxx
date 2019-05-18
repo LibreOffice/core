@@ -22,29 +22,16 @@
 
 #include <svx/svdoattr.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/def3d.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/deflt3d.hxx>
-#include <vcl/bitmap.hxx>
-#include <svx/svx3ditems.hxx>
-#include <svx/xflclit.hxx>
-#include <svl/itemset.hxx>
+#include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/vector/b2enums.hxx>
 #include <svx/svxdllapi.h>
 
 // Forward declarations
-class SfxPoolItem;
-class Viewport3D;
 class E3dScene;
 
-namespace basegfx { class B3DPolyPolygon; }
 namespace sdr { namespace properties {
     class BaseProperties;
-    class E3dProperties;
     class E3dCompoundProperties;
     class E3dExtrudeProperties;
     class E3dLatheProperties;

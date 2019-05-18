@@ -42,6 +42,7 @@
 #include <svx/obj3d.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svdotable.hxx>
+#include <tools/debug.hxx>
 #include <tools/tenccvt.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>

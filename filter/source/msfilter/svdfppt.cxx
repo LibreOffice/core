@@ -56,6 +56,7 @@
 #include <svx/svdotable.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xflbmtit.hxx>
+#include <svx/xflclit.hxx>
 #include <svx/xfltrit.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/numdef.hxx>

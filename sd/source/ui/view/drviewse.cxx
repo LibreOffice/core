@@ -44,6 +44,7 @@
 #include <svx/svdorect.hxx>
 #include <svx/svdograf.hxx>
 #include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>

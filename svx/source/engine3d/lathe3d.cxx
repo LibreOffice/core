@@ -18,6 +18,7 @@
  */
 
 
+#include <svx/deflt3d.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <tools/poly.hxx>

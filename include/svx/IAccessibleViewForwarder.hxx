@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_IACCESSIBLEVIEWFORWARDER_HXX
 #define INCLUDED_SVX_IACCESSIBLEVIEWFORWARDER_HXX
 
-#include <sal/types.h>
 #include <tools/gen.hxx>
 
 

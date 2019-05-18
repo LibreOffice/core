@@ -30,7 +30,6 @@
 |*
 \************************************************************************/
 
-class SdrObjFactory;
 class SdrObject;
 struct SdrObjCreatorParams;
 

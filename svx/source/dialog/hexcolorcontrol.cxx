@@ -17,9 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sax/tools/converter.hxx>
 #include <svx/hexcolorcontrol.hxx>
 #include <rtl/character.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 namespace weld {
 

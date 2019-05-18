@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVX_RULER_HXX
 #define INCLUDED_SVX_RULER_HXX
 
-#include <vcl/menu.hxx>
 #include <svtools/ruler.hxx>
 #include <svl/lstner.hxx>
 #include <svx/svxdllapi.h>
@@ -27,6 +26,7 @@
 
 #include <memory>
 
+class Menu;
 class SvxProtectItem;
 class SvxRulerItem;
 class SfxBindings;

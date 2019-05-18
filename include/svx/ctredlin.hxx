@@ -20,27 +20,16 @@
 #ifndef INCLUDED_SVX_CTREDLIN_HXX
 #define INCLUDED_SVX_CTREDLIN_HXX
 
-#include <comphelper/string.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
-#include <svtools/simptabl.hxx>
-#include <svtools/ctrlbox.hxx>
 #include <vcl/svlbitm.hxx>
-#include <vcl/svtabbx.hxx>
-#include <vcl/treelistbox.hxx>
-#include <vcl/treelistentry.hxx>
 #include <tools/color.hxx>
-#include <tools/contnr.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/link.hxx>
 #include <tools/time.hxx>
-#include <tools/wintypes.hxx>
-#include <vcl/builder.hxx>
-#include <vcl/vclptr.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/tabctrl.hxx>
+#include <vcl/weld.hxx>
 #include <memory>
 
 namespace utl {
@@ -48,16 +37,11 @@ namespace utl {
     class TextSearch;
 }
 
-namespace vcl { class Window; }
+namespace comphelper::string { class NaturalStringSorter; }
 
-class DateField;
-class Edit;
-class FixedText;
-class ListBox;
 class Point;
 class SvViewDataEntry;
-class TimeField;
-struct SvSortData;
+class SvtCalendarBox;
 
 enum class SvxRedlinDateMode
 {

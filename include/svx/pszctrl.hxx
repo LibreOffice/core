@@ -23,7 +23,6 @@
 #include <sfx2/stbitem.hxx>
 #include <svx/svxdllapi.h>
 
-class  SvxSizeItem;
 struct SvxPosSizeStatusBarControl_Impl;
 
 class SVX_DLLPUBLIC SvxPosSizeStatusBarControl : public SfxStatusBarControl

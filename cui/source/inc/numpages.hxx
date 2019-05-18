@@ -27,6 +27,7 @@
 #include <editeng/numdef.hxx>
 #include <editeng/svxenum.hxx>
 #include <svtools/ctrlbox.hxx>
+#include <vcl/customweld.hxx>
 
 #define MN_GALLERY_ENTRY 100
 

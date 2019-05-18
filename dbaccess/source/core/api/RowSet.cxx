@@ -69,6 +69,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

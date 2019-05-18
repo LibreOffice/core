@@ -20,10 +20,13 @@
 #ifndef INCLUDED_SVX_IACCESSIBLEPARENT_HXX
 #define INCLUDED_SVX_IACCESSIBLEPARENT_HXX
 
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <sal/types.h>
-#include <svx/AccessibleControlShape.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace accessibility { class AccessibleControlShape; }
+namespace com::sun::star::accessibility { class XAccessible; }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::drawing { class XShape; }
+
 namespace accessibility {
 
 class AccessibleShape;

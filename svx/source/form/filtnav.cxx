@@ -37,6 +37,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqlnode.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <fmservs.hxx>
 #include <fmshimp.hxx>
 #include <sfx2/dispatch.hxx>

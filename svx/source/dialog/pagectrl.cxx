@@ -20,6 +20,7 @@
 #include <memory>
 #include <vcl/bitmap.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <tools/fract.hxx>
 #include <editeng/frmdiritem.hxx>

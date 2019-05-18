@@ -18,6 +18,7 @@
  */
 
 
+#include <tools/debug.hxx>
 #include <svx/svddrgv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/xpoly.hxx>

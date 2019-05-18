@@ -26,6 +26,7 @@
 
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/popupwindowcontroller.hxx>
+#include <svtools/valueset.hxx>
 
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>

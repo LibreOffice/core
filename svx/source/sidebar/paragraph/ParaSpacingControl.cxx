@@ -30,6 +30,8 @@
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
+#include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
 
 using namespace svx;
 

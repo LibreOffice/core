@@ -20,7 +20,6 @@
 #define INCLUDED_SVX_PARAPREV_HXX
 
 #include <vcl/customweld.hxx>
-#include <vcl/window.hxx>
 #include <editeng/svxenum.hxx>
 #include <svx/svxdllapi.h>
 

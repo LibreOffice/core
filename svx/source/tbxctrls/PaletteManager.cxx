@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <svx/PaletteManager.hxx>
+#include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/objsh.hxx>
@@ -26,6 +27,7 @@
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/tbxcolorupdate.hxx>
 #include <vcl/toolbox.hxx>
 #include <svtools/colrdlg.hxx>
 #include <vcl/svapp.hxx>
@@ -37,6 +39,8 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 #include <palettes.hxx>
 
