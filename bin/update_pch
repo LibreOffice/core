@@ -603,14 +603,18 @@ def parse_makefile(groups, lines, lineno, lastif, ifstack):
 
     return groups
 
-def process_makefile(root, module, makefile):
+def process_makefile(root, module, libname):
     """ Parse a gmake makefile and extract
         source filenames from it.
     """
 
+    makefile = 'Library_{}.mk'.format(libname)
     filename = os.path.join(os.path.join(root, module), makefile)
     if not os.path.isfile(filename):
-        sys.stderr.write('Error: Module {} has no makefile at {}.'.format(module, filename))
+        makefile = 'StaticLibrary_{}.mk'.format(libname)
+        filename = os.path.join(os.path.join(root, module), makefile)
+        if not os.path.isfile(filename):
+            sys.stderr.write('Error: Module {} has no makefile at {}.'.format(module, filename))
 
     groups = {'':[], 'ANDROID':[], 'iOS':[], 'WNT':[], 'LINUX':[], 'MACOSX':[]}
 
@@ -917,8 +921,7 @@ def main():
                                 not EXCLUDE_LOCAL)
 
     # Read input.
-    makefile = 'Library_{}.mk'.format(libname)
-    groups = process_makefile(root, module, makefile)
+    groups = process_makefile(root, module, libname)
 
     generic = []
     for osname, group in groups.items():
