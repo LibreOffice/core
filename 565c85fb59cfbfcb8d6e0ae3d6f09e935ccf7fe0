@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_8c3d28bd",
+        "filename": "sfx2/source/dialog/infobar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-05-19T11:11:37Z",
+      "side": 1,
+      "message": "I think what you want to do is to change this line so that the nHeight variable starts off with zero at it\u0027s value",
+      "revId": "565c85fb59cfbfcb8d6e0ae3d6f09e935ccf7fe0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
