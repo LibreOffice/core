@@ -55,10 +55,10 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @descr          If you use a lock or mutex as a member of your class and whish to use it earlier then other ones
+    @descr          If you use a lock or mutex as a member of your class and wish to use it earlier than other ones
                     you should have a look on this implementation. You must use it as the first base class
                     of your implementation - because base classes are initialized by his order and before your
-                    member! Thats why ist a good place to declare your thread help member so.
+                    member! Thats why it is a good place to declare your thread help member so.
 *//*-*************************************************************************************************************/
 enum ELockType
 {
@@ -72,21 +72,21 @@ enum ELockType
 #define FALLBACK_LOCKTYPE   E_SOLARMUTEX
 
 //_________________________________________________________________________________________________________________
-//  declarations
+// declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          helper to set right lock in right situation
     @descr          This helper support different types of locking:
                         a)  no locks - transparent for user!
-                            This could be useful for simluation or single threaded environments!
+                            This could be useful for simulation or single threaded environments!
                         b)  own mutex
-                            An object use his own osl-mutex to be threadsafe. Useful for easy and exclusiv locking.
+                            An object use his own osl-mutex to be threadsafe. Useful for easy and exclusive locking.
                         c)  solar mutex
-                            An object use our solar mutex and will be a part of a greater safed "threadsafe code block".
+                            An object use our solar mutex and will be a part of a greater saved "threadsafe code block".
                             Could be useful for simulation and testing of higher modules!
                         d)  fair rw-lock
-                            An object use an implementation of a fair rw-lock. This increase granularity of t hreadsafe mechanism
+                            An object use an implementation of a fair rw-lock. This increase granularity of threadsafe mechanism
                             and should be used for high performance threadsafe code!
 
     @attention      We support two interfaces - "IMutex" and "IRWLock". Don't mix using of it!
@@ -157,8 +157,8 @@ class FWI_DLLPUBLIC LockHelper : public  IMutex
     //                                         ii ) Otherwise you have no osl mutex ... so you must create "m_pShareableOslMutex" and use it twice!
     //                                              In this case you must lock two members every time - "m_pShareableMutex" AND "m_pFairRWLock" or "m_pSolarMutex" or ...
     //                                              It isn't really fine - but the only possible way.
-    //                                         iii) There exist another special case - E_NOTHING is set! Then we should create this shareable mutex ...
-    //                                              nad you can use it ... but this implmentation ignore it.
+    //                                         iii) There exists another special case - E_NOTHING is set! Then we should create this shareable mutex ...
+    //                                              and you can use it ... but this implementation ignores it.
     //-------------------------------------------------------------------------------------------------------------
     private:
 
@@ -171,6 +171,6 @@ class FWI_DLLPUBLIC LockHelper : public  IMutex
         mutable sal_Bool        m_bDummySolarMutex      ;
 };
 
-}       //  namespace framework
+}       // namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_THREADHELP_LOCKHELPER_HXX_
