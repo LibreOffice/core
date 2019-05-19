@@ -294,6 +294,12 @@ const OUString& MediaDescriptor::PROP_PASSWORD()
     return sProp;
 }
 
+const OUString& MediaDescriptor::PROP_PICKLISTENTRY()
+{
+    static const OUString sProp("PickListEntry");
+    return sProp;
+}
+
 const OUString& MediaDescriptor::PROP_TITLE()
 {
     static const OUString sProp("Title");

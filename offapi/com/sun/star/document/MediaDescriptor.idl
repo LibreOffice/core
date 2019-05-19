@@ -346,6 +346,17 @@ service MediaDescriptor
      */
     [optional,property] sequence< byte > PostData;
 
+    /** add loaded document to recent document list
+
+        <p>
+        Setting this to `FALSE` prevents the loaded document to be added to the recent documents list.
+        Default is `TRUE`.
+        </p>
+
+        @since LibreOffice 5.1
+     */
+    [optional,property] boolean PickListEntry;
+
     /** use MediaDescriptor::PostData instead of this
 
         <p>
