@@ -24,8 +24,6 @@
 #include <svx/svdsob.hxx>
 #include <memory>
 
-class SdrObject;
-class SfxItemSet;
 class SdrPageProperties;
 
 namespace sdr

@@ -23,6 +23,7 @@
 #include <svx/AccessibleShapeInfo.hxx>
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
 #include <vcl/svapp.hxx>
+#include <svx/AccessibleShape.hxx>
 #include <svx/dialmgr.hxx>
 
 #include <svx/unoshape.hxx>

@@ -19,36 +19,23 @@
 #ifndef INCLUDED_SVX_SEARCHCHARMAP_HXX
 #define INCLUDED_SVX_SEARCHCHARMAP_HXX
 
-#include <map>
 #include <memory>
 
 #include <sal/types.h>
-#include <rtl/ref.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/charmap.hxx>
-#include <tools/gen.hxx>
-#include <tools/link.hxx>
-#include <vcl/ctrl.hxx>
-#include <vcl/event.hxx>
 #include <vcl/outdev.hxx>
-#include <svx/ucsubset.hxx>
-#include <vcl/metric.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/window.hxx>
-#include <vector>
 #include <unordered_map>
 
-namespace com { namespace sun { namespace star {
-    namespace accessibility { class XAccessible; }
-} } }
-
-namespace vcl { class Font; }
+namespace svx { struct SvxShowCharSetItem; }
+namespace tools { class Rectangle; }
+namespace weld { class ScrolledWindow; }
 
 #define COLUMN_COUNT    16
 #define ROW_COUNT        8
 
-class CommandEvent;
-class ScrollBar;
+class Subset;
 
 class SVX_DLLPUBLIC SvxSearchCharSet : public SvxShowCharSet
 {

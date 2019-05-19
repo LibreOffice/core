@@ -32,6 +32,7 @@
 #include <svx/colorbox.hxx>
 #include <svx/strarray.hxx>
 #include <svx/gallery.hxx>
+#include <svx/ucsubset.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/brushitem.hxx>
 #include <svl/intitem.hxx>
