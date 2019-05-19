@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_6c977c92",
+        "filename": "oox/source/drawingml/diagram/diagramlayoutatoms.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1001592
+      },
+      "writtenOn": "2019-05-19T14:07:49Z",
+      "side": 1,
+      "message": "this looks unrelated",
+      "range": {
+        "startLine": 315,
+        "startChar": 12,
+        "endLine": 315,
+        "endChar": 110
+      },
+      "revId": "65529eb029b45b8ce5fdcd96ea8bfd535b266d33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_8c94488d",
+        "filename": "oox/source/drawingml/diagram/diagramlayoutatoms.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1001592
+      },
+      "writtenOn": "2019-05-19T14:07:49Z",
+      "side": 1,
+      "message": "it should be taken into account that there is one less node in cycle now",
+      "range": {
+        "startLine": 325,
+        "startChar": 19,
+        "endLine": 325,
+        "endChar": 88
+      },
+      "revId": "65529eb029b45b8ce5fdcd96ea8bfd535b266d33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
