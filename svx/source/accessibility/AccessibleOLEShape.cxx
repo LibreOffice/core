@@ -27,6 +27,7 @@
 #include <cppuhelper/queryinterface.hxx>
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/drawing/XShapeDescriptor.hpp>
 
 using namespace ::accessibility;
 using namespace ::com::sun::star;

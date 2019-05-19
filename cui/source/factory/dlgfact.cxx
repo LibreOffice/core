@@ -27,6 +27,7 @@
 #include <sal/log.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
+#include <svx/ucsubset.hxx>
 #include <numfmt.hxx>
 #include <splitcelldlg.hxx>
 #include <dstribut.hxx>

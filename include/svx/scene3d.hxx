@@ -30,11 +30,6 @@
 
 namespace sdr { namespace properties {
     class BaseProperties;
-    class E3dSceneProperties;
-}}
-
-namespace drawinglayer { namespace geometry {
-    class ViewInformation3D;
 }}
 
 /*************************************************************************

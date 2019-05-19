@@ -22,11 +22,14 @@
 
 #include <svx/svxdllapi.h>
 #include <svx/shapeproperty.hxx>
-
-#include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <rtl/ustring.hxx>
 
 #include <memory>
+
+namespace com::sun::star::beans { class XPropertyChangeListener; }
+namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno { template <typename > class Reference; }
+namespace osl { class Mutex; }
 
 namespace cppu
 {

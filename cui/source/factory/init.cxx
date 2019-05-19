@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svx/ucsubset.hxx>
+
 #include <cuicharmap.hxx>
 
 // hook to call special character dialog for edits

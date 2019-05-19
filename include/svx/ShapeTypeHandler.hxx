@@ -20,18 +20,18 @@
 #ifndef INCLUDED_SVX_SHAPETYPEHANDLER_HXX
 #define INCLUDED_SVX_SHAPETYPEHANDLER_HXX
 
-#include <svx/AccessibleShapeTreeInfo.hxx>
-#include <svx/AccessibleShapeInfo.hxx>
-#include <svx/AccessibleShape.hxx>
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <svx/svxdllapi.h>
 
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <unordered_map>
 #include <vector>
+
+namespace accessibility { class AccessibleShape; }
+namespace accessibility { class AccessibleShapeInfo; }
+namespace accessibility { class AccessibleShapeTreeInfo; }
+namespace com::sun::star::drawing { class XShape; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 namespace accessibility {
 

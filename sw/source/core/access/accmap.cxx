@@ -53,6 +53,7 @@
 #include <flyfrm.hxx>
 #include <ndtyp.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <svx/AccessibleShapeInfo.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/SvxShapeTypes.hxx>
@@ -61,6 +62,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <pagepreviewlayout.hxx>

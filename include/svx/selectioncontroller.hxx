@@ -30,7 +30,6 @@ namespace vcl { class Window; }
 class SfxItemSet;
 class SfxRequest;
 class SfxStyleSheet;
-class SdrPage;
 class SdrModel;
 class Point;
 class FontList;

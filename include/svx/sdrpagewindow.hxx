@@ -21,14 +21,14 @@
 #define INCLUDED_SVX_SDRPAGEWINDOW_HXX
 
 #include <basegfx/range/b2irectangle.hxx>
-#include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
-#include <rtl/ref.hxx>
 #include <memory>
 
-#include <com/sun/star/awt/XControlContainer.hpp>
-
+namespace com::sun::star::awt { class XControlContainer; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace rtl { template <class reference_type> class Reference; }
+namespace sdr { namespace overlay { class OverlayManager; } }
 namespace vcl { class Region; }
 
 namespace sdr
@@ -40,7 +40,7 @@ namespace sdr
     }
 }
 
-namespace basegfx { class B2DRange; class B2IRange; }
+namespace basegfx { class B2DRange; }
 
 class SdrPaintWindow;
 class SdrPageView;

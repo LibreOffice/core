@@ -21,11 +21,12 @@
 #define INCLUDED_SVX_SDRHITTESTHELPER_HXX
 
 #include <svx/svxdllapi.h>
-#include <tools/gen.hxx>
 
 
 // #i101872# new Object HitTest as View-tooling
 
+
+class Point;
 class SdrObject;
 class SdrPageView;
 class SdrLayerIDSet;
