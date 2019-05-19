@@ -12,6 +12,13 @@ avmedia/res/avl02051.png cmd/lc_datastreamsstop.png
 avmedia/res/avl02052.png cmd/lc_mediarepeat.png
 avmedia/res/avl02053.png cmd/lc_ok.png
 avmedia/res/avl02054.png cmd/lc_mediamute.png
+chart2/res/dataeditor_icon01.png cmd/sc_insertrowsafter.png
+chart2/res/dataeditor_icon02.png cmd/sc_insertcolumnsafter.png
+chart2/res/dataeditor_icon03.png cmd/sc_deleterows.png
+chart2/res/dataeditor_icon04.png cmd/sc_deletecolumns.png
+chart2/res/typecolumn_16.png cmd/sc_insertobjectchartfromfile.png
+chart2/res/typecolumnline_16.png cmd/sc_statisticsmenu.png
+chart2/res/typepie_16.png cmd/sc_drawchart.png
 cmd/32/acceptchanges.png cmd/32/accepttrackedchanges.png
 cmd/32/accepttracedchange.png cmd/32/accepttrackedchange.png
 cmd/32/adddatefield.png cmd/32/datefield.png
@@ -74,6 +81,7 @@ cmd/32/convertmenu.png cmd/32/bezierconvert.png
 cmd/32/currentfootnotedialog.png cmd/32/footnotedialog.png
 cmd/32/datafilterhideautofilter.png cmd/32/removefiltersort.png
 cmd/32/datapilotmenu.png cmd/32/datadatapilotrun.png
+cmd/32/dbdtableedit.png cmd/32/dbtableedit.png
 cmd/32/dbviewfunctions.png cmd/32/insertformula.png
 cmd/32/defaultcellstyles.png cmd/32/defaultcharstyle.png
 cmd/32/defaultparastyle.png cmd/32/controlcodes.png
@@ -86,6 +94,7 @@ cmd/32/diagramdata.png cmd/32/changedatabasefield.png
 cmd/32/draw.png cmd/32/reload.png
 cmd/32/drawselect.png cmd/32/selectobject.png
 cmd/32/drawtext.png cmd/32/text.png
+cmd/32/dsbdocumentdatasource.png cmd/32/insertexternaldatasource.png
 cmd/32/dsbeditdoc.png cmd/32/editdoc.png
 cmd/32/dsbformletter.png cmd/32/mergedialog.png
 cmd/32/editcommentsmenu.png cmd/32/editannotation.png
@@ -111,6 +120,7 @@ cmd/32/es/underlinesimple.png cmd/32/ca/underline.png
 cmd/32/exitsearch.png cmd/32/closepreview.png
 cmd/32/exportasgraphic.png cmd/32/graphic.png
 cmd/32/exportasmenu.png cmd/32/exportto.png
+cmd/32/extrusionsurfacefloater.png cmd/32/cube.png
 cmd/32/extrusiontoggle.png cmd/32/convertinto3d.png
 cmd/32/fa/alphaliststyle.png cmd/32/ar/alphaliststyle.png
 cmd/32/fa/alphalowliststyle.png cmd/32/ar/alphalowliststyle.png
@@ -311,7 +321,6 @@ cmd/32/numberingmenu.png cmd/32/outlinebullet.png
 cmd/32/numberliststyle.png cmd/32/defaultnumbering.png
 cmd/32/objectbackone.png cmd/32/backward.png
 cmd/32/objectforwardone.png cmd/32/forward.png
-cmd/32/objectmenu.png cmd/32/insertobject.png
 cmd/32/objectmirrorhorizontal.png cmd/32/fliphorizontal.png
 cmd/32/objectmirrorvertical.png cmd/32/flipvertical.png
 cmd/32/objects3dtoolbox.png cmd/32/cube.png
@@ -403,6 +412,7 @@ cmd/32/slidesetup.png cmd/32/pagedialog.png
 cmd/32/sortdialog.png cmd/32/datasort.png
 cmd/32/sortdown.png cmd/32/sortdescending.png
 cmd/32/sortup.png cmd/32/sortascending.png
+cmd/32/sourceview.png cmd/32/managexmlsource.png
 cmd/32/spelldialog.png cmd/32/spelling.png
 cmd/32/spellingandgrammardialog.png cmd/32/spelling.png
 cmd/32/splithorizontal.png cmd/32/splitwindow.png
@@ -462,6 +472,7 @@ cmd/32/ur/undo.png cmd/32/ar/undo.png
 cmd/32/view100.png cmd/32/zoom100percent.png
 cmd/32/view3d.png cmd/32/cube.png
 cmd/32/viewsidebarstyles.png cmd/32/designerdialog.png
+cmd/32/viewtrackchanges.png cmd/32/showtrackedchanges.png
 cmd/32/vscroll.png cmd/32/scrollbar.png
 cmd/32/vscrollbar.png cmd/32/scrollbar.png
 cmd/32/wrapmenu.png cmd/32/wrapon.png
@@ -705,6 +716,7 @@ cmd/lc_convertmenu.png cmd/lc_bezierconvert.png
 cmd/lc_currentfootnotedialog.png cmd/lc_footnotedialog.png
 cmd/lc_datafilterhideautofilter.png cmd/lc_removefiltersort.png
 cmd/lc_datapilotmenu.png cmd/lc_datadatapilotrun.png
+cmd/lc_dbdtableedit.png cmd/lc_dbtableedit.png
 cmd/lc_dbviewfunctions.png cmd/lc_insertformula.png
 cmd/lc_defaultcellstyles.png cmd/lc_defaultcharstyle.png
 cmd/lc_defaultparastyle.png cmd/lc_controlcodes.png
@@ -717,6 +729,7 @@ cmd/lc_diagramdata.png cmd/lc_changedatabasefield.png
 cmd/lc_draw.png cmd/lc_reload.png
 cmd/lc_drawselect.png cmd/lc_selectobject.png
 cmd/lc_drawtext.png cmd/lc_text.png
+cmd/lc_dsbdocumentdatasource.png cmd/lc_insertexternaldatasource.png
 cmd/lc_dsbeditdoc.png cmd/lc_editdoc.png
 cmd/lc_dsbformletter.png cmd/lc_mergedialog.png
 cmd/lc_editcommentsmenu.png cmd/lc_editannotation.png
@@ -732,6 +745,7 @@ cmd/lc_ellipsetoolbox.png cmd/lc_basicshapes.ellipse.png
 cmd/lc_exitsearch.png cmd/lc_closepreview.png
 cmd/lc_exportasgraphic.png cmd/lc_graphic.png
 cmd/lc_exportasmenu.png cmd/lc_exportto.png
+cmd/lc_extrusionsurfacefloater.png cmd/lc_cube.png
 cmd/lc_extrusiontoggle.png cmd/lc_convertinto3d.png
 cmd/lc_fielddialog.png cmd/lc_fields.png
 cmd/lc_fieldmenu.png cmd/lc_insertfield.png
@@ -874,7 +888,6 @@ cmd/lc_numberingmenu.png cmd/lc_outlinebullet.png
 cmd/lc_numberliststyle.png cmd/lc_defaultnumbering.png
 cmd/lc_objectbackone.png cmd/lc_backward.png
 cmd/lc_objectforwardone.png cmd/lc_forward.png
-cmd/lc_objectmenu.png cmd/lc_insertobject.png
 cmd/lc_objectmirrorhorizontal.png cmd/lc_fliphorizontal.png
 cmd/lc_objectmirrorvertical.png cmd/lc_flipvertical.png
 cmd/lc_objects3dtoolbox.png cmd/lc_cube.png
@@ -950,6 +963,7 @@ cmd/lc_slidesetup.png cmd/lc_pagedialog.png
 cmd/lc_sortdialog.png cmd/lc_datasort.png
 cmd/lc_sortdown.png cmd/lc_sortdescending.png
 cmd/lc_sortup.png cmd/lc_sortascending.png
+cmd/lc_sourceview.png cmd/lc_managexmlsource.png
 cmd/lc_spelldialog.png cmd/lc_spelling.png
 cmd/lc_spellingandgrammardialog.png cmd/lc_spelling.png
 cmd/lc_splithorizontal.png cmd/lc_splitwindow.png
@@ -987,6 +1001,7 @@ cmd/lc_updatemenu.png cmd/lc_reload.png
 cmd/lc_view100.png cmd/lc_zoom100percent.png
 cmd/lc_view3d.png cmd/lc_cube.png
 cmd/lc_viewsidebarstyles.png cmd/lc_designerdialog.png
+cmd/lc_viewtrackchanges.png cmd/lc_showtrackedchanges.png
 cmd/lc_vscroll.png cmd/lc_scrollbar.png
 cmd/lc_vscrollbar.png cmd/lc_scrollbar.png
 cmd/lc_wrapmenu.png cmd/lc_wrapon.png
@@ -1056,6 +1071,7 @@ cmd/sc_convertmenu.png cmd/sc_bezierconvert.pngs
 cmd/sc_currentfootnotedialog.png cmd/sc_footnotedialog.png
 cmd/sc_datafilterhideautofilter.png cmd/sc_removefiltersort.png
 cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
+cmd/sc_dbdtableedit.png cmd/sc_dbtableedit.png
 cmd/sc_dbviewfunctions.png cmd/sc_insertformula.png
 cmd/sc_defaultcellstyles.png cmd/sc_defaultcharstyle.png
 cmd/sc_defaultparastyle.png cmd/sc_controlcodes.png
@@ -1068,6 +1084,7 @@ cmd/sc_diagramdata.png cmd/sc_changedatabasefield.png
 cmd/sc_draw.png cmd/sc_reload.png
 cmd/sc_drawselect.png cmd/sc_selectobject.png
 cmd/sc_drawtext.png cmd/sc_text.png
+cmd/sc_dsbdocumentdatasource.png cmd/sc_insertexternaldatasource.png
 cmd/sc_dsbeditdoc.png cmd/sc_editdoc.png
 cmd/sc_dsbformletter.png cmd/sc_mergedialog.png
 cmd/sc_editcommentsmenu.png cmd/sc_editannotation.png
@@ -1083,6 +1100,7 @@ cmd/sc_ellipsetoolbox.png cmd/sc_basicshapes.ellipse.png
 cmd/sc_exitsearch.png cmd/sc_closepreview.png
 cmd/sc_exportasgraphic.png cmd/sc_graphic.png
 cmd/sc_exportasmenu.png cmd/sc_exportto.png
+cmd/sc_extrusionsurfacefloater.png cmd/sc_cube.png
 cmd/sc_extrusiontoggle.png cmd/sc_convertinto3d.png
 cmd/sc_fielddialog.png cmd/sc_fields.png
 cmd/sc_fieldmenu.png cmd/sc_insertfield.png
@@ -1226,7 +1244,6 @@ cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png
 cmd/sc_numberliststyle.png cmd/sc_defaultnumbering.png
 cmd/sc_objectbackone.png cmd/sc_backward.png
 cmd/sc_objectforwardone.png cmd/sc_forward.png
-cmd/sc_objectmenu.png cmd/sc_insertobject.png
 cmd/sc_objectmirrorhorizontal.png cmd/sc_fliphorizontal.png
 cmd/sc_objectmirrorvertical.png cmd/sc_flipvertical.png
 cmd/sc_objects3dtoolbox.png cmd/sc_cube.png
@@ -1302,6 +1319,7 @@ cmd/sc_slidesetup.png cmd/sc_pagedialog.png
 cmd/sc_sortdialog.png cmd/sc_datasort.png
 cmd/sc_sortdown.png cmd/sc_sortdescending.png
 cmd/sc_sortup.png cmd/sc_sortascending.png
+cmd/sc_sourceview.png cmd/sc_managexmlsource.png
 cmd/sc_spelldialog.png cmd/sc_spelling.png
 cmd/sc_spellingandgrammardialog.png cmd/sc_spelling.png
 cmd/sc_splithorizontal.png cmd/sc_splitwindow.png
@@ -1339,6 +1357,7 @@ cmd/sc_updatemenu.png cmd/sc_reload.png
 cmd/sc_view100.png cmd/sc_zoom100percent.png
 cmd/sc_view3d.png cmd/sc_cube.png
 cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
+cmd/sc_viewtrackchanges.png cmd/sc_showtrackedchanges.png
 cmd/sc_vscroll.png cmd/sc_scrollbar.png
 cmd/sc_vscrollbar.png cmd/sc_scrollbar.png
 cmd/sc_wrapmenu.png cmd/sc_wrapon.png
@@ -1383,6 +1402,18 @@ cmd/ur/sc_removebullets.png cmd/ar/sc_removebullets.png
 cmd/ur/sc_romanliststyle.png cmd/ar/sc_romanliststyle.png
 cmd/ur/sc_romanlowliststyle.png cmd/ar/sc_romanlowliststyle.png
 cmd/ur/sc_undo.png cmd/ar/sc_undo.png
+dbaccess/res/db.png cmd/sc_changedatabasefield.png
+dbaccess/res/exinfo.png res/info_16.png
+dbaccess/res/lc036.png cmd/lc_dbnewreport.png
+dbaccess/res/lc037.png cmd/lc_dbreportdelete.png
+dbaccess/res/lc038.png cmd/lc_dbreportedit.png
+dbaccess/res/sc021.png cmd/sc_dbqueryedit.png
+dbaccess/res/sc023.png cmd/sc_dbnewquerysql.png
+dbaccess/res/sc036.png cmd/sc_dbnewreport.png
+dbaccess/res/sc037.png cmd/sc_dbreportdelete.png
+dbaccess/res/sc038.png cmd/sc_dbreportedit.png
+dbaccess/res/sortdown.png cmd/sc_sortascending.png
+dbaccess/res/sortup.png cmd/sc_sortdescending.png
 desktop/res/extension_16.png cmd/sc_addons.png
 desktop/res/extension_32.png cmd/32/addons.png
 extensions/res/scanner/minus.png res/minus.png
@@ -1396,11 +1427,15 @@ framework/res/extension.png cmd/lc_addons.png
 framework/res/info_26.png cmd/lc_helperdialog.png
 reportdesign/res/sc30768.png cmd/sc_upsearch.png
 reportdesign/res/sc30769.png cmd/sc_downsearch.png
+reportdesign/res/sx10928.png cmd/sc_hfixedline.png
+reportdesign/res/sx10929.png cmd/sc_vfixedline.png
 reportdesign/res/sx11047.png cmd/sc_basicshapes.diamond.png
 reportdesign/res/sx12452.png cmd/sc_actionmode.png
 reportdesign/res/sx12453.png cmd/lc_animationeffects.png
+reportdesign/res/sx12464.png dbaccess/res/report_16.png
 reportdesign/res/sx12594.png cmd/sc_insertformula.png
 res/adrbook.png cmd/sc_viewdatasourcebrowser.png
+res/browse.png fpicker/res/fp016.png
 res/extension_plus_26.png cmd/lc_addons.png
 res/extension_plus_32.png cmd/32/addons.png
 res/fileopen.png cmd/sc_open.png
@@ -1515,11 +1550,12 @@ res/sc16670.png cmd/sc_sbaexecutesql.png
 res/so03127.png res/so03126.png
 res/so03227.png res/odg_16_8.png
 res/sx03123.png res/odp_16_8.png
-res/sx03127.png res/sx03126.png
+res/sx03126.png dbaccess/res/tables_16.png
+res/sx03127.png dbaccess/res/tables_16.png
 res/sx03129.png dbaccess/res/db.png
 res/sx03130.png res/odp_16_8.png
 res/sx03131.png res/so03126.png
-res/sx03132.png res/sx03126.png
+res/sx03132.png dbaccess/res/tables_16.png
 res/sx03137.png res/sx03125.png
 res/sx03139.png cmd/sc_newhtmldoc.png
 res/sx03140.png res/sx03125.png
@@ -1535,8 +1571,9 @@ res/sx03162.png res/odt_16_8.png
 res/sx03163.png res/ott_16_8.png
 res/sx03164.png res/harddisk_16.png
 res/sx03165.png cmd/sc_save.png
-res/sx03188.png res/sx03126.png
+res/sx03188.png dbaccess/res/tables_16.png
 res/sx03189.png svtools/res/folder.png
+res/sx03202.png dbaccess/res/query_16.png
 res/sx03218.png res/sx03217.png
 res/sx03219.png res/sx03125.png
 res/sx03220.png res/sx03217.png
@@ -1602,6 +1639,7 @@ sc/res/nc05.png cmd/sc_insertobject.png
 sc/res/nc06.png cmd/sc_showannotations.png
 sc/res/nc08.png cmd/sc_graphic.png
 sc/res/page.png cmd/sc_adddirect.png
+sc/res/nc07.png sc/res/droplink.png
 sc/res/sc26047.png cmd/sc_insertformula.png
 sc/res/sc26048.png cmd/sc_autosum.png
 sc/res/sc26050.png cmd/sc_cancel.png
@@ -1638,7 +1676,6 @@ sd/res/nv010.png sc/res/dropurl.png
 sd/res/objects.png cmd/sc_objectcatalog.png
 sd/res/ole.png cmd/sc_insertobject.png
 sd/res/page.png cmd/sc_adddirect.png
-sd/res/playblue_16.png cmd/sc_datastreamsplay.png
 sd/res/pipette.png cmd/sc_bmpmask.png
 sd/res/sc05928.png cmd/sc_autopilotmenu.png
 sd/res/sc27015.png cmd/sc_importfromfile.png
@@ -1654,9 +1691,11 @@ sd/res/sc27095.png cmd/sc_toggleobjectrotatemode.png
 sd/res/sc27173.png sd/res/sc27171.png
 sd/res/sc27296.png sd/res/sc27295.png
 sd/res/stopplayingblue_16.png cmd/sc_datastreamsstop.png
-sfx2/actionview030.png cmd/lc_open.png
+sd/res/time_16.png cmd/sc_timefield.png
+sfx2/res/actionview028.png cmd/lc_save.png
+sfx2/res/actionview030.png cmd/lc_open.png
 sfx2/res/deleterow.png cmd/sc_deleterows.png
-sfx2/res/favorite.png sw/res/nc20005.png
+sw/res/nc20005.png sfx2/res/favourite.png
 sfx2/res/newex.png cmd/sc_stylenewbyexample.png
 sfx2/res/sortascending.png cmd/lc_sortascending.png
 sfx2/res/styfam1.png sw/res/sf02.png
@@ -1686,10 +1725,16 @@ starmath/res/at21720.png cmd/lc_charfontname.png
 svtools/res/back_large.png cmd/lc_navigateback.png
 svtools/res/back_small.png cmd/sc_navigateback.png
 svtools/res/fp011.png fpicker/res/fp015.png
+svtools/res/info_small.png res/info_16.png
+svtools/res/new_doc.png cmd/32/insertpage.png
 svtools/res/preview_large.png cmd/lc_printpreview.png
 svtools/res/preview_small.png cmd/sc_printpreview.png
+svtools/res/samples.png cmd/32/open.png
 svtools/res/up_large.png cmd/lc_upsearch.png
 svtools/res/up_small.png cmd/sc_upsearch.png
+svx/res/3dlight.png cmd/sc_extrusionlightingfloater.png
+svx/res/apply.png cmd/sc_apply.png
+svx/res/blend3d.png cmd/sc_sphere.png
 svx/res/cd01.png cmd/sc_ok.png
 svx/res/cd015.png cmd/sc_toggleobjectbeziermode.png
 svx/res/cd016.png cmd/sc_beziermove.png
@@ -1706,7 +1751,7 @@ svx/res/cd08.png cmd/sc_polygon.png
 svx/res/colordlg.png cmd/sc_colorsettings.png
 svx/res/ColorModeBlackWhite_16x16.png cmd/sc_outputqualityblackwhite.png
 svx/res/ColorModeGrey_16x16.png cmd/sc_outputqualitygrayscale.png
-svx/res/convrt3d.png cmd/lc_convertinto3d.png
+svx/res/convrt3d.png cmd/sc_convertinto3d.png
 svx/res/fill_color.png cmd/sc_formatarea.png
 svx/res/filter3d.png cmd/sc_datafilterstandardfilter.png
 svx/res/fontworkaligncentered_16.png cmd/sc_alignhorizontalcenter.png
@@ -1742,12 +1787,14 @@ svx/res/id05.png cmd/sc_basicshapes.rectangle.png
 svx/res/id06.png cmd/sc_basicshapes.ellipse.png
 svx/res/id07.png cmd/sc_polygon.png
 svx/res/id08.png cmd/sc_freeline_unfilled.png
+svx/res/lighton.png cmd/sc_extrusionlightingfloater.png
 svx/res/lngcheck.png cmd/sc_spelling.png
 svx/res/nu01.png cmd/sc_ok.png
 svx/res/nu02.png cmd/sc_delete.png
 svx/res/nu03.png cmd/sc_showannotations.png
 svx/res/objects.png cmd/sc_objectcatalog.png
 svx/res/ole.png cmd/sc_insertobject.png
+svx/res/persp3d.png svx/res/perspective_16.png
 svx/res/rotate3d.png cmd/sc_convertinto3dlathefast.png
 svx/res/symphony/AdjustColorBlue_16x16.png cmd/sc_grafblue.png
 svx/res/symphony/AdjustColorGamma_16x16.png cmd/sc_grafgamma.png
@@ -1804,18 +1851,17 @@ sw/res/sr20004.png cmd/sc_adddirect.png
 sw/res/sr20005.png cmd/sc_insertdraw.png
 sw/res/sr20006.png cmd/sc_choosecontrols.png
 sw/res/sr20007.png cmd/sc_insertsection.png
-sw/res/sr20008.png sw/res/nc20005.png
+sw/res/sr20008.png sfx2/res/favourite.png
 sw/res/sr20009.png cmd/sc_graphic.png
 sw/res/sr20010.png cmd/sc_insertobject.png
 sw/res/sr20011.png sw/res/nc20000.png
 sw/res/sr20013.png cmd/sc_insertfootnote.png
 sw/res/sr20014.png sw/res/sc20183.png
 sw/res/sr20015.png cmd/sc_showannotations.png
-sw/res/sr20016.png cmd/sc_searchdialog.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
 sw/res/styfamnu.png sw/res/sf05.png
 sw/res/sx01.png cmd/sc_changedatabasefield.png
-sw/res/sx02.png res/sx03126.png
+sw/res/sx02.png dbaccess/res/tables_16.png
 sw/res/sx03.png dbaccess/res/query_16.png
 sw/res/wr01.png cmd/32/wrapoff.png
 sw/res/wr02.png cmd/32/wrapleft.png
@@ -1828,4 +1874,5 @@ sw/res/wr011.png cmd/32/wrapideal.png
 vcl/res/closedoc.png sfx2/res/closedoc.png
 vcl/res/index.png cmd/sc_insertindexesentry.png
 vcl/source/src/msgbox.png vcl/res/msgbox.png
+xmlsecurity/res/notcertificate_16.png svx/res/notcertificate_16.png
 xmlsecurity/res/signet_11x16.png svx/res/signet_11x16.png
