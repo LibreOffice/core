@@ -457,11 +457,11 @@ public:
     {
         LOCH,
         HICH,
-        DBCH
+        DBCH,
+        RTLCH,
+        LTRCH
     };
     RunType eRunType;
-    /// ltrch or rtlch
-    bool isRightToLeft;
 
     // Info group.
     sal_Int16 nYear;

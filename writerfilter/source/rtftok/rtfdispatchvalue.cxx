@@ -164,7 +164,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         case RTF_FS:
         case RTF_AFS:
-            nSprm = (m_aStates.top().isRightToLeft
+            nSprm = (m_aStates.top().eRunType == RTFParserState::RunType::RTLCH
                      || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
                         ? NS_ooxml::LN_EG_RPrBase_szCs
                         : NS_ooxml::LN_EG_RPrBase_sz;
@@ -191,7 +191,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         case RTF_LANG:
         case RTF_ALANG:
-            if (m_aStates.top().isRightToLeft
+            if (m_aStates.top().eRunType == RTFParserState::RunType::RTLCH
                 || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
             {
                 nSprm = NS_ooxml::LN_CT_Language_bidi;
@@ -202,7 +202,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             else
             {
-                assert(m_aStates.top().eRunType == RTFParserState::RunType::LOCH);
+                assert(m_aStates.top().eRunType == RTFParserState::RunType::LOCH
+                       || m_aStates.top().eRunType == RTFParserState::RunType::LTRCH);
                 nSprm = NS_ooxml::LN_CT_Language_val;
             }
             break;
@@ -336,7 +337,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         case RTF_F:
         case RTF_AF:
-            if (m_aStates.top().isRightToLeft
+            if (m_aStates.top().eRunType == RTFParserState::RunType::RTLCH
                 || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
             {
                 nSprm = NS_ooxml::LN_CT_Fonts_cs;
@@ -347,7 +348,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             else
             {
-                assert(m_aStates.top().eRunType == RTFParserState::RunType::LOCH);
+                assert(m_aStates.top().eRunType == RTFParserState::RunType::LOCH
+                       || m_aStates.top().eRunType == RTFParserState::RunType::LTRCH);
                 nSprm = NS_ooxml::LN_CT_Fonts_ascii;
             }
             if (m_aStates.top().eDestination == Destination::FONTTABLE
