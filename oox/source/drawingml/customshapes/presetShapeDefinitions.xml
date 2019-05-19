@@ -17101,7 +17101,7 @@
     </gdLst>
 
     <ahLst xmlns="http://schemas.openxmlformats.org/drawingml/2006/main">
-      <ahXY gdRefY="adj" minY="0" maxY="ssd2">
+      <ahXY gdRefY="adj" minY="0" maxY="50000">
         <pos x="hc" y="yAdj" />
       </ahXY>
     </ahLst>
@@ -17384,7 +17384,7 @@
     </gdLst>
 
     <ahLst xmlns="http://schemas.openxmlformats.org/drawingml/2006/main">
-      <ahXY gdRefY="adj" minY="0" maxY="ssd2">
+      <ahXY gdRefY="adj" minY="0" maxY="50000">
         <pos x="hc" y="yAdj" />
       </ahXY>
     </ahLst>
