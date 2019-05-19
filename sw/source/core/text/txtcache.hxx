@@ -19,11 +19,10 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_TXTCACHE_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_TXTCACHE_HXX
 
-#include <sal/types.h>
 #include <swcache.hxx>
+#include "porlay.hxx"
 #include <memory>
 
-class SwParaPortion;
 class SwTextFrame;
 
 class SwTextLine : public SwCacheObj

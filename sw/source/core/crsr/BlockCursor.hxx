@@ -19,12 +19,13 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_CRSR_BLOCKCURSOR_HXX
 #define INCLUDED_SW_SOURCE_CORE_CRSR_BLOCKCURSOR_HXX
 
-#include <crsrsh.hxx>
 #include <boost/optional.hpp>
+#include <tools/gen.hxx>
+
+#include <viscrs.hxx>
 
 class SwCursorShell;
 struct SwPosition;
-class Point;
 
  /** Access to the block cursor
 

@@ -19,23 +19,23 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_DOCNODE_THREADMANAGER_HXX
 #define INCLUDED_SW_SOURCE_CORE_DOCNODE_THREADMANAGER_HXX
 
-#include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <osl/mutex.hxx>
 #include <osl/interlck.h>
 #include <rtl/ref.hxx>
 
 #include <deque>
-#include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <com/sun/star/util/XJobManager.hpp>
 #include <observablethread.hxx>
-#include "cancellablejob.hxx"
-#include <threadlistener.hxx>
 
 #include <memory>
-#include <ifinishedthreadlistener.hxx>
 
+namespace com::sun::star::util { class XCancellable; }
+namespace com::sun::star::util { class XJobManager; }
+
+class IFinishedThreadListener;
+class ThreadListener;
+class Timer;
 
 /** class to manage threads
 

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_INFTXT_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_INFTXT_HXX
 #include <memory>
-#include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 
 #include <map>
@@ -34,22 +33,16 @@
 #include <editeng/paravertalignitem.hxx>
 #include <sal/log.hxx>
 
-namespace vcl { class Font; }
-class OutputDevice;
+namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
+
 class SvxBrushItem;
 class SvxLineSpacingItem;
 class SvxTabStop;
 class SvxTabStopItem;
-class SwAttrSet;
-class SwFieldPortion;
 class SwFlyPortion;
 class SwFormatDrop;
-class SwLineLayout;
 class SwLinePortion;
-class SwParaPortion;
 class SwTabPortion;
-class SwTextFrame;
-class SwTextSizeInfo;
 class SwViewOption;
 class SwViewShell;
 class SwAttrIter;

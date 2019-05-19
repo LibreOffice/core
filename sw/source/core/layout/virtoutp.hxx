@@ -21,7 +21,6 @@
 
 #include <vcl/virdev.hxx>
 
-#include <swtypes.hxx>
 #include <swrect.hxx>
 
 class SwViewShell;

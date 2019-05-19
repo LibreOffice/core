@@ -22,7 +22,7 @@
 
 #include "acccontext.hxx"
 #include <calbck.hxx>
-#include <pam.hxx>
+#include <ndtyp.hxx>
 
 class SwFlyFrame;
 

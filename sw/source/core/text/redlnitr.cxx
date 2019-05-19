@@ -24,6 +24,7 @@
 #include <hintids.hxx>
 #include <svl/whiter.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <scriptinfo.hxx>
 #include <swmodule.hxx>
 #include <redline.hxx>
 #include <txtatr.hxx>

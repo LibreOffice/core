@@ -22,10 +22,7 @@
 #include "possiz.hxx"
 #include <txttypes.hxx>
 #include <TextFrameIndex.hxx>
-
-#ifdef DBG_UTIL
-#include <libxml/xmlwriter.h>
-#endif
+#include <rtl/ustring.hxx>
 
 class SwTextSizeInfo;
 class SwTextPaintInfo;

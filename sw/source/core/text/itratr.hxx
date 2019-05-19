@@ -20,16 +20,10 @@
 #define INCLUDED_SW_SOURCE_CORE_TEXT_ITRATR_HXX
 #include <o3tl/deleter.hxx>
 #include "atrhndl.hxx"
-#include <swtypes.hxx>
 #include <swfont.hxx>
-#include "porlay.hxx"
 
 namespace sw { struct MergedPara; }
-class OutputDevice;
-class SwFont;
-class SwpHints;
 class SwTextAttr;
-class SwAttrSet;
 class SwTextNode;
 class SwRedlineItr;
 class SwViewShell;

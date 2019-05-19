@@ -25,10 +25,6 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
 class SwFlyFrame;
-namespace utl { class AccessibleRelationSetHelper; }
-namespace com { namespace star {
-    namespace accessibility { struct AccessibleRelation; }
-} }
 
 class SwAccessibleTextFrame : public SwAccessibleFrameBase,
         public css::accessibility::XAccessibleSelection

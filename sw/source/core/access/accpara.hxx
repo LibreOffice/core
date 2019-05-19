@@ -26,16 +26,13 @@
 #include <com/sun/star/accessibility/XAccessibleTextMarkup.hpp>
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextSelection.hpp>
-#include <txmsrt.hxx>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include "accselectionhelper.hxx"
-#include <calbck.hxx>
 #include <unordered_map>
+#include <svl/lstner.hxx>
 
-class SwField;
 class SwTextFrame;
-class SwTextNode;
 class SwPaM;
 class SwAccessiblePortionData;
 class SwAccessibleHyperTextData;

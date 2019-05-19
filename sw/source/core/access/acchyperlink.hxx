@@ -25,8 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <svl/listener.hxx>
 
-#include <fmtinfmt.hxx>
-
+class SwFormatINetFormat;
 class SwAccessibleParagraph;
 class SwTextAttr;
 

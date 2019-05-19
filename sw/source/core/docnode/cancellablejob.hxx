@@ -26,7 +26,7 @@
 
 #include <rtl/ref.hxx>
 
-class ObservableThread;
+#include <observablethread.hxx>
 
 class CancellableJob : public ::cppu::WeakImplHelper<css::util::XCancellable>
 {

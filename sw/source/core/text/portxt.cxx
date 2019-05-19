@@ -20,6 +20,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <i18nlangtag/mslangid.hxx>
+#include <breakit.hxx>
 #include <hintids.hxx>
 #include <EnhancedPDFExportHelper.hxx>
 #include <SwPortionHandler.hxx>

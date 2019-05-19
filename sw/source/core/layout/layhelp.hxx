@@ -22,6 +22,9 @@
 
 #include <swrect.hxx>
 
+#include <tools/solar.h>
+
+#include <memory>
 #include <vector>
 #include <deque>
 
@@ -29,7 +32,6 @@ class SwDoc;
 class SwFrame;
 class SwLayoutFrame;
 class SwPageFrame;
-class SwFlyFrame;
 class SwSectionFrame;
 class SwSectionNode;
 class SvStream;

@@ -18,8 +18,19 @@
  */
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_PORRST_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_PORRST_HXX
-#include "porlay.hxx"
-#include "porexp.hxx"
+
+#include <tools/gen.hxx>
+
+#include <TextFrameIndex.hxx>
+#include <txttypes.hxx>
+
+#include "porlin.hxx"
+#include "portxt.hxx"
+#include "possiz.hxx"
+
+class SwPortionHandler;
+class SwTextPaintInfo;
+class SwTextSizeInfo;
 
 #define LINE_BREAK_WIDTH        150
 #define SPECIAL_FONT_HEIGHT     200

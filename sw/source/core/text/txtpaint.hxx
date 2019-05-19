@@ -21,7 +21,7 @@
 #include <vcl/outdev.hxx>
 
 class SwRect;               // SwSaveClip
-#include <txtfrm.hxx>
+class SwTextFrame;
 
 class SwSaveClip final
 {

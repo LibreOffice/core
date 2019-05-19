@@ -26,8 +26,6 @@
 #include <com/sun/star/accessibility/XAccessibleGetAccFlowTo.hpp>
 #include "accselectionhelper.hxx"
 
-class VclSimpleEvent;
-
 // base class for SwAccessibleDocument (in this same header file) and
 // SwAccessiblePreview
 class SwAccessibleDocumentBase : public SwAccessibleContext

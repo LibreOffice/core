@@ -22,7 +22,6 @@
 #include "itratr.hxx"
 #include "inftxt.hxx"
 
-class SwTextFrame;
 struct SwPosition;
 struct SwCursorMoveState;
 class SwMarginPortion;

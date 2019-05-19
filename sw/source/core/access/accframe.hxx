@@ -31,9 +31,6 @@
 class SwAccessibleMap;
 class SwFrame;
 class SwViewShell;
-namespace sw { namespace access {
-    class SwAccessibleChild;
-}}
 
 // Any method of this class must be called with an acquired solar mutex!
 

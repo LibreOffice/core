@@ -21,13 +21,11 @@
 
 #include <memory>
 #include "porlay.hxx"
-#include "porexp.hxx"
 #include <com/sun/star/text/RubyAdjust.hpp>
 
+class IDocumentSettingAccess;
 class SwTextFormatInfo;
-class SwFieldPortion;
 class SwTextCursor;
-class SwLineLayout;
 class SwTextPaintInfo;
 class SwTextAttr;
 class SfxPoolItem;
