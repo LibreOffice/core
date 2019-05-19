@@ -1833,14 +1833,14 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
     {
         case RTF_B:
         case RTF_AB:
-            nSprm = (m_aStates.top().isRightToLeft
+            nSprm = (m_aStates.top().eRunType == RTFParserState::RunType::RTLCH
                      || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
                         ? NS_ooxml::LN_EG_RPrBase_bCs
                         : NS_ooxml::LN_EG_RPrBase_b;
             break;
         case RTF_I:
         case RTF_AI:
-            nSprm = (m_aStates.top().isRightToLeft
+            nSprm = (m_aStates.top().eRunType == RTFParserState::RunType::RTLCH
                      || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
                         ? NS_ooxml::LN_EG_RPrBase_iCs
                         : NS_ooxml::LN_EG_RPrBase_i;
@@ -3504,7 +3504,6 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
     , bLevelNumbersValid(true)
     , aFrame(this)
     , eRunType(RunType::LOCH)
-    , isRightToLeft(false)
     , nYear(0)
     , nMonth(0)
     , nDay(0)

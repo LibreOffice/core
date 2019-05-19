@@ -471,7 +471,6 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().nCurrentEncoding = getEncoding(getFontIndex(m_nDefaultFontIndex));
             m_aStates.top().aCharacterAttributes = getDefaultState().aCharacterAttributes;
             m_aStates.top().nCurrentCharacterStyleIndex = -1;
-            m_aStates.top().isRightToLeft = false;
             m_aStates.top().eRunType = RTFParserState::RunType::LOCH;
         }
         break;
@@ -579,10 +578,10 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         case RTF_LTRCH:
             // dmapper does not support this.
-            m_aStates.top().isRightToLeft = false;
+            m_aStates.top().eRunType = RTFParserState::RunType::LTRCH;
             break;
         case RTF_RTLCH:
-            m_aStates.top().isRightToLeft = true;
+            m_aStates.top().eRunType = RTFParserState::RunType::RTLCH;
             if (m_aDefaultState.nCurrentEncoding == RTL_TEXTENCODING_MS_1255)
                 m_aStates.top().nCurrentEncoding = m_aDefaultState.nCurrentEncoding;
             break;
