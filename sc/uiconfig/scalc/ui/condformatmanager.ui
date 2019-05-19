@@ -133,7 +133,7 @@
                               <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                                 <property name="resizable">True</property>
                                 <property name="spacing">6</property>
-                                <property name="title" translatable="yes" context="condformatmanager|STR_HEADER_RANGE">First Condition</property>
+                                <property name="title" translatable="yes" context="condformatmanager|STR_HEADER_RANGE">Range</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="cellrenderer1"/>
                                   <attributes>
@@ -146,7 +146,7 @@
                               <object class="GtkTreeViewColumn" id="treeviewcolumn2">
                                 <property name="resizable">True</property>
                                 <property name="spacing">6</property>
-                                <property name="title" translatable="yes" context="condformatmanager|STR_HEADER_RANGE">Range</property>
+                                <property name="title" translatable="yes" context="condformatmanager|STR_HEADER_FIRST_CONDITION">First Condition</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="cellrenderer2"/>
                                   <attributes>
