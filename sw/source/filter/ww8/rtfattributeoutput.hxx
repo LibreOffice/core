@@ -486,6 +486,7 @@ private:
     void FinishTableRowCell(const ww8::WW8TableNodeInfoInner::Pointer_t& pInner);
 
     void WriteTextFootnoteNumStr(const SwFormatFootnote& rFootnote);
+    OString generateCharacterProperties();
 
     /*
      * Current style name and its ID.
@@ -516,9 +517,11 @@ private:
      */
     OStringBuffer m_aStyles;
     /*
-     * This is the same as m_aStyles but the contents of it is written last.
+     * This is the same as m_aStyles but the contents of it is Assoc.
      */
-    OStringBuffer m_aStylesEnd;
+    OStringBuffer m_aStylesAssoc;
+    bool m_bIsRTL;
+    sal_uInt16 m_nScript;
 
     sal_Int32 m_nNextAnnotationMarkId;
     sal_Int32 m_nCurrentAnnotationMarkId;
