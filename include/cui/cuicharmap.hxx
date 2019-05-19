@@ -26,6 +26,7 @@
 #include <svl/itemset.hxx>
 #include <svx/charmap.hxx>
 #include <svx/searchcharmap.hxx>
+#include <svx/ucsubset.hxx>
 #include <sfx2/charwin.hxx>
 #include <cui/cuidllapi.h>
 

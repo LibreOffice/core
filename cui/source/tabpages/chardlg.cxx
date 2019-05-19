@@ -29,6 +29,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
+#include <svx/ucsubset.hxx>
 #include <svtools/unitconv.hxx>
 #include <svl/languageoptions.hxx>
 #include <svx/xtable.hxx>

@@ -41,6 +41,7 @@
 #include <editeng/editeng.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svxids.hrc>
+#include <svx/sdr/overlay/overlaymanager.hxx>
 #include <sfx2/docfile.hxx>
 #include <editeng/outlobj.hxx>
 

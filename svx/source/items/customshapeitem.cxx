@@ -22,6 +22,8 @@
 #include <o3tl/any.hxx>
 #include <svx/sdasitm.hxx>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 using namespace ::std;
 using namespace com::sun::star;
 

@@ -18,6 +18,7 @@
  */
 
 #include <i18nutil/unicode.hxx>
+#include <vcl/event.hxx>
 #include <vcl/field.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/settings.hxx>
@@ -40,6 +41,7 @@
 #include <svl/eitem.hxx>
 #include <svl/languageoptions.hxx>
 #include <svx/SmartTagMgr.hxx>
+#include <svx/ucsubset.hxx>
 #include <com/sun/star/smarttags/XSmartTagRecognizer.hpp>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
 #include <rtl/strbuf.hxx>

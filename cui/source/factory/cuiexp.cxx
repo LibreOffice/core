@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/basedlgs.hxx>
+#include <svx/ucsubset.hxx>
 #include <cuigaldlg.hxx>
 #include <hlmarkwn.hxx>
 #include <srchxtra.hxx>
