@@ -23,7 +23,7 @@
       <value>false</value>
     </prop>
     <prop oor:name="LastTipOfTheDayShown">
-      <value>"32767"</value> <!-- some arbitray high value (sal_Int32) -->
+      <value>"32767"</value> <!-- some arbitrary high value (sal_Int32) -->
     </prop>
   </node>
   <node oor:name="Filter">

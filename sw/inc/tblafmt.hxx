@@ -80,7 +80,7 @@ public:
     SwBoxAutoFormat( const SwBoxAutoFormat& rNew );
     ~SwBoxAutoFormat();
 
-    /// assignemt-op (still used)
+    /// assignment-op (still used)
     SwBoxAutoFormat& operator=(const SwBoxAutoFormat& rRef);
 
     /// Comparing based of boxes backgrounds.
