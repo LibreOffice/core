@@ -74,6 +74,7 @@ public:
     void testInteropGrabBag();
     void testBackground();
     void testBackgroundDrawingmlFallback();
+    void testCenterCycle();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -110,6 +111,7 @@ public:
     CPPUNIT_TEST(testInteropGrabBag);
     CPPUNIT_TEST(testBackground);
     CPPUNIT_TEST(testBackgroundDrawingmlFallback);
+    CPPUNIT_TEST(testCenterCycle);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1132,6 +1134,34 @@ void SdImportTestSmartArt::testBackgroundDrawingmlFallback()
     bool bSizeProtect = false;
     xPropertySet->getPropertyValue("SizeProtect") >>= bSizeProtect;
     CPPUNIT_ASSERT_EQUAL(true, bSizeProtect);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testCenterCycle()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-center-cycle.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+
+    uno::Reference<drawing::XShapes> xGroupNested(xGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroupNested.is());
+
+    uno::Reference<drawing::XShape> xShapeCenter(xGroupNested->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShapeA(xGroupNested->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShapeB(xGroupNested->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShapeC(xGroupNested->getByIndex(3), uno::UNO_QUERY);
+
+    uno::Reference<text::XText> xTextCenter(xShapeCenter, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextCenter.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("center"), xTextCenter->getString());
+
+    CPPUNIT_ASSERT_LESS(xShapeCenter->getPosition().Y, xShapeA->getPosition().Y);
+    CPPUNIT_ASSERT_GREATER(xShapeCenter->getPosition().X, xShapeB->getPosition().X);
+    CPPUNIT_ASSERT_GREATER(xShapeCenter->getPosition().Y, xShapeB->getPosition().Y);
+    CPPUNIT_ASSERT_LESS(xShapeCenter->getPosition().X, xShapeC->getPosition().X);
+    CPPUNIT_ASSERT_GREATER(xShapeCenter->getPosition().Y, xShapeC->getPosition().Y);
 
     xDocShRef->DoClose();
 }

@@ -661,18 +661,34 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             const sal_Int32 nStartAngle = maMap.count(XML_stAng) ? maMap.find(XML_stAng)->second : 0;
             const sal_Int32 nSpanAngle = maMap.count(XML_spanAng) ? maMap.find(XML_spanAng)->second : 360;
             const sal_Int32 nRotationPath = maMap.count(XML_rotPath) ? maMap.find(XML_rotPath)->second : XML_none;
-            const sal_Int32 nShapes = rShape->getChildren().size();
+            const sal_Int32 nctrShpMap = maMap.count(XML_ctrShpMap) ? maMap.find(XML_ctrShpMap)->second : XML_none;
             const awt::Size aCenter(rShape->getSize().Width / 2, rShape->getSize().Height / 2);
             const awt::Size aChildSize(rShape->getSize().Width / 4, rShape->getSize().Height / 4);
             const awt::Size aConnectorSize(rShape->getSize().Width / 12, rShape->getSize().Height / 12);
             const sal_Int32 nRadius = std::min(
                 (rShape->getSize().Width - aChildSize.Width) / 2,
                 (rShape->getSize().Height - aChildSize.Height) / 2);
-            const sal_Int32 nConnectorRadius = nRadius * cos(basegfx::deg2rad(nSpanAngle/nShapes));
+
+            std::vector<oox::drawingml::ShapePtr> aCycleChildren = rShape->getChildren();
+
+            if (nctrShpMap == XML_fNode)
+            {
+                // first node placed in center, others around
+                oox::drawingml::ShapePtr pCenterShape = aCycleChildren.front();
+                aCycleChildren.erase(aCycleChildren.begin());
+                const awt::Point aCurrPos(aCenter.Width - aChildSize.Width / 2,
+                                          aCenter.Height - aChildSize.Height / 2);
+                pCenterShape->setPosition(aCurrPos);
+                pCenterShape->setSize(aChildSize);
+                pCenterShape->setChildSize(aChildSize);
+            }
+
+            const sal_Int32 nShapes = aCycleChildren.size();
+            const sal_Int32 nConnectorRadius = nRadius * cos(basegfx::deg2rad(nSpanAngle / nShapes));
             const sal_Int32 nConnectorAngle = nSpanAngle > 0 ? 0 : 180;
 
             sal_Int32 idx = 0;
-            for (auto & aCurrShape : rShape->getChildren())
+            for (auto & aCurrShape : aCycleChildren)
             {
                 const double fAngle = static_cast<double>(idx)*nSpanAngle/nShapes + nStartAngle;
                 awt::Size aCurrSize = aChildSize;
