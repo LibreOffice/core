@@ -22,10 +22,8 @@
 #include <swtypes.hxx>
 #include <swfont.hxx>
 #include "porexp.hxx"
-#include <fmtornt.hxx>
 #include <o3tl/enumarray.hxx>
 
-class SwFont;
 class SvxBrushItem;
 class SwFormatVertOrient;
 

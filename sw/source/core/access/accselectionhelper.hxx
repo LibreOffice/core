@@ -22,7 +22,8 @@
 
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/accessibility/XAccessible.hpp>
+
+namespace com::sun::star::accessibility { class XAccessible; }
 
 class SwAccessibleContext;
 class SwFEShell;

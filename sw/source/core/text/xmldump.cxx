@@ -23,6 +23,7 @@
 #include "porlay.hxx"
 #include "portxt.hxx"
 #include <sortedobjs.hxx>
+#include <swfont.hxx>
 #include <anchoredobject.hxx>
 #include <libxml/xmlwriter.h>
 #include <SwPortionHandler.hxx>

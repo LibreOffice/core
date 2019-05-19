@@ -19,11 +19,12 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_GUESS_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_GUESS_HXX
 #include <memory>
-#include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 
-#include <swtypes.hxx>
-#include <breakit.hxx>
 #include "porrst.hxx"
+
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
 
 class SwTextFormatInfo;
 

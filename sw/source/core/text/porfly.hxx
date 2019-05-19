@@ -25,7 +25,6 @@
 #include <flyfrms.hxx>
 
 class SwDrawContact;
-class SwFlyInContentFrame;
 class SwTextFrame;
 struct SwCursorMoveState;
 

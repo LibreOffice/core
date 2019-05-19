@@ -21,7 +21,6 @@
 #include "itrpaint.hxx"
 
 class SwFlyCntPortion;
-class SwInterHyphInfo;
 class SwDropPortion;
 class SwFormatDrop;
 class SwTextAttr;
@@ -30,8 +29,6 @@ class SwErgoSumPortion;
 class SwExpandPortion;
 class SwMultiPortion;
 class SwFootnotePortion;
-
-namespace sw { class MergedAttrIterByEnd; }
 
 class SwTextFormatter : public SwTextPainter
 {

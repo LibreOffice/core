@@ -18,6 +18,7 @@
  */
 
 #include <editeng/unolingu.hxx>
+#include <breakit.hxx>
 #include <dlelstnr.hxx>
 #include <swmodule.hxx>
 #include <IDocumentSettingAccess.hxx>

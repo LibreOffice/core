@@ -24,14 +24,8 @@
 #include <com/sun/star/accessibility/XAccessibleImage.hpp>
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
 
-namespace utl { class AccessibleRelationSetHelper; }
-namespace com { namespace star {
-    namespace accessibility { struct AccessibleRelation; }
-} }
-
 class SwFlyFrame;
 class SwNoTextNode;
-class SwAccessibleNoTextHyperlink;
 
 class SwAccessibleNoTextFrame : public  SwAccessibleFrameBase,
                                 public css::accessibility::XAccessibleImage,

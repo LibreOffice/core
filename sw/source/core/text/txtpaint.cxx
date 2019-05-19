@@ -18,6 +18,7 @@
  */
 
 #include "txtpaint.hxx"
+#include <txtfrm.hxx>
 #include <swrect.hxx>
 #include <rootfrm.hxx>
 

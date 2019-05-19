@@ -25,6 +25,8 @@
 
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <osl/diagnose.h>
 #include <ndtxt.hxx>

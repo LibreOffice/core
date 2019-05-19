@@ -19,6 +19,7 @@
 
 #include <ndtxt.hxx>
 #include <flyfrm.hxx>
+#include <txatbase.hxx>
 #include <paratr.hxx>
 #include <vcl/outdev.hxx>
 #include <editeng/paravertalignitem.hxx>

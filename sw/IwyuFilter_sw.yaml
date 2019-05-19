@@ -250,6 +250,20 @@ blacklist:
     - com/sun/star/text/XRedline.hpp
     # sw::UnoImplPtr typedef
     - unobaseclass.hxx
+    sw/source/core/access/acccontext.hxx:
+    # Base class needs complete type
+    - com/sun/star/accessibility/XAccessibleComponent.hpp
+    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sw/source/core/access/acchyperlink.hxx:
+    # Base class needs complete type
+    - com/sun/star/accessibility/XAccessibleHyperlink.hpp
+    sw/source/core/access/accnotexthyperlink.hxx:
+    # Base class needs complete type
+    - com/sun/star/accessibility/XAccessibleHyperlink.hpp
+    sw/source/core/docnode/cancellablejob.hxx:
+    # Base class needs complete type
+    - com/sun/star/util/XCancellable.hpp
     sw/source/core/inc/acorrect.hxx:
     # Needed for implicit dtor
     - svl/itemset.hxx

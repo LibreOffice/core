@@ -24,15 +24,12 @@
 #include <accmap.hxx>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 
 #include <memory>
 
 namespace vcl { class Window; }
-class SwAccessibleMap;
 class SwCursorShell;
 class SdrObject;
 class SwPaM;

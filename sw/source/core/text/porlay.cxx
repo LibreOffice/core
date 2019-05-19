@@ -53,6 +53,7 @@
 #include <calbck.hxx>
 #include <doc.hxx>
 #include <swscanner.hxx>
+#include <txatbase.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentContentOperations.hxx>

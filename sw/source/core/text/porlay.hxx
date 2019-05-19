@@ -19,19 +19,17 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_PORLAY_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_PORLAY_HXX
 
-#include <tools/fract.hxx>
 #include <scriptinfo.hxx>
 
 #include <swrect.hxx>
+#include <swtypes.hxx>
 #include "portxt.hxx"
-#include <swfont.hxx>
 
 #include <vector>
 #include <deque>
 
 class SwMarginPortion;
 class SwDropPortion;
-class SvStream;
 class SwTextFormatter;
 
 class SwCharRange

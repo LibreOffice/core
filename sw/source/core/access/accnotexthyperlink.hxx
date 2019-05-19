@@ -20,10 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCNOTEXTHYPERLINK_HXX
 
 #include <com/sun/star/accessibility/XAccessibleHyperlink.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <fmtinfmt.hxx>
-#include <frame.hxx>
 #include <layfrm.hxx>
 
 #include "accnotextframe.hxx"

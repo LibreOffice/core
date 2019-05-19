@@ -21,7 +21,6 @@
 
 #include "porfld.hxx"
 
-class SwTextFrame;
 class SwTextFootnote;
 
 class SwFootnotePortion : public SwFieldPortion

@@ -24,9 +24,9 @@
 #define NUM_ATTRIBUTE_STACKS 44
 
 #include <memory>
-#include <txatbase.hxx>
 #include <swfntcch.hxx>
 
+class SwTextAttr;
 class SwAttrSet;
 class IDocumentSettingAccess;
 class SwViewShell;
