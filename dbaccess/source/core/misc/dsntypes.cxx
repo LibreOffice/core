@@ -83,17 +83,20 @@ OUString ODsnTypeCollection::cutPrefix(const OUString& _sURL) const
     OUString sRet;
     OUString sOldPattern;
 
+    // on Windows or with gen rendering, the urls may begin with an ~
+    const OUString& sCleanURL = comphelper::string::stripStart(_sURL, '~');
+
     for (auto const& dsnPrefix : m_aDsnPrefixes)
     {
         WildCard aWildCard(dsnPrefix);
-        if ( sOldPattern.getLength() < dsnPrefix.getLength() && aWildCard.Matches(_sURL) )
+        if ( sOldPattern.getLength() < dsnPrefix.getLength() && aWildCard.Matches(sCleanURL) )
         {
             // This relies on the fact that all patterns are of the form
             //   foo*
             // that is, the very concept of "prefix" applies.
             OUString prefix(comphelper::string::stripEnd(dsnPrefix, '*'));
-            OSL_ENSURE(prefix.getLength() <= _sURL.getLength(), "How can A match B when A shorter than B?");
-            sRet = _sURL.copy(prefix.getLength());
+            OSL_ENSURE(prefix.getLength() <= sCleanURL.getLength(), "How can A match B when A shorter than B?");
+            sRet = sCleanURL.copy(prefix.getLength());
             sOldPattern = dsnPrefix;
         }
     }
