@@ -80,8 +80,7 @@ struct OWriteStream_Impl;
 
 struct SotElement_Impl
 {
-    OUString             m_aName;
-    OUString             m_aOriginalName;
+    OUString                m_aOriginalName;
     bool                    m_bIsRemoved;
     bool                    m_bIsInserted;
     bool const              m_bIsStorage;
@@ -139,7 +138,7 @@ struct OStorage_Impl
         return m_nModifiedListenerCount > 0 && m_pAntiImpl != nullptr;
     }
 
-    std::unordered_map<OUString, SotElement_Impl*> m_aChildrenMap;
+    std::unordered_map<OUString, std::vector<SotElement_Impl*>> m_aChildrenMap;
     SotElementVector_Impl                         m_aDeletedVector;
 
     css::uno::Reference< css::container::XNameContainer > m_xPackageFolder;
@@ -229,7 +228,6 @@ struct OStorage_Impl
                             bool bDirect );
 
     SotElement_Impl* FindElement( const OUString& rName );
-    std::unordered_map<OUString, SotElement_Impl*>::iterator FindElementIt( const OUString& rName );
 
     SotElement_Impl* InsertStream( const OUString& aName, bool bEncr );
     void InsertRawStream( const OUString& aName, const css::uno::Reference< css::io::XInputStream >& xInStream );
@@ -243,7 +241,7 @@ struct OStorage_Impl
 
     css::uno::Sequence< OUString > GetElementNames();
 
-    std::unordered_map<OUString, SotElement_Impl*>::iterator RemoveElement( std::unordered_map<OUString, SotElement_Impl*>::iterator pElement );
+    void RemoveElement( OUString const & rName, SotElement_Impl* pElement );
     static void ClearElement( SotElement_Impl* pElement );
 
     /// @throws css::embed::InvalidStorageException
@@ -262,7 +260,7 @@ struct OStorage_Impl
 
     void RemoveStreamRelInfo( const OUString& aOriginalName );
     void CreateRelStorage();
-    void CommitStreamRelInfo( SotElement_Impl const * pStreamElement );
+    void CommitStreamRelInfo( const OUString& rName, SotElement_Impl const * pStreamElement );
     css::uno::Reference< css::io::XInputStream > GetRelInfoStreamForName( const OUString& aName );
     void CommitRelInfo( const css::uno::Reference< css::container::XNameContainer >& xNewPackageFolder );
 
