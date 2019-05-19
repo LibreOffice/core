@@ -516,9 +516,11 @@ private:
      */
     OStringBuffer m_aStyles;
     /*
-     * This is the same as m_aStyles but the contents of it is written last.
+     * This is the same as m_aStyles but the contents of it is Assoc.
      */
-    OStringBuffer m_aStylesEnd;
+    OStringBuffer m_aStylesAssoc;
+    bool m_bIsRTL;
+    sal_uInt16 m_nScript;
 
     sal_Int32 m_nNextAnnotationMarkId;
     sal_Int32 m_nCurrentAnnotationMarkId;
