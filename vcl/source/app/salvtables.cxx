@@ -61,6 +61,7 @@
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/vclmedit.hxx>
+#include <vcl/viewdataentry.hxx>
 #include <vcl/virdev.hxx>
 #include <bitmaps.hlst>
 
@@ -2768,7 +2769,9 @@ public:
         enable_notify_events();
     }
 
-    virtual void bulk_insert_for_each(int nSourceCount, const std::function<void(weld::TreeIter&, int nSourceIndex)>& func) override
+    virtual void bulk_insert_for_each(int nSourceCount,
+                                      const std::function<void(weld::TreeIter&, int nSourceIndex)>& func,
+                                      const std::vector<int>* pFixedWidths) override
     {
         freeze();
         clear();
@@ -2776,11 +2779,25 @@ public:
 
         m_xTreeView->nTreeFlags |= SvTreeFlags::MANINS;
 
+        if (pFixedWidths)
+            set_column_fixed_widths(*pFixedWidths);
+
         for (int i = 0; i < nSourceCount; ++i)
         {
             aVclIter.iter = new SvTreeListEntry;
             m_xTreeView->Insert(aVclIter.iter, nullptr, TREELIST_APPEND);
             func(aVclIter, i);
+
+            if (!pFixedWidths)
+                continue;
+
+            size_t nFixedWidths = std::min(pFixedWidths->size(), aVclIter.iter->ItemCount());
+            for (size_t j = 0; j < nFixedWidths; ++j)
+            {
+                SvLBoxItem& rItem = aVclIter.iter->GetItem(j);
+                SvViewDataItem* pViewDataItem = m_xTreeView->GetViewDataItem(aVclIter.iter, &rItem);
+                pViewDataItem->mnWidth = (*pFixedWidths)[j];
+            }
         }
 
         m_xTreeView->nTreeFlags &= ~SvTreeFlags::MANINS;
