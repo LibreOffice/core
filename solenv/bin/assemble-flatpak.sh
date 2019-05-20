@@ -142,6 +142,7 @@ cat <<EOF >/app/share/appdata/org.libreoffice.LibreOffice.appdata.xml
   <kudo>ModernToolkit</kudo>
   <kudo>UserDocs</kudo>
  </kudos>
+ <content_rating type="oars-1.0"/>
  <releases>
   <release
     version="${LIBO_VERSION_MAJOR?}.${LIBO_VERSION_MINOR?}.${LIBO_VERSION_MICRO?}.${LIBO_VERSION_PATCH?}"

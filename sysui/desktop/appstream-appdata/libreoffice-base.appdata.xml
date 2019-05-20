@@ -49,4 +49,5 @@ to connect to virtually any other existing database engine as well.
     <kudo>ModernToolkit</kudo>
     <kudo>UserDocs</kudo>
   </kudos>
+  <content_rating type="oars-1.0"/>
 </component>
