@@ -164,7 +164,7 @@ typedef enum
     /**
      * The size and/or the position of the graphic selection changed,
      * the rotation angle of the embedded graphic object, and a property list
-     * which can be used for informing the client about severl properties.
+     * which can be used for informing the client about several properties.
      *
      * Format is "x, y, width, height, angle, { list of properties }",
      * where angle is in 100th of degree, and the property list is optional.
