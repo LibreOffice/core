@@ -690,9 +690,11 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
                 return false;
             Size aButtonSizeDown(pButtonDownPart->mnWidth, pButtonDownPart->mnHeight);
 
-            OString sOrientation = "decrease-edit-increase";
+            auto const& pEntirePart
+                = m_pWidgetDefinition->getDefinition(eType, ControlPart::Entire);
+            OString sOrientation = pEntirePart->msOrientation;
 
-            if (sOrientation == "decrease-edit-increase")
+            if (sOrientation.isEmpty() || sOrientation == "decrease-edit-increase")
             {
                 if (ePart == ControlPart::ButtonUp)
                 {
@@ -728,7 +730,7 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
                     return true;
                 }
             }
-            else
+            else if (sOrientation == "edit-decrease-increase")
             {
                 if (ePart == ControlPart::ButtonUp)
                 {
