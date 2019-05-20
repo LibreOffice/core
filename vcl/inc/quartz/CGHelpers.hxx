@@ -73,13 +73,17 @@ public:
 
     void saveState()
     {
+#if OSL_DEBUG_LEVEL > 0
         SAL_INFO("vcl.cg", "CGContextSaveGState(" << mpContext << ") " << ++mnContextStackDepth);
+#endif
         CGContextSaveGState(mpContext);
     }
 
     void restoreState()
     {
+#if OSL_DEBUG_LEVEL > 0
         SAL_INFO("vcl.cg", "CGContextRestoreGState(" << mpContext << ") " << mnContextStackDepth--);
+#endif
         CGContextRestoreGState(mpContext);
     }
 };
