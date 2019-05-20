@@ -206,7 +206,8 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, long nX, long nY,
     // draw icon
     if(nIconItem != nItemCount && nIconItem < nItemCount)
     {
-        auto nItemWidth = SvLBoxItem::GetWidth(pViewDataEntry, nIconItem);
+        SvLBoxItem* pItem = &rEntry.GetItem(nIconItem);
+        auto nItemWidth = pItem->GetWidth(this, pViewDataEntry, nIconItem);
         auto nItemHeight = SvLBoxItem::GetHeight(pViewDataEntry, nIconItem);
 
         aEntryPos.setX( nX );
@@ -218,8 +219,6 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, long nX, long nY,
         aEntryPos.AdjustY((nTempEntryHeight - nItemHeight) / 2 );
 
         aEntryPos.AdjustY( -10 );
-
-        SvLBoxItem* pItem = &rEntry.GetItem(nIconItem);
 
         pItem->Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
     }
