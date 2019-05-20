@@ -306,7 +306,13 @@ SvLBoxItem::~SvLBoxItem()
 int SvLBoxItem::GetWidth(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const
 {
     const SvViewDataItem* pViewData = pView->GetViewDataItem( pEntry, this );
-    return pViewData->mnWidth;
+    int nWidth = pViewData->mnWidth;
+    if (nWidth == -1)
+    {
+        nWidth = CalcWidth(pView);
+        const_cast<SvViewDataItem*>(pViewData)->mnWidth = nWidth;
+    }
+    return nWidth;
 }
 
 int SvLBoxItem::GetHeight(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const
@@ -315,16 +321,27 @@ int SvLBoxItem::GetHeight(const SvTreeListBox* pView, const SvTreeListEntry* pEn
     return pViewData->mnHeight;
 }
 
-int SvLBoxItem::GetWidth(const SvViewDataEntry* pData, sal_uInt16 nItemPos)
+int SvLBoxItem::GetWidth(const SvTreeListBox* pView, const SvViewDataEntry* pData, sal_uInt16 nItemPos)
 {
     const SvViewDataItem& rIData = pData->GetItem(nItemPos);
-    return rIData.mnWidth;
+    int nWidth = rIData.mnWidth;
+    if (nWidth == -1)
+    {
+        nWidth = CalcWidth(pView);
+        const_cast<SvViewDataItem&>(rIData).mnWidth = nWidth;
+    }
+    return nWidth;
 }
 
 int SvLBoxItem::GetHeight(const SvViewDataEntry* pData, sal_uInt16 nItemPos)
 {
     const SvViewDataItem& rIData = pData->GetItem(nItemPos);
     return rIData.mnHeight;
+}
+
+int SvLBoxItem::CalcWidth(const SvTreeListBox* /*pView*/) const
+{
+    return 0;
 }
 
 struct SvTreeListBoxImpl
@@ -2645,7 +2662,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         SvLBoxItem& rItem = rEntry.GetItem(nCurItem);
 
         SvLBoxTabFlags nFlags = pTab->nFlags;
-        Size aSize(SvLBoxItem::GetWidth(pViewDataEntry, nCurItem),
+        Size aSize(rItem.GetWidth(this, pViewDataEntry, nCurItem),
                    SvLBoxItem::GetHeight(pViewDataEntry, nCurItem));
         long nTabPos = GetTabPos(&rEntry, pTab);
 

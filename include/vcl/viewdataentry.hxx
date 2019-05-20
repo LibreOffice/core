@@ -26,6 +26,8 @@
 
 #include <vector>
 
+class SvTreeListBox;
+
 struct SvViewDataItem
 {
     int mnWidth = 0;
