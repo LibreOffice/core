@@ -203,7 +203,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_pagemodule \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_pageobject \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_pageobjectholder \
-    UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_pageobjectlist \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_path \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_pathobject \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_pattern \
@@ -633,6 +632,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/win32/fx_win32_gdipext \
     UnpackedTarball/pdfium/core/fxge/win32/fx_win32_print \
     UnpackedTarball/pdfium/core/fxcrt/cfx_fileaccess_windows \
+    UnpackedTarball/pdfium/third_party/base/win/win_util \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,pdfium,\

@@ -1,26 +1,41 @@
 diff --git a/public/fpdfview.h b/public/fpdfview.h
-index 1ff0aeb26..f48036f2b 100644
+index f5212599f..57d6cda13 100644
 --- a/public/fpdfview.h
 +++ b/public/fpdfview.h
-@@ -129,14 +129,20 @@ typedef int FPDF_ANNOTATION_SUBTYPE;
+@@ -154,31 +154,20 @@ typedef int FPDF_ANNOT_APPEARANCEMODE;
  // Dictionary value types.
  typedef int FPDF_OBJECT_TYPE;
  
--#if defined(_WIN32) && defined(FPDFSDK_EXPORTS)
--// On Windows system, functions are exported in a DLL
+-#if defined(COMPONENT_BUILD)
+-// FPDF_EXPORT should be consistent with |export| in the pdfium_fuzzer
+-// template in testing/fuzzers/BUILD.gn.
+-#if defined(WIN32)
+-#if defined(FPDF_IMPLEMENTATION)
 +#if defined(PDFIUM_DLLIMPLEMENTATION)
 +#ifdef _WIN32
  #define FPDF_EXPORT __declspec(dllexport)
--#define FPDF_CALLCONV __stdcall
  #else
+-#define FPDF_EXPORT __declspec(dllimport)
+-#endif  // defined(FPDF_IMPLEMENTATION)
+-#else
+-#if defined(FPDF_IMPLEMENTATION)
+-#define FPDF_EXPORT __attribute__((visibility("default")))
+-#else
 -#define FPDF_EXPORT
--#define FPDF_CALLCONV
+-#endif  // defined(FPDF_IMPLEMENTATION)
+-#endif  // defined(WIN32)
 +#define FPDF_EXPORT __attribute__ ((visibility("default")))
 +#endif
-+#else
+ #else
+-#define FPDF_EXPORT
+-#endif  // defined(COMPONENT_BUILD)
+-
+-#if defined(WIN32) && defined(FPDFSDK_EXPORTS)
+-#define FPDF_CALLCONV __stdcall
 +#ifdef _WIN32
 +#define FPDF_EXPORT __declspec(dllimport)
-+#else
+ #else
+-#define FPDF_CALLCONV
 +#define FPDF_EXPORT __attribute__ ((visibility("default")))
  #endif
 +#endif
