@@ -27,7 +27,7 @@
 #include <list>
 #include <memory>
 #include <set>
-#include <unordered_map>
+#include <map>
 #include <vector>
 #include <boost/optional.hpp>
 
@@ -107,7 +107,7 @@ public:
 };
 
 /** map from style name to ScMyStyleRanges */
-typedef std::unordered_map<OUString, std::unique_ptr<ScMyStyleRanges>>  ScMyStylesMap;
+typedef std::map<OUString, std::unique_ptr<ScMyStyleRanges>>  ScMyStylesMap;
 
 class ScMyStylesImportHelper
 {
