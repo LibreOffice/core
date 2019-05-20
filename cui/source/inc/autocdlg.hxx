@@ -180,6 +180,7 @@ private:
     bool bReplaceEditChanged:1;
     bool bSWriter:1;
 
+    std::vector<int> m_aReplaceFixedWidths;
     std::unique_ptr<weld::CheckButton> m_xTextOnlyCB;
     std::unique_ptr<weld::Entry> m_xShortED;
     std::unique_ptr<weld::Entry> m_xReplaceED;

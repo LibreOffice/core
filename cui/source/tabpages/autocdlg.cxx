@@ -680,9 +680,9 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage(TabPageParent pParent,
     pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
     pCharClass.reset( new CharClass( aLanguageTag ) );
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xReplaceTLB->get_approximate_digit_width() * 32);
-    m_xReplaceTLB->set_column_fixed_widths(aWidths);
+    auto nColWidth = m_xReplaceTLB->get_approximate_digit_width() * 32;
+    m_aReplaceFixedWidths.push_back(nColWidth);
+    m_aReplaceFixedWidths.push_back(nColWidth);
 
     m_xReplaceTLB->connect_changed( LINK(this, OfaAutocorrReplacePage, SelectHdl) );
     m_xNewReplacePB->connect_clicked( LINK(this, OfaAutocorrReplacePage, NewDelButtonHdl) );
@@ -827,7 +827,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
             {
                 aFormatText.insert(rDouble.sShort);
             }
-        });
+        }, &m_aReplaceFixedWidths);
     }
     else
     {
@@ -853,7 +853,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
             {
                 aFormatText.insert(elem->GetShort());
             }
-        });
+        }, &m_aReplaceFixedWidths);
         m_xNewReplacePB->set_sensitive(false);
         m_xDeleteReplacePB->set_sensitive(false);
     }
@@ -999,12 +999,13 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelActionHdl, weld::Entry&, rEdit, bool)
 
 IMPL_LINK_NOARG(OfaAutocorrReplacePage, EntrySizeAllocHdl, const Size&, void)
 {
-    std::vector<int> aWidths;
+    m_aReplaceFixedWidths.clear();
     int x, y, width, height;
     if (m_xReplaceED->get_extents_relative_to(*m_xReplaceTLB, x, y, width, height))
     {
-        aWidths.push_back(x);
-        m_xReplaceTLB->set_column_fixed_widths(aWidths);
+        m_aReplaceFixedWidths.push_back(x);
+        m_aReplaceFixedWidths.push_back(width);
+        m_xReplaceTLB->set_column_fixed_widths(m_aReplaceFixedWidths);
     }
 }
 
