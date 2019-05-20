@@ -696,7 +696,9 @@ private:
             aPt = OutputToScreenPixel(aHelpArea.BottomRight());
             aHelpArea.SetRight(aPt.X());
             aHelpArea.SetBottom(aPt.Y());
-            Help::ShowQuickHelp(this, aHelpArea, sHelpTip);
+            // tdf#125369 recover newline support of tdf#101779
+            QuickHelpFlags eHelpWinStyle = sHelpTip.indexOf('\n') != -1 ? QuickHelpFlags::TipStyleBalloon : QuickHelpFlags::NONE;
+            Help::ShowQuickHelp(this, aHelpArea, sHelpTip, eHelpWinStyle);
         }
     }
     virtual FactoryFunction GetUITestFactory() const override
