@@ -1327,7 +1327,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
             if( rTmpCursor.HasMark() )
             {
                 SwNodeIndex nStartIndex( rTmpCursor.Start()->nNode );
-                SwNodeIndex nEndIndex( rTmpCursor.End()->nNode );
+                SwNodeIndex const & nEndIndex( rTmpCursor.End()->nNode );
                 for (; nStartIndex <= nEndIndex; ++nStartIndex)
                 {
                     SwFrame *pFrame = nullptr;
