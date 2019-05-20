@@ -586,6 +586,8 @@ namespace
     }
 }
 
+#ifndef IOS
+
 static sal_Int32                            nVCLToolkitInstanceCount = 0;
 static bool                                 bInitedByVCLToolkit = false;
 
@@ -674,6 +676,8 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 }
 }
 
+#endif
+
 // constructor, which might initialize VCL
 VCLXToolkit::VCLXToolkit():
     cppu::WeakComponentImplHelper<
@@ -691,6 +695,7 @@ VCLXToolkit::VCLXToolkit():
     hSvToolsLib = nullptr;
     fnSvtCreateWindow = nullptr;
 
+#ifndef IOS
     osl::Guard< osl::Mutex > aGuard( getInitMutex() );
     nVCLToolkitInstanceCount++;
     if( ( nVCLToolkitInstanceCount == 1 ) && ( !Application::IsInMain() ) )
@@ -699,6 +704,7 @@ VCLXToolkit::VCLXToolkit():
         CreateMainLoopThread( ToolkitWorkerFunction, this );
         getInitCondition().wait();
     }
+#endif
 }
 
 void SAL_CALL VCLXToolkit::disposing()
@@ -712,6 +718,7 @@ void SAL_CALL VCLXToolkit::disposing()
     }
 #endif
 
+#ifndef IOS
     {
         osl::Guard< osl::Mutex > aGuard( getInitMutex() );
         if( --nVCLToolkitInstanceCount == 0 )
@@ -724,7 +731,7 @@ void SAL_CALL VCLXToolkit::disposing()
             }
         }
     }
-
+#endif
     if (m_bEventListener)
     {
         ::Application::RemoveEventListener(m_aEventListenerLink);
