@@ -2314,7 +2314,9 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
             if ( !pSVData->mpIntroWindow )
             {
                 // The right way would be just to call this (not even in the 'if')
-                GetpApp()->InitFinished();
+                auto pApp = GetpApp();
+                if ( pApp )
+                    pApp->InitFinished();
             }
             else if ( !ImplIsWindowOrChild( pSVData->mpIntroWindow ) )
             {
