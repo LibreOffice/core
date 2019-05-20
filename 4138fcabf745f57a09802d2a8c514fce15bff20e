@@ -126,6 +126,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_d221864f",
+        "filename": "offapi/com/sun/star/text/TextGraphicObject.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2019-05-20T08:34:09Z",
+      "side": 1,
+      "message": "So I opted for not listing the new property at all; I am fine to use it internally",
+      "parentUuid": "3fa0c359_97a9cce0",
+      "revId": "4138fcabf745f57a09802d2a8c514fce15bff20e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f91af0f_bf8dd77c",
         "filename": "offapi/type_reference/offapi.idl",
         "patchSetId": 1
