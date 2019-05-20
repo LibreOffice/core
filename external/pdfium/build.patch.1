@@ -71,16 +71,3 @@ index 7f4eb86c0..5e227f86e 100644
  };
  
  #endif  // CORE_FPDFDOC_CPDF_DEST_H_
-diff --git a/core/fpdfdoc/cpdf_filespec.h b/core/fpdfdoc/cpdf_filespec.h
-index 7050f695b..916afed8b 100644
---- a/core/fpdfdoc/cpdf_filespec.h
-+++ b/core/fpdfdoc/cpdf_filespec.h
-@@ -41,7 +41,7 @@ class CPDF_FileSpec {
- 
-  private:
-   UnownedPtr<const CPDF_Object> const m_pObj;
--  UnownedPtr<CPDF_Object> const m_pWritableObj;
-+  UnownedPtr<CPDF_Object> m_pWritableObj;
- };
- 
- #endif  // CORE_FPDFDOC_CPDF_FILESPEC_H_
