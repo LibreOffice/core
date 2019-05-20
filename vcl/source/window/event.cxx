@@ -217,7 +217,7 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
 
     // If maEventListeners is empty, the XVCLWindow has not yet been initialized.
     // Calling GetComponentInterface will do that.
-    if (mpWindowImpl->maEventListeners.empty())
+    if (mpWindowImpl->maEventListeners.empty() && pData)
         xWindow->GetComponentInterface();
 
     if (!mpWindowImpl->maEventListeners.empty())
