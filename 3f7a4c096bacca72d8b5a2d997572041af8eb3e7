@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_753c1c93",
+        "filename": "vcl/source/treelist/treelistbox.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-05-20T16:20:21Z",
+      "side": 1,
+      "message": "make mnWidth mutable?",
+      "revId": "3f7a4c096bacca72d8b5a2d997572041af8eb3e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
