@@ -53,8 +53,8 @@ namespace filter{
                 </ul>
                 uses this schema.
 
-    @attention  This class is not threadsafe implemented. Because its not necessary.
-                But you have to make shure, that ist not used as such :-)
+    @attention  This class is not threadsafe implemented. Because it's not necessary.
+                But you have to make sure, that it's not used as such :-)
  */
 class QueryTokenizer : public ::std::hash_map< ::rtl::OUString                    ,
                                                ::rtl::OUString                    ,
@@ -69,7 +69,7 @@ class QueryTokenizer : public ::std::hash_map< ::rtl::OUString                  
         /** @short  Because the given query can contain errors,
                     it should be checked outside.
 
-            TODO    May its a good idea to describe the real problem
+            TODO    Maybe it's a good idea to describe the real problem
                     more detailed ...
          */
         sal_Bool m_bValid;
@@ -82,9 +82,9 @@ class QueryTokenizer : public ::std::hash_map< ::rtl::OUString                  
         /** @short  create a new tokenizer instance with a
                     a new query.
 
-            @descr  The given query is immidiatly analyzed
+            @descr  The given query is immediately analyzed
                     and separated into its token, which can
-                    be access by some specialized method later.
+                    be accessed by some specialized method later.
 
             @param  sQuery
                     the query string.
