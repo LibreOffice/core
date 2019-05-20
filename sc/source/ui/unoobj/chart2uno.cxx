@@ -170,7 +170,7 @@ struct TokenTable
     void push_back( std::unique_ptr<FormulaToken> pToken )
     {
         maTokens.push_back( std::move(pToken) );
-        OSL_ENSURE( maTokens.size()<= static_cast<sal_uInt32>( mnColCount*mnRowCount ), "too much tokens" );
+        OSL_ENSURE( maTokens.size()<= static_cast<sal_uInt32>( mnColCount*mnRowCount ), "too many tokens" );
     }
 
     sal_uInt32 getIndex(SCCOL nCol, SCROW nRow) const
