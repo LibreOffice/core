@@ -1291,4 +1291,37 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf125310)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf125310b)
+{
+    SwDoc* pDoc = createDoc("tdf125310b.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(3), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // remove second paragraph with the page break
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Up(/*bSelect=*/true);
+    pWrtShell->DelLeft();
+
+    IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
+    rIDRA.AcceptAllRedline(true);
+
+    // losing the page break, as without redlining
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
