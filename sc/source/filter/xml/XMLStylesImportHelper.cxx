@@ -256,7 +256,7 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
         if (aColDefaultStyles.size() > sal::static_int_cast<sal_uInt32>(nStartCol))
         {
             ScMyStylesMap::iterator aPrevItr(aColDefaultStyles[nStartCol]);
-            OSL_ENSURE(aColDefaultStyles.size() > sal::static_int_cast<sal_uInt32>(nEndCol), "to much columns");
+            OSL_ENSURE(aColDefaultStyles.size() > sal::static_int_cast<sal_uInt32>(nEndCol), "too many columns");
             for (SCCOL i = nStartCol + 1; (i <= nEndCol) && (i < sal::static_int_cast<SCCOL>(aColDefaultStyles.size())); ++i)
             {
                 if (aPrevItr != aColDefaultStyles[i])
@@ -285,7 +285,7 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
         }
         else
         {
-            OSL_FAIL("too much columns");
+            OSL_FAIL("too many columns");
         }
     }
     else
@@ -348,7 +348,7 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
             {
                 if (rRange.aEnd.Row() == aPrevRange.aEnd.Row())
                 {
-                    OSL_ENSURE(aPrevRange.aEnd.Col() + 1 == rRange.aStart.Col(), "something wents wrong");
+                    OSL_ENSURE(aPrevRange.aEnd.Col() + 1 == rRange.aStart.Col(), "something went wrong");
                     aPrevRange.aEnd.SetCol(rRange.aEnd.Col());
                 }
                 else
@@ -359,7 +359,7 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
                 if (rRange.aStart.Col() == aPrevRange.aStart.Col() &&
                     rRange.aEnd.Col() == aPrevRange.aEnd.Col())
                 {
-                    OSL_ENSURE(aPrevRange.aEnd.Row() + 1 == rRange.aStart.Row(), "something wents wrong");
+                    OSL_ENSURE(aPrevRange.aEnd.Row() + 1 == rRange.aStart.Row(), "something went wrong");
                     aPrevRange.aEnd.SetRow(rRange.aEnd.Row());
                 }
                 else
