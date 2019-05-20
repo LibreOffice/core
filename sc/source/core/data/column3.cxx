@@ -1962,13 +1962,14 @@ bool ScColumn::ParseString(
 
     sal_uInt32 nIndex = 0;
     sal_uInt32 nOldIndex = 0;
+    SvNumFormatType eNumFormatType = SvNumFormatType::ALL;
     sal_Unicode cFirstChar;
     if (!aParam.mpNumFormatter)
         aParam.mpNumFormatter = GetDoc()->GetFormatTable();
 
     nIndex = nOldIndex = GetNumberFormat( GetDoc()->GetNonThreadedContext(), nRow );
     if ( rString.getLength() > 1
-            && aParam.mpNumFormatter->GetType(nIndex) != SvNumFormatType::TEXT )
+            && (eNumFormatType = aParam.mpNumFormatter->GetType(nIndex)) != SvNumFormatType::TEXT )
         cFirstChar = rString[0];
     else
         cFirstChar = 0; // Text
@@ -2024,11 +2025,56 @@ bool ScColumn::ParseString(
         {
             if (aParam.mbDetectNumberFormat)
             {
-                if (!aParam.mpNumFormatter->IsNumberFormat(rString, nIndex, nVal))
+                // Editing a date prefers the format's locale's edit date
+                // format's date acceptance patterns and YMD order.
+                /* TODO: this could be determined already far above when
+                 * starting to edit a date "cell" and passed down. A problem
+                 * could also be if a new date was typed over or written by a
+                 * macro assuming the current locale if that conflicts somehow.
+                 * You can't have everything. See tdf#116579 and tdf#125109. */
+                if (eNumFormatType == SvNumFormatType::ALL)
+                    eNumFormatType = aParam.mpNumFormatter->GetType(nIndex);
+                bool bForceFormatDate = (eNumFormatType == SvNumFormatType::DATE
+                        || eNumFormatType == SvNumFormatType::DATETIME);
+                const SvNumberformat* pOldFormat = nullptr;
+                NfEvalDateFormat eEvalDateFormat;
+                if (bForceFormatDate)
+                {
+                    ScRefCellValue aCell = GetCellValue(nRow);
+                    if (aCell.meType == CELLTYPE_VALUE)
+                    {
+                        // Only for an actual date (serial number), not an
+                        // arbitrary string or formula or empty cell.
+                        // Also ensure the edit date format's pattern is used,
+                        // not the display format's.
+                        pOldFormat = aParam.mpNumFormatter->GetEntry( nOldIndex);
+                        if (!pOldFormat)
+                            bForceFormatDate = false;
+                        else
+                        {
+                            nIndex = aParam.mpNumFormatter->GetEditFormat( aCell.getValue(), nOldIndex, eNumFormatType,
+                                    pOldFormat->GetLanguage(), pOldFormat);
+                            eEvalDateFormat = aParam.mpNumFormatter->GetEvalDateFormat();
+                            aParam.mpNumFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL);
+                        }
+                    }
+                    else
+                    {
+                        bForceFormatDate = false;
+                    }
+                }
+
+                const bool bIsNumberFormat = aParam.mpNumFormatter->IsNumberFormat(rString, nIndex, nVal);
+
+                if (bForceFormatDate)
+                    aParam.mpNumFormatter->SetEvalDateFormat( eEvalDateFormat);
+
+                if (!bIsNumberFormat)
                     break;
 
                 // convert back to the original language if a built-in format was detected
-                const SvNumberformat* pOldFormat = aParam.mpNumFormatter->GetEntry( nOldIndex );
+                if (!pOldFormat)
+                    pOldFormat = aParam.mpNumFormatter->GetEntry( nOldIndex );
                 if ( pOldFormat )
                     nIndex = aParam.mpNumFormatter->GetFormatForLanguageIfBuiltIn( nIndex, pOldFormat->GetLanguage() );
 
