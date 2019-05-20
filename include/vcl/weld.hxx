@@ -775,9 +775,15 @@ public:
     // inserted with an arg of the index that this row will be when bulk insert
     // ends.
     //
-    // this enables inserting the entries backwards in models where that is faster
+    // this enables inserting the entries backwards in models where that is faster,
+    //
+    // pFixedWidths is optional, when present each matching entry col text
+    // width will not be measured, and the fixed width used instead. Use
+    // sparingly because wider text than the fixed width is clipped and cannot
+    // be scrolled into view horizontally.
     virtual void bulk_insert_for_each(int nSourceCount,
-                                      const std::function<void(TreeIter&, int nSourceIndex)>& func)
+                                      const std::function<void(TreeIter&, int nSourceIndex)>& func,
+                                      const std::vector<int>* pFixedWidths = nullptr)
         = 0;
 
     void connect_expanding(const Link<const TreeIter&, bool>& rLink) { m_aExpandingHdl = rLink; }
