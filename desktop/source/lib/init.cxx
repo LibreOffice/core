@@ -92,6 +92,7 @@
 
 #include <editeng/fontitem.hxx>
 #include <editeng/flstitem.hxx>
+#include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -4609,7 +4610,6 @@ static void lo_runLoop(LibreOfficeKit* /*pThis*/,
                        void* pData)
 {
 #ifdef IOS // Maybe ANDROID, too?
-    InitVCL();
     Application::GetSolarMutex().acquire();
 #endif
 
@@ -4927,6 +4927,19 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             // command arg set (various code specifically checks via
             // CommandLineArgs):
             desktop::Desktop::GetCommandLineArgs().setHeadless();
+
+#ifdef IOS
+            if (InitVCL() && [NSThread isMainThread])
+            {
+                static bool bFirstTime = true;
+                if (bFirstTime)
+                {
+                    Application::GetSolarMutex().release();
+                    bFirstTime = false;
+                }
+            }
+            SfxApplication::GetOrCreate();
+#endif
 
             if (eStage == PRE_INIT)
             {
