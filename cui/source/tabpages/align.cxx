@@ -698,6 +698,7 @@ IMPL_LINK(AlignmentTabPage, AsianModeClickHdl, weld::ToggleButton&, rToggle, voi
 IMPL_LINK(AlignmentTabPage, WrapClickHdl, weld::ToggleButton&, rToggle, void)
 {
     m_aWrapState.ButtonToggled(rToggle);
+    UpdateEnableControls();
 }
 
 IMPL_LINK(AlignmentTabPage, HyphenClickHdl, weld::ToggleButton&, rToggle, void)
@@ -708,7 +709,6 @@ IMPL_LINK(AlignmentTabPage, HyphenClickHdl, weld::ToggleButton&, rToggle, void)
 IMPL_LINK(AlignmentTabPage, ShrinkClickHdl, weld::ToggleButton&, rToggle, void)
 {
     m_aShrinkState.ButtonToggled(rToggle);
-    UpdateEnableControls();
 }
 
 IMPL_LINK_NOARG(AlignmentTabPage, UpdateEnableHdl, weld::ComboBox&, void)
