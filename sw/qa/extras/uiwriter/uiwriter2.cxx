@@ -51,6 +51,8 @@ public:
     void testTableWidth();
     void testTdf122942();
     void testDocxAttributeTableExport();
+    void testTdf125310()
+    void testTdf125310b()
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
@@ -68,6 +70,8 @@ public:
     CPPUNIT_TEST(testTableWidth);
     CPPUNIT_TEST(testTdf122942);
     CPPUNIT_TEST(testDocxAttributeTableExport);
+    CPPUNIT_TEST(testTdf125310);
+    CPPUNIT_TEST(testTdf125310b);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -677,9 +681,7 @@ void SwUiWriterTest2::testDocxAttributeTableExport()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
-
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf125310)
+void SwUiWriterTest2::testTdf125310()
 {
     load(DATA_DIRECTORY, "tdf125310.fodt");
 
@@ -717,5 +719,40 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf125310)
     // without copying the page break
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
+
+void SwUiWriterTest2::testTdf125310b()
+{
+    SwDoc* pDoc = createDoc("tdf125310b.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(3), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // remove second paragraph with the page break
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Up(/*bSelect=*/true);
+    pWrtShell->DelLeft();
+
+    IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
+    rIDRA.AcceptAllRedline(true);
+
+    // losing the page break, as without redlining
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
