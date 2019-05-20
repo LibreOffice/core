@@ -63,6 +63,8 @@ public class PlainSourceView extends JScrollPane implements
     UndoManager undoManager;
     private List<UnsavedChangesListener> unsavedListener = new ArrayList<UnsavedChangesListener>();
 
+    private static final Pattern tabPattern = Pattern.compile("^ *(?<tab>\\t)");
+
     public PlainSourceView(ScriptSourceModel model) {
         this.model = model;
         initUI();
@@ -173,7 +175,7 @@ public class PlainSourceView extends JScrollPane implements
 
         ta.addKeyListener(new KeyAdapter(){
             @Override
-            public void keyReleased(KeyEvent ke){
+            public void keyPressed(KeyEvent ke) {
                 // if shift + tab was pressed, remove the first tab before any code begins
                 if (ke.isShiftDown() && ke.getKeyCode() == KeyEvent.VK_TAB) {
                     try {
@@ -182,17 +184,18 @@ public class PlainSourceView extends JScrollPane implements
                         int startOffset = ta.getLineStartOffset(lineOffset);
                         int endOffset = ta.getLineEndOffset(lineOffset);
 
-                        Pattern pattern = Pattern.compile("^ *(\\t)");
-                        Matcher matcher = pattern.matcher(ta.getText(startOffset, endOffset - startOffset));
-
+                        Matcher matcher = tabPattern.matcher(ta.getText(startOffset, endOffset - startOffset));
                         if (matcher.find()) {
-                            ta.replaceRange(null, startOffset + matcher.start(1), startOffset + matcher.end(1));
+                            ta.replaceRange(null, startOffset + matcher.start("tab"), startOffset + matcher.end("tab"));
                         }
                     } catch (BadLocationException e) {
                         // could not find correct location of the tab
                     }
                 }
+            }
 
+            @Override
+            public void keyReleased(KeyEvent ke){
                 if(ke.getKeyCode() == KeyEvent.VK_SPACE || ke.getKeyCode() == KeyEvent.VK_ENTER){
                     compoundEdit.end();
                     undoManager.addEdit(compoundEdit);
