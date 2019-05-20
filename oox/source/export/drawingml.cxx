@@ -231,7 +231,7 @@ void DrawingML::WriteColor( ::Color nColor, sal_Int32 nAlpha )
     }
 }
 
-void DrawingML::WriteColor( const OUString& sColorSchemeName, const Sequence< PropertyValue >& aTransformations )
+void DrawingML::WriteColor( const OUString& sColorSchemeName, const Sequence< PropertyValue >& aTransformations, sal_Int32 nAlpha )
 {
     // prevent writing a tag with empty val attribute
     if( sColorSchemeName.isEmpty() )
@@ -242,7 +242,15 @@ void DrawingML::WriteColor( const OUString& sColorSchemeName, const Sequence< Pr
         mpFS->startElementNS( XML_a, XML_schemeClr,
                               XML_val, USS( sColorSchemeName ),
                               FSEND );
-        WriteColorTransformations( aTransformations );
+        WriteColorTransformations( aTransformations, nAlpha );
+        mpFS->endElementNS( XML_a, XML_schemeClr );
+    }
+    else if(nAlpha < MAX_PERCENT)
+    {
+        mpFS->startElementNS( XML_a, XML_schemeClr,
+                              XML_val, USS( sColorSchemeName ),
+                              FSEND );
+        mpFS->singleElementNS(XML_a, XML_alpha, XML_val, OString::number(nAlpha), FSEND);
         mpFS->endElementNS( XML_a, XML_schemeClr );
     }
     else
@@ -253,15 +261,22 @@ void DrawingML::WriteColor( const OUString& sColorSchemeName, const Sequence< Pr
     }
 }
 
-void DrawingML::WriteColorTransformations( const Sequence< PropertyValue >& aTransformations )
+void DrawingML::WriteColorTransformations( const Sequence< PropertyValue >& aTransformations, sal_Int32 nAlpha )
 {
     for( sal_Int32 i = 0; i < aTransformations.getLength(); i++ )
     {
         sal_Int32 nToken = Color::getColorTransformationToken( aTransformations[i].Name );
         if( nToken != XML_TOKEN_INVALID && aTransformations[i].Value.hasValue() )
         {
-            sal_Int32 nValue = aTransformations[i].Value.get<sal_Int32>();
-            mpFS->singleElementNS( XML_a, nToken, XML_val, I32S( nValue ), FSEND );
+            if(nToken == XML_alpha && nAlpha < MAX_PERCENT)
+            {
+                mpFS->singleElementNS( XML_a, nToken, XML_val, I32S( nAlpha ), FSEND );
+            }
+            else
+            {
+                sal_Int32 nValue = aTransformations[i].Value.get<sal_Int32>();
+                mpFS->singleElementNS( XML_a, nToken, XML_val, I32S( nValue ), FSEND );
+            }
         }
     }
 }
@@ -273,10 +288,10 @@ void DrawingML::WriteSolidFill( ::Color nColor, sal_Int32 nAlpha )
     mpFS->endElementNS( XML_a, XML_solidFill );
 }
 
-void DrawingML::WriteSolidFill( const OUString& sSchemeName, const Sequence< PropertyValue >& aTransformations )
+void DrawingML::WriteSolidFill( const OUString& sSchemeName, const Sequence< PropertyValue >& aTransformations, sal_Int32 nAlpha )
 {
     mpFS->startElementNS( XML_a, XML_solidFill, FSEND );
-    WriteColor( sSchemeName, aTransformations );
+    WriteColor( sSchemeName, aTransformations, nAlpha );
     mpFS->endElementNS( XML_a, XML_solidFill );
 }
 
@@ -326,22 +341,36 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     else if ( !sColorFillScheme.isEmpty() )
     {
         // the shape had a scheme color and the user didn't change it
-        WriteSolidFill( sColorFillScheme, aTransformations );
+        WriteSolidFill( sColorFillScheme, aTransformations, nAlpha );
     }
     else if ( aStyleProperties.hasElements() )
     {
         sal_uInt32 nThemeColor = 0;
+        sal_Int32 nThemeAlpha = MAX_PERCENT;
         for( sal_Int32 i=0; i < aStyleProperties.getLength(); ++i )
         {
             if( aStyleProperties[i].Name == "Color" )
             {
                 aStyleProperties[i].Value >>= nThemeColor;
-                break;
+            }
+            else if(aStyleProperties[i].Name == "Transformations" )
+            {
+                Sequence< PropertyValue > aStyleTransformations;
+                aStyleProperties[i].Value >>= aStyleTransformations;
+                for( sal_Int32 j = 0; j < aStyleTransformations.getLength(); j++ )
+                {
+                    if (aStyleTransformations[j].Name == "alpha" )
+                    {
+                        aStyleTransformations[j].Value >>= nThemeAlpha;
+                        break;
+                    }
+                }
             }
         }
-        if ( nFillColor != nThemeColor )
+        if ( nFillColor != nThemeColor || nAlpha != nThemeAlpha )
             // the shape contains a theme but it wasn't being used
             WriteSolidFill( ::Color(nFillColor & 0xffffff), nAlpha );
+
         // in case the shape used the style color and the user didn't change it,
         // we must not write a <a: solidFill> tag.
     }
