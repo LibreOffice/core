@@ -34,7 +34,7 @@
 #include <oox/helper/textinputstream.hxx>
 #include <tools/time.hxx>
 
-#if OOX_INCLUDE_DUMPER
+#ifdef DBG_UTIL
 
 namespace oox {
 namespace dump {
