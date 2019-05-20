@@ -119,6 +119,8 @@ public:
                               SvTreeListEntry* pEntry,
                               SvViewDataItem* pViewData = nullptr) override;
 
+    virtual int CalcWidth(const SvTreeListBox* pView) const override;
+
     void Emphasize(bool bEmphasize) { mbEmphasized = bEmphasize; }
     bool IsEmphasized() const { return mbEmphasized; }
 
