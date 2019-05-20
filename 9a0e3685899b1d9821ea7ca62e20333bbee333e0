@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_7252f215",
+        "filename": "cui/uiconfig/ui/bulletandposition.ui",
+        "patchSetId": 7
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2019-05-20T07:17:25Z",
+      "side": 1,
+      "message": "typo: Separator",
+      "range": {
+        "startLine": 570,
+        "startChar": 125,
+        "endLine": 570,
+        "endChar": 134
+      },
+      "revId": "9a0e3685899b1d9821ea7ca62e20333bbee333e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
