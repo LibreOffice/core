@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_6c245cc7",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2019-05-20T02:54:44Z",
+      "side": 1,
+      "message": "You\u0027re right, I should not have introduced this change which is not related to the other.\nMy future changes will contain only sets of related changes.\n\nI have some pending changes that are clean from this point of view.\nCould you have a look at them please?\nThank you very much for your careful review.",
+      "parentUuid": "3fa0c359_98457873",
+      "range": {
+        "startLine": 111,
+        "startChar": 4,
+        "endLine": 111,
+        "endChar": 52
+      },
+      "revId": "d83b1383ffbe98502c196cccae4bcb2eb3978f6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_b54abd7d",
         "filename": "vcl/source/animate/Animation.cxx",
         "patchSetId": 2
