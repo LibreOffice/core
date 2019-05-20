@@ -308,6 +308,12 @@ void WidgetDefinitionReader::readDefinition(tools::XmlWalker& rWalker,
                 pPart->mnMarginWidth = nMarginWidth;
             }
 
+            OString sOrientation = rWalker.attribute("orientation");
+            if (!sOrientation.isEmpty())
+            {
+                pPart->msOrientation = sOrientation;
+            }
+
             rWidgetDefinition.maDefinitions.emplace(ControlTypeAndPart(eType, ePart), pPart);
             readPart(rWalker, pPart);
         }
