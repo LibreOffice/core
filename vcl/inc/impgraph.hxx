@@ -84,6 +84,8 @@ private:
     bool                         mbSwapOut;
     bool                         mbDummyContext;
     VectorGraphicDataPtr         maVectorGraphicData;
+    // cache checksum computation
+    mutable BitmapChecksum       mnChecksum = 0;
 
     /// The PDF stream from which this Graphic is rendered,
     /// as converted (version downgraded) from the original,

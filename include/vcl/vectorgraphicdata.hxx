@@ -104,6 +104,7 @@ public:
     const basegfx::B2DRange& getRange() const;
     const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& getPrimitive2DSequence() const;
     const BitmapEx& getReplacement() const;
+    BitmapChecksum GetChecksum() const;
 };
 
 typedef std::shared_ptr< VectorGraphicData > VectorGraphicDataPtr;
