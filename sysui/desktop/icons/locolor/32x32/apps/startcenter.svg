@@ -7,16 +7,16 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="48"
+   height="32"
    preserveAspectRatio="xMidYMid"
-   viewBox="0 0 1269.9999 1269.9999"
-   width="48"
+   viewBox="0 0 846.6666 846.6666"
+   width="32"
    version="1.1"
    id="svg1868"
    sodipodi:docname="main.svg"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    style="fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
-   inkscape:export-filename="C:\cygwin\home\Marina\lode\dev\FLOSS-194\sysui\desktop\icons\hicolor\48x48\apps\main.png"
+   inkscape:export-filename="C:\cygwin\home\Marina\lode\dev\FLOSS-194\sysui\desktop\icons\locolor\32x32\apps\main.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <metadata
@@ -58,12 +58,12 @@
   <g
      data-name="Ebene 4"
      id="Ebene_4"
-     transform="matrix(99.215593,0,0,99.215593,82.797858,-6105.1423)">
+     transform="matrix(99.215593,0,0,99.215593,82.797858,-6528.4757)">
     <g
        id="g6082">
       <g
          id="g822"
-         transform="matrix(0.17089617,0,0,0.1706567,-0.70070684,61.610461)"
+         transform="matrix(0.11393078,0,0,0.11377114,-0.74531278,65.851811)"
          inkscape:export-filename="C:\cygwin\home\Marina\lode\dev\FLOSS-194\sysui\desktop\icons\hicolor\16x16\apps\main.png"
          inkscape:export-xdpi="95.16349"
          inkscape:export-ydpi="95.16349">
