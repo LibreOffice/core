@@ -844,7 +844,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                 SdrMark* pM = GetSdrMarkByIndex(0);
                 SdrObject* pO = pM->GetMarkedSdrObj();
                 long nRotAngle = pO->GetRotateAngle();
-                // true if we are delaing with a RotGrfFlyFrame
+                // true if we are dealing with a RotGrfFlyFrame
                 // (SwVirtFlyDrawObj with a SwGrfNode)
                 bool bWriterGraphic = pO->HasLimitedRotation();
 
