@@ -2841,16 +2841,20 @@ namespace
     }
 }
 
+class GtkInstanceDialog;
+
 struct DialogRunner
 {
     GtkDialog *m_pDialog;
+    GtkInstanceDialog *m_pInstance;
     gint m_nResponseId;
     GMainLoop *m_pLoop;
     VclPtr<vcl::Window> m_xFrameWindow;
     int m_nModalDepth;
 
-    DialogRunner(GtkDialog* pDialog)
+    DialogRunner(GtkDialog* pDialog, GtkInstanceDialog* pInstance)
        : m_pDialog(pDialog)
+       , m_pInstance(pInstance)
        , m_nResponseId(GTK_RESPONSE_NONE)
        , m_pLoop(nullptr)
        , m_nModalDepth(0)
@@ -2871,12 +2875,7 @@ struct DialogRunner
             g_main_loop_quit(m_pLoop);
     }
 
-    static void signal_response(GtkDialog*, gint nResponseId, gpointer data)
-    {
-        DialogRunner* pThis = static_cast<DialogRunner*>(data);
-        pThis->m_nResponseId = nResponseId;
-        pThis->loop_quit();
-    }
+    static void signal_response(GtkDialog*, gint nResponseId, gpointer data);
 
     static gboolean signal_delete(GtkDialog*, GdkEventAny*, gpointer data)
     {
@@ -3017,7 +3016,10 @@ private:
     int m_nOldEditWidthReq; // Original width request of the input field
     int m_nOldBorderWidth; // border width for expanded dialog
 
-    void signal_close();
+    void signal_close()
+    {
+        close(true);
+    }
 
     static void signalClose(GtkWidget*, gpointer widget)
     {
@@ -3059,7 +3061,7 @@ public:
     GtkInstanceDialog(GtkDialog* pDialog, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWindow(GTK_WINDOW(pDialog), pBuilder, bTakeOwnership)
         , m_pDialog(pDialog)
-        , m_aDialogRun(pDialog)
+        , m_aDialogRun(pDialog, this)
         , m_nCloseSignalId(g_signal_connect(m_pDialog, "close", G_CALLBACK(signalClose), this))
         , m_nResponseSignalId(0)
         , m_nSignalDeleteId(0)
@@ -3255,6 +3257,8 @@ public:
         present();
     }
 
+    void close(bool bCloseSignal);
+
     virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>&) override
     {
         //not implemented for the gtk variant
@@ -3276,6 +3280,21 @@ public:
             g_signal_handler_disconnect(m_pDialog, m_nSignalDeleteId);
     }
 };
+
+void DialogRunner::signal_response(GtkDialog*, gint nResponseId, gpointer data)
+{
+    DialogRunner* pThis = static_cast<DialogRunner*>(data);
+
+    // make GTK_RESPONSE_DELETE_EVENT act as if cancel button was pressed
+    if (nResponseId == GTK_RESPONSE_DELETE_EVENT)
+    {
+        pThis->m_pInstance->close(false);
+        return;
+    }
+
+    pThis->m_nResponseId = nResponseId;
+    pThis->loop_quit();
+}
 
 class GtkInstanceMessageDialog : public GtkInstanceDialog, public virtual weld::MessageDialog
 {
@@ -4602,7 +4621,7 @@ void GtkInstanceDialog::asyncresponse(gint ret)
     {
         // make GTK_RESPONSE_DELETE_EVENT act as if cancel button was pressed
         if (ret == GTK_RESPONSE_DELETE_EVENT)
-            pClickHandler->clicked();
+            close(false);
         return;
     }
 
@@ -4627,16 +4646,8 @@ int GtkInstanceDialog::run()
             help();
             continue;
         }
-
-        GtkInstanceButton* pClickHandler = has_click_handler(ret);
-        if (pClickHandler)
-        {
-            // make GTK_RESPONSE_DELETE_EVENT act as if cancel button was pressed
-            if (ret == GTK_RESPONSE_DELETE_EVENT)
-                pClickHandler->clicked();
+        else if (has_click_handler(ret))
             continue;
-        }
-
         break;
     }
     hide();
@@ -4664,14 +4675,15 @@ void GtkInstanceDialog::response(int nResponse)
     gtk_dialog_response(m_pDialog, VclToGtk(nResponse));
 }
 
-
-void GtkInstanceDialog::signal_close()
+void GtkInstanceDialog::close(bool bCloseSignal)
 {
     GtkInstanceButton* pClickHandler = has_click_handler(GTK_RESPONSE_CANCEL);
     if (pClickHandler)
     {
-        g_signal_stop_emission_by_name(m_pDialog, "close");
-        // make esc act as if cancel button was pressed
+        if (bCloseSignal)
+            g_signal_stop_emission_by_name(m_pDialog, "close");
+        // make esc (bCloseSignal == true) or window-delete (bCloseSignal == false)
+        // act as if cancel button was pressed
         pClickHandler->clicked();
         return;
     }

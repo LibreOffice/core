@@ -1352,14 +1352,14 @@ IMPL_LINK_NOARG(SfxTabDialogController, UserHdl, weld::Button&, void)
         if (RET_OK == nRet)
             nRet = RET_USER;
         else
-            nRet = RET_USER_CANCEL;
+            nRet = RET_CANCEL;
         m_xDialog->response(nRet);
     }
 }
 
 IMPL_LINK_NOARG(SfxTabDialogController, CancelHdl, weld::Button&, void)
 {
-    m_xDialog->response(RET_USER_CANCEL);
+    m_xDialog->response(RET_CANCEL);
 }
 
 IMPL_LINK_NOARG(SfxTabDialogController, ResetHdl, weld::Button&, void)
