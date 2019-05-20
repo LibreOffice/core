@@ -797,8 +797,6 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage(TabPageParent pParent, const SfxI
     m_xMtrHeight->connect_value_changed( LINK( this, SvxPositionSizeTabPage, ChangeHeightHdl ) );
     m_xCbxScale->connect_toggled( LINK( this, SvxPositionSizeTabPage, ClickAutoHdl ) );
 
-    m_xTsbAutoGrowWidth->set_sensitive(false);
-    m_xTsbAutoGrowHeight->set_sensitive(false);
     m_xFlAdjust->set_sensitive(false);
 
     // #i2379# disable controls when protected
