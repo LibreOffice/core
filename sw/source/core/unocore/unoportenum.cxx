@@ -1079,23 +1079,28 @@ static void lcl_FillRedlineArray(
     const SwRedlineTable& rRedTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
     const size_t nRedTableCount = rRedTable.size();
 
-    if ( nRedTableCount > 0 )
-    {
-        const SwPosition* pStart = rUnoCursor.GetPoint();
-        const SwNodeIndex nOwnNode = pStart->nNode;
+    if ( nRedTableCount == 0 )
+        return;
 
-        for(size_t nRed = 0; nRed < nRedTableCount; ++nRed)
-        {
-            const SwRangeRedline* pRedline = rRedTable[nRed];
-            const SwPosition* pRedStart = pRedline->Start();
-            const SwNodeIndex nRedNode = pRedStart->nNode;
-            if ( nOwnNode == nRedNode )
-                rRedArr.insert( std::make_shared<SwXRedlinePortion_Impl>(
-                    pRedline, true ) );
-            if( pRedline->HasMark() && pRedline->End()->nNode == nOwnNode )
-                rRedArr.insert( std::make_shared<SwXRedlinePortion_Impl>(
-                    pRedline, false ) );
-       }
+    const SwPosition* pStart = rUnoCursor.GetPoint();
+    const SwNodeIndex & nOwnNode = pStart->nNode;
+
+    // The redline table is sorted by start, so use that to limit our search
+    auto findIt = std::lower_bound(rRedTable.begin(), rRedTable.end(), nOwnNode,
+                    [](const SwRangeRedline*lhs, const SwNodeIndex& nOwnNode)
+                    { return lhs->Start()->nNode < nOwnNode; });
+    if (findIt != rRedTable.end() && (*findIt)->Start()->nNode == nOwnNode)
+            rRedArr.insert( std::make_shared<SwXRedlinePortion_Impl>(
+                *findIt, true ) );
+
+    for( ; findIt != rRedTable.end(); ++findIt)
+    {
+        const SwRangeRedline* pRedline = *findIt;
+        if( pRedline->HasMark() && pRedline->End()->nNode == nOwnNode )
+            rRedArr.insert( std::make_shared<SwXRedlinePortion_Impl>(
+                pRedline, false ) );
+        if( pRedline->Start()->nNode > nOwnNode )
+            break;
     }
 }
 

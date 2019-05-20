@@ -1468,8 +1468,16 @@ void DelBookmarks(
     // which holds all position information as offset.
     // Assignment happens after moving.
     SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
-    for(SwRangeRedline* pRedl : rTable)
+    // The redline table is sorted by start, so use that to limit our search
+    auto beginIt = std::lower_bound(rTable.begin(), rTable.end(), nullptr,
+                    [&](const SwRangeRedline*lhs, std::nullptr_t)
+                    { return lcl_Lower( *lhs->Start(), rEnd, pEndIdx ); });
+    auto endIt = std::upper_bound(rTable.begin(), rTable.end(), nullptr,
+                    [&](std::nullptr_t, const SwRangeRedline*lhs )
+                    { return lcl_Greater( *lhs->Start(), rEnd, pEndIdx ); });
+    for( auto it = beginIt; it != endIt; ++it)
     {
+        SwRangeRedline* pRedl = *it;
         // Is at position?
         SwPosition *const pRStt = pRedl->Start();
         SwPosition *const pREnd = pRedl->End();
