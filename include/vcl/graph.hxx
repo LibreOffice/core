@@ -199,11 +199,6 @@ public:
 
     BitmapChecksum  GetChecksum() const;
 
-    SAL_DLLPRIVATE std::size_t getHash() const
-    {
-        return reinterpret_cast<std::size_t>(ImplGetImpGraphic());
-    }
-
     OUString getOriginURL() const;
     void setOriginURL(OUString const & rOriginURL);
 
@@ -251,7 +246,7 @@ struct hash<Graphic>
 {
     std::size_t operator()(Graphic const & rGraphic) const
     {
-        return rGraphic.getHash();
+        return static_cast<std::size_t>(rGraphic.GetChecksum());
     }
 };
 
