@@ -1535,9 +1535,8 @@ IMPL_LINK(SfxTabDialogController, DeactivatePageHdl, const OString&, rPage, bool
     }
 
     VclPtr<SfxTabPage> pPage = pDataObject->pTabPage;
-    DBG_ASSERT( pPage, "no active Page" );
     if (!pPage)
-        return false;
+        return true;
 
     DeactivateRC nRet = DeactivateRC::LeavePage;
 
