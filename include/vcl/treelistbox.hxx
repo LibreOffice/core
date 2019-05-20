@@ -140,9 +140,10 @@ public:
                         SvLBoxItem();
     virtual             ~SvLBoxItem();
     virtual SvLBoxItemType GetType() const = 0;
+    virtual int CalcWidth(const SvTreeListBox* pView) const;
     int GetWidth(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const;
+    int GetWidth(const SvTreeListBox* pView, const SvViewDataEntry* pData, sal_uInt16 nItemPos);
     int GetHeight(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const;
-    static int GetWidth(const SvViewDataEntry* pData, sal_uInt16 nItemPos);
     static int GetHeight(const SvViewDataEntry* pData, sal_uInt16 nItemPos);
     void Enable(bool bEnabled) { mbDisabled = !bEnabled; }
 

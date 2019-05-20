@@ -244,11 +244,16 @@ void SvLBoxString::InitViewData(
         pView->Control::SetFont( aFont );
     }
 
-    pViewData->mnWidth = pView->GetTextWidth(maText);
+    pViewData->mnWidth = -1; // calc on demand
     pViewData->mnHeight = pView->GetTextHeight();
 
     if (mbEmphasized)
         pView->Pop();
+}
+
+int SvLBoxString::CalcWidth(const SvTreeListBox* pView) const
+{
+    return pView->GetTextWidth(maText);
 }
 
 // ***************************************************************
