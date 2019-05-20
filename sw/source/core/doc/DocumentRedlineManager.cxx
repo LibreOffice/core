@@ -1935,7 +1935,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         SwTextNode* pDelNode = pStt->nNode.GetNode().GetTextNode();
                         SwTextNode* pTextNode = pEnd->nNode.GetNode().GetTextNode();
                         if (pDelNode != nullptr && pTextNode != nullptr && pDelNode != pTextNode)
-                            pTextNode->CopyCollFormat( *pDelNode );
+                            pDelNode->ChgFormatColl( pTextNode->GetTextColl() );
                     }
                     else
                     {
