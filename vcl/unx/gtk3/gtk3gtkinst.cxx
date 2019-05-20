@@ -6698,11 +6698,15 @@ public:
         return aSearch.index;
     }
 
-    virtual void bulk_insert_for_each(int nSourceCount, const std::function<void(weld::TreeIter&, int nSourceIndex)>& func) override
+    virtual void bulk_insert_for_each(int nSourceCount, const std::function<void(weld::TreeIter&, int nSourceIndex)>& func,
+                                      const std::vector<int>* pFixedWidths) override
     {
         freeze();
         clear();
         GtkInstanceTreeIter aGtkIter(nullptr);
+
+        if (pFixedWidths)
+            set_column_fixed_widths(*pFixedWidths);
 
         while (nSourceCount)
         {
