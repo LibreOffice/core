@@ -73,6 +73,10 @@ ifdef LO_CLANG_SHARED_PLUGINS
 CLANGCXXFLAGS+=-DLO_CLANG_SHARED_PLUGINS
 endif
 
+ifeq ($(HAVE_GCC_SPLIT_DWARF),TRUE)
+CLANGCXXFLAGS+=-gsplit-dwarf
+endif
+
 QUIET=$(if $(verbose),,@)
 
 ifneq ($(ENABLE_WERROR),)
