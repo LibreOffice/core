@@ -181,9 +181,6 @@ bool BitmapEx::operator==( const BitmapEx& rBitmapEx ) const
     if (meTransparent != rBitmapEx.meTransparent)
         return false;
 
-    if (!maBitmap.ShallowEquals(rBitmapEx.maBitmap))
-        return false;
-
     if (GetSizePixel() != rBitmapEx.GetSizePixel())
         return false;
 
@@ -197,7 +194,10 @@ bool BitmapEx::operator==( const BitmapEx& rBitmapEx ) const
     if (mbAlpha != rBitmapEx.mbAlpha)
         return false;
 
-    return maMask.ShallowEquals(rBitmapEx.maMask);
+    if (maBitmap != rBitmapEx.maBitmap)
+        return false;
+
+    return maMask == rBitmapEx.maMask;
 }
 
 bool BitmapEx::IsEmpty() const
