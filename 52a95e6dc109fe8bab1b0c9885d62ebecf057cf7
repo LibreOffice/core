@@ -22,6 +22,30 @@
       "revId": "52a95e6dc109fe8bab1b0c9885d62ebecf057cf7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_f2912254",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-20T08:42:07Z",
+      "side": 1,
+      "message": "yes, adding such an optional property is not an incompatible change (and we only mark incompatible changes with [API CHANGE])",
+      "parentUuid": "3fa0c359_f2f5a2cc",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 24
+      },
+      "revId": "52a95e6dc109fe8bab1b0c9885d62ebecf057cf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
