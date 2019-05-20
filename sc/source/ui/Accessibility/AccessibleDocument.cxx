@@ -1140,7 +1140,7 @@ void ScChildrenShapes::SetAnchor(const uno::Reference<drawing::XShape>& xShape, 
         if ((xAddress && pData->xRelationCell && (*xAddress != *(pData->xRelationCell))) ||
             (!xAddress && pData->xRelationCell) || (xAddress && !pData->xRelationCell))
         {
-            pData->xRelationCell = *xAddress;
+            pData->xRelationCell = xAddress;
             if (pData->pAccShape.is())
                 pData->pAccShape->SetRelationSet(GetRelationSet(pData));
         }
