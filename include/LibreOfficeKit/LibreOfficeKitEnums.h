@@ -195,7 +195,7 @@ typedef enum
      *      }
      *
      *      where the "svg" property is a string containing an svg document
-     *      which is a rapresentation of the pie segment.
+     *      which is a representation of the pie segment.
      */
     LOK_CALLBACK_GRAPHIC_SELECTION = 6,
 
