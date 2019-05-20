@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_72943238",
+        "filename": "compilerplugins/clang/readability-redundant-pp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-20T09:11:45Z",
+      "side": 1,
+      "message": "Why break with the convention of using the same name here and for the .cxx file?  That makes it easier to find the source if a plugin e.g. produces a problematic diagnostic that one needs to debug.",
+      "range": {
+        "startLine": 126,
+        "startChar": 54,
+        "endLine": 126,
+        "endChar": 75
+      },
+      "revId": "13c247b7fee91b0ffb256e85bcd0cf416b3cd83e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
