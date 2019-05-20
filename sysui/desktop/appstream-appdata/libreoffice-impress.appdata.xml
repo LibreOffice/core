@@ -44,4 +44,5 @@ worrying about compatibility.
     <kudo>ModernToolkit</kudo>
     <kudo>UserDocs</kudo>
   </kudos>
+  <content_rating type="oars-1.0"/>
 </component>
