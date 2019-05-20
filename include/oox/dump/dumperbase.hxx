@@ -40,9 +40,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/types.h>
 
-#define OOX_INCLUDE_DUMPER (OSL_DEBUG_LEVEL > 0)
-
-#if OOX_INCLUDE_DUMPER
+#ifdef DBG_UTIL
 
 namespace com { namespace sun { namespace star {
     namespace io { class XInputStream; }
@@ -1733,11 +1731,11 @@ do {                                                \
         return aDumper.isValid();                   \
 } while( false )
 
-#else   // OOX_INCLUDE_DUMPER
+#else   // DBG_UTIL
 
 #define OOX_DUMP_FILE( DumperClassName ) (void)0
 
-#endif  // OOX_INCLUDE_DUMPER
+#endif  // DBG_UTIL
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,7 +23,7 @@
 #include <oox/dump/dumperbase.hxx>
 #include <sal/types.h>
 
-#if OOX_INCLUDE_DUMPER
+#ifdef DBG_UTIL
 
 namespace oox { class BinaryInputStream; }
 

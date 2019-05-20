@@ -29,7 +29,7 @@
 #include <oox/ole/olestorage.hxx>
 #include <oox/ole/vbainputstream.hxx>
 
-#if OOX_INCLUDE_DUMPER
+#ifdef DBG_UTIL
 
 namespace oox {
 namespace dump {

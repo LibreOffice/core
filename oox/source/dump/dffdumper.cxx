@@ -19,7 +19,7 @@
 
 #include <oox/dump/dffdumper.hxx>
 
-#if OOX_INCLUDE_DUMPER
+#ifdef DBG_UTIL
 
 namespace oox {
 namespace dump {

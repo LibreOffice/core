@@ -24,7 +24,7 @@
 #include <oox/helper/zipstorage.hxx>
 #include <oox/ole/olestorage.hxx>
 
-#if OOX_INCLUDE_DUMPER
+#ifdef DBG_UTIL
 
 namespace oox {
 namespace dump {

@@ -24,7 +24,7 @@
 #include <oox/dump/dumperbase.hxx>
 #include <rtl/ustring.hxx>
 
-#if OOX_INCLUDE_DUMPER
+#ifdef DBG_UTIL
 
 namespace com { namespace sun { namespace star {
     namespace io { class XInputStream; }
