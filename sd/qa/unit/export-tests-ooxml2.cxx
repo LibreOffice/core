@@ -145,6 +145,9 @@ public:
     void testOpenDocumentAsReadOnly();
     void testTdf125346();
     void testTdf125346_2();
+    void testTdf125360();
+    void testTdf125360_1();
+    void testTdf125360_2();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -213,6 +216,9 @@ public:
     CPPUNIT_TEST(testOpenDocumentAsReadOnly);
     CPPUNIT_TEST(testTdf125346);
     CPPUNIT_TEST(testTdf125346_2);
+    CPPUNIT_TEST(testTdf125360);
+    CPPUNIT_TEST(testTdf125360_1);
+    CPPUNIT_TEST(testTdf125360_2);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1801,6 +1807,76 @@ void SdOOXMLExportTest2::testTdf125346_2()
         xPropSet->getPropertyValue("FillColor") >>= nFillColor;
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x90C226), nFillColor);
     }
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf125360()
+{
+    // Check whether the changed fill transparency is exported correctly.
+    // Color is defined by shape style
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf125360.pptx"), PPTX);
+
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+
+    xShape->setPropertyValue("FillTransparence", uno::makeAny(static_cast<sal_Int32>(23)));
+
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xShape.set( getShapeFromPage( 0, 0, xDocShRef ) );
+
+    sal_Int32 nTransparence = 0;
+    xShape->getPropertyValue("FillTransparence") >>= nTransparence;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(23), nTransparence);
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf125360_1()
+{
+    // Check whether the changed fill transparency is exported correctly.
+    // Color is defined by color scheme
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf125360_1.pptx"), PPTX);
+
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+
+    xShape->setPropertyValue("FillTransparence", uno::makeAny(static_cast<sal_Int32>(23)));
+
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xShape.set( getShapeFromPage( 0, 0, xDocShRef ) );
+
+    sal_Int32 nTransparence = 0;
+    xShape->getPropertyValue("FillTransparence") >>= nTransparence;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(23), nTransparence);
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf125360_2()
+{
+    // Check whether the changed fill transparency is exported correctly.
+    // Color is defined by color scheme with a transparency
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf125360_2.pptx"), PPTX);
+
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+
+    sal_Int32 nTransparence = 0;
+    xShape->getPropertyValue("FillTransparence") >>= nTransparence;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(82), nTransparence);
+
+    xShape->setPropertyValue("FillTransparence", uno::makeAny(static_cast<sal_Int32>(23)));
+
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xShape.set( getShapeFromPage( 0, 0, xDocShRef ) );
+
+    nTransparence = 0;
+    xShape->getPropertyValue("FillTransparence") >>= nTransparence;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(23), nTransparence);
 
     xDocShRef->DoClose();
 }
