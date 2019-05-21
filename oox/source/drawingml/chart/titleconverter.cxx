@@ -238,7 +238,6 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
             // manual size needs ChartLegendExpansion_CUSTOM and LegendPosition_CUSTOM (tdf#118150)
             if( aLayoutConv.convertFromModel( aPropSet ) )
             {
-                eLegendPos = cssc2::LegendPosition_CUSTOM;
                 eLegendExpand = cssc::ChartLegendExpansion_CUSTOM;
             }
             bManualLayout = !aLayoutConv.getAutoLayout();
