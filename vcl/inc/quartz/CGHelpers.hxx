@@ -22,15 +22,45 @@ class CGLayerHolder
 private:
     CGLayerRef mpLayer;
 
+    // Layer's scaling factor
+    float mfScale;
+
 public:
     CGLayerHolder()
         : mpLayer(nullptr)
+        , mfScale(1.0)
     {
     }
 
-    CGLayerHolder(CGLayerRef pLayer)
+    CGLayerHolder(CGLayerRef pLayer, float fScale = 1.0)
         : mpLayer(pLayer)
+        , mfScale(fScale)
     {
+    }
+
+    // Just the size of the layer in pixels
+    CGSize getSizePixels() const
+    {
+        CGSize aSize;
+        if (mpLayer)
+        {
+            aSize = CGLayerGetSize(mpLayer);
+            SAL_INFO("vcl.cg", "CGLayerGetSize(" << mpLayer << ") = " << aSize);
+        }
+        return aSize;
+    }
+
+    // Size in points is size in pixels multiplied by the scaling factor
+    CGSize getSizePoints() const
+    {
+        CGSize aSize;
+        if (mpLayer)
+        {
+            const CGSize aLayerSize = getSizePixels();
+            aSize.width = aLayerSize.width / mfScale;
+            aSize.height = aLayerSize.height / mfScale;
+        }
+        return aSize;
     }
 
     CGLayerRef get() const { return mpLayer; }
@@ -38,6 +68,10 @@ public:
     bool isSet() const { return mpLayer != nullptr; }
 
     void set(CGLayerRef const& pLayer) { mpLayer = pLayer; }
+
+    float getScale() { return mfScale; }
+
+    void setScale(float fScale) { mfScale = fScale; }
 };
 
 class CGContextHolder
