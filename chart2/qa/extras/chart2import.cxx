@@ -119,6 +119,7 @@ public:
 
     void testTdf114179();
     void testTdf123504();
+    void testTdf122765();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -192,6 +193,7 @@ public:
 
     CPPUNIT_TEST(testTdf114179);
     CPPUNIT_TEST(testTdf123504);
+    CPPUNIT_TEST(testTdf122765);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1730,6 +1732,27 @@ void Chart2ImportTest::testTdf123504()
     awt::Size aSliceSize = xSlice->getSize();
     CPPUNIT_ASSERT_GREATER(sal_Int32(8500), aSliceSize.Height);
     CPPUNIT_ASSERT_GREATER(sal_Int32(8500), aSliceSize.Width);
+}
+
+void Chart2ImportTest::testTdf122765()
+{
+    // The horizontal position of the slices was wrong.
+    load("/chart2/qa/extras/data/pptx/", "tdf122765.pptx");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), UNO_QUERY);
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+    Reference<drawing::XShape> xSeriesSlices(getShapeByName(xShapes, "CID/D=0:CS=0:CT=0:Series=0"),
+                                             UNO_SET_THROW);
+
+    Reference<container::XIndexAccess> xIndexAccess(xSeriesSlices, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), xIndexAccess->getCount());
+    Reference<drawing::XShape> xSlice(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
+
+    // Check position of the first slice, all slices move together, so enough to check only one.
+    // Wrong poisition was around 5856.
+    awt::Point aSlicePosition = xSlice->getPosition();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(7000), aSlicePosition.X);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
