@@ -14,8 +14,6 @@
 #include <string>
 #include <iostream>
 
-#include "LuceneHelper.hxx"
-
 int main(int argc, char **argv)
 {
     try

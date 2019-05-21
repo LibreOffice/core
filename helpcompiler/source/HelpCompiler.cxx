@@ -18,16 +18,15 @@
  */
 
 
+#include <algorithm>
 #include <memory>
 #include <HelpCompiler.hxx>
 #include <BasCodeTagger.hxx>
-#include <limits.h>
+#include <iostream>
 #include <stdlib.h>
 #include <string.h>
-#include <libxslt/xslt.h>
 #include <libxslt/xsltInternals.h>
 #include <libxslt/transform.h>
-#include <libxslt/xsltutils.h>
 #include <osl/thread.hxx>
 #include <chrono>
 #include <rtl/character.hxx>

@@ -21,8 +21,10 @@
 #define INCLUDED_HELPCOMPILER_INC_HELPLINKER_HXX
 
 #include <memory>
+#include <vector>
 #include <helpcompiler/dllapi.h>
-#include <libxslt/transform.h>
+#include "HelpCompiler.hxx"
+#include <libxslt/xsltInternals.h>
 
 #ifdef AIX
 #    undef _THREAD_SAFE

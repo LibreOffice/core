@@ -20,20 +20,14 @@
 #include <HelpCompiler.hxx>
 #include <HelpLinker.hxx>
 
-#include <map>
+#include <algorithm>
+#include <fstream>
 
 #include <string.h>
-#include <limits.h>
 
-#include <libxslt/xslt.h>
-#include <libxslt/xsltutils.h>
-#include <libxslt/functions.h>
-#include <libxslt/extensions.h>
+#include <libxslt/transform.h>
 
-#include <sal/main.h>
 #include <sal/types.h>
-#include <osl/time.h>
-#include <rtl/bootstrap.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <sal/log.hxx>
 

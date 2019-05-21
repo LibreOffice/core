@@ -10,19 +10,13 @@
 #ifndef INCLUDED_HELPCOMPILER_INC_BASCODETAGGER_HXX
 #define INCLUDED_HELPCOMPILER_INC_BASCODETAGGER_HXX
 
-#include <iostream>
-#include <cstdlib>
-#include <string>
 #include <deque>
 #include <memory>
 #include <vector>
-#include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
-#include <rtl/ustring.hxx>
 #include <comphelper/syntaxhighlight.hxx>
 #include <helpcompiler/dllapi.h>
 
-class BasicCodeTagger;
 class LibXmlTreeWalker;
 
 //!Tagger class.
