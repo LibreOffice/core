@@ -2040,7 +2040,9 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
                     xFootnoteText->createTextCursorByRange(xFootnoteText->getStart())));
 
         // Redlines for the footnote anchor
+        m_aRedlines.pop();
         CheckRedline( xFootnote->getAnchor( ) );
+        m_aRedlines.push(std::vector< RedlineParamsPtr >());
 
     }
     catch( const uno::Exception& )
