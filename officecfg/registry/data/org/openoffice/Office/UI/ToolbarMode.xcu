@@ -184,6 +184,11 @@
             <value>
             </value>
           </prop>
+          <prop oor:name="UIItemProperties">
+            <value oor:separator=";">
+             UIItemID , propertyName , propertyValue;
+            </value>
+          </prop>
           <prop oor:name="Sidebar">
             <value>Arrow</value>
           </prop>
@@ -210,6 +215,11 @@
           </prop>
           <prop oor:name="UserToolbars">
             <value>
+            </value>
+          </prop>
+          <prop oor:name="UIItemProperties">
+            <value oor:separator=";">
+             UIItemID , propertyName , propertyValue;
             </value>
           </prop>
           <prop oor:name="Sidebar">
@@ -240,6 +250,11 @@
             <value>
             </value>
           </prop>
+          <prop oor:name="UIItemProperties">
+            <value oor:separator=";">
+             UIItemID , propertyName , propertyValue;
+            </value>
+          </prop>
           <prop oor:name="Sidebar">
             <value>Arrow</value>
           </prop>
@@ -266,6 +281,11 @@
           </prop>
           <prop oor:name="UserToolbars">
             <value>
+            </value>
+          </prop>
+          <prop oor:name="UIItemProperties">
+            <value oor:separator=";">
+             UIItemID , propertyName , propertyValue;
             </value>
           </prop>
           <prop oor:name="Sidebar">
@@ -413,6 +433,11 @@
             <value>
             </value>
           </prop>
+          <prop oor:name="UIItemProperties">
+            <value oor:separator=";">
+             UIItemID , propertyName , propertyValue;
+            </value>
+          </prop>
           <prop oor:name="Sidebar">
             <value>Arrow</value>
           </prop>
@@ -439,6 +464,11 @@
           </prop>
           <prop oor:name="UserToolbars">
             <value>
+            </value>
+          </prop>
+          <prop oor:name="UIItemProperties">
+            <value oor:separator=";">
+             UIItemID , propertyName , propertyValue;
             </value>
           </prop>
           <prop oor:name="Sidebar">
@@ -469,6 +499,11 @@
             <value>
             </value>
           </prop>
+          <prop oor:name="UIItemProperties">
+            <value oor:separator=";">
+             UIItemID , propertyName , propertyValue;
+            </value>
+          </prop>
           <prop oor:name="Sidebar">
             <value>Arrow</value>
           </prop>
@@ -495,6 +530,11 @@
           </prop>
           <prop oor:name="UserToolbars">
             <value>
+            </value>
+          </prop>
+          <prop oor:name="UIItemProperties">
+            <value oor:separator=";">
+             UIItemID , propertyName , propertyValue;
             </value>
           </prop>
           <prop oor:name="Sidebar">
@@ -617,6 +657,11 @@
             <value>
             </value>
           </prop>
+          <prop oor:name="UIItemProperties">
+            <value oor:separator=";">
+             UIItemID , propertyName , propertyValue;
+            </value>
+          </prop>
           <prop oor:name="Sidebar">
             <value>Arrow</value>
           </prop>
@@ -645,6 +690,11 @@
             <value>
             </value>
           </prop>
+          <prop oor:name="UIItemProperties">
+            <value oor:separator=";">
+             UIItemID , propertyName , propertyValue;
+            </value>
+          </prop>
           <prop oor:name="Sidebar">
             <value>Arrow</value>
           </prop>
@@ -671,6 +721,11 @@
           </prop>
           <prop oor:name="UserToolbars">
             <value>
+            </value>
+          </prop>
+          <prop oor:name="UIItemProperties">
+            <value oor:separator=";">
+             UIItemID , propertyName , propertyValue;
             </value>
           </prop>
           <prop oor:name="Sidebar">
@@ -734,6 +789,11 @@
             <value>
             </value>
           </prop>
+          <prop oor:name="UIItemProperties">
+            <value oor:separator=";">
+             UIItemID , propertyName , propertyValue;
+            </value>
+          </prop>
           <prop oor:name="Sidebar">
             <value>Arrow</value>
           </prop>
@@ -765,6 +825,11 @@
             <value>
             </value>
           </prop>
+          <prop oor:name="UIItemProperties">
+            <value oor:separator=";">
+             UIItemID , propertyName , propertyValue;
+            </value>
+          </prop>
           <prop oor:name="Sidebar">
             <value>Arrow</value>
           </prop>
@@ -794,6 +859,11 @@
           </prop>
           <prop oor:name="UserToolbars">
             <value>
+            </value>
+          </prop>
+          <prop oor:name="UIItemProperties">
+            <value oor:separator=";">
+             UIItemID , propertyName , propertyValue;
             </value>
           </prop>
           <prop oor:name="Sidebar">
