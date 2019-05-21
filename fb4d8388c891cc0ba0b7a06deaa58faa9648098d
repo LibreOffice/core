@@ -34,6 +34,24 @@
       "revId": "fb4d8388c891cc0ba0b7a06deaa58faa9648098d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_788f332a",
+        "filename": "include/unotools/mediadescriptor.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1001073
+      },
+      "writtenOn": "2019-05-21T09:14:31Z",
+      "side": 1,
+      "message": "btw: hve you seen the comment:\nthese methods can be used to get the different property names as static const OUString values. \nBecause definition and declaration of static const class members does not work as expected under windows \n(under unix it works as well) these way must be used :-(",
+      "parentUuid": "3fa0c359_18570f05",
+      "revId": "fb4d8388c891cc0ba0b7a06deaa58faa9648098d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
