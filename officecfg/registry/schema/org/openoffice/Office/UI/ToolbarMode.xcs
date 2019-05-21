@@ -64,6 +64,16 @@
           <desc>List of visible toolbars activated by user.</desc>
         </info>
       </prop>
+      <prop oor:name="UIItemProperties" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>
+          List of context descriptors.  Each context descriptor is a string that contains two comma
+          separated values (note that values are case sensitive):
+          1. visible - describes show/hide property of uiitem
+          2. UIItemID - contains the ID of uiitem of notebookbar
+          </desc>
+        </info>
+      </prop>
       <prop oor:name="Sidebar" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>
