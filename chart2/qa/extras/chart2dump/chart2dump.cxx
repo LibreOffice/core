@@ -648,6 +648,7 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
         "rotated_axis_labels.odp",
         "formated_axis_labels.odp",
         "percent_stacked_column_chart.odp",
+        "tdf118150.xlsx",
     };
 
     for (const OUString& sTestFile : aTestFiles)
