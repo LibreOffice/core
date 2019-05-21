@@ -128,6 +128,7 @@ certain functionality.
 @li @c cui.factory
 @li @c cui.options
 @li @c cui.tabpages
+@li @c cui.CustomNotebookbar
 
 @section drawinglayer
 
