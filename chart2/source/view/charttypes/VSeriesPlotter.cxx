@@ -2241,7 +2241,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
 
                     // add entries reverse if chart is stacked in y-direction and the legend is not wide.
                     // If the legend is wide and we have a stacked bar-chart the normal order
-                    // is the correct one
+                    // is the correct one, unless the chart type is horizontal bar-chart.
                     bool bReverse = false;
                     if( eLegendExpansion != css::chart::ChartLegendExpansion_WIDE )
                     {
@@ -2252,6 +2252,11 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
                         {
                             bReverse = !bReverse;
                         }
+                    }
+                    else if( bSwapXAndY )
+                    {
+                        StackingDirection eStackingDirection( pSeries->getStackingDirection() );
+                        bReverse = ( eStackingDirection != StackingDirection_Y_STACKING );
                     }
 
                     if (bReverse)
