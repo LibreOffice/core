@@ -1234,7 +1234,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     }
 
     if ( GetUpper()->IsSctFrame() &&
-         HasFollow() &&
+         HasFollow() && !GetFollow()->IsDeleteForbidden() &&
          &GetFollow()->GetFrame() == GetNext() )
     {
         dynamic_cast<SwTextFrame&>(*this).JoinFrame();
