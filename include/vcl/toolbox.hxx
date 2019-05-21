@@ -68,11 +68,13 @@ enum class ToolBoxButtonSize
     Size32,
 };
 
-// ToolBoxLayoutMode::Normal   - traditional layout, items are centered in the toolbar
-// ToolBoxLayoutMode::LockVert - special mode (currently used for calc input/formula
-//                       bar) where item's vertical position is locked, e.g.
-//                       toolbox is prevented from centering the items
-enum class ToolBoxLayoutMode { Normal, LockVert };
+enum class ToolBoxLayoutMode
+{
+    Normal,  // traditional layout, items are centered in the toolbar
+    Locked   // horizontal positions of all items remain unchanged,
+             // vertical positions of items smaller than first item are aligned to first item's vertical center,
+             // vertical positions of items larger than first item remain unchanged
+};
 
 // Position of the text when icon and text are painted
 enum class ToolBoxTextPosition { Right, Bottom };
@@ -149,7 +151,8 @@ private:
                         mbIsKeyEvent:1,
                         mbChangingHighlight:1,
                         mbImagesMirrored:1,
-                        mbLineSpacing:1;
+                        mbLineSpacing:1,
+                        mbIsArranged:1;
     WindowAlign         meAlign;
     WindowAlign         meDockAlign;
     ButtonType          meButtonType;

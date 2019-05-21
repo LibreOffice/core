@@ -1097,58 +1097,61 @@ void ToolBox::ImplInitToolBoxData()
     // initialize variables
     ImplGetWindowImpl()->mbToolBox  = true;
     mpData.reset(new ImplToolBoxPrivateData);
-    mpFloatWin        = nullptr;
-    mnDX              = 0;
-    mnDY              = 0;
-    mnMaxItemWidth    = 0;
-    mnMaxItemHeight   = 0;
-    mnWinHeight       = 0;
-    mnLeftBorder      = 0;
-    mnTopBorder       = 0;
-    mnRightBorder     = 0;
-    mnBottomBorder    = 0;
-    mnLastResizeDY    = 0;
-    mnOutStyle        = TOOLBOX_STYLE_FLAT; // force flat buttons since NWF
-    mnHighItemId      = 0;
-    mnCurItemId       = 0;
-    mnDownItemId      = 0;
-    mnCurPos          = ITEM_NOTFOUND;
-    mnLines           = 1;
-    mnCurLine         = 1;
-    mnCurLines        = 1;
-    mnVisLines        = 1;
-    mnFloatLines      = 0;
-    mnDockLines       = 0;
-    mnMouseModifier   = 0;
-    mbDrag            = false;
-    mbSelection       = false;
-    mbUpper           = false;
-    mbLower           = false;
-    mbIn              = false;
-    mbCalc            = true;
-    mbFormat          = false;
-    mbFullPaint       = false;
-    mbHorz            = true;
-    mbScroll          = false;
-    mbLastFloatMode   = false;
-    mbCustomize       = false;
-    mbDragging        = false;
-    mbIsKeyEvent = false;
-    mbChangingHighlight = false;
-    mbImagesMirrored  = false;
-    mbLineSpacing     = false;
-    meButtonType      = ButtonType::SYMBOLONLY;
-    meAlign           = WindowAlign::Top;
-    meDockAlign       = WindowAlign::Top;
-    meLastStyle       = PointerStyle::Arrow;
-    mnWinStyle        = 0;
-    meLayoutMode      = ToolBoxLayoutMode::Normal;
-    meTextPosition    = ToolBoxTextPosition::Right;
-    mnLastFocusItemId = 0;
-    mnKeyModifier     = 0;
-    mnActivateCount   = 0;
+
+    mpFloatWin            = nullptr;
+    mnDX                  = 0;
+    mnDY                  = 0;
+    mnMaxItemWidth        = 0;
+    mnMaxItemHeight       = 0;
+    mnWinHeight           = 0;
+    mnLeftBorder          = 0;
+    mnTopBorder           = 0;
+    mnRightBorder         = 0;
+    mnBottomBorder        = 0;
+    mnLastResizeDY        = 0;
+    mnOutStyle            = TOOLBOX_STYLE_FLAT; // force flat buttons since NWF
+    mnHighItemId          = 0;
+    mnCurItemId           = 0;
+    mnDownItemId          = 0;
+    mnCurPos              = ITEM_NOTFOUND;
+    mnLines               = 1;
+    mnCurLine             = 1;
+    mnCurLines            = 1;
+    mnVisLines            = 1;
+    mnFloatLines          = 0;
+    mnDockLines           = 0;
+    mnMouseModifier       = 0;
+    mbDrag                = false;
+    mbSelection           = false;
+    mbUpper               = false;
+    mbLower               = false;
+    mbIn                  = false;
+    mbCalc                = true;
+    mbFormat              = false;
+    mbFullPaint           = false;
+    mbHorz                = true;
+    mbScroll              = false;
+    mbLastFloatMode       = false;
+    mbCustomize           = false;
+    mbDragging            = false;
+    mbIsKeyEvent          = false;
+    mbChangingHighlight   = false;
+    mbImagesMirrored      = false;
+    mbLineSpacing         = false;
+    mbIsArranged          = false;
+    meButtonType          = ButtonType::SYMBOLONLY;
+    meAlign               = WindowAlign::Top;
+    meDockAlign           = WindowAlign::Top;
+    meLastStyle           = PointerStyle::Arrow;
+    mnWinStyle            = 0;
+    meLayoutMode          = ToolBoxLayoutMode::Normal;
+    meTextPosition        = ToolBoxTextPosition::Right;
+    mnLastFocusItemId     = 0;
+    mnKeyModifier         = 0;
+    mnActivateCount       = 0;
     mnImagesRotationAngle = 0;
-    mpStatusListener  = new VclStatusListener<ToolBox>(this, ".uno:ImageOrientation");
+
+    mpStatusListener = new VclStatusListener<ToolBox>(this, ".uno:ImageOrientation");
     mpStatusListener->startListening();
 
     mpIdle.reset(new Idle("vcl::ToolBox maIdle update"));
@@ -2141,6 +2144,7 @@ void ToolBox::ImplFormat( bool bResize )
             else if ( mnCurLine+mnVisLines-1 > mnCurLines )
                 mnCurLine = mnCurLines - (mnVisLines-1);
 
+            long firstItemCenter = 0;
             for (auto & item : mpData->m_aItems)
             {
                 item.mbShowWindow = false;
@@ -2184,35 +2188,32 @@ void ToolBox::ImplFormat( bool bResize )
                     Size aCurrentItemSize( item.GetSize( mbHorz, mbScroll, nMax, Size(mnMaxItemWidth, mnMaxItemHeight) ) );
 
                     // 2. position item rect and use size from step 1
-                    //  items will be centered horizontally (if mbHorz) or vertically
-                    //  advance nX and nY accordingly
+                    // items will be centered horizontally (if mbHorz) or vertically
+                    // advance nX and nY accordingly
+
                     if ( mbHorz )
                     {
+                        // In special mode Locked horizontal positions of all items remain unchanged.
+
+                        if ( mbIsArranged && meLayoutMode == ToolBoxLayoutMode::Locked && mnLines == 1 && item.maRect.Left() > 0 )
+                            nX = item.maRect.Left();
                         item.maCalcRect.SetLeft( nX );
-                        // if special ToolBoxLayoutMode::LockVert lock vertical position
-                        // don't recalculate the vertical position of the item
-                        if ( meLayoutMode == ToolBoxLayoutMode::LockVert && mnLines == 1 )
-                        {
-                            // Somewhat of a hack here, calc deletes and re-adds
-                            // the sum/assign & ok/cancel items dynamically.
-                            // Because ToolBoxLayoutMode::LockVert effectively prevents
-                            // recalculation of the vertical pos of an item the
-                            // item.maRect.Top() for those newly added items is
-                            // 0. The hack here is that we want to effectively
-                            // recalculate the vertical pos for those added
-                            // items here. ( Note: assume mnMaxItemHeight is
-                            // equal to the LineSize when multibar has a single
-                            // line size )
-                            if ( item.maRect.Top() ||
-                                 (item.mpWindow && item.mpWindow->GetType() == WindowType::CALCINPUTLINE) ) // tdf#83099
-                            {
-                                item.maCalcRect.SetTop( item.maRect.Top() );
-                            }
+
+                        // In special mode Locked first item's vertical position remains unchanged. Consecutive items vertical
+                        // positions are centered around first item's vertical position. If an item's height exceeds available
+                        // space, item's vertical position remains unchanged too.
+
+                        if ( mbIsArranged && meLayoutMode == ToolBoxLayoutMode::Locked && mnLines == 1 )
+                            if ( firstItemCenter > 0 )
+                                if ( firstItemCenter-aCurrentItemSize.Height()/2 > nY  )
+                                    item.maCalcRect.SetTop( firstItemCenter-aCurrentItemSize.Height()/2 );
+                                else
+                                    item.maCalcRect.SetTop( item.maRect.Top() );
                             else
                             {
-                                item.maCalcRect.SetTop( nY+(mnMaxItemHeight-aCurrentItemSize.Height())/2 );
+                                item.maCalcRect.SetTop( item.maRect.Top() );
+                                firstItemCenter = item.maRect.Top()+aCurrentItemSize.Height()/2;
                             }
-                        }
                         else
                             item.maCalcRect.SetTop( nY+(nLineSize-aCurrentItemSize.Height())/2 );
                         item.maCalcRect.SetRight( nX+aCurrentItemSize.Width()-1 );
@@ -2245,6 +2246,7 @@ void ToolBox::ImplFormat( bool bResize )
                         item.mpWindow->Hide();
                 }
             } // end of loop over all items
+            mbIsArranged = true;
         }
         else
             // we have no toolbox items
