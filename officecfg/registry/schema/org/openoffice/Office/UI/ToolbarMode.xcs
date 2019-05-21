@@ -64,6 +64,17 @@
           <desc>List of visible toolbars activated by user.</desc>
         </info>
       </prop>
+      <prop oor:name="UIItemProperties" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>
+          List of context descriptors.  Each context descriptor is a string that contains three comma
+          separated values (note that values are case sensitive):
+          1. UIItemID - contains the ID of uiitem(GtkToolButton/GtkMenuItem) of notebookbar
+          2. propertyName - contains the value of attibute(name) of property node.
+          3. propertyValue - cotains the value of property node.
+          </desc>
+        </info>
+      </prop>
       <prop oor:name="Sidebar" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>
