@@ -317,14 +317,16 @@ void ContentIdxStoreImpl::SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 n
 
 void ContentIdxStoreImpl::RestoreRedlines(SwDoc* pDoc, updater_t const & rUpdater)
 {
-    const SwRedlineTable& rRedlTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    SwRedlineTable& rRedlTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     for (const MarkEntry& aEntry : m_aRedlineEntries)
     {
+        auto pRedline = rRedlTable[aEntry.m_nIdx];
         SwPosition* const pPos = aEntry.m_bOther
-            ? rRedlTable[ aEntry.m_nIdx ]->GetMark()
-            : rRedlTable[ aEntry.m_nIdx ]->GetPoint();
+            ? pRedline->GetMark()
+            : pRedline->GetPoint();
         rUpdater(*pPos, aEntry.m_nContent);
     }
+    rRedlTable.Resort();
 }
 
 void ContentIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit)

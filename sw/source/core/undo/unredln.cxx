@@ -277,6 +277,7 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
                     "could not find an Insert object" );
         ++nFnd;
         rDoc.getIDocumentRedlineAccess().GetRedlineTable()[nFnd]->Show(1, nFnd);
+        rDoc.getIDocumentRedlineAccess().GetRedlineTable().AssertSorted();
     }
 
     {
@@ -502,6 +503,7 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
         {
             rDoc.getIDocumentRedlineAccess().SplitRedline(rPam);
         }
+        rDoc.getIDocumentRedlineAccess().GetRedlineTable().Resort();
         SetPaM(rPam, true);
     }
     else
@@ -520,6 +522,7 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
         SwRangeRedline* pTmp = new SwRangeRedline(*pRedlData, rPam);
         rDoc.getIDocumentRedlineAccess().GetRedlineTable().Insert( pTmp );
         pTmp->InvalidateRange(SwRangeRedline::Invalidation::Add);
+        rDoc.getIDocumentRedlineAccess().GetRedlineTable().Resort();
 
         SetPaM(rPam, true);
     }

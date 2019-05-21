@@ -2039,6 +2039,7 @@ drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwContentNode::getSdrAllF
 const IDocumentSettingAccess* SwNode::getIDocumentSettingAccess() const { return &GetDoc()->GetDocumentSettingManager(); }
 const IDocumentDeviceAccess& SwNode::getIDocumentDeviceAccess() const { return GetDoc()->getIDocumentDeviceAccess(); }
 const IDocumentRedlineAccess& SwNode::getIDocumentRedlineAccess() const { return GetDoc()->getIDocumentRedlineAccess(); }
+IDocumentRedlineAccess& SwNode::getIDocumentRedlineAccess() { return GetDoc()->getIDocumentRedlineAccess(); }
 const IDocumentStylePoolAccess& SwNode::getIDocumentStylePoolAccess() const { return GetDoc()->getIDocumentStylePoolAccess(); }
 const IDocumentDrawModelAccess& SwNode::getIDocumentDrawModelAccess() const { return GetDoc()->getIDocumentDrawModelAccess(); }
 const IDocumentLayoutAccess& SwNode::getIDocumentLayoutAccess() const { return GetDoc()->getIDocumentLayoutAccess(); }

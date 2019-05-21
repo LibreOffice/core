@@ -349,7 +349,7 @@ void lcl_LOKInvalidateStartEndFrames(SwShellCursor& rCursor)
 } // anonymous namespace
 
 /// Emits LOK notification about one addition / removal of a redline item.
-void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRedline* pRedline)
+void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, const SwRangeRedline* pRedline)
 {
     // Disable since usability is very low beyond some small number of changes.
     static bool bDisableRedlineComments = getenv("DISABLE_REDLINE") != nullptr;
@@ -368,8 +368,8 @@ void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRe
     OUString sDateTime = utl::toISO8601(pRedline->GetRedlineData().GetTimeStamp().GetUNODateTime());
     aRedline.put("dateTime", sDateTime.toUtf8().getStr());
 
-    SwPosition* pStartPos = pRedline->Start();
-    SwPosition* pEndPos = pRedline->End();
+    const SwPosition* pStartPos = pRedline->Start();
+    const SwPosition* pEndPos = pRedline->End();
     SwContentNode* pContentNd = pRedline->GetContentNode();
     SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
     if (pView && pContentNd)
@@ -426,6 +426,10 @@ bool SwRedlineTable::Insert(SwRangeRedlinePtr& p)
 {
     if( p->HasValidRange() )
     {
+#ifdef DBG_UTIL
+        assert(p->m_pRedlineTable == nullptr);
+        p->m_pRedlineTable = this;
+#endif
         std::pair<vector_type::const_iterator, bool> rv = maVector.insert( p );
         size_type nP = rv.first - begin();
         LOKRedlineNotification(RedlineNotification::Add, p);
@@ -439,6 +443,10 @@ bool SwRedlineTable::Insert(SwRangeRedlinePtr& p, size_type& rP)
 {
     if( p->HasValidRange() )
     {
+#ifdef DBG_UTIL
+        assert(p->m_pRedlineTable == nullptr);
+        p->m_pRedlineTable = this;
+#endif
         std::pair<vector_type::const_iterator, bool> rv = maVector.insert( p );
         rP = rv.first - begin();
         p->CallDisplayFunc(rP);
@@ -559,6 +567,10 @@ std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p
 
 bool SwRedlineTable::InsertWithValidRanges(SwRangeRedlinePtr& p, size_type* pInsPos)
 {
+#ifdef DBG_UTIL
+    assert(p->m_pRedlineTable == nullptr);
+    p->m_pRedlineTable = this;
+#endif
     bool bAnyIns = false;
     std::vector<SwRangeRedline*> const redlines(
             GetAllValidRanges(std::unique_ptr<SwRangeRedline>(p)));
@@ -600,6 +612,11 @@ SwRedlineTable::size_type SwRedlineTable::GetPos(const SwRangeRedline* p) const
 
 void SwRedlineTable::Remove( const SwRangeRedline* p )
 {
+#ifdef DBG_UTIL
+    assert(p->m_pRedlineTable == this);
+    p->m_pRedlineTable = nullptr;
+#endif
+
     const size_type nPos = GetPos(p);
     if (nPos == npos)
         return;
@@ -612,6 +629,10 @@ void SwRedlineTable::Remove( size_type nP )
     SwDoc* pDoc = nullptr;
     if( !nP && 1 == size() )
         pDoc = maVector.front()->GetDoc();
+
+#ifdef DBG_UTIL
+    maVector[nP]->m_pRedlineTable = nullptr;
+#endif
 
     maVector.erase( maVector.begin() + nP );
 
@@ -703,6 +724,7 @@ const SwRangeRedline* SwRedlineTable::FindAtPosition( const SwPosition& rSttPos,
                                         size_type& rPos,
                                         bool bNext ) const
 {
+    assert( std::is_sorted(maVector.begin(), maVector.end(), CompareSwRedlineTable()) );
     const SwRangeRedline* pFnd = nullptr;
     for( ; rPos < maVector.size() ; ++rPos )
     {
@@ -1114,6 +1136,9 @@ void SwRangeRedline::SetStart( const SwPosition& rPos, SwPosition* pSttPtr )
     *pSttPtr = rPos;
 
     MaybeNotifyRedlineModification(this, GetDoc());
+#ifdef DBG_UTIL
+    assert(!m_pRedlineTable || std::is_sorted(m_pRedlineTable->begin(), m_pRedlineTable->end(), CompareSwRedlineTable()));
+#endif
 }
 
 void SwRangeRedline::SetEnd( const SwPosition& rPos, SwPosition* pEndPtr )
@@ -1122,6 +1147,9 @@ void SwRangeRedline::SetEnd( const SwPosition& rPos, SwPosition* pEndPtr )
     *pEndPtr = rPos;
 
     MaybeNotifyRedlineModification(this, GetDoc());
+#ifdef DBG_UTIL
+    assert(!m_pRedlineTable || std::is_sorted(m_pRedlineTable->begin(), m_pRedlineTable->end(), CompareSwRedlineTable()));
+#endif
 }
 
 /// Do we have a valid Selection?
@@ -1149,6 +1177,9 @@ void SwRangeRedline::CallDisplayFunc(size_t nMyPos)
         Hide(0, nMyPos);
     else if (eShow == RedlineFlags::ShowDelete)
         ShowOriginal(0, nMyPos);
+#ifdef DBG_UTIL
+    assert(!m_pRedlineTable || std::is_sorted(m_pRedlineTable->begin(), m_pRedlineTable->end(), CompareSwRedlineTable()));
+#endif
 }
 
 void SwRangeRedline::Show(sal_uInt16 nLoop, size_t nMyPos)
@@ -1181,6 +1212,7 @@ void SwRangeRedline::Show(sal_uInt16 nLoop, size_t nMyPos)
         }
         pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
+    // the callers is responsible for re-sorting the table
 }
 
 void SwRangeRedline::Hide(sal_uInt16 nLoop, size_t nMyPos)
@@ -1217,6 +1249,7 @@ void SwRangeRedline::Hide(sal_uInt16 nLoop, size_t nMyPos)
         break;
     }
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
+    // the callers is responsible for re-sorting table
 }
 
 void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos)
@@ -1259,6 +1292,7 @@ void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos)
         break;
     }
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
+    // the callers is responsible for re-sorting table
 }
 
 // trigger the Layout
@@ -1309,6 +1343,7 @@ void SwRangeRedline::InvalidateRange(Invalidation const eWhy)
             }
         }
     }
+    // callers are responsible for re-sorting table
 }
 
 /** Calculates the start and end position of the intersection rTmp and
@@ -1418,6 +1453,9 @@ void SwRangeRedline::MoveToSection()
     }
     else
         InvalidateRange(Invalidation::Remove);
+#ifdef DBG_UTIL
+    assert(!m_pRedlineTable || std::is_sorted(m_pRedlineTable->begin(), m_pRedlineTable->end(), CompareSwRedlineTable()));
+#endif
 }
 
 void SwRangeRedline::CopyToSection()
@@ -1492,7 +1530,6 @@ void SwRangeRedline::CopyToSection()
 
     pDoc->SetCopyIsMove( bSaveCopyFlag );
     pDoc->getIDocumentRedlineAccess().SetRedlineMove( bSaveRdlMoveFlg );
-
 }
 
 void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
@@ -1540,20 +1577,21 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
                 // table are sorted and the pEnd position is an endnode (see
                 // bDelLastPara condition above), only redlines before the
                 // current ones can be affected.
-                const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+                SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
                 size_t n = nMyPos;
                 for( bool bBreak = false; !bBreak && n > 0; )
                 {
                     --n;
                     bBreak = true;
-                    if( rTable[ n ]->GetBound() == *aPam.GetPoint() )
+                    auto pRedline = rTable[n];
+                    if( pRedline->GetBound() == *aPam.GetPoint() )
                     {
-                        rTable[ n ]->GetBound() = *pEnd;
+                        pRedline->GetBound() = *pEnd;
                         bBreak = false;
                     }
-                    if( rTable[ n ]->GetBound(false) == *aPam.GetPoint() )
+                    if( pRedline->GetBound(false) == *aPam.GetPoint() )
                     {
-                        rTable[ n ]->GetBound(false) = *pEnd;
+                        pRedline->GetBound(false) = *pEnd;
                         bBreak = false;
                     }
                 }
@@ -1585,7 +1623,7 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
     if( m_pContentSect )
     {
         SwDoc* pDoc = GetDoc();
-        const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+        SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
         std::vector<SwPosition*> aBeforeArr, aBehindArr;
         bool bBreak = false;
         SwRedlineTable::size_type n;
@@ -1593,15 +1631,14 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
         for( n = nMyPos+1; !bBreak && n < rTable.size(); ++n )
         {
             bBreak = true;
-            if( rTable[ n ]->GetBound() == *GetPoint() )
+            SwRangeRedline* pRedl = rTable[n];
+            if( pRedl->GetBound() == *GetPoint() )
             {
-                SwRangeRedline* pRedl = rTable[n];
                 aBehindArr.push_back(&pRedl->GetBound());
                 bBreak = false;
             }
-            if( rTable[ n ]->GetBound(false) == *GetPoint() )
+            if( pRedl->GetBound(false) == *GetPoint() )
             {
-                SwRangeRedline* pRedl = rTable[n];
                 aBehindArr.push_back(&pRedl->GetBound(false));
                 bBreak = false;
             }
@@ -1610,15 +1647,14 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
         {
             --n;
             bBreak = true;
-            if( rTable[ n ]->GetBound() == *GetPoint() )
+            SwRangeRedline* pRedl = rTable[n];
+            if( pRedl->GetBound() == *GetPoint() )
             {
-                SwRangeRedline* pRedl = rTable[n];
                 aBeforeArr.push_back(&pRedl->GetBound());
                 bBreak = false;
             }
-            if( rTable[ n ]->GetBound(false) == *GetPoint() )
+            if( pRedl->GetBound(false) == *GetPoint() )
             {
-                SwRangeRedline* pRedl = rTable[n];
                 aBeforeArr.push_back(&pRedl->GetBound(false));
                 bBreak = false;
             }
@@ -1719,6 +1755,9 @@ void SwRangeRedline::SetContentIdx( const SwNodeIndex* pIdx )
     {
         OSL_FAIL("SwRangeRedline::SetContentIdx: invalid state");
     }
+#ifdef DBG_UTIL
+    assert(!m_pRedlineTable || std::is_sorted(m_pRedlineTable->begin(), m_pRedlineTable->end(), CompareSwRedlineTable()));
+#endif
 }
 
 bool SwRangeRedline::CanCombine( const SwRangeRedline& rRedl ) const
@@ -1812,12 +1851,12 @@ const SwRedlineData & SwRangeRedline::GetRedlineData(const sal_uInt16 nPos) cons
     return *pCur;
 }
 
-OUString SwRangeRedline::GetDescr()
+OUString SwRangeRedline::GetDescr() const
 {
     // get description of redline data (e.g.: "insert $1")
     OUString aResult = GetRedlineData().GetDescr();
 
-    SwPaM * pPaM = nullptr;
+    const SwPaM * pPaM = nullptr;
     bool bDeletePaM = false;
 
     // if this redline is visible the content is in this PaM
@@ -1865,7 +1904,7 @@ void SwRangeRedline::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("id"), BAD_CAST(OString::number(GetSeqNo()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("author"), BAD_CAST(SW_MOD()->GetRedlineAuthor(GetAuthor()).toUtf8().getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("date"), BAD_CAST(DateTimeToOString(GetTimeStamp()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("descr"), BAD_CAST(const_cast<SwRangeRedline*>(this)->GetDescr().toUtf8().getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("descr"), BAD_CAST(GetDescr().toUtf8().getStr()));
 
     OString sRedlineType;
     switch (GetType())

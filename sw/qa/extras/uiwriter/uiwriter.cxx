@@ -5334,7 +5334,7 @@ void SwUiWriterTest::testRedlineViewAuthor()
     // Now assert that SwView::SetRedlineAuthor() had an effect.
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rTable.size());
-    SwRangeRedline* pRedline = rTable[0];
+    const SwRangeRedline* pRedline = rTable[0];
     // This was 'Unknown Author' instead of 'A U. Thor'.
     CPPUNIT_ASSERT_EQUAL(aAuthor, pRedline->GetAuthorString());
 

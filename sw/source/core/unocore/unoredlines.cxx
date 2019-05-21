@@ -59,7 +59,7 @@ uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    const SwRedlineTable& rRedTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    SwRedlineTable& rRedTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
     if ((rRedTable.size() <= static_cast<size_t>(nIndex)) || (nIndex < 0))
         throw lang::IndexOutOfBoundsException();
 
@@ -135,7 +135,7 @@ uno::Any SwXRedlineEnumeration::nextElement()
 {
     if(!pDoc)
         throw uno::RuntimeException();
-    const SwRedlineTable& rRedTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    SwRedlineTable& rRedTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     if( rRedTable.size() <= nCurrentIndex )
         throw container::NoSuchElementException();
     uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTable[nCurrentIndex++], *pDoc );

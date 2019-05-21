@@ -261,7 +261,7 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
     else if(rPropertyName == UNO_NAME_REDLINE_COMMENT)
         aRet <<= rRedline.GetComment();
     else if(rPropertyName == UNO_NAME_REDLINE_DESCRIPTION)
-        aRet <<= const_cast<SwRangeRedline&>(rRedline).GetDescr();
+        aRet <<= rRedline.GetDescr();
     else if(rPropertyName == UNO_NAME_REDLINE_TYPE)
     {
         aRet <<= nsRedlineType_t::SwRedlineTypeToOUString(rRedline.GetType());
@@ -302,7 +302,7 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_COMMENT;
     pRet[nPropIdx++].Value <<= rRedline.GetComment();
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_DESCRIPTION;
-    pRet[nPropIdx++].Value <<= const_cast<SwRangeRedline&>(rRedline).GetDescr();
+    pRet[nPropIdx++].Value <<= rRedline.GetDescr();
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_TYPE;
     pRet[nPropIdx++].Value <<= nsRedlineType_t::SwRedlineTypeToOUString(rRedline.GetType());
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_IDENTIFIER;
@@ -431,7 +431,7 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
             break;
             case SwNodeType::Text :
             {
-                SwPosition* pPoint = nullptr;
+                const SwPosition* pPoint = nullptr;
                 if(bStart || !pRedline->HasMark())
                     pPoint = pRedline->GetPoint();
                 else

@@ -1546,7 +1546,7 @@ void SwTextNode::Update(
         const SwRedlineTable& rTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
         for (SwRedlineTable::size_type nRedlnPos = 0; nRedlnPos < rTable.size(); ++nRedlnPos)
         {
-            SwRangeRedline* pRedln = rTable[nRedlnPos];
+            const SwRangeRedline* pRedln = rTable[nRedlnPos];
             if (pRedln->HasMark())
             {
                 if (this == &pRedln->End()->nNode.GetNode() && *pRedln->GetPoint() != *pRedln->GetMark())

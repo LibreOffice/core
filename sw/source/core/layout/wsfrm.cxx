@@ -4549,6 +4549,7 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
             pRedline->InvalidateRange(SwRangeRedline::Invalidation::Add);
         }
     }
+    rDoc.getIDocumentRedlineAccess().GetRedlineTable().Resort();
 
     SwFootnoteIdxs & rFootnotes(rDoc.GetFootnoteIdxs());
     if (rDoc.GetFootnoteInfo().eNum == FTNNUM_CHAPTER)

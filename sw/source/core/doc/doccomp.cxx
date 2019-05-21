@@ -1964,9 +1964,9 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
         const SwRedlineTable& rRedlineTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
         for( ; n < rRedlineTable.size(); ++n )
         {
-            SwRangeRedline* pRedl = rRedlineTable[ n ];
-            SwPosition* pRStt = pRedl->Start(),
-                      * pREnd = pRStt == pRedl->GetPoint() ? pRedl->GetMark()
+            const SwRangeRedline* pRedl = rRedlineTable[ n ];
+            const SwPosition* pRStt = pRedl->Start(),
+                            * pREnd = pRStt == pRedl->GetPoint() ? pRedl->GetMark()
                                                            : pRedl->GetPoint();
             if( nsRedlineType_t::REDLINE_DELETE == pRedl->GetType() ||
                 nsRedlineType_t::REDLINE_INSERT == pRedl->GetType() )

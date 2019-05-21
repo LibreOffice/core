@@ -170,6 +170,10 @@ public:
 
 class SW_DLLPUBLIC SwRangeRedline : public SwPaM
 {
+friend class SwRedlineTable;
+#ifdef DBG_UTIL
+    mutable SwRedlineTable* m_pRedlineTable = nullptr; // used to verify that the lines stay sorted
+#endif
     SwRedlineData* m_pRedlineData;
     SwNodeIndex* m_pContentSect;
     bool m_bDelLastPara : 1;
@@ -273,7 +277,7 @@ public:
 
        @return textual description of the selected redline data element
      */
-    OUString GetDescr();
+    OUString GetDescr() const;
 
     bool operator<( const SwRangeRedline& ) const;
     void dumpAsXml(xmlTextWriterPtr pWriter) const;

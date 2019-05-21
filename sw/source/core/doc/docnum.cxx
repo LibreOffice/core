@@ -2104,7 +2104,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
         SwRedlineTable::size_type nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_INSERT );
         if( SwRedlineTable::npos != nRedlPos )
         {
-            SwRangeRedline* pTmp = getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
+            SwRangeRedline* pTmp = getIDocumentRedlineAccess().GetRedlineTable()[nRedlPos];
             const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
             SwRangeRedline aTmpRedl( nsRedlineType_t::REDLINE_INSERT, rPam );
             const SwContentNode* pCEndNd = pEnd->nNode.GetNode().GetContentNode();
@@ -2347,6 +2347,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
             SwContentNode* pCNd = pREnd->nNode.GetNode().GetContentNode();
             pREnd->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
         }
+        getIDocumentRedlineAccess().GetRedlineTable().Resort();
     }
 
     getIDocumentState().SetModified();

@@ -226,6 +226,10 @@ public:
      */
     const IDocumentRedlineAccess& getIDocumentRedlineAccess() const;
 
+    /** Provides access to the document redline interface
+     */
+    IDocumentRedlineAccess& getIDocumentRedlineAccess();
+
     /** Provides access to the document style pool interface
      */
     const IDocumentStylePoolAccess& getIDocumentStylePoolAccess() const;

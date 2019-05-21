@@ -368,13 +368,16 @@ public:
 
     bool                        empty() const { return maVector.empty(); }
     size_type                   size() const { return maVector.size(); }
-    SwRangeRedline*             operator[]( size_type idx ) const { return maVector[idx]; }
+    const SwRangeRedline*       operator[]( size_type idx ) const { return maVector[idx]; }
+    // if you call this, and modify the position of a redline, you MUST call Resort()
+    SwRangeRedline*             operator[]( size_type idx ) { return maVector[idx]; }
     vector_type::const_iterator begin() const { return maVector.begin(); }
     vector_type::const_iterator end() const { return maVector.end(); }
     void                        Resort() { maVector.Resort(); }
+    void                        AssertSorted() { assert( std::is_sorted(maVector.begin(), maVector.end(), CompareSwRedlineTable()) ); }
 
     // Notifies all LOK clients when redlines are added/modified/removed
-    static void                 LOKRedlineNotification(RedlineNotification eType, SwRangeRedline* pRedline);
+    static void                 LOKRedlineNotification(RedlineNotification eType, const SwRangeRedline* pRedline);
 };
 
 /// Table that holds 'extra' redlines, such as 'table row insert/delete', 'paragraph moves' etc...
