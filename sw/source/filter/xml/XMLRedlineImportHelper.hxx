@@ -43,22 +43,22 @@ class XMLRedlineImportHelper final
 {
     SvXMLImport & m_rImport;
 
-    const OUString sInsertion;
-    const OUString sDeletion;
-    const OUString sFormatChange;
+    const OUString m_sInsertion;
+    const OUString m_sDeletion;
+    const OUString m_sFormatChange;
 
-    RedlineMapType aRedlineMap;
+    RedlineMapType m_aRedlineMap;
 
     // if true, no redlines should be inserted into document
     // (This typically happen when a document is loaded in 'insert'-mode.)
-    bool const bIgnoreRedlines;
+    bool const m_bIgnoreRedlines;
 
     // save information for saving and reconstruction of the redline mode
-    css::uno::Reference<css::beans::XPropertySet> xModelPropertySet;
-    css::uno::Reference<css::beans::XPropertySet> xImportInfoPropertySet;
-    bool bShowChanges;
-    bool bRecordChanges;
-    css::uno::Sequence<sal_Int8> aProtectionKey;
+    css::uno::Reference<css::beans::XPropertySet> m_xModelPropertySet;
+    css::uno::Reference<css::beans::XPropertySet> m_xImportInfoPropertySet;
+    bool m_bShowChanges;
+    bool m_bRecordChanges;
+    css::uno::Sequence<sal_Int8> m_aProtectionKey;
 
 public:
 
