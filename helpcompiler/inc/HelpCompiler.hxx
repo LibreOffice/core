@@ -22,29 +22,20 @@
 
 #include <sal/config.h>
 
+#include <deque>
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <list>
-#include <fstream>
-#include <sstream>
-#include <algorithm>
 
-#include <libxml/xmlmemory.h>
-#include <libxml/debugXML.h>
-#include <libxml/HTMLtree.h>
-#include <libxml/xmlIO.h>
-#include <libxml/xinclude.h>
-#include <libxml/catalog.h>
+#include <libxml/parser.h>
 
 #include <rtl/ustring.hxx>
 #include <rtl/character.hxx>
-#include <osl/thread.h>
 #include <osl/process.h>
 #include <osl/file.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
-#include "BasCodeTagger.hxx"
 #include <helpcompiler/compilehelp.hxx>
 
 #if OSL_DEBUG_LEVEL > 2

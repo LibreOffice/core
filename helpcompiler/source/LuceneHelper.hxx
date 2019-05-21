@@ -15,7 +15,6 @@
 #endif
 
 #include <CLucene.h>
-#include <CLucene/analysis/LanguageBasedAnalyzer.h>
 
 #if defined(__GNUC__)
 #  pragma GCC visibility pop

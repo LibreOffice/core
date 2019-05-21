@@ -12,6 +12,7 @@
 #include <osl/thread.hxx>
 
 #include "LuceneHelper.hxx"
+#include <CLucene.h>
 
 HelpSearch::HelpSearch(OUString const &indexDir)
 {

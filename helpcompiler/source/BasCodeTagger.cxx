@@ -8,6 +8,7 @@
  */
 
 #include <BasCodeTagger.hxx>
+#include <iostream>
 
 LibXmlTreeWalker::LibXmlTreeWalker( xmlDocPtr doc )
 {
