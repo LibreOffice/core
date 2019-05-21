@@ -1002,7 +1002,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         const uno::Sequence< beans::PropertyValue >& rValues,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    osl::ResettableGuard< osl::Mutex > aGuard( m_aMutex );
 
     uno::Sequence< uno::Any > aRet( rValues.getLength() );
     uno::Sequence< beans::PropertyChangeEvent > aChanges( rValues.getLength() );
@@ -1253,6 +1253,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                     "Exchange failed!",
                     static_cast< cppu::OWeakObject * >( this ) );
         }
+        aGuard.reset();
     }
 
     if ( !aOldTitle.isEmpty() )
