@@ -17,12 +17,13 @@ from com.sun.star.awt import XKeyListener
 
 
 mouseListenerCount = 0
+keyListenerCount = 0
 mousePressedEventsIntercepted = 0
 mouseReleasedEventsIntercepted = 0
 mouseEnteredEventsIntercepted = 0
 mouseExitedEventsIntercepted = 0
-keymousePressedEventsIntercepted = 0
-keymouseReleasedEventsIntercepted = 0
+keyPressedEventsIntercepted = 0
+keyReleasedEventsIntercepted = 0
 
 
 class XMouseListenerExtended(unohelper.Base, XMouseListener):
@@ -57,24 +58,28 @@ class XMouseListenerExtended(unohelper.Base, XMouseListener):
 
 
 class XKeyListenerExtended(unohelper.Base, XKeyListener):
+    def __init__(self):
+        global keyListenerCount
+        keyListenerCount += 1
+        super().__init__()
+
     # is invoked when a key has been pressed
     @classmethod
     def keyPressed(self, xKeyEvent):
-        global keymousePressedEventsIntercepted
-        keymousePressedEventsIntercepted += 1
-        return super(XKeyListenerExtended, self).keyPressed(xKeyEvent)
+        global keyPressedEventsIntercepted
+        keyPressedEventsIntercepted += 1
 
     # is invoked when a key has been released
     @classmethod
     def keyReleased(self, xKeyEvent):
-        global keymouseReleasedEventsIntercepted
-        keymouseReleasedEventsIntercepted += 1
-        return super(XKeyListenerExtended, self).keyReleased(xKeyEvent)
+        global keyReleasedEventsIntercepted
+        keyReleasedEventsIntercepted += 1
 
 # Test that registered mouse/key listeners for top window receive mouse/key events
 class XWindow(UITestCase):
     def test_listeners(self):
         global mouseListenerCount
+        global keyListenerCount
 
         self.ui_test.create_doc_in_start_center("writer")
         xDoc = self.ui_test.get_component()
@@ -95,6 +100,7 @@ class XWindow(UITestCase):
         xKeyListener = XKeyListenerExtended()
         self.assertIsNotNone(xKeyListener)
         xWindow.addKeyListener(xKeyListener)
+        self.assertEqual(1, keyListenerCount)
 
         # create dummy mouse event
         xMouseEvent = MouseEvent()
@@ -115,7 +121,6 @@ class XWindow(UITestCase):
         xMouseEvent2.PopupTrigger = False
         xMouseEvent2.Source = xWindow
 
-        # send mouse event
         xToolkitRobot = xWindow.getToolkit()
         self.assertIsNotNone(xToolkitRobot)
 
@@ -151,13 +156,13 @@ class XWindow(UITestCase):
         xWindow.removeKeyListener(xKeyListener)
         del xKeyListener
 
-        global keymousePressedEventsIntercepted
+        global keyPressedEventsIntercepted
         # Not expected any interceptions
-        self.assertEqual(0, keymousePressedEventsIntercepted)
+        self.assertEqual(1, keyPressedEventsIntercepted)
 
-        global keymouseReleasedEventsIntercepted
+        global keyReleasedEventsIntercepted
         # Not expected any interceptions
-        self.assertEqual(0, keymouseReleasedEventsIntercepted)
+        self.assertEqual(1, keyReleasedEventsIntercepted)
 
         global mousePressedEventsIntercepted
         self.assertEqual(2, mousePressedEventsIntercepted)
