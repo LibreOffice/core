@@ -448,14 +448,14 @@ static void deflateZipEntry(ZipOutputEntry *pZipEntry,
     pZipEntry->closeEntry();
 }
 
-class DeflateThread: public comphelper::ThreadTask
+class DeflateThreadTask: public comphelper::ThreadTask
 {
     ZipOutputEntry *mpEntry;
     uno::Reference< io::XInputStream > mxInStream;
 
 public:
-    DeflateThread( const std::shared_ptr<comphelper::ThreadTaskTag>& pTag, ZipOutputEntry *pEntry,
-                   const uno::Reference< io::XInputStream >& xInStream )
+    DeflateThreadTask( const std::shared_ptr<comphelper::ThreadTaskTag>& pTag, ZipOutputEntry *pEntry,
+                       const uno::Reference< io::XInputStream >& xInStream )
         : comphelper::ThreadTask(pTag)
         , mpEntry(pEntry)
         , mxInStream(xInStream)
@@ -826,17 +826,19 @@ bool ZipPackageStream::saveChild(
 
                 if (bParallelDeflate)
                 {
-                    // tdf#93553 limit to a useful amount of threads. Taking number of available
+                    // tdf#93553 limit to a useful amount of pending tasks. Having way too many
+                    // tasks pending may use a lot of memory. Take number of available
                     // cores and allow 4-times the amount for having the queue well filled. The
                     // 2nd parameter is the time to wait between cleanups in 10th of a second.
                     // Both values may be added to the configuration settings if needed.
-                    static sal_Int32 nAllowedThreads(comphelper::ThreadPool::getPreferredConcurrency() * 4);
-                    rZipOut.reduceScheduledThreadsToGivenNumberOrLess(nAllowedThreads);
+                    static sal_Int32 nAllowedTasks(comphelper::ThreadPool::getPreferredConcurrency() * 4);
+                    rZipOut.reduceScheduledThreadTasksToGivenNumberOrLess(nAllowedTasks);
 
-                    // Start a new thread deflating this zip entry
+                    // Start a new thread task deflating this zip entry
                     ZipOutputEntry *pZipEntry = new ZipOutputEntry(
                             m_xContext, *pTempEntry, this, bToBeEncrypted);
-                    rZipOut.addDeflatingThread( pZipEntry, std::make_unique<DeflateThread>(rZipOut.getThreadTaskTag(), pZipEntry, xStream) );
+                    rZipOut.addDeflatingThreadTask( pZipEntry,
+                            std::make_unique<DeflateThreadTask>(rZipOut.getThreadTaskTag(), pZipEntry, xStream) );
                 }
                 else
                 {
