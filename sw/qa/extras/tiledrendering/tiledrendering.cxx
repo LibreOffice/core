@@ -1470,7 +1470,7 @@ void SwTiledRenderingTest::testTrackChanges()
     // Get the redline just created
     const SwRedlineTable& rTable = pWrtShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rTable.size());
-    SwRangeRedline* pRedline = rTable[0];
+    const SwRangeRedline* pRedline = rTable[0];
 
     // Reject the change by id, while the cursor does not cover the tracked change.
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
@@ -2200,7 +2200,7 @@ void SwTiledRenderingTest::testRedlineField()
     // Get the redline just created
     const SwRedlineTable& rTable = pWrtShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rTable.size());
-    SwRangeRedline* pRedline = rTable[0];
+    const SwRangeRedline* pRedline = rTable[0];
     CPPUNIT_ASSERT(pRedline->GetDescr().indexOf(aDate.GetFieldName())!= -1);
 }
 

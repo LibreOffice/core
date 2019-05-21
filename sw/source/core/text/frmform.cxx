@@ -346,8 +346,8 @@ void SwTextFrame::MakePos()
     // Inform LOK clients about change in position of redlines (if any)
     if(comphelper::LibreOfficeKit::isActive())
     {
-        SwTextNode const* pTextNode = GetTextNodeFirst();
-        const SwRedlineTable& rTable = pTextNode->getIDocumentRedlineAccess().GetRedlineTable();
+        SwTextNode* pTextNode = GetTextNodeFirst();
+        SwRedlineTable& rTable = pTextNode->getIDocumentRedlineAccess().GetRedlineTable();
         for (SwRedlineTable::size_type nRedlnPos = 0; nRedlnPos < rTable.size(); ++nRedlnPos)
         {
             SwRangeRedline* pRedln = rTable[nRedlnPos];
