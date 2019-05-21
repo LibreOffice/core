@@ -63,7 +63,7 @@ public class PlainSourceView extends JScrollPane implements
     UndoManager undoManager;
     private List<UnsavedChangesListener> unsavedListener = new ArrayList<UnsavedChangesListener>();
 
-    private static final Pattern tabPattern = Pattern.compile("^ *(?<tab>\\t)");
+    private static final Pattern tabPattern = Pattern.compile("^ *(\\t)");
 
     public PlainSourceView(ScriptSourceModel model) {
         this.model = model;
@@ -186,7 +186,7 @@ public class PlainSourceView extends JScrollPane implements
 
                         Matcher matcher = tabPattern.matcher(ta.getText(startOffset, endOffset - startOffset));
                         if (matcher.find()) {
-                            ta.replaceRange(null, startOffset + matcher.start("tab"), startOffset + matcher.end("tab"));
+                            ta.replaceRange(null, startOffset + matcher.start(1), startOffset + matcher.end(1));
                         }
                     } catch (BadLocationException e) {
                         // could not find correct location of the tab
