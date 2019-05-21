@@ -98,6 +98,12 @@ bool AquaSalGraphics::CheckContext()
         const unsigned int nWidth = mpFrame->maGeometry.nWidth;
         const unsigned int nHeight = mpFrame->maGeometry.nHeight;
 
+        // Let's get the window scaling factor if possible, or use 1.0
+        // as the scaling factor.
+        float fScale = 1.0f;
+        if (mpFrame->getNSWindow())
+            fScale = [mpFrame->getNSWindow() backingScaleFactor];
+
         CGLayerRef rReleaseLayer = nullptr;
 
         // check if a new drawing context is needed (e.g. after a resize)
@@ -107,7 +113,9 @@ bool AquaSalGraphics::CheckContext()
             mnHeight = nHeight;
             // prepare to release the corresponding resources
             if (maLayer.isSet())
+            {
                 rReleaseLayer = maLayer.get();
+            }
             else if (maContextHolder.isSet())
             {
                 SAL_INFO("vcl.cg", "CGContextRelease(" << maContextHolder.get() << ")");
@@ -119,50 +127,49 @@ bool AquaSalGraphics::CheckContext()
 
         if (!maContextHolder.isSet())
         {
-            if (mpFrame->getNSWindow())
-            {
-                const CGSize aLayerSize = { static_cast<CGFloat>(nWidth), static_cast<CGFloat>(nHeight) };
-                NSGraphicsContext* pNSGContext = [NSGraphicsContext graphicsContextWithWindow: mpFrame->getNSWindow()];
-                CGContextRef xCGContext = [pNSGContext CGContext];
-                maLayer.set(CGLayerCreateWithContext(xCGContext, aLayerSize, nullptr));
-                SAL_INFO("vcl.cg", "CGLayerCreateWithContext(" << xCGContext << "," << aLayerSize << ",NULL) = " << maLayer.get());
-                if (maLayer.isSet())
-                {
-                    maContextHolder.set(CGLayerGetContext(maLayer.get()));
-                    SAL_INFO( "vcl.cg", "CGLayerGetContext(" << maLayer.get() << ") = " << maContextHolder.get() );
-                }
+            const int nBitmapDepth = 32;
 
-                if (rReleaseLayer)
-                {
-                    // copy original layer to resized layer
-                    if (maContextHolder.isSet())
-                    {
-                        SAL_INFO("vcl.cg", "CGContextDrawLayerAtPoint(" << maContextHolder.get() << "," << CGPointZero << "," << rReleaseLayer << ")");
-                        CGContextDrawLayerAtPoint(maContextHolder.get(), CGPointZero, rReleaseLayer);
-                    }
-                    SAL_INFO("vcl.cg", "CGLayerRelease(" << rReleaseLayer << ")");
-                    CGLayerRelease(rReleaseLayer);
-                }
-            }
-            else
+            float nScaledWidth = mnWidth * fScale;
+            float nScaledHeight = mnHeight * fScale;
+
+            const CGSize aLayerSize = { static_cast<CGFloat>(nScaledWidth), static_cast<CGFloat>(nScaledHeight) };
+
+            const int nBytesPerRow = (nBitmapDepth * nScaledWidth) / 8;
+            void* pRawData = std::malloc(nBytesPerRow * nScaledHeight);
+#ifdef MACOSX
+        const int nFlags = kCGImageAlphaNoneSkipFirst;
+#else
+        const int nFlags = kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little;
+#endif
+            CGContextHolder aContextHolder(CGBitmapContextCreate(
+                pRawData, nScaledWidth, nScaledHeight, 8, nBytesPerRow, GetSalData()->mxRGBSpace, nFlags));
+
+            maLayer.set(CGLayerCreateWithContext(aContextHolder.get(), aLayerSize, nullptr));
+            maLayer.setScale(fScale);
+
+            CGContextRef xDrawContext = CGLayerGetContext(maLayer.get());
+            maContextHolder = xDrawContext;
+
+            if (rReleaseLayer)
             {
-                assert(Application::IsBitmapRendering());
-                const int nBitmapDepth = 32;
-                const int nBytesPerRow = (nBitmapDepth * mnWidth) / 8;
-                void* pRawData = std::malloc(nBytesPerRow * mnHeight);
-                const int nFlags = kCGImageAlphaNoneSkipFirst;
-                maContextHolder.set(CGBitmapContextCreate(pRawData, mnWidth, mnHeight, 8, nBytesPerRow,
-                                                  GetSalData()->mxRGBSpace, nFlags));
-                SAL_INFO("vcl.cg", "CGBitmapContextCreate(" << mnWidth << "x" << mnHeight
-                                   << "x" << nBitmapDepth << ") = " << maContextHolder.get());
+                // copy original layer to resized layer
+                if (maContextHolder.isSet())
+                {
+                    SAL_INFO("vcl.cg", "CGContextDrawLayerAtPoint(" << maContextHolder.get() << "," << CGPointZero << "," << rReleaseLayer << ")");
+                    CGContextDrawLayerAtPoint(maContextHolder.get(), CGPointZero, rReleaseLayer);
+                }
+                SAL_INFO("vcl.cg", "CGLayerRelease(" << rReleaseLayer << ")");
+                CGLayerRelease(rReleaseLayer);
             }
 
             if (maContextHolder.isSet())
             {
-                CGContextTranslateCTM(maContextHolder.get(), 0, nHeight);
+                CGContextTranslateCTM(maContextHolder.get(), 0, nScaledHeight);
                 CGContextScaleCTM(maContextHolder.get(), 1.0, -1.0);
                 CGContextSetFillColorSpace(maContextHolder.get(), GetSalData()->mxRGBSpace);
                 CGContextSetStrokeColorSpace(maContextHolder.get(), GetSalData()->mxRGBSpace);
+                // apply a scale matrix so everything is auto-magically scaled
+                CGContextScaleCTM(maContextHolder.get(), fScale, fScale);
                 maContextHolder.saveState();
                 SetState();
 
@@ -173,7 +180,8 @@ bool AquaSalGraphics::CheckContext()
         }
     }
 
-    SAL_WARN_IF( !maContextHolder.get() && !mbPrinter, "vcl", "<<<WARNING>>> AquaSalGraphics::CheckContext() FAILED!!!!" );
+    SAL_WARN_IF(!maContextHolder.isSet() && !mbPrinter, "vcl", "<<<WARNING>>> AquaSalGraphics::CheckContext() FAILED!!!!");
+
     return maContextHolder.isSet();
 }
 
@@ -201,28 +209,30 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
     NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
     if (maLayer.isSet() && pContext != nullptr)
     {
-        CGContextRef rCGContext = [pContext CGContext];
-        SAL_INFO( "vcl.cg", "[[NSGraphicsContext currentContext] CGContext] = " << rCGContext );
+        CGContextHolder rCGContextHolder([pContext CGContext]);
+        SAL_INFO("vcl.cg", "[[NSGraphicsContext currentContext] CGContext] = " << rCGContextHolder.get());
+
+        rCGContextHolder.saveState();
 
         CGMutablePathRef rClip = mpFrame->getClipPath();
-        if( rClip )
+        if (rClip)
         {
-            CGContextSaveGState( rCGContext );
-            SAL_INFO( "vcl.cg", "CGContextBeginPath(" << rCGContext << ")" );
-            CGContextBeginPath( rCGContext );
-            SAL_INFO( "vcl.cg", "CGContextAddPath(" << rCGContext << "," << rClip << ")" );
-            CGContextAddPath( rCGContext, rClip );
-            SAL_INFO( "vcl.cg", "CGContextClip(" << rCGContext << ")" );
-            CGContextClip( rCGContext );
+            CGContextBeginPath(rCGContextHolder.get());
+            SAL_INFO( "vcl.cg", "CGContextAddPath(" << rCGContextHolder.get() << "," << rClip << ")" );
+            CGContextAddPath(rCGContextHolder.get(), rClip );
+            SAL_INFO( "vcl.cg", "CGContextClip(" << rCGContextHolder.get() << ")" );
+            CGContextClip(rCGContextHolder.get());
         }
 
         ApplyXorContext();
-        SAL_INFO( "vcl.cg", "CGContextDrawLayerAtPoint(" << rCGContext << "," << CGPointZero << "," << maLayer.get() << ")" );
-        CGContextDrawLayerAtPoint( rCGContext, CGPointZero, maLayer.get() );
-        if( rClip ) // cleanup clipping
-        {
-            CGContextRestoreGState( rCGContext );
-        }
+
+        const CGSize aSize = maLayer.getSizePoints();
+        const CGRect aRect = CGRectMake(0, 0, aSize.width,  aSize.height);
+
+        SAL_INFO( "vcl.cg", "CGContextDrawLayerInRect(" << rCGContextHolder.get() << "," << aRect << "," << maLayer.get() << ")" );
+        CGContextDrawLayerInRect(rCGContextHolder.get(), aRect, maLayer.get());
+
+        rCGContextHolder.restoreState();
     }
     else
     {

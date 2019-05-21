@@ -483,48 +483,67 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
     if (!maLayer.isSet())
         return;
 #endif
+    float fScale = maLayer.getScale();
+
+    long nScaledSourceX = nSrcX * fScale;
+    long nScaledSourceY = nSrcY * fScale;
+
+    long nScaledTargetX = nDstX * fScale;
+    long nScaledTargetY = nDstY * fScale;
+
+    long nScaledSourceWidth = nSrcWidth * fScale;
+    long nScaledSourceHeight = nSrcHeight * fScale;
 
     ApplyXorContext();
+
+    maContextHolder.saveState();
 
     // in XOR mode the drawing context is redirected to the XOR mask
     // copyArea() always works on the target context though
     CGContextRef xCopyContext = maContextHolder.get();
+
     if( mpXorEmulation && mpXorEmulation->IsEnabled() )
     {
         xCopyContext = mpXorEmulation->GetTargetContext();
     }
+
+    // If we have a scaled layer, we need to revert the scaling or else
+    // it will interfere with the coordinate calculation
+    CGContextScaleCTM(xCopyContext, 1.0 / fScale, 1.0 / fScale);
+
     // drawing a layer onto its own context causes trouble on OSX => copy it first
     // TODO: is it possible to get rid of this unneeded copy more often?
     //       e.g. on OSX>=10.5 only this situation causes problems:
     //          mnBitmapDepth && (aDstPoint.x + pSrc->mnWidth) > mnWidth
 
-    CGLayerHolder sSourceLayerHolder(maLayer.get());
-    // TODO: if( mnBitmapDepth > 0 )
+    CGLayerHolder sSourceLayerHolder(maLayer);
     {
-        const CGSize aSrcSize = CGSizeMake(nSrcWidth, nSrcHeight);
+        const CGSize aSrcSize = CGSizeMake(nScaledSourceWidth, nScaledSourceHeight);
         sSourceLayerHolder.set(CGLayerCreateWithContext(xCopyContext, aSrcSize, nullptr));
         SAL_INFO( "vcl.cg", "CGLayerCreateWithContext(" << xCopyContext << "," << aSrcSize << ",NULL) = " << sSourceLayerHolder.get());
 
         const CGContextRef xSrcContext = CGLayerGetContext(sSourceLayerHolder.get());
         SAL_INFO( "vcl.cg", "CGLayerGetContext(" << sSourceLayerHolder.get() << ") = " << xSrcContext);
 
-        CGPoint aSrcPoint = CGPointMake(-nSrcX, -nSrcY);
+        CGPoint aSrcPoint = CGPointMake(-nScaledSourceX, -nScaledSourceY);
         if( IsFlipped() )
         {
             SAL_INFO( "vcl.cg", "CGContextTranslateCTM(" << xSrcContext << ",0," << nSrcHeight << ")" );
-            CGContextTranslateCTM( xSrcContext, 0, +nSrcHeight );
+            CGContextTranslateCTM( xSrcContext, 0, +nScaledSourceHeight );
             SAL_INFO( "vcl.cg", "CGContextScaleCTM(" << xSrcContext << ",+1,-1)" );
             CGContextScaleCTM( xSrcContext, +1, -1 );
-            aSrcPoint.y = (nSrcY + nSrcHeight) - mnHeight;
+            aSrcPoint.y = (nScaledSourceY + nScaledSourceHeight) - (mnHeight * fScale);
         }
         SAL_INFO( "vcl.cg", "CGContextDrawLayerAtPoint(" << xSrcContext << "," << aSrcPoint << "," << maLayer.get() << ")" );
         CGContextDrawLayerAtPoint(xSrcContext, aSrcPoint, maLayer.get());
     }
 
     // draw at new destination
-    const CGPoint aDstPoint = CGPointMake(+nDstX, +nDstY);
-    SAL_INFO( "vcl.cg", "CGContextDrawLayerAtPoint(" << xCopyContext << "," << aDstPoint << "," << sSourceLayerHolder.get() << ")" );
-    CGContextDrawLayerAtPoint(xCopyContext, aDstPoint, sSourceLayerHolder.get());
+    const CGRect aTargetRect = CGRectMake(nScaledTargetX, nScaledTargetY, nScaledSourceWidth, nScaledSourceHeight);
+    SAL_INFO( "vcl.cg", "CGContextDrawLayerInRect(" << xCopyContext << "," << aTargetRect << "," << sSourceLayerHolder.get() << ")" );
+    CGContextDrawLayerInRect(xCopyContext, aTargetRect, sSourceLayerHolder.get());
+
+    maContextHolder.restoreState();
 
     // cleanup
     if (sSourceLayerHolder.get() != maLayer.get())
