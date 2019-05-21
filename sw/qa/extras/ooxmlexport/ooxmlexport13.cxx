@@ -306,6 +306,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125298, "tdf125298_crossreflink_nonascii_charlim
     CPPUNIT_ASSERT_EQUAL(expectedFieldName2, fieldName2);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf121784, "tdf121784.docx")
+{
+    // check tracked insertion of footnotes
+    CPPUNIT_ASSERT_EQUAL( OUString( "Text1" ), getParagraph( 1 )->getString());
+    CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 1 ), 2 )->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(1), 2), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"),getProperty<OUString>(getRun(getParagraph(1), 2), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL( OUString( "1" ), getRun( getParagraph( 1 ), 3 )->getString());
+
+    // check tracked insertion of endnotes
+    CPPUNIT_ASSERT_EQUAL( OUString( "texti" ), getParagraph( 2 )->getString());
+    CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 2 ), 2 )->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 2), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"),getProperty<OUString>(getRun(getParagraph(2), 2), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL( OUString( "i" ), getRun( getParagraph( 2 ), 3 )->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
