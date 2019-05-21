@@ -124,6 +124,7 @@ certain functionality.
 @section cui
 
 @li @c cui.customize
+@li @c cui.customnotebookbar
 @li @c cui.dialogs
 @li @c cui.factory
 @li @c cui.options
