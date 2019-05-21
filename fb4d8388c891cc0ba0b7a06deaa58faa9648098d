@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_18570f05",
+        "filename": "include/unotools/mediadescriptor.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-21T06:31:09Z",
+      "side": 1,
+      "message": "there\u0027s no use of this, is there?  (in which case, why add it?)",
+      "revId": "fb4d8388c891cc0ba0b7a06deaa58faa9648098d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
