@@ -14,8 +14,7 @@
 #  pragma GCC visibility push (default)
 #endif
 
-#include <CLucene.h>
-#include <CLucene/analysis/LanguageBasedAnalyzer.h>
+#include <CLucene/clucene-config.h>
 
 #if defined(__GNUC__)
 #  pragma GCC visibility pop

@@ -11,14 +11,14 @@
 
 #include <rtl/string.hxx>
 #include <rtl/uri.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <o3tl/runtimetooustring.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
-#include <algorithm>
 #include <memory>
 
 #include "LuceneHelper.hxx"
+#include <CLucene.h>
+#include <CLucene/analysis/LanguageBasedAnalyzer.h>
 
 using namespace lucene::document;
 
