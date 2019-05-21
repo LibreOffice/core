@@ -451,6 +451,7 @@ namespace
         default:
             bRet = false;
         }
+        rArr.Resort();
         return bRet;
     }
 
@@ -669,6 +670,7 @@ namespace
         default:
             bRet = false;
         }
+        rArr.Resort();
         return bRet;
     }
 
@@ -705,7 +707,7 @@ namespace
         {
             for(SwRedlineTable::size_type o = n ; o < rArr.size(); ++o )
             {
-                SwRangeRedline* pTmp = rArr[ o ];
+                const SwRangeRedline* pTmp = rArr[ o ];
                 if( pTmp->HasMark() && pTmp->IsVisible() )
                 {
                     if( *pTmp->End() <= *pEnd )
@@ -1988,6 +1990,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
     }
     CHECK_REDLINE( *this )
 
+    mpRedlineTable->Resort();
+
     return (nullptr != pNewRedl)
         ? AppendResult::APPENDED
         : (bMerged ? AppendResult::MERGED : AppendResult::IGNORED);
@@ -2092,7 +2096,7 @@ void DocumentRedlineManager::CompressRedlines()
     for( SwRedlineTable::size_type n = 1; n < mpRedlineTable->size(); ++n )
     {
         SwRangeRedline* pPrev = (*mpRedlineTable)[ n-1 ],
-                    * pCur = (*mpRedlineTable)[ n ];
+                      * pCur = (*mpRedlineTable)[ n ];
         const SwPosition* pPrevStt = pPrev->Start(),
                         * pPrevEnd = pPrevStt == pPrev->GetPoint()
                             ? pPrev->GetMark() : pPrev->GetPoint();
@@ -2117,6 +2121,8 @@ void DocumentRedlineManager::CompressRedlines()
         }
     }
     CHECK_REDLINE( *this )
+
+    mpRedlineTable->Resort();
 
     // #TODO - add 'SwExtraRedlineTable' also ?
 }
@@ -2178,6 +2184,7 @@ bool DocumentRedlineManager::SplitRedline( const SwPaM& rRange )
         else if (*pEnd < *pRedlineStart)
             break;
     }
+    mpRedlineTable->Resort();
     return bChg;
 
     // #TODO - add 'SwExtraRedlineTable' also ?
@@ -2293,6 +2300,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
             break;
         }
     }
+    mpRedlineTable->Resort();
 
     if( bChg )
         m_rDoc.getIDocumentState().SetModified();
@@ -2410,7 +2418,7 @@ bool DocumentRedlineManager::AcceptRedline( SwRedlineTable::size_type nPos, bool
         (RedlineFlags::ShowMask & meRedlineFlags) )
       SetRedlineFlags( RedlineFlags::ShowInsert | RedlineFlags::ShowDelete | meRedlineFlags );
 
-    SwRangeRedline* pTmp = (*mpRedlineTable)[ nPos ];
+    const SwRangeRedline* pTmp = (*mpRedlineTable)[ nPos ];
     if( pTmp->HasMark() && pTmp->IsVisible() )
     {
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
@@ -2552,7 +2560,7 @@ bool DocumentRedlineManager::RejectRedline( SwRedlineTable::size_type nPos, bool
         (RedlineFlags::ShowMask & meRedlineFlags) )
       SetRedlineFlags( RedlineFlags::ShowInsert | RedlineFlags::ShowDelete | meRedlineFlags );
 
-    SwRangeRedline* pTmp = (*mpRedlineTable)[ nPos ];
+    const SwRangeRedline* pTmp = (*mpRedlineTable)[ nPos ];
     if( pTmp->HasMark() && pTmp->IsVisible() )
     {
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
@@ -3024,7 +3032,7 @@ void DocumentRedlineManager::FinalizeImport()
     // tdf#118699 fix numbering after deletion of numbered list items
     for( SwRedlineTable::size_type n = 0; n < mpRedlineTable->size(); ++n )
     {
-        SwRangeRedline* pRedl = (*mpRedlineTable)[ n ];
+        const SwRangeRedline* pRedl = (*mpRedlineTable)[ n ];
         if ( nsRedlineType_t::REDLINE_DELETE == pRedl->GetType() )
         {
             const SwPosition* pStt = pRedl->Start(),

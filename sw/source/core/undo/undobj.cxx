@@ -1388,7 +1388,7 @@ bool SwUndo::FillSaveData(
 
     const SwPosition* pStt = rRange.Start();
     const SwPosition* pEnd = rRange.End();
-    const SwRedlineTable& rTable = rRange.GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    SwRedlineTable& rTable = rRange.GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
     SwRedlineTable::size_type n = 0;
     rRange.GetDoc()->getIDocumentRedlineAccess().GetRedline( *pStt, &n );
     for ( ; n < rTable.size(); ++n )
@@ -1410,6 +1410,7 @@ bool SwUndo::FillSaveData(
     {
         rRange.GetDoc()->getIDocumentRedlineAccess().DeleteRedline( rRange, false, USHRT_MAX );
     }
+    rTable.Resort();
     return !rSData.empty();
 }
 
@@ -1420,7 +1421,7 @@ bool SwUndo::FillSaveDataForFormat(
     rSData.clear();
 
     const SwPosition *pStt = rRange.Start(), *pEnd = rRange.End();
-    const SwRedlineTable& rTable = rRange.GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    SwRedlineTable& rTable = rRange.GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
     SwRedlineTable::size_type n = 0;
     rRange.GetDoc()->getIDocumentRedlineAccess().GetRedline( *pStt, &n );
     for ( ; n < rTable.size(); ++n )

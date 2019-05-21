@@ -197,6 +197,7 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
                 ++n;
             }
         }
+        rTable.Resort();
 
         // To-Do - need to add here 'SwExtraRedlineTable' also ?
     }

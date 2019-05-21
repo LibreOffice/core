@@ -712,6 +712,7 @@ namespace
                 rArr.emplace_back( pCurrent, *pStart );
             }
         }
+        rRedlineTable.Resort();
 
         // restore old redline mode
         pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
@@ -811,6 +812,7 @@ namespace
                 break;
 
         } while( ++nRedlPos < pDoc->getIDocumentRedlineAccess().GetRedlineTable().size() );
+        rRedlTable.Resort();
         pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
 
@@ -2408,6 +2410,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
                 pEnd->nContent.Assign( pNewNd->GetContentNode(), 0 );
             }
         }
+        m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().Resort();
     }
 
     if( !aSaveRedl.empty() )
