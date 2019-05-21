@@ -384,6 +384,11 @@ void ScFilterDlg::SetActive()
 
 void ScFilterDlg::FillFieldLists()
 {
+    m_xLbField1->freeze();
+    m_xLbField2->freeze();
+    m_xLbField3->freeze();
+    m_xLbField4->freeze();
+
     m_xLbField1->clear();
     m_xLbField2->clear();
     m_xLbField3->clear();
@@ -415,6 +420,11 @@ void ScFilterDlg::FillFieldLists()
             m_xLbField4->append_text( aFieldName );
         }
     }
+
+    m_xLbField4->thaw();
+    m_xLbField3->thaw();
+    m_xLbField2->thaw();
+    m_xLbField1->thaw();
 }
 
 void ScFilterDlg::UpdateValueList( size_t nList )
@@ -491,12 +501,14 @@ void ScFilterDlg::UpdateValueList( size_t nList )
             else
                 pList = m_EntryLists[nColumn].get();
 
-            OSL_ASSERT(pList);
+            assert(pList);
 
+            pValList->freeze();
             for (const auto& rEntry : pList->maFilterEntries)
             {
                 pValList->append_text(rEntry.GetString());
             }
+            pValList->thaw();
         }
         pValList->set_entry_text(aCurValue);
     }
