@@ -1516,6 +1516,18 @@ void SvxGraphCtrlView::InvalidateOneWin(OutputDevice& rDevice, const tools::Rect
     SdrView::InvalidateOneWin(rDevice, rArea);
 }
 
+SvxGraphCtrlView::~SvxGraphCtrlView()
+{
+    // turn SetOutputToWindow back off again before
+    // turning back into our baseclass during dtoring
+    const sal_uInt32 nWindowCount(PaintWindowCount());
+    for (sal_uInt32 nWinNum(0); nWinNum < nWindowCount; nWinNum++)
+    {
+        SdrPaintWindow* pPaintWindow = GetPaintWindow(nWinNum);
+        pPaintWindow->SetOutputToWindow(false);
+    }
+}
+
 Point SvxGraphCtrl::GetPositionInDialog() const
 {
     int x, y, width, height;

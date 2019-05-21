@@ -261,6 +261,8 @@ public:
     {
     }
 
+    virtual ~SvxGraphCtrlView() override;
+
     // override these so we can get the occasions SdrPaintView would call Window::Invalidate on its vcl::Window
     // if it had one, and route to WidgetController::Invalidate instead
     virtual rtl::Reference<sdr::overlay::OverlayManager> CreateOverlayManager(OutputDevice& rDevice) const override;
