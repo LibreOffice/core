@@ -24,7 +24,6 @@
 # longer, server is temporarily not available) a fallback server is used.
 
 # The primary fallback site.
-# OOO_EXTRAS=http://ooo-extras.apache-extras.org.codespot.com/files/
 OOO_EXTRAS=https://sourceforge.net/projects/oooextras.mirror/files/
 
 
@@ -238,13 +237,13 @@ if (WITH_CATA_FONTS == YES)
 if (WITH_CATA_FONTS==YES)
     MD5 = 3c90ac73fd13bd79684d9dc073840328
     name = croscorefonts-1.31.0.tar.bz2
-    URL1 = http://gsdview.appspot.com/chromeos-localmirror/distfiles/$(name)
+    URL1 = https://gsdview.appspot.com/chromeos-localmirror/distfiles/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (WITH_CATA_FONTS==YES)
     MD5 = 368f114c078f94214a308a74c7e991bc
     name = crosextrafonts-20130214.tar.gz
-    URL1 = http://gsdview.appspot.com/chromeos-localmirror/distfiles/$(name)
+    URL1 = https://gsdview.appspot.com/chromeos-localmirror/distfiles/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if ( true )
@@ -279,7 +278,7 @@ if (ENABLE_CATEGORY_B==YES && SYSTEM_COINMP!=YES)
 if (WITH_CATB_FONTS==YES)
     MD5 = c74b7223abe75949b4af367942d96c7a
     name = crosextrafonts-carlito-20130920.tar.gz
-    URL1 = http://gsdview.appspot.com/chromeos-localmirror/distfiles/$(name)
+    URL1 = https://gsdview.appspot.com/chromeos-localmirror/distfiles/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (WITH_CATB_FONTS == YES)
