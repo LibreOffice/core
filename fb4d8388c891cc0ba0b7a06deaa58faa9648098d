@@ -16,6 +16,24 @@
       "revId": "fb4d8388c891cc0ba0b7a06deaa58faa9648098d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_58a117a9",
+        "filename": "include/unotools/mediadescriptor.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1001073
+      },
+      "writtenOn": "2019-05-21T09:04:06Z",
+      "side": 1,
+      "message": "all MediaDescriptor Props are listed here,\na usecase would be something like this:\nutl::MediaDescriptor::PROP_PICKLISTENTRY()...",
+      "parentUuid": "3fa0c359_18570f05",
+      "revId": "fb4d8388c891cc0ba0b7a06deaa58faa9648098d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
