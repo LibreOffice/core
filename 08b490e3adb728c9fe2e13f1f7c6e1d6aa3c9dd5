@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_18b86f74",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1584,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2019-05-21T13:36:53Z",
+      "side": 1,
+      "message": "I haven\u0027t checked but I believe it crashes here, so I would check if nRememberSize is greater than 0 here",
+      "revId": "08b490e3adb728c9fe2e13f1f7c6e1d6aa3c9dd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
