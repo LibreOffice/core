@@ -93,7 +93,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
-
 #include <dlgname.hxx>
 
 SvxToolbarConfigPage::SvxToolbarConfigPage(TabPageParent pParent, const SfxItemSet& rSet)
