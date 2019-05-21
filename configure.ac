@@ -1077,7 +1077,7 @@ AC_ARG_ENABLE(fuzzers,
 libo_FUZZ_ARG_ENABLE(pch,
     AS_HELP_STRING([--enable-pch=<yes/no/system/base/normal/full>],
         [Enables precompiled header support for C++. Forced default on Windows/VC build.
-         Using 'system' will include only external headers, 'basic' will add also headers
+         Using 'system' will include only external headers, 'base' will add also headers
          from base modules, 'normal' will also add all headers except from the module built,
          'full' will use all suitable headers even from a module itself.])
 )
