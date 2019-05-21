@@ -920,6 +920,9 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     // Make sure that all actual rendering happens in one go to avoid flicker.
     ScopedVclPtrInstance<VirtualDevice> pBuffer;
     pBuffer->SetOutputSizePixel(aOutputSize, false);
+    // Copy the current state to the buffer.
+    pBuffer->DrawOutDev(Point(0, 0), GetOutputSizePixel(), Point(0, 0), GetOutputSizePixel(),
+                        rRenderContext);
 
     if (rRenderContext.IsNativeControlSupported(ControlType::Menubar, ControlPart::Entire))
     {
@@ -963,6 +966,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
         pBuffer->Pop();
     }
 
+    // Copy the current state from the buffer.
     rRenderContext.DrawOutDev(Point(0, 0), GetOutputSizePixel(), Point(0, 0), GetOutputSizePixel(),
                               *pBuffer);
 }
