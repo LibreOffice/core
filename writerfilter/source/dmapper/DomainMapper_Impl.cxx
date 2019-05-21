@@ -2039,8 +2039,11 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xFootnoteText, uno::UNO_QUERY_THROW ),
                     xFootnoteText->createTextCursorByRange(xFootnoteText->getStart())));
 
-        // Redlines for the footnote anchor
+        // Redlines for the footnote anchor in the main text content
+        std::vector< RedlineParamsPtr > aFootnoteRedline = m_aRedlines.top();
+        m_aRedlines.pop();
         CheckRedline( xFootnote->getAnchor( ) );
+        m_aRedlines.push( aFootnoteRedline );
 
     }
     catch( const uno::Exception& )
