@@ -235,7 +235,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
         if( mrModel.mxLayout.get() )
         {
             LayoutConverter aLayoutConv( *this, *mrModel.mxLayout );
-            // manual size needs ChartLegendExpansion_CUSTOM and LegendPosition_CUSTOM (tdf#118150)
+            // manual size needs ChartLegendExpansion_CUSTOM
             if( aLayoutConv.convertFromModel( aPropSet ) )
             {
                 eLegendExpand = cssc::ChartLegendExpansion_CUSTOM;
