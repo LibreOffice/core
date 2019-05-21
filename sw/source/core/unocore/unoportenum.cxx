@@ -1082,14 +1082,15 @@ static void lcl_FillRedlineArray(
     if ( nRedTableCount > 0 )
     {
         const SwPosition* pStart = rUnoCursor.GetPoint();
-        const SwNodeIndex nOwnNode = pStart->nNode;
+        const SwNodeIndex & nOwnNode = pStart->nNode;
 
         for(size_t nRed = 0; nRed < nRedTableCount; ++nRed)
         {
             const SwRangeRedline* pRedline = rRedTable[nRed];
             const SwPosition* pRedStart = pRedline->Start();
-            const SwNodeIndex nRedNode = pRedStart->nNode;
-            if ( nOwnNode == nRedNode )
+            if (pRedStart->nNode > nOwnNode)
+                break;
+            if ( nOwnNode == pRedStart->nNode )
                 rRedArr.insert( std::make_shared<SwXRedlinePortion_Impl>(
                     pRedline, true ) );
             if( pRedline->HasMark() && pRedline->End()->nNode == nOwnNode )
