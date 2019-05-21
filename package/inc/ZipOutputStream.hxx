@@ -47,7 +47,7 @@ public:
         const css::uno::Reference< css::io::XOutputStream > &xOStream );
     ~ZipOutputStream();
 
-    void addDeflatingThread( ZipOutputEntry *pEntry, std::unique_ptr<comphelper::ThreadTask> pThreadTask );
+    void addDeflatingThreadTask( ZipOutputEntry *pEntry, std::unique_ptr<comphelper::ThreadTask> pThreadTask );
 
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
@@ -79,12 +79,12 @@ private:
     void writeEXT( const ZipEntry &rEntry );
 
     // ScheduledThread handling helpers
-    void consumeScheduledThreadEntry(std::unique_ptr<ZipOutputEntry> pCandidate);
-    void consumeFinishedScheduledThreadEntries();
+    void consumeScheduledThreadTaskEntry(std::unique_ptr<ZipOutputEntry> pCandidate);
+    void consumeFinishedScheduledThreadTaskEntries();
 
 public:
-    void reduceScheduledThreadsToGivenNumberOrLess(
-        sal_Int32 nThreads);
+    void reduceScheduledThreadTasksToGivenNumberOrLess(
+        sal_Int32 nThreadTasks);
 
     const std::shared_ptr<comphelper::ThreadTaskTag>& getThreadTaskTag() { return mpThreadTaskTag; }
 };

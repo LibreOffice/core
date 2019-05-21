@@ -36,8 +36,8 @@ class ZipPackageStream;
 
 class ZipOutputEntry
 {
-    // allow only DeflateThread to change m_bFinished using setFinished()
-    friend class DeflateThread;
+    // allow only DeflateThreadTask to change m_bFinished using setFinished()
+    friend class DeflateThreadTask;
 
     css::uno::Sequence< sal_Int8 > m_aDeflateBuffer;
     ZipUtils::Deflater m_aDeflater;
