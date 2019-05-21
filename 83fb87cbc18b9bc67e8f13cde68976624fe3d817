@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_f87343e6",
+        "filename": "sw/inc/redline.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-21T14:26:32Z",
+      "side": 1,
+      "message": "if you add members in a header you have to use DBGUTIL, not NDEBUG because NDEBUG and OSL_DEBUG_LEVEL must be allowed to vary between compilation units",
+      "revId": "83fb87cbc18b9bc67e8f13cde68976624fe3d817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_183b8feb",
+        "filename": "sw/source/core/doc/DocumentRedlineManager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2125,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-21T14:26:32Z",
+      "side": 1,
+      "message": "i\u0027d hope that merging them doesn\u0027t change the sort order?",
+      "revId": "83fb87cbc18b9bc67e8f13cde68976624fe3d817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_9880ff8d",
+        "filename": "sw/source/core/doc/doccorr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-21T14:26:32Z",
+      "side": 1,
+      "message": "i think this is unnecessary because it just sets positions to a new position - if the table was sorted before CorrAbs it should be sorted after CorrAbs too?",
+      "revId": "83fb87cbc18b9bc67e8f13cde68976624fe3d817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_d82447c9",
+        "filename": "sw/source/core/doc/docredln.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1590,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-21T14:26:32Z",
+      "side": 1,
+      "message": "this can\u0027t resort as it\u0027s called out of a loop over all redlines",
+      "revId": "83fb87cbc18b9bc67e8f13cde68976624fe3d817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_b82b7b92",
+        "filename": "sw/source/core/doc/docredln.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1729,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-21T14:26:32Z",
+      "side": 1,
+      "message": "same problem, called from a loop",
+      "revId": "83fb87cbc18b9bc67e8f13cde68976624fe3d817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_3840cb56",
+        "filename": "sw/source/core/undo/undobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1413,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-21T14:26:32Z",
+      "side": 1,
+      "message": "why here? you already added it to DeleteRedline()",
+      "revId": "83fb87cbc18b9bc67e8f13cde68976624fe3d817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
