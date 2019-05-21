@@ -221,9 +221,11 @@ namespace Item
         // helpers for reduction of template member implementations,
         // all based on typeid(<type>).hash_code()
         const ItemBase* implGetStateAndItem(size_t hash_code, IState& rIState, bool bSearchParent) const;
-        void implInvalidateItem(size_t hash_code, const ItemBase& rItemDefault);
-        void implDisableItem(size_t hash_code, const ItemBase& rItemDefault);
+        void implInvalidateItem(size_t hash_code);
+        void implDisableItem(size_t hash_code);
         bool implClearItem(size_t hash_code);
+        // ...or a given default
+        const ItemBase& implGetDefault(const ItemBase& rCurrent) const;
 
     protected:
         // constructor - protected BY DEFAULT - do NOT CHANGE (!)
@@ -262,27 +264,19 @@ namespace Item
         // on the fetched TypeID
         template< typename TItem > void invalidateItem()
         {
-            implInvalidateItem(typeid(TItem).hash_code(), Item::getDefault<TItem>());
+            implInvalidateItem(typeid(TItem).hash_code());
         }
 
         template< typename TItem > void disableItem()
         {
-            implDisableItem(typeid(TItem).hash_code(), Item::getDefault<TItem>());
+            implDisableItem(typeid(TItem).hash_code());
         }
 
         template< typename TItem > const TItem& getDefault() const
         {
-            // get static available default as instance
-            const TItem& rStaticDefault(Item::getDefault<TItem>());
-
-            if(m_aModelSpecificIValues)
-            {
-                // may use model-specific default, get from helper
-                // helper *will* fallback to ItemBase default
-                return static_cast<const TItem&>(m_aModelSpecificIValues->getDefault(rStaticDefault));
-            }
-
-            return rStaticDefault;
+            return static_cast<const TItem&>(
+                implGetDefault(
+                    Item::getDefault<TItem>()));
         }
 
         template< typename TItem > StateAndItem<TItem> getStateAndItem(bool bSearchParent = true) const

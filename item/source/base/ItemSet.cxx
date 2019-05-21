@@ -15,59 +15,39 @@
 
 namespace Item
 {
-    ItemControlBlock& getEmptyStaticItemControlBlock()
+    // single global static instance for helper class ImplInvalidateItem
+    static const ItemBase& getInvalidateItem()
     {
-        static ItemControlBlock aItemControlBlock;
-        return aItemControlBlock;
+        // helper class for an ImplInvalidateItem - placeholder for InvaidateState
+        // SfxItemState::DONTCARE -> IsInvalidItem -> pItem == INVALID_POOL_ITEM -> reinterpret_cast<SfxPoolItem*>(-1)
+        // the instance of this class is *never* returned in any way or helper data struture,
+        // but is *strictly* local. Thus also needs no 'static ItemControlBlock& GetStaticItemControlBlock()'
+        class ImplInvalidateItem : public ItemBase
+        {
+        public:
+            ImplInvalidateItem() : ItemBase(*ItemControlBlock::getItemControlBlock(0)) {}
+        };
+
+        static const ImplInvalidateItem aImplInvalidateItem;
+        return aImplInvalidateItem;
     }
 
-    // helper class for an ImplInvalidateItem - placeholder for InvaidateState
-    // SfxItemState::DONTCARE -> IsInvalidItem -> pItem == INVALID_POOL_ITEM -> reinterpret_cast<SfxPoolItem*>(-1)
-    // instances of this class are *never* returned in any way or helper data struture,
-    // but are *strictly* local. Thus also need no 'static ItemControlBlock& GetStaticItemControlBlock()' (for now)
-    class ImplInvalidateItem : public ItemBase
+    // single global static instance for helper class ImplDisableItem
+    static const ItemBase& getDisableItem()
     {
-    private:
-        const ItemBase& m_rItemDefault;
-
-    public:
-        ImplInvalidateItem(const ItemBase& rItemDefault)
-        :   ItemBase(getEmptyStaticItemControlBlock()),
-            m_rItemDefault(rItemDefault)
+        // helper class for a ImplDisableItem - placeholder for InvaidateState
+        // SfxItemState::DISABLED -> IsVoidItem() -> instance of SfxVoidItem, virtual bool IsVoidItem()
+        // the instance of this class is *never* returned in any way or helper data struture,
+        // but is *strictly* local. Thus also needs no 'static ItemControlBlock& GetStaticItemControlBlock()'
+        class ImplDisableItem : public ItemBase
         {
-        }
+        public:
+            ImplDisableItem() : ItemBase(*ItemControlBlock::getItemControlBlock(0)) {}
+        };
 
-        virtual bool isInvalidateItem() const override
-        {
-            return true;
-        }
-
-        const ItemBase& getItemDefault() const { return m_rItemDefault; }
-    };
-
-    // helper class for a ImplDisableItem - placeholder for InvaidateState
-    // SfxItemState::DISABLED -> IsVoidItem() -> instance of SfxVoidItem, virtual bool IsVoidItem()
-    // instances of this class are *never* returned in any way or helper data struture,
-    // but are *strictly* local. Thus also need no 'static ItemControlBlock& GetStaticItemControlBlock()' (for now)
-    class ImplDisableItem : public ItemBase
-    {
-    private:
-        const ItemBase& m_rItemDefault;
-
-    public:
-        ImplDisableItem(const ItemBase& rItemDefault)
-        :   ItemBase(getEmptyStaticItemControlBlock()),
-            m_rItemDefault(rItemDefault)
-        {
-        }
-
-        virtual bool isDisableItem() const override
-        {
-            return true;
-        }
-
-        const ItemBase& getItemDefault() const { return m_rItemDefault; }
-    };
+        static const ImplDisableItem aImplDisableItem;
+        return aImplDisableItem;
+    }
 
     const ItemBase* ItemSet::implGetStateAndItem(size_t hash_code, IState& rIState, bool bSearchParent) const
     {
@@ -77,18 +57,22 @@ namespace Item
         {
             assert(nullptr != aRetval->second && "empty const ItemBase* in ItemSet (!)");
 
-            if(aRetval->second->isInvalidateItem())
+            if(aRetval->second == &getInvalidateItem())
             {
                 // SfxItemState::DONTCARE
                 rIState = IState::DONTCARE;
-                return &static_cast<const ImplInvalidateItem*>(aRetval->second)->getItemDefault();
+                ItemControlBlock* pBlock(ItemControlBlock::getItemControlBlock(hash_code));
+                assert(nullptr != pBlock && "Could not find globally registered ItemControlBlock for given ItemType (!)");
+                return &implGetDefault(pBlock->getDefault());
             }
 
-            if(aRetval->second->isDisableItem())
+            if(aRetval->second == &getDisableItem())
             {
                 // SfxItemState::DISABLED
                 rIState = IState::DISABLED;
-                return &static_cast<const ImplDisableItem*>(aRetval->second)->getItemDefault();
+                ItemControlBlock* pBlock(ItemControlBlock::getItemControlBlock(hash_code));
+                assert(nullptr != pBlock && "Could not find globally registered ItemControlBlock for given ItemType (!)");
+                return &implGetDefault(pBlock->getDefault());
             }
 
             // SfxItemState::SET
@@ -108,33 +92,33 @@ namespace Item
         return nullptr;
     }
 
-    void ItemSet::implInvalidateItem(size_t hash_code, const ItemBase& rItemDefault)
+    void ItemSet::implInvalidateItem(size_t hash_code)
     {
         const auto aRetval(m_aItems.find(hash_code));
 
         if(aRetval == m_aItems.end())
         {
-            m_aItems[hash_code] = new ImplInvalidateItem(rItemDefault);
+            m_aItems[hash_code] = &getInvalidateItem();
         }
         else
         {
             delete aRetval->second;
-            aRetval->second = new ImplInvalidateItem(rItemDefault);
+            aRetval->second = &getInvalidateItem();
         }
     }
 
-    void ItemSet::implDisableItem(size_t hash_code, const ItemBase& rItemDefault)
+    void ItemSet::implDisableItem(size_t hash_code)
     {
         const auto aRetval(m_aItems.find(hash_code));
 
         if(aRetval == m_aItems.end())
         {
-            m_aItems[hash_code] = new ImplDisableItem(rItemDefault);
+            m_aItems[hash_code] = &getDisableItem();
         }
         else
         {
             delete aRetval->second;
-            aRetval->second = new ImplDisableItem(rItemDefault);
+            aRetval->second = &getDisableItem();
         }
     }
 
@@ -150,6 +134,18 @@ namespace Item
         }
 
         return false;
+    }
+
+    const ItemBase& ItemSet::implGetDefault(const ItemBase& rCurrent) const
+    {
+        if(m_aModelSpecificIValues)
+        {
+            // may use model-specific default, get from helper
+            // helper *will* fallback to ItemBase default
+            return m_aModelSpecificIValues->getDefault(rCurrent);
+        }
+
+        return rCurrent;
     }
 
     ItemSet::ItemSet(const ModelSpecificItemValues::SharedPtr& rModelSpecificIValues)
@@ -223,7 +219,7 @@ namespace Item
             assert(nullptr != candidate.second && "empty const ItemBase* not allowed (!)");
             const ItemBase* pNew(nullptr);
 
-            if(candidate.second->isInvalidateItem())
+            if(candidate.second == &getInvalidateItem())
             {
                 if(bDontCareToDefault)
                 {
@@ -233,13 +229,13 @@ namespace Item
                 else
                 {
                     // prepare SfxItemState::DONTCARE
-                    pNew = new ImplInvalidateItem(static_cast<const ImplInvalidateItem*>(candidate.second)->getItemDefault());
+                    pNew = &getInvalidateItem();
                 }
             }
-            else if(candidate.second->isDisableItem())
+            else if(candidate.second == &getDisableItem())
             {
                 // prepare SfxItemState::DISABLED
-                pNew = new ImplDisableItem(static_cast<const ImplDisableItem*>(candidate.second)->getItemDefault());
+                pNew = &getDisableItem();
             }
             else
             {
@@ -278,16 +274,20 @@ namespace Item
 
             for(const auto& candidate : m_aItems)
             {
-                if(candidate.second->isInvalidateItem())
+                if(candidate.second == &getInvalidateItem())
                 {
+                    ItemControlBlock* pBlock(ItemControlBlock::getItemControlBlock(candidate.first));
+                    assert(nullptr != pBlock && "Could not find globally registered ItemControlBlock for given ItemType (!)");
                     aRetval.push_back(std::pair<const ItemBase*, ItemSet::IState>(
-                        &static_cast<const ImplInvalidateItem*>(candidate.second)->getItemDefault(),
+                        &implGetDefault(pBlock->getDefault()),
                         IState::DONTCARE));
                 }
-                else if(candidate.second->isDisableItem())
+                else if(candidate.second == &getDisableItem())
                 {
+                    ItemControlBlock* pBlock(ItemControlBlock::getItemControlBlock(candidate.first));
+                    assert(nullptr != pBlock && "Could not find globally registered ItemControlBlock for given ItemType (!)");
                     aRetval.push_back(std::pair<const ItemBase*, ItemSet::IState>(
-                        &static_cast<const ImplDisableItem*>(candidate.second)->getItemDefault(),
+                        &implGetDefault(pBlock->getDefault()),
                         IState::DISABLED));
                 }
                 else
@@ -305,7 +305,7 @@ namespace Item
     std::vector<const ItemBase*> ItemSet::getItemsOfState(IState eIState) const
     {
         assert((IState::SET == eIState || IState::DISABLED == eIState || IState::DONTCARE == eIState)
-            && "only IStates SET/DISBALE/DONTCALE allowed (!)");
+            && "only IStates SET/DISBALE/DONTCARE allowed (!)");
         std::vector<const ItemBase*> aRetval;
 
         if(!m_aItems.empty())
@@ -314,13 +314,17 @@ namespace Item
 
             for(const auto& candidate : m_aItems)
             {
-                if(IState::DONTCARE == eIState && candidate.second->isInvalidateItem())
+                if(IState::DONTCARE == eIState && candidate.second == &getInvalidateItem())
                 {
-                    aRetval.push_back(&static_cast<const ImplInvalidateItem*>(candidate.second)->getItemDefault());
+                    ItemControlBlock* pBlock(ItemControlBlock::getItemControlBlock(candidate.first));
+                    assert(nullptr != pBlock && "Could not find globally registered ItemControlBlock for given ItemType (!)");
+                    aRetval.push_back(&implGetDefault(pBlock->getDefault()));
                 }
-                else if(IState::DISABLED == eIState && candidate.second->isDisableItem())
+                else if(IState::DISABLED == eIState && candidate.second == &getDisableItem())
                 {
-                    aRetval.push_back(&static_cast<const ImplDisableItem*>(candidate.second)->getItemDefault());
+                    ItemControlBlock* pBlock(ItemControlBlock::getItemControlBlock(candidate.first));
+                    assert(nullptr != pBlock && "Could not find globally registered ItemControlBlock for given ItemType (!)");
+                    aRetval.push_back(&implGetDefault(pBlock->getDefault()));
                 }
                 else if(IState::SET == eIState)
                 {
