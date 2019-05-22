@@ -178,7 +178,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/searchattrdialog \
 	cui/uiconfig/ui/searchformatdialog \
 	cui/uiconfig/ui/securityoptionsdialog \
-	cui/uiconfig/ui/select_persona_dialog \
 	cui/uiconfig/ui/selectpathdialog \
 	cui/uiconfig/ui/shadowtabpage \
 	cui/uiconfig/ui/showcoldialog \
