@@ -36,7 +36,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
-void SvxGraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, const tools::Rectangle& /*rOldBoundRect*/ )
+void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, const tools::Rectangle& /*rOldBoundRect*/ )
 {
     switch( eType )
     {
@@ -65,7 +65,7 @@ SvxGraphCtrl::SvxGraphCtrl(weld::Dialog* pDialog)
     , mbInIdleUpdate(false)
     , mpDialog(pDialog)
 {
-    pUserCall.reset(new SvxGraphCtrlUserCall( *this ));
+    pUserCall.reset(new GraphCtrlUserCall( *this ));
     aUpdateIdle.SetPriority( TaskPriority::LOWEST );
     aUpdateIdle.SetInvokeHandler( LINK( this, SvxGraphCtrl, UpdateHdl ) );
     aUpdateIdle.Start();
