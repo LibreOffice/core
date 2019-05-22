@@ -1,4 +1,5 @@
 --enable-dbgutil
 --enable-compiler-plugins
 COMPILER_PLUGINS_CXX=ccache g++ -std=c++11
+--enable-gtk3-kde5
 --enable-kde5
