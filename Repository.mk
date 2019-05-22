@@ -687,6 +687,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooobinaryta
 		instooofiltmsi \
 		inst_msu_msi \
 		qslnkmsi \
+		reg_dlls \
 		reg4allmsdoc \
 		sdqsmsi \
 		sellangmsi \
