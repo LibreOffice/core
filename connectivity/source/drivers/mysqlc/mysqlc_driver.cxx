@@ -114,7 +114,7 @@ MysqlCDriver::getPropertyInfo(const OUString& url, const Sequence<PropertyValue>
                                                  Sequence<OUString>()));
         aDriverInfo.push_back(
             DriverPropertyInfo("Port", "Port", true, "3306", Sequence<OUString>()));
-        return Sequence<DriverPropertyInfo>(&(aDriverInfo[0]), aDriverInfo.size());
+        return Sequence<DriverPropertyInfo>(aDriverInfo.data(), aDriverInfo.size());
     }
 
     return Sequence<DriverPropertyInfo>();

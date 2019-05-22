@@ -1406,7 +1406,7 @@ void Test::testSharedFormulaMoveBlock()
     aRows.push_back(0);
     aRows.push_back(1);
     aRows.push_back(2);
-    bool bRes = checkFormulaPositions(*m_pDoc, 0, 1, &aRows[0], aRows.size());
+    bool bRes = checkFormulaPositions(*m_pDoc, 0, 1, aRows.data(), aRows.size());
     CPPUNIT_ASSERT(bRes);
 
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();

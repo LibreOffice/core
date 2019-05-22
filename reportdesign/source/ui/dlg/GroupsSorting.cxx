@@ -249,7 +249,7 @@ uno::Sequence<uno::Any> OFieldExpressionControl::fillSelectedGroups()
             }
         }
         if ( !vClipboardList.empty() )
-            aList = uno::Sequence< uno::Any >(&vClipboardList[0], vClipboardList.size());
+            aList = uno::Sequence< uno::Any >(vClipboardList.data(), vClipboardList.size());
     }
     return aList;
 }

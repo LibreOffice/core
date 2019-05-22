@@ -70,7 +70,7 @@ namespace canvas
                    EntryComparator() );
 
         if( !maMapEntries.empty() )
-            mpMap.reset( new MapType(&maMapEntries[0],
+            mpMap.reset( new MapType(maMapEntries.data(),
                                      maMapEntries.size(),
                                      true) );
     }

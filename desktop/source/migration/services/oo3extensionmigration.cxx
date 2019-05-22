@@ -326,7 +326,7 @@ void OO3ExtensionMigration::initialize( const Sequence< Any >& aArguments )
             if ( (aValue.Value >>= aBlackList ) && ( aBlackList.getLength() > 0 ))
             {
                 m_aBlackList.resize( aBlackList.getLength() );
-                ::comphelper::sequenceToArray< OUString >( &m_aBlackList[0], aBlackList );
+                ::comphelper::sequenceToArray< OUString >( m_aBlackList.data(), aBlackList );
             }
         }
     }

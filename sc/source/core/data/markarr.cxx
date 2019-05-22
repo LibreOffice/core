@@ -504,7 +504,7 @@ void ScMarkArray::Intersect(const ScMarkArray& rOther)
     OSL_ENSURE(nSize > 0, "Unexpected case.");
 
     pData.reset(new ScMarkEntry[nSize]);
-    memcpy(pData.get(), &(aEntryArray[0]), nSize * sizeof(ScMarkEntry));
+    memcpy(pData.get(), aEntryArray.data(), nSize * sizeof(ScMarkEntry));
     nCount = nLimit = nSize;
 }
 

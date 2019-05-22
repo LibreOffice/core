@@ -213,7 +213,7 @@ bool IncomingRequest::execute_throw(
                                     css::uno::TypeDescription(
                                         mtd->pParams[j].pTypeRef).
                                     get()->nSize));
-                            p = &outBufs.back()[0];
+                            p = outBufs.back().data();
                         }
                         args.push_back(p);
                         if (mtd->pParams[j].bOut) {
@@ -234,8 +234,8 @@ bool IncomingRequest::execute_throw(
             uno_Any exc;
             uno_Any * pexc = &exc;
             (*object_.get()->pDispatcher)(
-                object_.get(), member_.get(), retBuf.empty() ? nullptr : &retBuf[0],
-                args.empty() ? nullptr : &args[0], &pexc);
+                object_.get(), member_.get(), retBuf.empty() ? nullptr : retBuf.data(),
+                args.empty() ? nullptr : args.data(), &pexc);
             isExc = pexc != nullptr;
             if (isExc) {
                 *returnValue = BinaryAny(
@@ -245,8 +245,8 @@ bool IncomingRequest::execute_throw(
                 uno_any_destruct(&exc, nullptr);
             } else {
                 if (!retBuf.empty()) {
-                    *returnValue = BinaryAny(retType, &retBuf[0]);
-                    uno_destructData(&retBuf[0], retType.get(), nullptr);
+                    *returnValue = BinaryAny(retType, retBuf.data());
+                    uno_destructData(retBuf.data(), retType.get(), nullptr);
                 }
                 if (!outArguments->empty()) {
                     assert(
@@ -268,7 +268,7 @@ bool IncomingRequest::execute_throw(
                         }
                         if (!mtd->pParams[k].bIn) {
                             uno_type_destructData(
-                                &(*j++)[0], mtd->pParams[k].pTypeRef, nullptr);
+                                (j++)->data(), mtd->pParams[k].pTypeRef, nullptr);
                         }
                     }
                     assert(i == outArguments->end());

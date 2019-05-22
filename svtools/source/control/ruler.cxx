@@ -2568,7 +2568,7 @@ void Ruler::SetBorders( sal_uInt32 aBorderArraySize, const RulerBorder* pBorderA
         else
         {
             sal_uInt32             i = aBorderArraySize;
-            const RulerBorder* pAry1 = &mpData->pBorders[0];
+            const RulerBorder* pAry1 = mpData->pBorders.data();
             const RulerBorder* pAry2 = pBorderArray;
             while ( i )
             {
@@ -2609,7 +2609,7 @@ void Ruler::SetIndents( sal_uInt32 aIndentArraySize, const RulerIndent* pIndentA
         else
         {
             sal_uInt32             i = aIndentArraySize;
-            const RulerIndent* pAry1 = &mpData->pIndents[0];
+            const RulerIndent* pAry1 = mpData->pIndents.data();
             const RulerIndent* pAry2 = pIndentArray;
             while ( i )
             {

@@ -301,7 +301,7 @@ bool PNGReaderImpl::ReadNextChunk()
                 nBytesRead += mrPNGStream.ReadBytes(&rPtr, mnChunkLen - nBytesRead);
             } while (nBytesRead < mnChunkLen && mrPNGStream.good());
 
-            nCRC32 = rtl_crc32( nCRC32, &rChunkData.aData[ 0 ], mnChunkLen );
+            nCRC32 = rtl_crc32( nCRC32, rChunkData.aData.data(), mnChunkLen );
             maDataIter = rChunkData.aData.begin();
         }
         sal_uInt32 nCheck(0);

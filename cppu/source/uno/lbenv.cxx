@@ -189,7 +189,7 @@ InterfaceEntry * ObjectEntry::find(
         OUString::unacquired( &pTypeDescr_->aBase.pTypeName );
     if ( type_name == "com.sun.star.uno.XInterface" )
     {
-        return &aInterfaces[ 0 ];
+        return aInterfaces.data();
     }
 
     std::size_t nSize = aInterfaces.size();

@@ -188,14 +188,14 @@ typereg::Reader getReader(RegistryKey & key, std::vector< char > * buffer) {
              + " of key " + key.getName()));
     }
     buffer->resize(static_cast< std::vector< char >::size_type >(size));
-    e = key.getValue("", &(*buffer)[0]);
+    e = key.getValue("", buffer->data());
     if (e != RegError::NO_ERROR) {
         throw FileFormatException(
             key.getRegistryName(),
             ("legacy format: cannot get binary value of key " + key.getName()
              + ": " + OUString::number(static_cast<int>(e))));
     }
-    typereg::Reader reader(&(*buffer)[0], size);
+    typereg::Reader reader(buffer->data(), size);
     if (!reader.isValid()) {
         throw FileFormatException(
             key.getRegistryName(),

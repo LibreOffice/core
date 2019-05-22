@@ -381,7 +381,7 @@ void XclExpString::WriteBufferToMem( sal_uInt8* pnMem ) const
             }
         }
         else
-            memcpy( pnMem, &maCharBuffer[ 0 ], mnLen );
+            memcpy( pnMem, maCharBuffer.data(), mnLen );
     }
 }
 

@@ -123,7 +123,7 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
                 ,aBoolean)
                 );
         return ::comphelper::concatSequences(OFileDriver::getPropertyInfo(url,info ),
-                                             Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size()));
+                                             Sequence< DriverPropertyInfo >(aDriverInfo.data(),aDriverInfo.size()));
     }
     ::connectivity::SharedResources aResources;
     const OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);

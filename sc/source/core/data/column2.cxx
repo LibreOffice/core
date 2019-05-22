@@ -2224,13 +2224,13 @@ struct CellBucket
         }
         else if (!maNumVals.empty())
         {
-            const double* p = &maNumVals[0];
+            const double* p = maNumVals.data();
             rMat.PutDouble(p, maNumVals.size(), nCol, mnNumValStart);
             reset();
         }
         else if (!maStrVals.empty())
         {
-            const svl::SharedString* p = &maStrVals[0];
+            const svl::SharedString* p = maStrVals.data();
             rMat.PutString(p, maStrVals.size(), nCol, mnStrValStart);
             reset();
         }
@@ -2309,7 +2309,7 @@ public:
                         aSSs.push_back(mpPool->intern(aStr));
                 }
 
-                const svl::SharedString* p = &aSSs[0];
+                const svl::SharedString* p = aSSs.data();
                 mrMat.PutString(p, nDataSize, mnMatCol, nMatRow);
             }
             break;

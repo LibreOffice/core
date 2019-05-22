@@ -256,7 +256,7 @@ Preedit_FeedbackToSAL ( const XIMFeedback* pfeedback, int nlength, std::vector<E
     if (nlength > 0 && nlength > sal::static_int_cast<int>(rSalAttr.size()) )
     {
         rSalAttr.reserve( nlength );
-        psalattr = &rSalAttr[0];
+        psalattr = rSalAttr.data();
     }
     else
         return nullptr;

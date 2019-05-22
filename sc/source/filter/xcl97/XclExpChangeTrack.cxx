@@ -407,7 +407,7 @@ XclExpXmlChTrHeader::XclExpXmlChTrHeader(
     if (rBuf.GetBufferCount())
     {
         maTabBuffer.resize(rBuf.GetBufferCount());
-        rBuf.GetBufferCopy(&maTabBuffer[0]);
+        rBuf.GetBufferCopy(maTabBuffer.data());
     }
 }
 

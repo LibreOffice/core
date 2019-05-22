@@ -130,7 +130,7 @@ static void writeBinaryBuffer( const OutputBuffer& rBuffer )
 
     // put buffer to stderr
     if( !rBuffer.empty() )
-        if( fwrite(&rBuffer[0], sizeof(char),
+        if( fwrite(rBuffer.data(), sizeof(char),
                    rBuffer.size(), g_binary_out) != static_cast<size_t>(rBuffer.size()) )
             exit(1); // error
 

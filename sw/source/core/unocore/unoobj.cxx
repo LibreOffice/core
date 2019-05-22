@@ -1820,7 +1820,7 @@ void SwUnoCursorHelper::SetPropertyValues(
     if (!aWhichPairs.empty())
     {
         aWhichPairs.push_back(0); // terminate
-        SfxItemSet aItemSet(pDoc->GetAttrPool(), &aWhichPairs[0]);
+        SfxItemSet aItemSet(pDoc->GetAttrPool(), aWhichPairs.data());
 
         // Fetch, overwrite, and re-set the attributes from the core
 

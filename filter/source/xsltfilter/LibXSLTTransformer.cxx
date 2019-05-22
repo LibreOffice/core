@@ -302,7 +302,7 @@ namespace XSLT
                 m_tcontext = tcontext;
             }
             oh->registercontext(m_tcontext);
-            xsltQuoteUserParams(m_tcontext, &params[0]);
+            xsltQuoteUserParams(m_tcontext, params.data());
             result = xsltApplyStylesheetUser(styleSheet, doc, nullptr, nullptr, nullptr,
                                              m_tcontext);
         }

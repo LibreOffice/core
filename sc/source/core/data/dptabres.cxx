@@ -2446,8 +2446,8 @@ void ScDPDataMember::UpdateRunningTotals(
                                                                     nColPos, rRunning );
                                 else
                                 {
-                                    const long* pRowSorted = &rRowSorted[0];
-                                    const long* pColSorted = &rColSorted[0];
+                                    const long* pRowSorted = rRowSorted.data();
+                                    const long* pColSorted = rColSorted.data();
                                     pRowSorted += nRowPos + 1; // including the reference dimension
                                     pSelectMember = pSelectDim->GetRowReferenceMember(
                                         nullptr, nullptr, pRowSorted, pColSorted);
@@ -2505,8 +2505,8 @@ void ScDPDataMember::UpdateRunningTotals(
                                 else
                                 {
                                     aRefItemPos.nBasePos = rRowVisible[nRowPos];    // without sort order applied
-                                    const long* pRowSorted = &rRowSorted[0];
-                                    const long* pColSorted = &rColSorted[0];
+                                    const long* pRowSorted = rRowSorted.data();
+                                    const long* pColSorted = rColSorted.data();
                                     pRowSorted += nRowPos + 1; // including the reference dimension
                                     pSelectMember = pSelectDim->GetRowReferenceMember(
                                         pRefPos, pRefName, pRowSorted, pColSorted);
@@ -3336,8 +3336,8 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember(
 {
     OSL_ENSURE( pRelativePos == nullptr || pName == nullptr, "can't use position and name" );
 
-    const long* pColIndexes = &rRunning.GetColSorted()[0];
-    const long* pRowIndexes = &rRunning.GetRowSorted()[0];
+    const long* pColIndexes = rRunning.GetColSorted().data();
+    const long* pRowIndexes = rRunning.GetRowSorted().data();
 
     // get own row member using all indexes
 

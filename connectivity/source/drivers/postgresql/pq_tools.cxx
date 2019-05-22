@@ -894,7 +894,7 @@ css::uno::Sequence< sal_Int32 > string2intarray( const OUString & str )
         } while( true );
         // vec is guaranteed non-empty
         assert(vec.size() > 0);
-        ret = css::uno::Sequence< sal_Int32 > ( &vec[0] , vec.size() );
+        ret = css::uno::Sequence< sal_Int32 > ( vec.data() , vec.size() );
     }
     return ret;
 }

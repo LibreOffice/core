@@ -594,7 +594,7 @@ void OP_SheetName123(LotusContext& rContext, SvStream& rStream, sal_uInt16 nLeng
 
     if (!sSheetName.empty())
     {
-        OUString aName(&sSheetName[0], strlen(&sSheetName[0]), rContext.eCharVon);
+        OUString aName(sSheetName.data(), strlen(sSheetName.data()), rContext.eCharVon);
         rContext.pDoc->RenameTab(nSheetNum, aName);
     }
 }

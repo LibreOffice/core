@@ -54,7 +54,7 @@ cppu::IPropertyArrayHelper& SAL_CALL PropertySetBase::getInfoHelper()
     if ( !m_pProperties )
     {
         OSL_ENSURE( !m_aProperties.empty(), "PropertySetBase::getInfoHelper: no registered properties!" );
-        m_pProperties.reset(new cppu::OPropertyArrayHelper( &m_aProperties[0], m_aProperties.size(), false ));
+        m_pProperties.reset(new cppu::OPropertyArrayHelper( m_aProperties.data(), m_aProperties.size(), false ));
     }
     return *m_pProperties;
 }

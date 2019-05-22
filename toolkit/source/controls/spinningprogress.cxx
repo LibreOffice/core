@@ -70,7 +70,7 @@ protected:
                 for ( size_t i=0; i < SAL_N_ELEMENTS(aImageSets); ++i )
                 {
                     const ::std::vector< OUString > aDefaultURLs( Throbber::getDefaultImageURLs( aImageSets[i] ) );
-                    const Sequence< OUString > aImageURLs( &aDefaultURLs[0], aDefaultURLs.size() );
+                    const Sequence< OUString > aImageURLs( aDefaultURLs.data(), aDefaultURLs.size() );
                     insertImageSet( i, aImageURLs );
                 }
             }

@@ -4227,7 +4227,7 @@ void Test::testCopyPasteRepeatOneFormula()
     CPPUNIT_ASSERT(pBASM);
     std::vector<sc::AreaListener> aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaInside);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aListeners.size());
-    const sc::AreaListener* pListener = &aListeners[0];
+    const sc::AreaListener* pListener = aListeners.data();
     CPPUNIT_ASSERT_EQUAL(ScRange(0,0,0,1,0,0), pListener->maArea);
     CPPUNIT_ASSERT_MESSAGE("This listener shouldn't be a group listener.", !pListener->mbGroupListening);
 #endif
@@ -4260,7 +4260,7 @@ void Test::testCopyPasteRepeatOneFormula()
     // a group listener listening on A1:B10.
     aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaInside);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aListeners.size());
-    pListener = &aListeners[0];
+    pListener = aListeners.data();
     CPPUNIT_ASSERT_EQUAL(ScRange(0,0,0,1,9,0), pListener->maArea);
     CPPUNIT_ASSERT_MESSAGE("This listener should be a group listener.", pListener->mbGroupListening);
 #endif
@@ -4278,7 +4278,7 @@ void Test::testCopyPasteRepeatOneFormula()
     // Make there we only have one group area listener listening on A2:B11.
     aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaInside);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aListeners.size());
-    pListener = &aListeners[0];
+    pListener = aListeners.data();
     CPPUNIT_ASSERT_EQUAL(ScRange(0,1,0,1,10,0), pListener->maArea);
     CPPUNIT_ASSERT_MESSAGE("This listener should be a group listener.", pListener->mbGroupListening);
 #endif
@@ -4305,7 +4305,7 @@ void Test::testCopyPasteRepeatOneFormula()
     // Check the group area listener again to make sure it's listening on A1:B10 once again.
     aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaInside);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aListeners.size());
-    pListener = &aListeners[0];
+    pListener = aListeners.data();
     CPPUNIT_ASSERT_EQUAL(ScRange(0,0,0,1,9,0), pListener->maArea);
     CPPUNIT_ASSERT_MESSAGE("This listener should be a group listener.", pListener->mbGroupListening);
 #endif
