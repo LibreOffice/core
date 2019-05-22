@@ -40,8 +40,8 @@ class SdVectorizeDlg : public weld::GenericDialogController
     Bitmap              aPreviewBmp;
     GDIMetaFile         aMtf;
 
-    SvxGraphCtrl m_aBmpWin;
-    SvxGraphCtrl m_aMtfWin;
+    GraphCtrl m_aBmpWin;
+    GraphCtrl m_aMtfWin;
 
     std::unique_ptr<weld::SpinButton> m_xNmLayers;
     std::unique_ptr<weld::MetricSpinButton> m_xMtReduce;

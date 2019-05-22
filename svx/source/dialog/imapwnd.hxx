@@ -81,7 +81,7 @@ public:
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 };
 
-class IMapWindow final : public SvxGraphCtrl
+class IMapWindow final : public GraphCtrl
 {
     NotifyInfo          aInfo;
     ImageMap            aIMap;
@@ -96,7 +96,7 @@ class IMapWindow final : public SvxGraphCtrl
 
     void                MenuSelectHdl(const OString& rId);
 
-    // SvxGraphCtrl
+    // GraphCtrl
     virtual bool        MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual void        SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual bool        ContextMenu(const CommandEvent& rCEvt) override;
