@@ -820,8 +820,12 @@ bool ZipPackageStream::saveChild(
             {
                 // tdf#89236 Encrypting in parallel does not work
                 bParallelDeflate = !bToBeEncrypted;
-                // Do not deflate small streams in a thread
+                // Do not deflate small streams in a thread. XSeekable's getLength()
+                // gives the full size, XInputStream's available() may not be
+                // the full size, but it appears that at this point it usually is.
                 if (xSeek.is() && xSeek->getLength() < 100000)
+                    bParallelDeflate = false;
+                else if (xStream->available() < 100000)
                     bParallelDeflate = false;
 
                 if (bParallelDeflate)

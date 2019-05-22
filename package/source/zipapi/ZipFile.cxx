@@ -524,7 +524,7 @@ bool ZipFile::hasValidPassword ( ZipEntry const & rEntry, const ::rtl::Reference
 
 namespace {
 
-class XBufferedStream : public cppu::WeakImplHelper<css::io::XInputStream>
+class XBufferedStream : public cppu::WeakImplHelper<css::io::XInputStream, css::io::XSeekable>
 {
     std::vector<sal_Int8> maBytes;
     size_t mnPos;
@@ -612,6 +612,21 @@ public:
 
     virtual void SAL_CALL closeInput() override
     {
+    }
+    // XSeekable
+    virtual void SAL_CALL seek( sal_Int64 location ) override
+    {
+        if ( location > sal_Int64(maBytes.size()) || location < 0 )
+            throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
+        mnPos = location;
+    }
+    virtual sal_Int64 SAL_CALL getPosition() override
+    {
+        return mnPos;
+    }
+    virtual sal_Int64 SAL_CALL getLength() override
+    {
+        return maBytes.size();
     }
 };
 
