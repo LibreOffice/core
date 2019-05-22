@@ -518,6 +518,22 @@ SwVbaDocument::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, con
     return SaveAs2000( FileName, FileFormat, LockComments, Password, AddToRecentFiles, WritePassword, ReadOnlyRecommended, EmbedTrueTypeFonts, SaveNativePictureFormat, SaveFormsData, SaveAsAOCELetter );
 }
 
+void SAL_CALL
+SwVbaDocument::SavePreviewPngAs( const uno::Any& FileName )
+{
+    OUString sFileName;
+    FileName >>= sFileName;
+    OUString sURL;
+    osl::FileBase::getFileURLFromSystemPath( sFileName, sURL );
+
+    uno::Sequence<  beans::PropertyValue > storeProps(1);
+    storeProps[0].Name = "FilterName" ;
+    storeProps[0].Value <<= OUString("writer_png_Export");
+
+    uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
+    xStor->storeToURL( sURL, storeProps );
+}
+
 uno::Any
 SwVbaDocument::getControlShape( const OUString& sName )
 {
