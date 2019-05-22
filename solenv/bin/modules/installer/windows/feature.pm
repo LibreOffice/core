@@ -125,13 +125,19 @@ sub get_feature_level
 
     my $level = "20";   # the default
 
-    my $localdefault = "";
-
-    if ( $onefeature->{'Default'} ) { $localdefault = $onefeature->{'Default'}; }
-
-    if ( $localdefault eq "NO" )    # explicitly set Default = "NO"
+    if ( $onefeature->{'Disabled'} )
     {
-        $level = "200";             # deselected in default installation, base is 100
+        if ( $onefeature->{'Disabled'} eq "YES" )    # Disabled = "YES"
+        {
+            $level = "0";               # disabled for installation at any INSTALLLEVEL
+        }
+    }
+    elsif ( $onefeature->{'Default'} )
+    {
+        if ( $onefeature->{'Default'} eq "NO" )    # explicitly set Default = "NO"
+        {
+            $level = "200";             # deselected in default installation, base is 100
+        }
     }
 
     return $level

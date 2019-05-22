@@ -22,5 +22,18 @@ Module gid_Module_Optional_SharePointSupport
     Files = (auto_spsuppfiles_ALL);
 End
 
+/*
+ * This is an *empty* feature disabled by default, that controls custom action registering
+ * SharePoint.OpenDocuments class, which replaces registration of that class from MSO
+ */
+Module gid_Module_SharePointSupport_SubstMSO
+    ParentID = gid_Module_Optional_SharePointSupport;
+    Name = "gid_Module_SharePointSupport_SubstMSO";
+    Description = "Registration of SharePoint.OpenDocuments class";
+    Sortkey = "1305";
+    Disabled = YES;
+    Styles = (HIDDEN_ROOT);
+End
+
 #endif
 
