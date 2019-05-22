@@ -1442,7 +1442,7 @@ const SwRedlineData* SwWW8AttrIter::GetParagraphLevelRedline( )
             // Maybe add here a check that also the start & end of the redline is the entire paragraph
 
             // Only return if this is a paragraph formatting redline
-            if (pRedl->GetType() == nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT)
+            if (pRedl->GetType() == RedlineType::ParagraphFormat)
             {
                 // write data of this redline
                 pCurRedline = pRedl;
@@ -1462,9 +1462,9 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
         {
             switch( pCurRedline->GetType() )
             {
-                case nsRedlineType_t::REDLINE_INSERT:
-                case nsRedlineType_t::REDLINE_DELETE:
-                case nsRedlineType_t::REDLINE_FORMAT:
+                case RedlineType::Insert:
+                case RedlineType::Delete:
+                case RedlineType::Format:
                     // write data of this redline
                     return &( pCurRedline->GetRedlineData() );
                     break;
@@ -1496,9 +1496,9 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
                 {
                         switch( pRedl->GetType() )
                         {
-                            case nsRedlineType_t::REDLINE_INSERT:
-                            case nsRedlineType_t::REDLINE_DELETE:
-                            case nsRedlineType_t::REDLINE_FORMAT:
+                            case RedlineType::Insert:
+                            case RedlineType::Delete:
+                            case RedlineType::Format:
                                 // write data of this redline
                                 pCurRedline = pRedl;
                                 return &( pCurRedline->GetRedlineData() );
@@ -1748,7 +1748,7 @@ static SwTextFormatColl& lcl_getFormatCollection( MSWordExportBase& rExport, con
                                     ? pRedl->GetMark()
                                     : pRedl->GetPoint();
         // Looking for deletions, which ends in current pTextNode
-        if( nsRedlineType_t::REDLINE_DELETE == pRedl->GetRedlineData().GetType() &&
+        if( RedlineType::Delete == pRedl->GetRedlineData().GetType() &&
             pEnd->nNode == *pTextNode && pStt->nNode != *pTextNode &&
             pStt->nNode.GetNode().IsTextNode() )
         {
@@ -2967,8 +2967,8 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         {
             aParagraphMarkerProperties.Put(*rNode.GetpSwAttrSet());
         }
-        const SwRedlineData* pRedlineParagraphMarkerDelete = AttrOutput().GetParagraphMarkerRedline( rNode, nsRedlineType_t::REDLINE_DELETE );
-        const SwRedlineData* pRedlineParagraphMarkerInsert = AttrOutput().GetParagraphMarkerRedline( rNode, nsRedlineType_t::REDLINE_INSERT );
+        const SwRedlineData* pRedlineParagraphMarkerDelete = AttrOutput().GetParagraphMarkerRedline( rNode, RedlineType::Delete );
+        const SwRedlineData* pRedlineParagraphMarkerInsert = AttrOutput().GetParagraphMarkerRedline( rNode, RedlineType::Insert );
         const SwRedlineData* pParagraphRedlineData = aAttrIter.GetParagraphLevelRedline( );
         AttrOutput().EndParagraphProperties(aParagraphMarkerProperties, pParagraphRedlineData, pRedlineParagraphMarkerDelete, pRedlineParagraphMarkerInsert);
 
@@ -3297,15 +3297,15 @@ void WW8AttributeOutput::Redline( const SwRedlineData* pRedline )
     const sal_uInt16* pSprmIds = nullptr;
     switch( pRedline->GetType() )
     {
-    case nsRedlineType_t::REDLINE_INSERT:
+    case RedlineType::Insert:
         pSprmIds = insSprmIds;
         break;
 
-    case nsRedlineType_t::REDLINE_DELETE:
+    case RedlineType::Delete:
         pSprmIds = delSprmIds;
         break;
 
-    case nsRedlineType_t::REDLINE_FORMAT:
+    case RedlineType::Format:
         m_rWW8Export.InsUInt16( NS_sprm::sprmCPropRMark90 );
         m_rWW8Export.pO->push_back( 7 );       // len
         m_rWW8Export.pO->push_back( 1 );

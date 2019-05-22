@@ -89,9 +89,9 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
                     const SwRangeRedline* pRedline = rIDRA.GetRedline( rAnchorPos, nullptr );
                     if( pRedline )
                     {
-                        if( nsRedlineType_t::REDLINE_INSERT == pRedline->GetType() )
+                        if( RedlineType::Insert == pRedline->GetType() )
                             aRet = INSERTED;
-                        else if( nsRedlineType_t::REDLINE_DELETE == pRedline->GetType() )
+                        else if( RedlineType::Delete == pRedline->GetType() )
                             aRet = DELETED;
                         o_rInfo.mRedlineAuthor = pRedline->GetAuthor();
                     }

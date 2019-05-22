@@ -149,14 +149,14 @@ lcl_MaskRedlines( const SwTextNode& rNode, OUStringBuffer& rText,
 
     const SwDoc& rDoc = *rNode.GetDoc();
 
-    for ( SwRedlineTable::size_type nAct = rDoc.getIDocumentRedlineAccess().GetRedlinePos( rNode, USHRT_MAX ); nAct < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); ++nAct )
+    for ( SwRedlineTable::size_type nAct = rDoc.getIDocumentRedlineAccess().GetRedlinePos( rNode, RedlineType::Any ); nAct < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); ++nAct )
     {
         const SwRangeRedline* pRed = rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nAct ];
 
         if ( pRed->Start()->nNode > rNode.GetIndex() )
             break;
 
-        if( nsRedlineType_t::REDLINE_DELETE == pRed->GetType() )
+        if( RedlineType::Delete == pRed->GetType() )
         {
             sal_Int32 nRedlineEnd;
             sal_Int32 nRedlineStart;

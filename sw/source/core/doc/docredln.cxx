@@ -134,7 +134,7 @@ static bool CheckPosition( const SwPosition* pStt, const SwPosition* pEnd )
 }
 #endif
 
-bool SwExtraRedlineTable::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rTable, bool bSaveInUndo, sal_uInt16 nRedlineTypeToDelete )
+bool SwExtraRedlineTable::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rTable, bool bSaveInUndo, RedlineType nRedlineTypeToDelete )
 {
     bool bChg = false;
 
@@ -164,10 +164,10 @@ bool SwExtraRedlineTable::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rT
             {
                 // Redline for this table
                 const SwRedlineData& aRedlineData = pTableCellRedline->GetRedlineData();
-                const RedlineType_t nRedlineType = aRedlineData.GetType();
+                const RedlineType nRedlineType = aRedlineData.GetType();
 
                 // Check if this redline object type should be deleted
-                if (USHRT_MAX == nRedlineTypeToDelete || nRedlineTypeToDelete == nRedlineType)
+                if (RedlineType::Any == nRedlineTypeToDelete || nRedlineTypeToDelete == nRedlineType)
                 {
 
                     DeleteAndDestroy( nCurRedlinePos );
@@ -188,10 +188,10 @@ bool SwExtraRedlineTable::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rT
                 {
                     // Redline for this table
                     const SwRedlineData& aRedlineData = pTableRowRedline->GetRedlineData();
-                    const RedlineType_t nRedlineType = aRedlineData.GetType();
+                    const RedlineType nRedlineType = aRedlineData.GetType();
 
                     // Check if this redline object type should be deleted
-                    if (USHRT_MAX == nRedlineTypeToDelete || nRedlineTypeToDelete == nRedlineType)
+                    if (RedlineType::Any == nRedlineTypeToDelete || nRedlineTypeToDelete == nRedlineType)
 
                     {
                         DeleteAndDestroy( nCurRedlinePos );
@@ -210,7 +210,7 @@ bool SwExtraRedlineTable::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rT
     return bChg;
 }
 
-bool SwExtraRedlineTable::DeleteTableRowRedline( SwDoc* pDoc, const SwTableLine& rTableLine, bool bSaveInUndo, sal_uInt16 nRedlineTypeToDelete )
+bool SwExtraRedlineTable::DeleteTableRowRedline( SwDoc* pDoc, const SwTableLine& rTableLine, bool bSaveInUndo, RedlineType nRedlineTypeToDelete )
 {
     bool bChg = false;
 
@@ -237,10 +237,10 @@ bool SwExtraRedlineTable::DeleteTableRowRedline( SwDoc* pDoc, const SwTableLine&
         {
             // Redline for this table row
             const SwRedlineData& aRedlineData = pTableRowRedline->GetRedlineData();
-            const RedlineType_t nRedlineType = aRedlineData.GetType();
+            const RedlineType nRedlineType = aRedlineData.GetType();
 
             // Check if this redline object type should be deleted
-            if( USHRT_MAX != nRedlineTypeToDelete && nRedlineTypeToDelete != nRedlineType )
+            if( RedlineType::Any != nRedlineTypeToDelete && nRedlineTypeToDelete != nRedlineType )
                 continue;
 
             DeleteAndDestroy( nCurRedlinePos );
@@ -254,7 +254,7 @@ bool SwExtraRedlineTable::DeleteTableRowRedline( SwDoc* pDoc, const SwTableLine&
     return bChg;
 }
 
-bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox& rTableBox, bool bSaveInUndo, sal_uInt16 nRedlineTypeToDelete )
+bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox& rTableBox, bool bSaveInUndo, RedlineType nRedlineTypeToDelete )
 {
     bool bChg = false;
 
@@ -281,10 +281,10 @@ bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox&
         {
             // Redline for this table cell
             const SwRedlineData& aRedlineData = pTableCellRedline->GetRedlineData();
-            const RedlineType_t nRedlineType = aRedlineData.GetType();
+            const RedlineType nRedlineType = aRedlineData.GetType();
 
             // Check if this redline object type should be deleted
-            if( USHRT_MAX != nRedlineTypeToDelete && nRedlineTypeToDelete != nRedlineType )
+            if( RedlineType::Any != nRedlineTypeToDelete && nRedlineTypeToDelete != nRedlineType )
                 continue;
 
             DeleteAndDestroy( nCurRedlinePos );
@@ -362,7 +362,7 @@ void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRe
                              (nType == RedlineNotification::Modify ? "Modify" : "???"))));
     aRedline.put("index", pRedline->GetId());
     aRedline.put("author", pRedline->GetAuthorString(1).toUtf8().getStr());
-    aRedline.put("type", nsRedlineType_t::SwRedlineTypeToOUString(pRedline->GetRedlineData().GetType()).toUtf8().getStr());
+    aRedline.put("type", SwRedlineTypeToOUString(pRedline->GetRedlineData().GetType()).toUtf8().getStr());
     aRedline.put("comment", pRedline->GetRedlineData().GetComment().toUtf8().getStr());
     aRedline.put("description", pRedline->GetDescr().toUtf8().getStr());
     OUString sDateTime = utl::toISO8601(pRedline->GetRedlineData().GetTimeStamp().GetUNODateTime());
@@ -935,7 +935,7 @@ bool SwRedlineExtraData_FormattingChanges::operator == ( const SwRedlineExtraDat
     return false;
 }
 
-SwRedlineData::SwRedlineData( RedlineType_t eT, std::size_t nAut )
+SwRedlineData::SwRedlineData( RedlineType eT, std::size_t nAut )
     : m_pNext( nullptr ), m_pExtraData( nullptr ),
     m_aStamp( DateTime::SYSTEM ),
     m_eType( eT ), m_nAuthor( nAut ), m_nSeqNo( 0 )
@@ -957,7 +957,7 @@ SwRedlineData::SwRedlineData(
 }
 
 // For sw3io: We now own pNext!
-SwRedlineData::SwRedlineData(RedlineType_t eT, std::size_t nAut, const DateTime& rDT,
+SwRedlineData::SwRedlineData(RedlineType eT, std::size_t nAut, const DateTime& rDT,
     const OUString& rCmnt, SwRedlineData *pNxt)
     : m_pNext(pNxt), m_pExtraData(nullptr), m_sComment(rCmnt), m_aStamp(rDT),
     m_eType(eT), m_nAuthor(nAut), m_nSeqNo(0)
@@ -1017,12 +1017,12 @@ static const char* STR_REDLINE_ARY[] =
 
 OUString SwRedlineData::GetDescr() const
 {
-    return SwResId(STR_REDLINE_ARY[GetType()]);
+    return SwResId(STR_REDLINE_ARY[static_cast<int>(GetType())]);
 }
 
 sal_uInt32 SwRangeRedline::m_nLastId = 1;
 
-SwRangeRedline::SwRangeRedline(RedlineType_t eTyp, const SwPaM& rPam )
+SwRangeRedline::SwRangeRedline(RedlineType eTyp, const SwPaM& rPam )
     : SwPaM( *rPam.GetMark(), *rPam.GetPoint() ),
     m_pRedlineData( new SwRedlineData( eTyp, GetDoc()->getIDocumentRedlineAccess().GetRedlineAuthor() ) ),
     m_pContentSect( nullptr ),
@@ -1162,18 +1162,18 @@ void SwRangeRedline::Show(sal_uInt16 nLoop, size_t nMyPos)
 
         switch( GetType() )
         {
-        case nsRedlineType_t::REDLINE_INSERT:           // Content has been inserted
+        case RedlineType::Insert:           // Content has been inserted
             m_bIsVisible = true;
             MoveFromSection(nMyPos);
             break;
 
-        case nsRedlineType_t::REDLINE_DELETE:           // Content has been deleted
+        case RedlineType::Delete:           // Content has been deleted
             m_bIsVisible = true;
             MoveFromSection(nMyPos);
             break;
 
-        case nsRedlineType_t::REDLINE_FORMAT:           // Attributes have been applied
-        case nsRedlineType_t::REDLINE_TABLE:            // Table structure has been modified
+        case RedlineType::Format:           // Attributes have been applied
+        case RedlineType::Table:            // Table structure has been modified
             InvalidateRange(Invalidation::Add);
             break;
         default:
@@ -1192,13 +1192,13 @@ void SwRangeRedline::Hide(sal_uInt16 nLoop, size_t nMyPos)
 
     switch( GetType() )
     {
-    case nsRedlineType_t::REDLINE_INSERT:           // Content has been inserted
+    case RedlineType::Insert:           // Content has been inserted
         m_bIsVisible = true;
         if( 1 <= nLoop )
             MoveFromSection(nMyPos);
         break;
 
-    case nsRedlineType_t::REDLINE_DELETE:           // Content has been deleted
+    case RedlineType::Delete:           // Content has been deleted
         m_bIsVisible = false;
         switch( nLoop )
         {
@@ -1208,8 +1208,8 @@ void SwRangeRedline::Hide(sal_uInt16 nLoop, size_t nMyPos)
         }
         break;
 
-    case nsRedlineType_t::REDLINE_FORMAT:           // Attributes have been applied
-    case nsRedlineType_t::REDLINE_TABLE:            // Table structure has been modified
+    case RedlineType::Format:           // Attributes have been applied
+    case RedlineType::Table:            // Table structure has been modified
         if( 1 <= nLoop )
             InvalidateRange(Invalidation::Remove);
         break;
@@ -1234,7 +1234,7 @@ void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos)
 
     switch( pCur->m_eType )
     {
-    case nsRedlineType_t::REDLINE_INSERT:           // Content has been inserted
+    case RedlineType::Insert:           // Content has been inserted
         m_bIsVisible = false;
         switch( nLoop )
         {
@@ -1244,14 +1244,14 @@ void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos)
         }
         break;
 
-    case nsRedlineType_t::REDLINE_DELETE:           // Content has been deleted
+    case RedlineType::Delete:           // Content has been deleted
         m_bIsVisible = true;
         if( 1 <= nLoop )
             MoveFromSection(nMyPos);
         break;
 
-    case nsRedlineType_t::REDLINE_FORMAT:           // Attributes have been applied
-    case nsRedlineType_t::REDLINE_TABLE:            // Table structure has been modified
+    case RedlineType::Format:           // Attributes have been applied
+    case RedlineType::Table:            // Table structure has been modified
         if( 1 <= nLoop )
             InvalidateRange(Invalidation::Remove);
         break;
@@ -1292,7 +1292,7 @@ void SwRangeRedline::InvalidateRange(Invalidation const eWhy)
             pNd->ModifyNotification(&aHt, &aHt);
 
             // SwUpdateAttr must be handled first, otherwise indexes are off
-            if (GetType() == nsRedlineType_t::REDLINE_DELETE)
+            if (GetType() == RedlineType::Delete)
             {
                 sal_Int32 const nStart(n == nSttNd ? nSttCnt : 0);
                 sal_Int32 const nLen((n == nEndNd ? nEndCnt : pNd->GetText().getLength()) - nStart);
@@ -1776,7 +1776,7 @@ const DateTime& SwRangeRedline::GetTimeStamp( sal_uInt16 nPos ) const
     return GetRedlineData(nPos).m_aStamp;
 }
 
-RedlineType_t SwRangeRedline::GetRealType( sal_uInt16 nPos ) const
+RedlineType SwRangeRedline::GetType( sal_uInt16 nPos ) const
 {
     return GetRedlineData(nPos).m_eType;
 }
@@ -1870,13 +1870,13 @@ void SwRangeRedline::dumpAsXml(xmlTextWriterPtr pWriter) const
     OString sRedlineType;
     switch (GetType())
     {
-        case nsRedlineType_t::REDLINE_INSERT:
+        case RedlineType::Insert:
             sRedlineType = "REDLINE_INSERT";
             break;
-        case nsRedlineType_t::REDLINE_DELETE:
+        case RedlineType::Delete:
             sRedlineType = "REDLINE_DELETE";
             break;
-        case nsRedlineType_t::REDLINE_FORMAT:
+        case RedlineType::Format:
             sRedlineType = "REDLINE_FORMAT";
             break;
         default:

@@ -61,7 +61,7 @@ namespace {
         }
 
         const SwRedlineTable::size_type nIdxOfFirstRedlineForTextNode =
-                    rIDocChangeTrack.GetRedlinePos( rTextNode, USHRT_MAX );
+                    rIDocChangeTrack.GetRedlinePos( rTextNode, RedlineType::Any );
         if ( nIdxOfFirstRedlineForTextNode == SwRedlineTable::npos )
         {
             // nothing to do --> empty change track text markup lists.
@@ -105,17 +105,17 @@ namespace {
             SwWrongList* pMarkupList( nullptr );
             switch ( pActRedline->GetType() )
             {
-                case nsRedlineType_t::REDLINE_INSERT:
+                case RedlineType::Insert:
                 {
                     pMarkupList = opChangeTrackInsertionTextMarkupList.get();
                 }
                 break;
-                case nsRedlineType_t::REDLINE_DELETE:
+                case RedlineType::Delete:
                 {
                     pMarkupList = opChangeTrackDeletionTextMarkupList.get();
                 }
                 break;
-                case nsRedlineType_t::REDLINE_FORMAT:
+                case RedlineType::Format:
                 {
                     pMarkupList = opChangeTrackFormatChangeTextMarkupList.get();
                 }

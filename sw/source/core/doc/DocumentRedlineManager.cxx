@@ -313,8 +313,8 @@ namespace
 
         switch( pRedl->GetType() )
         {
-        case nsRedlineType_t::REDLINE_INSERT:
-        case nsRedlineType_t::REDLINE_FORMAT:
+        case RedlineType::Insert:
+        case RedlineType::Format:
             {
                 bool bCheck = false, bReplace = false;
                 switch( eCmp )
@@ -363,7 +363,7 @@ namespace
                 }
             }
             break;
-        case nsRedlineType_t::REDLINE_DELETE:
+        case RedlineType::Delete:
             {
                 SwDoc& rDoc = *pRedl->GetDoc();
                 const SwPosition *pDelStt = nullptr, *pDelEnd = nullptr;
@@ -440,11 +440,11 @@ namespace
             }
             break;
 
-        case nsRedlineType_t::REDLINE_FMTCOLL:
+        case RedlineType::FmtColl:
             rArr.DeleteAndDestroy( rPos-- );
             break;
 
-        case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT:
+        case RedlineType::ParagraphFormat:
             rArr.DeleteAndDestroy( rPos-- );
             break;
 
@@ -475,7 +475,7 @@ namespace
 
         switch( pRedl->GetType() )
         {
-        case nsRedlineType_t::REDLINE_INSERT:
+        case RedlineType::Insert:
             {
                 const SwPosition *pDelStt = nullptr, *pDelEnd = nullptr;
                 bool bDelRedl = false;
@@ -551,7 +551,7 @@ namespace
                     delete pRedl;
             }
             break;
-        case nsRedlineType_t::REDLINE_DELETE:
+        case RedlineType::Delete:
             {
                 SwRangeRedline* pNew = nullptr;
                 bool bCheck = false, bReplace = false;
@@ -645,8 +645,8 @@ namespace
             }
             break;
 
-        case nsRedlineType_t::REDLINE_FORMAT:
-        case nsRedlineType_t::REDLINE_FMTCOLL:
+        case RedlineType::Format:
+        case RedlineType::FmtColl:
             {
                 if( pRedl->GetExtraData() )
                     pRedl->GetExtraData()->Reject( *pRedl );
@@ -656,7 +656,7 @@ namespace
                 // original state of the text (FIXME if the original text
                 // has already contained direct text formatting: unfortunately
                 // ODF 1.2 doesn't support rejection of format-only changes)
-                if ( pRedl->GetType() == nsRedlineType_t::REDLINE_FORMAT )
+                if ( pRedl->GetType() == RedlineType::Format )
                 {
                     SwPaM aPam( *(pRedl->Start()), *(pRedl->End()) );
                     rArr.DeleteAndDestroy( rPos-- );
@@ -710,7 +710,7 @@ namespace
                 {
                     if( *pTmp->End() <= *pEnd )
                     {
-                        if( (m > 0 || nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT == pTmp->GetType()) &&
+                        if( (m > 0 || RedlineType::ParagraphFormat == pTmp->GetType()) &&
                             (*fn_AcceptReject)( rArr, o, bCallDelete, nullptr, nullptr ))
                         {
                             bHasParagraphFormatChange = true;
@@ -722,7 +722,7 @@ namespace
                         if( *pTmp->Start() < *pEnd )
                         {
                             // Only revoke the partial selection
-                            if( (m > 0 || nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT == pTmp->GetType()) &&
+                            if( (m > 0 || RedlineType::ParagraphFormat == pTmp->GetType()) &&
                                 (*fn_AcceptReject)( rArr, o, bCallDelete, pStt, pEnd ))
                             {
                                 bHasParagraphFormatChange = true;
@@ -1001,7 +1001,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
 
         if( m_rDoc.IsAutoFormatRedline() )
         {
-            pNewRedl->SetAutoFormatFlag();
+            pNewRedl->SetAutoFormat();
             if( mpAutoFormatRedlnComment && !mpAutoFormatRedlnComment->isEmpty() )
             {
                 pNewRedl->SetComment( *mpAutoFormatRedlnComment );
@@ -1082,10 +1082,10 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
 
             switch( pNewRedl->GetType() )
             {
-            case nsRedlineType_t::REDLINE_INSERT:
+            case RedlineType::Insert:
                 switch( pRedl->GetType() )
                 {
-                case nsRedlineType_t::REDLINE_INSERT:
+                case RedlineType::Insert:
                     if( pRedl->IsOwnRedline( *pNewRedl ) )
                     {
                         bool bDelete = false;
@@ -1222,7 +1222,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         }
                     }
                     break;
-                case nsRedlineType_t::REDLINE_DELETE:
+                case RedlineType::Delete:
                     if( SwComparePosition::Inside == eCmpPos )
                     {
                         // split up
@@ -1276,7 +1276,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         pNewRedl->SetStart( *pREnd );
                     }
                     break;
-                case nsRedlineType_t::REDLINE_FORMAT:
+                case RedlineType::Format:
                     switch( eCmpPos )
                     {
                     case SwComparePosition::OverlapBefore:
@@ -1333,10 +1333,10 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                 }
                 break;
 
-            case nsRedlineType_t::REDLINE_DELETE:
+            case RedlineType::Delete:
                 switch( pRedl->GetType() )
                 {
-                case nsRedlineType_t::REDLINE_DELETE:
+                case RedlineType::Delete:
                     switch( eCmpPos )
                     {
                     case SwComparePosition::Outside:
@@ -1436,7 +1436,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     }
                     break;
 
-                case nsRedlineType_t::REDLINE_INSERT:
+                case RedlineType::Insert:
                 {
                     // b62341295: Do not throw away redlines
                     // even if they are not allowed to be combined
@@ -1709,7 +1709,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                 }
                 break;
 
-                case nsRedlineType_t::REDLINE_FORMAT:
+                case RedlineType::Format:
                     switch( eCmpPos )
                     {
                     case SwComparePosition::OverlapBefore:
@@ -1762,11 +1762,11 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                 }
                 break;
 
-            case nsRedlineType_t::REDLINE_FORMAT:
+            case RedlineType::Format:
                 switch( pRedl->GetType() )
                 {
-                case nsRedlineType_t::REDLINE_INSERT:
-                case nsRedlineType_t::REDLINE_DELETE:
+                case RedlineType::Insert:
+                case RedlineType::Delete:
                     switch( eCmpPos )
                     {
                     case SwComparePosition::OverlapBefore:
@@ -1805,7 +1805,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         break;
                     }
                     break;
-                case nsRedlineType_t::REDLINE_FORMAT:
+                case RedlineType::Format:
                     switch( eCmpPos )
                     {
                     case SwComparePosition::Outside:
@@ -1905,7 +1905,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                 }
                 break;
 
-            case nsRedlineType_t::REDLINE_FMTCOLL:
+            case RedlineType::FmtColl:
                 // How should we behave here?
                 // insert as is
                 break;
@@ -1924,7 +1924,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
             }
             else
             {
-                if ( bCallDelete && nsRedlineType_t::REDLINE_DELETE == pNewRedl->GetType() )
+                if ( bCallDelete && RedlineType::Delete == pNewRedl->GetType() )
                 {
                     if ( pStt->nContent == 0 )
                     {
@@ -1974,7 +1974,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
     }
     else
     {
-        if( bCallDelete && nsRedlineType_t::REDLINE_DELETE == pNewRedl->GetType() )
+        if( bCallDelete && RedlineType::Delete == pNewRedl->GetType() )
         {
             RedlineFlags eOld = meRedlineFlags;
             // Set to NONE, so that the Delete::Redo merges the Redline data correctly!
@@ -2015,7 +2015,7 @@ bool DocumentRedlineManager::AppendTableRowRedline( SwTableRowRedline* pNewRedl,
     {
         // TO DO - equivalent for 'SwTableRowRedline'
         /*
-        if( bCallDelete && nsRedlineType_t::REDLINE_DELETE == pNewRedl->GetType() )
+        if( bCallDelete && RedlineType::Delete == pNewRedl->GetType() )
         {
             RedlineFlags eOld = meRedlineFlags;
             // Set to NONE, so that the Delete::Redo merges the Redline data correctly!
@@ -2057,7 +2057,7 @@ bool DocumentRedlineManager::AppendTableCellRedline( SwTableCellRedline* pNewRed
     {
         // TO DO - equivalent for 'SwTableCellRedline'
         /*
-        if( bCallDelete && nsRedlineType_t::REDLINE_DELETE == pNewRedl->GetType() )
+        if( bCallDelete && RedlineType::Delete == pNewRedl->GetType() )
         {
             RedlineFlags eOld = meRedlineFlags;
             // Set to NONE, so that the Delete::Redo merges the Redline data correctly!
@@ -2184,7 +2184,7 @@ bool DocumentRedlineManager::SplitRedline( const SwPaM& rRange )
 }
 
 bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUndo,
-                            sal_uInt16 nDelType )
+                            RedlineType nDelType )
 {
     if( !rRange.HasMark() || *rRange.GetMark() == *rRange.GetPoint() )
         return false;
@@ -2208,7 +2208,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
     for( ; n < mpRedlineTable->size() ; ++n )
     {
         SwRangeRedline* pRedl = (*mpRedlineTable)[ n ];
-        if( USHRT_MAX != nDelType && nDelType != pRedl->GetType() )
+        if( RedlineType::Any != nDelType && nDelType != pRedl->GetType() )
             continue;
 
         SwPosition* pRStt = pRedl->Start(),
@@ -2303,13 +2303,13 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
 }
 
 bool DocumentRedlineManager::DeleteRedline( const SwStartNode& rNode, bool bSaveInUndo,
-                            sal_uInt16 nDelType )
+                            RedlineType nDelType )
 {
     SwPaM aTemp(*rNode.EndOfSectionNode(), rNode);
     return DeleteRedline(aTemp, bSaveInUndo, nDelType);
 }
 
-SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& rNd, sal_uInt16 nType ) const
+SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& rNd, RedlineType nType ) const
 {
     const sal_uLong nNdIdx = rNd.GetIndex();
     for( SwRedlineTable::size_type n = 0; n < mpRedlineTable->size() ; ++n )
@@ -2319,7 +2319,7 @@ SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& r
               nMk = pTmp->GetMark()->nNode.GetIndex();
         if( nPt < nMk ) { long nTmp = nMk; nMk = nPt; nPt = nTmp; }
 
-        if( ( USHRT_MAX == nType || nType == pTmp->GetType()) &&
+        if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
             nMk <= nNdIdx && nNdIdx <= nPt )
             return n;
 
@@ -2360,18 +2360,18 @@ const SwRangeRedline* DocumentRedlineManager::GetRedline( const SwPosition& rPos
                 // show insert change first.
                 // since the redlines are sorted by position, only check the redline
                 // before and after the current redline
-                if( nsRedlineType_t::REDLINE_FORMAT == pRedl->GetType() )
+                if( RedlineType::Format == pRedl->GetType() )
                 {
                     if( nM && rPos >= *(*mpRedlineTable)[ nM - 1 ]->Start() &&
                         rPos <= *(*mpRedlineTable)[ nM - 1 ]->End() &&
-                        ( nsRedlineType_t::REDLINE_INSERT == (*mpRedlineTable)[ nM - 1 ]->GetType() ) )
+                        ( RedlineType::Insert == (*mpRedlineTable)[ nM - 1 ]->GetType() ) )
                     {
                         --nM;
                         pRedl = (*mpRedlineTable)[ nM ];
                     }
                     else if( ( nM + 1 ) <= nO && rPos >= *(*mpRedlineTable)[ nM + 1 ]->Start() &&
                         rPos <= *(*mpRedlineTable)[ nM + 1 ]->End() &&
-                        ( nsRedlineType_t::REDLINE_INSERT == (*mpRedlineTable)[ nM + 1 ]->GetType() ) )
+                        ( RedlineType::Insert == (*mpRedlineTable)[ nM + 1 ]->GetType() ) )
                     {
                         ++nM;
                         pRedl = (*mpRedlineTable)[ nM ];
@@ -2534,7 +2534,7 @@ void DocumentRedlineManager::AcceptRedlineParagraphFormatting( const SwPaM &rPam
               nMk = pTmp->GetMark()->nNode.GetIndex();
         if( nPt < nMk ) { long nTmp = nMk; nMk = nPt; nPt = nTmp; }
 
-        if( nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT == pTmp->GetType() &&
+        if( RedlineType::ParagraphFormat == pTmp->GetType() &&
             ( (nSttIdx <= nMk && nMk <= nEndIdx) || (nSttIdx <= nPt && nPt <= nEndIdx) ) )
                 AcceptRedline( n, false );
 
@@ -3025,7 +3025,7 @@ void DocumentRedlineManager::FinalizeImport()
     for( SwRedlineTable::size_type n = 0; n < mpRedlineTable->size(); ++n )
     {
         SwRangeRedline* pRedl = (*mpRedlineTable)[ n ];
-        if ( nsRedlineType_t::REDLINE_DELETE == pRedl->GetType() )
+        if ( RedlineType::Delete == pRedl->GetType() )
         {
             const SwPosition* pStt = pRedl->Start(),
                             * pEnd = pStt == pRedl->GetPoint()

@@ -60,40 +60,36 @@ namespace o3tl
     template<> struct typed_flags<RedlineFlags> : is_typed_flags<RedlineFlags, 0x533> {};
 }
 
-typedef sal_uInt16 RedlineType_t;
-namespace nsRedlineType_t
+enum class RedlineType : sal_uInt16
 {
     // Range of RedlineTypes is 0 to 127.
-    const RedlineType_t REDLINE_INSERT = 0x0;// Content has been inserted.
-    const RedlineType_t REDLINE_DELETE = 0x1;// Content has been deleted.
-    const RedlineType_t REDLINE_FORMAT = 0x2;// Attributes have been applied.
-    const RedlineType_t REDLINE_TABLE = 0x3;// Table structure has been altered.
-    const RedlineType_t REDLINE_FMTCOLL = 0x4;// Style has been altered (Autoformat!).
-    const RedlineType_t REDLINE_PARAGRAPH_FORMAT = 0x5;// Paragraph attributes have been changed.
-    const RedlineType_t REDLINE_TABLE_ROW_INSERT = 0x6;// Table row has been inserted.
-    const RedlineType_t REDLINE_TABLE_ROW_DELETE = 0x7;// Table row has been deleted.
-    const RedlineType_t REDLINE_TABLE_CELL_INSERT = 0x8;// Table cell has been inserted.
-    const RedlineType_t REDLINE_TABLE_CELL_DELETE = 0x9;// Table cell has been deleted.
-
-    // When larger than 128, flags can be inserted.
-    const RedlineType_t REDLINE_NO_FLAG_MASK = 0x7F;
-    const RedlineType_t REDLINE_FORM_AUTOFMT = 0x80;// Can be a flag in RedlineType.
-
-    inline OUString SwRedlineTypeToOUString(RedlineType_t eType)
+    Insert = 0x0,// Content has been inserted.
+    Delete = 0x1,// Content has been deleted.
+    Format = 0x2,// Attributes have been applied.
+    Table = 0x3,// Table structure has been altered.
+    FmtColl = 0x4,// Style has been altered (Autoformat!).
+    ParagraphFormat = 0x5,// Paragraph attributes have been changed.
+    TableRowInsert = 0x6,// Table row has been inserted.
+    TableRowDelete = 0x7,// Table row has been deleted.
+    TableCellInsert = 0x8,// Table cell has been inserted.
+    TableCellDelete = 0x9,// Table cell has been deleted.
+    Any = USHRT_MAX // special value to indicate any redline type in some method calls
+};
+inline OUString SwRedlineTypeToOUString(RedlineType eType)
+{
+    OUString sRet;
+    switch(eType)
     {
-        OUString sRet;
-        switch(eType & nsRedlineType_t::REDLINE_NO_FLAG_MASK)
-        {
-            case nsRedlineType_t::REDLINE_INSERT: sRet = "Insert"; break;
-            case nsRedlineType_t::REDLINE_DELETE: sRet = "Delete"; break;
-            case nsRedlineType_t::REDLINE_FORMAT: sRet = "Format"; break;
-            case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT: sRet = "ParagraphFormat"; break;
-            case nsRedlineType_t::REDLINE_TABLE:  sRet = "TextTable"; break;
-            case nsRedlineType_t::REDLINE_FMTCOLL:sRet = "Style"; break;
-        }
-        return sRet;
+        case RedlineType::Insert: sRet = "Insert"; break;
+        case RedlineType::Delete: sRet = "Delete"; break;
+        case RedlineType::Format: sRet = "Format"; break;
+        case RedlineType::ParagraphFormat: sRet = "ParagraphFormat"; break;
+        case RedlineType::Table:  sRet = "TextTable"; break;
+        case RedlineType::FmtColl:sRet = "Style"; break;
+        default: break;
     }
-}
+    return sRet;
+};
 
 class IDocumentRedlineAccess
 {
@@ -177,16 +173,16 @@ public:
     virtual bool DeleteRedline(
         /*[in]*/const SwPaM& rPam,
         /*[in]*/bool bSaveInUndo,
-        /*[in]*/sal_uInt16 nDelType) = 0;
+        /*[in]*/RedlineType nDelType) = 0;
 
     virtual bool DeleteRedline(
         /*[in]*/const SwStartNode& rSection,
         /*[in]*/bool bSaveInUndo,
-        /*[in]*/sal_uInt16 nDelType) = 0;
+        /*[in]*/RedlineType nDelType) = 0;
 
     virtual SwRedlineTable::size_type GetRedlinePos(
         /*[in]*/const SwNode& rNode,
-        /*[in]*/sal_uInt16 nType) const = 0;
+        /*[in]*/RedlineType nType) const = 0;
 
     virtual void CompressRedlines() = 0;
 

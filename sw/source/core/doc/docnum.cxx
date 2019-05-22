@@ -2044,7 +2044,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
     // Test for Redlining - Can the Selection be moved at all, actually?
     if( !getIDocumentRedlineAccess().IsIgnoreRedline() )
     {
-        SwRedlineTable::size_type nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_DELETE );
+        SwRedlineTable::size_type nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStt->nNode.GetNode(), RedlineType::Delete );
         if( SwRedlineTable::npos != nRedlPos )
         {
             SwPosition aStPos( *pStt ), aEndPos( *pEnd );
@@ -2057,7 +2057,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
             for( ; nRedlPos < getIDocumentRedlineAccess().GetRedlineTable().size(); ++nRedlPos )
             {
                 const SwRangeRedline* pTmp = getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
-                if( !bCheckDel || nsRedlineType_t::REDLINE_DELETE == pTmp->GetType() )
+                if( !bCheckDel || RedlineType::Delete == pTmp->GetType() )
                 {
                     const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
                     switch( ComparePosition( *pRStt, *pREnd, aStPos, aEndPos ))
@@ -2101,12 +2101,12 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
     if( getIDocumentRedlineAccess().IsRedlineOn() )
     {
         // If the range is completely in the own Redline, we can move it!
-        SwRedlineTable::size_type nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_INSERT );
+        SwRedlineTable::size_type nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStt->nNode.GetNode(), RedlineType::Insert );
         if( SwRedlineTable::npos != nRedlPos )
         {
             SwRangeRedline* pTmp = getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
             const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
-            SwRangeRedline aTmpRedl( nsRedlineType_t::REDLINE_INSERT, rPam );
+            SwRangeRedline aTmpRedl( RedlineType::Insert, rPam );
             const SwContentNode* pCEndNd = pEnd->nNode.GetNode().GetContentNode();
             // Is completely in the range and is the own Redline too?
             if( aTmpRedl.IsOwnRedline( *pTmp ) &&
@@ -2198,7 +2198,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
                 {
                     break;
                 }
-                if (pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE)
+                if (pRedline->GetType() == RedlineType::Delete)
                 {
                     assert(*aPam.Start() <= *pRedline->Start()); // caller's fault
                     SwRangeRedline* pNewRedline;
@@ -2211,7 +2211,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
                         pam.GetMark()->nNode += nCurrentOffset;
                         pam.GetMark()->nContent.Assign(pam.GetMark()->nNode.GetNode().GetContentNode(), pam.GetMark()->nContent.GetIndex());
 
-                        pNewRedline = new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, pam );
+                        pNewRedline = new SwRangeRedline( RedlineType::Delete, pam );
                     }
                     // note: effectively this will DeleteAndJoin the pam!
                     getIDocumentRedlineAccess().AppendRedline(pNewRedline, true);
@@ -2272,7 +2272,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
                     std::make_unique<SwUndoRedlineDelete>(aPam, SwUndoId::DELETE));
             }
 
-            SwRangeRedline* pNewRedline = new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, aPam );
+            SwRangeRedline* pNewRedline = new SwRangeRedline( RedlineType::Delete, aPam );
 
             // prevent assertion from aPam's target being deleted
             // (Alternatively, one could just let aPam go out of scope, but

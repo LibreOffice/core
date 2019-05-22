@@ -93,7 +93,7 @@ void SwUndoInsert::Init(const SwNodeIndex & rNd)
     pDoc = rNd.GetNode().GetDoc();
     if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
     {
-        pRedlData.reset( new SwRedlineData( nsRedlineType_t::REDLINE_INSERT,
+        pRedlData.reset( new SwRedlineData( RedlineType::Insert,
                                        pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
         SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
     }
@@ -165,7 +165,7 @@ bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
             const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
             if( !rTable.empty() )
             {
-                SwRedlineData aRData( nsRedlineType_t::REDLINE_INSERT, rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() );
+                SwRedlineData aRData( RedlineType::Insert, rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() );
                 const SwIndexReg* pIReg = rPos.nContent.GetIdxReg();
                 for(SwRangeRedline* pRedl : rTable)
                 {
@@ -219,7 +219,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
             pPam->SetMark();
             pPam->Move( fnMoveBackward );
             pPam->Exchange();
-            pTmpDoc->getIDocumentRedlineAccess().DeleteRedline( *pPam, true, USHRT_MAX );
+            pTmpDoc->getIDocumentRedlineAccess().DeleteRedline( *pPam, true, RedlineType::Any );
         }
         pPam->DeleteMark();
         pTmpDoc->getIDocumentContentOperations().DelFullPara( *pPam );
@@ -242,7 +242,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
             {
                 aPaM.GetPoint()->nContent -= nLen;
                 if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
-                    pTmpDoc->getIDocumentRedlineAccess().DeleteRedline( aPaM, true, USHRT_MAX );
+                    pTmpDoc->getIDocumentRedlineAccess().DeleteRedline( aPaM, true, RedlineType::Any );
                 if (m_bWithRsid)
                 {
                     // RSID was added: remove any CHARFMT/AUTOFMT that may be
@@ -263,7 +263,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
             {
                 aPaM.Move(fnMoveBackward);
                 if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
-                    pTmpDoc->getIDocumentRedlineAccess().DeleteRedline( aPaM, true, USHRT_MAX );
+                    pTmpDoc->getIDocumentRedlineAccess().DeleteRedline( aPaM, true, RedlineType::Any );
                 RemoveIdxFromRange( aPaM, false );
             }
 

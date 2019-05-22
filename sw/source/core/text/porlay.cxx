@@ -2306,7 +2306,7 @@ void SwScriptInfo::selectRedLineDeleted(const SwTextNode& rNode, MultiSelection 
     const IDocumentRedlineAccess& rIDRA = rNode.getIDocumentRedlineAccess();
     if ( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() ) )
     {
-        SwRedlineTable::size_type nAct = rIDRA.GetRedlinePos( rNode, USHRT_MAX );
+        SwRedlineTable::size_type nAct = rIDRA.GetRedlinePos( rNode, RedlineType::Any );
 
         for ( ; nAct < rIDRA.GetRedlineTable().size(); nAct++ )
         {
@@ -2315,7 +2315,7 @@ void SwScriptInfo::selectRedLineDeleted(const SwTextNode& rNode, MultiSelection 
             if (pRed->Start()->nNode > rNode.GetIndex())
                 break;
 
-            if (pRed->GetType() != nsRedlineType_t::REDLINE_DELETE)
+            if (pRed->GetType() != RedlineType::Delete)
                 continue;
 
             sal_Int32 nRedlStart;

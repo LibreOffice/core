@@ -68,7 +68,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     SwTextNode * pParaPropsNode(nullptr);
     SwTextNode * pNode(&rTextNode);
     sal_Int32 nLastEnd(0);
-    for (auto i = rIDRA.GetRedlinePos(rTextNode, USHRT_MAX);
+    for (auto i = rIDRA.GetRedlinePos(rTextNode, RedlineType::Any);
          i < rIDRA.GetRedlineTable().size(); ++i)
     {
         SwRangeRedline const*const pRed = rIDRA.GetRedlineTable()[i];
@@ -76,7 +76,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
         if (pNode->GetIndex() < pRed->Start()->nNode.GetIndex())
             break;
 
-        if (pRed->GetType() != nsRedlineType_t::REDLINE_DELETE)
+        if (pRed->GetType() != RedlineType::Delete)
             continue;
 
         SwPosition const*const pStart(pRed->Start());
@@ -445,7 +445,7 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
         && pRootFrame && !pRootFrame->IsHideRedlines();
     if (pExtInp || m_pMergedPara || bShow)
     {
-        SwRedlineTable::size_type nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
+        SwRedlineTable::size_type nRedlPos = rIDRA.GetRedlinePos( rTextNode, RedlineType::Any );
         if (SwRedlineTable::npos == nRedlPos && m_pMergedPara)
         {
             SwTextNode const* pNode(&rTextNode);
@@ -454,7 +454,7 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
                 if (rExtent.pNode != pNode)
                 {
                     pNode = rExtent.pNode;
-                    nRedlPos = rIDRA.GetRedlinePos(*pNode, USHRT_MAX);
+                    nRedlPos = rIDRA.GetRedlinePos(*pNode, RedlineType::Any);
                     if (SwRedlineTable::npos != nRedlPos)
                         break;
                 }
@@ -635,7 +635,7 @@ short SwRedlineItr::Seek(SwFont& rFnt,
             SwRangeRedline const*const pRedline(
                 m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[m_nAct]);
             SwPosition const*const pStart(pRedline->Start());
-            if (pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE
+            if (pRedline->GetType() == RedlineType::Delete
                 && (nNode < pStart->nNode.GetIndex()
                     || (nNode == pStart->nNode.GetIndex()
                         && nNew <= pStart->nContent.GetIndex())))
@@ -650,18 +650,18 @@ short SwRedlineItr::Seek(SwFont& rFnt,
     return nRet + EnterExtend(rFnt, nNode, nNew);
 }
 
-void SwRedlineItr::FillHints( std::size_t nAuthor, RedlineType_t eType )
+void SwRedlineItr::FillHints( std::size_t nAuthor, RedlineType eType )
 {
     switch ( eType )
     {
-        case nsRedlineType_t::REDLINE_INSERT:
+        case RedlineType::Insert:
             SW_MOD()->GetInsertAuthorAttr(nAuthor, *m_pSet);
             break;
-        case nsRedlineType_t::REDLINE_DELETE:
+        case RedlineType::Delete:
             SW_MOD()->GetDeletedAuthorAttr(nAuthor, *m_pSet);
             break;
-        case nsRedlineType_t::REDLINE_FORMAT:
-        case nsRedlineType_t::REDLINE_FMTCOLL:
+        case RedlineType::Format:
+        case RedlineType::FmtColl:
             SW_MOD()->GetFormatAuthorAttr(nAuthor, *m_pSet);
             break;
         default:
@@ -730,7 +730,7 @@ SwRedlineItr::GetNextRedln(sal_Int32 nNext, SwTextNode const*const pNode,
                     m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct]);
             pRedline->CalcStartEnd(pNode->GetIndex(), nStart, nEnd);
             if (m_eMode != Mode::Hide
-                || pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE)
+                || pRedline->GetType() == RedlineType::Delete)
             {
                 break;
             }
@@ -757,8 +757,8 @@ SwRedlineItr::GetNextRedln(sal_Int32 nNext, SwTextNode const*const pNode,
             assert(m_eMode == Mode::Hide);
             SwRangeRedline const* pRedline(
                     m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct]);
-            assert(pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE); //?
-            if (pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE)
+            assert(pRedline->GetType() == RedlineType::Delete); //?
+            if (pRedline->GetType() == RedlineType::Delete)
             {
                 nNext = nStart;
                 size_t nSkipped(1); // (consecutive) candidates to be skipped
@@ -772,7 +772,7 @@ SwRedlineItr::GetNextRedln(sal_Int32 nNext, SwTextNode const*const pNode,
                         break; // done for now
                     }
                     else if (*pNext->Start() == *pRedline->End() &&
-                            pNext->GetType() == nsRedlineType_t::REDLINE_DELETE)
+                            pNext->GetType() == RedlineType::Delete)
                     {
                         // consecutive delete - continue
                         pRedline = pNext;

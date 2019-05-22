@@ -61,7 +61,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
         }
         if (nSttContent < nTextNdLen)
         {
-            pDoc->getIDocumentRedlineAccess().DeleteRedline(aPam, false, USHRT_MAX);
+            pDoc->getIDocumentRedlineAccess().DeleteRedline(aPam, false, RedlineType::Any);
         }
     }
 
@@ -140,7 +140,7 @@ bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
         if( !bOk )
             return false;
 
-        pDoc->getIDocumentRedlineAccess().DeleteRedline( aPam, false, USHRT_MAX );
+        pDoc->getIDocumentRedlineAccess().DeleteRedline( aPam, false, RedlineType::Any );
     }
 
     // both 'overwrites' can be combined so 'move' the corresponding character
@@ -273,7 +273,7 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
         rIdx.Assign( pTextNd, nSttContent );
         pCurrentPam->SetMark();
         pCurrentPam->GetMark()->nContent += aDelStr.getLength();
-        pDoc->getIDocumentRedlineAccess().DeleteRedline( *pCurrentPam, false, USHRT_MAX );
+        pDoc->getIDocumentRedlineAccess().DeleteRedline( *pCurrentPam, false, RedlineType::Any );
         pCurrentPam->DeleteMark();
     }
     rIdx.Assign( pTextNd, !aDelStr.isEmpty() ? nSttContent+1 : nSttContent );

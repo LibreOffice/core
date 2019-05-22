@@ -1069,7 +1069,7 @@ bool ReplaceImpl(
                 ++tmp;
                 continue;
             }
-            if (pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE)
+            if (pRedline->GetType() == RedlineType::Delete)
             {
                 assert(*pRedline->Start() != *pRedline->End());
                 // search in hidden layout can't overlap redlines
