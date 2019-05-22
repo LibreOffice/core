@@ -2884,8 +2884,6 @@ cui/source/options/optsave.cxx
 cui/source/options/optsave.hxx
 cui/source/options/optupdt.cxx
 cui/source/options/optupdt.hxx
-cui/source/options/personalization.cxx
-cui/source/options/personalization.hxx
 cui/source/options/radiobtnbox.cxx
 cui/source/options/sdbcdriverenum.cxx
 cui/source/options/sdbcdriverenum.hxx
