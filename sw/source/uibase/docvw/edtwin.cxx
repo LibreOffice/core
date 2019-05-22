@@ -2649,6 +2649,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
         }
     }
 
+    // update the page number in the statusbar
+    sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
+    if( KEY_UP == nKey || KEY_DOWN == nKey || KEY_PAGEUP == nKey || KEY_PAGEDOWN == nKey )
+        GetView().GetViewFrame()->GetBindings().Update( FN_STAT_PAGE );
+
     // in case the buffered characters are inserted
     if( bFlushBuffer && !m_aInBuffer.isEmpty() )
     {
