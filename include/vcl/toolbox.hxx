@@ -40,6 +40,7 @@ struct ImplToolItem;
 struct ImplToolBoxPrivateData;
 class  PopupMenu;
 class VclMenuEvent;
+class StyleSettings;
 
 #define TOOLBOX_STYLE_FLAT          (sal_uInt16(0x0004))
 
@@ -251,11 +252,14 @@ public:
     SAL_DLLPRIVATE ImplToolItems::size_type ImplCalcLines( long nToolSize ) const;
     SAL_DLLPRIVATE sal_uInt16 ImplTestLineSize( const Point& rPos ) const;
     SAL_DLLPRIVATE void ImplLineSizing( const Point& rPos, tools::Rectangle& rRect, sal_uInt16 nLineMode );
-    static SAL_DLLPRIVATE ImplToolItems::size_type ImplFindItemPos( const ImplToolItem* pItem, const ImplToolItems& rList );
+    SAL_DLLPRIVATE static ImplToolItems::size_type ImplFindItemPos( const ImplToolItem* pItem, const ImplToolItems& rList );
     SAL_DLLPRIVATE void ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighlight);
     SAL_DLLPRIVATE void ImplDrawButton(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow);
     SAL_DLLPRIVATE ImplToolItems::size_type ImplCountLineBreaks() const;
     SAL_DLLPRIVATE ImplToolBoxPrivateData* ImplGetToolBoxPrivateData() const { return mpData.get(); }
+
+    SAL_DLLPRIVATE void ApplyBackgroundSettings(vcl::RenderContext&, const StyleSettings&);
+    SAL_DLLPRIVATE void ApplyForegroundSettings(vcl::RenderContext&, const StyleSettings&);
 
 protected:
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;

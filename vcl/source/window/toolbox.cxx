@@ -1176,19 +1176,8 @@ void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     ImplInitSettings(true, true, true);
 }
 
-void ToolBox::ApplySettings(vcl::RenderContext& rRenderContext)
+void ToolBox::ApplyForegroundSettings(vcl::RenderContext& rRenderContext, const StyleSettings& rStyleSettings)
 {
-    mpData->mbNativeButtons = rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Button);
-
-    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-
-    // Font
-    vcl::Font aFont = rStyleSettings.GetToolFont();
-    if (IsControlFont())
-        aFont.Merge(GetControlFont());
-    SetZoomedPointFont(rRenderContext, aFont);
-
-    // ControlForeground
     Color aColor;
     if (IsControlForeground())
         aColor = GetControlForeground();
@@ -1198,11 +1187,13 @@ void ToolBox::ApplySettings(vcl::RenderContext& rRenderContext)
         aColor = rStyleSettings.GetWindowTextColor();
     rRenderContext.SetTextColor(aColor);
     rRenderContext.SetTextFillColor();
+}
 
+void ToolBox::ApplyBackgroundSettings(vcl::RenderContext& rRenderContext, const StyleSettings& rStyleSettings)
+{
     if (IsControlBackground())
     {
-        aColor = GetControlBackground();
-        SetBackground( aColor );
+        rRenderContext.SetBackground(GetControlBackground());
         SetPaintTransparent(false);
         SetParentClipMode();
     }
@@ -1220,16 +1211,27 @@ void ToolBox::ApplySettings(vcl::RenderContext& rRenderContext)
         }
         else
         {
+            Color aColor;
             if (Window::GetStyle() & WB_3DLOOK)
                 aColor = rStyleSettings.GetFaceColor();
             else
                 aColor = rStyleSettings.GetWindowColor();
-
             rRenderContext.SetBackground(aColor);
             SetPaintTransparent(false);
             SetParentClipMode();
         }
     }
+}
+
+void ToolBox::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    mpData->mbNativeButtons = rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Button);
+
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+    ApplyControlFont(rRenderContext, rStyleSettings.GetToolFont());
+    ApplyForegroundSettings(rRenderContext, rStyleSettings);
+    ApplyBackgroundSettings(rRenderContext, rStyleSettings);
 }
 
 void ToolBox::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
@@ -1239,61 +1241,12 @@ void ToolBox::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
     if (bFont)
-    {
-        vcl::Font aFont = rStyleSettings.GetToolFont();
-        if (IsControlFont())
-            aFont.Merge(GetControlFont());
-        SetZoomedPointFont(*this, aFont);
-    }
-
+        ApplyControlFont(*this, rStyleSettings.GetToolFont());
     if (bForeground || bFont)
-    {
-        Color aColor;
-        if (IsControlForeground())
-            aColor = GetControlForeground();
-        else if (Window::GetStyle() & WB_3DLOOK)
-            aColor = rStyleSettings.GetButtonTextColor();
-        else
-            aColor = rStyleSettings.GetWindowTextColor();
-        SetTextColor(aColor);
-        SetTextFillColor();
-    }
-
+        ApplyForegroundSettings(*this, rStyleSettings);
     if (bBackground)
     {
-        Color aColor;
-        if (IsControlBackground())
-        {
-            aColor = GetControlBackground();
-            SetBackground( aColor );
-            SetPaintTransparent(false);
-            SetParentClipMode();
-        }
-        else
-        {
-            if (IsNativeControlSupported(ControlType::Toolbar, ControlPart::Entire)
-                || (GetAlign() == WindowAlign::Top && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty())
-                || (GetAlign() == WindowAlign::Bottom && !Application::GetSettings().GetStyleSettings().GetPersonaFooter().IsEmpty()))
-            {
-                SetBackground();
-                SetTextColor(rStyleSettings.GetMenuBarTextColor());
-                SetPaintTransparent( true );
-                SetParentClipMode( ParentClipMode::NoClip );
-                mpData->maDisplayBackground = Wallpaper( rStyleSettings.GetFaceColor() );
-            }
-            else
-            {
-                if (Window::GetStyle() & WB_3DLOOK)
-                    aColor = rStyleSettings.GetFaceColor();
-                else
-                    aColor = rStyleSettings.GetWindowColor();
-
-                SetBackground(aColor);
-                SetPaintTransparent(false);
-                SetParentClipMode();
-            }
-        }
-
+        ApplyBackgroundSettings(*this, rStyleSettings);
         EnableChildTransparentMode(IsPaintTransparent());
     }
 }
