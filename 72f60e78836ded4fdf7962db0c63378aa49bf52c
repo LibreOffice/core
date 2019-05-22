@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_61945e38",
+        "filename": "sd/qa/unit/tiledrendering/tiledrendering.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2260,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-05-22T13:09:59Z",
+      "side": 1,
+      "message": "You should move this line to setUp(), since it only affects how the static bool is initialized in PowerPointImport::importDocument(), so if you do it only here, it\u0027s too late, as some other test will already init that bool, and your setenv() will have no effect.",
+      "revId": "72f60e78836ded4fdf7962db0c63378aa49bf52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
