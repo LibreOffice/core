@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_8192caf5",
+        "filename": "sd/source/ui/dlg/BulletAndPositionDlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-05-22T15:23:34Z",
+      "side": 1,
+      "message": "You could remove this function and just include sdresid.hxx which already has a same-named function.",
+      "revId": "2362eef2d4967d92b5a2b574ff12d45b2754bad4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
