@@ -19,7 +19,6 @@
 
 
 #include <sot/storinfo.hxx>
-#include <sot/exchange.hxx>
 #include <osl/file.hxx>
 #include <unotools/tempfile.hxx>
 #include <tools/stream.hxx>
@@ -27,13 +26,9 @@
 
 #include <sot/stg.hxx>
 #include "stgelem.hxx"
-#include "stgcache.hxx"
-#include "stgstrms.hxx"
 #include "stgdir.hxx"
 #include "stgio.hxx"
 #include "stgole.hxx"
-
-#include <memory>
 
 static long nTmpCount = 0;
 

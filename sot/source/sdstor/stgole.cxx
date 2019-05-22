@@ -20,10 +20,9 @@
 #include <memory>
 #include <algorithm>
 
-#include <rtl/string.h>
+#include "stgelem.hxx"
 #include "stgole.hxx"
 #include <sot/storinfo.hxx>
-#include <sot/exchange.hxx>
 
 ///////////////////////// class StgInternalStream
 

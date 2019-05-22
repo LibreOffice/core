@@ -18,9 +18,10 @@
  */
 
 
-#include <sot/stg.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/exchange.hxx>
+#include <tools/stream.hxx>
+#include <vcl/errcode.hxx>
 #include <memory>
 
 /************** class SvStorageInfo **************************************

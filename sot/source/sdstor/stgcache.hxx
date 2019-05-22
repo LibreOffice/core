@@ -22,18 +22,15 @@
 
 #include <osl/endian.h>
 #include <rtl/ref.hxx>
-#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include "stgelem.hxx"
 #include <salhelper/simplereferenceobject.hxx>
 
 #include <memory>
 #include <unordered_map>
-#include <functional>
 
 class UCBStorageStream;
 class StgPage;
-class StgDirEntry;
 class StorageBase;
 
 class StgCache
