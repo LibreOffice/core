@@ -520,15 +520,8 @@ void ImplListBoxWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    vcl::Font aFont = rStyleSettings.GetFieldFont();
-    if (IsControlFont())
-        aFont.Merge(GetControlFont());
-    SetZoomedPointFont(rRenderContext, aFont);
-
-    Color aTextColor = rStyleSettings.GetFieldTextColor();
-    if (IsControlForeground())
-        aTextColor = GetControlForeground();
-    rRenderContext.SetTextColor(aTextColor);
+    ApplyControlFont(rRenderContext, rStyleSettings.GetFieldFont());
+    ApplyControlForeground(rRenderContext, rStyleSettings.GetFieldTextColor());
 
     if (IsControlBackground())
         rRenderContext.SetBackground(GetControlBackground());
@@ -2733,7 +2726,9 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
             else
             {
                 Color aColor;
-                if( ImplGetSVData()->maNWFData.mbDDListBoxNoTextArea )
+                if (IsControlForeground())
+                    aColor = GetControlForeground();
+                else if (ImplGetSVData()->maNWFData.mbDDListBoxNoTextArea)
                 {
                     if( bNativeOK && (nState & ControlState::ROLLOVER) )
                         aColor = rStyleSettings.GetButtonRolloverTextColor();
@@ -2747,8 +2742,6 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
                     else
                         aColor = rStyleSettings.GetFieldTextColor();
                 }
-                if (IsControlForeground())
-                    aColor = GetControlForeground();
                 rRenderContext.SetTextColor(aColor);
                 if (!bNativeOK)
                     rRenderContext.Erase(maFocusRect);
@@ -2777,15 +2770,8 @@ void ImplWin::ApplySettings(vcl::RenderContext& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    vcl::Font aFont = rStyleSettings.GetFieldFont();
-    if (IsControlFont())
-        aFont.Merge(GetControlFont());
-    SetZoomedPointFont(rRenderContext, aFont);
-
-    Color aTextColor = rStyleSettings.GetFieldTextColor();
-    if (IsControlForeground())
-        aTextColor = GetControlForeground();
-    rRenderContext.SetTextColor(aTextColor);
+    ApplyControlFont(rRenderContext, rStyleSettings.GetFieldFont());
+    ApplyControlForeground(rRenderContext, rStyleSettings.GetFieldTextColor());
 
     if (IsControlBackground())
         rRenderContext.SetBackground(GetControlBackground());

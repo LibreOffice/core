@@ -2225,7 +2225,7 @@ void Edit::StateChanged( StateChangedType nType )
         }
 
     }
-    else if (nType == StateChangedType::Zoom)
+    else if ((nType == StateChangedType::Zoom) || (nType == StateChangedType::ControlFont))
     {
         if (!mpSubEdit)
         {
@@ -2234,24 +2234,7 @@ void Edit::StateChanged( StateChangedType nType )
             Invalidate();
         }
     }
-    else if (nType == StateChangedType::ControlFont)
-    {
-        if (!mpSubEdit)
-        {
-            ApplySettings(*this);
-            ImplShowCursor();
-            Invalidate();
-        }
-    }
-    else if (nType == StateChangedType::ControlForeground)
-    {
-        if (!mpSubEdit)
-        {
-            ApplySettings(*this);
-            Invalidate();
-        }
-    }
-    else if (nType == StateChangedType::ControlBackground)
+    else if ((nType == StateChangedType::ControlForeground) || (nType == StateChangedType::ControlBackground))
     {
         if (!mpSubEdit)
         {

@@ -65,13 +65,7 @@ void ProgressBar::ImplInitSettings( bool bFont,
 
 /* FIXME: !!! We do not support text output at the moment
     if ( bFont )
-    {
-        Font aFont;
-        aFont = rStyleSettings.GetAppFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetZoomedPointFont( aFont );
-    }
+        ApplyControlFont(*this, rStyleSettings.GetAppFont());
 */
 
     if ( bBackground )
