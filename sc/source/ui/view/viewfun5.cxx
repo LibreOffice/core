@@ -714,9 +714,9 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
     if (aStrs.size() < 3)
         return false;
 
-    const OUString* pApp   = &aStrs[0];
-    const OUString* pTopic = &aStrs[1];
-    const OUString* pItem  = &aStrs[2];
+    const OUString& pApp   = aStrs[0];
+    const OUString& pTopic = aStrs[1];
+    const OUString& pItem  = aStrs[2];
     const OUString* pExtra = nullptr;
     if (aStrs.size() > 3)
         pExtra = &aStrs[3];
@@ -727,8 +727,8 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
         // uses Calc A1 syntax even when another formula syntax is specified
         // in the UI.
         EnterMatrix("='"
-            + ScGlobal::GetAbsDocName(*pTopic, GetViewData().GetDocument()->GetDocumentShell())
-            + "'#" + *pItem
+            + ScGlobal::GetAbsDocName(pTopic, GetViewData().GetDocument()->GetDocumentShell())
+            + "'#" + pItem
                 , ::formula::FormulaGrammar::GRAM_NATIVE);
         return true;
     }
@@ -739,11 +739,11 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
         // TODO: we could define ocQuote for "
         EnterMatrix("=" + ScCompiler::GetNativeSymbol(ocDde)
             + ScCompiler::GetNativeSymbol(ocOpen)
-            + "\"" + *pApp + "\""
+            + "\"" + pApp + "\""
             + ScCompiler::GetNativeSymbol(ocSep)
-            + "\"" + *pTopic + "\""
+            + "\"" + pTopic + "\""
             + ScCompiler::GetNativeSymbol(ocSep)
-            + "\"" + *pItem + "\""
+            + "\"" + pItem + "\""
             + ScCompiler::GetNativeSymbol(ocClose)
                 , ::formula::FormulaGrammar::GRAM_NATIVE);
     }
