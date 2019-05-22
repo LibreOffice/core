@@ -3039,7 +3039,13 @@ void DocumentRedlineManager::FinalizeImport()
                 const SwPaM aPam( *pStt, *pStt );
                 m_rDoc.DelNumRules( aPam );
             }
-       }
+            else if ( pDelNode->GetNumRule() != pTextNode->GetNumRule() )
+            {
+                const SwPaM aPam( *pStt, *pStt );
+                SwNumRule *pRule = pTextNode->GetNumRule();
+                m_rDoc.SetNumRule( aPam, *pRule, false );
+            }
+        }
     }
 }
 
