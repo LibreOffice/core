@@ -221,3 +221,44 @@ WindowsCustomAction gid_Customaction_RegisterSomeExtensions
 End
 
 #endif /* HAVE_WINDOWS_SDK */
+
+/* Deferred not-impersonated actions that will call regsvr32 to (un)register DLLs.
+ * Custom action type 1 (msidbCustomActionTypeDll + msidbCustomActionTypeBinaryData)
+ * + 64 (msidbCustomActionTypeContinue) + 1024 (msidbCustomActionTypeInScript)
+ * + 2048 (msidbCustomActionTypeNoImpersonate).
+ * Since deferred actions don't have access to current DB, the actions depend on
+ * immediate-executed action prep_reg_unreg_dlls (see below) that precedes it, and
+ * sets this action's CustomActionData property.
+ */
+
+WindowsCustomAction gid_Customaction_reg_dlls
+    Name = "reg_dlls";
+    Typ = "3137";
+    Source = "reg_dlls.dll";
+    Target = "RegDLLs";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "reg_dlls", "InstallFinalize");
+End
+
+WindowsCustomAction gid_Customaction_unreg_dlls
+    Name = "unreg_dlls";
+    Typ = "3137";
+    Source = "reg_dlls.dll";
+    Target = "UnregDLLs";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "unreg_dlls", "UnpublishComponents");
+End
+
+/* Immediately-executed action that adds registration command lines for spsupp_x*.dll
+ * to "[un]reg_dlls" properties.
+ * Custom action type 1 (msidbCustomActionTypeDll + msidbCustomActionTypeBinaryData)
+ * + 64 (msidbCustomActionTypeContinue).
+ */
+WindowsCustomAction gid_Customaction_prep_reg_dlls
+    Name = "prep_reg_unreg_dlls";
+    Typ = "65";
+    Source = "reg_dlls.dll";
+    Target = "PrepRegUnregDLLs";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "", "behind_CostFinalize");
+End
