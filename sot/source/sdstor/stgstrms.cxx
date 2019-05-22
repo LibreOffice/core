@@ -24,9 +24,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 #include <unotools/tempfile.hxx>
-#include <set>
 
-#include <sot/stg.hxx>
 #include "stgelem.hxx"
 #include "stgcache.hxx"
 #include "stgstrms.hxx"

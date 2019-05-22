@@ -24,9 +24,6 @@
 #include <unotools/charclass.hxx>
 #include <sot/stg.hxx>
 #include "stgelem.hxx"
-#include "stgcache.hxx"
-#include "stgstrms.hxx"
-#include "stgdir.hxx"
 #include "stgio.hxx"
 
 static const sal_uInt16 nMaxLegalStr = 31;

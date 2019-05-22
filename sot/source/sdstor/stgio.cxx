@@ -18,14 +18,12 @@
  */
 
 
-#include <sot/stg.hxx>
 #include "stgelem.hxx"
 #include "stgcache.hxx"
 #include "stgstrms.hxx"
 #include "stgdir.hxx"
 #include "stgio.hxx"
 #include <o3tl/safeint.hxx>
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 
 #include <memory>

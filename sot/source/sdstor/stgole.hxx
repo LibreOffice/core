@@ -21,10 +21,8 @@
 #define INCLUDED_SOT_SOURCE_SDSTOR_STGOLE_HXX
 
 #include <memory>
-#include <string.h>
 
 #include <sot/stg.hxx>
-#include "stgelem.hxx"
 
 class StgInternalStream : public SvStream
 {

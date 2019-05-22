@@ -22,8 +22,6 @@
 
 #include "stgcache.hxx"
 #include "stgelem.hxx"
-#include <tools/link.hxx>
-#include <tools/solar.h>
 
 class StgFATStrm;
 class StgDataStrm;

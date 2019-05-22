@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SOT_SOURCE_SDSTOR_STGAVL_HXX
 #define INCLUDED_SOT_SOURCE_SDSTOR_STGAVL_HXX
 
+#include <sal/types.h>
+
 // This is an abstract base class for nodes.
 // Especially, the compare function must be implemented.
 
