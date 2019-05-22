@@ -477,7 +477,6 @@ custom_widgets = [
     'SidebarDialControl',
     'SidebarToolBox',
     'SpacingListBox',
-    'StatusBar',
     'SvSimpleTableContainer',
     'SvTreeListBox',
     'SvtFileView',
