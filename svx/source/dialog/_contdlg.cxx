@@ -238,7 +238,7 @@ SvxSuperContourDlg::SvxSuperContourDlg(weld::Builder& rBuilder,
 
 SvxSuperContourDlg::~SvxSuperContourDlg()
 {
-    m_xContourWnd->SetUpdateLink( Link<SvxGraphCtrl*,void>() );
+    m_xContourWnd->SetUpdateLink( Link<GraphCtrl*,void>() );
 }
 
 IMPL_LINK_NOARG(SvxSuperContourDlg, CancelHdl, weld::Button&, void)
@@ -458,7 +458,7 @@ IMPL_LINK(SvxSuperContourDlg, Tbx1ClickHdl, const OString&, rId, void)
     m_xContourWnd->QueueIdleUpdate();
 }
 
-IMPL_LINK( SvxSuperContourDlg, MousePosHdl, SvxGraphCtrl*, pWnd, void )
+IMPL_LINK( SvxSuperContourDlg, MousePosHdl, GraphCtrl*, pWnd, void )
 {
     OUString aStr;
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
@@ -473,7 +473,7 @@ IMPL_LINK( SvxSuperContourDlg, MousePosHdl, SvxGraphCtrl*, pWnd, void )
     m_xStbStatus2->set_label( aStr );
 }
 
-IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, SvxGraphCtrl*, pWnd, void )
+IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, GraphCtrl*, pWnd, void )
 {
     OUString aStr;
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
@@ -527,7 +527,7 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, CreateHdl, Timer *, void)
     SetPolyPolygon( SvxContourDlg::CreateAutoContour( rGraphic, bValid ? &aWorkRect : nullptr ) );
 }
 
-IMPL_LINK( SvxSuperContourDlg, StateHdl, SvxGraphCtrl*, pWnd, void )
+IMPL_LINK( SvxSuperContourDlg, StateHdl, GraphCtrl*, pWnd, void )
 {
     const SdrObject*    pObj = pWnd->GetSelectedSdrObject();
     const SdrView*      pView = pWnd->GetSdrView();

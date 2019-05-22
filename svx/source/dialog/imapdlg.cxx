@@ -184,7 +184,7 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, weld::Windo
 
 SvxIMapDlg::~SvxIMapDlg()
 {
-    m_xIMapWnd->SetUpdateLink( Link<SvxGraphCtrl*,void>() );
+    m_xIMapWnd->SetUpdateLink( Link<GraphCtrl*,void>() );
     m_xIMapWnd.reset();
 }
 
@@ -571,7 +571,7 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow&, rWnd, void )
     }
 }
 
-IMPL_LINK( SvxIMapDlg, MousePosHdl, SvxGraphCtrl*, pWnd, void )
+IMPL_LINK( SvxIMapDlg, MousePosHdl, GraphCtrl*, pWnd, void )
 {
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Point& rMousePos = pWnd->GetMousePos();
@@ -584,7 +584,7 @@ IMPL_LINK( SvxIMapDlg, MousePosHdl, SvxGraphCtrl*, pWnd, void )
     m_xStbStatus2->set_label(aStr);
 }
 
-IMPL_LINK( SvxIMapDlg, GraphSizeHdl, SvxGraphCtrl*, pWnd, void )
+IMPL_LINK( SvxIMapDlg, GraphSizeHdl, GraphCtrl*, pWnd, void )
 {
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Size& rSize = pWnd->GetGraphicSize();
@@ -677,7 +677,7 @@ IMPL_LINK_NOARG(SvxIMapDlg, UpdateHdl, Timer *, void)
     m_xIMapWnd->QueueIdleUpdate();
 }
 
-IMPL_LINK( SvxIMapDlg, StateHdl, SvxGraphCtrl*, pWnd, void )
+IMPL_LINK( SvxIMapDlg, StateHdl, GraphCtrl*, pWnd, void )
 {
     const SdrObject*    pObj = pWnd->GetSelectedSdrObject();
     const SdrModel*     pModel = pWnd->GetSdrModel();

@@ -59,7 +59,7 @@ using namespace ::com::sun::star::accessibility;
 // internal
 /** initialize this component and set default values */
 SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
-    SvxGraphCtrl&                   rRepr ) :
+    GraphCtrl&                   rRepr ) :
 
     SvxGraphCtrlAccessibleContext_Base( m_aMutex ),
     mpControl( &rRepr ),
@@ -775,6 +775,5 @@ Size SvxGraphCtrlAccessibleContext::LogicToPixel (const Size& rSize) const
     else
         return rSize;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
