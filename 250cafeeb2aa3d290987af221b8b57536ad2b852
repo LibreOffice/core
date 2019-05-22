@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_a6183c1d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-22T07:46:56Z",
+      "side": 1,
+      "message": "The above sounded very confusing to me on first read, as if you tried to misuse registrymodifications.xcu for storing additional, non-configuration data.  I would suggest something like \"Store customized uiitem data in the configuration\".  (Unfortunately, traditionally both \"configuration\" and \"registry\" are used to denote the configuration, but I would stick to \"configuration\" to avoid confusion with the Windows registry.)",
+      "revId": "250cafeeb2aa3d290987af221b8b57536ad2b852",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_66d8f452",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-22T07:46:56Z",
+      "side": 1,
+      "message": "(Paragraphs like the above should better be Gerrit comments rather than part of a---final---commit message.  But I assume you intended to remove it from the finished change, anyway.)",
+      "revId": "250cafeeb2aa3d290987af221b8b57536ad2b852",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_06dd7041",
+        "filename": "cui/Library_cui.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-22T07:46:56Z",
+      "side": 1,
+      "message": "the existing list looked roughly sorted (ignoring case); please keep it that way",
+      "revId": "250cafeeb2aa3d290987af221b8b57536ad2b852",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_e6e3a404",
+        "filename": "cui/source/customize/customuigenerator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-22T07:46:56Z",
+      "side": 1,
+      "message": "Here and in the corresponding .hxx:\n\nDoes this new file indeed contain traces of old OOo code?  Please see the file TEMPLATE.SOURCECODE.HEADER for which license header to pick for new files.\n\n(And those templates also contain a trailing vim modeline, which is missing here.)",
+      "revId": "250cafeeb2aa3d290987af221b8b57536ad2b852",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_86f0a0cb",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/ToolbarMode.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-22T07:46:56Z",
+      "side": 1,
+      "message": "Note that this string-list value has two elements, \"\\n             visible , UIItemID\" and \"\\n\n            \" (where \\n denotes a newline).  For props of *-list types, it can be easier to write values using \u003cit\u003e elements, see officecfg/registry/component-update.dtd.",
+      "revId": "250cafeeb2aa3d290987af221b8b57536ad2b852",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_66c1d454",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/UI/ToolbarMode.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-22T07:46:56Z",
+      "side": 1,
+      "message": "(I\u0027m far from being an expert on the content matter here, but wonder whether there might be a better name than \"UIItemProeprties\" (I don\u0027t know what a \"UIItem\" is), esp. given your description says \"List of context descriptors\"?)\n\nAnd note that props of *-list type generally face the issue that the various layers of configuration data (as can e.g. be added by extensions) can only replace them completely, not per-element.  That may or may not be an issue here, but should be taken into account.  If modification of individual elements is wanted, a \u003cset\u003e may be a better approach than a \u003cprop oor:type\u003d\"oor:string-list\"\u003e.",
+      "revId": "250cafeeb2aa3d290987af221b8b57536ad2b852",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_c6cf887d",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/UI/ToolbarMode.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-22T07:46:56Z",
+      "side": 1,
+      "message": "* Is whitespace allowed in those strings?  (If yes, where?  And if yes, would it maybe be better to be strict and disallow such whitespace?)\n* What are the valid values for the \"visible\" part of the string?",
+      "revId": "250cafeeb2aa3d290987af221b8b57536ad2b852",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
