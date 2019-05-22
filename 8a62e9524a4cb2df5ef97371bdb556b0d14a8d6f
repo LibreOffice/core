@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_4cff1901",
+        "filename": "cui/Library_cui.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-22T16:42:49Z",
+      "side": 1,
+      "message": "Maybe change it to \"CustomNotebookbarGenerator\" then it will be obvious what part of UI is related. and the same with class name - sorry for incovinence I know it was my name example, but I belive good naming is important for further code maintenance. Eqasier to find realted code.",
+      "revId": "8a62e9524a4cb2df5ef97371bdb556b0d14a8d6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_8c1c416b",
+        "filename": "cui/source/customize/customuigenerator.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-22T16:42:49Z",
+      "side": 1,
+      "message": "Are you going to concatenate this string with something in the future? If not it can be OUString return type here.",
+      "revId": "8a62e9524a4cb2df5ef97371bdb556b0d14a8d6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_6c2d3594",
+        "filename": "cui/source/customize/customuigenerator.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-22T16:42:49Z",
+      "side": 1,
+      "message": "sActiveAppName",
+      "revId": "8a62e9524a4cb2df5ef97371bdb556b0d14a8d6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_0c2271a5",
+        "filename": "cui/source/customize/customuigenerator.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-22T16:42:49Z",
+      "side": 1,
+      "message": "aAppName",
+      "revId": "8a62e9524a4cb2df5ef97371bdb556b0d14a8d6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_ac47bd4b",
+        "filename": "cui/source/customize/customuigenerator.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-22T16:42:49Z",
+      "side": 1,
+      "message": "sNotebookbarUIFileName",
+      "revId": "8a62e9524a4cb2df5ef97371bdb556b0d14a8d6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_2c272db6",
+        "filename": "cui/source/customize/customuigenerator.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-22T16:42:49Z",
+      "side": 1,
+      "message": "Layer? I would prefer aOriginalUIPathBuffer and aCustomizedUIPathBuffer",
+      "revId": "8a62e9524a4cb2df5ef97371bdb556b0d14a8d6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_4c287985",
+        "filename": "cui/source/customize/customuigenerator.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-22T16:42:49Z",
+      "side": 1,
+      "message": "But in general is that line needed? it is used only in the next one.\n\nPlease use static method here: that on created in notebookbar.cxx in previous patch (OUString NotebookBar::getCustomizedUIRootDir()). It should be moved here and reused in notebookbar.cxx.",
+      "revId": "8a62e9524a4cb2df5ef97371bdb556b0d14a8d6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_cc3b29cf",
+        "filename": "cui/source/customize/customuigenerator.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-22T16:42:49Z",
+      "side": 1,
+      "message": "and sOriginalUIPath \u0026 sCustomizedUIPath",
+      "revId": "8a62e9524a4cb2df5ef97371bdb556b0d14a8d6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_8c4a0153",
+        "filename": "cui/source/customize/customuigenerator.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-22T16:42:49Z",
+      "side": 1,
+      "message": "We should create the folder then.",
+      "revId": "8a62e9524a4cb2df5ef97371bdb556b0d14a8d6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

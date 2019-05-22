@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_21197684",
+        "filename": "cui/source/customize/SvxToolbarConfigPage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-22T16:42:49Z",
+      "side": 0,
+      "message": "please avoid changes like this",
+      "revId": "34d25edec00b812dedbb0616a98c5f82d221263a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
