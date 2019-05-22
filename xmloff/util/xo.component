@@ -144,8 +144,11 @@
     <service name="com.sun.star.comp.Impress.XMLOasisStylesExporter"/>
   </implementation>
   <implementation name="XMLImpressStylesImportOasis">
-    <service name="com.sun.star.comp.Draw.XMLOasisStylesImporter"/>
     <service name="com.sun.star.comp.Impress.XMLOasisStylesImporter"/>
+  </implementation>
+  <implementation name="XMLDrawStylesImportOasis"
+    constructor="com_sun_star_comp_Draw_XMLOasisStylesImporter_get_implementation">
+    <service name="com.sun.star.comp.Draw.XMLOasisStylesImporter"/>
   </implementation>
   <implementation name="XMLMetaExportComponent"
       constructor="XMLMetaExportComponent_get_implementation">
