@@ -175,6 +175,16 @@ public:
 };
 
 
+//  class Calendar_dangun
+
+class Calendar_dangun : public Calendar_gregorian
+{
+public:
+    // Constructors
+    Calendar_dangun();
+};
+
+
 //  class Calendar_buddhist
 
 class Calendar_buddhist : public Calendar_gregorian

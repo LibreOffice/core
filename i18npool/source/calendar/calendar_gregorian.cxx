@@ -226,6 +226,19 @@ Calendar_ROC::Calendar_ROC() : Calendar_gregorian(ROC_eraArray)
     cCalendar = "com.sun.star.i18n.Calendar_ROC";
 }
 
+/**
+* The start year of the Korean traditional calendar (Dan-gi) is the inaugural
+* year of Dan-gun (BC 2333).
+*/
+static const Era dangun_eraArray[] = {
+    {-2332, 1, 1, 0},
+    {0, 0, 0, 0}
+};
+Calendar_dangun::Calendar_dangun() : Calendar_gregorian(dangun_eraArray)
+{
+    cCalendar = "com.sun.star.i18n.Calendar_dangun";
+}
+
 static const Era buddhist_eraArray[] = {
     {-542, 1, 1, 0},
     {0, 0, 0, 0}
