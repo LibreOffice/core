@@ -63,7 +63,8 @@ interface XDocument
     any Frames( [in] any index );
     void SaveAs2000( [in] any FileName, [in] any FileFormat, [in] any LockComments, [in] any Password, [in] any AddToRecentFiles, [in] any WritePassword, [in] any ReadOnlyRecommended, [in] any EmbedTrueTypeFonts, [in] any SaveNativePictureFormat, [in] any SaveFormsData, [in] any SaveAsAOCELetter );
     void SaveAs( [in] any FileName, [in] any FileFormat, [in] any LockComments, [in] any Password, [in] any AddToRecentFiles, [in] any WritePassword, [in] any ReadOnlyRecommended, [in] any EmbedTrueTypeFonts, [in] any SaveNativePictureFormat, [in] any SaveFormsData, [in] any SaveAsAOCELetter, [in] any Encoding, [in] any InsertLineBreaks, [in] any AllowSubstitutions, [in] any LineEnding, [in] any AddBiDiMarks );
-
+    // This is a COLEAT-specific addition
+    void SavePreviewPngAs( [in] any FileName );
 };
 
 }; }; };
