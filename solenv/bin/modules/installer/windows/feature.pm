@@ -125,13 +125,19 @@ sub get_feature_level
 
     my $level = "20";   # the default
 
-    my $localdefault = "";
-
-    if ( $onefeature->{'Default'} ) { $localdefault = $onefeature->{'Default'}; }
-
-    if ( $localdefault eq "NO" )    # explicitly set Default = "NO"
+    if ( $onefeature->{'Disabled'} )
     {
-        $level = "200";             # deselected in default installation, base is 100
+        if ( $onefeature->{'Disabled'} eq "YES" )    # Disabled = "YES"
+        {
+            $level = "0";               # disabled for installation at any INSTALLLEVEL
+        }
+    }
+    elsif ( $onefeature->{'Default'} )
+    {
+        if ( $onefeature->{'Default'} eq "NO" )    # explicitly set Default = "NO"
+        {
+            $level = "200";             # deselected in default installation, base is 100
+        }
     }
 
     return $level
@@ -162,6 +168,10 @@ sub get_feature_attributes
 
     my $attributes;
 
+    # 2 = msidbFeatureAttributesFollowParent
+    # 8 = msidbFeatureAttributesDisallowAdvertise
+    # 16 = msidbFeatureAttributesUIDisallowAbsent
+
     # No advertising of features and no leaving on network.
     # Feature without parent must not have the "2"
 
@@ -169,6 +179,7 @@ sub get_feature_attributes
     if ( $onefeature->{'ParentID'} ) { $parentgid = $onefeature->{'ParentID'}; }
 
     if (( $parentgid eq "" ) || ( $parentgid eq $installer::globals::rootmodulegid )) { $attributes = "8"; }
+    elsif ( $onefeature->{'Independent'} && ($onefeature->{'Independent'} eq "YES") ) { $attributes = "8"; }
     elsif ( get_feature_display($onefeature) eq "0" ) { $attributes = "26"; } # fdo#33798
     else { $attributes = "10"; }
 
