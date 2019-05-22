@@ -330,8 +330,7 @@ public:
     typedef o3tl::sorted_vector<SwRangeRedline*, CompareSwRedlineTable,
                 o3tl::find_partialorder_ptrequals> vector_type;
     typedef vector_type::size_type size_type;
-    static constexpr size_type npos = USHRT_MAX;
-        //TODO: std::numeric_limits<size_type>::max()
+    static constexpr size_type npos = SAL_MAX_INT32;
 private:
     vector_type maVector;
 public:
