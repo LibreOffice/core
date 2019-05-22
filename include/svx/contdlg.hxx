@@ -50,12 +50,9 @@ public:
 
 class SvxSuperContourDlg;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxContourDlg : public SfxFloatingWindow
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxContourDlg : public SfxModelessDialogController
 {
-    using Window::Update;
-
-    VclPtr<SvxSuperContourDlg> pSuperClass;
-
+    std::unique_ptr<SvxSuperContourDlg> m_xImpl;
 
 protected:
 
@@ -63,15 +60,13 @@ protected:
 
 public:
 
-                        SvxContourDlg(SfxBindings *pBindings, SfxChildWindow *pCW,
-                                      vcl::Window* pParent);
+    SvxContourDlg(SfxBindings *pBindings, SfxChildWindow *pCW, weld::Window* pParent);
     virtual             ~SvxContourDlg() override;
-    virtual void        dispose() override;
 
     const Graphic&      GetGraphic() const;
     bool                IsGraphicChanged() const;
 
-    tools::PolyPolygon         GetPolyPolygon();
+    tools::PolyPolygon  GetPolyPolygon();
 
     const void*         GetEditingObject() const;
 

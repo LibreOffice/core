@@ -381,9 +381,6 @@
                         generic-name="DriverListControl" parent="GtkEntry"
                         icon-name="widget-gtk-combobox"/>
 
-    <glade-widget-class title="Statusbar" name="svxlo-StatusBar"
-                        generic-name="Statusbar" parent="GtkStatusbar"
-                        icon-name="widget-gtk-statusbar"/>
     <glade-widget-class title="DataTreeListBox" name="svxcorelo-DataTreeListBox"
                         generic-name="DataTreeListBox" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
