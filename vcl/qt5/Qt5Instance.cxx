@@ -50,6 +50,7 @@
 
 #include <headless/svpbmp.hxx>
 
+#include <memory>
 #include <mutex>
 #include <condition_variable>
 

@@ -188,7 +188,7 @@ OUString SAL_CALL KDE5FilePicker::getLabel(sal_Int16 controlId)
 {
     // We ignore this one and rely on QFileDialog to provide the functionality
     if (CHECKBOX_AUTOEXTENSION == controlId)
-        return "";
+        return OUString("");
 
     return Qt5FilePicker::getLabel(controlId);
 }
