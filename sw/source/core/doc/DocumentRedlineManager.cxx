@@ -3032,14 +3032,21 @@ void DocumentRedlineManager::FinalizeImport()
                                 ? pRedl->GetMark() : pRedl->GetPoint();
             SwTextNode* pDelNode = pStt->nNode.GetNode().GetTextNode();
             SwTextNode* pTextNode = pEnd->nNode.GetNode().GetTextNode();
-            // remove numbering of the first deleted list item
-            // to avoid of incorrect numbering after the deletion
+            // avoid of incorrect numbering after the deletion
             if ( pDelNode->GetNumRule() && !pTextNode->GetNumRule() )
             {
+                // remove numbering of the first deleted list item
                 const SwPaM aPam( *pStt, *pStt );
                 m_rDoc.DelNumRules( aPam );
             }
-       }
+            else if ( pDelNode->GetNumRule() != pTextNode->GetNumRule() )
+            {
+                // copy numbering to the first deleted list item
+                const SwPaM aPam( *pStt, *pStt );
+                SwNumRule *pRule = pTextNode->GetNumRule();
+                m_rDoc.SetNumRule( aPam, *pRule, false );
+            }
+        }
     }
 }
 
