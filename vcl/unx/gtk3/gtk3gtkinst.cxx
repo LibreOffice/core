@@ -8663,6 +8663,27 @@ public:
     }
 };
 
+#define g_signal_handlers_block_by_data(instance, data) \
+    g_signal_handlers_block_matched ((instance), G_SIGNAL_MATCH_DATA, 0, 0, nullptr, nullptr, (data))
+
+/* tdf#125388 on measuring each row, the GtkComboBox GtkTreeMenu will call
+   its area_apply_attributes_cb function on the row, but that calls
+   gtk_tree_menu_get_path_item which then loops through each child of the
+   menu looking for the widget of the row, so performance drops to useless.
+
+   All area_apply_attributes_cb does it set menu item sensitivity, so block it from running
+   with fragile hackery which assumes that the unwanted callback is the only one with a
+   user_data of the ComboBox GtkTreeMenu */
+static void disable_area_apply_attributes_cb(GtkWidget* pItem, gpointer userdata)
+{
+    GtkMenuItem* pMenuItem = GTK_MENU_ITEM(pItem);
+    GtkWidget* child = gtk_bin_get_child(GTK_BIN(pMenuItem));
+    GtkCellView* pCellView = GTK_CELL_VIEW(child);
+    GtkCellLayout* pCellLayout = GTK_CELL_LAYOUT(pCellView);
+    GtkCellArea* pCellArea = gtk_cell_layout_get_area(pCellLayout);
+    g_signal_handlers_block_by_data(pCellArea, userdata);
+}
+
 class GtkInstanceComboBox : public GtkInstanceContainer, public vcl::ISearchableStringList, public virtual weld::ComboBox
 {
 private:
@@ -9238,6 +9259,11 @@ public:
 #endif
     }
 
+    void bodge_area_apply_attributes_cb()
+    {
+        gtk_container_foreach(GTK_CONTAINER(m_pMenu), disable_area_apply_attributes_cb, m_pMenu);
+    }
+
     virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems, bool bKeepExisting) override
     {
         freeze();
@@ -9455,6 +9481,7 @@ public:
         enable_notify_events();
 
         bodge_wayland_menu_not_appearing();
+        bodge_area_apply_attributes_cb();
     }
 
     virtual bool get_popup_shown() const override
