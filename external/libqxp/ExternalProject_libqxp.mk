@@ -34,6 +34,7 @@ $(call gb_ExternalProject_get_state_target,libqxp,build) :
 			--disable-debug \
 			--disable-werror \
 			--disable-weffc \
+			$(if $(gb_FULLDEPS),,--disable-dependency-tracking) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
