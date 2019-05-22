@@ -436,7 +436,20 @@ void SwFrame::PrepareCursor()
                      SwFlowFrame::CastFlowFrame(pFrame)->IsAnFollow( pThis ) )
                     break;
 
+                bool const isLast(pFrame->GetNext() == this);
                 pFrame->MakeAll(getRootFrame()->GetCurrShell()->GetOut());
+                if (isLast && pFrame->GetUpper() != GetUpper())
+                {
+                    assert(GetUpper()->Lower() == this
+                        // tab frame/section frame may split multiple times
+                        || (   SwFlowFrame::CastFlowFrame(pFrame)
+                            && SwFlowFrame::CastFlowFrame(GetUpper()->Lower())
+                            && SwFlowFrame::CastFlowFrame(pFrame)->IsAnFollow(
+                                SwFlowFrame::CastFlowFrame(GetUpper()->Lower()))
+                            && GetUpper()->Lower()->GetNext() == this));
+                    break; // tdf#119109 frame was moved backward, prevent
+                           // FindNext() returning a frame inside this if
+                }          // this is a table!
             }
             // With ContentFrames, the chain may be broken while walking through
             // it. Therefore we have to figure out the next frame in a bit more
