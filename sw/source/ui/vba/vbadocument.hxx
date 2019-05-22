@@ -90,6 +90,7 @@ public:
     virtual css::uno::Any SAL_CALL Frames( const css::uno::Any& aIndex ) override;
     virtual void SAL_CALL SaveAs2000( const css::uno::Any& FileName, const css::uno::Any& FileFormat, const css::uno::Any& LockComments, const css::uno::Any& Password, const css::uno::Any& AddToRecentFiles, const css::uno::Any& WritePassword, const css::uno::Any& ReadOnlyRecommended, const css::uno::Any& EmbedTrueTypeFonts, const css::uno::Any& SaveNativePictureFormat, const css::uno::Any& SaveFormsData, const css::uno::Any& SaveAsAOCELetter ) override;
     virtual void SAL_CALL SaveAs( const css::uno::Any& FileName, const css::uno::Any& FileFormat, const css::uno::Any& LockComments, const css::uno::Any& Password, const css::uno::Any& AddToRecentFiles, const css::uno::Any& WritePassword, const css::uno::Any& ReadOnlyRecommended, const css::uno::Any& EmbedTrueTypeFonts, const css::uno::Any& SaveNativePictureFormat, const css::uno::Any& SaveFormsData, const css::uno::Any& SaveAsAOCELetter, const css::uno::Any& Encoding, const css::uno::Any& InsertLineBreaks, const css::uno::Any& AllowSubstitutions, const css::uno::Any& LineEnding, const css::uno::Any& AddBiDiMarks ) override;
+    virtual void SAL_CALL SavePreviewPngAs( const css::uno::Any& FileName ) override;
 
     // XInvocation
     virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
