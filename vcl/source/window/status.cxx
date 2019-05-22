@@ -164,10 +164,7 @@ void StatusBar::ApplySettings(vcl::RenderContext& rRenderContext)
     rRenderContext.SetLineColor();
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-    vcl::Font aFont = rStyleSettings.GetToolFont();
-    if (IsControlFont())
-        aFont.Merge(GetControlFont());
-    SetZoomedPointFont(rRenderContext, aFont);
+    ApplyControlFont(rRenderContext, rStyleSettings.GetToolFont());
 
     Color aColor;
     if (IsControlForeground())
@@ -176,8 +173,8 @@ void StatusBar::ApplySettings(vcl::RenderContext& rRenderContext)
         aColor = rStyleSettings.GetButtonTextColor();
     else
         aColor = rStyleSettings.GetWindowTextColor();
-
     rRenderContext.SetTextColor(aColor);
+
     rRenderContext.SetTextFillColor();
 
     if (IsControlBackground())
