@@ -1736,40 +1736,71 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                 // need width and height of the shape and handle position. These patterns are calculated
                 // in the static, local methods. More complex calculations or additional steps are
                 // done here.
-                // Values for corner cases 'root(negative)' or 'div zero' are meaningless dummies.
+                // Values for corner cases like 'root(negative)' or 'div zero' are meaningless dummies.
+                // Identifiers often refer to guide names in OOXML shape definitions.
                 double fAdjustX = fPos1;
                 double fAdjustY = fPos2;
                 if (aHandle.nFlags & HandleFlags::REFX)
                 {
                     nFirstAdjustmentValue = aHandle.nRefX;
-                    fAdjustX = lcl_getXAdjustmentValue(sShapeType, nIndex, fPos1, fWidth, fHeight);
-                    if ((sShapeType == "ooxml-curvedDownArrow")
-                        || (sShapeType == "ooxml-curvedUpArrow"))
+                    if ((sShapeType == "ooxml-gear6") || (sShapeType == "ooxml-gear9"))
                     {
+                        // special, needs angle calculations
                         double fss(std::min(fWidth, fHeight));
+                        double fadj1(GetAdjustValueAsDouble(0)); // from point D6 or D9
+                        double fth(fadj1 * fss / 100000.0); // radius difference
+                        double frw(fWidth / 2.0 - fth); // inner ellipse
+                        double frh(fHeight / 2.0 - fth);
+                        double fDX(fPos1 - fWidth / 2.0);
+                        double fDY(fPos2 - fHeight / 2.0);
+                        double fbA(-1.7); // effective angle for point A6 or A9, dummy value
+                        if (fDX != 0.0 || fDY != 0.0)
+                            fbA = atan2(fDY, fDX);
+                        double faA(fbA); // corresponding circle angle, dummy value
+                        double ftmpX(frh * cos(fbA));
+                        double ftmpY(frw * sin(fbA));
+                        if (ftmpX != 0.0 || ftmpY != 0.0)
+                            faA = atan2(ftmpY, ftmpX); // range ]-pi..pi], here -pi < faA < -pi/2
+                        // screen 270 deg = mathematic coordinate system -pi/2
+                        double fha(-F_PI2 - faA); // positive circle angle difference to 270 deg
+                        if (abs(fha) == F_PI2) // should not happen, but ensure no tan(90deg)
+                            fha = 0.12; // dummy value
+                        double flFD(2 * std::min(frw, frh) * tan(fha) - fth);
                         if (fss != 0.0)
+                            fAdjustX = flFD / fss * 100000.0;
+                    }
+                    else
+                    {
+                        fAdjustX
+                            = lcl_getXAdjustmentValue(sShapeType, nIndex, fPos1, fWidth, fHeight);
+                        if ((sShapeType == "ooxml-curvedDownArrow")
+                            || (sShapeType == "ooxml-curvedUpArrow"))
                         {
-                            double fadj3(GetAdjustValueAsDouble(2));
-                            double fHScaled(100000.0 * fHeight / fss);
-                            double fRadicand(fHScaled * fHScaled - fadj3 * fadj3);
-                            double fSqrt = fRadicand >= 0.0 ? sqrt(fRadicand) : 0.0;
-                            double fPart(200000.0 * fWidth / fss * (fSqrt + fHScaled));
-                            fAdjustX = fPart - 4.0 * fHScaled * fAdjustX;
-                            if (nIndex == 0)
+                            double fss(std::min(fWidth, fHeight));
+                            if (fss != 0.0)
                             {
-                                // calculate adj1
-                                double fadj2(GetAdjustValueAsDouble(1));
-                                fAdjustX = fAdjustX - fadj2 * (fSqrt + fHScaled);
-                                double fDenominator(fSqrt - 3.0 * fHScaled);
-                                fAdjustX /= fDenominator != 0.0 ? fDenominator : 1.0;
-                            }
-                            else
-                            {
-                                // nIndex == 1, calculate adj2
-                                double fadj1(GetAdjustValueAsDouble(0));
-                                fAdjustX = fAdjustX - fadj1 * (fSqrt - fHScaled);
-                                double fDenominator(fSqrt + 3.0 * fHScaled);
-                                fAdjustX /= fDenominator != 0.0 ? fDenominator : 1.0;
+                                double fadj3(GetAdjustValueAsDouble(2));
+                                double fHScaled(100000.0 * fHeight / fss);
+                                double fRadicand(fHScaled * fHScaled - fadj3 * fadj3);
+                                double fSqrt = fRadicand >= 0.0 ? sqrt(fRadicand) : 0.0;
+                                double fPart(200000.0 * fWidth / fss * (fSqrt + fHScaled));
+                                fAdjustX = fPart - 4.0 * fHScaled * fAdjustX;
+                                if (nIndex == 0)
+                                {
+                                    // calculate adj1
+                                    double fadj2(GetAdjustValueAsDouble(1));
+                                    fAdjustX = fAdjustX - fadj2 * (fSqrt + fHScaled);
+                                    double fDenominator(fSqrt - 3.0 * fHScaled);
+                                    fAdjustX /= fDenominator != 0.0 ? fDenominator : 1.0;
+                                }
+                                else
+                                {
+                                    // nIndex == 1, calculate adj2
+                                    double fadj1(GetAdjustValueAsDouble(0));
+                                    fAdjustX = fAdjustX - fadj1 * (fSqrt - fHScaled);
+                                    double fDenominator(fSqrt + 3.0 * fHScaled);
+                                    fAdjustX /= fDenominator != 0.0 ? fDenominator : 1.0;
+                                }
                             }
                         }
                     }
@@ -1778,62 +1809,76 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                 if (aHandle.nFlags & HandleFlags::REFY)
                 {
                     nSecondAdjustmentValue = aHandle.nRefY;
-                    fAdjustY = lcl_getYAdjustmentValue(sShapeType, nIndex, fPos2, fWidth, fHeight);
-
-                    if (sShapeType == "ooxml-mathDivide" && nIndex == 1)
-                        fAdjustY = fAdjustY - GetAdjustValueAsDouble(0) / 2.0
-                                   - GetAdjustValueAsDouble(2);
-                    else if (sShapeType == "ooxml-mathEqual" && nIndex == 0)
-                        fAdjustY -= GetAdjustValueAsDouble(1) / 2.0;
-                    else if (sShapeType == "ooxml-mathNotEqual" && nIndex == 0)
-                        fAdjustY -= GetAdjustValueAsDouble(2) / 2.0;
-                    else if (sShapeType == "ooxml-leftUpArrow" && nIndex == 0)
-                        fAdjustY -= GetAdjustValueAsDouble(1) * 2.0;
-                    else if ((sShapeType == "ooxml-curvedRightArrow")
-                             || (sShapeType == "ooxml-curvedLeftArrow"))
+                    if ((sShapeType == "ooxml-gear6") || (sShapeType == "ooxml-gear9"))
                     {
+                        // special, acts more like a polar handle radius
+                        double fDX = fPos1 - fWidth / 2.0;
+                        double fDY = fPos2 - fHeight / 2.0;
+                        double fRadiusDifference
+                            = lcl_getRadiusDistance(fWidth / 2.0, fHeight / 2.0, fDX, fDY);
                         double fss(std::min(fWidth, fHeight));
-                        if (fss != 0.0)
+                        if (fss != 0)
+                            fAdjustY = fRadiusDifference / fss * 100000.0;
+                    }
+                    else
+                    {
+                        fAdjustY
+                            = lcl_getYAdjustmentValue(sShapeType, nIndex, fPos2, fWidth, fHeight);
+                        if (sShapeType == "ooxml-mathDivide" && nIndex == 1)
+                            fAdjustY = fAdjustY - GetAdjustValueAsDouble(0) / 2.0
+                                       - GetAdjustValueAsDouble(2);
+                        else if (sShapeType == "ooxml-mathEqual" && nIndex == 0)
+                            fAdjustY -= GetAdjustValueAsDouble(1) / 2.0;
+                        else if (sShapeType == "ooxml-mathNotEqual" && nIndex == 0)
+                            fAdjustY -= GetAdjustValueAsDouble(2) / 2.0;
+                        else if (sShapeType == "ooxml-leftUpArrow" && nIndex == 0)
+                            fAdjustY -= GetAdjustValueAsDouble(1) * 2.0;
+                        else if ((sShapeType == "ooxml-curvedRightArrow")
+                                 || (sShapeType == "ooxml-curvedLeftArrow"))
                         {
-                            double fadj3(GetAdjustValueAsDouble(2));
-                            double fWScaled(100000.0 * fWidth / fss);
-                            double fRadicand(fWScaled * fWScaled - fadj3 * fadj3);
-                            double fSqrt = fRadicand >= 0.0 ? sqrt(fRadicand) : 0.0;
+                            double fss(std::min(fWidth, fHeight));
+                            if (fss != 0.0)
+                            {
+                                double fadj3(GetAdjustValueAsDouble(2));
+                                double fWScaled(100000.0 * fWidth / fss);
+                                double fRadicand(fWScaled * fWScaled - fadj3 * fadj3);
+                                double fSqrt = fRadicand >= 0.0 ? sqrt(fRadicand) : 0.0;
+                                if (nIndex == 0)
+                                {
+                                    // calculate adj1
+                                    double fadj2(GetAdjustValueAsDouble(1));
+                                    fAdjustY = fWScaled * (2.0 * fAdjustY - fadj2);
+                                    fAdjustY += (200000.0 / fss * fHeight - fadj2) * fSqrt;
+                                    double fDenominator(fSqrt + fWScaled);
+                                    fAdjustY /= fDenominator != 0.0 ? fDenominator : 1.0;
+                                }
+                                else
+                                {
+                                    // nIndex == 1, calculate adj2
+                                    double fadj1(GetAdjustValueAsDouble(0));
+                                    fAdjustY = fWScaled * (2.0 * fAdjustY + fadj1);
+                                    fAdjustY += (200000.0 / fss * fHeight - fadj1) * fSqrt;
+                                    double fDenominator(fSqrt + 3.0 * fWScaled);
+                                    fAdjustY /= fDenominator != 0.0 ? fDenominator : 1.0;
+                                }
+                            }
+                        }
+                        else if (sShapeType == "ooxml-uturnArrow" && nIndex == 2)
+                        {
+                            double fss(std::min(fWidth, fHeight));
+                            if (fss != 0.0)
+                            {
+                                double fadj5(GetAdjustValueAsDouble(4));
+                                fAdjustY += fHeight / fss * (fadj5 - 100000.0);
+                            }
+                        }
+                        else if (sShapeType == "ooxml-leftRightRibbon")
+                        {
                             if (nIndex == 0)
-                            {
-                                // calculate adj1
-                                double fadj2(GetAdjustValueAsDouble(1));
-                                fAdjustY = fWScaled * (2.0 * fAdjustY - fadj2);
-                                fAdjustY += (200000.0 / fss * fHeight - fadj2) * fSqrt;
-                                double fDenominator(fSqrt + fWScaled);
-                                fAdjustY /= fDenominator != 0.0 ? fDenominator : 1.0;
-                            }
-                            else
-                            {
-                                // nIndex == 1, calculate adj2
-                                double fadj1(GetAdjustValueAsDouble(0));
-                                fAdjustY = fWScaled * (2.0 * fAdjustY + fadj1);
-                                fAdjustY += (200000.0 / fss * fHeight - fadj1) * fSqrt;
-                                double fDenominator(fSqrt + 3.0 * fWScaled);
-                                fAdjustY /= fDenominator != 0.0 ? fDenominator : 1.0;
-                            }
+                                fAdjustY = GetAdjustValueAsDouble(2) - fAdjustY;
+                            else // nIndex == 2
+                                fAdjustY = GetAdjustValueAsDouble(0) + fAdjustY;
                         }
-                    }
-                    else if (sShapeType == "ooxml-uturnArrow" && nIndex == 2)
-                    {
-                        double fss(std::min(fWidth, fHeight));
-                        if (fss != 0.0)
-                        {
-                            double fadj5(GetAdjustValueAsDouble(4));
-                            fAdjustY += fHeight / fss * (fadj5 - 100000.0);
-                        }
-                    }
-                    else if (sShapeType == "ooxml-leftRightRibbon")
-                    {
-                        if (nIndex == 0)
-                            fAdjustY = GetAdjustValueAsDouble(2) - fAdjustY;
-                        else // nIndex == 2
-                            fAdjustY = GetAdjustValueAsDouble(0) + fAdjustY;
                     }
                 }
 
