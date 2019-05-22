@@ -3614,7 +3614,7 @@ OUString SwTextNode::GetRedlineText() const
 {
     std::vector<sal_Int32> aRedlArr;
     const SwDoc* pDoc = GetDoc();
-    SwRedlineTable::size_type nRedlPos = pDoc->getIDocumentRedlineAccess().GetRedlinePos( *this, nsRedlineType_t::REDLINE_DELETE );
+    SwRedlineTable::size_type nRedlPos = pDoc->getIDocumentRedlineAccess().GetRedlinePos( *this, RedlineType::Delete );
     if( SwRedlineTable::npos != nRedlPos )
     {
         // some redline-delete object exists for the node
@@ -3622,7 +3622,7 @@ OUString SwTextNode::GetRedlineText() const
         for( ; nRedlPos < pDoc->getIDocumentRedlineAccess().GetRedlineTable().size() ; ++nRedlPos )
         {
             const SwRangeRedline* pTmp = pDoc->getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
-            if( nsRedlineType_t::REDLINE_DELETE == pTmp->GetType() )
+            if( RedlineType::Delete == pTmp->GetType() )
             {
                 const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
                 if( pRStt->nNode < nNdIdx )

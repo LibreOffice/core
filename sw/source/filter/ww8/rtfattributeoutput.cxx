@@ -569,7 +569,7 @@ void RtfAttributeOutput::Redline(const SwRedlineData* pRedline)
     if (!pRedline)
         return;
 
-    if (pRedline->GetType() == nsRedlineType_t::REDLINE_INSERT)
+    if (pRedline->GetType() == RedlineType::Insert)
     {
         m_aRun->append(OOO_STRING_SVTOOLS_RTF_REVISED);
         m_aRun->append(OOO_STRING_SVTOOLS_RTF_REVAUTH);
@@ -577,7 +577,7 @@ void RtfAttributeOutput::Redline(const SwRedlineData* pRedline)
             m_rExport.GetRedline(SW_MOD()->GetRedlineAuthor(pRedline->GetAuthor()))));
         m_aRun->append(OOO_STRING_SVTOOLS_RTF_REVDTTM);
     }
-    else if (pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE)
+    else if (pRedline->GetType() == RedlineType::Delete)
     {
         m_aRun->append(OOO_STRING_SVTOOLS_RTF_DELETED);
         m_aRun->append(OOO_STRING_SVTOOLS_RTF_REVAUTHDEL);

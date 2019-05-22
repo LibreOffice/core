@@ -252,7 +252,7 @@ SwTwips SwTextFrame::EmptyHeight() const
     if (IDocumentRedlineAccess::IsShowChanges(rIDRA.GetRedlineFlags())
         && !getRootFrame()->IsHideRedlines())
     {
-        const SwRedlineTable::size_type nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
+        const SwRedlineTable::size_type nRedlPos = rIDRA.GetRedlinePos( rTextNode, RedlineType::Any );
         if( SwRedlineTable::npos != nRedlPos )
         {
             SwAttrHandler aAttrHandler;

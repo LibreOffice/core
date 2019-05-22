@@ -93,7 +93,7 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg final
     DECL_DLLPRIVATE_LINK( CommandHdl, const CommandEvent&, bool );
 
     SAL_DLLPRIVATE SwRedlineTable::size_type CalcDiff(SwRedlineTable::size_type nStart, bool bChild);
-    SAL_DLLPRIVATE void          InsertChildren(SwRedlineDataParent *pParent, const SwRangeRedline& rRedln, const sal_uInt16 nAutoFormat);
+    SAL_DLLPRIVATE void          InsertChildren(SwRedlineDataParent *pParent, const SwRangeRedline& rRedln, bool bHasRedlineAutoFormat);
     SAL_DLLPRIVATE void          InsertParents(SwRedlineTable::size_type nStart, SwRedlineTable::size_type nEnd = SwRedlineTable::npos);
     SAL_DLLPRIVATE void          RemoveParents(SwRedlineTable::size_type nStart, SwRedlineTable::size_type nEnd);
     SAL_DLLPRIVATE void          InitAuthors();

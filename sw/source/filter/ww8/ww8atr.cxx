@@ -5463,7 +5463,7 @@ void AttributeOutputBase::FormatCharBorder( const SvxBoxItem& rBox )
  * - Start = the last character of the current paragraph
  * - End = the first character of the next paragraph
  */
-const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTextNode& rNode, RedlineType_t aRedlineType)
+const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTextNode& rNode, RedlineType aRedlineType)
 {
     // ToDo : this is not the most ideal ... should start maybe from 'nCurRedlinePos'
     for(SwRangeRedline* pRedl : GetExport().m_pDoc->getIDocumentRedlineAccess().GetRedlineTable())

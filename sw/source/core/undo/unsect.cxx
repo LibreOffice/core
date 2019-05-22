@@ -92,7 +92,7 @@ SwUndoInsSection::SwUndoInsSection(
     SwDoc& rDoc = *rPam.GetDoc();
     if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
     {
-        m_pRedlData.reset(new SwRedlineData( nsRedlineType_t::REDLINE_INSERT,
+        m_pRedlData.reset(new SwRedlineData( RedlineType::Insert,
                                         rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() ));
         SetRedlineFlags( rDoc.getIDocumentRedlineAccess().GetRedlineFlags() );
     }
@@ -133,7 +133,7 @@ void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
     OSL_ENSURE( pNd, "where is my SectionNode?" );
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
-        rDoc.getIDocumentRedlineAccess().DeleteRedline( *pNd, true, USHRT_MAX );
+        rDoc.getIDocumentRedlineAccess().DeleteRedline( *pNd, true, RedlineType::Any );
 
     // no selection?
     SwNodeIndex aIdx( *pNd );

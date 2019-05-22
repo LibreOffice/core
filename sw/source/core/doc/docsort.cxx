@@ -346,7 +346,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
             GetNodes().Copy_( aRg, aEndIdx );
 
             // range is new from pEnd->nNode+1 to aEndIdx
-            getIDocumentRedlineAccess().DeleteRedline( *pRedlPam, true, USHRT_MAX );
+            getIDocumentRedlineAccess().DeleteRedline( *pRedlPam, true, RedlineType::Any );
 
             pRedlPam->GetMark()->nNode.Assign( pEnd->nNode.GetNode(), 1 );
             pCNd = pRedlPam->GetContentNode( false );
@@ -368,7 +368,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         }
         else
         {
-            getIDocumentRedlineAccess().DeleteRedline( *pRedlPam, true, USHRT_MAX );
+            getIDocumentRedlineAccess().DeleteRedline( *pRedlPam, true, RedlineType::Any );
             delete pRedlPam;
             pRedlPam = nullptr;
         }
@@ -434,7 +434,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 
         // the copied range is deleted
         SwRangeRedline *const pDeleteRedline(
-            new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, *pRedlPam ));
+            new SwRangeRedline( RedlineType::Delete, *pRedlPam ));
 
         // pRedlPam points to nodes that may be deleted (hidden) by
         // AppendRedline, so adjust it beforehand to prevent ASSERT
@@ -445,7 +445,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         getIDocumentRedlineAccess().AppendRedline(pDeleteRedline, true);
 
         // the sorted range is inserted
-        getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, *pRedlPam ), true);
+        getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( RedlineType::Insert, *pRedlPam ), true);
 
         if( pRedlUndo )
         {
@@ -491,7 +491,7 @@ bool SwDoc::SortTable(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
         return false;
 
     if( !getIDocumentRedlineAccess().IsIgnoreRedline() && !getIDocumentRedlineAccess().GetRedlineTable().empty() )
-        getIDocumentRedlineAccess().DeleteRedline( *pTableNd, true, USHRT_MAX );
+        getIDocumentRedlineAccess().DeleteRedline( *pTableNd, true, RedlineType::Any );
 
     FndLines_t::size_type nStart = 0;
     if( pTableNd->GetTable().GetRowsToRepeat() > 0 && rOpt.eDirection == SRT_ROWS )

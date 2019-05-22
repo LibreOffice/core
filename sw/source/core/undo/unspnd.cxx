@@ -57,7 +57,7 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
     // consider Redline
     if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
     {
-        pRedlData.reset( new SwRedlineData( nsRedlineType_t::REDLINE_INSERT, pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
+        pRedlData.reset( new SwRedlineData( RedlineType::Insert, pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
         SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 
@@ -122,7 +122,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
                 ++rPam.GetMark()->nNode;
                 rPam.GetMark()->nContent.Assign( rPam.GetMark()->
                                     nNode.GetNode().GetContentNode(), 0 );
-                pDoc->getIDocumentRedlineAccess().DeleteRedline( rPam, true, USHRT_MAX );
+                pDoc->getIDocumentRedlineAccess().DeleteRedline( rPam, true, RedlineType::Any );
                 rPam.DeleteMark();
             }
 

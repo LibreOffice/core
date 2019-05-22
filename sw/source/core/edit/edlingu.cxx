@@ -1228,7 +1228,7 @@ static SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell const * pSh)
         const SwPosition* pStartPos = pCursor->Start();
         const SwTextNode* pTextNode = pCursor->GetNode().GetTextNode();
 
-        SwRedlineTable::size_type nAct = pDoc->getIDocumentRedlineAccess().GetRedlinePos( *pTextNode, USHRT_MAX );
+        SwRedlineTable::size_type nAct = pDoc->getIDocumentRedlineAccess().GetRedlinePos( *pTextNode, RedlineType::Any );
         const sal_Int32 nStartIndex = pStartPos->nContent.GetIndex();
         for ( ; nAct < pDoc->getIDocumentRedlineAccess().GetRedlineTable().size(); nAct++ )
         {
@@ -1237,7 +1237,7 @@ static SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell const * pSh)
             if ( pRed->Start()->nNode > pTextNode->GetIndex() )
                 break;
 
-            if( nsRedlineType_t::REDLINE_DELETE == pRed->GetType() )
+            if( RedlineType::Delete == pRed->GetType() )
             {
                 sal_Int32 nStart_, nEnd_;
                 pRed->CalcStartEnd( pTextNode->GetIndex(), nStart_, nEnd_ );

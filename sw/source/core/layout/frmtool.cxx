@@ -1465,7 +1465,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 // pathology: redline that starts on a TableNode; cannot
                 // be created in UI but by import filters...
                 if (pRedline
-                    && pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE
+                    && pRedline->GetType() == RedlineType::Delete
                     && &pRedline->Start()->nNode.GetNode() == pNd)
                 {
                     SAL_WARN("sw.pageframe", "skipping table frame creation on bizarre redline");

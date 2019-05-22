@@ -916,7 +916,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 
     SwUndoUpdateIndex * pUndo(nullptr);
     {
-        pDoc->getIDocumentRedlineAccess().DeleteRedline( *pSectNd, true, USHRT_MAX );
+        pDoc->getIDocumentRedlineAccess().DeleteRedline( *pSectNd, true, RedlineType::Any );
 
         SwNodeIndex aSttIdx( *pSectNd, +1 );
         SwNodeIndex aEndIdx( *pSectNd->EndOfSectionNode() );

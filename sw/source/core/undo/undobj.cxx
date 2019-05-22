@@ -1364,7 +1364,7 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM const & rPam )
     // First, delete the "old" so that in an Append no unexpected things will
     // happen, e.g. a delete in an insert. In the latter case the just restored
     // content will be deleted and not the one you originally wanted.
-    rDoc.getIDocumentRedlineAccess().DeleteRedline( *pRedl, false, USHRT_MAX );
+    rDoc.getIDocumentRedlineAccess().DeleteRedline( *pRedl, false, RedlineType::Any );
 
     RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
     rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld | RedlineFlags::DontCombineRedlines );
@@ -1408,7 +1408,7 @@ bool SwUndo::FillSaveData(
     }
     if( !rSData.empty() && bDelRange )
     {
-        rRange.GetDoc()->getIDocumentRedlineAccess().DeleteRedline( rRange, false, USHRT_MAX );
+        rRange.GetDoc()->getIDocumentRedlineAccess().DeleteRedline( rRange, false, RedlineType::Any );
     }
     return !rSData.empty();
 }
@@ -1426,7 +1426,7 @@ bool SwUndo::FillSaveDataForFormat(
     for ( ; n < rTable.size(); ++n )
     {
         SwRangeRedline* pRedl = rTable[n];
-        if ( nsRedlineType_t::REDLINE_FORMAT == pRedl->GetType() )
+        if ( RedlineType::Format == pRedl->GetType() )
         {
             const SwComparePosition eCmpPos = ComparePosition( *pStt, *pEnd, *pRedl->Start(), *pRedl->End() );
             if ( eCmpPos != SwComparePosition::Before

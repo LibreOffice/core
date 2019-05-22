@@ -69,16 +69,17 @@ static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon )
     const char* pResId = nullptr;
     switch( rRedl.GetType() )
     {
-    case nsRedlineType_t::REDLINE_INSERT:   pResId = STR_REDLINE_INSERT; break;
-    case nsRedlineType_t::REDLINE_DELETE:   pResId = STR_REDLINE_DELETE; break;
-    case nsRedlineType_t::REDLINE_FORMAT:   pResId = STR_REDLINE_FORMAT; break;
-    case nsRedlineType_t::REDLINE_TABLE:    pResId = STR_REDLINE_TABLE; break;
-    case nsRedlineType_t::REDLINE_FMTCOLL:  pResId = STR_REDLINE_FMTCOLL; break;
-    case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT: pResId = STR_REDLINE_PARAGRAPH_FORMAT; break;
-    case nsRedlineType_t::REDLINE_TABLE_ROW_INSERT: pResId = STR_REDLINE_TABLE_ROW_INSERT; break;
-    case nsRedlineType_t::REDLINE_TABLE_ROW_DELETE: pResId = STR_REDLINE_TABLE_ROW_DELETE; break;
-    case nsRedlineType_t::REDLINE_TABLE_CELL_INSERT: pResId = STR_REDLINE_TABLE_CELL_INSERT; break;
-    case nsRedlineType_t::REDLINE_TABLE_CELL_DELETE: pResId = STR_REDLINE_TABLE_CELL_DELETE; break;
+    case RedlineType::Insert:   pResId = STR_REDLINE_INSERT; break;
+    case RedlineType::Delete:   pResId = STR_REDLINE_DELETE; break;
+    case RedlineType::Format:   pResId = STR_REDLINE_FORMAT; break;
+    case RedlineType::Table:    pResId = STR_REDLINE_TABLE; break;
+    case RedlineType::FmtColl:  pResId = STR_REDLINE_FMTCOLL; break;
+    case RedlineType::ParagraphFormat: pResId = STR_REDLINE_PARAGRAPH_FORMAT; break;
+    case RedlineType::TableRowInsert: pResId = STR_REDLINE_TABLE_ROW_INSERT; break;
+    case RedlineType::TableRowDelete: pResId = STR_REDLINE_TABLE_ROW_DELETE; break;
+    case RedlineType::TableCellInsert: pResId = STR_REDLINE_TABLE_CELL_INSERT; break;
+    case RedlineType::TableCellDelete: pResId = STR_REDLINE_TABLE_CELL_DELETE; break;
+    default: break;
     }
 
     OUStringBuffer sBuf;

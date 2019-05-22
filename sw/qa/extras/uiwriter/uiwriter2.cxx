@@ -314,7 +314,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376_redline)
 
     IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
     rIDRA.SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
-    rIDRA.AppendRedline(new SwRangeRedline(nsRedlineType_t::REDLINE_DELETE, pam), true);
+    rIDRA.AppendRedline(new SwRangeRedline(RedlineType::Delete, pam), true);
     // this used to assert/crash with m_pAnchoredFlys mismatch because the
     // fly was not deleted but its anchor was moved to the SwTableNode
     rIDRA.AcceptAllRedline(true);

@@ -2250,7 +2250,7 @@ const SwRangeRedline* SwCursorShell::GotoRedline_( SwRedlineTable::size_type nAr
         if( pFnd && bSelect )
         {
             m_pCurrentCursor->SetMark();
-            if( nsRedlineType_t::REDLINE_FMTCOLL == pFnd->GetType() )
+            if( RedlineType::FmtColl == pFnd->GetType() )
             {
                 pCNd = pIdx->GetNode().GetContentNode();
                 m_pCurrentCursor->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );

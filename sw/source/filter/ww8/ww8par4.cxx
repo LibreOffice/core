@@ -477,7 +477,7 @@ void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
    Revision Marks ( == Redlining )
 */
 // insert or delete content (change char attributes resp.)
-void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
+void SwWW8ImplReader::Read_CRevisionMark(RedlineType eType,
     const sal_uInt8* pData, short nLen )
 {
     // there *must* be a SprmCIbstRMark[Del] and a SprmCDttmRMark[Del]
@@ -486,7 +486,7 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
         return;
     const sal_uInt8* pSprmCIbstRMark;
     const sal_uInt8* pSprmCDttmRMark;
-    if( nsRedlineType_t::REDLINE_FORMAT == eType )
+    if( RedlineType::Format == eType )
     {
         pSprmCIbstRMark = nLen >= 3 ? pData+1 : nullptr;
         pSprmCDttmRMark = nLen >= 7 ? pData+3 : nullptr;
@@ -498,7 +498,7 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
          * list" variant of HasCharSprm and take the last one as the true one.
          */
         std::vector<SprmResult> aResult;
-        bool bIns = (nsRedlineType_t::REDLINE_INSERT == eType);
+        bool bIns = (RedlineType::Insert == eType);
         if( m_bVer67 )
         {
             m_xPlcxMan->HasCharSprm(69, aResult);
@@ -534,13 +534,13 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
 // insert new content
 void SwWW8ImplReader::Read_CFRMark(sal_uInt16 , const sal_uInt8* pData, short nLen)
 {
-    Read_CRevisionMark( nsRedlineType_t::REDLINE_INSERT, pData, nLen );
+    Read_CRevisionMark( RedlineType::Insert, pData, nLen );
 }
 
 // delete old content
 void SwWW8ImplReader::Read_CFRMarkDel(sal_uInt16 , const sal_uInt8* pData, short nLen)
 {
-    Read_CRevisionMark( nsRedlineType_t::REDLINE_DELETE, pData, nLen );
+    Read_CRevisionMark( RedlineType::Delete, pData, nLen );
 }
 
 // change properties of content ( == char formatting)
@@ -550,7 +550,7 @@ void SwWW8ImplReader::Read_CPropRMark(sal_uInt16 , const sal_uInt8* pData, short
     // 1 byte  - chp.fPropRMark
     // 2 bytes - chp.ibstPropRMark
     // 4 bytes - chp.dttmPropRMark;
-    Read_CRevisionMark( nsRedlineType_t::REDLINE_FORMAT, pData, nLen );
+    Read_CRevisionMark( RedlineType::Format, pData, nLen );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -689,9 +689,9 @@ namespace sw
         class SameOpenRedlineType
         {
         private:
-            RedlineType_t const meType;
+            RedlineType const meType;
         public:
-            explicit SameOpenRedlineType(RedlineType_t eType) : meType(eType) {}
+            explicit SameOpenRedlineType(RedlineType eType) : meType(eType) {}
             bool operator()(const std::unique_ptr<SwFltStackEntry> & pEntry) const
             {
                 const SwFltRedline *pTest = static_cast<const SwFltRedline *>
@@ -700,7 +700,7 @@ namespace sw
             }
         };
 
-        bool RedlineStack::close(const SwPosition& rPos, RedlineType_t eType)
+        bool RedlineStack::close(const SwPosition& rPos, RedlineType eType)
         {
             //Search from end for same type
             auto aResult = std::find_if(maStack.rbegin(), maStack.rend(),
@@ -820,7 +820,7 @@ namespace sw
             //Return the earlier time, if two have the same time, prioritize
             //inserts over deletes
             if (pOne->aStamp == pTwo->aStamp)
-                return (pOne->eType == nsRedlineType_t::REDLINE_INSERT && pTwo->eType != nsRedlineType_t::REDLINE_INSERT);
+                return (pOne->eType == RedlineType::Insert && pTwo->eType != RedlineType::Insert);
             else
                 return (pOne->aStamp < pTwo->aStamp);
         }

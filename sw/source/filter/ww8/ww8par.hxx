@@ -1778,7 +1778,7 @@ public:     // really private, but can only be done public
     // Revision Marks ( == Redlining )
 
     // insert or delete content (change char attributes resp.)
-    void Read_CRevisionMark(RedlineType_t eType, const sal_uInt8* pData, short nLen);
+    void Read_CRevisionMark(RedlineType eType, const sal_uInt8* pData, short nLen);
     // insert new content
     void Read_CFRMark(sal_uInt16 , const sal_uInt8* pData, short nLen);
     // delete old content

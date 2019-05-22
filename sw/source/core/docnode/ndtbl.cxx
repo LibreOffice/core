@@ -547,7 +547,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     {
         SwPaM aPam( *pTableNd->EndOfSectionNode(), *pTableNd, 1 );
         if( getIDocumentRedlineAccess().IsRedlineOn() )
-            getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
+            getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( RedlineType::Insert, aPam ), true);
         else
             getIDocumentRedlineAccess().SplitRedline( aPam );
     }
@@ -2472,7 +2472,7 @@ void SwTableNode::RemoveRedlines()
     {
         SwTable& rTable = GetTable();
         if ( pDoc->getIDocumentRedlineAccess().HasExtraRedlineTable() )
-            pDoc->getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteAllTableRedlines( pDoc, rTable, true, USHRT_MAX );
+            pDoc->getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteAllTableRedlines( pDoc, rTable, true, RedlineType::Any );
     }
 }
 

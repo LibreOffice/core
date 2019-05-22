@@ -87,20 +87,20 @@ static OUString lcl_BuildTitleWithRedline( const SwRangeRedline *pRedline )
     const char* pResId = nullptr;
     switch( pRedline->GetType() )
     {
-        case nsRedlineType_t::REDLINE_INSERT:
+        case RedlineType::Insert:
             pResId = STR_REDLINE_INSERTED;
             break;
-        case nsRedlineType_t::REDLINE_DELETE:
+        case RedlineType::Delete:
             pResId = STR_REDLINE_DELETED;
             break;
-        case nsRedlineType_t::REDLINE_FORMAT:
-        case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT:
+        case RedlineType::Format:
+        case RedlineType::ParagraphFormat:
             pResId = STR_REDLINE_FORMATTED;
             break;
-        case nsRedlineType_t::REDLINE_TABLE:
+        case RedlineType::Table:
             pResId = STR_REDLINE_TABLECHG;
             break;
-        case nsRedlineType_t::REDLINE_FMTCOLL:
+        case RedlineType::FmtColl:
             pResId = STR_REDLINE_FMTCOLLSET;
             break;
         default:

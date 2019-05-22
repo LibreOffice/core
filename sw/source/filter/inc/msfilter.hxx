@@ -302,8 +302,8 @@ namespace sw
             explicit RedlineStack(SwDoc &rDoc) : mrDoc(rDoc) {}
             void MoveAttrs(const SwPosition& rPos);
             void open(const SwPosition& rPos, const SfxPoolItem& rAttr);
-            bool close(const SwPosition& rPos, RedlineType_t eType);
-            void close(const SwPosition& rPos, RedlineType_t eType,
+            bool close(const SwPosition& rPos, RedlineType eType);
+            void close(const SwPosition& rPos, RedlineType eType,
                 WW8TabDesc* pTabDesc );
             void closeall(const SwPosition& rPos);
             ~RedlineStack();

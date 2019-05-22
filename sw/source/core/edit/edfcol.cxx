@@ -2206,7 +2206,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
             // ie. in all directly preceding deleted paragraphs at the actual cursor positions
             if ( IDocumentRedlineAccess::IsShowChanges(eRedlMode) &&
                // is there redlining at beginning of the position (possible redline block before the modified node)
-               GetDoc()->getIDocumentRedlineAccess().GetRedlinePos( (*rPaM.Start()).nNode.GetNode(), USHRT_MAX ) <
+               GetDoc()->getIDocumentRedlineAccess().GetRedlinePos( (*rPaM.Start()).nNode.GetNode(), RedlineType::Any ) <
                    GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().size() )
             {
                 eRedlMode = RedlineFlags::ShowInsert | RedlineFlags::Ignore;

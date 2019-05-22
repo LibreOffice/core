@@ -80,7 +80,7 @@ static SwTextNode * FindFirstAndNextNode(SwDoc & rDoc, SwUndRng const& rRange,
         if (rRedline.nSttNode <= rRange.nSttNode
             && rRedline.nSttNode < rRange.nEndNode
             && rRange.nEndNode <= rRedline.nEndNode
-            && rRedline.GetType() == nsRedlineType_t::REDLINE_DELETE)
+            && rRedline.GetType() == RedlineType::Delete)
         {
             nEndOfRedline = rRedline.nEndNode;
             o_rpFirstMergedDeletedTextNode = rDoc.GetNodes()[rRedline.nSttNode]->GetTextNode();
@@ -573,7 +573,7 @@ bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
         if( !bOk )
             return false;
 
-        pDoc->getIDocumentRedlineAccess().DeleteRedline( rDelPam, false, USHRT_MAX );
+        pDoc->getIDocumentRedlineAccess().DeleteRedline( rDelPam, false, RedlineType::Any );
     }
 
     // Both 'deletes' can be consolidated, so 'move' the related character

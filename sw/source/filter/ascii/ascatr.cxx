@@ -180,7 +180,7 @@ public:
         : m_rNode(rNode)
         , m_rIDRA(rNode.GetDoc()->getIDocumentRedlineAccess())
         , m_nextRedline(rWriter.m_bHideDeleteRedlines
-            ? m_rIDRA.GetRedlinePos(m_rNode, nsRedlineType_t::REDLINE_DELETE)
+            ? m_rIDRA.GetRedlinePos(m_rNode, RedlineType::Delete)
             : SwRedlineTable::npos)
     {
     }
@@ -203,7 +203,7 @@ public:
         for ( ; m_nextRedline < m_rIDRA.GetRedlineTable().size(); ++m_nextRedline)
         {
             SwRangeRedline const*const pRedline(m_rIDRA.GetRedlineTable()[m_nextRedline]);
-            if (pRedline->GetType() != nsRedlineType_t::REDLINE_DELETE)
+            if (pRedline->GetType() != RedlineType::Delete)
             {
                 continue;
             }
