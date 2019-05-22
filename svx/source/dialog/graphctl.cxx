@@ -136,7 +136,7 @@ void SvxGraphCtrl::InitSdrModel()
     pModel->SetChanged( false );
 
     // Creating a View
-    pView.reset(new SvxGraphCtrlView(*pModel, this));
+    pView.reset(new GraphCtrlView(*pModel, this));
     pView->SetWorkArea( tools::Rectangle( Point(), aGraphSize ) );
     pView->EnableExtendedMouseEventDispatcher( true );
     pView->ShowSdrPage(pView->GetModel()->GetPage(0));
@@ -780,7 +780,7 @@ namespace
     };
 }
 
-rtl::Reference<sdr::overlay::OverlayManager> SvxGraphCtrlView::CreateOverlayManager(OutputDevice& rDevice) const
+rtl::Reference<sdr::overlay::OverlayManager> GraphCtrlView::CreateOverlayManager(OutputDevice& rDevice) const
 {
     assert(&rDevice == &rGraphCtrl.GetDrawingArea()->get_ref_device());
     if (rDevice.GetOutDevType() == OUTDEV_VIRDEV)
@@ -792,7 +792,7 @@ rtl::Reference<sdr::overlay::OverlayManager> SvxGraphCtrlView::CreateOverlayMana
     return SdrView::CreateOverlayManager(rDevice);
 }
 
-void SvxGraphCtrlView::InvalidateOneWin(OutputDevice& rDevice)
+void GraphCtrlView::InvalidateOneWin(OutputDevice& rDevice)
 {
     assert(&rDevice == &rGraphCtrl.GetDrawingArea()->get_ref_device());
     if (rDevice.GetOutDevType() == OUTDEV_VIRDEV)
@@ -803,7 +803,7 @@ void SvxGraphCtrlView::InvalidateOneWin(OutputDevice& rDevice)
     SdrView::InvalidateOneWin(rDevice);
 }
 
-void SvxGraphCtrlView::InvalidateOneWin(OutputDevice& rDevice, const tools::Rectangle& rArea)
+void GraphCtrlView::InvalidateOneWin(OutputDevice& rDevice, const tools::Rectangle& rArea)
 {
     assert(&rDevice == &rGraphCtrl.GetDrawingArea()->get_ref_device());
     if (rDevice.GetOutDevType() == OUTDEV_VIRDEV)
@@ -814,7 +814,7 @@ void SvxGraphCtrlView::InvalidateOneWin(OutputDevice& rDevice, const tools::Rect
     SdrView::InvalidateOneWin(rDevice, rArea);
 }
 
-SvxGraphCtrlView::~SvxGraphCtrlView()
+GraphCtrlView::~GraphCtrlView()
 {
     // turn SetOutputToWindow back off again before
     // turning back into our baseclass during dtoring

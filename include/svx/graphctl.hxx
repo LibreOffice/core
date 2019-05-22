@@ -46,7 +46,7 @@ class SvxGraphCtrlAccessibleContext;
 
 class SVX_DLLPUBLIC SvxGraphCtrl : public weld::CustomWidgetController
 {
-    friend class SvxGraphCtrlView;
+    friend class GraphCtrlView;
     friend class GraphCtrlUserCall;
 
     Graphic             aGraphic;
@@ -129,7 +129,7 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 };
 
-class SvxGraphCtrlView : public SdrView
+class GraphCtrlView : public SdrView
 {
     SvxGraphCtrl& rGraphCtrl;
 
@@ -142,13 +142,13 @@ protected:
     }
 
 public:
-    SvxGraphCtrlView(SdrModel& rSdrModel, SvxGraphCtrl* pWindow)
+    GraphCtrlView(SdrModel& rSdrModel, SvxGraphCtrl* pWindow)
         : SdrView(rSdrModel, &pWindow->GetDrawingArea()->get_ref_device())
         , rGraphCtrl(*pWindow)
     {
     }
 
-    virtual ~SvxGraphCtrlView() override;
+    virtual ~GraphCtrlView() override;
 
     // override these so we can get the occasions SdrPaintView would call Window::Invalidate on its vcl::Window
     // if it had one, and route to WidgetController::Invalidate instead
