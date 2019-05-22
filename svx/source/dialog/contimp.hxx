@@ -90,11 +90,11 @@ class SvxSuperContourDlg
     std::unique_ptr<weld::CustomWeld> m_xContourWndWeld;
 
     DECL_LINK( Tbx1ClickHdl, const OString&, void );
-    DECL_LINK( MousePosHdl, SvxGraphCtrl*, void );
-    DECL_LINK( GraphSizeHdl, SvxGraphCtrl*, void );
+    DECL_LINK( MousePosHdl, GraphCtrl*, void );
+    DECL_LINK( GraphSizeHdl, GraphCtrl*, void );
     DECL_LINK( UpdateHdl, Timer *, void );
     DECL_LINK( CreateHdl, Timer *, void );
-    DECL_LINK( StateHdl, SvxGraphCtrl*, void );
+    DECL_LINK( StateHdl, GraphCtrl*, void );
     DECL_LINK( PipetteHdl, ContourWindow&, void );
     DECL_LINK( PipetteClickHdl, ContourWindow&, void );
     DECL_LINK( WorkplaceClickHdl, ContourWindow&, void );

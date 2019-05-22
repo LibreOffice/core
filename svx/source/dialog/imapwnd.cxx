@@ -56,7 +56,7 @@ using ::com::sun::star::uno::Reference;
 #define TRANSCOL COL_WHITE
 
 IMapWindow::IMapWindow(const Reference< XFrame >& rxDocumentFrame, weld::Dialog* pDialog)
-    : SvxGraphCtrl(pDialog)
+    : GraphCtrl(pDialog)
     , mxDocumentFrame(rxDocumentFrame)
 {
     memset( maItemInfos, 0, sizeof( SfxItemInfo ) );
@@ -296,7 +296,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
 
 void IMapWindow::InitSdrModel()
 {
-    SvxGraphCtrl::InitSdrModel();
+    GraphCtrl::InitSdrModel();
 
     SfxItemSet aSet( pModel->GetItemPool() );
 
@@ -431,14 +431,14 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
 
 bool IMapWindow::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    bool bRet = SvxGraphCtrl::MouseButtonUp( rMEvt );
+    bool bRet = GraphCtrl::MouseButtonUp( rMEvt );
     UpdateInfo( true );
     return bRet;
 }
 
 void IMapWindow::MarkListHasChanged()
 {
-    SvxGraphCtrl::MarkListHasChanged();
+    GraphCtrl::MarkListHasChanged();
     UpdateInfo( false );
 }
 

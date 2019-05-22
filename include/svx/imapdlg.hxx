@@ -82,7 +82,7 @@ public:
 
 class IMapOwnData;
 class IMapWindow;
-class SvxGraphCtrl;
+class GraphCtrl;
 
 class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialogController
 {
@@ -109,14 +109,14 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialogController
 
     DECL_LINK( TbxClickHdl, const OString&, void );
     DECL_LINK( InfoHdl, IMapWindow&, void );
-    DECL_LINK( MousePosHdl, SvxGraphCtrl*, void );
-    DECL_LINK( GraphSizeHdl, SvxGraphCtrl*, void );
+    DECL_LINK( MousePosHdl, GraphCtrl*, void );
+    DECL_LINK( GraphSizeHdl, GraphCtrl*, void );
     DECL_LINK( URLModifyHdl, weld::ComboBox&, void );
     DECL_LINK( EntryModifyHdl, weld::Entry&, void );
     DECL_LINK( URLModifyComboBoxHdl, weld::ComboBox&, void );
     DECL_LINK( URLLoseFocusHdl, weld::Widget&, void );
     DECL_LINK( UpdateHdl, Timer *, void );
-    DECL_LINK( StateHdl, SvxGraphCtrl*, void );
+    DECL_LINK( StateHdl, GraphCtrl*, void );
     DECL_LINK( CancelHdl, weld::Button&, void );
 
     void                URLModify();

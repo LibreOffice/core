@@ -23,7 +23,7 @@
 #include <tools/poly.hxx>
 #include <svx/graphctl.hxx>
 
-class ContourWindow final : public SvxGraphCtrl
+class ContourWindow final : public GraphCtrl
 {
     tools::PolyPolygon         aPolyPoly;
     Color               aPipetteColor;

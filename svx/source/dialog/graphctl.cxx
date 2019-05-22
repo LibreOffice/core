@@ -55,7 +55,7 @@ void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, c
     rWin.QueueIdleUpdate();
 }
 
-SvxGraphCtrl::SvxGraphCtrl(weld::Dialog* pDialog)
+GraphCtrl::GraphCtrl(weld::Dialog* pDialog)
     : aUpdateIdle("svx GraphCtrl Update")
     , aMap100(MapUnit::Map100thMM)
     , eObjKind(OBJ_NONE)
@@ -67,17 +67,17 @@ SvxGraphCtrl::SvxGraphCtrl(weld::Dialog* pDialog)
 {
     pUserCall.reset(new GraphCtrlUserCall( *this ));
     aUpdateIdle.SetPriority( TaskPriority::LOWEST );
-    aUpdateIdle.SetInvokeHandler( LINK( this, SvxGraphCtrl, UpdateHdl ) );
+    aUpdateIdle.SetInvokeHandler( LINK( this, GraphCtrl, UpdateHdl ) );
     aUpdateIdle.Start();
 }
 
-void SvxGraphCtrl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+void GraphCtrl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     weld::CustomWidgetController::SetDrawingArea(pDrawingArea);
     EnableRTL(false);
 }
 
-SvxGraphCtrl::~SvxGraphCtrl()
+GraphCtrl::~GraphCtrl()
 {
     aUpdateIdle.Stop();
 
@@ -91,7 +91,7 @@ SvxGraphCtrl::~SvxGraphCtrl()
     pUserCall.reset();
 }
 
-void SvxGraphCtrl::SetSdrMode(bool bSdrMode)
+void GraphCtrl::SetSdrMode(bool bSdrMode)
 {
     mbSdrMode = bSdrMode;
 
@@ -111,7 +111,7 @@ void SvxGraphCtrl::SetSdrMode(bool bSdrMode)
     QueueIdleUpdate();
 }
 
-void SvxGraphCtrl::InitSdrModel()
+void GraphCtrl::InitSdrModel()
 {
     SolarMutexGuard aGuard;
 
@@ -154,7 +154,7 @@ void SvxGraphCtrl::InitSdrModel()
         mpAccContext->setModelAndView (pModel.get(), pView.get());
 }
 
-void SvxGraphCtrl::SetGraphic( const Graphic& rGraphic, bool bNewModel )
+void GraphCtrl::SetGraphic( const Graphic& rGraphic, bool bNewModel )
 {
     aGraphic = rGraphic;
     xVD->SetOutputSizePixel(Size(0, 0)); //force redraw
@@ -175,7 +175,7 @@ void SvxGraphCtrl::SetGraphic( const Graphic& rGraphic, bool bNewModel )
     QueueIdleUpdate();
 }
 
-void SvxGraphCtrl::GraphicToVD()
+void GraphCtrl::GraphicToVD()
 {
     OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
     xVD->SetOutputSizePixel(GetOutputSizePixel());
@@ -186,7 +186,7 @@ void SvxGraphCtrl::GraphicToVD()
         aGraphic.Draw(xVD.get(), Point(), aGraphSize);
 }
 
-void SvxGraphCtrl::Resize()
+void GraphCtrl::Resize()
 {
     weld::CustomWidgetController::Resize();
 
@@ -229,7 +229,7 @@ void SvxGraphCtrl::Resize()
     Invalidate();
 }
 
-void SvxGraphCtrl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void GraphCtrl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     // #i72889# used split repaint to be able to paint an own background
     // even to the buffered view
@@ -267,22 +267,22 @@ void SvxGraphCtrl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     }
 }
 
-void SvxGraphCtrl::SdrObjChanged( const SdrObject&  )
+void GraphCtrl::SdrObjChanged( const SdrObject&  )
 {
     QueueIdleUpdate();
 }
 
-void SvxGraphCtrl::SdrObjCreated( const SdrObject& )
+void GraphCtrl::SdrObjCreated( const SdrObject& )
 {
     QueueIdleUpdate();
 }
 
-void SvxGraphCtrl::MarkListHasChanged()
+void GraphCtrl::MarkListHasChanged()
 {
     QueueIdleUpdate();
 }
 
-bool SvxGraphCtrl::KeyInput( const KeyEvent& rKEvt )
+bool GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 {
     vcl::KeyCode aCode( rKEvt.GetKeyCode() );
     bool    bProc = false;
@@ -584,7 +584,7 @@ bool SvxGraphCtrl::KeyInput( const KeyEvent& rKEvt )
     return bProc;
 }
 
-bool SvxGraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
+bool GraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( mbSdrMode && ( rMEvt.GetClicks() < 2 ) )
     {
@@ -629,7 +629,7 @@ bool SvxGraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
     return false;
 }
 
-bool SvxGraphCtrl::MouseMove(const MouseEvent& rMEvt)
+bool GraphCtrl::MouseMove(const MouseEvent& rMEvt)
 {
     OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
     const Point aLogPos( rDevice.PixelToLogic( rMEvt.GetPosPixel() ) );
@@ -665,7 +665,7 @@ bool SvxGraphCtrl::MouseMove(const MouseEvent& rMEvt)
     return false;
 }
 
-bool SvxGraphCtrl::MouseButtonUp(const MouseEvent& rMEvt)
+bool GraphCtrl::MouseButtonUp(const MouseEvent& rMEvt)
 {
     if ( mbSdrMode )
     {
@@ -687,7 +687,7 @@ bool SvxGraphCtrl::MouseButtonUp(const MouseEvent& rMEvt)
     return false;
 }
 
-SdrObject* SvxGraphCtrl::GetSelectedSdrObject() const
+SdrObject* GraphCtrl::GetSelectedSdrObject() const
 {
     SdrObject* pSdrObj = nullptr;
 
@@ -702,7 +702,7 @@ SdrObject* SvxGraphCtrl::GetSelectedSdrObject() const
     return pSdrObj;
 }
 
-void SvxGraphCtrl::SetEditMode( const bool _bEditMode )
+void GraphCtrl::SetEditMode( const bool _bEditMode )
 {
     if ( mbSdrMode )
     {
@@ -717,7 +717,7 @@ void SvxGraphCtrl::SetEditMode( const bool _bEditMode )
     QueueIdleUpdate();
 }
 
-void SvxGraphCtrl::SetPolyEditMode( const sal_uInt16 _nPolyEdit )
+void GraphCtrl::SetPolyEditMode( const sal_uInt16 _nPolyEdit )
 {
     if ( mbSdrMode && ( _nPolyEdit != nPolyEdit ) )
     {
@@ -730,7 +730,7 @@ void SvxGraphCtrl::SetPolyEditMode( const sal_uInt16 _nPolyEdit )
     QueueIdleUpdate();
 }
 
-void SvxGraphCtrl::SetObjKind( const SdrObjKind _eObjKind )
+void GraphCtrl::SetObjKind( const SdrObjKind _eObjKind )
 {
     if ( mbSdrMode )
     {
@@ -745,14 +745,14 @@ void SvxGraphCtrl::SetObjKind( const SdrObjKind _eObjKind )
     QueueIdleUpdate();
 }
 
-IMPL_LINK_NOARG(SvxGraphCtrl, UpdateHdl, Timer *, void)
+IMPL_LINK_NOARG(GraphCtrl, UpdateHdl, Timer *, void)
 {
     mbInIdleUpdate = true;
     aUpdateLink.Call( this );
     mbInIdleUpdate = false;
 }
 
-void SvxGraphCtrl::QueueIdleUpdate()
+void GraphCtrl::QueueIdleUpdate()
 {
     if (!mbInIdleUpdate)
         aUpdateIdle.Start();
@@ -826,7 +826,7 @@ GraphCtrlView::~GraphCtrlView()
     }
 }
 
-Point SvxGraphCtrl::GetPositionInDialog() const
+Point GraphCtrl::GetPositionInDialog() const
 {
     int x, y, width, height;
     if (GetDrawingArea()->get_extents_relative_to(*mpDialog, x, y, width, height))
@@ -834,7 +834,7 @@ Point SvxGraphCtrl::GetPositionInDialog() const
     return Point();
 }
 
-css::uno::Reference< css::accessibility::XAccessible > SvxGraphCtrl::CreateAccessible()
+css::uno::Reference< css::accessibility::XAccessible > GraphCtrl::CreateAccessible()
 {
     if(mpAccContext == nullptr )
     {

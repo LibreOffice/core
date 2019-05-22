@@ -39,7 +39,7 @@ private:
     SdDrawDocument* m_pDoc;
     GraphicFilter* m_pGraphicFilter;
 
-    SvxGraphCtrl m_aImg;
+    GraphCtrl m_aImg;
 
     std::unique_ptr<weld::Button> m_xCancelBtn;
     std::unique_ptr<weld::Button> m_xCreateBtn;

@@ -54,7 +54,7 @@ namespace com { namespace sun { namespace star { namespace awt {
 } } } }
 
 namespace tools { class Rectangle; }
-class SvxGraphCtrl;
+class GraphCtrl;
 class SdrObject;
 class SdrModel;
 class SdrPage;
@@ -80,10 +80,10 @@ class SvxGraphCtrlAccessibleContext final :
     public SfxListener, public ::accessibility::IAccessibleViewForwarder
 {
 public:
-    friend class SvxGraphCtrl;
+    friend class GraphCtrl;
 
     // internal
-    SvxGraphCtrlAccessibleContext(SvxGraphCtrl& rRepresentation);
+    SvxGraphCtrlAccessibleContext(GraphCtrl& rRepresentation);
 
     void Notify( SfxBroadcaster& aBC, const SfxHint& aHint ) override;
 
@@ -181,7 +181,7 @@ private:
     typedef ::std::map< const SdrObject*, rtl::Reference<::accessibility::AccessibleShape> > ShapesMapType;
     ShapesMapType mxShapes;
 
-    SvxGraphCtrl*  mpControl;
+    GraphCtrl*  mpControl;
 
     SdrModel* mpModel;
     SdrPage* mpPage;
