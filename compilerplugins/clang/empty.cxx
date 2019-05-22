@@ -100,7 +100,7 @@ private:
             return;
         }
         APSInt val;
-        if (!rhs->isIntegerConstantExpr(val, compiler.getASTContext()))
+        if (rhs->isValueDependent() || !rhs->isIntegerConstantExpr(val, compiler.getASTContext()))
         {
             return;
         }
