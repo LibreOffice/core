@@ -1888,7 +1888,7 @@ void Chart2ImportTest::testTdf122765()
     Reference<drawing::XShape> xSlice(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
 
     // Check position of the first slice, all slices move together, so enough to check only one.
-    // Wrong poisition was around 5856.
+    // Wrong position was around 5856.
     awt::Point aSlicePosition = xSlice->getPosition();
     CPPUNIT_ASSERT_GREATER(sal_Int32(7000), aSlicePosition.X);
 }
