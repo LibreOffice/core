@@ -29,13 +29,13 @@
 
 class SvxGraphCtrl;
 
-class SvxGraphCtrlUserCall : public SdrObjUserCall
+class GraphCtrlUserCall : public SdrObjUserCall
 {
     SvxGraphCtrl& rWin;
 
 public:
 
-    SvxGraphCtrlUserCall(SvxGraphCtrl& rGraphWin)
+    GraphCtrlUserCall(SvxGraphCtrl& rGraphWin)
         : rWin(rGraphWin)
     {}
 
@@ -47,7 +47,7 @@ class SvxGraphCtrlAccessibleContext;
 class SVX_DLLPUBLIC SvxGraphCtrl : public weld::CustomWidgetController
 {
     friend class SvxGraphCtrlView;
-    friend class SvxGraphCtrlUserCall;
+    friend class GraphCtrlUserCall;
 
     Graphic             aGraphic;
     ScopedVclPtrInstance<VirtualDevice> xVD;
@@ -58,7 +58,7 @@ class SVX_DLLPUBLIC SvxGraphCtrl : public weld::CustomWidgetController
     MapMode const          aMap100;
     Size                aGraphSize;
     Point               aMousePos;
-    std::unique_ptr<SvxGraphCtrlUserCall> pUserCall;
+    std::unique_ptr<GraphCtrlUserCall> pUserCall;
     SdrObjKind          eObjKind;
     sal_uInt16          nPolyEdit;
     bool                bEditMode;
