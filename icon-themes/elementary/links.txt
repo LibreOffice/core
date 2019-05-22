@@ -884,6 +884,7 @@ cmd/32/navigatemenu.png cmd/32/navigator.png
 cmd/32/printrangesmenu.png cmd/32/defineprintarea.png
 cmd/32/recalcpivottable.png cmd/32/dataarearefresh.png
 cmd/32/sheetcommentmenu.png cmd/32/showannotations.png
+cmd/32/shownote.png cmd/32/showannotations.png
 cmd/32/toggleformula.png cmd/32/dbviewfunctions.png
 
 cmd/lc_cellcontentsmenu.png cmd/lc_calculate.png
@@ -901,6 +902,7 @@ cmd/lc_navigatemenu.png cmd/lc_navigator.png
 cmd/lc_printrangesmenu.png cmd/lc_defineprintarea.png
 cmd/lc_recalcpivottable.png cmd/lc_dataarearefresh.png
 cmd/lc_sheetcommentmenu.png cmd/lc_showannotations.png
+cmd/lc_shownote.png cmd/lc_showannotations.png
 cmd/lc_toggleformula.png cmd/lc_dbviewfunctions.png
 
 cmd/sc_cellcontentsmenu.png cmd/sc_calculate.png
@@ -918,6 +920,7 @@ cmd/sc_navigatemenu.png cmd/sc_navigator.png
 cmd/sc_printrangesmenu.png cmd/sc_defineprintarea.png
 cmd/sc_recalcpivottable.png cmd/sc_dataarearefresh.png
 cmd/sc_sheetcommentmenu.png cmd/sc_showannotations.png
+cmd/sc_shownote.png cmd/sc_showannotations.png
 cmd/sc_toggleformula.png cmd/sc_dbviewfunctions.png
 
 # Draw & Impress menu entries
@@ -1102,9 +1105,9 @@ cmd/sc_diagramaxisall.png cmd/sc_diagramaxisxyz.png
 cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
 
 # Crop
-cmd/32/grafattrcrop.png cmd/32/transformdialog.png
-cmd/lc_grafattrcrop.png cmd/lc_transformdialog.png
-cmd/sc_grafattrcrop.png cmd/sc_transformdialog.png
+cmd/32/grafattrcrop.png cmd/32/crop.png
+cmd/lc_grafattrcrop.png cmd/lc_crop.png
+cmd/sc_grafattrcrop.png cmd/sc_crop.png
 
 # Group
 cmd/32/groupmenu.png cmd/32/formatgroup.png
@@ -1692,6 +1695,158 @@ sd/res/stopplayingblue_16.png cmd/sc_basicstop.png
 sd/res/time_16.png cmd/sc_timefield.png
 sd/res/waiticon.png cmd/sc_mediapause.png
 
+# RTL support
+#===============================================
+
+cmd/32/ar/bulletliststyle.png cmd/32/ar/defaultbullet.png
+cmd/32/ar/numberliststyle.png cmd/32/ar/defaultnumbering.png
+
+cmd/32/fa/alphaliststyle.png cmd/32/ar/alphaliststyle.png
+cmd/32/fa/alphalowliststyle.png cmd/32/ar/alphalowliststyle.png
+cmd/32/fa/bulletliststyle.png cmd/32/ar/defaultbullet.png
+cmd/32/fa/bulletsandnumberingdialog.png cmd/32/ar/bulletsandnumberingdialog.png
+cmd/32/fa/defaultbullet.png cmd/32/ar/defaultbullet.png
+cmd/32/fa/defaultnumbering.png cmd/32/ar/defaultnumbering.png
+cmd/32/fa/insertneutralparagraph.png cmd/32/ar/insertneutralparagraph.png
+cmd/32/fa/linenumberdialog.png cmd/32/ar/linenumberdialog.png
+cmd/32/fa/numberingstart.png cmd/32/ar/numberingstart.png
+cmd/32/fa/numberliststyle.png cmd/32/ar/defaultnumbering.png
+cmd/32/fa/outlinebullet.png cmd/32/ar/outlinebullet.png
+cmd/32/fa/redo.png cmd/32/ar/redo.png
+cmd/32/fa/removebullets.png cmd/32/ar/removebullets.png
+cmd/32/fa/romanliststyle.png cmd/32/ar/romanliststyle.png
+cmd/32/fa/romanlowliststyle.png cmd/32/ar/romanlowliststyle.png
+cmd/32/fa/undo.png cmd/32/ar/undo.png
+cmd/fa/lc_alphaliststyle.png cmd/ar/lc_alphaliststyle.png
+cmd/fa/lc_alphalowliststyle.png cmd/ar/lc_alphalowliststyle.png
+cmd/fa/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
+cmd/fa/lc_bulletsandnumberingdialog.png cmd/ar/lc_bulletsandnumberingdialog.png
+cmd/fa/lc_defaultbullet.png cmd/ar/lc_defaultbullet.png
+cmd/fa/lc_defaultnumbering.png cmd/ar/lc_defaultnumbering.png
+cmd/fa/lc_insertneutralparagraph.png cmd/ar/lc_insertneutralparagraph.png
+cmd/fa/lc_linenumberdialog.png cmd/ar/lc_linenumberdialog.png
+cmd/fa/lc_numberingstart.png cmd/ar/lc_numberingstart.png
+cmd/fa/lc_numberliststyle.png cmd/ar/lc_defaultnumbering.png
+cmd/fa/lc_outlinebullet.png cmd/ar/lc_outlinebullet.png
+cmd/fa/lc_redo.png cmd/ar/lc_redo.png
+cmd/fa/lc_removebullets.png cmd/ar/lc_removebullets.png
+cmd/fa/lc_romanliststyle.png cmd/ar/lc_romanliststyle.png
+cmd/fa/lc_romanlowliststyle.png cmd/ar/lc_romanlowliststyle.png
+cmd/fa/lc_undo.png cmd/ar/lc_undo.png
+cmd/fa/sc_alphaliststyle.png cmd/ar/sc_alphaliststyle.png
+cmd/fa/sc_alphalowliststyle.png cmd/ar/sc_alphalowliststyle.png
+cmd/fa/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
+cmd/fa/sc_bulletsandnumberingdialog.png cmd/ar/sc_bulletsandnumberingdialog.png
+cmd/fa/sc_defaultbullet.png cmd/ar/sc_defaultbullet.png
+cmd/fa/sc_defaultnumbering.png cmd/ar/sc_defaultnumbering.png
+cmd/fa/sc_insertneutralparagraph.png cmd/ar/sc_insertneutralparagraph.png
+cmd/fa/sc_linenumberdialog.png cmd/ar/sc_linenumberdialog.png
+cmd/fa/sc_numberingstart.png cmd/ar/sc_numberingstart.png
+cmd/fa/sc_numberliststyle.png cmd/ar/sc_defaultnumbering.png
+cmd/fa/sc_outlinebullet.png cmd/ar/sc_outlinebullet.png
+cmd/fa/sc_redo.png cmd/ar/sc_redo.png
+cmd/fa/sc_removebullets.png cmd/ar/sc_removebullets.png
+cmd/fa/sc_romanliststyle.png cmd/ar/sc_romanliststyle.png
+cmd/fa/sc_romanlowliststyle.png cmd/ar/sc_romanlowliststyle.png
+cmd/fa/sc_undo.png cmd/ar/sc_undo.png
+
+cmd/32/he/alphaliststyle.png cmd/32/ar/alphaliststyle.png
+cmd/32/he/alphalowliststyle.png cmd/32/ar/alphalowliststyle.png
+cmd/32/he/bulletliststyle.png cmd/32/ar/defaultbullet.png
+cmd/32/he/bulletsandnumberingdialog.png cmd/32/ar/bulletsandnumberingdialog.png
+cmd/32/he/defaultbullet.png cmd/32/ar/defaultbullet.png
+cmd/32/he/defaultnumbering.png cmd/32/ar/defaultnumbering.png
+cmd/32/he/insertneutralparagraph.png cmd/32/ar/insertneutralparagraph.png
+cmd/32/he/linenumberdialog.png cmd/32/ar/linenumberdialog.png
+cmd/32/he/numberingstart.png cmd/32/ar/numberingstart.png
+cmd/32/he/numberliststyle.png cmd/32/ar/defaultnumbering.png
+cmd/32/he/outlinebullet.png cmd/32/ar/outlinebullet.png
+cmd/32/he/redo.png cmd/32/ar/redo.png
+cmd/32/he/removebullets.png cmd/32/ar/removebullets.png
+cmd/32/he/romanliststyle.png cmd/32/ar/romanliststyle.png
+cmd/32/he/romanlowliststyle.png cmd/32/ar/romanlowliststyle.png
+cmd/32/he/undo.png cmd/32/ar/undo.png
+cmd/he/lc_alphaliststyle.png cmd/ar/lc_alphaliststyle.png
+cmd/he/lc_alphalowliststyle.png cmd/ar/lc_alphalowliststyle.png
+cmd/he/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
+cmd/he/lc_bulletsandnumberingdialog.png cmd/ar/lc_bulletsandnumberingdialog.png
+cmd/he/lc_defaultbullet.png cmd/ar/lc_defaultbullet.png
+cmd/he/lc_defaultnumbering.png cmd/ar/lc_defaultnumbering.png
+cmd/he/lc_insertneutralparagraph.png cmd/ar/lc_insertneutralparagraph.png
+cmd/he/lc_linenumberdialog.png cmd/ar/lc_linenumberdialog.png
+cmd/he/lc_numberingstart.png cmd/ar/lc_numberingstart.png
+cmd/he/lc_numberliststyle.png cmd/ar/lc_defaultnumbering.png
+cmd/he/lc_outlinebullet.png cmd/ar/lc_outlinebullet.png
+cmd/he/lc_redo.png cmd/ar/lc_redo.png
+cmd/he/lc_removebullets.png cmd/ar/lc_removebullets.png
+cmd/he/lc_romanliststyle.png cmd/ar/lc_romanliststyle.png
+cmd/he/lc_romanlowliststyle.png cmd/ar/lc_romanlowliststyle.png
+cmd/he/lc_undo.png cmd/ar/lc_undo.png
+cmd/he/sc_alphaliststyle.png cmd/ar/sc_alphaliststyle.png
+cmd/he/sc_alphalowliststyle.png cmd/ar/sc_alphalowliststyle.png
+cmd/he/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
+cmd/he/sc_bulletsandnumberingdialog.png cmd/ar/sc_bulletsandnumberingdialog.png
+cmd/he/sc_defaultbullet.png cmd/ar/sc_defaultbullet.png
+cmd/he/sc_defaultnumbering.png cmd/ar/sc_defaultnumbering.png
+cmd/he/sc_insertneutralparagraph.png cmd/ar/sc_insertneutralparagraph.png
+cmd/he/sc_linenumberdialog.png cmd/ar/sc_linenumberdialog.png
+cmd/he/sc_numberingstart.png cmd/ar/sc_numberingstart.png
+cmd/he/sc_numberliststyle.png cmd/ar/sc_defaultnumbering.png
+cmd/he/sc_outlinebullet.png cmd/ar/sc_outlinebullet.png
+cmd/he/sc_redo.png cmd/ar/sc_redo.png
+cmd/he/sc_removebullets.png cmd/ar/sc_removebullets.png
+cmd/he/sc_romanliststyle.png cmd/ar/sc_romanliststyle.png
+cmd/he/sc_romanlowliststyle.png cmd/ar/sc_romanlowliststyle.png
+
+cmd/32/ur/alphaliststyle.png cmd/32/ar/alphaliststyle.png
+cmd/32/ur/alphalowliststyle.png cmd/32/ar/alphalowliststyle.png
+cmd/32/ur/bulletliststyle.png cmd/32/ar/defaultbullet.png
+cmd/32/ur/bulletsandnumberingdialog.png cmd/32/ar/bulletsandnumberingdialog.png
+cmd/32/ur/defaultbullet.png cmd/32/ar/defaultbullet.png
+cmd/32/ur/defaultnumbering.png cmd/32/ar/defaultnumbering.png
+cmd/32/ur/insertneutralparagraph.png cmd/32/ar/insertneutralparagraph.png
+cmd/32/ur/linenumberdialog.png cmd/32/ar/linenumberdialog.png
+cmd/32/ur/numberingstart.png cmd/32/ar/numberingstart.png
+cmd/32/ur/numberliststyle.png cmd/32/ar/defaultnumbering.png
+cmd/32/ur/outlinebullet.png cmd/32/ar/outlinebullet.png
+cmd/32/ur/redo.png cmd/32/ar/redo.png
+cmd/ur/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
+cmd/ur/lc_numberliststyle.png cmd/ar/lc_defaultnumbering.png
+cmd/ur/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
+cmd/ur/sc_numberliststyle.png cmd/ar/sc_defaultnumbering.png
+cmd/ur/lc_alphaliststyle.png cmd/ar/lc_alphaliststyle.png
+cmd/ur/lc_alphalowliststyle.png cmd/ar/lc_alphalowliststyle.png
+cmd/ar/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
+cmd/ur/lc_bulletsandnumberingdialog.png cmd/ar/lc_bulletsandnumberingdialog.png
+cmd/ur/lc_defaultbullet.png cmd/ar/lc_defaultbullet.png
+cmd/ur/lc_defaultnumbering.png cmd/ar/lc_defaultnumbering.png
+cmd/ur/lc_insertneutralparagraph.png cmd/ar/lc_insertneutralparagraph.png
+cmd/ur/lc_linenumberdialog.png cmd/ar/lc_linenumberdialog.png
+cmd/ur/lc_numberingstart.png cmd/ar/lc_numberingstart.png
+cmd/ur/lc_numberliststyle.png cmd/ar/lc_defaultnumbering.png
+cmd/ur/lc_outlinebullet.png cmd/ar/lc_outlinebullet.png
+cmd/ur/lc_redo.png cmd/ar/lc_redo.png
+cmd/ur/lc_removebullets.png cmd/ar/lc_removebullets.png
+cmd/ur/lc_romanliststyle.png cmd/ar/lc_romanliststyle.png
+cmd/ur/lc_romanlowliststyle.png cmd/ar/lc_romanlowliststyle.png
+cmd/ur/lc_undo.png cmd/ar/lc_undo.png
+cmd/ur/sc_alphaliststyle.png cmd/ar/sc_alphaliststyle.png
+cmd/ur/sc_alphalowliststyle.png cmd/ar/sc_alphalowliststyle.png
+cmd/ur/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
+cmd/ur/sc_bulletsandnumberingdialog.png cmd/ar/sc_bulletsandnumberingdialog.png
+cmd/ur/sc_defaultbullet.png cmd/ar/sc_defaultbullet.png
+cmd/ur/sc_defaultnumbering.png cmd/ar/sc_defaultnumbering.png
+cmd/ur/sc_insertneutralparagraph.png cmd/ar/sc_insertneutralparagraph.png
+cmd/ur/sc_linenumberdialog.png cmd/ar/sc_linenumberdialog.png
+cmd/ur/sc_numberingstart.png cmd/ar/sc_numberingstart.png
+cmd/ur/sc_numberliststyle.png cmd/ar/sc_defaultnumbering.png
+cmd/ur/sc_outlinebullet.png cmd/ar/sc_outlinebullet.png
+cmd/ur/sc_redo.png cmd/ar/sc_redo.png
+cmd/ur/sc_removebullets.png cmd/ar/sc_removebullets.png
+cmd/ur/sc_romanliststyle.png cmd/ar/sc_romanliststyle.png
+cmd/ur/sc_romanlowliststyle.png cmd/ar/sc_romanlowliststyle.png
+cmd/ur/sc_undo.png cmd/ar/sc_undo.png
+
 # sfx2
 # ==============================================
 sfx2/res/actionaction012.png cmd/lc_recsearch.png
@@ -1973,7 +2128,7 @@ cmd/32/addtextbox.png cmd/32/insertfixedtext.png
 cmd/lc_addtextbox.png cmd/lc_insertfixedtext.png
 cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
 
-# Edit menu
+# Edit menu 
 # ===============================================
 cmd/32/authoritiesentrydialog.png cmd/32/dbviewaliases.png
 cmd/32/changesmenu.png cmd/32/accepttrackedchange.png
@@ -2028,6 +2183,7 @@ cmd/32/scrollbarmenu.png cmd/32/scrollbar.png
 cmd/32/showruler.png cmd/32/ruler.png
 cmd/32/sidebarmenu.png cmd/32/sidebar.png
 cmd/32/toolbarsmenu.png cmd/32/showtoolbar.png
+cmd/32/viewtrackchanges.png cmd/32/showtrackedchanges.png
 cmd/32/zoommenu.png cmd/32/zoom.png
 
 cmd/lc_availabletoolbars.png cmd/lc_showtoolbar.png
@@ -2037,6 +2193,7 @@ cmd/lc_scrollbarmenu.png cmd/lc_scrollbar.png
 cmd/lc_showruler.png cmd/lc_ruler.png
 cmd/lc_sidebarmenu.png cmd/lc_sidebar.png
 cmd/lc_toolbarsmenu.png cmd/lc_showtoolbar.png
+cmd/lc_viewtrackchanges.png cmd/lc_showtrackedchanges.png
 cmd/lc_zoommenu.png cmd/lc_zoom.png
 
 cmd/sc_availabletoolbars.png cmd/sc_showtoolbar.png
@@ -2046,6 +2203,7 @@ cmd/sc_scrollbarmenu.png cmd/sc_scrollbar.png
 cmd/sc_showruler.png cmd/sc_ruler.png
 cmd/sc_sidebarmenu.png cmd/sc_sidebar.png
 cmd/sc_toolbarsmenu.png cmd/sc_showtoolbar.png
+cmd/sc_viewtrackchanges.png cmd/sc_showtrackedchanges.png
 cmd/sc_zoommenu.png cmd/sc_zoom.png
 
 # Insert menu
@@ -2057,7 +2215,6 @@ cmd/32/insertformmenu.png cmd/32/choosecontrols.png
 cmd/32/insertheaderfootermenu.png cmd/32/editheaderandfooter.png
 cmd/32/insertpagefooter.png cmd/32/insertfooter.png
 cmd/32/insertpageheader.png cmd/32/insertheader.png
-cmd/32/objectmenu.png cmd/32/insertobject.png
 cmd/32/shapeslinemenu.png cmd/32/line.png
 cmd/32/shapesmenu.png cmd/32/basicshapes.round-quadrat.png
 
@@ -2069,7 +2226,6 @@ cmd/lc_insertheaderfootermenu.png cmd/lc_editheaderandfooter.png
 cmd/lc_insertpagefield.png cmd/lc_insertpagenumberfield.png
 cmd/lc_insertpagefooter.png cmd/lc_insertfooter.png
 cmd/lc_insertpageheader.png cmd/lc_insertheader.png
-cmd/lc_objectmenu.png cmd/lc_insertobject.png
 cmd/lc_shapeslinemenu.png cmd/lc_line.png
 cmd/lc_shapesmenu.png cmd/lc_basicshapes.round-quadrat.png
 
@@ -2081,7 +2237,6 @@ cmd/sc_insertheaderfootermenu.png cmd/sc_editheaderandfooter.png
 cmd/sc_insertpagefield.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertpagefooter.png cmd/sc_insertfooter.png
 cmd/sc_insertpageheader.png cmd/sc_insertheader.png
-cmd/sc_objectmenu.png cmd/sc_insertobject.png
 cmd/sc_shapeslinemenu.png cmd/sc_line.png
 cmd/sc_shapesmenu.png cmd/sc_basicshapes.round-quadrat.png
 
@@ -2132,6 +2287,7 @@ cmd/32/formattextmenu.png cmd/32/bold.png
 cmd/32/numberformatmenu.png cmd/32/numberformatstandard.png
 cmd/32/numberingmenu.png cmd/32/outlinebullet.png
 cmd/32/paragraphmenu.png cmd/32/paragraphdialog.png
+cmd/32/tablemenu.png cmd/32/tabledialog.png
 cmd/32/textalign.png cmd/32/alignleft.png
 
 cmd/lc_anchormenu.png cmd/lc_toggleanchortype.png
@@ -2152,6 +2308,7 @@ cmd/lc_formattextmenu.png cmd/lc_bold.png
 cmd/lc_numberformatmenu.png cmd/lc_numberformatstandard.png
 cmd/lc_numberingmenu.png cmd/lc_outlinebullet.png
 cmd/lc_paragraphmenu.png cmd/lc_paragraphdialog.png
+cmd/lc_tablemenu.png cmd/lc_tabledialog.png
 cmd/lc_textalign.png cmd/lc_alignleft.png
 
 cmd/sc_anchormenu.png cmd/sc_toggleanchortype.png
@@ -2172,6 +2329,7 @@ cmd/sc_formattextmenu.png cmd/sc_bold.png
 cmd/sc_numberformatmenu.png cmd/sc_numberformatstandard.png
 cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png
 cmd/sc_paragraphmenu.png cmd/sc_paragraphdialog.png
+cmd/sc_tablemenu.png cmd/sc_tabledialog.png
 cmd/sc_textalign.png cmd/sc_alignleft.png
 
 # Dialog editor
