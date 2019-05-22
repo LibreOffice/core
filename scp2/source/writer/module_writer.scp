@@ -65,7 +65,7 @@ Module gid_Module_Prg_Wrt_MSO_Reg
     Name = "gid_Module_Prg_Wrt_MSO_Reg";
     Description = "gid_Module_Prg_Wrt_MSO_Reg";
     Styles = (HIDDEN_ROOT);
-    Default = YES;
+    Default = NO;
 End
 
 Module gid_Module_Prg_Wrt_Other_Reg
