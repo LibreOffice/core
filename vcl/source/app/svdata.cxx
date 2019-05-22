@@ -56,7 +56,7 @@
 #include "vcl/msgbox.hxx"
 #include "vcl/unohelp.hxx"
 #include "vcl/button.hxx" // for Button::GetStandardText
-#include "vcl/dockwin.hxx"  // for DockingManager
+#include "vcl/dockwin.hxx" // for DockingManager
 
 #include "salinst.hxx"
 #include "salframe.hxx"
@@ -146,11 +146,11 @@ void ImplInitSVData()
         }
     }
 #ifdef WNT
-    //Default enable the acc bridge interface
+    // Default enable the acc bridge interface
     pImplSVData->maAppData.m_bEnableAccessInterface =true;
 #endif
 
-    // mark default layout border as unitialized
+    // mark default layout border as uninitialized
     pImplSVData->maAppData.mnDefaultLayoutBorder = -1;
 }
 
@@ -212,7 +212,7 @@ Window* ImplGetDefaultWindow()
         return pSVData->maWinData.mpAppWin;
 
     // First test if we already have a default window.
-    // Don't only place a single if..else inside solar mutex lockframe
+    // Don't only place a single if...else inside solar mutex lockframe
     // because then we might have to wait for the solar mutex what is not necessary
     // if we already have a default window.
 
@@ -346,7 +346,7 @@ com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const rtl::
     com::sun::star::uno::Any ret;
     if( Name.equalsAscii( "java-vm.interaction-handler" ) )
     {
-        // Currently, for accessbility no interaction handler shall be offered.
+        // Currently, for accessibility no interaction handler shall be offered.
         // There may be introduced later on a handler using native toolkits
         // jbu->obr: Instantiate here your interaction handler
     }
@@ -448,13 +448,13 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
     // if bAllowCancel is sal_True we were called from application startup
     //  where we will disable any Java errorboxes and show our own accessibility dialog if Java throws an exception
     // if bAllowCancel is sal_False we were called from Tools->Options
-    //  where we will see Java errorboxes, se we do not show our dialogs in addition to Java's
+    //  where we will see Java errorboxes, so we do not show our dialogs in addition to Java's
 
     try
     {
         sal_Bool bSuccess = sal_True;
 
-        // No error messages when env var is set ..
+        // No error messages when env var is set...
         static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
         if( pEnv && *pEnv )
         {
@@ -490,7 +490,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 
                 // Disable default java error messages on startup, because they were probably unreadable
                 // for a disabled user. Use native message boxes which are accessible without java support.
-                // No need to do this when activated by Tools-Options dialog ..
+                // No need to do this when activated by Tools-Options dialog...
                 if( bAllowCancel )
                 {
                     // customize the java-not-available-interaction-handler entry within the
@@ -684,7 +684,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 Window* ImplFindWindow( const SalFrame* pFrame, ::Point& rSalFramePos )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    Window*     pFrameWindow = pSVData->maWinData.mpFirstFrame;
+    Window*  pFrameWindow = pSVData->maWinData.mpFirstFrame;
     while ( pFrameWindow )
     {
         if ( pFrameWindow->ImplGetFrame() == pFrame )
@@ -705,4 +705,3 @@ void LocaleConfigurationListener::ConfigurationChanged( utl::ConfigurationBroadc
 {
     AllSettings::LocaleSettingsChanged( nHint );
 }
-
