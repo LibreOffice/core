@@ -107,8 +107,6 @@ void SvxIMapDlgChildWindow::UpdateIMapDlg( const Graphic& rGraphic, const ImageM
         pDlg->UpdateLink(rGraphic, pImageMap, pTargetList, pEditingObj);
 }
 
-VCL_BUILDER_FACTORY(StatusBar)
-
 SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, weld::Window* _pParent)
     : SfxModelessDialogController(_pBindings, pCW, _pParent, "svx/ui/imapdialog.ui", "ImapDialog")
     , pCheckObj(nullptr)
@@ -707,18 +705,19 @@ IMPL_LINK( SvxIMapDlg, StateHdl, SvxGraphCtrl*, pWnd, void )
 
     if ( bPolyEdit )
     {
-        OString sId;
-
         switch( pWnd->GetPolyEditMode() )
         {
-            case SID_BEZIER_MOVE: sId = "TBI_POLYMOVE"; break;
-            case SID_BEZIER_INSERT: sId = "TBI_POLYINSERT"; break;
-
+            case SID_BEZIER_MOVE:
+                m_xTbxIMapDlg1->set_item_active("TBI_POLYMOVE", true);
+                m_xTbxIMapDlg1->set_item_active("TBI_POLYINSERT", false);
+                break;
+            case SID_BEZIER_INSERT:
+                m_xTbxIMapDlg1->set_item_active("TBI_POLYINSERT", true);
+                m_xTbxIMapDlg1->set_item_active("TBI_POLYMOVE", false);
+                break;
             default:
-            break;
+                break;
         }
-
-        m_xTbxIMapDlg1->set_item_active(sId, true);
     }
     else
     {

@@ -5353,9 +5353,12 @@ private:
 
     static void collect(GtkWidget* pItem, gpointer widget)
     {
-        GtkToolButton* pToolItem = GTK_TOOL_BUTTON(pItem);
-        GtkInstanceToolbar* pThis = static_cast<GtkInstanceToolbar*>(widget);
-        pThis->add_to_map(pToolItem);
+        if (GTK_IS_TOOL_BUTTON(pItem))
+        {
+            GtkToolButton* pToolItem = GTK_TOOL_BUTTON(pItem);
+            GtkInstanceToolbar* pThis = static_cast<GtkInstanceToolbar*>(widget);
+            pThis->add_to_map(pToolItem);
+        }
     }
 
     void add_to_map(GtkToolButton* pToolItem)
