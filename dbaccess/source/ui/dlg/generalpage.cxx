@@ -675,6 +675,10 @@ namespace dbaui
         {
             m_pEmbeddedDBType->Enable(m_pRB_CreateDatabase->IsChecked());
             m_pFT_EmbeddedDBLabel->Enable(m_pRB_CreateDatabase->IsChecked());
+            m_pDatasourceType->Enable(m_pRB_ConnectDatabase->IsChecked());
+            m_pPB_OpenDatabase->Enable(m_pRB_OpenExistingDatabase->IsChecked());
+            m_pFT_DocListLabel->Enable(m_pRB_OpenExistingDatabase->IsChecked());
+            m_pLB_DocumentList->Enable(m_pRB_OpenExistingDatabase->IsChecked());
         }
     }
 
