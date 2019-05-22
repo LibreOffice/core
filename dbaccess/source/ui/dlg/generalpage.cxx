@@ -576,8 +576,6 @@ namespace dbaui
         }
         else
         {
-            m_pEmbeddedDBType->Enable( false );
-            m_pFT_EmbeddedDBLabel->Enable( false );
             m_pDatasourceType->Enable( false );
             m_pPB_OpenDatabase->Enable( false );
             m_pFT_DocListLabel->Enable( false );
