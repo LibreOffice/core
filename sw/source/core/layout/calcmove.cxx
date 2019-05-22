@@ -308,12 +308,29 @@ void SwFrame::PrepareMake(vcl::RenderContext* pRenderContext)
                          SwFlowFrame::CastFlowFrame(pFrame)->IsAnFollow( pThis ) )
                         break;
 
+                    bool const isLast(pFrame->GetNext() == this);
+                    // note: this seems obvious but does *not* hold, a MakeAll()
+                    // could move more than 1 frame backwards!
+                    // that's why FindNext() is used below
+                    // assert(pFrame->GetUpper() == GetUpper());
                     pFrame->MakeAll(pRenderContext);
                     if( IsSctFrame() && !static_cast<SwSectionFrame*>(this)->GetSection() )
                         break;
+                    if (isLast && pFrame->GetUpper() != GetUpper())
+                    {
+                        assert(GetUpper()->Lower() == this
+                            // tab frame/section frame may split multiple times
+                            || (   SwFlowFrame::CastFlowFrame(pFrame)
+                                && SwFlowFrame::CastFlowFrame(GetUpper()->Lower())
+                                && SwFlowFrame::CastFlowFrame(pFrame)->IsAnFollow(
+                                    SwFlowFrame::CastFlowFrame(GetUpper()->Lower()))
+                                && GetUpper()->Lower()->GetNext() == this));
+                        break; // tdf#119109 frame was moved backward, prevent
+                               // FindNext() returning a frame inside this if
+                    }          // this is a table!
                 }
                 // With ContentFrames, the chain may be broken while walking through
-                // it. Therefore we have to figure out the follower in a bit more
+                // it. Therefore we have to figure out the next frame in a bit more
                 // complicated way. However, I'll HAVE to get back to myself
                 // sometime again.
                 pFrame = pFrame->FindNext();
@@ -422,7 +439,7 @@ void SwFrame::PrepareCursor()
                 pFrame->MakeAll(getRootFrame()->GetCurrShell()->GetOut());
             }
             // With ContentFrames, the chain may be broken while walking through
-            // it. Therefore we have to figure out the follower in a bit more
+            // it. Therefore we have to figure out the next frame in a bit more
             // complicated way. However, I'll HAVE to get back to myself
             // sometime again.
             pFrame = pFrame->FindNext();
