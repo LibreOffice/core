@@ -16,32 +16,33 @@
 #include <array>
 #include <atomic>
 
-#define MAX_DEFAULT_PERSONAS 6  // Maximum number of default personas
+#define MAX_DEFAULT_PERSONAS 6 // Maximum number of default personas
 
 class SvxPersonalizationTabPage : public SfxTabPage
 {
     using SfxTabPage::DeactivatePage;
 
 private:
-    VclPtr<RadioButton> m_pNoPersona;                  ///< Just the default look, without any bitmap
-    VclPtr<RadioButton> m_pDefaultPersona;             ///< Use the built-in bitmap
-    VclPtr<PushButton> m_vDefaultPersonaImages[MAX_DEFAULT_PERSONAS];     ///< Buttons to show the default persona images
-    OUString m_aPersonaSettings;                       ///< Header and footer images + color to be set in the settings.
+    VclPtr<RadioButton> m_pNoPersona; ///< Just the default look, without any bitmap
+    VclPtr<RadioButton> m_pDefaultPersona; ///< Use the built-in bitmap
+    VclPtr<PushButton> m_vDefaultPersonaImages
+        [MAX_DEFAULT_PERSONAS]; ///< Buttons to show the default persona images
+    OUString m_aPersonaSettings; ///< Header and footer images + color to be set in the settings.
 
     std::vector<OUString> m_vDefaultPersonaSettings;
 
 public:
-    SvxPersonalizationTabPage( vcl::Window *pParent, const SfxItemSet &rSet );
+    SvxPersonalizationTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SvxPersonalizationTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet *rSet );
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
 
     /// Apply the settings ([OK] button).
-    virtual bool FillItemSet( SfxItemSet *rSet ) override;
+    virtual bool FillItemSet(SfxItemSet* rSet) override;
 
     /// Reset to default settings ([Revert] button).
-    virtual void Reset( const SfxItemSet *rSet ) override;
+    virtual void Reset(const SfxItemSet* rSet) override;
 
     /*
      * Loads the default personas from the shared personas directory
@@ -60,10 +61,10 @@ public:
 
 private:
     /// Handle the Persona selection
-    DECL_LINK( SelectPersona, Button*, void );
+    DECL_LINK(SelectPersona, Button*, void);
 
     /// Handle the default Persona selection
-    DECL_LINK( DefaultPersona, Button*, void );
+    DECL_LINK(DefaultPersona, Button*, void);
 };
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_PERSONALIZATION_HXX

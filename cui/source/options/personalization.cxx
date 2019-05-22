@@ -53,90 +53,90 @@ struct PersonaInfo
     OUString sTextColor;
 };
 
-SvxPersonalizationTabPage::SvxPersonalizationTabPage( vcl::Window *pParent, const SfxItemSet &rSet )
-    : SfxTabPage( pParent, "PersonalizationTabPage", "cui/ui/personalization_tab.ui", &rSet )
+SvxPersonalizationTabPage::SvxPersonalizationTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "PersonalizationTabPage", "cui/ui/personalization_tab.ui", &rSet)
 {
     // persona
-    get( m_pNoPersona, "no_persona" );
-    get( m_pDefaultPersona, "default_persona" );
+    get(m_pNoPersona, "no_persona");
+    get(m_pDefaultPersona, "default_persona");
 
     for (sal_uInt32 i = 0; i < MAX_DEFAULT_PERSONAS; ++i)
     {
         OUString sDefaultId("default" + OUString::number(i));
-        get( m_vDefaultPersonaImages[i], OUStringToOString(sDefaultId, RTL_TEXTENCODING_UTF8) );
-        m_vDefaultPersonaImages[i]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
+        get(m_vDefaultPersonaImages[i], OUStringToOString(sDefaultId, RTL_TEXTENCODING_UTF8));
+        m_vDefaultPersonaImages[i]->SetClickHdl(
+            LINK(this, SvxPersonalizationTabPage, DefaultPersona));
     }
 
     LoadDefaultImages();
 }
 
-SvxPersonalizationTabPage::~SvxPersonalizationTabPage()
-{
-    disposeOnce();
-}
+SvxPersonalizationTabPage::~SvxPersonalizationTabPage() { disposeOnce(); }
 
 void SvxPersonalizationTabPage::dispose()
 {
     m_pNoPersona.clear();
     m_pDefaultPersona.clear();
-    for (VclPtr<PushButton> & i : m_vDefaultPersonaImages)
+    for (VclPtr<PushButton>& i : m_vDefaultPersonaImages)
         i.clear();
     SfxTabPage::dispose();
 }
 
-
-VclPtr<SfxTabPage> SvxPersonalizationTabPage::Create( TabPageParent pParent, const SfxItemSet *rSet )
+VclPtr<SfxTabPage> SvxPersonalizationTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxPersonalizationTabPage>::Create( pParent.pParent, *rSet );
+    return VclPtr<SvxPersonalizationTabPage>::Create(pParent.pParent, *rSet);
 }
 
-bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet * )
+bool SvxPersonalizationTabPage::FillItemSet(SfxItemSet*)
 {
     // persona
-    OUString aPersona( "default" );
-    if ( m_pNoPersona->IsChecked() )
+    OUString aPersona("default");
+    if (m_pNoPersona->IsChecked())
         aPersona = "no";
 
     bool bModified = false;
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-    if ( xContext.is() &&
-            ( aPersona != officecfg::Office::Common::Misc::Persona::get( xContext ) ||
-              m_aPersonaSettings != officecfg::Office::Common::Misc::PersonaSettings::get( xContext ) ) )
+    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    if (xContext.is()
+        && (aPersona != officecfg::Office::Common::Misc::Persona::get(xContext)
+            || m_aPersonaSettings
+                   != officecfg::Office::Common::Misc::PersonaSettings::get(xContext)))
     {
         bModified = true;
     }
 
     // write
-    std::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
-    if( aPersona == "no" )
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create());
+    if (aPersona == "no")
         m_aPersonaSettings.clear();
-    officecfg::Office::Common::Misc::Persona::set( aPersona, batch );
-    officecfg::Office::Common::Misc::PersonaSettings::set( m_aPersonaSettings, batch );
+    officecfg::Office::Common::Misc::Persona::set(aPersona, batch);
+    officecfg::Office::Common::Misc::PersonaSettings::set(m_aPersonaSettings, batch);
     batch->commit();
 
-    if ( bModified )
+    if (bModified)
     {
         // broadcast the change
-        DataChangedEvent aDataChanged( DataChangedEventType::SETTINGS, nullptr, AllSettingsFlags::STYLE );
-        Application::NotifyAllWindows( aDataChanged );
+        DataChangedEvent aDataChanged(DataChangedEventType::SETTINGS, nullptr,
+                                      AllSettingsFlags::STYLE);
+        Application::NotifyAllWindows(aDataChanged);
     }
 
     return bModified;
 }
 
-void SvxPersonalizationTabPage::Reset( const SfxItemSet * )
+void SvxPersonalizationTabPage::Reset(const SfxItemSet*)
 {
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
 
     // persona
-    OUString aPersona( "default" );
-    if ( xContext.is() )
+    OUString aPersona("default");
+    if (xContext.is())
     {
-        aPersona = officecfg::Office::Common::Misc::Persona::get( xContext );
-        m_aPersonaSettings = officecfg::Office::Common::Misc::PersonaSettings::get( xContext );
+        aPersona = officecfg::Office::Common::Misc::Persona::get(xContext);
+        m_aPersonaSettings = officecfg::Office::Common::Misc::PersonaSettings::get(xContext);
     }
 
-    if ( aPersona == "no" )
+    if (aPersona == "no")
         m_pNoPersona->Check();
     else
         m_pDefaultPersona->Check();
@@ -146,36 +146,35 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
 {
     // Load the pre saved personas
 
-    OUString gallery
-        = "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/gallery/personas/";
-    rtl::Bootstrap::expandMacros( gallery );
+    OUString gallery = "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/gallery/personas/";
+    rtl::Bootstrap::expandMacros(gallery);
     OUString aPersonasList = gallery + "personas_list.txt";
-    SvFileStream aStream( aPersonasList, StreamMode::READ );
+    SvFileStream aStream(aPersonasList, StreamMode::READ);
     GraphicFilter aFilter;
     Graphic aGraphic;
     sal_Int32 nIndex = 0;
     bool foundOne = false;
 
-    while( aStream.IsOpen() && !aStream.eof() && nIndex < MAX_DEFAULT_PERSONAS )
+    while (aStream.IsOpen() && !aStream.eof() && nIndex < MAX_DEFAULT_PERSONAS)
     {
         OString aLine;
         OUString aPersonaSetting, aPreviewFile, aName;
         sal_Int32 nParseIndex = 0;
 
-        aStream.ReadLine( aLine );
-        aPersonaSetting = OStringToOUString( aLine, RTL_TEXTENCODING_UTF8 );
-        aName = aPersonaSetting.getToken( 1, ';', nParseIndex );
-        aPreviewFile = aPersonaSetting.getToken( 0, ';', nParseIndex );
+        aStream.ReadLine(aLine);
+        aPersonaSetting = OStringToOUString(aLine, RTL_TEXTENCODING_UTF8);
+        aName = aPersonaSetting.getToken(1, ';', nParseIndex);
+        aPreviewFile = aPersonaSetting.getToken(0, ';', nParseIndex);
 
         if (aPreviewFile.isEmpty())
             break;
 
-        m_vDefaultPersonaSettings.push_back( aPersonaSetting );
+        m_vDefaultPersonaSettings.push_back(aPersonaSetting);
 
-        INetURLObject aURLObj( gallery + aPreviewFile );
-        aFilter.ImportGraphic( aGraphic, aURLObj );
+        INetURLObject aURLObj(gallery + aPreviewFile);
+        aFilter.ImportGraphic(aGraphic, aURLObj);
         BitmapEx aBmp = aGraphic.GetBitmapEx();
-        m_vDefaultPersonaImages[nIndex]->SetModeImage( Image( aBmp ) );
+        m_vDefaultPersonaImages[nIndex]->SetModeImage(Image(aBmp));
         m_vDefaultPersonaImages[nIndex]->SetQuickHelpText(aName);
         m_vDefaultPersonaImages[nIndex++]->Show();
         foundOne = true;
@@ -184,12 +183,12 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
     m_pDefaultPersona->Enable(foundOne);
 }
 
-IMPL_LINK( SvxPersonalizationTabPage, DefaultPersona, Button*, pButton, void )
+IMPL_LINK(SvxPersonalizationTabPage, DefaultPersona, Button*, pButton, void)
 {
     m_pDefaultPersona->Check();
-    for( sal_Int32 nIndex = 0; nIndex < MAX_DEFAULT_PERSONAS; ++nIndex )
+    for (sal_Int32 nIndex = 0; nIndex < MAX_DEFAULT_PERSONAS; ++nIndex)
     {
-        if( pButton == m_vDefaultPersonaImages[nIndex] )
+        if (pButton == m_vDefaultPersonaImages[nIndex])
             m_aPersonaSettings = m_vDefaultPersonaSettings[nIndex];
     }
 }
