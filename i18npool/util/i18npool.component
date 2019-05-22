@@ -49,6 +49,9 @@
   <implementation name="com.sun.star.i18n.Calendar_ROC">
     <service name="com.sun.star.i18n.Calendar_ROC"/>
   </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_dangi">
+    <service name="com.sun.star.i18n.Calendar_dangi"/>
+  </implementation>
   <implementation name="com.sun.star.i18n.Calendar_buddhist">
     <service name="com.sun.star.i18n.Calendar_buddhist"/>
   </implementation>
