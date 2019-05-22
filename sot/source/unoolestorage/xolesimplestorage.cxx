@@ -22,7 +22,6 @@
 #include <com/sun/star/embed/OLESimpleStorage.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -30,10 +29,12 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <sot/stg.hxx>
 #include <sot/storinfo.hxx>
 
 using namespace ::com::sun::star;

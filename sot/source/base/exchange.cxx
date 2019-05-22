@@ -20,15 +20,12 @@
 #include <sal/config.h>
 
 #include <tools/debug.hxx>
-#include <tools/solar.h>
 #include <tools/globname.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <sysformats.hxx>
 #include <comphelper/classids.hxx>
 #include <rtl/instance.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/documentconstants.hxx>
 
 #include <memory>

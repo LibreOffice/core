@@ -20,11 +20,9 @@
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ucb/NameClash.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -32,7 +30,6 @@
 #include <com/sun/star/ucb/ResultSetException.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
@@ -45,16 +42,13 @@
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 
 #include <memory>
-#include <rtl/digest.h>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
-#include <unotools/streamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbhelper.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -62,12 +56,13 @@
 
 #include <sot/stg.hxx>
 #include <sot/storinfo.hxx>
-#include <sot/storage.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <comphelper/classids.hxx>
 
 #include <vector>
+
+namespace com::sun::star::ucb { class XCommandEnvironment; }
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;

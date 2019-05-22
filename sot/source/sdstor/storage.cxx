@@ -24,7 +24,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <rtl/digest.h>
 #include <osl/file.hxx>
 #include <sot/stg.hxx>
 #include <sot/storinfo.hxx>
@@ -37,8 +36,6 @@
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/fileformat.h>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <ucbhelper/content.hxx>
 
 #include <memory>
 

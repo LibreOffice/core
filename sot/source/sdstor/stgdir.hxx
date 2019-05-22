@@ -25,8 +25,6 @@
 #include "stgstrms.hxx"
 
 class StgIo;
-class StgEntry;
-class StgDirEntry;
 class StgDirStrm;
 
 class BaseStorageStream;

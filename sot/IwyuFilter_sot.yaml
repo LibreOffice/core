@@ -1,0 +1,13 @@
+---
+assumeFilename: sot/source/base/object.cxx
+blacklist:
+    sot/source/unoolestorage/xolesimplestorage.hxx:
+    # Base class needs complete type
+    - com/sun/star/embed/XOLESimpleStorage.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sot/source/sdstor/stgcache.hxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h
+    sot/source/sdstor/stgcache.cxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h

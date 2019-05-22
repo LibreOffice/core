@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/solar.h>
 #include <config_features.h>
 
 #include <sot/exchange.hxx>
