@@ -2531,6 +2531,9 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                                     }
                                     if ( bCalcNxt )
                                     {
+                                        // tdf#119109 follow was just formatted,
+                                        // don't do it again now
+                                        FlowFrameJoinLockGuard g(GetFollow());
                                         pNxt->Calc(pRenderContext);
                                     }
                                 }
