@@ -1,0 +1,4 @@
+LIBRARY		"r.dll"
+EXPORTS
+			RegDLLs
+			UnregDLLs

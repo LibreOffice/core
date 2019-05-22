@@ -221,3 +221,68 @@ WindowsCustomAction gid_Customaction_RegisterSomeExtensions
 End
 
 #endif /* HAVE_WINDOWS_SDK */
+
+/* A deferred not-impersonated action that will call regsvr32 to register DLLs.
+   Custom action type 1 (msidbCustomActionTypeDll + msidbCustomActionTypeBinaryData)
+   + 1024 (msidbCustomActionTypeInScript) + 2048 (msidbCustomActionTypeNoImpersonate).
+   Since deferred actions don't have access to current DB, the action depends
+   on immediate-executed action(s) prepare_reg_*_dll (see below) that precede it,
+   and set this action's CustomActionData property.
+*/
+WindowsCustomAction gid_Customaction_reg_dlls
+	Name = "reg_dlls";
+	Typ = "3073";
+	Source = "reg_dlls.dll";
+	Target = "RegDLLs";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "&gm_o_Activexcontrol=3 Or (!gm_o_Activexcontrol=3 And &gm_o_Activexcontrol=-1)", "InstallFinalize");
+End
+
+/* Immediately-executed actions that add registration command lines for spsupp[_x64].dll
+   to "reg_dlls" property.
+   Custom action type 51 (msidbCustomActionTypeTextData + msidbCustomActionTypeProperty)
+*/
+
+/* Register SharePoint.OpenDocuments component, substituting MSO component of same name */
+WindowsCustomAction gid_Customaction_prep_regspsupp2
+	Name = "prepare_reg_spsupp_dll_2";
+	Typ = "51";
+	Source = "reg_dlls";
+	Target = "[reg_dlls]|/i:Substitute_OWSSUPP "[#spsupp.dll]"";
+	Inbinarytable = 0;
+	Assignment1 = ("InstallExecuteSequence", "REGISTER_ALL_MSO_TYPES And (&gm_o_Activexcontrol=3 Or (!gm_o_Activexcontrol=3 And &gm_o_Activexcontrol=-1))", "reg_dlls");
+	Styles = "NO_FILE";
+End
+
+/* Register LOSPSupport.OpenDocuments component */
+WindowsCustomAction gid_Customaction_prep_regspsupp1
+	Name = "prepare_reg_spsupp_dll_1";
+	Typ = "51";
+	Source = "reg_dlls";
+	Target = "[reg_dlls]|"[#spsupp.dll]"";
+	Inbinarytable = 0;
+	Assignment1 = ("InstallExecuteSequence", "&gm_o_Activexcontrol=3 Or (!gm_o_Activexcontrol=3 And &gm_o_Activexcontrol=-1)", "prepare_reg_spsupp_dll_2");
+	Styles = "NO_FILE";
+End
+
+/* Register SharePoint.OpenDocuments component, substituting MSO component of same name -x64 */
+WindowsCustomAction gid_Customaction_prep_regspsupp642
+	Name = "prepare_reg_spsupp64_dll_2";
+	Typ = "51";
+	Source = "reg_dlls";
+	Target = "[reg_dlls]|/i:Substitute_OWSSUPP "[#spsupp_x64.dll]"";
+	Inbinarytable = 0;
+	Assignment1 = ("InstallExecuteSequence", "REGISTER_ALL_MSO_TYPES And (&gm_o_Activexcontrol=3 Or (!gm_o_Activexcontrol=3 And &gm_o_Activexcontrol=-1))", "prepare_reg_spsupp_dll_1");
+	Styles = "NO_FILE";
+End
+
+/* Register LOSPSupport.OpenDocuments component - x64 */
+WindowsCustomAction gid_Customaction_prep_regspsupp641
+	Name = "prepare_reg_spsupp64_dll_1";
+	Typ = "51";
+	Source = "reg_dlls";
+	Target = "[reg_dlls]|"[#spsupp_x64.dll]"";
+	Inbinarytable = 0;
+	Assignment1 = ("InstallExecuteSequence", "&gm_o_Activexcontrol=3 Or (!gm_o_Activexcontrol=3 And &gm_o_Activexcontrol=-1)", "prepare_reg_spsupp64_dll_2");
+	Styles = "NO_FILE";
+End

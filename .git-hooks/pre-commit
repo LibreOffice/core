@@ -15,8 +15,8 @@ $ENV{LC_ALL} = "C";
 sub check_whitespaces($)
 {
     my ($h) = @_;
-    my $src_limited = "c|cpp|cxx|h|hrc|hxx|idl|inl|java|swift|map|MK|pmk|pl|pm|sdi|sh|src|tab|ui|xcu|xml|xsl";
-    my $src_full = "c|cpp|cxx|h|hrc|hxx|idl|inl|java|swift|map|mk|MK|pmk|pl|pm|sdi|sh|src|tab|ui|xcu|xml|xsl";
+    my $src_limited = "c|cpp|cxx|h|hrc|hxx|idl|inl|java|swift|map|MK|pmk|pl|pm|sdi|sh|src|tab|ui|xcu|xml|xsl|py";
+    my $src_full = "c|cpp|cxx|h|hrc|hxx|idl|inl|java|swift|map|mk|MK|pmk|pl|pm|sdi|sh|src|tab|ui|xcu|xml|xsl|py";
 
     my $found_bad = 0;
     my $filename;
@@ -109,6 +109,17 @@ sub check_whitespaces($)
     }
 }
 
+sub check_author()
+{
+    my $author = `git var GIT_AUTHOR_IDENT`;
+    chomp $author;
+    if ($author =~ /^Your Name <you\@example.com>/)
+    {
+        print("ERROR: You have a suspicious author identity: '$author'\n");
+        exit(1);
+    }
+}
+
 sub check_style($)
 {
     if (! -e "solenv/clang-format/ClangFormat.pm")
@@ -133,7 +144,7 @@ sub check_style($)
         chomp $filename;
         if ($filename =~ /\.($src)$/ and !exists($blacklist_names->{$filename}))
         {
-            if (! -x $clang_format)
+            if (!defined($clang_format))
             {
                 my $version = ClangFormat::get_wanted_version();
                 my $opt_lo = ClangFormat::get_own_directory();
@@ -161,8 +172,7 @@ sub check_style($)
                 print("cp clang-format-$version-$platform clang-format\n");
                 print("chmod +x clang-format\n\n");
 
-                print("(Or read the instructions how to build it yourself at\n");
-                print("<https://dev-www.libreoffice.org/bin/README.clang-format.txt>).\n\n");
+                print("(Or read solenv/clang-format/README on how to build it yourself.\n");
                 return;
             }
             if (!ClangFormat::check_style($clang_format, $filename))
@@ -194,6 +204,8 @@ sub check_style($)
             print("and the clang-format rules. Fixing these now automatically.\n");
             print("Running '$clang_format -i " . join(" ", @bad_names) . "' for you...\n");
             system("$clang_format -i " . join(" ", @bad_names));
+            # TODO this stages all local modifications, staging originally
+            # unstaged hunks.
             system("git add " . join(" ", @bad_names));
             print("Done.\n");
         }
@@ -323,6 +335,9 @@ check_whitespaces( $against);
 
 # fix style in code
 check_style($against);
+
+# catch missing author info
+check_author();
 
 # catch commits to the submodules
 check_submodules($against);
