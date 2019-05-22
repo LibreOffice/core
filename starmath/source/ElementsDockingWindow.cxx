@@ -265,7 +265,15 @@ void SmElementsControl::dispose()
 
 void SmElementsControl::setVerticalMode(bool bVerticalMode)
 {
+    if (mbVerticalMode == bVerticalMode)
+        return;
     mbVerticalMode = bVerticalMode;
+    if (bVerticalMode)
+        mxScroll->SetStyle((mxScroll->GetStyle() & ~WB_VERT) | WB_HORZ);
+    else
+        mxScroll->SetStyle((mxScroll->GetStyle() & ~WB_HORZ) | WB_VERT);
+    LayoutOrPaintContents(nullptr);
+    Invalidate();
 }
 
 /**
@@ -277,16 +285,17 @@ void SmElementsControl::setVerticalMode(bool bVerticalMode)
  **/
 void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
 {
-    const sal_Int32 nScrollbarWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+    const sal_Int32 nScrollbarSize = GetSettings().GetStyleSettings().GetScrollBarSize();
+    const sal_Int32 nControlHeight = GetOutputSizePixel().Height()
+                                    - (pContext && mbVerticalMode && mxScroll->IsVisible() ? nScrollbarSize : 0);
     const sal_Int32 nControlWidth = GetOutputSizePixel().Width()
-                                    - (pContext && mxScroll->IsVisible() ? nScrollbarWidth : 0);
-    const sal_Int32 nControlHeight = GetOutputSizePixel().Height();
+                                    - (pContext && !mbVerticalMode && mxScroll->IsVisible() ? nScrollbarSize : 0);
 
     sal_Int32 boxX = maMaxElementDimensions.Width()  + 10;
     sal_Int32 boxY = maMaxElementDimensions.Height() + 10;
 
-    sal_Int32 x = 0;
-    sal_Int32 y = -mxScroll->GetThumbPos();
+    sal_Int32 x = mbVerticalMode ? -mxScroll->GetThumbPos() : 0;
+    sal_Int32 y = !mbVerticalMode ? -mxScroll->GetThumbPos() : 0;
 
     sal_Int32 perLine = 0;
 
@@ -294,11 +303,8 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
         perLine = nControlHeight / boxY;
     else
         perLine = nControlWidth / boxX;
-
     if (perLine <= 0)
-    {
         perLine = 1;
-    }
 
     if (mbVerticalMode)
         boxY = nControlHeight / perLine;
@@ -392,26 +398,46 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
     else
         mbFirstPaintAfterLayout = true;
 
-    sal_Int32 nTotalControlHeight = y + boxY + mxScroll->GetThumbPos();
-    if (nTotalControlHeight > GetOutputSizePixel().Height())
+    if (mbVerticalMode)
     {
-        mxScroll->SetRangeMax(nTotalControlHeight);
-        mxScroll->SetPosSizePixel(Point(nControlWidth, 0), Size(nScrollbarWidth, nControlHeight));
-        mxScroll->SetVisibleSize(nControlHeight);
-        mxScroll->SetPageSize(nControlHeight);
-        mxScroll->Show();
+        sal_Int32 nTotalControlWidth = x + boxX + mxScroll->GetThumbPos();
+        if (nTotalControlWidth > GetOutputSizePixel().Width())
+        {
+            mxScroll->SetRangeMax(nTotalControlWidth);
+            mxScroll->SetPosSizePixel(Point(0, nControlHeight), Size(nControlWidth, nScrollbarSize));
+            mxScroll->SetVisibleSize(nControlWidth);
+            mxScroll->SetPageSize(nControlWidth);
+            mxScroll->Show();
+        }
+        else
+        {
+            mxScroll->SetThumbPos(0);
+            mxScroll->Hide();
+        }
     }
     else
     {
-        mxScroll->SetThumbPos(0);
-        mxScroll->Hide();
+        sal_Int32 nTotalControlHeight = y + boxY + mxScroll->GetThumbPos();
+        if (nTotalControlHeight > GetOutputSizePixel().Height())
+        {
+            mxScroll->SetRangeMax(nTotalControlHeight);
+            mxScroll->SetPosSizePixel(Point(nControlWidth, 0), Size(nScrollbarSize, nControlHeight));
+            mxScroll->SetVisibleSize(nControlHeight);
+            mxScroll->SetPageSize(nControlHeight);
+            mxScroll->Show();
+        }
+        else
+        {
+            mxScroll->SetThumbPos(0);
+            mxScroll->Hide();
+        }
     }
 }
 
 void SmElementsControl::Resize()
 {
-     Window::Resize();
-     LayoutOrPaintContents(nullptr);
+    Window::Resize();
+    LayoutOrPaintContents(nullptr);
 }
 
 void SmElementsControl::ApplySettings(vcl::RenderContext& rRenderContext)
@@ -461,9 +487,7 @@ void SmElementsControl::RequestHelp(const HelpEvent& rHEvt)
         // get text and display it
         OUString aStr = pHelpElement->getHelpText();
         if (rHEvt.GetMode() & HelpEventMode::BALLOON)
-        {
             Help::ShowBalloon(this, aHelpRect.Center(), aHelpRect, aStr);
-        }
         else
             Help::ShowQuickHelp(this, aHelpRect, aStr, QuickHelpFlags::CtrlText);
         return;
@@ -553,8 +577,16 @@ void SmElementsControl::DoScroll(long nDelta)
 {
     Point aNewPoint = mxScroll->GetPosPixel();
     tools::Rectangle aRect(Point(), GetOutputSize());
-    aRect.AdjustRight( -(mxScroll->GetSizePixel().Width()) );
-    Scroll( 0, -nDelta, aRect );
+    if (mbVerticalMode)
+    {
+        aRect.AdjustBottom( -(mxScroll->GetSizePixel().Height()) );
+        Scroll( -nDelta, 0, aRect );
+    }
+    else
+    {
+        aRect.AdjustRight( -(mxScroll->GetSizePixel().Width()) );
+        Scroll( 0, -nDelta, aRect );
+    }
     mxScroll->SetPosPixel(aNewPoint);
     Invalidate();
 }
