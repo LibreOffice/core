@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_01ab1a89",
+        "filename": "avmedia/source/gstreamer/gstplayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-05-22T13:01:47Z",
+      "side": 1,
+      "message": "So IDK how relevant this chunk is for 6.2, in my orig. commit I changed the code that misbehaved but was only introduced post-6.2\nPerhaps it doesn\u0027t make much sense w/o the rest of the commit (18138417485aeba6c52d935c616dba829b24ffd8)",
+      "revId": "8aedee3bbe2de7b4ee67d8b1c9d1676d3294b39e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
