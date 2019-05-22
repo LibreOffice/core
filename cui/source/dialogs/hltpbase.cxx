@@ -36,6 +36,7 @@
 #include <dialmgr.hxx>
 #include <bitmaps.hlst>
 #include <vcl/builderfactory.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace ::ucbhelper;
 
@@ -242,27 +243,42 @@ void SvxHyperlinkTabPageBase::ShowMarkWnd ()
 // Fill Dialogfields
 void SvxHyperlinkTabPageBase::FillStandardDlgFields ( const SvxHyperlinkItem* pHyperlinkItem )
 {
-    // Frame
-    sal_Int32 nPos = mpCbbFrame->GetEntryPos ( pHyperlinkItem->GetTargetFrame() );
-    if ( nPos != COMBOBOX_ENTRY_NOTFOUND)
-        mpCbbFrame->SetText ( pHyperlinkItem->GetTargetFrame() );
-
-    // Form
-    OUString aStrFormText = CuiResId( RID_SVXSTR_HYPERDLG_FROM_TEXT );
-    OUString aStrFormButton = CuiResId( RID_SVXSTR_HYPERDLG_FORM_BUTTON );
-
-    if( pHyperlinkItem->GetInsertMode() & HLINK_HTMLMODE )
+    if (!comphelper::LibreOfficeKit::isActive())
     {
-        mpLbForm->Clear();
-        mpLbForm->InsertEntry( aStrFormText );
-        mpLbForm->SelectEntryPos ( 0 );
+        // Frame
+        sal_Int32 nPos = mpCbbFrame->GetEntryPos ( pHyperlinkItem->GetTargetFrame() );
+        if ( nPos != COMBOBOX_ENTRY_NOTFOUND)
+            mpCbbFrame->SetText ( pHyperlinkItem->GetTargetFrame() );
+
+        // Form
+        OUString aStrFormText = CuiResId( RID_SVXSTR_HYPERDLG_FROM_TEXT );
+
+        OUString aStrFormButton = CuiResId( RID_SVXSTR_HYPERDLG_FORM_BUTTON );
+
+        if( pHyperlinkItem->GetInsertMode() & HLINK_HTMLMODE )
+        {
+            mpLbForm->Clear();
+            mpLbForm->InsertEntry( aStrFormText );
+            mpLbForm->SelectEntryPos ( 0 );
+        }
+        else
+        {
+            mpLbForm->Clear();
+            mpLbForm->InsertEntry( aStrFormText );
+            mpLbForm->InsertEntry( aStrFormButton );
+            mpLbForm->SelectEntryPos ( pHyperlinkItem->GetInsertMode() == HLINK_BUTTON ? 1 : 0 );
+        }
     }
     else
     {
-        mpLbForm->Clear();
-        mpLbForm->InsertEntry( aStrFormText );
-        mpLbForm->InsertEntry( aStrFormButton );
-        mpLbForm->SelectEntryPos ( pHyperlinkItem->GetInsertMode() == HLINK_BUTTON ? 1 : 0 );
+        mpCbbFrame->Hide();
+        mpLbForm->Hide();
+
+        VclPtr<FixedText> pLabel;
+        get(pLabel, "form_label");
+        pLabel->Hide();
+        get(pLabel, "frame_label");
+        pLabel->Hide();
     }
 
     // URL
