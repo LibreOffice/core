@@ -33,8 +33,8 @@ using namespace css;
 
 #define TRANSCOL COL_WHITE
 
-ContourWindow::ContourWindow(vcl::Window* pParent, WinBits nBits)
-    : GraphCtrl (pParent, nBits)
+ContourWindow::ContourWindow(weld::Dialog* pDialog)
+    : SvxGraphCtrl(pDialog)
     , aWorkRect(0, 0, 0, 0)
     , bPipetteMode(false)
     , bWorkplaceMode(false)
@@ -112,7 +112,7 @@ const tools::PolyPolygon& ContourWindow::GetPolyPolygon()
 
 void ContourWindow::InitSdrModel()
 {
-    GraphCtrl::InitSdrModel();
+    SvxGraphCtrl::InitSdrModel();
 
     SfxItemSet aSet( pModel->GetItemPool() );
 
@@ -139,11 +139,11 @@ bool ContourWindow::IsContourChanged() const
     return bRet;
 }
 
-void ContourWindow::MouseButtonDown( const MouseEvent& rMEvt )
+bool ContourWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( bWorkplaceMode )
     {
-        const Point aLogPt( PixelToLogic( rMEvt.GetPosPixel() ) );
+        const Point aLogPt(GetDrawingArea()->get_ref_device().PixelToLogic(rMEvt.GetPosPixel()));
 
         SetPolyPolygon( tools::PolyPolygon() );
         aWorkRect = tools::Rectangle( aLogPt, aLogPt );
@@ -152,10 +152,11 @@ void ContourWindow::MouseButtonDown( const MouseEvent& rMEvt )
     }
 
     if ( !bPipetteMode )
-        GraphCtrl::MouseButtonDown( rMEvt );
+        return GraphCtrl::MouseButtonDown( rMEvt );
+    return false;
 }
 
-void ContourWindow::MouseMove( const MouseEvent& rMEvt )
+bool ContourWindow::MouseMove( const MouseEvent& rMEvt )
 {
     bClickValid = false;
 
@@ -164,19 +165,21 @@ void ContourWindow::MouseMove( const MouseEvent& rMEvt )
         const Point aLogPt( PixelToLogic( rMEvt.GetPosPixel() ) );
 
         aPipetteColor = GetPixel( aLogPt );
-        Control::MouseMove( rMEvt );
+        weld::CustomWidgetController::MouseMove( rMEvt );
 
         if ( aPipetteLink.IsSet() && tools::Rectangle( Point(), GetGraphicSize() ).IsInside( aLogPt ) )
         {
             SetPointer( PointerStyle::RefHand );
             aPipetteLink.Call( *this );
         }
+
+        return false;
     }
-    else
-        GraphCtrl::MouseMove( rMEvt );
+
+    return SvxGraphCtrl::MouseMove( rMEvt );
 }
 
-void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
+bool ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
 {
     const tools::Rectangle aGraphRect( Point(), GetGraphicSize() );
     const Point     aLogPt( PixelToLogic( rMEvt.GetPosPixel() ) );
@@ -186,9 +189,11 @@ void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
 
     if ( bPipetteMode )
     {
-        Control::MouseButtonUp( rMEvt );
+        weld::CustomWidgetController::MouseButtonUp( rMEvt );
 
         aPipetteClickLink.Call( *this );
+
+        return false;
     }
     else if ( bWorkplaceMode )
     {
@@ -213,9 +218,11 @@ void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
         Invalidate( aGraphRect );
 
         aWorkplaceClickLink.Call( *this );
+
+        return false;
     }
-    else
-        GraphCtrl::MouseButtonUp( rMEvt );
+
+    return SvxGraphCtrl::MouseButtonUp( rMEvt );
 }
 
 void ContourWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)

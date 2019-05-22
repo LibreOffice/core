@@ -23,7 +23,7 @@
 #include <tools/poly.hxx>
 #include <svx/graphctl.hxx>
 
-class ContourWindow : public GraphCtrl
+class ContourWindow final : public SvxGraphCtrl
 {
     tools::PolyPolygon         aPolyPoly;
     Color               aPipetteColor;
@@ -37,17 +37,17 @@ class ContourWindow : public GraphCtrl
 
 protected:
 
-    virtual void        MouseButtonDown(const MouseEvent& rMEvt) override;
-    virtual void        MouseMove(const MouseEvent& rMEvt) override;
-    virtual void        MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual bool        MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual bool        MouseMove(const MouseEvent& rMEvt) override;
+    virtual bool        MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual void        SdrObjCreated( const SdrObject& rObj ) override;
     virtual void        InitSdrModel() override;
     virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual Size        GetOptimalSize() const override;
+    virtual void        SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
 public:
 
-    ContourWindow(vcl::Window* pParent, WinBits nBits);
+    ContourWindow(weld::Dialog* pDialog);
 
     void                SetPolyPolygon( const tools::PolyPolygon& rPolyPoly );
     const tools::PolyPolygon&  GetPolyPolygon();

@@ -137,10 +137,8 @@ namespace
 {
     SvxContourDlg* GetContourDlg(SwView const &rView)
     {
-        SfxChildWindow *pChildWindow = rView.GetViewFrame()->GetChildWindow(
-            SvxContourDlgChildWindow::GetChildWindowId());
-
-        return pChildWindow ? static_cast<SvxContourDlg*>(pChildWindow->GetWindow()) : nullptr;
+        SfxChildWindow *pWnd = rView.GetViewFrame()->GetChildWindow(SvxContourDlgChildWindow::GetChildWindowId());
+        return pWnd ? static_cast<SvxContourDlg*>(pWnd->GetController().get()) : nullptr;
     }
 
     SvxIMapDlg* GetIMapDlg(SwView const &rView)

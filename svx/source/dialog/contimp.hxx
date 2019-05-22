@@ -40,10 +40,8 @@ public:
     SvxContourDlgItem( SvxSuperContourDlg& rDlg, SfxBindings& rBindings );
 };
 
-class SvxSuperContourDlg : public SvxContourDlg
+class SvxSuperContourDlg
 {
-    using SvxContourDlg::GetPolyPolygon;
-
     Graphic             aGraphic;
     Graphic             aUndoGraphic;
     Graphic             aRedoGraphic;
@@ -54,49 +52,34 @@ class SvxSuperContourDlg : public SvxContourDlg
     void*               pUpdateEditingObject;
     void*               pCheckObj;
     SvxContourDlgItem   aContourItem;
-    VclPtr<ToolBox>     m_pTbx1;
-    VclPtr<MetricField> m_pMtfTolerance;
-    VclPtr<ContourWindow> m_pContourWnd;
-    VclPtr<StatusBar>   m_pStbStatus;
     sal_Int32           mnGrfChanged;
     bool                bExecState;
     bool                bUpdateGraphicLinked;
     bool                bGraphicLinked;
 
-    sal_uInt16          mnApplyId;
-    sal_uInt16          mnWorkSpaceId;
-    sal_uInt16          mnSelectId;
-    sal_uInt16          mnRectId;
-    sal_uInt16          mnCircleId;
-    sal_uInt16          mnPolyId;
-    sal_uInt16          mnPolyEditId;
-    sal_uInt16          mnPolyMoveId;
-    sal_uInt16          mnPolyInsertId;
-    sal_uInt16          mnPolyDeleteId;
-    sal_uInt16          mnAutoContourId;
-    sal_uInt16          mnUndoId;
-    sal_uInt16          mnRedoId;
-    sal_uInt16          mnPipetteId;
+    weld::Dialog& m_rDialog;
+    std::unique_ptr<weld::Toolbar> m_xTbx1;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtfTolerance;
+    std::unique_ptr<ContourWindow> m_xContourWnd;
+    std::unique_ptr<weld::DrawingArea> m_xStbStatusColor;
+    std::unique_ptr<weld::Label> m_xStbStatus2;
+    std::unique_ptr<weld::Label> m_xStbStatus3;
 
-    virtual bool        Close() override;
-
-                        DECL_LINK( Tbx1ClickHdl, ToolBox*, void );
-                        DECL_LINK( MousePosHdl, GraphCtrl*, void );
-                        DECL_LINK( GraphSizeHdl, GraphCtrl*, void );
-                        DECL_LINK( UpdateHdl, Timer *, void );
-                        DECL_LINK( CreateHdl, Timer *, void );
-                        DECL_LINK( StateHdl, GraphCtrl*, void );
-                        DECL_LINK( PipetteHdl, ContourWindow&, void );
-                        DECL_LINK( PipetteClickHdl, ContourWindow&, void );
-                        DECL_LINK( WorkplaceClickHdl, ContourWindow&, void );
-                        DECL_LINK( MiscHdl, LinkParamNone*, void );
+    DECL_LINK( Tbx1ClickHdl, const OString&, void );
+    DECL_LINK( MousePosHdl, GraphCtrl*, void );
+    DECL_LINK( GraphSizeHdl, GraphCtrl*, void );
+    DECL_LINK( UpdateHdl, Timer *, void );
+    DECL_LINK( CreateHdl, Timer *, void );
+    DECL_LINK( StateHdl, GraphCtrl*, void );
+    DECL_LINK( PipetteHdl, weld::DrawingArea::draw_args, void );
+    DECL_LINK( PipetteClickHdl, ContourWindow&, void );
+    DECL_LINK( WorkplaceClickHdl, ContourWindow&, void );
+    DECL_LINK( CancelHdl, weld::Button&, void );
 
 public:
 
-                        SvxSuperContourDlg(SfxBindings *pBindings, SfxChildWindow *pCW,
-                                           vcl::Window* pParent);
-                        virtual ~SvxSuperContourDlg() override;
-    virtual void        dispose() override;
+    SvxSuperContourDlg(weld::Builder& rBuilder, weld::Dialog& rDialog);
+    ~SvxSuperContourDlg();
 
     void                SetExecState( bool bEnable );
 
