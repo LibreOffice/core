@@ -104,6 +104,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_a6f03c92",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/UI/ToolbarMode.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-05-22T09:01:48Z",
+      "side": 1,
+      "message": "ok, I will look on this which will be better set/prop",
+      "parentUuid": "3fa0c359_66c1d454",
+      "revId": "250cafeeb2aa3d290987af221b8b57536ad2b852",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_c6cf887d",
         "filename": "officecfg/registry/schema/org/openoffice/Office/UI/ToolbarMode.xcs",
         "patchSetId": 1
@@ -115,6 +133,24 @@
       "writtenOn": "2019-05-22T07:46:56Z",
       "side": 1,
       "message": "* Is whitespace allowed in those strings?  (If yes, where?  And if yes, would it maybe be better to be strict and disallow such whitespace?)\n* What are the valid values for the \"visible\" part of the string?",
+      "revId": "250cafeeb2aa3d290987af221b8b57536ad2b852",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_86f3c09e",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/UI/ToolbarMode.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-05-22T09:01:48Z",
+      "side": 1,
+      "message": "1. There will be no white spaces in the strings.\n2. The visible will store the value true/false depending on whether the user wants to show/hide gtktoolbutton /gtkmenuitem of notebookbar*.ui.",
+      "parentUuid": "3fa0c359_c6cf887d",
       "revId": "250cafeeb2aa3d290987af221b8b57536ad2b852",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
