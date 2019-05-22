@@ -107,8 +107,6 @@ void SvxIMapDlgChildWindow::UpdateIMapDlg( const Graphic& rGraphic, const ImageM
         pDlg->UpdateLink(rGraphic, pImageMap, pTargetList, pEditingObj);
 }
 
-VCL_BUILDER_FACTORY(StatusBar)
-
 SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, weld::Window* _pParent)
     : SfxModelessDialogController(_pBindings, pCW, _pParent, "svx/ui/imapdialog.ui", "ImapDialog")
     , pCheckObj(nullptr)
