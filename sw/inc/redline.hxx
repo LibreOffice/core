@@ -111,16 +111,17 @@ class SW_DLLPUBLIC SwRedlineData
 
     OUString m_sComment;
     DateTime m_aStamp;
-    RedlineType_t m_eType;
+    RedlineType m_eType;
+    bool m_bAutoFormat;
     std::size_t const m_nAuthor;
     sal_uInt16 m_nSeqNo;
 
 public:
-    SwRedlineData( RedlineType_t eT, std::size_t nAut );
+    SwRedlineData( RedlineType eT, std::size_t nAut );
     SwRedlineData( const SwRedlineData& rCpy, bool bCpyNext = true );
 
     // For sw3io: pNext/pExtraData are taken over.
-    SwRedlineData( RedlineType_t eT, std::size_t nAut, const DateTime& rDT,
+    SwRedlineData( RedlineType eT, std::size_t nAut, const DateTime& rDT,
                    const OUString& rCmnt, SwRedlineData* pNxt );
 
     ~SwRedlineData();
@@ -129,6 +130,7 @@ public:
         {
             return m_nAuthor == rCmp.m_nAuthor &&
                     m_eType == rCmp.m_eType &&
+                    m_bAutoFormat == rCmp.m_bAutoFormat &&
                     m_sComment == rCmp.m_sComment &&
                     (( !m_pNext && !rCmp.m_pNext ) ||
                         ( m_pNext && rCmp.m_pNext && *m_pNext == *rCmp.m_pNext )) &&
@@ -139,8 +141,7 @@ public:
     bool operator!=( const SwRedlineData& rCmp ) const
         {   return !operator==( rCmp ); }
 
-    RedlineType_t GetType() const
-        { return static_cast<RedlineType_t>(m_eType & nsRedlineType_t::REDLINE_NO_FLAG_MASK); }
+    RedlineType GetType() const { return m_eType; }
 
     std::size_t GetAuthor() const                { return m_nAuthor; }
     const OUString& GetComment() const        { return m_sComment; }
@@ -150,8 +151,8 @@ public:
     void SetComment( const OUString& rS )     { m_sComment = rS; }
     void SetTimeStamp( const DateTime& rDT ) { m_aStamp = rDT; }
 
-    void SetAutoFormatFlag()
-        { m_eType = static_cast<RedlineType_t>(m_eType | nsRedlineType_t::REDLINE_FORM_AUTOFMT); }
+    void SetAutoFormat() { m_bAutoFormat = true; }
+    bool IsAutoFormat() const { return m_bAutoFormat; }
     bool CanCombine( const SwRedlineData& rCmp ) const;
 
     // ExtraData gets copied, the pointer is therefore not taken over by
@@ -186,7 +187,7 @@ class SW_DLLPUBLIC SwRangeRedline : public SwPaM
 public:
     static sal_uInt32 m_nLastId;
 
-    SwRangeRedline( RedlineType_t eType, const SwPaM& rPam );
+    SwRangeRedline( RedlineType eType, const SwPaM& rPam );
     SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam );
     SwRangeRedline( const SwRedlineData& rData, const SwPosition& rPos );
     // For sw3io: pData is taken over!
@@ -215,15 +216,14 @@ public:
     const SwRedlineData& GetRedlineData(sal_uInt16 nPos = 0) const;
     bool operator!=( const SwRedlineData& rCmp ) const
         { return *m_pRedlineData != rCmp; }
-    void SetAutoFormatFlag()               { m_pRedlineData->SetAutoFormatFlag(); }
+    void SetAutoFormat() { m_pRedlineData->SetAutoFormat(); }
+    bool IsAutoFormat() const { return m_pRedlineData->IsAutoFormat(); }
 
     sal_uInt16 GetStackCount() const;
     std::size_t GetAuthor( sal_uInt16 nPos = 0) const;
     OUString const & GetAuthorString( sal_uInt16 nPos = 0 ) const;
     const DateTime& GetTimeStamp( sal_uInt16 nPos = 0) const;
-    RedlineType_t GetRealType( sal_uInt16 nPos = 0 ) const;
-    RedlineType_t GetType( sal_uInt16 nPos = 0) const
-        { return static_cast<RedlineType_t>(GetRealType( nPos ) & nsRedlineType_t::REDLINE_NO_FLAG_MASK); }
+    RedlineType GetType( sal_uInt16 nPos = 0 ) const;
     const OUString& GetComment( sal_uInt16 nPos = 0 ) const;
 
     void SetComment( const OUString& rS ) { m_pRedlineData->SetComment( rS ); }

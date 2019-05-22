@@ -355,7 +355,7 @@ void SwTextFrame::MakePos()
             {
                 pRedln->MaybeNotifyRedlinePositionModification(getFrameArea().Top());
                 if (GetMergedPara()
-                    && pRedln->GetType() == nsRedlineType_t::REDLINE_DELETE
+                    && pRedln->GetType() == RedlineType::Delete
                     && pRedln->GetPoint()->nNode != pRedln->GetMark()->nNode)
                 {
                     pTextNode = pRedln->End()->nNode.GetNode().GetTextNode();

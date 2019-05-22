@@ -389,7 +389,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
     else
     {
         if (!GetMergedPara() &&
-            SwRedlineTable::npos == rIDRA.GetRedlinePos(*GetTextNodeFirst(), USHRT_MAX))
+            SwRedlineTable::npos == rIDRA.GetRedlinePos(*GetTextNodeFirst(), RedlineType::Any))
         {
             bRedLine = false;
         }
@@ -484,7 +484,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
             if (IDocumentRedlineAccess::IsShowChanges(rIDRA.GetRedlineFlags())
                 && !getRootFrame()->IsHideRedlines())
             {
-                const SwRedlineTable::size_type nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
+                const SwRedlineTable::size_type nRedlPos = rIDRA.GetRedlinePos( rTextNode, RedlineType::Any );
                 if( SwRedlineTable::npos != nRedlPos )
                 {
                     SwAttrHandler aAttrHandler;

@@ -235,7 +235,7 @@ SwUndoInsTable::SwUndoInsTable( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt
     SwDoc& rDoc = *rPos.nNode.GetNode().GetDoc();
     if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
     {
-        pRedlData.reset( new SwRedlineData( nsRedlineType_t::REDLINE_INSERT, rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() ) );
+        pRedlData.reset( new SwRedlineData( RedlineType::Insert, rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() ) );
         SetRedlineFlags( rDoc.getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 
@@ -260,7 +260,7 @@ void SwUndoInsTable::UndoImpl(::sw::UndoRedoContext & rContext)
     pTableNd->DelFrames();
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
-        rDoc.getIDocumentRedlineAccess().DeleteRedline( *pTableNd, true, USHRT_MAX );
+        rDoc.getIDocumentRedlineAccess().DeleteRedline( *pTableNd, true, RedlineType::Any );
     RemoveIdxFromSection( rDoc, nSttNode );
 
     // move hard page breaks into next node
@@ -2153,7 +2153,7 @@ void SwUndoTableNumFormat::UndoImpl(::sw::UndoRedoContext & rContext)
     // the same here.
     if( pTextNd->GetText() != m_aStr )
     {
-        rDoc.getIDocumentRedlineAccess().DeleteRedline( *( pBox->GetSttNd() ), false, USHRT_MAX );
+        rDoc.getIDocumentRedlineAccess().DeleteRedline( *( pBox->GetSttNd() ), false, RedlineType::Any );
 
         SwIndex aIdx( pTextNd, 0 );
         if( !m_aStr.isEmpty() )
@@ -2399,7 +2399,7 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
                         *aPam.GetPoint() = SwPosition( aTmpIdx );
                 }
             }
-            rDoc.getIDocumentRedlineAccess().DeleteRedline( aPam, true, USHRT_MAX );
+            rDoc.getIDocumentRedlineAccess().DeleteRedline( aPam, true, RedlineType::Any );
 
             if( pEntry->pUndo )
             {
@@ -2675,7 +2675,7 @@ std::unique_ptr<SwUndo> SwUndoTableCpyTable::PrepareRedline( SwDoc* pDoc, const 
     {   // If the old (deleted) part is not empty, here we are...
         SwPaM aDeletePam( aDeleteStart, aCellEnd );
         pUndo = std::make_unique<SwUndoRedlineDelete>( aDeletePam, SwUndoId::DELETE );
-        pDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, aDeletePam ), true );
+        pDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( RedlineType::Delete, aDeletePam ), true );
     }
     else if( !rJoin ) // If the old part is empty and joined, we are finished
     {   // if it is not joined, we have to delete this empty paragraph
@@ -2691,7 +2691,7 @@ std::unique_ptr<SwUndo> SwUndoTableCpyTable::PrepareRedline( SwDoc* pDoc, const 
     if( aCellStart != aInsertEnd ) // An empty insertion will not been marked
     {
         SwPaM aTmpPam( aCellStart, aInsertEnd );
-        pDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aTmpPam ), true );
+        pDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( RedlineType::Insert, aTmpPam ), true );
     }
 
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );

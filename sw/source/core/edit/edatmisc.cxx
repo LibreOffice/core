@@ -102,7 +102,7 @@ static void lcl_disableShowChangesIfNeeded( SwDoc *const pDoc, const SwNode& rNo
 {
     if ( IDocumentRedlineAccess::IsShowChanges(eRedlMode) &&
         // is there redlining at beginning of the position (possible redline block before the modified node)
-        pDoc->getIDocumentRedlineAccess().GetRedlinePos( rNode, USHRT_MAX ) <
+        pDoc->getIDocumentRedlineAccess().GetRedlinePos( rNode, RedlineType::Any ) <
                    pDoc->getIDocumentRedlineAccess().GetRedlineTable().size() )
     {
         eRedlMode = RedlineFlags::ShowInsert | RedlineFlags::Ignore;

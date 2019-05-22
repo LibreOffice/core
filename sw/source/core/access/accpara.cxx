@@ -1863,15 +1863,16 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         {
             switch( pRedline->GetType())
             {
-            case nsRedlineType_t::REDLINE_INSERT:
+            case RedlineType::Insert:
                 aChangeAttr = pOpt->GetInsertAuthorAttr();
                 break;
-            case nsRedlineType_t::REDLINE_DELETE:
+            case RedlineType::Delete:
                 aChangeAttr = pOpt->GetDeletedAuthorAttr();
                 break;
-            case nsRedlineType_t::REDLINE_FORMAT:
+            case RedlineType::Format:
                 aChangeAttr = pOpt->GetFormatAuthorAttr();
                 break;
+            default: break;
             }
         }
         switch( aChangeAttr.m_nItemId )

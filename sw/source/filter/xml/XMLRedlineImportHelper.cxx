@@ -184,7 +184,7 @@ public:
     ~RedlineInfo();
 
     // redline type (insert, delete, ...)
-    RedlineType_t eType;
+    RedlineType eType;
 
     // info fields:
     OUString sAuthor;               // change author string
@@ -211,7 +211,7 @@ public:
 };
 
 RedlineInfo::RedlineInfo() :
-    eType(nsRedlineType_t::REDLINE_INSERT),
+    eType(RedlineType::Insert),
     sAuthor(),
     sComment(),
     aDateTime(),
@@ -388,18 +388,18 @@ void XMLRedlineImportHelper::Add(
     // 3b) attach to existing redline
 
     // ad 1)
-    RedlineType_t eType;
+    RedlineType eType;
     if (rType == sInsertion)
     {
-        eType = nsRedlineType_t::REDLINE_INSERT;
+        eType = RedlineType::Insert;
     }
     else if (rType == sDeletion)
     {
-        eType = nsRedlineType_t::REDLINE_DELETE;
+        eType = RedlineType::Delete;
     }
     else if (rType == sFormatChange)
     {
-        eType = nsRedlineType_t::REDLINE_FORMAT;
+        eType = RedlineType::Format;
     }
     else
     {
@@ -631,7 +631,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
     {
         // ignore redline (e.g. file loaded in insert mode):
         // delete 'deleted' redlines and forget about the whole thing
-        if (nsRedlineType_t::REDLINE_DELETE == pRedlineInfo->eType)
+        if (RedlineType::Delete == pRedlineInfo->eType)
         {
             pDoc->getIDocumentContentOperations().DeleteRange(aPaM);
             // And what about the "deleted nodes"?
@@ -709,8 +709,8 @@ SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
     //    ( check presence and sanity of hierarchical redline info )
     SwRedlineData* pNext = nullptr;
     if ( (nullptr != pRedlineInfo->pNextRedline) &&
-         (nsRedlineType_t::REDLINE_DELETE == pRedlineInfo->eType) &&
-         (nsRedlineType_t::REDLINE_INSERT == pRedlineInfo->pNextRedline->eType) )
+         (RedlineType::Delete == pRedlineInfo->eType) &&
+         (RedlineType::Insert == pRedlineInfo->pNextRedline->eType) )
     {
         pNext = ConvertRedline(pRedlineInfo->pNextRedline, pDoc);
     }

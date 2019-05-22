@@ -1781,7 +1781,7 @@ void SwDoc::SetTextFormatCollByAutoFormat( const SwPosition& rPos, sal_uInt16 nP
     {
         // create the redline object
         const SwTextFormatColl& rColl = *pTNd->GetTextColl();
-        SwRangeRedline* pRedl = new SwRangeRedline( nsRedlineType_t::REDLINE_FMTCOLL, aPam );
+        SwRangeRedline* pRedl = new SwRangeRedline( RedlineType::FmtColl, aPam );
         pRedl->SetMark();
 
         // Only those items that are not set by the Set again in the Node
@@ -1828,7 +1828,7 @@ void SwDoc::SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& rSet
     if (mbIsAutoFormatRedline)
     {
         // create the redline object
-        SwRangeRedline* pRedl = new SwRangeRedline( nsRedlineType_t::REDLINE_FORMAT, rPam );
+        SwRangeRedline* pRedl = new SwRangeRedline( RedlineType::Format, rPam );
         if( !pRedl->HasMark() )
             pRedl->SetMark();
 

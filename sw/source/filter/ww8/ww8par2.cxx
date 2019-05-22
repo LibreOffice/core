@@ -97,7 +97,7 @@ WW8TabBandDesc::~WW8TabBandDesc()
 }
 
 void sw::util::RedlineStack::close( const SwPosition& rPos,
-    RedlineType_t eType, WW8TabDesc* pTabDesc )
+    RedlineType eType, WW8TabDesc* pTabDesc )
 {
     // If the redline type is not found in the redline stack, we have to check if there has been
     // a tabledesc and to check its saved redline stack, too. (#136939, #i68139)

@@ -65,16 +65,16 @@ public:
     virtual bool DeleteRedline(
         /*[in]*/const SwPaM& rPam,
         /*[in]*/bool bSaveInUndo,
-        /*[in]*/sal_uInt16 nDelType) override;
+        /*[in]*/RedlineType nDelType) override;
 
     virtual bool DeleteRedline(
         /*[in]*/const SwStartNode& rSection,
         /*[in]*/bool bSaveInUndo,
-        /*[in]*/sal_uInt16 nDelType) override;
+        /*[in]*/RedlineType nDelType) override;
 
     virtual SwRedlineTable::size_type GetRedlinePos(
         /*[in]*/const SwNode& rNode,
-        /*[in]*/sal_uInt16 nType) const override;
+        /*[in]*/RedlineType nType) const override;
 
     virtual void CompressRedlines() override;
 

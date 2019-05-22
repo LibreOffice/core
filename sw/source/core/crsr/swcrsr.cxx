@@ -1504,14 +1504,14 @@ static OUString lcl_MaskDeletedRedlines( const SwTextNode* pTextNd )
         const bool bShowChg = IDocumentRedlineAccess::IsShowChanges( rDoc.getIDocumentRedlineAccess().GetRedlineFlags() );
         if ( bShowChg )
         {
-            SwRedlineTable::size_type nAct = rDoc.getIDocumentRedlineAccess().GetRedlinePos( *pTextNd, USHRT_MAX );
+            SwRedlineTable::size_type nAct = rDoc.getIDocumentRedlineAccess().GetRedlinePos( *pTextNd, RedlineType::Any );
             for ( ; nAct < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); nAct++ )
             {
                 const SwRangeRedline* pRed = rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nAct ];
                 if ( pRed->Start()->nNode > pTextNd->GetIndex() )
                     break;
 
-                if( nsRedlineType_t::REDLINE_DELETE == pRed->GetType() )
+                if( RedlineType::Delete == pRed->GetType() )
                 {
                     sal_Int32 nStart, nEnd;
                     pRed->CalcStartEnd( pTextNd->GetIndex(), nStart, nEnd );

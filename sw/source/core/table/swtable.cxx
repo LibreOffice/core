@@ -2036,7 +2036,7 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
         if( !pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
         {
             SwPaM aTemp(*pTNd, 0, *pTNd, rOrig.getLength());
-            pDoc->getIDocumentRedlineAccess().DeleteRedline(aTemp, true, USHRT_MAX);
+            pDoc->getIDocumentRedlineAccess().DeleteRedline(aTemp, true, RedlineType::Any);
         }
 
         // preserve comments inside of the number by deleting number portions starting from the back
@@ -2061,7 +2061,7 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
         if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
         {
             SwPaM aTemp(*pTNd, 0, *pTNd, rText.getLength());
-            pDoc->getIDocumentRedlineAccess().AppendRedline(new SwRangeRedline(nsRedlineType_t::REDLINE_INSERT, aTemp), true);
+            pDoc->getIDocumentRedlineAccess().AppendRedline(new SwRangeRedline(RedlineType::Insert, aTemp), true);
         }
     }
 

@@ -451,7 +451,7 @@ void SwTextFrame::RegisterToNode(SwTextNode & rNode, bool const isForceNodeAsFir
     {   // nothing registered here, in particular no redlines
         assert(m_pMergedPara->pFirstNode->GetIndex() + 1 == rNode.GetIndex());
         assert(rNode.GetDoc()->getIDocumentRedlineAccess().GetRedlinePos(
-                *m_pMergedPara->pFirstNode, USHRT_MAX) == SwRedlineTable::npos);
+                *m_pMergedPara->pFirstNode, RedlineType::Any) == SwRedlineTable::npos);
     }
     assert(&rNode != GetDep());
     assert(!m_pMergedPara

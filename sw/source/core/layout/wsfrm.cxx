@@ -4395,7 +4395,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
             // pathology: redline that starts on a TableNode; cannot
             // be created in UI but by import filters...
             if (pRedline
-                && pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE
+                && pRedline->GetType() == RedlineType::Delete
                 && &pRedline->Start()->nNode.GetNode() == &rNode)
             {
                 for (sal_uLong j = rNode.GetIndex(); j <= rNode.EndOfSectionIndex(); ++j)
@@ -4544,7 +4544,7 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
     for (auto const pRedline : rDoc.getIDocumentRedlineAccess().GetRedlineTable())
     {   // DELETE are handled by the code above; for other types, need to
         // trigger repaint of text frames to add/remove the redline color font
-        if (pRedline->GetType() != nsRedlineType_t::REDLINE_DELETE)
+        if (pRedline->GetType() != RedlineType::Delete)
         {
             pRedline->InvalidateRange(SwRangeRedline::Invalidation::Add);
         }

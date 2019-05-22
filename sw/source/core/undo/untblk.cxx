@@ -73,7 +73,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     // consider Redline
     if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
     {
-        pRedlData.reset( new SwRedlineData( nsRedlineType_t::REDLINE_INSERT, pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
+        pRedlData.reset( new SwRedlineData( RedlineType::Insert, pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
         SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 }
@@ -186,7 +186,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
     SwPaM& rPam = AddUndoRedoPaM(rContext);
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
-        rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, USHRT_MAX);
+        rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, RedlineType::Any);
 
     // if Point and Mark are different text nodes so a JoinNext has to be done
     bool bJoinNext = nSttNode != nEndNode &&

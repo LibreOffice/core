@@ -252,7 +252,7 @@ void SwRedlineAcceptDlg::InitAuthors()
     {
         const SwRangeRedline& rRedln = pSh->GetRedline(i);
 
-        if( m_bOnlyFormatedRedlines && nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType() )
+        if( m_bOnlyFormatedRedlines && RedlineType::Format != rRedln.GetType() )
             m_bOnlyFormatedRedlines = false;
 
         aStrings.push_back(rRedln.GetAuthorString());
@@ -284,7 +284,7 @@ void SwRedlineAcceptDlg::InitAuthors()
         {
             const SwRangeRedline& rRedln = pSh->GetRedline( nPos );
 
-            bIsNotFormated |= nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType();
+            bIsNotFormated |= RedlineType::Format != rRedln.GetType();
         }
         return false;
     });
@@ -302,12 +302,13 @@ OUString SwRedlineAcceptDlg::GetActionImage(const SwRangeRedline& rRedln, sal_uI
 {
     switch (rRedln.GetType(nStack))
     {
-        case nsRedlineType_t::REDLINE_INSERT:  return BMP_REDLINE_INSERTED;
-        case nsRedlineType_t::REDLINE_DELETE:  return BMP_REDLINE_DELETED;
-        case nsRedlineType_t::REDLINE_FORMAT:  return BMP_REDLINE_FORMATTED;
-        case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT: return BMP_REDLINE_FORMATTED;
-        case nsRedlineType_t::REDLINE_TABLE:   return BMP_REDLINE_TABLECHG;
-        case nsRedlineType_t::REDLINE_FMTCOLL: return BMP_REDLINE_FMTCOLLSET;
+        case RedlineType::Insert:  return BMP_REDLINE_INSERTED;
+        case RedlineType::Delete:  return BMP_REDLINE_DELETED;
+        case RedlineType::Format:  return BMP_REDLINE_FORMATTED;
+        case RedlineType::ParagraphFormat: return BMP_REDLINE_FORMATTED;
+        case RedlineType::Table:   return BMP_REDLINE_TABLECHG;
+        case RedlineType::FmtColl: return BMP_REDLINE_FMTCOLLSET;
+        default: break;
     }
 
     return OUString();
@@ -317,12 +318,12 @@ OUString SwRedlineAcceptDlg::GetActionText(const SwRangeRedline& rRedln, sal_uIn
 {
     switch( rRedln.GetType(nStack) )
     {
-        case nsRedlineType_t::REDLINE_INSERT:   return m_sInserted;
-        case nsRedlineType_t::REDLINE_DELETE:   return m_sDeleted;
-        case nsRedlineType_t::REDLINE_FORMAT:   return m_sFormated;
-        case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT:   return m_sFormated;
-        case nsRedlineType_t::REDLINE_TABLE:    return m_sTableChgd;
-        case nsRedlineType_t::REDLINE_FMTCOLL:  return m_sFormatCollSet;
+        case RedlineType::Insert:   return m_sInserted;
+        case RedlineType::Delete:   return m_sDeleted;
+        case RedlineType::Format:   return m_sFormated;
+        case RedlineType::ParagraphFormat:   return m_sFormated;
+        case RedlineType::Table:    return m_sTableChgd;
+        case RedlineType::FmtColl:  return m_sFormatCollSet;
         default:;//prevent warning
     }
 
@@ -443,7 +444,7 @@ SwRedlineTable::size_type SwRedlineAcceptDlg::CalcDiff(SwRedlineTable::size_type
     rTreeView.freeze();
     SwView *pView   = ::GetActiveView();
     SwWrtShell* pSh = pView->GetWrtShellPtr();
-    sal_uInt16 nAutoFormat = HasRedlineAutoFormat() ? nsRedlineType_t::REDLINE_FORM_AUTOFMT : 0;
+    bool bHasRedlineAutoFormat = HasRedlineAutoFormat();
     SwRedlineDataParent *const pParent = m_RedlineParents[nStart].get();
     const SwRangeRedline& rRedln = pSh->GetRedline(nStart);
 
@@ -469,7 +470,7 @@ SwRedlineTable::size_type SwRedlineAcceptDlg::CalcDiff(SwRedlineTable::size_type
         pParent->pNext = nullptr;
 
         // insert new children
-        InsertChildren(pParent, rRedln, nAutoFormat);
+        InsertChildren(pParent, rRedln, bHasRedlineAutoFormat);
 
         rTreeView.thaw();
         return nStart;
@@ -508,18 +509,18 @@ SwRedlineTable::size_type SwRedlineAcceptDlg::CalcDiff(SwRedlineTable::size_type
     return SwRedlineTable::npos;
 }
 
-void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRangeRedline& rRedln, const sal_uInt16 nAutoFormat)
+void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRangeRedline& rRedln, bool bHasRedlineAutoFormat)
 {
     SwRedlineDataChild *pLastRedlineChild = nullptr;
     const SwRedlineData *pRedlineData = &rRedln.GetRedlineData();
-    bool bAutoFormat = (rRedln.GetRealType() & nAutoFormat) != 0;
+    bool bAutoFormatRedline = rRedln.IsAutoFormat();
 
     weld::TreeView& rTreeView = m_pTable->GetWidget();
 
     OUString sAction = GetActionText(rRedln);
     bool bValidParent = m_sFilterAction.isEmpty() || m_sFilterAction == sAction;
     bValidParent = bValidParent && m_pTable->IsValidEntry(rRedln.GetAuthorString(), rRedln.GetTimeStamp(), rRedln.GetComment());
-    if (nAutoFormat)
+    if (bHasRedlineAutoFormat)
     {
 
         if (pParent->pData->GetSeqNo())
@@ -537,7 +538,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
                 return;
             }
         }
-        bValidParent = bValidParent && bAutoFormat;
+        bValidParent = bValidParent && bAutoFormatRedline;
     }
     bool bValidTree = bValidParent;
 
@@ -557,8 +558,8 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
         sAction = GetActionText(rRedln, nStack);
         bool bValidChild = m_sFilterAction.isEmpty() || m_sFilterAction == sAction;
         bValidChild = bValidChild && m_pTable->IsValidEntry(rRedln.GetAuthorString(nStack), rRedln.GetTimeStamp(nStack), rRedln.GetComment());
-        if (nAutoFormat)
-            bValidChild = bValidChild && bAutoFormat;
+        if (bHasRedlineAutoFormat)
+            bValidChild = bValidChild && bAutoFormatRedline;
         bValidTree |= bValidChild;
 
         if (bValidChild)
@@ -600,7 +601,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
     {
         rTreeView.remove(*pParent->xTLBParent);
         pParent->xTLBParent.reset();
-        if (nAutoFormat)
+        if (bHasRedlineAutoFormat)
             m_aUsedSeqNo.erase(pParent);
     }
 }
@@ -685,7 +686,7 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
 {
     SwView *pView   = ::GetActiveView();
     SwWrtShell* pSh = pView->GetWrtShellPtr();
-    sal_uInt16 nAutoFormat = HasRedlineAutoFormat() ? nsRedlineType_t::REDLINE_FORM_AUTOFMT : 0;
+    bool bHasRedlineAutoFormat = HasRedlineAutoFormat();
 
     SwRedlineTable::size_type nCount = pSh->GetRedlineCount();
     nEnd = std::min(nEnd, (nCount - 1)); // also treats nEnd=SwRedlineTable::npos (until the end)
@@ -754,7 +755,7 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
 
         pRedlineParent->xTLBParent = std::move(xParent);
 
-        InsertChildren(pRedlineParent, rRedln, nAutoFormat);
+        InsertChildren(pRedlineParent, rRedln, bHasRedlineAutoFormat);
     }
     rTreeView.thaw();
 }
@@ -793,7 +794,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
                 SwRedlineTable::size_type nPosition = GetRedlinePos(rEntry);
                 const SwRangeRedline& rRedln = pSh->GetRedline(nPosition);
 
-                if( nsRedlineType_t::REDLINE_FORMAT == rRedln.GetType() )
+                if( RedlineType::Format == rRedln.GetType() )
                     bIsNotFormatted = false;
             }
 
@@ -960,7 +961,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
                 {
 
                     const SwRangeRedline& rRedln = pSh->GetRedline( nPos );
-                    bIsNotFormated |= nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType();
+                    bIsNotFormated |= RedlineType::Format != rRedln.GetType();
 
                     if (pSh->GotoRedline(nPos, true))
                     {
@@ -1066,17 +1067,17 @@ IMPL_LINK(SwRedlineAcceptDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
             const char* pResId = nullptr;
             switch( rRedline.GetType() )
             {
-                case nsRedlineType_t::REDLINE_INSERT:
+                case RedlineType::Insert:
                     pResId = STR_REDLINE_INSERTED;
                     break;
-                case nsRedlineType_t::REDLINE_DELETE:
+                case RedlineType::Delete:
                     pResId = STR_REDLINE_DELETED;
                     break;
-                case nsRedlineType_t::REDLINE_FORMAT:
-                case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT:
+                case RedlineType::Format:
+                case RedlineType::ParagraphFormat:
                     pResId = STR_REDLINE_FORMATTED;
                     break;
-                case nsRedlineType_t::REDLINE_TABLE:
+                case RedlineType::Table:
                     pResId = STR_REDLINE_TABLECHG;
                     break;
                 default:;//prevent warning

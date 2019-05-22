@@ -693,8 +693,8 @@ void SwUndoAttr::SaveRedlineData( const SwPaM& rPam, bool bIsContent )
     SwDoc* pDoc = rPam.GetDoc();
     if ( pDoc->getIDocumentRedlineAccess().IsRedlineOn() ) {
         m_pRedlineData.reset( new SwRedlineData( bIsContent
-                              ? nsRedlineType_t::REDLINE_INSERT
-                              : nsRedlineType_t::REDLINE_FORMAT,
+                              ? RedlineType::Insert
+                              : RedlineType::Format,
                               pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
     }
 
@@ -722,11 +722,11 @@ void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
             aPam.GetPoint()->nContent.Assign( aPam.GetContentNode(), nSttContent );
             aPam.SetMark();
             ++aPam.GetPoint()->nContent;
-            pDoc->getIDocumentRedlineAccess().DeleteRedline(aPam, false, USHRT_MAX);
+            pDoc->getIDocumentRedlineAccess().DeleteRedline(aPam, false, RedlineType::Any);
         } else {
             // remove all format redlines, will be recreated if needed
             SetPaM(aPam);
-            pDoc->getIDocumentRedlineAccess().DeleteRedline(aPam, false, nsRedlineType_t::REDLINE_FORMAT);
+            pDoc->getIDocumentRedlineAccess().DeleteRedline(aPam, false, RedlineType::Format);
             if (m_pRedlineSaveData)
             {
                 SetSaveData( *pDoc, *m_pRedlineSaveData );

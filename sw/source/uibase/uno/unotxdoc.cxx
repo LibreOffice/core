@@ -3306,7 +3306,7 @@ OUString SwXTextDocument::getTrackedChanges()
             boost::property_tree::ptree aTrackedChange;
             aTrackedChange.put("index", rRedlineTable[i]->GetId());
             aTrackedChange.put("author", rRedlineTable[i]->GetAuthorString(1).toUtf8().getStr());
-            aTrackedChange.put("type", nsRedlineType_t::SwRedlineTypeToOUString(
+            aTrackedChange.put("type", SwRedlineTypeToOUString(
                                            rRedlineTable[i]->GetRedlineData().GetType())
                                            .toUtf8()
                                            .getStr());

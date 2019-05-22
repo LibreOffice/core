@@ -48,7 +48,7 @@ SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
         {
         case SwUndoId::DELETE:
         case SwUndoId::REPLACE:
-            mpRedlData.reset( new SwRedlineData( nsRedlineType_t::REDLINE_DELETE, rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() ) );
+            mpRedlData.reset( new SwRedlineData( RedlineType::Delete, rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() ) );
             break;
         default:
             ;
@@ -150,7 +150,7 @@ void SwUndoRedline::UndoRedlineImpl(SwDoc &, SwPaM &)
 // default: remove redlines
 void SwUndoRedline::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
-    rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, USHRT_MAX);
+    rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, RedlineType::Any);
 }
 
 SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
@@ -196,7 +196,7 @@ void SwUndoRedlineDelete::SetRedlineText(const OUString & rText)
 
 void SwUndoRedlineDelete::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
-    rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, USHRT_MAX);
+    rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, RedlineType::Any);
 }
 
 void SwUndoRedlineDelete::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
@@ -272,7 +272,7 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
         // 'insert' Redline object. The former is located directly after the latter.
         SwRedlineTable::size_type nFnd = rDoc.getIDocumentRedlineAccess().GetRedlinePos(
                             *rDoc.GetNodes()[ nSttNode + 1 ],
-                            nsRedlineType_t::REDLINE_INSERT );
+                            RedlineType::Insert );
         OSL_ENSURE( SwRedlineTable::npos != nFnd && nFnd+1 < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(),
                     "could not find an Insert object" );
         ++nFnd;
@@ -285,7 +285,7 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
         aTmp.SetMark();
         aTmp.GetPoint()->nNode = nSaveEndNode;
         aTmp.GetPoint()->nContent.Assign( aTmp.GetContentNode(), nSaveEndContent );
-        rDoc.getIDocumentRedlineAccess().DeleteRedline( aTmp, true, USHRT_MAX );
+        rDoc.getIDocumentRedlineAccess().DeleteRedline( aTmp, true, RedlineType::Any );
     }
 
     rDoc.getIDocumentContentOperations().DelFullPara(rPam);
@@ -387,7 +387,7 @@ SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, bool bIns )
     SwDoc* pDoc = rRg.GetDoc();
     if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
     {
-        RedlineType_t eTyp = bInsert ? nsRedlineType_t::REDLINE_INSERT : nsRedlineType_t::REDLINE_DELETE;
+        RedlineType eTyp = bInsert ? RedlineType::Insert : RedlineType::Delete;
         pRedlData.reset( new SwRedlineData( eTyp, pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
         SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
     }
@@ -396,7 +396,7 @@ SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, bool bIns )
 SwUndoCompDoc::SwUndoCompDoc( const SwRangeRedline& rRedl )
     : SwUndo( SwUndoId::COMPAREDOC, rRedl.GetDoc() ), SwUndRng( rRedl ),
     // for MergeDoc the corresponding inverse is needed
-    bInsert( nsRedlineType_t::REDLINE_DELETE == rRedl.GetType() )
+    bInsert( RedlineType::Delete == rRedl.GetType() )
 {
     SwDoc* pDoc = rRedl.GetDoc();
     if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
@@ -431,7 +431,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
         RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
         rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern(( eOld & ~RedlineFlags::Ignore) | RedlineFlags::On);
 
-        rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, USHRT_MAX);
+        rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, RedlineType::Any);
 
         rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 
@@ -475,7 +475,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
         {
-            rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, USHRT_MAX);
+            rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, RedlineType::Any);
 
             if( pRedlSaveData )
                 SetSaveData(rDoc, *pRedlSaveData);

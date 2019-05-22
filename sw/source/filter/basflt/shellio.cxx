@@ -310,7 +310,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
 
             mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
             if( mxDoc->getIDocumentRedlineAccess().IsRedlineOn() )
-                mxDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, *pUndoPam ), true);
+                mxDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( RedlineType::Insert, *pUndoPam ), true);
             else
                 mxDoc->getIDocumentRedlineAccess().SplitRedline( *pUndoPam );
             mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );

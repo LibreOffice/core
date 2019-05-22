@@ -1147,7 +1147,7 @@ bool GetRanges(std::vector<std::shared_ptr<SwUnoCursor>> & rRanges,
         {
             continue;
         }
-        if (pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE)
+        if (pRedline->GetType() == RedlineType::Delete)
         {
             assert(*pRedline->Start() != *pRedline->End());
             isNoRedline = false;
