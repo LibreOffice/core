@@ -946,7 +946,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
     if (nHighlightedItem != ITEMPOS_INVALID && pMenu && !pMenu->GetItemList()->GetDataFromPos(nHighlightedItem)->bHiddenOnGUI)
         HighlightItem(*pBuffer, nHighlightedItem);
-    else if (ImplGetSVData()->maNWFData.mbRolloverMenubar && nRolloveredItem != ITEMPOS_INVALID)
+    else if (nRolloveredItem != ITEMPOS_INVALID)
         HighlightItem(*pBuffer, nRolloveredItem);
 
     // in high contrast mode draw a separating line on the lower edge
