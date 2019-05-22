@@ -709,7 +709,7 @@ AnimationActivitySharedPtr createActivity(
         // yes, convert them from Sequence< double >
         aActivityParms.maDiscreteTimes.resize( aKeyTimes.getLength() );
         comphelper::sequenceToArray(
-            &aActivityParms.maDiscreteTimes[0],
+            aActivityParms.maDiscreteTimes.data(),
             aKeyTimes ); // saves us some temporary vectors
     }
 

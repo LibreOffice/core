@@ -151,7 +151,7 @@ static void testTile( Document *pDocument, int max_parts,
     fprintf(stderr, "Parts to render: %d, Total Parts: %d, Max parts: %d, Max tiles: %d\n", nParts, nTotalParts, max_parts, max_tiles);
 
     std::vector<unsigned char> vBuffer(nTilePixelWidth * nTilePixelHeight * 4);
-    unsigned char* pPixels = &vBuffer[0];
+    unsigned char* pPixels = vBuffer.data();
 
     for (int n = 0; n < nParts; ++n)
     {

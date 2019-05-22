@@ -1437,10 +1437,10 @@ OUString cppuhelper::ServiceManager::readLegacyRdbString(
     }
     OUString val;
     std::vector< char > v(s); // assuming sal_uInt32 fits into vector::size_type
-    if (subkey.getValue(OUString(), &v[0]) != RegError::NO_ERROR
+    if (subkey.getValue(OUString(), v.data()) != RegError::NO_ERROR
         || v.back() != '\0'
         || !rtl_convertStringToUString(
-            &val.pData, &v[0], static_cast< sal_Int32 >(s - 1),
+            &val.pData, v.data(), static_cast< sal_Int32 >(s - 1),
             RTL_TEXTENCODING_UTF8,
             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
              | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR

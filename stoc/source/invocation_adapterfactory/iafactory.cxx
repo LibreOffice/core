@@ -838,7 +838,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
         }
         }
         // map one interface to C++
-        uno_Interface * pUnoI = &that->m_vInterfaces[ 0 ];
+        uno_Interface * pUnoI = that->m_vInterfaces.data();
         m_aUno2Cpp.mapInterface(
             reinterpret_cast<void **>(&xRet), pUnoI, cppu::UnoType<decltype(xRet)>::get() );
         that->release();

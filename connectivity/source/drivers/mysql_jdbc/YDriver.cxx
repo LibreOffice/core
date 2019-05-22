@@ -326,7 +326,7 @@ ODriverDelegator::getPropertyInfo(const OUString& url, const Sequence<PropertyVa
             OUString(), Sequence<OUString>()));
     }
 
-    return Sequence<DriverPropertyInfo>(&aDriverInfo[0], aDriverInfo.size());
+    return Sequence<DriverPropertyInfo>(aDriverInfo.data(), aDriverInfo.size());
 }
 
 sal_Int32 SAL_CALL ODriverDelegator::getMajorVersion() { return 1; }

@@ -1249,7 +1249,7 @@ void makeRedline( SwPaM const & rPaM,
             if (!aWhichPairs.empty())
             {
                 aWhichPairs.push_back(0); // terminate
-                SfxItemSet aItemSet(pDoc->GetAttrPool(), &aWhichPairs[0]);
+                SfxItemSet aItemSet(pDoc->GetAttrPool(), aWhichPairs.data());
 
                 for (size_t i = 0; i < aEntries.size(); ++i)
                 {

@@ -1242,7 +1242,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
         Reference<io::XOutputStream> xPipe( io::Pipe::create( xContext ), UNO_QUERY_THROW );
         xManifestWriter->writeManifestSequence(
             xPipe, Sequence< Sequence<beans::PropertyValue> >(
-                &manifest[ 0 ], manifest.size() ) );
+                manifest.data(), manifest.size() ) );
 
         aMetaInfInetObj.insertName( "manifest.xml",
             true, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );

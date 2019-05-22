@@ -1296,28 +1296,28 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
 
             LgstCommonSubseq aSeq( aCmp );
 
-            nLcsLen = aSeq.Find( &aTmpLcsDst[0], &aTmpLcsSrc[0] );
+            nLcsLen = aSeq.Find( aTmpLcsDst.data(), aTmpLcsSrc.data() );
 
             if( CmpOptions.nIgnoreLen )
             {
-                nLcsLen = CommonSubseq::IgnoreIsolatedPieces( &aTmpLcsDst[0], &aTmpLcsSrc[0],
+                nLcsLen = CommonSubseq::IgnoreIsolatedPieces( aTmpLcsDst.data(), aTmpLcsSrc.data(),
                                                 aCmp.GetLen1(), aCmp.GetLen2(),
                                                 nLcsLen, CmpOptions.nIgnoreLen );
             }
 
-            nLcsLen = aCmp.GetCharSequence( &aTmpLcsDst[0], &aTmpLcsSrc[0],
-                                            &aLcsDst[0], &aLcsSrc[0], nLcsLen );
+            nLcsLen = aCmp.GetCharSequence( aTmpLcsDst.data(), aTmpLcsSrc.data(),
+                                            aLcsDst.data(), aLcsSrc.data(), nLcsLen );
         }
         else
         {
             CharArrayComparator aCmp( &rDstNd, &rSrcNd );
             LgstCommonSubseq aSeq( aCmp );
 
-            nLcsLen = aSeq.Find( &aLcsDst[0], &aLcsSrc[0] );
+            nLcsLen = aSeq.Find( aLcsDst.data(), aLcsSrc.data() );
 
             if( CmpOptions.nIgnoreLen )
             {
-                nLcsLen = CommonSubseq::IgnoreIsolatedPieces( &aLcsDst[0], &aLcsSrc[0], nDstLen,
+                nLcsLen = CommonSubseq::IgnoreIsolatedPieces( aLcsDst.data(), aLcsSrc.data(), nDstLen,
                                                     nSrcLen, nLcsLen,
                                                     CmpOptions.nIgnoreLen );
             }

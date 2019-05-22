@@ -823,7 +823,7 @@ void MigrationImpl::runServices()
                 sal_uInt32 nSize = rMigration.excludeExtensions.size();
                 if ( nSize > 0 )
                     seqExtBlackList = comphelper::arrayToSequence< OUString >(
-                                          &rMigration.excludeExtensions[0], nSize );
+                                          rMigration.excludeExtensions.data(), nSize );
                 seqArguments[2] <<= NamedValue("ExtensionBlackList",
                                                uno::makeAny( seqExtBlackList ));
 

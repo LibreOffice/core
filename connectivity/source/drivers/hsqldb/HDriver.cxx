@@ -428,7 +428,7 @@ namespace connectivity
                 ,"CALL IDENTITY()"
                 ,Sequence< OUString >())
                 );
-        return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
+        return Sequence< DriverPropertyInfo >(aDriverInfo.data(),aDriverInfo.size());
     }
 
 

@@ -102,7 +102,7 @@ void writeStream(FileStream & file, std::vector< unsigned char > const & stream)
         // approximation of std::numeric_limits<T1>::max() <=
         // std::numeric_limits<T2>::max()
     if (n != 0) {
-        write(file, &stream[0], static_cast< sal_uInt64 >(n));
+        write(file, stream.data(), static_cast< sal_uInt64 >(n));
     }
 }
 

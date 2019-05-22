@@ -224,7 +224,7 @@ void PngHelper::createPng( OutputBuffer&     o_rOutputBuf,
     // begin IDAT chunk for scanline data
     nIdx = startChunk( "IDAT", o_rOutputBuf );
     // compress scanlines
-    deflateBuffer( &aScanlines[0], aScanlines.size(), o_rOutputBuf );
+    deflateBuffer( aScanlines.data(), aScanlines.size(), o_rOutputBuf );
     // end IDAT chunk
     endChunk( nIdx, o_rOutputBuf );
 
@@ -308,7 +308,7 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
     // begind IDAT chunk for scanline data
     size_t nIdx = startChunk( "IDAT", o_rOutputBuf );
     // compress scanlines
-    deflateBuffer( &aScanlines[0], aScanlines.size(), o_rOutputBuf );
+    deflateBuffer( aScanlines.data(), aScanlines.size(), o_rOutputBuf );
     // end IDAT chunk
     endChunk( nIdx, o_rOutputBuf );
     // output IEND
@@ -392,7 +392,7 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
     // begind IDAT chunk for scanline data
     size_t nIdx = startChunk( "IDAT", o_rOutputBuf );
     // compress scanlines
-    deflateBuffer( &aScanlines[0], aScanlines.size(), o_rOutputBuf );
+    deflateBuffer( aScanlines.data(), aScanlines.size(), o_rOutputBuf );
     // end IDAT chunk
     endChunk( nIdx, o_rOutputBuf );
     // output IEND

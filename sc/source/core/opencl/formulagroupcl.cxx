@@ -4009,7 +4009,7 @@ void DynamicKernel::CreateKernel()
                             std::vector<char> log(n);
                             e = clGetProgramBuildInfo(
                                 mpProgram, openclwrapper::gpuEnv.mpDevID,
-                                CL_PROGRAM_BUILD_LOG, n, &log[0], nullptr);
+                                CL_PROGRAM_BUILD_LOG, n, log.data(), nullptr);
                             SAL_WARN_IF(
                                 e != CL_SUCCESS || n == 0, "sc.opencl",
                                 "after CL_BUILD_PROGRAM_FAILURE,"
@@ -4019,7 +4019,7 @@ void DynamicKernel::CreateKernel()
                                 SAL_WARN(
                                     "sc.opencl",
                                     "CL_BUILD_PROGRAM_FAILURE, status " << stat
-                                    << ", log \"" << &log[0] << "\"");
+                                    << ", log \"" << log.data() << "\"");
                         }
                     }
                 }

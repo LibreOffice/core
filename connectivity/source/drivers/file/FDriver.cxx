@@ -161,7 +161,7 @@ Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const OUSt
                 ,OUString()
                 ,Sequence< OUString >())
                 );
-        return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size());
+        return Sequence< DriverPropertyInfo >(aDriverInfo.data(),aDriverInfo.size());
     } // if ( acceptsURL(url) )
     {
         ::connectivity::SharedResources aResources;

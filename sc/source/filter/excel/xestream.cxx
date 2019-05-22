@@ -229,7 +229,7 @@ std::size_t XclExpStream::Write( const void* pData, std::size_t nBytes )
                 {
                     OSL_ENSURE(nWriteLen > 0, "XclExpStream::Write: write length is 0!");
                     vector<sal_uInt8> aBytes(nWriteLen);
-                    memcpy(&aBytes[0], pBuffer, nWriteLen);
+                    memcpy(aBytes.data(), pBuffer, nWriteLen);
                     mxEncrypter->EncryptBytes(mrStrm, aBytes);
                     // TODO: How do I check if all the bytes have been successfully written ?
                 }
@@ -340,7 +340,7 @@ void XclExpStream::WriteByteString( const OString& rString )
 void XclExpStream::WriteCharBuffer( const ScfUInt8Vec& rBuffer )
 {
     SetSliceSize( 0 );
-    Write( &rBuffer[ 0 ], rBuffer.size() );
+    Write( rBuffer.data(), rBuffer.size() );
 }
 
 void XclExpStream::SetEncrypter( XclExpEncrypterRef const & xEncrypter )
@@ -513,14 +513,14 @@ void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_uInt32 nData )
 void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, float fValue )
 {
     ::std::vector<sal_uInt8> pnBytes(4);
-    memcpy(&pnBytes[0], &fValue, 4);
+    memcpy(pnBytes.data(), &fValue, 4);
     EncryptBytes(rStrm, pnBytes);
 }
 
 void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, double fValue )
 {
     ::std::vector<sal_uInt8> pnBytes(8);
-    memcpy(&pnBytes[0], &fValue, 8);
+    memcpy(pnBytes.data(), &fValue, 8);
     EncryptBytes(rStrm, pnBytes);
 }
 
@@ -712,7 +712,7 @@ OString XclXmlUtils::ToOString( const ScfUInt16Vec& rBuffer )
     if(rBuffer.empty())
         return OString();
 
-    const sal_uInt16* pBuffer = &rBuffer [0];
+    const sal_uInt16* pBuffer = rBuffer.data();
     return OString(
         reinterpret_cast<sal_Unicode const *>(pBuffer), rBuffer.size(),
         RTL_TEXTENCODING_UTF8);

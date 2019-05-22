@@ -507,7 +507,7 @@ void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
         const QList<QInputMethodEvent::Attribute>& rAttrList = pEvent->attributes();
         std::vector<ExtTextInputAttr> aTextAttrs(std::max(sal_Int32(1), nLength),
                                                  ExtTextInputAttr::NONE);
-        aInputEvent.mpTextAttr = &aTextAttrs[0];
+        aInputEvent.mpTextAttr = aTextAttrs.data();
 
         for (int i = 0; i < rAttrList.size(); ++i)
         {

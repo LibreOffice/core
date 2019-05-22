@@ -264,7 +264,7 @@ namespace drawinglayer
                     nIndex,
                     nLength,
                     0,
-                    &(aIntegerDXArray[0]));
+                    aIntegerDXArray.data());
             }
             else
             {
@@ -351,7 +351,7 @@ namespace drawinglayer
             {
                 aRetval.reserve(nTextLength);
                 std::vector<long> aArray(nTextLength);
-                mrDevice.GetTextArray(rText, &aArray[0], nIndex, nLength);
+                mrDevice.GetTextArray(rText, aArray.data(), nIndex, nLength);
                 aRetval.assign(aArray.begin(), aArray.end());
             }
 

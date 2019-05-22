@@ -983,7 +983,7 @@ void XclExpTbxControlObj::WriteSubRecs( XclExpStream& rStrm )
                     for( const auto& rItem : maMultiSel )
                         if( rItem < nEntryCount )
                             aSelEx[ rItem ] = 1;
-                    rStrm.Write( &aSelEx[ 0 ], aSelEx.size() );
+                    rStrm.Write( aSelEx.data(), aSelEx.size() );
                 }
             }
             else if( mnObjType == EXC_OBJTYPE_DROPDOWN )

@@ -83,13 +83,13 @@ namespace comphelper
             sal_Int32 nLength = 1024+n;
             // coverity[tainted_data] - 1024 deliberate random minus max -127/plus max 128
             std::vector<sal_uInt8> aChaff(nLength);
-            rtl_random_getBytes(pool, &aChaff[0], nLength);
+            rtl_random_getBytes(pool, aChaff.data(), nLength);
 
             rtl_random_destroyPool(pool);
 
             encodeChaff(aChaff);
 
-            return OString(reinterpret_cast<const sal_Char*>(&aChaff[0]), nLength);
+            return OString(reinterpret_cast<const sal_Char*>(aChaff.data()), nLength);
         }
 
         OString generateGUIDString()

@@ -424,7 +424,7 @@ public:
     // This const_cast is there for compatibility with PostgreSQL <= 9.1;
     // PostgreSQL >= 9.2 has the right const qualifiers in the headers
     // for a return type of "char const*const*".
-    char const** c_array() const { return const_cast <const char**>(&values[0]); }
+    char const** c_array() const { return const_cast <const char**>(values.data()); }
 };
 
 static void properties2arrays( const Sequence< PropertyValue > & args,

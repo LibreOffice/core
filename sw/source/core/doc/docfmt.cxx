@@ -1854,7 +1854,7 @@ void SwDoc::SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& rSet
         whichIds.push_back(pItem->Which());
     }
     whichIds.push_back(0);
-    SfxItemSet currentSet(GetAttrPool(), &whichIds[0]);
+    SfxItemSet currentSet(GetAttrPool(), whichIds.data());
     pTNd->GetParaAttr(currentSet, nEnd, nEnd);
     for (size_t i = 0; whichIds[i]; i += 2)
     {   // yuk - want to explicitly set the pool defaults too :-/

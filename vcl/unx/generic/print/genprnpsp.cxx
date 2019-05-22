@@ -1151,10 +1151,10 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
                             sal_uInt64 nBytesRead = 0;
                             do
                             {
-                                osl_readFile( pFile, &buffer[0], buffer.size(), &nBytesRead );
+                                osl_readFile( pFile, buffer.data(), buffer.size(), &nBytesRead );
                                 if( nBytesRead > 0 )
                                 {
-                                    size_t nBytesWritten = fwrite(&buffer[0], 1, nBytesRead, fp);
+                                    size_t nBytesWritten = fwrite(buffer.data(), 1, nBytesRead, fp);
                                     OSL_ENSURE(nBytesRead == nBytesWritten, "short write");
                                     if (nBytesRead != nBytesWritten)
                                         break;

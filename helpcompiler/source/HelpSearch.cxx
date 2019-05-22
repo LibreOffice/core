@@ -32,9 +32,9 @@ void HelpSearch::query(OUString const &queryStr, bool captionOnly,
     std::vector<TCHAR> aQueryStr(OUStringToTCHARVec(queryStr));
     lucene::search::Query *pQuery;
     if (isWildcard)
-        pQuery = _CLNEW lucene::search::WildcardQuery(_CLNEW lucene::index::Term(field, &aQueryStr[0]));
+        pQuery = _CLNEW lucene::search::WildcardQuery(_CLNEW lucene::index::Term(field, aQueryStr.data()));
     else
-        pQuery = _CLNEW lucene::search::TermQuery(_CLNEW lucene::index::Term(field, &aQueryStr[0]));
+        pQuery = _CLNEW lucene::search::TermQuery(_CLNEW lucene::index::Term(field, aQueryStr.data()));
 
     lucene::search::Hits *hits = searcher.search(pQuery);
     for (size_t i = 0; i < hits->length(); ++i) {

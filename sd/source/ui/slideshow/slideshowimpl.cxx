@@ -1033,7 +1033,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
             }
 
             bRet = startShowImpl( Sequence<beans::PropertyValue>(
-                                      &aProperties[0], aProperties.size() ) );
+                                      aProperties.data(), aProperties.size() ) );
 
         }
 

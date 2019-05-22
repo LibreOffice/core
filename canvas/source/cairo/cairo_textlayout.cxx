@@ -472,7 +472,7 @@ namespace cairocanvas
                     << aFont.GetFamilyName() << " - "
                     << maText.Text.copy(maText.StartPosition, maText.Length));
 
-            cairo_show_glyphs(pSCairo.get(), &cairo_glyphs[0], cairo_glyphs.size());
+            cairo_show_glyphs(pSCairo.get(), cairo_glyphs.data(), cairo_glyphs.size());
 
             //faux bold
             if (rSysFontData.bFakeBold)
@@ -488,7 +488,7 @@ namespace cairocanvas
                         cairo_glyph.x += (bold_dx * nSteps / total_steps) / 4;
                         cairo_glyph.y -= (bold_dx * nSteps / total_steps) / 4;
                     }
-                    cairo_show_glyphs(pSCairo.get(), &cairo_glyphs[0], cairo_glyphs.size());
+                    cairo_show_glyphs(pSCairo.get(), cairo_glyphs.data(), cairo_glyphs.size());
                 }
                 SAL_INFO("canvas.cairo",":cairocanvas::TextLayout::draw(S,O,p,v,r): FAKEBOLD - dx:" << static_cast<int>(bold_dx));
             }

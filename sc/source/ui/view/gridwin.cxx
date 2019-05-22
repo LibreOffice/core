@@ -4172,7 +4172,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                     }
                 }
 
-                pView->ImportTables( pSrcShell,static_cast<SCTAB>(nTabs.size()), &nTabs[0], bIsLink, nThisTab );
+                pView->ImportTables( pSrcShell,static_cast<SCTAB>(nTabs.size()), nTabs.data(), bIsLink, nThisTab );
                 bDone = true;
             }
         }

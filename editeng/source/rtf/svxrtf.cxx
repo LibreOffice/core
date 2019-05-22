@@ -282,7 +282,7 @@ void SvxRTFParser::ReadStyleTable()
     bool bHasStyleNo = false;
     int _nOpenBrakets = 1;      // the first was already detected earlier!!
     std::unique_ptr<SvxRTFStyleType> pStyle(
-            new SvxRTFStyleType( *pAttrPool, &aWhichMap[0] ));
+            new SvxRTFStyleType( *pAttrPool, aWhichMap.data() ));
     pStyle->aAttrSet.Put( GetRTFDefaults() );
 
     bIsInReadStyleTab = true;
@@ -340,7 +340,7 @@ void SvxRTFParser::ReadStyleTable()
                 }
                 // All data from the font is available, so off to the table
                 m_StyleTable.insert(std::make_pair(nStyleNo, std::move(pStyle)));
-                pStyle.reset(new SvxRTFStyleType( *pAttrPool, &aWhichMap[0] ));
+                pStyle.reset(new SvxRTFStyleType( *pAttrPool, aWhichMap.data() ));
                 pStyle->aAttrSet.Put( GetRTFDefaults() );
                 nStyleNo = 0;
                 bHasStyleNo = false;
@@ -625,7 +625,7 @@ SvxRTFItemStackType* SvxRTFParser::GetAttrSet_()
     if( pCurrent )
         pNew.reset(new SvxRTFItemStackType( *pCurrent, *pInsPos, false/*bCopyAttr*/ ));
     else
-        pNew.reset(new SvxRTFItemStackType( *pAttrPool, &aWhichMap[0],
+        pNew.reset(new SvxRTFItemStackType( *pAttrPool, aWhichMap.data(),
                                         *pInsPos ));
     pNew->SetRTFDefaults( GetRTFDefaults() );
 
@@ -910,7 +910,7 @@ const SfxItemSet& SvxRTFParser::GetRTFDefaults()
 {
     if( !pRTFDefaults )
     {
-        pRTFDefaults.reset( new SfxItemSet( *pAttrPool, &aWhichMap[0] ) );
+        pRTFDefaults.reset( new SfxItemSet( *pAttrPool, aWhichMap.data() ) );
         sal_uInt16 nId;
         if( 0 != ( nId = aPardMap.nScriptSpace ))
         {

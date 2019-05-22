@@ -1484,7 +1484,7 @@ void ScExportTest::testRichTextExportODS()
                 return false;
 
             // Check the first bold section.
-            const editeng::Section* pAttr = &aSecAttrs[0];
+            const editeng::Section* pAttr = aSecAttrs.data();
             if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 0 || pAttr->mnEnd != 4)
                 return false;
 
@@ -1576,7 +1576,7 @@ void ScExportTest::testRichTextExportODS()
                 return false;
 
             // Check the first strike-out section.
-            const editeng::Section* pAttr = &aSecAttrs[0];
+            const editeng::Section* pAttr = aSecAttrs.data();
             if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 0 || pAttr->mnEnd != 6)
                 return false;
 
@@ -1605,7 +1605,7 @@ void ScExportTest::testRichTextExportODS()
                 return false;
 
             // First section should have "Courier" font applied.
-            const editeng::Section* pAttr = &aSecAttrs[0];
+            const editeng::Section* pAttr = aSecAttrs.data();
             if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 0 || pAttr->mnEnd != 5)
                 return false;
 
@@ -1640,7 +1640,7 @@ void ScExportTest::testRichTextExportODS()
                 return false;
 
             // First section shoul have overline applied.
-            const editeng::Section* pAttr = &aSecAttrs[0];
+            const editeng::Section* pAttr = aSecAttrs.data();
             if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 0 || pAttr->mnEnd != 4)
                 return false;
 
@@ -1675,7 +1675,7 @@ void ScExportTest::testRichTextExportODS()
                 return false;
 
             // superscript
-            const editeng::Section* pAttr = &aSecAttrs[0];
+            const editeng::Section* pAttr = aSecAttrs.data();
             if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 0 || pAttr->mnEnd != 3)
                 return false;
 

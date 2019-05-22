@@ -92,7 +92,7 @@ cppu::defaultBootstrap_InitialComponentContext(OUString const & iniUri)
             true));
     assert(!context_values.empty());
     css::uno::Reference< css::uno::XComponentContext > context(
-        createComponentContext(&context_values[0], context_values.size()));
+        createComponentContext(context_values.data(), context_values.size()));
     smgr->setContext(context);
     cppu::installTypeDescriptionManager(tmgr.get());
     return context;

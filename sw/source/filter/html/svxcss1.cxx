@@ -737,7 +737,7 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
     if( pWhichIds && nWhichIds )
         BuildWhichTable( aWhichMap, pWhichIds, nWhichIds );
 
-    pSheetItemSet.reset( new SfxItemSet( rPool, &aWhichMap[0] ) );
+    pSheetItemSet.reset( new SfxItemSet( rPool, aWhichMap.data() ) );
     pSheetPropInfo.reset( new SvxCSS1PropertyInfo );
 }
 

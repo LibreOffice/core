@@ -589,7 +589,7 @@ void OPropertySetHelper::impl_fireAll( sal_Int32* i_handles, const Any* i_newVal
     m_pReserved->m_oldValues.clear();
 
     aGuard.clear();
-    fire( &allHandles[0], &allNewValues[0], &allOldValues[0], additionalEvents + i_count, false );
+    fire( allHandles.data(), allNewValues.data(), allOldValues.data(), additionalEvents + i_count, false );
 }
 
 

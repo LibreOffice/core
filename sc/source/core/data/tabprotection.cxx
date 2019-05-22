@@ -193,7 +193,7 @@ Sequence<sal_Int8> ScTableProtectionImpl::hashPassword(
             aChars.push_back(static_cast<sal_Char>(rPassHash[i]));
 
         Sequence<sal_Int8> aNewHash;
-        SvPasswordHelper::GetHashPassword(aNewHash, &aChars[0], aChars.size());
+        SvPasswordHelper::GetHashPassword(aNewHash, aChars.data(), aChars.size());
         return aNewHash;
     }
 

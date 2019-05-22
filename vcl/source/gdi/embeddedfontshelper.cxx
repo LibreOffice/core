@@ -113,7 +113,7 @@ bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStrea
         unsigned char *nakedPointerToUncompressedFont = nullptr;
         libeot::EOTMetadata eotMetadata;
         libeot::EOTError uncompressError =
-            libeot::EOT2ttf_buffer( reinterpret_cast<unsigned char *>(&fontData[0]), fontData.size(), &eotMetadata, &nakedPointerToUncompressedFont, &uncompressedFontSize );
+            libeot::EOT2ttf_buffer( reinterpret_cast<unsigned char *>(fontData.data()), fontData.size(), &eotMetadata, &nakedPointerToUncompressedFont, &uncompressedFontSize );
         std::shared_ptr<unsigned char> uncompressedFont( nakedPointerToUncompressedFont, libeot::EOTfreeBuffer );
         if( uncompressError != libeot::EOT_SUCCESS )
         {

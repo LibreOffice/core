@@ -235,7 +235,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             {
                                 if(pDlg->IsTableBefore())
                                 {
-                                    ImportTables( pDlg->GetDocShellTables(), nTabs.size(), &nTabs[0],
+                                    ImportTables( pDlg->GetDocShellTables(), nTabs.size(), nTabs.data(),
                                                 bLink,nTabNr );
                                 }
                                 else
@@ -251,7 +251,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                         }
                                     }
 
-                                    ImportTables( pDlg->GetDocShellTables(), nTabs.size(), &nTabs[0],
+                                    ImportTables( pDlg->GetDocShellTables(), nTabs.size(), nTabs.data(),
                                                 bLink,nTabAfter );
                                 }
                             }

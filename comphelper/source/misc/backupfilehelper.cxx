@@ -158,9 +158,9 @@ namespace
         sal_uInt64 nBaseRead(0);
 
         // read rTarget
-        if (osl::File::E_None == rFile->read(static_cast<void*>(&aTarget[0]), nLength, nBaseRead) && nLength == nBaseRead)
+        if (osl::File::E_None == rFile->read(static_cast<void*>(aTarget.data()), nLength, nBaseRead) && nLength == nBaseRead)
         {
-            rTarget = OString(&aTarget[0], static_cast< sal_Int32 >(nLength));
+            rTarget = OString(aTarget.data(), static_cast< sal_Int32 >(nLength));
             return true;
         }
 

@@ -386,7 +386,7 @@ void ScPrintFunc::FillPageData()
         }
         else
         {
-            rData.SetPagesX( m_aRanges.m_nPagesX, &m_aRanges.m_aPageEndX[0]);
+            rData.SetPagesX( m_aRanges.m_nPagesX, m_aRanges.m_aPageEndX.data());
         }
 
         // #i123672#
@@ -396,7 +396,7 @@ void ScPrintFunc::FillPageData()
         }
         else
         {
-            rData.SetPagesY( m_aRanges.m_nTotalY, &m_aRanges.m_aPageEndY[0]);
+            rData.SetPagesY( m_aRanges.m_nTotalY, m_aRanges.m_aPageEndY.data());
         }
 
         //  Settings

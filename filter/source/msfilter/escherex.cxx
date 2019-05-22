@@ -343,7 +343,7 @@ void EscherPropertyContainer::Commit( SvStream& rSt, sal_uInt16 nVersion, sal_uI
             {
                 if ( !pSortStruct[ i ].nProp.empty() )
                     rSt.WriteBytes(
-                        &pSortStruct[i].nProp[0],
+                        pSortStruct[i].nProp.data(),
                         pSortStruct[i].nProp.size());
             }
         }

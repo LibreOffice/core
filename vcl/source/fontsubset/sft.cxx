@@ -640,7 +640,7 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
         pa = static_cast<ControlPoint*>(calloc(np, sizeof(ControlPoint)));
         assert(pa != nullptr);
 
-        memcpy(pa, &myPoints[0], np * sizeof(ControlPoint));
+        memcpy(pa, myPoints.data(), np * sizeof(ControlPoint));
 
         *pointArray = pa;
     }
@@ -813,7 +813,7 @@ static int BSplineToPSPath(ControlPoint const *srcA, int srcCount, PSPathElement
     {
         *path = static_cast<PSPathElement*>(calloc(nPathCount, sizeof(PSPathElement)));
         assert(*path != nullptr);
-        memcpy( *path, &aPathList[0], nPathCount * sizeof(PSPathElement) );
+        memcpy( *path, aPathList.data(), nPathCount * sizeof(PSPathElement) );
     }
 
     return nPathCount;

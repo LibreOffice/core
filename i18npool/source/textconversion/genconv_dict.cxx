@@ -402,7 +402,7 @@ void make_stc_word(FILE *sfp, FILE *cfp)
     sal_uInt16 STC_WordIndex[0x100];
 
     if (count_S2T > 0) {
-        qsort(&STC_WordEntry_S2T[0], count_S2T, sizeof(Index), Index_comp);
+        qsort(STC_WordEntry_S2T.data(), count_S2T, sizeof(Index), Index_comp);
 
         fprintf(cfp, "\nstatic const sal_uInt16 STC_WordEntry_S2T[] = {");
         count = 0;
@@ -435,7 +435,7 @@ void make_stc_word(FILE *sfp, FILE *cfp)
     }
 
     if (count_T2S > 0) {
-        qsort(&STC_WordEntry_T2S[0], count_T2S, sizeof(Index), Index_comp);
+        qsort(STC_WordEntry_T2S.data(), count_T2S, sizeof(Index), Index_comp);
 
         fprintf(cfp, "\nstatic const sal_uInt16 STC_WordEntry_T2S[] = {");
         count = 0;

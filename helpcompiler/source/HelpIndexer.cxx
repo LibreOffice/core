@@ -116,7 +116,7 @@ void HelpIndexer::helpDocument(OUString const & fileName, Document *doc) const {
 
     OUString path = "#HLP#" + d_module + "/" + fileName;
     std::vector<TCHAR> aPath(OUStringToTCHARVec(path));
-    doc->add(*_CLNEW Field(_T("path"), &aPath[0], Field::STORE_YES | Field::INDEX_UNTOKENIZED));
+    doc->add(*_CLNEW Field(_T("path"), aPath.data(), Field::STORE_YES | Field::INDEX_UNTOKENIZED));
 
     OUString sEscapedFileName =
         rtl::Uri::encode(fileName,

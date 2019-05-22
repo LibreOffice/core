@@ -614,7 +614,7 @@ SalI18N_InputContext::EndExtTextInput()
         if( ! aDel.isDeleted() )
         {
             // mark previous preedit state again (will e.g. be sent at focus gain)
-            maClientData.aInputEv.mpTextAttr = &maClientData.aInputFlags[0];
+            maClientData.aInputEv.mpTextAttr = maClientData.aInputFlags.data();
             if( static_cast<X11SalFrame*>(maClientData.pFrame)->hasFocus() )
             {
                 // begin preedit again

@@ -415,7 +415,7 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
     Marshal::write32(&header, static_cast< sal_uInt32 >(buffer.size()));
     Marshal::write32(&header, 1);
     assert(!buffer.empty());
-    unsigned char const * p = &buffer[0];
+    unsigned char const * p = buffer.data();
     std::vector< unsigned char >::size_type n = buffer.size();
     assert(header.size() <= SAL_MAX_INT32);
     /*static_*/assert(SAL_MAX_INT32 <= std::numeric_limits<std::size_t>::max());
@@ -425,7 +425,7 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
     }
     css::uno::Sequence<sal_Int8> s(header.size() + k);
     assert(!header.empty());
-    std::memcpy(s.getArray(), &header[0], header.size());
+    std::memcpy(s.getArray(), header.data(), header.size());
     for (;;) {
         std::memcpy(s.getArray() + s.getLength() - k, p, k);
         try {

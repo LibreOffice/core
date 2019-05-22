@@ -74,7 +74,7 @@ const Property* FastPropertySetInfo::hasProperty( const OUString& aName )
 
 Sequence< Property > SAL_CALL FastPropertySetInfo::getProperties()
 {
-    return Sequence< Property >( &maProperties[0], maProperties.size() );
+    return Sequence< Property >( maProperties.data(), maProperties.size() );
 }
 
 

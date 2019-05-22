@@ -296,7 +296,7 @@ Sequence< OUString > SAL_CALL DocumentStorageAccess::getDocumentSubStoragesNames
     }
     return aNames.empty()
         ?  Sequence< OUString >()
-        :  Sequence< OUString >( &aNames[0], aNames.size() );
+        :  Sequence< OUString >( aNames.data(), aNames.size() );
 }
 
 void SAL_CALL DocumentStorageAccess::preCommit( const css::lang::EventObject& /*aEvent*/ )

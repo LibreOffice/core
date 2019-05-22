@@ -738,7 +738,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                     xSimpleMailMessage->setCcRecipient( aCcRecipientSeq );
                 }
 
-                Sequence< OUString > aAttachmentSeq(&(maAttachedDocuments[0]),maAttachedDocuments.size());
+                Sequence< OUString > aAttachmentSeq(maAttachedDocuments.data(),maAttachedDocuments.size());
 
                 if ( xSimpleMailMessage->getSubject().isEmpty() ) {
                     INetURLObject url(

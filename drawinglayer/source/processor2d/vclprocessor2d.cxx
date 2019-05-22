@@ -265,7 +265,7 @@ namespace drawinglayer
                     sal_Int32 nPos = rTextCandidate.getTextPosition();
                     sal_Int32 nLen = rTextCandidate.getTextLength();
 
-                    long* pDXArray = !aTransformedDXArray.empty() ? &(aTransformedDXArray[0]) : nullptr ;
+                    long* pDXArray = !aTransformedDXArray.empty() ? aTransformedDXArray.data() : nullptr ;
 
                     if ( rTextCandidate.isFilled() )
                     {

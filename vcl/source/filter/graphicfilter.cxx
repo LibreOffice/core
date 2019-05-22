@@ -1598,7 +1598,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
             if(nStreamLength > 0)
             {
                 std::vector<sal_uInt8> aTwoBytes(2);
-                rIStream.ReadBytes(&aTwoBytes[0], 2);
+                rIStream.ReadBytes(aTwoBytes.data(), 2);
                 rIStream.Seek(nStreamPosition);
 
                 if(aTwoBytes[0] == 0x1F && aTwoBytes[1] == 0x8B)
@@ -2082,7 +2082,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                                                 if ( nChunkLen )
                                                 {
                                                     aChunkData.aData.resize( nChunkLen );
-                                                    memcpy( &aChunkData.aData[ 0 ], aByteSeq.getConstArray(), nChunkLen );
+                                                    memcpy( aChunkData.aData.data(), aByteSeq.getConstArray(), nChunkLen );
                                                 }
                                                 std::vector< vcl::PNGWriter::ChunkData >::iterator aIter = rChunkData.end() - 1;
                                                 rChunkData.insert( aIter, aChunkData );

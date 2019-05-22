@@ -364,7 +364,7 @@ sal_Bool SAL_CALL Submission::convertFastPropertyValue(
             while ( p >= 0 )
                 aPrefixes.push_back( sTokenList.getToken( 0, ',', p ) );
 
-            Sequence< OUString > aConvertedPrefixes( &aPrefixes[0], aPrefixes.size() );
+            Sequence< OUString > aConvertedPrefixes( aPrefixes.data(), aPrefixes.size() );
             return PropertySetBase::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, makeAny( aConvertedPrefixes ) );
         }
     }

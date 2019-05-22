@@ -61,7 +61,7 @@ namespace
 
         //Some slots are unused, so don't map to private, just set them to 'X'
         sal_uInt32 const convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS ^ RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE;
-        OUString sOrigText(&aAllChars[0], aAllChars.size(), eEncoding, convertFlags);
+        OUString sOrigText(aAllChars.data(), aAllChars.size(), eEncoding, convertFlags);
         sOrigText = sOrigText.replace( 0xfffd, 'X' );
 
         //Should clearly be equal
