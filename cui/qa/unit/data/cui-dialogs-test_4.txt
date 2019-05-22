@@ -47,7 +47,6 @@ cui/ui/scriptorganizer.ui
 cui/ui/searchattrdialog.ui
 cui/ui/searchformatdialog.ui
 cui/ui/securityoptionsdialog.ui
-cui/ui/select_persona_dialog.ui
 cui/ui/selectpathdialog.ui
 cui/ui/shadowtabpage.ui
 cui/ui/showcoldialog.ui
