@@ -27,15 +27,15 @@
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
 
-class SvxGraphCtrl;
+class GraphCtrl;
 
 class GraphCtrlUserCall : public SdrObjUserCall
 {
-    SvxGraphCtrl& rWin;
+    GraphCtrl& rWin;
 
 public:
 
-    GraphCtrlUserCall(SvxGraphCtrl& rGraphWin)
+    GraphCtrlUserCall(GraphCtrl& rGraphWin)
         : rWin(rGraphWin)
     {}
 
@@ -44,7 +44,7 @@ public:
 
 class SvxGraphCtrlAccessibleContext;
 
-class SVX_DLLPUBLIC SvxGraphCtrl : public weld::CustomWidgetController
+class SVX_DLLPUBLIC GraphCtrl : public weld::CustomWidgetController
 {
     friend class GraphCtrlView;
     friend class GraphCtrlUserCall;
@@ -52,9 +52,9 @@ class SVX_DLLPUBLIC SvxGraphCtrl : public weld::CustomWidgetController
     Graphic             aGraphic;
     ScopedVclPtrInstance<VirtualDevice> xVD;
     Idle                aUpdateIdle;
-    Link<SvxGraphCtrl*,void>  aMousePosLink;
-    Link<SvxGraphCtrl*,void>  aGraphSizeLink;
-    Link<SvxGraphCtrl*,void>  aUpdateLink;
+    Link<GraphCtrl*,void>  aMousePosLink;
+    Link<GraphCtrl*,void>  aGraphSizeLink;
+    Link<GraphCtrl*,void>  aUpdateLink;
     MapMode const          aMap100;
     Size                aGraphSize;
     Point               aMousePos;
@@ -94,9 +94,9 @@ protected:
 
 public:
 
-    SvxGraphCtrl(weld::Dialog* pDialog);
+    GraphCtrl(weld::Dialog* pDialog);
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
-    virtual ~SvxGraphCtrl() override;
+    virtual ~GraphCtrl() override;
 
     void                SetGraphic( const Graphic& rGraphic, bool bNewModel = true );
     const Graphic&      GetGraphic() const { return aGraphic; }
@@ -116,11 +116,11 @@ public:
     SdrObject*          GetSelectedSdrObject() const;
     bool                IsChanged() const { return mbSdrMode && pModel->IsChanged(); }
 
-    void                SetMousePosLink( const Link<SvxGraphCtrl*,void>& rLink ) { aMousePosLink = rLink; }
+    void                SetMousePosLink( const Link<GraphCtrl*,void>& rLink ) { aMousePosLink = rLink; }
 
-    void                SetGraphSizeLink( const Link<SvxGraphCtrl*,void>& rLink ) { aGraphSizeLink = rLink; }
+    void                SetGraphSizeLink( const Link<GraphCtrl*,void>& rLink ) { aGraphSizeLink = rLink; }
 
-    void                SetUpdateLink( const Link<SvxGraphCtrl*,void>& rLink ) { aUpdateLink = rLink; }
+    void                SetUpdateLink( const Link<GraphCtrl*,void>& rLink ) { aUpdateLink = rLink; }
     void                QueueIdleUpdate();
 
     void                SetSdrMode(bool b);
@@ -131,7 +131,7 @@ public:
 
 class GraphCtrlView : public SdrView
 {
-    SvxGraphCtrl& rGraphCtrl;
+    GraphCtrl& rGraphCtrl;
 
 protected:
 
@@ -142,7 +142,7 @@ protected:
     }
 
 public:
-    GraphCtrlView(SdrModel& rSdrModel, SvxGraphCtrl* pWindow)
+    GraphCtrlView(SdrModel& rSdrModel, GraphCtrl* pWindow)
         : SdrView(rSdrModel, &pWindow->GetDrawingArea()->get_ref_device())
         , rGraphCtrl(*pWindow)
     {

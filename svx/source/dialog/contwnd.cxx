@@ -34,7 +34,7 @@ using namespace css;
 #define TRANSCOL COL_WHITE
 
 ContourWindow::ContourWindow(weld::Dialog* pDialog)
-    : SvxGraphCtrl(pDialog)
+    : GraphCtrl(pDialog)
     , aWorkRect(0, 0, 0, 0)
     , bPipetteMode(false)
     , bWorkplaceMode(false)
@@ -111,7 +111,7 @@ const tools::PolyPolygon& ContourWindow::GetPolyPolygon()
 
 void ContourWindow::InitSdrModel()
 {
-    SvxGraphCtrl::InitSdrModel();
+    GraphCtrl::InitSdrModel();
 
     SfxItemSet aSet( pModel->GetItemPool() );
 
@@ -151,7 +151,7 @@ bool ContourWindow::MouseButtonDown( const MouseEvent& rMEvt )
     }
 
     if (!bPipetteMode)
-        return SvxGraphCtrl::MouseButtonDown( rMEvt );
+        return GraphCtrl::MouseButtonDown( rMEvt );
 
     return true;
 }
@@ -176,7 +176,7 @@ bool ContourWindow::MouseMove( const MouseEvent& rMEvt )
         return true;
     }
 
-    return SvxGraphCtrl::MouseMove( rMEvt );
+    return GraphCtrl::MouseMove( rMEvt );
 }
 
 bool ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
@@ -197,7 +197,7 @@ bool ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
     }
     else if ( bWorkplaceMode )
     {
-        SvxGraphCtrl::MouseButtonUp( rMEvt );
+        GraphCtrl::MouseButtonUp( rMEvt );
 
         aWorkRect.SetRight( aLogPt.X() );
         aWorkRect.SetBottom( aLogPt.Y() );
@@ -222,7 +222,7 @@ bool ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
         return false;
     }
 
-    return SvxGraphCtrl::MouseButtonUp( rMEvt );
+    return GraphCtrl::MouseButtonUp( rMEvt );
 }
 
 void ContourWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
@@ -262,7 +262,7 @@ void ContourWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
 void ContourWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    SvxGraphCtrl::SetDrawingArea(pDrawingArea);
+    GraphCtrl::SetDrawingArea(pDrawingArea);
     Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(270, 170), MapMode(MapUnit::MapAppFont)));
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
     SetOutputSizePixel(aSize);
