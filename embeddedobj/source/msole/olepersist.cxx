@@ -1420,7 +1420,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
                                         3 );
     }
 #else
-    // On unix the ole object can not do anything except storing itself somewere
+    // On Unix the OLE object can not do anything except storing itself somewhere
     if ( nEntryConnectionMode == embed::EntryInitModes::DEFAULT_INIT && bElExists )
     {
         // TODO/LATER: detect classID of the object
