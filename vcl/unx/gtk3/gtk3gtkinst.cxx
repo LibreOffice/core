@@ -8938,7 +8938,9 @@ private:
         return pThis->separator_function(nIndex);
     }
 
-    // in the absence of a built-in solution for https://gitlab.gnome.org/GNOME/gtk/issues/310
+    // https://gitlab.gnome.org/GNOME/gtk/issues/310
+    //
+    // in the absence of a built-in solution
     // a) support typeahead for the case where there is no entry widget, typing ahead
     // into the button itself will select via the vcl selection engine, a matching
     // entry
@@ -9050,6 +9052,9 @@ private:
         set_selected_entry(nSelect);
     }
 
+    // https://gitlab.gnome.org/GNOME/gtk/issues/310
+    //
+    // in the absence of a built-in solution
     // b) support typeahead for the menu itself, typing into the menu will
     // select via the vcl selection engine, a matching entry. Clearly
     // this is cheating, brittle and not a long term solution.
@@ -9263,6 +9268,8 @@ public:
 #endif
     }
 
+    // https://gitlab.gnome.org/GNOME/gtk/issues/1910
+    // has_entry long menus take forever to appear (tdf#125388)
     void bodge_area_apply_attributes_cb()
     {
         gtk_container_foreach(GTK_CONTAINER(m_pMenu), disable_area_apply_attributes_cb, m_pMenu);
