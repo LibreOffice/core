@@ -79,7 +79,6 @@
 #include <basic/sbstar.hxx>
 #include <basic/sberrors.hxx>
 #include <xmloff/autolayout.hxx>
-#include <vcl/mnemonic.hxx>
 
 using namespace ::com::sun::star;
 
@@ -172,7 +171,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         {
             // Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1081 ff.
-            OUString aTmp(MnemonicGenerator::EraseAllMnemonicChars(SvtResId(STR_REDO)));
+            OUString aTmp(SvtResId(STR_REDO));
             aTmp += pUndoManager->GetRedoActionComment();
             rSet.Put(SfxStringItem(SID_REDO, aTmp));
         }

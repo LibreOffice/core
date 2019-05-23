@@ -35,7 +35,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/mnemonic.hxx>
 #include <vcl/splitwin.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svl/intitem.hxx>
@@ -998,7 +997,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
         }
         else
         {
-            rSet.Put( SfxStringItem( SID_REDO, MnemonicGenerator::EraseAllMnemonicChars(SvtResId(STR_REDO))+pShUndoMgr->GetRedoActionComment() ) );
+            rSet.Put(SfxStringItem(SID_REDO, SvtResId(STR_REDO) + pShUndoMgr->GetRedoActionComment()));
         }
     }
     else
