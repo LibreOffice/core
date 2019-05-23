@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_79c5f23b",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2484,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-23T17:50:45Z",
+      "side": 1,
+      "message": "1. pCurrentEntry cannot be null here - because of assert(pCurrentEntry) and pCurrentEntry is \"const\"\n\n2. a potential problem? what if the \"next sibling\" is not a content-entry but a top-level entry ... then we must not move it ... i.e. move this \"if\" inside the lcl_IsContent() branch so we still set nDir \u003d 0 in this case\n... err no, NextSibling can\u0027t be a top-level entry, right? because it\u0027s on the same level as the content entry which isn\u0027t a top-level entry",
+      "revId": "8be5bbd8f5b4b5985bd8a9cd6aa4ed71dfd49380",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_b9d05af9",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2542,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-23T17:50:45Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "8be5bbd8f5b4b5985bd8a9cd6aa4ed71dfd49380",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
