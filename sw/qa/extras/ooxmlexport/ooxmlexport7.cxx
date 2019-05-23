@@ -1910,6 +1910,17 @@ DECLARE_OOXMLEXPORT_TEST(testSignatureLineShape, "signature-line-all-props-set.d
     CPPUNIT_ASSERT_EQUAL(OUString("Check the machines!"), aSigningInstructions);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTextInput, "textinput.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // Ensure we have a formfield
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:instrText", " FILLIN \"\"");
+    // and it's content is not gone
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:t", "SomeText");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
