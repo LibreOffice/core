@@ -198,7 +198,10 @@ $(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT): $(CLANGINDIR)/sharedvisi
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,1)
 	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) $(CLANGTOOLDEFS) $(CLANGINCLUDES) \
         -DCLANGDIR=$(CLANGDIR) -DBUILDDIR=$(BUILDDIR) -I$(BUILDDIR)/config_host \
-        $< -o $@ -MMD -MT $@ -MP -MF $(CLANGOUTDIR)/sharedvisitor/generator.d $(CLANGTOOLLIBS)
+        -c $< -o $(CLANGOUTDIR)/sharedvisitor/generator.o -MMD -MT $@ -MP \
+        -MF $(CLANGOUTDIR)/sharedvisitor/generator.d
+	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGOUTDIR)/sharedvisitor/generator.o \
+        -o $@ $(CLANGTOOLLIBS)
 
 $(CLANGOUTDIR)/sharedvisitor:
 	mkdir -p $(CLANGOUTDIR)/sharedvisitor
