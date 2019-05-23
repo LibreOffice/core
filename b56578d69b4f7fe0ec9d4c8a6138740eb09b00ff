@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_872e5aa3",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-05-23T13:05:55Z",
+      "side": 1,
+      "message": "Why _AUTHOR?\nThe COL_AUTHOR... colors are used to color changes made by certain authors, this is not related.",
+      "range": {
+        "startLine": 287,
+        "startChar": 32,
+        "endLine": 287,
+        "endChar": 39
+      },
+      "revId": "b56578d69b4f7fe0ec9d4c8a6138740eb09b00ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_a72b5692",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-05-23T13:05:55Z",
+      "side": 1,
+      "message": "BLUEONBLACK is misleading, it\u0027s not on black..",
+      "range": {
+        "startLine": 288,
+        "startChar": 18,
+        "endLine": 288,
+        "endChar": 33
+      },
+      "revId": "b56578d69b4f7fe0ec9d4c8a6138740eb09b00ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
