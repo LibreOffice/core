@@ -663,6 +663,10 @@ $(eval $(call gb_Library_add_cxxflags,vcl,\
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/ios/iosinst \
     vcl/ios/dummies \
+    vcl/ios/clipboard \
+    vcl/ios/iOSTransferable \
+    vcl/ios/DataFlavorMapping \
+    vcl/ios/HtmlFmtFlt \
     $(vcl_really_generic_code) \
     $(vcl_coretext_code) \
 	$(vcl_quartz_code) \

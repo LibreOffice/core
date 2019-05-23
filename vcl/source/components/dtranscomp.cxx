@@ -220,6 +220,8 @@ OUString SAL_CALL Clipboard_getImplementationName()
     return OUString(
     #if defined MACOSX
     "com.sun.star.datatransfer.clipboard.AquaClipboard"
+    #elif defined IOS
+    "com.sun.star.datatransfer.clipboard.iOSClipboard"
     #elif defined ANDROID
     "com.sun.star.datatransfer.VCLGenericClipboard"
     #elif defined UNX
