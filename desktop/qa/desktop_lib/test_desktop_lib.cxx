@@ -550,6 +550,24 @@ void DesktopLOKTest::testPasteWriter()
     // Writer is expected to support text/html.
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/html", aText.getStr(), aText.getLength()));
 
+    // Overwrite doc contents with a HTML paste.
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+    OString aComment("foo <!-- bar --> baz");
+    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/html", aComment.getStr(), aComment.getLength()));
+
+    // Check if we have a comment.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphEnumeration = xParagraphEnumerationAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphEnumeration->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xTextPortionEnumeration = xParagraph->createEnumeration();
+    uno::Reference<beans::XPropertySet> xTextPortion(xTextPortionEnumeration->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), xTextPortion->getPropertyValue("TextPortionType").get<OUString>());
+    // Without the accompanying fix in place, this test would have failed, as we had a comment
+    // between "foo" and "baz".
+    CPPUNIT_ASSERT(!xTextPortionEnumeration->hasMoreElements());
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 

@@ -284,11 +284,15 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     // destroyed after the paste.
                     SwView* pView = &rView;
 
+                    RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA;
                     const SfxUInt16Item* pAnchorType = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
                     if (pAnchorType)
-                        SwTransferable::Paste(rSh, aDataHelper, static_cast<RndStdIds>(pAnchorType->GetValue()));
-                    else
-                        SwTransferable::Paste(rSh, aDataHelper);
+                        nAnchorType = static_cast<RndStdIds>(pAnchorType->GetValue());
+                    bool bIgnoreComments = false;
+                    const SfxBoolItem* pIgnoreComments = rReq.GetArg<SfxBoolItem>(FN_PARAM_2);
+                    if (pIgnoreComments)
+                        bIgnoreComments = pIgnoreComments->GetValue();
+                    SwTransferable::Paste(rSh, aDataHelper, nAnchorType, bIgnoreComments);
 
                     if( rSh.IsFrameSelected() || rSh.IsObjSelected() )
                         rSh.EnterSelFrameMode();
