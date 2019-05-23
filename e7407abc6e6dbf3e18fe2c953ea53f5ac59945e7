@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_0709ea2a",
+        "filename": "include/cui/cuicharmap.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-05-23T08:16:28Z",
+      "side": 1,
+      "message": "Could you add a one-liner \"/// Foo and bar.\"-style doxygen comment for this class? Now that you know what it does, before you forget it.",
+      "revId": "e7407abc6e6dbf3e18fe2c953ea53f5ac59945e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_270e6634",
+        "filename": "include/cui/numberingpreview.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-05-23T08:16:28Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "e7407abc6e6dbf3e18fe2c953ea53f5ac59945e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_871c1a6b",
+        "filename": "include/svx/svxdlg.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-05-23T08:16:28Z",
+      "side": 1,
+      "message": "And here.",
+      "revId": "e7407abc6e6dbf3e18fe2c953ea53f5ac59945e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_a719167a",
+        "filename": "sd/source/ui/dlg/BulletAndPositionDlg.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-05-23T08:16:28Z",
+      "side": 1,
+      "message": "Is this still needed? I think an effect of image handling rework is that graphics are always loaded synchronously, the options are only if they are lazy-loaded or not. See https://tomazvajngerl.blogspot.com/2018/04/improving-image-handling-in-libreoffice.html and the 2 other parts for Tomaz\u0027s work.",
+      "revId": "e7407abc6e6dbf3e18fe2c953ea53f5ac59945e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_47285285",
+        "filename": "sd/source/ui/dlg/sddlgfact.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-05-23T08:16:28Z",
+      "side": 1,
+      "message": "Missing one-liner doxygen comment.",
+      "revId": "e7407abc6e6dbf3e18fe2c953ea53f5ac59945e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_672d4e94",
+        "filename": "sd/source/ui/inc/BulletAndPositionDlg.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-05-23T08:16:28Z",
+      "side": 1,
+      "message": "Missing doxygen comment.",
+      "revId": "e7407abc6e6dbf3e18fe2c953ea53f5ac59945e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
