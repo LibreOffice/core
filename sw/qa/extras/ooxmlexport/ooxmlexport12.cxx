@@ -777,7 +777,7 @@ DECLARE_OOXMLEXPORT_TEST(testTextInput, "textinput.odt")
     if (!pXmlDoc)
         return;
     // Ensure we have a formfield
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:instrText", " FORMTEXT ");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:instrText", " FILLIN \"\"");
     // and it's content is not gone
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:t", "SomeText");
 }
