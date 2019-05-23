@@ -20,6 +20,7 @@
 #include "ManifestReader.hxx"
 #include "ManifestImport.hxx"
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/factory.hxx>
@@ -63,17 +64,20 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSeque
         xParser->parseStream( aParserInput );
         aManifestSequence = comphelper::containerToSequence(aManVector);
     }
-    catch (SAXParseException& e)
+    catch (const SAXParseException&)
     {
-        SAL_WARN("package", "ignoring " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("package", "ignoring " << exceptionToString(ex));
     }
-    catch (SAXException& e)
+    catch (const SAXException&)
     {
-        SAL_WARN("package", "ignoring " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("package", "ignoring " << exceptionToString(ex));
     }
-    catch (IOException& e)
+    catch (const IOException&)
     {
-        SAL_WARN("package", "ignoring " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("package", "ignoring " << exceptionToString(ex));
     }
     xParser->setDocumentHandler ( Reference < XDocumentHandler > () );
     return aManifestSequence;

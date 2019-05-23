@@ -32,6 +32,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <unotools/configmgr.hxx>
 
@@ -141,10 +142,11 @@ XUnbufferedStream::XUnbufferedStream(
     try {
         if ( mxZipSeek.is() )
             mnZipSize = mxZipSeek->getLength();
-    } catch( Exception& e )
+    } catch( const Exception& )
     {
+        css::uno::Any ex( cppu::getCaughtException() );
         // in case of problem the size will stay set to 0
-        SAL_WARN("package", "ignoring " << e);
+        SAL_WARN("package", "ignoring " << exceptionToString(ex));
     }
 
     mnZipEnd = mnZipCurrent + mnZipSize;

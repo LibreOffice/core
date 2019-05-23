@@ -22,6 +22,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/process.h>
+#include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <unotools/resmgr.hxx>
 #include <uno/current_context.hxx>
@@ -244,9 +245,10 @@ vcl::Window *ImplGetDefaultContextWindow()
                     pContext->acquire();
 #endif
             }
-            catch (const css::uno::Exception& e)
+            catch (const css::uno::Exception&)
             {
-                 SAL_WARN("vcl", "unable to create Default Window: " << e);
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("vcl", "unable to create Default Window: " << exceptionToString(ex));
             }
         }
     }

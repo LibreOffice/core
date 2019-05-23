@@ -47,6 +47,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <osl/file.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/pathoptions.hxx>
@@ -1679,9 +1680,10 @@ void SfxViewShell::CheckIPClient_Impl(
         {
             pIPClient->GetObject()->changeState( embed::EmbedStates::INPLACE_ACTIVE );
         }
-        catch (const uno::Exception& e)
+        catch (const uno::Exception&)
         {
-            SAL_WARN("sfx.view", "SfxViewShell::CheckIPClient_Impl: " << e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("sfx.view", "SfxViewShell::CheckIPClient_Impl: " << exceptionToString(ex));
         }
     }
 }

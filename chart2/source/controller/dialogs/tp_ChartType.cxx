@@ -649,9 +649,10 @@ ChartTypeTabPage::ChartTypeTabPage(TabPageParent pParent , const uno::Reference<
         {
             xProps->getPropertyValue("EnableComplexChartTypes") >>= bEnableComplexChartTypes;
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
 

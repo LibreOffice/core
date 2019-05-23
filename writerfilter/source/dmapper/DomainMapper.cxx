@@ -3152,9 +3152,10 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
             m_pImpl->appendTextPortion( sText, pContext );
         }
     }
-    catch( const uno::RuntimeException& e )
+    catch( const uno::RuntimeException& )
     {
-        SAL_WARN("writerfilter", "failed. Message :" << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("writerfilter", exceptionToString(ex));
     }
 }
 

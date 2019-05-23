@@ -51,6 +51,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/mapunit.hxx>
@@ -295,9 +296,10 @@ void Shape::addShape(
             }
         }
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-        SAL_WARN( "oox.drawingml", "Shape::addShape: " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "oox.drawingml", "Shape::addShape: " << exceptionToString(ex) );
     }
 }
 
@@ -1460,9 +1462,10 @@ void Shape::keepDiagramCompatibilityInfo()
         } else
             xSet->setPropertyValue( aGrabBagPropName, Any( maDiagramDoms ) );
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-        SAL_WARN( "oox.drawingml", "Shape::keepDiagramCompatibilityInfo: " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "oox.drawingml", "Shape::keepDiagramCompatibilityInfo: " << exceptionToString(ex) );
     }
 }
 
@@ -1483,9 +1486,10 @@ void Shape::convertSmartArtToMetafile(XmlFilterBase const & rFilterBase)
             xShapes->remove(Reference<XShape>(xShapes->getByIndex(0), UNO_QUERY_THROW));
         xShapes->add(xShape);
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN("oox.drawingml", "Shape::convertSmartArtToMetafile: " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("oox.drawingml", "Shape::convertSmartArtToMetafile: " << exceptionToString(ex));
     }
 }
 
@@ -1552,9 +1556,10 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase const & rFilte
         xPropSet->setPropertyValue(  "SizeProtect", Any( true ) );
         xPropSet->setPropertyValue(  "Name", Any( OUString( "RenderedShapes" ) ) );
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-        SAL_WARN( "oox.drawingml", "Shape::renderDiagramToGraphic: " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "oox.drawingml", "Shape::renderDiagramToGraphic: " << exceptionToString(ex) );
     }
 
     return xShape;

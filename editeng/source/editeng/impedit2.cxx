@@ -60,6 +60,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <svl/asiancfg.hxx>
+#include <tools/diagnose_ex.h>
 #include <comphelper/lok.hxx>
 #include <unotools/configmgr.hxx>
 
@@ -3528,9 +3529,10 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                 }
                 bDone = true;
             }
-            catch( const css::uno::Exception& e)
+            catch( const css::uno::Exception&)
             {
-                SAL_WARN( "editeng", "Unable to paste EDITENGINE_ODF_TEXT_FLAT " << e );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN( "editeng", "Unable to paste EDITENGINE_ODF_TEXT_FLAT " << exceptionToString(ex) );
             }
         }
 

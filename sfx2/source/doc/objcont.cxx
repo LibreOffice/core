@@ -40,6 +40,7 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/datetime.hxx>
+#include <tools/diagnose_ex.h>
 #include <rtl/uri.hxx>
 #include <math.h>
 #include <sal/log.hxx>
@@ -466,9 +467,10 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         aTemplDate = xTemplateDocProps->getModificationDate();
         bOK = true;
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_INFO("sfx.doc", e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_INFO("sfx.doc", exceptionToString(ex));
     }
 
     // if modify date was read successfully

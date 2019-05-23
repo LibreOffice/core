@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 #include <rtl/character.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 
@@ -419,9 +420,10 @@ css::i18n::ParseResult CharClass::parseAnyToken(
                 nContCharFlags, userDefinedCharactersCont );
         }
     }
-    catch ( const Exception& e )
+    catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "parseAnyToken: Exception caught " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "unotools.i18n", "parseAnyToken: " << exceptionToString(ex) );
     }
     return ParseResult();
 }
@@ -445,9 +447,10 @@ css::i18n::ParseResult CharClass::parsePredefinedToken(
                 nContCharFlags, userDefinedCharactersCont );
         }
     }
-    catch ( const Exception& e )
+    catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "parsePredefinedToken: Exception caught " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "unotools.i18n", "parsePredefinedToken: " << exceptionToString(ex) );
     }
     return ParseResult();
 }

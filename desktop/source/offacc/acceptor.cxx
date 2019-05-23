@@ -28,6 +28,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace css::bridge;
 using namespace css::connection;
@@ -121,8 +122,9 @@ void Acceptor::run()
                 "", m_aProtocol, rConnection, rInstanceProvider);
             osl::MutexGuard g(m_aMutex);
             m_bridges.add(rBridge);
-        } catch (const Exception& e) {
-            SAL_WARN("desktop.offacc", "caught " << e);
+        } catch (const Exception&) {
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("desktop.offacc", "caught " << exceptionToString(ex));
             // connection failed...
             // something went wrong during connection setup.
             // just wait for a new connection to accept

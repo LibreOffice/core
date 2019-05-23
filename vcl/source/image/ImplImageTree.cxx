@@ -41,6 +41,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/uri.hxx>
 
+#include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <implimagetree.hxx>
@@ -256,9 +257,10 @@ OUString ImplImageTree::getImageUrl(OUString const & rName, OUString const & rSt
                 }
             }
         }
-        catch (const uno::Exception & e)
+        catch (const uno::Exception &)
         {
-            SAL_INFO("vcl", e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_INFO("vcl", exceptionToString(ex));
         }
 
         aStyle = fallbackStyle(aStyle);
@@ -296,9 +298,10 @@ std::shared_ptr<SvMemoryStream> ImplImageTree::getImageStream(OUString const & r
                 }
             }
         }
-        catch (const uno::Exception & e)
+        catch (const uno::Exception &)
         {
-            SAL_INFO("vcl", e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_INFO("vcl", exceptionToString(ex));
         }
 
         aStyle = fallbackStyle(aStyle);
@@ -413,9 +416,10 @@ bool ImplImageTree::doLoadImage(ImageRequestParameters& rParameters)
     {
         throw;
     }
-    catch (const uno::Exception& e)
+    catch (const uno::Exception&)
     {
-        SAL_INFO("vcl", "ImplImageTree::doLoadImage exception: " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_INFO("vcl", "ImplImageTree::doLoadImage exception: " << exceptionToString(ex));
     }
 
     if (bFound)
@@ -681,9 +685,10 @@ bool ImplImageTree::checkPathAccess()
     {
         throw;
     }
-    catch (const uno::Exception & e)
+    catch (const uno::Exception &)
     {
-        SAL_INFO("vcl", "ImplImageTree::zip file location " << e << " for " << rIconSet.maURL);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_INFO("vcl", "ImplImageTree::zip file location " << exceptionToString(ex) << " for " << rIconSet.maURL);
         return false;
     }
     return rNameAccess.is();

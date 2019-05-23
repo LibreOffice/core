@@ -30,6 +30,7 @@
 #include <svtools/miscopt.hxx>
 #include <unotools/resmgr.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
@@ -1503,7 +1504,8 @@ IMPL_LINK_NOARG(ImpPDFTabSigningPage, ClickmaPbSignCertSelect, weld::Button&, vo
         }
         catch (const uno::Exception &e)
         {
-            SAL_INFO("filter.pdf", "TSAURLsDialog::TSAURLsDialog(): " << e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_INFO("filter.pdf", "TSAURLsDialog::TSAURLsDialog(): " << exceptionToString(ex));
         }
 
         // If more than only the "None" entry is there, enable the ListBox

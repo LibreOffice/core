@@ -25,6 +25,7 @@
 #include <filter/msfilter/util.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <comphelper/string.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/globname.hxx>
 #include <tools/datetimeutils.hxx>
 #include <comphelper/classids.hxx>
@@ -3133,10 +3134,11 @@ RTFError RTFDocumentImpl::popState()
                             xDocumentPropertyContainer->addProperty(
                                 rKey, beans::PropertyAttribute::REMOVABLE, aValue);
                     }
-                    catch (const uno::Exception& rException)
+                    catch (const uno::Exception&)
                     {
-                        SAL_WARN("writerfilter.rtf",
-                                 "failed to set property " << rKey << ": " << rException);
+                        css::uno::Any ex(cppu::getCaughtException());
+                        SAL_WARN("writerfilter.rtf", "failed to set property "
+                                                         << rKey << ": " << exceptionToString(ex));
                     }
                 }
             }

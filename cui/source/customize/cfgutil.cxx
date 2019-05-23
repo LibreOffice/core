@@ -58,6 +58,7 @@
 #include <unotools/configmgr.hxx>
 #include <dialmgr.hxx>
 #include <svl/stritem.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
@@ -649,9 +650,10 @@ void CuiConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
         Reference< browse::XBrowseNodeFactory > xFac = browse::theBrowseNodeFactory::get( m_xContext );
         rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
     }
-    catch( Exception& e )
+    catch( const Exception& )
     {
-        SAL_INFO("cui.customize", "Caught some exception whilst retrieving browse nodes from factory... Exception: " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_INFO("cui.customize", "Caught some exception whilst retrieving browse nodes from factory: " << exceptionToString(ex));
         // TODO exception handling
     }
 

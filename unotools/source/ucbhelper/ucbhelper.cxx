@@ -265,11 +265,11 @@ bool utl::UCBContentHelper::MakeFolder(
         if (e.Code == css::ucb::IOErrorCode_ALREADY_EXISTING) {
             exists = true;
         } else {
+            css::uno::Any ex( cppu::getCaughtException() );
             SAL_INFO(
                 "unotools.ucbhelper",
                 "UCBContentHelper::MakeFolder(" << title
-                    << ") InteractiveIOException \"" << e
-                    << "\", code " << + static_cast<sal_Int32>(e.Code));
+                    << ") " << exceptionToString(ex));
         }
     } catch (css::ucb::NameClashException const &) {
         exists = true;

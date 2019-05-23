@@ -35,6 +35,7 @@
 
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -295,9 +296,10 @@ void ControllerState::update(
                     if( xEquationProperties.is() )
                         xEquationProperties->getPropertyValue( "ShowCorrelationCoefficient" ) >>= bHasR2Value;
                 }
-                catch(const uno::RuntimeException& e)
+                catch(const uno::RuntimeException&)
                 {
-                    SAL_WARN("chart2", "Exception caught. " << e );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN("chart2", exceptionToString(ex) );
                 }
                 bMayAddR2Value = !bHasR2Value;
                 bMayDeleteR2Value = bHasR2Value;
@@ -541,9 +543,10 @@ void ControllerCommandDispatch::updateCommandAvailability()
             {
                 xProps->getPropertyValue("EnableDataTableDialog") >>= bEnableDataTableDialog;
             }
-            catch( const uno::Exception& e )
+            catch( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("chart2", exceptionToString(ex) );
             }
         }
 

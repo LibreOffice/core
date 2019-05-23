@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
 #include <sal/log.hxx>
 #include <vcl/vectorgraphicdata.hxx>
@@ -78,9 +79,10 @@ BitmapEx convertPrimitive2DSequenceToBitmapEx(
                 aRetval = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
             }
         }
-        catch (const uno::Exception& e)
+        catch (const uno::Exception&)
         {
-            SAL_WARN("vcl", "Got no graphic::XPrimitive2DRenderer! : " << e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("vcl", "Got no graphic::XPrimitive2DRenderer! : " << exceptionToString(ex));
         }
         catch (const std::exception& e)
         {

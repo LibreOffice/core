@@ -25,6 +25,7 @@
 #include <sfx2/templatelocalview.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/historyoptions.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/event.hxx>
@@ -86,11 +87,12 @@ bool IsDocEncrypted(const OUString& rURL)
             } catch( uno::Exception& ) {}
         }
     }
-    catch (const uno::Exception& rException)
+    catch (const uno::Exception&)
     {
+        css::uno::Any ex( cppu::getCaughtException() );
         SAL_WARN("sfx",
             "caught exception trying to find out if doc is encrypted"
-            << rURL << ": " << rException);
+            << rURL << ": " << exceptionToString(ex));
     }
 
     return bIsEncrypted;

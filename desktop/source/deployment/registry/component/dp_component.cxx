@@ -35,6 +35,7 @@
 #include <comphelper/sequence.hxx>
 #include <xmlscript/xml_helper.hxx>
 #include <svl/inettype.hxx>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -1373,13 +1374,15 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
         if (!startup) {
             try {
                 componentLiveInsertion(data, factories);
-            } catch (css::uno::Exception & e) {
+            } catch (css::uno::Exception &) {
+                css::uno::Any ex( cppu::getCaughtException() );
                 SAL_INFO(
-                    "desktop.deployment", "caught " << e);
+                    "desktop.deployment", "caught " << exceptionToString(ex));
                 try {
                     impreg->revokeImplementation(url, rdb);
-                } catch (css::uno::RuntimeException & e2) {
-                    SAL_WARN("desktop.deployment", "ignored " << e2);
+                } catch (css::uno::RuntimeException &) {
+                    css::uno::Any ex2( cppu::getCaughtException() );
+                    SAL_WARN("desktop.deployment", "ignored " << exceptionToString(ex2));
                 }
                 throw;
             }

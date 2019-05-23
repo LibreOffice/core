@@ -36,6 +36,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/graph.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/extendapplicationenvironment.hxx>
 #include <tools/stream.hxx>
 
@@ -79,7 +80,8 @@ SAL_IMPLEMENT_MAIN()
     }
     catch (const Exception& e)
     {
-        SAL_WARN("vcl", "Fatal: " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("vcl", "Fatal: " << exceptionToString(ex));
         return 1;
     }
     catch (const std::exception& e)

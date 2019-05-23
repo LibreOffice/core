@@ -29,6 +29,7 @@
 #include <com/sun/star/chart2/XAxis.hpp>
 
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <rtl/math.hxx>
 
 using namespace ::com::sun::star;
@@ -235,9 +236,10 @@ void AxisProperties::initAxisPositioning( const uno::Reference< beans::XProperty
             m_eTickmarkPos = css::chart::ChartAxisMarkPosition_AT_LABELS;
         }
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
 }
 
@@ -325,9 +327,10 @@ void AxisProperties::init( bool bCartesian )
             m_aTickmarkPropertiesList.push_back( aTickmarkProperties );
         }
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
 }
 
@@ -376,9 +379,10 @@ void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
                     break;
             }
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
 }

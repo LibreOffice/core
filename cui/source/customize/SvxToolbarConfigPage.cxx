@@ -628,9 +628,10 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
                     GetSaveInData()->PersistChanges(
                         GetSaveInData()->GetImageManager() );
                 }
-                catch ( css::uno::Exception& e)
+                catch ( const css::uno::Exception&)
                 {
-                    SAL_WARN("cui.customize", "Error replacing image: " << e);
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN("cui.customize", "Error replacing image: " << exceptionToString(ex));
                 }
             }
         }
@@ -672,9 +673,10 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
             GetSaveInData()->PersistChanges(
                 GetSaveInData()->GetImageManager() );
         }
-        catch ( css::uno::Exception& e )
+        catch ( const css::uno::Exception& )
         {
-            SAL_WARN("cui.customize", "Error resetting image: " << e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("cui.customize", "Error resetting image: " << exceptionToString(ex));
         }
     }
     else if (rIdent == "restoreItem")
@@ -724,9 +726,10 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
 
             bNeedsApply = true;
         }
-        catch ( css::uno::Exception& e )
+        catch ( const css::uno::Exception& )
         {
-            SAL_WARN("cui.customize", "Error restoring image: " << e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("cui.customize", "Error restoring image: " << exceptionToString(ex));
         }
     }
     else

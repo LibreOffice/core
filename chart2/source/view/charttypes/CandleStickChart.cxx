@@ -26,6 +26,7 @@
 #include <DateHelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 
 namespace chart
@@ -124,9 +125,10 @@ void CandleStickChart::createShapes()
             PropertyMapper::getMultiPropertyListsFromValueMap( aBlackBox_Names, aBlackBox_Values, aBlackBox_Map );
         }
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
 
     //(@todo maybe different iteration for breaks in axis ?)

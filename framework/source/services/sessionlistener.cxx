@@ -24,6 +24,7 @@
 #include <protocols.h>
 #include <general.h>
 
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <unotools/tempfile.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -186,8 +187,9 @@ void SessionListener::StoreSession( bool bAsync )
         Sequence< PropertyValue > args(1);
         args[0] = PropertyValue("DispatchAsynchron",-1,makeAny(bAsync),PropertyState_DIRECT_VALUE);
         xDispatch->dispatch(aURL, args);
-    } catch (const css::uno::Exception& e) {
-        SAL_WARN("fwk.session",e);
+    } catch (const css::uno::Exception&) {
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("fwk.session", exceptionToString(ex));
         // save failed, but tell manager to go on if we haven't yet dispatched the request
         // in case of synchronous saving the notification is done by the caller
         if ( bAsync && m_rSessionManager.is() )
@@ -214,8 +216,9 @@ void SessionListener::QuitSessionQuietly()
         Sequence< PropertyValue > args(1);
         args[0] = PropertyValue("DispatchAsynchron",-1,makeAny(false),PropertyState_DIRECT_VALUE);
         xDispatch->dispatch(aURL, args);
-    } catch (const css::uno::Exception& e) {
-        SAL_WARN("fwk.session",e);
+    } catch (const css::uno::Exception&) {
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("fwk.session", exceptionToString(ex));
     }
 }
 
@@ -302,8 +305,9 @@ sal_Bool SAL_CALL SessionListener::doRestore()
         xDispatch->dispatch(aURL, args);
         m_bRestored = true;
 
-    } catch (const css::uno::Exception& e) {
-        SAL_WARN("fwk.session",e);
+    } catch (const css::uno::Exception&) {
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("fwk.session", exceptionToString(ex));
     }
 
     return m_bRestored;

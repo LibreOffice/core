@@ -67,6 +67,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <comphelper/configuration.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -1222,7 +1223,8 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
     {
         // we'll just leave the box in its default setting and won't
         // even give it event handler...
-        SAL_WARN("cui.options", "ignoring " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("cui.options", "ignoring " << exceptionToString(ex));
     }
 
     m_pWesternLanguageLB->SetLanguageList( SvxLanguageListFlags::WESTERN | SvxLanguageListFlags::ONLY_KNOWN, true, true );
@@ -1398,11 +1400,12 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             css::office::Quickstart::createAndSetVeto(xContext, false, false, false/*DisableVeto*/);
         }
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
         // we'll just leave the box in its default setting and won't
         // even give it event handler...
-        SAL_WARN("cui.options", "ignoring Exception \"" << e << "\"");
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("cui.options", "ignoring " << exceptionToString(ex));
     }
 
     LanguageTag aLanguageTag( pLangConfig->aSysLocaleOptions.GetLanguageTag());

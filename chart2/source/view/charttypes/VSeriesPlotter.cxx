@@ -492,9 +492,10 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 xPointProps->getPropertyValue( "TextRotation" ) >>= fRotationDegrees;
             }
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
 
         sal_Int32 nLineCountForSymbolsize = 0;
@@ -755,9 +756,10 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             xTextShape->setPosition( aNewTextPos );
         }
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
 
     return xTextShape;
@@ -845,9 +847,10 @@ double lcl_getErrorBarLogicLength(
             break;
         }
     }
-    catch( const uno::Exception & e )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
 
     return fResult;
@@ -1063,9 +1066,10 @@ void VSeriesPlotter::createErrorBar(
         uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D( xTarget, PolyToPointSequence( aPoly) );
         setMappedProperties( xShape, xErrorBarProperties, PropertyMapper::getPropertyNameMapForLineProperties() );
     }
-    catch( const uno::Exception & e )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
 
 }

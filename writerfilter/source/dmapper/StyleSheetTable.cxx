@@ -375,9 +375,10 @@ void StyleSheetTable_Impl::SetPropertiesToDefault(const uno::Reference<style::XS
             {
                 xPropertyState->setPropertyToDefault(aPropertyNames[i]);
             }
-            catch(const uno::Exception& rException)
+            catch(const uno::Exception&)
             {
-                SAL_INFO("writerfilter", "setPropertyToDefault(" << aPropertyNames[i] << ") failed: " << rException);
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_INFO("writerfilter", "setPropertyToDefault(" << aPropertyNames[i] << ") failed: " << exceptionToString(ex));
             }
         }
     }

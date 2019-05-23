@@ -2319,9 +2319,10 @@ void SfxMedium::Transfer_Impl()
                         aLockContent.lock();
                     }
                 }
-                catch ( css::uno::Exception & e )
+                catch ( css::uno::Exception & )
                 {
-                    SAL_WARN( "sfx.doc", "LOCK not working while re-issuing it. Exception message: " << e );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN( "sfx.doc", "LOCK not working while re-issuing it. " << exceptionToString(ex) );
                 }
             }
             catch ( const css::ucb::CommandAbortedException& )
@@ -3799,10 +3800,13 @@ bool SfxMedium::SignDocumentContentUsingCertificate(bool bHasValidDocumentSignat
         {
             xWriteableZipStor = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream( ZIP_STORAGE_FORMAT_STRING, pImpl->xStream );
         }
-        catch (const io::IOException& rException)
+        catch (const io::IOException&)
         {
             if (bODF)
-                SAL_WARN("sfx.doc", "ODF stream is not a zip storage: " << rException);
+            {
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("sfx.doc", "ODF stream is not a zip storage: " << exceptionToString(ex));
+            }
         }
 
         if ( !xWriteableZipStor.is() && bODF )
@@ -3924,10 +3928,13 @@ bool SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
         {
             xWriteableZipStor = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream( ZIP_STORAGE_FORMAT_STRING, pImpl->xStream );
         }
-        catch (const io::IOException& rException)
+        catch (const io::IOException&)
         {
             if (bODF)
-                SAL_WARN("sfx.doc", "ODF stream is not a zip storage: " << rException);
+            {
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("sfx.doc", "ODF stream is not a zip storage: " << exceptionToString(ex));
+            }
         }
 
         if ( !xWriteableZipStor.is() && bODF )

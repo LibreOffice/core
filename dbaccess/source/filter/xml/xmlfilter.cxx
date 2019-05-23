@@ -115,12 +115,11 @@ static ErrCode ReadThroughComponent(
     {
         xParser->parseStream( aParserInput );
     }
-    catch (const SAXParseException& r)
+    catch (const SAXParseException&)
     {
 #if OSL_DEBUG_LEVEL > 0
-        SAL_WARN("dbaccess", "SAX parse exception caught while importing: " << r << r.LineNumber << "," << r.ColumnNumber);
-#else
-        (void)r;
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("dbaccess", "SAX parse exception caught while importing: " << exceptionToString(ex));
 #endif
         return ErrCode(1);
     }

@@ -30,6 +30,7 @@
 #include <ExplicitCategoriesProvider.hxx>
 
 #include <rtl/math.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/color.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unoshtxt.hxx>
@@ -1747,9 +1748,10 @@ void VCartesianAxis::updatePositions()
                     {
                         xProp->setPropertyValue( "Transformation", aATransformation );
                     }
-                    catch( const uno::Exception& e )
+                    catch( const uno::Exception& )
                     {
-                        SAL_WARN("chart2", "Exception caught. " << e );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN("chart2", exceptionToString(ex) );
                     }
                 }
 

@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/textsearch.hxx>
@@ -269,12 +270,13 @@ void OO3ExtensionMigration::migrateExtension( const OUString& sSourceDir )
             sSourceDir, uno::Sequence<beans::NamedValue>(), "user",
             xAbortChannel, xCmdEnv );
     }
-    catch ( css::uno::Exception & e )
+    catch ( css::uno::Exception & )
     {
+        css::uno::Any ex( cppu::getCaughtException() );
         SAL_WARN(
             "desktop.migration",
             "Ignoring UNO Exception while migrating extension from <"
-            << sSourceDir << ">: " << e);
+            << sSourceDir << ">: " << exceptionToString(ex));
     }
 }
 

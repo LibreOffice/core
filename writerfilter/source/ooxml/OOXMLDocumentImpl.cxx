@@ -83,10 +83,11 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
     {
         pStream = OOXMLDocumentFactory::createStream(mpStream, nType);
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
+        css::uno::Any ex( cppu::getCaughtException() );
         SAL_INFO("writerfilter.ooxml", "resolveFastSubStream: exception while "
-                "resolving stream " << nType << " : " << e);
+                "resolving stream " << nType << " : " << exceptionToString(ex));
         return;
     }
     OOXMLStream::Pointer_t savedStream = mpStream;
@@ -137,10 +138,11 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStre
     {
         pStream = OOXMLDocumentFactory::createStream(mpStream, nType);
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
+        css::uno::Any ex( cppu::getCaughtException() );
         SAL_INFO("writerfilter.ooxml", "importSubStream: exception while "
-                "importing stream " << nType << " : " << e);
+                "importing stream " << nType << " : " << exceptionToString(ex));
         return xRet;
     }
 
@@ -153,10 +155,11 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStre
             uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(xContext));
             xRet = xDomBuilder->parse(xInputStream);
         }
-        catch (uno::Exception const& e)
+        catch (uno::Exception const&)
         {
+            css::uno::Any ex( cppu::getCaughtException() );
             SAL_INFO("writerfilter.ooxml", "importSubStream: exception while "
-                     "parsing stream " << nType << " : " << e);
+                     "parsing stream " << nType << " : " << exceptionToString(ex));
             return xRet;
         }
     }
@@ -616,10 +619,11 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
     {
         pStream = OOXMLDocumentFactory::createStream(mpStream, OOXMLStream::GLOSSARY);
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
+        css::uno::Any ex( cppu::getCaughtException() );
         SAL_INFO("writerfilter.ooxml", "resolveGlossaryStream: exception while "
-                 "createStream for glossary" << OOXMLStream::GLOSSARY << " : " << e);
+                 "createStream for glossary" << OOXMLStream::GLOSSARY << " : " << exceptionToString(ex));
         return;
     }
     uno::Reference<embed::XRelationshipAccess> xRelationshipAccess;
@@ -688,10 +692,11 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
                       uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(xContext));
                       xDom = xDomBuilder->parse(xInputStream);
                   }
-                  catch (uno::Exception const& e)
+                  catch (uno::Exception const&)
                   {
+                      css::uno::Any ex( cppu::getCaughtException() );
                       SAL_INFO("writerfilter.ooxml", "importSubStream: exception while "
-                      "parsing stream of Type" << nType << " : " << e);
+                                 "parsing stream of Type" << nType << " : " << exceptionToString(ex));
                       return;
                   }
 
@@ -772,10 +777,11 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
                         if (Stream)
                             resolveEmbeddingsStream(Stream);
                     }
-                    catch (uno::Exception const& e)
+                    catch (uno::Exception const&)
                     {
+                        css::uno::Any ex( cppu::getCaughtException() );
                         SAL_INFO("writerfilter.ooxml", "resolveEmbeddingsStream: can't find header/footer whilst "
-                               "resolving stream " << streamType << " : " << e);
+                               "resolving stream " << streamType << " : " << exceptionToString(ex));
                         return;
                     }
                 }

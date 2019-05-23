@@ -398,9 +398,10 @@ void lcl_correctSymbolSizeForBitmaps( chart2::Symbol& rSymbol )
                         bFoundSize = true;
                 }
             }
-            catch( const uno::Exception& e )
+            catch( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("chart2", exceptionToString(ex) );
             }
 
             if(!bFoundSize)
@@ -419,9 +420,10 @@ void lcl_correctSymbolSizeForBitmaps( chart2::Symbol& rSymbol )
         }
         rSymbol.Size = aSize;
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
 }
 

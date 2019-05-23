@@ -46,6 +46,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <unotools/configmgr.hxx>
 #include "xmlenums.hxx"
 
@@ -749,10 +750,11 @@ void XMLConfigItemMapIndexedContext::EndElement()
                             {
                                 xForbChars->setForbiddenCharacters( aLocale, aForbid );
                             }
-                            catch (uno::Exception const& e)
+                            catch (uno::Exception const&)
                             {
+                                css::uno::Any ex( cppu::getCaughtException() );
                                 SAL_WARN("xmloff.core",
-                                    "Exception while importing forbidden characters: " << e);
+                                    "Exception while importing forbidden characters: " << exceptionToString(ex));
                             }
                         }
                     }

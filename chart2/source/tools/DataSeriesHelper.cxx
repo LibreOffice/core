@@ -177,9 +177,10 @@ void lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( const Reference< chart2::
             }
         }
     }
-    catch(const uno::Exception &e)
+    catch(const uno::Exception &)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
 }
 
@@ -724,9 +725,10 @@ bool hasDataLabelsAtSeries( const Reference< chart2::XDataSeries >& xSeries )
                 bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName;
         }
     }
-    catch(const uno::Exception &e)
+    catch(const uno::Exception &)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
     return bRet;
 }
@@ -757,9 +759,10 @@ bool hasDataLabelsAtPoints( const Reference< chart2::XDataSeries >& xSeries )
             }
         }
     }
-    catch(const uno::Exception &e)
+    catch(const uno::Exception &)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
     return bRet;
 }
@@ -791,9 +794,10 @@ bool hasDataLabelAtPoint( const Reference< chart2::XDataSeries >& xSeries, sal_I
             }
         }
     }
-    catch(const uno::Exception &e)
+    catch(const uno::Exception &)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
     return bRet;
 }
@@ -820,9 +824,10 @@ void insertDataLabelToPoint( const Reference< beans::XPropertySet >& xPointProp 
             xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabel));
         }
     }
-    catch(const uno::Exception &e)
+    catch(const uno::Exception &)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
 }
 
@@ -840,9 +845,10 @@ void deleteDataLabelsFromPoint( const Reference< beans::XPropertySet >& xPointPr
             xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabel));
         }
     }
-    catch(const uno::Exception &e)
+    catch(const uno::Exception &)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
 }
 

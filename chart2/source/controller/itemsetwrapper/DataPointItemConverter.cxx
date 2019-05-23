@@ -43,6 +43,7 @@
 #include <svl/stritem.hxx>
 #include <editeng/brushitem.hxx>
 #include <svl/ilstitem.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/graph.hxx>
 
 #include <svx/tabline.hxx>
@@ -362,9 +363,10 @@ bool DataPointItemConverter::ApplySpecialItem(
                     bChanged = true;
                 }
             }
-            catch( const uno::Exception& e )
+            catch( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("chart2", exceptionToString(ex) );
             }
         }
         break;
@@ -393,9 +395,10 @@ bool DataPointItemConverter::ApplySpecialItem(
                     bChanged = true;
                 }
             }
-            catch( const uno::Exception& e )
+            catch( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("chart2", exceptionToString(ex) );
             }
         }
         break;
@@ -428,9 +431,10 @@ bool DataPointItemConverter::ApplySpecialItem(
                     bChanged = true;
                 }
             }
-            catch( const uno::Exception& e )
+            catch( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("chart2", exceptionToString(ex) );
             }
         }
         break;
@@ -612,9 +616,10 @@ void DataPointItemConverter::FillSpecialItem(
                 GetPropertySet()->getPropertyValue( "LabelSeparator" ) >>= aValue;
                 rOutItemSet.Put( SfxStringItem( nWhichId, aValue ));
             }
-            catch( const uno::Exception& e )
+            catch( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("chart2", exceptionToString(ex) );
             }
         }
         break;
@@ -627,9 +632,10 @@ void DataPointItemConverter::FillSpecialItem(
                 GetPropertySet()->getPropertyValue( "TextWordWrap" ) >>= bValue;
                 rOutItemSet.Put( SfxBoolItem( nWhichId, bValue ));
             }
-            catch( const uno::Exception& e )
+            catch( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("chart2", exceptionToString(ex) );
             }
         }
         break;
@@ -644,9 +650,10 @@ void DataPointItemConverter::FillSpecialItem(
                 else if( m_aAvailableLabelPlacements.getLength() )
                     rOutItemSet.Put( SfxInt32Item( nWhichId, m_aAvailableLabelPlacements[0] ));
             }
-            catch( const uno::Exception& e )
+            catch( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("chart2", exceptionToString(ex) );
             }
         }
         break;

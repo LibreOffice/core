@@ -36,6 +36,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <svtools/unitconv.hxx>
 #include <sax/fastattribs.hxx>
+#include <tools/diagnose_ex.h>
 #include <i18nlangtag/languagetag.hxx>
 
 #include <cstdio>
@@ -4265,10 +4266,11 @@ void DrawingML::writeDiagramRels(const uno::Sequence<uno::Sequence<uno::Any>>& x
         {
             comphelper::OStorageHelper::CopyInputToOutput(dataImagebin, xBinOutStream);
         }
-        catch (const uno::Exception& rException)
+        catch (const uno::Exception&)
         {
+            css::uno::Any ex( cppu::getCaughtException() );
             SAL_WARN("oox.drawingml", "DrawingML::writeDiagramRels Failed to copy grabbaged Image: "
-                     << rException);
+                     << exceptionToString(ex));
         }
         dataImagebin->closeInput();
     }

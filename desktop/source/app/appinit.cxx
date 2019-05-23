@@ -44,6 +44,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <rtl/instance.hxx>
 #include <comphelper/processfactory.hxx>
@@ -161,9 +162,10 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
             }
             catch (const css::uno::Exception& e)
             {
+                css::uno::Any ex( cppu::getCaughtException() );
                 // no error handling needed...
                 // acceptor just won't come up
-                SAL_WARN( "desktop.app", "Acceptor could not be created: " << e);
+                SAL_WARN( "desktop.app", "Acceptor could not be created: " << exceptionToString(ex));
             }
         }
         else

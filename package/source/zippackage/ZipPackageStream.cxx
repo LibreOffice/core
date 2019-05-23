@@ -944,8 +944,9 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream()
         OSL_FAIL( "ZipException thrown" );//rException.Message);
         return uno::Reference < io::XInputStream > ();
     }
-    catch ( Exception &ex )
+    catch ( const Exception & )
     {
+        css::uno::Any ex( cppu::getCaughtException() );
         SAL_WARN( "package", "Exception is thrown during stream wrapping!" << ex);
         return uno::Reference < io::XInputStream > ();
     }

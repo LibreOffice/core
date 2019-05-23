@@ -35,6 +35,7 @@
 #include "util.hxx"
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <comphelper/sequence.hxx>
 
 #ifdef DBG_UTIL
@@ -913,9 +914,10 @@ static bool lcl_emptyRow(std::vector<RowSequence_t>& rTableRanges, sal_Int32 nRo
             if (xTextRangeCompare->compareRegionStarts(rRowSeq[nCell][0], rRowSeq[nCell][1]) != 0)
                 return false;
     }
-    catch (const lang::IllegalArgumentException& e)
+    catch (const lang::IllegalArgumentException&)
     {
-        SAL_WARN( "writerfilter.dmapper", "compareRegionStarts() failed: " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "writerfilter.dmapper", "compareRegionStarts() failed: " << exceptionToString(ex));
         return false;
     }
     return true;
@@ -1102,18 +1104,20 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                 }
             }
         }
-        catch ( const lang::IllegalArgumentException &e )
+        catch ( const lang::IllegalArgumentException & )
         {
+            css::uno::Any ex( cppu::getCaughtException() );
             SAL_INFO("writerfilter.dmapper",
-                    "Conversion to table error: " << e);
+                    "Conversion to table error: " << exceptionToString(ex));
 #ifdef DBG_UTIL
             TagLogger::getInstance().chars(std::string("failed to import table!"));
 #endif
         }
-        catch ( const uno::Exception &e )
+        catch ( const uno::Exception & )
         {
+            css::uno::Any ex( cppu::getCaughtException() );
             SAL_INFO("writerfilter.dmapper",
-                    "Exception during table creation: " << e);
+                    "Exception during table creation: " << exceptionToString(ex));
         }
 
         // If we have a table with a start and an end position, we should make it a floating one.

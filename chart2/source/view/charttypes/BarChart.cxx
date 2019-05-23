@@ -37,6 +37,7 @@
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <unordered_set>
 
 namespace chart
@@ -61,9 +62,10 @@ BarChart::BarChart( const uno::Reference<XChartType>& xChartTypeModel
             m_xChartTypeModelProps->getPropertyValue( "GapwidthSequence" ) >>= m_aGapwidthSequence;
         }
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
 }
 
@@ -313,9 +315,10 @@ uno::Reference< drawing::XShape > BarChart::createDataPoint3D_Bar(
                 bRoundedEdges = false;
         }
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
 
     uno::Reference< drawing::XShape > xShape;
@@ -696,9 +699,10 @@ void BarChart::createShapes()
                     {
                         xDataPointProperties->getPropertyValue( "Geometry3D") >>= nGeometry3D;
                     }
-                    catch( const uno::Exception& e )
+                    catch( const uno::Exception& )
                     {
-                        SAL_WARN("chart2", "Exception caught. " << e );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN("chart2", exceptionToString(ex) );
                     }
 
                     //@todo iterate through all subsystems to create partial points

@@ -19,6 +19,7 @@
 
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <comphelper/base64.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -699,9 +700,10 @@ void XMLTextFrameContext_Impl::Create()
         {
             xTextImportHelper->InsertTextContent(xTxtCntnt);
         }
-        catch (lang::IllegalArgumentException const& e)
+        catch (lang::IllegalArgumentException const&)
         {
-            SAL_WARN("xmloff.text", "Cannot import part of the text - probably an image in the text frame? " << e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("xmloff.text", "Cannot import part of the text - probably an image in the text frame? " << exceptionToString(ex));
             return;
         }
     }
@@ -1294,10 +1296,11 @@ void XMLTextFrameContext_Impl::SetName()
             {
                 xNamed->setName(m_sOrigName);
             }
-            catch (uno::Exception const& e)
+            catch (uno::Exception const&)
             {   // fdo#71698 document contains 2 frames with same draw:name
+                css::uno::Any ex( cppu::getCaughtException() );
                 SAL_INFO("xmloff.text", "SetName(): exception setting \""
-                        << m_sOrigName << "\": " << e);
+                        << m_sOrigName << "\": " << exceptionToString(ex));
             }
         }
     }

@@ -36,6 +36,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/color.hxx>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
@@ -218,9 +219,10 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
                     m_PropertyMap.insert(std::make_pair(aRole, aSequence));
                 }
             }
-            catch( const uno::Exception& e )
+            catch( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("chart2", exceptionToString(ex) );
             }
         }
     }
@@ -254,9 +256,10 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
             if(m_nAxisIndex<0)
                 m_nAxisIndex=0;
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
 }
@@ -627,9 +630,10 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
 
         OSL_FAIL("no label placement supported");
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
     return nLabelPlacement;
 }
@@ -772,9 +776,10 @@ static std::unique_ptr<Symbol> getSymbolPropertiesFromPropertySet( const uno::Re
         else
             apSymbolProps.reset();
     }
-    catch(const uno::Exception &e)
+    catch(const uno::Exception &)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
     return apSymbolProps;
 }
@@ -862,9 +867,10 @@ bool VDataSeries::hasPointOwnColor( sal_Int32 index ) const
         uno::Reference< beans::XPropertyState > xPointState( getPropertiesOfPoint(index), uno::UNO_QUERY_THROW );
         return (xPointState->getPropertyState("Color") != beans::PropertyState_DEFAULT_VALUE );
     }
-    catch(const uno::Exception& e)
+    catch(const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
     return false;
 }
@@ -911,9 +917,10 @@ static std::unique_ptr<DataPointLabel> getDataPointLabelFromPropertySet( const u
         if( !(xProp->getPropertyValue(CHART_UNONAME_LABEL) >>= *apLabel) )
             apLabel.reset();
     }
-    catch(const uno::Exception &e)
+    catch(const uno::Exception &)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
     return apLabel;
 }

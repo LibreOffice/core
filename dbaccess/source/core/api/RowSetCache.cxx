@@ -135,9 +135,10 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                             ::comphelper::getINT32(xProp->getPropertyValue(PROPERTY_RESULTSETTYPE)) != ResultSetType::FORWARD_ONLY)
             _xRs->beforeFirst();
     }
-    catch(const SQLException& e)
+    catch(const SQLException&)
     {
-        SAL_WARN("dbaccess.core", "ORowSetCache: " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("dbaccess.core", "ORowSetCache: " << exceptionToString(ex));
     }
 
     // check if all keys of the updateable table are fetched
@@ -181,9 +182,10 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                     m_aKeyColumns = pCursor->getJoinedKeyColumns();
                     return;
                 }
-                catch (const Exception& e)
+                catch (const Exception&)
                 {
-                    SAL_WARN("dbaccess.core", "ORowSetCache: " << e);
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN("dbaccess.core", "ORowSetCache: " << exceptionToString(ex));
                 }
                 m_xCacheSet.clear();
             }
@@ -221,9 +223,10 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 }
             }
         }
-        catch (Exception const& e)
+        catch (Exception const&)
         {
-            SAL_WARN("dbaccess.core", "ORowSetCache: " << e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("dbaccess.core", "ORowSetCache: " << exceptionToString(ex));
         }
     }
 
@@ -249,9 +252,10 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 }
             }
         }
-        catch (const SQLException& e)
+        catch (const SQLException&)
         {
-            SAL_WARN("dbaccess.core", "ORowSetCache: " << e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("dbaccess.core", "ORowSetCache: " << exceptionToString(ex));
             bNeedKeySet = true;
         }
 
@@ -328,9 +332,10 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 if(bNoInsert)
                     m_nPrivileges |= ~Privilege::INSERT; // remove the insert privilege
             }
-            catch (const SQLException& e)
+            catch (const SQLException&)
             {
-                SAL_WARN("dbaccess.core", "ORowSetCache: " << e);
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("dbaccess.core", "ORowSetCache: " << exceptionToString(ex));
                 // we couldn't create a keyset here so we have to create a static cache
                 m_xCacheSet = new OStaticSet(i_nMaxRows);
                 m_xCacheSet->construct(_xRs,i_sRowSetFilter);

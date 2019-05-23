@@ -816,9 +816,10 @@ void SvxPathTabPage::SetPathList(
         pImpl->m_xPathSettings->setPropertyValue(
             sCfgName + POSTFIX_WRITABLE, aValue);
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-        SAL_WARN("cui.options", "caught: " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("cui.options", "caught: " << exceptionToString(ex));
     }
 }
 

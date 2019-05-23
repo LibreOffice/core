@@ -1887,8 +1887,9 @@ namespace
                 {
                     try {
                         xProp->getPropertyValue( _sPropName ) >>= sRetText;
-                    } catch (UnknownPropertyException const& e) {
-                        SAL_WARN("svx.fmcomp", e);
+                    } catch (UnknownPropertyException const&) {
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN("svx.fmcomp", exceptionToString(ex));
                     }
                 }
             }

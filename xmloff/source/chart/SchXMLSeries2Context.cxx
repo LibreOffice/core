@@ -861,9 +861,10 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
                     }
                 }
             }
-            catch( const uno::Exception & rEx )
+            catch( const uno::Exception & )
             {
-                SAL_INFO("xmloff.chart", "Exception caught during setting styles to series: " << rEx );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_INFO("xmloff.chart", "Exception caught during setting styles to series: " << exceptionToString(ex) );
             }
         }
     }
@@ -927,9 +928,10 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
                 xRegCurveCont->addRegressionCurve( xRegCurve );
             }
         }
-        catch( const uno::Exception& rEx )
+        catch( const uno::Exception& )
         {
-            SAL_INFO("xmloff.chart", "Exception caught during setting styles to series: " << rEx );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_INFO("xmloff.chart", "Exception caught during setting styles to series: " << exceptionToString(ex) );
         }
 
     }
@@ -996,9 +998,10 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
                     }
                 }
             }
-            catch( const uno::Exception & rEx )
+            catch( const uno::Exception & )
             {
-                SAL_INFO("xmloff.chart", "Exception caught during setting styles to series: " << rEx );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_INFO("xmloff.chart", "Exception caught during setting styles to series: " << exceptionToString(ex) );
             }
         }
     }
@@ -1091,9 +1094,10 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                         lcl_resetSymbolSizeForPointsIfNecessary( xPointProp, rImport, pPropStyleContext, pStylesCtxt );
                 }
             }
-            catch( const uno::Exception & rEx )
+            catch( const uno::Exception & )
             {
-                SAL_INFO("xmloff.chart", "Exception caught during setting styles to data points: " << rEx );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_INFO("xmloff.chart", "Exception caught during setting styles to data points: " << exceptionToString(ex) );
             }
         }
     }   // styles iterator

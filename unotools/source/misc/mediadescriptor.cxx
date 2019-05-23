@@ -626,16 +626,16 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(const css::ucb::ContentCreationException& e)
+    catch(const css::ucb::ContentCreationException&)
         {
-            SAL_WARN("unotools.misc", "caught \"" << e
-                    << "\" while opening <" << sURL << ">");
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("unotools.misc", "url: '" << sURL << "' " << exceptionToString(ex));
             return false; // TODO error handling
         }
-    catch(const css::uno::Exception& e)
+    catch(const css::uno::Exception&)
         {
-            SAL_WARN("unotools.misc", "caught \"" << e << "\" while opening <"
-                    << sURL << ">");
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("unotools.misc", "url: '" << sURL << "' " << exceptionToString(ex));
             return false; // TODO error handling
         }
 
@@ -666,8 +666,9 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
-        catch(const css::uno::Exception& e)
+        catch(const css::uno::Exception&)
             {
+                css::uno::Any ex( cppu::getCaughtException() );
                 // ignore exception, if reason was problem reasoned on
                 // open it in WRITEABLE mode! Then we try it READONLY
                 // later a second time.
@@ -675,8 +676,7 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
                 // break this method.
                 if (!pInteraction->wasWriteError() || bModeRequestedExplicitly)
                 {
-                    SAL_WARN("unotools.misc", "caught \"" << e
-                            << "\" while opening <" << sURL << ">");
+                    SAL_WARN("unotools.misc","url: '" << sURL << "' " << exceptionToString(ex));
                     // If the protocol is webdav, then we need to treat the stream as readonly, even if the
                     // operation was requested as read/write explicitly (the WebDAV UCB implementation is monodirectional
                     // read or write not both at the same time).
@@ -737,11 +737,10 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
         {
             throw;
         }
-        catch(const css::uno::Exception& e)
+        catch(const css::uno::Exception&)
         {
-            SAL_INFO(
-                "unotools.misc",
-                "caught " << e << " while opening <" << sURL << ">");
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_INFO("unotools.misc","url: '" << sURL << "' " << exceptionToString(ex));
             return false;
         }
     }

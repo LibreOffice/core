@@ -27,6 +27,7 @@
 #include "SchXMLTools.hxx"
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/mediadescriptor.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlement.hxx>
@@ -165,9 +166,10 @@ void lcl_removeEmptyChartTypeGroups( const uno::Reference< chart2::XChartDocumen
             }
         }
     }
-    catch(const uno::Exception& ex)
+    catch(const uno::Exception&)
     {
-        SAL_INFO("xmloff.chart", "Exception caught while removing empty chart types: " << ex);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_INFO("xmloff.chart", "Exception caught while removing empty chart types: " << exceptionToString(ex));
     }
 }
 
@@ -301,9 +303,10 @@ static void lcl_setDataProvider(uno::Reference<chart2::XChartDocument> const & x
                 xChartDoc->createInternalDataProvider(false);
         }
     }
-    catch (const uno::Exception & rEx)
+    catch (const uno::Exception &)
     {
-        SAL_INFO("xmloff.chart", "SchXMLChartContext::StartElement(): Exception caught: " << rEx);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_INFO("xmloff.chart", "SchXMLChartContext::StartElement(): " << exceptionToString(ex));
     }
 }
 

@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include "XmlFilterAdaptor.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -185,10 +186,11 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
     }
     catch( const Exception& e )
     {
+        css::uno::Any ex( cppu::getCaughtException() );
         if (xStatusIndicator.is())
                xStatusIndicator->end();
 
-        SAL_WARN("filter.xmlfa", "XmlFilterAdaptor: " << e);
+        SAL_WARN("filter.xmlfa", "XmlFilterAdaptor: " << exceptionToString(ex));
         return false;
     }
     if (xStatusIndicator.is()) {
@@ -299,7 +301,8 @@ bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& 
     }
     catch (const Exception& e)
     {
-        SAL_WARN("filter.xmlfa", "XmlFilterAdaptor: " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("filter.xmlfa", "XmlFilterAdaptor: " << exceptionToString(ex));
         if (xStatusIndicator.is())
             xStatusIndicator->end();
         return false;

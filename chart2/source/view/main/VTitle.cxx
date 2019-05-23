@@ -24,6 +24,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -91,9 +92,10 @@ void VTitle::changePosition( const awt::Point& rPos )
         aM.translate( m_nXPos, m_nYPos);
         xShapeProp->setPropertyValue( "Transformation", uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ) );
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
 }
 
@@ -121,7 +123,8 @@ void VTitle::createShapes(
     }
     catch( const uno::Exception& e )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
 
     ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);

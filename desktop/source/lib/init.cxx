@@ -1714,7 +1714,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
     catch (const uno::Exception& exception)
     {
         pLib->maLastExceptionMsg = exception.Message;
-        SAL_INFO("lok", "Document can't be loaded: " << exception);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_INFO("lok", "Document can't be loaded: " << exceptionToString(ex));
     }
 
     return nullptr;

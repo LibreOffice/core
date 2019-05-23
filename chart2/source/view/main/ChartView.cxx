@@ -489,9 +489,10 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
                 xAxisProp->getPropertyValue("Show") >>= bSecondaryYaxisVisible;
             }
         }
-        catch (const lang::IndexOutOfBoundsException& e)
+        catch (const lang::IndexOutOfBoundsException&)
         {
-            SAL_WARN("chart2", "Exception caught. " << e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex));
         }
         //iterate through all chart types in the current coordinate system
         uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
@@ -763,9 +764,10 @@ void SeriesPlotterContainer::setNumberFormatsFromAxes()
                             }
                         }
                     }
-                    catch( const lang::IndexOutOfBoundsException& e )
+                    catch( const lang::IndexOutOfBoundsException& )
                     {
-                        SAL_WARN("chart2", "Exception caught. " << e );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN("chart2", exceptionToString(ex) );
                     }
                 }
             }
@@ -1871,9 +1873,10 @@ bool lcl_getPropertySwapXAndYAxis( const uno::Reference< XDiagram >& xDiagram )
             {
                 xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndY;
             }
-            catch( const uno::Exception& e )
+            catch( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("chart2", exceptionToString(ex) );
             }
         }
     }
@@ -2455,9 +2458,10 @@ void ChartView::impl_refreshAddIn()
                 xAddIn->refresh();
         }
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
 }
 

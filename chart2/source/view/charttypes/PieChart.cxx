@@ -35,6 +35,7 @@
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>
 
 #include <memory>
@@ -191,9 +192,10 @@ PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel
                 m_pPosHelper->m_fRingDistance = 0.1;
         }
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
 }
 
@@ -647,9 +649,10 @@ void PieChart::createShapes()
                 {
                     xPointProperties->getPropertyValue( "Offset") >>= aParam.mfExplodePercentage;
                 }
-                catch( const uno::Exception& e )
+                catch( const uno::Exception& )
                 {
-                    SAL_WARN("chart2", "Exception caught. " << e );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN("chart2", exceptionToString(ex) );
                 }
 
                 ///see notes for `PolarPlottingPositionHelper` methods
@@ -719,9 +722,10 @@ void PieChart::createShapes()
                     ShapeFactory::setShapeName( xPointShape
                                 , ObjectIdentifier::createPointCID( aPointCIDStub, nPointIndex ) );
                 }
-                catch( const uno::Exception& e )
+                catch( const uno::Exception& )
                 {
-                    SAL_WARN("chart2", "Exception caught. " << e );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN("chart2", exceptionToString(ex) );
                 }
             }//next series in x slot (next y slot)
         }//next category

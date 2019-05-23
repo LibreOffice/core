@@ -377,9 +377,10 @@ uno::Reference<drawing::XShape>
                     bRounded = false;
             }
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
     uno::Reference<drawing::XShape> xShape = impl_createCube( xTarget, rPosition, rSize, nRotateZAngleHundredthDegree, bRounded );
@@ -443,9 +444,10 @@ uno::Reference<drawing::XShape>
 
             xMultiPropertySet->setPropertyValues(aPropertyNames, aPropertyValues);
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
     return xShape;
@@ -691,9 +693,10 @@ uno::Reference<drawing::XShape>
 
             xMultiPropertySet->setPropertyValues(aPropertyNames, aPropertyValues);
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
     return xShape;
@@ -902,9 +905,10 @@ uno::Reference< drawing::XShape >
 
             xProp->setPropertyValue( "PolyPolygonBezier", uno::Any( aCoords ) );
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
 
@@ -985,9 +989,10 @@ uno::Reference< drawing::XShape >
             xProp->setPropertyValue( UNO_NAME_3D_TEXTURE_PROJ_Y
                 , uno::Any( drawing::TextureProjectionMode_OBJECTSPECIFIC ) );
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
     return xShape;
@@ -1047,9 +1052,10 @@ uno::Reference< drawing::XShape >
                 PropertyMapper::setMappedProperties(xPropertySet, xSourceProp, rPropertyNameMap);
             }
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
     return xShape;
@@ -1106,9 +1112,10 @@ uno::Reference< drawing::XShape >
             }
             xMultiPropertySet->setPropertyValues(aPropertyNames, aPropertyValues);
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
     return xShape;
@@ -1146,9 +1153,10 @@ uno::Reference< drawing::XShape >
             xProp->setPropertyValue( UNO_NAME_MISC_OBJ_ZORDER
                 , uno::Any( sal_Int32(0) ) );
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
     return xShape;
@@ -1695,9 +1703,10 @@ uno::Reference< drawing::XShape >
             xProp->setPropertyValue( UNO_NAME_FILLCOLOR
                 , uno::Any( nFillColor ) );
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
     return xShape;
@@ -1732,9 +1741,10 @@ uno::Reference< drawing::XShape >
         xShape->setPosition( Position3DToAWTPoint( aCenterPosition ));
         xShape->setSize( Direction3DToAWTSize( rSize ));
     }
-    catch( const uno::Exception & e )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
     OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
@@ -1744,9 +1754,10 @@ uno::Reference< drawing::XShape >
         {
             xProp->setPropertyValue( "Graphic", uno::Any( xGraphic ));
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
     return xShape;
@@ -1780,9 +1791,10 @@ uno::Reference< drawing::XShapes >
             uno::Reference<drawing::XShapes>( xShape, uno::UNO_QUERY );
         return xShapes;
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
     return nullptr;
 }
@@ -1817,9 +1829,10 @@ uno::Reference< drawing::XShapes >
                     xProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
                         , uno::Any(B3DHomMatrixToHomogenMatrix(aM)) );
                 }
-                catch( const uno::Exception& e )
+                catch( const uno::Exception& )
                 {
-                    SAL_WARN("chart2", "Exception caught. " << e );
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN("chart2", exceptionToString(ex) );
                 }
             }
         }
@@ -1833,9 +1846,10 @@ uno::Reference< drawing::XShapes >
                 uno::Reference<drawing::XShapes>( xShape, uno::UNO_QUERY );
         return xShapes;
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
     return nullptr;
 }
@@ -1863,9 +1877,10 @@ uno::Reference< drawing::XShape >
         xShape->setPosition( Position3DToAWTPoint( aCenterPosition ));
         xShape->setSize( Direction3DToAWTSize( rSize ));
     }
-    catch( const uno::Exception & e )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
 
     //set properties
@@ -1877,9 +1892,10 @@ uno::Reference< drawing::XShape >
         {
             xProp->setPropertyValue( UNO_NAME_CIRCKIND, uno::Any( drawing::CircleKind_FULL ) );
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
     return xShape;
@@ -1967,9 +1983,10 @@ uno::Reference< drawing::XShape >
             }
             xMultiPropertySet->setPropertyValues(aPropertyNames, aPropertyValues);
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
     return xShape;
@@ -2031,9 +2048,10 @@ uno::Reference< drawing::XShape >
                         , pLineProperties->DashName );
             }
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
     return xShape;
@@ -2158,9 +2176,10 @@ uno::Reference< drawing::XShape >
         {
             xProp->setPropertyValue( "Transformation", rATransformation );
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
     return xShape;
@@ -2261,9 +2280,10 @@ uno::Reference< drawing::XShape >
             {
                 xProp->setPropertyValue( "Transformation", rATransformation );
             }
-            catch( const uno::Exception& e )
+            catch( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("chart2", exceptionToString(ex) );
             }
         }
     }
@@ -2355,9 +2375,10 @@ uno::Reference< drawing::XShape >
             {
                 xProp->setPropertyValue( "Transformation", rATransformation );
             }
-            catch( const uno::Exception& e )
+            catch( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("chart2", exceptionToString(ex) );
             }
         }
     }
@@ -2425,9 +2446,10 @@ uno::Reference< drawing::XShape >
         {
             xTextProperties->getPropertyValue( "StackCharacters" ) >>= bStackCharacters;
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
 
         if(bStackCharacters)
@@ -2506,9 +2528,10 @@ uno::Reference< drawing::XShape >
         aM.translate( nXPos, nYPos );
         xShapeProp->setPropertyValue( "Transformation", uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ) );
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
     return xShape;
 }
@@ -2554,9 +2577,10 @@ void ShapeFactory::makeShapeInvisible( const uno::Reference< drawing::XShape >& 
             xShapeProp->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_NONE ));
             xShapeProp->setPropertyValue( "FillStyle", uno::Any( drawing::FillStyle_NONE ));
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
 }
@@ -2577,9 +2601,10 @@ void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
             xProp->setPropertyValue( UNO_NAME_MISC_OBJ_NAME
                 , uno::Any( rName ) );
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
 }
@@ -2596,9 +2621,10 @@ OUString ShapeFactory::getShapeName( const uno::Reference< drawing::XShape >& xS
         {
             xProp->getPropertyValue( UNO_NAME_MISC_OBJ_NAME ) >>= aRet;
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("chart2", exceptionToString(ex) );
         }
     }
 

@@ -150,9 +150,10 @@ void SvxScriptOrgDialog::Init( const OUString& language  )
             children = rootNode->getChildNodes();
         }
     }
-    catch( Exception& e )
+    catch( const Exception& )
     {
-        SAL_WARN("cui.dialogs", "Exception getting root browse node from factory: " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("cui.dialogs", "Exception getting root browse node from factory: " << exceptionToString(ex) );
         // TODO exception handling
     }
 

@@ -27,6 +27,7 @@
 
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace framework{
 
@@ -217,9 +218,10 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     // ignore all errors - inclusive runtime errors!
     // E.g. a script based service (written in Python) could not be executed
     // because it contains syntax errors, which was detected at runtime...
-    catch(const css::uno::Exception& e)
+    catch(const css::uno::Exception&)
     {
-        SAL_WARN("fwk.dispatch", "ignored " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("fwk.dispatch", "ignored " << exceptionToString(ex));
         xService.clear();
     }
 

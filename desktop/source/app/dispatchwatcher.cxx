@@ -55,6 +55,7 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
 #include <comphelper/sequence.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
@@ -446,12 +447,13 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                     else
                         xDispatcher->dispatch( aURL, aArgs2 );
                 }
-                catch (const css::uno::Exception& e)
+                catch (const css::uno::Exception&)
                 {
+                    css::uno::Any ex( cppu::getCaughtException() );
                     SAL_WARN(
                         "desktop.app",
                         "Desktop::OpenDefault() ignoring Exception while"
-                            " calling XNotifyingDispatch: " << e);
+                            " calling XNotifyingDispatch: " << exceptionToString(ex));
                 }
             }
         }
@@ -503,19 +505,21 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                              xDesktop, aName, aTarget, comphelper::containerToSequence(aArgs)),
                          UNO_QUERY);
             }
-            catch (const css::lang::IllegalArgumentException& iae)
+            catch (const css::lang::IllegalArgumentException&)
             {
+                css::uno::Any ex( cppu::getCaughtException() );
                 SAL_WARN(
                     "desktop.app",
                     "Dispatchwatcher IllegalArgumentException while calling"
-                        " loadComponentFromURL: " << iae);
+                        " loadComponentFromURL: " << exceptionToString(ex));
             }
-            catch (const css::io::IOException& ioe)
+            catch (const css::io::IOException&)
             {
+                css::uno::Any ex( cppu::getCaughtException() );
                 SAL_WARN(
                     "desktop.app",
                     "Dispatchwatcher IOException while calling"
-                        " loadComponentFromURL: " << ioe);
+                        " loadComponentFromURL: " << exceptionToString(ex));
             }
             if ( aDispatchRequest.aRequestType == REQUEST_OPEN ||
                  aDispatchRequest.aRequestType == REQUEST_VIEW ||

@@ -976,9 +976,10 @@ void ChartController::executeDispatch_LOKPieSegmentDragging( int nOffset )
                 xPointProperties->setPropertyValue( "Offset", uno::Any( nOffset / 100.0 ) );
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN( "chart2", "Exception caught. " << ex );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN( "chart2", exceptionToString(ex) );
     }
 }
 

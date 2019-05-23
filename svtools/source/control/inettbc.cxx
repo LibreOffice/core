@@ -23,6 +23,7 @@
 #endif
 
 #include <svtools/inettbc.hxx>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/Property.hpp>
@@ -966,8 +967,9 @@ void SvtMatchContext_Impl::doExecute()
                                 if (proc2.is()) {
                                     try {
                                         proc2->releaseCommandIdentifier(id);
-                                    } catch (css::uno::RuntimeException & e) {
-                                        SAL_WARN("svtools.control", "ignoring " << e);
+                                    } catch (css::uno::RuntimeException &) {
+                                        css::uno::Any ex( cppu::getCaughtException() );
+                                        SAL_WARN("svtools.control", "ignoring " << exceptionToString(ex));
                                     }
                                 }
                                 throw;
@@ -990,8 +992,9 @@ void SvtMatchContext_Impl::doExecute()
                             css::uno::Reference< css::sdbc::XRow > row(
                                 res, css::uno::UNO_QUERY_THROW);
                             folder = row->getBoolean(1) && !row->wasNull();
-                        } catch (css::uno::Exception & e) {
-                            SAL_WARN("svtools.control", "ignoring " << e);
+                        } catch (css::uno::Exception &) {
+                            css::uno::Any ex( cppu::getCaughtException() );
+                            SAL_WARN("svtools.control", "ignoring " << exceptionToString(ex));
                             return;
                         }
                     }
@@ -1214,8 +1217,9 @@ void MatchContext_Impl::doExecute()
                                 if (proc2.is()) {
                                     try {
                                         proc2->releaseCommandIdentifier(id);
-                                    } catch (css::uno::RuntimeException & e) {
-                                        SAL_WARN("svtools.control", "ignoring " << e);
+                                    } catch (css::uno::RuntimeException &) {
+                                        css::uno::Any ex( cppu::getCaughtException() );
+                                        SAL_WARN("svtools.control", "ignoring " << exceptionToString(ex));
                                     }
                                 }
                                 throw;
@@ -1238,8 +1242,9 @@ void MatchContext_Impl::doExecute()
                             css::uno::Reference< css::sdbc::XRow > row(
                                 res, css::uno::UNO_QUERY_THROW);
                             folder = row->getBoolean(1) && !row->wasNull();
-                        } catch (css::uno::Exception & e) {
-                            SAL_WARN("svtools.control", "ignoring " << e);
+                        } catch (css::uno::Exception &) {
+                            css::uno::Any ex( cppu::getCaughtException() );
+                            SAL_WARN("svtools.control", "ignoring " << exceptionToString(ex));
                             return;
                         }
                     }

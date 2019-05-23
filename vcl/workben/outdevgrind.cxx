@@ -19,6 +19,7 @@
 
 #include <sal/main.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/extendapplicationenvironment.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
@@ -740,9 +741,10 @@ SAL_IMPLEMENT_MAIN()
 
         DeInitVCL();
     }
-    catch (const css::uno::Exception& e)
+    catch (const css::uno::Exception&)
     {
-        SAL_WARN("vcl.app", "Fatal: " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("vcl.app", "Fatal: " << exceptionToString(ex));
         return EXIT_FAILURE;
     }
     catch (const std::exception& e)

@@ -20,6 +20,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <svtools/langhelp.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
@@ -97,9 +98,10 @@ public:
             css::uno::Reference<XSyncDbusSessionHelper> xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
             xSyncDbusSessionHelper->InstallPackageNames(comphelper::containerToSequence(m_aPackages), OUString());
         }
-        catch (const css::uno::Exception& e)
+        catch (const css::uno::Exception&)
         {
-            SAL_INFO("svl", "trying to install a LibreOffice langpack, caught " << e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_INFO("svl", "trying to install a LibreOffice langpack, caught " << exceptionToString(ex));
         }
         xLangpackInstaller.reset();
     }

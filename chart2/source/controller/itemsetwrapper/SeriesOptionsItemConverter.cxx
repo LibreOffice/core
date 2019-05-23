@@ -324,9 +324,10 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                             bChanged = true;
                         }
                     }
-                    catch( const uno::Exception& e )
+                    catch( const uno::Exception& )
                     {
-                        SAL_WARN("chart2", "Exception caught. " << e );
+                        css::uno::Any ex( cppu::getCaughtException() );
+                        SAL_WARN("chart2", exceptionToString(ex) );
                     }
                 }
             }

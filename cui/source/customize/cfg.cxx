@@ -879,9 +879,10 @@ void ContextMenuSaveInData::Reset()
         {
             GetConfigManager()->removeSettings( pEntry->GetCommand() );
         }
-        catch ( const css::uno::Exception& e )
+        catch ( const css::uno::Exception& )
         {
-            SAL_WARN("cui.customize", "Exception caught while resetting context menus: " << e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("cui.customize", "Exception caught while resetting context menus: " << exceptionToString(ex));
         }
     }
     PersistChanges( GetConfigManager() );
@@ -894,9 +895,10 @@ void ContextMenuSaveInData::ResetContextMenu( const SvxConfigEntry* pEntry )
     {
         GetConfigManager()->removeSettings( pEntry->GetCommand() );
     }
-    catch ( const css::uno::Exception& e )
+    catch ( const css::uno::Exception& )
     {
-        SAL_WARN("cui.customize", "Exception caught while resetting context menu: " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("cui.customize", "Exception caught while resetting context menu: " << exceptionToString(ex));
     }
     PersistChanges( GetConfigManager() );
     m_pRootEntry.reset();

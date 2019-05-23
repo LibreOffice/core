@@ -341,9 +341,10 @@ void EmbeddedObjectRef::Clear()
                 {
                     // there's still someone who needs the object!
                 }
-                catch (const uno::Exception& e)
+                catch (const uno::Exception&)
                 {
-                    SAL_WARN("svtools.misc", "Error on switching of the object to loaded state and closing: \"" << e << "\"");
+                    css::uno::Any ex( cppu::getCaughtException() );
+                    SAL_WARN("svtools.misc", "Error on switching of the object to loaded state and closing: " << exceptionToString(ex));
                 }
             }
         }
@@ -493,18 +494,20 @@ Size EmbeddedObjectRef::GetSize( MapMode const * pTargetMapMode ) const
             catch(const embed::NoVisualAreaSizeException&)
             {
             }
-            catch (const uno::Exception& e)
+            catch (const uno::Exception&)
             {
-                SAL_WARN("svtools.misc", "Something went wrong on getting of the size of the object: \"" << e << "\"");
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("svtools.misc", "Something went wrong on getting of the size of the object: " << exceptionToString(ex));
             }
 
             try
             {
                 aSourceMapMode = MapMode(VCLUnoHelper::UnoEmbed2VCLMapUnit(mpImpl->mxObj->getMapUnit(mpImpl->nViewAspect)));
             }
-            catch (const uno::Exception& e)
+            catch (const uno::Exception&)
             {
-                SAL_WARN("svtools.misc", "Can not get the map mode: \"" << e << "\"");
+                css::uno::Any ex( cppu::getCaughtException() );
+                SAL_WARN("svtools.misc", "Can not get the map mode: " << exceptionToString(ex));
             }
         }
 

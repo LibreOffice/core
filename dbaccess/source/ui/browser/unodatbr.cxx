@@ -2387,7 +2387,10 @@ bool SbaTableQueryBrowser::implLoadAnything(const OUString& _rDataSourceName, co
         if  ( e.TargetException.isExtractableTo( ::cppu::UnoType< SQLException >::get() ) )
             showError( SQLExceptionInfo( e.TargetException ) );
         else
-            SAL_WARN("dbaccess", e);
+        {
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("dbaccess", exceptionToString(ex));
+        }
     }
     catch(const Exception&)
     {

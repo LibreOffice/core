@@ -59,6 +59,7 @@
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -824,9 +825,10 @@ void ChartController::executeDispatch_View3D()
         if( aDlg->Execute() == RET_OK )
             aUndoGuard.commit();
     }
-    catch(const uno::RuntimeException& e)
+    catch(const uno::RuntimeException&)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
 }
 

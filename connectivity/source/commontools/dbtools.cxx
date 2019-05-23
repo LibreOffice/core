@@ -961,10 +961,11 @@ try
                 {
                     xNewProps->setPropertyValue(pResult->Name, xOldProps->getPropertyValue(pResult->Name));
                 }
-                catch(IllegalArgumentException const & exc)
+                catch(IllegalArgumentException const &)
                 {
+                    css::uno::Any ex( cppu::getCaughtException() );
                     SAL_WARN( "connectivity.commontools", "TransferFormComponentProperties : could not transfer the value for property \""
-                                << pResult->Name << "\" " << exc);
+                                << pResult->Name << "\" " << exceptionToString(ex));
                 }
             }
         }

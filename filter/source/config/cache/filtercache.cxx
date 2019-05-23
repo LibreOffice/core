@@ -19,6 +19,7 @@
 
 
 #include <memory>
+#include <tools/diagnose_ex.h>
 #include "filtercache.hxx"
 #include "constant.hxx"
 #include "cacheupdatelistener.hxx"
@@ -860,9 +861,10 @@ css::uno::Any FilterCache::impl_getDirectCFGValue(const OUString& sDirectKey)
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
         {
-            SAL_WARN( "filter.config", ex);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "filter.config", exceptionToString(ex));
             aValue.clear();
         }
 

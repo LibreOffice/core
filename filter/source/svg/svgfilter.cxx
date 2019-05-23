@@ -50,6 +50,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/zcodec.hxx>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
@@ -824,7 +825,8 @@ OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor)
     }
     catch (css::io::IOException & e)
     {
-        SAL_WARN("filter.svg", "caught " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("filter.svg", exceptionToString(ex));
     }
 
     return aRetval;

@@ -26,7 +26,7 @@
 #include <svx/graphichelper.hxx>
 #include <svx/strings.hrc>
 #include <sal/log.hxx>
-
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
@@ -173,9 +173,10 @@ bool lcl_ExecuteFilterDialog( const Sequence< PropertyValue >& rPropsForDialog,
     {
         throw;
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-        SAL_WARN("sfx.doc", "ignoring " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("sfx.doc", "ignoring " << exceptionToString(ex));
     }
 
     return bStatus;

@@ -28,6 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
 #include <unotools/streamwrap.hxx>
@@ -98,11 +99,12 @@ void GalleryTheme::ImplCreateSvDrawStorage()
         if ( ( aSvDrawStorageRef->GetError() != ERRCODE_NONE ) && !pThm->IsReadOnly() )
             aSvDrawStorageRef = new SotStorage( false, GetSdvURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
     }
-    catch (const css::ucb::ContentCreationException& e)
+    catch (const css::ucb::ContentCreationException&)
     {
+        css::uno::Any ex( cppu::getCaughtException() );
         SAL_WARN("svx", "failed to open: "
                   << GetSdvURL().GetMainURL(INetURLObject::DecodeMechanism::NONE)
-                  << "due to : " << e);
+                  << "due to : " << exceptionToString(ex));
     }
 }
 
@@ -625,11 +627,12 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
         aSvDrawStorageRef->CopyTo( aTempStorageRef.get() );
         nStorErr = aSvDrawStorageRef->GetError();
     }
-    catch (const css::ucb::ContentCreationException& e)
+    catch (const css::ucb::ContentCreationException&)
     {
+        css::uno::Any ex( cppu::getCaughtException() );
         SAL_WARN("svx", "failed to open: "
                   << aTmpURL.GetMainURL(INetURLObject::DecodeMechanism::NONE)
-                  << "due to : " << e);
+                  << "due to : " << exceptionToString(ex));
         nStorErr = ERRCODE_IO_GENERAL;
     }
 

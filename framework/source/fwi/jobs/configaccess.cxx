@@ -31,6 +31,7 @@
 #include <unotools/configpaths.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace framework{
 
@@ -127,9 +128,10 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
             if (eMode==E_READWRITE)
                 m_xConfig = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGUPDATEACCESS, lParams);
         }
-        catch(const css::uno::Exception& ex)
+        catch(const css::uno::Exception&)
         {
-            SAL_INFO("fwk", "open config: " << ex);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_INFO("fwk", "open config: " << exceptionToString(ex));
         }
 
         m_eMode = E_CLOSED;

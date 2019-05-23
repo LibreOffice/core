@@ -35,6 +35,7 @@
 #include <svtools/printoptions.hxx>
 #include <unotools/options.hxx>
 #include <svtools/miscopt.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace svtools {
 
@@ -60,7 +61,8 @@ ItemHolder2::ItemHolder2()
         if(bMessage)
         {
             bMessage = false;
-            SAL_WARN( "svtools", "CreateInstance with arguments: " << rEx );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "svtools", "CreateInstance with arguments: " << exceptionToString(ex) );
         }
     }
 #else

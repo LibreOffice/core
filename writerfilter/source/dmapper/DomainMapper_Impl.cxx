@@ -1564,9 +1564,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         {
             OSL_FAIL( "IllegalArgumentException in DomainMapper_Impl::finishParagraph" );
         }
-        catch(const uno::Exception& e)
+        catch(const uno::Exception&)
         {
-            SAL_WARN( "writerfilter.dmapper", "finishParagraph() " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "writerfilter.dmapper", "finishParagraph() " << exceptionToString(ex) );
         }
 
     }
@@ -2243,10 +2244,11 @@ void DomainMapper_Impl::PopAnnotation()
         }
         m_aAnnotationPositions.erase( m_nAnnotationId );
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
+        css::uno::Any ex( cppu::getCaughtException() );
         SAL_WARN("writerfilter.dmapper",
-                "Cannot insert annotation field: " << e);
+                "Cannot insert annotation field: " << exceptionToString(ex));
     }
 
     m_xAnnotationField.clear();
@@ -2437,9 +2439,10 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         m_bParaChanged = true;
         getTableManager().setIsInShape(true);
     }
-    catch ( const uno::Exception& e )
+    catch ( const uno::Exception& )
     {
-        SAL_WARN("writerfilter.dmapper", "Exception when adding shape: " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("writerfilter.dmapper", "Exception when adding shape: " << exceptionToString(ex));
     }
 }
 /*
@@ -4907,9 +4910,10 @@ void DomainMapper_Impl::CloseFieldCommand()
             //set the text field if there is any
             pContext->SetTextField( uno::Reference< text::XTextField >( xFieldInterface, uno::UNO_QUERY ) );
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN( "writerfilter.dmapper", "Exception in CloseFieldCommand(): " << e );
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN( "writerfilter.dmapper", "Exception in CloseFieldCommand(): " << exceptionToString(ex) );
         }
         pContext->SetCommandCompleted();
     }
@@ -5078,10 +5082,11 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                 }
             }
         }
-        catch (const uno::Exception& e)
+        catch (const uno::Exception&)
         {
+            css::uno::Any ex( cppu::getCaughtException() );
             SAL_WARN("writerfilter.dmapper",
-                "DomainMapper_Impl::SetFieldResult: " << e);
+                "DomainMapper_Impl::SetFieldResult: " << exceptionToString(ex));
         }
     }
 }
@@ -5915,10 +5920,11 @@ uno::Reference<container::XIndexAccess> DomainMapper_Impl::GetCurrentNumberingRu
         uno::Reference<beans::XPropertySet> xStyle(xNumberingStyles->getByName(aListName), uno::UNO_QUERY);
         xRet.set(xStyle->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
     }
-    catch (const uno::Exception& e)
+    catch (const uno::Exception&)
     {
+        css::uno::Any ex( cppu::getCaughtException() );
         SAL_WARN("writerfilter.dmapper",
-                "GetCurrentNumberingRules: exception caught: " << e);
+                "GetCurrentNumberingRules: exception caught: " << exceptionToString(ex));
     }
     return xRet;
 }

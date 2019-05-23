@@ -1279,9 +1279,10 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
                 bModified = true;
             }
         }
-        catch( const uno::Exception & e )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("desktop.deployment", e);
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("desktop.deployment", exceptionToString(ex));
         }
     }
     return bModified;
@@ -1416,10 +1417,11 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                 }
             }
         }
-        catch (const uno::Exception & e)
+        catch (const uno::Exception &)
         {
+            css::uno::Any ex( cppu::getCaughtException() );
             // Looks like exceptions being caught here is not an uncommon case.
-            SAL_WARN("desktop.deployment", e);
+            SAL_WARN("desktop.deployment", exceptionToString(ex));
         }
     }
     return bModified;

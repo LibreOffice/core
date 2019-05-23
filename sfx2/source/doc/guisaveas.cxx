@@ -63,6 +63,7 @@
 #include <unotools/saveopt.hxx>
 #include <svtools/miscopt.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -632,9 +633,10 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
     {
         throw;
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("sfx.doc", "ignoring " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("sfx.doc", "ignoring " << exceptionToString(ex));
     }
 
     return bDialogUsed;
@@ -1403,10 +1405,11 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
             {
                 aModelData.GetStorable2()->storeSelf( aModelData.GetMediaDescr().getAsConstPropertyValueList() );
             }
-            catch (const lang::IllegalArgumentException& e)
+            catch (const lang::IllegalArgumentException&)
             {
+                css::uno::Any ex( cppu::getCaughtException() );
                 SAL_WARN("sfx.doc", "Ignoring parameters! "
-                    "ModelData considers this illegal:  " << e);
+                    "ModelData considers this illegal:  " << exceptionToString(ex));
                 aModelData.GetStorable()->store();
             }
         }
@@ -1772,9 +1775,10 @@ void SfxStoringHelper::SetDocInfoState(
         xDocPropsToFill->setEditingDuration(i_xOldDocProps->getEditingDuration());
         // other attributes e.g. DocumentStatistics are not editable from dialog
     }
-    catch (const uno::Exception& e)
+    catch (const uno::Exception&)
     {
-        SAL_INFO("sfx.doc", "SetDocInfoState: caught " << e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_INFO("sfx.doc", "SetDocInfoState: " << exceptionToString(ex));
     }
 
     // set the modified flag back if required

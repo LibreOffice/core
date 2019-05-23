@@ -44,6 +44,7 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <tools/diagnose_ex.h>
 #include <unotools/tempfile.hxx>
 #include <boost/optional.hpp>
 
@@ -647,8 +648,9 @@ void Package::processPackage_impl(
                  + getDisplayName()),
                 static_cast< OWeakObject * >(this), e);
         }
-        catch (const RuntimeException &e) {
-            SAL_WARN("desktop.deployment", "unexpected " << e);
+        catch (const RuntimeException &) {
+            css::uno::Any ex( cppu::getCaughtException() );
+            SAL_WARN("desktop.deployment", "unexpected " << exceptionToString(ex));
             throw;
         }
         catch (const CommandFailedException &) {

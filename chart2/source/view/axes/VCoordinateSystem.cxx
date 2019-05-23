@@ -34,7 +34,7 @@
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
-
+#include <tools/diagnose_ex.h>
 #include <algorithm>
 #include <rtl/math.hxx>
 
@@ -533,9 +533,10 @@ bool VCoordinateSystem::getPropertySwapXAndYAxis() const
     {
         xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndY;
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("chart2", exceptionToString(ex) );
     }
     return bSwapXAndY;
 }

@@ -19,6 +19,7 @@
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::connectivity::firebird;
 
@@ -175,10 +176,11 @@ void SAL_CALL Blob::disposing()
     {
          closeBlob();
     }
-    catch (SQLException &e)
+    catch (const SQLException &)
     {
+        css::uno::Any ex( cppu::getCaughtException() );
         // we cannot throw any exceptions here...
-        SAL_WARN("connectivity.firebird", "isc_close_blob failed " << e);
+        SAL_WARN("connectivity.firebird", "isc_close_blob failed " << exceptionToString(ex));
         assert(false);
     }
     Blob_BASE::disposing();
