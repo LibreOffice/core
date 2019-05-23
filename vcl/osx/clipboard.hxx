@@ -78,8 +78,8 @@ public:
      system clipboard will be created (bUseSystemClipboard == true) or if
      the DragPasteboard if bUseSystemClipboard == false
    */
-  AquaClipboard(NSPasteboard* pasteboard = nullptr,
-                bool bUseSystemClipboard = true);
+  AquaClipboard(NSPasteboard* pasteboard,
+                bool bUseSystemClipboard);
 
   virtual ~AquaClipboard() override;
   AquaClipboard(const AquaClipboard&) = delete;

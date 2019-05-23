@@ -41,7 +41,7 @@ uno::Reference< XInterface > AquaSalInstance::CreateClipboard( const Sequence< A
 
     SalData* pSalData = GetSalData();
     if( ! pSalData->mxClipboard.is() )
-        pSalData->mxClipboard.set(static_cast< XClipboard* >(new AquaClipboard()), UNO_QUERY);
+        pSalData->mxClipboard.set(static_cast< XClipboard* >(new AquaClipboard(nullptr, true)), UNO_QUERY);
     return pSalData->mxClipboard;
 }
 
