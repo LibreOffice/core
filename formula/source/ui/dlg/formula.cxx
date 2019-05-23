@@ -657,7 +657,7 @@ void FormulaDlg_Impl::MakeTree( StructPage* _pTree, SvTreeListEntry* pParent, co
             const table::CellAddress aRefPos(m_pHelper->getReferencePosition());
             const OUString aResult = m_pHelper->getFormulaParser()->printFormula( aArgs, aRefPos);
 
-            if ( nParas > 0 )
+            if ( nParas > 0 || (nParas == 0 && _pToken->IsFunction()) )
             {
                 SvTreeListEntry* pEntry;
 
