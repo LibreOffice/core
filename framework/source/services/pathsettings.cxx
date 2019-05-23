@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <properties.h>
 #include <stdtypes.h>
 #include <helper/mischelper.hxx>
@@ -102,16 +106,6 @@ class PathSettings : private cppu::BaseMutex
                 , bIsSinglePath (false)
                 , bIsReadonly   (false)
             {}
-
-            void takeOver(const PathInfo& rCopy)
-            {
-                sPathName      = rCopy.sPathName;
-                lInternalPaths = rCopy.lInternalPaths;
-                lUserPaths     = rCopy.lUserPaths;
-                sWritePath     = rCopy.sWritePath;
-                bIsSinglePath  = rCopy.bIsSinglePath;
-                bIsReadonly    = rCopy.bIsReadonly;
-            }
 
             /// an internal name describing this path
             OUString sPathName;
@@ -1223,7 +1217,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
     // If no exception occurs we can update our internal cache (means
     // we can overwrite pOrgPath !
     impl_storePath(aChangePath);
-    pOrgPath->takeOver(aChangePath);
+    *pOrgPath = std::move(aChangePath);
 }
 
 bool PathSettings::impl_isValidPath(const std::vector<OUString>& lPath) const
