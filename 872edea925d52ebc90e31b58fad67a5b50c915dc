@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "3fa0c359_e7f63e90",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-23T11:40:58Z",
+      "side": 1,
+      "message": "file name and app name should be an argument",
+      "revId": "872edea925d52ebc90e31b58fad67a5b50c915dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_27050678",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-23T11:40:58Z",
+      "side": 1,
+      "message": "create helper method: getCurrentNotebookbarFileName",
+      "revId": "872edea925d52ebc90e31b58fad67a5b50c915dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_0799ea6c",
         "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
         "patchSetId": 5
@@ -47,6 +81,23 @@
       "writtenOn": "2019-05-23T11:36:13Z",
       "side": 1,
       "message": "sUIFilePath \u003d sUIDirPath + sNotebookbarUIFileName",
+      "revId": "872edea925d52ebc90e31b58fad67a5b50c915dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_a7c27632",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-23T11:40:58Z",
+      "side": 1,
+      "message": "create helper method: checkIfDirExistOrCreate",
       "revId": "872edea925d52ebc90e31b58fad67a5b50c915dc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
