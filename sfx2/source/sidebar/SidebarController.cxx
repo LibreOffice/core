@@ -237,8 +237,6 @@ void SidebarController::disposeDecks()
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
                                                        (hide + "=false").c_str());
         }
-
-        mpParentWindow->ReleaseLOKNotifier();
     }
 
     mpCurrentDeck.clear();
