@@ -1380,6 +1380,7 @@ private:
     bool m_bFrozen;
     bool m_bDraggedOver;
     sal_uInt16 m_nLastMouseButton;
+    sal_uInt16 m_nLastMouseClicks;
     gulong m_nFocusInSignalId;
     gulong m_nMnemonicActivateSignalId;
     gulong m_nFocusOutSignalId;
@@ -1431,8 +1432,6 @@ private:
 
     bool signal_button(GdkEventButton* pEvent)
     {
-        int nClicks = 1;
-
         SalEvent nEventType = SalEvent::NONE;
         switch (pEvent->type)
         {
@@ -1448,13 +1447,14 @@ private:
                     }
                 }
                 nEventType = SalEvent::MouseButtonDown;
+                m_nLastMouseClicks = 1;
                 break;
             case GDK_2BUTTON_PRESS:
-                nClicks = 2;
+                m_nLastMouseClicks = 2;
                 nEventType = SalEvent::MouseButtonDown;
                 break;
             case GDK_3BUTTON_PRESS:
-                nClicks = 3;
+                m_nLastMouseClicks = 3;
                 nEventType = SalEvent::MouseButtonDown;
                 break;
             case GDK_BUTTON_RELEASE:
@@ -1493,7 +1493,7 @@ private:
 
         sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
         sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
-        MouseEvent aMEvt(aPos, nClicks, ImplGetMouseButtonMode(m_nLastMouseButton, nModCode), nCode, nCode);
+        MouseEvent aMEvt(aPos, m_nLastMouseClicks, ImplGetMouseButtonMode(m_nLastMouseButton, nModCode), nCode, nCode);
 
         if (nEventType == SalEvent::MouseButtonDown)
         {
@@ -1581,6 +1581,7 @@ public:
         , m_bFrozen(false)
         , m_bDraggedOver(false)
         , m_nLastMouseButton(0)
+        , m_nLastMouseClicks(0)
         , m_nFocusInSignalId(0)
         , m_nMnemonicActivateSignalId(0)
         , m_nFocusOutSignalId(0)
