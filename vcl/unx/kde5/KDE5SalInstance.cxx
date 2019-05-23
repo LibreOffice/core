@@ -51,9 +51,9 @@ KDE5SalInstance::KDE5SalInstance()
 SalFrame* KDE5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nState)
 {
     SalFrame* pRet(nullptr);
-    RunInMainThread(std::function([&pRet, pParent, nState]() {
+    RunInMainThread([&pRet, pParent, nState]() {
         pRet = new KDE5SalFrame(static_cast<KDE5SalFrame*>(pParent), nState, true);
-    }));
+    });
     assert(pRet);
     return pRet;
 }
@@ -65,8 +65,7 @@ KDE5SalInstance::createFilePicker(const uno::Reference<uno::XComponentContext>& 
     {
         SolarMutexGuard g;
         uno::Reference<ui::dialogs::XFilePicker2> xRet;
-        RunInMainThread(
-            std::function([&xRet, this, xMSF]() { xRet = this->createFilePicker(xMSF); }));
+        RunInMainThread([&xRet, this, xMSF]() { xRet = this->createFilePicker(xMSF); });
         assert(xRet);
         return xRet;
     }
