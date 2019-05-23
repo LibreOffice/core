@@ -23,7 +23,11 @@
 #include <Qt5Frame.hxx>
 
 #include <QtWidgets/QWidget>
+#include <QtGui/QGuiApplication>
 #include <QtGui/QWindow>
+
+#include <config_qt5.h>
+#include QPNI_HEADER
 
 Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     : m_pParent(pParent)
@@ -40,12 +44,26 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
         m_pQWidget->show();
 
     m_aSystemData.nSize = sizeof(SystemEnvData);
-    m_aSystemData.aWindow = m_pQWindow->winId(); // ID of the embedded window
     m_aSystemData.aShellWindow = reinterpret_cast<sal_IntPtr>(this);
     //m_aSystemData.pSalFrame = this;
     //m_aSystemData.pWidget = m_pQWidget;
     //m_aSystemData.nScreen = m_nXScreen.getXScreen();
     m_aSystemData.pToolkit = "qt5";
+    m_aSystemData.pPlatformName = "xcb";
+    const bool bWayland = QGuiApplication::platformName() == "wayland";
+    if (!bWayland)
+    {
+        m_aSystemData.pPlatformName = "xcb";
+        m_aSystemData.aWindow = m_pQWindow->winId(); // ID of the embedded window
+    }
+    else
+    {
+        m_aSystemData.pPlatformName = "wayland";
+        QPlatformNativeInterface* native = QGuiApplication::platformNativeInterface();
+        m_aSystemData.pDisplay = native->nativeResourceForWindow("display", nullptr);
+        m_aSystemData.aWindow = reinterpret_cast<unsigned long>(
+            native->nativeResourceForWindow("surface", m_pQWidget->windowHandle()));
+    }
 }
 
 void Qt5Object::ResetClipRegion()

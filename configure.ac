@@ -11283,6 +11283,8 @@ the root of your Qt installation by exporting QT5DIR before running "configure".
 fi
 AC_SUBST(QT5_CFLAGS)
 AC_SUBST(QT5_LIBS)
+AC_DEFINE_UNQUOTED([QPNI_HEADER], [<QtGui/$qmake5_test_ver/QtGui/qpa/qplatformnativeinterface.h>])
+AC_SUBST(QPNI_HEADER)
 AC_SUBST(MOC5)
 AC_SUBST(QT5_GLIB_CFLAGS)
 AC_SUBST(QT5_GLIB_LIBS)
