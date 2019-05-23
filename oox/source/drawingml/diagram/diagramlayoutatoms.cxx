@@ -684,37 +684,40 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             }
 
             const sal_Int32 nShapes = aCycleChildren.size();
-            const sal_Int32 nConnectorRadius = nRadius * cos(basegfx::deg2rad(nSpanAngle / nShapes));
-            const sal_Int32 nConnectorAngle = nSpanAngle > 0 ? 0 : 180;
-
-            sal_Int32 idx = 0;
-            for (auto & aCurrShape : aCycleChildren)
+            if (nShapes)
             {
-                const double fAngle = static_cast<double>(idx)*nSpanAngle/nShapes + nStartAngle;
-                awt::Size aCurrSize = aChildSize;
-                sal_Int32 nCurrRadius = nRadius;
-                if (aCurrShape->getSubType() == XML_conn)
+                const sal_Int32 nConnectorRadius = nRadius * cos(basegfx::deg2rad(nSpanAngle / nShapes));
+                const sal_Int32 nConnectorAngle = nSpanAngle > 0 ? 0 : 180;
+
+                sal_Int32 idx = 0;
+                for (auto & aCurrShape : aCycleChildren)
                 {
-                    aCurrSize = aConnectorSize;
-                    nCurrRadius = nConnectorRadius;
+                    const double fAngle = static_cast<double>(idx)*nSpanAngle/nShapes + nStartAngle;
+                    awt::Size aCurrSize = aChildSize;
+                    sal_Int32 nCurrRadius = nRadius;
+                    if (aCurrShape->getSubType() == XML_conn)
+                    {
+                        aCurrSize = aConnectorSize;
+                        nCurrRadius = nConnectorRadius;
+                    }
+                    const awt::Point aCurrPos(
+                        aCenter.Width + nCurrRadius*sin(basegfx::deg2rad(fAngle)) - aCurrSize.Width/2,
+                        aCenter.Height - nCurrRadius*cos(basegfx::deg2rad(fAngle)) - aCurrSize.Height/2);
+
+                    aCurrShape->setPosition(aCurrPos);
+                    aCurrShape->setSize(aCurrSize);
+                    aCurrShape->setChildSize(aCurrSize);
+
+                    if (nRotationPath == XML_alongPath)
+                        aCurrShape->setRotation(fAngle * PER_DEGREE);
+
+                    // connectors should be handled in conn, but we don't have
+                    // reference to previous and next child, so it's easier here
+                    if (aCurrShape->getSubType() == XML_conn)
+                        aCurrShape->setRotation((nConnectorAngle + fAngle) * PER_DEGREE);
+
+                    idx++;
                 }
-                const awt::Point aCurrPos(
-                    aCenter.Width + nCurrRadius*sin(basegfx::deg2rad(fAngle)) - aCurrSize.Width/2,
-                    aCenter.Height - nCurrRadius*cos(basegfx::deg2rad(fAngle)) - aCurrSize.Height/2);
-
-                aCurrShape->setPosition(aCurrPos);
-                aCurrShape->setSize(aCurrSize);
-                aCurrShape->setChildSize(aCurrSize);
-
-                if (nRotationPath == XML_alongPath)
-                    aCurrShape->setRotation(fAngle * PER_DEGREE);
-
-                // connectors should be handled in conn, but we don't have
-                // reference to previous and next child, so it's easier here
-                if (aCurrShape->getSubType() == XML_conn)
-                    aCurrShape->setRotation((nConnectorAngle + fAngle) * PER_DEGREE);
-
-                idx++;
             }
             break;
         }
