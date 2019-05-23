@@ -8281,7 +8281,7 @@ SfxBoolItem TestMode SID_DIALOG_TESTMODE
 
 
 SfxBoolItem Text SID_ATTR_CHAR
-
+(SfxBoolItem CreateDirectly FN_PARAM_1)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
