@@ -37,7 +37,6 @@
 #include <svx/nbdtmg.hxx>
 #include <svx/nbdtmgfact.hxx>
 #include <svx/svdoutl.hxx>
-#include <sdabstdlg.hxx>
 #include <memory>
 #include <sdpage.hxx>
 
