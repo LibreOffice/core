@@ -617,8 +617,8 @@ void Qt5Menu::ShowCloseButton(bool bShow)
         if (QIcon::hasThemeIcon("window-close-symbolic"))
             aIcon = QIcon::fromTheme("window-close-symbolic");
         else
-            aIcon = QIcon(
-                QPixmap::fromImage((toQImage(Image(StockImage::Yes, SV_RESID_BITMAP_CLOSEDOC)))));
+            aIcon = QIcon(QPixmap::fromImage((toQImage(Image(
+                OUString("private:graphicrepository/") + OUString(SV_RESID_BITMAP_CLOSEDOC))))));
         pButton = new QPushButton(mpQMenuBar);
         pButton->setIcon(aIcon);
         pButton->setFlat(true);
