@@ -353,14 +353,21 @@ void SwFrame::CheckDir( SvxFrameDirection nDir, bool bVert, bool bOnlyBiDi, bool
         {
             mbVertical = false;
             mbVertLR = false;
+            mbVertLRBT = false;
         }
         else
         {
             mbVertical = true;
             if(SvxFrameDirection::Vertical_RL_TB == nDir)
+            {
                 mbVertLR = false;
+                mbVertLRBT = false;
+            }
             else if(SvxFrameDirection::Vertical_LR_TB==nDir)
+            {
                 mbVertLR = true;
+                mbVertLRBT = false;
+            }
             else if (nDir == SvxFrameDirection::Vertical_LR_BT)
             {
                 mbVertLR = true;
