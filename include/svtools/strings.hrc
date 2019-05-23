@@ -22,8 +22,10 @@
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
+// To translators: tdf#125447 use no mnemonic in this string
 #define STR_UNDO                                NC_("STR_UNDO", "Undo: ")
-#define STR_REDO                                NC_("STR_REDO", "Re~do: ")
+// To translators: tdf#125447 use no mnemonic in this string
+#define STR_REDO                                NC_("STR_REDO", "Redo: ")
 #define STR_REPEAT                              NC_("STR_REPEAT", "~Repeat: ")
 
 #define STR_FORMAT_STRING                       NC_("STR_FORMAT_STRING", "Unformatted text")

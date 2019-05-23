@@ -25,7 +25,6 @@
 #include <swdtflvr.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/strings.hrc>
-#include <vcl/mnemonic.hxx>
 
 // Undo ends all modes. If a selection is emerged by the Undo,
 // this must be considered for further action.
@@ -109,7 +108,7 @@ OUString SwWrtShell::GetDoString( DoType eDoType ) const
     default:;//prevent warning
     }
 
-    return MnemonicGenerator::EraseAllMnemonicChars(SvtResId(pResStr)) + aUndoStr;
+    return SvtResId(pResStr) + aUndoStr;
 }
 
 void SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) const
