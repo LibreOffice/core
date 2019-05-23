@@ -95,6 +95,7 @@ private:
     bool                    mbLooping;
     bool                    mbInitialized;
 
+    void*                   mpDisplay;
     long                    mnWindowID;
     GstVideoOverlay*        mpXOverlay;
     gint64                  mnDuration;
