@@ -302,6 +302,7 @@ Player::Player() :
     mbMuted( false ),
     mbLooping( false ),
     mbInitialized( false ),
+    mpDisplay( nullptr ),
     mnWindowID( 0 ),
     mpXOverlay( nullptr ),
     mnDuration( 0 ),
@@ -453,6 +454,31 @@ static gboolean wrap_element_query_duration (GstElement *element, GstFormat form
 #endif
 }
 
+#ifndef AVMEDIA_GST_0_10
+
+#define LCL_WAYLAND_DISPLAY_HANDLE_CONTEXT_TYPE "GstWaylandDisplayHandleContextType"
+
+static gboolean lcl_is_wayland_display_handle_need_context_message(GstMessage* msg)
+{
+    g_return_val_if_fail(GST_IS_MESSAGE(msg), false);
+
+    if (GST_MESSAGE_TYPE(msg) != GST_MESSAGE_NEED_CONTEXT)
+        return false;
+    const gchar *type = nullptr;
+    if (!gst_message_parse_context_type(msg, &type))
+        return false;
+    return !g_strcmp0(type, LCL_WAYLAND_DISPLAY_HANDLE_CONTEXT_TYPE);
+}
+
+static GstContext* lcl_wayland_display_handle_context_new(void* display)
+{
+    GstContext *context = gst_context_new(LCL_WAYLAND_DISPLAY_HANDLE_CONTEXT_TYPE, TRUE);
+    gst_structure_set (gst_context_writable_structure (context),
+                       "handle", G_TYPE_POINTER, display, nullptr);
+    return context;
+}
+
+#endif
 
 GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 {
@@ -490,6 +516,15 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                 gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
             return GST_BUS_DROP;
         }
+#ifndef AVMEDIA_GST_0_10
+        else if (lcl_is_wayland_display_handle_need_context_message(message))
+        {
+            GstContext *context = lcl_wayland_display_handle_context_new(mpDisplay);
+            gst_element_set_context(GST_ELEMENT(GST_MESSAGE_SRC(message)), context);
+
+            return GST_BUS_DROP;
+        }
+#endif
     }
 
 #ifdef AVMEDIA_GST_0_10
@@ -888,7 +923,6 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize()
     return aSize;
 }
 
-
 uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const uno::Sequence< uno::Any >& rArguments )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -916,9 +950,13 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
             OSL_ASSERT(pEnvData);
             if (pEnvData)
             {
+                OUString aToolkit = OUString::createFromAscii(pEnvData->pToolkit);
+                OUString aPlatform = OUString::createFromAscii(pEnvData->pPlatformName);
+
+                GstElement *pVideosink = nullptr;
 #if defined(ENABLE_GTKSINK)
-                GstElement *pVideosink = g_strcmp0(pEnvData->pToolkit, "gtk3") == 0 ?
-                                           gst_element_factory_make("gtksink", "gtksink") : nullptr;
+                pVideosink = (aToolkit == "gtk3") ?
+                              gst_element_factory_make("gtksink", "gtksink") : nullptr;
                 if (pVideosink)
                 {
                     mbUseGtkSink = true;
@@ -936,21 +974,30 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
                 else
 #endif
                 {
+                    if (aPlatform == "wayland")
+                        pVideosink = gst_element_factory_make("waylandsink", "video-output");
+                    else
+                        pVideosink = gst_element_factory_make("autovideosink", "video-output");
+                    if (!pVideosink)
+                    {
+                        xRet.clear();
+                        return nullptr;
+                    }
+                    g_object_set(G_OBJECT(mpPlaybin), "video-sink", pVideosink, nullptr);
                     mbUseGtkSink = false;
                     mnWindowID = pEnvData->aWindow;
+                    mpDisplay = pEnvData->pDisplay;
                     SAL_INFO( "avmedia.gstreamer", AVVERSION "set window id to " << static_cast<int>(mnWindowID) << " XOverlay " << mpXOverlay);
                     gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
                     if ( mpXOverlay != nullptr )
                         gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
                 }
-
             }
         }
     }
 
     return xRet;
 }
-
 
 uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
 {
