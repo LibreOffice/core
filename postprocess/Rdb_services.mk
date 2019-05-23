@@ -135,6 +135,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(filter iOS MACOSX,$(OS)), \
 		lingucomponent/source/spellcheck/macosxspell/MacOSXSpell \
 	) \
+	$(if $(filter iOS,$(OS)), \
+		vcl/vcl.ios \
+	) \
 	$(if $(filter WNT,$(OS)), \
 		avmedia/source/win/avmediawin \
 		dtrans/source/generic/dtrans \
