@@ -1479,6 +1479,9 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
                 pStyleSheetPool=nullptr;
                 break;
             }
+        case SfxHintId::StyleSheetModified:
+            TimeOut(nullptr);
+        break;
         default: break;
     }
 
@@ -1487,7 +1490,8 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
     // works bad in UpdateStyles_Impl ()!
 
     if(!bDontUpdate && nId != SfxHintId::Dying &&
-       (dynamic_cast<const SfxStyleSheetPoolHint*>(&rHint) ||
+       ( /*nId == SfxHintId::StyleSheetModified || maybe handling here is better than in the case?*/
+        dynamic_cast<const SfxStyleSheetPoolHint*>(&rHint) ||
         dynamic_cast<const SfxStyleSheetHint*>(&rHint) ||
         dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint)))
     {
