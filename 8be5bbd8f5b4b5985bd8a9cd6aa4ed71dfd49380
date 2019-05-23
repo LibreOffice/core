@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_792172fb",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2484,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-05-23T18:55:51Z",
+      "side": 1,
+      "message": "1. Here and at line 2542 I followed existing code practice which has pCurrentEntry check for null in if statements at lines 2431 and 2466.\n\n2. I think you are correct, next or previous sibling can\u0027t be a content type entry when the entry is content.",
+      "parentUuid": "3fa0c359_79c5f23b",
+      "revId": "8be5bbd8f5b4b5985bd8a9cd6aa4ed71dfd49380",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_b9d05af9",
         "filename": "sw/source/uibase/utlui/content.cxx",
         "patchSetId": 10
