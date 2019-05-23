@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_c76c6238",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-23T12:02:46Z",
+      "side": 1,
+      "message": "the preferred way of writing such concatenations involving a mix of OUString and plain C++ string literals is as just:\n\n  OUString sUIDirPath \u003d \"modules/s\" + sAppName.to\u0027AsciiLowerCase() + \"/ui/\";",
+      "parentUuid": "3fa0c359_27b746d8",
+      "revId": "872edea925d52ebc90e31b58fad67a5b50c915dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_a7a9167c",
         "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
         "patchSetId": 5
