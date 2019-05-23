@@ -76,26 +76,6 @@ class AcceleratorCache
     // interface
 
     public:
-
-        /** @short  creates a new - but empty - cache instance. */
-        AcceleratorCache();
-
-        /** @short  make a copy of this cache.
-            @descr  Used for the copy-on-write feature.
-        */
-        AcceleratorCache(const AcceleratorCache& rCopy);
-
-        /** @short  write changes back to the original container.
-
-            @param  rCopy
-                    the (changed!) copy, which should be written
-                    back to this original container.
-          */
-        void takeOver(const AcceleratorCache& rCopy);
-
-        /** TODO document me */
-        AcceleratorCache& operator=(const AcceleratorCache& rCopy);
-
         /** @short  checks if the specified key exists.
 
             @param  aKey

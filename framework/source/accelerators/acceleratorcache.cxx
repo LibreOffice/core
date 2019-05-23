@@ -30,29 +30,6 @@
 namespace framework
 {
 
-AcceleratorCache::AcceleratorCache()
-{
-}
-
-AcceleratorCache::AcceleratorCache(const AcceleratorCache& rCopy)
-{
-    m_lCommand2Keys = rCopy.m_lCommand2Keys;
-    m_lKey2Commands = rCopy.m_lKey2Commands;
-}
-
-void AcceleratorCache::takeOver(const AcceleratorCache& rCopy)
-{
-    SolarMutexGuard g;
-    m_lCommand2Keys = rCopy.m_lCommand2Keys;
-    m_lKey2Commands = rCopy.m_lKey2Commands;
-}
-
-AcceleratorCache& AcceleratorCache::operator=(const AcceleratorCache& rCopy)
-{
-    takeOver(rCopy);
-    return *this;
-}
-
 bool AcceleratorCache::hasKey(const css::awt::KeyEvent& aKey) const
 {
     SolarMutexGuard g;

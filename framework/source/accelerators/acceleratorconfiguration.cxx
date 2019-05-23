@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <accelerators/acceleratorconfiguration.hxx>
 #include <accelerators/keymapping.hxx>
 #include <accelerators/presethandler.hxx>
@@ -410,9 +414,9 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
         SolarMutexGuard g;
         bChanged = (m_pWriteCache != nullptr);
         if (bChanged)
-            aCache.takeOver(*m_pWriteCache);
+            aCache = *m_pWriteCache;
         else
-            aCache.takeOver(m_aReadCache);
+            aCache = m_aReadCache;
         xContext = m_xContext;
     }
 
@@ -438,7 +442,7 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
     // and forget the copy-on-write copied cache
     if (bChanged)
     {
-        m_aReadCache.takeOver(*m_pWriteCache);
+        m_aReadCache = *m_pWriteCache;
         m_pWriteCache.reset();
     }
 }
@@ -800,9 +804,9 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
         SolarMutexGuard g;
 
         if (m_pPrimaryWriteCache != nullptr)
-            aCache.takeOver(*m_pPrimaryWriteCache);
+            aCache = *m_pPrimaryWriteCache;
         else
-            aCache.takeOver(m_aPrimaryReadCache);
+            aCache = m_aPrimaryReadCache;
 
         AcceleratorCache::TKeyList lKeys;
         if (m_pSecondaryWriteCache!=nullptr)
@@ -1055,9 +1059,9 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
     }
 
     if (bPreferred)
-        m_aPrimaryReadCache.takeOver(aReadCache);
+        m_aPrimaryReadCache = std::move(aReadCache);
     else
-        m_aSecondaryReadCache.takeOver(aReadCache);
+        m_aSecondaryReadCache = std::move(aReadCache);
 }
 
 void XCUBasedAcceleratorConfiguration::impl_ts_save(bool bPreferred)
@@ -1093,7 +1097,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(bool bPreferred)
         // coverity[check_after_deref] - confusing but correct
         if (m_pPrimaryWriteCache)
         {
-            m_aPrimaryReadCache.takeOver(*m_pPrimaryWriteCache);
+            m_aPrimaryReadCache = *m_pPrimaryWriteCache;
             m_pPrimaryWriteCache.reset();
         }
     }
@@ -1129,7 +1133,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(bool bPreferred)
         // coverity[check_after_deref] - confusing but correct
         if (m_pSecondaryWriteCache)
         {
-            m_aSecondaryReadCache.takeOver(*m_pSecondaryWriteCache);
+            m_aSecondaryReadCache = *m_pSecondaryWriteCache;
             m_pSecondaryWriteCache.reset();
         }
     }
