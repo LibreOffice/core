@@ -82,6 +82,9 @@
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
             </prop>
+            <prop oor:name="Position">
+              <value>0</value>
+            </prop>
           </node>
         </node>
         <node oor:name="Frame">
