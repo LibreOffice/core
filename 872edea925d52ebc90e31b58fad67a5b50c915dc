@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_0799ea6c",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-23T11:36:13Z",
+      "side": 1,
+      "message": "Please use static method here: that on created in notebookbar.cxx in previous patch (OUString NotebookBar::getCustomizedUIRootDir()). It should be moved here and reused in notebookbar.cxx.",
+      "revId": "872edea925d52ebc90e31b58fad67a5b50c915dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_27b746d8",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-23T11:36:13Z",
+      "side": 1,
+      "message": "OUStringBuffer can be used for concatenate",
+      "revId": "872edea925d52ebc90e31b58fad67a5b50c915dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_a7a9167c",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-05-23T11:36:13Z",
+      "side": 1,
+      "message": "sUIFilePath \u003d sUIDirPath + sNotebookbarUIFileName",
+      "revId": "872edea925d52ebc90e31b58fad67a5b50c915dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
