@@ -255,6 +255,10 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                 ImpAddPrintableCharactersToTextEdit(rReq, GetView());
 
             rReq.Done();
+
+            const SfxItemSet* pArgs = rReq.GetArgs();
+            if (pArgs && pArgs->HasItem(FN_PARAM_1))
+                bCreateDirectly = static_cast<const SfxBoolItem&>(pArgs->Get(FN_PARAM_1)).GetValue();
         }
         break;
 
