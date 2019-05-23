@@ -3022,7 +3022,7 @@ SfxTemplateItem ParaStyle SID_STYLE_FAMILY2
 
 
 SfxVoidItem Paste SID_PASTE
-(SfxUInt16Item AnchorType FN_PARAM_1)
+(SfxUInt16Item AnchorType FN_PARAM_1, SfxBoolItem IgnoreComments FN_PARAM_2)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,

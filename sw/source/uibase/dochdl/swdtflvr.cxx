@@ -1249,7 +1249,7 @@ bool SwTransferable::IsPaste( const SwWrtShell& rSh,
     return bIsPaste;
 }
 
-bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndStdIds nAnchorType)
+bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndStdIds nAnchorType, bool bIgnoreComments)
 {
     SwPasteContext aPasteContext(rSh);
 
@@ -1321,7 +1321,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                 nLevel++;
             } while (rSh.GetDoc()->IsIdxInTable(rSh.GetCursor()->GetNode()) != nullptr);
             if ( SwTransferable::PasteData( rData, rSh, EXCHG_OUT_ACTION_INSERT_STRING, nActionFlags, SotClipboardFormatId::HTML,
-                                        nDestination, false, false, nullptr, 0, false, nAnchorType, &aPasteContext ))
+                                        nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext ))
             {
                 pDispatch->Execute(FN_CHAR_LEFT, SfxCallMode::SYNCHRON);
                 pDispatch->Execute(FN_TABLE_SELECT_ALL, SfxCallMode::SYNCHRON);
@@ -1354,7 +1354,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
 
     return EXCHG_INOUT_ACTION_NONE != nAction &&
             SwTransferable::PasteData( rData, rSh, nAction, nActionFlags, nFormat,
-                                        nDestination, false, false, nullptr, 0, false, nAnchorType, &aPasteContext );
+                                        nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext );
 }
 
 bool SwTransferable::PasteData( TransferableDataHelper& rData,
@@ -1364,6 +1364,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                             bool bIsDefault,
                             const Point* pPt, sal_Int8 nDropAction,
                             bool bPasteSelection, RndStdIds nAnchorType,
+                            bool bIgnoreComments,
                             SwPasteContext* pContext )
 {
     SwWait aWait( *rSh.GetView().GetDocShell(), false );
@@ -1518,7 +1519,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             case SotClipboardFormatId::RICHTEXT:
             case SotClipboardFormatId::STRING:
                 bRet = SwTransferable::PasteFileContent( rData, rSh,
-                                                            nFormat, bMsg );
+                                                            nFormat, bMsg, bIgnoreComments );
                 break;
 
             case SotClipboardFormatId::NETSCAPE_BOOKMARK:
@@ -1798,7 +1799,7 @@ SotExchangeDest SwTransferable::GetSotDestination( const SwWrtShell& rSh )
 }
 
 bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
-                                    SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bMsg )
+                                    SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bMsg, bool bIgnoreComments )
 {
     const char* pResId = STR_CLPBRD_FORMAT_ERROR;
     bool bRet = false;
@@ -1870,6 +1871,10 @@ bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
         const SwPosition& rInsPos = *rSh.GetCursor()->Start();
         SwReader aReader(*pStream, OUString(), OUString(), *rSh.GetCursor());
         rSh.SaveTableBoxContent( &rInsPos );
+
+        if (bIgnoreComments)
+            pRead->SetIgnoreHTMLComments(true);
+
         if( aReader.Read( *pRead ).IsError() )
             pResId = STR_ERROR_CLPBRD_READ;
         else

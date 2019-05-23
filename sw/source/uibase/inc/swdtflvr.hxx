@@ -97,7 +97,7 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
                                         SotClipboardFormatId nFormat, SotExchangeDest nDestination );
 
     static bool PasteFileContent( TransferableDataHelper&,
-                                    SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bMsg );
+                                    SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bMsg, bool bIgnoreComments = false );
     static bool PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                             SotClipboardFormatId nFormat, SotExchangeActionFlags nActionFlags, bool bMsg );
     static bool PasteTargetURL( TransferableDataHelper& rData, SwWrtShell& rSh,
@@ -175,7 +175,7 @@ public:
 
     // paste - methods and helper methods for the paste
     static bool IsPaste( const SwWrtShell&, const TransferableDataHelper& );
-    static bool Paste( SwWrtShell&, TransferableDataHelper&, RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA );
+    static bool Paste( SwWrtShell&, TransferableDataHelper&, RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA, bool bIgnoreComments = false );
     static bool PasteData( TransferableDataHelper& rData,
                           SwWrtShell& rSh, sal_uInt8 nAction, SotExchangeActionFlags nActionFlags,
                           SotClipboardFormatId nFormat,
@@ -183,6 +183,7 @@ public:
                           bool bIsDefault,
                           const Point* pDDPos = nullptr, sal_Int8 nDropAction = 0,
                           bool bPasteSelection = false, RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA,
+                          bool bIgnoreComments = false,
                           SwPasteContext* pContext = nullptr );
 
     static bool IsPasteSpecial( const SwWrtShell& rWrtShell,
