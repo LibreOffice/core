@@ -221,7 +221,8 @@ void Qt5Widget::dragMoveEvent(QDragMoveEvent* event)
 {
     QPoint point = event->pos();
 
-    m_rFrame.draggingStarted(point.x(), point.y(), event->possibleActions(), event->mimeData());
+    m_rFrame.draggingStarted(point.x(), point.y(), event->possibleActions(),
+                             event->keyboardModifiers(), event->mimeData());
     QWidget::dragMoveEvent(event);
 }
 
@@ -229,7 +230,7 @@ void Qt5Widget::dropEvent(QDropEvent* event)
 {
     QPoint point = event->pos();
 
-    m_rFrame.dropping(point.x(), point.y(), event->mimeData());
+    m_rFrame.dropping(point.x(), point.y(), event->keyboardModifiers(), event->mimeData());
     QWidget::dropEvent(event);
 }
 
