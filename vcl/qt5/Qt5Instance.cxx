@@ -50,6 +50,7 @@
 
 #include <headless/svpbmp.hxx>
 
+#include <o3tl/make_unique.hxx>
 #include <mutex>
 #include <condition_variable>
 
@@ -201,7 +202,7 @@ void Qt5Instance::ImplRunInMain()
 }
 
 Qt5Instance::Qt5Instance(bool bUseCairo)
-    : SalGenericInstance(std::make_unique<Qt5YieldMutex>())
+    : SalGenericInstance(o3tl::make_unique<Qt5YieldMutex>())
     , m_postUserEventId(-1)
     , m_bUseCairo(bUseCairo)
 {
