@@ -72,6 +72,7 @@ struct SystemEnvData
     // however, the GTK3 vclplug wants to store pointers in here!
     sal_IntPtr          aShellWindow;   // the window of the frame's shell
     const char*         pToolkit;       // the toolkit in use (gtk2 vs gtk3)
+    const char*         pPlatformName; // the windowing system in use (xcb vs wayland)
 #endif
 
     SystemEnvData()
@@ -92,6 +93,7 @@ struct SystemEnvData
         , nScreen(0)
         , aShellWindow(0)
         , pToolkit(nullptr)
+        , pPlatformName(nullptr)
 #endif
     {
     }

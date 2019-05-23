@@ -162,16 +162,28 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     // s. https://doc.qt.io/qt-5/qwidget.html#native-widgets-vs-alien-widgets
     // Avoid this on Wayland due to problems with missing 'mouseMoveEvent's,
     // s. tdf#122293/QTBUG-75766
-    if (QGuiApplication::platformName() != "wayland")
+    const bool bWayland = QGuiApplication::platformName() == "wayland";
+    if (!bWayland)
         m_aSystemData.aWindow = m_pQWidget->winId();
-    // TODO implement as needed for Wayland,
-    // s.a. commit c0d4f3ad3307c which did this for gtk3
+    else
+    {
+        // TODO implement as needed for Wayland,
+        // s.a. commit c0d4f3ad3307c which did this for gtk3
+        // QPlatformNativeInterface* native = QGuiApplication::platformNativeInterface();
+        // m_aSystemData.pDisplay = native->nativeResourceForWindow("display", nullptr);
+        // m_aSystemData.aWindow = reinterpret_cast<unsigned long>(
+        //     native->nativeResourceForWindow("surface", m_pQWidget->windowHandle()));
+    }
 
     m_aSystemData.aShellWindow = reinterpret_cast<sal_IntPtr>(this);
     //m_aSystemData.pSalFrame = this;
     //m_aSystemData.pWidget = m_pQWidget;
     //m_aSystemData.nScreen = m_nXScreen.getXScreen();
     m_aSystemData.pToolkit = "qt5";
+    if (!bWayland)
+        m_aSystemData.pPlatformName = "xcb";
+    else
+        m_aSystemData.pPlatformName = "wayland";
 
     SetIcon(SV_ICON_ID_OFFICE);
 }
