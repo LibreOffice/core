@@ -410,7 +410,11 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
     sal_Int32 nPara = pParaList->GetAbsPos( pPara );
 
     if (pEditEngine->GetText( nPara ) == rText)
-        return; // do nothing
+    {
+        // short-circuit logic to improve performance
+        bFirstParaIsEmpty = false;
+        return;
+    }
 
     bool bUpdate = pEditEngine->GetUpdateMode();
     pEditEngine->SetUpdateMode( false );
