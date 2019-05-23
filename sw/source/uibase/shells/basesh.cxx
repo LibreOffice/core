@@ -539,6 +539,10 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
     {
         rReq.SetReturnValue( SfxUInt32Item(nId, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)) );
     }
+    else if (nUndoId == SwUndoId::INSFMTATTR)
+    {
+        rWrtShell.GetDoc()->GetDocShell()->GetStyleSheetPool()->Broadcast(SfxHint(SfxHintId::StyleSheetModified));
+    }
 
     if (pViewFrame) { pViewFrame->GetBindings().InvalidateAll(false); }
 }
