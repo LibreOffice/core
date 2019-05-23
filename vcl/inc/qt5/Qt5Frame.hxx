@@ -140,8 +140,9 @@ public:
     virtual void registerDropTarget(Qt5DropTarget* pDropTarget);
     virtual void deregisterDropTarget(Qt5DropTarget const* pDropTarget);
     void draggingStarted(const int x, const int y, Qt::DropActions eActions,
-                         const QMimeData* pQMimeData);
-    void dropping(const int x, const int y, const QMimeData* pQMimeData);
+                         Qt::KeyboardModifiers eKeyMod, const QMimeData* pQMimeData);
+    void dropping(const int x, const int y, Qt::KeyboardModifiers eKeyMod,
+                  const QMimeData* pQMimeData);
 
     virtual void SetExtendedFrameStyle(SalExtStyle nExtStyle) override;
     virtual void Show(bool bVisible, bool bNoActivate = false) override;

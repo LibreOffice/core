@@ -1159,16 +1159,30 @@ void Qt5Frame::deregisterDropTarget(Qt5DropTarget const* pDropTarget)
 }
 
 void Qt5Frame::draggingStarted(const int x, const int y, Qt::DropActions eActions,
-                               const QMimeData* pQMimeData)
+                               Qt::KeyboardModifiers eKeyMod, const QMimeData* pQMimeData)
 {
     assert(m_pDropTarget);
+
+    sal_Int8 nUserDropAction = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
+    if ((eKeyMod & Qt::ShiftModifier) && !(eKeyMod & Qt::ControlModifier))
+        nUserDropAction = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
+    else if ((eKeyMod & Qt::ControlModifier) && !(eKeyMod & Qt::ShiftModifier))
+        nUserDropAction = css::datatransfer::dnd::DNDConstants::ACTION_COPY;
+    else if ((eKeyMod & Qt::ShiftModifier) && (eKeyMod & Qt::ControlModifier))
+        nUserDropAction = css::datatransfer::dnd::DNDConstants::ACTION_LINK;
 
     css::datatransfer::dnd::DropTargetDragEnterEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
     aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDragContext*>(m_pDropTarget);
     aEvent.LocationX = x;
     aEvent.LocationY = y;
-    aEvent.DropAction = getPreferredDropAction(eActions);
+
+    // system drop action if neither Shift nor Control is held
+    if (!(eKeyMod & (Qt::ShiftModifier | Qt::ControlModifier)))
+        aEvent.DropAction = getPreferredDropAction(eActions);
+    // otherwise user-preferred action
+    else
+        aEvent.DropAction = nUserDropAction;
     aEvent.SourceActions = toVclDropActions(eActions);
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
@@ -1190,7 +1204,8 @@ void Qt5Frame::draggingStarted(const int x, const int y, Qt::DropActions eAction
         m_pDropTarget->fire_dragOver(aEvent);
 }
 
-void Qt5Frame::dropping(const int x, const int y, const QMimeData* pQMimeData)
+void Qt5Frame::dropping(const int x, const int y, Qt::KeyboardModifiers eKeyMod,
+                        const QMimeData* pQMimeData)
 {
     assert(m_pDropTarget);
 
@@ -1199,8 +1214,12 @@ void Qt5Frame::dropping(const int x, const int y, const QMimeData* pQMimeData)
     aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDropContext*>(m_pDropTarget);
     aEvent.LocationX = x;
     aEvent.LocationY = y;
-    aEvent.DropAction = m_pDropTarget->proposedDragAction()
-                        | css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT;
+
+    if (!(eKeyMod & (Qt::ShiftModifier | Qt::ControlModifier)))
+        aEvent.DropAction = m_pDropTarget->proposedDragAction()
+                            | css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT;
+    else
+        aEvent.DropAction = m_pDropTarget->proposedDragAction();
     aEvent.SourceActions = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
