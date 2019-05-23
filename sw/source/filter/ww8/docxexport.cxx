@@ -378,8 +378,8 @@ void DocxExport::DoComboBox(const OUString& rName,
 void DocxExport::DoFormText(const SwInputField* pField)
 {
     assert(pField);
-    const OUString sStr = FieldString(ww::eFORMTEXT);
-    OutputField(pField, ww::eFORMTEXT, sStr);
+    const OUString sStr = FieldString(ww::eFILLIN) + "\"" + pField->GetPar2() + "\"";
+    OutputField(pField, ww::eFILLIN, sStr);
 }
 
 OString DocxExport::OutputChart( uno::Reference< frame::XModel > const & xModel, sal_Int32 nCount, ::sax_fastparser::FSHelperPtr const & m_pSerializer )

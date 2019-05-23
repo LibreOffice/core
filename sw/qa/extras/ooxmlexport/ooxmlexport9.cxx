@@ -1202,6 +1202,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90789_2, "tdf90789-2.docx")
     CPPUNIT_ASSERT_EQUAL( 3, getPages() );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTextInput, "textinput.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // Ensure we have a formfield
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:instrText", " FILLIN \"\"");
+    // and it's content is not gone
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:t", "SomeText");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
