@@ -85,22 +85,22 @@
     <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER" formatindex="9">
       <FormatCode>0,00%</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
+    <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
       <FormatCode>[$Ls-64B] # ##0;[$Ls-64B] -# ##0</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
+    <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
       <FormatCode>[$Ls-64B] # ##0,00;[$Ls-64B] -# ##0,00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
+    <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
       <FormatCode>[$Ls-64B] # ##0;[RED][$Ls-64B] -# ##0</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
+    <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
       <FormatCode>[$Ls-64B] # ##0,00;[RED][$Ls-64B] -# ##0,00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
+    <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
       <FormatCode># ##0,00 CCC</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
+    <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
       <FormatCode>[$Ls-64B] # ##0,--;[RED][$Ls-64B] -# ##0,--</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="true" type="short" usage="DATE" formatindex="18">
@@ -335,7 +335,14 @@
     </Calendar>
   </LC_CALENDAR>
   <LC_CURRENCY>
-    <Currency default="true" usedInCompatibleFormatCodes="true">
+    <Currency default="true" usedInCompatibleFormatCodes="false">
+      <CurrencyID>EUR</CurrencyID>
+      <CurrencySymbol>€</CurrencySymbol>
+      <BankSymbol>EUR</BankSymbol>
+      <CurrencyName>euro</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="true">
       <CurrencyID>LVL</CurrencyID>
       <CurrencySymbol>Ls</CurrencySymbol>
       <BankSymbol>LVL</BankSymbol>
@@ -367,4 +374,4 @@
   <LC_NumberingLevel ref="lv_LV"/>
   <LC_OutLineNumberingLevel ref="lv_LV"/>
 </Locale>
-<!--Version 1.0  -->
+<!--Version 1.0 -->
