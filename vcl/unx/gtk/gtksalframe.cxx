@@ -841,6 +841,7 @@ void GtkSalFrame::InitCommon()
     m_aSystemData.pWidget       = m_pWindow;
     m_aSystemData.nScreen       = m_nXScreen.getXScreen();
     m_aSystemData.pToolkit      = "gtk2";
+    m_aSystemData.pPlatformName = "xcb";
 
     m_bGraphics = false;
     m_pGraphics = nullptr;

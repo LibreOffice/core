@@ -46,6 +46,12 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     //m_aSystemData.pWidget = m_pQWidget;
     //m_aSystemData.nScreen = m_nXScreen.getXScreen();
     m_aSystemData.pToolkit = "qt5";
+    m_aSystemData.pPlatformName = "xcb";
+    const bool bWayland = QGuiApplication::platformName() == "wayland";
+    if (!bWayland)
+        m_aSystemData.pPlatformName = "xcb";
+    else
+        m_aSystemData.pPlatformName = "wayland";
 }
 
 void Qt5Object::ResetClipRegion()
