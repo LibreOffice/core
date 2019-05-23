@@ -615,7 +615,7 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree, weld::TreeIter* pParent, cons
             const table::CellAddress aRefPos(m_pHelper->getReferencePosition());
             const OUString aResult = m_pHelper->getFormulaParser()->printFormula( aArgs, aRefPos);
 
-            if ( nParas > 0 )
+            if ( nParas > 0 || (nParas == 0 && _pToken->IsFunction()) )
             {
                 std::unique_ptr<weld::TreeIter> xEntry;
                 weld::TreeIter* pEntry;
