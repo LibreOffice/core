@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_67bd4eb6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-05-23T11:35:22Z",
+      "side": 1,
+      "message": "Both look redundant?",
+      "revId": "6b8e513b468b7ba46cbb6edcd684a7e0e6314ede",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_47b852c7",
+        "filename": "sd/source/ui/inc/slideshow.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-05-23T11:35:22Z",
+      "side": 1,
+      "message": "as mentioned on irc - let\u0027s not change that for this patch",
+      "revId": "6b8e513b468b7ba46cbb6edcd684a7e0e6314ede",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
