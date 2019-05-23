@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_399beac9",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-23T14:17:19Z",
+      "side": 1,
+      "message": "probably better to stick to {...} rather than \u003c...\u003e, as appears to be consistently used here now",
+      "range": {
+        "startLine": 99,
+        "startChar": 21,
+        "endLine": 99,
+        "endChar": 22
+      },
+      "revId": "cc2052ed89db81644c5b520353158d3e9b531ce5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_9960fed0",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-23T14:17:19Z",
+      "side": 1,
+      "message": "those \"an UNO\" -\u003e \"a UNO\" had been changed independently recently (and should be left intact I think)",
+      "range": {
+        "startLine": 99,
+        "startChar": 49,
+        "endLine": 99,
+        "endChar": 50
+      },
+      "revId": "cc2052ed89db81644c5b520353158d3e9b531ce5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_59a036f5",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-23T14:17:19Z",
+      "side": 1,
+      "message": "...and use {...} rather than \u0027...\u0027 here too, as other entries do, too",
+      "range": {
+        "startLine": 103,
+        "startChar": 50,
+        "endLine": 103,
+        "endChar": 51
+      },
+      "revId": "cc2052ed89db81644c5b520353158d3e9b531ce5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
