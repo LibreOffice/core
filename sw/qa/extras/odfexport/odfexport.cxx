@@ -1453,6 +1453,16 @@ DECLARE_ODFEXPORT_TEST(testBtlrFrame, "btlr-frame.odt")
     auto* pFlyFrame = dynamic_cast<SwFlyFrame*>(rAnchored[0]);
     CPPUNIT_ASSERT(pFlyFrame);
     CPPUNIT_ASSERT(pFlyFrame->IsVertLRBT());
+
+    if (!mbExported)
+        // Not yet exported, don't modify the doc model for test purposes.
+        return;
+
+    // Make sure that btlr -> tbrl transition clears the "BT" flag.
+    xTextFrame->setPropertyValue("WritingMode", uno::makeAny(static_cast<sal_Int16>(text::WritingMode2::TB_LR)));
+    pFlyFrame = dynamic_cast<SwFlyFrame*>(rAnchored[0]);
+    CPPUNIT_ASSERT(pFlyFrame);
+    CPPUNIT_ASSERT(!pFlyFrame->IsVertLRBT());
 }
 
 DECLARE_ODFEXPORT_TEST(testFdo86963, "fdo86963.odt")
