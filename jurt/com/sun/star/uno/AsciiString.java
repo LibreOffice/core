@@ -24,6 +24,7 @@ package com.sun.star.uno;
  *
  * @deprecated do not use.
  */
+@Deprecated
 public final class AsciiString {
     public final String asciistring;
 
@@ -33,6 +34,7 @@ public final class AsciiString {
      * @deprecated do not use.
      * @param   s  the String value.
      */
+    @Deprecated
     public AsciiString(String s) {
         asciistring = s;
     }
