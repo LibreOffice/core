@@ -938,7 +938,7 @@ bool SwRedlineExtraData_FormattingChanges::operator == ( const SwRedlineExtraDat
 SwRedlineData::SwRedlineData( RedlineType eT, std::size_t nAut )
     : m_pNext( nullptr ), m_pExtraData( nullptr ),
     m_aStamp( DateTime::SYSTEM ),
-    m_eType( eT ), m_nAuthor( nAut ), m_nSeqNo( 0 )
+    m_eType( eT ), m_bAutoFormat(false), m_nAuthor( nAut ), m_nSeqNo( 0 )
 {
     m_aStamp.SetNanoSec( 0 );
 }
@@ -951,6 +951,7 @@ SwRedlineData::SwRedlineData(
     , m_sComment( rCpy.m_sComment )
     , m_aStamp( rCpy.m_aStamp )
     , m_eType( rCpy.m_eType )
+    , m_bAutoFormat(false)
     , m_nAuthor( rCpy.m_nAuthor )
     , m_nSeqNo( rCpy.m_nSeqNo )
 {
@@ -960,7 +961,7 @@ SwRedlineData::SwRedlineData(
 SwRedlineData::SwRedlineData(RedlineType eT, std::size_t nAut, const DateTime& rDT,
     const OUString& rCmnt, SwRedlineData *pNxt)
     : m_pNext(pNxt), m_pExtraData(nullptr), m_sComment(rCmnt), m_aStamp(rDT),
-    m_eType(eT), m_nAuthor(nAut), m_nSeqNo(0)
+    m_eType(eT), m_bAutoFormat(false), m_nAuthor(nAut), m_nSeqNo(0)
 {
 }
 
