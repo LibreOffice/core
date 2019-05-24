@@ -102,6 +102,8 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/Qt5OpenGLContext \
     vcl/qt5/Qt5Painter \
     vcl/qt5/Qt5Printer \
+    vcl/qt5/Qt5SvpGraphics \
+    vcl/qt5/Qt5SvpSurface \
     vcl/qt5/Qt5System \
     vcl/qt5/Qt5Timer \
     vcl/qt5/Qt5Tools \
