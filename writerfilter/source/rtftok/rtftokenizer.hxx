@@ -67,7 +67,7 @@ private:
     RTFListener& m_rImport;
     SvStream* m_pInStream;
     css::uno::Reference<css::task::XStatusIndicator> const& m_xStatusIndicator;
-    // This is the same as aRTFControlWords, but sorted
+    // This is the same as aRTFControlWords, but mapped by token name for fast lookup
     static std::unordered_map<OString, RTFSymbol> s_aRTFControlWords;
     static bool s_bControlWordsInitialised;
     // This is the same as aRTFMathControlWords, but sorted
