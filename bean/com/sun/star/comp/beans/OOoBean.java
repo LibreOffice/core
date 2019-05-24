@@ -119,6 +119,7 @@ public class OOoBean
         the dispose method of the OfficeConnection or the OOoBean's stopOOoConnection
         method would make all instances of OOoBean stop working.
      */
+    @Deprecated
     public OOoBean( OfficeConnection iConnection )
         throws NoConnectionException
     {
@@ -212,6 +213,7 @@ public class OOoBean
         make is method work. It is better to call OOoBean's methods and be prepared
         to catch a NoConnectionException.
      */
+    @Deprecated
     public boolean isOOoConnected()
     {
         return iConnection != null;
@@ -353,6 +355,7 @@ public class OOoBean
         should call the clearDocument of the deriving class or {@link #clear} which discards
         the currently displayed document.
      */
+    @Deprecated
     public synchronized void clearDocument( boolean bClearStateToo )
     {
         // TBD
@@ -488,6 +491,7 @@ public class OOoBean
         office window is called, then the actions are performed for which this method
         needed to be called previously.
      */
+    @Deprecated
     public synchronized void releaseSystemWindow()
         throws
             SystemWindowException,
@@ -1024,6 +1028,7 @@ com.sun.star.frame.XLayoutManager xLayoutManager =
 xLayoutManager.showElement("private:resource/menubar/menubar");
         </pre>
      */
+    @Deprecated
     public void setAllBarsVisible( boolean bVisible )
     {
         bIgnoreVisibility = true;
@@ -1041,6 +1046,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         which can be obtained from a frame, to control toolbars. See also
         {@link #setAllBarsVisible setAllBarsVisible}.
      */
+    @Deprecated
     protected void applyToolVisibilities()
     {
         bIgnoreVisibility = true;
@@ -1061,6 +1067,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         which can be obtained from a frame, to control toolbars. See also
         {@link #setAllBarsVisible}.
      */
+    @Deprecated
     protected boolean setToolVisible( String aProperty, String aResourceURL,
         boolean bOldValue, boolean bNewValue )
 
@@ -1127,6 +1134,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         which can be obtained from a frame, to control toolbars. See also
         {@link #setAllBarsVisible}.
      */
+    @Deprecated
     public void setMenuBarVisible(boolean bVisible)
     {
         try
@@ -1154,6 +1162,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         which can be obtained from a frame, to control toolbars. See also
         {@link #setAllBarsVisible}.
      */
+    @Deprecated
     public boolean isMenuBarVisible()
     {
         return bMenuBarVisible;
@@ -1175,6 +1184,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         which can be obtained from a frame, to control toolbars. See also
         {@link #setAllBarsVisible}.
      */
+    @Deprecated
     public void setStandardBarVisible(boolean bVisible)
     {
         try
@@ -1202,6 +1212,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         which can be obtained from a frame, to control toolbars. See also
         {@link #setAllBarsVisible}.
     */
+    @Deprecated
     public boolean isStandardBarVisible()
     {
         return bStandardBarVisible;
@@ -1223,6 +1234,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         which can be obtained from a frame, to control toolbars. See also
         {@link #setAllBarsVisible}.
      */
+    @Deprecated
     public void setToolBarVisible(boolean bVisible)
     {
         try
@@ -1250,6 +1262,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         which can be obtained from a frame, to control toolbars. See also
         {@link #setAllBarsVisible}.
      */
+    @Deprecated
     public boolean isToolBarVisible()
     {
         return bToolBarVisible;
@@ -1271,6 +1284,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         which can be obtained from a frame, to control toolbars. See also
         {@link #setAllBarsVisible}.
      */
+    @Deprecated
     public void setStatusBarVisible(boolean bVisible)
     {
         try
@@ -1298,6 +1312,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         which can be obtained from a frame, to control toolbars. See also
         {@link #setAllBarsVisible}.
      */
+    @Deprecated
     public boolean isStatusBarVisible()
     {
         return bStatusBarVisible;

@@ -24,6 +24,7 @@ package com.sun.star.uno;
  *
  * @deprecated do not use.
  */
+@Deprecated
 public final class Ascii {
     public final char ascii;
 
@@ -33,6 +34,7 @@ public final class Ascii {
      * @deprecated do not use.
      * @param   c  the char value.
      */
+    @Deprecated
     public Ascii(char c) {
         ascii = c;
     }

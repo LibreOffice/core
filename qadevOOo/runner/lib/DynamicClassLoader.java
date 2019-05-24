@@ -23,6 +23,7 @@ import java.lang.reflect.Constructor;
 /**
  * @deprecated: moved to util package.
  */
+@Deprecated
 public class DynamicClassLoader {
 
     /**
