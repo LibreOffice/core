@@ -63,7 +63,7 @@ namespace o3tl
 namespace svx {
 
 struct FrameSelectorImpl;
-
+namespace a11y { class AccFrameSelectorChild; }
 
 /** All possible states of a frame border. */
 enum class FrameBorderState
@@ -160,7 +160,7 @@ public:
     a11yrelationset get_accessible_relation_set() { return GetDrawingArea()->get_accessible_relation_set(); }
 
     /** Returns the accessibility child object of the specified frame border (if enabled). */
-    css::uno::Reference< css::accessibility::XAccessible >
+    rtl::Reference< a11y::AccFrameSelectorChild >
                         GetChildAccessible( FrameBorderType eBorder );
     /** Returns the accessibility child object with specified index (counts enabled frame borders only). */
     css::uno::Reference< css::accessibility::XAccessible >
