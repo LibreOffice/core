@@ -80,7 +80,7 @@ namespace logging
                     m_nLevel = _nLevel;
                 }
 
-        /** prepares implementation of an public accessible method of a log handler
+        /** prepares implementation of a public accessible method of a log handler
 
             <code>enterMethod</code> does the following things:
             <ul><li>It acquires the mutex given in the constructor.</li>
