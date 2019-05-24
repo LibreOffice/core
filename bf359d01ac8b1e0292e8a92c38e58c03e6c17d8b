@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_1c613c37",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2450,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-24T12:18:17Z",
+      "side": 1,
+      "message": "that doesn\u0027t work; you can\u0027t create a shared_ptr from an existing object (and even if you used std::enable_shared_from_this, calling shared_from_this() here would require that there\u0027s already an existing shared_ptr for this, which apparently there isn\u0027t)",
+      "revId": "bf359d01ac8b1e0292e8a92c38e58c03e6c17d8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
