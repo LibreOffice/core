@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_3cdd1814",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2433,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-24T11:10:11Z",
+      "side": 1,
+      "message": "hmm... i think this should work... SwDoc::MoveParagraphImpl will either move the nodes, or it will copy them (if redlining is enabled) - there\u0027s no chance of the nodes being deleted as far as i can see.",
+      "revId": "52a6dc1e4fe97557b254b1247be38b85cd1ebd02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
