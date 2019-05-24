@@ -38,6 +38,7 @@
 #include <vcl/virdev.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <comphelper/lok.hxx>
 
 #include <sfx2/strings.hrc>
 #include <helpids.h>
@@ -353,6 +354,10 @@ SfxTabDialogController::SfxTabDialogController
         m_xExampleSet.reset(new SfxItemSet(*m_pSet));
         m_pOutSet.reset(new SfxItemSet(*m_pSet->GetPool(), m_pSet->GetRanges()));
     }
+
+    // The reset functionality seems to be confusing to many; disable in LOK.
+    if (comphelper::LibreOfficeKit::isActive())
+        RemoveResetButton();
 }
 
 IMPL_LINK_NOARG(SfxTabDialogController, OkHdl, weld::Button&, void)
