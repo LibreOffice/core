@@ -50,17 +50,17 @@ ValueSetItem::~ValueSetItem()
 {
     if( mxAcc.is() )
     {
-        static_cast< ValueItemAcc* >( mxAcc.get() )->ParentDestroyed();
+        mxAcc->ParentDestroyed();
     }
 }
 
 
-uno::Reference< accessibility::XAccessible > const & ValueSetItem::GetAccessible( bool bIsTransientChildrenDisabled )
+uno::Reference< accessibility::XAccessible > ValueSetItem::GetAccessible( bool bIsTransientChildrenDisabled )
 {
     if( !mxAcc.is() )
         mxAcc = new ValueItemAcc( this, bIsTransientChildrenDisabled );
 
-    return mxAcc;
+    return mxAcc.get();
 }
 
 SvtValueSetItem::SvtValueSetItem( SvtValueSet& rParent )
@@ -77,16 +77,16 @@ SvtValueSetItem::~SvtValueSetItem()
 {
     if( mxAcc.is() )
     {
-        static_cast< ValueItemAcc* >( mxAcc.get() )->ParentDestroyed();
+        mxAcc.get()->ParentDestroyed();
     }
 }
 
-uno::Reference< accessibility::XAccessible > const & SvtValueSetItem::GetAccessible( bool bIsTransientChildrenDisabled )
+uno::Reference< accessibility::XAccessible > SvtValueSetItem::GetAccessible( bool bIsTransientChildrenDisabled )
 {
     if( !mxAcc.is() )
         mxAcc = new SvtValueItemAcc( this, bIsTransientChildrenDisabled );
 
-    return mxAcc;
+    return mxAcc.get();
 }
 
 ValueSetAcc::ValueSetAcc( ValueSet* pParent ) :
@@ -1071,6 +1071,12 @@ SvtValueItemAcc::SvtValueItemAcc( SvtValueSetItem* pParent, bool bIsTransientChi
 
 SvtValueItemAcc::~SvtValueItemAcc()
 {
+}
+
+void SvtValueItemAcc::ParentDestroyed()
+{
+    const ::osl::MutexGuard aGuard( maMutex );
+    mpParent = nullptr;
 }
 
 namespace

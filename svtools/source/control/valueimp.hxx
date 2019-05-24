@@ -47,7 +47,9 @@ enum ValueSetItemType
     VALUESETITEM_USERDRAW
 };
 
+class ValueItemAcc;
 class ValueSet;
+class SvtValueItemAcc;
 class SvtValueSet;
 
 struct ValueSetItem
@@ -60,12 +62,12 @@ struct ValueSetItem
     Color               maColor;
     OUString            maText;
     void*               mpData;
-    css::uno::Reference< css::accessibility::XAccessible > mxAcc;
+    rtl::Reference< ValueItemAcc > mxAcc;
 
     explicit ValueSetItem( ValueSet& rParent );
     ~ValueSetItem();
 
-    css::uno::Reference< css::accessibility::XAccessible > const &
+    css::uno::Reference< css::accessibility::XAccessible >
                         GetAccessible( bool bIsTransientChildrenDisabled );
 };
 
@@ -79,12 +81,12 @@ struct SvtValueSetItem
     Color               maColor;
     OUString            maText;
     void*               mpData;
-    css::uno::Reference< css::accessibility::XAccessible > mxAcc;
+    rtl::Reference< SvtValueItemAcc > mxAcc;
 
     explicit SvtValueSetItem( SvtValueSet& rParent );
     ~SvtValueSetItem();
 
-    css::uno::Reference< css::accessibility::XAccessible > const &
+    css::uno::Reference< css::accessibility::XAccessible >
                         GetAccessible( bool bIsTransientChildrenDisabled );
 };
 
@@ -409,6 +411,8 @@ public:
 
     SvtValueItemAcc(SvtValueSetItem* pParent, bool bIsTransientChildrenDisabled);
     virtual ~SvtValueItemAcc() override;
+
+    void    ParentDestroyed();
 
     void    FireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
 
