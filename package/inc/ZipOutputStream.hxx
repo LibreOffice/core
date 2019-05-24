@@ -29,6 +29,7 @@
 
 struct ZipEntry;
 class ZipOutputEntry;
+class ZipOutputEntryInThread;
 class ZipPackageStream;
 
 class ZipOutputStream
@@ -39,7 +40,7 @@ class ZipOutputStream
 
     ByteChucker         m_aChucker;
     ZipEntry            *m_pCurrentEntry;
-    std::vector< ZipOutputEntry* > m_aEntries;
+    std::vector< ZipOutputEntryInThread* > m_aEntries;
     std::exception_ptr m_aDeflateException;
 
 public:
@@ -47,7 +48,7 @@ public:
         const css::uno::Reference< css::io::XOutputStream > &xOStream );
     ~ZipOutputStream();
 
-    void addDeflatingThreadTask( ZipOutputEntry *pEntry, std::unique_ptr<comphelper::ThreadTask> pThreadTask );
+    void addDeflatingThreadTask( ZipOutputEntryInThread *pEntry, std::unique_ptr<comphelper::ThreadTask> pThreadTask );
 
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
@@ -79,7 +80,7 @@ private:
     void writeEXT( const ZipEntry &rEntry );
 
     // ScheduledThread handling helpers
-    void consumeScheduledThreadTaskEntry(std::unique_ptr<ZipOutputEntry> pCandidate);
+    void consumeScheduledThreadTaskEntry(std::unique_ptr<ZipOutputEntryInThread> pCandidate);
     void consumeFinishedScheduledThreadTaskEntries();
 
 public:
