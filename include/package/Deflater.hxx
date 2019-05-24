@@ -45,12 +45,12 @@ public:
     ~Deflater();
     Deflater(sal_Int32 nSetLevel, bool bNowrap);
     void setInputSegment( const css::uno::Sequence< sal_Int8 >& rBuffer );
-    bool needsInput(  );
+    bool needsInput() const;
     void finish(  );
-    bool finished(  ) { return bFinished;}
+    bool finished() const { return bFinished;}
     sal_Int32 doDeflateSegment( css::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewLength );
-    sal_Int64 getTotalIn(  );
-    sal_Int64 getTotalOut(  );
+    sal_Int64 getTotalIn() const;
+    sal_Int64 getTotalOut() const;
     void reset(  );
     void end(  );
 };

@@ -100,7 +100,7 @@ void Deflater::setInputSegment( const uno::Sequence< sal_Int8 >& rBuffer )
     nLength = rBuffer.getLength();
 }
 
-bool Deflater::needsInput(  )
+bool Deflater::needsInput() const
 {
     return nLength <=0;
 }
@@ -113,11 +113,11 @@ sal_Int32 Deflater::doDeflateSegment( uno::Sequence< sal_Int8 >& rBuffer, sal_In
     OSL_ASSERT( !(nNewLength < 0 || nNewLength > rBuffer.getLength()));
     return doDeflateBytes(rBuffer, /*nNewOffset*/0, nNewLength);
 }
-sal_Int64 Deflater::getTotalIn(  )
+sal_Int64 Deflater::getTotalIn() const
 {
     return pStream->total_in; // FIXME64: zlib doesn't look 64bit clean here
 }
-sal_Int64 Deflater::getTotalOut(  )
+sal_Int64 Deflater::getTotalOut() const
 {
     return pStream->total_out; // FIXME64: zlib doesn't look 64bit clean here
 }

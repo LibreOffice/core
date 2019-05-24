@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
 #include <ZipPackageStream.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -431,65 +430,6 @@ bool ZipPackageStream::ParsePackageRawStream()
     return true;
 }
 
-static void deflateZipEntry(ZipOutputEntry *pZipEntry,
-        const uno::Reference< io::XInputStream >& xInStream)
-{
-    sal_Int32 nLength = 0;
-    uno::Sequence< sal_Int8 > aSeq(n_ConstBufferSize);
-    do
-    {
-        nLength = xInStream->readBytes(aSeq, n_ConstBufferSize);
-        if (nLength != n_ConstBufferSize)
-            aSeq.realloc(nLength);
-
-        pZipEntry->write(aSeq);
-    }
-    while (nLength == n_ConstBufferSize);
-    pZipEntry->closeEntry();
-}
-
-class DeflateThreadTask: public comphelper::ThreadTask
-{
-    ZipOutputEntry *mpEntry;
-    uno::Reference< io::XInputStream > mxInStream;
-
-public:
-    DeflateThreadTask( const std::shared_ptr<comphelper::ThreadTaskTag>& pTag, ZipOutputEntry *pEntry,
-                       const uno::Reference< io::XInputStream >& xInStream )
-        : comphelper::ThreadTask(pTag)
-        , mpEntry(pEntry)
-        , mxInStream(xInStream)
-    {}
-
-private:
-    virtual void doWork() override
-    {
-        try
-        {
-            mpEntry->createBufferFile();
-            deflateZipEntry(mpEntry, mxInStream);
-            mxInStream.clear();
-            mpEntry->closeBufferFile();
-            mpEntry->setFinished();
-        }
-        catch (...)
-        {
-            mpEntry->setParallelDeflateException(std::current_exception());
-            try
-            {
-                if (mpEntry->m_xOutStream.is())
-                    mpEntry->closeBufferFile();
-                if (!mpEntry->m_aTempURL.isEmpty())
-                    mpEntry->deleteBufferFile();
-            }
-            catch (uno::Exception const&)
-            {
-            }
-            mpEntry->setFinished();
-        }
-    }
-};
-
 static void ImplSetStoredData( ZipEntry & rEntry, uno::Reference< io::XInputStream> const & rStream )
 {
     // It's very annoying that we have to do this, but lots of zip packages
@@ -839,16 +779,16 @@ bool ZipPackageStream::saveChild(
                     rZipOut.reduceScheduledThreadTasksToGivenNumberOrLess(nAllowedTasks);
 
                     // Start a new thread task deflating this zip entry
-                    ZipOutputEntry *pZipEntry = new ZipOutputEntry(
+                    ZipOutputEntryInThread *pZipEntry = new ZipOutputEntryInThread(
                             m_xContext, *pTempEntry, this, bToBeEncrypted);
                     rZipOut.addDeflatingThreadTask( pZipEntry,
-                            std::make_unique<DeflateThreadTask>(rZipOut.getThreadTaskTag(), pZipEntry, xStream) );
+                            pZipEntry->createTask( rZipOut.getThreadTaskTag(), xStream) );
                 }
                 else
                 {
                     rZipOut.writeLOC(pTempEntry, bToBeEncrypted);
                     ZipOutputEntry aZipEntry(rZipOut.getStream(), m_xContext, *pTempEntry, this, bToBeEncrypted);
-                    deflateZipEntry(&aZipEntry, xStream);
+                    aZipEntry.writeStream(xStream);
                     rZipOut.rawCloseEntry(bToBeEncrypted);
                 }
             }

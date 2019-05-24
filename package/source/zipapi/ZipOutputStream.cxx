@@ -68,7 +68,7 @@ void ZipOutputStream::setEntry( ZipEntry *pEntry )
     }
 }
 
-void ZipOutputStream::addDeflatingThreadTask( ZipOutputEntry *pEntry, std::unique_ptr<comphelper::ThreadTask> pTask )
+void ZipOutputStream::addDeflatingThreadTask( ZipOutputEntryInThread *pEntry, std::unique_ptr<comphelper::ThreadTask> pTask )
 {
     comphelper::ThreadPool::getSharedOptimalPool().pushTask(std::move(pTask));
     m_aEntries.push_back(pEntry);
@@ -91,7 +91,7 @@ void ZipOutputStream::rawCloseEntry( bool bEncrypt )
     m_pCurrentEntry = nullptr;
 }
 
-void ZipOutputStream::consumeScheduledThreadTaskEntry(std::unique_ptr<ZipOutputEntry> pCandidate)
+void ZipOutputStream::consumeScheduledThreadTaskEntry(std::unique_ptr<ZipOutputEntryInThread> pCandidate)
 {
     //Any exceptions thrown in the threads were caught and stored for now
     const std::exception_ptr& rCaughtException(pCandidate->getParallelDeflateException());
@@ -126,13 +126,13 @@ void ZipOutputStream::consumeScheduledThreadTaskEntry(std::unique_ptr<ZipOutputE
 
 void ZipOutputStream::consumeFinishedScheduledThreadTaskEntries()
 {
-    std::vector< ZipOutputEntry* > aNonFinishedEntries;
+    std::vector< ZipOutputEntryInThread* > aNonFinishedEntries;
 
-    for(ZipOutputEntry* pEntry : m_aEntries)
+    for(ZipOutputEntryInThread* pEntry : m_aEntries)
     {
         if(pEntry->isFinished())
         {
-            consumeScheduledThreadTaskEntry(std::unique_ptr<ZipOutputEntry>(pEntry));
+            consumeScheduledThreadTaskEntry(std::unique_ptr<ZipOutputEntryInThread>(pEntry));
         }
         else
         {
@@ -167,9 +167,9 @@ void ZipOutputStream::finish()
     // consume all processed entries
     while(!m_aEntries.empty())
     {
-        ZipOutputEntry* pCandidate = m_aEntries.back();
+        ZipOutputEntryInThread* pCandidate = m_aEntries.back();
         m_aEntries.pop_back();
-        consumeScheduledThreadTaskEntry(std::unique_ptr<ZipOutputEntry>(pCandidate));
+        consumeScheduledThreadTaskEntry(std::unique_ptr<ZipOutputEntryInThread>(pCandidate));
     }
 
     sal_Int32 nOffset= static_cast < sal_Int32 > (m_aChucker.GetPosition());
