@@ -115,6 +115,7 @@ public:
     void testTdf115873();
     void testTdf115873Group();
     void testCutSelectionChange();
+    void testLanguageAllText();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -161,6 +162,7 @@ public:
     CPPUNIT_TEST(testTdf115873);
     CPPUNIT_TEST(testTdf115873Group);
     CPPUNIT_TEST(testCutSelectionChange);
+    CPPUNIT_TEST(testLanguageAllText);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1952,6 +1954,35 @@ void SdTiledRenderingTest::testLanguageStatus()
         CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(xItem1.get()));
         CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(xItem2.get()));
     }
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testLanguageAllText()
+{
+    // Load the document, which has a single shape, with Hungarian text.
+    comphelper::LibreOfficeKit::setActive();
+    createDoc("language-all-text.odp");
+
+    // Set tha language to English for all text.
+    uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence({
+        { "Language", uno::makeAny(OUString("Default_English (USA)")) },
+    });
+    comphelper::dispatchCommand(".uno:LanguageStatus", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // Assert that the shape text language was changed.
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xRun(
+        getRunFromParagraph(0, getParagraphFromShape(0, xShape)), uno::UNO_QUERY);
+    lang::Locale aLocale;
+    xRun->getPropertyValue("CharLocale") >>= aLocale;
+    // Without the accompanying fix in place, this test would have failed with 'Expected: en;
+    // Actual: hu', as the shape text language was not set.
+    CPPUNIT_ASSERT_EQUAL(OUString("en"), aLocale.Language);
 
     comphelper::LibreOfficeKit::setActive(false);
 }
