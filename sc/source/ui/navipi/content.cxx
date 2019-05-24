@@ -724,7 +724,7 @@ void ScContentTree::RequestHelp( const HelpEvent& rHEvt )
             if (bRet)
             {
                 SvLBoxTab* pTab;
-                SvLBoxString* pItem = static_cast<SvLBoxString*>(GetItem( pEntry, aPos.X(), &pTab ));
+                SvLBoxItem* pItem = GetItem( pEntry, aPos.X(), &pTab );
                 if( pItem )
                 {
                     aPos = GetEntryPosition( pEntry );
