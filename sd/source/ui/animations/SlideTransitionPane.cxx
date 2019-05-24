@@ -1105,6 +1105,8 @@ IMPL_LINK_NOARG(SlideTransitionPane, DurationModifiedHdl, Edit&, void)
         mpCBX_duration->SetValue(0);
     else
         mpCBX_duration->SetValue(duration_value);
+
+    applyToSelectedPages();
 }
 
 IMPL_LINK_NOARG(SlideTransitionPane, DurationLoseFocusHdl, Control&, void)
