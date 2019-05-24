@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_af97ac90",
+        "filename": "vcl/inc/qt5/Qt5SvpSurface.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-05-24T21:27:36Z",
+      "side": 1,
+      "message": "\u0027m_cr\u0027 might be a little short to be a descriptive variable name. :)\nWould sth like \u0027m_pCairoContext\u0027 fit?\n( https://www.cairographics.org/manual/cairo-cairo-t.html#cairo-t says: \"Cairo contexts, as cairo_t objects are named [...]\")",
+      "range": {
+        "startLine": 26,
+        "startChar": 19,
+        "endLine": 26,
+        "endChar": 23
+      },
+      "revId": "d8ecd6af413115630567c88f13ac7a7f7c7e23de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
