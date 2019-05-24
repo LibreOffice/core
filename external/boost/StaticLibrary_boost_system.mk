@@ -11,7 +11,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,boost_system))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,boost_system,boost))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,boost_system))
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,boost_system))
 
 # disable "auto link" "feature" on MSVC
 $(eval $(call gb_StaticLibrary_add_defs,boost_system,\

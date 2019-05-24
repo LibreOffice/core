@@ -9,7 +9,7 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,boost_iostreams))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,boost_iostreams))
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,boost_iostreams))
 
 # disable "auto link" "feature" on MSVC
 $(eval $(call gb_StaticLibrary_add_defs,boost_iostreams,\

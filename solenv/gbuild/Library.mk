@@ -230,6 +230,7 @@ gb_Library_add_nativeres = $(call gb_Library__forward_to_Linktarget,$(subst gb_L
 gb_Library_set_nativeres = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
 gb_Library_set_visibility_default = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
 gb_Library_set_warnings_not_errors = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
+gb_Library_set_warnings_disabled = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
 gb_Library_set_external_code = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
 gb_Library_set_generated_cxx_suffix = $(call gb_Library__forward_to_Linktarget,$(subst gb_Library_,,$(0)),$(1),$(2),$(3))
 

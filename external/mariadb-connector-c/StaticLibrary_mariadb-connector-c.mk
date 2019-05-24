@@ -9,7 +9,7 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,mariadb-connector-c))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,mariadb-connector-c))
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,mariadb-connector-c))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,mariadb-connector-c,mariadb-connector-c))
 

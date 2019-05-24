@@ -9,7 +9,7 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,mDNSResponder))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,mDNSResponder))
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,mDNSResponder))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,mDNSResponder,mDNSResponder))
 

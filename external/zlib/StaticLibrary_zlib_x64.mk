@@ -13,7 +13,7 @@ $(eval $(call gb_StaticLibrary_set_x64,zlib_x64,YES))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,zlib_x64,zlib))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,zlib_x64))
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,zlib_x64))
 
 $(eval $(call gb_StaticLibrary_set_include,zlib_x64,\
 	-I$(call gb_UnpackedTarball_get_dir,zlib) \

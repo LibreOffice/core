@@ -19,7 +19,7 @@ $(eval $(call gb_Library_use_externals,gpgmepp,\
 $(eval $(call gb_LinkTarget_use_external_project,\
 	$(call gb_Library_get_linktarget,gpgmepp),gpgmepp,full))
 
-$(eval $(call gb_Library_set_warnings_not_errors,gpgmepp))
+$(eval $(call gb_Library_set_warnings_disabled,gpgmepp))
 
 $(eval $(call gb_Library_set_include,gpgmepp,\
     -I$(call gb_UnpackedTarball_get_dir,gpgmepp)/lang/cpp/src \

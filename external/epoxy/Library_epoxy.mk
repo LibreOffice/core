@@ -11,21 +11,12 @@ $(eval $(call gb_Library_Library,epoxy))
 
 $(eval $(call gb_Library_use_unpacked,epoxy,epoxy))
 
-$(eval $(call gb_Library_set_warnings_not_errors,epoxy))
+$(eval $(call gb_Library_set_warnings_disabled,epoxy))
 
 $(eval $(call gb_Library_set_include,epoxy,\
 	-I$(call gb_UnpackedTarball_get_dir,epoxy)/include \
 	-I$(call gb_UnpackedTarball_get_dir,epoxy)/src \
 	$$(INCLUDE) \
-))
-
-# epoxy is riddled with warnings... let's spare us
-# the pointless spamming
-$(eval $(call gb_Library_add_cxxflags,epoxy,\
-	-w \
-))
-$(eval $(call gb_Library_add_cflags,epoxy,\
-	-w \
 ))
 
 ifeq ($(OS),LINUX)

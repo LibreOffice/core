@@ -46,7 +46,7 @@ $(call gb_Helper_abbreviate_dirs,\
 					$(MSVC_CXX) -I$(SRCDIR)/solenv/clang-cl,$(gb_CXX))))) \
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
-		$(2) \
+		$(if $(WARNINGS_DISABLED),$(call gb_Helper_disable_warnings,$(2)),$(2)) \
 		$(if $(EXTERNAL_CODE), \
 			$(if $(filter -clr,$(2)),,$(if $(COM_IS_CLANG),-Wno-undef)), \
 			$(gb_DEFS_INTERNAL)) \
@@ -82,7 +82,8 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2),$(7))) && \
 	unset INCLUDE && \
 	$(gb_CXX) \
-		$(4) $(5) -Fd$(PDBFILE) \
+		$(if $(WARNINGS_DISABLED),$(call gb_Helper_disable_warnings,$(4) $(5)),$(4) $(5)) \
+		-Fd$(PDBFILE) \
 		$(if $(EXTERNAL_CODE),$(if $(COM_IS_CLANG),-Wno-undef),$(gb_DEFS_INTERNAL)) \
 		$(gb_LTOFLAGS) \
 		$(gb_COMPILERDEPFLAGS) \

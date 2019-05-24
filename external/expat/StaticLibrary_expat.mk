@@ -9,7 +9,7 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,expat))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,expat))
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,expat))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,expat,expat))
 
@@ -41,11 +41,6 @@ $(eval $(call gb_StaticLibrary_add_defs,expat,\
     -DHAVE_EXPAT_CONFIG_H \
 ))
 endif
-
-# suppress warning spam
-$(eval $(call gb_StaticLibrary_add_cflags,expat,\
-	-w \
-))
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,expat,\
 	UnpackedTarball/expat/lib/loadlibrary \

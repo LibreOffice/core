@@ -82,6 +82,8 @@ gb_CXXFLAGS_COMMON := \
 	-fno-common \
 	-pipe \
 
+gb_Helper_disable_warnings = $(1) -w
+
 ifeq ($(HAVE_BROKEN_GCC_WMAYBE_UNINITIALIZED),TRUE)
 gb_CXXFLAGS_COMMON += -Wno-maybe-uninitialized
 endif

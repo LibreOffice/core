@@ -11,7 +11,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,mythes))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,mythes,mythes))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,mythes))
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,mythes))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,mythes,\
 	UnpackedTarball/mythes/mythes \

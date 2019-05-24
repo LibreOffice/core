@@ -11,7 +11,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,libexttextcat))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,libexttextcat,libexttextcat))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,libexttextcat))
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,libexttextcat))
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,libexttextcat,\
 	UnpackedTarball/libexttextcat/src/common \

@@ -16,7 +16,7 @@ $(eval $(call gb_Library_set_include,rdf, \
 
 $(eval $(call gb_Library_use_unpacked,rdf,redland))
 
-$(eval $(call gb_Library_set_warnings_not_errors,rdf))
+$(eval $(call gb_Library_set_warnings_disabled,rdf))
 
 $(eval $(call gb_Library_use_libraries,rdf,\
 	raptor2 \

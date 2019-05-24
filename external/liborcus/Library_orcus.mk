@@ -20,7 +20,7 @@ $(eval $(call gb_Library_use_externals,orcus,\
 	zlib \
 ))
 
-$(eval $(call gb_Library_set_warnings_not_errors,orcus))
+$(eval $(call gb_Library_set_warnings_disabled,orcus))
 
 $(eval $(call gb_Library_set_include,orcus,\
 	-I$(call gb_UnpackedTarball_get_dir,liborcus)/include \

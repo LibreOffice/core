@@ -9,7 +9,7 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,libpng))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,libpng))
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,libpng))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,libpng,libpng))
 

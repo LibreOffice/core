@@ -13,7 +13,7 @@ $(eval $(call gb_Library_use_external,clucene,zlib))
 
 $(eval $(call gb_Library_use_unpacked,clucene,clucene))
 
-$(eval $(call gb_Library_set_warnings_not_errors,clucene))
+$(eval $(call gb_Library_set_warnings_disabled,clucene))
 
 $(eval $(call gb_Library_set_include,clucene,\
 	-I$(call gb_UnpackedTarball_get_dir,clucene)/inc/internal \
@@ -33,15 +33,6 @@ $(eval $(call gb_Library_add_defs,clucene,\
 # workdir/UnpackedTarball/clucene/src/core/CLucene/util/Equators.h uses std::binary_function:
 $(eval $(call gb_Library_add_defs,clucene, \
     -D_HAS_AUTO_PTR_ETC=1 \
-))
-
-# clucene is riddled with warnings... let's spare use
-# the pointless spamming
-$(eval $(call gb_Library_add_cxxflags,clucene,\
-	-w \
-))
-$(eval $(call gb_Library_add_cflags,clucene,\
-	-w \
 ))
 
 ifeq ($(OS),LINUX)
