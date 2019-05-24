@@ -23,6 +23,7 @@
 #include <Qt5Frame.hxx>
 #include <Qt5Graphics.hxx>
 #include <Qt5Instance.hxx>
+#include <Qt5SvpGraphics.hxx>
 #include <Qt5Tools.hxx>
 
 #include <QtCore/QMimeData>
@@ -43,7 +44,6 @@
 #include <QtWidgets/QWidget>
 
 #include <cairo.h>
-#include <headless/svpgdi.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <window.h>
