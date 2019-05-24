@@ -201,7 +201,7 @@ protected:
     // This member is used to determine the default value
     // denoted by DISPID_VALUE (0). For proper results in JavaScript
     // we have to return the default value when we write an object
-    // as out parameter. That is, we get an JScript Array as parameter
+    // as out parameter. That is, we get a JScript Array as parameter
     // and put a wrapped object on index null. The array object tries
     // to detect the default value. The wrapped object must then return
     // its own IDispatch* otherwise we cannot access it within the script.
@@ -222,7 +222,7 @@ protected:
     Only if Invoke fails the name is being checked. Moreover Invoke tries to figure out
     if a call is made to a property or method if the flags are DISPATCH_METHOD | DISPATCH_PROPERTYPUT.
     If something has been found out about a property or member than it is saved
-    in a MemberInfo structure hold by a IdToMemberInfoMap stl map.
+    in a MemberInfo structure hold by an IdToMemberInfoMap stl map.
 
 *****************************************************************************/
 class UnoObjectWrapperRemoteOpt: public InterfaceOleWrapper
