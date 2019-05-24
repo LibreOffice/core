@@ -46,7 +46,8 @@ ZipOutputEntry::ZipOutputEntry(
         const uno::Reference< uno::XComponentContext >& rxContext,
         ZipEntry& rEntry,
         ZipPackageStream* pStream,
-        bool bEncrypt)
+        bool bEncrypt,
+        bool checkStream)
 : m_aDeflateBuffer(n_ConstBufferSize)
 , m_aDeflater(DEFAULT_COMPRESSION, true)
 , m_xContext(rxContext)
@@ -55,10 +56,10 @@ ZipOutputEntry::ZipOutputEntry(
 , m_nDigested(0)
 , m_pCurrentStream(pStream)
 , m_bEncryptCurrentEntry(bEncrypt)
-, m_bFinished(false)
 {
     assert(m_pCurrentEntry->nMethod == DEFLATED && "Use ZipPackageStream::rawWrite() for STORED entries");
-    assert(m_xOutStream.is());
+    (void)checkStream;
+    assert(!checkStream || m_xOutStream.is());
     if (m_bEncryptCurrentEntry)
     {
         m_xCipherContext = ZipFile::StaticGetCipher( m_xContext, pStream->GetEncryptionData(), true );
@@ -67,64 +68,13 @@ ZipOutputEntry::ZipOutputEntry(
 }
 
 ZipOutputEntry::ZipOutputEntry(
+        const css::uno::Reference< css::io::XOutputStream >& rxOutput,
         const uno::Reference< uno::XComponentContext >& rxContext,
         ZipEntry& rEntry,
         ZipPackageStream* pStream,
         bool bEncrypt)
-: m_aDeflateBuffer(n_ConstBufferSize)
-, m_aDeflater(DEFAULT_COMPRESSION, true)
-, m_xContext(rxContext)
-, m_pCurrentEntry(&rEntry)
-, m_nDigested(0)
-, m_pCurrentStream(pStream)
-, m_bEncryptCurrentEntry(bEncrypt)
-, m_bFinished(false)
+: ZipOutputEntry( rxOutput, rxContext, rEntry, pStream, bEncrypt, true)
 {
-    assert(m_pCurrentEntry->nMethod == DEFLATED && "Use ZipPackageStream::rawWrite() for STORED entries");
-    if (m_bEncryptCurrentEntry)
-    {
-        m_xCipherContext = ZipFile::StaticGetCipher( m_xContext, pStream->GetEncryptionData(), true );
-        m_xDigestContext = ZipFile::StaticGetDigestContextForChecksum( m_xContext, pStream->GetEncryptionData() );
-    }
-}
-
-ZipOutputEntry::~ZipOutputEntry()
-{
-}
-
-void ZipOutputEntry::createBufferFile()
-{
-    assert(!m_xOutStream.is() && m_aTempURL.isEmpty() &&
-           "should only be called in the threaded mode where there is no existing stream yet");
-    uno::Reference < beans::XPropertySet > xTempFileProps(
-            io::TempFile::create(m_xContext),
-            uno::UNO_QUERY_THROW );
-    xTempFileProps->setPropertyValue("RemoveFile", uno::makeAny(false));
-    uno::Any aUrl = xTempFileProps->getPropertyValue( "Uri" );
-    aUrl >>= m_aTempURL;
-    assert(!m_aTempURL.isEmpty());
-
-    uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(ucb::SimpleFileAccess::create(m_xContext));
-    m_xOutStream = xTempAccess->openFileWrite(m_aTempURL);
-}
-
-void ZipOutputEntry::closeBufferFile()
-{
-    m_xOutStream->closeOutput();
-    m_xOutStream.clear();
-}
-
-void ZipOutputEntry::deleteBufferFile()
-{
-    assert(!m_xOutStream.is() && !m_aTempURL.isEmpty());
-    uno::Reference < ucb::XSimpleFileAccess3 > xAccess(ucb::SimpleFileAccess::create(m_xContext));
-    xAccess->kill(m_aTempURL);
-}
-
-uno::Reference< io::XInputStream > ZipOutputEntry::getData() const
-{
-    uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(ucb::SimpleFileAccess::create(m_xContext));
-    return xTempAccess->openFileRead(m_aTempURL);
 }
 
 void ZipOutputEntry::closeEntry()
@@ -239,6 +189,116 @@ void ZipOutputEntry::doDeflate()
             m_aCRC.update( aEncryptionBuffer );
         }
     }
+}
+
+ZipOutputEntryInThread::ZipOutputEntryInThread(
+        const uno::Reference< uno::XComponentContext >& rxContext,
+        ZipEntry& rEntry,
+        ZipPackageStream* pStream,
+        bool bEncrypt)
+: ZipOutputEntry( uno::Reference< css::io::XOutputStream >(), rxContext, rEntry, pStream, bEncrypt, true)
+, m_bFinished(false)
+{
+}
+
+void ZipOutputEntryInThread::createBufferFile()
+{
+    assert(!m_xOutStream.is() && m_aTempURL.isEmpty() &&
+           "should only be called in the threaded mode where there is no existing stream yet");
+    uno::Reference < beans::XPropertySet > xTempFileProps(
+            io::TempFile::create(m_xContext),
+            uno::UNO_QUERY_THROW );
+    xTempFileProps->setPropertyValue("RemoveFile", uno::makeAny(false));
+    uno::Any aUrl = xTempFileProps->getPropertyValue( "Uri" );
+    aUrl >>= m_aTempURL;
+    assert(!m_aTempURL.isEmpty());
+
+    uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(ucb::SimpleFileAccess::create(m_xContext));
+    m_xOutStream = xTempAccess->openFileWrite(m_aTempURL);
+}
+
+void ZipOutputEntryInThread::closeBufferFile()
+{
+    m_xOutStream->closeOutput();
+    m_xOutStream.clear();
+}
+
+void ZipOutputEntryInThread::deleteBufferFile()
+{
+    assert(!m_xOutStream.is() && !m_aTempURL.isEmpty());
+    uno::Reference < ucb::XSimpleFileAccess3 > xAccess(ucb::SimpleFileAccess::create(m_xContext));
+    xAccess->kill(m_aTempURL);
+}
+
+uno::Reference< io::XInputStream > ZipOutputEntryInThread::getData() const
+{
+    uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(ucb::SimpleFileAccess::create(m_xContext));
+    return xTempAccess->openFileRead(m_aTempURL);
+}
+
+class ZipOutputEntryInThread::Task : public comphelper::ThreadTask
+{
+    ZipOutputEntryInThread *mpEntry;
+    uno::Reference< io::XInputStream > mxInStream;
+
+public:
+    Task( const std::shared_ptr<comphelper::ThreadTaskTag>& pTag, ZipOutputEntryInThread *pEntry,
+          const uno::Reference< io::XInputStream >& xInStream )
+        : comphelper::ThreadTask(pTag)
+        , mpEntry(pEntry)
+        , mxInStream(xInStream)
+    {}
+
+private:
+    virtual void doWork() override
+    {
+        try
+        {
+            mpEntry->createBufferFile();
+            mpEntry->writeStream(mxInStream);
+            mxInStream.clear();
+            mpEntry->closeBufferFile();
+            mpEntry->setFinished();
+        }
+        catch (...)
+        {
+            mpEntry->setParallelDeflateException(std::current_exception());
+            try
+            {
+                if (mpEntry->m_xOutStream.is())
+                    mpEntry->closeBufferFile();
+                if (!mpEntry->m_aTempURL.isEmpty())
+                    mpEntry->deleteBufferFile();
+            }
+            catch (uno::Exception const&)
+            {
+            }
+            mpEntry->setFinished();
+        }
+    }
+};
+
+std::unique_ptr<comphelper::ThreadTask> ZipOutputEntryInThread::createTask(
+    const std::shared_ptr<comphelper::ThreadTaskTag>& pTag,
+    const uno::Reference< io::XInputStream >& xInStream )
+{
+    return std::make_unique<Task>(pTag, this, xInStream);
+}
+
+void ZipOutputEntry::writeStream(const uno::Reference< io::XInputStream >& xInStream)
+{
+    sal_Int32 nLength = 0;
+    uno::Sequence< sal_Int8 > aSeq(n_ConstBufferSize);
+    do
+    {
+        nLength = xInStream->readBytes(aSeq, n_ConstBufferSize);
+        if (nLength != n_ConstBufferSize)
+            aSeq.realloc(nLength);
+
+        write(aSeq);
+    }
+    while (nLength == n_ConstBufferSize);
+    closeEntry();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
