@@ -323,8 +323,9 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
         case WindowType::MULTILINEEDIT: nRole = accessibility::AccessibleRole::SCROLL_PANE; break;
 
         case WindowType::PATTERNFIELD:
-        case WindowType::CALCINPUTLINE:
         case WindowType::EDIT: nRole = static_cast<Edit const *>(this)->IsPassword() ? accessibility::AccessibleRole::PASSWORD_TEXT : accessibility::AccessibleRole::TEXT; break;
+
+        case WindowType::CALCINPUTLINE: nRole = accessibility::AccessibleRole::TEXT; break;
 
         case WindowType::PATTERNBOX:
         case WindowType::NUMERICBOX:
