@@ -304,6 +304,10 @@ void SAL_CALL UpdateCheckJob::notifyTermination( lang::EventObject const & )
 static uno::Reference<uno::XInterface>
 createJobInstance(const uno::Reference<uno::XComponentContext>& xContext)
 {
+    // don't bother running this if we are in unit-test mode, just generates annoying warnings
+    if (getenv("LO_TESTNAME"))
+        return uno::Reference<uno::XInterface>();
+
     css::uno::Reference<css::frame::XDesktop2> desktop(
         css::frame::Desktop::create(xContext));
     rtl::Reference<UpdateCheckJob> job(new UpdateCheckJob(xContext, desktop));
