@@ -385,6 +385,7 @@ public class FactoryHelper {
      * @see     com.sun.star.lang.XServiceInfo
      * @deprecated as of UDK 1.0
      */
+    @Deprecated
     public static XSingleServiceFactory getServiceFactory(Class<?> implClass,
                                                           XMultiServiceFactory multiFactory,
                                                           XRegistryKey regKey)

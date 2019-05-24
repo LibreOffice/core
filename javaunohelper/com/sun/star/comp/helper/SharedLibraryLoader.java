@@ -34,6 +34,7 @@ import com.sun.star.registry.XRegistryKey;
  *
  * @see         com.sun.star.loader.SharedLibrary
  */
+@Deprecated
 public class SharedLibraryLoader {
     /**
      * The default library which contains the SharedLibraryLoader component

@@ -28,6 +28,7 @@ package com.sun.star.uno;
  * @deprecated As of UDK 3.2, this interface is deprecated, without offering a
  * replacement.
  */
+@Deprecated
 public interface IMapping {
     /**
      * Maps an interface from one environment to another.
