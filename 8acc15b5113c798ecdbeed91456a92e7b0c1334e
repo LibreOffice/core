@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_fc3a50e5",
+        "filename": "sw/source/core/doc/DocumentRedlineManager.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1428,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-24T15:01:58Z",
+      "side": 1,
+      "message": "i think this is really not the right place to set this flag, because it could be triggered by accident while editing the document - much better to set it somewhere in the OOXML import filter, which iirc has some part already that calls SetRedlineFlags",
+      "revId": "8acc15b5113c798ecdbeed91456a92e7b0c1334e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
