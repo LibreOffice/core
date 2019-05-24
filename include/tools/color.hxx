@@ -316,6 +316,9 @@ constexpr ::Color COL_AUTHOR8_LIGHT           ( 226,  234, 241 );
 constexpr ::Color COL_AUTHOR9_DARK            ( 209,  118,   0 );
 constexpr ::Color COL_AUTHOR9_NORMAL          ( 255,  226, 185 );
 constexpr ::Color COL_AUTHOR9_LIGHT           ( 255,  231, 199 );
+constexpr ::Color COL_ORANGE                  ( 255,  165,   0 );
+constexpr ::Color COL_WINE                    (  94,   18,  36 );
+constexpr ::Color COL_MADEIRAWINE             ( 144,  103, 106 );
 
 template<typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator <<(std::basic_ostream<charT, traits>& rStream, const Color& rColor)
