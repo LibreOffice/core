@@ -537,25 +537,26 @@ void StatusIndicatorFactory::impl_startWakeUpThread()
     if (m_bDisableReschedule)
         return;
 
-    if (!m_pWakeUp.is())
+    if (!m_xWakeUpTimer)
     {
-        m_pWakeUp = new WakeUpThread(this);
-        m_pWakeUp->launch();
+        m_xWakeUpTimer = Timer();
+        m_xWakeUpTimer->SetInvokeHandler( LINK(this, StatusIndicatorFactory, WakeupTimerHdl) );
+        m_xWakeUpTimer->SetTimeout(25); // 25 msec
+        m_xWakeUpTimer->Start();
     }
 }
 
 void StatusIndicatorFactory::impl_stopWakeUpThread()
 {
-    rtl::Reference<WakeUpThread> wakeUp;
-    {
-        osl::MutexGuard g(m_mutex);
-        std::swap(wakeUp, m_pWakeUp);
-    }
-    if (wakeUp.is())
-    {
-        wakeUp->stop();
-    }
+    if (m_xWakeUpTimer)
+        m_xWakeUpTimer->Stop();
 }
+
+IMPL_LINK_NOARG(StatusIndicatorFactory, WakeupTimerHdl, Timer *, void)
+{
+    update();
+}
+
 
 } // namespace framework
 
