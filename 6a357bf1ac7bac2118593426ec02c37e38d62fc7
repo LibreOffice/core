@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_4fa068f5",
+        "filename": "sc/source/ui/app/rfindlst.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-05-24T19:11:39Z",
+      "side": 1,
+      "message": "COL_CYAN, Color(60, 154, 176) /*krishna-Blue*/ , Color(0,  128, 128) /*greenish-blue*/\n\nThese three are visually very similar and not good distinguishable.",
+      "range": {
+        "startLine": 29,
+        "startChar": 8,
+        "endLine": 29,
+        "endChar": 94
+      },
+      "revId": "6a357bf1ac7bac2118593426ec02c37e38d62fc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_efa4d40a",
+        "filename": "sc/source/ui/app/rfindlst.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-05-24T19:11:39Z",
+      "side": 1,
+      "message": "Color(88,  214, 141) /*light-green*/\n\nis not very readable on a white background, specifically the reference in a formula.",
+      "range": {
+        "startLine": 30,
+        "startChar": 69,
+        "endLine": 30,
+        "endChar": 105
+      },
+      "revId": "6a357bf1ac7bac2118593426ec02c37e38d62fc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_0faa60d3",
+        "filename": "sc/source/ui/app/rfindlst.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-05-24T19:11:39Z",
+      "side": 1,
+      "message": "COL_WINE and Color(23, 32, 42) /*blue-black*/\n\nare also visually quite similar.",
+      "range": {
+        "startLine": 30,
+        "startChar": 8,
+        "endLine": 30,
+        "endChar": 68
+      },
+      "revId": "6a357bf1ac7bac2118593426ec02c37e38d62fc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
