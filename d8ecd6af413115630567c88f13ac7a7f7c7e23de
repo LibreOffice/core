@@ -22,6 +22,30 @@
       "revId": "d8ecd6af413115630567c88f13ac7a7f7c7e23de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_afc56c90",
+        "filename": "vcl/inc/qt5/Qt5SvpSurface.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-05-24T22:10:16Z",
+      "side": 1,
+      "message": "I thought cr is short for cairo reference, but that was just a guess. As I wrote this is a copy from Gtk3Surface, almost as it. I just added the m_ prefixes. cr seems to be the common variable name for cairo_t, but we can call it m_pCairoContext. I\u0027ll change that.\n\nhttps://www.cairographics.org/manual/cairo-cairo-t.html#cairo-reference",
+      "parentUuid": "3fa0c359_af97ac90",
+      "range": {
+        "startLine": 26,
+        "startChar": 19,
+        "endLine": 26,
+        "endChar": 23
+      },
+      "revId": "d8ecd6af413115630567c88f13ac7a7f7c7e23de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
