@@ -925,7 +925,7 @@ Any  IUnknownWrapper::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                 throw;
             }
         }
-        else // it is an JScriptObject
+        else // it is a JScriptObject
         {
             int i = 0;
             try
@@ -1160,7 +1160,7 @@ Any  IUnknownWrapper::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
 void SAL_CALL IUnknownWrapper::initialize( const Sequence< Any >& aArguments )
 {
     // 1.parameter is IUnknown
-    // 2.parameter is a boolean which indicates if the COM pointer was a IUnknown or IDispatch
+    // 2.parameter is a boolean which indicates if the COM pointer was an IUnknown or IDispatch
     // 3.parameter is a Sequence<Type>
     o2u_attachCurrentThread();
     OSL_ASSERT(aArguments.getLength() == 3);
