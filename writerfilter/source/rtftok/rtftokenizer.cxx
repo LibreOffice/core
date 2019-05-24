@@ -27,8 +27,8 @@ namespace writerfilter
 {
 namespace rtftok
 {
-std::vector<RTFSymbol> RTFTokenizer::s_aRTFControlWords;
-bool RTFTokenizer::s_bControlWordsSorted;
+std::unordered_map<OString, RTFSymbol> RTFTokenizer::s_aRTFControlWords;
+bool RTFTokenizer::s_bControlWordsInitialised;
 std::vector<RTFMathSymbol> RTFTokenizer::s_aRTFMathControlWords;
 bool RTFTokenizer::s_bMathControlWordsSorted;
 
@@ -42,12 +42,12 @@ RTFTokenizer::RTFTokenizer(RTFListener& rImport, SvStream* pInStream,
     , m_nLineStartPos(0)
     , m_nGroupStart(0)
 {
-    if (!RTFTokenizer::s_bControlWordsSorted)
+    if (!RTFTokenizer::s_bControlWordsInitialised)
     {
-        RTFTokenizer::s_bControlWordsSorted = true;
-        s_aRTFControlWords
-            = std::vector<RTFSymbol>(aRTFControlWords, aRTFControlWords + nRTFControlWords);
-        std::sort(s_aRTFControlWords.begin(), s_aRTFControlWords.end());
+        RTFTokenizer::s_bControlWordsInitialised = true;
+        for (int i = 0; i < nRTFControlWords; ++i)
+            s_aRTFControlWords.emplace(OString(aRTFControlWords[i].GetKeyword()),
+                                       aRTFControlWords[i]);
     }
     if (!RTFTokenizer::s_bMathControlWordsSorted)
     {
@@ -270,10 +270,8 @@ RTFError RTFTokenizer::dispatchKeyword(OString const& rKeyword, bool bParam, int
     SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": keyword '\\" << rKeyword << "' with param? "
                                                << (bParam ? 1 : 0) << " param val: '"
                                                << (bParam ? nParam : 0) << "'");
-    RTFSymbol aSymbol(rKeyword.getStr());
-    auto low = std::lower_bound(s_aRTFControlWords.begin(), s_aRTFControlWords.end(), aSymbol);
-    int i = low - s_aRTFControlWords.begin();
-    if (low == s_aRTFControlWords.end() || aSymbol < *low)
+    auto findIt = s_aRTFControlWords.find(rKeyword);
+    if (findIt == s_aRTFControlWords.end())
     {
         SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": unknown keyword '\\" << rKeyword << "'");
         RTFSkipDestination aSkip(m_rImport);
@@ -282,35 +280,36 @@ RTFError RTFTokenizer::dispatchKeyword(OString const& rKeyword, bool bParam, int
     }
 
     RTFError ret;
-    switch (s_aRTFControlWords[i].GetControlType())
+    RTFSymbol const& rSymbol = findIt->second;
+    switch (rSymbol.GetControlType())
     {
         case CONTROL_FLAG:
             // flags ignore any parameter by definition
-            ret = m_rImport.dispatchFlag(s_aRTFControlWords[i].GetIndex());
+            ret = m_rImport.dispatchFlag(rSymbol.GetIndex());
             if (ret != RTFError::OK)
                 return ret;
             break;
         case CONTROL_DESTINATION:
             // same for destinations
-            ret = m_rImport.dispatchDestination(s_aRTFControlWords[i].GetIndex());
+            ret = m_rImport.dispatchDestination(rSymbol.GetIndex());
             if (ret != RTFError::OK)
                 return ret;
             break;
         case CONTROL_SYMBOL:
             // and symbols
-            ret = m_rImport.dispatchSymbol(s_aRTFControlWords[i].GetIndex());
+            ret = m_rImport.dispatchSymbol(rSymbol.GetIndex());
             if (ret != RTFError::OK)
                 return ret;
             break;
         case CONTROL_TOGGLE:
-            ret = m_rImport.dispatchToggle(s_aRTFControlWords[i].GetIndex(), bParam, nParam);
+            ret = m_rImport.dispatchToggle(rSymbol.GetIndex(), bParam, nParam);
             if (ret != RTFError::OK)
                 return ret;
             break;
         case CONTROL_VALUE:
             if (!bParam)
-                nParam = s_aRTFControlWords[i].GetDefValue();
-            ret = m_rImport.dispatchValue(s_aRTFControlWords[i].GetIndex(), nParam);
+                nParam = rSymbol.GetDefValue();
+            ret = m_rImport.dispatchValue(rSymbol.GetIndex(), nParam);
             if (ret != RTFError::OK)
                 return ret;
             break;

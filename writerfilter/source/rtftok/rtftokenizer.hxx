@@ -13,6 +13,7 @@
 #include "rtflistener.hxx"
 
 #include <vector>
+#include <unordered_map>
 
 #include <com/sun/star/uno/Reference.h>
 
@@ -67,8 +68,8 @@ private:
     SvStream* m_pInStream;
     css::uno::Reference<css::task::XStatusIndicator> const& m_xStatusIndicator;
     // This is the same as aRTFControlWords, but sorted
-    static std::vector<RTFSymbol> s_aRTFControlWords;
-    static bool s_bControlWordsSorted;
+    static std::unordered_map<OString, RTFSymbol> s_aRTFControlWords;
+    static bool s_bControlWordsInitialised;
     // This is the same as aRTFMathControlWords, but sorted
     static std::vector<RTFMathSymbol> s_aRTFMathControlWords;
     static bool s_bMathControlWordsSorted;
