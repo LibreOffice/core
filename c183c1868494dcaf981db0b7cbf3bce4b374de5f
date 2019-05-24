@@ -2,6 +2,91 @@
   "comments": [
     {
       "key": {
+        "uuid": "3fa0c359_0fbb40e2",
+        "filename": "config_host/config_qt5.h.in",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-05-24T23:49:50Z",
+      "side": 1,
+      "message": "Drop this too.",
+      "revId": "c183c1868494dcaf981db0b7cbf3bce4b374de5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_4fc14854",
+        "filename": "configure.ac",
+        "patchSetId": 4
+      },
+      "lineNbr": 11248,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-05-24T23:49:50Z",
+      "side": 1,
+      "message": "\u003e +    AC_MSG_CHECKING([for Qt5 QtGui/qpa/platformnativeinterface.h])\n\u003e +    if test -r \"$inc_dir/QtGui/qpa/platformnativeinterface.h\"; then\n\u003e +        AC_MSG_RESULT([yes])\n\u003e +    else\n\u003e +        AC_MSG_RESULT([no])\n\u003e +        AC_MSG_ERROR([Qt5 private QPA headers not found.  Some distributions have them in extra packages, like qtbase5-private-dev.])\n\u003e +    fi",
+      "revId": "c183c1868494dcaf981db0b7cbf3bce4b374de5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_efb5b4ef",
+        "filename": "configure.ac",
+        "patchSetId": 4
+      },
+      "lineNbr": 11287,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-05-24T23:49:50Z",
+      "side": 1,
+      "message": "Just drop them.",
+      "revId": "c183c1868494dcaf981db0b7cbf3bce4b374de5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_cfcc788b",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-05-24T23:49:50Z",
+      "side": 1,
+      "message": "#include \u003cQtGui/qpa/qplatformnativeinterface.h\u003e",
+      "revId": "c183c1868494dcaf981db0b7cbf3bce4b374de5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_afcfac7d",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-05-24T23:49:50Z",
+      "side": 1,
+      "message": "Drop both",
+      "revId": "c183c1868494dcaf981db0b7cbf3bce4b374de5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_6fb8c429",
         "filename": "vcl/qt5/Qt5Frame.cxx",
         "patchSetId": 4
@@ -13,6 +98,30 @@
       "writtenOn": "2019-05-24T19:40:17Z",
       "side": 1,
       "message": "m_pQWidget-\u003ewindowHandle() returns nullptr in my case, resulting in a crash with qt5 on Plasma Wayland",
+      "range": {
+        "startLine": 176,
+        "startChar": 79,
+        "endLine": 176,
+        "endChar": 84
+      },
+      "revId": "c183c1868494dcaf981db0b7cbf3bce4b374de5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_6fc9a476",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-05-24T23:49:50Z",
+      "side": 1,
+      "message": "Maybe that can be handled in GetSystemData() instead of the constructor, as a workaround?",
+      "parentUuid": "3fa0c359_6fb8c429",
       "range": {
         "startLine": 176,
         "startChar": 79,
