@@ -24,6 +24,7 @@ import com.sun.star.connection.XConnection;
  *
  * @deprecated.
  */
+@Deprecated
 class NativeConnection
     implements XConnection
 {

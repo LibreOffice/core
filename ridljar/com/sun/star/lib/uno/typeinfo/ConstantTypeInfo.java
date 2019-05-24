@@ -20,6 +20,7 @@ package com.sun.star.lib.uno.typeinfo;
 /**
    @deprecated <code>UNOTYPEINFO</code> for constants is not needed
  */
+@Deprecated
 public class ConstantTypeInfo extends TypeInfo
 {
     public ConstantTypeInfo(String name, int flags)

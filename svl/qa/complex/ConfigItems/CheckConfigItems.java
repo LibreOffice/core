@@ -35,6 +35,7 @@ import org.openoffice.test.OfficeConnection;
 /** @short  todo document me
  * @deprecated this tests seems no longer work as expected.
  */
+@Deprecated
 public class CheckConfigItems
 {
 

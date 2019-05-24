@@ -54,6 +54,7 @@ public class UnoRuntime {
      * Also, this class might be changed to become <code>final</code> in a
      * future version.
      */
+    @Deprecated
     public UnoRuntime() {}
 
     /**
@@ -422,6 +423,7 @@ public class UnoRuntime {
      * @deprecated As of UDK&nbsp;3.2.0, this method is deprecated, without
      * offering a replacement.
      */
+    @Deprecated
     public static IEnvironment getEnvironment(String name, Object context)
         throws java.lang.Exception
     {
@@ -465,6 +467,7 @@ public class UnoRuntime {
      * @deprecated As of UDK&nbsp;3.2.0, this method is deprecated, without
      * offering a replacement.
      */
+    @Deprecated
     public static IBridge getBridge(
         IEnvironment from, IEnvironment to, Object[] args)
         throws java.lang.Exception
@@ -523,6 +526,7 @@ public class UnoRuntime {
      * @deprecated As of UDK&nbsp;3.2.0, this method is deprecated, without
      * offering a replacement.
      */
+    @Deprecated
     public static IBridge getBridgeByName(
         String from, Object fromContext, String to, Object toContext,
         Object[] args) throws java.lang.Exception
@@ -541,6 +545,7 @@ public class UnoRuntime {
      * @deprecated As of UDK&nbsp;3.2.0, this method is deprecated, without
      * offering a replacement.
      */
+    @Deprecated
     public static IBridge[] getBridges() {
         ArrayList<Object> l = new ArrayList<Object>();
         synchronized (bridges) {
@@ -572,6 +577,7 @@ public class UnoRuntime {
      * @deprecated As of UDK&nbsp;3.2.0, this method is deprecated, without
      * offering a replacement.
      */
+    @Deprecated
     public static IMapping getMapping(IEnvironment from, IEnvironment to)
         throws java.lang.Exception
     {
@@ -603,6 +609,7 @@ public class UnoRuntime {
      * @deprecated As of UDK&nbsp;3.2.0, this method is deprecated, without
      * offering a replacement.
      */
+    @Deprecated
     public static IMapping getMappingByName(String from, String to)
         throws java.lang.Exception
     {
@@ -621,6 +628,7 @@ public class UnoRuntime {
      * @deprecated As of UDK&nbsp;3.2.0, this method is deprecated, without
      * offering a replacement.
      */
+    @Deprecated
     public static boolean reset() {
         synchronized (bridges) {
             for (Iterator<java.lang.ref.WeakReference<IBridge>> i = bridges.values().iterator(); i.hasNext();) {
@@ -651,6 +659,7 @@ public class UnoRuntime {
     /**
      * @deprecated As of UDK&nbsp;3.2.0, do not use this internal field.
      */
+    @Deprecated
     public static final boolean DEBUG = false;
 
     private static final class BridgeTurner implements IBridge {
