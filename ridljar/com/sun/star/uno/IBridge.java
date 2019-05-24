@@ -33,6 +33,7 @@ import java.io.IOException;
  * @deprecated As of UDK 3.2, this interface is deprecated, without offering a
  * replacement.
  */
+@Deprecated
 public interface IBridge {
     /**
      * Maps an object from the source environment to the destination

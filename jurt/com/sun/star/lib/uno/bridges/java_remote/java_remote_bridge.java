@@ -360,6 +360,7 @@ public class java_remote_bridge
      *
      * @deprecated as of UDK 1.0
      */
+    @Deprecated
     public java_remote_bridge(Object args[]) throws Exception {
         this(UnoRuntime.getEnvironment("java", null), UnoRuntime.getEnvironment("remote", null), args);
     }
