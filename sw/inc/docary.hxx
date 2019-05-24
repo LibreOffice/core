@@ -322,8 +322,6 @@ struct CompareSwRedlineTable
 // Notification type for notifying about redlines to LOK clients
 enum class RedlineNotification { Add, Remove, Modify };
 
-typedef SwRangeRedline* SwRangeRedlinePtr;
-
 class SwRedlineTable
 {
 public:
@@ -338,9 +336,9 @@ public:
     bool Contains(const SwRangeRedline* p) const { return maVector.find(const_cast<SwRangeRedline*>(p)) != maVector.end(); }
     size_type GetPos(const SwRangeRedline* p) const;
 
-    bool Insert(SwRangeRedlinePtr& p);
-    bool Insert(SwRangeRedlinePtr& p, size_type& rInsPos);
-    bool InsertWithValidRanges(SwRangeRedlinePtr& p, size_type* pInsPos = nullptr);
+    bool Insert(SwRangeRedline*& p);
+    bool Insert(SwRangeRedline*& p, size_type& rInsPos);
+    bool InsertWithValidRanges(SwRangeRedline*& p, size_type* pInsPos = nullptr);
 
     void Remove( size_type nPos );
     void Remove( const SwRangeRedline* p );
