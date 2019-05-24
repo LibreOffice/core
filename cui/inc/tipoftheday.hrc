@@ -246,7 +246,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Annoyed from the marching ants around cells in Calc. Press escape to stop them; the copied content will remain available for pasting."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To quickly insert or delete rows, select the desired number of rows (or columns) and press Ctrl+ to add or Ctrl- to delete."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To select a contiguous range of cells containing data and bounded by empty row and columns use Ctrl+* (numeric key pad)."), "", "tipoftheday_c.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Ctrl+Shift+F9 recalculates all formulas in all sheets (some functions like RANDBETWEEN are not calculated by F9)."), "", "tipoftheday_c.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Ctrl+Shift+F9 recalculates all formulas in all sheets."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Write along a curve? Draw the line, double click, type the text, Format > Text Box and Shape > Fontwork."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To enable macro recording, check Tools > Options > %PRODUCTNAME > Advanced > Enable macro recording."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "In the replace input field of auto correct options you can use the wildcards .*"), "", "tipoftheday_w.png"},
