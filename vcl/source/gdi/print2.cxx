@@ -917,8 +917,6 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                         bTreatSpecial = true;
                 }
 
-                ConnectedComponentsList::iterator       aCurrCC;
-                const ConnectedComponentsList::iterator aLastCC( aCCList.end() );
                 bool                                    bSomeComponentsChanged;
 
                 // now, this is unfortunate: since changing anyone of
@@ -934,7 +932,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                     bSomeComponentsChanged = false;
 
                     // iterate over all current members of aCCList
-                    for( aCurrCC=aCCList.begin(); aCurrCC != aLastCC; )
+                    for( auto aCurrCC=aCCList.begin(); aCurrCC != aCCList.end(); )
                     {
                         // first check if current element's bounds are
                         // empty. This ensures that empty actions are not
