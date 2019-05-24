@@ -746,18 +746,17 @@ void FrameSelectorImpl::SetBorderState( FrameBorder& rBorder, FrameBorderState e
     Any aNew;
     Any& rMod = eState == FrameBorderState::Show ? aNew : aOld;
     rMod <<= AccessibleStateType::CHECKED;
-    Reference< XAccessible > xRet;
+    rtl::Reference< a11y::AccFrameSelectorChild > xRet;
     size_t nVecIdx = static_cast< size_t >( rBorder.GetType() );
     if( GetBorder(rBorder.GetType()).IsEnabled() && (1 <= nVecIdx) && (nVecIdx <= maChildVec.size()) )
         xRet = maChildVec[ --nVecIdx ].get();
-    a11y::AccFrameSelector* pFrameSelector = static_cast<a11y::AccFrameSelector*>(xRet.get());
 
     if( eState == FrameBorderState::Show )
         SetBorderCoreStyle( rBorder, &maCurrStyle );
     else
         rBorder.SetState( eState );
-    if (pFrameSelector)
-        pFrameSelector->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOld, aNew );
+    if (xRet.is())
+        xRet->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOld, aNew );
     DoInvalidate( true );
 }
 
@@ -968,13 +967,12 @@ void FrameSelector::SelectBorder( FrameBorderType eBorder )
     // MT: bFireFox as API parameter is ugly...
     // if (bFocus)
     {
-        Reference< XAccessible > xRet = GetChildAccessible(eBorder);
-        a11y::AccFrameSelector* pFrameSelector = static_cast<a11y::AccFrameSelector*>(xRet.get());
-        if (pFrameSelector)
+        rtl::Reference< a11y::AccFrameSelectorChild > xRet = GetChildAccessible(eBorder);
+        if (xRet.is())
         {
             Any aOldValue, aNewValue;
             aNewValue <<= AccessibleStateType::FOCUSED;
-            pFrameSelector->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+            xRet->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
     }
 }
@@ -1020,9 +1018,9 @@ Reference< XAccessible > FrameSelector::CreateAccessible()
     return mxAccess.get();
 }
 
-Reference< XAccessible > FrameSelector::GetChildAccessible( FrameBorderType eBorder )
+rtl::Reference< a11y::AccFrameSelectorChild > FrameSelector::GetChildAccessible( FrameBorderType eBorder )
 {
-    Reference< XAccessible > xRet;
+    rtl::Reference< a11y::AccFrameSelectorChild > xRet;
     size_t nVecIdx = static_cast< size_t >( eBorder );
     if( IsBorderEnabled( eBorder ) && (1 <= nVecIdx) && (nVecIdx <= mxImpl->maChildVec.size()) )
     {
@@ -1036,7 +1034,7 @@ Reference< XAccessible > FrameSelector::GetChildAccessible( FrameBorderType eBor
 
 Reference< XAccessible > FrameSelector::GetChildAccessible( sal_Int32 nIndex )
 {
-    return GetChildAccessible( GetEnabledBorderType( nIndex ) );
+    return GetChildAccessible( GetEnabledBorderType( nIndex ) ).get();
 }
 
 Reference< XAccessible > FrameSelector::GetChildAccessible( const Point& rPos )
@@ -1044,7 +1042,7 @@ Reference< XAccessible > FrameSelector::GetChildAccessible( const Point& rPos )
     Reference< XAccessible > xRet;
     for( FrameBorderCIter aIt( mxImpl->maEnabBorders ); !xRet.is() && aIt.Is(); ++aIt )
         if( (*aIt)->ContainsClickPoint( rPos ) )
-            xRet = GetChildAccessible( (*aIt)->GetType() );
+            xRet = GetChildAccessible( (*aIt)->GetType() ).get();
     return xRet;
 }
 

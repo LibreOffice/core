@@ -71,11 +71,6 @@ public:
     virtual sal_Int32 SAL_CALL getForeground(  ) override;
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
 
-    void NotifyAccessibleEvent(const sal_Int16 _nEventId, const css::uno::Any& _rOldValue, const css::uno::Any& _rNewValue)
-    {
-        ::comphelper::OAccessibleComponentHelper::NotifyAccessibleEvent(_nEventId, _rOldValue, _rNewValue);
-    }
-
     void    Invalidate();
 
 private:
@@ -119,6 +114,11 @@ public:
 
     virtual sal_Int32 SAL_CALL getForeground(  ) override;
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
+
+    void NotifyAccessibleEvent(const sal_Int16 _nEventId, const css::uno::Any& _rOldValue, const css::uno::Any& _rNewValue)
+    {
+        ::comphelper::OAccessibleComponentHelper::NotifyAccessibleEvent(_nEventId, _rOldValue, _rNewValue);
+    }
 
     void    Invalidate();
 
