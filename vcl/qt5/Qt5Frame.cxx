@@ -20,14 +20,15 @@
 #include <Qt5Frame.hxx>
 #include <Qt5Frame.moc>
 
-#include <Qt5Tools.hxx>
-#include <Qt5Instance.hxx>
-#include <Qt5Graphics.hxx>
-#include <Qt5Widget.hxx>
-#include <Qt5MainWindow.hxx>
 #include <Qt5Data.hxx>
-#include <Qt5Menu.hxx>
 #include <Qt5DragAndDrop.hxx>
+#include <Qt5Graphics.hxx>
+#include <Qt5Instance.hxx>
+#include <Qt5MainWindow.hxx>
+#include <Qt5Menu.hxx>
+#include <Qt5SvpGraphics.hxx>
+#include <Qt5Tools.hxx>
+#include <Qt5Widget.hxx>
 
 #include <QtCore/QMimeData>
 #include <QtCore/QPoint>
@@ -217,14 +218,14 @@ void Qt5Frame::TriggerPaintEvent(QRect aRect)
     CallCallback(SalEvent::Paint, &aPaintEvt);
 }
 
-void Qt5Frame::InitSvpSalGraphics(SvpSalGraphics* pSvpSalGraphics)
+void Qt5Frame::InitQt5SvpGraphics(Qt5SvpGraphics* pQt5SvpGraphics)
 {
     int width = 640;
     int height = 480;
-    m_pSvpGraphics = pSvpSalGraphics;
+    m_pSvpGraphics = pQt5SvpGraphics;
     m_pSurface.reset(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height));
     m_pSvpGraphics->setSurface(m_pSurface.get(), basegfx::B2IVector(width, height));
-    cairo_surface_set_user_data(m_pSurface.get(), SvpSalGraphics::getDamageKey(), &m_aDamageHandler,
+    cairo_surface_set_user_data(m_pSurface.get(), Qt5SvpGraphics::getDamageKey(), &m_aDamageHandler,
                                 nullptr);
 }
 
@@ -239,8 +240,8 @@ SalGraphics* Qt5Frame::AcquireGraphics()
     {
         if (!m_pOurSvpGraphics.get())
         {
-            m_pOurSvpGraphics.reset(new SvpSalGraphics());
-            InitSvpSalGraphics(m_pOurSvpGraphics.get());
+            m_pOurSvpGraphics.reset(new Qt5SvpGraphics(m_pQWidget));
+            InitQt5SvpGraphics(m_pOurSvpGraphics.get());
         }
         return m_pOurSvpGraphics.get();
     }
@@ -1196,6 +1197,17 @@ void Qt5Frame::dropping(const int x, const int y, const QMimeData* pQMimeData)
     {
         m_pDragSource->fire_dragEnd(m_pDropTarget->proposedDragAction());
     }
+}
+
+cairo_t* Qt5Frame::getCairoContext() const
+{
+    cairo_t* cr = nullptr;
+    if (m_bUseCairo)
+    {
+        cr = cairo_create(m_pSurface.get());
+        assert(cr);
+    }
+    return cr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,18 +30,19 @@
 
 #include <QtCore/QObject>
 
-class Qt5Graphics;
-class Qt5Instance;
-class Qt5Menu;
-class QWidget;
-class Qt5MainWindow;
 class Qt5DragSource;
 class Qt5DropTarget;
+class Qt5Graphics;
+class Qt5Instance;
+class Qt5MainWindow;
+class Qt5Menu;
+class Qt5SvpGraphics;
+
+class QImage;
 class QMimeData;
 class QPaintDevice;
 class QScreen;
-class QImage;
-class SvpSalGraphics;
+class QWidget;
 
 class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
 {
@@ -56,11 +57,11 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
     std::unique_ptr<QImage> m_pQImage;
     std::unique_ptr<Qt5Graphics> m_pQt5Graphics;
     UniqueCairoSurface m_pSurface;
-    std::unique_ptr<SvpSalGraphics> m_pOurSvpGraphics;
+    std::unique_ptr<Qt5SvpGraphics> m_pOurSvpGraphics;
     // in base class, this ptr is the same as m_pOurSvpGraphic
     // in derived class, it can point to a derivative
-    // of SvpSalGraphics (which the derived class then owns)
-    SvpSalGraphics* m_pSvpGraphics;
+    // of Qt5SvpGraphics (which the derived class then owns)
+    Qt5SvpGraphics* m_pSvpGraphics;
     DamageHandler m_aDamageHandler;
     QRegion m_aRegion;
     bool m_bNullRegion;
@@ -123,7 +124,7 @@ public:
     void Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
                 sal_Int32 nExtentsHeight) const;
 
-    virtual void InitSvpSalGraphics(SvpSalGraphics* pSvpSalGraphics);
+    void InitQt5SvpGraphics(Qt5SvpGraphics* pQt5SvpGraphics);
     virtual SalGraphics* AcquireGraphics() override;
     virtual void ReleaseGraphics(SalGraphics* pGraphics) override;
 
@@ -188,6 +189,8 @@ public:
     virtual void SetApplicationID(const OUString&) override;
 
     inline bool CallCallback(SalEvent nEvent, const void* pEvent) const;
+
+    cairo_t* getCairoContext() const;
 };
 
 inline bool Qt5Frame::CallCallback(SalEvent nEvent, const void* pEvent) const
