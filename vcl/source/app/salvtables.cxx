@@ -1199,10 +1199,13 @@ public:
         return m_xDialog->StartExecuteAsync(aCtx);
     }
 
-    virtual bool runAsync(const std::function<void(sal_Int32)> &rEndDialogFn) override
+    virtual bool runAsync(std::shared_ptr<Dialog> const & rxSelf, const std::function<void(sal_Int32)> &rEndDialogFn) override
     {
+        assert( rxSelf.get() == this );
         VclAbstractDialog::AsyncContext aCtx;
-        aCtx.mxOwnerSelf.reset(this);
+        // In order to store a shared_ptr to ourself, we have to have been constructed by make_shared,
+        // which is that rxSelf enforces.
+        aCtx.mxOwnerSelf = rxSelf;
         aCtx.maEndDialogFn = rEndDialogFn;
         return m_xDialog->StartExecuteAsync(aCtx);
     }
