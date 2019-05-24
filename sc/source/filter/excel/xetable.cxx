@@ -24,6 +24,8 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <scitems.hxx>
 #include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <editeng/flditem.hxx>
 #include <document.hxx>
 #include <dociter.hxx>
 #include <olinetab.hxx>
@@ -2521,6 +2523,17 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             case CELLTYPE_VALUE:
             {
                 double fValue = rScCell.mfValue;
+
+                if (pPattern)
+                {
+                    OUString aUrl = pPattern->GetItemSet().Get(ATTR_HYPERLINK).GetValue();
+                    if (!aUrl.isEmpty())
+                    {
+                        std::shared_ptr<XclExpHyperlink> aLink;
+                        aLink.reset(new XclExpHyperlink(GetRoot(), SvxURLField(aUrl, aUrl), aScPos));
+                        mxHyperlinkList->AppendRecord(aLink);
+                    }
+                }
 
                 // try to create a Boolean cell
                 if( pPattern && ((fValue == 0.0) || (fValue == 1.0)) )
