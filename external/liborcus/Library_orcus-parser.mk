@@ -18,7 +18,7 @@ $(eval $(call gb_Library_use_externals,orcus-parser,\
 	zlib \
 ))
 
-$(eval $(call gb_Library_set_warnings_not_errors,orcus-parser))
+$(eval $(call gb_Library_set_warnings_disabled,orcus-parser))
 
 $(eval $(call gb_Library_set_include,orcus-parser,\
 	-I$(call gb_UnpackedTarball_get_dir,liborcus)/include \

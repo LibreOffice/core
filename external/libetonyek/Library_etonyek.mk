@@ -21,7 +21,7 @@ $(eval $(call gb_Library_use_externals,etonyek,\
 	zlib \
 ))
 
-$(eval $(call gb_Library_set_warnings_not_errors,etonyek))
+$(eval $(call gb_Library_set_warnings_disabled,etonyek))
 
 $(eval $(call gb_Library_set_precompiled_header,etonyek,$(SRCDIR)/external/libetonyek/inc/pch/precompiled_etonyek))
 

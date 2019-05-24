@@ -46,7 +46,7 @@ $(call gb_Helper_abbreviate_dirs,\
 					$(MSVC_CXX) -I$(SRCDIR)/solenv/clang-cl,$(gb_CXX))))) \
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
-		$(2) \
+		$(if $(WARNINGS_DISABLED),$(call gb_Helper_disable_warnings,$(2)),$(2)) \
 		$(if $(EXTERNAL_CODE), \
 			$(if $(filter -clr,$(2)),,$(if $(COM_IS_CLANG),-Wno-undef)), \
 			$(gb_DEFS_INTERNAL)) \

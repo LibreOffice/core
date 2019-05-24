@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Executable_Executable,ucpp))
 
-$(eval $(call gb_Executable_set_warnings_not_errors,ucpp))
+$(eval $(call gb_Executable_set_warnings_disabled,ucpp))
 
 $(eval $(call gb_Executable_use_unpacked,ucpp,ucpp))
 

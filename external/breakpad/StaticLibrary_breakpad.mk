@@ -9,7 +9,7 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,breakpad))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,breakpad))
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,breakpad))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,breakpad,breakpad))
 

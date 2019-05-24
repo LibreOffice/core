@@ -15,7 +15,7 @@ $(eval $(call gb_Library_use_externals,mwaw,\
     revenge \
 ))
 
-$(eval $(call gb_Library_set_warnings_not_errors,mwaw))
+$(eval $(call gb_Library_set_warnings_disabled,mwaw))
 
 $(eval $(call gb_Library_set_precompiled_header,mwaw,$(SRCDIR)/external/libmwaw/inc/pch/precompiled_mwaw))
 

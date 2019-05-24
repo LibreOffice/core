@@ -11,7 +11,7 @@ $(eval $(call gb_Library_Library,rasqal))
 
 $(eval $(call gb_Library_use_unpacked,rasqal,rasqal))
 
-$(eval $(call gb_Library_set_warnings_not_errors,rasqal))
+$(eval $(call gb_Library_set_warnings_disabled,rasqal))
 
 $(eval $(call gb_Library_use_external,rasqal,raptor_headers))
 

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,expat))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,expat))
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,expat))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,expat,expat))
 

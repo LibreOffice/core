@@ -13,7 +13,7 @@ $(eval $(call gb_StaticLibrary_use_unpacked,poppler,poppler))
 
 $(eval $(call gb_StaticLibrary_use_external,poppler,libjpeg))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,poppler))
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,poppler))
 
 $(eval $(call gb_StaticLibrary_set_include,poppler,\
 	-I$(WORKDIR)/UnpackedTarball/poppler \

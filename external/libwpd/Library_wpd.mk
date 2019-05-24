@@ -16,7 +16,7 @@ $(eval $(call gb_Library_use_externals,wpd,\
 	revenge \
 ))
 
-$(eval $(call gb_Library_set_warnings_not_errors,wpd))
+$(eval $(call gb_Library_set_warnings_disabled,wpd))
 
 $(eval $(call gb_Library_set_include,wpd,\
     -I$(call gb_UnpackedTarball_get_dir,libwpd)/inc \

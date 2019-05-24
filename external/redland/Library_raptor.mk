@@ -21,7 +21,7 @@ $(eval $(call gb_Library_use_externals,raptor2,\
 	libxslt \
 ))
 
-$(eval $(call gb_Library_set_warnings_not_errors,raptor2))
+$(eval $(call gb_Library_set_warnings_disabled,raptor2))
 
 $(eval $(call gb_Library_add_defs,raptor2,\
 	-DHAVE_CONFIG_H \

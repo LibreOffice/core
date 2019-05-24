@@ -15,7 +15,7 @@ $(eval $(call gb_Library_use_externals,odfgen,\
 	revenge \
 ))
 
-$(eval $(call gb_Library_set_warnings_not_errors,odfgen))
+$(eval $(call gb_Library_set_warnings_disabled,odfgen))
 
 $(eval $(call gb_Library_set_include,odfgen,\
     -I$(call gb_UnpackedTarball_get_dir,libodfgen)/inc \

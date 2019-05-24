@@ -115,6 +115,7 @@ gb_StaticLibrary_use_static_libraries = $(call gb_StaticLibrary__forward_to_Link
 gb_StaticLibrary_add_sdi_headers = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
 gb_StaticLibrary_set_precompiled_header = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
 gb_StaticLibrary_set_warnings_not_errors = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_set_warnings_disabled = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
 gb_StaticLibrary_set_external_code = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
 gb_StaticLibrary_set_generated_cxx_suffix = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
 

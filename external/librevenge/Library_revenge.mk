@@ -15,7 +15,7 @@ $(eval $(call gb_Library_use_externals,revenge,\
     boost_headers \
 ))
 
-$(eval $(call gb_Library_set_warnings_not_errors,revenge))
+$(eval $(call gb_Library_set_warnings_disabled,revenge))
 
 $(eval $(call gb_Library_set_include,revenge,\
     -I$(call gb_UnpackedTarball_get_dir,librevenge)/inc \

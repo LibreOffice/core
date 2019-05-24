@@ -11,7 +11,7 @@ $(eval $(call gb_Library_Library,pdfium))
 
 $(eval $(call gb_Library_use_unpacked,pdfium,pdfium))
 
-$(eval $(call gb_Library_set_warnings_not_errors,pdfium))
+$(eval $(call gb_Library_set_warnings_disabled,pdfium))
 
 $(eval $(call gb_Library_set_precompiled_header,pdfium,$(SRCDIR)/external/pdfium/inc/pch/precompiled_pdfium))
 

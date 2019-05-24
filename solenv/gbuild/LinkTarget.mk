@@ -788,6 +788,7 @@ $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS :=
 $(call gb_LinkTarget_get_target,$(1)) : NATIVERES :=
 $(call gb_LinkTarget_get_target,$(1)) : VISIBILITY :=
 $(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS :=
+$(call gb_LinkTarget_get_target,$(1)) : WARNINGS_DISABLED :=
 $(call gb_LinkTarget_get_target,$(1)) : PLUGIN_WARNINGS_AS_ERRORS :=
 $(call gb_LinkTarget_get_target,$(1)) : EXTERNAL_CODE :=
 $(call gb_LinkTarget_get_target,$(1)) : SOVERSIONSCRIPT :=
@@ -1606,6 +1607,12 @@ endef
 # call gb_LinkTarget_set_warnings_not_errors,linktarget
 define gb_LinkTarget_set_warnings_not_errors
 $(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS := $(true)
+
+endef
+
+# call gb_LinkTarget_set_warnings_disabled,linktarget
+define gb_LinkTarget_set_warnings_disabled
+$(call gb_LinkTarget_get_target,$(1)) : WARNINGS_DISABLED := $(true)
 
 endef
 
