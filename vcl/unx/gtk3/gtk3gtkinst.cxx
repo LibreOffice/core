@@ -3088,11 +3088,14 @@ public:
         return true;
     }
 
-    virtual bool runAsync(const std::function<void(sal_Int32)>& func) override
+    virtual bool runAsync(std::shared_ptr<Dialog> const & rxSelf, const std::function<void(sal_Int32)>& func) override
     {
+        assert( rxSelf.get() == this );
         assert(!m_nResponseSignalId);
 
-        m_xRunAsyncSelf.reset(this);
+        // In order to store a shared_ptr to ourself, we have to have been constructed by make_shared,
+        // which is that rxSelf enforces.
+        m_xRunAsyncSelf = rxSelf;
         m_aFunc = func;
 
         show();

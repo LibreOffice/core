@@ -38,7 +38,7 @@ namespace
         std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
                                                   VclMessageType::Warning, VclButtonsType::Ok,
                                                   rString));
-        xBox->runAsync(func);
+        xBox->runAsync(xBox, func);
     }
 }
 
