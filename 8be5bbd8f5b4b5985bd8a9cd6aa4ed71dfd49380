@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_5cc10454",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2484,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-24T10:51:36Z",
+      "side": 1,
+      "message": "okay so 1. is a pre-existing problem of this function that will need cleaning up at some point anyway...",
+      "parentUuid": "3fa0c359_792172fb",
+      "revId": "8be5bbd8f5b4b5985bd8a9cd6aa4ed71dfd49380",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_b9d05af9",
         "filename": "sw/source/uibase/utlui/content.cxx",
         "patchSetId": 10
