@@ -3004,7 +3004,7 @@ private:
     DialogRunner m_aDialogRun;
     std::shared_ptr<weld::DialogController> m_xDialogController;
     // Used to keep ourself alive during a runAsync(when doing runAsync without a DialogController)
-    std::shared_ptr<GtkInstanceDialog> m_xRunAsyncSelf;
+    std::shared_ptr<weld::Dialog> m_xRunAsyncSelf;
     std::function<void(sal_Int32)> m_aFunc;
     gulong m_nCloseSignalId;
     gulong m_nResponseSignalId;
@@ -3088,11 +3088,14 @@ public:
         return true;
     }
 
-    virtual bool runAsync(const std::function<void(sal_Int32)>& func) override
+    virtual bool runAsync(std::shared_ptr<Dialog> const & rxSelf, const std::function<void(sal_Int32)>& func) override
     {
+        assert( rxSelf.get() == this );
         assert(!m_nResponseSignalId);
 
-        m_xRunAsyncSelf.reset(this);
+        // In order to store a shared_ptr to ourself, we have to have been constructed by make_shared,
+        // which is that rxSelf enforces.
+        m_xRunAsyncSelf = rxSelf;
         m_aFunc = func;
 
         show();
@@ -4630,7 +4633,7 @@ void GtkInstanceDialog::asyncresponse(gint ret)
     m_aFunc(GtkToVcl(ret));
     m_aFunc = nullptr;
     // move the self pointer, otherwise it might be de-allocated by time we try to reset it
-    std::shared_ptr<GtkInstanceDialog> me = std::move(m_xRunAsyncSelf);
+    std::shared_ptr<weld::Dialog> me = std::move(m_xRunAsyncSelf);
     m_xDialogController.reset();
     me.reset();
 }
