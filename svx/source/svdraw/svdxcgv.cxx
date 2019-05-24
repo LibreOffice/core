@@ -743,8 +743,17 @@ std::unique_ptr<SdrModel> SdrExchangeView::CreateMarkedObjModel() const
 
         if(nullptr == pNewObj)
         {
-            // not cloned yet, use default way
-            pNewObj = pObj->CloneSdrObject(*pNewModel);
+            // not cloned yet
+            if (pObj->GetObjIdentifier() == OBJ_OLE2)
+            {
+                // tdf#125520
+                pNewObj = pObj->CloneSdrObject(pObj->getSdrModelFromSdrObject());
+            }
+            else
+            {
+                // use default way
+                pNewObj = pObj->CloneSdrObject(*pNewModel);
+            }
         }
 
         if(pNewObj)
