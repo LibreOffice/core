@@ -156,6 +156,8 @@ gb_CFLAGS := \
 	-wd4800 \
 	-wd4267 \
 
+gb_Helper_disable_warnings = $(filter-out -W4,$(1)) -w
+
 ifneq ($(COM_IS_CLANG),TRUE)
 
 # clang-cl doesn't support -Wv:18 for now

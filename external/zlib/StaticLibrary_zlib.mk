@@ -11,7 +11,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,zlib))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,zlib,zlib))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,zlib))
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,zlib))
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,zlib,\
 	UnpackedTarball/zlib/adler32 \

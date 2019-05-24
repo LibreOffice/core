@@ -11,7 +11,7 @@ $(eval $(call gb_Library_Library,pdfium))
 
 $(eval $(call gb_Library_use_unpacked,pdfium,pdfium))
 
-$(eval $(call gb_Library_set_warnings_not_errors,pdfium))
+$(eval $(call gb_Library_set_warnings_disabled,pdfium))
 
 $(eval $(call gb_Library_set_precompiled_header,pdfium,$(SRCDIR)/external/pdfium/inc/pch/precompiled_pdfium))
 
@@ -31,14 +31,6 @@ $(eval $(call gb_Library_add_defs,pdfium,\
     -DMEMORY_TOOL_REPLACES_ALLOCATOR \
     -DUNICODE \
     -DWIN32_LEAN_AND_MEAN \
-))
-
-# Don't show warnings upstream doesn't care about.
-$(eval $(call gb_Library_add_cxxflags,pdfium,\
-    -w \
-))
-$(eval $(call gb_Library_add_cflags,pdfium,\
-    -w \
 ))
 
 $(eval $(call gb_Library_set_generated_cxx_suffix,pdfium,cpp))

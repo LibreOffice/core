@@ -11,7 +11,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,libnumbertext))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,libnumbertext,libnumbertext))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,libnumbertext))
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,libnumbertext))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,libnumbertext,\
         UnpackedTarball/libnumbertext/src/Soros \

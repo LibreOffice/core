@@ -11,7 +11,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,graphite))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,graphite,graphite))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,graphite))
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,graphite))
 
 $(eval $(call gb_StaticLibrary_set_include,graphite,\
 	-I$(call gb_UnpackedTarball_get_dir,graphite/include) \

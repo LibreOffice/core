@@ -477,6 +477,7 @@ gb_CppunitTest_use_externals = $(call gb_CppunitTest__forward_to_Linktarget,$(su
 gb_CppunitTest_use_custom_headers = $(call gb_CppunitTest__forward_to_Linktarget,$(subst gb_CppunitTest_,,$(0)),$(1),$(2),$(3))
 gb_CppunitTest_set_visibility_default = $(call gb_CppunitTest__forward_to_Linktarget,$(subst gb_CppunitTest_,,$(0)),$(1),$(2),$(3))
 gb_CppunitTest_set_warnings_not_errors = $(call gb_CppunitTest__forward_to_Linktarget,$(subst gb_CppunitTest_,,$(0)),$(1),$(2),$(3))
+gb_CppunitTest_set_warnings_disabled = $(call gb_CppunitTest__forward_to_Linktarget,$(subst gb_CppunitTest_,,$(0)),$(1),$(2),$(3))
 gb_CppunitTest_set_external_code = $(call gb_CppunitTest__forward_to_Linktarget,$(subst gb_CppunitTest_,,$(0)),$(1),$(2),$(3))
 gb_CppunitTest_set_generated_cxx_suffix = $(call gb_CppunitTest__forward_to_Linktarget,$(subst gb_CppunitTest_,,$(0)),$(1),$(2),$(3))
 

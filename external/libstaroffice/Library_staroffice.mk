@@ -15,7 +15,7 @@ $(eval $(call gb_Library_use_externals,staroffice,\
     revenge \
 ))
 
-$(eval $(call gb_Library_set_warnings_not_errors,staroffice))
+$(eval $(call gb_Library_set_warnings_disabled,staroffice))
 
 $(eval $(call gb_Library_set_include,staroffice,\
     -I$(call gb_UnpackedTarball_get_dir,libstaroffice)/inc \

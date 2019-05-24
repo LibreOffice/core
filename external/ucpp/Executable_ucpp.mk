@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Executable_Executable,ucpp))
 
-$(eval $(call gb_Executable_set_warnings_not_errors,ucpp))
+$(eval $(call gb_Executable_set_warnings_disabled,ucpp))
 
 $(eval $(call gb_Executable_use_unpacked,ucpp,ucpp))
 
@@ -18,12 +18,6 @@ $(eval $(call gb_Executable_add_defs,ucpp,\
 	-DUCPP_CONFIG \
 	-DSTAND_ALONE \
 ))
-
-# suppress warning spam
-$(eval $(call gb_Executable_add_cflags,ucpp,\
-	-w \
-))
-
 
 $(eval $(call gb_Executable_add_generated_cobjects,ucpp,\
 	UnpackedTarball/ucpp/assert \

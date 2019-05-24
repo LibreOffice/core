@@ -11,7 +11,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,expat_x64))
 
 $(eval $(call gb_StaticLibrary_set_x64,expat_x64,YES))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,expat_x64))
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,expat_x64))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,expat_x64,expat))
 
