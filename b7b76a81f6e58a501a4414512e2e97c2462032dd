@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_fcffb064",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-24T11:20:40Z",
+      "side": 1,
+      "message": "\"urb\"? i thought it was \"urp\"",
+      "revId": "b7b76a81f6e58a501a4414512e2e97c2462032dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
