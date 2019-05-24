@@ -1974,7 +1974,7 @@ void SdTiledRenderingTest::testLanguageAllText()
     comphelper::LibreOfficeKit::setActive();
     createDoc("language-all-text.odp");
 
-    // Set tha language to English for all text.
+    // Set the language to English for all text.
     uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence({
         { "Language", uno::makeAny(OUString("Default_English (USA)")) },
     });

@@ -2522,7 +2522,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                                 else if (nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel())
                                 {
                                     // nDest needs adjusted if there are selected entries (including ancestral lineage)
-                                    // immediatly before the current moved entry.
+                                    // immediately before the current moved entry.
                                     SvTreeListEntry* pTmp = Prev(pEntry);
                                     while (pTmp && lcl_IsContent(pTmp) &&
                                            nActLevel < static_cast<SwOutlineContent*>(pTmp->GetUserData())->GetOutlineLevel())
@@ -2589,7 +2589,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                                     {
                                         nDest = static_cast<SwOutlineContent*>(pTmp->GetUserData())->GetOutlinePos();
                                         const auto nLevel = static_cast<SwOutlineContent*>(pTmp->GetUserData())->GetOutlineLevel();
-                                        // account for selected entries' decendent lineage
+                                        // account for selected entries' descendent lineage
                                         pTmp = Next(pTmp);
                                         while (pTmp && lcl_IsContent(pTmp) &&
                                                nLevel < static_cast<SwOutlineContent*>(pTmp->GetUserData())->GetOutlineLevel())
