@@ -30,8 +30,6 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 
-#undef Region
-
 #include "KDE5SalFrame.hxx"
 #include "KDE5SalGraphics.hxx"
 
@@ -211,7 +209,7 @@ SalGraphics* KDE5SalFrame::AcquireGraphics()
     if (!m_pKDE5Graphics.get())
     {
         m_pKDE5Graphics.reset(new KDE5SalGraphics(this));
-        Qt5Frame::InitSvpSalGraphics(m_pKDE5Graphics.get());
+        Qt5Frame::InitQt5SvpGraphics(m_pKDE5Graphics.get());
     }
 
     return m_pKDE5Graphics.get();

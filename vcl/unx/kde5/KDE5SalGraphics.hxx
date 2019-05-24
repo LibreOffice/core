@@ -25,6 +25,7 @@
 #include <headless/svpgdi.hxx>
 
 #include <Qt5Graphics_Controls.hxx>
+#include <Qt5SvpGraphics.hxx>
 
 #include <QtGui/QImage>
 #include <QtWidgets/QPushButton>
@@ -34,7 +35,7 @@ class Qt5Frame;
 /**
  * Handles native graphics requests and performs the needed drawing operations.
  */
-class KDE5SalGraphics : public SvpSalGraphics
+class KDE5SalGraphics : public Qt5SvpGraphics
 {
 public:
     KDE5SalGraphics(Qt5Frame* pFrame);
