@@ -422,7 +422,7 @@ void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRe
     }
 }
 
-bool SwRedlineTable::Insert(SwRangeRedlinePtr& p)
+bool SwRedlineTable::Insert(SwRangeRedline*& p)
 {
     if( p->HasValidRange() )
     {
@@ -435,7 +435,7 @@ bool SwRedlineTable::Insert(SwRangeRedlinePtr& p)
     return InsertWithValidRanges( p );
 }
 
-bool SwRedlineTable::Insert(SwRangeRedlinePtr& p, size_type& rP)
+bool SwRedlineTable::Insert(SwRangeRedline*& p, size_type& rP)
 {
     if( p->HasValidRange() )
     {
@@ -557,7 +557,7 @@ std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p
 
 } // namespace sw
 
-bool SwRedlineTable::InsertWithValidRanges(SwRangeRedlinePtr& p, size_type* pInsPos)
+bool SwRedlineTable::InsertWithValidRanges(SwRangeRedline*& p, size_type* pInsPos)
 {
     bool bAnyIns = false;
     std::vector<SwRangeRedline*> const redlines(
