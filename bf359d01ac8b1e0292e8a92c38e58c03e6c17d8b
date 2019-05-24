@@ -16,6 +16,24 @@
       "revId": "bf359d01ac8b1e0292e8a92c38e58c03e6c17d8b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_fce9f07f",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2450,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-24T12:41:17Z",
+      "side": 1,
+      "message": "\"would require that there\u0027s already an existing shared_ptr for this, which apparently there isn\u0027t\": oh, there apparently is, I\u0027d failed to notice lclErrorDialog in sc/source/ui/miscdlgs/solvrdlg.cxx",
+      "parentUuid": "3fa0c359_1c613c37",
+      "revId": "bf359d01ac8b1e0292e8a92c38e58c03e6c17d8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
