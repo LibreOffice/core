@@ -335,7 +335,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf115813_OOXML_XY_handle)
 {
     // The test covers all preset shapes with handles. Only these ones are
     // excluded: arc, blockArc, chord, circularArrow, gear6, gear9, mathNotEqual, pie,
-    // leftCircularArrow, leftRightCircularArrow, star24, star32, swooshArrow.
+    // leftCircularArrow, leftRightCircularArrow, swooshArrow.
     // Connectors are included as ordinary shapes to prevent converting.
     // Error was, that the handle movement and the changes to the shape did not follow
     // the mouse movement.
