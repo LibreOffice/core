@@ -114,6 +114,7 @@ IMPL_CREATEINSTANCE( Calendar_gregorian )
 IMPL_CREATEINSTANCE( Calendar_hanja )
 IMPL_CREATEINSTANCE( Calendar_gengou )
 IMPL_CREATEINSTANCE( Calendar_ROC )
+IMPL_CREATEINSTANCE( Calendar_dangi )
 IMPL_CREATEINSTANCE( Calendar_hijri )
 IMPL_CREATEINSTANCE( Calendar_jewish )
 IMPL_CREATEINSTANCE( Calendar_buddhist )
@@ -295,6 +296,9 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.Calendar_ROC",
         "com.sun.star.i18n.Calendar_ROC",
         &Calendar_ROC_CreateInstance },
+    {   "com.sun.star.i18n.Calendar_dangi",
+        "com.sun.star.i18n.Calendar_dangi",
+        &Calendar_dangi_CreateInstance },
     {   "com.sun.star.i18n.Calendar_hanja_yoil",
         "com.sun.star.i18n.Calendar_hanja_yoil",
         &Calendar_hanja_CreateInstance },
