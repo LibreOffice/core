@@ -135,6 +135,9 @@ void SwpHints::Insert( const SwTextAttr *pHt )
     if (m_bWhichMapNeedsSorting)
         ResortWhichMap();
 
+    if (pHt->IsCharFormatAttr())
+        m_eContainsCharFormatAttr = ContainsCharFormatState::Yes;
+
     auto it1 = std::lower_bound(m_HintsByStart.begin(), m_HintsByStart.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtStart);
     m_HintsByStart.insert(it1, const_cast<SwTextAttr*>(pHt));
 
@@ -454,6 +457,22 @@ size_t SwpHints::GetIndexOf( const SwTextAttr *pHt ) const
     if ( it == m_HintsByStart.end() || *it != pHt )
         return SAL_MAX_SIZE;
     return it - m_HintsByStart.begin();
+}
+
+bool SwpHints::ContainsCharFormatAttr() const
+{
+    if (m_eContainsCharFormatAttr != ContainsCharFormatState::Unknown)
+        return m_eContainsCharFormatAttr == ContainsCharFormatState::Yes;
+
+    // recalculate
+    m_eContainsCharFormatAttr = ContainsCharFormatState::No;
+    for (SwTextAttr* pHt : m_HintsByStart)
+        if ( pHt->IsCharFormatAttr() )
+        {
+            m_eContainsCharFormatAttr = ContainsCharFormatState::Yes;
+            break;
+        }
+    return m_eContainsCharFormatAttr == ContainsCharFormatState::Yes;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

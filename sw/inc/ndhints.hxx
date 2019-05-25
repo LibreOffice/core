@@ -85,6 +85,8 @@ private:
     mutable bool  m_bStartMapNeedsSorting : 1;
     mutable bool  m_bEndMapNeedsSorting : 1;
     mutable bool  m_bWhichMapNeedsSorting : 1;
+    enum class ContainsCharFormatState { Unknown, Yes, No };
+    mutable ContainsCharFormatState m_eContainsCharFormatAttr; ///< cache the information that we contain such an item
 
     /// records a new attribute in m_pHistory.
     void NoteInHistory( SwTextAttr *pAttr, const bool bNew = false );
@@ -180,6 +182,7 @@ public:
 
     bool HasFootnote() const          { return m_bFootnote; }
     bool IsInSplitNode() const   { return m_bInSplitNode; }
+    bool ContainsCharFormatAttr() const;
 
     // calc current value of m_bHiddenByParaField, returns true iff changed
     bool CalcHiddenParaField() const; // changes mutable state

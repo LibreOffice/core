@@ -1850,16 +1850,7 @@ bool SwTextNode::SetAttr(
         // be set as hints too to override those.
         bool bHasCharFormats = false;
         if ( HasHints() )
-        {
-            for ( size_t n = 0; n < m_pSwpHints->Count(); ++n )
-            {
-                if ( m_pSwpHints->Get( n )->IsCharFormatAttr() )
-                {
-                    bHasCharFormats = true;
-                    break;
-                }
-            }
-        }
+            bHasCharFormats = m_pSwpHints->ContainsCharFormatAttr();
 
         if( !bHasCharFormats )
         {
@@ -3294,6 +3285,9 @@ void SwpHints::DeleteAtPos( const size_t nPos )
     auto findIt2 = std::lower_bound(m_HintsByWhichAndStart.begin(), m_HintsByWhichAndStart.end(), pHt, CompareSwpHtWhichStart);
     assert(*findIt2 == pHt);
     m_HintsByWhichAndStart.erase(findIt2);
+
+    if (pHt->IsCharFormatAttr())
+        m_eContainsCharFormatAttr = ContainsCharFormatState::Unknown;
 
     if( pHint->Which() == RES_TXTATR_FIELD )
     {
