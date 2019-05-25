@@ -982,7 +982,7 @@ std::unique_ptr<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &
                 {
                     break;
                 }
-                if (startPos.second < *pAttr->GetAnyEnd())
+                if (startPos.second < pAttr->GetAnyEnd())
                 {
                     // sw_redlinehide: ruby *always* splits
                     if (RES_TXTATR_CJK_RUBY == pAttr->Which())
@@ -1128,7 +1128,7 @@ std::unique_ptr<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &
             TextFrameIndex nTmpEnd;
             if (pTmp)
             {
-                nTmpEnd = m_pFrame->MapModelToView(pNode, *pTmp->GetAnyEnd());
+                nTmpEnd = m_pFrame->MapModelToView(pNode, pTmp->GetAnyEnd());
                 if (nTmpEnd <= rPos)
                     continue;
                 nTmpStart = m_pFrame->MapModelToView(pNode, pTmp->GetStart());
@@ -1233,7 +1233,7 @@ std::unique_ptr<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &
             TextFrameIndex nTmpEnd;
             if (pTmp)
             {
-                nTmpEnd = m_pFrame->MapModelToView(pNode, *pTmp->GetAnyEnd());
+                nTmpEnd = m_pFrame->MapModelToView(pNode, pTmp->GetAnyEnd());
                 if (nTmpEnd <= n2Start)
                     continue;
                 nTmpStart = m_pFrame->MapModelToView(pNode, pTmp->GetStart());
@@ -1334,7 +1334,7 @@ std::unique_ptr<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &
             TextFrameIndex nTmpEnd;
             if (pTmp)
             {
-                nTmpEnd = m_pFrame->MapModelToView(pNode, *pTmp->GetAnyEnd());
+                nTmpEnd = m_pFrame->MapModelToView(pNode, pTmp->GetAnyEnd());
                 if (nTmpEnd <= rPos)
                     continue;
                 nTmpStart = m_pFrame->MapModelToView(pNode, pTmp->GetStart());
