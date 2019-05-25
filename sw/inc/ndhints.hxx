@@ -54,23 +54,8 @@ SwTextAttr* MakeRedlineTextAttr(
     SwDoc & rDoc,
     SfxPoolItem const & rAttr );
 
-
-/// SwTextAttr's, sorted by start
-struct CompareSwpHtStart
-{
-    bool operator()(SwTextAttr const * const lhs, SwTextAttr const * const rhs) const;
-};
-class SwpHtStart : public o3tl::sorted_vector<SwTextAttr*, CompareSwpHtStart,
-    o3tl::find_partialorder_ptrequals> {};
-
-/// SwTextAttr's, sorted by end
-struct CompareSwpHtEnd
-{
-    bool operator()(SwTextAttr const * const lhs, SwTextAttr const * const rhs) const;
-};
-class SwpHtEnd : public o3tl::sorted_vector<SwTextAttr*, CompareSwpHtEnd,
-    o3tl::find_partialorder_ptrequals> {};
-
+bool CompareSwpHtEnd( const SwTextAttr* lhs, const SwTextAttr* rhs );
+bool CompareSwpHtWhichStart( const SwTextAttr* lhs, const SwTextAttr* rhs );
 
 /// An SwTextAttr container, stores all directly formatted text portions for a text node.
 class SwpHints
@@ -82,8 +67,9 @@ private:
     // failure, so just allow SAL_MAX_SIZE-1 hints
     static const size_t MAX_HINTS = SAL_MAX_SIZE-1;
 
-    SwpHtStart    m_HintsByStart;
-    SwpHtEnd      m_HintsByEnd;
+    std::vector<SwTextAttr*> m_HintsByStart;
+    std::vector<SwTextAttr*> m_HintsByEnd;
+    std::vector<SwTextAttr*> m_HintsByWhichAndStart;
 
     SwRegHistory* m_pHistory;                   ///< for Undo
 
@@ -96,6 +82,9 @@ private:
     mutable bool  m_bHiddenByParaField   : 1;
     bool          m_bFootnote            : 1;   ///< footnotes
     bool          m_bDDEFields           : 1;   ///< the TextNode has DDE fields
+    mutable bool  m_bStartMapNeedsSorting : 1;
+    mutable bool  m_bEndMapNeedsSorting : 1;
+    mutable bool  m_bWhichMapNeedsSorting : 1;
 
     /// records a new attribute in m_pHistory.
     void NoteInHistory( SwTextAttr *pAttr, const bool bNew = false );
@@ -129,18 +118,12 @@ private:
     bool MergePortions( SwTextNode& rNode );
 
     void Insert( const SwTextAttr *pHt );
-    void Resort();
+    SW_DLLPUBLIC void Resort() const;
+    SW_DLLPUBLIC void ResortStartMap() const;
+    SW_DLLPUBLIC void ResortEndMap() const;
+    SW_DLLPUBLIC void ResortWhichMap() const;
 
-    size_t GetIndexOf( const SwTextAttr *pHt ) const
-    {
-        SwpHtStart::const_iterator const it =
-            m_HintsByStart.find(const_cast<SwTextAttr*>(pHt));
-        if ( it == m_HintsByStart.end() )
-        {
-            return SAL_MAX_SIZE;
-        }
-        return it - m_HintsByStart.begin();
-    }
+    size_t GetIndexOf( const SwTextAttr *pHt ) const;
 
 #ifdef DBG_UTIL
     bool Check(bool) const;
@@ -153,11 +136,39 @@ public:
     bool Contains( const SwTextAttr *pHt ) const;
     SwTextAttr * Get( size_t nPos ) const
     {
+        assert( !(nPos != 0 && m_bStartMapNeedsSorting) && "going to trigger a resort in the middle of an iteration, that's bad" );
+        if (m_bStartMapNeedsSorting)
+            ResortStartMap();
         return m_HintsByStart[nPos];
+    }
+    SwTextAttr * GetWithoutResorting( size_t nPos ) const
+    {
+        return m_HintsByStart[nPos];
+    }
+    size_t GetFirstPosSortedByWhichAndStart(sal_Int16 nWhich) const;
+    int GetLastPosSortedByEnd(sal_Int32 nEndPos) const;
+    SwTextAttr * GetSortedByWhichAndStart( size_t nPos ) const
+    {
+        assert( !(nPos != 0 && m_bWhichMapNeedsSorting) && "going to trigger a resort in the middle of an iteration, that's bad" );
+        if (m_bWhichMapNeedsSorting)
+            ResortWhichMap();
+        return m_HintsByWhichAndStart[nPos];
     }
     SwTextAttr * GetSortedByEnd( size_t nPos ) const
     {
+        assert( !(nPos != 0 && m_bEndMapNeedsSorting) && "going to trigger a resort in the middle of an iteration, that's bad" );
+        if (m_bEndMapNeedsSorting)
+            ResortEndMap();
         return m_HintsByEnd[nPos];
+    }
+    void SortIfNeedBe() const
+    {
+        if (m_bStartMapNeedsSorting)
+            ResortStartMap();
+        if (m_bWhichMapNeedsSorting)
+            ResortWhichMap();
+        if (m_bEndMapNeedsSorting)
+            ResortEndMap();
     }
     SwTextAttr * Cut( const size_t nPosInStart )
     {
@@ -184,6 +195,10 @@ public:
 
     // calc current value of m_bHiddenByParaField, returns true iff changed
     bool CalcHiddenParaField() const; // changes mutable state
+
+    // Marks the hint-maps as needing sorting because the position of something has changed
+    void StartPosChanged() const { m_bStartMapNeedsSorting = true; m_bEndMapNeedsSorting = true; m_bWhichMapNeedsSorting = true; }
+    void EndPosChanged() const { m_bStartMapNeedsSorting = true; m_bEndMapNeedsSorting = true; }
 };
 
 #endif

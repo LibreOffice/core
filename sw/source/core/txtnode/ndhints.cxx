@@ -19,6 +19,7 @@
 
 #include <editeng/rsiditem.hxx>
 #include <sal/log.hxx>
+#include <svl/eitem.hxx>
 #include <txatbase.hxx>
 #include <ndhints.hxx>
 #include <txtatr.hxx>
@@ -31,8 +32,10 @@
 
 /// sort order: Start, End (reverse), Which (reverse),
 /// (char style: sort number), at last the pointer
-static bool lcl_IsLessStart( const SwTextAttr &rHt1, const SwTextAttr &rHt2 )
+static bool CompareSwpHtStart( const SwTextAttr* lhs, const SwTextAttr* rhs )
 {
+    const SwTextAttr &rHt1 = *lhs;
+    const SwTextAttr &rHt2 = *rhs;
     if ( rHt1.GetStart() == rHt2.GetStart() )
     {
         const sal_Int32 nHt1 = *rHt1.GetAnyEnd();
@@ -63,10 +66,30 @@ static bool lcl_IsLessStart( const SwTextAttr &rHt1, const SwTextAttr &rHt2 )
     return ( rHt1.GetStart() < rHt2.GetStart() );
 }
 
+/// sort order: which, Start, at last the pointer
+bool CompareSwpHtWhichStart( const SwTextAttr* lhs, const SwTextAttr* rhs )
+{
+    const SwTextAttr &rHt1 = *lhs;
+    const SwTextAttr &rHt2 = *rhs;
+    const sal_uInt16 nWhich1 = rHt1.Which();
+    const sal_uInt16 nWhich2 = rHt2.Which();
+    if ( nWhich1 < nWhich2 )
+        return true;
+    if ( nWhich1 > nWhich2 )
+        return false;
+    if (rHt1.GetStart() < rHt2.GetStart())
+        return true;
+    if (rHt1.GetStart() > rHt2.GetStart())
+        return false;
+    return reinterpret_cast<sal_IntPtr>(&rHt1) < reinterpret_cast<sal_IntPtr>(&rHt2);
+}
+
 /// sort order: End (reverse), Start, Which (reverse),
 /// (char style: sort number), at last the pointer
-static bool lcl_IsLessEnd( const SwTextAttr &rHt1, const SwTextAttr &rHt2 )
+bool CompareSwpHtEnd( const SwTextAttr* lhs, const SwTextAttr* rhs )
 {
+    const SwTextAttr &rHt1 = *lhs;
+    const SwTextAttr &rHt2 = *rhs;
     const sal_Int32 nHt1 = *rHt1.GetAnyEnd();
     const sal_Int32 nHt2 = *rHt2.GetAnyEnd();
     if ( nHt1 == nHt2 )
@@ -98,25 +121,28 @@ static bool lcl_IsLessEnd( const SwTextAttr &rHt1, const SwTextAttr &rHt2 )
     return ( nHt1 < nHt2 );
 }
 
-bool CompareSwpHtStart::operator()(SwTextAttr const * const lhs, SwTextAttr const * const rhs) const
-{
-  return lcl_IsLessStart( *lhs, *rhs );
-}
-
-bool CompareSwpHtEnd::operator()(SwTextAttr const * const lhs, SwTextAttr const * const rhs) const
-{
-  return lcl_IsLessEnd( *lhs, *rhs );
-}
-
 void SwpHints::Insert( const SwTextAttr *pHt )
 {
-    Resort();
-    assert(m_HintsByStart.find(const_cast<SwTextAttr*>(pHt))
+    assert(std::find(m_HintsByStart.begin(), m_HintsByStart.end(), const_cast<SwTextAttr*>(pHt))
             == m_HintsByStart.end()); // "Insert: hint already in HtStart"
-    assert(m_HintsByEnd.find(const_cast<SwTextAttr*>(pHt))
-            == m_HintsByEnd.end());   // "Insert: hint already in HtEnd"
-    m_HintsByStart.insert( const_cast<SwTextAttr*>(pHt) );
-    m_HintsByEnd  .insert( const_cast<SwTextAttr*>(pHt) );
+    assert( pHt->m_pHints == nullptr );
+    const_cast<SwTextAttr*>(pHt)->m_pHints = this;
+
+    if (m_bStartMapNeedsSorting)
+        ResortStartMap();
+    if (m_bEndMapNeedsSorting)
+        ResortEndMap();
+    if (m_bWhichMapNeedsSorting)
+        ResortWhichMap();
+
+    auto it1 = std::lower_bound(m_HintsByStart.begin(), m_HintsByStart.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtStart);
+    m_HintsByStart.insert(it1, const_cast<SwTextAttr*>(pHt));
+
+    auto it2 = std::lower_bound(m_HintsByEnd.begin(), m_HintsByEnd.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtEnd);
+    m_HintsByEnd.insert(it2, const_cast<SwTextAttr*>(pHt));
+
+    auto it3 = std::lower_bound(m_HintsByWhichAndStart.begin(), m_HintsByWhichAndStart.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtWhichStart);
+    m_HintsByWhichAndStart.insert(it3, const_cast<SwTextAttr*>(pHt));
 }
 
 bool SwpHints::Contains( const SwTextAttr *pHt ) const
@@ -124,14 +150,8 @@ bool SwpHints::Contains( const SwTextAttr *pHt ) const
     // DO NOT use find() or CHECK here!
     // if called from SwTextNode::InsertItem, pHt has already been deleted,
     // so it cannot be dereferenced
-    for (size_t i = 0; i < m_HintsByStart.size(); ++i)
-    {
-        if (m_HintsByStart[i] == pHt)
-        {
-            return true;
-        }
-    }
-    return false;
+    return std::find(m_HintsByStart.begin(), m_HintsByStart.end(), pHt)
+        != m_HintsByStart.end();
 }
 
 #ifdef DBG_UTIL
@@ -140,7 +160,7 @@ bool SwpHints::Contains( const SwTextAttr *pHt ) const
         if(!(cond)) \
         { \
             SAL_WARN("sw.core", text); \
-            (const_cast<SwpHints*>(this))->Resort(); \
+            Resort(); \
             return false; \
         }
 
@@ -186,7 +206,7 @@ bool SwpHints::Check(bool bPortionsMerged) const
 
         // 4a) IsLessStart consistency
         if( pLastStart )
-            CHECK_ERR( lcl_IsLessStart( *pLastStart, *pHt ), "HintsCheck: IsLastStart" );
+            CHECK_ERR( CompareSwpHtStart( pLastStart, pHt ), "HintsCheck: IsLastStart" );
 
         nLastStart = nIdx;
         pLastStart = pHt;
@@ -203,7 +223,7 @@ bool SwpHints::Check(bool bPortionsMerged) const
 
         // 4b) IsLessEnd consistency
         if( pLastEnd )
-            CHECK_ERR( lcl_IsLessEnd( *pLastEnd, *pHtEnd ), "HintsCheck: IsLastEnd" );
+            CHECK_ERR( CompareSwpHtEnd( pLastEnd, pHtEnd ), "HintsCheck: IsLastEnd" );
 
         nLastEnd = nIdx;
         pLastEnd = pHtEnd;
@@ -211,13 +231,13 @@ bool SwpHints::Check(bool bPortionsMerged) const
         // --- cross checks ---
 
         // 5) same pointers in both arrays
-        if (m_HintsByStart.find(const_cast<SwTextAttr*>(pHt)) == m_HintsByStart.end())
+        if (std::lower_bound(m_HintsByStart.begin(), m_HintsByStart.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtStart) == m_HintsByStart.end())
             nIdx = COMPLETE_STRING;
 
         CHECK_ERR( COMPLETE_STRING != nIdx, "HintsCheck: no GetStartOf" );
 
         // 6) same pointers in both arrays
-        if (m_HintsByEnd.find(const_cast<SwTextAttr*>(pHt)) == m_HintsByEnd.end())
+        if (std::lower_bound(m_HintsByEnd.begin(), m_HintsByEnd.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtEnd) == m_HintsByEnd.end())
             nIdx = COMPLETE_STRING;
 
         CHECK_ERR( COMPLETE_STRING != nIdx, "HintsCheck: no GetEndOf" );
@@ -368,10 +388,70 @@ bool SwpHints::Check(bool bPortionsMerged) const
 // sort order of the m_HintsByStart, m_HintsByEnd arrays, so this method is needed
 // to restore the order.
 
-void SwpHints::Resort()
+void SwpHints::Resort() const
 {
-    m_HintsByStart.Resort();
-    m_HintsByEnd.Resort();
+    auto & rStartMap = const_cast<SwpHints*>(this)->m_HintsByStart;
+    std::sort(rStartMap.begin(), rStartMap.end(), CompareSwpHtStart);
+    auto & rEndMap = const_cast<SwpHints*>(this)->m_HintsByEnd;
+    std::sort(rEndMap.begin(), rEndMap.end(), CompareSwpHtEnd);
+    auto & rWhichStartMap = const_cast<SwpHints*>(this)->m_HintsByWhichAndStart;
+    std::sort(rWhichStartMap.begin(), rWhichStartMap.end(), CompareSwpHtWhichStart);
+    m_bStartMapNeedsSorting = false;
+    m_bEndMapNeedsSorting = false;
+    m_bWhichMapNeedsSorting = false;
+}
+
+void SwpHints::ResortStartMap() const
+{
+    auto & rStartMap = const_cast<SwpHints*>(this)->m_HintsByStart;
+    std::sort(rStartMap.begin(), rStartMap.end(), CompareSwpHtStart);
+    m_bStartMapNeedsSorting = false;
+}
+
+void SwpHints::ResortEndMap() const
+{
+    auto & rEndMap = const_cast<SwpHints*>(this)->m_HintsByEnd;
+    std::sort(rEndMap.begin(), rEndMap.end(), CompareSwpHtEnd);
+    m_bEndMapNeedsSorting = false;
+}
+
+void SwpHints::ResortWhichMap() const
+{
+    m_bWhichMapNeedsSorting = false;
+    auto & rWhichStartMap = const_cast<SwpHints*>(this)->m_HintsByWhichAndStart;
+    std::sort(rWhichStartMap.begin(), rWhichStartMap.end(), CompareSwpHtWhichStart);
+}
+
+size_t SwpHints::GetFirstPosSortedByWhichAndStart( sal_Int16 nWhich ) const
+{
+    if (m_bWhichMapNeedsSorting)
+        ResortWhichMap();
+    SfxBoolItem aFindItem(nWhich);
+    SwTextAttr aTmp(aFindItem, 0);
+    auto it = std::lower_bound(m_HintsByWhichAndStart.begin(), m_HintsByWhichAndStart.end(), &aTmp, CompareSwpHtWhichStart);
+    if ( it == m_HintsByWhichAndStart.end() )
+        return SAL_MAX_SIZE;
+    return it - m_HintsByWhichAndStart.begin();
+}
+
+int SwpHints::GetLastPosSortedByEnd( sal_Int32 nEndPos ) const
+{
+    if (m_bEndMapNeedsSorting)
+        ResortEndMap();
+    SfxBoolItem aFindItem(0);
+    SwTextAttrEnd aTmp(aFindItem, nEndPos, nEndPos);
+    auto it = std::upper_bound(m_HintsByEnd.begin(), m_HintsByEnd.end(), &aTmp, CompareSwpHtEnd);
+    return it - m_HintsByEnd.begin() - 1;
+}
+
+size_t SwpHints::GetIndexOf( const SwTextAttr *pHt ) const
+{
+    if (m_bStartMapNeedsSorting)
+        ResortStartMap();
+    auto it = std::lower_bound(m_HintsByStart.begin(), m_HintsByStart.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtStart);
+    if ( it == m_HintsByStart.end() || *it != pHt )
+        return SAL_MAX_SIZE;
+    return it - m_HintsByStart.begin();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

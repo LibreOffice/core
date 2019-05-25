@@ -726,8 +726,9 @@ static bool lcl_SearchForward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpAr
                 if( rCmpArr.GetNdStt() < pAttr->GetStart() )
                 {
                     // found end
+                    auto nTmpStart = pAttr->GetStart();
                     lcl_SetAttrPam( rPam, rCmpArr.GetNdStt(),
-                                &pAttr->GetStart(), true );
+                                &nTmpStart, true );
                     return true;
                 }
                 // continue search
