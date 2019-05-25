@@ -38,8 +38,8 @@ static bool CompareSwpHtStart( const SwTextAttr* lhs, const SwTextAttr* rhs )
     const SwTextAttr &rHt2 = *rhs;
     if ( rHt1.GetStart() == rHt2.GetStart() )
     {
-        const sal_Int32 nHt1 = *rHt1.GetAnyEnd();
-        const sal_Int32 nHt2 = *rHt2.GetAnyEnd();
+        const sal_Int32 nHt1 = rHt1.GetAnyEnd();
+        const sal_Int32 nHt2 = rHt2.GetAnyEnd();
         if ( nHt1 == nHt2 )
         {
             const sal_uInt16 nWhich1 = rHt1.Which();
@@ -113,8 +113,8 @@ bool CompareSwpHtEnd::operator()( const SwTextAttr* lhs, const SwTextAttr* rhs )
 {
     const SwTextAttr &rHt1 = *lhs;
     const SwTextAttr &rHt2 = *rhs;
-    const sal_Int32 nHt1 = *rHt1.GetAnyEnd();
-    const sal_Int32 nHt2 = *rHt2.GetAnyEnd();
+    const sal_Int32 nHt1 = rHt1.GetAnyEnd();
+    const sal_Int32 nHt2 = rHt2.GetAnyEnd();
     if ( nHt1 == nHt2 )
     {
         if ( rHt1.GetStart() == rHt2.GetStart() )

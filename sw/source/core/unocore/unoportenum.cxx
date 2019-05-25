@@ -1010,7 +1010,7 @@ lcl_ExportHints(
         nEndIndex = 0;
         nNextEnd = 0;
         while(nEndIndex < pHints->Count() &&
-            nCurrentIndex >= (nNextEnd = (*pHints->GetSortedByEnd(nEndIndex)->GetAnyEnd())))
+            nCurrentIndex >= (nNextEnd = pHints->GetSortedByEnd(nEndIndex)->GetAnyEnd()))
             nEndIndex++;
 
         sal_Int32 nNextPos =
