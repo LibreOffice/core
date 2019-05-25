@@ -1190,31 +1190,30 @@ void SwTextNode::Update(
             {
                 bool bTextAttrChanged = false;
                 bool bStartOfTextAttrChanged = false;
-                SwTextAttr * const pHint = m_pSwpHints->Get(n);
-                sal_Int32 &       rStart = pHint->GetStart();
-                if ( rStart > nChangePos )
+                SwTextAttr * const pHint = m_pSwpHints->GetWithoutResorting(n);
+                if ( pHint->GetStart() > nChangePos )
                 {
-                    if ( rStart > nChangeEnd )
+                    if ( pHint->GetStart() > nChangeEnd )
                     {
-                         rStart = rStart - nChangeLen;
+                         pHint->SetStart( pHint->GetStart() - nChangeLen );
                     }
                     else
                     {
-                         rStart = nChangePos;
+                         pHint->SetStart( nChangePos );
                     }
                     bStartOfTextAttrChanged = true;
                 }
 
-                sal_Int32 * const pEnd = pHint->GetEnd();
+                const sal_Int32 * const pEnd = pHint->GetEnd();
                 if (pEnd && *pEnd > nChangePos )
                 {
                     if( *pEnd > nChangeEnd )
                     {
-                        *pEnd = *pEnd - nChangeLen;
+                        pHint->SetEnd(*pEnd - nChangeLen);
                     }
                     else
                     {
-                        *pEnd = nChangePos;
+                        pHint->SetEnd(nChangePos);
                     }
                     bTextAttrChanged = !bStartOfTextAttrChanged;
                 }
@@ -1251,22 +1250,21 @@ void SwTextNode::Update(
             for ( size_t n = 0; n < m_pSwpHints->Count(); ++n )
             {
                 bool bTextAttrChanged = false;
-                SwTextAttr * const pHint = m_pSwpHints->Get(n);
-                sal_Int32 &       rStart = pHint->GetStart();
-                sal_Int32 * const pEnd = pHint->GetEnd();
-                if ( rStart >= nChangePos )
+                SwTextAttr * const pHint = m_pSwpHints->GetWithoutResorting(n);
+                const sal_Int32 * const pEnd = pHint->GetEnd();
+                if ( pHint->GetStart() >= nChangePos )
                 {
-                    rStart = rStart + nChangeLen;
+                    pHint->SetStart( pHint->GetStart() + nChangeLen );
                     if ( pEnd )
                     {
-                        *pEnd = *pEnd + nChangeLen;
+                        pHint->SetEnd(*pEnd + nChangeLen);
                     }
                 }
                 else if ( pEnd && (*pEnd >= nChangePos) )
                 {
                     if ( (*pEnd > nChangePos) || IsIgnoreDontExpand() )
                     {
-                        *pEnd = *pEnd + nChangeLen;
+                        pHint->SetEnd(*pEnd + nChangeLen);
                         bTextAttrChanged = true;
                     }
                     else // *pEnd == nChangePos
@@ -1321,7 +1319,7 @@ void SwTextNode::Update(
                         }
                         else
                         {
-                            *pEnd = *pEnd + nChangeLen;
+                            pHint->SetEnd(*pEnd + nChangeLen);
                             bTextAttrChanged = true;
                         }
                     }
@@ -1616,12 +1614,11 @@ bool SwTextNode::DontExpandFormat( const SwIndex& rIdx, bool bFlag,
     bool bRet = false;
     if ( HasHints() )
     {
-        const size_t nEndCnt = m_pSwpHints->Count();
-        size_t nPos = nEndCnt;
-        while( nPos )
+        size_t nPos = m_pSwpHints->GetLastPosSortedByEnd(nIdx);
+        for( ; nPos; --nPos )
         {
-            SwTextAttr *pTmp = m_pSwpHints->GetSortedByEnd( --nPos );
-            sal_Int32 *pEnd = pTmp->GetEnd();
+            SwTextAttr *pTmp = m_pSwpHints->GetSortedByEnd( nPos );
+            const sal_Int32 *pEnd = pTmp->GetEnd();
             if( !pEnd || *pEnd > nIdx )
                 continue;
             if( nIdx != *pEnd )
@@ -1660,7 +1657,9 @@ lcl_GetTextAttrs(
     enum SwTextNode::GetTextAttrMode const eMode)
 {
     assert(nWhich >= RES_TXTATR_BEGIN && nWhich < RES_TXTATR_END);
-    size_t const nSize = pSwpHints ? pSwpHints->Count() : 0;
+    if (!pSwpHints)
+        return;
+    size_t const nSize = pSwpHints->Count();
     sal_Int32 nPreviousIndex(0); // index of last hint with nWhich
     bool (*pMatchFunc)(sal_Int32, sal_Int32, sal_Int32)=nullptr;
     switch (eMode)
@@ -1671,18 +1670,18 @@ lcl_GetTextAttrs(
         default: assert(false);
     }
 
-    for( size_t i = 0; i < nSize; ++i )
+    for( size_t i = pSwpHints->GetFirstPosSortedByWhichAndStart(nWhich); i < nSize; ++i )
     {
-        SwTextAttr *const pHint = pSwpHints->Get(i);
+        SwTextAttr *const pHint = pSwpHints->GetSortedByWhichAndStart(i);
         sal_Int32 const nHintStart = pHint->GetStart();
         if (nIndex < nHintStart)
         {
-            return; // hints are sorted by start, so we are done...
+            return; // hints are sorted by which&start, so we are done...
         }
 
         if (pHint->Which() != nWhich)
         {
-            continue;
+            return; // hints are sorted by which&start, so we are done...
         }
 
         sal_Int32 const*const pEndIdx = pHint->GetEnd();
@@ -2330,7 +2329,7 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
                 rIdx >= m_pSwpHints->Get(i)->GetStart(); ++i )
         {
             SwTextAttr * const pHt = m_pSwpHints->Get( i );
-            sal_Int32 * const pEndIdx = pHt->GetEnd();
+            const sal_Int32 * const pEndIdx = pHt->GetEnd();
             if( !pEndIdx )
                 continue;
 
@@ -2342,8 +2341,8 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
                 {
                     // on empty attributes also adjust Start
                     if( rIdx == pHt->GetStart() )
-                        pHt->GetStart() = pHt->GetStart() - nLen;
-                    *pEndIdx = *pEndIdx - nLen;
+                        pHt->SetStart( pHt->GetStart() - nLen );
+                    pHt->SetEnd(*pEndIdx - nLen);
                     m_pSwpHints->DeleteAtPos(i);
                     // could be that pHt has IsFormatIgnoreEnd set, and it's
                     // not a RSID-only hint - now we have the inserted text
@@ -2359,7 +2358,7 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
                 else if ( (nMode & SwInsertFlags::EMPTYEXPAND)
                         && (*pEndIdx == pHt->GetStart()) )
                 {
-                    pHt->GetStart() = pHt->GetStart() - nLen;
+                    pHt->SetStart( pHt->GetStart() - nLen );
                     const size_t nCurrentLen = m_pSwpHints->Count();
                     m_pSwpHints->DeleteAtPos(i);
                     InsertHint( pHt/* AUTOSTYLES:, SetAttrMode::NOHINTADJUST*/ );
@@ -2380,7 +2379,7 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
             {
                 // no field, at paragraph start, HintExpand
                 m_pSwpHints->DeleteAtPos(i);
-                pHt->GetStart() = pHt->GetStart() - nLen;
+                pHt->SetStart( pHt->GetStart() - nLen );
                 // no effect on format ignore flags here (para start)
                 InsertHint( pHt, SetAttrMode::NOHINTADJUST );
             }
@@ -2576,14 +2575,13 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
                 {
                     bMergePortionsNeeded = true;
                 }
-                pHt->GetStart() =
-                        nDestStart + (nAttrStartIdx - nTextStartIdx);
+                pHt->SetStart(nDestStart + (nAttrStartIdx - nTextStartIdx));
                 if (pEndIdx)
                 {
-                    *pHt->GetEnd() = nDestStart + (
+                    pHt->SetEnd( nDestStart + (
                                     *pEndIdx > nEnd
                                         ? nLen
-                                        : *pEndIdx - nTextStartIdx );
+                                        : *pEndIdx - nTextStartIdx ) );
                 }
                 pDest->InsertHint( pHt,
                           SetAttrMode::NOTXTATRCHR
@@ -2644,7 +2642,8 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
 
         for (SwTextAttr* pHt : aArr)
         {
-            pHt->GetStart() = *pHt->GetEnd() = rStart.GetIndex();
+            pHt->SetStart( rStart.GetIndex() );
+            pHt->SetEnd( rStart.GetIndex() );
             InsertHint( pHt );
         }
     }

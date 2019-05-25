@@ -1116,7 +1116,7 @@ bool IsMarkHintHidden(SwRootFrame const& rLayout,
     {
         return true;
     }
-    sal_Int32 const*const pEnd(const_cast<SwTextAttrEnd &>(rHint).GetEnd());
+    sal_Int32 const*const pEnd(rHint.GetEnd());
     if (pEnd)
     {
         return pFrame->MapModelToView(&rNode, rHint.GetStart())

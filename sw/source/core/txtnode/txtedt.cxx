@@ -420,7 +420,7 @@ void SwTextNode::RstTextAttr(
 
         // attributes without end stay in!
         // but consider <bInclRefToxMark> used by Undo
-        sal_Int32* const pAttrEnd = pHt->GetEnd();
+        const sal_Int32* const pAttrEnd = pHt->GetEnd();
         const bool bKeepAttrWithoutEnd =
             pAttrEnd == nullptr
             && ( !bInclRefToxMark
@@ -513,7 +513,7 @@ void SwTextNode::RstTextAttr(
                     bChanged = true;
                     m_pSwpHints->NoteInHistory( pHt );
                     // UGLY: this may temporarily destroy the sorting!
-                    pHt->GetStart() = nEnd;
+                    pHt->SetStart(nEnd);
                     m_pSwpHints->NoteInHistory( pHt, true );
 
                     if ( pStyleHandle.get() && nAttrStart < nEnd )
@@ -541,7 +541,7 @@ void SwTextNode::RstTextAttr(
 
                     m_pSwpHints->NoteInHistory( pHt );
                     // UGLY: this may temporarily destroy the sorting!
-                    *pAttrEnd = nStt;
+                    pHt->SetEnd(nStt);
                     m_pSwpHints->NoteInHistory( pHt, true );
 
                     if ( pStyleHandle.get() )
@@ -563,7 +563,7 @@ void SwTextNode::RstTextAttr(
                     const sal_Int32 nTmpEnd = *pAttrEnd;
                     m_pSwpHints->NoteInHistory( pHt );
                     // UGLY: this may temporarily destroy the sorting!
-                    *pAttrEnd = nStt;
+                    pHt->SetEnd(nStt);
                     m_pSwpHints->NoteInHistory( pHt, true );
 
                     if ( pStyleHandle.get() && nStt < nEnd )

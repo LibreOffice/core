@@ -46,9 +46,14 @@ SwTextAttr::~SwTextAttr() COVERITY_NOEXCEPT_FALSE
 {
 }
 
-sal_Int32* SwTextAttr::GetEnd()
+const sal_Int32* SwTextAttr::GetEnd() const
 {
     return nullptr;
+}
+
+void SwTextAttr::SetEnd(sal_Int32 )
+{
+    assert(false);
 }
 
 void SwTextAttr::Destroy( SwTextAttr * pToDestroy, SfxItemPool& rPool )
@@ -70,9 +75,16 @@ SwTextAttrEnd::SwTextAttrEnd( SfxPoolItem& rAttr,
 {
 }
 
-sal_Int32* SwTextAttrEnd::GetEnd()
+const sal_Int32* SwTextAttrEnd::GetEnd() const
 {
     return & m_nEnd;
+}
+
+void SwTextAttrEnd::SetEnd(sal_Int32 n)
+{
+    m_nEnd = n;
+    if (m_pHints)
+        m_pHints->EndPosChanged();
 }
 
 void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
