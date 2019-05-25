@@ -35,6 +35,7 @@
 #include <string.h>
 
 #include <CRC32.hxx>
+#include <ThreadedDeflater.hxx>
 #include <ZipOutputEntry.hxx>
 #include <ZipOutputStream.hxx>
 #include <ZipPackage.hxx>
@@ -496,7 +497,7 @@ bool ZipPackageStream::saveChild(
     else if ( m_nStreamMode == PACKAGE_STREAM_RAW )
         m_bRawStream = true;
 
-    bool bParallelDeflate = false;
+    bool bBackgroundThreadDeflate = false;
     bool bTransportOwnEncrStreamAsRaw = false;
     // During the storing the original size of the stream can be changed
     // TODO/LATER: get rid of this hack
@@ -758,17 +759,25 @@ bool ZipPackageStream::saveChild(
             }
             else
             {
-                // tdf#89236 Encrypting in parallel does not work
-                bParallelDeflate = !bToBeEncrypted;
-                // Do not deflate small streams in a thread. XSeekable's getLength()
+                // tdf#89236 Encrypting in a background thread does not work
+                bBackgroundThreadDeflate = !bToBeEncrypted;
+                // Do not deflate small streams using threads. XSeekable's getLength()
                 // gives the full size, XInputStream's available() may not be
                 // the full size, but it appears that at this point it usually is.
-                if (xSeek.is() && xSeek->getLength() < 100000)
-                    bParallelDeflate = false;
-                else if (xStream->available() < 100000)
-                    bParallelDeflate = false;
+                sal_Int64 estimatedSize = xSeek.is() ? xSeek->getLength() : xStream->available();
 
-                if (bParallelDeflate)
+                if (estimatedSize > 1000000)
+                {
+                    // Use ThreadDeflater which will split the stream into blocks and compress
+                    // them in threads, but not in background (i.e. writeStream() will block).
+                    // This is suitable for large data.
+                    bBackgroundThreadDeflate = false;
+                    rZipOut.writeLOC(pTempEntry, bToBeEncrypted);
+                    ZipOutputEntryParallel aZipEntry(rZipOut.getStream(), m_xContext, *pTempEntry, this, bToBeEncrypted);
+                    aZipEntry.writeStream(xStream);
+                    rZipOut.rawCloseEntry(bToBeEncrypted);
+                }
+                else if (bBackgroundThreadDeflate && estimatedSize > 100000)
                 {
                     // tdf#93553 limit to a useful amount of pending tasks. Having way too many
                     // tasks pending may use a lot of memory. Take number of available
@@ -786,6 +795,7 @@ bool ZipPackageStream::saveChild(
                 }
                 else
                 {
+                    bBackgroundThreadDeflate = false;
                     rZipOut.writeLOC(pTempEntry, bToBeEncrypted);
                     ZipOutputEntry aZipEntry(rZipOut.getStream(), m_xContext, *pTempEntry, this, bToBeEncrypted);
                     aZipEntry.writeStream(xStream);
@@ -823,7 +833,7 @@ bool ZipPackageStream::saveChild(
         }
     }
 
-    if (bSuccess && !bParallelDeflate)
+    if (bSuccess && !bBackgroundThreadDeflate)
         successfullyWritten(pTempEntry);
 
     if ( aPropSet.hasElements()
