@@ -86,7 +86,7 @@ public:
     virtual void SetEnd(sal_Int32);
     inline const sal_Int32* End() const;
     /// end (if available), else start
-    inline const sal_Int32* GetAnyEnd() const;
+    inline sal_Int32 GetAnyEnd() const;
 
     inline void SetDontExpand( bool bDontExpand );
     bool DontExpand() const                 { return m_bDontExpand; }
@@ -150,10 +150,10 @@ inline const sal_Int32* SwTextAttr::End() const
     return GetEnd();
 }
 
-inline const sal_Int32* SwTextAttr::GetAnyEnd() const
+inline sal_Int32 SwTextAttr::GetAnyEnd() const
 {
     const sal_Int32* pEnd = End();
-    return pEnd ? pEnd : &m_nStart;
+    return pEnd ? *pEnd : m_nStart;
 }
 
 inline const SfxPoolItem& SwTextAttr::GetAttr() const

@@ -1153,7 +1153,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
                 pTextNd = const_cast<SwTextNode*>(&pRef->GetTextRefMark()->GetTextNode());
                 *pStt = pRef->GetTextRefMark()->GetStart();
                 if( pEnd )
-                    *pEnd = *pRef->GetTextRefMark()->GetAnyEnd();
+                    *pEnd = pRef->GetTextRefMark()->GetAnyEnd();
             }
         }
         break;

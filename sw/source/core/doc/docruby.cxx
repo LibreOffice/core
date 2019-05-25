@@ -210,7 +210,7 @@ bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry )
         {
             const SwTextAttr* pHt = pHts->Get(nHtIdx);
             if( RES_TXTATR_CJK_RUBY == pHt->Which() &&
-                *pHt->GetAnyEnd() > nStart )
+                pHt->GetAnyEnd() > nStart )
             {
                 if( pHt->GetStart() < nEnd )
                 {
@@ -252,7 +252,7 @@ bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry )
             if( !rPam.HasMark() )
             {
                 rPam.SetMark();
-                pPos->nContent = *pAttr->GetAnyEnd();
+                pPos->nContent = pAttr->GetAnyEnd();
                 if( pPos->nContent.GetIndex() > nEnd )
                     pPos->nContent = nEnd;
                 rEntry.SetRubyAttr( pAttr->GetRuby() );

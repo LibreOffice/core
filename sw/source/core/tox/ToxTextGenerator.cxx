@@ -334,7 +334,7 @@ void ToxTextGenerator::GetAttributesForNode(
             // mapping going on here, can't use the usual merged attr iterators :(
 
             sal_Int32 const nStart(aConversionMap.ConvertToViewPosition(pHint->GetStart()));
-            sal_Int32 const nEnd(aConversionMap.ConvertToViewPosition(*pHint->GetAnyEnd()));
+            sal_Int32 const nEnd(aConversionMap.ConvertToViewPosition(pHint->GetAnyEnd()));
             if (nStart != nEnd) // might be in delete redline, and useless anyway
             {
                 std::unique_ptr<SwFormatAutoFormat> pClone(

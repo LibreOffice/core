@@ -239,7 +239,7 @@ namespace sw {
                     {
                         SwTextAttr *const pHint(
                                 pHints->GetSortedByEnd(m_CurrentHint - 1));
-                        if (*pHint->GetAnyEnd() < rExtent.nStart
+                        if (pHint->GetAnyEnd() < rExtent.nStart
                                 // <= if it has end and isn't empty
                             || (pHint->GetEnd()
                                 && *pHint->GetEnd() != pHint->GetStart()
@@ -248,7 +248,7 @@ namespace sw {
                             break;
                         }
                         --m_CurrentHint;
-                        if (*pHint->GetAnyEnd() <= rExtent.nEnd)
+                        if (pHint->GetAnyEnd() <= rExtent.nEnd)
                         {
                             if (ppNode)
                             {
