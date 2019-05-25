@@ -30,11 +30,13 @@
 #include "fmtftn.hxx"
 #include "fchrfmt.hxx"
 #include "tox.hxx"
+#include "ndhints.hxx"
 
 class SfxItemPool;
 
 class SAL_DLLPUBLIC_RTTI SwTextAttr
 {
+friend class SwpHints;
 private:
     SfxPoolItem * const m_pAttr;
     sal_Int32 m_nStart;
@@ -56,6 +58,8 @@ private:
     SwTextAttr& operator=(SwTextAttr const&) = delete;
 
 protected:
+    SwpHints * m_pHints = nullptr;  // the SwpHints holds a pointer to this, and needs to be notified if the start/end changes
+
     SwTextAttr( SfxPoolItem& rAttr, sal_Int32 nStart );
     virtual ~SwTextAttr() COVERITY_NOEXCEPT_FALSE;
 
@@ -74,11 +78,12 @@ public:
     static void Destroy( SwTextAttr * pToDestroy, SfxItemPool& rPool );
 
     /// start position
-                  sal_Int32& GetStart()        { return m_nStart; }
-            const sal_Int32& GetStart() const  { return m_nStart; }
+    void SetStart(sal_Int32 n) { m_nStart = n; if (m_pHints) m_pHints->StartPosChanged(); }
+    sal_Int32 GetStart() const { return m_nStart; }
 
     /// end position
-    virtual      sal_Int32* GetEnd(); // also used to change the end position
+    virtual const sal_Int32* GetEnd() const;
+    virtual void SetEnd(sal_Int32);
     inline const sal_Int32* End() const;
     /// end (if available), else start
     inline const sal_Int32* GetAnyEnd() const;
@@ -127,7 +132,8 @@ protected:
 public:
     SwTextAttrEnd( SfxPoolItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
 
-    virtual sal_Int32* GetEnd() override;
+    virtual const sal_Int32* GetEnd() const override;
+    virtual void SetEnd(sal_Int32) override;
 };
 
 // attribute that must not overlap others
@@ -141,13 +147,13 @@ protected:
 
 inline const sal_Int32* SwTextAttr::End() const
 {
-    return const_cast<SwTextAttr * >(this)->GetEnd();
+    return GetEnd();
 }
 
 inline const sal_Int32* SwTextAttr::GetAnyEnd() const
 {
     const sal_Int32* pEnd = End();
-    return pEnd ? pEnd : &GetStart();
+    return pEnd ? pEnd : &m_nStart;
 }
 
 inline const SfxPoolItem& SwTextAttr::GetAttr() const
