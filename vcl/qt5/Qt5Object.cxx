@@ -43,7 +43,7 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     m_aSystemData.aWindow = m_pQWindow->winId(); // ID of the embedded window
     m_aSystemData.aShellWindow = reinterpret_cast<sal_IntPtr>(this);
     //m_aSystemData.pSalFrame = this;
-    //m_aSystemData.pWidget = m_pQWidget;
+    m_aSystemData.pWidget = m_pQWidget;
     //m_aSystemData.nScreen = m_nXScreen.getXScreen();
     m_aSystemData.pToolkit = "qt5";
 }

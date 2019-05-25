@@ -966,13 +966,38 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 #endif
                 {
                     mbUseGtkSink = false;
-                    mnWindowID = pEnvData->aWindow;
-                    SAL_INFO( "avmedia.gstreamer", AVVERSION "set window id to " << static_cast<int>(mnWindowID) << " XOverlay " << mpXOverlay);
-                    gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
-                    if ( mpXOverlay != nullptr )
-                        gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
-                }
 
+#if defined(ENABLE_QWIDGET5SINK)
+                    // try to use qwidget5videosink for qt5 on Wayland, which requires the Qt5 packages for QtGStreamer to be installed
+                    if (aToolkit == "qt5" && QGuiApplication::platformName() == "wayland")
+                    {
+                        pVideosink = gst_element_factory_make("qwidget5videosink", "qwidget5videosink");
+                        if (pVideosink) {
+                            QWidget* pQWidget = static_cast<QWidget*>(pEnvData->pWidget);
+                            g_object_set(G_OBJECT(pVideosink), "widget", pQWidget, nullptr);
+                            g_object_set(G_OBJECT(mpPlaybin), "video-sink", pVideosink, nullptr);
+                        }
+                        else
+                        {
+                            SAL_WARN("avmedia.gstreamer", "Couldn't initialize qwidget5videosink."
+                                                          " Video playback might not work properly."
+                                                          " Please install Qt5 packages for QtGStreamer.");
+                            // give up, since following code would lead to crash on Wayland
+                            // with no videosink explicitly set, GStreamer will open it's own window(s) to display video
+                            xRet.clear();
+                            return nullptr;
+                        }
+                    }
+#endif
+                    if (!pVideosink)
+                    {
+                        mnWindowID = pEnvData->aWindow;
+                        SAL_INFO( "avmedia.gstreamer", AVVERSION "set window id to " << static_cast<int>(mnWindowID) << " XOverlay " << mpXOverlay);
+                        gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
+                        if ( mpXOverlay != nullptr )
+                            gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
+                    }
+                }
             }
         }
     }

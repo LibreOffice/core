@@ -31,6 +31,11 @@
 #    include <gtk/gtk.h>
 #endif
 
+#if defined(ENABLE_QWIDGET5SINK)
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QWidget>
+#endif
+
 typedef struct _GstVideoOverlay GstVideoOverlay;
 
 namespace avmedia { namespace gstreamer {
