@@ -1018,20 +1018,19 @@ namespace sw { namespace mark
             " - Mark is not in my doc.");
         // finds the last Mark that is starting before pMark
         // (pMarkLow < pMark)
-        iterator_t pMarkLow =
-            lower_bound(
+        auto it = lower_bound(
                 m_vAllMarks.begin(),
                 m_vAllMarks.end(),
                 pMark->GetMarkStart(),
                 sw::mark::CompareIMarkStartsBefore());
-        iterator_t pMarkHigh = m_vAllMarks.end();
-        iterator_t pMarkFound =
-            find_if(
-                pMarkLow,
-                pMarkHigh,
-                [pMark] (pMark_t const& rpMark) { return rpMark.get() == pMark; } );
-        if(pMarkFound != pMarkHigh)
-            deleteMark(pMarkFound);
+        while(it != m_vAllMarks.end())
+            if (pMark->StartsBefore((*it)->GetMarkStart()))
+                break;
+            else if (it->get() == pMark)
+            {
+                deleteMark(it);
+                break;
+            }
     }
 
     void MarkManager::clearAllMarks()
