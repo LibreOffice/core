@@ -134,6 +134,30 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_0f7260e6",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-05-25T13:59:49Z",
+      "side": 1,
+      "message": "I quickly tried. Even if call to \u0027m_pQWidget-\u003esetAttribute(Qt::WA_NativeWindow);\u0027 is only added in GetSystemData(), this reintroduces tdf#122293; GetSystemData() is called e.g. from vcl::Window::GetDragSource() as well. (And moving it there would require changing constness of GetSystemData()).",
+      "parentUuid": "3fa0c359_6fc9a476",
+      "range": {
+        "startLine": 176,
+        "startChar": 79,
+        "endLine": 176,
+        "endChar": 84
+      },
+      "revId": "c183c1868494dcaf981db0b7cbf3bce4b374de5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_8fb51034",
         "filename": "vcl/qt5/Qt5Object.cxx",
         "patchSetId": 4
