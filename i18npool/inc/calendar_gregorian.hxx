@@ -177,6 +177,16 @@ public:
 };
 
 
+//  class Calendar_dangi
+
+class Calendar_dangi : public Calendar_gregorian
+{
+public:
+    // Constructors
+    Calendar_dangi();
+};
+
+
 //  class Calendar_buddhist
 
 class Calendar_buddhist : public Calendar_gregorian
