@@ -194,7 +194,7 @@ SwHistorySetText::SwHistorySetText( SwTextAttr* pTextHt, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_SETTXTHNT )
     , m_nNodeIndex( nNodePos )
     , m_nStart( pTextHt->GetStart() )
-    , m_nEnd( *pTextHt->GetAnyEnd() )
+    , m_nEnd( pTextHt->GetAnyEnd() )
     , m_bFormatIgnoreStart(pTextHt->IsFormatIgnoreStart())
     , m_bFormatIgnoreEnd  (pTextHt->IsFormatIgnoreEnd  ())
 {
@@ -314,7 +314,7 @@ SwHistorySetRefMark::SwHistorySetRefMark( SwTextRefMark* pTextHt, sal_uLong nNod
     , m_RefName( pTextHt->GetRefMark().GetRefName() )
     , m_nNodeIndex( nNodePos )
     , m_nStart( pTextHt->GetStart() )
-    , m_nEnd( *pTextHt->GetAnyEnd() )
+    , m_nEnd( pTextHt->GetAnyEnd() )
 {
 }
 
@@ -343,7 +343,7 @@ SwHistorySetTOXMark::SwHistorySetTOXMark( SwTextTOXMark* pTextHt, sal_uLong nNod
     , m_eTOXTypes( m_TOXMark.GetTOXType()->GetType() )
     , m_nNodeIndex( nNodePos )
     , m_nStart( pTextHt->GetStart() )
-    , m_nEnd( *pTextHt->GetAnyEnd() )
+    , m_nEnd( pTextHt->GetAnyEnd() )
 {
     m_TOXMark.EndListeningAll();
 }
@@ -1045,7 +1045,7 @@ void SwHistory::Add( SwTextAttr* pHint, sal_uLong nNodeIdx, bool bNewAttr )
     else
     {
         pHt.reset( new SwHistoryResetText( pHint->Which(), pHint->GetStart(),
-                                    *pHint->GetAnyEnd(), nNodeIdx ) );
+                                    pHint->GetAnyEnd(), nNodeIdx ) );
     }
     m_SwpHstry.push_back( std::move(pHt) );
 }

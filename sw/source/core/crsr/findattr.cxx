@@ -339,7 +339,7 @@ lcl_IsAttributeIgnorable(sal_Int32 const nNdStart, sal_Int32 const nNdEnd,
 
 bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
 {
-    SwSrchChrAttr aTmp( rAttr.GetAttr(), rAttr.GetStart(), *rAttr.GetAnyEnd() );
+    SwSrchChrAttr aTmp( rAttr.GetAttr(), rAttr.GetStart(), rAttr.GetAnyEnd() );
 
     // ignore all attributes not in search range
     if (lcl_IsAttributeIgnorable(m_nNodeStart, m_nNodeEnd, aTmp))
@@ -493,7 +493,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
 
 bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
 {
-    SwSrchChrAttr aTmp( rAttr.GetAttr(), rAttr.GetStart(), *rAttr.GetAnyEnd() );
+    SwSrchChrAttr aTmp( rAttr.GetAttr(), rAttr.GetStart(), rAttr.GetAnyEnd() );
 
     // ignore all attributes not in search range
     if (lcl_IsAttributeIgnorable(m_nNodeStart, m_nNodeEnd, aTmp))
@@ -799,7 +799,7 @@ static bool lcl_SearchBackward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpA
         while( nPos )
             if( !rCmpArr.SetAttrBwd( *( pAttr = rHtArr.GetSortedByEnd( --nPos )) ) )
             {
-                nSttPos = *pAttr->GetAnyEnd();
+                nSttPos = pAttr->GetAnyEnd();
                 if( nSttPos < rCmpArr.GetNdEnd() )
                 {
                     // found end
@@ -827,9 +827,9 @@ static bool lcl_SearchBackward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpA
             // Do multiple start at that position? Do also check those:
             if( nPos )
             {
-                nEndPos = *pAttr->GetAnyEnd();
+                nEndPos = pAttr->GetAnyEnd();
                 while( --nPos && nEndPos ==
-                        *( pAttr = rHtArr.GetSortedByEnd( nPos ))->GetAnyEnd() &&
+                        ( pAttr = rHtArr.GetSortedByEnd( nPos ))->GetAnyEnd() &&
                         rCmpArr.SetAttrBwd( *pAttr ) )
                     ;
             }

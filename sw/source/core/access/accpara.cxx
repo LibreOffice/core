@@ -2776,7 +2776,7 @@ const SwTextAttr *SwHyperlinkIter_Impl::next(SwTextNode const** ppNode)
         if (RES_TXTATR_INETFMT == pHt->Which())
         {
             const TextFrameIndex nHtStt(m_rFrame.MapModelToView(pNode, pHt->GetStart()));
-            const TextFrameIndex nHtEnd(m_rFrame.MapModelToView(pNode, *pHt->GetAnyEnd()));
+            const TextFrameIndex nHtEnd(m_rFrame.MapModelToView(pNode, pHt->GetAnyEnd()));
             if (nHtEnd > nHtStt &&
                 ((nHtStt >= m_nStt && nHtStt < m_nEnd) ||
                  (nHtEnd > m_nStt && nHtEnd <= m_nEnd)))
@@ -2839,7 +2839,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
             if (!xRet.is())
             {
                 TextFrameIndex const nHintStart(pTextFrame->MapModelToView(pNode, pHt->GetStart()));
-                TextFrameIndex const nHintEnd(pTextFrame->MapModelToView(pNode, *pHt->GetAnyEnd()));
+                TextFrameIndex const nHintEnd(pTextFrame->MapModelToView(pNode, pHt->GetAnyEnd()));
                 const sal_Int32 nTmpHStt = GetPortionData().GetAccessiblePosition(
                     max(aHIter.startIdx(), nHintStart));
                 const sal_Int32 nTmpHEnd = GetPortionData().GetAccessiblePosition(
@@ -2891,7 +2891,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharInde
         SwTextNode const* pNode(nullptr);
         const SwTextAttr *pHt = aHIter.next(&pNode);
         while (pHt && !(nIdx >= pTextFrame->MapModelToView(pNode, pHt->GetStart())
-                     && nIdx < pTextFrame->MapModelToView(pNode, *pHt->GetAnyEnd())))
+                     && nIdx < pTextFrame->MapModelToView(pNode, pHt->GetAnyEnd())))
         {
             pHt = aHIter.next(&pNode);
             nPos++;

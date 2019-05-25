@@ -331,7 +331,7 @@ SwExpandPortion * SwTextFormatter::TryNewNoLengthPortion(SwTextFormatInfo const 
     {
         SwTextAttr & rHint(const_cast<SwTextAttr&>(*pHint));
         TextFrameIndex const nEnd(
-            rInfo.GetTextFrame()->MapModelToView(pNode, *rHint.GetAnyEnd()));
+            rInfo.GetTextFrame()->MapModelToView(pNode, rHint.GetAnyEnd()));
         if (nEnd > nIdx)
         {
             m_pByEndIter->PrevAttr();
@@ -425,7 +425,7 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
          pHint = iter.PrevAttr(&pNode))
     {
         TextFrameIndex const nHintEnd(
-            rInf.GetTextFrame()->MapModelToView(pNode, *pHint->GetAnyEnd()));
+            rInf.GetTextFrame()->MapModelToView(pNode, pHint->GetAnyEnd()));
         if (nHintEnd < nTextLen)
         {
             break; // only those at para end are interesting
