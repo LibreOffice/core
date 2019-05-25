@@ -152,6 +152,7 @@ gb_CFLAGS := \
 	-nologo \
 	-W4 \
 	-wd4091 \
+       -wd4005 \
 	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4100) \
 	-wd4127 \
 	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4189) \
@@ -194,6 +195,7 @@ gb_CXXFLAGS := \
 	-nologo \
 	-W4 \
 	-wd4091 \
+       -wd4005 \
 	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4100) \
 	-wd4127 \
 	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4189) \
@@ -259,7 +261,6 @@ gb_PCHWARNINGS = \
 	-we4651 \
 	-we4652 \
 	-we4653 \
-	-we4005 \
 
 gb_STDLIBS := \
 	advapi32.lib \
