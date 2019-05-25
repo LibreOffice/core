@@ -70,7 +70,9 @@ using ::com::sun::star::container::XEnumeration;
 class XMLHints_Impl
 {
 private:
+
     std::vector<std::unique_ptr<XMLHint_Impl>> m_Hints;
+    std::unordered_map<OUString, XMLIndexMarkHint_Impl*> m_IndexHintsById;
     uno::Reference<uno::XInterface> m_xCrossRefHeadingBookmark;
 
 public:
@@ -79,9 +81,21 @@ public:
         m_Hints.push_back(std::move(pHint));
     }
 
+    void push_back(std::unique_ptr<XMLIndexMarkHint_Impl> pHint)
+    {
+        m_IndexHintsById.emplace(pHint->GetID(), pHint.get());
+        m_Hints.push_back(std::move(pHint));
+    }
+
     std::vector<std::unique_ptr<XMLHint_Impl>> const& GetHints()
     {
         return m_Hints;
+    }
+
+    XMLIndexMarkHint_Impl* GetIndexHintById(const OUString& sID)
+    {
+        auto it = m_IndexHintsById.find(sID);
+        return it == m_IndexHintsById.end() ? nullptr : it->second;
     }
 
     uno::Reference<uno::XInterface> & GetCrossRefHeadingBookmark()
@@ -1101,17 +1115,10 @@ void XMLIndexMarkImportContext_Impl::StartElement(
             if (!sID.isEmpty())
             {
                 // if we have an ID, find the hint and set the end position
-                for (const auto& rHintPtr : m_rHints.GetHints())
-                {
-                    XMLHint_Impl *const pHint = rHintPtr.get();
-                    if ( pHint->IsIndexMark() &&
-                         sID == static_cast<XMLIndexMarkHint_Impl *>(pHint)->GetID() )
-                    {
-                        // set end and stop searching
-                        pHint->SetEnd(xPos);
-                        break;
-                    }
-                }
+                XMLIndexMarkHint_Impl *const pHint = m_rHints.GetIndexHintById(sID);
+                if (pHint)
+                    // set end and stop searching
+                    pHint->SetEnd(xPos);
             }
             // else: no ID -> ignore
             break;
