@@ -29,6 +29,7 @@
 #include <vcl/i18nhelp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include <comphelper/lok.hxx>
 
 using std::vector;
 
@@ -181,7 +182,10 @@ IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
     m_pApplyBtn->Show();
     m_pCancelBtn->Show();
     m_pHelpBtn->Show();
-    m_pResetBtn->Show();
+    if (comphelper::LibreOfficeKit::isActive())
+        m_pResetBtn->Hide();
+    else
+        m_pResetBtn->Show();
 }
 
 IconChoiceDialog ::~IconChoiceDialog ()
@@ -376,7 +380,10 @@ void IconChoiceDialog::ActivatePageImpl ()
         SetHelpId( pData->pPage->GetHelpId() );
     }
 
-    m_pResetBtn->Show();
+    if (comphelper::LibreOfficeKit::isActive())
+        m_pResetBtn->Hide();
+    else
+        m_pResetBtn->Show();
 }
 
 
