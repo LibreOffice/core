@@ -27,6 +27,7 @@
 #include <osl/diagnose.h>
 
 #include <PackageConstants.hxx>
+#include <ThreadedDeflater.hxx>
 #include <ZipEntry.hxx>
 #include <ZipFile.hxx>
 #include <ZipPackageBuffer.hxx>
@@ -41,16 +42,14 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 
 /** This class is used to deflate Zip entries
  */
-ZipOutputEntry::ZipOutputEntry(
+ZipOutputEntryBase::ZipOutputEntryBase(
         const css::uno::Reference< css::io::XOutputStream >& rxOutput,
         const uno::Reference< uno::XComponentContext >& rxContext,
         ZipEntry& rEntry,
         ZipPackageStream* pStream,
         bool bEncrypt,
         bool checkStream)
-: m_aDeflateBuffer(n_ConstBufferSize)
-, m_aDeflater(DEFAULT_COMPRESSION, true)
-, m_xContext(rxContext)
+: m_xContext(rxContext)
 , m_xOutStream(rxOutput)
 , m_pCurrentEntry(&rEntry)
 , m_nDigested(0)
@@ -67,33 +66,21 @@ ZipOutputEntry::ZipOutputEntry(
     }
 }
 
-ZipOutputEntry::ZipOutputEntry(
-        const css::uno::Reference< css::io::XOutputStream >& rxOutput,
-        const uno::Reference< uno::XComponentContext >& rxContext,
-        ZipEntry& rEntry,
-        ZipPackageStream* pStream,
-        bool bEncrypt)
-: ZipOutputEntry( rxOutput, rxContext, rEntry, pStream, bEncrypt, true)
+void ZipOutputEntryBase::closeEntry()
 {
-}
-
-void ZipOutputEntry::closeEntry()
-{
-    m_aDeflater.finish();
-    while (!m_aDeflater.finished())
-        doDeflate();
+    finishDeflater();
 
     if ((m_pCurrentEntry->nFlag & 8) == 0)
     {
-        if (m_pCurrentEntry->nSize != m_aDeflater.getTotalIn())
+        if (m_pCurrentEntry->nSize != getDeflaterTotalIn())
         {
             OSL_FAIL("Invalid entry size");
         }
-        if (m_pCurrentEntry->nCompressedSize != m_aDeflater.getTotalOut())
+        if (m_pCurrentEntry->nCompressedSize != getDeflaterTotalOut())
         {
             // Different compression strategies make the merit of this
             // test somewhat dubious
-            m_pCurrentEntry->nCompressedSize = m_aDeflater.getTotalOut();
+            m_pCurrentEntry->nCompressedSize = getDeflaterTotalOut();
         }
         if (m_pCurrentEntry->nCrc != m_aCRC.getValue())
         {
@@ -104,12 +91,12 @@ void ZipOutputEntry::closeEntry()
     {
         if ( !m_bEncryptCurrentEntry )
         {
-            m_pCurrentEntry->nSize = m_aDeflater.getTotalIn();
-            m_pCurrentEntry->nCompressedSize = m_aDeflater.getTotalOut();
+            m_pCurrentEntry->nSize = getDeflaterTotalIn();
+            m_pCurrentEntry->nCompressedSize = getDeflaterTotalOut();
         }
         m_pCurrentEntry->nCrc = m_aCRC.getValue();
     }
-    m_aDeflater.reset();
+    deflaterReset();
     m_aCRC.reset();
 
     if (m_bEncryptCurrentEntry)
@@ -128,25 +115,11 @@ void ZipOutputEntry::closeEntry()
     }
 }
 
-void ZipOutputEntry::write( const Sequence< sal_Int8 >& rBuffer )
+void ZipOutputEntryBase::processDeflated( const uno::Sequence< sal_Int8 >& deflateBuffer, sal_Int32 nLength )
 {
-    if (!m_aDeflater.finished())
-    {
-        m_aDeflater.setInputSegment(rBuffer);
-        while (!m_aDeflater.needsInput())
-            doDeflate();
-        if (!m_bEncryptCurrentEntry)
-            m_aCRC.updateSegment(rBuffer, rBuffer.getLength());
-    }
-}
-
-void ZipOutputEntry::doDeflate()
-{
-    sal_Int32 nLength = m_aDeflater.doDeflateSegment(m_aDeflateBuffer, m_aDeflateBuffer.getLength());
-
     if ( nLength > 0 )
     {
-        uno::Sequence< sal_Int8 > aTmpBuffer( m_aDeflateBuffer.getConstArray(), nLength );
+        uno::Sequence< sal_Int8 > aTmpBuffer( deflateBuffer.getConstArray(), nLength );
         if ( m_bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is() )
         {
             // Need to update our digest before encryption...
@@ -175,7 +148,7 @@ void ZipOutputEntry::doDeflate()
         }
     }
 
-    if ( m_aDeflater.finished() && m_bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is() )
+    if ( isDeflaterFinished() && m_bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is() )
     {
         // FIXME64: sequence not 64bit safe.
         uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->finalizeCipherContextAndDispose();
@@ -190,6 +163,80 @@ void ZipOutputEntry::doDeflate()
         }
     }
 }
+
+void ZipOutputEntryBase::processInput( const uno::Sequence< sal_Int8 >& rBuffer )
+{
+    if (!m_bEncryptCurrentEntry)
+        m_aCRC.updateSegment(rBuffer, rBuffer.getLength());
+}
+
+ZipOutputEntry::ZipOutputEntry(
+        const css::uno::Reference< css::io::XOutputStream >& rxOutput,
+        const uno::Reference< uno::XComponentContext >& rxContext,
+        ZipEntry& rEntry,
+        ZipPackageStream* pStream,
+        bool bEncrypt,
+        bool checkStream)
+: ZipOutputEntryBase(rxOutput, rxContext, rEntry, pStream, bEncrypt, checkStream)
+, m_aDeflateBuffer(n_ConstBufferSize)
+, m_aDeflater(DEFAULT_COMPRESSION, true)
+{
+}
+
+ZipOutputEntry::ZipOutputEntry(
+        const css::uno::Reference< css::io::XOutputStream >& rxOutput,
+        const uno::Reference< uno::XComponentContext >& rxContext,
+        ZipEntry& rEntry,
+        ZipPackageStream* pStream,
+        bool bEncrypt)
+: ZipOutputEntry( rxOutput, rxContext, rEntry, pStream, bEncrypt, true)
+{
+}
+
+void ZipOutputEntry::write( const Sequence< sal_Int8 >& rBuffer )
+{
+    if (!m_aDeflater.finished())
+    {
+        m_aDeflater.setInputSegment(rBuffer);
+        while (!m_aDeflater.needsInput())
+            doDeflate();
+        processInput(rBuffer);
+    }
+}
+
+void ZipOutputEntry::doDeflate()
+{
+    sal_Int32 nLength = m_aDeflater.doDeflateSegment(m_aDeflateBuffer, m_aDeflateBuffer.getLength());
+    processDeflated( m_aDeflateBuffer, nLength );
+}
+
+void ZipOutputEntry::finishDeflater()
+{
+    m_aDeflater.finish();
+    while (!m_aDeflater.finished())
+        doDeflate();
+}
+
+sal_Int64 ZipOutputEntry::getDeflaterTotalIn() const
+{
+    return m_aDeflater.getTotalIn();
+}
+
+sal_Int64 ZipOutputEntry::getDeflaterTotalOut() const
+{
+    return m_aDeflater.getTotalOut();
+}
+
+void ZipOutputEntry::deflaterReset()
+{
+    m_aDeflater.reset();
+}
+
+bool ZipOutputEntry::isDeflaterFinished() const
+{
+    return m_aDeflater.finished();
+}
+
 
 ZipOutputEntryInThread::ZipOutputEntryInThread(
         const uno::Reference< uno::XComponentContext >& rxContext,
@@ -299,6 +346,72 @@ void ZipOutputEntry::writeStream(const uno::Reference< io::XInputStream >& xInSt
     }
     while (nLength == n_ConstBufferSize);
     closeEntry();
+}
+
+
+ZipOutputEntryParallel::ZipOutputEntryParallel(
+        const css::uno::Reference< css::io::XOutputStream >& rxOutput,
+        const uno::Reference< uno::XComponentContext >& rxContext,
+        ZipEntry& rEntry,
+        ZipPackageStream* pStream,
+        bool bEncrypt)
+: ZipOutputEntryBase(rxOutput, rxContext, rEntry, pStream, bEncrypt, true)
+, totalIn(0)
+, totalOut(0)
+{
+}
+
+void ZipOutputEntryParallel::writeStream(const uno::Reference< io::XInputStream >& xInStream)
+{
+    sal_Int64 toRead = xInStream->available();
+    uno::Sequence< sal_Int8 > inBuffer( toRead );
+    sal_Int64 read = xInStream->readBytes(inBuffer, toRead);
+    if (read < toRead)
+        inBuffer.realloc( read );
+    while( xInStream->available() > 0 )
+    {   // We didn't get the full size from available().
+        uno::Sequence< sal_Int8 > buf( xInStream->available());
+        read = xInStream->readBytes( buf, xInStream->available());
+        sal_Int64 oldSize = inBuffer.getLength();
+        inBuffer.realloc( oldSize + read );
+        std::copy( buf.begin(), buf.end(), inBuffer.begin() + oldSize );
+    }
+    ZipUtils::ThreadedDeflater deflater( DEFAULT_COMPRESSION );
+    totalIn = inBuffer.getLength();
+    deflater.startDeflate( inBuffer );
+    processInput( inBuffer );
+    deflater.waitForTasks();
+    uno::Sequence< sal_Int8 > outBuffer = deflater.getOutput();
+    deflater.clear(); // release memory
+    totalOut = outBuffer.getLength();
+    processDeflated(outBuffer, outBuffer.getLength());
+    closeEntry();
+}
+
+void ZipOutputEntryParallel::finishDeflater()
+{
+    // ThreadedDeflater is called synchronously in one call, so nothing to do here.
+}
+
+sal_Int64 ZipOutputEntryParallel::getDeflaterTotalIn() const
+{
+    return totalIn;
+}
+
+sal_Int64 ZipOutputEntryParallel::getDeflaterTotalOut() const
+{
+    return totalOut;
+}
+
+void ZipOutputEntryParallel::deflaterReset()
+{
+    totalIn = 0;
+    totalOut = 0;
+}
+
+bool ZipOutputEntryParallel::isDeflaterFinished() const
+{
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

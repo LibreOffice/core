@@ -334,6 +334,7 @@ certain functionality.
 
 @li @c package
 @li @c package.xstor
+@li @c package.threadeddeflate
 
 @section sdext
 
