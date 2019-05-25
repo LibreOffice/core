@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <algorithm>
 #include <utility>
@@ -30,6 +31,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/propertysequence.hxx>
@@ -447,13 +449,18 @@ Reference<XInterface> CanvasFactory::createInstanceWithArgumentsAndContext(
     OUString const & preferredOne, Sequence<Any> const & args,
     Reference<XComponentContext> const & xContext )
 {
-    Reference<XInterface> xCanvas(
-        lookupAndUse( preferredOne, args, xContext ) );
-    if(xCanvas.is())
-        return xCanvas;
+    Reference<XInterface> xCanvas(lookupAndUse(preferredOne, args, xContext));
+    if (!xCanvas.is())
+        // last resort: try service name directly
+        xCanvas = use(preferredOne, args, xContext);
 
-    // last resort: try service name directly
-    return use( preferredOne, args, xContext );
+    if (xCanvas.is())
+    {
+        Reference<lang::XServiceName> xServiceName(xCanvas, uno::UNO_QUERY);
+        SAL_INFO("canvas", "using " << (xServiceName.is() ? xServiceName->getServiceName()
+                                                          : OUString("(unknown)")));
+    }
+    return xCanvas;
 }
 
 // XMultiServiceFactory
