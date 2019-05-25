@@ -1310,7 +1310,7 @@ int SwWW8AttrIter::OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos)
                     }
                     break;
             }
-            if (nPos < *pHt->GetAnyEnd())
+            if (nPos < pHt->GetAnyEnd())
                 break; // sorted by end
         }
         for ( size_t i = 0; i < pTextAttrs->Count(); ++i )

@@ -272,7 +272,7 @@ void SwAttrIter::SeekFwd(const sal_Int32 nOldPos, const sal_Int32 nNewPos)
         // As long as we've not yet reached the end of EndArray and the
         // TextAttribute ends before or at the new position ...
         while ((m_nEndIndex < pHints->Count()) &&
-               (*(pTextAttr = pHints->GetSortedByEnd(m_nEndIndex))->GetAnyEnd() <= nNewPos))
+               ((pTextAttr = pHints->GetSortedByEnd(m_nEndIndex))->GetAnyEnd() <= nNewPos))
         {
             // Close the TextAttributes, whose StartPos were before or at
             // the old nPos and are currently open
@@ -283,7 +283,7 @@ void SwAttrIter::SeekFwd(const sal_Int32 nOldPos, const sal_Int32 nNewPos)
     else // skip the not opened ends
     {
         while ((m_nEndIndex < pHints->Count()) &&
-               (*pHints->GetSortedByEnd(m_nEndIndex)->GetAnyEnd() <= nNewPos))
+               (pHints->GetSortedByEnd(m_nEndIndex)->GetAnyEnd() <= nNewPos))
         {
             m_nEndIndex++;
         }
@@ -296,7 +296,7 @@ void SwAttrIter::SeekFwd(const sal_Int32 nOldPos, const sal_Int32 nNewPos)
     {
 
         // open the TextAttributes, whose ends lie behind the new position
-        if ( *pTextAttr->GetAnyEnd() > nNewPos )  Chg( pTextAttr );
+        if ( pTextAttr->GetAnyEnd() > nNewPos )  Chg( pTextAttr );
         m_nStartIndex++;
     }
 
@@ -542,7 +542,7 @@ static bool CanSkipOverRedline(
             }
         }
         assert(nEndIndex == pStartHints->Count() ||
-            pRLEnd->nContent.GetIndex() < *pStartHints->GetSortedByEnd(nEndIndex)->GetAnyEnd());
+            pRLEnd->nContent.GetIndex() < pStartHints->GetSortedByEnd(nEndIndex)->GetAnyEnd());
     }
 
     if (&rStartNode != &pRLEnd->nNode.GetNode())
@@ -693,7 +693,7 @@ static sal_Int32 GetNextAttrImpl(SwTextNode const*const pTextNode,
             SwTextAttr *const pAttr(pHints->GetSortedByEnd(i));
             if (!pAttr->IsFormatIgnoreEnd())
             {
-                sal_Int32 const nNextEnd = *pAttr->GetAnyEnd();
+                sal_Int32 const nNextEnd = pAttr->GetAnyEnd();
                 nNext = std::min(nNext, nNextEnd); // pick nearest one
                 break;
             }

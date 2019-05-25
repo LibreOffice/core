@@ -38,8 +38,8 @@ static bool CompareSwpHtStart( const SwTextAttr* lhs, const SwTextAttr* rhs )
     const SwTextAttr &rHt2 = *rhs;
     if ( rHt1.GetStart() == rHt2.GetStart() )
     {
-        const sal_Int32 nHt1 = *rHt1.GetAnyEnd();
-        const sal_Int32 nHt2 = *rHt2.GetAnyEnd();
+        const sal_Int32 nHt1 = rHt1.GetAnyEnd();
+        const sal_Int32 nHt2 = rHt2.GetAnyEnd();
         if ( nHt1 == nHt2 )
         {
             const sal_uInt16 nWhich1 = rHt1.Which();
@@ -94,8 +94,8 @@ bool CompareSwpHtWhichStart::operator()( const SwTextAttr* lhs, const SwTextAttr
         if ( nS1 != nS2 ) // robust
             return nS1 < nS2;
     }
-    const sal_Int32 nEnd1 = *rHt1.GetAnyEnd();
-    const sal_Int32 nEnd2 = *rHt2.GetAnyEnd();
+    const sal_Int32 nEnd1 = rHt1.GetAnyEnd();
+    const sal_Int32 nEnd2 = rHt2.GetAnyEnd();
     if ( nEnd1 > nEnd2 )
         return true;
     if ( nEnd1 < nEnd2 )
@@ -107,14 +107,14 @@ bool CompareSwpHtWhichStart::operator()( const SwTextAttr* lhs, const SwTextAttr
 /// (char style: sort number), at last the pointer(reverse)
 bool CompareSwpHtEnd::operator()( sal_Int32 nEndPos, const SwTextAttr* rhs ) const
 {
-    return nEndPos < *rhs->GetAnyEnd();
+    return nEndPos < rhs->GetAnyEnd();
 }
 bool CompareSwpHtEnd::operator()( const SwTextAttr* lhs, const SwTextAttr* rhs ) const
 {
     const SwTextAttr &rHt1 = *lhs;
     const SwTextAttr &rHt2 = *rhs;
-    const sal_Int32 nHt1 = *rHt1.GetAnyEnd();
-    const sal_Int32 nHt2 = *rHt2.GetAnyEnd();
+    const sal_Int32 nHt1 = rHt1.GetAnyEnd();
+    const sal_Int32 nHt2 = rHt2.GetAnyEnd();
     if ( nHt1 == nHt2 )
     {
         if ( rHt1.GetStart() == rHt2.GetStart() )
@@ -241,7 +241,7 @@ bool SwpHints::Check(bool bPortionsMerged) const
         CHECK_ERR( 0xFF != *reinterpret_cast<unsigned char const *>(pHtEnd), "HintsCheck: end ptr was deleted" );
 
         // 3b) end sort order?
-        nIdx = *pHtEnd->GetAnyEnd();
+        nIdx = pHtEnd->GetAnyEnd();
         CHECK_ERR( nIdx >= nLastEnd, "HintsCheck: ends are unsorted" );
 
         // 4b) IsLessEnd consistency
@@ -333,7 +333,7 @@ bool SwpHints::Check(bool bPortionsMerged) const
                         {
                             break; // done
                         }
-                        else if (pOther->GetStart() == *pOther->GetAnyEnd())
+                        else if (pOther->GetStart() == pOther->GetAnyEnd())
                         {
                             continue; // empty hint: ignore
                         }
