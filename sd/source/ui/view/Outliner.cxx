@@ -1402,29 +1402,33 @@ void SdOutliner::EnterEditMode (bool bGrabFocus)
     // Make FuText the current function.
     SfxUInt16Item aItem (SID_TEXTEDIT, 1);
     std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
-    pViewShell->GetDispatcher()->ExecuteList(SID_TEXTEDIT,
-            SfxCallMode::SYNCHRON | SfxCallMode::RECORD, { &aItem });
-
-    if (mpView->IsTextEdit())
+    if (pViewShell && pViewShell->GetDispatcher())
     {
-        // end text edition before starting it again
-        mpView->SdrEndTextEdit();
+        pViewShell->GetDispatcher()->ExecuteList(
+            SID_TEXTEDIT, SfxCallMode::SYNCHRON | SfxCallMode::RECORD, {&aItem});
+
+        if (mpView->IsTextEdit())
+        {
+            // end text edition before starting it again
+            mpView->SdrEndTextEdit();
+        }
+
+        // To be consistent with the usual behaviour in the Office the text
+        // object that is put into edit mode would have also to be selected.
+        // Starting the text edit mode is not enough so we do it here by
+        // hand.
+        mpView->UnmarkAllObj(pPV);
+        mpView->MarkObj(mpSearchSpellTextObj, pPV);
+
+        mpSearchSpellTextObj->setActiveText(mnText);
+
+        // Turn on the edit mode for the text object.
+        mpView->SdrBeginTextEdit(mpSearchSpellTextObj, pPV, mpWindow, true, this,
+                                pOutlinerView, true, true, bGrabFocus);
+
+        SetUpdateMode(true);
+        mbFoundObject = true;
     }
-
-    // To be consistent with the usual behaviour in the Office the text
-    // object that is put into edit mode would have also to be selected.
-    // Starting the text edit mode is not enough so we do it here by
-    // hand.
-    mpView->UnmarkAllObj (pPV);
-    mpView->MarkObj (mpSearchSpellTextObj, pPV);
-
-    mpSearchSpellTextObj->setActiveText( mnText );
-
-    // Turn on the edit mode for the text object.
-    mpView->SdrBeginTextEdit(mpSearchSpellTextObj, pPV, mpWindow, true, this, pOutlinerView, true, true, bGrabFocus);
-
-    SetUpdateMode(true);
-    mbFoundObject = true;
 }
 
 ESelection SdOutliner::GetSearchStartPosition() const
