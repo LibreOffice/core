@@ -35,11 +35,9 @@ struct ZipEntry;
 class ZipPackageBuffer;
 class ZipPackageStream;
 
-class ZipOutputEntry
+class ZipOutputEntryBase
 {
 protected:
-    css::uno::Sequence< sal_Int8 > m_aDeflateBuffer;
-    ZipUtils::Deflater m_aDeflater;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::io::XOutputStream > m_xOutStream;
 
@@ -53,10 +51,9 @@ protected:
     bool const          m_bEncryptCurrentEntry;
 
 public:
-    ZipOutputEntry(
-        const css::uno::Reference< css::io::XOutputStream >& rxOutStream,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-        ZipEntry& rEntry, ZipPackageStream* pStream, bool bEncrypt);
+    virtual ~ZipOutputEntryBase() = default;
+
+    virtual void writeStream(const css::uno::Reference< css::io::XInputStream >& xInStream) = 0;
 
     ZipEntry* getZipEntry() { return m_pCurrentEntry; }
     ZipPackageStream* getZipPackageStream() { return m_pCurrentStream; }
@@ -64,7 +61,36 @@ public:
 
     void closeEntry();
 
-    void writeStream(const css::uno::Reference< css::io::XInputStream >& xInStream);
+protected:
+    ZipOutputEntryBase(
+        const css::uno::Reference< css::io::XOutputStream >& rxOutStream,
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        ZipEntry& rEntry, ZipPackageStream* pStream, bool bEncrypt, bool checkStream);
+
+    // Inherited classes call this with deflated data buffer.
+    void processDeflated( const css::uno::Sequence< sal_Int8 >& deflateBuffer, sal_Int32 nLength );
+    // Inherited classes call this with the input buffer.
+    void processInput( const css::uno::Sequence< sal_Int8 >& rBuffer );
+
+    virtual void finishDeflater() = 0;
+    virtual sal_Int64 getDeflaterTotalIn() const = 0;
+    virtual sal_Int64 getDeflaterTotalOut() const = 0;
+    virtual void deflaterReset() = 0;
+    virtual bool isDeflaterFinished() const = 0;
+};
+
+// Normal non-threaded case.
+class ZipOutputEntry : public ZipOutputEntryBase
+{
+    css::uno::Sequence< sal_Int8 > m_aDeflateBuffer;
+    ZipUtils::Deflater m_aDeflater;
+
+public:
+    ZipOutputEntry(
+        const css::uno::Reference< css::io::XOutputStream >& rxOutStream,
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        ZipEntry& rEntry, ZipPackageStream* pStream, bool bEncrypt);
+    void writeStream(const css::uno::Reference< css::io::XInputStream >& xInStream) override;
     void write(const css::uno::Sequence< sal_Int8 >& rBuffer);
 
 protected:
@@ -72,10 +98,15 @@ protected:
         const css::uno::Reference< css::io::XOutputStream >& rxOutStream,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         ZipEntry& rEntry, ZipPackageStream* pStream, bool bEncrypt, bool checkStream);
+    virtual void finishDeflater() override;
+    virtual sal_Int64 getDeflaterTotalIn() const override;
+    virtual sal_Int64 getDeflaterTotalOut() const override;
+    virtual void deflaterReset() override;
+    virtual bool isDeflaterFinished() const override;
     void doDeflate();
 };
 
-// Class that runs the compression in a thread.
+// Class that runs the compression in a background thread.
 class ZipOutputEntryInThread : public ZipOutputEntry
 {
     class Task;
@@ -101,6 +132,25 @@ public:
     bool isFinished() const { return m_bFinished; }
 private:
     void setFinished() { m_bFinished = true; }
+};
+
+// Class that synchronously runs the compression in multiple threads (using ThreadDeflater).
+class ZipOutputEntryParallel : public ZipOutputEntryBase
+{
+    sal_Int64 totalIn;
+    sal_Int64 totalOut;
+public:
+    ZipOutputEntryParallel(
+        const css::uno::Reference< css::io::XOutputStream >& rxOutStream,
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        ZipEntry& rEntry, ZipPackageStream* pStream, bool bEncrypt);
+    void writeStream(const css::uno::Reference< css::io::XInputStream >& xInStream) override;
+protected:
+    virtual void finishDeflater() override;
+    virtual sal_Int64 getDeflaterTotalIn() const override;
+    virtual sal_Int64 getDeflaterTotalOut() const override;
+    virtual void deflaterReset() override;
+    virtual bool isDeflaterFinished() const override;
 };
 
 #endif
