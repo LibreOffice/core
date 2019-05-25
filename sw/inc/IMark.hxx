@@ -153,6 +153,11 @@ namespace sw { namespace mark
         {
             return pMark->StartsBefore(rPos);
         }
+        bool operator()(SwPosition const& rPos,
+                        std::shared_ptr<sw::mark::IMark> const& pMark)
+        {
+            return !pMark->StartsBefore(rPos);
+        }
     };
 
     OUString ExpandFieldmark(IFieldmark* pBM);

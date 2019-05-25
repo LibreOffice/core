@@ -1018,13 +1018,12 @@ namespace sw { namespace mark
             " - Mark is not in my doc.");
         // finds the last Mark that is starting before pMark
         // (pMarkLow < pMark)
-        iterator_t pMarkLow =
-            lower_bound(
+        auto [pMarkLow, pMarkHigh] =
+            equal_range(
                 m_vAllMarks.begin(),
                 m_vAllMarks.end(),
                 pMark->GetMarkStart(),
                 sw::mark::CompareIMarkStartsBefore());
-        iterator_t pMarkHigh = m_vAllMarks.end();
         iterator_t pMarkFound =
             find_if(
                 pMarkLow,
