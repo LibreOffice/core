@@ -1416,6 +1416,7 @@ dbaccess/res/sortdown.png cmd/sc_sortascending.png
 dbaccess/res/sortup.png cmd/sc_sortdescending.png
 desktop/res/extension_16.png cmd/sc_addons.png
 desktop/res/extension_32.png cmd/32/addons.png
+extensions/res/buttonplus.png cmd/sc_add.png
 extensions/res/scanner/minus.png res/minus.png
 extensions/res/scanner/plus.png res/plus.png
 formula/res/fapclose.png svtools/res/folder.png
