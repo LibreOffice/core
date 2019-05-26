@@ -167,6 +167,7 @@ void SmOoxmlExport::HandleAttribute( const SmAttributNode* pNode, int nLevel )
         case TDDDOT:
         case TWIDETILDE:
         case TWIDEHAT:
+        case TWIDEHARPOON:
         case TWIDEVEC:
         case TBAR:
         {

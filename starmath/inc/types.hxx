@@ -141,6 +141,7 @@ sal_Unicode const MS_CIRCLE = 0x02DA;
 sal_Unicode const MS_COMBCIRCLE = 0x030A;
 sal_Unicode const MS_CHECK = 0x02C7;
 sal_Unicode const MS_COMBCHECK = 0x030C;
+sal_Unicode const MS_HARPOON = 0x20D1;
 sal_Unicode const MS_VEC = 0x20D7;
 sal_Unicode const MS_DOT = 0x02D9;
 sal_Unicode const MS_DDOT = 0x00A8;

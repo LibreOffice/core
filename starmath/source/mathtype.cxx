@@ -3165,6 +3165,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
         case TACUTE: //Not Exportable
         case TGRAVE: //Not Exportable
         case TCIRCLE: //Not Exportable
+        case TWIDEHARPOON: //Not Exportable
         case TWIDETILDE: //Not Exportable
         case TWIDEHAT: //Not Exportable
             break;
@@ -3248,6 +3249,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
                 pS->WriteUChar( 20 );
                 break;
             case TWIDEVEC:
+            case TWIDEHARPOON:
             case TUNDERLINE:
             case TWIDETILDE:
             case TWIDEHAT:

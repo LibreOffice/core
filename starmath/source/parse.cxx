@@ -143,6 +143,7 @@ static const SmTokenTableEntry aTokenTable[] =
     { "gray", TGRAY, '\0', TG::Color, 0},
     { "green", TGREEN, '\0', TG::Color, 0},
     { "gt", TGT, MS_GT, TG::Relation, 0},
+    { "harpoon", THARPOON, MS_HARPOON, TG::Attribute, 5},
     { "hat", THAT, MS_HAT, TG::Attribute, 5},
     { "hbar" , THBAR, MS_HBAR, TG::Standalone, 5},
     { "iiint", TIIINT, MS_IIINT, TG::Oper, 5},
@@ -287,6 +288,7 @@ static const SmTokenTableEntry aTokenTable[] =
     { "vec", TVEC, MS_VEC, TG::Attribute, 5},
     { "white", TWHITE, '\0', TG::Color, 0},
     { "widebslash", TWIDEBACKSLASH, MS_BACKSLASH, TG::Product, 0 },
+    { "wideharpoon", TWIDEHARPOON, MS_HARPOON, TG::Attribute, 5},
     { "widehat", TWIDEHAT, MS_HAT, TG::Attribute, 5},
     { "wideslash", TWIDESLASH, MS_SLASH, TG::Product, 0 },
     { "widetilde", TWIDETILDE, MS_TILDE, TG::Attribute, 5},
@@ -1778,6 +1780,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoAttribut()
             break;
 
         case TWIDEVEC :
+        case TWIDEHARPOON :
         case TWIDEHAT :
         case TWIDETILDE :
             xAttr.reset(new SmMathSymbolNode(m_aCurToken));
