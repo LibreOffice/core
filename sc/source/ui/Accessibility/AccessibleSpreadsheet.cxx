@@ -644,35 +644,38 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 CommitTableModelChange(maRange.aStart.Row(), maRange.aStart.Col(), maRange.aEnd.Row(), maRange.aEnd.Col(), AccessibleTableModelChangeType::UPDATE);
             else
                 mbDelIns = false;
-            ScViewData& rViewData = mpViewShell->GetViewData();
-            ScAddress aNewCell = rViewData.GetCurPos();
-            if( maActiveCell == aNewCell)
+            if (mpViewShell)
             {
-                ScDocument* pScDoc= GetDocument(mpViewShell);
-                if (pScDoc)
+                ScViewData& rViewData = mpViewShell->GetViewData();
+                ScAddress aNewCell = rViewData.GetCurPos();
+                if( maActiveCell == aNewCell)
                 {
-                    OUString valStr(pScDoc->GetString(aNewCell.Col(),aNewCell.Row(),aNewCell.Tab()));
-                    if(m_strCurCellValue != valStr)
+                    ScDocument* pScDoc= GetDocument(mpViewShell);
+                    if (pScDoc)
                     {
-                        AccessibleEventObject aEvent;
-                        aEvent.EventId = AccessibleEventId::VALUE_CHANGED;
-                        mpAccCell->CommitChange(aEvent);
-                        m_strCurCellValue=valStr;
-                    }
-                    OUString tabName;
-                    pScDoc->GetName( maActiveCell.Tab(), tabName );
-                    if( m_strOldTabName != tabName )
-                    {
-                        AccessibleEventObject aEvent;
-                        aEvent.EventId = AccessibleEventId::NAME_CHANGED;
-                        OUString sOldName(ScResId(STR_ACC_TABLE_NAME));
-                        sOldName = sOldName.replaceFirst("%1", m_strOldTabName);
-                        aEvent.OldValue <<= sOldName;
-                        OUString sNewName(ScResId(STR_ACC_TABLE_NAME));
-                        sOldName = sNewName.replaceFirst("%1", tabName);
-                        aEvent.NewValue <<= sNewName;
-                        CommitChange( aEvent );
-                        m_strOldTabName = tabName;
+                        OUString valStr(pScDoc->GetString(aNewCell.Col(),aNewCell.Row(),aNewCell.Tab()));
+                        if(m_strCurCellValue != valStr)
+                        {
+                            AccessibleEventObject aEvent;
+                            aEvent.EventId = AccessibleEventId::VALUE_CHANGED;
+                            mpAccCell->CommitChange(aEvent);
+                            m_strCurCellValue=valStr;
+                        }
+                        OUString tabName;
+                        pScDoc->GetName( maActiveCell.Tab(), tabName );
+                        if( m_strOldTabName != tabName )
+                        {
+                            AccessibleEventObject aEvent;
+                            aEvent.EventId = AccessibleEventId::NAME_CHANGED;
+                            OUString sOldName(ScResId(STR_ACC_TABLE_NAME));
+                            sOldName = sOldName.replaceFirst("%1", m_strOldTabName);
+                            aEvent.OldValue <<= sOldName;
+                            OUString sNewName(ScResId(STR_ACC_TABLE_NAME));
+                            sOldName = sNewName.replaceFirst("%1", tabName);
+                            aEvent.NewValue <<= sNewName;
+                            CommitChange( aEvent );
+                            m_strOldTabName = tabName;
+                        }
                     }
                 }
             }
