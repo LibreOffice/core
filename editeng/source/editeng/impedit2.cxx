@@ -60,6 +60,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <svl/asiancfg.hxx>
+#include <rtl/character.hxx>
 #include <comphelper/lok.hxx>
 #include <unotools/configmgr.hxx>
 
@@ -2300,7 +2301,20 @@ EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, sal_uInt8 n
     {
         if ( nDelMode == DeleteMode::Simple )
         {
-            aDelStart = CursorLeft( aCurPos, i18n::CharacterIteratorMode::SKIPCHARACTER );
+            sal_uInt16 nCharMode = i18n::CharacterIteratorMode::SKIPCHARACTER;
+            // Check if we are deleting a CJK ideograph variance sequence (IVS).
+            sal_Int32 nIndex = aCurPos.GetIndex();
+            if (nIndex > 0)
+            {
+                const OUString& rString = aCurPos.GetNode()->GetString();
+                sal_Int32 nCode = rString.iterateCodePoints(&nIndex, -1);
+                if (rtl::isIVSSelector(nCode) && nIndex > 0 &&
+                        rtl::isCJKIVSCharacter(rString.iterateCodePoints(&nIndex, -1)))
+                {
+                    nCharMode = i18n::CharacterIteratorMode::SKIPCELL;
+                }
+            }
+            aDelStart = CursorLeft(aCurPos, nCharMode);
         }
         else if ( nDelMode == DeleteMode::RestOfWord )
         {
