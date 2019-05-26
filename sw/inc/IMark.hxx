@@ -135,26 +135,6 @@ namespace sw { namespace mark
             ICheckboxFieldmark &operator =(ICheckboxFieldmark const&) = delete;
     };
 
-    // Apple llvm-g++ 4.2.1 with _GLIBCXX_DEBUG won't eat boost::bind for this
-    // Neither will MSVC 2008 with _DEBUG
-    struct CompareIMarkStartsAfter
-    {
-        bool operator()(SwPosition const& rPos,
-                        std::shared_ptr<sw::mark::IMark> const& pMark)
-        {
-            return pMark->StartsAfter(rPos);
-        }
-    };
-
-    struct CompareIMarkStartsBefore
-    {
-        bool operator()(std::shared_ptr<sw::mark::IMark> const& pMark,
-                        SwPosition const& rPos)
-        {
-            return pMark->StartsBefore(rPos);
-        }
-    };
-
     OUString ExpandFieldmark(IFieldmark* pBM);
 
 }}

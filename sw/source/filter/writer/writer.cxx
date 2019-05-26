@@ -183,11 +183,7 @@ bool Writer::CopyNextPam( SwPaM ** ppPam )
 sal_Int32 Writer::FindPos_Bkmk(const SwPosition& rPos) const
 {
     const IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
-    const IDocumentMarkAccess::const_iterator_t ppBkmk = std::lower_bound(
-        pMarkAccess->getAllMarksBegin(),
-        pMarkAccess->getAllMarksEnd(),
-        rPos,
-        sw::mark::CompareIMarkStartsBefore()); // find the first Mark that does not start before
+    const IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findFirstBookmarkStartsAfter(rPos);
     if(ppBkmk != pMarkAccess->getAllMarksEnd())
         return ppBkmk - pMarkAccess->getAllMarksBegin();
     return -1;
