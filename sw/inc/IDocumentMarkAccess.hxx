@@ -58,11 +58,6 @@ class IDocumentMarkAccess
         typedef container_t::const_iterator const_iterator_t;
         typedef container_t::const_reverse_iterator const_reverse_iterator_t;
 
-        /// To avoid recursive calls of deleteMark, the removal of dummy
-        /// characters of fieldmarks has to be delayed; this is the baseclass
-        /// that can be subclassed for that purpose.
-        struct ILazyDeleter { virtual ~ILazyDeleter() { } };
-
         /** Generates a new mark in the document for a certain selection.
 
            @param rPaM
@@ -184,8 +179,7 @@ class IDocumentMarkAccess
             @param ppMark
             [in] an iterator pointing to the Mark to be deleted.
         */
-        virtual std::shared_ptr<ILazyDeleter>
-            deleteMark(const IDocumentMarkAccess::const_iterator_t& ppMark) =0;
+        virtual pMark_t deleteMark(const IDocumentMarkAccess::const_iterator_t& ppMark) =0;
 
         /** Deletes a mark.
 

@@ -886,7 +886,7 @@ namespace sw { namespace mark
             // fdo#61016 delay the deletion of the fieldmark characters
             // to prevent that from deleting the marks on that position
             // which would invalidate the iterators in vMarksToDelete
-            std::vector< std::shared_ptr<ILazyDeleter> > vDelay;
+            std::vector< pMark_t > vDelay;
             vDelay.reserve(vMarksToDelete.size());
 
             // If needed, sort mark containers containing subsets of the marks
@@ -907,6 +907,13 @@ namespace sw { namespace mark
             {
                 vDelay.push_back(deleteMark(*pppMark));
             }
+
+            for (pMark_t & pMark : vDelay)
+            {
+                auto pFieldMark = dynamic_cast<Fieldmark*>(pMark.get());
+                pFieldMark->ReleaseDoc(m_pDoc);
+                pMark.reset();
+            }
         } // scope to kill vDelay
 
         // also need to sort if both marks were moved and not-deleted because
@@ -920,27 +927,9 @@ namespace sw { namespace mark
         lcl_DebugMarks(m_vAllMarks);
     }
 
-    struct LazyFieldmarkDeleter : public IDocumentMarkAccess::ILazyDeleter
+    MarkManager::pMark_t MarkManager::deleteMark(const const_iterator_t& ppMark)
     {
-        std::shared_ptr<IMark> const m_pFieldmark;
-        SwDoc *const m_pDoc;
-        LazyFieldmarkDeleter(
-                std::shared_ptr<IMark> const& pMark, SwDoc *const pDoc)
-            : m_pFieldmark(pMark), m_pDoc(pDoc)
-        { }
-        virtual ~LazyFieldmarkDeleter() override
-        {
-            Fieldmark *const pFieldMark(
-                    dynamic_cast<Fieldmark*>(m_pFieldmark.get()));
-            assert(pFieldMark);
-            pFieldMark->ReleaseDoc(m_pDoc);
-        }
-    };
-
-    std::shared_ptr<IDocumentMarkAccess::ILazyDeleter>
-        MarkManager::deleteMark(const const_iterator_t& ppMark)
-    {
-        std::shared_ptr<ILazyDeleter> ret;
+        pMark_t ret;
         if (ppMark == m_vAllMarks.end())
             return ret;
 
@@ -974,7 +963,7 @@ namespace sw { namespace mark
                             ClearFieldActivation();
 
                         m_vFieldmarks.erase(ppFieldmark);
-                        ret.reset(new LazyFieldmarkDeleter(*ppMark, m_pDoc));
+                        ret = *ppMark;
                     }
                     else
                     {
@@ -1018,7 +1007,7 @@ namespace sw { namespace mark
         //extra reference on the shared_ptr, remove the entry from the
         //vector, and on xHoldPastErase release findMark won't find
         //it anymore.
-        pMark_t xHoldPastErase = *aI;
+        auto xHoldPastErase = *aI;
         m_vAllMarks.erase(aI);
         return ret;
     }
