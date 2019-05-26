@@ -204,11 +204,7 @@ bool SwCursorShell::GoNextBookmark()
     IDocumentMarkAccess* pMarkAccess = getIDocumentMarkAccess();
     IDocumentMarkAccess::container_t vCandidates;
     remove_copy_if(
-        upper_bound( // finds the first that is starting after
-            pMarkAccess->getBookmarksBegin(),
-            pMarkAccess->getBookmarksEnd(),
-            *GetCursor()->GetPoint(),
-            sw::mark::CompareIMarkStartsAfter()),
+        pMarkAccess->findFirstBookmarkStartsAfter(*GetCursor()->GetPoint()),
         pMarkAccess->getBookmarksEnd(),
         back_inserter(vCandidates),
         &lcl_IsInvisibleBookmark);
@@ -244,11 +240,7 @@ bool SwCursorShell::GoPrevBookmark()
     IDocumentMarkAccess::container_t vCandidates;
     remove_copy_if(
         pMarkAccess->getBookmarksBegin(),
-        upper_bound(
-            pMarkAccess->getBookmarksBegin(),
-            pMarkAccess->getBookmarksEnd(),
-            *GetCursor()->GetPoint(),
-            sw::mark::CompareIMarkStartsAfter()),
+        pMarkAccess->findFirstBookmarkStartsAfter(*GetCursor()->GetPoint()),
         back_inserter(vCandidates),
         &lcl_IsInvisibleBookmark);
     sort(
