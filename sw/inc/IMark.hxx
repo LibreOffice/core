@@ -64,8 +64,6 @@ namespace sw { namespace mark
                 { return GetMarkStart() < rOther.GetMarkStart(); }
             bool operator==(const IMark& rOther) const
                 { return GetMarkStart() == rOther.GetMarkStart(); }
-            bool EndsBefore(const SwPosition& rPos) const
-                { return GetMarkEnd() < rPos; }
 
             virtual OUString ToString( ) const =0;
             virtual void dumpAsXml(xmlTextWriterPtr pWriter) const = 0;
