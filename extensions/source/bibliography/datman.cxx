@@ -50,11 +50,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <svl/urihelper.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/edit.hxx>
 #include <tools/debug.hxx>
 #include "datman.hxx"
 #include "bibresid.hxx"
