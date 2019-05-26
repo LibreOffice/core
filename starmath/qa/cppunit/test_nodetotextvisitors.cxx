@@ -249,11 +249,13 @@ void Test::SimpleAttributes()
     parseandparseagain("breve a", "Breve");
     parseandparseagain("circle a", "Circle");
     parseandparseagain("vec a", "Vector arrow");
+    parseandparseagain("harpoon a", "Harpoon");
     parseandparseagain("tilde a", "Tilde");
     parseandparseagain("hat a", "Circumflex");
     parseandparseagain("bar a", "Line above");
     parseandparseagain("dot a", "Dot");
     parseandparseagain("widevec abc", "Wide vector arrow");
+    parseandparseagain("wideharpoon abc", "Wide harpoon");
     parseandparseagain("widetilde abc", "Wide tilde");
     parseandparseagain("widehat abc", "Wide circumflex");
     parseandparseagain("ddot a", "Double dot");
