@@ -8685,6 +8685,8 @@ static void disable_area_apply_attributes_cb(GtkWidget* pItem, gpointer userdata
 {
     GtkMenuItem* pMenuItem = GTK_MENU_ITEM(pItem);
     GtkWidget* child = gtk_bin_get_child(GTK_BIN(pMenuItem));
+    if (!child)
+        return;
     GtkCellView* pCellView = GTK_CELL_VIEW(child);
     GtkCellLayout* pCellLayout = GTK_CELL_LAYOUT(pCellView);
     GtkCellArea* pCellArea = gtk_cell_layout_get_area(pCellLayout);
