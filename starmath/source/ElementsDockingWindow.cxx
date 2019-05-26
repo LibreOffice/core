@@ -261,8 +261,9 @@ const size_t SmElementsControl::m_aCategoriesSize = SAL_N_ELEMENTS(m_aCategories
 SmElementsControl::SmElementsControl(vcl::Window *pParent)
     : Control(pParent, WB_TABSTOP)
     , mpDocShell(new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT))
-    , m_nCurrentElement(0)
+    , m_nCurrentElement(SAL_MAX_UINT16)
     , m_nCurrentRolloverElement(SAL_MAX_UINT16)
+    , m_nCurrentOffset(1) // Default offset of 1 due to the ScrollBar child
     , mbVerticalMode(true)
     , mxScroll(VclPtr<ScrollBar>::Create(this, WB_VERT))
     , m_bFirstPaintAfterLayout(false)
@@ -311,6 +312,19 @@ SmElement* SmElementsControl::current() const
     return (nCur < maElementList.size()) ? maElementList[nCur].get() : nullptr;
 }
 
+void SmElementsControl::setCurrentElement(sal_uInt16 nPos)
+{
+    if (m_nCurrentElement == nPos)
+        return;
+    if (nPos != SAL_MAX_UINT16 && nPos >= maElementList.size())
+        return;
+    if (m_xAccessible.is() && m_nCurrentElement != SAL_MAX_UINT16)
+        m_xAccessible->ReleaseFocus(m_nCurrentElement);
+    m_nCurrentElement = nPos;
+    if (m_xAccessible.is() && m_nCurrentElement != SAL_MAX_UINT16)
+        m_xAccessible->AcquireFocus();
+}
+
 /**
  * !pContext => layout only
  *
@@ -357,6 +371,9 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
                 x += boxX;
                 y = 0;
 
+                element->mBoxLocation = Point(x, y);
+                element->mBoxSize = Size(10, nControlHeight);
+
                 tools::Rectangle aSelectionRectangle(x + 5 - 1, y + 5,
                                               x + 5 + 1, nControlHeight - 5);
 
@@ -368,6 +385,9 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
             {
                 x = 0;
                 y += boxY;
+
+                element->mBoxLocation = Point(x, y);
+                element->mBoxSize = Size(nControlWidth, 10);
 
                 tools::Rectangle aSelectionRectangle(x + 5, y + 5 - 1,
                                               nControlWidth - 5, y + 5 + 1);
@@ -603,7 +623,7 @@ void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
             tools::Rectangle rect(pPrevElement->mBoxLocation, pPrevElement->mBoxSize);
             if (rect.IsInside(rMouseEvent.GetPosPixel()))
             {
-                m_nCurrentElement = m_nCurrentRolloverElement;
+                setCurrentElement(m_nCurrentRolloverElement);
                 maSelectHdlLink.Call(*const_cast<SmElement*>(pPrevElement));
                 collectUIInformation(OUString::number(m_nCurrentRolloverElement));
                 return;
@@ -617,7 +637,7 @@ void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
             tools::Rectangle rect(element->mBoxLocation, element->mBoxSize);
             if (rect.IsInside(rMouseEvent.GetPosPixel()))
             {
-                m_nCurrentElement = n;
+                setCurrentElement(n);
                 maSelectHdlLink.Call(*element);
                 collectUIInformation(OUString::number(n));
                 return;
@@ -697,8 +717,8 @@ void SmElementsControl::stepFocus(const bool bBackward)
     sal_uInt16 nPos = nextElement(bBackward, nStartPos, nLastElement);
     if (nStartPos != nPos)
     {
-        m_nCurrentElement = nPos;
         m_nCurrentRolloverElement = SAL_MAX_UINT16;
+        setCurrentElement(nPos);
 
         const tools::Rectangle outputRect(Point(0,0), GetOutputSizePixel());
         const SmElement *pCur = maElementList[nPos].get();
@@ -752,7 +772,7 @@ void SmElementsControl::pageFocus(const bool bBackward)
 
     if (nStartPos != nPos)
     {
-        m_nCurrentElement = nPos;
+        setCurrentElement(nPos);
         if (bMoved)
             scrollToElement(bBackward, maElementList[nPos].get());
         Invalidate();
@@ -793,12 +813,18 @@ void SmElementsControl::KeyInput(const KeyEvent& rKEvt)
             break;
 
         case KEY_HOME:
-            m_nCurrentElement = 0;
-            mxScroll->DoScroll(0);
+            if (!maElementList.empty())
+            {
+                setCurrentElement(0);
+                mxScroll->DoScroll(0);
+            }
             break;
         case KEY_END:
-            m_nCurrentElement = (maElementList.size() ? maElementList.size() - 1 : 0);
-            mxScroll->DoScroll(mxScroll->GetRangeMax());
+            if (!maElementList.empty())
+            {
+                setCurrentElement(maElementList.size() - 1);
+                mxScroll->DoScroll(mxScroll->GetRangeMax());
+            }
             break;
 
         case KEY_PAGEUP:
@@ -964,8 +990,21 @@ void SmElementsControl::addElements(const SmElementDescr aElementsArray[], sal_u
 
 void SmElementsControl::build()
 {
+    // The order is important!
+    // 1. Ensure there are no items left, including the default scrollbar!
+    // 2. Release all the current accessible items.
+    //    This will check for new items after releasing them!
+    // 3. Set the cursor element
     maElementList.clear();
+    mxScroll->SetThumbPos(0);
+    mxScroll->Hide();
+    if (m_xAccessible.is())
+        m_xAccessible->ReleaseAllItems(true);
+    setCurrentElement(SAL_MAX_UINT16);
 
+    // The first element is the scrollbar. We can't change its indexInParent
+    // value, as this is set by being a child of the SmElementsControl.
+    m_nCurrentOffset = 1;
     for (sal_uInt16 n = 0; n < SAL_N_ELEMENTS(m_aCategories); ++n)
     {
         if (msCurrentSetId == std::get<0>(m_aCategories[n]))
@@ -973,11 +1012,15 @@ void SmElementsControl::build()
             addElements(std::get<1>(m_aCategories[n]), std::get<2>(m_aCategories[n]));
             break;
         }
+        else
+            m_nCurrentOffset += std::get<2>(m_aCategories[n]);
     }
 
-    m_nCurrentElement = 0;
     m_nCurrentRolloverElement = SAL_MAX_UINT16;
     LayoutOrPaintContents();
+    if (m_xAccessible.is())
+        m_xAccessible->AddAllItems();
+    setCurrentElement(0);
     Invalidate();
 }
 
@@ -989,6 +1032,96 @@ Size SmElementsControl::GetOptimalSize() const
 FactoryFunction SmElementsControl::GetUITestFactory() const
 {
     return ElementSelectorUIObject::create;
+}
+
+bool SmElementsControl::itemIsSeparator(sal_uInt16 nPos) const
+{
+    if (nPos < m_nCurrentOffset || (nPos -= m_nCurrentOffset) >= maElementList.size())
+        return true;
+    return maElementList[nPos].get()->isSeparator();
+}
+
+css::uno::Reference<css::accessibility::XAccessible> SmElementsControl::CreateAccessible()
+{
+    if (!m_xAccessible.is())
+    {
+        m_xAccessible = new AccessibleSmElementsControl(*this);
+        m_xAccessible->AddAllItems();
+    }
+    return m_xAccessible.get();
+}
+
+bool SmElementsControl::itemTrigger(sal_uInt16 nPos)
+{
+    if (nPos < m_nCurrentOffset || (nPos -= m_nCurrentOffset) >= maElementList.size())
+        return false;
+
+    maSelectHdlLink.Call(*const_cast<SmElement*>(maElementList[nPos].get()));
+    collectUIInformation(OUString::number(nPos));
+    return true;
+}
+
+tools::Rectangle SmElementsControl::itemPosRect(sal_uInt16 nPos) const
+{
+    if (nPos < m_nCurrentOffset || (nPos -= m_nCurrentOffset) >= maElementList.size())
+        return tools::Rectangle();
+
+    SmElement* pItem = maElementList[nPos].get();
+    return tools::Rectangle(pItem->mBoxLocation, pItem->mBoxSize);
+}
+
+bool SmElementsControl::itemIsVisible(sal_uInt16 nPos) const
+{
+    tools::Rectangle elementRect = itemPosRect(nPos);
+    if (elementRect.IsEmpty())
+        return false;
+
+    tools::Rectangle outputRect(Point(0, 0), GetOutputSizePixel());
+    return outputRect.IsInside(elementRect);
+}
+
+sal_uInt16 SmElementsControl::itemCount() const { return maElementList.size(); }
+
+sal_uInt16 SmElementsControl::itemHighlighted() const { return m_nCurrentElement; }
+
+void SmElementsControl::setItemHighlighted(sal_uInt16 nPos)
+{
+    if (m_nCurrentRolloverElement == nPos)
+        return;
+    if (nPos != SAL_MAX_UINT16 && nPos >= maElementList.size())
+        return;
+
+    if (maElementList[nPos]->isSeparator())
+        m_nCurrentRolloverElement = SAL_MAX_UINT16;
+    else
+        m_nCurrentRolloverElement = nPos;
+    Invalidate();
+}
+
+OUString SmElementsControl::itemName(sal_uInt16 nPos) const
+{
+    if (nPos < m_nCurrentOffset || (nPos -= m_nCurrentOffset) >= maElementList.size())
+        return OUString();
+
+    return maElementList[nPos]->getHelpText();
+}
+
+sal_uInt16 SmElementsControl::itemAtPos(const Point& rPoint) const
+{
+    sal_uInt16 nElementCount = maElementList.size();
+    for (sal_uInt16 n = 0; n < nElementCount; n++)
+    {
+        const SmElement* pItem = maElementList[n].get();
+        tools::Rectangle elementRect(pItem->mBoxLocation, pItem->mBoxSize);
+        if (elementRect.IsInside(rPoint))
+            return n;
+    }
+    return SAL_MAX_UINT16;
+}
+
+css::uno::Reference<css::accessibility::XAccessible> SmElementsControl::scrollbarAccessible() const
+{
+    return mxScroll && mxScroll->IsVisible() ? mxScroll->GetAccessible() : css::uno::Reference<css::accessibility::XAccessible>();
 }
 
 SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, SfxChildWindow* pChildWindow, vcl::Window* pParent) :
