@@ -19,10 +19,6 @@
 #ifndef INCLUDED_SVX_SOURCE_DIALOG_IMAPWND_HXX
 #define INCLUDED_SVX_SOURCE_DIALOG_IMAPWND_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/imapobj.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/imap.hxx>
