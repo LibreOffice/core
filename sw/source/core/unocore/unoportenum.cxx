@@ -186,11 +186,8 @@ namespace
             // no need to consider marks starting after aEndOfPara
             SwPosition aEndOfPara(*rUnoCursor.GetPoint());
             aEndOfPara.nContent = aEndOfPara.nNode.GetNode().GetTextNode()->Len();
-            const IDocumentMarkAccess::const_iterator_t pCandidatesEnd = upper_bound(
-                pMarkAccess->getBookmarksBegin(),
-                pMarkAccess->getBookmarksEnd(),
-                aEndOfPara,
-                sw::mark::CompareIMarkStartsAfter()); // finds the first that starts after
+            const IDocumentMarkAccess::const_iterator_t pCandidatesEnd =
+                pMarkAccess->findFirstBookmarkStartsAfter(aEndOfPara);
 
             // search for all bookmarks that start or end in this paragraph
             for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
@@ -270,11 +267,8 @@ namespace
         // no need to consider annotation marks starting after aEndOfPara
         SwPosition aEndOfPara(*rUnoCursor.GetPoint());
         aEndOfPara.nContent = aEndOfPara.nNode.GetNode().GetTextNode()->Len();
-        const IDocumentMarkAccess::const_iterator_t pCandidatesEnd = upper_bound(
-            pMarkAccess->getAnnotationMarksBegin(),
-            pMarkAccess->getAnnotationMarksEnd(),
-            aEndOfPara,
-            sw::mark::CompareIMarkStartsAfter()); // finds the first that starts after
+        const IDocumentMarkAccess::const_iterator_t pCandidatesEnd =
+            pMarkAccess->findFirstAnnotationStartsAfter(aEndOfPara);
 
         // search for all annotation marks that have its start position in this paragraph
         const SwNodeIndex nOwnNode = rUnoCursor.GetPoint()->nNode;

@@ -159,13 +159,34 @@ namespace
         return std::make_unique<SwPosition>(rOtherPosition);
     }
 
+    struct CompareIMarkStartsBefore
+    {
+        bool operator()(std::shared_ptr<sw::mark::IMark> const& pMark,
+                        SwPosition const& rPos)
+        {
+            return pMark->StartsBefore(rPos);
+        }
+    };
+
+    // Apple llvm-g++ 4.2.1 with _GLIBCXX_DEBUG won't eat boost::bind for this
+    // Neither will MSVC 2008 with _DEBUG
+    struct CompareIMarkStartsAfter
+    {
+        bool operator()(SwPosition const& rPos,
+                        std::shared_ptr<sw::mark::IMark> const& pMark)
+        {
+            return pMark->StartsAfter(rPos);
+        }
+    };
+
+
     IMark* lcl_getMarkAfter(const IDocumentMarkAccess::container_t& rMarks, const SwPosition& rPos)
     {
         IDocumentMarkAccess::const_iterator_t pMarkAfter = upper_bound(
             rMarks.begin(),
             rMarks.end(),
             rPos,
-            sw::mark::CompareIMarkStartsAfter());
+            CompareIMarkStartsAfter());
         if(pMarkAfter == rMarks.end()) return nullptr;
         return pMarkAfter->get();
     };
@@ -179,7 +200,7 @@ namespace
             rMarks.begin(),
             rMarks.end(),
             rPos,
-            sw::mark::CompareIMarkStartsAfter());
+            CompareIMarkStartsAfter());
         vCandidates.reserve(pCandidatesEnd - rMarks.begin());
         // only marks ending before are candidates
         remove_copy_if(
@@ -264,7 +285,7 @@ namespace
         for(IDocumentMarkAccess::iterator_t ppCurrentMark = lower_bound(
                 rMarks.begin(), rMarks.end(),
                 rPos,
-                sw::mark::CompareIMarkStartsBefore());
+                CompareIMarkStartsBefore());
             ppCurrentMark != rMarks.end();
             ++ppCurrentMark)
         {
@@ -1022,7 +1043,7 @@ namespace sw { namespace mark
                 m_vAllMarks.begin(),
                 m_vAllMarks.end(),
                 pMark->GetMarkStart(),
-                sw::mark::CompareIMarkStartsBefore());
+                CompareIMarkStartsBefore());
         for ( ; it != m_vAllMarks.end(); ++it)
             if (pMark->StartsBefore((*it)->GetMarkStart()))
                 break;
@@ -1061,6 +1082,16 @@ namespace sw { namespace mark
         return lcl_FindMarkByName(rName, m_vBookmarks.begin(), m_vBookmarks.end());
     }
 
+    // find the first Mark that does not start before
+    IDocumentMarkAccess::const_iterator_t MarkManager::findFirstMarkStartsBefore(const SwPosition& rPos) const
+    {
+        return std::lower_bound(
+                m_vAllMarks.begin(),
+                m_vAllMarks.end(),
+                rPos,
+                CompareIMarkStartsBefore());
+    }
+
     IDocumentMarkAccess::const_iterator_t MarkManager::getAllMarksBegin() const
         { return m_vAllMarks.begin(); }
 
@@ -1078,6 +1109,16 @@ namespace sw { namespace mark
 
     sal_Int32 MarkManager::getBookmarksCount() const
         { return m_vBookmarks.size(); }
+
+    // finds the first that is starting after
+    IDocumentMarkAccess::const_iterator_t MarkManager::findFirstBookmarkStartsAfter(const SwPosition& rPos) const
+    {
+        return std::upper_bound(
+            m_vBookmarks.begin(),
+            m_vBookmarks.end(),
+            rPos,
+            CompareIMarkStartsAfter());
+    }
 
     IFieldmark* MarkManager::getFieldmarkFor(const SwPosition& rPos) const
     {
@@ -1245,6 +1286,15 @@ namespace sw { namespace mark
         return pAnnotationMark->get();
     }
 
+    // finds the first that is starting after
+    IDocumentMarkAccess::const_iterator_t MarkManager::findFirstAnnotationStartsAfter(const SwPosition& rPos) const
+    {
+        return std::upper_bound(
+            m_vAnnotationMarks.begin(),
+            m_vAnnotationMarks.end(),
+            rPos,
+            CompareIMarkStartsAfter());
+    }
 
     OUString MarkManager::getUniqueMarkName(const OUString& rName) const
     {

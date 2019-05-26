@@ -130,7 +130,7 @@ class IDocumentMarkAccess
 
             @returns false, if renaming failed (because the name is already in use)
         */
-            virtual bool renameMark(::sw::mark::IMark* io_pMark,
+        virtual bool renameMark(::sw::mark::IMark* io_pMark,
                 const OUString& rNewName) =0;
 
         /** Corrects marks (absolute)
@@ -224,6 +224,13 @@ class IDocumentMarkAccess
         */
         virtual const_iterator_t findMark(const OUString& rMark) const =0;
 
+        /** Find the first Mark that does not start before.
+
+            @returns
+            an iterator pointing to the mark, or pointing to getAllMarksEnd() if nothing was found.
+        */
+        virtual const_iterator_t findFirstMarkStartsBefore(const SwPosition& rPos) const =0;
+
         // interface IBookmarks (BOOKMARK, CROSSREF_NUMITEM_BOOKMARK, CROSSREF_HEADING_BOOKMARK )
 
         /** returns a STL-like random access iterator to the begin of the sequence the IBookmarks.
@@ -248,6 +255,14 @@ class IDocumentMarkAccess
         */
         virtual const_iterator_t findBookmark(const OUString& rMark) const =0;
 
+        /** Finds the first mark that is starting after.
+
+            @returns
+            an iterator pointing to the mark, or pointing to getBookmarksEnd() if nothing was found.
+        */
+        virtual const_iterator_t findFirstBookmarkStartsAfter(const SwPosition& rPos) const =0;
+
+
         // Fieldmarks
         virtual ::sw::mark::IFieldmark* getFieldmarkFor(const SwPosition& pos) const =0;
         virtual ::sw::mark::IFieldmark* getFieldmarkBefore(const SwPosition& pos) const =0;
@@ -268,6 +283,12 @@ class IDocumentMarkAccess
         virtual sal_Int32 getAnnotationMarksCount() const = 0;
         virtual const_iterator_t findAnnotationMark( const OUString& rName ) const = 0;
         virtual sw::mark::IMark* getAnnotationMarkFor(const SwPosition& rPosition) const = 0;
+        /** Finds the first mark that is starting after.
+
+            @returns
+            an iterator pointing to the mark, or pointing to getAnnotationMarksEnd() if nothing was found.
+        */
+        virtual const_iterator_t findFirstAnnotationStartsAfter(const SwPosition& rPos) const =0;
 
         /** Returns the MarkType used to create the mark
         */

@@ -74,12 +74,14 @@ namespace sw {
             virtual const_iterator_t getAllMarksEnd() const override;
             virtual sal_Int32 getAllMarksCount() const override;
             virtual const_iterator_t findMark(const OUString& rName) const override;
+            virtual const_iterator_t findFirstMarkStartsBefore(const SwPosition& rPos) const override;
 
             // bookmarks
             virtual const_iterator_t getBookmarksBegin() const override;
             virtual const_iterator_t getBookmarksEnd() const override;
             virtual sal_Int32 getBookmarksCount() const override;
             virtual const_iterator_t findBookmark(const OUString& rName) const override;
+            virtual const_iterator_t findFirstBookmarkStartsAfter(const SwPosition& rPos) const override;
 
             // Fieldmarks
             virtual ::sw::mark::IFieldmark* getFieldmarkFor(const SwPosition& rPos) const override;
@@ -103,6 +105,7 @@ namespace sw {
             virtual sal_Int32 getAnnotationMarksCount() const override;
             virtual const_iterator_t findAnnotationMark( const OUString& rName ) const override;
             virtual sw::mark::IMark* getAnnotationMarkFor(const SwPosition& rPos) const override;
+            virtual const_iterator_t findFirstAnnotationStartsAfter(const SwPosition& rPos) const override;
 
             virtual void assureSortedMarkContainers() const override;
 
