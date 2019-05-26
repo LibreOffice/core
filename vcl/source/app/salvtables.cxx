@@ -2947,9 +2947,8 @@ public:
         return aRows;
     }
 
-    virtual OUString get_text(int pos, int col) const override
+    OUString get_text(SvTreeListEntry* pEntry, int col) const
     {
-        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
         if (col == -1)
             return SvTabListBox::GetEntryText(pEntry, 0);
 
@@ -2962,6 +2961,12 @@ public:
         SvLBoxItem& rItem = pEntry->GetItem(col);
         assert(dynamic_cast<SvLBoxString*>(&rItem));
         return static_cast<SvLBoxString&>(rItem).GetText();
+    }
+
+    virtual OUString get_text(int pos, int col) const override
+    {
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+        return get_text(pEntry, col);
     }
 
     void set_text(SvTreeListEntry* pEntry, const OUString& rText, int col)
@@ -3407,11 +3412,7 @@ public:
     virtual OUString get_text(const weld::TreeIter& rIter, int col) const override
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-
-        if (col == -1)
-            col = 0xffff;
-
-        return SvTabListBox::GetEntryText(rVclIter.iter, col);
+        return get_text(rVclIter.iter, col);
     }
 
     virtual void set_text(const weld::TreeIter& rIter, const OUString& rText, int col) override
