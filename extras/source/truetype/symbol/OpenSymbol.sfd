@@ -3,8 +3,8 @@ FontName: OpenSymbol
 FullName: OpenSymbol
 FamilyName: OpenSymbol
 Weight: Book
-Copyright: (c) 2009 Sun Microsystems Inc.\nTHERE DOES NOT EXIST (c) 2011 Julien Nabet\nPRECEDES <-> DOES NOT SUCCEED (c) 2011 Olivier Hallot\nPRIME <-> TRIPLE PRIME (c) 2013 Mathias Hasselmann\nphi <-> phi1 (c) 2015 Khaled Hosny\n(c) 2016 Mike Kaganski\nzero, one, two, three, four, five, six, seven, eight, nine, question, underscore, copyright, registered, uni2215, angle, therefore, lozenge (c) 2010 Google Corporation
-Version: 102.10
+Copyright: (c) 2009 Sun Microsystems Inc.\nTHERE DOES NOT EXIST (c) 2011 Julien Nabet\nPRECEDES <-> DOES NOT SUCCEED (c) 2011 Olivier Hallot\nPRIME <-> TRIPLE PRIME (c) 2013 Mathias Hasselmann\nphi <-> phi1 (c) 2015 Khaled Hosny\n(c) 2016 Mike Kaganski\nzero, one, two, three, four, five, six, seven, eight, nine, question, underscore, copyright, registered, uni2215, angle, therefore, lozenge (c) 2010 Google Corporation\nuni20D1 (c) 2019 Takeshi Abe
+Version: 102.11
 ItalicAngle: 0
 UnderlinePosition: -143
 UnderlineWidth: 20
@@ -20,7 +20,7 @@ OS2Version: 0
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1144938807
-ModificationTime: 1479754802
+ModificationTime: 1558881510
 PfmFamily: 81
 TTFWeight: 400
 TTFWidth: 5
@@ -784,7 +784,7 @@ FitToEm: 1
 WinInfo: 0 34 12
 BeginPrivate: 0
 EndPrivate
-BeginChars: 1052 1052
+BeginChars: 1053 1053
 
 StartChar: Alpha
 Encoding: 0 913 0
@@ -108705,6 +108705,23 @@ SplineSet
  508 147 l 1,8,-1
  860 721 l 1,9,-1
  508 1286 l 1,6,-1
+EndSplineSet
+EndChar
+
+StartChar: uni20D1
+Encoding: 1052 8401 1052
+Width: 1056
+Flags: W
+HStem: 1313 112<98 686>
+LayerCount: 2
+Fore
+SplineSet
+98 1313 m 1,0,-1
+ 98 1425 l 1,1,-1
+ 686 1425 l 1,2,-1
+ 645 1575 l 1,3,-1
+ 1026 1313 l 1,4,-1
+ 98 1313 l 1,0,-1
 EndSplineSet
 EndChar
 EndChars

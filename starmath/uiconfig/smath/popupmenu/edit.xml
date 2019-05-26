@@ -166,10 +166,12 @@
       <menu:menuitem menu:label="dddot a" menu:id=".uno:InsertCommandText?Text:string=dddot &lt;?&gt; "/>
       <menu:menuitem menu:label="bar a" menu:id=".uno:InsertCommandText?Text:string=bar &lt;?&gt; "/>
       <menu:menuitem menu:label="vec a" menu:id=".uno:InsertCommandText?Text:string=vec &lt;?&gt; "/>
+      <menu:menuitem menu:label="harpoon a" menu:id=".uno:InsertCommandText?Text:string=harpoon &lt;?&gt; "/>
       <menu:menuitem menu:label="tilde a" menu:id=".uno:InsertCommandText?Text:string=tilde &lt;?&gt; "/>
       <menu:menuitem menu:label="hat a" menu:id=".uno:InsertCommandText?Text:string=hat &lt;?&gt; "/>
       <menu:menuseparator/>
       <menu:menuitem menu:label="widevec abc" menu:id=".uno:InsertCommandText?Text:string=widevec {&lt;?&gt;} "/>
+      <menu:menuitem menu:label="wideharpoon abc" menu:id=".uno:InsertCommandText?Text:string=wideharpoon {&lt;?&gt;} "/>
       <menu:menuitem menu:label="widetilde abc" menu:id=".uno:InsertCommandText?Text:string=widetilde {&lt;?&gt;} "/>
       <menu:menuitem menu:label="widehat abc" menu:id=".uno:InsertCommandText?Text:string=widehat {&lt;?&gt;} "/>
       <menu:menuitem menu:label="overline abc" menu:id=".uno:InsertCommandText?Text:string=overline {&lt;?&gt;} "/>
