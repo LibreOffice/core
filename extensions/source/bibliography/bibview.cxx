@@ -187,7 +187,7 @@ namespace bib
 
     IMPL_LINK_NOARG( BibView, CallMappingHdl, void*, void)
     {
-        m_pDatMan->CreateMappingDialog( this );
+        m_pDatMan->CreateMappingDialog(GetFrameWeld());
     }
 
     void BibView::Resize()

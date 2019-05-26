@@ -148,7 +148,7 @@ public:
         css::uno::Reference< css::awt::XControlModel > loadControlModel(const OUString& rName,
                                                         bool bForceListBox);
 
-        void                        CreateMappingDialog(vcl::Window* pParent);
+        void                        CreateMappingDialog(weld::Window* pParent);
         OUString                    CreateDBChangeDialog(weld::Window* pParent);
 
         void                        DispatchDBChangeDialog();

@@ -363,19 +363,20 @@ void BibToolBar::Click()
 {
     sal_uInt16 nId = GetCurItemId();
 
+    vcl::Window* pWin = GetParent();
+
     if (nId == nTBC_BT_COL_ASSIGN )
     {
-        if(pDatMan)
-            pDatMan->CreateMappingDialog(GetParent());
+        if (pDatMan)
+            pDatMan->CreateMappingDialog(pWin ? pWin->GetFrameWeld() : nullptr);
         CheckItem( nId, false );
     }
     else if (nId == nTBC_BT_CHANGESOURCE)
     {
-        if(pDatMan)
+        if (pDatMan)
         {
-            vcl::Window* pWin = GetParent();
             OUString sNew = pDatMan->CreateDBChangeDialog(pWin ? pWin->GetFrameWeld() : nullptr);
-            if(!sNew.isEmpty())
+            if (!sNew.isEmpty())
                 pDatMan->setActiveDataSource(sNew);
         }
         CheckItem( nId, false );
