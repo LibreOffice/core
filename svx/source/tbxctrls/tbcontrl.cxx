@@ -898,7 +898,8 @@ bool SvxStyleBox_Impl::EventNotify( NotifyEvent& rNEvt )
 
             case KEY_ESCAPE:
                 SelectEntryPos( nCurSel );
-                ReleaseFocus();
+                if ( !dynamic_cast<sfx2::sidebar::SidebarToolBox*>(GetParent()) )
+                    ReleaseFocus();
                 bHandled = true;
                 break;
         }
@@ -1416,7 +1417,8 @@ bool SvxFontNameBox_Impl::EventNotify( NotifyEvent& rNEvt )
 
             case KEY_ESCAPE:
                 SetText( aCurText );
-                ReleaseFocus_Impl();
+                if ( !dynamic_cast<sfx2::sidebar::SidebarToolBox*>(GetParent()) )
+                    ReleaseFocus_Impl();
                 EndPreview();
                 break;
         }
