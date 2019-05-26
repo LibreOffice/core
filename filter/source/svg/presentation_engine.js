@@ -4429,6 +4429,7 @@ var aOOOAttrUsePositionedChars = 'use-positioned-chars';
 
 var aOOOAttrSlide = 'slide';
 var aOOOAttrMaster = 'master';
+var aOOOAttrSlideDuration = 'slide-duration';
 var aOOOAttrHasTransition = 'has-transition';
 var aOOOAttrBackgroundVisibility = 'background-visibility';
 var aOOOAttrMasterObjectsVisibility = 'master-objects-visibility';
@@ -5060,6 +5061,9 @@ function MetaSlide( sMetaSlideId, aMetaDoc )
     this.aTextFieldContentProviderSet[aFooterClassName]        = this.initFixedTextFieldContentProvider( aOOOAttrFooterField );
     this.aTextFieldContentProviderSet[aHeaderClassName]        = this.initFixedTextFieldContentProvider( aOOOAttrHeaderField );
 
+    // We init the slide duration when automatic slide transition is enabled
+    this.fDuration = this.initSlideDuration();
+
     // We look for slide transition.
     this.aTransitionHandler = null;
     this.bHasTransition = this.initHasTransition() || true;
@@ -5141,6 +5145,15 @@ initMasterPage : function()
         this.theMetaDoc.aTextFieldHandlerSet[ sMasterPageId ] = {};
     }
     return this.theMetaDoc.aMasterPageSet[ sMasterPageId ];
+},
+
+initSlideDuration : function()
+{
+    var sSlideDuration = this.element.getAttributeNS( NSS['ooo'], aOOOAttrSlideDuration );
+    if( sSlideDuration && sSlideDuration.length > 0 )
+        return parseFloat( sSlideDuration );
+    else
+        return -1;
 },
 
 initHasTransition : function()
@@ -10133,6 +10146,9 @@ BaseNode.prototype.notifyEndListeners = function()
     this.aContext.aEventMultiplexer.notifyEvent( EVENT_TRIGGER_END_EVENT, this.getId() );
     if( this.getParentNode() && this.getParentNode().isMainSequenceRootNode() )
         this.aContext.aEventMultiplexer.notifyNextEffectEndEvent();
+
+    if( this.isMainSequenceRootNode() )
+        this.aContext.aEventMultiplexer.notifyAnimationsEndEvent();
 };
 
 BaseNode.prototype.getContext = function()
@@ -15823,6 +15839,7 @@ function EventMultiplexer( aTimerEventQueue )
     this.nId = EventMultiplexer.getUniqueId();
     this.aTimerEventQueue = aTimerEventQueue;
     this.aEventMap = {};
+    this.aAnimationsEndHandler = null;
     this.aSkipEffectEndHandlerSet = [];
     this.aMouseClickHandlerSet = new PriorityQueue( PriorityEntry.compare );
     this.aSkipEffectEvent = null;
@@ -15901,6 +15918,17 @@ EventMultiplexer.prototype.notifyEvent = function( eEventType, aNotifierId )
             }
         }
     }
+};
+
+EventMultiplexer.prototype.registerAnimationsEndHandler = function( aHandler )
+{
+    this.aAnimationsEndHandler = aHandler;
+};
+
+EventMultiplexer.prototype.notifyAnimationsEndEvent = function()
+{
+    if( this.aAnimationsEndHandler )
+        this.aAnimationsEndHandler();
 };
 
 EventMultiplexer.prototype.registerNextEffectEndHandler = function( aHandler )
@@ -17796,6 +17824,7 @@ function SlideShow()
     this.aStartedEffectList = [];
     this.aStartedEffectIndexMap = {};
     this.aStartedEffectIndexMap[ -1 ] = undefined;
+    this.automaticAdvanceTimeout = null;
 }
 
 SlideShow.prototype.setSlideEvents = function( aNextEffectEventArray,
@@ -17908,7 +17937,6 @@ SlideShow.prototype.notifyNextEffectStart = function()
     this.aStartedEffectIndexMap[ -1 ] = this.aStartedEffectList.length;
     this.aStartedEffectList.push( aEffect );
 
-
     var aAnimatedElementMap = theMetaDoc.aMetaSlideSet[nCurSlide].aSlideAnimationsHandler.aAnimatedElementMap;
     for( var sId in aAnimatedElementMap )
         aAnimatedElementMap[ sId ].notifyNextEffectStart( this.nCurrentEffect );
@@ -17916,11 +17944,34 @@ SlideShow.prototype.notifyNextEffectStart = function()
 
 SlideShow.prototype.notifyNextEffectEnd = function()
 {
-     assert( this.bIsNextEffectRunning,
+    assert( this.bIsNextEffectRunning,
             'SlideShow.notifyNextEffectEnd: effect already ended.' );
     this.bIsNextEffectRunning = false;
 
     this.aStartedEffectList[ this.aStartedEffectIndexMap[ -1 ] ].end();
+    if( this.automaticAdvanceTimeout !== null )
+    {
+        if( this.automaticAdvanceTimeout['rewindedEffect'] === this.nCurrentEffect )
+        {
+            this.automaticAdvanceTimeout = null;
+            this.notifyAnimationsEnd();
+        }
+    }
+};
+
+SlideShow.prototype.notifyAnimationsEnd = function()
+{
+    if( nCurSlide + 1 === theMetaDoc.nNumberOfSlides )
+        return;
+
+    assert (this.automaticAdvanceTimeout === null,
+        'SlideShow.notifyAnimationsEnd: Timeout already set.')
+
+    var nTimeout = Math.ceil(theMetaDoc.aMetaSlideSet[nCurSlide].fDuration * 1000);
+    if( nTimeout < 0 )
+        return;
+
+    this.automaticAdvanceTimeout = window.setTimeout('switchSlide(1, false)', nTimeout);
 };
 
 SlideShow.prototype.notifySlideStart = function( nNewSlideIndex, nOldSlideIndex )
@@ -17981,7 +18032,15 @@ SlideShow.prototype.notifyTransitionEnd = function( nSlideIndex )
         // clear all queues
         this.dispose();
 
-        theMetaDoc.getCurrentSlide().aSlideAnimationsHandler.start();
+        var aCurrentSlide = theMetaDoc.getCurrentSlide();
+        if( aCurrentSlide.aSlideAnimationsHandler.elementsParsed() )
+        {
+			aCurrentSlide.aSlideAnimationsHandler.start();
+			this.aEventMultiplexer.registerAnimationsEndHandler( bind2( SlideShow.prototype.notifyAnimationsEnd, this ) );
+        }
+        else
+            this.notifyAnimationsEnd();
+
         this.update();
     }
 };
@@ -18213,6 +18272,12 @@ SlideShow.prototype.rewindEffect = function()
     if( this.bIsSkipping || this.bIsRewinding )
         return;
 
+	if( this.automaticAdvanceTimeout !== null && !this.automaticAdvanceTimeout['rewindedEffect'] )
+	{
+		window.clearTimeout( this.automaticAdvanceTimeout );
+		this.automaticAdvanceTimeout = { 'rewindedEffect': this.nCurrentEffect };
+	}
+
     if( !this.hasAnyEffectStarted() )
     {
         this.rewindToPreviousSlide();
@@ -18390,6 +18455,12 @@ SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
                 // clear all queues
                 this.dispose();
             }
+        }
+
+        if( this.automaticAdvanceTimeout !== null )
+        {
+            window.clearTimeout( this.automaticAdvanceTimeout );
+            this.automaticAdvanceTimeout = null;
         }
     }
 
