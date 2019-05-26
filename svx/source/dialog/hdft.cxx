@@ -624,54 +624,59 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
         *pBBSet,
         mbEnableDrawingLayerFillStyles));
 
-    if(RET_OK == pDlg->Execute() && pDlg->GetOutputItemSet())
-    {
-        SfxItemIter aIter(*pDlg->GetOutputItemSet());
-
-        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    pDlg->StartExecuteAsync([&](sal_Int32 nResult) {
+        if (nResult == RET_OK && pDlg->GetOutputItemSet())
         {
-            if(!IsInvalidItem(pItem))
-            {
-                pBBSet->Put(*pItem);
-            }
-        }
+            SfxItemIter aIter(*pDlg->GetOutputItemSet());
 
-        {
-            drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
-
-            if(mbEnableDrawingLayerFillStyles)
+            for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
             {
-                // create FillAttributes directly from DrawingLayer FillStyle entries
-                aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(*pBBSet));
-            }
-            else
-            {
-                const sal_uInt16 nWhich = GetWhich(SID_ATTR_BRUSH);
-
-                if(pBBSet->GetItemState(nWhich) == SfxItemState::SET)
+                if(!IsInvalidItem(pItem))
                 {
-                    // create FillAttributes from SvxBrushItem
-                    const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(pBBSet->Get(nWhich));
-                    SfxItemSet aTempSet(*pBBSet->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
-
-                    setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
-                    aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
+                    pBBSet->Put(*pItem);
                 }
             }
 
-            if(SID_ATTR_PAGE_HEADERSET == nId)
             {
-                //m_aBspWin.SetHdColor(rItem.GetColor());
-                m_aBspWin.setHeaderFillAttributes(aFillAttributes);
-            }
-            else
-            {
-                //m_aBspWin.SetFtColor(rItem.GetColor());
-                m_aBspWin.setFooterFillAttributes(aFillAttributes);
+                drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
+
+                if (mbEnableDrawingLayerFillStyles)
+                {
+                    // create FillAttributes directly from DrawingLayer FillStyle entries
+                    aFillAttributes.reset(
+                        new drawinglayer::attribute::SdrAllFillAttributesHelper(*pBBSet));
+                }
+                else
+                {
+                    const sal_uInt16 nWhich = GetWhich(SID_ATTR_BRUSH);
+
+                    if (pBBSet->GetItemState(nWhich) == SfxItemState::SET)
+                    {
+                        // create FillAttributes from SvxBrushItem
+                        const SvxBrushItem& rItem
+                            = static_cast<const SvxBrushItem&>(pBBSet->Get(nWhich));
+                        SfxItemSet aTempSet(*pBBSet->GetPool(),
+                                            svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+
+                        setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                        aFillAttributes.reset(
+                            new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
+                    }
+                }
+
+                if (SID_ATTR_PAGE_HEADERSET == nId)
+                {
+                    //m_aBspWin.SetHdColor(rItem.GetColor());
+                    m_aBspWin.setHeaderFillAttributes(aFillAttributes);
+                }
+                else
+                {
+                    //m_aBspWin.SetFtColor(rItem.GetColor());
+                    m_aBspWin.setFooterFillAttributes(aFillAttributes);
+                }
             }
         }
-
-    }
+    });
 
     UpdateExample();
 }
