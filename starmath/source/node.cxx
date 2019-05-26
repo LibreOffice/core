@@ -2535,6 +2535,9 @@ void SmAttributNode::CreateTextFromNode(OUStringBuffer &rText)
             case MS_VEC: // COMBINING RIGHT ARROW ABOVE
                 rText.append("vec ");
                 break;
+            case MS_HARPOON: // COMBINING RIGHT HARPOON ABOVE
+                rText.append("harpoon ");
+                break;
             case MS_TILDE: // TILDE
             case MS_COMBTILDE: // COMBINING TILDE
                 rText.append("tilde ");
