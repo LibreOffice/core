@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_52d80b52",
+        "filename": "i18npool/IwyuFilter_i18npool.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2019-05-26T11:44:15Z",
+      "side": 1,
+      "message": "This one is puzzling because the IWYU command does not consider the workdir/CustomTarget/i18npool/collator/ path as necessary (this might be a gbuildtojson bug?), so it does not find lrl_include.hxx which in turn causes some false positives. I did not add those here, rather just list them here: \n\n    - rtl/ustrbuf.hxx\n    - i18nlangtag/languagetag.hxx\n    - i18nlangtag/languagetagicu.hxx\n    - localedata.hxx\n    - com/sun/star/i18n/CollatorOptions.hpp\n    - cppuhelper/supportsservice.hxx",
+      "range": {
+        "startLine": 92,
+        "startChar": 4,
+        "endLine": 92,
+        "endChar": 50
+      },
+      "revId": "02beb9158595bb6597224c9f6360fc819b8e46d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
