@@ -175,7 +175,7 @@ namespace
         bool operator()(SwPosition const& rPos,
                         std::shared_ptr<sw::mark::IMark> const& pMark)
         {
-            return pMark->StartsAfter(rPos);
+            return pMark->GetMarkStart() > rPos;
         }
     };
 
@@ -291,7 +291,7 @@ namespace
         {
             // Once we reach a mark starting after the target pos
             // we do not need to continue
-            if(ppCurrentMark->get()->StartsAfter(rPos))
+            if(ppCurrentMark->get()->GetMarkStart() > rPos)
                 break;
             if(IDocumentMarkAccess::GetType(**ppCurrentMark) == eType)
             {
