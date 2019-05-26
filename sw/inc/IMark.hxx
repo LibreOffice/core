@@ -22,7 +22,6 @@
 #include <vcl/keycod.hxx>
 #include "calbck.hxx"
 #include "pam.hxx"
-#include <boost/operators.hpp>
 #include <map>
 #include <memory>
 #include "swdllapi.h"
@@ -37,7 +36,6 @@ namespace sw { namespace mark
 
     class SW_DLLPUBLIC IMark
         : virtual public sw::BroadcastingModify // inherited as interface
-        , public ::boost::totally_ordered<IMark>
     {
         protected:
             IMark() = default;
@@ -58,12 +56,6 @@ namespace sw { namespace mark
             // not available in IMark
             // inside core, you can cast to MarkBase and use its setters,
             // make sure to update the sorting in Markmanager in this case
-
-            //operators and comparisons (non-virtual)
-            bool operator<(const IMark& rOther) const
-                { return GetMarkStart() < rOther.GetMarkStart(); }
-            bool operator==(const IMark& rOther) const
-                { return GetMarkStart() == rOther.GetMarkStart(); }
 
             virtual OUString ToString( ) const =0;
             virtual void dumpAsXml(xmlTextWriterPtr pWriter) const = 0;
