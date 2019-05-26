@@ -171,8 +171,10 @@ else
 			-Wl$(CLANG_COMMA)-undefined -Wl$(CLANG_COMMA)suppress)
 endif
 
-# Clang most probably doesn't maintain binary compatibility, so rebuild when clang changes.
-$(CLANGOUTDIR)/clang-timestamp: $(CLANGDIR)/bin/clang$(CLANG_EXE_EXT)
+# Clang most probably doesn't maintain binary compatibility, so rebuild when clang changes
+# (either the binary can change if it's a local build, or config_clang.h will change if configure detects
+# a new version of a newly installed system clang).
+$(CLANGOUTDIR)/clang-timestamp: $(CLANGDIR)/bin/clang$(CLANG_EXE_EXT) $(BUILDDIR)/config_host/config_clang.h
 	$(QUIET)touch $@
 
 
