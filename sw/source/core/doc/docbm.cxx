@@ -77,29 +77,36 @@ namespace
                     && rPos.nContent < pIdx->GetIndex() );
     }
 
-    bool lcl_MarkOrderingByStart(const IDocumentMarkAccess::pMark_t& rpFirst,
-        const IDocumentMarkAccess::pMark_t& rpSecond)
+    struct MarkOrderingByStart
     {
-        auto const& rFirstStart(rpFirst->GetMarkStart());
-        auto const& rSecondStart(rpSecond->GetMarkStart());
-        if (rFirstStart.nNode != rSecondStart.nNode)
+        bool operator()(const IDocumentMarkAccess::pMark_t& rpFirst,
+            const IDocumentMarkAccess::pMark_t& rpSecond)
         {
-            return rFirstStart.nNode < rSecondStart.nNode;
+            return operator()(rpFirst.get(), rpSecond.get());
         }
-        const sal_Int32 nFirstContent = rFirstStart.nContent.GetIndex();
-        const sal_Int32 nSecondContent = rSecondStart.nContent.GetIndex();
-        if (nFirstContent != 0 || nSecondContent != 0)
+        bool operator()(const IDocumentMarkAccess::pMark_t& rpFirst,
+            const IMark* pSecond)
         {
-            return nFirstContent < nSecondContent;
+            return operator()(rpFirst.get(), pSecond);
         }
-        auto *const pCRFirst (dynamic_cast<::sw::mark::CrossRefBookmark const*>(rpFirst.get()));
-        auto *const pCRSecond(dynamic_cast<::sw::mark::CrossRefBookmark const*>(rpSecond.get()));
-        if ((pCRFirst == nullptr) == (pCRSecond == nullptr))
+        bool operator()(const IMark* pFirst, const IMark* pSecond)
         {
-            return false; // equal
+            auto const& rFirstStart(pFirst->GetMarkStart());
+            auto const& rSecondStart(pSecond->GetMarkStart());
+            if (rFirstStart != rSecondStart)
+            {
+                return rFirstStart < rSecondStart;
+            }
+            auto *const pCRFirst (dynamic_cast<::sw::mark::CrossRefBookmark const*>(pFirst));
+            auto *const pCRSecond(dynamic_cast<::sw::mark::CrossRefBookmark const*>(pSecond));
+            // cross-ref sorts *before*
+            if (pCRFirst && !pCRSecond)
+                return true;
+            if (!pCRFirst && pCRSecond)
+                return false;
+            return pFirst < pSecond;
         }
-        return pCRFirst != nullptr; // cross-ref sorts *before*
-    }
+    };
 
     bool lcl_MarkOrderingByEnd(const IDocumentMarkAccess::pMark_t& rpFirst,
         const IDocumentMarkAccess::pMark_t& rpSecond)
@@ -115,7 +122,7 @@ namespace
                 io_vMarks.begin(),
                 io_vMarks.end(),
                 pMark,
-                &lcl_MarkOrderingByStart),
+                MarkOrderingByStart()),
             pMark);
     }
 
@@ -187,7 +194,8 @@ namespace
             rMarks.end(),
             rPos,
             CompareIMarkStartsAfter());
-        if(pMarkAfter == rMarks.end()) return nullptr;
+        if(pMarkAfter == rMarks.end())
+            return nullptr;
         return pMarkAfter->get();
     };
 
@@ -247,33 +255,15 @@ namespace
         return false;
     }
 
-    bool lcl_MarkEqualByStart(const IDocumentMarkAccess::pMark_t& rpFirst,
-                              const IDocumentMarkAccess::pMark_t& rpSecond)
-    {
-        return !lcl_MarkOrderingByStart(rpFirst, rpSecond) &&
-               !lcl_MarkOrderingByStart(rpSecond, rpFirst);
-    }
-
     IDocumentMarkAccess::iterator_t lcl_FindMark(
         IDocumentMarkAccess::container_t& rMarks,
         const IDocumentMarkAccess::pMark_t& rpMarkToFind)
     {
         IDocumentMarkAccess::iterator_t ppCurrentMark = lower_bound(
             rMarks.begin(), rMarks.end(),
-            rpMarkToFind, &lcl_MarkOrderingByStart);
-        // since there are usually not too many marks on the same start
-        // position, we are not doing a bisect search for the upper bound
-        // but instead start to iterate from pMarkLow directly
-        while (ppCurrentMark != rMarks.end() && lcl_MarkEqualByStart(*ppCurrentMark, rpMarkToFind))
-        {
-            if(ppCurrentMark->get() == rpMarkToFind.get())
-            {
-                return ppCurrentMark;
-            }
-            ++ppCurrentMark;
-        }
-        // reached a mark starting on a later start pos or the end of the
-        // vector => not found
+            rpMarkToFind, MarkOrderingByStart());
+        if (ppCurrentMark != rMarks.end() && *ppCurrentMark == rpMarkToFind)
+            return ppCurrentMark;
         return rMarks.end();
     };
 
@@ -336,7 +326,7 @@ namespace
 #else
         (void) rMarks;
 #endif
-        assert(std::is_sorted(rMarks.begin(), rMarks.end(), lcl_MarkOrderingByStart));
+        assert(std::is_sorted(rMarks.begin(), rMarks.end(), MarkOrderingByStart()));
     };
 }
 
@@ -951,7 +941,8 @@ namespace sw { namespace mark
         MarkManager::deleteMark(const const_iterator_t& ppMark)
     {
         std::shared_ptr<ILazyDeleter> ret;
-        if (ppMark == m_vAllMarks.end()) return ret;
+        if (ppMark == m_vAllMarks.end())
+            return ret;
 
         switch(IDocumentMarkAccess::GetType(**ppMark))
         {
@@ -1032,26 +1023,15 @@ namespace sw { namespace mark
         return ret;
     }
 
-    void MarkManager::deleteMark(const IMark* const pMark)
+    void MarkManager::deleteMark(const IMark* pMark)
     {
         assert(pMark->GetMarkPos().GetDoc() == m_pDoc &&
             "<MarkManager::deleteMark(..)>"
             " - Mark is not in my doc.");
-        // finds the last Mark that is starting before pMark
-        // (pMarkLow < pMark)
-        auto it = lower_bound(
-                m_vAllMarks.begin(),
-                m_vAllMarks.end(),
-                pMark->GetMarkStart(),
-                CompareIMarkStartsBefore());
-        for ( ; it != m_vAllMarks.end(); ++it)
-            if (pMark->GetMarkStart() < (*it)->GetMarkStart())
-                break;
-            else if (it->get() == pMark)
-            {
-                deleteMark(it);
-                break;
-            }
+        IDocumentMarkAccess::iterator_t ppCurrentMark = lower_bound(
+            m_vAllMarks.begin(), m_vAllMarks.end(),
+            pMark, MarkOrderingByStart());
+        deleteMark(ppCurrentMark);
     }
 
     void MarkManager::clearAllMarks()
@@ -1126,7 +1106,8 @@ namespace sw { namespace mark
             m_vFieldmarks.begin(),
             m_vFieldmarks.end(),
             [&rPos] (pMark_t const& rpMark) { return rpMark->IsCoveringPosition(rPos); } );
-        if(pFieldmark == m_vFieldmarks.end()) return nullptr;
+        if(pFieldmark == m_vFieldmarks.end())
+            return nullptr;
         return dynamic_cast<IFieldmark*>(pFieldmark->get());
     }
 
@@ -1136,8 +1117,8 @@ namespace sw { namespace mark
             m_vFieldmarks.begin(),
             m_vFieldmarks.end(),
             [&rPos] (pMark_t const& rpMark) { return rpMark->IsCoveringPosition(rPos); } );
-        if(pFieldmark == m_vFieldmarks.end()) return;
-
+        if(pFieldmark == m_vFieldmarks.end())
+            return;
         deleteMark(lcl_FindMark(m_vAllMarks, *pFieldmark));
     }
 
@@ -1234,7 +1215,7 @@ namespace sw { namespace mark
         for (IDocumentMarkAccess::const_iterator_t aI = m_vFieldmarks.begin(),
             aEnd = m_vFieldmarks.end(); aI != aEnd; ++aI)
         {
-            std::shared_ptr<IMark> xI = *aI;
+            std::shared_ptr<IMark> const & xI = *aI;
             const SwPosition &rStart = xI->GetMarkPos();
             if (!rPaM.ContainsPosition(rStart))
                 continue;
@@ -1343,14 +1324,14 @@ namespace sw { namespace mark
 
     void MarkManager::sortSubsetMarks()
     {
-        sort(m_vBookmarks.begin(), m_vBookmarks.end(), &lcl_MarkOrderingByStart);
-        sort(m_vFieldmarks.begin(), m_vFieldmarks.end(), &lcl_MarkOrderingByStart);
-        sort(m_vAnnotationMarks.begin(), m_vAnnotationMarks.end(), &lcl_MarkOrderingByStart);
+        sort(m_vBookmarks.begin(), m_vBookmarks.end(), MarkOrderingByStart());
+        sort(m_vFieldmarks.begin(), m_vFieldmarks.end(), MarkOrderingByStart());
+        sort(m_vAnnotationMarks.begin(), m_vAnnotationMarks.end(), MarkOrderingByStart());
     }
 
     void MarkManager::sortMarks()
     {
-        sort(m_vAllMarks.begin(), m_vAllMarks.end(), &lcl_MarkOrderingByStart);
+        sort(m_vAllMarks.begin(), m_vAllMarks.end(), MarkOrderingByStart());
         sortSubsetMarks();
     }
 
