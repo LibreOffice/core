@@ -12,6 +12,8 @@
 #ifndef PLUGIN_H
 #define PLUGIN_H
 
+#include <config_clang.h>
+
 #include <clang/AST/ASTContext.h>
 #include <clang/AST/RecursiveASTVisitor.h>
 #include <clang/Basic/FileManager.h>
