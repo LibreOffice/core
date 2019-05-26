@@ -21,6 +21,8 @@
 #include <localedata.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;

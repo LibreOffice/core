@@ -19,11 +19,11 @@
 #ifndef INCLUDED_I18NPOOL_INC_TEXTCONVERSIONIMPL_HXX
 #define INCLUDED_I18NPOOL_INC_TEXTCONVERSIONIMPL_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/i18n/XExtendedTextConversion.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace i18npool {
 

@@ -17,11 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <indexentrysupplier.hxx>
 #include <localedata.hxx>
+
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

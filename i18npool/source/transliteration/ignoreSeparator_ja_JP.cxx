@@ -18,6 +18,7 @@
  */
 
 #include <transliteration_Ignore.hxx>
+#include <i18nutil/oneToOneMapping.hxx>
 
 namespace i18npool {
 

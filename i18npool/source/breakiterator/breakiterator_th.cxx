@@ -23,7 +23,6 @@
 #include <wtt.h>
 
 #include <string.h>
-#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

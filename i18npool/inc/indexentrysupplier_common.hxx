@@ -24,9 +24,9 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <rtl/ref.hxx>
-#include "collatorImpl.hxx"
 
-#include <memory>
+namespace com::sun::star::uno { class XComponentContext; }
+namespace i18npool { class CollatorImpl; }
 
 namespace i18npool {
 

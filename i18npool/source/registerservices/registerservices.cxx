@@ -20,8 +20,6 @@
 #include <config_locales.h>
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
@@ -48,7 +46,6 @@
 #include <indexentrysupplier.hxx>
 #include <indexentrysupplier_asian.hxx>
 #include <indexentrysupplier_ja_phonetic.hxx>
-#include <indexentrysupplier_common.hxx>
 #include <indexentrysupplier_default.hxx>
 
 #include <chaptercollator.hxx>

@@ -19,14 +19,14 @@
 #ifndef INCLUDED_I18NPOOL_INC_TEXTCONVERSION_HXX
 #define INCLUDED_I18NPOOL_INC_TEXTCONVERSION_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/i18n/XExtendedTextConversion.hpp>
-#include <com/sun/star/linguistic2/XConversionDictionary.hpp>
-#include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <osl/module.h>
+
+namespace com::sun::star::linguistic2 { class XConversionDictionary; }
+namespace com::sun::star::linguistic2 { class XConversionDictionaryList; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace i18npool {
 

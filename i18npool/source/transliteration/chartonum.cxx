@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/ustrbuf.hxx>
-
 #include <chartonum.hxx>
 
 using namespace com::sun::star::uno;

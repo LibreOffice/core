@@ -23,7 +23,6 @@
 #include <errno.h>
 #include <sal/main.h>
 #include <sal/types.h>
-#include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <vector>

@@ -17,7 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/i18n/TransliterationType.hpp>
+
 #include <transliteration_Ignore.hxx>
+#include <i18nutil/oneToOneMapping.hxx>
 
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;

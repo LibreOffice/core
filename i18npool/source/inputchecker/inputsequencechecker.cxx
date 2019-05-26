@@ -19,7 +19,7 @@
 
 #include <inputsequencechecker.hxx>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
-#include <com/sun/star/i18n/UnicodeType.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nutil/unicode.hxx>
 

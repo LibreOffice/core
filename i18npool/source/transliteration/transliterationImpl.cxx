@@ -24,13 +24,10 @@
 #include <com/sun/star/i18n/LocaleData2.hpp>
 #include <com/sun/star/i18n/TransliterationType.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/instance.hxx>
-#include <rtl/string.h>
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 
 #include <algorithm>
 

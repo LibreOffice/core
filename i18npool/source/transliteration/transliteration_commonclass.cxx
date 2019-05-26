@@ -18,7 +18,6 @@
  */
 
 #include <transliteration_commonclass.hxx>
-#include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::uno;

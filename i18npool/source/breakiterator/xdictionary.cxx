@@ -20,9 +20,11 @@
 #include <config_folders.h>
 
 #include <osl/file.h>
+#include <osl/module.h>
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <xdictionary.hxx>
 #include <unicode/uchar.h>

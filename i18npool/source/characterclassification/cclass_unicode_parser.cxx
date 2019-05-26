@@ -25,7 +25,6 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/i18n/KParseTokens.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
-#include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/i18n/LocaleData2.hpp>
 #include <com/sun/star/i18n/NativeNumberMode.hpp>
 #include <com/sun/star/i18n/NativeNumberSupplier.hpp>

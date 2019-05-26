@@ -20,8 +20,9 @@
 #define INCLUDED_I18NPOOL_INC_TRANSLITERATION_IGNORE_HXX
 
 #include "transliteration_commonclass.hxx"
-#include <i18nutil/oneToOneMapping.hxx>
 #include <unicode/translit.h>
+
+namespace i18nutil { class oneToOneMapping; }
 
 typedef sal_Unicode (*TransFunc)(const sal_Unicode);
 

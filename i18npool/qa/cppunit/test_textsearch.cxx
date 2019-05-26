@@ -17,20 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/XTextSearch2.hpp>
-#include <com/sun/star/i18n/Transliteration.hpp>
 #include <unotest/bootstrapfixturebase.hxx>
 #include <i18nutil/transliteration.hxx>
 
 #include <unicode/regex.h>
-
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star;
 using namespace U_ICU_NAMESPACE;

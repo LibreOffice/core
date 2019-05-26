@@ -20,10 +20,8 @@
 #define INCLUDED_I18NPOOL_INC_TRANSLITERATION_COMMONCLASS_HXX
 
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
-#include <com/sun/star/i18n/TransliterationType.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <rtl/ustrbuf.h>
 #include <rtl/ustring.hxx>
 
 namespace i18npool {

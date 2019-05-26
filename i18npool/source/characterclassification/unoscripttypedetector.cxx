@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <unoscripttypedetector.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nutil/scripttypedetector.hxx>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 //      class UnoScriptTypeDetector
 sal_Int16 SAL_CALL

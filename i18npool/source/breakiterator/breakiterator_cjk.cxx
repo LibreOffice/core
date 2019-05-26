@@ -19,7 +19,9 @@
 
 #include <breakiterator_cjk.hxx>
 #include <localedata.hxx>
-#include <i18nutil/unicode.hxx>
+
+#include <com/sun/star/i18n/BreakType.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;

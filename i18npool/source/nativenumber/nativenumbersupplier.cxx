@@ -30,6 +30,8 @@
 #include <memory>
 #include <string_view>
 #include <unordered_map>
+#include <com/sun/star/i18n/CharacterClassification.hpp>
+#include <com/sun/star/i18n/NativeNumberMode.hpp>
 #include <com/sun/star/linguistic2/NumberText.hpp>
 
 using namespace ::com::sun::star::uno;

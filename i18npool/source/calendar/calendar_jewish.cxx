@@ -18,10 +18,11 @@
  */
 
 
-#include <math.h>
-#include <stdio.h>
-
 #include <calendar_jewish.hxx>
+#include <nativenumbersupplier.hxx>
+
+#include <com/sun/star/i18n/CalendarDisplayCode.hpp>
+#include <com/sun/star/i18n/NativeNumberMode.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;

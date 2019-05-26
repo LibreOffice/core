@@ -19,6 +19,7 @@
 
 
 #include <rtl/ustrbuf.hxx>
+#include <collatorImpl.hxx>
 #include <indexentrysupplier_asian.hxx>
 #include "data/indexdata_alphanumeric.h"
 

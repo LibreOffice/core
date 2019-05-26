@@ -55,7 +55,6 @@
     c't 07/89 pages 192-208 and c't 03/94 pages 230-239
 */
 
-#include <string.h>
 #include <algorithm>
 
 #include "levdis.hxx"

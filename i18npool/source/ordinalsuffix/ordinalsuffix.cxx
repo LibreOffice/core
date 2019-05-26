@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/languagetagicu.hxx>
 #include <sal/log.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <string.h>
 #include <ordinalsuffix.hxx>
 
 #include <unicode/rbnf.h>
 #include <unicode/normlzr.h>
 #include <memory>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;

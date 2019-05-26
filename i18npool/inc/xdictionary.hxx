@@ -20,7 +20,6 @@
 #define INCLUDED_I18NPOOL_INC_XDICTIONARY_HXX
 
 #include <sal/types.h>
-#include <osl/module.h>
 
 #include <com/sun/star/i18n/Boundary.hpp>
 

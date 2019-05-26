@@ -21,7 +21,6 @@
 
 #include <cmath>
 #include <stdlib.h>
-#include <math.h>
 
 #include <calendar_hijri.hxx>
 

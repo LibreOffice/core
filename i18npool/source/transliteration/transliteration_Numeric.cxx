@@ -18,9 +18,10 @@
  */
 
 
+#include <com/sun/star/i18n/TransliterationType.hpp>
+
 #include <transliteration_Numeric.hxx>
 #include <nativenumbersupplier.hxx>
-#include <defaultnumberingprovider.hxx>
 #include <rtl/ref.hxx>
 
 using namespace com::sun::star::i18n;

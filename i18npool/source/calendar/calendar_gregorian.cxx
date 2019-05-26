@@ -21,11 +21,11 @@
 
 #include <calendar_gregorian.hxx>
 #include <localedata.hxx>
-#include <com/sun/star/i18n/AmPmValue.hpp>
-#include <com/sun/star/i18n/Months.hpp>
-#include <com/sun/star/i18n/Weekdays.hpp>
+#include <nativenumbersupplier.hxx>
+#include <com/sun/star/i18n/CalendarDisplayCode.hpp>
+#include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
+#include <com/sun/star/i18n/NativeNumberMode.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>

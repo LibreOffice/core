@@ -17,17 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
 #include <i18nutil/casefolding.hxx>
 #include <i18nutil/unicode.hxx>
 #include <com/sun/star/i18n/MultipleCharsOutputException.hpp>
+#include <com/sun/star/i18n/TransliterationType.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include <string.h>
-
 #include <characterclassificationImpl.hxx>
-#include <breakiteratorImpl.hxx>
 
 #include <transliteration_body.hxx>
 #include <memory>

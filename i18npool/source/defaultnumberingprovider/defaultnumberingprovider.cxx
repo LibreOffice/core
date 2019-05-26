@@ -18,16 +18,17 @@
  */
 
 #include <defaultnumberingprovider.hxx>
+#include <transliterationImpl.hxx>
+#include <com/sun/star/i18n/NativeNumberMode.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <localedata.hxx>
 #include <nativenumbersupplier.hxx>
-#include <stdio.h>
 #include <string.h>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -66,13 +67,9 @@
 #define S_HI_TWO "\xDB\xB2"
 #define S_HI_THREE "\xDB\xB3"
 
-#include <math.h>
 #include <sal/macros.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/i18n/XTransliteration.hpp>
-#include <com/sun/star/i18n/TransliterationType.hpp>
-#include <com/sun/star/i18n/XLocaleData.hpp>
 
 #include <bullet.h>
 

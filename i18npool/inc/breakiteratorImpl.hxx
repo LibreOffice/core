@@ -19,20 +19,13 @@
 #ifndef INCLUDED_I18NPOOL_INC_BREAKITERATORIMPL_HXX
 #define INCLUDED_I18NPOOL_INC_BREAKITERATORIMPL_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-#include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/BreakType.hpp>
-#include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#include <com/sun/star/i18n/CharType.hpp>
-#include <com/sun/star/i18n/XLocaleData.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
 #include <vector>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace i18npool {
 

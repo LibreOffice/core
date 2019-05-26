@@ -28,7 +28,10 @@
 #include <unicode/udata.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <string.h>
+
+#include <com/sun/star/i18n/BreakType.hpp>
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
 
 U_CDECL_BEGIN
 extern const char OpenOffice_dat[];
