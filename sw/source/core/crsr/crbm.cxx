@@ -257,7 +257,7 @@ bool SwCursorShell::GoPrevBookmark()
         // (we were only able to eliminate those starting
         // behind the Cursor by the upper_bound(..)
         // above)
-        if(!(**ppMark).EndsBefore(*GetCursor()->GetPoint()))
+        if(!((**ppMark).GetMarkEnd() < *GetCursor()->GetPoint()))
             continue;
         if (sw::IsMarkHidden(*GetLayout(), **ppMark))
         {
