@@ -39,6 +39,8 @@
 
 #include <memory>
 
+#include <sfx2/sidebar/SidebarToolBox.hxx>
+
 using namespace ::com::sun::star;
 
 namespace {
@@ -230,7 +232,8 @@ bool SvxFontSizeBox_Impl::EventNotify( NotifyEvent& rNEvt )
 
             case KEY_ESCAPE:
                 SetText( m_aCurText );
-                ReleaseFocus_Impl();
+                if ( typeid( *GetParent() ) != typeid( sfx2::sidebar::SidebarToolBox ) )
+                    ReleaseFocus_Impl();
                 bHandled = true;
                 break;
         }
