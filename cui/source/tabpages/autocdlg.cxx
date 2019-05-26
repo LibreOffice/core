@@ -775,7 +775,9 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage(TabPageParent pParent,
 {
     sNew = m_xNewReplacePB->get_label();
     sModify = m_xReplacePB->get_label();
-    m_xReplaceTLB->set_size_request(-1, m_xReplaceTLB->get_height_rows(10));
+    // tdf#125348 set some small but fixed initial width size, final width will
+    // depend on the size of the entry boxes
+    m_xReplaceTLB->set_size_request(42, m_xReplaceTLB->get_height_rows(10));
 
     SfxModule *pMod = SfxApplication::GetModule(SfxToolsModule::Writer);
     bSWriter = pMod == SfxModule::GetActiveModule();
