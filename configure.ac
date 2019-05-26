@@ -7533,7 +7533,7 @@ if test -n "$ENABLE_JAVA" -a -z "$JAVAINC"; then
 fi
 SOLARINC="$SOLARINC $JAVAINC"
 
-if test "$ENABLE_JAVA" != "" -a "x" != "x$JAVACOMPILER" -a "$_jdk_ver" -ge 10900; then
+if test "$ENABLE_JAVA" != "" -a "x" != "x$JAVACOMPILER" && test "$_jdk_ver" -ge 10900; then
     url_check_unknown=0
     java_base="testurlcheck"
     java_src="${java_base}.java"
