@@ -205,6 +205,8 @@ $(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT): $(CLANGINDIR)/sharedvisi
 	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGOUTDIR)/sharedvisitor/generator.o \
         -o $@ $(CLANGTOOLLIBS)
 
+$(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT): $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
+
 $(CLANGOUTDIR)/sharedvisitor:
 	mkdir -p $(CLANGOUTDIR)/sharedvisitor
 
