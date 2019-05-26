@@ -164,7 +164,7 @@ namespace
         bool operator()(std::shared_ptr<sw::mark::IMark> const& pMark,
                         SwPosition const& rPos)
         {
-            return pMark->StartsBefore(rPos);
+            return pMark->GetMarkStart() < rPos;
         }
     };
 
@@ -1045,7 +1045,7 @@ namespace sw { namespace mark
                 pMark->GetMarkStart(),
                 CompareIMarkStartsBefore());
         for ( ; it != m_vAllMarks.end(); ++it)
-            if (pMark->StartsBefore((*it)->GetMarkStart()))
+            if (pMark->GetMarkStart() < (*it)->GetMarkStart())
                 break;
             else if (it->get() == pMark)
             {

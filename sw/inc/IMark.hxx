@@ -64,8 +64,6 @@ namespace sw { namespace mark
                 { return GetMarkStart() < rOther.GetMarkStart(); }
             bool operator==(const IMark& rOther) const
                 { return GetMarkStart() == rOther.GetMarkStart(); }
-            bool StartsBefore(const SwPosition& rPos) const
-                { return GetMarkStart() < rPos; }
             bool StartsAfter(const SwPosition& rPos) const
                 { return GetMarkStart() > rPos; }
             bool EndsBefore(const SwPosition& rPos) const
