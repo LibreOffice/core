@@ -241,7 +241,7 @@ inline const clang::Expr *getSubExprAsWritten(const clang::CastExpr *This) {
 }
 
 inline bool isExplicitSpecified(clang::CXXConstructorDecl const * decl) {
-#if CLANG_VERSION >= 80000
+#if CLANG_VERSION >= 90000
     return decl->getExplicitSpecifier().isExplicit();
 #else
     return decl->isExplicitSpecified();
@@ -249,7 +249,7 @@ inline bool isExplicitSpecified(clang::CXXConstructorDecl const * decl) {
 }
 
 inline bool isExplicitSpecified(clang::CXXConversionDecl const * decl) {
-#if CLANG_VERSION >= 80000
+#if CLANG_VERSION >= 90000
     return decl->getExplicitSpecifier().isExplicit();
 #else
     return decl->isExplicitSpecified();
