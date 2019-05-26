@@ -52,6 +52,7 @@
 #include <vcl/GraphicObject.hxx>
 
 #include <svx/unobrushitemhelper.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace css;
 
@@ -315,6 +316,10 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(TabPageParent pParent, const SfxItemS
     m_xBackgroundColorSet->SetSelectHdl(HDL(BackgroundColorHdl_Impl));
     m_xBackgroundColorSet->SetStyle(m_xBackgroundColorSet->GetStyle() | WB_ITEMBORDER | WB_NAMEFIELD | WB_NONEFIELD);
     m_xBackgroundColorSet->SetText(SvxResId(RID_SVXSTR_NOFILL));
+
+    // Browsing files is not supported in LOK.
+    if (comphelper::LibreOfficeKit::isActive())
+        m_xBtnBrowse->hide();
 }
 
 SvxBackgroundTabPage::~SvxBackgroundTabPage()
