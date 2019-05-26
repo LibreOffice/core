@@ -371,8 +371,8 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
     if ( !bDisposing )
     {
         ::SolarMutexGuard aGuard;
-        VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xWindow );
-        WaitObject aWaitObject( pParent );
+        weld::Window* pParent = Application::GetFrameWeld(xWindow);
+        weld::WaitObject aWaitObject(pParent);
 
         OUString aCommand( _rURL.Path);
         if(aCommand == "Bib/Mapping")
@@ -385,7 +385,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         }
         else if(aCommand == "Bib/sdbsource")
         {
-            OUString aURL = m_xDatMan->CreateDBChangeDialog(pParent ? pParent->GetFrameWeld() : nullptr);
+            OUString aURL = m_xDatMan->CreateDBChangeDialog(pParent);
             if(!aURL.isEmpty())
             {
                 try

@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="pcr">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="MappingDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="mappingdialog|MappingDialog">Column Layout for Table “%1”</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -169,7 +175,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="authorCombobox">
+                      <object class="GtkComboBoxText" id="authorCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -181,7 +187,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="publisherCombobox">
+                      <object class="GtkComboBoxText" id="publisherCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -193,7 +199,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="chapterCombobox">
+                      <object class="GtkComboBoxText" id="chapterCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -205,7 +211,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="editorCombobox">
+                      <object class="GtkComboBoxText" id="editorCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -262,7 +268,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="authorityTypeCombobox">
+                      <object class="GtkComboBoxText" id="authorityTypeCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -274,7 +280,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="yearCombobox">
+                      <object class="GtkComboBoxText" id="yearCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -286,7 +292,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="titleCombobox">
+                      <object class="GtkComboBoxText" id="titleCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -343,7 +349,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="addressCombobox">
+                      <object class="GtkComboBoxText" id="addressCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -355,7 +361,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="ISBNCombobox">
+                      <object class="GtkComboBoxText" id="ISBNCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -367,7 +373,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="pagesCombobox">
+                      <object class="GtkComboBoxText" id="pagesCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -394,7 +400,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="editionCombobox">
+                      <object class="GtkComboBoxText" id="editionCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -449,7 +455,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="bookTitleCombobox">
+                      <object class="GtkComboBoxText" id="bookTitleCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -461,7 +467,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="volumeCombobox">
+                      <object class="GtkComboBoxText" id="volumeCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -473,7 +479,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="howPublishedCombobox">
+                      <object class="GtkComboBoxText" id="howPublishedCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -530,7 +536,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="organizationCombobox">
+                      <object class="GtkComboBoxText" id="organizationCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -542,7 +548,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="institutionCombobox">
+                      <object class="GtkComboBoxText" id="institutionCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -554,7 +560,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="schoolCombobox">
+                      <object class="GtkComboBoxText" id="schoolCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -596,7 +602,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="reportTypeCombobox">
+                      <object class="GtkComboBoxText" id="reportTypeCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -608,7 +614,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="monthCombobox">
+                      <object class="GtkComboBoxText" id="monthCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -665,7 +671,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="journalCombobox">
+                      <object class="GtkComboBoxText" id="journalCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -677,7 +683,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="numberCombobox">
+                      <object class="GtkComboBoxText" id="numberCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -689,7 +695,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="seriesCombobox">
+                      <object class="GtkComboBoxText" id="seriesCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -744,7 +750,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="annoteCombobox">
+                      <object class="GtkComboBoxText" id="annoteCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -756,7 +762,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="noteCombobox">
+                      <object class="GtkComboBoxText" id="noteCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -768,7 +774,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="URLCombobox">
+                      <object class="GtkComboBoxText" id="URLCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -855,7 +861,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="custom1Combobox">
+                      <object class="GtkComboBoxText" id="custom1Combobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -867,7 +873,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="custom2Combobox">
+                      <object class="GtkComboBoxText" id="custom2Combobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -879,7 +885,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="custom3Combobox">
+                      <object class="GtkComboBoxText" id="custom3Combobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -891,7 +897,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="custom4Combobox">
+                      <object class="GtkComboBoxText" id="custom4Combobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -903,7 +909,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="custom5Combobox">
+                      <object class="GtkComboBoxText" id="custom5Combobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -915,7 +921,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="identifierCombobox">
+                      <object class="GtkComboBoxText" id="identifierCombobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>

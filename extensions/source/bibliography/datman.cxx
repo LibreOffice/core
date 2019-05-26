@@ -184,54 +184,52 @@ static Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
     return xReturn;
 }
 
-class MappingDialog_Impl : public ModalDialog
+class MappingDialog_Impl : public weld::GenericDialogController
 {
     BibDataManager* pDatMan;
-    VclPtr<OKButton>       pOKBT;
-    VclPtr<ListBox>        pIdentifierLB;
-    VclPtr<ListBox>        pAuthorityTypeLB;
-    VclPtr<ListBox>        pAuthorLB;
-    VclPtr<ListBox>        pTitleLB;
-    VclPtr<ListBox>        pMonthLB;
-    VclPtr<ListBox>        pYearLB;
-    VclPtr<ListBox>        pISBNLB;
-    VclPtr<ListBox>        pBooktitleLB;
-    VclPtr<ListBox>        pChapterLB;
-    VclPtr<ListBox>        pEditionLB;
-    VclPtr<ListBox>        pEditorLB;
-    VclPtr<ListBox>        pHowpublishedLB;
-    VclPtr<ListBox>        pInstitutionLB;
-    VclPtr<ListBox>        pJournalLB;
-    VclPtr<ListBox>        pNoteLB;
-    VclPtr<ListBox>        pAnnoteLB;
-    VclPtr<ListBox>        pNumberLB;
-    VclPtr<ListBox>        pOrganizationsLB;
-    VclPtr<ListBox>        pPagesLB;
-    VclPtr<ListBox>        pPublisherLB;
-    VclPtr<ListBox>        pAddressLB;
-    VclPtr<ListBox>        pSchoolLB;
-    VclPtr<ListBox>        pSeriesLB;
-    VclPtr<ListBox>        pReportTypeLB;
-    VclPtr<ListBox>        pVolumeLB;
-    VclPtr<ListBox>        pURLLB;
-    VclPtr<ListBox>        pCustom1LB;
-    VclPtr<ListBox>        pCustom2LB;
-    VclPtr<ListBox>        pCustom3LB;
-    VclPtr<ListBox>        pCustom4LB;
-    VclPtr<ListBox>        pCustom5LB;
-    VclPtr<ListBox>        aListBoxes[COLUMN_COUNT];
-    OUString        sNone;
 
+    OUString        sNone;
     bool        bModified;
 
+    std::unique_ptr<weld::Button> m_xOKBT;
+    std::unique_ptr<weld::ComboBox> m_xIdentifierLB;
+    std::unique_ptr<weld::ComboBox> m_xAuthorityTypeLB;
+    std::unique_ptr<weld::ComboBox> m_xAuthorLB;
+    std::unique_ptr<weld::ComboBox> m_xTitleLB;
+    std::unique_ptr<weld::ComboBox> m_xMonthLB;
+    std::unique_ptr<weld::ComboBox> m_xYearLB;
+    std::unique_ptr<weld::ComboBox> m_xISBNLB;
+    std::unique_ptr<weld::ComboBox> m_xBooktitleLB;
+    std::unique_ptr<weld::ComboBox> m_xChapterLB;
+    std::unique_ptr<weld::ComboBox> m_xEditionLB;
+    std::unique_ptr<weld::ComboBox> m_xEditorLB;
+    std::unique_ptr<weld::ComboBox> m_xHowpublishedLB;
+    std::unique_ptr<weld::ComboBox> m_xInstitutionLB;
+    std::unique_ptr<weld::ComboBox> m_xJournalLB;
+    std::unique_ptr<weld::ComboBox> m_xNoteLB;
+    std::unique_ptr<weld::ComboBox> m_xAnnoteLB;
+    std::unique_ptr<weld::ComboBox> m_xNumberLB;
+    std::unique_ptr<weld::ComboBox> m_xOrganizationsLB;
+    std::unique_ptr<weld::ComboBox> m_xPagesLB;
+    std::unique_ptr<weld::ComboBox> m_xPublisherLB;
+    std::unique_ptr<weld::ComboBox> m_xAddressLB;
+    std::unique_ptr<weld::ComboBox> m_xSchoolLB;
+    std::unique_ptr<weld::ComboBox> m_xSeriesLB;
+    std::unique_ptr<weld::ComboBox> m_xReportTypeLB;
+    std::unique_ptr<weld::ComboBox> m_xVolumeLB;
+    std::unique_ptr<weld::ComboBox> m_xURLLB;
+    std::unique_ptr<weld::ComboBox> m_xCustom1LB;
+    std::unique_ptr<weld::ComboBox> m_xCustom2LB;
+    std::unique_ptr<weld::ComboBox> m_xCustom3LB;
+    std::unique_ptr<weld::ComboBox> m_xCustom4LB;
+    std::unique_ptr<weld::ComboBox> m_xCustom5LB;
+    weld::ComboBox* aListBoxes[COLUMN_COUNT];
 
-    DECL_LINK(OkHdl, Button*, void);
-    DECL_LINK(ListBoxSelectHdl, ListBox&, void);
+    DECL_LINK(OkHdl, weld::Button&, void);
+    DECL_LINK(ListBoxSelectHdl, weld::ComboBox&, void);
 
 public:
-    MappingDialog_Impl(vcl::Window* pParent, BibDataManager* pDatMan);
-    virtual ~MappingDialog_Impl() override;
-    virtual void dispose() override;
+    MappingDialog_Impl(weld::Window* pParent, BibDataManager* pDatMan);
 };
 
 static sal_uInt16 lcl_FindLogicalName(BibConfig const * pConfig ,
@@ -245,101 +243,100 @@ static sal_uInt16 lcl_FindLogicalName(BibConfig const * pConfig ,
     return USHRT_MAX;
 }
 
-MappingDialog_Impl::MappingDialog_Impl(vcl::Window* pParent, BibDataManager* pMan)
-    : ModalDialog(pParent, "MappingDialog", "modules/sbibliography/ui/mappingdialog.ui")
+MappingDialog_Impl::MappingDialog_Impl(weld::Window* pParent, BibDataManager* pMan)
+    : GenericDialogController(pParent, "modules/sbibliography/ui/mappingdialog.ui", "MappingDialog")
     , pDatMan(pMan)
     , sNone(BibResId(RID_BIB_STR_NONE))
     , bModified(false)
+    , m_xOKBT(m_xBuilder->weld_button("ok"))
+    , m_xIdentifierLB(m_xBuilder->weld_combo_box("identifierCombobox"))
+    , m_xAuthorityTypeLB(m_xBuilder->weld_combo_box("authorityTypeCombobox"))
+    , m_xAuthorLB(m_xBuilder->weld_combo_box("authorCombobox"))
+    , m_xTitleLB(m_xBuilder->weld_combo_box("titleCombobox"))
+    , m_xMonthLB(m_xBuilder->weld_combo_box("monthCombobox"))
+    , m_xYearLB(m_xBuilder->weld_combo_box("yearCombobox"))
+    , m_xISBNLB(m_xBuilder->weld_combo_box("ISBNCombobox"))
+    , m_xBooktitleLB(m_xBuilder->weld_combo_box("bookTitleCombobox"))
+    , m_xChapterLB(m_xBuilder->weld_combo_box("chapterCombobox"))
+    , m_xEditionLB(m_xBuilder->weld_combo_box("editionCombobox"))
+    , m_xEditorLB(m_xBuilder->weld_combo_box("editorCombobox"))
+    , m_xHowpublishedLB(m_xBuilder->weld_combo_box("howPublishedCombobox"))
+    , m_xInstitutionLB(m_xBuilder->weld_combo_box("institutionCombobox"))
+    , m_xJournalLB(m_xBuilder->weld_combo_box("journalCombobox"))
+    , m_xNoteLB(m_xBuilder->weld_combo_box("noteCombobox"))
+    , m_xAnnoteLB(m_xBuilder->weld_combo_box("annoteCombobox"))
+    , m_xNumberLB(m_xBuilder->weld_combo_box("numberCombobox"))
+    , m_xOrganizationsLB(m_xBuilder->weld_combo_box("organizationCombobox"))
+    , m_xPagesLB(m_xBuilder->weld_combo_box("pagesCombobox"))
+    , m_xPublisherLB(m_xBuilder->weld_combo_box("publisherCombobox"))
+    , m_xAddressLB(m_xBuilder->weld_combo_box("addressCombobox"))
+    , m_xSchoolLB(m_xBuilder->weld_combo_box("schoolCombobox"))
+    , m_xSeriesLB(m_xBuilder->weld_combo_box("seriesCombobox"))
+    , m_xReportTypeLB(m_xBuilder->weld_combo_box("reportTypeCombobox"))
+    , m_xVolumeLB(m_xBuilder->weld_combo_box("volumeCombobox"))
+    , m_xURLLB(m_xBuilder->weld_combo_box("URLCombobox"))
+    , m_xCustom1LB(m_xBuilder->weld_combo_box("custom1Combobox"))
+    , m_xCustom2LB(m_xBuilder->weld_combo_box("custom2Combobox"))
+    , m_xCustom3LB(m_xBuilder->weld_combo_box("custom3Combobox"))
+    , m_xCustom4LB(m_xBuilder->weld_combo_box("custom4Combobox"))
+    , m_xCustom5LB(m_xBuilder->weld_combo_box("custom5Combobox"))
 {
-    get(pOKBT, "ok");
-    get(pIdentifierLB, "identifierCombobox");
-    get(pAuthorityTypeLB, "authorityTypeCombobox");
-    get(pAuthorLB, "authorCombobox");
-    get(pTitleLB, "titleCombobox");
-    get(pMonthLB, "monthCombobox");
-    get(pYearLB, "yearCombobox");
-    get(pISBNLB, "ISBNCombobox");
-    get(pBooktitleLB, "bookTitleCombobox");
-    get(pChapterLB, "chapterCombobox");
-    get(pEditionLB, "editionCombobox");
-    get(pEditorLB, "editorCombobox");
-    get(pHowpublishedLB, "howPublishedCombobox");
-    get(pInstitutionLB, "institutionCombobox");
-    get(pJournalLB, "journalCombobox");
-    get(pNoteLB, "noteCombobox");
-    get(pAnnoteLB, "annoteCombobox");
-    get(pNumberLB, "numberCombobox");
-    get(pOrganizationsLB, "organizationCombobox");
-    get(pPagesLB, "pagesCombobox");
-    get(pPublisherLB, "publisherCombobox");
-    get(pAddressLB, "addressCombobox");
-    get(pSchoolLB, "schoolCombobox");
-    get(pSeriesLB, "seriesCombobox");
-    get(pReportTypeLB, "reportTypeCombobox");
-    get(pVolumeLB, "volumeCombobox");
-    get(pURLLB, "URLCombobox");
-    get(pCustom1LB, "custom1Combobox");
-    get(pCustom2LB, "custom2Combobox");
-    get(pCustom3LB, "custom3Combobox");
-    get(pCustom4LB, "custom4Combobox");
-    get(pCustom5LB, "custom5Combobox");
-
-    pOKBT->SetClickHdl(LINK(this, MappingDialog_Impl, OkHdl));
-    OUString sTitle = GetText();
+    m_xOKBT->connect_clicked(LINK(this, MappingDialog_Impl, OkHdl));
+    OUString sTitle = m_xDialog->get_title();
     sTitle = sTitle.replaceFirst("%1", pDatMan->getActiveDataTable());
-    SetText(sTitle);
+    m_xDialog->set_title(sTitle);
 
-    aListBoxes[0] = pIdentifierLB;
-    aListBoxes[1] = pAuthorityTypeLB;
-    aListBoxes[2] = pAuthorLB;
-    aListBoxes[3] = pTitleLB;
-    aListBoxes[4] = pYearLB;
-    aListBoxes[5] = pISBNLB;
-    aListBoxes[6] = pBooktitleLB;
-    aListBoxes[7] = pChapterLB;
-    aListBoxes[8] = pEditionLB;
-    aListBoxes[9] = pEditorLB;
-    aListBoxes[10] = pHowpublishedLB;
-    aListBoxes[11] = pInstitutionLB;
-    aListBoxes[12] = pJournalLB;
-    aListBoxes[13] = pMonthLB;
-    aListBoxes[14] = pNoteLB;
-    aListBoxes[15] = pAnnoteLB;
-    aListBoxes[16] = pNumberLB;
-    aListBoxes[17] = pOrganizationsLB;
-    aListBoxes[18] = pPagesLB;
-    aListBoxes[19] = pPublisherLB;
-    aListBoxes[20] = pAddressLB;
-    aListBoxes[21] = pSchoolLB;
-    aListBoxes[22] = pSeriesLB;
-    aListBoxes[23] = pReportTypeLB;
-    aListBoxes[24] = pVolumeLB;
-    aListBoxes[25] = pURLLB;
-    aListBoxes[26] = pCustom1LB;
-    aListBoxes[27] = pCustom2LB;
-    aListBoxes[28] = pCustom3LB;
-    aListBoxes[29] = pCustom4LB;
-    aListBoxes[30] = pCustom5LB;
+    aListBoxes[0] = m_xIdentifierLB.get();
+    aListBoxes[1] = m_xAuthorityTypeLB.get();
+    aListBoxes[2] = m_xAuthorLB.get();
+    aListBoxes[3] = m_xTitleLB.get();
+    aListBoxes[4] = m_xYearLB.get();
+    aListBoxes[5] = m_xISBNLB.get();
+    aListBoxes[6] = m_xBooktitleLB.get();
+    aListBoxes[7] = m_xChapterLB.get();
+    aListBoxes[8] = m_xEditionLB.get();
+    aListBoxes[9] = m_xEditorLB.get();
+    aListBoxes[10] = m_xHowpublishedLB.get();
+    aListBoxes[11] = m_xInstitutionLB.get();
+    aListBoxes[12] = m_xJournalLB.get();
+    aListBoxes[13] = m_xMonthLB.get();
+    aListBoxes[14] = m_xNoteLB.get();
+    aListBoxes[15] = m_xAnnoteLB.get();
+    aListBoxes[16] = m_xNumberLB.get();
+    aListBoxes[17] = m_xOrganizationsLB.get();
+    aListBoxes[18] = m_xPagesLB.get();
+    aListBoxes[19] = m_xPublisherLB.get();
+    aListBoxes[20] = m_xAddressLB.get();
+    aListBoxes[21] = m_xSchoolLB.get();
+    aListBoxes[22] = m_xSeriesLB.get();
+    aListBoxes[23] = m_xReportTypeLB.get();
+    aListBoxes[24] = m_xVolumeLB.get();
+    aListBoxes[25] = m_xURLLB.get();
+    aListBoxes[26] = m_xCustom1LB.get();
+    aListBoxes[27] = m_xCustom2LB.get();
+    aListBoxes[28] = m_xCustom3LB.get();
+    aListBoxes[29] = m_xCustom4LB.get();
+    aListBoxes[30] = m_xCustom5LB.get();
 
-    aListBoxes[0]->InsertEntry(sNone);
+    aListBoxes[0]->append_text(sNone);
     Reference< XNameAccess >  xFields = getColumns( pDatMan->getForm() );
     DBG_ASSERT(xFields.is(), "MappingDialog_Impl::MappingDialog_Impl : gave me an invalid form !");
-    if(xFields.is())
+    if (xFields.is())
     {
         for(const OUString& rName : xFields->getElementNames())
-            aListBoxes[0]->InsertEntry(rName);
+            aListBoxes[0]->append_text(rName);
     }
 
-    Link<ListBox&,void> aLnk = LINK(this, MappingDialog_Impl, ListBoxSelectHdl);
+    Link<weld::ComboBox&,void> aLnk = LINK(this, MappingDialog_Impl, ListBoxSelectHdl);
 
-    aListBoxes[0]->SelectEntryPos(0);
-    aListBoxes[0]->SetSelectHdl(aLnk);
+    aListBoxes[0]->set_active(0);
+    aListBoxes[0]->connect_changed(aLnk);
     for(sal_uInt16 i = 1; i < COLUMN_COUNT; i++)
     {
-        for(sal_Int32 j = 0; j < aListBoxes[0]->GetEntryCount();j++)
-            aListBoxes[i]->InsertEntry(aListBoxes[0]->GetEntry(j));
-        aListBoxes[i]->SelectEntryPos(0);
-        aListBoxes[i]->SetSelectHdl(aLnk);
+        for(sal_Int32 j = 0, nEntryCount = aListBoxes[0]->get_count(); j < nEntryCount; ++j)
+            aListBoxes[i]->append_text(aListBoxes[0]->get_text(j));
+        aListBoxes[i]->set_active(0);
+        aListBoxes[i]->connect_changed(aLnk);
     }
     BibConfig* pConfig = BibModul::GetConfig();
     BibDBDescriptor aDesc;
@@ -354,71 +351,27 @@ MappingDialog_Impl::MappingDialog_Impl(vcl::Window* pParent, BibDataManager* pMa
             sal_uInt16 nListBoxIndex = lcl_FindLogicalName( pConfig, aColumnPair.sLogicalColumnName);
             if(nListBoxIndex < COLUMN_COUNT)
             {
-                aListBoxes[nListBoxIndex]->SelectEntry(aColumnPair.sRealColumnName);
+                aListBoxes[nListBoxIndex]->set_active_text(aColumnPair.sRealColumnName);
             }
         }
     }
 }
 
-MappingDialog_Impl::~MappingDialog_Impl()
+IMPL_LINK(MappingDialog_Impl, ListBoxSelectHdl, weld::ComboBox&, rListBox, void)
 {
-    disposeOnce();
-}
-
-void MappingDialog_Impl::dispose()
-{
-    pOKBT.clear();
-    pIdentifierLB.clear();
-    pAuthorityTypeLB.clear();
-    pAuthorLB.clear();
-    pTitleLB.clear();
-    pMonthLB.clear();
-    pYearLB.clear();
-    pISBNLB.clear();
-    pBooktitleLB.clear();
-    pChapterLB.clear();
-    pEditionLB.clear();
-    pEditorLB.clear();
-    pHowpublishedLB.clear();
-    pInstitutionLB.clear();
-    pJournalLB.clear();
-    pNoteLB.clear();
-    pAnnoteLB.clear();
-    pNumberLB.clear();
-    pOrganizationsLB.clear();
-    pPagesLB.clear();
-    pPublisherLB.clear();
-    pAddressLB.clear();
-    pSchoolLB.clear();
-    pSeriesLB.clear();
-    pReportTypeLB.clear();
-    pVolumeLB.clear();
-    pURLLB.clear();
-    pCustom1LB.clear();
-    pCustom2LB.clear();
-    pCustom3LB.clear();
-    pCustom4LB.clear();
-    pCustom5LB.clear();
-    for(auto & a : aListBoxes)
-        a.clear();
-    ModalDialog::dispose();
-}
-
-IMPL_LINK(MappingDialog_Impl, ListBoxSelectHdl, ListBox&, rListBox, void)
-{
-    const sal_Int32 nEntryPos = rListBox.GetSelectedEntryPos();
-    if(0 < nEntryPos)
+    const sal_Int32 nEntryPos = rListBox.get_active();
+    if (0 < nEntryPos)
     {
-        for(VclPtr<ListBox> & aListBoxe : aListBoxes)
+        for(auto & pListBoxe : aListBoxes)
         {
-            if(&rListBox != aListBoxe && aListBoxe->GetSelectedEntryPos() == nEntryPos)
-                aListBoxe->SelectEntryPos(0);
+            if (&rListBox != pListBoxe && pListBoxe->get_active() == nEntryPos)
+                pListBoxe->set_active(0);
         }
     }
     bModified = true;
 }
 
-IMPL_LINK_NOARG(MappingDialog_Impl, OkHdl, Button*, void)
+IMPL_LINK_NOARG(MappingDialog_Impl, OkHdl, weld::Button&, void)
 {
     if(bModified)
     {
@@ -430,7 +383,7 @@ IMPL_LINK_NOARG(MappingDialog_Impl, OkHdl, Button*, void)
         BibConfig* pConfig = BibModul::GetConfig();
         for(sal_uInt16 nEntry = 0; nEntry < COLUMN_COUNT; nEntry++)
         {
-            OUString sSel = aListBoxes[nEntry]->GetSelectedEntry();
+            OUString sSel = aListBoxes[nEntry]->get_active_text();
             if(sSel != sNone)
             {
                 aNew.aColumnPairs[nWriteIndex].sRealColumnName = sSel;
@@ -445,7 +398,7 @@ IMPL_LINK_NOARG(MappingDialog_Impl, OkHdl, Button*, void)
         pDatMan->ResetIdentifierMapping();
         pConfig->SetMapping(aDesc, &aNew);
     }
-    EndDialog(bModified ? RET_OK : RET_CANCEL);
+    m_xDialog->response(bModified ? RET_OK : RET_CANCEL);
 }
 
 class DBChangeDialog_Impl : public weld::GenericDialogController
@@ -1351,10 +1304,10 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
     return xModel;
 }
 
-void BibDataManager::CreateMappingDialog(vcl::Window* pParent)
+void BibDataManager::CreateMappingDialog(weld::Window* pParent)
 {
-    VclPtrInstance< MappingDialog_Impl > pDlg(pParent, this);
-    if(RET_OK == pDlg->Execute() && pBibView)
+    MappingDialog_Impl aDlg(pParent, this);
+    if (RET_OK == aDlg.run() && pBibView)
     {
         reload();
     }
