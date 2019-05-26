@@ -2673,12 +2673,10 @@ namespace pcr
         if ( !xDetailForm.is() || !xMasterForm.is() )
             return false;
 
-
-        ScopedVclPtrInstance< FormLinkDialog > aDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, xMasterProp, m_xContext );
+        FormLinkDialog aDialog(impl_getDefaultDialogFrame_nothrow(), m_xComponent, xMasterProp, m_xContext);
         _rClearBeforeDialog.clear();
-        return ( RET_OK == aDialog->Execute() );
+        return ( RET_OK == aDialog.run() );
     }
-
 
     bool FormComponentPropertyHandler::impl_dialogFormatting_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {

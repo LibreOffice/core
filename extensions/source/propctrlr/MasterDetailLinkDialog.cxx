@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <toolkit/helper/vclunohelper.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <vcl/svapp.hxx>
 #include "MasterDetailLinkDialog.hxx"
 #include "formlinkdialog.hxx"
 #include "pcrservices.hxx"
@@ -102,8 +102,9 @@ namespace pcr
 
     svt::OGenericUnoDialog::Dialog MasterDetailLinkDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
-        return svt::OGenericUnoDialog::Dialog(VclPtr<FormLinkDialog>::Create(VCLUnoHelper::GetWindow(rParent),m_xDetail,m_xMaster, m_aContext
-            ,m_sExplanation,m_sDetailLabel,m_sMasterLabel));
+        return svt::OGenericUnoDialog::Dialog(std::make_unique<FormLinkDialog>(Application::GetFrameWeld(rParent), m_xDetail,
+                                                                               m_xMaster, m_aContext, m_sExplanation,
+                                                                               m_sDetailLabel, m_sMasterLabel));
     }
 
     void MasterDetailLinkDialog::implInitialize(const Any& _rValue)
