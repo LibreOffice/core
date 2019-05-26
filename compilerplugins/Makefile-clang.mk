@@ -57,6 +57,8 @@ CLANGINCLUDES=-I$(CLANGDIR)/include
 else
 CLANGINCLUDES=$(if $(filter /usr,$(CLANGDIR)),,-isystem $(CLANGDIR)/include)
 endif
+# for config_clang.h and other config_.*.h
+CLANGINCLUDES+=-I$(BUILDDIR)/compilerplugins/clang -I$(BUILDDIR)/config_host
 
 LLVMCONFIG=$(CLANGDIR)/bin/llvm-config
 
@@ -134,7 +136,7 @@ define clangbuildsrc
 $(3): $(2) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
 	$$(call gb_Output_announce,$(subst $(SRCDIR)/,,$(2)),$(true),CXX,3)
 	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) \
-        $(CLANGINCLUDES) /I$(BUILDDIR)/config_host $(2) /MD \
+        $(CLANGINCLUDES) $(2) /MD \
         /c /Fo: $(3)
 
 -include $(CLANGOUTDIR)/$(1).d #TODO
@@ -148,7 +150,7 @@ else
 define clangbuildsrc
 $(3): $(2) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
 	$$(call gb_Output_announce,$(subst $(SRCDIR)/,,$(2)),$(true),CXX,3)
-	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) $(CLANGINCLUDES) -I$(BUILDDIR)/config_host $(2) -fPIC -c -o $(3) -MMD -MT $(3) -MP -MF $(CLANGOUTDIR)/$(1).d
+	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) $(CLANGINCLUDES) $(2) -fPIC -c -o $(3) -MMD -MT $(3) -MP -MF $(CLANGOUTDIR)/$(1).d
 
 -include $(CLANGOUTDIR)/$(1).d
 
@@ -171,8 +173,10 @@ else
 			-Wl$(CLANG_COMMA)-undefined -Wl$(CLANG_COMMA)suppress)
 endif
 
-# Clang most probably doesn't maintain binary compatibility, so rebuild when clang changes.
-$(CLANGOUTDIR)/clang-timestamp: $(CLANGDIR)/bin/clang$(CLANG_EXE_EXT)
+# Clang most probably doesn't maintain binary compatibility, so rebuild when clang changes
+# (either the binary can change if it's a local build, or config_clang.h will change if configure detects
+# a new version of a newly installed system clang).
+$(CLANGOUTDIR)/clang-timestamp: $(CLANGDIR)/bin/clang$(CLANG_EXE_EXT) $(BUILDDIR)/compilerplugins/clang/config_clang.h
 	$(QUIET)touch $@
 
 

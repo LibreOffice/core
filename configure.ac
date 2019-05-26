@@ -12836,7 +12836,6 @@ AC_CONFIG_FILES([config_host.mk
                  instsetoo_native/util/openoffice.lst
                  sysui/desktop/macosx/Info.plist])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
-AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_dconf.h])
 AC_CONFIG_HEADERS([config_host/config_eot.h])
 AC_CONFIG_HEADERS([config_host/config_extensions.h])
@@ -12873,6 +12872,7 @@ AC_CONFIG_HEADERS([config_host/config_oauth2.h])
 AC_CONFIG_HEADERS([config_host/config_poppler.h])
 AC_CONFIG_HEADERS([config_host/config_python.h])
 AC_CONFIG_HEADERS([config_host/config_writerperfect.h])
+AC_CONFIG_HEADERS([compilerplugins/clang/config_clang.h])
 AC_OUTPUT
 
 if test "$CROSS_COMPILING" = TRUE; then
