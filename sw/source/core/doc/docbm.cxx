@@ -207,7 +207,7 @@ namespace
             rMarks.begin(),
             pCandidatesEnd,
             back_inserter(vCandidates),
-            [&rPos] (IDocumentMarkAccess::pMark_t const& rpMark) { return !rpMark->EndsBefore(rPos); } );
+            [&rPos] (IDocumentMarkAccess::pMark_t const& rpMark) { return !(rpMark->GetMarkEnd() < rPos); } );
         // no candidate left => we are in front of the first mark or there are none
         if(vCandidates.empty()) return nullptr;
         // return the highest (last) candidate using mark end ordering
