@@ -898,7 +898,8 @@ bool SvxStyleBox_Impl::EventNotify( NotifyEvent& rNEvt )
 
             case KEY_ESCAPE:
                 SelectEntryPos( nCurSel );
-                ReleaseFocus();
+                if ( typeid( *GetParent() ) != typeid( sfx2::sidebar::SidebarToolBox ) )
+                    ReleaseFocus();
                 bHandled = true;
                 break;
         }
@@ -1416,7 +1417,8 @@ bool SvxFontNameBox_Impl::EventNotify( NotifyEvent& rNEvt )
 
             case KEY_ESCAPE:
                 SetText( aCurText );
-                ReleaseFocus_Impl();
+                if ( typeid( *GetParent() ) != typeid( sfx2::sidebar::SidebarToolBox ) )
+                    ReleaseFocus_Impl();
                 EndPreview();
                 break;
         }
