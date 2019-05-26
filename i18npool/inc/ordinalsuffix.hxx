@@ -23,7 +23,8 @@
 #include <com/sun/star/i18n/XOrdinalSuffix.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/Locale.hpp>
+
+namespace com::sun::star::lang { struct Locale; }
 
 namespace i18npool {
 

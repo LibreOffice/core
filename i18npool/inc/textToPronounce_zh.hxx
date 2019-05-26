@@ -20,7 +20,7 @@
 #define INCLUDED_I18NPOOL_INC_TEXTTOPRONOUNCE_ZH_HXX
 
 #include "transliteration_Ignore.hxx"
-#include "indexentrysupplier_asian.hxx"
+#include <osl/module.hxx>
 
 namespace i18npool {
 

@@ -7,18 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <unotest/bootstrapfixturebase.hxx>
 
-#include <unicode/uversion.h>
+#include <unicode/uvernum.h>
 
 #include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
 
 #include <string.h>
 

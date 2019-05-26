@@ -18,6 +18,7 @@
  */
 
 #include <indexentrysupplier_default.hxx>
+#include <collatorImpl.hxx>
 #include <localedata.hxx>
 #include <i18nutil/unicode.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>

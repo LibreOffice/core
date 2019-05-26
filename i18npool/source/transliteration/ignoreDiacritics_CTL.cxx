@@ -10,7 +10,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <transliteration_Ignore.hxx>
 #include <unicode/translit.h>
-#include <unicode/uchar.h>
 
 namespace i18npool {
 

@@ -18,8 +18,10 @@
  */
 
 #include <memory>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <localedata.hxx>
@@ -29,9 +31,10 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <string.h>
-#include <stdio.h>
 #include <rtl/instance.hxx>
 #include <sal/macros.h>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
@@ -1329,10 +1332,6 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale )
 
 // OutlineNumbering helper class
 
-namespace com{ namespace sun{ namespace star{ namespace lang {
-    struct  Locale;
-}}}}
-
 struct OutlineNumberingLevel_Impl
 {
     OUString        sPrefix;
@@ -1511,7 +1510,6 @@ LocaleDataImpl::getAllInstalledLocaleNames()
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 
 OutlineNumbering::OutlineNumbering(std::unique_ptr<const OutlineNumberingLevel_Impl[]> pOutlnLevels, int nLevels) :

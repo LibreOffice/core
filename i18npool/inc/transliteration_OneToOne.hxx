@@ -20,7 +20,8 @@
 #define INCLUDED_I18NPOOL_INC_TRANSLITERATION_ONETOONE_HXX
 
 #include "transliteration_commonclass.hxx"
-#include <i18nutil/oneToOneMapping.hxx>
+
+namespace i18nutil { class oneToOneMapping; }
 
 namespace i18npool {
 

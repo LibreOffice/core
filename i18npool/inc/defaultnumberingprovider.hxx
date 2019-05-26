@@ -23,14 +23,12 @@
 #include <com/sun/star/text/XNumberingFormatter.hpp>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/i18n/XTransliteration.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
-#include "transliterationImpl.hxx"
-
-#include <memory>
+namespace com::sun::star::container { class XHierarchicalNameAccess; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace i18npool { class TransliterationImpl; }
 
 namespace i18npool {
 

@@ -19,24 +19,18 @@
 #ifndef INCLUDED_I18NPOOL_SOURCE_LOCALEDATA_LOCALENODE_HXX
 #define INCLUDED_I18NPOOL_SOURCE_LOCALEDATA_LOCALENODE_HXX
 
-#include <com/sun/star/xml/sax/XParser.hpp>
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-
 #include <string>
 #include <vector>
 #include <memory>
 
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/xml/sax/SAXParseException.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+
+namespace com::sun::star::xml::sax { class XAttributeList; }
 
 using namespace ::std;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::io;
 
 class OFileWriter
 {

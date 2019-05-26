@@ -20,7 +20,6 @@
 #define INCLUDED_I18NPOOL_INC_BREAKITERATOR_TH_HXX
 
 #include "breakiterator_unicode.hxx"
-#include "xdictionary.hxx"
 
 namespace i18npool {
 

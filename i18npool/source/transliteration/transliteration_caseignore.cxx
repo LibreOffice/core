@@ -17,14 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/i18n/TransliterationType.hpp>
 #include <rtl/ref.hxx>
 
-#include <i18nutil/oneToOneMapping.hxx>
 #include <i18nutil/casefolding.hxx>
 #include <i18nutil/transliteration.hxx>
 
 #include <transliteration_caseignore.hxx>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;

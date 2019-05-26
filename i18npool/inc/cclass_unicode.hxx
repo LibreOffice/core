@@ -19,19 +19,19 @@
 #ifndef INCLUDED_I18NPOOL_INC_CCLASS_UNICODE_HXX
 #define INCLUDED_I18NPOOL_INC_CCLASS_UNICODE_HXX
 
-#include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
-#include <com/sun/star/i18n/XLocaleData5.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include "transliteration_body.hxx"
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
+namespace com::sun::star::i18n { class XNativeNumberSupplier; }
+namespace com::sun::star::i18n { class XLocaleData5; }
+namespace i18npool { class Transliteration_casemapping; }
 
 
 /// Flag values of table.

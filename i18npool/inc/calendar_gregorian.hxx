@@ -20,13 +20,15 @@
 #define INCLUDED_I18NPOOL_INC_CALENDAR_GREGORIAN_HXX
 
 #include "calendarImpl.hxx"
-#include "nativenumbersupplier.hxx"
+
+#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 
 #include <unicode/calendar.h>
 #include <rtl/ref.hxx>
 
 #include <memory>
 
+namespace i18npool { class NativeNumberSupplierService; }
 
 //  class Calendar_gregorian
 

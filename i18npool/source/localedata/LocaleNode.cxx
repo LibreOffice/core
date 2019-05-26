@@ -18,10 +18,8 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <algorithm>
-#include <iostream>
 #include <memory>
 #include <set>
 #include <vector>
@@ -31,6 +29,7 @@
 
 #include "LocaleNode.hxx"
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
+#include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 // NOTE: MUST match the Locale versionDTD attribute defined in data/locale.dtd
 #define LOCALE_VERSION_DTD "2.0.3"

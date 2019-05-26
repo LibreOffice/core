@@ -24,6 +24,11 @@
 #include <i18nutil/unicode.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <com/sun/star/i18n/CharType.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;

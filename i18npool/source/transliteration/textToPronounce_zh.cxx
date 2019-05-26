@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/i18n/MultipleCharsOutputException.hpp>
+#include <com/sun/star/i18n/TransliterationType.hpp>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 

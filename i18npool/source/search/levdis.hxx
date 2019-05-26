@@ -20,7 +20,7 @@
 #ifndef INCLUDED_I18NPOOL_SOURCE_SEARCH_LEVDIS_HXX
 #define INCLUDED_I18NPOOL_SOURCE_SEARCH_LEVDIS_HXX
 
-#include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include <memory>
 
 // Sensible default values for a user interface could be:

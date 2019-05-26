@@ -18,14 +18,14 @@
  */
 
 #include <cclass_unicode.hxx>
-#include <com/sun/star/i18n/UnicodeScript.hpp>
-#include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <unicode/uchar.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <breakiteratorImpl.hxx>
+#include <transliteration_body.hxx>
 #include <rtl/ref.hxx>
 
 using namespace ::com::sun::star;

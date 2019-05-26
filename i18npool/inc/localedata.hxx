@@ -19,24 +19,15 @@
 #ifndef INCLUDED_I18NPOOL_INC_LOCALEDATA_HXX
 #define INCLUDED_I18NPOOL_INC_LOCALEDATA_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
 #include <com/sun/star/i18n/XLocaleData5.hpp>
 
 
 #include <cppuhelper/implbase.hxx>
-#include <cppu/macros.hxx>
-#include <com/sun/star/uno/Reference.h>
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/i18n/Calendar.hpp>
-#include <com/sun/star/i18n/FormatElement.hpp>
-#include <com/sun/star/i18n/Currency.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/LocaleDataItem2.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <vector>
@@ -44,14 +35,14 @@
 #include <osl/module.hxx>
 
 
-#include "defaultnumberingprovider.hxx"
-#include <com/sun/star/style/NumberingType.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/text/HoriOrientation.hpp>
-
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::container { class XIndexAccess; }
+namespace com::sun::star::i18n { struct Currency; }
+namespace com::sun::star::i18n { struct Currency2; }
+namespace com::sun::star::i18n { struct FormatElement; }
+namespace com::sun::star::lang { struct Locale; }
 
 struct LocaleDataLookupTableItem;
 

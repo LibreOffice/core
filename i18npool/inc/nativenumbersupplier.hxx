@@ -20,11 +20,11 @@
 #define INCLUDED_I18NPOOL_INC_NATIVENUMBERSUPPLIER_HXX
 
 #include <com/sun/star/i18n/XNativeNumberSupplier2.hpp>
-#include <com/sun/star/i18n/NativeNumberMode.hpp>
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/i18n/CharacterClassification.hpp>
+
+namespace com::sun::star::i18n { class XCharacterClassification; }
 
 namespace i18npool {
 

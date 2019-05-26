@@ -21,7 +21,6 @@
 #include <localedata.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/i18n/LocaleData2.hpp>
-#include <rtl/ustrbuf.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star;

@@ -19,6 +19,7 @@
 
 
 #include <indexentrysupplier_ja_phonetic.hxx>
+#include <collatorImpl.hxx>
 #include "data/indexdata_alphanumeric.h"
 #include "data/indexdata_ja_phonetic.h"
 #include <string.h>

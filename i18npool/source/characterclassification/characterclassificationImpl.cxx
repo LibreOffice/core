@@ -20,7 +20,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <characterclassificationImpl.hxx>
 #include <localedata.hxx>
-#include <rtl/ustrbuf.hxx>
+
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
