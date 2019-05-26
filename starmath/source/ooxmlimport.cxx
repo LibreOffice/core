@@ -199,6 +199,9 @@ OUString SmOoxmlImport::handleAcc()
             // shouldn't matter, but short above a longer expression doesn't look right
             acc = "widevec";
             break;
+        case MS_HARPOON:
+            acc = "wideharpoon";
+            break;
         case MS_TILDE:
         case MS_COMBTILDE:
             acc = "widetilde";
