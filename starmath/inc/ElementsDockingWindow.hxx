@@ -27,6 +27,8 @@
 #include <memory>
 #include <tuple>
 
+#include "AccessibleSmElementsControl.hxx"
+
 class SmDocShell;
 class SmNode;
 
@@ -88,12 +90,14 @@ class SmElementsControl : public Control
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
     virtual void KeyInput(const KeyEvent& rKEvt) override;
+    css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
     SmDocShell*   mpDocShell;
     SmFormat      maFormat;
     OString       msCurrentSetId;
     sal_uInt16    m_nCurrentElement;
     sal_uInt16    m_nCurrentRolloverElement;
+    sal_uInt16 m_nCurrentOffset;
     Link<SmElement&,void> maSelectHdlLink;
 
     std::vector< std::unique_ptr<SmElement> > maElementList;
@@ -101,10 +105,12 @@ class SmElementsControl : public Control
     bool          mbVerticalMode;
     VclPtr< ScrollBar > mxScroll;
     bool m_bFirstPaintAfterLayout;
+    rtl::Reference<AccessibleSmElementsControl> m_xAccessible;
 
     void addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
     void addElements(const SmElementDescr aElementsArray[], sal_uInt16 size);
     SmElement* current() const;
+    void setCurrentElement(sal_uInt16);
     bool hasRollover() const { return m_nCurrentRolloverElement != SAL_MAX_UINT16; }
 
     void stepFocus(const bool bBackward);
@@ -126,9 +132,23 @@ public:
 
     static const auto& categories() { return m_aCategories; }
     static size_t categoriesSize() { return m_aCategoriesSize; }
+    OString elementSetId() const { return msCurrentSetId; }
     void setElementSetId(const char* pSetId);
 
     void setVerticalMode(bool bVertical);
+
+    sal_uInt16 itemCount() const;
+    sal_uInt16 itemHighlighted() const;
+    sal_uInt16 itemFocused() const;
+    sal_uInt16 itemAtPos(const Point& rPos) const;
+    tools::Rectangle itemPosRect(sal_uInt16) const;
+    bool itemIsSeparator(sal_uInt16) const;
+    bool itemIsVisible(sal_uInt16) const;
+    OUString itemName(sal_uInt16) const;
+    bool itemTrigger(sal_uInt16);
+    void setItemHighlighted(sal_uInt16);
+    sal_uInt16 itemOffset() const { return m_nCurrentOffset; }
+    css::uno::Reference<css::accessibility::XAccessible> scrollbarAccessible() const;
 
     Size GetOptimalSize() const override;
 
