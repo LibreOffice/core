@@ -88,6 +88,7 @@ static const char    aOOOAttrSlide[] = NSPREFIX "slide";
 static const char    aOOOAttrMaster[] = NSPREFIX "master";
 static const char    aOOOAttrBackgroundVisibility[] = NSPREFIX "background-visibility";
 static const char    aOOOAttrMasterObjectsVisibility[] = NSPREFIX "master-objects-visibility";
+static const char    aOOOAttrSlideDuration[] = NSPREFIX "slide-duration";
 static const OUString aOOOAttrDateTimeField = NSPREFIX "date-time-field";
 static const char    aOOOAttrFooterField[] = NSPREFIX "footer-field";
 static const char    aOOOAttrHasTransition[] = NSPREFIX "has-transition";
@@ -1205,6 +1206,18 @@ void SVGFilter::implGenerateMetaData()
                             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrMasterObjectsVisibility, "hidden" );
                         }
 
+                        sal_Int32 nChange(0);
+                        double fSlideDuration(0);
+
+                        if( xPropSet->getPropertySetInfo()->hasPropertyByName( "Change" ) &&
+                            (xPropSet->getPropertyValue( "Change" ) >>= nChange ) && nChange == 1 )
+                        {
+                            if( xPropSet->getPropertySetInfo()->hasPropertyByName( "HighResDuration" ) &&
+                                (xPropSet->getPropertyValue( "HighResDuration" ) >>= fSlideDuration) )
+                            {
+                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrSlideDuration, OUString::number(fSlideDuration) );
+                            }
+                        }
                         // We look for a slide transition.
                         // Transition properties are exported together with animations.
                         sal_Int16 nTransitionType(0);
