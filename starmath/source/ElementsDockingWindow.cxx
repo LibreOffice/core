@@ -55,7 +55,7 @@ SmElementSeparator::SmElementSeparator() :
     SmElement(std::unique_ptr<SmNode>(), OUString(), OUString())
 {}
 
-const std::pair<const char*, const char*> SmElementsControl::aUnaryBinaryOperatorsList[] =
+const SmElementDescr SmElementsControl::m_aUnaryBinaryOperatorsList[] =
 {
     {RID_PLUSX, RID_PLUSX_HELP}, {RID_MINUSX, RID_MINUSX_HELP},
     {RID_PLUSMINUSX, RID_PLUSMINUSX_HELP}, {RID_MINUSPLUSX, RID_MINUSPLUSX_HELP},
@@ -72,7 +72,7 @@ const std::pair<const char*, const char*> SmElementsControl::aUnaryBinaryOperato
     {RID_NEGX, RID_NEGX_HELP}, {RID_XANDY, RID_XANDY_HELP}, {RID_XORY, RID_XORY_HELP},
 };
 
-const std::pair<const char*, const char*> SmElementsControl::aRelationsList[] =
+const SmElementDescr SmElementsControl::m_aRelationsList[] =
 {
     {RID_XEQY, RID_XEQY_HELP}, {RID_XNEQY, RID_XNEQY_HELP}, {RID_XLTY, RID_XLTY_HELP},
     {RID_XLEY, RID_XLEY_HELP}, {RID_XLESLANTY, RID_XLESLANTY_HELP}, {RID_XGTY, RID_XGTY_HELP},
@@ -93,7 +93,7 @@ const std::pair<const char*, const char*> SmElementsControl::aRelationsList[] =
     {RID_XNOTPRECEDESY, RID_XNOTPRECEDESY_HELP}, {RID_XNOTSUCCEEDSY, RID_XNOTSUCCEEDSY_HELP},
 };
 
-const std::pair<const char*, const char*> SmElementsControl::aSetOperations[] =
+const SmElementDescr SmElementsControl::m_aSetOperationsList[] =
 {
     {RID_XINY, RID_XINY_HELP}, {RID_XNOTINY, RID_XNOTINY_HELP}, {RID_XOWNSY, RID_XOWNSY_HELP},
     {nullptr, nullptr},
@@ -108,7 +108,7 @@ const std::pair<const char*, const char*> SmElementsControl::aSetOperations[] =
     {RID_SETZ, RID_SETZ_HELP}, {RID_SETQ, RID_SETQ_HELP}, {RID_SETR, RID_SETR_HELP}, {RID_SETC, RID_SETC_HELP}
 };
 
-const std::pair<const char*, const char*> SmElementsControl::aFunctions[] =
+const SmElementDescr SmElementsControl::m_aFunctionsList[] =
 {
     {RID_ABSX, RID_ABSX_HELP}, {RID_FACTX, RID_FACTX_HELP}, {RID_SQRTX, RID_SQRTX_HELP},
     {RID_NROOTXY, RID_NROOTXY_HELP}, {RID_RSUPX, RID_RSUPX_HELP}, {RID_EX, RID_EX_HELP},
@@ -123,7 +123,7 @@ const std::pair<const char*, const char*> SmElementsControl::aFunctions[] =
     {RID_ARTANHX, RID_ARTANHX_HELP}, {RID_ARCOTHX, RID_ARCOTHX_HELP}
 };
 
-const std::pair<const char*, const char*> SmElementsControl::aOperators[] =
+const SmElementDescr SmElementsControl::m_aOperatorsList[] =
 {
     {RID_LIMX, RID_LIMX_HELP}, {RID_LIM_FROMX, RID_LIM_FROMX_HELP},
     {RID_LIM_TOX, RID_LIM_TOX_HELP}, {RID_LIM_FROMTOX, RID_LIM_FROMTOX_HELP},
@@ -162,7 +162,7 @@ const std::pair<const char*, const char*> SmElementsControl::aOperators[] =
     {RID_LLLINT_TOX, RID_LLLINT_TOX_HELP}, {RID_LLLINT_FROMTOX, RID_LLLINT_FROMTOX_HELP},
 };
 
-const std::pair<const char*, const char*> SmElementsControl::aAttributes[] =
+const SmElementDescr SmElementsControl::m_aAttributesList[] =
 {
     {RID_ACUTEX, RID_ACUTEX_HELP}, {RID_GRAVEX, RID_GRAVEX_HELP}, {RID_BREVEX, RID_BREVEX_HELP},
     {RID_CIRCLEX, RID_CIRCLEX_HELP}, {RID_DOTX, RID_DOTX_HELP}, {RID_DDOTX, RID_DDOTX_HELP},
@@ -185,7 +185,7 @@ const std::pair<const char*, const char*> SmElementsControl::aAttributes[] =
     {RID_COLORX_TEAL, RID_COLORX_TEAL_HELP}
 };
 
-const std::pair<const char*, const char*> SmElementsControl::aBrackets[] =
+const SmElementDescr SmElementsControl::m_aBracketsList[] =
 {
     {RID_LRGROUPX, RID_LRGROUPX_HELP},
     {nullptr, nullptr},
@@ -205,7 +205,7 @@ const std::pair<const char*, const char*> SmElementsControl::aBrackets[] =
     {RID_XOVERBRACEY, RID_XOVERBRACEY_HELP}, {RID_XUNDERBRACEY, RID_XUNDERBRACEY_HELP},
 };
 
-const std::pair<const char*, const char*> SmElementsControl::aFormats[] =
+const SmElementDescr SmElementsControl::m_aFormatsList[] =
 {
     {RID_RSUPX, RID_RSUPX_HELP}, {RID_RSUBX, RID_RSUBX_HELP}, {RID_LSUPX, RID_LSUPX_HELP},
     {RID_LSUBX, RID_LSUBX_HELP}, {RID_CSUPX, RID_CSUPX_HELP}, {RID_CSUBX, RID_CSUBX_HELP},
@@ -218,7 +218,7 @@ const std::pair<const char*, const char*> SmElementsControl::aFormats[] =
     {RID_MATRIX, RID_MATRIX_HELP},
 };
 
-const std::pair<const char*, const char*> SmElementsControl::aOthers[] =
+const SmElementDescr SmElementsControl::m_aOthersList[] =
 {
     {RID_INFINITY, RID_INFINITY_HELP}, {RID_PARTIAL, RID_PARTIAL_HELP}, {RID_NABLA, RID_NABLA_HELP},
     {RID_EXISTS, RID_EXISTS_HELP}, {RID_NOTEXISTS, RID_NOTEXISTS_HELP}, {RID_FORALL, RID_FORALL_HELP},
@@ -231,6 +231,32 @@ const std::pair<const char*, const char*> SmElementsControl::aOthers[] =
     {RID_DOTSLOW, RID_DOTSLOW_HELP}, {RID_DOTSAXIS, RID_DOTSAXIS_HELP}, {RID_DOTSVERT, RID_DOTSVERT_HELP},
     {RID_DOTSUP, RID_DOTSUP_HELP}, {RID_DOTSDOWN, RID_DOTSDOWN_HELP}
 };
+
+const SmElementDescr SmElementsControl::m_aExamplesList[] =
+{
+    {"C=%pi cdot d = 2 cdot %pi cdot r", nullptr},
+    {"E=mc^2", nullptr},
+    {"a^2 + b^2 = c^2", nullptr},
+    {"f ( x ) = sum from { { i = 0 } } to { infinity } { {f^{(i)}(0)} over {i!} x^i}", nullptr},
+    {"f ( x ) = {1} over {%sigma sqrt{2%pi} }func e^-{{(x-%mu)^2} over {2%sigma^2}}", nullptr},
+};
+
+#define AS_PAIR(a) a, SAL_N_ELEMENTS(a)
+const std::tuple<const char*, const SmElementDescr*, size_t> SmElementsControl::m_aCategories[] =
+{
+    {RID_CATEGORY_UNARY_BINARY_OPERATORS, AS_PAIR(m_aUnaryBinaryOperatorsList)},
+    {RID_CATEGORY_RELATIONS, AS_PAIR(m_aRelationsList)},
+    {RID_CATEGORY_SET_OPERATIONS, AS_PAIR(m_aSetOperationsList)},
+    {RID_CATEGORY_FUNCTIONS, AS_PAIR(m_aFunctionsList)},
+    {RID_CATEGORY_OPERATORS, AS_PAIR(m_aOperatorsList)},
+    {RID_CATEGORY_ATTRIBUTES, AS_PAIR(m_aAttributesList)},
+    {RID_CATEGORY_BRACKETS, AS_PAIR(m_aBracketsList)},
+    {RID_CATEGORY_FORMATS, AS_PAIR(m_aFormatsList)},
+    {RID_CATEGORY_OTHERS, AS_PAIR(m_aOthersList)},
+    {RID_CATEGORY_EXAMPLES, AS_PAIR(m_aExamplesList)},
+};
+
+const size_t SmElementsControl::m_aCategoriesSize = SAL_N_ELEMENTS(m_aCategories);
 
 SmElementsControl::SmElementsControl(vcl::Window *pParent)
     : Control(pParent, WB_TABSTOP)
@@ -834,12 +860,14 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
 
 void SmElementsControl::setElementSetId(const char* pSetId)
 {
+    if (msCurrentSetId == pSetId)
+        return;
     msCurrentSetId = pSetId;
     maMaxElementDimensions = Size();
     build();
 }
 
-void SmElementsControl::addElements(const std::pair<const char*, const char*> aElementsArray[], sal_uInt16 aElementsArraySize)
+void SmElementsControl::addElements(const SmElementDescr aElementsArray[], sal_uInt16 aElementsArraySize)
 {
     for (sal_uInt16 i = 0; i < aElementsArraySize ; i++)
     {
@@ -929,7 +957,7 @@ void SmElementsControl::addElements(const std::pair<const char*, const char*> aE
             else if (aElement == RID_XUNDERBRACEY)
                 addElement("{<?><?><?>} underbrace {<?>} ", aElement, SmResId(pElementHelp));
             else
-                addElement(aElement, aElement, SmResId(pElementHelp));
+                addElement(aElement, aElement, pElementHelp ? SmResId(pElementHelp) : "");
         }
     }
 }
@@ -938,36 +966,13 @@ void SmElementsControl::build()
 {
     maElementList.clear();
 
-    if (msCurrentSetId == RID_CATEGORY_UNARY_BINARY_OPERATORS)
-        addElements(aUnaryBinaryOperatorsList, SAL_N_ELEMENTS(aUnaryBinaryOperatorsList));
-    else if (msCurrentSetId == RID_CATEGORY_RELATIONS)
-        addElements(aRelationsList, SAL_N_ELEMENTS(aRelationsList));
-    else if (msCurrentSetId == RID_CATEGORY_SET_OPERATIONS)
-        addElements(aSetOperations, SAL_N_ELEMENTS(aSetOperations));
-    else if (msCurrentSetId == RID_CATEGORY_FUNCTIONS)
-        addElements(aFunctions, SAL_N_ELEMENTS(aFunctions));
-    else if (msCurrentSetId == RID_CATEGORY_OPERATORS)
-        addElements(aOperators, SAL_N_ELEMENTS(aOperators));
-    else if (msCurrentSetId == RID_CATEGORY_ATTRIBUTES)
-        addElements(aAttributes, SAL_N_ELEMENTS(aAttributes));
-    else if (msCurrentSetId ==  RID_CATEGORY_BRACKETS)
-        addElements(aBrackets, SAL_N_ELEMENTS(aBrackets));
-    else if (msCurrentSetId == RID_CATEGORY_FORMATS)
-        addElements(aFormats, SAL_N_ELEMENTS(aFormats));
-    else if (msCurrentSetId == RID_CATEGORY_OTHERS)
-        addElements(aOthers, SAL_N_ELEMENTS(aOthers));
-    else if (msCurrentSetId == RID_CATEGORY_EXAMPLES)
+    for (sal_uInt16 n = 0; n < SAL_N_ELEMENTS(m_aCategories); ++n)
     {
-        OUString aEquation = "C=%pi cdot d = 2 cdot %pi cdot r";
-        addElement(aEquation, aEquation, "");
-        aEquation = "E=mc^2";
-        addElement(aEquation, aEquation, "");
-        aEquation = "a^2 + b^2 = c^2";
-        addElement(aEquation, aEquation, "");
-        aEquation = "f ( x ) = sum from { { i = 0 } } to { infinity } { {f^{(i)}(0)} over {i!} x^i}";
-        addElement(aEquation, aEquation, "");
-        aEquation = "f ( x ) = {1} over {%sigma sqrt{2%pi} }func e^-{{(x-%mu)^2} over {2%sigma^2}}";
-        addElement(aEquation, aEquation, "");
+        if (msCurrentSetId == std::get<0>(m_aCategories[n]))
+        {
+            addElements(std::get<1>(m_aCategories[n]), std::get<2>(m_aCategories[n]));
+            break;
+        }
     }
 
     m_nCurrentElement = 0;
@@ -986,19 +991,6 @@ FactoryFunction SmElementsControl::GetUITestFactory() const
     return ElementSelectorUIObject::create;
 }
 
-const char* SmElementsDockingWindow::aCategories[] = {
-    RID_CATEGORY_UNARY_BINARY_OPERATORS,
-    RID_CATEGORY_RELATIONS,
-    RID_CATEGORY_SET_OPERATIONS,
-    RID_CATEGORY_FUNCTIONS,
-    RID_CATEGORY_OPERATORS,
-    RID_CATEGORY_ATTRIBUTES,
-    RID_CATEGORY_BRACKETS,
-    RID_CATEGORY_FORMATS,
-    RID_CATEGORY_OTHERS,
-    RID_CATEGORY_EXAMPLES
-};
-
 SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, SfxChildWindow* pChildWindow, vcl::Window* pParent) :
     SfxDockingWindow(pInputBindings, pChildWindow, pParent, "DockingElements",
         "modules/smath/ui/dockingelements.ui")
@@ -1011,12 +1003,10 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
 
     mpElementsControl->SetBorderStyle( WindowBorderStyle::MONO );
 
-    mpElementListBox->SetDropDownLineCount( SAL_N_ELEMENTS(aCategories) );
+    mpElementListBox->SetDropDownLineCount(SmElementsControl::categoriesSize());
 
-    for (const char* pCategory : aCategories)
-    {
-        mpElementListBox->InsertEntry(SmResId(pCategory));
-    }
+    for (size_t i = 0; i < SmElementsControl::categoriesSize(); ++i)
+        mpElementListBox->InsertEntry(SmResId(std::get<0>(SmElementsControl::categories()[i])));
 
     mpElementListBox->SetSelectHdl(LINK(this, SmElementsDockingWindow, ElementSelectedHandle));
     mpElementListBox->SelectEntry(SmResId(RID_CATEGORY_UNARY_BINARY_OPERATORS));
@@ -1071,8 +1061,9 @@ IMPL_LINK(SmElementsDockingWindow, SelectClickHandler, SmElement&, rElement, voi
 
 IMPL_LINK( SmElementsDockingWindow, ElementSelectedHandle, ListBox&, rList, void)
 {
-    for (const char* pCurrentCategory : aCategories)
+    for (size_t i = 0; i < SmElementsControl::categoriesSize(); ++i)
     {
+        const char *pCurrentCategory = std::get<0>(SmElementsControl::categories()[i]);
         OUString aCurrentCategoryString = SmResId(pCurrentCategory);
         if (aCurrentCategoryString == rList.GetSelectedEntry())
         {
