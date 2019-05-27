@@ -1678,6 +1678,9 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 void OOXMLFastContextHandlerShape::lcl_endFastElement
 (Token_t Element)
 {
+    if (!isForwardEvents())
+        return;
+
     if (mrShapeContext.is())
     {
         mrShapeContext->endFastElement(Element);
