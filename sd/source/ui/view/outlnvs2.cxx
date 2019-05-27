@@ -400,7 +400,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         case FN_SVX_SET_BULLET:
         case FN_SVX_SET_NUMBER:
         {
-            SetCurrentFunction( FuOutlineBullet::Create( this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
+            SetCurrentFunction( FuBulletAndPosition::Create( this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
             Cancel();
         }
         break;
