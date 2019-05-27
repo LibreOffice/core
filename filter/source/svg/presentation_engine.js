@@ -18043,6 +18043,8 @@ SlideShow.prototype.notifyTransitionEnd = function( nSlideIndex )
 
         this.update();
     }
+    else
+        this.notifyAnimationsEnd();
 };
 
 SlideShow.prototype.notifyInteractiveAnimationSequenceStart = function( nNodeId )
