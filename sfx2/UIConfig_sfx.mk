@@ -36,6 +36,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/helpsearchpage \
 	sfx2/uiconfig/ui/inputdialog \
 	sfx2/uiconfig/ui/licensedialog \
+	sfx2/uiconfig/ui/linefragment \
 	sfx2/uiconfig/ui/linkeditdialog \
 	sfx2/uiconfig/ui/loadtemplatedialog \
 	sfx2/uiconfig/ui/managestylepage \

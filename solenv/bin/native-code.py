@@ -439,7 +439,6 @@ custom_widgets = [
     'ContentListBox',
     'ContextVBox',
     'CustomAnimationList',
-    'CustomPropertiesControl',
     'DataTreeListBox',
     'DriverListControl',
     'DropdownBox',
