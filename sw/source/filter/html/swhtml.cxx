@@ -109,6 +109,7 @@
 #include <SwAppletImpl.hxx>
 
 #include <sfx2/viewfrm.hxx>
+#include <officecfg/Office/Writer.hxx>
 
 #include <strings.hrc>
 #include <swerror.h>
@@ -301,6 +302,10 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_isInTableStructure(false),
     m_pTempViewFrame(nullptr)
 {
+    // If requested explicitly, then force ignoring of comments (don't create postits for them).
+    if (officecfg::Office::Writer::Filter::Import::HTML::IgnoreComments::get())
+        m_bIgnoreHTMLComments = true;
+
     m_nEventId = nullptr;
     m_bUpperSpace = m_bViewCreated = m_bChkJumpMark = false;
 
