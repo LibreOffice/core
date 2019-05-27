@@ -65,6 +65,7 @@ core_factory_list = [
     ("libctllo.a", "ctl_component_getFactory"),
     ("libMacOSXSpelllo.a", "MacOSXSpell_component_getFactory", "#ifdef IOS"),
     ("libcuilo.a", "cui_component_getFactory"),
+    ("libproxyfaclo.a", "proxyfac_component_getFactory"),
     ]
 
 core_constructor_list = [
