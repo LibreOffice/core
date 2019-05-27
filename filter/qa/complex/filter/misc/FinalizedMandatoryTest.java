@@ -232,7 +232,7 @@ public class FinalizedMandatoryTest
      * print all properties with its values to <CODE>logger</CODE>. For debug purposes.
      * @see stats.SimpleLogWriter
      * @see com.sun.star.beans.PropertyValue
-     * @param props Sequenze of PropertyValue
+     * @param props Sequence of PropertyValue
      */
     protected void printPropertyValues(PropertyValue[] props)
     {
@@ -249,7 +249,7 @@ public class FinalizedMandatoryTest
     }
 
     /**
-     * returns the value of the specified (<CODE>pName</CODE>) property from a sequenze of <CODE>PropertyValue</CODE>
+     * returns the value of the specified (<CODE>pName</CODE>) property from a sequence of <CODE>PropertyValue</CODE>
      * @param props a sequence of <CODE>PropertyValue</CODE>
      * @param pName the name of the property the value should be returned
      * @return the value of the property
@@ -265,8 +265,8 @@ public class FinalizedMandatoryTest
     }
 
     /**
-     * set a value of the specified (<CODE>pName</CODE>) property inside a sequenze of <CODE>PropertyValue</CODE>
-     * @param props sequenze of <CODE>PropertyValue</CODE>
+     * set a value of the specified (<CODE>pName</CODE>) property inside a sequence of <CODE>PropertyValue</CODE>
+     * @param props sequence of <CODE>PropertyValue</CODE>
      * @param pName name of the property which should be changed
      * @param pValue the value the property should be assigned
      */

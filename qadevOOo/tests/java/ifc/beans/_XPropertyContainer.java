@@ -66,7 +66,7 @@ public class _XPropertyContainer extends MultiMethodTest {
 
 
     /**
-     * Test calls the method and checks if the returned sequence contanis a propterty which is named
+     * Test calls the method and checks if the returned sequence contains a property which is named
      * in the object relation <code>XPropertyAccess.propertyNotRemovable</code>.
      */
     public void _addProperty() {
@@ -214,7 +214,7 @@ public class _XPropertyContainer extends MultiMethodTest {
     }
 
     /**
-     * Test calls the method and checks if the returned sequence contanis a propterty which is named
+     * Test calls the method and checks if the returned sequence contains a property which is named
      * in the object relation <code>XPropertyAccess.propertyNotRemovable</code>.
      */
     public void _removeProperty() {
