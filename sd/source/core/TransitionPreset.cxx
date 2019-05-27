@@ -17,12 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <set>
+
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
+#include <com/sun/star/animations/TransitionType.hpp>
+#include <com/sun/star/animations/TransitionSubType.hpp>
 #include <unotools/configmgr.hxx>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
@@ -87,6 +91,128 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
     // import transition presets
     Reference< XAnimationNode > xAnimationNode;
 
+    const std::set<sal_Int16> LOKSupportedTransitionTypes = {
+            TransitionType::BARWIPE,
+            TransitionType::BOXWIPE,
+            TransitionType::FOURBOXWIPE,
+            TransitionType::ELLIPSEWIPE,
+            TransitionType::CLOCKWIPE,
+            TransitionType::PINWHEELWIPE,
+            TransitionType::PUSHWIPE,
+            TransitionType::SLIDEWIPE,
+            TransitionType::FADE,
+            TransitionType::RANDOMBARWIPE,
+            TransitionType::CHECKERBOARDWIPE,
+            TransitionType::DISSOLVE,
+            TransitionType::SNAKEWIPE,
+            TransitionType::PARALLELSNAKESWIPE,
+            TransitionType::IRISWIPE,
+            TransitionType::BARNDOORWIPE,
+            TransitionType::VEEWIPE,
+            TransitionType::ZIGZAGWIPE,
+            TransitionType::BARNZIGZAGWIPE,
+            TransitionType::FANWIPE,
+            TransitionType::SINGLESWEEPWIPE,
+            TransitionType::WATERFALLWIPE,
+            TransitionType::SPIRALWIPE,
+            TransitionType::MISCDIAGONALWIPE,
+            TransitionType::BOXSNAKESWIPE
+    };
+
+    const std::set<sal_Int16> LOKSupportedTransitionSubTypes = {
+            TransitionSubType::DEFAULT,
+            TransitionSubType::LEFTTORIGHT,
+            TransitionSubType::TOPTOBOTTOM,
+            TransitionSubType::CORNERSIN,
+            TransitionSubType::CORNERSOUT,
+            TransitionSubType::VERTICAL,
+            TransitionSubType::HORIZONTAL,
+            TransitionSubType::DOWN,
+            TransitionSubType::CIRCLE,
+            TransitionSubType::CLOCKWISETWELVE,
+            TransitionSubType::CLOCKWISETHREE,
+            TransitionSubType::CLOCKWISESIX,
+            TransitionSubType::CLOCKWISENINE,
+            TransitionSubType::TWOBLADEVERTICAL,
+            TransitionSubType::TWOBLADEHORIZONTAL,
+            TransitionSubType::FOURBLADE,
+            TransitionSubType::FROMLEFT,
+            TransitionSubType::FROMTOP,
+            TransitionSubType::FROMRIGHT,
+            TransitionSubType::FROMBOTTOM,
+            TransitionSubType::CROSSFADE,
+            TransitionSubType::FADETOCOLOR,
+            TransitionSubType::FADEFROMCOLOR,
+            TransitionSubType::FADEOVERCOLOR,
+            TransitionSubType::THREEBLADE,
+            TransitionSubType::EIGHTBLADE,
+            TransitionSubType::ONEBLADE,
+            TransitionSubType::ACROSS,
+            TransitionSubType::TOPLEFTVERTICAL,
+            TransitionSubType::TOPLEFTHORIZONTAL,
+            TransitionSubType::TOPLEFTDIAGONAL,
+            TransitionSubType::TOPRIGHTDIAGONAL,
+            TransitionSubType::BOTTOMRIGHTDIAGONAL,
+            TransitionSubType::BOTTOMLEFTDIAGONAL,
+            TransitionSubType::RECTANGLE,
+            TransitionSubType::DIAMOND,
+            TransitionSubType::TOPLEFT,
+            TransitionSubType::TOPRIGHT,
+            TransitionSubType::BOTTOMRIGHT,
+            TransitionSubType::BOTTOMLEFT,
+            TransitionSubType::TOPCENTER,
+            TransitionSubType::RIGHTCENTER,
+            TransitionSubType::BOTTOMCENTER,
+            TransitionSubType::LEFTCENTER,
+            TransitionSubType::LEFT,
+            TransitionSubType::UP,
+            TransitionSubType::RIGHT,
+            TransitionSubType::DIAGONALBOTTOMLEFT,
+            TransitionSubType::DIAGONALTOPLEFT,
+            TransitionSubType::CENTERTOP,
+            TransitionSubType::CENTERRIGHT,
+            TransitionSubType::TOP,
+            TransitionSubType::BOTTOM,
+            TransitionSubType::CLOCKWISETOP,
+            TransitionSubType::CLOCKWISERIGHT,
+            TransitionSubType::CLOCKWISEBOTTOM,
+            TransitionSubType::CLOCKWISELEFT,
+            TransitionSubType::CLOCKWISETOPLEFT,
+            TransitionSubType::COUNTERCLOCKWISEBOTTOMLEFT,
+            TransitionSubType::CLOCKWISEBOTTOMRIGHT,
+            TransitionSubType::COUNTERCLOCKWISETOPRIGHT,
+            TransitionSubType::VERTICALLEFT,
+            TransitionSubType::VERTICALRIGHT,
+            TransitionSubType::HORIZONTALLEFT,
+            TransitionSubType::HORIZONTALRIGHT,
+            TransitionSubType::TOPLEFTCLOCKWISE,
+            TransitionSubType::TOPRIGHTCLOCKWISE,
+            TransitionSubType::BOTTOMRIGHTCLOCKWISE,
+            TransitionSubType::BOTTOMLEFTCLOCKWISE,
+            TransitionSubType::TOPLEFTCOUNTERCLOCKWISE,
+            TransitionSubType::TOPRIGHTCOUNTERCLOCKWISE,
+            TransitionSubType::BOTTOMRIGHTCOUNTERCLOCKWISE,
+            TransitionSubType::BOTTOMLEFTCOUNTERCLOCKWISE,
+            TransitionSubType::DOUBLEBARNDOOR,
+            TransitionSubType::DOUBLEDIAMOND,
+            TransitionSubType::VERTICALTOPSAME,
+            TransitionSubType::VERTICALBOTTOMSAME,
+            TransitionSubType::VERTICALTOPLEFTOPPOSITE,
+            TransitionSubType::VERTICALBOTTOMLEFTOPPOSITE,
+            TransitionSubType::HORIZONTALLEFTSAME,
+            TransitionSubType::HORIZONTALRIGHTSAME,
+            TransitionSubType::HORIZONTALTOPLEFTOPPOSITE,
+            TransitionSubType::HORIZONTALTOPRIGHTOPPOSITE,
+            TransitionSubType::DIAGONALBOTTOMLEFTOPPOSITE,
+            TransitionSubType::DIAGONALTOPLEFTOPPOSITE,
+            TransitionSubType::TWOBOXTOP,
+            TransitionSubType::TWOBOXBOTTOM,
+            TransitionSubType::TWOBOXLEFT,
+            TransitionSubType::TWOBOXRIGHT,
+            TransitionSubType::FOURBOXVERTICAL,
+            TransitionSubType::FOURBOXHORIZONTAL
+    };
+
     try {
         xAnimationNode = implImportEffects( xServiceFactory, aURL );
         Reference< XEnumerationAccess > xEnumerationAccess( xAnimationNode, UNO_QUERY_THROW );
@@ -98,6 +224,17 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
             if( xChildNode->getType() == AnimationNodeType::PAR )
             {
                 TransitionPresetPtr pPreset( new TransitionPreset( xChildNode ) );
+
+                if( comphelper::LibreOfficeKit::isActive() )
+                {
+                    sal_Int16 eTransitionType = pPreset->getTransition();
+                    sal_Int16 eTransitionSubType = pPreset->getSubtype();
+                    if( LOKSupportedTransitionTypes.find(eTransitionType) == LOKSupportedTransitionTypes.end()
+                            || LOKSupportedTransitionSubTypes.find(eTransitionSubType) == LOKSupportedTransitionSubTypes.end() )
+                    {
+                        continue;
+                    }
+                }
 
                 OUString aPresetId( pPreset->getPresetId() );
 
