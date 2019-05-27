@@ -1444,13 +1444,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case FN_SVX_SET_BULLET:
         case FN_SVX_SET_NUMBER:
         {
-            SetCurrentFunction( FuOutlineBullet::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq ) );
-            Cancel();
-        }
-        break;
-
-        case SID_NUMBERING_AND_POSITION:
-        {
             SetCurrentFunction( FuBulletAndPosition::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq ) );
             Cancel();
         }
