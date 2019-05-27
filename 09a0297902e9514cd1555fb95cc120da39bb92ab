@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_8d4c38c8",
+        "filename": "bridges/source/cpp_uno/msvc_win32_intel/cpp2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-27T11:17:07Z",
+      "side": 1,
+      "message": "if at all possible, I would appreciate it if any such comparisons against zero were written in a more conventional and more readable way as \"x \u003e 0\" rather than \"0 \u003c x\"",
+      "revId": "09a0297902e9514cd1555fb95cc120da39bb92ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_adda54e6",
+        "filename": "bridges/source/cpp_uno/msvc_win32_intel/uno2cpp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-27T11:17:07Z",
+      "side": 1,
+      "message": "wouldn\u0027t it be more readable if you drop pRet, assign directly to pCppReturn here, and then assign that to pCppStack at the bottom? (and probably leave the \"complex return via ptr\" comment at the start of this branch)",
+      "revId": "09a0297902e9514cd1555fb95cc120da39bb92ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_6de44cad",
+        "filename": "bridges/source/cpp_uno/msvc_win32_x86-64/cpp2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-27T11:17:07Z",
+      "side": 1,
+      "message": "move the comments up to the var declarations (e.g., as trailing comments on the same line each)?",
+      "revId": "09a0297902e9514cd1555fb95cc120da39bb92ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_8de1989d",
+        "filename": "bridges/source/cpp_uno/msvc_win32_x86-64/cpp2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-27T11:17:07Z",
+      "side": 1,
+      "message": "any reason to change the intra-line whitespace of these lines, instead of just adding further leading indentation?  just adds needless noise to review process and to history browsing",
+      "revId": "09a0297902e9514cd1555fb95cc120da39bb92ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
