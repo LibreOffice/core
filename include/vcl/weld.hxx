@@ -1511,6 +1511,7 @@ public:
 
     void set_sensitive(bool sensitive) { m_xSpinButton->set_sensitive(sensitive); }
     bool get_sensitive() const { return m_xSpinButton->get_sensitive(); }
+    void set_visible(bool bShow) { m_xSpinButton->set_visible(bShow); }
     bool get_visible() const { return m_xSpinButton->get_visible(); }
     void grab_focus() { m_xSpinButton->grab_focus(); }
     bool has_focus() const { return m_xSpinButton->has_focus(); }

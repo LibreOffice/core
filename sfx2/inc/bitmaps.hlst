@@ -87,7 +87,6 @@
 #define BMP_128X128_MATH_DOC                "sfx2/res/128x128_math_doc-p.png"
 #define BMP_128X128_WRITER_DOC              "sfx2/res/128x128_writer_doc-p.png"
 
-#define SFX_BMP_PROPERTY_REMOVE             "sfx2/res/deleterow.png"
 #define SFX_BMP_CLOSE_DOC                   "sfx2/res/closedoc.png"
 
 #define RID_SFXBMP_WATERCAN                 "res/sc05554.png"
