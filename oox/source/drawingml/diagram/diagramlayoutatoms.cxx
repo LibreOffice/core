@@ -31,6 +31,7 @@
 #include <drawingml/textrun.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <tools/gen.hxx>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1127,6 +1128,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             // adjust text alignment
 
             // Parse constraints, only self margins as a start.
+            double fFontSize = 0;
             for (const auto& rConstr : rConstraints)
             {
                 if (rConstr.mnRefType == XML_w)
@@ -1146,9 +1148,10 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
                     rShape->getShapeProperties().setProperty(nProperty, nValue);
                 }
+                if (rConstr.mnType == XML_primFontSz)
+                    fFontSize = rConstr.mfValue;
             }
 
-            // TODO: adjust text size to fit shape
             TextBodyPtr pTextBody = rShape->getTextBody();
             if (!pTextBody ||
                 pTextBody->getParagraphs().empty() ||
@@ -1156,6 +1159,16 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             {
                 break;
             }
+
+            // adjust text size to fit shape
+            if (fFontSize != 0)
+            {
+                for (auto& aParagraph : pTextBody->getParagraphs())
+                    for (auto& aRun : aParagraph->getRuns())
+                        if (!aRun->getTextCharacterProperties().moHeight.has())
+                            aRun->getTextCharacterProperties().moHeight = fFontSize * 100;
+            }
+            pTextBody->getTextProperties().maPropertyMap.setProperty(PROP_TextFitToSize, drawing::TextFitToSizeType_AUTOFIT);
 
             // ECMA-376-1:2016 21.4.7.5 ST_AutoTextRotation (Auto Text Rotation)
             const sal_Int32 nautoTxRot = maMap.count(XML_autoTxRot) ? maMap.find(XML_autoTxRot)->second : XML_upr;
