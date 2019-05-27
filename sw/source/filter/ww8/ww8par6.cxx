@@ -1075,7 +1075,7 @@ void wwSectionManager::CreateSep(const long nTextPos)
     // #i31806# but only swap if 2page in 1sheet is enabled.
     // it's not clear if dmOrientPage is the correct member to
     // decide on this.
-    if(mrReader.m_xWDop->doptypography.f2on1 &&
+    if(mrReader.m_xWDop->doptypography.m_f2on1 &&
             aNewSection.maSep.dmOrientPage == 2)
         std::swap(aNewSection.maSep.dxaLeft, aNewSection.maSep.dxaRight);
 

@@ -1942,12 +1942,12 @@ void SwWW8ImplReader::ImportDop()
 
 void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
 {
-    switch (rTypo.iLevelOfKinsoku)
+    switch (rTypo.m_iLevelOfKinsoku)
     {
         case 2: // custom
             {
-                i18n::ForbiddenCharacters aForbidden(rTypo.rgxchFPunct,
-                    rTypo.rgxchLPunct);
+                i18n::ForbiddenCharacters aForbidden(rTypo.m_rgxchFPunct,
+                    rTypo.m_rgxchLPunct);
                 m_rDoc.getIDocumentSettingAccess().setForbiddenCharacters(rTypo.GetConvertedLang(),
                         aForbidden);
                 // Obviously cannot set the standard level 1 for japanese, so
@@ -1966,15 +1966,15 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
     hack in the writer. Its our default as well, but we can set it anyway
     as a flag for later.
     */
-    if (!rTypo.reserved2)
+    if (!rTypo.m_reserved2)
     {
         i18n::ForbiddenCharacters aForbidden(WW8DopTypography::GetJapanNotBeginLevel1(),
             WW8DopTypography::GetJapanNotEndLevel1());
         m_rDoc.getIDocumentSettingAccess().setForbiddenCharacters(LANGUAGE_JAPANESE,aForbidden);
     }
 
-    m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::KERN_ASIAN_PUNCTUATION, bool(rTypo.fKerningPunct));
-    m_rDoc.getIDocumentSettingAccess().setCharacterCompressionType(static_cast<CharCompressType>(rTypo.iJustification));
+    m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::KERN_ASIAN_PUNCTUATION, bool(rTypo.m_fKerningPunct));
+    m_rDoc.getIDocumentSettingAccess().setCharacterCompressionType(static_cast<CharCompressType>(rTypo.m_iJustification));
 }
 
 /**
@@ -4378,7 +4378,7 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
 void wwSectionManager::SetUseOn(wwSection &rSection)
 {
     bool bMirror = mrReader.m_xWDop->fMirrorMargins ||
-        mrReader.m_xWDop->doptypography.f2on1;
+        mrReader.m_xWDop->doptypography.m_f2on1;
 
     UseOnPage eUseBase = bMirror ? UseOnPage::Mirror : UseOnPage::All;
     UseOnPage eUse = eUseBase;

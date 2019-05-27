@@ -380,18 +380,18 @@ public:
     //Maps what I think is the language this is to affect to the OOo language
     LanguageType GetConvertedLang() const;
 
-    sal_uInt16 fKerningPunct  : 1;  // true if we're kerning punctuation
-    sal_uInt16 iJustification : 2;  // Kinsoku method of justification:
+    sal_uInt16 m_fKerningPunct  : 1;  // true if we're kerning punctuation
+    sal_uInt16 m_iJustification : 2;  // Kinsoku method of justification:
                                 //  0 = always expand
                                 //  1 = compress punctuation
                                 //  2 = compress punctuation and kana.
-    sal_uInt16 iLevelOfKinsoku : 2; // Level of Kinsoku:
+    sal_uInt16 m_iLevelOfKinsoku : 2; // Level of Kinsoku:
                                 //  0 = Level 1
                                 //  1 = Level 2
                                 //  2 = Custom
-    sal_uInt16 f2on1          : 1;  // 2-page-on-1 feature is turned on.
-    sal_uInt16 reserved1      : 4;  // in 97 its marked as reserved BUT
-    sal_uInt16 reserved2      : 6;  // reserved ?
+    sal_uInt16 m_f2on1          : 1;  // 2-page-on-1 feature is turned on.
+    sal_uInt16 m_reserved1      : 4;  // in 97 its marked as reserved BUT
+    sal_uInt16 m_reserved2      : 6;  // reserved ?
     //we find that the following applies,
     //2 == Japanese
     //4 == Chinese (VR...
@@ -406,13 +406,13 @@ public:
     static const sal_Unicode * GetJapanNotBeginLevel1();
     static const sal_Unicode * GetJapanNotEndLevel1();
 
-    sal_Int16 cchFollowingPunct;    // length of rgxchFPunct
-    sal_Int16 cchLeadingPunct;      // length of rgxchLPunct
+    sal_Int16 m_cchFollowingPunct;    // length of rgxchFPunct
+    sal_Int16 m_cchLeadingPunct;      // length of rgxchLPunct
 
     // array of characters that should never appear at the start of a line
-    sal_Unicode rgxchFPunct[nMaxFollowing];
+    sal_Unicode m_rgxchFPunct[nMaxFollowing];
     // array of characters that should never appear at the end of a line
-    sal_Unicode rgxchLPunct[nMaxLeading];
+    sal_Unicode m_rgxchLPunct[nMaxLeading];
 };
 
 struct WW8_DOGRID
