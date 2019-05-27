@@ -186,13 +186,13 @@ public class dbg {
 
 
     /**
-     * Print the names and the values of a sequenze of <code>PropertyValue</code>
+     * Print the names and the values of a sequence of <code>PropertyValue</code>
      * to a print writer.
      * @param ps The property which should displayed
      * @param out The print writer which is used as output.
      * @see com.sun.star.beans.PropertyValue
      */
-    private static void printProperyValueSequenzePairs(PropertyValue[] ps, PrintWriter out){
+    private static void printPropertyValueSequencePairs(PropertyValue[] ps, PrintWriter out){
         for( int i = 0; i < ps.length; i++){
             printProperyValuePairs(ps[i], out);
         }
@@ -227,13 +227,13 @@ public class dbg {
         } else if (ps.Value instanceof PropertyValue){
             out.println("--------");
             out.println("   Name: '" + ps.Name + "' contains PropertyValue:");
-            printProperyValuePairs((PropertyValue)ps.Value, out);
+            printPropertyValuePairs((PropertyValue)ps.Value, out);
             out.println("--------");
 
         } else if (ps.Value instanceof PropertyValue[]){
             out.println("--------");
             out.println("   Name: '" + ps.Name + "' contains PropertyValue[]:");
-            printProperyValueSequenzePairs((PropertyValue[])ps.Value, out);
+            printPropertyValueSequencePairs((PropertyValue[])ps.Value, out);
             out.println("--------");
 
         } else {

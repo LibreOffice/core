@@ -105,12 +105,12 @@ public class _XModuleManager extends MultiMethodTest {
      */
     public void _identify() {
         boolean ok = true;
-        log.println("testing frame sequenze...");
-        ok &= testSequenze(xFrameSeq);
-        log.println("testing controller sequenze...");
-        ok &= testSequenze(xControllerSeq);
-        log.println("testing model sequenze...");
-        ok &= testSequenze(xModelSeq);
+        log.println("testing frame sequence...");
+        ok &= testSequence(xFrameSeq);
+        log.println("testing controller sequence...");
+        ok &= testSequence(xControllerSeq);
+        log.println("testing model sequence...");
+        ok &= testSequence(xModelSeq);
         tRes.tested("identify()", ok);
 
         log.println("testing invalid objects...");
@@ -123,26 +123,26 @@ public class _XModuleManager extends MultiMethodTest {
         }
     }
 
-    private boolean testSequenze(PropertyValue[] sequenze){
+    private boolean testSequence(PropertyValue[] sequence){
         boolean ok = true;
-        for (int i = 0 ; i < sequenze.length; i++){
+        for (int i = 0 ; i < sequence.length; i++){
             try{
-                log.println("testing '" + sequenze[i].Name + "'");
-                if (!oObj.identify(sequenze[i].Value).equals(
-                                                        sequenze[i].Name)) {
+                log.println("testing '" + sequence[i].Name + "'");
+                if (!oObj.identify(sequence[i].Value).equals(
+                                                        sequence[i].Name)) {
                      log.println("failure: returned value: '" +
-                                 oObj.identify(sequenze[i].Value) +
-                                 "' ,expected value: '" + sequenze[i].Name + "'");
+                                 oObj.identify(sequence[i].Value) +
+                                 "' ,expected value: '" + sequence[i].Name + "'");
                      ok = false;
                 }
             } catch (IllegalArgumentException e){
-                log.println("Could not get value of sequenze '" +
-                            sequenze[i].Name + "'");
+                log.println("Could not get value of sequence '" +
+                            sequence[i].Name + "'");
                 return false;
 
             } catch (UnknownModuleException e){
-                log.println("Could not indetify value of sequenze '" +
-                            sequenze[i].Name + "'");
+                log.println("Could not indetify value of sequence '" +
+                            sequence[i].Name + "'");
                 return false;
             }
         }
