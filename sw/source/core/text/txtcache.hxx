@@ -29,6 +29,8 @@ class SwTextLine : public SwCacheObj
 {
     std::unique_ptr<SwParaPortion> pLine;
 
+    virtual void UpdateCachePos() override;
+
 public:
     SwTextLine( SwTextFrame const *pFrame, std::unique_ptr<SwParaPortion> pNew = nullptr );
     virtual ~SwTextLine() override;

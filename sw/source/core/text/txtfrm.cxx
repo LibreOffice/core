@@ -881,10 +881,7 @@ void SwTextFrame::DestroyImpl()
 
 SwTextFrame::~SwTextFrame()
 {
-    if (GetCacheIdx() != USHRT_MAX)
-    {
-        s_pTextCache->Delete(this, GetCacheIdx());
-    }
+    RemoveFromCache();
 }
 
 namespace sw {
