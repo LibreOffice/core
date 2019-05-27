@@ -273,9 +273,10 @@ ifneq ($(strip $$(PCH_NAME)),)
 ifeq ($$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)),$$(sort $$(T_CXXFLAGS) $$(T_CXXFLAGS_APPEND) $$(DEFS)))
 $$@ : PCHFLAGS := $$(call gb_PrecompiledHeader_get_enableflags,$$(PCH_NAME),$$(PCH_LINKTARGETMAKEFILENAME))
 else
-$$(info No precompiled header available for $$*.cxx .)
+$$(warning No precompiled header available for $$*.cxx .)
 $$(info precompiled header flags : $$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)))
 $$(info .           object flags : $$(sort $$(T_CXXFLAGS) $$(T_CXXFLAGS_APPEND) $$(DEFS)))
+$$(error   Incorrect precompiled header setup or internal gbuild error.)
 $$@ : PCHFLAGS :=
 endif
 endif
