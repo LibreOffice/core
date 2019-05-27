@@ -534,7 +534,9 @@ void SbiImage::MakeStrings( short nSize )
     nStringSize = 1024;
     pStrings.reset( new sal_Unicode[ nStringSize ]);
     mvStringOffsets.resize(nSize);
-    memset( mvStringOffsets.data(), 0, nSize * sizeof( sal_uInt32 ) );
+    if (nSize != 0) {
+        memset( mvStringOffsets.data(), 0, nSize * sizeof( sal_uInt32 ) );
+    }
     memset( pStrings.get(), 0, nStringSize * sizeof( sal_Unicode ) );
 }
 
