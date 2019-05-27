@@ -6558,6 +6558,11 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
             // size to the size of this record.
             sal_uInt64 maxSize = pGrStream == &rBLIPStream ? nLength : 0;
             Graphic aGraphic = rGF.ImportUnloadedGraphic(*pGrStream, maxSize);
+
+            // Size available in metafile header, set that here.
+            if (aMtfSize100.getWidth() && aMtfSize100.getHeight())
+                aGraphic.SetPrefSize(aMtfSize100);
+
             if (aGraphic)
             {
                 rData = aGraphic;
