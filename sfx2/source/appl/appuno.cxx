@@ -177,7 +177,8 @@ static bool isMediaDescriptor( sal_uInt16 nSlotId )
              nSlotId == SID_SAVETO || nSlotId == SID_SAVEACOPY ||
              nSlotId == SID_EXPORTDOCASPDF || nSlotId == SID_DIRECTEXPORTDOCASPDF ||
              nSlotId == SID_EXPORTDOCASEPUB || nSlotId == SID_DIRECTEXPORTDOCASEPUB ||
-             nSlotId == SID_REDACTDOC || nSlotId == SID_SAVEACOPYITEM);
+             nSlotId == SID_REDACTDOC || nSlotId == SID_AUTOREDACTDOC ||
+             nSlotId == SID_SAVEACOPYITEM);
 }
 
 void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
@@ -1340,7 +1341,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
     if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC ||  nSlotId == SID_SAVEDOC ||
          nSlotId == SID_SAVETO || nSlotId == SID_EXPORTDOCASPDF || nSlotId == SID_DIRECTEXPORTDOCASPDF ||
          nSlotId == SID_EXPORTDOCASEPUB || nSlotId == SID_DIRECTEXPORTDOCASEPUB ||
-         nSlotId == SID_REDACTDOC || nSlotId == SID_SAVEACOPY )
+         nSlotId == SID_REDACTDOC || nSlotId == SID_AUTOREDACTDOC || nSlotId == SID_SAVEACOPY )
     {
         const SfxPoolItem *pItem=nullptr;
         if ( rSet.GetItemState( SID_COMPONENTDATA, false, &pItem ) == SfxItemState::SET )
