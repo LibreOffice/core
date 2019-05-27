@@ -375,8 +375,8 @@ Locale::Locale(const ::rtl::OUString& sLanguage,
 //-----------------------------------------------
 Locale::Locale()
 {
-    // Initialize instance ... otherwhise user will
-    // may be get exceptions if he e.g. copy this instance ...
+    // Initialize instance... otherwise users will
+    // maybe get exceptions if he e.g. copies this instance...
     (*this) = X_NOTRANSLATE();
 }
 
@@ -424,9 +424,9 @@ void Locale::setVariant(const ::rtl::OUString& sVariant)
 
 //-----------------------------------------------
 /* Attention: Use own interface methods to set the
-   different parts of this locale. Because the
+   different parts of this locale. Because they
    check the incoming value and throw an exception
-   automatically ...
+   automatically...
  */
 void Locale::fromISO(const ::rtl::OUString& sISO)
     throw(Locale::MalFormedLocaleException)
@@ -511,9 +511,9 @@ sal_Bool Locale::similar(const Locale& aComparable) const
     Locale aReference(sReferenceISO);
 
     // Note: The same language or "en"/"en-US" should be preferred as fallback.
-    // On the other side some localized variables doesn't use localzation in real.
-    // May be the use a "fix" value only ... marked as X-DEFAULT or X-NOTRANSLATE.
-    // At least it can be discussed, if any language is a valid fallback ...
+    // On the other side some localized variables don't use localization in real.
+    // Maybe they use a "fix" value only... marked as X-DEFAULT or X-NOTRANSLATE.
+    // At least it can be discussed, if any language is a valid fallback...
     // But in case some office functionality depends on that (that means real functionality instead
     // of pure UI descriptions) we should do anything, so it can work.
 
@@ -534,7 +534,7 @@ sal_Bool Locale::similar(const Locale& aComparable) const
         if (aCheck.equals(aReference))
             return pIt;
 
-        // found similar Locale => safe it as possible fallback
+        // found similar Locale => save it as possible fallback
         if (
             (pSimilar == lISOList.end()) &&
             (aCheck.similar(aReference))
@@ -543,7 +543,7 @@ sal_Bool Locale::similar(const Locale& aComparable) const
             pSimilar = pIt;
         }
         else
-        // found en-US => safe it as fallback
+        // found en-US => save it as fallback
         if (
             (pEN_US == lISOList.end()) &&
             (aCheck.equals(EN_US())  )
@@ -552,7 +552,7 @@ sal_Bool Locale::similar(const Locale& aComparable) const
             pEN_US = pIt;
         }
         else
-        // found en[-XX] => safe it as fallback
+        // found en[-XX] => save it as fallback
         if (
             (pEN == lISOList.end()  ) &&
             (aCheck.similar(EN_US()))
@@ -561,7 +561,7 @@ sal_Bool Locale::similar(const Locale& aComparable) const
             pEN = pIt;
         }
         else
-        // found an explicit default value(!) => safe it as fallback
+        // found an explicit default value(!) => save it as fallback
         if (
             (pXDefault == lISOList.end()) &&
             (aCheck.equals(X_DEFAULT()) )
@@ -570,7 +570,7 @@ sal_Bool Locale::similar(const Locale& aComparable) const
             pXDefault = pIt;
         }
         else
-        // found an implicit default value(!) => safe it as fallback
+        // found an implicit default value(!) => save it as fallback
         if (
             (pXNoTranslate == lISOList.end()) &&
             (aCheck.equals(X_NOTRANSLATE()) )
@@ -579,7 +579,7 @@ sal_Bool Locale::similar(const Locale& aComparable) const
             pXNoTranslate = pIt;
         }
         else
-        // safe the first locale, which isn't an explicit fallback
+        // save the first locale, which isn't an explicit fallback
         // as "last possible fallback"
         if (pAny == lISOList.end())
             pAny = pIt;
@@ -611,7 +611,7 @@ sal_Bool Locale::getFallback(Locale& aLocale)
 {
     // a)
     // this was our last fallback!
-    // break any further calls to this method ...
+    // break any further calls to this method...
     if (aLocale.equals(X_NOTRANSLATE()))
         return sal_False;
 
@@ -655,8 +655,8 @@ sal_Bool Locale::getFallback(Locale& aLocale)
 //-----------------------------------------------
 void  Locale::operator=(const Locale& rCopy)
 {
-    // Take over these values without checking ...
-    // They was already checked if the copy was constructed
+    // Take over these values without checking...
+    // They were already checked if the copy was constructed
     // and must be valid now!
     m_sLanguage = rCopy.m_sLanguage;
     m_sCountry  = rCopy.m_sCountry;
