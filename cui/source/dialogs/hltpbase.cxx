@@ -444,7 +444,13 @@ void SvxHyperlinkTabPageBase::GetDataFromCommonFields( OUString& aStrName,
     aStrIntName = mpEdText->GetText();
     aStrName    = mpEdIndication->GetText();
     aStrFrame   = mpCbbFrame->GetText();
-    eMode       = static_cast<SvxLinkInsertMode>(mpLbForm->GetSelectedEntryPos()+1);
+
+    sal_Int32 nPos = mpLbForm->GetSelectedEntryPos();
+    if (nPos == LISTBOX_ENTRY_NOTFOUND)
+        // This happens when FillStandardDlgFields() hides mpLbForm.
+        nPos = 0;
+    eMode = static_cast<SvxLinkInsertMode>(nPos + 1);
+
     // Ask dialog whether the current doc is a HTML-doc
     if (static_cast<SvxHpLinkDlg*>(mpDialog.get())->IsHTMLDoc())
         eMode = static_cast<SvxLinkInsertMode>( sal_uInt16(eMode) | HLINK_HTMLMODE );
