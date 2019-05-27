@@ -35,30 +35,7 @@ class ViewShell;
 /**
  * bullet functions in outline mode
  */
-class FuOutlineBullet
-    : public FuPoor
-{
-public:
 
-    static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
-    virtual void DoExecute( SfxRequest& rReq ) override;
-
-private:
-    FuOutlineBullet (
-        ViewShell* pViewShell,
-        ::sd::Window* pWin,
-        ::sd::View* pView,
-        SdDrawDocument* pDoc,
-        SfxRequest& rReq);
-
-    void SetCurrentBulletsNumbering(SfxRequest& rReq);
-
-    const SfxPoolItem* GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt32& nNumItemId);
-};
-
-/**
- * New merged bullet and position functions in outline mode
- */
 class FuBulletAndPosition
     : public FuPoor
 {
