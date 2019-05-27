@@ -16,6 +16,24 @@
       "revId": "8acc15b5113c798ecdbeed91456a92e7b0c1334e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_28e95219",
+        "filename": "sw/source/core/doc/DocumentRedlineManager.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1428,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-05-27T16:43:16Z",
+      "side": 1,
+      "message": "Michael, you are right. I tried to find a better solution, but it seemed for me, that it had to extend XRedlines UNO interface for it, and I was lazy to find a better solution. A better solution without the (rare? frequent? but ugly) triggering during editing: https://gerrit.libreoffice.org/#/c/73043/ Thanks for your review!",
+      "parentUuid": "3fa0c359_fc3a50e5",
+      "revId": "8acc15b5113c798ecdbeed91456a92e7b0c1334e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
