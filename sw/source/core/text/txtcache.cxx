@@ -34,6 +34,13 @@ SwTextLine::~SwTextLine()
 {
 }
 
+void SwTextLine::UpdateCachePos()
+{
+    // note: SwTextFrame lives longer than its SwTextLine, see ~SwTextFrame
+    assert(m_pOwner);
+    const_cast<SwTextFrame *>(static_cast<SwTextFrame const *>(m_pOwner))->SetCacheIdx(GetCachePos());
+}
+
 SwCacheObj *SwTextLineAccess::NewObj()
 {
     return new SwTextLine( static_cast<SwTextFrame const *>(m_pOwner) );
@@ -46,7 +53,7 @@ SwParaPortion *SwTextLineAccess::GetPara()
         pRet = static_cast<SwTextLine*>(m_pObj);
     else
     {
-        pRet = static_cast<SwTextLine*>(Get());
+        pRet = static_cast<SwTextLine*>(Get(false));
         const_cast<SwTextFrame *>(static_cast<SwTextFrame const *>(m_pOwner))->SetCacheIdx( pRet->GetCachePos() );
     }
     if ( !pRet->GetPara() )
@@ -109,6 +116,15 @@ void SwTextFrame::ClearPara()
     }
 }
 
+void SwTextFrame::RemoveFromCache()
+{
+    if (GetCacheIdx() != USHRT_MAX)
+    {
+        s_pTextCache->Delete(this, GetCacheIdx());
+        SetCacheIdx(USHRT_MAX);
+    }
+}
+
 void SwTextFrame::SetPara( SwParaPortion *pNew, bool bDelete )
 {
     if ( GetCacheIdx() != USHRT_MAX )
@@ -129,7 +145,7 @@ void SwTextFrame::SetPara( SwParaPortion *pNew, bool bDelete )
     else if ( pNew )
     {   // Insert a new one
         SwTextLine *pTextLine = new SwTextLine( this, pNew );
-        if ( SwTextFrame::GetTextCache()->Insert( pTextLine ) )
+        if (SwTextFrame::GetTextCache()->Insert(pTextLine, false))
             mnCacheIndex = pTextLine->GetCachePos();
         else
         {

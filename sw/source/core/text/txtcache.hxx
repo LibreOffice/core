@@ -31,6 +31,8 @@ class SwTextLine : public SwCacheObj
 {
     std::unique_ptr<SwParaPortion> pLine;
 
+    virtual void UpdateCachePos() override;
+
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTextLine)
 

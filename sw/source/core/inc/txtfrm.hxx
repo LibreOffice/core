@@ -567,8 +567,10 @@ public:
     sal_uInt16 GetCacheIdx() const { return mnCacheIndex; }
     void   SetCacheIdx( const sal_uInt16 nNew ) { mnCacheIndex = nNew; }
 
-    /// Removes the Line information from the Cache
+    /// Removes the Line information from the Cache but retains the entry itself
     void ClearPara();
+    /// Removes this frame completely from the Cache
+    void RemoveFromCache();
 
     /// Am I a FootnoteFrame, with a number at the start of the paragraph?
     bool IsFootnoteNumFrame() const
