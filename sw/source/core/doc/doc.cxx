@@ -1438,12 +1438,30 @@ bool SwDoc::RemoveInvisibleContent()
         if ( pTextNd )
         {
             bool bRemoved = false;
-            SwPaM aPam(*pTextNd, 0, *pTextNd, pTextNd->GetText().getLength());
             if ( pTextNd->HasHiddenCharAttribute( true ) )
             {
                 bRemoved = true;
                 bRet = true;
-                RemoveOrDeleteContents(pTextNd, getIDocumentContentOperations());
+
+                if (2 == pTextNd->EndOfSectionIndex() - pTextNd->StartOfSectionIndex())
+                {
+                    SwFrameFormat *const pFormat = pTextNd->StartOfSectionNode()->GetFlyFormat();
+                    if (nullptr != pFormat)
+                    {
+                        // remove hidden text frame
+                        getIDocumentLayoutAccess().DelLayoutFormat(pFormat);
+                    }
+                    else
+                    {
+                        // default, remove hidden paragraph
+                        RemoveOrDeleteContents(pTextNd, getIDocumentContentOperations());
+                    }
+                }
+                else
+                {
+                    // default, remove hidden paragraph
+                    RemoveOrDeleteContents(pTextNd, getIDocumentContentOperations());
+                }
             }
             else if ( pTextNd->HasHiddenCharAttribute( false ) )
             {
@@ -1455,7 +1473,11 @@ bool SwDoc::RemoveInvisibleContent()
             // Footnotes/Frames may have been removed, therefore we have
             // to reset n:
             if ( bRemoved )
-                n = aPam.GetPoint()->nNode.GetIndex();
+            {
+                // [n] has to be inside [0 .. GetNodes().Count()] range
+                if (n > GetNodes().Count())
+                    n = GetNodes().Count();
+            }
         }
     }
 
