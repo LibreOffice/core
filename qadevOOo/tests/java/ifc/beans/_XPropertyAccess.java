@@ -64,7 +64,7 @@ public class _XPropertyAccess extends MultiMethodTest {
     }
 
     /**
-     * Test calls the method and checks if the returned sequenze contanis a propterty which is named
+     * Test calls the method and checks if the returned sequence contains a property which is named
      * in the object relation <code>XPropertyAccess.propertyToChange</code>.
      */
     public void _getPropertyValues() {
