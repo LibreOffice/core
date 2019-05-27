@@ -17988,6 +17988,8 @@ SlideShow.prototype.notifyTransitionEnd = function( nSlideIndex )
         theMetaDoc.getCurrentSlide().aSlideAnimationsHandler.start();
         this.update();
     }
+    else
+        this.notifyAnimationsEnd();
 };
 
 SlideShow.prototype.notifyInteractiveAnimationSequenceStart = function( nNodeId )
