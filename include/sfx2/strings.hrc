@@ -193,7 +193,6 @@
 
 #define STR_SFX_NEWOFFICEDOC                    NC_("STR_SFX_NEWOFFICEDOC", "%PRODUCTNAME document")
 #define SFX_ST_DURATION_FORMAT                  NC_("SFX_ST_DURATION_FORMAT", " Y: %1 M: %2 D: %3 H: %4 M: %5 S: %6")
-#define STR_SFX_REMOVE_PROPERTY                 NC_("STR_SFX_REMOVE_PROPERTY", "Remove Property")
 #define STR_SFX_QUERY_WRONG_TYPE                NC_("STR_SFX_QUERY_WRONG_TYPE", "The value entered does not match the specified type.\nThe value will be stored as text.")
 
 #define STR_QUERY_OVERWRITE                     NC_("STR_QUERY_OVERWRITE", "Style already exists. Overwrite?")

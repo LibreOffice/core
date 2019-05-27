@@ -45,8 +45,6 @@
 #define STR_TEMPLATE_NAME29_DEF "Modern business letter serif"
 #define STR_TEMPLATE_NAME30_DEF "Businesscard with logo"
 
-#define SFX_ST_EDIT             "..."
-
 #define CMIS_TYPE_STRING        "String"
 #define CMIS_TYPE_INTEGER       "Integer"
 #define CMIS_TYPE_DECIMAL       "Decimal"

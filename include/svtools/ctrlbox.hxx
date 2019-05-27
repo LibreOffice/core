@@ -305,6 +305,7 @@ public:
 
     void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
     bool get_sensitive() const { return m_xControl->get_sensitive(); }
+    void set_visible(bool bSensitive) { m_xControl->set_visible(bSensitive); }
     void grab_focus() { m_xControl->grab_focus(); }
 
     void connect_activated(const Link<SvtCalendarBox&, void>& rActivatedHdl) { m_aActivatedHdl = rActivatedHdl; }
