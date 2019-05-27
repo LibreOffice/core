@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_0d14a8f4",
+        "filename": "compilerplugins/Makefile-clang.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-27T06:47:46Z",
+      "side": 1,
+      "message": "so the otherwise unused include of config_clang.h can be removed again from plugin.hxx, right?",
+      "revId": "c822a79fbfa99e0c509f5ea1d3fd95dfe1166168",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
