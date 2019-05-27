@@ -34,6 +34,7 @@
 #endif
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 
 #include <xmloff/attrlist.hxx>
 #include <rtl/ustrbuf.hxx>
