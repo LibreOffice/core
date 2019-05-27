@@ -5864,6 +5864,18 @@
             <value>true</value>
           </prop>
         </group>
+        <group oor:name="HTML">
+          <info>
+            <desc>Contains settings for importing HTML.</desc>
+          </info>
+          <prop oor:name="IgnoreComments" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Specifies whether HTML comments should be ignored or imported as postits / annotations.</desc>
+              <label>Ignore HTML comments</label>
+            </info>
+            <value>false</value>
+          </prop>
+        </group>
       </group>
     </group>
     <group oor:name="Numbering">
