@@ -150,7 +150,7 @@ static void cpp_call(
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
     assert(pReturnTypeDescr);
 
-    void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
+    void * pCppReturn = nullptr; // if != 0 && != pUnoReturn, needs reconversion
 
     if (pReturnTypeDescr)
     {
