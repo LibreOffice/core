@@ -8251,52 +8251,52 @@ void WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
 void WW8DopTypography::ReadFromMem(sal_uInt8 *&pData)
 {
     sal_uInt16 a16Bit = Get_UShort(pData);
-    fKerningPunct = (a16Bit & 0x0001);
-    iJustification = (a16Bit & 0x0006) >>  1;
-    iLevelOfKinsoku = (a16Bit & 0x0018) >>  3;
-    f2on1 = (a16Bit & 0x0020) >>  5;
-    reserved1 = (a16Bit & 0x03C0) >>  6;
-    reserved2 = (a16Bit & 0xFC00) >>  10;
+    m_fKerningPunct = (a16Bit & 0x0001);
+    m_iJustification = (a16Bit & 0x0006) >>  1;
+    m_iLevelOfKinsoku = (a16Bit & 0x0018) >>  3;
+    m_f2on1 = (a16Bit & 0x0020) >>  5;
+    m_reserved1 = (a16Bit & 0x03C0) >>  6;
+    m_reserved2 = (a16Bit & 0xFC00) >>  10;
 
-    cchFollowingPunct = Get_Short(pData);
-    cchLeadingPunct = Get_Short(pData);
+    m_cchFollowingPunct = Get_Short(pData);
+    m_cchLeadingPunct = Get_Short(pData);
 
     sal_Int16 i;
     for (i=0; i < nMaxFollowing; ++i)
-        rgxchFPunct[i] = Get_Short(pData);
+        m_rgxchFPunct[i] = Get_Short(pData);
     for (i=0; i < nMaxLeading; ++i)
-        rgxchLPunct[i] = Get_Short(pData);
+        m_rgxchLPunct[i] = Get_Short(pData);
 
-    if (cchFollowingPunct >= 0 && cchFollowingPunct < nMaxFollowing)
-        rgxchFPunct[cchFollowingPunct]=0;
+    if (m_cchFollowingPunct >= 0 && m_cchFollowingPunct < nMaxFollowing)
+        m_rgxchFPunct[m_cchFollowingPunct]=0;
     else
-        rgxchFPunct[nMaxFollowing - 1]=0;
+        m_rgxchFPunct[nMaxFollowing - 1]=0;
 
-    if (cchLeadingPunct >= 0 && cchLeadingPunct < nMaxLeading)
-        rgxchLPunct[cchLeadingPunct]=0;
+    if (m_cchLeadingPunct >= 0 && m_cchLeadingPunct < nMaxLeading)
+        m_rgxchLPunct[m_cchLeadingPunct]=0;
     else
-        rgxchLPunct[nMaxLeading - 1]=0;
+        m_rgxchLPunct[nMaxLeading - 1]=0;
 
 }
 
 void WW8DopTypography::WriteToMem(sal_uInt8 *&pData) const
 {
-    sal_uInt16 a16Bit = sal_uInt16(fKerningPunct);
-    a16Bit |= (iJustification << 1) & 0x0006;
-    a16Bit |= (iLevelOfKinsoku << 3) & 0x0018;
-    a16Bit |= (int(f2on1) << 5) & 0x0020;
-    a16Bit |= (reserved1 << 6) & 0x03C0;
-    a16Bit |= (reserved2 << 10) & 0xFC00;
+    sal_uInt16 a16Bit = sal_uInt16(m_fKerningPunct);
+    a16Bit |= (m_iJustification << 1) & 0x0006;
+    a16Bit |= (m_iLevelOfKinsoku << 3) & 0x0018;
+    a16Bit |= (int(m_f2on1) << 5) & 0x0020;
+    a16Bit |= (m_reserved1 << 6) & 0x03C0;
+    a16Bit |= (m_reserved2 << 10) & 0xFC00;
     Set_UInt16(pData,a16Bit);
 
-    Set_UInt16(pData,cchFollowingPunct);
-    Set_UInt16(pData,cchLeadingPunct);
+    Set_UInt16(pData,m_cchFollowingPunct);
+    Set_UInt16(pData,m_cchLeadingPunct);
 
     sal_Int16 i;
     for (i=0; i < nMaxFollowing; ++i)
-        Set_UInt16(pData,rgxchFPunct[i]);
+        Set_UInt16(pData,m_rgxchFPunct[i]);
     for (i=0; i < nMaxLeading; ++i)
-        Set_UInt16(pData,rgxchLPunct[i]);
+        Set_UInt16(pData,m_rgxchLPunct[i]);
 }
 
 LanguageType WW8DopTypography::GetConvertedLang() const
@@ -8312,7 +8312,7 @@ LanguageType WW8DopTypography::GetConvertedLang() const
     is for some other use ?, or redundant. If more examples trigger the assert
     we might be able to figure it out.
     */
-    switch(reserved1 & 0xE)
+    switch(m_reserved1 & 0xE)
     {
         case 2:     //Japan
             nLang = LANGUAGE_JAPANESE;

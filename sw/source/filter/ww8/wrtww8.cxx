@@ -699,14 +699,14 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
     */
 
     /*Our default Japanese Level is 2, this is a special MS hack to set this*/
-    rTypo.reserved2 = 1;
+    rTypo.m_reserved2 = 1;
 
-    for (rTypo.reserved1=8;rTypo.reserved1>0;rTypo.reserved1-=2)
+    for (rTypo.m_reserved1=8;rTypo.m_reserved1>0;rTypo.m_reserved1-=2)
     {
         if (nullptr != (pForbidden = m_pDoc->getIDocumentSettingAccess().getForbiddenCharacters(rTypo.GetConvertedLang(),
             false)))
         {
-            int nIdx = (rTypo.reserved1-2)/2;
+            int nIdx = (rTypo.m_reserved1-2)/2;
             if( lcl_CmpBeginEndChars( pForbidden->endLine,
                     aLangNotEnd[ nIdx ], sizeof(aLangNotEnd[ nIdx ]) ) ||
                 lcl_CmpBeginEndChars( pForbidden->beginLine,
@@ -732,7 +732,7 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
                             )
                         )
                     {
-                        rTypo.reserved2 = 0;
+                        rTypo.m_reserved2 = 0;
                         continue;
                     }
                 }
@@ -740,8 +740,8 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
                 if (!pUseMe)
                 {
                     pUseMe = pForbidden;
-                    nUseReserved = rTypo.reserved1;
-                    rTypo.iLevelOfKinsoku = 2;
+                    nUseReserved = rTypo.m_reserved1;
+                    rTypo.m_iLevelOfKinsoku = 2;
                 }
                 nNoNeeded++;
             }
@@ -749,30 +749,30 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
     }
 
     OSL_ENSURE( nNoNeeded<=1, "Example of unexportable forbidden chars" );
-    rTypo.reserved1=nUseReserved;
-    if (rTypo.iLevelOfKinsoku && pUseMe)
+    rTypo.m_reserved1=nUseReserved;
+    if (rTypo.m_iLevelOfKinsoku && pUseMe)
     {
-        rTypo.cchFollowingPunct = msword_cast<sal_Int16>
+        rTypo.m_cchFollowingPunct = msword_cast<sal_Int16>
             (pUseMe->beginLine.getLength());
-        if (rTypo.cchFollowingPunct > WW8DopTypography::nMaxFollowing - 1)
-            rTypo.cchFollowingPunct = WW8DopTypography::nMaxFollowing - 1;
+        if (rTypo.m_cchFollowingPunct > WW8DopTypography::nMaxFollowing - 1)
+            rTypo.m_cchFollowingPunct = WW8DopTypography::nMaxFollowing - 1;
 
-        rTypo.cchLeadingPunct = msword_cast<sal_Int16>
+        rTypo.m_cchLeadingPunct = msword_cast<sal_Int16>
             (pUseMe->endLine.getLength());
-        if (rTypo.cchLeadingPunct > WW8DopTypography::nMaxLeading - 1)
-            rTypo.cchLeadingPunct = WW8DopTypography::nMaxLeading -1;
+        if (rTypo.m_cchLeadingPunct > WW8DopTypography::nMaxLeading - 1)
+            rTypo.m_cchLeadingPunct = WW8DopTypography::nMaxLeading -1;
 
-        memcpy(rTypo.rgxchFPunct,pUseMe->beginLine.getStr(),
-            (rTypo.cchFollowingPunct+1)*2);
+        memcpy(rTypo.m_rgxchFPunct,pUseMe->beginLine.getStr(),
+            (rTypo.m_cchFollowingPunct+1)*2);
 
-        memcpy(rTypo.rgxchLPunct,pUseMe->endLine.getStr(),
-            (rTypo.cchLeadingPunct+1)*2);
+        memcpy(rTypo.m_rgxchLPunct,pUseMe->endLine.getStr(),
+            (rTypo.m_cchLeadingPunct+1)*2);
     }
 
     const IDocumentSettingAccess& rIDocumentSettingAccess = GetWriter().getIDocumentSettingAccess();
 
-    rTypo.fKerningPunct = sal_uInt16(rIDocumentSettingAccess.get(DocumentSettingId::KERN_ASIAN_PUNCTUATION));
-    rTypo.iJustification = sal_uInt16(m_pDoc->getIDocumentSettingAccess().getCharacterCompressionType());
+    rTypo.m_fKerningPunct = sal_uInt16(rIDocumentSettingAccess.get(DocumentSettingId::KERN_ASIAN_PUNCTUATION));
+    rTypo.m_iJustification = sal_uInt16(m_pDoc->getIDocumentSettingAccess().getCharacterCompressionType());
 }
 
 // It can only be found something with this method, if it is used within
