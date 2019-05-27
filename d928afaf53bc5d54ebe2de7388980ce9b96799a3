@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_0d058877",
+        "filename": "sw/source/core/doc/docbm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-27T09:53:10Z",
+      "side": 1,
+      "message": "what about the other 20 callers of deleteMark, do you plan to copy/paste this to every caller?",
+      "revId": "d928afaf53bc5d54ebe2de7388980ce9b96799a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
