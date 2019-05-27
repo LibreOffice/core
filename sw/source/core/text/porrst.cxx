@@ -330,7 +330,7 @@ bool SwTextFrame::FormatEmpty()
         ClearPara();
         ResetBlinkPor();
     }
-    SetCacheIdx( USHRT_MAX );
+    RemoveFromCache();
     if( !IsEmpty() )
     {
         SetEmpty( true );
