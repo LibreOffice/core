@@ -14,6 +14,7 @@
 #include <ndtxt.hxx>
 #include <viscrs.hxx>
 #include <wrtsh.hxx>
+#include <ndgrf.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 
@@ -159,6 +160,22 @@ DECLARE_WW8IMPORT_TEST(testTdf112346, "tdf112346.doc")
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     // This was 1, multi-page table was imported as a floating one.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+}
+
+DECLARE_WW8IMPORT_TEST(testTdf125281, "tdf125281.doc")
+{
+    // Load a .doc file which has an embedded .emf image.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwNode* pNode = pDoc->GetNodes()[6];
+    CPPUNIT_ASSERT(pNode->IsGrfNode());
+    SwGrfNode* pGrfNode = pNode->GetGrfNode();
+    const Graphic& rGraphic = pGrfNode->GetGrf();
+
+    // Without the accompanying fix in place, this test would have failed, as pref size was 0 till
+    // an actual Paint() was performed (and even then, it was wrong).
+    long nExpected = 25664;
+    CPPUNIT_ASSERT_EQUAL(nExpected, rGraphic.GetPrefSize().getWidth());
 }
 
 DECLARE_WW8IMPORT_TEST(testTdf110987, "tdf110987")
