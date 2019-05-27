@@ -16,6 +16,24 @@
       "revId": "d928afaf53bc5d54ebe2de7388980ce9b96799a3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_2d7964fb",
+        "filename": "sw/source/core/doc/docbm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-05-27T10:43:02Z",
+      "side": 1,
+      "message": "yeah, good point, this change is no good",
+      "parentUuid": "3fa0c359_0d058877",
+      "revId": "d928afaf53bc5d54ebe2de7388980ce9b96799a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
