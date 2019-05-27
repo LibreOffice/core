@@ -138,6 +138,7 @@ class SvxSearchItem;
 #define SID_EXPORTDOCASEPUB                 (SID_SFX_START + 1677)
 #define SID_DIRECTEXPORTDOCASEPUB           (SID_SFX_START + 1678)
 #define SID_REDACTDOC                       (SID_SFX_START + 1732)
+#define SID_AUTOREDACTDOC                   (SID_SFX_START + 1736)
 #define SID_UPDATEDOCMODE                   (SID_SFX_START + 1668)
 #define SID_CHECKOUT                        (SID_SFX_START + 512)
 #define SID_CANCELCHECKOUT                  (SID_SFX_START + 513)
@@ -263,7 +264,7 @@ class SvxSearchItem;
 #define SID_REDACTION_STYLE                 (SID_SFX_START + 1734)
 #define SID_DIALOG_PARENT                   (SID_SFX_START + 1735)
 
-//      SID_SFX_free_START                  (SID_SFX_START + 1736)
+//      SID_SFX_free_START                  (SID_SFX_START + 1737)
 //      SID_SFX_free_END                    (SID_SFX_START + 3999)
 
 #define SID_OPEN_NEW_VIEW                   (SID_SFX_START + 520)
