@@ -10,6 +10,8 @@
 #include "sdmodeltestbase.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -71,6 +73,7 @@ public:
     void testInteropGrabBag();
     void testBackground();
     void testBackgroundDrawingmlFallback();
+    void testFontSize();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -106,6 +109,7 @@ public:
     CPPUNIT_TEST(testInteropGrabBag);
     CPPUNIT_TEST(testBackground);
     CPPUNIT_TEST(testBackgroundDrawingmlFallback);
+    CPPUNIT_TEST(testFontSize);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -993,6 +997,36 @@ void SdImportTestSmartArt::testBackgroundDrawingmlFallback()
     bool bSizeProtect = false;
     xPropertySet->getPropertyValue("SizeProtect") >>= bSizeProtect;
     CPPUNIT_ASSERT_EQUAL(true, bSizeProtect);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testFontSize()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-font-size.pptx"), PPTX);
+
+    uno::Reference<drawing::XShapes> xGroup1(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape1(xGroup1->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xParagraph1(getParagraphFromShape(0, xShape1));
+    uno::Reference<text::XTextRange> xRun1(getRunFromParagraph(0, xParagraph1));
+    uno::Reference<beans::XPropertySet> xPropSet1(xRun1, uno::UNO_QUERY);
+    double fFontSize1 = xPropSet1->getPropertyValue("CharHeight").get<double>();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(65.0, fFontSize1, 0.01);
+
+    uno::Reference<drawing::XShapes> xGroup2(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape2(xGroup2->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xParagraph2(getParagraphFromShape(0, xShape2));
+    uno::Reference<text::XTextRange> xRun2(getRunFromParagraph(0, xParagraph2));
+    uno::Reference<beans::XPropertySet> xPropSet2(xRun2, uno::UNO_QUERY);
+    double fFontSize2 = xPropSet2->getPropertyValue("CharHeight").get<double>();
+    CPPUNIT_ASSERT_EQUAL(32.0, fFontSize2);
+
+    uno::Reference<drawing::XShapes> xGroup3(getShapeFromPage(2, 0, xDocShRef), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape3(xGroup3->getByIndex(1), uno::UNO_QUERY);
+    drawing::TextFitToSizeType eTextFitToSize = drawing::TextFitToSizeType_NONE;
+    xShape3->getPropertyValue("TextFitToSize") >>= eTextFitToSize;
+    CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_AUTOFIT, eTextFitToSize);
 
     xDocShRef->DoClose();
 }
