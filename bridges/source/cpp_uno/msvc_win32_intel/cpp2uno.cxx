@@ -55,8 +55,8 @@ static inline typelib_TypeClass cpp2uno_call(
         TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
     }
 
-    void * pUnoReturn = 0;
-    void * pCppReturn = 0; // complex return ptr: if != 0 && != pUnoReturn, reconversion need
+    void * pUnoReturn = nullptr;
+    void * pCppReturn = nullptr; // complex return ptr: if != 0 && != pUnoReturn, reconversion need
 
     if (pReturnTypeDescr)
     {
