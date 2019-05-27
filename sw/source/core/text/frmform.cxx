@@ -107,13 +107,11 @@ void SwTextFrame::ValidateFrame()
     ValidateText( this );
 
     // We at least have to save the MustFit flag!
-    OSL_ENSURE( HasPara(), "ResetPreps(), missing ParaPortion." );
-    if (SwParaPortion *pPara = GetPara())
-    {
-        const bool bMustFit = pPara->IsPrepMustFit();
-        ResetPreps();
-        pPara->SetPrepMustFit( bMustFit );
-    }
+    assert(HasPara() && "ResetPreps(), missing ParaPortion, SwCache bug?");
+    SwParaPortion *pPara = GetPara();
+    const bool bMustFit = pPara->IsPrepMustFit();
+    ResetPreps();
+    pPara->SetPrepMustFit( bMustFit );
 }
 
 // After a RemoveFootnote the BodyFrame and all Frames contained within it, need to be
