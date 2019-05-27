@@ -139,7 +139,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
     /**
     * Object relation <code>xQueryAna</code> set a complex filter with method
     . <code>setFilter</code>. Then <code>getStructuredFilter</code> returns a
-    * sequenze of <code>PropertyValue</code> which was set with method
+    * sequence of <code>PropertyValue</code> which was set with method
     * <code>setStructuredFilter</code> from <code>xQueryAna</code>.
     * Then test has ok status if <code>getFilter</code> returns the complex filter.
     */
