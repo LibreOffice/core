@@ -124,6 +124,8 @@
 #include <svx/unoshape.hxx>
 #include <com/sun/star/util/Color.hpp>
 
+#include <sfx2/autoredactdialog.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -529,6 +531,22 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             }
 
             return;
+        }
+
+        case SID_AUTOREDACTDOC:
+        {
+            //TODO: Implement
+            SfxAutoRedactDialog aDlg(pDialogParent);
+            sal_uInt16 nResult = aDlg.run();
+
+            if (nResult != RET_OK || !aDlg.hasTargets())
+            {
+                //Do nothing
+                return;
+            }
+
+            // else continue with normal redaction
+            [[fallthrough]];
         }
 
         case SID_REDACTDOC:
@@ -1217,6 +1235,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             case SID_EXPORTDOCASEPUB:
             case SID_DIRECTEXPORTDOCASEPUB:
             case SID_REDACTDOC:
+            case SID_AUTOREDACTDOC:
             {
                 break;
             }
