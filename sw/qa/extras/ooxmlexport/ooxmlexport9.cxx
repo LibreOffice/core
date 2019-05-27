@@ -1297,6 +1297,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104354_2, "tdf104354-2.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell5->getText()), "ParaBottomMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf115557, "tdf115557.docx")
+{
+    // A chart anchored to a footnote multiplied during import
+    xmlDocPtr pXmlDoc = parseExport("word/footnotes.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "//w:footnote/w:p/w:r/w:drawing", 1);
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

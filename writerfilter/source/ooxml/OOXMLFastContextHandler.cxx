@@ -1678,18 +1678,23 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 void OOXMLFastContextHandlerShape::lcl_endFastElement
 (Token_t Element)
 {
-    if (mrShapeContext.is())
+    if (isForwardEvents())
     {
-        mrShapeContext->endFastElement(Element);
-        sendShape( Element );
+
+        if (mrShapeContext.is())
+        {
+            mrShapeContext->endFastElement(Element);
+            sendShape( Element );
+        }
+
+        OOXMLFastContextHandlerProperties::lcl_endFastElement(Element);
+
+        // Ending the shape should be the last thing to do
+        bool bIsPicture = Element == ( NMSP_dmlPicture | XML_pic );
+        if ( !bIsPicture && m_bShapeStarted)
+            mpStream->endShape( );
+
     }
-
-    OOXMLFastContextHandlerProperties::lcl_endFastElement(Element);
-
-    // Ending the shape should be the last thing to do
-    bool bIsPicture = Element == ( NMSP_dmlPicture | XML_pic );
-    if ( !bIsPicture && m_bShapeStarted)
-        mpStream->endShape( );
 }
 
 void SAL_CALL OOXMLFastContextHandlerShape::endUnknownElement
