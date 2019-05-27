@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_ad2494c7",
+        "filename": "cui/uiconfig/ui/bulletandposition.ui",
+        "patchSetId": 16
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2019-05-27T13:45:18Z",
+      "side": 1,
+      "message": "Could you set a tooltip_text on these center/left/right buttons? So they can be accessible (and avoid the warning being suppressed in cui.suppr)",
+      "revId": "e3015d7021e689c71c2ed8e5dd01a74d832c84f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
