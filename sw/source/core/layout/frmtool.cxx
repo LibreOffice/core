@@ -1431,7 +1431,8 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 // no notification, if <SwViewShell> is in construction
                 if ( pViewShell && !pViewShell->IsInConstructor() &&
                      pViewShell->GetLayout() &&
-                     pViewShell->GetLayout()->IsAnyShellAccessible() )
+                     pViewShell->GetLayout()->IsAnyShellAccessible() &&
+                     pFrame->FindPageFrame() != nullptr)
                 {
                     pViewShell->InvalidateAccessibleParaFlowRelation(
                         dynamic_cast<SwTextFrame*>(pFrame->FindNextCnt( true )),
@@ -1512,7 +1513,8 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 // no notification, if <SwViewShell> is in construction
                 if ( pViewShell && !pViewShell->IsInConstructor() &&
                      pViewShell->GetLayout() &&
-                     pViewShell->GetLayout()->IsAnyShellAccessible() )
+                     pViewShell->GetLayout()->IsAnyShellAccessible() &&
+                     pFrame->FindPageFrame() != nullptr)
                 {
                     pViewShell->InvalidateAccessibleParaFlowRelation(
                             dynamic_cast<SwTextFrame*>(pFrame->FindNextCnt( true )),
@@ -1592,7 +1594,8 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                     // no notification, if <SwViewShell> is in construction
                     if ( pViewShell && !pViewShell->IsInConstructor() &&
                          pViewShell->GetLayout() &&
-                         pViewShell->GetLayout()->IsAnyShellAccessible() )
+                         pViewShell->GetLayout()->IsAnyShellAccessible() &&
+                         pFrame->FindPageFrame() != nullptr)
                     {
                         pViewShell->InvalidateAccessibleParaFlowRelation(
                             dynamic_cast<SwTextFrame*>(pFrame->FindNextCnt( true )),
