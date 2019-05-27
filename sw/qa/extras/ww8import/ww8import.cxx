@@ -14,6 +14,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <viscrs.hxx>
 #include <wrtsh.hxx>
+#include <ndgrf.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -202,6 +203,22 @@ DECLARE_WW8IMPORT_TEST(testTdf121734, "tdf121734.doc")
             CPPUNIT_ASSERT(!pBox->GetLine(eLine));
         }
     }
+}
+
+DECLARE_WW8IMPORT_TEST(testTdf125281, "tdf125281.doc")
+{
+    // Load a .doc file which has an embedded .emf image.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwNode* pNode = pDoc->GetNodes()[6];
+    CPPUNIT_ASSERT(pNode->IsGrfNode());
+    SwGrfNode* pGrfNode = pNode->GetGrfNode();
+    const Graphic& rGraphic = pGrfNode->GetGrf();
+
+    // Without the accompanying fix in place, this test would have failed, as pref size was 0 till
+    // an actual Paint() was performed (and even then, it was wrong).
+    long nExpected = 25664;
+    CPPUNIT_ASSERT_EQUAL(nExpected, rGraphic.GetPrefSize().getWidth());
 }
 
 DECLARE_WW8IMPORT_TEST(testTdf122425_1, "tdf122425_1.doc")
