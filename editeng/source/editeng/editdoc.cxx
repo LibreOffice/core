@@ -2025,10 +2025,12 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_RELIEF ) == SfxItemState::SET ) )
         rFont.SetRelief( rSet.Get( EE_CHAR_RELIEF ).GetValue() );
 
-    // If comparing the entire font, or if checking before each alteration
-    // whether the value changes, remains relatively the same thing.
-    // So possible one MakeUniqFont more in the font, but as a result a quicker
-    // abortion of the query, or one must each time check bChanged.
+    // Operator == compares the individual members of the font if the impl pointer is
+    // not equal. If all members are the same, this assignment makes
+    // sure that both also point to the same internal instance of the font.
+    // To avoid this assignment, you would need to check in
+    // every if statement above whether or not the new value differs from the
+    // old value before making an assignment.
     if ( rFont == aPrevFont  )
         rFont = aPrevFont;  // => The same ImpPointer for IsSameInstance
 }
