@@ -431,6 +431,7 @@ void msci_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     typelib_TypeDescription * pTypeDescr = 0;
     TYPELIB_DANGER_GET( &pTypeDescr, pUnoExc->pType );
 
+    assert(pTypeDescr->nSize > 0);
     void * pCppExc = alloca( pTypeDescr->nSize );
     ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
 
