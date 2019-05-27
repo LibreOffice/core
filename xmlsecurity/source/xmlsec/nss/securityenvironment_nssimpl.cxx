@@ -797,11 +797,7 @@ X509Certificate_NssImpl* NssCertToXCert( CERTCertificate* cert )
 
     if( cert != nullptr ) {
         xcert = new X509Certificate_NssImpl() ;
-        if( xcert == nullptr ) {
-            xcert = nullptr ;
-        } else {
-            xcert->setCert( cert ) ;
-        }
+        xcert->setCert( cert ) ;
     } else {
         xcert = nullptr ;
     }
