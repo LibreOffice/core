@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_e834ca4c",
+        "filename": "sfx2/uiconfig/ui/alienwarndialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2019-05-27T21:32:47Z",
+      "side": 1,
+      "message": "Please don\u0027t do this, the sfx domain is actually correct!\n\nI see this mo file name in my build:\ninstdir/program/resource/hu/LC_MESSAGES/sfx.mo\n\nDon\u0027t get fooled by the name of sfx2/AllLangMoTarget_sfx2.mk - that\u0027s incorrect, it creates sfx.mo files.\n\nConsequently: .ui files from module sfx2 show up with localization as of now.",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 25
+      },
+      "revId": "aa36eaa315aad959f03f718d11655244b0afa08d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
