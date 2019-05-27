@@ -117,6 +117,10 @@ public:
     virtual void SetRedlinePassword(
         /*[in]*/const css::uno::Sequence <sal_Int8>& rNewPassword) override;
 
+    virtual bool IsFinalizeImport() const override;
+
+    virtual void SetFinalizeImport(bool const bFinalizeImport) override;
+
     //Non Interface methods;
 
     /** Set comment-text for Redline. It then comes in via AppendRedLine.

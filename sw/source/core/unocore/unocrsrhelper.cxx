@@ -1260,6 +1260,10 @@ void makeRedline( SwPaM const & rPaM,
                 pRedlineExtraData = new SwRedlineExtraData_FormattingChanges( &aItemSet );
             }
         }
+
+        // to finalize DOCX import
+        if ( eType == nsRedlineType_t::REDLINE_DELETE && !pRedlineAccess->IsFinalizeImport() )
+            pRedlineAccess->SetFinalizeImport( true );
     }
 
     SwRangeRedline* pRedline = new SwRangeRedline( aRedlineData, rPaM );

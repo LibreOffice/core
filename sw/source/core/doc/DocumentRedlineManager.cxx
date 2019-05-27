@@ -820,10 +820,10 @@ RedlineFlags DocumentRedlineManager::GetRedlineFlags() const
 
 void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
 {
-    if ( m_bFinalizeImport )
+    if ( IsFinalizeImport() )
     {
         FinalizeImport();
-        m_bFinalizeImport = false;
+        SetFinalizeImport( false );
     }
 
     if( meRedlineFlags != eMode )
@@ -1424,8 +1424,6 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                 // better fix it.
                                 n = 0;
                                 bDec = true;
-                                // or simply this is an OOXML import
-                                m_bFinalizeImport = true;
                             }
 
                             mpRedlineTable->DeleteAndDestroy( nToBeDeleted );
@@ -2998,6 +2996,16 @@ void DocumentRedlineManager::SetRedlinePassword(
 {
     maRedlinePasswd = rNewPassword;
     m_rDoc.getIDocumentState().SetModified();
+}
+
+bool DocumentRedlineManager::IsFinalizeImport() const
+{
+    return m_bFinalizeImport;
+}
+
+void DocumentRedlineManager::SetFinalizeImport(bool const bFinalizeImport)
+{
+    m_bFinalizeImport = bFinalizeImport;
 }
 
 /// Set comment text for the Redline, which is inserted later on via
