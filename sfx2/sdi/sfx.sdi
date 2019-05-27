@@ -4832,6 +4832,23 @@ SfxVoidItem RedactDoc SID_REDACTDOC
     GroupId = SfxGroupId::Document;
 ]
 
+SfxVoidItem AutoRedactDoc SID_AUTOREDACTDOC
+(SfxStringItem URL SID_FILE_NAME, SfxStringItem FilterName SID_FILTER_NAME)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Document;
+]
+
 SfxImageItem ImageOrientation SID_IMAGE_ORIENTATION
 
 [
