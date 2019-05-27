@@ -743,6 +743,7 @@ void mscx_raiseException(
     typelib_TypeDescription * pTD = nullptr;
     TYPELIB_DANGER_GET( &pTD, pUnoExc->pType );
 
+    assert(pTD->nSize > 0);
     void * pCppExc = alloca( pTD->nSize );
     ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTD, pUno2Cpp );
 

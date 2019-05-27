@@ -69,82 +69,98 @@ static inline typelib_TypeClass cpp2uno_call(
             pCppReturn = *(void **)pCppStack;
             pCppStack += sizeof(void *);
 
-            pUnoReturn = (bridges::cpp_uno::shared::relatesToInterfaceType(
-                              pReturnTypeDescr )
-                          ? alloca( pReturnTypeDescr->nSize )
-                          : pCppReturn); // direct way
+            if (bridges::cpp_uno::shared::relatesToInterfaceType(pReturnTypeDescr))
+            {
+                assert(pReturnTypeDescr->nSize > 0);
+                pUnoReturn = alloca(pReturnTypeDescr->nSize);
+            }
+            else
+            {
+                pUnoReturn = pCppReturn; // direct way
+            }
         }
     }
 
     // stack space
     static_assert(sizeof(void *) == sizeof(sal_Int32), "### unexpected size!");
     // parameters
-    void ** pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
-    void ** pCppArgs = pUnoArgs + nParams;
+    void ** pUnoArgs  = nullptr;
+    void ** pCppArgs  = nullptr;
     // indices of values this have to be converted (interface conversion cpp<=>uno)
-    sal_Int32 * pTempIndices = (sal_Int32 *)(pUnoArgs + (2 * nParams));
+    sal_Int32 * pTempIndices = nullptr;
     // type descriptions for reconversions
-    typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
-
+    typelib_TypeDescription ** ppTempParamTypeDescr = nullptr;
     sal_Int32 nTempIndices = 0;
 
-    for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
+    if (nParams > 0)
     {
-        const typelib_MethodParameter & rParam = pParams[nPos];
-        typelib_TypeDescription * pParamTypeDescr = 0;
-        TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
+        pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
+        pCppArgs = pUnoArgs + nParams;
+        // indices of values this have to be converted (interface conversion cpp<=>uno)
+        pTempIndices = (sal_Int32 *)(pUnoArgs + (2 * nParams));
+        // type descriptions for reconversions
+        ppTempParamTypeDescr = (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
 
-        if (!rParam.bOut
-            && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
-            // value
+        for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
         {
-            pCppArgs[nPos] = pCppStack;
-            pUnoArgs[nPos] = pCppStack;
-            switch (pParamTypeDescr->eTypeClass)
-            {
-            case typelib_TypeClass_HYPER:
-            case typelib_TypeClass_UNSIGNED_HYPER:
-            case typelib_TypeClass_DOUBLE:
-                pCppStack += sizeof(sal_Int32); // extra long
-                break;
-            default:
-                break;
-            }
-            // no longer needed
-            TYPELIB_DANGER_RELEASE( pParamTypeDescr );
-        }
-        else // ptr to complex value | ref
-        {
-            pCppArgs[nPos] = *(void **)pCppStack;
+            const typelib_MethodParameter & rParam = pParams[nPos];
+            typelib_TypeDescription * pParamTypeDescr = 0;
+            TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
 
-            if (! rParam.bIn) // is pure out
+            if (!rParam.bOut
+                && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
+                // value
             {
-                // uno out is unconstructed mem!
-                pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize );
-                pTempIndices[nTempIndices] = nPos;
-                // will be released at reconversion
-                ppTempParamTypeDescr[nTempIndices++] = pParamTypeDescr;
-            }
-            // is in/inout
-            else if (bridges::cpp_uno::shared::relatesToInterfaceType(
-                         pParamTypeDescr ))
-            {
-                ::uno_copyAndConvertData(
-                    pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize ),
-                    *(void **)pCppStack, pParamTypeDescr,
-                    pThis->getBridge()->getCpp2Uno() );
-                pTempIndices[nTempIndices] = nPos; // has to be reconverted
-                // will be released at reconversion
-                ppTempParamTypeDescr[nTempIndices++] = pParamTypeDescr;
-            }
-            else // direct way
-            {
-                pUnoArgs[nPos] = *(void **)pCppStack;
+                pCppArgs[nPos] = pCppStack;
+                pUnoArgs[nPos] = pCppStack;
+                switch (pParamTypeDescr->eTypeClass)
+                {
+                case typelib_TypeClass_HYPER:
+                case typelib_TypeClass_UNSIGNED_HYPER:
+                case typelib_TypeClass_DOUBLE:
+                    pCppStack += sizeof(sal_Int32); // extra long
+                    break;
+                default:
+                    break;
+                }
                 // no longer needed
                 TYPELIB_DANGER_RELEASE( pParamTypeDescr );
             }
+            else // ptr to complex value | ref
+            {
+                pCppArgs[nPos] = *(void **)pCppStack;
+
+                if (! rParam.bIn) // is pure out
+                {
+                    // uno out is unconstructed mem!
+                    assert(pParamTypeDescr->nSize > 0);
+                    pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize );
+                    pTempIndices[nTempIndices] = nPos;
+                    // will be released at reconversion
+                    ppTempParamTypeDescr[nTempIndices++] = pParamTypeDescr;
+                }
+                // is in/inout
+                else if (bridges::cpp_uno::shared::relatesToInterfaceType(
+                             pParamTypeDescr ))
+                {
+                    assert(pParamTypeDescr->nSize > 0);
+                    ::uno_copyAndConvertData(
+                        pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize ),
+                        *(void **)pCppStack, pParamTypeDescr,
+                        pThis->getBridge()->getCpp2Uno() );
+                    pTempIndices[nTempIndices] = nPos; // has to be reconverted
+                    // will be released at reconversion
+                    ppTempParamTypeDescr[nTempIndices++] = pParamTypeDescr;
+                }
+                else // direct way
+                {
+                    pUnoArgs[nPos] = *(void **)pCppStack;
+                    // no longer needed
+                    TYPELIB_DANGER_RELEASE( pParamTypeDescr );
+                }
+            }
+            pCppStack += sizeof(sal_Int32); // standard parameter length
         }
-        pCppStack += sizeof(sal_Int32); // standard parameter length
     }
 
     // ExceptionHolder

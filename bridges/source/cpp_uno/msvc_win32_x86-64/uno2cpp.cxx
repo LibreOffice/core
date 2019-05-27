@@ -91,6 +91,7 @@ bool cpp_call(
         } else if (bridges::cpp_uno::shared::relatesToInterfaceType(pReturnTD))
         {
             retKind = ReturnKind::ComplexConvert;
+            assert(pReturnTD->nSize > 0);
             aCppParams[nCppParamIndex++].p = alloca(pReturnTD->nSize);
         } else {
             retKind = ReturnKind::Complex;
@@ -128,6 +129,7 @@ bool cpp_call(
             if ( !rParam.bIn ) // Is pure out
             {
                 // C++ out is constructed mem, UNO out is not!
+                assert(pParamTD->nSize > 0);
                 ::uno_constructData(
                     aCppParams[nCppParamIndex].p = alloca( pParamTD->nSize ),
                     pParamTD );
@@ -142,6 +144,7 @@ bool cpp_call(
             // Is in/inout
             else if ( bridges::cpp_uno::shared::relatesToInterfaceType( pParamTD ) )
             {
+                assert(pParamTD->nSize > 0);
                 ::uno_copyAndConvertData(
                     aCppParams[nCppParamIndex].p = alloca( pParamTD->nSize ),
                     pUnoArgs[nPos], pParamTD,
