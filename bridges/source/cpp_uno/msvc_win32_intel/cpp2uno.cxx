@@ -69,16 +69,22 @@ static inline typelib_TypeClass cpp2uno_call(
             pCppReturn = *(void **)pCppStack;
             pCppStack += sizeof(void *);
 
-            pUnoReturn = (bridges::cpp_uno::shared::relatesToInterfaceType(
-                              pReturnTypeDescr )
-                          ? alloca( pReturnTypeDescr->nSize )
-                          : pCppReturn); // direct way
+            if (bridges::cpp_uno::shared::relatesToInterfaceType(pReturnTypeDescr))
+            {
+                assert(0 < pReturnTypeDescr->nSize);
+                pUnoReturn = alloca(pReturnTypeDescr->nSize);
+            }
+            else
+            {
+                pUnoReturn = pCppReturn; // direct way
+            }
         }
     }
 
     // stack space
     static_assert(sizeof(void *) == sizeof(sal_Int32), "### unexpected size!");
     // parameters
+    assert(0 < nParams);
     void ** pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
     void ** pCppArgs = pUnoArgs + nParams;
     // indices of values this have to be converted (interface conversion cpp<=>uno)
@@ -120,6 +126,7 @@ static inline typelib_TypeClass cpp2uno_call(
             if (! rParam.bIn) // is pure out
             {
                 // uno out is unconstructed mem!
+                assert(0 < pParamTypeDescr->nSize);
                 pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize );
                 pTempIndices[nTempIndices] = nPos;
                 // will be released at reconversion
@@ -129,6 +136,7 @@ static inline typelib_TypeClass cpp2uno_call(
             else if (bridges::cpp_uno::shared::relatesToInterfaceType(
                          pParamTypeDescr ))
             {
+                assert(0 < pParamTypeDescr->nSize);
                 ::uno_copyAndConvertData(
                     pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize ),
                     *(void **)pCppStack, pParamTypeDescr,

@@ -65,9 +65,15 @@ static typelib_TypeClass cpp2uno_call(
         {
             pCppReturn = pStack[nFirstRealParam++];
 
-            pUnoReturn = ( bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTD )
-                           ? alloca( pReturnTD->nSize )
-                           : pCppReturn ); // direct way
+            if (bridges::cpp_uno::shared::relatesToInterfaceType(pReturnTD))
+            {
+                assert(0 < pReturnTD->nSize);
+                pUnoReturn = alloca(pReturnTD->nSize);
+            }
+            else
+            {
+                pUnoReturn =  pCppReturn; // direct way
+            }
         }
     }
 
@@ -76,65 +82,74 @@ static typelib_TypeClass cpp2uno_call(
     // Unlike this method for other archs, prefer clarity to
     // micro-optimization, and allocate these array separately
 
-    // Parameters passed to the UNO function
-    void ** pUnoArgs = static_cast<void **>(alloca( sizeof(void *) * nParams ));
+    void** pUnoArgs   = nullptr;
+    void** pCppArgs   = nullptr;
+    int* pTempIndexes = nullptr;
+    typelib_TypeDescription** ppTempParamTD = nullptr;
+    int  nTempIndexes = 0;
 
-    // Parameters received from C++
-    void ** pCppArgs = static_cast<void **>(alloca( sizeof(void *) * nParams ));
-
-    // Indexes of values this have to be converted (interface conversion C++<=>UNO)
-    int * pTempIndexes =
-        static_cast<int *>(alloca( sizeof(int) * nParams ));
-
-    // Type descriptions for reconversions
-    typelib_TypeDescription ** ppTempParamTD =
-        static_cast<typelib_TypeDescription **>(alloca( sizeof(void *) * nParams ));
-
-    int nTempIndexes = 0;
-
-    for ( int nPos = 0; nPos < nParams; ++nPos )
+    if (0 < nParams)
     {
-        const typelib_MethodParameter & rParam = pParams[nPos];
+        // Parameters passed to the UNO function
+        pUnoArgs = static_cast<void **>(alloca( sizeof(void *) * nParams ));
 
-        typelib_TypeDescription * pParamTD = nullptr;
-        TYPELIB_DANGER_GET( &pParamTD, rParam.pTypeRef );
+        // Parameters received from C++
+        pCppArgs = static_cast<void**>(alloca(sizeof(void*) * nParams));
 
-        if ( !rParam.bOut &&
-             bridges::cpp_uno::shared::isSimpleType( pParamTD ) )
+        // Indexes of values this have to be converted (interface conversion C++<=>UNO)
+        pTempIndexes =
+            static_cast<int *>(alloca( sizeof(int) * nParams ));
+
+        // Type descriptions for reconversions
+        ppTempParamTD =
+            static_cast<typelib_TypeDescription **>(alloca( sizeof(void *) * nParams ));
+
+        for (int nPos = 0; nPos < nParams; ++nPos)
         {
-            pCppArgs[nPos] = pUnoArgs[nPos] = pCppIncomingParams++;
+            const typelib_MethodParameter& rParam = pParams[nPos];
 
-            TYPELIB_DANGER_RELEASE( pParamTD );
-        }
-        else // ptr to complex value | ref
-        {
-            void * pCppStack;
+            typelib_TypeDescription* pParamTD = nullptr;
+            TYPELIB_DANGER_GET(&pParamTD, rParam.pTypeRef);
 
-            pCppArgs[nPos] = pCppStack = *pCppIncomingParams++;
-
-            if ( !rParam.bIn ) // Pure out
+            if ( !rParam.bOut &&
+                 bridges::cpp_uno::shared::isSimpleType( pParamTD ) )
             {
-                // UNO out is unconstructed mem
-                pUnoArgs[nPos] = alloca( pParamTD->nSize );
-                pTempIndexes[nTempIndexes] = nPos;
-                // pParamTD will be released at reconversion
-                ppTempParamTD[nTempIndexes++] = pParamTD;
+                pCppArgs[nPos] = pUnoArgs[nPos] = pCppIncomingParams++;
+
+                TYPELIB_DANGER_RELEASE(pParamTD);
             }
-            else if ( bridges::cpp_uno::shared::relatesToInterfaceType( pParamTD ) )
+            else // ptr to complex value | ref
             {
-                ::uno_copyAndConvertData(
-                    pUnoArgs[nPos] = alloca( pParamTD->nSize ),
-                    pCppStack, pParamTD,
-                    pThis->getBridge()->getCpp2Uno() );
-                pTempIndexes[nTempIndexes] = nPos; // Has to be reconverted
-                // pParamTD will be released at reconversion
-                ppTempParamTD[nTempIndexes++] = pParamTD;
-            }
-            else // direct way
-            {
-                pUnoArgs[nPos] = pCppStack;
-                // No longer needed
-                TYPELIB_DANGER_RELEASE( pParamTD );
+                void* pCppStack;
+
+                pCppArgs[nPos] = pCppStack = *pCppIncomingParams++;
+
+                if (!rParam.bIn) // Pure out
+                {
+                    // UNO out is unconstructed mem
+                    assert(0 < pParamTD->nSize);
+                    pUnoArgs[nPos] = alloca(pParamTD->nSize);
+                    pTempIndexes[nTempIndexes] = nPos;
+                    // pParamTD will be released at reconversion
+                    ppTempParamTD[nTempIndexes++] = pParamTD;
+                }
+                else if (bridges::cpp_uno::shared::relatesToInterfaceType(pParamTD))
+                {
+                    assert(0 < pParamTD->nSize);
+                    ::uno_copyAndConvertData(
+                        pUnoArgs[nPos] = alloca( pParamTD->nSize ),
+                        pCppStack, pParamTD,
+                        pThis->getBridge()->getCpp2Uno() );
+                    pTempIndexes[nTempIndexes] = nPos; // Has to be reconverted
+                    // pParamTD will be released at reconversion
+                    ppTempParamTD[nTempIndexes++] = pParamTD;
+                }
+                else // direct way
+                {
+                    pUnoArgs[nPos] = pCppStack;
+                    // No longer needed
+                    TYPELIB_DANGER_RELEASE(pParamTD);
+                }
             }
         }
     }
