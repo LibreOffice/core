@@ -198,6 +198,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/doc/Metadatable \
     sfx2/source/doc/QuerySaveDocument \
     sfx2/source/doc/SfxDocumentMetaData \
+    sfx2/source/doc/autoredactdialog \
     sfx2/source/doc/docfac \
     sfx2/source/doc/docfile \
     sfx2/source/doc/docfilt \
