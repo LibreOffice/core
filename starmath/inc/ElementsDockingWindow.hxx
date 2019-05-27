@@ -25,6 +25,7 @@
 
 #include "format.hxx"
 #include <memory>
+#include <tuple>
 
 class SmDocShell;
 class SmNode;
@@ -57,20 +58,25 @@ public:
     bool isSeparator() const override { return true; }
 };
 
+typedef std::pair<const char*, const char*> SmElementDescr;
+
 class SmElementsControl : public Control
 {
     friend class ElementSelectorUIObject;
     friend class ElementUIObject;
 
-    static const std::pair<const char*, const char*> aUnaryBinaryOperatorsList[];
-    static const std::pair<const char*, const char*> aRelationsList[];
-    static const std::pair<const char*, const char*> aSetOperations[];
-    static const std::pair<const char*, const char*> aFunctions[];
-    static const std::pair<const char*, const char*> aOperators[];
-    static const std::pair<const char*, const char*> aAttributes[];
-    static const std::pair<const char*, const char*> aBrackets[];
-    static const std::pair<const char*, const char*> aFormats[];
-    static const std::pair<const char*, const char*> aOthers[];
+    static const SmElementDescr m_aUnaryBinaryOperatorsList[];
+    static const SmElementDescr m_aRelationsList[];
+    static const SmElementDescr m_aSetOperationsList[];
+    static const SmElementDescr m_aFunctionsList[];
+    static const SmElementDescr m_aOperatorsList[];
+    static const SmElementDescr m_aAttributesList[];
+    static const SmElementDescr m_aBracketsList[];
+    static const SmElementDescr m_aFormatsList[];
+    static const SmElementDescr m_aOthersList[];
+    static const SmElementDescr m_aExamplesList[];
+    static const std::tuple<const char*, const SmElementDescr*, size_t> m_aCategories[];
+    static const size_t m_aCategoriesSize;
 
     virtual void ApplySettings(vcl::RenderContext&) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
@@ -117,6 +123,8 @@ public:
     virtual ~SmElementsControl() override;
     virtual void dispose() override;
 
+    static const auto& categories() { return m_aCategories; }
+    static size_t categoriesSize() { return m_aCategoriesSize; }
     void setElementSetId(const char* pSetId);
 
     void setVerticalMode(bool bVertical);
@@ -133,8 +141,6 @@ public:
 
 class SmElementsDockingWindow : public SfxDockingWindow
 {
-    static const char* aCategories[];
-
     VclPtr<SmElementsControl>  mpElementsControl;
     VclPtr<ListBox>            mpElementListBox;
 
