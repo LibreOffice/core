@@ -448,7 +448,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     bool m_bSelect : 1;
     bool m_bInFootEndNoteAnchor : 1;
     bool m_bInFootEndNoteSymbol : 1;
-    bool const m_bIgnoreHTMLComments : 1;
+    bool m_bIgnoreHTMLComments : 1;
     bool m_bRemoveHidden : 1; // the filter implementation might set the hidden flag
 
     bool m_bBodySeen : 1;
