@@ -933,6 +933,30 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf62364, "tdf62364.odt", "10-testing-addresses
     }
 }
 
+DECLARE_SHELL_MAILMERGE_TEST(tdf125522_shell, "tdf125522.odt", "10-testing-addresses.ods", "testing-addresses")
+{
+    // prepare unit test and run
+    executeMailMerge();
+
+    // reset currently opened layout of the original template,
+    // and create the layout of the document with 10 mails inside
+    dumpMMLayout();
+
+    // there should be no any text frame in output
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    const auto & rNodes = pTextDoc->GetDocShell()->GetDoc()->GetNodes();
+    for (int nodeIndex = 0; nodeIndex<rNodes.Count(); nodeIndex++)
+    {
+        const SwNodePtr aNode = rNodes[nodeIndex];
+        if (aNode->StartOfSectionNode())
+        {
+            CPPUNIT_ASSERT(!aNode->StartOfSectionNode()->GetFlyFormat());
+        }
+    }
+}
+
 DECLARE_SHELL_MAILMERGE_TEST(testTd78611_shell, "tdf78611.odt", "10-testing-addresses.ods", "testing-addresses")
 {
     // prepare unit test and run
