@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_feeb20ad",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport9.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1205,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-05-28T22:27:44Z",
+      "side": 1,
+      "message": "That test is duplicated, see sw/qa/extras/ooxmlexport/ooxmlexport12.cxx from 72131204cadbd20678a41b1da910bf66740c0886",
+      "revId": "7c0361b9fc06a472c98f64f3b6d712643e05ef53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
