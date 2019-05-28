@@ -3533,6 +3533,7 @@ void ScFiltersTest::testAutoheight2Rows()
 
     // We will do relative comparison, because calculated autoheight
     // can be different on different platforms
+    (void)nHeight2;
     CPPUNIT_ASSERT_MESSAGE("Row #3 shoud be thinner than #1", nHeight3 < nHeight1);
 
     xDocSh->DoClose();

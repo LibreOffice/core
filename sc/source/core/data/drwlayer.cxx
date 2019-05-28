@@ -1480,8 +1480,8 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
                                                      pObjData->maStart.Row()));
                         if (bObjectInMarkArea || bObjectAnchoredToMarkedCell)
                         {
-                            ScRange aRange = pDoc->GetRange( nTab, aObjRect );
-                            if (rMark.IsAllMarked(aRange))
+                            ScRange aRange2 = pDoc->GetRange( nTab, aObjRect );
+                            if (rMark.IsAllMarked(aRange2))
                                 ppObj[nDelCount++] = pObject;
                         }
                     }
