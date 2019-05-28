@@ -1922,6 +1922,11 @@ AC_ARG_WITH(system-hunspell,
         [Use libhunspell already on system.]),,
     [with_system_hunspell="$with_system_libs"])
 
+AC_ARG_WITH(system-qrcodegen,
+    AS_HELP_STRING([--with-system-qrcodegen],
+        [Use libqrcodegen already on system.]),,
+    [with_system_qrcodegen="$with_system_libs"])
+
 AC_ARG_WITH(system-mythes,
     AS_HELP_STRING([--with-system-mythes],
         [Use mythes already on system.]),,
