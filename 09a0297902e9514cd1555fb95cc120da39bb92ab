@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_631bfb1a",
+        "filename": "bridges/source/cpp_uno/msvc_win32_intel/cpp2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-28T09:14:38Z",
+      "side": 1,
+      "message": "i disagree :)\n\ni find it somehow easier to read if the \"smaller\" one is on the left side... but maybe that\u0027s because i grew up learning a LTR script :)",
+      "parentUuid": "3fa0c359_8d4c38c8",
+      "revId": "09a0297902e9514cd1555fb95cc120da39bb92ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_adda54e6",
         "filename": "bridges/source/cpp_uno/msvc_win32_intel/uno2cpp.cxx",
         "patchSetId": 1
