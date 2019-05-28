@@ -469,24 +469,8 @@ sal_Int32 AlgAtom::getConnectorType()
 }
 
 void AlgAtom::layoutShape( const ShapePtr& rShape,
-                           const std::vector<Constraint>& rOwnConstraints )
+                           const std::vector<Constraint>& rConstraints )
 {
-    // Algorithm result may depend on the parent constraints as well.
-    std::vector<Constraint> aMergedConstraints;
-    const LayoutNode* pParent = getLayoutNode().getParentLayoutNode();
-    if (pParent)
-    {
-        for (const auto& pChild : pParent->getChildren())
-        {
-            auto pConstraintAtom = dynamic_cast<ConstraintAtom*>(pChild.get());
-            if (pConstraintAtom)
-                pConstraintAtom->parseConstraint(aMergedConstraints, /*bRequireForName=*/true);
-        }
-    }
-    aMergedConstraints.insert(aMergedConstraints.end(), rOwnConstraints.begin(),
-                              rOwnConstraints.end());
-    const std::vector<Constraint>& rConstraints = aMergedConstraints;
-
     switch(mnType)
     {
         case XML_composite:
@@ -765,7 +749,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             sal_Int32 nXOffset = 0;
             double fWidthScale = 1.0;
             if (mnType == XML_hierChild)
-                calculateHierChildOffsetScale(rShape, pParent, nXOffset, fWidthScale);
+                calculateHierChildOffsetScale(rShape, getLayoutNode().getParentLayoutNode(), nXOffset, fWidthScale);
 
             awt::Size aChildSize = rShape->getSize();
             if (nDir == XML_fromT)
