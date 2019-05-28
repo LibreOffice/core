@@ -27,6 +27,7 @@
 #include <map>
 #include <memory>
 
+#include <unicode/regex.h>
 #include <unicode/unistr.h>
 #include <unicode/uversion.h>
 
@@ -34,7 +35,6 @@ namespace com::sun::star::i18n { class XBreakIterator; }
 namespace com::sun::star::i18n { class XCharacterClassification; }
 namespace com::sun::star::i18n { class XExtendedTransliteration; }
 namespace com::sun::star::uno { class XComponentContext; }
-namespace icu_63 { class RegexMatcher; }
 
 
 using namespace U_ICU_NAMESPACE;

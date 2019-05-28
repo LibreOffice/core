@@ -1,6 +1,9 @@
 ---
 assumeFilename: i18npool/source/localedata/localedata.cxx
 blacklist:
+    i18npool/inc/breakiterator_unicode.hxx:
+    # contains versioned namespace so cannot forward declare
+    - unicode/brkiter.h
     i18npool/inc/breakiteratorImpl.hxx:
     # Base class needs complete type
     - com/sun/star/i18n/XBreakIterator.hpp
@@ -84,6 +87,8 @@ blacklist:
     # Base class needs complete type
     - com/sun/star/util/XTextSearch2.hpp
     - com/sun/star/lang/XServiceInfo.hpp
+    # contains versioned namespace so cannot forward declare
+    - unicode/regex.h
     i18npool/source/breakiterator/xdictionary.cxx:
     # Used after #ifdef DICT_JA_ZH_IN_DATAFILE
     - config_folders.h

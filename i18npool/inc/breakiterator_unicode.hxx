@@ -21,11 +21,10 @@
 
 #include "breakiteratorImpl.hxx"
 
+#include <unicode/brkiter.h>
 #include <unicode/utext.h>
 #include <memory>
 #include <unordered_map>
-
-namespace icu_63 { class BreakIterator; }
 
 namespace i18npool {
 
