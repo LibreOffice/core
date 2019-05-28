@@ -5873,7 +5873,7 @@
               <desc>Specifies whether HTML comments should be ignored or imported as postits / annotations.</desc>
               <label>Ignore HTML comments</label>
             </info>
-            <value>false</value>
+            <value>true</value>
           </prop>
         </group>
       </group>
