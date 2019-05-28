@@ -301,7 +301,6 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_isInTableStructure(false),
     m_pTempViewFrame(nullptr)
 {
-    m_bIgnoreHTMLComments = true;
     m_nEventId = nullptr;
     m_bUpperSpace = m_bViewCreated = m_bChkJumpMark = false;
 
