@@ -46,65 +46,6 @@ using namespace cppu;
 
 namespace
 {
-bool ImageToPNG(css::uno::Sequence<sal_Int8> const& rImgData,
-                css::uno::Sequence<sal_Int8>& rPngData)
-{
-#if 1
-    // Skip this complexity for now. Work in progress.
-    (void)rImgData;
-    (void)rPngData;
-    return false;
-#else
-    NSData* pData = [NSData dataWithBytesNoCopy:const_cast<sal_Int8*>(rImgData.getConstArray())
-                                         length:rImgData.getLength()
-                                   freeWhenDone:0];
-    if (!pData)
-        return false;
-
-    NSBitmapImageRep* pRep = [NSBitmapImageRep imageRepWithData:pData];
-    if (!pRep)
-        return false;
-
-    NSData* pOut = [pRep representationUsingType:NSPNGFileType properties:@{}];
-    if (!pOut)
-        return false;
-
-    const size_t nPngSize = [pOut length];
-    rPngData.realloc(nPngSize);
-    [pOut getBytes:rPngData.getArray() length:nPngSize];
-    return (nPngSize > 0);
-#endif
-}
-
-bool PNGToImage(css::uno::Sequence<sal_Int8> const& rPngData,
-                css::uno::Sequence<sal_Int8>& rImgData)
-{
-#if 1
-    (void)rPngData;
-    (void)rImgData;
-    return false;
-#else
-    NSData* pData = [NSData dataWithBytesNoCopy:const_cast<sal_Int8*>(rPngData.getConstArray())
-                                         length:rPngData.getLength()
-                                   freeWhenDone:0];
-    if (!pData)
-        return false;
-
-    NSBitmapImageRep* pRep = [NSBitmapImageRep imageRepWithData:pData];
-    if (!pRep)
-        return false;
-
-    NSData* pOut = [pRep representationUsingType:eOutFormat properties:@{}];
-    if (!pOut)
-        return false;
-
-    const size_t nImgSize = [pOut length];
-    rImgData.realloc(nImgSize);
-    [pOut getBytes:rImgData.getArray() length:nImgSize];
-    return (nImgSize > 0);
-#endif
-}
-
 /* Determine whether or not a DataFlavor is valid.
    */
 bool isValidFlavor(const DataFlavor& aFlavor)
@@ -396,61 +337,6 @@ Any HTMLFormatDataProvider::getOOoData()
     return oOOData;
 }
 
-class PNGDataProvider : public DataProviderBaseImpl
-{
-public:
-    PNGDataProvider(const Any&);
-    PNGDataProvider(NSData*);
-
-    NSData* getSystemData() override;
-    Any getOOoData() override;
-};
-
-PNGDataProvider::PNGDataProvider(const Any& data)
-    : DataProviderBaseImpl(data)
-{
-}
-
-PNGDataProvider::PNGDataProvider(NSData* data)
-    : DataProviderBaseImpl(data)
-{
-}
-
-NSData* PNGDataProvider::getSystemData()
-{
-    Sequence<sal_Int8> pngData;
-    mData >>= pngData;
-
-    Sequence<sal_Int8> imgData;
-    NSData* sysData = nullptr;
-    if (PNGToImage(pngData, imgData))
-        sysData = [NSData dataWithBytes:imgData.getArray() length:imgData.getLength()];
-
-    return sysData;
-}
-
-Any PNGDataProvider::getOOoData()
-{
-    Any oOOData;
-
-    if (mSystemData)
-    {
-        const unsigned int flavorDataLength = [mSystemData length];
-        Sequence<sal_Int8> imgData(flavorDataLength);
-        memcpy(imgData.getArray(), [mSystemData bytes], flavorDataLength);
-
-        Sequence<sal_Int8> pngData;
-        if (ImageToPNG(imgData, pngData))
-            oOOData <<= pngData;
-    }
-    else
-    {
-        oOOData = mData;
-    }
-
-    return oOOData;
-}
-
 DataFlavorMapper::DataFlavorMapper()
 {
     Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
@@ -564,14 +450,7 @@ DataFlavorMapper::getDataProvider(const NSString* systemFlavor,
 
         if (isByteSequenceType(data.getValueType()))
         {
-            if ([systemFlavor caseInsensitiveCompare:PBTYPE_PNG] == NSOrderedSame)
-            {
-                dp = DataProviderPtr_t(new PNGDataProvider(data));
-            }
-            else
-            {
-                dp = DataProviderPtr_t(new ByteSequenceDataProvider(data));
-            }
+            dp = DataProviderPtr_t(new ByteSequenceDataProvider(data));
         }
         else // Must be OUString type
         {
@@ -600,10 +479,6 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider(const NSString* systemFlavor
     else if ([systemFlavor caseInsensitiveCompare:PBTYPE_HTML] == NSOrderedSame)
     {
         dp = DataProviderPtr_t(new HTMLFormatDataProvider(systemData));
-    }
-    else if ([systemFlavor caseInsensitiveCompare:PBTYPE_PNG] == NSOrderedSame)
-    {
-        dp = DataProviderPtr_t(new PNGDataProvider(systemData));
     }
     else
     {
