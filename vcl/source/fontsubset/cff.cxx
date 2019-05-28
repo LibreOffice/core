@@ -1131,7 +1131,7 @@ int CffSubsetterContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const 
     const int nType1Len = mpWritePtr - pT1Ops;
 
     // encrypt the Type1 charstring
-    int nRDCryptR = 4330; // TODO: mnRDCryptSeed;
+    unsigned nRDCryptR = 4330; // TODO: mnRDCryptSeed;
     for( U8* p = pT1Ops; p < mpWritePtr; ++p) {
         *p ^= (nRDCryptR >> 8);
         nRDCryptR = (*p + nRDCryptR) * 52845 + 22719;
@@ -1591,7 +1591,7 @@ public:
 private:
     FILE*       mpFileOut;
     char        maBuffer[MAX_T1OPS_SIZE];   // TODO: dynamic allocation
-    int         mnEECryptR;
+    unsigned    mnEECryptR;
 public:
     char*       mpPtr;
 
