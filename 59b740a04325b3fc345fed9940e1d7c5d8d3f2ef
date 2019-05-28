@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_237653a6",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 4173,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-05-28T07:50:43Z",
+      "side": 1,
+      "message": "hm there is no \"public\" directory in the tarball?",
+      "range": {
+        "startLine": 4173,
+        "startChar": 60,
+        "endLine": 4173,
+        "endChar": 66
+      },
+      "revId": "59b740a04325b3fc345fed9940e1d7c5d8d3f2ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
