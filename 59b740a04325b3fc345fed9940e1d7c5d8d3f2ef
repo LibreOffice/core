@@ -22,6 +22,30 @@
       "revId": "59b740a04325b3fc345fed9940e1d7c5d8d3f2ef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_03d1d754",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 4173,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-05-28T08:15:52Z",
+      "side": 1,
+      "message": "\u003e hm there is no \"public\" directory in the tarball?\n\nNice catch Samuel. :)\n\n@Shubham:\nI guess it is a copy/paste error. You may look at other external tarballs like libpagemaker and pdfium to make sense of what these directives mean.\n\nProbably you already know, but just in case, you may find all other external tarballs here: https://dev-www.libreoffice.org/src/",
+      "parentUuid": "3fa0c359_237653a6",
+      "range": {
+        "startLine": 4173,
+        "startChar": 60,
+        "endLine": 4173,
+        "endChar": 66
+      },
+      "revId": "59b740a04325b3fc345fed9940e1d7c5d8d3f2ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
