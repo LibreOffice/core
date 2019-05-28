@@ -409,18 +409,19 @@ void SwTextNode::RstTextAttr(
     std::vector<SwTextAttr *> delAttributes;
 
     // iterate over attribute array until start of attribute is behind deletion range
+    m_pSwpHints->SortIfNeedBe(); // trigger sorting now, we don't want it during iteration
     size_t i = 0;
     sal_Int32 nAttrStart = sal_Int32();
     SwTextAttr *pHt = nullptr;
     while ( (i < m_pSwpHints->Count())
-            && ( ( ( nAttrStart = m_pSwpHints->Get(i)->GetStart()) < nEnd )
+            && ( ( ( nAttrStart = m_pSwpHints->GetWithoutResorting(i)->GetStart()) < nEnd )
                  || nLen==0 ) && !bExactRange)
     {
-        pHt = m_pSwpHints->Get(i);
+        pHt = m_pSwpHints->GetWithoutResorting(i);
 
         // attributes without end stay in!
         // but consider <bInclRefToxMark> used by Undo
-        sal_Int32* const pAttrEnd = pHt->GetEnd();
+        const sal_Int32* const pAttrEnd = pHt->GetEnd();
         const bool bKeepAttrWithoutEnd =
             pAttrEnd == nullptr
             && ( !bInclRefToxMark
@@ -513,7 +514,7 @@ void SwTextNode::RstTextAttr(
                     bChanged = true;
                     m_pSwpHints->NoteInHistory( pHt );
                     // UGLY: this may temporarily destroy the sorting!
-                    pHt->GetStart() = nEnd;
+                    pHt->SetStart(nEnd);
                     m_pSwpHints->NoteInHistory( pHt, true );
 
                     if ( pStyleHandle.get() && nAttrStart < nEnd )
@@ -541,7 +542,7 @@ void SwTextNode::RstTextAttr(
 
                     m_pSwpHints->NoteInHistory( pHt );
                     // UGLY: this may temporarily destroy the sorting!
-                    *pAttrEnd = nStt;
+                    pHt->SetEnd(nStt);
                     m_pSwpHints->NoteInHistory( pHt, true );
 
                     if ( pStyleHandle.get() )
@@ -563,7 +564,7 @@ void SwTextNode::RstTextAttr(
                     const sal_Int32 nTmpEnd = *pAttrEnd;
                     m_pSwpHints->NoteInHistory( pHt );
                     // UGLY: this may temporarily destroy the sorting!
-                    *pAttrEnd = nStt;
+                    pHt->SetEnd(nStt);
                     m_pSwpHints->NoteInHistory( pHt, true );
 
                     if ( pStyleHandle.get() && nStt < nEnd )
