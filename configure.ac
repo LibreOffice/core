@@ -1909,6 +1909,11 @@ AC_ARG_WITH(system-hunspell,
         [Use libhunspell already on system.]),,
     [with_system_hunspell="$with_system_libs"])
 
+AC_ARG_WITH(system-qrcodegen,
+    AS_HELP_STRING([--with-system-qrcodegen],
+        [Use libqrcodegen already on system.]),,
+    [with_system_qrcodegen="$with_system_libs"])
+
 AC_ARG_WITH(system-mythes,
     AS_HELP_STRING([--with-system-mythes],
         [Use mythes already on system.]),,
@@ -9820,6 +9825,32 @@ fi
 AC_SUBST(SYSTEM_HUNSPELL)
 AC_SUBST(HUNSPELL_CFLAGS)
 AC_SUBST(HUNSPELL_LIBS)
+
+dnl ===================================================================
+dnl Check for system qrcodegen
+dnl ===================================================================
+AC_MSG_CHECKING([which libqrcodegen to use])
+if test "$with_system_qrcodegen" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_QRCODEGEN=TRUE
+    AC_LANG_PUSH([C++])
+    AC_CHECK_HEADER(qrcodegen/QrCode.hpp, [],
+        [AC_MSG_ERROR(qrcodegen headers not found.)], [#include <stdexcept>])
+    AC_CHECK_LIB([qrcodegencpp], [main], [:],
+        [ AC_MSG_ERROR(qrcodegen C++ library not found.) ], [])
+    QRCODEGEN_LIBS=-lqrcodegencpp
+    AC_LANG_POP([C++])
+    QRCODEGEN_CFLAGS=$(printf '%s' "$QRCODEGEN_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    FilterLibs "${QRCODEGEN_LIBS}"
+    QRCODEGEN_LIBS="${filteredlibs}"
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_QRCODEGEN=
+    BUILD_TYPE="$BUILD_TYPE QRCODEGEN"
+fi
+AC_SUBST(SYSTEM_QRCODEGEN)
+AC_SUBST(QRCODEGEN_CFLAGS)
+AC_SUBST(QRCODEGEN_LIBS)
 
 dnl ===================================================================
 dnl Checking for altlinuxhyph
