@@ -475,48 +475,52 @@ public:
     static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
 };
 
-struct CmisValue : public VclBuilderContainer
+struct CmisValue
 {
-    VclPtr<Edit>   m_aValueEdit;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Entry> m_xValueEdit;
 
-    CmisValue( vcl::Window* pParent, const OUString& aStr );
+    CmisValue(weld::Widget* pParent, const OUString& rStr);
 };
 
-struct CmisDateTime : public VclBuilderContainer
+struct CmisDateTime
 {
-    VclPtr<DateField>  m_aDateField;
-    VclPtr<TimeField>  m_aTimeField;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<SvtCalendarBox>  m_xDateField;
+    std::unique_ptr<weld::TimeSpinButton> m_xTimeField;
 
-    CmisDateTime( vcl::Window* pParent, const css::util::DateTime& aDateTime );
+    CmisDateTime(weld::Widget* pParent, const css::util::DateTime& rDateTime);
 };
 
-struct CmisYesNo : public VclBuilderContainer
+struct CmisYesNo
 {
-    VclPtr<RadioButton> m_aYesButton;
-    VclPtr<RadioButton> m_aNoButton;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::RadioButton> m_xYesButton;
+    std::unique_ptr<weld::RadioButton> m_xNoButton;
 
-    CmisYesNo( vcl::Window* pParent, bool bValue);
+    CmisYesNo(weld::Widget* pParent, bool bValue);
 };
 
 // struct CmisPropertyLine ---------------------------------------------
 
-struct CmisPropertyLine : public VclBuilderContainer
+struct CmisPropertyLine
 {
-    VclPtr<VclFrame>              m_pFrame;
+    std::unique_ptr<weld::Builder> m_xBuilder;
     OUString                      m_sId;
     OUString                      m_sType;
     bool                          m_bUpdatable;
     bool                          m_bRequired;
     bool                          m_bMultiValued;
     bool                          m_bOpenChoice;
-    VclPtr<FixedText>             m_aName;
-    VclPtr<FixedText>             m_aType;
+    std::unique_ptr<weld::Frame>  m_xFrame;
+    std::unique_ptr<weld::Label>  m_xName;
+    std::unique_ptr<weld::Label>  m_xType;
     std::vector< std::unique_ptr<CmisValue> >     m_aValues;
     std::vector< std::unique_ptr<CmisDateTime> >  m_aDateTimes;
     std::vector< std::unique_ptr<CmisYesNo> >     m_aYesNos;
     long getItemHeight() const;
-    CmisPropertyLine( vcl::Window* pParent );
-    virtual ~CmisPropertyLine() override;
+    CmisPropertyLine(weld::Widget* pParent);
+    ~CmisPropertyLine();
 };
 
 // class CmisPropertiesWindow ------------------------------------------
@@ -524,16 +528,13 @@ struct CmisPropertyLine : public VclBuilderContainer
 class CmisPropertiesWindow
 {
 private:
-    VclPtr<VclBox>                      m_pBox;
-    sal_Int32                           m_nItemHeight;
+    std::unique_ptr<weld::Container>    m_xBox;
     SvNumberFormatter                   m_aNumberFormatter;
     std::vector< std::unique_ptr<CmisPropertyLine> > m_aCmisPropertiesLines;
 public:
-    CmisPropertiesWindow(SfxTabPage* pParent);
+    CmisPropertiesWindow(std::unique_ptr<weld::Container> xParent);
     ~CmisPropertiesWindow();
 
-    sal_Int32 GetItemHeight() const { return m_nItemHeight; }
-    long getBoxHeight() const { return VclContainer::getLayoutRequisition(*m_pBox).Height(); };
     void AddLine( const OUString& sId, const OUString& sName,
                   const OUString& sType, const bool bUpdatable,
                   const bool bRequired, const bool bMultiValued,
@@ -541,7 +542,6 @@ public:
                   css::uno::Any& aChoices,
                   css::uno::Any const & rAny );
     void ClearAllLines();
-    void DoScroll( sal_Int32 nNewPos );
 
     css::uno::Sequence< css::document::CmisProperty >
                         GetCmisProperties() const;
@@ -552,16 +552,11 @@ public:
 class CmisPropertiesControl
 {
 private:
-    CmisPropertiesWindow    m_pPropertiesWin;
-    VclScrolledWindow&      m_rScrolledWindow;
-    ScrollBar&              m_rVertScroll;
-    DECL_LINK( ScrollHdl, ScrollBar*, void );
-
-    void checkAutoVScroll();
+    CmisPropertiesWindow m_aPropertiesWin;
+    std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;
 
 public:
-    CmisPropertiesControl(SfxTabPage* pParent);
-    void setScrollRange();
+    CmisPropertiesControl(weld::Builder& rBuilder);
 
     void AddLine( const OUString& sId, const OUString& sName,
                   const OUString& sType, const bool bUpdatable,
@@ -573,7 +568,7 @@ public:
     void ClearAllLines();
     css::uno::Sequence< css::document::CmisProperty >
                     GetCmisProperties() const
-                        { return m_pPropertiesWin.GetCmisProperties(); }
+                        { return m_aPropertiesWin.GetCmisProperties(); }
 };
 
 // class SfxCmisPropertiesPage -------------------------------------------------
@@ -581,7 +576,7 @@ public:
 class SfxCmisPropertiesPage : public SfxTabPage
 {
 private:
-    CmisPropertiesControl m_pPropertiesCtrl;
+    std::unique_ptr<CmisPropertiesControl> m_xPropertiesCtrl;
     using TabPage::DeactivatePage;
 
 protected:
@@ -590,14 +585,10 @@ protected:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    SfxCmisPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
-    virtual ~SfxCmisPropertiesPage() override;
+    SfxCmisPropertiesPage(TabPageParent pParent, const SfxItemSet&);
     virtual void dispose() override;
-
+    virtual ~SfxCmisPropertiesPage() override;
     static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
-    virtual void SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation) override;
-    virtual void SetSizePixel(const Size& rAllocation) override;
-    virtual void SetPosPixel(const Point& rAllocPos) override;
 };
 
 #endif // #ifndef _ INCLUDED_SFX2_DINFDLG_HXX

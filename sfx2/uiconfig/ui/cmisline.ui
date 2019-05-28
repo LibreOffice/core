@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">86400000</property>
+    <property name="step_increment">1000</property>
+    <property name="page_increment">60000</property>
+  </object>
   <object class="GtkFrame" id="CmisFrame">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -24,9 +30,9 @@
               <object class="GtkLabel" id="name">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="width_chars">30</property>
                 <property name="xalign">0</property>
                 <property name="yalign">0</property>
-                <property name="width_chars">30</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -34,17 +40,15 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="type">
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
-                <property name="yalign">0</property>
                 <property name="label" translatable="yes" context="cmisline|type">Type</property>
                 <property name="width_chars">8</property>
+                <property name="xalign">0</property>
+                <property name="yalign">0</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -52,8 +56,6 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -66,13 +68,10 @@
                 <property name="yalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
-                <property name="group">no</property>
               </object>
               <packing>
                 <property name="left_attach">3</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -89,8 +88,6 @@
               <packing>
                 <property name="left_attach">4</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -102,32 +99,31 @@
               <packing>
                 <property name="left_attach">2</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="date:yy:mm:dd">
+              <object class="GtkMenuButton" id="date">
+                <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="update_policy">if-valid</property>
+                <property name="receives_default">False</property>
+                <property name="draw_indicator">True</property>
+                <child>
+                  <placeholder/>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">5</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="time:hh:mm">
+              <object class="GtkSpinButton" id="time">
                 <property name="can_focus">True</property>
-                <property name="numeric">True</property>
+                <property name="adjustment">adjustment1</property>
               </object>
               <packing>
                 <property name="left_attach">6</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
           </object>

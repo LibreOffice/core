@@ -1965,79 +1965,73 @@ VclPtr<SfxTabPage> SfxCustomPropertiesPage::Create( TabPageParent pParent, const
     return VclPtr<SfxCustomPropertiesPage>::Create( pParent, *rItemSet );
 }
 
-CmisValue::CmisValue( vcl::Window* pParent, const OUString& aStr )
+CmisValue::CmisValue(weld::Widget* pParent, const OUString& aStr)
+    : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/cmisline.ui"))
+    , m_xValueEdit(m_xBuilder->weld_entry("value"))
 {
-    m_pUIBuilder.reset(new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui"));
-    get( m_aValueEdit, "value");
-    m_aValueEdit->Show();
-    m_aValueEdit->SetText( aStr );
+    m_xValueEdit->show();
+    m_xValueEdit->set_text(aStr);
 }
 
-CmisDateTime::CmisDateTime( vcl::Window* pParent, const util::DateTime& aDateTime )
+CmisDateTime::CmisDateTime(weld::Widget* pParent, const util::DateTime& aDateTime)
+    : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/cmisline.ui"))
+    , m_xDateField(new SvtCalendarBox(m_xBuilder->weld_menu_button("date")))
+    , m_xTimeField(m_xBuilder->weld_time_spin_button("time", TimeFieldFormat::F_SEC))
 {
-    m_pUIBuilder.reset(new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui"));
-    get( m_aDateField, "date");
-    get( m_aTimeField, "time");
-    m_aDateField->Show();
-    m_aTimeField->Show();
-    m_aDateField->SetDate( Date( aDateTime ) );
-    m_aTimeField->SetTime( tools::Time( aDateTime ) );
+    m_xDateField->show();
+    m_xTimeField->show();
+    m_xDateField->set_date(Date(aDateTime));
+    m_xTimeField->set_value(tools::Time(aDateTime));
 }
 
-CmisYesNo::CmisYesNo( vcl::Window* pParent, bool bValue )
+CmisYesNo::CmisYesNo(weld::Widget* pParent, bool bValue)
+    : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/cmisline.ui"))
+    , m_xYesButton(m_xBuilder->weld_radio_button("yes"))
+    , m_xNoButton(m_xBuilder->weld_radio_button("no"))
 {
-    m_pUIBuilder.reset(new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui"));
-    get( m_aYesButton, "yes");
-    get( m_aNoButton, "no");
-    m_aYesButton->Show();
-    m_aNoButton->Show();
-    if ( bValue )
-        m_aYesButton->Check( );
+    m_xYesButton->show();
+    m_xNoButton->show();
+    if (bValue)
+        m_xYesButton->set_active(true);
     else
-        m_aNoButton->Check( );
+        m_xNoButton->set_active(true);
 }
 
 // struct CmisPropertyLine ---------------------------------------------
-CmisPropertyLine::CmisPropertyLine(vcl::Window* pParent)
-    : m_sType(CMIS_TYPE_STRING)
+CmisPropertyLine::CmisPropertyLine(weld::Widget* pParent)
+    : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/cmisline.ui"))
+    , m_sType(CMIS_TYPE_STRING)
     , m_bUpdatable(false)
     , m_bRequired(false)
     , m_bMultiValued(false)
     , m_bOpenChoice(false)
+    , m_xFrame(m_xBuilder->weld_frame("CmisFrame"))
+    , m_xName(m_xBuilder->weld_label("name"))
+    , m_xType(m_xBuilder->weld_label("type"))
 {
-    m_pUIBuilder.reset(new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui"));
-    get( m_pFrame, "CmisFrame" );
-    get( m_aName, "name" );
-    get( m_aType, "type" );
-    m_pFrame->Enable();
+    m_xFrame->set_sensitive(true);
 }
 
 CmisPropertyLine::~CmisPropertyLine( )
 {
-    m_aValues.clear();
-    m_aYesNos.clear();
-    m_aDateTimes.clear();
 }
 
 long CmisPropertyLine::getItemHeight() const
 {
-    return VclContainer::getLayoutRequisition(*m_pFrame).Height();
+    return m_xFrame->get_preferred_size().Height();
 }
 
 // class CmisPropertiesWindow -----------------------------------------
 
-CmisPropertiesWindow::CmisPropertiesWindow(SfxTabPage* pParent):
-    m_aNumberFormatter( ::comphelper::getProcessComponentContext(),
-                        Application::GetSettings().GetLanguageTag().getLanguageType() )
+CmisPropertiesWindow::CmisPropertiesWindow(std::unique_ptr<weld::Container> xParent)
+    : m_xBox(std::move(xParent))
+    , m_aNumberFormatter(::comphelper::getProcessComponentContext(),
+                         Application::GetSettings().GetLanguageTag().getLanguageType())
 {
-    pParent->get(m_pBox, "CmisWindow");
-    CmisPropertyLine aTemp( m_pBox );
-    m_nItemHeight = aTemp.getItemHeight();
 }
 
 CmisPropertiesWindow::~CmisPropertiesWindow()
 {
-    ClearAllLines();
 }
 
 void CmisPropertiesWindow::ClearAllLines()
@@ -2050,7 +2044,7 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
                                     const bool bRequired, const bool bMultiValued,
                                     const bool bOpenChoice, Any& /*aChoices*/, Any const & rAny )
 {
-    std::unique_ptr<CmisPropertyLine> pNewLine(new CmisPropertyLine( m_pBox ));
+    std::unique_ptr<CmisPropertyLine> pNewLine(new CmisPropertyLine(m_xBox.get()));
 
     pNewLine->m_sId = sId;
     pNewLine->m_sType = sType;
@@ -2069,8 +2063,8 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         {
             OUString sValue;
             m_aNumberFormatter.GetInputLineString( seqValue[i], nIndex, sValue );
-            std::unique_ptr<CmisValue> pValue(new CmisValue( m_pBox, sValue ));
-            pValue->m_aValueEdit->SetReadOnly( !bUpdatable );
+            std::unique_ptr<CmisValue> pValue(new CmisValue(m_xBox.get(), sValue));
+            pValue->m_xValueEdit->set_editable(bUpdatable);
             pNewLine->m_aValues.push_back( std::move(pValue) );
         }
     }
@@ -2084,8 +2078,8 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         {
             OUString sValue;
             m_aNumberFormatter.GetInputLineString( seqValue[i], nIndex, sValue );
-            std::unique_ptr<CmisValue> pValue(new CmisValue( m_pBox, sValue ));
-            pValue->m_aValueEdit->SetReadOnly( !bUpdatable );
+            std::unique_ptr<CmisValue> pValue(new CmisValue(m_xBox.get(), sValue));
+            pValue->m_xValueEdit->set_editable(bUpdatable);
             pNewLine->m_aValues.push_back( std::move(pValue) );
         }
 
@@ -2097,9 +2091,9 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         sal_Int32 nNumValue = seqValue.getLength( );
         for ( sal_Int32 i = 0; i < nNumValue; ++i )
         {
-            std::unique_ptr<CmisYesNo> pYesNo(new CmisYesNo( m_pBox, seqValue[i] ));
-            pYesNo->m_aYesButton->Enable( bUpdatable );
-            pYesNo->m_aNoButton->Enable( bUpdatable );
+            std::unique_ptr<CmisYesNo> pYesNo(new CmisYesNo(m_xBox.get(), seqValue[i]));
+            pYesNo->m_xYesButton->set_sensitive( bUpdatable );
+            pYesNo->m_xNoButton->set_sensitive( bUpdatable );
             pNewLine->m_aYesNos.push_back( std::move(pYesNo) );
         }
     }
@@ -2110,8 +2104,8 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         sal_Int32 nNumValue = seqValue.getLength( );
         for ( sal_Int32 i = 0; i < nNumValue; ++i )
         {
-            std::unique_ptr<CmisValue> pValue(new CmisValue( m_pBox, seqValue[i] ));
-            pValue->m_aValueEdit->SetReadOnly( !bUpdatable );
+            std::unique_ptr<CmisValue> pValue(new CmisValue(m_xBox.get(), seqValue[i]));
+            pValue->m_xValueEdit->set_editable(bUpdatable);
             pNewLine->m_aValues.push_back( std::move(pValue) );
         }
     }
@@ -2122,23 +2116,18 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         sal_Int32 nNumValue = seqValue.getLength( );
         for ( sal_Int32 i = 0; i < nNumValue; ++i )
         {
-            std::unique_ptr<CmisDateTime> pDateTime(new CmisDateTime( m_pBox, seqValue[i]));
-            pDateTime->m_aDateField->SetReadOnly( !bUpdatable );
-            pDateTime->m_aTimeField->SetReadOnly( !bUpdatable );
+            std::unique_ptr<CmisDateTime> pDateTime(new CmisDateTime(m_xBox.get(), seqValue[i]));
+            pDateTime->m_xDateField->set_sensitive(bUpdatable);
+            pDateTime->m_xTimeField->set_sensitive(bUpdatable);
             pNewLine->m_aDateTimes.push_back( std::move(pDateTime) );
         }
     }
-    pNewLine->m_aName->SetText( sName );
-    pNewLine->m_aName->Show();
-    pNewLine->m_aType->SetText( sType );
-    pNewLine->m_aType->Show();
+    pNewLine->m_xName->set_label( sName );
+    pNewLine->m_xName->show();
+    pNewLine->m_xType->set_label( sType );
+    pNewLine->m_xType->show();
 
     m_aCmisPropertiesLines.push_back( std::move(pNewLine) );
-}
-
-void CmisPropertiesWindow::DoScroll( sal_Int32 nNewPos )
-{
-    m_pBox->SetPosPixel(Point(0, nNewPos));
 }
 
 Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() const
@@ -2156,11 +2145,11 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
         aPropertiesSeq[i].OpenChoice = pLine->m_bOpenChoice;
         aPropertiesSeq[i].MultiValued = pLine->m_bMultiValued;
 
-        OUString sPropertyName = pLine->m_aName->GetText();
+        OUString sPropertyName = pLine->m_xName->get_label();
         if ( !sPropertyName.isEmpty() )
         {
             aPropertiesSeq[i].Name = sPropertyName;
-            OUString sType = pLine->m_aType->GetText( );
+            OUString sType = pLine->m_xType->get_label();
             if ( CMIS_TYPE_DECIMAL == sType )
             {
                 sal_uInt32 nIndex = const_cast< SvNumberFormatter& >(
@@ -2170,7 +2159,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                 for ( auto& rxValue : pLine->m_aValues )
                 {
                     double dValue = 0.0;
-                    OUString sValue( rxValue->m_aValueEdit->GetText() );
+                    OUString sValue( rxValue->m_xValueEdit->get_text() );
                     bool bIsNum = const_cast< SvNumberFormatter& >( m_aNumberFormatter ).
                     IsNumberFormat( sValue, nIndex, dValue );
                     if ( bIsNum )
@@ -2188,7 +2177,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                 for ( auto& rxValue : pLine->m_aValues )
                 {
                     double dValue = 0;
-                    OUString sValue( rxValue->m_aValueEdit->GetText() );
+                    OUString sValue( rxValue->m_xValueEdit->get_text() );
                     bool bIsNum = const_cast< SvNumberFormatter& >( m_aNumberFormatter ).
                     IsNumberFormat( sValue, nIndex, dValue );
                     if ( bIsNum )
@@ -2203,7 +2192,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                 sal_Int32 k = 0;
                 for ( auto& rxYesNo : pLine->m_aYesNos )
                 {
-                    bool bValue = rxYesNo->m_aYesButton->IsChecked();
+                    bool bValue = rxYesNo->m_xYesButton->get_active();
                     seqValue[k] = bValue;
                     ++k;
                 }
@@ -2216,8 +2205,8 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                 sal_Int32 k = 0;
                 for ( auto& rxDateTime : pLine->m_aDateTimes )
                 {
-                    Date aTmpDate = rxDateTime->m_aDateField->GetDate();
-                    tools::Time aTmpTime = rxDateTime->m_aTimeField->GetTime();
+                    Date aTmpDate = rxDateTime->m_xDateField->get_date();
+                    tools::Time aTmpTime = rxDateTime->m_xTimeField->get_value();
                     util::DateTime aDateTime( aTmpTime.GetNanoSec(), aTmpTime.GetSec(),
                                               aTmpTime.GetMin(), aTmpTime.GetHour(),
                                               aTmpDate.GetDay(), aTmpDate.GetMonth(),
@@ -2233,7 +2222,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                 sal_Int32 k = 0;
                 for ( auto& rxValue : pLine->m_aValues )
                 {
-                    OUString sValue( rxValue->m_aValueEdit->GetText() );
+                    OUString sValue( rxValue->m_xValueEdit->get_text() );
                     seqValue[k] = sValue;
                     ++k;
                 }
@@ -2246,54 +2235,15 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
     return aPropertiesSeq;
 }
 
-CmisPropertiesControl::CmisPropertiesControl(SfxTabPage* pParent)
-    : m_pPropertiesWin( pParent )
-    , m_rScrolledWindow( *pParent->get<VclScrolledWindow>("CmisScroll"))
-    , m_rVertScroll( m_rScrolledWindow.getVertScrollBar())
+CmisPropertiesControl::CmisPropertiesControl(weld::Builder& rBuilder)
+    : m_aPropertiesWin(rBuilder.weld_container("CmisWindow"))
+    , m_xScrolledWindow(rBuilder.weld_scrolled_window("CmisScroll"))
 {
-    m_rScrolledWindow.setUserManagedScrolling(true);
-    m_rVertScroll.EnableDrag();
-    m_rVertScroll.Show( m_rScrolledWindow.GetStyle() & WB_VSCROLL);
-    m_rVertScroll.SetRangeMin(0);
-    m_rVertScroll.SetVisibleSize( 0xFFFF );
-
-    Link<ScrollBar*,void> aScrollLink = LINK( this, CmisPropertiesControl, ScrollHdl );
-    m_rVertScroll.SetScrollHdl( aScrollLink );
 }
 
 void CmisPropertiesControl::ClearAllLines()
 {
-   m_pPropertiesWin.ClearAllLines();
-}
-
-IMPL_LINK( CmisPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar, void )
-{
-    sal_Int32 nOffset = m_pPropertiesWin.GetItemHeight();
-    nOffset *= ( pScrollBar->GetThumbPos() );
-    m_pPropertiesWin.DoScroll( -nOffset );
-}
-
-void CmisPropertiesControl::checkAutoVScroll()
-{
-    WinBits nBits = m_rScrolledWindow.GetStyle();
-    if (nBits & WB_VSCROLL)
-        return;
-    if (nBits & WB_AUTOVSCROLL)
-    {
-        bool bShow = m_rVertScroll.GetRangeMax() > m_rVertScroll.GetVisibleSize();
-        if (bShow != m_rVertScroll.IsVisible())
-            m_rVertScroll.Show(bShow);
-    }
-}
-
-void CmisPropertiesControl::setScrollRange()
-{
-    sal_Int32 nScrollOffset = m_pPropertiesWin.GetItemHeight();
-    sal_Int32 nVisibleItems = m_rScrolledWindow.getVisibleChildSize().Height() / nScrollOffset;
-    m_rVertScroll.SetPageSize( nVisibleItems - 1 );
-    m_rVertScroll.SetVisibleSize( nVisibleItems );
-    m_rVertScroll.Scroll();
-    checkAutoVScroll();
+   m_aPropertiesWin.ClearAllLines();
 }
 
 void CmisPropertiesControl::AddLine( const OUString& sId, const OUString& sName,
@@ -2302,32 +2252,25 @@ void CmisPropertiesControl::AddLine( const OUString& sId, const OUString& sName,
                                      const bool bOpenChoice, Any& aChoices, Any const & rAny
                                      )
 {
-    m_pPropertiesWin.AddLine( sId, sName, sType, bUpdatable, bRequired, bMultiValued,
+    m_aPropertiesWin.AddLine( sId, sName, sType, bUpdatable, bRequired, bMultiValued,
                                bOpenChoice, aChoices, rAny );
-    //compute logical elements
-    sal_Int32 nLogicElements = ( m_pPropertiesWin.getBoxHeight()
-                                 + m_pPropertiesWin.GetItemHeight() ) / m_pPropertiesWin.GetItemHeight();
-    m_rVertScroll.SetRangeMax( nLogicElements );
-    m_rVertScroll.DoScroll( nLogicElements );
-    checkAutoVScroll();
 }
 
 // class SfxCmisPropertiesPage -----------------------------------------
-SfxCmisPropertiesPage::SfxCmisPropertiesPage( vcl::Window* pParent, const SfxItemSet& rItemSet )
-    : SfxTabPage(pParent, "CmisInfoPage", "sfx/ui/cmisinfopage.ui", &rItemSet)
-    , m_pPropertiesCtrl( this )
+SfxCmisPropertiesPage::SfxCmisPropertiesPage(TabPageParent pParent, const SfxItemSet& rItemSet)
+    : SfxTabPage(pParent, "sfx/ui/cmisinfopage.ui", "CmisInfoPage", &rItemSet)
+    , m_xPropertiesCtrl(new CmisPropertiesControl(*m_xBuilder))
 {
-}
-
-SfxCmisPropertiesPage::~SfxCmisPropertiesPage()
-{
-    disposeOnce();
 }
 
 void SfxCmisPropertiesPage::dispose()
 {
-    m_pPropertiesCtrl.ClearAllLines();
+    m_xPropertiesCtrl.reset();
     SfxTabPage::dispose();
+}
+
+SfxCmisPropertiesPage::~SfxCmisPropertiesPage()
+{
 }
 
 bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet* rSet )
@@ -2351,7 +2294,7 @@ bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet* rSet )
     if ( pInfo )
     {
         Sequence< document::CmisProperty > aOldProps = pInfo->GetCmisProperties( );
-        Sequence< document::CmisProperty > aNewProps = m_pPropertiesCtrl.GetCmisProperties();
+        Sequence< document::CmisProperty > aNewProps = m_xPropertiesCtrl->GetCmisProperties();
 
         std::vector< document::CmisProperty > changedProps;
         for ( sal_Int32 i = 0; i< aNewProps.getLength( ); ++i )
@@ -2396,12 +2339,12 @@ bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet* rSet )
 
 void SfxCmisPropertiesPage::Reset( const SfxItemSet* rItemSet )
 {
-    m_pPropertiesCtrl.ClearAllLines();
+    m_xPropertiesCtrl->ClearAllLines();
     const SfxDocumentInfoItem& rInfoItem = rItemSet->Get(SID_DOCINFO);
     uno::Sequence< document::CmisProperty > aCmisProps = rInfoItem.GetCmisProperties();
     for ( sal_Int32 i = 0; i < aCmisProps.getLength(); i++ )
     {
-        m_pPropertiesCtrl.AddLine( aCmisProps[i].Id,
+        m_xPropertiesCtrl->AddLine(aCmisProps[i].Id,
                                    aCmisProps[i].Name,
                                    aCmisProps[i].Type,
                                    aCmisProps[i].Updatable,
@@ -2409,9 +2352,8 @@ void SfxCmisPropertiesPage::Reset( const SfxItemSet* rItemSet )
                                    aCmisProps[i].MultiValued,
                                    aCmisProps[i].OpenChoice,
                                    aCmisProps[i].Choices,
-                                   aCmisProps[i].Value );
+                                   aCmisProps[i].Value);
     }
-    m_pPropertiesCtrl.setScrollRange();
 }
 
 DeactivateRC SfxCmisPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
@@ -2421,26 +2363,7 @@ DeactivateRC SfxCmisPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
 
 VclPtr<SfxTabPage> SfxCmisPropertiesPage::Create( TabPageParent pParent, const SfxItemSet* rItemSet )
 {
-    return VclPtr<SfxCmisPropertiesPage>::Create( pParent.pParent, *rItemSet );
+    return VclPtr<SfxCmisPropertiesPage>::Create( pParent, *rItemSet );
 }
-
-void SfxCmisPropertiesPage::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
-{
-    SfxTabPage::SetPosSizePixel(rAllocPos, rAllocation);
-    m_pPropertiesCtrl.setScrollRange();
-}
-
-void SfxCmisPropertiesPage::SetSizePixel(const Size& rAllocation)
-{
-    SfxTabPage::SetSizePixel(rAllocation);
-    m_pPropertiesCtrl.setScrollRange();
-}
-
-void SfxCmisPropertiesPage::SetPosPixel(const Point& rAllocPos)
-{
-    SfxTabPage::SetPosPixel(rAllocPos);
-    m_pPropertiesCtrl.setScrollRange();
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
