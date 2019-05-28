@@ -352,6 +352,18 @@ public:
     }
 
     /**
+     * Gets the currently selected content as a binary stream.
+     *
+     * @param pMimeType suggests the return format, for example text/plain;charset=utf-8.
+     * @param pBytesSent returns the size of data in the allocated return block
+     * @param pUsedMimeType output parameter to inform about the determined format (suggested one or plain text).
+     */
+    char* getBinarySelection(const char* pMimeType, size_t *pBytesSent, char** pUsedMimeType = NULL)
+    {
+        return mpDoc->pClass->getBinarySelection(mpDoc, pMimeType, pBytesSent, pUsedMimeType);
+    }
+
+    /**
      * Pastes content at the current cursor position.
      *
      * @param pMimeType format of pData, for example text/plain;charset=utf-8.

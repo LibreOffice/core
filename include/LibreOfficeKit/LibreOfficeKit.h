@@ -377,6 +377,12 @@ struct _LibreOfficeKitDocumentClass
     void (*resizeWindow) (LibreOfficeKitDocument* pThis, unsigned nWindowId,
                           const int width, const int height);
 
+    /// @see lok::Document::getBinarySelection
+    char* (*getBinarySelection) (LibreOfficeKitDocument* pThis,
+                                 const char* pMimeType,
+                                 size_t *pBytesSent,
+                                 char** pUsedMimeType);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

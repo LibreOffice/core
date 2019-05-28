@@ -778,6 +778,10 @@ static void doc_setTextSelection (LibreOfficeKitDocument* pThis,
 static char* doc_getTextSelection(LibreOfficeKitDocument* pThis,
                                   const char* pMimeType,
                                   char** pUsedMimeType);
+static char* doc_getBinarySelection(LibreOfficeKitDocument* pThis,
+                                    const char* pMimeType,
+                                    size_t *pBytesSent,
+                                    char** pUsedMimeType);
 static bool doc_paste(LibreOfficeKitDocument* pThis,
                       const char* pMimeType,
                       const char* pData,
@@ -874,6 +878,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->postUnoCommand = doc_postUnoCommand;
         m_pDocumentClass->setTextSelection = doc_setTextSelection;
         m_pDocumentClass->getTextSelection = doc_getTextSelection;
+        m_pDocumentClass->getBinarySelection = doc_getBinarySelection;
         m_pDocumentClass->paste = doc_paste;
         m_pDocumentClass->setGraphicSelection = doc_setGraphicSelection;
         m_pDocumentClass->resetSelection = doc_resetSelection;
@@ -3333,9 +3338,12 @@ static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int n
     pDoc->setTextSelection(nType, nX, nY);
 }
 
-static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMimeType, char** pUsedMimeType)
+static char* doc_getBinarySelection(LibreOfficeKitDocument* pThis,
+                                    const char* pMimeType,
+                                    size_t *pBytesSent,
+                                    char** pUsedMimeType)
 {
-    comphelper::ProfileZone aZone("doc_getTextSelection");
+    comphelper::ProfileZone aZone("doc_getBinarySelection");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -3347,13 +3355,22 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
         return nullptr;
     }
 
+    const char *pRealType = pMimeType;
+    if (pMimeType && !strncmp(pMimeType, "application/x-openoffice-embed-source-xml",
+                              sizeof ("application/x-openoffice-embed-source-xml") - 1))
+        pRealType = "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
+
     OString aUsedMimeType;
-    OString aRet = pDoc->getTextSelection(pMimeType, aUsedMimeType);
+    OString aRet = pDoc->getTextSelection(pRealType, aUsedMimeType);
     if (aUsedMimeType.isEmpty())
         aRet = pDoc->getTextSelection("text/plain;charset=utf-8", aUsedMimeType);
 
     char* pMemory = static_cast<char*>(malloc(aRet.getLength() + 1));
-    strcpy(pMemory, aRet.getStr());
+    std::memcpy(pMemory, aRet.getStr(), aRet.getLength());
+    pMemory[aRet.getLength()] = '\0';
+
+    if (pBytesSent)
+        *pBytesSent = aRet.getLength();
 
     if (pUsedMimeType)
     {
@@ -3362,6 +3379,13 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
     }
 
     return pMemory;
+}
+
+static char* doc_getTextSelection(LibreOfficeKitDocument* pThis,
+                                  const char* pMimeType,
+                                  char** pUsedMimeType)
+{
+    return doc_getBinarySelection(pThis, pMimeType, nullptr, pUsedMimeType);
 }
 
 static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, const char* pData, size_t nSize)
