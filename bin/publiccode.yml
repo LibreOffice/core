@@ -1,0 +1,212 @@
+# This repository adheres to the publiccode.yml standard by including this 
+# metadata file that makes public software easily discoverable.
+# More info at https://github.com/italia/publiccode.yml
+
+publiccodeYmlVersion: '0.2'
+name: LibreOffice
+releaseDate: '2019-05-07'
+url: 'https://git.libreoffice.org/core'
+applicationSuite: LibreOffice
+isBasedOn: 'http://svn.services.openoffice.org/ooo/trunk'
+landingURL: 'https://www.libreoffice.org/'
+developmentStatus: stable
+softwareVersion: 6.1.6
+softwareType: standalone/desktop
+roadmap: 'https://wiki.documentfoundation.org/ReleasePlan'
+platforms:
+  - windows
+  - mac
+  - linux
+  - android
+categories:
+  - office
+  - productivity-suite
+  - budgeting
+  - billing-and-invoicing
+  - collaboration
+  - document-management
+  - financial-reporting
+logo: icon-themes/colibre_svg/sfx2/res/logo.svg
+maintenance:
+  type: community
+  contacts:
+    - name: Board of Directors
+      email: info@documentfoundation.org
+legal:
+  license: MPL-2.0
+  mainCopyrightOwner: The Document Foundation
+  repoOwner: The Document Foundation
+intendedAudience:
+  scope:
+    - culture
+    - defence
+    - education
+    - government
+    - healthcare
+    - local-authorities
+    - justice
+localisation:
+  localisationReady: true
+  availableLanguages:
+    - af
+    - sq
+    - am
+    - ar
+    - as
+    - ast
+    - eu
+    - be
+    - bn
+    - bn-IN
+    - bs
+    - br
+    - brx
+    - bg
+    - my
+    - ca
+    - ca-valencia
+    - zh
+    - hr
+    - cs
+    - da
+    - dgo
+    - nl
+    - dz
+    - en
+    - en-GB
+    - en-US
+    - en-ZA
+    - eo
+    - et
+    - fi
+    - fr
+    - fy
+    - gl
+    - ka
+    - de
+    - el
+    - gu
+    - gug
+    - he
+    - hi
+    - hu
+    - is
+    - id
+    - ga
+    - it
+    - ja
+    - kab
+    - kn
+    - ks
+    - kk
+    - kok
+    - krm-Latn
+    - km
+    - rw
+    - ko
+    - lo
+    - lv
+    - lt
+    - dsb
+    - lb
+    - mk
+    - mai
+    - ml
+    - mni
+    - mr
+    - mn
+    - nr
+    - ne
+    - nso
+    - nb
+    - nn
+    - oc
+    - or
+    - om
+    - pa
+    - pa-IN
+    - fa
+    - pl
+    - pt
+    - pt-BR
+    - ro
+    - ru
+    - gd
+    - sa-IN
+    - sat
+    - sr
+    - sr-Latn
+    - sid
+    - sd
+    - si
+    - sk
+    - sl
+    - st
+    - es
+    - sw-TZ
+    - sw
+    - ss
+    - sv
+    - tg
+    - ta
+    - tt
+    - te
+    - th
+    - bo
+    - ts
+    - tn
+    - tr
+    - ug
+    - uk
+    - hsb
+    - uz
+    - ve
+    - vec
+    - vi
+    - cy
+    - xh
+    - zu
+    - zh-CN
+    - zh-TW
+it:
+  countryExtensionVersion: '0.2'
+  conforme:
+    modelloInteroperabilita: true
+    gdpr: true
+    misureMinimeSicurezza: true
+description:
+  en:
+    localisedName: LibreOffice
+    genericName: LibreOffice
+    shortDescription: LibreOffice is a powerful free and open source office suite
+    longDescription: >
+      LibreOffice is a powerful and free office suite, used by millions of 
+      people around the world. Its clean interface and feature-rich tools help 
+      you unleash your creativity and enhance your productivity. LibreOffice 
+      includes several applications that make it the most versatile Free and 
+      Open Source office suite on the market: Writer (word processing), Calc 
+      (spreadsheets), Impress (presentations), Draw (vector graphics and 
+      flowcharts), Base (databases), and Math (formula editing). 
+
+
+      LibreOffice is compatible with a wide range of document formats such as 
+      Microsoft® Word (.doc, .docx), Excel (.xls, .xlsx), PowerPoint (.ppt, 
+      .pptx) and Publisher. But LibreOffice goes much further with its native 
+      support for a modern and open standard, the Open Document Format (ODF). 
+      With LibreOffice, you have maximum control over your data and content – 
+      and you can export your work in many different formats including PDF. 
+    documentation: 'https://help.libreoffice.org'
+    apiDocumentation: 'https://api.libreoffice.org/'
+    features:
+      - Text Documents
+      - Spreadsheets
+      - Presentations
+      - Drawings
+      - Databases
+      - Formula Editor
+      - Charts
+      - Templates
+      - Extensions
+      - Macros
+    videos:
+      - 'https://youtu.be/3KC0ZdcA6s8'
