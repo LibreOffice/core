@@ -4168,6 +4168,46 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
 ))
 endif
 
+ifneq ($(SYSTEM_QRCODEGEN),)
+
+define gb_LinkTarget__use_qrcodegen
+$(call gb_LinkTarget_set_include,$(1),\
+       $$(INCLUDE) \
+	   $(QRCODEGEN_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(QRCODEGEN_LIBS))
+
+endef
+
+gb_ExternalProject__use_qrcodegen :=
+
+else # !SYSTEM_QRCODEGEN
+
+define gb_LinkTarget__use_qrcodegen
+l$(call gb_LinkTarget_use_unpacked,$(1),qrcodegen)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,qrcodegen/cpp/)\
+	$$(INCLUDE) \
+)
+
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	qrcodegen \
+)
+else
+$(call gb_LinkTarget_add_libs,$(1),$(QRCODEGEN_LIBS))
+$(call gb_LinkTarget_use_external_project,$(1),qrcodegen)
+endif
+
+endef
+
+define gb_ExternalProject__use_qrcodegen
+$(call gb_ExternalProject_use_external_project,$(1),qrcodegen)
+
+endef
+
+endif # SYSTEM_QRCODEGEN
+
 $(eval $(call gb_Helper_register_packages_for_install,ucrt_binarytable,\
 	$(if $(UCRT_REDISTDIR),ucrt) \
 ))
