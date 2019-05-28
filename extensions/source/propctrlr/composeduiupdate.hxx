@@ -112,7 +112,7 @@ namespace pcr
             firing is suspended, only explicit ->fire calls trigger the notification to the
             delegator UI.
 
-            Note that calls to ->suspendAutoFire are culmulative, that is, if you make multiple calls
+            Note that calls to ->suspendAutoFire are cumulative, that is, if you make multiple calls
             they must be accompanied by an equal number of calls to ->resumeAutoFire, to enable
             auto-firing again.
 
