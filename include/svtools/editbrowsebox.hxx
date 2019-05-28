@@ -100,7 +100,7 @@ namespace svt
         // to output formatting) here
         virtual void CommitModifications();
 
-        // suspending the controller is not culmulative!
+        // suspending the controller is not cumulative!
                 void        suspend( );
                 void        resume( );
         bool        isSuspended( ) const { return bSuspended; }
