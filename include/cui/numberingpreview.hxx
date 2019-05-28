@@ -5,6 +5,7 @@
 #include <editeng/numitem.hxx>
 #include <vcl/customweld.hxx>
 
+/// Provides the preview to show how looks bullet or numbering format before the apply.
 class CUI_DLLPUBLIC SvxNumberingPreview : public weld::CustomWidgetController
 {
     const SvxNumRule* pActNum;
