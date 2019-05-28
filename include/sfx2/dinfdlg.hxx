@@ -31,8 +31,6 @@
 
 #include <svtools/ctrlbox.hxx>
 
-#include <vcl/headbar.hxx>
-
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
 #include <vcl/idle.hxx>
