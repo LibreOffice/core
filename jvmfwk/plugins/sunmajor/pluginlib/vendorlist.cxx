@@ -48,6 +48,7 @@ VendorSupportMapEntry const gVendorMap[] ={
     VENDOR_MAP_ENTRY<OtherInfo>("The FreeBSD Foundation"),
 #endif
     VENDOR_MAP_ENTRY<OtherInfo>("Azul Systems, Inc."),
+    VENDOR_MAP_ENTRY<OtherInfo>("BellSoft"),
     {nullptr, nullptr, nullptr} };
 
 }
