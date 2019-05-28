@@ -30,7 +30,6 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-#include <vcl/headbar.hxx>
 #include <com/sun/star/ucb/XContentEventListener.hpp>
 #include <osl/mutex.hxx>
 
