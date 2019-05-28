@@ -72,6 +72,7 @@ $(eval $(call gb_Library_use_externals,cui,\
     icu_headers \
     orcus-parser \
     orcus \
+	qrcodegenerator \
 ))
 ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Library_use_externals,cui,\

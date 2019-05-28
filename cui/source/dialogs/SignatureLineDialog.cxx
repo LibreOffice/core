@@ -15,6 +15,8 @@
 #include <unotools/streamwrap.hxx>
 #include <utility>
 #include <vcl/weld.hxx>
+#include <qrcodegenerator/BitBuffer.hpp>
+#include <qrcodegenerator/QrCode.hpp>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>

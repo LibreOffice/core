@@ -1,0 +1,110 @@
+diff --git a/cpp/BitBuffer.cpp b/cpp/BitBuffer.cpp
+index e22e9d3..ef164d1 100644
+--- a/cpp/BitBuffer.cpp
++++ b/cpp/BitBuffer.cpp
+@@ -22,7 +22,7 @@
+  */
+ 
+ #include <stdexcept>
+-#include "BitBuffer.hpp"
++#include "public/BitBuffer.hpp"
+ 
+ 
+ namespace qrcodegen {
+diff --git a/cpp/QrCode.cpp b/cpp/QrCode.cpp
+index 2679805..28cb9ad 100644
+--- a/cpp/QrCode.cpp
++++ b/cpp/QrCode.cpp
+@@ -27,8 +27,8 @@
+ #include <cstdlib>
+ #include <sstream>
+ #include <utility>
+-#include "BitBuffer.hpp"
+-#include "QrCode.hpp"
++#include "public/BitBuffer.hpp"
++#include "public/QrCode.hpp"
+ 
+ using std::int8_t;
+ using std::uint8_t;
+@@ -192,19 +192,21 @@ bool QrCode::getModule(int x, int y) const {
+ 	return 0 <= x && x < size && 0 <= y && y < size && module(x, y);
+ }
+ 
++/* bgcolor  - Hexadecimal color code for background color of generated QR code. */
++/* color - QR code color */
+ 
+-std::string QrCode::toSvgString(int border) const {
++std::string QrCode::toSvgString(int border, std::string color, std::string bgcolor) const {
++	
+ 	if (border < 0)
+ 		throw std::domain_error("Border must be non-negative");
+-	if (border > INT_MAX / 2 || border * 2 > INT_MAX - size)
++	if(border > INT_MAX / 2 || border * 2 > INT_MAX - size)
+ 		throw std::overflow_error("Border too large");
+-	
+ 	std::ostringstream sb;
+ 	sb << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+ 	sb << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n";
+ 	sb << "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 ";
+ 	sb << (size + border * 2) << " " << (size + border * 2) << "\" stroke=\"none\">\n";
+-	sb << "\t<rect width=\"100%\" height=\"100%\" fill=\"#FFFFFF\"/>\n";
++	sb << "\t<rect width=\"100%\" height=\"100%\" fill=\"#" << bgcolor << "\"/>\n";
+ 	sb << "\t<path d=\"";
+ 	for (int y = 0; y < size; y++) {
+ 		for (int x = 0; x < size; x++) {
+@@ -215,12 +217,11 @@ std::string QrCode::toSvgString(int border) const {
+ 			}
+ 		}
+ 	}
+-	sb << "\" fill=\"#000000\"/>\n";
++	sb << "\" fill=\"#" << color << "\"/>\n";
+ 	sb << "</svg>\n";
+ 	return sb.str();
+ }
+ 
+-
+ void QrCode::drawFunctionPatterns() {
+ 	// Draw horizontal and vertical timing patterns
+ 	for (int i = 0; i < size; i++) {
+diff --git a/cpp/QrSegment.hpp b/cpp/QrSegment.hpp
+index 663b8bb..29d5ab9 100644
+--- a/cpp/QrSegment.hpp
++++ b/cpp/QrSegment.hpp
+@@ -25,7 +25,7 @@
+ 
+ #include <cstdint>
+ #include <vector>
+-#include "BitBuffer.hpp"
++#include "public/BitBuffer.hpp"
+ 
+ 
+ namespace qrcodegen {
+diff --git a/cpp/BitBuffer.hpp b/cpp/public/BitBuffer.hpp
+similarity index 100%
+rename from cpp/BitBuffer.hpp
+rename to cpp/public/BitBuffer.hpp
+diff --git a/cpp/QrCode.hpp b/cpp/public/QrCode.hpp
+similarity index 99%
+rename from cpp/QrCode.hpp
+rename to cpp/public/QrCode.hpp
+index d496e2a..d11ccfc 100644
+--- a/cpp/QrCode.hpp
++++ b/cpp/public/QrCode.hpp
+@@ -28,7 +28,7 @@
+ #include <stdexcept>
+ #include <string>
+ #include <vector>
+-#include "QrSegment.hpp"
++#include "../QrSegment.hpp"
+ 
+ 
+ namespace qrcodegen {
+@@ -189,7 +189,7 @@ class QrCode final {
+ 	 * Returns a string of SVG code for an image depicting this QR Code, with the given number
+ 	 * of border modules. The string always uses Unix newlines (\n), regardless of the platform.
+ 	 */
+-	public: std::string toSvgString(int border) const;
++	public: std::string toSvgString(int border, std::string color, std::string bgcolor) const;
+ 	
+ 	
+ 	

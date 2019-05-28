@@ -4168,6 +4168,17 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
 ))
 endif
 
+define gb_LinkTarget__use_qrcodegenerator
+$(call gb_LinkTarget_set_include,$(1),\
+       -I$(call gb_UnpackedTarball_get_dir,qrcodegenerator)/cpp / public\
+       $$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_libraries,$(1),qrcodegenerator)
+endef
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
+       qrcodegenerator \
+))
+
 $(eval $(call gb_Helper_register_packages_for_install,ucrt_binarytable,\
 	$(if $(UCRT_REDISTDIR),ucrt) \
 ))
