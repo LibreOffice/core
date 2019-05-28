@@ -1153,12 +1153,8 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             }
 
             TextBodyPtr pTextBody = rShape->getTextBody();
-            if (!pTextBody ||
-                pTextBody->getParagraphs().empty() ||
-                pTextBody->getParagraphs().front()->getRuns().empty())
-            {
+            if (!pTextBody || pTextBody->isEmpty())
                 break;
-            }
 
             // adjust text size to fit shape
             if (fFontSize != 0)
