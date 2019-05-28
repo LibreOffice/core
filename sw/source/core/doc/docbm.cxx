@@ -161,6 +161,11 @@ namespace
 
     struct CompareIMarkStartsBefore
     {
+        bool operator()(SwPosition const& rPos,
+                        std::shared_ptr<sw::mark::IMark> const& pMark)
+        {
+            return rPos < pMark->GetMarkStart();
+        }
         bool operator()(std::shared_ptr<sw::mark::IMark> const& pMark,
                         SwPosition const& rPos)
         {
@@ -1039,15 +1044,13 @@ namespace sw { namespace mark
             " - Mark is not in my doc.");
         // finds the last Mark that is starting before pMark
         // (pMarkLow < pMark)
-        auto it = lower_bound(
+        auto [it, endIt] = equal_range(
                 m_vAllMarks.begin(),
                 m_vAllMarks.end(),
                 pMark->GetMarkStart(),
                 CompareIMarkStartsBefore());
-        for ( ; it != m_vAllMarks.end(); ++it)
-            if (pMark->GetMarkStart() < (*it)->GetMarkStart())
-                break;
-            else if (it->get() == pMark)
+        for ( ; it != endIt; ++it)
+            if (it->get() == pMark)
             {
                 deleteMark(it);
                 break;
