@@ -2809,7 +2809,9 @@ rtl_TextEncoding SwWW8ImplReader::GetCurrentCharSet()
     rtl_TextEncoding eSrcCharSet = m_eHardCharSet;
     if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
     {
-        if (!m_aFontSrcCharSets.empty())
+        if (!m_bVer67)
+            eSrcCharSet = GetCharSetFromLanguage();
+        else if (!m_aFontSrcCharSets.empty())
             eSrcCharSet = m_aFontSrcCharSets.top();
         if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && m_nCharFormat >= 0 && static_cast<size_t>(m_nCharFormat) < m_vColl.size() )
             eSrcCharSet = m_vColl[m_nCharFormat].GetCharSet();
