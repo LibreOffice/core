@@ -115,6 +115,19 @@ void SwFrameShell::InitInterface_Impl()
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Frame_Toolbox);
 }
 
+void SwFrameShell::ExecMove(SfxRequest& rReq)
+{
+    SwWrtShell& rSh = GetShell();
+    sal_uInt16 nSlot = rReq.GetSlot();
+    switch (nSlot)
+    {
+        case SID_SELECTALL:
+            rSh.SelAll();
+            rReq.Done();
+            break;
+    }
+}
+
 void SwFrameShell::Execute(SfxRequest &rReq)
 {
     //First those who do not need FrameMgr.

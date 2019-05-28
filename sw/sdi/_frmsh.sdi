@@ -406,5 +406,10 @@ interface BaseTextFrame
         ExecMethod = Execute ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    SID_SELECTALL
+    [
+        ExecMethod = ExecMove ;
+        StateMethod = NoState ;
+    ]
 }
 
