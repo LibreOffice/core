@@ -146,7 +146,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to know how many days there are in the current month? Use the DAYSINMONTH(TODAY()) function."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Add background images to spreadsheets via Insert > Image or drag a background from the Gallery, then Format > Arrange > To Background."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To quickly get a math object in Writer type your formula, mark it, and use Insert > Object > Formula to convert the text."), "", "tipoftheday_w.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Writer can insert a blank page between two odd (even) pages that follow. Check ‘Print automatically inserted blank pages’ in the print dialog’s Writer tab."), "", "tipoftheday_w.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Writer can insert a blank page between two odd (even) pages that follow. Check ‘Print automatically inserted blank pages’ in the print dialog’s %PRODUCTNAME Writer tab."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "The 4th optional parameter of VLOOKUP Calc function indicates whether the first column of data is sorted. If not, enter FALSE or zero."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to show hidden column A? Click a cell in column B, press the left mouse button, move the mouse to the left, release. Then switch it on via Format > Columns > Show."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Writer helps you to make backups: with File > Save a Copy you create a new document continuing to work on the original."), "", "tipoftheday_w.png"},
