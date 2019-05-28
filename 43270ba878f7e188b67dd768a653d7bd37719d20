@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_03b0f7f3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-28T09:53:48Z",
+      "side": 1,
+      "message": "I don\u0027t see in how far that would be a problem for which we would need these changes?  (Out-of-bounds access can always be an issue, for alloca or heap, for zero-sized or non-zero-sized allocations.)",
+      "revId": "43270ba878f7e188b67dd768a653d7bd37719d20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
