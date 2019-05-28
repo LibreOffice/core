@@ -1259,13 +1259,20 @@ protected:
 
     DECL_LINK(async_signal_focus_in, void*, void);
 
-    static gboolean signalFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
+    void launch_signal_focus_in()
     {
-        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         // in e.g. function wizard RefEdits we want to select all when we get focus
         // but there are pending gtk handlers which change selection after our handler
         // post our focus in event to happen after those finish
-        Application::PostUserEvent(LINK(pThis, GtkInstanceWidget, async_signal_focus_in));
+        if (m_pFocusEvent)
+            Application::RemoveUserEvent(m_pFocusEvent);
+        m_pFocusEvent = Application::PostUserEvent(LINK(this, GtkInstanceWidget, async_signal_focus_in));
+    }
+
+    static gboolean signalFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        pThis->launch_signal_focus_in();
         return false;
     }
 
@@ -1381,6 +1388,7 @@ private:
     bool m_bDraggedOver;
     sal_uInt16 m_nLastMouseButton;
     sal_uInt16 m_nLastMouseClicks;
+    ImplSVEvent* m_pFocusEvent;
     gulong m_nFocusInSignalId;
     gulong m_nMnemonicActivateSignalId;
     gulong m_nFocusOutSignalId;
@@ -1582,6 +1590,7 @@ public:
         , m_bDraggedOver(false)
         , m_nLastMouseButton(0)
         , m_nLastMouseClicks(0)
+        , m_pFocusEvent(nullptr)
         , m_nFocusInSignalId(0)
         , m_nMnemonicActivateSignalId(0)
         , m_nFocusOutSignalId(0)
@@ -2070,6 +2079,8 @@ public:
 
     virtual ~GtkInstanceWidget() override
     {
+        if (m_pFocusEvent)
+            Application::RemoveUserEvent(m_pFocusEvent);
         if (m_nDragMotionSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nDragMotionSignalId);
         if (m_nDragDropSignalId)
@@ -2157,6 +2168,7 @@ public:
 
 IMPL_LINK_NOARG(GtkInstanceWidget, async_signal_focus_in, void*, void)
 {
+    m_pFocusEvent = nullptr;
     signal_focus_in();
 }
 
