@@ -1619,7 +1619,6 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     uno::Reference< drawing::XShapes > xSeriesTargetInFrontOfAxis(nullptr);
     uno::Reference< drawing::XShapes > xSeriesTargetBehindAxis(nullptr);
     VDiagram aVDiagram(xDiagram, aPreferredAspectRatio, nDimensionCount);
-    bool bIsPieOrDonut = lcl_IsPieOrDonut(xDiagram);
     {//create diagram
         aVDiagram.init(rParam.mxDiagramWithAxesShapes, m_xShapeFactory);
         aVDiagram.createShapes(
@@ -1628,7 +1627,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
 
         xSeriesTargetInFrontOfAxis = aVDiagram.getCoordinateRegion();
         // It is preferable to use full size than minimum for pie charts
-        if (!bIsPieOrDonut && !rParam.mbUseFixedInnerSize)
+        if (!rParam.mbUseFixedInnerSize)
             aVDiagram.reduceToMimimumSize();
     }
 
@@ -1656,6 +1655,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
 
     //use first coosys only so far; todo: calculate for more than one coosys if we have more in future
     //todo: this is just a workaround at the moment for pie and donut labels
+    bool bIsPieOrDonut = lcl_IsPieOrDonut(xDiagram);
     if( !bIsPieOrDonut && (!rVCooSysList.empty()) )
     {
         VCoordinateSystem* pVCooSys = rVCooSysList[0];
