@@ -1122,6 +1122,15 @@ DECLARE_OOXMLEXPORT_TEST(testFlipAndRotateCustomShape, "flip_and_rotate.odt")
 #endif
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf92335, "tdf92335.docx")
+{
+    // Don't export redundant ListLabel character styles
+    xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+    if (!pXmlStyles)
+        return;
+
+    assertXPath(pXmlStyles, "//w:style[@w:styleId='ListLabel1']", 0);
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
