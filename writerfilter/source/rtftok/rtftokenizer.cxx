@@ -66,7 +66,8 @@ RTFError RTFTokenizer::resolveParse()
     char ch;
     RTFError ret;
     // for hex chars
-    int b = 0, count = 2;
+    int b = 0;
+    int count = 2;
     std::size_t nPercentSize = 0;
     sal_uInt64 nLastPos = 0;
 
