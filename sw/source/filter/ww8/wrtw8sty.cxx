@@ -618,6 +618,11 @@ void MSWordStyles::OutputStyle( SwFormat* pFormat, sal_uInt16 nPos )
                 aName = aBaseName + OUString::number(++nSuffix);
             }
         }
+        else if (!bFormatColl && m_rExport.m_pStyles->GetStyleId(nPos).startsWith("ListLabel"))
+        {
+            // tdf#92335 don't export redundant DOCX import style "ListLabel"
+            return;
+        }
 
         m_rExport.AttrOutput().StartStyle( aName, (bFormatColl ? STYLE_TYPE_PARA : STYLE_TYPE_CHAR),
                 nBase, nWwNext, GetWWId( *pFormat ), nPos,
