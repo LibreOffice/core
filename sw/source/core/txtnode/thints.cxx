@@ -100,6 +100,8 @@ SwpHints::SwpHints(const SwTextNode& rParent)
     , m_bHiddenByParaField(false)
     , m_bFootnote(false)
     , m_bDDEFields(false)
+    , m_bStartMapNeedsSorting(false)
+    , m_bEndMapNeedsSorting(false)
 {
 }
 
@@ -270,7 +272,7 @@ lcl_DoSplitNew(NestList_t & rSplits, SwTextNode & rNode,
             (bSplitAtStart && bOtherDummy) ? nSplitPos + 1 : nSplitPos );
         SwTextAttrNesting * const pNew( MakeTextAttrNesting(
                 rNode, **iter, nStartPos, *(*iter)->GetEnd() ) );
-        *(*iter)->GetEnd() = nSplitPos;
+        (*iter)->SetEnd(nSplitPos);
         rSplits.insert(iter + 1, pNew);
     }
 }
@@ -425,9 +427,8 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
                         // should be corrected because it may lead to problems
                         // in SwXMeta::createEnumeration
                         // SplitNew is sorted, so this is the first split
-                        sal_Int32& rStart(SplitNew.front()->GetStart());
-                        assert(rStart == nNewStart);
-                        rStart = nNewStart + 1;
+                        assert(SplitNew.front()->GetStart() == nNewStart);
+                        SplitNew.front()->SetStart(nNewStart + 1);
                     }
                 }
             }
@@ -476,7 +477,7 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
                 case SwComparePosition::OverlapBefore:
                     {
                         Delete( rpOther ); // this also does NoteInHistory!
-                        rpOther->GetStart() = nSplitNewEnd;
+                        rpOther->SetStart(nSplitNewEnd);
                         InsertNesting( *rpOther );
                         if (!bRemoveOverlap)
                         {
@@ -495,7 +496,7 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
                 case SwComparePosition::OverlapBehind:
                     {
                         Delete( rpOther ); // this also does NoteInHistory!
-                        *rpOther->GetEnd() = nSplitNewStart;
+                        rpOther->SetEnd(nSplitNewStart);
                         InsertNesting( *rpOther );
                         if (!bRemoveOverlap)
                         {
@@ -561,7 +562,7 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
             }
             if (nOtherStart < nNewStart)
             {
-                *rpOther->GetEnd() = nNewStart;
+                rpOther->SetEnd(nNewStart);
                 bool const bSuccess( TryInsertNesting(rNode, *rpOther) );
                 SAL_WARN_IF(!bSuccess, "sw.core", "recursive call 2 failed?");
             }
@@ -604,7 +605,9 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
     {
         for ( size_t i = 0; i < Count(); ++i )
         {
-            SwTextAttr* pOther = Get(i);
+            // we're modifying stuff here which affects the sorting, and we
+            // don't want it changing underneath us
+            SwTextAttr* pOther = GetWithoutResorting(i);
 
             if ( RES_TXTATR_CHARFMT != pOther->Which() &&
                  RES_TXTATR_AUTOFMT != pOther->Which() )
@@ -627,7 +630,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                 aInsDelHints.push_back( pNewAttr );
 
                 NoteInHistory( pOther );
-                pOther->GetStart() = nThisStart;
+                pOther->SetStart(nThisStart);
                 NoteInHistory( pOther, true );
 
                 nOtherStart = nThisStart;
@@ -647,7 +650,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                 aInsDelHints.push_back( pNewAttr );
 
                 NoteInHistory( pOther );
-                pOther->GetStart() = nThisEnd;
+                pOther->SetStart(nThisEnd);
                 NoteInHistory( pOther, true );
             }
         }
@@ -707,7 +710,8 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
         // Get all hints that are in [nPorStart, nPorEnd[:
         for ( size_t i = 0; i < Count(); ++i )
         {
-            SwTextAttr *pOther = Get(i);
+            // we get called from TryInsertHint, which changes ordering
+            SwTextAttr *pOther = GetWithoutResorting(i);
 
             if ( RES_TXTATR_CHARFMT != pOther->Which() &&
                  RES_TXTATR_AUTOFMT != pOther->Which() )
@@ -1482,10 +1486,10 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
             }
 
             // adjust end of hint to account for inserted CH_TXTATR
-            sal_Int32 * const pEnd(pAttr->GetEnd());
+            const sal_Int32 * const pEnd(pAttr->GetEnd());
             if (pEnd)
             {
-                *pEnd = *pEnd + 1;
+                pAttr->SetEnd(*pEnd + 1);
             }
         }
     }
@@ -1511,10 +1515,10 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                             + pTextInputField->GetFieldContent() + OUStringLiteral1(CH_TXT_ATR_INPUTFIELDEND);
                         InsertText( aContent, aIdx, nInsertFlags );
 
-                        sal_Int32* const pEnd(pAttr->GetEnd());
+                        const sal_Int32* const pEnd(pAttr->GetEnd());
                         assert(pEnd != nullptr);
-                        *pEnd = *pEnd + aContent.getLength();
-                        nEnd = *pEnd;
+                        pAttr->SetEnd(*pEnd + aContent.getLength());
+                        nEnd = *pAttr->GetEnd();
                     }
                     else
                     {
@@ -1524,21 +1528,21 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                             SwIndex aIdx( this, pAttr->GetStart() );
                             InsertText( OUString(CH_TXT_ATR_INPUTFIELDSTART), aIdx, nInsertFlags );
                             bInputFieldStartCharInserted = true;
-                            sal_Int32* const pEnd(pAttr->GetEnd());
+                            const sal_Int32* const pEnd(pAttr->GetEnd());
                             assert(pEnd != nullptr);
-                            *pEnd = *pEnd + 1;
-                            nEnd = *pEnd;
+                            pAttr->SetEnd(*pEnd + 1);
+                            nEnd = *pAttr->GetEnd();
                         }
 
-                        sal_Int32* const pEnd(pAttr->GetEnd());
+                        const sal_Int32* const pEnd(pAttr->GetEnd());
                         assert(pEnd != nullptr);
                         if (m_Text[ *pEnd - 1 ] != CH_TXT_ATR_INPUTFIELDEND)
                         {
                             SwIndex aIdx( this, *pEnd );
                             InsertText( OUString(CH_TXT_ATR_INPUTFIELDEND), aIdx, nInsertFlags );
                             bInputFieldEndCharInserted = true;
-                            *pEnd = *pEnd + 1;
-                            nEnd = *pEnd;
+                            pAttr->SetEnd(*pEnd + 1);
+                            nEnd = *pAttr->GetEnd();
                         }
                     }
                 }
@@ -1565,11 +1569,11 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
             {
                 if ( pAttr->GetStart() > pTextInputField->GetStart() )
                 {
-                    pAttr->GetStart() = pTextInputField->GetStart();
+                    pAttr->SetStart( pTextInputField->GetStart() );
                 }
                 if ( *(pAttr->End()) < *(pTextInputField->End()) )
                 {
-                    *(pAttr->GetEnd()) = *(pTextInputField->End());
+                    pAttr->SetEnd(*(pTextInputField->End()));
                 }
             }
         }
@@ -2850,7 +2854,7 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
             {
                 SwTextAttr *const p1 = aIter1->second.first;
                 NoteInHistory( p1 );
-                *p1->GetEnd() = nNewPortionEnd;
+                p1->SetEnd(nNewPortionEnd);
                 NoteInHistory( p1, true );
                 bRet = true;
             }
@@ -2948,7 +2952,7 @@ bool SwpHints::TryInsertHint(
         return false;
     }
 
-    sal_Int32 *pHtEnd = pHint->GetEnd();
+    const sal_Int32 *pHtEnd = pHint->GetEnd();
     const sal_uInt16 nWhich = pHint->Which();
     std::vector<sal_uInt16> aWhichSublist;
 
@@ -3094,8 +3098,8 @@ bool SwpHints::TryInsertHint(
             SwTextAttr* pTmpHt;
             for( size_t n = 0, nEnd = Count(); n < nEnd; ++n )
             {
-                sal_Int32 *pTmpHtEnd;
-                sal_Int32 *pTmpHintEnd;
+                const sal_Int32 *pTmpHtEnd;
+                const sal_Int32 *pTmpHintEnd;
                 if (RES_TXTATR_REFMARK == (pTmpHt = Get(n))->Which() &&
                     pHint->GetAttr() == pTmpHt->GetAttr() &&
                     nullptr != ( pTmpHtEnd = pTmpHt->GetEnd() ) &&
@@ -3120,9 +3124,11 @@ bool SwpHints::TryInsertHint(
                     }
 
                     if( bChgStart )
-                        pHint->GetStart() = pTmpHt->GetStart();
+                    {
+                        pHint->SetStart( pTmpHt->GetStart() );
+                    }
                     if( bChgEnd )
-                        *pTmpHintEnd = *pTmpHtEnd;
+                        pHint->SetEnd(*pTmpHtEnd);
 
                     if( bDelOld )
                     {
@@ -3190,8 +3196,8 @@ bool SwpHints::TryInsertHint(
         assert(*pHtEnd >= nHtStart);
 
         // just swap the nonsense:
-        pHint->GetStart() = *pHtEnd;
-        *pHtEnd = nHtStart;
+        pHint->SetStart(*pHtEnd);
+        pHint->SetEnd(nHtStart);
         nHtStart = pHint->GetStart();
     }
 
@@ -3270,6 +3276,7 @@ bool SwpHints::TryInsertHint(
 void SwpHints::DeleteAtPos( const size_t nPos )
 {
     SwTextAttr *pHint = Get(nPos);
+    assert( pHint->m_pHints == this );
     // ChainDelete( pHint );
     NoteInHistory( pHint );
 
@@ -3277,11 +3284,15 @@ void SwpHints::DeleteAtPos( const size_t nPos )
     SwTextAttr *pHt = m_HintsByStart[ nPos ];
     m_HintsByStart.erase( m_HintsByStart.begin() + nPos );
 
-    Resort();
+    if (m_bStartMapNeedsSorting)
+        ResortStartMap();
+    if (m_bEndMapNeedsSorting)
+        ResortEndMap();
 
-    bool const done = m_HintsByEnd.erase(pHt);
-    assert(done);
-    (void)done; // unused in NDEBUG
+    auto findIt = std::lower_bound(m_HintsByEnd.begin(), m_HintsByEnd.end(), pHt, CompareSwpHtEnd);
+    assert(*findIt == pHt);
+    m_HintsByEnd.erase(findIt);
+    pHt->m_pHints = nullptr;
 
     if( pHint->Which() == RES_TXTATR_FIELD )
     {
