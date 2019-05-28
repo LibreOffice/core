@@ -291,14 +291,18 @@ void ShapeLayoutingVisitor::visit(LayoutNode& rAtom)
     if (meLookFor != LAYOUT_NODE)
         return;
 
+    size_t nParentConstraintsNumber = maConstraints.size();
+
     // process alg atoms first, nested layout nodes afterwards
     meLookFor = CONSTRAINT;
     defaultVisit(rAtom);
     meLookFor = ALGORITHM;
     defaultVisit(rAtom);
-    maConstraints.clear();
     meLookFor = LAYOUT_NODE;
     defaultVisit(rAtom);
+
+    // delete added constraints, keep parent constraints
+    maConstraints.erase(maConstraints.begin() + nParentConstraintsNumber, maConstraints.end());
 }
 
 void ShapeLayoutingVisitor::visit(ShapeAtom& /*rAtom*/)
