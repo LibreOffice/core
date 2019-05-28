@@ -29,9 +29,6 @@
 
 #include <com/sun/star/xml/crypto/sax/XMissionTaker.hpp>
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
-#ifdef ANDROID
-#include <com/sun/star/xml/crypto/XXMLSignature.hpp>
-#endif
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
