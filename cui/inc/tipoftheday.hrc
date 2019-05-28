@@ -130,7 +130,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Apply Heading paragraph styles in Writer with shortcut keys: Ctrl+1 applies Heading 1, Ctrl+2 applies Heading 2, etc."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Mix portrait and landscape orientations in a Calc spreadsheet by applying different page styles on sheets."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Create different master pages in a presentation template: View > Master Slide and Slide > New Master (or per toolbar or right click in slide pane)."), "", "tipoftheday_i.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Use Format > Page > 'Fit object to paper format' in Draw/Impress to resize the objects so that they fit on your chosen paper format."), "", "tipoftheday_d.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Use Page/Slide > Properties > 'Fit object to paper format' in Draw/Impress to resize the objects so that they fit on your chosen paper format."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To modify an AutoPlay presentation, open it and after it starts, right click and select Edit in the context menu."), "", "tipoftheday_i.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Rename your slides in Impress to help you define 'Go to page' interactions and to have a summary more explicit than Slide1, Slide2…"), "", "tipoftheday_i.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Play music throughout a slideshow by assigning the sound to the first slide transition without clicking the ‘Apply to All Slides’ button."), "", "tipoftheday_i.png"},
