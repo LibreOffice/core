@@ -54,7 +54,7 @@ policy.1.0.cli_cppuhelper.dll
 policy.1.0.cli_ootypes.dll (build in unoil)
 
 After deinstalling the offices, there should none of them remain in the GAC. If there are some, then 
-try to remove them by clicking on them an choose uninstall from the context menu of the mouse.
+try to remove them by clicking on them and choosing uninstall.
 
 Step 2: Install the office of the last release (respin when using staroffice)
 
