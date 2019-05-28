@@ -283,9 +283,10 @@ int RTFSdrImport::initShape(uno::Reference<drawing::XShape>& o_xShape,
 
     // first, find the shape type
     int nType = -1;
-    auto iter = std::find_if(
-        rShape.getProperties().begin(), rShape.getProperties().end(),
-        [](std::pair<OUString, OUString> aProperty) { return aProperty.first == "shapeType"; });
+    auto iter = std::find_if(rShape.getProperties().begin(), rShape.getProperties().end(),
+                             [](const std::pair<OUString, OUString>& rProperty) {
+                                 return rProperty.first == "shapeType";
+                             });
 
     if (iter == rShape.getProperties().end())
     {
@@ -368,8 +369,14 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     uno::Any aLineWidth = uno::makeAny(sal_Int32(26));
     text::WritingMode eWritingMode = text::WritingMode_LR_TB;
     // Groupshape support
-    boost::optional<sal_Int32> oGroupLeft, oGroupTop, oGroupRight, oGroupBottom;
-    boost::optional<sal_Int32> oRelLeft, oRelTop, oRelRight, oRelBottom;
+    boost::optional<sal_Int32> oGroupLeft;
+    boost::optional<sal_Int32> oGroupTop;
+    boost::optional<sal_Int32> oGroupRight;
+    boost::optional<sal_Int32> oGroupBottom;
+    boost::optional<sal_Int32> oRelLeft;
+    boost::optional<sal_Int32> oRelTop;
+    boost::optional<sal_Int32> oRelRight;
+    boost::optional<sal_Int32> oRelBottom;
 
     // Importing these are not trivial, let the VML import do the hard work.
     oox::vml::FillModel aFillModel; // Gradient.
@@ -377,7 +384,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
 
     bool bOpaque = true;
 
-    boost::optional<sal_Int16> oRelativeWidth, oRelativeHeight;
+    boost::optional<sal_Int16> oRelativeWidth;
+    boost::optional<sal_Int16> oRelativeHeight;
     sal_Int16 nRelativeWidthRelation = text::RelOrientation::PAGE_FRAME;
     sal_Int16 nRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
     boost::logic::tribool obRelFlipV(boost::logic::indeterminate);

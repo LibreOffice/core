@@ -846,7 +846,8 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     if (!m_pBinaryData.get())
     {
         pStream = &aStream;
-        int b = 0, count = 2;
+        int b = 0;
+        int count = 2;
 
         // Feed the destination text to a stream.
         OString aStr = OUStringToOString(m_aStates.top().getDestinationText().makeStringAndClear(),
@@ -1019,11 +1020,10 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     auto pGraphicValue = new RTFValue(aGraphicAttributes, aGraphicSprms);
     // extent sprm
     RTFSprms aExtentAttributes;
-    int nXExt, nYExt;
-    nXExt = (m_aStates.top().getPicture().nGoalWidth ? m_aStates.top().getPicture().nGoalWidth
-                                                     : m_aStates.top().getPicture().nWidth);
-    nYExt = (m_aStates.top().getPicture().nGoalHeight ? m_aStates.top().getPicture().nGoalHeight
-                                                      : m_aStates.top().getPicture().nHeight);
+    int nXExt = (m_aStates.top().getPicture().nGoalWidth ? m_aStates.top().getPicture().nGoalWidth
+                                                         : m_aStates.top().getPicture().nWidth);
+    int nYExt = (m_aStates.top().getPicture().nGoalHeight ? m_aStates.top().getPicture().nGoalHeight
+                                                          : m_aStates.top().getPicture().nHeight);
     if (m_aStates.top().getPicture().nScaleX != 100)
         nXExt = (static_cast<long>(m_aStates.top().getPicture().nScaleX)
                  * (nXExt
@@ -2477,7 +2477,8 @@ RTFError RTFDocumentImpl::popState()
                     aState.getCurrentEncoding());
                 // decode hex dump
                 OStringBuffer aBuf;
-                int b = 0, count = 2;
+                int b = 0;
+                int count = 2;
                 for (int i = 0; i < aStr.getLength(); ++i)
                 {
                     char ch = aStr[i];
@@ -2745,8 +2746,8 @@ RTFError RTFDocumentImpl::popState()
             if (m_aStates.top().getDrawingObject().getShape().is())
             {
                 RTFDrawingObject& rDrawing = m_aStates.top().getDrawingObject();
-                uno::Reference<drawing::XShape> xShape(rDrawing.getShape());
-                uno::Reference<beans::XPropertySet> xPropertySet(rDrawing.getPropertySet());
+                const uno::Reference<drawing::XShape>& xShape(rDrawing.getShape());
+                const uno::Reference<beans::XPropertySet>& xPropertySet(rDrawing.getPropertySet());
 
                 uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY);
                 bool bTextFrame = xServiceInfo->supportsService("com.sun.star.text.TextFrame");
