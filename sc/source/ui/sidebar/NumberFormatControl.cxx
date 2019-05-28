@@ -55,7 +55,7 @@ void ScNumberFormatControl::StateChanged(sal_uInt16, SfxItemState eState,
     {
         case SfxItemState::DEFAULT:
         {
-            const SfxInt16Item* pItem = static_cast<const SfxInt16Item*>(pState);
+            const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pState);
             sal_uInt16 nVal = pItem->GetValue();
             pComboBox->SelectEntryPos(nVal);
             break;
