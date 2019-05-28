@@ -77,6 +77,7 @@ public:
     void testBackgroundDrawingmlFallback();
     void testCenterCycle();
     void testFontSize();
+    void testVerticalBlockList();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -115,6 +116,7 @@ public:
     CPPUNIT_TEST(testBackgroundDrawingmlFallback);
     CPPUNIT_TEST(testCenterCycle);
     CPPUNIT_TEST(testFontSize);
+    CPPUNIT_TEST(testVerticalBlockList);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1195,6 +1197,45 @@ void SdImportTestSmartArt::testFontSize()
     drawing::TextFitToSizeType eTextFitToSize = drawing::TextFitToSizeType_NONE;
     xShape3->getPropertyValue("TextFitToSize") >>= eTextFitToSize;
     CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_AUTOFIT, eTextFitToSize);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testVerticalBlockList()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-vertical-block-list.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+
+    uno::Reference<drawing::XShapes> xGroup1(xGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xGroup1->getCount());
+    uno::Reference<drawing::XShape> xShapeA(xGroup1->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShapeBC(xGroup1->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xTextA(xShapeA, uno::UNO_QUERY);
+    uno::Reference<text::XText> xTextBC(xShapeBC, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), xTextA->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("b\nc"), xTextBC->getString());
+
+    uno::Reference<beans::XPropertySet> xPropSetBC(xShapeBC, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(27000), xPropSetBC->getPropertyValue("RotateAngle").get<sal_Int32>());
+
+    // BC shape is rotated 90*, so width and height is swapped
+    CPPUNIT_ASSERT_GREATER(xShapeA->getSize().Width, xShapeBC->getSize().Height);
+    CPPUNIT_ASSERT_LESSEQUAL(xShapeA->getSize().Height, xShapeBC->getSize().Width);
+    CPPUNIT_ASSERT_GREATER(xShapeA->getPosition().X, xShapeBC->getPosition().X);
+    CPPUNIT_ASSERT_GREATEREQUAL(xShapeA->getPosition().Y, xShapeBC->getPosition().Y);
+
+    uno::Reference<drawing::XShapes> xGroup3(xGroup->getByIndex(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xGroup3->getCount());
+    uno::Reference<drawing::XShape> xShapeEmpty(xGroup3->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xTextEmpty(xShapeEmpty, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("empty"), xTextEmpty->getString());
+
+    CPPUNIT_ASSERT_EQUAL(xShapeA->getSize().Width, xShapeEmpty->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(xShapeA->getSize().Height, xShapeEmpty->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(xShapeA->getPosition().X, xShapeEmpty->getPosition().X);
+    CPPUNIT_ASSERT_GREATEREQUAL(xShapeA->getPosition().Y + 2*xShapeA->getSize().Height, xShapeEmpty->getPosition().Y);
 
     xDocShRef->DoClose();
 }
