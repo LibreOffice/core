@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_03e23704",
+        "filename": "bridges/source/cpp_uno/msvc_win32_intel/cpp2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-28T09:20:42Z",
+      "side": 1,
+      "message": "\"if you accidentally write 0 \u003d x then this generate a compiler-error but not when you write x \u003d 0\"  ...but which generates a compiler warning (i.e., an error with --enable-werror).  I see even less benefit in sticking to this \"trick\" today (where compilers routinely warn about the typo) than, say, 20 years ago.",
+      "parentUuid": "3fa0c359_a33b43cf",
+      "revId": "09a0297902e9514cd1555fb95cc120da39bb92ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_adda54e6",
         "filename": "bridges/source/cpp_uno/msvc_win32_intel/uno2cpp.cxx",
         "patchSetId": 1
@@ -118,6 +136,24 @@
       "side": 1,
       "message": "Sorry, this was the VS-Editor",
       "parentUuid": "3fa0c359_8de1989d",
+      "revId": "09a0297902e9514cd1555fb95cc120da39bb92ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_a3e6e315",
+        "filename": "bridges/source/cpp_uno/msvc_win32_x86-64/cpp2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-28T09:20:42Z",
+      "side": 1,
+      "message": "fair enough, then",
+      "parentUuid": "3fa0c359_6363fbdd",
       "revId": "09a0297902e9514cd1555fb95cc120da39bb92ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
