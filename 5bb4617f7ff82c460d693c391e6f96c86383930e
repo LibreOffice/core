@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_e8136a65",
+        "filename": "editeng/source/editeng/editdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2032,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-28T06:19:35Z",
+      "side": 1,
+      "message": "I\u0027d replace the previous comment, instead of having two comments now that apparently want to say more or less the same.  (One thing that complicates understanding of the old comment is that it was originally written in somewhat colloquial German and has then been mass-translated to English.)",
+      "revId": "5bb4617f7ff82c460d693c391e6f96c86383930e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_0819f683",
+        "filename": "editeng/source/editeng/editdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2033,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-28T06:19:35Z",
+      "side": 1,
+      "message": "Operator \u003d\u003d",
+      "range": {
+        "startLine": 2033,
+        "startChar": 7,
+        "endLine": 2033,
+        "endChar": 9
+      },
+      "revId": "5bb4617f7ff82c460d693c391e6f96c86383930e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
