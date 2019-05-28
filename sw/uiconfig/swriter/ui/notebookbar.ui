@@ -3230,7 +3230,7 @@
                           <object class="sfxlo-NotebookbarToolBox" id="SectionBottom10">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="halign">center</property>
+                            <property name="halign">end</property>
                             <property name="valign">center</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
@@ -3428,6 +3428,7 @@
                                   <object class="sfxlo-NotebookbarToolBox" id="fontheight">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="margin_left">5</property>
                                     <child>
                                       <object class="GtkToolButton" id="Home-FontHeight">
                                         <property name="visible">True</property>
@@ -3551,6 +3552,21 @@
                                   </packing>
                                 </child>
                                 <child>
+                                  <object class="GtkSeparator" id="separator5">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="margin_top">5</property>
+                                    <property name="margin_bottom">5</property>
+                                    <property name="orientation">vertical</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="padding">5</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="ExtTop5">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
@@ -3584,7 +3600,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">True</property>
-                                    <property name="position">1</property>
+                                    <property name="position">2</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -3601,7 +3617,7 @@
                                     <property name="expand">False</property>
                                     <property name="fill">True</property>
                                     <property name="padding">5</property>
-                                    <property name="position">2</property>
+                                    <property name="position">3</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -3636,7 +3652,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">True</property>
-                                    <property name="position">3</property>
+                                    <property name="position">4</property>
                                   </packing>
                                 </child>
                               </object>
