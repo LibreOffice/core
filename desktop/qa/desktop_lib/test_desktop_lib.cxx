@@ -101,6 +101,7 @@ public:
     void testSaveAsCalc();
     void testPasteWriter();
     void testPasteWriterJPEG();
+    void testRichPaste();
     void testUndoWriter();
     void testRowColumnHeaders();
     void testHiddenRowHeaders();
@@ -152,6 +153,7 @@ public:
     CPPUNIT_TEST(testSaveAsCalc);
     CPPUNIT_TEST(testPasteWriter);
     CPPUNIT_TEST(testPasteWriterJPEG);
+    CPPUNIT_TEST(testRichPaste);
     CPPUNIT_TEST(testUndoWriter);
     CPPUNIT_TEST(testRowColumnHeaders);
     CPPUNIT_TEST(testHiddenRowHeaders);
@@ -636,6 +638,35 @@ void DesktopLOKTest::testPasteWriterJPEG()
     xShape.set(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     // This was text::TextContentAnchorType_AS_CHARACTER, AnchorType argument was ignored.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, xShape->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
+}
+
+void DesktopLOKTest::testRichPaste()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+
+    OUString aFileURL;
+    createFileURL("paste.jpg", aFileURL);
+    std::ifstream aImageStream(aFileURL.toUtf8().copy(strlen("file://")).getStr());
+    std::vector<char> aImageContents((std::istreambuf_iterator<char>(aImageStream)), std::istreambuf_iterator<char>());
+    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "image/jpeg", aImageContents.data(), aImageContents.size()));
+
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    const char *pMadMime = "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
+    size_t nSize = 0;
+    char *pUsedMime = 0;
+    char *pData = pDocument->pClass->getBinarySelection(pDocument, pMadMime, &nSize, &pUsedMime);
+    CPPUNIT_ASSERT(nSize > 0);
+    CPPUNIT_ASSERT(pData != nullptr);
+    CPPUNIT_ASSERT(pUsedMime && !strcmp(pUsedMime, pMadMime));
+
+    LibLODocument_Impl* pDocument2 = loadDoc("blank_text.odt");
+    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument2, pMadMime, pData, nSize));
+
+    // FIXME: validate the paste actually occurred: which is the problem ...
 }
 
 void DesktopLOKTest::testUndoWriter()
