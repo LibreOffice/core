@@ -3018,7 +3018,7 @@ void ScInterpreter::ScExternal()
         {
             aCall.ExecuteCall();
 
-            if ( aCall.HasVarRes() )                        // handle async functions
+            if ( pMyFormulaCell && aCall.HasVarRes() )                        // handle async functions
             {
                 rArr.AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
                 uno::Reference<sheet::XVolatileResult> xRes = aCall.GetVarRes();
