@@ -257,31 +257,6 @@ public:
 // class CustomPropertiesRemoveButton ------------------------------------
 struct CustomPropertyLine;
 
-class CustomPropertiesEdit : public Edit
-{
-private:
-    CustomPropertyLine* const       m_pLine;
-
-public:
-    CustomPropertiesEdit(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine)
-        : Edit(pParent, nStyle)
-        , m_pLine(pLine)
-    {
-    }
-
-    CustomPropertyLine*      GetLine() const { return m_pLine; }
-};
-
-class CustomPropertiesTypeBox : public ListBox
-{
-private:
-    CustomPropertyLine* const       m_pLine;
-
-public:
-    CustomPropertiesTypeBox(vcl::Window* pParent, CustomPropertyLine* pLine);
-    CustomPropertyLine*      GetLine() const { return m_pLine; }
-};
-
 class CustomPropertiesDateField
 {
 private:
@@ -324,29 +299,6 @@ public:
     const css::util::Duration& GetDuration() const { return m_aDuration; }
 
     void set_visible(bool bVisible);
-};
-
-class CustomPropertiesEditButton : public PushButton
-{
-    CustomPropertyLine*             m_pLine;
-
-public:
-    CustomPropertiesEditButton(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine);
-};
-
-class CustomPropertiesRemoveButton : public ImageButton
-{
-private:
-    CustomPropertyLine* const       m_pLine;
-
-public:
-    CustomPropertiesRemoveButton(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine)
-        : ImageButton(pParent, nStyle)
-        , m_pLine(pLine)
-    {
-    }
-
-    CustomPropertyLine*      GetLine() const { return m_pLine; }
 };
 
 class CustomPropertiesYesNoButton
