@@ -95,9 +95,16 @@ SwTextRefMark::SwTextRefMark( SwFormatRefMark& rAttr,
     SetOverlapAllowedAttr( true );
 }
 
-sal_Int32* SwTextRefMark::GetEnd()
+const sal_Int32* SwTextRefMark::GetEnd() const
 {
     return m_pEnd;
+}
+
+void SwTextRefMark::SetEnd(sal_Int32 n)
+{
+    *m_pEnd = n;
+    if (m_pHints)
+        m_pHints->EndPosChanged();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
