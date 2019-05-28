@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_a33b43cf",
+        "filename": "bridges/source/cpp_uno/msvc_win32_intel/cpp2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2019-05-28T09:07:45Z",
+      "side": 1,
+      "message": "I also prefer this direction x \u003e 0 but if the check x \u003d\u003d 0 has to be made it would be better to write it in the other direction 0 \u003d\u003d x which if you accidentally write 0 \u003d x then this generate a compiler-error but not when you write x \u003d 0. And because it should be uniform for all check that was the background of this way of writing.",
+      "parentUuid": "3fa0c359_8d4c38c8",
+      "revId": "09a0297902e9514cd1555fb95cc120da39bb92ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_adda54e6",
         "filename": "bridges/source/cpp_uno/msvc_win32_intel/uno2cpp.cxx",
         "patchSetId": 1
@@ -64,6 +82,24 @@
       "writtenOn": "2019-05-27T11:17:07Z",
       "side": 1,
       "message": "any reason to change the intra-line whitespace of these lines, instead of just adding further leading indentation?  just adds needless noise to review process and to history browsing",
+      "revId": "09a0297902e9514cd1555fb95cc120da39bb92ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_6363fbdd",
+        "filename": "bridges/source/cpp_uno/msvc_win32_x86-64/cpp2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2019-05-28T09:07:45Z",
+      "side": 1,
+      "message": "Sorry, this was the VS-Editor",
+      "parentUuid": "3fa0c359_8de1989d",
       "revId": "09a0297902e9514cd1555fb95cc120da39bb92ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
