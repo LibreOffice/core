@@ -650,6 +650,13 @@ void DesktopLOKTest::testRichPaste()
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 't', 0);
     Scheduler::ProcessEventsToIdle();
 
+    // Paste an image and make sure select-all still works.
+    OUString aFileURL;
+    createFileURL("paste.jpg", aFileURL);
+    std::ifstream aImageStream(aFileURL.toUtf8().copy(strlen("file://")).getStr());
+    std::vector<char> aImageContents((std::istreambuf_iterator<char>(aImageStream)), std::istreambuf_iterator<char>());
+    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "image/jpeg", aImageContents.data(), aImageContents.size()));
+
     pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
     Scheduler::ProcessEventsToIdle();
 
