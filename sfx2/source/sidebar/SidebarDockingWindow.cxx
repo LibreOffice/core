@@ -126,25 +126,39 @@ bool SidebarDockingWindow::EventNotify(NotifyEvent& rEvent)
     if (MouseNotifyEvent::KEYINPUT == nType)
     {
         const vcl::KeyCode& rKeyCode = rEvent.GetKeyEvent()->GetKeyCode();
-        if (!(rKeyCode.GetCode() == KEY_F10 && rKeyCode.GetModifier() &&
-            rKeyCode.IsShift() && rKeyCode.IsMod1()))
+        switch (rKeyCode.GetCode())
         {
-            if (!mpAccel)
+            case KEY_UP:
+            case KEY_DOWN:
+            case KEY_PAGEUP:
+            case KEY_PAGEDOWN:
+            case KEY_HOME:
+            case KEY_END:
+            case KEY_LEFT:
+            case KEY_RIGHT:
+            case KEY_BACKSPACE:
+            case KEY_DELETE:
+            case KEY_INSERT:
+            case KEY_RETURN:
             {
-                mpAccel = svt::AcceleratorExecute::createAcceleratorHelper();
-                mpAccel->init(comphelper::getProcessComponentContext(), mpSidebarController->getXFrame());
+                return true;
             }
-            const OUString aCommand(mpAccel->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyCode)));
-            if (".uno:DesignerDialog" == aCommand)
-            {
-                std::shared_ptr<PanelDescriptor> xPanelDescriptor =
+            default:
+            break;
+        }
+        if (!mpAccel)
+        {
+            mpAccel = svt::AcceleratorExecute::createAcceleratorHelper();
+            mpAccel->init(comphelper::getProcessComponentContext(), mpSidebarController->getXFrame());
+        }
+        const OUString aCommand(mpAccel->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyCode)));
+        if (".uno:DesignerDialog" == aCommand)
+        {
+            std::shared_ptr<PanelDescriptor> xPanelDescriptor =
                     mpSidebarController->GetResourceManager()->GetPanelDescriptor( "StyleListPanel" );
-                if ( xPanelDescriptor && mpSidebarController->IsDeckVisible( xPanelDescriptor->msDeckId ) )
-                    Close();
-                return true;
-            }
-            if (".uno:Sidebar" != aCommand)
-                return true;
+            if ( xPanelDescriptor && mpSidebarController->IsDeckVisible( xPanelDescriptor->msDeckId ) )
+                Close();
+            return true;
         }
     }
     else if (MouseNotifyEvent::MOUSEBUTTONDOWN == nType)
