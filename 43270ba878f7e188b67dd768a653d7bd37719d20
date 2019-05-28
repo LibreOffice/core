@@ -16,6 +16,24 @@
       "revId": "43270ba878f7e188b67dd768a653d7bd37719d20",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_0389d721",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-28T09:56:54Z",
+      "side": 1,
+      "message": "it could potentially be a problem if these pointers are compared for equality with the assumption that equality implies they originate from the same allocation... but no idea if there are such comparisons.",
+      "parentUuid": "3fa0c359_03b0f7f3",
+      "revId": "43270ba878f7e188b67dd768a653d7bd37719d20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
