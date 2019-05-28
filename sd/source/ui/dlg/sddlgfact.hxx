@@ -83,6 +83,7 @@ bool Class::StartExecuteAsync(AsyncContext &ctx) \
 
 class SvxBulletAndPositionDlg;
 
+/// Provides managing and getting information from the numbering and position dialog.
 class AbstractSvxBulletAndPositionDlg_Impl :public AbstractSvxBulletAndPositionDlg
 {
     std::unique_ptr<SvxBulletAndPositionDlg> m_xDlg;

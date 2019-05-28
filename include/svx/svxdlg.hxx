@@ -206,6 +206,7 @@ public:
     virtual void GetDescription(OUString& rDescription) = 0;
 };
 
+/// Abstract class provides the get information from the numbering and position dialog.
 class AbstractSvxBulletAndPositionDlg :public VclAbstractDialog
 {
 protected:
