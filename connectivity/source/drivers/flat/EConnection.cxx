@@ -25,6 +25,7 @@
 #include <flat/EPreparedStatement.hxx>
 #include <flat/EStatement.hxx>
 #include <connectivity/dbexception.hxx>
+#include <sal/log.hxx>
 
 using namespace connectivity::flat;
 using namespace connectivity::file;
@@ -67,29 +68,40 @@ void OFlatConnection::construct(const OUString& url,const Sequence< PropertyValu
     for(;pBegin != pEnd;++pBegin)
     {
         if(pBegin->Name == "HeaderLine")
-            OSL_VERIFY( pBegin->Value >>= m_bHeaderLine );
+        {
+            if( ! (pBegin->Value >>= m_bHeaderLine) )
+                SAL_WARN("connectivity.flat", "construct: unable to get property HeaderLine");
+        }
         else if(pBegin->Name == "FieldDelimiter")
         {
             OUString aVal;
-            OSL_VERIFY( pBegin->Value >>= aVal );
+            if( ! (pBegin->Value >>= aVal) )
+                SAL_WARN("connectivity.flat", "construct: unable to get property FieldDelimiter");
+
             m_cFieldDelimiter = aVal.toChar();
         }
         else if(pBegin->Name == "StringDelimiter")
         {
             OUString aVal;
-            OSL_VERIFY( pBegin->Value >>= aVal );
+            if( ! (pBegin->Value >>= aVal) )
+                SAL_WARN("connectivity.flat", "construct: unable to get property StringDelimiter");
+
             m_cStringDelimiter = aVal.toChar();
         }
         else if(pBegin->Name == "DecimalDelimiter")
         {
             OUString aVal;
-            OSL_VERIFY( pBegin->Value >>= aVal );
+            if( ! (pBegin->Value >>= aVal) )
+                SAL_WARN("connectivity.flat", "construct: unable to get property DecimalDelimiter");
+
             m_cDecimalDelimiter = aVal.toChar();
         }
         else if(pBegin->Name == "ThousandDelimiter")
         {
             OUString aVal;
-            OSL_VERIFY( pBegin->Value >>= aVal );
+            if( ! (pBegin->Value >>= aVal) )
+                SAL_WARN("connectivity.flat", "construct: unable to get property ThousandDelimiter");
+
             m_cThousandDelimiter = aVal.toChar();
         }
         else if ( pBegin->Name == "MaxRowScan" )
