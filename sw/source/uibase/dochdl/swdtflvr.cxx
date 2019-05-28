@@ -1765,8 +1765,10 @@ bool SwTransferable::PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
     SotClipboardFormatId nId;
     if( rData.HasFormat( SotClipboardFormatId::EMBEDDED_OBJ ) )
         nId = SotClipboardFormatId::EMBEDDED_OBJ;
+    // LOK case: the clipboard only has the ODF content, no object description: still paste it using
+    // the ODF import, not as an OLE object.
     else if( rData.HasFormat( SotClipboardFormatId::EMBED_SOURCE ) &&
-             rData.HasFormat( SotClipboardFormatId::OBJECTDESCRIPTOR ))
+             (comphelper::LibreOfficeKit::isActive() || rData.HasFormat( SotClipboardFormatId::OBJECTDESCRIPTOR )))
         nId = SotClipboardFormatId::EMBED_SOURCE;
     else
         nId = SotClipboardFormatId::NONE;

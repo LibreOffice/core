@@ -646,11 +646,9 @@ void DesktopLOKTest::testRichPaste()
 
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
 
-    OUString aFileURL;
-    createFileURL("paste.jpg", aFileURL);
-    std::ifstream aImageStream(aFileURL.toUtf8().copy(strlen("file://")).getStr());
-    std::vector<char> aImageContents((std::istreambuf_iterator<char>(aImageStream)), std::istreambuf_iterator<char>());
-    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "image/jpeg", aImageContents.data(), aImageContents.size()));
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 't', 0);
+    Scheduler::ProcessEventsToIdle();
 
     pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
     Scheduler::ProcessEventsToIdle();
@@ -663,10 +661,16 @@ void DesktopLOKTest::testRichPaste()
     CPPUNIT_ASSERT(pData != nullptr);
     CPPUNIT_ASSERT(pUsedMime && !strcmp(pUsedMime, pMadMime));
 
-    LibLODocument_Impl* pDocument2 = loadDoc("blank_text.odt");
-    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument2, pMadMime, pData, nSize));
+    closeDoc();
 
-    // FIXME: validate the paste actually occurred: which is the problem ...
+    LibLODocument_Impl* pDocument2 = loadDoc("blank_text.odt");
+    CPPUNIT_ASSERT(pDocument2->pClass->paste(pDocument2, pMadMime, pData, nSize));
+
+    uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDocument.is());
+    uno::Reference<text::XText> xText = xDocument->getText();
+    CPPUNIT_ASSERT(xText.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("t"), xText->getString());
 }
 
 void DesktopLOKTest::testUndoWriter()
