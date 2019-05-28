@@ -187,38 +187,6 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
         std::remove_if(pCurrParent->getChildren().begin(), pCurrParent->getChildren().end(),
             [] (const ShapePtr & aChild) { return aChild->getServiceName() == "com.sun.star.drawing.GroupShape" && aChild->getChildren().empty(); }),
         pCurrParent->getChildren().end());
-
-    // Offset the children from their default z-order stacking, if necessary.
-    std::vector<ShapePtr>& rChildren = pCurrParent->getChildren();
-    for (size_t i = 0; i < rChildren.size(); ++i)
-        rChildren[i]->setZOrder(i);
-
-    for (size_t i = 0; i < rChildren.size(); ++i)
-    {
-        const ShapePtr& pChild = rChildren[i];
-        sal_Int32 nZOrderOff = pChild->getZOrderOff();
-        if (nZOrderOff <= 0)
-            continue;
-
-        // Increase my ZOrder by nZOrderOff.
-        pChild->setZOrder(pChild->getZOrder() + nZOrderOff);
-        pChild->setZOrderOff(0);
-
-        for (sal_Int32 j = 0; j < nZOrderOff; ++j)
-        {
-            size_t nIndex = i + j + 1;
-            if (nIndex >= rChildren.size())
-                break;
-
-            // Decrease the ZOrder of the next nZOrderOff elements by one.
-            const ShapePtr& pNext = rChildren[nIndex];
-            pNext->setZOrder(pNext->getZOrder() - 1);
-        }
-    }
-
-    // Now that the ZOrders are adjusted, sort the children.
-    std::sort(rChildren.begin(), rChildren.end(),
-              [](const ShapePtr& a, const ShapePtr& b) { return a->getZOrder() < b->getZOrder(); });
 }
 
 void ShapeCreationVisitor::visit(ShapeAtom& /*rAtom*/)
