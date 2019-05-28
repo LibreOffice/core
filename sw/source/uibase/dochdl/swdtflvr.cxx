@@ -797,8 +797,10 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
         m_pWrtShell->Copy( pDoc );
 
+#if HAVE_FEATURE_DESKTOP
         if (m_pOrigGraphic && !m_pOrigGraphic->GetBitmap().IsEmpty())
           AddFormat( SotClipboardFormatId::SVXB );
+#endif
 
         PrepareOLE( m_aObjDesc );
         AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
@@ -806,9 +808,11 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         const Graphic* pGrf = m_pWrtShell->GetGraphic();
         if( pGrf && pGrf->IsSupportedGraphic() )
         {
-            AddFormat( SotClipboardFormatId::GDIMETAFILE );
             AddFormat( SotClipboardFormatId::PNG );
+#if HAVE_FEATURE_DESKTOP
+            AddFormat( SotClipboardFormatId::GDIMETAFILE );
             AddFormat( SotClipboardFormatId::BITMAP );
+#endif
         }
         m_eBufferType = TransferBufferType::Graphic;
         m_pWrtShell->GetGrfNms( &sGrfNm, nullptr );
@@ -828,8 +832,9 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         m_aObjDesc.maSize = OutputDevice::LogicToLogic(m_pWrtShell->GetObjSize(), MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM));
         // <--
         PrepareOLE( m_aObjDesc );
-        AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
 
+#if HAVE_FEATURE_DESKTOP
+        AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
         AddFormat( SotClipboardFormatId::GDIMETAFILE );
 
         // Fetch the formats supported via embedtransferhelper as well
@@ -848,6 +853,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
                     AddFormat( *aIter++ );
             }
         }
+#endif
         m_eBufferType = TransferBufferType::Ole;
     }
     // Is there anything to provide anyway?
@@ -912,15 +918,19 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
             bDDELink = m_pWrtShell->HasWholeTabSelection();
         }
 
+#if HAVE_FEATURE_DESKTOP
         //When someone needs it, we 'OLE' him something
         AddFormat( SotClipboardFormatId::EMBED_SOURCE );
+#endif
 
         //put RTF ahead of  the OLE's Metafile to have less loss
         if( !m_pWrtShell->IsObjSelected() )
         {
             AddFormat( SotClipboardFormatId::RTF );
+#if HAVE_FEATURE_DESKTOP
             AddFormat( SotClipboardFormatId::RICHTEXT );
             AddFormat( SotClipboardFormatId::HTML );
+#endif
         }
         if( m_pWrtShell->IsSelection() )
             AddFormat( SotClipboardFormatId::STRING );
@@ -930,9 +940,11 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
             AddFormat( SotClipboardFormatId::DRAWING );
             if ( nSelection & SelectionType::DrawObject )
             {
+#if HAVE_FEATURE_DESKTOP
                 AddFormat( SotClipboardFormatId::GDIMETAFILE );
-                AddFormat( SotClipboardFormatId::PNG );
                 AddFormat( SotClipboardFormatId::BITMAP );
+#endif
+                AddFormat( SotClipboardFormatId::PNG );
             }
             m_eBufferType = (TransferBufferType)( TransferBufferType::Graphic | m_eBufferType );
 
@@ -949,10 +961,12 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
             if( m_pWrtShell->GetURLFromButton( sURL, sDesc ) )
             {
                 AddFormat( SotClipboardFormatId::STRING );
+#if HAVE_FEATURE_DESKTOP
                 AddFormat( SotClipboardFormatId::SOLK );
                 AddFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK );
                 AddFormat( SotClipboardFormatId::FILECONTENT );
                 AddFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR );
+#endif
                 AddFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR );
                 m_eBufferType = TransferBufferType::InetField | m_eBufferType;
                 nRet = 1;
@@ -965,7 +979,9 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
             nullptr != ( pDShell = m_pWrtShell->GetDoc()->GetDocShell()) &&
             SfxObjectCreateMode::STANDARD == pDShell->GetCreateMode() )
         {
+#if HAVE_FEATURE_DESKTOP
             AddFormat( SotClipboardFormatId::LINK );
+#endif
             m_xDdeLink = new SwTrnsfrDdeLink( *this, *m_pWrtShell );
         }
 
@@ -976,7 +992,9 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         m_aObjDesc.maSize = OutputDevice::LogicToLogic(aSz, MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM));
 
         PrepareOLE( m_aObjDesc );
+#if HAVE_FEATURE_DESKTOP
         AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
+#endif
     }
     else
         nRet = 0;
