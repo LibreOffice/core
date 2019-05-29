@@ -1092,6 +1092,29 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
             return SwXText::getPropertyValue(rPropertyName);
         }
         break;
+        case FN_UNO_PARENT_TEXT:
+        {
+            if (!m_xParentText.is())
+            {
+                const SwStartNode* pSttNd = pBox->GetSttNd();
+                if (!pSttNd)
+                    return uno::Any();
+
+                const SwTableNode* pTableNode = pSttNd->FindTableNode();
+                if (!pTableNode)
+                    return uno::Any();
+
+                SwPosition aPos(*pTableNode);
+                SwDoc* pDoc = const_cast<SwDoc*>(aPos.GetDoc());
+                if (!pDoc)
+                    return uno::Any();
+
+                m_xParentText = sw::CreateParentXText(*pDoc, aPos);
+            }
+
+            return uno::makeAny(m_xParentText);
+        }
+        break;
         default:
         {
             const SwAttrSet& rSet = pBox->GetFrameFormat()->GetAttrSet();
@@ -1100,6 +1123,8 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
             return aResult;
         }
     }
+
+    return uno::Any();
 }
 
 void SwXCell::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
