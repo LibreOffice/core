@@ -134,6 +134,14 @@ published service CellProperties
         @since LibreOffice 6.1
      */
     [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
+
+    /** Parent text of this table cell.
+
+        This might be a header text, body text, parent cell, etc.
+
+        @since LibreOffice 6.3
+     */
+    [optional, readonly, property] com::sun::star::text::XText ParentText;
 };
 
 

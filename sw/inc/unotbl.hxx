@@ -72,6 +72,7 @@ class SwXCell final : public SwXCellBaseClass,
 
     // table position where pBox was found last
     size_t nFndPos;
+    css::uno::Reference<css::text::XText> m_xParentText;
     static size_t const NOTFOUND = SAL_MAX_SIZE;
 
     virtual const SwStartNode *GetStartNode() const override;
