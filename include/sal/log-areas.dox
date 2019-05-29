@@ -474,6 +474,7 @@ certain functionality.
 @li @c vcl.headless - bitmap-based backend
 @li @c vcl.helper
 @li @c vcl.icontest
+@li @c vcl.ios.clipboard
 @li @c vcl.kde4 - KDE4
 @li @c vcl.kde5 - KDE5
 @li @c vcl.layout - Widget layout
