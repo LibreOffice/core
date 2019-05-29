@@ -74,6 +74,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     , m_bDefaultSize(true)
     , m_bDefaultPos(true)
     , m_bFullScreen(false)
+    , m_bFullScreenSpanAll(false)
 {
     Qt5Instance* pInst = static_cast<Qt5Instance*>(GetSalData()->m_pInstance);
     pInst->insertFrame(this);
@@ -145,6 +146,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     // fake an initial geometry, gets updated via configure event or SetPosSize
     if (m_bDefaultPos || m_bDefaultSize)
     {
+        maGeometry.nDisplayScreenNumber = 0;
         Size aDefSize = CalcDefaultSize();
         maGeometry.nX = -1;
         maGeometry.nY = -1;
@@ -310,6 +312,25 @@ QScreen* Qt5Frame::screen() const
         return nullptr;
 }
 
+sal_Int32 Qt5Frame::screenNumber(const QScreen* pScreen) const
+{
+    const QList<QScreen*> screens = QApplication::screens();
+
+    sal_Int32 nScreen = 0;
+    bool bFound = false;
+    for (const QScreen* pCurScreen : screens)
+    {
+        if (pScreen == pCurScreen)
+        {
+            bFound = true;
+            break;
+        }
+        nScreen++;
+    }
+
+    return bFound ? nScreen : -1;
+}
+
 bool Qt5Frame::isMinimized() const
 {
     if (m_pTopLevel)
@@ -431,16 +452,25 @@ void Qt5Frame::Center()
 Size Qt5Frame::CalcDefaultSize()
 {
     assert(isWindow());
-    QSize qSize(0, 0);
-    QScreen* pScreen = screen();
-    if (pScreen)
-        qSize = pScreen->size();
-    else
-        qSize = QApplication::desktop()->screenGeometry(0).size();
 
-    Size aSize = toSize(qSize);
+    Size aSize;
     if (!m_bFullScreen)
-        aSize = bestmaxFrameSizeForScreenSize(aSize);
+    {
+        const QScreen* pScreen = screen();
+        aSize = bestmaxFrameSizeForScreenSize(
+            toSize(pScreen ? pScreen->size() : QApplication::desktop()->screenGeometry(0).size()));
+    }
+    else
+    {
+        if (!m_bFullScreenSpanAll)
+            aSize = toSize(
+                QApplication::desktop()->screenGeometry(maGeometry.nDisplayScreenNumber).size());
+        else
+        {
+            int nLeftScreen = QApplication::desktop()->screenNumber(QPoint(0, 0));
+            aSize = toSize(QApplication::screens()[nLeftScreen]->availableVirtualGeometry().size());
+        }
+    }
 
     return aSize;
 }
@@ -644,7 +674,11 @@ void Qt5Frame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
     // only top-level windows can go fullscreen
     assert(m_pTopLevel);
 
+    if (m_bFullScreen == bFullScreen)
+        return;
+
     m_bFullScreen = bFullScreen;
+    m_bFullScreenSpanAll = m_bFullScreen && (nScreen < 0);
 
     // show it if it isn't shown yet
     if (!isWindow())
@@ -653,15 +687,18 @@ void Qt5Frame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
     if (m_bFullScreen)
     {
         m_aRestoreGeometry = m_pTopLevel->geometry();
-        // do that before going fullscreen
-        SetScreenNumber(nScreen);
-        windowHandle()->showFullScreen();
+        m_nRestoreScreen = maGeometry.nDisplayScreenNumber;
+        SetScreenNumber(m_bFullScreenSpanAll ? m_nRestoreScreen : nScreen);
+        if (!m_bFullScreenSpanAll)
+            windowHandle()->showFullScreen();
+        else
+            windowHandle()->showNormal();
     }
     else
     {
+        SetScreenNumber(m_nRestoreScreen);
         windowHandle()->showNormal();
         m_pTopLevel->setGeometry(m_aRestoreGeometry);
-        m_aRestoreGeometry = QRect();
     }
 }
 
@@ -1101,23 +1138,25 @@ void Qt5Frame::SetScreenNumber(unsigned int nScreen)
         if (pWindow)
         {
             QList<QScreen*> screens = QApplication::screens();
-            if (static_cast<int>(nScreen) < screens.size())
+            if (static_cast<int>(nScreen) < screens.size() || m_bFullScreenSpanAll)
             {
-                bool bSpanAllScreens = (nScreen == static_cast<unsigned int>(-1));
                 QRect screenGeo;
 
-                if (!bSpanAllScreens)
+                if (!m_bFullScreenSpanAll)
                 {
                     screenGeo = QApplication::desktop()->screenGeometry(nScreen);
                     pWindow->setScreen(QApplication::screens()[nScreen]);
                 }
                 else // special case: fullscreen over all available screens
                 {
+                    assert(m_bFullScreen);
                     // left-most screen
                     int nLeftScreen = QApplication::desktop()->screenNumber(QPoint(0, 0));
                     // entire virtual desktop
                     screenGeo = QApplication::screens()[nLeftScreen]->availableVirtualGeometry();
                     pWindow->setScreen(QApplication::screens()[nLeftScreen]);
+                    pWindow->setGeometry(screenGeo);
+                    nScreen = nLeftScreen;
                 }
 
                 // setScreen by itself has no effect, explicitly move the widget to
@@ -1130,7 +1169,10 @@ void Qt5Frame::SetScreenNumber(unsigned int nScreen)
                 // index outta bounds, use primary screen
                 QScreen* primaryScreen = QApplication::primaryScreen();
                 pWindow->setScreen(primaryScreen);
+                nScreen = static_cast<sal_uInt32>(screenNumber(primaryScreen));
             }
+
+            maGeometry.nDisplayScreenNumber = nScreen;
         }
     }
 }
