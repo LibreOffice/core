@@ -71,10 +71,11 @@ namespace dbaccess
         css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
         css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xNumberFormats;
 
-    // <properties>
+        // <properties>
         mutable sal_Int32                                         m_nPrivileges;
-    // </properties>
-        rtl::Reference<::connectivity::sdbcx::OCollection>       m_pColumns;
+        // </properties>
+        // note: this thing uses the ref-count of "this", see OCollection::acquire()!
+        std::unique_ptr<::connectivity::sdbcx::OCollection>       m_pColumns;
 
         // IColumnFactory
         virtual OColumn*    createColumn(const OUString& _rName) const override;
