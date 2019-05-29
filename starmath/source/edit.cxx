@@ -73,7 +73,7 @@ bool SmEditWindow::IsInlineEditEnabled()
 
 
 SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
-    Window              (&rMyCmdBoxWin),
+    Window              (&rMyCmdBoxWin, WB_BORDER),
     DropTargetHelper    ( this ),
     rCmdBox             (rMyCmdBoxWin),
     aModifyIdle         ("SmEditWindow ModifyIdle"),
