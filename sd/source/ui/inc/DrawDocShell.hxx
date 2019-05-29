@@ -98,7 +98,8 @@ public:
     virtual SfxStyleSheetBasePool* GetStyleSheetPool() override;
     virtual void            FillClass(SvGlobalName* pClassName, SotClipboardFormatId* pFormat, OUString* pAppName, OUString* pFullTypeName, OUString* pShortTypeName, sal_Int32 nFileFormat, bool bTemplate = false ) const override;
     virtual void            SetModified( bool = true ) override;
-    virtual VclPtr<SfxDocumentInfoDialog> CreateDocumentInfoDialog( const SfxItemSet &rSet ) override;
+    virtual std::unique_ptr<SfxDocumentInfoDialog> CreateDocumentInfoDialog(weld::Window* pParent,
+                                                                            const SfxItemSet &rSet) override;
 
     using SfxObjectShell::GetVisArea;
     using SfxShell::GetViewShell;

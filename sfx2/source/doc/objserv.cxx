@@ -500,16 +500,13 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 // creating dialog is done via virtual method; application will
                 // add its own statistics page
-                VclAbstractDialog::AsyncContext aCtx;
                 std::shared_ptr<SfxRequest> pReq = std::make_shared<SfxRequest>(rReq);
-                VclPtr<SfxDocumentInfoDialog> pDlg(CreateDocumentInfoDialog(aSet));
-
-                aCtx.mxOwner = pDlg;
-                aCtx.maEndDialogFn = [this, pDlg, xCmisDoc, pReq](sal_Int32 nResult)
+                std::shared_ptr<SfxDocumentInfoDialog> xDlg(CreateDocumentInfoDialog(rReq.GetFrameWeld(), aSet));
+                SfxTabDialogController::runAsync(xDlg, [this, xDlg, xCmisDoc, pReq](sal_Int32 nResult)
                 {
                     if (RET_OK == nResult)
                     {
-                        const SfxDocumentInfoItem* pDocInfoItem = SfxItemSet::GetItem<SfxDocumentInfoItem>(pDlg->GetOutputItemSet(), SID_DOCINFO, false);
+                        const SfxDocumentInfoItem* pDocInfoItem = SfxItemSet::GetItem<SfxDocumentInfoItem>(xDlg->GetOutputItemSet(), SID_DOCINFO, false);
                         if ( pDocInfoItem )
                         {
                             // user has done some changes to DocumentInfo
@@ -537,9 +534,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     else
                         // nothing done; no recording
                         pReq->Ignore();
-                };
+                });
 
-                pDlg->StartExecuteAsync(aCtx);
                 rReq.Ignore();
             }
 

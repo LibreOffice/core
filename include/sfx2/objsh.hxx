@@ -358,7 +358,7 @@ public:
     void                        SignScriptingContent(weld::Window* pDialogParent);
     DECL_LINK(SignDocumentHandler, Button*, void);
 
-    virtual VclPtr<SfxDocumentInfoDialog> CreateDocumentInfoDialog( const SfxItemSet& );
+    virtual std::unique_ptr<SfxDocumentInfoDialog> CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet& rItemSet);
 
     ErrCode                     CallBasic( const OUString& rMacro, const OUString& rBasicName,
                                     SbxArray* pArgs, SbxValue* pRet = nullptr );

@@ -147,11 +147,9 @@ using namespace ::com::sun::star;
 using namespace ::sfx2;
 
 // create DocInfo (virtual)
-VclPtr<SfxDocumentInfoDialog> SwDocShell::CreateDocumentInfoDialog(const SfxItemSet &rSet)
+std::unique_ptr<SfxDocumentInfoDialog> SwDocShell::CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet &rSet)
 {
-    SfxViewShell* pViewShell = GetView() ? GetView() : SfxViewShell::Current();
-    vcl::Window* pWindow = pViewShell ? &pViewShell->GetViewFrame()->GetWindow() : nullptr;
-    VclPtr<SfxDocumentInfoDialog> pDlg = VclPtr<SfxDocumentInfoDialog>::Create(pWindow, rSet);
+    std::unique_ptr<SfxDocumentInfoDialog> xDlg = std::make_unique<SfxDocumentInfoDialog>(pParent, rSet);
     //only with statistics, when this document is being shown, not
     //from within the Doc-Manager
     SwDocShell* pDocSh = static_cast<SwDocShell*>( SfxObjectShell::Current());
@@ -162,11 +160,11 @@ VclPtr<SfxDocumentInfoDialog> SwDocShell::CreateDocumentInfoDialog(const SfxItem
         if ( pVSh && dynamic_cast< const SwSrcView *>( pVSh ) ==  nullptr )
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            pDlg->AddFontTabPage();
-            pDlg->AddTabPage(RID_SW_TP_DOC_STAT, SwResId(STR_DOC_STAT), pFact->GetTabPageCreatorFunc(RID_SW_TP_DOC_STAT));
+            xDlg->AddFontTabPage();
+            xDlg->AddTabPage("writerstats", SwResId(STR_DOC_STAT), pFact->GetTabPageCreatorFunc(RID_SW_TP_DOC_STAT));
         }
     }
-    return pDlg;
+    return xDlg;
 }
 
 void SwDocShell::ToggleLayoutMode(SwView* pView)
