@@ -410,9 +410,9 @@ void ScDocument::SetFormulaResults( const ScAddress& rTopPos, const double* pRes
     pTab->SetFormulaResults(rTopPos.Col(), rTopPos.Row(), pResults, nLen);
 }
 
-const ScDocumentThreadSpecific& ScDocument::CalculateInColumnInThread( ScInterpreterContext& rContext, const ScAddress& rTopPos, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
+const ScDocumentThreadSpecific& ScDocument::CalculateInColumnInThread( ScInterpreterContext& rContext, const ScRange& rCalcRange, unsigned nThisThread, unsigned nThreadsTotal)
 {
-    ScTable* pTab = FetchTable(rTopPos.Tab());
+    ScTable* pTab = FetchTable(rCalcRange.aStart.Tab());
     if (!pTab)
         return maNonThreaded;
 
@@ -420,7 +420,7 @@ const ScDocumentThreadSpecific& ScDocument::CalculateInColumnInThread( ScInterpr
 
     maThreadSpecific.pContext = &rContext;
     ScDocumentThreadSpecific::SetupFromNonThreadedData(maNonThreaded);
-    pTab->CalculateInColumnInThread(rContext, rTopPos.Col(), rTopPos.Row(), nLen, nThisThread, nThreadsTotal);
+    pTab->CalculateInColumnInThread(rContext, rCalcRange.aStart.Col(), rCalcRange.aEnd.Col(), rCalcRange.aStart.Row(), rCalcRange.aEnd.Row(), nThisThread, nThreadsTotal);
 
     assert(IsThreadedGroupCalcInProgress());
     maThreadSpecific.pContext = nullptr;
@@ -428,18 +428,18 @@ const ScDocumentThreadSpecific& ScDocument::CalculateInColumnInThread( ScInterpr
     return maThreadSpecific;
 }
 
-void ScDocument::HandleStuffAfterParallelCalculation( const ScAddress& rTopPos, size_t nLen )
+void ScDocument::HandleStuffAfterParallelCalculation( SCCOL nColStart, SCCOL nColEnd, SCROW nRow, size_t nLen, SCTAB nTab )
 {
     assert(!IsThreadedGroupCalcInProgress());
     for( const DelayedSetNumberFormat& data : GetNonThreadedContext().maDelayedSetNumberFormat)
-        SetNumberFormat( ScAddress( rTopPos.Col(), data.mRow, rTopPos.Tab()), data.mnNumberFormat );
+        SetNumberFormat( ScAddress( data.mCol, data.mRow, nTab ), data.mnNumberFormat );
     GetNonThreadedContext().maDelayedSetNumberFormat.clear();
 
-    ScTable* pTab = FetchTable(rTopPos.Tab());
+    ScTable* pTab = FetchTable(nTab);
     if (!pTab)
         return;
 
-    pTab->HandleStuffAfterParallelCalculation(rTopPos.Col(), rTopPos.Row(), nLen);
+    pTab->HandleStuffAfterParallelCalculation(nColStart, nColEnd, nRow, nLen);
 }
 
 void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo,
