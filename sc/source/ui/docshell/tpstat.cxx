@@ -30,47 +30,36 @@
 
 VclPtr<SfxTabPage> ScDocStatPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<ScDocStatPage>::Create( pParent.pParent, *rSet );
+    return VclPtr<ScDocStatPage>::Create( pParent, *rSet );
 }
 
-ScDocStatPage::ScDocStatPage( vcl::Window *pParent, const SfxItemSet& rSet )
-    :   SfxTabPage( pParent, "StatisticsInfoPage", "modules/scalc/ui/statisticsinfopage.ui", &rSet )
+ScDocStatPage::ScDocStatPage(TabPageParent pParent, const SfxItemSet& rSet)
+    :   SfxTabPage(pParent, "modules/scalc/ui/statisticsinfopage.ui", "StatisticsInfoPage", &rSet)
+    , m_xFtTables(m_xBuilder->weld_label("nosheets"))
+    , m_xFtCells(m_xBuilder->weld_label("nocells"))
+    , m_xFtPages(m_xBuilder->weld_label("nopages"))
+    , m_xFtFormula(m_xBuilder->weld_label("noformula"))
+    , m_xFrame(m_xBuilder->weld_frame("StatisticsInfoPage"))
 {
-    get(m_pFtTables,"nosheets");
-    get(m_pFtCells,"nocells");
-    get(m_pFtPages,"nopages");
-    get(m_pFtFormula,"noformula");
     ScDocShell* pDocSh = dynamic_cast<ScDocShell*>( SfxObjectShell::Current()  );
     ScDocStat   aDocStat;
 
     if ( pDocSh )
         pDocSh->GetDocStat( aDocStat );
 
-    VclFrame *pFrame = get<VclFrame>("StatisticsInfoPage");
-    OUString aInfo = pFrame->get_label();
+    OUString aInfo = m_xFrame->get_label();
     aInfo += aDocStat.aDocName;
-    pFrame->set_label(aInfo);
-    m_pFtTables   ->SetText( OUString::number( aDocStat.nTableCount ) );
-    m_pFtCells    ->SetText( OUString::number( aDocStat.nCellCount ) );
-    m_pFtPages    ->SetText( OUString::number( aDocStat.nPageCount ) );
-    m_pFtFormula  ->SetText( OUString::number( aDocStat.nFormulaCount ) );
+    m_xFrame->set_label(aInfo);
+    m_xFtTables->set_label( OUString::number( aDocStat.nTableCount ) );
+    m_xFtCells->set_label( OUString::number( aDocStat.nCellCount ) );
+    m_xFtPages->set_label( OUString::number( aDocStat.nPageCount ) );
+    m_xFtFormula->set_label( OUString::number( aDocStat.nFormulaCount ) );
 
 }
 
 ScDocStatPage::~ScDocStatPage()
 {
-    disposeOnce();
 }
-
-void ScDocStatPage::dispose()
-{
-    m_pFtTables.clear();
-    m_pFtCells.clear();
-    m_pFtPages.clear();
-    m_pFtFormula.clear();
-    SfxTabPage::dispose();
-}
-
 
 bool ScDocStatPage::FillItemSet( SfxItemSet* /* rSet */ )
 {
