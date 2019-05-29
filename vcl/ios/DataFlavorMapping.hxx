@@ -111,10 +111,6 @@ public:
     css::uno::Sequence<css::datatransfer::DataFlavor>
     typesArrayToFlavorSequence(NSArray* types) const;
 
-    /* Returns an NSArray containing all pasteboard types supported by OOo
-   */
-    static NSArray* getAllSupportedPboardTypes();
-
 private:
     /* Determines if the provided Mime content type is valid.
    */
