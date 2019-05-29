@@ -47,6 +47,8 @@
 #include <unochart.hxx>
 #include <memory>
 
+#include <comphelper/lok.hxx>
+
 using namespace ::com::sun::star;
 
 // Adjust line height (dialogue)
@@ -247,9 +249,10 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
     }
     pSh->EndAllAction();
 
-    if ( xObj.is() )
+    if (xObj.is() && !comphelper::LibreOfficeKit::isActive())
     {
-        // Let the chart be activated after the inserting
+        // Let the chart be activated after the inserting (unless
+        // via LibreOfficeKit)
         SfxInPlaceClient* pClient = pSh->GetView().FindIPClient( xObj, &pSh->GetView().GetEditWin() );
         if ( !pClient )
         {

@@ -89,6 +89,8 @@
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>
 
+#include <comphelper/lok.hxx>
+
 using namespace com::sun::star;
 
 namespace sd {
@@ -407,8 +409,10 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
             else
                 bRet = mpView->InsertObjectAtView(pOleObj, *pPV, SdrInsertFlags::SETDEFLAYER);
 
-            if( bRet )
+            if (bRet && !comphelper::LibreOfficeKit::isActive())
             {
+                // Let the chart be activated after the inserting (unless
+                // via LibreOfficeKit)
                 if (nSlotId == SID_INSERT_DIAGRAM)
                 {
                     pOleObj->SetProgName( "StarChart");
