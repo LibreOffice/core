@@ -2711,6 +2711,9 @@ bool EditEngine::HasValidData( const css::uno::Reference< css::datatransfer::XTr
 {
     bool bValidData = false;
 
+    if ( comphelper::LibreOfficeKit::isActive())
+        return true;
+
     if ( rTransferable.is() )
     {
         // Every application that copies rtf or any other text format also copies plain text into the clipboard....
