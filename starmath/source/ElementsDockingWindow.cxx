@@ -234,11 +234,11 @@ const SmElementDescr SmElementsControl::m_aOthersList[] =
 
 const SmElementDescr SmElementsControl::m_aExamplesList[] =
 {
-    {"C=%pi cdot d = 2 cdot %pi cdot r", nullptr},
-    {"E=mc^2", nullptr},
-    {"a^2 + b^2 = c^2", nullptr},
-    {"f ( x ) = sum from { { i = 0 } } to { infinity } { {f^{(i)}(0)} over {i!} x^i}", nullptr},
-    {"f ( x ) = {1} over {%sigma sqrt{2%pi} }func e^-{{(x-%mu)^2} over {2%sigma^2}}", nullptr},
+    {"C=%pi cdot d = 2 cdot %pi cdot r", RID_EXAMPLE_CIRCUMFERENCE_HELP},
+    {"E=mc^2", RID_EXAMPLE_MASS_ENERGY_EQUIV_HELP},
+    {"a^2 + b^2 = c^2", RID_EXAMPLE_PYTHAGOREAN_THEO_HELP},
+    {"f ( x ) = sum from { { i = 0 } } to { infinity } { {f^{(i)}(0)} over {i!} x^i}", RID_EXAMPLE_A_SIMPLE_SERIES_HELP},
+    {"f ( x ) = {1} over {%sigma sqrt{2%pi} }func e^-{{(x-%mu)^2} over {2%sigma^2}}", RID_EXAMPLE_GAUSS_DISTRIBUTION_HELP},
 };
 
 #define AS_PAIR(a) a, SAL_N_ELEMENTS(a)
