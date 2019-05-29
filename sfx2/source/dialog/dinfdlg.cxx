@@ -814,7 +814,7 @@ void SfxDocumentPage::ImplUpdateSignatures()
     try
     {
         xD = security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext());
-        xD->setParentWindow(VCLUnoHelper::GetInterface(GetTabDialog()));
+        xD->setParentWindow(GetDialogController()->getDialog()->GetXWindow());
     }
     catch ( const css::uno::DeploymentException& )
     {
