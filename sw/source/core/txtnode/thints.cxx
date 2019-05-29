@@ -102,6 +102,7 @@ SwpHints::SwpHints(const SwTextNode& rParent)
     , m_bDDEFields(false)
     , m_bStartMapNeedsSorting(false)
     , m_bEndMapNeedsSorting(false)
+    , m_bWhichMapNeedsSorting(false)
 {
 }
 
@@ -3275,6 +3276,8 @@ bool SwpHints::TryInsertHint(
 
 void SwpHints::DeleteAtPos( const size_t nPos )
 {
+    assert(!m_bStartMapNeedsSorting && "deleting at pos and the list needs sorting?");
+
     SwTextAttr *pHint = Get(nPos);
     assert( pHint->m_pHints == this );
     // ChainDelete( pHint );
@@ -3288,10 +3291,17 @@ void SwpHints::DeleteAtPos( const size_t nPos )
         ResortStartMap();
     if (m_bEndMapNeedsSorting)
         ResortEndMap();
+    if (m_bWhichMapNeedsSorting)
+        ResortWhichMap();
 
-    auto findIt = std::lower_bound(m_HintsByEnd.begin(), m_HintsByEnd.end(), pHt, CompareSwpHtEnd);
+    auto findIt = std::lower_bound(m_HintsByEnd.begin(), m_HintsByEnd.end(), pHt, CompareSwpHtEnd());
     assert(*findIt == pHt);
     m_HintsByEnd.erase(findIt);
+
+    auto findIt2 = std::lower_bound(m_HintsByWhichAndStart.begin(), m_HintsByWhichAndStart.end(), pHt, CompareSwpHtWhichStart());
+    assert(*findIt2 == pHt);
+    m_HintsByWhichAndStart.erase(findIt2);
+
     pHt->m_pHints = nullptr;
 
     if( pHint->Which() == RES_TXTATR_FIELD )

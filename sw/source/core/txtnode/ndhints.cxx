@@ -66,9 +66,50 @@ static bool CompareSwpHtStart( const SwTextAttr* lhs, const SwTextAttr* rhs )
     return ( rHt1.GetStart() < rHt2.GetStart() );
 }
 
-/// sort order: End (reverse), Start, Which (reverse),
-/// (char style: sort number), at last the pointer
-bool CompareSwpHtEnd( const SwTextAttr* lhs, const SwTextAttr* rhs )
+/// sort order: Which, Start, End(reverse) at last the pointer
+bool CompareSwpHtWhichStart::operator()( const SwTextAttr* lhs, const sal_uInt16 nWhich ) const
+{
+    return lhs->Which() < nWhich;
+}
+bool CompareSwpHtWhichStart::operator()( const SwTextAttr* lhs, const SwTextAttr* rhs ) const
+{
+    const SwTextAttr &rHt1 = *lhs;
+    const SwTextAttr &rHt2 = *rhs;
+    const sal_uInt16 nWhich1 = rHt1.Which();
+    const sal_uInt16 nWhich2 = rHt2.Which();
+    if ( nWhich1 < nWhich2 )
+        return true;
+    if ( nWhich1 > nWhich2 )
+        return false;
+    if (rHt1.GetStart() < rHt2.GetStart())
+        return true;
+    if (rHt1.GetStart() > rHt2.GetStart())
+        return false;
+    if ( RES_TXTATR_CHARFMT == nWhich1 )
+    {
+        const sal_uInt16 nS1 =
+                        static_txtattr_cast<const SwTextCharFormat&>(rHt1).GetSortNumber();
+        const sal_uInt16 nS2 =
+                        static_txtattr_cast<const SwTextCharFormat&>(rHt2).GetSortNumber();
+        if ( nS1 != nS2 ) // robust
+            return nS1 < nS2;
+    }
+    const sal_Int32 nEnd1 = *rHt1.GetAnyEnd();
+    const sal_Int32 nEnd2 = *rHt2.GetAnyEnd();
+    if ( nEnd1 > nEnd2 )
+        return true;
+    if ( nEnd1 < nEnd2 )
+        return false;
+    return reinterpret_cast<sal_IntPtr>(&rHt1) < reinterpret_cast<sal_IntPtr>(&rHt2);
+}
+
+/// sort order: End, Start(reverse), Which
+/// (char style: sort number), at last the pointer(reverse)
+bool CompareSwpHtEnd::operator()( sal_Int32 nEndPos, const SwTextAttr* rhs ) const
+{
+    return nEndPos < *rhs->GetAnyEnd();
+}
+bool CompareSwpHtEnd::operator()( const SwTextAttr* lhs, const SwTextAttr* rhs ) const
 {
     const SwTextAttr &rHt1 = *lhs;
     const SwTextAttr &rHt2 = *rhs;
@@ -85,9 +126,9 @@ bool CompareSwpHtEnd( const SwTextAttr* lhs, const SwTextAttr* rhs )
                 if ( RES_TXTATR_CHARFMT == nWhich1 )
                 {
                     const sal_uInt16 nS1 =
-                        static_txtattr_cast<const SwTextCharFormat&>(rHt1).GetSortNumber();
+                            static_txtattr_cast<const SwTextCharFormat&>(rHt1).GetSortNumber();
                     const sal_uInt16 nS2 =
-                        static_txtattr_cast<const SwTextCharFormat&>(rHt2).GetSortNumber();
+                            static_txtattr_cast<const SwTextCharFormat&>(rHt2).GetSortNumber();
                     if ( nS1 != nS2 ) // robust
                         return nS1 > nS2;
                 }
@@ -114,12 +155,17 @@ void SwpHints::Insert( const SwTextAttr *pHt )
         ResortStartMap();
     if (m_bEndMapNeedsSorting)
         ResortEndMap();
+    if (m_bWhichMapNeedsSorting)
+        ResortWhichMap();
 
     auto it1 = std::lower_bound(m_HintsByStart.begin(), m_HintsByStart.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtStart);
     m_HintsByStart.insert(it1, const_cast<SwTextAttr*>(pHt));
 
-    auto it2 = std::lower_bound(m_HintsByEnd.begin(), m_HintsByEnd.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtEnd);
+    auto it2 = std::lower_bound(m_HintsByEnd.begin(), m_HintsByEnd.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtEnd());
     m_HintsByEnd.insert(it2, const_cast<SwTextAttr*>(pHt));
+
+    auto it3 = std::lower_bound(m_HintsByWhichAndStart.begin(), m_HintsByWhichAndStart.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtWhichStart());
+    m_HintsByWhichAndStart.insert(it3, const_cast<SwTextAttr*>(pHt));
 }
 
 bool SwpHints::Contains( const SwTextAttr *pHt ) const
@@ -200,7 +246,7 @@ bool SwpHints::Check(bool bPortionsMerged) const
 
         // 4b) IsLessEnd consistency
         if( pLastEnd )
-            CHECK_ERR( CompareSwpHtEnd( pLastEnd, pHtEnd ), "HintsCheck: IsLastEnd" );
+            CHECK_ERR( CompareSwpHtEnd()( pLastEnd, pHtEnd ), "HintsCheck: IsLastEnd" );
 
         nLastEnd = nIdx;
         pLastEnd = pHtEnd;
@@ -214,7 +260,7 @@ bool SwpHints::Check(bool bPortionsMerged) const
         CHECK_ERR( COMPLETE_STRING != nIdx, "HintsCheck: no GetStartOf" );
 
         // 6) same pointers in both arrays
-        if (std::lower_bound(m_HintsByEnd.begin(), m_HintsByEnd.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtEnd) == m_HintsByEnd.end())
+        if (std::lower_bound(m_HintsByEnd.begin(), m_HintsByEnd.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtEnd()) == m_HintsByEnd.end())
             nIdx = COMPLETE_STRING;
 
         CHECK_ERR( COMPLETE_STRING != nIdx, "HintsCheck: no GetEndOf" );
@@ -370,9 +416,12 @@ void SwpHints::Resort() const
     auto & rStartMap = const_cast<SwpHints*>(this)->m_HintsByStart;
     std::sort(rStartMap.begin(), rStartMap.end(), CompareSwpHtStart);
     auto & rEndMap = const_cast<SwpHints*>(this)->m_HintsByEnd;
-    std::sort(rEndMap.begin(), rEndMap.end(), CompareSwpHtEnd);
+    std::sort(rEndMap.begin(), rEndMap.end(), CompareSwpHtEnd());
+    auto & rWhichStartMap = const_cast<SwpHints*>(this)->m_HintsByWhichAndStart;
+    std::sort(rWhichStartMap.begin(), rWhichStartMap.end(), CompareSwpHtWhichStart());
     m_bStartMapNeedsSorting = false;
     m_bEndMapNeedsSorting = false;
+    m_bWhichMapNeedsSorting = false;
 }
 
 void SwpHints::ResortStartMap() const
@@ -385,17 +434,32 @@ void SwpHints::ResortStartMap() const
 void SwpHints::ResortEndMap() const
 {
     auto & rEndMap = const_cast<SwpHints*>(this)->m_HintsByEnd;
-    std::sort(rEndMap.begin(), rEndMap.end(), CompareSwpHtEnd);
+    std::sort(rEndMap.begin(), rEndMap.end(), CompareSwpHtEnd());
     m_bEndMapNeedsSorting = false;
+}
+
+void SwpHints::ResortWhichMap() const
+{
+    m_bWhichMapNeedsSorting = false;
+    auto & rWhichStartMap = const_cast<SwpHints*>(this)->m_HintsByWhichAndStart;
+    std::sort(rWhichStartMap.begin(), rWhichStartMap.end(), CompareSwpHtWhichStart());
+}
+
+size_t SwpHints::GetFirstPosSortedByWhichAndStart( sal_uInt16 nWhich ) const
+{
+    if (m_bWhichMapNeedsSorting)
+        ResortWhichMap();
+    auto it = std::lower_bound(m_HintsByWhichAndStart.begin(), m_HintsByWhichAndStart.end(), nWhich, CompareSwpHtWhichStart());
+    if ( it == m_HintsByWhichAndStart.end() )
+        return SAL_MAX_SIZE;
+    return it - m_HintsByWhichAndStart.begin();
 }
 
 int SwpHints::GetLastPosSortedByEnd( sal_Int32 nEndPos ) const
 {
     if (m_bEndMapNeedsSorting)
         ResortEndMap();
-    SfxBoolItem aFindItem(0);
-    SwTextAttrEnd aTmp(aFindItem, nEndPos, nEndPos);
-    auto it = std::upper_bound(m_HintsByEnd.begin(), m_HintsByEnd.end(), &aTmp, CompareSwpHtEnd);
+    auto it = std::upper_bound(m_HintsByEnd.begin(), m_HintsByEnd.end(), nEndPos, CompareSwpHtEnd());
     return it - m_HintsByEnd.begin() - 1;
 }
 

@@ -54,8 +54,16 @@ SwTextAttr* MakeRedlineTextAttr(
     SwDoc & rDoc,
     SfxPoolItem const & rAttr );
 
-bool CompareSwpHtEnd( const SwTextAttr* lhs, const SwTextAttr* rhs );
-bool CompareSwpHtWhichStart( const SwTextAttr* lhs, const SwTextAttr* rhs );
+struct CompareSwpHtEnd
+{
+    bool operator()( sal_Int32 nEndPos, const SwTextAttr* rhs ) const;
+    bool operator()( const SwTextAttr* lhs, const SwTextAttr* rhs ) const;
+};
+struct CompareSwpHtWhichStart
+{
+    bool operator()( const SwTextAttr* lhs, const sal_uInt16 nWhich ) const;
+    bool operator()( const SwTextAttr* lhs, const SwTextAttr* rhs ) const;
+};
 
 /// An SwTextAttr container, stores all directly formatted text portions for a text node.
 class SwpHints
@@ -69,6 +77,7 @@ private:
 
     std::vector<SwTextAttr*> m_HintsByStart;
     std::vector<SwTextAttr*> m_HintsByEnd;
+    std::vector<SwTextAttr*> m_HintsByWhichAndStart;
 
     SwRegHistory* m_pHistory;                   ///< for Undo
 
@@ -84,6 +93,7 @@ private:
     // Sort on demand to avoid O(n^2) behaviour
     mutable bool  m_bStartMapNeedsSorting : 1;
     mutable bool  m_bEndMapNeedsSorting : 1;
+    mutable bool  m_bWhichMapNeedsSorting : 1;
 
     /// records a new attribute in m_pHistory.
     void NoteInHistory( SwTextAttr *pAttr, const bool bNew = false );
@@ -120,6 +130,7 @@ private:
     SW_DLLPUBLIC void Resort() const;
     SW_DLLPUBLIC void ResortStartMap() const;
     SW_DLLPUBLIC void ResortEndMap() const;
+    SW_DLLPUBLIC void ResortWhichMap() const;
 
     size_t GetIndexOf( const SwTextAttr *pHt ) const;
 
@@ -144,6 +155,7 @@ public:
     {
         return m_HintsByStart[nPos];
     }
+
     int GetLastPosSortedByEnd(sal_Int32 nEndPos) const;
     SwTextAttr * GetSortedByEnd( size_t nPos ) const
     {
@@ -152,6 +164,16 @@ public:
             ResortEndMap();
         return m_HintsByEnd[nPos];
     }
+
+    size_t GetFirstPosSortedByWhichAndStart(sal_uInt16 nWhich) const;
+    SwTextAttr * GetSortedByWhichAndStart( size_t nPos ) const
+    {
+        assert( !(nPos != 0 && m_bWhichMapNeedsSorting) && "going to trigger a resort in the middle of an iteration, that's bad" );
+        if (m_bWhichMapNeedsSorting)
+            ResortWhichMap();
+        return m_HintsByWhichAndStart[nPos];
+    }
+
     /// Trigger the sorting if necessary
     void SortIfNeedBe() const
     {
@@ -159,6 +181,8 @@ public:
             ResortStartMap();
         if (m_bEndMapNeedsSorting)
             ResortEndMap();
+        if (m_bWhichMapNeedsSorting)
+            ResortWhichMap();
     }
     SwTextAttr * Cut( const size_t nPosInStart )
     {
@@ -187,8 +211,8 @@ public:
     bool CalcHiddenParaField() const; // changes mutable state
 
     // Marks the hint-maps as needing sorting because the position of something has changed
-    void StartPosChanged() const { m_bStartMapNeedsSorting = true; m_bEndMapNeedsSorting = true; }
-    void EndPosChanged() const { m_bStartMapNeedsSorting = true; m_bEndMapNeedsSorting = true; }
+    void StartPosChanged() const { m_bStartMapNeedsSorting = true; m_bEndMapNeedsSorting = true; m_bWhichMapNeedsSorting = true; }
+    void EndPosChanged() const { m_bStartMapNeedsSorting = true; m_bEndMapNeedsSorting = true; m_bWhichMapNeedsSorting = true; }
 };
 
 #endif
