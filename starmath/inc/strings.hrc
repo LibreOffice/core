@@ -282,6 +282,12 @@
 #define RID_CATEGORY_OTHERS                 NC_("RID_CATEGORY_OTHERS", "Others" )
 #define RID_CATEGORY_EXAMPLES               NC_("RID_CATEGORY_EXAMPLES", "Examples" )
 
+#define RID_EXAMPLE_CIRCUMFERENCE_HELP      NC_("RID_EXAMPLE_CIRCUMFERENCE_HELP", "Circumference" )
+#define RID_EXAMPLE_MASS_ENERGY_EQUIV_HELP  NC_("RID_EXAMPLE_MASS_ENERGY_EQUIV_HELP", "Mass–energy equivalence" )
+#define RID_EXAMPLE_PYTHAGOREAN_THEO_HELP   NC_("RID_EXAMPLE_PYTHAGOREAN_THEO_HELP", "Pythagorean theorem" )
+#define RID_EXAMPLE_A_SIMPLE_SERIES_HELP    NC_("RID_EXAMPLE_A_SIMPLE_SERIES_HELP", "A simple series" )
+#define RID_EXAMPLE_AN_ELABORARTE_ONE_HELP  NC_("RID_EXAMPLE_AN_ELABORATE_ONE_HELP", "An elaborate example" )
+
 #define RID_FONTREGULAR                     NC_("RID_FONTREGULAR", "Standard" )
 #define RID_FONTITALIC                      NC_("RID_FONTITALIC", "Italic" )
 #define RID_FONTBOLD                        NC_("RID_FONTBOLD", "Bold" )
