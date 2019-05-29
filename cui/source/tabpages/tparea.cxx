@@ -393,15 +393,9 @@ void SvxAreaTabPage::SelectFillType(weld::ToggleButton& rButton, const SfxItemSe
         maBox.SelectButton(&rButton);
         FillType eFillType = static_cast<FillType>(maBox.GetCurrentButtonPos());
         TabPageParent aFillTab(m_xFillTab.get(), GetDialogController());
-        // TEMP
-        if (!aFillTab.pController)
-            aFillTab.pParent = GetParentDialog();
         m_pFillTabPage.disposeAndReset(lcl_CreateFillStyleTabPage(eFillType, aFillTab, m_rXFSet));
         if (m_pFillTabPage)
-        {
-            m_pFillTabPage->SetTabDialog(GetTabDialog());
             m_pFillTabPage->SetDialogController(GetDialogController());
-        }
         CreatePage( eFillType , m_pFillTabPage);
     }
 }
