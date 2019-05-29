@@ -513,6 +513,7 @@
 #define FN_UNO_FOOTER                       (FN_EXTRA2 + 38)
 #define FN_UNO_FOOTER_LEFT                  (FN_EXTRA2 + 39)
 #define FN_UNO_FOOTER_RIGHT                 (FN_EXTRA2 + 40)
+#define FN_UNO_PARENT_TEXT (FN_EXTRA2 + 42)
 #define FN_UNO_FOLLOW_STYLE                 (FN_EXTRA2 + 59)
 
 #define FN_API_CALL                         (FN_EXTRA2 + 60)

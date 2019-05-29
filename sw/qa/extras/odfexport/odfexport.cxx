@@ -150,6 +150,14 @@ DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32( 408), rect.Height);
 }
 
+DECLARE_ODFEXPORT_TEST(testUserFieldDecl, "user-field-decl.odt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("styles.xml"))
+        // Without the accompanying fix in place, this test would have failed with 'Expected: 2;
+        // Actual: 1', i.e. the in-table field had no declaration (in the header), while the
+        // outside-table one had the declaration.
+        assertXPath(pXmlDoc, "//style:header/text:user-field-decls/text:user-field-decl", 2);
+}
 
 DECLARE_ODFEXPORT_TEST(testFramebackgrounds, "framebackgrounds.odt")
 {

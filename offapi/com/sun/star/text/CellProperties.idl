@@ -122,6 +122,13 @@ published service CellProperties
      */
     [property] short VertOrient;
 
+    /** Parent text of this table cell.
+
+        This might be a header text, body text, parent cell, etc.
+
+        @since LibreOffice 6.3
+     */
+    [optional, readonly, property] com::sun::star::text::XText ParentText;
 };
 
 

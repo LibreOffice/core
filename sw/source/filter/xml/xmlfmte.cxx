@@ -37,6 +37,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include "xmlexp.hxx"
 #include <SwStyleNameMapper.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;

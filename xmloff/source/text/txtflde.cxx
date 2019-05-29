@@ -156,6 +156,31 @@ static sal_Char const FIELD_SERVICE_MEASURE[] = "Measure";
 static sal_Char const FIELD_SERVICE_TABLE_FORMULA[] = "TableFormula";
 static sal_Char const FIELD_SERVICE_DROP_DOWN[] = "DropDown";
 
+namespace
+{
+/// Walks up the parent chain of xText and returns the topmost text.
+uno::Reference<text::XText> GetToplevelText(const uno::Reference<text::XText>& xText)
+{
+    uno::Reference<text::XText> xRet = xText;
+    while (true)
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(xRet, uno::UNO_QUERY);
+        if (!xPropertySet.is())
+            return xRet;
+
+        if (!xPropertySet->getPropertySetInfo()->hasPropertyByName("ParentText"))
+            return xRet;
+
+        uno::Reference<text::XText> xParent;
+        if (xPropertySet->getPropertyValue("ParentText") >>= xParent)
+            xRet = xParent;
+        else
+            return xRet;
+    }
+    return xRet;
+}
+}
+
 SvXMLEnumStringMapEntry<FieldIdEnum> const aFieldServiceNameMapping[] =
 {
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_SENDER, FIELD_ID_SENDER ),
@@ -747,7 +772,9 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
         Reference<XDependentTextField> xDepField(rTextField, UNO_QUERY);
         if (xDepField.is())
         {
-            Reference<XText> xOurText = rTextField->getAnchor()->getText();
+            // The direct parent may be just the table cell, while we want the topmost parent, e.g.
+            // a header text.
+            Reference<XText> xOurText = GetToplevelText(rTextField->getAnchor()->getText());
 
             map<Reference<XText>, set<OUString> >::iterator aMapIter =
                 pUsedMasters->find(xOurText);
