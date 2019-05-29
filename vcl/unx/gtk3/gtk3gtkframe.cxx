@@ -913,11 +913,30 @@ void GtkSalFrame::resizeWindow( long nWidth, long nHeight )
         window_resize(nWidth, nHeight);
 }
 
+// tdf#124694 GtkFixed takes the max size of all its children as its
+// preferred size, causing it to not clip its child, but grow instead.
+
+static void
+ooo_fixed_get_preferred_height(GtkWidget*, gint *minimum, gint *natural)
+{
+    *minimum = 0;
+    *natural = 0;
+}
+
+static void
+ooo_fixed_get_preferred_width(GtkWidget*, gint *minimum, gint *natural)
+{
+    *minimum = 0;
+    *natural = 0;
+}
+
 static void
 ooo_fixed_class_init(GtkFixedClass *klass)
 {
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
     widget_class->get_accessible = ooo_fixed_get_accessible;
+    widget_class->get_preferred_height = ooo_fixed_get_preferred_height;
+    widget_class->get_preferred_width = ooo_fixed_get_preferred_width;
 }
 
 /*
