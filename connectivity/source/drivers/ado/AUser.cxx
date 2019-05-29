@@ -62,7 +62,7 @@ void OAdoUser::refreshGroups()
     if(m_pGroups)
         m_pGroups->reFill(aVector);
     else
-        m_pGroups = new OGroups(m_pCatalog,m_aMutex,aVector,aGroups,isCaseSensitive());
+        m_pGroups.reset(new OGroups(m_pCatalog, m_aMutex, aVector, aGroups, isCaseSensitive()));
 }
 
 Sequence< sal_Int8 > OAdoUser::getUnoTunnelImplementationId()
