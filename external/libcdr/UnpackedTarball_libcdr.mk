@@ -15,8 +15,11 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libcdr,0))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libcdr))
 
+# * external/libcdr/debug.patch is upstream at <https://gerrit.libreoffice.org/#/c/73178/> "Missing
+#   include for PRIu16 with --enable-debug":
 $(eval $(call gb_UnpackedTarball_add_patches,libcdr, \
     external/libcdr/libcdr-visibility-win.patch \
+    external/libcdr/debug.patch \
 ))
 
 ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
