@@ -875,6 +875,23 @@ void GtkSalFrame::resizeWindow( long nWidth, long nHeight )
         window_resize(nWidth, nHeight);
 }
 
+// tdf#124694 GtkFixed takes the max size of all its children as its
+// preferred size, causing it to not clip its child, but grow instead.
+
+static void
+ooo_fixed_size_request(GtkWidget*, GtkRequisition* req)
+{
+    req->width = 0;
+    req->height = 0;
+}
+
+static void
+ooo_fixed_class_init(GtkFixedClass *klass)
+{
+    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
+    widget_class->size_request = ooo_fixed_size_request;
+}
+
 /*
  * Always use a sub-class of GtkFixed we can tag for a11y. This allows us to
  * utilize GAIL for the toplevel window and toolkit implementation incl.
@@ -892,7 +909,7 @@ ooo_fixed_get_type()
             sizeof (GtkFixedClass),
             nullptr,      /* base init */
             nullptr,  /* base finalize */
-            nullptr,     /* class init */
+            reinterpret_cast<GClassInitFunc>(ooo_fixed_class_init), /* class init */
             nullptr, /* class finalize */
             nullptr,                      /* class data */
             sizeof (GtkFixed),         /* instance size */
