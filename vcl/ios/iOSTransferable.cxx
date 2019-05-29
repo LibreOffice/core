@@ -142,6 +142,17 @@ void iOSTransferable::initClipboardItemList()
         throw RuntimeException("Cannot get clipboard data", static_cast<XTransferable*>(this));
     }
 
+#ifdef SAL_LOG_INFO
+    NSString* types = @"";
+    for (unsigned i = 0; i < [pboardFormats count]; i++)
+    {
+        if ([types length] > 0)
+            types = [types stringByAppendingString:@", "];
+        types = [types stringByAppendingString:[pboardFormats objectAtIndex:i]];
+    }
+    SAL_INFO("vcl.ios.clipboard", "Types on clipboard: " << [types UTF8String]);
+#endif
+
     mFlavorList = mDataFlavorMapper->typesArrayToFlavorSequence(pboardFormats);
 }
 
