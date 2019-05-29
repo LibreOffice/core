@@ -29,6 +29,8 @@ void ScRecursionHelper::ResetIteration()
 
 ScRecursionHelper::ScRecursionHelper()
 {
+    pFGSet = nullptr;
+    bGroupsIndependent = true;
     Init();
 }
 
@@ -172,6 +174,17 @@ void ScRecursionHelper::CleanTemporaryGroupCells()
     }
 }
 
+bool ScRecursionHelper::CheckFGIndependence(ScFormulaCellGroup* pFG)
+{
+    if (pFGSet && pFGSet->count(pFG))
+    {
+        bGroupsIndependent = false;
+        return false;
+    }
+
+    return true;
+}
+
 ScFormulaGroupCycleCheckGuard::ScFormulaGroupCycleCheckGuard(ScRecursionHelper& rRecursionHelper, ScFormulaCell* pCell) :
     mrRecHelper(rRecursionHelper)
 {
@@ -199,6 +212,37 @@ ScFormulaGroupDependencyComputeGuard::ScFormulaGroupDependencyComputeGuard(ScRec
 ScFormulaGroupDependencyComputeGuard::~ScFormulaGroupDependencyComputeGuard()
 {
     mrRecHelper.DecDepComputeLevel();
+}
+
+ScCheckIndependentFGGuard::ScCheckIndependentFGGuard(ScRecursionHelper& rRecursionHelper,
+                                                     std::unordered_set<ScFormulaCellGroup*>* pSet) :
+    mrRecHelper(rRecursionHelper),
+    mbUsedFGSet(false)
+{
+    if (!mrRecHelper.HasFormulaGroupSet())
+    {
+        mrRecHelper.SetFormulaGroupSet(pSet);
+        mrRecHelper.SetGroupsIndependent(true);
+        mbUsedFGSet = true;
+    }
+}
+
+ScCheckIndependentFGGuard::~ScCheckIndependentFGGuard()
+{
+    if (mbUsedFGSet)
+    {
+        // Reset to defaults.
+        mrRecHelper.SetFormulaGroupSet(nullptr);
+        mrRecHelper.SetGroupsIndependent(true);
+    }
+}
+
+bool ScCheckIndependentFGGuard::AreGroupsIndependent()
+{
+    if (!mbUsedFGSet)
+        return false;
+
+    return mrRecHelper.AreGroupsIndependent();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

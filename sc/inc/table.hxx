@@ -1012,8 +1012,9 @@ public:
 
     void SetFormulaResults( SCCOL nCol, SCROW nRow, const double* pResults, size_t nLen );
 
-    void CalculateInColumnInThread( ScInterpreterContext& rContext, SCCOL nCol, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal);
-    void HandleStuffAfterParallelCalculation( SCCOL nCol, SCROW nRow, size_t nLen);
+    void CalculateInColumnInThread( ScInterpreterContext& rContext, SCCOL nColStart, SCCOL nColEnd,
+                                    SCROW nRowStart, SCROW nRowEnd, unsigned nThisThread, unsigned nThreadsTotal);
+    void HandleStuffAfterParallelCalculation( SCCOL nColStart, SCCOL nColEnd, SCROW nRow, size_t nLen);
 
     /**
      * Either start all formula cells as listeners unconditionally, or start
