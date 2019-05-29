@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_341d280f",
+        "filename": "cui/source/options/certpath.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-05-29T12:39:40Z",
+      "side": 1,
+      "message": "Please don\u0027t convert path -\u003e URL yourself, use osl::FileBase::getFileURLFromSystemPath that does this transparently in OS-dependent way",
+      "revId": "24f593a2ae22336336b2d8319c26a4b27b700314",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
