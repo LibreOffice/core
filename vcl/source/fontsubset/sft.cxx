@@ -577,7 +577,7 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
         b = c = 0;
 
         if (flags & WE_HAVE_A_SCALE) {
-            a = GetInt16(ptr, 0) << 2;
+            a = sal_uInt16(GetInt16(ptr, 0)) << 2;
             d = a;
             ptr += 2;
         } else if (flags & WE_HAVE_AN_X_AND_Y_SCALE) {
@@ -587,7 +587,7 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
         } else if (flags & WE_HAVE_A_TWO_BY_TWO) {
             a = GetInt16(ptr, 0) << 2;
             b = GetInt16(ptr, 2) << 2;
-            c = GetInt16(ptr, 4) << 2;
+            c = sal_uInt16(GetInt16(ptr, 4)) << 2;
             d = GetInt16(ptr, 6) << 2;
             ptr += 8;
         }
