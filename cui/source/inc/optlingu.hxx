@@ -19,6 +19,7 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_OPTLINGU_HXX
 #define INCLUDED_CUI_SOURCE_INC_OPTLINGU_HXX
 
+#include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/field.hxx>
