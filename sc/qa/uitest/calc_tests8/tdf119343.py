@@ -19,7 +19,7 @@ from uitest.path import get_srcdir_url
 def get_url_for_data_file(file_name):
     return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
-#Bug 119343 - EDITING: copied and pasted cells containing formulas are not recalcuated (2)
+#Bug 119343 - EDITING: copied and pasted cells containing formulas are not recalculated (2)
 
 class tdf119343(UITestCase):
     def test_tdf119343_copy_paste_formula(self):
