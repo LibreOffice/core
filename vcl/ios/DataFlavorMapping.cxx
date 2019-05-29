@@ -567,16 +567,4 @@ DataFlavorMapper::typesArrayToFlavorSequence(NSArray* types) const
     return flavors;
 }
 
-NSArray* DataFlavorMapper::getAllSupportedPboardTypes()
-{
-    NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity:SIZE_FLAVOR_MAP];
-
-    for (sal_uInt32 i = 0; i < SIZE_FLAVOR_MAP; i++)
-    {
-        [array addObject:flavorMap[i].SystemFlavor];
-    }
-
-    return [array autorelease];
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
