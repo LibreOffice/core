@@ -68,6 +68,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
+#include <editeng/escapementitem.hxx>
 #include <filter/msfilter/util.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -2206,9 +2207,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         sal_Int16 nEscapement = 0;
         sal_Int8 nProp  = 58;
         if ( sStringValue == "superscript" )
-                nEscapement = 101;
+                nEscapement = DFLT_ESC_AUTO_SUPER;
         else if ( sStringValue == "subscript" )
-                nEscapement = -101;
+                nEscapement = DFLT_ESC_AUTO_SUB;
         else
             nProp = 100;
 
@@ -2839,8 +2840,17 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
                     nEscapement = ( nIntValue > 0 ) ? 58: -58;
                 }
             }
+
             // tdf#120412 up to 14400% (eg. 1584 pt with 11 pt letters)
-            if( nEscapement > 14400 ) nEscapement = 14400;
+            if ( nEscapement > MAX_ESC_POS )
+            {
+                nEscapement = MAX_ESC_POS;
+            }
+            else if ( nEscapement < -MAX_ESC_POS )
+            {
+                nEscapement = -MAX_ESC_POS;
+            }
+
             rContext->Insert(PROP_CHAR_ESCAPEMENT,         uno::makeAny( nEscapement ) );
             rContext->Insert(PROP_CHAR_ESCAPEMENT_HEIGHT,  uno::makeAny( nProp ) );
         }
