@@ -304,7 +304,8 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             tools::SvRef<SotStorageStream> xStream;
             if ( aDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream.is() )
             {
-                if (nFormatId == SotClipboardFormatId::HTML)
+                if (nFormatId == SotClipboardFormatId::HTML &&
+                    !comphelper::LibreOfficeKit::isActive())
                 {
                     // Launch the text import options dialog.  For now, we do
                     // this for html pasting only, but in the future it may
