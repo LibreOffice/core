@@ -1404,8 +1404,8 @@ uno::Any BasicManager::SetGlobalUNOConstant( const OUString& rName, const uno::A
     SbxVariable* pVariable = pStandardLib->Find( rName, SbxClassType::Object );
     if ( pVariable )
         aOldValue = sbxToUnoValue( pVariable );
-
-    SbxObjectRef xUnoObj = GetSbUnoObject( rName, _rValue );
+    SbxObjectRef xUnoObj = GetSbUnoObject( _rValue.getValueType ().getTypeName () , _rValue );
+    xUnoObj->SetName(rName);
     xUnoObj->SetFlag( SbxFlagBits::DontStore );
     pStandardLib->Insert( xUnoObj.get() );
 
