@@ -83,6 +83,7 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
     bool m_bDefaultSize;
     bool m_bDefaultPos;
     bool m_bFullScreen;
+    sal_Int32 m_nScreen;
     QRect m_aRestoreGeometry;
 
     void Center();

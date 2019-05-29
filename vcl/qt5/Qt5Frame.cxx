@@ -74,6 +74,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     , m_bDefaultSize(true)
     , m_bDefaultPos(true)
     , m_bFullScreen(false)
+    , m_nScreen(0)
 {
     Qt5Instance* pInst = static_cast<Qt5Instance*>(GetSalData()->m_pInstance);
     pInst->insertFrame(this);
@@ -441,6 +442,18 @@ Size Qt5Frame::CalcDefaultSize()
     Size aSize = toSize(qSize);
     if (!m_bFullScreen)
         aSize = bestmaxFrameSizeForScreenSize(aSize);
+    else
+    {
+        if (m_nScreen != -1)
+            qSize = QApplication::desktop()->screenGeometry(m_nScreen).size();
+        else
+        {
+            int nLeftScreen = QApplication::desktop()->screenNumber(QPoint(0, 0));
+            qSize = QApplication::screens()[nLeftScreen]->availableVirtualGeometry().size();
+        }
+
+        aSize = toSize(qSize);
+    }
 
     return aSize;
 }
@@ -645,6 +658,7 @@ void Qt5Frame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
     assert(m_pTopLevel);
 
     m_bFullScreen = bFullScreen;
+    m_nScreen = nScreen;
 
     // show it if it isn't shown yet
     if (!isWindow())
@@ -655,7 +669,10 @@ void Qt5Frame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
         m_aRestoreGeometry = m_pTopLevel->geometry();
         // do that before going fullscreen
         SetScreenNumber(nScreen);
-        windowHandle()->showFullScreen();
+        if (nScreen != -1)
+            windowHandle()->showFullScreen();
+        else
+            windowHandle()->showNormal();
     }
     else
     {
@@ -1118,6 +1135,7 @@ void Qt5Frame::SetScreenNumber(unsigned int nScreen)
                     // entire virtual desktop
                     screenGeo = QApplication::screens()[nLeftScreen]->availableVirtualGeometry();
                     pWindow->setScreen(QApplication::screens()[nLeftScreen]);
+                    pWindow->setGeometry(screenGeo);
                 }
 
                 // setScreen by itself has no effect, explicitly move the widget to
