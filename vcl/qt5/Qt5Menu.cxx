@@ -622,6 +622,7 @@ void Qt5Menu::ShowCloseButton(bool bShow)
         pButton = new QPushButton(mpQMenuBar);
         pButton->setIcon(aIcon);
         pButton->setFlat(true);
+        pButton->setFocusPolicy(Qt::NoFocus);
         pButton->setToolTip(toQString(VclResId(SV_HELPTEXT_CLOSEDOCUMENT)));
         mpQMenuBar->setCornerWidget(pButton, Qt::TopRightCorner);
     }
