@@ -362,7 +362,6 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, StartFolderPickerHdl, void*, void)
     }
 }
 
-
 IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt, void )
 {
     if ( RET_OK == pEvt->DialogResult )
@@ -373,10 +372,9 @@ IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt, void )
     }
 }
 
-
-IMPL_LINK_NOARG( SvxJavaOptionsPage, ExpertConfigHdl_Impl, Button*, void )
+IMPL_STATIC_LINK( SvxJavaOptionsPage, ExpertConfigHdl_Impl, Button*, pButton, void )
 {
-    ScopedVclPtrInstance< CuiAboutConfigTabPage > pExpertConfigDlg(GetTabDialog());
+    ScopedVclPtrInstance< CuiAboutConfigTabPage > pExpertConfigDlg(pButton->GetParentDialog());
     pExpertConfigDlg->Reset();//initialize and reset function
 
     if( RET_OK == pExpertConfigDlg->Execute() )
@@ -386,7 +384,6 @@ IMPL_LINK_NOARG( SvxJavaOptionsPage, ExpertConfigHdl_Impl, Button*, void )
 
     pExpertConfigDlg.disposeAndClear();
 }
-
 
 void SvxJavaOptionsPage::ClearJavaInfo()
 {
