@@ -43,6 +43,7 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/lok.hxx>
@@ -613,7 +614,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
         //the controller will be unlocked by the dialog when the dialog is told to do so
 
         // only activate object if not called via API (e.g. macro)
-        rViewShell.ActivateObject(pObj, embed::EmbedVerbs::MS_OLEVERB_SHOW);
+        if (!comphelper::LibreOfficeKit::isActive())
+            rViewShell.ActivateObject(pObj, embed::EmbedVerbs::MS_OLEVERB_SHOW);
 
         //open wizard
         //@todo get context from calc if that has one
