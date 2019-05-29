@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_57a55603",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3021,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-05-29T19:38:45Z",
+      "side": 1,
+      "message": "This prevents the symptom of the crash, but also suppresses setting the correct asynchronous result. Well, THE correct result is not possible because there is no listener to receive it when ready. By chance the\n\n else if ( aCall.HasString() )\n\nbelow then will hit because ScUnoAddInCall is initialized to bString(true) and an empty string will be the result. But probably better would be to indicate an error in this case by setting aCall.SetResult() with an empty Any, for which uno::TypeClass_VOID will set the FormulaError::NotAvailable error code.",
+      "revId": "d43efc474a60cfe83498cb3901d30664fd73031f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
