@@ -89,7 +89,25 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
             officecfg::Office::Common::Security::Scripting::CertDir::get().get_value_or(OUString());
 
         if (!sUserSetCertPath.isEmpty())
-            AddCertPath(m_sManual, sUserSetCertPath);
+        {
+            // check existence
+            ::osl::DirectoryItem aUserPathItem;
+            ::osl::FileBase::RC result = ::osl::DirectoryItem::get( sUserSetCertPath, aUserPathItem );
+            if ( result != ::osl::FileBase::E_None  )
+            {
+                result = ::osl::DirectoryItem::get( "file://"+sUserSetCertPath, aUserPathItem );
+            }
+            if ( result == ::osl::FileBase::E_None  )
+            {
+                ::osl::FileStatus aStatus( osl_FileStatus_Mask_Validate );
+                result = aUserPathItem.getFileStatus( aStatus );
+                if ( result == ::osl::FileBase::E_None  )
+                {
+                    // the cert path exists
+                    AddCertPath(m_sManual, sUserSetCertPath);
+                }
+            }
+        }
     }
     catch (const uno::Exception &e)
     {
