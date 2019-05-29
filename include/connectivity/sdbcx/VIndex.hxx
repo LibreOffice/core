@@ -57,7 +57,8 @@ namespace connectivity
             bool            m_IsPrimaryKeyIndex;
             bool            m_IsClustered;
 
-            rtl::Reference<OCollection>    m_pColumns;
+            // no Reference! see OCollection::acquire
+            std::unique_ptr<OCollection> m_pColumns;
 
             using ODescriptor_BASE::rBHelper;
             virtual void refreshColumns() override;
