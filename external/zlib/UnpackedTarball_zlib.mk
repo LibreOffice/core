@@ -16,4 +16,10 @@ $(eval $(call gb_UnpackedTarball_set_post_action,zlib,\
 	cp $(addsuffix .c,adler32 compress crc32 deflate inffast inflate inftrees trees zutil) x64 \
 ))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,zlib,0))
+
+$(eval $(call gb_UnpackedTarball_add_patches,zlib, \
+    external/zlib/ubsan.patch \
+))
+
 # vim: set noet sw=4 ts=4:
