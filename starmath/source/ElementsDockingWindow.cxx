@@ -259,7 +259,7 @@ const std::tuple<const char*, const SmElementDescr*, size_t> SmElementsControl::
 const size_t SmElementsControl::m_aCategoriesSize = SAL_N_ELEMENTS(m_aCategories);
 
 SmElementsControl::SmElementsControl(vcl::Window *pParent)
-    : Control(pParent, WB_TABSTOP)
+    : Control(pParent, WB_TABSTOP | WB_BORDER)
     , mpDocShell(new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT))
     , m_nCurrentElement(SAL_MAX_UINT16)
     , m_nCurrentRolloverElement(SAL_MAX_UINT16)
