@@ -68,6 +68,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
+#include <editeng/escapementitem.hxx>
 #include <filter/msfilter/util.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -2840,7 +2841,7 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
                 }
             }
             // tdf#120412 up to 14400% (eg. 1584 pt with 11 pt letters)
-            if( nEscapement > 14400 ) nEscapement = 14400;
+            if( nEscapement > MAX_ESC_POS ) nEscapement = MAX_ESC_POS;
             rContext->Insert(PROP_CHAR_ESCAPEMENT,         uno::makeAny( nEscapement ) );
             rContext->Insert(PROP_CHAR_ESCAPEMENT_HEIGHT,  uno::makeAny( nProp ) );
         }
