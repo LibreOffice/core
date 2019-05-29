@@ -5503,7 +5503,7 @@ find_msms()
     my_msm_files=Microsoft_VC${VCVER}_CRT_x86.msm
     case "$VCVER" in
         150|160)
-        my_msm_files="Microsoft_VC141_CRT_x86.msm ${my_msm_files}"
+        my_msm_files="Microsoft_VC141_CRT_x86.msm Microsoft_VC142_CRT_x86.msm ${my_msm_files}"
         ;;
     esac
     AC_MSG_CHECKING([for ${my_msm_files}])
@@ -5575,6 +5575,11 @@ find_msvc_x64_dlls()
             AC_MSG_CHECKING([for $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT])
             if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT"; then
                 msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT"
+                break
+            fi
+            AC_MSG_CHECKING([for $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC142.CRT])
+            if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC142.CRT"; then
+                msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC142.CRT"
                 break
             fi
             if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/onecore/x64/Microsoft.VC150.CRT"; then
