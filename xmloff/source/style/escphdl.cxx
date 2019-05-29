@@ -28,10 +28,11 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-// this is a copy of defines in svx/inc/escpitem.hxx
+// this is a copy of defines in include/editeng/escapementitem.hxx
 #define DFLT_ESC_PROP    58
-#define DFLT_ESC_AUTO_SUPER 101
-#define DFLT_ESC_AUTO_SUB  -101
+#define MAX_ESC_POS      13999
+#define DFLT_ESC_AUTO_SUPER  (MAX_ESC_POS+1)
+#define DFLT_ESC_AUTO_SUB    -DFLT_ESC_AUTO_SUPER
 
 
 // class XMLEscapementPropHdl
