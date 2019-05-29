@@ -31,6 +31,7 @@
 
 class SmDocShell;
 class SmNode;
+class SmParser;
 
 class SmElement
 {
@@ -107,7 +108,7 @@ class SmElementsControl : public Control
     bool m_bFirstPaintAfterLayout;
     rtl::Reference<AccessibleSmElementsControl> m_xAccessible;
 
-    void addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
+    void addElement(SmParser &rParser, const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
     void addElements(const SmElementDescr aElementsArray[], sal_uInt16 size);
     SmElement* current() const;
     void setCurrentElement(sal_uInt16);

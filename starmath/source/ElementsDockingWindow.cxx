@@ -863,10 +863,11 @@ void SmElementsControl::DoScroll(long nDelta)
     Invalidate();
 }
 
-void SmElementsControl::addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText)
+void SmElementsControl::addElement(SmParser &rParser, const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText)
 {
-    assert(maElementList.size() <= SAL_MAX_UINT16);
-    auto pNode = SmParser().ParseExpression(aElementVisual);
+    // SAL_MAX_UINT16 is invalid, zero is the scrollbar
+    assert(maElementList.size() < SAL_MAX_UINT16 - 2);
+    auto pNode = rParser.ParseExpression(aElementVisual);
 
     pNode->Prepare(maFormat, *mpDocShell, 0);
     pNode->SetSize(Fraction(10,8));
@@ -895,6 +896,9 @@ void SmElementsControl::setElementSetId(const char* pSetId)
 
 void SmElementsControl::addElements(const SmElementDescr aElementsArray[], sal_uInt16 aElementsArraySize)
 {
+    SmParser aParser;
+    aParser.SetImportSymbolNames(true);
+
     for (sal_uInt16 i = 0; i < aElementsArraySize ; i++)
     {
         const char* pElement = aElementsArray[i].first;
@@ -904,86 +908,86 @@ void SmElementsControl::addElements(const SmElementDescr aElementsArray[], sal_u
         } else {
             OUString aElement(OUString::createFromAscii(pElement));
             if (aElement == RID_NEWLINE)
-                addElement(OUString(u"\u21B5"), aElement, SmResId(pElementHelp));
+                addElement(aParser, OUString(u"\u21B5"), aElement, SmResId(pElementHelp));
             else if (aElement == RID_SBLANK)
-                addElement("\"`\"", aElement, SmResId(pElementHelp));
+                addElement(aParser, "\"`\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_BLANK)
-                addElement("\"~\"", aElement, SmResId(pElementHelp));
+                addElement(aParser, "\"~\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_PHANTOMX)
-                addElement("\"" + SmResId(STR_HIDE) +"\"", aElement, SmResId(pElementHelp));
+                addElement(aParser, "\"" + SmResId(STR_HIDE) +"\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_BOLDX)
-                addElement("bold B", aElement, SmResId(pElementHelp));
+                addElement(aParser, "bold B", aElement, SmResId(pElementHelp));
             else if (aElement == RID_ITALX)
-                addElement("ital I", aElement, SmResId(pElementHelp));
+                addElement(aParser, "ital I", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SIZEXY)
-                addElement("\"" + SmResId(STR_SIZE) + "\"", aElement, SmResId(pElementHelp));
+                addElement(aParser, "\"" + SmResId(STR_SIZE) + "\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_FONTXY)
-                addElement("\"" + SmResId(STR_FONT) + "\"", aElement, SmResId(pElementHelp));
+                addElement(aParser, "\"" + SmResId(STR_FONT) + "\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_BLACK)
-                addElement("color black { \"" + SmResId(STR_BLACK) + "\" }", aElement, SmResId(pElementHelp));
+                addElement(aParser, "color black { \"" + SmResId(STR_BLACK) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_BLUE)
-                addElement("color blue { \"" + SmResId(STR_BLUE) + "\" }", aElement, SmResId(pElementHelp));
+                addElement(aParser, "color blue { \"" + SmResId(STR_BLUE) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_GREEN)
-                addElement("color green { \"" + SmResId(STR_GREEN) + "\" }", aElement, SmResId(pElementHelp));
+                addElement(aParser, "color green { \"" + SmResId(STR_GREEN) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_RED)
-                addElement("color red { \"" + SmResId(STR_RED) + "\" }", aElement, SmResId(pElementHelp));
+                addElement(aParser, "color red { \"" + SmResId(STR_RED) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_CYAN)
-                addElement("color cyan { \"" + SmResId(STR_CYAN) + "\" }", aElement, SmResId(pElementHelp));
+                addElement(aParser, "color cyan { \"" + SmResId(STR_CYAN) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_MAGENTA)
-                addElement("color magenta { \"" + SmResId(STR_MAGENTA) + "\" }", aElement, SmResId(pElementHelp));
+                addElement(aParser, "color magenta { \"" + SmResId(STR_MAGENTA) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_YELLOW)
-                addElement("color yellow { \"" + SmResId(STR_YELLOW) + "\" }", aElement, SmResId(pElementHelp));
+                addElement(aParser, "color yellow { \"" + SmResId(STR_YELLOW) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_GRAY)
-                addElement("color gray { \"" + SmResId(STR_GRAY) + "\" }", aElement, SmResId(pElementHelp));
+                addElement(aParser, "color gray { \"" + SmResId(STR_GRAY) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_LIME)
-                addElement("color lime { \"" + SmResId(STR_LIME) + "\" }", aElement, SmResId(pElementHelp));
+                addElement(aParser, "color lime { \"" + SmResId(STR_LIME) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_MAROON)
-                addElement("color maroon { \"" + SmResId(STR_MAROON) + "\" }", aElement, SmResId(pElementHelp));
+                addElement(aParser, "color maroon { \"" + SmResId(STR_MAROON) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_NAVY)
-                addElement("color navy { \"" + SmResId(STR_NAVY) + "\" }", aElement, SmResId(pElementHelp));
+                addElement(aParser, "color navy { \"" + SmResId(STR_NAVY) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_OLIVE)
-                addElement("color olive { \"" + SmResId(STR_OLIVE) + "\" }", aElement, SmResId(pElementHelp));
+                addElement(aParser, "color olive { \"" + SmResId(STR_OLIVE) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_PURPLE)
-                addElement("color purple { \"" + SmResId(STR_PURPLE) + "\" }", aElement, SmResId(pElementHelp));
+                addElement(aParser, "color purple { \"" + SmResId(STR_PURPLE) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_SILVER)
-                addElement("color silver { \"" + SmResId(STR_SILVER) + "\" }", aElement, SmResId(pElementHelp));
+                addElement(aParser, "color silver { \"" + SmResId(STR_SILVER) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_TEAL)
-                addElement("color teal { \"" + SmResId(STR_TEAL) + "\" }", aElement, SmResId(pElementHelp));
+                addElement(aParser, "color teal { \"" + SmResId(STR_TEAL) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_ALIGNLX)
-                addElement("\"" + SmResId(STR_ALIGN_LEFT) + "\"", aElement, SmResId(pElementHelp));
+                addElement(aParser, "\"" + SmResId(STR_ALIGN_LEFT) + "\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_ALIGNCX)
-                addElement("\"" + SmResId(STR_ALIGN_CENTER) + "\"", aElement, SmResId(pElementHelp));
+                addElement(aParser, "\"" + SmResId(STR_ALIGN_CENTER) + "\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_ALIGNRX)
-                addElement("\"" + SmResId(STR_ALIGN_RIGHT) + "\"", aElement, SmResId(pElementHelp));
+                addElement(aParser, "\"" + SmResId(STR_ALIGN_RIGHT) + "\"", aElement, SmResId(pElementHelp));
 
             else if (aElement == RID_SLRPARENTX)
-                addElement("left ( binom{<?>}{<?>} right ) ", aElement, SmResId(pElementHelp));
+                addElement(aParser, "left ( binom{<?>}{<?>} right ) ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLRBRACKETX)
-                addElement("left [ binom{<?>}{<?>} right ] ", aElement, SmResId(pElementHelp));
+                addElement(aParser, "left [ binom{<?>}{<?>} right ] ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLRDBRACKETX)
-                addElement("left ldbracket binom{<?>}{<?>} right rdbracket ", aElement, SmResId(pElementHelp));
+                addElement(aParser, "left ldbracket binom{<?>}{<?>} right rdbracket ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLRBRACEX)
-                addElement("left lbrace binom{<?>}{<?>} right rbrace ", aElement, SmResId(pElementHelp));
+                addElement(aParser, "left lbrace binom{<?>}{<?>} right rbrace ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLRANGLEX)
-                addElement("left langle binom{<?>}{<?>} right rangle ", aElement, SmResId(pElementHelp));
+                addElement(aParser, "left langle binom{<?>}{<?>} right rangle ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLRCEILX)
-                addElement("left lceil binom{<?>}{<?>} right rceil ", aElement, SmResId(pElementHelp));
+                addElement(aParser, "left lceil binom{<?>}{<?>} right rceil ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLRFLOORX)
-                addElement("left lfloor binom{<?>}{<?>} right rfloor ", aElement, SmResId(pElementHelp));
+                addElement(aParser, "left lfloor binom{<?>}{<?>} right rfloor ", aElement, SmResId(pElementHelp));
 
             else if (aElement == RID_SLRLINEX)
-                addElement("left lline binom{<?>}{<?>} right rline ", aElement, SmResId(pElementHelp));
+                addElement(aParser, "left lline binom{<?>}{<?>} right rline ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLRDLINEX)
-                addElement("left ldline binom{<?>}{<?>} right rdline ", aElement, SmResId(pElementHelp));
+                addElement(aParser, "left ldline binom{<?>}{<?>} right rdline ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLMRANGLEXY)
-                addElement("left langle binom{<?>}{<?>} mline binom{<?>}{<?>} right rangle ", aElement, SmResId(pElementHelp));
+                addElement(aParser, "left langle binom{<?>}{<?>} mline binom{<?>}{<?>} right rangle ", aElement, SmResId(pElementHelp));
 
             else if (aElement == RID_XOVERBRACEY)
-                addElement("{<?><?><?>} overbrace {<?>} ", aElement, SmResId(pElementHelp));
+                addElement(aParser, "{<?><?><?>} overbrace {<?>} ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_XUNDERBRACEY)
-                addElement("{<?><?><?>} underbrace {<?>} ", aElement, SmResId(pElementHelp));
+                addElement(aParser, "{<?><?><?>} underbrace {<?>} ", aElement, SmResId(pElementHelp));
             else
-                addElement(aElement, aElement, pElementHelp ? SmResId(pElementHelp) : "");
+                addElement(aParser, aElement, aElement, pElementHelp ? SmResId(pElementHelp) : "");
         }
     }
 }
