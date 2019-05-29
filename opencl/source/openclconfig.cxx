@@ -158,6 +158,9 @@ bool match(const OpenCLConfig::ImplMatcher& rListEntry, const OpenCLPlatformInfo
 
 bool match(const OpenCLConfig::ImplMatcherSet& rList, const OpenCLPlatformInfo& rPlatform, const OpenCLDeviceInfo& rDevice, const char* sKindOfList)
 {
+#if !defined(SAL_LOG_INFO)
+    (void)sKindOfList;
+#endif
     for (const auto& rListEntry : rList)
     {
         SAL_INFO("opencl", "Looking for match for platform=" << rPlatform << ", device=" << rDevice <<
