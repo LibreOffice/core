@@ -32,7 +32,7 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 			--disable-shared \
 			--without-docs \
 			--disable-tools \
-			--disable-debug \
+			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
 			--disable-weffc \
 			$(if $(gb_FULLDEPS),,--disable-dependency-tracking) \
