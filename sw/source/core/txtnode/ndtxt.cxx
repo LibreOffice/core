@@ -1615,17 +1615,17 @@ bool SwTextNode::DontExpandFormat( const SwIndex& rIdx, bool bFlag,
     if ( HasHints() )
     {
         m_pSwpHints->SortIfNeedBe();
-        const size_t nEndCnt = m_pSwpHints->Count();
-        size_t nPos = nEndCnt;
-        while( nPos )
+        int nPos = m_pSwpHints->GetLastPosSortedByEnd(nIdx);
+        for ( ; nPos >= 0; --nPos)
         {
-            SwTextAttr *pTmp = m_pSwpHints->GetSortedByEnd( --nPos );
+            SwTextAttr *pTmp = m_pSwpHints->GetSortedByEnd( nPos );
             const sal_Int32 *pEnd = pTmp->GetEnd();
-            if( !pEnd || *pEnd > nIdx )
+            if( !pEnd )
                 continue;
+            assert( *pEnd <= nIdx );
             if( nIdx != *pEnd )
-                nPos = 0;
-            else if( bFlag != pTmp->DontExpand() && !pTmp->IsLockExpandFlag()
+                break;
+            if( bFlag != pTmp->DontExpand() && !pTmp->IsLockExpandFlag()
                      && *pEnd > pTmp->GetStart())
             {
                 bRet = true;
