@@ -956,16 +956,15 @@ void DrawDocShell::OpenBookmark( const OUString& rBookmarkURL )
     ( mpViewShell ? mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings().Execute( SID_OPENHYPERLINK, ppArgs );
 }
 
-VclPtr<SfxDocumentInfoDialog> DrawDocShell::CreateDocumentInfoDialog( const SfxItemSet &rSet )
+std::unique_ptr<SfxDocumentInfoDialog> DrawDocShell::CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet &rSet)
 {
-    VclPtr<SfxDocumentInfoDialog> pDlg   = VclPtr<SfxDocumentInfoDialog>::Create( nullptr, rSet );
-    DrawDocShell*          pDocSh = dynamic_cast< DrawDocShell *>( SfxObjectShell::Current() );
-
+    std::unique_ptr<SfxDocumentInfoDialog> xDlg = std::make_unique<SfxDocumentInfoDialog>(pParent, rSet);
+    DrawDocShell* pDocSh = dynamic_cast<DrawDocShell*>(SfxObjectShell::Current());
     if( pDocSh == this )
     {
-        pDlg->AddFontTabPage();
+        xDlg->AddFontTabPage();
     }
-    return pDlg;
+    return xDlg;
 }
 
 void DrawDocShell::setEditMode(DrawViewShell* pDrawViewShell, bool isMasterPage)

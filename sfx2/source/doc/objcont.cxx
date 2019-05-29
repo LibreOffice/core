@@ -282,15 +282,11 @@ void SfxObjectShell::UpdateTime_Impl(
     }
 }
 
-
-VclPtr<SfxDocumentInfoDialog> SfxObjectShell::CreateDocumentInfoDialog
-(
-    const SfxItemSet&   rSet
-)
+std::unique_ptr<SfxDocumentInfoDialog> SfxObjectShell::CreateDocumentInfoDialog(weld::Window* pParent,
+                                                                                const SfxItemSet& rSet)
 {
-    return VclPtr<SfxDocumentInfoDialog>::Create(nullptr, rSet);
+    return std::make_unique<SfxDocumentInfoDialog>(pParent, rSet);
 }
-
 
 std::set<Color> SfxObjectShell::GetDocColors()
 {

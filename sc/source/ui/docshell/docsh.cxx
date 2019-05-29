@@ -2912,9 +2912,9 @@ void ScDocShell::GetDocStat( ScDocStat& rDocStat )
                 static_cast<sal_uInt16>(ScPrintFunc( this, pPrinter, i ).GetTotalPages()) );
 }
 
-VclPtr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog( const SfxItemSet &rSet )
+std::unique_ptr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet &rSet)
 {
-    VclPtr<SfxDocumentInfoDialog> pDlg   = VclPtr<SfxDocumentInfoDialog>::Create( nullptr, rSet );
+    std::unique_ptr<SfxDocumentInfoDialog> xDlg = std::make_unique<SfxDocumentInfoDialog>(pParent, rSet);
     ScDocShell*            pDocSh = dynamic_cast< ScDocShell *>( SfxObjectShell::Current() );
 
     // Only for statistics, if this Doc is shown; not from the Doc Manager
@@ -2923,12 +2923,10 @@ VclPtr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog( const SfxIte
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         ::CreateTabPage ScDocStatPageCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_STAT);
         OSL_ENSURE(ScDocStatPageCreate, "Tabpage create fail!");
-        pDlg->AddFontTabPage();
-        pDlg->AddTabPage( 42,
-            ScResId( STR_DOC_STAT ),
-            ScDocStatPageCreate);
+        xDlg->AddFontTabPage();
+        xDlg->AddTabPage("calcstats", ScResId(STR_DOC_STAT), ScDocStatPageCreate);
     }
-    return pDlg;
+    return xDlg;
 }
 
 vcl::Window* ScDocShell::GetActiveDialogParent()

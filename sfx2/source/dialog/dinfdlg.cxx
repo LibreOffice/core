@@ -87,8 +87,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
-const sal_uInt16 FONT_PAGE_ID = 99;
-
 struct CustomProperty
 {
     OUString         m_sName;
@@ -1089,11 +1087,9 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     m_xUseThumbnailSaveCB->save_state();
 }
 
-SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
-                                              const SfxItemSet& rItemSet )
-    : SfxTabDialog(pParent, "DocumentPropertiesDialog",
-        "sfx/ui/documentpropertiesdialog.ui", &rItemSet)
-    , m_nDocInfoId(0)
+SfxDocumentInfoDialog::SfxDocumentInfoDialog(weld::Window* pParent, const SfxItemSet& rItemSet)
+    : SfxTabDialogController(pParent, "sfx/ui/documentpropertiesdialog.ui",
+                             "DocumentPropertiesDialog", &rItemSet)
 {
     const SfxDocumentInfoItem& rInfoItem = rItemSet.Get( SID_DOCINFO );
 
@@ -1104,7 +1100,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
 
      // Determine the Titles
     const SfxPoolItem* pItem = nullptr;
-    OUString aTitle( GetText() );
+    OUString aTitle(m_xDialog->get_title());
     if ( SfxItemState::SET !=
          rItemSet.GetItemState( SID_EXPLORER_PROPS_START, false, &pItem ) )
     {
@@ -1131,27 +1127,26 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
                     "SfxDocumentInfoDialog:<SfxStringItem> expected" );
         aTitle = aTitle.replaceFirst("%1", static_cast<const SfxStringItem*>(pItem)->GetValue());
     }
-    SetText( aTitle );
+    m_xDialog->set_title(aTitle);
 
     // Property Pages
-    m_nDocInfoId = AddTabPage("general", SfxDocumentPage::Create);
-    AddTabPage("description", SfxDocumentDescPage::Create);
-    AddTabPage("customprops", SfxCustomPropertiesPage::Create);
-    AddTabPage("cmisprops", SfxCmisPropertiesPage::Create);
-    AddTabPage("security", SfxSecurityPage::Create);
+    AddTabPage("general", SfxDocumentPage::Create, nullptr);
+    AddTabPage("description", SfxDocumentDescPage::Create, nullptr);
+    AddTabPage("customprops", SfxCustomPropertiesPage::Create, nullptr);
+    AddTabPage("cmisprops", SfxCmisPropertiesPage::Create, nullptr);
+    AddTabPage("security", SfxSecurityPage::Create, nullptr);
 }
 
 
-void SfxDocumentInfoDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SfxDocumentInfoDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
-    if ( m_nDocInfoId == nId )
+    if (rId == "general")
         static_cast<SfxDocumentPage&>(rPage).EnableUseUserData();
 }
 
 void SfxDocumentInfoDialog::AddFontTabPage()
 {
-    AddTabPage(FONT_PAGE_ID, SfxResId(STR_FONT_TABPAGE), SfxDocumentFontsPage::Create);
-    SetPageName(FONT_PAGE_ID , "font");
+    AddTabPage("font", SfxResId(STR_FONT_TABPAGE), SfxDocumentFontsPage::Create);
 }
 
 // class CustomPropertiesYesNoButton -------------------------------------
@@ -1263,6 +1258,8 @@ namespace
     {
         for (size_t i = 0; i < SAL_N_ELEMENTS(SFX_CB_PROPERTY_STRINGARRAY); ++i)
             rNameBox.append_text(SfxResId(SFX_CB_PROPERTY_STRINGARRAY[i]));
+        Size aSize(rNameBox.get_preferred_size());
+        rNameBox.set_size_request(aSize.Width(), aSize.Height());
     }
 
     void fillTypeBox(weld::ComboBox& rTypeBox)
@@ -1273,6 +1270,8 @@ namespace
             rTypeBox.append(sId, SfxResId(SFX_LB_PROPERTY_STRINGARRAY[i].first));
         }
         rTypeBox.set_active(0);
+        Size aSize(rTypeBox.get_preferred_size());
+        rTypeBox.set_size_request(aSize.Width(), aSize.Height());
     }
 }
 
@@ -1781,7 +1780,7 @@ void CustomPropertiesControl::Init(weld::Builder& rBuilder)
     std::unique_ptr<CustomPropertyLine> xNewLine(new CustomPropertyLine(m_xPropertiesWin.get(), m_xBody.get()));
     Size aLineSize(xNewLine->m_xLine->get_preferred_size());
     m_xPropertiesWin->SetLineHeight(aLineSize.Height() + 6);
-    m_xBody->set_size_request(aLineSize.Width(), -1);
+    m_xBody->set_size_request(aLineSize.Width() + 6, -1);
     auto nHeight = aLineSize.Height() * 8;
     m_xVertScroll->set_size_request(-1, nHeight + 6);
 
@@ -1808,6 +1807,8 @@ void CustomPropertiesControl::Init(weld::Builder& rBuilder)
 IMPL_LINK(CustomPropertiesControl, ResizeHdl, const Size&, rSize, void)
 {
     int nHeight = rSize.Height() - 6;
+    if (nHeight == m_xPropertiesWin->GetHeight())
+        return;
     m_xPropertiesWin->SetHeight(nHeight);
     sal_Int32 nScrollOffset = m_xPropertiesWin->GetLineHeight();
     sal_Int32 nVisibleEntries = nHeight / nScrollOffset;
