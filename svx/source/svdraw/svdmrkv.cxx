@@ -776,7 +776,12 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
 
         if(pSdrOle2Obj && (pSdrOle2Obj->isInplaceActive() || pSdrOle2Obj->isUiActive()))
         {
-            return;
+            if(SfxViewShell* pViewShell = GetSfxViewShell())
+            {
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "INPLACE");
+                SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "INPLACE");
+                return;
+            }
         }
     }
 
