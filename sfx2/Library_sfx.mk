@@ -325,6 +325,9 @@ $(eval $(call gb_Library_add_defs,sfx,\
 endif
 
 ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_cxxflags,sfx,\
+    $(gb_OBJCXXFLAGS) \
+))
 $(eval $(call gb_Library_add_objcxxobjects,sfx,\
     sfx2/source/appl/shutdowniconaqua \
 ))
