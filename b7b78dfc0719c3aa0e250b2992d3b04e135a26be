@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_f4726049",
+        "filename": "sw/source/core/bastyp/index.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-29T12:59:45Z",
+      "side": 1,
+      "message": "surely this is an accident?",
+      "revId": "b7b78dfc0719c3aa0e250b2992d3b04e135a26be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
