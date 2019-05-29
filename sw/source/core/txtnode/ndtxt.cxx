@@ -1672,19 +1672,15 @@ lcl_GetTextAttrs(
         default: assert(false);
     }
 
-    for( size_t i = 0; i < nSize; ++i )
+    for( size_t i = pSwpHints->GetFirstPosSortedByWhichAndStart(nWhich); i < nSize; ++i )
     {
-        SwTextAttr *const pHint = pSwpHints->Get(i);
+        SwTextAttr *const pHint = pSwpHints->GetSortedByWhichAndStart(i);
+        if (pHint->Which() != nWhich)
+            break; // hints are sorted by which&start, so we are done...
+
         sal_Int32 const nHintStart = pHint->GetStart();
         if (nIndex < nHintStart)
-        {
-            return; // hints are sorted by start, so we are done...
-        }
-
-        if (pHint->Which() != nWhich)
-        {
-            continue;
-        }
+            break; // hints are sorted by which&start, so we are done...
 
         sal_Int32 const*const pEndIdx = pHint->GetEnd();
         // cannot have hint with no end and no dummy char
