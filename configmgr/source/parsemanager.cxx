@@ -57,7 +57,9 @@ ParseManager::ParseManager(
 }
 
 bool ParseManager::parse(std::set< OUString > const * existingDependencies) {
+#if defined SAL_LOG_INFO
     sal_uInt32 startTime( osl_getGlobalTimer() );
+#endif
     for (;;) {
         switch (itemData_.is()
                 ? xmlreader::XmlReader::Result::Begin
