@@ -87,8 +87,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
-const sal_uInt16 FONT_PAGE_ID = 99;
-
 struct CustomProperty
 {
     OUString         m_sName;
@@ -1089,11 +1087,9 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     m_xUseThumbnailSaveCB->save_state();
 }
 
-SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
-                                              const SfxItemSet& rItemSet )
-    : SfxTabDialog(pParent, "DocumentPropertiesDialog",
-        "sfx/ui/documentpropertiesdialog.ui", &rItemSet)
-    , m_nDocInfoId(0)
+SfxDocumentInfoDialog::SfxDocumentInfoDialog(weld::Window* pParent, const SfxItemSet& rItemSet)
+    : SfxTabDialogController(pParent, "sfx/ui/documentpropertiesdialog.ui",
+                             "DocumentPropertiesDialog", &rItemSet)
 {
     const SfxDocumentInfoItem& rInfoItem = rItemSet.Get( SID_DOCINFO );
 
@@ -1104,7 +1100,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
 
      // Determine the Titles
     const SfxPoolItem* pItem = nullptr;
-    OUString aTitle( GetText() );
+    OUString aTitle(m_xDialog->get_title());
     if ( SfxItemState::SET !=
          rItemSet.GetItemState( SID_EXPLORER_PROPS_START, false, &pItem ) )
     {
@@ -1131,27 +1127,26 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
                     "SfxDocumentInfoDialog:<SfxStringItem> expected" );
         aTitle = aTitle.replaceFirst("%1", static_cast<const SfxStringItem*>(pItem)->GetValue());
     }
-    SetText( aTitle );
+    m_xDialog->set_title(aTitle);
 
     // Property Pages
-    m_nDocInfoId = AddTabPage("general", SfxDocumentPage::Create);
-    AddTabPage("description", SfxDocumentDescPage::Create);
-    AddTabPage("customprops", SfxCustomPropertiesPage::Create);
-    AddTabPage("cmisprops", SfxCmisPropertiesPage::Create);
-    AddTabPage("security", SfxSecurityPage::Create);
+    AddTabPage("general", SfxDocumentPage::Create, nullptr);
+    AddTabPage("description", SfxDocumentDescPage::Create, nullptr);
+    AddTabPage("customprops", SfxCustomPropertiesPage::Create, nullptr);
+    AddTabPage("cmisprops", SfxCmisPropertiesPage::Create, nullptr);
+    AddTabPage("security", SfxSecurityPage::Create, nullptr);
 }
 
 
-void SfxDocumentInfoDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SfxDocumentInfoDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
-    if ( m_nDocInfoId == nId )
+    if (rId == "general")
         static_cast<SfxDocumentPage&>(rPage).EnableUseUserData();
 }
 
 void SfxDocumentInfoDialog::AddFontTabPage()
 {
-    AddTabPage(FONT_PAGE_ID, SfxResId(STR_FONT_TABPAGE), SfxDocumentFontsPage::Create);
-    SetPageName(FONT_PAGE_ID , "font");
+    AddTabPage("font", SfxResId(STR_FONT_TABPAGE), SfxDocumentFontsPage::Create);
 }
 
 // class CustomPropertiesYesNoButton -------------------------------------

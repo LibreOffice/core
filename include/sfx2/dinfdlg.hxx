@@ -242,15 +242,13 @@ public:
 
 // class SfxDocumentInfoDialog -------------------------------------------
 
-class SFX2_DLLPUBLIC SfxDocumentInfoDialog : public SfxTabDialog
+class SFX2_DLLPUBLIC SfxDocumentInfoDialog : public SfxTabDialogController
 {
-private:
-    sal_uInt16 m_nDocInfoId;
 protected:
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage& rPage ) override;
+    virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
 
 public:
-    SfxDocumentInfoDialog( vcl::Window* pParent, const SfxItemSet& );
+    SfxDocumentInfoDialog(weld::Window* pParent, const SfxItemSet&);
     void AddFontTabPage();
 };
 
