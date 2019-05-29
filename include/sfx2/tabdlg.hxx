@@ -51,121 +51,6 @@ public:
     virtual SfxPoolItem*    Clone(SfxItemPool* pToPool = nullptr) const override;
 };
 
-class SFX2_DLLPUBLIC SfxTabDialog : public TabDialog
-{
-private:
-friend class SfxTabPage;
-friend class SfxTabDialogUIObject;
-
-    VclPtr<VclBox>     m_pBox;
-    VclPtr<TabControl> m_pTabCtrl;
-
-    VclPtr<PushButton> m_pOKBtn;
-    VclPtr<PushButton> m_pUserBtn;
-    VclPtr<CancelButton> m_pCancelBtn;
-    VclPtr<HelpButton> m_pHelpBtn;
-    VclPtr<PushButton> m_pResetBtn;
-    VclPtr<PushButton> m_pBaseFmtBtn;
-
-    bool m_bOwnsOKBtn;
-    bool m_bOwnsCancelBtn;
-    bool m_bOwnsHelpBtn;
-    bool m_bOwnsResetBtn;
-    bool m_bOwnsBaseFmtBtn;
-
-    std::unique_ptr<SfxItemSet>           m_pSet;
-    std::unique_ptr<SfxItemSet>           m_pOutSet;
-    std::unique_ptr< TabDlg_Impl >        m_pImpl;
-    std::unique_ptr<sal_uInt16[]>         m_pRanges;
-    sal_uInt16          m_nAppPageId;
-    bool                m_bStandardPushed;
-
-    DECL_DLLPRIVATE_LINK(ActivatePageHdl, TabControl*, void );
-    DECL_DLLPRIVATE_LINK(DeactivatePageHdl, TabControl*, bool );
-    DECL_DLLPRIVATE_LINK(OkHdl, Button*, void);
-    DECL_DLLPRIVATE_LINK(ResetHdl, Button*, void);
-    DECL_DLLPRIVATE_LINK(BaseFmtHdl, Button*, void);
-    DECL_DLLPRIVATE_LINK(UserHdl, Button*, void);
-    DECL_DLLPRIVATE_LINK(CancelHdl, Button*, void);
-    SAL_DLLPRIVATE void Init_Impl();
-
-protected:
-    virtual short               Ok();
-    // Is deleted in Sfx!
-    static SfxItemSet*          CreateInputItemSet( sal_uInt16 nId );
-    virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
-
-    VclPtr<VclButtonBox>   m_pActionArea;
-    SfxItemSet*     m_pExampleSet;
-    SfxItemSet*     GetInputSetImpl();
-    SfxTabPage*     GetTabPage( sal_uInt16 nPageId ) const;
-
-    /** prepare to leave the current page. Calls the DeactivatePage method of the current page, (if necessary),
-        handles the item sets to copy.
-        @return sal_True if it is allowed to leave the current page, sal_False otherwise
-    */
-    bool PrepareLeaveCurrentPage();
-
-    /** save the position of the TabDialog and which tab page is the currently active one
-     */
-    void SavePosAndId();
-
-    void SetPageName(sal_uInt16 nPageId, const OString& rName) const;
-public:
-    SfxTabDialog(vcl::Window* pParent,
-                 const OUString& rID, const OUString& rUIXMLDescription,
-                 const SfxItemSet * = nullptr);
-    virtual ~SfxTabDialog() override;
-    virtual void dispose() override;
-
-    sal_uInt16          AddTabPage( const OString& rName,           // Name of the label for the page in the notebook .ui
-                                    CreateTabPage pCreateFunc);      // != 0
-
-    void                AddTabPage( sal_uInt16 nId,
-                                    const OUString &rRiderText,
-                                    CreateTabPage pCreateFunc,      // != 0
-                                    sal_uInt16 nPos = TAB_APPEND);
-
-    void                SetCurPageId(sal_uInt16 nId)
-    {
-        m_nAppPageId = nId;
-    }
-    sal_uInt16          GetCurPageId() const
-    {
-        return m_pTabCtrl->GetCurPageId();
-    }
-
-    SfxTabPage* GetCurTabPage() const
-    {
-        return GetTabPage(m_pTabCtrl->GetCurPageId());
-    }
-
-    virtual OString GetScreenshotId() const override;
-
-    OUString const & GetPageText( sal_uInt16 nPageId ) const
-    {
-        return m_pTabCtrl->GetPageText(nPageId);
-    }
-
-    void                ShowPage( sal_uInt16 nId );
-
-    // may provide local slots converted by Map
-    const sal_uInt16*       GetInputRanges( const SfxItemPool& );
-    const SfxItemSet*   GetOutputItemSet() const { return m_pOutSet.get(); }
-
-    short               Execute() override;
-    bool                StartExecuteAsync( VclAbstractDialog::AsyncContext &rCtx ) override;
-
-    const SfxItemSet*   GetExampleSet() const { return m_pExampleSet; }
-
-    SAL_DLLPRIVATE void Start_Impl();
-
-    virtual FactoryFunction GetUITestFactory() const override;
-    // Screenshot interface
-    virtual std::vector<OString> getAllPageUIXMLDescriptions() const override;
-    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override;
-};
-
 class SFX2_DLLPUBLIC SfxTabDialogController : public SfxOkDialogController
 {
 protected:
@@ -306,10 +191,8 @@ protected:
         return static_cast<const T*>(GetOldItem(rSet, sal_uInt16(nSlot), bDeep));
     }
 
-    SfxTabDialog*       GetTabDialog() const;
     SfxOkDialogController* GetDialogController() const;
 public:
-    void                SetTabDialog(SfxTabDialog* pDialog);
     void                SetDialogController(SfxOkDialogController* pDialog);
 public:
     virtual             ~SfxTabPage() override;
