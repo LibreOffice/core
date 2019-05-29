@@ -45,7 +45,7 @@ public class DocumentPreview
 {
 
     /**
-     * The window in which the preview is showed.
+     * The window in which the preview is shown.
      */
     private XWindow xWindow;
     /**
@@ -67,7 +67,7 @@ public class DocumentPreview
 
     - create new frame with window inside
     - load a component as preview into this frame
-     */
+    */
     public DocumentPreview(XMultiServiceFactory xmsf, Object control) throws Exception
     {
 
@@ -137,9 +137,9 @@ public class DocumentPreview
     which isn't part of the global frame tree.
 
     Attention:
-    a) This frame wont be destroyed by the office. It must be closed by you!
+    a) This frame won't be destroyed by the office. It must be closed by you!
     Do so - please call XCloseable::close().
-    b) The container window is part of the frame. Dont hold it alive - nor try to kill it.
+    b) The container window is part of the frame. Don't hold it alive - nor try to kill it.
     It will be destroyed inside close().
      */
     public void createPreviewFrame(XMultiServiceFactory xmsf, XControl xControl) throws com.sun.star.uno.Exception, com.sun.star.lang.IllegalArgumentException
