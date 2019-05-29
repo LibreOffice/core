@@ -2930,7 +2930,8 @@ void ScColumn::SetFormulaResults( SCROW nRow, const double* pResults, size_t nLe
     }
 }
 
-void ScColumn::CalculateInThread( ScInterpreterContext& rContext, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
+void ScColumn::CalculateInThread( ScInterpreterContext& rContext, SCROW nRow, size_t nLen, size_t nOffset,
+                                  unsigned nThisThread, unsigned nThreadsTotal)
 {
     assert(GetDoc()->IsThreadedGroupCalcInProgress());
 
@@ -2953,7 +2954,7 @@ void ScColumn::CalculateInThread( ScInterpreterContext& rContext, SCROW nRow, si
 
     for (size_t i = 0; i < nLen; ++i, ++itCell)
     {
-        if (nThreadsTotal > 0 && (i % nThreadsTotal) != nThisThread)
+        if (nThreadsTotal > 0 && ((i + nOffset) % nThreadsTotal) != nThisThread)
             continue;
 
         ScFormulaCell& rCell = **itCell;

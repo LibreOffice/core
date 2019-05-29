@@ -25,6 +25,7 @@
 #include <list>
 #include <vector>
 #include <stack>
+#include <unordered_set>
 
 class ScFormulaCell;
 
@@ -59,7 +60,9 @@ class ScRecursionHelper
     bool                                bDoingRecursion;
     bool                                bInIterationReturn;
     bool                                bConverging;
+    bool                                bGroupsIndependent;
     std::vector< ScFormulaCell* >       aTemporaryGroupCells;
+    std::unordered_set< ScFormulaCellGroup* >* pFGSet;
 
     void Init();
     void ResetIteration();
@@ -111,6 +114,12 @@ public:
 
     void AddTemporaryGroupCell(ScFormulaCell* cell);
     void CleanTemporaryGroupCells();
+
+    void SetFormulaGroupSet(std::unordered_set<ScFormulaCellGroup*>* pSet) { pFGSet = pSet; }
+    bool HasFormulaGroupSet() { return pFGSet != nullptr; }
+    bool CheckFGIndependence(ScFormulaCellGroup* pFG);
+    void SetGroupsIndependent(bool bSet) { bGroupsIndependent = bSet; }
+    bool AreGroupsIndependent() { return bGroupsIndependent; }
 };
 
 /** A class to wrap ScRecursionHelper::PushFormulaGroup(),
@@ -134,6 +143,19 @@ public:
     ScFormulaGroupDependencyComputeGuard() = delete;
     ScFormulaGroupDependencyComputeGuard(ScRecursionHelper& rRecursionHelper);
     ~ScFormulaGroupDependencyComputeGuard();
+};
+
+class ScCheckIndependentFGGuard
+{
+    ScRecursionHelper& mrRecHelper;
+    bool mbUsedFGSet;
+public:
+    ScCheckIndependentFGGuard() = delete;
+    ScCheckIndependentFGGuard(ScRecursionHelper& rRecursionHelper,
+                              std::unordered_set<ScFormulaCellGroup*>* pSet);
+    ~ScCheckIndependentFGGuard();
+
+    bool AreGroupsIndependent();
 };
 
 #endif // INCLUDED_SC_INC_RECURSIONHELPER_HXX

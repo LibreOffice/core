@@ -28,7 +28,8 @@ struct ScLookupCacheMap;
 // SetNumberFormat() is not thread-safe, so calls to it need to be delayed to the main thread.
 struct DelayedSetNumberFormat
 {
-    SCROW mRow; // Used only with formula groups, so column and tab do not need to be stored.
+    SCROW mCol;
+    SCROW mRow;
     sal_uInt32 mnNumberFormat;
 };
 
