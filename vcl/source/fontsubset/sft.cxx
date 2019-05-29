@@ -487,6 +487,12 @@ static int GetSimpleTTOutline(TrueTypeFont const *ttf, sal_uInt32 glyphID, Contr
     return lastPoint + 1;
 }
 
+static F16Dot16 fromF2Dot14(sal_Int16 n)
+{
+    // Avoid undefined shift of negative values prior to C++2a:
+    return sal_uInt32(n) << 2;
+}
+
 static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics, std::vector< sal_uInt32 >& glyphlist)
 {
     sal_uInt16 flags, index;
@@ -577,18 +583,18 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
         b = c = 0;
 
         if (flags & WE_HAVE_A_SCALE) {
-            a = GetInt16(ptr, 0) << 2;
+            a = fromF2Dot14(GetInt16(ptr, 0));
             d = a;
             ptr += 2;
         } else if (flags & WE_HAVE_AN_X_AND_Y_SCALE) {
-            a = GetInt16(ptr, 0) << 2;
-            d = GetInt16(ptr, 2) << 2;
+            a = fromF2Dot14(GetInt16(ptr, 0));
+            d = fromF2Dot14(GetInt16(ptr, 2));
             ptr += 4;
         } else if (flags & WE_HAVE_A_TWO_BY_TWO) {
-            a = GetInt16(ptr, 0) << 2;
-            b = GetInt16(ptr, 2) << 2;
-            c = GetInt16(ptr, 4) << 2;
-            d = GetInt16(ptr, 6) << 2;
+            a = fromF2Dot14(GetInt16(ptr, 0));
+            b = fromF2Dot14(GetInt16(ptr, 2));
+            c = fromF2Dot14(GetInt16(ptr, 4));
+            d = fromF2Dot14(GetInt16(ptr, 6));
             ptr += 8;
         }
 
