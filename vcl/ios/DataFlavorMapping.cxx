@@ -74,6 +74,8 @@ NSString* OUStringToNSString(const OUString& ustring)
 }
 
 NSString* PBTYPE_PLAINTEXT = (__bridge NSString*)kUTTypePlainText;
+// Nope. See commented-out use below.
+// NSString* PBTYPE_UTF8PLAINTEXT = (__bridge NSString*)kUTTypeUTF8PlainText;
 NSString* PBTYPE_RTF = (__bridge NSString*)kUTTypeRTF;
 NSString* PBTYPE_PNG = (__bridge NSString*)kUTTypePNG;
 NSString* PBTYPE_JPEG = (__bridge NSString*)kUTTypeJPEG;
@@ -122,11 +124,12 @@ struct FlavorMap
 
 static const FlavorMap flavorMap[]
     = { { PBTYPE_PLAINTEXT, "text/plain;charset=utf-16", "Unicode Text (UTF-16)", true },
+        // Nope. The LO code does not understand text/plain in UTF-8. Which is a shame.
+        // PBTYPE_UTF8PLAINTEXT, "text/plain;charset=utf-8", "Unicode Text (UTF-8)", false },
         { PBTYPE_RTF, "text/rtf", "Rich Text Format", false },
         { PBTYPE_PNG, "image/png", "Portable Network Graphics", false },
         { PBTYPE_JPEG, "image/jpeg", "Portable Network Graphics", false },
-        // Nope, sorry. See comment in openOfficeToSystemFlavor() below.
-        // { PBTYPE_HTML, "text/html", "Plain HTML", false },
+        { PBTYPE_HTML, "text/html", "Plain HTML", false },
         { PBTYPE_PDF, "application/pdf", "PDF File", false },
         { PBTYPE_SESX, FLAVOR_SESX, "Star Embed Source (XML)", false },
         { PBTYPE_SLSDX, FLAVOR_SLSDX, "Star Link Source Descriptor (XML)", false },
