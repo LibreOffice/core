@@ -23,6 +23,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/tabctrl.hxx>
 #include <tabcont.hxx>
 #include <tabvwsh.hxx>
 #include <docsh.hxx>

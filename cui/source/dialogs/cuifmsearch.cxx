@@ -18,6 +18,7 @@
  */
 
 #include <tools/debug.hxx>
+#include <vcl/button.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <dialmgr.hxx>
