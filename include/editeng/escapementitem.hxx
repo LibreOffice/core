@@ -28,8 +28,9 @@
 #define DFLT_ESC_SUPER   33     // 1/3
 #define DFLT_ESC_SUB    -33     // also 1/3 previously 8/100
 #define DFLT_ESC_PROP    58
-#define DFLT_ESC_AUTO_SUPER 101
-#define DFLT_ESC_AUTO_SUB  -101
+#define MAX_ESC_POS      13999
+#define DFLT_ESC_AUTO_SUPER  (MAX_ESC_POS+1)
+#define DFLT_ESC_AUTO_SUB    -DFLT_ESC_AUTO_SUPER
 
 /*  [Description]
 
