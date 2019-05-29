@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_TPCALC_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include "editfield.hxx"

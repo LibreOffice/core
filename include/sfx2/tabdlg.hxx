@@ -24,9 +24,6 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/basedlgs.hxx>
 #include <sal/types.h>
-#include <vcl/button.hxx>
-#include <vcl/tabctrl.hxx>
-#include <vcl/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>

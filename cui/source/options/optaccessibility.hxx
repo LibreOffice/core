@@ -20,8 +20,10 @@
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTACCESSIBILITY_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
+
 class SvxAccessibilityOptionsTabPage : public SfxTabPage
 {
     VclPtr<CheckBox>       m_pAccessibilityTool;

@@ -25,11 +25,13 @@
 #include <time.h>
 #include <typeinfo>
 
+#include <vcl/button.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/toolbox.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/virdev.hxx>
