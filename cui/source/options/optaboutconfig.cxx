@@ -10,6 +10,7 @@
 #include "optaboutconfig.hxx"
 #include "optHeaderTabListbox.hxx"
 
+#include <vcl/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>

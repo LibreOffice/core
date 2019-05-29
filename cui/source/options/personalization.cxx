@@ -20,6 +20,7 @@
 #include <rtl/strbuf.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
+#include <vcl/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
