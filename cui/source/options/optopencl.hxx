@@ -23,6 +23,7 @@
 #include <opencl/openclconfig.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svtools/simptabl.hxx>
+#include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 
 class SvxOpenCLTabPage : public SfxTabPage
