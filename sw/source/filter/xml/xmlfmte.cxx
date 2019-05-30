@@ -33,13 +33,11 @@
 #include <format.hxx>
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>
-#include <unostyle.hxx>
 #include <cellatr.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include "xmlexp.hxx"
 #include <SwStyleNameMapper.hxx>
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
