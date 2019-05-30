@@ -65,7 +65,7 @@ void FloatingWindow::ImplInitFloating( vcl::Window* pParent, WinBits nStyle )
     SAL_WARN_IF(!pParent, "vcl", "FloatWindow::FloatingWindow(): - pParent == NULL!");
 
     if (!pParent)
-        pParent = ImplGetSVData()->maWinData.mpAppWin;
+        pParent = ImplGetSVData()->maFrameData.mpAppWin;
 
     SAL_WARN_IF(!pParent, "vcl", "FloatWindow::FloatingWindow(): - pParent == NULL and no AppWindow exists");
 
@@ -391,7 +391,7 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
             default: break;
         }
 
-        // no further adjustment for LibreOfficeKit
+        // no further adjustement for LibreOfficeKit
         if (bLOKActive)
             break;
 
@@ -768,8 +768,8 @@ void FloatingWindow::StartPopupMode( const tools::Rectangle& rRect, FloatWinPopu
 
     // add FloatingWindow to list of windows that are in popup mode
     ImplSVData* pSVData = ImplGetSVData();
-    mpNextFloat = pSVData->maWinData.mpFirstFloat;
-    pSVData->maWinData.mpFirstFloat = this;
+    mpNextFloat = pSVData->mpWinData->mpFirstFloat;
+    pSVData->mpWinData->mpFirstFloat = this;
     if (nFlags & FloatWinPopupFlags::GrabFocus)
     {
         // force key input even without focus (useful for menus)
@@ -826,11 +826,11 @@ void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPt
     mbInCleanUp = true; // prevent killing this window due to focus change while working with it
 
     // stop the PopupMode also for all following PopupMode windows
-    while ( pSVData->maWinData.mpFirstFloat && pSVData->maWinData.mpFirstFloat.get() != this )
-        pSVData->maWinData.mpFirstFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel );
+    while (pSVData->mpWinData->mpFirstFloat && pSVData->mpWinData->mpFirstFloat.get() != this)
+        pSVData->mpWinData->mpFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel);
 
     // delete window from the list
-    pSVData->maWinData.mpFirstFloat = mpNextFloat;
+    pSVData->mpWinData->mpFirstFloat = mpNextFloat;
     mpNextFloat = nullptr;
 
     FloatWinPopupFlags nPopupModeFlags = mnPopupModeFlags;
@@ -846,11 +846,11 @@ void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPt
         // restore focus to previous focus window if we still have the focus
         Window::EndSaveFocus(xFocusId);
     }
-    else if ( pSVData->maWinData.mpFocusWin && pSVData->maWinData.mpFirstFloat &&
-              ImplIsWindowOrChild( pSVData->maWinData.mpFocusWin ) )
+    else if ( pSVData->mpWinData->mpFocusWin && pSVData->mpWinData->mpFirstFloat &&
+              ImplIsWindowOrChild( pSVData->mpWinData->mpFocusWin ) )
     {
         // maybe pass focus on to a suitable FloatingWindow
-        pSVData->maWinData.mpFirstFloat->GrabFocus();
+        pSVData->mpWinData->mpFirstFloat->GrabFocus();
     }
 
     mbPopupModeCanceled = bool(nFlags & FloatWinPopupEndFlags::Cancel);
@@ -878,9 +878,9 @@ void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPt
     {
         if ( !(nPopupModeFlags & FloatWinPopupFlags::NewLevel) )
         {
-            if ( pSVData->maWinData.mpFirstFloat )
+            if (pSVData->mpWinData->mpFirstFloat)
             {
-                FloatingWindow* pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
+                FloatingWindow* pLastLevelFloat = pSVData->mpWinData->mpFirstFloat->ImplFindLastLevelFloat();
                 pLastLevelFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
             }
         }

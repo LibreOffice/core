@@ -6621,7 +6621,7 @@ weld::Builder* Application::CreateInterimBuilder(weld::Widget* pParent, const OU
 void SalInstanceWindow::help()
 {
     //show help for widget with keyboard focus
-    vcl::Window* pWidget = ImplGetSVData()->maWinData.mpFocusWin;
+    vcl::Window* pWidget = ImplGetSVData()->mpWinData->mpFocusWin;
     if (!pWidget)
         pWidget = m_xWindow;
     OString sHelpId = pWidget->GetHelpId();

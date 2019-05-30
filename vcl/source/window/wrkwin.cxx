@@ -61,8 +61,9 @@ void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentDat
     if ( nStyle & WB_APP )
     {
         ImplSVData* pSVData = ImplGetSVData();
-        SAL_WARN_IF( pSVData->maWinData.mpAppWin, "vcl", "WorkWindow::WorkWindow(): More than one window with style WB_APP" );
-        pSVData->maWinData.mpAppWin = this;
+        SAL_WARN_IF(pSVData->maFrameData.mpAppWin, "vcl",
+                    "WorkWindow::WorkWindow(): More than one window with style WB_APP");
+        pSVData->maFrameData.mpAppWin = this;
     }
 
     SetActivateMode( ActivateModeFlags::GrabFocus );
@@ -120,9 +121,9 @@ WorkWindow::~WorkWindow()
 void WorkWindow::dispose()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maWinData.mpAppWin == this )
+    if (pSVData->maFrameData.mpAppWin == this)
     {
-        pSVData->maWinData.mpAppWin = nullptr;
+        pSVData->maFrameData.mpAppWin = nullptr;
         Application::Quit();
     }
     SystemWindow::dispose();
@@ -250,7 +251,7 @@ bool WorkWindow::Close()
     bool bCanClose = SystemWindow::Close();
 
     // if it's the application window then close the application
-    if ( bCanClose && ( ImplGetSVData()->maWinData.mpAppWin == this ) )
+    if (bCanClose && (ImplGetSVData()->maFrameData.mpAppWin == this))
         Application::Quit();
 
     return bCanClose;

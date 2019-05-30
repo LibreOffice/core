@@ -1458,6 +1458,12 @@ VCL_DLLPUBLIC ImplSVHelpData* CreateSVHelpData();
 VCL_DLLPUBLIC void DestroySVHelpData(ImplSVHelpData*);
 VCL_DLLPUBLIC void SetSVHelpData(ImplSVHelpData*);
 
+/// The following are to manage per-view (frame) window data.
+struct ImplSVWinData;
+VCL_DLLPUBLIC ImplSVWinData* CreateSVWinData();
+VCL_DLLPUBLIC void DestroySVWinData(ImplSVWinData*);
+VCL_DLLPUBLIC void SetSVWinData(ImplSVWinData*);
+
 inline void Application::EndYield()
 {
     PostUserEvent( Link<void*,void>() );

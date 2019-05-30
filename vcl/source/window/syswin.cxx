@@ -694,7 +694,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
             {
                 tools::Rectangle aDesktop = GetDesktopRectPixel();
                 ImplSVData *pSVData = ImplGetSVData();
-                vcl::Window *pWin = pSVData->maWinData.mpFirstFrame;
+                vcl::Window *pWin = pSVData->maFrameData.mpFirstFrame;
                 bool bWrapped = false;
                 while( pWin )
                 {
@@ -724,7 +724,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
                                 aState.mnX += displacement;
                                 aState.mnY += displacement;
                             }
-                            pWin = pSVData->maWinData.mpFirstFrame; // check new pos again
+                            pWin = pSVData->maFrameData.mpFirstFrame; // check new pos again
                         }
                     }
                     pWin = pWin->mpWindowImpl->mpFrameData->mpNextFrame;
