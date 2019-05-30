@@ -503,8 +503,9 @@ void XMLHyperlinkContext::characters(const OUString& rChars)
     GetImport().GetGenerator().closeSpan();
 }
 
-XMLParaContext::XMLParaContext(XMLImport& rImport)
+XMLParaContext::XMLParaContext(XMLImport& rImport, bool bTopLevel)
     : XMLImportContext(rImport)
+    , m_bTopLevel(bTopLevel)
 {
 }
 
@@ -535,7 +536,8 @@ void XMLParaContext::startElement(
                        GetImport().GetParagraphStyles(), aPropertyList);
             FillStyles(m_aStyleName, GetImport().GetAutomaticTextStyles(),
                        GetImport().GetTextStyles(), m_aTextPropertyList);
-            GetImport().HandlePageSpan(aPropertyList);
+            if (m_bTopLevel)
+                GetImport().HandlePageSpan(aPropertyList);
         }
         else
         {

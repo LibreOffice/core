@@ -35,17 +35,18 @@ void XMLBodyContentContext::endElement(const OUString& /*rName*/)
 rtl::Reference<XMLImportContext> XMLBodyContentContext::CreateChildContext(
     const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
-    return CreateTextChildContext(GetImport(), rName);
+    return CreateTextChildContext(GetImport(), rName, true);
 }
 
-rtl::Reference<XMLImportContext> CreateTextChildContext(XMLImport& rImport, const OUString& rName)
+rtl::Reference<XMLImportContext> CreateTextChildContext(XMLImport& rImport, const OUString& rName,
+                                                        bool bTopLevel)
 {
     if (rName == "text:p" || rName == "text:h")
-        return new XMLParaContext(rImport);
+        return new XMLParaContext(rImport, bTopLevel);
     if (rName == "text:section")
         return new XMLSectionContext(rImport);
     if (rName == "table:table")
-        return new XMLTableContext(rImport);
+        return new XMLTableContext(rImport, bTopLevel);
     if (rName == "text:list")
         return new XMLTextListContext(rImport);
     return nullptr;

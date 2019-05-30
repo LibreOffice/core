@@ -29,7 +29,8 @@ public:
 };
 
 /// Context factory for body text, section, table cell, etc.
-rtl::Reference<XMLImportContext> CreateTextChildContext(XMLImport& rImport, const OUString& rName);
+rtl::Reference<XMLImportContext> CreateTextChildContext(XMLImport& rImport, const OUString& rName,
+                                                        bool bTopLevel = false);
 
 } // namespace exp
 } // namespace writerperfect

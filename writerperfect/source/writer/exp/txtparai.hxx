@@ -24,7 +24,7 @@ namespace exp
 class XMLParaContext : public XMLImportContext
 {
 public:
-    XMLParaContext(XMLImport& rImport);
+    XMLParaContext(XMLImport& rImport, bool bTopLevel = false);
 
     rtl::Reference<XMLImportContext> CreateChildContext(
         const OUString& rName,
@@ -40,6 +40,9 @@ private:
     OUString m_aStyleName;
     /// List of properties spans should inherit from this paragraph.
     librevenge::RVNGPropertyList m_aTextPropertyList;
+    /// If the context is a direct child of XMLBodyContentContext.
+    /// Only direct child of XMLBodyContentContext has to handle page span.
+    bool m_bTopLevel;
 };
 
 /// Shared child context factory for paragraph and span contexts.
