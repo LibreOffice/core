@@ -870,12 +870,11 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTdf115623ManyPageSpans)
     }
 }
 
-CPPUNIT_TEST_FIXTURE(EPUBExportTest, testSimpleRuby)
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testAbi11105)
 {
-    createDoc("simple-ruby.odt", {});
-    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
-    assertXPathContent(mpXmlDoc, "//xhtml:body/xhtml:p/xhtml:ruby/xhtml:span", "base text");
-    assertXPathContent(mpXmlDoc, "//xhtml:body/xhtml:p/xhtml:ruby/xhtml:rt", "ruby text");
+    // This crashed because the paragraph style "P5" which had a master-page-name
+    // appeared in a table cell messed up page spans.
+    createDoc("abi11105.abw", {});
 }
 }
 

@@ -22,7 +22,7 @@ namespace exp
 class XMLTableContext : public XMLImportContext
 {
 public:
-    XMLTableContext(XMLImport& rImport);
+    XMLTableContext(XMLImport& rImport, bool bTopLevel = false);
 
     rtl::Reference<XMLImportContext>
     CreateChildContext(const OUString& rName,
@@ -35,6 +35,9 @@ public:
 
 private:
     bool m_bTableOpened = false;
+    /// If the context is a direct child of XMLBodyContentContext.
+    /// Only direct child of XMLBodyContentContext has to handle page span.
+    bool m_bTopLevel;
     librevenge::RVNGPropertyList m_aPropertyList;
     librevenge::RVNGPropertyListVector m_aColumns;
 };
