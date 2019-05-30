@@ -47,6 +47,9 @@ struct ImplCursorData
 static void ImplCursorInvert( ImplCursorData const * pData )
 {
     vcl::Window* pWindow  = pData->mpWindow;
+    if (!pWindow || pWindow->IsDisposed())
+        return;
+
     std::unique_ptr<PaintBufferGuard> pGuard;
     const bool bDoubleBuffering = pWindow->SupportsDoubleBuffering();
     if (bDoubleBuffering)
