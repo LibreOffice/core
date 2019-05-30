@@ -400,7 +400,13 @@ public:
 class SwGlossaryDlg;
 class AbstractGlossaryDlg_Impl : public AbstractGlossaryDlg
 {
-    DECL_ABSTDLG_BASE(AbstractGlossaryDlg_Impl,SwGlossaryDlg)
+    std::unique_ptr<SwGlossaryDlg> m_xDlg;
+public:
+    explicit AbstractGlossaryDlg_Impl(std::unique_ptr<SwGlossaryDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
     virtual OUString        GetCurrGrpName() const override;
     virtual OUString        GetCurrShortName() const override;
 };
