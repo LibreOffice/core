@@ -1551,17 +1551,32 @@ sal_Int32 VCartesianAxis::estimateMaximumAutoMainIncrementCount()
 
     sal_Int32 nTotalAvailable = nMaxHeight;
     sal_Int32 nSingleNeeded = m_nMaximumTextHeightSoFar;
+    bool bSameValueLabel = false;
 
     //for horizontal axis:
     if( (m_nDimensionIndex == 0 && !m_aAxisProperties.m_bSwapXAndY)
         || (m_nDimensionIndex == 1 && m_aAxisProperties.m_bSwapXAndY) )
     {
+        // tdf#48041: do not duplicate the same value labels
+        if( m_nDimensionIndex == 1 && m_aAllTickInfos[0].size() >= 3 )
+        {
+            Color nColor = COL_AUTO;
+            bool bHasExtraColor = false;
+            FixedNumberFormatter aFixedNumberFormatterTest(m_xNumberFormatsSupplier, m_aAxisLabelProperties.nNumberFormatKey);
+            OUString valueLabel_1 = aFixedNumberFormatterTest.getFormattedString(m_aAllTickInfos[0][0].fScaledTickValue, nColor, bHasExtraColor);
+            OUString valueLabel_2 = aFixedNumberFormatterTest.getFormattedString(m_aAllTickInfos[0][1].fScaledTickValue, nColor, bHasExtraColor);
+            OUString valueLabel_3 = aFixedNumberFormatterTest.getFormattedString(m_aAllTickInfos[0][2].fScaledTickValue, nColor, bHasExtraColor);
+            bSameValueLabel = (valueLabel_1 == valueLabel_2 || valueLabel_2 == valueLabel_3);
+        }
         nTotalAvailable = nMaxWidth;
         nSingleNeeded = m_nMaximumTextWidthSoFar;
     }
 
     if( nSingleNeeded>0 )
         nRet = nTotalAvailable/nSingleNeeded;
+
+    if( bSameValueLabel )
+        nRet = (nRet >= 10) ? 5 : nRet / 2;
 
     return nRet;
 }
