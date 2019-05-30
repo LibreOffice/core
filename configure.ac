@@ -10335,6 +10335,7 @@ if test "x$enable_gtk3" = "xyes"; then
     : ${with_system_cairo:=yes}
     PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.18 gtk+-unix-print-3.0 gmodule-no-export-2.0 glib-2.0 >= 2.38 cairo, ENABLE_GTK3="TRUE", ENABLE_GTK3="")
     if test "x$ENABLE_GTK3" = "xTRUE"; then
+        AC_DEFINE(ENABLE_GTK3)
         R="gtk3"
         dnl Avoid installed by unpackaged files for now.
         if test -z "$PKGFORMAT"; then
