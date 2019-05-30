@@ -135,7 +135,7 @@ static void lcl_FillSubRegionList( SwWrtShell& rSh, weld::ComboBox& rSubRegions,
         ppMark != pMarkAccess->getBookmarksEnd();
         ++ppMark)
     {
-        const ::sw::mark::IMark* pBkmk = ppMark->get();
+        const ::sw::mark::IMark* pBkmk = *ppMark;
         if( pBkmk->IsExpanded() )
             rSubRegions.append_text( pBkmk->GetName() );
     }

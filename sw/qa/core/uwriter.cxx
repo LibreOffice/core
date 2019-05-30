@@ -1615,9 +1615,9 @@ void SwDocTest::testMarkMove()
         SwTextNode& rParaNode2 = dynamic_cast<SwTextNode&>(aIdx.GetNode());
         rParaNode2.JoinNext();
     }
-    ::sw::mark::IMark* pBM1 = pMarksAccess->findMark("Para1")->get();
-    ::sw::mark::IMark* pBM2 = pMarksAccess->findMark("Para2")->get();
-    ::sw::mark::IMark* pBM3 = pMarksAccess->findMark("Para3")->get();
+    ::sw::mark::IMark* pBM1 = *pMarksAccess->findMark("Para1");
+    ::sw::mark::IMark* pBM2 = *pMarksAccess->findMark("Para2");
+    ::sw::mark::IMark* pBM3 = *pMarksAccess->findMark("Para3");
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0) , pBM1->GetMarkStart().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pBM1->GetMarkEnd().nContent.GetIndex());
@@ -1652,9 +1652,9 @@ void SwDocTest::testMarkMove()
         aPaM.GetMark()->nContent += 6;
         m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPaM);
     }
-    pBM1 = pMarksAccess->findMark("Para1")->get();
-    pBM2 = pMarksAccess->findMark("Para2")->get();
-    pBM3 = pMarksAccess->findMark("Para3")->get();
+    pBM1 = *pMarksAccess->findMark("Para1");
+    pBM2 = *pMarksAccess->findMark("Para2");
+    pBM3 = *pMarksAccess->findMark("Para3");
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pBM1->GetMarkStart().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pBM1->GetMarkEnd().nContent.GetIndex());
@@ -1688,9 +1688,9 @@ void SwDocTest::testMarkMove()
         aPos.nContent += 8;
         m_pDoc->getIDocumentContentOperations().SplitNode(aPos, false);
     }
-    pBM1 = pMarksAccess->findMark("Para1")->get();
-    pBM2 = pMarksAccess->findMark("Para2")->get();
-    pBM3 = pMarksAccess->findMark("Para3")->get();
+    pBM1 = *pMarksAccess->findMark("Para1");
+    pBM2 = *pMarksAccess->findMark("Para2");
+    pBM3 = *pMarksAccess->findMark("Para3");
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pBM1->GetMarkStart().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pBM1->GetMarkEnd().nContent.GetIndex());

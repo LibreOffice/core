@@ -1191,7 +1191,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
                 && (!pLayout || !pLayout->IsHideRedlines()
                     || !sw::IsMarkHidden(*pLayout, **ppMark)))
             {
-                const ::sw::mark::IMark* pBkmk = ppMark->get();
+                const ::sw::mark::IMark* pBkmk = *ppMark;
                 const SwPosition* pPos = &pBkmk->GetMarkStart();
 
                 pTextNd = pPos->nNode.GetNode().GetTextNode();
