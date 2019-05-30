@@ -879,14 +879,14 @@ bool AquaSalGraphics::drawPolyLine(
 
     // #i101491# Aqua does not support B2DLineJoin::NONE; return false to use
     // the fallback (own geometry preparation)
-    // #i104886# linejoin-mode and thus the above only applies to "fat" lines
-    if( (basegfx::B2DLineJoin::NONE == eLineJoin) && (aLineWidths.getX() > 1.3) )
+    if(basegfx::B2DLineJoin::NONE == eLineJoin)
         return false;
 
     // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
     basegfx::B2DPolygon aPolyLine(rPolyLine);
     aPolyLine.transform(rObjectToDevice);
-    if(bPixelSnapHairline) { aPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyLine); }
+    if(bPixelSnapHairline)
+        aPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyLine);
 
     // setup line attributes
     CGLineJoin aCGLineJoin = kCGLineJoinMiter;
