@@ -118,8 +118,8 @@ public:
 
 struct VCL_DLLPUBLIC ControlTypeAndPart
 {
-    ControlType const meType;
-    ControlPart const mePart;
+    ControlType meType;
+    ControlPart mePart;
 
     ControlTypeAndPart(ControlType eType, ControlPart ePart)
         : meType(eType)
