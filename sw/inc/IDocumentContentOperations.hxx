@@ -38,6 +38,7 @@ class SwDrawFrameFormat;
 class SwFlyFrameFormat;
 class SwNodeIndex;
 class SwRootFrame;
+class SwTextAttr;
 
 namespace utl { class TransliterationWrapper; }
 namespace svt { class EmbeddedObjectRef; }
@@ -215,7 +216,8 @@ public:
     virtual bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
                                 const SetAttrMode nFlags = SetAttrMode::DEFAULT,
                                 SwRootFrame const* pLayout = nullptr,
-                                bool bExpandCharToPara=false) = 0;
+                                bool bExpandCharToPara = false,
+                                SwTextAttr **ppNewTextAttr = nullptr) = 0;
 
     virtual void InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
         const SetAttrMode nFlags = SetAttrMode::DEFAULT,

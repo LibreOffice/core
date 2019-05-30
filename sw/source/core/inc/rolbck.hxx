@@ -416,7 +416,8 @@ public:
     /// @return true if at least 1 item was inserted
     bool InsertItems( const SfxItemSet& rSet,
         sal_Int32 const nStart, sal_Int32 const nEnd,
-        SetAttrMode const nFlags );
+        SetAttrMode const nFlags,
+        SwTextAttr **ppNewTextAttr );
 
     void AddHint( SwTextAttr* pHt, const bool bNew );
 
