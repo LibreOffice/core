@@ -47,7 +47,6 @@ class Qt5Widget : public QWidget
     bool m_bNonEmptyIMPreeditSeen;
 
     bool handleKeyEvent(QKeyEvent*, bool);
-    void handleMouseButtonEvent(QMouseEvent*, bool);
 
     virtual bool event(QEvent*) override;
 
@@ -81,6 +80,8 @@ public:
     Qt5Frame& getFrame() const { return m_rFrame; }
     void startDrag(sal_Int8 nSourceActions);
     void endExtTextInput();
+
+    static void handleMouseButtonEvent(const Qt5Frame&, QMouseEvent*, bool);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

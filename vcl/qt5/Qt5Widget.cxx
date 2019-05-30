@@ -120,7 +120,7 @@ void Qt5Widget::resizeEvent(QResizeEvent* pEvent)
     m_rFrame.CallCallback(SalEvent::Resize, nullptr);
 }
 
-void Qt5Widget::handleMouseButtonEvent(QMouseEvent* pEvent, bool bReleased)
+void Qt5Widget::handleMouseButtonEvent(const Qt5Frame& rFrame, QMouseEvent* pEvent, bool bReleased)
 {
     SalMouseEvent aEvent;
     switch (pEvent->button())
@@ -148,12 +148,18 @@ void Qt5Widget::handleMouseButtonEvent(QMouseEvent* pEvent, bool bReleased)
         nEventType = SalEvent::MouseButtonUp;
     else
         nEventType = SalEvent::MouseButtonDown;
-    m_rFrame.CallCallback(nEventType, &aEvent);
+    rFrame.CallCallback(nEventType, &aEvent);
 }
 
-void Qt5Widget::mousePressEvent(QMouseEvent* pEvent) { handleMouseButtonEvent(pEvent, false); }
+void Qt5Widget::mousePressEvent(QMouseEvent* pEvent)
+{
+    handleMouseButtonEvent(m_rFrame, pEvent, false);
+}
 
-void Qt5Widget::mouseReleaseEvent(QMouseEvent* pEvent) { handleMouseButtonEvent(pEvent, true); }
+void Qt5Widget::mouseReleaseEvent(QMouseEvent* pEvent)
+{
+    handleMouseButtonEvent(m_rFrame, pEvent, true);
+}
 
 void Qt5Widget::mouseMoveEvent(QMouseEvent* pEvent)
 {
