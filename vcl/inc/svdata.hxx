@@ -192,13 +192,20 @@ struct ImplSVGDIData
     o3tl::lru_map<OUString, gfx::DrawRoot> maThemeDrawCommandsCache = o3tl::lru_map<OUString, gfx::DrawRoot>(50);
 };
 
+struct ImplSVFrameData
+{
+    ~ImplSVFrameData();
+    VclPtr<vcl::Window>     mpFirstFrame;                   // First FrameWindow
+    VclPtr<vcl::Window>     mpActiveApplicationFrame;       // the last active application frame, can be used as DefModalDialogParent if no focuswin set
+    VclPtr<WorkWindow>      mpAppWin;                       // Application-Window
+
+    std::unique_ptr<UITestLogger> m_pUITestLogger;
+};
+
 struct ImplSVWinData
 {
     ~ImplSVWinData();
-    VclPtr<vcl::Window>     mpFirstFrame;                   // First FrameWindow
-    VclPtr<WorkWindow>      mpAppWin;                       // Application-Window
     VclPtr<vcl::Window>     mpFocusWin;                     // window, that has the focus
-    VclPtr<vcl::Window>     mpActiveApplicationFrame;       // the last active application frame, can be used as DefModalDialogParent if no focuswin set
     VclPtr<vcl::Window>     mpCaptureWin;                   // window, that has the mouse capture
     VclPtr<vcl::Window>     mpLastDeacWin;                  // Window, that need a deactivate (FloatingWindow-Handling)
     VclPtr<FloatingWindow>  mpFirstFloat;                   // First FloatingWindow in PopupMode
@@ -215,8 +222,6 @@ struct ImplSVWinData
     StartAutoScrollFlags    mnAutoScrollFlags = StartAutoScrollFlags::NONE; // auto scroll flags
     bool                    mbNoDeactivate = false;         // true: do not execute Deactivate
     bool                    mbNoSaveFocus = false;          // true: menus must not save/restore focus
-
-    std::unique_ptr<UITestLogger> m_pUITestLogger;
 };
 
 typedef std::vector< std::pair< OUString, FieldUnit > > FieldUnitStringList;
@@ -344,11 +349,12 @@ struct ImplSVData
     bool                    mbFontUpdatesNewLists = false;  // generate new font lists
     bool                    mbResLocaleSet = false;         // SV-Resource-Manager
     std::locale             maResLocale;                    // Resource locale
-    ImplSchedulerContext    maSchedCtx;                     // indepen data for class Scheduler
-    ImplSVAppData           maAppData;                      // indepen data for class Application
-    ImplSVGDIData           maGDIData;                      // indepen data for Output classes
-    ImplSVWinData           maWinData;                      // indepen data for Windows classes
-    ImplSVCtrlData          maCtrlData;                     // indepen data for Control classes
+    ImplSchedulerContext    maSchedCtx;                     // Data for class Scheduler
+    ImplSVAppData           maAppData;                      // Data for class Application
+    ImplSVGDIData           maGDIData;                      // Data for Output classes
+    ImplSVFrameData         maFrameData;                    // Data for Frame classes
+    ImplSVWinData*          mpWinData = nullptr;            // Data for per-view Windows classes
+    ImplSVCtrlData          maCtrlData;                     // Data for Control classes
     ImplSVHelpData*         mpHelpData;                     // Data for Help classes
     ImplSVNWFData           maNWFData;
     UnoWrapperBase*         mpUnoWrapper = nullptr;
