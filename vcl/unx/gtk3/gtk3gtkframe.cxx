@@ -2453,11 +2453,11 @@ void GtkSalFrame::closePopup()
     if (!m_nFloats)
         return;
     ImplSVData* pSVData = ImplGetSVData();
-    if (!pSVData->maWinData.mpFirstFloat)
+    if (!pSVData->mpWinData->mpFirstFloat)
         return;
-    if (pSVData->maWinData.mpFirstFloat->ImplGetFrame() != this)
+    if (pSVData->mpWinData->mpFirstFloat->ImplGetFrame() != this)
         return;
-    pSVData->maWinData.mpFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
+    pSVData->mpWinData->mpFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
 }
 
 namespace

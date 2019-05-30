@@ -50,6 +50,7 @@ class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
     std::unique_ptr<SfxDispatcher> m_pDispatcher;
     SfxBindings*                m_pBindings;
     ImplSVHelpData*             m_pHelpData;
+    ImplSVWinData*              m_pWinData;
     sal_uInt16                  m_nAdjustPosPixelLock;
 
 private:

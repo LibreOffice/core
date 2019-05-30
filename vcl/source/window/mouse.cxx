@@ -146,7 +146,7 @@ void Window::ImplCallMouseMove( sal_uInt16 nMouseCode, bool bModChanged )
         bLeave = ((nX < 0) || (nY < 0) ||
                   (nX >= mpWindowImpl->mpFrameWindow->mnOutWidth) ||
                   (nY >= mpWindowImpl->mpFrameWindow->mnOutHeight)) &&
-                 !ImplGetSVData()->maWinData.mpCaptureWin;
+                 !ImplGetSVData()->mpWinData->mpCaptureWin;
         nMode |= MouseEventModifiers::SYNTHETIC;
         if ( bModChanged )
             nMode |= MouseEventModifiers::MODIFIERCHANGED;
@@ -164,7 +164,7 @@ void Window::ImplGenerateMouseMove()
 IMPL_LINK_NOARG(Window, ImplGenerateMouseMoveHdl, void*, void)
 {
     mpWindowImpl->mpFrameData->mnMouseMoveId = nullptr;
-    vcl::Window* pCaptureWin = ImplGetSVData()->maWinData.mpCaptureWin;
+    vcl::Window* pCaptureWin = ImplGetSVData()->mpWinData->mpCaptureWin;
     if( ! pCaptureWin ||
         (pCaptureWin->mpWindowImpl && pCaptureWin->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame)
     )
@@ -251,7 +251,7 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
     ImplSVData* pSVData = ImplGetSVData();
 
     bool bAsyncFocusWaiting = false;
-    vcl::Window *pFrame = pSVData->maWinData.mpFirstFrame;
+    vcl::Window *pFrame = pSVData->maFrameData.mpFirstFrame;
     while( pFrame  )
     {
         if( pFrame != mpWindowImpl->mpFrameWindow.get() && pFrame->mpWindowImpl->mpFrameData->mnFocusId )
@@ -278,15 +278,15 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
         pParent = pParent->mpWindowImpl->mpParent;
     }
 
-    if ( !(( pSVData->maWinData.mpFocusWin.get() != this &&
+    if ( !(( pSVData->mpWinData->mpFocusWin.get() != this &&
              !mpWindowImpl->mbInDispose ) ||
            ( bAsyncFocusWaiting && !bHasFocus && !bMustNotGrabFocus )) )
         return;
 
     // EndExtTextInput if it is not the same window
-    if ( pSVData->maWinData.mpExtTextInputWin &&
-         (pSVData->maWinData.mpExtTextInputWin.get() != this) )
-        pSVData->maWinData.mpExtTextInputWin->EndExtTextInput();
+    if (pSVData->mpWinData->mpExtTextInputWin
+        && (pSVData->mpWinData->mpExtTextInputWin.get() != this))
+        pSVData->mpWinData->mpExtTextInputWin->EndExtTextInput();
 
     // mark this windows as the last FocusWindow
     vcl::Window* pOverlapWindow = ImplGetFirstOverlapWindow();
@@ -308,9 +308,9 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
         }
     }
 
-    VclPtr<vcl::Window> pOldFocusWindow = pSVData->maWinData.mpFocusWin;
+    VclPtr<vcl::Window> pOldFocusWindow = pSVData->mpWinData->mpFocusWin;
 
-    pSVData->maWinData.mpFocusWin = this;
+    pSVData->mpWinData->mpFocusWin = this;
 
     if ( pOldFocusWindow )
     {
@@ -351,7 +351,7 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
         pOldFocusWindow->ImplCallDeactivateListeners( this );
     }
 
-    if ( pSVData->maWinData.mpFocusWin.get() == this )
+    if (pSVData->mpWinData->mpFocusWin.get() == this)
     {
         if ( mpWindowImpl->mpSysObj )
         {
@@ -360,7 +360,7 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
                 mpWindowImpl->mpSysObj->GrabFocus();
         }
 
-        if ( pSVData->maWinData.mpFocusWin.get() == this )
+        if (pSVData->mpWinData->mpFocusWin.get() == this)
         {
             if ( mpWindowImpl->mpCursor )
                 mpWindowImpl->mpCursor->ImplShow();
@@ -442,15 +442,15 @@ void Window::CaptureMouse()
     ImplSVData* pSVData = ImplGetSVData();
 
     // possibly stop tracking
-    if ( pSVData->maWinData.mpTrackWin.get() != this )
+    if (pSVData->mpWinData->mpTrackWin.get() != this)
     {
-        if ( pSVData->maWinData.mpTrackWin )
-            pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Cancel );
+        if (pSVData->mpWinData->mpTrackWin)
+            pSVData->mpWinData->mpTrackWin->EndTracking(TrackingEventFlags::Cancel);
     }
 
-    if ( pSVData->maWinData.mpCaptureWin.get() != this )
+    if (pSVData->mpWinData->mpCaptureWin.get() != this)
     {
-        pSVData->maWinData.mpCaptureWin = this;
+        pSVData->mpWinData->mpCaptureWin = this;
         mpWindowImpl->mpFrame->CaptureMouse( true );
     }
 }
@@ -460,7 +460,7 @@ void Window::ReleaseMouse()
     if (IsMouseCaptured())
     {
         ImplSVData* pSVData = ImplGetSVData();
-        pSVData->maWinData.mpCaptureWin = nullptr;
+        pSVData->mpWinData->mpCaptureWin = nullptr;
         mpWindowImpl->mpFrame->CaptureMouse( false );
         ImplGenerateMouseMove();
     }
@@ -468,7 +468,7 @@ void Window::ReleaseMouse()
 
 bool Window::IsMouseCaptured() const
 {
-    return (this == ImplGetSVData()->maWinData.mpCaptureWin);
+    return (this == ImplGetSVData()->mpWinData->mpCaptureWin);
 }
 
 void Window::SetPointer( PointerStyle nPointer )
