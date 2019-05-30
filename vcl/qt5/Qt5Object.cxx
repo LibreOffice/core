@@ -21,21 +21,23 @@
 #include <Qt5Object.moc>
 
 #include <Qt5Frame.hxx>
+#include <Qt5Widget.hxx>
 
-#include <QtWidgets/QWidget>
 #include <QtGui/QGuiApplication>
+#include <QtGui/QKeyEvent>
 #include <QtGui/QWindow>
+#include <QtWidgets/QWidget>
 
 Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     : m_pParent(pParent)
     , m_pQWidget(nullptr)
-    , m_pQWindow(nullptr)
 {
     if (!m_pParent || !pParent->GetQWidget())
         return;
 
-    m_pQWindow = new QWindow;
-    m_pQWidget = QWidget::createWindowContainer(m_pQWindow, pParent->GetQWidget());
+    QWindow* pWindow = new Qt5ObjectWindow(*this);
+    m_pQWidget = QWidget::createWindowContainer(pWindow, pParent->GetQWidget());
+    m_pQWidget->setAttribute(Qt::WA_NoSystemBackground);
 
     if (bShow)
         m_pQWidget->show();
@@ -51,7 +53,7 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     if (!bWayland)
     {
         m_aSystemData.pPlatformName = "xcb";
-        m_aSystemData.aWindow = m_pQWindow->winId(); // ID of the embedded window
+        m_aSystemData.aWindow = pWindow->winId(); // ID of the embedded window
     }
     else
     {
@@ -63,6 +65,11 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
         // m_aSystemData.aWindow = reinterpret_cast<unsigned long>(
         //     native->nativeResourceForWindow("surface", m_pQWidget->windowHandle()));
     }
+}
+
+QWindow* Qt5Object::windowHandle() const
+{
+    return m_pQWidget ? m_pQWidget->windowHandle() : nullptr;
 }
 
 void Qt5Object::ResetClipRegion()
@@ -102,5 +109,34 @@ void Qt5Object::Show(bool bVisible)
 }
 
 void Qt5Object::SetForwardKey(bool /*bEnable*/) {}
+
+Qt5ObjectWindow::Qt5ObjectWindow(Qt5Object& rParent)
+    : m_rParent(rParent)
+{
+    assert(m_rParent.frame() && m_rParent.frame()->GetQWidget());
+}
+
+void Qt5ObjectWindow::mousePressEvent(QMouseEvent* pEvent)
+{
+    m_rParent.CallCallback(SalObjEvent::ToTop);
+    Qt5Widget::handleMousePressEvent(*m_rParent.frame(), pEvent);
+}
+
+void Qt5ObjectWindow::mouseReleaseEvent(QMouseEvent* pEvent)
+{
+    Qt5Widget::handleMouseReleaseEvent(*m_rParent.frame(), pEvent);
+}
+
+bool Qt5ObjectWindow::event(QEvent* pEvent)
+{
+    return Qt5Widget::handleEvent(*m_rParent.frame(), *m_rParent.widget(), pEvent)
+           || QWindow::event(pEvent);
+}
+
+void Qt5ObjectWindow::keyReleaseEvent(QKeyEvent* pEvent)
+{
+    if (!Qt5Widget::handleKeyReleaseEvent(*m_rParent.frame(), *m_rParent.widget(), pEvent))
+        QWindow::keyReleaseEvent(pEvent);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

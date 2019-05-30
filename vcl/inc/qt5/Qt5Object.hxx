@@ -24,10 +24,10 @@
 
 #include <QtCore/QObject>
 #include <QtGui/QRegion>
+#include <QtGui/QWindow>
 
 class Qt5Frame;
 class QWidget;
-class QWindow;
 
 class Qt5Object : public QObject, public SalObject
 {
@@ -38,11 +38,14 @@ class Qt5Object : public QObject, public SalObject
     SystemEnvData m_aSystemData;
     Qt5Frame* m_pParent;
     QWidget* m_pQWidget; // main widget, container
-    QWindow* m_pQWindow; // contained window, used for opengl rendering
     QRegion m_pRegion;
 
 public:
     Qt5Object(Qt5Frame* pParent, bool bShow);
+
+    Qt5Frame* frame() const { return m_pParent; }
+    QWidget* widget() const { return m_pQWidget; }
+    QWindow* windowHandle() const;
 
     virtual void ResetClipRegion() override;
     virtual void BeginSetClipRegion(sal_uInt32 nRects) override;
@@ -55,6 +58,20 @@ public:
     virtual void SetForwardKey(bool bEnable) override;
 
     virtual const SystemEnvData* GetSystemData() const override { return &m_aSystemData; }
+};
+
+class Qt5ObjectWindow : public QWindow
+{
+    Qt5Object& m_rParent;
+
+    bool event(QEvent*) override;
+    void mousePressEvent(QMouseEvent*) override;
+    void mouseReleaseEvent(QMouseEvent*) override;
+    // keyPressEvent(QKeyEvent*) is handled via event(QEvent*); see comment in Qt5Widget::event
+    void keyReleaseEvent(QKeyEvent*) override;
+
+public:
+    explicit Qt5ObjectWindow(Qt5Object& rParent);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
