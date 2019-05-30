@@ -64,7 +64,7 @@ namespace sw {
             virtual void deleteMarks(const SwNodeIndex& rStt, const SwNodeIndex& rEnd, std::vector< ::sw::mark::SaveBookmark>* pSaveBkmk, const SwIndex* pSttIdx, const SwIndex* pEndIdx) override;
 
             // deleters
-            virtual std::shared_ptr<ILazyDeleter>
+            virtual std::unique_ptr<ILazyDeleter>
                 deleteMark(const const_iterator_t& ppMark) override;
             virtual void deleteMark(const ::sw::mark::IMark* const pMark) override;
             virtual void clearAllMarks() override;
@@ -121,7 +121,7 @@ namespace sw {
         private:
             void sortSubsetMarks();
 
-            // container for all marks
+            // container for all marks, this container owns the objects it points to
             container_t m_vAllMarks;
 
             // additional container for bookmarks

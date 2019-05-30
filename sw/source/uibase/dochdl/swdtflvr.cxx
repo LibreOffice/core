@@ -915,7 +915,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
                 ++ppMark)
             {
                 if(IDocumentMarkAccess::MarkType::DDE_BOOKMARK == IDocumentMarkAccess::GetType(**ppMark))
-                    vDdeMarks.push_back(ppMark->get());
+                    vDdeMarks.push_back(*ppMark);
             }
             // remove all DDE-Bookmarks, they are invalid inside the clipdoc!
             for(const auto& rpMark : vDdeMarks)
@@ -3982,7 +3982,7 @@ bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
     {
         // the mark is still a DdeBookmark
         // we replace it with a Bookmark, so it will get saved etc.
-        ::sw::mark::IMark* const pMark = ppMark->get();
+        ::sw::mark::IMark* const pMark = *ppMark;
         ::sfx2::SvLinkSource* p = refObj.get();
         SwServerObject& rServerObject = dynamic_cast<SwServerObject&>(*p);
 

@@ -2857,7 +2857,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                         IDocumentMarkAccess* const pMarkAccess = m_xDoc->getIDocumentMarkAccess();
                         IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark( sName );
                         if( ppBkmk != pMarkAccess->getAllMarksEnd() &&
-                            ppBkmk->get()->GetMarkStart() == *pAttrPam->GetPoint() )
+                            (*ppBkmk)->GetMarkStart() == *pAttrPam->GetPoint() )
                             break; // do not generate duplicates on this position
                         pAttrPam->DeleteMark();
                         const ::sw::mark::IMark* const pNewMark = pMarkAccess->makeMark(

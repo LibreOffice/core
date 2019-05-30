@@ -611,7 +611,7 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
     }
     else
     {
-        pMark = pMarkAccess->findMark(m_aName)->get();
+        pMark = *pMarkAccess->findMark(m_aName);
         pPam.reset(new SwPaM(pMark->GetMarkPos()));
     }
 
@@ -632,7 +632,7 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
     else if(m_bHadOtherPos)
     {
         if(!pMark)
-            pMark = pMarkAccess->findMark(m_aName)->get();
+            pMark = *pMarkAccess->findMark(m_aName);
         OSL_ENSURE(pMark->IsExpanded(),
             "<SwHistoryBookmark::SetInDoc(..)>"
             " - missing pos on old mark");

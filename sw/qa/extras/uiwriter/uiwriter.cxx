@@ -1666,7 +1666,7 @@ void SwUiWriterTest::testBookmarkUndo()
     IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark("Mark");
     CPPUNIT_ASSERT(ppBkmk != pMarkAccess->getAllMarksEnd());
 
-    pMarkAccess->renameMark(ppBkmk->get(), "Mark_");
+    pMarkAccess->renameMark(*ppBkmk, "Mark_");
     CPPUNIT_ASSERT(bool(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd()));
     CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") != pMarkAccess->getAllMarksEnd());
     rUndoManager.Undo();
@@ -1876,7 +1876,7 @@ void SwUiWriterTest::testTdf51741()
     IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark("Mark");
     CPPUNIT_ASSERT(ppBkmk != pMarkAccess->getAllMarksEnd());
     //Modification 4
-    pMarkAccess->renameMark(ppBkmk->get(), "Mark_");
+    pMarkAccess->renameMark(*ppBkmk, "Mark_");
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
     CPPUNIT_ASSERT(bool(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd()));

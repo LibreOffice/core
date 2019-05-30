@@ -194,7 +194,7 @@ namespace
                 ppMark != pCandidatesEnd;
                 ++ppMark)
             {
-                ::sw::mark::IMark* const pBkmk = ppMark->get();
+                ::sw::mark::IMark* const pBkmk = *ppMark;
                 lcl_FillBookmark(pBkmk, nOwnNode, rDoc, rBkmArr);
             }
         }
@@ -277,7 +277,7 @@ namespace
              ++ppMark )
         {
             ::sw::mark::AnnotationMark* const pAnnotationMark =
-                dynamic_cast< ::sw::mark::AnnotationMark* >(ppMark->get());
+                dynamic_cast< ::sw::mark::AnnotationMark* >(*ppMark);
 
             if (!pAnnotationMark)
                 continue;

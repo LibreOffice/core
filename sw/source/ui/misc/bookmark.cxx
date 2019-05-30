@@ -264,8 +264,8 @@ bool SwInsertBookmarkDlg::HaveBookmarksChanged()
             // more bookmarks then expected
             if (aListIter == aTableBookmarks.end())
                 return true;
-            if (aListIter->first != ppBookmark->get() ||
-                aListIter->second != ppBookmark->get()->GetName())
+            if (aListIter->first != *ppBookmark ||
+                aListIter->second != (*ppBookmark)->GetName())
                 return true;
             ++aListIter;
         }
@@ -285,8 +285,8 @@ void SwInsertBookmarkDlg::PopulateTable()
     {
         if (IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
         {
-            m_xBookmarksBox->InsertBookmark(ppBookmark->get());
-            aTableBookmarks.emplace_back(ppBookmark->get(), ppBookmark->get()->GetName());
+            m_xBookmarksBox->InsertBookmark(*ppBookmark);
+            aTableBookmarks.emplace_back(*ppBookmark, (*ppBookmark)->GetName());
         }
     }
     m_nLastBookmarksCount = pMarkAccess->getBookmarksCount();

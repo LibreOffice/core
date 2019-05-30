@@ -134,7 +134,7 @@ void SwUndoRenameBookmark::Rename(::sw::UndoRedoContext const & rContext, const 
     IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark(sFrom);
     if (ppBkmk != pMarkAccess->getAllMarksEnd())
     {
-        pMarkAccess->renameMark( ppBkmk->get(), sTo );
+        pMarkAccess->renameMark( *ppBkmk, sTo );
     }
 }
 
