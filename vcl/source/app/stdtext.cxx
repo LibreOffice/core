@@ -36,7 +36,7 @@ void ShowServiceNotAvailableError(weld::Widget* pParent,
 static void ImplInitMsgBoxImageList()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    std::vector<Image> &rImages = pSVData->maWinData.maMsgBoxImgList;
+    std::vector<Image> &rImages = pSVData->mpWinData->maMsgBoxImgList;
     if (rImages.empty())
     {
         rImages.emplace_back(Image(StockImage::Yes, SV_RESID_BITMAP_ERRORBOX));
@@ -49,7 +49,7 @@ static void ImplInitMsgBoxImageList()
 Image const & GetStandardInfoBoxImage()
 {
     ImplInitMsgBoxImageList();
-    return ImplGetSVData()->maWinData.maMsgBoxImgList[3];
+    return ImplGetSVData()->mpWinData->maMsgBoxImgList[3];
 }
 
 OUString GetStandardInfoBoxText()
@@ -60,7 +60,7 @@ OUString GetStandardInfoBoxText()
 Image const & GetStandardWarningBoxImage()
 {
     ImplInitMsgBoxImageList();
-    return ImplGetSVData()->maWinData.maMsgBoxImgList[2];
+    return ImplGetSVData()->mpWinData->maMsgBoxImgList[2];
 }
 
 OUString GetStandardWarningBoxText()
@@ -71,7 +71,7 @@ OUString GetStandardWarningBoxText()
 Image const & GetStandardErrorBoxImage()
 {
     ImplInitMsgBoxImageList();
-    return ImplGetSVData()->maWinData.maMsgBoxImgList[0];
+    return ImplGetSVData()->mpWinData->maMsgBoxImgList[0];
 }
 
 OUString GetStandardErrorBoxText()
@@ -82,7 +82,7 @@ OUString GetStandardErrorBoxText()
 Image const & GetStandardQueryBoxImage()
 {
     ImplInitMsgBoxImageList();
-    return ImplGetSVData()->maWinData.maMsgBoxImgList[1];
+    return ImplGetSVData()->mpWinData->maMsgBoxImgList[1];
 }
 
 OUString GetStandardQueryBoxText()

@@ -478,13 +478,13 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
     bool bJustActivated = false;
     if ( ( m_nHighlightedItem == ITEMPOS_INVALID ) && ( n != ITEMPOS_INVALID ) )
     {
-        ImplGetSVData()->maWinData.mbNoDeactivate = true;
+        ImplGetSVData()->mpWinData->mbNoDeactivate = true;
         // #105406# avoid saving the focus when we already have the focus
-        bool bNoSaveFocus = (this == ImplGetSVData()->maWinData.mpFocusWin.get() );
+        bool bNoSaveFocus = (this == ImplGetSVData()->mpWinData->mpFocusWin.get());
 
         if( m_xSaveFocusId != nullptr )
         {
-            if( !ImplGetSVData()->maWinData.mbNoSaveFocus )
+            if (!ImplGetSVData()->mpWinData->mbNoSaveFocus)
             {
                  m_xSaveFocusId = nullptr;
                  if( !bNoSaveFocus )
@@ -509,8 +509,8 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
         m_pMenu->bInCallback = true;
         m_pMenu->Deactivate();
         m_pMenu->bInCallback = false;
-        ImplGetSVData()->maWinData.mbNoDeactivate = false;
-        if( !ImplGetSVData()->maWinData.mbNoSaveFocus )
+        ImplGetSVData()->mpWinData->mbNoDeactivate = false;
+        if (!ImplGetSVData()->mpWinData->mbNoSaveFocus)
         {
             VclPtr<vcl::Window> xTempFocusId;
             if (m_xSaveFocusId && !m_xSaveFocusId->isDisposed())
@@ -523,7 +523,7 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
                 // focus window, so we could avoid sending superfluous activate events
                 // to top window listeners.
                 if (xTempFocusId || bDefaultToDocument)
-                    ImplGetSVData()->maWinData.mpFocusWin = this;
+                    ImplGetSVData()->mpWinData->mpFocusWin = this;
 
                 // #105406# restore focus to document if we could not save focus before
                 if (!xTempFocusId && bDefaultToDocument)

@@ -440,7 +440,7 @@ void MenuFloatingWindow::End()
     xSaveFocusId = nullptr;
     if (xFocusId != nullptr && MenuInHierarchyHasFocus())
     {
-        ImplGetSVData()->maWinData.mbNoDeactivate = false;
+        ImplGetSVData()->mpWinData->mbNoDeactivate = false;
         Window::EndSaveFocus(xFocusId);
     }
 

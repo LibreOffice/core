@@ -227,8 +227,8 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
             ImplSVData* pSVData = ImplGetSVData();
             if ( !pSVData->maGDIData.mnAppFontX )
             {
-                if( pSVData->maWinData.mpFirstFrame )
-                    vcl::Window::ImplInitAppFontData( pSVData->maWinData.mpFirstFrame );
+                if (pSVData->maFrameData.mpFirstFrame)
+                    vcl::Window::ImplInitAppFontData(pSVData->maFrameData.mpFirstFrame);
                 else
                 {
                     ScopedVclPtrInstance<WorkWindow> pWin( nullptr, 0 );
