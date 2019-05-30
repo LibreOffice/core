@@ -1130,7 +1130,7 @@ bool Window::IsWindowOrChild( const vcl::Window* pWindow, bool bSystemWindow ) c
 
 void Window::ImplSetFrameParent( const vcl::Window* pParent )
 {
-    vcl::Window* pFrameWindow = ImplGetSVData()->maWinData.mpFirstFrame;
+    vcl::Window* pFrameWindow = ImplGetSVData()->maFrameData.mpFirstFrame;
     while( pFrameWindow )
     {
         // search all frames that are children of this window
