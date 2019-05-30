@@ -1029,7 +1029,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTextFormFieldInsertion)
     // Check whether the fieldmark is created
     auto aIter = pMarkAccess->getAllMarksBegin();
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
-    ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(aIter->get());
+    ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
     CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMTEXT), pFieldmark->GetFieldname());
 
@@ -1067,7 +1067,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testCheckboxFormFieldInsertion)
     // Check whether the fieldmark is created
     auto aIter = pMarkAccess->getAllMarksBegin();
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
-    ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(aIter->get());
+    ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
     CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMCHECKBOX), pFieldmark->GetFieldname());
     // The checkbox is not checked by default
@@ -1085,7 +1085,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testCheckboxFormFieldInsertion)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     aIter = pMarkAccess->getAllMarksBegin();
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
-    pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(aIter->get());
+    pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
     CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMCHECKBOX), pFieldmark->GetFieldname());
 }
@@ -1106,7 +1106,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDropDownFormFieldInsertion)
     // Check whether the fieldmark is created
     auto aIter = pMarkAccess->getAllMarksBegin();
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
-    ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(aIter->get());
+    ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
     CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDROPDOWN), pFieldmark->GetFieldname());
     // Check drop down field's parameters. By default these params are not set
@@ -1125,7 +1125,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDropDownFormFieldInsertion)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     aIter = pMarkAccess->getAllMarksBegin();
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
-    pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(aIter->get());
+    pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
     CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDROPDOWN), pFieldmark->GetFieldname());
 }

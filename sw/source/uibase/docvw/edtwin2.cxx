@@ -194,10 +194,10 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     IDocumentMarkAccess::const_iterator_t ppBkmk =
                                     pMarkAccess->findBookmark( sTmpSearchStr );
                     if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
-                         IDocumentMarkAccess::GetType( *(ppBkmk->get()) )
+                         IDocumentMarkAccess::GetType(**ppBkmk)
                             == IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK )
                     {
-                        SwTextNode* pTextNode = ppBkmk->get()->GetMarkStart().nNode.GetNode().GetTextNode();
+                        SwTextNode* pTextNode = (*ppBkmk)->GetMarkStart().nNode.GetNode().GetTextNode();
                         if ( pTextNode )
                         {
                             sText = sw::GetExpandTextMerged(rSh.GetLayout(), *pTextNode, true, false, ExpandMode(0));

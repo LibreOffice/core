@@ -1591,7 +1591,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 sal_uInt16 nBkmNo;
                 if( IsFootnoteEdnBkmField(rFormatField, nBkmNo) )
                 {
-                    ::sw::mark::IMark const * const pMark = (pDoc->getIDocumentMarkAccess()->getAllMarksBegin() + nBkmNo)->get();
+                    ::sw::mark::IMark const * const pMark = pDoc->getIDocumentMarkAccess()->getAllMarksBegin()[nBkmNo];
 
                     const SwPosition& rBkMrkPos = pMark->GetMarkPos();
 
@@ -5348,9 +5348,9 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         {
             IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findBookmark( "_PictureBullets" );
             if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
-                       IDocumentMarkAccess::GetType( *(ppBkmk->get()) ) == IDocumentMarkAccess::MarkType::BOOKMARK )
+                       IDocumentMarkAccess::GetType(**ppBkmk) == IDocumentMarkAccess::MarkType::BOOKMARK )
             {
-                SwTextNode* pTextNode = ppBkmk->get()->GetMarkStart().nNode.GetNode().GetTextNode();
+                SwTextNode* pTextNode = (*ppBkmk)->GetMarkStart().nNode.GetNode().GetTextNode();
 
                 if ( pTextNode )
                 {
@@ -5361,7 +5361,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
                         const sal_Int32 st = pHt->GetStart();
                         if( pHt
                             && pHt->Which() == RES_TXTATR_FLYCNT
-                            && (st >= ppBkmk->get()->GetMarkStart().nContent.GetIndex()) )
+                            && (st >= (*ppBkmk)->GetMarkStart().nContent.GetIndex()) )
                         {
                             SwFrameFormat* pFrameFormat = pHt->GetFlyCnt().GetFrameFormat();
                             vecFrameFormat.push_back(pFrameFormat);
