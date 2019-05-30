@@ -1222,9 +1222,9 @@ void SdImportTestSmartArt::testVerticalBlockList()
 
     // BC shape is rotated 90*, so width and height is swapped
     CPPUNIT_ASSERT_GREATER(xShapeA->getSize().Width, xShapeBC->getSize().Height);
-    CPPUNIT_ASSERT_LESSEQUAL(xShapeA->getSize().Height, xShapeBC->getSize().Width);
+    CPPUNIT_ASSERT_LESS(xShapeA->getSize().Height, xShapeBC->getSize().Width);
     CPPUNIT_ASSERT_GREATER(xShapeA->getPosition().X, xShapeBC->getPosition().X);
-    CPPUNIT_ASSERT_GREATEREQUAL(xShapeA->getPosition().Y, xShapeBC->getPosition().Y);
+    CPPUNIT_ASSERT_GREATER(xShapeA->getPosition().Y, xShapeBC->getPosition().Y);
 
     uno::Reference<drawing::XShapes> xGroup3(xGroup->getByIndex(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xGroup3->getCount());
@@ -1235,7 +1235,11 @@ void SdImportTestSmartArt::testVerticalBlockList()
     CPPUNIT_ASSERT_EQUAL(xShapeA->getSize().Width, xShapeEmpty->getSize().Width);
     CPPUNIT_ASSERT_EQUAL(xShapeA->getSize().Height, xShapeEmpty->getSize().Height);
     CPPUNIT_ASSERT_EQUAL(xShapeA->getPosition().X, xShapeEmpty->getPosition().X);
-    CPPUNIT_ASSERT_GREATEREQUAL(xShapeA->getPosition().Y + 2*xShapeA->getSize().Height, xShapeEmpty->getPosition().Y);
+    CPPUNIT_ASSERT_GREATER(xShapeA->getPosition().Y + 2*xShapeA->getSize().Height, xShapeEmpty->getPosition().Y);
+
+    uno::Reference<drawing::XShape> xGroupShape(xGroup, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(xGroupShape->getPosition().Y + xGroupShape->getSize().Height,
+                         xShapeEmpty->getPosition().Y + xShapeEmpty->getSize().Height);
 
     xDocShRef->DoClose();
 }
