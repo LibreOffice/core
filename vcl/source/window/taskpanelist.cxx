@@ -190,6 +190,23 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
 
             if( pNextWin != pWin )
             {
+                ImplGetSVData()->mpWinData->mbNoSaveFocus = true;
+                ImplTaskPaneListGrabFocus( pNextWin, bForward );
+                ImplGetSVData()->mpWinData->mbNoSaveFocus = false;
+            }
+            else
+            {
+                // forward key if no splitter found
+                if( bSplitterOnly )
+                    return false;
+
+                // we did not find another taskpane, so
+                // put focus back into document
+                pWin->ImplGrabFocusToDocument( GetFocusFlags::F6 | (bForward ? GetFocusFlags::Forward : GetFocusFlags::Backward));
+            }
+
+            if( pNextWin != pWin )
+            {
                 ImplGetSVData()->maWinData.mbNoSaveFocus = true;
                 ImplTaskPaneListGrabFocus( pNextWin, bForward );
                 ImplGetSVData()->maWinData.mbNoSaveFocus = false;

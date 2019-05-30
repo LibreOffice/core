@@ -481,13 +481,13 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
     bool bJustActivated = false;
     if ( ( nHighlightedItem == ITEMPOS_INVALID ) && ( n != ITEMPOS_INVALID ) )
     {
-        ImplGetSVData()->maWinData.mbNoDeactivate = true;
+        ImplGetSVData()->mpWinData->mbNoDeactivate = true;
         // #105406# avoid saving the focus when we already have the focus
-        bool bNoSaveFocus = (this == ImplGetSVData()->maWinData.mpFocusWin.get() );
+        bool bNoSaveFocus = (this == ImplGetSVData()->mpWinData->mpFocusWin.get());
 
         if( xSaveFocusId != nullptr )
         {
-            if( !ImplGetSVData()->maWinData.mbNoSaveFocus )
+            if (!ImplGetSVData()->mpWinData->mbNoSaveFocus)
             {
                  xSaveFocusId = nullptr;
                  if( !bNoSaveFocus )
@@ -512,8 +512,8 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
         pMenu->bInCallback = true;
         pMenu->Deactivate();
         pMenu->bInCallback = false;
-        ImplGetSVData()->maWinData.mbNoDeactivate = false;
-        if( !ImplGetSVData()->maWinData.mbNoSaveFocus )
+        ImplGetSVData()->mpWinData->mbNoDeactivate = false;
+        if (!ImplGetSVData()->mpWinData->mbNoSaveFocus)
         {
             VclPtr<vcl::Window> xTempFocusId;
             if (xSaveFocusId && !xSaveFocusId->isDisposed())

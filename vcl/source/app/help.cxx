@@ -117,8 +117,8 @@ bool Help::StartExtHelp()
         pSVData->maHelpData.mbExtHelpMode = true;
         pSVData->maHelpData.mbOldBalloonMode = pSVData->maHelpData.mbBalloonHelp;
         pSVData->maHelpData.mbBalloonHelp = true;
-        if ( pSVData->maWinData.mpAppWin )
-            pSVData->maWinData.mpAppWin->ImplGenerateMouseMove();
+        if (pSVData->maFrameData.mpAppWin)
+            pSVData->maFrameData.mpAppWin->ImplGenerateMouseMove();
         return true;
     }
 
@@ -133,8 +133,8 @@ bool Help::EndExtHelp()
     {
         pSVData->maHelpData.mbExtHelpMode = false;
         pSVData->maHelpData.mbBalloonHelp = pSVData->maHelpData.mbOldBalloonMode;
-        if ( pSVData->maWinData.mpAppWin )
-            pSVData->maWinData.mpAppWin->ImplGenerateMouseMove();
+        if (pSVData->maFrameData.mpAppWin)
+            pSVData->maFrameData.mpAppWin->ImplGenerateMouseMove();
         return true;
     }
 

@@ -1480,6 +1480,7 @@ SfxViewFrame::SfxViewFrame
 )
     : m_pImpl( new SfxViewFrame_Impl( rFrame ) )
     , m_pBindings( new SfxBindings )
+    , m_pWinData(CreateSVWinData())
     , m_nAdjustPosPixelLock( 0 )
 {
 
@@ -1522,6 +1523,9 @@ SfxViewFrame::~SfxViewFrame()
 
     // Delete Member
     KillDispatcher_Impl();
+
+    DestroySVWinData(m_pWinData);
+    m_pWinData = nullptr;
 }
 
 // Remove and delete the Dispatcher.
@@ -3159,6 +3163,8 @@ void SfxViewFrame::UpdateDocument_Impl()
 
 void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )
 {
+    SetSVWinData(pFrame ? pFrame->m_pWinData : nullptr);
+
     SfxGetpApp()->SetViewFrame_Impl( pFrame );
 }
 

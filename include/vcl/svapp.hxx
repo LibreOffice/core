@@ -1485,6 +1485,12 @@ VCL_DLLPUBLIC bool InitAccessBridge();
 VCL_DLLPUBLIC void CreateMainLoopThread( oslWorkerFunction pWorker, void * pThreadData );
 VCL_DLLPUBLIC void JoinMainLoopThread();
 
+/// The following are to manage per-view (frame) window data.
+struct ImplSVWinData;
+VCL_DLLPUBLIC ImplSVWinData* CreateSVWinData();
+VCL_DLLPUBLIC void DestroySVWinData(ImplSVWinData*);
+VCL_DLLPUBLIC void SetSVWinData(ImplSVWinData*);
+
 inline void Application::EndYield()
 {
     PostUserEvent( Link<void*,void>() );

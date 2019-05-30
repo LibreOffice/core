@@ -2853,10 +2853,12 @@ bool X11SalFrame::HandleMouseEvent( XEvent *pEvent )
          *  applications do weird things.
          */
         ImplSVData* pSVData = ImplGetSVData();
-        if ( pSVData->maWinData.mpFirstFloat )
+        if (pSVData->mpWinData->mpFirstFloat)
         {
-            if (!(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoAppFocusClose))
-                pSVData->maWinData.mpFirstFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
+            if (!(pSVData->mpWinData->mpFirstFloat->GetPopupModeFlags()
+                  & FloatWinPopupFlags::NoAppFocusClose))
+                pSVData->mpWinData->mpFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel
+                                                               | FloatWinPopupEndFlags::CloseAll);
         }
     }
 
@@ -3357,11 +3359,11 @@ bool X11SalFrame::HandleFocusEvent( XFocusChangeEvent const *pEvent )
 
             bool nRet = CallCallback( SalEvent::GetFocus,  nullptr );
             if ((mpParent != nullptr && nStyle_ == SalFrameStyleFlags::NONE)
-                && pSVData->maWinData.mpFirstFloat )
+                && pSVData->mpWinData->mpFirstFloat)
             {
-                FloatWinPopupFlags nMode = pSVData->maWinData.mpFirstFloat->GetPopupModeFlags();
-                pSVData->maWinData.mpFirstFloat->SetPopupModeFlags(
-                                        nMode & ~FloatWinPopupFlags::NoAppFocusClose);
+                FloatWinPopupFlags nMode = pSVData->mpWinData->mpFirstFloat->GetPopupModeFlags();
+                pSVData->mpWinData->mpFirstFloat->SetPopupModeFlags(
+                    nMode & ~FloatWinPopupFlags::NoAppFocusClose);
             }
             return nRet;
         }

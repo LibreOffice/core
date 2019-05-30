@@ -51,7 +51,7 @@ ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
     SAL_WARN_IF( !pParent, "vcl", "ImplWheelWindow::ImplWheelWindow(): Parent not set!" );
 
     const Size      aSize( pParent->GetOutputSizePixel() );
-    const StartAutoScrollFlags nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
+    const StartAutoScrollFlags nFlags = ImplGetSVData()->mpWinData->mnAutoScrollFlags;
     const bool      bHorz( nFlags & StartAutoScrollFlags::Horz );
     const bool      bVert( nFlags & StartAutoScrollFlags::Vert );
 
@@ -235,7 +235,7 @@ void ImplWheelWindow::ImplRecalcScrollValues()
 PointerStyle ImplWheelWindow::ImplGetMousePointer( long nDistX, long nDistY )
 {
     PointerStyle    eStyle;
-    const StartAutoScrollFlags nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
+    const StartAutoScrollFlags nFlags = ImplGetSVData()->mpWinData->mnAutoScrollFlags;
     const bool      bHorz( nFlags & StartAutoScrollFlags::Horz );
     const bool      bVert( nFlags & StartAutoScrollFlags::Vert );
 
@@ -314,7 +314,7 @@ void ImplWheelWindow::MouseMove( const MouseEvent& rMEvt )
     mnActDist = static_cast<sal_uLong>(hypot( static_cast<double>(nDistX), nDistY ));
 
     const PointerStyle  eActStyle = ImplGetMousePointer( nDistX, nDistY );
-    const StartAutoScrollFlags nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
+    const StartAutoScrollFlags nFlags = ImplGetSVData()->mpWinData->mnAutoScrollFlags;
     const bool          bHorz( nFlags & StartAutoScrollFlags::Horz );
     const bool          bVert( nFlags & StartAutoScrollFlags::Vert );
     const bool          bOuter = mnActDist > WHEEL_RADIUS;

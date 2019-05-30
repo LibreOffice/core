@@ -72,6 +72,11 @@ namespace
 {
     struct private_aImplSVData :
         public rtl::Static<ImplSVData, private_aImplSVData> {};
+
+    /// Default instance ensures that ImplSVData::mpWinData is never null.
+    struct private_aImplSVWinData :
+        public rtl::Static<ImplSVWinData, private_aImplSVWinData> {};
+
 }
 
 ImplSVData* ImplGetSVData() {
@@ -233,8 +238,8 @@ basegfx::SystemDependentDataManager& ImplGetSystemDependentDataManager()
 vcl::Window* ImplGetDefaultWindow()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maWinData.mpAppWin )
-        return pSVData->maWinData.mpAppWin;
+    if (pSVData->maFrameData.mpAppWin)
+        return pSVData->maFrameData.mpAppWin;
     else
         return ImplGetDefaultContextWindow();
 }
@@ -383,10 +388,58 @@ void LocaleConfigurationListener::ConfigurationChanged( utl::ConfigurationBroadc
     AllSettings::LocaleSettingsChanged( nHint );
 }
 
+ImplSVWinData* CreateSVWinData()
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return nullptr;
+
+    ImplSVWinData* p = new ImplSVWinData();
+
+    ImplSVData* pSVData = ImplGetSVData();
+    assert(pSVData && pSVData->mpWinData);
+
+    p->mpFocusWin = pSVData->mpWinData->mpFocusWin;
+    return p;
+}
+
+void DestroySVWinData(ImplSVWinData* pData)
+{
+    delete static_cast<ImplSVWinData*>(pData);
+}
+
+void SetSVWinData(ImplSVWinData* pSVWinData)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    ImplSVData* pSVData = ImplGetSVData();
+    assert(pSVData != nullptr);
+
+    if (pSVData->mpWinData != pSVWinData)
+    {
+        // If current one is the static, clean it up to avoid having lingering references.
+        if (pSVData->mpWinData == &private_aImplSVWinData::get())
+        {
+            pSVData->mpWinData->mpFocusWin.reset();
+        }
+
+        pSVData->mpWinData = pSVWinData;
+        if (pSVData->mpWinData == nullptr)
+        {
+            pSVData->mpWinData = &private_aImplSVWinData::get(); // Never leave it null.
+        }
+    }
+}
+
+ImplSVData::ImplSVData()
+{
+    mpWinData = &private_aImplSVWinData::get();
+}
 
 ImplSVData::~ImplSVData() {}
 ImplSVAppData::~ImplSVAppData() {}
 ImplSVGDIData::~ImplSVGDIData() {}
+ImplSVFrameData::~ImplSVFrameData() {}
 ImplSVWinData::~ImplSVWinData() {}
 ImplSVHelpData::~ImplSVHelpData() {}
 

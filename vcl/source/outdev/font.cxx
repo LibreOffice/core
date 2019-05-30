@@ -579,8 +579,8 @@ void OutputDevice::ImplClearAllFontData(bool bNewFontLists)
     pSVData->maGDIData.mxScreenFontCache->Invalidate();
     if ( bNewFontLists )
     {
-        pSVData->maGDIData.mxScreenFontList->Clear();
-        vcl::Window * pFrame = pSVData->maWinData.mpFirstFrame;
+        pSVData->maGDIData.mpScreenFontList->Clear();
+        vcl::Window * pFrame = pSVData->maFrameData.mpFirstFrame;
         if ( pFrame )
         {
             if ( pFrame->AcquireGraphics() )
@@ -609,7 +609,7 @@ void OutputDevice::ImplUpdateFontDataForAllFrames( const FontUpdateHandler_t pHd
     ImplSVData* const pSVData = ImplGetSVData();
 
     // update all windows
-    vcl::Window* pFrame = pSVData->maWinData.mpFirstFrame;
+    vcl::Window* pFrame = pSVData->maFrameData.mpFirstFrame;
     while ( pFrame )
     {
         ( pFrame->*pHdl )( bNewFontLists );

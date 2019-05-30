@@ -403,21 +403,25 @@ vcl::Window* Dialog::GetDefaultParent(WinBits nStyle)
 {
     vcl::Window* pParent = Application::GetDefDialogParent();
     if (!pParent && !(nStyle & WB_SYSTEMWINDOW))
-        pParent = ImplGetSVData()->maWinData.mpAppWin;
+        pParent = ImplGetSVData()->maFrameData.mpAppWin;
 
     // If Parent is disabled, then we search for a modal dialog
     // in this frame
     if (pParent && (!pParent->IsInputEnabled() || pParent->IsInModalMode()))
     {
         ImplSVData* pSVData = ImplGetSVData();
-        auto& rExecuteDialogs = pSVData->maWinData.mpExecuteDialogs;
-        auto it = std::find_if(rExecuteDialogs.rbegin(), rExecuteDialogs.rend(),
-            [&pParent](VclPtr<Dialog>& rDialogPtr) {
-                return pParent->ImplGetFirstOverlapWindow()->IsWindowOrChild(rDialogPtr, true) &&
-                    rDialogPtr->IsReallyVisible() && rDialogPtr->IsEnabled() &&
-                    rDialogPtr->IsInputEnabled() && !rDialogPtr->IsInModalMode(); });
-        if (it != rExecuteDialogs.rend())
-            pParent = it->get();
+        auto& rExecuteDialogs = pSVData->mpWinData->mpExecuteDialogs;
+        for (auto it = rExecuteDialogs.rbegin(); it != rExecuteDialogs.rend(); ++it)
+        {
+            // only if visible and enabled
+            if (pParent->ImplGetFirstOverlapWindow()->IsWindowOrChild(*it, true) &&
+                (*it)->IsReallyVisible() &&
+                (*it)->IsEnabled() && (*it)->IsInputEnabled() && !(*it)->IsInModalMode())
+            {
+                pParent = it->get();
+                break;
+            }
+        }
     }
 
     return pParent;
@@ -890,10 +894,16 @@ bool Dialog::ImplStartExecute()
     {
         if (bKitActive && !GetLOKNotifier())
         {
-            if (vcl::ILibreOfficeKitNotifier* pViewShell = mpDialogImpl->m_aInstallLOKNotifierHdl.Call(nullptr))
-            {
-                SetLOKNotifier(pViewShell);
-            }
+            // check if there's already some dialog being ::Execute()d
+            const bool bDialogExecuting = std::any_of(pSVData->mpWinData->mpExecuteDialogs.begin(),
+                                                      pSVData->mpWinData->mpExecuteDialogs.end(),
+                                                      [](const Dialog* pDialog) {
+                                                          return pDialog->IsInSyncExecute();
+                                                      });
+            if (!(bDialogExecuting && IsInSyncExecute()))
+                break;
+            else
+                SAL_WARN("lok.dialog", "Dialog \"" << ImplGetDialogText(this) << "\" is being synchronously executed over an existing synchronously executing dialog.");
         }
 
         switch ( Application::GetDialogCancelMode() )
@@ -953,15 +963,15 @@ bool Dialog::ImplStartExecute()
         }
 #endif
 
-        // link all dialogs which are being executed
-        pSVData->maWinData.mpExecuteDialogs.push_back(this);
+    // link all dialogs which are being executed
+    pSVData->mpWinData->mpExecuteDialogs.push_back(this);
 
-        // stop capturing, in order to have control over the dialog
-        if ( pSVData->maWinData.mpTrackWin )
-            pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Cancel );
-        if ( pSVData->maWinData.mpCaptureWin )
-            pSVData->maWinData.mpCaptureWin->ReleaseMouse();
-        EnableInput();
+    // stop capturing, in order to have control over the dialog
+    if (pSVData->mpWinData->mpTrackWin)
+        pSVData->mpWinData->mpTrackWin->EndTracking(TrackingEventFlags::Cancel);
+    if (pSVData->mpWinData->mpCaptureWin)
+        pSVData->mpWinData->mpCaptureWin->ReleaseMouse();
+    EnableInput();
 
         if ( GetParent() )
         {
@@ -1132,7 +1142,7 @@ bool Dialog::StartExecuteAsync( VclAbstractDialog::AsyncContext &rCtx )
 void Dialog::RemoveFromDlgList()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    auto& rExecuteDialogs = pSVData->maWinData.mpExecuteDialogs;
+    auto& rExecuteDialogs = pSVData->mpWinData->mpExecuteDialogs;
 
     // remove dialog from the list of dialogs which are being executed
     rExecuteDialogs.erase(std::remove_if(rExecuteDialogs.begin(), rExecuteDialogs.end(), [this](VclPtr<Dialog>& dialog){ return dialog.get() == this; }), rExecuteDialogs.end());
@@ -1147,11 +1157,12 @@ void Dialog::EndDialog( long nResult )
 
     Hide();
 
-    if (bModal)
+    // set focus to previous modal dialogue if it is modal for
+    // the same frame parent (or NULL)
+    ImplSVData* pSVData = ImplGetSVData();
+    if (!pSVData->mpWinData->mpExecuteDialogs.empty())
     {
-        SetModalInputMode(false);
-
-        RemoveFromDlgList();
+        VclPtr<Dialog> pPrevious = pSVData->mpWinData->mpExecuteDialogs.back();
 
         // set focus to previous modal dialogue if it is modal for
         // the same frame parent (or NULL)
@@ -1208,7 +1219,7 @@ void Dialog::EndDialog( long nResult )
 void Dialog::EndAllDialogs( vcl::Window const * pParent )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    auto& rExecuteDialogs = pSVData->maWinData.mpExecuteDialogs;
+    auto& rExecuteDialogs = pSVData->mpWinData->mpExecuteDialogs;
 
     for (auto it = rExecuteDialogs.rbegin(); it != rExecuteDialogs.rend(); ++it)
     {
@@ -1246,7 +1257,7 @@ void Dialog::ImplSetModalInputMode( bool bModal )
     // previously Execute()'d dialog - the one below the top-most one
     VclPtr<Dialog> pPrevious;
     ImplSVData* pSVData = ImplGetSVData();
-    auto& rExecuteDialogs = pSVData->maWinData.mpExecuteDialogs;
+    auto& rExecuteDialogs = pSVData->mpWinData->mpExecuteDialogs;
     if (rExecuteDialogs.size() > 1)
         pPrevious = rExecuteDialogs[rExecuteDialogs.size() - 2];
 
