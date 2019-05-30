@@ -2449,31 +2449,42 @@ void ScXMLExport::collectAutoStyles()
 
             // stored text styles
 
+            // Calling createTextCursor fires up editeng, which is very slow, and often subsequent style entries
+            // refer to the same cell, so cache it.
+            ScAddress aPrevPos;
+            uno::Reference<beans::XPropertySet> xPrevCursorProp;
             const std::vector<ScTextStyleEntry>& rTextEntries = pSheetData->GetTextStyles();
             for (const auto& rTextEntry : rTextEntries)
             {
                 ScAddress aPos = rTextEntry.maCellPos;
                 sal_Int32 nTable = aPos.Tab();
                 bool bCopySheet = pDoc->IsStreamValid( static_cast<SCTAB>(nTable) );
-                if (bCopySheet)
-                {
-                    //! separate method AddStyleFromText needed?
-                    //! cache sheet object
+                if (!bCopySheet)
+                    continue;
 
+                //! separate method AddStyleFromText needed?
+                //! cache sheet object
+
+                uno::Reference<beans::XPropertySet> xCursorProp;
+                if (xPrevCursorProp && aPrevPos == aPos)
+                    xCursorProp = xPrevCursorProp;
+                else
+                {
                     uno::Reference<table::XCellRange> xCellRange(xIndex->getByIndex(nTable), uno::UNO_QUERY);
                     uno::Reference<text::XSimpleText> xCellText(xCellRange->getCellByPosition(aPos.Col(), aPos.Row()), uno::UNO_QUERY);
-                    uno::Reference<beans::XPropertySet> xCursorProp(xCellText->createTextCursor(), uno::UNO_QUERY);
-                    ScCellTextCursor* pCursor = ScCellTextCursor::getImplementation( xCursorProp );
-                    if (pCursor)
-                    {
-                        pCursor->SetSelection( rTextEntry.maSelection );
-
-                        std::vector<XMLPropertyState> aPropStates(xTextPropMapper->Filter(xCursorProp));
-                        OUString sName( rTextEntry.maName );
-                        GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_TEXT, OUString(), aPropStates);
-                        GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TEXT_TEXT, sName);
-                    }
+                    xCursorProp.set(xCellText->createTextCursor(), uno::UNO_QUERY);
                 }
+                ScCellTextCursor* pCursor = ScCellTextCursor::getImplementation( xCursorProp );
+                if (!pCursor)
+                    continue;
+                pCursor->SetSelection( rTextEntry.maSelection );
+
+                std::vector<XMLPropertyState> aPropStates(xTextPropMapper->Filter(xCursorProp));
+                OUString sName( rTextEntry.maName );
+                GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_TEXT, OUString(), aPropStates);
+                GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TEXT_TEXT, sName);
+                xPrevCursorProp = xCursorProp;
+                aPrevPos = aPos;
             }
         }
 
