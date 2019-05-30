@@ -421,10 +421,6 @@ namespace sw { namespace mark
                 pPos2->nContent.GetIndex());
         }
 #endif
-        // see for example _SaveContentIdx, Shells
-        OSL_PRECOND(m_vAllMarks.size() < USHRT_MAX,
-            "MarkManager::makeMark(..)"
-            " - more than USHRT_MAX marks are not supported correctly");
         // There should only be one CrossRefBookmark per Textnode per Type
         if ((eType == MarkType::CROSSREF_NUMITEM_BOOKMARK || eType == MarkType::CROSSREF_HEADING_BOOKMARK)
             && (lcl_FindMarkAtPos(m_vBookmarks, *rPaM.Start(), eType) != m_vBookmarks.end()))
