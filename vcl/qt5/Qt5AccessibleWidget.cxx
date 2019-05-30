@@ -830,6 +830,10 @@ QString Qt5AccessibleWidget::attributes(int offset, int* startOffset, int* endOf
     if (!xText.is())
         return QString();
 
+    const int nTextLength = xText->getText().getLength();
+    if (offset <= 0 || offset >= nTextLength)
+        return QString();
+
     Sequence<PropertyValue> attribs = xText->getCharacterAttributes(offset, Sequence<OUString>());
     const PropertyValue* pValues = attribs.getConstArray();
     OUString aRet;
