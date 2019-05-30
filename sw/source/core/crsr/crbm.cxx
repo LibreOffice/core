@@ -66,13 +66,13 @@ namespace
         SwCursorSaveState const m_aSaveState;
     };
 
-    bool lcl_ReverseMarkOrderingByEnd(const IDocumentMarkAccess::pMark_t& rpFirst,
-        const IDocumentMarkAccess::pMark_t& rpSecond)
+    bool lcl_ReverseMarkOrderingByEnd(const ::sw::mark::IMark* pFirst,
+                                      const ::sw::mark::IMark* pSecond)
     {
-        return rpFirst->GetMarkEnd() > rpSecond->GetMarkEnd();
+        return pFirst->GetMarkEnd() > pSecond->GetMarkEnd();
     }
 
-    bool lcl_IsInvisibleBookmark(const IDocumentMarkAccess::pMark_t& pMark)
+    bool lcl_IsInvisibleBookmark(const ::sw::mark::IMark* pMark)
     {
         return IDocumentMarkAccess::GetType(*pMark) != IDocumentMarkAccess::MarkType::BOOKMARK;
     }
@@ -218,7 +218,7 @@ bool SwCursorShell::GoNextBookmark()
         {
             continue;
         }
-        aCursorSt.SetCursorToMark(ppMark->get());
+        aCursorSt.SetCursorToMark(*ppMark);
         if(!aCursorSt.RollbackIfIllegal())
             break; // found legal move
     }
@@ -263,7 +263,7 @@ bool SwCursorShell::GoPrevBookmark()
         {
             continue;
         }
-        aCursorSt.SetCursorToMark(ppMark->get());
+        aCursorSt.SetCursorToMark(*ppMark);
         if(!aCursorSt.RollbackIfIllegal())
             break; // found legal move
     }

@@ -2118,9 +2118,9 @@ SwXTextField::getAnchor()
         IDocumentMarkAccess* pMarkAccess = m_pImpl->m_pDoc->getIDocumentMarkAccess();
         for (IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAnnotationMarksBegin(); ppMark != pMarkAccess->getAnnotationMarksEnd(); ++ppMark)
         {
-            if (ppMark->get()->GetName() == pPostItField->GetName())
+            if ((*ppMark)->GetName() == pPostItField->GetName())
             {
-                pPamForTextField.reset(new SwPaM(ppMark->get()->GetMarkStart(), ppMark->get()->GetMarkEnd()));
+                pPamForTextField.reset(new SwPaM((*ppMark)->GetMarkStart(), (*ppMark)->GetMarkEnd()));
                 break;
             }
         }

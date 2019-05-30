@@ -1380,7 +1380,7 @@ bool SwHTMLParser::HasCurrentParaBookmarks( bool bIgnoreStack ) const
             ppMark != pMarkAccess->getAllMarksEnd();
             ++ppMark)
         {
-            const ::sw::mark::IMark* pBookmark = ppMark->get();
+            const ::sw::mark::IMark* pBookmark = *ppMark;
 
             const sal_uLong nBookNdIdx = pBookmark->GetMarkPos().nNode.GetIndex();
             if( nBookNdIdx==nNodeIdx )
@@ -1445,7 +1445,7 @@ void SwHTMLParser::StripTrailingPara()
                 ppMark != pMarkAccess->getAllMarksEnd();
                 ++ppMark)
             {
-                ::sw::mark::IMark* pMark = ppMark->get();
+                ::sw::mark::IMark* pMark = *ppMark;
 
                 sal_uLong nBookNdIdx = pMark->GetMarkPos().nNode.GetIndex();
                 if(nBookNdIdx==nNodeIdx)
@@ -1463,7 +1463,7 @@ void SwHTMLParser::StripTrailingPara()
                         SwPosition aNewPos(*pNd);
                         aNewPos.nContent.Assign(pNd, pNd->Len());
                         const SwPaM aPaM(aNewPos);
-                        pMarkAccess->repositionMark(ppMark->get(), aPaM);
+                        pMarkAccess->repositionMark(*ppMark, aPaM);
                     }
                 }
                 else if( nBookNdIdx > nNodeIdx )

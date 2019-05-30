@@ -1119,7 +1119,7 @@ void SwHTMLWriter::OutBookmarks()
     const ::sw::mark::IMark* pBookmark = nullptr;
     IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
     if(m_nBkmkTabPos != -1)
-        pBookmark = (pMarkAccess->getAllMarksBegin() + m_nBkmkTabPos)->get();
+        pBookmark = pMarkAccess->getAllMarksBegin()[m_nBkmkTabPos];
     // Output all bookmarks in this paragraph. The content position
     // for the moment isn't considered!
     sal_uInt32 nNode = m_pCurrentPam->GetPoint()->nNode.GetIndex();
@@ -1137,7 +1137,7 @@ void SwHTMLWriter::OutBookmarks()
         if( ++m_nBkmkTabPos >= pMarkAccess->getAllMarksCount() )
             m_nBkmkTabPos = -1;
         else
-            pBookmark = (pMarkAccess->getAllMarksBegin() + m_nBkmkTabPos)->get();
+            pBookmark = pMarkAccess->getAllMarksBegin()[m_nBkmkTabPos];
     }
 
     decltype(m_aOutlineMarkPoss)::size_type nPos;

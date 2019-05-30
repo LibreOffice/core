@@ -1070,7 +1070,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 // #i81002#
                 bool bSavePos = false;
                 bool bSaveOtherPos = false;
-                const ::sw::mark::IMark* pBkmk = (pMarkAccess->getAllMarksBegin() + n)->get();
+                const ::sw::mark::IMark* pBkmk = pMarkAccess->getAllMarksBegin()[n];
 
                 if( DelContentType::CheckNoCntnt & nDelContentType )
                 {

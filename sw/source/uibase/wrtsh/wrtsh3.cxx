@@ -132,7 +132,7 @@ void SwWrtShell::GotoMark( const OUString& rName )
     IDocumentMarkAccess::const_iterator_t ppMark = getIDocumentMarkAccess()->findMark( rName );
     if (ppMark == getIDocumentMarkAccess()->getAllMarksEnd())
         return;
-    MoveBookMark( BOOKMARK_INDEX, ppMark->get() );
+    MoveBookMark( BOOKMARK_INDEX, *ppMark );
 }
 
 void SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark )
@@ -151,7 +151,7 @@ bool SwWrtShell::GoNextBookmark()
     bool bRet = MoveBookMark( BOOKMARK_NEXT );
     if ( !bRet )
     {
-        MoveBookMark( BOOKMARK_INDEX, getIDocumentMarkAccess()->getBookmarksBegin()->get() );
+        MoveBookMark( BOOKMARK_INDEX, *getIDocumentMarkAccess()->getBookmarksBegin() );
         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
     }
     else
@@ -172,7 +172,7 @@ bool SwWrtShell::GoPrevBookmark()
     bool bRet = MoveBookMark( BOOKMARK_PREV );
     if ( !bRet )
     {
-        MoveBookMark( BOOKMARK_INDEX, ( getIDocumentMarkAccess()->getBookmarksEnd() - 1 )->get() );
+        MoveBookMark( BOOKMARK_INDEX, *( getIDocumentMarkAccess()->getBookmarksEnd() - 1 ) );
         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::StartWrapped );
     }
     else
