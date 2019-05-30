@@ -244,9 +244,6 @@
     <glade-widget-class title="Checked Tree List" name="svxlo-SvxCheckListBox"
                         generic-name="Checked Tree List" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Glossary Tree List" name="swuilo-SwGlTreeListBox"
-                        generic-name="Glossary Tree List" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Sidebar Dial Control" name="svxlo-SidebarDialControl"
                         generic-name="Sidebar Dial Control" parent="GtkSpinner"
                         icon-name="widget-gtk-spinner"/>

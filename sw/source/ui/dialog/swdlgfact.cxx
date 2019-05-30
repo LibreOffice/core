@@ -211,7 +211,10 @@ short AbstractSwModalRedlineAcceptDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractGlossaryDlg_Impl);
+short AbstractGlossaryDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractFieldInputDlg_Impl::Execute()
 {
@@ -533,12 +536,12 @@ void AbstractSwModalRedlineAcceptDlg_Impl::AcceptAll( bool bAccept )
 
 OUString AbstractGlossaryDlg_Impl::GetCurrGrpName() const
 {
-    return pDlg->GetCurrGrpName();
+    return m_xDlg->GetCurrGrpName();
 }
 
 OUString AbstractGlossaryDlg_Impl::GetCurrShortName() const
 {
-    return pDlg->GetCurrShortName();
+    return m_xDlg->GetCurrShortName();
 }
 
 void AbstractFieldInputDlg_Impl::EndDialog(sal_Int32 n)
@@ -995,15 +998,14 @@ VclPtr<SfxAbstractApplyTabDialog> SwAbstractDialogFactory_Impl::CreateTemplateDi
                                                 SwWrtShell*         pActShell,
                                                 bool                bNew )
 {
-    return VclPtr<AbstractApplyTabController_Impl>::Create(std::make_unique<SwTemplateDlgController>(pParent, rBase, nRegion, sPage, pActShell, bNew));
+    return VclPtr<AbstractApplyTabController_Impl>::Create(std::make_unique<SwTemplateDlgController>(pParent, rBase, nRegion,
+                                                                                                     sPage, pActShell, bNew));
 }
 
-VclPtr<AbstractGlossaryDlg> SwAbstractDialogFactory_Impl::CreateGlossaryDlg(SfxViewFrame* pViewFrame,
-                                                SwGlossaryHdl* pGlosHdl,
-                                                SwWrtShell *pWrtShell)
+VclPtr<AbstractGlossaryDlg> SwAbstractDialogFactory_Impl::CreateGlossaryDlg(SfxViewFrame* pViewFrame, SwGlossaryHdl* pGlosHdl,
+                                                                            SwWrtShell *pWrtShell)
 {
-    VclPtr<SwGlossaryDlg> pDlg = VclPtr<SwGlossaryDlg>::Create(pViewFrame, pGlosHdl, pWrtShell);
-    return VclPtr<AbstractGlossaryDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractGlossaryDlg_Impl>::Create(std::make_unique<SwGlossaryDlg>(pViewFrame, pGlosHdl, pWrtShell));
 }
 
 VclPtr<AbstractFieldInputDlg> SwAbstractDialogFactory_Impl::CreateFieldInputDlg(weld::Widget *pParent,

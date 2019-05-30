@@ -21,7 +21,8 @@
 
 #include <vcl/edit.hxx>
 #include <vcl/treelistbox.hxx>
-#include <svx/stddlg.hxx>
+#include <vcl/customweld.hxx>
+#include <vcl/weld.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
@@ -33,78 +34,24 @@
 
 #include "actctrl.hxx"
 
+struct GroupUserData;
 class SwGlossaryHdl;
 class SwNewGlosNameDlg;
 class SwWrtShell;
 class SfxViewFrame;
 class PopupMenu;
 class Menu;
+class OneExampleFrame;
 
 const short RET_EDIT = 100;
 
-class SwGlTreeListBox : public SvTreeListBox
-{
-    const OUString    sReadonly;
-
-    SvTreeListEntry*  pDragEntry;
-
-    Link<SwGlTreeListBox*,void> m_aDeleteHdl;
-
-    virtual DragDropMode NotifyStartDrag( TransferDataContainer& rContainer,
-                                            SvTreeListEntry* ) override;
-    virtual bool         NotifyAcceptDrop( SvTreeListEntry* ) override;
-
-    virtual TriState     NotifyMoving(   SvTreeListEntry*  pTarget,
-                                    SvTreeListEntry*  pEntry,
-                                    SvTreeListEntry*& rpNewParent,
-                                    sal_uLong&        rNewChildPos
-                                ) override;
-    virtual TriState     NotifyCopying(  SvTreeListEntry*  pTarget,
-                                    SvTreeListEntry*  pEntry,
-                                    SvTreeListEntry*& rpNewParent,
-                                    sal_uLong&        rNewChildPos) override;
-
-    TriState NotifyCopyingOrMoving( SvTreeListEntry*  pTarget,
-                                    SvTreeListEntry*  pEntry,
-                                    bool              bIsMove);
-public:
-    SwGlTreeListBox(vcl::Window* pParent, WinBits nBits);
-
-    virtual void RequestHelp( const HelpEvent& rHEvt ) override;
-    virtual Size GetOptimalSize() const override;
-    void Clear();
-
-    virtual void ExpandedHdl() override;
-
-    virtual void KeyInput( const KeyEvent& rKEvt ) override;
-
-    void SetDeleteHdl( const Link<SwGlTreeListBox*,void>& rLink ) { m_aDeleteHdl = rLink; }
-};
-
-class SwOneExampleFrame;
-class SwGlossaryDlg : public SvxStandardDialog
+class SwGlossaryDlg : public SfxDialogController
 {
     friend class SwNewGlosNameDlg;
-    friend class SwGlTreeListBox;
-
-    VclPtr<CheckBox>       m_pInsertTipCB;
-    VclPtr<Edit>           m_pNameED;
-    VclPtr<FixedText>      m_pShortNameLbl;
-    TextFilter      m_aNoSpaceFilter;
-    VclPtr<Edit>           m_pShortNameEdit;
-    VclPtr<SwGlTreeListBox> m_pCategoryBox;
-    VclPtr<CheckBox>       m_pFileRelCB;
-    VclPtr<CheckBox>       m_pNetRelCB;
-    VclPtr<vcl::Window>    m_pExampleWIN;
-    VclPtr<PushButton>     m_pInsertBtn;
-    VclPtr<MenuButton>     m_pEditBtn;
-    VclPtr<PushButton>     m_pBibBtn;
-    VclPtr<PushButton>     m_pPathBtn;
 
     OUString const        m_sReadonlyPath;
 
     css::uno::Reference< css::text::XAutoTextContainer2 > m_xAutoText;
-    std::unique_ptr<SwOneExampleFrame>  m_pExampleFrame;
 
     SwGlossaryHdl*  m_pGlossaryHdl;
 
@@ -119,25 +66,42 @@ class SwGlossaryDlg : public SvxStandardDialog
 
     SwWrtShell*     m_pShell;
 
+    std::vector<std::unique_ptr<GroupUserData>> m_xGroupData;
+
+    std::unique_ptr<weld::CheckButton> m_xInsertTipCB;
+    std::unique_ptr<weld::Entry> m_xNameED;
+    std::unique_ptr<weld::Label> m_xShortNameLbl;
+    TextFilter      m_aNoSpaceFilter;
+    std::unique_ptr<weld::Entry> m_xShortNameEdit;
+    std::unique_ptr<weld::TreeView> m_xCategoryBox;
+    std::unique_ptr<weld::CheckButton> m_xFileRelCB;
+    std::unique_ptr<weld::CheckButton> m_xNetRelCB;
+    std::unique_ptr<weld::Button> m_xInsertBtn;
+    std::unique_ptr<weld::MenuButton> m_xEditBtn;
+    std::unique_ptr<weld::Button> m_xBibBtn;
+    std::unique_ptr<weld::Button> m_xPathBtn;
+    std::unique_ptr<OneExampleFrame> m_xExampleFrame;
+    std::unique_ptr<weld::CustomWeld> m_xExampleFrameWin;
+
     void EnableShortName(bool bOn = true);
     void ShowPreview();
 
-    DECL_LINK( NameModify, Edit&, void );
-    DECL_LINK( NameDoubleClick, SvTreeListBox*, bool );
-    DECL_LINK( GrpSelect, SvTreeListBox *, void );
-    DECL_LINK( MenuHdl, Menu *, bool );
-    DECL_LINK( EnableHdl, Menu *, bool );
-    DECL_LINK( BibHdl, Button *, void );
-    DECL_LINK( EditHdl, MenuButton *, void );
-    DECL_LINK( InsertHdl, Button *, void );
-    DECL_LINK( PathHdl, Button *, void );
-    DECL_LINK( CheckBoxHdl, Button*, void );
-    DECL_LINK( PreviewLoadedHdl, SwOneExampleFrame&, void );
-    DECL_LINK( DeleteHdl, SwGlTreeListBox*, void );
+    DECL_LINK( NameModify, weld::Entry&, void );
+    DECL_LINK( NameDoubleClick, weld::TreeView&, void );
+    DECL_LINK( GrpSelect, weld::TreeView&, void );
+    DECL_LINK( MenuHdl, const OString&, void );
+    DECL_LINK( EnableHdl, weld::ToggleButton&, void );
+    DECL_LINK( BibHdl, weld::Button&, void );
+    DECL_LINK( InsertHdl, weld::Button&, void );
+    DECL_LINK( PathHdl, weld::Button&, void );
+    DECL_LINK( CheckBoxHdl, weld::ToggleButton&, void );
+    DECL_LINK( PreviewLoadedHdl, OneExampleFrame&, void );
+    DECL_LINK( KeyInputHdl, const KeyEvent&, bool );
+    DECL_LINK( TextFilterHdl, OUString&, bool );
 
-    virtual void    Apply() override;
+    void            Apply();
     void            Init();
-    SvTreeListEntry*    DoesBlockExist(const OUString& sBlock, const OUString& rShort);
+    std::unique_ptr<weld::TreeIter> DoesBlockExist(const OUString& sBlock, const OUString& rShort);
     void            ShowAutoText(const OUString& rGroup, const OUString& rShortName);
     void            ResumeShowAutoText();
 
@@ -149,12 +113,12 @@ class SwGlossaryDlg : public SvxStandardDialog
     void            DeleteEntry();
 public:
     SwGlossaryDlg(SfxViewFrame const * pViewFrame, SwGlossaryHdl* pGlosHdl, SwWrtShell *pWrtShell);
+    virtual short run() override;
     virtual ~SwGlossaryDlg() override;
-    virtual void dispose() override;
     OUString GetCurrGrpName() const;
     OUString GetCurrShortName() const
     {
-        return m_pShortNameEdit->GetText();
+        return m_xShortNameEdit->get_text();
     }
     static OUString GetCurrGroup();
     static void     SetActGroup(const OUString& rNewGroup);
