@@ -12,6 +12,7 @@
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -226,6 +227,24 @@ DECLARE_RTFEXPORT_TEST(testTdf122455, "tdf122455.rtf")
     // 'Expected: 16; Actual  : 32', the font size from a list definition
     // leaked into the first run's character properties.
     CPPUNIT_ASSERT_EQUAL(16.0, getProperty<double>(getRun(getParagraph(1), 1), "CharHeight"));
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf125719_case_1, "tdf125719_case_1.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                         getProperty<float>(getRun(getParagraph(1), 1), "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                         getProperty<float>(getRun(getParagraph(3), 1), "CharWeight"));
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf125719_case_2, "tdf125719_case_2.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
+                         getProperty<float>(getRun(getParagraph(1), 1), "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
+                         getProperty<float>(getRun(getParagraph(3), 1), "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                         getProperty<float>(getRun(getParagraph(5), 1), "CharWeight"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTabs, "tabs.rtf")
