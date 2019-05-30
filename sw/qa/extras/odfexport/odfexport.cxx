@@ -159,6 +159,15 @@ DECLARE_ODFEXPORT_TEST(testUserFieldDecl, "user-field-decl.odt")
         assertXPath(pXmlDoc, "//style:header/text:user-field-decls/text:user-field-decl", 2);
 }
 
+DECLARE_ODFEXPORT_TEST(testUserFieldDeclFly, "user-field-decl-fly.odt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("styles.xml"))
+        // Without the accompanying fix in place, this test would have failed with 'Expected: 2;
+        // Actual: 1', i.e. the in-textframe field had no declaration (in the header), while the
+        // outside-textframe one had the declaration.
+        assertXPath(pXmlDoc, "//style:header/text:user-field-decls/text:user-field-decl", 2);
+}
+
 DECLARE_ODFEXPORT_TEST(testFramebackgrounds, "framebackgrounds.odt")
 {
    //Counting the Number of Frames and checking with the expected count

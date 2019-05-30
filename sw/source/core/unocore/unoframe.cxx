@@ -2268,6 +2268,18 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 aAny <<= awt::Size( aMM100Size.Width(), aMM100Size.Height() );
             }
         }
+        else if(pEntry->nWID == FN_UNO_PARENT_TEXT)
+        {
+            if (!m_xParentText.is())
+            {
+                const SwPosition* pContentAnchor = pFormat->GetAnchor().GetContentAnchor();
+                if (pContentAnchor)
+                {
+                    m_xParentText = sw::CreateParentXText(*pFormat->GetDoc(), *pContentAnchor);
+                }
+            }
+            aAny <<= m_xParentText;
+        }
         else
         {
             // standard UNO API read attributes

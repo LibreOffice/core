@@ -70,6 +70,7 @@ private:
     OUString                        m_sName;
 
     SwPaM*                          m_pCopySource;
+    css::uno::Reference<css::text::XText> m_xParentText;
 
 protected:
     css::uno::Reference< css::beans::XPropertySet > mxStyleData;
