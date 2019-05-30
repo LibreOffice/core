@@ -401,9 +401,14 @@ public:
     /// Maps to OOXML's ascii, cs or eastAsia.
     enum class RunType
     {
+        NONE,
         LOCH,
         HICH,
-        DBCH
+        DBCH,
+        LTRCH_RTLCH_1,
+        LTRCH_RTLCH_2,
+        RTLCH_LTRCH_1,
+        RTLCH_LTRCH_2
     };
 
     explicit RTFParserState(RTFDocumentImpl* pDocumentImpl);
@@ -475,8 +480,6 @@ public:
     sal_uInt16 getMonth() const { return m_nMonth; }
     void setYear(sal_uInt16 nYear) { m_nYear = nYear; }
     sal_uInt16 getYear() const { return m_nYear; }
-    void setIsRightToLeft(bool bIsRightToLeft) { m_bIsRightToLeft = bIsRightToLeft; }
-    bool getIsRightToLeft() const { return m_bIsRightToLeft; }
     void setRunType(RunType eRunType) { m_eRunType = eRunType; }
     RunType getRunType() const { return m_eRunType; }
     RTFFrame& getFrame() { return m_aFrame; }
@@ -578,8 +581,6 @@ private:
     RTFFrame m_aFrame;
 
     RunType m_eRunType;
-    /// ltrch or rtlch
-    bool m_bIsRightToLeft;
 
     // Info group.
     sal_Int16 m_nYear;
