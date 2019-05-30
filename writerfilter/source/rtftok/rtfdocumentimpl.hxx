@@ -326,13 +326,16 @@ public:
     /// Maps to OOXML's ascii, cs or eastAsia.
     enum class RunType
     {
+        NONE,
         LOCH,
         HICH,
-        DBCH
+        DBCH,
+        LTRCH_RTLCH_1,
+        LTRCH_RTLCH_2,
+        RTLCH_LTRCH_1,
+        RTLCH_LTRCH_2
     };
     RunType eRunType;
-    /// ltrch or rtlch
-    bool isRightToLeft;
 
     // Info group.
     sal_Int16 nYear;
