@@ -164,10 +164,22 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         case RTF_FS:
         case RTF_AFS:
-            nSprm = (m_aStates.top().getIsRightToLeft()
-                     || m_aStates.top().getRunType() == RTFParserState::RunType::HICH)
-                        ? NS_ooxml::LN_EG_RPrBase_szCs
-                        : NS_ooxml::LN_EG_RPrBase_sz;
+            switch (m_aStates.top().getRunType())
+            {
+                case RTFParserState::RunType::HICH:
+                case RTFParserState::RunType::RTLCH_LTRCH_1:
+                case RTFParserState::RunType::LTRCH_RTLCH_2:
+                case RTFParserState::RunType::DBCH:
+                    nSprm = NS_ooxml::LN_EG_RPrBase_szCs;
+                    break;
+                case RTFParserState::RunType::NONE:
+                case RTFParserState::RunType::LOCH:
+                case RTFParserState::RunType::LTRCH_RTLCH_1:
+                case RTFParserState::RunType::RTLCH_LTRCH_2:
+                default:
+                    nSprm = NS_ooxml::LN_EG_RPrBase_sz;
+                    break;
+            }
             break;
         case RTF_EXPNDTW:
             nSprm = NS_ooxml::LN_EG_RPrBase_spacing;
@@ -191,19 +203,23 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         case RTF_LANG:
         case RTF_ALANG:
-            if (m_aStates.top().getIsRightToLeft()
-                || m_aStates.top().getRunType() == RTFParserState::RunType::HICH)
+            switch (m_aStates.top().getRunType())
             {
-                nSprm = NS_ooxml::LN_CT_Language_bidi;
-            }
-            else if (m_aStates.top().getRunType() == RTFParserState::RunType::DBCH)
-            {
-                nSprm = NS_ooxml::LN_CT_Language_eastAsia;
-            }
-            else
-            {
-                assert(m_aStates.top().getRunType() == RTFParserState::RunType::LOCH);
-                nSprm = NS_ooxml::LN_CT_Language_val;
+                case RTFParserState::RunType::HICH:
+                case RTFParserState::RunType::RTLCH_LTRCH_1:
+                case RTFParserState::RunType::LTRCH_RTLCH_2:
+                    nSprm = NS_ooxml::LN_CT_Language_bidi;
+                    break;
+                case RTFParserState::RunType::DBCH:
+                    nSprm = NS_ooxml::LN_CT_Language_eastAsia;
+                    break;
+                case RTFParserState::RunType::NONE:
+                case RTFParserState::RunType::LOCH:
+                case RTFParserState::RunType::LTRCH_RTLCH_1:
+                case RTFParserState::RunType::RTLCH_LTRCH_2:
+                default:
+                    nSprm = NS_ooxml::LN_CT_Language_val;
+                    break;
             }
             break;
         case RTF_LANGFE: // this one is always CJK apparently
@@ -336,20 +352,25 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         case RTF_F:
         case RTF_AF:
-            if (m_aStates.top().getIsRightToLeft()
-                || m_aStates.top().getRunType() == RTFParserState::RunType::HICH)
+            switch (m_aStates.top().getRunType())
             {
-                nSprm = NS_ooxml::LN_CT_Fonts_cs;
+                case RTFParserState::RunType::HICH:
+                case RTFParserState::RunType::RTLCH_LTRCH_1:
+                case RTFParserState::RunType::LTRCH_RTLCH_2:
+                    nSprm = NS_ooxml::LN_CT_Fonts_cs;
+                    break;
+                case RTFParserState::RunType::DBCH:
+                    nSprm = NS_ooxml::LN_CT_Fonts_eastAsia;
+                    break;
+                case RTFParserState::RunType::NONE:
+                case RTFParserState::RunType::LOCH:
+                case RTFParserState::RunType::LTRCH_RTLCH_1:
+                case RTFParserState::RunType::RTLCH_LTRCH_2:
+                default:
+                    nSprm = NS_ooxml::LN_CT_Fonts_ascii;
+                    break;
             }
-            else if (m_aStates.top().getRunType() == RTFParserState::RunType::DBCH)
-            {
-                nSprm = NS_ooxml::LN_CT_Fonts_eastAsia;
-            }
-            else
-            {
-                assert(m_aStates.top().getRunType() == RTFParserState::RunType::LOCH);
-                nSprm = NS_ooxml::LN_CT_Fonts_ascii;
-            }
+
             if (m_aStates.top().getDestination() == Destination::FONTTABLE
                 || m_aStates.top().getDestination() == Destination::FONTENTRY)
             {
