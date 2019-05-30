@@ -282,7 +282,7 @@ void TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
         TBCBSpecific* pSpecificInfo = dynamic_cast< TBCBSpecific* >( controlSpecificInfo.get() );
         if ( pSpecificInfo )
         {
-            // if we have a icon then lets  set it for the command
+            // if we have an icon then lets set it for the command
             OUString sCommand;
             for (auto const& property : props)
             {
