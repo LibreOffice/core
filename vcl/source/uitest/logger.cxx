@@ -540,12 +540,12 @@ UITestLogger& UITestLogger::getInstance()
     ImplSVData* const pSVData = ImplGetSVData();
     assert(pSVData);
 
-    if (!pSVData->maWinData.m_pUITestLogger)
+    if (!pSVData->maFrameData.m_pUITestLogger)
     {
-        pSVData->maWinData.m_pUITestLogger.reset(new UITestLogger);
+        pSVData->maFrameData.m_pUITestLogger.reset(new UITestLogger);
     }
 
-    return *pSVData->maWinData.m_pUITestLogger;
+    return *pSVData->maFrameData.m_pUITestLogger;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

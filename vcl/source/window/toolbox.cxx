@@ -4336,9 +4336,9 @@ static bool ImplCloseLastPopup( vcl::Window const *pParent )
     // close last popup toolbox (see also:
     // ImplHandleMouseFloatMode(...) in winproc.cxx )
 
-    if( ImplGetSVData()->maWinData.mpFirstFloat )
+    if (ImplGetSVData()->mpWinData->mpFirstFloat)
     {
-        FloatingWindow* pLastLevelFloat = ImplGetSVData()->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
+        FloatingWindow* pLastLevelFloat = ImplGetSVData()->mpWinData->mpFirstFloat->ImplFindLastLevelFloat();
         // only close the floater if it is not our direct parent, which would kill ourself
         if( pLastLevelFloat && pLastLevelFloat != pParent )
         {
