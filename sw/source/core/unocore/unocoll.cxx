@@ -1601,7 +1601,7 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
             {
                 uno::Any aRet;
                 const uno::Reference< text::XTextContent > xRef =
-                    SwXBookmark::CreateXBookmark(*GetDoc(), ppMark->get());
+                    SwXBookmark::CreateXBookmark(*GetDoc(), *ppMark);
                 aRet <<= xRef;
                 return aRet;
             }
@@ -1624,7 +1624,7 @@ uno::Any SwXBookmarks::getByName(const OUString& rName)
 
     uno::Any aRet;
     const uno::Reference< text::XTextContent > xRef =
-        SwXBookmark::CreateXBookmark(*GetDoc(), ppBkmk->get());
+        SwXBookmark::CreateXBookmark(*GetDoc(), *ppBkmk);
     aRet <<= xRef;
     return aRet;
 }

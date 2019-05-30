@@ -502,7 +502,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                 ppMark != pMarkAccess->getBookmarksEnd();
                 ++ppMark)
             {
-                const ::sw::mark::IMark* pBkmk = ppMark->get();
+                const ::sw::mark::IMark* pBkmk = *ppMark;
                 if(IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(*pBkmk))
                 {
                     bool isSubstring = MatchSubstring(pBkmk->GetName(), filterString);

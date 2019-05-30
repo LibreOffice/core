@@ -141,9 +141,9 @@ namespace
         return bFound;
     }
 
-    bool lcl_IsUiVisibleBookmark(const IDocumentMarkAccess::pMark_t& rpMark)
+    bool lcl_IsUiVisibleBookmark(const ::sw::mark::IMark* pMark)
     {
-        return IDocumentMarkAccess::GetType(*rpMark) == IDocumentMarkAccess::MarkType::BOOKMARK;
+        return IDocumentMarkAccess::GetType(*pMark) == IDocumentMarkAccess::MarkType::BOOKMARK;
     }
 
     size_t lcl_InsertURLFieldContent(
@@ -649,7 +649,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             {
                 if(lcl_IsUiVisibleBookmark(*ppBookmark))
                 {
-                    const OUString& rBkmName = ppBookmark->get()->GetName();
+                    const OUString& rBkmName = (*ppBookmark)->GetName();
                     //nYPos from 0 -> text::Bookmarks will be sorted alphabetically
                     std::unique_ptr<SwContent> pCnt(new SwContent(this, rBkmName, 0));
                     m_pMember->insert(std::move(pCnt));

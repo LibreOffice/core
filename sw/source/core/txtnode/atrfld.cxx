@@ -661,7 +661,7 @@ SwTextAnnotationField::~SwTextAnnotationField()
     IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
     IDocumentMarkAccess::const_iterator_t pMark = pMarksAccess->findAnnotationMark( pPostItField->GetName() );
     return pMark != pMarksAccess->getAnnotationMarksEnd()
-           ? pMark->get()
+           ? *pMark
            : nullptr;
 }
 
