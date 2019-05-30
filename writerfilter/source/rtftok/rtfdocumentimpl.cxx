@@ -1828,17 +1828,41 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
     {
         case RTF_B:
         case RTF_AB:
-            nSprm = (m_aStates.top().isRightToLeft
-                     || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
-                        ? NS_ooxml::LN_EG_RPrBase_bCs
-                        : NS_ooxml::LN_EG_RPrBase_b;
+            switch (m_aStates.top().eRunType)
+            {
+                case RTFParserState::RunType::HICH:
+                case RTFParserState::RunType::RTLCH_LTRCH_1:
+                case RTFParserState::RunType::LTRCH_RTLCH_2:
+                case RTFParserState::RunType::DBCH:
+                    nSprm = NS_ooxml::LN_EG_RPrBase_bCs;
+                    break;
+                case RTFParserState::RunType::NONE:
+                case RTFParserState::RunType::LOCH:
+                case RTFParserState::RunType::LTRCH_RTLCH_1:
+                case RTFParserState::RunType::RTLCH_LTRCH_2:
+                default:
+                    nSprm = NS_ooxml::LN_EG_RPrBase_b;
+                    break;
+            }
             break;
         case RTF_I:
         case RTF_AI:
-            nSprm = (m_aStates.top().isRightToLeft
-                     || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
-                        ? NS_ooxml::LN_EG_RPrBase_iCs
-                        : NS_ooxml::LN_EG_RPrBase_i;
+            switch (m_aStates.top().eRunType)
+            {
+                case RTFParserState::RunType::HICH:
+                case RTFParserState::RunType::RTLCH_LTRCH_1:
+                case RTFParserState::RunType::LTRCH_RTLCH_2:
+                case RTFParserState::RunType::DBCH:
+                    nSprm = NS_ooxml::LN_EG_RPrBase_iCs;
+                    break;
+                case RTFParserState::RunType::NONE:
+                case RTFParserState::RunType::LOCH:
+                case RTFParserState::RunType::LTRCH_RTLCH_1:
+                case RTFParserState::RunType::RTLCH_LTRCH_2:
+                default:
+                    nSprm = NS_ooxml::LN_EG_RPrBase_i;
+                    break;
+            }
             break;
         case RTF_OUTL:
             nSprm = NS_ooxml::LN_EG_RPrBase_outline;
@@ -1927,7 +1951,11 @@ RTFError RTFDocumentImpl::pushState()
     else
     {
         // fdo#85812 group resets run type of _current_ and new state (but not RTL)
-        m_aStates.top().eRunType = RTFParserState::RunType::LOCH;
+        if (m_aStates.top().eRunType != RTFParserState::RunType::LTRCH_RTLCH_2
+            && m_aStates.top().eRunType != RTFParserState::RunType::RTLCH_LTRCH_2)
+        {
+            m_aStates.top().eRunType = RTFParserState::RunType::NONE;
+        }
 
         if (m_aStates.top().eDestination == Destination::MR)
             lcl_DestinationToMath(m_aStates.top().pDestinationText, m_aMathBuffer, m_bMathNor);
@@ -3497,8 +3525,7 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
     , nListLevelNum(0)
     , bLevelNumbersValid(true)
     , aFrame(this)
-    , eRunType(RunType::LOCH)
-    , isRightToLeft(false)
+    , eRunType(RunType::NONE)
     , nYear(0)
     , nMonth(0)
     , nDay(0)
