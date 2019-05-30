@@ -788,7 +788,8 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             const sal_Int32 nIncY = nDir==XML_fromT ? 1 : (nDir==XML_fromB ? -1 : 0);
 
             sal_Int32 nCount = rShape->getChildren().size();
-            double fSpace = 0.3;
+
+            awt::Size aSpaceSize;
 
             // Find out which constraint is relevant for which (internal) name.
             LayoutPropertyMap aProperties;
@@ -800,17 +801,25 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 LayoutProperty& rProperty = aProperties[rConstraint.msForName];
                 if (rConstraint.mnType == XML_w)
                     rProperty[XML_w] = rShape->getSize().Width * rConstraint.mfFactor;
+                if (rConstraint.mnType == XML_h)
+                    rProperty[XML_h] = rShape->getSize().Height * rConstraint.mfFactor;
 
                 // TODO: get values from differently named constraints as well
-                if (rConstraint.msForName == "sibTrans" && rConstraint.mnType == XML_w)
-                    fSpace = rConstraint.mfFactor;
+                if (rConstraint.msForName == "sp" || rConstraint.msForName == "space" || rConstraint.msForName == "sibTrans")
+                {
+                    if (rConstraint.mnType == XML_w)
+                        aSpaceSize.Width = rShape->getSize().Width * rConstraint.mfFactor;
+                    if (rConstraint.mnType == XML_h)
+                        aSpaceSize.Height = rShape->getSize().Height * rConstraint.mfFactor;
+                }
             }
 
+            // first approximation of children size
             awt::Size aChildSize = rShape->getSize();
             if (nDir == XML_fromL || nDir == XML_fromR)
-                aChildSize.Width /= (nCount + (nCount-1)*fSpace);
+                aChildSize.Width /= nCount;
             else if (nDir == XML_fromT || nDir == XML_fromB)
-                aChildSize.Height /= (nCount + (nCount-1)*fSpace);
+                aChildSize.Height /= nCount;
 
             awt::Point aCurrPos(0, 0);
             if (nIncX == -1)
@@ -820,51 +829,58 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
             // See if children requested more than 100% space in total: scale
             // down in that case.
-            sal_Int32 nTotalWidth = 0;
-            bool bSpaceFromConstraints = false;
+            awt::Size aTotalSize;
             for (auto & aCurrShape : rShape->getChildren())
             {
-                oox::OptValue<sal_Int32> oWidth
-                    = findProperty(aProperties, aCurrShape->getInternalName(), XML_w);
-
+                oox::OptValue<sal_Int32> oWidth = findProperty(aProperties, aCurrShape->getInternalName(), XML_w);
+                oox::OptValue<sal_Int32> oHeight = findProperty(aProperties, aCurrShape->getInternalName(), XML_h);
                 awt::Size aSize = aChildSize;
                 if (oWidth.has())
-                {
                     aSize.Width = oWidth.get();
-                    bSpaceFromConstraints = true;
-                }
-                if (nDir == XML_fromL || nDir == XML_fromR)
-                    nTotalWidth += aSize.Width;
+                if (oHeight.has())
+                    aSize.Height = oHeight.get();
+                aTotalSize.Width += aSize.Width;
+                aTotalSize.Height += aSize.Height;
             }
+
+            aTotalSize.Width += (nCount-1) * aSpaceSize.Width;
+            aTotalSize.Height += (nCount-1) * aSpaceSize.Height;
 
             double fWidthScale = 1.0;
-            if (nTotalWidth > rShape->getSize().Width && nTotalWidth)
-            {
-                fWidthScale = rShape->getSize().Width;
-                fWidthScale /= nTotalWidth;
-            }
-
-            // Don't add automatic space if we take space from constraints.
-            if (bSpaceFromConstraints)
-                fSpace = 0;
+            double fHeightScale = 1.0;
+            if (nIncX && aTotalSize.Width > rShape->getSize().Width)
+                fWidthScale = static_cast<double>(rShape->getSize().Width) / aTotalSize.Width;
+            if (nIncY && aTotalSize.Height > rShape->getSize().Height)
+                fHeightScale = static_cast<double>(rShape->getSize().Height) / aTotalSize.Height;
+            aSpaceSize.Width *= fWidthScale;
+            aSpaceSize.Height *= fHeightScale;
 
             for (auto& aCurrShape : rShape->getChildren())
             {
                 // Extract properties relevant for this shape from constraints.
-                oox::OptValue<sal_Int32> oWidth
-                    = findProperty(aProperties, aCurrShape->getInternalName(), XML_w);
-
-                aCurrShape->setPosition(aCurrPos);
+                oox::OptValue<sal_Int32> oWidth = findProperty(aProperties, aCurrShape->getInternalName(), XML_w);
+                oox::OptValue<sal_Int32> oHeight = findProperty(aProperties, aCurrShape->getInternalName(), XML_h);
 
                 awt::Size aSize = aChildSize;
                 if (oWidth.has())
                     aSize.Width = oWidth.get();
+                if (oHeight.has())
+                    aSize.Height = oHeight.get();
                 aSize.Width *= fWidthScale;
+                aSize.Height *= fHeightScale;
                 aCurrShape->setSize(aSize);
-
                 aCurrShape->setChildSize(aSize);
-                aCurrPos.X += nIncX * (aSize.Width + fSpace*aSize.Width);
-                aCurrPos.Y += nIncY * (aChildSize.Height + fSpace*aChildSize.Height);
+
+                // center in the other axis - probably some parameter controls it
+                if (nIncX)
+                    aCurrPos.Y = (rShape->getSize().Height - aSize.Height) / 2;
+                if (nIncY)
+                    aCurrPos.X = (rShape->getSize().Width - aSize.Width) / 2;
+
+                aCurrShape->setPosition(aCurrPos);
+
+                aCurrPos.X += nIncX * (aSize.Width + aSpaceSize.Width);
+                aCurrPos.Y += nIncY * (aSize.Height + aSpaceSize.Height);
             }
             break;
         }
