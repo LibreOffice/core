@@ -33,6 +33,7 @@
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/lok.hxx>
+#include <sfx2/viewfrm.hxx>
 
 namespace chart
 {
@@ -168,12 +169,18 @@ void CreationWizardUnoDlg::createDialogOnDemand()
                     m_xParentWindow = xFrame->getContainerWindow();
             }
         }
+
         if( m_xParentWindow.is() )
         {
             VCLXWindow* pImplementation = VCLXWindow::GetImplementation(m_xParentWindow);
             if (pImplementation)
                 pParent = pImplementation->GetWindow().get();
         }
+        else if (comphelper::LibreOfficeKit::isActive())
+        {
+            pParent = &SfxViewFrame::Current()->GetWindow();
+        }
+
         uno::Reference< XComponent > xComp( this );
         if( m_xChartModel.is() )
             m_pDialog = VclPtr<CreationWizard>::Create( pParent, m_xChartModel, m_xCC );
