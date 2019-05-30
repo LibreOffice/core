@@ -471,8 +471,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().nCurrentEncoding = getEncoding(getFontIndex(m_nDefaultFontIndex));
             m_aStates.top().aCharacterAttributes = getDefaultState().aCharacterAttributes;
             m_aStates.top().nCurrentCharacterStyleIndex = -1;
-            m_aStates.top().isRightToLeft = false;
-            m_aStates.top().eRunType = RTFParserState::RunType::LOCH;
+            m_aStates.top().eRunType = RTFParserState::RunType::NONE;
         }
         break;
         case RTF_PARD:
@@ -561,6 +560,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_RTLSECT:
         {
             auto pValue = new RTFValue(nKeyword == RTF_LTRSECT ? 0 : 1);
+            m_aStates.top().eRunType = RTFParserState::RunType::NONE;
             m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_EG_SectPrContents_textDirection,
                                                 pValue);
         }
@@ -570,19 +570,28 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         {
             auto pValue = new RTFValue(nKeyword == RTF_LTRPAR ? 0 : 1);
             m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_bidi, pValue);
+            m_aStates.top().eRunType = RTFParserState::RunType::NONE;
         }
         break;
         case RTF_LTRROW:
         case RTF_RTLROW:
+            m_aStates.top().eRunType = RTFParserState::RunType::NONE;
             m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblPrBase_bidiVisual,
                                                new RTFValue(int(nKeyword == RTF_RTLROW)));
             break;
         case RTF_LTRCH:
             // dmapper does not support this.
-            m_aStates.top().isRightToLeft = false;
+            if (m_aStates.top().eRunType == RTFParserState::RunType::RTLCH_LTRCH_1)
+                m_aStates.top().eRunType = RTFParserState::RunType::RTLCH_LTRCH_2;
+            else
+                m_aStates.top().eRunType = RTFParserState::RunType::LTRCH_RTLCH_1;
             break;
         case RTF_RTLCH:
-            m_aStates.top().isRightToLeft = true;
+            if (m_aStates.top().eRunType == RTFParserState::RunType::LTRCH_RTLCH_1)
+                m_aStates.top().eRunType = RTFParserState::RunType::LTRCH_RTLCH_2;
+            else
+                m_aStates.top().eRunType = RTFParserState::RunType::RTLCH_LTRCH_1;
+
             if (m_aDefaultState.nCurrentEncoding == RTL_TEXTENCODING_MS_1255)
                 m_aStates.top().nCurrentEncoding = m_aDefaultState.nCurrentEncoding;
             break;
