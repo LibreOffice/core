@@ -21,7 +21,7 @@
  <statusbar:statusbaritem xlink:href=".uno:PageStatus" statusbar:align="left" statusbar:width="124"/>
  <statusbar:statusbaritem xlink:href=".uno:Context" statusbar:align="left" statusbar:autosize="true" statusbar:mandatory="false" statusbar:width="184"/>
  <statusbar:statusbaritem xlink:href=".uno:LayoutStatus" statusbar:align="left" statusbar:autosize="true" statusbar:mandatory="false" statusbar:width="54"/>
- <statusbar:statusbaritem xlink:href=".uno:Size" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="200"/>
+ <statusbar:statusbaritem xlink:href=".uno:Size" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="400"/>
  <statusbar:statusbaritem xlink:href=".uno:ModifiedStatus" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="9"/>
  <statusbar:statusbaritem xlink:href=".uno:Signature" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="16"/>
  <statusbar:statusbaritem xlink:href=".uno:LanguageStatus" statusbar:align="center" statusbar:autosize="true" statusbar:width="100"/>
