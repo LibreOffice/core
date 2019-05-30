@@ -31,6 +31,7 @@
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <sal/log.hxx>
 
 using namespace rtl;
 #include <comphelper/string.hxx>
@@ -66,6 +67,7 @@ const std::type_index getTypeFromMysqlType(enum_field_types type)
         case MYSQL_TYPE_SHORT:
             return std::type_index(typeid(sal_Int16));
         case MYSQL_TYPE_LONG:
+        case MYSQL_TYPE_INT24:
             return std::type_index(typeid(sal_Int32));
         case MYSQL_TYPE_LONGLONG:
             return std::type_index(typeid(sal_Int64));
@@ -88,7 +90,6 @@ const std::type_index getTypeFromMysqlType(enum_field_types type)
         case MYSQL_TYPE_BLOB:
         case MYSQL_TYPE_YEAR:
         case MYSQL_TYPE_BIT:
-        case MYSQL_TYPE_INT24:
         case MYSQL_TYPE_SET:
         case MYSQL_TYPE_ENUM:
         case MYSQL_TYPE_GEOMETRY:
@@ -268,6 +269,7 @@ ORowSetValue OPreparedResultSet::getRowSetValue(sal_Int32 nColumnIndex)
         case MYSQL_TYPE_SHORT:
             return getShort(nColumnIndex);
         case MYSQL_TYPE_LONG:
+        case MYSQL_TYPE_INT24:
             return getInt(nColumnIndex);
         case MYSQL_TYPE_LONGLONG:
             return getLong(nColumnIndex);
@@ -287,9 +289,10 @@ ORowSetValue OPreparedResultSet::getRowSetValue(sal_Int32 nColumnIndex)
         case MYSQL_TYPE_NEWDECIMAL:
             return getString(nColumnIndex);
         default:
-            mysqlc_sdbc_driver::throwFeatureNotImplementedException(
-                "OPreparedResultSet::getRowSetValue", *this);
-            return ORowSetValue();
+            SAL_WARN("connectivity.mysqlc", "OPreparedResultSet::getRowSetValue: unknown type: "
+                                                << m_aFields[nColumnIndex - 1].type);
+            throw SQLException("Unknown column type when fetching result", *this, OUString(), 1,
+                               Any());
     }
 }
 
