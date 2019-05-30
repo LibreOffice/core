@@ -304,6 +304,8 @@ OUString AboutDialog::GetVersionString()
 
 #ifdef _WIN64
     sVersion += " (x64)";
+#elif defined(_WIN32)
+    sVersion += " (x86)";
 #endif
 
     OUString sBuildId = GetBuildId();
