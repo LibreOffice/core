@@ -473,8 +473,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().setCurrentEncoding(getEncoding(getFontIndex(m_nDefaultFontIndex)));
             m_aStates.top().getCharacterAttributes() = getDefaultState().getCharacterAttributes();
             m_aStates.top().setCurrentCharacterStyleIndex(-1);
-            m_aStates.top().setIsRightToLeft(false);
-            m_aStates.top().setRunType(RTFParserState::RunType::LOCH);
+            m_aStates.top().setRunType(RTFParserState::RunType::NONE);
         }
         break;
         case RTF_PARD:
@@ -583,10 +582,17 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         case RTF_LTRCH:
             // dmapper does not support this.
-            m_aStates.top().setIsRightToLeft(false);
+            if (m_aStates.top().getRunType() == RTFParserState::RunType::RTLCH_LTRCH_1)
+                m_aStates.top().setRunType(RTFParserState::RunType::RTLCH_LTRCH_2);
+            else
+                m_aStates.top().setRunType(RTFParserState::RunType::LTRCH_RTLCH_1);
             break;
         case RTF_RTLCH:
-            m_aStates.top().setIsRightToLeft(true);
+            if (m_aStates.top().getRunType() == RTFParserState::RunType::LTRCH_RTLCH_1)
+                m_aStates.top().setRunType(RTFParserState::RunType::LTRCH_RTLCH_2);
+            else
+                m_aStates.top().setRunType(RTFParserState::RunType::RTLCH_LTRCH_1);
+
             if (m_aDefaultState.getCurrentEncoding() == RTL_TEXTENCODING_MS_1255)
                 m_aStates.top().setCurrentEncoding(m_aDefaultState.getCurrentEncoding());
             break;
