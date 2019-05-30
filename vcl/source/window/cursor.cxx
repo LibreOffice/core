@@ -46,7 +46,12 @@ struct ImplCursorData
 static tools::Rectangle ImplCursorInvert(vcl::RenderContext* pRenderContext, ImplCursorData const * pData)
 {
     tools::Rectangle aPaintRect;
-    bool    bMapMode = pRenderContext->IsMapModeEnabled();
+
+    vcl::Window* pWindow  = pData->mpWindow;
+    if (!pWindow || pWindow->IsDisposed())
+        return aPaintRect;
+
+    bool bMapMode = pRenderContext->IsMapModeEnabled();
     pRenderContext->EnableMapMode( false );
     InvertFlags nInvertStyle;
     if ( pData->mnStyle & CURSOR_SHADOW )
