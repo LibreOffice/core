@@ -140,6 +140,7 @@ bool SidebarDockingWindow::EventNotify(NotifyEvent& rEvent)
             case KEY_DELETE:
             case KEY_INSERT:
             case KEY_RETURN:
+            case KEY_ESCAPE:
             {
                 return true;
             }
