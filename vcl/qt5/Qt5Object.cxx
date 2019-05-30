@@ -29,13 +29,15 @@
 Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     : m_pParent(pParent)
     , m_pQWidget(nullptr)
-    , m_pQWindow(nullptr)
 {
     if (!m_pParent || !pParent->GetQWidget())
         return;
 
-    m_pQWindow = new QWindow;
-    m_pQWidget = QWidget::createWindowContainer(m_pQWindow, pParent->GetQWidget());
+    m_pQWidget = new QWidget(pParent->GetQWidget());
+    // is there a better way to get a transparent widget?
+    m_pQWidget->setAttribute(Qt::WA_NoSystemBackground);
+    m_pQWidget->setAttribute(Qt::WA_OpaquePaintEvent);
+    m_pQWidget->setWindowOpacity(0.0);
 
     if (bShow)
         m_pQWidget->show();
@@ -51,7 +53,7 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     if (!bWayland)
     {
         m_aSystemData.pPlatformName = "xcb";
-        m_aSystemData.aWindow = m_pQWindow->winId(); // ID of the embedded window
+        m_aSystemData.aWindow = m_pQWidget->winId(); // ID of the embedded window
     }
     else
     {

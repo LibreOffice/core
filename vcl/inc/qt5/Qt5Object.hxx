@@ -27,22 +27,20 @@
 
 class Qt5Frame;
 class QWidget;
-class QWindow;
 
 class Qt5Object : public QObject, public SalObject
 {
     Q_OBJECT
 
-    friend class Qt5OpenGLContext;
-
     SystemEnvData m_aSystemData;
     Qt5Frame* m_pParent;
     QWidget* m_pQWidget; // main widget, container
-    QWindow* m_pQWindow; // contained window, used for opengl rendering
     QRegion m_pRegion;
 
 public:
-    Qt5Object(Qt5Frame* pParent, bool bShow);
+    explicit Qt5Object(Qt5Frame* pParent, bool bShow);
+
+    QWidget* GetQWidget() const { return m_pQWidget; }
 
     virtual void ResetClipRegion() override;
     virtual void BeginSetClipRegion(sal_uInt32 nRects) override;

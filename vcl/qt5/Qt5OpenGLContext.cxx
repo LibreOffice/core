@@ -29,6 +29,7 @@
 
 #include <QtGui/QOpenGLContext>
 #include <QtGui/QWindow>
+#include <QtWidgets/QWidget>
 
 bool Qt5OpenGLContext::g_bAnyCurrent = false;
 
@@ -147,5 +148,7 @@ void Qt5OpenGLContext::initWindow()
         InitChildWindow(m_pChildWindow.get());
     }
 
-    m_pWindow = static_cast<Qt5Object*>(m_pChildWindow->ImplGetWindowImpl()->mpSysObj)->m_pQWindow;
+    m_pWindow = static_cast<Qt5Object*>(m_pChildWindow->ImplGetWindowImpl()->mpSysObj)
+                    ->GetQWidget()
+                    ->windowHandle();
 }
