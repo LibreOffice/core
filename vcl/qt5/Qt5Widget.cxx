@@ -120,7 +120,8 @@ void Qt5Widget::resizeEvent(QResizeEvent* pEvent)
     m_rFrame.CallCallback(SalEvent::Resize, nullptr);
 }
 
-void Qt5Widget::handleMouseButtonEvent(QMouseEvent* pEvent, bool bReleased)
+void Qt5Widget::handleMouseButtonEvent(const Qt5Frame& rFrame, QMouseEvent* pEvent,
+                                       const ButtonKeyState eState)
 {
     SalMouseEvent aEvent;
     switch (pEvent->button())
@@ -144,16 +145,19 @@ void Qt5Widget::handleMouseButtonEvent(QMouseEvent* pEvent, bool bReleased)
     aEvent.mnCode = GetKeyModCode(pEvent->modifiers()) | GetMouseModCode(pEvent->buttons());
 
     SalEvent nEventType;
-    if (bReleased)
-        nEventType = SalEvent::MouseButtonUp;
-    else
+    if (eState == ButtonKeyState::Pressed)
         nEventType = SalEvent::MouseButtonDown;
-    m_rFrame.CallCallback(nEventType, &aEvent);
+    else
+        nEventType = SalEvent::MouseButtonUp;
+    rFrame.CallCallback(nEventType, &aEvent);
 }
 
-void Qt5Widget::mousePressEvent(QMouseEvent* pEvent) { handleMouseButtonEvent(pEvent, false); }
+void Qt5Widget::mousePressEvent(QMouseEvent* pEvent) { handleMousePressEvent(m_rFrame, pEvent); }
 
-void Qt5Widget::mouseReleaseEvent(QMouseEvent* pEvent) { handleMouseButtonEvent(pEvent, true); }
+void Qt5Widget::mouseReleaseEvent(QMouseEvent* pEvent)
+{
+    handleMouseReleaseEvent(m_rFrame, pEvent);
+}
 
 void Qt5Widget::mouseMoveEvent(QMouseEvent* pEvent)
 {
@@ -405,7 +409,7 @@ static sal_uInt16 GetKeyCode(int keyval, Qt::KeyboardModifiers modifiers)
     return nCode;
 }
 
-void Qt5Widget::commitText(const QString& aText) const
+void Qt5Widget::commitText(Qt5Frame& rFrame, const QString& aText)
 {
     SalExtTextInputEvent aInputEvent;
     aInputEvent.mpTextAttr = nullptr;
@@ -414,19 +418,21 @@ void Qt5Widget::commitText(const QString& aText) const
     aInputEvent.mnCursorPos = aInputEvent.maText.getLength();
 
     SolarMutexGuard aGuard;
-    vcl::DeletionListener aDel(&m_rFrame);
-    m_rFrame.CallCallback(SalEvent::ExtTextInput, &aInputEvent);
+    vcl::DeletionListener aDel(&rFrame);
+    rFrame.CallCallback(SalEvent::ExtTextInput, &aInputEvent);
     if (!aDel.isDeleted())
-        m_rFrame.CallCallback(SalEvent::EndExtTextInput, nullptr);
+        rFrame.CallCallback(SalEvent::EndExtTextInput, nullptr);
 }
 
-bool Qt5Widget::handleKeyEvent(QKeyEvent* pEvent, bool bDown)
+bool Qt5Widget::handleKeyEvent(Qt5Frame& rFrame, const QWidget& rWidget, QKeyEvent* pEvent,
+                               const ButtonKeyState eState)
 {
     sal_uInt16 nCode = GetKeyCode(pEvent->key(), pEvent->modifiers());
-    if (bDown && nCode == 0 && !pEvent->text().isEmpty()
-        && testAttribute(Qt::WA_InputMethodEnabled))
+    if (eState == ButtonKeyState::Pressed && nCode == 0 && !pEvent->text().isEmpty()
+        && rWidget.testAttribute(Qt::WA_InputMethodEnabled))
     {
-        commitText(pEvent->text());
+        commitText(rFrame, pEvent->text());
+        pEvent->accept();
         return true;
     }
 
@@ -439,14 +445,16 @@ bool Qt5Widget::handleKeyEvent(QKeyEvent* pEvent, bool bDown)
     QGuiApplication::inputMethod()->update(Qt::ImCursorRectangle);
 
     bool bStopProcessingKey;
-    if (bDown)
-        bStopProcessingKey = m_rFrame.CallCallback(SalEvent::KeyInput, &aEvent);
+    if (eState == ButtonKeyState::Pressed)
+        bStopProcessingKey = rFrame.CallCallback(SalEvent::KeyInput, &aEvent);
     else
-        bStopProcessingKey = m_rFrame.CallCallback(SalEvent::KeyUp, &aEvent);
+        bStopProcessingKey = rFrame.CallCallback(SalEvent::KeyUp, &aEvent);
+    if (bStopProcessingKey)
+        pEvent->accept();
     return bStopProcessingKey;
 }
 
-bool Qt5Widget::event(QEvent* pEvent)
+bool Qt5Widget::handleEvent(Qt5Frame& rFrame, const QWidget& rWidget, QEvent* pEvent)
 {
     if (pEvent->type() == QEvent::ShortcutOverride)
     {
@@ -459,17 +467,22 @@ bool Qt5Widget::event(QEvent* pEvent)
         // and if it's handled - disable the shortcut, it should have been activated.
         // Don't process keyPressEvent generated after disabling shortcut since it was handled here.
         // If event is not handled, don't accept it and let Qt activate related shortcut.
-        if (handleKeyEvent(static_cast<QKeyEvent*>(pEvent), true))
-            pEvent->accept();
+        if (handleKeyEvent(rFrame, rWidget, static_cast<QKeyEvent*>(pEvent),
+                           ButtonKeyState::Pressed))
+            return true;
     }
+    return false;
+}
 
-    return QWidget::event(pEvent);
+bool Qt5Widget::event(QEvent* pEvent)
+{
+    return handleEvent(m_rFrame, *this, pEvent) || QWidget::event(pEvent);
 }
 
 void Qt5Widget::keyReleaseEvent(QKeyEvent* pEvent)
 {
-    if (handleKeyEvent(pEvent, false))
-        pEvent->accept();
+    if (!handleKeyReleaseEvent(m_rFrame, *this, pEvent))
+        QWidget::keyReleaseEvent(pEvent);
 }
 
 void Qt5Widget::focusInEvent(QFocusEvent*) { m_rFrame.CallCallback(SalEvent::GetFocus, nullptr); }
@@ -519,7 +532,7 @@ static ExtTextInputAttr lcl_MapUndrelineStyle(QTextCharFormat::UnderlineStyle us
 void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
 {
     if (!pEvent->commitString().isEmpty())
-        commitText(pEvent->commitString());
+        commitText(m_rFrame, pEvent->commitString());
     else
     {
         SalExtTextInputEvent aInputEvent;

@@ -24,10 +24,10 @@
 
 #include <QtCore/QObject>
 #include <QtGui/QRegion>
+#include <QtGui/QWindow>
 
 class Qt5Frame;
 class QWidget;
-class QWindow;
 
 class Qt5Object : public QObject, public SalObject
 {
@@ -44,6 +44,10 @@ class Qt5Object : public QObject, public SalObject
 public:
     Qt5Object(Qt5Frame* pParent, bool bShow);
 
+    Qt5Frame* frame() const { return m_pParent; }
+    QWidget* widget() const { return m_pQWidget; }
+    QWindow* windowHandle() const { return m_pQWindow; }
+
     virtual void ResetClipRegion() override;
     virtual void BeginSetClipRegion(sal_uInt32 nRects) override;
     virtual void UnionClipRegion(long nX, long nY, long nWidth, long nHeight) override;
@@ -55,6 +59,20 @@ public:
     virtual void SetForwardKey(bool bEnable) override;
 
     virtual const SystemEnvData* GetSystemData() const override { return &m_aSystemData; }
+};
+
+class Qt5ObjectWindow : public QWindow
+{
+    Qt5Object& m_rParent;
+
+    bool event(QEvent*) override;
+    void mousePressEvent(QMouseEvent*) override;
+    void mouseReleaseEvent(QMouseEvent*) override;
+    // keyPressEvent(QKeyEvent*) is handled via event(QEvent*); see comment in Qt5Widget::event
+    void keyReleaseEvent(QKeyEvent*) override;
+
+public:
+    explicit Qt5ObjectWindow(Qt5Object& rParent);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
