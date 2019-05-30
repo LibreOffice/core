@@ -1551,17 +1551,45 @@ sal_Int32 VCartesianAxis::estimateMaximumAutoMainIncrementCount()
 
     sal_Int32 nTotalAvailable = nMaxHeight;
     sal_Int32 nSingleNeeded = m_nMaximumTextHeightSoFar;
+    sal_Int32 nMaxSameLabel = 0;
 
     //for horizontal axis:
     if( (m_nDimensionIndex == 0 && !m_aAxisProperties.m_bSwapXAndY)
         || (m_nDimensionIndex == 1 && m_aAxisProperties.m_bSwapXAndY) )
     {
+        // tdf#48041: do not duplicate the value labels because of rounding
+        FixedNumberFormatter aFixedNumberFormatterTest(m_xNumberFormatsSupplier, m_aAxisLabelProperties.nNumberFormatKey);
+        OUString sPreviousValueLabel;
+        sal_Int32 nSameLabel = 0;
+        for ( sal_Int32 nLabel = 0; nLabel < m_aAllTickInfos[0].size(); ++nLabel )
+        {
+            Color nColor = COL_AUTO;
+            bool bHasColor = false;
+            OUString sValueLabel = aFixedNumberFormatterTest.getFormattedString(m_aAllTickInfos[0][nLabel].fScaledTickValue, nColor, bHasColor);
+            if ( sValueLabel == sPreviousValueLabel )
+            {
+                nSameLabel++;
+                if ( nSameLabel > nMaxSameLabel )
+                    nMaxSameLabel = nSameLabel;
+            }
+            else
+                nSameLabel = 0;
+            sPreviousValueLabel = sValueLabel;
+        }
+
         nTotalAvailable = nMaxWidth;
         nSingleNeeded = m_nMaximumTextWidthSoFar;
     }
 
     if( nSingleNeeded>0 )
         nRet = nTotalAvailable/nSingleNeeded;
+
+    if ( nMaxSameLabel > 0 )
+    {
+        sal_Int32 nRetNoSameLabel = m_aAllTickInfos[0].size() / (nMaxSameLabel + 1);
+        if ( nRet > nRetNoSameLabel )
+           nRet = nRetNoSameLabel;
+    }
 
     return nRet;
 }
