@@ -295,7 +295,8 @@ public:
        set them only in AutoAttrSet (SwContentNode::SetAttr). */
     bool SetAttr( const SfxItemSet& rSet,
                   sal_Int32 nStt, sal_Int32 nEnd,
-                  const SetAttrMode nMode = SetAttrMode::DEFAULT );
+                  const SetAttrMode nMode = SetAttrMode::DEFAULT,
+                  SwTextAttr **ppNewTextAttr = nullptr);
     /** Query the attributes of textnode over the range.
        Introduce 4th optional parameter <bMergeIndentValuesOfNumRule>.
        If <bMergeIndentValuesOfNumRule> == true, the indent attributes of

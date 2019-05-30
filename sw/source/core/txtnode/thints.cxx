@@ -1836,7 +1836,8 @@ bool SwTextNode::SetAttr(
     const SfxItemSet& rSet,
     const sal_Int32 nStt,
     const sal_Int32 nEnd,
-    const SetAttrMode nMode )
+    const SetAttrMode nMode,
+    SwTextAttr **ppNewTextAttr )
 {
     if( !rSet.Count() )
         return false;
@@ -1931,6 +1932,9 @@ bool SwTextNode::SetAttr(
                                 const_cast<SfxPoolItem&>(*pItem), nStt, nEnd );
                         if ( pNew )
                         {
+                            // store the first one we create into the pp
+                            if (ppNewTextAttr && !*ppNewTextAttr)
+                                *ppNewTextAttr = pNew;
                             if ( nEnd != nStt && !pNew->GetEnd() )
                             {
                                 OSL_FAIL("Attribute without end, but area marked");

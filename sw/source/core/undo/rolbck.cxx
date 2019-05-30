@@ -1350,7 +1350,8 @@ void SwRegHistory::AddHint( SwTextAttr* pHt, const bool bNew )
 }
 
 bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
-    sal_Int32 const nStart, sal_Int32 const nEnd, SetAttrMode const nFlags )
+    sal_Int32 const nStart, sal_Int32 const nEnd, SetAttrMode const nFlags,
+    SwTextAttr **ppNewTextAttr )
 {
     if( !rSet.Count() )
         return false;
@@ -1367,7 +1368,7 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
         pTextNode->GetOrCreateSwpHints().Register(this);
     }
 
-    const bool bInserted = pTextNode->SetAttr( rSet, nStart, nEnd, nFlags );
+    const bool bInserted = pTextNode->SetAttr( rSet, nStart, nEnd, nFlags, ppNewTextAttr );
 
     // Caution: The array can be deleted when inserting an attribute!
     // This can happen when the value that should be added first deletes

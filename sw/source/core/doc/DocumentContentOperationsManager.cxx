@@ -1101,7 +1101,8 @@ namespace //local functions originally from docfmt.cxx
         const SetAttrMode nFlags,
         SwUndoAttr *const pUndo,
         SwRootFrame const*const pLayout,
-        const bool bExpandCharToPara=false)
+        const bool bExpandCharToPara,
+        SwTextAttr **ppNewTextAttr)
     {
         // Divide the Sets (for selections in Nodes)
         const SfxItemSet* pCharSet = nullptr;
@@ -1233,7 +1234,7 @@ namespace //local functions originally from docfmt.cxx
                 {
                     SwRegHistory history( pNode, *pNode, pHistory );
                     bRet = history.InsertItems(
-                        aTextSet, rSt.GetIndex(), rSt.GetIndex(), nFlags ) || bRet;
+                        aTextSet, rSt.GetIndex(), rSt.GetIndex(), nFlags, /*ppNewTextAttr*/nullptr ) || bRet;
 
                     if (bRet && (pDoc->getIDocumentRedlineAccess().IsRedlineOn() || (!pDoc->getIDocumentRedlineAccess().IsIgnoreRedline()
                                     && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty())))
@@ -1272,7 +1273,7 @@ namespace //local functions originally from docfmt.cxx
                                     ? pEnd->nContent.GetIndex()
                                     : pNode->Len();
                     SwRegHistory history( pNode, *pNode, pHistory );
-                    bRet = history.InsertItems( aTextSet, nInsCnt, nEnd, nFlags )
+                    bRet = history.InsertItems( aTextSet, nInsCnt, nEnd, nFlags, ppNewTextAttr )
                            || bRet;
 
                     if (bRet && (pDoc->getIDocumentRedlineAccess().IsRedlineOn() || (!pDoc->getIDocumentRedlineAccess().IsIgnoreRedline()
@@ -1474,7 +1475,7 @@ namespace //local functions originally from docfmt.cxx
 
                 // the SwRegHistory inserts the attribute into the TextNode!
                 SwRegHistory history( pNode, *pNode, pHistory );
-                bRet = history.InsertItems( *pCharSet, nMkPos, nPtPos, nFlags )
+                bRet = history.InsertItems( *pCharSet, nMkPos, nPtPos, nFlags, /*ppNewTextAttr*/nullptr )
                     || bRet;
 
                 if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
@@ -1528,7 +1529,7 @@ namespace //local functions originally from docfmt.cxx
                 {
                     SwRegHistory history( pNode, *pNode, pHistory );
                     bRet = history.InsertItems(*pCharSet,
-                            pStt->nContent.GetIndex(), aCntEnd.GetIndex(), nFlags)
+                            pStt->nContent.GetIndex(), aCntEnd.GetIndex(), nFlags, /*ppNewTextAttr*/nullptr)
                         || bRet;
                 }
 
@@ -1588,7 +1589,7 @@ namespace //local functions originally from docfmt.cxx
                     {
                         SwRegHistory history( pNode, *pNode, pHistory );
                         (void)history.InsertItems(*pCharSet,
-                                0, aCntEnd.GetIndex(), nFlags);
+                                0, aCntEnd.GetIndex(), nFlags, /*ppNewTextAttr*/nullptr);
                     }
 
                     if( pOtherSet && pOtherSet->Count() )
@@ -3214,7 +3215,8 @@ bool DocumentContentOperationsManager::InsertPoolItem(
     const SfxPoolItem &rHt,
     const SetAttrMode nFlags,
     SwRootFrame const*const pLayout,
-    const bool bExpandCharToPara)
+    const bool bExpandCharToPara,
+    SwTextAttr **ppNewTextAttr)
 {
     if (utl::ConfigManager::IsFuzzing())
         return false;
@@ -3229,7 +3231,7 @@ bool DocumentContentOperationsManager::InsertPoolItem(
 
     SfxItemSet aSet( m_rDoc.GetAttrPool(), {{rHt.Which(), rHt.Which()}} );
     aSet.Put( rHt );
-    const bool bRet = lcl_InsAttr(&m_rDoc, rRg, aSet, nFlags, pUndoAttr.get(), pLayout, bExpandCharToPara);
+    const bool bRet = lcl_InsAttr(&m_rDoc, rRg, aSet, nFlags, pUndoAttr.get(), pLayout, bExpandCharToPara, ppNewTextAttr);
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
@@ -3254,7 +3256,7 @@ void DocumentContentOperationsManager::InsertItemSet ( const SwPaM &rRg, const S
         pUndoAttr.reset(new SwUndoAttr( rRg, rSet, nFlags ));
     }
 
-    bool bRet = lcl_InsAttr(&m_rDoc, rRg, rSet, nFlags, pUndoAttr.get(), pLayout);
+    bool bRet = lcl_InsAttr(&m_rDoc, rRg, rSet, nFlags, pUndoAttr.get(), pLayout, /*bExpandCharToPara*/false, /*ppNewTextAttr*/nullptr );
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {

@@ -1944,44 +1944,17 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
             | SetAttrMode::DONTEXPAND)
         : SetAttrMode::DONTEXPAND;
 
-    std::vector<SwTextAttr *> oldMarks;
-    if (bMark)
-    {
-        oldMarks = rPam.GetNode().GetTextNode()->GetTextAttrsAt(
-            rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK);
-    }
-
-    pDoc->getIDocumentContentOperations().InsertPoolItem(rPam, rMark, nInsertFlags);
+    // rMark gets copied into the document pool;
+    // pNewTextAttr comes back with the real format
+    SwTextAttr *pNewTextAttr = nullptr;
+    pDoc->getIDocumentContentOperations().InsertPoolItem(rPam, rMark, nInsertFlags,
+            /*pLayout*/nullptr, /*bExpandCharToPara*/false, &pNewTextAttr);
     if (bMark && *rPam.GetPoint() > *rPam.GetMark())
     {
         rPam.Exchange();
     }
 
-    // rMark was copied into the document pool; now retrieve real format...
-    SwTextAttr * pTextAttr(nullptr);
-    if (bMark)
-    {
-        // #i107672#
-        // ensure that we do not retrieve a different mark at the same position
-        std::vector<SwTextAttr *> const newMarks(
-            rPam.GetNode().GetTextNode()->GetTextAttrsAt(
-                rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK));
-        std::vector<SwTextAttr *>::const_iterator const iter(
-            std::find_if(newMarks.begin(), newMarks.end(),
-                NotContainedIn<SwTextAttr *>(oldMarks)));
-        assert(newMarks.end() != iter);
-        if (newMarks.end() != iter)
-        {
-            pTextAttr = *iter;
-        }
-    }
-    else
-    {
-        pTextAttr = rPam.GetNode().GetTextNode()->GetTextAttrForCharAt(
-            rPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_TOXMARK );
-    }
-
-    if (!pTextAttr)
+    if (!pNewTextAttr)
     {
         throw uno::RuntimeException(
             "SwXDocumentIndexMark::InsertTOXMark(): cannot insert attribute",
@@ -1989,7 +1962,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     }
 
     m_pDoc = pDoc;
-    m_pTOXMark = &pTextAttr->GetTOXMark();
+    m_pTOXMark = &pNewTextAttr->GetTOXMark();
     m_pTOXType = &rTOXType;
     m_aListener.EndListeningAll();
     m_aListener.StartListening(const_cast<SwTOXMark*>(m_pTOXMark));
