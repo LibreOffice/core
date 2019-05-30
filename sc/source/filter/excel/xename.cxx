@@ -92,6 +92,8 @@ public:
 private:
     /** Writes the body of the NAME record to the passed stream. */
     virtual void        WriteBody( XclExpStream& rStrm ) override;
+    /** Convert localized range separators */
+    OUString            GetWithDefaultRangeSeparator( const OUString& rSymbol ) const;
 
 private:
     OUString            maOrigName;     /// The original user-defined name.
@@ -294,6 +296,27 @@ void XclExpName::Save( XclExpStream& rStrm )
     XclExpRecord::Save( rStrm );
 }
 
+OUString XclExpName::GetWithDefaultRangeSeparator( const OUString& rSymbol ) const
+{
+    sal_Int32 nPos = rSymbol.indexOf(';');
+    if ( nPos > -1 )
+    {
+        // convert with validation
+        ScRange aRange;
+        ScAddress::Details detailsXL( ::formula::FormulaGrammar::CONV_XL_A1 );
+        ScRefFlags nRes = aRange.Parse( rSymbol.copy(0, nPos), &GetDocRef(), detailsXL );
+        if ( nRes & ScRefFlags::VALID )
+        {
+            nRes = aRange.Parse( rSymbol.copy(nPos+1), &GetDocRef(), detailsXL );
+            if ( nRes & ScRefFlags::VALID )
+            {
+                return rSymbol.replaceFirst(";", ",");
+            }
+        }
+    }
+    return rSymbol;
+}
+
 void XclExpName::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
@@ -314,7 +337,7 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_workbookParameter, "",
             // OOXTODO: XML_xlm, ""
     );
-    rWorkbook->writeEscaped( msSymbol );
+    rWorkbook->writeEscaped( GetWithDefaultRangeSeparator( msSymbol ) );
     rWorkbook->endElement( XML_definedName );
 }
 
