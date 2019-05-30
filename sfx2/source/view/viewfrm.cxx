@@ -752,7 +752,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pNewSet->Put( SfxUInt16Item(SID_UPDATEDOCMODE,css::document::UpdateDocMode::ACCORDING_TO_CONFIG) );
 
                 xOldObj->SetModified( false );
-                // Do not cache the old Document! Is invalid when loading
+                // Do not chache the old Document! Is invalid when loading
                 // another document.
 
                 const SfxStringItem* pSavedOptions = SfxItemSet::GetItem<SfxStringItem>(pMedium->GetItemSet(), SID_FILE_FILTEROPTIONS, false);
@@ -942,7 +942,7 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
                 else
                 {
                     // If any ChildFrame is reloadable, the slot is enabled,
-                    // so you can perform CTRL-Reload
+                    // so you can perfom CTRL-Reload
                     rSet.Put( SfxBoolItem( nWhich, false));
                 }
 
@@ -1481,6 +1481,7 @@ SfxViewFrame::SfxViewFrame
     : m_pImpl( new SfxViewFrame_Impl( rFrame ) )
     , m_pBindings( new SfxBindings )
     , m_pHelpData(CreateSVHelpData())
+    , m_pWinData(CreateSVWinData())
     , m_nAdjustPosPixelLock( 0 )
 {
 
@@ -1526,6 +1527,9 @@ SfxViewFrame::~SfxViewFrame()
 
     DestroySVHelpData(m_pHelpData);
     m_pHelpData = nullptr;
+
+    DestroySVWinData(m_pWinData);
+    m_pWinData = nullptr;
 }
 
 // Remove and delete the Dispatcher.
@@ -2183,7 +2187,7 @@ void SfxViewFrame::ExecView_Impl
                 return;
             }
 
-            // Get ViewData of FrameSets recursively.
+            // Get ViewData of FrameSets recursivly.
             GetFrame().GetViewData_Impl();
             SfxMedium* pMed = GetObjectShell()->GetMedium();
 
@@ -3165,6 +3169,9 @@ void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )
 {
     if(pFrame)
         SetSVHelpData(pFrame->m_pHelpData);
+
+    SetSVWinData(pFrame ? pFrame->m_pWinData : nullptr);
+
     SfxGetpApp()->SetViewFrame_Impl( pFrame );
 }
 

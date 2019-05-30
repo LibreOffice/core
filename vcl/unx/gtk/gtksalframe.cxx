@@ -2679,10 +2679,12 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
         if( bClosePopups )
         {
             ImplSVData* pSVData = ImplGetSVData();
-            if ( pSVData->maWinData.mpFirstFloat )
+            if (pSVData->mpWinData->mpFirstFloat)
             {
-                if (!(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoAppFocusClose))
-                    pSVData->maWinData.mpFirstFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
+                if (!(pSVData->mpWinData->mpFirstFloat->GetPopupModeFlags()
+                      & FloatWinPopupFlags::NoAppFocusClose))
+                    pSVData->mpWinData->mpFirstFloat->EndPopupMode(
+                        FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
             }
         }
 

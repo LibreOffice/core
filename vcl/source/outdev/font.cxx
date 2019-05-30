@@ -580,7 +580,7 @@ void OutputDevice::ImplClearAllFontData(bool bNewFontLists)
     if ( bNewFontLists )
     {
         pSVData->maGDIData.mxScreenFontList->Clear();
-        vcl::Window * pFrame = pSVData->maWinData.mpFirstFrame;
+        vcl::Window * pFrame = pSVData->maFrameData.mpFirstFrame;
         if ( pFrame )
         {
             if ( pFrame->AcquireGraphics() )
@@ -609,7 +609,7 @@ void OutputDevice::ImplUpdateFontDataForAllFrames( const FontUpdateHandler_t pHd
     ImplSVData* const pSVData = ImplGetSVData();
 
     // update all windows
-    vcl::Window* pFrame = pSVData->maWinData.mpFirstFrame;
+    vcl::Window* pFrame = pSVData->maFrameData.mpFirstFrame;
     while ( pFrame )
     {
         ( pFrame->*pHdl )( bNewFontLists );
@@ -1059,11 +1059,11 @@ bool OutputDevice::ImplNewFont() const
         pFontInstance->mxFontMetric->SetOrientation( sal::static_int_cast<short>(mpFontInstance->GetFontSelectPattern().mnOrientation) );
         mpGraphics->GetFontMetric( pFontInstance->mxFontMetric, 0 );
 
-        pFontInstance->mxFontMetric->ImplInitTextLineSize( this );
-        pFontInstance->mxFontMetric->ImplInitAboveTextLineSize();
-        pFontInstance->mxFontMetric->ImplInitFlags( this );
+            pFontInstance->mxFontMetric->ImplInitTextLineSize( this );
+            pFontInstance->mxFontMetric->ImplInitAboveTextLineSize();
+            pFontInstance->mxFontMetric->ImplInitFlags( this );
 
-        pFontInstance->mnLineHeight = pFontInstance->mxFontMetric->GetAscent() + pFontInstance->mxFontMetric->GetDescent();
+            pFontInstance->mnLineHeight = pFontInstance->mxFontMetric->GetAscent() + pFontInstance->mxFontMetric->GetDescent();
 
         SetFontOrientation( pFontInstance );
     }
@@ -1341,7 +1341,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
     for( int nFallbackLevel = 1; nFallbackLevel < MAX_FALLBACK; ++nFallbackLevel )
     {
         // find a font family suited for glyph fallback
-        // GetGlyphFallbackFont() needs a valid FontInstance
+        // GetGlyphFallbackFont() needs a valid aFontSelData.mpFontInstance
         // if the system-specific glyph fallback is active
         rtl::Reference<LogicalFontInstance> pFallbackFont = mxFontCache->GetGlyphFallbackFont( mxFontCollection.get(),
             aFontSelData, mpFontInstance.get(), nFallbackLevel, aMissingCodes );

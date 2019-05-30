@@ -118,8 +118,8 @@ bool Help::StartExtHelp()
         aHelpData.mbExtHelpMode = true;
         aHelpData.mbOldBalloonMode = aHelpData.mbBalloonHelp;
         aHelpData.mbBalloonHelp = true;
-        if ( pSVData->maWinData.mpAppWin )
-            pSVData->maWinData.mpAppWin->ImplGenerateMouseMove();
+        if (pSVData->maFrameData.mpAppWin)
+            pSVData->maFrameData.mpAppWin->ImplGenerateMouseMove();
         return true;
     }
 
@@ -135,8 +135,8 @@ bool Help::EndExtHelp()
     {
         aHelpData.mbExtHelpMode = false;
         aHelpData.mbBalloonHelp = aHelpData.mbOldBalloonMode;
-        if ( pSVData->maWinData.mpAppWin )
-            pSVData->maWinData.mpAppWin->ImplGenerateMouseMove();
+        if (pSVData->maFrameData.mpAppWin)
+            pSVData->maFrameData.mpAppWin->ImplGenerateMouseMove();
         return true;
     }
 
@@ -512,7 +512,7 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
             &&  aHelpData.mbRequestingHelp
             )
         {
-            // remove help window if no HelpText or
+            // remove help window if no HelpText or other HelpText or
             // other help mode. but keep it if we are scrolling, ie not requesting help
             bool bWasVisible = pHelpWin->IsVisible();
             if ( bWasVisible )

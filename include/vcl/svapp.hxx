@@ -260,6 +260,8 @@ public:
     platform specific data structures.
 
     @attention The initialization of the application itself is done in Init()
+
+    @see    InitSalData is implemented by platform specific code.
     */
                                 Application();
 
@@ -267,6 +269,9 @@ public:
 
      Deinitializes the LibreOffice global instance data structure, then
      deinitializes any platform specific data structures.
+
+     @see   ImplDeInitSVData deinitializes the global instance data,
+            DeInitSalData is implemented by platform specific code
     */
     virtual                     ~Application();
 
@@ -457,14 +462,14 @@ public:
     /** Run the main event processing loop until it is quit by Quit().
 
      @see Quit, Reschedule, Yield, EndYield, GetSolarMutex,
-          IsMainThread, ReleaseSolarMutex, AcquireSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
     */
     static void                 Execute();
 
     /** Quit the program
 
      @see Execute, Reschedule, Yield, EndYield, GetSolarMutex,
-          IsMainThread, ReleaseSolarMutex, AcquireSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
     */
     static void                 Quit();
 
@@ -491,14 +496,14 @@ public:
      if an event was processed.
 
      @see Execute, Quit, Reschedule, EndYield, GetSolarMutex,
-          IsMainThread, ReleaseSolarMutex, AcquireSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
     */
     static void                 Yield();
 
     /**
 
      @see Execute, Quit, Reschedule, Yield, GetSolarMutex,
-          IsMainThread, ReleaseSolarMutex, AcquireSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
     */
     static void                 EndYield();
 
@@ -510,13 +515,13 @@ public:
      @returns SolarMutex reference
 
      @see Execute, Quit, Reschedule, Yield, EndYield,
-          IsMainThread, ReleaseSolarMutex, AcquireSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
     */
     static comphelper::SolarMutex& GetSolarMutex();
 
-    /** Queries whether we are in main thread.
+    /** Get the main thread ID.
 
-     @returns true if we are in main thread, false if not
+     @returns oslThreadIdentifier that contains the thread ID
 
      @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           ReleaseSolarMutex, AcquireSolarMutex,
@@ -531,7 +536,7 @@ public:
      @returns The number of mutexes that were acquired by this thread.
 
      @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
-          IsMainThread, AcquireSolarMutex,
+          GetMainThreadIdentifier, AcquireSolarMutex,
     */
     static sal_uInt32           ReleaseSolarMutex();
 
@@ -541,7 +546,7 @@ public:
      VCL concurrently.
 
      @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
-          IsMainThread, ReleaseSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex,
     */
     static void                 AcquireSolarMutex( sal_uInt32 nCount );
 
@@ -688,7 +693,7 @@ public:
 
     /** Remove a VCL event listener from the application.
 
-     @param     rEventListener  Const reference to the event listener to be removed
+     @param     rEventListener  Const refernece to the event listener to be removed
 
      @see AddEventListener, AddKeyListener, RemoveKeyListener
     */
@@ -714,6 +719,7 @@ public:
 
     /** Send event to all VCL application event listeners
 
+     @param     nEvent          Event ID
      @param     pWin            Pointer to window to send event
      @param     pData           Pointer to data to send with event
 
@@ -832,7 +838,7 @@ public:
     */
     static WorkWindow*          GetAppWindow();
 
-    /** Get the currently focused window.
+    /** Get the currently focussed window.
 
      @returns Pointer to focused window.
 
@@ -1490,6 +1496,12 @@ struct ImplSVHelpData;
 VCL_DLLPUBLIC ImplSVHelpData* CreateSVHelpData();
 VCL_DLLPUBLIC void DestroySVHelpData(ImplSVHelpData*);
 VCL_DLLPUBLIC void SetSVHelpData(ImplSVHelpData*);
+
+/// The following are to manage per-view (frame) window data.
+struct ImplSVWinData;
+VCL_DLLPUBLIC ImplSVWinData* CreateSVWinData();
+VCL_DLLPUBLIC void DestroySVWinData(ImplSVWinData*);
+VCL_DLLPUBLIC void SetSVWinData(ImplSVWinData*);
 
 inline void Application::EndYield()
 {
