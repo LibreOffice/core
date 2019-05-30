@@ -2828,15 +2828,16 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
     bool bRealExecute = false;
     if ( !pStartedFrom )
     {
-        pSVData->maWinData.mbNoDeactivate = true;
+        pSVData->mpWinData->mbNoDeactivate = true;
         xFocusId = Window::SaveFocus();
         bRealExecute = true;
     }
     else
     {
         // assure that only one menu is open at a time
-        if (pStartedFrom->IsMenuBar() && pSVData->maWinData.mpFirstFloat)
-            pSVData->maWinData.mpFirstFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
+        if (pStartedFrom->IsMenuBar() && pSVData->mpWinData->mpFirstFloat)
+            pSVData->mpWinData->mpFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel
+                                                           | FloatWinPopupEndFlags::CloseAll);
     }
 
     SAL_WARN_IF( ImplGetWindow(), "vcl", "Win?!" );

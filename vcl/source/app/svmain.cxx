@@ -477,7 +477,7 @@ void DeInitVCL()
 
     Scheduler::ImplDeInitScheduler();
 
-    pSVData->maWinData.maMsgBoxImgList.clear();
+    pSVData->mpWinData->maMsgBoxImgList.clear();
     pSVData->maCtrlData.maCheckImgList.clear();
     pSVData->maCtrlData.maRadioImgList.clear();
     pSVData->maCtrlData.mpDisclosurePlus.reset();
@@ -528,7 +528,7 @@ void DeInitVCL()
 
         pSVData->maAppData.mpSettings.reset();
     }
-    if (pSVData->maAppData.mpAccelMgr)
+    if ( pSVData->maAppData.mpAccelMgr )
     {
         delete pSVData->maAppData.mpAccelMgr;
         pSVData->maAppData.mpAccelMgr = nullptr;
@@ -557,17 +557,17 @@ void DeInitVCL()
     pSVData->maGDIData.mpLastPrnGraphics = nullptr;
     pSVData->maGDIData.mpFirstVirDev = nullptr;
     pSVData->maGDIData.mpFirstPrinter = nullptr;
-    pSVData->maWinData.mpFirstFrame = nullptr;
-    pSVData->maWinData.mpAppWin = nullptr;
-    pSVData->maWinData.mpActiveApplicationFrame = nullptr;
-    pSVData->maWinData.mpCaptureWin = nullptr;
-    pSVData->maWinData.mpLastDeacWin = nullptr;
-    pSVData->maWinData.mpFirstFloat = nullptr;
-    pSVData->maWinData.mpExecuteDialogs.clear();
-    pSVData->maWinData.mpExtTextInputWin = nullptr;
-    pSVData->maWinData.mpTrackWin = nullptr;
-    pSVData->maWinData.mpAutoScrollWin = nullptr;
-    pSVData->maWinData.mpLastWheelWindow = nullptr;
+    pSVData->maFrameData.mpFirstFrame = nullptr;
+    pSVData->maFrameData.mpAppWin = nullptr;
+    pSVData->maFrameData.mpActiveApplicationFrame = nullptr;
+    pSVData->mpWinData->mpCaptureWin = nullptr;
+    pSVData->mpWinData->mpLastDeacWin = nullptr;
+    pSVData->mpWinData->mpFirstFloat = nullptr;
+    pSVData->mpWinData->mpExecuteDialogs.clear();
+    pSVData->mpWinData->mpExtTextInputWin = nullptr;
+    pSVData->mpWinData->mpTrackWin = nullptr;
+    pSVData->mpWinData->mpAutoScrollWin = nullptr;
+    pSVData->mpWinData->mpLastWheelWindow = nullptr;
 
     pSVData->maGDIData.mxScreenFontList.reset();
     pSVData->maGDIData.mxScreenFontCache.reset();

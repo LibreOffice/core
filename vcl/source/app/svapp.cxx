@@ -176,7 +176,7 @@ int Application::Main()
 
 bool Application::QueryExit()
 {
-    WorkWindow* pAppWin = ImplGetSVData()->maWinData.mpAppWin;
+    WorkWindow* pAppWin = ImplGetSVData()->maFrameData.mpAppWin;
 
     // call the close handler of the application window
     if ( pAppWin )
@@ -290,8 +290,8 @@ const vcl::KeyCode* Application::GetReservedKeyCode( sal_uLong i )
 IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplEndAllPopupsMsg, void*, void )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    while (pSVData->maWinData.mpFirstFloat)
-        pSVData->maWinData.mpFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel);
+    while (pSVData->mpWinData->mpFirstFloat)
+        pSVData->mpWinData->mpFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel);
 }
 
 IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplEndAllDialogsMsg, void*, void )
@@ -474,7 +474,7 @@ void Scheduler::ProcessEventsToIdle()
     // events were processed at some point, but our check can't prevent further
     // processing in the main thread, which may add new events, so skip it.
     const ImplSVData* pSVData = ImplGetSVData();
-    if (!pSVData->mpDefInst->IsMainThread())
+    if ( !pSVData->mpDefInst->IsMainThread() )
         return;
     for (int nTaskPriority = 0; nTaskPriority < PRIO_COUNT; ++nTaskPriority)
     {
@@ -581,8 +581,8 @@ bool Application::IsUICaptured()
     // If mouse was captured, or if in tracking- or in select-mode of a floatingwindow (e.g. menus
     // or pulldown toolboxes) another window should be created
     // D&D active !!!
-    return pSVData->maWinData.mpCaptureWin || pSVData->maWinData.mpTrackWin ||
-         pSVData->maWinData.mpFirstFloat || nImplSysDialog;
+    return pSVData->mpWinData->mpCaptureWin || pSVData->mpWinData->mpTrackWin
+           || pSVData->mpWinData->mpFirstFloat || nImplSysDialog;
 }
 
 void Application::OverrideSystemSettings( AllSettings& /*rSettings*/ )
@@ -591,7 +591,7 @@ void Application::OverrideSystemSettings( AllSettings& /*rSettings*/ )
 
 void Application::MergeSystemSettings( AllSettings& rSettings )
 {
-    vcl::Window* pWindow = ImplGetSVData()->maWinData.mpFirstFrame;
+    vcl::Window* pWindow = ImplGetSVData()->maFrameData.mpFirstFrame;
     if( ! pWindow )
         pWindow = ImplGetDefaultWindow();
     if( pWindow )
@@ -636,7 +636,7 @@ void Application::SetSettings( const AllSettings& rSettings )
             ImplCallEventListenersApplicationDataChanged( &aDCEvt);
 
             // Update all windows
-            vcl::Window* pFirstFrame = pSVData->maWinData.mpFirstFrame;
+            vcl::Window* pFirstFrame = pSVData->maFrameData.mpFirstFrame;
             // Reset data that needs to be re-calculated
             long nOldDPIX = 0;
             long nOldDPIY = 0;
@@ -671,7 +671,7 @@ void Application::SetSettings( const AllSettings& rSettings )
 
             // if DPI resolution for screen output was changed set the new resolution for all
             // screen compatible VirDev's
-            pFirstFrame = pSVData->maWinData.mpFirstFrame;
+            pFirstFrame = pSVData->maFrameData.mpFirstFrame;
             if ( pFirstFrame )
             {
                 if ( (pFirstFrame->GetDPIX() != nOldDPIX) ||
@@ -732,7 +732,7 @@ void InitSettings(ImplSVData* pSVData)
 void Application::NotifyAllWindows( DataChangedEvent& rDCEvt )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    vcl::Window*     pFrame = pSVData->maWinData.mpFirstFrame;
+    vcl::Window* pFrame = pSVData->maFrameData.mpFirstFrame;
     while ( pFrame )
     {
         pFrame->NotifyAllChildren( rDCEvt );
@@ -1044,12 +1044,12 @@ void Application::LockFontUpdates(bool bLock)
 
 WorkWindow* Application::GetAppWindow()
 {
-    return ImplGetSVData()->maWinData.mpAppWin;
+    return ImplGetSVData()->maFrameData.mpAppWin;
 }
 
 vcl::Window* Application::GetFocusWindow()
 {
-    return ImplGetSVData()->maWinData.mpFocusWin;
+    return ImplGetSVData()->mpWinData->mpFocusWin;
 }
 
 OutputDevice* Application::GetDefaultDevice()
@@ -1060,7 +1060,7 @@ OutputDevice* Application::GetDefaultDevice()
 vcl::Window* Application::GetFirstTopLevelWindow()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    return pSVData->maWinData.mpFirstFrame;
+    return pSVData->maFrameData.mpFirstFrame;
 }
 
 vcl::Window* Application::GetNextTopLevelWindow( vcl::Window const * pWindow )
@@ -1072,7 +1072,7 @@ long    Application::GetTopWindowCount()
 {
     long nRet = 0;
     ImplSVData* pSVData = ImplGetSVData();
-    vcl::Window *pWin = pSVData ? pSVData->maWinData.mpFirstFrame.get() : nullptr;
+    vcl::Window *pWin = pSVData ? pSVData->maFrameData.mpFirstFrame.get() : nullptr;
     while( pWin )
     {
         if( pWin->ImplGetWindow()->IsTopWindow() )
@@ -1086,7 +1086,7 @@ vcl::Window* Application::GetTopWindow( long nIndex )
 {
     long nIdx = 0;
     ImplSVData* pSVData = ImplGetSVData();
-    vcl::Window *pWin = pSVData ? pSVData->maWinData.mpFirstFrame.get() : nullptr;
+    vcl::Window *pWin = pSVData ? pSVData->maFrameData.mpFirstFrame.get() : nullptr;
     while( pWin )
     {
         if( pWin->ImplGetWindow()->IsTopWindow() )
@@ -1103,7 +1103,7 @@ vcl::Window* Application::GetTopWindow( long nIndex )
 
 vcl::Window* Application::GetActiveTopWindow()
 {
-    vcl::Window *pWin = ImplGetSVData()->maWinData.mpFocusWin;
+    vcl::Window *pWin = ImplGetSVData()->mpWinData->mpFocusWin;
     while( pWin )
     {
         if( pWin->IsTopWindow() )
@@ -1191,8 +1191,8 @@ OUString Application::GetDisplayName()
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maAppData.mxDisplayName )
         return *(pSVData->maAppData.mxDisplayName);
-    else if ( pSVData->maWinData.mpAppWin )
-        return pSVData->maWinData.mpAppWin->GetText();
+    else if (pSVData->maFrameData.mpAppWin)
+        return pSVData->maFrameData.mpAppWin->GetText();
     else
         return OUString();
 }
@@ -1354,7 +1354,7 @@ vcl::Window* Application::GetDefDialogParent()
     // as DefDialogParent
 
     // current focus frame
-    vcl::Window *pWin = pSVData->maWinData.mpFocusWin;
+    vcl::Window *pWin = pSVData->mpWinData->mpFocusWin;
     if (pWin && !pWin->IsMenuFloatingWindow())
     {
         while (pWin->mpWindowImpl && pWin->mpWindowImpl->mpParent)
@@ -1364,7 +1364,7 @@ vcl::Window* Application::GetDefDialogParent()
         if (!pWin->mpWindowImpl)
         {
             OSL_FAIL( "Window hierarchy corrupted!" );
-            pSVData->maWinData.mpFocusWin = nullptr;   // avoid further access
+            pSVData->mpWinData->mpFocusWin = nullptr;   // avoid further access
             return nullptr;
         }
 
@@ -1375,14 +1375,14 @@ vcl::Window* Application::GetDefDialogParent()
     }
 
     // last active application frame
-    pWin = pSVData->maWinData.mpActiveApplicationFrame;
+    pWin = pSVData->maFrameData.mpActiveApplicationFrame;
     if (pWin)
     {
         return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
     }
 
     // first visible top window (may be totally wrong...)
-    pWin = pSVData->maWinData.mpFirstFrame;
+    pWin = pSVData->maFrameData.mpFirstFrame;
     while (pWin)
     {
         if( pWin->ImplGetWindow()->IsTopWindow() &&

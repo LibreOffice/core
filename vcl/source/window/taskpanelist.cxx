@@ -190,9 +190,9 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
 
             if( pNextWin != pWin )
             {
-                ImplGetSVData()->maWinData.mbNoSaveFocus = true;
+                ImplGetSVData()->mpWinData->mbNoSaveFocus = true;
                 ImplTaskPaneListGrabFocus( pNextWin, bForward );
-                ImplGetSVData()->maWinData.mbNoSaveFocus = false;
+                ImplGetSVData()->mpWinData->mbNoSaveFocus = false;
             }
             else
             {

@@ -237,13 +237,13 @@ void Window::dispose()
     if ( ImplGetSVHelpData().mpHelpWin && (ImplGetSVHelpData().mpHelpWin->GetParent() == this) )
         ImplDestroyHelpWindow( true );
 
-    SAL_WARN_IF( pSVData->maWinData.mpTrackWin.get() == this, "vcl.window",
-                "Window::~Window(): Window is in TrackingMode" );
+    SAL_WARN_IF(pSVData->mpWinData->mpTrackWin.get() == this, "vcl.window",
+                "Window::~Window(): Window is in TrackingMode");
     SAL_WARN_IF(IsMouseCaptured(), "vcl.window",
                 "Window::~Window(): Window has the mouse captured");
 
     // due to old compatibility
-    if ( pSVData->maWinData.mpTrackWin == this )
+    if (pSVData->mpWinData->mpTrackWin == this)
         EndTracking();
     if (IsMouseCaptured())
         ReleaseMouse();
@@ -297,7 +297,7 @@ void Window::dispose()
         }
 
         bError = false;
-        pTempWin = pSVData->maWinData.mpFirstFrame;
+        pTempWin = pSVData->maFrameData.mpFirstFrame;
         while ( pTempWin )
         {
             if ( ImplIsRealParentPath( pTempWin ) )
@@ -391,16 +391,16 @@ void Window::dispose()
     Hide();
 
     // EndExtTextInputMode
-    if ( pSVData->maWinData.mpExtTextInputWin == this )
+    if (pSVData->mpWinData->mpExtTextInputWin == this)
     {
         EndExtTextInput();
-        if ( pSVData->maWinData.mpExtTextInputWin == this )
-            pSVData->maWinData.mpExtTextInputWin = nullptr;
+        if (pSVData->mpWinData->mpExtTextInputWin == this)
+            pSVData->mpWinData->mpExtTextInputWin = nullptr;
     }
 
     // check if the focus window is our child
     bool bHasFocussedChild = false;
-    if( pSVData->maWinData.mpFocusWin && ImplIsRealParentPath( pSVData->maWinData.mpFocusWin ) )
+    if (pSVData->mpWinData->mpFocusWin && ImplIsRealParentPath(pSVData->mpWinData->mpFocusWin))
     {
         // #122232#, this must not happen and is an application bug ! but we try some cleanup to hopefully avoid crashes, see below
         bHasFocussedChild = true;
@@ -414,12 +414,12 @@ void Window::dispose()
 
     // if we get focus pass focus to another window
     vcl::Window* pOverlapWindow = ImplGetFirstOverlapWindow();
-    if ( pSVData->maWinData.mpFocusWin == this
-        || bHasFocussedChild )  // #122232#, see above, try some cleanup
+    if (pSVData->mpWinData->mpFocusWin == this
+        || bHasFocussedChild) // #122232#, see above, try some cleanup
     {
         if ( mpWindowImpl->mbFrame )
         {
-            pSVData->maWinData.mpFocusWin = nullptr;
+            pSVData->mpWinData->mpFocusWin = nullptr;
             pOverlapWindow->mpWindowImpl->mpLastFocusWindow = nullptr;
         }
         else
@@ -442,9 +442,9 @@ void Window::dispose()
                 mpWindowImpl->mpFrameWindow->GrabFocus();
 
             // If the focus was set back to 'this' set it to nothing
-            if ( pSVData->maWinData.mpFocusWin == this )
+            if (pSVData->mpWinData->mpFocusWin == this)
             {
-                pSVData->maWinData.mpFocusWin = nullptr;
+                pSVData->mpWinData->mpFocusWin = nullptr;
                 pOverlapWindow->mpWindowImpl->mpLastFocusWindow = nullptr;
             }
         }
@@ -455,12 +455,12 @@ void Window::dispose()
         pOverlapWindow->mpWindowImpl->mpLastFocusWindow = nullptr;
 
     // reset hint for DefModalDialogParent
-    if( pSVData->maWinData.mpActiveApplicationFrame == this )
-        pSVData->maWinData.mpActiveApplicationFrame = nullptr;
+    if( pSVData->maFrameData.mpActiveApplicationFrame == this )
+        pSVData->maFrameData.mpActiveApplicationFrame = nullptr;
 
     // reset hint of what was the last wheeled window
-    if( pSVData->maWinData.mpLastWheelWindow == this )
-        pSVData->maWinData.mpLastWheelWindow = nullptr;
+    if (pSVData->mpWinData->mpLastWheelWindow == this)
+        pSVData->mpWinData->mpLastWheelWindow = nullptr;
 
     // reset marked windows
     if ( mpWindowImpl->mpFrameData != nullptr )
@@ -474,8 +474,8 @@ void Window::dispose()
     }
 
     // reset Deactivate-Window
-    if ( pSVData->maWinData.mpLastDeacWin == this )
-        pSVData->maWinData.mpLastDeacWin = nullptr;
+    if (pSVData->mpWinData->mpLastDeacWin == this)
+        pSVData->mpWinData->mpLastDeacWin = nullptr;
 
     if ( mpWindowImpl->mbFrame && mpWindowImpl->mpFrameData )
     {
@@ -497,7 +497,8 @@ void Window::dispose()
     // de-register as "top window child" at our parent, if necessary
     if ( mpWindowImpl->mbFrame )
     {
-        bool bIsTopWindow = mpWindowImpl->mpWinData && ( mpWindowImpl->mpWinData->mnIsTopWindow == 1 );
+        bool bIsTopWindow
+            = mpWindowImpl->mpWinData && (mpWindowImpl->mpWinData->mnIsTopWindow == 1);
         if ( mpWindowImpl->mpRealParent && bIsTopWindow )
         {
             ImplWinData* pParentWinData = mpWindowImpl->mpRealParent->ImplGetWinData();
@@ -517,12 +518,12 @@ void Window::dispose()
     mpWindowImpl->mpBorderWindow.disposeAndClear();
     if ( mpWindowImpl->mbFrame )
     {
-        if ( pSVData->maWinData.mpFirstFrame == this )
-            pSVData->maWinData.mpFirstFrame = mpWindowImpl->mpFrameData->mpNextFrame;
+        if ( pSVData->maFrameData.mpFirstFrame == this )
+            pSVData->maFrameData.mpFirstFrame = mpWindowImpl->mpFrameData->mpNextFrame;
         else
         {
             sal_Int32 nWindows = 0;
-            vcl::Window* pSysWin = pSVData->maWinData.mpFirstFrame;
+            vcl::Window* pSysWin = pSVData->maFrameData.mpFirstFrame;
             while ( pSysWin && pSysWin->mpWindowImpl->mpFrameData->mpNextFrame.get() != this )
             {
                 pSysWin = pSysWin->mpWindowImpl->mpFrameData->mpNextFrame;
@@ -761,9 +762,9 @@ ImplWinData::~ImplWinData()
 ImplFrameData::ImplFrameData( vcl::Window *pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    assert (pSVData->maWinData.mpFirstFrame.get() != pWindow);
-    mpNextFrame        = pSVData->maWinData.mpFirstFrame;
-    pSVData->maWinData.mpFirstFrame = pWindow;
+    assert (pSVData->maFrameData.mpFirstFrame.get() != pWindow);
+    mpNextFrame        = pSVData->maFrameData.mpFirstFrame;
+    pSVData->maFrameData.mpFirstFrame = pWindow;
     mpFirstOverlap     = nullptr;
     mpFocusWin         = nullptr;
     mpMouseMoveWin     = nullptr;
@@ -1205,7 +1206,7 @@ void Window::ImplInitAppFontData( vcl::Window const * pWindow )
 
 ImplWinData* Window::ImplGetWinData() const
 {
-    if ( !mpWindowImpl->mpWinData )
+    if (!mpWindowImpl->mpWinData)
     {
         static const char* pNoNWF = getenv( "SAL_NO_NWF" );
 
@@ -1706,7 +1707,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
 void Window::ImplNewInputContext()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    vcl::Window*     pFocusWin = pSVData->maWinData.mpFocusWin;
+    vcl::Window* pFocusWin = pSVData->mpWinData->mpFocusWin;
     if ( !pFocusWin )
         return;
 
@@ -2208,7 +2209,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
 
             if ( !mpWindowImpl->mbFrame )
             {
-                if( mpWindowImpl->mpWinData && mpWindowImpl->mpWinData->mbEnableNativeWidget )
+                if (mpWindowImpl->mpWinData && mpWindowImpl->mpWinData->mbEnableNativeWidget)
                 {
                     /*
                     * #i48371# native theming: some themes draw outside the control
@@ -2424,11 +2425,9 @@ void Window::Enable( bool bEnable, bool bChild )
     // #i56102# restore app focus win in case the
     // window was disabled when the frame focus changed
     ImplSVData* pSVData = ImplGetSVData();
-    if( bEnable &&
-        pSVData->maWinData.mpFocusWin == nullptr &&
-        mpWindowImpl->mpFrameData->mbHasFocus &&
-        mpWindowImpl->mpFrameData->mpFocusWin == this )
-        pSVData->maWinData.mpFocusWin = this;
+    if (bEnable && pSVData->mpWinData->mpFocusWin == nullptr
+        && mpWindowImpl->mpFrameData->mbHasFocus && mpWindowImpl->mpFrameData->mpFocusWin == this)
+        pSVData->mpWinData->mpFocusWin = this;
 
     if ( mpWindowImpl->mbDisabled != !bEnable )
     {
@@ -2509,11 +2508,9 @@ void Window::EnableInput( bool bEnable, bool bChild )
     // #i56102# restore app focus win in case the
     // window was disabled when the frame focus changed
     ImplSVData* pSVData = ImplGetSVData();
-    if( bEnable &&
-        pSVData->maWinData.mpFocusWin == nullptr &&
-        mpWindowImpl->mpFrameData->mbHasFocus &&
-        mpWindowImpl->mpFrameData->mpFocusWin == this )
-        pSVData->maWinData.mpFocusWin = this;
+    if (bEnable && pSVData->mpWinData->mpFocusWin == nullptr
+        && mpWindowImpl->mpFrameData->mbHasFocus && mpWindowImpl->mpFrameData->mpFocusWin == this)
+        pSVData->mpWinData->mpFocusWin = this;
 
     if ( bChild )
     {
@@ -2562,7 +2559,7 @@ void Window::EnableInput( bool bEnable, const vcl::Window* pExcludeWindow )
     }
 
     // enable/disable floating system windows as well
-    vcl::Window* pFrameWin = ImplGetSVData()->maWinData.mpFirstFrame;
+    vcl::Window* pFrameWin = ImplGetSVData()->maFrameData.mpFirstFrame;
     while ( pFrameWin )
     {
         if( pFrameWin->ImplIsFloatingWindow() )
@@ -2984,7 +2981,7 @@ void Window::GrabFocus()
 
 bool Window::HasFocus() const
 {
-    return (this == ImplGetSVData()->maWinData.mpFocusWin);
+    return (this == ImplGetSVData()->mpWinData->mpFocusWin);
 }
 
 void Window::GrabFocusToDocument()
@@ -3008,7 +3005,7 @@ void Window::SetFakeFocus( bool bFocus )
 bool Window::HasChildPathFocus( bool bSystemWindow ) const
 {
 
-    vcl::Window* pFocusWin = ImplGetSVData()->maWinData.mpFocusWin;
+    vcl::Window* pFocusWin = ImplGetSVData()->mpWinData->mpFocusWin;
     if ( pFocusWin )
         return ImplIsWindowOrChild( pFocusWin, bSystemWindow );
     return false;
@@ -3419,7 +3416,7 @@ void Window::ImplCallActivateListeners( vcl::Window *pOld )
         else if( (mpWindowImpl->mnStyle & WB_INTROWIN) == 0 )
         {
             // top level frame reached: store hint for DefModalDialogParent
-            ImplGetSVData()->maWinData.mpActiveApplicationFrame = mpWindowImpl->mpFrameWindow;
+            ImplGetSVData()->maFrameData.mpActiveApplicationFrame = mpWindowImpl->mpFrameWindow;
         }
     }
 }
@@ -3639,7 +3636,7 @@ void Window::ImplNotifyIconifiedState( bool bIconified )
 bool Window::HasActiveChildFrame() const
 {
     bool bRet = false;
-    vcl::Window *pFrameWin = ImplGetSVData()->maWinData.mpFirstFrame;
+    vcl::Window *pFrameWin = ImplGetSVData()->maFrameData.mpFirstFrame;
     while( pFrameWin )
     {
         if( pFrameWin != mpWindowImpl->mpFrameWindow )
