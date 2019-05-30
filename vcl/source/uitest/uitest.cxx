@@ -54,20 +54,20 @@ bool UITest::executeDialog(const OUString& rCommand)
 std::unique_ptr<UIObject> UITest::getFocusTopWindow()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    ImplSVWinData& rWinData = pSVData->maWinData;
+    ImplSVWinData& rWinData = *pSVData->mpWinData;
 
     if (!rWinData.mpExecuteDialogs.empty())
     {
         return rWinData.mpExecuteDialogs.back()->GetUITestFactory()(rWinData.mpExecuteDialogs.back());
     }
 
-    return rWinData.mpFirstFrame->GetUITestFactory()(rWinData.mpFirstFrame);
+    return pSVData->maFrameData.mpFirstFrame->GetUITestFactory()(pSVData->maFrameData.mpFirstFrame);
 }
 
 std::unique_ptr<UIObject> UITest::getFloatWindow()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    ImplSVWinData& rWinData = pSVData->maWinData;
+    ImplSVWinData& rWinData = *pSVData->mpWinData;
 
     VclPtr<vcl::Window> pFloatWin = rWinData.mpFirstFloat;
     if (pFloatWin)

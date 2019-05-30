@@ -222,7 +222,7 @@ IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer, void )
     ImplSVData* pSVData = ImplGetSVData();
 
     // if Button-Repeat we have to change the timeout
-    if ( pSVData->maWinData.mnTrackFlags & StartTrackingFlags::ButtonRepeat )
+    if ( pSVData->mpWinData->mnTrackFlags & StartTrackingFlags::ButtonRepeat )
         pTimer->SetTimeout( GetSettings().GetMouseSettings().GetButtonRepeat() );
 
     // create Tracking-Event
@@ -245,27 +245,27 @@ void Window::StartTracking( StartTrackingFlags nFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    if ( pSVData->maWinData.mpTrackWin.get() != this )
+    if ( pSVData->mpWinData->mpTrackWin.get() != this )
     {
-        if ( pSVData->maWinData.mpTrackWin )
-            pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Cancel );
+        if ( pSVData->mpWinData->mpTrackWin )
+            pSVData->mpWinData->mpTrackWin->EndTracking( TrackingEventFlags::Cancel );
     }
 
     if ( nFlags & (StartTrackingFlags::ScrollRepeat | StartTrackingFlags::ButtonRepeat) )
     {
-        pSVData->maWinData.mpTrackTimer = new AutoTimer;
+        pSVData->mpWinData->mpTrackTimer = new AutoTimer;
 
         if ( nFlags & StartTrackingFlags::ScrollRepeat )
-            pSVData->maWinData.mpTrackTimer->SetTimeout( MouseSettings::GetScrollRepeat() );
+            pSVData->mpWinData->mpTrackTimer->SetTimeout( MouseSettings::GetScrollRepeat() );
         else
-            pSVData->maWinData.mpTrackTimer->SetTimeout( MouseSettings::GetButtonStartRepeat() );
-        pSVData->maWinData.mpTrackTimer->SetInvokeHandler( LINK( this, Window, ImplTrackTimerHdl ) );
-        pSVData->maWinData.mpTrackTimer->SetDebugName( "vcl::Window pSVData->maWinData.mpTrackTimer" );
-        pSVData->maWinData.mpTrackTimer->Start();
+            pSVData->mpWinData->mpTrackTimer->SetTimeout( MouseSettings::GetButtonStartRepeat() );
+        pSVData->mpWinData->mpTrackTimer->SetInvokeHandler( LINK( this, Window, ImplTrackTimerHdl ) );
+        pSVData->mpWinData->mpTrackTimer->SetDebugName( "vcl::Window pSVData->mpWinData->mpTrackTimer" );
+        pSVData->mpWinData->mpTrackTimer->Start();
     }
 
-    pSVData->maWinData.mpTrackWin   = this;
-    pSVData->maWinData.mnTrackFlags = nFlags;
+    pSVData->mpWinData->mpTrackWin   = this;
+    pSVData->mpWinData->mnTrackFlags = nFlags;
     CaptureMouse();
 }
 
@@ -273,16 +273,16 @@ void Window::EndTracking( TrackingEventFlags nFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    if ( pSVData->maWinData.mpTrackWin.get() == this )
+    if ( pSVData->mpWinData->mpTrackWin.get() == this )
     {
-        if ( pSVData->maWinData.mpTrackTimer )
+        if ( pSVData->mpWinData->mpTrackTimer )
         {
-            delete pSVData->maWinData.mpTrackTimer;
-            pSVData->maWinData.mpTrackTimer = nullptr;
+            delete pSVData->mpWinData->mpTrackTimer;
+            pSVData->mpWinData->mpTrackTimer = nullptr;
         }
 
-        pSVData->maWinData.mpTrackWin    = nullptr;
-        pSVData->maWinData.mnTrackFlags  = StartTrackingFlags::NONE;
+        pSVData->mpWinData->mpTrackWin    = nullptr;
+        pSVData->mpWinData->mnTrackFlags  = StartTrackingFlags::NONE;
         ReleaseMouse();
 
         // call EndTracking if required
@@ -311,21 +311,21 @@ void Window::EndTracking( TrackingEventFlags nFlags )
 
 bool Window::IsTracking() const
 {
-    return (ImplGetSVData()->maWinData.mpTrackWin == this);
+    return (ImplGetSVData()->mpWinData->mpTrackWin == this);
 }
 
 void Window::StartAutoScroll( StartAutoScrollFlags nFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    if ( pSVData->maWinData.mpAutoScrollWin.get() != this )
+    if ( pSVData->mpWinData->mpAutoScrollWin.get() != this )
     {
-        if ( pSVData->maWinData.mpAutoScrollWin )
-            pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
+        if ( pSVData->mpWinData->mpAutoScrollWin )
+            pSVData->mpWinData->mpAutoScrollWin->EndAutoScroll();
     }
 
-    pSVData->maWinData.mpAutoScrollWin = this;
-    pSVData->maWinData.mnAutoScrollFlags = nFlags;
+    pSVData->mpWinData->mpAutoScrollWin = this;
+    pSVData->mpWinData->mnAutoScrollFlags = nFlags;
     pSVData->maAppData.mpWheelWindow = VclPtr<ImplWheelWindow>::Create( this );
 }
 
@@ -333,10 +333,10 @@ void Window::EndAutoScroll()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    if ( pSVData->maWinData.mpAutoScrollWin.get() == this )
+    if ( pSVData->mpWinData->mpAutoScrollWin.get() == this )
     {
-        pSVData->maWinData.mpAutoScrollWin = nullptr;
-        pSVData->maWinData.mnAutoScrollFlags = StartAutoScrollFlags::NONE;
+        pSVData->mpWinData->mpAutoScrollWin = nullptr;
+        pSVData->mpWinData->mnAutoScrollFlags = StartAutoScrollFlags::NONE;
         pSVData->maAppData.mpWheelWindow->ImplStop();
         pSVData->maAppData.mpWheelWindow->SetParentToDefaultWindow();
         pSVData->maAppData.mpWheelWindow.disposeAndClear();
@@ -346,9 +346,9 @@ void Window::EndAutoScroll()
 VclPtr<vcl::Window> Window::SaveFocus()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maWinData.mpFocusWin )
+    if ( pSVData->mpWinData->mpFocusWin )
     {
-        return pSVData->maWinData.mpFocusWin;
+        return pSVData->mpWinData->mpFocusWin;
     }
     else
         return nullptr;
@@ -814,7 +814,7 @@ void Window::EnableDocking( bool bEnable )
         ImplGetDockingManager()->RemoveWindow( this );
 }
 
-// retrieves the list of owner draw decorated windows for this window hierarchy
+// retrieves the list of owner draw decorated windows for this window hiearchy
 ::std::vector<VclPtr<vcl::Window> >& Window::ImplGetOwnerDrawList()
 {
     return ImplGetTopmostFrameWindow()->mpWindowImpl->mpFrameData->maOwnerDrawList;
