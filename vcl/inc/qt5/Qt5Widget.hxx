@@ -27,17 +27,6 @@
 
 class Qt5Frame;
 class Qt5Object;
-class QEvent;
-class QFocusEvent;
-class QInputMethodEvent;
-class QKeyEvent;
-class QMouseEvent;
-class QMoveEvent;
-class QPaintEvent;
-class QResizeEvent;
-class QShowEvent;
-class QWheelEvent;
-class QVariant;
 
 class Qt5Widget : public QWidget
 {
@@ -48,9 +37,15 @@ class Qt5Widget : public QWidget
     int m_nDeltaX;
     int m_nDeltaY;
 
-    bool handleKeyEvent(QKeyEvent*, bool);
-    void handleMouseButtonEvent(QMouseEvent*, bool);
-    void commitText(const QString& aText) const;
+    enum class ButtonKeyState
+    {
+        Pressed,
+        Released
+    };
+
+    static void commitText(Qt5Frame&, const QString& aText);
+    static bool handleKeyEvent(Qt5Frame&, const QWidget&, QKeyEvent*, const ButtonKeyState);
+    static void handleMouseButtonEvent(const Qt5Frame&, QMouseEvent*, const ButtonKeyState);
 
     virtual bool event(QEvent*) override;
 
@@ -84,6 +79,28 @@ public:
     Qt5Frame& getFrame() const { return m_rFrame; }
     void startDrag(sal_Int8 nSourceActions);
     void endExtTextInput();
+
+    static bool handleEvent(Qt5Frame&, const QWidget&, QEvent*);
+    // key events might be propagated further down => call base on false
+    static inline bool handleKeyReleaseEvent(Qt5Frame&, const QWidget&, QKeyEvent*);
+    // mouse events are always accepted
+    static inline void handleMousePressEvent(const Qt5Frame&, QMouseEvent*);
+    static inline void handleMouseReleaseEvent(const Qt5Frame&, QMouseEvent*);
 };
+
+bool Qt5Widget::handleKeyReleaseEvent(Qt5Frame& rFrame, const QWidget& rWidget, QKeyEvent* pEvent)
+{
+    return handleKeyEvent(rFrame, rWidget, pEvent, ButtonKeyState::Released);
+}
+
+void Qt5Widget::handleMousePressEvent(const Qt5Frame& rFrame, QMouseEvent* pEvent)
+{
+    handleMouseButtonEvent(rFrame, pEvent, ButtonKeyState::Pressed);
+}
+
+void Qt5Widget::handleMouseReleaseEvent(const Qt5Frame& rFrame, QMouseEvent* pEvent)
+{
+    handleMouseButtonEvent(rFrame, pEvent, ButtonKeyState::Released);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
