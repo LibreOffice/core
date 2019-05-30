@@ -877,6 +877,13 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testSimpleRuby)
     assertXPathContent(mpXmlDoc, "//xhtml:body/xhtml:p/xhtml:ruby/xhtml:span", "base text");
     assertXPathContent(mpXmlDoc, "//xhtml:body/xhtml:p/xhtml:ruby/xhtml:rt", "ruby text");
 }
+
+CPPUNIT_TEST_FIXTURE(EPUBExportTest, testAbi11105)
+{
+    // This crashed because the paragraph style "P5" which had a master-page-name
+    // appeared in a table cell messed up page spans.
+    createDoc("abi11105.abw", {});
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

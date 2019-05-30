@@ -184,8 +184,9 @@ int XMLTableRowContext::GetColumn() const { return m_nColumn; }
 
 void XMLTableRowContext::SetColumn(int nColumn) { m_nColumn = nColumn; }
 
-XMLTableContext::XMLTableContext(XMLImport& rImport)
+XMLTableContext::XMLTableContext(XMLImport& rImport, bool bTopLevel)
     : XMLImportContext(rImport)
+    , m_bTopLevel(bTopLevel)
 {
 }
 
@@ -224,7 +225,8 @@ void XMLTableContext::startElement(
         {
             FillStyles(rAttributeValue, GetImport().GetAutomaticTableStyles(),
                        GetImport().GetTableStyles(), m_aPropertyList);
-            GetImport().HandlePageSpan(m_aPropertyList);
+            if (m_bTopLevel)
+                GetImport().HandlePageSpan(m_aPropertyList);
         }
         else
         {
