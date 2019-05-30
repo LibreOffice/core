@@ -147,5 +147,6 @@ void Qt5OpenGLContext::initWindow()
         InitChildWindow(m_pChildWindow.get());
     }
 
-    m_pWindow = static_cast<Qt5Object*>(m_pChildWindow->ImplGetWindowImpl()->mpSysObj)->m_pQWindow;
+    m_pWindow
+        = static_cast<Qt5Object*>(m_pChildWindow->ImplGetWindowImpl()->mpSysObj)->windowHandle();
 }

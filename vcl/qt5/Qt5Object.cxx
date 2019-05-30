@@ -21,10 +21,9 @@
 #include <Qt5Object.moc>
 
 #include <Qt5Frame.hxx>
+#include <Qt5Widget.hxx>
 
-#include <QtWidgets/QWidget>
 #include <QtGui/QGuiApplication>
-#include <QtGui/QWindow>
 
 Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     : m_pParent(pParent)
@@ -34,8 +33,9 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     if (!m_pParent || !pParent->GetQWidget())
         return;
 
-    m_pQWindow = new QWindow;
+    m_pQWindow = new Qt5ObjectWindow(*this);
     m_pQWidget = QWidget::createWindowContainer(m_pQWindow, pParent->GetQWidget());
+    m_pQWidget->setAttribute(Qt::WA_NoSystemBackground);
 
     if (bShow)
         m_pQWidget->show();
@@ -102,5 +102,34 @@ void Qt5Object::Show(bool bVisible)
 }
 
 void Qt5Object::SetForwardKey(bool /*bEnable*/) {}
+
+Qt5ObjectWindow::Qt5ObjectWindow(Qt5Object& rParent)
+    : m_rParent(rParent)
+{
+    assert(m_rParent.frame() && m_rParent.frame()->GetQWidget());
+}
+
+void Qt5ObjectWindow::mousePressEvent(QMouseEvent* pEvent)
+{
+    m_rParent.CallCallback(SalObjEvent::ToTop);
+    Qt5Widget::handleMousePressEvent(*m_rParent.frame(), pEvent);
+}
+
+void Qt5ObjectWindow::mouseReleaseEvent(QMouseEvent* pEvent)
+{
+    Qt5Widget::handleMouseReleaseEvent(*m_rParent.frame(), pEvent);
+}
+
+bool Qt5ObjectWindow::event(QEvent* pEvent)
+{
+    return Qt5Widget::handleEvent(*m_rParent.frame(), *m_rParent.widget(), pEvent)
+           || QWindow::event(pEvent);
+}
+
+void Qt5ObjectWindow::keyReleaseEvent(QKeyEvent* pEvent)
+{
+    if (!Qt5Widget::handleKeyReleaseEvent(*m_rParent.frame(), *m_rParent.widget(), pEvent))
+        QWindow::keyReleaseEvent(pEvent);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
