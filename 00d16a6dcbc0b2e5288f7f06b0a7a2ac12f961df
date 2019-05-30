@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_77d412be",
+        "filename": "chart2/source/view/axes/VCartesianAxis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1569,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-05-30T13:08:17Z",
+      "side": 1,
+      "message": "and this could guarantee, that it\u0027s worth the modification (while we don\u0027t add a better algorithm here):\n\u0026\u0026 valueLabel_1 !\u003d valueLabel_3",
+      "revId": "00d16a6dcbc0b2e5288f7f06b0a7a2ac12f961df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
