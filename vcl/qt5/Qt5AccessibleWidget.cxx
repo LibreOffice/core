@@ -830,6 +830,22 @@ QString Qt5AccessibleWidget::attributes(int offset, int* startOffset, int* endOf
     if (!xText.is())
         return QString();
 
+    // handle special values for offset the same way base class's QAccessibleTextWidget::attributes does
+    // (as defined in IAccessible 2: -1 -> length, -2 -> cursor position)
+    if (offset == -2)
+        offset = cursorPosition(); // currently always returns 0
+
+    const int nTextLength = characterCount();
+    if (offset == -1 || offset == nTextLength)
+        offset = nTextLength - 1;
+
+    if (offset < 0 || offset > nTextLength)
+    {
+        *startOffset = -1;
+        *endOffset = -1;
+        return QString();
+    }
+
     Sequence<PropertyValue> attribs = xText->getCharacterAttributes(offset, Sequence<OUString>());
     const PropertyValue* pValues = attribs.getConstArray();
     OUString aRet;
