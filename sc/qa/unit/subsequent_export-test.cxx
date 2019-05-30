@@ -220,6 +220,7 @@ public:
     void testTdf91634XLSX();
     void testTdf115159();
     void testTdf112567();
+    void testTdf112567b();
     void testTdf123645XLSX();
     void testTdf125173XLSX();
     void testTdf79972XLSX();
@@ -348,6 +349,7 @@ public:
     CPPUNIT_TEST(testTdf91634XLSX);
     CPPUNIT_TEST(testTdf115159);
     CPPUNIT_TEST(testTdf112567);
+    CPPUNIT_TEST(testTdf112567b);
     CPPUNIT_TEST(testTdf123645XLSX);
     CPPUNIT_TEST(testTdf125173XLSX);
     CPPUNIT_TEST(testTdf79972XLSX);
@@ -4330,6 +4332,35 @@ void ScExportTest::testTdf112567()
 
     //assert the existing OOXML built-in name is not duplicated
     assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName", 1);
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf112567b()
+{
+    // Set the system locale to Hungarian (a language with different range separator)
+    SvtSysLocaleOptions aOptions;
+    aOptions.SetLocaleConfigString("hu-HU");
+    aOptions.Commit();
+    comphelper::ScopeGuard g([&aOptions] {
+        aOptions.SetLocaleConfigString(OUString());
+        aOptions.Commit();
+    });
+
+    ScDocShellRef xShell = loadDoc("tdf112567.", FORMAT_FODS);
+    CPPUNIT_ASSERT(xShell.is());
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    xShell->DoClose();
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/workbook.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    //assert the existing OOXML built-in name is not duplicated
+    assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName", 1);
+
+    //and it contains "," instead of ";"
+    assertXPathContent(pDoc, "/x:workbook/x:definedNames/x:definedName[1]", "Sheet1!$A:$A,Sheet1!$1:$1");
 
     xDocSh->DoClose();
 }
