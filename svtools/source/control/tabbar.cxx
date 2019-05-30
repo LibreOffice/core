@@ -668,7 +668,9 @@ bool TabBar::ImplCalcWidth()
 
         // Padding is dependent on font height - bigger font = bigger padding
         long nFontWidth = aFont.GetFontHeight();
-        nNewWidth += nFontWidth * 5;
+        if (pItem->mbProtect)
+            nNewWidth += 24;
+        nNewWidth += nFontWidth * 2;
 
         if (pItem->mnWidth != nNewWidth)
         {
