@@ -210,7 +210,7 @@ DECLARE_OOXMLEXPORT_TEST(testFontEsc, "test_tdf120412.docx")
         return;
     // don't lose the run with superscript formatting
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 2);
-    // raising is greater, than 100%
+    // raising is greater than 100%
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w:position","val", "24");
 }
 
