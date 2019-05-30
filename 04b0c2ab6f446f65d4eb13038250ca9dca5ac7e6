@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_b7093a96",
+        "filename": "chart2/source/view/axes/VCartesianAxis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1560,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-05-30T11:44:54Z",
+      "side": 1,
+      "message": "used only in the next block, it\u0027s better to move there",
+      "range": {
+        "startLine": 1560,
+        "startChar": 8,
+        "endLine": 1560,
+        "endChar": 122
+      },
+      "revId": "04b0c2ab6f446f65d4eb13038250ca9dca5ac7e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_d7dac615",
+        "filename": "chart2/source/view/axes/VCartesianAxis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-05-30T11:44:54Z",
+      "side": 1,
+      "message": "nColor is enough",
+      "range": {
+        "startLine": 1564,
+        "startChar": 19,
+        "endLine": 1564,
+        "endChar": 24
+      },
+      "revId": "04b0c2ab6f446f65d4eb13038250ca9dca5ac7e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_7703b274",
+        "filename": "chart2/source/view/axes/VCartesianAxis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1579,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-05-30T11:44:54Z",
+      "side": 1,
+      "message": "halving is not enough?, ie. removing this and",
+      "range": {
+        "startLine": 1578,
+        "startChar": 0,
+        "endLine": 1579,
+        "endChar": 17
+      },
+      "revId": "04b0c2ab6f446f65d4eb13038250ca9dca5ac7e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_17fa6e74",
+        "filename": "chart2/source/view/axes/VCartesianAxis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1580,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-05-30T11:44:54Z",
+      "side": 1,
+      "message": "this part?",
+      "range": {
+        "startLine": 1580,
+        "startChar": 41,
+        "endLine": 1580,
+        "endChar": 42
+      },
+      "revId": "04b0c2ab6f446f65d4eb13038250ca9dca5ac7e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
