@@ -33,11 +33,7 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     if (!m_pParent || !pParent->GetQWidget())
         return;
 
-    m_pQWidget = new QWidget(pParent->GetQWidget());
-    // is there a better way to get a transparent widget?
-    m_pQWidget->setAttribute(Qt::WA_NoSystemBackground);
-    m_pQWidget->setAttribute(Qt::WA_OpaquePaintEvent);
-    m_pQWidget->setWindowOpacity(0.0);
+    m_pQWidget = new Qt5ObjectWidget(*this, pParent->GetQWidget());
 
     if (bShow)
         m_pQWidget->show();
@@ -104,5 +100,33 @@ void Qt5Object::Show(bool bVisible)
 }
 
 void Qt5Object::SetForwardKey(bool /*bEnable*/) {}
+
+Qt5ObjectWidget::Qt5ObjectWidget(Qt5Object& rParent, QWidget* pWidget)
+    : QWidget(pWidget)
+    , m_rParent(rParent)
+{
+    // is there a better way to get a transparent widget?
+    setAttribute(Qt::WA_NoSystemBackground);
+    setAttribute(Qt::WA_OpaquePaintEvent);
+    setWindowOpacity(0.0);
+}
+
+void Qt5ObjectWidget::mousePressEvent(QMouseEvent* pEvent)
+{
+    m_rParent.CallCallback(SalObjEvent::ToTop);
+    QWidget::mousePressEvent(pEvent);
+}
+
+void Qt5ObjectWidget::focusInEvent(QFocusEvent* pEvent)
+{
+    m_rParent.CallCallback(SalObjEvent::GetFocus);
+    QWidget::focusInEvent(pEvent);
+}
+
+void Qt5ObjectWidget::focusOutEvent(QFocusEvent* pEvent)
+{
+    m_rParent.CallCallback(SalObjEvent::LoseFocus);
+    QWidget::focusOutEvent(pEvent);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

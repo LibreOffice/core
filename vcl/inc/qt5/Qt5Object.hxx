@@ -24,9 +24,9 @@
 
 #include <QtCore/QObject>
 #include <QtGui/QRegion>
+#include <QtWidgets/QWidget>
 
 class Qt5Frame;
-class QWidget;
 
 class Qt5Object : public QObject, public SalObject
 {
@@ -53,6 +53,20 @@ public:
     virtual void SetForwardKey(bool bEnable) override;
 
     virtual const SystemEnvData* GetSystemData() const override { return &m_aSystemData; }
+};
+
+class Qt5ObjectWidget : public QWidget
+{
+    Q_OBJECT
+
+    Qt5Object& m_rParent;
+
+    void focusInEvent(QFocusEvent*) override;
+    void focusOutEvent(QFocusEvent*) override;
+    void mousePressEvent(QMouseEvent*) override;
+
+public:
+    explicit Qt5ObjectWidget(Qt5Object& rParent, QWidget* pWidget);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
