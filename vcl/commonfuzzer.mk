@@ -99,6 +99,7 @@ fuzzer_core_libraries = \
     sm \
     gie \
     oox \
+    proxyfac \
     reflection \
     odfflatxml \
     invocadapt \
