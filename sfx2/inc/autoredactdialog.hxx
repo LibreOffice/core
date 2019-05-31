@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_AUTOREDACTDIALOG_HXX
-#define INCLUDED_SFX2_AUTOREDACTDIALOG_HXX
+#ifndef INCLUDED_SFX2_INC_AUTOREDACTDIALOG_HXX
+#define INCLUDED_SFX2_INC_AUTOREDACTDIALOG_HXX
 
 #include <memory>
 #include <sal/config.h>
@@ -25,6 +25,10 @@ class Button;
 }
 namespace weld
 {
+class ComboBox;
+}
+namespace weld
+{
 class Label;
 }
 namespace weld
@@ -36,16 +40,26 @@ namespace weld
 class TreeView;
 }
 
-struct RedactionTarget
+enum RedactionTargetType
 {
-    sal_uInt32 nID;
-    OUString sName;
-    OUString sType;
-    bool bCaseSensitive;
-    bool bWholeWords;
-    OUString sDescription;
+    REDACTION_TARGET_TEXT,
+    REDACTION_TARGET_REGEX,
+    REDACTION_TARGET_PREDEFINED,
+    REDACTION_TARGET_UNKNOWN
 };
 
+/// Keeps information for a single redaction target
+struct RedactionTarget
+{
+    OUString sName;
+    RedactionTargetType sType;
+    OUString sContent;
+    bool bCaseSensitive;
+    bool bWholeWords;
+    sal_uInt32 nID;
+};
+
+/// Used to display the targets list
 class TargetsTable
 {
     std::unique_ptr<weld::TreeView> m_xControl;
@@ -75,7 +89,7 @@ public:
 class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxDialogController
 {
     SfxObjectShellLock m_xDocShell;
-    std::vector<std::pair<TargetsTable*, OUString>> m_aTableTargets;
+    std::vector<std::pair<RedactionTarget*, OUString>> m_aTableTargets;
 
     std::unique_ptr<weld::Label> m_xRedactionTargetsLabel;
     std::unique_ptr<TargetsTable> m_xTargetsBox;
@@ -84,6 +98,12 @@ class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxDialogController
     std::unique_ptr<weld::Button> m_xAddBtn;
     std::unique_ptr<weld::Button> m_xEditBtn;
     std::unique_ptr<weld::Button> m_xDeleteBtn;
+
+    /*DECL_LINK(LoadHdl, weld::Button&, void);
+    DECL_LINK(SaveHdl, weld::Button&, void);*/
+    DECL_LINK(AddHdl, weld::Button&, void);
+    //DECL_LINK(EditHdl, weld::Button&, void);
+    DECL_LINK(DeleteHdl, weld::Button&, void);
 
 public:
     SfxAutoRedactDialog(weld::Window* pParent);
@@ -97,6 +117,28 @@ public:
     // TODO: Some method(s) to check emptiness/validity
     // TODO: Some method(s) to get the search params/objects
     // TODO: Some method(s) to load/save redaction target sets
+};
+
+class SfxAddTargetDialog : public weld::GenericDialogController
+{
+private:
+    std::unique_ptr<weld::Entry> m_xName;
+    std::unique_ptr<weld::ComboBox> m_xType;
+    std::unique_ptr<weld::Entry> m_xContent;
+    std::unique_ptr<weld::CheckButton> m_xCaseSensitive;
+    std::unique_ptr<weld::CheckButton> m_xWholeWords;
+
+public:
+    SfxAddTargetDialog(weld::Window* pWindow, const OUString& rName);
+
+    OUString getName() const { return m_xName->get_text(); }
+    RedactionTargetType getType() const;
+    OUString getContent() const { return m_xContent->get_text(); }
+    bool isCaseSensitive() const
+    {
+        return m_xCaseSensitive->get_state() == TriState::TRISTATE_TRUE;
+    }
+    bool isWholeWords() const { return m_xWholeWords->get_state() == TriState::TRISTATE_TRUE; }
 };
 
 #endif
