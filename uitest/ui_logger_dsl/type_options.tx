@@ -1,0 +1,9 @@
+Type_options:
+    char | KeyCode
+;
+char:
+    '{' '"TEXT":' input_char=STRING '}'
+;
+KeyCode:
+    '{' '"KEYCODE":' input_key_code=STRING '}'
+;

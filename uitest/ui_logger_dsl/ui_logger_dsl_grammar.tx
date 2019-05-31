@@ -1,0 +1,20 @@
+//this file is to define the new dsl grammar
+
+import dialog_commands
+import starter_commands
+import uno_commands
+import UI_Object_commands
+import Special_commands
+
+
+UILogger:
+    commands*=Command    
+;
+
+Command:
+  UNOCommand | StarterCommand | UIObjectCommand | DialogCommand  | SpecialCommand
+;
+
+Comment:
+  /\/\/.*$/
+;

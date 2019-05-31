@@ -1,0 +1,9 @@
+UNOCommand:
+    'Send UNO Command' '(' uno_command=STRING ')'  prameters*=parameter
+;
+parameter:
+    '{'  parameter_data *= data '}'
+;
+data:
+    key=STRING ':' value=ID ','
+;

@@ -1,0 +1,71 @@
+import type_options
+/*
+    this file is for: 
+        ButtonUIObject	
+        EditUIObject	
+        CheckBoxUIObject	
+        RadioButtonUIObject	
+        ListBoxUIObject	
+        ComboBoxUIObject	
+        SpinUIObject	
+        SpinFieldUIObject	
+        TabControlUIObject
+*/
+
+UIObjectCommand:
+  ButtonUIObject | CheckBoxUIObject | EditUIObject | 
+  RadioButtonUIObject | ListBoxUIObject | ComboBoxUIObject | 
+  SpinUIObject | SpinFieldUIObject | TabControlUIObject
+;
+
+ButtonUIObject:
+  'Click on' ui_button=STRING 'from' parent_id=ID 
+;	
+CheckBoxUIObject:
+  'Toggle' Check_box_id=STRING 'CheckBox' 'from' parent_id=ID   
+;	
+RadioButtonUIObject:
+  'Select' Radio_button_id=STRING 'RadioButton' 'from' parent_id=ID 
+;	
+ComboBoxUIObject:
+   'Select in' Combo_box_id=STRING 'ComboBox' 'item number' item_num=INT 'from' parent_id=ID  
+;
+TabControlUIObject:
+   'Choose Tab number' tab_page_number=INT 'from' parent_id=ID 
+;
+
+EditUIObject:
+   action=action_on_UIObject 'from' parent_id=ID  
+;
+SpinFieldUIObject:
+   change=increase_or_ecrease Spin_id=STRING 'from' parent_id=ID 
+;
+ListBoxUIObject:
+   'Select element with position ' POS=INT 'in' list=STRING 'from' parent_id=ID 
+;
+//==========================================
+SpinUIObject:
+	'from' parent_id=ID 
+  //unkown for now 
+;
+//==========================================
+
+//hellper grammer for EditUIObject
+action_on_UIObject:
+    Type_action | SELECT | Clear
+;
+Type_action:
+  'Type on' edit_button=STRING what_to_type=Type_options
+;
+SELECT:
+  'Select in ' edit_button=STRING
+  '{"FROM": "' from=INT '", "' To=INT '": "0"}'
+;
+Clear:
+  'Clear' edit_button=STRING
+;
+
+//helper functions for SpinUIObject
+increase_or_ecrease:
+  'Increase' | 'Decrease'
+;

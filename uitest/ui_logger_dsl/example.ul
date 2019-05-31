@@ -1,0 +1,22 @@
+Start writer
+Send UNO Command (".uno:UpdateInputFields")
+Send UNO Command (".uno:FontDialog")
+Open CharacterPropertiesDialog
+Choose Tab number 0 from CharacterPropertiesDialog 
+Choose Tab number 2 from CharacterPropertiesDialog
+Select "90deg" Radio Button from CharacterPropertiesDialog
+Toggle "pairkerning" CheckBox from CharacterPropertiesDialog
+Select in "weststylelb-cjk" ComboBox item number 2 from CharacterPropertiesDialog 
+Increase "scalewidthsb" from CharacterPropertiesDialog
+Decrease "scalewidthsb" from CharacterPropertiesDialog
+Type on "linewidthmf" {"TEXT": "1"} from CharacterPropertiesDialog
+Select element with position 2 in "effectslb" from CharacterPropertiesDialog
+Click on "ok" from CharacterPropertiesDialog 
+Close Dialog
+Type on writer {"TEXT": "s"}
+Select from Pos 5 to Pos 7
+Set Zoom to be 100
+GOTO page number 1
+Open QuerySaveDialog
+Click on "ok" from QuerySaveDialog
+Close Dialog
