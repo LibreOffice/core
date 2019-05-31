@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
+#include <iostream>
 #include <sal/config.h>
 #include <sal/log.hxx>
 
@@ -849,6 +849,7 @@ void SvxToolbarConfigPage::SelectElement()
         m_xContentsListBox->insert(i, sId);
         if (entry->IsBinding() && !entry->IsSeparator())
             m_xContentsListBox->set_toggle(i,  entry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+        std::cout<<entry->GetCommand()<<"\n";
         InsertEntryIntoUI(entry, i, 1);
         ++i;
     }

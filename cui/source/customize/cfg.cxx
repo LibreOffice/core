@@ -25,11 +25,13 @@
 #include <time.h>
 #include <typeinfo>
 
+#include <vcl/button.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/toolbox.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/virdev.hxx>
@@ -58,6 +60,7 @@
 #include <cfg.hxx>
 #include <SvxMenuConfigPage.hxx>
 #include <SvxToolbarConfigPage.hxx>
+#include <SvxNotebookbarConfigPage.hxx>
 #include <SvxConfigPageHelper.hxx>
 #include "eventdlg.hxx"
 #include <dialmgr.hxx>
@@ -188,6 +191,12 @@ static VclPtr<SfxTabPage> CreateKeyboardConfigPage( TabPageParent pParent, const
        return VclPtr<SfxAcceleratorConfigPage>::Create(pParent, *rSet);
 }
 
+static VclPtr<SfxTabPage> CreateSvxNotebookbarConfigPage(TabPageParent pParent,
+                                                         const SfxItemSet* rSet)
+{
+    return VclPtr<SvxNotebookbarConfigPage>::Create(pParent, *rSet);
+}
+
 static VclPtr<SfxTabPage> CreateSvxToolbarConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
 {
     return VclPtr<SvxToolbarConfigPage>::Create(pParent, *rSet);
@@ -212,6 +221,7 @@ SvxConfigDialog::SvxConfigDialog(weld::Window * pParent, const SfxItemSet* pInSe
 
     AddTabPage("menus", CreateSvxMenuConfigPage, nullptr);
     AddTabPage("toolbars", CreateSvxToolbarConfigPage, nullptr);
+    AddTabPage("notebookbar", CreateSvxNotebookbarConfigPage, nullptr);
     AddTabPage("contextmenus", CreateSvxContextMenuConfigPage, nullptr);
     AddTabPage("keyboard", CreateKeyboardConfigPage, nullptr);
     AddTabPage("events", CreateSvxEventConfigPage, nullptr);
@@ -240,8 +250,8 @@ void SvxConfigDialog::SetFrame(const css::uno::Reference< css::frame::XFrame >& 
 
 void SvxConfigDialog::PageCreated(const OString &rId, SfxTabPage& rPage)
 {
-    if (rId == "menus" || rId == "keyboard" ||
-        rId == "toolbars" || rId == "contextmenus")
+    if (rId == "menus" || rId == "keyboard" || rId == "notebookbar"
+        || rId == "toolbars" || rId == "contextmenus")
     {
         rPage.SetFrame(m_xFrame);
     }
@@ -970,6 +980,11 @@ SvxConfigPage::SvxConfigPage(TabPageParent pParent, const SfxItemSet& rSet)
     , m_aUpdateDataTimer("UpdateDataTimer")
     , bInitialised(false)
     , pCurrentSaveInData(nullptr)
+    , m_xLeftFunctionLabel(m_xBuilder->weld_label("leftfunctionlabel"))
+    , m_xSearchLabel(m_xBuilder->weld_label("searchlabel"))
+    , m_xCategoryLabel(m_xBuilder->weld_label("categorylabel"))
+    , m_xCategoryListBox(m_xBuilder->weld_combo_box("commandcategorylist"))
+    , m_xCustomizeLabel(m_xBuilder->weld_label("customizelabel"))
     , m_xSearchEdit(m_xBuilder->weld_entry("searchEntry"))
     , m_xCommandCategoryListBox(new CommandCategoryListBox(m_xBuilder->weld_combo_box("commandcategorylist")))
     , m_xFunctions(new CuiConfigFunctionListBox(m_xBuilder->weld_tree_view("functions")))
@@ -1309,8 +1324,8 @@ bool SvxConfigPage::FillItemSet( SfxItemSet* )
     {
         SaveInData* pData =
             reinterpret_cast<SaveInData*>(m_xSaveInListBox->get_id(i).toInt64());
-
-        result = pData->Apply();
+        if (m_xSaveInListBox->get_id(i) != "0")
+            result = pData->Apply();
     }
     return result;
 }
@@ -2723,7 +2738,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
     {
         name[ 0 ] = elem.first;
         uno::Sequence< uno::Reference< graphic::XGraphic> > graphics = m_xImportedImageManager->getImages( SvxConfigPageHelper::GetImageType(), name );
-        if ( graphics.getLength() > 0 )
+        if ( graphics.hasElements() )
         {
             m_aGraphics.push_back(graphics[0]);
             Image img(graphics[0]);
@@ -2769,7 +2784,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
             // added to the list
         }
 
-        if ( graphics.getLength() > 0 )
+        if ( graphics.hasElements() )
         {
             Image img(graphics[0]);
             if (!img.GetBitmapEx().IsEmpty())
