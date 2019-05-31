@@ -1,0 +1,7 @@
+Code-Review+2: Eike Rathke <erack@redhat.com>
+Verified+1: Jenkins
+Submitted-by: Stephan Bergmann <sbergman@redhat.com>
+Submitted-at: Fri, 31 May 2019 22:27:33 +0200
+Reviewed-on: https://gerrit.libreoffice.org/73273
+Project: core
+Branch: refs/heads/master
