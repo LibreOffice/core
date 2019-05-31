@@ -21,10 +21,6 @@
 
 #include <QtGui/QClipboard>
 
-using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-
 class Qt5Transferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
 public:
@@ -44,31 +40,30 @@ private:
     QClipboard::Mode m_aClipboardMode;
 };
 
-class VclQt5Clipboard
+class Qt5Clipboard
     : public QObject,
-      public cppu::WeakComponentImplHelper<datatransfer::clipboard::XSystemClipboard,
-                                           datatransfer::clipboard::XFlushableClipboard,
-                                           XServiceInfo>
+      public cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
+                                           css::datatransfer::clipboard::XFlushableClipboard,
+                                           css::lang::XServiceInfo>
 {
     Q_OBJECT
 
-private Q_SLOTS:
-    void handleClipboardChange(QClipboard::Mode mode);
-
-private:
     osl::Mutex m_aMutex;
-    Reference<css::datatransfer::XTransferable> m_aContents;
-    Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
-    std::vector<Reference<css::datatransfer::clipboard::XClipboardListener>> m_aListeners;
+    css::uno::Reference<css::datatransfer::XTransferable> m_aContents;
+    css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
+    std::vector<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> m_aListeners;
     OUString m_aClipboardName;
     QClipboard::Mode m_aClipboardMode;
     // custom MIME type to detect whether clipboard content was added by self or externally
     const QString m_sMimeTypeUuid = "application/x-libreoffice-clipboard-uuid";
     const QByteArray m_aUuid;
 
+private Q_SLOTS:
+    void handleClipboardChange(QClipboard::Mode mode);
+
 public:
-    explicit VclQt5Clipboard(const OUString& aModeString);
-    virtual ~VclQt5Clipboard() override;
+    explicit Qt5Clipboard(const OUString& aModeString);
+    virtual ~Qt5Clipboard() override;
 
     /*
      * XServiceInfo
@@ -76,17 +71,18 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     /*
      * XClipboard
      */
 
-    virtual Reference<css::datatransfer::XTransferable> SAL_CALL getContents() override;
+    virtual css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getContents() override;
 
     virtual void SAL_CALL setContents(
-        const Reference<css::datatransfer::XTransferable>& xTrans,
-        const Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner) override;
+        const css::uno::Reference<css::datatransfer::XTransferable>& xTrans,
+        const css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
+        override;
 
     virtual OUString SAL_CALL getName() override;
 
@@ -105,10 +101,12 @@ public:
      * XClipboardNotifier
      */
     virtual void SAL_CALL addClipboardListener(
-        const Reference<css::datatransfer::clipboard::XClipboardListener>& listener) override;
+        const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
+        override;
 
     virtual void SAL_CALL removeClipboardListener(
-        const Reference<css::datatransfer::clipboard::XClipboardListener>& listener) override;
+        const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
+        override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

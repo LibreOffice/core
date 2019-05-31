@@ -22,8 +22,6 @@
 #include <Qt5Widget.hxx>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 
 Qt5DnDTransferable::Qt5DnDTransferable(const QMimeData* pMimeData)
     : Qt5Transferable(QClipboard::Clipboard)
@@ -56,7 +54,8 @@ css::uno::Any Qt5DnDTransferable::getTransferData(const css::datatransfer::DataF
                     aStr += "\n";
             }
 
-            Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()), aStr.length());
+            uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()),
+                                         aStr.length());
             aAny <<= aSeq;
         }
     }
@@ -85,7 +84,7 @@ std::vector<css::datatransfer::DataFlavor> Qt5DnDTransferable::getTransferDataFl
             else
             {
                 aFlavor.MimeType = toOUString(rMimeType);
-                aFlavor.DataType = cppu::UnoType<Sequence<sal_Int8>>::get();
+                aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
                 aVector.push_back(aFlavor);
             }
         }
@@ -113,8 +112,8 @@ void Qt5DragSource::initialize(const css::uno::Sequence<css::uno::Any>& rArgumen
 {
     if (rArguments.getLength() < 2)
     {
-        throw RuntimeException("DragSource::initialize: Cannot install window event handler",
-                               static_cast<OWeakObject*>(this));
+        throw uno::RuntimeException("DragSource::initialize: Cannot install window event handler",
+                                    static_cast<OWeakObject*>(this));
     }
 
     sal_IntPtr nFrame = 0;
@@ -122,8 +121,8 @@ void Qt5DragSource::initialize(const css::uno::Sequence<css::uno::Any>& rArgumen
 
     if (!nFrame)
     {
-        throw RuntimeException("DragSource::initialize: missing SalFrame",
-                               static_cast<OWeakObject*>(this));
+        throw uno::RuntimeException("DragSource::initialize: missing SalFrame",
+                                    static_cast<OWeakObject*>(this));
     }
 
     m_pFrame = reinterpret_cast<Qt5Frame*>(nFrame);
@@ -197,7 +196,7 @@ sal_Bool SAL_CALL Qt5DragSource::supportsService(OUString const& ServiceName)
 
 css::uno::Sequence<OUString> SAL_CALL Qt5DragSource::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet{ "com.sun.star.datatransfer.dnd.Qt5DragSource" };
+    uno::Sequence<OUString> aRet{ "com.sun.star.datatransfer.dnd.Qt5DragSource" };
     return aRet;
 }
 
@@ -221,7 +220,7 @@ sal_Bool SAL_CALL Qt5DropTarget::supportsService(OUString const& ServiceName)
 
 css::uno::Sequence<OUString> SAL_CALL Qt5DropTarget::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet{ "com.sun.star.datatransfer.dnd.Qt5DropTarget" };
+    uno::Sequence<OUString> aRet{ "com.sun.star.datatransfer.dnd.Qt5DropTarget" };
     return aRet;
 }
 
@@ -237,12 +236,12 @@ void Qt5DropTarget::deinitialize()
     m_bActive = false;
 }
 
-void Qt5DropTarget::initialize(const Sequence<Any>& rArguments)
+void Qt5DropTarget::initialize(const uno::Sequence<uno::Any>& rArguments)
 {
     if (rArguments.getLength() < 2)
     {
-        throw RuntimeException("DropTarget::initialize: Cannot install window event handler",
-                               static_cast<OWeakObject*>(this));
+        throw uno::RuntimeException("DropTarget::initialize: Cannot install window event handler",
+                                    static_cast<OWeakObject*>(this));
     }
 
     sal_IntPtr nFrame = 0;
@@ -250,8 +249,8 @@ void Qt5DropTarget::initialize(const Sequence<Any>& rArguments)
 
     if (!nFrame)
     {
-        throw RuntimeException("DropTarget::initialize: missing SalFrame",
-                               static_cast<OWeakObject*>(this));
+        throw uno::RuntimeException("DropTarget::initialize: missing SalFrame",
+                                    static_cast<OWeakObject*>(this));
     }
 
     mnDragAction = datatransfer::dnd::DNDConstants::ACTION_NONE;
@@ -263,7 +262,7 @@ void Qt5DropTarget::initialize(const Sequence<Any>& rArguments)
 }
 
 void Qt5DropTarget::addDropTargetListener(
-    const Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
+    const uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
 {
     ::osl::Guard<::osl::Mutex> aGuard(m_aMutex);
 
@@ -271,7 +270,7 @@ void Qt5DropTarget::addDropTargetListener(
 }
 
 void Qt5DropTarget::removeDropTargetListener(
-    const Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
+    const uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
 {
     ::osl::Guard<::osl::Mutex> aGuard(m_aMutex);
 
