@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+-->
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.3">
+  <LC_INFO>
+    <Language>
+      <LangID>szl</LangID>
+      <DefaultName>Silesian</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>PL</CountryID>
+      <DefaultName>Poland</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE ref="pl_PL"/>
+  <LC_FORMAT ref="pl_PL" replaceFrom="[CURRENCY]" replaceTo="[$zł-699]"/>
+  <LC_COLLATION ref="pl_PL"/>
+  <LC_SEARCH ref="pl_PL"/>
+  <LC_INDEX>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A Ã B C Ć D E-L Ł M N Ń O Ō Ô Ŏ Õ P-S Ś T-Z Ź Ż</IndexKey>
+    <UnicodeScript>0</UnicodeScript>
+    <UnicodeScript>1</UnicodeScript>
+    <UnicodeScript>2</UnicodeScript>
+    <FollowPageWord>s.</FollowPageWord>
+    <FollowPageWord>ss.</FollowPageWord>
+  </LC_INDEX>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>niydz.</DefaultAbbrvName>
+          <DefaultFullName>niydziela</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>pyń.</DefaultAbbrvName>
+          <DefaultFullName>pyńdziałek</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>wt.</DefaultAbbrvName>
+          <DefaultFullName>wtorek</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>strz.</DefaultAbbrvName>
+          <DefaultFullName>strzoda</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>sztw.</DefaultAbbrvName>
+          <DefaultFullName>sztwortek</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>pt.</DefaultAbbrvName>
+          <DefaultFullName>piōntek</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>sob.</DefaultAbbrvName>
+          <DefaultFullName>sobota</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>I</DefaultAbbrvName>
+          <DefaultFullName>styczyń</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>II</DefaultAbbrvName>
+          <DefaultFullName>luty</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>III</DefaultAbbrvName>
+          <DefaultFullName>marzec</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>IV</DefaultAbbrvName>
+          <DefaultFullName>kwieciyń</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>V</DefaultAbbrvName>
+          <DefaultFullName>moj</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>VI</DefaultAbbrvName>
+          <DefaultFullName>czyrwiec</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>VII</DefaultAbbrvName>
+          <DefaultFullName>lipiec</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>VIII</DefaultAbbrvName>
+          <DefaultFullName>sierpiyń</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>IX</DefaultAbbrvName>
+          <DefaultFullName>wrzesiyń</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>X</DefaultAbbrvName>
+          <DefaultFullName>październik</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>XI</DefaultAbbrvName>
+          <DefaultFullName>listopad</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>XII</DefaultAbbrvName>
+          <DefaultFullName>grudziyń</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <GenitiveMonths>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>I</DefaultAbbrvName>
+          <DefaultFullName>stycznia</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>II</DefaultAbbrvName>
+          <DefaultFullName>lutego</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>III</DefaultAbbrvName>
+          <DefaultFullName>marca</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>IV</DefaultAbbrvName>
+          <DefaultFullName>kwietnia</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>V</DefaultAbbrvName>
+          <DefaultFullName>moja</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>VI</DefaultAbbrvName>
+          <DefaultFullName>czyrwca</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>VII</DefaultAbbrvName>
+          <DefaultFullName>lipca</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>VIII</DefaultAbbrvName>
+          <DefaultFullName>sierpnia</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>IX</DefaultAbbrvName>
+          <DefaultFullName>września</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>X</DefaultAbbrvName>
+          <DefaultFullName>października</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>XI</DefaultAbbrvName>
+          <DefaultFullName>listopada</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>XII</DefaultAbbrvName>
+          <DefaultFullName>grudnia</DefaultFullName>
+        </Month>
+      </GenitiveMonths>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>p.n.e.</DefaultAbbrvName>
+          <DefaultFullName>p.n.e.</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>n.e.</DefaultAbbrvName>
+          <DefaultFullName>n.e.</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>mon</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY ref="pl_PL"/>
+  <LC_TRANSLITERATION ref="pl_PL"/>
+  <LC_MISC>
+    <ReservedWords>
+      <trueWord>prowda</trueWord>
+      <falseWord>fałsz</falseWord>
+      <quarter1Word>I sztwierć roku</quarter1Word>
+      <quarter2Word>II sztwierć roku</quarter2Word>
+      <quarter3Word>III sztwierć roku</quarter3Word>
+      <quarter4Word>IV sztwierć roku</quarter4Word>
+      <aboveWord>bez</aboveWord>
+      <belowWord>hned</belowWord>
+      <quarter1Abbreviation>S1</quarter1Abbreviation>
+      <quarter2Abbreviation>S2</quarter2Abbreviation>
+      <quarter3Abbreviation>S3</quarter3Abbreviation>
+      <quarter4Abbreviation>S4</quarter4Abbreviation>
+    </ReservedWords>
+  </LC_MISC>
+  <LC_NumberingLevel ref="pl_PL"/>
+  <LC_OutLineNumberingLevel ref="pl_PL"/>
+</Locale>
