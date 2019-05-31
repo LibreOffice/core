@@ -19,8 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_CHANGEDB_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CHANGEDB_HXX
 
-#include <svx/stddlg.hxx>
-#include <vcl/weld.hxx>
+#include <sfx2/basedlgs.hxx>
 #include "dbtree.hxx"
 
 class SwFieldMgr;
