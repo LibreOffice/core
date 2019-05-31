@@ -29,7 +29,7 @@
 
 class SwMailMergeWizard;
 class SwFrameFormat;
-class SwOneExampleFrame;
+class OneExampleFrame;
 class SwWrtShell;
 class SwView;
 
@@ -37,26 +37,10 @@ namespace com{ namespace sun{ namespace star{ namespace beans{ class XPropertySe
 
 class SwMailMergeLayoutPage : public svt::OWizardPage
 {
-    VclPtr<VclContainer>       m_pPosition;
-
-    VclPtr<CheckBox>           m_pAlignToBodyCB;
-    VclPtr<FixedText>          m_pLeftFT;
-    VclPtr<MetricField>        m_pLeftMF;
-    VclPtr<MetricField>        m_pTopMF;
-
-    VclPtr<VclContainer>       m_pGreetingLine;
-    VclPtr<PushButton>         m_pUpPB;
-    VclPtr<PushButton>         m_pDownPB;
-
-    VclPtr<vcl::Window>             m_pExampleContainerWIN;
-
-    VclPtr<ListBox>            m_pZoomLB;
-
-    std::unique_ptr<SwOneExampleFrame> m_pExampleFrame;
     SwWrtShell*         m_pExampleWrtShell;
 
     OUString            m_sExampleURL;
-    SwFrameFormat*           m_pAddressBlockFormat;
+    SwFrameFormat*      m_pAddressBlockFormat;
 
     bool                m_bIsGreetingInserted;
 
@@ -64,14 +48,25 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
 
     css::uno::Reference< css::beans::XPropertySet >  m_xViewProperties;
 
-    DECL_LINK(PreviewLoadedHdl_Impl, SwOneExampleFrame&, void);
-    DECL_LINK(ZoomHdl_Impl, ListBox&, void);
-    DECL_LINK(ChangeAddressHdl_Impl, SpinField&, void);
-    DECL_LINK(ChangeAddressLoseFocusHdl_Impl, Control&, void);
-    DECL_LINK(GreetingsHdl_Impl, Button*, void);
-    DECL_LINK(AlignToTextHdl_Impl, Button*, void);
+    std::unique_ptr<weld::Container> m_xPosition;
+    std::unique_ptr<weld::CheckButton> m_xAlignToBodyCB;
+    std::unique_ptr<weld::Label> m_xLeftFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xLeftMF;
+    std::unique_ptr<weld::MetricSpinButton> m_xTopMF;
+    std::unique_ptr<weld::Container> m_xGreetingLine;
+    std::unique_ptr<weld::Button> m_xUpPB;
+    std::unique_ptr<weld::Button> m_xDownPB;
+    std::unique_ptr<weld::ComboBox> m_xZoomLB;
+    std::unique_ptr<OneExampleFrame> m_xExampleFrame;
+    std::unique_ptr<weld::CustomWeld> m_xExampleContainerWIN;
 
-    static SwFrameFormat*        InsertAddressFrame(
+    DECL_LINK(PreviewLoadedHdl_Impl, OneExampleFrame&, void);
+    DECL_LINK(ZoomHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(ChangeAddressHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(GreetingsHdl_Impl, weld::Button&, void);
+    DECL_LINK(AlignToTextHdl_Impl, weld::ToggleButton&, void);
+
+    static SwFrameFormat* InsertAddressFrame(
                             SwWrtShell& rShell,
                             SwMailMergeConfigItem const & rConfigItem,
                             const Point& rDestination,
@@ -82,9 +77,8 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
     virtual void        ActivatePage() override;
     virtual bool        commitPage(::svt::WizardTypes::CommitPageReason _eReason) override;
 public:
-        SwMailMergeLayoutPage( SwMailMergeWizard* _pParent);
-        virtual ~SwMailMergeLayoutPage() override;
-    virtual void            dispose() override;
+    SwMailMergeLayoutPage(SwMailMergeWizard* pWizard, TabPageParent pParent);
+    virtual ~SwMailMergeLayoutPage() override;
 
     static SwFrameFormat*        InsertAddressAndGreeting(SwView const * pView,
                                             SwMailMergeConfigItem& rConfigItem,
