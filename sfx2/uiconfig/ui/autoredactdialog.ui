@@ -8,11 +8,11 @@
       <column type="gchararray"/>
       <!-- column-name sType -->
       <column type="gchararray"/>
+      <!-- column-name sContent -->
+      <column type="gchararray"/>
       <!-- column-name bIsCaseSensitive -->
       <column type="gchararray"/>
       <!-- column-name bWholeWords -->
-      <column type="gchararray"/>
-      <!-- column-name sDescription -->
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
@@ -143,7 +143,7 @@
                       <object class="GtkTreeViewColumn" id="treeviewcolumn2">
                         <property name="resizable">True</property>
                         <property name="spacing">6</property>
-                        <property name="title" translatable="yes" context="autoredactdialog|target">Case Sensitive</property>
+                        <property name="title" translatable="yes" context="autoredactdialog|target">Content</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderer2"/>
                           <attributes>
@@ -156,7 +156,7 @@
                       <object class="GtkTreeViewColumn" id="treeviewcolumn3">
                         <property name="resizable">True</property>
                         <property name="spacing">6</property>
-                        <property name="title" translatable="yes" context="autoredactdialog|target">Whole Words</property>
+                        <property name="title" translatable="yes" context="autoredactdialog|target">Case Sensitive</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderer3"/>
                           <attributes>
@@ -169,7 +169,7 @@
                       <object class="GtkTreeViewColumn" id="treeviewcolumn4">
                         <property name="resizable">True</property>
                         <property name="spacing">6</property>
-                        <property name="title" translatable="yes" context="autoredactdialog|target">Description</property>
+                        <property name="title" translatable="yes" context="autoredactdialog|target">Whole Words</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderer4"/>
                           <attributes>
