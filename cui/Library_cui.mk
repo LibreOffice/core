@@ -76,6 +76,7 @@ $(eval $(call gb_Library_use_externals,cui,\
 ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Library_use_externals,cui,\
      epoxy \
+     libxml2 \
  ))
 endif
 
@@ -96,6 +97,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/customize/SvxConfigPageHelper \
     cui/source/customize/SvxMenuConfigPage \
     cui/source/customize/SvxToolbarConfigPage \
+    cui/source/customize/SvxNotebookbarConfigPage \
     cui/source/dialogs/about \
     cui/source/dialogs/colorpicker \
     cui/source/dialogs/cuicharmap \
