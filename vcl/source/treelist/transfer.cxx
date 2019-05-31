@@ -1973,10 +1973,20 @@ bool TransferableDataHelper::GetFileList( FileList& rFileList )
         if( SotClipboardFormatId::FILE_LIST == GetFormat( i ) )
         {
             const DataFlavor aFlavor( GetFormatDataFlavor( i ) );
+            const bool bIsUriList = aFlavor.MimeType.indexOf("text/uri-list") > -1;
 
-            if( GetSotStorageStream( aFlavor, xStm ) )
+            if (bIsUriList && aFlavor.DataType == cppu::UnoType<css::uno::Sequence<OUString>>::get())
             {
-                if( aFlavor.MimeType.indexOf( "text/uri-list" ) > -1 )
+                css::uno::Any aAny = GetAny(aFlavor, OUString());
+                css::uno::Sequence<OUString> aSeq;
+                bRet = (aAny >>= aSeq) && aSeq.hasElements();
+                if (bRet)
+                    for (OUString& aUrl : aSeq)
+                        rFileList.AppendFile(aUrl);
+            }
+            else if( GetSotStorageStream( aFlavor, xStm ) )
+            {
+                if (bIsUriList)
                 {
                     OString aDiskString;
 
