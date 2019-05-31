@@ -15,7 +15,6 @@
 #include <sal/log.hxx>
 
 #include <QtCore/QBuffer>
-#include <QtCore/QMimeData>
 #include <QtCore/QUrl>
 #include <QtWidgets/QApplication>
 
@@ -79,11 +78,11 @@ Qt5Transferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFla
 }
 
 Qt5ClipboardTransferable::Qt5ClipboardTransferable(QClipboard::Mode aMode)
-    : Qt5Transferable(QApplication::clipboard()->mimeData(aMode))
+    : Qt5Transferable(new Qt5MimeData(*QApplication::clipboard()->mimeData(aMode)))
 {
 }
 
-Qt5ClipboardTransferable::~Qt5ClipboardTransferable() {}
+Qt5ClipboardTransferable::~Qt5ClipboardTransferable() { delete m_pMimeData; }
 
 css::uno::Any SAL_CALL
 Qt5ClipboardTransferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)

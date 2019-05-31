@@ -18,9 +18,30 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <cppuhelper/compbase.hxx>
 
+#include <QtCore/QMimeData>
 #include <QtGui/QClipboard>
 
-class Qt5Clipboard
+/**
+ * A lazy data loading variant of QMimeData
+ **/
+class Qt5MimeData final : public QMimeData
+{
+    css::uno::Reference<css::datatransfer::XTransferable> m_aContents;
+
+    static void deepCopy(QMimeData& rMimeCopy, const QMimeData& rMimeReference);
+    QVariant retrieveData(const QString& mimeType, QVariant::Type type) const override;
+
+public:
+    explicit Qt5MimeData(css::uno::Reference<css::datatransfer::XTransferable>& aContents);
+    explicit Qt5MimeData(const QMimeData& obj);
+
+    bool hasFormat(const QString& mimeType) const override;
+    QStringList formats() const override;
+
+    QMimeData* deepCopy() const;
+};
+
+class Qt5Clipboard final
     : public QObject,
       public cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
                                            css::datatransfer::clipboard::XFlushableClipboard,
@@ -29,21 +50,23 @@ class Qt5Clipboard
     Q_OBJECT
 
     osl::Mutex m_aMutex;
+    const OUString m_aClipboardName;
+    const QClipboard::Mode m_aClipboardMode;
+
     css::uno::Reference<css::datatransfer::XTransferable> m_aContents;
     css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
     std::vector<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> m_aListeners;
-    OUString m_aClipboardName;
-    QClipboard::Mode m_aClipboardMode;
-    // custom MIME type to detect whether clipboard content was added by self or externally
-    const QString m_sMimeTypeUuid = "application/x-libreoffice-clipboard-uuid";
-    const QByteArray m_aUuid;
+
+    static bool isOwner(const QClipboard::Mode aMode);
+    static bool isSupported(const QClipboard::Mode aMode);
+
+    explicit Qt5Clipboard(const OUString& aModeString, const QClipboard::Mode aMode);
 
 private Q_SLOTS:
-    void handleClipboardChange(QClipboard::Mode mode);
+    void handleChanged(QClipboard::Mode mode);
 
 public:
-    explicit Qt5Clipboard(const OUString& aModeString);
-    virtual ~Qt5Clipboard() override;
+    static css::uno::Reference<css::uno::XInterface> create(const OUString& aModeString);
 
     /*
      * XServiceInfo
