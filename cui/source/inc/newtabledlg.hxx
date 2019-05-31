@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_NEWTABLEDLG_HXX
 #define INCLUDED_CUI_SOURCE_INC_NEWTABLEDLG_HXX
 
-#include <svx/stddlg.hxx>
 #include <svx/svxdlg.hxx>
 #include <vcl/weld.hxx>
 

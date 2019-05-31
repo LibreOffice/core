@@ -19,21 +19,12 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_SWUICNTTAB_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SWUICNTTAB_HXX
 
-#include <svx/stddlg.hxx>
-
-#include <vcl/button.hxx>
-
-#include <vcl/edit.hxx>
-
-#include <vcl/fixed.hxx>
-
-#include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <svx/langbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <tox.hxx>
 #include "toxmgr.hxx"
-#include <svx/langbox.hxx>
 #include "cnttab.hxx"
 #include <vector>
 

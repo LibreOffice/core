@@ -19,10 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_DBUI_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DBUI_HXX
 
-#include <svx/stddlg.hxx>
-
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/weld.hxx>
 
 class SW_DLLPUBLIC PrintMonitor: public weld::GenericDialogController
