@@ -19,7 +19,6 @@
 
 #include <svl/lstner.hxx>
 
-#include <svl/hint.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <sal/backtrace.hxx>
 #include <sal/log.hxx>

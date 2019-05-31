@@ -21,8 +21,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/script/Converter.hpp>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
 #include <osl/diagnose.h>
 
 #include <comphelper/processfactory.hxx>

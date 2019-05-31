@@ -19,6 +19,7 @@
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>

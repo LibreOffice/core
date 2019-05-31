@@ -21,7 +21,6 @@
 #define INCLUDED_SVL_CUSTRITM_HXX
 
 #include <svl/svldllapi.h>
-#include <tools/debug.hxx>
 #include <svl/poolitem.hxx>
 #include <cassert>
 

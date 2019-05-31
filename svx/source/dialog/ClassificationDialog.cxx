@@ -22,6 +22,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/uri.hxx>
 #include <config_folders.h>
+#include <tools/stream.hxx>
 #include <tools/XmlWriter.hxx>
 #include <tools/XmlWalker.hxx>
 #include <vcl/customweld.hxx>

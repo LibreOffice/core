@@ -8,7 +8,6 @@
  */
 
 #include <svl/msodocumentlockfile.hxx>
-#include <sal/log.hxx>
 #include <algorithm>
 #include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>

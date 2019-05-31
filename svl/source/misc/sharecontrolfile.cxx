@@ -24,26 +24,18 @@
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
-#include <com/sun/star/io/WrongFormatException.hpp>
 
-#include <osl/time.h>
-#include <osl/security.hxx>
-#include <osl/socket.hxx>
 #include <o3tl/enumrange.hxx>
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 
 #include <tools/stream.hxx>
-#include <unotools/bootstrap.hxx>
 #include <unotools/streamwrap.hxx>
-
-#include <unotools/useroptions.hxx>
 
 #include <svl/sharecontrolfile.hxx>
 

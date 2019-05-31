@@ -19,10 +19,7 @@
 
 #include <sal/config.h>
 
-#include <memory>
-#include <i18nlangtag/languagetag.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/types.h>
 #include <svl/svlresid.hxx>
 #include <unotools/resmgr.hxx>
 

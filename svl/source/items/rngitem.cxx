@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <sal/log.hxx>
-#include <tools/stream.hxx>
 #include <svl/rngitem.hxx>
 
 

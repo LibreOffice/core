@@ -18,8 +18,6 @@
  */
 
 
-#include <limits.h>
-
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/poolcach.hxx>

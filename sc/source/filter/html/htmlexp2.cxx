@@ -26,6 +26,7 @@
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <svl/urihelper.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 
 #include <htmlexp.hxx>

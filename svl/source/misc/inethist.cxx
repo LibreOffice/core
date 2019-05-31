@@ -25,7 +25,6 @@
 #include <rtl/instance.hxx>
 #include <rtl/crc.h>
 #include <osl/getglobalmutex.hxx>
-#include <tools/solar.h>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 

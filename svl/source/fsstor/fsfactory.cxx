@@ -20,10 +20,8 @@
 
 #include <fsfactory.hxx>
 #include <cppuhelper/factory.hxx>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

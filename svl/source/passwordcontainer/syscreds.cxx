@@ -18,7 +18,6 @@
  */
 
 #include "syscreds.hxx"
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 

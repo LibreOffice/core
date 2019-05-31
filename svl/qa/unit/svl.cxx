@@ -15,18 +15,14 @@
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <sal/config.h>
-#include <osl/file.hxx>
-#include <osl/process.h>
-#include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <i18nlangtag/lang.h>
 
@@ -40,7 +36,7 @@
 #include <unotools/syslocale.hxx>
 
 #include <memory>
-#include <unicode/calendar.h>
+#include <unicode/timezone.h>
 
 using namespace ::com::sun::star;
 using namespace svl;

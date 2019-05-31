@@ -23,6 +23,7 @@
 #include <editeng/paragraphdata.hxx>
 #include <editeng/editengdllapi.h>
 #include <rtl/ustring.hxx>
+#include <svl/poolitem.hxx>
 #include <svl/style.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <memory>

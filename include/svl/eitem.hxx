@@ -22,7 +22,6 @@
 
 #include <svl/svldllapi.h>
 #include <svl/cenumitm.hxx>
-#include <tools/stream.hxx>
 
 
 template<typename EnumT>

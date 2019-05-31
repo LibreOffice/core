@@ -46,7 +46,6 @@
 #include <rtl/character.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <sal/log.hxx>

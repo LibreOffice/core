@@ -20,6 +20,7 @@
 #include <svl/eitem.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/datetime.hxx>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>

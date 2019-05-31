@@ -24,6 +24,7 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <memory>
 #include <unordered_map>
 /*

@@ -13,7 +13,6 @@
 #include <svl/itemset.hxx>
 #include <svl/stylepool.hxx>
 #include <svl/stritem.hxx>
-#include <sal/log.hxx>
 
 namespace
 {

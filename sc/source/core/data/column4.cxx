@@ -32,6 +32,7 @@
 
 #include <svl/sharedstringpool.hxx>
 #include <sal/log.hxx>
+#include <tools/stream.hxx>
 
 #include <numeric>
 #include <vector>

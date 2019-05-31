@@ -25,14 +25,11 @@
 #include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/factory.hxx>
 
-#include <tools/stream.hxx>
 #include <unotools/configitem.hxx>
 #include <ucbhelper/interactionrequest.hxx>
 
