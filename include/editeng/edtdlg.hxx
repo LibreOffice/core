@@ -93,8 +93,9 @@ class EDITENG_DLLPUBLIC EditAbstractDialogFactory : virtual public VclAbstractDi
 public:
                                         virtual ~EditAbstractDialogFactory() override;   // needed for export of vtable
     static EditAbstractDialogFactory*   Create();
-    virtual VclPtr<AbstractThesaurusDialog>  CreateThesaurusDialog( vcl::Window*, css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
-                                                const OUString &rWord, LanguageType nLanguage ) = 0;
+    virtual VclPtr<AbstractThesaurusDialog>  CreateThesaurusDialog(weld::Window*,
+                                                css::uno::Reference<css::linguistic2::XThesaurus> xThesaurus,
+                                                const OUString &rWord, LanguageType nLanguage) = 0;
 
     virtual VclPtr<AbstractHyphenWordDialog> CreateHyphenWordDialog(weld::Window*,
                                                 const OUString &rWord, LanguageType nLang,

@@ -3141,6 +3141,12 @@ public:
         set_text_emphasis(rVclIter.iter, bOn, col);
     }
 
+    virtual void set_text_emphasis(int pos, bool bOn, int col) override
+    {
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+        set_text_emphasis(pEntry, bOn, col);
+    }
+
     virtual bool get_text_emphasis(const weld::TreeIter& rIter, int col) const override
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);

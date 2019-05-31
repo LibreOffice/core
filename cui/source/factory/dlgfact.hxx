@@ -183,7 +183,14 @@ public:
 
 class AbstractThesaurusDialog_Impl : public AbstractThesaurusDialog
 {
-    DECL_ABSTDLG_BASE(AbstractThesaurusDialog_Impl,SvxThesaurusDialog)
+    std::shared_ptr<SvxThesaurusDialog> m_xDlg;
+public:
+    explicit AbstractThesaurusDialog_Impl(std::unique_ptr<SvxThesaurusDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
     virtual OUString    GetWord() override;
 };
 
@@ -715,8 +722,9 @@ public:
     virtual VclPtr<SfxAbstractLinksDialog> CreateLinksDialog(weld::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML = false, sfx2::SvBaseLink* p=nullptr) override;
 
     virtual VclPtr<AbstractHangulHanjaConversionDialog> CreateHangulHanjaConversionDialog(weld::Window* pParent) override;
-    virtual VclPtr<AbstractThesaurusDialog>  CreateThesaurusDialog( vcl::Window*, css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
-                                                const OUString &rWord, LanguageType nLanguage ) override;
+    virtual VclPtr<AbstractThesaurusDialog>  CreateThesaurusDialog(weld::Window*,
+                                                css::uno::Reference<css::linguistic2::XThesaurus> xThesaurus,
+                                                const OUString &rWord, LanguageType nLanguage) override;
 
     virtual VclPtr<AbstractHyphenWordDialog> CreateHyphenWordDialog(weld::Window*,
                                                 const OUString &rWord, LanguageType nLang,

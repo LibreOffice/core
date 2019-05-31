@@ -26,7 +26,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/idle.hxx>
-#include <svx/stddlg.hxx>
+#include <sfx2/basedlgs.hxx>
 
 #include <memory>
 #include <stack>
@@ -119,14 +119,8 @@ public:
     virtual void        SetText( const OUString& rStr, const Selection& rNewSelection ) override;
 };
 
-class SvxThesaurusDialog : public SvxStandardDialog
+class SvxThesaurusDialog : public SfxDialogController
 {
-    VclPtr<PushButton>             m_pLeftBtn;
-    VclPtr<LookUpComboBox>         m_pWordCB;
-    VclPtr<ThesaurusAlternativesCtrl> m_pAlternativesCT;
-    VclPtr<ReplaceEdit>            m_pReplaceEdit;
-    VclPtr<ListBox>                m_pLangLB;
-
     OUString                m_aErrStr;
 
     css::uno::Reference< css::linguistic2::XThesaurus >   xThesaurus;
@@ -135,22 +129,27 @@ class SvxThesaurusDialog : public SvxStandardDialog
     std::stack< OUString >  aLookUpHistory;
     bool                    m_bWordFound;
 
+    std::unique_ptr<weld::Button> m_xLeftBtn;
+    std::unique_ptr<weld::ComboBox> m_xWordCB;
+    std::unique_ptr<weld::TreeView> m_xAlternativesCT;
+    std::unique_ptr<weld::Entry> m_xReplaceEdit;
+    std::unique_ptr<weld::ComboBox> m_xLangLB;
+    std::unique_ptr<weld::Button> m_xReplaceBtn;
+
 public:
     virtual ~SvxThesaurusDialog() override;
-    virtual void dispose() override;
 
     bool                    WordFound() const { return m_bWordFound; }
     const OUString&         getErrStr() const { return m_aErrStr; }
 
     // Handler
-    DECL_LINK( ReplaceBtnHdl_Impl, Button *, void );
-    DECL_LINK( LeftBtnHdl_Impl, Button *, void );
-    DECL_LINK( LanguageHdl_Impl, ListBox&, void );
-    DECL_LINK( WordSelectHdl_Impl, ComboBox&, void );
-    DECL_LINK( AlternativesSelectHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK( AlternativesDoubleClickHdl_Impl, SvTreeListBox*, bool );
-
-    DECL_STATIC_LINK( SvxThesaurusDialog, SelectFirstHdl_Impl, void*, void );
+    DECL_LINK( ReplaceBtnHdl_Impl, weld::Button&, void );
+    DECL_LINK( LeftBtnHdl_Impl, weld::Button&, void );
+    DECL_LINK( LanguageHdl_Impl, weld::ComboBox&, void );
+    DECL_LINK( WordSelectHdl_Impl, weld::ComboBox&, void );
+    DECL_LINK( AlternativesSelectHdl_Impl, weld::TreeView&, void );
+    DECL_LINK( AlternativesDoubleClickHdl_Impl, weld::TreeView&, void );
+    DECL_LINK( SelectFirstHdl_Impl, void*, void );
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
@@ -160,13 +159,11 @@ public:
     bool    UpdateAlternativesBox_Impl();
     void    LookUp( const OUString &rText );
     void    LookUp_Impl();
-    virtual void     Apply() override;
 
 public:
-    SvxThesaurusDialog( vcl::Window* pParent,
-                        css::uno::Reference< css::linguistic2::XThesaurus > const & xThesaurus,
-                        const OUString &rWord, LanguageType nLanguage );
-
+    SvxThesaurusDialog(weld::Window* pParent,
+                       css::uno::Reference< css::linguistic2::XThesaurus > const & xThesaurus,
+                       const OUString &rWord, LanguageType nLanguage);
     void            SetWindowTitle( LanguageType nLanguage );
     OUString        GetWord();
 };

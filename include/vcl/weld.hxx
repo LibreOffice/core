@@ -681,6 +681,7 @@ public:
     virtual void set_image(int row, const css::uno::Reference<css::graphic::XGraphic>& rImage,
                            int col = -1)
         = 0;
+    virtual void set_text_emphasis(int row, bool bOn, int col) = 0;
     virtual void set_top_entry(int pos) = 0;
     virtual void swap(int pos1, int pos2) = 0;
     virtual std::vector<int> get_selected_rows() const = 0;
