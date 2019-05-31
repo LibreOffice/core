@@ -171,28 +171,28 @@ public:
     */
     inline E * SAL_CALL getArray();
 
-    /** This function allows to use Sequence in standard algorightms, like std::find
+    /** This function allows to use Sequence in standard algorithms, like std::find
         and others.
 
         @since LibreOffice 4.2
     */
     inline E * begin();
 
-    /** This function allows to use Sequence in standard algorightms, like std::find
+    /** This function allows to use Sequence in standard algorithms, like std::find
         and others.
 
         @since LibreOffice 4.2
     */
     inline E const * begin() const;
 
-    /** This function allows to use Sequence in standard algorightms, like std::find
+    /** This function allows to use Sequence in standard algorithms, like std::find
         and others.
 
         @since LibreOffice 4.2
     */
     inline E * end();
 
-    /** This function allows to use Sequence in standard algorightms, like std::find
+    /** This function allows to use Sequence in standard algorithms, like std::find
         and others.
 
         @since LibreOffice 4.2
