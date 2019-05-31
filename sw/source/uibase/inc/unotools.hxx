@@ -41,7 +41,7 @@
 
 class SwView;
 
-class SW_DLLPUBLIC OneExampleFrame : public weld::CustomWidgetController
+class SW_DLLPUBLIC SwOneExampleFrame : public weld::CustomWidgetController
 {
     ScopedVclPtr<VirtualDevice> m_xVirDev;
     css::uno::Reference< css::frame::XModel >         m_xModel;
@@ -49,7 +49,7 @@ class SW_DLLPUBLIC OneExampleFrame : public weld::CustomWidgetController
     css::uno::Reference< css::text::XTextCursor >     m_xCursor;
 
     Idle            m_aLoadedIdle;
-    Link<OneExampleFrame&,void> m_aInitializedLink;
+    Link<SwOneExampleFrame&,void> m_aInitializedLink;
 
     OUString        m_sArgumentURL;
 
@@ -66,13 +66,13 @@ class SW_DLLPUBLIC OneExampleFrame : public weld::CustomWidgetController
     SAL_DLLPRIVATE void  DisposeControl();
 
 public:
-    OneExampleFrame(sal_uInt32 nStyleFlags,
-                    const Link<OneExampleFrame&,void>* pInitalizedLink,
+    SwOneExampleFrame(sal_uInt32 nStyleFlags,
+                    const Link<SwOneExampleFrame&,void>* pInitalizedLink,
                     const OUString* pURL = nullptr);
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual bool ContextMenu(const CommandEvent& rCEvt) override;
-    virtual ~OneExampleFrame() override;
+    virtual ~SwOneExampleFrame() override;
 
     css::uno::Reference< css::frame::XModel > &       GetModel()      {return m_xModel;}
     css::uno::Reference< css::frame::XController > &  GetController() {return m_xController;}
