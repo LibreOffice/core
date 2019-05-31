@@ -28,7 +28,10 @@ class CustomNotebookbarGenerator
 {
 public:
     CustomNotebookbarGenerator();
+    static OUString getCustomizedUIPath();
+    static char* convertToCharPointer(const OUString& sString);
     static Sequence<OUString> getCustomizedUIItem(OUString sNotebookbarConfigType);
+    static void getFileNameAndAppName(OUString& sAppName, OUString& sNotebookbarUIFileName);
     static void modifyCustomizedUIFile(Sequence<OUString> sUIItemProperties);
     static void createCustomizedUIFile();
     static void setCustomizedUIItem(Sequence<OUString> sUIItemProperties,
