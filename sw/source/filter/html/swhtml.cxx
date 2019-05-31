@@ -42,6 +42,7 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/ctrltool.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -314,7 +315,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_pTempViewFrame(nullptr)
 {
     // If requested explicitly, then force ignoring of comments (don't create postits for them).
-    if (officecfg::Office::Writer::Filter::Import::HTML::IgnoreComments::get())
+    if (!utl::ConfigManager::IsFuzzing() && officecfg::Office::Writer::Filter::Import::HTML::IgnoreComments::get())
         m_bIgnoreHTMLComments = true;
 
     m_nEventId = nullptr;
