@@ -57,6 +57,7 @@
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
+#include <officecfg/Office/Common.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -144,6 +145,7 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     , m_xStartED(m_xBuilder->weld_spin_button("startat"))
     , m_xBulletFT(m_xBuilder->weld_label("bulletft"))
     , m_xBulletPB(m_xBuilder->weld_button("bullet"))
+    , m_xRecentGrid(m_xBuilder->weld_widget("viewgrid"))
     , m_xBitmapMB(m_xBuilder->weld_menu_button("bitmap"))
     , m_xWidthFT(m_xBuilder->weld_label("widthft"))
     , m_xWidthMF(m_xBuilder->weld_metric_spin_button("widthmf", FieldUnit::CM))
@@ -162,6 +164,16 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     , m_xSlideRB(m_xBuilder->weld_radio_button("sliderb"))
     , m_xSelectionRB(m_xBuilder->weld_radio_button("selectionrb"))
     , m_xApplyToMaster(m_xBuilder->weld_toggle_button("applytomaster"))
+    , m_xVirDev(VclPtr<VirtualDevice>::Create())
+    , m_aRecentCharView{ SvxCharView(m_xVirDev), SvxCharView(m_xVirDev), SvxCharView(m_xVirDev),
+                         SvxCharView(m_xVirDev), SvxCharView(m_xVirDev) }
+    , m_xRecentCharView{
+        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar1", m_aRecentCharView[0]),
+        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar2", m_aRecentCharView[1]),
+        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar3", m_aRecentCharView[2]),
+        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar4", m_aRecentCharView[3]),
+        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar5", m_aRecentCharView[4])
+    }
 {
     m_xBulColLB->SetSlotId(SID_ATTR_CHAR_COLOR);
     m_xBulRelSizeMF->set_min(SVX_NUM_REL_SIZE_MIN, FieldUnit::PERCENT);
@@ -221,6 +233,7 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
 
     Size aSize(m_xGrid->get_preferred_size());
     m_xGrid->set_size_request(aSize.Width(), -1);
+    m_xRecentGrid->set_size_request(-1, m_aRecentCharView[0].get_preferred_size().Height());
 
     // PageCreated
     FieldUnit eMetric = pView->GetDoc().GetUIUnit();
@@ -665,6 +678,13 @@ void SvxBulletAndPositionDlg::InitControls()
 
     m_aPreviewWIN.SetLevel(nActNumLvl);
     m_aPreviewWIN.Invalidate();
+
+    getRecentCharacterList();
+    updateRecentCharacterList();
+
+    for(int i = 0; i < 5; i++)
+        m_aRecentCharView[i].setMouseClickHdl(LINK(this, SvxBulletAndPositionDlg, CharClickHdl));
+
     bInInitControl = false;
 }
 
@@ -689,6 +709,7 @@ void SvxBulletAndPositionDlg::SwitchNumberType(sal_uInt8 nType)
 
     m_xBulletFT->set_visible(bBullet);
     m_xBulletPB->set_visible(bBullet);
+    m_xRecentGrid->set_visible(bBullet);
     bool bBullColor = pActNum->IsFeatureSupported(SvxNumRuleFlags::BULLET_COLOR);
     m_xBulColorFT->set_visible(!bBitmap && bBullColor);
     m_xBulColLB->set_visible(!bBitmap && bBullColor);
@@ -1356,6 +1377,52 @@ void SvxBulletAndPositionDlg::InitPosAndSpaceMode()
     }
 
     bLabelAlignmentPosAndSpaceModeActive = ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT;
+}
+
+void SvxBulletAndPositionDlg::getRecentCharacterList()
+{
+    //retrieve recent character list
+    css::uno::Sequence<OUString> rRecentCharList(
+        officecfg::Office::Common::RecentCharacters::RecentCharacterList::get());
+    for (int i = 0; i < rRecentCharList.getLength(); ++i)
+    {
+        maRecentCharList.push_back(rRecentCharList[i]);
+    }
+
+    //retrieve recent character font list
+    css::uno::Sequence<OUString> rRecentCharFontList(
+        officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::get());
+    for (int i = 0; i < rRecentCharFontList.getLength(); ++i)
+    {
+        maRecentCharFontList.push_back(rRecentCharFontList[i]);
+    }
+}
+
+void SvxBulletAndPositionDlg::updateRecentCharacterList()
+{
+    int i = 0;
+    for (std::deque<OUString>::iterator it = maRecentCharList.begin(),
+                                        it2 = maRecentCharFontList.begin();
+         i < 5 ;
+         ++it, ++it2, i++)
+    {
+        m_aRecentCharView[i].SetText(*it);
+        vcl::Font rFont = m_aRecentCharView[i].GetFont();
+        rFont.SetFamilyName(*it2);
+        m_aRecentCharView[i].SetFont(rFont);
+        m_aRecentCharView[i].Show();
+    }
+
+    for (; i < 5; i++)
+    {
+        m_aRecentCharView[i].SetText(OUString());
+        m_aRecentCharView[i].Hide();
+    }
+}
+
+
+IMPL_LINK(SvxBulletAndPositionDlg, CharClickHdl, SvxCharView*, rView, void)
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,6 +24,7 @@
 #include <memory>
 
 #include <sfx2/tabdlg.hxx>
+#include <sfx2/charwin.hxx>
 #include <svx/Palette.hxx>
 #include <editeng/numdef.hxx>
 #include <editeng/svxenum.hxx>
@@ -41,6 +42,7 @@ class SvxBmpNumValueSet;
 class SvxBrushItem;
 class ValueSet;
 class SdDrawDocument;
+class SvxCharView;
 
 namespace sd
 {
@@ -52,6 +54,8 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
 {
     OUString m_sNumCharFmtName;
     OUString m_sBulletCharFormatName;
+    std::deque<OUString> maRecentCharList;
+    std::deque<OUString> maRecentCharFontList;
 
     Timer aInvalidateTimer;
 
@@ -97,6 +101,7 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
     std::unique_ptr<weld::SpinButton> m_xStartED;
     std::unique_ptr<weld::Label> m_xBulletFT;
     std::unique_ptr<weld::Button> m_xBulletPB;
+    std::unique_ptr<weld::Widget> m_xRecentGrid;
     std::unique_ptr<weld::MenuButton> m_xBitmapMB;
     std::unique_ptr<weld::Label> m_xWidthFT;
     std::unique_ptr<weld::MetricSpinButton> m_xWidthMF;
@@ -117,6 +122,10 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
     std::unique_ptr<weld::RadioButton> m_xSelectionRB;
     std::unique_ptr<weld::ToggleButton> m_xApplyToMaster;
 
+    ScopedVclPtr<VirtualDevice> m_xVirDev;
+    SvxCharView m_aRecentCharView[5];
+    std::unique_ptr<weld::CustomWeld> m_xRecentCharView[5];
+
     void InitControls();
     /** To switch between the numbering type
         0 - Number;
@@ -124,6 +133,8 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
         2 - Bitmap; */
     void SwitchNumberType(sal_uInt8 nType);
     void CheckForStartValue_Impl(sal_uInt16 nNumberingType);
+    void getRecentCharacterList();
+    void updateRecentCharacterList();
 
     DECL_LINK(NumberTypeSelectHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(LevelHdl_Impl, weld::TreeView&, void);
@@ -143,6 +154,7 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
     DECL_LINK(SelectCenterAlignmentHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(SelectRightAlignmentHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(ApplyToMasterHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(CharClickHdl, SvxCharView*, void);
     void EditModifyHdl_Impl(const weld::Entry*);
     void InitPosAndSpaceMode();
     void SetAlignmentHdl_Impl(SvxAdjust);

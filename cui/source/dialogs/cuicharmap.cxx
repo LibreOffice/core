@@ -621,8 +621,6 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
         aArgs[1].Value <<= aFont.GetFamilyName();
         comphelper::dispatchCommand(".uno:InsertSymbol", m_xFrame, aArgs);
 
-        updateRecentCharacterList(sGlyph, aFont.GetFamilyName());
-
     } else {
         sal_Int32 tmp = 0;
         sal_UCS4 cChar = sGlyph.iterateCodePoints(&tmp);
@@ -633,6 +631,8 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
         m_xOutputSet->Put( SfxStringItem( pPool->GetWhich(SID_FONT_NAME), aFont.GetFamilyName() ) );
         m_xOutputSet->Put( SfxInt32Item( pPool->GetWhich(SID_ATTR_CHAR), cChar ) );
     }
+
+    updateRecentCharacterList(sGlyph, aFont.GetFamilyName());
 }
 
 IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, weld::ComboBox&, void)
