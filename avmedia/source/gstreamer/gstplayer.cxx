@@ -42,6 +42,10 @@
 #include "gstframegrabber.hxx"
 #include "gstwindow.hxx"
 
+#if ENABLE_QT5
+#include <QtWidgets/QWidget>
+#endif
+
 #include <gst/video/videooverlay.h>
 #define AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Player_GStreamer"
 #define AVMEDIA_GST_PLAYER_SERVICENAME        "com.sun.star.media.Player_GStreamer"
@@ -908,10 +912,32 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
                 else
 #endif
                 {
-                    if (aPlatform == "wayland")
-                        pVideosink = gst_element_factory_make("waylandsink", "video-output");
-                    else
-                        pVideosink = gst_element_factory_make("autovideosink", "video-output");
+#if ENABLE_QT5
+                    // try to use qwidget5videosink for qt5 on Wayland, which requires the Qt5 packages for QtGStreamer to be installed
+                    if (aToolkit == "qt5" && aPlatform == "wayland")
+                    {
+                        pVideosink = gst_element_factory_make("qwidget5videosink", "qwidget5videosink");
+                        if (pVideosink) {
+                            QWidget* pQWidget = static_cast<QWidget*>(pEnvData->pWidget);
+                            g_object_set(G_OBJECT(pVideosink), "widget", pQWidget, nullptr);
+                        }
+                        else
+                        {
+                            SAL_WARN("avmedia.gstreamer", "Couldn't initialize qwidget5videosink."
+                                                          " Video playback might not work as expected."
+                                                          " Please install Qt5 packages for QtGStreamer.");
+                            // with no videosink explicitly set, GStreamer will open it's own (misplaced) window(s) to display video
+                        }
+                    }
+#endif
+                    if (!pVideosink)
+                    {
+                        if (aPlatform == "wayland")
+                            pVideosink = gst_element_factory_make("waylandsink", "video-output");
+                        else
+                            pVideosink = gst_element_factory_make("autovideosink", "video-output");
+                    }
+
                     if (!pVideosink)
                     {
                         xRet.clear();

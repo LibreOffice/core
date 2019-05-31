@@ -43,7 +43,7 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     m_aSystemData.nSize = sizeof(SystemEnvData);
     m_aSystemData.aShellWindow = reinterpret_cast<sal_IntPtr>(this);
     //m_aSystemData.pSalFrame = this;
-    //m_aSystemData.pWidget = m_pQWidget;
+    m_aSystemData.pWidget = m_pQWidget;
     //m_aSystemData.nScreen = m_nXScreen.getXScreen();
     m_aSystemData.pToolkit = "qt5";
     m_aSystemData.pPlatformName = "xcb";
