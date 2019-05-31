@@ -1765,4 +1765,36 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testShapePageMove)
     CPPUNIT_ASSERT_EQUAL(nNodeIndex, pAnchor->nNode.GetIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldInsertion)
+{
+    SwDoc* pDoc = createDoc();
+    CPPUNIT_ASSERT(pDoc);
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT(pMarkAccess);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+
+    // Insert a date form field
+    lcl_dispatchCommand(mxComponent, ".uno:DatePickerFormField", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+
+    // Check whether the fieldmark is created
+    auto aIter = pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
+    ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
+    CPPUNIT_ASSERT(pFieldmark);
+    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+
+    // Undo insertion
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+
+    // Redo insertion
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    aIter = pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
+    pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
+    CPPUNIT_ASSERT(pFieldmark);
+    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
