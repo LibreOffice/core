@@ -19,16 +19,12 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_BOOKMARK_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_BOOKMARK_HXX
 
-#include <svx/stddlg.hxx>
-#include <vcl/fixed.hxx>
-#include <ndtxt.hxx>
-
-#include <vcl/button.hxx>
-#include "condedit.hxx"
 #include <svtools/simptabl.hxx>
+#include <vcl/weld.hxx>
+#include <ndtxt.hxx>
 #include <pam.hxx>
-
 #include <IMark.hxx>
+#include "condedit.hxx"
 
 class SwWrtShell;
 class SfxRequest;
