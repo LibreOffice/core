@@ -863,6 +863,12 @@ namespace sw { namespace mark {
         sal_Unicode vEnSpaces[ODF_FORMFIELD_DEFAULT_LENGTH] = {8194, 8194, 8194, 8194, 8194};
         return OUString(vEnSpaces, ODF_FORMFIELD_DEFAULT_LENGTH);
     }
+
+    static OUString ExpandDateFieldmark(IFieldmark* /*pBM*/)
+    {
+        sal_Unicode vEnSpaces[ODF_FORMFIELD_DEFAULT_LENGTH] = {8194, 8194, 8194, 8194, 8194};
+        return OUString(vEnSpaces, ODF_FORMFIELD_DEFAULT_LENGTH);
+    }
 } }
 
 SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
@@ -909,6 +915,10 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                     else if (pBM->GetFieldname( ) == ODF_FORMDROPDOWN)
                     {
                         pPor = new SwFieldFormDropDownPortion(pBM, sw::mark::ExpandFieldmark(pBM));
+                    }
+                    else if (pBM->GetFieldname( ) == ODF_FORMDATE)
+                    {
+                        pPor = new SwFieldFormDatePortion(pBM, sw::mark::ExpandDateFieldmark(pBM));
                     }
                     /* we need to check for ODF_FORMTEXT for scenario having FormFields inside FORMTEXT.
                      * Otherwise file will crash on open.

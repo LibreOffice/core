@@ -232,6 +232,23 @@ private:
     sw::mark::IFieldmark* m_pFieldMark;
 };
 
+class SwFieldFormDatePortion : public SwFieldPortion
+{
+public:
+    explicit SwFieldFormDatePortion(sw::mark::IFieldmark *pFieldMark, const OUString &rExpand)
+        : SwFieldPortion(rExpand)
+        , m_pFieldMark(pFieldMark)
+    {
+    }
+    // Field cloner for SplitGlue
+    virtual SwFieldPortion *Clone( const OUString &rExpand ) const override;
+
+    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+
+private:
+    sw::mark::IFieldmark* m_pFieldMark;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
