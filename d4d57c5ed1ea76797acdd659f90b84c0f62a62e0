@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_dddae715",
+        "filename": "Makefile.fetch",
+        "patchSetId": 2
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-31T12:19:21Z",
+      "side": 1,
+      "message": "you need to add these variables to config_host.mk.in and download.lst",
+      "revId": "d4d57c5ed1ea76797acdd659f90b84c0f62a62e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_5db257e8",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 4173,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-31T12:19:21Z",
+      "side": 1,
+      "message": "why is there a space before and after the / - is the \"public\" directory necessary or not?",
+      "revId": "d4d57c5ed1ea76797acdd659f90b84c0f62a62e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_1dcccf68",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 4176,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-31T12:19:21Z",
+      "side": 1,
+      "message": "there is no Library_qrcodegenerator defined in your patch so this will fail",
+      "revId": "d4d57c5ed1ea76797acdd659f90b84c0f62a62e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_7db5d3cc",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 4178,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-31T12:19:21Z",
+      "side": 1,
+      "message": "there is no Library_qrcodegenerator defined in your patch so this will fail",
+      "revId": "d4d57c5ed1ea76797acdd659f90b84c0f62a62e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_fdd563e6",
+        "filename": "download.lst",
+        "patchSetId": 2
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-31T12:19:21Z",
+      "side": 1,
+      "message": "you need a SHA256SUM as well or it won\u0027t be downloaded",
+      "revId": "d4d57c5ed1ea76797acdd659f90b84c0f62a62e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_9d069f86",
+        "filename": "external/qrcodegenerator/visibility.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-05-31T12:19:21Z",
+      "side": 1,
+      "message": "why is this needed? i dont even see a \"public\" directory in the tarball?",
+      "revId": "d4d57c5ed1ea76797acdd659f90b84c0f62a62e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
