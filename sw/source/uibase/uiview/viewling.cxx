@@ -578,7 +578,7 @@ void SwView::StartThesaurus()
             SwWait aWait( *GetDocShell(), true );
             // load library with dialog only on demand ...
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            pDlg.reset(pFact->CreateThesaurusDialog(&GetEditWin(), xThes, aTmp, eLang));
+            pDlg.reset(pFact->CreateThesaurusDialog(GetEditWin().GetFrameWeld(), xThes, aTmp, eLang));
         }
 
         if (pDlg)
@@ -590,6 +590,7 @@ void SwView::StartThesaurus()
                     InsertThesaurusSynonym(pDlg->GetWord(), aTmp, bSelection);
 
                 pVOpt->SetIdle(bOldIdle);
+                pDlg->disposeOnce();
             });
         }
     }
