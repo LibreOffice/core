@@ -118,20 +118,6 @@ void SwXSelChgLstnr_Impl::disposing( const EventObject&  )
     OSL_FAIL("disposing");
 }
 
-short SvxStandardDialog::Execute()
-{
-    short nRet = ModalDialog::Execute();
-
-    if ( RET_OK == nRet )
-        Apply();
-    return nRet;
-}
-
-SvxStandardDialog::SvxStandardDialog(vcl::Window *pParent, const OUString& rID, const OUString& rUIXMLDescription )
-    : SfxModalDialog(pParent, rID, rUIXMLDescription)
-{
-}
-
 SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
                                const OUString& rSourceName,
                                const OUString& rTableName,
@@ -139,7 +125,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
                                const uno::Reference< XConnection>& _xConnection,
                                Sequence< Any > const * pSelection) :
 
-    SvxStandardDialog(pParent, "MailmergeDialog", "modules/swriter/ui/mailmerge.ui"),
+    SfxModalDialog(pParent, "MailmergeDialog", "modules/swriter/ui/mailmerge.ui"),
 
     pImpl           (new SwMailMergeDlg_Impl),
 
@@ -420,11 +406,7 @@ void SwMailMergeDlg::dispose()
     m_pFormatRtfCB.clear();
     m_pFormatSwCB.clear();
     m_pOkBTN.clear();
-    SvxStandardDialog::dispose();
-}
-
-void SwMailMergeDlg::Apply()
-{
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK( SwMailMergeDlg, ButtonHdl, Button *, pBtn, void )
