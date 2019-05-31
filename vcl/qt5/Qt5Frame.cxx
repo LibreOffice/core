@@ -197,7 +197,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
 
     m_aSystemData.aShellWindow = reinterpret_cast<sal_IntPtr>(this);
     //m_aSystemData.pSalFrame = this;
-    //m_aSystemData.pWidget = m_pQWidget;
+    m_aSystemData.pWidget = m_pQWidget;
     //m_aSystemData.nScreen = m_nXScreen.getXScreen();
     m_aSystemData.pToolkit = "qt5";
     if (!bWayland)
