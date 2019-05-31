@@ -1897,11 +1897,23 @@ void FileDialogHelper_Impl::addGraphicFilter()
 
     try
     {
-        OUString aAllFilterName = SfxResId(STR_SFX_IMPORT_ALL_IMAGES);
-        aAllFilterName = ::sfx2::addExtension( aAllFilterName, aExtensions, bIsInOpenMode, *this );
+        // if the extension is not "All files", insert "All images"
+        if (aExtensions != FILEDIALOG_FILTER_ALL)
+        {
+            OUString aAllFilterName = SfxResId(STR_SFX_IMPORT_ALL_IMAGES);
+            aAllFilterName = ::sfx2::addExtension( aAllFilterName, aExtensions, bIsInOpenMode, *this );
+            xFltMgr->appendFilter( aAllFilterName, aExtensions );
+            maSelectFilter = aAllFilterName; // and make it the default
+        }
 
-        xFltMgr->appendFilter( aAllFilterName, aExtensions );
-        maSelectFilter = aAllFilterName;
+        // rhbz#1715109 always include All files *.* or *
+        OUString aAllFilesName = SfxResId( STR_SFX_FILTERNAME_ALL );
+        aAllFilesName = ::sfx2::addExtension( aAllFilesName, FILEDIALOG_FILTER_ALL, bIsInOpenMode, *this );
+        xFltMgr->appendFilter( aAllFilesName, FILEDIALOG_FILTER_ALL );
+
+        // if the extension is "All files", make that the default
+        if (aExtensions == FILEDIALOG_FILTER_ALL)
+            maSelectFilter = maSelectFilter;
     }
     catch( const IllegalArgumentException& )
     {
