@@ -335,6 +335,13 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingInplace()
 {
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
+
+    if ( comphelper::LibreOfficeKit::isActive() )
+    {
+        if ( SfxViewShell* pViewShell = m_pClient->GetViewShell() )
+            pViewShell->libreOfficeKitViewCallback( LOK_CALLBACK_GRAPHIC_SELECTION, "INPLACE" );
+    }
+
 }
 
 
