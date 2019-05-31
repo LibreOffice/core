@@ -72,12 +72,19 @@ $(eval $(call gb_Library_use_externals,cui,\
     icu_headers \
     orcus-parser \
     orcus \
-	qrcodegenerator \
 ))
 ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Library_use_externals,cui,\
-     epoxy \
- ))
+    epoxy \
+))
+endif
+
+$(info *********Debugging*********)
+
+ifeq ($(USING_X11), TRUE)
+$(eval $(call gb_Library_use_externals,cui,\
+   	libqrgen \
+))
 endif
 
 ifeq ($(OS),WNT)

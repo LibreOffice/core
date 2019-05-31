@@ -4168,16 +4168,55 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
 ))
 endif
 
-define gb_LinkTarget__use_qrcodegenerator
+ifneq ($(SYSTEM_QRGEN),)
+
+define gb_LinkTarget__use_qrgen
 $(call gb_LinkTarget_set_include,$(1),\
-       -I$(call gb_UnpackedTarball_get_dir,qrcodegenerator)/cpp / public\
+	$$(INCLUDE) \
+    $(QRGEN_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(QRGEN_LIBS))
+
+endef
+
+else # !SYSTEM_QRGEN
+
+ifeq ($(COM), MSC)
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+	qrgen \
+))
+
+define gb_LinkTarget__use_qrgen
+$(call gb_LinkTarget_set_include,$(1),\
+       -I$(call gb_UnpackedTarball_get_dir,libqrgen)/cpp/public\
        $$(INCLUDE) \
 )
-$(call gb_LinkTarget_use_libraries,$(1),qrcodegenerator)
+$(call gb_LinkTarget_use_libraries,$(1),\
+	qrgen\
+)
+
 endef
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
-       qrcodegenerator \
+
+else #!MSC
+
+$(eval $(call gb_Helper_register_libraries_for_install,ooo,\
+       libqrgen \
 ))
+
+define gb_LinkTarget__use_qrgen
+$(call gb_LinkTarget_use_package,$(1),libqrgen)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,libqrgen)/cpp/public \
+	$$(INCLUDE) \
+)
+
+endef
+
+endif
+
+endif # SYSTEM_QRGEN
 
 $(eval $(call gb_Helper_register_packages_for_install,ucrt_binarytable,\
 	$(if $(UCRT_REDISTDIR),ucrt) \

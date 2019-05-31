@@ -7,10 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,qrcodegenerator))
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,libqrgen))
 
-$(eval $(call gb_Module_add_targets,qrcodegenerator,\
-	UnpackedTarball_qrcodegenerator \
-))
+$(eval $(call gb_UnpackedTarball_set_tarball,libqrgen,$(QRGEN_TARBALL)))
 
-# vim: set noet sw=4 ts=4:
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libqrgen,0))
+
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,libqrgen))

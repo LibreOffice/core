@@ -7,12 +7,25 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UnpackedTarball_UnpackedTarball,qrcodegenerator))
+$(eval $(call gb_Module_Module,libqrgen))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,qrcodegenerator,$(QRCODEGEN_TARBALL)))
-
-$(eval $(call gb_UnpackedTarball_add_patches,qrcodegenerator,\
-	external/qrcodegenerator/visibility.patch \
+$(eval $(call gb_Module_add_targets,libqrgen,\
+	UnpackedTarball_libqrgen \
 ))
+
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Module_add_targets,libqrgen,\
+	Library_qrgen \
+))
+
+else
+
+$(eval $(call gb_Module_add_targets,libqrgen,\
+	ExternalPackage_libqrgen \
+	ExternalProject_libqrgen \
+))
+
+endif
 
 # vim: set noet sw=4 ts=4:
