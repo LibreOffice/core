@@ -41,7 +41,7 @@ class SwWrtShell;
 class SfxViewFrame;
 class PopupMenu;
 class Menu;
-class OneExampleFrame;
+class SwOneExampleFrame;
 
 const short RET_EDIT = 100;
 
@@ -80,7 +80,7 @@ class SwGlossaryDlg : public SfxDialogController
     std::unique_ptr<weld::MenuButton> m_xEditBtn;
     std::unique_ptr<weld::Button> m_xBibBtn;
     std::unique_ptr<weld::Button> m_xPathBtn;
-    std::unique_ptr<OneExampleFrame> m_xExampleFrame;
+    std::unique_ptr<SwOneExampleFrame> m_xExampleFrame;
     std::unique_ptr<weld::CustomWeld> m_xExampleFrameWin;
 
     void EnableShortName(bool bOn = true);
@@ -95,7 +95,7 @@ class SwGlossaryDlg : public SfxDialogController
     DECL_LINK( InsertHdl, weld::Button&, void );
     DECL_LINK( PathHdl, weld::Button&, void );
     DECL_LINK( CheckBoxHdl, weld::ToggleButton&, void );
-    DECL_LINK( PreviewLoadedHdl, OneExampleFrame&, void );
+    DECL_LINK( PreviewLoadedHdl, SwOneExampleFrame&, void );
     DECL_LINK( KeyInputHdl, const KeyEvent&, bool );
     DECL_LINK( TextFilterHdl, OUString&, bool );
 
