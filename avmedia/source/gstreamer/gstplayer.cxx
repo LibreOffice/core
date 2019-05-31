@@ -292,7 +292,7 @@ Player::Player() :
     GstPlayer_BASE( m_aMutex ),
     mpPlaybin( nullptr ),
     mpVolumeControl( nullptr ),
-#if defined(ENABLE_GTKSINK)
+#if ENABLE_GTK3
     mpGtkWidget( nullptr ),
 #endif
     mbUseGtkSink( false ),
@@ -352,7 +352,7 @@ void SAL_CALL Player::disposing()
     // Release the elements and pipeline
     if( mbInitialized )
     {
-#if defined(ENABLE_GTKSINK)
+#if ENABLE_GTK3
         if (mpGtkWidget)
         {
             gtk_widget_destroy(mpGtkWidget);
@@ -642,7 +642,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 
 void Player::preparePlaybin( const OUString& rURL, GstElement *pSink )
 {
-#if defined(ENABLE_GTKSINK)
+#if ENABLE_GTK3
     if (mpGtkWidget)
     {
         gtk_widget_destroy(mpGtkWidget);
@@ -981,7 +981,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
                 }
 
                 GstElement *pVideosink = nullptr;
-#if defined(ENABLE_GTKSINK)
+#if ENABLE_GTK3
                 pVideosink = (aToolkit == "gtk3") ?
                               gst_element_factory_make("gtksink", "gtksink") : nullptr;
                 if (pVideosink)
