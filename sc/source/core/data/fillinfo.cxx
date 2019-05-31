@@ -40,6 +40,8 @@
 #include <cellvalue.hxx>
 #include <mtvcellfunc.hxx>
 
+#include <algorithm>
+#include <limits>
 #include <vector>
 #include <memory>
 
@@ -211,9 +213,9 @@ void initRowInfo(const ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow
             RowInfo* pThisRowInfo = &pRowInfo[rArrRow];
             pThisRowInfo->pCellInfo = nullptr;                 // is loaded below
 
-            sal_uInt16 nHeight = static_cast<sal_uInt16>( nDocHeight * fRowScale );
-            if (!nHeight)
-                nHeight = 1;
+            sal_uInt16 nHeight = static_cast<sal_uInt16>(
+                std::clamp(
+                    nDocHeight * fRowScale, 1.0, double(std::numeric_limits<sal_uInt16>::max())));
 
             pThisRowInfo->nRowNo        = nY;               //TODO: case < 0 ?
             pThisRowInfo->nHeight       = nHeight;
