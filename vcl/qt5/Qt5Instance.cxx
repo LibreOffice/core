@@ -438,13 +438,11 @@ Qt5Instance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
 
     auto it = m_aClipboards.find(sel);
     if (it != m_aClipboards.end())
-    {
         return it->second;
-    }
 
-    css::uno::Reference<css::uno::XInterface> xClipboard(
-        static_cast<cppu::OWeakObject*>(new Qt5Clipboard(sel)));
-    m_aClipboards[sel] = xClipboard;
+    css::uno::Reference<css::uno::XInterface> xClipboard = Qt5Clipboard::create(sel);
+    if (xClipboard.is())
+        m_aClipboards[sel] = xClipboard;
 
     return xClipboard;
 }

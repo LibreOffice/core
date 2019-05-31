@@ -29,9 +29,9 @@ protected:
     Qt5Transferable(const QMimeData* pMimeData);
     std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector();
 
-public:
-    ~Qt5Transferable() override;
+    bool getXTransferableData(const css::datatransfer::DataFlavor& rFlavor, css::uno::Any& rAny);
 
+public:
     css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
     sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
 };
@@ -40,7 +40,6 @@ class Qt5ClipboardTransferable final : public Qt5Transferable
 {
 public:
     explicit Qt5ClipboardTransferable(QClipboard::Mode aMode);
-    ~Qt5ClipboardTransferable() override;
 
     css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
 };
