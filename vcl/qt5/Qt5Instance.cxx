@@ -429,20 +429,22 @@ Qt5Instance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
     }
 
     css::uno::Reference<css::uno::XInterface> xClipboard(
-        static_cast<cppu::OWeakObject*>(new VclQt5Clipboard(sel)));
+        static_cast<cppu::OWeakObject*>(new Qt5Clipboard(sel)));
     m_aClipboards[sel] = xClipboard;
 
     return xClipboard;
 }
 
-Reference<XInterface> Qt5Instance::CreateDragSource()
+css::uno::Reference<css::uno::XInterface> Qt5Instance::CreateDragSource()
 {
-    return Reference<XInterface>(static_cast<cppu::OWeakObject*>(new Qt5DragSource()));
+    return css::uno::Reference<css::uno::XInterface>(
+        static_cast<cppu::OWeakObject*>(new Qt5DragSource()));
 }
 
-Reference<XInterface> Qt5Instance::CreateDropTarget()
+css::uno::Reference<css::uno::XInterface> Qt5Instance::CreateDropTarget()
 {
-    return Reference<XInterface>(static_cast<cppu::OWeakObject*>(new Qt5DropTarget()));
+    return css::uno::Reference<css::uno::XInterface>(
+        static_cast<cppu::OWeakObject*>(new Qt5DropTarget()));
 }
 
 IMPL_LINK_NOARG(Qt5Instance, updateStyleHdl, Timer*, void)
