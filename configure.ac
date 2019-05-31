@@ -10229,6 +10229,7 @@ if test "x$enable_gtk3" = "xyes"; then
     : ${with_system_cairo:=yes}
     PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.18 gtk+-unix-print-3.0 gmodule-no-export-2.0 glib-2.0 >= 2.38 cairo, ENABLE_GTK3="TRUE", ENABLE_GTK3="")
     if test "x$ENABLE_GTK3" = "xTRUE"; then
+        AC_DEFINE(ENABLE_GTK3)
         R="gtk3"
         dnl Avoid installed by unpackaged files for now.
         if test -z "$PKGFORMAT"; then
@@ -11171,7 +11172,6 @@ the root of your Qt installation by exporting QT5DIR before running "configure".
     PKG_CHECK_MODULES(QT5_GLIB,[glib-2.0 >= 2.4],
         [
             QT5_HAVE_GLIB=1
-            AC_DEFINE(QT5_HAVE_GLIB,1)
         ],
         AC_MSG_WARN([[No Glib found, Qt5 support will not use native file pickers!]])
     )
@@ -12710,9 +12710,6 @@ AC_CONFIG_HEADERS([config_host/config_liblangtag.h])
 AC_CONFIG_HEADERS([config_host/config_libnumbertext.h])
 AC_CONFIG_HEADERS([config_host/config_locales.h])
 AC_CONFIG_HEADERS([config_host/config_mpl.h])
-AC_CONFIG_HEADERS([config_host/config_qt5.h])
-AC_CONFIG_HEADERS([config_host/config_kde5.h])
-AC_CONFIG_HEADERS([config_host/config_gtk3_kde5.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
 AC_CONFIG_HEADERS([config_host/config_options.h])
 AC_CONFIG_HEADERS([config_host/config_options_calc.h])
