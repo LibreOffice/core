@@ -287,6 +287,26 @@ namespace sw {
             SwRect m_aPortionPaintArea;
             VclPtr<DropDownFormFieldButton> m_pButton;
         };
+
+        /// Fieldmark representing a date form field.
+        class DateFieldmark
+            : public NonTextFieldmark
+        {
+        public:
+            DateFieldmark(const SwPaM& rPaM);
+            virtual ~DateFieldmark() override;
+
+            // This method should be called only by the portion so we can now the portion's painting area
+            void SetPortionPaintArea(const SwRect& rPortionPaintArea);
+
+            void ShowButton(SwEditWin* pEditWin);
+            void HideButton();
+            void RemoveButton();
+
+        private:
+            SwRect m_aPortionPaintArea;
+            VclPtr<MenuButton> m_pButton;
+        };
     }
 }
 #endif

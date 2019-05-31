@@ -622,7 +622,7 @@ void SwXFieldmark::setFieldType(const OUString & fieldType)
         throw uno::RuntimeException();
     if(fieldType != getFieldType())
     {
-        if(fieldType == ODF_FORMDROPDOWN || fieldType == ODF_FORMCHECKBOX)
+        if(fieldType == ODF_FORMDROPDOWN || fieldType == ODF_FORMCHECKBOX || fieldType == ODF_FORMDATE)
         {
             ::sw::mark::IFieldmark* pNewFieldmark = GetIDocumentMarkAccess()->changeNonTextFieldmarkType(pBkm, fieldType);
             if (pNewFieldmark)
@@ -669,6 +669,8 @@ SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark *const pMark,
         else if (dynamic_cast< ::sw::mark::CheckboxFieldmark* >(pMark))
             pXBkmk = new SwXFieldmark(true, &rDoc);
         else if (dynamic_cast< ::sw::mark::DropDownFieldmark* >(pMark))
+            pXBkmk = new SwXFieldmark(true, &rDoc);
+        else if (dynamic_cast< ::sw::mark::DateFieldmark* >(pMark))
             pXBkmk = new SwXFieldmark(true, &rDoc);
         else
             pXBkmk = new SwXFieldmark(isReplacementObject, &rDoc);
