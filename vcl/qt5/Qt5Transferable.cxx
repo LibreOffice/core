@@ -10,158 +10,333 @@
 
 #include <Qt5Transferable.hxx>
 
-#include <comphelper/solarmutex.hxx>
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 
-#include <QtCore/QBuffer>
-#include <QtCore/QMimeData>
-#include <QtCore/QUrl>
 #include <QtWidgets/QApplication>
 
-#include <Qt5Clipboard.hxx>
+#include <Qt5Instance.hxx>
 #include <Qt5Tools.hxx>
 
-using namespace com::sun::star;
+#include <cassert>
+
+static bool lcl_textMimeInfo(const OUString& rMimeString, bool& bHaveNoCharset, bool& bHaveUTF16,
+                             bool& bHaveUTF8)
+{
+    sal_Int32 nIndex = 0;
+    if (rMimeString.getToken(0, ';', nIndex) == "text/plain")
+    {
+        OUString aToken(rMimeString.getToken(0, ';', nIndex));
+        if (aToken == "charset=utf-16")
+            bHaveUTF16 = true;
+        else if (aToken == "charset=utf-8")
+            bHaveUTF8 = true;
+        else if (aToken.isEmpty())
+            bHaveNoCharset = true;
+        else // we just handle UTF-16 and UTF-8, everything else is "bytes"
+            return false;
+        return true;
+    }
+    return false;
+}
 
 Qt5Transferable::Qt5Transferable(const QMimeData* pMimeData)
     : m_pMimeData(pMimeData)
+    , m_bConvertFromLocale(false)
 {
+    assert(pMimeData);
 }
 
-Qt5Transferable::~Qt5Transferable() {}
-
-std::vector<css::datatransfer::DataFlavor> Qt5Transferable::getTransferDataFlavorsAsVector()
+css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL Qt5Transferable::getTransferDataFlavors()
 {
-    std::vector<css::datatransfer::DataFlavor> aVector;
-    assert(m_pMimeData);
-    if (!m_pMimeData)
-        return aVector;
+    // it's just filled once, ever, so just try to get it without locking first
+    if (m_aMimeTypeSeq.hasElements())
+        return m_aMimeTypeSeq;
+
+    // better safe then sorry; preventing broken usage
+    // DnD should not be shared and Clipboard access runs in the GUI thread
+    osl::MutexGuard aGuard(m_aMutex);
+    if (m_aMimeTypeSeq.hasElements())
+        return m_aMimeTypeSeq;
+
+    QStringList aFormatList(m_pMimeData->formats());
+    // we might add the UTF-16 mime text variant later
+    const int nMimeTypeSeqSize = aFormatList.size() + 1;
+    bool bHaveNoCharset = false, bHaveUTF16 = false;
+    css::uno::Sequence<css::datatransfer::DataFlavor> aMimeTypeSeq(nMimeTypeSeqSize);
 
     css::datatransfer::DataFlavor aFlavor;
-    for (QString& rMimeType : m_pMimeData->formats())
+    int nMimeTypeCount = 0;
+
+    for (const QString& rMimeType : aFormatList)
     {
         // filter out non-MIME types such as TARGETS, MULTIPLE, TIMESTAMP
         if (rMimeType.indexOf('/') == -1)
             continue;
 
-        aFlavor.MimeType = toOUString(rMimeType);
-        if (rMimeType.startsWith("text/plain"))
+        // gtk3 thinks it is not well defined - skip too
+        if (rMimeType == QStringLiteral("text/plain;charset=unicode"))
+            continue;
+
+        // LO doesn't like 'text/plain', so we have to provide UTF-16
+        bool bIsNoCharset = false, bIsUTF8 = false, bIsUTF16 = false;
+        if (lcl_textMimeInfo(toOUString(rMimeType), bIsNoCharset, bIsUTF16, bIsUTF8))
         {
-            aFlavor.MimeType = "text/plain;charset=utf-16";
-            aFlavor.DataType = cppu::UnoType<OUString>::get();
-            aVector.push_back(aFlavor);
+            bHaveNoCharset |= bIsNoCharset;
+            bHaveUTF16 |= bIsUTF16;
+            if (bIsUTF16)
+                aFlavor.DataType = cppu::UnoType<OUString>::get();
+            else
+                aFlavor.DataType = cppu::UnoType<css::uno::Sequence<sal_Int8>>::get();
         }
         else
-        {
-            aFlavor.MimeType = toOUString(rMimeType);
-            aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
-            aVector.push_back(aFlavor);
-        }
+            aFlavor.DataType = cppu::UnoType<css::uno::Sequence<sal_Int8>>::get();
+
+        aFlavor.MimeType = toOUString(rMimeType);
+        assert(nMimeTypeCount < nMimeTypeSeqSize);
+        aMimeTypeSeq[nMimeTypeCount] = aFlavor;
+        nMimeTypeCount++;
     }
 
-    return aVector;
-}
+    m_bConvertFromLocale = bHaveNoCharset && !bHaveUTF16;
+    if (m_bConvertFromLocale)
+    {
+        aFlavor.MimeType = "text/plain;charset=utf-16";
+        aFlavor.DataType = cppu::UnoType<OUString>::get();
+        assert(nMimeTypeCount < nMimeTypeSeqSize);
+        aMimeTypeSeq[nMimeTypeCount] = aFlavor;
+        nMimeTypeCount++;
+    }
 
-css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL Qt5Transferable::getTransferDataFlavors()
-{
-    return comphelper::containerToSequence(getTransferDataFlavorsAsVector());
+    aMimeTypeSeq.realloc(nMimeTypeCount);
+
+    m_aMimeTypeSeq = aMimeTypeSeq;
+    return m_aMimeTypeSeq;
 }
 
 sal_Bool SAL_CALL
 Qt5Transferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
 {
-    const std::vector<css::datatransfer::DataFlavor> aAll = getTransferDataFlavorsAsVector();
-
-    return std::any_of(aAll.begin(), aAll.end(), [&](const css::datatransfer::DataFlavor& aFlavor) {
+    const auto aSeq = getTransferDataFlavors();
+    return std::any_of(aSeq.begin(), aSeq.end(), [&](const css::datatransfer::DataFlavor& aFlavor) {
         return rFlavor.MimeType == aFlavor.MimeType;
-    }); //FIXME
+    });
 }
 
-Qt5ClipboardTransferable::Qt5ClipboardTransferable(QClipboard::Mode aMode)
-    : Qt5Transferable(QApplication::clipboard()->mimeData(aMode))
+css::uno::Any SAL_CALL
+Qt5Transferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
+{
+    css::uno::Any aAny;
+    if (!isDataFlavorSupported(rFlavor))
+        return aAny;
+
+    if (rFlavor.MimeType == "text/plain;charset=utf-16")
+    {
+        OUString aString;
+        if (m_bConvertFromLocale)
+        {
+            QByteArray aByteData(m_pMimeData->data(QStringLiteral("text/plain")));
+            aString = OUString(reinterpret_cast<const sal_Char*>(aByteData.data()),
+                               aByteData.size(), osl_getThreadTextEncoding());
+        }
+        else
+        {
+            QByteArray aByteData(m_pMimeData->data(toQString(rFlavor.MimeType)));
+            aString = OUString(reinterpret_cast<const sal_Unicode*>(aByteData.data()),
+                               aByteData.size() / 2);
+        }
+        aAny <<= aString;
+    }
+    else
+    {
+        QByteArray aByteData(m_pMimeData->data(toQString(rFlavor.MimeType)));
+        css::uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aByteData.data()),
+                                          aByteData.size());
+        aAny <<= aSeq;
+    }
+
+    return aAny;
+}
+
+Qt5ClipboardTransferable::Qt5ClipboardTransferable(const QClipboard::Mode aMode,
+                                                   const QMimeData* pMimeData)
+    : Qt5Transferable(pMimeData)
+    , m_aMode(aMode)
 {
 }
 
-Qt5ClipboardTransferable::~Qt5ClipboardTransferable() {}
+bool Qt5ClipboardTransferable::hasInFlightChanged() const
+{
+    const bool bChanged(mimeData() != QApplication::clipboard()->mimeData(m_aMode));
+    SAL_WARN_IF(bChanged, "vcl.qt5",
+                "In flight clipboard change detected - broken clipboard read!");
+    return bChanged;
+}
 
 css::uno::Any SAL_CALL
 Qt5ClipboardTransferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
 {
     css::uno::Any aAny;
-    assert(m_pMimeData);
-    if (!m_pMimeData)
-        return aAny;
-
-    if (rFlavor.MimeType == "text/plain;charset=utf-16")
-    {
-        QString clipboardContent = m_pMimeData->text();
-        OUString sContent = toOUString(clipboardContent);
-
-        aAny <<= sContent.replaceAll("\r\n", "\n");
-    }
-    else if (rFlavor.MimeType == "text/html")
-    {
-        QString clipboardContent = m_pMimeData->html();
-        std::string aStr = clipboardContent.toStdString();
-        uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()),
-                                     aStr.length());
-        aAny <<= aSeq;
-    }
-    else if (rFlavor.MimeType.startsWith("image") && m_pMimeData->hasImage())
-    {
-        QImage image = qvariant_cast<QImage>(m_pMimeData->imageData());
-        QByteArray ba;
-        QBuffer buffer(&ba);
-        sal_Int32 nIndex = rFlavor.MimeType.indexOf('/');
-        OUString sFormat(nIndex != -1 ? rFlavor.MimeType.copy(nIndex + 1) : "png");
-
-        buffer.open(QIODevice::WriteOnly);
-        image.save(&buffer, sFormat.toUtf8().getStr());
-
-        uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(ba.data()), ba.size());
-        aAny <<= aSeq;
-    }
-
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    SolarMutexGuard g;
+    pSalInst->RunInMainThread([&, this]() {
+        if (!hasInFlightChanged())
+            aAny = Qt5Transferable::getTransferData(rFlavor);
+    });
     return aAny;
 }
 
-Qt5DnDTransferable::Qt5DnDTransferable(const QMimeData* pMimeData)
-    : Qt5Transferable(pMimeData)
+css::uno::Sequence<css::datatransfer::DataFlavor>
+    SAL_CALL Qt5ClipboardTransferable::getTransferDataFlavors()
 {
+    css::uno::Sequence<css::datatransfer::DataFlavor> aSeq;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    SolarMutexGuard g;
+    pSalInst->RunInMainThread([&, this]() {
+        if (!hasInFlightChanged())
+            aSeq = Qt5Transferable::getTransferDataFlavors();
+    });
+    return aSeq;
 }
 
-css::uno::Any Qt5DnDTransferable::getTransferData(const css::datatransfer::DataFlavor&)
+sal_Bool SAL_CALL
+Qt5ClipboardTransferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
 {
-    uno::Any aAny;
-    assert(m_pMimeData);
+    bool bIsSupported = false;
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    SolarMutexGuard g;
+    pSalInst->RunInMainThread([&, this]() {
+        if (!hasInFlightChanged())
+            bIsSupported = Qt5Transferable::isDataFlavorSupported(rFlavor);
+    });
+    return bIsSupported;
+}
 
-    // FIXME: not sure if we should support more mimetypes here
-    // (how to carry out external DnD with anything else than [file] URL?)
-    if (m_pMimeData->hasUrls())
+Qt5MimeData::Qt5MimeData(const css::uno::Reference<css::datatransfer::XTransferable>& xTrans)
+    : m_aContents(xTrans)
+    , m_bHaveNoCharset(false)
+    , m_bHaveUTF8(false)
+{
+    assert(xTrans.is());
+}
+
+bool Qt5MimeData::deepCopy(QMimeData** const pMimeCopy) const
+{
+    if (!pMimeCopy)
+        return false;
+
+    QMimeData* pMimeData = new QMimeData();
+    for (QString& format : formats())
     {
-        QList<QUrl> urlList = m_pMimeData->urls();
-
-        if (urlList.size() > 0)
+        QByteArray aData = data(format);
+        // Checking for custom MIME types
+        if (format.startsWith("application/x-qt"))
         {
-            std::string aStr;
-
-            // transfer data is list of URLs
-            for (int i = 0; i < urlList.size(); ++i)
-            {
-                QString url = urlList.at(i).path();
-                aStr += url.toStdString();
-                // separated by newline if more than 1
-                if (i < urlList.size() - 1)
-                    aStr += "\n";
-            }
-
-            uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()),
-                                         aStr.length());
-            aAny <<= aSeq;
+            // Retrieving true format name
+            int indexBegin = format.indexOf('"') + 1;
+            int indexEnd = format.indexOf('"', indexBegin);
+            format = format.mid(indexBegin, indexEnd - indexBegin);
         }
+        pMimeData->setData(format, aData);
     }
-    return aAny;
+
+    *pMimeCopy = pMimeData;
+    return true;
 }
+
+QStringList Qt5MimeData::formats() const
+{
+    if (!m_aMimeTypeList.isEmpty())
+        return m_aMimeTypeList;
+
+    css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
+        = m_aContents->getTransferDataFlavors();
+    QStringList aList;
+    bool bHaveUTF16;
+
+    for (const auto& rFlavor : aFormats)
+    {
+        aList << toQString(rFlavor.MimeType);
+        lcl_textMimeInfo(rFlavor.MimeType, m_bHaveNoCharset, bHaveUTF16, m_bHaveUTF8);
+    }
+
+    // we provide a locale encoded and an UTF-8 variant, if missing
+    if (m_bHaveNoCharset || bHaveUTF16 || m_bHaveUTF8)
+    {
+        // if there is a text representation from LO point of view, it'll be UTF-16
+        assert(bHaveUTF16);
+        if (!m_bHaveUTF8)
+            aList << QStringLiteral("text/plain;charset=utf-8");
+        if (!m_bHaveNoCharset)
+            aList << QStringLiteral("text/plain");
+    }
+
+    m_aMimeTypeList = aList;
+    return m_aMimeTypeList;
+}
+
+QVariant Qt5MimeData::retrieveData(const QString& mimeType, QVariant::Type) const
+{
+    if (!hasFormat(mimeType))
+        return QVariant();
+
+    css::datatransfer::DataFlavor aFlavor;
+    aFlavor.MimeType = toOUString(mimeType);
+    aFlavor.DataType = cppu::UnoType<css::uno::Sequence<sal_Int8>>::get();
+
+    bool bWantNoCharset = false, bWantUTF8 = false, bWantUTF16 = false;
+    if (lcl_textMimeInfo(aFlavor.MimeType, bWantNoCharset, bWantUTF8, bWantUTF16))
+    {
+        if ((bWantNoCharset && !m_bHaveNoCharset) || (bWantUTF8 && !m_bHaveUTF8))
+        {
+            aFlavor.MimeType = "text/plain;charset=utf-16";
+            aFlavor.DataType = cppu::UnoType<OUString>::get();
+        }
+        else if (bWantUTF16)
+            aFlavor.DataType = cppu::UnoType<OUString>::get();
+    }
+
+    css::uno::Any aValue;
+
+    try
+    {
+        aValue = m_aContents->getTransferData(aFlavor);
+    }
+    catch (...)
+    {
+    }
+
+    QByteArray aByteArray;
+    if (aValue.getValueTypeClass() == css::uno::TypeClass_STRING)
+    {
+        OUString aString;
+        aValue >>= aString;
+
+        if (bWantUTF8)
+        {
+            OString aUTF8String(OUStringToOString(aString, RTL_TEXTENCODING_UTF8));
+            aByteArray = QByteArray(reinterpret_cast<const char*>(aUTF8String.getStr()),
+                                    aUTF8String.getLength());
+        }
+        else if (bWantNoCharset)
+        {
+            OString aLocaleString(OUStringToOString(aString, osl_getThreadTextEncoding()));
+            aByteArray = QByteArray(reinterpret_cast<const char*>(aLocaleString.getStr()),
+                                    aLocaleString.getLength());
+        }
+        else
+            return QVariant(toQString(aString));
+    }
+    else
+    {
+        css::uno::Sequence<sal_Int8> aData;
+        aValue >>= aData;
+        aByteArray
+            = QByteArray(reinterpret_cast<const char*>(aData.getConstArray()), aData.getLength());
+    }
+    return QVariant::fromValue(aByteArray);
+}
+
+bool Qt5MimeData::hasFormat(const QString& mimeType) const { return formats().contains(mimeType); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
