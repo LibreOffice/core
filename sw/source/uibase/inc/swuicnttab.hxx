@@ -43,7 +43,7 @@ class SwTOXWidget;
 class SwTOXEdit;
 class SwTOXButton;
 class SwTOXEntryTabPage;
-class OneExampleFrame;
+class SwOneExampleFrame;
 class SwWrtShell;
 
 namespace com{namespace sun{namespace star{
@@ -83,14 +83,14 @@ class SwMultiTOXTabDialog : public SfxTabDialogController
     bool                m_bExampleCreated;
     bool const          m_bGlobalFlag;
 
-    std::unique_ptr<OneExampleFrame> m_xExampleFrame;
+    std::unique_ptr<SwOneExampleFrame> m_xExampleFrame;
     std::unique_ptr<weld::CheckButton> m_xShowExampleCB;
     std::unique_ptr<weld::CustomWeld> m_xExampleFrameWin;
 
     virtual short       Ok() override;
     std::unique_ptr<SwTOXDescription> CreateTOXDescFromTOXBase(const SwTOXBase*pCurTOX);
 
-    DECL_LINK(CreateExample_Hdl, OneExampleFrame&, void);
+    DECL_LINK(CreateExample_Hdl, SwOneExampleFrame&, void);
     DECL_LINK(ShowPreviewHdl, weld::ToggleButton&, void);
 
 public:

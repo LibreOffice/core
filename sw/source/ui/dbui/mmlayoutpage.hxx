@@ -29,7 +29,7 @@
 
 class SwMailMergeWizard;
 class SwFrameFormat;
-class OneExampleFrame;
+class SwOneExampleFrame;
 class SwWrtShell;
 class SwView;
 
@@ -57,10 +57,10 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
     std::unique_ptr<weld::Button> m_xUpPB;
     std::unique_ptr<weld::Button> m_xDownPB;
     std::unique_ptr<weld::ComboBox> m_xZoomLB;
-    std::unique_ptr<OneExampleFrame> m_xExampleFrame;
+    std::unique_ptr<SwOneExampleFrame> m_xExampleFrame;
     std::unique_ptr<weld::CustomWeld> m_xExampleContainerWIN;
 
-    DECL_LINK(PreviewLoadedHdl_Impl, OneExampleFrame&, void);
+    DECL_LINK(PreviewLoadedHdl_Impl, SwOneExampleFrame&, void);
     DECL_LINK(ZoomHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(ChangeAddressHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(GreetingsHdl_Impl, weld::Button&, void);
