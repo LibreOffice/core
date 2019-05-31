@@ -533,6 +533,55 @@ namespace sw { namespace mark
         if(m_pButton)
             m_pButton.disposeAndClear();
     }
+
+    DateFieldmark::DateFieldmark(const SwPaM& rPaM)
+        : NonTextFieldmark(rPaM)
+        //, m_pButton(nullptr)
+    {
+    }
+
+    DateFieldmark::~DateFieldmark()
+    {
+        //m_pButton.disposeAndClear();
+    }
+
+    void DateFieldmark::SetPortionPaintArea(const SwRect& rPortionPaintArea)
+    {
+        /*if(m_aPortionPaintArea == rPortionPaintArea &&
+           m_pButton && m_pButton->IsVisible())
+            return;
+
+        m_aPortionPaintArea = rPortionPaintArea;
+        if(m_pButton)
+        {
+            m_pButton->Show();
+            m_pButton->CalcPosAndSize(m_aPortionPaintArea);
+            m_pButton->Invalidate();
+        }*/
+    }
+
+    void DateFieldmark::ShowButton(SwEditWin* pEditWin)
+    {
+        if(pEditWin)
+        {
+            //if(!m_pButton)
+            //    m_pButton = VclPtr<DropDownFormFieldButton>::Create(pEditWin, *this);
+            //m_pButton->CalcPosAndSize(m_aPortionPaintArea);
+            //m_pButton->Show();
+        }
+    }
+
+    void DateFieldmark::HideButton()
+    {
+        //if(m_pButton)
+            //m_pButton->Show(false);
+    }
+
+    void DateFieldmark::RemoveButton()
+    {
+        //if(m_pButton)
+            //m_pButton.disposeAndClear();
+    }
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
