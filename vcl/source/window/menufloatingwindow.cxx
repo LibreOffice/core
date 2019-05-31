@@ -20,6 +20,7 @@
 #include "menufloatingwindow.hxx"
 #include "menuitemlist.hxx"
 #include "menubarwindow.hxx"
+#include "bufferdevice.hxx"
 
 #include <sal/log.hxx>
 #include <salmenu.hxx>
@@ -1208,10 +1209,7 @@ void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
         return;
 
     // Make sure that all actual rendering happens in one go to avoid flicker.
-    ScopedVclPtrInstance<VirtualDevice> pBuffer;
-    pBuffer->SetOutputSizePixel(GetOutputSizePixel(), false);
-    pBuffer->DrawOutDev(Point(0, 0), GetOutputSizePixel(), Point(0, 0), GetOutputSizePixel(),
-                        rRenderContext);
+    vcl::BufferDevice pBuffer(this, rRenderContext);
 
     pBuffer->Push(PushFlags::CLIPREGION);
     pBuffer->SetClipRegion(vcl::Region(rPaintRect));
@@ -1239,9 +1237,6 @@ void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
         RenderHighlightItem(*pBuffer, nHighlightedItem);
 
     pBuffer->Pop();
-
-    rRenderContext.DrawOutDev(Point(0, 0), GetOutputSizePixel(), Point(0, 0), GetOutputSizePixel(),
-                              *pBuffer);
 }
 
 void MenuFloatingWindow::ImplDrawScroller(vcl::RenderContext& rRenderContext, bool bUp)
