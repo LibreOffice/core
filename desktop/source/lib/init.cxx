@@ -1187,7 +1187,6 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_TEXT_SELECTION_START:
             case LOK_CALLBACK_TEXT_SELECTION_END:
             case LOK_CALLBACK_TEXT_SELECTION:
-            case LOK_CALLBACK_GRAPHIC_SELECTION:
             case LOK_CALLBACK_MOUSE_POINTER:
             case LOK_CALLBACK_CELL_CURSOR:
             case LOK_CALLBACK_CELL_FORMULA:
@@ -1248,6 +1247,15 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_WINDOW:
                 if (processWindowEvent(aCallbackData))
                     return;
+            break;
+
+            case LOK_CALLBACK_GRAPHIC_SELECTION:
+            {
+                // remove only selection ranges and 'EMPTY' messages
+                // always send 'INPLACE' and 'INPLACE EXIT' messages
+                removeAll([type, payload] (const queue_type::value_type& elem)
+                    { return (elem.Type == type && elem.PayloadString[0] != 'I'); });
+            }
             break;
         }
     }
