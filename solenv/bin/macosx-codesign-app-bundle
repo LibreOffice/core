@@ -36,7 +36,7 @@ if test -n "$ENABLE_MACOSX_SANDBOX"; then
     other_files=''
 else
     # We then want to sign data files, too, hmm.
-    entitlements=''
+    entitlements="--entitlements $SRCDIR/hardened_runtime.xcent"
     other_files="\
  -or -name '*.fodt' -or -name 'schema.strings' -or -name 'schema.xml' \
  -or -name '*.jar' -or -name 'LICENSE' -or -name 'LICENSE.html' \
@@ -83,7 +83,7 @@ while read app; do
     fn=${fn%.*}
     # Assume the app has a XML (and not binary) Info.plist
     id=`grep -A 1 '<key>CFBundleIdentifier</key>' $app/Contents/Info.plist | tail -1 | sed -e 's,.*<string>,,' -e 's,</string>.*,,'`
-    codesign --verbose --force --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$app" > "/tmp/codesign_${fn}.log" 2>&1
+    codesign --verbose --options=runtime --force --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$app" > "/tmp/codesign_${fn}.log" 2>&1
     if [ "$?" != "0" ] ; then
 	exit 1
     fi
@@ -100,7 +100,11 @@ while read framework; do
         if test ! -L "$version" -a -d "$version"; then
 	    # Assume the framework has a XML (and not binary) Info.plist
 	    id=`grep -A 1 '<key>CFBundleIdentifier</key>' $version/Resources/Info.plist | tail -1 | sed -e 's,.*<string>,,' -e 's,</string>.*,,'`
-            codesign --verbose --force --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$version" > "/tmp/codesign_${fn}.log" 2>&1
+            # files in bin are not covered by signing the framework...
+            for scriptorexecutable in $(find $version/bin/ -type f); do
+                codesign --verbose --options=runtime --force --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$scriptorexecutable" >> "/tmp/codesign_${fn}.log" 2>&1
+            done
+            codesign --verbose --force --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$version" >> "/tmp/codesign_${fn}.log" 2>&1
 	    if [ "$?" != "0" ] ; then
 		exit 1
 	    fi
@@ -129,7 +133,7 @@ while read file; do
 	    ;;
 	*)
 	    id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
-	    codesign --force --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$file"  > "/tmp/codesign_${MACOSX_BUNDLE_IDENTIFIER}.${id}.log" 2>&1
+	    codesign --force --verbose --options=runtime --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$file"  > "/tmp/codesign_${MACOSX_BUNDLE_IDENTIFIER}.${id}.log" 2>&1
 	    if [ "$?" != "0" ] ; then
 		exit 1
 	    fi
@@ -152,7 +156,7 @@ done
 
 id=`echo ${PRODUCTNAME} | tr ' ' '-'`
 
-codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$APP_BUNDLE" > "/tmp/codesign_${MACOSX_BUNDLE_IDENTIFIER}.log" 2>&1
+codesign --force --verbose --options=runtime --identifier="${MACOSX_BUNDLE_IDENTIFIER}" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$APP_BUNDLE" > "/tmp/codesign_${MACOSX_BUNDLE_IDENTIFIER}.log" 2>&1
 if [ "$?" != "0" ] ; then
     exit 1
 fi

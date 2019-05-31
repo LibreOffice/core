@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <!-- AppleScript support -->
+        <key>com.apple.security.automation.apple-events</key>
+        <true/>
+        <!-- for extension manager, "exception in synchronize" -->
+        <key>com.apple.security.cs.disable-executable-page-protection</key>
+        <true/>
+    </dict>
+</plist>

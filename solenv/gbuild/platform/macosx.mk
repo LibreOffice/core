@@ -132,7 +132,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(if $(MACOSX_CODESIGNING_IDENTITY), \
 		$(if $(filter Executable,$(TARGETTYPE)), \
 			$(if $(filter-out $(call gb_Executable_get_target,soffice_bin),$(1)), \
-				codesign --identifier=$(MACOSX_BUNDLE_IDENTIFIER).$(notdir $(1)) --sign $(MACOSX_CODESIGNING_IDENTITY) --force $(1) &&))) \
+				codesign --identifier=$(MACOSX_BUNDLE_IDENTIFIER).$(notdir $(1)) --sign $(MACOSX_CODESIGNING_IDENTITY) --options=runtime --force $(1) &&))) \
 	$(if $(filter Library,$(TARGETTYPE)),\
 		otool -l $(1) | grep -A 5 LC_ID_DYLIB \
 			> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
