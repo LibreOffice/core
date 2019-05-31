@@ -72,6 +72,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <sfx2/lokhelper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #define SFX_CLIENTACTIVATE_TIMEOUT 100
 
@@ -353,6 +354,13 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedInplace()
 {
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
+
+    if ( comphelper::LibreOfficeKit::isActive() )
+    {
+        if ( SfxViewShell* pViewShell = m_pClient->GetViewShell() ) {
+            pViewShell->libreOfficeKitViewCallback( LOK_CALLBACK_GRAPHIC_SELECTION, "INPLACE EXIT" );
+        }
+    }
 }
 
 
