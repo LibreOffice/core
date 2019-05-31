@@ -1,0 +1,71 @@
+import type_options
+/*
+    This file for the log statments that relates to each diffrent applications
+*/
+
+SpecialCommand:
+  writer_command | calc_command 
+;
+
+/*
+  This part for all the writer log statments:
+   
+    1)  Type 
+    2)  Select
+    3)  Set zoom
+    4)  GOTO page
+
+  then we can add whatever we need in the future
+*/
+writer_command:
+  Type_command | Select_command | setZoom_command | GOTO_command 
+;
+Type_command:
+  'Type on writer' what_to_type=Type_options
+;
+Select_command:
+  'Select from Pos' from=INT 'to Pos' to=INT 
+;
+setZoom_command:
+  'Set Zoom to be' zoom_value=INT 
+;
+GOTO_command:
+  'GOTO page number' page_num=INT
+;
+//=================================================================//
+/*
+  This part for all the calc log statments:
+
+    1)  select sheet
+    2)  Select cell or range
+    3)  launch AutoFill
+
+  then we can add whatever we need in the future
+*/
+calc_command:
+  calc_Type_command | switch_sheet | Select_cell | AutoFill_filter 
+;
+calc_Type_command:
+  'Type on current cell' what_to_type=Type_options
+;
+switch_sheet:
+  'Switch to sheet number' sheet_num=INT
+;
+Select_cell:
+  'Select from calc' select_op=select_options
+;
+AutoFill_filter:
+  'Lanuch AutoFilter from Col' col_num=INT 'and Row' row_num=INT
+;
+//this is the select options
+select_options:
+    one_cell | range_of_cells
+;
+range_of_cells:
+    '{' '"RANGE":' input_range=STRING '}'
+;
+one_cell:
+    '{' '"CELL":' input_cell=STRING '}'
+;
+//=================================================================//
+
