@@ -25,6 +25,10 @@ class Button;
 }
 namespace weld
 {
+class ComboBox;
+}
+namespace weld
+{
 class Label;
 }
 namespace weld
@@ -41,6 +45,7 @@ struct RedactionTarget
     sal_uInt32 nID;
     OUString sName;
     OUString sType;
+    OUString sSearchText;
     bool bCaseSensitive;
     bool bWholeWords;
     OUString sDescription;
@@ -85,6 +90,8 @@ class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxDialogController
     std::unique_ptr<weld::Button> m_xEditBtn;
     std::unique_ptr<weld::Button> m_xDeleteBtn;
 
+    DECL_LINK(AddHdl, weld::Button&, void);
+
 public:
     SfxAutoRedactDialog(weld::Window* pParent);
     virtual ~SfxAutoRedactDialog() override;
@@ -97,6 +104,21 @@ public:
     // TODO: Some method(s) to check emptiness/validity
     // TODO: Some method(s) to get the search params/objects
     // TODO: Some method(s) to load/save redaction target sets
+};
+
+class SfxAddTargetDialog : public weld::GenericDialogController
+{
+private:
+    std::unique_ptr<weld::Entry> m_xName;
+    std::unique_ptr<weld::ComboBox> m_xType;
+    std::unique_ptr<weld::Entry> m_xContent;
+    std::unique_ptr<weld::CheckButton> m_xCaseSensitive;
+    std::unique_ptr<weld::CheckButton> m_xWholeWords;
+
+public:
+    SfxAddTargetDialog(weld::Window* pWindow, const OUString& rName);
+
+    OUString GetName() { return m_xName->get_text(); }
 };
 
 #endif

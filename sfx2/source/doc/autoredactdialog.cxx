@@ -121,6 +121,29 @@ OUString TargetsTable::GetNameProposal()
     return sDefaultTargetName + " " + OUString::number(nHighestTargetId + 1);
 }
 
+// callback to a insert button. Inserts a new text mark to the current position.
+IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, weld::Button&, void)
+{
+    /*OUString sBookmark = m_xEditBox->get_text();
+    rSh.SetBookmark2(vcl::KeyCode(), sBookmark, m_xHideCB->get_active(), m_xConditionED->get_text());
+    rReq.AppendItem(SfxStringItem(FN_INSERT_BOOKMARK, sBookmark));
+    rReq.Done();
+    if (!rReq.IsDone())
+        rReq.Ignore();*/
+
+    // Open the Add Target dialog
+    SfxAddTargetDialog aAddTargetDialog(getDialog(), m_xTargetsBox->GetNameProposal());
+
+    // If RET_OK, add to the targets box, and to the targets vector (m_aTableTargets)
+    if (aAddTargetDialog.run() == RET_OK)
+    {
+        RedactionTarget* redactiontarget = new RedactionTarget(
+            { 0, aAddTargetDialog.GetName(), "String", "deploy", true, false, "Some description" });
+        m_xTargetsBox->InsertTarget(redactiontarget);
+        //m_aTableTargets.emplace_back(redactiontarget, redactiontarget->sName);
+    }
+}
+
 SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
     : SfxDialogController(pParent, "sfx/ui/autoredactdialog.ui", "AutoRedactDialog")
     , m_xRedactionTargetsLabel(m_xBuilder->weld_label("labelRedactionTargets"))
@@ -156,10 +179,8 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
         m_xRegionLb->connect_changed(LINK(this, SfxNewFileDialog, RegionSelect));
     }*/
 
-    /*RedactionTarget* redactiontarget
-        = new RedactionTarget({ 0, "Target 1", "String", true, false, "Some description" });
-
-    m_xTargetsBox->InsertTarget(redactiontarget);*/
+    // Handler connections
+    m_xAddBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, AddHdl));
 }
 
 SfxAutoRedactDialog::~SfxAutoRedactDialog()
@@ -176,6 +197,17 @@ bool SfxAutoRedactDialog::hasTargets() const
         return false;
 
     return true;
+}
+
+SfxAddTargetDialog::SfxAddTargetDialog(weld::Window* pParent, const OUString& rName)
+    : GenericDialogController(pParent, "sfx/ui/addtargetdialog.ui", "AddTargetDialog")
+    , m_xName(m_xBuilder->weld_entry("name"))
+    , m_xType(m_xBuilder->weld_combo_box("type"))
+    , m_xContent(m_xBuilder->weld_entry("content"))
+    , m_xCaseSensitive(m_xBuilder->weld_check_button("checkboxCaseSensitive"))
+    , m_xWholeWords(m_xBuilder->weld_check_button("checkboxWholeWords"))
+{
+    m_xName->set_text(rName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
