@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_fd17a344",
+        "filename": "include/sfx2/autoredactdialog.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-05-31T07:54:40Z",
+      "side": 1,
+      "message": "Will you need this dialog outside sfx2? If not, move it to sfx2/inc/ at least, out of include/.",
+      "revId": "8a9438099c5e625c01195272a35aa41d97931f97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_9d28df86",
+        "filename": "include/sfx2/autoredactdialog.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-05-31T07:54:40Z",
+      "side": 1,
+      "message": "Missing one-liner doxygen comment.",
+      "revId": "8a9438099c5e625c01195272a35aa41d97931f97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_bd2b5b80",
+        "filename": "include/sfx2/autoredactdialog.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-05-31T07:54:40Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "8a9438099c5e625c01195272a35aa41d97931f97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
