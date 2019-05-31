@@ -213,8 +213,8 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame const * pViewFrame,
     m_xCategoryBox->set_size_request(m_xCategoryBox->get_approximate_digit_width() * 52,
                                      m_xCategoryBox->get_height_rows(12));
 
-    Link<OneExampleFrame&,void> aLink(LINK(this, SwGlossaryDlg, PreviewLoadedHdl));
-    m_xExampleFrame.reset(new OneExampleFrame(EX_SHOW_ONLINE_LAYOUT, &aLink));
+    Link<SwOneExampleFrame&,void> aLink(LINK(this, SwGlossaryDlg, PreviewLoadedHdl));
+    m_xExampleFrame.reset(new SwOneExampleFrame(EX_SHOW_ONLINE_LAYOUT, &aLink));
     m_xExampleFrameWin.reset(new weld::CustomWeld(*m_xBuilder, "example", *m_xExampleFrame));
     Size aSize = m_xExampleFrame->GetDrawingArea()->get_ref_device().LogicToPixel(
             Size(82, 124), MapMode(MapUnit::MapAppFont));
@@ -898,7 +898,7 @@ void SwGlossaryDlg::ShowPreview()
     ShowAutoText(::GetCurrGlosGroup(), m_xShortNameEdit->get_text());
 };
 
-IMPL_LINK_NOARG(SwGlossaryDlg, PreviewLoadedHdl, OneExampleFrame&, void)
+IMPL_LINK_NOARG(SwGlossaryDlg, PreviewLoadedHdl, SwOneExampleFrame&, void)
 {
     ResumeShowAutoText();
 }
