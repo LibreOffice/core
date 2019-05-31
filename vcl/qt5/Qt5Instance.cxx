@@ -437,15 +437,18 @@ Qt5Instance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
                                                   css::uno::Reference<css::uno::XInterface>(), -1);
     }
 
+    // This could also use RunInMain, but SolarMutexGuard is enough
+    // since at this point we're not accessing the clipbord, just get the
+    // accessor to the clipboard.
+    SolarMutexGuard aGuard;
+
     auto it = m_aClipboards.find(sel);
     if (it != m_aClipboards.end())
-    {
         return it->second;
-    }
 
-    css::uno::Reference<css::uno::XInterface> xClipboard(
-        static_cast<cppu::OWeakObject*>(new Qt5Clipboard(sel)));
-    m_aClipboards[sel] = xClipboard;
+    css::uno::Reference<css::uno::XInterface> xClipboard = Qt5Clipboard::create(sel);
+    if (xClipboard.is())
+        m_aClipboards[sel] = xClipboard;
 
     return xClipboard;
 }
