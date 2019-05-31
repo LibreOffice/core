@@ -60,6 +60,7 @@
 #include <formula/vectortoken.hxx>
 
 #include <algorithm>
+#include <limits>
 #include <memory>
 #include <numeric>
 
@@ -738,7 +739,8 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
     if (bFound)
     {
         nWidth += 2;
-        sal_uInt16 nTwips = static_cast<sal_uInt16>(nWidth / nPPTX);
+        sal_uInt16 nTwips = static_cast<sal_uInt16>(
+            std::min(nWidth / nPPTX, double(std::numeric_limits<sal_uInt16>::max())));
         return nTwips;
     }
     else
