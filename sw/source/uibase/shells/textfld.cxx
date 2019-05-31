@@ -717,6 +717,21 @@ FIELD_INSERT:
                 rSh.GetView().GetViewFrame()->GetBindings().Invalidate( SID_UNDO );
             }
             break;
+        case FN_INSERT_DATE_FORMFIELD:
+        {
+            rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+
+            SwPaM* pCursorPos = rSh.GetCursor();
+            if(pCursorPos)
+            {
+                IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
+                pMarksAccess->makeNoTextFieldBookmark(*pCursorPos, OUString(), ODF_FORMDATE);
+            }
+
+            rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+            rSh.GetView().GetViewFrame()->GetBindings().Invalidate( SID_UNDO );
+        }
+        break;
             default:
                 OSL_FAIL("wrong dispatcher");
                 return;
@@ -880,6 +895,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
         case FN_INSERT_TEXT_FORMFIELD:
         case FN_INSERT_CHECKBOX_FORMFIELD:
         case FN_INSERT_DROPDOWN_FORMFIELD:
+        case FN_INSERT_DATE_FORMFIELD:
             if ( rSh.CursorInsideInputField() )
             {
                 rSet.DisableItem(nWhich);
