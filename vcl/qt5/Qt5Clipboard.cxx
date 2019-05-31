@@ -8,85 +8,73 @@
  *
  */
 
-#include <comphelper/solarmutex.hxx>
-#include <comphelper/sequence.hxx>
-#include <cppuhelper/supportsservice.hxx>
-#include <vcl/svapp.hxx>
-#include <sal/log.hxx>
-
-#include <QtCore/QMimeData>
-#include <QtCore/QUuid>
-#include <QtWidgets/QApplication>
-
 #include <Qt5Clipboard.hxx>
 #include <Qt5Clipboard.moc>
+
+#include <cppuhelper/supportsservice.hxx>
+#include <sal/log.hxx>
+
+#include <QtWidgets/QApplication>
+
+#include <Qt5Instance.hxx>
 #include <Qt5Transferable.hxx>
 #include <Qt5Tools.hxx>
 
+#include <cassert>
 #include <map>
 
-using namespace com::sun::star;
-
-namespace
+Qt5Clipboard::Qt5Clipboard(const OUString& aModeString, const QClipboard::Mode aMode)
+    : cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
+                                    css::datatransfer::clipboard::XFlushableClipboard,
+                                    XServiceInfo>(m_aMutex)
+    , m_aClipboardName(aModeString)
+    , m_aClipboardMode(aMode)
 {
-QClipboard::Mode getClipboardTypeFromName(const OUString& aString)
+    assert(isSupported(m_aClipboardMode));
+    // DirectConnection guarantess the changed slot runs in the same thread as the QClipboard
+    connect(QApplication::clipboard(), &QClipboard::changed, this, &Qt5Clipboard::handleChanged,
+            Qt::DirectConnection);
+}
+
+css::uno::Reference<css::uno::XInterface> Qt5Clipboard::create(const OUString& aModeString)
 {
     static const std::map<OUString, QClipboard::Mode> aNameToClipboardMap
         = { { "CLIPBOARD", QClipboard::Clipboard }, { "PRIMARY", QClipboard::Selection } };
 
-    // default to QClipboard::Clipboard as fallback
-    QClipboard::Mode aMode = QClipboard::Clipboard;
+    assert(QApplication::clipboard()->thread() == qApp->thread());
 
-    auto iter = aNameToClipboardMap.find(aString);
-    if (iter != aNameToClipboardMap.end())
-        aMode = iter->second;
-    else
-        SAL_WARN("vcl.qt5", "Unrecognized clipboard type \""
-                                << aString << "\"; falling back to QClipboard::Clipboard");
-    return aMode;
-}
-
-void lcl_peekFormats(const css::uno::Sequence<css::datatransfer::DataFlavor>& rFormats,
-                     bool& bHasHtml, bool& bHasImage)
-{
-    for (int i = 0; i < rFormats.getLength(); ++i)
-    {
-        const css::datatransfer::DataFlavor& rFlavor = rFormats[i];
-
-        if (rFlavor.MimeType == "text/html")
-            bHasHtml = true;
-        else if (rFlavor.MimeType.startsWith("image"))
-            bHasImage = true;
-    }
-}
-}
-
-Qt5Clipboard::Qt5Clipboard(const OUString& aModeString)
-    : cppu::WeakComponentImplHelper<datatransfer::clipboard::XSystemClipboard,
-                                    datatransfer::clipboard::XFlushableClipboard, XServiceInfo>(
-          m_aMutex)
-    , m_aClipboardName(aModeString)
-    , m_aClipboardMode(getClipboardTypeFromName(aModeString))
-    , m_aUuid(QUuid::createUuid().toByteArray())
-{
-    connect(QApplication::clipboard(), &QClipboard::changed, this,
-            &Qt5Clipboard::handleClipboardChange, Qt::DirectConnection);
+    auto iter = aNameToClipboardMap.find(aModeString);
+    if (iter != aNameToClipboardMap.end() && isSupported(iter->second))
+        return static_cast<cppu::OWeakObject*>(new Qt5Clipboard(aModeString, iter->second));
+    SAL_WARN("vcl.qt5", "Ignoring unrecognized clipboard type: '" << aModeString << "'");
+    return css::uno::Reference<css::uno::XInterface>();
 }
 
 void Qt5Clipboard::flushClipboard()
 {
-    SolarMutexGuard aGuard;
-    return;
-}
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    SolarMutexGuard g;
+    pSalInst->RunInMainThread([&, this]() {
+        if (!isOwner(m_aClipboardMode))
+            return;
 
-Qt5Clipboard::~Qt5Clipboard() {}
+        QClipboard* pClipboard = QApplication::clipboard();
+        const Qt5MimeData* pQt5MimeData
+            = dynamic_cast<const Qt5MimeData*>(pClipboard->mimeData(m_aClipboardMode));
+        assert(pQt5MimeData);
+
+        QMimeData* pMimeCopy = nullptr;
+        if (pQt5MimeData && pQt5MimeData->deepCopy(&pMimeCopy))
+            pClipboard->setMimeData(pMimeCopy, m_aClipboardMode);
+    });
+}
 
 OUString Qt5Clipboard::getImplementationName()
 {
     return OUString("com.sun.star.datatransfer.Qt5Clipboard");
 }
 
-uno::Sequence<OUString> Qt5Clipboard::getSupportedServiceNames()
+css::uno::Sequence<OUString> Qt5Clipboard::getSupportedServiceNames()
 {
     return { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
 }
@@ -96,162 +84,55 @@ sal_Bool Qt5Clipboard::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Reference<css::datatransfer::XTransferable> Qt5Clipboard::getContents()
+css::uno::Reference<css::datatransfer::XTransferable> Qt5Clipboard::getContents()
 {
-    if (!m_aContents.is())
-        m_aContents = new Qt5ClipboardTransferable(m_aClipboardMode);
+    osl::MutexGuard aGuard(m_aMutex);
+
+    // if we're the owner, we have the XTransferable from setContents
+    if (isOwner(m_aClipboardMode))
+        return m_aContents;
+
+    // check if we can still use the shared Qt5ClipboardTransferable
+    const QMimeData* pMimeData = QApplication::clipboard()->mimeData(m_aClipboardMode);
+    if (m_aContents.is())
+    {
+        const auto* pTrans = dynamic_cast<Qt5ClipboardTransferable*>(m_aContents.get());
+        assert(pTrans);
+        if (pTrans && pTrans->mimeData() == pMimeData)
+            return m_aContents;
+    }
+
+    m_aContents = new Qt5ClipboardTransferable(m_aClipboardMode, pMimeData);
     return m_aContents;
 }
 
 void Qt5Clipboard::setContents(
-    const uno::Reference<css::datatransfer::XTransferable>& xTrans,
-    const uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
+    const css::uno::Reference<css::datatransfer::XTransferable>& xTrans,
+    const css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
 {
+    // it's actually possible to get a non-empty xTrans and an empty xClipboardOwner!
     osl::ClearableMutexGuard aGuard(m_aMutex);
-    uno::Reference<datatransfer::clipboard::XClipboardOwner> xOldOwner(m_aOwner);
-    uno::Reference<datatransfer::XTransferable> xOldContents(m_aContents);
+
+    css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> xOldOwner(m_aOwner);
+    css::uno::Reference<css::datatransfer::XTransferable> xOldContents(m_aContents);
     m_aContents = xTrans;
     m_aOwner = xClipboardOwner;
 
-    std::vector<uno::Reference<datatransfer::clipboard::XClipboardListener>> aListeners(
-        m_aListeners);
-    datatransfer::clipboard::ClipboardEvent aEv;
-
-    QClipboard* clipboard = QApplication::clipboard();
-
-    switch (m_aClipboardMode)
-    {
-        case QClipboard::Selection:
-            if (!clipboard->supportsSelection())
-            {
-                return;
-            }
-            break;
-
-        case QClipboard::FindBuffer:
-            if (!clipboard->supportsFindBuffer())
-            {
-                return;
-            }
-            break;
-
-        case QClipboard::Clipboard:
-        default:
-            break;
-    }
-
+    // these will trigger QClipboard::changed / handleChanged
     if (m_aContents.is())
+        QApplication::clipboard()->setMimeData(new Qt5MimeData(m_aContents), m_aClipboardMode);
+    else
     {
-        css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
-            = xTrans->getTransferDataFlavors();
-        // Do not add non-text formats for the selection buffer,
-        // I don't think that one is ever used for anything else
-        // besides text and this gets called whenever something
-        // in LO gets selected (which may be e.g. an entire Calc sheet).
-        bool bHasHtml = false, bHasImage = false;
-        if (m_aClipboardMode != QClipboard::Selection)
-            lcl_peekFormats(aFormats, bHasHtml, bHasImage);
-
-        std::unique_ptr<QMimeData> pMimeData(new QMimeData);
-
-        // Add html data if present
-        if (bHasHtml)
-        {
-            css::datatransfer::DataFlavor aFlavor;
-            aFlavor.MimeType = "text/html";
-            aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
-
-            uno::Any aValue;
-            try
-            {
-                aValue = xTrans->getTransferData(aFlavor);
-            }
-            catch (...)
-            {
-            }
-
-            if (aValue.getValueType() == cppu::UnoType<uno::Sequence<sal_Int8>>::get())
-            {
-                uno::Sequence<sal_Int8> aData;
-                aValue >>= aData;
-
-                OUString aHtmlAsString(reinterpret_cast<const char*>(aData.getConstArray()),
-                                       aData.getLength(), RTL_TEXTENCODING_UTF8);
-
-                pMimeData->setHtml(toQString(aHtmlAsString));
-            }
-        }
-
-        // Add image data if present
-        if (bHasImage)
-        {
-            css::datatransfer::DataFlavor aFlavor;
-            //FIXME: other image formats?
-            aFlavor.MimeType = "image/png";
-            aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
-
-            uno::Any aValue;
-            try
-            {
-                aValue = xTrans->getTransferData(aFlavor);
-            }
-            catch (...)
-            {
-            }
-
-            if (aValue.getValueType() == cppu::UnoType<uno::Sequence<sal_Int8>>::get())
-            {
-                uno::Sequence<sal_Int8> aData;
-                aValue >>= aData;
-
-                QImage image;
-                image.loadFromData(reinterpret_cast<const uchar*>(aData.getConstArray()),
-                                   aData.getLength());
-
-                pMimeData->setImageData(image);
-            }
-        }
-
-        // Add text data
-        // TODO: consider checking if text of suitable type is present
-        {
-            css::datatransfer::DataFlavor aFlavor;
-            aFlavor.MimeType = "text/plain;charset=utf-16";
-            aFlavor.DataType = cppu::UnoType<OUString>::get();
-
-            uno::Any aValue;
-            try
-            {
-                aValue = xTrans->getTransferData(aFlavor);
-            }
-            catch (...)
-            {
-            }
-
-            if (aValue.getValueTypeClass() == uno::TypeClass_STRING)
-            {
-                OUString aString;
-                aValue >>= aString;
-                pMimeData->setText(toQString(aString));
-            }
-        }
-
-        // set value for custom MIME type to indicate that content was added by this clipboard
-        pMimeData->setData(m_sMimeTypeUuid, m_aUuid);
-
-        clipboard->setMimeData(pMimeData.release(), m_aClipboardMode);
+        assert(!m_aOwner.is());
+        QApplication::clipboard()->clear(m_aClipboardMode);
     }
-
-    aEv.Contents = getContents();
 
     aGuard.clear();
 
+    // we have to notify only an owner change, since handleChanged can't
+    // access the previous owner anymore and can just handle lost ownership.
     if (xOldOwner.is() && xOldOwner != xClipboardOwner)
         xOldOwner->lostOwnership(this, xOldContents);
-    for (auto const& listener : aListeners)
-    {
-        listener->changedContents(aEv);
-    }
 }
 
 OUString Qt5Clipboard::getName() { return m_aClipboardName; }
@@ -259,32 +140,85 @@ OUString Qt5Clipboard::getName() { return m_aClipboardName; }
 sal_Int8 Qt5Clipboard::getRenderingCapabilities() { return 0; }
 
 void Qt5Clipboard::addClipboardListener(
-    const uno::Reference<datatransfer::clipboard::XClipboardListener>& listener)
+    const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
-
+    osl::MutexGuard aGuard(m_aMutex);
     m_aListeners.push_back(listener);
 }
 
 void Qt5Clipboard::removeClipboardListener(
-    const uno::Reference<datatransfer::clipboard::XClipboardListener>& listener)
+    const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
-
+    osl::MutexGuard aGuard(m_aMutex);
     m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener),
                        m_aListeners.end());
 }
 
-void Qt5Clipboard::handleClipboardChange(QClipboard::Mode aMode)
+void Qt5Clipboard::handleChanged(QClipboard::Mode aMode)
 {
-    // if system clipboard content has changed and current content was not created by
-    // this clipboard itself, clear the own current content
-    // (e.g. to take into account clipboard updates from other applications)
-    if (aMode == m_aClipboardMode
-        && QApplication::clipboard()->mimeData(aMode)->data(m_sMimeTypeUuid) != m_aUuid)
+    if (aMode != m_aClipboardMode)
+        return;
+
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+
+    css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> xOldOwner(m_aOwner);
+    css::uno::Reference<css::datatransfer::XTransferable> xOldContents(m_aContents);
+    // ownership change from LO POV is handled in setContents
+    const bool bLostOwnership = !isOwner(m_aClipboardMode);
+    if (bLostOwnership)
     {
         m_aContents.clear();
+        m_aOwner.clear();
     }
+
+    std::vector<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> aListeners(
+        m_aListeners);
+    css::datatransfer::clipboard::ClipboardEvent aEv;
+    aEv.Contents = getContents();
+
+    aGuard.clear();
+
+    if (bLostOwnership && xOldOwner.is())
+        xOldOwner->lostOwnership(this, xOldContents);
+    for (auto const& listener : aListeners)
+        listener->changedContents(aEv);
+}
+
+bool Qt5Clipboard::isSupported(const QClipboard::Mode aMode)
+{
+    const QClipboard* pClipboard = QApplication::clipboard();
+    switch (aMode)
+    {
+        case QClipboard::Selection:
+            return pClipboard->supportsSelection();
+
+        case QClipboard::FindBuffer:
+            return pClipboard->supportsFindBuffer();
+
+        case QClipboard::Clipboard:
+            return true;
+    }
+    return false;
+}
+
+bool Qt5Clipboard::isOwner(const QClipboard::Mode aMode)
+{
+    if (!isSupported(aMode))
+        return false;
+
+    const QClipboard* pClipboard = QApplication::clipboard();
+    switch (aMode)
+    {
+        case QClipboard::Selection:
+            return pClipboard->ownsSelection();
+
+        case QClipboard::FindBuffer:
+            return pClipboard->ownsFindBuffer();
+
+        case QClipboard::Clipboard:
+            return pClipboard->ownsClipboard();
+    }
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
