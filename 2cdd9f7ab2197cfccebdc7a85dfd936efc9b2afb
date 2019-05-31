@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_5d7ed76b",
+        "filename": "avmedia/source/gstreamer/gstplayer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-05-31T09:11:00Z",
+      "side": 1,
+      "message": "I wonder if there\u0027s a more obvious way to bring it to user\u0027s attention that they need to install an additional package, PackageKit or somesuch\n\nIsn\u0027t avmedia code already notifying users they need to install codecs and if yes, perhaps the same can be done w/ videosink?",
+      "revId": "2cdd9f7ab2197cfccebdc7a85dfd936efc9b2afb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
