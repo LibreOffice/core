@@ -24,7 +24,6 @@ $(eval $(call gb_Library_add_libs,avmediagst,\
 ifneq ($(ENABLE_GTK3),)
 $(eval $(call gb_Library_add_cxxflags,avmediagst,\
     $$(GTK3_CFLAGS) \
-    -DENABLE_GTKSINK \
 ))
 
 $(eval $(call gb_Library_add_libs,avmediagst,\
