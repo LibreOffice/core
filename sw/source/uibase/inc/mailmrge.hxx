@@ -47,18 +47,7 @@ namespace com{namespace sun{namespace star{
     }
 }}}
 
-class SvxStandardDialog : public SfxModalDialog
-{
-public:
-    SvxStandardDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
-
-    short           Execute() override;
-
-protected:
-    virtual void    Apply() = 0;
-};
-
-class SwMailMergeDlg : public SvxStandardDialog
+class SwMailMergeDlg : public SfxModalDialog
 {
     friend class SwXSelChgLstnr_Impl;
 
@@ -122,7 +111,6 @@ class SwMailMergeDlg : public SvxStandardDialog
     DECL_LINK( ModifyHdl, Edit&, void );
     DECL_LINK( SaveTypeHdl, Button*, void );
 
-    virtual void    Apply() override;
     bool            ExecQryShell();
     bool            AskUserFilename() const;
     OUString        GetURLfromPath() const;
