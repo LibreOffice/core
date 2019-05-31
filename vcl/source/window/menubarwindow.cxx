@@ -33,6 +33,7 @@
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <window.h>
+#include "bufferdevice.hxx"
 
 // document closing button
 #define IID_DOCUMENTCLOSE 1
@@ -918,11 +919,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     }
 
     // Make sure that all actual rendering happens in one go to avoid flicker.
-    ScopedVclPtrInstance<VirtualDevice> pBuffer;
-    pBuffer->SetOutputSizePixel(aOutputSize, false);
-    // Copy the current state to the buffer.
-    pBuffer->DrawOutDev(Point(0, 0), GetOutputSizePixel(), Point(0, 0), GetOutputSizePixel(),
-                        rRenderContext);
+    vcl::BufferDevice pBuffer(this, rRenderContext);
 
     if (rRenderContext.IsNativeControlSupported(ControlType::Menubar, ControlPart::Entire))
     {
@@ -965,10 +962,6 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
                           Point(aSize.Width() - 1, aSize.Height() - 1));
         pBuffer->Pop();
     }
-
-    // Copy the current state from the buffer.
-    rRenderContext.DrawOutDev(Point(0, 0), GetOutputSizePixel(), Point(0, 0), GetOutputSizePixel(),
-                              *pBuffer);
 }
 
 void MenuBarWindow::Resize()
