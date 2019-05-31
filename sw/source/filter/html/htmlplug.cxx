@@ -1506,6 +1506,12 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
         return rWrt;
     }
 
+    if ( !pOLENd->GetGraphic() )
+    {
+        SAL_WARN("sw.html", "Unexpected missing OLE fallback graphic");
+        return rWrt;
+    }
+
     Graphic aGraphic( *pOLENd->GetGraphic() );
 
     SwDocShell* pDocSh = rHTMLWrt.m_pDoc->GetDocShell();
