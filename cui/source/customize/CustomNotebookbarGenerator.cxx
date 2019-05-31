@@ -91,7 +91,8 @@ static OUString getAppNameRegistryPath()
     return sPath.makeStringAndClear();
 }
 
-static void getFileNameAndAppName(OUString& sAppName, OUString& sNotebookbarUIFileName)
+void CustomNotebookbarGenerator::getFileNameAndAppName(OUString& sAppName,
+                                                       OUString& sNotebookbarUIFileName)
 {
     utl::OConfigurationTreeRoot aRoot(::comphelper::getProcessComponentContext(),
                                       "org.openoffice.Office.UI.ToolbarMode/", false);
@@ -115,12 +116,12 @@ static OUString customizedUIPathBuffer()
     return sDirPath;
 }
 
-static OUString getCustomizedUIPath()
+OUString CustomNotebookbarGenerator::getCustomizedUIPath()
 {
     OUStringBuffer aCustomizedUIPathBuffer;
     aCustomizedUIPathBuffer.append(customizedUIPathBuffer());
     OUString sAppName, sNotebookbarUIFileName;
-    getFileNameAndAppName(sAppName, sNotebookbarUIFileName);
+    CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sNotebookbarUIFileName);
     OUString sUIFilePath
         = "modules/s" + sAppName.toAsciiLowerCase() + "/ui/" + sNotebookbarUIFileName;
     aCustomizedUIPathBuffer.append(sUIFilePath);
@@ -132,7 +133,7 @@ static OUString getOriginalUIPath()
 {
     OUStringBuffer aOriginalUIPathBuffer = VclBuilderContainer::getUIRootDir();
     OUString sAppName, sNotebookbarUIFileName;
-    getFileNameAndAppName(sAppName, sNotebookbarUIFileName);
+    CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sNotebookbarUIFileName);
     OUString sUIFilePath
         = "modules/s" + sAppName.toAsciiLowerCase() + "/ui/" + sNotebookbarUIFileName;
     aOriginalUIPathBuffer.append(sUIFilePath);
@@ -143,13 +144,13 @@ static OUString getOriginalUIPath()
 static OUString getUIDirPath()
 {
     OUString sAppName, sNotebookbarUIFileName;
-    getFileNameAndAppName(sAppName, sNotebookbarUIFileName);
+    CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sNotebookbarUIFileName);
     OUString sUIDirPath
         = customizedUIPathBuffer() + "modules/s" + sAppName.toAsciiLowerCase() + "/ui/";
     return sUIDirPath;
 }
 
-static char* convertToCharPointer(const OUString& sString)
+char* CustomNotebookbarGenerator::convertToCharPointer(const OUString& sString)
 {
     char* cString = nullptr;
     cString = new char[sString.getLength() + 1];
