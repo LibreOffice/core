@@ -49,6 +49,7 @@ class IDocumentMarkAccess
             TEXT_FIELDMARK,
             CHECKBOX_FIELDMARK,
             DROPDOWN_FIELDMARK,
+            DATE_FIELDMARK,
             NAVIGATOR_REMINDER
         };
 
