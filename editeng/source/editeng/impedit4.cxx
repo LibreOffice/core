@@ -58,6 +58,7 @@
 #include "textconv.hxx"
 #include <rtl/tencinfo.h>
 #include <svtools/rtfout.hxx>
+#include <tools/stream.hxx>
 #include <edtspell.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/unolingu.hxx>

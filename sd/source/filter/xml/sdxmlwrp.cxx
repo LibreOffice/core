@@ -75,6 +75,7 @@
 #include <strings.hrc>
 
 #include <sfx2/frame.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace com::sun::star;

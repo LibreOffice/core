@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVL_ADRPARSE_HXX
 #define INCLUDED_SVL_ADRPARSE_HXX
 
+#include <rtl/ustring.hxx>
 #include <svl/svldllapi.h>
 #include <vector>
 

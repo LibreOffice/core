@@ -24,15 +24,9 @@
 #include <com/sun/star/task/XPasswordContainer2.hpp>
 #include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/factory.hxx>
 
-#include <tools/stream.hxx>
 #include <unotools/configitem.hxx>
 #include <ucbhelper/interactionrequest.hxx>
 
@@ -44,6 +38,9 @@
 #define MEMORY_RECORD         0
 #define PERSISTENT_RECORD     1
 
+namespace com::sun::star::lang { class XComponent; }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
+namespace com::sun::star::lang { class XSingleServiceFactory; }
 
 class NamePassRecord
 {

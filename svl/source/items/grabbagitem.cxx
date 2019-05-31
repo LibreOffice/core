@@ -11,8 +11,8 @@
 #include <sal/config.h>
 
 #include <sal/log.hxx>
-#include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 using namespace com::sun::star;
 

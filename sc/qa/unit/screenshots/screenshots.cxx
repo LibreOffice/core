@@ -13,6 +13,7 @@
 #include <sfx2/sfxdlg.hxx>
 #include <svx/numinf.hxx>
 #include <svx/svxids.hrc>
+#include <tools/stream.hxx>
 
 #include <tabvwsh.hxx>
 #include <docsh.hxx>

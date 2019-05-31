@@ -32,12 +32,6 @@
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
 
-#include <tools/stream.hxx>
-#include <tools/solar.h>
-#include <rtl/string.hxx>
-
-#include <poolio.hxx>
-
 static const sal_uInt16 nInitCount = 10; // Single USHORTs => 5 pairs without '0'
 
 namespace

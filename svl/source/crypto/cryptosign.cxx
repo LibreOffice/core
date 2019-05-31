@@ -24,16 +24,10 @@
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <filter/msfilter/mscodec.hxx>
-#include <sax/tools/converter.hxx>
-#include <unotools/calendarwrapper.hxx>
-#include <unotools/datetime.hxx>
-#include <xmloff/xmluconv.hxx>
-#include <tools/zcodec.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #if HAVE_FEATURE_NSS && !defined(_WIN32)
 // NSS headers for PDF signing
-#include <nss.h>
 #include <cert.h>
 #include <hasht.h>
 #include <secerr.h>
@@ -56,11 +50,11 @@
 
 #if HAVE_FEATURE_NSS
 
-#include <com/sun/star/xml/crypto/XDigestContext.hpp>
-#include <com/sun/star/xml/crypto/XDigestContextSupplier.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/NSSInitializer.hpp>
 #include <mutex>
+
+namespace com::sun::star::xml::crypto { class XDigestContext; }
 
 // Is this length truly the maximum possible, or just a number that
 // seemed large enough when the author tested this (with some type of
@@ -940,7 +934,6 @@ std::vector<unsigned char> DecodeHexString(const OString& rHex)
 
     return aRet;
 }
-
 
 #if defined(SVL_CRYPTO_NSS) || defined(SVL_CRYPTO_MSCRYPTO)
 

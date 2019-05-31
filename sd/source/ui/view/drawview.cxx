@@ -37,6 +37,7 @@
 #include <editeng/numitem.hxx>
 #include <svl/whiter.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>

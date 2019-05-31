@@ -20,15 +20,11 @@
 
 #include <svl/ctloptions.hxx>
 
-#include <svl/languageoptions.hxx>
-#include <i18nlangtag/mslangid.hxx>
 #include <unotools/configitem.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
-#include <unotools/syslocale.hxx>
-#include <svl/hint.hxx>
 #include "itemholder2.hxx"
 
 using namespace ::com::sun::star;

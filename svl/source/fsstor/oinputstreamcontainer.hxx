@@ -26,10 +26,11 @@
 
 
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
 
 #include <osl/mutex.hxx>
 #include <memory>
+
+namespace comphelper { class OInterfaceContainerHelper2; }
 
 class OFSInputStreamContainer : public cppu::WeakImplHelper < css::io::XInputStream
                                                             ,css::embed::XExtendedStorageStream >

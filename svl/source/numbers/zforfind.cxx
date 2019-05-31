@@ -19,7 +19,6 @@
 
 #include <cstdlib>
 #include <float.h>
-#include <errno.h>
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 #include <tools/date.hxx>

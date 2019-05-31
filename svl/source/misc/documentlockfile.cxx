@@ -18,8 +18,6 @@
  */
 
 
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
@@ -30,25 +28,19 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 
-#include <osl/time.h>
-#include <osl/security.hxx>
-#include <osl/socket.hxx>
 #include <o3tl/enumrange.hxx>
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <comphelper/processfactory.hxx>
 
-#include <unotools/bootstrap.hxx>
-
 #include <ucbhelper/content.hxx>
 
-#include <unotools/useroptions.hxx>
-
 #include <svl/documentlockfile.hxx>
+
+namespace com::sun::star::ucb { class XCommandEnvironment; }
 
 using namespace ::com::sun::star;
 

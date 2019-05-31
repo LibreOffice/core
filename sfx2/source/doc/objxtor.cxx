@@ -73,6 +73,7 @@
 #include <svtools/asynclink.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/globname.hxx>
+#include <tools/debug.hxx>
 #include <comphelper/classids.hxx>
 
 #include <sfx2/app.hxx>

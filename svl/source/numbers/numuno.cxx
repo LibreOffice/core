@@ -20,7 +20,6 @@
 
 #include <svl/numuno.hxx>
 #include "numfmuno.hxx"
-#include <svl/zforlist.hxx>
 
 using namespace com::sun::star;
 

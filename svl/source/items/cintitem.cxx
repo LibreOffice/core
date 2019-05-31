@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/uno/Any.hxx>
-#include <tools/stream.hxx>
 #include <svl/cintitem.hxx>
 #include <sal/log.hxx>
 

@@ -33,6 +33,7 @@
 #include <svtools/DocumentToGraphicRenderer.hxx>
 
 #include <tools/gen.hxx>
+#include <tools/stream.hxx>
 
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>

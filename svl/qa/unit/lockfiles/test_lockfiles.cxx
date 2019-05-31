@@ -18,7 +18,6 @@
 #include <svl/documentlockfile.hxx>
 #include <svl/msodocumentlockfile.hxx>
 #include <unotools/useroptions.hxx>
-#include <comphelper/sequence.hxx>
 #include <tools/stream.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/security.hxx>

@@ -8,7 +8,6 @@
  */
 
 #include <svl/msodocumentlockfile.hxx>
-#include <sal/log.hxx>
 #include <algorithm>
 #include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
@@ -16,7 +15,11 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+
+namespace com::sun::star::ucb
+{
+class XCommandEnvironment;
+}
 
 namespace svt
 {

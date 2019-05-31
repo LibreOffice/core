@@ -34,6 +34,7 @@
 #include <comphelper/fileformat.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <tools/stream.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 using namespace com::sun::star::uno;

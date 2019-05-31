@@ -269,6 +269,10 @@ blacklist:
     include/svl/urihelper.hxx:
     # base class has to be a complete type
     - tools/link.hxx
+    include/svl/style.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/style/XStyle.hpp
     include/vcl/FilterConfigItem.hxx:
     # Needed on Windows with --disable-pch
     - com/sun/star/beans/PropertyValue.hpp

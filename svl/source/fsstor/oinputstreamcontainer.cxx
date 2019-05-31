@@ -19,6 +19,7 @@
 
 
 #include "oinputstreamcontainer.hxx"
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
