@@ -874,19 +874,17 @@ bool AquaSalGraphics::drawPolyLine(
         return false;
 #endif
 
-    // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
-    const basegfx::B2DVector aLineWidths(rObjectToDevice * rLineWidths);
-
     // #i101491# Aqua does not support B2DLineJoin::NONE; return false to use
     // the fallback (own geometry preparation)
     // #i104886# linejoin-mode and thus the above only applies to "fat" lines
-    if( (basegfx::B2DLineJoin::NONE == eLineJoin) && (aLineWidths.getX() > 1.3) )
+    if( (basegfx::B2DLineJoin::NONE == eLineJoin) && (rLineWidths.getX() > 1.3) )
         return false;
 
     // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
     basegfx::B2DPolygon aPolyLine(rPolyLine);
     aPolyLine.transform(rObjectToDevice);
-    if(bPixelSnapHairline) { aPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyLine); }
+    if(bPixelSnapHairline)
+        aPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyLine);
 
     // setup line attributes
     CGLineJoin aCGLineJoin = kCGLineJoinMiter;
@@ -948,7 +946,7 @@ bool AquaSalGraphics::drawPolyLine(
         CGContextSetAlpha( maContextHolder.get(), 1.0 - fTransparency );
         CGContextSetLineJoin( maContextHolder.get(), aCGLineJoin );
         CGContextSetLineCap( maContextHolder.get(), aCGLineCap );
-        CGContextSetLineWidth( maContextHolder.get(), aLineWidths.getX() );
+        CGContextSetLineWidth( maContextHolder.get(), rLineWidths.getX() );
         CGContextSetMiterLimit(maContextHolder.get(), fCGMiterLimit);
         SAL_INFO( "vcl.cg", "CGContextDrawPath(" << maContextHolder.get() << ",kCGPathStroke)" );
         CGContextDrawPath( maContextHolder.get(), kCGPathStroke );
