@@ -7304,7 +7304,6 @@ include/svx/sidebar/ValueSetWithTextControl.hxx
 include/svx/spacinglistbox.hxx
 include/svx/sphere3d.hxx
 include/svx/srchdlg.hxx
-include/svx/stddlg.hxx
 include/svx/strarray.hxx
 include/svx/svdcrtv.hxx
 include/svx/svddef.hxx
@@ -14066,7 +14065,6 @@ svx/source/dialog/spacinglistbox.cxx
 svx/source/dialog/srchctrl.cxx
 svx/source/dialog/srchctrl.hxx
 svx/source/dialog/srchdlg.cxx
-svx/source/dialog/stddlg.cxx
 svx/source/dialog/strarray.cxx
 svx/source/dialog/svxbmpnumvalueset.cxx
 svx/source/dialog/svxdlg.cxx
