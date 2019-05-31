@@ -21,7 +21,6 @@
 
 #include <osl/diagnose.h>
 #include <unotools/intlwrapper.hxx>
-#include <tools/stream.hxx>
 #include <svl/custritm.hxx>
 
 

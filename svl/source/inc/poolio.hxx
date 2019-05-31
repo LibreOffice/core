@@ -20,11 +20,9 @@
 #ifndef INCLUDED_SVL_SOURCE_INC_POOLIO_HXX
 #define INCLUDED_SVL_SOURCE_INC_POOLIO_HXX
 
-#include <sal/log.hxx>
 #include <svl/itempool.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <tools/debug.hxx>
-#include <deque>
 #include <memory>
 #include <o3tl/sorted_vector.hxx>
 

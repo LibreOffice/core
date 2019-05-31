@@ -19,7 +19,6 @@
 
 
 #include <svl/poolitem.hxx>
-#include <tools/stream.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <osl/diagnose.h>

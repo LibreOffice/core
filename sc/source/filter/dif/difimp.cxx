@@ -18,6 +18,7 @@
  */
 
 #include <svl/zforlist.hxx>
+#include <tools/stream.hxx>
 #include <osl/diagnose.h>
 #include <dif.hxx>
 #include <docpool.hxx>

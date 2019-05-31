@@ -29,10 +29,10 @@
 #include <svl/svldllapi.h>
 #include <svl/hint.hxx>
 #include <svl/lstner.hxx>
-#include <svl/poolitem.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/stylesheetuser.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/solar.h>
 
 #include <memory>

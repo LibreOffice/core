@@ -23,15 +23,11 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/packages/NoEncryptionException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/interfacecontainer.h>
 
 #include <ucbhelper/content.hxx>
 

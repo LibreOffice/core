@@ -29,7 +29,6 @@
 #include <unotools/configmgr.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/calendarwrapper.hxx>
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
 #include <com/sun/star/i18n/FormatElement.hpp>

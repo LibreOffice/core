@@ -33,6 +33,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/xtable.hxx>
 #include <vcl/svapp.hxx>

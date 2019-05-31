@@ -21,7 +21,6 @@
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svl/itemset.hxx>

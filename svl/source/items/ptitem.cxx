@@ -22,7 +22,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <osl/diagnose.h>
-#include <tools/stream.hxx>
 #include <tools/mapunit.hxx>
 
 #include <svl/poolitem.hxx>

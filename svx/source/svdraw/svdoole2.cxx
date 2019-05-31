@@ -54,6 +54,7 @@
 #include <tools/stream.hxx>
 #include <comphelper/anytostring.hxx>
 #include <svx/svdpagv.hxx>
+#include <tools/debug.hxx>
 #include <tools/globname.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/jobset.hxx>

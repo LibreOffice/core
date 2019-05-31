@@ -19,7 +19,6 @@
 
 
 #include <svl/itemiter.hxx>
-#include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 
 SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )

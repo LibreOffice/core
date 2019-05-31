@@ -36,6 +36,7 @@
 #include <vcl/settings.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>

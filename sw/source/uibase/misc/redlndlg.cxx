@@ -19,6 +19,7 @@
 
 #include <redline.hxx>
 #include <tools/datetime.hxx>
+#include <tools/lineend.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>

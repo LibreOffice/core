@@ -29,6 +29,7 @@
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <svl/itempool.hxx>
+#include <tools/lineend.hxx>
 #include <unotools/useroptions.hxx>
 #include <svl/whiter.hxx>
 #include <svl/eitem.hxx>

@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <sal/log.hxx>
-#include <tools/tenccvt.hxx>
 #include <osl/diagnose.h>
 #include <unotools/intlwrapper.hxx>
 #include <svl/hint.hxx>
@@ -33,7 +32,6 @@
 #include <svl/IndexedStyleSheets.hxx>
 #include <svl/itemiter.hxx>
 #include <unotools/syslocale.hxx>
-#include <algorithm>
 #include <comphelper/servicehelper.hxx>
 #include <rtl/ustrbuf.hxx>
 

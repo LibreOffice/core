@@ -28,6 +28,7 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svtools/langtab.hxx>
+#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 

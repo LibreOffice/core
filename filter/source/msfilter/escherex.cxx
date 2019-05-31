@@ -36,6 +36,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
+#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/zcodec.hxx>
 #include <tools/urlobj.hxx>
