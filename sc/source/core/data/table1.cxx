@@ -2554,6 +2554,10 @@ ScColumnsRange ScTable::GetColumnsRange(SCCOL nColBegin, SCCOL nColEnd) const
 // out-of-line the cold part of the CreateColumnIfNotExists function
 void ScTable::CreateColumnIfNotExistsImpl( const SCCOL nScCol ) const
 {
+    // When doing multi-threaded load of, e.g. XLS files, we can hit this, which calls
+    // into SfxItemPool::Put, in parallel with other code that calls into SfxItemPool::Put,
+    // which is bad since that code is not thread-safe.
+    SolarMutexGuard aGuard;
     const SCCOL aOldColSize = aCol.size();
     aCol.resize( static_cast< size_t >( nScCol + 1 ) );
     for (SCCOL i = aOldColSize; i <= nScCol; i++)
