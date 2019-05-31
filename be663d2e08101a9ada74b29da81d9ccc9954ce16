@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_08180f73",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-31T14:55:20Z",
+      "side": 1,
+      "message": "TWIPS, apparently",
+      "range": {
+        "startLine": 29,
+        "startChar": 35,
+        "endLine": 30,
+        "endChar": 11
+      },
+      "revId": "be663d2e08101a9ada74b29da81d9ccc9954ce16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
