@@ -445,8 +445,8 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, ShowPreviewHdl, weld::ToggleButton&, void)
             }
             else
             {
-                Link<OneExampleFrame&,void> aLink(LINK(this, SwMultiTOXTabDialog, CreateExample_Hdl));
-                m_xExampleFrame.reset(new OneExampleFrame(EX_SHOW_ONLINE_LAYOUT, &aLink, &sTemplate));
+                Link<SwOneExampleFrame&,void> aLink(LINK(this, SwMultiTOXTabDialog, CreateExample_Hdl));
+                m_xExampleFrame.reset(new SwOneExampleFrame(EX_SHOW_ONLINE_LAYOUT, &aLink, &sTemplate));
                 m_xExampleFrameWin.reset(new weld::CustomWeld(*m_xBuilder, "example", *m_xExampleFrame));
             }
             m_xShowExampleCB->set_visible(m_xExampleFrame != nullptr);
