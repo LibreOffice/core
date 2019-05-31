@@ -3023,12 +3023,21 @@ void ScInterpreter::ScExternal()
                 rArr.AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
                 uno::Reference<sheet::XVolatileResult> xRes = aCall.GetVarRes();
                 ScAddInListener* pLis = ScAddInListener::Get( xRes );
+                // In case there is no pMyFormulaCell, i.e. while interpreting
+                // temporarily from within the Function Wizard, try to obtain a
+                // valid result from an existing listener for that volatile, or
+                // create a new and hope for an immediate result. If none
+                // available that should lead to a void result and thus #N/A.
+                bool bTemporaryListener = false;
                 if ( !pLis )
                 {
                     pLis = ScAddInListener::CreateListener( xRes, pDok );
-                    pMyFormulaCell->StartListening( *pLis );
+                    if (pMyFormulaCell)
+                        pMyFormulaCell->StartListening( *pLis );
+                    else
+                        bTemporaryListener = true;
                 }
-                else
+                else if (pMyFormulaCell)
                 {
                     pMyFormulaCell->StartListening( *pLis );
                     if ( !pLis->HasDocument( pDok ) )
@@ -3038,6 +3047,20 @@ void ScInterpreter::ScExternal()
                 }
 
                 aCall.SetResult( pLis->GetResult() );       // use result from async
+
+                if (bTemporaryListener)
+                {
+                    try
+                    {
+                        // EventObject can be any, not evaluated by
+                        // ScAddInListener::disposing()
+                        css::lang::EventObject aEvent;
+                        pLis->disposing(aEvent);    // pLis is dead hereafter
+                    }
+                    catch (const uno::Exception&)
+                    {
+                    }
+                }
             }
 
             if ( aCall.GetErrCode() != FormulaError::NONE )
