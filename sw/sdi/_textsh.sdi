@@ -1705,6 +1705,12 @@ interface BaseText
         StateMethod = StateField ;
     ]
 
+    FN_INSERT_DATE_FORMFIELD
+    [
+        ExecMethod = ExecField ;
+        StateMethod = StateField ;
+    ]
+
     SID_FM_CTL_PROPERTIES
     [
         ExecMethod = Execute ;
