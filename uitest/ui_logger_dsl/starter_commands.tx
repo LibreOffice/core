@@ -1,0 +1,11 @@
+//this file for the staters commands when you open any LO application
+
+StarterCommand:
+  'Start' program_name=Program
+;
+
+
+Program:
+  "writer"|"calc"|"impress"|"draw"|"math"|"database"
+;
+
