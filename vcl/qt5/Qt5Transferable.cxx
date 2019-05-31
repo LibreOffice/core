@@ -15,21 +15,16 @@
 #include <sal/log.hxx>
 
 #include <QtCore/QBuffer>
-#include <QtCore/QMimeData>
 #include <QtCore/QUrl>
 #include <QtWidgets/QApplication>
 
 #include <Qt5Clipboard.hxx>
 #include <Qt5Tools.hxx>
 
-using namespace com::sun::star;
-
 Qt5Transferable::Qt5Transferable(const QMimeData* pMimeData)
     : m_pMimeData(pMimeData)
 {
 }
-
-Qt5Transferable::~Qt5Transferable() {}
 
 std::vector<css::datatransfer::DataFlavor> Qt5Transferable::getTransferDataFlavorsAsVector()
 {
@@ -55,7 +50,7 @@ std::vector<css::datatransfer::DataFlavor> Qt5Transferable::getTransferDataFlavo
         else
         {
             aFlavor.MimeType = toOUString(rMimeType);
-            aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
+            aFlavor.DataType = cppu::UnoType<css::uno::Sequence<sal_Int8>>::get();
             aVector.push_back(aFlavor);
         }
     }
@@ -78,19 +73,33 @@ Qt5Transferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFla
     }); //FIXME
 }
 
+bool Qt5Transferable::getXTransferableData(const css::datatransfer::DataFlavor& rFlavor,
+                                           css::uno::Any& rAny)
+{
+    assert(m_pMimeData);
+    if (!m_pMimeData)
+        return true;
+
+    const Qt5MimeData* pMimeData = dynamic_cast<const Qt5MimeData*>(m_pMimeData);
+    if (pMimeData && pMimeData->m_aContents.is())
+    {
+        rAny = pMimeData->m_aContents->getTransferData(rFlavor);
+        return true;
+    }
+
+    return false;
+}
+
 Qt5ClipboardTransferable::Qt5ClipboardTransferable(QClipboard::Mode aMode)
     : Qt5Transferable(QApplication::clipboard()->mimeData(aMode))
 {
 }
 
-Qt5ClipboardTransferable::~Qt5ClipboardTransferable() {}
-
 css::uno::Any SAL_CALL
 Qt5ClipboardTransferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
 {
     css::uno::Any aAny;
-    assert(m_pMimeData);
-    if (!m_pMimeData)
+    if (getXTransferableData(rFlavor, aAny))
         return aAny;
 
     if (rFlavor.MimeType == "text/plain;charset=utf-16")
@@ -104,8 +113,8 @@ Qt5ClipboardTransferable::getTransferData(const css::datatransfer::DataFlavor& r
     {
         QString clipboardContent = m_pMimeData->html();
         std::string aStr = clipboardContent.toStdString();
-        uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()),
-                                     aStr.length());
+        css::uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()),
+                                          aStr.length());
         aAny <<= aSeq;
     }
     else if (rFlavor.MimeType.startsWith("image") && m_pMimeData->hasImage())
@@ -119,7 +128,7 @@ Qt5ClipboardTransferable::getTransferData(const css::datatransfer::DataFlavor& r
         buffer.open(QIODevice::WriteOnly);
         image.save(&buffer, sFormat.toUtf8().getStr());
 
-        uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(ba.data()), ba.size());
+        css::uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(ba.data()), ba.size());
         aAny <<= aSeq;
     }
 
@@ -131,10 +140,11 @@ Qt5DnDTransferable::Qt5DnDTransferable(const QMimeData* pMimeData)
 {
 }
 
-css::uno::Any Qt5DnDTransferable::getTransferData(const css::datatransfer::DataFlavor&)
+css::uno::Any Qt5DnDTransferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
 {
-    uno::Any aAny;
-    assert(m_pMimeData);
+    css::uno::Any aAny;
+    if (getXTransferableData(rFlavor, aAny))
+        return aAny;
 
     // FIXME: not sure if we should support more mimetypes here
     // (how to carry out external DnD with anything else than [file] URL?)
@@ -156,8 +166,8 @@ css::uno::Any Qt5DnDTransferable::getTransferData(const css::datatransfer::DataF
                     aStr += "\n";
             }
 
-            uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()),
-                                         aStr.length());
+            css::uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()),
+                                              aStr.length());
             aAny <<= aSeq;
         }
     }
