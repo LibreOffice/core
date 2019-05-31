@@ -116,8 +116,8 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage(SwMailMergeWizard* pWizard, TabPage
     uno::Reference< frame::XStorable > xStore( pView->GetDocShell()->GetModel(), uno::UNO_QUERY);
     xStore->storeToURL( m_sExampleURL, aValues   );
 
-    Link<OneExampleFrame&,void> aLink(LINK(this, SwMailMergeLayoutPage, PreviewLoadedHdl_Impl));
-    m_xExampleFrame.reset(new OneExampleFrame(EX_SHOW_DEFAULT_PAGE, &aLink, &m_sExampleURL));
+    Link<SwOneExampleFrame&,void> aLink(LINK(this, SwMailMergeLayoutPage, PreviewLoadedHdl_Impl));
+    m_xExampleFrame.reset(new SwOneExampleFrame(EX_SHOW_DEFAULT_PAGE, &aLink, &m_sExampleURL));
     m_xExampleContainerWIN.reset(new weld::CustomWeld(*m_xBuilder, "example", *m_xExampleFrame));
 
     Size aSize = m_xExampleFrame->GetDrawingArea()->get_ref_device().LogicToPixel(
@@ -605,7 +605,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     OSL_ENSURE(nullptr == rShell.GetTableFormat(), "What to do with a table here?");
 }
 
-IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, OneExampleFrame&, void)
+IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, SwOneExampleFrame&, void)
 {
     m_xExampleContainerWIN->show();
 
