@@ -939,9 +939,12 @@ void ScColumn::GetOptimalHeight(
                         {
                             aOptions.pPattern = pPattern;
                             const ScPatternAttr* pOldPattern = pPattern;
-                            sal_uInt16 nHeight = static_cast<sal_uInt16>( GetNeededSize( nRow, rCxt.getOutputDevice(), rCxt.getPPTX(), rCxt.getPPTY(),
-                                                        rCxt.getZoomX(), rCxt.getZoomY(), false, aOptions,
-                                                        &pPattern) / rCxt.getPPTY() );
+                            sal_uInt16 nHeight = static_cast<sal_uInt16>(
+                                std::min(
+                                    GetNeededSize( nRow, rCxt.getOutputDevice(), rCxt.getPPTX(), rCxt.getPPTY(),
+                                                   rCxt.getZoomX(), rCxt.getZoomY(), false, aOptions,
+                                                   &pPattern) / rCxt.getPPTY(),
+                                    double(std::numeric_limits<sal_uInt16>::max())));
                             if (nHeight > rHeights.getValue(nRow))
                                 rHeights.setValue(nRow, nRow, nHeight);
                             // Pattern changed due to calculation? => sync.
