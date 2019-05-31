@@ -713,6 +713,7 @@ void CffSubsetterContext::convertOneTypeOp()
         int nCntrBits[2] = {0,0};
         U8 nMaskBit = 0;
         U8 nMaskByte = 0;
+        int const MASK_BITS = 8*sizeof(nHintMask);
         for( i = 0; i < mnHintSize; i+=2, nMaskBit>>=1) {
             if( !nMaskBit) {
                 nMaskByte = *(mpReadPtr++);
@@ -720,7 +721,7 @@ void CffSubsetterContext::convertOneTypeOp()
             }
             if( !(nMaskByte & nMaskBit))
                 continue;
-            if( i >= 8*int(sizeof(nHintMask)))
+            if( i >= MASK_BITS)
                 mbIgnoreHints = true;
             if( mbIgnoreHints)
                 continue;
@@ -734,7 +735,7 @@ void CffSubsetterContext::convertOneTypeOp()
             break;
 
         for( i = 0; i < mnHintSize; i+=2) {
-            if( !(nHintMask & (1U << i)))
+            if(i >= MASK_BITS || !(nHintMask & (1U << i)))
                 continue;
             writeType1Val( mnHintStack[i]);
             writeType1Val( mnHintStack[i+1] - mnHintStack[i]);
