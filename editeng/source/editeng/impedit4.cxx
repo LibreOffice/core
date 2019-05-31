@@ -2429,7 +2429,8 @@ EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
         return EESpellState::ErrorFound;
 
     EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractThesaurusDialog> xDlg(pFact->CreateThesaurusDialog( pEditView->GetWindow(), xThes, aWord, GetLanguage( aCurSel.Max() ) ));
+    ScopedVclPtr<AbstractThesaurusDialog> xDlg(pFact->CreateThesaurusDialog(pEditView->GetWindow()->GetFrameWeld(), xThes,
+                                               aWord, GetLanguage( aCurSel.Max() ) ));
     if (xDlg->Execute() == RET_OK)
     {
         // Replace Word...

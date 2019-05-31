@@ -86,7 +86,6 @@
 #define RID_SVXSTR_HYPERDLG_FROM_TEXT               NC_("RID_SVXSTR_HYPERDLG_FROM_TEXT", "Text")
 #define RID_SVXSTR_HYPERDLG_QUERYOVERWRITE          NC_("RID_SVXSTR_HYPERDLG_QUERYOVERWRITE", "The file already exists. Overwrite?")
 
-#define RID_SVXSTR_ERR_TEXTNOTFOUND                 NC_("RID_SVXSTR_ERR_TEXTNOTFOUND", "No alternatives found.")
 #define RID_SVXSTR_SELECT_FILE_IFRAME               NC_("RID_SVXSTR_SELECT_FILE_IFRAME", "Select File for Floating Frame")
 #define RID_SVXSTR_ALLFUNCTIONS                     NC_("RID_SVXSTR_ALLFUNCTIONS", "All commands")
 #define RID_SVXSTR_MACROS                           NC_("RID_SVXSTR_MACROS", "Macros")
