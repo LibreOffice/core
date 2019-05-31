@@ -1329,4 +1329,22 @@ void SwFieldFormDropDownPortion::Paint( const SwTextPaintInfo &rInf ) const
     }
 }
 
+SwFieldPortion *SwFieldFormDatePortion::Clone(const OUString &rExpand) const
+{
+    return new SwFieldFormDatePortion(m_pFieldMark, rExpand);
+}
+
+void SwFieldFormDatePortion::Paint( const SwTextPaintInfo &rInf ) const
+{
+    SwFieldPortion::Paint( rInf );
+
+    ::sw::mark::DateFieldmark* pDateField = dynamic_cast< ::sw::mark::DateFieldmark* >(m_pFieldMark);
+    if(pDateField)
+    {
+        SwRect aPaintArea;
+        rInf.CalcRect( *this, &aPaintArea );
+        pDateField->SetPortionPaintArea(aPaintArea);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
