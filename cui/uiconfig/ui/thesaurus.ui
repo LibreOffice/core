@@ -1,19 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-go-back</property>
+  </object>
+  <object class="GtkTreeStore" id="liststore3">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name weight1 -->
+      <column type="gint"/>
+    </columns>
   </object>
   <object class="GtkDialog" id="ThesaurusDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="thesaurus|ThesaurusDialog">Thesaurus</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -39,10 +54,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="replace">
+              <object class="GtkButton" id="ok">
                 <property name="label" translatable="yes" context="thesaurus|replace">_Replace</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
@@ -58,6 +74,7 @@
                 <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
               </object>
@@ -85,10 +102,10 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="thesaurus|label1">Current word:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">wordcb</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -100,10 +117,10 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="thesaurus|label2">Alternatives:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">alternatives</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -115,10 +132,10 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="thesaurus|label3">Replace with:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">replaceed</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -127,26 +144,15 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-ReplaceEdit" id="replaceed">
+              <object class="GtkEntry" id="replaceed">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="activates_default">True</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">5</property>
                 <property name="width">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="cuilo-LookUpComboBox" id="wordcb">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="valign">center</property>
-                <property name="hexpand">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
               </packing>
             </child>
             <child>
@@ -175,16 +181,68 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-ThesaurusAlternativesCtrl" id="alternatives">
+              <object class="GtkScrolledWindow">
                 <property name="width_request">450</property>
                 <property name="height_request">250</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="alternatives">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore3</property>
+                    <property name="headers_visible">False</property>
+                    <property name="search_column">0</property>
+                    <property name="show_expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                        <property name="resizable">True</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderer1"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                            <attribute name="weight">2</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">3</property>
                 <property name="width">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="wordcb">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">center</property>
+                <property name="hexpand">True</property>
+                <property name="has_entry">True</property>
+                <child internal-child="entry">
+                  <object class="GtkEntry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
               </packing>
             </child>
             <child>
@@ -201,7 +259,7 @@
     </child>
     <action-widgets>
       <action-widget response="-11">help</action-widget>
-      <action-widget response="101">replace</action-widget>
+      <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>
   </object>

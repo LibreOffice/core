@@ -6411,6 +6411,14 @@ private:
         gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), col, bInt, -1);
     }
 
+    void set(int pos, int col, gint bInt)
+    {
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+            set(iter, col, bInt);
+    }
+
     static gboolean signalTestExpandRow(GtkTreeView*, GtkTreeIter* iter, GtkTreePath*, gpointer widget)
     {
         GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
@@ -7116,6 +7124,12 @@ public:
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         col = get_model_col(col);
         set(rGtkIter.iter, m_aWeightMap[col], bOn ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL);
+    }
+
+    virtual void set_text_emphasis(int pos, bool bOn, int col) override
+    {
+        col = get_model_col(col);
+        set(pos, m_aWeightMap[col], bOn ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL);
     }
 
     virtual bool get_text_emphasis(const weld::TreeIter& rIter, int col) const override

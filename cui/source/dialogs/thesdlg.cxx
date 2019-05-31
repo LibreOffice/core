@@ -52,6 +52,7 @@
 
 using namespace ::com::sun::star;
 
+#if 0
 // class LookUpComboBox --------------------------------------------------
 
 LookUpComboBox::LookUpComboBox(vcl::Window *pParent)
@@ -120,7 +121,7 @@ VCL_BUILDER_FACTORY(ReplaceEdit)
 void ReplaceEdit::Modify()
 {
     if (m_pBtn)
-        m_pBtn->Enable( !GetText().isEmpty() );
+        m_pBtn->set_sensitive( !GetText().isEmpty() );
 }
 
 void ReplaceEdit::SetText( const OUString& rStr )
@@ -269,6 +270,7 @@ void ThesaurusAlternativesCtrl::Paint(vcl::RenderContext& rRenderContext, const 
     else
         SvxCheckListBox::Paint(rRenderContext, rRect);
 }
+#endif
 
 uno::Sequence< uno::Reference< linguistic2::XMeaning > > SvxThesaurusDialog::queryMeanings_Impl(
         OUString& rTerm,
@@ -302,13 +304,14 @@ bool SvxThesaurusDialog::UpdateAlternativesBox_Impl()
     const sal_Int32 nMeanings = aMeanings.getLength();
     const uno::Reference< linguistic2::XMeaning > *pMeanings = aMeanings.getConstArray();
 
-    m_pAlternativesCT->SetUpdateMode( false );
+    m_xAlternativesCT->freeze();
 
     // clear old user data of control before creating new ones via AddEntry below
-    m_pAlternativesCT->ClearExtraData();
+//TODO    m_xAlternativesCT->ClearExtraData();
 
-    m_pAlternativesCT->Clear();
-    for (sal_Int32 i = 0;  i < nMeanings;  ++i)
+    m_xAlternativesCT->clear();
+    int nRow = 0;
+    for (sal_Int32 i = 0;  i < nMeanings;  ++i, ++nRow)
     {
         OUString rMeaningTxt = pMeanings[i]->getMeaning();
         uno::Sequence< OUString > aSynonyms( pMeanings[i]->querySynonyms() );
@@ -317,37 +320,38 @@ bool SvxThesaurusDialog::UpdateAlternativesBox_Impl()
         DBG_ASSERT( !rMeaningTxt.isEmpty(), "meaning with empty text" );
         DBG_ASSERT( nSynonyms > 0, "meaning without synonym" );
 
-        m_pAlternativesCT->AddEntry( i + 1, rMeaningTxt, true );
-        for (sal_Int32 k = 0;  k < nSynonyms;  ++k)
-            m_pAlternativesCT->AddEntry( -1, pSynonyms[k], false );
+        m_xAlternativesCT->append_text(rMeaningTxt);
+        m_xAlternativesCT->set_text_emphasis(nRow, true, 0);
+        for (sal_Int32 k = 0;  k < nSynonyms;  ++k, ++nRow)
+            m_xAlternativesCT->append_text(pSynonyms[k]);
     }
 
-    m_pAlternativesCT->SetUpdateMode( true );
+    m_xAlternativesCT->thaw();
 
     return nMeanings > 0;
 }
 
 void SvxThesaurusDialog::LookUp( const OUString &rText )
 {
-    if (rText != m_pWordCB->GetText()) // avoid moving of the cursor if the text is the same
-        m_pWordCB->SetText( rText );
+    if (rText != m_xWordCB->get_active_text()) // avoid moving of the cursor if the text is the same
+        m_xWordCB->set_entry_text(rText);
     LookUp_Impl();
 }
 
-IMPL_LINK( SvxThesaurusDialog, LeftBtnHdl_Impl, Button *, pBtn, void )
+IMPL_LINK_NOARG(SvxThesaurusDialog, LeftBtnHdl_Impl, weld::Button&, void)
 {
-    if (pBtn && aLookUpHistory.size() >= 2)
+    if (aLookUpHistory.size() >= 2)
     {
         aLookUpHistory.pop();                       // remove current look up word from stack
-        m_pWordCB->SetText( aLookUpHistory.top() );    // retrieve previous look up word
+        m_xWordCB->set_entry_text(aLookUpHistory.top()); // retrieve previous look up word
         aLookUpHistory.pop();
         LookUp_Impl();
     }
 }
 
-IMPL_LINK( SvxThesaurusDialog, LanguageHdl_Impl, ListBox&, rLB, void )
+IMPL_LINK( SvxThesaurusDialog, LanguageHdl_Impl, weld::ComboBox&, rLB, void )
 {
-    OUString aLangText( rLB.GetSelectedEntry() );
+    OUString aLangText(rLB.get_active_text());
     LanguageType nLang = SvtLanguageTable::GetLanguageType( aLangText );
     DBG_ASSERT( nLang != LANGUAGE_NONE && nLang != LANGUAGE_DONTKNOW, "failed to get language" );
     if (xThesaurus->hasLocale( LanguageTag::convertToLocale( nLang ) ))
@@ -358,7 +362,7 @@ IMPL_LINK( SvxThesaurusDialog, LanguageHdl_Impl, ListBox&, rLB, void )
 
 void SvxThesaurusDialog::LookUp_Impl()
 {
-    OUString aText( m_pWordCB->GetText() );
+    OUString aText(m_xWordCB->get_active_text());
 
     aLookUpText = aText;
     if (!aLookUpText.isEmpty() &&
@@ -366,49 +370,49 @@ void SvxThesaurusDialog::LookUp_Impl()
         aLookUpHistory.push( aLookUpText );
 
     m_bWordFound = UpdateAlternativesBox_Impl();
-    m_pAlternativesCT->Enable( m_bWordFound );
+    m_xAlternativesCT->set_sensitive( m_bWordFound );
 
-    if ( m_pWordCB->GetEntryPos( aText ) == LISTBOX_ENTRY_NOTFOUND )
-        m_pWordCB->InsertEntry( aText );
+    if (m_xWordCB->find_text(aText) == -1)
+        m_xWordCB->append_text(aText);
 
-    m_pReplaceEdit->SetText( OUString() );
-    m_pLeftBtn->Enable( aLookUpHistory.size() > 1 );
+    m_xReplaceEdit->set_text( OUString() );
+    m_xLeftBtn->set_sensitive( aLookUpHistory.size() > 1 );
 }
 
-IMPL_LINK( SvxThesaurusDialog, WordSelectHdl_Impl, ComboBox&, rBox, void )
+IMPL_LINK( SvxThesaurusDialog, WordSelectHdl_Impl, weld::ComboBox&, rBox, void )
 {
-    if (!m_pWordCB->IsTravelSelect())  // act only upon return key and not when traveling with cursor keys
+//TODO    if (!m_xWordCB->IsTravelSelect())  // act only upon return key and not when traveling with cursor keys
     {
-        const sal_Int32 nPos = rBox.GetSelectedEntryPos();
-        OUString aStr( rBox.GetEntry( nPos ) );
+        const sal_Int32 nPos = rBox.get_active();
+        OUString aStr(rBox.get_text(nPos));
         aStr = linguistic::GetThesaurusReplaceText( aStr );
-        m_pWordCB->SetText( aStr );
+        m_xWordCB->set_entry_text(aStr);
         LookUp_Impl();
     }
 }
 
-IMPL_LINK( SvxThesaurusDialog, AlternativesSelectHdl_Impl, SvTreeListBox *, pBox, void )
+IMPL_LINK( SvxThesaurusDialog, AlternativesSelectHdl_Impl, weld::TreeView&, rBox, void )
 {
-    SvTreeListEntry *pEntry = pBox ? pBox->GetCurEntry() : nullptr;
-    if (pEntry)
+    int nEntry = rBox.get_selected_index();
+    if (nEntry != -1)
     {
-        AlternativesExtraData * pData = m_pAlternativesCT->GetExtraData( pEntry );
+        AlternativesExtraData* pData = reinterpret_cast<AlternativesExtraData*>(rBox.get_id(nEntry).toInt64());
         OUString aStr;
         if (pData && !pData->IsHeader())
         {
             aStr = pData->GetText();
             aStr = linguistic::GetThesaurusReplaceText( aStr );
         }
-        m_pReplaceEdit->SetText( aStr );
+        m_xReplaceEdit->set_text(aStr);
     }
 }
 
-IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, SvTreeListBox*, pBox, bool )
+IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, weld::TreeView&, rBox, void )
 {
-    SvTreeListEntry *pEntry = pBox ? pBox->GetCurEntry() : nullptr;
-    if (pEntry)
+    int nEntry = rBox.get_selected_index();
+    if (nEntry != -1)
     {
-        AlternativesExtraData * pData = m_pAlternativesCT->GetExtraData( pEntry );
+        AlternativesExtraData* pData = reinterpret_cast<AlternativesExtraData*>(rBox.get_id(nEntry).toInt64());
         OUString aStr;
         if (pData && !pData->IsHeader())
         {
@@ -416,57 +420,52 @@ IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, SvTreeListBox*, 
             aStr = linguistic::GetThesaurusReplaceText( aStr );
         }
 
-        m_pWordCB->SetText( aStr );
+        m_xWordCB->set_entry_text( aStr );
         if (!aStr.isEmpty())
             LookUp_Impl();
     }
 
     //! workaround to set the selection since calling SelectEntryPos within
     //! the double click handler does not work
-    Application::PostUserEvent( LINK( this, SvxThesaurusDialog, SelectFirstHdl_Impl ), pBox, true );
-    return false;
+    Application::PostUserEvent(LINK(this, SvxThesaurusDialog, SelectFirstHdl_Impl));
 }
 
-IMPL_STATIC_LINK( SvxThesaurusDialog, SelectFirstHdl_Impl, void *, p, void )
+IMPL_LINK_NOARG(SvxThesaurusDialog, SelectFirstHdl_Impl, void *, void)
 {
-    SvxCheckListBox* pBox = static_cast<SvxCheckListBox*>(p);
-    if (pBox && pBox->GetEntryCount() >= 2)
-        pBox->SelectEntryPos( 1 );  // pos 0 is a 'header' that is not selectable
+    if (m_xAlternativesCT->n_children() >= 2)
+        m_xAlternativesCT->select(1);  // pos 0 is a 'header' that is not selectable
 }
 
 // class SvxThesaurusDialog ----------------------------------------------
 
 SvxThesaurusDialog::SvxThesaurusDialog(
-    vcl::Window* pParent,
+    weld::Window* pParent,
     uno::Reference< linguistic2::XThesaurus > const & xThes,
     const OUString &rWord,
     LanguageType nLanguage)
-    : SvxStandardDialog(pParent, "ThesaurusDialog", "cui/ui/thesaurus.ui")
+    : SfxDialogController(pParent, "cui/ui/thesaurus.ui", "ThesaurusDialog")
     , m_aErrStr(CuiResId(RID_SVXSTR_ERR_TEXTNOTFOUND))
     , aLookUpText()
     , nLookUpLanguage(LANGUAGE_NONE)
     , m_bWordFound(false)
+    , m_xLeftBtn(m_xBuilder->weld_button("left"))
+    , m_xWordCB(m_xBuilder->weld_combo_box("wordcb"))
+    , m_xAlternativesCT(m_xBuilder->weld_tree_view("alternatives"))
+    , m_xReplaceEdit(m_xBuilder->weld_entry("replaceed"))
+    , m_xLangLB(m_xBuilder->weld_combo_box("langcb"))
+    , m_xReplaceBtn(m_xBuilder->weld_button("ok"))
 {
-    get(m_pLeftBtn, "left");
+//TODO    m_xReplaceEdit->init(m_xReplaceBtn.get());
+//TODO    m_xWordCB->init(this);
 
-    get(m_pWordCB, "wordcb");
-    m_pWordCB->init(this);
+//TODO    m_xAlternativesCT->init(this);
 
-    get(m_pAlternativesCT, "alternatives");
-    m_pAlternativesCT->init(this);
-
-    get(m_pReplaceEdit, "replaceed");
-    PushButton *pReplaceBtn = get<PushButton>("replace");
-    m_pReplaceEdit->init(pReplaceBtn);
-
-    get(m_pLangLB, "langcb");
-
-    pReplaceBtn->SetClickHdl( LINK( this, SvxThesaurusDialog, ReplaceBtnHdl_Impl ) );
-    m_pLeftBtn->SetClickHdl( LINK( this, SvxThesaurusDialog, LeftBtnHdl_Impl ) );
-    m_pWordCB->SetSelectHdl( LINK( this, SvxThesaurusDialog, WordSelectHdl_Impl ) );
-    m_pLangLB->SetSelectHdl( LINK( this, SvxThesaurusDialog, LanguageHdl_Impl ) );
-    m_pAlternativesCT->SetSelectHdl( LINK( this, SvxThesaurusDialog, AlternativesSelectHdl_Impl ));
-    m_pAlternativesCT->SetDoubleClickHdl( LINK( this, SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl ));
+    m_xReplaceBtn->connect_clicked( LINK( this, SvxThesaurusDialog, ReplaceBtnHdl_Impl ) );
+    m_xLeftBtn->connect_clicked( LINK( this, SvxThesaurusDialog, LeftBtnHdl_Impl ) );
+    m_xWordCB->connect_changed( LINK( this, SvxThesaurusDialog, WordSelectHdl_Impl ) );
+    m_xLangLB->connect_changed( LINK( this, SvxThesaurusDialog, LanguageHdl_Impl ) );
+    m_xAlternativesCT->connect_changed( LINK( this, SvxThesaurusDialog, AlternativesSelectHdl_Impl ));
+    m_xAlternativesCT->connect_row_activated( LINK( this, SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl ));
 
     xThesaurus = xThes;
     aLookUpText = rWord;
@@ -477,12 +476,12 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     OUString aTmp( rWord );
     (void)linguistic::RemoveHyphens( aTmp );
     (void)linguistic::ReplaceControlChars( aTmp );
-    m_pReplaceEdit->SetText( aTmp );
-    m_pWordCB->InsertEntry( aTmp );
+    m_xReplaceEdit->set_text( aTmp );
+    m_xWordCB->append_text( aTmp );
 
     LookUp( aTmp );
-    m_pAlternativesCT->GrabFocus();
-    m_pLeftBtn->Enable( false );
+    m_xAlternativesCT->grab_focus();
+    m_xLeftBtn->set_sensitive(false);
 
     // fill language menu button list
     uno::Sequence< lang::Locale > aLocales;
@@ -490,7 +489,7 @@ SvxThesaurusDialog::SvxThesaurusDialog(
         aLocales = xThesaurus->getLocales();
     const sal_Int32 nLocales = aLocales.getLength();
     const lang::Locale *pLocales = aLocales.getConstArray();
-    m_pLangLB->Clear();
+    m_xLangLB->clear();
     std::vector< OUString > aLangVec;
     for (sal_Int32 i = 0;  i < nLocales; ++i)
     {
@@ -499,62 +498,48 @@ SvxThesaurusDialog::SvxThesaurusDialog(
         aLangVec.push_back( SvtLanguageTable::GetLanguageString( nLang ) );
     }
     std::sort( aLangVec.begin(), aLangVec.end() );
+    m_xLangLB->freeze();
     for (OUString & i : aLangVec)
-        m_pLangLB->InsertEntry( i );
+        m_xLangLB->append_text(i);
+    m_xLangLB->thaw();
 
     std::vector< OUString >::iterator aI = std::find(aLangVec.begin(), aLangVec.end(),
             SvtLanguageTable::GetLanguageString(nLanguage));
     if (aI != aLangVec.end())
     {
-        m_pLangLB->SelectEntry(*aI);
+        m_xLangLB->set_active_text(*aI);
     }
 
     SetWindowTitle(nLanguage);
 
     // disable controls if service is missing
     if (!xThesaurus.is())
-        Enable( false );
+        m_xDialog->set_sensitive(false);
 }
 
 SvxThesaurusDialog::~SvxThesaurusDialog()
 {
-    disposeOnce();
 }
 
-void SvxThesaurusDialog::dispose()
+IMPL_LINK_NOARG(SvxThesaurusDialog, ReplaceBtnHdl_Impl, weld::Button&, void)
 {
-    m_pLeftBtn.clear();
-    m_pWordCB.clear();
-    m_pAlternativesCT.clear();
-    m_pReplaceEdit.clear();
-    m_pLangLB.clear();
-    SvxStandardDialog::dispose();
-}
-
-IMPL_LINK_NOARG( SvxThesaurusDialog, ReplaceBtnHdl_Impl, Button *, void )
-{
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
 void SvxThesaurusDialog::SetWindowTitle( LanguageType nLanguage )
 {
     // adjust language
-    OUString aStr( GetText() );
+    OUString aStr(m_xDialog->get_title());
     sal_Int32 nIndex = aStr.indexOf( '(' );
     if( nIndex != -1 )
         aStr = aStr.copy( 0, nIndex - 1 );
     aStr += " (" + SvtLanguageTable::GetLanguageString( nLanguage ) + ")";
-    SetText( aStr );    // set window title
+    m_xDialog->set_title(aStr);    // set window title
 }
 
 OUString SvxThesaurusDialog::GetWord()
 {
-    return m_pReplaceEdit->GetText();
-}
-
-
-void SvxThesaurusDialog::Apply()
-{
+    return m_xReplaceEdit->get_text();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
