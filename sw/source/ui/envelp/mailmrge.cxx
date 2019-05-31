@@ -118,6 +118,20 @@ void SwXSelChgLstnr_Impl::disposing( const EventObject&  )
     OSL_FAIL("disposing");
 }
 
+short SvxStandardDialog::Execute()
+{
+    short nRet = ModalDialog::Execute();
+
+    if ( RET_OK == nRet )
+        Apply();
+    return nRet;
+}
+
+SvxStandardDialog::SvxStandardDialog(vcl::Window *pParent, const OUString& rID, const OUString& rUIXMLDescription )
+    : SfxModalDialog(pParent, rID, rUIXMLDescription)
+{
+}
+
 SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
                                const OUString& rSourceName,
                                const OUString& rTableName,
