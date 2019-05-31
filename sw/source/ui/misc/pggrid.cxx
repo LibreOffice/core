@@ -171,6 +171,8 @@ bool SwTextGridPage::FillItemSet(SfxItemSet *rSet)
 
 void    SwTextGridPage::Reset(const SfxItemSet *rSet)
 {
+    sal_Int32 nLinesPerPage = 0;
+
     if(SfxItemState::DEFAULT <= rSet->GetItemState(RES_TEXTGRID))
     {
         const SwTextGridItem& rGridItem = rSet->Get(RES_TEXTGRID);
@@ -185,7 +187,8 @@ void    SwTextGridPage::Reset(const SfxItemSet *rSet)
         m_xDisplayCB->set_active(rGridItem.IsDisplayGrid());
         GridTypeHdl(*pButton);
         m_xSnapToCharsCB->set_active(rGridItem.IsSnapToChars());
-        m_xLinesPerPageNF->set_value(rGridItem.GetLines());
+        nLinesPerPage = rGridItem.GetLines();
+
         SetLinesOrCharsRanges(*m_xLinesRangeFT , m_xLinesPerPageNF->get_max());
         m_nRubyUserValue = rGridItem.GetBaseHeight();
         m_bRubyUserValue = true;
@@ -197,6 +200,9 @@ void    SwTextGridPage::Reset(const SfxItemSet *rSet)
         m_xColorLB->SelectEntry(rGridItem.GetColor());
     }
     UpdatePageSize(*rSet);
+
+    if (nLinesPerPage > 0)
+        m_xLinesPerPageNF->set_value(nLinesPerPage);
 
     m_xNoGridRB->save_state();
     m_xLinesGridRB->save_state();
@@ -301,8 +307,9 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
 
     if ( m_bSquaredMode )
     {
-        m_xCharsPerLineNF->set_value(m_aPageSize.Width() / nTextSize);
-        m_xCharsPerLineNF->set_max(m_xCharsPerLineNF->get_value());
+        sal_Int32 nCharsPerLine = m_aPageSize.Width() / nTextSize;
+        m_xCharsPerLineNF->set_max(nCharsPerLine);
+        m_xCharsPerLineNF->set_value(nCharsPerLine);
         m_xLinesPerPageNF->set_max(m_aPageSize.Height() /
         (   m_xTextSizeMF->denormalize(m_xTextSizeMF->get_value(FieldUnit::TWIP)) +
                     m_xRubySizeMF->denormalize(m_xRubySizeMF->get_value(FieldUnit::TWIP))));
