@@ -224,10 +224,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="contextmenus">
+              <object class="GtkLabel" id="notebookbar">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="customizedialog|contextmenus">Context Menus</property>
+                <property name="label" translatable="yes" context="customizedialog|notebookbar">Notebookbar</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -271,10 +271,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="keyboard">
+              <object class="GtkLabel" id="contextmenus">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="customizedialog|keyboard">Keyboard</property>
+                <property name="label" translatable="yes" context="customizedialog|contextmenus">Context Menus</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -318,13 +318,60 @@
               </packing>
             </child>
             <child type="tab">
+              <object class="GtkLabel" id="keyboard">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="customizedialog|keyboard">Keyboard</property>
+              </object>
+              <packing>
+                <property name="position">4</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">5</property>
+              </packing>
+            </child>
+            <child type="tab">
               <object class="GtkLabel" id="events">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="customizedialog|events">Events</property>
               </object>
               <packing>
-                <property name="position">4</property>
+                <property name="position">5</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>

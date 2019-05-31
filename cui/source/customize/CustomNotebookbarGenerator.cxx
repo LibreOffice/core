@@ -114,7 +114,7 @@ OUString CustomNotebookbarGenerator::getCustomizedUIPath()
     return sCustomizedUIPath;
 }
 
-static OUString getOriginalUIPath()
+OUString CustomNotebookbarGenerator::getOriginalUIPath()
 {
     OUStringBuffer aOriginalUIPathBuffer = VclBuilderContainer::getUIRootDir();
     OUString sAppName, sNotebookbarUIFileName;
