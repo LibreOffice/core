@@ -96,10 +96,10 @@ static const sal_Int16 nZoomValues[] =
     100
 };
 
-OneExampleFrame::OneExampleFrame(sal_uInt32 nFlags,
-                                 const Link<OneExampleFrame&,void>* pInitializedLink,
+SwOneExampleFrame::SwOneExampleFrame(sal_uInt32 nFlags,
+                                 const Link<SwOneExampleFrame&,void>* pInitializedLink,
                                  const OUString* pURL)
-    : m_aLoadedIdle("sw uibase OneExampleFrame Loaded")
+    : m_aLoadedIdle("sw uibase SwOneExampleFrame Loaded")
     , m_pModuleView(SW_MOD()->GetView())
     , m_nStyleFlags(nFlags)
     , m_bIsInitialized(false)
@@ -111,11 +111,11 @@ OneExampleFrame::OneExampleFrame(sal_uInt32 nFlags,
         m_aInitializedLink = *pInitializedLink;
 
     // the controller is asynchronously set
-    m_aLoadedIdle.SetInvokeHandler(LINK(this, OneExampleFrame, TimeoutHdl));
+    m_aLoadedIdle.SetInvokeHandler(LINK(this, SwOneExampleFrame, TimeoutHdl));
     m_aLoadedIdle.SetPriority(TaskPriority::HIGH_IDLE);
 }
 
-void OneExampleFrame::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+void SwOneExampleFrame::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     CustomWidgetController::SetDrawingArea(pDrawingArea);
     m_xVirDev = VclPtr<VirtualDevice>::Create();
@@ -125,7 +125,7 @@ void OneExampleFrame::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     CreateControl();
 }
 
-bool OneExampleFrame::ContextMenu(const CommandEvent& rCEvt)
+bool SwOneExampleFrame::ContextMenu(const CommandEvent& rCEvt)
 {
     switch (rCEvt.GetCommand())
     {
@@ -142,7 +142,7 @@ bool OneExampleFrame::ContextMenu(const CommandEvent& rCEvt)
     return false;
 }
 
-void OneExampleFrame::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SwOneExampleFrame::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     Size aSize(GetOutputSizePixel());
     // m_xVirDev instead of rRenderContext just to avoid overlays in writer re-triggering
@@ -184,12 +184,12 @@ void OneExampleFrame::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     rRenderContext.DrawOutDev(Point(), aSize, Point(), aSize, *m_xVirDev);
 }
 
-OneExampleFrame::~OneExampleFrame()
+SwOneExampleFrame::~SwOneExampleFrame()
 {
     DisposeControl();
 }
 
-void OneExampleFrame::CreateControl()
+void SwOneExampleFrame::CreateControl()
 {
     // create new doc
     OUString sTempURL(cFactory);
@@ -211,7 +211,7 @@ void OneExampleFrame::CreateControl()
     m_aLoadedIdle.Start();
 }
 
-void OneExampleFrame::DisposeControl()
+void SwOneExampleFrame::DisposeControl()
 {
     m_aLoadedIdle.Stop();
     m_xCursor = nullptr;
@@ -223,7 +223,7 @@ void OneExampleFrame::DisposeControl()
     m_xController = nullptr;
 }
 
-IMPL_LINK( OneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
+IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
 {
     if (!m_xModel.is())
         return;
@@ -420,7 +420,7 @@ IMPL_LINK( OneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
         pTimer->Start();
 }
 
-void OneExampleFrame::ClearDocument()
+void SwOneExampleFrame::ClearDocument()
 {
     uno::Reference< lang::XUnoTunnel> xTunnel( m_xCursor, uno::UNO_QUERY);
     if( xTunnel.is() )
@@ -454,7 +454,7 @@ void OneExampleFrame::ClearDocument()
     }
 }
 
-bool OneExampleFrame::CreatePopup(const Point& rPt)
+bool SwOneExampleFrame::CreatePopup(const Point& rPt)
 {
     if (EX_SHOW_ONLINE_LAYOUT != m_nStyleFlags)
         return false;
@@ -484,7 +484,7 @@ bool OneExampleFrame::CreatePopup(const Point& rPt)
     return true;
 }
 
-void OneExampleFrame::PopupHdl(const OString& rId)
+void SwOneExampleFrame::PopupHdl(const OString& rId)
 {
     OString sZoomValue;
     if (rId.startsWith("zoom", &sZoomValue))
