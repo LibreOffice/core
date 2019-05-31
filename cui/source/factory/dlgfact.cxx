@@ -133,7 +133,15 @@ short AbstractHyphenWordDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractThesaurusDialog_Impl)
+short AbstractThesaurusDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+bool AbstractThesaurusDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return SfxDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
 
 short AbstractSvxZoomDialog_Impl::Execute()
 {
@@ -463,7 +471,7 @@ OUString AbstractHangulHanjaConversionDialog_Impl::GetCurrentSuggestion( ) const
 
 OUString AbstractThesaurusDialog_Impl::GetWord()
 {
-    return pDlg->GetWord();
+    return m_xDlg->GetWord();
 };
 
 Reference < css::embed::XEmbeddedObject > AbstractInsertObjectDialog_Impl::GetObject()
@@ -1016,12 +1024,11 @@ VclPtr<AbstractHangulHanjaConversionDialog> AbstractDialogFactory_Impl::CreateHa
     return VclPtr<AbstractHangulHanjaConversionDialog_Impl>::Create(std::make_unique<HangulHanjaConversionDialog>(pParent));
 }
 
-VclPtr<AbstractThesaurusDialog> AbstractDialogFactory_Impl::CreateThesaurusDialog( vcl::Window* pParent,
-                                css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
-                                const OUString &rWord, LanguageType nLanguage )
+VclPtr<AbstractThesaurusDialog> AbstractDialogFactory_Impl::CreateThesaurusDialog(weld::Window* pParent,
+                                css::uno::Reference<css::linguistic2::XThesaurus> xThesaurus,
+                                const OUString &rWord, LanguageType nLanguage)
 {
-    VclPtrInstance<SvxThesaurusDialog> pDlg( pParent, xThesaurus, rWord, nLanguage );
-    return VclPtr<AbstractThesaurusDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractThesaurusDialog_Impl>::Create(std::make_unique<SvxThesaurusDialog>(pParent, xThesaurus, rWord, nLanguage));
 }
 
 VclPtr<AbstractHyphenWordDialog> AbstractDialogFactory_Impl::CreateHyphenWordDialog(weld::Window* pParent,

@@ -459,7 +459,6 @@ custom_widgets = [
     'IndexBox',
     'IndexBox',
     'LightButton',
-    'LookUpComboBox',
     'ManagedMenuButton',
     'MultiLineEditSyntaxHighlight',
     'OFileURLControl',
@@ -470,7 +469,6 @@ custom_widgets = [
     'PriorityMergedHBox',
     'PropertyControl',
     'RecentDocsView',
-    'ReplaceEdit',
     'RowEdit',
     'SameContentListBox',
     'ScCsvTableBox',
@@ -512,7 +510,6 @@ custom_widgets = [
     'SwNavHelpToolBox',
     'TableValueSet',
     'TemplateDefaultView',
-    'ThesaurusAlternativesCtrl',
     'ValueSet',
     ]
 

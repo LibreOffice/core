@@ -26,106 +26,14 @@
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/idle.hxx>
-#include <svx/stddlg.hxx>
+#include <sfx2/basedlgs.hxx>
 
 #include <memory>
 #include <stack>
 
-class SvxThesaurusDialog;
-
-class LookUpComboBox : public ComboBox
+class SvxThesaurusDialog : public SfxDialogController
 {
-    Idle                        m_aModifyIdle;
-    VclPtr<SvxThesaurusDialog>         m_pDialog;
-
-    LookUpComboBox( const LookUpComboBox & ) = delete;
-    LookUpComboBox& operator = ( const LookUpComboBox & ) = delete;
-
-public:
-    LookUpComboBox(vcl::Window *pParent);
-    virtual ~LookUpComboBox() override;
-    virtual void dispose() override;
-
-    DECL_LINK( ModifyTimer_Hdl, Timer *, void );
-
-    void init(SvxThesaurusDialog *pDialog);
-
-    // ComboBox
-    virtual void        Modify() override;
-};
-
-class AlternativesExtraData
-{
-    OUString  sText;
-    bool      bHeader;
-
-public:
-    AlternativesExtraData() : bHeader( false ) {}
-    AlternativesExtraData( const OUString &rText, bool bIsHeader ) :
-        sText(rText),
-        bHeader(bIsHeader)
-        {
-        }
-
-    bool  IsHeader() const          { return bHeader; }
-    const OUString& GetText() const   { return sText; }
-};
-
-class ThesaurusAlternativesCtrl
-    : public SvxCheckListBox
-{
-    VclPtr<SvxThesaurusDialog>     m_pDialog;
-
-    typedef std::map< const SvTreeListEntry *, AlternativesExtraData >  UserDataMap_t;
-    UserDataMap_t           m_aUserData;
-
-    ThesaurusAlternativesCtrl( const ThesaurusAlternativesCtrl & ) = delete;
-    ThesaurusAlternativesCtrl & operator = ( const ThesaurusAlternativesCtrl & ) = delete;
-
-public:
-    ThesaurusAlternativesCtrl(vcl::Window* pParent);
-
-    void init(SvxThesaurusDialog *pDialog);
-    virtual ~ThesaurusAlternativesCtrl() override;
-    virtual void dispose() override;
-
-    SvTreeListEntry *   AddEntry( sal_Int32 nVal, const OUString &rText, bool bIsHeader );
-
-    void            ClearExtraData();
-    void            SetExtraData( const SvTreeListEntry *pEntry, const AlternativesExtraData &rData );
-    AlternativesExtraData * GetExtraData( const SvTreeListEntry *pEntry );
-
-    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect ) override;
-};
-
-class ReplaceEdit : public Edit
-{
-    VclPtr<Button>       m_pBtn;
-
-    ReplaceEdit( const ReplaceEdit & ) = delete;
-    ReplaceEdit & operator = ( const ReplaceEdit & ) = delete;
-
-public:
-    ReplaceEdit(vcl::Window *pParent);
-    virtual ~ReplaceEdit() override;
-    virtual void dispose() override;
-
-    void init(Button *pBtn)  { m_pBtn = pBtn; }
-
-    // Edit
-    virtual void        Modify() override;
-    virtual void        SetText( const OUString& rStr ) override;
-    virtual void        SetText( const OUString& rStr, const Selection& rNewSelection ) override;
-};
-
-class SvxThesaurusDialog : public SvxStandardDialog
-{
-    VclPtr<PushButton>             m_pLeftBtn;
-    VclPtr<LookUpComboBox>         m_pWordCB;
-    VclPtr<ThesaurusAlternativesCtrl> m_pAlternativesCT;
-    VclPtr<ReplaceEdit>            m_pReplaceEdit;
-    VclPtr<ListBox>                m_pLangLB;
+    Idle                    m_aModifyIdle;
 
     OUString                m_aErrStr;
 
@@ -135,22 +43,29 @@ class SvxThesaurusDialog : public SvxStandardDialog
     std::stack< OUString >  aLookUpHistory;
     bool                    m_bWordFound;
 
+    std::unique_ptr<weld::Button> m_xLeftBtn;
+    std::unique_ptr<weld::ComboBox> m_xWordCB;
+    std::unique_ptr<weld::TreeView> m_xAlternativesCT;
+    std::unique_ptr<weld::Entry> m_xReplaceEdit;
+    std::unique_ptr<weld::ComboBox> m_xLangLB;
+    std::unique_ptr<weld::Button> m_xReplaceBtn;
+
 public:
     virtual ~SvxThesaurusDialog() override;
-    virtual void dispose() override;
 
     bool                    WordFound() const { return m_bWordFound; }
     const OUString&         getErrStr() const { return m_aErrStr; }
 
     // Handler
-    DECL_LINK( ReplaceBtnHdl_Impl, Button *, void );
-    DECL_LINK( LeftBtnHdl_Impl, Button *, void );
-    DECL_LINK( LanguageHdl_Impl, ListBox&, void );
-    DECL_LINK( WordSelectHdl_Impl, ComboBox&, void );
-    DECL_LINK( AlternativesSelectHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK( AlternativesDoubleClickHdl_Impl, SvTreeListBox*, bool );
-
-    DECL_STATIC_LINK( SvxThesaurusDialog, SelectFirstHdl_Impl, void*, void );
+    DECL_LINK( ReplaceBtnHdl_Impl, weld::Button&, void );
+    DECL_LINK( LeftBtnHdl_Impl, weld::Button&, void );
+    DECL_LINK( LanguageHdl_Impl, weld::ComboBox&, void );
+    DECL_LINK( WordSelectHdl_Impl, weld::ComboBox&, void );
+    DECL_LINK( AlternativesSelectHdl_Impl, weld::TreeView&, void );
+    DECL_LINK( AlternativesDoubleClickHdl_Impl, weld::TreeView&, void );
+    DECL_LINK( SelectFirstHdl_Impl, void*, void );
+    DECL_LINK( ReplaceEditHdl_Impl, weld::Entry&, void );
+    DECL_LINK( ModifyTimer_Hdl, Timer *, void );
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
@@ -160,13 +75,11 @@ public:
     bool    UpdateAlternativesBox_Impl();
     void    LookUp( const OUString &rText );
     void    LookUp_Impl();
-    virtual void     Apply() override;
 
 public:
-    SvxThesaurusDialog( vcl::Window* pParent,
-                        css::uno::Reference< css::linguistic2::XThesaurus > const & xThesaurus,
-                        const OUString &rWord, LanguageType nLanguage );
-
+    SvxThesaurusDialog(weld::Window* pParent,
+                       css::uno::Reference< css::linguistic2::XThesaurus > const & xThesaurus,
+                       const OUString &rWord, LanguageType nLanguage);
     void            SetWindowTitle( LanguageType nLanguage );
     OUString        GetWord();
 };
