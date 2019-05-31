@@ -97,6 +97,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/customize/SvxConfigPageHelper \
     cui/source/customize/SvxMenuConfigPage \
     cui/source/customize/SvxToolbarConfigPage \
+    cui/source/customize/SvxNotebookbarConfigPage \
     cui/source/customize/CustomNotebookbarGenerator \
     cui/source/dialogs/about \
     cui/source/dialogs/colorpicker \
