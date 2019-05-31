@@ -19,10 +19,31 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 
+#include <QtCore/QMimeData>
 #include <QtGui/QClipboard>
+
+class Qt5MimeData : public QMimeData
+{
+    Q_OBJECT
+
+    mutable css::uno::Reference<css::datatransfer::XTransferable> m_aContents;
+
+    QVariant retrieveData(const QString& mimeType, QVariant::Type type) const override;
+
+public:
+    explicit Qt5MimeData(css::uno::Reference<css::datatransfer::XTransferable>& aContents);
+    explicit Qt5MimeData(const QMimeData& obj);
+
+    bool hasFormat(const QString& mimeType) const override;
+    QStringList formats() const override;
+
+    void releaseXTransferable() const { m_aContents.clear(); }
+};
 
 class Qt5Transferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
+    Qt5MimeData m_aContent;
+
 public:
     explicit Qt5Transferable(QClipboard::Mode aMode);
 
@@ -35,9 +56,6 @@ public:
         SAL_CALL getTransferDataFlavors() override;
     virtual sal_Bool SAL_CALL
     isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
-
-private:
-    QClipboard::Mode m_aClipboardMode;
 };
 
 class Qt5Clipboard
@@ -49,17 +67,15 @@ class Qt5Clipboard
     Q_OBJECT
 
     osl::Mutex m_aMutex;
+    const OUString m_aClipboardName;
+    const QClipboard::Mode m_aClipboardMode;
+
     css::uno::Reference<css::datatransfer::XTransferable> m_aContents;
     css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
     std::vector<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> m_aListeners;
-    OUString m_aClipboardName;
-    QClipboard::Mode m_aClipboardMode;
-    // custom MIME type to detect whether clipboard content was added by self or externally
-    const QString m_sMimeTypeUuid = "application/x-libreoffice-clipboard-uuid";
-    const QByteArray m_aUuid;
 
 private Q_SLOTS:
-    void handleClipboardChange(QClipboard::Mode mode);
+    void handleChanged(QClipboard::Mode mode);
 
 public:
     explicit Qt5Clipboard(const OUString& aModeString);
