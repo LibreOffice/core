@@ -14,8 +14,6 @@
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
-#include <QtCore/QMimeData>
-#include <QtCore/QUuid>
 #include <QtWidgets/QApplication>
 
 #include <Qt5Clipboard.hxx>
@@ -23,63 +21,163 @@
 #include <Qt5Transferable.hxx>
 #include <Qt5Tools.hxx>
 
+#include <cassert>
 #include <map>
 
 using namespace com::sun::star;
 
-namespace
+Qt5MimeData::Qt5MimeData(const uno::Reference<css::datatransfer::XTransferable>& xTrans)
+    : m_aContents(xTrans)
 {
-QClipboard::Mode getClipboardTypeFromName(const OUString& aString)
-{
-    static const std::map<OUString, QClipboard::Mode> aNameToClipboardMap
-        = { { "CLIPBOARD", QClipboard::Clipboard }, { "PRIMARY", QClipboard::Selection } };
-
-    // default to QClipboard::Clipboard as fallback
-    QClipboard::Mode aMode = QClipboard::Clipboard;
-
-    auto iter = aNameToClipboardMap.find(aString);
-    if (iter != aNameToClipboardMap.end())
-        aMode = iter->second;
-    else
-        SAL_WARN("vcl.qt5", "Unrecognized clipboard type \""
-                                << aString << "\"; falling back to QClipboard::Clipboard");
-    return aMode;
+    assert(xTrans.is());
 }
 
-void lcl_peekFormats(const css::uno::Sequence<css::datatransfer::DataFlavor>& rFormats,
-                     bool& bHasHtml, bool& bHasImage)
+bool Qt5MimeData::deepCopy(QMimeData** const pMimeCopy) const
 {
-    for (int i = 0; i < rFormats.getLength(); ++i)
-    {
-        const css::datatransfer::DataFlavor& rFlavor = rFormats[i];
+    if (!pMimeCopy)
+        return false;
 
-        if (rFlavor.MimeType == "text/html")
-            bHasHtml = true;
-        else if (rFlavor.MimeType.startsWith("image"))
-            bHasImage = true;
+    QMimeData* pMimeData = new QMimeData();
+    for (QString& format : formats())
+    {
+        QByteArray aData = data(format);
+        // Checking for custom MIME types
+        if (format.startsWith("application/x-qt"))
+        {
+            // Retrieving true format name
+            int indexBegin = format.indexOf('"') + 1;
+            int indexEnd = format.indexOf('"', indexBegin);
+            format = format.mid(indexBegin, indexEnd - indexBegin);
+        }
+        pMimeData->setData(format, aData);
+    }
+
+    *pMimeCopy = pMimeData;
+    return true;
+}
+
+QVariant Qt5MimeData::retrieveData(const QString& mimeType, QVariant::Type) const
+{
+    css::datatransfer::DataFlavor aFlavor;
+    aFlavor.MimeType = toOUString(mimeType);
+    aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
+    if (aFlavor.MimeType == "text/plain")
+        aFlavor.MimeType += ";charset=utf-16";
+
+    uno::Sequence<sal_Int8> aData;
+    uno::Any aValue;
+
+    try
+    {
+        aValue = m_aContents->getTransferData(aFlavor);
+    }
+    catch (...)
+    {
+    }
+
+    if (aValue.getValueTypeClass() == uno::TypeClass_STRING)
+    {
+        OUString aString;
+        aValue >>= aString;
+        return QVariant(toQString(aString));
+    }
+    else
+    {
+        aValue >>= aData;
+        const QByteArray aQByteArray(reinterpret_cast<const char*>(aData.getConstArray()),
+                                     aData.getLength());
+        return QVariant::fromValue(aQByteArray);
     }
 }
+
+bool Qt5MimeData::hasFormat(const QString& mimeType) const
+{
+    OUString aSearchString = toOUString(mimeType);
+    if (aSearchString == "text/plain")
+        aSearchString += ";charset=utf-16";
+    css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
+        = m_aContents->getTransferDataFlavors();
+
+    return std::any_of(aFormats.begin(), aFormats.end(),
+                       [&aSearchString](const auto& rFlavor) -> bool {
+                           return rFlavor.MimeType == aSearchString;
+                       });
 }
 
-Qt5Clipboard::Qt5Clipboard(const OUString& aModeString)
+QStringList Qt5MimeData::formats() const
+{
+    css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
+        = m_aContents->getTransferDataFlavors();
+    QStringList aList;
+    bool bHaveText = false, bHaveNoCharset = false, bHaveUTF16 = false;
+    for (const auto& rFlavor : aFormats)
+    {
+        aList << toQString(rFlavor.MimeType);
+        sal_Int32 nIndex(0);
+        if (rFlavor.MimeType.getToken(0, ';', nIndex) == "text/plain")
+        {
+            bHaveText = true;
+            OUString aToken(rFlavor.MimeType.getToken(0, ';', nIndex));
+            if (aToken == "charset=utf-16")
+                bHaveUTF16 = true;
+            else if (aToken.isEmpty())
+                bHaveNoCharset = true;
+        }
+    }
+
+    if (bHaveText)
+    {
+        // If we have text, but no UTF-16 format which is basically the only
+        // text-format LibreOffice supports for cnp then claim we do and we
+        // will convert on demand
+        if (!bHaveUTF16)
+            aList << toQString("text/plain;charset=utf-16");
+        // Qt expects plain "text/plain" for UTF-16
+        if (!bHaveNoCharset)
+            aList << "text/plain";
+    }
+
+    return aList;
+}
+
+Qt5Clipboard::Qt5Clipboard(const OUString& aModeString, const QClipboard::Mode aMode)
     : cppu::WeakComponentImplHelper<datatransfer::clipboard::XSystemClipboard,
                                     datatransfer::clipboard::XFlushableClipboard, XServiceInfo>(
           m_aMutex)
     , m_aClipboardName(aModeString)
-    , m_aClipboardMode(getClipboardTypeFromName(aModeString))
-    , m_aUuid(QUuid::createUuid().toByteArray())
+    , m_aClipboardMode(aMode)
+    , m_aVolatileContents(new Qt5ClipboardTransferable(aMode))
 {
-    connect(QApplication::clipboard(), &QClipboard::changed, this,
-            &Qt5Clipboard::handleClipboardChange, Qt::DirectConnection);
+    assert(isSupported(m_aClipboardMode));
+    connect(QApplication::clipboard(), &QClipboard::changed, this, &Qt5Clipboard::handleChanged,
+            Qt::DirectConnection);
+}
+
+css::uno::Reference<css::uno::XInterface> Qt5Clipboard::create(const OUString& aModeString)
+{
+    static const std::map<OUString, QClipboard::Mode> aNameToClipboardMap
+        = { { "CLIPBOARD", QClipboard::Clipboard }, { "PRIMARY", QClipboard::Selection } };
+
+    auto iter = aNameToClipboardMap.find(aModeString);
+    if (iter != aNameToClipboardMap.end() && isSupported(iter->second))
+        return static_cast<cppu::OWeakObject*>(new Qt5Clipboard(aModeString, iter->second));
+    SAL_WARN("vcl.qt5", "Ignoring unrecognized clipboard type: '" << aModeString << "'");
+    return css::uno::Reference<css::uno::XInterface>();
 }
 
 void Qt5Clipboard::flushClipboard()
 {
-    SolarMutexGuard aGuard;
-    return;
-}
+    if (!isOwner(m_aClipboardMode))
+        return;
 
-Qt5Clipboard::~Qt5Clipboard() {}
+    QClipboard* pClipboard = QApplication::clipboard();
+    const Qt5MimeData* pQt5MimeData
+        = dynamic_cast<const Qt5MimeData*>(pClipboard->mimeData(m_aClipboardMode));
+    assert(pQt5MimeData);
+    QMimeData* pMimeCopy = nullptr;
+    if (pQt5MimeData && pQt5MimeData->deepCopy(&pMimeCopy))
+        pClipboard->setMimeData(pMimeCopy, m_aClipboardMode);
+}
 
 OUString Qt5Clipboard::getImplementationName()
 {
@@ -98,9 +196,9 @@ sal_Bool Qt5Clipboard::supportsService(const OUString& ServiceName)
 
 uno::Reference<css::datatransfer::XTransferable> Qt5Clipboard::getContents()
 {
-    if (!m_aContents.is())
-        m_aContents = new Qt5ClipboardTransferable(m_aClipboardMode);
-    return m_aContents;
+    if (m_aContents.is())
+        return m_aContents;
+    return m_aVolatileContents;
 }
 
 void Qt5Clipboard::setContents(
@@ -113,145 +211,15 @@ void Qt5Clipboard::setContents(
     m_aContents = xTrans;
     m_aOwner = xClipboardOwner;
 
-    std::vector<uno::Reference<datatransfer::clipboard::XClipboardListener>> aListeners(
-        m_aListeners);
-    datatransfer::clipboard::ClipboardEvent aEv;
-
-    QClipboard* clipboard = QApplication::clipboard();
-
-    switch (m_aClipboardMode)
-    {
-        case QClipboard::Selection:
-            if (!clipboard->supportsSelection())
-            {
-                return;
-            }
-            break;
-
-        case QClipboard::FindBuffer:
-            if (!clipboard->supportsFindBuffer())
-            {
-                return;
-            }
-            break;
-
-        case QClipboard::Clipboard:
-        default:
-            break;
-    }
-
     if (m_aContents.is())
-    {
-        css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
-            = xTrans->getTransferDataFlavors();
-        // Do not add non-text formats for the selection buffer,
-        // I don't think that one is ever used for anything else
-        // besides text and this gets called whenever something
-        // in LO gets selected (which may be e.g. an entire Calc sheet).
-        bool bHasHtml = false, bHasImage = false;
-        if (m_aClipboardMode != QClipboard::Selection)
-            lcl_peekFormats(aFormats, bHasHtml, bHasImage);
-
-        std::unique_ptr<QMimeData> pMimeData(new QMimeData);
-
-        // Add html data if present
-        if (bHasHtml)
-        {
-            css::datatransfer::DataFlavor aFlavor;
-            aFlavor.MimeType = "text/html";
-            aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
-
-            uno::Any aValue;
-            try
-            {
-                aValue = xTrans->getTransferData(aFlavor);
-            }
-            catch (...)
-            {
-            }
-
-            if (aValue.getValueType() == cppu::UnoType<uno::Sequence<sal_Int8>>::get())
-            {
-                uno::Sequence<sal_Int8> aData;
-                aValue >>= aData;
-
-                OUString aHtmlAsString(reinterpret_cast<const char*>(aData.getConstArray()),
-                                       aData.getLength(), RTL_TEXTENCODING_UTF8);
-
-                pMimeData->setHtml(toQString(aHtmlAsString));
-            }
-        }
-
-        // Add image data if present
-        if (bHasImage)
-        {
-            css::datatransfer::DataFlavor aFlavor;
-            //FIXME: other image formats?
-            aFlavor.MimeType = "image/png";
-            aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
-
-            uno::Any aValue;
-            try
-            {
-                aValue = xTrans->getTransferData(aFlavor);
-            }
-            catch (...)
-            {
-            }
-
-            if (aValue.getValueType() == cppu::UnoType<uno::Sequence<sal_Int8>>::get())
-            {
-                uno::Sequence<sal_Int8> aData;
-                aValue >>= aData;
-
-                QImage image;
-                image.loadFromData(reinterpret_cast<const uchar*>(aData.getConstArray()),
-                                   aData.getLength());
-
-                pMimeData->setImageData(image);
-            }
-        }
-
-        // Add text data
-        // TODO: consider checking if text of suitable type is present
-        {
-            css::datatransfer::DataFlavor aFlavor;
-            aFlavor.MimeType = "text/plain;charset=utf-16";
-            aFlavor.DataType = cppu::UnoType<OUString>::get();
-
-            uno::Any aValue;
-            try
-            {
-                aValue = xTrans->getTransferData(aFlavor);
-            }
-            catch (...)
-            {
-            }
-
-            if (aValue.getValueTypeClass() == uno::TypeClass_STRING)
-            {
-                OUString aString;
-                aValue >>= aString;
-                pMimeData->setText(toQString(aString));
-            }
-        }
-
-        // set value for custom MIME type to indicate that content was added by this clipboard
-        pMimeData->setData(m_sMimeTypeUuid, m_aUuid);
-
-        clipboard->setMimeData(pMimeData.release(), m_aClipboardMode);
-    }
-
-    aEv.Contents = getContents();
+        QApplication::clipboard()->setMimeData(new Qt5MimeData(m_aContents), m_aClipboardMode);
+    else
+        QApplication::clipboard()->clear(m_aClipboardMode);
 
     aGuard.clear();
 
     if (xOldOwner.is() && xOldOwner != xClipboardOwner)
         xOldOwner->lostOwnership(this, xOldContents);
-    for (auto const& listener : aListeners)
-    {
-        listener->changedContents(aEv);
-    }
 }
 
 OUString Qt5Clipboard::getName() { return m_aClipboardName; }
@@ -261,30 +229,83 @@ sal_Int8 Qt5Clipboard::getRenderingCapabilities() { return 0; }
 void Qt5Clipboard::addClipboardListener(
     const uno::Reference<datatransfer::clipboard::XClipboardListener>& listener)
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
-
+    osl::MutexGuard aGuard(m_aMutex);
     m_aListeners.push_back(listener);
 }
 
 void Qt5Clipboard::removeClipboardListener(
     const uno::Reference<datatransfer::clipboard::XClipboardListener>& listener)
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
-
+    osl::MutexGuard aGuard(m_aMutex);
     m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener),
                        m_aListeners.end());
 }
 
-void Qt5Clipboard::handleClipboardChange(QClipboard::Mode aMode)
+bool Qt5Clipboard::isSupported(const QClipboard::Mode aMode)
 {
-    // if system clipboard content has changed and current content was not created by
-    // this clipboard itself, clear the own current content
-    // (e.g. to take into account clipboard updates from other applications)
-    if (aMode == m_aClipboardMode
-        && QApplication::clipboard()->mimeData(aMode)->data(m_sMimeTypeUuid) != m_aUuid)
+    const QClipboard* pClipboard = QApplication::clipboard();
+    switch (aMode)
     {
-        m_aContents.clear();
+        case QClipboard::Selection:
+            return pClipboard->supportsSelection();
+
+        case QClipboard::FindBuffer:
+            return pClipboard->supportsFindBuffer();
+
+        case QClipboard::Clipboard:
+            return true;
     }
+    return false;
+}
+
+bool Qt5Clipboard::isOwner(const QClipboard::Mode aMode)
+{
+    if (!isSupported(aMode))
+        return false;
+
+    const QClipboard* pClipboard = QApplication::clipboard();
+    switch (aMode)
+    {
+        case QClipboard::Selection:
+            return pClipboard->ownsSelection();
+
+        case QClipboard::FindBuffer:
+            return pClipboard->ownsFindBuffer();
+
+        case QClipboard::Clipboard:
+            return pClipboard->ownsClipboard();
+    }
+    return false;
+}
+
+void Qt5Clipboard::handleChanged(QClipboard::Mode aMode)
+{
+    if (aMode != m_aClipboardMode)
+        return;
+
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+
+    uno::Reference<datatransfer::clipboard::XClipboardOwner> xOldOwner(m_aOwner);
+    uno::Reference<datatransfer::XTransferable> xOldContents(m_aContents);
+    const bool bNewOwner = !isOwner(m_aClipboardMode) && m_aOwner.is();
+    if (bNewOwner)
+    {
+        assert(m_aContents.is());
+        m_aContents.clear();
+        m_aOwner.clear();
+    }
+
+    std::vector<uno::Reference<datatransfer::clipboard::XClipboardListener>> aListeners(
+        m_aListeners);
+    datatransfer::clipboard::ClipboardEvent aEv;
+    aEv.Contents = getContents();
+
+    aGuard.clear();
+
+    if (bNewOwner)
+        xOldOwner->lostOwnership(this, xOldContents);
+    for (auto const& listener : aListeners)
+        listener->changedContents(aEv);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

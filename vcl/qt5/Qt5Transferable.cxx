@@ -15,31 +15,20 @@
 #include <sal/log.hxx>
 
 #include <QtCore/QBuffer>
-#include <QtCore/QMimeData>
 #include <QtCore/QUrl>
 #include <QtWidgets/QApplication>
 
 #include <Qt5Clipboard.hxx>
 #include <Qt5Tools.hxx>
 
-using namespace com::sun::star;
-
-Qt5Transferable::Qt5Transferable(const QMimeData* pMimeData)
-    : m_pMimeData(pMimeData)
-{
-}
-
-Qt5Transferable::~Qt5Transferable() {}
+Qt5Transferable::Qt5Transferable() {}
 
 std::vector<css::datatransfer::DataFlavor> Qt5Transferable::getTransferDataFlavorsAsVector()
 {
     std::vector<css::datatransfer::DataFlavor> aVector;
-    assert(m_pMimeData);
-    if (!m_pMimeData)
-        return aVector;
 
     css::datatransfer::DataFlavor aFlavor;
-    for (QString& rMimeType : m_pMimeData->formats())
+    for (QString& rMimeType : mimeData()->formats())
     {
         // filter out non-MIME types such as TARGETS, MULTIPLE, TIMESTAMP
         if (rMimeType.indexOf('/') == -1)
@@ -55,7 +44,7 @@ std::vector<css::datatransfer::DataFlavor> Qt5Transferable::getTransferDataFlavo
         else
         {
             aFlavor.MimeType = toOUString(rMimeType);
-            aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
+            aFlavor.DataType = cppu::UnoType<css::uno::Sequence<sal_Int8>>::get();
             aVector.push_back(aFlavor);
         }
     }
@@ -65,52 +54,74 @@ std::vector<css::datatransfer::DataFlavor> Qt5Transferable::getTransferDataFlavo
 
 css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL Qt5Transferable::getTransferDataFlavors()
 {
+    css::uno::Reference<css::datatransfer::XTransferable> xTrans(xTransferable());
+    if (xTrans.is())
+        return xTrans->getTransferDataFlavors();
     return comphelper::containerToSequence(getTransferDataFlavorsAsVector());
 }
 
 sal_Bool SAL_CALL
 Qt5Transferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
 {
-    const std::vector<css::datatransfer::DataFlavor> aAll = getTransferDataFlavorsAsVector();
+    css::uno::Reference<css::datatransfer::XTransferable> xTrans(xTransferable());
+    if (xTrans.is())
+        return xTrans->isDataFlavorSupported(rFlavor);
 
+    const std::vector<css::datatransfer::DataFlavor> aAll = getTransferDataFlavorsAsVector();
     return std::any_of(aAll.begin(), aAll.end(), [&](const css::datatransfer::DataFlavor& aFlavor) {
         return rFlavor.MimeType == aFlavor.MimeType;
-    }); //FIXME
+    });
 }
 
 Qt5ClipboardTransferable::Qt5ClipboardTransferable(QClipboard::Mode aMode)
-    : Qt5Transferable(QApplication::clipboard()->mimeData(aMode))
+    : m_aMode(aMode)
 {
 }
 
-Qt5ClipboardTransferable::~Qt5ClipboardTransferable() {}
+const QMimeData* Qt5ClipboardTransferable::mimeData() const
+{
+    return QApplication::clipboard()->mimeData(m_aMode);
+}
+
+const css::uno::Reference<css::datatransfer::XTransferable>
+Qt5ClipboardTransferable::xTransferable() const
+{
+    const Qt5MimeData* pQt5MimeData = dynamic_cast<const Qt5MimeData*>(mimeData());
+    if (pQt5MimeData)
+        return pQt5MimeData->m_aContents;
+    return css::uno::Reference<css::datatransfer::XTransferable>();
+}
 
 css::uno::Any SAL_CALL
 Qt5ClipboardTransferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
 {
     css::uno::Any aAny;
-    assert(m_pMimeData);
-    if (!m_pMimeData)
+    css::uno::Reference<css::datatransfer::XTransferable> xTrans(xTransferable());
+    if (xTrans.is())
+    {
+        aAny = xTrans->getTransferData(rFlavor);
         return aAny;
+    }
 
+    const QMimeData* pMimeData = mimeData();
     if (rFlavor.MimeType == "text/plain;charset=utf-16")
     {
-        QString clipboardContent = m_pMimeData->text();
+        QString clipboardContent = pMimeData->text();
         OUString sContent = toOUString(clipboardContent);
 
         aAny <<= sContent.replaceAll("\r\n", "\n");
     }
     else if (rFlavor.MimeType == "text/html")
     {
-        QString clipboardContent = m_pMimeData->html();
+        QString clipboardContent = pMimeData->html();
         std::string aStr = clipboardContent.toStdString();
-        uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()),
-                                     aStr.length());
+        css::uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()),
+                                          aStr.length());
         aAny <<= aSeq;
     }
-    else if (rFlavor.MimeType.startsWith("image") && m_pMimeData->hasImage())
+    else if (rFlavor.MimeType.startsWith("image") && pMimeData->hasImage())
     {
-        QImage image = qvariant_cast<QImage>(m_pMimeData->imageData());
+        QImage image = qvariant_cast<QImage>(pMimeData->imageData());
         QByteArray ba;
         QBuffer buffer(&ba);
         sal_Int32 nIndex = rFlavor.MimeType.indexOf('/');
@@ -119,7 +130,7 @@ Qt5ClipboardTransferable::getTransferData(const css::datatransfer::DataFlavor& r
         buffer.open(QIODevice::WriteOnly);
         image.save(&buffer, sFormat.toUtf8().getStr());
 
-        uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(ba.data()), ba.size());
+        css::uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(ba.data()), ba.size());
         aAny <<= aSeq;
     }
 
@@ -127,13 +138,21 @@ Qt5ClipboardTransferable::getTransferData(const css::datatransfer::DataFlavor& r
 }
 
 Qt5DnDTransferable::Qt5DnDTransferable(const QMimeData* pMimeData)
-    : Qt5Transferable(pMimeData)
+    : m_pMimeData(pMimeData)
 {
+}
+
+const QMimeData* Qt5DnDTransferable::mimeData() const { return m_pMimeData; }
+
+const css::uno::Reference<css::datatransfer::XTransferable>
+Qt5DnDTransferable::xTransferable() const
+{
+    return nullptr;
 }
 
 css::uno::Any Qt5DnDTransferable::getTransferData(const css::datatransfer::DataFlavor&)
 {
-    uno::Any aAny;
+    css::uno::Any aAny;
     assert(m_pMimeData);
 
     // FIXME: not sure if we should support more mimetypes here
@@ -156,8 +175,8 @@ css::uno::Any Qt5DnDTransferable::getTransferData(const css::datatransfer::DataF
                     aStr += "\n";
             }
 
-            uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()),
-                                         aStr.length());
+            css::uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()),
+                                              aStr.length());
             aAny <<= aSeq;
         }
     }
