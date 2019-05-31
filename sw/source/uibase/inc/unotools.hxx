@@ -32,19 +32,6 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <swdllapi.h>
 
-class SwOneExampleFrame;
-
-class SwFrameCtrlWindow : public VclEventBox
-{
-    SwOneExampleFrame* pExampleFrame;
-public:
-    SwFrameCtrlWindow(vcl::Window* pParent, SwOneExampleFrame* pFrame);
-
-    virtual void Command( const CommandEvent& rCEvt ) override;
-    virtual Size GetOptimalSize() const override;
-    virtual void Resize() override;
-};
-
 #define EX_SHOW_ONLINE_LAYOUT   0x001
 
 // hard zoom value
@@ -53,55 +40,6 @@ public:
 #define EX_SHOW_DEFAULT_PAGE    0x04
 
 class SwView;
-
-class SW_DLLPUBLIC SwOneExampleFrame
-{
-    css::uno::Reference< css::awt::XControl >         m_xControl;
-    css::uno::Reference< css::frame::XModel >         m_xModel;
-    css::uno::Reference< css::frame::XController >    m_xController;
-    css::uno::Reference< css::text::XTextCursor >     m_xCursor;
-
-    VclPtr<SwFrameCtrlWindow> m_aTopWindow;
-    Idle            m_aLoadedIdle;
-    Link<SwOneExampleFrame&,void> m_aInitializedLink;
-
-    OUString        m_sArgumentURL;
-
-    SwView* const    m_pModuleView;
-
-    sal_uInt32 const m_nStyleFlags;
-
-    bool            m_bIsInitialized;
-    bool            m_bServiceAvailable;
-
-    static  bool    bShowServiceNotAvailableMessage;
-
-    DECL_DLLPRIVATE_LINK( TimeoutHdl, Timer*, void );
-    DECL_DLLPRIVATE_LINK( PopupHdl, Menu*, bool );
-
-    SAL_DLLPRIVATE void  CreateControl();
-    SAL_DLLPRIVATE void  DisposeControl();
-
-public:
-    SwOneExampleFrame(vcl::Window& rWin,
-                    sal_uInt32 nStyleFlags,
-                    const Link<SwOneExampleFrame&,void>* pInitalizedLink,
-                    const OUString* pURL = nullptr);
-    ~SwOneExampleFrame();
-
-    css::uno::Reference< css::frame::XModel > &       GetModel()      {return m_xModel;}
-    css::uno::Reference< css::frame::XController > &  GetController() {return m_xController;}
-    css::uno::Reference< css::text::XTextCursor > &   GetTextCursor() {return m_xCursor;}
-
-    void ClearDocument();
-
-    bool IsInitialized() const {return m_bIsInitialized;}
-    bool IsServiceAvailable() const {return m_bServiceAvailable;}
-
-    void CreatePopup(const Point& rPt);
-
-    static void     CreateErrorMessage();
-};
 
 class SW_DLLPUBLIC OneExampleFrame : public weld::CustomWidgetController
 {
