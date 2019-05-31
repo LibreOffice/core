@@ -23,7 +23,6 @@
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
-#include <svx/stddlg.hxx>
 #include <vcl/weld.hxx>
 #include <toxe.hxx>
 #include <memory>
