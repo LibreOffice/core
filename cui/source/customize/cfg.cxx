@@ -58,6 +58,7 @@
 #include <cfg.hxx>
 #include <SvxMenuConfigPage.hxx>
 #include <SvxToolbarConfigPage.hxx>
+#include <SvxNotebookbarConfigPage.hxx>
 #include <SvxConfigPageHelper.hxx>
 #include "eventdlg.hxx"
 #include <dialmgr.hxx>
@@ -193,6 +194,11 @@ static VclPtr<SfxTabPage> CreateSvxToolbarConfigPage( TabPageParent pParent, con
     return VclPtr<SvxToolbarConfigPage>::Create(pParent, *rSet);
 }
 
+static VclPtr<SfxTabPage> CreateSvxNotebookbarConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
+{
+    return VclPtr<SvxNotebookbarConfigPage>::Create(pParent, *rSet);
+}
+
 static VclPtr<SfxTabPage> CreateSvxEventConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
 {
     return VclPtr<SvxEventConfigPage>::Create(pParent, *rSet, SvxEventConfigPage::EarlyInit());
@@ -212,6 +218,7 @@ SvxConfigDialog::SvxConfigDialog(weld::Window * pParent, const SfxItemSet* pInSe
 
     AddTabPage("menus", CreateSvxMenuConfigPage, nullptr);
     AddTabPage("toolbars", CreateSvxToolbarConfigPage, nullptr);
+    AddTabPage("notebookbar", CreateSvxNotebookbarConfigPage, nullptr);
     AddTabPage("contextmenus", CreateSvxContextMenuConfigPage, nullptr);
     AddTabPage("keyboard", CreateKeyboardConfigPage, nullptr);
     AddTabPage("events", CreateSvxEventConfigPage, nullptr);
@@ -241,7 +248,7 @@ void SvxConfigDialog::SetFrame(const css::uno::Reference< css::frame::XFrame >& 
 void SvxConfigDialog::PageCreated(const OString &rId, SfxTabPage& rPage)
 {
     if (rId == "menus" || rId == "keyboard" ||
-        rId == "toolbars" || rId == "contextmenus")
+        rId == "toolbars" || rId == "notebookbar" || rId == "contextmenus")
     {
         rPage.SetFrame(m_xFrame);
     }
@@ -970,6 +977,11 @@ SvxConfigPage::SvxConfigPage(TabPageParent pParent, const SfxItemSet& rSet)
     , m_aUpdateDataTimer("UpdateDataTimer")
     , bInitialised(false)
     , pCurrentSaveInData(nullptr)
+    , m_xLeftFunctionLabel(m_xBuilder->weld_label("leftfunctionlabel"))
+    , m_xSearchLabel(m_xBuilder->weld_label("searchlabel"))
+    , m_xCategoryLabel(m_xBuilder->weld_label("categorylabel"))
+    , m_xCategoryListBox(m_xBuilder->weld_combo_box("commandcategorylist"))
+    , m_xCustomizeLabel(m_xBuilder->weld_label("customizelabel"))
     , m_xSearchEdit(m_xBuilder->weld_entry("searchEntry"))
     , m_xCommandCategoryListBox(new CommandCategoryListBox(m_xBuilder->weld_combo_box("commandcategorylist")))
     , m_xFunctions(new CuiConfigFunctionListBox(m_xBuilder->weld_tree_view("functions")))

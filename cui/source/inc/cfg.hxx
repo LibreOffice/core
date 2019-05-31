@@ -383,12 +383,17 @@ protected:
     std::unique_ptr<weld::Entry>               m_xSearchEdit;
     std::unique_ptr<CommandCategoryListBox>    m_xCommandCategoryListBox;
     std::unique_ptr<CuiConfigFunctionListBox>  m_xFunctions;
+    std::unique_ptr<weld::ComboBox>            m_xCategoryListBox;
 
     std::unique_ptr<weld::Label>               m_xDescriptionFieldLb;
+    std::unique_ptr<weld::Label>               m_xLeftFunctionLabel;
+    std::unique_ptr<weld::Label>               m_xSearchLabel;
+    std::unique_ptr<weld::Label>               m_xCategoryLabel;
     std::unique_ptr<weld::TextView>            m_xDescriptionField;
 
     // Right side of the dialog where the contents of the selected
     // menu or toolbar are displayed
+    std::unique_ptr<weld::Label>               m_xCustomizeLabel;
     std::unique_ptr<weld::ComboBox>            m_xTopLevelListBox;
     // Used to add and remove toolbars/menus
     std::unique_ptr<weld::MenuButton>          m_xGearBtn;
