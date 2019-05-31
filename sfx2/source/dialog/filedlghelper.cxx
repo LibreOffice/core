@@ -1897,7 +1897,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
 
     try
     {
-        OUString aAllFilterName = SfxResId( STR_SFX_IMPORT_ALL );
+        OUString aAllFilterName = SfxResId(STR_SFX_IMPORT_ALL_IMAGES);
         aAllFilterName = ::sfx2::addExtension( aAllFilterName, aExtensions, bIsInOpenMode, *this );
 
         xFltMgr->appendFilter( aAllFilterName, aExtensions );
