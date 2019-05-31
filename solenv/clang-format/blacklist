@@ -2739,7 +2739,6 @@ cui/source/dialogs/showcols.cxx
 cui/source/dialogs/splitcelldlg.cxx
 cui/source/dialogs/srchxtra.cxx
 cui/source/dialogs/thesdlg.cxx
-cui/source/dialogs/thesdlg_impl.hxx
 cui/source/dialogs/zoom.cxx
 cui/source/factory/cuiexp.cxx
 cui/source/factory/cuiresmgr.cxx

@@ -439,6 +439,7 @@ cui/uiconfig/ui/textanimtabpage.ui://GtkLabel[@id='FT_DELAY'] orphan-label
 cui/uiconfig/ui/textflowpage.ui://GtkLabel[@id='labelOrphan'] orphan-label
 cui/uiconfig/ui/textflowpage.ui://GtkLabel[@id='labelWidow'] orphan-label
 cui/uiconfig/ui/thesaurus.ui://GtkButton[@id='left'] button-no-label
+cui/uiconfig/ui/thesaurus.ui://GtkLabel[@id='notfound'] orphan-label
 cui/uiconfig/ui/tsaurldialog.ui://GtkLabel[@id='label2'] orphan-label
 cui/uiconfig/ui/tsaurldialog.ui://GtkTreeView[@id='urls:border'] no-labelled-by
 cui/uiconfig/ui/tsaurldialog.ui://GtkLabel[@id='enteraurl'] orphan-label

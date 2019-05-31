@@ -28,7 +28,7 @@
       <column type="gchararray"/>
       <!-- column-name weight1 -->
       <column type="gint"/>
-      <!-- column-name weight1 -->
+      <!-- column-name weight2 -->
       <column type="gint"/>
       <!-- column-name sensitive1 -->
       <column type="gboolean"/>
