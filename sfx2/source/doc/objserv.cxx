@@ -125,7 +125,7 @@
 #include <svx/unoshape.hxx>
 #include <com/sun/star/util/Color.hpp>
 
-#include <sfx2/autoredactdialog.hxx>
+#include <autoredactdialog.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
