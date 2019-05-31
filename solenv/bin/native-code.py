@@ -122,6 +122,7 @@ core_constructor_list = [
 # chart2/source/controller/chartcontroller.component
     "com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation",
     "com_sun_star_comp_chart2_ChartFrameLoader_get_implementation",
+    "com_sun_star_comp_chart2_WizardDialog_get_implementation",
 # comphelper/util/comphelp.component
     "com_sun_star_comp_MemoryStream",
     "com_sun_star_comp_task_OfficeRestartManager",
@@ -220,6 +221,7 @@ core_constructor_list = [
     "com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTexpand_get_implementation",
     "com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTscript_get_implementation",
 # vcl/vcl.android.component
+    "com_sun_star_comp_embed_HatchWindowFactory_get_implementation",
     "com_sun_star_graphic_GraphicObject_get_implementation",
     "com_sun_star_comp_graphic_GraphicProvider_get_implementation",
 # svx/util/svx.component
@@ -261,6 +263,8 @@ core_constructor_list = [
 # uui/util/uui.component
     "com_sun_star_comp_uui_UUIInteractionHandler_get_implementation",
 # xmloff/util/xo.component
+    "XMLMetaExportComponent_get_implementation",
+    "XMLMetaImportComponent_get_implementation",
     "XMLVersionListPersistence_get_implementation",
 # xmlscript/util/xmlscript.component
     "com_sun_star_comp_xmlscript_XMLBasicExporter",
