@@ -23,19 +23,20 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include <rtl/ref.hxx>
 #include <comphelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svl/svldllapi.h>
 #include <svl/hint.hxx>
 #include <svl/lstner.hxx>
-#include <svl/poolitem.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/stylesheetuser.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/solar.h>
 
 #include <memory>
+
+namespace rtl { template <class reference_type> class Reference; }
 
 // This is used as a flags enum in sw/, but only there,
 // so I don't pull in o3tl::typed_flags here
@@ -80,7 +81,6 @@ namespace o3tl {
 class SfxItemSet;
 class SfxItemPool;
 class SfxStyleSheetBasePool;
-class SvStream;
 
 namespace svl { class IndexedStyleSheets; }
 /*

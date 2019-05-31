@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <sal/log.hxx>
-#include <tools/tenccvt.hxx>
 #include <osl/diagnose.h>
 #include <unotools/intlwrapper.hxx>
 #include <svl/hint.hxx>

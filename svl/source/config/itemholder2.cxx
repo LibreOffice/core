@@ -28,7 +28,6 @@
 
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
-#include <svl/languageoptions.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/options.hxx>
 

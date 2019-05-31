@@ -22,9 +22,7 @@
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/Command.hpp>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
@@ -39,16 +37,13 @@
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppunit/TestCase.h>
 #include <cppunit/TestFixture.h>
-#include <cppunit/TestSuite.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/textenc.h>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/macros.h>
 #include <sal/types.h>

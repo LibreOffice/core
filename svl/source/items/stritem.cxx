@@ -18,7 +18,6 @@
  */
 
 #include <svl/stritem.hxx>
-#include <stringio.hxx>
 #include <libxml/xmlwriter.h>
 
 //  class SfxStringItem

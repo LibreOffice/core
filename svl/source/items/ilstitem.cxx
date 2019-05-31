@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/script/Converter.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>

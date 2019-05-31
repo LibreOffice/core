@@ -20,6 +20,7 @@
 #include "ostreamcontainer.hxx"
 
 #include <cppuhelper/queryinterface.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/sequence.hxx>
 
 

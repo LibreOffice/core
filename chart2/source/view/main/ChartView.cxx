@@ -100,6 +100,7 @@
 #include <sal/log.hxx>
 
 #include <tools/diagnose_ex.h>
+#include <tools/stream.hxx>
 
 #include <memory>
 namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }

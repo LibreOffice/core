@@ -21,10 +21,6 @@
 #include <stdio.h>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/ucb/InsertCommandArgument.hpp>
-#include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 
 #include <osl/time.h>
@@ -33,15 +29,12 @@
 #include <osl/file.hxx>
 #include <o3tl/enumrange.hxx>
 
-#include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>
-
-#include <ucbhelper/content.hxx>
 
 #include <unotools/useroptions.hxx>
 

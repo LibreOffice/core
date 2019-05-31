@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 
 #include <svtools/ctrltool.hxx>
+#include <tools/stream.hxx>
 
 #include <editeng/svxfont.hxx>
 #include "impedit.hxx"

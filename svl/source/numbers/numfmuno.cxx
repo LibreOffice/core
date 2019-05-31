@@ -18,7 +18,6 @@
  */
 
 #include <tools/color.hxx>
-#include <i18nlangtag/mslangid.hxx>
 #include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>

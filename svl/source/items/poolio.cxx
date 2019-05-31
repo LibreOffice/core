@@ -20,9 +20,7 @@
 #include <poolio.hxx>
 
 #include <sal/log.hxx>
-#include <tools/solar.h>
 #include <svl/itempool.hxx>
-#include <svl/SfxBroadcaster.hxx>
 
 #include <algorithm>
 #include <memory>

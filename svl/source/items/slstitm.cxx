@@ -23,9 +23,8 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/diagnose.h>
-#include <tools/stream.hxx>
-#include <stringio.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <tools/lineend.hxx>
 
 SfxPoolItem* SfxStringListItem::CreateDefault() { return new SfxStringListItem; }
 

@@ -21,10 +21,13 @@
 #define INCLUDED_SVL_SOURCE_NUMBERS_SUPSERVS_HXX
 
 #include <svl/numuno.hxx>
-#include <svl/zforlist.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <memory>
+
+namespace com::sun::star::uno { class XComponentContext; }
+
+class SvNumberFormatter;
 
 /**
  * SvNumberFormatsSupplierServiceObject - a number formats supplier which

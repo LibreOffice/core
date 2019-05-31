@@ -20,7 +20,6 @@
 #include <svl/visitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <osl/diagnose.h>
-#include <tools/stream.hxx>
 
 
 // virtual

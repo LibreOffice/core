@@ -28,6 +28,7 @@
 #include <bitmaps.hlst>
 #include <svx/dlgctrl.hxx>
 #include <svx/dialmgr.hxx>
+#include <tools/debug.hxx>
 #include <tools/poly.hxx>
 #include <vcl/region.hxx>
 #include <vcl/gradient.hxx>

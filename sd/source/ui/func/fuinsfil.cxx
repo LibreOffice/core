@@ -37,6 +37,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svxids.hrc>
+#include <tools/debug.hxx>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>

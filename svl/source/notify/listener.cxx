@@ -19,7 +19,6 @@
 
 #include <svl/listener.hxx>
 #include <svl/broadcast.hxx>
-#include <cassert>
 
 SvtListener::QueryBase::QueryBase( sal_uInt16 nId ) : mnId(nId) {}
 SvtListener::QueryBase::~QueryBase() {}

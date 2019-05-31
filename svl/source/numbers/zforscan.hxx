@@ -25,8 +25,12 @@
 #include <svl/nfsymbol.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
+#include <svl/zforlist.hxx>
 
-class SvNumberFormatter;
+class CalendarWrapper;
+class CharClass;
+class LocaleDataWrapper;
+
 struct ImpSvNumberformatInfo;
 
 

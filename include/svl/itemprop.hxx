@@ -19,15 +19,15 @@
 #ifndef INCLUDED_SVL_ITEMPROP_HXX
 #define INCLUDED_SVL_ITEMPROP_HXX
 
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svl/itemset.hxx>
 #include <svl/svldllapi.h>
 #include <vector>
 #include <memory>
+
+namespace com::sun::star::beans { class XPropertySetInfo; }
 
 /// map a property between beans::XPropertySet and SfxPoolItem
 struct SfxItemPropertyMapEntry

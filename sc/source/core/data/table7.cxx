@@ -20,6 +20,8 @@
 #include <drwlayer.hxx>
 #include <compressedarray.hxx>
 
+#include <tools/stream.hxx>
+
 bool ScTable::IsMerged( SCCOL nCol, SCROW nRow ) const
 {
     if (!ValidCol(nCol) || nCol >= GetAllocatedColumnsCount() )

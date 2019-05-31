@@ -24,16 +24,12 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/packages/NoEncryptionException.hpp>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/interfacecontainer.h>
 
-#include <ucbhelper/content.hxx>
+namespace com::sun::star::io { class XStream; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace ucbhelper { class Content; }
 
 struct FSStorage_Impl;
 class FSStorage : public css::lang::XTypeProvider

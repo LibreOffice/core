@@ -64,6 +64,7 @@
 #include <svx/svdomeas.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpool.hxx>
+#include <tools/stream.hxx>
 #include <tools/gen.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/obj3d.hxx>

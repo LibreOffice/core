@@ -20,7 +20,6 @@
 
 #include <svl/flagitem.hxx>
 #include <svl/poolitem.hxx>
-#include <tools/stream.hxx>
 #include <sal/log.hxx>
 
 

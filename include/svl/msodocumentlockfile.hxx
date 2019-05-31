@@ -13,8 +13,6 @@
 #include <svl/svldllapi.h>
 #include <svl/documentlockfile.hxx>
 
-#include <com/sun/star/lang/XComponent.hpp>
-
 #define MSO_WORD_LOCKFILE_SIZE 162
 #define MSO_EXCEL_AND_POWERPOINT_LOCKFILE_SIZE 165
 #define MSO_USERNAME_MAX_LENGTH 52

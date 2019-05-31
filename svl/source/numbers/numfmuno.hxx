@@ -21,7 +21,6 @@
 #define INCLUDED_SVL_SOURCE_NUMBERS_NUMFMUNO_HXX
 
 #include <com/sun/star/util/XNumberFormatter2.hpp>
-#include <com/sun/star/util/XNumberFormatPreviewer.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

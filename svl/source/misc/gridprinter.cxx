@@ -11,8 +11,8 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <mdds/multi_type_vector_types.hpp>
-#include <mdds/multi_type_vector_trait.hpp>
 #include <mdds/multi_type_vector_custom_func1.hpp>
+#include <mdds/multi_type_vector_macro.hpp>
 #include <mdds/multi_type_matrix.hpp>
 
 #include <iostream>

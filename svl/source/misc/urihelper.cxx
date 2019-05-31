@@ -29,15 +29,12 @@
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
-#include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
@@ -46,12 +43,15 @@
 #include <rtl/character.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <sal/log.hxx>
 #include <tools/inetmime.hxx>
 #include <unotools/charclass.hxx>
+
+namespace com::sun::star::ucb { class XCommandEnvironment; }
+namespace com::sun::star::ucb { class XContent; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace com::sun::star;
 

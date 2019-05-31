@@ -22,10 +22,11 @@
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
+
+namespace com::sun::star::lang { class XMultiServiceFactory; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 class FSStorageFactory : public ::cppu::WeakImplHelper< css::lang::XSingleServiceFactory,
                                                         css::lang::XServiceInfo >

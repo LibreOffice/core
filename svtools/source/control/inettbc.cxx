@@ -43,6 +43,7 @@
 #include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <salhelper/thread.hxx>
+#include <tools/debug.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/builderfactory.hxx>

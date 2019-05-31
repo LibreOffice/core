@@ -23,8 +23,6 @@
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
 
-class SvStream;
-
 
 class SVL_DLLPUBLIC SfxRangeItem : public SfxPoolItem
 {

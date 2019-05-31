@@ -18,9 +18,6 @@
  */
 
 #include <stdio.h>
-#include <float.h>
-#include <errno.h>
-#include <stdlib.h>
 #include <string_view>
 
 #include <comphelper/string.hxx>

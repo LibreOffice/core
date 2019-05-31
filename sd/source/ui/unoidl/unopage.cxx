@@ -71,6 +71,8 @@
 #include <vcl/dibtools.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoashp.hxx>
+#include <tools/debug.hxx>
+#include <tools/stream.hxx>
 
 using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationNodeSupplier;
