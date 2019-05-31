@@ -33,6 +33,8 @@
 #define ODF_FORMDROPDOWN_LISTENTRY "Dropdown_ListEntry"
 #define ODF_FORMDROPDOWN_RESULT "Dropdown_Selected"
 
+#define ODF_FORMDATE "vnd.oasis.opendocument.field.FORMDATE"
+
 #define ODF_TOC "vnd.oasis.opendocument.field.TOC"
 
 #define ODF_HYPERLINK "vnd.oasis.opendocument.field.HYPERLINK"

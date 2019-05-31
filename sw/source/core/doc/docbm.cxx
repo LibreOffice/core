@@ -342,6 +342,8 @@ IDocumentMarkAccess::MarkType IDocumentMarkAccess::GetType(const IMark& rBkmk)
         return MarkType::CHECKBOX_FIELDMARK;
     else if(*pMarkTypeInfo == typeid(DropDownFieldmark))
         return MarkType::DROPDOWN_FIELDMARK;
+    else if(*pMarkTypeInfo == typeid(DateFieldmark))
+        return MarkType::DATE_FIELDMARK;
     else if(*pMarkTypeInfo == typeid(NavigatorReminder))
         return MarkType::NAVIGATOR_REMINDER;
     else
@@ -422,6 +424,9 @@ namespace sw { namespace mark
             case IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK:
                 pMark = std::shared_ptr<IMark>(new DropDownFieldmark(rPaM));
                 break;
+            case IDocumentMarkAccess::MarkType::DATE_FIELDMARK:
+                pMark = std::make_unique<DateFieldmark>(rPaM);
+                break;
             case IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER:
                 pMark = std::shared_ptr<IMark>(new NavigatorReminder(rPaM));
                 break;
@@ -472,6 +477,7 @@ namespace sw { namespace mark
             case IDocumentMarkAccess::MarkType::TEXT_FIELDMARK:
             case IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK:
             case IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK:
+            case IDocumentMarkAccess::MarkType::DATE_FIELDMARK:
                 lcl_InsertMarkSorted(m_vFieldmarks, pMark);
                 break;
             case IDocumentMarkAccess::MarkType::ANNOTATIONMARK:
@@ -543,6 +549,12 @@ namespace sw { namespace mark
         {
             pMark = makeMark( rPaM, rName,
                     IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK,
+                    sw::mark::InsertMode::New);
+        }
+        else if(rType == ODF_FORMDATE)
+        {
+            pMark = makeMark( rPaM, rName,
+                    IDocumentMarkAccess::MarkType::DATE_FIELDMARK,
                     sw::mark::InsertMode::New);
         }
 
@@ -958,6 +970,7 @@ namespace sw { namespace mark
             case IDocumentMarkAccess::MarkType::TEXT_FIELDMARK:
             case IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK:
             case IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK:
+            case IDocumentMarkAccess::MarkType::DATE_FIELDMARK:
                 {
                     IDocumentMarkAccess::iterator_t ppFieldmark = lcl_FindMark(m_vFieldmarks, *ppMark);
                     if ( ppFieldmark != m_vFieldmarks.end() )
@@ -1118,6 +1131,11 @@ namespace sw { namespace mark
         else if(rNewType == ODF_FORMCHECKBOX)
         {
             if (dynamic_cast<::sw::mark::DropDownFieldmark*>(pFieldmark))
+                bActualChange = true;
+        }
+        else if(rNewType == ODF_FORMDATE)
+        {
+            if (dynamic_cast<::sw::mark::DateFieldmark*>(pFieldmark))
                 bActualChange = true;
         }
 
