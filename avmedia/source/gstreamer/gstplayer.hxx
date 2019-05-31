@@ -20,6 +20,8 @@
 #ifndef INCLUDED_AVMEDIA_SOURCE_GSTREAMER_GSTPLAYER_HXX
 #define INCLUDED_AVMEDIA_SOURCE_GSTREAMER_GSTPLAYER_HXX
 
+#include <config_vclplug.h>
+
 #include <osl/conditn.hxx>
 #include "gstcommon.hxx"
 
@@ -27,7 +29,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-#if defined(ENABLE_GTKSINK)
+#if ENABLE_GTK3
 #    include <gtk/gtk.h>
 #endif
 
@@ -83,7 +85,7 @@ private:
     // Add elements and pipeline here
     GstElement*             mpPlaybin;  // the playbin is also a pipeline
     GstElement*             mpVolumeControl;  // the playbin is also a pipeline
-#if defined(ENABLE_GTKSINK)
+#if ENABLE_GTK3
     GtkWidget*              mpGtkWidget;
 #endif
     bool                    mbUseGtkSink;
