@@ -380,15 +380,21 @@ protected:
 
     // Left side of the dialog where command categories and the available
     // commands in them are displayed as a searchable list
-    std::unique_ptr<weld::Entry>               m_xSearchEdit;
     std::unique_ptr<CommandCategoryListBox>    m_xCommandCategoryListBox;
     std::unique_ptr<CuiConfigFunctionListBox>  m_xFunctions;
 
+    std::unique_ptr<weld::Label>               m_xCategoryLabel;
+    std::unique_ptr<weld::ComboBox>            m_xCategoryListBox;
     std::unique_ptr<weld::Label>               m_xDescriptionFieldLb;
     std::unique_ptr<weld::TextView>            m_xDescriptionField;
+    std::unique_ptr<weld::Label>               m_xLeftFunctionLabel;
+    std::unique_ptr<weld::Entry>               m_xSearchEdit;
+    std::unique_ptr<weld::Label>               m_xSearchLabel;
+
 
     // Right side of the dialog where the contents of the selected
     // menu or toolbar are displayed
+    std::unique_ptr<weld::Label>               m_xCustomizeLabel;
     std::unique_ptr<weld::ComboBox>            m_xTopLevelListBox;
     // Used to add and remove toolbars/menus
     std::unique_ptr<weld::MenuButton>          m_xGearBtn;
@@ -440,6 +446,8 @@ protected:
 
     void                InsertEntryIntoUI(SvxConfigEntry* pNewEntryData,
                                           int nPos, int nStartCol);
+    void InsertEntryIntoNotebookbarTabUI(OUString& UIItemID, OUString& UIItemCommand, int nPos,
+                                         int nStartCol, int space);
 
     SvxEntries*     FindParentForChild( SvxEntries* pParentEntries,
                                         SvxConfigEntry* pChildData );
