@@ -277,6 +277,8 @@
 #define FN_INSERT_CHECKBOX_FORMFIELD    (FN_INSERT2 + 23)
 #define FN_INSERT_DROPDOWN_FORMFIELD    (FN_INSERT2 + 24)
 
+// MSO content controls
+#define FN_INSERT_DATE_FORMFIELD        (FN_INSERT2 + 25)
 
 // Region: Format
 #define FN_AUTOFORMAT_APPLY     (FN_FORMAT + 1 ) /* apply autoformat options */

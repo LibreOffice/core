@@ -32,7 +32,7 @@
       </menu:menu>
       <menu:menu menu:id=".uno:MSCompatContentControls">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:DateField"/>
+          <menu:menuitem menu:id=".uno:DatePickerFormField"/>
         </menu:menupopup>
       </menu:menu>
     </menu:menupopup>

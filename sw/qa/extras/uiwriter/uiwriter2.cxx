@@ -87,6 +87,7 @@ public:
     void testImageCommentAtChar();
     void testTdf124261();
     void testShapePageMove();
+    void testDateFormFieldInsertion();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
@@ -118,6 +119,7 @@ public:
     CPPUNIT_TEST(testImageCommentAtChar);
     CPPUNIT_TEST(testTdf124261);
     CPPUNIT_TEST(testShapePageMove);
+    CPPUNIT_TEST(testDateFormFieldInsertion);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1331,6 +1333,38 @@ void SwUiWriterTest2::testShapePageMove()
     // Actual: 12", i.e. the shape was anchored to the last paragraph of the 1st page, not to a
     // paragraph on the 2nd page.
     CPPUNIT_ASSERT_EQUAL(nNodeIndex, pAnchor->nNode.GetIndex());
+}
+
+void SwUiWriterTest2::testDateFormFieldInsertion()
+{
+    SwDoc* pDoc = createDoc();
+    CPPUNIT_ASSERT(pDoc);
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT(pMarkAccess);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+
+    // Insert a date form field
+    lcl_dispatchCommand(mxComponent, ".uno:DatePickerFormField", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+
+    // Check whether the fieldmark is created
+    auto aIter = pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
+    ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(aIter->get());
+    CPPUNIT_ASSERT(pFieldmark);
+    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+
+    // Undo insertion
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+
+    // Redo insertion
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    aIter = pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
+    pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(aIter->get());
+    CPPUNIT_ASSERT(pFieldmark);
+    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
