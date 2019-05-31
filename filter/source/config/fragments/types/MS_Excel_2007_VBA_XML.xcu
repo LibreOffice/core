@@ -22,6 +22,6 @@
     <prop oor:name="MediaType"><value>application/vnd.ms-excel.sheet.macroEnabled.12</value></prop>
     <prop oor:name="Preferred"><value>false</value></prop>
     <prop oor:name="PreferredFilter"><value>Calc MS Excel 2007 VBA XML</value></prop>
-    <prop oor:name="UIName"><value xml:lang="en-US">Microsoft Excel 2007-2016 VBA XML</value></prop>
+    <prop oor:name="UIName"><value xml:lang="en-US">Microsoft Excel 2007–365 VBA XML</value></prop>
     <prop oor:name="ClipboardFormat"/>
 </node>

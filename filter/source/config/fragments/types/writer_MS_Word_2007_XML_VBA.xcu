@@ -12,6 +12,6 @@
         <prop oor:name="MediaType"><value>application/msword</value></prop>
         <prop oor:name="Preferred"><value>true</value></prop>
         <prop oor:name="PreferredFilter"><value>MS Word 2007 XML VBA</value></prop>
-        <prop oor:name="UIName"><value xml:lang="en-US">Word 2007–2019 VBA</value></prop>
+        <prop oor:name="UIName"><value xml:lang="en-US">Word 2007–365 VBA</value></prop>
         <prop oor:name="ClipboardFormat"><value>MSWordDoc</value></prop>
     </node>

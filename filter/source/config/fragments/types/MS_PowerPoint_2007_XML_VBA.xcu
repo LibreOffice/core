@@ -23,6 +23,6 @@
     <prop oor:name="MediaType"><value>application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml</value></prop>
     <prop oor:name="Preferred"><value>true</value></prop>
     <prop oor:name="PreferredFilter"><value>Impress MS PowerPoint 2007 XML VBA</value></prop>
-    <prop oor:name="UIName"><value xml:lang="en-US">PowerPoint 2007–2019 VBA</value></prop>
+    <prop oor:name="UIName"><value xml:lang="en-US">PowerPoint 2007–365 VBA</value></prop>
     <prop oor:name="ClipboardFormat"/>
 </node>

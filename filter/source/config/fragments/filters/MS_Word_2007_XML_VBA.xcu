@@ -10,7 +10,7 @@
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.WriterFilter</value></prop>
         <prop oor:name="UserData"><value>OXML</value></prop>
-        <prop oor:name="UIName"><value xml:lang="en-US">Word 2007–2019 VBA</value></prop>
+        <prop oor:name="UIName"><value xml:lang="en-US">Word 2007–365 VBA</value></prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_MS_Word_2007_VBA</value></prop>
         <prop oor:name="TemplateName"/>
