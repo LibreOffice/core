@@ -114,7 +114,7 @@ VclPtr<TabPage> SwMailMergeWizard::createPage(WizardState _nState)
             SetRoadmapHelpId("modules/swriter/ui/mmsalutationpage/MMSalutationPage");
         break;
         case MM_LAYOUTPAGE         :
-            pRet = VclPtr<SwMailMergeLayoutPage>::Create(this);
+            pRet = VclPtr<SwMailMergeLayoutPage>::Create(this, TabPageParent(this));
             SetRoadmapHelpId("modules/swriter/ui/mmlayoutpage/MMLayoutPage");
         break;
     }
