@@ -25,6 +25,8 @@
 
 #include <map>
 
+using namespace com::sun::star;
+
 namespace
 {
 std::map<OUString, QClipboard::Mode> g_nameToClipboardMap
@@ -95,7 +97,7 @@ std::vector<css::datatransfer::DataFlavor> Qt5Transferable::getTransferDataFlavo
             else
             {
                 aFlavor.MimeType = toOUString(rMimeType);
-                aFlavor.DataType = cppu::UnoType<Sequence<sal_Int8>>::get();
+                aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
                 aVector.push_back(aFlavor);
             }
         }
@@ -143,7 +145,8 @@ Qt5Transferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
         {
             QString clipboardContent = mimeData->html();
             std::string aStr = clipboardContent.toStdString();
-            Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()), aStr.length());
+            uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()),
+                                         aStr.length());
             aRet <<= aSeq;
         }
         else if (rFlavor.MimeType.startsWith("image") && mimeData->hasImage())
@@ -157,7 +160,7 @@ Qt5Transferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
             buffer.open(QIODevice::WriteOnly);
             image.save(&buffer, sFormat.toUtf8().getStr());
 
-            Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(ba.data()), ba.size());
+            uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(ba.data()), ba.size());
             aRet <<= aSeq;
         }
     }
@@ -165,7 +168,7 @@ Qt5Transferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
     return aRet;
 }
 
-VclQt5Clipboard::VclQt5Clipboard(const OUString& aModeString)
+Qt5Clipboard::Qt5Clipboard(const OUString& aModeString)
     : cppu::WeakComponentImplHelper<datatransfer::clipboard::XSystemClipboard,
                                     datatransfer::clipboard::XFlushableClipboard, XServiceInfo>(
           m_aMutex)
@@ -174,34 +177,34 @@ VclQt5Clipboard::VclQt5Clipboard(const OUString& aModeString)
     , m_aUuid(QUuid::createUuid().toByteArray())
 {
     connect(QApplication::clipboard(), &QClipboard::changed, this,
-            &VclQt5Clipboard::handleClipboardChange, Qt::DirectConnection);
+            &Qt5Clipboard::handleClipboardChange, Qt::DirectConnection);
 }
 
-void VclQt5Clipboard::flushClipboard()
+void Qt5Clipboard::flushClipboard()
 {
     SolarMutexGuard aGuard;
     return;
 }
 
-VclQt5Clipboard::~VclQt5Clipboard() {}
+Qt5Clipboard::~Qt5Clipboard() {}
 
-OUString VclQt5Clipboard::getImplementationName()
+OUString Qt5Clipboard::getImplementationName()
 {
-    return OUString("com.sun.star.datatransfer.VclQt5Clipboard");
+    return OUString("com.sun.star.datatransfer.Qt5Clipboard");
 }
 
-Sequence<OUString> VclQt5Clipboard::getSupportedServiceNames()
+uno::Sequence<OUString> Qt5Clipboard::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet{ "com.sun.star.datatransfer.clipboard.SystemClipboard" };
+    uno::Sequence<OUString> aRet{ "com.sun.star.datatransfer.clipboard.SystemClipboard" };
     return aRet;
 }
 
-sal_Bool VclQt5Clipboard::supportsService(const OUString& ServiceName)
+sal_Bool Qt5Clipboard::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Reference<css::datatransfer::XTransferable> VclQt5Clipboard::getContents()
+uno::Reference<css::datatransfer::XTransferable> Qt5Clipboard::getContents()
 {
     if (!m_aContents.is())
         m_aContents = new Qt5Transferable(m_aClipboardMode);
@@ -209,17 +212,18 @@ Reference<css::datatransfer::XTransferable> VclQt5Clipboard::getContents()
     return m_aContents;
 }
 
-void VclQt5Clipboard::setContents(
-    const Reference<css::datatransfer::XTransferable>& xTrans,
-    const Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
+void Qt5Clipboard::setContents(
+    const uno::Reference<css::datatransfer::XTransferable>& xTrans,
+    const uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
-    Reference<datatransfer::clipboard::XClipboardOwner> xOldOwner(m_aOwner);
-    Reference<datatransfer::XTransferable> xOldContents(m_aContents);
+    uno::Reference<datatransfer::clipboard::XClipboardOwner> xOldOwner(m_aOwner);
+    uno::Reference<datatransfer::XTransferable> xOldContents(m_aContents);
     m_aContents = xTrans;
     m_aOwner = xClipboardOwner;
 
-    std::vector<Reference<datatransfer::clipboard::XClipboardListener>> aListeners(m_aListeners);
+    std::vector<uno::Reference<datatransfer::clipboard::XClipboardListener>> aListeners(
+        m_aListeners);
     datatransfer::clipboard::ClipboardEvent aEv;
 
     QClipboard* clipboard = QApplication::clipboard();
@@ -264,9 +268,9 @@ void VclQt5Clipboard::setContents(
         {
             css::datatransfer::DataFlavor aFlavor;
             aFlavor.MimeType = "text/html";
-            aFlavor.DataType = cppu::UnoType<Sequence<sal_Int8>>::get();
+            aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
 
-            Any aValue;
+            uno::Any aValue;
             try
             {
                 aValue = xTrans->getTransferData(aFlavor);
@@ -275,9 +279,9 @@ void VclQt5Clipboard::setContents(
             {
             }
 
-            if (aValue.getValueType() == cppu::UnoType<Sequence<sal_Int8>>::get())
+            if (aValue.getValueType() == cppu::UnoType<uno::Sequence<sal_Int8>>::get())
             {
-                Sequence<sal_Int8> aData;
+                uno::Sequence<sal_Int8> aData;
                 aValue >>= aData;
 
                 OUString aHtmlAsString(reinterpret_cast<const char*>(aData.getConstArray()),
@@ -293,9 +297,9 @@ void VclQt5Clipboard::setContents(
             css::datatransfer::DataFlavor aFlavor;
             //FIXME: other image formats?
             aFlavor.MimeType = "image/png";
-            aFlavor.DataType = cppu::UnoType<Sequence<sal_Int8>>::get();
+            aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
 
-            Any aValue;
+            uno::Any aValue;
             try
             {
                 aValue = xTrans->getTransferData(aFlavor);
@@ -304,9 +308,9 @@ void VclQt5Clipboard::setContents(
             {
             }
 
-            if (aValue.getValueType() == cppu::UnoType<Sequence<sal_Int8>>::get())
+            if (aValue.getValueType() == cppu::UnoType<uno::Sequence<sal_Int8>>::get())
             {
-                Sequence<sal_Int8> aData;
+                uno::Sequence<sal_Int8> aData;
                 aValue >>= aData;
 
                 QImage image;
@@ -324,7 +328,7 @@ void VclQt5Clipboard::setContents(
             aFlavor.MimeType = "text/plain;charset=utf-16";
             aFlavor.DataType = cppu::UnoType<OUString>::get();
 
-            Any aValue;
+            uno::Any aValue;
             try
             {
                 aValue = xTrans->getTransferData(aFlavor);
@@ -333,7 +337,7 @@ void VclQt5Clipboard::setContents(
             {
             }
 
-            if (aValue.getValueTypeClass() == TypeClass_STRING)
+            if (aValue.getValueTypeClass() == uno::TypeClass_STRING)
             {
                 OUString aString;
                 aValue >>= aString;
@@ -359,20 +363,20 @@ void VclQt5Clipboard::setContents(
     }
 }
 
-OUString VclQt5Clipboard::getName() { return m_aClipboardName; }
+OUString Qt5Clipboard::getName() { return m_aClipboardName; }
 
-sal_Int8 VclQt5Clipboard::getRenderingCapabilities() { return 0; }
+sal_Int8 Qt5Clipboard::getRenderingCapabilities() { return 0; }
 
-void VclQt5Clipboard::addClipboardListener(
-    const Reference<datatransfer::clipboard::XClipboardListener>& listener)
+void Qt5Clipboard::addClipboardListener(
+    const uno::Reference<datatransfer::clipboard::XClipboardListener>& listener)
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
 
     m_aListeners.push_back(listener);
 }
 
-void VclQt5Clipboard::removeClipboardListener(
-    const Reference<datatransfer::clipboard::XClipboardListener>& listener)
+void Qt5Clipboard::removeClipboardListener(
+    const uno::Reference<datatransfer::clipboard::XClipboardListener>& listener)
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
 
@@ -380,7 +384,7 @@ void VclQt5Clipboard::removeClipboardListener(
                        m_aListeners.end());
 }
 
-void VclQt5Clipboard::handleClipboardChange(QClipboard::Mode aMode)
+void Qt5Clipboard::handleClipboardChange(QClipboard::Mode aMode)
 {
     // if system clipboard content has changed and current content was not created by
     // this clipboard itself, clear the own current content
