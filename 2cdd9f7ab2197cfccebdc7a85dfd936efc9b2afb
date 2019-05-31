@@ -16,6 +16,24 @@
       "revId": "2cdd9f7ab2197cfccebdc7a85dfd936efc9b2afb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_dde427af",
+        "filename": "avmedia/source/gstreamer/gstplayer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-05-31T13:18:49Z",
+      "side": 1,
+      "message": "\u0027git grep -i packagekit\u0027 doesn\u0027t show anything in avmedia, but elsewhere. I didn\u0027t take a closer look yet, will do. In case, I\u0027d rather prefer to have it in a separate change, though (if reasonably easy to implement).",
+      "parentUuid": "3fa0c359_5d7ed76b",
+      "revId": "2cdd9f7ab2197cfccebdc7a85dfd936efc9b2afb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
