@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_MAILMRGE_HXX
 
 #include <memory>
-#include <svx/stddlg.hxx>
+#include <sfx2/basedlgs.hxx>
 
 #include <vcl/button.hxx>
 
@@ -46,6 +46,17 @@ namespace com{namespace sun{namespace star{
         class XConnection;
     }
 }}}
+
+class SvxStandardDialog : public SfxModalDialog
+{
+public:
+    SvxStandardDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
+
+    short           Execute() override;
+
+protected:
+    virtual void    Apply() = 0;
+};
 
 class SwMailMergeDlg : public SvxStandardDialog
 {
