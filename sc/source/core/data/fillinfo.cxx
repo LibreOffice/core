@@ -40,6 +40,8 @@
 #include <cellvalue.hxx>
 #include <mtvcellfunc.hxx>
 
+#include <algorithm>
+#include <limits>
 #include <vector>
 #include <memory>
 
@@ -442,9 +444,7 @@ void ScDocument::FillInfo(
             // TODO: Optimize this loop.
             if (!ColHidden(nX, nTab))
             {
-                sal_uInt16 nThisWidth = static_cast<sal_uInt16>(GetColWidth( nX, nTab ) * fColScale);
-                if (!nThisWidth)
-                    nThisWidth = 1;
+                sal_uInt16 nThisWidth = static_cast<sal_uInt16>(std::clamp(GetColWidth( nX, nTab ) * fColScale, 1.0, double(std::numeric_limits<sal_uInt16>::max())));
 
                 pRowInfo[0].pCellInfo[nArrCol].nWidth = nThisWidth;           //TODO: this should be enough
 
