@@ -24,6 +24,10 @@ class Qt5Transferable : public cppu::WeakImplHelper<css::datatransfer::XTransfer
     Qt5Transferable(const Qt5Transferable&) = delete;
 
 protected:
+    /**
+     * for D'n'D this is just a reference, but for the Clipboard it's a deep copy,
+     * which must be deleted, so just keep it accessible for sub classes.
+     **/
     const QMimeData* m_pMimeData;
 
     Qt5Transferable(const QMimeData* pMimeData);
