@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_CNTTAB_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CNTTAB_HXX
 
-#include <svx/stddlg.hxx>
 #include <sfx2/tabdlg.hxx>
 
 #include <tox.hxx>

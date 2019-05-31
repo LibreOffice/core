@@ -21,7 +21,6 @@
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include <svx/stddlg.hxx>
 #include <vcl/weld.hxx>
 
 class SvxInsRowColDlg : public SvxAbstractInsRowColDlg, public weld::GenericDialogController
