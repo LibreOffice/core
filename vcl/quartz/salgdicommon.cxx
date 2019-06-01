@@ -864,8 +864,10 @@ bool AquaSalGraphics::drawPolyLine(
         return false;
 #endif
 
-    // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
-    const basegfx::B2DVector aLineWidths(rObjectToDevice * rLineWidths);
+    // need to check/handle LineWidth when ObjectToDevice transformation is used
+    const basegfx::B2DVector aDeviceLineWidths(rObjectToDevice * rLineWidths);
+    const bool bCorrectLineWidth(aDeviceLineWidths.getX() < 1.0 && rLineWidths.getX() >= 1.0);
+    const basegfx::B2DVector aLineWidths(bCorrectLineWidth ? rLineWidths : aDeviceLineWidths);
 
     // #i101491# Aqua does not support B2DLineJoin::NONE; return false to use
     // the fallback (own geometry preparation)
