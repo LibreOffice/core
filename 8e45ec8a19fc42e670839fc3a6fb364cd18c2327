@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_e89283f6",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-06-01T08:19:33Z",
+      "side": 1,
+      "message": "How about a shorter \"Use Page/Slide \u003e Properties... in Draw/Impress to...\"?",
+      "range": {
+        "startLine": 133,
+        "startChar": 39,
+        "endLine": 133,
+        "endChar": 43
+      },
+      "revId": "8e45ec8a19fc42e670839fc3a6fb364cd18c2327",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
