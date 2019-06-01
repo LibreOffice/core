@@ -956,36 +956,7 @@ ScStyleObj::~ScStyleObj()
 
 // XUnoTunnel
 
-sal_Int64 SAL_CALL ScStyleObj::getSomething(
-                const uno::Sequence<sal_Int8 >& rId )
-{
-    if ( rId.getLength() == 16 &&
-          0 == memcmp( getUnoTunnelId().getConstArray(),
-                                    rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    return 0;
-}
-
-namespace
-{
-    class theScStyleObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScStyleObjUnoTunnelId> {};
-}
-
-const uno::Sequence<sal_Int8>& ScStyleObj::getUnoTunnelId()
-{
-    return theScStyleObjUnoTunnelId::get().getSeq();
-}
-
-ScStyleObj* ScStyleObj::getImplementation(const uno::Reference<uno::XInterface>& rObj)
-{
-    ScStyleObj* pRet = nullptr;
-    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
-    if (xUT.is())
-        pRet = reinterpret_cast<ScStyleObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
-    return pRet;
-}
+UNO3_GETIMPLEMENTATION_IMPL(ScStyleObj);
 
 void ScStyleObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {

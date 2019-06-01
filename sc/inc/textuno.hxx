@@ -27,6 +27,7 @@
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
@@ -236,10 +237,7 @@ public:
                             getEnd() override;
 
                             // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScCellTextCursor* getImplementation(const css::uno::Reference< css::uno::XInterface>& rObj);
+    UNO3_GETIMPLEMENTATION_DECL(ScCellTextCursor)
 };
 
 class ScHeaderFooterTextCursor : public SvxUnoTextCursor
@@ -265,10 +263,7 @@ public:
                             getEnd() override;
 
                             // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScHeaderFooterTextCursor* getImplementation(const css::uno::Reference<css::uno::XInterface>& rObj);
+    UNO3_GETIMPLEMENTATION_DECL(ScHeaderFooterTextCursor)
 };
 
 class ScDrawTextCursor : public SvxUnoTextCursor
@@ -295,10 +290,7 @@ public:
                             getEnd() override;
 
                             // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScDrawTextCursor* getImplementation(const css::uno::Reference<css::uno::XInterface>& rObj);
+    UNO3_GETIMPLEMENTATION_DECL(ScDrawTextCursor)
 };
 
 // ScAnnotationTextCursor isn't needed anymore - SvxUnoTextCursor is used instead

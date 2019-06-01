@@ -29,6 +29,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -73,16 +74,13 @@ class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
         virtual sal_Int32 SAL_CALL getCertificateUsage( ) override;
 
         //Methods from XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+        UNO3_GETIMPLEMENTATION_DECL(X509Certificate_MSCryptImpl)
 
         /// @see xmlsecurity::Certificate::getSHA256Thumbprint().
         virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() override;
 
         /// @see xmlsecurity::Certificate::getSignatureMethodAlgorithm().
         virtual svl::crypto::SignatureMethodAlgorithm getSignatureMethodAlgorithm() override;
-
-        static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
-        static X509Certificate_MSCryptImpl* getImplementation( const css::uno::Reference< css::uno::XInterface >& rObj ) ;
 
         //Helper methods
         void setMswcryCert( const CERT_CONTEXT* cert ) ;

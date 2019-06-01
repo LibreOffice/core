@@ -13,6 +13,7 @@
 #include <functional>
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
 class AsyncFunc : public cppu::WeakImplHelper<css::lang::XUnoTunnel>
@@ -24,14 +25,10 @@ public:
     AsyncFunc(const std::function<void()>&);
     virtual ~AsyncFunc() override;
 
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static AsyncFunc* getImplementation(const css::uno::Reference<css::uno::XInterface>&);
-
     void Execute();
 
     //XUnoTunnel
-    virtual sal_Int64 SAL_CALL
-    getSomething(const css::uno::Sequence<sal_Int8>& aIdentifier) override;
+    UNO3_GETIMPLEMENTATION_DECL(AsyncFunc)
 };
 
 #endif

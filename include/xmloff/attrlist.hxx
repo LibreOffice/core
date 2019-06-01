@@ -26,6 +26,7 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <memory>
 
@@ -45,11 +46,8 @@ public:
         css::xml::sax::XAttributeList> & rAttrList );
     virtual ~SvXMLAttributeList() override;
 
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
-    static SvXMLAttributeList* getImplementation( const css::uno::Reference< css::uno::XInterface >& ) throw();
-
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+    UNO3_GETIMPLEMENTATION_DECL(SvXMLAttributeList)
 
     // css::xml::sax::XAttributeList
     virtual sal_Int16 SAL_CALL getLength() override;

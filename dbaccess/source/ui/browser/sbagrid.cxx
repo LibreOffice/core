@@ -71,7 +71,6 @@
 #include <connectivity/dbconversion.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -506,16 +505,6 @@ void SAL_CALL SbaXGridPeer::removeStatusListener(const Reference< css::frame::XS
         pCont->removeInterface(xControl);
 }
 
-namespace
-{
-    class theSbaXGridPeerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSbaXGridPeerUnoTunnelId > {};
-}
-
-const Sequence< sal_Int8 > & SbaXGridPeer::getUnoTunnelId()
-{
-    return theSbaXGridPeerUnoTunnelId::get().getSeq();
-}
-
 Sequence< Type > SAL_CALL SbaXGridPeer::getTypes()
 {
     return comphelper::concatSequences(
@@ -523,23 +512,7 @@ Sequence< Type > SAL_CALL SbaXGridPeer::getTypes()
         Sequence { cppu::UnoType<css::frame::XDispatch>::get() });
 }
 
-// return implementation specific data
-sal_Int64 SAL_CALL SbaXGridPeer::getSomething( const Sequence< sal_Int8 > & rId )
-{
-    if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return reinterpret_cast< sal_Int64 >( this );
-
-    return FmXGridPeer::getSomething(rId);
-}
-
-SbaXGridPeer* SbaXGridPeer::getImplementation(const Reference< XInterface >& _rxIFace)
-{
-    Reference< XUnoTunnel > xTunnel(
-        _rxIFace, UNO_QUERY);
-    if (xTunnel.is())
-        return reinterpret_cast<SbaXGridPeer*>(xTunnel->getSomething(getUnoTunnelId()));
-    return nullptr;
-}
+UNO3_GETIMPLEMENTATION2_IMPL(SbaXGridPeer, FmXGridPeer);
 
 VclPtr<FmGridControl> SbaXGridPeer::imp_CreateControl(vcl::Window* pParent, WinBits nStyle)
 {

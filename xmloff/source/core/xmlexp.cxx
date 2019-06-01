@@ -81,7 +81,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <PropertySetMerger.hxx>
 
 #include <svl/urihelper.hxx>
@@ -2038,41 +2037,8 @@ XMLImageMapExport& SvXMLExport::GetImageMapExport()
     return *mpImageMapExport;
 }
 
-namespace
-{
-    class theSvXMLExportUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvXMLExportUnoTunnelId> {};
-}
-
 // XUnoTunnel & co
-const uno::Sequence< sal_Int8 > & SvXMLExport::getUnoTunnelId() throw()
-{
-    return theSvXMLExportUnoTunnelId::get().getSeq();
-}
-
-SvXMLExport* SvXMLExport::getImplementation( const uno::Reference< uno::XInterface >& xInt ) throw()
-{
-    uno::Reference< lang::XUnoTunnel > xUT( xInt, uno::UNO_QUERY );
-    if( xUT.is() )
-    {
-        return
-            reinterpret_cast<SvXMLExport*>(
-                sal::static_int_cast<sal_IntPtr>(
-                    xUT->getSomething( SvXMLExport::getUnoTunnelId())));
-    }
-    else
-        return nullptr;
-}
-
-// XUnoTunnel
-sal_Int64 SAL_CALL SvXMLExport::getSomething( const uno::Sequence< sal_Int8 >& rId )
-{
-    if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(),
-                                                         rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
-    }
-    return 0;
-}
+UNO3_GETIMPLEMENTATION_IMPL(SvXMLExport);
 
 void SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent > const & rComp )
 {
