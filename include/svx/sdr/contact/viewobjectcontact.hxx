@@ -20,10 +20,7 @@
 #ifndef INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACT_HXX
 #define INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACT_HXX
 
-#include <sal/types.h>
-
 #include <memory>
-#include <vector>
 #include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 

@@ -22,7 +22,6 @@
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 
 
 namespace sdr

@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_SDR_ANIMATION_ANIMATIONSTATE_HXX
 
 #include <sal/types.h>
-#include <vector>
 #include <svx/sdr/animation/scheduler.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 

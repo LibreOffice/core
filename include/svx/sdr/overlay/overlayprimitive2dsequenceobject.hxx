@@ -22,7 +22,6 @@
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 
 
 namespace sdr

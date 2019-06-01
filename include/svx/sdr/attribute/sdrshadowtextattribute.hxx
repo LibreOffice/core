@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_SDR_ATTRIBUTE_SDRSHADOWTEXTATTRIBUTE_HXX
 #define INCLUDED_SVX_SDR_ATTRIBUTE_SDRSHADOWTEXTATTRIBUTE_HXX
 
-#include <sal/types.h>
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
 

@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_SDR_TABLE_TABLECONTROLLER_HXX
 
 #include <com/sun/star/util/XModifyListener.hpp>
-#include <com/sun/star/table/XTable.hpp>
 #include <rtl/ref.hxx>
 
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
