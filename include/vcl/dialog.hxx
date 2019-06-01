@@ -188,7 +188,7 @@ class VCL_DLLPUBLIC ModelessDialog : public Dialog
                     ModelessDialog (const ModelessDialog &) = delete;
                     ModelessDialog & operator= (const ModelessDialog &) = delete;
 
-public:
+protected:
     explicit        ModelessDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, Dialog::InitFlag eFlag = Dialog::InitFlag::Default );
 };
 
