@@ -20,10 +20,8 @@
 #include <hintids.hxx>
 
 #include <o3tl/any.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/help.hxx>
-#include <vcl/builderfactory.hxx>
 #include <svl/stritem.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/pathoptions.hxx>
@@ -46,7 +44,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <svl/urihelper.hxx>
 #include <unotools/charclass.hxx>
-#include <vcl/treelistentry.hxx>
 #include <swwait.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
