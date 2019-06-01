@@ -308,11 +308,11 @@ ways and often both.
 	Window that has already been destroyed. This can easily
 	happen via this sort of pattern:
 
-	ModelessDialog *pDlg = VclPtr<ModelessDialog>(nullptr /* parent */);
+	ModalDialog *pDlg = VclPtr<ModalDialog>(nullptr /* parent */);
 	// by here the pDlg quite probably points to free'd memory...
 
 	It is necessary in these cases to ensure that the *pDlg is
-	a VclPtr<ModelessDialog> instead.
+	a VclPtr<ModalDialog> instead.
 
 ** It crashes with some invalid memory #2...
 

@@ -299,7 +299,6 @@ void LifecycleTest::testLeakage()
         aObjects.push_back(LeakTestObject::Create<VclVButtonBox>(xVBox));
     }
 
-    aObjects.push_back(LeakTestObject::Create<ModelessDialog>(xParent, "PrintProgressDialog", "vcl/ui/printprogressdialog.ui"));
     aObjects.push_back(LeakTestObject::Create<ModalDialog>(xParent, "PrintProgressDialog", "vcl/ui/printprogressdialog.ui"));
     xParent.clear();
 
