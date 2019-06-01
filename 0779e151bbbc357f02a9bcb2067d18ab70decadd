@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_63b694fd",
+        "filename": "cui/source/customize/SvxNotebookbarConfigPage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-06-01T18:25:19Z",
+      "side": 1,
+      "message": "Try to open the toolcontents dialog box",
+      "range": {
+        "startLine": 99,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 24
+      },
+      "revId": "0779e151bbbc357f02a9bcb2067d18ab70decadd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_83b960ea",
+        "filename": "cui/source/customize/SvxNotebookbarConfigPage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-06-01T18:25:19Z",
+      "side": 1,
+      "message": "constructor of class",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 1
+      },
+      "revId": "0779e151bbbc357f02a9bcb2067d18ab70decadd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_c3bf68ce",
+        "filename": "cui/source/inc/SvxNotebookbarConfigPage.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-06-01T18:25:19Z",
+      "side": 1,
+      "message": "class declartion",
+      "revId": "0779e151bbbc357f02a9bcb2067d18ab70decadd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_83e080fc",
+        "filename": "cui/source/inc/cfg.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-06-01T18:25:19Z",
+      "side": 1,
+      "message": "Class definition.",
+      "range": {
+        "startLine": 365,
+        "startChar": 33,
+        "endLine": 365,
+        "endChar": 34
+      },
+      "revId": "0779e151bbbc357f02a9bcb2067d18ab70decadd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_43e27803",
+        "filename": "cui/source/inc/cfg.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-06-01T18:25:19Z",
+      "side": 1,
+      "message": "VclPtr to be used later",
+      "revId": "0779e151bbbc357f02a9bcb2067d18ab70decadd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
