@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_SDR_ATTRIBUTE_SDRLINEFILLSHADOWTEXTATTRIBUTE_HXX
 #define INCLUDED_SVX_SDR_ATTRIBUTE_SDRLINEFILLSHADOWTEXTATTRIBUTE_HXX
 
-#include <sal/types.h>
 #include <svx/sdr/attribute/sdrlineshadowtextattribute.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>

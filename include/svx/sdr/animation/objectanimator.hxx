@@ -20,11 +20,7 @@
 #ifndef INCLUDED_SVX_SDR_ANIMATION_OBJECTANIMATOR_HXX
 #define INCLUDED_SVX_SDR_ANIMATION_OBJECTANIMATOR_HXX
 
-#include <sal/types.h>
-#include <vector>
-#include <vcl/timer.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
-#include <svx/sdr/animation/animationstate.hxx>
 
 
 namespace sdr

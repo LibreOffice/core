@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_SDR_OVERLAY_OVERLAYSELECTION_HXX
 
 #include <svx/sdr/overlay/overlayobject.hxx>
-#include <vcl/region.hxx>
 
 
 namespace sdr
