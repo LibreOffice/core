@@ -48,6 +48,7 @@ class Qt5Widget : public QWidget
 
     bool handleKeyEvent(QKeyEvent*, bool);
     void handleMouseButtonEvent(QMouseEvent*, bool);
+    void commitText(const QString& aText) const;
 
     virtual bool event(QEvent*) override;
 
