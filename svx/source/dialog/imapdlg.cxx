@@ -50,8 +50,6 @@
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/status.hxx>
-#include <vcl/builderfactory.hxx>
 #include "dlgunit.hxx"
 #include <memory>
 
