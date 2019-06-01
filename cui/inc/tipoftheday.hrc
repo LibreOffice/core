@@ -197,7 +197,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Don't get lost in large documents. Use the Navigator (F5) to find your way through the content."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can use styles to make the tables in your document consistent. Choose one from the predefined per Styles (F11) or  via Table > AutoFormat."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to select a large range of cells without scrolling? Type the range reference (e.g. A1:A1000) in the name box then Enter"), "", "tipoftheday_w.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Want to center cells on a printed page? Format > Page, Page > Layout settings > Table alignment."), "", "tipoftheday_c.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Want to center cells on a printed page in Calc? Format > Page, Page > Layout settings > Table alignment."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can show formulas instead of results with View > Show Formula (or Tools > Options > %PRODUCTNAME Calc > View > Display > Formulas)."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to jump to a particular page by its number? Click the left-most statusbar entry or use Edit > Go To Page… or press Ctrl+G."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "With Tools > AutoText > AutoText > Import you can select Word document or template containing the AutoText entries that you want to import."), "", "tipoftheday_w.png"},
