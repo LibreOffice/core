@@ -921,8 +921,12 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchCharSelectHdl, SvxShowCharSet*, void)
 
 IMPL_LINK_NOARG(SvxCharacterMap, InsertClickHdl, weld::Button&, void)
 {
-   insertCharToDoc(m_aShowChar.GetText());
-   m_xDialog->response(RET_OK);
+    OUString sChar = m_aShowChar.GetText();
+    insertCharToDoc(sChar);
+    // Need to update recent character list, when OK button does not insert
+    if(!m_xFrame.is())
+        updateRecentCharacterList(sChar, aFont.GetFamilyName());
+    m_xDialog->response(RET_OK);
 }
 
 IMPL_LINK_NOARG(SvxCharacterMap, FavSelectHdl, weld::Button&, void)
