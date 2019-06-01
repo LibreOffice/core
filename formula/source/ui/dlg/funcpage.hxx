@@ -20,14 +20,7 @@
 #ifndef INCLUDED_FORMULA_SOURCE_UI_DLG_FUNCPAGE_HXX
 #define INCLUDED_FORMULA_SOURCE_UI_DLG_FUNCPAGE_HXX
 
-#include <vcl/lstbox.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/tabpage.hxx>
-
-#include <vcl/tabctrl.hxx>
-#include <vcl/button.hxx>
-#include <vcl/treelistbox.hxx>
-
+#include <vcl/weld.hxx>
 #include <vector>
 
 namespace formula

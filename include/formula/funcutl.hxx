@@ -23,13 +23,8 @@
 #include <formula/formuladllapi.h>
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
-#include <tools/wintypes.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/image.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/vclptr.hxx>
 
 class KeyEvent;
 

@@ -23,7 +23,6 @@
 
 #include <tox.hxx>
 #include "toxmgr.hxx"
-#include <svx/checklbx.hxx>
 #include <svx/langbox.hxx>
 
 #define TOX_PAGE_SELECT 1

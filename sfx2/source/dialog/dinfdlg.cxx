@@ -77,7 +77,6 @@
 #include <strings.hxx>
 #include <bitmaps.hlst>
 #include <vcl/help.hxx>
-#include <vcl/builderfactory.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>

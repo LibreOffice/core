@@ -20,16 +20,10 @@
 #ifndef INCLUDED_FORMULA_SOURCE_UI_DLG_PARAWIN_HXX
 #define INCLUDED_FORMULA_SOURCE_UI_DLG_PARAWIN_HXX
 
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/tabctrl.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/weld.hxx>
-
-#include <vector>
 #include <formula/funcutl.hxx>
+#include <vcl/weld.hxx>
 #include "ControlHelper.hxx"
+#include <vector>
 
 namespace formula
 {

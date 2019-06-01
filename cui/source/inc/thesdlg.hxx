@@ -21,10 +21,6 @@
 
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 
-#include <svx/checklbx.hxx>
-#include <vcl/button.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/idle.hxx>
 #include <sfx2/basedlgs.hxx>
 
