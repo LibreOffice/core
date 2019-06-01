@@ -1913,7 +1913,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
 
         // if the extension is "All files", make that the default
         if (aExtensions == FILEDIALOG_FILTER_ALL)
-            maSelectFilter = maSelectFilter;
+            maSelectFilter = aAllFilesName;
     }
     catch( const IllegalArgumentException& )
     {
