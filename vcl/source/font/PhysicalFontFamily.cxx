@@ -67,6 +67,8 @@ static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 
         // korean
         if ( ((ch >= 0xAC00) && (ch <= 0xD7AF)) ||
+             ((ch >= 0xA960) && (ch <= 0xA97F)) ||
+             ((ch >= 0xD7B0) && (ch <= 0xD7FF)) ||
              ((ch >= 0x3130) && (ch <= 0x318F)) ||
              ((ch >= 0x1100) && (ch <= 0x11FF)) )
             return ImplFontAttrs::CJK|ImplFontAttrs::CJK_KR;
