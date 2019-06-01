@@ -28,6 +28,7 @@
 #include <Qt5Data.hxx>
 #include <Qt5Menu.hxx>
 #include <Qt5DragAndDrop.hxx>
+#include <Qt5Transferable.hxx>
 
 #include <QtCore/QMimeData>
 #include <QtCore/QPoint>
