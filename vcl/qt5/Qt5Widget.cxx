@@ -394,13 +394,35 @@ static sal_uInt16 GetKeyCode(int keyval, Qt::KeyboardModifiers modifiers)
     return nCode;
 }
 
+void Qt5Widget::commitText(const QString& aText) const
+{
+    SalExtTextInputEvent aInputEvent;
+    aInputEvent.mpTextAttr = nullptr;
+    aInputEvent.mnCursorFlags = 0;
+    aInputEvent.maText = toOUString(aText);
+    aInputEvent.mnCursorPos = aInputEvent.maText.getLength();
+
+    SolarMutexGuard aGuard;
+    vcl::DeletionListener aDel(&m_rFrame);
+    m_rFrame.CallCallback(SalEvent::ExtTextInput, &aInputEvent);
+    if (!aDel.isDeleted())
+        m_rFrame.CallCallback(SalEvent::EndExtTextInput, nullptr);
+}
+
 bool Qt5Widget::handleKeyEvent(QKeyEvent* pEvent, bool bDown)
 {
-    SalKeyEvent aEvent;
+    sal_uInt16 nCode = GetKeyCode(pEvent->key(), pEvent->modifiers());
+    if (bDown && nCode == 0 && !pEvent->text().isEmpty()
+        && testAttribute(Qt::WA_InputMethodEnabled))
+    {
+        commitText(pEvent->text());
+        return true;
+    }
 
+    SalKeyEvent aEvent;
     aEvent.mnCharCode = (pEvent->text().isEmpty() ? 0 : pEvent->text().at(0).unicode());
     aEvent.mnRepeat = 0;
-    aEvent.mnCode = GetKeyCode(pEvent->key(), pEvent->modifiers());
+    aEvent.mnCode = nCode;
     aEvent.mnCode |= GetKeyModCode(pEvent->modifiers());
 
     QGuiApplication::inputMethod()->update(Qt::ImCursorRectangle);
@@ -483,24 +505,13 @@ static ExtTextInputAttr lcl_MapUndrelineStyle(QTextCharFormat::UnderlineStyle us
 
 void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
 {
-    SolarMutexGuard aGuard;
-    SalExtTextInputEvent aInputEvent;
-    aInputEvent.mpTextAttr = nullptr;
-    aInputEvent.mnCursorFlags = 0;
-
-    vcl::DeletionListener aDel(&m_rFrame);
-
     if (!pEvent->commitString().isEmpty())
-    {
-        aInputEvent.maText = toOUString(pEvent->commitString());
-        aInputEvent.mnCursorPos = aInputEvent.maText.getLength();
-        if (!aDel.isDeleted())
-            m_rFrame.CallCallback(SalEvent::ExtTextInput, &aInputEvent);
-        if (!aDel.isDeleted())
-            m_rFrame.CallCallback(SalEvent::EndExtTextInput, nullptr);
-    }
+        commitText(pEvent->commitString());
     else
     {
+        SalExtTextInputEvent aInputEvent;
+        aInputEvent.mpTextAttr = nullptr;
+        aInputEvent.mnCursorFlags = 0;
         aInputEvent.maText = toOUString(pEvent->preeditString());
         aInputEvent.mnCursorPos = 0;
 
@@ -549,8 +560,9 @@ void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
         const bool bIsEmpty = aInputEvent.maText.isEmpty();
         if (m_bNonEmptyIMPreeditSeen || !bIsEmpty)
         {
-            if (!aDel.isDeleted())
-                m_rFrame.CallCallback(SalEvent::ExtTextInput, &aInputEvent);
+            SolarMutexGuard aGuard;
+            vcl::DeletionListener aDel(&m_rFrame);
+            m_rFrame.CallCallback(SalEvent::ExtTextInput, &aInputEvent);
             if (!aDel.isDeleted() && bIsEmpty)
                 m_rFrame.CallCallback(SalEvent::EndExtTextInput, nullptr);
             m_bNonEmptyIMPreeditSeen = !bIsEmpty;
