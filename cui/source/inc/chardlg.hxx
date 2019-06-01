@@ -22,7 +22,6 @@
 #include <svtools/ctrlbox.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/fntctrl.hxx>
-#include <svx/checklbx.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/langbox.hxx>
 #include <vcl/weld.hxx>

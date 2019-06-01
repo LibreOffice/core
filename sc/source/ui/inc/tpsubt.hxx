@@ -21,8 +21,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_TPSUBT_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <svx/checklbx.hxx>
-#include <vcl/lstbox.hxx>
 #include <global.hxx>
 
 // +1 because one field is reserved for the "- none -" entry

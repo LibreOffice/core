@@ -24,11 +24,8 @@
 #include <strings.hrc>
 #include "formstrings.hxx"
 #include <sal/log.hxx>
-#include <vcl/combobox.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/builderfactory.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
