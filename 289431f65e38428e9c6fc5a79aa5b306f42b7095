@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_0331d0ec",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 4171,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2019-06-01T13:15:59Z",
+      "side": 1,
+      "message": "that one missses the appropriate checks in configure.ac",
+      "revId": "289431f65e38428e9c6fc5a79aa5b306f42b7095",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
