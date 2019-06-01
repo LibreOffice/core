@@ -27,6 +27,7 @@
 #include <wincrypt.h>
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -124,10 +125,7 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         //Methods from XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
-        static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
-        static SecurityEnvironment_MSCryptImpl* getImplementation( const css::uno::Reference< css::uno::XInterface >& rObj ) ;
+        UNO3_GETIMPLEMENTATION_DECL(SecurityEnvironment_MSCryptImpl)
 
         /// @throws css::uno::Exception
         /// @throws css::uno::RuntimeException

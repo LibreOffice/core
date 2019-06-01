@@ -36,6 +36,7 @@
 
 #include <com/sun/star/sheet/XMultiFormulaTokens.hpp>
 #include <com/sun/star/sheet/FormulaToken.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include "address.hxx"
@@ -108,10 +109,7 @@ public:
     virtual sal_Bool SAL_CALL hasElements() override;
 
                             // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScTableConditionalFormat* getImplementation(const css::uno::Reference<css::sheet::XSheetConditionalEntries>& rObj);
+    UNO3_GETIMPLEMENTATION_DECL(ScTableConditionalFormat)
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -235,10 +233,7 @@ public:
                                     const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
                             // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScTableValidationObj* getImplementation(const css::uno::Reference<css::beans::XPropertySet>& rObj);
+    UNO3_GETIMPLEMENTATION_DECL(ScTableValidationObj)
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

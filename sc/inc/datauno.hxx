@@ -42,6 +42,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <svl/itemprop.hxx>
@@ -161,10 +162,7 @@ public:
                                     const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
                             // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScSubTotalDescriptorBase* getImplementation(const css::uno::Reference<css::sheet::XSubTotalDescriptor>& rObj);
+    UNO3_GETIMPLEMENTATION_DECL(ScSubTotalDescriptorBase)
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

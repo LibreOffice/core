@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <svl/itemprop.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
 class SvxSearchItem;
@@ -71,11 +72,7 @@ public:
                                     const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
                                 // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence<
-                                    sal_Int8 >& aIdentifier ) override;
-
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScCellSearchObj* getImplementation(const css::uno::Reference<css::util::XSearchDescriptor>& rObj);
+    UNO3_GETIMPLEMENTATION_DECL(ScCellSearchObj)
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

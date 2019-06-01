@@ -22,6 +22,7 @@
 #include <svl/svldllapi.h>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <memory>
 
@@ -59,11 +60,7 @@ public:
                                 getNumberFormats() override;
 
                                 // XUnoTunnel
-    virtual sal_Int64 SAL_CALL  getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static SvNumberFormatsSupplierObj* getImplementation( const css::uno::Reference<
-                                    css::util::XNumberFormatsSupplier>& rObj );
+    UNO3_GETIMPLEMENTATION_DECL(SvNumberFormatsSupplierObj)
 
     ::comphelper::SharedMutex&  getSharedMutex() const;
 };

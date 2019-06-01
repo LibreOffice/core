@@ -65,7 +65,7 @@ const css::uno::Sequence< sal_Int8 > & classname::getUnoTunnelId() throw() \
     return the##classname##UnoTunnelId::get().getSeq(); \
 } \
 \
-classname* classname::getImplementation( const uno::Reference< uno::XInterface >& xInt ) \
+classname* classname::getImplementation( const css::uno::Reference< css::uno::XInterface >& xInt ) \
 { \
     css::uno::Reference< css::lang::XUnoTunnel > xUT( xInt, css::uno::UNO_QUERY ); \
     if( xUT.is() ) \

@@ -42,7 +42,6 @@
 #include <sfx2/bindings.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <float.h>
 
@@ -4067,36 +4066,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
 
 // XUnoTunnel
 
-sal_Int64 SAL_CALL ScCellRangesBase::getSomething(
-                const uno::Sequence<sal_Int8 >& rId )
-{
-    if ( rId.getLength() == 16 &&
-          0 == memcmp( getUnoTunnelId().getConstArray(),
-                                    rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    return 0;
-}
-
-namespace
-{
-    class theScCellRangesBaseUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScCellRangesBaseUnoTunnelId> {};
-}
-
-const uno::Sequence<sal_Int8>& ScCellRangesBase::getUnoTunnelId()
-{
-    return theScCellRangesBaseUnoTunnelId::get().getSeq();
-}
-
-ScCellRangesBase* ScCellRangesBase::getImplementation(const uno::Reference<uno::XInterface>& rObj)
-{
-    ScCellRangesBase* pRet = nullptr;
-    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
-    if (xUT.is())
-        pRet = reinterpret_cast<ScCellRangesBase*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
-    return pRet;
-}
+UNO3_GETIMPLEMENTATION_IMPL(ScCellRangesBase);
 
 typedef std::vector<ScNamedEntry> ScNamedEntryArr_Impl;
 
@@ -8423,37 +8393,7 @@ uno::Sequence<OUString> SAL_CALL ScTableSheetObj::getSupportedServiceNames()
 
 // XUnoTunnel
 
-sal_Int64 SAL_CALL ScTableSheetObj::getSomething(
-                const uno::Sequence<sal_Int8 >& rId )
-{
-    if ( rId.getLength() == 16 &&
-          0 == memcmp( getUnoTunnelId().getConstArray(),
-                                    rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-
-    return ScCellRangeObj::getSomething( rId );
-}
-
-namespace
-{
-    class theScTableSheetObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScTableSheetObjUnoTunnelId> {};
-}
-
-const uno::Sequence<sal_Int8>& ScTableSheetObj::getUnoTunnelId()
-{
-    return theScTableSheetObjUnoTunnelId::get().getSeq();
-}
-
-ScTableSheetObj* ScTableSheetObj::getImplementation(const uno::Reference<uno::XInterface>& rObj)
-{
-    ScTableSheetObj* pRet = nullptr;
-    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
-    if (xUT.is())
-        pRet = reinterpret_cast<ScTableSheetObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
-    return pRet;
-}
+UNO3_GETIMPLEMENTATION2_IMPL(ScTableSheetObj, ScCellRangeObj);
 
 ScTableColumnObj::ScTableColumnObj( ScDocShell* pDocSh, SCCOL nCol, SCTAB nTab ) :
     ScCellRangeObj( pDocSh, ScRange(nCol,0,nTab, nCol,MAXROW,nTab) ),

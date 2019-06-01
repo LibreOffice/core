@@ -21,7 +21,6 @@
 
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
@@ -453,36 +452,7 @@ sal_Bool SAL_CALL ScTableConditionalFormat::hasByName( const OUString& aName )
 
 // XUnoTunnel
 
-sal_Int64 SAL_CALL ScTableConditionalFormat::getSomething(
-                const uno::Sequence<sal_Int8 >& rId )
-{
-    if ( rId.getLength() == 16 &&
-          0 == memcmp( getUnoTunnelId().getConstArray(),
-                                    rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    return 0;
-}
-
-namespace
-{
-    class theScTableConditionalFormatUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScTableConditionalFormatUnoTunnelId> {};
-}
-
-const uno::Sequence<sal_Int8>& ScTableConditionalFormat::getUnoTunnelId()
-{
-    return theScTableConditionalFormatUnoTunnelId::get().getSeq();
-}
-
-ScTableConditionalFormat* ScTableConditionalFormat::getImplementation(const uno::Reference<sheet::XSheetConditionalEntries>& rObj)
-{
-    ScTableConditionalFormat* pRet = nullptr;
-    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
-    if (xUT.is())
-        pRet = reinterpret_cast<ScTableConditionalFormat*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
-    return pRet;
-}
+UNO3_GETIMPLEMENTATION_IMPL(ScTableConditionalFormat);
 
 ScTableConditionalEntry::ScTableConditionalEntry(const ScCondFormatEntryItem& aItem) :
     aData( aItem )
@@ -951,35 +921,6 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScTableValidationObj )
 
 // XUnoTunnel
 
-sal_Int64 SAL_CALL ScTableValidationObj::getSomething(
-                const uno::Sequence<sal_Int8 >& rId )
-{
-    if ( rId.getLength() == 16 &&
-          0 == memcmp( getUnoTunnelId().getConstArray(),
-                                    rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    return 0;
-}
-
-namespace
-{
-    class theScTableValidationObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScTableValidationObjUnoTunnelId> {};
-}
-
-const uno::Sequence<sal_Int8>& ScTableValidationObj::getUnoTunnelId()
-{
-    return theScTableValidationObjUnoTunnelId::get().getSeq();
-}
-
-ScTableValidationObj* ScTableValidationObj::getImplementation(const uno::Reference<beans::XPropertySet>& rObj)
-{
-    ScTableValidationObj* pRet = nullptr;
-    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
-    if (xUT.is())
-        pRet = reinterpret_cast<ScTableValidationObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
-    return pRet;
-}
+UNO3_GETIMPLEMENTATION_IMPL(ScTableValidationObj);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

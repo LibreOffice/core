@@ -26,7 +26,6 @@
 #include <vcl/svapp.hxx>
 #include <svx/unomid.hxx>
 #include <unowids.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/CellVertJustify2.hpp>
@@ -379,36 +378,7 @@ void ScAutoFormatObj::InitFormat( sal_uInt16 nNewIndex )
 
 // XUnoTunnel
 
-sal_Int64 SAL_CALL ScAutoFormatObj::getSomething(
-                const uno::Sequence<sal_Int8 >& rId )
-{
-    if ( rId.getLength() == 16 &&
-          0 == memcmp( getUnoTunnelId().getConstArray(),
-                                    rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    return 0;
-}
-
-namespace
-{
-    class theScAutoFormatObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScAutoFormatObjUnoTunnelId> {};
-}
-
-const uno::Sequence<sal_Int8>& ScAutoFormatObj::getUnoTunnelId()
-{
-    return theScAutoFormatObjUnoTunnelId::get().getSeq();
-}
-
-ScAutoFormatObj* ScAutoFormatObj::getImplementation(const uno::Reference<uno::XInterface>& rObj)
-{
-    ScAutoFormatObj* pRet = nullptr;
-    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
-    if (xUT.is())
-        pRet = reinterpret_cast<ScAutoFormatObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
-    return pRet;
-}
+UNO3_GETIMPLEMENTATION_IMPL(ScAutoFormatObj);
 
 // XTableAutoFormat
 

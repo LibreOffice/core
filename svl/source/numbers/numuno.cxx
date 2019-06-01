@@ -18,8 +18,6 @@
  */
 
 
-#include <comphelper/servicehelper.hxx>
-
 #include <svl/numuno.hxx>
 #include "numfmuno.hxx"
 #include <svl/zforlist.hxx>
@@ -87,38 +85,6 @@ uno::Reference<util::XNumberFormats> SAL_CALL SvNumberFormatsSupplierObj::getNum
 
 // XUnoTunnel
 
-sal_Int64 SAL_CALL SvNumberFormatsSupplierObj::getSomething(
-                const uno::Sequence<sal_Int8 >& rId )
-{
-    if ( rId.getLength() == 16 &&
-          0 == memcmp( getUnoTunnelId().getConstArray(),
-                                    rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    return 0;
-}
-
-namespace
-{
-    class theSvNumberFormatsSupplierObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvNumberFormatsSupplierObjUnoTunnelId > {};
-}
-
-// static
-const uno::Sequence<sal_Int8>& SvNumberFormatsSupplierObj::getUnoTunnelId()
-{
-    return theSvNumberFormatsSupplierObjUnoTunnelId::get().getSeq();
-}
-
-// static
-SvNumberFormatsSupplierObj* SvNumberFormatsSupplierObj::getImplementation(
-                                const uno::Reference<util::XNumberFormatsSupplier>& rObj )
-{
-    SvNumberFormatsSupplierObj* pRet = nullptr;
-    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
-    if (xUT.is())
-        pRet = reinterpret_cast<SvNumberFormatsSupplierObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( getUnoTunnelId() )));
-    return pRet;
-}
+UNO3_GETIMPLEMENTATION_IMPL(SvNumberFormatsSupplierObj);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

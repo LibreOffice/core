@@ -27,6 +27,7 @@
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/URL.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/uno3.hxx>
 #include "sbamultiplex.hxx"
 #include <svx/dataaccessdescriptor.hxx>
@@ -114,9 +115,7 @@ namespace dbaui
 
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
-        static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-        sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 > & rId ) override;
-        static SbaXGridPeer* getImplementation(const css::uno::Reference< css::uno::XInterface>& _rxIFace);
+        UNO3_GETIMPLEMENTATION_DECL(SbaXGridPeer)
 
         // css::frame::XDispatch
         virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs) override;

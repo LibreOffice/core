@@ -20,7 +20,6 @@
 #include <scitems.hxx>
 #include <svl/srchitem.hxx>
 #include <vcl/svapp.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 
@@ -198,35 +197,6 @@ uno::Sequence<OUString> SAL_CALL ScCellSearchObj::getSupportedServiceNames()
 
 // XUnoTunnel
 
-sal_Int64 SAL_CALL ScCellSearchObj::getSomething(
-                const uno::Sequence<sal_Int8 >& rId )
-{
-    if ( rId.getLength() == 16 &&
-          0 == memcmp( getUnoTunnelId().getConstArray(),
-                                    rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    return 0;
-}
-
-namespace
-{
-    class theScCellSearchObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScCellSearchObjUnoTunnelId> {};
-}
-
-const uno::Sequence<sal_Int8>& ScCellSearchObj::getUnoTunnelId()
-{
-    return theScCellSearchObjUnoTunnelId::get().getSeq();
-}
-
-ScCellSearchObj* ScCellSearchObj::getImplementation(const uno::Reference<util::XSearchDescriptor>& rObj)
-{
-    ScCellSearchObj* pRet = nullptr;
-    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
-    if (xUT.is())
-        pRet = reinterpret_cast<ScCellSearchObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
-    return pRet;
-}
+UNO3_GETIMPLEMENTATION_IMPL(ScCellSearchObj);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

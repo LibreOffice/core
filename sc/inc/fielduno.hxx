@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
@@ -199,9 +200,6 @@ private:
     void setPropertyValueSheet(const OUString& rName, const css::uno::Any& rVal);
 
 public:
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScEditFieldObj* getImplementation(const css::uno::Reference<css::text::XTextContent>& xObj);
-
     ScEditFieldObj(
         const css::uno::Reference<css::text::XTextRange>& rContent,
         std::unique_ptr<ScEditSource> pEditSrc, sal_Int32 eType, const ESelection& rSel);
@@ -244,7 +242,7 @@ public:
                                     const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
                             // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+    UNO3_GETIMPLEMENTATION_DECL(ScEditFieldObj)
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

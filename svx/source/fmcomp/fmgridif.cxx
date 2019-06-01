@@ -50,7 +50,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -1079,43 +1078,7 @@ FmXGridPeer::~FmXGridPeer()
     setColumns(Reference< XIndexContainer > ());
 }
 
-namespace
-{
-    class theFmXGridPeerImplementationId : public rtl::Static< UnoTunnelIdInit, theFmXGridPeerImplementationId > {};
-}
-
-const Sequence< sal_Int8 >& FmXGridPeer::getUnoTunnelImplementationId() throw()
-{
-    return theFmXGridPeerImplementationId::get().getSeq();
-}
-
-
-FmXGridPeer* FmXGridPeer::getImplementation( const Reference< XInterface >& _rxIFace ) throw()
-{
-    FmXGridPeer* pReturn = nullptr;
-    Reference< XUnoTunnel >  xTunnel(_rxIFace, UNO_QUERY);
-    if (xTunnel.is())
-        pReturn = reinterpret_cast<FmXGridPeer*>(xTunnel->getSomething(getUnoTunnelImplementationId()));
-
-    return pReturn;
-}
-
-
-sal_Int64 SAL_CALL FmXGridPeer::getSomething( const Sequence< sal_Int8 >& _rIdentifier )
-{
-    sal_Int64 nReturn(0);
-
-    if  (   (_rIdentifier.getLength() == 16)
-        &&  (0 == memcmp( getUnoTunnelImplementationId().getConstArray(), _rIdentifier.getConstArray(), 16 ))
-        )
-    {
-        nReturn = reinterpret_cast<sal_Int64>(this);
-    }
-    else
-        nReturn = VCLXWindow::getSomething(_rIdentifier);
-
-    return nReturn;
-}
+UNO3_GETIMPLEMENTATION2_IMPL(FmXGridPeer, VCLXWindow);
 
 // XEventListener
 
