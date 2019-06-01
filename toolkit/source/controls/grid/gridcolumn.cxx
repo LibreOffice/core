@@ -285,28 +285,7 @@ namespace toolkit
     }
 
 
-    sal_Int64 SAL_CALL GridColumn::getSomething( const Sequence< sal_Int8 >& i_identifier )
-    {
-        if ( ( i_identifier.getLength() == 16 ) && ( i_identifier == getUnoTunnelId() ) )
-            return ::sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ) );
-        return 0;
-    }
-
-
-    Sequence< sal_Int8 > GridColumn::getUnoTunnelId() throw()
-    {
-        static ::cppu::OImplementationId const aId;
-        return aId.getImplementationId();
-    }
-
-
-    GridColumn* GridColumn::getImplementation( const Reference< XInterface >& i_component )
-    {
-        Reference< XUnoTunnel > const xTunnel( i_component, UNO_QUERY );
-        if ( xTunnel.is() )
-            return reinterpret_cast< GridColumn* >( ::sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething( getUnoTunnelId() ) ) );
-        return nullptr;
-    }
+    UNO3_GETIMPLEMENTATION_IMPL(GridColumn);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

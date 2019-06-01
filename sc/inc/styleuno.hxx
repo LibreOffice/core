@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
 namespace com { namespace sun { namespace star { namespace container { class XIndexReplace; } } } }
@@ -264,11 +265,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
                             // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScStyleObj* getImplementation(const css::uno::Reference<css::uno::XInterface>& rObj);
-
+    UNO3_GETIMPLEMENTATION_DECL(ScStyleObj)
 };
 
 #endif

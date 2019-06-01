@@ -46,21 +46,7 @@ namespace connectivity
 
 
         // css::lang::XUnoTunnel
-        sal_Int64 SAL_CALL ODescriptor::getSomething( const Sequence< sal_Int8 >& rId )
-        {
-            return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                ? reinterpret_cast< sal_Int64 >( this )
-                : 0;
-        }
-
-
-        ODescriptor* ODescriptor::getImplementation( const Reference< XInterface >& _rxSomeComp )
-        {
-            Reference< XUnoTunnel > xTunnel( _rxSomeComp, UNO_QUERY );
-            if ( xTunnel.is() )
-                return reinterpret_cast< ODescriptor* >( xTunnel->getSomething( getUnoTunnelImplementationId() ) );
-            return nullptr;
-        }
+        UNO3_GETIMPLEMENTATION_IMPL(ODescriptor);
 
 
         namespace
@@ -100,14 +86,6 @@ namespace connectivity
         {
             ODescriptor* pImplementation = getImplementation( _rxDescriptor );
             return pImplementation && pImplementation->isNew();
-        }
-
-
-        Sequence< sal_Int8 > ODescriptor::getUnoTunnelImplementationId()
-        {
-            static ::cppu::OImplementationId implId;
-
-            return implId.getImplementationId();
         }
 
 

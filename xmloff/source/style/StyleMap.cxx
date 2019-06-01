@@ -19,20 +19,10 @@
 
 #include <string.h>
 
-#include <comphelper/servicehelper.hxx>
-
 #include <StyleMap.hxx>
 
 using namespace css::uno;
 using namespace css::lang;
-
-namespace
-{
-
-class theStyleMapUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theStyleMapUnoTunnelId>
-{};
-
-} // end anonymous namespace
 
 StyleMap::StyleMap()
 {
@@ -43,33 +33,6 @@ StyleMap::~StyleMap()
 }
 
 // XUnoTunnel & co
-const Sequence<sal_Int8>& StyleMap::getUnoTunnelId() throw()
-{
-    return theStyleMapUnoTunnelId::get().getSeq();
-}
-
-StyleMap* StyleMap::getImplementation(const Reference<XInterface>& xInterface) throw()
-{
-    Reference<XUnoTunnel> xUnoTunnel(xInterface, UNO_QUERY);
-    if (xUnoTunnel.is())
-    {
-        return reinterpret_cast<StyleMap*>(xUnoTunnel->getSomething(StyleMap::getUnoTunnelId()));
-    }
-
-    return nullptr;
-}
-
-// XUnoTunnel
-sal_Int64 SAL_CALL StyleMap::getSomething(const Sequence<sal_Int8>& rId)
-{
-    if (rId.getLength() == 16 &&
-        memcmp(getUnoTunnelId().getConstArray(), rId.getConstArray(), 16) == 0)
-    {
-        return reinterpret_cast<sal_Int64>(this);
-    }
-
-    return 0;
-}
-
+UNO3_GETIMPLEMENTATION_IMPL(StyleMap);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

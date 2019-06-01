@@ -22,7 +22,6 @@
 #include <vector>
 #include <osl/diagnose.h>
 #include <xmloff/xmltoken.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <xmloff/attrlist.hxx>
@@ -220,41 +219,8 @@ sal_Int16 SvXMLAttributeList::GetIndexByName( const OUString& rName ) const
     return -1;
 }
 
-namespace
-{
-    class theSvXMLAttributeListUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvXMLAttributeListUnoTunnelId> {};
-}
-
 // XUnoTunnel & co
-const uno::Sequence< sal_Int8 > & SvXMLAttributeList::getUnoTunnelId() throw()
-{
-    return theSvXMLAttributeListUnoTunnelId::get().getSeq();
-}
-
-SvXMLAttributeList* SvXMLAttributeList::getImplementation( const uno::Reference< uno::XInterface >& xInt ) throw()
-{
-    uno::Reference< lang::XUnoTunnel > xUT( xInt, uno::UNO_QUERY );
-    if( xUT.is() )
-    {
-        return
-            reinterpret_cast<SvXMLAttributeList*>(
-                sal::static_int_cast<sal_IntPtr>(
-                    xUT->getSomething( SvXMLAttributeList::getUnoTunnelId())));
-    }
-    else
-        return nullptr;
-}
-
-// XUnoTunnel
-sal_Int64 SAL_CALL SvXMLAttributeList::getSomething( const uno::Sequence< sal_Int8 >& rId )
-{
-    if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(),
-                                                         rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
-    }
-    return 0;
-}
+UNO3_GETIMPLEMENTATION_IMPL(SvXMLAttributeList)
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

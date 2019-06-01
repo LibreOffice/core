@@ -72,7 +72,7 @@ sdbcx::ObjectType ODbaseTables::appendObject( const OUString& _rForName, const R
     Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
     {
-        ODbaseTable* pTable = reinterpret_cast< ODbaseTable* >( xTunnel->getSomething(ODbaseTable::getUnoTunnelImplementationId()) );
+        ODbaseTable* pTable = reinterpret_cast< ODbaseTable* >( xTunnel->getSomething(ODbaseTable::getUnoTunnelId()) );
         if(pTable)
         {
             pTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(_rForName));
@@ -111,7 +111,7 @@ void ODbaseTables::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
 
     if ( xTunnel.is() )
     {
-        ODbaseTable* pTable = reinterpret_cast< ODbaseTable* >( xTunnel->getSomething(ODbaseTable::getUnoTunnelImplementationId()) );
+        ODbaseTable* pTable = reinterpret_cast< ODbaseTable* >( xTunnel->getSomething(ODbaseTable::getUnoTunnelId()) );
         if(pTable)
             pTable->DropImpl();
     }

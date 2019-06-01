@@ -38,7 +38,6 @@
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -1284,36 +1283,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScEditFieldObj )
 
 // XUnoTunnel
 
-sal_Int64 SAL_CALL ScEditFieldObj::getSomething(
-                const uno::Sequence<sal_Int8 >& rId )
-{
-    if ( rId.getLength() == 16 &&
-          0 == memcmp( getUnoTunnelId().getConstArray(),
-                                    rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    return 0;
-}
-
-namespace
-{
-    class theScEditFieldObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScEditFieldObjUnoTunnelId> {};
-}
-
-const uno::Sequence<sal_Int8>& ScEditFieldObj::getUnoTunnelId()
-{
-    return theScEditFieldObjUnoTunnelId::get().getSeq();
-}
-
-ScEditFieldObj* ScEditFieldObj::getImplementation(const uno::Reference<text::XTextContent>& xObj)
-{
-    ScEditFieldObj* pRet = nullptr;
-    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
-    if (xUT.is())
-        pRet = reinterpret_cast<ScEditFieldObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
-    return pRet;
-}
+UNO3_GETIMPLEMENTATION_IMPL(ScEditFieldObj);
 
 // XServiceInfo
 

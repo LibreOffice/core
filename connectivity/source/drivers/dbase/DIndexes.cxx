@@ -94,7 +94,7 @@ sdbcx::ObjectType ODbaseIndexes::appendObject( const OUString& _rForName, const 
     Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
     {
-        ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId()) );
+        ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelId()) );
         if(!pIndex)
             throw SQLException();
         pIndex->CreateImpl();
@@ -109,7 +109,7 @@ void ODbaseIndexes::dropObject(sal_Int32 _nPos, const OUString& /*_sElementName*
     Reference< XUnoTunnel> xTunnel(getObject(_nPos),UNO_QUERY);
     if ( xTunnel.is() )
     {
-        ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId()) );
+        ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelId()) );
         if ( pIndex )
             pIndex->DropImpl();
     }

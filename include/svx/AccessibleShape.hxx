@@ -36,6 +36,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <editeng/AccessibleContextBase.hxx>
 #include <editeng/AccessibleComponentBase.hxx>
 #include <rtl/ustring.hxx>
@@ -327,9 +328,7 @@ public:
 
     //===== XUnoTunnel ========================================================
 
-    static const css::uno::Sequence< sal_Int8 >&   getUnoTunnelImplementationId() throw();
-    static AccessibleShape*                                     getImplementation( const css::uno::Reference< css::uno::XInterface >& _rxIFace ) throw();
-    sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& _rIdentifier ) override;
+    UNO3_GETIMPLEMENTATION_DECL(AccessibleShape)
 
     //===== XAccessibleHypertext ========================================================
     virtual sal_Int32 SAL_CALL getHyperLinkCount() override;

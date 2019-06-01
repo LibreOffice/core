@@ -21,6 +21,7 @@
 #define INCLUDED_XMLOFF_INC_STYLEMAP_HXX
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <boost/functional/hash.hpp>
 #include <unordered_map>
@@ -71,13 +72,8 @@ public:
     StyleMap();
     virtual ~StyleMap() override;
 
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
-    static StyleMap* getImplementation(
-            const css::uno::Reference< css::uno::XInterface >& ) throw();
-
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething(
-                const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+    UNO3_GETIMPLEMENTATION_DECL(StyleMap)
 };
 
 #endif // INCLUDED_XMLOFF_INC_STYLEMAP_HXX

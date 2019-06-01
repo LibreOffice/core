@@ -40,7 +40,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/profilezone.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -2063,36 +2062,7 @@ uno::Sequence<OUString> SAL_CALL ScTabViewObj::getSupportedServiceNames()
 
 // XUnoTunnel
 
-sal_Int64 SAL_CALL ScTabViewObj::getSomething(
-                const uno::Sequence<sal_Int8 >& rId )
-{
-    if ( rId.getLength() == 16 &&
-          0 == memcmp( getUnoTunnelId().getConstArray(),
-                                    rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    return 0;
-}
-
-namespace
-{
-    class theScTabViewObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScTabViewObjUnoTunnelId> {};
-}
-
-const uno::Sequence<sal_Int8>& ScTabViewObj::getUnoTunnelId()
-{
-    return theScTabViewObjUnoTunnelId::get().getSeq();
-}
-
-ScTabViewObj* ScTabViewObj::getImplementation(const uno::Reference<uno::XInterface>& rObj)
-{
-    ScTabViewObj* pRet = nullptr;
-    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
-    if (xUT.is())
-        pRet = reinterpret_cast<ScTabViewObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
-    return pRet;
-}
+UNO3_GETIMPLEMENTATION_IMPL(ScTabViewObj);
 
 css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL ScTabViewObj::getTransferable()
 {

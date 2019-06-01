@@ -23,6 +23,7 @@
 #include <comphelper/propertycontainer.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/stl_types.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity
@@ -71,10 +72,8 @@ namespace connectivity
             virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  );
 
             // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-            static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            UNO3_GETIMPLEMENTATION_DECL(ODescriptor)
 
-            static ODescriptor* getImplementation( const css::uno::Reference< css::uno::XInterface >& _rxSomeComp );
             // retrieves the ODescriptor implementation of a given UNO component, and returns its ->isNew flag
             static bool isNew( const css::uno::Reference< css::uno::XInterface >& _rxDescriptor );
         };

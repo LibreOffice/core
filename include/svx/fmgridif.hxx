@@ -44,6 +44,7 @@
 #include <tools/wintypes.hxx>
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase10.hxx>
@@ -377,9 +378,7 @@ public:
     void Create(vcl::Window* pParent, WinBits nStyle);
 
 // css::lang::XUnoTunnel
-    static const css::uno::Sequence< sal_Int8 >&   getUnoTunnelImplementationId() throw();
-    static FmXGridPeer*                                         getImplementation( const css::uno::Reference< css::uno::XInterface >& _rxIFace ) throw();
-    sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& _rIdentifier ) override;
+    UNO3_GETIMPLEMENTATION_DECL(FmXGridPeer)
 
 // css::form::XGridPeer
     virtual css::uno::Reference< css::container::XIndexContainer > SAL_CALL getColumns(  ) override;

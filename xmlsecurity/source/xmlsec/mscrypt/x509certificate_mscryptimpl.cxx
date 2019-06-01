@@ -448,32 +448,7 @@ void X509Certificate_MSCryptImpl::setRawCert( Sequence< sal_Int8 > const & rawCe
 }
 
 /* XUnoTunnel */
-sal_Int64 SAL_CALL X509Certificate_MSCryptImpl::getSomething( const Sequence< sal_Int8 >& aIdentifier ) {
-    if( aIdentifier.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
-        return reinterpret_cast<sal_Int64>(this);
-    }
-    return 0 ;
-}
-
-/* XUnoTunnel extension */
-
-namespace
-{
-    class theX509Certificate_MSCryptImplUnoTunnelId  : public rtl::Static< UnoTunnelIdInit, theX509Certificate_MSCryptImplUnoTunnelId > {};
-}
-
-const Sequence< sal_Int8>& X509Certificate_MSCryptImpl::getUnoTunnelId() {
-    return theX509Certificate_MSCryptImplUnoTunnelId::get().getSeq();
-}
-
-/* XUnoTunnel extension */
-X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl::getImplementation( const Reference< XInterface >& rObj ) {
-    Reference< XUnoTunnel > xUT( rObj , UNO_QUERY ) ;
-    if( xUT.is() ) {
-        return reinterpret_cast<X509Certificate_MSCryptImpl*>(xUT->getSomething( getUnoTunnelId() ));
-    } else
-        return nullptr ;
-}
+UNO3_GETIMPLEMENTATION_IMPL(X509Certificate_MSCryptImpl);
 
 static OUString findOIDDescription(char const *oid)
 {

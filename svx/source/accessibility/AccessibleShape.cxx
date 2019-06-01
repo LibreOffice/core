@@ -57,7 +57,6 @@
 #include <svx/svdview.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/queryinterface.hxx>
-#include <comphelper/servicehelper.hxx>
 #include "AccessibleEmptyEditSource.hxx"
 
 #include <algorithm>
@@ -1002,43 +1001,7 @@ void SAL_CALL
 }
 
 // lang::XUnoTunnel
-namespace
-{
-    class theAccessibleShapeImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleShapeImplementationId > {};
-}
-
-const uno::Sequence< sal_Int8 >&
-    AccessibleShape::getUnoTunnelImplementationId()
-    throw()
-{
-    return theAccessibleShapeImplementationId::get().getSeq();
-}
-
-
-AccessibleShape*
-    AccessibleShape::getImplementation( const uno::Reference< uno::XInterface >& rxIFace )
-    throw()
-{
-    uno::Reference< lang::XUnoTunnel >  xTunnel( rxIFace, uno::UNO_QUERY );
-    AccessibleShape*                    pReturn = nullptr;
-
-    if( xTunnel.is() )
-        pReturn = reinterpret_cast< AccessibleShape* >( xTunnel->getSomething( getUnoTunnelImplementationId() ) );
-
-    return pReturn;
-}
-
-
-sal_Int64 SAL_CALL
-    AccessibleShape::getSomething( const uno::Sequence< sal_Int8 >& rIdentifier )
-{
-    sal_Int64 nReturn( 0 );
-
-    if( ( rIdentifier.getLength() == 16 ) && ( 0 == memcmp( getUnoTunnelImplementationId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
-        nReturn = reinterpret_cast< sal_Int64 >( this );
-
-    return nReturn;
-}
+UNO3_GETIMPLEMENTATION_IMPL(AccessibleShape)
 
 // IAccessibleViewForwarderListener
 void AccessibleShape::ViewForwarderChanged()

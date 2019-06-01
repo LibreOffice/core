@@ -635,7 +635,7 @@ OUString SAL_CALL ODocumentContainer::composeHierarchicalName( const OUString& i
     {
         Reference<XUnoTunnel> xUnoTunnel(const_cast<ODocumentContainer*>(this)->implGetByName( _sName, true ), UNO_QUERY );
         if ( xUnoTunnel.is() )
-            pContent = reinterpret_cast<OContentHelper*>(xUnoTunnel->getSomething(OContentHelper::getUnoTunnelImplementationId()));
+            pContent = reinterpret_cast<OContentHelper*>(xUnoTunnel->getSomething(OContentHelper::getUnoTunnelId()));
     }
     catch(const Exception&)
     {

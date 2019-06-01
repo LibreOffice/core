@@ -38,6 +38,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
+#include <comphelper/servicehelper.hxx>
 
 #include "types.hxx"
 
@@ -268,11 +269,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
                             // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence<
-                                    sal_Int8 >& aIdentifier ) override;
-
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScTabViewObj* getImplementation(const css::uno::Reference<css::uno::XInterface>& rObj);
+    UNO3_GETIMPLEMENTATION_DECL(ScTabViewObj)
 
                             // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;

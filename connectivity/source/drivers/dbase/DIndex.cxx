@@ -104,7 +104,7 @@ void ODbaseIndex::refreshColumns()
         m_pColumns.reset(new ODbaseIndexColumns(this,m_aMutex,aVector));
 }
 
-Sequence< sal_Int8 > ODbaseIndex::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > ODbaseIndex::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 
@@ -115,7 +115,7 @@ Sequence< sal_Int8 > ODbaseIndex::getUnoTunnelImplementationId()
 
 sal_Int64 ODbaseIndex::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : ODbaseIndex_BASE::getSomething(rId);
 }

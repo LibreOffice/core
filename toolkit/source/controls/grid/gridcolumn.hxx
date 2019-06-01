@@ -29,6 +29,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/componentguard.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <rtl/ref.hxx>
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
 
@@ -86,9 +87,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XUnoTunnel and friends
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& i_identifier ) override;
-    static css::uno::Sequence< sal_Int8 > getUnoTunnelId() throw();
-    static GridColumn* getImplementation( const css::uno::Reference< css::uno::XInterface >& i_component );
+    UNO3_GETIMPLEMENTATION_DECL(GridColumn)
 
     // attribute access
     void setIndex( sal_Int32 const i_index );

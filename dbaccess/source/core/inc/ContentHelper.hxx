@@ -35,6 +35,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/sdbcx/XRename.hpp>
@@ -133,7 +134,7 @@ namespace dbaccess
 
         // css::lang::XTypeProvider
         virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
-        static css::uno::Sequence< sal_Int8 >  getUnoTunnelImplementationId();
+
         // css::lang::XServiceInfo
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
@@ -162,8 +163,7 @@ namespace dbaccess
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
         // css::lang::XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-        static OContentHelper* getImplementation( const css::uno::Reference< css::uno::XInterface >& _rxComponent );
+        UNO3_GETIMPLEMENTATION_DECL(OContentHelper)
 
         // css::container::XChild
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;

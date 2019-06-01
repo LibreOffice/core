@@ -45,6 +45,7 @@
 #include <unotools/saveopt.hxx>
 
 #include <xmloff/XMLPageExport.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <tools/fldunit.hxx>
 #include <vcl/errcode.hxx>
@@ -289,9 +290,6 @@ public:
 
     virtual void collectAutoStyles();
 
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
-    static SvXMLExport* getImplementation( const css::uno::Reference< css::uno::XInterface >& ) throw();
-
     // XExporter
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
@@ -312,7 +310,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) final override;
 
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+    UNO3_GETIMPLEMENTATION_DECL(SvXMLExport)
 
     /** ensures that the given namespace is in scope at the next started
         element.

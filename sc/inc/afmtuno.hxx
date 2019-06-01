@@ -28,6 +28,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
 class ScAutoFormatFieldObj;
@@ -145,11 +146,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
                             // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence<
-                                    sal_Int8 >& aIdentifier ) override;
-
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScAutoFormatObj* getImplementation(const css::uno::Reference<css::uno::XInterface>& rObj);
+    UNO3_GETIMPLEMENTATION_DECL(ScAutoFormatObj)
 };
 
 class ScAutoFormatFieldObj : public ::cppu::WeakImplHelper<

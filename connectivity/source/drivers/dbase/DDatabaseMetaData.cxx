@@ -299,7 +299,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
         Reference< XUnoTunnel> xTunnel(xIndex,UNO_QUERY);
         if(xTunnel.is())
         {
-            ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId()) );
+            ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelId()) );
             if(pIndex)
             {
                 aRow[11] = new ORowSetValueDecorator(static_cast<sal_Int32>(pIndex->getHeader().db_maxkeys));
