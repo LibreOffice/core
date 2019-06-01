@@ -10,35 +10,15 @@
 
 #pragma once
 
-#include <cppuhelper/compbase.hxx>
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
+#include <cppuhelper/compbase.hxx>
 
 #include <QtGui/QClipboard>
-
-class Qt5Transferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
-{
-public:
-    explicit Qt5Transferable(QClipboard::Mode aMode);
-
-    virtual css::uno::Any SAL_CALL
-    getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
-
-    virtual std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector();
-
-    virtual css::uno::Sequence<css::datatransfer::DataFlavor>
-        SAL_CALL getTransferDataFlavors() override;
-    virtual sal_Bool SAL_CALL
-    isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
-
-private:
-    QClipboard::Mode m_aClipboardMode;
-};
 
 class Qt5Clipboard
     : public QObject,
