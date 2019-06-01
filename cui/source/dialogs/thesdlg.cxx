@@ -25,13 +25,8 @@
 #include <svl/lngmisc.hxx>
 #include <vcl/event.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/svlbitm.hxx>
-#include <vcl/treelistbox.hxx>
-#include <vcl/treelistentry.hxx>
-#include <vcl/viewdataentry.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/builderfactory.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/svxerr.hxx>
 #include <editeng/unolingu.hxx>

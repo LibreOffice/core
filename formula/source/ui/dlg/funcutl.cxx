@@ -17,12 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/event.hxx>
-#include <vcl/fixed.hxx>
 
 #include <formula/funcutl.hxx>
 #include <formula/IControlReferenceHandler.hxx>

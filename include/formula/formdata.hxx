@@ -24,8 +24,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/gen.hxx>
-#include <vcl/vclptr.hxx>
-#include <vcl/window.hxx>
 
 namespace formula
 {

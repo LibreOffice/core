@@ -19,8 +19,6 @@
 
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/builderfactory.hxx>
-#include <vcl/treelistentry.hxx>
 #include <vcl/svapp.hxx>
 
 #include "structpg.hxx"
