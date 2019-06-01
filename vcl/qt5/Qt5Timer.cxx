@@ -29,6 +29,7 @@
 Qt5Timer::Qt5Timer()
 {
     m_aTimer.setSingleShot(true);
+    m_aTimer.setTimerType(Qt::PreciseTimer);
     connect(&m_aTimer, SIGNAL(timeout()), this, SLOT(timeoutActivated()));
     connect(this, SIGNAL(startTimerSignal(int)), this, SLOT(startTimer(int)));
     connect(this, SIGNAL(stopTimerSignal()), this, SLOT(stopTimer()));
