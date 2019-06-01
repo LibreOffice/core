@@ -29,6 +29,7 @@
 #include <Qt5SvpGraphics.hxx>
 #include <Qt5System.hxx>
 #include <Qt5Tools.hxx>
+#include <Qt5Transferable.hxx>
 #include <Qt5Widget.hxx>
 
 #include <QtCore/QMimeData>
