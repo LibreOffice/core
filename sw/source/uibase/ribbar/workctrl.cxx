@@ -55,9 +55,10 @@
 #include <bitmaps.hlst>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/srchdlg.hxx>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 
 // Size check
 #define NAVI_ENTRIES 20
