@@ -21,13 +21,8 @@
 
 #include <utility>
 
-#include <QtCore/QAbstractEventDispatcher>
-#include <QtCore/QThread>
 #include <QtWidgets/QApplication>
-#include <QtGui/QClipboard>
-#include <QtWidgets/QFrame>
 
-#include <osl/process.h>
 #include <sal/log.hxx>
 
 #include <Qt5Data.hxx>
@@ -105,5 +100,4 @@ VCLPLUG_KDE5_PUBLIC SalInstance* create_SalInstance()
 }
 }
 
-#include <KDE5SalInstance.moc>
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

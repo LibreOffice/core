@@ -18,53 +18,21 @@
  */
 
 #include "KDE5FilePicker.hxx"
+#include <KDE5FilePicker.moc>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include <com/sun/star/ui/dialogs/ControlActions.hpp>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
-#include <sal/log.hxx>
 
-#undef Region
-
-#include <unx/geninst.h>
-#include <qt5/Qt5Tools.hxx>
 #include <qt5/Qt5Instance.hxx>
 
-#include <QtCore/QDebug>
-#include <QtCore/QThread>
-#include <QtCore/QUrl>
-#include <QtGui/QClipboard>
-#include <QtGui/QWindow>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QFileDialog>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QWidget>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QWidget>
 #include <KFileWidget>
 
-#include <fpicker/strings.hrc>
-#include <strings.hrc>
-
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
-using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
-using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
-
-// helper functions
+using ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION;
 
 namespace
 {
@@ -237,7 +205,5 @@ bool KDE5FilePicker::eventFilter(QObject* o, QEvent* e)
     }
     return QObject::eventFilter(o, e);
 }
-
-#include <KDE5FilePicker.moc>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
