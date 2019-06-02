@@ -145,11 +145,6 @@
           <value xml:lang="en-US">Table</value>
         </prop>
       </node>
-      <node oor:name="private:resource/popupmenu/tabletext" oor:op="replace">
-        <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Table Text</value>
-        </prop>
-      </node>
       <node oor:name="private:resource/popupmenu/textbox" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Text Box (drawing)</value>
