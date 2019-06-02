@@ -318,6 +318,8 @@ void SwFrame::PrepareMake(vcl::RenderContext* pRenderContext)
                     if (isLast && pFrame->GetUpper() != GetUpper())
                     {
                         assert(GetUpper()->Lower() == this
+                            // empty section frames are created all the time...
+                            || GetUpper()->Lower()->IsSctFrame()
                             // tab frame/section frame may split multiple times
                             || (   SwFlowFrame::CastFlowFrame(pFrame)
                                 && SwFlowFrame::CastFlowFrame(GetUpper()->Lower())
@@ -440,6 +442,8 @@ void SwFrame::PrepareCursor()
                 if (isLast && pFrame->GetUpper() != GetUpper())
                 {
                     assert(GetUpper()->Lower() == this
+                        // empty section frames are created all the time...
+                        || GetUpper()->Lower()->IsSctFrame()
                         // tab frame/section frame may split multiple times
                         || (   SwFlowFrame::CastFlowFrame(pFrame)
                             && SwFlowFrame::CastFlowFrame(GetUpper()->Lower())
