@@ -1932,6 +1932,7 @@ class SalInstanceLinkButton : public SalInstanceContainer, public virtual weld::
 {
 private:
     VclPtr<FixedHyperlink> m_xButton;
+    Link<FixedHyperlink&,void> m_aOrigClickHdl;
 
     DECL_LINK(ClickHdl, FixedHyperlink&, void);
 public:
@@ -1939,6 +1940,7 @@ public:
         : SalInstanceContainer(pButton, pBuilder, bTakeOwnership)
         , m_xButton(pButton)
     {
+        m_aOrigClickHdl = m_xButton->GetClickHdl();
         m_xButton->SetClickHdl(LINK(this, SalInstanceLinkButton, ClickHdl));
     }
 
@@ -1964,15 +1966,16 @@ public:
 
     virtual ~SalInstanceLinkButton() override
     {
-        m_xButton->SetClickHdl(Link<FixedHyperlink&,void>());
+        m_xButton->SetClickHdl(m_aOrigClickHdl);
     }
 };
 
 #include <vcl/pngwrite.hxx>
 #include <tools/stream.hxx>
 
-IMPL_LINK_NOARG(SalInstanceLinkButton, ClickHdl, FixedHyperlink&, void)
+IMPL_LINK(SalInstanceLinkButton, ClickHdl, FixedHyperlink&, rButton, void)
 {
+    m_aOrigClickHdl.Call(rButton);
     signal_clicked();
 }
 
