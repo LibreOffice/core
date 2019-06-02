@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_23288ce0",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-06-02T08:45:23Z",
+      "side": 1,
+      "message": "No %PRODUCTNAME Calc here? ;-)",
+      "range": {
+        "startLine": 200,
+        "startChar": 77,
+        "endLine": 200,
+        "endChar": 81
+      },
+      "revId": "3fbafe1f3218797458813c36eec17ad2b918b75a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
