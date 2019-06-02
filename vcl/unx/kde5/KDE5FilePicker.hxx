@@ -21,34 +21,12 @@
 
 #include <Qt5FilePicker.hxx>
 
-#include <cppuhelper/compbase.hxx>
-
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
-#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-
-#include <osl/conditn.hxx>
-#include <rtl/ustrbuf.hxx>
-
-#include <functional>
-
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QHash>
-#include <QtWidgets/QFileDialog>
-
-class QFileDialog;
 class QGridLayout;
-class QWidget;
-class QComboBox;
 
 class KDE5FilePicker : public Qt5FilePicker
 {
     Q_OBJECT
+
 protected:
     //layout for extra custom controls
     QGridLayout* _layout;
@@ -69,17 +47,6 @@ public:
     virtual void SAL_CALL enableControl(sal_Int16 nControlId, sal_Bool bEnable) override;
     virtual void SAL_CALL setLabel(sal_Int16 nControlId, const OUString& rLabel) override;
     virtual OUString SAL_CALL getLabel(sal_Int16 nControlId) override;
-
-    /* TODO XFilePreview
-
-    virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  );
-    virtual sal_Int32 SAL_CALL  getTargetColorDepth(  );
-    virtual sal_Int32 SAL_CALL  getAvailableWidth(  );
-    virtual sal_Int32 SAL_CALL  getAvailableHeight(  );
-    virtual void SAL_CALL       setImage( sal_Int16 aImageFormat, const css::uno::Any &rImage );
-    virtual sal_Bool SAL_CALL   setShowState( sal_Bool bShowState );
-    virtual sal_Bool SAL_CALL   getShowState(  );
-    */
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
