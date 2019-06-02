@@ -394,18 +394,32 @@ void Qt5Instance::ProcessEvent(SalUserEvent aEvent)
     aEvent.m_pFrame->CallCallback(aEvent.m_nEvent, aEvent.m_pData);
 }
 
-css::uno::Reference<css::ui::dialogs::XFilePicker2>
-Qt5Instance::createFilePicker(const css::uno::Reference<css::uno::XComponentContext>&)
+Qt5FilePicker*
+Qt5Instance::createPicker(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+                          bool bFile)
 {
-    return css::uno::Reference<css::ui::dialogs::XFilePicker2>(
-        new Qt5FilePicker(QFileDialog::ExistingFile));
+    if (!IsMainThread())
+    {
+        SolarMutexGuard g;
+        Qt5FilePicker* pPicker;
+        RunInMainThread(std::function([&, this]() { pPicker = createPicker(xContext, bFile); }));
+        assert(pPicker);
+        return pPicker;
+    }
+
+    return new Qt5FilePicker(bFile ? QFileDialog::ExistingFile : QFileDialog::Directory);
+}
+
+css::uno::Reference<css::ui::dialogs::XFilePicker2>
+Qt5Instance::createFilePicker(const css::uno::Reference<css::uno::XComponentContext>& xContext)
+{
+    return css::uno::Reference<css::ui::dialogs::XFilePicker2>(createPicker(xContext, true));
 }
 
 css::uno::Reference<css::ui::dialogs::XFolderPicker2>
-Qt5Instance::createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>&)
+Qt5Instance::createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>& xContext)
 {
-    return css::uno::Reference<css::ui::dialogs::XFolderPicker2>(
-        new Qt5FilePicker(QFileDialog::Directory));
+    return css::uno::Reference<css::ui::dialogs::XFolderPicker2>(createPicker(xContext, false));
 }
 
 css::uno::Reference<css::uno::XInterface>

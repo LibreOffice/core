@@ -34,6 +34,7 @@
 #include <vector>
 
 class QApplication;
+class Qt5FilePicker;
 class SalYieldMutex;
 class SalFrame;
 
@@ -63,6 +64,8 @@ class VCLPLUG_QT5_PUBLIC Qt5Instance : public QObject,
     bool m_bUpdateFonts;
 
     DECL_LINK(updateStyleHdl, Timer*, void);
+    virtual Qt5FilePicker* createPicker(const css::uno::Reference<css::uno::XComponentContext>&,
+                                        bool);
 
 private Q_SLOTS:
     bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
