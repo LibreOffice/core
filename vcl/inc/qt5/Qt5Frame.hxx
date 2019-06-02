@@ -123,6 +123,7 @@ public:
 
     QWidget* GetQWidget() const { return m_pQWidget; }
     Qt5MainWindow* GetTopLevelWindow() const { return m_pTopLevel; }
+    QWidget* asChild() const;
 
     void Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
                 sal_Int32 nExtentsHeight) const;
