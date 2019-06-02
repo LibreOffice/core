@@ -33,6 +33,8 @@
 #include <memory>
 #include <vector>
 
+#include "Qt5FilePicker.hxx"
+
 class QApplication;
 class SalYieldMutex;
 class SalFrame;
@@ -73,6 +75,9 @@ Q_SIGNALS:
     bool ImplYieldSignal(bool bWait, bool bHandleAllCurrentEvents);
     void ImplRunInMainSignal();
     void deleteObjectLaterSignal(QObject* pObject);
+
+protected:
+    virtual Qt5FilePicker* createPicker(QFileDialog::FileMode);
 
 public:
     explicit Qt5Instance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo = false);
