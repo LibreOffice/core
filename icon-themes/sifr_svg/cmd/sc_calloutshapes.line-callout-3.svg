@@ -1,16 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-  <path
-     style="fill:#555753"
-     d="M 5,1 V 13 H 15 V 1 Z m 2,2 h 6 v 8 H 7 Z"
-     id="path2"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cccccccccc" />
-  <path
-     style="fill:#555753"
-     d="m 1,6 v 9 H 3 V 6 Z"
-     />
-  <path
-     style="opacity:0.35;fill:#555753"
-     d="m 7,3 v 8 h 6 V 3 Z"
-     />
-</svg>
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><g fill="#555753"><path d="m5 1v12h10v-12zm2 2h6v8h-6z"/><path d="m1 6v9h2v-9z"/><path d="m7 3v8h6v-8z" opacity=".35"/></g></svg>
