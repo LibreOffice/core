@@ -82,6 +82,7 @@ cmd/lc_insertnumericfield.png cmd/lc_numberformatstandard.png
 cmd/lc_insertlistbox.png cmd/lc_listbox.png
 cmd/lc_inserttextframe.png cmd/lc_insertframe.png
 cmd/lc_insertobjectstarmath.png cmd/lc_insertmath.png
+cmd/lc_insertpagefield.png cmd/lc_insertpagenumberfield.png
 cmd/lc_insertpatternfield.png cmd/lc_patternfield.png
 cmd/lc_insertpushbutton.png cmd/lc_pushbutton.png
 cmd/lc_insertrowbreak.png cmd/lc_insertpagebreak.png
@@ -113,6 +114,7 @@ cmd/sc_insertlistbox.png cmd/sc_listbox.png
 cmd/sc_insertobjectfloatingframe.png cmd/sc_insertframe.png
 cmd/sc_inserttextframe.png cmd/sc_insertframe.png
 cmd/sc_insertobjectstarmath.png cmd/sc_insertmath.png
+cmd/sc_insertpagefield.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertpatternfield.png cmd/sc_patternfield.png
 cmd/sc_insertpushbutton.png cmd/sc_pushbutton.png
 cmd/sc_insertrowbreak.png cmd/sc_insertpagebreak.png
@@ -199,6 +201,8 @@ cmd/sc_insertannotation.png cmd/sc_showannotations.png
 cmd/lc_insertannotation.png cmd/lc_showannotations.png
 cmd/sc_deletenote.png cmd/sc_deleteannotation.png
 cmd/lc_deletenote.png cmd/lc_deleteannotation.png
+cmd/sc_shownote.png cmd/sc_showannotations.png
+cmd/lc_shownote.png cmd/lc_showannotations.png
 cmd/sc_showchanges.png cmd/sc_addwatch.png
 cmd/lc_showchanges.png cmd/lc_addwatch.png
 cmd/sc_acceptchanges.png cmd/sc_accepttrackedchange.png
@@ -232,13 +236,9 @@ cmd/sc_sectionalignbottom.png cmd/sc_aligndown.png
 cmd/sc_alignhorizontalceter.png cmd/sc_alignhorizontalcenter.png
 
 # Graphic
-cmd/lc_colorsettings.png cmd/lc_graphicfiltersmooth.png
-cmd/lc_graphicfilterposter.png cmd/lc_graphicdialog.png
 cmd/lc_grafmode.png cmd/lc_graphicdialog.png
 cmd/lc_grafinvert.png cmd/lc_graphicfilterinvert.png
 cmd/lc_colorview.png cmd/lc_graphicfilterinvert.png
-cmd/sc_colorsettings.png cmd/sc_graphicfiltersmooth.png
-cmd/sc_graphicfilterposter.png cmd/sc_insertgraphic.png
 cmd/sc_grafmode.png cmd/sc_insertgraphic.png
 cmd/sc_grafinvert.png cmd/sc_graphicfilterinvert.png
 cmd/sc_colorview.png cmd/sc_graphicfilterinvert.png
@@ -508,9 +508,17 @@ cmd/sc_cellvertbottom.png cmd/sc_alignbottom.png
 
 cmd/sc_commonaligntop.png cmd/sc_aligntop.png
 cmd/sc_commonalignverticalcenter.png cmd/sc_alignverticalcenter.png
+cmd/sc_commonalignhorizontalcenter.png cmd/sc_alignhorizontalcenter.png
+cmd/sc_commonalignleft.png cmd/sc_alignleft.png
+cmd/sc_commonalignright.png cmd/sc_alignright.png
+cmd/sc_commonalignjustified.png cmd/sc_alignblock.png
 cmd/sc_commonalignbottom.png cmd/sc_alignbottom.png
 cmd/lc_commonaligntop.png cmd/lc_aligntop.png
 cmd/lc_commonalignverticalcenter.png cmd/lc_alignverticalcenter.png
+cmd/lc_commonalignhorizontalcenter.png cmd/lc_alignhorizontalcenter.png
+cmd/lc_commonalignleft.png cmd/lc_alignleft.png
+cmd/lc_commonalignright.png cmd/lc_alignright.png
+cmd/lc_commonalignjustified.png cmd/lc_alignblock.png
 cmd/lc_commonalignbottom.png cmd/lc_alignbottom.png
 
 # paragraph line spacing drop down
@@ -1112,13 +1120,13 @@ sd/res/waiticon.png cmd/sc_mediapause.png
 # sfx2
 # ==============================================
 sfx2/res/actionaction012.png cmd/lc_recsearch.png
-sfx2/res/actionaction013.png cmd/lc_controlproperties.png
+sfx2/res/actionaction013.png cmd/lc_configuredialog.png
 sfx2/res/actiontemplates015.png cmd/lc_ok.png
 sfx2/res/actiontemplates016.png cmd/lc_formproperties.png
 sfx2/res/actiontemplates018.png cmd/lc_delete.png
 sfx2/res/actiontemplates019.png cmd/lc_editdoc.png
 sfx2/res/actiontemplates020.png cmd/lc_exportto.png
-sfx2/res/actionview010.png cmd/lc_starshapes.png
+sfx2/res/actionview010.png cmd/lc_dataimport.png
 sfx2/res/actionview025.png cmd/lc_delete.png
 sfx2/res/actionview028.png cmd/lc_save.png
 sfx2/res/actionview030.png cmd/lc_open.png
@@ -1449,6 +1457,8 @@ cmd/lc_insertavmedia.png cmd/lc_avmediaplayer.png
 cmd/sc_insertavmedia.png cmd/sc_avmediaplayer.png
 cmd/lc_arrowtoolbox.png cmd/lc_linearrowend.png
 cmd/sc_arrowtoolbox.png cmd/sc_linearrowend.png
+cmd/lc_slidechangewindow.png cmd/lc_dia.png
+cmd/sc_slidechangewindow.png cmd/sc_dia.png
 
 # Writer - Table toolbar
 cmd/lc_tablesort.png cmd/lc_datasort.png
@@ -1526,6 +1536,10 @@ cmd/sc_numberliststyle.png cmd/sc_defaultnumbering.png
 # view menu
 cmd/lc_viewsidebarstyles.png cmd/lc_designerdialog.png
 cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
+
+# tools menu
+cmd/lc_languagemenu.png cmd/lc_managelanguage.png
+cmd/sc_languagemenu.png cmd/sc_managelanguage.png
 
 # writer text and table context menus
 cmd/sc_charactermenu.png cmd/sc_fontdialog.png

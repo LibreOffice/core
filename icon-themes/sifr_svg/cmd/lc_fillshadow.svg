@@ -1,14 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <rect
-     style="opacity:0.35;fill:#555753"
-     width="17"
-     height="12"
-     x="5"
-     y="7" />
-  <rect
-     style="fill:#555753"
-     width="17"
-     height="12"
-     x="2"
-     y="4" />
-</svg>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="#555753"><path d="m5 7h17v12h-17z" opacity=".35"/><path d="m2 4h17v12h-17z"/></g></svg>

@@ -1,6 +1,1 @@
-<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path
-     style="fill:#555753"
-     d="M 2 3 L 2 22 L 10 22 L 10 20 L 10 17 L 10 16 L 10 13 L 14 13 L 15 13 L 20 13 L 22 13 L 22 3 L 2 3 z M 4 5 L 9 5 L 9 8 L 4 8 L 4 5 z M 10 5 L 14 5 L 14 8 L 10 8 L 10 5 z M 15 5 L 20 5 L 20 8 L 15 8 L 15 5 z M 4 9 L 9 9 L 9 12 L 4 12 L 4 9 z M 10 9 L 14 9 L 14 12 L 10 12 L 10 9 z M 15 9 L 20 9 L 20 12 L 15 12 L 15 9 z M 4 13 L 9 13 L 9 16 L 4 16 L 4 13 z M 21.5 14 L 16 20 L 14.300781 18.5 L 13 20.099609 L 16 23 L 23 15.400391 L 21.5 14 z M 4 17 L 9 17 L 9 20 L 4 20 L 4 17 z "
-     />
-</svg>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m2 3v19h8v-2-3-1-3h4 1 5 2v-10zm2 2h5v3h-5zm6 0h4v3h-4zm5 0h5v3h-5zm-11 4h5v3h-5zm6 0h4v3h-4zm5 0h5v3h-5zm-11 4h5v3h-5zm17.5 1-5.5 6-1.699219-1.5-1.300781 1.599609 3 2.900391 7-7.599609zm-17.5 3h5v3h-5z" fill="#555753"/></svg>
