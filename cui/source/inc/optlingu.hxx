@@ -50,18 +50,8 @@ class SvxLinguData_Impl;
 
 // forward ---------------------------------------------------------------
 
-class SvxEditModulesDlg : public ModalDialog
+class SvxEditModulesDlg : public weld::GenericDialogController
 {
-    VclPtr<SvxLanguageBox>     m_pLanguageLB;
-
-    VclPtr<SvxCheckListBox>    m_pModulesCLB;
-    VclPtr<PushButton>         m_pPrioUpPB;
-    VclPtr<PushButton>         m_pPrioDownPB;
-    VclPtr<PushButton>         m_pBackPB;
-    VclPtr<FixedHyperlink>     m_pMoreDictsLink;
-
-    VclPtr<CloseButton>        m_pClosePB;
-
     OUString            sSpell;
     OUString            sHyph;
     OUString            sThes;
@@ -70,23 +60,26 @@ class SvxEditModulesDlg : public ModalDialog
     std::unique_ptr<SvxLinguData_Impl>  pDefaultLinguData;
     SvxLinguData_Impl&  rLinguData;
 
-    std::unique_ptr<SvLBoxButtonData>   m_xCheckButtonData;
+    std::unique_ptr<weld::TreeView> m_xModulesCLB;
+    std::unique_ptr<weld::Button> m_xPrioUpPB;
+    std::unique_ptr<weld::Button> m_xPrioDownPB;
+    std::unique_ptr<weld::Button> m_xBackPB;
+    std::unique_ptr<weld::LinkButton> m_xMoreDictsLink;
+    std::unique_ptr<weld::Button> m_xClosePB;
+    std::unique_ptr<LanguageBox> m_xLanguageLB;
 
-    SvTreeListEntry*    CreateEntry(OUString& rTxt, sal_uInt16 nCol);
-
-    DECL_LINK( SelectHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK( UpDownHdl_Impl, Button*, void );
-    DECL_LINK( ClickHdl_Impl, Button*, void );
-    DECL_LINK( BackHdl_Impl, Button*, void );
-    DECL_LINK( LangSelectListBoxHdl_Impl, ListBox&, void );
-    DECL_LINK( BoxCheckButtonHdl_Impl2, SvLBoxButtonData*, void );
-    DECL_LINK( BoxCheckButtonHdl_Impl, SvTreeListBox*, void );
-    void LangSelectHdl_Impl(ListBox const *);
+    DECL_LINK( SelectHdl_Impl, weld::TreeView&, void );
+    DECL_LINK( UpDownHdl_Impl, weld::Button&, void );
+    DECL_LINK( ClickHdl_Impl, weld::Button&, void );
+    DECL_LINK( BackHdl_Impl, weld::Button&, void );
+    DECL_LINK( LangSelectListBoxHdl_Impl, weld::ComboBox&, void );
+    typedef std::pair<int, int> row_col;
+    DECL_LINK( BoxCheckButtonHdl_Impl, const row_col&, void );
+    void LangSelectHdl_Impl(const LanguageBox* pBox);
 
 public:
-    SvxEditModulesDlg(vcl::Window* pParent, SvxLinguData_Impl& rData);
+    SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& rData);
     virtual ~SvxEditModulesDlg() override;
-    virtual void dispose() override;
 };
 
 // class SvxLinguTabPage -------------------------------------------------
