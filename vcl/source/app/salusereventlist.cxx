@@ -64,6 +64,8 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
 
     DBG_TESTSOLARMUTEX();
     osl::ResettableMutexGuard aResettableListGuard(m_aUserEventsMutex);
+    if (m_aProcessingThread && m_aProcessingThread != aCurId)
+        return HasUserEvents();
 
     if (!m_aUserEvents.empty())
     {
@@ -87,8 +89,9 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
         m_aProcessingThread = aCurId;
 
         SalUserEvent aEvent( nullptr, nullptr, SalEvent::NONE );
-        do {
-            if (m_aProcessingUserEvents.empty() || aCurId != m_aProcessingThread)
+        do
+        {
+            if (m_aProcessingUserEvents.empty())
                 break;
             aEvent = m_aProcessingUserEvents.front();
             m_aProcessingUserEvents.pop_front();
@@ -127,8 +130,8 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
             aResettableListGuard.reset();
             if (!bHandleAllCurrentEvents)
                 break;
-        }
-        while( true );
+        } while (true);
+        m_aProcessingThread = 0;
     }
 
     if ( !m_bAllUserEventProcessedSignaled && !HasUserEvents() )
