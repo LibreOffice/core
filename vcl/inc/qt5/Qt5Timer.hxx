@@ -40,6 +40,8 @@ Q_SIGNALS:
 public:
     Qt5Timer();
 
+    int remainingTime() const { return m_aTimer.remainingTime(); }
+
     virtual void Start(sal_uInt64 nMS) override;
     virtual void Stop() override;
 };
