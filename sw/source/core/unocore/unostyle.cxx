@@ -186,6 +186,7 @@ namespace sw
         const StyleFamilyEntry& m_rEntry;
         SfxStyleSheetBasePool* m_pBasePool;
         SwDocShell* m_pDocShell;
+        boost::optional<uno::Sequence<OUString>> m_xElementNames;
 
         SwXStyle* FindStyle(const OUString& rStyleName) const;
         sal_Int32 GetCountOrName(OUString* pString, sal_Int32 nIndex = SAL_MAX_INT32)
@@ -869,6 +870,8 @@ uno::Sequence<OUString> XStyleFamily::getElementNames()
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
         throw uno::RuntimeException();
+    if (m_xElementNames)
+        return *m_xElementNames;
     std::vector<OUString> vRet;
     std::unique_ptr<SfxStyleSheetIterator> pIt = m_pBasePool->CreateIterator(m_rEntry.m_eFamily, SfxStyleSearchBits::All);
     for (SfxStyleSheetBase* pStyle = pIt->First(); pStyle; pStyle = pIt->Next())
@@ -877,7 +880,8 @@ uno::Sequence<OUString> XStyleFamily::getElementNames()
         SwStyleNameMapper::FillProgName(pStyle->GetName(), sName, m_rEntry.m_aPoolId);
         vRet.push_back(sName);
     }
-    return comphelper::containerToSequence(vRet);
+    m_xElementNames = comphelper::containerToSequence(vRet);
+    return *m_xElementNames;
 }
 
 sal_Bool XStyleFamily::hasByName(const OUString& rName)
