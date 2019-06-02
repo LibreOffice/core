@@ -139,13 +139,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
 
     if (aWinFlags == Qt::Window)
     {
-        QWidget* pParentWidget = nullptr;
-        if (m_pParent)
-        {
-            pParentWidget
-                = (m_pParent->m_pTopLevel) ? m_pParent->m_pTopLevel : m_pParent->m_pQWidget;
-        }
-
+        QWidget* pParentWidget = m_pParent ? m_pParent->asChild() : nullptr;
         m_pTopLevel = new Qt5MainWindow(*this, pParentWidget, aWinFlags);
         m_pQWidget = new Qt5Widget(*this, aWinFlags);
         m_pTopLevel->setCentralWidget(m_pQWidget);
@@ -159,8 +153,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
     {
         QWindow* pParentWindow = pParent->GetQWidget()->window()->windowHandle();
-        QWindow* pChildWindow = (m_pTopLevel ? m_pTopLevel->window()->windowHandle()
-                                             : m_pQWidget->window()->windowHandle());
+        QWindow* pChildWindow = asChild()->window()->windowHandle();
         if (pParentWindow && pChildWindow && (pParentWindow != pChildWindow))
             pChildWindow->setTransientParent(pParentWindow);
     }
@@ -217,10 +210,7 @@ Qt5Frame::~Qt5Frame()
 {
     Qt5Instance* pInst = static_cast<Qt5Instance*>(GetSalData()->m_pInstance);
     pInst->eraseFrame(this);
-    if (m_pTopLevel)
-        delete m_pTopLevel;
-    else
-        delete m_pQWidget;
+    delete asChild();
     m_aSystemData.aShellWindow = 0;
 }
 
@@ -302,60 +292,31 @@ bool Qt5Frame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
     return true;
 }
 
-bool Qt5Frame::isWindow() const
-{
-    if (m_pTopLevel)
-        return m_pTopLevel->isWindow();
-    else
-        return m_pQWidget->isWindow();
-}
+QWidget* Qt5Frame::asChild() const { return m_pTopLevel ? m_pTopLevel : m_pQWidget; }
+
+bool Qt5Frame::isWindow() const { return asChild()->isWindow(); }
 
 QWindow* Qt5Frame::windowHandle() const
 {
     // set attribute 'Qt::WA_NativeWindow' first to make sure a window handle actually exists
-    if (m_pTopLevel)
-    {
-        m_pTopLevel->setAttribute(Qt::WA_NativeWindow);
-        return m_pTopLevel->windowHandle();
-    }
-    else
-    {
-        m_pQWidget->setAttribute(Qt::WA_NativeWindow);
-        return m_pQWidget->windowHandle();
-    }
+    QWidget* pChild = asChild();
+    pChild->setAttribute(Qt::WA_NativeWindow);
+    return pChild->windowHandle();
 }
 
 QScreen* Qt5Frame::screen() const
 {
     QWindow* const pWindow = windowHandle();
-    if (pWindow)
-        return pWindow->screen();
-    else
-        return nullptr;
+    return pWindow ? pWindow->screen() : nullptr;
 }
 
-bool Qt5Frame::isMinimized() const
-{
-    if (m_pTopLevel)
-        return m_pTopLevel->isMinimized();
-    else
-        return m_pQWidget->isMinimized();
-}
+bool Qt5Frame::isMinimized() const { return asChild()->isMinimized(); }
 
-bool Qt5Frame::isMaximized() const
-{
-    if (m_pTopLevel)
-        return m_pTopLevel->isMaximized();
-    else
-        return m_pQWidget->isMaximized();
-}
+bool Qt5Frame::isMaximized() const { return asChild()->isMaximized(); }
 
 void Qt5Frame::SetWindowStateImpl(Qt::WindowStates eState)
 {
-    if (m_pTopLevel)
-        m_pTopLevel->setWindowState(eState);
-    else
-        m_pQWidget->setWindowState(eState);
+    return asChild()->setWindowState(eState);
 }
 
 void Qt5Frame::SetTitle(const OUString& rTitle)
@@ -399,13 +360,7 @@ void Qt5Frame::DrawMenuBar() { /* not needed */}
 
 void Qt5Frame::SetExtendedFrameStyle(SalExtStyle /*nExtStyle*/) { /* not needed */}
 
-void Qt5Frame::setVisible(bool bVisible)
-{
-    if (m_pTopLevel)
-        m_pTopLevel->setVisible(bVisible);
-    else
-        m_pQWidget->setVisible(bVisible);
-}
+void Qt5Frame::setVisible(bool bVisible) { asChild()->setVisible(bVisible); }
 
 void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
 {
@@ -422,23 +377,13 @@ void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
 void Qt5Frame::SetMinClientSize(long nWidth, long nHeight)
 {
     if (!isChild())
-    {
-        if (m_pTopLevel)
-            m_pTopLevel->setMinimumSize(nWidth, nHeight);
-        else
-            m_pQWidget->setMinimumSize(nWidth, nHeight);
-    }
+        asChild()->setMinimumSize(nWidth, nHeight);
 }
 
 void Qt5Frame::SetMaxClientSize(long nWidth, long nHeight)
 {
     if (!isChild())
-    {
-        if (m_pTopLevel)
-            m_pTopLevel->setMaximumSize(nWidth, nHeight);
-        else
-            m_pQWidget->setMaximumSize(nWidth, nHeight);
-    }
+        asChild()->setMaximumSize(nWidth, nHeight);
 }
 
 void Qt5Frame::Center()
@@ -446,7 +391,7 @@ void Qt5Frame::Center()
     if (m_pParent)
     {
         QWidget* pWindow = m_pParent->GetQWidget()->window();
-        QWidget* const pWidget = m_pTopLevel ? m_pTopLevel : m_pQWidget;
+        QWidget* const pWidget = asChild();
         pWidget->move(pWindow->frameGeometry().topLeft() + pWindow->rect().center()
                       - pWidget->rect().center());
     }
@@ -497,12 +442,10 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
         m_bDefaultSize = false;
         if (isChild(false) || !m_pQWidget->isMaximized())
         {
-            QWidget* const pWidget = m_pTopLevel ? m_pTopLevel : m_pQWidget;
-
             if (m_nStyle & SalFrameStyleFlags::SIZEABLE)
-                pWidget->resize(nWidth, nHeight);
+                asChild()->resize(nWidth, nHeight);
             else
-                pWidget->setFixedSize(nWidth, nHeight);
+                asChild()->setFixedSize(nWidth, nHeight);
         }
     }
     else if (m_bDefaultSize)
@@ -528,10 +471,7 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
         maGeometry.nY = nY;
 
         m_bDefaultPos = false;
-        if (m_pTopLevel)
-            m_pTopLevel->move(nX, nY);
-        else
-            m_pQWidget->move(nX, nY);
+        asChild()->move(nX, nY);
     }
     else if (m_bDefaultPos)
         Center();
@@ -600,16 +540,9 @@ void Qt5Frame::SetWindowState(const SalFrameState* pState)
     if ((pState->mnMask & WindowStateMask::State) && (pState->mnState & WindowStateState::Maximized)
         && !isMaximized() && (pState->mnMask & nMaxGeometryMask) == nMaxGeometryMask)
     {
-        if (m_pTopLevel)
-        {
-            m_pTopLevel->resize(pState->mnWidth, pState->mnHeight);
-            m_pTopLevel->move(pState->mnX, pState->mnY);
-        }
-        else
-        {
-            m_pQWidget->resize(pState->mnWidth, pState->mnHeight);
-            m_pQWidget->move(pState->mnX, pState->mnY);
-        }
+        QWidget* const pChild = asChild();
+        pChild->resize(pState->mnWidth, pState->mnHeight);
+        pChild->move(pState->mnX, pState->mnY);
         SetWindowStateImpl(Qt::WindowMaximized);
     }
     else if (pState->mnMask
@@ -660,7 +593,7 @@ bool Qt5Frame::GetWindowState(SalFrameState* pState)
     }
     else
     {
-        QRect rect = m_pTopLevel ? m_pTopLevel->geometry() : m_pQWidget->geometry();
+        QRect rect = asChild()->geometry();
         pState->mnX = rect.x();
         pState->mnY = rect.y();
         pState->mnWidth = rect.width();
@@ -714,7 +647,7 @@ void Qt5Frame::StartPresentation(bool)
 
 void Qt5Frame::SetAlwaysOnTop(bool bOnTop)
 {
-    QWidget* const pWidget = m_pTopLevel ? m_pTopLevel : m_pQWidget;
+    QWidget* const pWidget = asChild();
     const Qt::WindowFlags flags = pWidget->windowFlags();
     if (bOnTop)
         pWidget->setWindowFlags(flags | Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint);
@@ -724,8 +657,7 @@ void Qt5Frame::SetAlwaysOnTop(bool bOnTop)
 
 void Qt5Frame::ToTop(SalFrameToTop nFlags)
 {
-    QWidget* const pWidget = m_pTopLevel ? m_pTopLevel : m_pQWidget;
-
+    QWidget* const pWidget = asChild();
     if (isWindow() && !(nFlags & SalFrameToTop::GrabFocusOnly))
         pWidget->raise();
     if ((nFlags & SalFrameToTop::RestoreWhenMin) || (nFlags & SalFrameToTop::ForegroundTask))
@@ -1164,8 +1096,7 @@ void Qt5Frame::SetScreenNumber(unsigned int nScreen)
 
                 // setScreen by itself has no effect, explicitly move the widget to
                 // the new screen
-                QWidget* const pWidget = m_pTopLevel ? m_pTopLevel : m_pQWidget;
-                pWidget->move(screenGeo.topLeft());
+                asChild()->move(screenGeo.topLeft());
             }
             else
             {
