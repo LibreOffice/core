@@ -92,6 +92,7 @@ private:
     bool            bAuthor;
     bool            bDate;
     bool            bComment;
+    bool            bSorted;
     SvxRedlinDateMode nDaTiMode;
     DateTime        aDaTiFirst;
     DateTime        aDaTiLast;

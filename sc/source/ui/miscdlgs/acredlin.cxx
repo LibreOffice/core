@@ -1748,7 +1748,7 @@ int ScAcceptChgDlg::ColCompareHdl(const weld::TreeIter& rLeft, const weld::TreeI
     weld::TreeView& rTreeView = pTheView->GetWidget();
 
     sal_Int32 nCompare = 0;
-    SCCOL nSortCol= rTreeView.get_sort_column();
+    SCCOL nSortCol = rTreeView.get_sort_column();
 
     if (CALC_DATE == nSortCol)
     {
