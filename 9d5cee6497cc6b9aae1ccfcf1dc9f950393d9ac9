@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_a3c7bc12",
+        "filename": "vcl/source/gdi/CommonSalLayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2019-06-02T11:35:02Z",
+      "side": 1,
+      "message": "Hmm, I would have thought that `previousCharacters`, `nextCharacters` would have handled index inside a surrogate pair gracefully, may be it would a good idea to make it do this.",
+      "revId": "9d5cee6497cc6b9aae1ccfcf1dc9f950393d9ac9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
