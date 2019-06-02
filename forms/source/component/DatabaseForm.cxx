@@ -468,7 +468,7 @@ Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XContr
     FillSuccessfulList( aSuccObjList, SubmitButton, MouseEvt );
 
 
-    // Aggregate Liste to OUString
+    // Aggregate List to OUString
     for (auto const& succObj : aSuccObjList)
     {
         if( succObj.nRepresentation == SUCCESSFUL_REPRESENT_TEXT )
@@ -2025,7 +2025,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
 
     aResetGuard.reset();
     // and again : ensure the row isn't modified
-    // we already did this after we (and maybe our dependents) resetted the values, but the listeners may have changed the row, too
+    // we already did this after we (and maybe our dependents) reset the values, but the listeners may have changed the row, too
     if (bInsertRow)
         m_xAggregateSet->setPropertyValue(PROPERTY_ISMODIFIED, css::uno::Any(false));
 
