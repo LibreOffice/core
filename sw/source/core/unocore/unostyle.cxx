@@ -186,6 +186,7 @@ namespace sw
         const StyleFamilyEntry& m_rEntry;
         SfxStyleSheetBasePool* m_pBasePool;
         SwDocShell* m_pDocShell;
+        boost::optional<uno::Sequence<OUString>> m_xElementNames;
 
         SwXStyle* FindStyle(const OUString& rStyleName) const;
         sal_Int32 GetCountOrName(OUString* pString, sal_Int32 nIndex = SAL_MAX_INT32)
@@ -869,6 +870,8 @@ uno::Sequence<OUString> XStyleFamily::getElementNames()
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
         throw uno::RuntimeException();
+    if (m_xElementNames)
+        return *m_xElementNames;
     std::vector<OUString> vRet;
     std::unique_ptr<SfxStyleSheetIterator> pIt = m_pBasePool->CreateIterator(m_rEntry.m_eFamily, SfxStyleSearchBits::All);
     for (SfxStyleSheetBase* pStyle = pIt->First(); pStyle; pStyle = pIt->Next())
@@ -877,7 +880,8 @@ uno::Sequence<OUString> XStyleFamily::getElementNames()
         SwStyleNameMapper::FillProgName(pStyle->GetName(), sName, m_rEntry.m_aPoolId);
         vRet.push_back(sName);
     }
-    return comphelper::containerToSequence(vRet);
+    m_xElementNames = comphelper::containerToSequence(vRet);
+    return *m_xElementNames;
 }
 
 sal_Bool XStyleFamily::hasByName(const OUString& rName)
@@ -898,6 +902,7 @@ void XStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
         throw uno::RuntimeException();
+    m_xElementNames.reset();
     OUString sStyleName;
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_aPoolId);
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
@@ -969,6 +974,7 @@ void XStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
         throw uno::RuntimeException();
+    m_xElementNames.reset();
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
     SfxStyleSheetBase* pBase = m_pBasePool->Find(rName);
     // replacements only for userdefined styles
@@ -1033,6 +1039,7 @@ void XStyleFamily::removeByName(const OUString& rName)
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
         throw uno::RuntimeException();
+    m_xElementNames.reset();
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
     OUString sName;
     SwStyleNameMapper::FillUIName(rName, sName, m_rEntry.m_aPoolId);

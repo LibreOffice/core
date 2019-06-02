@@ -516,7 +516,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 const std::vector<OUString>& rStrings = pStringsFetchFunc();
                 sal_uInt16 nIndex, nId;
                 for ( nIndex = 0, nId = std::get<0>( rEntry ) ; nId < std::get<1>( rEntry ) ; nId++, nIndex++ )
-                    (*pHash)[rStrings[nIndex]] = nId;
+                    pHash->emplace(rStrings[nIndex], nId);
             }
         }
 
