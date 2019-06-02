@@ -40,7 +40,6 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/sdraw,\
 	sd/uiconfig/sdraw/popupmenu/pagepane \
 	sd/uiconfig/sdraw/popupmenu/pagetab \
 	sd/uiconfig/sdraw/popupmenu/page \
-	sd/uiconfig/sdraw/popupmenu/tabletext \
 	sd/uiconfig/sdraw/popupmenu/table \
 	sd/uiconfig/sdraw/popupmenu/textbox \
 ))

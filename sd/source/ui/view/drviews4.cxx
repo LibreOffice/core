@@ -647,7 +647,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                             {
                                 if( (pObj->GetObjInventor() == SdrInventor::Default) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
                                 {
-                                    aPopupId = "tabletext";
+                                    aPopupId = "table";
                                 }
                                 else
                                 {
