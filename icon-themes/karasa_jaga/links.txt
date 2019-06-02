@@ -1731,7 +1731,7 @@ sfx2/res/symphony/sidebar-imganim-small.png cmd/sc_animationobjects.png
 sfx2/res/symphony/sidebar-navigator-large.png cmd/lc_navigator.png
 sfx2/res/symphony/sidebar-navigator-small.png cmd/sc_navigator.png
 sfx2/res/symphony/sidebar-property-large.png cmd/lc_configuredialog.png
-sfx2/res/symphony/sidebar-property-small.png cmd/sxc_configuredialog.png
+sfx2/res/symphony/sidebar-property-small.png cmd/sc_configuredialog.png
 sfx2/res/symphony/sidebar-style-large.png cmd/lc_designerdialog.png
 sfx2/res/symphony/sidebar-style-small.png cmd/sc_designerdialog.png
 sfx2/res/symphony/sidebar-template-large.png cmd/lc_slidemasterpage.png
@@ -1786,11 +1786,6 @@ svx/res/fontworkalignright_26.png cmd/lc_alignright.png
 svx/res/fw07.png cmd/sc_alignleft.png
 svx/res/fw08.png cmd/sc_alignhorizontalcenter.png
 svx/res/fw09.png cmd/sc_alignright.png
-svx/res/galdefs.png svtools/res/folder.png
-svx/res/galnorl.png svx/res/galdefl.png
-svx/res/galnors.png svtools/res/folder.png
-svx/res/galrdol.png svx/res/galdefl.png
-svx/res/galrdos.png svtools/res/folder.png
 svx/res/graphic.png cmd/lc_graphic.png
 svx/res/id01.png cmd/sc_ok.png
 svx/res/id018.png cmd/sc_choosemacro.png
@@ -1811,7 +1806,7 @@ svx/res/id08.png cmd/sc_freeline_unfilled.png
 svx/res/lighton.png cmd/sc_extrusionlightingfloater.png
 svx/res/lngcheck.png cmd/sc_spelling.png
 svx/res/nu01.png cmd/sc_ok.png
-svx/res/nu02.png cmd/sc_delete.png
+svx/res/nu02.png reportdesign/res/sc30770.png
 svx/res/nu03.png cmd/sc_showannotations.png
 svx/res/objects.png cmd/sc_objectcatalog.png
 svx/res/ole.png cmd/sc_insertobject.png
