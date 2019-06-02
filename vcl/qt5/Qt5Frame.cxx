@@ -33,6 +33,7 @@
 #include <QtCore/QMimeData>
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
+#include <QtCore/QThread>
 #include <QtGui/QIcon>
 #include <QtGui/QWindow>
 #include <QtGui/QScreen>
@@ -360,8 +361,6 @@ void Qt5Frame::DrawMenuBar() { /* not needed */}
 
 void Qt5Frame::SetExtendedFrameStyle(SalExtStyle /*nExtStyle*/) { /* not needed */}
 
-void Qt5Frame::setVisible(bool bVisible) { asChild()->setVisible(bVisible); }
-
 void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
 {
     assert(m_pQWidget);
@@ -371,7 +370,7 @@ void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
 
     auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
     assert(pSalInst);
-    pSalInst->RunInMainThread([this, bVisible]() { setVisible(bVisible); });
+    pSalInst->RunInMainThread([this, bVisible]() { asChild()->setVisible(bVisible); });
 }
 
 void Qt5Frame::SetMinClientSize(long nWidth, long nHeight)
@@ -506,21 +505,18 @@ void Qt5Frame::SetModal(bool bModal)
         auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
         assert(pSalInst);
         pSalInst->RunInMainThread([this, bModal]() {
-            bool wasVisible = windowHandle()->isVisible();
+
+            QWidget* const pChild = asChild();
+            const bool bWasVisible = pChild->isVisible();
 
             // modality change is only effective if the window is hidden
-            if (wasVisible)
-            {
-                windowHandle()->hide();
-            }
+            if (bWasVisible)
+                pChild->hide();
 
-            windowHandle()->setModality(bModal ? Qt::WindowModal : Qt::NonModal);
+            pChild->setWindowModality(bModal ? Qt::WindowModal : Qt::NonModal);
 
-            // and shown again if it was visible
-            if (wasVisible)
-            {
-                windowHandle()->show();
-            }
+            if (bWasVisible)
+                pChild->show();
         });
     }
 }

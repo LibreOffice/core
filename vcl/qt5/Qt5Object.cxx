@@ -109,6 +109,18 @@ Qt5ObjectWindow::Qt5ObjectWindow(Qt5Object& rParent)
     assert(m_rParent.frame() && m_rParent.frame()->GetQWidget());
 }
 
+void Qt5ObjectWindow::focusInEvent(QFocusEvent* pEvent)
+{
+    m_rParent.CallCallback(SalObjEvent::GetFocus);
+    QWindow::focusInEvent(pEvent);
+}
+
+void Qt5ObjectWindow::focusOutEvent(QFocusEvent* pEvent)
+{
+    m_rParent.CallCallback(SalObjEvent::LoseFocus);
+    QWindow::focusOutEvent(pEvent);
+}
+
 void Qt5ObjectWindow::mousePressEvent(QMouseEvent* pEvent)
 {
     m_rParent.CallCallback(SalObjEvent::ToTop);
