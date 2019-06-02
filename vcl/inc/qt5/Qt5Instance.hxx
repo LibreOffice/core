@@ -35,6 +35,8 @@
 
 #include "Qt5FilePicker.hxx"
 
+class Qt5Timer;
+
 class QApplication;
 class SalYieldMutex;
 class SalFrame;
@@ -52,8 +54,9 @@ class VCLPLUG_QT5_PUBLIC Qt5Instance : public QObject,
     Q_OBJECT
 
     osl::Condition m_aWaitingYieldCond;
-    int m_postUserEventId;
     const bool m_bUseCairo;
+    Qt5Timer* m_pTimer;
+    bool m_bSleeping;
     std::unordered_map<OUString, css::uno::Reference<css::uno::XInterface>> m_aClipboards;
 
     std::unique_ptr<QApplication> m_pQApplication;
@@ -69,12 +72,10 @@ class VCLPLUG_QT5_PUBLIC Qt5Instance : public QObject,
 
 private Q_SLOTS:
     bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
-    void ImplRunInMain();
     static void deleteObjectLater(QObject* pObject);
 
 Q_SIGNALS:
     bool ImplYieldSignal(bool bWait, bool bHandleAllCurrentEvents);
-    void ImplRunInMainSignal();
     void deleteObjectLaterSignal(QObject* pObject);
 
 protected:

@@ -187,10 +187,8 @@ void Qt5Instance::RunInMainThread(std::function<void()> func)
         pMutex->m_isWakeUpMain = true;
         pMutex->m_InMainCondition.notify_all();
     }
-    // wake up main thread in case it is blocked on event queue
-    // TriggerUserEventProcessing() appears to be insufficient in case the
-    // main thread does QEventLoop::WaitForMoreEvents
-    Q_EMIT ImplRunInMainSignal();
+
+    TriggerUserEventProcessing();
     {
         std::unique_lock<std::mutex> g(pMutex->m_RunInMainMutex);
         pMutex->m_ResultCondition.wait(g, [pMutex]() { return pMutex->m_isResultReady; });
@@ -198,16 +196,11 @@ void Qt5Instance::RunInMainThread(std::function<void()> func)
     }
 }
 
-void Qt5Instance::ImplRunInMain()
-{
-    SolarMutexGuard g; // trigger the dispatch code in Qt5YieldMutex::doAcquire
-    (void)this; // suppress unhelpful [loplugin:staticmethods]; can't be static
-}
-
 Qt5Instance::Qt5Instance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
     : SalGenericInstance(std::make_unique<Qt5YieldMutex>())
-    , m_postUserEventId(-1)
     , m_bUseCairo(bUseCairo)
+    , m_pTimer(nullptr)
+    , m_bSleeping(false)
     , m_pQApplication(std::move(pQApp))
     , m_aUpdateStyleTimer("vcl::qt5 m_aUpdateStyleTimer")
     , m_bUpdateFonts(false)
@@ -218,14 +211,10 @@ Qt5Instance::Qt5Instance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
     else
         pSVData->maAppData.mxToolkitName = OUString("qt5");
 
-    m_postUserEventId = QEvent::registerEventType();
-
     // this one needs to be blocking, so that the handling in main thread
     // is processed before the thread emitting the signal continues
     connect(this, SIGNAL(ImplYieldSignal(bool, bool)), this, SLOT(ImplYield(bool, bool)),
             Qt::BlockingQueuedConnection);
-    connect(this, &Qt5Instance::ImplRunInMainSignal, this, &Qt5Instance::ImplRunInMain,
-            Qt::QueuedConnection); // no Blocking!
 
     // this one needs to be queued non-blocking
     // in order to have this event arriving to correct event processing loop
@@ -235,6 +224,11 @@ Qt5Instance::Qt5Instance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
 
     m_aUpdateStyleTimer.SetTimeout(50);
     m_aUpdateStyleTimer.SetInvokeHandler(LINK(this, Qt5Instance, updateStyleHdl));
+
+    QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance(qApp->thread());
+    connect(dispatcher, &QAbstractEventDispatcher::awake, this, [this]() { m_bSleeping = false; });
+    connect(dispatcher, &QAbstractEventDispatcher::aboutToBlock, this,
+            [this]() { m_bSleeping = true; });
 }
 
 Qt5Instance::~Qt5Instance()
@@ -333,7 +327,11 @@ std::unique_ptr<SalMenuItem> Qt5Instance::CreateMenuItem(const SalItemParams& rI
     return std::unique_ptr<SalMenuItem>(new Qt5MenuItem(&rItemData));
 }
 
-SalTimer* Qt5Instance::CreateSalTimer() { return new Qt5Timer(); }
+SalTimer* Qt5Instance::CreateSalTimer()
+{
+    m_pTimer = new Qt5Timer();
+    return m_pTimer;
+}
 
 SalSystem* Qt5Instance::CreateSalSystem() { return new Qt5System; }
 
@@ -392,7 +390,15 @@ bool Qt5Instance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     return bWasEvent;
 }
 
-bool Qt5Instance::AnyInput(VclInputFlags /*nType*/) { return false; }
+bool Qt5Instance::AnyInput(VclInputFlags nType)
+{
+    bool bResult = false;
+    if (nType & VclInputFlags::TIMER)
+        bResult |= (m_pTimer && m_pTimer->remainingTime() == 0);
+    if (nType & VclInputFlags::OTHER)
+        bResult |= !m_bSleeping;
+    return bResult;
+}
 
 OUString Qt5Instance::GetConnectionIdentifier() { return OUString(); }
 
@@ -407,7 +413,8 @@ bool Qt5Instance::IsMainThread() const
 
 void Qt5Instance::TriggerUserEventProcessing()
 {
-    QApplication::postEvent(this, new QEvent(QEvent::Type(m_postUserEventId)));
+    QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance(qApp->thread());
+    dispatcher->wakeUp();
 }
 
 void Qt5Instance::ProcessEvent(SalUserEvent aEvent)
