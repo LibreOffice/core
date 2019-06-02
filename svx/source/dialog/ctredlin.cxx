@@ -83,6 +83,7 @@ SvxRedlinTable::SvxRedlinTable(std::unique_ptr<weld::TreeView> xWriterControl,
     , bAuthor(false)
     , bDate(false)
     , bComment(false)
+    , bSorted(false)
     , nDaTiMode(SvxRedlinDateMode::BEFORE)
     , aDaTiFirst( DateTime::EMPTY )
     , aDaTiLast( DateTime::EMPTY )
@@ -121,6 +122,12 @@ SvxRedlinTable::~SvxRedlinTable()
 
 IMPL_LINK(SvxRedlinTable, HeaderBarClick, int, nColumn, void)
 {
+    if (!bSorted)
+    {
+        pTreeView->make_sorted();
+        bSorted = true;
+    }
+
     bool bSortAtoZ = pTreeView->get_sort_order();
 
     //set new arrow positions in headerbar
