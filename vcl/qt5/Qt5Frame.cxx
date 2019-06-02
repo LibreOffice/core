@@ -34,6 +34,7 @@
 #include <QtCore/QMimeData>
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
+#include <QtCore/QThread>
 #include <QtGui/QIcon>
 #include <QtGui/QWindow>
 #include <QtGui/QScreen>
@@ -507,21 +508,22 @@ void Qt5Frame::SetModal(bool bModal)
         auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
         assert(pSalInst);
         pSalInst->RunInMainThread([this, bModal]() {
-            bool wasVisible = windowHandle()->isVisible();
 
-            // modality change is only effective if the window is hidden
-            if (wasVisible)
+            QWidget* const pChild = asChild();
+            bool bWasVisible = pChild->isVisible();
+            if (bWasVisible)
             {
-                windowHandle()->hide();
+                SAL_WARN("vcl.qt5", "SetModal called after Show - apply delay");
+                pChild->hide();
+                // give QXcbConnection some time to recover from unmap
+                // ~/.xsession-errors => (BadWindow) (ChangeProperty)
+                QThread::msleep(250);
             }
-
-            windowHandle()->setModality(bModal ? Qt::WindowModal : Qt::NonModal);
+            pChild->setWindowModality(bModal ? Qt::WindowModal : Qt::NonModal);
 
             // and shown again if it was visible
-            if (wasVisible)
-            {
-                windowHandle()->show();
-            }
+            if (bWasVisible)
+                pChild->show();
         });
     }
 }
