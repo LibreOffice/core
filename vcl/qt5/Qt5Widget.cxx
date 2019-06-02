@@ -629,7 +629,7 @@ QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
         {
             sal_Int32 nCursorPos, nAnchor;
             if (lcl_retrieveSurrounding(nCursorPos, nAnchor, nullptr, nullptr))
-                return QVariant(nCursorPos);
+                return QVariant(static_cast<int>(nCursorPos));
             [[fallthrough]];
         }
         case Qt::ImCursorRectangle:
@@ -643,7 +643,7 @@ QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
         {
             sal_Int32 nCursorPos, nAnchor;
             if (lcl_retrieveSurrounding(nCursorPos, nAnchor, nullptr, nullptr))
-                return QVariant(nAnchor);
+                return QVariant(static_cast<int>(nAnchor));
             [[fallthrough]];
         }
         case Qt::ImCurrentSelection:
