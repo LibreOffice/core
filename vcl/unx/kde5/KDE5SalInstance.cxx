@@ -50,34 +50,23 @@ SalFrame* KDE5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nSt
     return pRet;
 }
 
-uno::Reference<ui::dialogs::XFilePicker2>
-KDE5SalInstance::createFilePicker(const uno::Reference<uno::XComponentContext>& xMSF)
+Qt5FilePicker* KDE5SalInstance::createPicker(QFileDialog::FileMode eMode)
 {
     if (!IsMainThread())
     {
         SolarMutexGuard g;
-        uno::Reference<ui::dialogs::XFilePicker2> xRet;
-        RunInMainThread(
-            std::function([&xRet, this, xMSF]() { xRet = this->createFilePicker(xMSF); }));
-        assert(xRet);
-        return xRet;
+        Qt5FilePicker* pPicker;
+        RunInMainThread(std::function([&, this]() { pPicker = createPicker(eMode); }));
+        assert(pPicker);
+        return pPicker;
     }
 
     // In order to insert custom controls, KDE5FilePicker currently relies on KFileWidget
     // being used in the native file picker, which is only the case for KDE Plasma.
     // Therefore, return the plain qt5 one in order to not lose custom controls.
     if (Application::GetDesktopEnvironment() == "KDE5")
-    {
-        return uno::Reference<ui::dialogs::XFilePicker2>(
-            new KDE5FilePicker(QFileDialog::ExistingFile));
-    }
-    return Qt5Instance::createFilePicker(xMSF);
-}
-
-uno::Reference<ui::dialogs::XFolderPicker2>
-KDE5SalInstance::createFolderPicker(const uno::Reference<uno::XComponentContext>& /*xMSF*/)
-{
-    return uno::Reference<ui::dialogs::XFolderPicker2>(new KDE5FilePicker(QFileDialog::Directory));
+        return new KDE5FilePicker(eMode);
+    return Qt5Instance::createPicker(eMode);
 }
 
 extern "C" {

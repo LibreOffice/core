@@ -21,23 +21,15 @@
 
 #include <qt5/Qt5Instance.hxx>
 
-class QApplication;
-
-class KDE5SalInstance : public Qt5Instance
+class KDE5SalInstance final : public Qt5Instance
 {
+    Qt5FilePicker* createPicker(QFileDialog::FileMode) override;
+
+    SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
+    bool hasNativeFileSelection() const override { return true; }
+
 public:
     explicit KDE5SalInstance(std::unique_ptr<QApplication>& pQApp);
-
-    virtual bool hasNativeFileSelection() const override { return true; }
-
-    virtual css::uno::Reference<css::ui::dialogs::XFolderPicker2>
-    createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>&) override;
-
-private:
-    virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
-
-    virtual css::uno::Reference<css::ui::dialogs::XFilePicker2>
-    createFilePicker(const css::uno::Reference<css::uno::XComponentContext>&) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
