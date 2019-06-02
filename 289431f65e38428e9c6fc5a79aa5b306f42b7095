@@ -16,6 +16,24 @@
       "revId": "289431f65e38428e9c6fc5a79aa5b306f42b7095",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_c32e88f9",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 4171,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-06-02T03:03:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fa0c359_0331d0ec",
+      "revId": "289431f65e38428e9c6fc5a79aa5b306f42b7095",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
