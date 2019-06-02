@@ -190,11 +190,13 @@ void GenericSalLayout::SetNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos
     //mark all glyphs as missing so the whole thing is rendered with the same
     //font
     sal_Int32 nDone;
-    sal_Int32 nGraphemeStartPos =
-        mxBreak->previousCharacters(rArgs.mrStr, nCharPos + 1, aLocale,
-            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
     sal_Int32 nGraphemeEndPos =
         mxBreak->nextCharacters(rArgs.mrStr, nCharPos, aLocale,
+            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+    // Safely advance nCharPos in case it is a non-BMP character.
+    rArgs.mrStr.iterateCodePoints(&nCharPos);
+    sal_Int32 nGraphemeStartPos =
+        mxBreak->previousCharacters(rArgs.mrStr, nCharPos, aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
 
     rArgs.NeedFallback(nGraphemeStartPos, nGraphemeEndPos, bRightToLeft);
