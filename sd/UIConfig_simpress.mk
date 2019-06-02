@@ -40,7 +40,6 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/simpress,\
 	sd/uiconfig/simpress/popupmenu/pagepane \
 	sd/uiconfig/simpress/popupmenu/pagetab \
 	sd/uiconfig/simpress/popupmenu/page \
-	sd/uiconfig/simpress/popupmenu/tabletext \
 	sd/uiconfig/simpress/popupmenu/table \
 	sd/uiconfig/simpress/popupmenu/textbox \
 ))
