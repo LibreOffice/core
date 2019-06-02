@@ -91,6 +91,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     , m_bNullRegion(true)
     , m_bGraphicsInUse(false)
     , m_bGraphicsInvalid(false)
+    , m_pParent(pParent)
     , m_ePointerStyle(PointerStyle::Arrow)
     , m_pDragSource(nullptr)
     , m_pDropTarget(nullptr)
@@ -112,9 +113,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
                   | SalFrameStyleFlags::CLOSEABLE;
         nStyle &= ~SalFrameStyleFlags::FLOAT;
     }
-
     m_nStyle = nStyle;
-    m_pParent = pParent;
 
     Qt::WindowFlags aWinFlags;
     if (!(nStyle & SalFrameStyleFlags::SYSTEMCHILD))
@@ -139,26 +138,18 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
             aWinFlags |= Qt::Window;
     }
 
+    QWidget* const pParentWidget = m_pParent ? m_pParent->asChild() : nullptr;
     if (aWinFlags == Qt::Window)
     {
-        QWidget* pParentWidget = m_pParent ? m_pParent->asChild() : nullptr;
         m_pTopLevel = new Qt5MainWindow(*this, pParentWidget, aWinFlags);
-        m_pQWidget = new Qt5Widget(*this, aWinFlags);
+        m_pQWidget = new Qt5Widget(*this, m_pTopLevel, Qt::WindowFlags());
         m_pTopLevel->setCentralWidget(m_pQWidget);
     }
     else
-        m_pQWidget = new Qt5Widget(*this, aWinFlags);
+        m_pQWidget = new Qt5Widget(*this, pParentWidget, aWinFlags);
 
     connect(this, &Qt5Frame::tooltipRequest, static_cast<Qt5Widget*>(m_pQWidget),
             &Qt5Widget::showTooltip);
-
-    if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
-    {
-        QWindow* pParentWindow = pParent->GetQWidget()->window()->windowHandle();
-        QWindow* pChildWindow = asChild()->window()->windowHandle();
-        if (pParentWindow && pChildWindow && (pParentWindow != pChildWindow))
-            pChildWindow->setTransientParent(pParentWindow);
-    }
 
     // fake an initial geometry, gets updated via configure event or SetPosSize
     if (m_bDefaultPos || m_bDefaultSize)
@@ -298,13 +289,7 @@ QWidget* Qt5Frame::asChild() const { return m_pTopLevel ? m_pTopLevel : m_pQWidg
 
 bool Qt5Frame::isWindow() const { return asChild()->isWindow(); }
 
-QWindow* Qt5Frame::windowHandle() const
-{
-    // set attribute 'Qt::WA_NativeWindow' first to make sure a window handle actually exists
-    QWidget* pChild = asChild();
-    pChild->setAttribute(Qt::WA_NativeWindow);
-    return pChild->windowHandle();
-}
+QWindow* Qt5Frame::windowHandle() const { return asChild()->windowHandle(); }
 
 QScreen* Qt5Frame::screen() const
 {
@@ -362,8 +347,6 @@ void Qt5Frame::DrawMenuBar() { /* not needed */}
 
 void Qt5Frame::SetExtendedFrameStyle(SalExtStyle /*nExtStyle*/) { /* not needed */}
 
-void Qt5Frame::setVisible(bool bVisible) { asChild()->setVisible(bVisible); }
-
 void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
 {
     assert(m_pQWidget);
@@ -373,7 +356,7 @@ void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
 
     auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
     assert(pSalInst);
-    pSalInst->RunInMainThread([this, bVisible]() { setVisible(bVisible); });
+    pSalInst->RunInMainThread([this, bVisible]() { asChild()->setVisible(bVisible); });
 }
 
 void Qt5Frame::SetMinClientSize(long nWidth, long nHeight)
@@ -1046,7 +1029,18 @@ void Qt5Frame::SimulateKeyPress(sal_uInt16 nKeyCode)
     SAL_WARN("vcl.kde5", "missing simulate keypress " << nKeyCode);
 }
 
-void Qt5Frame::SetParent(SalFrame* pNewParent) { m_pParent = static_cast<Qt5Frame*>(pNewParent); }
+void Qt5Frame::SetParent(SalFrame* pNewParent)
+{
+    QWidget* const pChildWidget = asChild();
+    QWidget* const pParentWidget = m_pParent ? m_pParent->asChild() : nullptr;
+    const bool bIsVisible = pChildWidget->isVisible();
+
+    m_pParent = static_cast<Qt5Frame*>(pNewParent);
+
+    // setParent hides the widget and without the flags, resets them to 0!
+    pChildWidget->setParent(pParentWidget, pChildWidget->windowFlags());
+    pChildWidget->setVisible(bIsVisible);
+}
 
 bool Qt5Frame::SetPluginParent(SystemParentData* /*pNewParent*/)
 {

@@ -96,7 +96,7 @@ Qt5FilePicker::Qt5FilePicker(QFileDialog::FileMode eMode, bool bShowFileExtensio
         m_pFileDialog->setWindowTitle(toQString(VclResId(STR_FPICKER_FOLDER_DEFAULT_TITLE)));
     }
 
-    m_pExtraControls = new QWidget();
+    m_pExtraControls = new QWidget(m_pFileDialog.get());
     m_pLayout = dynamic_cast<QGridLayout*>(m_pFileDialog->layout());
 
     setMultiSelectionMode(false);

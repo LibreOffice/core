@@ -77,7 +77,7 @@ public slots:
     static void showTooltip(const OUString& rTip);
 
 public:
-    Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f = Qt::WindowFlags());
+    Qt5Widget(Qt5Frame& rFrame, QWidget* pParent, Qt::WindowFlags f);
 
     Qt5Frame& getFrame() const { return m_rFrame; }
     void startDrag(sal_Int8 nSourceActions);

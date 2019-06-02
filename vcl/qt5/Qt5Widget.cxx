@@ -475,8 +475,8 @@ void Qt5Widget::showTooltip(const OUString& rTooltip)
     QToolTip::showText(pt, toQString(rTooltip));
 }
 
-Qt5Widget::Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
-    : QWidget(Q_NULLPTR, f)
+Qt5Widget::Qt5Widget(Qt5Frame& rFrame, QWidget* pParent, Qt::WindowFlags f)
+    : QWidget(pParent, f)
     , m_rFrame(rFrame)
     , m_bNonEmptyIMPreeditSeen(false)
 {
