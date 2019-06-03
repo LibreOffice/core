@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_2e25d3c2",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 4186,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-03T09:31:50Z",
+      "side": 1,
+      "message": "there\u0027s a typo here, \"qb\" instead of \"gb\"",
+      "revId": "e752475bc728476b13467148dc7d0b0a22d9a9b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
