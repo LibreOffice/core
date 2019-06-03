@@ -29,6 +29,7 @@
 #include "file_url.hxx"
 #include "file_error.hxx"
 
+#include <atomic>
 #include <cassert>
 #include <algorithm>
 #include <limits>
@@ -60,7 +61,8 @@ struct FileHandle_Impl
 
     sal_uInt64    m_size;    /*< file size */
     LONGLONG      m_offset;  /*< physical offset from begin of file */
-    LONGLONG      m_filepos; /*< logical offset from begin of file */
+    // m_filepos is hit hard in some situations, where the overhead of a mutex starts to show up, so use an atomic
+    std::atomic<LONGLONG> m_filepos; /*< logical offset from begin of file */
 
     LONGLONG      m_bufptr;  /*< buffer offset from begin of file */
     SIZE_T        m_buflen;  /*< buffer filled [0, m_bufsiz - 1] */
@@ -185,7 +187,7 @@ SIZE_T FileHandle_Impl::getpagesize()
 
 sal_uInt64 FileHandle_Impl::getPos() const
 {
-    return sal::static_int_cast< sal_uInt64 >(m_filepos);
+    return sal::static_int_cast< sal_uInt64 >(m_filepos.load());
 }
 
 oslFileError FileHandle_Impl::setPos(sal_uInt64 uPos)
@@ -946,8 +948,9 @@ oslFileError SAL_CALL osl_getFilePos(oslFileHandle Handle, sal_uInt64 *pPos)
     if ((!pImpl) || !IsValidHandle(pImpl->m_hFile) || (!pPos))
         return osl_File_E_INVAL;
 
-    FileHandle_Impl::Guard lock(&(pImpl->m_mutex));
+    // no need to lock because pos is atomic
     *pPos = pImpl->getPos();
+
     return osl_File_E_None;
 }
 

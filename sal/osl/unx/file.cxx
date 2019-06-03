@@ -36,6 +36,7 @@
 #include "unixerrnostring.hxx"
 
 #include <algorithm>
+#include <atomic>
 #include <cassert>
 #include <limits>
 
@@ -84,7 +85,8 @@ struct FileHandle_Impl
 
     sal_uInt64   m_size;    /*< file size */
     off_t        m_offset;  /*< physical offset from begin of file */
-    off_t        m_fileptr; /*< logical offset from begin of file */
+    // m_fileptr is hit hard in some situations, where the overhead of a mutex starts to show up, so use an atomic
+    std::atomic<off_t> m_fileptr; /*< logical offset from begin of file */
 
     off_t        m_bufptr;  /*< buffer offset from begin of file */
     size_t       m_buflen;  /*< buffer filled [0, m_bufsiz - 1] */
@@ -224,7 +226,7 @@ size_t FileHandle_Impl::getpagesize()
 
 sal_uInt64 FileHandle_Impl::getPos() const
 {
-    return sal::static_int_cast< sal_uInt64 >(m_fileptr);
+    return sal::static_int_cast< sal_uInt64 >(m_fileptr.load());
 }
 
 void FileHandle_Impl::setPos(sal_uInt64 uPos)
@@ -1421,7 +1423,7 @@ oslFileError SAL_CALL osl_getFilePos(oslFileHandle Handle, sal_uInt64* pPos)
     if ((!pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (pImpl->m_fd == -1)) || (!pPos))
         return osl_File_E_INVAL;
 
-    FileHandle_Impl::Guard lock(&(pImpl->m_mutex));
+    // no need to lock because pos is atomic
     *pPos = pImpl->getPos();
 
     return osl_File_E_None;
