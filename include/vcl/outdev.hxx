@@ -988,7 +988,7 @@ public:
     void                        ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontLineStyle eUnderline,
                                                    FontLineStyle eOverline, bool bWordLine, bool bUnderlineAbove );
 
-    void                        DrawWaveLine( const Point& rStartPos, const Point& rEndPos );
+    void                        DrawWaveLine( const Point& rStartPos, const Point& rEndPos, long nLineWidth = 1 );
 
     bool                        ImplDrawRotateText( SalLayout& );
 
