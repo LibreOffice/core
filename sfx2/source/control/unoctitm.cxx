@@ -1064,6 +1064,9 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
              aEvent.FeatureURL.Path == "InsertColumnsBefore" ||
              aEvent.FeatureURL.Path == "InsertColumnsAfter" ||
              aEvent.FeatureURL.Path == "InsertSymbol" ||
+             aEvent.FeatureURL.Path == "InsertPage" ||
+             aEvent.FeatureURL.Path == "DeletePage" ||
+             aEvent.FeatureURL.Path == "DuplicatePage" ||
              aEvent.FeatureURL.Path == "DeleteRows" ||
              aEvent.FeatureURL.Path == "DeleteColumns" ||
              aEvent.FeatureURL.Path == "DeleteTable" ||
@@ -1087,12 +1090,6 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
 
     {
         aBuffer.append(aEvent.IsEnabled ? OUString("enabled") : OUString("disabled"));
-    }
-    else if (aEvent.FeatureURL.Path == "InsertPage" ||
-             aEvent.FeatureURL.Path == "DeletePage" ||
-             aEvent.FeatureURL.Path == "DuplicatePage")
-    {
-        aBuffer.append(OUString::boolean(aEvent.IsEnabled));
     }
     else if (aEvent.FeatureURL.Path == "AssignLayout" ||
              aEvent.FeatureURL.Path == "StatusSelectionMode" ||
