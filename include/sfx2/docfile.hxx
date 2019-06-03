@@ -60,9 +60,9 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     std::unique_ptr< SfxMedium_Impl > pImpl;
 
     SAL_DLLPRIVATE void SetIsRemote_Impl();
-    SAL_DLLPRIVATE void CloseInStream_Impl();
+    SAL_DLLPRIVATE void CloseInStream_Impl(bool bInDestruction = false);
     SAL_DLLPRIVATE void CloseOutStream_Impl();
-    SAL_DLLPRIVATE void CloseStreams_Impl();
+    SAL_DLLPRIVATE void CloseStreams_Impl(bool bInDestruction = false);
 
     SAL_DLLPRIVATE void SetEncryptionDataToStorage_Impl();
 
@@ -121,7 +121,7 @@ public:
     const OUString&     GetOrigURL() const;
 
     SfxItemSet  *       GetItemSet() const;
-    void                Close();
+    void                Close(bool bInDestruction = false);
     void                CloseAndRelease();
     void                ReOpen();
     void                CompleteReOpen();

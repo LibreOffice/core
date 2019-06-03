@@ -593,7 +593,7 @@ void SfxMedium::CloseInStream()
     CloseInStream_Impl();
 }
 
-void SfxMedium::CloseInStream_Impl()
+void SfxMedium::CloseInStream_Impl(bool bInDestruction)
 {
     // if there is a storage based on the InStream, we have to
     // close the storage, too, because otherwise the storage
@@ -604,7 +604,7 @@ void SfxMedium::CloseInStream_Impl()
             CloseStorage();
     }
 
-    if ( pImpl->m_pInStream && !GetContent().is() )
+    if ( pImpl->m_pInStream && !GetContent().is() && !bInDestruction )
     {
         CreateTempFile();
         return;
@@ -2905,14 +2905,14 @@ sal_uInt32 SfxMedium::CreatePasswordToModifyHash( const OUString& aPasswd, bool 
 }
 
 
-void SfxMedium::Close()
+void SfxMedium::Close(bool bInDestruction)
 {
     if ( pImpl->xStorage.is() )
     {
         CloseStorage();
     }
 
-    CloseStreams_Impl();
+    CloseStreams_Impl(bInDestruction);
 
     UnlockFile( false );
 }
@@ -3081,9 +3081,9 @@ void SfxMedium::CloseAndReleaseStreams_Impl()
 }
 
 
-void SfxMedium::CloseStreams_Impl()
+void SfxMedium::CloseStreams_Impl(bool bInDestruction)
 {
-    CloseInStream_Impl();
+    CloseInStream_Impl(bInDestruction);
     CloseOutStream_Impl();
 
     if ( pImpl->m_pSet )
@@ -3326,7 +3326,7 @@ SfxMedium::~SfxMedium()
     // if there is a requirement to clean the backup this is the last possibility to do it
     ClearBackup_Impl();
 
-    Close();
+    Close(/*bInDestruction*/true);
 
     if( !pImpl->bIsTemp || pImpl->m_aName.isEmpty() )
         return;
