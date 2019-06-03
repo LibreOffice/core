@@ -64,6 +64,7 @@ public class PlainSourceView extends JScrollPane implements
     private List<UnsavedChangesListener> unsavedListener = new ArrayList<UnsavedChangesListener>();
 
     private static final Pattern tabPattern = Pattern.compile("^ *(\\t)");
+    private static final Pattern indentationPattern = Pattern.compile("^([^\\S\\r\\n]*)(([^\\{])*\\{\\s*)*");
 
     public PlainSourceView(ScriptSourceModel model) {
         this.model = model;
@@ -190,6 +191,31 @@ public class PlainSourceView extends JScrollPane implements
                         }
                     } catch (BadLocationException e) {
                         // could not find correct location of the tab
+                    }
+                }
+                // if the enter key was pressed, adjust indentation of the current line accordingly
+                if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+                    try {
+                        int caretOffset = ta.getCaretPosition();
+                        int lineOffset = ta.getLineOfOffset(caretOffset);
+                        int startOffset = ta.getLineStartOffset(lineOffset);
+                        int endOffset = ta.getLineEndOffset(lineOffset);
+
+                        Matcher matcher = indentationPattern.matcher(ta.getText(startOffset, endOffset - startOffset));
+                        // insert new line including indentation of the previous line
+                        ta.insert("\n", caretOffset++);
+                        if (matcher.find()) {
+                            if (matcher.group(1).length() > 0) {
+                                ta.insert(matcher.group(1), caretOffset++);
+                            }
+                            // if there is an open curly bracket in the current line, increase indentation level
+                            if (matcher.group(3) != null) {
+                                ta.insert("\t", caretOffset);
+                            }
+                        }
+                        ke.consume();
+                    } catch (BadLocationException e) {
+                        // could not find correct location of the indentation
                     }
                 }
             }
