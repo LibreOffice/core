@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_892501ae",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-03T10:40:18Z",
+      "side": 1,
+      "message": "can use range-based for here, or even\n\u0027return std::any_of(...)\u0027",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 17
+      },
+      "revId": "ed46fa08c3dbe1b0357c6e82d53c8788386ded10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_6922f5a6",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-03T10:40:18Z",
+      "side": 1,
+      "message": "can use range-based for here",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 67
+      },
+      "revId": "ed46fa08c3dbe1b0357c6e82d53c8788386ded10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
