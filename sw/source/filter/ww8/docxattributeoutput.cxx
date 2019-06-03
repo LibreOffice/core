@@ -3797,15 +3797,13 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                 OString sTblpYSpec = convertToOOXMLVertOrient( pFrame->GetFrameFormat().GetVertOrient().GetVertOrient() );
 
                 sOrientation = convertToOOXMLVertOrientRel( pFrame->GetFrameFormat().GetVertOrient().GetRelationOrient() );
-                if(sOrientation != "page") // do not write default
-                    attrListTablePos->add( FSNS( XML_w, XML_vertAnchor ), sOrientation.getStr() );
+                attrListTablePos->add( FSNS( XML_w, XML_vertAnchor ), sOrientation.getStr() );
 
                 if( !sTblpYSpec.isEmpty() )
                     attrListTablePos->add( FSNS( XML_w, XML_tblpYSpec ), sTblpYSpec.getStr() );
 
                 sOrientation = convertToOOXMLHoriOrientRel( pFrame->GetFrameFormat().GetHoriOrient().GetRelationOrient() );
-                if(sOrientation != "page") // do not wirte default
-                    attrListTablePos->add( FSNS( XML_w, XML_horzAnchor ), sOrientation.getStr() );
+                attrListTablePos->add( FSNS( XML_w, XML_horzAnchor ), sOrientation.getStr() );
 
                 if( !sTblpXSpec.isEmpty() )
                     attrListTablePos->add( FSNS( XML_w, XML_tblpXSpec ), sTblpXSpec.getStr() );
