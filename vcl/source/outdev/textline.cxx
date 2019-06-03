@@ -936,7 +936,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
         mpAlphaVDev->DrawTextLine( rPos, nWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
 }
 
-void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
+void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos, long nLineWidth )
 {
     assert(!is_double_buffered_window());
 
@@ -998,13 +998,14 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
     if( nWaveHeight > pFontInstance->mxFontMetric->GetWavelineUnderlineSize() )
     {
         nWaveHeight = pFontInstance->mxFontMetric->GetWavelineUnderlineSize();
+        nLineWidth = 1;
     }
     ImplDrawWaveLine(nStartX, nStartY, 0, 0,
                      nEndX-nStartX, nWaveHeight,
-                     fScaleFactor, nOrientation, GetLineColor());
+                     nLineWidth, nOrientation, GetLineColor());
 
     if( mpAlphaVDev )
-        mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos );
+        mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos, nLineWidth );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
