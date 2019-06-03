@@ -32,7 +32,6 @@ namespace Item
         static ::Item::ItemControlBlock aItemControlBlock(
             [](){ return new Sbx(ScriptDocument::getApplicationScriptDocument()); },
             [](const ItemBase& rRef){ return new Sbx(static_cast<const Sbx&>(rRef)); },
-            typeid(Sbx).hash_code(),
             "Sbx");
 
         return aItemControlBlock;

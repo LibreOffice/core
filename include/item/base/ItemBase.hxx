@@ -101,7 +101,12 @@ namespace Item
         // this way accessible for all incarnations - at the cost of
         // one local reference
         friend bool isDefault(const ItemBase& rCandidate);
+        friend class ItemSet;
         ItemControlBlock& m_rItemControlBlock;
+        const ItemControlBlock& getItemControlBlock() const
+        {
+            return m_rItemControlBlock;
+        }
 
     protected:
         // PutValue/Any interface for automated instance creation from SfxType

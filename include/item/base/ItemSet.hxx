@@ -216,14 +216,14 @@ namespace Item
         ModelSpecificItemValues::SharedPtr m_aModelSpecificIValues;
 
         // the items as content
-        std::unordered_map<size_t, const ItemBase*> m_aItems;
+        std::unordered_map<const ItemControlBlock*, const ItemBase*> m_aItems;
 
         // helpers for reduction of template member implementations,
-        // all based on typeid(<type>).hash_code()
-        const ItemBase* implGetStateAndItem(size_t hash_code, IState& rIState, bool bSearchParent) const;
-        void implInvalidateItem(size_t hash_code);
-        void implDisableItem(size_t hash_code);
-        bool implClearItem(size_t hash_code);
+        // all based on ItemControlBlock as unique identifier
+        const ItemBase* implGetStateAndItem(const ItemControlBlock& rICB, IState& rIState, bool bSearchParent) const;
+        void implInvalidateItem(const ItemControlBlock& rICB);
+        void implDisableItem(const ItemControlBlock& rICB);
+        bool implClearItem(const ItemControlBlock& rICB);
         // ...or a given default
         const ItemBase& implGetDefault(const ItemBase& rCurrent) const;
 
@@ -262,49 +262,37 @@ namespace Item
         // the compiler for each class.
         // reduction uses local immp methods wherever possible, based
         // on the fetched TypeID
-        template< typename TItem > void invalidateItem()
+        template< typename T > void invalidateItem()
         {
-            implInvalidateItem(typeid(TItem).hash_code());
+            implInvalidateItem(T::GetStaticItemControlBlock());
         }
 
-        template< typename TItem > void disableItem()
+        template< typename T > void disableItem()
         {
-            implDisableItem(typeid(TItem).hash_code());
+            implDisableItem(T::GetStaticItemControlBlock());
         }
 
-        template< typename TItem > const TItem& getDefault() const
+        template< typename T > const T& getDefault() const
         {
-            return static_cast<const TItem&>(
+            return static_cast<const T&>(
                 implGetDefault(
-                    Item::getDefault<TItem>()));
+                    Item::getDefault<T>()));
         }
 
-        template< typename TItem > StateAndItem<TItem> getStateAndItem(bool bSearchParent = true) const
+        template< typename T > StateAndItem<T> getStateAndItem(bool bSearchParent = true) const
         {
             IState aIState(IState::DEFAULT);
-            const ItemBase* pItem(implGetStateAndItem(typeid(TItem).hash_code(), aIState, bSearchParent));
-
-            // SfxItemState::DEFAULT
-            // SfxItemState::DONTCARE || SfxItemState::DISABLED -> should already be
-            //  solved from ImplInvalidateItem/ImplDisableItem, but to have the
-            //  fallback here additionally is never wrong
-            // in short: no specific ItemBase -> use default
-            if(nullptr == pItem)
-            {
-                return StateAndItem<TItem>(
-                    aIState,
-                    Item::getDefault<TItem>());
-            }
+            const ItemBase* pItem(implGetStateAndItem(T::GetStaticItemControlBlock(), aIState, bSearchParent));
 
             // SfxItemState::SET
-            return StateAndItem<TItem>(
+            return StateAndItem<T>(
                 aIState,
-                *static_cast<const TItem*>(pItem));
+                *static_cast<const T*>(pItem));
         }
 
-        template< typename TItem > bool clearItem()
+        template< typename T > bool clearItem()
         {
-            return implClearItem(typeid(TItem).hash_code());
+            return implClearItem(T::GetStaticItemControlBlock());
         }
     };
 } // end of namespace Item

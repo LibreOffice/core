@@ -38,19 +38,14 @@ namespace Item
         std::unique_ptr<const ItemBase>             m_aDefaultItem;
         std::function<ItemBase*()>                  m_aConstructDefaultItem;
         std::function<ItemBase*(const ItemBase&)>   m_aCloneItem;
-        size_t                                      m_aHashCode;
         OUString                                    m_aName;
-
-        // EmptyItemControlBlock: default constructor *only* for internal use
-        ItemControlBlock();
 
     public:
         ItemControlBlock(
             std::function<ItemBase*()>aConstructDefaultItem,
             std::function<ItemBase*(const ItemBase&)>aCloneItem,
-            size_t aHashCode,
             const OUString& rName);
-        ~ItemControlBlock();
+        ~ItemControlBlock() = default;
 
         const ItemBase& getDefault() const;
         bool isDefault(const ItemBase& rItem) const;
@@ -60,23 +55,11 @@ namespace Item
             return m_aName;
         }
 
-        size_t getHashCode() const
-        {
-            return m_aHashCode;
-        }
-
         // clone-op, secured by returning a std::unique_ptr to make
         // explicit the ownership you get when calling this
         std::unique_ptr<ItemBase> clone(const ItemBase&) const;
 
         std::unique_ptr<const ItemBase> createFromAny(const ItemBase::AnyIDArgs& rArgs);
-
-        // static access to registered ItemControlBlocks
-        static ItemControlBlock* getItemControlBlock(size_t HashCode);
-        template< typename TItem > ItemControlBlock* getItemControlBlock()
-        {
-            return getItemControlBlock(typeid(TItem).HashCode());
-        }
     };
 } // end of namespace Item
 

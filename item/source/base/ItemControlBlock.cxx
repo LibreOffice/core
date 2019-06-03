@@ -15,57 +15,17 @@
 
 namespace Item
 {
-    std::unordered_map<size_t, ItemControlBlock*>& getRegisteredItemControlBlocks()
-    {
-        // all globally registered ItemControlBlocks
-        static std::unordered_map<size_t, ItemControlBlock*> aItemControlBlocks;
-        return aItemControlBlocks;
-    }
-
-    ItemControlBlock::ItemControlBlock()
-    :   m_aDefaultItem(),
-        m_aConstructDefaultItem(),
-        m_aCloneItem(),
-        m_aHashCode(0),
-        m_aName()
-    {
-        // EmptyItemControlBlock: *only* for internal use, fallback for
-        // extra-Items like ImplInvalidateItem/ImplDisableItem
-        // Do *not* register this instance at aItemControlBlocks (!)
-    }
-
     ItemControlBlock::ItemControlBlock(
         std::function<ItemBase*()>aConstructDefaultItem,
         std::function<ItemBase*(const ItemBase&)>aCloneItem,
-        size_t aHashCode,
         const OUString& rName)
     :   m_aDefaultItem(),
         m_aConstructDefaultItem(aConstructDefaultItem),
         m_aCloneItem(aCloneItem),
-        m_aHashCode(aHashCode),
         m_aName(rName)
     {
         assert(nullptr != m_aConstructDefaultItem && "nullptr not allowed, a Item-Constructor *is* required (!)");
         assert(nullptr != aCloneItem && "nullptr not allowed, a Item-Clone lambda *is* required (!)");
-        assert(size_t(0) != m_aHashCode && "NULL hash_code not allowed, a Item-identifier (usually typeid(T).hash_code()) *is* required (!)");
-        assert(getRegisteredItemControlBlocks().find(m_aHashCode) == getRegisteredItemControlBlocks().end()
-            && "Constructed ItemControlBlock already globally registered - this hints to an error (!)");
-        // globally register new ItemControlBlock
-        getRegisteredItemControlBlocks()[m_aHashCode] = this;
-    }
-
-    ItemControlBlock::~ItemControlBlock()
-    {
-        assert((0 == m_aHashCode || // is the EmptyItemControlBlock
-            getRegisteredItemControlBlocks().find(m_aHashCode) != getRegisteredItemControlBlocks().end()) // or has to exist
-                && "Destructed ItemControlBlock was not globally registered - this hints to an error (!)");
-        // since ItemControlBlocks themselves are static this can only happen when
-        // handling libs, e.g. lib shutdown and of course app shutdown. Nonetheless
-        // do this to avoid errors
-        if(0 != m_aHashCode) // do not forget default constructor -> EmptyItemControlBlock
-        {
-            getRegisteredItemControlBlocks().erase(getRegisteredItemControlBlocks().find(m_aHashCode));
-        }
     }
 
     const ItemBase& ItemControlBlock::getDefault() const
@@ -96,23 +56,6 @@ namespace Item
         ItemBase* pNewInstance(m_aConstructDefaultItem());
         pNewInstance->putAnyValues(rArgs);
         return std::unique_ptr<const ItemBase>(pNewInstance);
-    }
-
-    ItemControlBlock* ItemControlBlock::getItemControlBlock(size_t hash_code)
-    {
-        if(size_t(0) != hash_code)
-        {
-            std::unordered_map<size_t, ItemControlBlock*>& rBlocks(getRegisteredItemControlBlocks());
-            const auto aCandidate(rBlocks.find(hash_code));
-
-            if(aCandidate != rBlocks.end())
-            {
-                return aCandidate->second;
-            }
-        }
-
-        static ItemControlBlock aEmptyItemControlBlock;
-        return &aEmptyItemControlBlock;
     }
 } // end of namespace Item
 

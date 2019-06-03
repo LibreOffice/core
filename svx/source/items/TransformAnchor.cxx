@@ -21,7 +21,6 @@ namespace Item
         static ItemControlBlock aItemControlBlock(
             [](){ return new TransformAnchor(); },
             [](const ItemBase& rRef){ return new TransformAnchor(static_cast<const TransformAnchor&>(rRef)); },
-            typeid(TransformAnchor).hash_code(),
             "TransformAnchor");
 
         return aItemControlBlock;

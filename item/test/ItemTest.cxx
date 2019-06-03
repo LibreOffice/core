@@ -31,7 +31,6 @@ namespace Item
             static ItemControlBlock aItemControlBlock(
                 [](){ return new MultiValueSimple(); },
                 [](const ItemBase& rRef){ return new MultiValueSimple(static_cast<const MultiValueSimple&>(rRef)); },
-                typeid(MultiValueSimple).hash_code(),
                 "MultiValueSimple");
 
             return aItemControlBlock;
@@ -90,7 +89,6 @@ namespace Item
             static ItemControlBlock aItemControlBlock(
                 [](){ return new MultiValueSimple_derivedClass(); },
                 [](const ItemBase& rRef){ return new MultiValueSimple_derivedClass(static_cast<const MultiValueSimple_derivedClass&>(rRef)); },
-                typeid(MultiValueSimple_derivedClass).hash_code(),
                 "MultiValueSimple_derivedClass");
 
             return aItemControlBlock;
@@ -117,7 +115,6 @@ namespace Item
             static ItemControlBlock aItemControlBlock(
                 [](){ return new MultiValueSimple_plus(); },
                 [](const ItemBase& rRef){ return new MultiValueSimple_plus(static_cast<const MultiValueSimple_plus&>(rRef)); },
-                typeid(MultiValueSimple_plus).hash_code(),
                 "MultiValueSimple_plus");
 
             return aItemControlBlock;
@@ -167,7 +164,6 @@ namespace Item
             static ItemControlBlock aItemControlBlock(
                 [](){ return new MultiValueSimple_plus_derivedClass(); },
                 [](const ItemBase& rRef){ return new MultiValueSimple_plus_derivedClass(static_cast<const MultiValueSimple_plus_derivedClass&>(rRef)); },
-                typeid(MultiValueSimple_plus_derivedClass).hash_code(),
                 "MultiValueSimple_plus_derivedClass");
 
             return aItemControlBlock;
@@ -194,7 +190,6 @@ namespace Item
             static ItemControlBlock aItemControlBlock(
                 [](){ return new MultiValueBuffered(); },
                 [](const ItemBase& rRef){ return new MultiValueBuffered(static_cast<const MultiValueBuffered&>(rRef)); },
-                typeid(MultiValueBuffered).hash_code(),
                 "MultiValueBuffered");
 
             return aItemControlBlock;
@@ -346,7 +341,6 @@ namespace Item
             static ItemControlBlock aItemControlBlock(
                 [](){ return new MultiValueBuffered_derivedClass(); },
                 [](const ItemBase& rRef){ return new MultiValueBuffered_derivedClass(static_cast<const MultiValueBuffered_derivedClass&>(rRef)); },
-                typeid(MultiValueBuffered_derivedClass).hash_code(),
                 "MultiValueBuffered_derivedClass");
 
             return aItemControlBlock;
@@ -373,7 +367,6 @@ namespace Item
             static ItemControlBlock aItemControlBlock(
                 [](){ return new MultiValueBuffered_plus(); },
                 [](const ItemBase& rRef){ return new MultiValueBuffered_plus(static_cast<const MultiValueBuffered_plus&>(rRef)); },
-                typeid(MultiValueBuffered_plus).hash_code(),
                 "MultiValueBuffered_plus");
 
             return aItemControlBlock;
@@ -489,7 +482,6 @@ namespace Item
             static ItemControlBlock aItemControlBlock(
                 [](){ return new MultiValueBuffered_plus_derivedClass(); },
                 [](const ItemBase& rRef){ return new MultiValueBuffered_plus_derivedClass(static_cast<const MultiValueBuffered_plus_derivedClass&>(rRef)); },
-                typeid(MultiValueBuffered_plus_derivedClass).hash_code(),
                 "MultiValueBuffered_plus_derivedClass");
 
             return aItemControlBlock;
@@ -516,7 +508,6 @@ namespace Item
             static ItemControlBlock aItemControlBlock(
                 [](){ return new CntInt16_derived(); },
                 [](const ItemBase& rRef){ return new CntInt16_derived(static_cast<const CntInt16_derived&>(rRef)); },
-                typeid(CntInt16_derived).hash_code(),
                 "CntInt16_derived");
 
             return aItemControlBlock;
@@ -543,7 +534,6 @@ namespace Item
             static ItemControlBlock aItemControlBlock(
                 [](){ return new CntOUString_derived(); },
                 [](const ItemBase& rRef){ return new CntOUString_derived(static_cast<const CntOUString_derived&>(rRef)); },
-                typeid(CntOUString_derived).hash_code(),
                 "CntOUString_derived");
 
             return aItemControlBlock;

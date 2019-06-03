@@ -21,11 +21,24 @@ namespace Item
         // helper class for an ImplInvalidateItem - placeholder for InvaidateState
         // SfxItemState::DONTCARE -> IsInvalidItem -> pItem == INVALID_POOL_ITEM -> reinterpret_cast<SfxPoolItem*>(-1)
         // the instance of this class is *never* returned in any way or helper data struture,
-        // but is *strictly* local. Thus also needs no 'static ItemControlBlock& GetStaticItemControlBlock()'
+        // but is *strictly* local
         class ImplInvalidateItem : public ItemBase
         {
         public:
-            ImplInvalidateItem() : ItemBase(*ItemControlBlock::getItemControlBlock(0)) {}
+            static ItemControlBlock& GetStaticItemControlBlock()
+            {
+                static ItemControlBlock aItemControlBlock(
+                    [](){ return new ImplInvalidateItem(); },
+                    [](const ItemBase& rRef){ return new ImplInvalidateItem(static_cast<const ImplInvalidateItem&>(rRef)); },
+                    "ImplInvalidateItem");
+
+                return aItemControlBlock;
+            }
+
+            ImplInvalidateItem()
+            :   ItemBase(ImplInvalidateItem::GetStaticItemControlBlock())
+            {
+            }
         };
 
         static const ImplInvalidateItem aImplInvalidateItem;
@@ -38,97 +51,124 @@ namespace Item
         // helper class for a ImplDisableItem - placeholder for InvaidateState
         // SfxItemState::DISABLED -> IsVoidItem() -> instance of SfxVoidItem, virtual bool IsVoidItem()
         // the instance of this class is *never* returned in any way or helper data struture,
-        // but is *strictly* local. Thus also needs no 'static ItemControlBlock& GetStaticItemControlBlock()'
+        // but is *strictly* local
         class ImplDisableItem : public ItemBase
         {
         public:
-            ImplDisableItem() : ItemBase(*ItemControlBlock::getItemControlBlock(0)) {}
+            static ItemControlBlock& GetStaticItemControlBlock()
+            {
+                static ItemControlBlock aItemControlBlock(
+                    [](){ return new ImplDisableItem(); },
+                    [](const ItemBase& rRef){ return new ImplDisableItem(static_cast<const ImplDisableItem&>(rRef)); },
+                    "ImplDisableItem");
+
+                return aItemControlBlock;
+            }
+
+            ImplDisableItem()
+            :   ItemBase(ImplDisableItem::GetStaticItemControlBlock())
+            {
+            }
         };
 
         static const ImplDisableItem aImplDisableItem;
         return aImplDisableItem;
     }
 
-    const ItemBase* ItemSet::implGetStateAndItem(size_t hash_code, IState& rIState, bool bSearchParent) const
+    const ItemBase* ItemSet::implGetStateAndItem(const ItemControlBlock& rICB, IState& rIState, bool bSearchParent) const
     {
-        const auto aRetval(m_aItems.find(hash_code));
+        const auto aEntry(m_aItems.find(&rICB));
 
-        if(aRetval != m_aItems.end()) // && aRetval->second)
+        if(aEntry != m_aItems.end()) // && aEntry->second)
         {
-            assert(nullptr != aRetval->second && "empty const ItemBase* in ItemSet (!)");
+            assert(nullptr != aEntry->second && "empty const ItemBase* in ItemSet (!)");
 
-            if(aRetval->second == &getInvalidateItem())
+            if(aEntry->second == &getInvalidateItem())
             {
                 // SfxItemState::DONTCARE
                 rIState = IState::DONTCARE;
-                ItemControlBlock* pBlock(ItemControlBlock::getItemControlBlock(hash_code));
-                assert(nullptr != pBlock && "Could not find globally registered ItemControlBlock for given ItemType (!)");
-                return &implGetDefault(pBlock->getDefault());
+                return &implGetDefault(aEntry->first->getDefault());
             }
 
-            if(aRetval->second == &getDisableItem())
+            if(aEntry->second == &getDisableItem())
             {
                 // SfxItemState::DISABLED
                 rIState = IState::DISABLED;
-                ItemControlBlock* pBlock(ItemControlBlock::getItemControlBlock(hash_code));
-                assert(nullptr != pBlock && "Could not find globally registered ItemControlBlock for given ItemType (!)");
-                return &implGetDefault(pBlock->getDefault());
+                return &implGetDefault(aEntry->first->getDefault());
             }
 
             // SfxItemState::SET
             rIState = IState::SET;
-            return aRetval->second;
+            return aEntry->second;
         }
 
-        // not set
+        // not set locally
+        const ItemBase* pRetval(nullptr);
+
         if(bSearchParent && m_aParent)
         {
             // continue searching in parent
-            return m_aParent->implGetStateAndItem(hash_code, rIState, bSearchParent);
+            pRetval = m_aParent->implGetStateAndItem(rICB, rIState, bSearchParent);
         }
 
-        // SfxItemState::DEFAULT
-        // already handed in as default - no need to set explicitely // rIState = IState::DEFAULT;
-        return nullptr;
+        if(nullptr == pRetval)
+        {
+            // SfxItemState::DEFAULT
+            pRetval = &implGetDefault(rICB.getDefault());
+        }
+
+        return pRetval;
     }
 
-    void ItemSet::implInvalidateItem(size_t hash_code)
+    void ItemSet::implInvalidateItem(const ItemControlBlock& rICB)
     {
-        const auto aRetval(m_aItems.find(hash_code));
+        const auto aRetval(m_aItems.find(&rICB));
 
         if(aRetval == m_aItems.end())
         {
-            m_aItems[hash_code] = &getInvalidateItem();
+            m_aItems[&rICB] = &getInvalidateItem();
         }
         else
         {
-            delete aRetval->second;
+            if(&getInvalidateItem() != aRetval->second && &getDisableItem() != aRetval->second)
+            {
+                delete aRetval->second;
+            }
+
             aRetval->second = &getInvalidateItem();
         }
     }
 
-    void ItemSet::implDisableItem(size_t hash_code)
+    void ItemSet::implDisableItem(const ItemControlBlock& rICB)
     {
-        const auto aRetval(m_aItems.find(hash_code));
+        const auto aRetval(m_aItems.find(&rICB));
 
         if(aRetval == m_aItems.end())
         {
-            m_aItems[hash_code] = &getDisableItem();
+            m_aItems[&rICB] = &getDisableItem();
         }
         else
         {
-            delete aRetval->second;
+            if(&getInvalidateItem() != aRetval->second && &getDisableItem() != aRetval->second)
+            {
+                delete aRetval->second;
+            }
+
             aRetval->second = &getDisableItem();
         }
     }
 
-    bool ItemSet::implClearItem(size_t hash_code)
+    bool ItemSet::implClearItem(const ItemControlBlock& rICB)
     {
-        const auto aRetval(m_aItems.find(hash_code));
+        const auto aRetval(m_aItems.find(&rICB));
 
         if(aRetval != m_aItems.end())
         {
-            delete aRetval->second;
+            if(&getInvalidateItem() != aRetval->second && &getDisableItem() != aRetval->second)
+            {
+                delete aRetval->second;
+            }
+
             m_aItems.erase(aRetval);
             return true;
         }
@@ -198,17 +238,31 @@ namespace Item
             bDefault = rItem.isDefault();
         }
 
-        const size_t hash_code(typeid(rItem).hash_code());
+        const ItemControlBlock& rICB(rItem.getItemControlBlock());
 
         if(bDefault)
         {
             // SfxItemState::DEFAULT is represented by not being set
-            m_aItems.erase(hash_code);
+            m_aItems.erase(&rICB);
         }
         else
         {
             // SfxItemState::SET
-            m_aItems[hash_code] = rItem.clone().release();
+            const auto aEntry(m_aItems.find(&rICB));
+
+            if(aEntry == m_aItems.end())
+            {
+                m_aItems[&rICB] = rItem.clone().release();
+            }
+            else
+            {
+                if(&getInvalidateItem() != aEntry->second && &getDisableItem() != aEntry->second)
+                {
+                    delete aEntry->second;
+                }
+
+                aEntry->second = rItem.clone().release();
+            }
         }
     }
 
@@ -245,7 +299,7 @@ namespace Item
 
             if(nullptr == pNew)
             {
-                m_aItems.erase(candidate.first);
+                implClearItem(*candidate.first);
             }
             else
             {
@@ -257,7 +311,11 @@ namespace Item
                 }
                 else
                 {
-                    delete aRetval->second;
+                    if(&getInvalidateItem() != aRetval->second && &getDisableItem() != aRetval->second)
+                    {
+                        delete aRetval->second;
+                    }
+
                     aRetval->second = pNew;
                 }
             }
@@ -276,18 +334,14 @@ namespace Item
             {
                 if(candidate.second == &getInvalidateItem())
                 {
-                    ItemControlBlock* pBlock(ItemControlBlock::getItemControlBlock(candidate.first));
-                    assert(nullptr != pBlock && "Could not find globally registered ItemControlBlock for given ItemType (!)");
                     aRetval.push_back(std::pair<const ItemBase*, ItemSet::IState>(
-                        &implGetDefault(pBlock->getDefault()),
+                        &implGetDefault(candidate.first->getDefault()),
                         IState::DONTCARE));
                 }
                 else if(candidate.second == &getDisableItem())
                 {
-                    ItemControlBlock* pBlock(ItemControlBlock::getItemControlBlock(candidate.first));
-                    assert(nullptr != pBlock && "Could not find globally registered ItemControlBlock for given ItemType (!)");
                     aRetval.push_back(std::pair<const ItemBase*, ItemSet::IState>(
-                        &implGetDefault(pBlock->getDefault()),
+                        &implGetDefault(candidate.first->getDefault()),
                         IState::DISABLED));
                 }
                 else
@@ -316,15 +370,11 @@ namespace Item
             {
                 if(IState::DONTCARE == eIState && candidate.second == &getInvalidateItem())
                 {
-                    ItemControlBlock* pBlock(ItemControlBlock::getItemControlBlock(candidate.first));
-                    assert(nullptr != pBlock && "Could not find globally registered ItemControlBlock for given ItemType (!)");
-                    aRetval.push_back(&implGetDefault(pBlock->getDefault()));
+                    aRetval.push_back(&implGetDefault(candidate.first->getDefault()));
                 }
                 else if(IState::DISABLED == eIState && candidate.second == &getDisableItem())
                 {
-                    ItemControlBlock* pBlock(ItemControlBlock::getItemControlBlock(candidate.first));
-                    assert(nullptr != pBlock && "Could not find globally registered ItemControlBlock for given ItemType (!)");
-                    aRetval.push_back(&implGetDefault(pBlock->getDefault()));
+                    aRetval.push_back(&implGetDefault(candidate.first->getDefault()));
                 }
                 else if(IState::SET == eIState)
                 {
