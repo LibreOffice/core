@@ -43,7 +43,7 @@ public:
 
     void StyleDeleted( const ScStyleSheet* pStyle );      // delete templates(?) in organizer
     void CellStyleCreated( const OUString& rName, const ScDocument* pDoc );
-    virtual bool GetPresentation( const SfxPoolItem&  rItem,
+    virtual bool ItemPoolGetPresentation( const SfxPoolItem&  rItem,
                                   MapUnit          ePresentationMetric,
                                   OUString&           rText,
                                   const IntlWrapper& rIntl ) const override;

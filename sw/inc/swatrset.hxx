@@ -184,7 +184,7 @@ public:
 
     int Intersect_BC( const SfxItemSet& rSet, SwAttrSet* pOld, SwAttrSet* pNew );
 
-    void GetPresentation( SfxItemPresentation ePres,
+    void AttrSetGetPresentation( SfxItemPresentation ePres,
         MapUnit eCoreMetric, MapUnit ePresMetric, OUString &rText ) const;
 
     SwAttrPool* GetPool() const { return static_cast<SwAttrPool*>(SfxItemSet::GetPool()); }

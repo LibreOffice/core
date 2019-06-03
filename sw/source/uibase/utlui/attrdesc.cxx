@@ -62,7 +62,7 @@ using namespace com::sun::star;
 
 
 // query the attribute descriptions
-void SwAttrSet::GetPresentation(
+void SwAttrSet::AttrSetGetPresentation(
         SfxItemPresentation ePres,
         MapUnit eCoreMetric,
         MapUnit ePresMetric,
@@ -103,7 +103,7 @@ bool SwFormatCharFormat::GetPresentation
     {
         OUString aStr;
         rText = SwResId( STR_CHARFMT );
-        pCharFormat->GetPresentation( ePres, eCoreUnit, ePresUnit, aStr );
+        pCharFormat->SwFormatGetPresentation( ePres, eCoreUnit, ePresUnit, aStr );
         rText = rText + "(" + aStr + ")";
     }
     else

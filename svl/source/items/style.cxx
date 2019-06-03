@@ -337,7 +337,7 @@ OUString SfxStyleSheetBase::GetDescription( MapUnit eMetric )
         OUString aItemPresentation;
 
         if ( !IsInvalidItem( pItem ) &&
-             m_pPool->GetPool().GetPresentation(
+             m_pPool->GetPool().ItemPoolGetPresentation(
                 *pItem, eMetric, aItemPresentation, aIntlWrapper ) )
         {
             if ( !aDesc.isEmpty() && !aItemPresentation.isEmpty() )

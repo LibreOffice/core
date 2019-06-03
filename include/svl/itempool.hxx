@@ -143,7 +143,7 @@ public:
 
         @return true if it has a valid string representation
     */
-    virtual bool                    GetPresentation( const SfxPoolItem& rItem,
+    virtual bool                    ItemPoolGetPresentation( const SfxPoolItem& rItem,
                                                      MapUnit ePresentationMetric,
                                                      OUString& rText,
                                                      const IntlWrapper& rIntlWrapper ) const;

@@ -356,7 +356,7 @@ SdrItemPool::~SdrItemPool()
     SetSecondaryPool(nullptr);
 }
 
-bool SdrItemPool::GetPresentation(
+bool SdrItemPool::ItemPoolGetPresentation(
               const SfxPoolItem& rItem,
               MapUnit ePresentationMetric, OUString& rText,
               const IntlWrapper& rIntlWrapper) const
@@ -375,7 +375,7 @@ bool SdrItemPool::GetPresentation(
             return true;
         }
     }
-    return XOutdevItemPool::GetPresentation(rItem,ePresentationMetric,rText,rIntlWrapper);
+    return XOutdevItemPool::ItemPoolGetPresentation(rItem,ePresentationMetric,rText,rIntlWrapper);
 }
 
 void SdrItemPool::TakeItemName(sal_uInt16 nWhich, OUString& rItemName)

@@ -2123,7 +2123,7 @@ OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
         if ( !IsInvalidItem( rItem.pItem ) )
         {
             OUString aStr;
-            rPool.GetPresentation(*rItem.pItem, eMapUnit, aStr, aIntlWrapper);
+            rPool.ItemPoolGetPresentation(*rItem.pItem, eMapUnit, aStr, aIntlWrapper);
             rStr += aStr;
         }
         else if ( rItem.nSlot == SID_ATTR_BRUSH_CHAR )

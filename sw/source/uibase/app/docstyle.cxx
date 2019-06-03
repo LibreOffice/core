@@ -848,7 +848,7 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
                     {
                         OUString aItemPresentation;
                         if ( !IsInvalidItem( pItem ) &&
-                             m_pPool->GetPool().GetPresentation(
+                             m_pPool->GetPool().ItemPoolGetPresentation(
                                 *pItem, eUnit, aItemPresentation, aIntlWrapper ) )
                         {
                             if ( !aDesc.isEmpty() && !aItemPresentation.isEmpty() )
@@ -896,7 +896,7 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
                     {
                         OUString aItemPresentation;
                         if ( !IsInvalidItem( pItem ) &&
-                             m_pPool->GetPool().GetPresentation(
+                             m_pPool->GetPool().ItemPoolGetPresentation(
                                 *pItem, eUnit, aItemPresentation, aIntlWrapper ) )
                         {
                             bool bIsDefault = false;

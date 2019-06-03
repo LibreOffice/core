@@ -1811,7 +1811,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                         if( !IsInvalidItem( pItem ))
                         {
                             OUString aStr;
-                            GetDoc()->GetAttrPool().GetPresentation(*pItem,
+                            GetDoc()->GetAttrPool().ItemPoolGetPresentation(*pItem,
                                 MapUnit::MapCM, aStr, aInt);
                             if (!sAttrs.isEmpty())
                                 sAttrs.append(", ");

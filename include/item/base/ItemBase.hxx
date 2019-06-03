@@ -129,10 +129,63 @@ namespace Item
 
         // clone-op, secured by returning a std::unique_ptr to make
         // explicit the ownership you get when calling this
+        // -> no longer virtual, no impls at the Items, one central method
         std::unique_ptr<ItemBase> clone() const;
 
         // ca. 220 impls
         // /**  @return true if it has a valid string representation */
+        //
+        // Notes:
+        // used as 'GetPresentation' in old environment, at least in three
+        // incarnations:
+        // - virtual SfxPoolItem::GetPresentation inm all Items implementing this
+        //   -> needs to be taken over for all transformend items (of course)
+        // - virtual SfxItemPool::GetPresentation in two forms: -> ItemPoolGetPresentation
+        //      SfxItemPool::GetPresentation:
+        //          Base impl just adds metric using GetMetric(rItem.Which())
+        //          thus usually from SfxItemPool, except that Items in Calc (see
+        //          other comments about metrics)
+        //          -> replace using metic from ModelSpecificItemValues directly
+        //          -> for the mentioned Items in Calc: use fixed metric in the
+        //             items GetPresentation implementation
+        //      ScDocumentPool::GetPresentation
+        //          Fallback to base impl, except for Items which use
+        //              case ATTR_PAGE_TOPDOWN:
+        //              case ATTR_PAGE_HEADERS:
+        //              case ATTR_PAGE_NULLVALS:
+        //              case ATTR_PAGE_FORMULAS:
+        //              case ATTR_PAGE_NOTES:
+        //              case ATTR_PAGE_GRID:
+        //              case ATTR_PAGE_SCALETOPAGES:
+        //              case ATTR_PAGE_FIRSTPAGENO:
+        //              case ATTR_PAGE_SCALE:
+        //              case ATTR_PAGE_HEADERSET:
+        //              case ATTR_PAGE_FOOTERSET:
+        //          -> adapt thse Items GetPresentation impl as needed, we
+        //             will have one ItemType (derivation) per ID in the future
+        //          -> also uses helper lcl_HFPresentation that iterates over ItemSet of
+        //             SetItem to create a combined string using SfxItemIter for the
+        //             WhichIDs
+        //              ATTR_PAGE_ON:
+        //              ATTR_PAGE_DYNAMIC:
+        //              ATTR_PAGE_SHARED:
+        //              ATTR_LRSPACE:
+        //             So need to adapt GetPresentation for the new Items which will
+        //             be used for this
+        //      SdrItemPool::GetPresentation
+        //          Uses fallback to rItem.GetPresentation, but adds 'TakeItemName'
+        //          in front of the result. See SdrItemPool::TakeItemName which uses
+        //          ResIDs to get the ItemNames. All that for Items in the WhichID ragnes of
+        //          (nWhich>=SDRATTR_SHADOW_FIRST && nWhich<=SDRATTR_END)
+        //          -> for Items SDRATTR_SHADOW_FIRST..SDRATTR_END use the WhichIDs from that
+        //             ressoures as ItemName (already prepared for new Items) and
+        //             add that in front of usual result in GetPresentation impl of those Items
+        // - SwAttrSet::GetPresentation -> AttrSetGetPresentation
+        //      non-virtual, local helper at SwAttrSet
+        //      uses SfxItemIter to create a combined presentation
+        //      -> extend to include new items from itemSet()
+        // - SwFormat::GetPresentation -> SwFormatGetPresentation
+        //      simple forwarder to SwAttrSet::GetPresentation
         virtual bool getPresentation(
             SfxItemPresentation ePresentation,
             MapUnit eCoreMetric,
@@ -143,6 +196,7 @@ namespace Item
         // ::ScaleMetrics 18 implementations
         // used by sdr::properties::ScaleItemSet / itemSetTools only
         // used by DefaultProperties::DefaultProperties only -> probably copying SdrObjects between Writer/Draw/Impress
+        // -> adapt where used to also use new Items, access over temp solution of itemSet()
         virtual void scaleMetrics(long lMult, long lDiv);
 
         // around 250 impls for each
@@ -151,6 +205,7 @@ namespace Item
         // -> 'virtual bool putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);'
 
         // ca. 150 impls
+        // -> needs to be taken over for all transformend items (of course)
         virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
     };
 

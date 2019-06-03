@@ -150,9 +150,9 @@ public:
     void SetPoolHlpFileId( sal_uInt8 nId ) { m_nPoolHlpFileId = nId; }
 
     /// Get attribute-description. Returns passed string.
-    void GetPresentation( SfxItemPresentation ePres,
+    void SwFormatGetPresentation( SfxItemPresentation ePres,
         MapUnit eCoreMetric, MapUnit ePresMetric, OUString &rText ) const
-        { m_aSet.GetPresentation( ePres, eCoreMetric, ePresMetric, rText ); }
+        { m_aSet.AttrSetGetPresentation( ePres, eCoreMetric, ePresMetric, rText ); }
 
     /// Query / set AutoFormat-flag.
     bool IsAuto() const                 { return m_bAutoFormat; }

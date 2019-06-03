@@ -476,7 +476,7 @@ static bool lcl_HFPresentation
     return true;
 }
 
-bool ScDocumentPool::GetPresentation(
+bool ScDocumentPool::ItemPoolGetPresentation(
     const SfxPoolItem&  rItem,
     MapUnit             ePresentationMetric,
     OUString&           rText,
