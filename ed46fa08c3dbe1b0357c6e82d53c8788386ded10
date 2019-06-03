@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3fa0c359_496ff991",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2019-06-03T13:31:13Z",
+      "side": 1,
+      "message": "I see a potential problem with this constructor.\n\nLet\u0027s assume you have QMimeData instance with some data, and you make Qt5MimeData out of it using this constructor. Let\u0027s call it \u0027Qt5MimeData_Instance1\u0027. Since it has instance of QMimeData as argument, it\u0027ll go to the branch \u0027else\u0027. Everything looks fine till this point. But \u0027m_aContents.is()\u0027 for Qt5MimeData_Instance1 should be \u0027false\u0027.\n\nBut now one more instance of Qt5MimeData is constructed, let\u0027s call it \u0027Qt5MimeData_Instance2\u0027, and it takes \u0027Qt5MimeData_Instance1\u0027 as argument, casted to \u0027const QMimeData\u0026\u0027 type. It took me an explicit cast when I tried a small test program with class inheriting QMimeData. Since it\u0027s an instance of \u0027Qt5MimeData\u0027 class, it\u0027ll take \u0027if\u0027 branch, and copy m_aContents. But it is empty, and \u0027Qt5MimeData_Instance2\u0027 should have actually copied data of underlying QMimeData instance from \u0027Qt5MimeData_Instance1\u0027. But instead it has empty \u0027m_aContents\u0027 and no data in QMimeData members. It means it\u0027ll produce an empty instance instead of copy in such case.\n\nQMimeData, AFAIK, isn\u0027t copyable, maybe this class shouldn\u0027t be copy-constructible as well? Otherwise, it might be worth to change condition \u0027if (pQt5MimeData)\u0027 to \u0027if (pQt5MimeData \u0026\u0026 pQt5MimeData-\u003em_aContents.is())\u0027: if m_aContents is empty for instance of Qt5MimeData (i.e. it was constructed using QMimeData), try using underlying QMimeData as well.",
+      "revId": "ed46fa08c3dbe1b0357c6e82d53c8788386ded10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_892501ae",
         "filename": "vcl/qt5/Qt5Clipboard.cxx",
         "patchSetId": 3
