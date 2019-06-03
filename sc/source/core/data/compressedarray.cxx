@@ -20,8 +20,6 @@
 #include <compressedarray.hxx>
 #include <global.hxx>
 
-static const size_t nScCompressedArrayDelta = 4;
-
 template< typename A, typename D >
 ScCompressedArray<A,D>::ScCompressedArray( A nMaxAccessP, const D& rValue )
     : nCount(1)
@@ -84,7 +82,7 @@ void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
             size_t nNeeded = nCount + 2;
             if (nLimit < nNeeded)
             {
-                nLimit += nScCompressedArrayDelta;
+                nLimit *= 1.5;
                 if (nLimit < nNeeded)
                     nLimit = nNeeded;
                 std::unique_ptr<DataEntry[]> pNewData(new DataEntry[nLimit]);
