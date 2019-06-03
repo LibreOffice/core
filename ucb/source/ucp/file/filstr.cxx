@@ -130,10 +130,9 @@ XStream_impl::readBytes(
     if( ! m_nIsOpen )
         throw io::IOException( THROW_WHERE );
 
-    std::unique_ptr<sal_Int8[]> buffer;
     try
     {
-        buffer.reset(new sal_Int8[nBytesToRead]);
+        aData.realloc(nBytesToRead);
     }
     catch (const std::bad_alloc&)
     {
@@ -142,12 +141,13 @@ XStream_impl::readBytes(
     }
 
     sal_uInt64 nrc(0);
-    if(m_aFile.read( buffer.get(),sal_uInt64(nBytesToRead),nrc )
+    if(m_aFile.read( aData.getArray(), sal_uInt64(nBytesToRead), nrc )
        != osl::FileBase::E_None)
     {
         throw io::IOException( THROW_WHERE );
     }
-    aData = uno::Sequence< sal_Int8 > ( buffer.get(), static_cast<sal_uInt32>(nrc) );
+    if (nrc != static_cast<sal_uInt64>(nBytesToRead))
+        aData.realloc(nrc);
     return static_cast<sal_Int32>(nrc);
 }
 
