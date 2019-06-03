@@ -2475,7 +2475,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     }
 
 #if defined(IOS)
-    CGContextRef cgc = CGBitmapContextCreate(pBuffer, nCanvasWidth, nCanvasHeight, 8, nCanvasWidth*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little);
+    CGContextRef cgc = CGBitmapContextCreate(pBuffer, nCanvasWidth, nCanvasHeight, 8, nCanvasWidth*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaPremultipliedFirst | kCGImageByteOrder32Little);
 
     // Use the vcl.cg tag even if this code is not in vcl, to match all other SAL_INFO logging about Core Graphics, in vcl.
     SAL_INFO( "vcl.cg", "CGBitmapContextCreate(" << nCanvasWidth << "x" << nCanvasHeight << "x32) = " << cgc );
