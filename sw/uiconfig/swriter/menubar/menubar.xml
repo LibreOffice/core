@@ -51,15 +51,15 @@
       <menu:menuitem menu:id=".uno:ExportTo"/>
       <menu:menu menu:id=".uno:ExportAsMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:ExportToPDF" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:ExportDirectToPDF" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:ExportToEPUB" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:ExportDirectToEPUB" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:ExportToPDF"/>
+          <menu:menuitem menu:id=".uno:ExportDirectToPDF"/>
+          <menu:menuitem menu:id=".uno:ExportToEPUB"/>
+          <menu:menuitem menu:id=".uno:ExportDirectToEPUB"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:SendToMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:SendMail" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:SendMail"/>
           <menu:menuitem menu:id=".uno:SendMailDocAsOOo" menu:style="text"/>
           <menu:menuitem menu:id=".uno:SendMailDocAsMS" menu:style="text"/>
           <menu:menuitem menu:id=".uno:SendMailDocAsPDF" menu:style="text"/>
@@ -96,7 +96,7 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:Undo"/>
       <menu:menuitem menu:id=".uno:Redo"/>
-      <menu:menuitem menu:id=".uno:Repeat" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:Repeat"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Cut"/>
       <menu:menuitem menu:id=".uno:Copy"/>
@@ -108,7 +108,7 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:SelectAll" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:SelectAll"/>
       <menu:menu menu:id=".uno:SelectionModeMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:SelectionModeDefault" menu:style="radio"/>
@@ -118,7 +118,7 @@
       <menu:menuitem menu:id=".uno:SelectTextMode" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
-      <menu:menuitem menu:id=".uno:SearchDialog" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:SearchDialog"/>
       <menu:menuitem menu:id=".uno:GotoPage" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:ChangesMenu">
@@ -179,14 +179,14 @@
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:RulerMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:Ruler" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:VRuler" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:Ruler"/>
+          <menu:menuitem menu:id=".uno:VRuler"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:ScrollBarMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:HScroll" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:VScroll" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:HScroll"/>
+          <menu:menuitem menu:id=".uno:VScroll"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:GridMenu">
@@ -211,9 +211,9 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Sidebar"/>
       <menu:menuitem menu:id=".uno:ViewSidebarStyles"/>
-      <menu:menuitem menu:id=".uno:Gallery" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:Gallery"/>
       <menu:menuitem menu:id=".uno:Navigator" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:ViewDataSourceBrowser" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FullScreen"/>
       <menu:menu menu:id=".uno:ZoomMenu">
@@ -300,12 +300,12 @@
           <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:FontworkGalleryFloater" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
       <menu:menuitem menu:id=".uno:InsertCaptionDialog" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
       <menu:menuitem menu:id=".uno:InsertBookmark" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:InsertReferenceField" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:InsertReferenceField"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertSymbol"/>
       <menu:menu menu:id=".uno:FormattingMarkMenu">
@@ -445,7 +445,7 @@
       <menu:menuitem menu:id=".uno:PageDialog"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:TitlePageDialog" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:FormatAllNotes" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:FormatAllNotes"/>
       <menu:menuitem menu:id=".uno:RubyDialog" menu:style="text"/>
       <menu:menuitem menu:id=".uno:FormatColumns" menu:style="text"/>
       <menu:menuitem menu:id=".uno:Watermark" menu:style="text"/>
@@ -627,12 +627,12 @@
       </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:MergeCells"/>
-      <menu:menuitem menu:id=".uno:SplitCell" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:SplitCell"/>
       <menu:menuitem menu:id=".uno:MergeTable" menu:style="text"/>
       <menu:menuitem menu:id=".uno:SplitTable" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Protect"/>
-      <menu:menuitem menu:id=".uno:UnsetCellsReadOnly" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:UnsetCellsReadOnly"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AutoFormat"/>
       <menu:menuitem menu:id=".uno:TableNumberFormatDialog" menu:style="text"/>
@@ -715,7 +715,7 @@
           <menu:menuitem menu:id=".uno:MoreDictionaries" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:WordCountDialog" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:WordCountDialog"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:AutoFormatMenu">
         <menu:menupopup>
@@ -728,9 +728,9 @@
       <menu:menuitem menu:id=".uno:EditGlossary" menu:style="text"/>
       <menu:menuitem menu:id=".uno:RedactDoc" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ChapterNumberingDialog" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ChapterNumberingDialog"/>
       <menu:menuitem menu:id=".uno:LineNumberingDialog" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:FootnoteDialog" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:FootnoteDialog">
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:MailMergeWizard"/>
       <menu:menuitem menu:id=".uno:BibliographyComponent" menu:style="text"/>
@@ -765,7 +765,7 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:ConfigureDialog" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ConfigureDialog"/>
       <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
     </menu:menupopup>
   </menu:menu>

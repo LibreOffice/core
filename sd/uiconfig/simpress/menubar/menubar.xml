@@ -51,13 +51,13 @@
       <menu:menuitem menu:id=".uno:ExportTo"/>
       <menu:menu menu:id=".uno:ExportAsMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:ExportToPDF" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:ExportDirectToPDF" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:ExportToPDF"/>
+          <menu:menuitem menu:id=".uno:ExportDirectToPDF"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:SendToMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:SendMail" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:SendMail"/>
           <menu:menuitem menu:id=".uno:SendMailDocAsPDF" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
@@ -93,10 +93,10 @@
       </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:CopyObjects" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:SelectAll" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:SelectAll"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
-      <menu:menuitem menu:id=".uno:SearchDialog" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:SearchDialog"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ToggleObjectBezierMode"/>
       <menu:menuitem menu:id=".uno:GlueEditMode"/>
@@ -241,7 +241,7 @@
       <menu:menuitem menu:id=".uno:Text"/>
       <menu:menuitem menu:id=".uno:InsertAnnotation"/>
       <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:FontworkGalleryFloater" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
       <menu:menuitem menu:id=".uno:InsertSymbol" menu:style="text"/>
@@ -651,7 +651,7 @@
       </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:ConfigureDialog" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ConfigureDialog"/>
       <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
     </menu:menupopup>
   </menu:menu>
