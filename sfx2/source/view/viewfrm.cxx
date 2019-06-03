@@ -1239,16 +1239,20 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     if ((iCurrent > iLast) && !Application::IsHeadlessModeEnabled() && !bIsUITest)
                     {
                         VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("whatsnew", SfxResId(STR_WHATSNEW_TEXT), InfoBarType::Info);
-                        VclPtrInstance<PushButton> xWhatsNewButton(&GetWindow());
-                        xWhatsNewButton->SetText(SfxResId(STR_WHATSNEW_BUTTON));
-                        xWhatsNewButton->SetSizePixel(xWhatsNewButton->GetOptimalSize());
-                        xWhatsNewButton->SetClickHdl(LINK(this, SfxViewFrame, WhatsNewHandler));
-                        pInfoBar->addButton(xWhatsNewButton);
+                        if (pInfoBar)
+                        {
+                            VclPtrInstance<PushButton> xWhatsNewButton(&GetWindow());
+                            xWhatsNewButton->SetText(SfxResId(STR_WHATSNEW_BUTTON));
+                            xWhatsNewButton->SetSizePixel(xWhatsNewButton->GetOptimalSize());
+                            xWhatsNewButton->SetClickHdl(LINK(this, SfxViewFrame, WhatsNewHandler));
+                            pInfoBar->addButton(xWhatsNewButton);
 
-                        //update lastversion
-                        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-                        officecfg::Setup::Product::ooSetupLastVersion::set(sSetupVersion, batch);
-                        batch->commit();
+                            //update lastversion
+                            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+                            officecfg::Setup::Product::ooSetupLastVersion::set(
+                                sSetupVersion, batch);
+                            batch->commit();
+                        }
                     }
                 }
 
