@@ -68,11 +68,11 @@ OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>
         return OUString();
 
     css::uno::Reference<css::io::XInputStream> xInputStream(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], css::uno::UNO_QUERY );
+    OStringBuffer aContent(xInputStream->available());
 
     static const sal_Int32 nBytes = 4096;
     css::uno::Sequence<sal_Int8> aSeq(nBytes);
     bool bEnd = false;
-    OStringBuffer aContent;
     while(!bEnd)
     {
         sal_Int32 nReadBytes = xInputStream->readBytes(aSeq, nBytes);
