@@ -116,6 +116,8 @@ private:
     */
     std::shared_ptr<ModeHandler> mpModeHandler;
 
+    bool mbKDE4;
+
     /** Make the slide nOffset slides away of the current one the new
         current slide.  When the new index is outside the range of valid
         page numbers it is clipped to that range.
