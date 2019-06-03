@@ -22,12 +22,12 @@
 
 #include <svx/svddef.hxx>
 #include <svx/sdooitm.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
 #include <unordered_map>
 
-namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::uno { class Any; }
 
 class SVX_DLLPUBLIC SdrCustomShapeGeometryItem : public SfxPoolItem
