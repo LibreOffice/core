@@ -445,6 +445,7 @@ public:
     const unsigned char* mpReadBuffer;
     unsigned long mnReadBufferLength;
     unsigned long mnReadBufferPos;
+    bool mbIsEnd;
 };
 
 WPXSvInputStreamImpl::WPXSvInputStreamImpl(Reference<XInputStream> const& xStream)
@@ -457,6 +458,7 @@ WPXSvInputStreamImpl::WPXSvInputStreamImpl(Reference<XInputStream> const& xStrea
     , mpReadBuffer(nullptr)
     , mnReadBufferLength(0)
     , mnReadBufferPos(0)
+    , mbIsEnd(false)
 {
     if (!xStream.is() || !mxStream.is())
         mnLength = 0;
@@ -491,6 +493,8 @@ const unsigned char* WPXSvInputStreamImpl::read(unsigned long numBytes, unsigned
     numBytesRead = mxStream->readSomeBytes(maData, numBytes);
     if (numBytesRead == 0)
         return nullptr;
+    if (numBytesRead < numBytes)
+        mbIsEnd = true;
 
     return reinterpret_cast<const unsigned char*>(maData.getConstArray());
 }
@@ -531,9 +535,7 @@ int WPXSvInputStreamImpl::seek(long offset)
 
 bool WPXSvInputStreamImpl::isEnd()
 {
-    if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
-        return true;
-    return (mxSeekable->getPosition() >= mnLength);
+    return mbIsEnd || (mnLength == 0) || !mxStream.is() || !mxSeekable.is();
 }
 
 bool WPXSvInputStreamImpl::isStructured()
