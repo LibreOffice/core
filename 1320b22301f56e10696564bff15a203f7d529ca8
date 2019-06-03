@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_c909c995",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-03T15:20:33Z",
+      "side": 1,
+      "message": "Both branches should now release the XReference properly. If we release the clipboard, we have to make it \"permanent\" without the XReference. Actually we have to test normal C\u0027n\u0027P too.",
+      "revId": "1320b22301f56e10696564bff15a203f7d529ca8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
