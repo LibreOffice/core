@@ -47,9 +47,11 @@ class SwWrongList;
 
 enum WrongAreaLineType
 {
-    WRONGAREA_DASHED,
+    WRONGAREA_NONE,
     WRONGAREA_WAVE,
-    WRONGAREA_NONE
+    WRONGAREA_BOLDWAVE,
+    WRONGAREA_BOLD,
+    WRONGAREA_DASHED
 };
 
 enum WrongListType
@@ -124,6 +126,14 @@ private:
                 if (!(aLineType >>= lineType))
                 {
                     return WRONGAREA_WAVE;
+                }
+                if (css::awt::FontUnderline::BOLDWAVE == lineType)
+                {
+                    return WRONGAREA_BOLDWAVE;
+                }
+                if (css::awt::FontUnderline::BOLD == lineType)
+                {
+                    return WRONGAREA_BOLD;
                 }
                 if (css::awt::FontUnderline::DASH == lineType)
                 {

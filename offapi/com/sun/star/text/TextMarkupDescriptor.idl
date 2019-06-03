@@ -54,7 +54,8 @@ struct TextMarkupDescriptor
         nType                     | aKey
         ------------------------- | -------------
         PROOFREADING or SMARTTAG  | "LineColor": changes the markup color from default to RGB aValue (int32)
-        PROOFREADING or SMARTTAG  | "LineType": changes the wiggly line type from default to aValue (short) (WAVE or DASH)
+        PROOFREADING or SMARTTAG  | "LineType": changes the wiggly line type from default to aValue (short) (WAVE, DASH, BOLDWAVE, BOLD)
+                                  | https://api.libreoffice.org/docs/idl/ref/FontUnderline_8idl.html
     */
     com::sun::star::container::XStringKeyMap xMarkupInfoContainer;
 };

@@ -784,7 +784,30 @@ static void lcl_DrawLineForWrongListData(
             SwWrongArea const*const wrongArea = pWList->GetWrongElement(nNextStart + rInf.GetIdx());
             if (wrongArea != nullptr)
             {
-                if (WRONGAREA_DASHED == wrongArea->mLineType)
+                if (WRONGAREA_WAVE == wrongArea->mLineType)
+                {
+                    rInf.GetOut().SetLineColor( wrongArea->mColor );
+
+                    rInf.GetOut().DrawWaveLine( aStart, aEnd, 1 );
+                }
+                else if (WRONGAREA_BOLDWAVE == wrongArea->mLineType)
+                {
+                    rInf.GetOut().SetLineColor( wrongArea->mColor );
+
+                    rInf.GetOut().DrawWaveLine( aStart, aEnd, 2 );
+                }
+                else if (WRONGAREA_BOLD == wrongArea->mLineType)
+                {
+                    rInf.GetOut().SetLineColor( wrongArea->mColor );
+
+                    aStart.AdjustY(30 );
+                    aEnd.AdjustY(30 );
+
+                    LineInfo aLineInfo( LineStyle::Solid, 26 );
+
+                    rInf.GetOut().DrawLine( aStart, aEnd, aLineInfo );
+                }
+                else if (WRONGAREA_DASHED == wrongArea->mLineType)
                 {
                     rInf.GetOut().SetLineColor( wrongArea->mColor );
 
@@ -797,12 +820,6 @@ static void lcl_DrawLineForWrongListData(
                     aLineInfo.SetDashCount(1);
 
                     rInf.GetOut().DrawLine( aStart, aEnd, aLineInfo );
-                }
-                else if (WRONGAREA_WAVE == wrongArea->mLineType)
-                {
-                    rInf.GetOut().SetLineColor( wrongArea->mColor );
-
-                    rInf.GetOut().DrawWaveLine( aStart, aEnd );
                 }
             }
         }

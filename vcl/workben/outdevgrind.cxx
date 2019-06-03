@@ -550,15 +550,6 @@ void setupMethodStubs( functor_vector_type& res )
             return pDev->DrawWallpaper(aRect2, aWallpaper);
         });
 
-#ifdef FIXME_HAVE_WAVE_NORMAL
-    /* void DrawWaveLine( const Point& rStartPos, const Point& rEndPos, sal_uInt16 nStyle ); */
-    add(res,
-        "DrawWaveLine",
-        [&] (OutputDevice * pDev) {
-            return pDev->DrawWaveLine(aPt1, aPt2, (sal_uInt16)WAVE_NORMAL);
-        });
-#endif
-
     /* void DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags ); */
     add(res,
         "DrawGrid",
