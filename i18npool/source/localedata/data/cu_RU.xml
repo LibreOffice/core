@@ -52,7 +52,7 @@
     <TimePM>по по́лꙋд.</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$р.-694]">
+  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$₽-694]">
     <DateAcceptancePattern>D.M.</DateAcceptancePattern>
     <DateAcceptancePattern>D/M/</DateAcceptancePattern>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
@@ -396,14 +396,21 @@
     </Calendar>
   </LC_CALENDAR>
   <LC_CURRENCY>
-    <Currency default="true" usedInCompatibleFormatCodes="false">
+    <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>RUB</CurrencyID>
+      <CurrencySymbol>₽</CurrencySymbol>
+      <BankSymbol>RUB</BankSymbol>
+      <CurrencyName>рꙋ́бль рѡссі́йскїй</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
       <CurrencyID>RUB</CurrencyID>
       <CurrencySymbol>рꙋб.</CurrencySymbol>
       <BankSymbol>RUB</BankSymbol>
       <CurrencyName>рꙋ́бль рѡссі́йскїй</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
-    <Currency default="false" usedInCompatibleFormatCodes="true">
+    <Currency default="false" usedInCompatibleFormatCodes="false">
       <CurrencyID>RUR</CurrencyID>
       <CurrencySymbol>р.</CurrencySymbol>
       <BankSymbol>RUR</BankSymbol>
