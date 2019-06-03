@@ -45,15 +45,15 @@ class SwTableSortBoxes;
 
 class SwUndoInsTable : public SwUndo
 {
-    OUString sTableNm;
-    SwInsertTableOptions const aInsTableOpts;
-    std::unique_ptr<SwDDEFieldType> pDDEFieldType;
-    std::unique_ptr<std::vector<sal_uInt16>> pColWidth;
-    std::unique_ptr<SwRedlineData>  pRedlData;
-    std::unique_ptr<SwTableAutoFormat> pAutoFormat;
-    sal_uLong nSttNode;
-    sal_uInt16 nRows, nCols;
-    sal_uInt16 const nAdjust;
+    OUString m_sTableName;
+    SwInsertTableOptions const m_aInsTableOptions;
+    std::unique_ptr<SwDDEFieldType> m_pDDEFieldType;
+    std::unique_ptr<std::vector<sal_uInt16>> m_pColumnWidth;
+    std::unique_ptr<SwRedlineData>  m_pRedlineData;
+    std::unique_ptr<SwTableAutoFormat> m_pAutoFormat;
+    sal_uLong m_nStartNode;
+    sal_uInt16 m_nRows, m_nColumns;
+    sal_uInt16 const m_nAdjust;
 
 public:
     SwUndoInsTable( const SwPosition&, sal_uInt16 nCols, sal_uInt16 nRows,
