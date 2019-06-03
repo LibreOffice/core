@@ -198,7 +198,8 @@ public:
         virtual css::i18n::ParseResult
                     parseAnyToken( const OUString& rFormula,
                                    sal_Int32 nSrcPos,
-                                   const CharClass* pCharClass) const = 0;
+                                   const CharClass* pCharClass,
+                                   bool bGroupSeparator) const = 0;
 
         /**
          * Parse the symbol string and pick up the file name and the external
