@@ -56,7 +56,7 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
     if ( mbInitClipRegion )
         InitClipRegion();
 
-    if ( mbOutputClipped )
+    if (mbOutputClipped && !mpMetaFile)
         return;
 
     if ( rPolyPoly.Count() && rPolyPoly[ 0 ].GetSize() )
@@ -109,6 +109,12 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
 
                 if( mbInitClipRegion )
                     InitClipRegion();
+
+                if (mbOutputClipped)
+                {
+                    Pop();
+                    return;
+                }
 
                 // try to draw gradient natively
                 bDrawn = mpGraphics->DrawGradient( aClixPolyPoly, aGradient );
