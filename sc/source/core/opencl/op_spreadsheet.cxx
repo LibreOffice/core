@@ -11,6 +11,8 @@
 
 #include <rtl/math.hxx>
 #include <formula/vectortoken.hxx>
+
+#include <algorithm>
 #include <sstream>
 
 using namespace formula;
