@@ -2069,6 +2069,7 @@ sw/res/wr04.png cmd/32/wrapon.png
 sw/res/wr05.png cmd/32/wrapthrough.png
 sw/res/wr06.png cmd/32/wrapideal.png
 sw/res/wr07.png cmd/32/wrapoff.png
+sw/res/wr010.png cmd/32/wrapcontour.png
 sw/res/wr011.png cmd/32/wrapideal.png
 
 # res
