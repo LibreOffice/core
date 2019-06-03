@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_eeab6b1a",
+        "filename": "chart2/source/view/axes/VCartesianAxis.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1561,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-06-03T08:45:00Z",
+      "side": 1,
+      "message": "\u003d\u003d css::chart2::AxisType::NUMBER isn\u0027t better?",
+      "range": {
+        "startLine": 1561,
+        "startChar": 42,
+        "endLine": 1561,
+        "endChar": 72
+      },
+      "revId": "624ee3cdd24eaeb8ceeb8b64e5dd043ffb323b59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
