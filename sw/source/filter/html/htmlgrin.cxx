@@ -644,7 +644,9 @@ IMAGE_SETEVENT:
     bool bSetScaleImageMap = false;
     sal_uInt8 nPrcWidth = 0, nPrcHeight = 0;
 
-    if ((!nWidth || !nHeight) && allowAccessLink(*m_xDoc))
+    // bPrcWidth / bPrcHeight means we have a percent size.  If that's not the case and we have no
+    // size from nWidth / nHeight either, then inspect the image header.
+    if ((!bPrcWidth && !nWidth) && (!bPrcHeight && !nHeight) && allowAccessLink(*m_xDoc))
     {
         GraphicDescriptor aDescriptor(aGraphicURL);
         if (aDescriptor.Detect(/*bExtendedInfo=*/true))
