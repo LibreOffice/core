@@ -1283,8 +1283,9 @@ namespace emfio
             if ( mbComplexClip )
             {
                 tools::PolyPolygon aPolyPoly( rPolygon );
-                tools::PolyPolygon aDest;
-                tools::PolyPolygon(maClipPath.getClipPath()).GetIntersection( aPolyPoly, aDest );
+                auto tmp = maClipPath.getClip();
+                tmp.intersectPolyPolygon(aPolyPoly.getB2DPolyPolygon());
+                tools::PolyPolygon aDest(tmp.getClipPoly());
                 ImplDrawClippedPolyPolygon( aDest );
             }
             else
