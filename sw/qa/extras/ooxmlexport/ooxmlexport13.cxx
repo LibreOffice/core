@@ -323,6 +323,13 @@ DECLARE_OOXMLIMPORT_TEST(testTdf121784, "tdf121784.docx")
     CPPUNIT_ASSERT_EQUAL( OUString( "i" ), getRun( getParagraph( 2 ), 3 )->getString());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf125324, "tdf125324.docx")
+{
+    discardDumpedLayout();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page/body//txt[2]/anchored/fly/tab/infos/bounds", "top", "4193");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
