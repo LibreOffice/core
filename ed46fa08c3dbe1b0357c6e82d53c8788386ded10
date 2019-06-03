@@ -19,6 +19,47 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_89b501d0",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-03T15:20:33Z",
+      "side": 1,
+      "message": "The code has now moved into the deepCopy function. See my other comment. Thanks for catching that. The patch is really WIP.",
+      "parentUuid": "3fa0c359_496ff991",
+      "revId": "ed46fa08c3dbe1b0357c6e82d53c8788386ded10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_29cced68",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-03T15:20:33Z",
+      "side": 1,
+      "message": "@aleksei - yup, the pQt5MimeData check is wrong and produced the empty data. That was left from one of my many tries to come up with a usable solution in the class layout.",
+      "range": {
+        "startLine": 63,
+        "startChar": 17,
+        "endLine": 63,
+        "endChar": 29
+      },
+      "revId": "ed46fa08c3dbe1b0357c6e82d53c8788386ded10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_892501ae",
         "filename": "vcl/qt5/Qt5Clipboard.cxx",
         "patchSetId": 3
@@ -42,6 +83,30 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_49c7f946",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-03T15:20:33Z",
+      "side": 1,
+      "message": "Learned something new - just knew std::find_if yet.\nDone.",
+      "parentUuid": "3fa0c359_892501ae",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 17
+      },
+      "revId": "ed46fa08c3dbe1b0357c6e82d53c8788386ded10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_6922f5a6",
         "filename": "vcl/qt5/Qt5Clipboard.cxx",
         "patchSetId": 3
@@ -53,6 +118,30 @@
       "writtenOn": "2019-06-03T10:40:18Z",
       "side": 1,
       "message": "can use range-based for here",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 67
+      },
+      "revId": "ed46fa08c3dbe1b0357c6e82d53c8788386ded10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_e9c5a53d",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-03T15:20:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fa0c359_6922f5a6",
       "range": {
         "startLine": 143,
         "startChar": 0,
