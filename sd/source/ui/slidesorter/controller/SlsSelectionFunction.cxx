@@ -61,6 +61,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svxids.hrc>
+#include <vcl/svapp.hxx>
 #include <boost/optional.hpp>
 #include <sdmod.hxx>
 
@@ -225,17 +226,12 @@ public:
     MultiSelectionModeHandler (
         SlideSorter& rSlideSorter,
         SelectionFunction& rSelectionFunction,
-#ifndef MACOSX
-        const Point& rMouseModelPosition);
-#else
         const Point& rMouseModelPosition,
-        const sal_uInt32 nEventCode);
-#endif
+        const sal_uInt32 nEventCode,
+        bool bKDE4);
     virtual ~MultiSelectionModeHandler() override;
 
-#ifndef MACOSX
     void Initialize(const sal_uInt32 nEventCode);
-#endif
 
     virtual SelectionFunction::Mode GetMode() const override;
     virtual void Abort() override;
@@ -258,6 +254,7 @@ private:
     bool mbAutoScrollInstalled;
     sal_Int32 mnAnchorIndex;
     sal_Int32 mnSecondIndex;
+    bool mbKDE4;
 
     void UpdateModelPosition (const Point& rMouseModelPosition);
     void UpdateSelection();
@@ -281,18 +278,13 @@ class DragAndDropModeHandler : public SelectionFunction::ModeHandler
 public:
     DragAndDropModeHandler (
         SlideSorter& rSlideSorter,
-#ifndef MACOSX
-        SelectionFunction& rSelectionFunction);
-#else
         SelectionFunction& rSelectionFunction,
         const Point& rMousePosition,
-        vcl::Window* pWindow);
-#endif
+        vcl::Window* pWindow,
+        bool bKDE4);
     virtual ~DragAndDropModeHandler() override;
 
-#ifndef MACOSX
     void Initialize(const Point& rMousePosition, vcl::Window* pWindow);
-#endif
 
     virtual SelectionFunction::Mode GetMode() const override;
     virtual void Abort() override;
@@ -303,6 +295,7 @@ protected:
 
 private:
     std::unique_ptr<DragAndDropContext, o3tl::default_delete<DragAndDropContext>> mpDragAndDropContext;
+    bool mbKDE4;
 };
 
 //===== SelectionFunction =====================================================
@@ -322,6 +315,7 @@ SelectionFunction::SelectionFunction (
       mnShiftKeySelectionAnchor(-1),
       mpModeHandler(new NormalModeHandler(rSlideSorter, *this))
 {
+    mbKDE4 = Application::GetToolkitName() == "kde4";
 }
 
 SelectionFunction::~SelectionFunction()
@@ -684,18 +678,21 @@ void SelectionFunction::SwitchToDragAndDropMode (const Point& rMousePosition)
 {
     if (mpModeHandler->GetMode() != DragAndDropMode)
     {
-#ifndef MACOSX
-        std::shared_ptr<DragAndDropModeHandler> handler(
-            new DragAndDropModeHandler(mrSlideSorter, *this));
-        SwitchMode(handler);
-        // Delayed initialization, only after mpModeHanler is set, otherwise DND initialization
-        // could already trigger DND events, which would recursively trigger this code again,
-        // and without mpModeHandler set it would again try to set a new handler.
-        handler->Initialize(rMousePosition, mpWindow);
-#else
-        SwitchMode(std::shared_ptr<ModeHandler>(
-            new DragAndDropModeHandler(mrSlideSorter, *this, rMousePosition, mpWindow)));
-#endif
+        if (mbKDE4)
+        {
+            std::shared_ptr<DragAndDropModeHandler> handler(
+                new DragAndDropModeHandler(mrSlideSorter, *this, rMousePosition, mpWindow, mbKDE4));
+            SwitchMode(handler);
+            // Delayed initialization, only after mpModeHanler is set, otherwise DND initialization
+            // could already trigger DND events, which would recursively trigger this code again,
+            // and without mpModeHandler set it would again try to set a new handler.
+            handler->Initialize(rMousePosition, mpWindow);
+        }
+        else
+        {
+            SwitchMode(std::shared_ptr<ModeHandler>(
+                new DragAndDropModeHandler(mrSlideSorter, *this, rMousePosition, mpWindow, mbKDE4)));
+        }
     }
 }
 
@@ -704,19 +701,22 @@ void SelectionFunction::SwitchToMultiSelectionMode (
     const sal_uInt32 nEventCode)
 {
     if (mpModeHandler->GetMode() != MultiSelectionMode)
-#ifndef MACOSX
     {
-        std::shared_ptr<MultiSelectionModeHandler> handler(
-            new MultiSelectionModeHandler(mrSlideSorter, *this, rMousePosition));
-        SwitchMode(handler);
-        // Delayed initialization, only after mpModeHanler is set, the handle ctor
-        // is non-trivial, so it could possibly recurse just like the DND handler above.
-        handler->Initialize(nEventCode);
+        if (mbKDE4)
+        {
+            std::shared_ptr<MultiSelectionModeHandler> handler(
+                new MultiSelectionModeHandler(mrSlideSorter, *this, rMousePosition, nEventCode, mbKDE4));
+            SwitchMode(handler);
+            // Delayed initialization, only after mpModeHanler is set, the handle ctor
+            // is non-trivial, so it could possibly recurse just like the DND handler above.
+            handler->Initialize(nEventCode);
+        }
+        else
+        {
+            SwitchMode(std::shared_ptr<ModeHandler>(
+                new MultiSelectionModeHandler(mrSlideSorter, *this, rMousePosition, nEventCode, mbKDE4)));
+        }
     }
-#else
-        SwitchMode(std::shared_ptr<ModeHandler>(
-            new MultiSelectionModeHandler(mrSlideSorter, *this, rMousePosition, nEventCode)));
-#endif
 }
 
 void SelectionFunction::SwitchMode (const std::shared_ptr<ModeHandler>& rpHandler)
@@ -1233,26 +1233,24 @@ void NormalModeHandler::ResetButtonDownLocation()
 MultiSelectionModeHandler::MultiSelectionModeHandler (
     SlideSorter& rSlideSorter,
     SelectionFunction& rSelectionFunction,
-#ifndef MACOSX
-    const Point& rMouseModelPosition)
-#else
     const Point& rMouseModelPosition,
-    const sal_uInt32 nEventCode)
-#endif
+    const sal_uInt32 nEventCode,
+    bool bKDE4)
     : ModeHandler(rSlideSorter, rSelectionFunction, false),
       meSelectionMode(SM_Normal),
       maSecondCorner(rMouseModelPosition),
       maSavedPointer(mrSlideSorter.GetContentWindow()->GetPointer()),
       mbAutoScrollInstalled(false),
       mnAnchorIndex(-1),
-      mnSecondIndex(-1)
+      mnSecondIndex(-1),
+      mbKDE4(bKDE4)
 {
-#ifndef MACOSX
+    if (!mbKDE4)
+        Initialize(nEventCode);
 }
 
 void MultiSelectionModeHandler::Initialize(const sal_uInt32 nEventCode)
 {
-#endif
     const Pointer aSelectionPointer (PointerStyle::Text);
     mrSlideSorter.GetContentWindow()->SetPointer(aSelectionPointer);
     SetSelectionModeFromModifier(nEventCode);
@@ -1461,21 +1459,19 @@ void MultiSelectionModeHandler::UpdateSelection()
 
 DragAndDropModeHandler::DragAndDropModeHandler (
     SlideSorter& rSlideSorter,
-#ifndef MACOSX
-    SelectionFunction& rSelectionFunction)
-#else
     SelectionFunction& rSelectionFunction,
     const Point& rMousePosition,
-    vcl::Window* pWindow)
-#endif
-    : ModeHandler(rSlideSorter, rSelectionFunction, false)
+    vcl::Window* pWindow,
+    bool bKDE4)
+    : ModeHandler(rSlideSorter, rSelectionFunction, false),
+      mbKDE4(bKDE4)
 {
-#ifndef MACOSX
+    if (!mbKDE4)
+        Initialize(rMousePosition, pWindow);
 }
 
 void DragAndDropModeHandler::Initialize(const Point& rMousePosition, vcl::Window* pWindow)
 {
-#endif
     SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
     if (pDragTransferable==nullptr && mrSlideSorter.GetViewShell() != nullptr)
     {
