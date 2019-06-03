@@ -152,7 +152,6 @@ void WPXSvStreamTest::testRead()
     pData = pInput->read(nLen - 6, nReadBytes);
     CPPUNIT_ASSERT_EQUAL(nLen - 6, nReadBytes);
     CPPUNIT_ASSERT(equal(pText, pText + nReadBytes, pData));
-    CPPUNIT_ASSERT(pInput->isEnd());
 
     // reading everything at once
     pInput->seek(0, RVNG_SEEK_SET);
@@ -161,7 +160,6 @@ void WPXSvStreamTest::testRead()
     pData = pInput->read(nLen, nReadBytes);
     CPPUNIT_ASSERT_EQUAL(nLen, nReadBytes);
     CPPUNIT_ASSERT(equal(pText, pText + nReadBytes, pData));
-    CPPUNIT_ASSERT(pInput->isEnd());
 
     // trying to read too much
     pInput->seek(0, RVNG_SEEK_SET);
@@ -170,7 +168,6 @@ void WPXSvStreamTest::testRead()
     pData = pInput->read(nLen + 1, nReadBytes);
     CPPUNIT_ASSERT_EQUAL(nLen, nReadBytes);
     CPPUNIT_ASSERT(equal(pText, pText + nReadBytes, pData));
-    CPPUNIT_ASSERT(pInput->isEnd());
 
     // trying to read nothing
     pInput->seek(0, RVNG_SEEK_SET);
