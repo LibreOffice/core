@@ -26,10 +26,10 @@
 #include <svl/sigstruct.hxx>
 #include "xmlsecuritydllapi.h"
 #include "xmlsignaturehelper.hxx"
+#include "xsecctl.hxx"
 
 class DateTime;
 class UriBindingHelper;
-class XSecController;
 
 namespace com {
 namespace sun {
