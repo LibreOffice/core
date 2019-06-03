@@ -22,6 +22,7 @@
 
 #include <svx/msdffdef.hxx>
 #include <svx/sdasitm.hxx>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <svl/itemset.hxx>
@@ -40,7 +41,6 @@
 #include <vector>
 
 namespace com::sun::star::awt { struct Point; }
-namespace com::sun::star::awt { struct Size; }
 
 class Color;
 class SdrObject;
