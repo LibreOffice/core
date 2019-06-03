@@ -150,7 +150,7 @@ void StdTabController::ImplActivateControl( bool bFirst ) const
             Reference< XWindowPeer >  xCP = pControls[nCtrl]->getPeer();
             if ( xCP.is() )
             {
-                VCLXWindow* pC = VCLXWindow::GetImplementation( xCP );
+                VCLXWindow* pC = VCLXWindow::getImplementation( xCP );
                 if ( pC && pC->GetWindow() && ( pC->GetWindow()->GetStyle() & WB_TABSTOP ) )
                 {
                     pC->GetWindow()->GrabFocus();

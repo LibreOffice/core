@@ -52,7 +52,7 @@ uno::Any VCLXGraphics::queryInterface( const uno::Type & rType )
 }
 
 // lang::XUnoTunnel
-IMPL_XUNOTUNNEL( VCLXGraphics )
+UNO3_GETIMPLEMENTATION_IMPL( VCLXGraphics );
 
 IMPL_IMPLEMENTATION_ID( VCLXGraphics )
 
@@ -286,7 +286,7 @@ void VCLXGraphics::copy( const uno::Reference< awt::XDevice >& rxSource, sal_Int
 
     if ( mpOutputDevice )
     {
-        VCLXDevice* pFromDev = VCLXDevice::GetImplementation( rxSource );
+        VCLXDevice* pFromDev = VCLXDevice::getImplementation( rxSource );
         DBG_ASSERT( pFromDev, "VCLXGraphics::copy - invalid device" );
         if ( pFromDev )
         {

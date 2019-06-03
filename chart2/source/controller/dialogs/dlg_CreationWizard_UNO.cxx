@@ -167,7 +167,7 @@ void CreationWizardUnoDlg::createDialogOnDemand()
         }
         if( m_xParentWindow.is() )
         {
-            VCLXWindow* pImplementation = VCLXWindow::GetImplementation(m_xParentWindow);
+            VCLXWindow* pImplementation = VCLXWindow::getImplementation(m_xParentWindow);
             if (pImplementation)
                 pParent = pImplementation->GetWindow().get();
         }

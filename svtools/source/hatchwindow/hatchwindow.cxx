@@ -48,7 +48,7 @@ void VCLXHatchWindow::initializeWindow( const uno::Reference< awt::XWindowPeer >
     SolarMutexGuard aGuard;
 
     VclPtr<vcl::Window> pParent;
-    VCLXWindow* pParentComponent = VCLXWindow::GetImplementation( xParent );
+    VCLXWindow* pParentComponent = VCLXWindow::getImplementation( xParent );
 
     if ( pParentComponent )
         pParent = pParentComponent->GetWindow();

@@ -991,7 +991,7 @@ void SAL_CALL SmModel::render(
     if (!xRenderDevice.is())
         return;
 
-    VCLXDevice*   pDevice = VCLXDevice::GetImplementation( xRenderDevice );
+    VCLXDevice*   pDevice = VCLXDevice::getImplementation( xRenderDevice );
     VclPtr< OutputDevice> pOut = pDevice ? pDevice->GetOutputDevice()
                                          : VclPtr< OutputDevice >();
     if (!pOut)

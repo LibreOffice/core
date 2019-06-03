@@ -329,7 +329,7 @@ void GenericPopupToolbarController::statusChanged( const css::frame::FeatureStat
 
     if ( m_bReplaceWithLast && !rEvent.IsEnabled && m_xPopupMenu.is() )
     {
-        Menu* pVclMenu = VCLXMenu::GetImplementation( m_xPopupMenu )->GetMenu();
+        Menu* pVclMenu = VCLXMenu::getImplementation( m_xPopupMenu )->GetMenu();
 
         ToolBox* pToolBox = nullptr;
         sal_uInt16 nId = 0;
@@ -663,7 +663,7 @@ void SAL_CALL NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
         // TODO investigate how to wrap Get/SetUserValue in css::awt::XMenu
         MenuAttributes* pMenuAttributes( nullptr );
         VCLXPopupMenu*  pTkPopupMenu =
-            static_cast<VCLXPopupMenu *>( VCLXMenu::GetImplementation( m_xPopupMenu ) );
+            static_cast<VCLXPopupMenu *>( VCLXMenu::getImplementation( m_xPopupMenu ) );
 
         SolarMutexGuard aSolarMutexGuard;
         PopupMenu* pVCLPopupMenu = pTkPopupMenu ?

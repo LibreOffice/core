@@ -48,7 +48,7 @@ css::uno::Any VCLXRegion::queryInterface( const css::uno::Type & rType )
 }
 
 // css::lang::XUnoTunnel
-IMPL_XUNOTUNNEL( VCLXRegion )
+UNO3_GETIMPLEMENTATION_IMPL( VCLXRegion );
 
 IMPL_IMPLEMENTATION_ID( VCLXRegion )
 

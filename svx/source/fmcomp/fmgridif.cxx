@@ -473,7 +473,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
         vcl::Window* pParentWin = nullptr;
         if (rParentPeer.is())
         {
-            VCLXWindow* pParent = VCLXWindow::GetImplementation(rParentPeer);
+            VCLXWindow* pParent = VCLXWindow::getImplementation(rParentPeer);
             if (pParent)
                 pParentWin = pParent->GetWindow().get();
         }

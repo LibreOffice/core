@@ -19,7 +19,6 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <toolkit/awt/vclxpointer.hxx>
-#include <toolkit/helper/macros.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 VCLXPointer::VCLXPointer() : maPointer(PointerStyle::Arrow)
@@ -31,7 +30,7 @@ VCLXPointer::~VCLXPointer()
 }
 
 // css::lang::XUnoTunnel
-IMPL_XUNOTUNNEL( VCLXPointer )
+UNO3_GETIMPLEMENTATION_IMPL( VCLXPointer );
 
 void VCLXPointer::setType( sal_Int32 nType )
 {
