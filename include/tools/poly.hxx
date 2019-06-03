@@ -265,18 +265,6 @@ public:
 
 typedef std::vector< tools::PolyPolygon > PolyPolyVector;
 
-
-template<typename charT, typename traits>
-inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const tools::PolyPolygon& rPolyPoly)
-{
-    if (!rPolyPoly.Count())
-        stream << "EMPTY";
-    for (sal_uInt16 i = 0; i < rPolyPoly.Count(); ++i)
-        stream << "[" << i << "] " << rPolyPoly.GetObject(i);
-    return stream;
-}
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
