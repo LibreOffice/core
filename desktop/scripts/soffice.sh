@@ -126,6 +126,9 @@ for arg in "$@" $EXTRAOPT ; do
                     export G_SLICE=always-malloc
                     export GLIBCXX_FORCE_NEW=1
                     ;;
+                callgrind)
+                    export LD_BIND_NOW=1
+                    ;;
                 esac
             else
                 echo "Error: Can't find the tool \"valgrind\", --valgrind option will be ignored"
