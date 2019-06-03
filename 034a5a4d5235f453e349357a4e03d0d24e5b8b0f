@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_aebc83dc",
+        "filename": "filter/source/xslt/odf2xhtml/export/xhtml/opendoc2xhtml.xsl",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2019-06-03T01:33:37Z",
+      "side": 1,
+      "message": "URL starts with consonant",
+      "revId": "034a5a4d5235f453e349357a4e03d0d24e5b8b0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
