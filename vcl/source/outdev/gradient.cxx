@@ -50,6 +50,9 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
 {
     assert(!is_double_buffered_window());
 
+    if ( !mpGraphics && !AcquireGraphics() )
+        return;
+
     if ( mbInitClipRegion )
         InitClipRegion();
 
