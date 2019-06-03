@@ -63,7 +63,9 @@ public class PlainSourceView extends JScrollPane implements
     UndoManager undoManager;
     private List<UnsavedChangesListener> unsavedListener = new ArrayList<UnsavedChangesListener>();
 
+    private static Matcher matcher;
     private static final Pattern tabPattern = Pattern.compile("^ *(\\t)");
+    private static final Pattern indentationPattern = Pattern.compile("^([^\\S\\r\\n]*)(([^\\{])*\\{\\s*)*");
 
     public PlainSourceView(ScriptSourceModel model) {
         this.model = model;
@@ -184,12 +186,37 @@ public class PlainSourceView extends JScrollPane implements
                         int startOffset = ta.getLineStartOffset(lineOffset);
                         int endOffset = ta.getLineEndOffset(lineOffset);
 
-                        Matcher matcher = tabPattern.matcher(ta.getText(startOffset, endOffset - startOffset));
+                        matcher = tabPattern.matcher(ta.getText(startOffset, endOffset - startOffset));
                         if (matcher.find()) {
                             ta.replaceRange(null, startOffset + matcher.start(1), startOffset + matcher.end(1));
                         }
                     } catch (BadLocationException e) {
                         // could not find correct location of the tab
+                    }
+                }
+                // if the enter key was pressed, adjust indentation of the current line accordingly
+                if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+                    try {
+                        int caretOffset = ta.getCaretPosition();
+                        int lineOffset = ta.getLineOfOffset(caretOffset);
+                        int startOffset = ta.getLineStartOffset(lineOffset);
+                        int endOffset = ta.getLineEndOffset(lineOffset);
+
+                        matcher = indentationPattern.matcher(ta.getText(startOffset, endOffset - startOffset));
+                        // insert new line including indentation of the previous line
+                        ta.insert("\n", caretOffset++);
+                        if (matcher.find()) {
+                            if (matcher.group(1).length() > 0) {
+                                ta.insert(matcher.group(1), caretOffset++);
+                            }
+                            // if there is an open curly bracket in the current line, increase indentation level
+                            if (matcher.group(3) != null) {
+                                ta.insert("\t", caretOffset);
+                            }
+                        }
+                        ke.consume();
+                    } catch (BadLocationException e) {
+                        // could not find correct location of the indentation
                     }
                 }
             }
