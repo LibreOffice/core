@@ -349,6 +349,17 @@ DECLARE_HTMLIMPORT_TEST(testImageSize, "image-size.html")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aExpected.getHeight()), aSize.Height);
 }
 
+DECLARE_HTMLIMPORT_TEST(testTdf122789, "tdf122789.html")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    const SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rFormats.size());
+    // This failed, the image had an absolute size, not a relative one.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(70), rFormats[0]->GetAttrSet().GetFrameSize().GetWidthPercent());
+}
+
 DECLARE_HTMLIMPORT_TEST(testReqIfPageStyle, "reqif-page-style.xhtml")
 {
     // Without the accompanying fix in place, this test would have failed with
