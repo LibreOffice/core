@@ -1596,6 +1596,45 @@ ITiledRenderable* getTiledRenderable(LibreOfficeKitDocument* pThis)
     return dynamic_cast<ITiledRenderable*>(pDocument->mxComponent.get());
 }
 
+#ifdef IOS
+void paintTileToCGContext(ITiledRenderable* pDocument,
+                          void* rCGContext, const Size nCanvasSize,
+                          const int nTilePosX, const int nTilePosY,
+                          const int nTileWidth, const int nTileHeight)
+{
+    SystemGraphicsData aData;
+    aData.rCGContext = reinterpret_cast<CGContextRef>(rCGContext);
+
+    ScopedVclPtrInstance<VirtualDevice> pDevice(&aData, Size(1, 1), DeviceFormat::DEFAULT);
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    pDevice->SetOutputSizePixel(nCanvasSize);
+    pDocument->paintTile(*pDevice, nCanvasSize.Width(), nCanvasSize.Height(),
+                    nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+}
+
+void paintTileIOS(LibreOfficeKitDocument* pThis,
+             unsigned char* pBuffer,
+             const int nCanvasWidth, const int nCanvasHeight, const double fDPIScale,
+             const int nTilePosX, const int nTilePosY,
+             const int nTileWidth, const int nTileHeight)
+{
+    CGContextRef pCGContext = CGBitmapContextCreate(pBuffer, nCanvasWidth, nCanvasHeight, 8,
+                                                    nCanvasWidth * 4, CGColorSpaceCreateDeviceRGB(),
+                                                    kCGImageAlphaPremultipliedFirst | kCGImageByteOrder32Little);
+
+    // Use the vcl.cg tag even if this code is not in vcl, to match all other SAL_INFO logging about Core Graphics, in vcl.
+    SAL_INFO("vcl.cg", "CGBitmapContextCreate(" << nCanvasWidth << "x" << nCanvasHeight << "x32) = " << pCGContext);
+
+    CGContextTranslateCTM(pCGContext, 0, nCanvasHeight);
+    CGContextScaleCTM(pCGContext, fDPIScale, -fDPIScale);
+
+    doc_paintTileToCGContext(pThis, (void*) pCGContext, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+
+    SAL_INFO("vcl.cg", "CGContextRelease(" << pCGContext << ")");
+    CGContextRelease(pCGContext);
+}
+#endif
+
 } // anonymous namespace
 
 // Wonder global state ...
@@ -2466,7 +2505,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     // would do - because that one is trying to fit the lines between cells to integer multiples of
     // pixels.
     comphelper::ScopeGuard dpiScaleGuard([]() { comphelper::LibreOfficeKit::setDPIScale(1.0); });
-    double fDPIScaleX = 1;
+    double fDPIScaleX = 1.0;
     if (doc_getDocumentType(pThis) == LOK_DOCTYPE_SPREADSHEET)
     {
         fDPIScaleX = (nCanvasWidth * 3840.0) / (256.0 * nTileWidth);
@@ -2475,19 +2514,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     }
 
 #if defined(IOS)
-    CGContextRef cgc = CGBitmapContextCreate(pBuffer, nCanvasWidth, nCanvasHeight, 8, nCanvasWidth*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaPremultipliedFirst | kCGImageByteOrder32Little);
-
-    // Use the vcl.cg tag even if this code is not in vcl, to match all other SAL_INFO logging about Core Graphics, in vcl.
-    SAL_INFO( "vcl.cg", "CGBitmapContextCreate(" << nCanvasWidth << "x" << nCanvasHeight << "x32) = " << cgc );
-
-    CGContextTranslateCTM(cgc, 0, nCanvasHeight);
-    CGContextScaleCTM(cgc, fDPIScaleX, -fDPIScaleX);
-
-    doc_paintTileToCGContext(pThis, (void*) cgc, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-
-    SAL_INFO( "vcl.cg", "CGContextRelease(" << cgc << ")" );
-    CGContextRelease(cgc);
-
+    paintTileIOS(pThis, pBuffer, nCanvasWidth, nCanvasHeight, fDPIScaleX, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 #else
     ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT) ;
 
@@ -2525,8 +2552,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 #ifdef IOS
 
 // This function is separate only to be used by LibreOfficeLight. If that app can be retired, this
-// function's code can be inlined into the iOS part of doc_paintTile().
-
+// function's code can be inlined.
 static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
                                      void* rCGContext,
                                      const int nCanvasWidth, const int nCanvasHeight,
@@ -2547,18 +2573,8 @@ static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
         return;
     }
 
-    SystemGraphicsData aData;
-    aData.rCGContext = reinterpret_cast<CGContextRef>(rCGContext);
-    // the Size argument is irrelevant, I hope
-    ScopedVclPtrInstance<VirtualDevice> pDevice(&aData, Size(1, 1), DeviceFormat::DEFAULT);
-
-    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
-
-    pDevice->SetOutputSizePixel(Size(nCanvasWidth, nCanvasHeight));
-
-    pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
-                    nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-
+    Size aCanvasSize(nCanvasWidth, nCanvasHeight);
+    paintTileToCGContext(pDoc, rCGContext, aCanvasSize, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 }
 
 #endif
