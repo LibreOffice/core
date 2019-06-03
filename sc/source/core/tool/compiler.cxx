@@ -709,7 +709,8 @@ struct Convention_A1 : public ScCompiler::Convention
 
     ParseResult parseAnyToken( const OUString& rFormula,
                                sal_Int32 nSrcPos,
-                               const CharClass* pCharClass) const override
+                               const CharClass* pCharClass,
+                               bool bGroupSeparator) const override
     {
         ParseResult aRet;
         if ( lcl_isValidQuotedText(rFormula, nSrcPos, aRet) )
@@ -721,7 +722,9 @@ struct Convention_A1 : public ScCompiler::Convention
         // '?' allowed in range names because of Xcl :-/
         static const char aAddAllowed[] = "?#";
         return pCharClass->parseAnyToken( rFormula,
-                nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
+                nSrcPos, nStartFlags, aAddAllowed,
+                (bGroupSeparator ? nContFlags | KParseTokens::GROUP_SEPARATOR_IN_NUMBER : nContFlags),
+                aAddAllowed );
     }
 
     virtual ScCharFlags getCharTableFlags( sal_Unicode c, sal_Unicode /*cLast*/ ) const override
@@ -1317,7 +1320,8 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
 
     virtual ParseResult parseAnyToken( const OUString& rFormula,
                                        sal_Int32 nSrcPos,
-                                       const CharClass* pCharClass) const override
+                                       const CharClass* pCharClass,
+                                       bool bGroupSeparator) const override
     {
         parseExternalDocName(rFormula, nSrcPos);
 
@@ -1331,7 +1335,9 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         // '?' allowed in range names
         const OUString aAddAllowed("?!");
         return pCharClass->parseAnyToken( rFormula,
-                nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
+                nSrcPos, nStartFlags, aAddAllowed,
+                (bGroupSeparator ? nContFlags | KParseTokens::GROUP_SEPARATOR_IN_NUMBER : nContFlags),
+                aAddAllowed );
     }
 
     virtual sal_Unicode getSpecialSymbol( SpecialSymbolType eSymType ) const override
@@ -1627,7 +1633,8 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 
     ParseResult parseAnyToken( const OUString& rFormula,
                                sal_Int32 nSrcPos,
-                               const CharClass* pCharClass) const override
+                               const CharClass* pCharClass,
+                               bool bGroupSeparator) const override
     {
         parseExternalDocName(rFormula, nSrcPos);
 
@@ -1642,7 +1649,9 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         const OUString aAddAllowed("?-[]!");
 
         return pCharClass->parseAnyToken( rFormula,
-                nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
+                nSrcPos, nStartFlags, aAddAllowed,
+                (bGroupSeparator ? nContFlags | KParseTokens::GROUP_SEPARATOR_IN_NUMBER : nContFlags),
+                aAddAllowed );
     }
 
     virtual sal_Unicode getSpecialSymbol( SpecialSymbolType eSymType ) const override
@@ -2632,6 +2641,17 @@ Label_MaskStateMachine:
     {
         const sal_Int32 nOldSrcPos = nSrcPos;
         nSrcPos = nSrcPos + nSpaces;
+        // If group separator is not a possible operator and not one of any
+        // separators then it may be parsed away in numbers. This is
+        // specifically the case with NO-BREAK SPACE, which actually triggers
+        // the bi18n case (which we don't want to include as yet another
+        // special case above as it is rare enough and doesn't generally occur
+        // in formulas).
+        const sal_Unicode cGroupSep = ScGlobal::pLocaleData->getNumThousandSep()[0];
+        const bool bGroupSeparator = (128 <= cGroupSep && cGroupSep != cSep &&
+                cGroupSep != cArrayColSep && cGroupSep != cArrayRowSep &&
+                cGroupSep != cDecSep && cGroupSep != cDecSepAlt &&
+                cGroupSep != cSheetPrefix && cGroupSep != cSheetSep);
         OUStringBuffer aSymbol;
         mnRangeOpPosInSymbol = -1;
         FormulaError nErr = FormulaError::NONE;
@@ -2642,7 +2662,7 @@ Label_MaskStateMachine:
             if ( pStart[nSrcPos] == cSheetPrefix && pStart[nSrcPos+1] == '\'' )
                 aSymbol.append(pStart[nSrcPos++]);
 
-            ParseResult aRes = pConv->parseAnyToken( aFormula, nSrcPos, pCharClass );
+            ParseResult aRes = pConv->parseAnyToken( aFormula, nSrcPos, pCharClass, bGroupSeparator);
 
             if ( !aRes.TokenType )
             {
