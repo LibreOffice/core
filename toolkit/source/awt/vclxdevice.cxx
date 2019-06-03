@@ -66,7 +66,7 @@ css::uno::Any VCLXDevice::queryInterface( const css::uno::Type & rType )
 }
 
 // css::lang::XUnoTunnel
-IMPL_XUNOTUNNEL( VCLXDevice )
+UNO3_GETIMPLEMENTATION_IMPL( VCLXDevice );
 
 IMPL_IMPLEMENTATION_ID( VCLXDevice )
 

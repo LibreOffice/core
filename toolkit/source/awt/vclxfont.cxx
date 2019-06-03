@@ -82,7 +82,7 @@ css::uno::Any VCLXFont::queryInterface( const css::uno::Type & rType )
 }
 
 // css::lang::XUnoTunnel
-IMPL_XUNOTUNNEL( VCLXFont )
+UNO3_GETIMPLEMENTATION_IMPL( VCLXFont );
 
 IMPL_IMPLEMENTATION_ID( VCLXFont )
 

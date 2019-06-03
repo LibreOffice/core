@@ -443,7 +443,7 @@ bool SwPrintUIOptions::processPropertiesAndCheckFormat( const uno::Sequence< bea
     VclPtr< OutputDevice > pOut;
     if (xRenderDevice.is())
     {
-        VCLXDevice*     pDevice = VCLXDevice::GetImplementation( xRenderDevice );
+        VCLXDevice*     pDevice = VCLXDevice::getImplementation( xRenderDevice );
         if (pDevice)
             pOut = pDevice->GetOutputDevice();
     }

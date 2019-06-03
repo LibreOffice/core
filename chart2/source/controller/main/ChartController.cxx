@@ -430,7 +430,7 @@ void SAL_CALL ChartController::attachFrame(
     if(xFrame.is())
     {
         uno::Reference< awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
-        VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(xContainerWindow);
+        VCLXWindow* pParentComponent = VCLXWindow::getImplementation(xContainerWindow);
         assert(pParentComponent);
         if (pParentComponent)
             pParentComponent->setVisible(true);

@@ -33,6 +33,7 @@
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/awt/XStyleSettingsSupplier.hpp>
 
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <tools/gen.hxx>
@@ -134,9 +135,7 @@ public:
     void    notifyWindowRemoved( vcl::Window const & _rWindow );
 
     // css::lang::XUnoTunnel
-    static const css::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
-    static VCLXWindow*                                          GetImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace );
-    sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) override;
+    UNO3_GETIMPLEMENTATION_DECL(VCLXWindow)
 
     // css::lang::XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;

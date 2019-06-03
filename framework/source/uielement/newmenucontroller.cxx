@@ -302,7 +302,7 @@ NewMenuController::~NewMenuController()
 // private function
 void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
-    VCLXPopupMenu* pPopupMenu    = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
+    VCLXPopupMenu* pPopupMenu    = static_cast<VCLXPopupMenu *>(VCLXMenu::getImplementation( rPopupMenu ));
     PopupMenu*     pVCLPopupMenu = nullptr;
 
     SolarMutexGuard aSolarMutexGuard;
@@ -400,7 +400,7 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
 
     if ( xPopupMenu.is() )
     {
-        VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXPopupMenu::GetImplementation( xPopupMenu ));
+        VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXPopupMenu::getImplementation( xPopupMenu ));
         if ( pPopupMenu )
         {
             OUString aURL;
@@ -430,7 +430,7 @@ void SAL_CALL NewMenuController::itemActivated( const css::awt::MenuEvent& )
     SolarMutexGuard aSolarMutexGuard;
     if ( m_xFrame.is() && m_xPopupMenu.is() )
     {
-        VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXPopupMenu::GetImplementation( m_xPopupMenu ));
+        VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXPopupMenu::getImplementation( m_xPopupMenu ));
         if ( pPopupMenu )
         {
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();

@@ -174,7 +174,7 @@ namespace frm
             vcl::Window* pParentWin = nullptr;
             if ( _rParentPeer.is() )
             {
-                VCLXWindow* pParentXWin = VCLXWindow::GetImplementation( _rParentPeer );
+                VCLXWindow* pParentXWin = VCLXWindow::getImplementation( _rParentPeer );
                 if ( pParentXWin )
                     pParentWin = pParentXWin->GetWindow().get();
                 DBG_ASSERT( pParentWin, "ORichTextControl::createPeer: could not obtain the VCL-level parent window!" );

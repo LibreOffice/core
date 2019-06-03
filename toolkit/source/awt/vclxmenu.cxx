@@ -19,7 +19,6 @@
 
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -231,7 +230,7 @@ css::uno::Any VCLXMenu::queryInterface(
 }
 
 
-IMPL_XUNOTUNNEL( VCLXMenu )
+UNO3_GETIMPLEMENTATION_IMPL( VCLXMenu );
 
 css::uno::Sequence< css::uno::Type > VCLXMenu::getTypes()
 {
@@ -388,7 +387,7 @@ void VCLXMenu::setPopupMenu(
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    VCLXMenu* pVCLMenu = VCLXMenu::GetImplementation( rxPopupMenu );
+    VCLXMenu* pVCLMenu = VCLXMenu::getImplementation( rxPopupMenu );
     DBG_ASSERT( pVCLMenu && pVCLMenu->GetMenu() && pVCLMenu->IsPopupMenu(), "setPopupMenu: Invalid Menu!" );
 
     if ( mpMenu && pVCLMenu && pVCLMenu->GetMenu() && pVCLMenu->IsPopupMenu() )

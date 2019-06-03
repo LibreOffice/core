@@ -22,33 +22,6 @@
 
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/servicehelper.hxx>
-
-#define IMPL_XUNOTUNNEL_MINIMAL( ClassName ) \
-sal_Int64 ClassName::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) \
-{ \
-    if( ( rIdentifier.getLength() == 16 ) && ( memcmp( ClassName::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) == 0 ) ) \
-    { \
-        return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(this)); \
-    } \
-    return 0; \
-} \
-namespace \
-{ \
-    class the##ClassName##UnoTunnelId : public rtl::Static< UnoTunnelIdInit, the##ClassName##UnoTunnelId> {}; \
-} \
-const css::uno::Sequence< sal_Int8 >& ClassName::GetUnoTunnelId() throw() \
-{ \
-    return the##ClassName##UnoTunnelId::get().getSeq(); \
-}
-
-#define IMPL_XUNOTUNNEL( ClassName ) \
-IMPL_XUNOTUNNEL_MINIMAL( ClassName ) \
-ClassName* ClassName::GetImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace ) \
-{ \
-    css::uno::Reference< css::lang::XUnoTunnel > xUT( rxIFace, css::uno::UNO_QUERY ); \
-    return xUT.is() ? reinterpret_cast<ClassName*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( ClassName::GetUnoTunnelId() ))) : nullptr; \
-}
 
 #define IMPL_IMPLEMENTATION_ID( ClassName ) \
 css::uno::Sequence< sal_Int8 > ClassName::getImplementationId() \

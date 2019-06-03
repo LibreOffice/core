@@ -42,7 +42,7 @@ css::uno::Any VCLXBitmap::queryInterface( const css::uno::Type & rType )
 }
 
 // css::lang::XUnoTunnel
-IMPL_XUNOTUNNEL( VCLXBitmap )
+UNO3_GETIMPLEMENTATION_IMPL( VCLXBitmap );
 
 IMPL_IMPLEMENTATION_ID( VCLXBitmap )
 

@@ -30,7 +30,6 @@
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/i18n/Currency2.hpp>
 #include <toolkit/controls/unocontrolmodel.hxx>
-#include <toolkit/helper/macros.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/uuid.h>
@@ -46,6 +45,7 @@
 #include <unotools/configmgr.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
 #include <uno/data.h>
@@ -426,7 +426,23 @@ css::uno::Any UnoControlModel::queryAggregation( const css::uno::Type & rType )
 }
 
 // css::lang::XUnoTunnel
-IMPL_XUNOTUNNEL_MINIMAL( UnoControlModel )
+namespace
+{
+    class theUnoControlModelUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theUnoControlModelUnoTunnelId> {};
+}
+
+const css::uno::Sequence< sal_Int8 >& UnoControlModel::GetUnoTunnelId() throw()
+{
+    return theUnoControlModelUnoTunnelId::get().getSeq();
+}
+
+sal_Int64 UnoControlModel::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
+{
+    if( ( rIdentifier.getLength() == 16 ) && ( memcmp( UnoControlModel::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) == 0 ) )
+        return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(this));
+
+    return 0;
+}
 
 // XInterface
 IMPLEMENT_FORWARD_REFCOUNT( UnoControlModel, UnoControlModel_Base )

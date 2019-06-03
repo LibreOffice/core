@@ -924,27 +924,7 @@ Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
 
 
 // css::lang::XUnoTunnel
-sal_Int64 VCLXWindow::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
-{
-    if( ( rIdentifier.getLength() == 16 ) && ( 0 == memcmp( VCLXWindow::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
-    {
-        return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(this));
-    }
-    return VCLXDevice::getSomething( rIdentifier );
-}
-namespace
-{
-    class theVCLXWindowUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theVCLXWindowUnoTunnelId> {};
-}
-const css::uno::Sequence< sal_Int8 >& VCLXWindow::GetUnoTunnelId() throw()
-{
-    return theVCLXWindowUnoTunnelId::get().getSeq();
-}
-VCLXWindow* VCLXWindow::GetImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace )
-{
-    css::uno::Reference< css::lang::XUnoTunnel > xUT( rxIFace, css::uno::UNO_QUERY );
-    return xUT.is() ? reinterpret_cast<VCLXWindow*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( VCLXWindow::GetUnoTunnelId() ))) : nullptr;
-}
+UNO3_GETIMPLEMENTATION2_IMPL(VCLXWindow, VCLXDevice);
 
 
 // css::lang::Component
@@ -1163,7 +1143,7 @@ void VCLXWindow::setPointer( const css::uno::Reference< css::awt::XPointer >& rx
 {
     SolarMutexGuard aGuard;
 
-    VCLXPointer* pPointer = VCLXPointer::GetImplementation( rxPointer );
+    VCLXPointer* pPointer = VCLXPointer::getImplementation( rxPointer );
     if ( pPointer && GetWindow() )
         GetWindow()->SetPointer( pPointer->GetPointer() );
 }
