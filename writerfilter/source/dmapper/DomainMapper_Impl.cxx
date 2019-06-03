@@ -5195,6 +5195,7 @@ void DomainMapper_Impl::PopFieldContext()
                             aMap.InsertProps(m_pLastCharacterContext);
                         aMap.InsertProps(m_aFieldStack.top()->getProperties());
                         appendTextContent(xToInsert, aMap.GetPropertyValues());
+                        CheckRedline( xToInsert->getAnchor( ) );
                     }
                     else
                     {
