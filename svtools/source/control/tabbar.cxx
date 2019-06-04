@@ -691,36 +691,39 @@ void TabBar::ImplFormat()
     if (!mbFormat)
         return;
 
-    sal_uInt16 n = 0;
+    sal_uInt16 nItemIndex = 0;
     long x = mnOffX;
-    for (auto& pItem : mpImpl->mpItemList)
+    for (auto & pItem : mpImpl->mpItemList)
     {
         // At all non-visible tabs an empty rectangle is set
-        if ((n + 1 < mnFirstPos) || (x > mnLastOffX))
+        if ((nItemIndex + 1 < mnFirstPos) || (x > mnLastOffX))
             pItem->maRect.SetEmpty();
         else
         {
             // Slightly before the tab before the first visible page
             // should also be visible
-            if (n + 1 == mnFirstPos)
-                pItem->maRect.SetLeft( x-pItem->mnWidth );
+            if (nItemIndex + 1 == mnFirstPos)
+            {
+                pItem->maRect.SetLeft(x - pItem->mnWidth);
+            }
             else
             {
-                pItem->maRect.SetLeft( x );
+                pItem->maRect.SetLeft(x);
                 x += pItem->mnWidth;
             }
-            pItem->maRect.SetRight( x );
-            pItem->maRect.SetBottom( maWinSize.Height() - 1 );
+            pItem->maRect.SetRight(x);
+            pItem->maRect.SetBottom(maWinSize.Height() - 1);
 
             if (mbMirrored)
             {
-                long nTmp = mnOffX + mnLastOffX - pItem->maRect.Right();
-                pItem->maRect.SetRight( mnOffX + mnLastOffX - pItem->maRect.Left() );
-                pItem->maRect.SetLeft( nTmp );
+                long nNewLeft  = mnOffX + mnLastOffX - pItem->maRect.Right();
+                long nNewRight = mnOffX + mnLastOffX - pItem->maRect.Left();
+                pItem->maRect.SetRight(nNewRight);
+                pItem->maRect.SetLeft(nNewLeft);
             }
         }
 
-        n++;
+        nItemIndex++;
     }
 
     mbFormat = false;
