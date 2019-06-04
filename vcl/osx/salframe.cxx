@@ -219,10 +219,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
     [mpNSWindow setDelegate: static_cast<id<NSWindowDelegate> >(mpNSWindow)];
 
-    if( [mpNSWindow respondsToSelector: @selector(setRestorable:)])
-    {
-        objc_msgSend(mpNSWindow, @selector(setRestorable:), NO);
-    }
+    [mpNSWindow setRestorable:NO];
     const NSRect aRect = { NSZeroPoint, NSMakeSize( maGeometry.nWidth, maGeometry.nHeight )};
     mnTrackingRectTag = [mpNSView addTrackingRect: aRect owner: mpNSView userData: nil assumeInside: NO];
 
