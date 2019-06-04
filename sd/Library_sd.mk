@@ -518,6 +518,10 @@ $(eval $(call gb_Library_add_objcxxobjects,sd,\
 	sd/source/ui/remotecontrol/OSXNetworkService \
 ))
 
+$(eval $(call gb_Library_use_system_darwin_frameworks,sd,\
+	Foundation \
+))
+
 else # OS!=MACSOX
 
 ifeq ($(ENABLE_AVAHI),TRUE)
@@ -566,7 +570,6 @@ $(eval $(call gb_Library_add_libs,sd,\
 ))
 
 $(eval $(call gb_Library_use_system_darwin_frameworks,sd,\
-	Foundation \
 	IOBluetooth \
 ))
 
