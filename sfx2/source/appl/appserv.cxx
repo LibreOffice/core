@@ -673,7 +673,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_ABOUT:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( nullptr, SID_ABOUT ));
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateAboutDialog(rReq.GetFrameWeld()));
             pDlg->Execute();
             bDone = true;
             break;

@@ -925,11 +925,6 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateVclDialog( vcl::Wind
     VclPtr<Dialog> pDlg;
     switch ( nResId )
     {
-        case SID_ABOUT:
-        {
-            pDlg = VclPtr<AboutDialog>::Create(pParent);
-            break;
-        }
         case SID_OPTIONS_TREEDIALOG :
         case SID_OPTIONS_DATABASES :
         case SID_LANGUAGE_OPTIONS :
@@ -958,6 +953,11 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateVclDialog( vcl::Wind
     if ( pDlg )
         return VclPtr<CuiVclAbstractDialog_Impl>::Create( pDlg );
     return nullptr;
+}
+
+VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateAboutDialog(weld::Window* pParent)
+{
+    return VclPtr<CuiAbstractController_Impl>::Create(std::make_unique<AboutDialog>(pParent));
 }
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateFrameDialog(vcl::Window* pParent, const Reference< frame::XFrame >& rxFrame,
