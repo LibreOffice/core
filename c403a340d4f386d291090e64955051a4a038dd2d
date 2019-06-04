@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_fec9d677",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2019-06-04T13:10:56Z",
+      "side": 1,
+      "message": "While part of this constructor was moved to separate function, the potential issue I mentioned in patch set #3 is still present:\n\nIf you make a Qt5MimeData using QMimeData, deepCopy is called, and thus m_aContents is empty. If you call this function on the Qt5MimeData with empty m_aContents, you\u0027d still get Qt5MimeData with empty m_aContents and no deepCopy called.",
+      "range": {
+        "startLine": 56,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 21
+      },
+      "revId": "c403a340d4f386d291090e64955051a4a038dd2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
