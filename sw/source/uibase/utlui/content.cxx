@@ -1099,11 +1099,41 @@ void SwContentTree::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
         }
     }
     else
+    {
+        SwWrtShell *const pShell = GetWrtShell();
+        pShell->StartAllAction();
+        pShell->StartUndo(SwUndoId::OUTLINE_UD);
+        // Only move drag entry and continuous selected siblings:
+        m_aDndOutlinesSelected.clear();
+        SvTreeListEntry* pEntry = GetEntry(rPosPixel);
+        // Find first selected of continous siblings
+        while (pEntry && IsSelected(pEntry->PrevSibling()))
+        {
+            pEntry = pEntry->PrevSibling();
+        }
+        // Record continous selected siblings
+        if (pEntry)
+        {
+            m_aDndOutlinesSelected.push_back(pEntry);
+            while (pEntry && IsSelected(pEntry->NextSibling()))
+            {
+                pEntry = pEntry->NextSibling();
+                m_aDndOutlinesSelected.push_back(pEntry);
+            }
+        }
         SvTreeListBox::StartDrag( nAction, rPosPixel );
+    }
 }
 
 void SwContentTree::DragFinished( sal_Int8 nAction )
 {
+    SwWrtShell *const pShell = GetWrtShell();
+    pShell->EndUndo();
+    pShell->EndAllAction();
+    m_aActiveContentArr[ContentTypeId::OUTLINE]->Invalidate();
+    Display(true);
+    m_aDndOutlinesSelected.clear();
+
     // To prevent the removing of the selected entry in external drag and drop
     // the drag action mustn't be MOVE.
     SvTreeListBox::DragFinished( m_bIsInternalDrag ? nAction : DND_ACTION_COPY );
@@ -2740,7 +2770,15 @@ DragDropMode SwContentTree::NotifyStartDrag(
     if (State::ACTIVE == m_eState && m_nRootType == ContentTypeId::OUTLINE &&
             GetModel()->GetAbsPos( pEntry ) > 0
             && !GetWrtShell()->GetView().GetDocShell()->IsReadOnly())
+    {
         eMode = GetDragDropMode();
+        if (m_bIsRoot)
+        {
+            // Restore selection for multiple selected outlines.
+            for (const auto pSelected : m_aDndOutlinesSelected)
+                SelectListEntry(pSelected, true);
+        }
+    }
     else if (State::ACTIVE != m_eState && GetWrtShell()->GetView().GetDocShell()->HasName())
         eMode = DragDropMode::APP_COPY;
 
@@ -2755,6 +2793,8 @@ DragDropMode SwContentTree::NotifyStartDrag(
 TriState SwContentTree::NotifyMoving( SvTreeListEntry*  pTarget,
         SvTreeListEntry*  pEntry, SvTreeListEntry*& , sal_uLong& )
 {
+    static SwOutlineNodes::size_type nStaticSourcePos = SwOutlineNodes::npos;
+    static SwOutlineNodes::size_type nStaticTargetPosOrOffset = SwOutlineNodes::npos;
     if(!m_bDocChgdInDragging)
     {
         SwOutlineNodes::size_type nTargetPos = 0;
@@ -2782,12 +2822,45 @@ TriState SwContentTree::NotifyMoving( SvTreeListEntry*  pTarget,
 
         OSL_ENSURE( pEntry &&
             lcl_IsContent(pEntry),"Source == 0 or Source has no Content" );
+
+        if (nStaticTargetPosOrOffset != SwOutlineNodes::npos)
+        {
+            if (nTargetPos == SwOutlineNodes::npos || nSourcePos > nTargetPos)
+            {
+                // Move up
+                nTargetPos = nSourcePos - nStaticTargetPosOrOffset;
+            }
+            else if (nSourcePos < nTargetPos)
+            {
+                // Move down
+                nSourcePos = nStaticSourcePos;
+                nTargetPos = nStaticTargetPosOrOffset;
+            }
+        }
+        // Done on the first selection move
+        if (nTargetPos == SwOutlineNodes::npos || (nStaticTargetPosOrOffset == SwOutlineNodes::npos && nSourcePos > nTargetPos)) // only do once
+        {
+            // Up moves
+            // The first up move sets the up move amount for the remaining selected outlines to be moved
+            if (nTargetPos != SwOutlineNodes::npos)
+                nStaticTargetPosOrOffset = nSourcePos - nTargetPos;
+            else
+                nStaticTargetPosOrOffset = nSourcePos + 1;
+        }
+        else if (nStaticTargetPosOrOffset == SwOutlineNodes::npos && nSourcePos < nTargetPos)
+        {
+            // Down moves
+            // The first down move sets the source and target positions for the remaining selected outlines to be moved
+            nStaticSourcePos = nSourcePos;
+            nStaticTargetPosOrOffset = nTargetPos;
+        }
+        // Done on the last selection move
+        if (!IsSelected(pEntry->NextSibling()))
+            nStaticTargetPosOrOffset = SwOutlineNodes::npos;
+
         GetParentWindow()->MoveOutline( nSourcePos,
                                     nTargetPos,
                                     true);
-
-        m_aActiveContentArr[ContentTypeId::OUTLINE]->Invalidate();
-        Display(true);
     }
     //TreeListBox will be reloaded from the document
     return TRISTATE_FALSE;

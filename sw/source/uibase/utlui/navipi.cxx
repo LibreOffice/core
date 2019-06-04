@@ -124,7 +124,6 @@ void SwNavigationPI::MoveOutline(SwOutlineNodes::size_type nSource, SwOutlineNod
             rSh.MoveOutlinePara( nMove );
         rSh.ClearMark();
         rSh.GotoOutline( nSource + nMove);
-        FillBox();
     }
 
 }
