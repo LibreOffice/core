@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_9b38e43d",
+        "filename": "vcl/qt5/Qt5Instance.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-04T07:11:36Z",
+      "side": 1,
+      "message": "\u0027xContext\u0027 looks unused here (except for passing it to self to not use it then)\n(same for KDE5SalInstance)",
+      "range": {
+        "startLine": 398,
+        "startChar": 26,
+        "endLine": 398,
+        "endChar": 90
+      },
+      "revId": "206b499679f73c9c561c82ae290f3716d8c1e3e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_3b28b0e0",
+        "filename": "vcl/qt5/Qt5Instance.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-04T07:11:36Z",
+      "side": 1,
+      "message": "I\u0027d personally pass \u0027QFileDialog::FileMode\u0027 instead of bool, but have no strong opinion on that.\n(same for KDE5SalInstance)",
+      "range": {
+        "startLine": 399,
+        "startChar": 26,
+        "endLine": 399,
+        "endChar": 36
+      },
+      "revId": "206b499679f73c9c561c82ae290f3716d8c1e3e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
