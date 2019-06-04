@@ -757,6 +757,9 @@ private:
     bool m_bWritingHeaderFooter;
     bool m_bAnchorLinkedToNode;
 
+    /// Flag indicating that multiple runs of a field are being written
+    bool m_bWritingField;
+
     /// Field data to remember in the text run
     bool m_bPreventDoubleFieldsHandling;
     std::vector< FieldInfos > m_Fields;
