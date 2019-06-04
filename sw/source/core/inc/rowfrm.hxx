@@ -39,7 +39,7 @@ class SwRowFrame: public SwLayoutFrame
     sal_uInt16 mnBottomMarginForLowers;
     sal_uInt16 mnBottomLineSize;
     // <-- collapsing
-    bool m_bIsFollowFlowRow;
+    bool m_bIsFollowFlowRow; ///< note: this is *only* set on old-style tables!
     bool m_bIsRepeatedHeadline;
     bool m_bIsRowSpanLine;
 
