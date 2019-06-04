@@ -21,6 +21,8 @@
 #include <editeng/eeitem.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdundo.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xlineit0.hxx>
 #include <editeng/outlobj.hxx>
 #include <xmloff/autolayout.hxx>
 

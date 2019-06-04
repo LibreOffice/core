@@ -25,6 +25,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xflclit.hxx>
 #include <tools/diagnose_ex.h>

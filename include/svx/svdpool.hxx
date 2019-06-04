@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_SVDPOOL_HXX
 
 #include <svx/xpool.hxx>
-#include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
 
 class XLineAttrSetItem;

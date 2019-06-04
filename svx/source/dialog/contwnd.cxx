@@ -22,6 +22,7 @@
 #include "contwnd.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xflclit.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

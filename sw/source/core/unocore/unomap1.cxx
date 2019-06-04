@@ -20,6 +20,7 @@
 #include <hintids.hxx>
 
 #include <svx/svxids.hrc>
+#include <svx/unomid.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/Size.hpp>

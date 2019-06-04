@@ -43,6 +43,7 @@
 #include <svl/stritem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/xfillit0.hxx>
 #include <editeng/adjustitem.hxx>
 
 #include <math.h>

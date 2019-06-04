@@ -21,14 +21,9 @@
 #define INCLUDED_SVX_SVDPAGE_HXX
 
 #include <svl/stylesheetuser.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/print.hxx>
-#include <vcl/gdimtf.hxx>
-#include <tools/weakbase.hxx>
-#include <tools/contnr.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <vcl/prntypes.hxx>
+#include <tools/weakbase.h>
 #include <svl/itemset.hxx>
-#include <svx/svdtypes.hxx>
 #include <svx/sdrpageuser.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdrmasterpagedescriptor.hxx>

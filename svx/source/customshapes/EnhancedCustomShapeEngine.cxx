@@ -47,6 +47,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svditer.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xlineit0.hxx>
 #include <uno/mapping.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <com/sun/star/document/XActionLockable.hpp>

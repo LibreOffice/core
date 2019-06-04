@@ -25,7 +25,6 @@
 #include <memory>
 #include <vector>
 
-#include <svl/solar.hrc>
 #include <svl/undo.hxx>
 #include <svl/style.hxx>
 #include <tools/gen.hxx>

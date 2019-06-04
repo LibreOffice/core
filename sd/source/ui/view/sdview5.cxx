@@ -21,6 +21,8 @@
 #include <View.hxx>
 #include <pres.hxx>
 
+#include <svx/svdpagv.hxx>
+
 namespace sd {
 
 static bool implIsMultiPresObj( PresObjKind eKind )

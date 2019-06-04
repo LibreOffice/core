@@ -74,6 +74,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svxdlg.hxx>
+#include <svx/unomid.hxx>
 #include <svx/unoprov.hxx>
 
 #include <unotools/pathoptions.hxx>

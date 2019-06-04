@@ -26,6 +26,7 @@
 
 #include <app.hrc>
 #include <svl/itemset.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedwit.hxx>
 #include <svx/xlnedit.hxx>

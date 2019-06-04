@@ -26,6 +26,7 @@
 #include <svl/stritem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/xfillit0.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/sdtagitm.hxx>
 #include <tabvwsh.hxx>

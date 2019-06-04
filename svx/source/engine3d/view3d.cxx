@@ -47,6 +47,8 @@
 #include <svx/svdograf.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflbmtit.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xlineit0.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>

@@ -38,6 +38,7 @@
 #include <sdmod.hxx>
 #include <svx/sdr/table/tablecontroller.hxx>
 #include <sfx2/request.hxx>
+#include <svx/svdpagv.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/eeitem.hxx>
 #include <editeng/adjustitem.hxx>

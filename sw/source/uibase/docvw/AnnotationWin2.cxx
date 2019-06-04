@@ -58,6 +58,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 
+#include <vcl/edit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
