@@ -1519,6 +1519,7 @@ res/lx03123.png res/odp_32_8.png
 res/lx03127.png res/ods_32_8.png
 res/lx03129.png res/odb_32_8.png
 res/lx03130.png res/odp_32_8.png
+res/lx03139.png cmd/32/newhtmldoc.png
 res/lx03144.png res/odf_32_8.png
 res/lx03145.png res/odf_32_8.png
 res/lx03145.png res/odf_32_8.png
@@ -1531,18 +1532,14 @@ res/lx03228.png res/odg_32_8.png
 res/lx03245.png res/odb_32_8.png
 res/lx03246.png res/odg_32_8.png
 res/lx03247.png res/odf_32_8.png
+res/lx03248.png res/odm_32_8.png
 res/lx03249.png res/odp_32_8.png
 res/lx03250.png res/ods_32_8.png
 res/lx03251.png res/odt_32_8.png
 res/lx03253.png res/odp_32_8.png
-res/sc05501.png cmd/sc_open.png
+res/lx03255.png res/ott_32_8.png
 res/lx03256.png cmd/lc_insertplugin.png
-
-res/mainapp_16.png cmd/sc_showsinglepage.png
-res/mainapp_16.png cmd/sc_showsinglepage.png
-res/mainapp_16.png cmd/sc_showsinglepage.png
-res/mainapp_16_8.png cmd/sc_showsinglepage.png
-
+res/mainapp_16.png res/mainapp_16_8.png
 res/newdoc.png cmd/sc_open.png
 res/page.png cmd/sc_adddirect.png
 res/printeradmin_16_8.png res/printeradmin_16.png
@@ -1553,10 +1550,10 @@ res/library_16.png cmd/lc_viewdatasourcebrowser.png
 res/sc05508.png cmd/sc_reload.png
 res/sc05555.png cmd/sc_editstyle.png
 res/sc05556.png cmd/sc_reload.png
+res/sc05501.png cmd/sc_open.png
 res/sc05502.png cmd/sc_saveas.png
 res/sc05504.png cmd/sc_print.png
 res/sc05509.png cmd/sc_print.png
-
 res/sc05554.png cmd/sc_formatpaintbrush.png
 res/sc05711.png cmd/sc_copy.png
 res/sc05961.png cmd/sc_recsearch.png
@@ -1582,12 +1579,25 @@ res/sc10868.png cmd/sc_grafgamma.png
 res/sc10869.png cmd/sc_graftransparence.png
 
 res/sc_helperdialog.png cmd/sc_helpindex.png
+res/sx03123.png res/odp_16_8.png
 res/sx03127.png res/sx03126.png
 res/sx03132.png res/sx03126.png
+res/sx03139.png cmd/sc_newhtmldoc.png
 res/sx03141.png formula/res/fapclose.png
+res/sx03144.png res/odf_16_8.png
+res/sx03162.png res/odt_16_8.png
+res/sx03164.png res/harddisk_16.png
 res/sx03188.png res/sx03126.png
 res/sx03189.png formula/res/fapclose.png
 res/sx03202.png cmd/sc_viewdatasourcebrowser.png
+res/sx03245.png res/odb_16_8.png
+res/sx03246.png res/odg_16_8.png
+res/sx03247.png res/odf_16_8.png
+res/sx03248.png res/odm_16_8.png
+res/sx03249.png res/odp_16_8.png
+res/sx03250.png res/ods_16_8.png
+res/sx03251.png res/odt_16_8.png
+res/sx03255.png res/ott_16_8.png
 res/sx03256.png cmd/sc_insertplugin.png
 res/sx10594.png cmd/sc_pushbutton.png
 res/sx10595.png cmd/sc_radiobutton.png
@@ -1614,6 +1624,7 @@ res/sx10768.png cmd/sc_scrollbar.png
 res/sx10769.png cmd/sc_spinbutton.png
 res/sx18002.png res/minus.png
 res/sx18003.png res/plus.png
+res/sx18013.png res/dialogfolder_16.png
 
 # sc
 # ==============================================
@@ -2069,6 +2080,7 @@ sw/res/wr04.png cmd/32/wrapon.png
 sw/res/wr05.png cmd/32/wrapthrough.png
 sw/res/wr06.png cmd/32/wrapideal.png
 sw/res/wr07.png cmd/32/wrapoff.png
+sw/res/wr010.png cmd/32/wrapcontour.png
 sw/res/wr011.png cmd/32/wrapideal.png
 
 # res
