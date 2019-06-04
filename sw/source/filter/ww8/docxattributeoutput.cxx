@@ -1502,6 +1502,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     m_pSerializer->endElementNS( XML_w, XML_r );
 
     // if there is some redlining in the document, output it
+    // (except in the case of fields with multiple runs)
     EndRedline( m_pRedlineData );
 
     // enclose in a sdt block, if necessary: if one is already started, then don't do it for now
@@ -1543,7 +1544,10 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
 
     WritePendingPlaceholder();
 
-    m_pRedlineData = nullptr;
+    if ( !m_bWritingField )
+    {
+        m_pRedlineData = nullptr;
+    }
 
     if ( m_closeHyperlinkInThisRun )
     {
@@ -1602,6 +1606,11 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
         }
     }
 
+    if ( m_pRedlineData )
+    {
+        EndRedline( m_pRedlineData );
+        m_pRedlineData = nullptr;
+    }
 
     DoWriteBookmarksStart(m_rFinalBookmarksStart);
     DoWriteBookmarksEnd(m_rFinalBookmarksEnd);
@@ -1908,6 +1917,8 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
         }
         else
         {
+            m_bWritingField = true;
+
             // Write the field start
             if ( rInfos.pField && (rInfos.pField->Which() == SwFieldIds::DateTime) && rInfos.pField->GetSubType() & FIXEDFLD )
             {
@@ -1946,9 +1957,13 @@ void DocxAttributeOutput::DoWriteCmd( const OUString& rCmd )
         m_aSeqBookmarksNames[sSeqName].push_back(m_sLastOpenedBookmark);
     }
     // Write the Field command
-    m_pSerializer->startElementNS(XML_w, XML_instrText);
+    sal_Int32 nTextToken = XML_instrText;
+    if ( m_pRedlineData && m_pRedlineData->GetType() == RedlineType::Delete )
+        nTextToken = XML_delInstrText;
+
+    m_pSerializer->startElementNS(XML_w, nTextToken);
     m_pSerializer->writeEscaped( rCmd );
-    m_pSerializer->endElementNS( XML_w, XML_instrText );
+    m_pSerializer->endElementNS( XML_w, nTextToken );
 
 }
 
@@ -2147,6 +2162,7 @@ void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos
     // Write the Field end
     if ( rInfos.bClose  )
     {
+        m_bWritingField = false;
         m_pSerializer->startElementNS(XML_w, XML_r);
         DoWriteFieldRunProperties( pNode, nPos );
         m_pSerializer->singleElementNS(XML_w, XML_fldChar, FSNS(XML_w, XML_fldCharType), "end");
@@ -3041,7 +3057,7 @@ void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData )
 
 void DocxAttributeOutput::EndRedline( const SwRedlineData * pRedlineData )
 {
-    if ( !pRedlineData )
+    if ( !pRedlineData || m_bWritingField )
         return;
 
     switch ( pRedlineData->GetType() )
@@ -9082,6 +9098,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_bRunTextIsOn( false ),
       m_bWritingHeaderFooter( false ),
       m_bAnchorLinkedToNode(false),
+      m_bWritingField( false ),
       m_bPreventDoubleFieldsHandling( false ),
       m_sFieldBkm( ),
       m_nNextBookmarkId( 0 ),
