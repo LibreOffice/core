@@ -121,6 +121,14 @@ namespace vcl {
 } // namespace vcl
 
 namespace {
+#if U_ICU_VERSION_MAJOR_NUM >= 63
+    enum class VerticalOrientation {
+        Upright            = U_VO_UPRIGHT,
+        Rotated            = U_VO_ROTATED,
+        TransformedUpright = U_VO_TRANSFORMED_UPRIGHT,
+        TransformedRotated = U_VO_TRANSFORMED_ROTATED
+    };
+#else
     #include "VerticalOrientationData.cxx"
 
     // These must match the values in the file included above.
@@ -130,6 +138,7 @@ namespace {
         TransformedUpright = 2,
         TransformedRotated = 3
     };
+#endif
 
     VerticalOrientation GetVerticalOrientation(sal_UCS4 cCh, const LanguageTag& rTag)
     {
@@ -140,6 +149,9 @@ namespace {
                 && rTag.getLanguage() == "zh")
             return VerticalOrientation::TransformedUpright;
 
+#if U_ICU_VERSION_MAJOR_NUM >= 63
+        int32_t nRet = u_getIntPropertyValue(cCh, UCHAR_VERTICAL_ORIENTATION);
+#else
         uint8_t nRet = 1;
 
         if (cCh < 0x10000)
@@ -158,6 +170,7 @@ namespace {
             // Default value for unassigned
             SAL_WARN("vcl.gdi", "Getting VerticalOrientation for codepoint outside Unicode range");
         }
+#endif
 
         return VerticalOrientation(nRet);
     }
