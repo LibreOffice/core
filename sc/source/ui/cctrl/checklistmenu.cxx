@@ -1164,6 +1164,9 @@ void ScCheckListMenuWindow::selectCurrentMemberOnly(bool bSet)
     if (!pEntry)
         return;
     maChecks->CheckEntry(pEntry, bSet );
+
+    // Make sure all checkboxes are invalidated.
+    Invalidate();
 }
 
 IMPL_LINK( ScCheckListMenuWindow, ButtonHdl, Button*, pBtn, void )
