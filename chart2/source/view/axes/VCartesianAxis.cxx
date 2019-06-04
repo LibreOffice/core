@@ -1554,33 +1554,32 @@ sal_Int32 VCartesianAxis::estimateMaximumAutoMainIncrementCount()
     sal_Int32 nSingleNeeded = m_nMaximumTextHeightSoFar;
     sal_Int32 nMaxSameLabel = 0;
 
+    // tdf#48041: do not duplicate the value labels because of rounding
+    if (m_aAxisProperties.m_nAxisType != css::chart2::AxisType::DATE)
+    {
+        FixedNumberFormatter aFixedNumberFormatterTest(m_xNumberFormatsSupplier, m_aAxisLabelProperties.nNumberFormatKey);
+        OUString sPreviousValueLabel;
+        sal_Int32 nSameLabel = 0;
+        for (sal_Int32 nLabel = 0; nLabel < static_cast<sal_Int32>(m_aAllTickInfos[0].size()); ++nLabel)
+        {
+            Color nColor = COL_AUTO;
+            bool bHasColor = false;
+            OUString sValueLabel = aFixedNumberFormatterTest.getFormattedString(m_aAllTickInfos[0][nLabel].fScaledTickValue, nColor, bHasColor);
+            if (sValueLabel == sPreviousValueLabel)
+            {
+                nSameLabel++;
+                if (nSameLabel > nMaxSameLabel)
+                    nMaxSameLabel = nSameLabel;
+            }
+            else
+                nSameLabel = 0;
+            sPreviousValueLabel = sValueLabel;
+        }
+    }
     //for horizontal axis:
     if( (m_nDimensionIndex == 0 && !m_aAxisProperties.m_bSwapXAndY)
         || (m_nDimensionIndex == 1 && m_aAxisProperties.m_bSwapXAndY) )
     {
-        if (m_aAxisProperties.m_nAxisType != css::chart2::AxisType::DATE)
-        {
-            // tdf#48041: do not duplicate the value labels because of rounding
-            FixedNumberFormatter aFixedNumberFormatterTest(m_xNumberFormatsSupplier, m_aAxisLabelProperties.nNumberFormatKey);
-            OUString sPreviousValueLabel;
-            sal_Int32 nSameLabel = 0;
-            for (sal_Int32 nLabel = 0; nLabel < static_cast<sal_Int32>(m_aAllTickInfos[0].size()); ++nLabel)
-            {
-                Color nColor = COL_AUTO;
-                bool bHasColor = false;
-                OUString sValueLabel = aFixedNumberFormatterTest.getFormattedString(m_aAllTickInfos[0][nLabel].fScaledTickValue, nColor, bHasColor);
-                if (sValueLabel == sPreviousValueLabel)
-                {
-                    nSameLabel++;
-                    if (nSameLabel > nMaxSameLabel)
-                        nMaxSameLabel = nSameLabel;
-                }
-                else
-                    nSameLabel = 0;
-                sPreviousValueLabel = sValueLabel;
-            }
-        }
-
         nTotalAvailable = nMaxWidth;
         nSingleNeeded = m_nMaximumTextWidthSoFar;
     }
