@@ -973,27 +973,27 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
         else if (maFormatName == "iti")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("itiGraphicImport"));
  #else
-        if (maFiltername ==  "icd")
+        if (maFormatName ==  "icd")
             mpfnImport = icdGraphicImport;
-        else if (maFiltername ==  "idx")
+        else if (maFormatName ==  "idx")
             mpfnImport = idxGraphicImport;
-        else if (maFiltername ==  "ime")
+        else if (maFormatName ==  "ime")
             mpfnImport = imeGraphicImport;
-        else if (maFiltername ==  "ipb")
+        else if (maFormatName ==  "ipb")
             mpfnImport = ipbGraphicImport;
-        else if (maFiltername ==  "ipd")
+        else if (maFormatName ==  "ipd")
             mpfnImport = ipdGraphicImport;
-        else if (maFiltername ==  "ips")
+        else if (maFormatName ==  "ips")
             mpfnImport = ipsGraphicImport;
-        else if (maFiltername ==  "ipt")
+        else if (maFormatName ==  "ipt")
             mpfnImport = iptGraphicImport;
-        else if (maFiltername ==  "ipx")
+        else if (maFormatName ==  "ipx")
             mpfnImport = ipxGraphicImport;
-        else if (maFiltername ==  "ira")
+        else if (maFormatName ==  "ira")
             mpfnImport = iraGraphicImport;
-        else if (maFiltername ==  "itg")
+        else if (maFormatName ==  "itg")
             mpfnImport = itgGraphicImport;
-        else if (maFiltername ==  "iti")
+        else if (maFormatName ==  "iti")
             mpfnImport = itiGraphicImport;
  #endif
     }
@@ -2174,9 +2174,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
 
     FilterConfigItem aConfigItem( pFilterData );
     OUString aFilterName( pConfig->GetExportFilterName( nFormat ) );
-#ifndef DISABLE_DYNLOADING
     OUString aExternalFilterName(pConfig->GetExternalFilterName(nFormat, true));
-#endif
     ErrCode     nStatus = ERRCODE_NONE;
     GraphicType eType;
     Graphic     aGraphic( rGraphic );
@@ -2470,11 +2468,11 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
  #else
                 --nIdx; // Just one iteration
                 PFilterCall pFunc = NULL;
-                if (aFilterName == "egi")
+                if (aExternalFilterName == "egi")
                     pFunc = egiGraphicExport;
-                else if (aFilterName == "eps")
+                else if (aExternalFilterName == "eps")
                     pFunc = epsGraphicExport;
-                else if (aFilterName == "eti")
+                else if (aExternalFilterName == "eti")
                     pFunc = etiGraphicExport;
  #endif
                 if( pFunc )
