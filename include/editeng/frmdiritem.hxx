@@ -47,7 +47,7 @@ public:
 
     virtual sal_uInt16      GetValueCount() const override
     {
-        return sal_uInt16(SvxFrameDirection::Environment) + 1;
+        return sal_uInt16(SvxFrameDirection::Vertical_LR_BT) + 1;
     }
 
         // SfxPoolItem copy function dichotomy
