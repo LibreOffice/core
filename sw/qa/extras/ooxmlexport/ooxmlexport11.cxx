@@ -852,8 +852,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTrackChangesEmptyParagraphsInADeletion, 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf70234, "tdf70234.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    // import fields with tracked deletion
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:del/w:r/w:fldChar");
+    // import field with tracked deletion
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:del/w:r[1]/w:fldChar");
+
+    // export multiple runs of a field with tracked deletion
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:del/w:r", 6);
+
+    // export w:delInstrText
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:del/w:r/w:delInstrText");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf118691, "tdf118691.docx")
