@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_1e2a828f",
+        "filename": "vcl/qt5/Qt5Transferable.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-04T21:08:06Z",
+      "side": 1,
+      "message": "Yeah - sberg would call it \"defensive programming\" and kill me :-) In a release build, this would just report an empty vector and won\u0027t crash. You should never have an empty m_pMimeData, but if it happens it won\u0027t crash this way. Maybe after all this rewriting it\u0027s not needed anymore and m_pMimeData is really guaranteed :-)",
+      "parentUuid": "3fa0c359_9e3e92d8",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 23
+      },
+      "revId": "2f0114b6244af429def59e107bd0b2835818913c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_3e25fec2",
         "filename": "vcl/qt5/Qt5Transferable.cxx",
         "patchSetId": 4
