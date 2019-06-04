@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_1ea7e251",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-04T20:34:59Z",
+      "side": 1,
+      "message": "if this is a workaround for an X11-specific bug, might make sense to extend this check with \u0027\u0026\u0026 QGuiApplication::platformName() \u003d\u003d \"xcb\"\u0027",
+      "range": {
+        "startLine": 514,
+        "startChar": 16,
+        "endLine": 514,
+        "endChar": 27
+      },
+      "revId": "2f7528a3f2d770e8f0522860110e635dd7d029cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
