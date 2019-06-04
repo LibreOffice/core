@@ -22,6 +22,30 @@
       "revId": "f10080e000ea4b35f891f416b274d45ee4849c1f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_be790efd",
+        "filename": "vcl/qt5/Qt5Widget.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-04T15:39:19Z",
+      "side": 1,
+      "message": "I\u0027m actually not sure the test is correct. I don\u0027t know what happens, if you send ExtTextInput events to a frame without extended input enabled. I simply didn\u0027t want to open that can of worms.\n\nOTOH, how fast can you type, compared to the processing speed of LO running on your computer, that this little bit shifting test would matter? Or am I misunderstanding your concern here?",
+      "parentUuid": "3fa0c359_de8dfa31",
+      "range": {
+        "startLine": 416,
+        "startChar": 11,
+        "endLine": 416,
+        "endChar": 24
+      },
+      "revId": "f10080e000ea4b35f891f416b274d45ee4849c1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
