@@ -20,6 +20,7 @@
 #include <sal/log.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/resmgr.hxx>
+#include <vcl/aboutdialog.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/button.hxx>
@@ -1647,12 +1648,15 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     extractButtonImage(id, rMap, name == "GtkRadioButton");
 
     VclPtr<vcl::Window> xWindow;
-    if (name == "GtkDialog")
+    if (name == "GtkDialog" || name == "GtkAboutDialog")
     {
         WinBits nBits = WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
-        xWindow = VclPtr<Dialog>::Create(pParent, nBits, !pParent ? Dialog::InitFlag::NoParent : Dialog::InitFlag::Default);
+        if (name == "GtkAboutDialog")
+            xWindow = VclPtr<AboutDialog>::Create(pParent, nBits, !pParent ? Dialog::InitFlag::NoParent : Dialog::InitFlag::Default);
+        else
+            xWindow = VclPtr<Dialog>::Create(pParent, nBits, !pParent ? Dialog::InitFlag::NoParent : Dialog::InitFlag::Default);
 #if HAVE_FEATURE_DESKTOP
         if (!m_bLegacy && !extractModal(rMap))
             xWindow->SetType(WindowType::MODELESSDIALOG);

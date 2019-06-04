@@ -132,6 +132,7 @@ public:
     virtual VclPtr<SfxAbstractPasteDialog>    CreatePasteDialog(weld::Window* pParent) = 0;
     virtual VclPtr<SfxAbstractLinksDialog>    CreateLinksDialog(weld::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML=false, sfx2::SvBaseLink* p=nullptr) = 0;
     virtual VclPtr<VclAbstractDialog>         CreateSvxScriptOrgDialog(weld::Window* pParent,  const OUString& rLanguage) = 0;
+    virtual VclPtr<VclAbstractDialog>         CreateHelpDialog(weld::Window* pParent) = 0;
 
     virtual VclPtr<AbstractScriptSelectorDialog> CreateScriptSelectorDialog(weld::Window* pParent,
             const css::uno::Reference< css::frame::XFrame >& rxFrame) = 0;

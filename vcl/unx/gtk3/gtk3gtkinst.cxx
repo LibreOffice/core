@@ -1817,6 +1817,13 @@ public:
         return gtk_widget_get_vexpand(m_pWidget);
     }
 
+    virtual void set_secondary(bool bSecondary) override
+    {
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+        if (pParent && GTK_IS_BUTTON_BOX(pParent))
+            gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(pParent), m_pWidget, bSecondary);
+    }
+
     virtual void set_margin_top(int nMargin) override
     {
         gtk_widget_set_margin_top(m_pWidget, nMargin);
@@ -2288,10 +2295,31 @@ namespace
     GdkPixbuf* getPixbuf(const VirtualDevice& rDevice)
     {
         Size aSize(rDevice.GetOutputSizePixel());
-        cairo_surface_t* surface = get_underlying_cairo_surface(rDevice);
+        cairo_surface_t* orig_surface = get_underlying_cairo_surface(rDevice);
         double m_fXScale, m_fYScale;
-        dl_cairo_surface_get_device_scale(surface, &m_fXScale, &m_fYScale);
-        return gdk_pixbuf_get_from_surface(surface, 0, 0, aSize.Width() * m_fXScale, aSize.Height() * m_fYScale);
+        dl_cairo_surface_get_device_scale(orig_surface, &m_fXScale, &m_fYScale);
+
+        cairo_surface_t* surface;
+        if (m_fXScale != 1.0 || m_fYScale != -1)
+        {
+            surface = cairo_surface_create_similar_image(orig_surface,
+                                                         CAIRO_FORMAT_ARGB32,
+                                                         aSize.Width(),
+                                                         aSize.Height());
+            cairo_t* cr = cairo_create(surface);
+            cairo_set_source_surface(cr, orig_surface, 0, 0);
+            cairo_paint(cr);
+            cairo_destroy(cr);
+        }
+        else
+            surface = orig_surface;
+
+        GdkPixbuf* pRet = gdk_pixbuf_get_from_surface(surface, 0, 0, aSize.Width(), aSize.Height());
+
+        if (surface != orig_surface)
+            cairo_surface_destroy(surface);
+
+        return pRet;
     }
 
     GtkWidget* image_new_from_virtual_device(const VirtualDevice& rImageSurface)
@@ -3346,6 +3374,63 @@ public:
     virtual Container* weld_message_area() override
     {
         return new GtkInstanceContainer(GTK_CONTAINER(gtk_message_dialog_get_message_area(m_pMessageDialog)), m_pBuilder, false);
+    }
+};
+
+class GtkInstanceAboutDialog : public GtkInstanceDialog, public virtual weld::AboutDialog
+{
+private:
+    GtkAboutDialog* m_pAboutDialog;
+public:
+    GtkInstanceAboutDialog(GtkAboutDialog* pAboutDialog, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceDialog(GTK_DIALOG(pAboutDialog), pBuilder, bTakeOwnership)
+        , m_pAboutDialog(pAboutDialog)
+    {
+    }
+
+    virtual void set_version(const OUString& rVersion) override
+    {
+        gtk_about_dialog_set_version(m_pAboutDialog, OUStringToOString(rVersion, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    virtual void set_copyright(const OUString& rCopyright) override
+    {
+        gtk_about_dialog_set_copyright(m_pAboutDialog, OUStringToOString(rCopyright, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    virtual void set_website(const OUString& rURL) override
+    {
+        OString sURL(OUStringToOString(rURL, RTL_TEXTENCODING_UTF8));
+        gtk_about_dialog_set_website(m_pAboutDialog, sURL.isEmpty() ? nullptr : sURL.getStr());
+    }
+
+    virtual void set_website_label(const OUString& rLabel) override
+    {
+        OString sLabel(OUStringToOString(rLabel, RTL_TEXTENCODING_UTF8));
+        gtk_about_dialog_set_website_label(m_pAboutDialog, sLabel.isEmpty() ? nullptr : sLabel.getStr());
+    }
+
+    virtual OUString get_website_label() const override
+    {
+        const gchar* pText = gtk_about_dialog_get_website_label(m_pAboutDialog);
+        return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
+    virtual void set_logo(VirtualDevice* pDevice) override
+    {
+        GdkPixbuf* pixbuf = pDevice ? getPixbuf(*pDevice) : nullptr;
+        if (!pixbuf)
+            gtk_about_dialog_set_logo(m_pAboutDialog, nullptr);
+        else
+        {
+            gtk_about_dialog_set_logo(m_pAboutDialog, pixbuf);
+            g_object_unref(pixbuf);
+        }
+    }
+
+    virtual void set_background(VirtualDevice* /*pDevice*/) override
+    {
+        // see GtkSalMenu::ApplyPersona if we want to support this
     }
 };
 
@@ -10057,6 +10142,24 @@ private:
                     set_primary_text(pMessageDialog, (*m_pStringReplace)(get_primary_text(pMessageDialog)));
                     set_secondary_text(pMessageDialog, (*m_pStringReplace)(get_secondary_text(pMessageDialog)));
                 }
+                else if (GTK_IS_ABOUT_DIALOG(pWindow))
+                {
+                    GtkAboutDialog* pAboutDialog = GTK_ABOUT_DIALOG(pWindow);
+                    const gchar *pComments = gtk_about_dialog_get_comments(pAboutDialog);
+                    if (pComments)
+                    {
+                        OUString sComments(pComments, strlen(pComments), RTL_TEXTENCODING_UTF8);
+                        sComments = (*m_pStringReplace)(sComments);
+                        gtk_about_dialog_set_comments(pAboutDialog, OUStringToOString(sComments, RTL_TEXTENCODING_UTF8).getStr());
+                    }
+                    const gchar *pProgramName = gtk_about_dialog_get_program_name(pAboutDialog);
+                    if (pProgramName)
+                    {
+                        OUString sProgramName(pProgramName, strlen(pProgramName), RTL_TEXTENCODING_UTF8);
+                        sProgramName = (*m_pStringReplace)(sProgramName);
+                        gtk_about_dialog_set_program_name(pAboutDialog, OUStringToOString(sProgramName, RTL_TEXTENCODING_UTF8).getStr());
+                    }
+                }
             }
         }
     }
@@ -10174,6 +10277,15 @@ public:
             return nullptr;
         gtk_window_set_transient_for(GTK_WINDOW(pMessageDialog), GTK_WINDOW(gtk_widget_get_toplevel(m_pParentWidget)));
         return std::make_unique<GtkInstanceMessageDialog>(pMessageDialog, this, bTakeOwnership);
+    }
+
+    virtual std::unique_ptr<weld::AboutDialog> weld_about_dialog(const OString &id, bool bTakeOwnership) override
+    {
+        GtkAboutDialog* pAboutDialog = GTK_ABOUT_DIALOG(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pAboutDialog)
+            return nullptr;
+        gtk_window_set_transient_for(GTK_WINDOW(pAboutDialog), GTK_WINDOW(gtk_widget_get_toplevel(m_pParentWidget)));
+        return std::make_unique<GtkInstanceAboutDialog>(pAboutDialog, this, bTakeOwnership);
     }
 
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString &id, bool bTakeOwnership) override

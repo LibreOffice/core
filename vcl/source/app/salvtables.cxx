@@ -36,6 +36,7 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <utility>
 #include <tools/helpers.hxx>
+#include <vcl/aboutdialog.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/calendar.hxx>
 #include <vcl/combobox.hxx>
@@ -460,6 +461,11 @@ public:
     virtual bool get_vexpand() const override
     {
         return m_xWidget->get_vexpand();
+    }
+
+    virtual void set_secondary(bool bSecondary) override
+    {
+        m_xWidget->set_secondary(bSecondary);
     }
 
     virtual void set_margin_top(int nMargin) override
@@ -1352,6 +1358,46 @@ public:
     virtual Container* weld_message_area() override
     {
         return new SalInstanceContainer(m_xMessageDialog->get_message_area(), m_pBuilder, false);
+    }
+};
+
+class SalInstanceAboutDialog : public SalInstanceDialog, public virtual weld::AboutDialog
+{
+private:
+    VclPtr<::AboutDialog> m_xAboutDialog;
+public:
+    SalInstanceAboutDialog(::AboutDialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceDialog(pDialog, pBuilder, bTakeOwnership)
+        , m_xAboutDialog(pDialog)
+    {
+    }
+    virtual void set_version(const OUString& rVersion) override
+    {
+        m_xAboutDialog->SetVersion(rVersion);
+    }
+    virtual void set_copyright(const OUString& rCopyright) override
+    {
+        m_xAboutDialog->SetCopyright(rCopyright);
+    }
+    virtual void set_website(const OUString& rURL) override
+    {
+        m_xAboutDialog->SetWebsiteLink(rURL);
+    }
+    virtual void set_website_label(const OUString& rLabel) override
+    {
+        m_xAboutDialog->SetWebsiteLabel(rLabel);
+    }
+    virtual OUString get_website_label() const override
+    {
+        return m_xAboutDialog->GetWebsiteLabel();
+    }
+    virtual void set_logo(VirtualDevice* pDevice) override
+    {
+        m_xAboutDialog->SetLogo(createImage(*pDevice));
+    }
+    virtual void set_background(VirtualDevice* pDevice) override
+    {
+        m_xAboutDialog->SetBackground(createImage(*pDevice));
     }
 };
 
@@ -5010,6 +5056,19 @@ public:
             assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
             m_aOwnedToplevel.set(pMessageDialog);
             m_xBuilder->drop_ownership(pMessageDialog);
+        }
+        return pRet;
+    }
+
+    virtual std::unique_ptr<weld::AboutDialog> weld_about_dialog(const OString &id, bool bTakeOwnership) override
+    {
+        AboutDialog* pAboutDialog = m_xBuilder->get<AboutDialog>(id);
+        std::unique_ptr<weld::AboutDialog> pRet(pAboutDialog ? new SalInstanceAboutDialog(pAboutDialog, this, false) : nullptr);
+        if (bTakeOwnership && pAboutDialog)
+        {
+            assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
+            m_aOwnedToplevel.set(pAboutDialog);
+            m_xBuilder->drop_ownership(pAboutDialog);
         }
         return pRet;
     }
