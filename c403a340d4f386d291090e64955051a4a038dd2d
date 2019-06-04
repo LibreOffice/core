@@ -22,6 +22,30 @@
       "revId": "c403a340d4f386d291090e64955051a4a038dd2d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_fe48f6cc",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-04T14:55:55Z",
+      "side": 1,
+      "message": "Ah - I missed that. Thanks for the reminder. Now fixed.",
+      "parentUuid": "3fa0c359_fec9d677",
+      "range": {
+        "startLine": 56,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 21
+      },
+      "revId": "c403a340d4f386d291090e64955051a4a038dd2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
