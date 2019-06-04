@@ -323,6 +323,31 @@ DECLARE_OOXMLIMPORT_TEST(testTdf121784, "tdf121784.docx")
     CPPUNIT_ASSERT_EQUAL( OUString( "i" ), getRun( getParagraph( 2 ), 3 )->getString());
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125657, "tdf125657.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    auto checkAttrIsInt = [&](const OString& sAttrName) {
+        OUString sAttr = getXPath(pXmlDoc,
+                                  "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:inline/a:graphic/"
+                                  "a:graphicData/pic:pic/pic:blipFill/a:srcRect",
+                                  sAttrName);
+        OString sAssertMsg("Attribute " + sAttrName + " value " + sAttr.toUtf8()
+                           + " is not a valid integer");
+        CPPUNIT_ASSERT_MESSAGE(sAssertMsg.getStr(), !sAttr.isEmpty());
+        // Only decimal characters allowed, optionally prepended with '-'; no '.'
+        CPPUNIT_ASSERT_MESSAGE(sAssertMsg.getStr(),
+                               sAttr[0] == '-' || sAttr[0] >= '0' && sAttr[0] <= '9');
+        for (sal_Int32 i = 1; i < sAttr.getLength(); ++i)
+            CPPUNIT_ASSERT_MESSAGE(sAssertMsg.getStr(), sAttr[i] >= '0' && sAttr[i] <= '9');
+    };
+    // check that we export all coordinates of srcRect as integers
+    checkAttrIsInt("l");
+    checkAttrIsInt("t");
+    checkAttrIsInt("r");
+    checkAttrIsInt("b");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

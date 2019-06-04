@@ -4668,10 +4668,10 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj, const SwFrameFo
         double  widthMultiplier  = 100000.0/aOriginalSize.Width();
         double  heightMultiplier = 100000.0/aOriginalSize.Height();
 
-        double left   = nCropL * widthMultiplier;
-        double right  = nCropR * widthMultiplier;
-        double top    = nCropT * heightMultiplier;
-        double bottom = nCropB * heightMultiplier;
+        sal_Int32 left   = static_cast<sal_Int32>(rtl::math::round(nCropL * widthMultiplier));
+        sal_Int32 right  = static_cast<sal_Int32>(rtl::math::round(nCropR * widthMultiplier));
+        sal_Int32 top    = static_cast<sal_Int32>(rtl::math::round(nCropT * heightMultiplier));
+        sal_Int32 bottom = static_cast<sal_Int32>(rtl::math::round(nCropB * heightMultiplier));
 
         m_pSerializer->singleElementNS( XML_a, XML_srcRect,
              XML_l, OString::number(left),
