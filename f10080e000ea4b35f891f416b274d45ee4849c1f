@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_de8dfa31",
+        "filename": "vcl/qt5/Qt5Widget.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-06-04T14:26:54Z",
+      "side": 1,
+      "message": "I was wondering if it\u0027d be possible not to test this attribute with every single key press.",
+      "range": {
+        "startLine": 416,
+        "startChar": 11,
+        "endLine": 416,
+        "endChar": 24
+      },
+      "revId": "f10080e000ea4b35f891f416b274d45ee4849c1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
