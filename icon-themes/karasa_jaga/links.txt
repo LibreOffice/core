@@ -1470,7 +1470,7 @@ res/lx03129.png res/odb_32_8.png
 res/lx03130.png res/otp_32_8.png
 res/lx03131.png res/lo03126.png
 res/lx03137.png res/lx03125.png
-res/lx03139.png cmd/lc_newhtmldoc.png
+res/lx03139.png cmd/32/newhtmldoc.png
 res/lx03140.png res/lx03125.png
 res/lx03144.png res/odf_32_8.png
 res/lx03145.png res/otf_32_8.png
@@ -1786,6 +1786,12 @@ svx/res/fontworkalignright_26.png cmd/lc_alignright.png
 svx/res/fw07.png cmd/sc_alignleft.png
 svx/res/fw08.png cmd/sc_alignhorizontalcenter.png
 svx/res/fw09.png cmd/sc_alignright.png
+svx/res/galdefl.png cmd/lc_gallery.png
+svx/res/galdefs.png cmd/sc_gallery.png
+svx/res/galnorl.png cmd/lc_gallery.png
+svx/res/galnors.png cmd/sc_gallery.png
+svx/res/galrdol.png cmd/lc_gallery.png
+svx/res/galrdos.png cmd/sc_gallery.png
 svx/res/graphic.png cmd/lc_graphic.png
 svx/res/id01.png cmd/sc_ok.png
 svx/res/id018.png cmd/sc_choosemacro.png
@@ -1802,9 +1808,10 @@ svx/res/id041.png cmd/sc_redo.png
 svx/res/id05.png cmd/sc_basicshapes.rectangle.png
 svx/res/id06.png cmd/sc_basicshapes.ellipse.png
 svx/res/id07.png cmd/sc_polygon.png
-svx/res/id08.png cmd/sc_freeline_unfilled.png
+svx/res/id08.png cmd/sc_freeline.png
 svx/res/lighton.png cmd/sc_extrusionlightingfloater.png
 svx/res/lngcheck.png cmd/sc_spelling.png
+svx/res/luminanc.png cmd/sc_colorview.png
 svx/res/nu01.png cmd/sc_ok.png
 svx/res/nu02.png reportdesign/res/sc30770.png
 svx/res/nu03.png cmd/sc_showannotations.png
@@ -1818,8 +1825,10 @@ svx/res/symphony/AdjustColorBlue_16x16.png cmd/sc_grafblue.png
 svx/res/symphony/AdjustColorGamma_16x16.png cmd/sc_grafgamma.png
 svx/res/symphony/AdjustColorGreen_16x16.png cmd/sc_grafgreen.png
 svx/res/symphony/AdjustColorRed_16x16.png cmd/sc_grafred.png
+svx/res/symphony/ColorModeNormal_16x16.png cmd/sc_outputqualitycolor.png
 svx/res/symphony/decrease_font.png cmd/sc_shrink.png
 svx/res/symphony/enlarge_font.png cmd/sc_grow.png
+svx/res/symphony/Line_color.png cmd/sc_xlinecolor.png
 svx/res/symphony/lpselected-spacing-1_15.png cmd/lc_spacepara1.png
 svx/res/symphony/lpselected-spacing-1.png cmd/lc_spacepara1.png
 svx/res/symphony/lpselected-spacing-1_5.png cmd/lc_spacepara15.png
@@ -1833,6 +1842,7 @@ svx/res/symphony/sch_backgroundcolor.png cmd/sc_formatarea.png
 svx/res/symphony/spacing3.png cmd/sc_spacepara2.png
 svx/res/symphony/para_numbullet01.png cmd/sc_defaultbullet.png
 svx/res/symphony/para_numbullet_rtl01.png cmd/ar/sc_defaultbullet.png
+svx/res/symphony/para_numbullet_rtl02.png cmd/ar/sc_defaultnumbering.png
 svx/res/symphony/para_numbullet02.png cmd/sc_defaultnumbering.png
 svx/res/time.png cmd/sc_timefield.png
 sw/res/all_left.png dbaccess/res/all_left.png
