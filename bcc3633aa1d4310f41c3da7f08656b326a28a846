@@ -22,6 +22,30 @@
       "revId": "bcc3633aa1d4310f41c3da7f08656b326a28a846",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_be76eea3",
+        "filename": "vcl/source/gdi/CommonSalLayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2019-06-04T10:27:16Z",
+      "side": 1,
+      "message": "The calling site still expects VerticalOrientation (which is mapped to ICU macros for ICU 63), I kept it this way to avoid much changes until we can require ICU 63 or above.",
+      "parentUuid": "3fa0c359_3b951041",
+      "range": {
+        "startLine": 150,
+        "startChar": 19,
+        "endLine": 150,
+        "endChar": 58
+      },
+      "revId": "bcc3633aa1d4310f41c3da7f08656b326a28a846",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
