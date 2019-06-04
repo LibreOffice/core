@@ -1,3 +1,15 @@
+vcl/uiconfig/ui/aboutbox.ui://GtkImage[@id='logo'] no-labelled-by
+vcl/uiconfig/ui/aboutbox.ui://GtkLabel[@id='logoreplacement'] orphan-label
+vcl/uiconfig/ui/aboutbox.ui://GtkLabel[@id='buildid'] orphan-label
+vcl/uiconfig/ui/aboutbox.ui://GtkLabel[@id='locale'] orphan-label
+vcl/uiconfig/ui/aboutbox.ui://GtkLabel[@id='uilocale'] orphan-label
+vcl/uiconfig/ui/aboutbox.ui://GtkTextView[@id='version'] no-labelled-by
+vcl/uiconfig/ui/aboutbox.ui://GtkLabel[@id='description'] orphan-label
+vcl/uiconfig/ui/aboutbox.ui://GtkLabel[@id='copyright'] orphan-label
+vcl/uiconfig/ui/aboutbox.ui://GtkLabel[@id='libreoffice'] orphan-label
+vcl/uiconfig/ui/aboutbox.ui://GtkLabel[@id='derived'] orphan-label
+vcl/uiconfig/ui/aboutbox.ui://GtkLabel[@id='vendor'] orphan-label
+vcl/uiconfig/ui/aboutbox.ui://GtkLabel[@id='link'] orphan-label
 vcl/uiconfig/ui/cupspassworddialog.ui://GtkLabel[@id='text'] orphan-label
 vcl/uiconfig/ui/printdialog.ui://GtkSpinButton[@id='pageedit-nospin'] no-labelled-by
 vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='totalnumpages'] orphan-label
