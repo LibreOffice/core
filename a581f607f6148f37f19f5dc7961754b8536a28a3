@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_fbfd683a",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-06-04T08:09:46Z",
+      "side": 1,
+      "message": "searchNodeandAttribute -\u003e searchNodeAndAttribute",
+      "revId": "a581f607f6148f37f19f5dc7961754b8536a28a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_1bf9344c",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-06-04T08:09:46Z",
+      "side": 1,
+      "message": "as we already found UIItemId can we break and return here?",
+      "revId": "a581f607f6148f37f19f5dc7961754b8536a28a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_7b9f1803",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-06-04T08:09:46Z",
+      "side": 1,
+      "message": "aProperties is not freed at the end",
+      "revId": "a581f607f6148f37f19f5dc7961754b8536a28a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_9ba2244b",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-06-04T08:09:46Z",
+      "side": 1,
+      "message": "const size of 50 doesn\u0027t look safe, I would use not less than 255 and check if that limit is not exceeded!\n\nmeybe use OUString instead of raw pointers and chars\n\nplease use some #define for that limit value - not magic numbers",
+      "revId": "a581f607f6148f37f19f5dc7961754b8536a28a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_db98ac1c",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-06-04T08:09:46Z",
+      "side": 1,
+      "message": "probably you can use some \u0027tokenize\u0027 functions which can split text using \u0027,\u0027 as a separator - I think there is something like that in OUString",
+      "revId": "a581f607f6148f37f19f5dc7961754b8536a28a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_bb95a0e6",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-06-04T08:09:46Z",
+      "side": 1,
+      "message": "please don\u0027t use magic numbers it\u0027s better to use ASCII chars directly",
+      "revId": "a581f607f6148f37f19f5dc7961754b8536a28a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_7bb87875",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-06-04T08:09:46Z",
+      "side": 1,
+      "message": "else SAL_WARN",
+      "revId": "a581f607f6148f37f19f5dc7961754b8536a28a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
