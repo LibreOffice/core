@@ -16,6 +16,24 @@
       "revId": "0b63870067bf64a4840c7db0db41f2ef1ff650f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_db342cfe",
+        "filename": "offapi/com/sun/star/text/TextMarkupDescriptor.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-04T08:41:08Z",
+      "side": 1,
+      "message": "it would be better to not hard-code the link url here but let doxygen generate it, that way it will work offline in the SDK as well",
+      "parentUuid": "3fa0c359_7beab875",
+      "revId": "0b63870067bf64a4840c7db0db41f2ef1ff650f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
