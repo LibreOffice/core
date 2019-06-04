@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_7beab875",
+        "filename": "offapi/com/sun/star/text/TextMarkupDescriptor.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-04T07:46:11Z",
+      "side": 1,
+      "message": "This could do with something like\n@since 6.4 BOLDWAVE and BOLD",
+      "revId": "0b63870067bf64a4840c7db0db41f2ef1ff650f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
