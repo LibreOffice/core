@@ -22,7 +22,6 @@
 #include <svx/svddef.hxx>
 
 #include <svx/sdangitm.hxx>
-#include <svx/sdooitm.hxx>
 
 // SDRATTR_CAPTIONFIXEDANGLE SdrOnOffItem:
 // sal_True=angle predefined by SdrCaptionAngleItem

@@ -65,6 +65,7 @@
 #include <svx/pageitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/xlineit0.hxx>
 #include <editeng/flditem.hxx>
 #include "UnoGraphicExporter.hxx"
 #include <memory>

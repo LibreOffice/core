@@ -38,6 +38,7 @@
 #include <svx/view3d.hxx>
 #include <svx/cube3d.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>

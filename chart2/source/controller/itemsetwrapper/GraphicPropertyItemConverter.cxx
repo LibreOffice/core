@@ -23,6 +23,7 @@
 #include <PropertyHelper.hxx>
 #include <CommonConverters.hxx>
 #include <editeng/memberids.h>
+#include <svx/unomid.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xbtmpit.hxx>

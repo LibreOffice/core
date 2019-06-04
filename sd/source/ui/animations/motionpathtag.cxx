@@ -30,6 +30,8 @@
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnstit.hxx>

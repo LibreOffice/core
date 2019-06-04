@@ -76,9 +76,11 @@
 #include <svx/xlndsit.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <svx/xbtmpit.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/svdpntv.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/svditer.hxx>

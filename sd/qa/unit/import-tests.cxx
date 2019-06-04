@@ -37,6 +37,7 @@
 #include <svx/svdomedia.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdotable.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
@@ -47,6 +48,8 @@
 #include <animations/animationnodehelper.hxx>
 #include <sax/tools/converter.hxx>
 
+#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>

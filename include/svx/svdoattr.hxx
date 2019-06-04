@@ -20,10 +20,6 @@
 #ifndef INCLUDED_SVX_SVDOATTR_HXX
 #define INCLUDED_SVX_SVDOATTR_HXX
 
-#include <svx/xfillit0.hxx>
-#include <svx/xflasit.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/xlnasit.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svxdllapi.h>
 

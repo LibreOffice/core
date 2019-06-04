@@ -21,7 +21,6 @@
 
 #include <svx/svddef.hxx>
 #include <svx/sdmetitm.hxx>
-#include <svx/svxdllapi.h>
 
 class SdrEdgeLineDeltaCountItem: public SfxUInt16Item {
 public:

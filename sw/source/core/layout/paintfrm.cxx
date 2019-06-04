@@ -97,6 +97,8 @@
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/framelinkarray.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/xfillit0.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/utils/b2dclipstate.hxx>

@@ -45,7 +45,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/fmglob.hxx>
-
+#include <svx/xfillit0.hxx>
 #include <svx/fmdpage.hxx>
 
 #include <sfx2/objsh.hxx>

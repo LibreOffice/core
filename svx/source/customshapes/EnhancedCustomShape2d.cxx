@@ -34,6 +34,7 @@
 #include <rtl/crc.h>
 #include <rtl/math.hxx>
 #include <svx/xfillit0.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnedit.hxx>
 #include <svx/xlnstwit.hxx>

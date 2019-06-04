@@ -23,12 +23,8 @@
 #include <tools/gen.hxx>
 #include <vcl/graph.hxx>
 
-#include <svl/solar.hrc>
-
-#include <svx/xpoly.hxx>
 #include <svx/svdoedge.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <svx/sdgcpitm.hxx>
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include <svx/svxdllapi.h>
 #include <deque>
@@ -39,6 +35,7 @@ class SdrMarkView;
 class SdrObject;
 class SdrPageView;
 class MouseEvent;
+class HelpEvent;
 
 namespace sdr { namespace contact {
     class ObjectContact;

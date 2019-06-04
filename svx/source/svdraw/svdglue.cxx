@@ -18,6 +18,7 @@
  */
 
 #include <tools/debug.hxx>
+#include <vcl/window.hxx>
 
 #include <svx/svdglue.hxx>
 #include <svx/svdobj.hxx>

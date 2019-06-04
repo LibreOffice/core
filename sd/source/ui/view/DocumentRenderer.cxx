@@ -51,6 +51,8 @@
 #include <svx/svditer.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/localedatawrapper.hxx>

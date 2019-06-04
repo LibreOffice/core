@@ -21,7 +21,6 @@
 
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
-#include <memory>
 
 /*
     contains strings needed for positioning dialogs

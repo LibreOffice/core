@@ -52,6 +52,7 @@
 #include <svx/xflboxy.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
+#include <svx/xtextit0.hxx>
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <svx/svdotext.hxx>

@@ -19,6 +19,7 @@
 
 #include <copydlg.hxx>
 #include <svx/colorbox.hxx>
+#include <svx/svdpagv.hxx>
 #include <sfx2/module.hxx>
 #include <svx/xcolit.hxx>
 #include <svl/intitem.hxx>

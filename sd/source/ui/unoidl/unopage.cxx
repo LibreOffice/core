@@ -58,6 +58,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdview.hxx>
+#include <svx/xfillit0.hxx>
 #include <View.hxx>
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>

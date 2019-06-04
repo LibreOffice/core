@@ -56,6 +56,7 @@
 #include <vcl/settings.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdpagv.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/sdrhittesthelper.hxx>
 

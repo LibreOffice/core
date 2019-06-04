@@ -22,6 +22,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/event.hxx>
 #include <sfx2/dialoghelper.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
 #include <svx/strings.hrc>

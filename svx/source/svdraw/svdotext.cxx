@@ -55,6 +55,7 @@
 #include <svx/sdtagitm.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <svx/sdtmfitm.hxx>
+#include <svx/xtextit0.hxx>
 #include <editeng/editeng.hxx>
 #include <svl/itemiter.hxx>
 #include <sdr/properties/textproperties.hxx>

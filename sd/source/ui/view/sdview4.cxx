@@ -34,6 +34,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/svdundo.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xoutbmp.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdomedia.hxx>

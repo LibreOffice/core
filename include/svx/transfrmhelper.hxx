@@ -23,6 +23,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/mapunit.hxx>
+#include <vcl/field.hxx>
 
 class SVX_DLLPUBLIC TransfrmHelper
 {

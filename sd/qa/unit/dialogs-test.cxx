@@ -28,6 +28,7 @@
 #include <editeng/colritem.hxx>
 #include <svx/svdtext.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/xfillit0.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/svapp.hxx>
 

@@ -36,6 +36,8 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xlineit0.hxx>
 
 #include <sfx2/docinf.hxx>
 

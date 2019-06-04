@@ -33,6 +33,8 @@
 #include <svx/sdgtritm.hxx>
 #include <svx/sdginitm.hxx>
 #include <svx/sdgmoitm.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xlineit0.hxx>
 
 namespace sdr
 {

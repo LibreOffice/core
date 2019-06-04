@@ -49,6 +49,7 @@
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
+#include <svx/xfillit0.hxx>
 #include <svl/itemiter.hxx>
 #include <svx/svxids.hrc>
 #include <unotools/localfilehelper.hxx>

@@ -37,6 +37,7 @@
 #include <clonelist.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/scene3d.hxx>
+#include <svx/xfillit0.hxx>
 
 
 using namespace com::sun::star;

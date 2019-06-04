@@ -48,6 +48,7 @@
 #include "ww8par.hxx"
 #include "ww8par2.hxx"
 #include "ww8graf.hxx"
+#include <vcl/gdimtf.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/wmf.hxx>
 

@@ -18,6 +18,7 @@
  */
 
 #include <DrawViewShell.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xtable.hxx>
 #include <sdattr.hxx>
 #include <svl/aeitem.hxx>

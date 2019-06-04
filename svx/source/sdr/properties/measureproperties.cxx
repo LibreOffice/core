@@ -25,6 +25,7 @@
 #include <svx/svddef.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/svdomeas.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedit.hxx>

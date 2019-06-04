@@ -48,6 +48,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/xbtmpit.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/svdundo.hxx>
 #include "svdfmtf.hxx"

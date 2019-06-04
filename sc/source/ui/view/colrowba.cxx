@@ -18,6 +18,7 @@
  */
 
 #include <unotools/localedatawrapper.hxx>
+#include <vcl/field.hxx>
 
 #include <colrowba.hxx>
 #include <document.hxx>

@@ -37,6 +37,7 @@
 #include <ToolBarManager.hxx>
 
 #include <svx/sxciaitm.hxx>
+#include <svx/xfillit0.hxx>
 
 using namespace com::sun::star;
 

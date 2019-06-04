@@ -50,6 +50,7 @@
 #include <vcl/EnumContext.hxx>
 #include <svx/svdopage.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>

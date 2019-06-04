@@ -32,6 +32,7 @@
 #include <svx/sdtmfitm.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/outliner.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>

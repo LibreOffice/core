@@ -38,7 +38,10 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/form/runtime/FeatureState.hpp>
+#include <vcl/builder.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/window.hxx>
 #include <sfx2/app.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/fmsearch.hxx>

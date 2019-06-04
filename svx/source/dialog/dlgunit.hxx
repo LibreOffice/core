@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SOURCE_DIALOG_DLGUNIT_HXX
 
 #include <svx/svdtrans.hxx>
+#include <vcl/field.hxx>
 
 inline OUString GetUnitString( long nVal_100, FieldUnit eFieldUnit, sal_Unicode cSep )
 {

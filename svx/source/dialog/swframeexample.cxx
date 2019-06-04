@@ -19,6 +19,7 @@
 
 #include <tools/poly.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/colorcfg.hxx>

@@ -42,6 +42,8 @@
 #include <svx/svdview.hxx>
 #include <svx/sxciaitm.hxx>
 #include <sxcikitm.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlnedit.hxx>
 #include <svx/xlnedwit.hxx>
 #include <svx/xlnstit.hxx>

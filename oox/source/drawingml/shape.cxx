@@ -95,6 +95,7 @@
 #include <vcl/wmfexternal.hxx>
 #include <sal/log.hxx>
 #include <svx/unoshape.hxx>
+#include <svx/xfillit0.hxx>
 
 #include <vcl/wmf.hxx>
 

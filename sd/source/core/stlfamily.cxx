@@ -27,6 +27,7 @@
 #include <svl/style.hxx>
 
 #include <tools/debug.hxx>
+#include <tools/weakbase.hxx>
 
 #include <strings.hrc>
 #include <stlfamily.hxx>

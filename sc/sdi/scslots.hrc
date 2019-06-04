@@ -18,6 +18,7 @@
  */
 #include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>
+#include <svx/unomid.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/memberids.h>
 #include <sc.hrc>

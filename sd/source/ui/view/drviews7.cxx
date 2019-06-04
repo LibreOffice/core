@@ -29,6 +29,7 @@
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <svx/fmglob.hxx>
 #include <svx/globl3d.hxx>
+#include <svx/pageitem.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/svdouno.hxx>
 #include <editeng/eeitem.hxx>
@@ -53,6 +54,7 @@
 #include <svl/whiter.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>

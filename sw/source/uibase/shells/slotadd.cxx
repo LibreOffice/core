@@ -23,6 +23,7 @@
 #include <uiitems.hxx>
 #include <cmdid.h>
 #include <unomid.h>
+#include <svx/unomid.hxx>
 
 #include <svl/globalnameitem.hxx>
 #include <editeng/memberids.h>

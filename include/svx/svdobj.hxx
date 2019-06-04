@@ -25,21 +25,17 @@
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/vclptr.hxx>
 #include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/typedwhich.hxx>
 #include <svx/svdtypes.hxx>
-#include <svx/xenum.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/shapeproperty.hxx>
 #include <tools/link.hxx>
-#include <tools/weakbase.hxx>
-#include <tools/mapunit.hxx>
+#include <tools/weakbase.h>
 #include <tools/gen.hxx>
 #include <osl/diagnose.h>
 #include <typeinfo>
-#include <functional>
 
 class SfxBroadcaster;
 class AutoTimer;

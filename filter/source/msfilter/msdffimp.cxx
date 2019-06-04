@@ -99,6 +99,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/xlntrit.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfltrit.hxx>
@@ -122,6 +123,7 @@
 #include <svx/extrud3d.hxx>
 #include <svx/svditer.hxx>
 #include <svx/xpoly.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlncapit.hxx>
 #include <svx/xlinjoit.hxx>
 #include <svx/xlndsit.hxx>

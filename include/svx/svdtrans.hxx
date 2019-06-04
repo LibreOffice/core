@@ -21,14 +21,13 @@
 #define INCLUDED_SVX_SVDTRANS_HXX
 
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/fldunit.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/helpers.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
-#include <vcl/field.hxx>
-#include <vcl/mapmod.hxx>
 
 // The DrawingEngine's angles are specified in 1/100th degrees
 // We need to convert these angles to radians, in order to be able

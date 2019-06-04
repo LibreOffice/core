@@ -18,6 +18,7 @@
  */
 
 #include <svx/svxids.hrc>
+#include <svx/unomid.hxx>
 #include <editeng/memberids.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

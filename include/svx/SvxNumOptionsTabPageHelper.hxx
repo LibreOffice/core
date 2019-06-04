@@ -20,8 +20,7 @@
 #ifndef INCLUDED_SVX_SVXNUMOPTIONSTABPAGEHELPER_HXX
 #define INCLUDED_SVX_SVXNUMOPTIONSTABPAGEHELPER_HXX
 
-#include <com/sun/star/text/DefaultNumberingProvider.hpp>
-#include <com/sun/star/text/XNumberingTypeInfo.hpp>
+#include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>

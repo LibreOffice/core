@@ -23,7 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/sdrobjectuser.hxx>
-#include <tools/solar.h>
 
 #include <memory>
 #include <set>

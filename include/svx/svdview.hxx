@@ -23,14 +23,13 @@
 // HACK to avoid too deep includes and to have some
 // levels free in svdmark itself (MS compiler include depth limit)
 #include <svx/svdhdl.hxx>
-#include <tools/weakbase.hxx>
+#include <tools/weakbase.h>
 #include <svtools/accessibilityoptions.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/svdcrtv.hxx>
 #include <vcl/event.hxx>
 #include <unotools/options.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 
 //  class hierarchy of View:
 //         SfxListener

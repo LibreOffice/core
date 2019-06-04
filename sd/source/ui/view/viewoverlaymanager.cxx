@@ -37,6 +37,7 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/svxids.hrc>
+#include <svx/svdpagv.hxx>
 
 #include <view/viewoverlaymanager.hxx>
 

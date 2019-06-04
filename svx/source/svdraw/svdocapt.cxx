@@ -37,6 +37,7 @@
 #include <sdr/contact/viewcontactofsdrcaptionobj.hxx>
 #include <sdr/properties/captionproperties.hxx>
 #include <svx/sdrhittesthelper.hxx>
+#include <svx/sdooitm.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdhdl.hxx>

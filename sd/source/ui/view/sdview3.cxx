@@ -26,6 +26,7 @@
 #include <unotools/pathoptions.hxx>
 #include <editeng/editdata.hxx>
 #include <svl/urlbmk.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/svdpagv.hxx>

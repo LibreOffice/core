@@ -25,7 +25,6 @@
 #include <editeng/edtdlg.hxx>
 
 #include <svx/dstribut_enum.hxx>
-#include <svx/rectenum.hxx>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <svx/svxdllapi.h>

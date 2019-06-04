@@ -59,6 +59,7 @@
 #include <svx/unoapi.hxx>
 #include <svx/sdtaitm.hxx>
 #include <document.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 
 #include <oox/token/tokens.hxx>

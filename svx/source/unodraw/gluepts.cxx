@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <tools/weakbase.hxx>
 
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>

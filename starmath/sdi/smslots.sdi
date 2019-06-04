@@ -24,6 +24,7 @@ StarMath
     SlotIdFile ( "editeng/editids.hrc" )
     SlotIdFile ( "sfx2/sfxsids.hrc" )
     SlotIdFile ( "svx/svxids.hrc" )
+    SlotIdFile ( "svx/unomid.hxx" )
 ]
 {
     include "sfxitems.sdi"

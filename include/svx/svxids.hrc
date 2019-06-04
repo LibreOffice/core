@@ -19,11 +19,9 @@
 #ifndef INCLUDED_SVX_SVXIDS_HRC
 #define INCLUDED_SVX_SVXIDS_HRC
 
-#include <svl/memberid.h>
 #include <svl/solar.hrc>
 #include <sfx2/sfxsids.hrc>
 #include <editeng/editids.hrc>
-#include <svx/unomid.hxx>
 #include <svl/typedwhich.hxx>
 
 class SfxInt32Item;
@@ -53,6 +51,7 @@ class SvxLineEndListItem;
 class SvxLineItem;
 class SvxBoxInfoItem;
 class SfxStringItem;
+class SvxSetItem;
 
 // member IDs
 

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_SVDOTEXT_HXX
 #define INCLUDED_SVX_SVDOTEXT_HXX
 
-#include <vcl/field.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/sdtaitm.hxx>
@@ -29,12 +28,9 @@
 #include <svx/svdtrans.hxx>
 #include <tools/datetime.hxx>
 #include <svl/style.hxx>
-#include <svx/xtextit0.hxx>
 #include <svx/svdtext.hxx>
 #include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <svx/svdpagv.hxx>
-#include <rtl/ref.hxx>
 #include <memory>
 #include <vector>
 

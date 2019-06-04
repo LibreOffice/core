@@ -29,9 +29,11 @@
 
 #include <svl/itemset.hxx>
 #include <svx/xhatch.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfltrit.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/sdprcitm.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

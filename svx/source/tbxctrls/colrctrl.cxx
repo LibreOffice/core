@@ -34,8 +34,10 @@
 
 #include <svx/svdview.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <editeng/colritem.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>

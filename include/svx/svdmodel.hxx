@@ -23,25 +23,18 @@
 #include <functional>
 #include <memory>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/outliner.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/link.hxx>
-#include <tools/weakbase.hxx>
-#include <vcl/mapmod.hxx>
+#include <tools/weakbase.h>
 #include <svl/SfxBroadcaster.hxx>
-#include <tools/datetime.hxx>
+#include <tools/fldunit.hxx>
 #include <tools/fract.hxx>
 #include <svl/hint.hxx>
-#include <o3tl/typed_flags_set.hxx>
 #include <o3tl/enumarray.hxx>
 
 #include <svl/style.hxx>
 #include <svx/xtable.hxx>
-#include <svx/pageitem.hxx>
-#include <vcl/field.hxx>
-#include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 class OutputDevice;
 #include <svx/svdtypes.hxx>

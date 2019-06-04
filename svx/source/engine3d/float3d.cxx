@@ -28,7 +28,9 @@
 #include <sfx2/viewsh.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/f3dchild.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/view3d.hxx>

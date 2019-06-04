@@ -18,6 +18,7 @@
  */
 
 #include <svx/svxids.hrc>
+#include <svx/svdpagv.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
 #include <svl/aeitem.hxx>

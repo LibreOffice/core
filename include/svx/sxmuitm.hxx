@@ -19,10 +19,10 @@
 #ifndef INCLUDED_SVX_SXMUITM_HXX
 #define INCLUDED_SVX_SXMUITM_HXX
 
-#include <vcl/field.hxx>
 #include <svx/svddef.hxx>
 #include <svl/eitem.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/fldunit.hxx>
 
 // specification of the unit if measurement. The numerical quantity value is converted in this unity.
 // (based on the facts of the MapUnit of the model). This unity is displayed if necessary.

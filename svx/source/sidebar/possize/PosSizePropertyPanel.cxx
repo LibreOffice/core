@@ -43,6 +43,7 @@
 #include <vcl/toolbox.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/intitem.hxx>
+#include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/transfrmhelper.hxx>
 

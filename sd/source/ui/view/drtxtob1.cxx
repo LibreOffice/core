@@ -47,6 +47,7 @@
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/shdditem.hxx>
+#include <svx/svdpagv.hxx>
 #include <svx/xtable.hxx>
 #include <svx/svdobj.hxx>
 #include <editeng/outlobj.hxx>
