@@ -116,6 +116,9 @@ class SwContentTree final
     bool                m_bIsKeySpace;
     tools::Rectangle           m_aOldRectangle;
 
+    // outline root mode drag & drop
+    std::vector< SvTreeListEntry* > m_aDndOutlinesSelected;
+
     /**
      * Before any data will be deleted, the last active entry has to be found.
      * After this the UserData will be deleted
