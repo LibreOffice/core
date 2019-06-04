@@ -1944,6 +1944,8 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
             // normally in the text run
             if ( !rInfos.pField )
                 CmdField_Impl( pNode, nPos, rInfos, bWriteRun );
+            else
+                m_bWritingField = true;
         }
     }
 }
