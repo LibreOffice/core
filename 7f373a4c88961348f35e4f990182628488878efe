@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_9b9c645e",
+        "filename": "chart2/source/view/axes/VCartesianAxis.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1582,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-06-04T06:09:10Z",
+      "side": 1,
+      "message": "don\u0027t limit this for the horizontal axis (see the new attachment of the bug)",
+      "range": {
+        "startLine": 1561,
+        "startChar": 4,
+        "endLine": 1582,
+        "endChar": 9
+      },
+      "revId": "7f373a4c88961348f35e4f990182628488878efe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
