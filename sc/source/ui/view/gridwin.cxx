@@ -645,6 +645,12 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
     mpAutoFilterPopup.disposeAndClear();
     mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pDoc));
+
+    // Avoid flicker when hovering over the menu items.
+    if (!IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus))
+        // If NWF renders the focus rects itself, that breaks double-buffering.
+        mpAutoFilterPopup->RequestDoubleBuffering(true);
+
     if (comphelper::LibreOfficeKit::isActive())
         mpAutoFilterPopup->SetLOKNotifier(SfxViewShell::Current());
     mpAutoFilterPopup->setOKAction(new AutoFilterAction(this, AutoFilterMode::Normal));
