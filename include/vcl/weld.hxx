@@ -129,6 +129,8 @@ public:
     virtual void set_vexpand(bool bExpand) = 0;
     virtual bool get_vexpand() const = 0;
 
+    virtual void set_secondary(bool bSecondary) = 0;
+
     virtual void set_margin_top(int nMargin) = 0;
     virtual void set_margin_bottom(int nMargin) = 0;
 
@@ -431,6 +433,18 @@ public:
     virtual void set_secondary_text(const OUString& rText) = 0;
     virtual OUString get_secondary_text() const = 0;
     virtual Container* weld_message_area() = 0;
+};
+
+class VCL_DLLPUBLIC AboutDialog : virtual public Dialog
+{
+public:
+    virtual void set_version(const OUString& rVersion) = 0;
+    virtual void set_copyright(const OUString& rCopyright) = 0;
+    virtual void set_website(const OUString& rURL) = 0;
+    virtual void set_website_label(const OUString& rLabel) = 0;
+    virtual OUString get_website_label() const = 0;
+    virtual void set_logo(VirtualDevice* pDevice) = 0;
+    virtual void set_background(VirtualDevice* pDevice) = 0;
 };
 
 struct VCL_DLLPUBLIC ComboBoxEntry
@@ -1730,6 +1744,9 @@ public:
                                                                bool bTakeOwnership = true)
         = 0;
     virtual std::unique_ptr<Dialog> weld_dialog(const OString& id, bool bTakeOwnership = true) = 0;
+    virtual std::unique_ptr<AboutDialog> weld_about_dialog(const OString& id,
+                                                           bool bTakeOwnership = true)
+        = 0;
     virtual std::unique_ptr<Window> weld_window(const OString& id, bool bTakeOwnership = true) = 0;
     virtual std::unique_ptr<Widget> weld_widget(const OString& id, bool bTakeOwnership = false) = 0;
     virtual std::unique_ptr<Container> weld_container(const OString& id,
