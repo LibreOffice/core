@@ -385,6 +385,8 @@ draw_constructor_list = [
     "com_sun_star_comp_Draw_framework_module_ModuleController_get_implementation",
 # sd/util/sdd.component
     "com_sun_star_comp_draw_FormatDetector_get_implementation",
+# sd/util/sdfilt.component
+    "css_comp_Impress_oox_PowerPointExport",
 # writerperfect/source/draw/wpftdraw.component
     "com_sun_star_comp_Draw_VisioImportFilter_get_implementation",
     ]
