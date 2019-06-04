@@ -22,6 +22,30 @@
       "revId": "2f7528a3f2d770e8f0522860110e635dd7d029cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_9e70d2de",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-04T20:44:28Z",
+      "side": 1,
+      "message": "I\u0027ll do that",
+      "parentUuid": "3fa0c359_1ea7e251",
+      "range": {
+        "startLine": 514,
+        "startChar": 16,
+        "endLine": 514,
+        "endChar": 27
+      },
+      "revId": "2f7528a3f2d770e8f0522860110e635dd7d029cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
