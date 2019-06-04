@@ -1,6 +1,6 @@
 This module provides the source code for the Scripting Framework. For
 more information on the Scripting Framework, see the project web page:
-http://framework.openoffice.org/scripting/
+https://framework.openoffice.org/scripting/
 
 Source Code Structure
 =====================
@@ -31,7 +31,7 @@ UNO dialogs from various languages
 - java/com/sun/star/script/framework/provider
 
 Implementation of an abstract base class ScriptProvider which provides
-core methods for implementing Java based LanguageScriptProvider implemetations
+core methods for implementing Java based LanguageScriptProvider implementations
 
 - java/com/sun/star/script/framework/provider/*
 
