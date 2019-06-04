@@ -1277,7 +1277,7 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
     SwTwips nShrink = 0;
 
     //Optimization: There is no paste needed for the new Follow and the
-    //optimized insert can be used (big amounts of rows luckily only occurs in
+    //optimized insert can be used (large numbers of rows luckily only occur in
     //such situations).
     if ( bNewFollow )
     {
@@ -2029,7 +2029,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         }
 
         //We need to know the height of the first row, because the master needs
-        //to be activated if it shrinks and then absorb the row if necessary.
+        //to be invalidated if it shrinks and then absorb the row if possible.
         long n1StLineHeight = 0;
         if ( IsFollow() )
         {
@@ -2197,7 +2197,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                             SwFrame* pRow = GetFollow()->GetFirstNonHeadlineRow();
 
                             if ( !pRow || !pRow->GetNext() )
-                                //The follow becomes empty and invalid for this reason.
+                                // The follow became empty and hence useless
                                 Join();
 
                             continue;
@@ -2207,7 +2207,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         // row in the follow table to the master table.
                         SwRowFrame *pRow = GetFollow()->GetFirstNonHeadlineRow();
 
-                        //The follow becomes empty and invalid for this reason.
+                        // The follow became empty and hence useless
                         if ( !pRow )
                         {
                             Join();
@@ -2230,7 +2230,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
                             if ( !pNextRow )
                             {
-                                //The follow becomes empty and invalid for this reason.
+                                // The follow became empty and hence useless
                                 Join();
                             }
                             else
@@ -2239,7 +2239,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                                 pRowToMove->Paste( this );
                             }
 
-                            //Displace the footnotes!
+                            // Move the footnotes!
                             if ( bMoveFootnotes )
                                 if ( static_cast<SwLayoutFrame*>(pRowToMove)->MoveLowerFootnotes( nullptr, pOldBoss, FindFootnoteBossFrame( true ), true ) )
                                     GetUpper()->Calc(pRenderContext);
@@ -2323,10 +2323,10 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             continue;
         }
 
-        //I don't fit in the higher-ranked element anymore, therefore it's the
-        //right moment to do some preferably constructive changes.
+        // I don't fit in the upper Frame anymore, therefore it's the
+        // right moment to do some preferably constructive changes.
 
-        //If I'm NOT allowed to leave the parent Frame, I've got a problem.
+        // If I'm NOT allowed to leave the upper Frame, I've got a problem.
         // Following Arthur Dent, we do the only thing that you can do with
         // an unsolvable problem: We ignore it with all our power.
         if ( !bMoveable )
@@ -2627,7 +2627,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         aNotify.SetLowersComplete( false );
         if ( IsFollow() )
         {
-            //To avoid oscillations now invalid master should drop behind.
+            // To avoid oscillations, master should not remain invalid
             SwTabFrame *pTab = FindMaster();
             if ( pTab->GetUpper() )
                 pTab->GetUpper()->Calc(pRenderContext);
@@ -2646,8 +2646,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
         if ( bMovedBwd && GetUpper() )
         {
-            //During floating back the upper was animated to do a full repaint,
-            //we can now skip this after the whole back and forth floating.
+            //During flowing back the upper was animated to do a full repaint,
+            //we can now skip this after the whole flowing back and forth.
             GetUpper()->ResetCompletePaint();
         }
 
@@ -2844,15 +2844,15 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
     }
 
     //VarSize is always the height.
-    //For the upper/lower border the same rules apply as for cntfrms (see
+    //For the upper/lower margins the same rules apply as for ContentFrames (see
     //MakePrtArea() of those).
 
     SwTwips nUpper = CalcUpperSpace( pAttrs );
 
-    //We want to dodge the border. Two possibilities:
-    //1. There are borders with SurroundNone, dodge them completely
-    //2. There are borders which only float on the right or the left side and
-    //   are right or left aligned, those set the minimum for the borders.
+    // We want to dodge the flys. Two possibilities:
+    // 1. There are flys with SurroundNone, dodge them completely
+    // 2. There are flys which only wrap on the right or the left side and
+    //    those are right or left aligned, those set the minimum for the margins
     long nTmpRight = -1000000,
          nLeftOffset  = 0;
     if( CalcFlyOffsets( nUpper, nLeftOffset, nTmpRight ) )
@@ -2871,13 +2871,13 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
     {
         setFramePrintAreaValid(true);
 
-        //The width of the PrtArea is given by the FrameFormat, the borders have to
-        //be set accordingly.
-        //Minimum borders are determined depending on margins and shadows.
-        //The borders are adjusted so that the PrtArea is aligned into the Frame
-        //according to the adjustment.
-        //If the adjustment is 0, the borders are set according to the border
-        //attributes.
+        // The width of the PrintArea is given by the FrameFormat, the margins
+        // have to be set accordingly.
+        // Minimum margins are determined depending on borders and shadows.
+        // The margins are set so that the PrintArea is aligned into the
+        // Frame according to the adjustment.
+        // If the adjustment is 0, the margins are set according to the border
+        // attributes.
 
         const SwTwips nOldHeight = aRectFnSet.GetHeight(getFramePrintArea());
         const SwTwips nMax = aRectFnSet.GetWidth(getFrameArea());
@@ -2886,9 +2886,9 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         const SwTwips nLeftLine  = pAttrs->CalcLeftLine();
         const SwTwips nRightLine = pAttrs->CalcRightLine();
 
-        //The width possibly is a percentage value. If the table is inside
-        //something else, the value applies to the surrounding. If it's the body
-        //the value applies to the screen width in the BrowseView.
+        // The width possibly is a percentage value. If the table is inside
+        // something else, the value refers to the environment. If it's in the
+        // body then in in the BrowseView the value refers to the screen width.
         const SwFormatFrameSize &rSz = GetFormat()->GetFrameSize();
         // OD 14.03.2003 #i9040# - adjust variable name.
         const SwTwips nWishedTableWidth = CalcRel( rSz );
@@ -2988,7 +2988,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                 break;
             case text::HoriOrientation::NONE:
                 {
-                    //The border are defined by the border attribute.
+                    // The margins are defined by the LRSpace attribute.
                     nLeftSpacing = pAttrs->CalcLeft( this );
                     if( nLeftOffset )
                     {
@@ -3056,7 +3056,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
              GetUpper()->IsPageBodyFrame() &&  // only PageBodyFrames and not ColBodyFrames
              pSh->VisArea().Width() )
         {
-            //Don't overlap the edge of the visible area.
+            //Don't go beyond the edge of the visible area.
             //The page width can be bigger because objects with
             //"over-size" are possible (RootFrame::ImplCalcBrowseWidth())
             long nWidth = pSh->GetBrowseWidth();
@@ -3077,7 +3077,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
     {
         setFrameAreaSizeValid(true);
 
-        //The size is defined by the content plus the borders.
+        // The size is defined by the content plus the margins.
         SwTwips nRemaining = 0, nDiff;
         SwFrame *pFrame = m_pLower;
         while ( pFrame )
@@ -3085,7 +3085,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
             nRemaining += aRectFnSet.GetHeight(pFrame->getFrameArea());
             pFrame = pFrame->GetNext();
         }
-        //And now add the borders
+        // And now add the margins
         nRemaining += nUpper + nLower;
 
         nDiff = aRectFnSet.GetHeight(getFrameArea()) - nRemaining;
@@ -3343,8 +3343,8 @@ bool SwTabFrame::GetInfo( SfxPoolItem &rHint ) const
         {
             if ( pPage == rInfo.GetOrigPage() && !GetPrev() )
             {
-                //Here it should be (can temporary be different, should we be
-                //                    concerned about this?)
+                // Should be the one (can temporarily be different, should we be
+                //                    concerned about this possibility?)
                 rInfo.SetInfo( pPage, this );
                 return false;
             }
@@ -3381,7 +3381,7 @@ SwContentFrame *SwTabFrame::FindLastContent()
         if ( pRet == pOld )
         {
             // Check all other columns if there is a column based section with
-            // an empty last column at the end of the last line - this is done
+            // an empty last column at the end of the last cell - this is done
             // by SwSectionFrame::FindLastContent
             if( pRet->IsColBodyFrame() )
             {
@@ -3434,18 +3434,18 @@ bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool &rReformat
     rReformat = false;
     if ( SwFlowFrame::IsMoveBwdJump() || !IsPrevObjMove() )
     {
-        //Floating back Frame's is quite time consuming unfortunately.
-        //Most often the location where the Frame wants to float to has the same
+        //Flowing back Frames is quite time consuming unfortunately.
+        //Most often the location where the Frame wants to flow to has the same
         //FixSize as the Frame itself. In such a situation it's easy to check if
         //the Frame will find enough space for its VarSize, if this is not the
         //case, the relocation can be skipped.
         //Checking if the Frame will find enough space is done by the Frame itself,
         //this also takes the possibility of splitting the Frame into account.
         //If the FixSize is different or Flys are involved  (at the old or the
-        //new position) the whole checks don't make sense at all, the Frame then
+        //new position) the checks are pointless, the Frame then
         //needs to be relocated tentatively (if a bit of space is available).
 
-        //The FixSize of the surrounding which contain tables is always the
+        //The FixSize of the environments which contain tables is always the
         //width.
 
         SwPageFrame *pOldPage = FindPageFrame(),
@@ -3541,8 +3541,8 @@ void SwTabFrame::Cut()
     SwFrame *pFrame = GetNext();
     if( pFrame )
     {
-        //The old follower eventually calculated a margin to the predecessor
-        //which is obsolete now as it became the first one
+        // Possibly the old follow calculated a spacing to the predecessor
+        // which is obsolete now when it becomes the first frame
         pFrame->InvalidatePrt_();
         pFrame->InvalidatePos_();
         if ( pFrame->IsContentFrame() )
@@ -3569,7 +3569,7 @@ void SwTabFrame::Cut()
                 pFrame->InvalidatePage( pPage );
         }
         //If I am (was) the only FlowFrame in my own upper, it has to do
-        //the retouch. Moreover it has to do the retouch.
+        //the retouch. Moreover a new empty page might be created.
         else
         {   SwRootFrame *pRoot = static_cast<SwRootFrame*>(pPage->GetUpper());
             pRoot->SetSuperfluous();
@@ -3675,10 +3675,10 @@ void SwTabFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
         }
     }
     else if ( GetNext() )
-        //Take the margin into account when dealing with ContentFrame's. There are
-        //two situations (both always happen at once):
-        //a) The Content becomes the first in a chain
-        //b) The new follower was the first in a chain before
+        // Take the spacing into account when dealing with ContentFrames.
+        // There are two situations (both always happen at the same time):
+        // a) The Content becomes the first in a chain
+        // b) The new follower was previously the first in a chain
         GetNext()->InvalidatePrt_();
 
     if ( pPage && !IsFollow() )
@@ -3736,9 +3736,9 @@ void SwRowFrame::DestroyImpl()
     SwModify* pMod = GetFormat();
     if( pMod )
     {
-        pMod->Remove( this );           // remove,
+        pMod->Remove( this );
         if( !pMod->HasWriterListeners() )
-            delete pMod;                // and delete
+            delete pMod;
     }
 
     SwLayoutFrame::DestroyImpl();
@@ -3969,9 +3969,9 @@ static SwTwips lcl_CalcMinCellHeight( const SwLayoutFrame *_pCell,
         if ( nFlyAdd )
             nHeight += nFlyAdd;
     }
-    //The border needs to be considered too, unfortunately it can't be
-    //calculated using PrtArea and Frame because those can be invalid in arbitrary
-    //combinations.
+    // The border/margin needs to be considered too, unfortunately it can't be
+    // calculated using PrintArea and FrameArea because any or all of those
+    // may be invalid.
     if ( _pCell->Lower() )
     {
         if ( pAttrs )
@@ -4197,8 +4197,8 @@ void SwRowFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
 
     if ( !isFramePrintAreaValid() )
     {
-        //RowFrames don't have borders and so on therefore the PrtArea always
-        //matches the Frame.
+        // RowFrames don't have borders/margins therefore the PrintArea always
+        // matches the FrameArea.
         setFramePrintAreaValid(true);
 
         {
@@ -4614,7 +4614,7 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         }
     }
 
-    //Invalidate if possible and update the height to the newest value.
+    // Invalidate appropriately and update the height to the newest value.
     if ( !bTst )
     {
         if ( nReal )
@@ -4715,9 +4715,9 @@ void SwCellFrame::DestroyImpl()
             pRootFrame->GetCurrShell()->Imp()->DisposeAccessibleFrame( this, true );
         }
 
-        pMod->Remove( this );           // remove,
+        pMod->Remove( this );
         if( !pMod->HasWriterListeners() )
-            delete pMod;                // and delete
+            delete pMod;
     }
 
     SwLayoutFrame::DestroyImpl();
@@ -5098,7 +5098,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             aRectFnSet.AddRight( aPrt, nDiff );
         }
 
-        //Adjust the height, it's defined through the content and the border.
+        //Adjust the height, it's defined through the content and the margins.
         const long nDiffHeight = nRemaining - aRectFnSet.GetHeight(getFrameArea());
         if ( nDiffHeight )
         {
@@ -5114,8 +5114,9 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             }
             else
             {
-                //Only keep invalidated if shrinking was done; this can be
-                //dismissed because all adjoined cells have to be the same size.
+                // Only keep invalidated if shrinking was actually done; the
+                // attempt can be ignored because all horizontally adjoined
+                // cells have to be the same height.
                 if ( !Shrink( -nDiffHeight ) )
                 {
                     setFrameAreaSizeValid(true);
@@ -5149,7 +5150,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
         // style influence is considered on object positioning and
         // an object is anchored inside the cell.
         const bool bConsiderWrapOnObjPos( GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) );
-        //No alignment if border with flow overlaps the cell.
+        // No alignment if fly with wrap overlaps the cell.
         if ( pPg->GetSortedObjs() )
         {
             SwRect aRect( getFramePrintArea() ); aRect += getFrameArea().Pos();
