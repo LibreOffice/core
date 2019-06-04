@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_3b951041",
+        "filename": "vcl/source/gdi/CommonSalLayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2019-06-04T04:44:13Z",
+      "side": 1,
+      "message": "This line also needs update.",
+      "range": {
+        "startLine": 150,
+        "startChar": 19,
+        "endLine": 150,
+        "endChar": 58
+      },
+      "revId": "bcc3633aa1d4310f41c3da7f08656b326a28a846",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
