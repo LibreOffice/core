@@ -10,6 +10,7 @@
 $(eval $(call gb_UIConfig_UIConfig,vcl))
 
 $(eval $(call gb_UIConfig_add_uifiles,vcl,\
+	vcl/uiconfig/ui/aboutbox \
 	vcl/uiconfig/ui/cupspassworddialog \
 	vcl/uiconfig/ui/editmenu \
 	vcl/uiconfig/ui/errornocontentdialog \

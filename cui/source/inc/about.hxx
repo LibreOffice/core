@@ -19,67 +19,44 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_ABOUT_HXX
 #define INCLUDED_CUI_SOURCE_INC_ABOUT_HXX
 
-#include <vcl/accel.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/fixedhyper.hxx>
-#include <vcl/vclmedit.hxx>
-#include <sfx2/basedlgs.hxx>
-#include <vector>
+#include <vcl/weld.hxx>
 
-// class AboutDialog -----------------------------------------------------
-
-class AboutDialog : public SfxModalDialog
+class AboutDialog : public weld::DialogController
 {
 private:
-    BitmapEx           aBackgroundBitmap;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::shared_ptr<weld::AboutDialog> m_xDialog;
+    std::shared_ptr<weld::Container> m_xContentArea;
+
     BitmapEx           aLogoBitmap;
+    BitmapEx           aBackgroundBitmap;
 
-    VclPtr<VclMultiLineEdit>    m_pVersion;
-    VclPtr<FixedHyperlink>      m_pBuildIdLink;
-    VclPtr<FixedText>           m_pDescriptionText;
-    VclPtr<FixedText>           m_pCopyrightText;
-    VclPtr<FixedImage>          m_pLogoImage;
-    VclPtr<FixedText>           m_pLogoReplacement;
-    VclPtr<PushButton>          m_pCreditsButton;
-    VclPtr<PushButton>          m_pWebsiteButton;
-    VclPtr<PushButton>          m_pReleaseNotesButton;
-
-    OUString m_aVersionTextStr;
-    OUString m_aVendorTextStr;
-    OUString m_aCopyrightTextStr;
-    OUString m_aBasedTextStr;
-    OUString m_aBasedDerivedTextStr;
-    OUString m_aCreditsLinkStr;
-    OUString m_sBuildStr;
-    OUString m_aLocaleStr;
-    OUString m_aUILocaleStr;
     OUString m_buildIdLinkString;
+
+    weld::Button* m_pCreditsButton;
+    weld::Button* m_pWebsiteButton;
+    weld::Button* m_pReleaseNotesButton;
+    weld::Button* m_pCloseButton;
 
     void SetBuildIdLink();
     void StyleControls();
     void SetLogo();
 
     static OUString GetBuildId();
-    OUString GetVersionString();
-    OUString GetCopyrightString();
+    static OUString GetVersionString();
+    static OUString GetCopyrightString();
     static OUString GetLocaleString();
     static bool IsStringValidGitHash(const OUString& hash);
 
-protected:
-    virtual bool Close() override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
-    virtual void Resize() override;
-
 public:
-    AboutDialog(vcl::Window* pParent);
+    AboutDialog(weld::Window* pParent);
+    virtual weld::Dialog* getDialog() override { return m_xDialog.get(); }
     virtual ~AboutDialog() override;
-    virtual void dispose() override;
 
-    DECL_LINK( HandleClick, Button*, void );
+    DECL_LINK(HandleClick, weld::Button&, void);
+    DECL_LINK(SizeAllocHdl, const Size&, void);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_ABOUT_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
