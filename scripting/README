@@ -1,7 +1,7 @@
 This module provides the source code for the Scripting Framework.
 
 For more information on the Scripting Framework, see the project web page:
-[http://framework.openoffice.org/scripting/]
+[https://framework.openoffice.org/scripting/]
 
 This module uses astyle to keep consistent java coding style. Please run
 
