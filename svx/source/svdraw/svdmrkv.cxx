@@ -33,7 +33,9 @@
 #include <osl/thread.h>
 #include <svx/svdoole2.hxx>
 #include <svx/xgrad.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
+#include <svx/xlineit0.hxx>
 #include "gradtrns.hxx"
 #include <svx/xflftrit.hxx>
 #include <svx/dialmgr.hxx>

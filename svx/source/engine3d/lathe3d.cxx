@@ -30,6 +30,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svx3ditems.hxx>
+#include <svx/xlineit0.hxx>
 #include <sdr/properties/e3dlatheproperties.hxx>
 #include <sdr/contact/viewcontactofe3dlathe.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>

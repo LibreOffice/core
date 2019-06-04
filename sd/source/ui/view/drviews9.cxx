@@ -24,6 +24,8 @@
 #include <vcl/wrkwin.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xflhtit.hxx>

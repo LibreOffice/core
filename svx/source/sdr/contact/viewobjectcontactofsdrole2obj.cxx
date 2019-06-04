@@ -22,6 +22,7 @@
 #include <sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
+#include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

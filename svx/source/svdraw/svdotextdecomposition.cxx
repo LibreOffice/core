@@ -29,6 +29,7 @@
 #include <svx/sdtayitm.hxx>
 #include <svx/sdtaiitm.hxx>
 #include <svx/sdtaaitm.hxx>
+#include <svx/xfillit0.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>

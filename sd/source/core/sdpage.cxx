@@ -48,6 +48,7 @@
 #include <svx/sdtmfitm.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svx/sdtcfitm.hxx>
+#include <svx/xfillit0.hxx>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>

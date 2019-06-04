@@ -20,9 +20,6 @@
 #ifndef INCLUDED_SVX_SVXSHAPETYPES_HXX
 #define INCLUDED_SVX_SVXSHAPETYPES_HXX
 
-#include <svx/ShapeTypeHandler.hxx>
-#include <com/sun/star/accessibility/XAccessible.hpp>
-
 namespace accessibility {
 
 /** Register the SVX draw shape types with the ShapeTypeHandler singleton.

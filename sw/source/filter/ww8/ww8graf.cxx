@@ -26,6 +26,8 @@
 #include <svx/sdtaitm.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/udlnitem.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlndsit.hxx>

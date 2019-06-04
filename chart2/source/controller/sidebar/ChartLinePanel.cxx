@@ -12,6 +12,7 @@
 #include <PropertyHelper.hxx>
 #include <ChartController.hxx>
 
+#include <svx/xlineit0.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlinjoit.hxx>
 #include <svx/xlndsit.hxx>

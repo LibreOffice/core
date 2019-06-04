@@ -66,6 +66,7 @@
 #include <svx/svdouno.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <sfx2/sfxbasemodel.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
 #include <docufld.hxx>
 #include <fmtclds.hxx>

@@ -21,9 +21,7 @@
 #define INCLUDED_SVX_SVDOPATH_HXX
 
 #include <svx/svdotext.hxx>
-#include <svx/xpoly.hxx>
 #include <svx/svxdllapi.h>
-#include <basegfx/vector/b2enums.hxx>
 #include <memory>
 
 class ImpPathForDragAndCreate;

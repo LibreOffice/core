@@ -44,6 +44,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/functional.hxx>
+#include <svx/svdpagv.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>

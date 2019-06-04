@@ -20,6 +20,7 @@
 #include <editeng/editids.hrc>
 #include <editeng/memberids.h>
 #include <svx/svxids.hrc>
+#include <svx/unomid.hxx>
 #include <app.hrc>
 #include <sdattr.hrc>
 
