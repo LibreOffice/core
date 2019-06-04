@@ -862,7 +862,7 @@ void SfxTabDialogController::SavePosAndId()
 }
 
 /*
-    Adds a page to the dialog. The Name must correspond to a entry in the
+    Adds a page to the dialog. The Name must correspond to an entry in the
     TabControl in the dialog .ui
 */
 void SfxTabDialogController::AddTabPage(const OString &rName /* Page ID */,
