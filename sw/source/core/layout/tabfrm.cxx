@@ -47,6 +47,7 @@
 #include <cellfrm.hxx>
 #include <flyfrms.hxx>
 #include <txtfrm.hxx>
+#include <ftnfrm.hxx>
 #include <notxtfrm.hxx>
 #include <htmltbl.hxx>
 #include <sectfrm.hxx>
@@ -715,7 +716,39 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
     // #i26945# - include check, if objects fit
     const SwTwips nDistanceToUpperPrtBottom =
         aRectFnSet.BottomDist(rTab.getFrameArea(), aRectFnSet.GetPrtBottom(*rTab.GetUpper()));
-    if ( nDistanceToUpperPrtBottom < 0 || !rTab.DoesObjsFit() )
+    // tdf#125685 ignore footnotes that are anchored in follow-table of this
+    // table - if split is successful they move to the next page/column anyway
+    assert(rTab.GetFollow() == rFollowLine.GetUpper());
+    SwTwips nFollowFootnotes(0);
+    // actually there should always be a boss frame, except if "this" isn't
+    // connected to a page yet; not sure if that can happen
+    if (SwFootnoteBossFrame const*const pBoss = rTab.FindFootnoteBossFrame())
+    {
+        if (SwFootnoteContFrame const*const pCont = pBoss->FindFootnoteCont())
+        {
+            for (SwFootnoteFrame const* pFootnote = static_cast<SwFootnoteFrame const*>(pCont->Lower());
+                 pFootnote != nullptr;
+                 pFootnote = static_cast<SwFootnoteFrame const*>(pFootnote->GetNext()))
+            {
+                SwContentFrame const*const pAnchor = pFootnote->GetRef();
+                SwTabFrame const* pTab = pAnchor->FindTabFrame();
+                if (pTab)
+                {
+                    while (pTab->GetUpper()->IsInTab())
+                    {
+                        pTab = pTab->GetUpper()->FindTabFrame();
+                    }
+                    // TODO currently do this only for top-level tables?
+                    // otherwise would need to check rTab's follow and any upper table's follow?
+                    if (pTab == rTab.GetFollow())
+                    {
+                        nFollowFootnotes += aRectFnSet.GetHeight(pFootnote->getFrameArea());
+                    }
+                }
+            }
+        }
+    }
+    if (nDistanceToUpperPrtBottom + nFollowFootnotes < 0 || !rTab.DoesObjsFit())
         bRet = false;
 
     // 2. Check if each cell in the last line has at least one content frame.
