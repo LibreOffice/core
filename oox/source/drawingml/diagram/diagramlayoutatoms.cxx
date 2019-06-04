@@ -1196,27 +1196,30 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     nBaseLevel = aParagraph->getProperties().getLevel();
             }
 
+            // Start bullets at:
+            // 1 - top level
+            // 2 - with children (default)
+            int nStartBulletsAtLevel = 2;
             ParamMap::const_iterator aBulletLvl = maMap.find(XML_stBulletLvl);
-            int nStartBulletsAtLevel = 0;
             if (aBulletLvl != maMap.end())
-            {
-                nBaseLevel -= aBulletLvl->second;
                 nStartBulletsAtLevel = aBulletLvl->second;
-            }
+            nStartBulletsAtLevel--;
 
+            bool isBulletList = false;
             for (auto & aParagraph : pTextBody->getParagraphs())
             {
-                sal_Int32 nLevel = aParagraph->getProperties().getLevel();
-                aParagraph->getProperties().setLevel(nLevel - nBaseLevel);
-                if (nStartBulletsAtLevel > 0 && nLevel >= nStartBulletsAtLevel)
+                sal_Int32 nLevel = aParagraph->getProperties().getLevel() - nBaseLevel;
+                aParagraph->getProperties().setLevel(nLevel);
+                if (nLevel >= nStartBulletsAtLevel)
                 {
                     // It is not possible to change the bullet style for text.
-                    sal_Int32 nLeftMargin = 285750 * (nLevel - nStartBulletsAtLevel) / EMU_PER_HMM;
+                    sal_Int32 nLeftMargin = 285750 * (nLevel - nStartBulletsAtLevel + 1) / EMU_PER_HMM;
                     aParagraph->getProperties().getParaLeftMargin() = nLeftMargin;
                     aParagraph->getProperties().getFirstLineIndentation() = -285750 / EMU_PER_HMM;
                     OUString aBulletChar = OUString::fromUtf8(u8"•");
                     aParagraph->getProperties().getBulletList().setBulletChar(aBulletChar);
                     aParagraph->getProperties().getBulletList().setSuffixNone();
+                    isBulletList = true;
                 }
             }
 
@@ -1229,8 +1232,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 for (auto & aParagraph : pTextBody->getParagraphs())
                     aParagraph->getProperties().setParaAdjust(aAlignment);
             }
-            else if (std::all_of(pTextBody->getParagraphs().begin(), pTextBody->getParagraphs().end(),
-                [](const std::shared_ptr<TextParagraph>& aParagraph) { return aParagraph->getProperties().getLevel() == 0; }))
+            else if (!isBulletList)
             {
                 // if not list use default alignment - centered
                 for (auto & aParagraph : pTextBody->getParagraphs())
