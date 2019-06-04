@@ -78,6 +78,7 @@ public:
     void testCenterCycle();
     void testFontSize();
     void testVerticalBlockList();
+    void testBulletList();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -117,6 +118,7 @@ public:
     CPPUNIT_TEST(testCenterCycle);
     CPPUNIT_TEST(testFontSize);
     CPPUNIT_TEST(testVerticalBlockList);
+    CPPUNIT_TEST(testBulletList);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -674,7 +676,7 @@ void SdImportTestSmartArt::testAccentProcess()
 
         uno::Reference<container::XIndexAccess> xRules(xPara->getPropertyValue("NumberingRules"),
                                                        uno::UNO_QUERY);
-        comphelper::SequenceAsHashMap aRule(xRules->getByIndex(1));
+        comphelper::SequenceAsHashMap aRule(xRules->getByIndex(0));
         CPPUNIT_ASSERT_EQUAL(OUString::fromUtf8(u8"•"), aRule["BulletChar"].get<OUString>());
     }
 
@@ -1243,6 +1245,34 @@ void SdImportTestSmartArt::testVerticalBlockList()
 
     xDocShRef->DoClose();
 }
+
+void SdImportTestSmartArt::testBulletList()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-bullet-list.pptx"),
+        PPTX);
+    uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+
+    uno::Reference<text::XText> xText(xGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParasAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParas = xParasAccess->createEnumeration();
+    xParas->nextElement(); // skip parent
+
+    // child levels should have bullets
+    uno::Reference<beans::XPropertySet> xPara1(xParas->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xRules1(xPara1->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aRule1(xRules1->getByIndex(1));
+    CPPUNIT_ASSERT_EQUAL(OUString::fromUtf8(u8"•"), aRule1["BulletChar"].get<OUString>());
+
+    uno::Reference<beans::XPropertySet> xPara2(xParas->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xRules2(xPara2->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aRule2(xRules2->getByIndex(2));
+    CPPUNIT_ASSERT_EQUAL(OUString::fromUtf8(u8"•"), aRule2["BulletChar"].get<OUString>());
+
+    xDocShRef->DoClose();
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTestSmartArt);
 
