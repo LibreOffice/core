@@ -22,6 +22,7 @@
 // arrange Tab-Page
 
 #include <sfx2/sfxdlg.hxx>
+#include <svx/pageitem.hxx>
 #include <svx/svxids.hrc>
 #include <svl/itempool.hxx>
 #include <sfx2/request.hxx>
@@ -31,6 +32,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/graphichelper.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xflbmtit.hxx>

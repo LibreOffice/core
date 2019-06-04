@@ -72,8 +72,10 @@
 #include <svx/xflftrit.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xbtmpit.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/unomaster.hxx>
 #include <editeng/outlobj.hxx>

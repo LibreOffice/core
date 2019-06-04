@@ -20,12 +20,10 @@
 #ifndef INCLUDED_SVX_SVDETC_HXX
 #define INCLUDED_SVX_SVDETC_HXX
 
-#include <rtl/ustring.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/link.hxx>
 #include <tools/fract.hxx>
-#include <vcl/outdev.hxx>
 #include <svx/svdobj.hxx>
 #include <memory>
 

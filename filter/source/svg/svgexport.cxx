@@ -40,6 +40,7 @@
 #include <svx/unoshape.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/xfillit0.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/numitem.hxx>

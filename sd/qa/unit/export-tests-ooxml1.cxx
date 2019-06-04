@@ -35,7 +35,9 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/sdmetitm.hxx>
 #include <animations/animationnodehelper.hxx>
@@ -55,6 +57,7 @@
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
+#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>

@@ -43,6 +43,7 @@
 #include <svx/colorbox.hxx>
 #include <svx/gallery.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/pageitem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/sidebar/Theme.hxx>
@@ -51,6 +52,7 @@
 #include <svx/xflgrit.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/svxids.hrc>
+#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xbitmap.hxx>

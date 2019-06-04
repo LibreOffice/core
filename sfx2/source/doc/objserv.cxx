@@ -123,6 +123,7 @@
 #include <unotools/streamwrap.hxx>
 
 #include <svx/unoshape.hxx>
+#include <svx/xlineit0.hxx>
 #include <com/sun/star/util/Color.hpp>
 
 #include <autoredactdialog.hxx>

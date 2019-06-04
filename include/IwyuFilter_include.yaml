@@ -980,3 +980,12 @@ blacklist:
     include/svx/measctrl.hxx:
     # Needed for template class
     - svx/svdobj.hxx
+    include/svx/svddef.hxx:
+    # Used in macro definition
+    - svl/typedwhich.hxx
+    include/svx/svxerr.hxx:
+    # Used in macro definition
+    - vcl/errcode.hxx
+    include/svx/svxids.hrc:
+    # Used in macro definition
+    - svl/typedwhich.hxx

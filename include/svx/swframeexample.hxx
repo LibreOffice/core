@@ -24,7 +24,6 @@
 #include <svx/svxdllapi.h>
 #include <svx/swframetypes.hxx>
 #include <vcl/customweld.hxx>
-#include <vcl/window.hxx>
 #include <com/sun/star/text/WrapTextMode.hpp>
 
 class SVX_DLLPUBLIC SwFrameExample : public weld::CustomWidgetController

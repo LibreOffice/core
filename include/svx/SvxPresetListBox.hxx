@@ -20,9 +20,6 @@
 #ifndef INCLUDED_SVX_SVXPRESETLISTBOX_HXX
 #define INCLUDED_SVX_SVXPRESETLISTBOX_HXX
 
-#include <svtools/svtdllapi.h>
-#include <svx/XPropertyTable.hxx>
-#include <vcl/ctrl.hxx>
 #include <svtools/valueset.hxx>
 #include <svx/xtable.hxx>
 #include <tools/gen.hxx>

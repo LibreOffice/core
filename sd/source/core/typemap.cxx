@@ -55,6 +55,7 @@
 #include <editeng/lineitem.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <editeng/memberids.h>
+#include <svx/unomid.hxx>
 #include <svx/xftstit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlineit0.hxx>

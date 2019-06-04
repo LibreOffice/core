@@ -45,6 +45,8 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/window.hxx>
 #include <vcl/wmf.hxx>
 #include <comphelper/classids.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -86,6 +88,8 @@
 #include <svx/xflclit.hxx>
 #include <sal/macros.h>
 #include <editeng/adjustitem.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlinjoit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xbtmpit.hxx>

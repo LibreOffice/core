@@ -32,7 +32,9 @@
 #include <svx/helperhittest3d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/polygn3d.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <helpids.h>

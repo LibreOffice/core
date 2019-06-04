@@ -111,12 +111,14 @@
 #include <svx/unoshape.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xenum.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xhatch.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnedcit.hxx>

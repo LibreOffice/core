@@ -23,7 +23,6 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
-#include <svl/lstner.hxx>
 #include <svx/svdhlpln.hxx>
 #include <svx/svdsob.hxx>
 #include <svx/svdtypes.hxx>
@@ -31,7 +30,6 @@
 
 #include <memory>
 #include <vector>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 
 
