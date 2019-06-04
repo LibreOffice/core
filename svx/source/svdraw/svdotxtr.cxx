@@ -34,7 +34,9 @@
 #include <svx/svditer.hxx>
 #include <drawinglayer/processor2d/textaspolygonextractor2d.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/sdshitm.hxx>

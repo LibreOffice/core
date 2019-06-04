@@ -84,7 +84,9 @@
 #include <editeng/memberids.h>
 #include <svx/svxids.hrc>
 #include <svx/svdobj.hxx>
+#include <svx/unomid.hxx>
 #include <svx/dataaccessdescriptor.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>

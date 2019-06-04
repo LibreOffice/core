@@ -27,6 +27,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdocapt.hxx>
 #include <editeng/outlobj.hxx>
@@ -35,6 +36,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/sdrundomanager.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xbtmpit.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>

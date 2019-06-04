@@ -31,6 +31,8 @@
 #include <svx/dialmgr.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/sdshitm.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xlineit0.hxx>
 #include "svdfmtf.hxx"
 #include "svdpdf.hxx"
 #include <svx/svdetc.hxx>

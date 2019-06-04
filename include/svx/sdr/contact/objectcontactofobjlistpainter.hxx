@@ -23,6 +23,7 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/svdpage.hxx>
+#include <tools/weakbase.hxx>
 
 class SdrPage;
 class SdrObject;

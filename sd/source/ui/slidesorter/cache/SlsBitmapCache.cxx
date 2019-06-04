@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <unordered_map>
 #include "SlsBitmapCache.hxx"
 #include "SlsCacheCompactor.hxx"
 #include "SlsBitmapCompressor.hxx"

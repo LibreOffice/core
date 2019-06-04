@@ -54,6 +54,7 @@
 #include <svx/svdocirc.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdotable.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflclit.hxx>
@@ -66,6 +67,7 @@
 #include <svx/sdtditm.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <svx/sdtmfitm.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/svdetc.hxx>
@@ -95,6 +97,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/numitem.hxx>
+#include <vcl/gdimtf.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <svx/svditer.hxx>

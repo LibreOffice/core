@@ -19,6 +19,7 @@
 #include <editeng/memberids.h>
 #include <editeng/editids.hrc>
 #include <svx/svxids.hrc>
+#include <svx/unomid.hxx>
 #include "globals.hrc"
 #include "cmdid.h"
 #include "unomid.h"

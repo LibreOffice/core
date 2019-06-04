@@ -43,6 +43,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <svx/svdoashp.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xtable.hxx>
 #include <vcl/EnumContext.hxx>
 #include <svx/svdoole2.hxx>
