@@ -27,63 +27,39 @@
 
 String RID_SVXSTR_FRAMEDIR_LTR
 {
-    Text [ en-US ] = "Left-to-right";
+    Text [ en-US ] = "Left-to-right" ;
 };
 
 String RID_SVXSTR_FRAMEDIR_RTL
 {
-    Text [ en-US ] = "Right-to-left";
+    Text [ en-US ] = "Right-to-left" ;
 };
 
 String RID_SVXSTR_FRAMEDIR_SUPER
 {
-    Text [ en-US ] = "Use superordinate object settings";
+    Text [ en-US ] = "Use superordinate object settings" ;
 };
 
 // page direction -------------------------------------------------------------
 
 String RID_SVXSTR_PAGEDIR_LTR_HORI
 {
-    Text [ en-US ] = "Left-to-right (horizontal)";
+    Text [ en-US ] = "Left-to-right (horizontal)" ;
 };
 
 String RID_SVXSTR_PAGEDIR_RTL_HORI
 {
-    Text [ en-US ] = "Right-to-left (horizontal)";
+    Text [ en-US ] = "Right-to-left (horizontal)" ;
 };
 
 String RID_SVXSTR_PAGEDIR_RTL_VERT
 {
-    Text [ en-US ] = "Right-to-left (vertical)";
+    Text [ en-US ] = "Right-to-left (vertical)" ;
 };
 
 String RID_SVXSTR_PAGEDIR_LTR_VERT
 {
-    Text [ en-US ] = "Left-to-right (vertical)";
+    Text [ en-US ] = "Left-to-right (vertical)" ;
 };
 
 // ----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
