@@ -52,7 +52,7 @@
     // So instead of this:
     // [parser setDelegate:self];
     // do this:
-    objc_msgSend(parser, @selector(setDelegate:), self);
+    ((id (*)(id, SEL, ...))objc_msgSend)(parser, @selector(setDelegate:), self);
 
     [parser setShouldResolveExternalEntities:NO];
     [parser parse];

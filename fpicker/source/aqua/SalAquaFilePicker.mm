@@ -162,7 +162,7 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute()
     // So instead of:
     // [m_pDialog setDelegate:m_pDelegate];
     // do:
-    objc_msgSend(m_pDialog, @selector(setDelegate:), m_pDelegate);
+    ((id (*)(id, SEL, ...))objc_msgSend)(m_pDialog, @selector(setDelegate:), m_pDelegate);
 
     int nStatus = runandwaitforresult();
 
