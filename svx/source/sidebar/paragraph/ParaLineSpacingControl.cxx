@@ -30,6 +30,8 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 
+#include <svl/itempool.hxx>
+
 #define DEFAULT_LINE_SPACING  200
 #define FIX_DIST_DEF          283
 #define LINESPACE_1           100
@@ -125,7 +127,7 @@ void ParaLineSpacingControl::Initialize()
 
     if( eState >= SfxItemState::DEFAULT )
     {
-        MapUnit eUnit = MapUnit::Map100thMM;
+        MapUnit eUnit = SfxViewFrame::Current()->GetPool().GetMetric( currSPItem->Which() );
         meLNSpaceUnit = eUnit;
 
         switch( currSPItem->GetLineSpaceRule() )
