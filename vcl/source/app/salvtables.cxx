@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -36,6 +35,7 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <utility>
 #include <tools/helpers.hxx>
+#include <vcl/aboutdialog.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/calendar.hxx>
 #include <vcl/combobox.hxx>
@@ -1352,6 +1352,38 @@ public:
     virtual Container* weld_message_area() override
     {
         return new SalInstanceContainer(m_xMessageDialog->get_message_area(), m_pBuilder, false);
+    }
+};
+
+class SalInstanceAboutDialog : public SalInstanceDialog, public virtual weld::AboutDialog
+{
+private:
+    VclPtr<::AboutDialog> m_xAboutDialog;
+public:
+    SalInstanceAboutDialog(::AboutDialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceDialog(pDialog, pBuilder, bTakeOwnership)
+        , m_xAboutDialog(pDialog)
+    {
+    }
+    virtual void set_version(const OUString& rVersion) override
+    {
+        m_xAboutDialog->SetVersion(rVersion);
+    }
+    virtual void set_copyright(const OUString& rCopyright) override
+    {
+        m_xAboutDialog->SetCopyright(rCopyright);
+    }
+    virtual void set_website(const OUString& rURL) override
+    {
+        m_xAboutDialog->SetWebsiteLink(rURL);
+    }
+    virtual void set_website_label(const OUString& rLabel) override
+    {
+        m_xAboutDialog->SetWebsiteLabel(rLabel);
+    }
+    virtual OUString get_website_label() const override
+    {
+        return m_xAboutDialog->GetWebsiteLabel();
     }
 };
 
@@ -5010,6 +5042,19 @@ public:
             assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
             m_aOwnedToplevel.set(pMessageDialog);
             m_xBuilder->drop_ownership(pMessageDialog);
+        }
+        return pRet;
+    }
+
+    virtual std::unique_ptr<weld::AboutDialog> weld_about_dialog(const OString &id, bool bTakeOwnership) override
+    {
+        AboutDialog* pAboutDialog = m_xBuilder->get<AboutDialog>(id);
+        std::unique_ptr<weld::AboutDialog> pRet(pAboutDialog ? new SalInstanceAboutDialog(pAboutDialog, this, false) : nullptr);
+        if (bTakeOwnership && pAboutDialog)
+        {
+            assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
+            m_aOwnedToplevel.set(pAboutDialog);
+            m_xBuilder->drop_ownership(pAboutDialog);
         }
         return pRet;
     }

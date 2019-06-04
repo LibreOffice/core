@@ -433,6 +433,16 @@ public:
     virtual Container* weld_message_area() = 0;
 };
 
+class VCL_DLLPUBLIC AboutDialog : virtual public Dialog
+{
+public:
+    virtual void set_version(const OUString& rVersion) = 0;
+    virtual void set_copyright(const OUString& rCopyright) = 0;
+    virtual void set_website(const OUString& rURL) = 0;
+    virtual void set_website_label(const OUString& rLabel) = 0;
+    virtual OUString get_website_label() const = 0;
+};
+
 struct VCL_DLLPUBLIC ComboBoxEntry
 {
     OUString sString;
@@ -1730,6 +1740,9 @@ public:
                                                                bool bTakeOwnership = true)
         = 0;
     virtual std::unique_ptr<Dialog> weld_dialog(const OString& id, bool bTakeOwnership = true) = 0;
+    virtual std::unique_ptr<AboutDialog> weld_about_dialog(const OString& id,
+                                                           bool bTakeOwnership = true)
+        = 0;
     virtual std::unique_ptr<Window> weld_window(const OString& id, bool bTakeOwnership = true) = 0;
     virtual std::unique_ptr<Widget> weld_widget(const OString& id, bool bTakeOwnership = false) = 0;
     virtual std::unique_ptr<Container> weld_container(const OString& id,

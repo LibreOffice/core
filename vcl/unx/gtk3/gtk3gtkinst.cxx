@@ -3349,6 +3349,44 @@ public:
     }
 };
 
+class GtkInstanceAboutDialog : public GtkInstanceDialog, public virtual weld::AboutDialog
+{
+private:
+    GtkAboutDialog* m_pAboutDialog;
+public:
+    GtkInstanceAboutDialog(GtkAboutDialog* pAboutDialog, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceDialog(GTK_DIALOG(pAboutDialog), pBuilder, bTakeOwnership)
+        , m_pAboutDialog(pAboutDialog)
+    {
+    }
+
+    virtual void set_version(const OUString& rVersion) override
+    {
+        gtk_about_dialog_set_version(m_pAboutDialog, OUStringToOString(rVersion, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    virtual void set_copyright(const OUString& rCopyright) override
+    {
+        gtk_about_dialog_set_copyright(m_pAboutDialog, OUStringToOString(rCopyright, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    virtual void set_website(const OUString& rURL) override
+    {
+        gtk_about_dialog_set_website(m_pAboutDialog, OUStringToOString(rURL, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    virtual void set_website_label(const OUString& rLabel) override
+    {
+        gtk_about_dialog_set_website_label(m_pAboutDialog, OUStringToOString(rLabel, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    virtual OUString get_website_label() const override
+    {
+        const gchar* pText = gtk_about_dialog_get_website_label(m_pAboutDialog);
+        return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
+    }
+};
+
 class GtkInstanceFrame : public GtkInstanceContainer, public virtual weld::Frame
 {
 private:
@@ -10174,6 +10212,15 @@ public:
             return nullptr;
         gtk_window_set_transient_for(GTK_WINDOW(pMessageDialog), GTK_WINDOW(gtk_widget_get_toplevel(m_pParentWidget)));
         return std::make_unique<GtkInstanceMessageDialog>(pMessageDialog, this, bTakeOwnership);
+    }
+
+    virtual std::unique_ptr<weld::AboutDialog> weld_about_dialog(const OString &id, bool bTakeOwnership) override
+    {
+        GtkAboutDialog* pAboutDialog = GTK_ABOUT_DIALOG(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pAboutDialog)
+            return nullptr;
+        gtk_window_set_transient_for(GTK_WINDOW(pAboutDialog), GTK_WINDOW(gtk_widget_get_toplevel(m_pParentWidget)));
+        return std::make_unique<GtkInstanceAboutDialog>(pAboutDialog, this, bTakeOwnership);
     }
 
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString &id, bool bTakeOwnership) override
