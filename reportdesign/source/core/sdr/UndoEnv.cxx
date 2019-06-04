@@ -45,6 +45,8 @@
 #include <svx/unoshape.hxx>
 #include <osl/mutex.hxx>
 
+#include <unordered_map>
+
 namespace rptui
 {
     using namespace ::com::sun::star;

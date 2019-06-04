@@ -27,7 +27,6 @@
 #include <svx/svdlayer.hxx>
 #include <vcl/window.hxx>
 #include <svtools/colorcfg.hxx>
-#include <com/sun/star/awt/XControlContainer.hpp>
 #include <svl/itemset.hxx>
 #include <vcl/timer.hxx>
 #include <svx/svxdllapi.h>

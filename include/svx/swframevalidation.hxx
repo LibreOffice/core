@@ -21,7 +21,6 @@
 
 #include <sal/types.h>
 #include <tools/gen.hxx>
-#include <limits.h>
 #include <svx/swframetypes.hxx>
 
 /*

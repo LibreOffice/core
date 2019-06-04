@@ -36,6 +36,7 @@
 #include <sal/log.hxx>
 
 #include <svx/sdrpaintwindow.hxx>
+#include <svx/sdooitm.hxx>
 #include <svx/sdtaaitm.hxx>
 #include <svx/sdtacitm.hxx>
 #include <svx/sdtaiitm.hxx>

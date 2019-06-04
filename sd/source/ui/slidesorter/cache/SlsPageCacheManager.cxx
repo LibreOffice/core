@@ -26,6 +26,7 @@
 #include <deque>
 #include <map>
 #include <memory>
+#include <unordered_map>
 
 namespace {
 

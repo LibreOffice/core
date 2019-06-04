@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_SVDVITER_HXX
 #define INCLUDED_SVX_SVDVITER_HXX
 
-#include <sal/types.h>
 #include <svx/svxdllapi.h>
 
 /*

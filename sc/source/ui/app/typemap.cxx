@@ -21,6 +21,7 @@
 
 #include <mid.h>
 #include <editeng/memberids.h>
+#include <svx/unomid.hxx>
 
 #include <sfx2/msg.hxx>
 #include <svl/slstitm.hxx>

@@ -28,6 +28,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/canvastools.hxx>

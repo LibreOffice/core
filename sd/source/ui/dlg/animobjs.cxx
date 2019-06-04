@@ -22,6 +22,7 @@
 #include <svl/intitem.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/svdpagv.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/svapp.hxx>

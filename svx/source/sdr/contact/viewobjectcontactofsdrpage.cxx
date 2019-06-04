@@ -23,6 +23,7 @@
 #include <sdr/contact/viewcontactofsdrpage.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdpagv.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

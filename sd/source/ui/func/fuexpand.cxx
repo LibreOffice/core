@@ -21,6 +21,7 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/svdundo.hxx>
 #include <editeng/outlobj.hxx>

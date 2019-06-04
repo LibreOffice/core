@@ -22,7 +22,7 @@
 
 #include <editeng/outliner.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/svdobj.hxx>
+#include <tools/weakbase.h>
 
 class SdrTextObj;
 class SdrPage;
