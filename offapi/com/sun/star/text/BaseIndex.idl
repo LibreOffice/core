@@ -21,7 +21,6 @@
 
 
 
-
 #ifndef __com_sun_star_text_BaseIndex_idl__
 #define __com_sun_star_text_BaseIndex_idl__
 
@@ -51,7 +50,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module text {
+ module com { module sun { module star { module text {
 
 //=============================================================================
 
@@ -59,7 +58,7 @@
 /** specifies the basic service of different indexes within a document.@see com::sun::star::text::DocumentIndex
         @see com::sun::star::text::ContentIndex
         @see com::sun::star::text::UserDefinedIndex
-        @see com::sun::star::text::IllustrationIndex
+        @see com::sun::star::text::IllustrationsIndex
         @see com::sun::star::text::TableIndex
         @see com::sun::star::text::ObjectIndex
  */
@@ -73,7 +72,7 @@ published service BaseIndex
 
     // DocMerge: empty anyway
     [property] string Title;
-    /** determins if the index is protected.*/
+    /** determines if the index is protected.*/
 
     // DocMerge: empty anyway
     [property] boolean IsProtected;
@@ -161,7 +160,7 @@ published service BaseIndex
      */
     // DocMerge: empty anyway
     [optional, property] com::sun::star::container::XIndexReplace LevelFormat;
-    /** determins if the content of the document index is created from the
+    /** determines if the content of the document index is created from the
          complete document content or from the current chapter only.
      <p> It is not available in the bibliography</p>*/
     [optional, property] boolean CreateFromChapter;
@@ -180,5 +179,3 @@ published service BaseIndex
 }; }; }; };
 
 #endif
-
-

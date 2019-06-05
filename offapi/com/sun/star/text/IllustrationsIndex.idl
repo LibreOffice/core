@@ -36,17 +36,17 @@ module com { module sun { module star { module text {
 */
 published service IllustrationsIndex
 {
-    service  com::sun::star::text::BaseIndex;
+    service com::sun::star::text::BaseIndex;
 
-    /* determins if the name or the label of an object is used to create the index.
+    /* determines if the name or the label of an object is used to create the index.
      */
     [optional, property] boolean CreateFromLabels; //tables, illustrations
-    /* determins the name of the sequence field that is evaluated to create the index.
+    /* determines the name of the sequence field that is evaluated to create the index.
      */
     [optional, property] string LabelCategory; //tables, illustrations
-    /* determins the way the paragraph containing a label is included in the index.
+    /* determines the way the paragraph containing a label is included in the index.
         @see ChapterFormat*/
-    [optional, property] short LabelDisplayType;//tables, illustrations
+    [optional, property] short LabelDisplayType; //tables, illustrations
 };
 
 //=============================================================================
@@ -54,4 +54,3 @@ published service IllustrationsIndex
 }; }; }; };
 
 #endif
-
