@@ -66,6 +66,8 @@ class Qt5ObjectWindow : public QWindow
     Qt5Object& m_rParent;
 
     bool event(QEvent*) override;
+    void focusInEvent(QFocusEvent*) override;
+    void focusOutEvent(QFocusEvent*) override;
     void mousePressEvent(QMouseEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
     // keyPressEvent(QKeyEvent*) is handled via event(QEvent*); see comment in Qt5Widget::event
