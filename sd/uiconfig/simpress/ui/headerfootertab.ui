@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="HeaderFooterTab">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -78,6 +77,7 @@
                           <object class="GtkEntry" id="header_text">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -136,7 +136,6 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">rb_auto</property>
                                 <accessibility>
                                   <relation type="label-for" target="datetime_value"/>
                                 </accessibility>
@@ -151,6 +150,7 @@
                               <object class="GtkEntry" id="datetime_value">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="activates_default">True</property>
                                 <accessibility>
                                   <relation type="labelled-by" target="rb_fixed"/>
                                 </accessibility>
@@ -204,7 +204,7 @@
                                     <property name="row_spacing">6</property>
                                     <property name="column_spacing">12</property>
                                     <child>
-                                      <object class="svxcorelo-SvxLanguageBox" id="language_list">
+                                      <object class="GtkComboBoxText" id="language_list">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                       </object>
@@ -228,7 +228,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkComboBox" id="datetime_format_list">
+                                      <object class="GtkComboBoxText" id="datetime_format_list">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                       </object>
@@ -328,6 +328,7 @@
                               <object class="GtkEntry" id="footer_text">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="activates_default">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -409,9 +410,9 @@
           <object class="GtkLabel" id="replacement_a">
             <property name="can_focus">False</property>
             <property name="no_show_all">True</property>
-            <property name="xalign">0</property>
             <property name="label" translatable="yes" context="headerfootertab|replacement_a">_Page Number</property>
             <property name="use_underline">True</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -423,8 +424,8 @@
           <object class="GtkLabel" id="replacement_b">
             <property name="can_focus">False</property>
             <property name="no_show_all">True</property>
-            <property name="xalign">0</property>
             <property name="label" translatable="yes" context="headerfootertab|replacement_b">Include on page</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -440,7 +441,7 @@
       </packing>
     </child>
     <child>
-      <object class="sduilo-PresLayoutPreview" id="preview">
+      <object class="GtkDrawingArea" id="preview">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">center</property>

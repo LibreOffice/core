@@ -188,9 +188,6 @@
     <glade-widget-class title="NUP Preview" name="vcllo-ShowNupOrderWindow"
                         generic-name="NUP Preview" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Presentation Preview" name="sduilo-PresLayoutPreview"
-                        generic-name="Presentation Preview" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Address Preview" name="swlo-SwAddressPreview"
                         generic-name="Address Preview" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
