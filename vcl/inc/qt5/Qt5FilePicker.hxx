@@ -23,8 +23,9 @@
 
 #include <cppuhelper/compbase.hxx>
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
@@ -32,8 +33,6 @@
 
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
-
-#include <rtl/ustrbuf.hxx>
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
@@ -48,9 +47,10 @@ class QGridLayout;
 class QLabel;
 class QWidget;
 
-typedef ::cppu::WeakComponentImplHelper<
-    css::ui::dialogs::XFilePicker3, css::ui::dialogs::XFilePickerControlAccess,
-    css::ui::dialogs::XFolderPicker2, css::lang::XInitialization, css::lang::XServiceInfo>
+typedef ::cppu::WeakComponentImplHelper<css::frame::XTerminateListener, css::lang::XInitialization,
+                                        css::lang::XServiceInfo, css::ui::dialogs::XFilePicker3,
+                                        css::ui::dialogs::XFilePickerControlAccess,
+                                        css::ui::dialogs::XFolderPicker2>
     Qt5FilePicker_Base;
 
 class VCLPLUG_QT5_PUBLIC Qt5FilePicker : public QObject, public Qt5FilePicker_Base
@@ -74,6 +74,8 @@ private:
     QHash<sal_Int16, QWidget*> m_aCustomWidgetsMap; ///< map of SAL control ID's to widget
 
     const bool m_bIsFolderPicker;
+
+    QWidget* m_pParentWidget;
 
 protected:
     std::unique_ptr<QFileDialog> m_pFileDialog; ///< the file picker dialog
@@ -132,8 +134,7 @@ public:
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
     // XEventListener
-    /// @throws css::uno::RuntimeException
-    virtual void disposing(const css::lang::EventObject& rEvent);
+    void SAL_CALL disposing(const css::lang::EventObject& rEvent) override;
     using cppu::WeakComponentImplHelperBase::disposing;
 
     // XServiceInfo
@@ -144,6 +145,10 @@ public:
     // XFolderPicker functions
     virtual OUString SAL_CALL getDirectory() override;
     virtual void SAL_CALL setDescription(const OUString& rDescription) override;
+
+    // XTerminateListener
+    void SAL_CALL queryTermination(const css::lang::EventObject& aEvent) override;
+    void SAL_CALL notifyTermination(const css::lang::EventObject& aEvent) override;
 
 protected:
     virtual void addCustomControl(sal_Int16 controlId);

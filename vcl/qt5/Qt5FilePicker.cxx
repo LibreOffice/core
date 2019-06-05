@@ -25,8 +25,15 @@
 #include <Qt5Widget.hxx>
 #include <Qt5Instance.hxx>
 
+#include <com/sun/star/awt/SystemDependentXWindow.hpp>
+#include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/TerminationVetoException.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
@@ -36,6 +43,7 @@
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/process.h>
 #include <sal/log.hxx>
 
 #include <QtCore/QDebug>
@@ -80,6 +88,7 @@ Qt5FilePicker::Qt5FilePicker(css::uno::Reference<css::uno::XComponentContext> co
     : Qt5FilePicker_Base(m_aHelperMutex)
     , m_context(context)
     , m_bIsFolderPicker(eMode == QFileDialog::Directory)
+    , m_pParentWidget(nullptr)
     , m_pFileDialog(new QFileDialog(nullptr, {}, QDir::homePath()))
     , m_pExtraControls(new QWidget())
 {
@@ -155,17 +164,16 @@ sal_Int16 SAL_CALL Qt5FilePicker::execute()
         return ret;
     }
 
-    vcl::Window* pWindow = ::Application::GetActiveTopWindow();
-    QWidget* pTransientParent = nullptr;
-    QWindow* pTransientWindow = nullptr;
-    if (pWindow)
+    QWidget* pTransientParent = m_pParentWidget;
+    if (!pTransientParent)
     {
-        Qt5Frame* pFrame = dynamic_cast<Qt5Frame*>(pWindow->ImplGetFrame());
-        assert(pFrame);
-        if (pFrame)
+        vcl::Window* pWindow = ::Application::GetActiveTopWindow();
+        if (pWindow)
         {
-            pTransientParent = pFrame->GetQWidget();
-            pTransientWindow = pTransientParent->window()->windowHandle();
+            Qt5Frame* pFrame = dynamic_cast<Qt5Frame*>(pWindow->ImplGetFrame());
+            assert(pFrame);
+            if (pFrame)
+                pTransientParent = pFrame->asChild();
         }
     }
 
@@ -174,16 +182,19 @@ sal_Int16 SAL_CALL Qt5FilePicker::execute()
     if (!m_aCurrentFilter.isEmpty())
         m_pFileDialog->selectNameFilter(m_aCurrentFilter);
 
-    if (pTransientParent)
-    {
-        m_pFileDialog->show();
-        m_pFileDialog->window()->windowHandle()->setTransientParent(pTransientWindow);
-        m_pFileDialog->setFocusProxy(pTransientParent);
-    }
-
     updateAutomaticFileExtension();
 
+    uno::Reference<css::frame::XDesktop> xDesktop(css::frame::Desktop::create(m_context),
+                                                  UNO_QUERY_THROW);
+
+    // will hide the window, so do before show
+    m_pFileDialog->setParent(pTransientParent, m_pFileDialog->windowFlags());
+    m_pFileDialog->show();
+    xDesktop->addTerminateListener(this);
     int result = m_pFileDialog->exec();
+    xDesktop->removeTerminateListener(this);
+    m_pFileDialog->setParent(nullptr, m_pFileDialog->windowFlags());
+
     if (QFileDialog::Rejected == result)
         return ExecutableDialogResults::CANCEL;
     return ExecutableDialogResults::OK;
@@ -679,9 +690,7 @@ void SAL_CALL Qt5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
     // parameter checking
     uno::Any arg;
     if (args.getLength() == 0)
-    {
         throw lang::IllegalArgumentException("no arguments", static_cast<XFilePicker2*>(this), 1);
-    }
 
     arg = args[0];
 
@@ -805,11 +814,40 @@ void SAL_CALL Qt5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
 
     m_pFileDialog->setAcceptMode(acceptMode);
     m_pFileDialog->setWindowTitle(getResString(resId));
+
+    css::uno::Reference<css::awt::XWindow> xParentWindow;
+    if (args.getLength() > 1)
+        args[1] >>= xParentWindow;
+    if (xParentWindow.is())
+    {
+        css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysWinPeer(xParentWindow,
+                                                                              css::uno::UNO_QUERY);
+        if (xSysWinPeer.is())
+        {
+            // the sal_*Int8 handling is strange, but it's public API - no way around
+            css::uno::Sequence<sal_Int8> aProcessIdent(16);
+            rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
+            uno::Any aAny = xSysWinPeer->getWindowHandle(
+                aProcessIdent, css::lang::SystemDependent::SYSTEM_XWINDOW);
+            css::awt::SystemDependentXWindow xSysWin;
+            aAny >>= xSysWin;
+
+            const auto& pFrames = pSalInst->getFrames();
+            const long aWindowHandle = xSysWin.WindowHandle;
+            const auto it = std::find_if(pFrames.begin(), pFrames.end(),
+                                         [&aWindowHandle](auto pFrame) -> bool {
+                                             const SystemEnvData* pData = pFrame->GetSystemData();
+                                             return pData && long(pData->aWindow) == aWindowHandle;
+                                         });
+            if (it != pFrames.end())
+                m_pParentWidget = static_cast<Qt5Frame*>(*it)->asChild();
+        }
+    }
 }
 
-void SAL_CALL Qt5FilePicker::cancel() {}
+void SAL_CALL Qt5FilePicker::cancel() { m_pFileDialog->reject(); }
 
-void Qt5FilePicker::disposing(const lang::EventObject& rEvent)
+void SAL_CALL Qt5FilePicker::disposing(const lang::EventObject& rEvent)
 {
     uno::Reference<XFilePickerListener> xFilePickerListener(rEvent.Source, uno::UNO_QUERY);
 
@@ -817,6 +855,17 @@ void Qt5FilePicker::disposing(const lang::EventObject& rEvent)
     {
         removeFilePickerListener(xFilePickerListener);
     }
+}
+
+void SAL_CALL Qt5FilePicker::queryTermination(const css::lang::EventObject&)
+{
+    throw css::frame::TerminationVetoException();
+}
+
+void SAL_CALL Qt5FilePicker::notifyTermination(const css::lang::EventObject&)
+{
+    SolarMutexGuard aGuard;
+    m_pFileDialog->reject();
 }
 
 OUString SAL_CALL Qt5FilePicker::getImplementationName()
