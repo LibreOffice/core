@@ -16,6 +16,24 @@
       "revId": "8adc0e0d2859ad865ade03d70afd8e81a9adeb20",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_118ef3cf",
+        "filename": "bridges/source/cpp_uno/msvc_win32_x86-64/cpp2uno.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-05T07:03:40Z",
+      "side": 1,
+      "message": "I understand that alright.  But if nParams is 1, past-the-end access of pUnoArgs[1] might erroneously access the values of other stack vars (or of other stack data), too.  Again: what is so special about size zero here that it would warrant adding all this non-obvious code?",
+      "parentUuid": "3fa0c359_71ead775",
+      "revId": "8adc0e0d2859ad865ade03d70afd8e81a9adeb20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
