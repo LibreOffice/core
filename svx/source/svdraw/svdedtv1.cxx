@@ -175,7 +175,7 @@ void SdrEditView::AddUndoActions( std::vector< std::unique_ptr<SdrUndoAction> > 
 
 void SdrEditView::MoveMarkedObj(const Size& rSiz, bool bCopy)
 {
-    const bool bUndo = IsUndoEnabled();
+    const bool bUndo = IsUndoEnabled() && CanDoSdrUndo();
 
     if( bUndo )
     {
