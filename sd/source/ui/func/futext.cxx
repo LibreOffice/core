@@ -262,6 +262,28 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
     SdrViewEvent aVEvt;
     SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
+    // handle URL also during the text editing
+    if (rMEvt.GetClicks() == 1 && rMEvt.IsLeft() && rMEvt.IsMod1())
+    {
+        OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+
+        if (mxTextObj.is() && pOLV && pOLV->GetFieldUnderMousePointer())
+        {
+            const SvxFieldItem* pFieldItem = pOLV->GetFieldUnderMousePointer();
+            if (pFieldItem)
+            {
+                const SvxFieldData* pField = pFieldItem->GetField();
+
+                if (pField && dynamic_cast< const SvxURLField *>( pField ) !=  nullptr)
+                {
+                    eHit = SdrHitKind::MarkedObject;
+                    aVEvt.eEvent = SdrEventKind::ExecuteUrl;
+                    aVEvt.pURLField = static_cast<const SvxURLField*>(pField);
+                }
+            }
+        }
+    }
+
     if (eHit == SdrHitKind::TextEdit)
     {
         // hit text -> SdrView handles event
