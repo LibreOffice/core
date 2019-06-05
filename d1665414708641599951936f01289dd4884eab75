@@ -16,6 +16,24 @@
       "revId": "d1665414708641599951936f01289dd4884eab75",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_6f23d206",
+        "filename": "cui/source/factory/dlgfact.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-06-05T20:22:08Z",
+      "side": 1,
+      "message": "A good question, I can\u0027t think how I thinkoed my way into that one",
+      "parentUuid": "3fa0c359_6fcc3261",
+      "revId": "d1665414708641599951936f01289dd4884eab75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
