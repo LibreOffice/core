@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_f4fd753a",
+        "filename": "sd/source/ui/dlg/BulletAndPositionDlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-06-05T13:11:01Z",
+      "side": 1,
+      "message": "Adding\n\n    Image aImg(StockImage::Yes, BMP_CMD_ALIGNLEFT);\n    Size aImgSize(aImg.GetSizePixel());\n\ngives size of (16,16), so it seems that the image is referenced and read correctly...",
+      "revId": "cd67be0abd2d3d4b61b8420861c5f9b4225473a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
