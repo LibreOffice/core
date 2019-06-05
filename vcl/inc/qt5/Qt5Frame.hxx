@@ -111,9 +111,6 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
     void TriggerPaintEvent();
     void TriggerPaintEvent(QRect aRect);
 
-private:
-    void setVisible(bool);
-
 Q_SIGNALS:
     void tooltipRequest(const OUString& rTooltip);
 
