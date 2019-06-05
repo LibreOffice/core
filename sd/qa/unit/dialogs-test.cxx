@@ -578,7 +578,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
         }
         case 22:
         {
-            // CreateHeaderFooterDialog(sd::ViewShell* pViewShell, vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage) override;
+            // CreateHeaderFooterDialog(sd::ViewShell* pViewShell, weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage) override;
             // This is a hard case, for two reasons:
             // - It uses BaseClass TabPage which has a very sparse interface,
             //   need to add 'Screenshot interface' there and implement
@@ -589,9 +589,10 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             CPPUNIT_ASSERT(pDrawDoc);
             SdPage* pSdPage = pDrawDoc->GetSdPage(0, PageKind::Standard);
             CPPUNIT_ASSERT(pSdPage);
+            auto const parent = Application::GetDefDialogParent();
             pRetval = getSdAbstractDialogFactory()->CreateHeaderFooterDialog(
                 getViewShell(),
-                Application::GetDefDialogParent(),
+                parent == nullptr ? nullptr : parent->GetFrameWeld(),
                 pDrawDoc,
                 pSdPage);
             break;
