@@ -16,6 +16,24 @@
       "revId": "95960b076d1a3d096660e6235ebaa5787fab5b46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_1444a1b6",
+        "filename": "sw/source/core/text/txtfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-05T12:24:20Z",
+      "side": 1,
+      "message": "hmm although m_CurrentHint won\u0027t be used in that case, so not a big issue...",
+      "parentUuid": "3fa0c359_343f5d26",
+      "revId": "95960b076d1a3d096660e6235ebaa5787fab5b46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
