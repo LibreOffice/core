@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from __future__ import unicode_literals
-import sys, os, uno, unohelper
+import ast, sys, os, uno, unohelper
 import re, random, traceback, itertools
 import threading, time as __time__
 
@@ -463,6 +463,36 @@ def __translate__(arg = None):
         selection.getStart().BreakType = 4
     __dispatcher__(".uno:ZoomPage")
 
+# incomplete list for demo hack
+allowed_functions = {
+    '__checkhalt__',
+    '__int__',
+    '__float__',
+    '__string__',
+    '__groupstart__',
+    '__groupend__',
+    '__pen__',
+    'backward',
+    'ellipse',
+    'fillcolor',
+    'fontcolor',
+    'forward',
+    'label',
+    'pencolor',
+    'pensize',
+    'position',
+    'range',
+    'turnleft',
+    'turnright',
+}
+
+class AllowedCallsNodeVisitor(ast.NodeVisitor):
+    def visit_Call(self, call):
+        if isinstance(call.func, ast.Attribute):
+            raise Exception("Unallowed call: %s" % ast.dump(call))
+        if call.func.id not in allowed_functions:
+            raise Exception("Unallowed call: %s" % ast.dump(call))
+
 class LogoProgram(threading.Thread):
     def __init__(self, code):
         self.code = code
@@ -471,6 +501,10 @@ class LogoProgram(threading.Thread):
     def run(self):
         global __thread__
         try:
+            tree = ast.parse(self.code)
+            # only allow whitelisted functions
+            gatekeep = AllowedCallsNodeVisitor()
+            gatekeep.visit(tree)
             exec(self.code)
             if _.origcursor[0] and _.origcursor[1]:
                 __dispatcher__(".uno:Escape")
