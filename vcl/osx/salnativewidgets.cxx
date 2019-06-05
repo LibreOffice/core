@@ -1017,6 +1017,8 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                                                 tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion )
 
 {
+    if (rControlRegion.IsEmpty()) // nothing to do
+        return false;
     bool toReturn = false;
 
     tools::Rectangle aCtrlBoundRect( rControlRegion );
