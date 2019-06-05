@@ -232,7 +232,7 @@ void InformationDialog::InitDialog()
     Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
 
-    mxDialogModelMultiPropertySet->setPropertyValues( aNames, aValues );
+    setPropertyValues(aNames, aValues);
 
     sal_Int64 nSource = mnSourceSize;
     sal_Int64 nDest   = mnDestSize;
@@ -315,11 +315,6 @@ InformationDialog::InformationDialog( const Reference< XComponentContext > &rxCo
     mrbOpenNewDocument( rbOpenNewDocument ),
     maSaveAsURL( rSaveAsURL )
 {
-    Reference< XFrame > xFrame( mxController->getFrame() );
-    Reference< XWindow > xContainerWindow( xFrame->getContainerWindow() );
-    Reference< XWindowPeer > xWindowPeer( xContainerWindow, UNO_QUERY_THROW );
-    createWindowPeer( xWindowPeer );
-
     InitDialog();
 }
 
