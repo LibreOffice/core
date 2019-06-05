@@ -17,44 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <osl/thread.h>
 #include <cppuhelper/factory.hxx>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
+#include <cppuhelper/implementationentry.hxx>
 #include "pppoptimizerdialog.hxx"
 
-using namespace ::cppu;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
-
-extern "C"
+namespace
 {
-    SAL_DLLPUBLIC_EXPORT void* pptminimizer_component_getFactory(
-        const sal_Char * pImplName, void * pServiceManager,
-        SAL_UNUSED_PARAMETER void * /*pRegistryKey*/ )
-    {
-        OUString    aImplName( OUString::createFromAscii( pImplName ) );
-        void*       pRet = nullptr;
 
-        if( pServiceManager )
-        {
-            Reference< XSingleComponentFactory > xFactory;
-            if( aImplName == PPPOptimizerDialog_getImplementationName() )
-            {
-                xFactory = createSingleComponentFactory(
-                        PPPOptimizerDialog_createInstance,
-                        OUString::createFromAscii( pImplName ),
-                        PPPOptimizerDialog_getSupportedServiceNames() );
-            }
-            if( xFactory.is() )
-            {
-                xFactory->acquire();
-                pRet = xFactory.get();
-            }
-        }
-        return pRet;
-    }
+static cppu::ImplementationEntry const services[] = {
+    { &PPPOptimizerDialog_createInstance,
+      &PPPOptimizerDialog_getImplementationName,
+      &PPPOptimizerDialog_getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, nullptr, 0 },
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 } };
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT void * pptminimizer_component_getFactory(
+    char const * pImplName, void * pServiceManager, void * pRegistryKey)
+{
+    return cppu::component_getFactoryHelper(
+        pImplName, pServiceManager, pRegistryKey, services);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
