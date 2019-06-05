@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_343f5d26",
+        "filename": "sw/source/core/text/txtfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-05T12:20:57Z",
+      "side": 1,
+      "message": "doesn\u0027t that leave m_CurrentHint uninitialised if there are no hints?",
+      "revId": "95960b076d1a3d096660e6235ebaa5787fab5b46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
