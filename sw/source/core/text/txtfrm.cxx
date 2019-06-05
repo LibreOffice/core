@@ -215,12 +215,17 @@ namespace sw {
             SwpHints const*const pHints(0 < m_CurrentExtent
                 ? m_pMerged->extents[m_CurrentExtent-1].pNode->GetpSwpHints()
                 : nullptr);
-            m_CurrentHint = pHints ? pHints->Count() : 0;
+            if (pHints)
+            {
+                pHints->SortIfNeedBe();
+                m_CurrentHint = pHints->Count();
+            }
         }
         else
         {
             if (SwpHints const*const pHints = m_pNode->GetpSwpHints())
             {
+                pHints->SortIfNeedBe();
                 m_CurrentHint = pHints->Count();
             }
         }
@@ -265,6 +270,8 @@ namespace sw {
                     SwpHints const*const pHints(
                         m_pMerged->extents[m_CurrentExtent-1].pNode->GetpSwpHints());
                     m_CurrentHint = pHints ? pHints->Count() : 0; // reset
+                    if (pHints)
+                        pHints->SortIfNeedBe();
                 }
             }
             return nullptr;
