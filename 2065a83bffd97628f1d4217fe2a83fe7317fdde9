@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_34775dd7",
+        "filename": "librelogo/source/LibreLogo/LibreLogo.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-05T13:29:44Z",
+      "side": 1,
+      "message": "I don\u0027t know much about Python in general and ast.parse in particular, but could it be that the malicious script could get unblocked access to some unanticipated object that happens to have a function with a name that appears in allowed_functions, and that such a call would then not get blocked here?",
+      "revId": "2065a83bffd97628f1d4217fe2a83fe7317fdde9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
