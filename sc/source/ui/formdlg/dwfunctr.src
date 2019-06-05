@@ -20,12 +20,13 @@
  *************************************************************/
 
 
- // include ---------------------------------------------------------------
+
+// include ---------------------------------------------------------------
 #include "sc.hrc"
 #include "dwfunctr.hrc"
- // pragma ----------------------------------------------------------------
+// pragma ----------------------------------------------------------------
 
- // RID_SVXDLG_CALCFUNC --------------------------------------------------
+// RID_SVXDLG_CALCFUNC --------------------------------------------------
 DockingWindow FID_FUNCTION_BOX
 {
     Border = TRUE ;
@@ -37,14 +38,14 @@ DockingWindow FID_FUNCTION_BOX
     Zoomable = TRUE ;
     Dockable = TRUE ;
     EnableResizing = TRUE ;
-    Size = MAP_APPFONT ( 130 , 160 ) ;
+    Size = MAP_APPFONT ( 130, 160 ) ;
     HelpId = HID_FUNCTION_BOX ;
     ListBox CB_CAT
     {
-        HelpID = "sc:ListBox:FID_FUNCTION_BOX:CB_CAT";
+        HelpID = "sc:ListBox:FID_FUNCTION_BOX:CB_CAT" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 20 , 4 ) ;
-        Size = MAP_APPFONT ( 56 , 80 ) ;
+        Pos = MAP_APPFONT ( 20, 4 ) ;
+        Size = MAP_APPFONT ( 56, 80 ) ;
         DropDown = TRUE ;
         AutoSize = TRUE ;
         TabStop = TRUE ;
@@ -52,27 +53,27 @@ DockingWindow FID_FUNCTION_BOX
         AutoHScroll = TRUE ;
         StringList [ en-US ] =
         {
-            < "Last Used" ; Default ; > ;
-            < "All" ; Default ; > ;
-            < "Database" ; Default ; > ;
-            < "Date&Time" ; Default ; > ;
-            < "Financial" ; Default ; > ;
-            < "Information" ; Default ; > ;
-            < "Logical" ; Default ; > ;
-            < "Mathematical" ; Default ; > ;
-            < "Array" ; Default ; > ;
-            < "Statistical" ; Default ; > ;
-            < "Spreadsheet" ; Default ; > ;
-            < "Text" ; Default ; > ;
-            < "Add-in" ; Default ; > ;
+            < "Last Used" ;     Default ; > ;
+            < "All" ;           Default ; > ;
+            < "Database" ;      Default ; > ;
+            < "Date&Time" ;     Default ; > ;
+            < "Financial" ;     Default ; > ;
+            < "Information" ;   Default ; > ;
+            < "Logical" ;       Default ; > ;
+            < "Mathematical" ;  Default ; > ;
+            < "Array" ;         Default ; > ;
+            < "Statistical" ;   Default ; > ;
+            < "Spreadsheet" ;   Default ; > ;
+            < "Text" ;          Default ; > ;
+            < "Add-in" ;        Default ; > ;
         };
     };
     ListBox DDLB_FUNC
     {
-        HelpID = "sc:ListBox:FID_FUNCTION_BOX:DDLB_FUNC";
+        HelpID = "sc:ListBox:FID_FUNCTION_BOX:DDLB_FUNC" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 103 , 4 ) ;
-        Size = MAP_APPFONT ( 56 , 80 ) ;
+        Pos = MAP_APPFONT ( 103, 4 ) ;
+        Size = MAP_APPFONT ( 56, 80 ) ;
         Hide = TRUE ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -80,10 +81,10 @@ DockingWindow FID_FUNCTION_BOX
     };
     ListBox LB_FUNC
     {
-        HelpID = "sc:ListBox:FID_FUNCTION_BOX:LB_FUNC";
+        HelpID = "sc:ListBox:FID_FUNCTION_BOX:LB_FUNC" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 3 , 19 ) ;
-        Size = MAP_APPFONT ( 72 , 90 ) ;
+        Pos = MAP_APPFONT ( 3, 19 ) ;
+        Size = MAP_APPFONT ( 72, 90 ) ;
         TabStop = TRUE ;
         AutoHScroll = TRUE ;
     };
@@ -92,64 +93,31 @@ DockingWindow FID_FUNCTION_BOX
         WordBreak = TRUE ;
         Border = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 3 , 115 ) ;
-        Size = MAP_APPFONT ( 72 , 40 ) ;
+        Pos = MAP_APPFONT ( 3, 115 ) ;
+        Size = MAP_APPFONT ( 72, 40 ) ;
     };
     Control FT_SPLIT
     {
-        Pos = MAP_APPFONT ( 3 , 110 ) ;
-        Size = MAP_APPFONT ( 72 , 3 ) ;
+        Pos = MAP_APPFONT ( 3, 110 ) ;
+        Size = MAP_APPFONT ( 72, 3 ) ;
     };
     ImageButton IMB_INSERT
     {
-        HelpID = "sc:ImageButton:FID_FUNCTION_BOX:IMB_INSERT";
-        Pos = MAP_APPFONT ( 3 , 4 ) ;
-        Size = MAP_APPFONT ( 13 , 13 ) ;
+        HelpID = "sc:ImageButton:FID_FUNCTION_BOX:IMB_INSERT" ;
+        Pos = MAP_APPFONT ( 3, 4 ) ;
+        Size = MAP_APPFONT ( 13, 13 ) ;
         TabStop = TRUE ;
         ButtonImage = Image
         {
             ImageBitmap = Bitmap
             {
-                File = "fx.bmp" ;
+                File = "fx.png" ;
             };
-            MaskColor = STD_MASKCOLOR;
         };
         DefButton = TRUE ;
         QuickHelpText [ en-US ] = "Insert Function into calculation sheet" ;
     };
     Text [ en-US ] = "Functions" ;
 };
- // ********************************************************************** EOF
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// ********************************************************************** EOF
