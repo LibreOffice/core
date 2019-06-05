@@ -3037,7 +3037,7 @@ com.sun.star.frame.Controller
 com.sun.star.lang.XMultiServiceFactory
 com.sun.star.frame.XDesktop
 com.sun.star.frame.Frame
-com.sun.star.model.OfficeDocument
+com.sun.star.document.OfficeDocument
 TOPIC:
 
 LINK:Documentation/DevGuide/GUI/Dialog_Controls
