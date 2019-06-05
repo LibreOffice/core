@@ -66,6 +66,21 @@
       </object>
     </child>
   </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">cmd/sc_alignleft.png</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">cmd/sc_alignhorizontalcenter.png</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">cmd/sc_alignright.png</property>
+  </object>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
       <!-- column-name text -->
@@ -796,14 +811,8 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
+                                        <property name="image">image2</property>
                                         <property name="always_show_image">True</property>
-                                        <child>
-                                          <object class="GtkImage" id="image_justify_center">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="stock">gtk-justify-center</property>
-                                          </object>
-                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -816,14 +825,8 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
                                         <property name="margin_left">88</property>
+                                        <property name="image">image1</property>
                                         <property name="always_show_image">True</property>
-                                        <child>
-                                          <object class="GtkImage" id="image_justify_left">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="stock">gtk-justify-left</property>
-                                          </object>
-                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -835,14 +838,8 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
+                                        <property name="image">image3</property>
                                         <property name="always_show_image">True</property>
-                                        <child>
-                                          <object class="GtkImage" id="image_justify_right">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="stock">gtk-justify-right</property>
-                                          </object>
-                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">2</property>
