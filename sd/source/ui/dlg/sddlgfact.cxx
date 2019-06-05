@@ -137,7 +137,16 @@ short AbstractSdVectorizeDlg_Impl::Execute()
 }
 
 IMPL_ABSTDLG_BASE(AbstractSdPublishingDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractHeaderFooterDialog_Impl);
+
+short AbstractHeaderFooterDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+bool AbstractHeaderFooterDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
 
 short AbstractBulletDialog_Impl::Execute()
 {
@@ -521,10 +530,10 @@ VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateMasterLayoutDialog
   return VclPtr<AbstractMasterLayoutDialog_Impl>::Create(std::make_unique<::sd::MasterLayoutDialog>(pParent, pDoc, pCurrentPage));
 }
 
-VclPtr<AbstractHeaderFooterDialog> SdAbstractDialogFactory_Impl::CreateHeaderFooterDialog( sd::ViewShell* pViewShell,
-  vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage )
+VclPtr<AbstractHeaderFooterDialog> SdAbstractDialogFactory_Impl::CreateHeaderFooterDialog(sd::ViewShell* pViewShell,
+    weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage)
 {
-    return VclPtr<AbstractHeaderFooterDialog_Impl>::Create( VclPtr<::sd::HeaderFooterDialog>::Create( pViewShell, pParent, pDoc, pCurrentPage ));
+    return VclPtr<AbstractHeaderFooterDialog_Impl>::Create(std::make_unique<::sd::HeaderFooterDialog>(pViewShell, pParent, pDoc, pCurrentPage));
 }
 
 VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateSdPhotoAlbumDialog(weld::Window* pParent, SdDrawDocument* pDoc)

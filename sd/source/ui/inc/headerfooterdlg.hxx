@@ -19,9 +19,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_HEADERFOOTERDLG_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_HEADERFOOTERDLG_HXX
 
-#include <vcl/tabdlg.hxx>
-#include <vcl/button.hxx>
-#include <vcl/tabctrl.hxx>
+#include <vcl/weld.hxx>
 
 #include <sdpage.hxx>
 
@@ -33,24 +31,13 @@ class ViewShell;
 
 class HeaderFooterTabPage;
 
-class HeaderFooterDialog : public TabDialog
+class HeaderFooterDialog : public weld::GenericDialogController
 {
 private:
-    DECL_LINK( ActivatePageHdl, TabControl*, void );
-    DECL_LINK( ClickApplyToAllHdl, Button*, void );
-    DECL_LINK( ClickApplyHdl, Button*, void );
-    DECL_LINK( ClickCancelHdl, Button*, void );
-
-    VclPtr<TabControl>      mpTabCtrl;
-
-    VclPtr<HeaderFooterTabPage>    mpSlideTabPage;
-    VclPtr<HeaderFooterTabPage>    mpNotesHandoutsTabPage;
-
-    sal_uInt16 mnSlidesId;
-
-    VclPtr<PushButton>      maPBApplyToAll;
-    VclPtr<PushButton>      maPBApply;
-    VclPtr<CancelButton>    maPBCancel;
+    DECL_LINK( ActivatePageHdl, const OString&, void );
+    DECL_LINK( ClickApplyToAllHdl, weld::Button&, void );
+    DECL_LINK( ClickApplyHdl, weld::Button&, void );
+    DECL_LINK( ClickCancelHdl, weld::Button&, void );
 
     HeaderFooterSettings    maSlideSettings;
     HeaderFooterSettings    maNotesHandoutSettings;
@@ -59,18 +46,24 @@ private:
     SdPage*                 mpCurrentPage;
     ViewShell*              mpViewShell;
 
+    std::unique_ptr<weld::Notebook> mxTabCtrl;
+    std::unique_ptr<weld::Button> mxPBApplyToAll;
+    std::unique_ptr<weld::Button> mxPBApply;
+    std::unique_ptr<weld::Button> mxPBCancel;
+    std::unique_ptr<HeaderFooterTabPage> mxSlideTabPage;
+    std::unique_ptr<HeaderFooterTabPage> mxNotesHandoutsTabPage;
+
     void apply( bool bToAll, bool bForceSlides );
     void change( SdUndoGroup* pUndoGroup, SdPage* pPage, const HeaderFooterSettings& rNewSettings );
 
 public:
-    HeaderFooterDialog( ViewShell* pViewShell, vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage );
+    HeaderFooterDialog(ViewShell* pViewShell, weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage);
     virtual ~HeaderFooterDialog() override;
-    virtual void dispose() override;
 
     void ApplyToAll();
     void Apply();
 
-    virtual short Execute() override;
+    virtual short run() override;
 };
 
 }

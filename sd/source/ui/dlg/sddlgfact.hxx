@@ -353,7 +353,15 @@ class AbstractSdPublishingDlg_Impl :public AbstractSdPublishingDlg
 
 class AbstractHeaderFooterDialog_Impl :public AbstractHeaderFooterDialog
 {
-  DECL_ABSTDLG_BASE(AbstractHeaderFooterDialog_Impl,::sd::HeaderFooterDialog)
+private:
+    std::shared_ptr<::sd::HeaderFooterDialog> m_xDlg;
+public:
+    AbstractHeaderFooterDialog_Impl(std::unique_ptr<::sd::HeaderFooterDialog> pDlg)
+        : m_xDlg(std::move(pDlg))
+    {
+    }
+    virtual short Execute() override;
+    virtual bool  StartExecuteAsync(AsyncContext &rCtx) override;
 };
 
 //AbstractDialogFactory_Impl implementations
@@ -390,10 +398,10 @@ public:
 
     virtual VclPtr<VclAbstractDialog>          CreateMasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pDoc, SdPage*) override;
 
-    virtual VclPtr<AbstractHeaderFooterDialog> CreateHeaderFooterDialog( sd::ViewShell* pViewShell,
-                                                                  vcl::Window* pParent,
-                                                                  SdDrawDocument* pDoc,
-                                                                  SdPage* pCurrentPage ) override;
+    virtual VclPtr<AbstractHeaderFooterDialog> CreateHeaderFooterDialog(sd::ViewShell* pViewShell,
+                                                                        weld::Window* pParent,
+                                                                        SdDrawDocument* pDoc,
+                                                                        SdPage* pCurrentPage) override;
 
     // For TabPage
     virtual CreateTabPage               GetSdOptionsContentsTabPageCreatorFunc() override;
