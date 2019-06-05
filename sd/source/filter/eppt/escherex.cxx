@@ -220,9 +220,10 @@ sal_uInt32 PptEscherEx::EnterGroup( ::tools::Rectangle const * pBoundRect, SvMem
         OpenContainer( ESCHER_SpContainer );
         AddAtom( 16, ESCHER_Spgr, 1 );
         PtReplaceOrInsert( ESCHER_Persist_Grouping_Snap | mnGroupLevel, mpOutStrm->Tell() );
+        // FIXME what to do with empty rectangles?
         mpOutStrm ->WriteInt32( aRect.Left() )  // bounding box for the grouped shapes to which they are attached
                    .WriteInt32( aRect.Top() )
-                   .WriteInt32( aRect.Right() )
+                   .WriteInt32( aRect.IsWidthEmpty() ? -32767 : aRect.Right() )
                    .WriteInt32( aRect.Bottom() );
 
         nShapeId = GenerateShapeId();

@@ -204,7 +204,7 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
     bool bCheckDrawObjs = false;
     if ( aDocRect != rOldWork )
     {
-        if ( rOldWork.Bottom() > aDocRect.Bottom() || rOldWork.Right() > aDocRect.Right())
+        if ( !rOldWork.IsEmpty() && (rOldWork.Bottom() > aDocRect.Bottom() || rOldWork.Right() > aDocRect.Right()))
             bCheckDrawObjs = true;
         GetDrawView()->SetWorkArea( aDocRect );
     }

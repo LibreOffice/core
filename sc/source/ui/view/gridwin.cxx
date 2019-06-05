@@ -6001,40 +6001,43 @@ void ScGridWindow::UpdateCursorOverlay()
             long nSizeYPix;
             pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
 
-            if (bLayoutRTL)
-                aScrPos.AdjustX( -(nSizeXPix - 2) );       // move instead of mirroring
+            if (nSizeXPix>1 && nSizeYPix>1)
+            {
+                if (bLayoutRTL)
+                    aScrPos.AdjustX( -(nSizeXPix - 2) );       // move instead of mirroring
 
-            // show the cursor as 4 (thin) rectangles
-            tools::Rectangle aRect(aScrPos, Size(nSizeXPix - 1, nSizeYPix - 1));
+                // show the cursor as 4 (thin) rectangles
+                tools::Rectangle aRect(aScrPos, Size(nSizeXPix - 1, nSizeYPix - 1));
 
-            float fScaleFactor = GetDPIScaleFactor();
+                float fScaleFactor = GetDPIScaleFactor();
 
-            long aCursorWidth = 1 * fScaleFactor;
+                long aCursorWidth = 1 * fScaleFactor;
 
-            tools::Rectangle aLeft = aRect;
-            aLeft.AdjustTop( -aCursorWidth );
-            aLeft.AdjustBottom(aCursorWidth );
-            aLeft.SetRight( aLeft.Left() );
-            aLeft.AdjustLeft( -aCursorWidth );
+                tools::Rectangle aLeft = aRect;
+                aLeft.AdjustTop( -aCursorWidth );
+                aLeft.AdjustBottom(aCursorWidth );
+                aLeft.SetRight( aLeft.Left() );
+                aLeft.AdjustLeft( -aCursorWidth );
 
-            tools::Rectangle aRight = aRect;
-            aRight.AdjustTop( -aCursorWidth );
-            aRight.AdjustBottom(aCursorWidth );
-            aRight.SetLeft( aRight.Right() );
-            aRight.AdjustRight(aCursorWidth );
+                tools::Rectangle aRight = aRect;
+                aRight.AdjustTop( -aCursorWidth );
+                aRight.AdjustBottom(aCursorWidth );
+                aRight.SetLeft( aRight.Right() );
+                aRight.AdjustRight(aCursorWidth );
 
-            tools::Rectangle aTop = aRect;
-            aTop.SetBottom( aTop.Top() );
-            aTop.AdjustTop( -aCursorWidth );
+                tools::Rectangle aTop = aRect;
+                aTop.SetBottom( aTop.Top() );
+                aTop.AdjustTop( -aCursorWidth );
 
-            tools::Rectangle aBottom = aRect;
-            aBottom.SetTop( aBottom.Bottom() );
-            aBottom.AdjustBottom(aCursorWidth );
+                tools::Rectangle aBottom = aRect;
+                aBottom.SetTop( aBottom.Bottom() );
+                aBottom.AdjustBottom(aCursorWidth );
 
-            aPixelRects.push_back(aLeft);
-            aPixelRects.push_back(aRight);
-            aPixelRects.push_back(aTop);
-            aPixelRects.push_back(aBottom);
+                aPixelRects.push_back(aLeft);
+                aPixelRects.push_back(aRight);
+                aPixelRects.push_back(aTop);
+                aPixelRects.push_back(aBottom);
+            }
         }
     }
 

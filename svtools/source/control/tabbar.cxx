@@ -861,7 +861,7 @@ void TabBar::ImplShowPage( sal_uInt16 nPos )
     auto& pItem = mpImpl->mpItemList[nPos];
     if (nPos < mnFirstPos)
         SetFirstPageId( pItem->mnId );
-    else if (pItem->maRect.Right() > nWidth)
+    else if (!pItem->maRect.IsEmpty() && pItem->maRect.Right() > nWidth)
     {
         while (pItem->maRect.Right() > nWidth)
         {
@@ -1865,8 +1865,8 @@ void TabBar::SetCurPageId(sal_uInt16 nPageId)
             if (pItem->maRect.IsEmpty())
                 ImplFormat();
 
-            while ((mbMirrored ? (pItem->maRect.Left() < mnOffX) : (pItem->maRect.Right() > nWidth)) ||
-                    pItem->maRect.IsEmpty())
+            while (pItem->maRect.IsEmpty() ||
+                   (mbMirrored ? (pItem->maRect.Left() < mnOffX) : (pItem->maRect.Right() > nWidth)))
             {
                 sal_uInt16 nNewPos = mnFirstPos + 1;
                 // assure at least the actual tabpages are visible as first tabpage
