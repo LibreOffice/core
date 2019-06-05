@@ -19,6 +19,7 @@
 
 
 #include "unodialog.hxx"
+
 #include <com/sun/star/awt/MessageBoxButtons.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/UnoControlDialog.hpp>
@@ -56,16 +57,23 @@ UnoDialog::UnoDialog( const Reference< XComponentContext > &rxContext, Reference
 
     Reference< XFrame > xFrame( mxController->getFrame() );
     Reference< XWindow > xContainerWindow( xFrame->getContainerWindow() );
-    mxWindowPeer.set( xContainerWindow, UNO_QUERY_THROW );
-    createWindowPeer( mxWindowPeer );
-}
+    Reference< XWindowPeer > xWindowPeer( xContainerWindow, UNO_QUERY_THROW );
 
+    // set the main loop handle to update GUI while busy
+    Reference< XToolkit > xToolkit( Toolkit::create( mxContext ), UNO_QUERY_THROW  );
+    mxReschedule.set( xToolkit, UNO_QUERY );
+
+    // allocate the real window resources
+    mxDialog->createPeer(xToolkit,
+        xWindowPeer.is() ? xWindowPeer : xToolkit->getDesktopWindow());
+}
 
 UnoDialog::~UnoDialog()
 {
-
+    // free the resources
+    Reference<XComponent> xDialogComponent(mxDialog, UNO_QUERY_THROW);
+    xDialogComponent->dispose();
 }
-
 
 void UnoDialog::execute()
 {
@@ -79,20 +87,6 @@ void UnoDialog::endExecute( bool bStatus )
     mbStatus = bStatus;
     mxDialog->endExecute();
 }
-
-
-Reference< XWindowPeer > UnoDialog::createWindowPeer( Reference< XWindowPeer > const & xParentPeer )
-{
-    mxDialog->setVisible( false );
-    Reference< XToolkit > xToolkit( Toolkit::create( mxContext ), UNO_QUERY_THROW  );
-    mxReschedule.set( xToolkit, UNO_QUERY );
-    mxDialog->createPeer(
-        xToolkit,
-        xParentPeer.is() ? xParentPeer : xToolkit->getDesktopWindow());
-//  xWindowPeer = xControl.getPeer();
-    return mxDialog->getPeer();
-}
-
 
 Reference< XInterface > UnoDialog::insertControlModel( const OUString& rServiceName, const OUString& rName,
                                                         const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rPropertyValues )
