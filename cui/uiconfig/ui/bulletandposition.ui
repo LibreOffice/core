@@ -802,7 +802,7 @@
                                           <object class="GtkImage" id="image_justify_center">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="stock">gtk-justify-center</property>
+                                            <property name="stock">gtk-missing-image</property>
                                           </object>
                                         </child>
                                       </object>
@@ -822,7 +822,7 @@
                                           <object class="GtkImage" id="image_justify_left">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="stock">gtk-justify-left</property>
+                                            <property name="stock">gtk-missing-image</property>
                                           </object>
                                         </child>
                                       </object>
@@ -841,7 +841,7 @@
                                           <object class="GtkImage" id="image_justify_right">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="stock">gtk-justify-right</property>
+                                            <property name="stock">gtk-missing-image</property>
                                           </object>
                                         </child>
                                       </object>

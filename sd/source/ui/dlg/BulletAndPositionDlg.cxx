@@ -21,6 +21,8 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 
+#include <bitmaps.hlst>
+
 #include <tools/mapunit.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -157,8 +159,11 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     , m_xIndentFT(m_xBuilder->weld_label("numberingwidth"))
     , m_xIndentMF(m_xBuilder->weld_metric_spin_button("numberingwidthmf", FieldUnit::CM))
     , m_xLeftTB(m_xBuilder->weld_toggle_button("left"))
+    , m_xLeftImage(m_xBuilder->weld_image("image_justify_left"))
     , m_xCenterTB(m_xBuilder->weld_toggle_button("center"))
+    , m_xCenterImage(m_xBuilder->weld_image("image_justify_center"))
     , m_xRightTB(m_xBuilder->weld_toggle_button("right"))
+    , m_xRightImage(m_xBuilder->weld_image("image_justify_right"))
     , m_xSlideRB(m_xBuilder->weld_radio_button("sliderb"))
     , m_xSelectionRB(m_xBuilder->weld_radio_button("selectionrb"))
     , m_xApplyToMaster(m_xBuilder->weld_toggle_button("applytomaster"))
@@ -187,6 +192,12 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
         LINK(this, SvxBulletAndPositionDlg, SelectCenterAlignmentHdl_Impl));
     m_xRightTB->connect_toggled(LINK(this, SvxBulletAndPositionDlg, SelectRightAlignmentHdl_Impl));
     m_xApplyToMaster->connect_toggled(LINK(this, SvxBulletAndPositionDlg, ApplyToMasterHdl_Impl));
+
+    m_xLeftImage->set_from_icon_name(BMP_CMD_ALIGNLEFT);
+    m_xLeftTB->set_size_request(100, 100);
+    m_xLeftImage->set_size_request(100, 100);
+    m_xCenterImage->set_from_icon_name(BMP_CMD_ALIGNCENTER);
+    m_xRightImage->set_from_icon_name(BMP_CMD_ALIGNRIGHT);
 
     aInvalidateTimer.SetInvokeHandler(
         LINK(this, SvxBulletAndPositionDlg, PreviewInvalidateHdl_Impl));
