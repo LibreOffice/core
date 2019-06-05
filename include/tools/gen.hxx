@@ -24,6 +24,7 @@
 #include <limits.h>
 #include <algorithm>
 #include <ostream>
+#include <cassert>
 
 class SvStream;
 namespace rtl
@@ -386,12 +387,12 @@ public:
                         Rectangle( const Point& rLT, const Size& rSize );
 
     long                Left() const    { return nLeft;   }
-    long                Right() const   { return nRight;  }
+    long                Right() const   { assert(!mbWidthEmpty); return nRight;  }
     long                Top() const     { return nTop;    }
     long                Bottom() const  { return nBottom; }
 
     void                SetLeft(long v)    { nLeft = v;   }
-    void                SetRight(long v)   { nRight = v;  }
+    void                SetRight(long v)   { nRight = v; mbWidthEmpty = false; }
     void                SetTop(long v)     { nTop = v;    }
     void                SetBottom(long v)  { nBottom = v; }
 
@@ -409,7 +410,17 @@ public:
     inline void         Move( long nHorzMoveDelta, long nVertMoveDelta );
     void                Move( Size const & s ) { Move(s.Width(), s.Height()); }
     long                AdjustLeft( long nHorzMoveDelta ) { nLeft += nHorzMoveDelta; return nLeft; }
-    long                AdjustRight( long nHorzMoveDelta ) { nRight += nHorzMoveDelta; return nRight; }
+    long                AdjustRight( long nHorzMoveDelta )
+    {
+        if (mbWidthEmpty)
+        {
+            mbWidthEmpty = false;
+            nRight = nLeft + nHorzMoveDelta - 1;
+        }
+        else
+            nRight += nHorzMoveDelta;
+        return nRight;
+    }
     long                AdjustTop( long nVertMoveDelta ) { nTop += nVertMoveDelta; return nTop; }
     long                AdjustBottom( long nVertMoveDelta ) { nBottom += nVertMoveDelta; return nBottom; }
     inline void         SetPos( const Point& rPoint );
@@ -432,11 +443,11 @@ public:
     bool                IsInside( const tools::Rectangle& rRect ) const;
     bool                IsOver( const tools::Rectangle& rRect ) const;
 
-    void                SetEmpty() { nRight = nBottom = RECT_EMPTY; }
-    void                SetWidthEmpty() { nRight = RECT_EMPTY; }
+    void                SetEmpty() { nRight = 0; nBottom = RECT_EMPTY; mbWidthEmpty = true; }
+    void                SetWidthEmpty() { nRight = 0; mbWidthEmpty = true; }
     void                SetHeightEmpty() { nBottom = RECT_EMPTY; }
     inline bool         IsEmpty() const;
-    bool                IsWidthEmpty() const { return nRight == RECT_EMPTY; }
+    bool                IsWidthEmpty() const { return mbWidthEmpty; }
     bool                IsHeightEmpty() const { return nBottom == RECT_EMPTY; }
 
     inline bool         operator == ( const tools::Rectangle& rRect ) const;
@@ -455,14 +466,19 @@ public:
     long                getX() const { return nLeft; }
     long                getY() const { return nTop; }
     /// Returns the difference between right and left, assuming the range includes one end, but not the other.
-    long                getWidth() const { return nRight - nLeft; }
+    long                getWidth() const { return mbWidthEmpty ? 0 : nRight - nLeft; }
     /// Returns the difference between bottom and top, assuming the range includes one end, but not the other.
     long                getHeight() const { return nBottom - nTop; }
     /// Set the left edge of the rectangle to x, preserving the width
-    void                setX( long x ) { nRight  += x - nLeft; nLeft = x; }
+    void                setX( long x )
+    {
+        if (!mbWidthEmpty)
+            nRight += x - nLeft;
+        nLeft = x;
+    }
     /// Set the top edge of the rectangle to y, preserving the height
     void                setY( long y ) { nBottom += y - nTop;  nTop  = y; }
-    void                setWidth( long n ) { nRight = nLeft + n; }
+    void                setWidth( long n ) { nRight = nLeft + n; mbWidthEmpty = false; }
     void                setHeight( long n ) { nBottom = nTop + n; }
     /// Returns the string representation of the rectangle, format is "x, y, width, height".
     rtl::OString        toString() const;
@@ -481,6 +497,7 @@ public:
     void                SaturatingSetY(long y);
 
 private:
+    bool                mbWidthEmpty : 1;
     long                nLeft;
     long                nTop;
     long                nRight;
@@ -491,7 +508,9 @@ private:
 inline tools::Rectangle::Rectangle()
 {
     nLeft = nTop = 0;
-    nRight = nBottom = RECT_EMPTY;
+    nRight = 0;
+    nBottom = RECT_EMPTY;
+    mbWidthEmpty = true;
 }
 
 inline tools::Rectangle::Rectangle( const Point& rLT, const Point& rRB )
@@ -500,6 +519,7 @@ inline tools::Rectangle::Rectangle( const Point& rLT, const Point& rRB )
     nTop    = rLT.Y();
     nRight  = rRB.X();
     nBottom = rRB.Y();
+    mbWidthEmpty = false;
 }
 
 inline tools::Rectangle::Rectangle( long _nLeft,  long _nTop,
@@ -509,26 +529,30 @@ inline tools::Rectangle::Rectangle( long _nLeft,  long _nTop,
     nTop    = _nTop;
     nRight  = _nRight;
     nBottom = _nBottom;
+    mbWidthEmpty = false;
 }
 
 inline tools::Rectangle::Rectangle( long _nLeft,  long _nTop )
 {
     nLeft   = _nLeft;
     nTop    = _nTop;
-    nRight = nBottom = RECT_EMPTY;
+    nRight  =  0;
+    nBottom = RECT_EMPTY;
+    mbWidthEmpty = true;
 }
 
 inline tools::Rectangle::Rectangle( const Point& rLT, const Size& rSize )
 {
     nLeft   = rLT.X();
     nTop    = rLT.Y();
-    nRight  = rSize.Width()  ? nLeft+(rSize.Width()-1) : RECT_EMPTY;
+    nRight  = rSize.Width()  ? nLeft+(rSize.Width()-1) : 0;
     nBottom = rSize.Height() ? nTop+(rSize.Height()-1) : RECT_EMPTY;
+    mbWidthEmpty  = rSize.Width() == 0;
 }
 
 inline bool tools::Rectangle::IsEmpty() const
 {
-    return (nRight == RECT_EMPTY) || (nBottom == RECT_EMPTY);
+    return mbWidthEmpty || (nBottom == RECT_EMPTY);
 }
 
 inline Point tools::Rectangle::TopLeft() const
@@ -538,7 +562,7 @@ inline Point tools::Rectangle::TopLeft() const
 
 inline Point tools::Rectangle::TopRight() const
 {
-    return Point( (nRight == RECT_EMPTY) ? nLeft : nRight, nTop );
+    return Point( mbWidthEmpty ? nLeft : nRight, nTop );
 }
 
 inline Point tools::Rectangle::BottomLeft() const
@@ -548,7 +572,7 @@ inline Point tools::Rectangle::BottomLeft() const
 
 inline Point tools::Rectangle::BottomRight() const
 {
-    return Point( (nRight  == RECT_EMPTY) ? nLeft : nRight,
+    return Point( mbWidthEmpty ? nLeft : nRight,
                   (nBottom == RECT_EMPTY) ? nTop  : nBottom );
 }
 
@@ -598,7 +622,7 @@ inline void tools::Rectangle::Move( long nHorzMove, long nVertMove )
 {
     nLeft += nHorzMove;
     nTop  += nVertMove;
-    if ( nRight != RECT_EMPTY )
+    if ( !mbWidthEmpty )
         nRight += nHorzMove;
     if ( nBottom != RECT_EMPTY )
         nBottom += nVertMove;
@@ -606,7 +630,7 @@ inline void tools::Rectangle::Move( long nHorzMove, long nVertMove )
 
 inline void tools::Rectangle::SetPos( const Point& rPoint )
 {
-    if ( nRight != RECT_EMPTY )
+    if ( !mbWidthEmpty )
         nRight += rPoint.X() - nLeft;
     if ( nBottom != RECT_EMPTY )
         nBottom += rPoint.Y() - nTop;
@@ -617,7 +641,7 @@ inline void tools::Rectangle::SetPos( const Point& rPoint )
 inline long tools::Rectangle::GetWidth() const
 {
     long n;
-    if ( nRight == RECT_EMPTY )
+    if ( mbWidthEmpty )
         n = 0;
     else
     {
@@ -670,22 +694,20 @@ inline bool tools::Rectangle::operator == ( const tools::Rectangle& rRect ) cons
     return (nLeft   == rRect.nLeft   ) &&
            (nTop    == rRect.nTop    ) &&
            (nRight  == rRect.nRight  ) &&
-           (nBottom == rRect.nBottom );
+           (nBottom == rRect.nBottom ) &&
+           (mbWidthEmpty == rRect.mbWidthEmpty);
 }
 
 inline bool tools::Rectangle::operator != ( const tools::Rectangle& rRect ) const
 {
-    return (nLeft   != rRect.nLeft   ) ||
-           (nTop    != rRect.nTop    ) ||
-           (nRight  != rRect.nRight  ) ||
-           (nBottom != rRect.nBottom );
+    return !(operator==(rRect));
 }
 
 inline tools::Rectangle& tools::Rectangle::operator +=( const Point& rPt )
 {
     nLeft += rPt.X();
     nTop  += rPt.Y();
-    if ( nRight != RECT_EMPTY )
+    if ( !mbWidthEmpty )
         nRight += rPt.X();
     if ( nBottom != RECT_EMPTY )
         nBottom += rPt.Y();
@@ -696,7 +718,7 @@ inline tools::Rectangle& tools::Rectangle::operator -= ( const Point& rPt )
 {
     nLeft -= rPt.X();
     nTop  -= rPt.Y();
-    if ( nRight != RECT_EMPTY )
+    if ( !mbWidthEmpty )
         nRight -= rPt.X();
     if ( nBottom != RECT_EMPTY )
         nBottom -= rPt.Y();
@@ -726,7 +748,13 @@ inline void tools::Rectangle::expand(long nExpandBy)
 {
     nLeft   -= nExpandBy;
     nTop    -= nExpandBy;
-    nRight  += nExpandBy;
+    if (mbWidthEmpty)
+    {
+        nRight  = nLeft + nExpandBy - 1;
+        mbWidthEmpty = false;
+    }
+    else
+        nRight  += nExpandBy;
     nBottom += nExpandBy;
 }
 
@@ -734,7 +762,8 @@ inline void tools::Rectangle::shrink(long nShrinkBy)
 {
     nLeft   += nShrinkBy;
     nTop    += nShrinkBy;
-    nRight  -= nShrinkBy;
+    if (!mbWidthEmpty)
+        nRight  -= nShrinkBy;
     nBottom -= nShrinkBy;
 }
 

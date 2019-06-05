@@ -2770,7 +2770,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
             {
                 rRenderContext.SetFillColor(aBackgroundColor);
                 // this case may occur for smaller horizontal resizes
-                if (aRect.Left() < aRect.Right())
+                if (!aRect.IsEmpty() && (aRect.Left() < aRect.Right()))
                     rRenderContext.DrawRect(aRect);
             }
         }
