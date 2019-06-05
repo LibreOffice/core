@@ -14,6 +14,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_bitmap_test, \
     vcl/qa/cppunit/BitmapExTest \
     vcl/qa/cppunit/bitmapcolor \
     vcl/qa/cppunit/ScanlineToolsTest \
+    vcl/qa/cppunit/BitmapScaleTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_bitmap_test,\
