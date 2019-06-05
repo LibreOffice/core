@@ -1876,22 +1876,26 @@ tools::Rectangle OutputDevice::LogicToLogic( const tools::Rectangle& rRectSource
     {
         ENTER4( rMapModeSource, rMapModeDest );
 
-        return tools::Rectangle( fn5( rRectSource.Left() + aMapResSource.mnMapOfsX,
+        auto left = fn5( rRectSource.Left() + aMapResSource.mnMapOfsX,
                                aMapResSource.mnMapScNumX, aMapResDest.mnMapScDenomX,
                                aMapResSource.mnMapScDenomX, aMapResDest.mnMapScNumX ) -
-                          aMapResDest.mnMapOfsX,
-                          fn5( rRectSource.Top() + aMapResSource.mnMapOfsY,
+                          aMapResDest.mnMapOfsX;
+        auto top = fn5( rRectSource.Top() + aMapResSource.mnMapOfsY,
                                aMapResSource.mnMapScNumY, aMapResDest.mnMapScDenomY,
                                aMapResSource.mnMapScDenomY, aMapResDest.mnMapScNumY ) -
-                          aMapResDest.mnMapOfsY,
-                          fn5( rRectSource.Right() + aMapResSource.mnMapOfsX,
+                          aMapResDest.mnMapOfsY;
+        if (rRectSource.IsEmpty())
+            return tools::Rectangle(left, top);
+
+        auto right = fn5( rRectSource.Right() + aMapResSource.mnMapOfsX,
                                aMapResSource.mnMapScNumX, aMapResDest.mnMapScDenomX,
                                aMapResSource.mnMapScDenomX, aMapResDest.mnMapScNumX ) -
-                          aMapResDest.mnMapOfsX,
-                          fn5( rRectSource.Bottom() + aMapResSource.mnMapOfsY,
+                          aMapResDest.mnMapOfsX;
+        auto bottom = fn5( rRectSource.Bottom() + aMapResSource.mnMapOfsY,
                                aMapResSource.mnMapScNumY, aMapResDest.mnMapScDenomY,
                                aMapResSource.mnMapScDenomY, aMapResDest.mnMapScNumY ) -
-                          aMapResDest.mnMapOfsY );
+                          aMapResDest.mnMapOfsY;
+        return tools::Rectangle(left, top, right, bottom);
     }
 }
 
