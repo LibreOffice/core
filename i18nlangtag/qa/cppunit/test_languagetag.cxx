@@ -742,6 +742,8 @@ bool checkMapping( const OUString& rStr1, const OUString& rStr2 )
     if (rStr1 == "en-GB-oed"   ) return rStr2 == "en-GB-oxendict";
     if (rStr1 == "es-ES_tradnl") return rStr2 == "es-ES-u-co-trad";
     if (rStr1 == "sd-IN"       ) return rStr2 == "sd-Deva-IN";
+    if (rStr1 == "cmn-CN"      ) return rStr2 == "zh-CN";
+    if (rStr1 == "cmn-TW"      ) return rStr2 == "zh-TW";
     return rStr1 == rStr2;
 }
 
