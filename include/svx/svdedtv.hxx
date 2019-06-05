@@ -186,6 +186,12 @@ public:
     void SetUndoComment(const OUString& rComment, const OUString& rObjDescr) { mpModel->SetUndoComment(rComment,rObjDescr); }
     bool IsUndoEnabled() const;
 
+    /**
+     * Checks if this or other views have an active text edit, in which case object undos are not
+     * created.
+     */
+    bool CanDoSdrUndo() const;
+
     std::vector< std::unique_ptr<SdrUndoAction> > CreateConnectorUndo( SdrObject& rO );
     void AddUndoActions( std::vector< std::unique_ptr<SdrUndoAction> > );
 
