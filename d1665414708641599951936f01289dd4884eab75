@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_6fcc3261",
+        "filename": "cui/source/factory/dlgfact.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-05T19:03:59Z",
+      "side": 1,
+      "message": "why is it called HelpDialog here and AboutDialog everywhere else?",
+      "revId": "d1665414708641599951936f01289dd4884eab75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
