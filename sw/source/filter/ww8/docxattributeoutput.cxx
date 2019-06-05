@@ -1390,7 +1390,9 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
         // Add the fields starts for hyperlinks, TOCs and index marks
         if ( pIt->bOpen && !pIt->pField )
         {
+            StartRedline( m_pRedlineData );
             StartField_Impl( pNode, nPos, *pIt, true );
+            EndRedline( m_pRedlineData );
 
             if (m_startedHyperlink)
                 ++m_nFieldsInHyperlink;
