@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_71ead775",
+        "filename": "bridges/source/cpp_uno/msvc_win32_x86-64/cpp2uno.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2019-06-05T06:31:52Z",
+      "side": 1,
+      "message": "Here is an example:\n\n\t\tVar-Address\t\talloca-pointer\t\t\n\u0026pUnoArgs\t0x000000049df8a238\t{0x000000049df8a210 \t\n\tcontent of alloca-pointer {0x000001a400000000}}\tvoid * * *\n\u0026pCppArgs\t0x000000049df8a270\t{0x000000049df8a210 \t\n\tcontent of alloca-pointer {0x000001a400000000}}\tvoid * * *\n\u0026pTempIndexes\t0x000000049df8a268\t{0x000000049df8a210 \t\n\tcontent of alloca-pointer {0}}\t\t\tint * *\n\t\t\t\t\t\t\t\t\n\u0026nTempIndexes\t0x000000049df8a210\t\t\t\t\n\tcontent of variable {0}\t\t\t\tint *\n\u0026nPos\t\t0x000000049df8a214\t\t\t\t\n\tcontent of variable {420}\t\t\tint *\n\n\nthe overlapping from \"nTempIndexes, nPos\" with the alloca-pointers\nthat is the case I\u0027m trying to avoid with this patch\n\nIn my case when using the \"pUnoArgs, ..\" it pointer to nullptr and get a clear exception, but in other case, the behavior is unpredictable.",
+      "revId": "8adc0e0d2859ad865ade03d70afd8e81a9adeb20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
