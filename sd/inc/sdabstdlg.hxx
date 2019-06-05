@@ -196,10 +196,10 @@ public:
 
     virtual VclPtr<VclAbstractDialog>          CreateMasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pDoc, SdPage*) = 0;
 
-    virtual VclPtr<AbstractHeaderFooterDialog> CreateHeaderFooterDialog( sd::ViewShell* pViewShell,
-                                                                  vcl::Window* pParent,
-                                                                  SdDrawDocument* pDoc,
-                                                                  SdPage* pCurrentPage ) = 0;
+    virtual VclPtr<AbstractHeaderFooterDialog> CreateHeaderFooterDialog(sd::ViewShell* pViewShell,
+                                                                        weld::Window* pParent,
+                                                                        SdDrawDocument* pDoc,
+                                                                        SdPage* pCurrentPage) = 0;
 
     virtual CreateTabPage               GetSdOptionsContentsTabPageCreatorFunc() = 0;
     virtual CreateTabPage               GetSdPrintOptionsTabPageCreatorFunc() = 0;

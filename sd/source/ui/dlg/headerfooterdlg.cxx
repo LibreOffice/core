@@ -44,6 +44,7 @@
 #include <tools/color.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/colorcfg.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/builderfactory.hxx>
 
@@ -57,7 +58,7 @@
 namespace sd
 {
 
-class PresLayoutPreview : public Control
+class PresLayoutPreview : public weld::CustomWidgetController
 {
 private:
     SdPage* mpMaster;
@@ -69,10 +70,11 @@ private:
     void Paint(vcl::RenderContext& rRenderContext, SdrTextObj const * pObj, bool bVisible, bool bDotted = false);
 
 public:
-    explicit PresLayoutPreview(vcl::Window* pParent);
+    explicit PresLayoutPreview();
+
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
-    virtual Size GetOptimalSize() const override;
 
     void init(SdPage* pMaster);
     void update(HeaderFooterSettings const & rSettings);
@@ -109,50 +111,46 @@ DateAndTimeFormat const nDateTimeFormats[nDateTimeFormatsCount] =
     { SvxDateFormat::AppDefault, SvxTimeFormat::HH12_MM_SS },
 };
 
-class HeaderFooterTabPage : public TabPage
+class HeaderFooterTabPage
 {
 private:
-
-    VclPtr<FixedText>   mpFTIncludeOn;
-
-    VclPtr<CheckBox>    mpCBHeader;
-    VclPtr<VclContainer> mpHeaderBox;
-    VclPtr<Edit>        mpTBHeader;
-
-    VclPtr<CheckBox>    mpCBDateTime;
-    VclPtr<RadioButton> mpRBDateTimeFixed;
-    VclPtr<RadioButton> mpRBDateTimeAutomatic;
-    VclPtr<Edit>        mpTBDateTimeFixed;
-    VclPtr<ListBox>     mpCBDateTimeFormat;
-    VclPtr<FixedText>   mpFTDateTimeLanguage;
-    VclPtr<SvxLanguageBox>  mpCBDateTimeLanguage;
-
-    VclPtr<CheckBox>    mpCBFooter;
-    VclPtr<VclContainer> mpFooterBox;
-    VclPtr<Edit>        mpTBFooter;
-
-    VclPtr<CheckBox>   mpCBSlideNumber;
-
-    VclPtr<CheckBox>    mpCBNotOnTitle;
-
-    VclPtr<PresLayoutPreview>   mpCTPreview;
-
-    SdDrawDocument*    mpDoc;
+    SdDrawDocument*     mpDoc;
     LanguageType        meOldLanguage;
-
     bool const          mbHandoutMode;
 
-    DECL_LINK( UpdateOnClickHdl, Button*, void );
-    DECL_LINK( LanguageChangeHdl, ListBox&, void );
+    std::unique_ptr<weld::Builder> mxBuilder;
+    std::unique_ptr<weld::Container> mxContainer;
+    std::unique_ptr<weld::Label> mxFTIncludeOn;
+    std::unique_ptr<weld::CheckButton> mxCBHeader;
+    std::unique_ptr<weld::Widget> mxHeaderBox;
+    std::unique_ptr<weld::Entry> mxTBHeader;
+    std::unique_ptr<weld::CheckButton> mxCBDateTime;
+    std::unique_ptr<weld::RadioButton> mxRBDateTimeFixed;
+    std::unique_ptr<weld::RadioButton> mxRBDateTimeAutomatic;
+    std::unique_ptr<weld::Entry> mxTBDateTimeFixed;
+    std::unique_ptr<weld::ComboBox> mxCBDateTimeFormat;
+    std::unique_ptr<weld::Label> mxFTDateTimeLanguage;
+    std::unique_ptr<LanguageBox> mxCBDateTimeLanguage;
+    std::unique_ptr<weld::CheckButton> mxCBFooter;
+    std::unique_ptr<weld::Widget> mxFooterBox;
+    std::unique_ptr<weld::Entry> mxTBFooter;
+    std::unique_ptr<weld::CheckButton> mxCBSlideNumber;
+    std::unique_ptr<weld::CheckButton> mxCBNotOnTitle;
+    std::unique_ptr<weld::Label> mxReplacementA;
+    std::unique_ptr<weld::Label> mxReplacementB;
+    std::unique_ptr<PresLayoutPreview> mxCTPreview;
+    std::unique_ptr<weld::CustomWeld> mxCTPreviewWin;
+
+
+    DECL_LINK( UpdateOnClickHdl, weld::Button&, void );
+    DECL_LINK( LanguageChangeHdl, weld::ComboBox&, void );
 
     void FillFormatList(sal_Int32 nSelectedPos);
     void GetOrSetDateTimeLanguage( LanguageType &rLanguage, bool bSet );
     void GetOrSetDateTimeLanguage( LanguageType &rLanguage, bool bSet, SdPage* pPage );
 
 public:
-    HeaderFooterTabPage( vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode );
-    virtual ~HeaderFooterTabPage() override;
-    virtual void dispose() override;
+    HeaderFooterTabPage(weld::Container* pParent, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode );
 
     void    init( const HeaderFooterSettings& rSettings, bool bNotOnTitle );
     void    getData( HeaderFooterSettings& rSettings, bool& rNotOnTitle );
@@ -163,14 +161,16 @@ public:
 
 using namespace ::sd;
 
-HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage ) :
-        TabDialog ( pParent, "HeaderFooterDialog", "modules/simpress/ui/headerfooterdialog.ui" ),
-        mpDoc( pDoc ),
-        mpCurrentPage( pCurrentPage ),
-        mpViewShell( pViewShell )
+HeaderFooterDialog::HeaderFooterDialog(ViewShell* pViewShell, weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage)
+    : GenericDialogController(pParent, "modules/simpress/ui/headerfooterdialog.ui", "HeaderFooterDialog")
+    , mpDoc( pDoc )
+    , mpCurrentPage( pCurrentPage )
+    , mpViewShell( pViewShell )
+    , mxTabCtrl(m_xBuilder->weld_notebook("tabs"))
+    , mxPBApplyToAll(m_xBuilder->weld_button("apply_all"))
+    , mxPBApply(m_xBuilder->weld_button("apply"))
+    , mxPBCancel(m_xBuilder->weld_button("cancel"))
 {
-    get(mpTabCtrl, "tabs" );
-
     SdPage* pSlide;
     SdPage* pNotes;
     if( pCurrentPage->GetPageKind() == PageKind::Standard )
@@ -192,115 +192,82 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, vcl::Window* pPar
         mpCurrentPage = nullptr;
     }
 
+    mxSlideTabPage.reset(new HeaderFooterTabPage(mxTabCtrl->get_page("slides"), pDoc, pSlide, false));
+    mxNotesHandoutsTabPage.reset(new HeaderFooterTabPage(mxTabCtrl->get_page("notes"), pDoc, pNotes, true));
+
     pDoc->StopWorkStartupDelay();
-    mpTabCtrl->Show();
+    mxTabCtrl->show();
 
-    mnSlidesId = mpTabCtrl->GetPageId("slides");
-    mpSlideTabPage = VclPtr<HeaderFooterTabPage>::Create( mpTabCtrl, pDoc, pSlide, false );
-    mpTabCtrl->SetTabPage( mnSlidesId, mpSlideTabPage );
+    ActivatePageHdl(mxTabCtrl->get_current_page_ident());
 
-    Size aSiz = mpSlideTabPage->GetSizePixel();
-    Size aCtrlSiz = mpTabCtrl->GetOutputSizePixel();
-    // set size on TabControl only if smaller than TabPage
-    if ( aCtrlSiz.Width() < aSiz.Width() || aCtrlSiz.Height() < aSiz.Height() )
-    {
-        mpTabCtrl->SetOutputSizePixel( aSiz );
-        aCtrlSiz = aSiz;
-    }
+    mxTabCtrl->connect_enter_page( LINK( this, HeaderFooterDialog, ActivatePageHdl ) );
 
-    sal_uInt16 nNotesId = mpTabCtrl->GetPageId("notes");
-    mpNotesHandoutsTabPage = VclPtr<HeaderFooterTabPage>::Create( mpTabCtrl, pDoc, pNotes, true );
-    mpTabCtrl->SetTabPage( nNotesId, mpNotesHandoutsTabPage );
-
-    get(maPBApplyToAll, "apply_all" );
-    get(maPBApply, "apply" );
-    get(maPBCancel, "cancel" );
-
-    ActivatePageHdl( mpTabCtrl );
-
-    mpTabCtrl->SetActivatePageHdl( LINK( this, HeaderFooterDialog, ActivatePageHdl ) );
-
-    maPBApplyToAll->SetClickHdl( LINK( this, HeaderFooterDialog, ClickApplyToAllHdl ) );
-    maPBApply->SetClickHdl( LINK( this, HeaderFooterDialog, ClickApplyHdl ) );
-    maPBCancel->SetClickHdl( LINK( this, HeaderFooterDialog, ClickCancelHdl ) );
+    mxPBApplyToAll->connect_clicked( LINK( this, HeaderFooterDialog, ClickApplyToAllHdl ) );
+    mxPBApply->connect_clicked( LINK( this, HeaderFooterDialog, ClickApplyHdl ) );
+    mxPBCancel->connect_clicked( LINK( this, HeaderFooterDialog, ClickCancelHdl ) );
 
     maSlideSettings = pSlide->getHeaderFooterSettings();
 
     const HeaderFooterSettings& rTitleSettings = mpDoc->GetSdPage(0, PageKind::Standard)->getHeaderFooterSettings();
     bool bNotOnTitle = !rTitleSettings.mbFooterVisible && !rTitleSettings.mbSlideNumberVisible && !rTitleSettings.mbDateTimeVisible;
 
-    mpSlideTabPage->init( maSlideSettings, bNotOnTitle );
+    mxSlideTabPage->init( maSlideSettings, bNotOnTitle );
 
     maNotesHandoutSettings = pNotes->getHeaderFooterSettings();
-    mpNotesHandoutsTabPage->init( maNotesHandoutSettings, false );
+    mxNotesHandoutsTabPage->init( maNotesHandoutSettings, false );
 }
 
 HeaderFooterDialog::~HeaderFooterDialog()
 {
-    disposeOnce();
 }
 
-void HeaderFooterDialog::dispose()
+IMPL_LINK(HeaderFooterDialog, ActivatePageHdl, const OString&, rIdent, void)
 {
-    mpSlideTabPage.disposeAndClear();
-    mpNotesHandoutsTabPage.disposeAndClear();
-    mpTabCtrl.clear();
-    maPBApplyToAll.clear();
-    maPBApply.clear();
-    maPBCancel.clear();
-    TabDialog::dispose();
+    mxPBApply->set_visible(rIdent == "slides");
+    mxPBApply->set_sensitive(mpCurrentPage != nullptr);
 }
 
-IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
-{
-    const sal_uInt16 nId = pTabCtrl->GetCurPageId();
-    TabPage* pTabPage = pTabCtrl->GetTabPage( nId );
-    pTabPage->Show();
-    maPBApply->Show( nId == mnSlidesId );
-    maPBApply->Enable( mpCurrentPage != nullptr );
-}
-
-IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyToAllHdl, Button*, void)
+IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyToAllHdl, weld::Button&, void)
 {
     ApplyToAll();
 }
 
-IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyHdl, Button*, void)
+IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyHdl, weld::Button&, void)
 {
     Apply();
 }
 
-IMPL_LINK_NOARG(HeaderFooterDialog, ClickCancelHdl, Button*, void)
+IMPL_LINK_NOARG(HeaderFooterDialog, ClickCancelHdl, weld::Button&, void)
 {
-    EndDialog();
+    m_xDialog->response(RET_CANCEL);
 }
 
-short HeaderFooterDialog::Execute()
+short HeaderFooterDialog::run()
 {
-    sal_uInt16 nRet = TabDialog::Execute();
-    if( nRet )
+    short nRet = GenericDialogController::run();
+    if (nRet)
         mpViewShell->GetDocSh()->SetModified();
     return nRet;
 }
 
 void HeaderFooterDialog::ApplyToAll()
 {
-    sal_uInt16 tabId = mpTabCtrl->GetCurPageId();
-    apply( true, tabId == mnSlidesId );
-    EndDialog(1);
+    OString tabId = mxTabCtrl->get_current_page_ident();
+    apply(true, tabId == "slides");
+    m_xDialog->response(RET_OK);
 }
 
 void HeaderFooterDialog::Apply()
 {
-    sal_uInt16 tabId = mpTabCtrl->GetCurPageId();
-    apply( false, tabId == mnSlidesId );
-    EndDialog(1);
+    OString tabId = mxTabCtrl->get_current_page_ident();
+    apply(false, tabId == "slides");
+    m_xDialog->response(RET_OK);
 }
 
 void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
 {
     std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup(mpDoc));
-    OUString aComment( GetText() );
+    OUString aComment( m_xDialog->get_title() );
     pUndoGroup->SetComment( aComment );
 
     HeaderFooterSettings aNewSettings;
@@ -308,7 +275,7 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
 
     // change slide settings first ...
 
-    mpSlideTabPage->getData( aNewSettings, bNewNotOnTitle );
+    mxSlideTabPage->getData( aNewSettings, bNewNotOnTitle );
 
     // only if we pressed apply or apply all on the slide tab page or if the slide settings
     // have been changed
@@ -351,7 +318,7 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
 
     // now notes settings
 
-    mpNotesHandoutsTabPage->getData( aNewSettings, bNewNotOnTitle );
+    mxNotesHandoutsTabPage->getData( aNewSettings, bNewNotOnTitle );
 
     // only if we pressed apply or apply all on the notes tab page or if the notes settings
     // have been changed
@@ -381,172 +348,115 @@ void HeaderFooterDialog::change( SdUndoGroup* pUndoGroup, SdPage* pPage, const H
     pPage->setHeaderFooterSettings( rNewSettings );
 }
 
-namespace {
-
-void recursive_rename_ui_element(vcl::Window& rWindow, const OUString& rPrefix)
+HeaderFooterTabPage::HeaderFooterTabPage(weld::Container* pParent, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode)
+    : mpDoc(pDoc)
+    , mbHandoutMode(bHandoutMode)
+    , mxBuilder(Application::CreateBuilder(pParent, "modules/simpress/ui/headerfootertab.ui"))
+    , mxContainer(mxBuilder->weld_container("HeaderFooterTab"))
+    , mxFTIncludeOn(mxBuilder->weld_label("include_label"))
+    , mxCBHeader(mxBuilder->weld_check_button("header_cb" ))
+    , mxHeaderBox(mxBuilder->weld_widget("header_box"))
+    , mxTBHeader(mxBuilder->weld_entry("header_text"))
+    , mxCBDateTime(mxBuilder->weld_check_button("datetime_cb"))
+    , mxRBDateTimeFixed(mxBuilder->weld_radio_button("rb_fixed"))
+    , mxRBDateTimeAutomatic(mxBuilder->weld_radio_button("rb_auto"))
+    , mxTBDateTimeFixed(mxBuilder->weld_entry("datetime_value"))
+    , mxCBDateTimeFormat(mxBuilder->weld_combo_box("datetime_format_list"))
+    , mxFTDateTimeLanguage(mxBuilder->weld_label("language_label"))
+    , mxCBDateTimeLanguage(new LanguageBox(mxBuilder->weld_combo_box("language_list")))
+    , mxCBFooter(mxBuilder->weld_check_button("footer_cb"))
+    , mxFooterBox(mxBuilder->weld_widget("footer_box" ))
+    , mxTBFooter(mxBuilder->weld_entry("footer_text"))
+    , mxCBSlideNumber(mxBuilder->weld_check_button("slide_number"))
+    , mxCBNotOnTitle(mxBuilder->weld_check_button("not_on_title"))
+    , mxReplacementA(mxBuilder->weld_label("replacement_a"))
+    , mxReplacementB(mxBuilder->weld_label("replacement_b"))
+    , mxCTPreview(new PresLayoutPreview)
+    , mxCTPreviewWin(new weld::CustomWeld(*mxBuilder, "preview", *mxCTPreview))
 {
-    OUString aID = rWindow.get_id();
-    if (aID.isEmpty())
-    {
-        rWindow.set_id(rPrefix +  aID);
-    }
-
-    size_t nChildCount = rWindow.GetChildCount();
-    for (size_t i = 0; i < nChildCount; ++i)
-    {
-        vcl::Window* pChild = rWindow.GetChild(i);
-        if (pChild)
-            recursive_rename_ui_element(*pChild, rPrefix);
-    }
-}
-
-}
-
-HeaderFooterTabPage::HeaderFooterTabPage( vcl::Window* pWindow, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode ) :
-        TabPage( pWindow, "HeaderFooterTab", "modules/simpress/ui/headerfootertab.ui" ),
-        mpDoc(pDoc),
-        mbHandoutMode( bHandoutMode )
-{
-    get(mpFTIncludeOn, "include_label");
-    get(mpCBHeader, "header_cb" );
-    get(mpHeaderBox, "header_box" );
-    get(mpTBHeader, "header_text" );
-    get(mpCBDateTime, "datetime_cb" );
-    get(mpRBDateTimeFixed, "rb_fixed" );
-    get(mpRBDateTimeAutomatic, "rb_auto" );
-    get(mpTBDateTimeFixed, "datetime_value" );
-    get(mpCBDateTimeFormat, "datetime_format_list" );
-    get(mpFTDateTimeLanguage, "language_label" );
-    get(mpCBDateTimeLanguage, "language_list" );
-
-    get(mpCBFooter, "footer_cb" );
-    get(mpFooterBox, "footer_box" );
-    get(mpTBFooter, "footer_text" );
-
-    get(mpCBSlideNumber, "slide_number" );
-
-    get(mpCBNotOnTitle, "not_on_title" );
-
-    get(mpCTPreview, "preview");
-    mpCTPreview->init( pActualPage ?
+    mxCTPreview->init( pActualPage ?
             (pActualPage->IsMasterPage() ? pActualPage : static_cast<SdPage*>(&(pActualPage->TRG_GetMasterPage()))) :
             (pDoc->GetMasterSdPage( 0, bHandoutMode ? PageKind::Notes : PageKind::Standard )) );
 
     if( mbHandoutMode )
     {
-        OUString sPageNo = get<FixedText>("replacement_a")->GetText();
-        mpCBSlideNumber->SetText( sPageNo );
+        OUString sPageNo = mxReplacementA->get_label();
+        mxCBSlideNumber->set_label( sPageNo );
 
-        OUString sFrameTitle = get<FixedText>("replacement_b")->GetText();
-        mpFTIncludeOn->SetText( sFrameTitle );
+        OUString sFrameTitle = mxReplacementB->get_label();
+        mxFTIncludeOn->set_label( sFrameTitle );
     }
 
-    mpCBHeader->Show( mbHandoutMode );
-    mpHeaderBox->Show( mbHandoutMode );
-    mpCBNotOnTitle->Show( !mbHandoutMode );
+    mxCBHeader->set_visible( mbHandoutMode );
+    mxHeaderBox->set_visible( mbHandoutMode );
+    mxCBNotOnTitle->set_visible( !mbHandoutMode );
 
-    mpCBDateTime->SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
-    mpRBDateTimeFixed->SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
-    mpRBDateTimeAutomatic->SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
-    mpCBFooter->SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
-    mpCBHeader->SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
-    mpCBSlideNumber->SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
+    mxCBDateTime->connect_clicked( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
+    mxRBDateTimeFixed->connect_clicked( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
+    mxRBDateTimeAutomatic->connect_clicked( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
+    mxCBFooter->connect_clicked( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
+    mxCBHeader->connect_clicked( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
+    mxCBSlideNumber->connect_clicked( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
 
-    mpCBDateTimeLanguage->SetLanguageList( SvxLanguageListFlags::ALL|SvxLanguageListFlags::ONLY_KNOWN, false, false );
-    mpCBDateTimeLanguage->SetSelectHdl( LINK( this, HeaderFooterTabPage, LanguageChangeHdl ) );
+    mxCBDateTimeLanguage->SetLanguageList( SvxLanguageListFlags::ALL|SvxLanguageListFlags::ONLY_KNOWN, false, false );
+    mxCBDateTimeLanguage->connect_changed( LINK( this, HeaderFooterTabPage, LanguageChangeHdl ) );
 
     GetOrSetDateTimeLanguage( meOldLanguage, false );
     meOldLanguage = MsLangId::getRealLanguage( meOldLanguage );
-    mpCBDateTimeLanguage->SelectLanguage( meOldLanguage );
+    mxCBDateTimeLanguage->set_active_id( meOldLanguage );
 
     FillFormatList(0);
-
-    if (mbHandoutMode)
-        recursive_rename_ui_element(*this, "handout");
-    else
-        recursive_rename_ui_element(*this, "slide");
 }
 
-HeaderFooterTabPage::~HeaderFooterTabPage()
+IMPL_LINK_NOARG(HeaderFooterTabPage, LanguageChangeHdl, weld::ComboBox&, void)
 {
-    disposeOnce();
-}
-
-void HeaderFooterTabPage::dispose()
-{
-    mpFTIncludeOn.clear();
-    mpCBHeader.clear();
-    mpHeaderBox.clear();
-    mpTBHeader.clear();
-    mpCBDateTime.clear();
-    mpRBDateTimeFixed.clear();
-    mpRBDateTimeAutomatic.clear();
-    mpTBDateTimeFixed.clear();
-    mpCBDateTimeFormat.clear();
-    mpFTDateTimeLanguage.clear();
-    mpCBDateTimeLanguage.clear();
-    mpCBFooter.clear();
-    mpFooterBox.clear();
-    mpTBFooter.clear();
-    mpCBSlideNumber.clear();
-    mpCBNotOnTitle.clear();
-    mpCTPreview.clear();
-    TabPage::dispose();
-}
-
-IMPL_LINK_NOARG(HeaderFooterTabPage, LanguageChangeHdl, ListBox&, void)
-{
-    FillFormatList( mpCBDateTimeFormat->GetSelectedEntryPos() );
+    FillFormatList( mxCBDateTimeFormat->get_active() );
 }
 
 void HeaderFooterTabPage::FillFormatList( sal_Int32 nSelectedPos )
 {
-    LanguageType eLanguage = mpCBDateTimeLanguage->GetSelectedLanguage();
+    LanguageType eLanguage = mxCBDateTimeLanguage->get_active_id();
 
-    mpCBDateTimeFormat->Clear();
+    mxCBDateTimeFormat->clear();
 
     DateTime aDateTime( DateTime::SYSTEM );
 
-    for( int nFormat = 0; nFormat < nDateTimeFormatsCount; nFormat++ )
+    for (int nFormat = 0; nFormat < nDateTimeFormatsCount; ++nFormat)
     {
         OUString aStr( SvxDateTimeField::GetFormatted(
                 aDateTime, aDateTime,
                 nDateTimeFormats[nFormat].meDateFormat, nDateTimeFormats[nFormat].meTimeFormat,
                 *(SD_MOD()->GetNumberFormatter()), eLanguage ) );
-        const sal_Int32 nEntry = mpCBDateTimeFormat->InsertEntry( aStr );
-        if( nFormat == nSelectedPos )
-        {
-            mpCBDateTimeFormat->SelectEntryPos( nEntry );
-            mpCBDateTimeFormat->SetText( aStr );
-        }
+        mxCBDateTimeFormat->append_text(aStr);
+        if (nFormat == nSelectedPos)
+            mxCBDateTimeFormat->set_active(nFormat);
     }
 }
 
 void HeaderFooterTabPage::init( const HeaderFooterSettings& rSettings, bool bNotOnTitle )
 {
-    mpCBDateTime->Check( rSettings.mbDateTimeVisible );
-    mpRBDateTimeFixed->Check( rSettings.mbDateTimeIsFixed );
-    mpRBDateTimeAutomatic->Check( !rSettings.mbDateTimeIsFixed );
-    mpTBDateTimeFixed->SetText( rSettings.maDateTimeText );
+    mxCBDateTime->set_active( rSettings.mbDateTimeVisible );
+    mxRBDateTimeFixed->set_active( rSettings.mbDateTimeIsFixed );
+    mxRBDateTimeAutomatic->set_active( !rSettings.mbDateTimeIsFixed );
+    mxTBDateTimeFixed->set_text( rSettings.maDateTimeText );
 
-    mpCBHeader->Check( rSettings.mbHeaderVisible );
-    mpTBHeader->SetText( rSettings.maHeaderText );
+    mxCBHeader->set_active( rSettings.mbHeaderVisible );
+    mxTBHeader->set_text( rSettings.maHeaderText );
 
-    mpCBFooter->Check( rSettings.mbFooterVisible );
-    mpTBFooter->SetText( rSettings.maFooterText );
+    mxCBFooter->set_active( rSettings.mbFooterVisible );
+    mxTBFooter->set_text( rSettings.maFooterText );
 
-    mpCBSlideNumber->Check( rSettings.mbSlideNumberVisible );
+    mxCBSlideNumber->set_active( rSettings.mbSlideNumberVisible );
 
-    mpCBNotOnTitle->Check( bNotOnTitle );
+    mxCBNotOnTitle->set_active( bNotOnTitle );
 
-    mpCBDateTimeLanguage->SelectLanguage( meOldLanguage );
+    mxCBDateTimeLanguage->set_active_id( meOldLanguage );
 
-    for( sal_Int32 nPos = 0; nPos < mpCBDateTimeFormat->GetEntryCount(); nPos++ )
+    for (sal_Int32 nPos = 0, nEntryCount = mxCBDateTimeFormat->get_count(); nPos < nEntryCount; ++nPos)
     {
         if( nDateTimeFormats[nPos].meDateFormat == rSettings.meDateFormat && nDateTimeFormats[nPos].meTimeFormat == rSettings.meTimeFormat )
         {
-            mpCBDateTimeFormat->SelectEntryPos( nPos );
-            mpCBDateTimeFormat->SetText( mpCBDateTimeFormat->GetEntry(nPos) );
+            mxCBDateTimeFormat->set_active(nPos);
             break;
         }
     }
@@ -556,49 +466,47 @@ void HeaderFooterTabPage::init( const HeaderFooterSettings& rSettings, bool bNot
 
 void HeaderFooterTabPage::getData( HeaderFooterSettings& rSettings, bool& rNotOnTitle )
 {
-    rSettings.mbDateTimeVisible = mpCBDateTime->IsChecked();
-    rSettings.mbDateTimeIsFixed = mpRBDateTimeFixed->IsChecked();
-    rSettings.maDateTimeText = mpTBDateTimeFixed->GetText();
-    rSettings.mbFooterVisible = mpCBFooter->IsChecked();
-    rSettings.maFooterText = mpTBFooter->GetText();
-    rSettings.mbSlideNumberVisible = mpCBSlideNumber->IsChecked();
-    rSettings.mbHeaderVisible = mpCBHeader->IsChecked();
-    rSettings.maHeaderText = mpTBHeader->GetText();
+    rSettings.mbDateTimeVisible = mxCBDateTime->get_active();
+    rSettings.mbDateTimeIsFixed = mxRBDateTimeFixed->get_active();
+    rSettings.maDateTimeText = mxTBDateTimeFixed->get_text();
+    rSettings.mbFooterVisible = mxCBFooter->get_active();
+    rSettings.maFooterText = mxTBFooter->get_text();
+    rSettings.mbSlideNumberVisible = mxCBSlideNumber->get_active();
+    rSettings.mbHeaderVisible = mxCBHeader->get_active();
+    rSettings.maHeaderText = mxTBHeader->get_text();
 
-    if( mpCBDateTimeFormat->GetSelectedEntryCount() == 1 )
+    int nPos = mxCBDateTimeFormat->get_active();
+    if (nPos != -1)
     {
-        sal_Int32 nPos = mpCBDateTimeFormat->GetSelectedEntryPos();
         rSettings.meDateFormat = nDateTimeFormats[nPos].meDateFormat;
         rSettings.meTimeFormat = nDateTimeFormats[nPos].meTimeFormat;
     }
 
-    LanguageType eLanguage = mpCBDateTimeLanguage->GetSelectedLanguage();
+    LanguageType eLanguage = mxCBDateTimeLanguage->get_active_id();
     if( eLanguage != meOldLanguage )
         GetOrSetDateTimeLanguage( eLanguage, true );
 
-    rNotOnTitle = mpCBNotOnTitle->IsChecked();
+    rNotOnTitle = mxCBNotOnTitle->get_active();
 }
 
 void HeaderFooterTabPage::update()
 {
-    mpRBDateTimeFixed->Enable( mpCBDateTime->IsChecked() );
-    mpTBDateTimeFixed->Enable( mpRBDateTimeFixed->IsChecked() && mpCBDateTime->IsChecked() );
-    mpRBDateTimeAutomatic->Enable( mpCBDateTime->IsChecked() );
-    mpCBDateTimeFormat->Enable( mpCBDateTime->IsChecked() && mpRBDateTimeAutomatic->IsChecked() );
-    mpFTDateTimeLanguage->Enable( mpCBDateTime->IsChecked() && mpRBDateTimeAutomatic->IsChecked() );
-    mpCBDateTimeLanguage->Enable( mpCBDateTime->IsChecked() && mpRBDateTimeAutomatic->IsChecked() );
-
-    mpFooterBox->Enable( mpCBFooter->IsChecked() );
-
-    mpHeaderBox->Enable( mpCBHeader->IsChecked() );
+    mxRBDateTimeFixed->set_sensitive( mxCBDateTime->get_active() );
+    mxTBDateTimeFixed->set_sensitive( mxRBDateTimeFixed->get_active() && mxCBDateTime->get_active() );
+    mxRBDateTimeAutomatic->set_sensitive( mxCBDateTime->get_active() );
+    mxCBDateTimeFormat->set_sensitive( mxCBDateTime->get_active() && mxRBDateTimeAutomatic->get_active() );
+    mxFTDateTimeLanguage->set_sensitive( mxCBDateTime->get_active() && mxRBDateTimeAutomatic->get_active() );
+    mxCBDateTimeLanguage->set_sensitive( mxCBDateTime->get_active() && mxRBDateTimeAutomatic->get_active() );
+    mxFooterBox->set_sensitive( mxCBFooter->get_active() );
+    mxHeaderBox->set_sensitive( mxCBHeader->get_active() );
 
     HeaderFooterSettings aSettings;
     bool bNotOnTitle;
     getData( aSettings, bNotOnTitle );
-    mpCTPreview->update( aSettings );
+    mxCTPreview->update( aSettings );
 }
 
-IMPL_LINK_NOARG(HeaderFooterTabPage, UpdateOnClickHdl, Button*, void)
+IMPL_LINK_NOARG(HeaderFooterTabPage, UpdateOnClickHdl, weld::Button&, void)
 {
     update();
 }
@@ -713,17 +621,17 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
     pOutl->Init( nOutlMode );
 }
 
-PresLayoutPreview::PresLayoutPreview( vcl::Window* pParent )
-    : Control(pParent)
-    , mpMaster(nullptr)
+PresLayoutPreview::PresLayoutPreview()
+    : mpMaster(nullptr)
 {
 }
 
-VCL_BUILDER_FACTORY(PresLayoutPreview)
-
-Size PresLayoutPreview::GetOptimalSize() const
+void PresLayoutPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    return LogicToPixel(Size(80, 80), MapMode(MapUnit::MapAppFont));
+    Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(80, 80), MapMode(MapUnit::MapAppFont)));
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
+    SetOutputSizePixel(aSize);
 }
 
 void PresLayoutPreview::init( SdPage *pMaster )
