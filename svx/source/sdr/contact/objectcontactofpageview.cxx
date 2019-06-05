@@ -213,6 +213,9 @@ namespace sdr
                 aViewRange.transform(rTargetOutDev.GetInverseViewTransformation());
             }
 
+            if (aViewRange.isEmpty())
+                return;
+
             // update local ViewInformation2D
             const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D(
                 basegfx::B2DHomMatrix(),
