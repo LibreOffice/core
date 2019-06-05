@@ -797,7 +797,7 @@
                                         <property name="receives_default">True</property>
                                         <property name="always_show_image">True</property>
                                         <child>
-                                          <object class="GtkImage">
+                                          <object class="GtkImage" id="image_justify_center">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="stock">gtk-justify-center</property>
@@ -817,7 +817,7 @@
                                         <property name="margin_left">88</property>
                                         <property name="always_show_image">True</property>
                                         <child>
-                                          <object class="GtkImage">
+                                          <object class="GtkImage" id="image_justify_left">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="stock">gtk-justify-left</property>
@@ -836,7 +836,7 @@
                                         <property name="receives_default">True</property>
                                         <property name="always_show_image">True</property>
                                         <child>
-                                          <object class="GtkImage">
+                                          <object class="GtkImage" id="image_justify_right">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="stock">gtk-justify-right</property>
