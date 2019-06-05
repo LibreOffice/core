@@ -59,9 +59,6 @@ public:
     void execute();
     void endExecute( bool bStatus );
 
-    /// @throws css::uno::Exception
-    css::uno::Reference< css::awt::XWindowPeer > createWindowPeer( css::uno::Reference< css::awt::XWindowPeer > const & xParentPeer );
-
     css::uno::Reference< css::uno::XInterface > insertControlModel( const OUString& rServiceName, const OUString& rName,
         const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< css::uno::Any >& rPropertyValues );
 
@@ -98,10 +95,19 @@ public:
     void enableControl( const OUString& rControlName );
     void disableControl( const OUString& rControlName );
 
+    void reschedule() const { mxReschedule->reschedule(); }
+    bool endStatus() const { return mbStatus; }
+    css::uno::Reference<css::awt::XControl> getControl(const OUString& rControlName) const { return mxDialog->getControl(rControlName); }
+    css::uno::Reference<css::frame::XController> controller() const { return mxController; }
+    void setPropertyValues(const css::uno::Sequence<OUString>& rNameSeq, const css::uno::Sequence<css::uno::Any>& rValueSeq)
+        { mxDialogModelMultiPropertySet->setPropertyValues(rNameSeq, rValueSeq); }
+
+protected:
     css::uno::Reference< css::uno::XComponentContext >        mxContext;
     css::uno::Reference< css::frame::XController >            mxController;
-    css::uno::Reference< css::awt::XReschedule >              mxReschedule;
 
+private:
+    css::uno::Reference< css::awt::XReschedule >              mxReschedule;
     css::uno::Reference< css::uno::XInterface >               mxDialogModel;
     css::uno::Reference< css::beans::XMultiPropertySet >      mxDialogModelMultiPropertySet;
     css::uno::Reference< css::lang::XMultiServiceFactory >    mxDialogModelMSF;
@@ -112,8 +118,6 @@ public:
 
     css::uno::Reference< css::awt::XUnoControlDialog >        mxDialog;
     css::uno::Reference< css::awt::XControl >                 mxControl;
-    css::uno::Reference< css::awt::XWindowPeer >              mxWindowPeer;
-
     bool                                                                        mbStatus;
 };
 
