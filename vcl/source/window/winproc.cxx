@@ -1137,6 +1137,12 @@ static bool ImplHandleExtTextInput( vcl::Window* pWindow,
         }
         if( !pChild->ImplGetWindowImpl()->mpFrameData->mnFocusId )
             break;
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            SAL_WARN("vcl", "Failed to get ext text input context");
+            break;
+        }
         Application::Yield();
     }
 
