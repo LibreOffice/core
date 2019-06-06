@@ -259,7 +259,7 @@ static AquaSalFrame* getMouseContainerFrame()
             mpFrame->mpMenu->setMainMenu();
         else if( ! mpFrame->mpParent &&
                  ( (mpFrame->mnStyle & nGuessDocument) == nGuessDocument || // set default menu for e.g. help
-                    mpFrame->mbFullScreen ) )                               // ser default menu for e.g. presentation
+                    mpFrame->mbFullScreen ) )                               // set default menu for e.g. presentation
         {
             AquaSalMenu::setDefaultMenu();
         }
