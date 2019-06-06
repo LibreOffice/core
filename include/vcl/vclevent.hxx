@@ -143,7 +143,6 @@ enum class VclEventId
     ToolboxItemWindowChanged,
     ToolboxSelect,
     WindowActivate,
-    WindowChildCreated,     // pData = vcl::Window*
     WindowChildDestroyed,   // pData = vcl::Window*
     WindowClose,
     WindowCommand,          // pData = CommandEvent*

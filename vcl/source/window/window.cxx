@@ -1171,9 +1171,6 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     // calculate app font res (except for the Intro Window or the default window)
     if ( mpWindowImpl->mbFrame && !pSVData->maGDIData.mnAppFontX && ! (nStyle & (WB_INTROWIN|WB_DEFAULTWIN)) )
         ImplInitAppFontData( this );
-
-    if ( GetAccessibleParentWindow()  && GetParent() != Application::GetDefDialogParent() )
-        GetAccessibleParentWindow()->CallEventListeners( VclEventId::WindowChildCreated, this );
 }
 
 void Window::ImplInitAppFontData( vcl::Window const * pWindow )

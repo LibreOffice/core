@@ -78,8 +78,6 @@ class XKeyListenerExtended(unohelper.Base, XKeyListener):
 # Test that registered mouse/key listeners for top window receive mouse/key events
 class XWindow(UITestCase):
     def test_listeners(self):
-        # Disabled until basic editor crash is fixed
-        return
         global mouseListenerCount
         global keyListenerCount
 
