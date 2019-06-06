@@ -17,6 +17,8 @@
 #include <vcl/layout.hxx>
 #include <vcl/vclmedit.hxx>
 
+namespace vcl
+{
 class AboutDialog : public Dialog
 {
 private:
@@ -54,6 +56,7 @@ public:
 
     OUString GetWebsiteLabel() const { return m_xBuildIdLink->GetText(); }
 };
+}
 
 #endif
 
