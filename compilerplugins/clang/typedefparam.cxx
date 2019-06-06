@@ -258,9 +258,9 @@ static bool areTypesEqual(QualType lhs, QualType rhs)
         //
         //   typedef __darwin_size_t size_t;
         //
-        // where __darwin_size_t is a typedef for long unsigned int, too, so that, depening on the
-        // order in which those two files get inclued, either of those two typedefs can act as a
-        // redeclaration of the other one.  However, areTypesEqual would unhelpfuly consider such
+        // where __darwin_size_t is a typedef for long unsigned int, too, so that, depending on the
+        // order in which those two files get included, either of those two typedefs can act as a
+        // redeclaration of the other one.  However, areTypesEqual would unhelpfully consider such
         // different occurrences of size_t to be non-equal, so filter them out here.  And, at least
         // with my libcxx trunk .../include/c++/v1/cstddef, std::size_t is a using declaration that
         // brings size_t from the global namespace into namespace std, so that the above checks for
