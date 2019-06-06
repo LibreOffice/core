@@ -4541,14 +4541,6 @@
           <value>8</value>
         </prop>
       </node>
-      <node oor:name=".uno:ToolsMacroEdit" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Edit Macros</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:InternetDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Internet Options</value>
