@@ -97,7 +97,7 @@ public:
     /// text rotation in radian
     float mfFontRotation;
     /// faux bold - true, if font doesn't have proper bold variants
-    float mbFauxBold;
+    bool mbFauxBold;
 
 private:
     explicit CoreTextStyle(const PhysicalFontFace&, const FontSelectPattern&);
