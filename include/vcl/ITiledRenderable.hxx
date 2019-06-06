@@ -20,6 +20,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
+#include <com/sun/star/datatransfer/XTransferable.hpp>
 
 namespace vcl
 {
@@ -186,11 +187,9 @@ public:
     virtual void setTextSelection(int nType, int nX, int nY) = 0;
 
     /**
-     * Gets the text selection.
-     *
-     * @see lok::Document::getTextSelection().
+     * Gets the selection as a transferable for later processing
      */
-    virtual OString getTextSelection(const char* pMimeType, OString& rUsedMimeType) = 0;
+    virtual css::uno::Reference<css::datatransfer::XTransferable> getSelection() = 0;
 
     /**
      * Adjusts the graphic selection.
