@@ -3940,7 +3940,12 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
         switch (eStackType)
         {
             case svDouble :
-                rArray.push_back( PopDouble());
+                if ( mnSubTotalFlags & SubtotalFlags::RefAndArrayOnly )
+                {
+                    SetError(FormulaError::IllegalParameter);
+                }
+                else
+                    rArray.push_back( PopDouble());
             break;
             case svSingleRef :
             {

@@ -2696,6 +2696,383 @@
      <table:table-cell table:number-columns-repeated="8"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J19];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A38])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A38])" office:value-type="string" office:string-value="=AGGREGATE(J19,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J19,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="15"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J20];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A39])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A39])" office:value-type="string" office:string-value="=AGGREGATE(J20,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J20,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="7"/>
+     <table:table-cell table:style-name="ce35" table:number-columns-repeated="3"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J21];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A40])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A40])" office:value-type="string" office:string-value="=AGGREGATE(J21,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J21,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="15"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J22];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A41])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A41])" office:value-type="string" office:string-value="=AGGREGATE(J22,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J22,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="15"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J23];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A42])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A42])" office:value-type="string" office:string-value="=AGGREGATE(J23,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J23,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce35" table:number-columns-repeated="5"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J24];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A43])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A43])" office:value-type="string" office:string-value="=AGGREGATE(J24,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J24,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce35" table:number-columns-repeated="5"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J25];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A44])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A44])" office:value-type="string" office:string-value="=AGGREGATE(J25,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J25,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce35" table:number-columns-repeated="5"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J26];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A45])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A45])" office:value-type="string" office:string-value="=AGGREGATE(J26,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J26,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce35" table:number-columns-repeated="5"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J27];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A46])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A46])" office:value-type="string" office:string-value="=AGGREGATE(J27,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J27,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce35" table:number-columns-repeated="5"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J28];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A47])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A47])" office:value-type="string" office:string-value="=AGGREGATE(J28,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J28,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce35" table:number-columns-repeated="5"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J29];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A48])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A48])" office:value-type="string" office:string-value="=AGGREGATE(J29,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J29,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce35" table:number-columns-repeated="5"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J30];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A49])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A49])" office:value-type="string" office:string-value="=AGGREGATE(J30,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J30,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce35" table:number-columns-repeated="5"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J31];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A50])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A50])" office:value-type="string" office:string-value="=AGGREGATE(J31,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J31,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce35" table:number-columns-repeated="5"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J32];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A51])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A51])" office:value-type="string" office:string-value="=AGGREGATE(J32,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J32,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce35" table:number-columns-repeated="5"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J33];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A52])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A52])" office:value-type="string" office:string-value="=AGGREGATE(J33,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J33,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce35" table:number-columns-repeated="5"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J34];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A53])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A53])" office:value-type="string" office:string-value="=AGGREGATE(J34,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J34,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce35" table:number-columns-repeated="5"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J35];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A54])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A54])" office:value-type="string" office:string-value="=AGGREGATE(J35,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J35,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce35" table:number-columns-repeated="5"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J36];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A55])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A55])" office:value-type="string" office:string-value="=AGGREGATE(J36,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J36,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce35" table:number-columns-repeated="5"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J37];4;[.$J$3];12)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:504</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A56])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A56])" office:value-type="string" office:string-value="=AGGREGATE(J37,4,$J$3,12)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J37,4,$J$3,12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce35" table:number-columns-repeated="5"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J34];4;[.$K$1:.$K$11];0.2)" office:value-type="float" office:value="63" calcext:value-type="float">
+      <text:p>63</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="63" calcext:value-type="float">
+      <text:p>63</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce55" table:formula="of:=[.A57]=[.B57]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A57])" office:value-type="string" office:string-value="=AGGREGATE(J34,4,$K$1:$K$11,0.2)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J34,4,$K$1:$K$11,0.2)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="15"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J35];4;[.$K$1:.$K$11];0.2)" office:value-type="float" office:value="53" calcext:value-type="float">
+      <text:p>53</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="53" calcext:value-type="float">
+      <text:p>53</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce55" table:formula="of:=[.A58]=[.B58]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A58])" office:value-type="string" office:string-value="=AGGREGATE(J35,4,$K$1:$K$11,0.2)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J35,4,$K$1:$K$11,0.2)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="15"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J36];4;[.$K$1:.$K$11];0.2)" office:value-type="float" office:value="58.2" calcext:value-type="float">
+      <text:p>58.2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="58.2" calcext:value-type="float">
+      <text:p>58.2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce55" table:formula="of:=[.A59]=[.B59]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A59])" office:value-type="string" office:string-value="=AGGREGATE(J36,4,$K$1:$K$11,0.2)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J36,4,$K$1:$K$11,0.2)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="15"/>
+     </table:table-row>
+     <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE([.J37];4;[.$K$1:.$K$11];2)" office:value-type="float" office:value="82" calcext:value-type="float">
+      <text:p>82</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="82" calcext:value-type="float">
+      <text:p>82</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce55" table:formula="of:=[.A60]=[.B60]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A60])" office:value-type="string" office:string-value="=AGGREGATE(J37,4,$K$1:$K$11,2)" calcext:value-type="string">
+      <text:p>=AGGREGATE(J37,4,$K$1:$K$11,2)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="15"/>
+     </table:table-row>
+    <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:number-columns-repeated="16"/>

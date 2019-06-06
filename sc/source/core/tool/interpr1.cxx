@@ -3640,9 +3640,16 @@ void ScInterpreter::ScMin( bool bTextAsZero )
         {
             case svDouble :
             {
-                nVal = GetDouble();
-                if (nMin > nVal) nMin = nVal;
-                nFuncFmtType = SvNumFormatType::NUMBER;
+                if ( mnSubTotalFlags & SubtotalFlags::RefAndArrayOnly )
+                {
+                    SetError(FormulaError::IllegalParameter);
+                }
+                else
+                {
+                    nVal = GetDouble();
+                    if (nMin > nVal) nMin = nVal;
+                    nFuncFmtType = SvNumFormatType::NUMBER;
+                }
             }
             break;
             case svSingleRef :
@@ -3720,7 +3727,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
             case svString :
             {
                 Pop();
-                if ( bTextAsZero )
+                if ( bTextAsZero && !( mnSubTotalFlags & SubtotalFlags::RefAndArrayOnly ) )
                 {
                     if ( nMin > 0.0 )
                         nMin = 0.0;
@@ -3798,9 +3805,16 @@ void ScInterpreter::ScMax( bool bTextAsZero )
         {
             case svDouble :
             {
-                nVal = GetDouble();
-                if (nMax < nVal) nMax = nVal;
-                nFuncFmtType = SvNumFormatType::NUMBER;
+                if ( mnSubTotalFlags & SubtotalFlags::RefAndArrayOnly )
+                {
+                    SetError(FormulaError::IllegalParameter);
+                }
+                else
+                {
+                    nVal = GetDouble();
+                    if (nMax < nVal) nMax = nVal;
+                    nFuncFmtType = SvNumFormatType::NUMBER;
+                }
             }
             break;
             case svSingleRef :
@@ -3878,7 +3892,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
             case svString :
             {
                 Pop();
-                if ( bTextAsZero )
+                if ( bTextAsZero && !( mnSubTotalFlags & SubtotalFlags::RefAndArrayOnly ) )
                 {
                     if ( nMax < 0.0 )
                         nMax = 0.0;
@@ -3954,11 +3968,18 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
         {
             case svDouble :
             {
-                fVal = GetDouble();
-                if (nGlobalError == FormulaError::NONE)
+                if ( mnSubTotalFlags & SubtotalFlags::RefAndArrayOnly )
                 {
-                    values.push_back(fVal);
-                    fSum    += fVal;
+                    SetError(FormulaError::IllegalParameter);
+                }
+                else
+                {
+                    fVal = GetDouble();
+                    if (nGlobalError == FormulaError::NONE)
+                    {
+                        values.push_back(fVal);
+                        fSum    += fVal;
+                    }
                 }
             }
             break;
@@ -4086,7 +4107,7 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
             case svString :
             {
                 Pop();
-                if ( bTextAsZero )
+                if ( bTextAsZero && !( mnSubTotalFlags & SubtotalFlags::RefAndArrayOnly ) )
                 {
                     values.push_back(0.0);
                 }
@@ -7576,31 +7597,32 @@ void ScInterpreter::ScAggregate()
             PushIllegalArgument();
         else
         {
+            mnSubTotalFlags = SubtotalFlags::RefAndArrayOnly;
             switch ( nOption)
             {
                 case 0 : // ignore nested SUBTOTAL and AGGREGATE functions
-                    mnSubTotalFlags = SubtotalFlags::IgnoreNestedStAg;
+                    mnSubTotalFlags |= SubtotalFlags::IgnoreNestedStAg;
                     break;
                 case 1 : // ignore hidden rows, nested SUBTOTAL and AGGREGATE functions
-                    mnSubTotalFlags = SubtotalFlags::IgnoreHidden | SubtotalFlags::IgnoreNestedStAg;
+                    mnSubTotalFlags |= SubtotalFlags::IgnoreHidden | SubtotalFlags::IgnoreNestedStAg;
                     break;
                 case 2 : // ignore error values, nested SUBTOTAL and AGGREGATE functions
-                    mnSubTotalFlags = SubtotalFlags::IgnoreErrVal | SubtotalFlags::IgnoreNestedStAg;
+                    mnSubTotalFlags |= SubtotalFlags::IgnoreErrVal | SubtotalFlags::IgnoreNestedStAg;
                     break;
                 case 3 : // ignore hidden rows, error values, nested SUBTOTAL and AGGREGATE functions
-                    mnSubTotalFlags = SubtotalFlags::IgnoreHidden | SubtotalFlags::IgnoreErrVal | SubtotalFlags::IgnoreNestedStAg;
+                    mnSubTotalFlags |= SubtotalFlags::IgnoreHidden | SubtotalFlags::IgnoreErrVal | SubtotalFlags::IgnoreNestedStAg;
                     break;
                 case 4 : // ignore nothing
-                    mnSubTotalFlags = SubtotalFlags::NONE;
+                    mnSubTotalFlags |= SubtotalFlags::NONE;
                     break;
                 case 5 : // ignore hidden rows
-                    mnSubTotalFlags = SubtotalFlags::IgnoreHidden ;
+                    mnSubTotalFlags |= SubtotalFlags::IgnoreHidden ;
                     break;
                 case 6 : // ignore error values
-                    mnSubTotalFlags = SubtotalFlags::IgnoreErrVal ;
+                    mnSubTotalFlags |= SubtotalFlags::IgnoreErrVal ;
                     break;
                 case 7 : // ignore hidden rows and error values
-                    mnSubTotalFlags = SubtotalFlags::IgnoreHidden | SubtotalFlags::IgnoreErrVal ;
+                    mnSubTotalFlags |= SubtotalFlags::IgnoreHidden | SubtotalFlags::IgnoreErrVal ;
                     break;
                 default :
                     PushIllegalArgument();

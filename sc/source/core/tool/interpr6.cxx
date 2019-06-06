@@ -529,70 +529,84 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
         {
             case svString:
             {
-                if( eFunc == ifCOUNT )
+                if ( mnSubTotalFlags & SubtotalFlags::RefAndArrayOnly )
                 {
-                    OUString aStr = PopString().getString();
-                    if ( bTextAsZero )
-                        nCount++;
-                    else
-                    {
-                        // Only check if string can be converted to number, no
-                        // error propagation.
-                        FormulaError nErr = nGlobalError;
-                        nGlobalError = FormulaError::NONE;
-                        ConvertStringToValue( aStr );
-                        if (nGlobalError == FormulaError::NONE)
-                            ++nCount;
-                        nGlobalError = nErr;
-                    }
+                    SetError(FormulaError::IllegalParameter);
                 }
                 else
                 {
-                    Pop();
-                    switch ( eFunc )
+                    if( eFunc == ifCOUNT )
                     {
-                        case ifAVERAGE:
-                        case ifSUM:
-                        case ifSUMSQ:
-                        case ifPRODUCT:
-                        {
-                            if ( bTextAsZero )
-                            {
-                                nCount++;
-                                if ( eFunc == ifPRODUCT )
-                                    fRes = 0.0;
-                            }
-                            else
-                            {
-                                while (nParamCount-- > 0)
-                                    Pop();
-                                SetError( FormulaError::NoValue );
-                            }
-                        }
-                        break;
-                        default:
+                        OUString aStr = PopString().getString();
+                        if ( bTextAsZero )
                             nCount++;
+                        else
+                        {
+                            // Only check if string can be converted to number, no
+                            // error propagation.
+                            FormulaError nErr = nGlobalError;
+                            nGlobalError = FormulaError::NONE;
+                            ConvertStringToValue( aStr );
+                            if (nGlobalError == FormulaError::NONE)
+                                ++nCount;
+                            nGlobalError = nErr;
+                        }
+                    }
+                    else
+                    {
+                        Pop();
+                        switch ( eFunc )
+                        {
+                            case ifAVERAGE:
+                            case ifSUM:
+                            case ifSUMSQ:
+                            case ifPRODUCT:
+                            {
+                                if ( bTextAsZero )
+                                {
+                                    nCount++;
+                                    if ( eFunc == ifPRODUCT )
+                                        fRes = 0.0;
+                                }
+                                else
+                                {
+                                    while (nParamCount-- > 0)
+                                        Pop();
+                                    SetError( FormulaError::NoValue );
+                                }
+                            }
+                            break;
+                            default:
+                                nCount++;
+                        }
                     }
                 }
             }
             break;
             case svDouble    :
-                fVal = GetDouble();
-                nCount++;
-                switch( eFunc )
+                if ( mnSubTotalFlags & SubtotalFlags::RefAndArrayOnly )
                 {
-                    case ifAVERAGE:
-                    case ifSUM:
-                        if ( fMem )
-                            fRes += fVal;
-                        else
-                            fMem = fVal;
-                        break;
-                    case ifSUMSQ:   fRes += fVal * fVal; break;
-                    case ifPRODUCT: fRes *= fVal; break;
-                    default: ; // nothing
+                    SetError(FormulaError::IllegalParameter);
                 }
-                nFuncFmtType = SvNumFormatType::NUMBER;
+                else
+                {
+                    fVal = GetDouble();
+                    nCount++;
+                    switch( eFunc )
+                    {
+                        case ifAVERAGE:
+                        case ifSUM:
+                            if ( fMem )
+                                fRes += fVal;
+                            else
+                                fMem = fVal;
+                            break;
+                        case ifSUMSQ:   fRes += fVal * fVal; break;
+                        case ifPRODUCT: fRes *= fVal; break;
+                        default: ; // nothing
+                    }
+                    nFuncFmtType = SvNumFormatType::NUMBER;
+                }
                 break;
             case svExternalSingleRef:
             {

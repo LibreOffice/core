@@ -249,13 +249,14 @@ namespace o3tl {
 
 enum class SubtotalFlags {
     NONE              = 0x00,
-    IgnoreNestedStAg  = 0x08,
-    IgnoreErrVal      = 0x04,
+    IgnoreFiltered    = 0x01,
     IgnoreHidden      = 0x02,
-    IgnoreFiltered    = 0x01
+    IgnoreErrVal      = 0x04,
+    IgnoreNestedStAg  = 0x08,
+    RefAndArrayOnly   = 0x10
 };
 namespace o3tl {
-    template<> struct typed_flags<SubtotalFlags> : is_typed_flags<SubtotalFlags, 0x0f> {};
+    template<> struct typed_flags<SubtotalFlags> : is_typed_flags<SubtotalFlags, 0x1f> {};
 }
 
 enum class ScCloneFlags{
