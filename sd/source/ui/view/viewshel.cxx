@@ -524,62 +524,17 @@ void ViewShell::SetCursorMm100Position(const Point& rPosition, bool bPoint, bool
     }
 }
 
-OString ViewShell::GetTextSelection(const OString& _aMimeType, OString& rUsedMimeType)
+uno::Reference<datatransfer::XTransferable> ViewShell::GetSelectionTransferrable()
 {
     SdrView* pSdrView = GetView();
     if (!pSdrView)
-        return OString();
+        return uno::Reference<datatransfer::XTransferable>();
 
     if (!pSdrView->GetTextEditObject())
-        return OString();
+        return uno::Reference<datatransfer::XTransferable>();
 
     EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
-    uno::Reference<datatransfer::XTransferable> xTransferable = rEditView.GetEditEngine()->CreateTransferable(rEditView.GetSelection());
-
-    // Take care of UTF-8 text here.
-    bool bConvert = false;
-    sal_Int32 nIndex = 0;
-    OString aMimeType = _aMimeType;
-    if (aMimeType.getToken(0, ';', nIndex) == "text/plain")
-    {
-        if (aMimeType.getToken(0, ';', nIndex) == "charset=utf-8")
-        {
-            aMimeType = "text/plain;charset=utf-16";
-            bConvert = true;
-        }
-    }
-
-    datatransfer::DataFlavor aFlavor;
-    aFlavor.MimeType = OUString::fromUtf8(aMimeType.getStr());
-    if (bConvert || aMimeType == "text/plain;charset=utf-16")
-        aFlavor.DataType = cppu::UnoType<OUString>::get();
-    else
-        aFlavor.DataType = cppu::UnoType< uno::Sequence<sal_Int8> >::get();
-
-    if (!xTransferable->isDataFlavorSupported(aFlavor))
-        return OString();
-
-    uno::Any aAny(xTransferable->getTransferData(aFlavor));
-
-    OString aRet;
-    if (aFlavor.DataType == cppu::UnoType<OUString>::get())
-    {
-        OUString aString;
-        aAny >>= aString;
-        if (bConvert)
-            aRet = OUStringToOString(aString, RTL_TEXTENCODING_UTF8);
-        else
-            aRet = OString(reinterpret_cast<const sal_Char *>(aString.getStr()), aString.getLength() * sizeof(sal_Unicode));
-    }
-    else
-    {
-        uno::Sequence<sal_Int8> aSequence;
-        aAny >>= aSequence;
-        aRet = OString(reinterpret_cast<sal_Char*>(aSequence.getArray()), aSequence.getLength());
-    }
-
-    rUsedMimeType = _aMimeType;
-    return aRet;
+    return rEditView.GetEditEngine()->CreateTransferable(rEditView.GetSelection());
 }
 
 void ViewShell::SetGraphicMm100Position(bool bStart, const Point& rPosition)
