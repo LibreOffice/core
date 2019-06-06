@@ -1384,9 +1384,9 @@ public:
 class SalInstanceAboutDialog : public SalInstanceDialog, public virtual weld::AboutDialog
 {
 private:
-    VclPtr<::AboutDialog> m_xAboutDialog;
+    VclPtr<vcl::AboutDialog> m_xAboutDialog;
 public:
-    SalInstanceAboutDialog(::AboutDialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    SalInstanceAboutDialog(vcl::AboutDialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : SalInstanceDialog(pDialog, pBuilder, bTakeOwnership)
         , m_xAboutDialog(pDialog)
     {
@@ -5082,7 +5082,7 @@ public:
 
     virtual std::unique_ptr<weld::AboutDialog> weld_about_dialog(const OString &id, bool bTakeOwnership) override
     {
-        AboutDialog* pAboutDialog = m_xBuilder->get<AboutDialog>(id);
+        vcl::AboutDialog* pAboutDialog = m_xBuilder->get<vcl::AboutDialog>(id);
         std::unique_ptr<weld::AboutDialog> pRet(pAboutDialog ? new SalInstanceAboutDialog(pAboutDialog, this, false) : nullptr);
         if (bTakeOwnership && pAboutDialog)
         {
