@@ -804,7 +804,7 @@ void AquaSalMenu::RemoveMenuBarButton( sal_uInt16 i_nId )
     {
         releaseButtonEntry( *pEntry );
         // note: vector guarantees that its contents are in a plain array
-        maButtons.erase( maButtons.begin() + (pEntry - &maButtons[0]) );
+        maButtons.erase( maButtons.begin() + (pEntry - maButtons.data()) );
     }
 
     if( pCurrentMenuBar == this )

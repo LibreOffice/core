@@ -1622,7 +1622,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
         aInputEvent.maText = aInsertString;
         aInputEvent.mnCursorPos = selRange.location;
-        aInputEvent.mpTextAttr = &aInputFlags[0];
+        aInputEvent.mpTextAttr = aInputFlags.data();
         mpFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void *>(&aInputEvent) );
     } else {
         aInputEvent.maText.clear();

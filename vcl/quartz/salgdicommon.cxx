@@ -175,7 +175,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     {
         // provide the raw-CFF data to the subsetter
         ByteCount nCffLen = aBuffer.size();
-        rInfo.LoadFont( FontType::CFF_FONT, &aBuffer[0], nCffLen );
+        rInfo.LoadFont( FontType::CFF_FONT, aBuffer.data(), nCffLen );
 
         // NOTE: assuming that all glyphids requested on Aqua are fully translated
 
@@ -193,7 +193,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
 
     // prepare data for psprint's font subsetter
     TrueTypeFont* pSftFont = nullptr;
-    SFErrCodes nRC = ::OpenTTFontBuffer( static_cast<void*>(&aBuffer[0]), aBuffer.size(), 0, &pSftFont);
+    SFErrCodes nRC = ::OpenTTFontBuffer( static_cast<void*>(aBuffer.data()), aBuffer.size(), 0, &pSftFont);
     if( nRC != SFErrCodes::Ok )
     {
         return false;
