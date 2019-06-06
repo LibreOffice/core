@@ -351,7 +351,8 @@ static void appendRecentMenu( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const OUStri
     // confused. Anyway, to avoid warnings, instead of this:
     // [pRecentMenu setDelegate: pRecentDelegate];
     // do this:
-    ((id (*)(id, SEL, ...))objc_msgSend)(pRecentMenu, @selector(setDelegate:), pRecentDelegate);
+    reinterpret_cast<id (*)(id, SEL, ...)>(objc_msgSend)(
+        pRecentMenu, @selector(setDelegate:), pRecentDelegate);
 
     [pRecentMenu setAutoenablesItems: NO];
     [pItem setSubmenu: pRecentMenu];
@@ -368,7 +369,8 @@ static void appendRecentMenu( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const OUStri
 
         // See above
         // [pRecentMenu setDelegate: pRecentDelegate];
-        ((id (*)(id, SEL, ...))objc_msgSend)(pRecentMenu, @selector(setDelegate:), pRecentDelegate);
+        reinterpret_cast<id (*)(id, SEL, ...)>(objc_msgSend)(
+            pRecentMenu, @selector(setDelegate:), pRecentDelegate);
 
         [pRecentMenu setAutoenablesItems: NO];
         [pItem setSubmenu: pRecentMenu];

@@ -1076,10 +1076,10 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
         CFURLRef pBrowser = LSCopyDefaultApplicationURLForURL(
                                 CFURLCreateWithString(
                                     kCFAllocatorDefault,
-                                    (CFStringRef)@"https://www.libreoffice.org",
+                                    static_cast<CFStringRef>(@"https://www.libreoffice.org"),
                                     NULL),
                                 kLSRolesAll, NULL);
-        if([(NSString*)CFURLGetString(pBrowser) isEqualToString:@"file:///Applications/Safari.app/"]) {
+        if([static_cast<NSString*>(CFURLGetString(pBrowser)) isEqualToString:@"file:///Applications/Safari.app/"]) {
             impl_showOnlineHelp( aHelpURL );
             return true;
         }
