@@ -463,7 +463,7 @@ blacklist:
     - namespace chart { class ThreeD_SceneIllumination_TabPage; }
     chart2/source/controller/dialogs/tp_3D_SceneIllumination.hxx:
     # Needed for vclptr type
-    - class SvxColorListBox
+    - class ColorListBox
     chart2/source/controller/inc/ItemPropertyMap.hxx:
     # base class has to be a complete type
     - map
