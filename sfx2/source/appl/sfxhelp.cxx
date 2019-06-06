@@ -725,8 +725,8 @@ static bool impl_showOnlineHelp( const OUString& rURL )
                            CFStringCreateWithCString(kCFAllocatorDefault,
                                aHelpLink.toUtf8().getStr(),
                                kCFStringEncodingUTF8),
-                           NULL),
-            NULL);
+                           nullptr),
+            nullptr);
 #else
         sfx2::openUriExternally(aHelpLink, false);
 #endif
@@ -953,8 +953,8 @@ static bool impl_showOfflineHelp( const OUString& rURL )
                            CFStringCreateWithCString(kCFAllocatorDefault,
                                aTempFile.GetURL().toUtf8().getStr(),
                                kCFStringEncodingUTF8),
-                           NULL),
-            NULL);
+                           nullptr),
+            nullptr);
 #else
         sfx2::openUriExternally(aTempFile.GetURL(), false);
 #endif
@@ -1077,8 +1077,8 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
                                 CFURLCreateWithString(
                                     kCFAllocatorDefault,
                                     static_cast<CFStringRef>(@"https://www.libreoffice.org"),
-                                    NULL),
-                                kLSRolesAll, NULL);
+                                    nullptr),
+                                kLSRolesAll, nullptr);
         if([static_cast<NSString*>(CFURLGetString(pBrowser)) isEqualToString:@"file:///Applications/Safari.app/"]) {
             impl_showOnlineHelp( aHelpURL );
             return true;
