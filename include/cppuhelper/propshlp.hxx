@@ -546,7 +546,7 @@ protected:
 
     /**
        Converted the value rValue and return the result in rConvertedValue and the
-       old value in rOldValue. A IllegalArgumentException is thrown.
+       old value in rOldValue. An IllegalArgumentException is thrown.
        The method is not implemented in this class. After this call the vetoable
        listeners are notified.
 
