@@ -13,7 +13,9 @@ namespace dbaccess
 {
 MigrationWarnDialog::MigrationWarnDialog(weld::Window* pParent)
     : MessageDialogController(pParent, "dbaccess/ui/migrwarndlg.ui", "MigrationWarnDialog")
+    , m_xLater(m_xBuilder->weld_button("no"))
 {
+    m_xLater->grab_focus();
 }
 }
 

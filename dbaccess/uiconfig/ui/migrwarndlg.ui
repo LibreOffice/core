@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="dba">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkMessageDialog" id="MigrationWarnDialog">
@@ -11,12 +11,12 @@
     <property name="text" translatable="yes" context="migrationwarndialog|MigrationWarnDialog">The document contains embedded HSQL data, which is deprecated.</property>
     <property name="secondary_text" translatable="yes" context="migrationwarndialog|MigrationWarnDialog">Would you like to migrate to Firebird now?</property>
     <child internal-child="vbox">
-      <object class="GtkBox">
+      <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
-          <object class="GtkButtonBox">
+          <object class="GtkButtonBox" id="messagedialog-action_area">
             <property name="can_focus">False</property>
             <child>
               <object class="GtkButton" id="yes">
@@ -37,6 +37,8 @@
                 <property name="label" translatable="yes" context="migrationwarndialog|later">_Later</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
               </object>
@@ -50,7 +52,23 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
+            <property name="pack_type">end</property>
             <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLinkButton" id="link">
+            <property name="label" translatable="yes" context="migrationwarndialog|link">Click for important information about migration.</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="relief">none</property>
+            <property name="uri">https://wiki.documentfoundation.org/Documentation/HowTo/MigrateFromHSQLDB</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>
@@ -59,8 +77,5 @@
       <action-widget response="-5">yes</action-widget>
       <action-widget response="-6">no</action-widget>
     </action-widgets>
-    <child>
-      <placeholder/>
-    </child>
   </object>
 </interface>
