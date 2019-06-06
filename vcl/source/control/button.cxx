@@ -1859,7 +1859,12 @@ WinBits RadioButton::ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nSty
          (!pPrevWindow || (pPrevWindow->GetType() != WindowType::RADIOBUTTON)) )
         nStyle |= WB_GROUP;
     if ( !(nStyle & WB_NOTABSTOP) )
-        nStyle |= WB_TABSTOP;
+    {
+//        if ( IsChecked() )
+            nStyle |= WB_TABSTOP;
+  //      else
+    //        nStyle &= ~WB_TABSTOP;
+    }
     return nStyle;
 }
 
