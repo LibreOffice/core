@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_653c51bf",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-06T13:02:24Z",
+      "side": 1,
+      "message": "one example where the pattern mentioned in the comment is used",
+      "range": {
+        "startLine": 70,
+        "startChar": 1,
+        "endLine": 71,
+        "endChar": 55
+      },
+      "revId": "9725b2e52e9ce445a1e06198abf0cc4f54d4b0c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
