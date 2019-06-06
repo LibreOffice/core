@@ -4083,6 +4083,19 @@ void ColorListBox::createColorWindow()
     m_xColorWindow->SelectEntry(m_aSelectedColor);
 }
 
+void ColorListBox::SelectEntry(const NamedColor& rColor)
+{
+    if (rColor.second.trim().isEmpty())
+    {
+        SelectEntry(rColor.first);
+        return;
+    }
+    ColorWindow* pColorWindow = getColorWindow();
+    pColorWindow->SelectEntry(rColor);
+    m_aSelectedColor = pColorWindow->GetSelectEntryColor();
+    ShowPreview(m_aSelectedColor);
+}
+
 void ColorListBox::SelectEntry(const Color& rColor)
 {
     ColorWindow* pColorWindow = getColorWindow();

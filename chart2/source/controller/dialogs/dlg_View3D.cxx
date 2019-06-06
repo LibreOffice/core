@@ -35,52 +35,44 @@ using namespace ::com::sun::star::chart2;
 
 sal_uInt16 View3DDialog::m_nLastPageId = 0;
 
-View3DDialog::View3DDialog(vcl::Window* pParent, const uno::Reference< frame::XModel > & xChartModel)
-    : TabDialog(pParent, "3DViewDialog", "modules/schart/ui/3dviewdialog.ui")
-    , m_pGeometry(nullptr)
-    , m_pAppearance(nullptr)
-    , m_pIllumination(nullptr)
+View3DDialog::View3DDialog(weld::Window* pParent, const uno::Reference< frame::XModel > & xChartModel)
+    : GenericDialogController(pParent, "modules/schart/ui/3dviewdialog.ui", "3DViewDialog")
     , m_aControllerLocker(xChartModel)
+    , m_xTabControl(m_xBuilder->weld_notebook("tabcontrol"))
 {
-    get(m_pTabControl, "tabcontrol");
-
     uno::Reference< beans::XPropertySet > xSceneProperties( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );
-    m_pGeometry   = VclPtr<ThreeD_SceneGeometry_TabPage>::Create(m_pTabControl,xSceneProperties,m_aControllerLocker);
-    m_pAppearance = VclPtr<ThreeD_SceneAppearance_TabPage>::Create(m_pTabControl,xChartModel,m_aControllerLocker);
-    m_pIllumination = VclPtr<ThreeD_SceneIllumination_TabPage>::Create(m_pTabControl,xSceneProperties,xChartModel);
 
-    m_pTabControl->InsertPage( TP_3D_SCENEGEOMETRY, SchResId(STR_PAGE_PERSPECTIVE) );
-    m_pTabControl->InsertPage( TP_3D_SCENEAPPEARANCE, SchResId(STR_PAGE_APPEARANCE) );
-    m_pTabControl->InsertPage( TP_3D_SCENEILLUMINATION, SchResId(STR_PAGE_ILLUMINATION) );
+    m_xTabControl->append_page("geometry", SchResId(STR_PAGE_PERSPECTIVE));
+    m_xGeometry.reset(new ThreeD_SceneGeometry_TabPage(m_xTabControl->get_page("geometry"), xSceneProperties, m_aControllerLocker));
 
-    m_pTabControl->SetTabPage( TP_3D_SCENEGEOMETRY, m_pGeometry );
-    m_pTabControl->SetTabPage( TP_3D_SCENEAPPEARANCE, m_pAppearance );
-    m_pTabControl->SetTabPage( TP_3D_SCENEILLUMINATION, m_pIllumination );
+    m_xTabControl->append_page("appearance", SchResId(STR_PAGE_APPEARANCE));
+    m_xAppearance.reset(new ThreeD_SceneAppearance_TabPage(m_xTabControl->get_page("appearance"), xChartModel, m_aControllerLocker));
 
-    m_pTabControl->SelectTabPage( m_nLastPageId );
+    m_xTabControl->append_page("illumination", SchResId(STR_PAGE_ILLUMINATION));
+    m_xIllumination.reset(new ThreeD_SceneIllumination_TabPage(m_xTabControl->get_page("illumination"), m_xDialog.get(),
+        xSceneProperties, xChartModel));
+
+    m_xTabControl->connect_enter_page(LINK(this, View3DDialog, ActivatePageHdl));
+
+    m_xTabControl->set_current_page(m_nLastPageId);
+}
+
+IMPL_LINK(View3DDialog, ActivatePageHdl, const OString&, rPage, void)
+{
+    if (rPage == "appearance")
+        m_xAppearance->ActivatePage();
 }
 
 View3DDialog::~View3DDialog()
 {
-    disposeOnce();
+    m_nLastPageId = m_xTabControl->get_current_page();
 }
 
-void View3DDialog::dispose()
+short View3DDialog::run()
 {
-    m_pGeometry.disposeAndClear();
-    m_pAppearance.disposeAndClear();
-    m_pIllumination.disposeAndClear();
-    if (m_pTabControl)
-        m_nLastPageId = m_pTabControl->GetCurPageId();
-    m_pTabControl.clear();
-    TabDialog::dispose();
-}
-
-short View3DDialog::Execute()
-{
-    short nResult = TabDialog::Execute();
-    if( nResult == RET_OK && m_pGeometry )
-        m_pGeometry->commitPendingChanges();
+    short nResult = GenericDialogController::run();
+    if (nResult == RET_OK && m_xGeometry)
+        m_xGeometry->commitPendingChanges();
     return nResult;
 }
 
