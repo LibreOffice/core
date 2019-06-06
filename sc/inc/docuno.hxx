@@ -343,8 +343,8 @@ public:
     /// @see vcl::ITiledRenderable::setTextSelection().
     virtual void setTextSelection(int nType, int nX, int nY) override;
 
-    /// @see vcl::ITiledRenderable::getTextSelection().
-    virtual OString getTextSelection(const char* pMimeType, OString& rUsedMimeType) override;
+    /// @see vcl::ITiledRenderable::getSelection().
+    virtual css::uno::Reference<css::datatransfer::XTransferable> getSelection() override;
 
     /// @see vcl::ITiledRenderable::setGraphicSelection().
     virtual void setGraphicSelection(int nType, int nX, int nY) override;

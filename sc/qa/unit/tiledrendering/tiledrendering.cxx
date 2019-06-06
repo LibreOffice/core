@@ -8,6 +8,7 @@
  */
 
 #include <test/bootstrapfixture.hxx>
+#include <test/helper/transferable.hxx>
 #include <unotest/macros_test.hxx>
 #include <test/xmltesttools.hxx>
 #include <boost/property_tree/json_parser.hpp>
@@ -16,6 +17,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -33,6 +35,7 @@
 #include <vcl/scheduler.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/unohelp2.hxx>
 #include <sc.hrc>
 
 #include <chrono>
@@ -253,8 +256,7 @@ void ScTiledRenderingTest::testRowColumnSelections()
     comphelper::dispatchCommand(".uno:SelectRow", aArgs);
 
     // Check if it is selected
-    OString aUsedMimeType;
-    OString aResult = pModelObj->getTextSelection("text/plain;charset=utf-8", aUsedMimeType);
+    OString aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8");
     OString aExpected("1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\n");
     CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 
@@ -266,7 +268,7 @@ void ScTiledRenderingTest::testRowColumnSelections()
     comphelper::dispatchCommand(".uno:SelectRow", aArgs);
 
     // Check if all the rows from 5th to 10th get selected
-    aResult = pModelObj->getTextSelection("text/plain;charset=utf-8", aUsedMimeType);
+    aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8");
     aExpected = "1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\n2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\n3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\n4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\n5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\t25\n6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\t25\t26\n";
     CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 
@@ -279,7 +281,7 @@ void ScTiledRenderingTest::testRowColumnSelections()
 
     // When we copy this, we don't get anything useful, but we must not crash
     // (used to happen)
-    aResult = pModelObj->getTextSelection("text/plain;charset=utf-8", aUsedMimeType);
+    aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8");
     CPPUNIT_ASSERT_EQUAL(OString(), aResult);
 
     // TODO check that we really selected what we wanted here
@@ -293,7 +295,7 @@ void ScTiledRenderingTest::testRowColumnSelections()
 
     // When we copy this, we don't get anything useful, but we must not crash
     // (used to happen)
-    aResult = pModelObj->getTextSelection("text/plain;charset=utf-8", aUsedMimeType);
+    aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8");
     CPPUNIT_ASSERT_EQUAL(OString(), aResult);
 
     // TODO check that we really selected what we wanted here
@@ -321,7 +323,7 @@ void ScTiledRenderingTest::testRowColumnSelections()
     comphelper::dispatchCommand(".uno:SelectRow", aArgs);
 
     //  only row 5 should remain selected
-    aResult = pModelObj->getTextSelection("text/plain;charset=utf-8", aUsedMimeType);
+    aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8");
     aExpected = "1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\n";
     CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 }
@@ -420,11 +422,8 @@ void ScTiledRenderingTest::testEmptyColumnSelection()
         }));
     comphelper::dispatchCommand(".uno:SelectColumn", aArgs);
 
-    // Get plain selection
-    OString aUsedMimeType;
-    OString aResult = pModelObj->getTextSelection("text/plain;charset=utf-8", aUsedMimeType);
     // should be an empty string
-    CPPUNIT_ASSERT_EQUAL(OString(), aResult);
+    CPPUNIT_ASSERT_EQUAL(OString(), apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"));
 }
 
 /// A view callback tracks callbacks invoked on one specific view.
