@@ -31,13 +31,8 @@
 
 #include <string>
 
-#ifdef AVMEDIA_GST_0_10
-#  define AVMEDIA_GST_FRAMEGRABBER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.FrameGrabber_GStreamer_0_10"
-#  define AVMEDIA_GST_FRAMEGRABBER_SERVICENAME "com.sun.star.media.FrameGrabber_GStreamer_0_10"
-#else
-#  define AVMEDIA_GST_FRAMEGRABBER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.FrameGrabber_GStreamer"
-#  define AVMEDIA_GST_FRAMEGRABBER_SERVICENAME "com.sun.star.media.FrameGrabber_GStreamer"
-#endif
+#define AVMEDIA_GST_FRAMEGRABBER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.FrameGrabber_GStreamer"
+#define AVMEDIA_GST_FRAMEGRABBER_SERVICENAME "com.sun.star.media.FrameGrabber_GStreamer"
 
 using namespace ::com::sun::star;
 
@@ -58,15 +53,8 @@ FrameGrabber::FrameGrabber( const OUString &rURL ) :
 {
     gchar *pPipelineStr;
     pPipelineStr = g_strdup_printf(
-#ifdef AVMEDIA_GST_0_10
-        "uridecodebin uri=%s ! ffmpegcolorspace ! videoscale ! appsink "
-        "name=sink caps=\"video/x-raw-rgb,format=RGB,pixel-aspect-ratio=1/1,"
-        "bpp=(int)24,depth=(int)24,endianness=(int)4321,"
-        "red_mask=(int)0xff0000, green_mask=(int)0x00ff00, blue_mask=(int)0x0000ff\"",
-#else
         "uridecodebin uri=%s ! videoconvert ! videoscale ! appsink "
         "name=sink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"",
-#endif
         OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     GError *pError = nullptr;
@@ -125,11 +113,6 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     GstCaps *pCaps = nullptr;
 
     // synchronously fetch the frame
-#ifdef AVMEDIA_GST_0_10
-    g_signal_emit_by_name( pSink, "pull-preroll", &pBuf, nullptr );
-    if( pBuf )
-        pCaps = GST_BUFFER_CAPS( pBuf );
-#else
     GstSample *pSample = nullptr;
     g_signal_emit_by_name( pSink, "pull-preroll", &pSample, nullptr );
 
@@ -138,7 +121,6 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
         pBuf = gst_sample_get_buffer( pSample );
         pCaps = gst_sample_get_caps( pSample );
     }
-#endif
 
     // get geometry
     int nWidth = 0, nHeight = 0;
@@ -156,29 +138,18 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 
     if( pBuf && nWidth > 0 && nHeight > 0 &&
         // sanity check the size
-#ifdef AVMEDIA_GST_0_10
-        GST_BUFFER_SIZE( pBuf ) >= static_cast<unsigned>( nWidth * nHeight * 3 )
-#else
         gst_buffer_get_size( pBuf ) >= static_cast<unsigned>( nWidth * nHeight * 3 )
-#endif
         )
     {
         sal_uInt8 *pData = nullptr;
-#ifdef AVMEDIA_GST_0_10
-        pData = GST_BUFFER_DATA( pBuf );
-#else
         GstMapInfo aMapInfo;
         gst_buffer_map( pBuf, &aMapInfo, GST_MAP_READ );
         pData = aMapInfo.data;
-#endif
 
         int nStride = GST_ROUND_UP_4( nWidth * 3 );
         BitmapEx aBmp = vcl::bitmap::CreateFromData(pData, nWidth, nHeight, nStride, 24 );
 
-#ifndef AVMEDIA_GST_0_10
         gst_buffer_unmap( pBuf, &aMapInfo );
-#endif
-
         xRet = Graphic( aBmp ).GetXGraphic();
     }
 

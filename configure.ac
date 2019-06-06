@@ -577,7 +577,6 @@ case "$host_os" in
 solaris*)
     test_gtk=yes
     build_gstreamer_1_0=yes
-    build_gstreamer_0_10=yes
     test_freetype=yes
     _os=SunOS
 
@@ -604,7 +603,6 @@ solaris*)
 linux-gnu*|k*bsd*-gnu*)
     test_gtk=yes
     build_gstreamer_1_0=yes
-    build_gstreamer_0_10=yes
     test_kde5=yes
     test_gtk3_kde5=yes
     test_gdb_index=yes
@@ -699,7 +697,6 @@ darwin*) # macOS or iOS
 freebsd*)
     test_gtk=yes
     build_gstreamer_1_0=yes
-    build_gstreamer_0_10=yes
     test_kde5=yes
     test_gtk3_kde5=yes
     test_freetype=yes
@@ -728,7 +725,6 @@ freebsd*)
 *netbsd*)
     test_gtk=yes
     build_gstreamer_1_0=yes
-    build_gstreamer_0_10=yes
     test_kde5=yes
     test_gtk3_kde5=yes
     test_freetype=yes
@@ -754,7 +750,6 @@ openbsd*)
 dragonfly*)
     test_gtk=yes
     build_gstreamer_1_0=yes
-    build_gstreamer_0_10=yes
     test_kde5=yes
     test_gtk3_kde5=yes
     test_freetype=yes
@@ -764,7 +759,6 @@ dragonfly*)
 
 linux-android*)
     build_gstreamer_1_0=no
-    build_gstreamer_0_10=no
     enable_lotuswordpro=no
     enable_mpl_subset=yes
     enable_coinmp=yes
@@ -796,7 +790,6 @@ haiku*)
     test_xrender=no
     test_freetype=yes
     enable_odk=no
-    enable_gstreamer_0_10=no
     enable_gstreamer_1_0=no
     enable_vlc=no
     enable_coinmp=no
@@ -1290,13 +1283,8 @@ libo_FUZZ_ARG_ENABLE(randr,
 
 libo_FUZZ_ARG_ENABLE(gstreamer-1-0,
     AS_HELP_STRING([--disable-gstreamer-1-0],
-        [Disable building with the new gstreamer 1.0 avmedia backend.]),
+        [Disable building with the gstreamer 1.0 avmedia backend.]),
 ,test "${enable_gstreamer_1_0+set}" = set || enable_gstreamer_1_0=yes)
-
-AC_ARG_ENABLE(gstreamer-0-10,
-    AS_HELP_STRING([--enable-gstreamer-0-10],
-        [Enable building with the gstreamer 0.10 avmedia backend.]),
-,enable_gstreamer_0_10=no)
 
 libo_FUZZ_ARG_ENABLE(vlc,
     AS_HELP_STRING([--enable-vlc],
@@ -4729,7 +4717,6 @@ if test "$cross_compiling" = "yes"; then
     ./configure \
         --disable-cups \
         --disable-gstreamer-1-0 \
-        --disable-gstreamer-0-10 \
         --disable-gtk \
         --disable-gtk3 \
         --disable-pdfimport \
@@ -4865,7 +4852,6 @@ if test "$USING_X11" != TRUE; then
     test_dbus=no
     test_gtk=no
     build_gstreamer_1_0=no
-    build_gstreamer_0_10=no
     test_kde5=no
     test_qt5=no
     test_gtk3_kde5=no
@@ -10505,14 +10491,13 @@ AC_SUBST(ENABLE_CAIRO_CANVAS)
 
 dnl ===================================================================
 dnl Check whether the GStreamer libraries are available.
-dnl It's possible to build avmedia with both GStreamer backends!
 dnl ===================================================================
 
 ENABLE_GSTREAMER_1_0=""
 
 if test "$build_gstreamer_1_0" = "yes"; then
 
-    AC_MSG_CHECKING([whether to enable the new GStreamer 1.0 avmedia backend])
+    AC_MSG_CHECKING([whether to enable the GStreamer 1.0 avmedia backend])
     if test "$enable_avmedia" = yes -a "$enable_gstreamer_1_0" != no; then
         ENABLE_GSTREAMER_1_0="TRUE"
         AC_MSG_RESULT([yes])
@@ -10527,29 +10512,6 @@ fi
 AC_SUBST(GSTREAMER_1_0_CFLAGS)
 AC_SUBST(GSTREAMER_1_0_LIBS)
 AC_SUBST(ENABLE_GSTREAMER_1_0)
-
-
-ENABLE_GSTREAMER_0_10=""
-if test "$build_gstreamer_0_10" = "yes"; then
-
-    AC_MSG_CHECKING([whether to enable the GStreamer 0.10 avmedia backend])
-    if test "$enable_avmedia" = yes -a "$enable_gstreamer_0_10" != no; then
-        ENABLE_GSTREAMER_0_10="TRUE"
-        AC_MSG_RESULT([yes])
-        PKG_CHECK_MODULES( [GSTREAMER_0_10], [gstreamer-0.10 gstreamer-plugins-base-0.10 gstreamer-pbutils-0.10 gstreamer-interfaces-0.10],, [
-            PKG_CHECK_MODULES( [GSTREAMER_0_10], [gstreamer-0.10 gstreamer-plugins-base-0.10 gstreamer-pbutils-0.10] )
-        ])
-        GSTREAMER_0_10_CFLAGS=$(printf '%s' "$GSTREAMER_0_10_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-        FilterLibs "${GSTREAMER_0_10_LIBS}"
-        GSTREAMER_0_10_LIBS="${filteredlibs}"
-    else
-        AC_MSG_RESULT([no])
-    fi
-fi
-
-AC_SUBST(GSTREAMER_0_10_CFLAGS)
-AC_SUBST(GSTREAMER_0_10_LIBS)
-AC_SUBST(ENABLE_GSTREAMER_0_10)
 
 dnl ===================================================================
 dnl Check whether to build the VLC avmedia backend

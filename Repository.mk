@@ -600,7 +600,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PRIVATELIBS_URE,ure, \
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	$(if $(ENABLE_VLC),avmediavlc) \
 	$(if $(ENABLE_GSTREAMER_1_0),avmediagst) \
-	$(if $(ENABLE_GSTREAMER_0_10),avmediagst_0_10) \
 	$(if $(filter WNT,$(OS)),avmediawin) \
 	cached1 \
 	collator_data \

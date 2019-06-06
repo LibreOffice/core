@@ -92,7 +92,6 @@ globalwhitelist="ld-linux-x86-64.so.2 ld-linux.so.2 libc.so.6 libm.so.6 libdl.so
 x11whitelist="libX11.so.6 libXext.so.6 libSM.so.6 libICE.so.6 libXinerama.so.1 libXrender.so.1 libXrandr.so.2 libcairo.so.2"
 openglwhitelist="libGL.so.1"
 giowhitelist="libgio-2.0.so.0 libgobject-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libglib-2.0.so.0 libdbus-glib-1.so.2 libdbus-1.so.3"
-gstreamer010whitelist="libgstpbutils-0.10.so.0 libgstinterfaces-0.10.so.0 libgstreamer-0.10.so.0"
 gstreamerwhitelist="libgstaudio-1.0.so.0 libgstpbutils-1.0.so.0 libgstvideo-1.0.so.0 libgstbase-1.0.so.0 libgstreamer-1.0.so.0"
 gtk2whitelist="libgtk-x11-2.0.so.0 libgdk-x11-2.0.so.0 libpangocairo-1.0.so.0 libfribidi.so.0 libatk-1.0.so.0 libcairo.so.2 libgio-2.0.so.0 libpangoft2-1.0.so.0 libpango-1.0.so.0 libfontconfig.so.1 libfreetype.so.6 libgdk_pixbuf-2.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libdbus-glib-1.so.2 libdbus-1.so.3"
 gtk3whitelist="libgtk-3.so.0 libgdk-3.so.0 libcairo-gobject.so.2 libpangocairo-1.0.so.0 libfribidi.so.0 libatk-1.0.so.0 libcairo.so.2 libgio-2.0.so.0 libpangoft2-1.0.so.0 libpango-1.0.so.0 libfontconfig.so.1 libfreetype.so.6 libgdk_pixbuf-2.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libdbus-glib-1.so.2 libdbus-1.so.3"
@@ -121,9 +120,6 @@ local file="$1"
         ;;
         */libavmediagst.so)
             whitelist="${whitelist} ${gtk3whitelist} ${gstreamerwhitelist}"
-        ;;
-        */libavmediagst_0_10.so)
-            whitelist="${whitelist} ${gtk2whitelist} ${gstreamer010whitelist}"
         ;;
         */libvclplug_kde5lo.so|*/libkde5be1lo.so)
             if [ "$ENABLE_KDE5" = TRUE ]; then

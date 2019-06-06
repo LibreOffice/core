@@ -27,13 +27,8 @@ using namespace ::com::sun::star;
 // - factory methods -
 
 
-#ifdef AVMEDIA_GST_0_10
-#  define IMPL_NAME    "com.sun.star.comp.media.Manager_GStreamer_0_10"
-#  define SERVICE_NAME AVMEDIA_MANAGER_SERVICE_NAME_OLD // "com.sun.star.comp.avmedia.Manager_GStreamer_0_10"
-#else
-#  define IMPL_NAME    "com.sun.star.comp.media.Manager_GStreamer"
-#  define SERVICE_NAME AVMEDIA_MANAGER_SERVICE_NAME // "com.sun.star.comp.avmedia.Manager_GStreamer"
-#endif
+#define IMPL_NAME    "com.sun.star.comp.media.Manager_GStreamer"
+#define SERVICE_NAME AVMEDIA_MANAGER_SERVICE_NAME // "com.sun.star.comp.avmedia.Manager_GStreamer"
 
 static uno::Reference< uno::XInterface > create_MediaPlayer( const uno::Reference< lang::XMultiServiceFactory >&  )
 {

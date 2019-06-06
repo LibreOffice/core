@@ -171,7 +171,6 @@ avmedia/source/framework/mediaplayer.cxx
 avmedia/source/framework/mediatoolbox.cxx
 avmedia/source/framework/soundhandler.cxx
 avmedia/source/framework/soundhandler.hxx
-avmedia/source/gstreamer/gst_0_10.cxx
 avmedia/source/gstreamer/gstcommon.hxx
 avmedia/source/gstreamer/gstframegrabber.cxx
 avmedia/source/gstreamer/gstframegrabber.hxx
