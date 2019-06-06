@@ -3575,7 +3575,7 @@ void SwXTextDocument::setTextSelection(int nType, int nX, int nY)
     }
 }
 
-OString SwXTextDocument::getTextSelection(const char* pMimeType, OString& rUsedMimeType)
+uno::Reference<datatransfer::XTransferable> SwXTextDocument::getSelection()
 {
     SolarMutexGuard aGuard;
 
@@ -3605,50 +3605,7 @@ OString SwXTextDocument::getTextSelection(const char* pMimeType, OString& rUsedM
     if (!xTransferable.is())
         xTransferable = new SwTransferable(*pWrtShell);
 
-    // Take care of UTF-8 text here.
-    OString aMimeType(pMimeType);
-    bool bConvert = false;
-    sal_Int32 nIndex = 0;
-    if (aMimeType.getToken(0, ';', nIndex) == "text/plain")
-    {
-        if (aMimeType.getToken(0, ';', nIndex) == "charset=utf-8")
-        {
-            aMimeType = "text/plain;charset=utf-16";
-            bConvert = true;
-        }
-    }
-
-    datatransfer::DataFlavor aFlavor;
-    aFlavor.MimeType = OUString::fromUtf8(aMimeType.getStr());
-    if (aMimeType == "text/plain;charset=utf-16")
-        aFlavor.DataType = cppu::UnoType<OUString>::get();
-    else
-        aFlavor.DataType = cppu::UnoType< uno::Sequence<sal_Int8> >::get();
-
-    if (!xTransferable->isDataFlavorSupported(aFlavor))
-        return OString();
-
-    uno::Any aAny(xTransferable->getTransferData(aFlavor));
-
-    OString aRet;
-    if (aFlavor.DataType == cppu::UnoType<OUString>::get())
-    {
-        OUString aString;
-        aAny >>= aString;
-        if (bConvert)
-            aRet = OUStringToOString(aString, RTL_TEXTENCODING_UTF8);
-        else
-            aRet = OString(reinterpret_cast<const sal_Char *>(aString.getStr()), aString.getLength() * sizeof(sal_Unicode));
-    }
-    else
-    {
-        uno::Sequence<sal_Int8> aSequence;
-        aAny >>= aSequence;
-        aRet = OString(reinterpret_cast<sal_Char*>(aSequence.getArray()), aSequence.getLength());
-    }
-
-    rUsedMimeType = pMimeType;
-    return aRet;
+    return xTransferable;
 }
 
 void SwXTextDocument::setGraphicSelection(int nType, int nX, int nY)

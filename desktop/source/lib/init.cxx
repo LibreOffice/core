@@ -77,6 +77,7 @@
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
@@ -3248,6 +3249,71 @@ static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int n
     pDoc->setTextSelection(nType, nX, nY);
 }
 
+static bool getFromTransferrable(
+    const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
+    const char *pMimeType, OString &aRet)
+{
+    // Take care of UTF-8 text here.
+    OString aMimeType(pMimeType);
+    bool bConvert = false;
+    sal_Int32 nIndex = 0;
+    if (aMimeType.getToken(0, ';', nIndex) == "text/plain")
+    {
+        if (aMimeType.getToken(0, ';', nIndex) == "charset=utf-8")
+        {
+            aMimeType = "text/plain;charset=utf-16";
+            bConvert = true;
+        }
+    }
+
+    datatransfer::DataFlavor aFlavor;
+    aFlavor.MimeType = OUString::fromUtf8(aMimeType.getStr());
+    if (aMimeType == "text/plain;charset=utf-16")
+        aFlavor.DataType = cppu::UnoType<OUString>::get();
+    else
+        aFlavor.DataType = cppu::UnoType< uno::Sequence<sal_Int8> >::get();
+
+    if (!xTransferable->isDataFlavorSupported(aFlavor))
+    {
+        SetLastExceptionMsg("Flavor " + aFlavor.MimeType + " is not supported");
+        return false;
+    }
+
+    uno::Any aAny;
+    try
+    {
+        aAny = xTransferable->getTransferData(aFlavor);
+    }
+    catch (const css::datatransfer::UnsupportedFlavorException& e)
+    {
+        SetLastExceptionMsg("Unsupported flavor " + aFlavor.MimeType + " exception " + e.Message);
+        return false;
+    }
+    catch (const css::uno::Exception& e)
+    {
+        SetLastExceptionMsg("Exception getting " + aFlavor.MimeType + " exception " + e.Message);
+        return false;
+    }
+
+    if (aFlavor.DataType == cppu::UnoType<OUString>::get())
+    {
+        OUString aString;
+        aAny >>= aString;
+        if (bConvert)
+            aRet = OUStringToOString(aString, RTL_TEXTENCODING_UTF8);
+        else
+            aRet = OString(reinterpret_cast<const sal_Char *>(aString.getStr()), aString.getLength() * sizeof(sal_Unicode));
+    }
+    else
+    {
+        uno::Sequence<sal_Int8> aSequence;
+        aAny >>= aSequence;
+        aRet = OString(reinterpret_cast<sal_Char*>(aSequence.getArray()), aSequence.getLength());
+    }
+
+    return true;;
+}
+
 static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMimeType, char** pUsedMimeType)
 {
     comphelper::ProfileZone aZone("doc_getTextSelection");
@@ -3262,19 +3328,35 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
         return nullptr;
     }
 
-    OString aUsedMimeType;
-    OString aRet = pDoc->getTextSelection(pMimeType, aUsedMimeType);
-    if (aUsedMimeType.isEmpty())
-        aRet = pDoc->getTextSelection("text/plain;charset=utf-8", aUsedMimeType);
+    css::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
+    if (!xTransferable)
+    {
+        SetLastExceptionMsg("No selection available");
+        return nullptr;
+    }
+
+    const char *pType = pMimeType;
+    if (!pType || pType[0] == '\0')
+        pType = "text/plain;charset=utf-8";
+
+    OString aRet;
+    bool bSuccess = getFromTransferrable(xTransferable, pType, aRet);
+    if (!bSuccess)
+        return nullptr;
 
     char* pMemory = static_cast<char*>(malloc(aRet.getLength() + 1));
     assert(pMemory); // Don't handle OOM conditions
     strcpy(pMemory, aRet.getStr());
 
-    if (pUsedMimeType)
+    if (pUsedMimeType) // legacy
     {
-        *pUsedMimeType = static_cast<char*>(malloc(aUsedMimeType.getLength() + 1));
-        strcpy(*pUsedMimeType, aUsedMimeType.getStr());
+        if (pMimeType)
+        {
+            *pUsedMimeType = static_cast<char*>(malloc(strlen(pMimeType) + 1));
+            strcpy(*pUsedMimeType, pMimeType);
+        }
+        else
+            *pUsedMimeType = nullptr;
     }
 
     return pMemory;
