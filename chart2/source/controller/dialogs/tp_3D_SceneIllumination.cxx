@@ -28,7 +28,7 @@
 #include <svtools/colrdlg.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/svddef.hxx>
-#include <vcl/builderfactory.hxx>
+#include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -39,28 +39,22 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-LightButton::LightButton( vcl::Window* pParent)
-            : ImageButton( pParent)
-            , m_bLightOn(false)
+LightButton::LightButton(std::unique_ptr<weld::ToggleButton> xButton)
+    : m_xButton(std::move(xButton))
+    , m_bLightOn(false)
 {
-    SetModeImage(Image(StockImage::Yes, RID_SVXBMP_LAMP_OFF));
+    m_xButton->set_from_icon_name(RID_SVXBMP_LAMP_OFF);
 }
-
-VCL_BUILDER_FACTORY(LightButton)
 
 void LightButton::switchLightOn(bool bOn)
 {
-    if( m_bLightOn==bOn )
+    if (m_bLightOn == bOn)
         return;
     m_bLightOn = bOn;
-    if(m_bLightOn)
-    {
-        SetModeImage(Image(StockImage::Yes, RID_SVXBMP_LAMP_ON));
-    }
+    if (m_bLightOn)
+        m_xButton->set_from_icon_name(RID_SVXBMP_LAMP_ON);
     else
-    {
-        SetModeImage(Image(StockImage::Yes, RID_SVXBMP_LAMP_OFF));
-    }
+        m_xButton->set_from_icon_name(RID_SVXBMP_LAMP_OFF);
 }
 
 struct LightSource
@@ -78,8 +72,9 @@ struct LightSource
 
 struct LightSourceInfo
 {
-    VclPtr<LightButton> pButton;
-    LightSource  aLightSource;
+    LightButton* pButton;
+    bool bButtonActive;
+    LightSource aLightSource;
 
     LightSourceInfo();
     void initButtonFromSource();
@@ -87,6 +82,7 @@ struct LightSourceInfo
 
 LightSourceInfo::LightSourceInfo()
     : pButton(nullptr)
+    , bButtonActive(false)
     , aLightSource()
 {
     aLightSource.nDiffuseColor = Color(0xffffff); // white
@@ -96,11 +92,9 @@ LightSourceInfo::LightSourceInfo()
 
 void LightSourceInfo::initButtonFromSource()
 {
-    if(!pButton)
+    if (!pButton)
         return;
-    pButton->SetModeImage(Image(StockImage::Yes,
-        aLightSource.bIsEnabled ? OUString(RID_SVXBMP_LAMP_ON) : OUString(RID_SVXBMP_LAMP_OFF)
-    ) );
+    pButton->switchLightOn(aLightSource.bIsEnabled);
 }
 
 namespace
@@ -118,7 +112,7 @@ namespace
         return aStr;
     }
 
-    void lcl_selectColor(SvxColorListBox& rListBox, const Color& rColor)
+    void lcl_selectColor(ColorListBox& rListBox, const Color& rColor)
     {
         rListBox.SetNoSelection();
         rListBox.SelectEntry(std::make_pair(rColor, lcl_makeColorName(rColor)));
@@ -203,88 +197,71 @@ namespace
     }
 }
 
-ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( vcl::Window* pWindow
-                , const uno::Reference< beans::XPropertySet > & xSceneProperties
-                , const uno::Reference< frame::XModel >& xChartModel )
-                : TabPage ( pWindow
-                          ,"tp_3D_SceneIllumination"
-                          ,"modules/schart/ui/tp_3D_SceneIllumination.ui")
-                , m_xSceneProperties( xSceneProperties )
-                , m_aTimerTriggeredControllerLock( xChartModel )
-                , m_bInCommitToModel( false )
-                , m_xChartModel( xChartModel )
+ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage(weld::Container* pParent,
+    weld::Window* pTopLevel,
+    const uno::Reference< beans::XPropertySet > & xSceneProperties,
+    const uno::Reference< frame::XModel >& xChartModel)
+    : m_xSceneProperties( xSceneProperties )
+    , m_aTimerTriggeredControllerLock( xChartModel )
+    , m_bInCommitToModel( false )
+    , m_xChartModel( xChartModel )
+    , m_pTopLevel(pTopLevel)
+    , m_xBuilder(Application::CreateBuilder(pParent, "modules/schart/ui/tp_3D_SceneIllumination.ui"))
+    , m_xContainer(m_xBuilder->weld_container("tp_3D_SceneIllumination"))
+    , m_xBtn_Light1(new LightButton(m_xBuilder->weld_toggle_button("BTN_LIGHT_1")))
+    , m_xBtn_Light2(new LightButton(m_xBuilder->weld_toggle_button("BTN_LIGHT_2")))
+    , m_xBtn_Light3(new LightButton(m_xBuilder->weld_toggle_button("BTN_LIGHT_3")))
+    , m_xBtn_Light4(new LightButton(m_xBuilder->weld_toggle_button("BTN_LIGHT_4")))
+    , m_xBtn_Light5(new LightButton(m_xBuilder->weld_toggle_button("BTN_LIGHT_5")))
+    , m_xBtn_Light6(new LightButton(m_xBuilder->weld_toggle_button("BTN_LIGHT_6")))
+    , m_xBtn_Light7(new LightButton(m_xBuilder->weld_toggle_button("BTN_LIGHT_7")))
+    , m_xBtn_Light8(new LightButton(m_xBuilder->weld_toggle_button("BTN_LIGHT_8")))
+    , m_xLB_LightSource(new ColorListBox(m_xBuilder->weld_menu_button("LB_LIGHTSOURCE"), pTopLevel))
+    , m_xBtn_LightSource_Color(m_xBuilder->weld_button("BTN_LIGHTSOURCE_COLOR"))
+    , m_xLB_AmbientLight(new ColorListBox(m_xBuilder->weld_menu_button("LB_AMBIENTLIGHT"), pTopLevel))
+    , m_xBtn_AmbientLight_Color(m_xBuilder->weld_button("BTN_AMBIENT_COLOR"))
+    , m_xHoriScale(m_xBuilder->weld_scale("hori"))
+    , m_xVertScale(m_xBuilder->weld_scale("vert"))
+    , m_xBtn_Corner(m_xBuilder->weld_button("corner"))
+    , m_xPreview(new LightControl3D)
+    , m_xPreviewWnd(new weld::CustomWeld(*m_xBuilder, "CTL_LIGHT_PREVIEW", *m_xPreview))
+    , m_xCtl_Preview(new LightCtl3D(*m_xPreview, *m_xHoriScale, *m_xVertScale, *m_xBtn_Corner))
 {
-    get(m_pBtn_Light1, "BTN_LIGHT_1");
-    get(m_pBtn_Light2, "BTN_LIGHT_2");
-    get(m_pBtn_Light3, "BTN_LIGHT_3");
-    get(m_pBtn_Light4, "BTN_LIGHT_4");
-    get(m_pBtn_Light5, "BTN_LIGHT_5");
-    get(m_pBtn_Light6, "BTN_LIGHT_6");
-    get(m_pBtn_Light7, "BTN_LIGHT_7");
-    get(m_pBtn_Light8, "BTN_LIGHT_8");
-
-    get(m_pLB_LightSource, "LB_LIGHTSOURCE");
-    get(m_pLB_AmbientLight, "LB_AMBIENTLIGHT");
-    get(m_pBtn_LightSource_Color, "BTN_LIGHTSOURCE_COLOR");
-    get(m_pBtn_AmbientLight_Color, "BTN_AMBIENT_COLOR");
-
-    get(m_pCtl_Preview, "CTL_LIGHT_PREVIEW");
-
     m_pLightSourceInfoList.reset(new LightSourceInfo[8]);
-    m_pLightSourceInfoList[0].pButton = m_pBtn_Light1;
-    m_pLightSourceInfoList[1].pButton = m_pBtn_Light2;
-    m_pLightSourceInfoList[2].pButton = m_pBtn_Light3;
-    m_pLightSourceInfoList[3].pButton = m_pBtn_Light4;
-    m_pLightSourceInfoList[4].pButton = m_pBtn_Light5;
-    m_pLightSourceInfoList[5].pButton = m_pBtn_Light6;
-    m_pLightSourceInfoList[6].pButton = m_pBtn_Light7;
-    m_pLightSourceInfoList[7].pButton = m_pBtn_Light8;
+    m_pLightSourceInfoList[0].pButton = m_xBtn_Light1.get();
+    m_pLightSourceInfoList[1].pButton = m_xBtn_Light2.get();
+    m_pLightSourceInfoList[2].pButton = m_xBtn_Light3.get();
+    m_pLightSourceInfoList[3].pButton = m_xBtn_Light4.get();
+    m_pLightSourceInfoList[4].pButton = m_xBtn_Light5.get();
+    m_pLightSourceInfoList[5].pButton = m_xBtn_Light6.get();
+    m_pLightSourceInfoList[6].pButton = m_xBtn_Light7.get();
+    m_pLightSourceInfoList[7].pButton = m_xBtn_Light8.get();
 
     fillControlsFromModel(nullptr);
 
-    m_pBtn_Light1->SetClickHdl( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
-    m_pBtn_Light2->SetClickHdl( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
-    m_pBtn_Light3->SetClickHdl( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
-    m_pBtn_Light4->SetClickHdl( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
-    m_pBtn_Light5->SetClickHdl( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
-    m_pBtn_Light6->SetClickHdl( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
-    m_pBtn_Light7->SetClickHdl( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
-    m_pBtn_Light8->SetClickHdl( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
+    m_xBtn_Light1->connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
+    m_xBtn_Light2->connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
+    m_xBtn_Light3->connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
+    m_xBtn_Light4->connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
+    m_xBtn_Light5->connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
+    m_xBtn_Light6->connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
+    m_xBtn_Light7->connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
+    m_xBtn_Light8->connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
 
-    m_pLB_AmbientLight->SetSelectHdl( LINK( this, ThreeD_SceneIllumination_TabPage, SelectColorHdl ) );
-    m_pLB_LightSource->SetSelectHdl( LINK( this, ThreeD_SceneIllumination_TabPage, SelectColorHdl ) );
+    m_xLB_AmbientLight->SetSelectHdl( LINK( this, ThreeD_SceneIllumination_TabPage, SelectColorHdl ) );
+    m_xLB_LightSource->SetSelectHdl( LINK( this, ThreeD_SceneIllumination_TabPage, SelectColorHdl ) );
 
-    m_pBtn_AmbientLight_Color->SetClickHdl( LINK( this, ThreeD_SceneIllumination_TabPage, ColorDialogHdl ) );
-    m_pBtn_LightSource_Color->SetClickHdl( LINK( this, ThreeD_SceneIllumination_TabPage, ColorDialogHdl ) );
+    m_xBtn_AmbientLight_Color->connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ColorDialogHdl ) );
+    m_xBtn_LightSource_Color->connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ColorDialogHdl ) );
 
-    m_pCtl_Preview->SetUserInteractiveChangeCallback( LINK( this, ThreeD_SceneIllumination_TabPage, PreviewChangeHdl ) );
-    m_pCtl_Preview->SetUserSelectionChangeCallback( LINK( this, ThreeD_SceneIllumination_TabPage, PreviewSelectHdl ) );
+    m_xCtl_Preview->SetUserInteractiveChangeCallback( LINK( this, ThreeD_SceneIllumination_TabPage, PreviewChangeHdl ) );
+    m_xCtl_Preview->SetUserSelectionChangeCallback( LINK( this, ThreeD_SceneIllumination_TabPage, PreviewSelectHdl ) );
 
-    ClickLightSourceButtonHdl(m_pBtn_Light2);
+    ClickLightSourceButtonHdl(*m_xBtn_Light2->get_widget());
 }
 
 ThreeD_SceneIllumination_TabPage::~ThreeD_SceneIllumination_TabPage()
 {
-    disposeOnce();
-}
-
-void ThreeD_SceneIllumination_TabPage::dispose()
-{
-    m_pLightSourceInfoList.reset();
-    m_pBtn_Light1.clear();
-    m_pBtn_Light2.clear();
-    m_pBtn_Light3.clear();
-    m_pBtn_Light4.clear();
-    m_pBtn_Light5.clear();
-    m_pBtn_Light6.clear();
-    m_pBtn_Light7.clear();
-    m_pBtn_Light8.clear();
-    m_pLB_LightSource.clear();
-    m_pBtn_LightSource_Color.clear();
-    m_pLB_AmbientLight.clear();
-    m_pBtn_AmbientLight_Color.clear();
-    m_pCtl_Preview.clear();
-    TabPage::dispose();
 }
 
 IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, fillControlsFromModel, void*, void)
@@ -298,7 +275,7 @@ IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, fillControlsFromModel, void*, 
     for( nL=0; nL<8; nL++)
         m_pLightSourceInfoList[nL].initButtonFromSource();
 
-    lcl_selectColor( *m_pLB_AmbientLight, lcl_getAmbientColor( m_xSceneProperties ));
+    lcl_selectColor( *m_xLB_AmbientLight, lcl_getAmbientColor( m_xSceneProperties ));
 
     updatePreview();
 }
@@ -321,12 +298,12 @@ void ThreeD_SceneIllumination_TabPage::applyLightSourcesToModel()
     m_aTimerTriggeredControllerLock.startTimer();
 }
 
-IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewChangeHdl, SvxLightCtl3D*, void)
+IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewChangeHdl, LightCtl3D*, void)
 {
     m_aTimerTriggeredControllerLock.startTimer();
 
     //update m_pLightSourceInfoList from preview
-    const SfxItemSet a3DLightAttributes(m_pCtl_Preview->GetSvx3DLightControl().Get3DAttributes());
+    const SfxItemSet a3DLightAttributes(m_xCtl_Preview->GetSvx3DLightControl().Get3DAttributes());
     LightSourceInfo* pInfo = &m_pLightSourceInfoList[0];
 
     pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1).GetValue();
@@ -371,27 +348,27 @@ IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewChangeHdl, SvxLightCtl3
     applyLightSourcesToModel();
 }
 
-IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewSelectHdl, SvxLightCtl3D*, void)
+IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewSelectHdl, LightCtl3D*, void)
 {
-    sal_uInt32 nLightNumber = m_pCtl_Preview->GetSvx3DLightControl().GetSelectedLight();
+    sal_uInt32 nLightNumber = m_xCtl_Preview->GetSvx3DLightControl().GetSelectedLight();
     if(nLightNumber<8)
     {
         LightButton* pButton = m_pLightSourceInfoList[nLightNumber].pButton;
-        if(!pButton->IsChecked())
-            ClickLightSourceButtonHdl(pButton);
+        if(!pButton->get_active())
+            ClickLightSourceButtonHdl(*pButton->get_widget());
 
         applyLightSourcesToModel();
     }
 }
 
-IMPL_LINK( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, Button*, pButton, void )
+IMPL_LINK( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, weld::Button&, rButton, void )
 {
-    bool bIsAmbientLight = (pButton==m_pBtn_AmbientLight_Color);
-    SvxColorListBox* pListBox = bIsAmbientLight ? m_pLB_AmbientLight.get() : m_pLB_LightSource.get();
+    bool bIsAmbientLight = (&rButton == m_xBtn_AmbientLight_Color.get());
+    ColorListBox* pListBox = bIsAmbientLight ? m_xLB_AmbientLight.get() : m_xLB_LightSource.get();
 
     SvColorDialog aColorDlg;
     aColorDlg.SetColor( pListBox->GetSelectEntryColor() );
-    if( aColorDlg.Execute(GetFrameWeld()) == RET_OK )
+    if( aColorDlg.Execute(m_pTopLevel) == RET_OK )
     {
         Color aColor( aColorDlg.GetColor());
         lcl_selectColor( *pListBox, aColor );
@@ -409,7 +386,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, Button*, pButton, v
             for( nL=0; nL<8; nL++)
             {
                 pInfo = &m_pLightSourceInfoList[nL];
-                if(pInfo->pButton->IsChecked())
+                if(pInfo->pButton->get_active())
                     break;
                 pInfo = nullptr;
             }
@@ -420,16 +397,16 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, Button*, pButton, v
     }
 }
 
-IMPL_LINK( ThreeD_SceneIllumination_TabPage, SelectColorHdl, SvxColorListBox&, rBox, void )
+IMPL_LINK( ThreeD_SceneIllumination_TabPage, SelectColorHdl, ColorListBox&, rBox, void )
 {
-    SvxColorListBox* pListBox = &rBox;
-    if(pListBox==m_pLB_AmbientLight)
+    ColorListBox* pListBox = &rBox;
+    if (pListBox == m_xLB_AmbientLight.get())
     {
         m_bInCommitToModel = true;
         lcl_setAmbientColor( m_xSceneProperties, pListBox->GetSelectEntryColor());
         m_bInCommitToModel = false;
     }
-    else if(pListBox==m_pLB_LightSource)
+    else if (pListBox == m_xLB_LightSource.get())
     {
         //get active lightsource:
         LightSourceInfo* pInfo = nullptr;
@@ -437,7 +414,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, SelectColorHdl, SvxColorListBox&, r
         for( nL=0; nL<8; nL++)
         {
             pInfo = &m_pLightSourceInfoList[nL];
-            if(pInfo->pButton->IsChecked())
+            if (pInfo->pButton->get_active())
                 break;
             pInfo = nullptr;
         }
@@ -450,59 +427,64 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, SelectColorHdl, SvxColorListBox&, r
     updatePreview();
 }
 
-IMPL_LINK( ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, Button*, pBtn, void )
+IMPL_LINK(ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, weld::Button&, rBtn, void)
 {
-    LightButton* pButton = static_cast<LightButton*>(pBtn);
-    if( !pButton )
-        return;
-
+    LightButton* pButton = nullptr;
     LightSourceInfo* pInfo = nullptr;
     sal_Int32 nL=0;
     for( nL=0; nL<8; nL++)
     {
-        if( m_pLightSourceInfoList[nL].pButton == pButton )
+        if (m_pLightSourceInfoList[nL].pButton->get_widget() == &rBtn)
         {
+            pButton = m_pLightSourceInfoList[nL].pButton;
             pInfo = &m_pLightSourceInfoList[nL];
             break;
         }
     }
 
-    //update light button
-    bool bIsChecked = pButton->IsChecked();
-    if(bIsChecked)
+    bool bIsChecked = pInfo->bButtonActive;
+
+    ControllerLockGuardUNO aGuard( m_xChartModel );
+    for( nL=0; nL<8; nL++)
     {
-        pButton->switchLightOn(!pButton->isLightOn());
-        if(pInfo)
+        LightButton* pLightButton = m_pLightSourceInfoList[nL].pButton;
+        if (pLightButton == pButton)
         {
-            pInfo->aLightSource.bIsEnabled=pButton->isLightOn();
-            applyLightSourceToModel( nL );
+            pLightButton->set_active(true);
+            if (!pLightButton->get_widget()->has_focus())
+                pLightButton->get_widget()->grab_focus();
+            m_pLightSourceInfoList[nL].bButtonActive = true;
+        }
+        else
+        {
+            pLightButton->set_active(false);
+            m_pLightSourceInfoList[nL].bButtonActive = false;
         }
     }
-    else
+
+    //update light button
+    if (bIsChecked)
     {
-        ControllerLockGuardUNO aGuard( m_xChartModel );
-        for( nL=0; nL<8; nL++)
-        {
-            LightButton* pLightButton = m_pLightSourceInfoList[nL].pButton;
-            pLightButton->Check( pLightButton == pButton );
-        }
+        pButton->switchLightOn(!pButton->isLightOn());
+        pInfo->aLightSource.bIsEnabled=pButton->isLightOn();
+        applyLightSourceToModel( nL );
     }
 
     //update color list box
     if(pInfo)
     {
-        lcl_selectColor( *m_pLB_LightSource, pInfo->aLightSource.nDiffuseColor );
+        lcl_selectColor( *m_xLB_LightSource, pInfo->aLightSource.nDiffuseColor );
     }
     updatePreview();
 }
 
 void ThreeD_SceneIllumination_TabPage::updatePreview()
 {
-    SfxItemSet aItemSet(m_pCtl_Preview->GetSvx3DLightControl().Get3DAttributes());
+    SfxItemSet aItemSet(m_xCtl_Preview->GetSvx3DLightControl().Get3DAttributes());
     LightSourceInfo* pInfo = &m_pLightSourceInfoList[0];
 
     // AmbientColor
-    aItemSet.Put(makeSvx3DAmbientcolorItem(m_pLB_AmbientLight->GetSelectEntryColor()));
+    aItemSet.Put(makeSvx3DAmbientcolorItem(m_xLB_AmbientLight->GetSelectEntryColor()));
 
     aItemSet.Put(makeSvx3DLightcolor1Item(pInfo->aLightSource.nDiffuseColor));
     aItemSet.Put(makeSvx3DLightOnOff1Item(pInfo->aLightSource.bIsEnabled));
@@ -544,15 +526,15 @@ void ThreeD_SceneIllumination_TabPage::updatePreview()
     aItemSet.Put(makeSvx3DLightDirection8Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
 
     // set lights and ambient light
-    m_pCtl_Preview->GetSvx3DLightControl().Set3DAttributes(aItemSet);
+    m_xCtl_Preview->GetSvx3DLightControl().Set3DAttributes(aItemSet);
 
     // select light
     for(sal_uInt32 a(0); a < 8; a++)
     {
-        if(m_pLightSourceInfoList[a].pButton->IsChecked())
+        if (m_pLightSourceInfoList[a].pButton->get_active())
         {
-            m_pCtl_Preview->GetSvx3DLightControl().SelectLight(a);
-            m_pCtl_Preview->CheckSelection();
+            m_xCtl_Preview->GetSvx3DLightControl().SelectLight(a);
+            m_xCtl_Preview->CheckSelection();
             break;
         }
     }

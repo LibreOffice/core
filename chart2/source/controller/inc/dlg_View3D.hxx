@@ -19,9 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_VIEW3D_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_VIEW3D_HXX
 
-#include <vcl/tabdlg.hxx>
-#include <vcl/tabctrl.hxx>
-
+#include <vcl/weld.hxx>
 #include <ControllerLockGuard.hxx>
 
 namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
@@ -32,27 +30,25 @@ class ThreeD_SceneGeometry_TabPage;
 class ThreeD_SceneAppearance_TabPage;
 class ThreeD_SceneIllumination_TabPage;
 
-class View3DDialog : public TabDialog
+class View3DDialog : public weld::GenericDialogController
 {
 public:
-    View3DDialog( vcl::Window* pWindow,
-                  const css::uno::Reference< css::frame::XModel > & xChartModel );
+    View3DDialog(weld::Window* pWindow, const css::uno::Reference<css::frame::XModel> & xChartModel);
     virtual ~View3DDialog() override;
-    virtual void dispose() override;
 
-    // from Dialog (base of TabDialog)
-    virtual short Execute() override;
+    virtual short run() override;
 
 private:
-    VclPtr<TabControl>     m_pTabControl;
-
-    VclPtr<ThreeD_SceneGeometry_TabPage>       m_pGeometry;
-    VclPtr<ThreeD_SceneAppearance_TabPage>     m_pAppearance;
-    VclPtr<ThreeD_SceneIllumination_TabPage>   m_pIllumination;
+    DECL_LINK(ActivatePageHdl, const OString&, void);
 
     ControllerLockHelper                m_aControllerLocker;
 
     static sal_uInt16 m_nLastPageId;
+
+    std::unique_ptr<weld::Notebook> m_xTabControl;
+    std::unique_ptr<ThreeD_SceneGeometry_TabPage> m_xGeometry;
+    std::unique_ptr<ThreeD_SceneAppearance_TabPage> m_xAppearance;
+    std::unique_ptr<ThreeD_SceneIllumination_TabPage> m_xIllumination;
 };
 
 } //namespace chart
