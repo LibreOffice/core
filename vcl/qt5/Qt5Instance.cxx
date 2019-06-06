@@ -247,6 +247,8 @@ void Qt5Instance::AfterAppInit()
     // as this otherwise overrides the individual desktop icons on X11.
     if (QGuiApplication::platformName() == "wayland")
         QGuiApplication::setDesktopFileName(QStringLiteral("libreoffice-startcenter.desktop"));
+    QGuiApplication::setLayoutDirection(AllSettings::GetLayoutRTL() ? Qt::RightToLeft
+                                                                    : Qt::LeftToRight);
 }
 
 void Qt5Instance::deleteObjectLater(QObject* pObject) { pObject->deleteLater(); }
