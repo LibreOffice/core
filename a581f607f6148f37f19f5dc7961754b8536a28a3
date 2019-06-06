@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_45b27596",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-06-06T20:56:52Z",
+      "side": 1,
+      "message": "char pointer is used so that we do not need to covert them later to char while pushing in .ui file using libxml2 library.",
+      "parentUuid": "3fa0c359_9ba2244b",
+      "revId": "a581f607f6148f37f19f5dc7961754b8536a28a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_db98ac1c",
         "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
         "patchSetId": 9
@@ -81,6 +99,24 @@
       "writtenOn": "2019-06-04T08:09:46Z",
       "side": 1,
       "message": "probably you can use some \u0027tokenize\u0027 functions which can split text using \u0027,\u0027 as a separator - I think there is something like that in OUString",
+      "revId": "a581f607f6148f37f19f5dc7961754b8536a28a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_65ad3130",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-06-06T20:56:52Z",
+      "side": 1,
+      "message": "I am unable to find the method tokenize.",
+      "parentUuid": "3fa0c359_db98ac1c",
       "revId": "a581f607f6148f37f19f5dc7961754b8536a28a3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
