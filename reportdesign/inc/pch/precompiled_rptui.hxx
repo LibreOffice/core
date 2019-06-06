@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:57:00 using:
+ Generated on 2019-06-06 09:42:49 using:
  ./bin/update_pch reportdesign rptui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -46,7 +46,6 @@
 #include <stddef.h>
 #include <string.h>
 #include <string>
-#include <string_view>
 #include <type_traits>
 #include <typeinfo>
 #include <unordered_map>
@@ -100,7 +99,6 @@
 #include <vcl/GraphicObject.hxx>
 #include <vcl/IContext.hxx>
 #include <vcl/IDialogRenderable.hxx>
-#include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
@@ -108,7 +106,6 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/button.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/combobox.hxx>
@@ -151,12 +148,9 @@
 #include <vcl/status.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
-#include <vcl/tabctrl.hxx>
-#include <vcl/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/task.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/treelistentries.hxx>
 #include <vcl/uitest/factory.hxx>
@@ -378,14 +372,12 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <svtools/valueset.hxx>
 #include <svx/Palette.hxx>
-#include <svx/SvxColorValueSet.hxx>
 #include <svx/XPropertyEntry.hxx>
 #include <svx/grfcrop.hxx>
 #include <svx/ipolypolygoneditorcontroller.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/sdgcpitm.hxx>
-#include <svx/sdr/animation/animationstate.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
