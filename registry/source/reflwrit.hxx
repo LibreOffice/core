@@ -25,7 +25,7 @@
 
 class RTConstValue;
 
-/// Implememetation handle
+/// Implementation handle
 typedef void* TypeWriterImpl;
 
 /** RegistryTypeWriter writes/creates a binary type blob.
