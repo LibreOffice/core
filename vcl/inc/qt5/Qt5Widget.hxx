@@ -34,6 +34,8 @@ class Qt5Widget : public QWidget
 
     Qt5Frame& m_rFrame;
     bool m_bNonEmptyIMPreeditSeen;
+    int m_nDeltaX;
+    int m_nDeltaY;
 
     enum class ButtonKeyState
     {
