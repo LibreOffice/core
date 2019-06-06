@@ -43,6 +43,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star;
+using namespace vcl;
 
 AboutDialog::AboutDialog(vcl::Window* pParent, WinBits nStyle, Dialog::InitFlag eFlag)
     : Dialog(pParent, nStyle, eFlag)

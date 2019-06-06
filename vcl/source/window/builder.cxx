@@ -1654,7 +1654,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
         if (name == "GtkAboutDialog")
-            xWindow = VclPtr<AboutDialog>::Create(pParent, nBits, !pParent ? Dialog::InitFlag::NoParent : Dialog::InitFlag::Default);
+            xWindow = VclPtr<vcl::AboutDialog>::Create(pParent, nBits, !pParent ? Dialog::InitFlag::NoParent : Dialog::InitFlag::Default);
         else
             xWindow = VclPtr<Dialog>::Create(pParent, nBits, !pParent ? Dialog::InitFlag::NoParent : Dialog::InitFlag::Default);
 #if HAVE_FEATURE_DESKTOP
