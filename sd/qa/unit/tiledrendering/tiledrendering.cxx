@@ -10,6 +10,7 @@
 #include "../sdmodeltestbase.hxx"
 #include <app.hrc>
 #include <test/bootstrapfixture.hxx>
+#include <test/helper/transferable.hxx>
 #include <unotest/macros_test.hxx>
 #include <test/xmltesttools.hxx>
 #include <boost/property_tree/json_parser.hpp>
@@ -473,11 +474,10 @@ void SdTiledRenderingTest::testGetTextSelection()
     ESelection aWordSelection(0, 0, 0, 5);
     rEditView.SetSelection(aWordSelection);
     // Did we indeed manage to copy the selected text?
-    OString aUsedFormat;
-    CPPUNIT_ASSERT_EQUAL(OString("Shape"), pXImpressDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
+    CPPUNIT_ASSERT_EQUAL(OString("Shape"), apitest::helper::transferable::getTextSelection(pXImpressDocument->getSelection(), "text/plain;charset=utf-8"));
 
     // Make sure returned RTF is not empty.
-    CPPUNIT_ASSERT(!pXImpressDocument->getTextSelection("text/rtf", aUsedFormat).isEmpty());
+    CPPUNIT_ASSERT(!apitest::helper::transferable::getTextSelection(pXImpressDocument->getSelection(), "text/rtf").isEmpty());
     comphelper::LibreOfficeKit::setActive(false);
 }
 
@@ -623,9 +623,8 @@ void SdTiledRenderingTest::testSearchAll()
 
     lcl_search("match", /*bFindAll=*/true);
 
-    OString aUsedFormat;
     // This was empty: find-all did not highlight the first match.
-    CPPUNIT_ASSERT_EQUAL(OString("match"), pXImpressDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
+    CPPUNIT_ASSERT_EQUAL(OString("match"), apitest::helper::transferable::getTextSelection(pXImpressDocument->getSelection(), "text/plain;charset=utf-8"));
 
     // We're on the first slide, search for something on the second slide and make sure we get a SET_PART.
     m_nPart = 0;
@@ -675,10 +674,9 @@ void SdTiledRenderingTest::testSearchAllFollowedBySearch()
     lcl_search("third", /*bFindAll=*/true);
     lcl_search("match" /*,bFindAll=false*/);
 
-    OString aUsedFormat;
     // This used to give wrong result: 'search' after 'search all' still
     // returned 'third'
-    CPPUNIT_ASSERT_EQUAL(OString("match"), pXImpressDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
+    CPPUNIT_ASSERT_EQUAL(OString("match"), apitest::helper::transferable::getTextSelection(pXImpressDocument->getSelection(), "text/plain;charset=utf-8"));
     comphelper::LibreOfficeKit::setActive(false);
 }
 

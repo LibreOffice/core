@@ -808,7 +808,7 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
     }
 }
 
-OString ScModelObj::getTextSelection(const char* pMimeType, OString& rUsedMimeType)
+uno::Reference<datatransfer::XTransferable> ScModelObj::getSelection()
 {
     SolarMutexGuard aGuard;
 
@@ -836,64 +836,7 @@ OString ScModelObj::getTextSelection(const char* pMimeType, OString& rUsedMimeTy
     if (!xTransferable.is())
         xTransferable.set( aDataHelper.GetTransferable() );
 
-    // Take care of UTF-8 text here.
-    OString aMimeType(pMimeType);
-    bool bConvert = false;
-    sal_Int32 nIndex = 0;
-    if (aMimeType.getToken(0, ';', nIndex) == "text/plain")
-    {
-        if (aMimeType.getToken(0, ';', nIndex) == "charset=utf-8")
-        {
-            aMimeType = "text/plain;charset=utf-16";
-            bConvert = true;
-        }
-    }
-
-    datatransfer::DataFlavor aFlavor;
-    aFlavor.MimeType = OUString::fromUtf8(aMimeType.getStr());
-    if (aMimeType == "text/plain;charset=utf-16")
-        aFlavor.DataType = cppu::UnoType<OUString>::get();
-    else
-        aFlavor.DataType = cppu::UnoType< uno::Sequence<sal_Int8> >::get();
-
-    if (!xTransferable.is() || !xTransferable->isDataFlavorSupported(aFlavor))
-        return OString();
-
-    uno::Any aAny;
-    try
-    {
-        aAny = xTransferable->getTransferData(aFlavor);
-    }
-    catch (const datatransfer::UnsupportedFlavorException& e)
-    {
-        SAL_WARN("sc", "Caught " << e);
-        return OString();
-    }
-    catch (const css::uno::Exception& e)
-    {
-        SAL_WARN("sc", "Caught " << e);
-        return OString();
-    }
-
-    OString aRet;
-    if (aFlavor.DataType == cppu::UnoType<OUString>::get())
-    {
-        OUString aString;
-        aAny >>= aString;
-        if (bConvert)
-            aRet = OUStringToOString(aString, RTL_TEXTENCODING_UTF8);
-        else
-            aRet = OString(reinterpret_cast<const sal_Char *>(aString.getStr()), aString.getLength() * sizeof(sal_Unicode));
-    }
-    else
-    {
-        uno::Sequence<sal_Int8> aSequence;
-        aAny >>= aSequence;
-        aRet = OString(reinterpret_cast<sal_Char*>(aSequence.getArray()), aSequence.getLength());
-    }
-
-    rUsedMimeType = pMimeType;
-    return aRet;
+    return xTransferable;
 }
 
 void ScModelObj::setGraphicSelection(int nType, int nX, int nY)

@@ -13,6 +13,7 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <swmodeltestbase.hxx>
+#include <test/helper/transferable.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -405,8 +406,7 @@ void SwTiledRenderingTest::testGetTextSelection()
 
     SwXTextDocument* pXTextDocument = createDoc("shape-with-text.fodt");
     // No crash, just empty output for unexpected mime type.
-    OString aUsedFormat;
-    CPPUNIT_ASSERT_EQUAL(OString(), pXTextDocument->getTextSelection("foo/bar", aUsedFormat));
+    CPPUNIT_ASSERT_EQUAL(OString(), apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "foo/bar"));
 
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     // Move the cursor into the first word.
@@ -415,10 +415,10 @@ void SwTiledRenderingTest::testGetTextSelection()
     pWrtShell->SelWrd();
 
     // Make sure that we selected text from the body text.
-    CPPUNIT_ASSERT_EQUAL(OString("Hello"), pXTextDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
+    CPPUNIT_ASSERT_EQUAL(OString("Hello"), apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/plain;charset=utf-8"));
 
     // Make sure we produce something for HTML.
-    CPPUNIT_ASSERT(!pXTextDocument->getTextSelection("text/html", aUsedFormat).isEmpty());
+    CPPUNIT_ASSERT(!apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/html").isEmpty());
 
     // Now select some shape text and check again.
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
@@ -429,7 +429,7 @@ void SwTiledRenderingTest::testGetTextSelection()
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     ESelection aWordSelection(0, 0, 0, 5);
     rEditView.SetSelection(aWordSelection);
-    CPPUNIT_ASSERT_EQUAL(OString("Shape"), pXTextDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
+    CPPUNIT_ASSERT_EQUAL(OString("Shape"), apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/plain;charset=utf-8"));
 }
 
 void SwTiledRenderingTest::testSetGraphicSelection()
