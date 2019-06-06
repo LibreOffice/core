@@ -2056,6 +2056,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
 
             rMouseRect          = tools::Rectangle( aPos, aSize );
             rMouseRect.Left()   = rPos.X();
+            rMouseRect.Top()    = rPos.Y();
 
             rStateRect.Left()   = rPos.X();
             rStateRect.Top()    = rMouseRect.Top();
