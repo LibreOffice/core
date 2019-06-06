@@ -3389,6 +3389,11 @@ public:
         , m_pAboutDialog(pAboutDialog)
         , m_pCssProvider(nullptr)
     {
+        // in GtkAboutDialog apply_use_header_bar if headerbar is false it
+        // automatically adds a default close button which it doesn't if
+        // headerbar is true and which doesn't appear in the .ui
+        if (GtkWidget* pDefaultButton = gtk_dialog_get_widget_for_response(GTK_DIALOG(pAboutDialog), GTK_RESPONSE_DELETE_EVENT))
+            gtk_widget_destroy(pDefaultButton);
     }
 
     virtual void set_version(const OUString& rVersion) override
