@@ -665,10 +665,9 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                             nLines = pData->GetNotchDelta() * nScrollLines;
                         if ( nLines )
                         {
-                            ImplHandleScroll( nullptr,
-                                          0L,
-                                          pData->IsHorz() ? pHScrl : pVScrl,
-                                          nLines );
+                            ImplHandleScroll(nullptr, 0L, pData->IsHorz() ? pHScrl : pVScrl,
+                                pData->IsHorz() && pHScrl && (AllSettings::GetLayoutRTL() == pHScrl->IsRTLEnabled())
+                                    ? -nLines : nLines);
                             bRet = true;
                         }
                     }
