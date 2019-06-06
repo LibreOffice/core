@@ -1,64 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkImage" id="IMG_AMBIENT_COLOR">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/colordlg.png</property>
+    <property name="icon_name">svx/res/colordlg.png</property>
   </object>
   <object class="GtkImage" id="IMG_LIGHTSOURCE_COLOR">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/colordlg.png</property>
+    <property name="icon_name">svx/res/colordlg.png</property>
   </object>
   <object class="GtkImage" id="IMG_LIGHT_1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/lighton.png</property>
+    <property name="icon_name">svx/res/lighton.png</property>
   </object>
   <object class="GtkImage" id="IMG_LIGHT_2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/lighton.png</property>
+    <property name="icon_name">svx/res/lighton.png</property>
   </object>
   <object class="GtkImage" id="IMG_LIGHT_3">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="yalign">0.44999998807907104</property>
-    <property name="pixbuf">svx/res/lighton.png</property>
+    <property name="icon_name">svx/res/lighton.png</property>
   </object>
   <object class="GtkImage" id="IMG_LIGHT_4">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="yalign">0.50999999046325684</property>
-    <property name="ypad">1</property>
-    <property name="pixbuf">svx/res/lighton.png</property>
+    <property name="icon_name">svx/res/lighton.png</property>
   </object>
   <object class="GtkImage" id="IMG_LIGHT_5">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="yalign">0.49000000953674316</property>
-    <property name="pixbuf">svx/res/lighton.png</property>
+    <property name="icon_name">svx/res/lighton.png</property>
   </object>
   <object class="GtkImage" id="IMG_LIGHT_6">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="yalign">0.50999999046325684</property>
-    <property name="pixbuf">svx/res/lighton.png</property>
+    <property name="icon_name">svx/res/lighton.png</property>
   </object>
   <object class="GtkImage" id="IMG_LIGHT_7">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="xalign">0.50999999046325684</property>
-    <property name="yalign">0.49000000953674316</property>
-    <property name="xpad">1</property>
-    <property name="pixbuf">svx/res/lighton.png</property>
+    <property name="icon_name">svx/res/lighton.png</property>
   </object>
   <object class="GtkImage" id="IMG_LIGHT_8">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/lighton.png</property>
+    <property name="icon_name">svx/res/lighton.png</property>
   </object>
   <object class="GtkBox" id="tp_3D_SceneIllumination">
     <property name="visible">True</property>
@@ -96,131 +88,123 @@
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
-                          <object class="chartcontrollerlo-LightButton" id="BTN_LIGHT_1">
+                          <object class="GtkToggleButton" id="BTN_LIGHT_1">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
                             <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHT_1|tooltip_text">Light source 1</property>
                             <property name="image">IMG_LIGHT_1</property>
+                            <property name="always_show_image">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="chartcontrollerlo-LightButton" id="BTN_LIGHT_2">
+                          <object class="GtkToggleButton" id="BTN_LIGHT_2">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
                             <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHT_2|tooltip_text">Light source 2</property>
                             <property name="image">IMG_LIGHT_2</property>
+                            <property name="always_show_image">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="chartcontrollerlo-LightButton" id="BTN_LIGHT_3">
+                          <object class="GtkToggleButton" id="BTN_LIGHT_3">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
                             <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHT_3|tooltip_text">Light source 3</property>
                             <property name="image">IMG_LIGHT_3</property>
+                            <property name="always_show_image">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="chartcontrollerlo-LightButton" id="BTN_LIGHT_4">
+                          <object class="GtkToggleButton" id="BTN_LIGHT_4">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
                             <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHT_4|tooltip_text">Light source 4</property>
                             <property name="image">IMG_LIGHT_4</property>
+                            <property name="always_show_image">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="chartcontrollerlo-LightButton" id="BTN_LIGHT_5">
+                          <object class="GtkToggleButton" id="BTN_LIGHT_5">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
                             <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHT_5|tooltip_text">Light source 5</property>
                             <property name="image">IMG_LIGHT_5</property>
+                            <property name="always_show_image">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="chartcontrollerlo-LightButton" id="BTN_LIGHT_6">
+                          <object class="GtkToggleButton" id="BTN_LIGHT_6">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
                             <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHT_6|tooltip_text">Light source 6</property>
                             <property name="image">IMG_LIGHT_6</property>
+                            <property name="always_show_image">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="chartcontrollerlo-LightButton" id="BTN_LIGHT_7">
+                          <object class="GtkToggleButton" id="BTN_LIGHT_7">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
                             <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHT_7|tooltip_text">Light source 7</property>
                             <property name="image">IMG_LIGHT_7</property>
+                            <property name="always_show_image">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="chartcontrollerlo-LightButton" id="BTN_LIGHT_8">
+                          <object class="GtkToggleButton" id="BTN_LIGHT_8">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
                             <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHT_8|tooltip_text">Light source 8</property>
                             <property name="image">IMG_LIGHT_8</property>
+                            <property name="always_show_image">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                       </object>
@@ -236,9 +220,16 @@
                         <property name="can_focus">False</property>
                         <property name="spacing">12</property>
                         <child>
-                          <object class="svxcorelo-SvxColorListBox" id="LB_LIGHTSOURCE">
+                          <object class="GtkMenuButton" id="LB_LIGHTSOURCE">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="label" translatable="no"></property>
+                            <child>
+                              <placeholder/>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -247,7 +238,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="BTN_LIGHTSOURCE_COLOR">
+                          <object class="GtkToggleButton" id="BTN_LIGHTSOURCE_COLOR">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -276,10 +267,10 @@
               <object class="GtkLabel" id="FT_LIGHTSOURCE">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="tp_3D_SceneIllumination|FT_LIGHTSOURCE">_Light source</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">BTN_LIGHT_1</property>
+                <property name="xalign">0</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -310,9 +301,16 @@
                     <property name="can_focus">False</property>
                     <property name="spacing">12</property>
                     <child>
-                      <object class="svxcorelo-SvxColorListBox" id="LB_AMBIENTLIGHT">
+                      <object class="GtkMenuButton" id="LB_AMBIENTLIGHT">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="label" translatable="no"></property>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -321,7 +319,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="BTN_AMBIENT_COLOR">
+                      <object class="GtkToggleButton" id="BTN_AMBIENT_COLOR">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -343,10 +341,10 @@
               <object class="GtkLabel" id="FT_AMBIENTLIGHT">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="tp_3D_SceneIllumination|FT_AMBIENTLIGHT">_Ambient light</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">LB_AMBIENTLIGHT</property>
+                <property name="xalign">0</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -367,15 +365,77 @@
       </packing>
     </child>
     <child>
-      <object class="svxlo-SvxLightCtl3D" id="CTL_LIGHT_PREVIEW">
+      <object class="GtkScrolledWindow" id="scrolledwindow">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|CTL_LIGHT_PREVIEW|tooltip_text">Light Preview</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
+        <property name="can_focus">True</property>
+        <property name="hscrollbar_policy">never</property>
+        <property name="vscrollbar_policy">never</property>
+        <property name="shadow_type">in</property>
+        <child>
+          <object class="GtkViewport">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkDrawingArea" id="CTL_LIGHT_PREVIEW">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                    <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|CTL_LIGHT_PREVIEW|tooltip_text">Light Preview</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="corner">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkScale" id="hori">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="round_digits">1</property>
+                    <property name="draw_value">False</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkScale" id="vert">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="round_digits">1</property>
+                    <property name="draw_value">False</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
       <packing>
-        <property name="expand">False</property>
+        <property name="expand">True</property>
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
