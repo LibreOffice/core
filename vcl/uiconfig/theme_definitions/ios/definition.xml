@@ -85,7 +85,7 @@
     </pushbutton>
 
     <radiobutton>
-        <part value="Entire" width="32" height="32">
+        <part value="Entire" width="26" height="26">
            <state enabled="true" pressed="false" button-value="true">
                 <image source="tick-on.svg" />
             </state>
