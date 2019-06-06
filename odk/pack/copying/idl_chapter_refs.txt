@@ -417,7 +417,7 @@ DESCR:Text - Indexes and Index Marks - Indexes
 REF:
 com.sun.star.text.BibliographyDataType
 com.sun.star.text.BibliographyDataField
-com.sun.star.text.IllustrationIndex
+com.sun.star.text.IllustrationsIndex
 com.sun.star.beans.XPropertySet
 com.sun.star.container.XIndexReplace
 com.sun.star.text.Bibliography
