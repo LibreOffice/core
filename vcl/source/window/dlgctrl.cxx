@@ -27,7 +27,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
-#include <vcl/tabdlg.hxx>
 #include <vcl/button.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/unohelp.hxx>
