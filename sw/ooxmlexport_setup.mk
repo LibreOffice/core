@@ -16,6 +16,7 @@ define sw_ooxmlexport_libraries
 	editeng \
 	sal \
 	sfx \
+	svl \
 	sw \
 	test \
 	tl \

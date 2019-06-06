@@ -17,8 +17,10 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <svx/xfillit0.hxx>
+#include <editeng/frmdiritem.hxx>
 
 #include <editsh.hxx>
+#include <frmatr.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -69,6 +71,22 @@ DECLARE_OOXMLEXPORT_TEST(testTbrlTextbox, "tbrl-textbox.docx")
     // Actual: 0', i.e. tbRl writing direction was imported as lrTb.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-90),
                          aGeometry["TextPreRotateAngle"].get<sal_Int32>());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testBtlrShape, "btlr-textbox.docx")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    const SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(RES_DRAWFRMFMT), rFormats[0]->Which());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(RES_FLYFRMFMT), rFormats[1]->Which());
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 5, Actual:
+    // 4', i.e. the textbox inherited its writing direction instead of having an explicit btlr
+    // value.
+    CPPUNIT_ASSERT_EQUAL(SvxFrameDirection::Vertical_LR_BT,
+                         rFormats[1]->GetAttrSet().GetFrameDir().GetValue());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFrameSizeExport, "floating-tables-anchor.docx")
