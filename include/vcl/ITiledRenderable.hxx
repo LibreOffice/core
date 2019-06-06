@@ -17,6 +17,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/vclptr.hxx>
 #include <map>
+#include <com/sun/star/datatransfer/XTransferable.hpp>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::datatransfer { namespace clipboard { class XClipboard; } }
@@ -142,11 +143,9 @@ public:
     virtual void setTextSelection(int nType, int nX, int nY) = 0;
 
     /**
-     * Gets the text selection.
-     *
-     * @see lok::Document::getTextSelection().
+     * Gets the selection as a transferable for later processing
      */
-    virtual OString getTextSelection(const char* pMimeType, OString& rUsedMimeType) = 0;
+    virtual css::uno::Reference<css::datatransfer::XTransferable> getSelection() = 0;
 
     /**
      * Adjusts the graphic selection.
