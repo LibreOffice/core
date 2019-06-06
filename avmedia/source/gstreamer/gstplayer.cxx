@@ -42,23 +42,14 @@
 #include "gstframegrabber.hxx"
 #include "gstwindow.hxx"
 
-#ifdef AVMEDIA_GST_0_10
-#  define AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Player_GStreamer_0_10"
-#  define AVMEDIA_GST_PLAYER_SERVICENAME        "com.sun.star.media.Player_GStreamer_0_10"
-#else
-#  include <gst/video/videooverlay.h>
-#  define AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Player_GStreamer"
-#  define AVMEDIA_GST_PLAYER_SERVICENAME        "com.sun.star.media.Player_GStreamer"
-#endif
+#include <gst/video/videooverlay.h>
+#define AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Player_GStreamer"
+#define AVMEDIA_GST_PLAYER_SERVICENAME        "com.sun.star.media.Player_GStreamer"
 
 #include <gst/pbutils/missing-plugins.h>
 #include <gst/pbutils/pbutils.h>
 
-#ifdef AVMEDIA_GST_0_10
-#  define AVVERSION "gst 0.10: "
-#else
-#  define AVVERSION "gst 1.0: "
-#endif
+#define AVVERSION "gst 1.0: "
 
 using namespace ::com::sun::star;
 
@@ -435,26 +426,14 @@ void Player::processMessage( GstMessage *message )
 
 static gboolean wrap_element_query_position (GstElement *element, GstFormat format, gint64 *cur)
 {
-#ifdef AVMEDIA_GST_0_10
-    GstFormat my_format = format;
-    return gst_element_query_position( element, &my_format, cur) && my_format == format && *cur > 0;
-#else
     return gst_element_query_position( element, format, cur );
-#endif
 }
 
 
 static gboolean wrap_element_query_duration (GstElement *element, GstFormat format, gint64 *duration)
 {
-#ifdef AVMEDIA_GST_0_10
-    GstFormat my_format = format;
-    return gst_element_query_duration( element, &my_format, duration) && my_format == format && *duration > 0;
-#else
     return gst_element_query_duration( element, format, duration );
-#endif
 }
-
-#ifndef AVMEDIA_GST_0_10
 
 #define LCL_WAYLAND_DISPLAY_HANDLE_CONTEXT_TYPE "GstWaylandDisplayHandleContextType"
 
@@ -478,8 +457,6 @@ static GstContext* lcl_wayland_display_handle_context_new(void* display)
     return context;
 }
 
-#endif
-
 GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 {
 #if OSL_DEBUG_LEVEL > 0
@@ -498,12 +475,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 
     if (!mbUseGtkSink)
     {
-#ifdef AVMEDIA_GST_0_10
-        if (message->structure &&
-            !strcmp( gst_structure_get_name( message->structure ), "prepare-xwindow-id" ) )
-#else
         if (gst_is_video_overlay_prepare_window_handle_message (message) )
-#endif
         {
             SAL_INFO( "avmedia.gstreamer", AVVERSION << this << " processSyncMessage prepare window id: " <<
                       GST_MESSAGE_TYPE_NAME( message ) << " " << static_cast<int>(mnWindowID) );
@@ -515,16 +487,13 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
             if ( mnWindowID != 0 )
             {
                 gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
-#ifndef AVMEDIA_GST_0_10
                 gst_video_overlay_handle_events(mpXOverlay, 0); // Let the parent window handle events.
                 if (maArea.Width > 0 && maArea.Height > 0)
                     gst_video_overlay_set_render_rectangle(mpXOverlay, maArea.X, maArea.Y, maArea.Width, maArea.Height);
-#endif
             }
 
             return GST_BUS_DROP;
         }
-#ifndef AVMEDIA_GST_0_10
         else if (lcl_is_wayland_display_handle_need_context_message(message))
         {
             GstContext *context = lcl_wayland_display_handle_context_new(mpDisplay);
@@ -532,65 +501,8 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 
             return GST_BUS_DROP;
         }
-#endif
     }
 
-#ifdef AVMEDIA_GST_0_10
-    if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_STATE_CHANGED ) {
-        if( message->src == GST_OBJECT( mpPlaybin ) ) {
-            GstState newstate, pendingstate;
-
-            gst_message_parse_state_changed (message, nullptr, &newstate, &pendingstate);
-
-            SAL_INFO( "avmedia.gstreamer", AVVERSION << this << " state change received, new state " << static_cast<int>(newstate) << " pending " << static_cast<int>(pendingstate) );
-            if( newstate == GST_STATE_PAUSED &&
-                pendingstate == GST_STATE_VOID_PENDING ) {
-
-                SAL_INFO( "avmedia.gstreamer", AVVERSION << this << " change to paused received" );
-
-                if( mnDuration == 0) {
-                    gint64 gst_duration = 0;
-                    if( wrap_element_query_duration( mpPlaybin, GST_FORMAT_TIME, &gst_duration) )
-                        mnDuration = gst_duration;
-                }
-
-                if( mnWidth == 0 ) {
-                    GList *pStreamInfo = nullptr;
-
-                    g_object_get( G_OBJECT( mpPlaybin ), "stream-info", &pStreamInfo, nullptr );
-
-                    for ( ; pStreamInfo != nullptr; pStreamInfo = pStreamInfo->next) {
-                        GObject *pInfo = G_OBJECT( pStreamInfo->data );
-
-                        if( !pInfo )
-                            continue;
-
-                        int nType;
-                        g_object_get( pInfo, "type", &nType, nullptr );
-                        GEnumValue *pValue = g_enum_get_value( G_PARAM_SPEC_ENUM( g_object_class_find_property( G_OBJECT_GET_CLASS( pInfo ), "type" ) )->enum_class,
-                                                               nType );
-
-                        if( !g_ascii_strcasecmp( pValue->value_nick, "video" ) ) {
-                            GstStructure *pStructure;
-                            GstPad *pPad;
-
-                            g_object_get( pInfo, "object", &pPad, nullptr );
-                            pStructure = gst_caps_get_structure( GST_PAD_CAPS( pPad ), 0 );
-                            if( pStructure ) {
-                                gst_structure_get_int( pStructure, "width", &mnWidth );
-                                gst_structure_get_int( pStructure, "height", &mnHeight );
-                                SAL_INFO( "avmedia.gstreamer", AVVERSION "queried size: " << mnWidth << "x" << mnHeight );
-                            }
-                            g_object_unref (pPad);
-                        }
-                    }
-
-                    maSizeCondition.set();
-                }
-            }
-        }
-#else
-    // We get to use the exciting new playbin2 ! (now known as playbin)
     if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ASYNC_DONE ) {
         if( mnDuration == 0) {
             gint64 gst_duration = 0;
@@ -623,7 +535,6 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 
             maSizeCondition.set();
         }
-#endif // AVMEDIA_GST_0_10
     } else if (gst_is_missing_plugin_message(message)) {
         TheMissingPluginInstaller::get().report(this, message);
         if( mnWidth == 0 ) {
@@ -692,11 +603,7 @@ void Player::preparePlaybin( const OUString& rURL, GstElement *pSink )
     mnWatchID = gst_bus_add_watch( pBus, pipeline_bus_callback, this );
     mbWatchID = true;
     SAL_INFO( "avmedia.gstreamer", AVVERSION << this << " set sync handler" );
-#ifdef AVMEDIA_GST_0_10
-    gst_bus_set_sync_handler( pBus, pipeline_bus_sync_handler, this );
-#else
     gst_bus_set_sync_handler( pBus, pipeline_bus_sync_handler, this, nullptr );
-#endif
     g_object_unref( pBus );
 }
 

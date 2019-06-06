@@ -195,11 +195,6 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
         {
             AVMEDIA_MANAGER_SERVICE_PREFERRED,
             AVMEDIA_MANAGER_SERVICE_NAME,
-// a fallback path just for gstreamer which has
-// two significant versions deployed at once ...
-#ifdef AVMEDIA_MANAGER_SERVICE_NAME_OLD
-            AVMEDIA_MANAGER_SERVICE_NAME_OLD
-#endif
         };
 
         for (sal_uInt32 i = 0; !xPlayer.is() && i < SAL_N_ELEMENTS( aServiceManagers ); ++i)
