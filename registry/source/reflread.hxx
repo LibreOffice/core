@@ -23,7 +23,7 @@
 #include <registry/refltype.hxx>
 #include <rtl/ustring.hxx>
 
-/// Implememetation handle
+/// Implementation handle
 typedef void* TypeReaderImpl;
 
 /** RegistryTypeReades reads a binary type blob.
