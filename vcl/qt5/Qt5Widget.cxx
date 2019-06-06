@@ -179,20 +179,31 @@ void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
     aEvent.mnY = pEvent->pos().y();
     aEvent.mnCode = GetKeyModCode(pEvent->modifiers()) | GetMouseModCode(pEvent->buttons());
 
-    int nDelta = pEvent->angleDelta().x();
-    aEvent.mbHorz = true;
-    if (!nDelta)
+    // mouse wheel ticks are 120, which we map to 3 lines.
+    // we have to accumulate for touch scroll to keep track of the absolute delta.
+
+    int nDelta = pEvent->angleDelta().y(), lines;
+    aEvent.mbHorz = nDelta == 0;
+    if (aEvent.mbHorz)
     {
-        nDelta = pEvent->angleDelta().y();
-        aEvent.mbHorz = false;
+        nDelta = pEvent->angleDelta().x();
+        if (!nDelta)
+            return;
+
+        m_nDeltaX += nDelta;
+        lines = m_nDeltaX / 40;
+        m_nDeltaX = m_nDeltaX % 40;
     }
-    if (!nDelta)
-        return;
-    nDelta /= 8;
+    else
+    {
+        m_nDeltaY += nDelta;
+        lines = m_nDeltaY / 40;
+        m_nDeltaY = m_nDeltaY % 40;
+    }
 
     aEvent.mnDelta = nDelta;
-    aEvent.mnNotchDelta = nDelta > 0 ? 1 : -1;
-    aEvent.mnScrollLines = 3;
+    aEvent.mnNotchDelta = nDelta < 0 ? -1 : 1;
+    aEvent.mnScrollLines = std::abs(lines);
 
     m_rFrame.CallCallback(SalEvent::WheelMouse, &aEvent);
     pEvent->accept();
@@ -479,6 +490,8 @@ Qt5Widget::Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
     : QWidget(Q_NULLPTR, f)
     , m_rFrame(rFrame)
     , m_bNonEmptyIMPreeditSeen(false)
+    , m_nDeltaX(0)
+    , m_nDeltaY(0)
 {
     create();
     setMouseTracking(true);
