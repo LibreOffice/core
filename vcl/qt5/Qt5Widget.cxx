@@ -141,7 +141,9 @@ void Qt5Widget::handleMouseButtonEvent(const Qt5Frame& rFrame, QMouseEvent* pEve
     }
 
     aEvent.mnTime = pEvent->timestamp();
-    aEvent.mnX = static_cast<long>(pEvent->pos().x());
+    aEvent.mnX = static_cast<long>(QGuiApplication::isLeftToRight()
+                                       ? pEvent->pos().x()
+                                       : rFrame.GetQWidget()->width() - pEvent->pos().x());
     aEvent.mnY = static_cast<long>(pEvent->pos().y());
     aEvent.mnCode = GetKeyModCode(pEvent->modifiers()) | GetMouseModCode(pEvent->buttons());
 
@@ -166,7 +168,7 @@ void Qt5Widget::mouseMoveEvent(QMouseEvent* pEvent)
 
     SalMouseEvent aEvent;
     aEvent.mnTime = pEvent->timestamp();
-    aEvent.mnX = point.x();
+    aEvent.mnX = QGuiApplication::isLeftToRight() ? point.x() : width() - point.x();
     aEvent.mnY = point.y();
     aEvent.mnCode = GetKeyModCode(pEvent->modifiers()) | GetMouseModCode(pEvent->buttons());
     aEvent.mnButton = 0;
@@ -191,7 +193,7 @@ void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
     aEvent.mbHorz = nDelta == 0;
     if (aEvent.mbHorz)
     {
-        nDelta = pEvent->angleDelta().x();
+        nDelta = (QGuiApplication::isLeftToRight() ? -1 : 1) * pEvent->angleDelta().x();
         if (!nDelta)
             return;
 

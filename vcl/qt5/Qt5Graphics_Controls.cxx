@@ -518,7 +518,11 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
             option.sliderPosition = sbVal->mnCur;
             option.pageStep = sbVal->mnVisibleSize;
             if (part == ControlPart::DrawBackgroundHorz)
-                option.upsideDown = sbVal->maButton1Rect.Left() > sbVal->maButton2Rect.Left();
+                option.upsideDown
+                    = (QGuiApplication::isRightToLeft()
+                       && sbVal->maButton1Rect.Left() < sbVal->maButton2Rect.Left())
+                      || (QGuiApplication::isLeftToRight()
+                          && sbVal->maButton1Rect.Left() > sbVal->maButton2Rect.Left());
 
             //setup the active control... always the slider
             if (sbVal->mnThumbState & ControlState::ROLLOVER)
