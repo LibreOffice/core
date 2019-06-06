@@ -2609,15 +2609,15 @@ void SdXImpressDocument::setTextSelection(int nType, int nX, int nY)
     }
 }
 
-OString SdXImpressDocument::getTextSelection(const char* pMimeType, OString& rUsedMimeType)
+uno::Reference<datatransfer::XTransferable> SdXImpressDocument::getSelection()
 {
     SolarMutexGuard aGuard;
 
     DrawViewShell* pViewShell = GetViewShell();
     if (!pViewShell)
-        return OString();
+        return uno::Reference<datatransfer::XTransferable>();
 
-    return pViewShell->GetTextSelection(pMimeType, rUsedMimeType);
+    return pViewShell->GetSelectionTransferrable();
 }
 
 void SdXImpressDocument::setGraphicSelection(int nType, int nX, int nY)
