@@ -19,9 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_3D_SCENEAPPEARANCE_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_3D_SCENEAPPEARANCE_HXX
 
-#include <vcl/tabpage.hxx>
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 
 namespace chart { class ControllerLockHelper; }
 namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
@@ -29,22 +27,20 @@ namespace com { namespace sun { namespace star { namespace frame { class XModel;
 namespace chart
 {
 
-class ThreeD_SceneAppearance_TabPage : public TabPage
+class ThreeD_SceneAppearance_TabPage
 {
 public:
     ThreeD_SceneAppearance_TabPage(
-        vcl::Window* pWindow,
+        weld::Container* pParent,
         const css::uno::Reference< css::frame::XModel > & xChartModel,
         ControllerLockHelper & rControllerLockHelper );
-    virtual ~ThreeD_SceneAppearance_TabPage() override;
-    virtual void dispose() override;
-
-    virtual void ActivatePage() override;
+    void ActivatePage();
+    ~ThreeD_SceneAppearance_TabPage();
 
 private:
-    DECL_LINK( SelectSchemeHdl, ListBox&, void );
-    DECL_LINK( SelectShading, CheckBox&, void );
-    DECL_LINK( SelectRoundedEdgeOrObjectLines, CheckBox&, void );
+    DECL_LINK( SelectSchemeHdl, weld::ComboBox&, void );
+    DECL_LINK( SelectShading, weld::ToggleButton&, void );
+    DECL_LINK( SelectRoundedEdgeOrObjectLines, weld::ToggleButton&, void );
 
     void initControlsFromModel();
     void applyShadeModeToModel();
@@ -52,20 +48,20 @@ private:
     void updateScheme();
 
 private:
-    css::uno::Reference< css::frame::XModel >
-        m_xChartModel;
-
-    VclPtr<ListBox>         m_pLB_Scheme;
-
-    VclPtr<CheckBox>        m_pCB_Shading;
-    VclPtr<CheckBox>        m_pCB_ObjectLines;
-    VclPtr<CheckBox>        m_pCB_RoundedEdge;
+    css::uno::Reference<css::frame::XModel> m_xChartModel;
 
     bool            m_bUpdateOtherControls;
     bool            m_bCommitToModel;
     OUString        m_aCustom;
 
-    ControllerLockHelper & m_rControllerLockHelper;
+    ControllerLockHelper& m_rControllerLockHelper;
+
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xContainer;
+    std::unique_ptr<weld::ComboBox> m_xLB_Scheme;
+    std::unique_ptr<weld::CheckButton> m_xCB_Shading;
+    std::unique_ptr<weld::CheckButton> m_xCB_ObjectLines;
+    std::unique_ptr<weld::CheckButton> m_xCB_RoundedEdge;
 };
 
 } //namespace chart
