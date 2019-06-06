@@ -378,9 +378,9 @@ bool ImplSdPPTImport::Import()
 
                                     nPropCount /= 6;    // 6 properties per hyperlink
 
-                                    SdHyperlinkEntry aHyperlink;
                                     for ( i = 0; i < nPropCount; i++ )
                                     {
+                                        SdHyperlinkEntry aHyperlink;
                                         aHyperlink.nIndex = 0;
                                         aPropItem.ReadUInt32( nType );
                                         if ( nType != VT_I4 )
