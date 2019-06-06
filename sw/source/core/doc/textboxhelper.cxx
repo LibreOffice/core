@@ -359,34 +359,14 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, const OUString& rPrope
         if (it != aCustomShapeGeometry.end())
         {
             auto nTextPreRotateAngle = it->second.get<sal_Int32>();
-            if (nTextPreRotateAngle == -270)
-            {
-                // That would be the btLr text direction which we don't support at a frame level, so
-                // do it at a character level.
-                const SwNodeIndex* pNodeIndex = pFormat->GetContent().GetContentIdx();
-                if (!pNodeIndex)
-                    return;
-
-                SwPaM aPaM(*pFormat->GetDoc()->GetNodes()[pNodeIndex->GetIndex() + 1], 0);
-                aPaM.SetMark();
-                if (SwTextNode* pMark
-                    = pFormat->GetDoc()
-                          ->GetNodes()[pNodeIndex->GetNode().EndOfSectionIndex() - 1]
-                          ->GetTextNode())
-                {
-                    aPaM.GetMark()->nNode = *pMark;
-                    aPaM.GetMark()->nContent.Assign(pMark, pMark->GetText().getLength());
-                    SvxCharRotateItem aItem(900, false, RES_CHRATR_ROTATE);
-                    pFormat->GetDoc()->getIDocumentContentOperations().InsertPoolItem(aPaM, aItem);
-                }
-                return;
-            }
-
             sal_Int16 nDirection = 0;
             switch (nTextPreRotateAngle)
             {
                 case -90:
                     nDirection = text::WritingMode2::TB_RL;
+                    break;
+                case -270:
+                    nDirection = text::WritingMode2::BT_LR;
                     break;
             }
 
