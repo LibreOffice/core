@@ -454,29 +454,62 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
     if (!xSet.is())
         return;
 
-    auto aGdList = pCustomShapePropertiesPtr->getAdjustmentGuideList();
+    // The DrawingML shapes from the presetTextWarpDefinitions are mapped to the definitions
+    // in svx/../EnhancedCustomShapeGeometry.cxx, which are used for WordArt shapes from
+    // binary MS Office. Therefore all adjustment values need to be adapted.
+    auto aAdjGdList = pCustomShapePropertiesPtr->getAdjustmentGuideList();
     Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustment(
-        !aGdList.empty() ? aGdList.size() : 1 );
+        !aAdjGdList.empty() ? aAdjGdList.size() : 1 );
 
     int nIndex = 0;
-    for (auto& aEntry : aGdList)
+    for (auto& aEntry : aAdjGdList)
     {
-        double fAngle = NormAngle36000( aEntry.maFormula.toDouble() / -600.0 );
-        fAngle = 360.0 - fAngle / 100.0;
+        double fValue = aEntry.maFormula.toDouble();
+        // then: polar-handle, else: XY-handle
+        // There exist only 8 polar-handles at all in presetTextWarp.
+        if ((rClass == "fontwork-arch-down-curve")
+            || (rClass == "fontwork-arch-down-pour" && aEntry.maName == "adj1")
+            || (rClass == "fontwork-arch-up-curve")
+            || (rClass == "fontwork-arch-up-pour" && aEntry.maName == "adj1")
+            || (rClass == "fontwork-open-circle-curve")
+            || (rClass == "fontwork-open-circle-pour" && aEntry.maName == "adj1")
+            || (rClass == "fontwork-circle-curve")
+            || (rClass == "fontwork-circle-pour" && aEntry.maName == "adj1"))
+        {
+            // DrawingML has 1/60000 degree unit, but WortArt simple degree. Range [0..360[
+            // or range ]-180..180] doesn't matter, because only cos(angle) and
+            // sin(angle) are used.
+            fValue = NormAngle360(fValue / 60000.0);
+        }
+        else
+        {
+            // DrawingML writes adjustment guides as relative value with 100% = 100000,
+            // but WordArt definitions use values absolute in viewBox 0 0 21600 21600,
+            // so scale with 21600/100000 = 0.216, with two exceptions:
+            // X-handles of waves describe increase/decrease relative to horizontal center.
+            // The gdRefR of pour-shapes is not relative to viewBox but to radius.
+            if ((rClass == "mso-spt158" && aEntry.maName == "adj2") // textDoubleWave1
+                || (rClass == "fontwork-wave" && aEntry.maName == "adj2") // textWave1
+                || (rClass == "mso-spt157" && aEntry.maName == "adj2") // textWave2
+                || (rClass == "mso-spt159" && aEntry.maName == "adj2")) // textWave4
+            {
+                fValue = (fValue + 50000.0) * 0.216;
+            }
+            else if ( (rClass == "fontwork-arch-down-pour" && aEntry.maName == "adj2")
+                    || (rClass == "fontwork-arch-up-pour" && aEntry.maName == "adj2")
+                    || (rClass == "fontwork-open-circle-pour" && aEntry.maName == "adj2")
+                    || (rClass == "fontwork-circle-pour" && aEntry.maName == "adj2"))
+                {
+                    fValue *= 0.108;
+                }
+            else
+            {
+                fValue *= 0.216;
+            }
+        }
 
-        aAdjustment[nIndex].Value <<= fAngle;
+        aAdjustment[nIndex].Value <<= fValue;
         aAdjustment[nIndex++].State = css::beans::PropertyState_DIRECT_VALUE;
-    }
-
-    if (aGdList.empty())
-    {
-        // Default angle
-        double fAngle = 0;
-        if (rClass == "fontwork-arch-up-curve")
-            fAngle = 180;
-
-        aAdjustment[0].Value <<= fAngle;
-        aAdjustment[0].State = css::beans::PropertyState_DIRECT_VALUE;
     }
 
     // Set properties
@@ -484,6 +517,9 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
     xSet->setPropertyValue( UNO_NAME_TEXT_AUTOGROWWIDTH, uno::makeAny( false ) );
     xSet->setPropertyValue( UNO_NAME_FILLSTYLE, uno::makeAny( drawing::FillStyle_SOLID ) );
 
+    // ToDo: Old binary WordArt does not allow different styles for different paragraphs, so it
+    // was not necessary to examine all paragraphs. Solution for DrawingML is needed.
+    // Currently different alignment of paragraphs are lost, for example.
     const TextParagraphVector& rParagraphs = pTextBody->getParagraphs();
     if (!rParagraphs.empty() && !rParagraphs[0]->getRuns().empty())
     {
@@ -528,6 +564,7 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
     }
 
     // Apply vertical adjustment for text on arc
+    // ToDo: The property is currently not evaluated.
     SvxShape* pShape = SvxShape::getImplementation(xShape);
     assert(pShape);
     if (rClass == "fontwork-arch-up-curve")
@@ -555,6 +592,7 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
     lcl_resetPropertyValue( aGeomPropVec, sCoordinateSize );
     lcl_resetPropertyValue( aGeomPropVec, sEquations );
     lcl_resetPropertyValue( aGeomPropVec, sPath );
+    lcl_resetPropertyValue( aGeomPropVec, sAdjustmentValues);
 
     // Some shapes don't need scaling
     bool bScale = true;
@@ -579,10 +617,11 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
     lcl_setPropertyValue( aGeomPropVec, sPresetTextWarp,
         comphelper::makePropertyValue( sPresetTextWarp, rPresetType ) );
 
-    if ( rClass == "fontwork-arch-up-curve" || rClass == "fontwork-circle-curve"
-        || rClass == "fontwork-arch-down-curve" || rClass == "fontwork-open-circle-curve" )
+    if (!aAdjGdList.empty())
+    {
         lcl_setPropertyValue( aGeomPropVec, sAdjustmentValues,
             comphelper::makePropertyValue( sAdjustmentValues, aAdjustment ) );
+    }
 
     xSet->setPropertyValue(
         "CustomShapeGeometry",
