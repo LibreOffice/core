@@ -123,6 +123,7 @@ public:
     Color const & GetSelectEntryColor() const { return m_aSelectedColor.first; }
     NamedColor const & GetSelectedEntry() const { return m_aSelectedColor; }
 
+    void SelectEntry(const NamedColor& rColor);
     void SelectEntry(const Color& rColor);
 
     void SetNoSelection() { getColorWindow()->SetNoSelection(); }

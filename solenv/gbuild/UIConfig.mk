@@ -140,7 +140,7 @@ endif
 # These are storage, containers, or preview
 gb_UIConfig_gla11y_PARAMETERS += --widgets-suffixignored +ValueSet,HBox,VBox,ToolBox,Preview,PreviewWin,PreviewWindow,PrevWindow
 # These are buttons, thus already contain their label (but an image is not enough)
-gb_UIConfig_gla11y_PARAMETERS += --widgets-button +chartcontrollerlo-LightButton,svtlo-ManagedMenuButton
+gb_UIConfig_gla11y_PARAMETERS += --widgets-button +svtlo-ManagedMenuButton
 
 # All new warnings should be fatal except a few kinds which could be only doubtful
 gb_UIConfig_gla11y_PARAMETERS += --fatal-all --not-fatal-type duplicate-mnemonic --not-fatal-type labelled-by-and-mnemonic --not-fatal-type orphan-label

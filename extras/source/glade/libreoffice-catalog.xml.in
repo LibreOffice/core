@@ -191,9 +191,6 @@
     <glade-widget-class title="Address Preview" name="swlo-SwAddressPreview"
                         generic-name="Address Preview" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Chart Light Button" name="chartcontrollerlo-LightButton"
-                        generic-name="ChartLightButton" parent="GtkButton"
-                        icon-name="widget-gtk-button"/>
     <glade-widget-class title="Extended Macro Library" name="basctllo-ExtTreeListBox"
                         generic-name="Extended Macro Library List" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>

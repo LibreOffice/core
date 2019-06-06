@@ -460,7 +460,6 @@ custom_widgets = [
     'FontStyleBox',
     'IndexBox',
     'IndexBox',
-    'LightButton',
     'ManagedMenuButton',
     'MultiLineEditSyntaxHighlight',
     'OFileURLControl',

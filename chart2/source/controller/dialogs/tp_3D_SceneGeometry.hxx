@@ -19,10 +19,8 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_3D_SCENEGEOMETRY_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_3D_SCENEGEOMETRY_HXX
 
-#include <vcl/tabpage.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/button.hxx>
+#include <vcl/timer.hxx>
+#include <vcl/weld.hxx>
 
 namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
 namespace chart { class ControllerLockHelper; }
@@ -30,29 +28,28 @@ namespace chart { class ControllerLockHelper; }
 namespace chart
 {
 
-class ThreeD_SceneGeometry_TabPage : public TabPage
+class ThreeD_SceneGeometry_TabPage
 {
 public:
-    ThreeD_SceneGeometry_TabPage( vcl::Window* pWindow,
-                                  const css::uno::Reference< css::beans::XPropertySet > & xSceneProperties,
-                                  ControllerLockHelper & rControllerLockHelper );
-    virtual ~ThreeD_SceneGeometry_TabPage() override;
-    virtual void dispose() override;
+    ThreeD_SceneGeometry_TabPage(weld::Container* pWindow,
+                                 const css::uno::Reference< css::beans::XPropertySet > & xSceneProperties,
+                                 ControllerLockHelper & rControllerLockHelper);
+    ~ThreeD_SceneGeometry_TabPage();
 
     // has to be called in case the dialog was closed with OK
     void commitPendingChanges();
 
     // is called by timer to apply changes to model
-    DECL_LINK( AngleChanged, Edit&, void );
+    DECL_LINK( AngleChanged, Timer *, void);
     // is called immediately when a field changes
-    DECL_LINK( AngleEdited, Edit&, void );
+    DECL_LINK( AngleEdited, weld::MetricSpinButton&, void );
 
     // is called by timer to apply changes to model
-    DECL_LINK( PerspectiveChanged, Edit&, void );
+    DECL_LINK( PerspectiveChanged, Timer *, void);
     // is called immediately when a field changes
-    DECL_LINK( PerspectiveEdited, Edit&, void );
-    DECL_LINK( PerspectiveToggled, CheckBox&, void );
-    DECL_LINK( RightAngledAxesToggled, CheckBox&, void );
+    DECL_LINK( PerspectiveEdited, weld::MetricSpinButton&, void );
+    DECL_LINK( PerspectiveToggled, weld::ToggleButton&, void );
+    DECL_LINK( RightAngledAxesToggled, weld::ToggleButton&, void );
 
 private:
     void applyAnglesToModel();
@@ -60,17 +57,8 @@ private:
 
     css::uno::Reference< css::beans::XPropertySet > m_xSceneProperties;
 
-    VclPtr<CheckBox>        m_pCbxRightAngledAxes;
-
-    VclPtr<MetricField>     m_pMFXRotation;
-
-    VclPtr<MetricField>     m_pMFYRotation;
-
-    VclPtr<FixedText>       m_pFtZRotation;
-    VclPtr<MetricField>     m_pMFZRotation;
-
-    VclPtr<CheckBox>        m_pCbxPerspective;
-    VclPtr<MetricField>     m_pMFPerspective;
+    Timer           m_aAngleTimer;
+    Timer           m_aPerspectiveTimer;
 
     //to keep old values when switching to right angled axes
     sal_Int64       m_nXRotation;
@@ -81,6 +69,16 @@ private:
     bool            m_bPerspectiveChangePending;
 
     ControllerLockHelper & m_rControllerLockHelper;
+
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xContainer;
+    std::unique_ptr<weld::CheckButton> m_xCbxRightAngledAxes;
+    std::unique_ptr<weld::MetricSpinButton> m_xMFXRotation;
+    std::unique_ptr<weld::MetricSpinButton> m_xMFYRotation;
+    std::unique_ptr<weld::Label> m_xFtZRotation;
+    std::unique_ptr<weld::MetricSpinButton> m_xMFZRotation;
+    std::unique_ptr<weld::CheckButton> m_xCbxPerspective;
+    std::unique_ptr<weld::MetricSpinButton> m_xMFPerspective;
 };
 
 } //namespace chart
