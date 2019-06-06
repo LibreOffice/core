@@ -1103,11 +1103,11 @@ void restartOnMac(bool passArguments) {
         argPtrs.push_back(elem.getStr());
     }
     argPtrs.push_back(nullptr);
-    execv(execPath8.getStr(), const_cast< char ** >(&argPtrs[0]));
+    execv(execPath8.getStr(), const_cast< char ** >(argPtrs.data()));
     if (errno == ENOTSUP) { // happens when multithreaded on macOS < 10.6
         pid_t pid = fork();
         if (pid == 0) {
-            execv(execPath8.getStr(), const_cast< char ** >(&argPtrs[0]));
+            execv(execPath8.getStr(), const_cast< char ** >(argPtrs.data()));
         } else if (pid > 0) {
             // Two simultaneously running soffice processes lead to two dock
             // icons, so avoid waiting here unless it must be assumed that the

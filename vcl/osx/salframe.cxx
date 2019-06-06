@@ -1767,7 +1767,7 @@ void AquaSalFrame::EndSetClipRegion()
     if( ! maClippingRects.empty() )
     {
         mrClippingPath = CGPathCreateMutable();
-        CGPathAddRects( mrClippingPath, nullptr, &maClippingRects[0], maClippingRects.size() );
+        CGPathAddRects( mrClippingPath, nullptr, maClippingRects.data(), maClippingRects.size() );
     }
     if( mpNSView && mbShown )
         [mpNSView setNeedsDisplay: YES];
