@@ -33,6 +33,8 @@ class TypeCheck {
 public:
     explicit TypeCheck(clang::QualType type): type_(type) {}
 
+    explicit TypeCheck(clang::Type const * type): type_(type, 0) {}
+
     explicit TypeCheck(clang::TypeDecl const * decl): type_(decl->getTypeForDecl(), 0) {}
 
     explicit operator bool() const { return !type_.isNull(); }
