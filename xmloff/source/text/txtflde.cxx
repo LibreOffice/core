@@ -1773,6 +1773,18 @@ void XMLTextFieldExport::ExportFieldHelper(
             GetExport().Characters(aAuthor);
         }
 
+        // resolved flag
+        {
+            bool b = GetBoolProperty("Resolved", rPropSet);
+            OUString aResolvedText("Resolved");
+            OUString aUnresolvedText("Unresolved");
+
+            SvXMLElementExport aCreatorElem( GetExport(), XML_NAMESPACE_LO_EXT,
+                                             XML_RESOLVED, true,
+                                             false );
+            GetExport().Characters(b?aResolvedText:aUnresolvedText);
+        }
+
         // date time
         util::DateTime aDate( GetDateTimeProperty(gsPropertyDateTimeValue, rPropSet) );
         {

@@ -956,6 +956,11 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
             <rng:text/>
           </rng:element>
         </rng:optional>
+        <rng:optional>
+          <rng:element name="loext:resolved">
+            <rng:text/>
+          </rng:element>
+        </rng:optional>
         <rng:zeroOrMore>
           <rng:choice>
             <rng:ref name="text-p"/>

@@ -980,9 +980,10 @@ class SvxSetItem;
 
 #define SID_TABLE_CELL_BACKGROUND_COLOR                 TypedWhichId<SvxColorItem>( SID_SVX_START + 1189 )
 
+#define SID_TOGGLE_RESOLVED_NOTES                       ( SID_SVX_START + 1190 )
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1189 + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1190 + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END
