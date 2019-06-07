@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_a087a70f",
+        "filename": "sw/source/core/unocore/unosett.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1308,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-07T08:04:53Z",
+      "side": 1,
+      "message": "if m_pDoc is null, consider m_pDocShell?",
+      "revId": "26ad31b132482506ce941a60f532ee0552fee62c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_407ee319",
+        "filename": "sw/source/uibase/config/StoredChapterNumbering.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-07T08:04:53Z",
+      "side": 1,
+      "message": "any obvious way to get a referer URL here?",
+      "range": {
+        "startLine": 133,
+        "startChar": 54,
+        "endLine": 133,
+        "endChar": 56
+      },
+      "revId": "26ad31b132482506ce941a60f532ee0552fee62c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
