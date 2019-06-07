@@ -3306,6 +3306,8 @@ void XMLAnnotationImportContext::ProcessAttribute(
 {
     if (nToken == XML_TOK_TEXT_NAME)
         aName = rValue;
+    if (nToken == XML_TOK_TEXT_RESOLVED)
+        aResolved = rValue;
 }
 
 SvXMLImportContextRef XMLAnnotationImportContext::CreateChildContext(
@@ -3467,6 +3469,12 @@ void XMLAnnotationImportContext::PrepareField(
     // import (possibly empty) initials
     OUString sInitials( aInitialsBuffer.makeStringAndClear() );
     xPropertySet->setPropertyValue("Initials", makeAny(sInitials));
+
+    //import resolved flag
+    if(!aResolved.isEmpty())
+        xPropertySet->setPropertyValue("Resolved", makeAny(true));
+    else
+        xPropertySet->setPropertyValue("Resolved", makeAny(false));
 
     util::DateTime aDateTime;
     if (::sax::Converter::parseDateTime(aDateTime,

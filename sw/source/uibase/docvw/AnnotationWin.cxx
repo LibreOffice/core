@@ -150,6 +150,12 @@ void SwAnnotationWin::dispose()
     }
     mpMetadataAuthor.disposeAndClear();
 
+    if (mpMetadataResolved)
+    {
+        mpMetadataResolved->RemoveEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
+    }
+    mpMetadataResolved.disposeAndClear();
+
     if (mpMetadataDate)
     {
         mpMetadataDate->RemoveEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
