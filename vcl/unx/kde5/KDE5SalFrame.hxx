@@ -22,16 +22,14 @@
 #include <memory>
 
 #include <qt5/Qt5Frame.hxx>
-
-#include "KDE5SalGraphics.hxx"
+#include <qt5/Qt5SvpGraphics.hxx>
 
 class QWidget;
-class KDE5SalGraphics;
 
 class KDE5SalFrame : public Qt5Frame
 {
 private:
-    std::unique_ptr<KDE5SalGraphics> m_pKDE5Graphics;
+    std::unique_ptr<Qt5SvpGraphics> m_pKDE5Graphics;
     bool m_bGraphicsInUse;
 
 public:
