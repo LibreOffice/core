@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_0078db27",
+        "filename": "sw/source/core/unocore/unosett.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1308,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-06-07T08:11:37Z",
+      "side": 1,
+      "message": "I don\u0027t think that makes sense. I think the semantics are:\n\n- this is an UNO wrapper object for an internal SwNumRule. m_pDoc is nullptr if the wrapper object is not yet inserted to the document model or in case the doc model is already disposed, but the UNO client still keeps the wrapper object alive\n\n- m_pDocShell is nullptr or not depending on if this numbering rule is a chapter numbering or not.\n\nBased on this, if m_pDoc is nullptr, m_pDocShell will be definitely nullptr as well.",
+      "parentUuid": "3fa0c359_a087a70f",
+      "revId": "26ad31b132482506ce941a60f532ee0552fee62c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_407ee319",
         "filename": "sw/source/uibase/config/StoredChapterNumbering.cxx",
         "patchSetId": 1
