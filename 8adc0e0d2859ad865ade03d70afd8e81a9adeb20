@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_40cca369",
+        "filename": "bridges/source/cpp_uno/msvc_win32_intel/cpp2uno.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-07T08:35:59Z",
+      "side": 1,
+      "message": "what kind of documentation does it serve?  (to me, it looks rather confusing to filter out nParams\u003d\u003d0 here for no apparent reason, as the guarded code would handle that case just fine)",
+      "parentUuid": "3fa0c359_c08f5321",
+      "revId": "8adc0e0d2859ad865ade03d70afd8e81a9adeb20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_e0928f4b",
         "filename": "bridges/source/cpp_uno/msvc_win32_x86-64/cpp2uno.cxx",
         "patchSetId": 4
