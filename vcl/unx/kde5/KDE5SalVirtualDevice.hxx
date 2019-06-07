@@ -19,21 +19,18 @@
 
 #pragma once
 
-#include <qt5/Qt5Instance.hxx>
+#include <headless/svpvd.hxx>
+#include "KDE5SalGraphics.hxx"
 
-class KDE5SalInstance final : public Qt5Instance
+class VCL_DLLPUBLIC KDE5SalVirtualDevice : public SvpSalVirtualDevice
 {
-    Qt5FilePicker* createPicker(QFileDialog::FileMode) override;
-
-    SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
-    bool hasNativeFileSelection() const override { return true; }
-
 public:
-    explicit KDE5SalInstance(std::unique_ptr<QApplication>& pQApp);
+    KDE5SalVirtualDevice(DeviceFormat eFormat, cairo_surface_t* pRefSurface)
+        : SvpSalVirtualDevice(eFormat, pRefSurface)
+    {
+    }
 
-    std::unique_ptr<SalVirtualDevice>
-    CreateVirtualDevice(SalGraphics*, long&, long&, DeviceFormat,
-                        const SystemGraphicsData* = nullptr) override;
+    SalGraphics* AcquireGraphics() override { return AddGraphics(new KDE5SalGraphics(nullptr)); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
