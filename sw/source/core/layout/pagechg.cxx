@@ -467,6 +467,22 @@ void SwPageFrame::PreparePage( bool bFootnote )
         if ( GetPrev() && static_cast<SwPageFrame*>(GetPrev())->IsEmptyPage() )
             lcl_MakeObjs( *pDoc->GetSpzFrameFormats(), static_cast<SwPageFrame*>(GetPrev()) );
         lcl_MakeObjs( *pDoc->GetSpzFrameFormats(), this );
+
+        // format footer/ header
+        SwLayoutFrame *pLow = static_cast<SwLayoutFrame*>(Lower());
+        while ( pLow )
+        {
+            if ( pLow->GetType() & (SwFrameType::Header|SwFrameType::Footer) )
+            {
+                SwContentFrame *pContent = pLow->ContainsContent();
+                while ( pContent && pLow->IsAnLower( pContent ) )
+                {
+                    pContent->OptCalc();  // not the predecessors
+                    pContent = pContent->GetNextContentFrame();
+                }
+            }
+            pLow = static_cast<SwLayoutFrame*>(pLow->GetNext());
+        }
     }
 }
 
