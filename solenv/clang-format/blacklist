@@ -7938,7 +7938,6 @@ include/vcl/syschild.hxx
 include/vcl/sysdata.hxx
 include/vcl/syswin.hxx
 include/vcl/tabctrl.hxx
-include/vcl/tabdlg.hxx
 include/vcl/tabpage.hxx
 include/vcl/task.hxx
 include/vcl/taskpanelist.hxx
@@ -7952,6 +7951,7 @@ include/vcl/timer.hxx
 include/vcl/toolbox.hxx
 include/vcl/toolkit/group.hxx
 include/vcl/toolkit/morebtn.hxx
+include/vcl/toolkit/tabdlg.hxx
 include/vcl/toolkit/unowrap.hxx
 include/vcl/transfer.hxx
 include/vcl/treelist.hxx
