@@ -206,7 +206,7 @@ void DropDownFormFieldButton::Paint(vcl::RenderContext& rRenderContext, const to
     int nPadding = 1;
     Point aPos(nPadding, nPadding);
     Size aSize(m_aFieldFramePixel.GetSize().Width() - nPadding,
-               m_aFieldFramePixel.GetSize().Height() - 2 * nPadding);
+               m_aFieldFramePixel.GetSize().Height() - nPadding);
     const tools::Rectangle aFrameRect(tools::Rectangle(aPos, aSize));
     rRenderContext.SetLineColor(aLineColor);
     rRenderContext.SetFillColor(COL_TRANSPARENT);
