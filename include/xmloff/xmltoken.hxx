@@ -3350,6 +3350,8 @@ namespace xmloff { namespace token {
         // tdf#115007
         XML_TRANSLITERATION_SPELLOUT,
 
+        XML_RESOLVED,
+
         XML_TOKEN_END
     };
 
