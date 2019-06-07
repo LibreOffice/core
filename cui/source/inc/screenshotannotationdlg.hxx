@@ -19,12 +19,12 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_SCREENSHANNDLG_HXX
 #define INCLUDED_CUI_SOURCE_INC_SCREENSHANNDLG_HXX
 
-#include <sfx2/basedlgs.hxx>
+#include <vcl/dialog.hxx>
 #include <memory>
 
 class ScreenshotAnnotationDlg_Impl;
 
-class ScreenshotAnnotationDlg : public SfxModalDialog
+class ScreenshotAnnotationDlg : public ModalDialog
 {
 private:
     std::unique_ptr< ScreenshotAnnotationDlg_Impl >  m_pImpl;

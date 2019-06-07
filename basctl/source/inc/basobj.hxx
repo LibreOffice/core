@@ -34,7 +34,7 @@ namespace weld { class Widget; class Window; }
 
 namespace basctl
 {
-    void            Organize( sal_Int16 tabId );
+    void            Organize(weld::Window* pParent, sal_Int16 tabId);
 
 
     // help methods for the general use:
