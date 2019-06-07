@@ -1434,7 +1434,9 @@ void SAL_CALL SwXTextField::attach(
                         m_pImpl->m_pProps->sPar2, // content
                         m_pImpl->m_pProps->sPar3, // author's initials
                         m_pImpl->m_pProps->sPar4, // name
-                        aDateTime );
+                        aDateTime,
+                        m_pImpl->m_pProps->bBool1 // resolvedflag
+                    );
                     if ( m_pImpl->m_xTextObject.is() )
                     {
                         pPostItField->SetTextObject( m_pImpl->m_xTextObject->CreateText() );
