@@ -20,7 +20,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/tabctrl.hxx>
-#include <vcl/tabdlg.hxx>
+#include <vcl/toolkit/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
 
 void TabDialog::ImplInitTabDialogData()
