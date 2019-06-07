@@ -50,6 +50,7 @@ namespace sw
 {
 class DropDownFieldDialog;
 class DropDownFormFieldDialog;
+class DateFormFieldDialog;
 }
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
@@ -296,6 +297,17 @@ class AbstractDropDownFormFieldDialog_Impl : public VclAbstractDialog
     std::unique_ptr<sw::DropDownFormFieldDialog> m_xDlg;
 public:
     explicit AbstractDropDownFormFieldDialog_Impl(std::unique_ptr<sw::DropDownFormFieldDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+};
+
+class AbstractDateFormFieldDialog_Impl : public VclAbstractDialog
+{
+    std::unique_ptr<sw::DateFormFieldDialog> m_xDlg;
+public:
+    explicit AbstractDateFormFieldDialog_Impl(std::unique_ptr<sw::DateFormFieldDialog> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -640,6 +652,8 @@ public:
     virtual VclPtr<AbstractDropDownFieldDialog> CreateDropDownFieldDialog(weld::Widget* pParent, SwWrtShell &rSh,
         SwField* pField, bool bPrevButton, bool bNextButton) override;
     virtual VclPtr<VclAbstractDialog> CreateDropDownFormFieldDialog(weld::Widget* pParent, sw::mark::IFieldmark* pDropDownField) override;
+    virtual VclPtr<VclAbstractDialog> CreateDateFormFieldDialog(weld::Widget* pParent, sw::mark::IFieldmark* pDateField) override;
+
     virtual VclPtr<SfxAbstractTabDialog> CreateSwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert) override;
     virtual VclPtr<AbstractSwLabDlg> CreateSwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
                                                      SwDBManager* pDBManager, bool bLabel) override;
