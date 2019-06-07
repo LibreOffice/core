@@ -459,7 +459,6 @@ certain functionality.
 @li @c vcl
 @li @c vcl.a11y
 @li @c vcl.app
-@li @c vcl.cg - CoreGraphics calls on macOS and iOS
 @li @c vcl.control
 @li @c vcl.ct - CoreText-using code for macOS and iOS
 @li @c vcl.debugevent

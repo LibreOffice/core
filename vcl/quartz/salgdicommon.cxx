@@ -90,7 +90,6 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
         if( !nPointIdx )
         {
             // first point => just move there
-            SAL_INFO( "vcl.cg", "CGPathMoveToPoint(" << xPath << ",NULL," << aPoint.getX() << "," << aPoint.getY() << ")");
             CGPathMoveToPoint( xPath, nullptr, aPoint.getX(), aPoint.getY() );
             continue;
         }
@@ -104,7 +103,6 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
 
         if( !bPendingCurve )    // line segment
         {
-            SAL_INFO( "vcl.cg", "CGPathAddLineToPoint(" << xPath << ",NULL," << aPoint.getX() << "," << aPoint.getY() << ")");
             CGPathAddLineToPoint( xPath, nullptr, aPoint.getX(), aPoint.getY() );
         }
         else                        // cubic bezier segment
@@ -116,8 +114,6 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
                 aCP1 += aHalfPointOfs;
                 aCP2 += aHalfPointOfs;
             }
-            SAL_INFO( "vcl.cg", "CGPathAddCurveToPoint(" << xPath << ",NULL," << aCP1.getX() << "," << aCP1.getY() << "," <<
-                      aCP2.getX() << "," << aCP2.getY() << "," << aPoint.getX() << "," << aPoint.getY() << ")" );
             CGPathAddCurveToPoint( xPath, nullptr, aCP1.getX(), aCP1.getY(),
                                     aCP2.getX(), aCP2.getY(), aPoint.getX(), aPoint.getY() );
         }
@@ -125,7 +121,6 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
 
     if( bClosePath )
     {
-        SAL_INFO( "vcl.cg", "CGPathCloseSubpath(" << xPath << ")" );
         CGPathCloseSubpath( xPath );
     }
 }
@@ -369,21 +364,17 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
         aCopyContext.saveState();
 
         const CGRect aDstRect = CGRectMake(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
-        SAL_INFO( "vcl.cg", "CGContextClipToRect(" << aCopyContext.get() << "," << aDstRect << ")" );
         CGContextClipToRect(aCopyContext.get(), aDstRect);
 
         // draw at new destination
         // NOTE: flipped drawing gets disabled for this, else the subimage would be drawn upside down
         if( pSrc->IsFlipped() )
         {
-            SAL_INFO( "vcl.cg", "CGContextTranslateCTM(" << aCopyContext.get() << ",0," << mnHeight << ")" );
             CGContextTranslateCTM( aCopyContext.get(), 0, +mnHeight );
-            SAL_INFO( "vcl.cg", "CGContextScaleCTM(" << aCopyContext.get() << ",+1,-1)" );
             CGContextScaleCTM( aCopyContext.get(), +1, -1 );
         }
 
         // TODO: pSrc->size() != this->size()
-        SAL_INFO("vcl.cg", "CGContextDrawLayerAtPoint(" << aCopyContext.get() << "," << aDstPoint << "," << pSrc->maLayer.get() << ")");
         CGContextDrawLayerAtPoint(aCopyContext.get(), aDstPoint, pSrc->maLayer.get());
 
         aCopyContext.restoreState();
@@ -407,9 +398,7 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
 static void DrawPattern50( void*, CGContextRef rContext )
 {
     static const CGRect aRects[2] = { { {0,0}, { 2, 2 } }, { { 2, 2 }, { 2, 2 } } };
-    SAL_INFO( "vcl.cg", "CGContextAddRects(" << rContext << ",aRects,2 )" );
     CGContextAddRects( rContext, aRects, 2 );
-    SAL_INFO( "vcl.cg", "CGContextFillPath(" << rContext << ")" );
     CGContextFillPath( rContext );
 }
 
@@ -520,27 +509,21 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
     {
         const CGSize aSrcSize = CGSizeMake(nScaledSourceWidth, nScaledSourceHeight);
         sSourceLayerHolder.set(CGLayerCreateWithContext(xCopyContext, aSrcSize, nullptr));
-        SAL_INFO( "vcl.cg", "CGLayerCreateWithContext(" << xCopyContext << "," << aSrcSize << ",NULL) = " << sSourceLayerHolder.get());
 
         const CGContextRef xSrcContext = CGLayerGetContext(sSourceLayerHolder.get());
-        SAL_INFO( "vcl.cg", "CGLayerGetContext(" << sSourceLayerHolder.get() << ") = " << xSrcContext);
 
         CGPoint aSrcPoint = CGPointMake(-nScaledSourceX, -nScaledSourceY);
         if( IsFlipped() )
         {
-            SAL_INFO( "vcl.cg", "CGContextTranslateCTM(" << xSrcContext << ",0," << nSrcHeight << ")" );
             CGContextTranslateCTM( xSrcContext, 0, +nScaledSourceHeight );
-            SAL_INFO( "vcl.cg", "CGContextScaleCTM(" << xSrcContext << ",+1,-1)" );
             CGContextScaleCTM( xSrcContext, +1, -1 );
             aSrcPoint.y = (nScaledSourceY + nScaledSourceHeight) - (mnHeight * fScale);
         }
-        SAL_INFO( "vcl.cg", "CGContextDrawLayerAtPoint(" << xSrcContext << "," << aSrcPoint << "," << maLayer.get() << ")" );
         CGContextDrawLayerAtPoint(xSrcContext, aSrcPoint, maLayer.get());
     }
 
     // draw at new destination
     const CGRect aTargetRect = CGRectMake(nScaledTargetX, nScaledTargetY, nScaledSourceWidth, nScaledSourceHeight);
-    SAL_INFO( "vcl.cg", "CGContextDrawLayerInRect(" << xCopyContext << "," << aTargetRect << "," << sSourceLayerHolder.get() << ")" );
     CGContextDrawLayerInRect(xCopyContext, aTargetRect, sSourceLayerHolder.get());
 
     maContextHolder.restoreState();
@@ -548,7 +531,6 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
     // cleanup
     if (sSourceLayerHolder.get() != maLayer.get())
     {
-        SAL_INFO( "vcl.cg", "CGLayerRelease(" << sSourceLayerHolder.get() << ")" );
         CGLayerRelease(sSourceLayerHolder.get());
     }
     // mark the destination rectangle as updated
@@ -607,12 +589,10 @@ bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     if ( CheckContext() )
     {
         const CGRect aDstRect = CGRectMake( rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
-        SAL_INFO( "vcl.cg", "CGContextDrawImage(" << maContextHolder.get() << "," << aDstRect << "," << xMaskedImage << ")" );
         CGContextDrawImage( maContextHolder.get(), aDstRect, xMaskedImage );
         RefreshRect( aDstRect );
     }
 
-    SAL_INFO( "vcl.cg", "CGImageRelease(" << xMaskedImage << ")");
     CGImageRelease(xMaskedImage);
 
     return true;
@@ -648,15 +628,12 @@ bool AquaSalGraphics::drawTransformedBitmap(
         aYRel.getX()/aSize.Height(), aYRel.getY()/aSize.Height(),
         rNull.getX(), rNull.getY());
 
-    SAL_INFO( "vcl.cg", "CGContextConcatCTM(" << maContextHolder.get() << "," << aCGMat << ")" );
     CGContextConcatCTM( maContextHolder.get(), aCGMat );
 
     // draw the transformed image
     const CGRect aSrcRect = CGRectMake(0, 0, aSize.Width(), aSize.Height());
-    SAL_INFO( "vcl.cg", "CGContextDrawImage(" << maContextHolder.get() << "," << aSrcRect << "," << xImage << ")" );
     CGContextDrawImage( maContextHolder.get(), aSrcRect, xImage );
 
-    SAL_INFO( "vcl.cg", "CGImageRelease(" << xImage << ")" );
     CGImageRelease( xImage );
     // restore the Quartz graphics state
     maContextHolder.restoreState();
@@ -676,7 +653,6 @@ bool AquaSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
 
     // save the current state
     maContextHolder.saveState();
-    SAL_INFO( "vcl.cg", "CGContextSetAlpha(" << maContextHolder.get() << "," << (100-nTransparency) * (1.0/100) << ")" );
     CGContextSetAlpha( maContextHolder.get(), (100-nTransparency) * (1.0/100) );
 
     CGRect aRect = CGRectMake(nX, nY, nWidth-1, nHeight-1);
@@ -686,11 +662,8 @@ bool AquaSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
         aRect.origin.y += 0.5;
     }
 
-    SAL_INFO( "vcl.cg", "CGContextBeginPath(" << maContextHolder.get() << ")" );
     CGContextBeginPath( maContextHolder.get() );
-    SAL_INFO( "vcl.cg", "CGContextAddRect(" << maContextHolder.get() << "," << aRect << ")" );
     CGContextAddRect( maContextHolder.get(), aRect );
-    SAL_INFO( "vcl.cg", "CGContextDrawPath(" << maContextHolder.get() << ",kCGPathFill)" );
     CGContextDrawPath( maContextHolder.get(), kCGPathFill );
 
     maContextHolder.restoreState();
@@ -711,10 +684,8 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rS
         return;
 
     const CGRect aDstRect = CGRectMake(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
-    SAL_INFO( "vcl.cg", "CGContextDrawImage(" << maContextHolder.get() << "," << aDstRect << "," << xImage << ")" );
     CGContextDrawImage( maContextHolder.get(), aDstRect, xImage );
 
-    SAL_INFO( "vcl.cg", "CGImageRelease(" << xImage << ")" );
     CGImageRelease( xImage );
     RefreshRect( aDstRect );
 }
@@ -733,9 +704,7 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rS
         return;
 
     const CGRect aDstRect = CGRectMake(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
-    SAL_INFO( "vcl.cg", "CGContextDrawImage(" << maContextHolder.get() << "," << aDstRect << "," << xMaskedImage << ")" );
     CGContextDrawImage( maContextHolder.get(), aDstRect, xMaskedImage );
-    SAL_INFO( "vcl.cg", "CGImageRelease(" << xMaskedImage << ")" );
     CGImageRelease( xMaskedImage );
     RefreshRect( aDstRect );
 }
@@ -760,7 +729,6 @@ bool AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
     // NOTE: flip drawing, else the nsimage would be drawn upside down
     maContextHolder.saveState();
 //  CGContextTranslateCTM( maContextHolder.get(), 0, +mnHeight );
-    SAL_INFO( "vcl.cg", "CGContextScaleCTM(" << maContextHolder.get() << ",+1,-1)" );
     CGContextScaleCTM( maContextHolder.get(), +1, -1 );
     nY = /*mnHeight*/ - (nY + nHeight);
 
@@ -803,13 +771,9 @@ void AquaSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
     if( !CheckContext() )
         return;
 
-    SAL_INFO( "vcl.cg", "CGContextBeginPath(" << maContextHolder.get() << ")" );
     CGContextBeginPath( maContextHolder.get() );
-    SAL_INFO( "vcl.cg", "CGContextMoveToPoint(" << maContextHolder.get() << "," << static_cast<float>(nX1)+0.5 << "," << static_cast<float>(nY1)+0.5 << ")" );
     CGContextMoveToPoint( maContextHolder.get(), static_cast<float>(nX1)+0.5, static_cast<float>(nY1)+0.5 );
-    SAL_INFO( "vcl.cg", "CGContextAddLineToPoint(" << maContextHolder.get() << "," << static_cast<float>(nX2)+0.5 << "," << static_cast<float>(nY2)+0.5 << ")" );
     CGContextAddLineToPoint( maContextHolder.get(), static_cast<float>(nX2)+0.5, static_cast<float>(nY2)+0.5 );
-    SAL_INFO( "vcl.cg", "CGContextDrawPath(" << maContextHolder.get() << ",kCGPathStroke)" );
     CGContextDrawPath( maContextHolder.get(), kCGPathStroke );
 
     tools::Rectangle aRefreshRect( nX1, nY1, nX2, nY2 );
@@ -830,9 +794,7 @@ void AquaSalGraphics::drawMask( const SalTwoRect& rPosAry, const SalBitmap& rSal
         return;
 
     const CGRect aDstRect = CGRectMake(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
-    SAL_INFO( "vcl.cg", "CGContextDrawImage(" << maContextHolder.get() << "," << aDstRect << "," << xImage << ")" );
     CGContextDrawImage( maContextHolder.get(), aDstRect, xImage );
-    SAL_INFO( "vcl.cg", "CGImageRelease(" << xImage << ")" );
     CGImageRelease( xImage );
     RefreshRect( aDstRect );
 }
@@ -920,7 +882,6 @@ bool AquaSalGraphics::drawPolyLine(
 
     // setup poly-polygon path
     CGMutablePathRef xPath = CGPathCreateMutable();
-    SAL_INFO( "vcl.cg", "CGPathCreateMutable() = " << xPath );
     AddPolygonToPath(
         xPath,
         aPolyLine,
@@ -929,25 +890,20 @@ bool AquaSalGraphics::drawPolyLine(
         true);
 
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
-    SAL_INFO( "vcl.cg", "CGPathGetBoundingBox(" << xPath << ") = " << aRefreshRect );
     // #i97317# workaround for Quartz having problems with drawing small polygons
     if( ! ((aRefreshRect.size.width <= 0.125) && (aRefreshRect.size.height <= 0.125)) )
     {
         // use the path to prepare the graphics context
         maContextHolder.saveState();
-        SAL_INFO( "vcl.cg", "CGContextBeginPath(" << maContextHolder.get() << ")" );
         CGContextBeginPath( maContextHolder.get() );
-        SAL_INFO( "vcl.cg", "CGContextAddPath(" << maContextHolder.get() << "," << xPath << ")" );
         CGContextAddPath( maContextHolder.get(), xPath );
         // draw path with antialiased line
         CGContextSetShouldAntialias( maContextHolder.get(), true );
-        SAL_INFO( "vcl.cg", "CGContextSetAlpha(" << maContextHolder.get() << "," << 1.0 - fTransparency << ")" );
         CGContextSetAlpha( maContextHolder.get(), 1.0 - fTransparency );
         CGContextSetLineJoin( maContextHolder.get(), aCGLineJoin );
         CGContextSetLineCap( maContextHolder.get(), aCGLineCap );
         CGContextSetLineWidth( maContextHolder.get(), aLineWidths.getX() );
         CGContextSetMiterLimit(maContextHolder.get(), fCGMiterLimit);
-        SAL_INFO( "vcl.cg", "CGContextDrawPath(" << maContextHolder.get() << ",kCGPathStroke)" );
         CGContextDrawPath( maContextHolder.get(), kCGPathStroke );
         maContextHolder.restoreState();
 
@@ -955,7 +911,6 @@ bool AquaSalGraphics::drawPolyLine(
         RefreshRect( aRefreshRect );
     }
 
-    SAL_INFO( "vcl.cg", "CGPathRelease(" << xPath << ")" );
     CGPathRelease( xPath );
 
     return true;
@@ -990,7 +945,6 @@ bool AquaSalGraphics::drawPolyPolygon(
 
     // setup poly-polygon path
     CGMutablePathRef xPath = CGPathCreateMutable();
-    SAL_INFO( "vcl.cg", "CGPathCreateMutable() = " << xPath );
     // tdf#120252 Use the correct, already transformed PolyPolygon (as long as
     // the transformation is not used here...)
     for(auto const& rPolygon : aPolyPolygon)
@@ -999,7 +953,6 @@ bool AquaSalGraphics::drawPolyPolygon(
     }
 
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
-    SAL_INFO( "vcl.cg", "CGPathGetBoundingBox(" << xPath << ") = " << aRefreshRect );
     // #i97317# workaround for Quartz having problems with drawing small polygons
     if( ! ((aRefreshRect.size.width <= 0.125) && (aRefreshRect.size.height <= 0.125)) )
     {
@@ -1020,23 +973,18 @@ bool AquaSalGraphics::drawPolyPolygon(
         else
         {
             SAL_WARN( "vcl.quartz", "Neither pen nor brush visible" );
-            SAL_INFO( "vcl.cg", "CGPathRelease(" << xPath << ")" );
             CGPathRelease( xPath );
             return true;
         }
 
         // use the path to prepare the graphics context
         maContextHolder.saveState();
-        SAL_INFO( "vcl.cg", "CGContextBeginPath(" << maContextHolder.get() << ")" );
         CGContextBeginPath( maContextHolder.get() );
-        SAL_INFO( "vcl.cg", "CGContextAddPath(" << maContextHolder.get() << "," << xPath << ")" );
         CGContextAddPath( maContextHolder.get(), xPath );
 
         // draw path with antialiased polygon
         CGContextSetShouldAntialias( maContextHolder.get(), true );
-        SAL_INFO( "vcl.cg", "CGContextSetAlpha(" << maContextHolder.get() << "," << 1.0 - fTransparency << ")" );
         CGContextSetAlpha( maContextHolder.get(), 1.0 - fTransparency );
-        SAL_INFO( "vcl.cg", "CGContextDrawPath(" << maContextHolder.get() << "," << eMode << ")" );
         CGContextDrawPath( maContextHolder.get(), eMode );
         maContextHolder.restoreState();
 
@@ -1044,7 +992,6 @@ bool AquaSalGraphics::drawPolyPolygon(
         RefreshRect( aRefreshRect );
     }
 
-    SAL_INFO( "vcl.cg", "CGPathRelease(" << xPath << ")" );
     CGPathRelease( xPath );
 
     return true;
@@ -1107,7 +1054,6 @@ void AquaSalGraphics::drawPolyPolygon( sal_uInt32 nPolyCount, const sal_uInt32 *
     }
 
     // convert to CGPath
-    SAL_INFO( "vcl.cg", "CGContextBeginPath(" << maContextHolder.get() << ")" );
     CGContextBeginPath( maContextHolder.get() );
     if( IsPenVisible() )
     {
@@ -1120,17 +1066,14 @@ void AquaSalGraphics::drawPolyPolygon( sal_uInt32 nPolyCount, const sal_uInt32 *
                 float fX, fY;
 
                 alignLinePoint( pPtAry, fX, fY );
-                SAL_INFO( "vcl.cg", "CGContextMoveToPoint(" << maContextHolder.get() << "," << fX << "," << fY << ")" );
                 CGContextMoveToPoint( maContextHolder.get(), fX, fY );
                 pPtAry++;
 
                 for( sal_uInt32 nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
                 {
                     alignLinePoint( pPtAry, fX, fY );
-                    SAL_INFO( "vcl.cg", "CGContextAddLineToPoint(" << maContextHolder.get() << "," << fX << "," << fY << ")" );
                     CGContextAddLineToPoint( maContextHolder.get(), fX, fY );
                 }
-                SAL_INFO( "vcl.cg", "CGContextClosePath(" << maContextHolder.get() << ")");
                 CGContextClosePath(maContextHolder.get());
             }
         }
@@ -1143,27 +1086,17 @@ void AquaSalGraphics::drawPolyPolygon( sal_uInt32 nPolyCount, const sal_uInt32 *
             if( nPoints > 1 )
             {
                 const SalPoint *pPtAry = ppPtAry[nPoly];
-                SAL_INFO( "vcl.cg", "CGContextMoveToPoint(" << maContextHolder.get() << "," << pPtAry->mnX << "," << pPtAry->mnY << ")" );
                 CGContextMoveToPoint( maContextHolder.get(), pPtAry->mnX, pPtAry->mnY );
                 pPtAry++;
                 for( sal_uInt32 nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
                 {
-                    SAL_INFO( "vcl.cg", "CGContextAddLineToPoint(" << maContextHolder.get() << "," << pPtAry->mnX << "," << pPtAry->mnY << ")" );
                     CGContextAddLineToPoint( maContextHolder.get(), pPtAry->mnX, pPtAry->mnY );
                 }
-                SAL_INFO( "vcl.cg", "CGContextClosePath(" << maContextHolder.get() << ")");
                 CGContextClosePath(maContextHolder.get());
             }
         }
     }
 
-    SAL_INFO( "vcl.cg", "CGContextDrawPath(" << maContextHolder.get() << "," <<
-              (eMode == kCGPathFill ? "kCGPathFill" :
-               (eMode == kCGPathEOFill ? "kCGPathEOFill" :
-                (eMode == kCGPathFillStroke ? "kCGPathFillStroke" :
-                 (eMode == kCGPathEOFillStroke ? "kCGPathEOFillStroke" :
-                  "???"))))
-              << ")" );
     CGContextDrawPath( maContextHolder.get(), eMode );
 
     RefreshRect( leftX, topY, maxWidth, maxHeight );
@@ -1199,38 +1132,31 @@ void AquaSalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint *pPtAry )
         return;
     }
 
-    SAL_INFO( "vcl.cg", "CGContextBeginPath(" << maContextHolder.get() << ")" );
     CGContextBeginPath( maContextHolder.get() );
 
     if( IsPenVisible() )
     {
         float fX, fY;
         alignLinePoint( pPtAry, fX, fY );
-        SAL_INFO( "vcl.cg", "CGContextMoveToPoint(" << maContextHolder.get() << "," << fX << "," << fY << ")" );
         CGContextMoveToPoint( maContextHolder.get(), fX, fY );
         pPtAry++;
         for( sal_uInt32 nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
         {
             alignLinePoint( pPtAry, fX, fY );
-            SAL_INFO( "vcl.cg", "CGContextAddLineToPoint(" << maContextHolder.get() << "," << fX << "," << fY << ")" );
             CGContextAddLineToPoint( maContextHolder.get(), fX, fY );
         }
     }
     else
     {
-        SAL_INFO( "vcl.cg", "CGContextMoveToPoint(" << maContextHolder.get() << "," << pPtAry->mnX << "," << pPtAry->mnY << ")" );
         CGContextMoveToPoint( maContextHolder.get(), pPtAry->mnX, pPtAry->mnY );
         pPtAry++;
         for( sal_uInt32 nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
         {
-            SAL_INFO( "vcl.cg", "CGContextAddLineToPoint(" << maContextHolder.get() << "," << pPtAry->mnX << "," << pPtAry->mnY << ")" );
             CGContextAddLineToPoint( maContextHolder.get(), pPtAry->mnX, pPtAry->mnY );
         }
     }
 
-    SAL_INFO( "vcl.cg", "CGContextClosePath(" << maContextHolder.get() << ")");
     CGContextClosePath( maContextHolder.get() );
-    SAL_INFO( "vcl.cg", "CGContextDrawPath(" << maContextHolder.get() << "," << eMode << ")" );
     CGContextDrawPath( maContextHolder.get(), eMode );
     RefreshRect( nX, nY, nWidth, nHeight );
 }
@@ -1262,12 +1188,10 @@ void AquaSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 
     if( IsBrushVisible() )
     {
-        SAL_INFO( "vcl.cg", "CGContextFillRect(" << maContextHolder.get() << "," << aRect << ")" );
         CGContextFillRect( maContextHolder.get(), aRect );
     }
     if( IsPenVisible() )
     {
-        SAL_INFO( "vcl.cg", "CGContextStrokeRect(" << maContextHolder.get() << "," << aRect << ")" );
         CGContextStrokeRect( maContextHolder.get(), aRect );
     }
     RefreshRect( nX, nY, nWidth, nHeight );
@@ -1285,20 +1209,16 @@ void AquaSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
     getBoundRect( nPoints, pPtAry, nX, nY, nWidth, nHeight );
 
     float fX, fY;
-    SAL_INFO( "vcl.cg", "CGContextBeginPath(" << maContextHolder.get() << ")" );
     CGContextBeginPath( maContextHolder.get() );
     alignLinePoint( pPtAry, fX, fY );
-    SAL_INFO( "vcl.cg", "CGContextMoveToPoint(" << maContextHolder.get() << "," << fX << "," << fY << ")" );
     CGContextMoveToPoint( maContextHolder.get(), fX, fY );
     pPtAry++;
 
     for( sal_uInt32 nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
     {
         alignLinePoint( pPtAry, fX, fY );
-        SAL_INFO( "vcl.cg", "CGContextAddLineToPoint(" << maContextHolder.get() << "," << fX << "," << fY << ")" );
         CGContextAddLineToPoint( maContextHolder.get(), fX, fY );
     }
-    SAL_INFO( "vcl.cg", "CGContextStrokePath(" << maContextHolder.get() << ")" );
     CGContextStrokePath(maContextHolder.get());
 
     RefreshRect( nX, nY, nWidth, nHeight );
@@ -1378,8 +1298,6 @@ Color AquaSalGraphics::getPixel( long nX, long nY )
                                GetSalData()->mxRGBSpace,
                                kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Big );
 
-    SAL_INFO( "vcl.cg", "CGBitmapContextCreate(1x1x8) = " << xOnePixelContext );
-
     // update this graphics layer
     ApplyXorContext();
 
@@ -1389,11 +1307,8 @@ Color AquaSalGraphics::getPixel( long nX, long nY )
         nY = mnHeight - nY;
     }
     const CGPoint aCGPoint = CGPointMake(-nX, -nY);
-    SAL_INFO("vcl.cg", "CGContextDrawLayerAtPoint(" <<
-             xOnePixelContext << "," << aCGPoint << "," << maLayer.get() << ")");
     CGContextDrawLayerAtPoint(xOnePixelContext, aCGPoint, maLayer.get());
 
-    SAL_INFO( "vcl.cg", "CGContextRelease(" << xOnePixelContext << ")" );
     CGContextRelease( xOnePixelContext );
 
     Color nColor( aPixel.r, aPixel.g, aPixel.b );
@@ -1431,15 +1346,12 @@ void AquaSalGraphics::ImplDrawPixel( long nX, long nY, const RGBAColor& rColor )
         return;
     }
     // overwrite the fill color
-    SAL_INFO( "vcl.cg", "CGContextSetFillColor(" << maContextHolder.get() << "," << rColor << ")" );
     CGContextSetFillColor( maContextHolder.get(), rColor.AsArray() );
     // draw 1x1 rect, there is no pixel drawing in Quartz
     const CGRect aDstRect = CGRectMake(nX, nY, 1, 1);
-    SAL_INFO( "vcl.cg", "CGContextFillRect(" << maContextHolder.get() << "," << aDstRect << ")" );
     CGContextFillRect( maContextHolder.get(), aDstRect );
     RefreshRect( aDstRect );
     // reset the fill color
-    SAL_INFO( "vcl.cg", "CGContextSetFillColor(" << maContextHolder.get() << "," << maFillColor << ")" );
     CGContextSetFillColor( maContextHolder.get(), maFillColor.AsArray() );
 }
 
@@ -1563,11 +1475,9 @@ void AquaSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalIn
         {
             const CGFloat dashLengths[2]  = { 4.0, 4.0 };     // for drawing dashed line
             CGContextSetBlendMode( maContextHolder.get(), kCGBlendModeDifference );
-            SAL_INFO( "vcl.cg", "CGContextSetRGBStrokeColor(" << maContextHolder.get() << ",{1,1,1,1})" );
             CGContextSetRGBStrokeColor ( maContextHolder.get(), 1.0, 1.0, 1.0, 1.0 );
             CGContextSetLineDash ( maContextHolder.get(), 0, dashLengths, 2 );
             CGContextSetLineWidth( maContextHolder.get(), 2.0);
-            SAL_INFO( "vcl.cg", "CGContextStrokeRect(" << maContextHolder.get() << "," << aCGRect << ")" );
             CGContextStrokeRect ( maContextHolder.get(), aCGRect );
         }
         else if ( nFlags & SalInvert::N50 )
@@ -1580,9 +1490,7 @@ void AquaSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalIn
         else // just invert
         {
             CGContextSetBlendMode(maContextHolder.get(), kCGBlendModeDifference);
-            SAL_INFO( "vcl.cg", "CGContextSetRGBFillColor(" << maContextHolder.get() << ",{1,1,1,1})" );
             CGContextSetRGBFillColor ( maContextHolder.get(),1.0, 1.0, 1.0 , 1.0 );
-            SAL_INFO( "vcl.cg", "CGContextFillRect(" << maContextHolder.get() << "," << aCGRect << ")" );
             CGContextFillRect ( maContextHolder.get(), aCGRect );
         }
         maContextHolder.restoreState();
@@ -1616,11 +1524,9 @@ void AquaSalGraphics::invert( sal_uInt32 nPoints, const SalPoint*  pPtAry, SalIn
         {
             const CGFloat dashLengths[2]  = { 4.0, 4.0 };     // for drawing dashed line
             CGContextSetBlendMode( maContextHolder.get(), kCGBlendModeDifference );
-            SAL_INFO( "vcl.cg", "CGContextSetRGBStrokeColor(" << maContextHolder.get() << ",{1,1,1,1})" );
             CGContextSetRGBStrokeColor ( maContextHolder.get(), 1.0, 1.0, 1.0, 1.0 );
             CGContextSetLineDash ( maContextHolder.get(), 0, dashLengths, 2 );
             CGContextSetLineWidth( maContextHolder.get(), 2.0);
-            SAL_INFO( "vcl.cg", "CGContextStrokePath(" << maContextHolder.get() << ")" );
             CGContextStrokePath ( maContextHolder.get() );
         }
         else if ( nSalFlags & SalInvert::N50 )
@@ -1631,9 +1537,7 @@ void AquaSalGraphics::invert( sal_uInt32 nPoints, const SalPoint*  pPtAry, SalIn
         else // just invert
         {
             CGContextSetBlendMode( maContextHolder.get(), kCGBlendModeDifference );
-            SAL_INFO( "vcl.cg", "CGContextSetRGBFillColor(" << maContextHolder.get() << ",{1,1,1,1})" );
             CGContextSetRGBFillColor( maContextHolder.get(), 1.0, 1.0, 1.0, 1.0 );
-            SAL_INFO( "vcl.cg", "CGContextFillPath(" << maContextHolder.get() << ")" );
             CGContextFillPath( maContextHolder.get() );
         }
         const CGRect aRefreshRect = CGContextGetClipBoundingBox(maContextHolder.get());
@@ -1653,11 +1557,8 @@ void AquaSalGraphics::Pattern50Fill()
                                                               kCGPatternTilingConstantSpacing,
                                                               false, &aCallback );
     SAL_WARN_IF( !maContextHolder.get(), "vcl.quartz", "maContextHolder.get() is NULL" );
-    SAL_INFO( "vcl.cg", "CGContextSetFillColorSpace(" << maContextHolder.get() << "," << mxP50Space << ")" );
     CGContextSetFillColorSpace( maContextHolder.get(), mxP50Space );
-    SAL_INFO( "vcl.cg", "CGContextSetFillPattern(" << maContextHolder.get() << "," << mxP50Pattern << ",{1,1,1,1})" );
     CGContextSetFillPattern( maContextHolder.get(), mxP50Pattern, aFillCol );
-    SAL_INFO( "vcl.cg", "CGContextFillPath(" << maContextHolder.get() << ")" );
     CGContextFillPath( maContextHolder.get() );
 }
 
@@ -1666,7 +1567,6 @@ void AquaSalGraphics::ResetClipRegion()
     // release old path and indicate no clipping
     if( mxClipPath )
     {
-        SAL_INFO( "vcl.cg", "CGPathRelease(" << mxClipPath << ")" );
         CGPathRelease( mxClipPath );
         mxClipPath = nullptr;
     }
@@ -1684,19 +1584,14 @@ void AquaSalGraphics::SetState()
     // setup clipping
     if( mxClipPath )
     {
-        SAL_INFO( "vcl.cg", "CGContextBeginPath(" << maContextHolder.get() << ")" );
         CGContextBeginPath( maContextHolder.get() );            // discard any existing path
-        SAL_INFO( "vcl.cg", "CGContextAddPath(" << maContextHolder.get() << "," << mxClipPath << ")" );
         CGContextAddPath( maContextHolder.get(), mxClipPath );  // set the current path to the clipping path
-        SAL_INFO( "vcl.cg", "CGContextClip(" << maContextHolder.get() << ")" );
         CGContextClip( maContextHolder.get() );                 // use it for clipping
     }
 
     // set RGB colorspace and line and fill colors
-    SAL_INFO( "vcl.cg", "CGContextSetFillColor(" << maContextHolder.get() << "," << maFillColor << ")" );
     CGContextSetFillColor( maContextHolder.get(), maFillColor.AsArray() );
 
-    SAL_INFO( "vcl.cg", "CGContextSetStrokeColor(" << maContextHolder.get() << "," << maLineColor << ")" );
     CGContextSetStrokeColor( maContextHolder.get(), maLineColor.AsArray() );
     CGContextSetShouldAntialias( maContextHolder.get(), false );
     if( mnXorMode == 2 )
@@ -1710,7 +1605,6 @@ void AquaSalGraphics::SetLineColor()
     maLineColor.SetAlpha( 0.0 );   // transparent
     if( CheckContext() )
     {
-        SAL_INFO( "vcl.cg", "CGContextSetRGBStrokeColor(" << maContextHolder.get() << "," << maLineColor << ")" );
         CGContextSetRGBStrokeColor( maContextHolder.get(), maLineColor.GetRed(), maLineColor.GetGreen(),
                                     maLineColor.GetBlue(), maLineColor.GetAlpha() );
     }
@@ -1721,7 +1615,6 @@ void AquaSalGraphics::SetLineColor( Color nColor )
     maLineColor = RGBAColor( nColor );
     if( CheckContext() )
     {
-        SAL_INFO( "vcl.cg", "CGContextSetRGBStrokeColor(" << maContextHolder.get() << "," << maLineColor << ")" );
         CGContextSetRGBStrokeColor( maContextHolder.get(), maLineColor.GetRed(), maLineColor.GetGreen(),
                                    maLineColor.GetBlue(), maLineColor.GetAlpha() );
     }
@@ -1732,7 +1625,6 @@ void AquaSalGraphics::SetFillColor()
     maFillColor.SetAlpha( 0.0 );   // transparent
     if( CheckContext() )
     {
-        SAL_INFO( "vcl.cg", "CGContextSetRGBFillColor(" << maContextHolder.get() << "," << maFillColor << ")" );
         CGContextSetRGBFillColor( maContextHolder.get(), maFillColor.GetRed(), maFillColor.GetGreen(),
                                   maFillColor.GetBlue(), maFillColor.GetAlpha() );
     }
@@ -1743,7 +1635,6 @@ void AquaSalGraphics::SetFillColor( Color nColor )
     maFillColor = RGBAColor( nColor );
     if( CheckContext() )
     {
-        SAL_INFO( "vcl.cg", "CGContextSetRGBFillColor(" << maContextHolder.get() << "," << maFillColor << ")" );
         CGContextSetRGBFillColor( maContextHolder.get(), maFillColor.GetRed(), maFillColor.GetGreen(),
                                  maFillColor.GetBlue(), maFillColor.GetAlpha() );
     }
@@ -1769,12 +1660,10 @@ bool AquaSalGraphics::setClipRegion( const vcl::Region& i_rClip )
     // release old clip path
     if( mxClipPath )
     {
-        SAL_INFO( "vcl.cg", "CGPathRelease(" << mxClipPath << ")" );
         CGPathRelease( mxClipPath );
         mxClipPath = nullptr;
     }
     mxClipPath = CGPathCreateMutable();
-    SAL_INFO( "vcl.cg", "CGPathCreateMutable() = " << mxClipPath );
 
     // set current path, either as polypolgon or sequence of rectangles
     if(i_rClip.HasPolyPolygonOrB2DPolyPolygon())
@@ -1799,7 +1688,6 @@ bool AquaSalGraphics::setClipRegion( const vcl::Region& i_rClip )
                 if(nH)
                 {
                     const CGRect aRect = CGRectMake( rRect.Left(), rRect.Top(), nW, nH);
-                    SAL_INFO( "vcl.cg", "CGPathAddRect(" << mxClipPath << ",NULL," << aRect << ")" );
                     CGPathAddRect( mxClipPath, nullptr, aRect );
                 }
             }
@@ -1926,7 +1814,6 @@ void XorEmulation::SetTarget( int nWidth, int nHeight, int nTargetDepth,
     if( m_xMaskContext )
     {
         // cleanup the mask context
-        SAL_INFO( "vcl.cg", "CGContextRelease(" << m_xMaskContext << ")" );
         CGContextRelease( m_xMaskContext );
         delete[] m_pMaskBuffer;
         m_xMaskContext = nullptr;
@@ -1935,7 +1822,6 @@ void XorEmulation::SetTarget( int nWidth, int nHeight, int nTargetDepth,
         // cleanup the temp context if needed
         if( m_xTempContext )
         {
-            SAL_INFO( "vcl.cg", "CGContextRelease(" << m_xTempContext << ")" );
             CGContextRelease( m_xTempContext );
             delete[] m_pTempBuffer;
             m_xTempContext = nullptr;
@@ -1978,7 +1864,6 @@ void XorEmulation::SetTarget( int nWidth, int nHeight, int nTargetDepth,
                                             nBitsPerComponent, nBytesPerRow,
                                             aCGColorSpace, aCGBmpInfo );
     SAL_WARN_IF( !m_xMaskContext, "vcl.quartz", "mask context creation failed" );
-    SAL_INFO( "vcl.cg", "CGBitmapContextCreate(" << nWidth << "x" << nHeight << ") = " << m_xMaskContext );
 
     // reset the XOR mask to black
     memset( m_pMaskBuffer, 0, m_nBufferLongs * sizeof(sal_uLong) );
@@ -1998,7 +1883,6 @@ void XorEmulation::SetTarget( int nWidth, int nHeight, int nTargetDepth,
                                                 nBitsPerComponent, nBytesPerRow,
                                                 aCGColorSpace, aCGBmpInfo );
         SAL_WARN_IF( !m_xTempContext, "vcl.quartz", "temp context creation failed" );
-        SAL_INFO( "vcl.cg", "CGBitmapContextCreate(" << nWidth << "x" << nHeight << ") = " << m_xTempContext );
     }
 
     // initialize XOR mask context for drawing
@@ -2035,7 +1919,6 @@ bool XorEmulation::UpdateTarget()
     if( m_xTempContext )
     {
         SAL_WARN_IF( m_xTargetContext == nullptr, "vcl.quartz", "Target layer is NULL");
-        SAL_INFO( "vcl.cg", "CGContextDrawLayerAtPoint(" << m_xTempContext << "," << CGPointZero << "," << m_xTargetLayer << ")" );
         CGContextDrawLayerAtPoint( m_xTempContext, CGPointZero, m_xTargetLayer );
     }
     // do a manual XOR with the XorMask
@@ -2051,14 +1934,11 @@ bool XorEmulation::UpdateTarget()
     if( m_xTempContext )
     {
         CGImageRef xXorImage = CGBitmapContextCreateImage( m_xTempContext );
-        SAL_INFO( "vcl.cg", "CGBitmapContextCreateImage(" << m_xTempContext << ") = " << xXorImage );
         const int nWidth  = static_cast<int>(CGImageGetWidth( xXorImage ));
         const int nHeight = static_cast<int>(CGImageGetHeight( xXorImage ));
         // TODO: update minimal changerect
         const CGRect aFullRect = CGRectMake(0, 0, nWidth, nHeight);
-        SAL_INFO( "vcl.cg", "CGContextDrawImage(" << m_xTargetContext << "," << aFullRect << "," << xXorImage << ")" );
         CGContextDrawImage( m_xTargetContext, aFullRect, xXorImage );
-        SAL_INFO( "vcl.cg", "CGImageRelease(" << xXorImage << ")" );
         CGImageRelease( xXorImage );
     }
 
@@ -2114,15 +1994,12 @@ void AquaSalGraphics::SetVirDevGraphics(CGLayerHolder const & rLayer, CGContextR
     {
         mnWidth = CGBitmapContextGetWidth( maContextHolder.get() );
         mnHeight = CGBitmapContextGetHeight( maContextHolder.get() );
-        SAL_INFO( "vcl.cg", "CGBitmapContextGetWidth&Height(" << maContextHolder.get() <<
-                  ") = " << mnWidth << "x" << mnHeight );
     }
     else
     {
         const CGSize aSize = CGLayerGetSize(maLayer.get());
         mnWidth = static_cast<int>(aSize.width);
         mnHeight = static_cast<int>(aSize.height);
-        SAL_INFO("vcl.cg", "CGLayerGetSize(" << maLayer.get() << ") = " << aSize);
     }
 
     // prepare graphics for drawing

@@ -1624,15 +1624,11 @@ void paintTileIOS(LibreOfficeKitDocument* pThis,
                                                     nCanvasWidth * 4, CGColorSpaceCreateDeviceRGB(),
                                                     kCGImageAlphaPremultipliedFirst | kCGImageByteOrder32Little);
 
-    // Use the vcl.cg tag even if this code is not in vcl, to match all other SAL_INFO logging about Core Graphics, in vcl.
-    SAL_INFO("vcl.cg", "CGBitmapContextCreate(" << nCanvasWidth << "x" << nCanvasHeight << "x32) = " << pCGContext);
-
     CGContextTranslateCTM(pCGContext, 0, nCanvasHeight);
     CGContextScaleCTM(pCGContext, fDPIScale, -fDPIScale);
 
     doc_paintTileToCGContext(pThis, (void*) pCGContext, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
-    SAL_INFO("vcl.cg", "CGContextRelease(" << pCGContext << ")");
     CGContextRelease(pCGContext);
 }
 #endif
@@ -4177,8 +4173,6 @@ static void doc_paintWindowDPI(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKW
 
     CGContextRef cgc = CGBitmapContextCreate(pBuffer, nWidth, nHeight, 8, nWidth*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little);
 
-    SAL_INFO( "vcl.cg", "CGBitmapContextCreate(" << nWidth << "x" << nHeight << "x32) = " << cgc);
-
     CGContextTranslateCTM(cgc, 0, nHeight);
     CGContextScaleCTM(cgc, fDPIScale, -fDPIScale);
 
@@ -4198,7 +4192,6 @@ static void doc_paintWindowDPI(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKW
     pWindow->PaintToDevice(pDevice.get(), Point(0, 0), Size());
     comphelper::LibreOfficeKit::setDialogPainting(false);
 
-    SAL_INFO( "vcl.cg", "CGContextRelease(" << cgc << ")" );
     CGContextRelease(cgc);
 
 #else

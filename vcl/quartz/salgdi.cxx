@@ -219,7 +219,6 @@ AquaSalGraphics::~AquaSalGraphics()
 
     if( mxClipPath )
     {
-        SAL_INFO("vcl.cg", "CGPathRelease(" << mxClipPath << ")" );
         CGPathRelease( mxClipPath );
     }
 
@@ -239,7 +238,6 @@ AquaSalGraphics::~AquaSalGraphics()
 #endif
     if (maLayer.isSet())
     {
-        SAL_INFO("vcl.cg", "CGLayerRelease(" << maLayer.get() << ")" );
         CGLayerRelease(maLayer.get());
     }
     else if (maContextHolder.isSet()
@@ -249,7 +247,6 @@ AquaSalGraphics::~AquaSalGraphics()
              )
     {
         // destroy backbuffer bitmap context that we created ourself
-        SAL_INFO("vcl.cg", "CGContextRelease(" << maContextHolder.get() << ")" );
         CGContextRelease(maContextHolder.get());
         maContextHolder.set(nullptr);
     }
@@ -448,10 +445,8 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     maContextHolder.saveState();
 
     // The view is vertically flipped (no idea why), flip it back.
-    SAL_INFO("vcl.cg", "CGContextScaleCTM(" << maContextHolder.get() << ",1,-1)");
     CGContextScaleCTM(maContextHolder.get(), 1.0, -1.0);
     CGContextSetShouldAntialias(maContextHolder.get(), !mbNonAntialiasedText);
-    SAL_INFO("vcl.cg", "CGContextSetFillColor(" << maContextHolder.get() << "," << maTextColor << ")");
     CGContextSetFillColor(maContextHolder.get(), maTextColor.AsArray());
 
     if (rStyle.mbFauxBold)
@@ -476,10 +471,8 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
         maContextHolder.saveState();
         if (rStyle.mfFontRotation && !bUprightGlyph)
         {
-            SAL_INFO("vcl.cg", "CGContextRotateCTM(" << maContextHolder.get() << "," << rStyle.mfFontRotation << ")");
             CGContextRotateCTM(maContextHolder.get(), rStyle.mfFontRotation);
         }
-        SAL_INFO("vcl.cg", "CTFontDrawGlyphs() @" << nStartIndex << ":" << nLen << "," << maContextHolder.get());
         CTFontDrawGlyphs(pFont, &aGlyphIds[nStartIndex], &aGlyphPos[nStartIndex], nLen, maContextHolder.get());
         maContextHolder.restoreState();
 

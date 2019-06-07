@@ -81,7 +81,6 @@ void AquaSalGraphics::UnsetState()
     }
     if( mxClipPath )
     {
-        SAL_INFO( "vcl.cg", "CGPathRelease(" << mxClipPath << ")" );
         CGPathRelease( mxClipPath );
         mxClipPath = nullptr;
     }
@@ -118,7 +117,6 @@ bool AquaSalGraphics::CheckContext()
             }
             else if (maContextHolder.isSet())
             {
-                SAL_INFO("vcl.cg", "CGContextRelease(" << maContextHolder.get() << ")");
                 CGContextRelease(maContextHolder.get());
             }
             maContextHolder.set(nullptr);
@@ -155,10 +153,8 @@ bool AquaSalGraphics::CheckContext()
                 // copy original layer to resized layer
                 if (maContextHolder.isSet())
                 {
-                    SAL_INFO("vcl.cg", "CGContextDrawLayerAtPoint(" << maContextHolder.get() << "," << CGPointZero << "," << rReleaseLayer << ")");
                     CGContextDrawLayerAtPoint(maContextHolder.get(), CGPointZero, rReleaseLayer);
                 }
-                SAL_INFO("vcl.cg", "CGLayerRelease(" << rReleaseLayer << ")");
                 CGLayerRelease(rReleaseLayer);
             }
 
@@ -210,7 +206,6 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
     if (maLayer.isSet() && pContext != nullptr)
     {
         CGContextHolder rCGContextHolder([pContext CGContext]);
-        SAL_INFO("vcl.cg", "[[NSGraphicsContext currentContext] CGContext] = " << rCGContextHolder.get());
 
         rCGContextHolder.saveState();
 
@@ -218,9 +213,7 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
         if (rClip)
         {
             CGContextBeginPath(rCGContextHolder.get());
-            SAL_INFO( "vcl.cg", "CGContextAddPath(" << rCGContextHolder.get() << "," << rClip << ")" );
             CGContextAddPath(rCGContextHolder.get(), rClip );
-            SAL_INFO( "vcl.cg", "CGContextClip(" << rCGContextHolder.get() << ")" );
             CGContextClip(rCGContextHolder.get());
         }
 
@@ -229,7 +222,6 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
         const CGSize aSize = maLayer.getSizePoints();
         const CGRect aRect = CGRectMake(0, 0, aSize.width,  aSize.height);
 
-        SAL_INFO( "vcl.cg", "CGContextDrawLayerInRect(" << rCGContextHolder.get() << "," << aRect << "," << maLayer.get() << ")" );
         CGContextDrawLayerInRect(rCGContextHolder.get(), aRect, maLayer.get());
 
         rCGContextHolder.restoreState();
