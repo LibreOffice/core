@@ -3228,6 +3228,18 @@ public:
         return ::get_text_emphasis(pEntry, col);
     }
 
+    virtual void connect_editing_started(const Link<const weld::TreeIter&, bool>& rLink) override
+    {
+        m_xTreeView->EnableInplaceEditing(true);
+        weld::TreeView::connect_editing_started(rLink);
+    }
+
+    virtual void connect_editing_done(const Link<const std::pair<const weld::TreeIter&, OUString>&, bool>& rLink) override
+    {
+        m_xTreeView->EnableInplaceEditing(true);
+        weld::TreeView::connect_editing_done(rLink);
+    }
+
     void set_image(SvTreeListEntry* pEntry, const Image& rImage, int col)
     {
         if (col == -1)
