@@ -456,195 +456,131 @@ TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
 }
 
 // OrganizeDialog
-OrganizeDialog::OrganizeDialog(vcl::Window* pParent, sal_Int16 tabId,
+OrganizeDialog::OrganizeDialog(weld::Window* pParent, sal_Int16 tabId,
     EntryDescriptor const & rDesc )
-    : TabDialog( pParent, "OrganizeDialog",
-        "modules/BasicIDE/ui/organizedialog.ui" )
-    , m_aCurEntry( rDesc )
+    : GenericDialogController(pParent, "modules/BasicIDE/ui/organizedialog.ui", "OrganizeDialog")
+    , m_xTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
+    , m_xModulePage(new ObjectPage(m_xTabCtrl->get_page("modules"), "ModulePage", BrowseMode::Modules, this))
+    , m_xDialogPage(new ObjectPage(m_xTabCtrl->get_page("dialogs"), "DialogPage", BrowseMode::Dialogs, this))
+    , m_xLibPage(new LibPage(m_xTabCtrl->get_page("libraries"), this))
+    , m_aCurEntry(rDesc)
 {
-    get(m_pTabCtrl, "tabcontrol");
+    m_xTabCtrl->connect_enter_page(LINK(this, OrganizeDialog, ActivatePageHdl));
 
-    sal_uInt16 nPageCount = m_pTabCtrl->GetPageCount();
-    for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
-    {
-        sal_uInt16 nPageId = m_pTabCtrl->GetPageId(nPage);
-        m_pTabCtrl->SetTabPage(nPageId, nullptr);
-    }
-
-    m_pTabCtrl->SetActivatePageHdl(LINK(this, OrganizeDialog, ActivatePageHdl));
-
-    if( tabId == 0 )
-    {
-        m_pTabCtrl->SetCurPageId(m_pTabCtrl->GetPageId("modules"));
-    }
-    else if ( tabId == 1 )
-    {
-        m_pTabCtrl->SetCurPageId(m_pTabCtrl->GetPageId("dialogs"));
-    }
+    if (tabId == 0)
+        m_xTabCtrl->set_current_page("modules");
+    else if (tabId == 1)
+        m_xTabCtrl->set_current_page("dialogs");
     else
-    {
-        m_pTabCtrl->SetCurPageId(m_pTabCtrl->GetPageId("libraries"));
-    }
-
-    ActivatePageHdl(m_pTabCtrl);
+        m_xTabCtrl->set_current_page("libraries");
 
     if (SfxDispatcher* pDispatcher = GetDispatcher())
         pDispatcher->Execute( SID_BASICIDE_STOREALLMODULESOURCES );
 }
 
+IMPL_LINK(OrganizeDialog, ActivatePageHdl, const OString&, rPage, void)
+{
+    if (rPage == "modules")
+        m_xModulePage->ActivatePage();
+    else if (rPage == "dialogs")
+        m_xDialogPage->ActivatePage();
+    else if (rPage == "libraries")
+        m_xLibPage->ActivatePage();
+}
+
 OrganizeDialog::~OrganizeDialog()
 {
-    disposeOnce();
 }
 
-void OrganizeDialog::dispose()
+OrganizePage::OrganizePage(weld::Container* pParent, const OUString& rUIFile, const OString &rName, OrganizeDialog* pDialog)
+    : m_pDialog(pDialog)
+    , m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
+    , m_xContainer(m_xBuilder->weld_container(rName))
 {
-    if (m_pTabCtrl)
-    {
-        for ( sal_uInt16 i = 0; i < m_pTabCtrl->GetPageCount(); i++ )
-            VclPtr<vcl::Window>(m_pTabCtrl->GetTabPage( m_pTabCtrl->GetPageId( i ) )).disposeAndClear();
-    }
-    m_pTabCtrl.clear();
-
-    TabDialog::dispose();
-};
-
-IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
-{
-    sal_uInt16 nId = pTabCtrl->GetCurPageId();
-
-    if ( !pTabCtrl->GetTabPage( nId ) )
-    {
-        OString sPageName(pTabCtrl->GetPageName(nId));
-        VclPtr<TabPage> pNewTabPage;
-        if (sPageName == "modules")
-        {
-            VclPtrInstance<ObjectPage> pObjectPage(pTabCtrl, "ModulePage", BrowseMode::Modules);
-            pNewTabPage.reset(pObjectPage);
-            pObjectPage->SetTabDlg(this);
-            pObjectPage->SetCurrentEntry(m_aCurEntry);
-        }
-        else if (sPageName == "dialogs")
-        {
-            VclPtrInstance<ObjectPage> pObjectPage( pTabCtrl, "DialogPage", BrowseMode::Dialogs );
-            pNewTabPage.reset(pObjectPage);
-            pObjectPage->SetTabDlg(this);
-            pObjectPage->SetCurrentEntry(m_aCurEntry);
-        }
-        else if (sPageName == "libraries")
-        {
-            VclPtrInstance<LibPage> pLibPage( pTabCtrl );
-            pNewTabPage.reset(pLibPage);
-            pLibPage->SetTabDlg( this );
-        }
-        else
-        {
-            OSL_FAIL( "PageHdl: Unknown ID" );
-        }
-        DBG_ASSERT( pNewTabPage, "No page" );
-        pTabCtrl->SetTabPage( nId, pNewTabPage );
-    }
 }
 
+OrganizePage::~OrganizePage()
+{
+}
 
 // ObjectPage
-
-
-ObjectPage::ObjectPage(vcl::Window *pParent, const OString &rName, BrowseMode nMode)
-    : TabPage(pParent, rName, "modules/BasicIDE/ui/" +
-        OStringToOUString(rName, RTL_TEXTENCODING_UTF8).toAsciiLowerCase() +
-        ".ui")
+ObjectPage::ObjectPage(weld::Container* pParent, const OString &rName, BrowseMode nMode, OrganizeDialog* pDialog)
+    : OrganizePage(pParent, "modules/BasicIDE/ui/" + OStringToOUString(rName, RTL_TEXTENCODING_UTF8).toAsciiLowerCase() + ".ui",
+        rName, pDialog)
+    , m_xBasicBox(new SbTreeListBox(m_xBuilder->weld_tree_view("library"), pDialog->getDialog()))
+    , m_xEditButton(m_xBuilder->weld_button("edit"))
+    , m_xNewModButton(m_xBuilder->weld_button("newmodule"))
+    , m_xNewDlgButton(m_xBuilder->weld_button("newdialog"))
+    , m_xDelButton(m_xBuilder->weld_button("delete"))
 {
-    get(m_pBasicBox, "library");
-    Size aSize(m_pBasicBox->LogicToPixel(Size(130, 117), MapMode(MapUnit::MapAppFont)));
-    m_pBasicBox->set_height_request(aSize.Height());
-    m_pBasicBox->set_width_request(aSize.Width());
-    get(m_pEditButton, "edit");
-    get(m_pNewModButton, "newmodule");
-    get(m_pNewDlgButton, "newdialog");
-    get(m_pDelButton, "delete");
+    Size aSize(m_xBasicBox->get_approximate_digit_width() * 40,
+               m_xBasicBox->get_height_rows(14));
+    m_xBasicBox->set_size_request(aSize.Width(), aSize.Height());
 
-    pTabDlg = nullptr;
-
-    m_pEditButton->SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
-    m_pDelButton->SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
-    m_pBasicBox->SetSelectHdl( LINK( this, ObjectPage, BasicBoxHighlightHdl ) );
+    m_xEditButton->connect_clicked( LINK( this, ObjectPage, ButtonHdl ) );
+    m_xDelButton->connect_clicked( LINK( this, ObjectPage, ButtonHdl ) );
+    m_xBasicBox->connect_changed( LINK( this, ObjectPage, BasicBoxHighlightHdl ) );
 
     if( nMode & BrowseMode::Modules )
     {
-        m_pNewModButton->SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
-        m_pNewDlgButton->Hide();
+        m_xNewModButton->connect_clicked( LINK( this, ObjectPage, ButtonHdl ) );
+        m_xNewDlgButton->hide();
     }
     else if ( nMode & BrowseMode::Dialogs )
     {
-        m_pNewDlgButton->SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
-        m_pNewModButton->Hide();
+        m_xNewDlgButton->connect_clicked( LINK( this, ObjectPage, ButtonHdl ) );
+        m_xNewModButton->hide();
     }
 
-    m_pBasicBox->SetDragDropMode( DragDropMode::CTRL_MOVE | DragDropMode::CTRL_COPY );
-    m_pBasicBox->EnableInplaceEditing(true);
-    m_pBasicBox->SetMode( nMode );
-    m_pBasicBox->SetStyle( WB_BORDER | WB_TABSTOP |
-                        WB_HASLINES | WB_HASLINESATROOT |
-                        WB_HASBUTTONS | WB_HASBUTTONSATROOT |
-                        WB_HSCROLL );
-    m_pBasicBox->ScanAllEntries();
+#if 0
+    //TODO
+    m_xBasicBox->SetDragDropMode( DragDropMode::CTRL_MOVE | DragDropMode::CTRL_COPY );
+    m_xBasicBox->EnableInplaceEditing(true);
+#endif
+    m_xBasicBox->SetMode( nMode );
+    m_xBasicBox->ScanAllEntries();
 
-    m_pEditButton->GrabFocus();
+    m_xEditButton->grab_focus();
     CheckButtons();
 }
 
 ObjectPage::~ObjectPage()
 {
-    disposeOnce();
-}
-
-void ObjectPage::dispose()
-{
-    m_pBasicBox.clear();
-    m_pEditButton.clear();
-    m_pNewModButton.clear();
-    m_pNewDlgButton.clear();
-    m_pDelButton.clear();
-    pTabDlg.clear();
-    TabPage::dispose();
 }
 
 void ObjectPage::SetCurrentEntry (EntryDescriptor const & rDesc)
 {
-    m_pBasicBox->SetCurrentEntry( rDesc );
+    m_xBasicBox->SetCurrentEntry( rDesc );
 }
 
 void ObjectPage::ActivatePage()
 {
-    m_pBasicBox->UpdateEntries();
-}
-
-void ObjectPage::DeactivatePage()
-{
+    m_xBasicBox->UpdateEntries();
 }
 
 void ObjectPage::CheckButtons()
 {
     // enable/disable edit button
-    SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();
-    EntryDescriptor aDesc = m_pBasicBox->GetEntryDescriptor(pCurEntry);
+    std::unique_ptr<weld::TreeIter> xCurEntry(m_xBasicBox->make_iterator());
+    if (!m_xBasicBox->get_cursor(xCurEntry.get()))
+        xCurEntry.reset();
+    EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(xCurEntry.get());
     const ScriptDocument& aDocument( aDesc.GetDocument() );
     const OUString& aLibName( aDesc.GetLibName() );
     const OUString& aLibSubName( aDesc.GetLibSubName() );
     bool bVBAEnabled = aDocument.isInVBAMode();
-    BrowseMode nMode = m_pBasicBox->GetMode();
+    BrowseMode nMode = m_xBasicBox->GetMode();
 
-    sal_uInt16 nDepth = pCurEntry ? m_pBasicBox->GetModel()->GetDepth( pCurEntry ) : 0;
+    sal_uInt16 nDepth = xCurEntry ? m_xBasicBox->get_iter_depth(*xCurEntry) : 0;
     if ( nDepth >= 2 )
     {
         if( bVBAEnabled && ( nMode & BrowseMode::Modules ) && ( nDepth == 2 ) )
-            m_pEditButton->Disable();
+            m_xEditButton->set_sensitive(false);
         else
-        m_pEditButton->Enable();
+            m_xEditButton->set_sensitive(true);
     }
     else
-        m_pEditButton->Disable();
+        m_xEditButton->set_sensitive(false);
 
     // enable/disable new module/dialog buttons
     LibraryLocation eLocation( aDesc.GetLocation() );
@@ -661,49 +597,48 @@ void ObjectPage::CheckButtons()
     }
     if ( bReadOnly || eLocation == LIBRARY_LOCATION_SHARE )
     {
-        m_pNewModButton->Disable();
-        m_pNewDlgButton->Disable();
+        m_xNewModButton->set_sensitive(false);
+        m_xNewDlgButton->set_sensitive(false);
     }
     else
     {
-        m_pNewModButton->Enable();
-        m_pNewDlgButton->Enable();
+        m_xNewModButton->set_sensitive(true);
+        m_xNewDlgButton->set_sensitive(true);
     }
 
     // enable/disable delete button
     if ( nDepth >= 2 && !bReadOnly && eLocation != LIBRARY_LOCATION_SHARE )
     {
         if( bVBAEnabled && ( nMode & BrowseMode::Modules ) && ( ( nDepth == 2 ) || aLibSubName == IDEResId(RID_STR_DOCUMENT_OBJECTS) ) )
-            m_pDelButton->Disable();
+            m_xDelButton->set_sensitive(false);
         else
-        m_pDelButton->Enable();
+            m_xDelButton->set_sensitive(true);
     }
     else
-        m_pDelButton->Disable();
+        m_xDelButton->set_sensitive(false);
 }
 
-IMPL_LINK( ObjectPage, BasicBoxHighlightHdl, SvTreeListBox*, pBox, void )
+IMPL_LINK_NOARG(ObjectPage, BasicBoxHighlightHdl, weld::TreeView&, void)
 {
-    if ( !pBox->IsSelected( pBox->GetHdlEntry() ) )
-        return;
-
     CheckButtons();
 }
 
-IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton, void )
+IMPL_LINK(ObjectPage, ButtonHdl, weld::Button&, rButton, void)
 {
-    if (pButton == m_pEditButton)
+    if (&rButton == m_xEditButton.get())
     {
         SfxAllItemSet aArgs( SfxGetpApp()->GetPool() );
         SfxRequest aRequest( SID_BASICIDE_APPEAR, SfxCallMode::SYNCHRON, aArgs );
         SfxGetpApp()->ExecuteSlot( aRequest );
 
         SfxDispatcher* pDispatcher = GetDispatcher();
-        SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();
-        DBG_ASSERT( pCurEntry, "Entry?!" );
-        if ( m_pBasicBox->GetModel()->GetDepth( pCurEntry ) >= 2 )
+
+        std::unique_ptr<weld::TreeIter> xCurEntry(m_xBasicBox->make_iterator());
+        if (!m_xBasicBox->get_cursor(xCurEntry.get()))
+            return;
+        if (m_xBasicBox->get_iter_depth(*xCurEntry) >= 2)
         {
-            EntryDescriptor aDesc = m_pBasicBox->GetEntryDescriptor(pCurEntry);
+            EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(xCurEntry.get());
             if ( pDispatcher )
             {
                 OUString aModName( aDesc.GetName() );
@@ -720,17 +655,17 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton, void )
         }
         else    // only Lib selected
         {
-            DBG_ASSERT( m_pBasicBox->GetModel()->GetDepth( pCurEntry ) == 1, "No LibEntry?!" );
+            DBG_ASSERT( m_xBasicBox->get_iter_depth(*xCurEntry) == 1, "No LibEntry?!" );
             ScriptDocument aDocument( ScriptDocument::getApplicationScriptDocument() );
-            SvTreeListEntry* pParentEntry = m_pBasicBox->GetParent( pCurEntry );
-            if ( pParentEntry )
+            std::unique_ptr<weld::TreeIter> xParentEntry(m_xBasicBox->make_iterator(xCurEntry.get()));
+            if (m_xBasicBox->iter_parent(*xParentEntry))
             {
-                DocumentEntry* pDocumentEntry = static_cast<DocumentEntry*>(pParentEntry->GetUserData());
+                DocumentEntry* pDocumentEntry = reinterpret_cast<DocumentEntry*>(m_xBasicBox->get_id(*xParentEntry).toInt64());
                 if (pDocumentEntry)
                     aDocument = pDocumentEntry->GetDocument();
             }
             SfxUnoAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, Any( aDocument.getDocumentOrNull() ) );
-            OUString aLibName( m_pBasicBox->GetEntryText( pCurEntry ) );
+            OUString aLibName(m_xBasicBox->get_text(*xCurEntry));
             SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
             if ( pDispatcher )
             {
@@ -740,11 +675,11 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton, void )
         }
         EndTabDialog();
     }
-    else if (pButton == m_pNewModButton)
+    else if (&rButton == m_xNewModButton.get())
         NewModule();
-    else if (pButton == m_pNewDlgButton)
+    else if (&rButton == m_xNewDlgButton.get())
         NewDialog();
-    else if (pButton == m_pDelButton)
+    else if (&rButton == m_xDelButton.get())
         DeleteCurrent();
 }
 
@@ -752,8 +687,10 @@ bool ObjectPage::GetSelection( ScriptDocument& rDocument, OUString& rLibName )
 {
     bool bRet = false;
 
-    SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();
-    EntryDescriptor aDesc = m_pBasicBox->GetEntryDescriptor(pCurEntry);
+    std::unique_ptr<weld::TreeIter> xCurEntry(m_xBasicBox->make_iterator());
+    if (!m_xBasicBox->get_cursor(xCurEntry.get()))
+        xCurEntry.reset();
+    EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(xCurEntry.get());
     rDocument = aDesc.GetDocument();
     rLibName = aDesc.GetLibName();
     if ( rLibName.isEmpty() )
@@ -804,8 +741,8 @@ void ObjectPage::NewModule()
 
     if ( GetSelection( aDocument, aLibName ) )
     {
-        createModImpl(GetFrameWeld(), aDocument,
-                      *m_pBasicBox, aLibName, true);
+        createModImpl(m_pDialog->getDialog(), aDocument,
+                      *m_xBasicBox, aLibName, OUString(), true);
     }
 }
 
@@ -818,7 +755,7 @@ void ObjectPage::NewDialog()
     {
         aDocument.getOrCreateLibrary( E_DIALOGS, aLibName );
 
-        NewObjectDialog aNewDlg(GetFrameWeld(), ObjectMode::Dialog, true);
+        NewObjectDialog aNewDlg(m_pDialog->getDialog(), ObjectMode::Dialog, true);
         aNewDlg.SetObjectName(aDocument.createObjectName(E_DIALOGS, aLibName));
 
         if (aNewDlg.run() != RET_CANCEL)
@@ -829,7 +766,7 @@ void ObjectPage::NewDialog()
 
             if ( aDocument.hasDialog( aLibName, aDlgName ) )
             {
-                std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(GetFrameWeld(),
+                std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(m_pDialog->getDialog(),
                                                             VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_SBXNAMEALLREADYUSED2)));
                 xError->run();
             }
@@ -846,29 +783,28 @@ void ObjectPage::NewDialog()
                         SfxCallMode::SYNCHRON, { &aSbxItem });
                 }
                 LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
-                SvTreeListEntry* pRootEntry = m_pBasicBox->FindRootEntry( aDocument, eLocation );
-                if ( pRootEntry )
+                std::unique_ptr<weld::TreeIter> xIter(m_xBasicBox->make_iterator());
+                bool bRootEntry = m_xBasicBox->FindRootEntry(aDocument, eLocation, *xIter);
+                if (bRootEntry)
                 {
-                    if ( !m_pBasicBox->IsExpanded( pRootEntry ) )
-                        m_pBasicBox->Expand( pRootEntry );
-                    SvTreeListEntry* pLibEntry = m_pBasicBox->FindEntry( pRootEntry, aLibName, OBJ_TYPE_LIBRARY );
-                    DBG_ASSERT( pLibEntry, "LibEntry not found!" );
-                    if ( pLibEntry )
+                    if (!m_xBasicBox->get_row_expanded(*xIter))
+                        m_xBasicBox->expand_row(*xIter);
+                    bool bLibEntry = m_xBasicBox->FindEntry(aLibName, OBJ_TYPE_LIBRARY, *xIter);
+                    DBG_ASSERT( bLibEntry, "LibEntry not found!" );
+                    if (bLibEntry)
                     {
-                        if ( !m_pBasicBox->IsExpanded( pLibEntry ) )
-                            m_pBasicBox->Expand( pLibEntry );
-                        SvTreeListEntry* pEntry = m_pBasicBox->FindEntry( pLibEntry, aDlgName, OBJ_TYPE_DIALOG );
-                        if ( !pEntry )
+                        if (!m_xBasicBox->get_row_expanded(*xIter))
+                            m_xBasicBox->expand_row(*xIter);
+                        std::unique_ptr<weld::TreeIter> xSubRootEntry(m_xBasicBox->make_iterator(xIter.get()));
+                        bool bDlgEntry = m_xBasicBox->FindEntry(aDlgName, OBJ_TYPE_DIALOG, *xIter);
+                        if (!bDlgEntry)
                         {
-                            pEntry = m_pBasicBox->AddEntry(
-                                aDlgName,
-                                Image(StockImage::Yes, RID_BMP_DIALOG),
-                                pLibEntry, false,
-                                std::make_unique<Entry>(OBJ_TYPE_DIALOG));
-                            DBG_ASSERT( pEntry, "Insert entry failed!" );
+                            m_xBasicBox->AddEntry(aDlgName, RID_BMP_DIALOG, xSubRootEntry.get(), false,
+                                               std::make_unique<Entry>(OBJ_TYPE_DIALOG), xIter.get());
+                            assert(xIter.get() && "Insert entry failed!");
                         }
-                        m_pBasicBox->SetCurEntry( pEntry );
-                        m_pBasicBox->Select( m_pBasicBox->GetCurEntry() );        // OV-Bug?!
+                        m_xBasicBox->set_cursor(*xIter);
+                        m_xBasicBox->select(*xIter);
                     }
                 }
             }
@@ -878,9 +814,11 @@ void ObjectPage::NewDialog()
 
 void ObjectPage::DeleteCurrent()
 {
-    SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();
-    DBG_ASSERT( pCurEntry, "No current entry!" );
-    EntryDescriptor aDesc( m_pBasicBox->GetEntryDescriptor( pCurEntry ) );
+    std::unique_ptr<weld::TreeIter> xCurEntry(m_xBasicBox->make_iterator());
+    if (!m_xBasicBox->get_cursor(xCurEntry.get()))
+        xCurEntry.reset();
+    DBG_ASSERT( xCurEntry.get(), "No current entry!" );
+    EntryDescriptor aDesc( m_xBasicBox->GetEntryDescriptor( xCurEntry.get() ) );
     const ScriptDocument& aDocument( aDesc.GetDocument() );
     DBG_ASSERT( aDocument.isAlive(), "ObjectPage::DeleteCurrent: no document!" );
     if ( !aDocument.isAlive() )
@@ -889,12 +827,12 @@ void ObjectPage::DeleteCurrent()
     const OUString& aName( aDesc.GetName() );
     EntryType eType = aDesc.GetType();
 
-    if ( ( eType == OBJ_TYPE_MODULE && QueryDelModule(aName, GetFrameWeld()) ) ||
-         ( eType == OBJ_TYPE_DIALOG && QueryDelDialog(aName, GetFrameWeld()) ) )
+    if ( ( eType == OBJ_TYPE_MODULE && QueryDelModule(aName, m_pDialog->getDialog()) ) ||
+         ( eType == OBJ_TYPE_DIALOG && QueryDelDialog(aName, m_pDialog->getDialog()) ) )
     {
-        m_pBasicBox->GetModel()->Remove( pCurEntry );
-        if ( m_pBasicBox->GetCurEntry() )  // OV-Bug ?
-            m_pBasicBox->Select( m_pBasicBox->GetCurEntry() );
+        m_xBasicBox->remove(*xCurEntry);
+        if (m_xBasicBox->get_cursor(xCurEntry.get()))
+            m_xBasicBox->select(*xCurEntry);
         if (SfxDispatcher* pDispatcher = GetDispatcher())
         {
             SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDocument, aLibName, aName, TreeListBox::ConvertType( eType ) );
@@ -922,9 +860,7 @@ void ObjectPage::DeleteCurrent()
 
 void ObjectPage::EndTabDialog()
 {
-    DBG_ASSERT( pTabDlg, "TabDlg not set!" );
-    if ( pTabDlg )
-        pTabDlg->EndDialog( 1 );
+    m_pDialog->response(RET_OK);
 }
 
 LibDialog::LibDialog(weld::Window* pParent)
@@ -949,100 +885,6 @@ void LibDialog::SetStorageName( const OUString& rName )
 }
 
 // Helper function
-SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
-    TreeListBox& rBasicBox, const OUString& rLibName, bool bMain )
-{
-    OSL_ENSURE( rDocument.isAlive(), "createModImpl: invalid document!" );
-    if ( !rDocument.isAlive() )
-        return nullptr;
-
-    SbModule* pModule = nullptr;
-
-    OUString aLibName( rLibName );
-    if ( aLibName.isEmpty() )
-        aLibName = "Standard" ;
-    rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
-    OUString aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
-
-    NewObjectDialog aNewDlg(pWin, ObjectMode::Module, true);
-    aNewDlg.SetObjectName(aModName);
-
-    if (aNewDlg.run() != RET_CANCEL)
-    {
-        if (!aNewDlg.GetObjectName().isEmpty())
-            aModName = aNewDlg.GetObjectName();
-
-        try
-        {
-            OUString sModuleCode;
-            // the module has existed
-            if( rDocument.hasModule( aLibName, aModName ) )
-                return nullptr;
-            rDocument.createModule( aLibName, aModName, bMain, sModuleCode );
-            BasicManager* pBasMgr = rDocument.getBasicManager();
-            StarBASIC* pBasic = pBasMgr? pBasMgr->GetLib( aLibName ) : nullptr;
-            if ( pBasic )
-                pModule = pBasic->FindModule( aModName );
-            SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
-            if (SfxDispatcher* pDispatcher = GetDispatcher())
-            {
-                pDispatcher->ExecuteList( SID_BASICIDE_SBXINSERTED,
-                      SfxCallMode::SYNCHRON, { &aSbxItem });
-            }
-            LibraryLocation eLocation = rDocument.getLibraryLocation( aLibName );
-            SvTreeListEntry* pRootEntry = rBasicBox.FindRootEntry( rDocument, eLocation );
-            if ( pRootEntry )
-            {
-                if ( !rBasicBox.IsExpanded( pRootEntry ) )
-                    rBasicBox.Expand( pRootEntry );
-                SvTreeListEntry* pLibEntry = rBasicBox.FindEntry( pRootEntry, aLibName, OBJ_TYPE_LIBRARY );
-                DBG_ASSERT( pLibEntry, "LibEntry not found!" );
-                if ( pLibEntry )
-                {
-                    if ( !rBasicBox.IsExpanded( pLibEntry ) )
-                        rBasicBox.Expand( pLibEntry );
-                    SvTreeListEntry* pSubRootEntry = pLibEntry;
-                    if( pBasic && rDocument.isInVBAMode() )
-                    {
-                        // add the new module in the "Modules" entry
-                        SvTreeListEntry* pLibSubEntry = rBasicBox.FindEntry( pLibEntry, IDEResId(RID_STR_NORMAL_MODULES) , OBJ_TYPE_NORMAL_MODULES );
-                        if( pLibSubEntry )
-                        {
-                            if( !rBasicBox.IsExpanded( pLibSubEntry ) )
-                                rBasicBox.Expand( pLibSubEntry );
-                            pSubRootEntry = pLibSubEntry;
-                        }
-                    }
-
-                    SvTreeListEntry* pEntry = rBasicBox.FindEntry( pSubRootEntry, aModName, OBJ_TYPE_MODULE );
-                    if ( !pEntry )
-                    {
-                        pEntry = rBasicBox.AddEntry(
-                            aModName,
-                            Image(StockImage::Yes, RID_BMP_MODULE),
-                            pSubRootEntry, false,
-                            std::make_unique<Entry>(OBJ_TYPE_MODULE));
-                        DBG_ASSERT( pEntry, "Insert entry failed!" );
-                    }
-                    rBasicBox.SetCurEntry( pEntry );
-                    rBasicBox.Select( rBasicBox.GetCurEntry() );        // OV-Bug?!
-                }
-            }
-        }
-        catch (const container::ElementExistException& )
-        {
-            std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(pWin,
-                                                        VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_SBXNAMEALLREADYUSED2)));
-            xError->run();
-        }
-        catch (const container::NoSuchElementException& )
-        {
-            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
-        }
-    }
-    return pModule;
-}
-
 SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
     SbTreeListBox& rBasicBox, const OUString& rLibName, const OUString& _aModName, bool bMain )
 {
