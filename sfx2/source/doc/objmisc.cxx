@@ -1344,6 +1344,16 @@ namespace
     }
 }
 
+namespace {
+
+// don't allow LibreLogo to be used with our mouseover/etc dom-alike events
+bool UnTrustedScript(const OUString& rScriptURL)
+{
+    return rScriptURL.startsWithIgnoreAsciiCase("vnd.sun.star.script:LibreLogo");
+}
+
+}
+
 ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptContext, const OUString& _rScriptURL,
     const Sequence< Any >& aParams, Any& aRet, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam, bool bRaiseError, const css::uno::Any* pCaller )
 {
@@ -1354,6 +1364,9 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
         // TODO: we should parse the URL, and check whether there is a parameter with this name.
         // Otherwise, we might find too much.
     if ( bIsDocumentScript && !lcl_isScriptAccessAllowed_nothrow( _rxScriptContext ) )
+        return ERRCODE_IO_ACCESSDENIED;
+
+    if ( UnTrustedScript(_rScriptURL) )
         return ERRCODE_IO_ACCESSDENIED;
 
     bool bCaughtException = false;
