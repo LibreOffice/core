@@ -22,6 +22,30 @@
       "revId": "e1b9e21d196d570efe933d96eaa70aeef593099d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_00c69b49",
+        "filename": "vcl/qt5/Qt5Object.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2019-06-07T08:39:54Z",
+      "side": 1,
+      "message": "Same happened for me with presentation from tdf#121247.",
+      "parentUuid": "3fa0c359_a0124708",
+      "range": {
+        "startLine": 116,
+        "startChar": 1,
+        "endLine": 116,
+        "endChar": 52
+      },
+      "revId": "e1b9e21d196d570efe933d96eaa70aeef593099d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
