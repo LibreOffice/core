@@ -1366,7 +1366,7 @@ bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
     {
         std::unique_ptr<SdrUndoAction> pUndo;
         std::unique_ptr<SdrUndoAction> pUndo2;
-        const bool bUndo = getSdrDragView().IsUndoEnabled();
+        const bool bUndo = getSdrDragView().IsUndoEnabled() && getSdrDragView().CanDoSdrUndo();
 
         if( bUndo )
         {
