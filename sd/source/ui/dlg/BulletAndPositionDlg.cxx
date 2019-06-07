@@ -117,13 +117,10 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     : GenericDialogController(pWindow, "cui/ui/bulletandposition.ui", "BulletAndPosition")
     , bLastWidthModified(false)
     , bModified(false)
-    , bPreset(false)
     , bAutomaticCharStyles(true)
-    , bHTMLMode(false)
     , bInInitControl(false)
     , bLabelAlignmentPosAndSpaceModeActive(false)
     , bApplyToMaster(false)
-    , bIsSlideScope(false)
     , nBullet(0xff)
     , nActNumLvl(1)
     , p_Window(pWindow)
@@ -246,6 +243,7 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     const SfxPoolItem* pItem;
     const SfxItemSet* pExampleSet = &rSet;
     sal_uInt16 nTmpNumLvl = 1;
+    bool bPreset = false;
     if (pExampleSet)
     {
         if (SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
@@ -385,15 +383,6 @@ void SvxBulletAndPositionDlg::Reset(const SfxItemSet* rSet)
     else if (*pSaveNum != *pActNum)
         *pActNum = *pSaveNum;
     m_aPreviewWIN.SetNumRule(pActNum.get());
-
-    SfxObjectShell* pShell;
-    if (SfxItemState::SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem)
-        || (nullptr != (pShell = SfxObjectShell::Current())
-            && nullptr != (pItem = pShell->GetItem(SID_HTML_MODE))))
-    {
-        sal_uInt16 nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-        bHTMLMode = 0 != (nHtmlMode & HTMLMODE_ON);
-    }
 
     bool bContinuous = pActNum->IsFeatureSupported(SvxNumRuleFlags::CONTINUOUS);
 

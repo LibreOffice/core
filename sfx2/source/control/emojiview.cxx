@@ -190,7 +190,6 @@ void EmojiView::KeyInput( const KeyEvent& rKEvt )
             if (!pItem->isSelected())
             {
                 pItem->setSelection(true);
-                maItemStateHdl.Call(pItem);
             }
         }
 

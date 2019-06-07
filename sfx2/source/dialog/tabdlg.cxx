@@ -97,12 +97,10 @@ typedef std::vector<Data_Impl*> SfxTabDlgData_Impl;
 
 struct TabDlg_Impl
 {
-    bool                bModal          : 1,
-                        bHideResetBtn   : 1;
+    bool                bHideResetBtn   : 1;
     SfxTabDlgData_Impl  aData;
 
     explicit TabDlg_Impl( sal_uInt8 nCnt ) :
-        bModal          ( true ),
         bHideResetBtn   ( false )
     {
         aData.reserve( nCnt );

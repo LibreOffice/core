@@ -36,7 +36,7 @@
 
 #define MNI_OPEN               1
 #define MNI_EDIT               2
-#define MNI_DEFAULT_TEMPLATE   3
+//#define MNI_DEFAULT_TEMPLATE   3
 #define MNI_DELETE             4
 #define MNI_RENAME             5
 
@@ -182,8 +182,6 @@ void TemplateLocalView::showAllTemplates()
     mnCurRegionId = 0;
 
     insertItems(maAllTemplates, false, true);
-
-    maOpenRegionHdl.Call(nullptr);
 }
 
 void TemplateLocalView::showRegion(TemplateContainerItem const *pItem)
@@ -191,8 +189,6 @@ void TemplateLocalView::showRegion(TemplateContainerItem const *pItem)
     mnCurRegionId = pItem->mnRegionId+1;
 
     insertItems(pItem->maTemplates);
-
-    maOpenRegionHdl.Call(nullptr);
 }
 
 TemplateContainerItem* TemplateLocalView::getRegion(OUString const & rName)
@@ -240,12 +236,8 @@ IMPL_LINK(TemplateLocalView, ContextMenuSelectHdl, Menu*, pMenu, bool)
         if (xQueryDlg->run() != RET_YES)
             break;
 
-        maDeleteTemplateHdl.Call(maSelectedItem);
         reload();
     }
-        break;
-    case MNI_DEFAULT_TEMPLATE:
-        maDefaultTemplateHdl.Call(maSelectedItem);
         break;
     default:
         break;
@@ -372,7 +364,6 @@ void TemplateLocalView::Command( const CommandEvent& rCEvt )
                 {
                     deselectItems();
                     pItem->setSelection(true);
-                    maItemStateHdl.Call(pItem);
                     tools::Rectangle aRect = pItem->getDrawArea();
                     maPosition = aRect.Center();
                     maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
@@ -397,7 +388,6 @@ void TemplateLocalView::KeyInput( const KeyEvent& rKEvt )
             if (!pItem->isSelected())
             {
                 pItem->setSelection(true);
-                maItemStateHdl.Call(pItem);
             }
         }
 
@@ -412,16 +402,6 @@ void TemplateLocalView::KeyInput( const KeyEvent& rKEvt )
         if (xQueryDlg->run() != RET_YES)
             return;
 
-        //copy to avoid changing filtered item list during deletion
-        ThumbnailValueItemList mFilteredItemListCopy = mFilteredItemList;
-
-        for (ThumbnailViewItem* pItem : mFilteredItemListCopy)
-        {
-            if (pItem->isSelected())
-            {
-                maDeleteTemplateHdl.Call(pItem);
-            }
-        }
         reload();
     }
 

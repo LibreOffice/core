@@ -1330,7 +1330,6 @@ public:
 
 class CopyTextAttrsFromClipHandler
 {
-    sc::CopyFromClipContext& mrCxt;
     sc::CellTextAttrStoreType& mrAttrs;
     size_t const mnDelta;
     sc::ColumnBlockPosition maDestBlockPos;
@@ -1339,10 +1338,9 @@ class CopyTextAttrsFromClipHandler
 public:
     CopyTextAttrsFromClipHandler( sc::CopyFromClipContext& rCxt, sc::CellTextAttrStoreType& rAttrs,
                                   ScColumn& rDestCol, SCTAB nDestTab, SCCOL nDestCol, size_t nDelta ) :
-        mrCxt( rCxt ),
         mrAttrs(rAttrs),
         mnDelta(nDelta),
-        mpDestBlockPos(mrCxt.getBlockPosition(nDestTab, nDestCol))
+        mpDestBlockPos(rCxt.getBlockPosition(nDestTab, nDestCol))
     {
         if (mpDestBlockPos)
             maDestBlockPos = *mpDestBlockPos;

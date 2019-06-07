@@ -62,10 +62,6 @@ public:
 /// Class for the representation of Strings depending on the font.
 class SAL_WARN_UNUSED SvLBoxColorString : public SvLBoxString
 {
-private:
-
-    Color           aPrivColor;
-
 public:
                     SvLBoxColorString();
                     virtual ~SvLBoxColorString() override;

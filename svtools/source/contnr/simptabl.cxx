@@ -350,13 +350,6 @@ void SvSimpleTable::HBarEndDrag()
 }
 
 
-void SvSimpleTable::Command( const CommandEvent& rCEvt )
-{
-    aCEvt=rCEvt;
-    aCommandLink.Call(this);
-    SvHeaderTabListBox::Command(rCEvt);
-}
-
 IMPL_LINK( SvSimpleTable, StartDragHdl, HeaderBar*, pCtr, void)
 {
     if(pCtr==aHeaderBar.get())
