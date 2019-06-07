@@ -12,7 +12,7 @@
 namespace vcl
 {
 BufferDevice::BufferDevice(const VclPtr<vcl::Window>& pWindow, vcl::RenderContext& rRenderContext)
-    : m_pBuffer(VclPtr<VirtualDevice>::Create())
+    : m_pBuffer(VclPtr<VirtualDevice>::Create(rRenderContext))
     , m_pWindow(pWindow)
     , m_rRenderContext(rRenderContext)
 {
