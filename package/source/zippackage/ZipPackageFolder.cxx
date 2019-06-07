@@ -287,8 +287,6 @@ void ZipPackageFolder::saveContents(
         sal_Int32 nPBKDF2IterationCount,
         const rtlRandomPool &rRandomPool ) const
 {
-    bool bWritingFailed = false;
-
     if ( maContents.empty() && !rPath.isEmpty() && m_nFormat != embed::StorageFormats::OFOPXML )
     {
         // it is an empty subfolder, use workaround to store it
@@ -305,11 +303,11 @@ void ZipPackageFolder::saveContents(
         }
         catch ( ZipException& )
         {
-            bWritingFailed = true;
+            throw uno::RuntimeException( THROW_WHERE );
         }
         catch ( IOException& )
         {
-            bWritingFailed = true;
+            throw uno::RuntimeException( THROW_WHERE );
         }
     }
 
@@ -322,8 +320,11 @@ void ZipPackageFolder::saveContents(
         if ( aIter != maContents.end() && !(*aIter).second->bFolder )
         {
             bMimeTypeStreamStored = true;
-            bWritingFailed = !aIter->second->pStream->saveChild(
-                rPath + aIter->first, rManList, rZipOut, rEncryptionKey, nPBKDF2IterationCount, rRandomPool );
+            if( !aIter->second->pStream->saveChild(
+                rPath + aIter->first, rManList, rZipOut, rEncryptionKey, nPBKDF2IterationCount, rRandomPool ))
+            {
+                throw uno::RuntimeException( THROW_WHERE );
+            }
         }
     }
 
@@ -335,19 +336,22 @@ void ZipPackageFolder::saveContents(
         {
             if (rInfo.bFolder)
             {
-                bWritingFailed = !rInfo.pFolder->saveChild(
-                    rPath + rShortName, rManList, rZipOut, rEncryptionKey, nPBKDF2IterationCount, rRandomPool );
+                if( !rInfo.pFolder->saveChild(
+                    rPath + rShortName, rManList, rZipOut, rEncryptionKey, nPBKDF2IterationCount, rRandomPool ))
+                {
+                    throw uno::RuntimeException( THROW_WHERE );
+                }
             }
             else
             {
-                bWritingFailed = !rInfo.pStream->saveChild(
-                    rPath + rShortName, rManList, rZipOut, rEncryptionKey, nPBKDF2IterationCount, rRandomPool );
+                if( !rInfo.pStream->saveChild(
+                    rPath + rShortName, rManList, rZipOut, rEncryptionKey, nPBKDF2IterationCount, rRandomPool ))
+                {
+                    throw uno::RuntimeException( THROW_WHERE );
+                }
             }
         }
     }
-
-    if( bWritingFailed )
-        throw uno::RuntimeException(THROW_WHERE );
 }
 
 sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
