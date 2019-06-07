@@ -31,6 +31,7 @@
 #include <Qt5Menu.hxx>
 #include <Qt5Object.hxx>
 #include <Qt5OpenGLContext.hxx>
+#include "Qt5SvpVirtualDevice.hxx"
 #include <Qt5System.hxx>
 #include <Qt5Timer.hxx>
 #include <Qt5VirtualDevice.hxx>
@@ -283,10 +284,10 @@ Qt5Instance::CreateVirtualDevice(SalGraphics* pGraphics, long& nDX, long& nDY, D
 {
     if (m_bUseCairo)
     {
-        SvpSalGraphics* pSvpSalGraphics = dynamic_cast<SvpSalGraphics*>(pGraphics);
+        SvpSalGraphics* pSvpSalGraphics = dynamic_cast<Qt5SvpGraphics*>(pGraphics);
         assert(pSvpSalGraphics);
         std::unique_ptr<SalVirtualDevice> pVD(
-            new SvpSalVirtualDevice(eFormat, pSvpSalGraphics->getSurface()));
+            new Qt5SvpVirtualDevice(eFormat, pSvpSalGraphics->getSurface()));
         pVD->SetSize(nDX, nDY);
         return pVD;
     }

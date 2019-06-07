@@ -30,10 +30,6 @@ class KDE5SalInstance final : public Qt5Instance
 
 public:
     explicit KDE5SalInstance(std::unique_ptr<QApplication>& pQApp);
-
-    std::unique_ptr<SalVirtualDevice>
-    CreateVirtualDevice(SalGraphics*, long&, long&, DeviceFormat,
-                        const SystemGraphicsData* = nullptr) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

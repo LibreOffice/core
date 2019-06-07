@@ -257,7 +257,7 @@ SalGraphics* Qt5Frame::AcquireGraphics()
     {
         if (!m_pOurSvpGraphics.get() || m_bGraphicsInvalid)
         {
-            m_pOurSvpGraphics.reset(new Qt5SvpGraphics(m_pQWidget));
+            m_pOurSvpGraphics.reset(new Qt5SvpGraphics(this));
             InitQt5SvpGraphics(m_pOurSvpGraphics.get());
             m_bGraphicsInvalid = false;
         }
