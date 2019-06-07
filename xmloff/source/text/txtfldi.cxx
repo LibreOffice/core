@@ -3331,6 +3331,12 @@ SvXMLImportContextRef XMLAnnotationImportContext::CreateChildContext(
         pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
                                         rLocalName, aInitialsBuffer);
     }
+    else if( XML_NAMESPACE_DC == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix )
+    {
+        if( IsXMLToken( rLocalName, XML_RESOLVED ) )
+            pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
+                                            rLocalName, aResolvedBuffer);
+    }
 
     if( !pContext )
     {
@@ -3467,6 +3473,14 @@ void XMLAnnotationImportContext::PrepareField(
     // import (possibly empty) initials
     OUString sInitials( aInitialsBuffer.makeStringAndClear() );
     xPropertySet->setPropertyValue("Initials", makeAny(sInitials));
+
+    // import resolved flag
+    OUString sResolved( aResolvedBuffer.makeStringAndClear() );
+    if(sResolved == "Resolved") {
+        xPropertySet->setPropertyValue("Resolved", makeAny(true));
+    } else {
+        xPropertySet->setPropertyValue("Resolved", makeAny(false));
+    }
 
     util::DateTime aDateTime;
     if (::sax::Converter::parseDateTime(aDateTime,
