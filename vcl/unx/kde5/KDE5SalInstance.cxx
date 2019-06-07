@@ -35,7 +35,7 @@
 #include "KDE5FilePicker.hxx"
 #include "KDE5SalData.hxx"
 #include "KDE5SalInstance.hxx"
-#include "KDE5SalFrame.hxx"
+#include "KDE5SalVirtualDevice.hxx"
 
 using namespace com::sun::star;
 
@@ -88,6 +88,22 @@ KDE5SalInstance::createFolderPicker(const uno::Reference<uno::XComponentContext>
 }
 
 bool KDE5SalInstance::IsMainThread() const { return qApp->thread() == QThread::currentThread(); }
+
+std::unique_ptr<SalVirtualDevice> KDE5SalInstance::CreateVirtualDevice(SalGraphics* pGraphics,
+                                                                       long& nDX, long& nDY,
+                                                                       DeviceFormat eFormat,
+                                                                       const SystemGraphicsData*)
+{
+    std::unique_ptr<SalVirtualDevice> pVD;
+    assert(pGraphics);
+    RunInMainThread([&]() {
+        KDE5SalGraphics* pKDE5Graphics = dynamic_cast<KDE5SalGraphics*>(pGraphics);
+        assert(pKDE5Graphics);
+        pVD.reset(new KDE5SalVirtualDevice(eFormat, pKDE5Graphics->getSurface()));
+        pVD->SetSize(nDX, nDY);
+    });
+    return pVD;
+}
 
 extern "C" {
 VCLPLUG_KDE5_PUBLIC SalInstance* create_SalInstance()

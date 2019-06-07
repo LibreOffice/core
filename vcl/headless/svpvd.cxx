@@ -45,12 +45,16 @@ SvpSalVirtualDevice::~SvpSalVirtualDevice()
     cairo_surface_destroy(m_pRefSurface);
 }
 
+SvpSalGraphics* SvpSalVirtualDevice::AddGraphics(SvpSalGraphics* pGraphics)
+{
+    pGraphics->setSurface(m_pSurface, m_aFrameSize);
+    m_aGraphics.push_back(pGraphics);
+    return pGraphics;
+}
+
 SalGraphics* SvpSalVirtualDevice::AcquireGraphics()
 {
-    SvpSalGraphics* pGraphics = new SvpSalGraphics();
-    pGraphics->setSurface(m_pSurface, m_aFrameSize);
-    m_aGraphics.push_back( pGraphics );
-    return pGraphics;
+    return AddGraphics(new SvpSalGraphics());
 }
 
 void SvpSalVirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
