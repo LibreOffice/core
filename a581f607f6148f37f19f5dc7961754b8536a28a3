@@ -123,6 +123,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_e6406838",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-06-07T11:37:08Z",
+      "side": 1,
+      "message": "https://opengrok.libreoffice.org/xref/core/include/rtl/ustring.hxx?r\u003d20ea90a5#2987",
+      "parentUuid": "3fa0c359_65ad3130",
+      "revId": "a581f607f6148f37f19f5dc7961754b8536a28a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_bb95a0e6",
         "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
         "patchSetId": 9
