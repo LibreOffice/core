@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_a0124708",
+        "filename": "vcl/qt5/Qt5Object.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-07T06:04:37Z",
+      "side": 1,
+      "message": "This assert triggers when I open the attachment of tdf#120452 (slide with video).",
+      "range": {
+        "startLine": 116,
+        "startChar": 1,
+        "endLine": 116,
+        "endChar": 52
+      },
+      "revId": "e1b9e21d196d570efe933d96eaa70aeef593099d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
