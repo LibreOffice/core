@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_e60dc83e",
+        "filename": "jvmfwk/plugins/sunmajor/pluginlib/util.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-07T20:14:18Z",
+      "side": 1,
+      "message": "this change is unsound, see https://gerrit.libreoffice.org/#/c/73679/\u003e \"Fix swapping of vector elements\"",
+      "revId": "edc85fb55f8adc30a1416c6c854c89097060fb21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
