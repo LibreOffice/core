@@ -754,7 +754,7 @@ SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
 
 SwGrfNumPortion::SwGrfNumPortion(
         const OUString& rGraphicFollowedBy,
-        const SvxBrushItem* pGrfBrush,
+        const SvxBrushItem* pGrfBrush, OUString const & referer,
         const SwFormatVertOrient* pGrfOrient, const Size& rGrfSize,
         const bool bLft, const bool bCntr, const sal_uInt16 nMinDst,
         const bool bLabelAlignmentPosAndSpaceModeActive ) :
@@ -768,7 +768,7 @@ SwGrfNumPortion::SwGrfNumPortion(
     if( pGrfBrush )
     {
         *pBrush = *pGrfBrush;
-        const Graphic* pGraph = pGrfBrush->GetGraphic();
+        const Graphic* pGraph = pGrfBrush->GetGraphic(referer);
         if( pGraph )
             SetAnimated( pGraph->IsAnimated() );
         else
