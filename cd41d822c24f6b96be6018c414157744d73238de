@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_a6e6e043",
+        "filename": "sfx2/source/doc/objmisc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1352,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-07T13:16:49Z",
+      "side": 1,
+      "message": "depending on whether or not rScriptURL has ever been passed through normalizing INetURLObject, it might be safer to check with startsWithIgnoreAsciiCase to catch casing variations of the \"vnd.sun.star.script\" URL schema (no idea if the \"LibreLogo\" payload part is case sensitive, but shouldn\u0027t hurt in practice anyway to check it case-insensitively)",
+      "revId": "cd41d822c24f6b96be6018c414157744d73238de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
