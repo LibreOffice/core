@@ -62,13 +62,10 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
 
     bool bLastWidthModified : 1;
     bool bModified : 1;
-    bool bPreset : 1;
     bool bAutomaticCharStyles : 1;
-    bool bHTMLMode : 1;
     bool bInInitControl : 1; // workaround for Modify-error, is said to be corrected from 391 on
     bool bLabelAlignmentPosAndSpaceModeActive;
     bool bApplyToMaster;
-    bool bIsSlideScope;
 
     std::vector<OUString> aGrfNames;
     vcl::Font aActBulletFont;
@@ -78,7 +75,6 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
     weld::Window* p_Window;
     sal_uInt16 nNumItemId;
     MapUnit eCoreUnit;
-    ::sd::View* p_View;
 
     SvxNumberingPreview m_aPreviewWIN;
     std::unique_ptr<weld::Widget> m_xGrid;

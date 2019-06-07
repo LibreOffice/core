@@ -5,9 +5,9 @@ avmedia/source/vlc/wrapper/Types.hxx:44
 avmedia/source/vlc/wrapper/Types.hxx:45
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:43:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo5/avmedia/source/vlc/wrapper/Types.hxx:43:7)
 avmedia/source/vlc/wrapper/Types.hxx:47
-    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:41:5)
+    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo5/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
 basctl/source/inc/dlged.hxx:122
@@ -52,23 +52,13 @@ cui/source/dialogs/colorpicker.cxx:721
     cui::ColorPickerDialog m_xColorField std::unique_ptr<weld::CustomWeld>
 cui/source/dialogs/colorpicker.cxx:723
     cui::ColorPickerDialog m_xColorPreview std::unique_ptr<weld::CustomWeld>
-cui/source/inc/align.hxx:92
+cui/source/inc/align.hxx:102
     svx::AlignmentTabPage m_xBoxDirection std::unique_ptr<weld::Widget>
 cui/source/inc/cfg.hxx:576
     SvxNewToolbarDialog m_xBtnOK std::unique_ptr<weld::Button>
 cui/source/inc/cfg.hxx:609
     SvxIconSelectorDialog m_xTbSymbolWin std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuicharmap.hxx:100
-    SvxCharacterMap m_xShowChar std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuicharmap.hxx:101
-    SvxCharacterMap m_xRecentCharView std::unique_ptr<weld::CustomWeld> [16]
-cui/source/inc/cuicharmap.hxx:102
-    SvxCharacterMap m_xFavCharView std::unique_ptr<weld::CustomWeld> [16]
-cui/source/inc/cuicharmap.hxx:104
-    SvxCharacterMap m_xShowSetArea std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuicharmap.hxx:106
-    SvxCharacterMap m_xSearchSetArea std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuigaldlg.hxx:244
+cui/source/inc/cuigaldlg.hxx:245
     TPGalleryThemeProperties m_xWndPreview std::unique_ptr<weld::CustomWeld>
 cui/source/inc/cuigrfflt.hxx:78
     GraphicFilterDialog mxPreview std::unique_ptr<weld::CustomWeld>
@@ -138,10 +128,18 @@ filter/source/xsltdialog/xmlfiltertabpagebasic.hxx:36
     XMLFilterTabPageBasic m_xContainer std::unique_ptr<weld::Widget>
 filter/source/xsltdialog/xmlfiltertabpagexslt.hxx:48
     XMLFilterTabPageXSLT m_xContainer std::unique_ptr<weld::Widget>
-formula/source/ui/dlg/formula.cxx:151
-    formula::FormulaDlg_Impl m_rParent weld::Builder &
-helpcompiler/inc/HelpCompiler.hxx:206
+helpcompiler/inc/HelpCompiler.hxx:197
     HelpCompiler lang const std::string
+include/cui/cuicharmap.hxx:103
+    SvxCharacterMap m_xShowChar std::unique_ptr<weld::CustomWeld>
+include/cui/cuicharmap.hxx:104
+    SvxCharacterMap m_xRecentCharView std::unique_ptr<weld::CustomWeld> [16]
+include/cui/cuicharmap.hxx:105
+    SvxCharacterMap m_xFavCharView std::unique_ptr<weld::CustomWeld> [16]
+include/cui/cuicharmap.hxx:107
+    SvxCharacterMap m_xShowSetArea std::unique_ptr<weld::CustomWeld>
+include/cui/cuicharmap.hxx:109
+    SvxCharacterMap m_xSearchSetArea std::unique_ptr<weld::CustomWeld>
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:58
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
 include/editeng/unotext.hxx:604
@@ -154,6 +152,12 @@ include/oox/vml/vmlshapecontext.hxx:116
     oox::vml::ShapeTypeContext m_pShapeType std::shared_ptr<ShapeType>
 include/registry/registry.hxx:35
     Registry_Api acquire void (*)(RegHandle)
+include/sfx2/dinfdlg.hxx:479
+    CmisValue m_xFrame std::unique_ptr<weld::Frame>
+include/sfx2/dinfdlg.hxx:488
+    CmisDateTime m_xFrame std::unique_ptr<weld::Frame>
+include/sfx2/dinfdlg.hxx:498
+    CmisYesNo m_xFrame std::unique_ptr<weld::Frame>
 include/sfx2/mgetempl.hxx:63
     SfxManageStyleSheetPage m_xNameFt std::unique_ptr<weld::Label>
 include/sfx2/msg.hxx:117
@@ -300,8 +304,12 @@ include/svx/colorwindow.hxx:133
     ColorWindow mxColorSetWin std::unique_ptr<weld::CustomWeld>
 include/svx/colorwindow.hxx:134
     ColorWindow mxRecentColorSetWin std::unique_ptr<weld::CustomWeld>
-include/svx/hdft.hxx:86
+include/svx/hdft.hxx:84
     SvxHFPage m_xBspWin std::unique_ptr<weld::CustomWeld>
+include/svx/imapdlg.hxx:94
+    SvxIMapDlg aIMapItem class SvxIMapDlgItem
+include/svx/imapdlg.hxx:108
+    SvxIMapDlg m_xIMapWndWeld std::unique_ptr<weld::CustomWeld>
 include/svx/rubydialog.hxx:67
     SvxRubyDialog m_xLeftFT std::unique_ptr<weld::Label>
 include/svx/rubydialog.hxx:68
@@ -326,11 +334,11 @@ include/xmloff/formlayerexport.hxx:173
     xmloff::OOfficeFormsExport m_pImpl std::unique_ptr<OFormsRootExport>
 libreofficekit/qa/gtktiledviewer/gtv-application-window.cxx:35
     GtvApplicationWindowPrivate lokDialog GtkWidget *
-libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:50
+libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:52
     GtvApplicationWindow parent_instance GtkApplicationWindow
-libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:54
+libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:56
     GtvApplicationWindow doctype LibreOfficeKitDocumentType
-libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:73
+libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:75
     GtvApplicationWindowClass parentClass GtkApplicationWindowClass
 libreofficekit/qa/gtktiledviewer/gtv-application.hxx:26
     GtvApplication parent GtkApplication
@@ -354,7 +362,7 @@ libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:36
     GtvMainToolbarClass parentClass GtkBoxClass
 lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char [2]
-opencl/source/openclwrapper.cxx:304
+opencl/source/openclwrapper.cxx:300
     openclwrapper::(anonymous namespace)::OpenCLEnv mpOclCmdQueue cl_command_queue [1]
 pyuno/source/module/pyuno_callable.cxx:43
     pyuno::PyUNO_callable ob_base PyObject
@@ -444,11 +452,11 @@ sc/source/filter/inc/sheetdatacontext.hxx:62
     oox::xls::SheetDataContext aReleaser const class SolarMutexReleaser
 sc/source/ui/inc/colorformat.hxx:32
     ScDataBarSettingsDlg mxBtnCancel std::unique_ptr<weld::Button>
-sc/source/ui/inc/consdlg.hxx:73
+sc/source/ui/inc/consdlg.hxx:71
     ScConsolidateDlg m_xExpander std::unique_ptr<weld::Expander>
 sc/source/ui/inc/crdlg.hxx:32
     ScColOrRowDlg m_xBtnRows std::unique_ptr<weld::RadioButton>
-sc/source/ui/inc/dbnamdlg.hxx:91
+sc/source/ui/inc/dbnamdlg.hxx:86
     ScDbNameDlg m_xExpander std::unique_ptr<weld::Expander>
 sc/source/ui/inc/delcodlg.hxx:39
     ScDeleteContentsDlg m_xBtnOk std::unique_ptr<weld::Button>
@@ -480,26 +488,36 @@ sc/source/ui/inc/scuiimoptdlg.hxx:63
     ScImportOptionsDlg m_xBtnOk std::unique_ptr<weld::Button>
 sc/source/ui/inc/scuitphfedit.hxx:94
     ScHFEditPage m_xWndCenterWnd std::unique_ptr<weld::CustomWeld>
-sd/source/ui/animations/CustomAnimationDialog.cxx:1736
+sd/source/ui/animations/CustomAnimationDialog.cxx:1738
     sd::CustomAnimationEffectTabPage mxContainer std::unique_ptr<weld::Container>
-sd/source/ui/animations/CustomAnimationDialog.cxx:1742
+sd/source/ui/animations/CustomAnimationDialog.cxx:1744
     sd::CustomAnimationEffectTabPage mxFTSound std::unique_ptr<weld::Label>
-sd/source/ui/animations/CustomAnimationDialog.cxx:1745
+sd/source/ui/animations/CustomAnimationDialog.cxx:1747
     sd::CustomAnimationEffectTabPage mxFTAfterEffect std::unique_ptr<weld::Label>
-sd/source/ui/animations/CustomAnimationDialog.cxx:2266
+sd/source/ui/animations/CustomAnimationDialog.cxx:2268
     sd::CustomAnimationDurationTabPage mxContainer std::unique_ptr<weld::Container>
-sd/source/ui/animations/CustomAnimationDialog.cxx:2267
-    sd::CustomAnimationDurationTabPage mxFTStart std::unique_ptr<weld::Label>
 sd/source/ui/animations/CustomAnimationDialog.cxx:2269
+    sd::CustomAnimationDurationTabPage mxFTStart std::unique_ptr<weld::Label>
+sd/source/ui/animations/CustomAnimationDialog.cxx:2271
     sd::CustomAnimationDurationTabPage mxFTStartDelay std::unique_ptr<weld::Label>
-sd/source/ui/animations/CustomAnimationDialog.cxx:2632
+sd/source/ui/animations/CustomAnimationDialog.cxx:2634
     sd::CustomAnimationTextAnimTabPage mxContainer std::unique_ptr<weld::Container>
-sd/source/ui/animations/CustomAnimationDialog.cxx:2633
+sd/source/ui/animations/CustomAnimationDialog.cxx:2635
     sd::CustomAnimationTextAnimTabPage mxFTGroupText std::unique_ptr<weld::Label>
 sd/source/ui/animations/CustomAnimationDialog.hxx:141
     sd::SdPropertySubControl mxContainer std::unique_ptr<weld::Container>
+sd/source/ui/dlg/headerfooterdlg.cxx:122
+    sd::HeaderFooterTabPage mxContainer std::unique_ptr<weld::Container>
+sd/source/ui/dlg/headerfooterdlg.cxx:142
+    sd::HeaderFooterTabPage mxCTPreviewWin std::unique_ptr<weld::CustomWeld>
 sd/source/ui/dlg/PhotoAlbumDialog.hxx:51
     sd::SdPhotoAlbumDialog m_xImg std::unique_ptr<weld::CustomWeld>
+sd/source/ui/inc/BulletAndPositionDlg.hxx:71
+    SvxBulletAndPositionDlg bIsSlideScope _Bool
+sd/source/ui/inc/BulletAndPositionDlg.hxx:81
+    SvxBulletAndPositionDlg p_View ::sd::View *
+sd/source/ui/inc/BulletAndPositionDlg.hxx:111
+    SvxBulletAndPositionDlg m_xIndentFT std::unique_ptr<weld::Label>
 sd/source/ui/inc/custsdlg.hxx:42
     SdCustomShowDlg m_xBtnHelp std::unique_ptr<weld::Button>
 sd/source/ui/inc/custsdlg.hxx:44
@@ -530,6 +548,8 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     PDFGrammar::definition array rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     PDFGrammar::definition value rule<ScannerT>
+sfx2/source/dialog/tabdlg.cxx:100
+    TabDlg_Impl bModal _Bool
 sfx2/source/doc/doctempl.cxx:117
     DocTempl::DocTempl_EntryData_Impl mxObjShell const class SfxObjectShellLock
 sfx2/source/inc/sfxpicklist.hxx:33
@@ -566,22 +586,28 @@ starmath/inc/dialog.hxx:416
     SmSymDefineDialog m_xCharsetDisplayArea std::unique_ptr<weld::CustomWeld>
 starmath/inc/smmod.hxx:69
     SmModule mpLocSymbolData std::unique_ptr<SmLocalizedSymbolData>
-starmath/inc/view.hxx:217
+starmath/inc/view.hxx:216
     SmViewShell maGraphicController const class SmGraphicController
 starmath/source/accessibility.hxx:268
     SmEditSource rEditAcc class SmEditAccessible &
-svl/source/crypto/cryptosign.cxx:131
+svl/source/crypto/cryptosign.cxx:124
     (anonymous namespace)::Extension extnID const SECItem
-svl/source/crypto/cryptosign.cxx:132
+svl/source/crypto/cryptosign.cxx:125
     (anonymous namespace)::Extension critical const SECItem
-svl/source/crypto/cryptosign.cxx:133
+svl/source/crypto/cryptosign.cxx:126
     (anonymous namespace)::Extension extnValue const SECItem
-svl/source/crypto/cryptosign.cxx:291
+svl/source/crypto/cryptosign.cxx:284
     (anonymous namespace)::PKIStatusInfo statusString SECItem
-svl/source/crypto/cryptosign.cxx:292
+svl/source/crypto/cryptosign.cxx:285
     (anonymous namespace)::PKIStatusInfo failInfo SECItem
 svtools/source/filter/exportdialog.hxx:124
     ExportDialog mxEncoding std::unique_ptr<weld::Widget>
+svx/source/dialog/contimp.hxx:75
+    SvxSuperContourDlg aContourItem class SvxContourDlgItem
+svx/source/dialog/contimp.hxx:89
+    SvxSuperContourDlg m_xStbStatusColorWeld std::unique_ptr<weld::CustomWeld>
+svx/source/dialog/contimp.hxx:90
+    SvxSuperContourDlg m_xContourWndWeld std::unique_ptr<weld::CustomWeld>
 svx/source/inc/datanavi.hxx:405
     svxform::AddDataItemDialog m_xDataTypeFT std::unique_ptr<weld::Label>
 svx/source/inc/datanavi.hxx:588
@@ -592,13 +618,13 @@ svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.hxx:154
     textconversiondlgs::ChineseDictionaryDialog m_xFT_Mapping std::unique_ptr<weld::Label>
 svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.hxx:157
     textconversiondlgs::ChineseDictionaryDialog m_xFT_Property std::unique_ptr<weld::Label>
-sw/qa/extras/layout/layout.cxx:2541
+sw/qa/extras/layout/layout.cxx:2583
       class SvtSysLocaleOptions &
 sw/source/core/crsr/crbm.cxx:66
     (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
 sw/source/core/frmedt/fetab.cxx:78
     TableWait m_pWait const std::unique_ptr<SwWait>
-sw/source/core/layout/dbg_lay.cxx:171
+sw/source/core/layout/dbg_lay.cxx:172
     SwImplEnterLeave nAction const enum DbgAction
 sw/source/ui/config/mailconfigpage.cxx:54
     SwTestAccountSettingsDialog m_xEstablish std::unique_ptr<weld::Label>
@@ -636,7 +662,7 @@ sw/source/uibase/inc/cption.hxx:56
     SwCaptionDialog m_xPosText std::unique_ptr<weld::Label>
 sw/source/uibase/inc/cption.hxx:61
     SwCaptionDialog m_xPreview std::unique_ptr<weld::CustomWeld>
-sw/source/uibase/inc/dbui.hxx:31
+sw/source/uibase/inc/dbui.hxx:27
     PrintMonitor m_xDocName std::unique_ptr<weld::Label>
 sw/source/uibase/inc/drpcps.hxx:133
     SwDropCapsPage m_xPict std::unique_ptr<weld::CustomWeld>
@@ -666,7 +692,9 @@ sw/source/uibase/inc/splittbl.hxx:30
     SwSplitTableDlg m_xHorzBox std::unique_ptr<weld::RadioButton>
 sw/source/uibase/inc/splittbl.hxx:31
     SwSplitTableDlg m_xContentCopyRB std::unique_ptr<weld::RadioButton>
-sw/source/uibase/inc/swuicnttab.hxx:259
+sw/source/uibase/inc/swuicnttab.hxx:242
+    SwTokenWindow m_aAdjustPositionsIdle class Idle
+sw/source/uibase/inc/swuicnttab.hxx:247
     SwTokenWindow m_xContainer std::unique_ptr<weld::Container>
 sw/source/uibase/inc/uivwimp.hxx:95
     SwView_Impl xTmpSelDocSh const class SfxObjectShellLock
@@ -682,10 +710,20 @@ uui/source/unknownauthdlg.hxx:36
     UnknownAuthDialog m_xOptionButtonDontAccept std::unique_ptr<weld::RadioButton>
 vcl/inc/opengl/zone.hxx:46
     OpenGLVCLContextZone aZone const class OpenGLZone
+vcl/inc/qt5/Qt5AccessibleEventListener.hxx:34
+    Qt5AccessibleEventListener m_xAccessible css::uno::Reference<css::accessibility::XAccessible>
+vcl/inc/qt5/Qt5FilePicker.hxx:82
+    Qt5FilePicker m_pFilenameLabel class QLabel *
+vcl/inc/qt5/Qt5FilePicker.hxx:83
+    Qt5FilePicker m_pFilterLabel class QLabel *
+vcl/inc/qt5/Qt5Graphics.hxx:59
+    Qt5Graphics m_focusedButton std::unique_ptr<QPushButton>
+vcl/inc/qt5/Qt5Graphics.hxx:60
+    Qt5Graphics m_image std::unique_ptr<QImage>
+vcl/inc/qt5/Qt5Graphics.hxx:61
+    Qt5Graphics m_lastPopupRect class QRect
 vcl/inc/salprn.hxx:45
     SalPrinterQueueInfo mpPortName std::unique_ptr<OUString>
-vcl/inc/widgetdraw/WidgetDefinition.hxx:191
-    vcl::WidgetDefinitionPart msOrientation class rtl::OString
 vcl/inc/WidgetThemeLibrary.hxx:87
     vcl::ControlDrawParameters nSize uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:88
@@ -696,7 +734,7 @@ vcl/inc/WidgetThemeLibrary.hxx:90
     vcl::ControlDrawParameters eState enum ControlState
 vcl/inc/WidgetThemeLibrary.hxx:106
     vcl::WidgetThemeLibrary_t nSize uint32_t
-vcl/source/app/salvtables.cxx:843
+vcl/source/app/salvtables.cxx:957
     SalInstanceContainer m_xContainer VclPtr<vcl::Window>
 vcl/source/gdi/jobset.cxx:36
     ImplOldJobSetupData cDeviceName char [32]
@@ -708,15 +746,17 @@ vcl/unx/generic/print/prtsetup.hxx:73
     RTSPaperPage m_xContainer std::unique_ptr<weld::Widget>
 vcl/unx/generic/print/prtsetup.hxx:108
     RTSDevicePage m_xContainer std::unique_ptr<weld::Widget>
-vcl/unx/gtk3/gtk3gtkinst.cxx:3279
+vcl/unx/gtk3/gtk3gtkinst.cxx:3532
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     HyperLink atk_hyper_link const AtkHyperlink
+vcl/unx/kde5/KDE5FilePicker.hxx:34
+    KDE5FilePicker allowRemoteUrls _Bool
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:43
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
 writerperfect/inc/WPFTEncodingDialog.hxx:37
     writerperfect::WPFTEncodingDialog m_xBtnOk std::unique_ptr<weld::Button>
-xmlsecurity/inc/certificateviewer.hxx:69
+xmlsecurity/inc/certificateviewer.hxx:70
     CertificateViewerTP mxContainer std::unique_ptr<weld::Container>
 xmlsecurity/inc/macrosecurity.hxx:67
     MacroSecurityTP m_xContainer std::unique_ptr<weld::Container>

@@ -131,12 +131,9 @@ protected:
 
     Point maPosition; //store the point of click event
 
-    Link<void*,void>              maOpenRegionHdl;
     Link<ThumbnailViewItem*,void> maCreateContextMenuHdl;
     Link<ThumbnailViewItem*,void> maOpenTemplateHdl;
     Link<ThumbnailViewItem*,void> maEditTemplateHdl;
-    Link<ThumbnailViewItem*,void> maDeleteTemplateHdl;
-    Link<ThumbnailViewItem*,void> maDefaultTemplateHdl;
 
     std::unique_ptr<SfxDocumentTemplates> mpDocTemplates;
     std::vector<std::unique_ptr<TemplateContainerItem> > maRegions;

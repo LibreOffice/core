@@ -171,8 +171,6 @@ void ThumbnailView::ImplDeleteItems()
         if (pItem->isSelected())
         {
             pItem->setSelection(false);
-            maItemStateHdl.Call(pItem);
-
             // fire accessible event???
         }
 
@@ -361,8 +359,6 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
                 }
 
                 pItem->show(true);
-
-                maItemStateHdl.Call(pItem);
             }
 
             pItem->setDrawArea(::tools::Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
@@ -389,8 +385,6 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
                 }
 
                 pItem->show(false);
-
-                maItemStateHdl.Call(pItem);
             }
 
         }
@@ -657,8 +651,6 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
 
                     if (pCurItem->isVisible())
                         DrawItem(pCurItem);
-
-                    maItemStateHdl.Call(pCurItem);
                 }
             }
         }
@@ -738,8 +730,6 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 
         if (!pItem->isHighlighted())
             DrawItem(pItem);
-
-        maItemStateHdl.Call(pItem);
     }
     else if(rMEvt.GetClicks() == 1)
     {
@@ -771,8 +761,6 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 
                     if (pCurItem->isVisible())
                         DrawItem(pCurItem);
-
-                    maItemStateHdl.Call(pCurItem);
                 }
             }
 
@@ -794,8 +782,6 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 
                         if (pCurItem->isVisible())
                             DrawItem(pCurItem);
-
-                        maItemStateHdl.Call(pCurItem);
                     }
 
                     nCurPos += dir;
@@ -818,8 +804,6 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 
         if (!pItem->isHighlighted())
             DrawItem(pItem);
-
-        maItemStateHdl.Call(pItem);
 
         //fire accessible event??
     }
@@ -989,7 +973,6 @@ void ThumbnailView::RemoveItem( sal_uInt16 nItemId )
         if ((*it)->isSelected())
         {
             (*it)->setSelection(false);
-            maItemStateHdl.Call(*it);
         }
 
         delete *it;
@@ -1082,7 +1065,6 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
         return;
 
     pItem->setSelection(true);
-    maItemStateHdl.Call(pItem);
 
     if (IsReallyVisible() && IsUpdateMode())
         Invalidate();
@@ -1145,8 +1127,6 @@ void ThumbnailView::deselectItems()
         if (p->isSelected())
         {
             p->setSelection(false);
-
-            maItemStateHdl.Call(p.get());
         }
     }
 
@@ -1198,8 +1178,6 @@ void ThumbnailView::filterItems(const std::function<bool (const ThumbnailViewIte
 
                 pItem->show(false);
                 pItem->setSelection(false);
-
-                maItemStateHdl.Call(pItem);
             }
         }
     }

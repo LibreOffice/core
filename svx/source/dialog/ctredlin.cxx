@@ -67,7 +67,7 @@ void SvLBoxColorString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::Rende
     Color aColor = rRenderContext.GetTextColor();
     if (!pView->IsSelected())
     {
-        rRenderContext.SetTextColor(aPrivColor);
+        rRenderContext.SetTextColor(Color());
     }
     SvLBoxString::Paint(rPos, rDev, rRenderContext, pView, rEntry);
     rRenderContext.SetTextColor(aColor);

@@ -312,7 +312,6 @@ protected:
     Color maSelectHighlightTextColor;   ///< Color of the text of the selected and hovered item.
     double mfHighlightTransparence; ///< Transparence of the highlight.
 
-    Link<const ThumbnailViewItem*, void> maItemStateHdl;
     std::unique_ptr<ThumbnailItemAttributes> mpItemAttrs;
 
     std::function<bool (const ThumbnailViewItem*)> maFilterFunc;

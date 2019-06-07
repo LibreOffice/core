@@ -55,8 +55,6 @@ class SVT_DLLPUBLIC SvSimpleTable : public SvHeaderTabListBox
 private:
     SvSimpleTableContainer& m_rParentTableContainer;
 
-    Link<SvSimpleTable*, void> aCommandLink;
-    CommandEvent        aCEvt;
     VclPtr<HeaderBar>   aHeaderBar;
     long                nOldPos;
     sal_uInt16          nHeaderItemId;
@@ -82,8 +80,6 @@ protected:
     virtual void            HBarClick();
     void                    HBarDrag();
     void                    HBarEndDrag();
-
-    virtual void            Command( const CommandEvent& rCEvt ) override;
 
     sal_Int32               ColCompare(SvTreeListEntry*,SvTreeListEntry*);
 public:

@@ -56,7 +56,6 @@ void TemplateDefaultView::showAllTemplates()
     mnCurRegionId = 0;
 
     insertItems(maAllTemplates, false);
-    maOpenRegionHdl.Call(nullptr);
 }
 
 void TemplateDefaultView::KeyInput( const KeyEvent& rKEvt )
