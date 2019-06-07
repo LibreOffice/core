@@ -1486,135 +1486,142 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-SpellDialog">
+      <object class="GtkMenuItem" id="SpellDialogD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SpellDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-SpellOnline">
+      <object class="GtkMenuItem" id="SpellOnlineD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SpellOnline</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-ThesaurusDialog">
+      <object class="GtkMenuItem" id="ThesaurusDialogD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ThesaurusDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="MenuReview-separator1">
+      <object class="GtkSeparatorMenuItem" id="separator23">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-SetLanguageAllTextMenu">
+      <object class="GtkMenuItem" id="SetLanguageAllTextMenuD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SetLanguageAllTextMenu</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="MenuReview-separator2">
+      <object class="GtkSeparatorMenuItem" id="separator90">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-Hyphenate">
+      <object class="GtkMenuItem" id="HyphenateD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Hyphenate</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-ChineseConversion">
+      <object class="GtkMenuItem" id="ChineseConversionD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ChineseConversion</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-HangulHanjaConversion">
+      <object class="GtkMenuItem" id="HangulHanjaConversionD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:HangulHanjaConversion</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-MoreDictionaries">
+      <object class="GtkMenuItem" id="MoreDictionariesD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:MoreDictionaries</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="MenuReview-separator3">
+      <object class="GtkSeparatorMenuItem" id="separator73">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-TraceChangeMode">
+      <object class="GtkMenuItem" id="TraceChangeModeD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:TraceChangeMode</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-AcceptChanges">
+      <object class="GtkMenuItem" id="AcceptChangesD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:AcceptChanges</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="MenuReview-separator4">
+      <object class="GtkSeparatorMenuItem" id="separator79">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-InsertAnnotation">
+      <object class="GtkMenuItem" id="InsertAnnotationD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertAnnotation</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-ShowAllNotes">
+      <object class="GtkMenuItem" id="ShowAllNotesD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ShowAllNotes</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="MenuReview-separator5">
+      <object class="GtkMenuItem" id="HideAllNotesD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:HideAllNotes</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator80">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-Protect">
+      <object class="GtkMenuItem" id="ProtectD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Protect</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-CompareDocuments">
+      <object class="GtkMenuItem" id="CompareDocuments">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:CompareDocuments</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuReview-MergeDocuments">
+      <object class="GtkMenuItem" id="MergeDocumentsD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:MergeDocuments</property>
@@ -4164,10 +4171,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Home-InsertRowsAfter">
+                                  <object class="GtkToolButton" id="Home-DeleteRows">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:InsertRowsAfter</property>
+                                    <property name="action_name">.uno:DeleteRows</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -4175,10 +4182,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Home-DeleteRows">
+                                  <object class="GtkMenuToolButton" id="Home-RowOperations">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:DeleteRows</property>
+                                    <property name="action_name">.uno:RowOperations</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -4210,10 +4217,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Home-InsertColumnsAfter">
+                                  <object class="GtkToolButton" id="Home-DeleteColumns">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:InsertColumnsAfter</property>
+                                    <property name="action_name">.uno:DeleteColumns</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -4221,10 +4228,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Home-DeleteColumns">
+                                  <object class="GtkMenuToolButton" id="Home-ColumnOperations">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:DeleteColumns</property>
+                                    <property name="action_name">.uno:ColumnOperations</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
