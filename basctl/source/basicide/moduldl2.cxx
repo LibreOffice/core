@@ -97,245 +97,20 @@ public:
     }
 };
 
-// LibUserData
-class LibUserData final
-{
-private:
-    ScriptDocument m_aDocument;
-
-public:
-    explicit LibUserData(ScriptDocument const& rDocument)
-        : m_aDocument(rDocument)
-    {
-    }
-
-    const ScriptDocument& GetDocument() const { return m_aDocument; }
-};
-
-//  LibLBoxString
-class LibLBoxString : public SvLBoxString
-{
-public:
-    explicit LibLBoxString(const OUString& rTxt)
-        : SvLBoxString(rTxt)
-    {
-    }
-
-    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
-};
-
-void LibLBoxString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
-                          const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
-{
-    // Change text color if library is read only:
-    bool bReadOnly = false;
-    if (rEntry.GetUserData())
-    {
-        ScriptDocument aDocument(static_cast<LibUserData*>(rEntry.GetUserData())->GetDocument());
-
-        OUString aLibName = static_cast<const SvLBoxString&>(rEntry.GetItem(1)).GetText();
-        Reference<script::XLibraryContainer2> xModLibContainer(aDocument.getLibraryContainer(E_SCRIPTS), UNO_QUERY);
-        Reference<script::XLibraryContainer2 > xDlgLibContainer(aDocument.getLibraryContainer(E_DIALOGS), UNO_QUERY);
-        bReadOnly = (xModLibContainer.is() && xModLibContainer->hasByName(aLibName) && xModLibContainer->isLibraryReadOnly(aLibName))
-                 || (xDlgLibContainer.is() && xDlgLibContainer->hasByName(aLibName) && xDlgLibContainer->isLibraryReadOnly(aLibName));
-    }
-    if (bReadOnly)
-        rRenderContext.DrawCtrlText(rPos, GetText(), 0, -1, DrawTextFlags::Disable);
-    else
-        rRenderContext.DrawText(rPos, GetText());
-}
-
 } // namespace
 
-//  basctl::CheckBox
-CheckBox::CheckBox(vcl::Window* pParent, WinBits nStyle)
-    : SvTabListBox(pParent, nStyle)
-    , eMode(ObjectMode::Module)
-    , m_aDocument(ScriptDocument::getApplicationScriptDocument())
+namespace
 {
-    long const aTabPositions[] = { 12 };  // TabPos needs at least one...
-                                          // 12 because of the CheckBox
-    SetTabs( SAL_N_ELEMENTS(aTabPositions), aTabPositions );
-    Init();
-}
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(CheckBox, WB_TABSTOP)
-
-CheckBox::~CheckBox()
-{
-    disposeOnce();
-}
-
-void CheckBox::dispose()
-{
-    pCheckButton.reset();
-
-    // delete user data
-    SvTreeListEntry* pEntry = First();
-    while ( pEntry )
+    int FindEntry(weld::TreeView& rBox, const OUString& rName)
     {
-        delete static_cast<LibUserData*>( pEntry->GetUserData() );
-        pEntry->SetUserData( nullptr );
-        pEntry = Next( pEntry );
-    }
-    SvTabListBox::dispose();
-}
-
-void CheckBox::Init()
-{
-    pCheckButton.reset(new SvLBoxButtonData(this));
-
-    if (eMode == ObjectMode::Library)
-        EnableCheckButton( pCheckButton.get() );
-    else
-        EnableCheckButton( nullptr );
-
-    SetHighlightRange();
-}
-
-void CheckBox::SetMode (ObjectMode e)
-{
-    eMode = e;
-
-    if (eMode == ObjectMode::Library)
-        EnableCheckButton( pCheckButton.get() );
-    else
-        EnableCheckButton( nullptr );
-}
-
-SvTreeListEntry* CheckBox::DoInsertEntry( const OUString& rStr, sal_uLong nPos )
-{
-    return SvTabListBox::InsertEntryToColumn( rStr, nPos, 0 );
-}
-
-SvTreeListEntry* CheckBox::FindEntry( const OUString& rName )
-{
-    sal_uLong nCount = GetEntryCount();
-    for ( sal_uLong i = 0; i < nCount; i++ )
-    {
-        SvTreeListEntry* pEntry = GetEntry( i );
-        DBG_ASSERT( pEntry, "pEntry?!" );
-        if ( rName.equalsIgnoreAsciiCase( GetEntryText( pEntry, 0 ) ) )
-            return pEntry;
-    }
-    return nullptr;
-}
-
-void CheckBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rTxt,
-    const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind )
-{
-    SvTabListBox::InitEntry(pEntry, rTxt, rImg1, rImg2, eButtonKind);
-
-    if (eMode == ObjectMode::Module)
-    {
-        // initialize all columns with own string class (column 0 == bitmap)
-        sal_uInt16 nCount = pEntry->ItemCount();
-        for ( sal_uInt16 nCol = 1; nCol < nCount; ++nCol )
+        int nCount = rBox.n_children();
+        for (int i = 0; i < nCount; ++i)
         {
-            SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nCol ));
-            pEntry->ReplaceItem(std::make_unique<LibLBoxString>( rCol.GetText() ), nCol);
+            if (rName.equalsIgnoreAsciiCase(rBox.get_text(i, 0)))
+                return i;
         }
+        return -1;
     }
-}
-
-bool CheckBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
-{
-    if (eMode != ObjectMode::Module)
-        return false;
-
-    DBG_ASSERT( pEntry, "No entry?" );
-
-    // check, if Standard library
-    OUString aLibName = GetEntryText( pEntry, 0 );
-    if ( aLibName.equalsIgnoreAsciiCase( "Standard" ) )
-    {
-        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                       VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_CANNOTCHANGENAMESTDLIB)));
-        xErrorBox->run();
-        return false;
-    }
-
-    // check, if library is readonly
-    Reference< script::XLibraryContainer2 > xModLibContainer( m_aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
-    Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
-    if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) && !xModLibContainer->isLibraryLink( aLibName ) ) ||
-         ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
-    {
-        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                       VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_LIBISREADONLY)));
-        xErrorBox->run();
-        return false;
-    }
-
-    // i24094: Password verification necessary for renaming
-    if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && !xModLibContainer->isLibraryLoaded( aLibName ) )
-    {
-        bool bOK = true;
-        // check password
-        Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
-        if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
-        {
-            OUString aPassword;
-            Reference< script::XLibraryContainer > xModLibContainer1( xModLibContainer, UNO_QUERY );
-            bOK = QueryPassword( xModLibContainer1, aLibName, aPassword );
-        }
-        if ( !bOK )
-            return false;
-    }
-
-    // TODO: check if library is reference/link
-
-    return true;
-}
-
-bool CheckBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewName )
-{
-    bool bValid = rNewName.getLength() <= 30 && IsValidSbxName(rNewName);
-    OUString aOldName( GetEntryText( pEntry, 0 ) );
-    if ( bValid && ( aOldName != rNewName ) )
-    {
-        try
-        {
-            Reference< script::XLibraryContainer2 > xModLibContainer( m_aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
-            if ( xModLibContainer.is() )
-                xModLibContainer->renameLibrary( aOldName, rNewName );
-
-            Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
-            if ( xDlgLibContainer.is() )
-                xDlgLibContainer->renameLibrary( aOldName, rNewName );
-
-            MarkDocumentModified( m_aDocument );
-            if (SfxBindings* pBindings = GetBindingsPtr())
-            {
-                pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR );
-                pBindings->Update( SID_BASICIDE_LIBSELECTOR );
-            }
-        }
-        catch (const container::ElementExistException& )
-        {
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                           VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_SBXNAMEALLREADYUSED)));
-            xErrorBox->run();
-            return false;
-        }
-        catch (const container::NoSuchElementException& )
-        {
-            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
-            return false;
-        }
-    }
-
-    if ( !bValid )
-    {
-        OUString sWarning(rNewName.getLength() > 30 ? IDEResId(RID_STR_LIBNAMETOLONG) : IDEResId(RID_STR_BADSBXNAME));
-        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                       VclMessageType::Warning, VclButtonsType::Ok, sWarning));
-        xErrorBox->run();
-
-    }
-
-    return bValid;
 }
 
 // NewObjectDialog
@@ -424,125 +199,202 @@ ExportDialog::~ExportDialog()
 }
 
 // LibPage
-LibPage::LibPage(vcl::Window * pParent)
-    : TabPage(pParent, "LibPage",
-        "modules/BasicIDE/ui/libpage.ui")
+LibPage::LibPage(weld::Container* pParent, OrganizeDialog* pDialog)
+    : OrganizePage(pParent, "modules/BasicIDE/ui/libpage.ui", "LibPage", pDialog)
+    , m_xBasicsBox(m_xBuilder->weld_combo_box("location"))
+    , m_xLibBox(m_xBuilder->weld_tree_view("library"))
+    , m_xEditButton(m_xBuilder->weld_button("edit"))
+    , m_xPasswordButton(m_xBuilder->weld_button("password"))
+    , m_xNewLibButton(m_xBuilder->weld_button("new"))
+    , m_xInsertLibButton(m_xBuilder->weld_button("import"))
+    , m_xExportButton(m_xBuilder->weld_button("export"))
+    , m_xDelButton(m_xBuilder->weld_button("delete"))
     , m_aCurDocument(ScriptDocument::getApplicationScriptDocument())
     , m_eCurLocation(LIBRARY_LOCATION_UNKNOWN)
 {
-    get(m_pBasicsBox, "location");
-    get(m_pLibBox, "library");
-    Size aSize(m_pLibBox->LogicToPixel(Size(130, 87), MapMode(MapUnit::MapAppFont)));
-    m_pLibBox->set_height_request(aSize.Height());
-    m_pLibBox->set_width_request(aSize.Width());
-    get(m_pEditButton, "edit");
-    get(m_pPasswordButton, "password");
-    get(m_pNewLibButton, "new");
-    get(m_pInsertLibButton, "import");
-    get(m_pExportButton, "export");
-    get(m_pDelButton, "delete");
+    Size aSize(m_xLibBox->get_approximate_digit_width() * 40,
+               m_xLibBox->get_height_rows(10));
+    m_xLibBox->set_size_request(aSize.Width(), aSize.Height());
 
-    pTabDlg = nullptr;
+    m_xEditButton->connect_clicked( LINK( this, LibPage, ButtonHdl ) );
+    m_xNewLibButton->connect_clicked( LINK( this, LibPage, ButtonHdl ) );
+    m_xPasswordButton->connect_clicked( LINK( this, LibPage, ButtonHdl ) );
+    m_xExportButton->connect_clicked( LINK( this, LibPage, ButtonHdl ) );
+    m_xInsertLibButton->connect_clicked( LINK( this, LibPage, ButtonHdl ) );
+    m_xDelButton->connect_clicked( LINK( this, LibPage, ButtonHdl ) );
+    m_xLibBox->connect_changed( LINK( this, LibPage, TreeListHighlightHdl ) );
 
-    m_pEditButton->SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
-    m_pNewLibButton->SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
-    m_pPasswordButton->SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
-    m_pExportButton->SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
-    m_pInsertLibButton->SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
-    m_pDelButton->SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
-    m_pLibBox->SetSelectHdl( LINK( this, LibPage, TreeListHighlightHdl ) );
+    m_xBasicsBox->connect_changed( LINK( this, LibPage, BasicSelectHdl ) );
 
-    m_pBasicsBox->SetSelectHdl( LINK( this, LibPage, BasicSelectHdl ) );
-
-    m_pLibBox->SetMode(ObjectMode::Module);
-    m_pLibBox->EnableInplaceEditing(true);
-    m_pLibBox->SetStyle( WB_HSCROLL | WB_BORDER | WB_TABSTOP );
-
-    long const aTabPositions[] = { 30, 120 };
-    m_pLibBox->SetTabs( SAL_N_ELEMENTS(aTabPositions), aTabPositions, MapUnit::MapPixel );
+    m_xLibBox->connect_editing_started( LINK( this, LibPage, EditingEntryHdl ) );
+    m_xLibBox->connect_editing_done( LINK( this, LibPage, EditedEntryHdl ) );
 
     FillListBox();
-    m_pBasicsBox->SelectEntryPos( 0 );
+    m_xBasicsBox->set_active(0);
     SetCurLib();
 
     CheckButtons();
 }
 
-LibPage::~LibPage()
+IMPL_LINK(LibPage, EditingEntryHdl, const weld::TreeIter&, rIter, bool)
 {
-    disposeOnce();
+    // check, if Standard library
+    OUString aLibName = m_xLibBox->get_text(rIter, 0);
+
+    if ( aLibName.equalsIgnoreAsciiCase( "Standard" ) )
+    {
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_pDialog->getDialog(),
+                                                       VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_CANNOTCHANGENAMESTDLIB)));
+        xErrorBox->run();
+        return false;
+    }
+
+    // check, if library is readonly
+    Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
+    Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+    if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) && !xModLibContainer->isLibraryLink( aLibName ) ) ||
+         ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
+    {
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_pDialog->getDialog(),
+                                                       VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_LIBISREADONLY)));
+        xErrorBox->run();
+        return false;
+    }
+
+    // i24094: Password verification necessary for renaming
+    if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && !xModLibContainer->isLibraryLoaded( aLibName ) )
+    {
+        bool bOK = true;
+        // check password
+        Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
+        if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
+        {
+            OUString aPassword;
+            Reference< script::XLibraryContainer > xModLibContainer1( xModLibContainer, UNO_QUERY );
+            bOK = QueryPassword( xModLibContainer1, aLibName, aPassword );
+        }
+        if ( !bOK )
+            return false;
+    }
+
+    // TODO: check if library is reference/link
+
+    return true;
 }
 
-void LibPage::dispose()
+IMPL_LINK(LibPage, EditedEntryHdl, const IterString&, rIterString, bool)
 {
-    if (m_pBasicsBox)
+    const weld::TreeIter& rIter = rIterString.first;
+    OUString sNewName = rIterString.second;
+
+    bool bValid = sNewName.getLength() <= 30 && IsValidSbxName(sNewName);
+    OUString aOldName(m_xLibBox->get_text(rIter, 0));
+
+    if (bValid && aOldName != sNewName)
     {
-        const sal_Int32 nCount = m_pBasicsBox->GetEntryCount();
-        for ( sal_Int32 i = 0; i < nCount; ++i )
+        try
         {
-            DocumentEntry* pEntry = static_cast<DocumentEntry*>(m_pBasicsBox->GetEntryData( i ));
+            Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
+            if ( xModLibContainer.is() )
+                xModLibContainer->renameLibrary( aOldName, sNewName );
+
+            Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+            if ( xDlgLibContainer.is() )
+                xDlgLibContainer->renameLibrary( aOldName, sNewName );
+
+            MarkDocumentModified( m_aCurDocument );
+            if (SfxBindings* pBindings = GetBindingsPtr())
+            {
+                pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR );
+                pBindings->Update( SID_BASICIDE_LIBSELECTOR );
+            }
+        }
+        catch (const container::ElementExistException& )
+        {
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_pDialog->getDialog(),
+                                                           VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_SBXNAMEALLREADYUSED)));
+            xErrorBox->run();
+            return false;
+        }
+        catch (const container::NoSuchElementException& )
+        {
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
+            return false;
+        }
+    }
+
+    if ( !bValid )
+    {
+        OUString sWarning(sNewName.getLength() > 30 ? IDEResId(RID_STR_LIBNAMETOLONG) : IDEResId(RID_STR_BADSBXNAME));
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_pDialog->getDialog(),
+                                                       VclMessageType::Warning, VclButtonsType::Ok, sWarning));
+        xErrorBox->run();
+
+    }
+
+    return bValid;
+}
+
+LibPage::~LibPage()
+{
+    if (m_xBasicsBox)
+    {
+        const sal_Int32 nCount = m_xBasicsBox->get_count();
+        for (sal_Int32 i = 0; i < nCount; ++i)
+        {
+            DocumentEntry* pEntry = reinterpret_cast<DocumentEntry*>(m_xBasicsBox->get_id(i).toInt64());
             delete pEntry;
         }
     }
-    m_pBasicsBox.clear();
-    m_pLibBox.clear();
-    m_pEditButton.clear();
-    m_pPasswordButton.clear();
-    m_pNewLibButton.clear();
-    m_pInsertLibButton.clear();
-    m_pExportButton.clear();
-    m_pDelButton.clear();
-    pTabDlg.clear();
-    TabPage::dispose();
 }
 
 void LibPage::CheckButtons()
 {
-    SvTreeListEntry* pCur = m_pLibBox->GetCurEntry();
-    if ( pCur )
+    std::unique_ptr<weld::TreeIter> xCur(m_xLibBox->make_iterator());
+    if (m_xLibBox->get_cursor(xCur.get()))
     {
-        OUString aLibName = SvTabListBox::GetEntryText( pCur, 0 );
+        OUString aLibName = m_xLibBox->get_text(*xCur, 0);
         Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
         Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
 
         if ( m_eCurLocation == LIBRARY_LOCATION_SHARE )
         {
-            m_pPasswordButton->Disable();
-            m_pNewLibButton->Disable();
-            m_pInsertLibButton->Disable();
-            m_pDelButton->Disable();
+            m_xPasswordButton->set_sensitive(false);
+            m_xNewLibButton->set_sensitive(false);
+            m_xInsertLibButton->set_sensitive(false);
+            m_xDelButton->set_sensitive(false);
         }
         else if ( aLibName.equalsIgnoreAsciiCase( "Standard" ) )
         {
-            m_pPasswordButton->Disable();
-            m_pNewLibButton->Enable();
-            m_pInsertLibButton->Enable();
-            m_pExportButton->Disable();
-            m_pDelButton->Disable();
+            m_xPasswordButton->set_sensitive(false);
+            m_xNewLibButton->set_sensitive(true);
+            m_xInsertLibButton->set_sensitive(true);
+            m_xExportButton->set_sensitive(false);
+            m_xDelButton->set_sensitive(false);
         }
         else if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) ) ||
                   ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) ) )
         {
-            m_pPasswordButton->Disable();
-            m_pNewLibButton->Enable();
-            m_pInsertLibButton->Enable();
+            m_xPasswordButton->set_sensitive(false);
+            m_xNewLibButton->set_sensitive(true);
+            m_xInsertLibButton->set_sensitive(true);
             if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) && !xModLibContainer->isLibraryLink( aLibName ) ) ||
                  ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
-                m_pDelButton->Disable();
+                m_xDelButton->set_sensitive(false);
             else
-                m_pDelButton->Enable();
+                m_xDelButton->set_sensitive(true);
         }
         else
         {
             if ( xModLibContainer.is() && !xModLibContainer->hasByName( aLibName ) )
-                m_pPasswordButton->Disable();
+                m_xPasswordButton->set_sensitive(false);
             else
-                m_pPasswordButton->Enable();
+                m_xPasswordButton->set_sensitive(true);
 
-            m_pNewLibButton->Enable();
-            m_pInsertLibButton->Enable();
-            m_pExportButton->Enable();
-            m_pDelButton->Enable();
+            m_xNewLibButton->set_sensitive(true);
+            m_xInsertLibButton->set_sensitive(true);
+            m_xExportButton->set_sensitive(true);
+            m_xDelButton->set_sensitive(true);
         }
     }
 }
@@ -552,34 +404,31 @@ void LibPage::ActivatePage()
     SetCurLib();
 }
 
-void LibPage::DeactivatePage()
+IMPL_LINK_NOARG(LibPage, TreeListHighlightHdl, weld::TreeView&, void)
 {
+    CheckButtons();
 }
 
-IMPL_LINK( LibPage, TreeListHighlightHdl, SvTreeListBox *, pBox, void )
-{
-    if ( pBox->IsSelected( pBox->GetHdlEntry() ) )
-        CheckButtons();
-}
-
-IMPL_LINK_NOARG( LibPage, BasicSelectHdl, ListBox&, void )
+IMPL_LINK_NOARG( LibPage, BasicSelectHdl, weld::ComboBox&, void )
 {
     SetCurLib();
     CheckButtons();
 }
 
-IMPL_LINK( LibPage, ButtonHdl, Button *, pButton, void )
+IMPL_LINK( LibPage, ButtonHdl, weld::Button&, rButton, void )
 {
-    if (pButton == m_pEditButton)
+    if (&rButton == m_xEditButton.get())
     {
         SfxAllItemSet aArgs( SfxGetpApp()->GetPool() );
         SfxRequest aRequest( SID_BASICIDE_APPEAR, SfxCallMode::SYNCHRON, aArgs );
         SfxGetpApp()->ExecuteSlot( aRequest );
 
         SfxUnoAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, Any( m_aCurDocument.getDocumentOrNull() ) );
-        SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
-        DBG_ASSERT( pCurEntry, "Entry?!" );
-        OUString aLibName( SvTabListBox::GetEntryText( pCurEntry, 0 ) );
+
+        std::unique_ptr<weld::TreeIter> xCurEntry(m_xLibBox->make_iterator());
+        if (!m_xLibBox->get_cursor(xCurEntry.get()))
+            return;
+        OUString aLibName(m_xLibBox->get_text(*xCurEntry, 0));
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->ExecuteList( SID_BASICIDE_LIBSELECTED,
@@ -587,18 +436,20 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton, void )
         EndTabDialog();
         return;
     }
-    else if (pButton == m_pNewLibButton)
+    else if (&rButton == m_xNewLibButton.get())
         NewLib();
-    else if (pButton == m_pInsertLibButton)
+    else if (&rButton == m_xInsertLibButton.get())
         InsertLib();
-    else if (pButton == m_pExportButton)
+    else if (&rButton == m_xExportButton.get())
         Export();
-    else if (pButton == m_pDelButton)
+    else if (&rButton == m_xDelButton.get())
         DeleteCurrent();
-    else if (pButton == m_pPasswordButton)
+    else if (&rButton == m_xPasswordButton.get())
     {
-        SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
-        OUString aLibName( SvTabListBox::GetEntryText( pCurEntry, 0 ) );
+        std::unique_ptr<weld::TreeIter> xCurEntry(m_xLibBox->make_iterator());
+        if (!m_xLibBox->get_cursor(xCurEntry.get()))
+            return;
+        OUString aLibName(m_xLibBox->get_text(*xCurEntry, 0));
 
         // load module library (if not loaded)
         Reference< script::XLibraryContainer > xModLibContainer = m_aCurDocument.getLibraryContainer( E_SCRIPTS );
@@ -633,7 +484,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton, void )
                 bool const bProtected = xPasswd->isLibraryPasswordProtected( aLibName );
 
                 // change password dialog
-                SvxPasswordDialog aDlg(GetFrameWeld(), !bProtected);
+                SvxPasswordDialog aDlg(m_pDialog->getDialog(), !bProtected);
                 aDlg.SetCheckPasswordHdl(LINK(this, LibPage, CheckPasswordHdl));
 
                 if (aDlg.run() == RET_OK)
@@ -642,10 +493,10 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton, void )
 
                     if ( bNewProtected != bProtected )
                     {
-                        sal_uLong nPos = m_pLibBox->GetModel()->GetAbsPos( pCurEntry );
-                        m_pLibBox->GetModel()->Remove( pCurEntry );
-                        ImpInsertLibEntry( aLibName, nPos );
-                        m_pLibBox->SetCurEntry( m_pLibBox->GetEntry( nPos ) );
+                        int nPos = m_xLibBox->get_iter_index_in_parent(*xCurEntry);
+                        m_xLibBox->remove(*xCurEntry);
+                        ImpInsertLibEntry(aLibName, nPos);
+                        m_xLibBox->set_cursor(nPos);
                     }
 
                     MarkDocumentModified( m_aCurDocument );
@@ -660,8 +511,11 @@ IMPL_LINK( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg, bool )
 {
     bool bRet = false;
 
-    SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
-    OUString aLibName( SvTabListBox::GetEntryText( pCurEntry, 0 ) );
+    std::unique_ptr<weld::TreeIter> xCurEntry(m_xLibBox->make_iterator());
+    if (!m_xLibBox->get_cursor(xCurEntry.get()))
+        return bRet;
+
+    OUString aLibName(m_xLibBox->get_text(*xCurEntry, 0));
     Reference< script::XLibraryContainerPassword > xPasswd( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
 
     if ( xPasswd.is() )
@@ -683,14 +537,14 @@ IMPL_LINK( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg, bool )
 
 void LibPage::NewLib()
 {
-    createLibImpl(GetFrameWeld(), m_aCurDocument, m_pLibBox, static_cast<SbTreeListBox*>(nullptr));
+    createLibImpl(m_pDialog->getDialog(), m_aCurDocument, m_xLibBox.get(), nullptr);
 }
 
 void LibPage::InsertLib()
 {
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     // file open dialog
-    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, pTabDlg ? pTabDlg->GetFrameWeld() : nullptr);
+    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, m_pDialog->getDialog());
     const Reference <XFilePicker3>& xFP = aDlg.GetFilePicker();
 
     xFP->setTitle(IDEResId(RID_STR_APPENDLIBS));
@@ -782,7 +636,7 @@ void LibPage::InsertLib()
         // library import dialog
         if (!xLibDlg)
         {
-            xLibDlg.reset(new LibDialog(GetFrameWeld()));
+            xLibDlg.reset(new LibDialog(m_pDialog->getDialog()));
             xLibDlg->SetStorageName( aURLObj.getName() );
         }
 
@@ -801,7 +655,7 @@ void LibPage::InsertLib()
 
     if (!xLibDlg)
     {
-        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_pDialog->getDialog(),
                                                        VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_NOLIBINSTORAGE)));
         xErrorBox->run();
         return;
@@ -821,7 +675,7 @@ void LibPage::InsertLib()
                 return;
 
             bool bChanges = false;
-            sal_uLong nNewPos = m_pLibBox->GetEntryCount();
+            int nNewPos = m_xLibBox->n_children();
             bool bRemove = false;
             bool bReplace = xLibDlg->IsReplace();
             bool bReference = xLibDlg->IsReference();
@@ -843,7 +697,7 @@ void LibPage::InsertLib()
                             // check, if the library is the Standard library
                             if ( aLibName == "Standard" )
                             {
-                                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_pDialog->getDialog(),
                                                                                VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_REPLACESTDLIB)));
                                 xErrorBox->run();
                                 continue;
@@ -855,7 +709,7 @@ void LibPage::InsertLib()
                             {
                                 OUString aErrStr( IDEResId(RID_STR_REPLACELIB) );
                                 aErrStr = aErrStr.replaceAll("XX", aLibName) + "\n" + IDEResId(RID_STR_LIBISREADONLY);
-                                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_pDialog->getDialog(),
                                                                                VclMessageType::Warning, VclButtonsType::Ok, aErrStr));
                                 xErrorBox->run();
                                 continue;
@@ -872,7 +726,7 @@ void LibPage::InsertLib()
                             else
                                 aErrStr = IDEResId(RID_STR_IMPORTNOTPOSSIBLE);
                             aErrStr = aErrStr.replaceAll("XX", aLibName) + "\n" +IDEResId(RID_STR_SBXNAMEALLREADYUSED);
-                            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_pDialog->getDialog(),
                                                                            VclMessageType::Warning, VclButtonsType::Ok, aErrStr));
                             xErrorBox->run();
                             continue;
@@ -893,7 +747,7 @@ void LibPage::InsertLib()
                             {
                                 OUString aErrStr( IDEResId(RID_STR_NOIMPORT) );
                                 aErrStr = aErrStr.replaceAll("XX", aLibName);
-                                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_pDialog->getDialog(),
                                                                                VclMessageType::Warning, VclButtonsType::Ok, aErrStr));
                                 xErrorBox->run();
                                 continue;
@@ -905,9 +759,9 @@ void LibPage::InsertLib()
                     if ( bRemove )
                     {
                         // remove listbox entry
-                        SvTreeListEntry* pEntry_ = m_pLibBox->FindEntry( aLibName );
-                        if ( pEntry_ )
-                            m_pLibBox->SvTreeListBox::GetModel()->Remove( pEntry_ );
+                        int nEntry_ = FindEntry(*m_xLibBox, aLibName);
+                        if (nEntry_ != -1)
+                            m_xLibBox->remove(nEntry_);
 
                         // remove module library
                         if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) )
@@ -1039,14 +893,13 @@ void LibPage::InsertLib()
                     }
 
                     // insert listbox entry
-                    ImpInsertLibEntry( aLibName, m_pLibBox->GetEntryCount() );
+                    ImpInsertLibEntry( aLibName, m_xLibBox->n_children() );
                     bChanges = true;
                 }
             }
 
-            SvTreeListEntry* pFirstNew = m_pLibBox->GetEntry( nNewPos );
-            if ( pFirstNew )
-                m_pLibBox->SetCurEntry( pFirstNew );
+            if (nNewPos < m_xLibBox->n_children())
+                m_xLibBox->set_cursor(nNewPos);
 
             if ( bChanges )
                 MarkDocumentModified( m_aCurDocument );
@@ -1055,8 +908,10 @@ void LibPage::InsertLib()
 
 void LibPage::Export()
 {
-    SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
-    OUString aLibName( SvTabListBox::GetEntryText( pCurEntry, 0 ) );
+    std::unique_ptr<weld::TreeIter> xCurEntry(m_xLibBox->make_iterator());
+    if (!m_xLibBox->get_cursor(xCurEntry.get()))
+        return;
+    OUString aLibName(m_xLibBox->get_text(*xCurEntry, 0));
 
     // Password verification
     Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
@@ -1077,7 +932,7 @@ void LibPage::Export()
             return;
     }
 
-    std::unique_ptr<ExportDialog> xNewDlg(new ExportDialog(GetFrameWeld()));
+    std::unique_ptr<ExportDialog> xNewDlg(new ExportDialog(m_pDialog->getDialog()));
     if (xNewDlg->run() == RET_OK)
     {
         try
@@ -1147,7 +1002,7 @@ Reference< XProgressHandler > OLibCommandEnvironment::getProgressHandler()
 void LibPage::ExportAsPackage( const OUString& aLibName )
 {
     // file open dialog
-    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, FileDialogFlags::NONE, pTabDlg ? pTabDlg->GetFrameWeld() : nullptr);
+    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, FileDialogFlags::NONE, m_pDialog->getDialog());
     const Reference <XFilePicker3>& xFP = aDlg.GetFilePicker();
 
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
@@ -1292,8 +1147,10 @@ void LibPage::ExportAsBasic( const OUString& aLibName )
 
 void LibPage::DeleteCurrent()
 {
-    SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
-    OUString aLibName( SvTabListBox::GetEntryText( pCurEntry, 0 ) );
+    std::unique_ptr<weld::TreeIter> xCurEntry(m_xLibBox->make_iterator());
+    if (!m_xLibBox->get_cursor(xCurEntry.get()))
+        return;
+    OUString aLibName(m_xLibBox->get_text(*xCurEntry, 0));
 
     // check, if library is link
     bool bIsLibraryLink = false;
@@ -1305,7 +1162,7 @@ void LibPage::DeleteCurrent()
         bIsLibraryLink = true;
     }
 
-    if (QueryDelLib(aLibName, bIsLibraryLink, GetFrameWeld()))
+    if (QueryDelLib(aLibName, bIsLibraryLink, m_pDialog->getDialog()))
     {
         // inform BasicIDE
         SfxUnoAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, Any( m_aCurDocument.getDocumentOrNull() ) );
@@ -1320,16 +1177,14 @@ void LibPage::DeleteCurrent()
         if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) )
             xDlgLibContainer->removeLibrary( aLibName );
 
-        static_cast<SvTreeListBox&>(*m_pLibBox).GetModel()->Remove( pCurEntry );
+        m_xLibBox->remove(*xCurEntry);
         MarkDocumentModified( m_aCurDocument );
     }
 }
 
 void LibPage::EndTabDialog()
 {
-    DBG_ASSERT( pTabDlg, "TabDlg not set!" );
-    if ( pTabDlg )
-        pTabDlg->EndDialog( 1 );
+    m_pDialog->response(RET_OK);
 }
 
 void LibPage::FillListBox()
@@ -1346,16 +1201,15 @@ void LibPage::FillListBox()
 
 void LibPage::InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
-    OUString aEntryText( rDocument.getTitle( eLocation ) );
-    const sal_Int32 nPos = m_pBasicsBox->InsertEntry( aEntryText );
-    m_pBasicsBox->SetEntryData( nPos, new DocumentEntry(rDocument, eLocation) );
+    OUString aEntryText(rDocument.getTitle(eLocation));
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(new DocumentEntry(rDocument, eLocation))));
+    m_xBasicsBox->append(sId,  aEntryText);
 }
 
 void LibPage::SetCurLib()
 {
-    const sal_Int32 nSelPos = m_pBasicsBox->GetSelectedEntryPos();
-    DocumentEntry* pEntry = static_cast<DocumentEntry*>(m_pBasicsBox->GetEntryData( nSelPos ));
-    if ( pEntry )
+    DocumentEntry* pEntry = reinterpret_cast<DocumentEntry*>(m_xBasicsBox->get_active_id().toInt64());
+    if (pEntry)
     {
         const ScriptDocument& aDocument( pEntry->GetDocument() );
         DBG_ASSERT( aDocument.isAlive(), "LibPage::SetCurLib: no document, or document is dead!" );
@@ -1366,30 +1220,30 @@ void LibPage::SetCurLib()
         {
             m_aCurDocument = aDocument;
             m_eCurLocation = eLocation;
-            m_pLibBox->SetDocument( aDocument );
-            m_pLibBox->Clear();
+            m_xLibBox->clear();
 
             // get a sorted list of library names
             Sequence< OUString > aLibNames = aDocument.getLibraryNames();
             sal_Int32 nLibCount = aLibNames.getLength();
             const OUString* pLibNames = aLibNames.getConstArray();
 
-            for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
+            int nEntry = 0;
+            for (int i = 0 ; i < nLibCount; ++i)
             {
-                OUString aLibName( pLibNames[ i ] );
-                if ( eLocation == aDocument.getLibraryLocation( aLibName ) )
-                    ImpInsertLibEntry( aLibName, i );
+                OUString aLibName(pLibNames[i]);
+                if (eLocation == aDocument.getLibraryLocation(aLibName))
+                    ImpInsertLibEntry(aLibName, nEntry++);
             }
 
-            SvTreeListEntry* pEntry_ = m_pLibBox->FindEntry( "Standard" );
-            if ( !pEntry_ )
-                pEntry_ = m_pLibBox->GetEntry( 0 );
-            m_pLibBox->SetCurEntry( pEntry_ );
+            int nEntry_ = FindEntry(*m_xLibBox, "Standard");
+            if (nEntry_ == -1 && m_xLibBox->n_children())
+                nEntry_ = 0;
+            m_xLibBox->set_cursor(nEntry_);
         }
     }
 }
 
-SvTreeListEntry* LibPage::ImpInsertLibEntry( const OUString& rLibName, sal_uLong nPos )
+void LibPage::ImpInsertLibEntry( const OUString& rLibName, sal_uLong nPos )
 {
     // check, if library is password protected
     bool bProtected = false;
@@ -1403,29 +1257,22 @@ SvTreeListEntry* LibPage::ImpInsertLibEntry( const OUString& rLibName, sal_uLong
         }
     }
 
-    SvTreeListEntry* pNewEntry = m_pLibBox->DoInsertEntry( rLibName, nPos );
-    pNewEntry->SetUserData( new LibUserData(m_aCurDocument) );
+    m_xLibBox->insert_text(nPos, rLibName);
 
     if (bProtected)
-    {
-        Image aImage(StockImage::Yes, RID_BMP_LOCKED);
-        m_pLibBox->SetExpandedEntryBmp(pNewEntry, aImage);
-        m_pLibBox->SetCollapsedEntryBmp(pNewEntry, aImage);
-    }
+        m_xLibBox->set_image(nPos, RID_BMP_LOCKED);
 
     // check, if library is link
     if ( xModLibContainer.is() && xModLibContainer->hasByName( rLibName ) && xModLibContainer->isLibraryLink( rLibName ) )
     {
         OUString aLinkURL = xModLibContainer->getLibraryLinkURL( rLibName );
-        m_pLibBox->SetEntryText( aLinkURL, pNewEntry, 1 );
+        m_xLibBox->set_text(nPos, aLinkURL, 1);
     }
-
-    return pNewEntry;
 }
 
 // Helper function
 void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
-                   CheckBox* pLibBox, TreeListBox* pBasicBox)
+                   weld::TreeView* pLibBox, SbTreeListBox* pBasicBox)
 {
     OSL_ENSURE( rDocument.isAlive(), "createLibImpl: invalid document!" );
     if ( !rDocument.isAlive() )
@@ -1479,121 +1326,8 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
 
                 if( pLibBox )
                 {
-                    SvTreeListEntry* pEntry = pLibBox->DoInsertEntry( aLibName );
-                    pEntry->SetUserData( new LibUserData( rDocument ) );
-                    pLibBox->SetCurEntry( pEntry );
-                }
-
-                // create a module
-                OUString aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
-                OUString sModuleCode;
-                if ( !rDocument.createModule( aLibName, aModName, true, sModuleCode ) )
-                    throw Exception("could not create module " + aModName, nullptr);
-
-                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
-                if (SfxDispatcher* pDispatcher = GetDispatcher())
-                    pDispatcher->ExecuteList(SID_BASICIDE_SBXINSERTED,
-                                          SfxCallMode::SYNCHRON, { &aSbxItem });
-
-                if( pBasicBox )
-                {
-                    SvTreeListEntry* pEntry = pBasicBox->GetCurEntry();
-                    SvTreeListEntry* pRootEntry = nullptr;
-                    while( pEntry )
-                    {
-                        pRootEntry = pEntry;
-                        pEntry = pBasicBox->GetParent( pEntry );
-                    }
-
-                    BrowseMode nMode = pBasicBox->GetMode();
-                    bool bDlgMode = ( nMode & BrowseMode::Dialogs ) && !( nMode & BrowseMode::Modules );
-                    const OUString sId = bDlgMode ? OUStringLiteral(RID_BMP_DLGLIB) : OUStringLiteral(RID_BMP_MODLIB);
-                    SvTreeListEntry* pNewLibEntry = pBasicBox->AddEntry(
-                        aLibName,
-                        Image(StockImage::Yes, sId),
-                        pRootEntry, false,
-                        std::make_unique<Entry>(OBJ_TYPE_LIBRARY));
-                    DBG_ASSERT( pNewLibEntry, "Insert entry failed!" );
-
-                    if( pNewLibEntry )
-                    {
-                        SvTreeListEntry* pEntry_ = pBasicBox->AddEntry(
-                            aModName,
-                            Image(StockImage::Yes, RID_BMP_MODULE),
-                            pNewLibEntry, false,
-                            std::make_unique<Entry>(OBJ_TYPE_MODULE));
-                        DBG_ASSERT( pEntry_, "Insert entry failed!" );
-                        pBasicBox->SetCurEntry( pEntry_ );
-                        pBasicBox->Select( pBasicBox->GetCurEntry() );      // OV-Bug?!
-                    }
-                }
-            }
-            catch (const uno::Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("basctl.basicide");
-            }
-        }
-    }
-}
-
-void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
-                   CheckBox* pLibBox, SbTreeListBox* pBasicBox)
-{
-    OSL_ENSURE( rDocument.isAlive(), "createLibImpl: invalid document!" );
-    if ( !rDocument.isAlive() )
-        return;
-
-    // create library name
-    OUString aLibName;
-    bool bValid = false;
-    sal_Int32 i = 1;
-    while ( !bValid )
-    {
-        aLibName = "Library" + OUString::number( i );
-        if ( !rDocument.hasLibrary( E_SCRIPTS, aLibName ) && !rDocument.hasLibrary( E_DIALOGS, aLibName ) )
-            bValid = true;
-        i++;
-    }
-
-    NewObjectDialog aNewDlg(pWin, ObjectMode::Library);
-    aNewDlg.SetObjectName(aLibName);
-
-    if (aNewDlg.run())
-    {
-        if (!aNewDlg.GetObjectName().isEmpty())
-            aLibName = aNewDlg.GetObjectName();
-
-        if ( aLibName.getLength() > 30 )
-        {
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin,
-                                                           VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_LIBNAMETOLONG)));
-            xErrorBox->run();
-        }
-        else if ( !IsValidSbxName( aLibName ) )
-        {
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin,
-                                                           VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_BADSBXNAME)));
-            xErrorBox->run();
-        }
-        else if ( rDocument.hasLibrary( E_SCRIPTS, aLibName ) || rDocument.hasLibrary( E_DIALOGS, aLibName ) )
-        {
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin,
-                                                           VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_SBXNAMEALLREADYUSED2)));
-            xErrorBox->run();
-        }
-        else
-        {
-            try
-            {
-                // create module and dialog library
-                Reference< container::XNameContainer > xModLib( rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName ) );
-                Reference< container::XNameContainer > xDlgLib( rDocument.getOrCreateLibrary( E_DIALOGS, aLibName ) );
-
-                if( pLibBox )
-                {
-                    SvTreeListEntry* pEntry = pLibBox->DoInsertEntry( aLibName );
-                    pEntry->SetUserData( new LibUserData( rDocument ) );
-                    pLibBox->SetCurEntry( pEntry );
+                    pLibBox->append_text(aLibName);
+                    pLibBox->set_cursor(pLibBox->n_children() - 1);
                 }
 
                 // create a module
