@@ -116,7 +116,6 @@ SwParaDlg::SwParaDlg(weld::Window *pParent,
     {
         RemoveTabPage("labelTP_NUMPARA");
         RemoveTabPage("labelTP_DROPCAPS");
-        RemoveTabPage("labelTP_BACKGROUND");
         RemoveTabPage("labelTP_BORDER");
         RemoveTabPage("area");
         RemoveTabPage("transparence");
