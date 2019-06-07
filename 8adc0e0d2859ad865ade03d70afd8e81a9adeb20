@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "3fa0c359_c08f5321",
+        "filename": "bridges/source/cpp_uno/msvc_win32_intel/cpp2uno.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-06-07T08:15:17Z",
+      "side": 1,
+      "message": "I\u0027d keep this change. it even serves documentation.",
+      "revId": "8adc0e0d2859ad865ade03d70afd8e81a9adeb20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_e0928f4b",
+        "filename": "bridges/source/cpp_uno/msvc_win32_x86-64/cpp2uno.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-06-07T08:15:17Z",
+      "side": 1,
+      "message": "I\u0027d keep this change. it even serves documentation.",
+      "revId": "8adc0e0d2859ad865ade03d70afd8e81a9adeb20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_71ead775",
         "filename": "bridges/source/cpp_uno/msvc_win32_x86-64/cpp2uno.cxx",
         "patchSetId": 4
