@@ -31,7 +31,6 @@
 #include <KSharedConfig>
 
 #include "KDE5SalFrame.hxx"
-#include "KDE5SalGraphics.hxx"
 
 #include <tools/color.hxx>
 
@@ -208,7 +207,7 @@ SalGraphics* KDE5SalFrame::AcquireGraphics()
 
     if (!m_pKDE5Graphics.get())
     {
-        m_pKDE5Graphics.reset(new KDE5SalGraphics(this));
+        m_pKDE5Graphics.reset(new Qt5SvpGraphics(this));
         Qt5Frame::InitQt5SvpGraphics(m_pKDE5Graphics.get());
     }
 
