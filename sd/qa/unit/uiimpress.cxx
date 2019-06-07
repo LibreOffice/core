@@ -93,6 +93,13 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)
     // Without the accompanying fix in place, this test would have failed with an assertion failure
     // in SdrObjEditView::SdrEndTextEdit() as mpOldTextEditUndoManager was not nullptr.
     pViewShell2->GetViewFrame()->GetDispatcher()->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
+
+    // Rotate the shape in window 2 & undo.
+    pView2->MarkObj(pShape2, pView2->GetSdrPageView());
+    pView2->RotateMarkedObj(pShape2->GetLastBoundRect().Center(), /*nAngle=*/45);
+    // Without the accompanying fix in place, this test would have failed with an assertion failure
+    // in SdrObjEditView::SdrEndTextEdit() as mpOldTextEditUndoManager was not nullptr.
+    pViewShell2->GetViewFrame()->GetDispatcher()->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
