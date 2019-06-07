@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_066f9492",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-07T14:04:54Z",
+      "side": 1,
+      "message": "nitpick: can be moved below the following \u0027if\u0027 (feel free to ignore)",
+      "range": {
+        "startLine": 216,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 55
+      },
+      "revId": "ce444dafadeb786a60fa6ff1f6b11893266c9a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_a66d8099",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-07T14:04:54Z",
+      "side": 1,
+      "message": "nitpick (feel free to ignore): can be simplified to just \u0027return pClipboard-\u003esupportsSelection()\u0027 (same for next case and in Qt5Clipboard::isOwner below)",
+      "range": {
+        "startLine": 270,
+        "startChar": 0,
+        "endLine": 271,
+        "endChar": 28
+      },
+      "revId": "ce444dafadeb786a60fa6ff1f6b11893266c9a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
