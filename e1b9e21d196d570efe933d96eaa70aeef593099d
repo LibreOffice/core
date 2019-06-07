@@ -46,6 +46,30 @@
       "revId": "e1b9e21d196d570efe933d96eaa70aeef593099d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_0049bbce",
+        "filename": "vcl/qt5/Qt5Object.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-07T09:39:00Z",
+      "side": 1,
+      "message": "Don\u0027t change code (blindly), when you don\u0027t think, because you\u0027re too tired. That assert is obviously wrong, as widget() is the QWidget() with this QWindow embedded. Should have tested it after I adapted it from the original \"assert(m_rParent.frame())\".\n\nFixed.",
+      "parentUuid": "3fa0c359_00c69b49",
+      "range": {
+        "startLine": 116,
+        "startChar": 1,
+        "endLine": 116,
+        "endChar": 52
+      },
+      "revId": "e1b9e21d196d570efe933d96eaa70aeef593099d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
